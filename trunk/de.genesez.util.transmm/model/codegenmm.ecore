@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="codegenMm"
+    nsURI="http://www.genesez.de/codegenMm" nsPrefix="codegenMm">
+  <eClassifiers xsi:type="ecore:EClass" name="MPackage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" upperBound="-1"
+        eType="#//MClass" containment="true" eOpposite="#//MClass/owningPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" upperBound="-1"
+        eType="#//MPackage" containment="true" eOpposite="#//MPackage/nestingPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingPackage" eType="#//MPackage"
+        eOpposite="#//MPackage/nestedPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//MModel"
+        eOpposite="#//MModel/ownedPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" upperBound="-1"
+        eType="#//MAssociation" containment="true" eOpposite="#//MAssociation/owningPackage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MClass">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associationEnd" upperBound="-1"
+        eType="#//MAssociationEnd" eOpposite="#//MAssociationEnd/class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningPackage" lowerBound="1"
+        eType="#//MPackage" eOpposite="#//MPackage/class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//MAttribute" containment="true" eOpposite="#//MAttribute/class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MAssociationEnd">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" lowerBound="1"
+        eType="#//MAssociation" eOpposite="#//MAssociation/end"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1" eType="#//MClass"
+        eOpposite="#//MClass/associationEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" lowerBound="1"
+        eType="#//MAssociationEnd"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MAssociation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="end" upperBound="-1" eType="#//MAssociationEnd"
+        containment="true" eOpposite="#//MAssociationEnd/association"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningPackage" lowerBound="1"
+        eType="#//MPackage" eOpposite="#//MPackage/association"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1" eType="#//MClass"
+        eOpposite="#//MClass/attribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedPackage" upperBound="-1"
+        eType="#//MPackage" containment="true" eOpposite="#//MPackage/model"/>
+  </eClassifiers>
+</ecore:EPackage>
