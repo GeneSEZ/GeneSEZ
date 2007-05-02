@@ -1,0 +1,104 @@
+import ecore;
+
+// this file contains constraints that must validate for
+// the result of transforming the test model into Ecore.
+// note that these are not general constraints to be eval-
+// uated against every model passed into the transformation,
+// but rather specific tests for the reference model.
+// this can be seen as unit testing for M2M transformations
+
+// debug stuff again...
+extension org::openarchitectureware::uml2ecore::io;   
+
+// defines a number of helper functions
+extension org::openarchitectureware::uml2ecore::test::testUtil;   
+
+// verify the name of the generated package
+context EPackage ERROR "wrong name": name == "entitymm";
+ 
+// check that all the original classes have been transformed
+context EPackage ERROR "classes are missing": 
+	classNames().size == 5 &&
+	classNames().contains("Type") &&
+	classNames().contains("PrimitiveType") &&
+	classNames().contains("Entity") &&
+	classNames().contains("Attribute") &&
+	classNames().contains("Model");
+
+// check that the 'name' attribute has been added to the Type class
+context EClass if name == "Type" ERROR "name attribute missing":
+	eAttributes.get(0).name == "name" && eAttributes.get(0).eType.name == "EString";
+
+// check that the 'name' attribute has been added to the Type class
+context EClass if name == "PrimitiveType" ERROR "name attribute must not be there":
+	!eAttributes.collect(a|a.name).contains("name");
+
+// Primitive Type extends Type	
+context EClass if name == "PrimitiveType" ERROR "Inheritance Broken":
+	hasSuperClassNamed("Type");
+
+// Entity extends Type	
+context EClass if name == "Entity" ERROR "Inheritance Broken":
+	hasSuperClassNamed("Type");
+
+// Type check on attributes
+context EClass if name == "Entity" ERROR "Attributes wrong":
+	eAttributes.get(0).name == "isPersistent" && eAttributes.get(0).eType.name == "EBoolean" && 
+	eAttributes.get(1).name == "size" && eAttributes.get(1).eType.name == "EInt";
+	eAttributes.get(2).name == "desc" && eAttributes.get(2).eType.name == "EString";
+
+// Model must have a one-to-many
+// containment relationship to Type named types
+context EClass if name == "Model" ERROR "problems with types reference":
+	eReferences.size == 1 &&
+	eReferences.get(0).eType == findClass("Type") &&
+	eReferences.get(0).name == "types" &&
+	eReferences.get(0).lowerBound == 0 &&
+	eReferences.get(0).upperBound == -1 &&
+	eReferences.get(0).containment == true;
+	
+// type must not have references; specifically, it must not have
+// a back-ref to Model, since the ref from Model to Type is
+// unidirectional	
+context EClass if name == "Type" ERROR "problems with model reference":
+	eReferences.size == 0;	
+	 
+// Entity must have a one-to-many
+// containment relationship to Attribute named attributes
+context EClass if name == "Entity" ERROR "problems with attributes reference":
+	eReferences.size == 1 &&
+	eReferences.get(0).eType == findClass("Attribute") &&
+	eReferences.get(0).name == "attributes" &&
+	eReferences.get(0).lowerBound == 1 && 
+	eReferences.get(0).upperBound == -1 &&
+	eReferences.get(0).containment == true;
+	
+// Attribute must have a one-to-one
+// non-containment relationship to Entity called entity
+context EClass if name == "Attribute" ERROR "problems with entity reference":
+	eReferences.size == 2 &&
+	findRef("entity") != null &&
+	findRef("entity").eType == findClass("Entity") &&
+	findRef("entity").lowerBound == 1 &&
+	findRef("entity").upperBound == 1 &&
+	findRef("entity").containment == false;
+	 
+// Attribute must have a one-to-one
+// non-containment relationship to PrimitiveType called type
+context EClass if name == "Attribute" ERROR "problems with type reference":
+	eReferences.size == 2 &&
+	findRef("type") != null &&
+	findRef("type").eType == findClass("PrimitiveType") &&
+	findRef("type").lowerBound == 1 &&
+	findRef("type").upperBound == 1 &&
+	findRef("type").containment == false;
+	 
+// the Entity.attributes reference must be specified to be
+// the eOpposite of Attribute.entity. This is crucial to re-
+// present the bidirectional nature of the UML association
+// correctly	 
+context EPackage ERROR "opposite references don't work":
+	findClass("Entity").findRef("attributes").eOpposite == findClass("Attribute").findRef("entity");	
+	
+	
+	

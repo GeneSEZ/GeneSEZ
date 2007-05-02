@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<workflow>
+
+	<!-- call the uml2ecore cartridge, passing in the required parameters -->
+    <cartridge file="org/openarchitectureware/uml2ecore/uml2ecoreWorkflow.oaw"
+    	uml2ModelFile="org/openarchitectureware/uml2ecore/test/data/entity.uml2" 
+    	ecoreModelFile="entity.ecore"
+    	nsUriPrefix="http://www.voelter.de"
+    	addNameAttribute="true"/> 
+    
+    <!-- run the test-specific constraints, i.e. the "unit tests" for the trafo -->
+    <component id="constrChecker-ecore" class="org.openarchitectureware.check.CheckComponent">
+    	<!-- the model is an instance of Ecore, thus the eCore metamodel -->
+	    <metaModel id="mm.emf" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="org.eclipse.emf.ecore.EcorePackage"/>
+		</metaModel>
+		<!-- invoke the constraints in the tests.chk file -->
+		<checkFile value="org::openarchitectureware::uml2ecore::test::tests"/>
+		<!-- with everything in and beneath the ecoreModel slot -->
+		<emfAllChildrenSlot value="ecoreModel"/>
+	</component>
+
+    
+</workflow>

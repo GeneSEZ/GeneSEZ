@@ -1,0 +1,48 @@
+import codegenMm;
+
+String concat( String s1, String s2 ): s1 == null ? s2 : s1+"."+s2;
+
+// ----------- MPackage ------------		
+			
+			
+String namespace(MPackage this): 
+	eContainer == null ? null : 
+	switch {
+		case MPackage.isInstance(eContainer): name == null ? null : concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name )
+		case MModel.isInstance(eContainer): name == null ? null : concat( ((MModel)eContainer).namespace(), ((MModel)eContainer).name )
+		default: null
+	};
+String qualifiedName(MPackage this): concat( namespace(), name );
+			
+// ----------- MClass ------------		
+			
+String namespace(MClass this): name == null ? null : ( (((MPackage)eContainer) != null) ? concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ) : null );
+String qualifiedName(MClass this): concat( namespace(), name );
+			
+			
+// ----------- MAssociationEnd ------------		
+			
+String namespace(MAssociationEnd this): name == null ? null : ( (((MAssociation)eContainer) != null) ? concat( ((MAssociation)eContainer).namespace(), ((MAssociation)eContainer).name ) : null );
+String qualifiedName(MAssociationEnd this): concat( namespace(), name );
+			
+			
+// ----------- MAssociation ------------		
+			
+String namespace(MAssociation this): name == null ? null : ( (((MPackage)eContainer) != null) ? concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ) : null );
+String qualifiedName(MAssociation this): concat( namespace(), name );
+			
+			
+// ----------- MAttribute ------------		
+			
+String namespace(MAttribute this): name == null ? null : ( (((MClass)eContainer) != null) ? concat( ((MClass)eContainer).namespace(), ((MClass)eContainer).name ) : null );
+String qualifiedName(MAttribute this): concat( namespace(), name );
+			
+			
+// ----------- MModel ------------		
+String namespace(MModel this): null;
+String qualifiedName(MModel this): name;
+			
+			
+			
+		
+	

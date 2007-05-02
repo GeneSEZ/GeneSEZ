@@ -1,0 +1,19 @@
+// a number of utility functions to write the test constraints
+
+import ecore;
+
+// checks if an ECLass c has a superclass with the given name
+boolean hasSuperClassNamed( EClass c, String name ):
+	c.eSuperTypes.contains( c.findClass(name) );
+	
+// finds a class by its name, using another class as the context	
+EClass findClass(EClass cls, String name): ((EPackage)cls.eContainer).findClass(name);
+	
+// finds a class by its name, using the EPackage as the context	
+EClass findClass(EPackage pkg, String name): pkg.eClassifiers.select(c|c.name == name).get(0);
+	
+// finds a Refernce with a given name in a certain class cls	
+EReference findRef(EClass cls, String name): cls.eReferences.select(c|c.name == name).get(0);
+	
+// maps the set of classes in the EPackage to the set of class names	
+classNames(EPackage this): eClassifiers.collect(c|c.name);

@@ -1,0 +1,71 @@
+«IMPORT ecore»
+«EXTENSION org::openarchitectureware::uml2ecore::templates::utils»
+
+«DEFINE root FOR EPackage»
+	«EXPAND constraintsFile»
+	«IF needsNamingUtils()»
+		«EXPAND namingUtilsFile»
+	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE constraintsFile FOR EPackage»
+	«FILE name+"Constraints.chk"-»
+import «nsPrefix»;
+		«EXPAND constraintsForClass FOREACH eAllContents.typeSelect(EClass)-»
+	«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE constraintsForClass FOR EClass-»
+	«FOREACH eReferences AS r-»
+		«IF r.lowerBound == 1-»
+			«IF r.upperBound == 1-»
+context «name» ERROR "«r.name» must bet set":
+	«r.name» != null;
+			«ENDIF-»
+			«IF r.upperBound > 1 || r.upperBound == -1-»
+context «name» ERROR "«r.name» cannot be empty":
+	!«r.name».isEmpty;
+			«ENDIF-»
+		«ENDIF-»
+	«ENDFOREACH-»
+	«IF ePackage.needsNamingUtils()-»
+		«FOREACH eReferences.select(r|r.containment).select(r|r.upperBound > 1 || r.upperBound == -1) AS r-»
+context «name» ERROR "«r.name» must have unique names":
+	«r.name».forAll(e1| !«r.name».exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+		«ENDFOREACH-»
+	«ENDIF-»
+«ENDDEFINE»
+
+
+«DEFINE namingUtilsFile FOR EPackage»
+	«FILE name+"NamingUtils.ext"-»
+import «nsPrefix»;
+
+String concat( String s1, String s2 ): s1 == null ? s2 : s1+"."+s2;
+
+		«FOREACH eClassifiers.typeSelect(EClass) AS c-»
+// ----------- «c.name» ------------		
+			«IF c.allOwners().size == 0-»	
+String namespace(«c.name» this): null;
+String qualifiedName(«c.name» this): name;
+			«ENDIF»
+			«IF c.allOwners().size == 1-»	
+String namespace(«c.name» this): name == null ? null : ( (((«c.owner().name»)eContainer) != null) ? concat( ((«c.owner().name»)eContainer).namespace(), ((«c.owner().name»)eContainer).name ) : null );
+String qualifiedName(«c.name» this): concat( namespace(), name );
+			«ENDIF»
+			«IF c.allOwners().size > 1-»
+String namespace(«c.name» this): 
+	eContainer == null ? null : 
+	switch {
+	«FOREACH c.allOwners() AS a-»
+		case «a.name».isInstance(eContainer): name == null ? null : concat( ((«a.name»)eContainer).namespace(), ((«a.name»)eContainer).name )
+	«ENDFOREACH-»
+		default: null
+	};
+String qualifiedName(«c.name» this): concat( namespace(), name );
+			«ENDIF»
+		«ENDFOREACH»
+	«ENDFILE»
+«ENDDEFINE»
+
+
