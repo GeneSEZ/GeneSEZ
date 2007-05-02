@@ -1,0 +1,21 @@
+// these tests check that namespace and qualified name
+// utilities work as expected
+
+import entitymm;
+extension entitymmUtils;
+extension org::openarchitectureware::uml2ecore::io;
+
+context Model ERROR "namespace wrong": namespace() == null;
+context Model ERROR "qfname wrong": qualifiedName() == "testModel";
+
+context Entity if name == "e1" ERROR "namespace wrong": namespace() == "testModel";
+context Entity if name == "e1" ERROR "qfname wrong": qualifiedName() == "testModel.e1";
+
+context Attribute if name == "a" ERROR "namespace wrong": namespace() == "testModel.e1";
+context Attribute if name == "a" ERROR "qfname wrong": qualifiedName() == "testModel.e1.a";
+
+context Attribute if name == "x" ERROR "namespace wrong": namespace() == null;
+context Attribute if name == "x" ERROR "qfname wrong": qualifiedName() == "x";
+
+  
+

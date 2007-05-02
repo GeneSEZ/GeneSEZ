@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<workflow>
+
+	<!-- load the example model -->
+	<component id="xmiParser" class="org.openarchitectureware.emf.XmiReader">
+		<modelFile value="org/openarchitectureware/uml2ecore/rttest/Model.xmi"/>
+		<metaModelFile value="entity.ecore"/> 
+		<outputSlot value="model"/>
+	</component>
+
+	<!-- run the tests that check the nameing things -->
+    <component id="constrChecker-ecore" class="org.openarchitectureware.check.CheckComponent">
+	    <metaModel id="mm.emf" class="oaw.type.emf.EmfMetaModel">
+			<metaModelFile value="entity.ecore"/> 
+		</metaModel>
+		<checkFile value="org::openarchitectureware::uml2ecore::rttest::tests"/>
+		<emfAllChildrenSlot value="model"/>
+	</component>
+
+    
+</workflow>
