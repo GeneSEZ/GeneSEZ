@@ -77,10 +77,21 @@ private String nsUri(): GLOBALVAR nsUriPrefix;
 	
 // associations are contained in packages and contain their ends
 create MAssociation mapAssociation(Association a, MPackage owningPackage): 
-	setName("Association")->info()->
+	setName(assocName(a))->info()->
 	setOwningPackage(owningPackage)->
 //	setEnd(a.memberEnd)->info()->
 	this;
+	
+private String assocName(Association a):
+	(a.name == null || a.name == "") ?
+		"" :
+		a.name ;
+		
+private String concatList(List l):
+	l.size == 0 ?
+		"" :
+//		(l.first() == null ? concatList(l.withoutFirst()):
+		l.first().toString() + concatList(l.withoutFirst()).toString() ;
 
 // for unidirectional associations, we determine which of the two ends is
 // navigable (by definition, in a unidir assocation, only one end can be
