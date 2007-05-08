@@ -252,6 +252,15 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getMClass_SuperClass() {
+		return (EReference)mClassEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMAssociationEnd() {
 		return mAssociationEndEClass;
 	}
@@ -270,7 +279,7 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getMAssociationEnd_Name() {
+	public EAttribute getMAssociationEnd_Navigable() {
 		return (EAttribute)mAssociationEndEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -279,8 +288,44 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getMAssociationEnd_Aggregation() {
+		return (EAttribute)mAssociationEndEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMAssociationEnd_Composition() {
+		return (EAttribute)mAssociationEndEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMAssociationEnd_Derived() {
+		return (EAttribute)mAssociationEndEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMAssociationEnd_Name() {
+		return (EAttribute)mAssociationEndEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getMAssociationEnd_Association() {
-		return (EReference)mAssociationEndEClass.getEStructuralFeatures().get(2);
+		return (EReference)mAssociationEndEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -289,7 +334,7 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * @generated
 	 */
 	public EReference getMAssociationEnd_Class() {
-		return (EReference)mAssociationEndEClass.getEStructuralFeatures().get(3);
+		return (EReference)mAssociationEndEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -298,7 +343,7 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * @generated
 	 */
 	public EReference getMAssociationEnd_Opposite() {
-		return (EReference)mAssociationEndEClass.getEStructuralFeatures().get(4);
+		return (EReference)mAssociationEndEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -315,7 +360,7 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getMAssociation_Name() {
+	public EAttribute getMAssociation_Derived() {
 		return (EAttribute)mAssociationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -324,8 +369,17 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getMAssociation_Name() {
+		return (EAttribute)mAssociationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getMAssociation_End() {
-		return (EReference)mAssociationEClass.getEStructuralFeatures().get(1);
+		return (EReference)mAssociationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -334,7 +388,7 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 	 * @generated
 	 */
 	public EReference getMAssociation_OwningPackage() {
-		return (EReference)mAssociationEClass.getEStructuralFeatures().get(2);
+		return (EReference)mAssociationEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -450,15 +504,21 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 		createEReference(mClassEClass, MCLASS__ASSOCIATION_END);
 		createEReference(mClassEClass, MCLASS__OWNING_PACKAGE);
 		createEReference(mClassEClass, MCLASS__ATTRIBUTE);
+		createEReference(mClassEClass, MCLASS__SUPER_CLASS);
 
 		mAssociationEndEClass = createEClass(MASSOCIATION_END);
 		createEAttribute(mAssociationEndEClass, MASSOCIATION_END__MULTIPLICITY);
+		createEAttribute(mAssociationEndEClass, MASSOCIATION_END__NAVIGABLE);
+		createEAttribute(mAssociationEndEClass, MASSOCIATION_END__AGGREGATION);
+		createEAttribute(mAssociationEndEClass, MASSOCIATION_END__COMPOSITION);
+		createEAttribute(mAssociationEndEClass, MASSOCIATION_END__DERIVED);
 		createEAttribute(mAssociationEndEClass, MASSOCIATION_END__NAME);
 		createEReference(mAssociationEndEClass, MASSOCIATION_END__ASSOCIATION);
 		createEReference(mAssociationEndEClass, MASSOCIATION_END__CLASS);
 		createEReference(mAssociationEndEClass, MASSOCIATION_END__OPPOSITE);
 
 		mAssociationEClass = createEClass(MASSOCIATION);
+		createEAttribute(mAssociationEClass, MASSOCIATION__DERIVED);
 		createEAttribute(mAssociationEClass, MASSOCIATION__NAME);
 		createEReference(mAssociationEClass, MASSOCIATION__END);
 		createEReference(mAssociationEClass, MASSOCIATION__OWNING_PACKAGE);
@@ -513,15 +573,21 @@ public class CodegenMmPackageImpl extends EPackageImpl implements CodegenMmPacka
 		initEReference(getMClass_AssociationEnd(), this.getMAssociationEnd(), this.getMAssociationEnd_Class(), "associationEnd", null, 0, -1, MClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMClass_OwningPackage(), this.getMPackage(), this.getMPackage_Class(), "owningPackage", null, 1, 1, MClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMClass_Attribute(), this.getMAttribute(), this.getMAttribute_Class(), "attribute", null, 0, -1, MClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMClass_SuperClass(), this.getMClass(), null, "superClass", null, 0, -1, MClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mAssociationEndEClass, MAssociationEnd.class, "MAssociationEnd", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMAssociationEnd_Multiplicity(), ecorePackage.getEInt(), "multiplicity", null, 0, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMAssociationEnd_Navigable(), ecorePackage.getEBoolean(), "navigable", null, 0, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMAssociationEnd_Aggregation(), ecorePackage.getEBoolean(), "aggregation", null, 0, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMAssociationEnd_Composition(), ecorePackage.getEBoolean(), "composition", null, 0, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMAssociationEnd_Derived(), ecorePackage.getEBoolean(), "derived", null, 0, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMAssociationEnd_Name(), ecorePackage.getEString(), "name", null, 0, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMAssociationEnd_Association(), this.getMAssociation(), this.getMAssociation_End(), "association", null, 1, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMAssociationEnd_Class(), this.getMClass(), this.getMClass_AssociationEnd(), "class", null, 1, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMAssociationEnd_Opposite(), this.getMAssociationEnd(), null, "opposite", null, 1, 1, MAssociationEnd.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mAssociationEClass, MAssociation.class, "MAssociation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMAssociation_Derived(), ecorePackage.getEBoolean(), "derived", null, 0, 1, MAssociation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMAssociation_Name(), ecorePackage.getEString(), "name", null, 0, 1, MAssociation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMAssociation_End(), this.getMAssociationEnd(), this.getMAssociationEnd_Association(), "end", null, 0, -1, MAssociation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMAssociation_OwningPackage(), this.getMPackage(), this.getMPackage_Association(), "owningPackage", null, 1, 1, MAssociation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

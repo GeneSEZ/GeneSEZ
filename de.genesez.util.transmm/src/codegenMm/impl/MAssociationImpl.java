@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link codegenMm.impl.MAssociationImpl#isDerived <em>Derived</em>}</li>
  *   <li>{@link codegenMm.impl.MAssociationImpl#getName <em>Name</em>}</li>
  *   <li>{@link codegenMm.impl.MAssociationImpl#getEnd <em>End</em>}</li>
  *   <li>{@link codegenMm.impl.MAssociationImpl#getOwningPackage <em>Owning Package</em>}</li>
@@ -46,6 +47,26 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class MAssociationImpl extends EObjectImpl implements MAssociation {
+	/**
+	 * The default value of the '{@link #isDerived() <em>Derived</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDerived()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DERIVED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDerived() <em>Derived</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDerived()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean derived = DERIVED_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -92,6 +113,27 @@ public class MAssociationImpl extends EObjectImpl implements MAssociation {
 	 */
 	protected EClass eStaticClass() {
 		return CodegenMmPackage.Literals.MASSOCIATION;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isDerived() {
+		return derived;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDerived(boolean newDerived) {
+		boolean oldDerived = derived;
+		derived = newDerived;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CodegenMmPackage.MASSOCIATION__DERIVED, oldDerived, derived));
 	}
 
 	/**
@@ -220,6 +262,8 @@ public class MAssociationImpl extends EObjectImpl implements MAssociation {
 	 */
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case CodegenMmPackage.MASSOCIATION__DERIVED:
+				return isDerived() ? Boolean.TRUE : Boolean.FALSE;
 			case CodegenMmPackage.MASSOCIATION__NAME:
 				return getName();
 			case CodegenMmPackage.MASSOCIATION__END:
@@ -237,6 +281,9 @@ public class MAssociationImpl extends EObjectImpl implements MAssociation {
 	 */
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case CodegenMmPackage.MASSOCIATION__DERIVED:
+				setDerived(((Boolean)newValue).booleanValue());
+				return;
 			case CodegenMmPackage.MASSOCIATION__NAME:
 				setName((String)newValue);
 				return;
@@ -258,6 +305,9 @@ public class MAssociationImpl extends EObjectImpl implements MAssociation {
 	 */
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case CodegenMmPackage.MASSOCIATION__DERIVED:
+				setDerived(DERIVED_EDEFAULT);
+				return;
 			case CodegenMmPackage.MASSOCIATION__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -278,6 +328,8 @@ public class MAssociationImpl extends EObjectImpl implements MAssociation {
 	 */
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case CodegenMmPackage.MASSOCIATION__DERIVED:
+				return derived != DERIVED_EDEFAULT;
 			case CodegenMmPackage.MASSOCIATION__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CodegenMmPackage.MASSOCIATION__END:
@@ -297,7 +349,9 @@ public class MAssociationImpl extends EObjectImpl implements MAssociation {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		result.append(" (derived: ");
+		result.append(derived);
+		result.append(", name: ");
 		result.append(name);
 		result.append(')');
 		return result.toString();

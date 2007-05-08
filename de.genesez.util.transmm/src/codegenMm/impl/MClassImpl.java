@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link codegenMm.impl.MClassImpl#getAssociationEnd <em>Association End</em>}</li>
  *   <li>{@link codegenMm.impl.MClassImpl#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link codegenMm.impl.MClassImpl#getAttribute <em>Attribute</em>}</li>
+ *   <li>{@link codegenMm.impl.MClassImpl#getSuperClass <em>Super Class</em>}</li>
  * </ul>
  * </p>
  *
@@ -86,6 +88,16 @@ public class MClassImpl extends EObjectImpl implements MClass {
 	 * @ordered
 	 */
 	protected EList attribute = null;
+
+	/**
+	 * The cached value of the '{@link #getSuperClass() <em>Super Class</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSuperClass()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList superClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -196,6 +208,18 @@ public class MClassImpl extends EObjectImpl implements MClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList getSuperClass() {
+		if (superClass == null) {
+			superClass = new EObjectResolvingEList(MClass.class, this, CodegenMmPackage.MCLASS__SUPER_CLASS);
+		}
+		return superClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CodegenMmPackage.MCLASS__ASSOCIATION_END:
@@ -255,6 +279,8 @@ public class MClassImpl extends EObjectImpl implements MClass {
 				return getOwningPackage();
 			case CodegenMmPackage.MCLASS__ATTRIBUTE:
 				return getAttribute();
+			case CodegenMmPackage.MCLASS__SUPER_CLASS:
+				return getSuperClass();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -280,6 +306,10 @@ public class MClassImpl extends EObjectImpl implements MClass {
 				getAttribute().clear();
 				getAttribute().addAll((Collection)newValue);
 				return;
+			case CodegenMmPackage.MCLASS__SUPER_CLASS:
+				getSuperClass().clear();
+				getSuperClass().addAll((Collection)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -303,6 +333,9 @@ public class MClassImpl extends EObjectImpl implements MClass {
 			case CodegenMmPackage.MCLASS__ATTRIBUTE:
 				getAttribute().clear();
 				return;
+			case CodegenMmPackage.MCLASS__SUPER_CLASS:
+				getSuperClass().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -322,6 +355,8 @@ public class MClassImpl extends EObjectImpl implements MClass {
 				return getOwningPackage() != null;
 			case CodegenMmPackage.MCLASS__ATTRIBUTE:
 				return attribute != null && !attribute.isEmpty();
+			case CodegenMmPackage.MCLASS__SUPER_CLASS:
+				return superClass != null && !superClass.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

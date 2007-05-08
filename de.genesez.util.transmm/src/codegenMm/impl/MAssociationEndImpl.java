@@ -30,6 +30,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * The following features are implemented:
  * <ul>
  *   <li>{@link codegenMm.impl.MAssociationEndImpl#getMultiplicity <em>Multiplicity</em>}</li>
+ *   <li>{@link codegenMm.impl.MAssociationEndImpl#isNavigable <em>Navigable</em>}</li>
+ *   <li>{@link codegenMm.impl.MAssociationEndImpl#isAggregation <em>Aggregation</em>}</li>
+ *   <li>{@link codegenMm.impl.MAssociationEndImpl#isComposition <em>Composition</em>}</li>
+ *   <li>{@link codegenMm.impl.MAssociationEndImpl#isDerived <em>Derived</em>}</li>
  *   <li>{@link codegenMm.impl.MAssociationEndImpl#getName <em>Name</em>}</li>
  *   <li>{@link codegenMm.impl.MAssociationEndImpl#getAssociation <em>Association</em>}</li>
  *   <li>{@link codegenMm.impl.MAssociationEndImpl#getClass_ <em>Class</em>}</li>
@@ -59,6 +63,86 @@ public class MAssociationEndImpl extends EObjectImpl implements MAssociationEnd 
 	 * @ordered
 	 */
 	protected int multiplicity = MULTIPLICITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isNavigable() <em>Navigable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isNavigable()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean NAVIGABLE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isNavigable() <em>Navigable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isNavigable()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean navigable = NAVIGABLE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isAggregation() <em>Aggregation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAggregation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean AGGREGATION_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAggregation() <em>Aggregation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAggregation()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean aggregation = AGGREGATION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isComposition() <em>Composition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isComposition()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean COMPOSITION_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isComposition() <em>Composition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isComposition()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean composition = COMPOSITION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDerived() <em>Derived</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDerived()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DERIVED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDerived() <em>Derived</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDerived()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean derived = DERIVED_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -137,6 +221,90 @@ public class MAssociationEndImpl extends EObjectImpl implements MAssociationEnd 
 		multiplicity = newMultiplicity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CodegenMmPackage.MASSOCIATION_END__MULTIPLICITY, oldMultiplicity, multiplicity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isNavigable() {
+		return navigable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNavigable(boolean newNavigable) {
+		boolean oldNavigable = navigable;
+		navigable = newNavigable;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CodegenMmPackage.MASSOCIATION_END__NAVIGABLE, oldNavigable, navigable));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isAggregation() {
+		return aggregation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAggregation(boolean newAggregation) {
+		boolean oldAggregation = aggregation;
+		aggregation = newAggregation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CodegenMmPackage.MASSOCIATION_END__AGGREGATION, oldAggregation, aggregation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isComposition() {
+		return composition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setComposition(boolean newComposition) {
+		boolean oldComposition = composition;
+		composition = newComposition;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CodegenMmPackage.MASSOCIATION_END__COMPOSITION, oldComposition, composition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isDerived() {
+		return derived;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDerived(boolean newDerived) {
+		boolean oldDerived = derived;
+		derived = newDerived;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CodegenMmPackage.MASSOCIATION_END__DERIVED, oldDerived, derived));
 	}
 
 	/**
@@ -355,6 +523,14 @@ public class MAssociationEndImpl extends EObjectImpl implements MAssociationEnd 
 		switch (featureID) {
 			case CodegenMmPackage.MASSOCIATION_END__MULTIPLICITY:
 				return new Integer(getMultiplicity());
+			case CodegenMmPackage.MASSOCIATION_END__NAVIGABLE:
+				return isNavigable() ? Boolean.TRUE : Boolean.FALSE;
+			case CodegenMmPackage.MASSOCIATION_END__AGGREGATION:
+				return isAggregation() ? Boolean.TRUE : Boolean.FALSE;
+			case CodegenMmPackage.MASSOCIATION_END__COMPOSITION:
+				return isComposition() ? Boolean.TRUE : Boolean.FALSE;
+			case CodegenMmPackage.MASSOCIATION_END__DERIVED:
+				return isDerived() ? Boolean.TRUE : Boolean.FALSE;
 			case CodegenMmPackage.MASSOCIATION_END__NAME:
 				return getName();
 			case CodegenMmPackage.MASSOCIATION_END__ASSOCIATION:
@@ -378,6 +554,18 @@ public class MAssociationEndImpl extends EObjectImpl implements MAssociationEnd 
 		switch (featureID) {
 			case CodegenMmPackage.MASSOCIATION_END__MULTIPLICITY:
 				setMultiplicity(((Integer)newValue).intValue());
+				return;
+			case CodegenMmPackage.MASSOCIATION_END__NAVIGABLE:
+				setNavigable(((Boolean)newValue).booleanValue());
+				return;
+			case CodegenMmPackage.MASSOCIATION_END__AGGREGATION:
+				setAggregation(((Boolean)newValue).booleanValue());
+				return;
+			case CodegenMmPackage.MASSOCIATION_END__COMPOSITION:
+				setComposition(((Boolean)newValue).booleanValue());
+				return;
+			case CodegenMmPackage.MASSOCIATION_END__DERIVED:
+				setDerived(((Boolean)newValue).booleanValue());
 				return;
 			case CodegenMmPackage.MASSOCIATION_END__NAME:
 				setName((String)newValue);
@@ -405,6 +593,18 @@ public class MAssociationEndImpl extends EObjectImpl implements MAssociationEnd 
 			case CodegenMmPackage.MASSOCIATION_END__MULTIPLICITY:
 				setMultiplicity(MULTIPLICITY_EDEFAULT);
 				return;
+			case CodegenMmPackage.MASSOCIATION_END__NAVIGABLE:
+				setNavigable(NAVIGABLE_EDEFAULT);
+				return;
+			case CodegenMmPackage.MASSOCIATION_END__AGGREGATION:
+				setAggregation(AGGREGATION_EDEFAULT);
+				return;
+			case CodegenMmPackage.MASSOCIATION_END__COMPOSITION:
+				setComposition(COMPOSITION_EDEFAULT);
+				return;
+			case CodegenMmPackage.MASSOCIATION_END__DERIVED:
+				setDerived(DERIVED_EDEFAULT);
+				return;
 			case CodegenMmPackage.MASSOCIATION_END__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -430,6 +630,14 @@ public class MAssociationEndImpl extends EObjectImpl implements MAssociationEnd 
 		switch (featureID) {
 			case CodegenMmPackage.MASSOCIATION_END__MULTIPLICITY:
 				return multiplicity != MULTIPLICITY_EDEFAULT;
+			case CodegenMmPackage.MASSOCIATION_END__NAVIGABLE:
+				return navigable != NAVIGABLE_EDEFAULT;
+			case CodegenMmPackage.MASSOCIATION_END__AGGREGATION:
+				return aggregation != AGGREGATION_EDEFAULT;
+			case CodegenMmPackage.MASSOCIATION_END__COMPOSITION:
+				return composition != COMPOSITION_EDEFAULT;
+			case CodegenMmPackage.MASSOCIATION_END__DERIVED:
+				return derived != DERIVED_EDEFAULT;
 			case CodegenMmPackage.MASSOCIATION_END__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CodegenMmPackage.MASSOCIATION_END__ASSOCIATION:
@@ -453,6 +661,14 @@ public class MAssociationEndImpl extends EObjectImpl implements MAssociationEnd 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (multiplicity: ");
 		result.append(multiplicity);
+		result.append(", navigable: ");
+		result.append(navigable);
+		result.append(", aggregation: ");
+		result.append(aggregation);
+		result.append(", composition: ");
+		result.append(composition);
+		result.append(", derived: ");
+		result.append(derived);
 		result.append(", name: ");
 		result.append(name);
 		result.append(')');

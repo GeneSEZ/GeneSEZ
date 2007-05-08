@@ -92,7 +92,7 @@ create EReference this createRef( Property a ):
     a.upperValue.stringValue() != "1" ? setUpperBound(-1) : null ->	
 	// this one copies the containment
 	setContainment( a.isComposite ) ->
-	// and finally, we add the refernce to the result of mapping 
+	// and finally, we add the reference to the result of mapping 
 	// the UML class associated with the property to the respective EClass
 	// Note: we can call mapClass() as often as we want, since create
 	// extensions are cached and, when invoked several times with the 
@@ -122,6 +122,10 @@ create EClass this mapClass(Class c):
 // creates the additional name attribute, if necessary	
 create EAttribute this createNameAttr(EClass cls):
 	setName("name") -> setEType( "String".mapTypeName() );	
+
+// creates the additional xmi:id attribute	
+create EAttribute this createUidAttr(EClass cls):
+	setName("xmiId") -> setEType( "String".mapTypeName() );	
 
 // copying attributes is easy, just copy name and type
 create EAttribute this mapAttribute( Property a ):

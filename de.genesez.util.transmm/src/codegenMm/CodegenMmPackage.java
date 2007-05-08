@@ -179,13 +179,22 @@ public interface CodegenMmPackage extends EPackage {
 	int MCLASS__ATTRIBUTE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Super Class</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MCLASS__SUPER_CLASS = 4;
+
+	/**
 	 * The number of structural features of the '<em>MClass</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MCLASS_FEATURE_COUNT = 4;
+	int MCLASS_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link codegenMm.impl.MAssociationEndImpl <em>MAssociation End</em>}' class.
@@ -207,13 +216,49 @@ public interface CodegenMmPackage extends EPackage {
 	int MASSOCIATION_END__MULTIPLICITY = 0;
 
 	/**
+	 * The feature id for the '<em><b>Navigable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MASSOCIATION_END__NAVIGABLE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Aggregation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MASSOCIATION_END__AGGREGATION = 2;
+
+	/**
+	 * The feature id for the '<em><b>Composition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MASSOCIATION_END__COMPOSITION = 3;
+
+	/**
+	 * The feature id for the '<em><b>Derived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MASSOCIATION_END__DERIVED = 4;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION_END__NAME = 1;
+	int MASSOCIATION_END__NAME = 5;
 
 	/**
 	 * The feature id for the '<em><b>Association</b></em>' container reference.
@@ -222,7 +267,7 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION_END__ASSOCIATION = 2;
+	int MASSOCIATION_END__ASSOCIATION = 6;
 
 	/**
 	 * The feature id for the '<em><b>Class</b></em>' reference.
@@ -231,7 +276,7 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION_END__CLASS = 3;
+	int MASSOCIATION_END__CLASS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Opposite</b></em>' reference.
@@ -240,7 +285,7 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION_END__OPPOSITE = 4;
+	int MASSOCIATION_END__OPPOSITE = 8;
 
 	/**
 	 * The number of structural features of the '<em>MAssociation End</em>' class.
@@ -249,7 +294,7 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION_END_FEATURE_COUNT = 5;
+	int MASSOCIATION_END_FEATURE_COUNT = 9;
 
 	/**
 	 * The meta object id for the '{@link codegenMm.impl.MAssociationImpl <em>MAssociation</em>}' class.
@@ -262,13 +307,22 @@ public interface CodegenMmPackage extends EPackage {
 	int MASSOCIATION = 3;
 
 	/**
+	 * The feature id for the '<em><b>Derived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MASSOCIATION__DERIVED = 0;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION__NAME = 0;
+	int MASSOCIATION__NAME = 1;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' containment reference list.
@@ -277,7 +331,7 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION__END = 1;
+	int MASSOCIATION__END = 2;
 
 	/**
 	 * The feature id for the '<em><b>Owning Package</b></em>' container reference.
@@ -286,7 +340,7 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION__OWNING_PACKAGE = 2;
+	int MASSOCIATION__OWNING_PACKAGE = 3;
 
 	/**
 	 * The number of structural features of the '<em>MAssociation</em>' class.
@@ -295,7 +349,7 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MASSOCIATION_FEATURE_COUNT = 3;
+	int MASSOCIATION_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link codegenMm.impl.MAttributeImpl <em>MAttribute</em>}' class.
@@ -521,6 +575,17 @@ public interface CodegenMmPackage extends EPackage {
 	EReference getMClass_Attribute();
 
 	/**
+	 * Returns the meta object for the reference list '{@link codegenMm.MClass#getSuperClass <em>Super Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Super Class</em>'.
+	 * @see codegenMm.MClass#getSuperClass()
+	 * @see #getMClass()
+	 * @generated
+	 */
+	EReference getMClass_SuperClass();
+
+	/**
 	 * Returns the meta object for class '{@link codegenMm.MAssociationEnd <em>MAssociation End</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -540,6 +605,50 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getMAssociationEnd_Multiplicity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link codegenMm.MAssociationEnd#isNavigable <em>Navigable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Navigable</em>'.
+	 * @see codegenMm.MAssociationEnd#isNavigable()
+	 * @see #getMAssociationEnd()
+	 * @generated
+	 */
+	EAttribute getMAssociationEnd_Navigable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link codegenMm.MAssociationEnd#isAggregation <em>Aggregation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Aggregation</em>'.
+	 * @see codegenMm.MAssociationEnd#isAggregation()
+	 * @see #getMAssociationEnd()
+	 * @generated
+	 */
+	EAttribute getMAssociationEnd_Aggregation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link codegenMm.MAssociationEnd#isComposition <em>Composition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Composition</em>'.
+	 * @see codegenMm.MAssociationEnd#isComposition()
+	 * @see #getMAssociationEnd()
+	 * @generated
+	 */
+	EAttribute getMAssociationEnd_Composition();
+
+	/**
+	 * Returns the meta object for the attribute '{@link codegenMm.MAssociationEnd#isDerived <em>Derived</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Derived</em>'.
+	 * @see codegenMm.MAssociationEnd#isDerived()
+	 * @see #getMAssociationEnd()
+	 * @generated
+	 */
+	EAttribute getMAssociationEnd_Derived();
 
 	/**
 	 * Returns the meta object for the attribute '{@link codegenMm.MAssociationEnd#getName <em>Name</em>}'.
@@ -594,6 +703,17 @@ public interface CodegenMmPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMAssociation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link codegenMm.MAssociation#isDerived <em>Derived</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Derived</em>'.
+	 * @see codegenMm.MAssociation#isDerived()
+	 * @see #getMAssociation()
+	 * @generated
+	 */
+	EAttribute getMAssociation_Derived();
 
 	/**
 	 * Returns the meta object for the attribute '{@link codegenMm.MAssociation#getName <em>Name</em>}'.
@@ -837,6 +957,14 @@ public interface CodegenMmPackage extends EPackage {
 		EReference MCLASS__ATTRIBUTE = eINSTANCE.getMClass_Attribute();
 
 		/**
+		 * The meta object literal for the '<em><b>Super Class</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MCLASS__SUPER_CLASS = eINSTANCE.getMClass_SuperClass();
+
+		/**
 		 * The meta object literal for the '{@link codegenMm.impl.MAssociationEndImpl <em>MAssociation End</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -853,6 +981,38 @@ public interface CodegenMmPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MASSOCIATION_END__MULTIPLICITY = eINSTANCE.getMAssociationEnd_Multiplicity();
+
+		/**
+		 * The meta object literal for the '<em><b>Navigable</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MASSOCIATION_END__NAVIGABLE = eINSTANCE.getMAssociationEnd_Navigable();
+
+		/**
+		 * The meta object literal for the '<em><b>Aggregation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MASSOCIATION_END__AGGREGATION = eINSTANCE.getMAssociationEnd_Aggregation();
+
+		/**
+		 * The meta object literal for the '<em><b>Composition</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MASSOCIATION_END__COMPOSITION = eINSTANCE.getMAssociationEnd_Composition();
+
+		/**
+		 * The meta object literal for the '<em><b>Derived</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MASSOCIATION_END__DERIVED = eINSTANCE.getMAssociationEnd_Derived();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -895,6 +1055,14 @@ public interface CodegenMmPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MASSOCIATION = eINSTANCE.getMAssociation();
+
+		/**
+		 * The meta object literal for the '<em><b>Derived</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MASSOCIATION__DERIVED = eINSTANCE.getMAssociation_Derived();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.

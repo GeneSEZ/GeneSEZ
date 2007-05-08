@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link codegenMm.MClass#getAssociationEnd <em>Association End</em>}</li>
  *   <li>{@link codegenMm.MClass#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link codegenMm.MClass#getAttribute <em>Attribute</em>}</li>
+ *   <li>{@link codegenMm.MClass#getSuperClass <em>Super Class</em>}</li>
  * </ul>
  * </p>
  *
@@ -119,5 +120,21 @@ public interface MClass extends EObject {
 	 * @generated
 	 */
 	EList getAttribute();
+
+	/**
+	 * Returns the value of the '<em><b>Super Class</b></em>' reference list.
+	 * The list contents are of type {@link codegenMm.MClass}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Super Class</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Super Class</em>' reference list.
+	 * @see codegenMm.CodegenMmPackage#getMClass_SuperClass()
+	 * @model type="codegenMm.MClass"
+	 * @generated
+	 */
+	EList getSuperClass();
 
 } // MClass
