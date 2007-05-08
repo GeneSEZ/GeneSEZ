@@ -27,9 +27,14 @@ extension org::openarchitectureware::uml2ecore::io;
 create MModel this transform(Model m): 
  	// the name of the new package should be the same as the UML model
 	setName(m.name)->info()->
+	// set the unique xmiId
+	// setXmiId(xmiId(m))->
 	// start descending package tree
 	setOwnedPackage(m.ownedElement.typeSelect(Package).reject(e|((Package) e).name == ignoredPackage())
 	.mapPackage(this))->this;
+
+private String xmiId (Element obj) : 
+	JAVA de.genesez.util.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
 
 // only packages are contained in the model element
 // they can contain more packages or classes
@@ -57,9 +62,12 @@ create MPackage mapPackage( Package p, MPackage nesting ) :
 // classes are contained in packages. 
 // they own attributes and Association ends
 create MClass mapClass( Class c, MPackage owningPackage) :
-	setName(c.name)->info()->setOwningPackage(owningPackage)->
+	setName(c.name)->
+//	c.info()->" is mapped to ".info()->
+	info()->
+	setOwningPackage(owningPackage)->
 	// add attributes
-	setAttribute(c.ownedAttribute.mapAttribute(this))->
+	setAttribute(c.ownedAttribute.reject(p|p.association != null).mapAttribute(this))->
 	this;
 
 // attributes at the moment are leafs in the model tree.
@@ -79,20 +87,31 @@ private String nsUri(): GLOBALVAR nsUriPrefix;
 create MAssociation mapAssociation(Association a, MPackage owningPackage): 
 	setName(assocName(a))->info()->
 	setOwningPackage(owningPackage)->
-//	setEnd(a.memberEnd)->info()->
+	setEnd(a.memberEnd.mapAssociationEnd(this, a))->
 	this;
 	
 private String assocName(Association a):
 	(a.name == null || a.name == "") ?
 		"" :
 		a.name ;
-		
-private String concatList(List l):
-	l.size == 0 ?
-		"" :
-//		(l.first() == null ? concatList(l.withoutFirst()):
-		l.first().toString() + concatList(l.withoutFirst()).toString() ;
 
+// MAssociationEnd is represented by a property in the uml2 meta model
+create MAssociationEnd mapAssociationEnd(Property aend, MAssociation owningAssociation, Association umlassoc):
+	setName(aend.assocEndName())->info()->
+	// Note: we can call mapClass() as often as we want, since create
+	// extensions are cached and, when invoked several times with the 
+	// same arguments are executed only upon first invocation. Subsequent
+	// invocations return the cached result of the first invocation
+	this;
+	
+private String assocEndName(Property a):
+//	"toClass: ".info()->a.class.info()->
+//	a.associationEnd.info()->
+	(a.name == null || a.name == "") ?
+		(a.class == null ? "???" : a.class.name.toFirstLower()) :
+		a.name ;
+	
+	
 // for unidirectional associations, we determine which of the two ends is
 // navigable (by definition, in a unidir assocation, only one end can be
 // navigable!). For tht end, we create an Ecore reference by calling the

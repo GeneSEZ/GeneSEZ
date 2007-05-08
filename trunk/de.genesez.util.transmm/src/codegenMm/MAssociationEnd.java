@@ -17,6 +17,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link codegenMm.MAssociationEnd#getMultiplicity <em>Multiplicity</em>}</li>
+ *   <li>{@link codegenMm.MAssociationEnd#isNavigable <em>Navigable</em>}</li>
+ *   <li>{@link codegenMm.MAssociationEnd#isAggregation <em>Aggregation</em>}</li>
+ *   <li>{@link codegenMm.MAssociationEnd#isComposition <em>Composition</em>}</li>
+ *   <li>{@link codegenMm.MAssociationEnd#isDerived <em>Derived</em>}</li>
  *   <li>{@link codegenMm.MAssociationEnd#getName <em>Name</em>}</li>
  *   <li>{@link codegenMm.MAssociationEnd#getAssociation <em>Association</em>}</li>
  *   <li>{@link codegenMm.MAssociationEnd#getClass_ <em>Class</em>}</li>
@@ -54,6 +58,110 @@ public interface MAssociationEnd extends EObject {
 	 * @generated
 	 */
 	void setMultiplicity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Navigable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Navigable</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Navigable</em>' attribute.
+	 * @see #setNavigable(boolean)
+	 * @see codegenMm.CodegenMmPackage#getMAssociationEnd_Navigable()
+	 * @model
+	 * @generated
+	 */
+	boolean isNavigable();
+
+	/**
+	 * Sets the value of the '{@link codegenMm.MAssociationEnd#isNavigable <em>Navigable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Navigable</em>' attribute.
+	 * @see #isNavigable()
+	 * @generated
+	 */
+	void setNavigable(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Aggregation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Aggregation</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Aggregation</em>' attribute.
+	 * @see #setAggregation(boolean)
+	 * @see codegenMm.CodegenMmPackage#getMAssociationEnd_Aggregation()
+	 * @model
+	 * @generated
+	 */
+	boolean isAggregation();
+
+	/**
+	 * Sets the value of the '{@link codegenMm.MAssociationEnd#isAggregation <em>Aggregation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Aggregation</em>' attribute.
+	 * @see #isAggregation()
+	 * @generated
+	 */
+	void setAggregation(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Composition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Composition</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Composition</em>' attribute.
+	 * @see #setComposition(boolean)
+	 * @see codegenMm.CodegenMmPackage#getMAssociationEnd_Composition()
+	 * @model
+	 * @generated
+	 */
+	boolean isComposition();
+
+	/**
+	 * Sets the value of the '{@link codegenMm.MAssociationEnd#isComposition <em>Composition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Composition</em>' attribute.
+	 * @see #isComposition()
+	 * @generated
+	 */
+	void setComposition(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Derived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Derived</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Derived</em>' attribute.
+	 * @see #setDerived(boolean)
+	 * @see codegenMm.CodegenMmPackage#getMAssociationEnd_Derived()
+	 * @model
+	 * @generated
+	 */
+	boolean isDerived();
+
+	/**
+	 * Sets the value of the '{@link codegenMm.MAssociationEnd#isDerived <em>Derived</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Derived</em>' attribute.
+	 * @see #isDerived()
+	 * @generated
+	 */
+	void setDerived(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.

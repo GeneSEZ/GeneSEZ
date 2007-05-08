@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link codegenMm.MAssociation#isDerived <em>Derived</em>}</li>
  *   <li>{@link codegenMm.MAssociation#getName <em>Name</em>}</li>
  *   <li>{@link codegenMm.MAssociation#getEnd <em>End</em>}</li>
  *   <li>{@link codegenMm.MAssociation#getOwningPackage <em>Owning Package</em>}</li>
@@ -29,6 +30,32 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface MAssociation extends EObject {
+	/**
+	 * Returns the value of the '<em><b>Derived</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Derived</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Derived</em>' attribute.
+	 * @see #setDerived(boolean)
+	 * @see codegenMm.CodegenMmPackage#getMAssociation_Derived()
+	 * @model
+	 * @generated
+	 */
+	boolean isDerived();
+
+	/**
+	 * Sets the value of the '{@link codegenMm.MAssociation#isDerived <em>Derived</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Derived</em>' attribute.
+	 * @see #isDerived()
+	 * @generated
+	 */
+	void setDerived(boolean value);
+
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
