@@ -54,8 +54,8 @@ private MPackage processPackage( Package p) :
 	mp.setNestedPackage(p.ownedElement.typeSelect(Package).processPackage())->
 	// add classes in package
 	mp.setClass(p.ownedElement.typeSelect(Class).processClass().setOwningPackage(mp)) ->
-	// map associations in package to unidirectional or bidirectional references
-//	p.ownedMember.typeSelect( Association ).mapAssociation(mp)
+	// map associations in package 
+	p.ownedMember.typeSelect( Association ).processAssociation(mp) ->
 	mp;
 	
 // create new MClass from uml2 class
@@ -77,8 +77,8 @@ create MAttribute makeAttribute( Property p ) :
 	// set the unique xmiId
 	setXmiId(getXmiIdAtt(p))->
 	setName(p.name)->
-	setVisibility(p.visibility.toString())->info()->
-	setType(p.type.toString())->
+	setVisibility(p.visibility.toString())->
+	setType(p.type.name)->info()->
 	this;
 
 // attributes at the moment are leafs in the model tree, so do nearly nothing here.
@@ -86,38 +86,54 @@ private MAttribute processAttribute( Property p) :
 	let ma = makeAttribute(p) :
 	ma;
 
-// associations are contained in packages and contain their ends
-create MAssociation mapAssociation(Association a, MPackage owningPackage): 
+// create new MAssociation from uml2 Association
+create MAssociation makeAssociation( Association a ) :
 	// set the unique xmiId
 	setXmiId(getXmiIdAtt(a))->
 	setName(assocName(a))->info()->
-	setOwningPackage(owningPackage)->
-	setEnd(a.memberEnd.mapAssociationEnd(this, a))->
 	this;
+
+// associations are contained in packages and contain their ends
+private MAssociation processAssociation(Association a, MPackage owningPackage): 
+	let ma = makeAssociation(a) :
+	ma.setOwningPackage(owningPackage)->
+	ma.setEnd(a.memberEnd.makeAssociationEnd())->
+	ma.linkEnds()->
+	ma;
 	
 private String assocName(Association a):
 	(a.name == null || a.name == "") ?
 		"" :
 		a.name ;
 
-// MAssociationEnd is represented by a property in the uml2 meta model
-create MAssociationEnd mapAssociationEnd(Property aend, MAssociation owningAssociation, Association umlassoc):
+create MAssociationEnd makeAssociationEnd(Property aend) :
 	// set the unique xmiId
 	setXmiId(getXmiIdAtt(aend))->
-	setName(aend.assocEndName())->info()->
-	// Note: we can call mapClass() as often as we want, since create
+	setClass(assocEndClass(aend))->
+	setName(assocEndName(aend))->info()->
+	info("end class " + class.name)->
+	this;
+	
+private MClass assocEndClass(Property a):
+	// Note: we can call makeClass() as often as we want, since create
 	// extensions are cached and, when invoked several times with the 
 	// same arguments are executed only upon first invocation. Subsequent
 	// invocations return the cached result of the first invocation
-	this;
+		a.class == null ? null : makeClass(a.class);
 	
+private MAssociation linkEnds(MAssociation ma) :
+	let mend = ma.end :
+	mend.size == 2 ?
+		(mend.get(0).setOpposite(mend.get(1))->
+		mend.get(1).setOpposite(mend.get(0))-> ma) :
+		ma;
+
 private String assocEndName(Property a):
-//	"toClass: ".info()->a.class.info()->
-//	a.associationEnd.info()->
 	(a.name == null || a.name == "") ?
-		(a.class == null ? "???" : a.class.name.toFirstLower()) :
+		(a.opposite == null ? "no opposite" : 
+			(a.opposite.class == null ? "no opposite class" : a.opposite.class.name.toFirstLower())) :
 		a.name ;
-	
+
 // externally configure packages to ignore, e.g. UML standard profile :-)
 private String ignoredPackage(): GLOBALVAR excludePackage; 	
 		
