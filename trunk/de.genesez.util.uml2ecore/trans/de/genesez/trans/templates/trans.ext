@@ -25,9 +25,10 @@ extension org::openarchitectureware::uml2ecore::io;
 // after the create keyword. Note that the newly created 
 // EPackage can be accessed by "this" inside the function
 create MModel this transform(Model m): 
+	// set the unique xmiId
+	setXmiId(getXmiIdAtt(m))->
  	// the name of the new package should be the same as the UML model
 	setName(m.name)->info()->
-	// set the unique xmiId
 	// setXmiId(xmiId(m))->
 	// start descending package tree
 	setOwnedPackage(m.ownedElement.typeSelect(Package).reject(e|((Package) e).name == ignoredPackage())
@@ -35,10 +36,15 @@ create MModel this transform(Model m):
 
 private String xmiId (Element obj) : 
 	JAVA de.genesez.util.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
+	
+private getXmiIdAtt (Element e) :
+	xmiId(e);
 
 // only packages are contained in the model element
 // they can contain more packages or classes
 create MPackage mapPackage( Package p, MModel model ) :
+	// set the unique xmiId
+	setXmiId(getXmiIdAtt(p))->
 	setName(p.name)->info()->setModel(model)->
 	// recursively descend package tree
 	setNestedPackage(p.ownedElement.typeSelect(Package).mapPackage(this))->
@@ -50,6 +56,8 @@ create MPackage mapPackage( Package p, MModel model ) :
 
 // here are packages nested in packages
 create MPackage mapPackage( Package p, MPackage nesting ) :
+	// set the unique xmiId
+	setXmiId(getXmiIdAtt(p))->
 	setName(p.name)->info()->setNestingPackage(nesting)->
 	// recursively descend package tree
 	setNestedPackage(p.ownedElement.typeSelect(Package).mapPackage(this))->
@@ -62,6 +70,8 @@ create MPackage mapPackage( Package p, MPackage nesting ) :
 // classes are contained in packages. 
 // they own attributes and Association ends
 create MClass mapClass( Class c, MPackage owningPackage) :
+	// set the unique xmiId
+	setXmiId(getXmiIdAtt(c))->
 	setName(c.name)->
 //	c.info()->" is mapped to ".info()->
 	info()->
@@ -72,6 +82,8 @@ create MClass mapClass( Class c, MPackage owningPackage) :
 
 // attributes at the moment are leafs in the model tree.
 create MAttribute mapAttribute( Property p, MClass class) :
+	// set the unique xmiId
+	setXmiId(getXmiIdAtt(p))->
 	setName(p.name)->
 	setVisibility(p.visibility.toString())->info()->
 	setType(p.type.toString())->
@@ -85,6 +97,8 @@ private String nsUri(): GLOBALVAR nsUriPrefix;
 	
 // associations are contained in packages and contain their ends
 create MAssociation mapAssociation(Association a, MPackage owningPackage): 
+	// set the unique xmiId
+	setXmiId(getXmiIdAtt(a))->
 	setName(assocName(a))->info()->
 	setOwningPackage(owningPackage)->
 	setEnd(a.memberEnd.mapAssociationEnd(this, a))->
@@ -97,6 +111,8 @@ private String assocName(Association a):
 
 // MAssociationEnd is represented by a property in the uml2 meta model
 create MAssociationEnd mapAssociationEnd(Property aend, MAssociation owningAssociation, Association umlassoc):
+	// set the unique xmiId
+	setXmiId(getXmiIdAtt(aend))->
 	setName(aend.assocEndName())->info()->
 	// Note: we can call mapClass() as often as we want, since create
 	// extensions are cached and, when invoked several times with the 
