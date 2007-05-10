@@ -1,0 +1,20 @@
+«IMPORT codegenMm»
+
+«DEFINE Root FOR MModel»
+«FILE "test.txt"»
+>>	model: «name»
+	«EXPAND Root FOREACH ownedPackage»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Root FOR MPackage»
+>>	package: «name»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH class»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClass»
+>>	class: «name»
+	«EXPAND java::Root FOR this»
+«ENDDEFINE»
+

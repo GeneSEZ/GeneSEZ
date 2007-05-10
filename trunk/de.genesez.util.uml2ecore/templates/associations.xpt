@@ -1,0 +1,129 @@
+«REM»
+	handles associations
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT codegenMm»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION util»
+«EXTENSION naming»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«REM»
+	generate association attribute declarations, and
+	accessor methods for class association attributes
+«ENDREM»
+«DEFINE Root FOR MClass»
+	// -- declare association attributes ----------------------------
+	«EXPAND AssAttrDecl FOREACH associationEnd»
+	// -- accessores for association attributes ---------------------
+	«EXPAND AssAttrAccessImpl FOREACH associationEnd»
+«ENDDEFINE»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«REM»
+	generate attribute declarations for each association
+«ENDREM»
+«DEFINE AssAttrDecl FOR MAssociationEnd»
+«REM»«IF opposite.isNavigable-»«ENDREM»
+	«IF opposite.multiplicity == 0 ||opposite.multiplicity == 1-»
+	private «opposite.class.name» «asAttribName(opposite.name)-»;
+	«ELSE»
+	private java.util.Set<«opposite.class.name»> «asAttribName(opposite.name)-»
+ = new java.util.HashSet<«opposite.class.name»>();
+	«ENDIF-»
+«REM»«ENDIF-»«ENDREM»
+«ENDDEFINE»
+
+«REM»
+	generate accessores for association attributes
+	accessors are generated as public
+		insertInXxx
+		removeFromXxx
+		getXxxs
+		setXxxs
+«ENDREM»
+«DEFINE AssAttrAccessImpl FOR MAssociationEnd»
+«REM»«IF Opposite.isNavigable»«ENDREM»
+	«REM» generate insertInXxx method «ENDREM»
+	public void insertIn«opposite.name.toFirstUpper()-»(«opposite.class.name» _in) {
+	«IF opposite.multiplicity == 0 || opposite.multiplicity == 1-»
+		«REM» check if attribute is already set to param «ENDREM»
+		if («asAttribName(opposite.name)» == _in) {
+			return;
+		}
+		«REM» if exist, break inverse association 
+		«IF isNavigable-»
+			if («asAttribName(opposite.name)» != null) {
+				«asAttribName(opposite.name)».removeFrom«name.toFirstUpper()»(this);
+			}
+		«ENDIF-»
+		«ENDREM»
+		«REM» set association attribute to param «ENDREM»
+		«asAttribName(opposite.name)» = _in;
+	«ELSE»
+		«REM» check if attribute already contains param «ENDREM»
+		if («asAttribName(opposite.name)».contains(_in)) {
+			return;
+		}
+		«REM» add param to association attribute «ENDREM»
+		«asAttribName(opposite.name)».add(_in);
+	«ENDIF»
+	«REM» ensure inverse association 
+	«IF isNavigable»
+		_in.insertIn«name.toFirstUpper()»(this);
+	«ENDIF»
+	«ENDREM»
+	}
+	
+	«REM» generate removeFromXxx method «ENDREM»
+	public void removeFrom«opposite.name.toFirstUpper()-»
+	(«opposite.class.name» _ex) {
+	«IF opposite.multiplicity == 0 || opposite.multiplicity == 1»
+		«REM» check if attribute is set to param «ENDREM»
+		if («asAttribName(opposite.name)» != _ex) {
+			return;
+		}
+		«REM» remove param from association attribute «ENDREM»
+		«asAttribName(opposite.name)» = null;
+	«ELSE»
+		«REM» check if attribute contains param «ENDREM»
+		if (! «asAttribName(opposite.name)».contains(_ex)) {
+			return;
+		}
+		«REM» add param to association attribute «ENDREM»
+		«asAttribName(opposite.name)».remove(_ex);
+	«ENDIF»
+	«REM» ensure inverse association 
+	«IF isNavigable»
+		_ex.removeFrom«name.toFirstUpper()»(this);
+	«ENDIF»
+	«ENDREM»
+	}
+	
+	«REM» generate getter for association attributes «ENDREM»
+	«IF opposite.multiplicity == 0 || opposite.multiplicity == 1»
+	public «opposite.class.name» «asGetter(opposite.name)»() {
+		return «asAttribName(opposite.name)»;
+	}
+	«ELSE»
+//	public java.util.Set<«opposite.class.name»> «asGetter(opposite.name)»() {
+//		return java.util.Collections.unmodifiableSet(«asAttribName(opposite.name)»);
+//	}
+	public «opposite.class.name»[] «asGetter(opposite.name)»() {
+		return «asAttribName(opposite.name)».toArray(new «opposite.class.name»[0]);
+	}
+	public java.util.Iterator<«opposite.class.name»> «asGetter(opposite.name)»Iterator() {
+		return «asAttribName(opposite.name)».iterator();
+	}
+	public int «asGetter(opposite.name)»Count() {
+		return «asAttribName(opposite.name)».size();
+	}
+	«ENDIF»
+«REM»«ENDIF»«ENDREM»
+«ENDDEFINE»
