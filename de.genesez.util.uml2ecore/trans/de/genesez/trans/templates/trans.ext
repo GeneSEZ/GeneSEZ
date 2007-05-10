@@ -28,8 +28,7 @@ create MModel this transform(Model m):
 	// set the unique xmiId
 	setXmiGuid(xmiId(m))->
  	// the name of the new package should be the same as the UML model
-	setName(m.name)->info()->
-	// setXmiId(xmiId(m))->
+	setName(m.name)->
 	// start descending package tree
 	setOwnedPackage(m.ownedElement.typeSelect(Package).reject(e|((Package) e).name == ignoredPackage())
 	.processPackage().setModel(this))->this;
@@ -38,7 +37,7 @@ create MModel this transform(Model m):
 create MPackage makePackage( Package p) :
 	// set the unique xmiId
 	setXmiGuid(xmiId(p))->
-	setName(p.name)->info();
+	setName(p.name);
 
 // only packages are contained in the model element
 // they can contain more packages or classes
@@ -56,7 +55,7 @@ private MPackage processPackage( Package p) :
 create MClass makeClass( Class c ) :
 	// set the unique xmiId
 	setXmiGuid(xmiId(c))->
-	setName(c.name)->info();
+	setName(c.name);
 
 // classes are contained in packages. 
 // they own attributes and association ends
@@ -64,7 +63,10 @@ private MClass processClass( Class c) :
 	let mc = makeClass(c) :
 	// add attributes
 	mc.setAttribute(c.ownedAttribute.reject(p|p.association != null).makeAttribute().setClass(mc))->
+	// add association ends
 	mc.setAssociationEnd(c.ownedAttribute.select(p|p.association != null).makeAssociationEnd().setClass(mc))->
+	// add superclasses
+	mc.setSuperClass(c.superClass.makeClass())->
 	mc;
 
 // create new MAttribute from uml2 Property
@@ -78,7 +80,8 @@ private initAttribute(MAttribute ma, Property p):
 	ma.setVisibility(p.visibility.toString())->
 	ma.setMultiplicity(p.getUpper())->
 	ma.setDerived(p.isDerived)->
-	ma.setType(p.type.name)->info(ma)->
+	ma.setType(p.type.name)->
+//	info(ma)->
 	ma;
 
 // attributes at the moment are leafs in the model tree, so do nearly nothing here.
@@ -101,7 +104,7 @@ private MAssociation processAssociation(Association a, MPackage owningPackage):
 	ma.setEnd(a.memberEnd.select(e|e.class != null).makeAssociationEnd())->
 	ma.end.setAssociation(ma).setDerived(a.isDerived)->
 	ma.linkEnds()->
-	info(ma.name + "(" + ma.end.name + ")")->
+//	info(ma.name + "(" + ma.end.name + ")")->
 	ma;
 	
 private String assocName(Association a):
@@ -117,7 +120,7 @@ create MAssociationEnd makeAssociationEnd(Property aend) :
 	setMultiplicity(aend.getUpper())->
 	setType(aend.type.name)->
 	setName(assocEndName(aend))->
-	info()->
+//	info()->
 	this;
 	
 private MClass assocEndClass(Property a):
