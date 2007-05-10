@@ -1,0 +1,78 @@
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT codegenMm»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION util»
+
+
+«REM»
+	generates a simple class
+	a class must implement:
+	all methods from all implemented interfaces and superinterfaces
+	all abstract methods from the superclass
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE getFilePath(this) + "/" + name + ".java"-»
+package «getPackagePath(this)»;
+
+/*
+	«name».java
+	generated @ «getTimestamp()» by «getUser()»
+ */
+
+«PROTECT CSTART '/* ' CEND ' */' ID ("java.imports." + xmiId)»
+// put your imports here - following import is placeholder that your IDE puts further imports here
+import java.lang.String;
+«ENDPROTECT»
+
+/**
+	«PROTECT CSTART '<!-- ' CEND ' -->' ID ("java.type.comment." + xmiId)»
+	<!-- TODO put your type comment here [description + responsibility] -->
+	«ENDPROTECT»
+	
+	@author		«getUser()»
+	@version	«getTimestamp()»
+ */
+
+«REM» class definition «ENDREM»
+public class «name» «REM»«EXPAND supertypes FOR this-»«ENDREM» {
+	
+	«REM» generate association attribute declarations «ENDREM»
+	«EXPAND attributes::Root FOR this»
+	
+	«REM» generate association attribute declarations «ENDREM»
+	«EXPAND associations::Root FOR this»
+	
+	«REM» generate method declarations and definitions with default return 
+	«EXPAND methods::Root FOR this»
+	«ENDREM»
+	
+	«REM» protected region for your stuff + close bracket for type definition «ENDREM»
+	«PROTECT CSTART '/* ' CEND ' */' ID "java.impl." + xmiId»
+	// -- put your implementation code here -------------------------
+	
+	«ENDPROTECT»
+	
+	// -- now it's your turn ----------------------------------------
+}
+
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	SuperTypes for Classes and Interfaces
+	UML generatisations are MetaModel generalizations and in java 'extends'
+	MetaModel specializations are the inverse from an 'extends'
+	UML abstractions are MetaModel specifications and in java 'implements'
+	UML realizations are the inverse from an 'implements'
+
+«DEFINE supertypes FOR Class»
+«IF hasGeneralizations» extends «getSuperTypeDecl(this, SuperClass)»«ENDIF-»
+«IF hasSpecifications» implements 
+«FOREACH Interface AS if SEPARATOR ", "»
+«getSuperTypeDecl(this, if)-»
+«ENDFOREACH-»
+«ENDIF-»
+«ENDDEFINE»
+«ENDREM»

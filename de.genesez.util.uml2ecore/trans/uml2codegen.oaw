@@ -92,14 +92,21 @@
 		<modelFile value="${outputModelFileName}" />
 	</component>
 
-	<!-- component id="generator" class="oaw.xpand2.Generator"
+	<component id="generator" class="oaw.xpand2.Generator"
 		skipOnErrors="true">
-		<metaModel idRef="mm.emf" />
-		<globalVarDef name="addNameAttribute"
-			value="${addNameAttribute}" />
+		<metaModel idRef="codegenMm" />
 		<expand
-			value="org::openarchitectureware::uml2ecore::templates::files::root FOR ecoreModel" />
-		<genPath value="${genTarget}" />
-		</component-->
+			value="templates::root::Root FOR generatorModel" />
+		<genPath value="${generated}" />
+		<!-- config the protected regions resolver -->
+		<prSrcPaths value="${generated}" />
+		<prDefaultExcludes value="false" />
+		<prExcludes value=".svn" />
+		<!--beautifier
+			class="org.openarchitectureware.xpand2.output.JavaBeautifier" /-->
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
+		<fileEncoding value="ISO-8859-1" />
+	</component>
 
 </workflow>

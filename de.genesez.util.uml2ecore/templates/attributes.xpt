@@ -1,0 +1,58 @@
+«REM»
+	generates attributes with getters + setters
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT codegenMm»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION util»
+«EXTENSION naming»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«REM»
+	generate attribute definitions, getter and setters for class types
+«ENDREM»
+«DEFINE Root FOR MClass»
+	// -- attribute definitions with default initialization ---------
+«EXPAND AttribDecl FOREACH attribute»
+	
+	// -- attribute getter + setter ---------------------------------
+«FOREACH attribute AS attrib-»
+	«EXPAND AttribGetter FOR attrib-»
+	«EXPAND AttribSetter FOR attrib-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«REM»
+	generate attribute declaration with initialization
+	attribs with init value : init value
+	attribs with type value : 'null'
+	primitive types : default value
+«ENDREM»
+«DEFINE AttribDecl FOR MAttribute»
+	«visibility» «type» «asAttribName(name)-»;
+«ENDDEFINE»
+
+«REM»
+	generates a getter for a non- static attribute
+«ENDREM»
+«DEFINE AttribGetter FOR MAttribute»
+	public «type» «asGetter(name)»() {
+		return «asAttribName(name)»;
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a setter for a non- static attribute
+«ENDREM»
+«DEFINE AttribSetter FOR MAttribute»
+	public void «asSetter(name)»(«type» «asAttribName(name)») {
+		this.«asAttribName(name)» = «asAttribName(name)»;
+	}
+«ENDDEFINE»
