@@ -1,3 +1,4 @@
+
 «REM»
 	handles associations
 «ENDREM»
@@ -19,7 +20,9 @@
 «DEFINE Root FOR MClass»
 	// -- declare association attributes ----------------------------
 	«EXPAND AssAttrDecl FOREACH associationEnd»
-	// -- accessores for association attributes ---------------------
+	// -- adding to and removing from association -------------------
+	«EXPAND AssAttrGetSetImpl FOREACH associationEnd»
+	// -- various ways to access the association --------------------
 	«EXPAND AssAttrAccessImpl FOREACH associationEnd»
 «ENDDEFINE»
 
@@ -30,13 +33,11 @@
 	generate attribute declarations for each association
 «ENDREM»
 «DEFINE AssAttrDecl FOR MAssociationEnd»
-«IF opposite.navigable-»
-	«IF opposite.multiplicity == 0 ||opposite.multiplicity == 1-»
-	private «opposite.class.name» «asAttribName(opposite.name)-»;
+«IF multiplicity == 1-»
+	private «this.type» «asAttribName(name)-»;
 	«ELSE»
-	private java.util.Set<«opposite.class.name»> «asAttribName(opposite.name)-»
- = new java.util.HashSet<«opposite.class.name»>();
-	«ENDIF-»
+	private java.util.Set<«type»> «asAttribName(name)-»
+ = new java.util.HashSet<«type»>();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -48,79 +49,80 @@
 		getXxxs
 		setXxxs
 «ENDREM»
-«DEFINE AssAttrAccessImpl FOR MAssociationEnd»
-«IF opposite.navigable»
+«DEFINE AssAttrGetSetImpl FOR MAssociationEnd»
 	«REM» generate insertInXxx method «ENDREM»
-	public void insertIn«opposite.name.toFirstUpper()-»(«opposite.class.name» _in) {
-	«IF opposite.multiplicity == 0 || opposite.multiplicity == 1-»
+	public void insertIn«name.toFirstUpper()-»(«type» _in) {
+	«IF multiplicity == 1-»
 		«REM» check if attribute is already set to param «ENDREM»
-		if («asAttribName(opposite.name)» == _in) {
+		if («asAttribName(name)» == _in) {
 			return;
 		}
 		«REM» if exist, break inverse association «ENDREM»
-		«IF navigable-»
-			if («asAttribName(opposite.name)» != null) {
-				«asAttribName(opposite.name)».removeFrom«name.toFirstUpper()»(this);
+		«IF opposite != null-»
+			if («asAttribName(name)» != null) {
+				«asAttribName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
 			}
 		«ENDIF-»
 		«REM» set association attribute to param «ENDREM»
-		«asAttribName(opposite.name)» = _in;
+		«asAttribName(name)» = _in;
 	«ELSE»
 		«REM» check if attribute already contains param «ENDREM»
-		if («asAttribName(opposite.name)».contains(_in)) {
+		if («asAttribName(name)».contains(_in)) {
 			return;
 		}
 		«REM» add param to association attribute «ENDREM»
-		«asAttribName(opposite.name)».add(_in);
+		«asAttribName(name)».add(_in);
 	«ENDIF»
-	«REM» ensure inverse association «ENDREM»
-	«IF navigable»
-		_in.insertIn«name.toFirstUpper()»(this);
+	«REM» synchronize inverse association «ENDREM»
+	«IF opposite != null»
+		_in.insertIn«opposite.name.toFirstUpper()»(this);
 	«ENDIF»
 	}
 	
 	«REM» generate removeFromXxx method «ENDREM»
-	public void removeFrom«opposite.name.toFirstUpper()-»
-	(«opposite.class.name» _ex) {
-	«IF opposite.multiplicity == 0 || opposite.multiplicity == 1»
+	public void removeFrom«name.toFirstUpper()-»
+	(«type» _ex) {
+	«IF multiplicity == 1»
 		«REM» check if attribute is set to param «ENDREM»
-		if («asAttribName(opposite.name)» != _ex) {
+		if («asAttribName(name)» != _ex) {
 			return;
 		}
 		«REM» remove param from association attribute «ENDREM»
-		«asAttribName(opposite.name)» = null;
+		«asAttribName(name)» = null;
 	«ELSE»
 		«REM» check if attribute contains param «ENDREM»
-		if (! «asAttribName(opposite.name)».contains(_ex)) {
+		if (! «asAttribName(name)».contains(_ex)) {
 			return;
 		}
-		«REM» add param to association attribute «ENDREM»
-		«asAttribName(opposite.name)».remove(_ex);
+		«REM» remove param from association attribute «ENDREM»
+		«asAttribName(name)».remove(_ex);
 	«ENDIF»
-	«REM» ensure inverse association «ENDREM»
-	«IF navigable»
-		_ex.removeFrom«name.toFirstUpper()»(this);
+	«REM» synchronize inverse association «ENDREM»
+	«IF opposite!= null»
+		_ex.removeFrom«opposite.name.toFirstUpper()»(this);
 	«ENDIF»
 	}
+«ENDDEFINE»
 	
 	«REM» generate getter for association attributes «ENDREM»
-	«IF opposite.multiplicity == 0 || opposite.multiplicity == 1»
-	public «opposite.class.name» «asGetter(opposite.name)»() {
-		return «asAttribName(opposite.name)»;
+	
+«DEFINE AssAttrAccessImpl FOR MAssociationEnd»
+	«IF multiplicity == 1»
+	public «type» «asGetter(name)»() {
+		return «asAttribName(name)»;
 	}
 	«ELSE»
-//	public java.util.Set<«opposite.class.name»> «asGetter(opposite.name)»() {
-//		return java.util.Collections.unmodifiableSet(«asAttribName(opposite.name)»);
-//	}
-	public «opposite.class.name»[] «asGetter(opposite.name)»() {
-		return «asAttribName(opposite.name)».toArray(new «opposite.class.name»[0]);
+	public java.util.Set<«type»> «asGetter(name)»() {
+		return java.util.Collections.unmodifiableSet(«asAttribName(name)»);
 	}
-	public java.util.Iterator<«opposite.class.name»> «asGetter(opposite.name)»Iterator() {
-		return «asAttribName(opposite.name)».iterator();
+	public «type»[] «asGetter(name)»Array() {
+		return «asAttribName(name)».toArray(new «type»[0]);
 	}
-	public int «asGetter(opposite.name)»Count() {
-		return «asAttribName(opposite.name)».size();
+	public java.util.Iterator<«type»> «asGetter(name)»Iterator() {
+		return «asAttribName(name)».iterator();
+	}
+	public int «asGetter(name)»Count() {
+		return «asAttribName(name)».size();
 	}
 	«ENDIF»
-«ENDIF»
 «ENDDEFINE»
