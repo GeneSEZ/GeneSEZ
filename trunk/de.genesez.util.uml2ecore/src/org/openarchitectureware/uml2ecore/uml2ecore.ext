@@ -114,11 +114,12 @@ create EClass this mapClass(Class c):
 	// that have a PrimitiveType as their type. mapAttribute converts a UML 
 	// Property into an EAttribute
 	setEStructuralFeatures( 
-		c.ownedAttribute.select(a|PrimitiveType.isInstance(a.type)).mapAttribute() ) ->
+		c.ownedAttribute.select(a|PrimitiveType.isInstance(a.type)).mapAttribute() )
+		;
 	// add the name attribute, if it needs to be added automatically
-	addNameAttr() && this.eSuperTypes.isEmpty && !eAttributes.collect(a|a.name).contains("name") ? 
-		eStructuralFeatures.add(createNameAttr()) : null ->
-		eStructuralFeatures.add(createUidAttr());
+//	addNameAttr() && this.eSuperTypes.isEmpty && !eAttributes.collect(a|a.name).contains("name") ? 
+//		eStructuralFeatures.add(createNameAttr()) : null ->
+//		eStructuralFeatures.add(createUidAttr());
 
 // creates the additional name attribute, if necessary	
 create EAttribute this createNameAttr(EClass cls):
