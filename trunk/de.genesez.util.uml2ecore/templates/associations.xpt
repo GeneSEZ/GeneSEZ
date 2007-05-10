@@ -30,14 +30,14 @@
 	generate attribute declarations for each association
 «ENDREM»
 «DEFINE AssAttrDecl FOR MAssociationEnd»
-«REM»«IF opposite.isNavigable-»«ENDREM»
+«IF opposite.navigable-»
 	«IF opposite.multiplicity == 0 ||opposite.multiplicity == 1-»
 	private «opposite.class.name» «asAttribName(opposite.name)-»;
 	«ELSE»
 	private java.util.Set<«opposite.class.name»> «asAttribName(opposite.name)-»
  = new java.util.HashSet<«opposite.class.name»>();
 	«ENDIF-»
-«REM»«ENDIF-»«ENDREM»
+«ENDIF-»
 «ENDDEFINE»
 
 «REM»
@@ -49,7 +49,7 @@
 		setXxxs
 «ENDREM»
 «DEFINE AssAttrAccessImpl FOR MAssociationEnd»
-«REM»«IF Opposite.isNavigable»«ENDREM»
+«IF opposite.navigable»
 	«REM» generate insertInXxx method «ENDREM»
 	public void insertIn«opposite.name.toFirstUpper()-»(«opposite.class.name» _in) {
 	«IF opposite.multiplicity == 0 || opposite.multiplicity == 1-»
@@ -57,13 +57,12 @@
 		if («asAttribName(opposite.name)» == _in) {
 			return;
 		}
-		«REM» if exist, break inverse association 
-		«IF isNavigable-»
+		«REM» if exist, break inverse association «ENDREM»
+		«IF navigable-»
 			if («asAttribName(opposite.name)» != null) {
 				«asAttribName(opposite.name)».removeFrom«name.toFirstUpper()»(this);
 			}
 		«ENDIF-»
-		«ENDREM»
 		«REM» set association attribute to param «ENDREM»
 		«asAttribName(opposite.name)» = _in;
 	«ELSE»
@@ -74,11 +73,10 @@
 		«REM» add param to association attribute «ENDREM»
 		«asAttribName(opposite.name)».add(_in);
 	«ENDIF»
-	«REM» ensure inverse association 
-	«IF isNavigable»
+	«REM» ensure inverse association «ENDREM»
+	«IF navigable»
 		_in.insertIn«name.toFirstUpper()»(this);
 	«ENDIF»
-	«ENDREM»
 	}
 	
 	«REM» generate removeFromXxx method «ENDREM»
@@ -99,11 +97,10 @@
 		«REM» add param to association attribute «ENDREM»
 		«asAttribName(opposite.name)».remove(_ex);
 	«ENDIF»
-	«REM» ensure inverse association 
-	«IF isNavigable»
+	«REM» ensure inverse association «ENDREM»
+	«IF navigable»
 		_ex.removeFrom«name.toFirstUpper()»(this);
 	«ENDIF»
-	«ENDREM»
 	}
 	
 	«REM» generate getter for association attributes «ENDREM»
@@ -125,5 +122,5 @@
 		return «asAttribName(opposite.name)».size();
 	}
 	«ENDIF»
-«REM»«ENDIF»«ENDREM»
+«ENDIF»
 «ENDDEFINE»
