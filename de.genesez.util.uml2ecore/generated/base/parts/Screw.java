@@ -2,7 +2,7 @@ package base.parts;
 
 /*
 	Screw.java
-	generated @ 2007-05-10 18:31:33.140 CEST by dreamer
+	generated @ 2007-05-10 18:52:15.953 CEST by dreamer
  */
 
 /* PROTECTED REGION ID(java.imports._XphC9f41EduRRenReWtq2g) ENABLED START */
@@ -16,7 +16,7 @@ import java.lang.String;
 	<!-- PROTECTED REGION END -->
 	
 	@author		dreamer
-	@version	2007-05-10 18:31:33.156 CEST
+	@version	2007-05-10 18:52:15.968 CEST
  */
 
 

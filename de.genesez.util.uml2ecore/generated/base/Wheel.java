@@ -2,7 +2,7 @@ package base;
 
 /*
 	Wheel.java
-	generated @ 2007-05-10 18:31:33.218 CEST by dreamer
+	generated @ 2007-05-10 18:52:16.015 CEST by dreamer
  */
 
 /* PROTECTED REGION ID(java.imports._XphC6v41EduRRenReWtq2g) ENABLED START */
@@ -16,7 +16,7 @@ import java.lang.String;
 	<!-- PROTECTED REGION END -->
 	
 	@author		dreamer
-	@version	2007-05-10 18:31:33.218 CEST
+	@version	2007-05-10 18:52:16.015 CEST
  */
 
 
@@ -45,122 +45,14 @@ public class Wheel  {
 	// -- declare association attributes ----------------------------
 	
 
-	private Car wheels;
-
-
-
-	private  no opposite;
-
-
-
-	private Car spare;
 
 
 	// -- accessores for association attributes ---------------------
 	
 
-	
-	public void insertInWheels(Car _in) {
-		
-		if (wheels == _in) {
-			return;
-		}
-		
-		
-		wheels = _in;
-	
-	
-	}
-	
-	
-	public void removeFromWheels	(Car _ex) {
-	
-		
-		if (wheels != _ex) {
-			return;
-		}
-		
-		wheels = null;
-	
-	
-	}
-	
-	
-	
-	public Car getWheels() {
-		return wheels;
-	}
-	
 
 
 
-	
-	public void insertInNo opposite( _in) {
-		
-		if (no opposite == _in) {
-			return;
-		}
-		
-		
-		no opposite = _in;
-	
-	
-	}
-	
-	
-	public void removeFromNo opposite	( _ex) {
-	
-		
-		if (no opposite != _ex) {
-			return;
-		}
-		
-		no opposite = null;
-	
-	
-	}
-	
-	
-	
-	public  getNo opposite() {
-		return no opposite;
-	}
-	
-
-
-
-	
-	public void insertInSpare(Car _in) {
-		
-		if (spare == _in) {
-			return;
-		}
-		
-		
-		spare = _in;
-	
-	
-	}
-	
-	
-	public void removeFromSpare	(Car _ex) {
-	
-		
-		if (spare != _ex) {
-			return;
-		}
-		
-		spare = null;
-	
-	
-	}
-	
-	
-	
-	public Car getSpare() {
-		return spare;
-	}
-	
 
 
 
