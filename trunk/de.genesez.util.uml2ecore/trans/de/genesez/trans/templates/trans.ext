@@ -26,24 +26,18 @@ extension org::openarchitectureware::uml2ecore::io;
 // EPackage can be accessed by "this" inside the function
 create MModel this transform(Model m): 
 	// set the unique xmiId
-	setXmiId(getXmiIdAtt(m))->
+	setXmiGuid(xmiId(m))->
  	// the name of the new package should be the same as the UML model
 	setName(m.name)->info()->
 	// setXmiId(xmiId(m))->
 	// start descending package tree
 	setOwnedPackage(m.ownedElement.typeSelect(Package).reject(e|((Package) e).name == ignoredPackage())
 	.processPackage().setModel(this))->this;
-
-private String xmiId (Element obj) : 
-	JAVA de.genesez.util.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
 	
-private getXmiIdAtt (Element e) :
-	xmiId(e);
-
 // create new MPackage from uml2 package
 create MPackage makePackage( Package p) :
 	// set the unique xmiId
-	setXmiId(getXmiIdAtt(p))->
+	setXmiGuid(xmiId(p))->
 	setName(p.name)->info();
 
 // only packages are contained in the model element
@@ -61,25 +55,31 @@ private MPackage processPackage( Package p) :
 // create new MClass from uml2 class
 create MClass makeClass( Class c ) :
 	// set the unique xmiId
-	setXmiId(getXmiIdAtt(c))->
+	setXmiGuid(xmiId(c))->
 	setName(c.name)->info();
 
 // classes are contained in packages. 
-// they own attributes and Association ends
+// they own attributes and association ends
 private MClass processClass( Class c) :
 	let mc = makeClass(c) :
 	// add attributes
-	mc.setAttribute(c.ownedAttribute.reject(p|p.association != null).processAttribute().setClass(mc))->
+	mc.setAttribute(c.ownedAttribute.reject(p|p.association != null).makeAttribute().setClass(mc))->
+	mc.setAssociationEnd(c.ownedAttribute.select(p|p.association != null).makeAssociationEnd().setClass(mc))->
 	mc;
 
 // create new MAttribute from uml2 Property
 create MAttribute makeAttribute( Property p ) :
+	initAttribute(this, p);
+
+private initAttribute(MAttribute ma, Property p):
 	// set the unique xmiId
-	setXmiId(getXmiIdAtt(p))->
-	setName(p.name)->
-	setVisibility(p.visibility.toString())->
-	setType(p.type.name)->info()->
-	this;
+	ma.setXmiGuid(xmiId(p))->
+	ma.setName(p.name)->
+	ma.setVisibility(p.visibility.toString())->
+	ma.setMultiplicity(p.getUpper())->
+	ma.setDerived(p.isDerived)->
+	ma.setType(p.type.name)->info(ma)->
+	ma;
 
 // attributes at the moment are leafs in the model tree, so do nearly nothing here.
 private MAttribute processAttribute( Property p) :
@@ -89,16 +89,19 @@ private MAttribute processAttribute( Property p) :
 // create new MAssociation from uml2 Association
 create MAssociation makeAssociation( Association a ) :
 	// set the unique xmiId
-	setXmiId(getXmiIdAtt(a))->
-	setName(assocName(a))->info()->
+	setXmiGuid(xmiId(a))->
+	setName(assocName(a))->
+//	info()->
 	this;
 
 // associations are contained in packages and contain their ends
 private MAssociation processAssociation(Association a, MPackage owningPackage): 
 	let ma = makeAssociation(a) :
 	ma.setOwningPackage(owningPackage)->
-	ma.setEnd(a.memberEnd.makeAssociationEnd())->
+	ma.setEnd(a.memberEnd.select(e|e.class != null).makeAssociationEnd())->
+	ma.end.setAssociation(ma).setDerived(a.isDerived)->
 	ma.linkEnds()->
+	info(ma.name + "(" + ma.end.name + ")")->
 	ma;
 	
 private String assocName(Association a):
@@ -108,10 +111,13 @@ private String assocName(Association a):
 
 create MAssociationEnd makeAssociationEnd(Property aend) :
 	// set the unique xmiId
-	setXmiId(getXmiIdAtt(aend))->
+	setXmiGuid(xmiId(aend))->
 	setClass(assocEndClass(aend))->
-	setName(assocEndName(aend))->info()->
-	info("end class " + class.name)->
+	setDerived(aend.isDerived)->
+	setMultiplicity(aend.getUpper())->
+	setType(aend.type.name)->
+	setName(assocEndName(aend))->
+	info()->
 	this;
 	
 private MClass assocEndClass(Property a):
@@ -130,9 +136,12 @@ private MAssociation linkEnds(MAssociation ma) :
 
 private String assocEndName(Property a):
 	(a.name == null || a.name == "") ?
-		(a.opposite == null ? "no opposite" : 
-			(a.opposite.class == null ? "no opposite class" : a.opposite.class.name.toFirstLower())) :
+		a.type.name.toFirstLower() :
 		a.name ;
+
+// get unique xmiId from ecore file, requires Java method
+private String xmiId (Element obj) : 
+	JAVA de.genesez.util.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
 
 // externally configure packages to ignore, e.g. UML standard profile :-)
 private String ignoredPackage(): GLOBALVAR excludePackage; 	
