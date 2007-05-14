@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import codegenMm.MClass;
+import codegenMm.MClassifier;
 import codegenMm.MPackage;
 
 public class TransUtils {
@@ -14,7 +15,7 @@ public class TransUtils {
 		return ((XMLResource)pObj.eResource()).getID(pObj);
 	}
 	
-	public static String getPackagePath(MClass clazz) {
+	public static String getPackagePath(MClassifier clazz) {
 		StringBuffer p = new StringBuffer();
 		for (MPackage pkg = clazz.getOwningPackage(); pkg != null; pkg = pkg.getNestingPackage()) {
 			p.insert(0, pkg.getName());
