@@ -1,10 +1,8 @@
-
 «REM» import code gen meta model «ENDREM»
 «IMPORT codegenMm»
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION util»
-
 
 «REM»
 	generates a simple class
@@ -14,6 +12,28 @@
 «ENDREM»
 «DEFINE Root FOR MClass»
 «FILE getFilePath(this) + "/" + name + ".java"-»
+«EXPAND filehead FOR this-»
+«REM» class definition «ENDREM»
+public class «name»«extensions()»«implementedInterfaces()» {
+	«EXPAND standardbody FOR this-»
+	«EXPAND ownStuff FOR this-»
+}
+
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Root FOR MInterface»
+«FILE getFilePath(this) + "/" + name + ".java"-»
+«EXPAND filehead-»
+interface «name» «extensions()» {
+	«EXPAND standardbody FOR this-»
+	«EXPAND ownStuff FOR this-»
+}
+
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE filehead FOR MClassifier»
 package «getPackagePath(this)»;
 
 /*
@@ -23,7 +43,6 @@ package «getPackagePath(this)»;
 	should not be used because it would cause
 	new svn revisions even when nothing else changed!
  */
-
 «PROTECT CSTART '/* ' CEND ' */' ID ("java.imports." + xmiGuid)»
 // put your imports here - following import is placeholder so that your IDE puts further imports here
 import java.lang.String;
@@ -37,10 +56,9 @@ import java.lang.String;
 	@author		«getUser()»
 	@version	«getTimestamp()»
  */
+«ENDDEFINE»
 
-«REM» class definition «ENDREM»
-public class «name» «REM»«EXPAND supertypes FOR this-»«ENDREM» {
-	
+«DEFINE standardbody FOR MClassifier»	
 	«REM» generate attribute declarations «ENDREM»
 	«EXPAND attributes::Root FOR this»
 	
@@ -50,32 +68,12 @@ public class «name» «REM»«EXPAND supertypes FOR this-»«ENDREM» {
 	«REM» generate method declarations and definitions with default return 
 	«EXPAND methods::Root FOR this»
 	«ENDREM»
-	
+«ENDDEFINE»
+«DEFINE ownStuff FOR MClassifier»	
 	«REM» protected region for your stuff + close bracket for type definition «ENDREM»
 	«PROTECT CSTART '/* ' CEND ' */' ID "java.impl." + xmiGuid»
 	// -- put your implementation code here -------------------------
 	
 	«ENDPROTECT»
+«ENDDEFINE»
 	
-	// -- now it's your turn ----------------------------------------
-}
-
-«ENDFILE»
-«ENDDEFINE»
-
-«REM»
-	SuperTypes for Classes and Interfaces
-	UML generatisations are MetaModel generalizations and in java 'extends'
-	MetaModel specializations are the inverse from an 'extends'
-	UML abstractions are MetaModel specifications and in java 'implements'
-	UML realizations are the inverse from an 'implements'
-
-«DEFINE supertypes FOR Class»
-«IF hasGeneralizations» extends «getSuperTypeDecl(this, SuperClass)»«ENDIF-»
-«IF hasSpecifications» implements 
-«FOREACH Interface AS if SEPARATOR ", "»
-«getSuperTypeDecl(this, if)-»
-«ENDFOREACH-»
-«ENDIF-»
-«ENDDEFINE»
-«ENDREM»

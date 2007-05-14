@@ -1,4 +1,3 @@
-
 «REM»
 	handles associations
 «ENDREM»
@@ -17,13 +16,13 @@
 	generate association attribute declarations, and
 	accessor methods for class association attributes
 «ENDREM»
-«DEFINE Root FOR MClass»
+«DEFINE Root FOR MClassifier»
 	// -- declare association attributes ----------------------------
-	«EXPAND AssAttrDecl FOREACH associationEnd»
+	«EXPAND AssAttrDecl FOREACH property.typeSelect(MAssociationEnd)-»
 	// -- adding to and removing from association -------------------
-	«EXPAND AssAttrGetSetImpl FOREACH associationEnd»
+	«EXPAND AssAttrGetSetImpl FOREACH property.typeSelect(MAssociationEnd)-»
 	// -- various ways to access the association --------------------
-	«EXPAND AssAttrAccessImpl FOREACH associationEnd»
+	«EXPAND AssAttrAccessImpl FOREACH property.typeSelect(MAssociationEnd)-»
 «ENDDEFINE»
 
 
@@ -32,12 +31,12 @@
 «REM»
 	generate attribute declarations for each association
 «ENDREM»
-«DEFINE AssAttrDecl FOR MAssociationEnd»
+«DEFINE AssAttrDecl FOR MAssociationEnd-»
 «IF multiplicity == 1-»
-	private «this.type» «asAttribName(name)-»;
-	«ELSE»
-	private java.util.Set<«type»> «asAttribName(name)-»
- = new java.util.HashSet<«type»>();
+	private «this.type.name» «asAttribName(name)-»;
+	«ELSE-»
+	private java.util.Set<«type.name»> «asAttribName(name)-»
+ = new java.util.HashSet<«type.name»>();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -49,80 +48,69 @@
 		getXxxs
 		setXxxs
 «ENDREM»
-«DEFINE AssAttrGetSetImpl FOR MAssociationEnd»
+«DEFINE AssAttrGetSetImpl FOR MAssociationEnd-»
 	«REM» generate insertInXxx method «ENDREM»
-	public void insertIn«name.toFirstUpper()-»(«type» _in) {
+	public void insertIn«name.toFirstUpper()-»(«type.name» _in) {
 	«IF multiplicity == 1-»
-		«REM» check if attribute is already set to param «ENDREM»
-		if («asAttribName(name)» == _in) {
+		if («asAttribName(name)» == _in) {		«REM» check if attribute is already set to param «ENDREM»
 			return;
 		}
-		«REM» if exist, break inverse association «ENDREM»
 		«IF opposite != null-»
-			if («asAttribName(name)» != null) {
+			if («asAttribName(name)» != null) {		«REM» if exist, break inverse association «ENDREM»
 				«asAttribName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
 			}
 		«ENDIF-»
-		«REM» set association attribute to param «ENDREM»
-		«asAttribName(name)» = _in;
-	«ELSE»
-		«REM» check if attribute already contains param «ENDREM»
-		if («asAttribName(name)».contains(_in)) {
+		«asAttribName(name)» = _in;		«REM» set association attribute to param «ENDREM»
+	«ELSE-»
+		if («asAttribName(name)».contains(_in)) {		«REM» check if attribute already contains param «ENDREM»
 			return;
 		}
-		«REM» add param to association attribute «ENDREM»
-		«asAttribName(name)».add(_in);
-	«ENDIF»
-	«REM» synchronize inverse association «ENDREM»
-	«IF opposite != null»
-		_in.insertIn«opposite.name.toFirstUpper()»(this);
-	«ENDIF»
+		«asAttribName(name)».add(_in);		«REM» add param to association attribute «ENDREM»
+	«ENDIF-»
+	«IF opposite != null-»
+		_in.insertIn«opposite.name.toFirstUpper()»(this);	«REM» synchronize inverse association «ENDREM»
+	«ENDIF-»
 	}
 	
 	«REM» generate removeFromXxx method «ENDREM»
 	public void removeFrom«name.toFirstUpper()-»
-	(«type» _ex) {
-	«IF multiplicity == 1»
-		«REM» check if attribute is set to param «ENDREM»
-		if («asAttribName(name)» != _ex) {
+	(«type.name» _ex) {
+	«IF multiplicity == 1-»
+		if («asAttribName(name)» != _ex) {		«REM» check if attribute is set to param «ENDREM»
 			return;
 		}
-		«REM» remove param from association attribute «ENDREM»
-		«asAttribName(name)» = null;
-	«ELSE»
-		«REM» check if attribute contains param «ENDREM»
-		if (! «asAttribName(name)».contains(_ex)) {
+		«asAttribName(name)» = null;		«REM» remove param from association attribute «ENDREM»
+	«ELSE-»
+		if (! «asAttribName(name)».contains(_ex)) {		«REM» check if attribute contains param «ENDREM»
 			return;
 		}
-		«REM» remove param from association attribute «ENDREM»
-		«asAttribName(name)».remove(_ex);
-	«ENDIF»
-	«REM» synchronize inverse association «ENDREM»
-	«IF opposite!= null»
-		_ex.removeFrom«opposite.name.toFirstUpper()»(this);
-	«ENDIF»
+		«asAttribName(name)».remove(_ex);		«REM» remove param from association attribute «ENDREM»
+	«ENDIF-»
+	«IF opposite!= null-»
+		_ex.removeFrom«opposite.name.toFirstUpper()»(this);	«REM» synchronize inverse association «ENDREM»
+	«ENDIF-»
 	}
 «ENDDEFINE»
 	
 	«REM» generate getter for association attributes «ENDREM»
 	
-«DEFINE AssAttrAccessImpl FOR MAssociationEnd»
-	«IF multiplicity == 1»
-	public «type» «asGetter(name)»() {
+«DEFINE AssAttrAccessImpl FOR MAssociationEnd-»
+	«IF multiplicity == 1-»
+	public «type.name» «asGetter(name)»() {
 		return «asAttribName(name)»;
 	}
-	«ELSE»
-	public java.util.Set<«type»> «asGetter(name)»() {
+	«ELSE-»
+	public java.util.Set<«type.name»> «asGetter(name)»() {
 		return java.util.Collections.unmodifiableSet(«asAttribName(name)»);
 	}
-	public «type»[] «asGetter(name)»Array() {
-		return «asAttribName(name)».toArray(new «type»[0]);
+	public «type.name»[] «asGetter(name)»Array() {
+		return «asAttribName(name)».toArray(new «type.name»[0]);
 	}
-	public java.util.Iterator<«type»> «asGetter(name)»Iterator() {
+	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
 		return «asAttribName(name)».iterator();
 	}
 	public int «asGetter(name)»Count() {
 		return «asAttribName(name)».size();
 	}
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
