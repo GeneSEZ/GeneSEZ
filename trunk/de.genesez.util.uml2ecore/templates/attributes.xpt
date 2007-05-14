@@ -15,12 +15,12 @@
 «REM»
 	generate attribute definitions, getter and setters for class types
 «ENDREM»
-«DEFINE Root FOR MClass»
+«DEFINE Root FOR MClassifier»
 	// -- attribute definitions with default initialization ---------
-«EXPAND AttribDecl FOREACH attribute»
+«EXPAND AttribDecl FOREACH property.typeSelect(MAttribute)-»
 	
 	// -- attribute getter + setter ---------------------------------
-«FOREACH attribute AS attrib-»
+«FOREACH property.typeSelect(MAttribute) AS attrib-»
 	«EXPAND AttribGetter FOR attrib-»
 	«EXPAND AttribSetter FOR attrib-»
 «ENDFOREACH-»
@@ -35,15 +35,15 @@
 	attribs with type value : 'null'
 	primitive types : default value
 «ENDREM»
-«DEFINE AttribDecl FOR MAttribute»
-	«visibility» «type» «asAttribName(name)-»;
+«DEFINE AttribDecl FOR MAttribute-»
+	«visibility» «type.name» «asAttribName(name)-»;
 «ENDDEFINE»
 
 «REM»
 	generates a getter for a non- static attribute
 «ENDREM»
-«DEFINE AttribGetter FOR MAttribute»
-	public «type» «asGetter(name)»() {
+«DEFINE AttribGetter FOR MAttribute-»
+	public «type.name» «asGetter(name)»() {
 		return «asAttribName(name)»;
 	}
 «ENDDEFINE»
@@ -51,8 +51,8 @@
 «REM»
 	generates a setter for a non- static attribute
 «ENDREM»
-«DEFINE AttribSetter FOR MAttribute»
-	public void «asSetter(name)»(«type» «asAttribName(name)») {
+«DEFINE AttribSetter FOR MAttribute-»
+	public void «asSetter(name)»(«type.name» «asAttribName(name)») {
 		this.«asAttribName(name)» = «asAttribName(name)»;
 	}
 «ENDDEFINE»

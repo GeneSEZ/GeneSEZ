@@ -3,14 +3,43 @@ import codegenMm;
 /**
 	getter for the file path from a class
 */
-String getFilePath(MClass clazz) :
+String getFilePath(MClassifier clazz) :
 	getPackagePath(clazz).replaceAll("\\.", "/");
+	
+/**
+	get extension for MClass and others
+*/
+extensions(MClassifier c) :
+	c.supertype.typeSelect(MClass).size > 0 ?
+		" extends " + c.supertype.typeSelect(MClass).first().name :
+		"";
+	
+/**
+	treat MInterface differently
+*/
+extensions(MInterface c) :
+	c.supertype.typeSelect(MInterface).size > 0 ?
+		" extends " + c.supertype.typeSelect(MInterface).namelist() :
+		"";
+	
+/**
+	get implements for MClass and others
+*/
+implementedInterfaces(MClassifier c) :
+	c.supertype.typeSelect(MInterface).size > 0 ?
+		" implements " + c.supertype.typeSelect(MInterface).namelist() :
+		"";
+
+private String namelist(List l) :
+	l.size > 1 ? ((MElement) l.first()).name + ", " + namelist(l.withoutFirst()) :
+		( l.size > 0 ? ((MElement) l.first()).name :
+		  "" );
 
 /**
 	getter for the package path from a class
 */
-String getPackagePath(MClass clazz) :
-	JAVA de.genesez.util.TransUtils.getPackagePath(codegenMm.MClass);
+String getPackagePath(MClassifier clazz) :
+	JAVA de.genesez.util.TransUtils.getPackagePath(codegenMm.MClassifier);
 
 	/**
 	getter for the current timestamp
