@@ -3,13 +3,13 @@ package base;
 
 /*
         Wheel.java
-        generated @ 2007-05-10 22:19:01.734 CEST by georg
+        generated @ 2007-05-15 18:38:01.156 CEST by georg
         here only for demo of java extension call.
         should not be used because it would cause
         new svn revisions even when nothing else changed!
  */
 
-/* PROTECTED REGION ID(java.imports._wPhQQ_8mEdu_PKOyBey_uw) ENABLED START */
+/* PROTECTED REGION ID(java.imports._mxnReQMCEdyxB6OTzxcZMQ) ENABLED START */
 // put your imports here - following import is placeholder so that your IDE puts further imports here
 import base.parts.Screw;
 
@@ -17,14 +17,14 @@ import base.parts.Screw;
 /* PROTECTED REGION END */
 
 /**
-        <!-- PROTECTED REGION ID(java.type.comment._wPhQQ_8mEdu_PKOyBey_uw) ENABLED START -->
+        <!-- PROTECTED REGION ID(java.type.comment._mxnReQMCEdyxB6OTzxcZMQ) ENABLED START -->
         <!-- TODO put your type comment here [description + responsibility] -->
         <!-- PROTECTED REGION END -->
 
         @author                georg
-        @version        2007-05-10 22:19:01.734 CEST
+        @version        2007-05-15 18:38:01.156 CEST
  */
-public class Wheel {
+public class Wheel implements Changeable {
     // -- attribute definitions with default initialization ---------
     private float diameter;
     private String specification;
@@ -32,6 +32,24 @@ public class Wheel {
     // -- declare association attributes ----------------------------
     private Car mycar;
     private java.util.Set<Screw> screw = new java.util.HashSet<Screw>();
+
+    // -- constructors ----------------------------------------------
+    // -- abstract methods ------------------------------------------
+    // -- methods ---------------------------------------------------
+    public Boolean change(Wheel newWheel) {
+        Boolean retval = false;
+
+        /* PROTECTED REGION ID(methods.methodimpl_mxnRhQMCEdyxB6OTzxcZMQ) ENABLED START */
+        // TODO: implement method change
+        /* PROTECTED REGION END */
+        return retval;
+    }
+
+    public void roll() {
+        /* PROTECTED REGION ID(methods.methodimpl_mxnRiAMCEdyxB6OTzxcZMQ) ENABLED START */
+        // TODO: implement method roll
+        /* PROTECTED REGION END */
+    }
 
     // -- attribute getter + setter ---------------------------------
     public float getDiameter() {
@@ -50,7 +68,7 @@ public class Wheel {
         this.specification = specification;
     }
 
-    // -- adding to and removing from association -------------------
+    // -- methods for adding to and removing from association -------
     public void insertInMycar(Car _in) {
         if (mycar == _in) {
             return;
@@ -61,7 +79,6 @@ public class Wheel {
         }
 
         mycar = _in;
-
         _in.insertInWheels(this);
     }
 
@@ -71,7 +88,6 @@ public class Wheel {
         }
 
         mycar = null;
-
         _ex.removeFromWheels(this);
     }
 
@@ -91,7 +107,7 @@ public class Wheel {
         screw.remove(_ex);
     }
 
-    // -- various ways to access the association --------------------
+    // -- methods for accessing the association ----------------------
     public Car getMycar() {
         return mycar;
     }
@@ -100,22 +116,12 @@ public class Wheel {
         return java.util.Collections.unmodifiableSet(screw);
     }
 
-    public Screw[] getScrewArray() {
-        return screw.toArray(new Screw[0]);
-    }
-
     public java.util.Iterator<Screw> getScrewIterator() {
         return screw.iterator();
     }
 
-    public int getScrewCount() {
-        return screw.size();
-    }
-
-    /* PROTECTED REGION ID(java.impl._wPhQQ_8mEdu_PKOyBey_uw) ENABLED START */
+    /* PROTECTED REGION ID(java.impl._mxnReQMCEdyxB6OTzxcZMQ) ENABLED START */
     // -- put your implementation code here -------------------------
 
     /* PROTECTED REGION END */
-
-    // -- now it's your turn ----------------------------------------
 }

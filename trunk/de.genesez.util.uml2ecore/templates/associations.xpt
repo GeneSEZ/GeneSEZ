@@ -17,12 +17,32 @@
 	accessor methods for class association attributes
 «ENDREM»
 «DEFINE Root FOR MClassifier»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
 	// -- declare association attributes ----------------------------
-	«EXPAND AssAttrDecl FOREACH property.typeSelect(MAssociationEnd)-»
-	// -- adding to and removing from association -------------------
-	«EXPAND AssAttrGetSetImpl FOREACH property.typeSelect(MAssociationEnd)-»
-	// -- various ways to access the association --------------------
-	«EXPAND AssAttrAccessImpl FOREACH property.typeSelect(MAssociationEnd)-»
+	«ENDIF-»
+	«EXPAND AssAttrDecl FOREACH property.typeSelect(MAssociationRole)-»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for adding to and removing from association -------
+	«ENDIF-»
+	«EXPAND AssAttrGetSetImpl FOREACH property.typeSelect(MAssociationRole)-»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for accessing the association ----------------------
+	«ENDIF-»
+	«EXPAND AssAttrAccessImpl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
+
+«REM»
+	generate abstract association accessor methods
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for adding to and removing from association --------
+	«ENDIF-»
+	«EXPAND AssAttrGetSetDecl FOREACH property.typeSelect(MAssociationRole)-»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for accessing the association ----------------------
+	«ENDIF-»
+	«EXPAND AssAttrAccessDecl FOREACH property.typeSelect(MAssociationRole)-»
 «ENDDEFINE»
 
 
@@ -31,7 +51,7 @@
 «REM»
 	generate attribute declarations for each association
 «ENDREM»
-«DEFINE AssAttrDecl FOR MAssociationEnd-»
+«DEFINE AssAttrDecl FOR MAssociationRole-»
 «IF multiplicity == 1-»
 	private «this.type.name» «asAttribName(name)-»;
 	«ELSE-»
@@ -48,8 +68,7 @@
 		getXxxs
 		setXxxs
 «ENDREM»
-«DEFINE AssAttrGetSetImpl FOR MAssociationEnd-»
-	«REM» generate insertInXxx method «ENDREM»
+«DEFINE AssAttrGetSetImpl FOR MAssociationRole-»
 	public void insertIn«name.toFirstUpper()-»(«type.name» _in) {
 	«IF multiplicity == 1-»
 		if («asAttribName(name)» == _in) {		«REM» check if attribute is already set to param «ENDREM»
@@ -72,7 +91,6 @@
 	«ENDIF-»
 	}
 	
-	«REM» generate removeFromXxx method «ENDREM»
 	public void removeFrom«name.toFirstUpper()-»
 	(«type.name» _ex) {
 	«IF multiplicity == 1-»
@@ -92,9 +110,9 @@
 	}
 «ENDDEFINE»
 	
-	«REM» generate getter for association attributes «ENDREM»
+	«REM» generate getter for association «ENDREM»
 	
-«DEFINE AssAttrAccessImpl FOR MAssociationEnd-»
+«DEFINE AssAttrAccessImpl FOR MAssociationRole-»
 	«IF multiplicity == 1-»
 	public «type.name» «asGetter(name)»() {
 		return «asAttribName(name)»;
@@ -103,14 +121,22 @@
 	public java.util.Set<«type.name»> «asGetter(name)»() {
 		return java.util.Collections.unmodifiableSet(«asAttribName(name)»);
 	}
-	public «type.name»[] «asGetter(name)»Array() {
-		return «asAttribName(name)».toArray(new «type.name»[0]);
-	}
 	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
 		return «asAttribName(name)».iterator();
 	}
-	public int «asGetter(name)»Count() {
-		return «asAttribName(name)».size();
-	}
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE AssAttrGetSetDecl FOR MAssociationRole-»
+	void insertIn«name.toFirstUpper()-»(«type.name» _in);
+	removeFrom«name.toFirstUpper()-»;
+«ENDDEFINE»
+
+«DEFINE AssAttrAccessDecl FOR MAssociationRole-»
+	«IF multiplicity == 1-»
+	«type.name» «asGetter(name)»();
+	«ELSE-»
+	java.util.Set<«type.name»> «asGetter(name)»();
+	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator();
 	«ENDIF-»
 «ENDDEFINE»

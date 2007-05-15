@@ -14,7 +14,7 @@
 «FILE getFilePath(this) + "/" + name + ".java"-»
 «EXPAND filehead FOR this-»
 «REM» class definition «ENDREM»
-public class «name»«extensions()»«implementedInterfaces()» {
+public «abstract ? "abstract " : ""»class «name»«extensions()»«implementedInterfaces()» {
 	«EXPAND standardbody FOR this-»
 	«EXPAND ownStuff FOR this-»
 }
@@ -26,7 +26,8 @@ public class «name»«extensions()»«implementedInterfaces()» {
 «FILE getFilePath(this) + "/" + name + ".java"-»
 «EXPAND filehead-»
 interface «name» «extensions()» {
-	«EXPAND standardbody FOR this-»
+	«EXPAND attributes::Root FOR this»
+	«EXPAND associations::Root»
 	«EXPAND ownStuff FOR this-»
 }
 
@@ -59,15 +60,13 @@ import java.lang.String;
 «ENDDEFINE»
 
 «DEFINE standardbody FOR MClassifier»	
+	«REM» generate method declarations and definitions with default return 
+	«ENDREM»
+	«EXPAND methods::Root FOR this»
 	«REM» generate attribute declarations «ENDREM»
 	«EXPAND attributes::Root FOR this»
-	
 	«REM» generate association attribute declarations «ENDREM»
 	«EXPAND associations::Root FOR this»
-	
-	«REM» generate method declarations and definitions with default return 
-	«EXPAND methods::Root FOR this»
-	«ENDREM»
 «ENDDEFINE»
 «DEFINE ownStuff FOR MClassifier»	
 	«REM» protected region for your stuff + close bracket for type definition «ENDREM»
