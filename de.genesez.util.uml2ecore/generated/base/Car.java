@@ -3,35 +3,54 @@ package base;
 
 /*
         Car.java
-        generated @ 2007-05-10 22:19:01.671 CEST by georg
+        generated @ 2007-05-15 18:38:01.093 CEST by georg
         here only for demo of java extension call.
         should not be used because it would cause
         new svn revisions even when nothing else changed!
  */
 
-/* PROTECTED REGION ID(java.imports._wPhQOf8mEdu_PKOyBey_uw) ENABLED START */
+/* PROTECTED REGION ID(java.imports._mxnRaQMCEdyxB6OTzxcZMQ) ENABLED START */
 // put your imports here - following import is placeholder so that your IDE puts further imports here
+import java.lang.String;
 
 
 /* PROTECTED REGION END */
 
 /**
-        <!-- PROTECTED REGION ID(java.type.comment._wPhQOf8mEdu_PKOyBey_uw) ENABLED START -->
+        <!-- PROTECTED REGION ID(java.type.comment._mxnRaQMCEdyxB6OTzxcZMQ) ENABLED START -->
         <!-- TODO put your type comment here [description + responsibility] -->
         <!-- PROTECTED REGION END -->
 
         @author                georg
-        @version        2007-05-10 22:19:01.671 CEST
+        @version        2007-05-15 18:38:01.093 CEST
  */
-public class Car {
+public class Car extends Vehicle {
     // -- attribute definitions with default initialization ---------
     private int maxSpeed;
-    private String make;
     private Integer noOfWheels;
 
     // -- declare association attributes ----------------------------
     private java.util.Set<Wheel> wheels = new java.util.HashSet<Wheel>();
     private Wheel spare;
+
+    // -- constructors ----------------------------------------------
+    public Car(int mxs, String make) throws NotReallySeriousException {
+        /* PROTECTED REGION ID(methods.methodimpl_mxnRdgMCEdyxB6OTzxcZMQ) ENABLED START */
+        // TODO: implement constructor
+        /* PROTECTED REGION END */
+    }
+
+    // -- abstract methods ------------------------------------------
+    // -- methods ---------------------------------------------------
+    public final Boolean drive(int speed)
+        throws WhatAMessException, NotReallySeriousException {
+        Boolean retval = false;
+
+        /* PROTECTED REGION ID(methods.methodimpl_mxnRcwMCEdyxB6OTzxcZMQ) ENABLED START */
+        // TODO: implement method drive
+        /* PROTECTED REGION END */
+        return retval;
+    }
 
     // -- attribute getter + setter ---------------------------------
     public int getMaxSpeed() {
@@ -42,14 +61,6 @@ public class Car {
         this.maxSpeed = maxSpeed;
     }
 
-    public String getMake() {
-        return make;
-    }
-
-    public void setMake(String make) {
-        this.make = make;
-    }
-
     public Integer getNoOfWheels() {
         return noOfWheels;
     }
@@ -58,14 +69,13 @@ public class Car {
         this.noOfWheels = noOfWheels;
     }
 
-    // -- adding to and removing from association -------------------
+    // -- methods for adding to and removing from association -------
     public void insertInWheels(Wheel _in) {
         if (wheels.contains(_in)) {
             return;
         }
 
         wheels.add(_in);
-
         _in.insertInMycar(this);
     }
 
@@ -75,7 +85,6 @@ public class Car {
         }
 
         wheels.remove(_ex);
-
         _ex.removeFromMycar(this);
     }
 
@@ -95,31 +104,21 @@ public class Car {
         spare = null;
     }
 
-    // -- various ways to access the association --------------------
+    // -- methods for accessing the association ----------------------
     public java.util.Set<Wheel> getWheels() {
         return java.util.Collections.unmodifiableSet(wheels);
-    }
-
-    public Wheel[] getWheelsArray() {
-        return wheels.toArray(new Wheel[0]);
     }
 
     public java.util.Iterator<Wheel> getWheelsIterator() {
         return wheels.iterator();
     }
 
-    public int getWheelsCount() {
-        return wheels.size();
-    }
-
     public Wheel getSpare() {
         return spare;
     }
 
-    /* PROTECTED REGION ID(java.impl._wPhQOf8mEdu_PKOyBey_uw) ENABLED START */
+    /* PROTECTED REGION ID(java.impl._mxnRaQMCEdyxB6OTzxcZMQ) ENABLED START */
     // -- put your implementation code here -------------------------
 
     /* PROTECTED REGION END */
-
-    // -- now it's your turn ----------------------------------------
 }

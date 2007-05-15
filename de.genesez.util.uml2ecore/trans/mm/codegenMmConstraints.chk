@@ -1,28 +1,52 @@
 import codegenMm;
-context MClass ERROR "owningPackage must bet set":
+context MModel ERROR "ownedPackage must have unique names":
+	ownedPackage.forAll(e1| !ownedPackage.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MModel ERROR "primitiveTypes must have unique names":
+	primitiveTypes.forAll(e1| !primitiveTypes.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MModel ERROR "anyStereotype must have unique names":
+	anyStereotype.forAll(e1| !anyStereotype.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MClassifier ERROR "owningPackage must bet set":
 	owningPackage != null;
-context MClass ERROR "attribute must have unique names":
-	attribute.forAll(e1| !attribute.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
-context MClass ERROR "associationEnd must have unique names":
-	associationEnd.forAll(e1| !associationEnd.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
-context MAssociation ERROR "owningPackage must bet set":
-	owningPackage != null;
+context MClassifier ERROR "operation must have unique names":
+	operation.forAll(e1| !operation.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MClassifier ERROR "property must have unique names":
+	property.forAll(e1| !property.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MParameter ERROR "operation must bet set":
+	operation != null;
+context MParameter ERROR "type must bet set":
+	type != null;
+context MPrimitiveType ERROR "model must bet set":
+	model != null;
+context MTaggedValue ERROR "owningStereotype must bet set":
+	owningStereotype != null;
 context MPackage ERROR "model must bet set":
 	model != null;
-context MPackage ERROR "class must have unique names":
-	class.forAll(e1| !class.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
 context MPackage ERROR "nestedPackage must have unique names":
 	nestedPackage.forAll(e1| !nestedPackage.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
 context MPackage ERROR "association must have unique names":
 	association.forAll(e1| !association.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
-context MAttribute ERROR "class must bet set":
-	class != null;
-context MAssociationEnd ERROR "association must bet set":
+context MPackage ERROR "classifier must have unique names":
+	classifier.forAll(e1| !classifier.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MProperty ERROR "type must bet set":
+	type != null;
+context MProperty ERROR "classifier must bet set":
+	classifier != null;
+context MStereotype ERROR "model must bet set":
+	model != null;
+context MStereotype ERROR "taggedValue must have unique names":
+	taggedValue.forAll(e1| !taggedValue.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MOperation ERROR "returnType must bet set":
+	returnType != null;
+context MOperation ERROR "classifier must bet set":
+	classifier != null;
+context MOperation ERROR "parameter must have unique names":
+	parameter.forAll(e1| !parameter.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+context MAssociation ERROR "end cannot be empty":
+	!end.isEmpty;
+context MAssociation ERROR "owningPackage must bet set":
+	owningPackage != null;
+context MAssociationRole ERROR "association must bet set":
 	association != null;
-context MAssociationEnd ERROR "opposite must bet set":
+context MAssociationRole ERROR "opposite must bet set":
 	opposite != null;
-context MAssociationEnd ERROR "class must bet set":
-	class != null;
-context MModel ERROR "ownedPackage must have unique names":
-	ownedPackage.forAll(e1| !ownedPackage.exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
 	

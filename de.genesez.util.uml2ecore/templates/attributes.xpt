@@ -26,6 +26,15 @@
 «ENDFOREACH-»
 «ENDDEFINE»
 
+«REM»
+	generate attribute definitions, getter and setters for class types
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	// -- attribute definitions with default initialization ---------
+«EXPAND AttribDecl FOREACH property.typeSelect(MAttribute)-»
+	
+«ENDDEFINE»
+
 
 «REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
 
@@ -36,7 +45,7 @@
 	primitive types : default value
 «ENDREM»
 «DEFINE AttribDecl FOR MAttribute-»
-	«visibility» «type.name» «asAttribName(name)-»;
+	«modifiers()»«type.name» «attribName()»«defaultValue()»;
 «ENDDEFINE»
 
 «REM»

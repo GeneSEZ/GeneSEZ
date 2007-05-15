@@ -8,8 +8,8 @@ String concat( String s1, String s2 ): s1 == null ? s2 : s1+"."+s2;
 String namespace(MPackage this): 
 	eContainer == null ? null : 
 	switch {
-		case MPackage.isInstance(eContainer): (name == null ? null : concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ))
 		case MModel.isInstance(eContainer): (name == null ? null : concat( ((MModel)eContainer).namespace(), ((MModel)eContainer).name ))
+		case MPackage.isInstance(eContainer): (name == null ? null : concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ))
 		default: null
 	};
 String qualifiedName(MPackage this): concat( namespace(), name );
@@ -20,10 +20,10 @@ String namespace(MClass this): name == null ? null : ( (((MPackage)eContainer) !
 String qualifiedName(MClass this): concat( namespace(), name );
 			
 			
-// ----------- MAssociationEnd ------------		
+// ----------- MAssociationRole ------------		
 			
-String namespace(MAssociationEnd this): name == null ? null : ( (((MClass)eContainer) != null) ? concat( ((MClass)eContainer).namespace(), ((MClass)eContainer).name ) : null );
-String qualifiedName(MAssociationEnd this): concat( namespace(), name );
+String namespace(MAssociationRole this): name == null ? null : ( (((MClassifier)eContainer) != null) ? concat( ((MClassifier)eContainer).namespace(), ((MClassifier)eContainer).name ) : null );
+String qualifiedName(MAssociationRole this): concat( namespace(), name );
 			
 			
 // ----------- MAssociation ------------		
@@ -34,7 +34,7 @@ String qualifiedName(MAssociation this): concat( namespace(), name );
 			
 // ----------- MAttribute ------------		
 			
-String namespace(MAttribute this): name == null ? null : ( (((MClass)eContainer) != null) ? concat( ((MClass)eContainer).namespace(), ((MClass)eContainer).name ) : null );
+String namespace(MAttribute this): name == null ? null : ( (((MClassifier)eContainer) != null) ? concat( ((MClassifier)eContainer).namespace(), ((MClassifier)eContainer).name ) : null );
 String qualifiedName(MAttribute this): concat( namespace(), name );
 			
 			
@@ -51,9 +51,69 @@ String qualifiedName(MElement this): name;
 			
 			
 // ----------- MProperty ------------		
-String namespace(MProperty this): null;
-String qualifiedName(MProperty this): name;
 			
+String namespace(MProperty this): name == null ? null : ( (((MClassifier)eContainer) != null) ? concat( ((MClassifier)eContainer).namespace(), ((MClassifier)eContainer).name ) : null );
+String qualifiedName(MProperty this): concat( namespace(), name );
+			
+			
+// ----------- MInterface ------------		
+			
+String namespace(MInterface this): name == null ? null : ( (((MPackage)eContainer) != null) ? concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ) : null );
+String qualifiedName(MInterface this): concat( namespace(), name );
+			
+			
+// ----------- MClassifier ------------		
+			
+String namespace(MClassifier this): name == null ? null : ( (((MPackage)eContainer) != null) ? concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ) : null );
+String qualifiedName(MClassifier this): concat( namespace(), name );
+			
+			
+// ----------- MOperation ------------		
+			
+String namespace(MOperation this): name == null ? null : ( (((MClassifier)eContainer) != null) ? concat( ((MClassifier)eContainer).namespace(), ((MClassifier)eContainer).name ) : null );
+String qualifiedName(MOperation this): concat( namespace(), name );
+			
+			
+// ----------- MParameter ------------		
+			
+String namespace(MParameter this): name == null ? null : ( (((MOperation)eContainer) != null) ? concat( ((MOperation)eContainer).namespace(), ((MOperation)eContainer).name ) : null );
+String qualifiedName(MParameter this): concat( namespace(), name );
+			
+			
+// ----------- MDataType ------------		
+			
+String namespace(MDataType this): name == null ? null : ( (((MPackage)eContainer) != null) ? concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ) : null );
+String qualifiedName(MDataType this): concat( namespace(), name );
+			
+			
+// ----------- MPrimitiveType ------------		
+			
+			
+String namespace(MPrimitiveType this): 
+	eContainer == null ? null : 
+	switch {
+		case MModel.isInstance(eContainer): (name == null ? null : concat( ((MModel)eContainer).namespace(), ((MModel)eContainer).name ))
+		case MPackage.isInstance(eContainer): (name == null ? null : concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ))
+		default: null
+	};
+String qualifiedName(MPrimitiveType this): concat( namespace(), name );
+			
+// ----------- MEnumeration ------------		
+			
+String namespace(MEnumeration this): name == null ? null : ( (((MPackage)eContainer) != null) ? concat( ((MPackage)eContainer).namespace(), ((MPackage)eContainer).name ) : null );
+String qualifiedName(MEnumeration this): concat( namespace(), name );
+			
+			
+// ----------- MStereotype ------------		
+			
+String namespace(MStereotype this): name == null ? null : ( (((MModel)eContainer) != null) ? concat( ((MModel)eContainer).namespace(), ((MModel)eContainer).name ) : null );
+String qualifiedName(MStereotype this): concat( namespace(), name );
+			
+			
+// ----------- MTaggedValue ------------		
+			
+String namespace(MTaggedValue this): name == null ? null : ( (((MStereotype)eContainer) != null) ? concat( ((MStereotype)eContainer).namespace(), ((MStereotype)eContainer).name ) : null );
+String qualifiedName(MTaggedValue this): concat( namespace(), name );
 			
 			
 		

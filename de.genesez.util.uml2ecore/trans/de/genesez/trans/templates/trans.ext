@@ -55,7 +55,10 @@ private MPackage processPackage( Package p) :
 create MClass makeClassifier( Class c ) :
 	// set the unique xmiId
 	setXmiGuid(xmiId(c))->
-	setName(c.name);
+	setName(c.name)->
+	setAbstract(c.isAbstract)
+	->info()
+	;
 
 // classes are contained in packages. 
 // they own attributes and association ends
@@ -64,26 +67,51 @@ private MClass processClassifier( Classifier c) :
 	// add attributes
 	mc.setProperty(c.attribute.reject(p|p.association != null).makeAttribute().setClassifier(mc))->
 	// add association ends
-	mc.property.addAll(c.attribute.select(p|p.association != null).makeAssociationEnd().setClassifier(mc))->
+	mc.property.addAll(c.attribute.select(p|p.association != null).makeAssociationRole().setClassifier(mc))->
+	// add operations
+	mc.setOperation(c.getOperations().makeOperation())->
 	// add superclasses
 	mc.setSupertype(c.general.makeClassifier())->
 	mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.makeClassifier())->
 	mc;
+	
+create MOperation makeOperation(Operation op) :
+	// set the unique xmiId
+	setXmiGuid(xmiId(op))->
+	setName(op.name)->
+	setAbstract(op.isAbstract)->
+	setStatic(op.isStatic)->
+	setVisibility(op.visibility.toString())->
+	setFinal(op.isLeaf)->
+	setReturnType(op.type.makeClassifier())->
+	setRaisedException(op.raisedException.makeClassifier())->
+	setParameter(op.ownedParameter
+		.reject(p|p.direction.toString() == "return")
+		.makeParameter().setOperation(this))
+//	->info()
+	;
+
+create MParameter makeParameter(Parameter p) :
+	// set the unique xmiId
+	setXmiGuid(p.xmiId())->
+	setName(p.name)->
+	setDirection(p.direction.toString())->
+	setType(p.type.makeClassifier())
+//	->info()
+	;
 
 // create new MAttribute from uml2 Property
 create MAttribute makeAttribute( Property p ) :
-	initAttribute(this, p);
-
-private initAttribute(MAttribute ma, Property p):
 	// set the unique xmiId
-	ma.setXmiGuid(xmiId(p))->
-	ma.setName(p.name)->
-	ma.setVisibility(p.visibility.toString())->
-	ma.setMultiplicity(p.getUpper())->
-	ma.setDerived(p.isDerived)->
-	ma.setType(p.type.makeClassifier())->
-//	info(ma)->
-	ma;
+	setXmiGuid(xmiId(p))->
+	setName(p.name)->
+	setVisibility(p.visibility.toString())->
+	setMultiplicity(p.getUpper())->
+	setDerived(p.isDerived)->
+	setType(p.type.makeClassifier())->
+	setFinal(p.isReadOnly)->
+	setDefaultvalue(p.getDefault())->
+	setStatic(p.isStatic);
 
 // attributes at the moment are leafs in the model tree, so do nearly nothing here.
 private MAttribute processAttribute( Property p) :
@@ -102,7 +130,7 @@ create MAssociation makeAssociation( Association a ) :
 private MAssociation processAssociation(Association a, MPackage owningPackage): 
 	let ma = makeAssociation(a) :
 	ma.setOwningPackage(owningPackage)->
-	ma.setEnd(a.memberEnd.select(e|e.class != null).makeAssociationEnd())->
+	ma.setEnd(a.memberEnd.select(e|e.class != null).makeAssociationRole())->
 	ma.end.setAssociation(ma).setDerived(a.isDerived)->
 	ma.linkEnds()->
 //	info(ma.name + "(" + ma.end.name + ")")->
@@ -113,7 +141,7 @@ private String assocName(Association a):
 		"" :
 		a.name ;
 
-create MAssociationEnd makeAssociationEnd(Property aend) :
+create MAssociationRole makeAssociationRole(Property aend) :
 	// set the unique xmiId
 	setXmiGuid(xmiId(aend))->
 	setClassifier(assocEndClass(aend))->
@@ -147,7 +175,8 @@ create MInterface makeClassifier( Interface c ):
 	// set the unique xmiId
 	setXmiGuid(xmiId(c))->
 	setName(c.name)
-	->info();
+//	->info()
+	;
 
 create MEnumeration makeClassifier( Enumeration c ):
 	// set the unique xmiId
@@ -158,22 +187,24 @@ create MPrimitiveType makeClassifier( PrimitiveType c ):
 	// set the unique xmiId
 	setXmiGuid(xmiId(c))->
 	setName(c.name)->
-	makeModel(getUml2Model()).primitiveTypes.add(this)->
-	info();
+	makeModel(getUml2Model()).primitiveTypes.add(this)
+//	->info()
+	;
+
+create MPrimitiveType makeClassifier( Void c ):
+	// set the unique xmiId
+	setXmiGuid("void")->
+	setName("void")->
+	makeModel(getUml2Model()).primitiveTypes.add(this)
+//	->info()
+	;
 
 create MClassifier makeClassifier( Type c ):
 	// set the unique xmiId
 	setXmiGuid(xmiId(c))->
 	setName(c.name)
-	->info();
-
-// create new MAssociation from uml2 Association
-create MAssociation makeClassifier( Association a ) :
-	// set the unique xmiId
-	setXmiGuid(xmiId(a))->
-	setName(assocName(a))->
-//	info()->
-	this;
+//	->info()
+	;
 
 // get unique xmiId from ecore file, requires Java method
 private String xmiId (Element obj) : 
