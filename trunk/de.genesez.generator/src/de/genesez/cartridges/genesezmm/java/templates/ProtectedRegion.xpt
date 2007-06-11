@@ -1,0 +1,170 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataType»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Helper»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Naming»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a simple protected region comment
+«DEFINE Comment(String proRegId) FOR MElement»
+	«EXPAND _Comment(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+//
+«DEFINE CommentClassifier(String proRegId) FOR MClassifier»
+	«EXPAND _CommentClassifier(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+// generate a protected region for a getter method
+«DEFINE CommentGetter(String proRegId) FOR MProperty»
+	«EXPAND _CommentGetter(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+// generate a proteced region for a setter method
+«DEFINE CommentSetter(String proRegId) FOR MProperty»
+	«EXPAND _CommentSetter(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+// generate a proteced region for a iterator method
+«DEFINE CommentIterator(String proRegId) FOR MProperty»
+	«EXPAND _CommentIterator(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+// generate a proteced region for a insert in method
+«DEFINE CommentInsertIn(String proRegId) FOR MProperty»
+	«EXPAND _CommentInsertIn(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+// generate a proteced region for a remove from method
+«DEFINE CommentRemoveFrom(String proRegId) FOR MProperty»
+	«EXPAND _CommentRemoveFrom(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+// generate a protected region for a operation
+«DEFINE CommentOperation(String proRegId) FOR MOperation»
+	«EXPAND _CommentOperation(proRegId, ownedComment)»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a basic comment text
+«DEFINE _Comment(String proRegId, List comments) FOR MElement»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ «getCommentText(comments)»
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+
+
+// 
+«DEFINE _CommentClassifier(String proRegId, List comments) FOR MClassifier»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ * «name».java
+ * 
+ «getCommentText(comments)»
+ * 
+ * @author «getUserName()» (generated at «getTimeStamp()»)
+ * @version %I%
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+
+
+//
+«DEFINE _CommentGetter(String proRegId, List comments) FOR MProperty»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ * getter for:
+ «getCommentText(comments)»
+ * 
+ «getCommentAtReturn(type)»
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+
+
+//
+«DEFINE _CommentSetter(String proRegId, List comments) FOR MProperty»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ * setter for:
+ «getCommentText(comments)»
+ * 
+ «getCommentOneAtParam(name, comments)»
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+
+
+//
+«DEFINE _CommentIterator(String proRegId, List comments) FOR MProperty»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ * iterator for:
+ «getCommentText(comments)»
+ * 
+ «getCommentAtReturn(type)»
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+
+
+//
+«DEFINE _CommentInsertIn(String proRegId, List comments) FOR MProperty»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ * insert in for:
+ «getCommentText(comments)»
+ * 
+ «getCommentOneAtParam("_in", comments)»
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+
+
+//
+«DEFINE _CommentRemoveFrom(String proRegId, List comments) FOR MProperty»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ * remove from for:
+ «getCommentText(comments)»
+ * 
+ «getCommentOneAtParam("_ex", comments)»
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+
+
+//
+«DEFINE _CommentOperation(String proRegId, List comments) FOR MOperation»
+/**
+ * «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)»
+ «getCommentText(comments)»
+ *
+ «getCommentAtParam(parameter)»
+ «getCommentAtReturn(returnType)»
+ «getCommentAtThrows(raisedException)»
+ * «ENDPROTECT»
+ */
+«ENDDEFINE»
+

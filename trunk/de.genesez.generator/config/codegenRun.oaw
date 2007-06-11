@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<!-- no comment -->
+
+<workflow>
+
+	<!-- load properties file -->
+	<property file="codegen.properties" />
+	
+	
+	<!-- first we have to initialize the support for UML2 models -->
+	<bean class="oaw.uml2.Setup" standardUML2Setup="true" />
+
+	<!-- here we read the UML2 model file into the uml2model workflow slot -->
+	<component id="xmiParserForUmlModel"
+		class="org.openarchitectureware.emf.XmiReader">
+		<modelFile value="${uml2File}" />
+		<outputSlot value="uml2model" />
+	</component> 
+
+	<!-- this one runs the transformation from UML2 to genesezMM. -->
+	<component class="oaw.xtend.XtendComponent">
+		<!-- Working on UML2 models also requires the EcorePackage to 
+			be configured as a meta model, so we do this here -->
+		<metaModel id="mm.emf" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage
+				value="org.eclipse.emf.ecore.EcorePackage" />
+		</metaModel>
+		<!-- and working with UML2 also requires the UML2 meta model -->
+		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
+		<!-- and we need the target metamodel -->
+		<metaModel id="genesezMM"
+			class="org.openarchitectureware.type.emf.EmfMetaModel">
+			<metaModelPackage value="${metaModelPackage}" />
+		</metaModel>
+		<!-- deactivated for now
+			again, we need the two meta models introduced above; we reference
+			them using XML's idRef mechanism - ->
+			<metaModel idRef="mm.emf" />
+			<metaModel idRef="mm.UML2" /-->
+		<!-- this statement makes the value "${nsUriPrefix"} passed in
+			by the external workflow file available as a global variable
+			that is accessed by the nsUri() function in uml2ecore.ext -->
+		<globalVarDef name="uml2model" value="uml2model" />
+		<globalVarDef name="excludePackage" value="'${excludePackage}'" />
+		<!-- finally, we run the transformation itself. there's an 
+			extension file called trans.ext in the respective location
+			in the classpath that contains a function called transform that
+			takes an object of type UML2::Model as its parameter. Note that 
+			we can use the slot name uml2model as a variable in this expression -->
+		<invoke
+			value="de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)" />
+		<!-- finally, we specify that we want to put the return value of the 
+			function invoked above into the ecoreModel slot in the workflow -->
+		<outputSlot value="generatorModel" />
+	</component>
+		
+
+	<!-- this component checks a number of constraints in the parsed genesezMM model -->
+	<component id="constraintsChecker-genesezMM"
+		class="org.openarchitectureware.check.CheckComponent">
+		<!-- Working on genesezMM models also requires the EcorePackage to 
+		be configured as a meta model, so we do this here -->
+		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="${metaModelPackage}" />
+		</metaModel>
+		<!-- and workin with genesezMM also requires the UML2 meta model -->
+		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
+		<!-- this is the file that contains the constraints; note the use of
+		:: as the namespace delimiter; we also don't specify the .chk
+		extension of the uml2Constraints file. The namespaces correspond
+		to Java packages; so you know where to look in the source folder -->
+		<checkFile
+		value="de::genesez::uml2genesezmm::genesezMMConstraints" />
+		<!-- we check the complete set of model elements under the uml2model 
+		slot in the workflow; this will be the Model object and all its
+		children, recusively  -->
+		<emfAllChildrenSlot value="generatorModel" />
+		<!-- finally, if we encounter errors here (i.e. failed constraints)
+		we stop the workflow here. We won't invoke the transformation if
+		the input model is faulty -->
+		<abortOnError value="true" />
+	</component>
+		
+		
+	<!-- next, we write the transformed model as Ecore file. We specify the workflow
+		slot where we expect the model as well as the file name of the 
+		to-be-written file -->
+	<component id="xmiWriter"
+		class="org.openarchitectureware.emf.XmiWriter">
+		<inputSlot value="generatorModel" />
+		<modelFile value="${outputModelFile}" />
+	</component>
+	
+	<!-- next, we clean the generated directory for testing code -->
+	<component id="dirCleaner"
+		class="oaw.workflow.common.DirectoryCleaner"
+		directories="${generateTarget}">
+	</component>
+
+	<component id="generator" class="oaw.xpand2.Generator"
+		skipOnErrors="true">
+		<metaModel idRef="genesezMM" />
+		<expand
+			value="de::genesez::cartridges::genesezmm::java::templates::Root::Root FOR generatorModel" />
+		<!-- expand
+			value="templates::root::Root FOR generatorModel" /-->
+		<genPath value="${generateTarget}" />
+		<!-- config the protected regions resolver -->
+		<prSrcPaths value="${generateTarget}" />
+		<prDefaultExcludes value="false" />
+		<prExcludes value=".svn" />
+		
+		<!--beautifier 
+			class="org.hybridlabs.source.formatter.JavaImportBeautifier"
+			conventionFilePath="-filename-"
+			organizeImports="true"
+			format="true"/-->
+		
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.JavaBeautifier" />
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
+		<fileEncoding value="ISO-8859-1" />
+	</component>
+
+</workflow>

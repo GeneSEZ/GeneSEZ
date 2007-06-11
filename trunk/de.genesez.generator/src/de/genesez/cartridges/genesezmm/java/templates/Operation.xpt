@@ -1,0 +1,88 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataType»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Helper»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Naming»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate constructor for mclass
+«DEFINE ConstructorImpl FOR MClass»
+«EXPAND _ConstructorImpl FOREACH operation.select(e|e.name == name)-»
+«ENDDEFINE»
+
+
+// generate all abstract methods for a classifier
+«DEFINE OperationDecl FOR MClassifier»
+«EXPAND _OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)»
+«ENDDEFINE»
+
+
+// generate all methods for a classifier
+«DEFINE OperationImpl FOR MClassifier»
+«EXPAND _OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate constructor for mclass
+«DEFINE _ConstructorImpl FOR MOperation»
+«EXPAND ProtectedRegion::CommentOperation("java.moperation.implementation.constructor.comment." + xmiGuid)»
+«visibility» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
+/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.moperation.implementation.constructor.code." + xmiGuid)» */
+/* <!-- TODO put your code here --> */
+
+/* «ENDPROTECT» */
+}
+«ENDDEFINE»
+
+
+// generate a declaration for an abstract operation
+«DEFINE _OperationDecl FOR MOperation»
+«EXPAND ProtectedRegion::CommentOperation("java.moperation.declaration.operation.comment." + xmiGuid)»
+«EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
+«ENDDEFINE»
+
+
+// generate an implementation for an normal operation
+«DEFINE _OperationImpl FOR MOperation»
+«EXPAND ProtectedRegion::CommentOperation("java.moperation.implementation.operation.comment." + xmiGuid)»
+«EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«getReturnTypeDeclaration()»
+	/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.moperation.implementation.operation.code." + xmiGuid)» */
+	/* <!-- TODO put your code here --> */
+	
+	/* «ENDPROTECT» */
+	«getReturnTypeReturn()»
+}
+«ENDDEFINE»
+
+
+// generate modifiers for moperation
+«DEFINE _Modifier FOR MOperation»
+«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+«ENDDEFINE»
+
+
+// generate a parameter list for moperation
+«DEFINE _Parameter FOR MOperation»
+«FOREACH parameter AS p SEPARATOR ", "»«p.type.name» «p.name»«ENDFOREACH»
+«ENDDEFINE»
+
+
+// generate exceptions for a moperation
+«DEFINE _Exception FOR MOperation»
+«IF !raisedException.isEmpty»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name»«ENDFOREACH»
+«ENDIF»
+«ENDDEFINE»

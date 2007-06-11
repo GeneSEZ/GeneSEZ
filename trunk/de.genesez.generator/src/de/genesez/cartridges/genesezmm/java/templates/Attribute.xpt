@@ -1,0 +1,78 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataType»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Helper»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Naming»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate attributes for a classifier
+«DEFINE AttributeDecl FOR MClassifier»
+«EXPAND _AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
+«EXPAND _AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static)-»
+«ENDDEFINE»
+
+
+// generate getter and setter methodes for all attributes of a classifier
+«DEFINE GetterSetterImpl FOR MClassifier»
+«EXPAND _GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
+«FOREACH property.typeSelect(MAttribute).select(e|!e.static) AS a»
+	«EXPAND _GetterImpl FOR a-»
+	«EXPAND _SetterImpl FOR a-»
+«ENDFOREACH»
+«ENDDEFINE»
+
+
+«DEFINE AOPRoot FOR MClass»
+«IF checkSerialVersion(supertype)»
+private static final long serialVersionUID = 1L;
+«ENDIF»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a declaration for an attribute
+«DEFINE _AttributeDecl FOR MAttribute»
+«EXPAND ProtectedRegion::Comment("java.mattribute.declaration.attribute.comment." + xmiGuid)»
+«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
+«ENDDEFINE»
+
+
+// generate a getter implementation method for an attribute
+«DEFINE _GetterImpl FOR MAttribute»
+«EXPAND ProtectedRegion::CommentGetter("java.mattribute.implementation.getter.comment." + xmiGuid)»
+public «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
+	return «asAttributeName()»;
+}
+«ENDDEFINE»
+
+
+// generate a setter implementation method for an attribute
+«DEFINE _SetterImpl FOR MAttribute»
+«EXPAND ProtectedRegion::CommentSetter("java.mattribute.implementation.setter.comment." + xmiGuid)»
+public «IF static»static«ENDIF» void «asSetter(name)»(«type.name» «asAttributeName()») {
+	this.«asAttributeName()» = «asAttributeName()»;
+}
+«ENDDEFINE»
+
+
+// generate modifiers for mattribute
+«DEFINE _Modifier FOR MAttribute»
+«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF»
+«ENDDEFINE»
+
+
+// generate defaultvalue for mattribute
+«DEFINE _DefaultValue FOR MAttribute»
+«IF defaultvalue.length > 0»= «defaultvalue»«ENDIF»
+«ENDDEFINE»

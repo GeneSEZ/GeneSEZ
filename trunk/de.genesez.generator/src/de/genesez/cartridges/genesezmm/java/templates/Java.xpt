@@ -1,0 +1,132 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataType»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Helper»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Naming»
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a interface
+«DEFINE Root FOR MInterface»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
+package «getPackagePath()-»;
+«EXPAND Import::Import-»
+«EXPAND ProtectedRegion::CommentClassifier("java.minterface.declaration.interface.comment." + xmiGuid)-»
+public interface «asClassifierName(name)» «EXPAND Generalization::Generalization» {
+
+	// ////////////////////////////////////////////////////////////////////////
+	// generated variable and constant declarations
+	// ////////////////////////////////////////////////////////////////////////
+
+	«EXPAND Attribute::AttributeDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated association method declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Association::OperationDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated abstract method declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationDecl-»
+	
+	public abstract String toString();
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// own implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND _OwnCodeImpl-»
+}
+«ENDFILE»
+«ENDDEFINE»
+
+
+// generate a class
+«DEFINE Root FOR MClass»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
+package «getPackagePath()-»;
+«EXPAND Import::Import-»
+«EXPAND ProtectedRegion::CommentClassifier("java.mclass.declaration.class.comment." + xmiGuid)-»
+«EXPAND _Modifier» class «asClassifierName(name)» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated variable, constant and association declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Attribute::AttributeDecl-»
+	«EXPAND Association::AssociationDecl-»
+	«EXPAND Attribute::AOPRoot-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated association method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Association::OperationImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated constructor implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::ConstructorImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated abstract method declaration
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated normal method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationImpl-»
+	
+	public String toString() {
+		/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.mclass.implementation.tostring.code." + xmiGuid)» */
+		/* <!-- TODO put your own toString code here --> */
+		return super.toString();
+		/* «ENDPROTECT» */
+	}
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated getter and setter method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Attribute::GetterSetterImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// own implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND _OwnCodeImpl-»
+}
+«ENDFILE»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl FOR MClassifier»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.mclassifier.implementation.owncode.code." + xmiGuid)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+
+// generate modifiers for mclassifier
+«DEFINE _Modifier FOR MClassifier»
+«visibility.toString()» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+«ENDDEFINE»

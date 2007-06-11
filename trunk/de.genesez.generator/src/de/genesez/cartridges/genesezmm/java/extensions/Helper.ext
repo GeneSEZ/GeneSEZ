@@ -1,0 +1,116 @@
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::cartridges::genesezmm::java::extensions::DataType;
+extension de::genesez::cartridges::genesezmm::java::extensions::Naming;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// public extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+// return a comma seperate string of list elements
+String getNameList(List l) :
+	l.size > 1 
+		? ((MElement) l.first()).name + ", " + getNameList(l.withoutFirst())
+		: (l.size > 0
+			? ((MElement) l.first()).name
+			: "");
+
+
+
+Boolean checkSerialVersion(List l) :
+	l.size > 0
+		? (((MClass) l.first()).name == "Exception"
+			? true
+			: checkSerialVersion(l.withoutFirst()))
+		: false;
+
+
+
+
+//
+String getCommentText(List l, String seperator) :
+	l.size > 0
+		? getComment((MComment) l.first(), seperator) + (((MComment) l.first()).nestedComment.size > 0 ? "\n " + seperator + " <p> \n " + getCommentText(((MComment) l.first()).nestedComment, seperator) : "")
+		: seperator + " <!-- TODO put your comment here -->";
+
+
+//
+String getCommentText(List l) :
+	getCommentText(l, "*");
+
+
+String getOneLineCommentText(String s) :
+	s.replaceAll("\n", ";");
+
+
+// 
+String getCommentOneAtParam(String name, List l) :
+	"* @param " + name + " " + getCommentText(l, "").getOneLineCommentText();
+
+
+// return a @throws text for javadoc
+String getCommentAtParam(List l) :
+	l.size > 1
+		? "* @param " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()  + "\n " + getCommentAtParam(l.withoutFirst())
+		: (l.size > 0
+			? "* @param " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()
+			: "");
+
+
+// return a @return text for javadoc
+String getCommentAtReturn(MClassifier c) :
+	c.name.toLowerCase() != "void"
+		? "* @return " + getCommentText(c.ownedComment, "").getOneLineCommentText()
+		: "* ";
+
+
+// return a @throws text for javadoc
+String getCommentAtThrows(List l) :
+	l.size > 1
+		? "* @throws " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()  + "\n " + getCommentAtThrows(l.withoutFirst())
+		: (l.size > 0
+			? "* @throws " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()
+			: "");
+
+
+////////////////////////////////////////////////////////////////////////////////
+// public java functions
+////////////////////////////////////////////////////////////////////////////////
+
+// return package path for a class
+String getPackagePath(MClassifier clazz) : 
+	JAVA de.genesez.cartridges.genesezmm.java.utilities.Helper.getPackagePath(genesezMM.MClassifier);
+
+// return file path for a class
+String getFQNPackagePath(MClassifier clazz) : 
+	JAVA de.genesez.cartridges.genesezmm.java.utilities.Helper.getFQNPackagePath(genesezMM.MClassifier);
+
+
+// return the actual date and time
+String getTimeStamp() :
+	JAVA de.genesez.cartridges.genesezmm.java.utilities.Helper.getTimeStamp();
+
+
+// return the user, who is logged in
+String getUserName() :
+	JAVA de.genesez.cartridges.genesezmm.java.utilities.Helper.getUserName();
+	
+
+////////////////////////////////////////////////////////////////////////////////
+// private extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+//
+private String getComment(MComment c, String seperator) :
+	c.annotation != "null"
+		? seperator + " " + c.annotation.replaceAll("\n", "\n " + seperator + " ")
+		: "";
+		
+
+////////////////////////////////////////////////////////////////////////////////
+// private java functions
+////////////////////////////////////////////////////////////////////////////////
