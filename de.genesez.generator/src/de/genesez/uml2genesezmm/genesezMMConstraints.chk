@@ -1,0 +1,20 @@
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::uml2genesezmm::io;
+
+
+// checks if all attributes are defined static final 
+context MInterface WARNING "GeneSEZ-Generator(" + name + "): illegal modifier for an interface attribute; only public, static & final are permitted" :
+	property.typeSelect(MAttribute).select(e|e.static && e.final).size == property.typeSelect(MAttribute).size;
+
+
+// checks if all methods are defined abstract
+context MInterface WARNING "GeneSEZ-Generator(" + name + "): illegal modifier for an interface method; only public & abstract are permitted" :
+	operation.typeSelect(MOperation).select(e|e.abstract).size == operation.typeSelect(MOperation).size;
+
+
+// checks if a constructor is defined
+context MClass WARNING "GeneSEZ-Generator(" + name + "): no constructor defined; using default one" :
+	operation.typeSelect(MOperation).select(e|e.name == name).size > 0;
+

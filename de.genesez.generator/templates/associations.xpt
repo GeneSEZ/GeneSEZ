@@ -1,0 +1,142 @@
+«REM»
+	handles associations
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION util»
+«EXTENSION naming»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«REM»
+	generate association attribute declarations, and
+	accessor methods for class association attributes
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- declare association attributes ----------------------------
+	«ENDIF-»
+	«EXPAND AssAttrDecl FOREACH property.typeSelect(MAssociationRole)-»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for adding to and removing from association -------
+	«ENDIF-»
+	«EXPAND AssAttrGetSetImpl FOREACH property.typeSelect(MAssociationRole)-»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for accessing the association ----------------------
+	«ENDIF-»
+	«EXPAND AssAttrAccessImpl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
+
+«REM»
+	generate abstract association accessor methods
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for adding to and removing from association --------
+	«ENDIF-»
+	«EXPAND AssAttrGetSetDecl FOREACH property.typeSelect(MAssociationRole)-»
+	«IF property.typeSelect(MAssociationRole).size > 0 -»
+	// -- methods for accessing the association ----------------------
+	«ENDIF-»
+	«EXPAND AssAttrAccessDecl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«REM»
+	generate attribute declarations for each association
+«ENDREM»
+«DEFINE AssAttrDecl FOR MAssociationRole-»
+«IF multiplicity == 1-»
+	private «this.type.name» «asAttribName(name)-»;
+	«ELSE-»
+	private java.util.Set<«type.name»> «asAttribName(name)-»
+ = new java.util.HashSet<«type.name»>();
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	generate accessores for association attributes
+	accessors are generated as public
+		insertInXxx
+		removeFromXxx
+		getXxxs
+		setXxxs
+«ENDREM»
+«DEFINE AssAttrGetSetImpl FOR MAssociationRole-»
+	public void insertIn«name.toFirstUpper()-»(«type.name» _in) {
+	«IF multiplicity == 1-»
+		if («asAttribName(name)» == _in) {		«REM» check if attribute is already set to param «ENDREM»
+			return;
+		}
+		«IF opposite != null-»
+			if («asAttribName(name)» != null) {		«REM» if exist, break inverse association «ENDREM»
+				«asAttribName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
+			}
+		«ENDIF-»
+		«asAttribName(name)» = _in;		«REM» set association attribute to param «ENDREM»
+	«ELSE-»
+		if («asAttribName(name)».contains(_in)) {		«REM» check if attribute already contains param «ENDREM»
+			return;
+		}
+		«asAttribName(name)».add(_in);		«REM» add param to association attribute «ENDREM»
+	«ENDIF-»
+	«IF opposite != null-»
+		_in.insertIn«opposite.name.toFirstUpper()»(this);	«REM» synchronize inverse association «ENDREM»
+	«ENDIF-»
+	}
+	
+	public void removeFrom«name.toFirstUpper()-»
+	(«type.name» _ex) {
+	«IF multiplicity == 1-»
+		if («asAttribName(name)» != _ex) {		«REM» check if attribute is set to param «ENDREM»
+			return;
+		}
+		«asAttribName(name)» = null;		«REM» remove param from association attribute «ENDREM»
+	«ELSE-»
+		if (! «asAttribName(name)».contains(_ex)) {		«REM» check if attribute contains param «ENDREM»
+			return;
+		}
+		«asAttribName(name)».remove(_ex);		«REM» remove param from association attribute «ENDREM»
+	«ENDIF-»
+	«IF opposite!= null-»
+		_ex.removeFrom«opposite.name.toFirstUpper()»(this);	«REM» synchronize inverse association «ENDREM»
+	«ENDIF-»
+	}
+«ENDDEFINE»
+	
+	«REM» generate getter for association «ENDREM»
+	
+«DEFINE AssAttrAccessImpl FOR MAssociationRole-»
+	«IF multiplicity == 1-»
+	public «type.name» «asGetter(name)»() {
+		return «asAttribName(name)»;
+	}
+	«ELSE-»
+	public java.util.Set<«type.name»> «asGetter(name)»() {
+		return java.util.Collections.unmodifiableSet(«asAttribName(name)»);
+	}
+	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
+		return «asAttribName(name)».iterator();
+	}
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE AssAttrGetSetDecl FOR MAssociationRole-»
+	void insertIn«name.toFirstUpper()-»(«type.name» _in);
+	removeFrom«name.toFirstUpper()-»;
+«ENDDEFINE»
+
+«DEFINE AssAttrAccessDecl FOR MAssociationRole-»
+	«IF multiplicity == 1-»
+	«type.name» «asGetter(name)»();
+	«ELSE-»
+	java.util.Set<«type.name»> «asGetter(name)»();
+	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator();
+	«ENDIF-»
+«ENDDEFINE»

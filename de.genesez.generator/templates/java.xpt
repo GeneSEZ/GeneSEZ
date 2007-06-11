@@ -1,0 +1,78 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION util»
+
+«REM»
+	generates a simple class
+	a class must implement:
+	all methods from all implemented interfaces and superinterfaces
+	all abstract methods from the superclass
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE getFilePath(this) + "/" + name + ".java"-»
+«EXPAND filehead FOR this-»
+«REM» class definition «ENDREM»
+public «abstract ? "abstract " : ""»class «name»«extensions()»«implementedInterfaces()» {
+	«EXPAND standardbody FOR this-»
+	«EXPAND ownStuff FOR this-»
+}
+
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Root FOR MInterface»
+«FILE getFilePath(this) + "/" + name + ".java"-»
+«EXPAND filehead-»
+interface «name» «extensions()» {
+	«EXPAND attributes::Root FOR this»
+	«EXPAND associations::Root»
+	«EXPAND ownStuff FOR this-»
+}
+
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE filehead FOR MClassifier»
+package «getPackagePath(this)»;
+
+/*
+	«name».java
+	generated @ «getTimestamp()» by «getUser()»
+	here only for demo of java extension call. 
+	should not be used because it would cause
+	new svn revisions even when nothing else changed!
+ */
+«PROTECT CSTART '/* ' CEND ' */' ID ("java.imports." + xmiGuid)»
+// put your imports here - following import is placeholder so that your IDE puts further imports here
+import java.lang.String;
+«ENDPROTECT»
+
+/**
+	«PROTECT CSTART '<!-- ' CEND ' -->' ID ("java.type.comment." + xmiGuid)»
+	<!-- TODO put your type comment here [description + responsibility] -->
+	«ENDPROTECT»
+	
+	@author		«getUser()»
+	@version	«getTimestamp()»
+ */
+«ENDDEFINE»
+
+«DEFINE standardbody FOR MClassifier»	
+	«REM» generate method declarations and definitions with default return 
+	«ENDREM»
+	«EXPAND methods::Root FOR this»
+	«REM» generate attribute declarations «ENDREM»
+	«EXPAND attributes::Root FOR this»
+	«REM» generate association attribute declarations «ENDREM»
+	«EXPAND associations::Root FOR this»
+«ENDDEFINE»
+«DEFINE ownStuff FOR MClassifier»	
+	«REM» protected region for your stuff + close bracket for type definition «ENDREM»
+	«PROTECT CSTART '/* ' CEND ' */' ID "java.impl." + xmiGuid»
+	// -- put your implementation code here -------------------------
+	
+	«ENDPROTECT»
+«ENDDEFINE»
+	

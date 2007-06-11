@@ -1,0 +1,57 @@
+«REM»
+	generates attributes with getters + setters
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION util»
+«EXTENSION naming»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«REM»
+	generate method implementations for classes, enums etc.
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	// -- constructors ----------------------------------------------
+	«EXPAND _constructor FOREACH operation.select(op|op.name == name) -»
+	// -- abstract methods ------------------------------------------
+	«EXPAND _abstractmethod FOREACH operation.select(op|op.name != name && op.abstract) -»
+	// -- methods ---------------------------------------------------
+	«EXPAND _method FOREACH operation.reject(op|op.name == name || op.abstract) -»
+«ENDDEFINE»
+
+«REM»
+	generate method implementations for interfaces
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	
+«ENDDEFINE»
+
+
+«REM» -- - - - - - - - - - - - - - - - - - - - - - - - - - - - -- «ENDREM»
+
+«DEFINE _constructor FOR MOperation»
+	«visibility» «name»(«arguments()»)«exceptions()» {
+	«PROTECT CSTART '/* ' CEND ' */' ID ("methods.methodimpl" + xmiGuid)»
+	// TODO: implement constructor
+	«ENDPROTECT»
+	}
+«ENDDEFINE»
+
+«DEFINE _method FOR MOperation»
+	«modifiers()»«returnType.name» «name»(«arguments()»)«exceptions()» {
+	«returnValDecl()-»
+	«PROTECT CSTART '/* ' CEND ' */' ID ("methods.methodimpl" + xmiGuid)-»
+	// TODO: implement method «name»
+	«ENDPROTECT»
+	«returnValReturn()-»
+	}
+«ENDDEFINE»
+
+«DEFINE _abstractmethod FOR MOperation»
+	«modifiers()»«returnType.name» «name»(«arguments()»)«exceptions()»;
+«ENDDEFINE»
