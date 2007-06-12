@@ -58,6 +58,7 @@ private MComment processComment(Comment c) :
 create MStereotype makeStereotype(Stereotype s) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(s))->
+	makeModel(getUml2Model()).anyStereotype.add(this)->
 	setName(s.name);
 
 private MStereotype processStereotype(Stereotype s) :
@@ -65,22 +66,34 @@ private MStereotype processStereotype(Stereotype s) :
 		// add comment to stereotype
 		//ms.setOwnedComment(s.ownedComment.typeSelect(Comment).processComment().setOwningElement(ms))->
 		// add tagged values FAIL
+		ms.setProperty(s.ownedAttribute.typeSelect(Property).processTag().setStereotype(ms))->
 		ms;
 
 
 
-create MTaggedValue makeTaggedValues(Property p) :
+create MTag makeTag(Property p) :
 	// set the unique xmiId and name
-	setXmiGuid(xmiId(p))->
-	setName(p.name);
+	//setXmiGuid(xmiId(p))->
+	setName(p.name)->
+	setType(p.type.makeClassifier().toString())
+//	->info()
+	;
 
-private MTaggedValue processTaggedValue(Property p) :
-	let mt = makeTaggedValues(p) :
+private MTag processTag(Property p) :
+	let mt = makeTag(p) :
 		// add comment to taggedvalue
-		mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt))->
+//		mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt))->
 		mt;
 
 
+
+
+create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
+	setTag(t)->
+	setValue(val)->
+	setOwningElement(owner)
+	->info("TaggedValue("+owner.name+") "+t.name+" = "+val)
+	;
 
 // create new MPackage from uml2 package
 create MPackage makePackage(Package p) :
@@ -157,9 +170,12 @@ private MClass processClassifier(Classifier c) :
 		// add comment to classifier
 		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment().setOwningElement(mc))->
 		
-		// TESTING STEREOTYPE
-		//mc.setStereotype(c.getAppliedStereotypes().typeSelect(Stereotype).processStereoType())->
-		
+		// set stereotype
+		mc.setStereotype(c.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		mc.setTaggedValue(makeTaggedValues(mc, c))->
+//		(mc.stereotype.size > 0 ? info(mc.name + " hat Stereotyp " +
+//			 c.getAppliedStereotypes().name  + " value tv2: " + c.getValue(c.getAppliedStereotypes().first(), "tv2")) : "" )->
 		// add superclasses
 		mc.setSupertype(c.general.makeClassifier())->
 		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.makeClassifier())->
@@ -171,6 +187,15 @@ private MClass processClassifier(Classifier c) :
 		mc.property.addAll(c.attribute.select(p|p.association != null).processAssociationRole().setClassifier(mc))->
 		mc;
 
+private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
+//	let list = 
+	me.stereotype.property.reject(t|t.name == "base_Class").collect(
+		mtag|e.getAppliedStereotypes().collect(
+				styp|let val = e.getValue(styp, mtag.name).toString() : 
+			  	 	 	(val != "[]" ? makeTaggedValue(mtag, val, me) : null)
+			  	)
+		).flatten().reject(e|e == null);
+//	list;
 
 
 // create new MAttribute from uml2 Property
