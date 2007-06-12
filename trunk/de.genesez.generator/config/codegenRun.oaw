@@ -5,8 +5,8 @@
 
 	<!-- load properties file -->
 	<property file="codegen.properties" />
-	
-	
+
+
 	<!-- first we have to initialize the support for UML2 models -->
 	<bean class="oaw.uml2.Setup" standardUML2Setup="true" />
 
@@ -15,7 +15,7 @@
 		class="org.openarchitectureware.emf.XmiReader">
 		<modelFile value="${uml2File}" />
 		<outputSlot value="uml2model" />
-	</component> 
+	</component>
 
 	<!-- this one runs the transformation from UML2 to genesezMM. -->
 	<component class="oaw.xtend.XtendComponent">
@@ -31,6 +31,9 @@
 		<metaModel id="genesezMM"
 			class="org.openarchitectureware.type.emf.EmfMetaModel">
 			<metaModelPackage value="${metaModelPackage}" />
+		</metaModel>
+		<metaModel class="oaw.uml2.profile.ProfileMetaModel">
+			<profile value="${profile}" />
 		</metaModel>
 		<!-- deactivated for now
 			again, we need the two meta models introduced above; we reference
@@ -53,35 +56,35 @@
 			function invoked above into the ecoreModel slot in the workflow -->
 		<outputSlot value="generatorModel" />
 	</component>
-		
+
 
 	<!-- this component checks a number of constraints in the parsed genesezMM model -->
 	<component id="constraintsChecker-genesezMM"
 		class="org.openarchitectureware.check.CheckComponent">
 		<!-- Working on genesezMM models also requires the EcorePackage to 
-		be configured as a meta model, so we do this here -->
+			be configured as a meta model, so we do this here -->
 		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
-		<metaModelPackage value="${metaModelPackage}" />
+			<metaModelPackage value="${metaModelPackage}" />
 		</metaModel>
 		<!-- and workin with genesezMM also requires the UML2 meta model -->
 		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
 		<!-- this is the file that contains the constraints; note the use of
-		:: as the namespace delimiter; we also don't specify the .chk
-		extension of the uml2Constraints file. The namespaces correspond
-		to Java packages; so you know where to look in the source folder -->
+			:: as the namespace delimiter; we also don't specify the .chk
+			extension of the uml2Constraints file. The namespaces correspond
+			to Java packages; so you know where to look in the source folder -->
 		<checkFile
-		value="de::genesez::uml2genesezmm::genesezMMConstraints" />
+			value="de::genesez::uml2genesezmm::genesezMMConstraints" />
 		<!-- we check the complete set of model elements under the uml2model 
-		slot in the workflow; this will be the Model object and all its
-		children, recusively  -->
+			slot in the workflow; this will be the Model object and all its
+			children, recusively  -->
 		<emfAllChildrenSlot value="generatorModel" />
 		<!-- finally, if we encounter errors here (i.e. failed constraints)
-		we stop the workflow here. We won't invoke the transformation if
-		the input model is faulty -->
+			we stop the workflow here. We won't invoke the transformation if
+			the input model is faulty -->
 		<abortOnError value="true" />
 	</component>
-		
-		
+
+
 	<!-- next, we write the transformed model as Ecore file. We specify the workflow
 		slot where we expect the model as well as the file name of the 
 		to-be-written file -->
@@ -90,7 +93,7 @@
 		<inputSlot value="generatorModel" />
 		<modelFile value="${outputModelFile}" />
 	</component>
-	
+
 	<!-- next, we clean the generated directory for testing code -->
 	<component id="dirCleaner"
 		class="oaw.workflow.common.DirectoryCleaner"
@@ -109,13 +112,13 @@
 		<prSrcPaths value="${generateTarget}" />
 		<prDefaultExcludes value="false" />
 		<prExcludes value=".svn" />
-		
+
 		<!--beautifier 
 			class="org.hybridlabs.source.formatter.JavaImportBeautifier"
 			conventionFilePath="-filename-"
 			organizeImports="true"
 			format="true"/-->
-		
+
 		<beautifier
 			class="org.openarchitectureware.xpand2.output.JavaBeautifier" />
 		<beautifier
