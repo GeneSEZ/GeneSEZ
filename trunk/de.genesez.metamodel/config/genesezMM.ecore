@@ -56,6 +56,8 @@
         eType="#//MStereotype"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ownedComment" upperBound="-1"
         eType="#//MComment" containment="true" eOpposite="#//MComment/owningElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumeration" lowerBound="1"
+        eType="#//MEnumeration" eOpposite="#//MEnumeration/ownedLiteral"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MProperty" eSuperTypes="#//MElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -105,7 +107,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//MModel"
         eOpposite="#//MModel/primitiveTypes"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MEnumeration" eSuperTypes="#//MDataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MEnumeration" eSuperTypes="#//MDataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedLiteral" upperBound="-1"
+        eType="#//MElement" containment="true" eOpposite="#//MElement/enumeration"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MStereotype" eSuperTypes="#//MElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="taggedValue" upperBound="-1"
         eType="#//MTaggedValue" containment="true" eOpposite="#//MTaggedValue/owningStereotype"/>
@@ -122,9 +127,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="owningElement" lowerBound="1"
         eType="#//MElement" eOpposite="#//MElement/ownedComment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
-        eType="#//MComment" containment="true" eOpposite="#//MComment/nestingComment"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nestingComment" eType="#//MComment"
         eOpposite="#//MComment/nestedComment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
+        eType="#//MComment" containment="true" eOpposite="#//MComment/nestingComment"/>
   </eClassifiers>
 </ecore:EPackage>

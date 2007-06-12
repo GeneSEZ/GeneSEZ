@@ -56,6 +56,8 @@
         eType="ecore:EClass genesezMM.ecore#//MStereotype"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ownedComment" upperBound="-1"
         eType="ecore:EClass genesezMM.ecore#//MComment" containment="true" eOpposite="genesezMM.ecore#//MComment/owningElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumeration" lowerBound="1"
+        eType="ecore:EClass genesezMM.ecore#//MEnumeration" eOpposite="genesezMM.ecore#//MEnumeration/ownedLiteral"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MProperty" eSuperTypes="genesezMM.ecore#//MElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -105,7 +107,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="ecore:EClass genesezMM.ecore#//MModel"
         eOpposite="genesezMM.ecore#//MModel/primitiveTypes"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MEnumeration" eSuperTypes="genesezMM.ecore#//MDataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MEnumeration" eSuperTypes="genesezMM.ecore#//MDataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedLiteral" upperBound="-1"
+        eType="ecore:EClass genesezMM.ecore#//MElement" containment="true" eOpposite="genesezMM.ecore#//MElement/enumeration"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MStereotype" eSuperTypes="genesezMM.ecore#//MElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="taggedValue" upperBound="-1"
         eType="ecore:EClass genesezMM.ecore#//MTaggedValue" containment="true" eOpposite="genesezMM.ecore#//MTaggedValue/owningStereotype"/>
@@ -122,9 +127,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="owningElement" lowerBound="1"
         eType="ecore:EClass genesezMM.ecore#//MElement" eOpposite="genesezMM.ecore#//MElement/ownedComment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
-        eType="ecore:EClass genesezMM.ecore#//MComment" containment="true" eOpposite="genesezMM.ecore#//MComment/nestingComment"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nestingComment" eType="ecore:EClass genesezMM.ecore#//MComment"
         eOpposite="genesezMM.ecore#//MComment/nestedComment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
+        eType="ecore:EClass genesezMM.ecore#//MComment" containment="true" eOpposite="genesezMM.ecore#//MComment/nestingComment"/>
   </eClassifiers>
 </ecore:EPackage>
