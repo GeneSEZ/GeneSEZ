@@ -87,13 +87,14 @@ private MTag processTag(Property p) :
 
 
 
-
 create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	setTag(t)->
 	setValue(val)->
 	setOwningElement(owner)
 	->info("TaggedValue("+owner.name+") "+t.name+" = "+val)
 	;
+
+
 
 // create new MPackage from uml2 package
 create MPackage makePackage(Package p) :
@@ -135,9 +136,9 @@ create MPrimitiveType makeClassifier(Void c):
 create MEnumeration makeClassifier(Enumeration c):
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
-	setName(c.name);
-
-
+	setName(c.name)->
+	setVisibility(c.visibility.toString())->
+	setLiteral(c.ownedLiteral.typeSelect(EnumerationLiteral).processLiteral().setOwningEnumeration(this));
 
 // create new MClassifier from uml2 type
 create MClassifier makeClassifier(Type c):
@@ -196,6 +197,19 @@ private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 			  	)
 		).flatten().reject(e|e == null);
 //	list;
+
+
+
+
+create MLiteral makeLiteral(EnumerationLiteral l) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(l))->
+	setName(l.name);
+
+private MLiteral processLiteral(EnumerationLiteral l) :
+	let ml = makeLiteral(l) :
+		ml;
+
 
 
 // create new MAttribute from uml2 Property
