@@ -109,7 +109,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//MModel"
         eOpposite="#//MModel/primitiveTypes"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MEnumeration" eSuperTypes="#//MDataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MEnumeration" eSuperTypes="#//MDataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literal" upperBound="-1"
+        eType="#//MLiteral" containment="true" eOpposite="#//MLiteral/owningEnumeration"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MStereotype" eSuperTypes="#//MElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="property" upperBound="-1"
         eType="#//MTag" containment="true" eOpposite="#//MTag/stereotype"/>
@@ -127,10 +130,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="owningElement" lowerBound="1"
         eType="#//MElement" eOpposite="#//MElement/ownedComment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingComment" eType="#//MComment"
-        eOpposite="#//MComment/nestedComment"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
         eType="#//MComment" containment="true" eOpposite="#//MComment/nestingComment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingComment" eType="#//MComment"
+        eOpposite="#//MComment/nestedComment"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MTaggedValue">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -159,5 +162,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="origin" lowerBound="1"
         eType="#//MAspect" eOpposite="#//MAspect/pointcut"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MLiteral" eSuperTypes="#//MElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningEnumeration" lowerBound="1"
+        eType="#//MEnumeration" eOpposite="#//MEnumeration/literal"/>
   </eClassifiers>
 </ecore:EPackage>
