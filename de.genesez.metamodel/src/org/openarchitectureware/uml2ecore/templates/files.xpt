@@ -11,7 +11,8 @@
 «DEFINE constraintsFile FOR EPackage»
 	«FILE name+"Constraints.chk"-»
 import «nsPrefix»;
-		«EXPAND constraintsForClass FOREACH eAllContents.typeSelect(EClass)-»
+		«REM»reject the constraints generation for MElement and MComment, because no name is define«ENDREM»
+		«EXPAND constraintsForClass FOREACH eAllContents.typeSelect(EClass).reject(e|e.name == "MElement" || e.name == "MComment")-»
 	«ENDFILE»
 «ENDDEFINE»
 
@@ -42,8 +43,8 @@ context «name» ERROR "«r.name» must have unique names":
 import «nsPrefix»;
 
 String concat( String s1, String s2 ): s1 == null ? s2 : s1+"."+s2;
-
-		«FOREACH eClassifiers.typeSelect(EClass) AS c-»
+		«REM»reject the extend generation for MTaggedValue and MComment, because no name is define«ENDREM»
+		«FOREACH eClassifiers.typeSelect(EClass).reject(e|e.name == "MComment" || e.name =="MTaggedValue") AS c-»
 // ----------- «c.name» ------------		
 			«IF c.allOwners().size == 0-»	
 String namespace(«c.name» this): null;
