@@ -14,49 +14,153 @@
 
 // generate attributes for a classifier
 «DEFINE AttributeDecl FOR MClassifier»
-«EXPAND _AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
-«EXPAND _AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static)-»
+«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
+«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static)-»
 «ENDDEFINE»
 
 
 // generate getter and setter methodes for all attributes of a classifier
-«DEFINE GetterSetterImpl FOR MClassifier»
-«EXPAND _GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
+«DEFINE GetterSetterImpl FOR MClass»
+«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
 «FOREACH property.typeSelect(MAttribute).select(e|!e.static) AS a»
-	«EXPAND _GetterImpl FOR a-»
-	«EXPAND _SetterImpl FOR a-»
+	«EXPAND GetterImpl FOR a»
+	«EXPAND SetterImpl FOR a»
+	«EXPAND IteratorImpl FOR a»
+	«EXPAND InsertInImpl FOR a»
+	«EXPAND RemoveFromImpl FOR a»
 «ENDFOREACH»
 «ENDDEFINE»
+
+
+// generate a declaration for an attribute
+«DEFINE AttributeDecl FOR MAttribute»
+«EXPAND ProtectedRegion::Comment("java.mattribute.declaration.attribute.comment." + xmiGuid)»
+«IF multiplicity == 1»
+	«EXPAND _Modifier» «type.name» «asAttributeName(name)» «EXPAND _DefaultValue»;
+«ENDIF»
+«IF multiplicity != 1»
+	«EXPAND _Modifier» java.util.Set<«type.name»> «asAttributeName(name)» = new java.util.HashSet<«type.name»>();
+«ENDIF»
+«ENDDEFINE»
+
+
+// generate a getter implementation method for a mattribute
+«DEFINE GetterImpl FOR MAttribute»
+«EXPAND ProtectedRegion::CommentGetter("java.mattribute.implementation.getter.comment." + xmiGuid)»
+«IF multiplicity == 1»
+	public «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
+		return «asAttributeName(name)»;
+	}
+«ENDIF»
+«IF multiplicity != 1»
+	public «IF static»static«ENDIF» java.util.Set<«type.name»> «asGetter(name)»() {
+		return java.util.Collections.unmodifiableSet(«asAttributeName(name)»);
+	}
+«ENDIF»
+«ENDDEFINE»
+
+
+// generate a setter implementation method for a mattribute
+«DEFINE SetterImpl FOR MAttribute»
+«EXPAND ProtectedRegion::CommentSetter("java.mattribute.implementation.setter.comment." + xmiGuid)»
+«IF multiplicity == 1»
+	public «IF static»static«ENDIF» void «asSetter(name)»(«type.name» «asAttributeName(name)») {
+		this.«asAttributeName(name)» = «asAttributeName(name)»;
+	}
+«ENDIF»
+«IF multiplicity != 1»
+	public «IF static»static«ENDIF» void «asSetter(name)»(java.util.HashSet<«type.name»> «asAttributeName(name)») {
+		this.«asAttributeName(name)» = «asAttributeName(name)»;
+	}
+«ENDIF»
+«ENDDEFINE»
+
+
+// generate a iterator implementation method for a mattribute
+«DEFINE IteratorImpl FOR MAttribute»
+«IF multiplicity != 1»
+	«EXPAND ProtectedRegion::CommentIterator("java.mattribute.implementation.iterator.comment." + xmiGuid)»
+	public «IF static»static«ENDIF» java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
+		return «asAttributeName(name)».iterator();
+	}
+«ENDIF»
+«ENDDEFINE»
+
+
+// generate a insert in implementation method
+«DEFINE InsertInImpl FOR MAttribute»
+«IF multiplicity != 1»
+«EXPAND ProtectedRegion::CommentInsertIn("java.mattribute.implementation.insertin.comment." + xmiGuid)»
+public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _in) {
+	if («asAttributeName(name)».contains(_in)) {
+		return;
+	}
+	«asAttributeName(name)».add(_in);
+}
+«ENDIF»
+«ENDDEFINE»
+
+«REM»
+// generate a insert in implementation method
+«DEFINE InsertInImpl FOR MAttribute»
+«EXPAND ProtectedRegion::CommentInsertIn("java.mattribute.implementation.insertin.comment." + xmiGuid)»
+public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _in) {
+	«IF multiplicity == 1»
+		if («asAttributeName(name)» == _in) {
+			return;
+		}
+		«asAttributeName(name)» = _in;
+	«ENDIF»
+	«IF multiplicity != 1»
+		if («asAttributeName(name)».contains(_in)) {
+			return;
+		}
+		«asAttributeName(name)».add(_in);
+	«ENDIF»
+}
+«ENDDEFINE»
+«ENDREM»
+
+
+// generate a remove from implementation method
+«DEFINE RemoveFromImpl FOR MAttribute»
+«IF multiplicity != 1»
+«EXPAND ProtectedRegion::CommentRemoveFrom("java.mattribute.implementation.removefrom.comment." + xmiGuid)»
+public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
+	if (!«asAttributeName(name)».contains(_ex)) {
+		return;
+	}
+	«asAttributeName(name)».remove(_ex);
+}
+«ENDIF»
+«ENDDEFINE»
+
+«REM»
+// generate a remove from implementation method
+«DEFINE RemoveFromImpl FOR MAttribute»
+«EXPAND ProtectedRegion::CommentRemoveFrom("java.mattribute.implementation.removefrom.comment." + xmiGuid)»
+public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
+	«IF multiplicity == 1»
+		if («asAttributeName(name)» != _ex) {
+			return;
+		}
+		«asAttributeName(name)» = «getReturnType()»;
+	«ENDIF»
+	«IF multiplicity != 1»
+		if (!«asAttributeName(name)».contains(_ex)) {
+			return;
+		}
+		«asAttributeName(name)».remove(_ex);
+	«ENDIF»
+}
+«ENDDEFINE»
+«ENDREM»
+
 
 
 // //////////////////////////////////////////////////////////////////////////////
 // private functions
 // //////////////////////////////////////////////////////////////////////////////
-
-
-// generate a declaration for an attribute
-«DEFINE _AttributeDecl FOR MAttribute»
-«EXPAND ProtectedRegion::Comment("java.mattribute.declaration.attribute.comment." + xmiGuid)»
-«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
-«ENDDEFINE»
-
-
-// generate a getter implementation method for an attribute
-«DEFINE _GetterImpl FOR MAttribute»
-«EXPAND ProtectedRegion::CommentGetter("java.mattribute.implementation.getter.comment." + xmiGuid)»
-public «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
-	return «asAttributeName()»;
-}
-«ENDDEFINE»
-
-
-// generate a setter implementation method for an attribute
-«DEFINE _SetterImpl FOR MAttribute»
-«EXPAND ProtectedRegion::CommentSetter("java.mattribute.implementation.setter.comment." + xmiGuid)»
-public «IF static»static«ENDIF» void «asSetter(name)»(«type.name» «asAttributeName()») {
-	this.«asAttributeName()» = «asAttributeName()»;
-}
-«ENDDEFINE»
 
 
 // generate modifiers for mattribute

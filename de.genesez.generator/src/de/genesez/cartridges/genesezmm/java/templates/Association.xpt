@@ -14,39 +14,34 @@
 
 // generate attributes for a classifier
 «DEFINE AssociationDecl FOR MClassifier»
-«EXPAND _AssociationDecl FOREACH property.typeSelect(MAssociationRole)»
+«EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)»
 «ENDDEFINE»
 
 
 «DEFINE OperationDecl FOR MInterface»
 «FOREACH property.typeSelect(MAssociationRole) AS a»
-	«EXPAND _GetterDecl FOR a»
-	«EXPAND _SetterDecl FOR a»
-	«EXPAND _IteratorDecl FOR a»
-	«EXPAND _InsertInDecl FOR a»
-	«EXPAND _RemoveFromDecl FOR a»
+	«EXPAND GetterDecl FOR a»
+	«EXPAND SetterDecl FOR a»
+	«EXPAND IteratorDecl FOR a»
+	«EXPAND InsertInDecl FOR a»
+	«EXPAND RemoveFromDecl FOR a»
 «ENDFOREACH»
 «ENDDEFINE»
 
 
 «DEFINE OperationImpl FOR MClass»
 «FOREACH property.typeSelect(MAssociationRole) AS a»
-	«EXPAND _GetterImpl FOR a»
-	«EXPAND _SetterImpl FOR a»
-	«EXPAND _IteratorImpl FOR a»
-	«EXPAND _InsertInImpl FOR a»
-	«EXPAND _RemoveFromImpl FOR a»
+	«EXPAND GetterImpl FOR a»
+	«EXPAND SetterImpl FOR a»
+	«EXPAND IteratorImpl FOR a»
+	«EXPAND InsertInImpl FOR a»
+	«EXPAND RemoveFromImpl FOR a»
 «ENDFOREACH»
 «ENDDEFINE»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// private functions
-// //////////////////////////////////////////////////////////////////////////////
-
-
 // generate a declaration for an attribute
-«DEFINE _AssociationDecl FOR MAssociationRole»
+«DEFINE AssociationDecl FOR MAssociationRole»
 «EXPAND ProtectedRegion::Comment("java.massociationrole.declaration.association.comment." + xmiGuid)»
 «IF multiplicity == 1»
 	private «type.name» «asAttributeName(name)»;
@@ -58,7 +53,7 @@
 
 
 // generate a getter declaration method for a massociation
-«DEFINE _GetterDecl FOR MAssociationRole»
+«DEFINE GetterDecl FOR MAssociationRole»
 «EXPAND ProtectedRegion::CommentGetter("java.massociation.declaration.getter.comment." + xmiGuid)»
 «IF multiplicity == 1»
 	public «type.name» «asGetter(name)»();
@@ -69,8 +64,9 @@
 «ENDDEFINE»
 
 
+
 // generate a getter implementation method for a massociation
-«DEFINE _GetterImpl FOR MAssociationRole»
+«DEFINE GetterImpl FOR MAssociationRole»
 «EXPAND ProtectedRegion::CommentGetter("java.massociation.implementation.getter.comment." + xmiGuid)»
 «IF multiplicity == 1»
 	public «type.name» «asGetter(name)»() {
@@ -86,7 +82,7 @@
 
 
 // generate a setter declaration method for a massociation
-«DEFINE _SetterDecl FOR MAssociationRole»
+«DEFINE SetterDecl FOR MAssociationRole»
 «EXPAND ProtectedRegion::CommentSetter("java.massociation.declaration.setter.comment." + xmiGuid)»
 «IF multiplicity == 1»
 	public void «asSetter(name)»(«type.name» «asAttributeName(name)»);
@@ -98,7 +94,7 @@
 
 
 // generate a setter implementation method for a massociation
-«DEFINE _SetterImpl FOR MAssociationRole»
+«DEFINE SetterImpl FOR MAssociationRole»
 «EXPAND ProtectedRegion::CommentSetter("java.massociation.implementation.setter.comment." + xmiGuid)»
 «IF multiplicity == 1»
 	public void «asSetter(name)»(«type.name» «asAttributeName(name)») {
@@ -114,7 +110,7 @@
 
 
 // generate a iterator declaration method for a massociation
-«DEFINE _IteratorDecl FOR MAssociationRole»
+«DEFINE IteratorDecl FOR MAssociationRole»
 «IF multiplicity != 1»
 	«EXPAND ProtectedRegion::CommentIterator("java.massociation.declaration.iterator.comment." + xmiGuid)»
 	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator();
@@ -123,7 +119,7 @@
 
 
 // generate a iterator implementation method for a massociation
-«DEFINE _IteratorImpl FOR MAssociationRole»
+«DEFINE IteratorImpl FOR MAssociationRole»
 «IF multiplicity != 1»
 	«EXPAND ProtectedRegion::CommentIterator("java.massociation.implementation.iterator.comment." + xmiGuid)»
 	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
@@ -134,7 +130,7 @@
 
 
 // generate a insert in declaration method
-«DEFINE _InsertInDecl FOR MAssociationRole»
+«DEFINE InsertInDecl FOR MAssociationRole»
 «IF multiplicity != 1»
 	«EXPAND ProtectedRegion::CommentInsertIn("java.massociation.declaration.insertin.comment." + xmiGuid)»
 	public void insertIn«name.toFirstUpper()»(«type.name» _in);
@@ -143,35 +139,35 @@
 
 
 // generate a insert in implementation method
-«DEFINE _InsertInImpl FOR MAssociationRole»
-	«EXPAND ProtectedRegion::CommentInsertIn("java.massociation.implementation.insertin.comment." + xmiGuid)»
-	public void insertIn«name.toFirstUpper()»(«type.name» _in) {
-		«IF multiplicity == 1»
-			if («asAttributeName(name)» == _in) {
-				return;
-			}
-			«IF opposite != null»
-				if («asAttributeName(name)» != null) {
-					«asAttributeName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
-				}
-			«ENDIF»
-			«asAttributeName(name)» = _in;
-		«ENDIF»
-		«IF multiplicity != 1»
-			if («asAttributeName(name)».contains(_in)) {
-				return;
-			}
-			«asAttributeName(name)».add(_in);
-		«ENDIF»
+«DEFINE InsertInImpl FOR MAssociationRole»
+«EXPAND ProtectedRegion::CommentInsertIn("java.massociation.implementation.insertin.comment." + xmiGuid)»
+public void insertIn«name.toFirstUpper()»(«type.name» _in) {
+	«IF multiplicity == 1»
+		if («asAttributeName(name)» == _in) {
+			return;
+		}
 		«IF opposite != null»
-			_in.insertIn«opposite.name.toFirstUpper()»(this);
+			if («asAttributeName(name)» != null) {
+				«asAttributeName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
+			}
 		«ENDIF»
-	}
+		«asAttributeName(name)» = _in;
+	«ENDIF»
+	«IF multiplicity != 1»
+		if («asAttributeName(name)».contains(_in)) {
+			return;
+		}
+		«asAttributeName(name)».add(_in);
+	«ENDIF»
+	«IF opposite != null»
+		_in.insertIn«opposite.name.toFirstUpper()»(this);
+	«ENDIF»
+}
 «ENDDEFINE»
 
 
 // generate a remove from declaration method
-«DEFINE _RemoveFromDecl FOR MAssociationRole»
+«DEFINE RemoveFromDecl FOR MAssociationRole»
 «IF multiplicity != 1»
 	«EXPAND ProtectedRegion::CommentRemoveFrom("java.massociation.declaration.removefrom.comment." + xmiGuid)»
 	public void removeFrom«name.toFirstUpper()»(«type.name» _ex);
@@ -180,23 +176,30 @@
 
 
 // generate a remove from implementation method
-«DEFINE _RemoveFromImpl FOR MAssociationRole»
-	«EXPAND ProtectedRegion::CommentRemoveFrom("java.massociation.implementation.removefrom.comment." + xmiGuid)»
-	public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
-		«IF multiplicity == 1»
-			if («asAttributeName(name)» != _ex) {
-				return;
-			}
-			«asAttributeName(name)» = null;
-		«ENDIF»
-		«IF multiplicity != 1»
-			if (!«asAttributeName(name)».contains(_ex)) {
-				return;
-			}
-			«asAttributeName(name)».remove(_ex);
-		«ENDIF»
-		«IF opposite != null»
-			_ex.removeFrom«opposite.name.toFirstUpper()»(this);
-		«ENDIF»
-	}
+«DEFINE RemoveFromImpl FOR MAssociationRole»
+«EXPAND ProtectedRegion::CommentRemoveFrom("java.massociation.implementation.removefrom.comment." + xmiGuid)»
+public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
+	«IF multiplicity == 1»
+		if («asAttributeName(name)» != _ex) {
+			return;
+		}
+		«asAttributeName(name)» = null;
+	«ENDIF»
+	«IF multiplicity != 1»
+		if (!«asAttributeName(name)».contains(_ex)) {
+			return;
+		}
+		«asAttributeName(name)».remove(_ex);
+	«ENDIF»
+	«IF opposite != null»
+		_ex.removeFrom«opposite.name.toFirstUpper()»(this);
+	«ENDIF»
+}
 «ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
