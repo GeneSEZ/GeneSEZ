@@ -8,25 +8,36 @@ import genesezMM;
 
 
 // cast the uml2 datatypes to java datatypes
-getReturnTypeDeclaration(MOperation op) :
-	switch (op.returnType.name) {
+getReturnTypeDeclaration(MOperation o) :
+	switch (o.returnType.name) {
 	case "void" : ""
 	case "Void" : ""
-	case "int" : op.returnType.name + " returnValue = 0;"
-	case "Integer" : op.returnType.name + " returnValue = 0;"
-	case "boolean" : op.returnType.name + " returnValue = false;"
-	case "Boolean" : op.returnType.name + " returnValue = false;"
-	default : op.returnType.name + " returnValue = null;"
+	case "int" : o.returnType.name + " returnValue = 0;"
+	case "Integer" : o.returnType.name + " returnValue = 0;"
+	case "boolean" : o.returnType.name + " returnValue = false;"
+	case "Boolean" : o.returnType.name + " returnValue = false;"
+	default : o.returnType.name + " returnValue = null;"
 	};
 
 
-getReturnTypeReturn(MOperation op) :
-	switch (op.returnType.name) {
+getReturnTypeReturn(MOperation o) :
+	switch (o.returnType.name) {
 	case "void" : ""
 	case "Void" : ""
 	default : "return returnValue;"
 	};
 	
+
+getReturnType(MAttribute a) :
+	switch (a.type.name) {
+	case "int" : "0"
+	case "Integer" : "0"
+	case "float" : "0"
+	case "boolean" : "false"
+	case "Boolean" : "false"
+	default : "null"
+	};
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // private extend functions

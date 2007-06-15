@@ -14,29 +14,24 @@
 
 // generate constructor for mclass
 «DEFINE ConstructorImpl FOR MClass»
-«EXPAND _ConstructorImpl FOREACH operation.select(e|e.name == name)-»
+«EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
 «ENDDEFINE»
 
 
 // generate all abstract methods for a classifier
 «DEFINE OperationDecl FOR MClassifier»
-«EXPAND _OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)»
+«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)»
 «ENDDEFINE»
 
 
 // generate all methods for a classifier
 «DEFINE OperationImpl FOR MClassifier»
-«EXPAND _OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)»
+«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)»
 «ENDDEFINE»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// private functions
-// //////////////////////////////////////////////////////////////////////////////
-
-
 // generate constructor for mclass
-«DEFINE _ConstructorImpl FOR MOperation»
+«DEFINE ConstructorImpl FOR MOperation»
 «EXPAND ProtectedRegion::CommentOperation("java.moperation.implementation.constructor.comment." + xmiGuid)»
 «visibility» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
 /* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.moperation.implementation.constructor.code." + xmiGuid)» */
@@ -48,14 +43,14 @@
 
 
 // generate a declaration for an abstract operation
-«DEFINE _OperationDecl FOR MOperation»
+«DEFINE OperationDecl FOR MOperation»
 «EXPAND ProtectedRegion::CommentOperation("java.moperation.declaration.operation.comment." + xmiGuid)»
 «EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
-«DEFINE _OperationImpl FOR MOperation»
+«DEFINE OperationImpl FOR MOperation»
 «EXPAND ProtectedRegion::CommentOperation("java.moperation.implementation.operation.comment." + xmiGuid)»
 «EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
 	«getReturnTypeDeclaration()»
@@ -66,6 +61,10 @@
 	«getReturnTypeReturn()»
 }
 «ENDDEFINE»
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
 
 
 // generate modifiers for moperation
