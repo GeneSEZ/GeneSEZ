@@ -14,15 +14,20 @@
 
 // generate attributes for a classifier
 «DEFINE AttributeDecl FOR MClassifier»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static)-»
+«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
+«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
+«ENDDEFINE»
+
+«DEFINE AttributeDerivedImpl FOR MClassifier»
+«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-»
+«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static&& e.derived)-»
 «ENDDEFINE»
 
 
 // generate getter and setter methodes for all attributes of a classifier
 «DEFINE GetterSetterImpl FOR MClass»
-«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.static)-»
-«FOREACH property.typeSelect(MAttribute).select(e|!e.static) AS a»
+«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
+«FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived) AS a»
 	«EXPAND GetterImpl FOR a»
 	«EXPAND SetterImpl FOR a»
 	«EXPAND IteratorImpl FOR a»
@@ -40,6 +45,31 @@
 «ENDIF»
 «IF multiplicity != 1»
 	«EXPAND _Modifier» java.util.Set<«type.name»> «asAttributeName(name)» = new java.util.HashSet<«type.name»>();
+«ENDIF»
+«ENDDEFINE»
+
+
+«DEFINE AttributeDerivedImpl FOR MAttribute»
+«EXPAND ProtectedRegion::CommentGetter("java.mattribute.implementation.attribute.comment." + xmiGuid)»
+«IF multiplicity == 1»
+	«EXPAND _Modifier» «IF static»static«ENDIF» «type.name» «name.toFirstLower()»() {
+		«getReturnTypeDeclaration(type.name)»
+		/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.mattribute.implementation.attribute.code." + xmiGuid)» */
+		/* <!-- TODO put your own implementation code here --> */
+		
+		/* «ENDPROTECT» */
+		«getReturnTypeReturn(type.name)»
+	}
+«ENDIF»
+«IF multiplicity != 1»
+	«EXPAND _Modifier» «IF static»static«ENDIF» java.util.Set<«type.name»> «name.toFirstLower()»() {
+		«getReturnTypeDeclaration(type.name)»
+		/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.mattribute.implementation.attribute.code." + xmiGuid)» */
+		/* <!-- TODO put your own implementation code here --> */
+		
+		/* «ENDPROTECT» */
+		«getReturnTypeReturn(type.name)»
+	}
 «ENDIF»
 «ENDDEFINE»
 
@@ -155,7 +185,6 @@ public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
 }
 «ENDDEFINE»
 «ENDREM»
-
 
 
 // //////////////////////////////////////////////////////////////////////////////
