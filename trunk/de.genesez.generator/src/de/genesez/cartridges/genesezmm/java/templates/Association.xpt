@@ -44,10 +44,10 @@
 «DEFINE AssociationDecl FOR MAssociationRole»
 «EXPAND ProtectedRegion::Comment("java.massociationrole.declaration.association.comment." + xmiGuid)»
 «IF multiplicity == 1»
-	private «type.name» «asAttributeName(name)»;
+	private «type.name» «asVariableName(name)»;
 «ENDIF»
 «IF multiplicity != 1»
-	private java.util.Set<«type.name»> «asAttributeName(name)» = new java.util.HashSet<«type.name»>();
+	private java.util.Set<«type.name»> «asVariableName(name)» = new java.util.HashSet<«type.name»>();
 «ENDIF»
 «ENDDEFINE»
 
@@ -70,12 +70,12 @@
 «EXPAND ProtectedRegion::CommentGetter("java.massociation.implementation.getter.comment." + xmiGuid)»
 «IF multiplicity == 1»
 	public «type.name» «asGetter(name)»() {
-		return «asAttributeName(name)»;
+		return «asVariableName(name)»;
 	}
 «ENDIF»
 «IF multiplicity != 1»
 	public java.util.Set<«type.name»> «asGetter(name)»() {
-		return java.util.Collections.unmodifiableSet(«asAttributeName(name)»);
+		return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
 	}
 «ENDIF»
 «ENDDEFINE»
@@ -85,10 +85,10 @@
 «DEFINE SetterDecl FOR MAssociationRole»
 «EXPAND ProtectedRegion::CommentSetter("java.massociation.declaration.setter.comment." + xmiGuid)»
 «IF multiplicity == 1»
-	public void «asSetter(name)»(«type.name» «asAttributeName(name)»);
+	public void «asSetter(name)»(«type.name» «asVariableName(name)»);
 «ENDIF»
 «IF multiplicity != 1»
-	public void «asSetter(name)»(java.util.HashSet<«type.name»> «asAttributeName(name)»);
+	public void «asSetter(name)»(java.util.HashSet<«type.name»> «asVariableName(name)»);
 «ENDIF»
 «ENDDEFINE»
 
@@ -97,13 +97,13 @@
 «DEFINE SetterImpl FOR MAssociationRole»
 «EXPAND ProtectedRegion::CommentSetter("java.massociation.implementation.setter.comment." + xmiGuid)»
 «IF multiplicity == 1»
-	public void «asSetter(name)»(«type.name» «asAttributeName(name)») {
-		this.«asAttributeName(name)» = «asAttributeName(name)»;
+	public void «asSetter(name)»(«type.name» «asVariableName(name)») {
+		this.«asVariableName(name)» = «asVariableName(name)»;
 	}
 «ENDIF»
 «IF multiplicity != 1»
-	public void «asSetter(name)»(java.util.HashSet<«type.name»> «asAttributeName(name)») {
-		this.«asAttributeName(name)» = «asAttributeName(name)»;
+	public void «asSetter(name)»(java.util.HashSet<«type.name»> «asVariableName(name)») {
+		this.«asVariableName(name)» = «asVariableName(name)»;
 	}
 «ENDIF»
 «ENDDEFINE»
@@ -123,7 +123,7 @@
 «IF multiplicity != 1»
 	«EXPAND ProtectedRegion::CommentIterator("java.massociation.implementation.iterator.comment." + xmiGuid)»
 	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
-		return «asAttributeName(name)».iterator();
+		return «asVariableName(name)».iterator();
 	}
 «ENDIF»
 «ENDDEFINE»
@@ -143,21 +143,21 @@
 «EXPAND ProtectedRegion::CommentInsertIn("java.massociation.implementation.insertin.comment." + xmiGuid)»
 public void insertIn«name.toFirstUpper()»(«type.name» _in) {
 	«IF multiplicity == 1»
-		if («asAttributeName(name)» == _in) {
+		if («asVariableName(name)» == _in) {
 			return;
 		}
 		«IF opposite != null»
-			if («asAttributeName(name)» != null) {
-				«asAttributeName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
+			if («asVariableName(name)» != null) {
+				«asVariableName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
 			}
 		«ENDIF»
-		«asAttributeName(name)» = _in;
+		«asVariableName(name)» = _in;
 	«ENDIF»
 	«IF multiplicity != 1»
-		if («asAttributeName(name)».contains(_in)) {
+		if («asVariableName(name)».contains(_in)) {
 			return;
 		}
-		«asAttributeName(name)».add(_in);
+		«asVariableName(name)».add(_in);
 	«ENDIF»
 	«IF opposite != null»
 		_in.insertIn«opposite.name.toFirstUpper()»(this);
@@ -180,16 +180,16 @@ public void insertIn«name.toFirstUpper()»(«type.name» _in) {
 «EXPAND ProtectedRegion::CommentRemoveFrom("java.massociation.implementation.removefrom.comment." + xmiGuid)»
 public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
 	«IF multiplicity == 1»
-		if («asAttributeName(name)» != _ex) {
+		if («asVariableName(name)» != _ex) {
 			return;
 		}
-		«asAttributeName(name)» = null;
+		«asVariableName(name)» = null;
 	«ENDIF»
 	«IF multiplicity != 1»
-		if (!«asAttributeName(name)».contains(_ex)) {
+		if (!«asVariableName(name)».contains(_ex)) {
 			return;
 		}
-		«asAttributeName(name)».remove(_ex);
+		«asVariableName(name)».remove(_ex);
 	«ENDIF»
 	«IF opposite != null»
 		_ex.removeFrom«opposite.name.toFirstUpper()»(this);

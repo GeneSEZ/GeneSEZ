@@ -20,14 +20,14 @@
 
 «DEFINE AttributeDerivedImpl FOR MClassifier»
 «EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-»
-«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static&& e.derived)-»
+«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static && e.derived)-»
 «ENDDEFINE»
 
 
 // generate getter and setter methodes for all attributes of a classifier
 «DEFINE GetterSetterImpl FOR MClass»
-«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
-«FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived) AS a»
+«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
+«FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a»
 	«EXPAND GetterImpl FOR a»
 	«EXPAND SetterImpl FOR a»
 	«EXPAND IteratorImpl FOR a»
@@ -41,10 +41,10 @@
 «DEFINE AttributeDecl FOR MAttribute»
 «EXPAND ProtectedRegion::Comment("java.mattribute.declaration.attribute.comment." + xmiGuid)»
 «IF multiplicity == 1»
-	«EXPAND _Modifier» «type.name» «asAttributeName(name)» «EXPAND _DefaultValue»;
+	«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
 «ENDIF»
 «IF multiplicity != 1»
-	«EXPAND _Modifier» java.util.Set<«type.name»> «asAttributeName(name)» = new java.util.HashSet<«type.name»>();
+	«EXPAND _Modifier» java.util.Set<«type.name»> «asAttributeName()» = new java.util.HashSet<«type.name»>();
 «ENDIF»
 «ENDDEFINE»
 
@@ -79,12 +79,12 @@
 «EXPAND ProtectedRegion::CommentGetter("java.mattribute.implementation.getter.comment." + xmiGuid)»
 «IF multiplicity == 1»
 	public «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
-		return «asAttributeName(name)»;
+		return «asAttributeName()»;
 	}
 «ENDIF»
 «IF multiplicity != 1»
 	public «IF static»static«ENDIF» java.util.Set<«type.name»> «asGetter(name)»() {
-		return java.util.Collections.unmodifiableSet(«asAttributeName(name)»);
+		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
 	}
 «ENDIF»
 «ENDDEFINE»
@@ -94,13 +94,13 @@
 «DEFINE SetterImpl FOR MAttribute»
 «EXPAND ProtectedRegion::CommentSetter("java.mattribute.implementation.setter.comment." + xmiGuid)»
 «IF multiplicity == 1»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«type.name» «asAttributeName(name)») {
-		this.«asAttributeName(name)» = «asAttributeName(name)»;
+	public «IF static»static«ENDIF» void «asSetter(name)»(«type.name» «asAttributeName()») {
+		this.«asAttributeName()» = «asAttributeName()»;
 	}
 «ENDIF»
 «IF multiplicity != 1»
-	public «IF static»static«ENDIF» void «asSetter(name)»(java.util.HashSet<«type.name»> «asAttributeName(name)») {
-		this.«asAttributeName(name)» = «asAttributeName(name)»;
+	public «IF static»static«ENDIF» void «asSetter(name)»(java.util.HashSet<«type.name»> «asAttributeName()») {
+		this.«asAttributeName()» = «asAttributeName()»;
 	}
 «ENDIF»
 «ENDDEFINE»
@@ -111,7 +111,7 @@
 «IF multiplicity != 1»
 	«EXPAND ProtectedRegion::CommentIterator("java.mattribute.implementation.iterator.comment." + xmiGuid)»
 	public «IF static»static«ENDIF» java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
-		return «asAttributeName(name)».iterator();
+		return «asAttributeName()».iterator();
 	}
 «ENDIF»
 «ENDDEFINE»
@@ -122,10 +122,10 @@
 «IF multiplicity != 1»
 «EXPAND ProtectedRegion::CommentInsertIn("java.mattribute.implementation.insertin.comment." + xmiGuid)»
 public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _in) {
-	if («asAttributeName(name)».contains(_in)) {
+	if («asAttributeName()».contains(_in)) {
 		return;
 	}
-	«asAttributeName(name)».add(_in);
+	«asAttributeName()».add(_in);
 }
 «ENDIF»
 «ENDDEFINE»
@@ -157,10 +157,10 @@ public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _
 «IF multiplicity != 1»
 «EXPAND ProtectedRegion::CommentRemoveFrom("java.mattribute.implementation.removefrom.comment." + xmiGuid)»
 public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
-	if (!«asAttributeName(name)».contains(_ex)) {
+	if (!«asAttributeName()».contains(_ex)) {
 		return;
 	}
-	«asAttributeName(name)».remove(_ex);
+	«asAttributeName()».remove(_ex);
 }
 «ENDIF»
 «ENDDEFINE»
