@@ -27,20 +27,25 @@ Boolean checkSerialVersion(List l) :
 			: checkSerialVersion(l.withoutFirst()))
 		: false;
 
+
+// returns true if the uml2-element has a comment else false
+Boolean hasComment(MElement e) :
+	e.ownedComment.size > 0
+		? true
+		: false;
+
+
 //
 String getCommentText(List l, String seperator) :
 	l.size > 0
 		? getComment((MComment) l.first(), seperator) + (((MComment) l.first()).nestedComment.size > 0 ? "\n " + seperator + " <p> \n " + getCommentText(((MComment) l.first()).nestedComment, seperator) : "")
 		: seperator + " <!-- TODO put your comment here -->";
 
+
 //
 String getCommentText(List l) :
 	getCommentText(l, "*");
 	
-//
-Boolean hasComment(MElement e) :
-//	true;
-	e.ownedComment.size > 0;
 
 //
 String getOneLineCommentText(String s) :
@@ -72,13 +77,16 @@ String getCommentAtThrows(List l) :
 			? "* @throws " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()
 			: "* ");
 
+
 // find out if MAssoiationRole belongs to an association class
 plainAssociation(MAssociationRole aend) :
 	aend.association.associationClass == null;
 
+
 // get AssociationClass for MAssoiationRole
 assocClass(MAssociationRole aend) :
 	aend.association.associationClass;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // public java functions
