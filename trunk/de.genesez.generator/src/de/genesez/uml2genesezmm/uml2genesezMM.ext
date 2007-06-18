@@ -191,17 +191,11 @@ private MClass processClassifier(Classifier c) :
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	me.stereotype.property.reject(t|t.name == "base_Class").collect(
 		mtag|e.getAppliedStereotypes().collect(
-				styp|let val = e.getValue(styp, mtag.name).toString() : 
-			  	 	 	(val != "[]" ? 
-			  	 	 		(val.startsWith("[") ? 
-			  	 	 			val.replaceAll("[\\[\\]]", "").split(", ").collect(t | makeTaggedValue(mtag, t, me))
-			  	 	 			: makeTaggedValue(mtag, val, me))
-			  	 	 	 	: null)
-			  	)
-		).flatten().reject(e|e == null);
-
-
-
+			styp | e.getValue(styp, mtag.name).eToString().collect(
+				tagval | makeTaggedValue(mtag, tagval, me)
+			)
+	  	)
+	).flatten().reject(e|e == null);
 
 create MLiteral makeLiteral(EnumerationLiteral l) :
 	// set the unique xmiId and name
@@ -330,16 +324,6 @@ private MAssociation processAssociationPackage(Association a, MPackage owningPac
 		ma;
 	
 
-
-
-
-
-
-
-
-
-
-
 private String assocName(Association a):
 	(a.name == null || a.name == "") ?
 		"" :
@@ -365,22 +349,9 @@ private MAssociation linkEnds(MAssociation ma) :
 		mend.get(1).setOpposite(mend.get(0))-> ma) :
 		ma;
 
-
-		
-
-
-
-
-
-
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // private extend functions
 ////////////////////////////////////////////////////////////////////////////////
-
 
 // get unique xmiId from ecore file, requires Java method
 private String xmiId (Element obj) : 
@@ -388,6 +359,18 @@ private String xmiId (Element obj) :
 
 // externally configure packages to ignore, e.g. UML standard profile :-)
 private String ignoredPackage(): GLOBALVAR excludePackage;
+
+// process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)
+private List[String] eToString(ecore::EJavaObject obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(java.lang.Object);
+
+// process List structured EJavaObject externally
+private List[String] eToString(List obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.lToString(org.eclipse.emf.ecore.util.EDataTypeUniqueEList);
+
+// process flat EJavaObject externally
+private List[String] eToString(Object obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(java.lang.Object);
 
 // the model is passed in as a global variable
 private Model getUml2Model() : GLOBALVAR uml2model;
