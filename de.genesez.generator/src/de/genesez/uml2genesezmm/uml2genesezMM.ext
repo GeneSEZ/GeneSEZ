@@ -290,7 +290,9 @@ create MAssociationRole makeAssociationRole(Property aend) :
 	setName(assocEndName(aend))->
 	setVisibility(aend.visibility.toString())->
 	setMultiplicity(aend.getUpper())->
-	setDerived(aend.isDerived);
+	setDerived(aend.isDerived)->
+	setAggregation(aend.aggregation.toString() == "shared" ? true : false)->
+	setComposition(aend.aggregation.toString() == "composite" ? true : false);
 
 private MAssociationRole processAssociationRole(Property aend) :
 	let ma = makeAssociationRole(aend) :
