@@ -10,7 +10,7 @@ extension de::genesez::cartridges::genesezmm::java::extensions::Naming;
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// return a comma seperate string of list elements
+// return a comma separated string of list elements
 String getNameList(List l) :
 	l.size > 1 
 		? ((MElement) l.first()).name + ", " + getNameList(l.withoutFirst())
@@ -19,7 +19,7 @@ String getNameList(List l) :
 			: "");
 
 
-
+// TODO: Write comment
 Boolean checkSerialVersion(List l) :
 	l.size > 0
 		? (((MClass) l.first()).name == "Exception"
@@ -27,29 +27,28 @@ Boolean checkSerialVersion(List l) :
 			: checkSerialVersion(l.withoutFirst()))
 		: false;
 
-
-
-
 //
 String getCommentText(List l, String seperator) :
 	l.size > 0
 		? getComment((MComment) l.first(), seperator) + (((MComment) l.first()).nestedComment.size > 0 ? "\n " + seperator + " <p> \n " + getCommentText(((MComment) l.first()).nestedComment, seperator) : "")
 		: seperator + " <!-- TODO put your comment here -->";
 
-
 //
 String getCommentText(List l) :
 	getCommentText(l, "*");
+	
+//
+Boolean hasComment(MElement e) :
+//	true;
+	e.ownedComment.size > 0;
 
-
+//
 String getOneLineCommentText(String s) :
 	s.replaceAll("\n", ";");
-
 
 // 
 String getCommentOneAtParam(String name, List l) :
 	"* @param " + name + " " + getCommentText(l, "").getOneLineCommentText();
-
 
 // return a @throws text for javadoc
 String getCommentAtParam(List l) :
@@ -59,13 +58,11 @@ String getCommentAtParam(List l) :
 			? "* @param " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()
 			: "* ");
 
-
 // return a @return text for javadoc
 String getCommentAtReturn(MClassifier c) :
 	c.name.toLowerCase() != "void"
 		? "* @return " + getCommentText(c.ownedComment, "").getOneLineCommentText()
 		: "* ";
-
 
 // return a @throws text for javadoc
 String getCommentAtThrows(List l) :
@@ -75,6 +72,13 @@ String getCommentAtThrows(List l) :
 			? "* @throws " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()
 			: "* ");
 
+// find out if MAssoiationRole belongs to an association class
+plainAssociation(MAssociationRole aend) :
+	aend.association.associationClass == null;
+
+// get AssociationClass for MAssoiationRole
+assocClass(MAssociationRole aend) :
+	aend.association.associationClass;
 
 ////////////////////////////////////////////////////////////////////////////////
 // public java functions
