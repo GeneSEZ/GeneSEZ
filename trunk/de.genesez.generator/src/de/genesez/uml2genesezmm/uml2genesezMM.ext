@@ -321,8 +321,14 @@ private MAssociation processAssociationPackage(Association a, MPackage owningPac
 		ma.setEnd(a.memberEnd.select(e|e.class != null).processAssociationRole())->
 		ma.end.setAssociation(ma).setDerived(a.isDerived)->
 		ma.linkEnds()->
+		ma.associationClass(a)->
 		ma;
 	
+private MAssociation associationClass(MAssociation ma, Association a):
+	ma;
+
+private MAssociation associationClass(MAssociation ma, AssociationClass a):
+	ma.setAssociationClass(makeClassifier(a).setOwnedAssociation(ma));
 
 private String assocName(Association a):
 	(a.name == null || a.name == "") ?
