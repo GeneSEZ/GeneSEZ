@@ -91,7 +91,7 @@ create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	setTag(t)->
 	setValue(val)->
 	setOwningElement(owner)
-	->info("TaggedValue("+owner.name+") "+t.name+" = "+val)
+//	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
 	;
 
 
@@ -189,14 +189,16 @@ private MClass processClassifier(Classifier c) :
 		mc;
 
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-//	let list = 
 	me.stereotype.property.reject(t|t.name == "base_Class").collect(
 		mtag|e.getAppliedStereotypes().collect(
 				styp|let val = e.getValue(styp, mtag.name).toString() : 
-			  	 	 	(val != "[]" ? makeTaggedValue(mtag, val, me) : null)
+			  	 	 	(val != "[]" ? 
+			  	 	 		(val.startsWith("[") ? 
+			  	 	 			val.replaceAll("[\\[\\]]", "").split(", ").collect(t | makeTaggedValue(mtag, t, me))
+			  	 	 			: makeTaggedValue(mtag, val, me))
+			  	 	 	 	: null)
 			  	)
 		).flatten().reject(e|e == null);
-//	list;
 
 
 
