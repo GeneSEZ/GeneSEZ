@@ -1,18 +1,36 @@
 package de.genesez.uml2genesezmm.utilities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import genesezMM.MClassifier;
 import genesezMM.MPackage;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+
 public class TransUtils {
-	
 	
 	// return the xmi id from an element
 	public static String getXmiId (EObject pObj) {
 		return ((XMLResource)pObj.eResource()).getID(pObj);
+	}
+	
+	// return ecore.EJavaObject as list of String
+	public static List<String> eToString(Object eobj) {
+		ArrayList<String> retval = new ArrayList<String>();
+		retval.add(eobj.toString());
+		return retval;
+	}
+	
+	// return ecore.EJavaObject as list of String
+	public static List<String> lToString(org.eclipse.emf.ecore.util.EDataTypeUniqueEList eobj) {
+		ArrayList<String> retval = new ArrayList<String>();
+		retval.addAll(eobj);
+		return retval;
 	}
 	
 	// return the package path from a class or other
