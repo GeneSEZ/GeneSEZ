@@ -35,51 +35,15 @@ Boolean hasComment(MElement e) :
 		: false;
 
 
-//
-String getCommentText(List l, String seperator) :
-	l.size > 0
-		? getComment((MComment) l.first(), seperator) + (((MComment) l.first()).nestedComment.size > 0 ? "\n " + seperator + " <p> \n " + getCommentText(((MComment) l.first()).nestedComment, seperator) : "")
-		: seperator + " <!-- TODO put your comment here -->";
-
-
-//
+// returns the comment of an element
 String getCommentText(List l) :
-	getCommentText(l, "*");
-	
-
-//
-String getOneLineCommentText(String s) :
-	s.replaceAll("\n", ";");
-
-// 
-String getCommentOneAtParam(String name, List l) :
-	"* @param " + name + " " + getCommentText(l, "").getOneLineCommentText();
-
-// return a @throws text for javadoc
-String getCommentAtParam(List l) :
-	l.size > 1
-		? "* @param " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()  + "\n " + getCommentAtParam(l.withoutFirst())
-		: (l.size > 0
-			? "* @param " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()
-			: "* ");
-
-// return a @return text for javadoc
-String getCommentAtReturn(MClassifier c) :
-	c.name.toLowerCase() != "void"
-		? "* @return " + getCommentText(c.ownedComment, "").getOneLineCommentText()
-		: "* ";
-
-// return a @throws text for javadoc
-String getCommentAtThrows(List l) :
-	l.size > 1
-		? "* @throws " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()  + "\n " + getCommentAtThrows(l.withoutFirst())
-		: (l.size > 0
-			? "* @throws " + ((MClassifier) l.first()).name + " " + getCommentText(((MElement) l.first()).ownedComment, "").getOneLineCommentText()
-			: "* ");
+	l.size > 0
+		? getComment((MComment) l.first()).replaceAll("\n", "; ")
+		: "";
 
 
 // find out if MAssoiationRole belongs to an association class
-plainAssociation(MAssociationRole aend) :
+isPlainAssociation(MAssociationRole aend) :
 	aend.association.associationClass == null;
 
 
@@ -117,9 +81,9 @@ String getUserName() :
 
 
 //
-private String getComment(MComment c, String seperator) :
+private String getComment(MComment c) :
 	c.annotation != "null"
-		? seperator + " " + c.annotation.replaceAll("\n", "\n " + seperator + " ")
+		? c.annotation
 		: "";
 		
 
