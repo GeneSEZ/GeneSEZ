@@ -13,51 +13,45 @@
 
 
 // generate constructor for mclass
-«DEFINE ConstructorImpl FOR MClass»
+«DEFINE ConstructorImpl FOR MClass-»
 «EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
 «ENDDEFINE»
 
 
 // generate all abstract methods for a classifier
-«DEFINE OperationDecl FOR MClassifier»
-«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)»
+«DEFINE OperationDecl FOR MClassifier-»
+«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)-»
 «ENDDEFINE»
 
 
 // generate all methods for a classifier
-«DEFINE OperationImpl FOR MClassifier»
-«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)»
+«DEFINE OperationImpl FOR MClassifier-»
+«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
 «ENDDEFINE»
 
 
 // generate constructor for mclass
-«DEFINE ConstructorImpl FOR MOperation»
-«EXPAND ProtectedRegion::CommentOperation("java.moperation.implementation.constructor.comment." + xmiGuid)»
+«DEFINE ConstructorImpl FOR MOperation-»
+«EXPAND _CommentOperation-»
 «visibility» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
-/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.moperation.implementation.constructor.code." + xmiGuid)» */
-/* <!-- TODO put your code here --> */
-
-/* «ENDPROTECT» */
+«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 }
 «ENDDEFINE»
 
 
 // generate a declaration for an abstract operation
-«DEFINE OperationDecl FOR MOperation»
-«EXPAND ProtectedRegion::CommentOperation("java.moperation.declaration.operation.comment." + xmiGuid)»
+«DEFINE OperationDecl FOR MOperation-»
+«EXPAND _CommentOperation-»
 «EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
-«DEFINE OperationImpl FOR MOperation»
-«EXPAND ProtectedRegion::CommentOperation("java.moperation.implementation.operation.comment." + xmiGuid)»
+«DEFINE OperationImpl FOR MOperation-»
+«EXPAND _CommentOperation-»
 «EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
 	«getReturnTypeDeclaration(returnType.name)»
-	/* «PROTECT CSTART "<!-- " CEND " -->" ID ("java.moperation.implementation.operation.code." + xmiGuid)» */
-	/* <!-- TODO put your code here --> */
-	
-	/* «ENDPROTECT» */
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 	«getReturnTypeReturn(returnType.name)»
 }
 «ENDDEFINE»
@@ -67,21 +61,61 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 
+«DEFINE _CommentOperation FOR MOperation-»
+/**
+«IF hasComment()-»
+ * «getCommentText(ownedComment)»
+«ENDIF-»
+«EXPAND _CommentParameter-»
+«EXPAND _CommentReturn-»
+«EXPAND _CommentExeception-»
+ */
+«ENDDEFINE»
+
+«DEFINE _CommentParameter FOR MOperation-»
+«FOREACH parameter.typeSelect(MParameter) AS p-»
+ * @param  «p.name»  «getCommentText(p.ownedComment)»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE _CommentReturn FOR MOperation-»
+«IF returnType != null-»
+ * @return «getCommentText(returnType.ownedComment)»
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _CommentExeception FOR MOperation-»
+«FOREACH raisedException.typeSelect(MClassifier) AS c-»
+ * @throws  «c.name»  «getCommentText(c.ownedComment)»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+
 // generate modifiers for moperation
-«DEFINE _Modifier FOR MOperation»
+«DEFINE _Modifier FOR MOperation-»
 «visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
 «ENDDEFINE»
 
 
 // generate a parameter list for moperation
-«DEFINE _Parameter FOR MOperation»
+«DEFINE _Parameter FOR MOperation-»
 «FOREACH parameter AS p SEPARATOR ", "»«p.type.name» «p.name»«ENDFOREACH»
 «ENDDEFINE»
 
 
 // generate exceptions for a moperation
-«DEFINE _Exception FOR MOperation»
-«IF !raisedException.isEmpty»
+«DEFINE _Exception FOR MOperation-»
+«IF !raisedException.isEmpty-»
 	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name»«ENDFOREACH»
-«ENDIF»
+«ENDIF-»
 «ENDDEFINE»
