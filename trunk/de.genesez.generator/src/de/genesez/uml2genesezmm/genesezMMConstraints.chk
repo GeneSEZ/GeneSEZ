@@ -4,25 +4,24 @@ import genesezMM;
 extension de::genesez::uml2genesezmm::io;
 
 
-
-
-
 // //////////////////////////////////////////////////////////////////////////////
-// check java syntax conventions
+// java syntax conventions
 // //////////////////////////////////////////////////////////////////////////////
 
 
 // checks if all attributes are defined static final 
-/*
-context MInterface WARNING "GeneSEZ-Gen: illegal modifiers for an interface attribute ("  :
-		property.typeSelect(MAttribute).select(e|e.visibility == "public" && e.static && e.final).size == property.typeSelect(MAttribute).size;
-*/
+context MAttribute WARNING "GeneSEZ-Gen: constant has illegal modifiers (" + "attribute: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (visibility == "public" && static && final ? true : false)
+		: true;
 
-// checks if all methods are defined abstract
-/*
-context MInterface WARNING "GeneSEZ-Gen: illegal modifier for an interface method; only public & abstract are permitted" :
-	operation.typeSelect(MOperation).select(e|e.abstract).size == operation.typeSelect(MOperation).size;
-*/
+
+// checks if all methods are defined public and abstract
+context MOperation WARNING "GeneSEZ-Gen: method has illegal modifiers (" + "operation: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (visibility == "public" && abstract ? true : false)
+		: true;
+
 
 // //////////////////////////////////////////////////////////////////////////////
 // java naming conventions
@@ -48,17 +47,17 @@ context MClass WARNING "GeneSEZ-Gen: class name doesn't start with a capital let
 context MEnumeration WARNING "GeneSEZ-Gen: enumeration name doesn't start with a capital letter (" + "classifier: " + name + ")" :
 	name == name.toFirstUpper();
 
-
+/*
 // checks if the constructor name starts with a upper-case char
 context MOperation WARNING "GeneSEZ-Gen: constructor name doesn't start with a uppercase letter (" + "classifier: " + classifier.name + ")" :
 	name == classifier.name
 		? (name == name.toFirstUpper() ? true : false)
 		: true;
-
+*/
 
 // checks if the constructor name starts with a upper-case char
 context MOperation WARNING "GeneSEZ-Gen: method name doesn't start with a lowercase letter (" + "method: " + name + " in classifier: " + classifier.name + ")" :
-	name != classifier.name
+	name != classifier.name.toFirstUpper()
 		? (name == name.toFirstLower() ? true : false)
 		: true;
 
@@ -82,16 +81,13 @@ context MAttribute WARNING "GeneSEZ-Gen: constant name isn't written in all-uppe
 		: true;
 
 	
-	
 // //////////////////////////////////////////////////////////////////////////////
 // check other conventions
 // //////////////////////////////////////////////////////////////////////////////
 
 
 // checks if a constructor is defined
-/*
 context MClass WARNING "GeneSEZ-Gen: constructor isn't defined (" + "class: " + name + ")" :
 	operation.select(e|e.name == name).size != 0;
-*/
 
 
