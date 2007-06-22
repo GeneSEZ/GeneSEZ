@@ -14,7 +14,7 @@
          hash map, uml2model is the key of the entry, the 
          model object read by the reader will be the value  -->
 	<component id="xmiParser" class="org.openarchitectureware.emf.XmiReader">
-		<modelFile value="${uml2MetaModelFile}"/>
+		<modelFile value="${uml2MetaModelPath}${uml2MetaModelFile}"/>
 		<outputSlot value="uml2metamodel"/>
 	</component>
 	
@@ -71,14 +71,14 @@
 	     to-be-written file -->	
 	<component id="xmiWriter" class="org.openarchitectureware.emf.XmiWriter">
 		<inputSlot value="ecoreModel"/>
-		<modelFile value="${generateTarget}/${ecoreMetaModelFile}"/>
+		<modelFile value="${ecoreMetaModelPath}${ecoreMetaModelFile}"/>
 	</component>
 	
-	<component id="generator" class="oaw.xpand2.Generator" skipOnErrors="true">
+	<!--component id="generator" class="oaw.xpand2.Generator" skipOnErrors="true">
 		<metaModel idRef="metamodel.emf"/>
 	   	<globalVarDef name="addNameAttribute" value="${addNameAttribute}"/>
 		<expand value="org::openarchitectureware::uml2ecore::templates::files::root FOR ecoreModel"/>
-		<genPath value="${generateTarget}"/>
-	</component>
+		<genPath value="${ecoreMetaModelPath}"/>
+	</component-->
     
 </workflow>
