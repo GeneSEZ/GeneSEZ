@@ -119,6 +119,13 @@ private MPackage processPackage(Package p) :
 
 
 
+// create new MPrimitivType from uml2 data type
+create MPrimitiveType makeClassifier(DataType c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name)->
+	makeModel(getUml2Model()).primitiveTypes.add(this);
+
 // create new MPrimitivType from uml2 primitive type
 create MPrimitiveType makeClassifier(PrimitiveType c):
 	// set the unique xmiId and name
@@ -139,6 +146,12 @@ create MEnumeration makeClassifier(Enumeration c):
 	setName(c.name)->
 	setVisibility(c.visibility.toString())->
 	setLiteral(c.ownedLiteral.typeSelect(EnumerationLiteral).processLiteral().setOwningEnumeration(this));
+
+// create new MClassifier from uml2 named element
+create MClassifier makeClassifier(NamedElement c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name);
 
 // create new MClassifier from uml2 type
 create MClassifier makeClassifier(Type c):
@@ -170,13 +183,14 @@ private MClass processClassifier(Classifier c) :
 	let mc = makeClassifier(c) :
 		// add comment to classifier
 		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment().setOwningElement(mc))->
-		
 		// set stereotype
 		mc.setStereotype(c.getAppliedStereotypes().processStereotype())->
 		// set tagged values
 		mc.setTaggedValue(makeTaggedValues(mc, c))->
-//		(mc.stereotype.size > 0 ? info(mc.name + " hat Stereotyp " +
-//			 c.getAppliedStereotypes().name  + " value tv2: " + c.getValue(c.getAppliedStereotypes().first(), "tv2")) : "" )->
+		//(mc.stereotype.size > 0 ? info(mc.name + " hat Stereotyp " +
+		// c.getAppliedStereotypes().name  + " value tv2: " + c.getValue(c.getAppliedStereotypes().first(), "tv2")) : "" )->
+		// add client dependency (<<use>>)
+		mc.setSupplier(c.clientDependency.supplier.makeClassifier())->
 		// add superclasses
 		mc.setSupertype(c.general.makeClassifier())->
 		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.makeClassifier())->
