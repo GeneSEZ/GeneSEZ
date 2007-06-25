@@ -1,10 +1,10 @@
-«REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+Â«REMÂ» import code gen meta model Â«ENDREMÂ»
+Â«IMPORT genesezMMÂ»
 
-«REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataType»
-«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Helper»
-«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Naming»
+Â«REMÂ» useful metamodel extensions Â«ENDREMÂ»
+Â«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataTypeÂ»
+Â«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::HelperÂ»
+Â«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::NamingÂ»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -13,169 +13,169 @@
 
 
 // generate attributes for a classifier
-«DEFINE AttributeDecl FOR MClassifier-»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
-«ENDDEFINE»
+Â«DEFINE AttributeDecl FOR MClassifier-Â»
+Â«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-Â»
+Â«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-Â»
+Â«ENDDEFINEÂ»
 
 
-«DEFINE AttributeDerivedImpl FOR MClassifier-»
-«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-»
-«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static && e.derived)-»
-«ENDDEFINE»
+Â«DEFINE AttributeDerivedImpl FOR MClassifier-Â»
+Â«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-Â»
+Â«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static && e.derived)-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate getter and setter methodes for all attributes of a classifier
-«DEFINE GetterSetterImpl FOR MClass-»
-«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
-«FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-»
-	«EXPAND GetterImpl FOR a-»
-	«EXPAND SetterImpl FOR a-»
-	«EXPAND IteratorImpl FOR a-»
-	«EXPAND InsertInImpl FOR a-»
-	«EXPAND RemoveFromImpl FOR a-»
-«ENDFOREACH-»
-«ENDDEFINE»
+Â«DEFINE GetterSetterImpl FOR MClass-Â»
+Â«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-Â»
+Â«FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-Â»
+	Â«EXPAND GetterImpl FOR a-Â»
+	Â«EXPAND SetterImpl FOR a-Â»
+	Â«EXPAND IteratorImpl FOR a-Â»
+	Â«EXPAND InsertInImpl FOR a-Â»
+	Â«EXPAND RemoveFromImpl FOR a-Â»
+Â«ENDFOREACH-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate a declaration for an attribute
-«DEFINE AttributeDecl FOR MAttribute-»
-«EXPAND _CommentAttribute-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
-«ELSE-»
-	«EXPAND _Modifier» java.util.Set<«type.name»> «asAttributeName()» = new java.util.HashSet<«type.name»>();
-«ENDIF-»
-«ENDDEFINE»
+Â«DEFINE AttributeDecl FOR MAttribute-Â»
+Â«EXPAND _CommentAttribute-Â»
+Â«IF multiplicity == 1-Â»
+	Â«EXPAND _ModifierÂ» Â«type.nameÂ» Â«asAttributeName()Â» Â«EXPAND _DefaultValueÂ»;
+Â«ELSE-Â»
+	Â«EXPAND _ModifierÂ» java.util.Set<Â«type.nameÂ»> Â«asAttributeName()Â» = new java.util.HashSet<Â«type.nameÂ»>();
+Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
 
-«DEFINE AttributeDerivedImpl FOR MAttribute-»
-«EXPAND _CommentGetter-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
-		«getReturnTypeDeclaration(type.name)»
-		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(type.name)»
+Â«DEFINE AttributeDerivedImpl FOR MAttribute-Â»
+Â«EXPAND _CommentGetter-Â»
+Â«IF multiplicity == 1-Â»
+	Â«EXPAND _ModifierÂ» Â«IF staticÂ»staticÂ«ENDIFÂ» Â«type.nameÂ» Â«asGetter(name)Â»() {
+		Â«getReturnTypeDeclaration(type.name)Â»
+		Â«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-Â»
+		Â«getReturnTypeReturn(type.name)Â»
 	}
-«ELSE-»
-	«EXPAND _Modifier» «IF static»static«ENDIF» java.util.Set<«type.name»> «name.toFirstLower()»() {
-		«getReturnTypeDeclaration(type.name)»
-		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(type.name)»
+Â«ELSE-Â»
+	Â«EXPAND _ModifierÂ» Â«IF staticÂ»staticÂ«ENDIFÂ» java.util.Set<Â«type.nameÂ»> Â«name.toFirstLower()Â»() {
+		Â«getReturnTypeDeclaration(type.name)Â»
+		Â«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-Â»
+		Â«getReturnTypeReturn(type.name)Â»
 	}
-«ENDIF-»
-«ENDDEFINE»
+Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate a getter implementation method for a mattribute
-«DEFINE GetterImpl FOR MAttribute-»
-«EXPAND _CommentGetter-»
-«IF multiplicity == 1-»
-	public «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
-		return «asAttributeName()»;
+Â«DEFINE GetterImpl FOR MAttribute-Â»
+Â«EXPAND _CommentGetter-Â»
+Â«IF multiplicity == 1-Â»
+	public Â«IF staticÂ»staticÂ«ENDIFÂ» Â«type.nameÂ» Â«asGetter(name)Â»() {
+		return Â«asAttributeName()Â»;
 	}
-«ELSE-»
-	public «IF static»static«ENDIF» java.util.Set<«type.name»> «asGetter(name)»() {
-		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
+Â«ELSE-Â»
+	public Â«IF staticÂ»staticÂ«ENDIFÂ» java.util.Set<Â«type.nameÂ»> Â«asGetter(name)Â»() {
+		return java.util.Collections.unmodifiableSet(Â«asAttributeName()Â»);
 	}
-«ENDIF-»
-«ENDDEFINE»
+Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate a setter implementation method for a mattribute
-«DEFINE SetterImpl FOR MAttribute-»
-«EXPAND _CommentAccessor-»
-«IF multiplicity == 1-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«type.name» «asAttributeName()») {
-		this.«asAttributeName()» = «asAttributeName()»;
+Â«DEFINE SetterImpl FOR MAttribute-Â»
+Â«EXPAND _CommentAccessor-Â»
+Â«IF multiplicity == 1-Â»
+	public Â«IF staticÂ»staticÂ«ENDIFÂ» void Â«asSetter(name)Â»(Â«type.nameÂ» Â«asAttributeName()Â») {
+		this.Â«asAttributeName()Â» = Â«asAttributeName()Â»;
 	}
-«ELSE-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(java.util.HashSet<«type.name»> «asAttributeName()») {
-		this.«asAttributeName()» = «asAttributeName()»;
+Â«ELSE-Â»
+	public Â«IF staticÂ»staticÂ«ENDIFÂ» void Â«asSetter(name)Â»(java.util.HashSet<Â«type.nameÂ»> Â«asAttributeName()Â») {
+		this.Â«asAttributeName()Â» = Â«asAttributeName()Â»;
 	}
-«ENDIF-»
-«ENDDEFINE»
+Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate a iterator implementation method for a mattribute
-«DEFINE IteratorImpl FOR MAttribute-»
-«IF multiplicity != 1-»
-	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
-		return «asAttributeName()».iterator();
+Â«DEFINE IteratorImpl FOR MAttribute-Â»
+Â«IF multiplicity != 1-Â»
+	Â«EXPAND _CommentAccessor-Â»
+	public Â«IF staticÂ»staticÂ«ENDIFÂ» java.util.Iterator<Â«type.nameÂ»> Â«asGetter(name)Â»Iterator() {
+		return Â«asAttributeName()Â».iterator();
 	}
-«ENDIF-»
-«ENDDEFINE»
+Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate a insert in implementation method
-«DEFINE InsertInImpl FOR MAttribute-»
-«IF multiplicity != 1-»
-	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _in) {
-		if («asAttributeName()».contains(_in)) {
+Â«DEFINE InsertInImpl FOR MAttribute-Â»
+Â«IF multiplicity != 1-Â»
+	Â«EXPAND _CommentAccessor-Â»
+	public Â«IF staticÂ»staticÂ«ENDIFÂ» void insertInÂ«name.toFirstUpper()Â»(Â«type.nameÂ» _in) {
+		if (Â«asAttributeName()Â».contains(_in)) {
 			return;
 		}
-		«asAttributeName()».add(_in);
+		Â«asAttributeName()Â».add(_in);
 	}
-«ENDIF-»
-«ENDDEFINE»
+Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«REM»
+Â«REMÂ»
 // generate a insert in implementation method
-«DEFINE InsertInImpl FOR MAttribute»
-«EXPAND ProtectedRegion::CommentInsertIn("java.mattribute.implementation.insertin.comment." + xmiGuid)»
-public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _in) {
-	«IF multiplicity == 1»
-		if («asAttributeName(name)» == _in) {
+Â«DEFINE InsertInImpl FOR MAttributeÂ»
+Â«EXPAND ProtectedRegion::CommentInsertIn("java.mattribute.implementation.insertin.comment." + xmiGuid)Â»
+public Â«IF staticÂ»staticÂ«ENDIFÂ» void insertInÂ«name.toFirstUpper()Â»(Â«type.nameÂ» _in) {
+	Â«IF multiplicity == 1Â»
+		if (Â«asAttributeName(name)Â» == _in) {
 			return;
 		}
-		«asAttributeName(name)» = _in;
-	«ENDIF»
-	«IF multiplicity != 1»
-		if («asAttributeName(name)».contains(_in)) {
+		Â«asAttributeName(name)Â» = _in;
+	Â«ENDIFÂ»
+	Â«IF multiplicity != 1Â»
+		if (Â«asAttributeName(name)Â».contains(_in)) {
 			return;
 		}
-		«asAttributeName(name)».add(_in);
-	«ENDIF»
+		Â«asAttributeName(name)Â».add(_in);
+	Â«ENDIFÂ»
 }
-«ENDDEFINE»
-«ENDREM»
+Â«ENDDEFINEÂ»
+Â«ENDREMÂ»
 
 
 // generate a remove from implementation method
-«DEFINE RemoveFromImpl FOR MAttribute-»
-«IF multiplicity != 1-»
-	«EXPAND _CommentAccessor-»
-	public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
-		if (!«asAttributeName()».contains(_ex)) {
+Â«DEFINE RemoveFromImpl FOR MAttribute-Â»
+Â«IF multiplicity != 1-Â»
+	Â«EXPAND _CommentAccessor-Â»
+	public void removeFromÂ«name.toFirstUpper()Â»(Â«type.nameÂ» _ex) {
+		if (!Â«asAttributeName()Â».contains(_ex)) {
 			return;
 		}
-		«asAttributeName()».remove(_ex);
+		Â«asAttributeName()Â».remove(_ex);
 	}
-	«ENDIF-»
-«ENDDEFINE»
+	Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
-«REM»
+Â«REMÂ»
 // generate a remove from implementation method
-«DEFINE RemoveFromImpl FOR MAttribute»
-«EXPAND ProtectedRegion::CommentRemoveFrom("java.mattribute.implementation.removefrom.comment." + xmiGuid)»
-public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
-	«IF multiplicity == 1»
-		if («asAttributeName(name)» != _ex) {
+Â«DEFINE RemoveFromImpl FOR MAttributeÂ»
+Â«EXPAND ProtectedRegion::CommentRemoveFrom("java.mattribute.implementation.removefrom.comment." + xmiGuid)Â»
+public void removeFromÂ«name.toFirstUpper()Â»(Â«type.nameÂ» _ex) {
+	Â«IF multiplicity == 1Â»
+		if (Â«asAttributeName(name)Â» != _ex) {
 			return;
 		}
-		«asAttributeName(name)» = «getReturnType()»;
-	«ENDIF»
-	«IF multiplicity != 1»
-		if (!«asAttributeName(name)».contains(_ex)) {
+		Â«asAttributeName(name)Â» = Â«getReturnType()Â»;
+	Â«ENDIFÂ»
+	Â«IF multiplicity != 1Â»
+		if (!Â«asAttributeName(name)Â».contains(_ex)) {
 			return;
 		}
-		«asAttributeName(name)».remove(_ex);
-	«ENDIF»
+		Â«asAttributeName(name)Â».remove(_ex);
+	Â«ENDIFÂ»
 }
-«ENDDEFINE»
-«ENDREM»
+Â«ENDDEFINEÂ»
+Â«ENDREMÂ»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -183,52 +183,52 @@ public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
 // //////////////////////////////////////////////////////////////////////////////
 
 
-«DEFINE _CommentAttribute FOR MAttribute-»
+Â«DEFINE _CommentAttribute FOR MAttribute-Â»
 /**
  * variable
-«IF hasComment()-»
- * @see {@link #«asGetter(name)»}
-«ENDIF-»
+Â«IF hasComment()-Â»
+ * @see {@link Â«#asGetter(name)Â»}
+Â«ENDIF-Â»
  */
-«ENDDEFINE»
+Â«ENDDEFINEÂ»
 
 
-«DEFINE _CommentGetter FOR MAttribute-»
+Â«DEFINE _CommentGetter FOR MAttribute-Â»
 /**
- * accessor for attribute «asAttributeName()»
-«IF hasComment()-»
- * «getCommentText(ownedComment)»
-«ENDIF-»
+ * accessor for attribute Â«asAttributeName()Â»
+Â«IF hasComment()-Â»
+ * Â«getCommentText(ownedComment)Â»
+Â«ENDIF-Â»
  */
-«ENDDEFINE»
+Â«ENDDEFINEÂ»
 
 
-«DEFINE _CommentAccessor FOR MAttribute-»
+Â«DEFINE _CommentAccessor FOR MAttribute-Â»
 /**
- * accessor for attribute «asAttributeName()»
-«IF hasComment()-»
- * @see {@link #«asGetter(name)»}
-«ENDIF-»
+ * accessor for attribute Â«asAttributeName()Â»
+Â«IF hasComment()-Â»
+ * @see {@link Â«#asGetter(name)Â»}
+Â«ENDIF-Â»
  */
-«ENDDEFINE»
+Â«ENDDEFINEÂ»
 
 
 // generate a protected region for own implementations
-«DEFINE _OwnCodeImpl(String proRegId) FOR MAttribute-»
-/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+Â«DEFINE _OwnCodeImpl(String proRegId) FOR MAttribute-Â»
+/* Â«PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)Â» */
 /* <!-- TODO put your own implementation code here --> */
 
-/* «ENDPROTECT» */
-«ENDDEFINE»
+/* Â«ENDPROTECTÂ» */
+Â«ENDDEFINEÂ»
 
 
 // generate modifiers for mattribute
-«DEFINE _Modifier FOR MAttribute-»
-«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF»
-«ENDDEFINE»
+Â«DEFINE _Modifier FOR MAttribute-Â»
+Â«visibilityÂ» Â«IF staticÂ»staticÂ«ENDIFÂ» Â«IF finalÂ»finalÂ«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
 
 // generate defaultvalue for mattribute
-«DEFINE _DefaultValue FOR MAttribute-»
-«IF defaultvalue.length > 0»= «defaultvalue»«ENDIF»
-«ENDDEFINE»
+Â«DEFINE _DefaultValue FOR MAttribute-Â»
+Â«IF defaultvalue.length > 0Â»= Â«defaultvalueÂ»Â«ENDIFÂ»
+Â«ENDDEFINEÂ»

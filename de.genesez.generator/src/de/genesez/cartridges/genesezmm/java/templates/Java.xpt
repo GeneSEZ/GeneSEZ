@@ -1,10 +1,10 @@
-«REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+Â«REMÂ» import code gen meta model Â«ENDREMÂ»
+Â«IMPORT genesezMMÂ»
 
-«REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataType»
-«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Helper»
-«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Naming»
+Â«REMÂ» useful metamodel extensions Â«ENDREMÂ»
+Â«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataTypeÂ»
+Â«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::HelperÂ»
+Â«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::NamingÂ»
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
@@ -12,124 +12,124 @@
 
 
 // generate a interface
-«DEFINE Root FOR MInterface-»
-«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
-package «getPackagePath()»;
-«EXPAND Import::Import-»
-«EXPAND _CommentClassifier-»
-public interface «asClassifierName(name)» «EXPAND Generalization::Generalization» {
+Â«DEFINE Root FOR MInterface-Â»
+Â«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-Â»
+package Â«getPackagePath()Â»;
+Â«EXPAND Import::Import-Â»
+Â«EXPAND _CommentClassifier-Â»
+public interface Â«asClassifierName(name)Â» Â«EXPAND Generalization::GeneralizationÂ» {
 
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable and constant declarations
 	// ////////////////////////////////////////////////////////////////////////
 
-	«EXPAND Attribute::AttributeDecl-»
+	Â«EXPAND Attribute::AttributeDecl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated association method declarations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Association::OperationDecl-»
+	Â«EXPAND Association::OperationDecl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated abstract method declarations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Operation::OperationDecl-»
+	Â«EXPAND Operation::OperationDecl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// own implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+	Â«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-Â»
 }
-«ENDFILE-»
-«ENDDEFINE»
+Â«ENDFILE-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate a class
-«DEFINE Root FOR MClass-»
-«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
-package «getPackagePath()»;
-«EXPAND Import::Import-»
-«EXPAND _CommentClassifier-»
-«EXPAND _Modifier» class «asClassifierName(name)» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
+Â«DEFINE Root FOR MClass-Â»
+Â«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-Â»
+package Â«getPackagePath()Â»;
+Â«EXPAND Import::Import-Â»
+Â«EXPAND _CommentClassifier-Â»
+Â«EXPAND _ModifierÂ» class Â«asClassifierName(name)Â» Â«EXPAND Generalization::GeneralizationÂ» Â«EXPAND Realization::RealizationÂ» {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Attribute::AttributeDecl-»
-	«EXPAND Association::AssociationDecl-»
+	Â«EXPAND Attribute::AttributeDecl-Â»
+	Â«EXPAND Association::AssociationDecl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated constructor implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Operation::ConstructorImpl-»
+	Â«EXPAND Operation::ConstructorImpl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated attribute derived method implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Attribute::AttributeDerivedImpl-»
+	Â«EXPAND Attribute::AttributeDerivedImpl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated association method implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Association::OperationImpl-»
+	Â«EXPAND Association::OperationImpl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated abstract method declaration
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Operation::OperationDecl-»
+	Â«EXPAND Operation::OperationDecl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated normal method implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Operation::OperationImpl-»
+	Â«EXPAND Operation::OperationImpl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated getter and setter method implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Attribute::GetterSetterImpl-»
+	Â«EXPAND Attribute::GetterSetterImpl-Â»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// own implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+	Â«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-Â»
 }
-«ENDFILE-»
-«ENDDEFINE»
+Â«ENDFILE-Â»
+Â«ENDDEFINEÂ»
 
 
 // generate an enumeration
-«DEFINE Root FOR MEnumeration-»
-«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
-package «getPackagePath()»;
-«EXPAND Import::Import-»
-«EXPAND _CommentClassifier-»
-«EXPAND _Modifier» enum «asClassifierName(name)» {
+Â«DEFINE Root FOR MEnumeration-Â»
+Â«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-Â»
+package Â«getPackagePath()Â»;
+Â«EXPAND Import::Import-Â»
+Â«EXPAND _CommentClassifier-Â»
+Â«EXPAND _ModifierÂ» enum Â«asClassifierName(name)Â» {
 
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«FOREACH literal AS l SEPARATOR ", "»«l.name»«ENDFOREACH»;
+	Â«FOREACH literal AS l SEPARATOR ", "Â»Â«l.nameÂ»Â«ENDFOREACHÂ»;
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// own implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+	Â«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-Â»
 }
-«ENDFILE-»
-«ENDDEFINE»
+Â«ENDFILE-Â»
+Â«ENDDEFINEÂ»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -138,26 +138,26 @@ package «getPackagePath()»;
 
 
 // generate a comment for a java file
-«DEFINE _CommentClassifier FOR MClassifier-»
+Â«DEFINE _CommentClassifier FOR MClassifier-Â»
 /**
-«IF hasComment()-»
- * «getCommentText(ownedComment)»
-«ENDIF-»
- * @author «getUserName()» (generated at «getTimeStamp()»)
+Â«IF hasComment()-Â»
+ * Â«getCommentText(ownedComment)Â»
+Â«ENDIF-Â»
+ * @author Â«getUserName()Â» (generated at Â«getTimeStamp()Â»)
  */
-«ENDDEFINE»
+Â«ENDDEFINEÂ»
 
 
 // generate a protected region for own implementations
-«DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-»
-/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+Â«DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-Â»
+/* Â«PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)Â» */
 /* <!-- TODO put your own implementation code here --> */
 
-/* «ENDPROTECT» */
-«ENDDEFINE»
+/* Â«ENDPROTECTÂ» */
+Â«ENDDEFINEÂ»
 
 
 // generate modifiers for mclassifier
-«DEFINE _Modifier FOR MClassifier-»
-«visibility.toString()» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
-«ENDDEFINE»
+Â«DEFINE _Modifier FOR MClassifier-Â»
+Â«visibility.toString()Â» Â«IF finalÂ»finalÂ«ENDIFÂ» Â«IF abstractÂ»abstractÂ«ENDIFÂ»
+Â«ENDDEFINEÂ»
