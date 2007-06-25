@@ -1,72 +1,72 @@
-«IMPORT ecore»
-«EXTENSION org::openarchitectureware::uml2ecore::templates::utils»
+Â«IMPORT ecoreÂ»
+Â«EXTENSION org::openarchitectureware::uml2ecore::templates::utilsÂ»
 
-«DEFINE root FOR EPackage»
-	«EXPAND constraintsFile»
-	«IF needsNamingUtils()»
-		«EXPAND namingUtilsFile»
-	«ENDIF»
-«ENDDEFINE»
+Â«DEFINE root FOR EPackageÂ»
+	Â«EXPAND constraintsFileÂ»
+	Â«IF needsNamingUtils()Â»
+		Â«EXPAND namingUtilsFileÂ»
+	Â«ENDIFÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE constraintsFile FOR EPackage»
-	«FILE name+"Constraints.chk"-»
-import «nsPrefix»;
-		«REM»reject the constraints generation for MElement and MComment, because no name is define«ENDREM»
-		«EXPAND constraintsForClass FOREACH eAllContents.typeSelect(EClass).reject(e|e.name == "MElement" || e.name == "MComment")-»
-	«ENDFILE»
-«ENDDEFINE»
+Â«DEFINE constraintsFile FOR EPackageÂ»
+	Â«FILE name+"Constraints.chk"-Â»
+import Â«nsPrefixÂ»;
+		Â«REMÂ»reject the constraints generation for MElement and MComment, because no name is defineÂ«ENDREMÂ»
+		Â«EXPAND constraintsForClass FOREACH eAllContents.typeSelect(EClass).reject(e|e.name == "MElement" || e.name == "MComment")-Â»
+	Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»
 
-«DEFINE constraintsForClass FOR EClass-»
-	«FOREACH eReferences AS r-»
-		«IF r.lowerBound == 1-»
-			«IF r.upperBound == 1-»
-context «name» ERROR "«r.name» must bet set":
-	«r.name» != null;
-			«ENDIF-»
-			«IF r.upperBound > 1 || r.upperBound == -1-»
-context «name» ERROR "«r.name» cannot be empty":
-	!«r.name».isEmpty;
-			«ENDIF-»
-		«ENDIF-»
-	«ENDFOREACH-»
-	«IF ePackage.needsNamingUtils()-»
-		«FOREACH eReferences.select(r|r.containment).select(r|r.upperBound > 1 || r.upperBound == -1) AS r-»
-context «name» ERROR "«r.name» must have unique names":
-	«r.name».forAll(e1| !«r.name».exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
-		«ENDFOREACH-»
-	«ENDIF-»
-«ENDDEFINE»
+Â«DEFINE constraintsForClass FOR EClass-Â»
+	Â«FOREACH eReferences AS r-Â»
+		Â«IF r.lowerBound == 1-Â»
+			Â«IF r.upperBound == 1-Â»
+context Â«nameÂ» ERROR "Â«r.nameÂ» must bet set":
+	Â«r.nameÂ» != null;
+			Â«ENDIF-Â»
+			Â«IF r.upperBound > 1 || r.upperBound == -1-Â»
+context Â«nameÂ» ERROR "Â«r.nameÂ» cannot be empty":
+	!Â«r.nameÂ».isEmpty;
+			Â«ENDIF-Â»
+		Â«ENDIF-Â»
+	Â«ENDFOREACH-Â»
+	Â«IF ePackage.needsNamingUtils()-Â»
+		Â«FOREACH eReferences.select(r|r.containment).select(r|r.upperBound > 1 || r.upperBound == -1) AS r-Â»
+context Â«nameÂ» ERROR "Â«r.nameÂ» must have unique names":
+	Â«r.nameÂ».forAll(e1| !Â«r.nameÂ».exists(e2| (e1 != e2) && (e1.name == e2.name) ) );
+		Â«ENDFOREACH-Â»
+	Â«ENDIF-Â»
+Â«ENDDEFINEÂ»
 
 
-«DEFINE namingUtilsFile FOR EPackage»
-	«FILE name+"NamingUtils.ext"-»
-import «nsPrefix»;
+Â«DEFINE namingUtilsFile FOR EPackageÂ»
+	Â«FILE name+"NamingUtils.ext"-Â»
+import Â«nsPrefixÂ»;
 
 String concat( String s1, String s2 ): s1 == null ? s2 : s1+"."+s2;
-		«REM»reject the extend generation for MTaggedValue and MComment, because no name is define«ENDREM»
-		«FOREACH eClassifiers.typeSelect(EClass).reject(e|e.name == "MComment" || e.name =="MTaggedValue") AS c-»
-// ----------- «c.name» ------------		
-			«IF c.allOwners().size == 0-»	
-String namespace(«c.name» this): null;
-String qualifiedName(«c.name» this): name;
-			«ENDIF»
-			«IF c.allOwners().size == 1-»	
-String namespace(«c.name» this): name == null ? null : ( (((«c.owner().name»)eContainer) != null) ? concat( ((«c.owner().name»)eContainer).namespace(), ((«c.owner().name»)eContainer).name ) : null );
-String qualifiedName(«c.name» this): concat( namespace(), name );
-			«ENDIF»
-			«IF c.allOwners().size > 1-»
-String namespace(«c.name» this): 
+		Â«REMÂ»reject the extend generation for MTaggedValue and MComment, because no name is defineÂ«ENDREMÂ»
+		Â«FOREACH eClassifiers.typeSelect(EClass).reject(e|e.name == "MComment" || e.name =="MTaggedValue") AS c-Â»
+// ----------- Â«c.nameÂ» ------------		
+			Â«IF c.allOwners().size == 0-Â»	
+String namespace(Â«c.nameÂ» this): null;
+String qualifiedName(Â«c.nameÂ» this): name;
+			Â«ENDIFÂ»
+			Â«IF c.allOwners().size == 1-Â»	
+String namespace(Â«c.nameÂ» this): name == null ? null : ( (((Â«c.owner().nameÂ»)eContainer) != null) ? concat( ((Â«c.owner().nameÂ»)eContainer).namespace(), ((Â«c.owner().nameÂ»)eContainer).name ) : null );
+String qualifiedName(Â«c.nameÂ» this): concat( namespace(), name );
+			Â«ENDIFÂ»
+			Â«IF c.allOwners().size > 1-Â»
+String namespace(Â«c.nameÂ» this): 
 	eContainer == null ? null : 
 	switch {
-	«FOREACH c.allOwners() AS a-»
-		case «a.name».isInstance(eContainer): (name == null ? null : concat( ((«a.name»)eContainer).namespace(), ((«a.name»)eContainer).name ))
-	«ENDFOREACH-»
+	Â«FOREACH c.allOwners() AS a-Â»
+		case Â«a.nameÂ».isInstance(eContainer): (name == null ? null : concat( ((Â«a.nameÂ»)eContainer).namespace(), ((Â«a.nameÂ»)eContainer).name ))
+	Â«ENDFOREACH-Â»
 		default: null
 	};
-String qualifiedName(«c.name» this): concat( namespace(), name );
-			«ENDIF»
-		«ENDFOREACH»
-	«ENDFILE»
-«ENDDEFINE»
+String qualifiedName(Â«c.nameÂ» this): concat( namespace(), name );
+			Â«ENDIFÂ»
+		Â«ENDFOREACHÂ»
+	Â«ENDFILEÂ»
+Â«ENDDEFINEÂ»
 
 
