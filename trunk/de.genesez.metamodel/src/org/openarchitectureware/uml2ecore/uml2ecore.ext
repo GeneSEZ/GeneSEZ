@@ -24,19 +24,19 @@ extension org::openarchitectureware::uml2ecore::io;
 // EPackage can be accessed by "this" inside the function
 create EPackage this transform(Model m): 
  	// the name of the new package should be the same as the UML model
-	setName(m.name) ->
+	setName(m.name)->
 	// the namespace prefix, too
-	setNsPrefix(m.name) ->
+	setNsPrefix(m.name)->
 	// the nsUri will be concatenated by the return value of nsUri() - 
 	// a function call - and the name
-	setNsURI( nsUri()+"/"+name ) ->
+	setNsURI(nsUri()+"/"+name)->
 	// the classifiers in the EPackage consists of an EClass foreach
 	// UML class in the UML model. We select all the classes from the
 	// UML model, and then call mapClass() on each of them.
-	setEClassifiers( m.ownedElement.typeSelect(Class).mapClass() ) ->
+	setEClassifiers(m.ownedElement.typeSelect(Class).mapClass())->
 	// finally, we also pick all the associations in the UML model
 	// and map them to unidirectional or bidirectional references
-	m.ownedMember.typeSelect( Association ).mapAssociation();
+	m.ownedMember.typeSelect(Association).mapAssociation();
 	
 // this one returns the value of the global variable nsUriPrefix
 // global variables are defined in the workflow file, take a look
@@ -61,7 +61,7 @@ private mapAssociation(Association a):
 // navigable!). For tht end, we create an Ecore reference by calling the
 // respective helper function createRef().
 private mapUniDirAssociation(Association a): 
-	a.memberEnd.get(0).isNavigable() ? a.memberEnd.get(0).createRef() : null ->
+	a.memberEnd.get(0).isNavigable() ? a.memberEnd.get(0).createRef() : null->
 	a.memberEnd.get(1).isNavigable() ? a.memberEnd.get(1).createRef() : null;
 
 // the mapping of bidirectional associations must be to two EReferences
@@ -73,25 +73,25 @@ private mapUniDirAssociation(Association a):
 // in both directions... this has worked with setting it in only one way before.
 // Strange.
 private mapBiDirAssociation(Association a): 
-	a.memberEnd.get(0).createRef().setEOpposite( a.memberEnd.get(1).createRef() ) ->
-	a.memberEnd.get(1).createRef().setEOpposite( a.memberEnd.get(0).createRef() );
+	a.memberEnd.get(0).createRef().setEOpposite(a.memberEnd.get(1).createRef())->
+	a.memberEnd.get(1).createRef().setEOpposite(a.memberEnd.get(0).createRef());
 
 // this helper function creates an EReference for a Property (a Property 
 // is basically the "docking point" of an association at the respective
 // class
-create EReference this createRef( Property a ): 
+create EReference this createRef(Property a): 
 	// the reference has the same name as the property
-	setName( a.name ) -> 
+	setName(a.name)-> 
 	// the type is the result of mapping the UML class
 	// associated with the property to the respective EClass
-	setEType( ((Class)a.type).mapClass() ) ->
+	setEType(((Class)a.type).mapClass()) ->
 	// the next couple of lines determine the multiplicity
-    a.lowerValue.stringValue() == "1" ? setLowerBound(1) : null -> 
-    a.lowerValue.stringValue() == "0" ? setLowerBound(0) : null -> 
-    a.upperValue.stringValue() == "1" ? setUpperBound(1) : null -> 
-    a.upperValue.stringValue() != "1" ? setUpperBound(-1) : null ->	
+    a.lowerValue.stringValue() == "1" ? setLowerBound(1) : null-> 
+    a.lowerValue.stringValue() == "0" ? setLowerBound(0) : null-> 
+    a.upperValue.stringValue() == "1" ? setUpperBound(1) : null-> 
+    a.upperValue.stringValue() != "1" ? setUpperBound(-1) : null->	
 	// this one copies the containment
-	setContainment( a.isComposite ) ->
+	setContainment(a.isComposite) ->
 	// and finally, we add the reference to the result of mapping 
 	// the UML class associated with the property to the respective EClass
 	// Note: we can call mapClass() as often as we want, since create
@@ -103,19 +103,17 @@ create EReference this createRef( Property a ):
 // that one creates an EClass from an UML Class	
 create EClass this mapClass(Class c):
 	// copies the name
-	setName(c.name) ->
+	setName(c.name)->
 	// copies the isAbstract property 
-	setAbstract(c.isAbstract) ->
+	setAbstract(c.isAbstract)->
 	// copy the super classes; note how we iterate over all generalization
 	// objects of the current class, ask it for it's general end (i.e. the super
 	// class) and then map that UML class to an EClass, as usual
-	setESuperTypes(c.generalization.general.typeSelect(Class).mapClass()) ->
+	setESuperTypes(c.generalization.general.typeSelect(Class).mapClass())->
 	// finally, we copy attributes. Attributes are by definition all Properties
 	// that have a PrimitiveType as their type. mapAttribute converts a UML 
 	// Property into an EAttribute
-	setEStructuralFeatures( 
-		c.ownedAttribute.select(a|PrimitiveType.isInstance(a.type)).mapAttribute() )
-		;
+	setEStructuralFeatures(c.ownedAttribute.select(a|PrimitiveType.isInstance(a.type)).mapAttribute());
 	// add the name attribute, if it needs to be added automatically
 //	addNameAttr() && this.eSuperTypes.isEmpty && !eAttributes.collect(a|a.name).contains("name") ? 
 //		eStructuralFeatures.add(createNameAttr()) : null ->
@@ -123,24 +121,27 @@ create EClass this mapClass(Class c):
 
 // creates the additional name attribute, if necessary	
 create EAttribute this createNameAttr(EClass cls):
-	setName("name") -> setEType( "String".mapTypeName() );	
+	setName("name") -> setEType("String".mapTypeName());	
 
 // creates the additional xmi:id attribute	
 create EAttribute this createUidAttr(EClass cls):
-	setName("xmiId") -> setEType( "String".mapTypeName() );	
+	setName("xmiId") -> setEType("String".mapTypeName());	
 
 // copying attributes is easy, just copy name and type
 create EAttribute this mapAttribute( Property a ):
-	setName( a.name ) ->
+	setName(a.name) ->
+	// set the multiplicity
+	setLowerBound(a.getLower())->
+	setUpperBound(a.getUpper())->
 	// note how we call the mapTypeName() operation on the
 	// name of the type
-	setEType( a.type.name.mapTypeName() );	
+	setEType(a.type.name.mapTypeName());	
 	  
 // finally, because of a number of EMF intricacies, we delegate the
 // actual type mapping to a Java method; take a look at the respective
 // method to see how it works	  
 ecore::EClassifier mapTypeName(String t):
-	JAVA org.openarchitectureware.uml2ecore.TypeMapper.mapType( java.lang.String );
+	JAVA org.openarchitectureware.uml2ecore.TypeMapper.mapType(java.lang.String);
 	
 	
 	
