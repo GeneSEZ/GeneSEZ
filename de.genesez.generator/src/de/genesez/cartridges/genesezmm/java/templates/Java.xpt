@@ -17,7 +17,7 @@
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
-public interface «asClassifierName(name)» «EXPAND Generalization::Generalization» {
+public interface «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» {
 
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable and constant declarations
@@ -53,7 +53,7 @@ public interface «asClassifierName(name)» «EXPAND Generalization::Generalizat
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
-«EXPAND _Modifier» class «asClassifierName(name)» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
+«EXPAND _Modifier» class «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations
@@ -160,4 +160,13 @@ package «getPackagePath()»;
 // generate modifiers for mclassifier
 «DEFINE _Modifier FOR MClassifier-»
 «visibility.toString()» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+«ENDDEFINE»
+
+
+// generate generics
+«DEFINE _Generics FOR MClassifier-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
 «ENDDEFINE»
