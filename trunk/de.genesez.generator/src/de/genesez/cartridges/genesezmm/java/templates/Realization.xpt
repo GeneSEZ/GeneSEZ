@@ -15,7 +15,7 @@
 // generate realization for a class
 «DEFINE Realization FOR MClass-»
 «IF !supertype.typeSelect(MInterface).isEmpty-»
-	implements «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«ENDFOREACH»
+	implements «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«EXPAND _Generics FOR c»«ENDFOREACH»
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»
@@ -23,3 +23,12 @@
 // //////////////////////////////////////////////////////////////////////////////
 // private functions
 // //////////////////////////////////////////////////////////////////////////////
+
+
+// generate generics
+«DEFINE _Generics FOR MClassifier-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»

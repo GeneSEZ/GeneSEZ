@@ -9,8 +9,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.uml2.uml.TemplateParameter;
+import org.eclipse.uml2.uml.resource.UML22UMLExtendedMetaData;
 
 public class TransUtils {
 	
@@ -32,6 +35,18 @@ public class TransUtils {
 		retval.addAll(eobj);
 		return retval;
 	}
+	
+	
+	/*public static List<String> eToString(org.eclipse.uml2.uml.TemplateSignature eObj) {
+		List<String> retval = new ArrayList<String>();
+		if (eObj != null) {
+			Iterator<TemplateParameter> it = eObj.getParameters().iterator();
+			while(it.hasNext()) {
+				retval.add(((org.eclipse.uml2.uml.Class)it.next().getParameteredElement()).getName());
+			}
+		}
+		return retval;
+	}*/
 	
 	// return the package path from a class or other
 	public static String getPackagePath(MClassifier clazz) {
