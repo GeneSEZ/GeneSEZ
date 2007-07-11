@@ -1,4 +1,4 @@
-package org.openarchitectureware.uml2ecore;
+package de.genesez.uml2ecore.utilities;
 
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EcoreFactoryImpl;
@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.impl.EcoreFactoryImpl;
  * Helper Class whose single operation is called from the mapTypeName
  * extension in uml2ecore.ext
  */
-public class TypeMapper {
+public class TransUtils {
 
 	/**
 	 * JAVA extension functions must be static methods
