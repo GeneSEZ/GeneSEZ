@@ -1,4 +1,4 @@
-package org.openarchitectureware.uml2ecore;
+package de.genesez.uml2ecore.utilities;
 
 /**
  * Helper Class for debug output. Methods are called from
