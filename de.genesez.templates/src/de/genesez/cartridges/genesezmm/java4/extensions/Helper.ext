@@ -1,0 +1,104 @@
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::cartridges::genesezmm::java4::extensions::DataType;
+extension de::genesez::cartridges::genesezmm::java4::extensions::Naming;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// public extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+// return a comma separated string of list elements
+String getNameList(List l) :
+	l.size > 1 
+		? ((MElement) l.first()).name + ", " + getNameList(l.withoutFirst())
+		: (l.size > 0
+			? ((MElement) l.first()).name
+			: "");
+
+
+// return a comma separated string of list elements
+String getGenericList(List l) :
+	l.size > 1 
+		? ((MGeneric) l.first()).specification + ", " + getGenericList(l.withoutFirst())
+		: (l.size > 0
+			? ((MGeneric) l.first()).specification
+			: "");
+
+
+// returns true if an classifier has generic parameter
+Boolean hasGenericParameter(MClassifier c) :
+	c.genericParameter.size > 0;
+
+
+// returns true if an classifier has generic parameter
+Boolean hasGenericParameter(MOperation o) :
+	o.genericParameter.size > 0;
+
+
+// returns true if the element has a comment else false
+Boolean hasComment(MElement e) :
+	e.ownedComment.size > 0;
+
+
+// returns the comment of an element
+String getCommentText(List l) :
+	l.size > 0
+		? getComment((MComment) l.first()).replaceAll("\n", "; ")
+		: "";
+
+
+// find out if MAssoiationRole belongs to an association class
+isPlainAssociation(MAssociationRole aend) :
+	aend.association.associationClass == null;
+
+
+// get AssociationClass for MAssoiationRole
+assocClass(MAssociationRole aend) :
+	aend.association.associationClass;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// public java functions
+////////////////////////////////////////////////////////////////////////////////
+
+// return package path for a class
+String getPackagePath(MClassifier clazz) : 
+	JAVA de.genesez.cartridges.genesezmm.java4.utilities.Helper.getPackagePath(genesezMM.MClassifier);
+
+// return file path for a class
+String getFQNPackagePath(MClassifier clazz) : 
+	JAVA de.genesez.cartridges.genesezmm.java4.utilities.Helper.getFQNPackagePath(genesezMM.MClassifier);
+
+
+// return the actual date and time
+String getTimeStamp() :
+	JAVA de.genesez.cartridges.genesezmm.java4.utilities.Helper.getTimeStamp();
+
+
+// return the user, who is logged in
+String getUserName() :
+	JAVA de.genesez.cartridges.genesezmm.java4.utilities.Helper.getUserName();
+
+
+// return the imports of a classifier
+String getImports(MClassifier clazz) :
+	JAVA de.genesez.cartridges.genesezmm.java4.utilities.ImportChecker.getImports(genesezMM.MClassifier);
+
+////////////////////////////////////////////////////////////////////////////////
+// private extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+//
+private String getComment(MComment c) :
+	c.annotation != "null"
+		? c.annotation
+		: "";
+		
+
+////////////////////////////////////////////////////////////////////////////////
+// private java functions
+////////////////////////////////////////////////////////////////////////////////
