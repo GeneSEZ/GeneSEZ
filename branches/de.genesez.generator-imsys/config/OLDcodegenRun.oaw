@@ -35,14 +35,6 @@
 		<metaModel class="oaw.uml2.profile.ProfileMetaModel">
 			<profile value="${profile}" />
 		</metaModel>
-		<!-- deactivated for now
-			again, we need the two meta models introduced above; we reference
-			them using XML's idRef mechanism - ->
-			<metaModel idRef="mm.emf" />
-			<metaModel idRef="mm.UML2" /-->
-		<!-- this statement makes the value "${nsUriPrefix"} passed in
-			by the external workflow file available as a global variable
-			that is accessed by the nsUri() function in uml2ecore.ext -->
 		<globalVarDef name="uml2model" value="uml2model" />
 		<globalVarDef name="excludePackage" value="'${excludePackage}'" />
 		<!-- finally, we run the transformation itself. there's an 
@@ -51,7 +43,7 @@
 			takes an object of type UML2::Model as its parameter. Note that 
 			we can use the slot name uml2model as a variable in this expression -->
 		<invoke
-			value="de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)" />
+			value="${invokeScript}" />
 		<!-- finally, we specify that we want to put the return value of the 
 			function invoked above into the ecoreModel slot in the workflow -->
 		<outputSlot value="generatorModel" />

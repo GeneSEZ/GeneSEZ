@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<component id="codeGenerator" class="oaw.xpand2.Generator" skipOnErrors="true">
+		<fileEncoding value="utf-8" />
+		<!--metaModel idRef="genesezMM" /-->
+		
+		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="${metaModelPackage}" />
+		</metaModel>
+		
+		<expand value="${rootTemplate}" />
+		<genPath value="${outputDir}" />
+		<!-- config the protected regions resolver -->
+		<prSrcPaths value="${outputDir}" />
+		<prDefaultExcludes value="false" />
+		<prExcludes value=".svn" />
+
+		<beautifier 
+			class="org.hybridlabs.source.formatter.JavaImportBeautifier"
+			conventionFilePath="-filename-"
+			organizeImports="true"
+			format="true" />
+
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.JavaBeautifier" />
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
+		
+	</component>
+
+</workflow>

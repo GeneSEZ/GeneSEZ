@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- this one runs the transformation from PIM to PSM -->
+	<component id="pim2psm" class="oaw.xtend.XtendComponent">
+		<!-- and we need the target metamodel -->
+		<metaModel id="genesezMM" class="org.openarchitectureware.type.emf.EmfMetaModel">
+			<metaModelPackage value="${metaModelPackage}" />
+		</metaModel>
+		<!-- finally, we run the transformation itself. there's an 
+			extension file called trans.ext in the respective location
+			in the classpath that contains a function called transform that
+			takes an object of type UML2::Model as its parameter. Note that 
+			we can use the slot name uml2model as a variable in this expression -->
+			<!-- inputSlot value="generatorModel" /-->
+		<invoke	value="${invokeScript}" />
+		<!-- finally, we specify that we want to put the return value of the 
+			function invoked above into the ecoreModel slot in the workflow -->
+		<!-- outputSlot value="generatorModel" /-->
+	</component>
+
+</workflow>

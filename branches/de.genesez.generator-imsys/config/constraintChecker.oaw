@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- this component checks a number of constraints in the parsed genesezMM model -->
+	<component id="constraintChecker" class="org.openarchitectureware.check.CheckComponent">
+		<!-- Working on genesezMM models also requires the EcorePackage to 
+			be configured as a meta model, so we do this here -->
+		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="${metaModelPackage}" />
+		</metaModel>
+		<!-- and workin with genesezMM also requires the UML2 meta model -->
+		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
+		<!-- this is the file that contains the constraints; note the use of
+			:: as the namespace delimiter; we also don't specify the .chk
+			extension of the uml2Constraints file. The namespaces correspond
+			to Java packages; so you know where to look in the source folder -->
+		<checkFile value="${checkScript}" />
+		<!-- we check the complete set of model elements under the uml2model 
+			slot in the workflow; this will be the Model object and all its
+			children, recusively  -->
+		<emfAllChildrenSlot value="generatorModel" />
+		<!-- finally, if we encounter errors here (i.e. failed constraints)
+			we stop the workflow here. We won't invoke the transformation if
+			the input model is faulty -->
+		<abortOnError value="${abortOnError}" />
+	</component>
+
+</workflow>

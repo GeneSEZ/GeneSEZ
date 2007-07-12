@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- this one runs the transformation from UML2 to genesezMM. -->
+	<component id="uml2genesezMM" class="oaw.xtend.XtendComponent">
+		<!-- Working on UML2 models also requires the EcorePackage to 
+			be configured as a meta model, so we do this here -->
+		<metaModel id="mm.emf" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="org.eclipse.emf.ecore.EcorePackage" />
+		</metaModel>
+		<!-- and working with UML2 also requires the UML2 meta model -->
+		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
+		<!-- and we need the target metamodel -->
+		<metaModel id="genesezMM" class="org.openarchitectureware.type.emf.EmfMetaModel">
+			<metaModelPackage value="${metaModelPackage}" />
+		</metaModel>
+		<metaModel class="oaw.uml2.profile.ProfileMetaModel">
+			<profile value="${profile}" />
+		</metaModel>
+		<globalVarDef name="uml2model" value="uml2model" />
+		<globalVarDef name="excludePackage" value="'${excludePackage}'" />
+		<!-- finally, we run the transformation itself. there's an 
+			extension file called trans.ext in the respective location
+			in the classpath that contains a function called transform that
+			takes an object of type UML2::Model as its parameter. Note that 
+			we can use the slot name uml2model as a variable in this expression -->
+		<invoke	value="de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)" />
+		<!-- finally, we specify that we want to put the return value of the 
+			function invoked above into the ecoreModel slot in the workflow -->
+		<outputSlot value="generatorModel" />
+	</component>
+
+</workflow>
