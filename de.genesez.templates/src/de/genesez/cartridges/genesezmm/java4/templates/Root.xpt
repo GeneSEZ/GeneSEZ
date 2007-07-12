@@ -1,0 +1,47 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::DataType»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Helper»
+«EXTENSION de::genesez::cartridges::genesezmm::java::extensions::Naming»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE Root FOR MModel-»
+«EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPackage-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MInterface-»
+«EXPAND Class::Root-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClass-»
+«EXPAND Class::Root-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MEnumeration-»
+«EXPAND Class::Root-»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
