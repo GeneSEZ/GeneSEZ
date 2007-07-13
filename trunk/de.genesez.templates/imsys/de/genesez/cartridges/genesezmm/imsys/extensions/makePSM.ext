@@ -2,7 +2,7 @@
 import genesezMM;
 // and we also load the io extensions, for the purpose of
 // debugging, in case we need it   
-
+extension de::genesez::io::io;
 
 ////////////////////////////////////////////////////////////////////////////////
 // public extend functions
@@ -20,12 +20,15 @@ MModel convert(MModel m):
 	
 convert(MPackage p):
 	p.nestedPackage.convert()->
-	p.classifier.typeSelect(MClass).select(e|e.stereotype.select(s|s.name == "Component")).component();
+	p.classifier.typeSelect(MClass).select(e|!e.stereotype.select(s|s.name == "Component").isEmpty).component();
+	//p.classifier.typeSelect(MClass).component();
 
 
 
 component(MClass c) :
-	c.abstract == true;
+	info(c.name)->
+	c.setAbstract(true)->
+	info(c.abstract);
 
 
 
