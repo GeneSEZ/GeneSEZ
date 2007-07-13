@@ -1,0 +1,23 @@
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::uml2genesezmm::io;
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// java syntax conventions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// checks if all attributes are defined static final 
+context MAttribute WARNING "GeneSEZ-Gen: constant has illegal modifiers (" + "attribute: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (visibility == "public" && static && final ? true : false)
+		: true;
+
+
+// checks if all methods are defined public and abstract
+context MOperation WARNING "GeneSEZ-Gen: method has illegal modifiers (" + "operation: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (visibility == "public" && abstract ? true : false)
+		: true;
