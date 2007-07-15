@@ -20,17 +20,18 @@ MModel convert(MModel m):
 	
 convert(MPackage p):
 	p.nestedPackage.convert()->
-	p.classifier.typeSelect(MClass).select(e|!e.stereotype.select(s|s.name == "Component").isEmpty).component();
-	//p.classifier.typeSelect(MClass).component();
+	p.classifier.typeSelect(MClass).select(e|!e.stereotype.select(s|s.name == "Component").isEmpty).componentClass();
 
 
 
-component(MClass c) :
-	info(c.name)->
+componentClass(MClass c) :
+	info("set class abstract: " + c.name)->
 	c.setAbstract(true)->
-	info(c.abstract);
+	c.operation.typeSelect(MOperation).select(e|e.name != c.name).componentOperations();
 
-
+componentOperations(MOperation op) :
+	info("--set operation abstract: " + op.name)->
+	op.setAbstract(true);
 
 
 
