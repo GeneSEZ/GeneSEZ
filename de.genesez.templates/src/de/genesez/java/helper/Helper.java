@@ -1,4 +1,4 @@
-package de.genesez.cartridges.genesezmm.java4.utilities;
+package de.genesez.java.helper;
 
 import genesezMM.MClassifier;
 import genesezMM.MPackage;
@@ -29,8 +29,7 @@ public class Helper {
 	 */
 	public static String getPackagePath(MClassifier clazz) {
 		StringBuffer p = new StringBuffer();
-		for (MPackage pkg = clazz.getOwningPackage(); pkg != null; pkg = pkg
-				.getNestingPackage()) {
+		for (MPackage pkg = clazz.getOwningPackage(); pkg != null; pkg = pkg.getNestingPackage()) {
 			p.insert(0, pkg.getName());
 			if (pkg.getNestingPackage() != null) {
 				p.insert(0, ".");

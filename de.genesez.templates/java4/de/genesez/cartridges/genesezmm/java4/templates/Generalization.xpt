@@ -2,9 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::cartridges::genesezmm::java4::extensions::DataType»
-«EXTENSION de::genesez::cartridges::genesezmm::java4::extensions::Helper»
-«EXTENSION de::genesez::cartridges::genesezmm::java4::extensions::Naming»
+«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 // generate generalization for a minterface
 «DEFINE Generalization FOR MInterface-»
 «IF !supertype.typeSelect(MInterface).isEmpty-»
-	extends «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«ENDFOREACH»
+	extends «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«EXPAND _Generics FOR c»«ENDFOREACH»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -23,7 +23,7 @@
 // generate generalization for a mclass
 «DEFINE Generalization FOR MClass-»
 «IF !supertype.typeSelect(MClass).isEmpty-»
-	extends «supertype.typeSelect(MClass).first().name.asClassifierName()»
+	extends «supertype.typeSelect(MClass).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MClass).first()»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -31,3 +31,12 @@
 // //////////////////////////////////////////////////////////////////////////////
 // private functions
 // //////////////////////////////////////////////////////////////////////////////
+
+
+// generate generics
+«DEFINE _Generics FOR MClassifier-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»

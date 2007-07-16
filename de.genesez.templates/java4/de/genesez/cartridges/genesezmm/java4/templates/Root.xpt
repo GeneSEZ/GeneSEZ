@@ -2,9 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::cartridges::genesezmm::java4::extensions::DataType»
-«EXTENSION de::genesez::cartridges::genesezmm::java4::extensions::Helper»
-«EXTENSION de::genesez::cartridges::genesezmm::java4::extensions::Naming»
+«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -13,28 +13,34 @@
 
 
 «DEFINE Root FOR MModel-»
-	«EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
+«EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
 «ENDDEFINE»
 
 
 «DEFINE Root FOR MPackage-»
-	«EXPAND Root FOREACH nestedPackage-»
-	«EXPAND Root FOREACH classifier-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
 «ENDDEFINE»
 
 
 «DEFINE Root FOR MInterface-»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 	«EXPAND Class::Root-»
+«ENDFILE-»
 «ENDDEFINE»
 
 
 «DEFINE Root FOR MClass-»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 	«EXPAND Class::Root-»
+«ENDFILE-»
 «ENDDEFINE»
 
 
 «DEFINE Root FOR MEnumeration-»
+«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 	«EXPAND Class::Root-»
+«ENDFILE-»
 «ENDDEFINE»
 
 
