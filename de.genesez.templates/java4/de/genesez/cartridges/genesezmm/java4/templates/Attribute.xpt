@@ -44,7 +44,7 @@
 «IF multiplicity == 1-»
 	«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
-	«EXPAND _Modifier» java.util.Set<«type.name»> «asAttributeName()» = new java.util.HashSet<«type.name»>();
+	«EXPAND _Modifier» java.util.Set «asAttributeName()» = new java.util.HashSet();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -52,13 +52,13 @@
 «DEFINE AttributeDerivedImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
+	«EXPAND _Modifier» «type.name» «asGetter(name)»() {
 		«getReturnTypeDeclaration(type.name)»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
 		«getReturnTypeReturn(type.name)»
 	}
 «ELSE-»
-	«EXPAND _Modifier» «IF static»static«ENDIF» java.util.Set<«type.name»> «name.toFirstLower()»() {
+	«EXPAND _Modifier» java.util.Set «asGetter(name)»() {
 		«getReturnTypeDeclaration(type.name)»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
 		«getReturnTypeReturn(type.name)»
@@ -75,7 +75,7 @@
 		return «asAttributeName()»;
 	}
 «ELSE-»
-	public «IF static»static«ENDIF» java.util.Set<«type.name»> «asGetter(name)»() {
+	public «IF static»static«ENDIF» java.util.Set «asGetter(name)»() {
 		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
 	}
 «ENDIF-»
@@ -90,7 +90,7 @@
 		this.«asAttributeName()» = «asAttributeName()»;
 	}
 «ELSE-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(java.util.HashSet<«type.name»> «asAttributeName()») {
+	public «IF static»static«ENDIF» void «asSetter(name)»(java.util.HashSet «asAttributeName()») {
 		this.«asAttributeName()» = «asAttributeName()»;
 	}
 «ENDIF-»
@@ -101,7 +101,7 @@
 «DEFINE IteratorImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
+	public «IF static»static«ENDIF» java.util.Iterator «asGetter(name)»Iterator() {
 		return «asAttributeName()».iterator();
 	}
 «ENDIF-»
@@ -121,27 +121,6 @@
 «ENDIF-»
 «ENDDEFINE»
 
-«REM»
-// generate a insert in implementation method
-«DEFINE InsertInImpl FOR MAttribute»
-«EXPAND ProtectedRegion::CommentInsertIn("java.mattribute.implementation.insertin.comment." + xmiGuid)»
-public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _in) {
-	«IF multiplicity == 1»
-		if («asAttributeName(name)» == _in) {
-			return;
-		}
-		«asAttributeName(name)» = _in;
-	«ENDIF»
-	«IF multiplicity != 1»
-		if («asAttributeName(name)».contains(_in)) {
-			return;
-		}
-		«asAttributeName(name)».add(_in);
-	«ENDIF»
-}
-«ENDDEFINE»
-«ENDREM»
-
 
 // generate a remove from implementation method
 «DEFINE RemoveFromImpl FOR MAttribute-»
@@ -155,27 +134,6 @@ public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.
 	}
 	«ENDIF-»
 «ENDDEFINE»
-
-«REM»
-// generate a remove from implementation method
-«DEFINE RemoveFromImpl FOR MAttribute»
-«EXPAND ProtectedRegion::CommentRemoveFrom("java.mattribute.implementation.removefrom.comment." + xmiGuid)»
-public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
-	«IF multiplicity == 1»
-		if («asAttributeName(name)» != _ex) {
-			return;
-		}
-		«asAttributeName(name)» = «getReturnType()»;
-	«ENDIF»
-	«IF multiplicity != 1»
-		if (!«asAttributeName(name)».contains(_ex)) {
-			return;
-		}
-		«asAttributeName(name)».remove(_ex);
-	«ENDIF»
-}
-«ENDDEFINE»
-«ENDREM»
 
 
 // //////////////////////////////////////////////////////////////////////////////
