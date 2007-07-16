@@ -40,46 +40,30 @@
 
 // generate a declaration for an attribute
 «DEFINE AssociationDecl FOR MAssociationRole-»
-«REM»
-/**
- * variable for association to «name»
-«IF hasComment()-»
- * <br>@see {@link «#asGetter(name)»}
-«ENDIF-»
- */
-«ENDREM»
 «EXPAND _CommentAssociation-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
 		private «type.name» «asVariableName(name)»;
 	«ELSE-»
-		private java.util.Set<«type.name»> «asVariableName(name)» = new java.util.HashSet<«type.name»>();
+		private java.util.Set «asVariableName(name)» = new java.util.HashSet();
 	«ENDIF-»
 «ELSE-»
-	private java.util.Map<«type.name», «assocClass().name»> «asVariableName(name)» = new java.util.HashMap<«type.name», «assocClass().name»>();
+	private java.util.Map «asVariableName(name)» = new java.util.HashMap();
 «ENDIF-»
 «ENDDEFINE»
 
 
 // generate a getter declaration method for a massociation
 «DEFINE GetterDecl FOR MAssociationRole-»
-«REM»«EXPAND ProtectedRegion::CommentGetter("java.massociation.declaration.getter.comment." + xmiGuid)»
-/**
- * accessor for association to «name» 
-«IF hasComment()-»
- * <br>«getCommentText(ownedComment)»
-«ENDIF-»
- */
- «ENDREM»
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
 		public «type.name» «asGetter(name)»();
 	«ELSE-»
-		public java.util.Set<«type.name»> «asGetter(name)»();
+		public java.util.Set «asGetter(name)»();
 	«ENDIF-»
 «ELSE-»
-	public java.util.Map<«type.name», «assocClass().name»> «asGetter(name)»();
+	public java.util.Map «asGetter(name)»();
 	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name» _other);
 «ENDIF-»
 «ENDDEFINE»
@@ -88,13 +72,6 @@
 
 // generate a getter implementation method for a MAssociation
 «DEFINE GetterImpl FOR MAssociationRole-»
-«REM»«EXPAND ProtectedRegion::CommentGetter("java.massociation.implementation.getter.comment." + xmiGuid)»
-/**
- * accessor for association to «name»«IF hasComment()-»<br>
- «getCommentText(ownedComment)»
-«ENDIF-»
- */
-«ENDREM»
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
@@ -102,12 +79,12 @@
 			return «asVariableName(name)»;
 		}
 	«ELSE-»
-		public java.util.Set<«type.name»> «asGetter(name)»() {
+		public java.util.Set «asGetter(name)»() {
 			return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
 		}
 	«ENDIF-»
 «ELSE-»
-	public java.util.Map<«type.name», «assocClass().name»> «asGetter(name)»() {
+	public java.util.Map «asGetter(name)»() {
 			return java.util.Collections.unmodifiableMap(«asVariableName(name)»);
 	}
 	
@@ -121,16 +98,8 @@
 // generate a iterator declaration method for a massociation
 «DEFINE IteratorDecl FOR MAssociationRole-»
 «IF multiplicity != 1-»
-«REM»
-/**
- * accessor for association to «name»
-«IF hasComment()-»
- * <br>@see {@link «#asGetter(name)»}
-«ENDIF-»
- */
-	«EXPAND ProtectedRegion::CommentIterator("java.massociation.declaration.iterator.comment." + xmiGuid)»«ENDREM»
 	«EXPAND _CommentAccessor-»
-	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator();
+	public java.util.Iterator «asGetter(name)»Iterator();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -138,16 +107,8 @@
 // generate a iterator implementation method for a massociation
 «DEFINE IteratorImpl FOR MAssociationRole-»
 «IF multiplicity != 1-»
-«REM»
-/**
- * accessor for association to «name»
-«IF hasComment()-»
- * <br>@see {@link «#asGetter(name)»}
-«ENDIF-»
- */
-	«EXPAND ProtectedRegion::CommentIterator("java.massociation.implementation.iterator.comment." + xmiGuid)»«ENDREM»
 	«EXPAND _CommentAccessor-»
-	public java.util.Iterator<«type.name»> «asGetter(name)»Iterator() {
+	public java.util.Iterator «asGetter(name)»Iterator() {
 	«IF  isPlainAssociation()-»
 		return «asVariableName(name)».iterator();
 	«ELSE-»
@@ -160,14 +121,6 @@
 
 // generate a insert in declaration method
 «DEFINE InsertInDecl FOR MAssociationRole-»
-«REM»
-/**
- * accessor for association to «name»
-«IF hasComment()-»
- * <br>@see {@link «#asGetter(name)»}
-«ENDIF-»
- */
-«REM»«EXPAND ProtectedRegion::CommentInsertIn("java.massociation.declaration.insertin.comment." + xmiGuid)»«ENDREM»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
 	public void insertIn«name.toFirstUpper()»(«type.name» _in);
@@ -179,14 +132,6 @@
 
 // generate a insert in implementation method
 «DEFINE InsertInImpl FOR MAssociationRole-»
-«REM»
-/**
- * accessor for association to «name»
-«IF hasComment()-»
- * <br>@see {@link «#asGetter(name)»}
-«ENDIF-»
- */
-«EXPAND ProtectedRegion::CommentInsertIn("java.massociation.implementation.insertin.comment." + xmiGuid)»«ENDREM»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
 	public void insertIn«name.toFirstUpper()»(«type.name» _in) {
@@ -226,14 +171,6 @@
 
 // generate a remove from declaration method
 «DEFINE RemoveFromDecl FOR MAssociationRole-»
-«REM»
-/**
- * accessor for association to «name»
-«IF hasComment()-»
- * <br>@see {@link «#asGetter(name)»}
-«ENDIF-»
- */
-«REM» «EXPAND ProtectedRegion::CommentRemoveFrom("java.massociation.declaration.removefrom.comment." + xmiGuid)»«ENDREM»
 «EXPAND _CommentAccessor-»
 public void removeFrom«name.toFirstUpper()»(«type.name» _ex);
 «ENDDEFINE»
@@ -241,14 +178,6 @@ public void removeFrom«name.toFirstUpper()»(«type.name» _ex);
 
 // generate a remove from implementation method
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
-«REM» EXPAND ProtectedRegion::CommentRemoveFrom("java.massociation.implementation.removefrom.comment." + xmiGuid)»
-	/**
-	 * accessor for association to «name»
-	«IF hasComment()-»
-	 * <br>@see {@link «#asGetter(name)»}
-	«ENDIF-»
-	 */
-«ENDREM»
 «EXPAND _CommentAccessor-»
 public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
 	«IF isPlainAssociation()-»
