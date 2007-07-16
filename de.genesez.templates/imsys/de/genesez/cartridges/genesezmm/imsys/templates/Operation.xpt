@@ -42,14 +42,14 @@
 // generate a declaration for an abstract operation
 «DEFINE OperationDecl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
+«EXPAND _Modifier» «returnType.name»«EXPAND _Generics FOR returnType» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
+«EXPAND _Modifier» «returnType.name»«EXPAND _Generics FOR returnType» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
 	«getReturnTypeDeclaration(returnType.name)»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 	«getReturnTypeReturn(returnType.name)»
@@ -116,5 +116,14 @@
 «DEFINE _Exception FOR MOperation-»
 «IF !raisedException.isEmpty-»
 	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name»«ENDFOREACH»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate generics
+«DEFINE _Generics FOR MClassifier-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
 «ENDIF-»
 «ENDDEFINE»

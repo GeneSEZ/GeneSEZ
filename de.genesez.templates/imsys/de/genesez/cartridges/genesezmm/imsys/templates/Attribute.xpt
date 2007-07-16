@@ -12,39 +12,13 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate attributes for a classifier
-«DEFINE AttributeDecl FOR MClassifier-»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
-«ENDDEFINE»
-
-
-«DEFINE AttributeDerivedImpl FOR MClassifier-»
-«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-»
-«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static && e.derived)-»
-«ENDDEFINE»
-
-
-// generate getter and setter methodes for all attributes of a classifier
-«DEFINE GetterSetterImpl FOR MClass-»
-«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
-«FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-»
-	«EXPAND GetterImpl FOR a-»
-	«EXPAND SetterImpl FOR a-»
-	«EXPAND IteratorImpl FOR a-»
-	«EXPAND InsertInImpl FOR a-»
-	«EXPAND RemoveFromImpl FOR a-»
-«ENDFOREACH-»
-«ENDDEFINE»
-
-
 // generate a declaration for an attribute
 «DEFINE AttributeDecl FOR MAttribute-»
 «EXPAND _CommentAttribute-»
 «IF multiplicity == 1-»
 	«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
-	«EXPAND _Modifier» java.util.Set «asAttributeName()» = new java.util.HashSet();
+	«EXPAND _Modifier» java.util.Vector «asAttributeName()» = new java.util.Vector();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -52,13 +26,13 @@
 «DEFINE AttributeDerivedImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
+	«EXPAND _Modifier» «type.name» «asGetter(name)»() {
 		«getReturnTypeDeclaration(type.name)»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
 		«getReturnTypeReturn(type.name)»
 	}
 «ELSE-»
-	«EXPAND _Modifier» «IF static»static«ENDIF» java.util.Set<«type.name»> «name.toFirstLower()»() {
+	«EXPAND _Modifier» java.util.Vector «asGetter(name)»() {
 		«getReturnTypeDeclaration(type.name)»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
 		«getReturnTypeReturn(type.name)»
@@ -75,7 +49,7 @@
 		return «asAttributeName()»;
 	}
 «ELSE-»
-	public «IF static»static«ENDIF» java.util.Set «asGetter(name)»() {
+	public «IF static»static«ENDIF» java.util.Vector «asGetter(name)»() {
 		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
 	}
 «ENDIF-»
