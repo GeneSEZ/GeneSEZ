@@ -6,6 +6,7 @@
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
+«EXTENSION de::genesez::mapping::Mapping»
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
@@ -44,7 +45,7 @@
 «IF multiplicity == 1-»
 	«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
-	«EXPAND _Modifier» java.util.Set «asAttributeName()» = new java.util.HashSet();
+	«EXPAND _Modifier» «getMapTo("Set")» «asAttributeName()» = new «getMapTo("HashSet")»();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -58,7 +59,7 @@
 		«getReturnTypeReturn(type.name)»
 	}
 «ELSE-»
-	«EXPAND _Modifier» java.util.Set «asGetter(name)»() {
+	«EXPAND _Modifier» «getMapTo("Set")» «asGetter(name)»() {
 		«getReturnTypeDeclaration(type.name)»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
 		«getReturnTypeReturn(type.name)»
@@ -75,7 +76,7 @@
 		return «asAttributeName()»;
 	}
 «ELSE-»
-	public «IF static»static«ENDIF» java.util.Set «asGetter(name)»() {
+	public «IF static»static«ENDIF» «getMapTo("Set")» «asGetter(name)»() {
 		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
 	}
 «ENDIF-»
@@ -90,7 +91,7 @@
 		this.«asAttributeName()» = «asAttributeName()»;
 	}
 «ELSE-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(java.util.HashSet «asAttributeName()») {
+	public «IF static»static«ENDIF» void «asSetter(name)»(«getMapTo("HashSet")» «asAttributeName()») {
 		this.«asAttributeName()» = «asAttributeName()»;
 	}
 «ENDIF-»
