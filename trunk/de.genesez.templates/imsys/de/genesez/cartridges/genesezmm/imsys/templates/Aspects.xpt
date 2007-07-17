@@ -9,32 +9,59 @@
 «EXTENSION de::genesez::io::io»
 
 // //////////////////////////////////////////////////////////////////////////////
-// public functions
+// aspect oriented association functions
 // //////////////////////////////////////////////////////////////////////////////
 
 
-«AROUND de::genesez::cartridges::genesezmm::imsys::templates::Class::Root FOR MClass-»
-	«info("HelloAOP")»
-	«targetDef.proceed()»
+// override the java4 getter method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::GetterImpl FOR MAssociationRole»
+	«EXPAND Association::GetterImpl»
 «ENDAROUND»
 
 
-«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::AttributeDecl FOR MAttribute»
-	«EXPAND de::genesez::cartridges::genesezmm::imsys::templates::Attribute::AttributeDecl»
-	«REM»«targetDef.proceed()»«ENDREM»
+// override the java4 iterator method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::IteratorImpl FOR MAssociationRole»
 «ENDAROUND»
 
-«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::AttributeDerivedImpl FOR MAttribute»
-	«EXPAND Attribute::AttributeDerivedImpl»
-	«REM»«targetDef.proceed()»«ENDREM»
+
+// override the java4 insertin method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::InsertInImpl FOR MAssociationRole»
+	«EXPAND Association::InsertInImpl»
 «ENDAROUND»
 
+
+// override the java4 removefrom method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::RemoveFromImpl FOR MAssociationRole»
+	«EXPAND Association::RemoveFromImpl»
+«ENDAROUND»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented attribute functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// override the java4 getter method for attributes
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::GetterImpl FOR MAttribute»
 	«EXPAND Attribute::GetterImpl»
-	«REM»«targetDef.proceed()»«ENDREM»
 «ENDAROUND»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// private functions
-// //////////////////////////////////////////////////////////////////////////////
+// override the java4 iterator method for attributes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::IteratorImpl FOR MAttribute»
+«ENDAROUND»
+
+
+// override the java4 insertin method for attributes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::InsertInImpl FOR MAttribute»
+	«EXPAND Attribute::InsertInImpl»
+«ENDAROUND»
+
+
+// override the java4 removefrom method for attributes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::RemoveFromImpl FOR MAttribute»
+	«EXPAND Attribute::RemoveFromImpl»
+«ENDAROUND»
+
+
+

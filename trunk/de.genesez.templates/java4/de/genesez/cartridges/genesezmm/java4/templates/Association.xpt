@@ -6,6 +6,7 @@
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
+«EXTENSION de::genesez::mapping::Mapping»
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
@@ -45,10 +46,10 @@
 	«IF multiplicity == 1-»
 		private «type.name» «asVariableName(name)»;
 	«ELSE-»
-		private java.util.Set «asVariableName(name)» = new java.util.HashSet();
+		private «getMapTo("Set")» «asVariableName(name)» = new «getMapTo("HashSet")»();
 	«ENDIF-»
 «ELSE-»
-	private java.util.Map «asVariableName(name)» = new java.util.HashMap();
+	private «getMapTo("Map")» «asVariableName(name)» = new «getMapTo("HashMap")»();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -60,10 +61,10 @@
 	«IF multiplicity == 1-»
 		public «type.name» «asGetter(name)»();
 	«ELSE-»
-		public java.util.Set «asGetter(name)»();
+		public «getMapTo("Set")» «asGetter(name)»();
 	«ENDIF-»
 «ELSE-»
-	public java.util.Map «asGetter(name)»();
+	public «getMapTo("Map")» «asGetter(name)»();
 	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name» _other);
 «ENDIF-»
 «ENDDEFINE»
@@ -79,12 +80,12 @@
 			return «asVariableName(name)»;
 		}
 	«ELSE-»
-		public java.util.Set «asGetter(name)»() {
+		public «getMapTo("Set")» «asGetter(name)»() {
 			return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
 		}
 	«ENDIF-»
 «ELSE-»
-	public java.util.Map «asGetter(name)»() {
+	public «getMapTo("Map")» «asGetter(name)»() {
 			return java.util.Collections.unmodifiableMap(«asVariableName(name)»);
 	}
 	

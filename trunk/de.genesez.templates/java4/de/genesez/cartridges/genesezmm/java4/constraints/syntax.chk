@@ -10,14 +10,14 @@ extension de::genesez::uml2genesezmm::io;
 
 
 // checks if all attributes are defined static final 
-context MAttribute WARNING "GeneSEZ-Gen: constant has illegal modifiers (" + "attribute: " + name + " in interface: " + classifier.name + ")" :
+context MAttribute ERROR "GeneSEZ-Gen: constant has illegal modifiers (" + "attribute: " + name + " in interface: " + classifier.name + ")" :
 	classifier.metaType == MInterface
 		? (visibility == "public" && static && final ? true : false)
 		: true;
 
 
 // checks if all methods are defined public and abstract
-context MOperation WARNING "GeneSEZ-Gen: method has illegal modifiers (" + "operation: " + name + " in interface: " + classifier.name + ")" :
+context MOperation ERROR "GeneSEZ-Gen: method has illegal modifiers (" + "operation: " + name + " in interface: " + classifier.name + ")" :
 	classifier.metaType == MInterface
 		? (visibility == "public" && abstract ? true : false)
 		: true;
