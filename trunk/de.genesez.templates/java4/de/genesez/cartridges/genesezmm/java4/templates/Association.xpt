@@ -44,12 +44,12 @@
 «EXPAND _CommentAssociation-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		private «type.name» «asVariableName(name)»;
+		«EXPAND _Modifier» «type.name» «asVariableName(name)»;
 	«ELSE-»
-		private «getMapTo("Set")» «asVariableName(name)» = new «getMapTo("HashSet")»();
+		«EXPAND _Modifier» «getMapTo("Set")» «asVariableName(name)» = new «getMapTo("HashSet")»();
 	«ENDIF-»
 «ELSE-»
-	private «getMapTo("Map")» «asVariableName(name)» = new «getMapTo("HashMap")»();
+	«EXPAND _Modifier» «getMapTo("Map")» «asVariableName(name)» = new «getMapTo("HashMap")»();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -238,4 +238,10 @@ public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
  * @see {@link «asGetter(name)»}
 «ENDIF-»
  */
+«ENDDEFINE»
+
+
+// generate modifiers for mclassifier
+«DEFINE _Modifier FOR MAssociationRole-»
+«visibility.toString()»
 «ENDDEFINE»
