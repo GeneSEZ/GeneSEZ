@@ -20,6 +20,7 @@ public class ImportChecker {
 		init(clazz);
 
 		// checks Imports
+		checkSupertypes(clazz);
 		checkProperties(clazz);
 		checkOperations(clazz);
 		
@@ -28,6 +29,15 @@ public class ImportChecker {
 
 	}
 
+	private static void checkSupertypes(MClassifier clazz) {
+		Iterator it = clazz.getSupertype().iterator();
+		MClassifier c;
+		while (it.hasNext()) {
+			c = (MClassifier)it.next();
+			insertInImports(c);
+		}
+	}
+	
 	private static void checkProperties(MClassifier clazz) {
 		Iterator it = clazz.getProperty().iterator();
 		MClassifier c;
