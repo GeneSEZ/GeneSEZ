@@ -75,9 +75,7 @@ create MTag makeTag(Property p) :
 	// set the unique xmiId and name
 	//setXmiGuid(xmiId(p))->
 	setName(p.name)->
-	setType(p.type.makeClassifier().toString())
-//	->info()
-	;
+	setType(p.type.makeClassifier().toString());
 
 private MTag processTag(Property p) :
 	let mt = makeTag(p) :
@@ -119,11 +117,10 @@ private MPackage processPackage(Package p) :
 		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mp))->
 		// recursively descend package tree
 		mp.setNestedPackage(p.ownedElement.typeSelect(Package).processPackage().setNestingPackage(mp))->
-		// add classes in package
+		// add classifier in package
 		mp.setClassifier(p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).processClassifier().setOwningPackage(mp))->
 		// map associations in package 
 		mp.setAssociation(p.ownedElement.typeSelect(Association).processAssociationPackage(mp).setOwningPackage(mp))->
-		//p.ownedMember.typeSelect(Association).processAssociationPackage(mp)->
 		mp;
 
 
@@ -148,25 +145,27 @@ create MPrimitiveType makeClassifier(Void c):
 	setXmiGuid("void")->
 	setName("void")->
 	makeModel(getUml2Model()).primitiveTypes.add(this);
+	
+// create new MClassifier from uml2 named element
+create MClassifier makeClassifier(NamedElement c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name);
+	
+// create new MClassifier from uml2 type
+create MClassifier makeClassifier(Type c):
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name);
 
+
+// create a new MEnumeration frum uml2 enumeration
 create MEnumeration makeClassifier(Enumeration c):
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
 	setName(c.name)->
 	setVisibility(c.visibility.toString())->
 	setLiteral(c.ownedLiteral.typeSelect(EnumerationLiteral).processLiteral().setOwningEnumeration(this));
-
-// create new MClassifier from uml2 named element
-create MClassifier makeClassifier(NamedElement c) :
-	// set the unique xmiId and name
-	setXmiGuid(xmiId(c))->
-	setName(c.name);
-
-// create new MClassifier from uml2 type
-create MClassifier makeClassifier(Type c):
-	// set the unique xmiId and name
-	setXmiGuid(xmiId(c))->
-	setName(c.name);
 		
 // create new MClass from uml2 class
 create MInterface makeClassifier(Interface c) :
@@ -185,7 +184,6 @@ create MClass makeClassifier(Class c) :
 	setVisibility(c.visibility.toString())->
 	setAbstract(c.isAbstract)->
 	setFinal(c.isLeaf);
-	//setGenericParameter(c.ownedTemplateSignature.getGenerics());
 
 // classes are contained in packages. 
 // they own attributes and association ends
@@ -193,27 +191,22 @@ private MClass processClassifier(Classifier c) :
 	let mc = makeClassifier(c) :
 		// add comment to classifier
 		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment().setOwningElement(mc))->
-		
 		// set generics
 		(c.ownedTemplateSignature != null ? mc.setGenericParameter(c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGenericParameter()) : "")->
-		
 		// set stereotype
 		mc.setStereotype(c.getAppliedStereotypes().processStereotype())->
 		// set tagged values
 		mc.setTaggedValue(makeTaggedValues(mc, c))->
-		//(mc.stereotype.size > 0 ? info(mc.name + " hat Stereotyp " +
-		// c.getAppliedStereotypes().name  + " value tv2: " + c.getValue(c.getAppliedStereotypes().first(), "tv2")) : "" )->
 		// add client dependency (<<use>>)
 		mc.setSupplier(c.clientDependency.supplier.makeClassifier())->
 		// add superclasses
 		mc.setSupertype(c.general.makeClassifier())->
 		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.makeClassifier())->
-		// add attributes
+		// add attributes and association ends
 		mc.setProperty(c.attribute.reject(p|p.association != null).processAttribute().setClassifier(mc))->
+		mc.property.addAll(c.attribute.select(p|p.association != null).processAssociationRole().setClassifier(mc))->
 		// add operations
 		mc.setOperation(c.getOperations().processOperaration().setClassifier(mc))->
-		// add association ends
-		mc.property.addAll(c.attribute.select(p|p.association != null).processAssociationRole().setClassifier(mc))->
 		mc;
 
 
@@ -225,6 +218,8 @@ create MLiteral makeLiteral(EnumerationLiteral l) :
 
 private MLiteral processLiteral(EnumerationLiteral l) :
 	let ml = makeLiteral(l) :
+		// add comment to classifier
+		ml.setOwnedComment(l.ownedComment.typeSelect(Comment).processComment().setOwningElement(ml))->
 		ml;
 
 
@@ -233,8 +228,8 @@ create MGeneric makeGenericParameter(ClassifierTemplateParameter c) :
 	setSpecification(((Class)c.ownedParameteredElement).name);
 	
 private MGeneric processGenericParameter(ClassifierTemplateParameter c) :
-	let mgp = makeGenericParameter(c) :
-		mgp;
+	let mg = makeGenericParameter(c) :
+		mg;
 
 
 
@@ -242,8 +237,8 @@ create MGeneric makeGenericRealization(ClassifierTemplateParameter c) :
 	setSpecification(((Class)c.ownedParameteredElement).name);
 	
 private MGeneric processGenericRealization(ClassifierTemplateParameter c) :
-	let mgr = makeGenericRealization(c) :
-		mgr;
+	let mg = makeGenericRealization(c) :
+		mg;
 
 
 
@@ -264,6 +259,10 @@ private MAttribute processAttribute(Property p) :
 	let ma = makeAttribute(p) :
 		// add comment to attribute
 		ma.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		// set stereotype
+		ma.setStereotype(p.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		ma.setTaggedValue(makeTaggedValues(ma, p))->
 		// add type of attribute
 		ma.setType(p.type.makeClassifier())->
 		ma;
@@ -284,20 +283,16 @@ private MOperation processOperaration(Operation o) :
 	let mo = makeOperation(o) :
 		// add comment to operation
 		mo.setOwnedComment(o.ownedComment.typeSelect(Comment).processComment().setOwningElement(mo))->
-
 		// set generics
 		(o.ownedTemplateSignature != null ? mo.setGenericParameter(o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGenericParameter()) : "")->
-		
+		// set stereotype
+		mo.setStereotype(o.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		mo.setTaggedValue(makeTaggedValues(mo, o))->
 		// add parameter to operation
 		mo.setParameter(o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter().setOperation(mo))->
-		// set return type (WORK AROUND)
-		//(o.type != null ? o.type.setOwnedComment(o.returnResult().ownedComment.typeSelect(Comment).processComment()) : "")->
-		//(o.type != null ? info(o.type.ownedComment) : "")->
-		//(o.type != null ? o.type.setOwnedComment(o.returnResult().ownedComment) : null)->
-		//(o.type != null ? info(o.type.ownedComment) : null)->
+		// set return type
 		mo.setReturnType(o.type.makeClassifier())->
-		//mo.returnType.setOwnedComment(o.returnResult().ownedComment.typeSelect(Comment).processComment())->
-		//mo.setReturnType(o.type.makeClassifier()).setOwnedComment(o.returnResult().ownedComment.typeSelect(Comment).processComment().setOwningElement(mo))->
 		// set raised exceptions
 		mo.setRaisedException(o.raisedException.makeClassifier())->
 		mo;
@@ -317,6 +312,10 @@ private MParameter processParameter(Parameter p) :
 		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mp))->
 		// set generic
 		//info(p.getAppliedStereotypes().getAllAttributes().typeSelect(Property).select(e|e.name == "typeModifier"))->
+		// set stereotype
+		mp.setStereotype(p.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		mp.setTaggedValue(makeTaggedValues(mp, p))->
 		// add type of parameter
 		mp.setType(p.type.makeClassifier())->
 		mp;
@@ -337,6 +336,10 @@ private MAssociationRole processAssociationRole(Property aend) :
 	let ma = makeAssociationRole(aend) :
 		// add comment to associationrole
 		ma.setOwnedComment(aend.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		// set stereotype
+		ma.setStereotype(aend.getAppliedStereotypes().processStereotype())->
+		// set tagged values
+		ma.setTaggedValue(makeTaggedValues(ma, aend))->
 		// set classifier
 		ma.setClassifier(assocEndClass(aend))->
 		ma.setType(aend.type.makeClassifier())->
@@ -402,7 +405,6 @@ private MAssociation linkEnds(MAssociation ma) :
 
 
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // private extend java functions
 ////////////////////////////////////////////////////////////////////////////////
@@ -425,11 +427,6 @@ private List[String] eToString(List obj):
 // process flat EJavaObject externally
 private List[String] eToString(Object obj):
 	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(java.lang.Object);
-
-/*
-private List[String] getGenerics(TemplateSignature obj) :
-	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(org.eclipse.uml2.uml.TemplateSignature);
-*/
 
 // the model is passed in as a global variable
 private Model getUml2Model() : GLOBALVAR uml2model;
