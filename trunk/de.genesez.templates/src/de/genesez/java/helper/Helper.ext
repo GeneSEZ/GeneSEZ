@@ -60,6 +60,11 @@ assocClass(MAssociationRole aend) :
 	aend.association.associationClass;
 
 
+// find out if an element has an stereotype
+Boolean hasStereotype(MElement e, String stereotype) :
+	!e.stereotype.typeSelect(MStereotype).select(e|e.name == stereotype).isEmpty;
+	
+
 // find out if an element has an stereotype with the tag and the correct value
 Boolean hasTaggedValue(MElement e, String stereotype, String tag, String value) :
 	!e.taggedValue.typeSelect(MTaggedValue).select(e|e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype).isEmpty;
