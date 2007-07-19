@@ -6,6 +6,7 @@
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
+«EXTENSION de::genesez::mapping::Mapping»
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
@@ -42,17 +43,17 @@
 // generate a declaration for an abstract operation
 «DEFINE OperationDecl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
+«EXPAND _Modifier» «getMapTo(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «returnType.name» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
-	«getReturnTypeDeclaration(returnType.name)»
+«EXPAND _Modifier» «getMapTo(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«getReturnTypeDeclaration(getMapTo(returnType.name))»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
-	«getReturnTypeReturn(returnType.name)»
+	«getReturnTypeReturn(getMapTo(returnType.name))»
 }
 «ENDDEFINE»
 
@@ -80,7 +81,7 @@
 
 «DEFINE _CommentReturn FOR MOperation-»
 «IF returnType.name.toLowerCase() != "void" -»
- * @return «getCommentText(returnType.ownedComment)»
+ * @return  «getCommentText(returnType.ownedComment)»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -108,7 +109,7 @@
 
 // generate a parameter list for moperation
 «DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "»«p.type.name» «p.name»«ENDFOREACH»
+«FOREACH parameter AS p SEPARATOR ", "»«getMapTo(p.type.name)» «p.name»«ENDFOREACH»
 «ENDDEFINE»
 
 

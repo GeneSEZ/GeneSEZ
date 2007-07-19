@@ -6,6 +6,7 @@
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
+«EXTENSION de::genesez::mapping::Mapping»
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
@@ -14,13 +15,21 @@
 
 // generate constructor for mclass
 «DEFINE StaticMain FOR MClassifier-»
-«IF hasTaggedValue("Application", "starting", "true")»
-	public static void main(String[] args) {
-		«EXPAND _OwnCodeImpl("java.moperation.implementation.staticmain.code." + xmiGuid)-»
-	}
-«ENDIF»
+/**
+ */
+public static void main(String[] args) {
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.staticmain.code." + xmiGuid)-»
+}
 «ENDDEFINE»
 
+
+«DEFINE ThreadRun FOR MClassifier-»
+/**
+ */
+public void run() {
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.threadrun.code." + xmiGuid)-»
+}
+«ENDDEFINE»
 
 
 
@@ -83,7 +92,7 @@
 
 // generate a parameter list for moperation
 «DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "»«p.type.name» «p.name»«ENDFOREACH»
+«FOREACH parameter AS p SEPARATOR ", "»«getMapTo(p.type.name)» «p.name»«ENDFOREACH»
 «ENDDEFINE»
 
 

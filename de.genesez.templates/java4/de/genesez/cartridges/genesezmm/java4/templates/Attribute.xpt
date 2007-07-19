@@ -43,7 +43,7 @@
 «DEFINE AttributeDecl FOR MAttribute-»
 «EXPAND _CommentAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «type.name» «asAttributeName()» «EXPAND _DefaultValue»;
+	«EXPAND _Modifier» «getMapTo(type.name)» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
 	«EXPAND _Modifier» «getMapTo("Set")» «asAttributeName()» = new «getMapTo("HashSet")»();
 «ENDIF-»
@@ -53,16 +53,16 @@
 «DEFINE AttributeDerivedImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «type.name» «asGetter(name)»() {
-		«getReturnTypeDeclaration(type.name)»
+	«EXPAND _Modifier» «getMapTo(type.name)» «asGetter(name)»() {
+		«getReturnTypeDeclaration(getMapTo(type.name))»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(type.name)»
+		«getReturnTypeReturn(getMapTo(type.name))»
 	}
 «ELSE-»
 	«EXPAND _Modifier» «getMapTo("Set")» «asGetter(name)»() {
-		«getReturnTypeDeclaration(type.name)»
+		«getReturnTypeDeclaration(getMapTo(type.name))»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(type.name)»
+		«getReturnTypeReturn(getMapTo(type.name))»
 	}
 «ENDIF-»
 «ENDDEFINE»
@@ -72,7 +72,7 @@
 «DEFINE GetterImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	public «IF static»static«ENDIF» «type.name» «asGetter(name)»() {
+	public «IF static»static«ENDIF» «getMapTo(type.name)» «asGetter(name)»() {
 		return «asAttributeName()»;
 	}
 «ELSE-»
@@ -87,7 +87,7 @@
 «DEFINE SetterImpl FOR MAttribute-»
 «EXPAND _CommentAccessor-»
 «IF multiplicity == 1-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«type.name» «asAttributeName()») {
+	public «IF static»static«ENDIF» void «asSetter(name)»(«getMapTo(type.name)» «asAttributeName()») {
 		this.«asAttributeName()» = «asAttributeName()»;
 	}
 «ELSE-»
@@ -113,7 +113,7 @@
 «DEFINE InsertInImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«type.name» _in) {
+	public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«getMapTo(type.name)» _in) {
 		if («asAttributeName()».contains(_in)) {
 			return;
 		}
@@ -127,7 +127,7 @@
 «DEFINE RemoveFromImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
+	public void removeFrom«name.toFirstUpper()»(«getMapTo(type.name)» _ex) {
 		if (!«asAttributeName()».contains(_ex)) {
 			return;
 		}

@@ -6,6 +6,7 @@
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
+«EXTENSION de::genesez::mapping::Mapping»
 «EXTENSION de::genesez::io::io»
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -43,7 +44,7 @@
 
 // override the java4 getter method for attributes
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::GetterImpl FOR MAttribute»
-	«EXPAND Attribute::GetterImpl»
+«EXPAND Attribute::GetterImpl»
 «ENDAROUND»
 
 
@@ -54,13 +55,13 @@
 
 // override the java4 insertin method for attributes
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::InsertInImpl FOR MAttribute»
-	«EXPAND Attribute::InsertInImpl»
+«EXPAND Attribute::InsertInImpl»
 «ENDAROUND»
 
 
 // override the java4 removefrom method for attributes
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::RemoveFromImpl FOR MAttribute»
-	«EXPAND Attribute::RemoveFromImpl»
+«EXPAND Attribute::RemoveFromImpl»
 «ENDAROUND»
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -68,9 +69,26 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// override the java4 getter method for attributes
+// override the java4 operation implementation method for classes
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Operation::OperationImpl FOR MClassifier»
-	«EXPAND Operation::StaticMain»
-	«targetDef.proceed()»
+«targetDef.proceed()-»
+«IF hasTaggedValue("Application", "starting", "true")-»
+	«EXPAND Operation::StaticMain-»
+«ENDIF-»
+«IF hasStereotype("ThreadComponent")-»
+	«EXPAND Operation::ThreadRun-»
+«ENDIF-»
 «ENDAROUND»
 
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented generalizazion functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// override the java4 realization method classes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Realization::Realization FOR MClass»
+«targetDef.proceed()-»
+«IF hasStereotype("ThreadComponent")-»
+	«EXPAND Realization::RunnableInterface-»
+«ENDIF-»
+«ENDAROUND»
