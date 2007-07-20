@@ -18,7 +18,7 @@ public class ImportChecker {
 	public static String getImports(MClassifier clazz) {
 		// initizial import routine
 		init(clazz);
-
+		
 		// checks Imports
 		checkSupertypes(clazz);
 		checkProperties(clazz);
@@ -28,6 +28,7 @@ public class ImportChecker {
 		return getImportString();
 
 	}
+	
 
 	private static void checkSupertypes(MClassifier clazz) {
 		Iterator it = clazz.getSupertype().iterator();
@@ -40,11 +41,11 @@ public class ImportChecker {
 	
 	private static void checkProperties(MClassifier clazz) {
 		Iterator it = clazz.getProperty().iterator();
-		MClassifier c;
+		MProperty p;
 
 		while (it.hasNext()) {
-			c = ((MProperty) it.next()).getType();
-			insertInImports(c);
+			p = (MProperty) it.next();
+			insertInImports(p.getType());
 		}
 	}
 	
