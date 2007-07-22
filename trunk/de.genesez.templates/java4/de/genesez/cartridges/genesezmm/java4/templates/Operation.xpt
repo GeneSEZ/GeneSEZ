@@ -109,7 +109,19 @@
 
 // generate a parameter list for moperation
 «DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "»«getMapTo(p.type.name)» «p.name»«ENDFOREACH»
+«FOREACH parameter AS p SEPARATOR ", "»
+	«EXPAND _Parameter FOR p-»
+«ENDFOREACH»
+«ENDDEFINE»
+
+
+// generate a parameter for moperation
+«DEFINE _Parameter FOR MParameter»
+«IF multiplicity == 1-»
+	«getMapTo(type.name)» «name»
+«ELSE-»
+	«getMapTo(type.name)»[] «name»
+«ENDIF-»
 «ENDDEFINE»
 
 

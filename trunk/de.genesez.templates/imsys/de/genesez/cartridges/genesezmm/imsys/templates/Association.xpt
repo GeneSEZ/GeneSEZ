@@ -19,23 +19,6 @@
 // override functions
 // //////////////////////////////////////////////////////////////////////////////
 
-«REM»
-// generate a getter declaration method for a massociation
-«DEFINE GetterDecl FOR MAssociationRole-»
-«EXPAND _CommentGetter-»
-«IF isPlainAssociation()-»
-	«IF multiplicity == 1-»
-		public «type.name» «asGetter(name)»();
-	«ELSE-»
-		public «getMapTo("Set")» «asGetter(name)»();
-	«ENDIF-»
-«ELSE-»
-	public «getMapTo("Map")» «asGetter(name)»();
-	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name» _other);
-«ENDIF-»
-«ENDDEFINE»
-«ENDREM»
-
 
 // generate a getter implementation method for a MAssociation
 «DEFINE GetterImpl FOR MAssociationRole-»
@@ -61,18 +44,6 @@
 «ENDIF-»
 «ENDDEFINE»
 
-
-«REM»
-// generate a insert in declaration method
-«DEFINE InsertInDecl FOR MAssociationRole-»
-«EXPAND _CommentAccessor-»
-«IF isPlainAssociation()-»
-	public void insertIn«name.toFirstUpper()»(«type.name» _in);
-«ELSE-»
-	public void insertIn«name.toFirstUpper()»(«type.name» _in, «assocClass().name» _at);
-«ENDIF-»
-«ENDDEFINE»
-«ENDREM»
 
 // generate a insert in implementation method
 «DEFINE InsertInImpl FOR MAssociationRole-»
@@ -112,13 +83,6 @@
 «ENDIF-»
 «ENDDEFINE»
 
-«REM»
-// generate a remove from declaration method
-«DEFINE RemoveFromDecl FOR MAssociationRole-»
-«EXPAND _CommentAccessor-»
-public void removeFrom«name.toFirstUpper()»(«type.name» _ex);
-«ENDDEFINE»
-«ENDREM»
 
 // generate a remove from implementation method
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
