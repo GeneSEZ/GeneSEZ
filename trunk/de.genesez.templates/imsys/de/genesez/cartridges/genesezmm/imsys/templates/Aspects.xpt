@@ -50,16 +50,16 @@
 // additional the java 4 declaration method for attribute
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::AttributeDecl FOR MClassifier»
 «targetDef.proceed()-»
-«IF hasStereotype("ThreadComponent")»
-	«EXPAND Attribute::ThreadDecl»
-«ENDIF»
+«IF hasStereotype("ThreadComponent")-»
+	«EXPAND Attribute::ThreadDecl-»
+«ENDIF-»
 «ENDAROUND»
 
 
 // addition to the java 4 getter method for attribute
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::GetterImpl FOR MAttribute»
-«IF !hasTaggedValue("AccessorModifier", "getter", "false")»
-	«targetDef.proceed()-»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")-»
+	«EXPAND Attribute::GetterImpl-»
 «ENDIF»
 «ENDAROUND»
 
@@ -67,7 +67,7 @@
 // addition to the java 4 setter method for attribute
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::SetterImpl FOR MAttribute»
 «IF !hasTaggedValue("AccessorModifier", "setter", "false")»
-	«targetDef.proceed()-»
+	«EXPAND Attribute::SetterImpl-»
 «ENDIF»
 «ENDAROUND»
 
@@ -80,7 +80,7 @@
 // addition to the java 4 insertIn method for attribute
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::InsertInImpl FOR MAttribute»
 «IF !hasTaggedValue("AccessorModifier", "insertIn", "false")»
-	«targetDef.proceed()-»
+	«EXPAND Attribute::InsertInImpl-»
 «ENDIF»
 «ENDAROUND»
 
@@ -88,8 +88,22 @@
 // addition to the java 4 removeFrom method for attribute
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::RemoveFromImpl FOR MAttribute»
 «IF !hasTaggedValue("AccessorModifier", "removeFrom", "false")»
-	«targetDef.proceed()-»
+	«EXPAND Attribute::RemoveFromImpl-»
 «ENDIF»
+«ENDAROUND»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented generalization functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// addition to the java4 generalization method classes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Generalization::Generalization FOR MClass»
+«targetDef.proceed()-»
+«IF hasStereotype("Exception")-»
+	«EXPAND Generalization::Exception-»
+«ENDIF-»
 «ENDAROUND»
 
 
@@ -109,8 +123,9 @@
 «ENDIF-»
 «ENDAROUND»
 
+
 // //////////////////////////////////////////////////////////////////////////////
-// aspect oriented generalizazion functions
+// aspect oriented realization functions
 // //////////////////////////////////////////////////////////////////////////////
 
 
