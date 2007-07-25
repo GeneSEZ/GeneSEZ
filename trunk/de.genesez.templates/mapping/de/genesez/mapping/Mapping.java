@@ -15,7 +15,7 @@ public class Mapping {
 	private static String xmlFile = "..\\de.genesez.templates\\mapping\\de\\genesez\\mapping\\templatemapping.xml";
 
 	
-	public static String typeMap(String _map, String _target) {
+	public static String typeMapping(String _map, String _target) {
 		try {
 			FileReader fr = new FileReader(xmlFile);
 			SAXReader saxReader = new SAXReader(false);

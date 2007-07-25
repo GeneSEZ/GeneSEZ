@@ -46,10 +46,10 @@
 	«IF multiplicity == 1-»
 		«EXPAND _Modifier» «type.name» «asVariableName(name)»;
 	«ELSE-»
-		«EXPAND _Modifier» «getMapTo("Set")» «asVariableName(name)» = new «getMapTo("HashSet")»();
+		«EXPAND _Modifier» «typeMap("Set")» «asVariableName(name)» = new «typeMap("HashSet")»();
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _Modifier» «getMapTo("Map")» «asVariableName(name)» = new «getMapTo("HashMap")»();
+	«EXPAND _Modifier» «typeMap("Map")» «asVariableName(name)» = new «typeMap("HashMap")»();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -61,10 +61,10 @@
 	«IF multiplicity == 1-»
 		public «type.name» «asGetter(name)»();
 	«ELSE-»
-		public «getMapTo("Set")» «asGetter(name)»();
+		public «typeMap("Set")» «asGetter(name)»();
 	«ENDIF-»
 «ELSE-»
-	public «getMapTo("Map")» «asGetter(name)»();
+	public «typeMap("Map")» «asGetter(name)»();
 	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name» _other);
 «ENDIF-»
 «ENDDEFINE»
@@ -80,12 +80,12 @@
 			return «asVariableName(name)»;
 		}
 	«ELSE-»
-		public «getMapTo("Set")» «asGetter(name)»() {
+		public «typeMap("Set")» «asGetter(name)»() {
 			return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
 		}
 	«ENDIF-»
 «ELSE-»
-	public «getMapTo("Map")» «asGetter(name)»() {
+	public «typeMap("Map")» «asGetter(name)»() {
 			return java.util.Collections.unmodifiableMap(«asVariableName(name)»);
 	}
 	
