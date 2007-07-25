@@ -105,19 +105,18 @@ package «getPackagePath()»;
 }
 «ENDDEFINE»
 
-«REM»
 // generate an enumeration
 «DEFINE Root FOR MEnumeration-»
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
-«EXPAND _Modifier» enum «asClassifierName(name)» {
+«EXPAND _Modifier» class «asClassifierName(name)» {
 
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«FOREACH literal AS l SEPARATOR ", "»«l.name»«ENDFOREACH»;
+	«FOREACH literal AS l SEPARATOR ", "»public static final String «l.name» = "«l.name»"«ENDFOREACH»;
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// own implementations
@@ -126,7 +125,7 @@ package «getPackagePath()»;
 	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
 }
 «ENDDEFINE»
-«ENDREM»
+
 
 // //////////////////////////////////////////////////////////////////////////////
 // private functions

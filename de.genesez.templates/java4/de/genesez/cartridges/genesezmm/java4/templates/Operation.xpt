@@ -34,7 +34,7 @@
 // generate constructor for mclass
 «DEFINE ConstructorImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«visibility» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
+«EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
 «EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 }
 «ENDDEFINE»
@@ -43,14 +43,14 @@
 // generate a declaration for an abstract operation
 «DEFINE OperationDecl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «typeMap(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
+«EXPAND _Modifier» «typeMap(returnType.name)» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «typeMap(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
+«EXPAND _Modifier» «typeMap(returnType.name)» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
 	«getReturnTypeDeclaration(typeMap(returnType.name))»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 	«getReturnTypeReturn(typeMap(returnType.name))»
@@ -75,7 +75,7 @@
 
 «DEFINE _CommentParameter FOR MOperation-»
 «FOREACH parameter.typeSelect(MParameter) AS p-»
- * @param  «p.name»  «getCommentText(p.ownedComment)»
+ * @param  «asParameterName(p.name)»  «getCommentText(p.ownedComment)»
 «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -87,7 +87,7 @@
 
 «DEFINE _CommentExeception FOR MOperation-»
 «FOREACH raisedException.typeSelect(MClassifier) AS c-»
- * @throws  «c.name»  «getCommentText(c.ownedComment)»
+ * @throws  «asClassifierName(c.name)»  «getCommentText(c.ownedComment)»
 «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -118,9 +118,9 @@
 // generate a parameter for moperation
 «DEFINE _Parameter FOR MParameter»
 «IF multiplicity == 1-»
-	«typeMap(type.name)» «name»
+	«typeMap(type.name)» «asParameterName(name)»
 «ELSE-»
-	«typeMap(type.name)»[] «name»
+	«typeMap(type.name)»[] «asParameterName(name)»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -128,6 +128,6 @@
 // generate exceptions for a moperation
 «DEFINE _Exception FOR MOperation-»
 «IF !raisedException.isEmpty-»
-	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name»«ENDFOREACH»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«asClassifierName(e.name)»«ENDFOREACH»
 «ENDIF-»
 «ENDDEFINE»

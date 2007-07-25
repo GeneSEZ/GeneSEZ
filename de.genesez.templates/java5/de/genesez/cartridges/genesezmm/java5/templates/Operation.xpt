@@ -2,10 +2,11 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::DataType»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::Helper»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::Naming»
+«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
 
+«EXTENSION de::genesez::mapping::Mapping»
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
@@ -33,7 +34,7 @@
 // generate constructor for mclass
 «DEFINE ConstructorImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«visibility» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
+«EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
 «EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 }
 «ENDDEFINE»
@@ -42,14 +43,14 @@
 // generate a declaration for an abstract operation
 «DEFINE OperationDecl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «returnType.name»«EXPAND _Generics FOR returnType» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
+«EXPAND _Modifier» «typeMap(returnType.name)»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «returnType.name»«EXPAND _Generics FOR returnType» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
+«EXPAND _Modifier» «typeMap(returnType.name)»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
 	«getReturnTypeDeclaration(returnType.name)»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 	«getReturnTypeReturn(returnType.name)»
