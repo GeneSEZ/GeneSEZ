@@ -2,9 +2,11 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::DataType»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::Helper»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::Naming»
+«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::mapping::Mapping»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -15,7 +17,7 @@
 // generate generalization for a minterface
 «DEFINE Generalization FOR MInterface-»
 «IF !supertype.typeSelect(MInterface).isEmpty-»
-	extends «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«EXPAND _Generics FOR c»«ENDFOREACH»
+	extends «supertype.typeSelect(MInterface).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MInterface).first()»
 «ENDIF-»
 «ENDDEFINE»
 

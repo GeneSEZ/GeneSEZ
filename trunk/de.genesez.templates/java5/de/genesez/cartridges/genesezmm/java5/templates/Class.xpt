@@ -2,9 +2,11 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::DataType»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::Helper»
-«EXTENSION de::genesez::cartridges::genesezmm::java5::extensions::Naming»
+«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::mapping::Mapping»
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
@@ -13,7 +15,6 @@
 
 // generate a interface
 «DEFINE Root FOR MInterface-»
-«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
@@ -43,13 +44,11 @@ public interface «asClassifierName(name)»«EXPAND _Generics» «EXPAND General
 	
 	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
 }
-«ENDFILE-»
 «ENDDEFINE»
 
 
 // generate a class
 «DEFINE Root FOR MClass-»
-«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
@@ -104,13 +103,11 @@ package «getPackagePath()»;
 	
 	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
 }
-«ENDFILE-»
 «ENDDEFINE»
 
 
 // generate an enumeration
 «DEFINE Root FOR MEnumeration-»
-«FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
@@ -128,7 +125,6 @@ package «getPackagePath()»;
 	
 	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
 }
-«ENDFILE-»
 «ENDDEFINE»
 
 

@@ -100,7 +100,8 @@
 «DEFINE IteratorDecl FOR MAssociationRole-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public java.util.Iterator «asGetter(name)»Iterator();
+	public java.util.Iterator «asIterator(name)»();
+«ELSE-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -109,13 +110,14 @@
 «DEFINE IteratorImpl FOR MAssociationRole-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public java.util.Iterator «asGetter(name)»Iterator() {
+	public java.util.Iterator «asIterator(name)»() {
 	«IF  isPlainAssociation()-»
 		return «asVariableName(name)».iterator();
 	«ELSE-»
 		return «asVariableName(name)».keySet().iterator();
 	«ENDIF-»
 	}
+«ELSE-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -124,9 +126,9 @@
 «DEFINE InsertInDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void insertIn«name.toFirstUpper()»(«type.name» _in);
+	public void «asInsertIn(name)»(«type.name» _in);
 «ELSE-»
-	public void insertIn«name.toFirstUpper()»(«type.name» _in, «assocClass().name» _at);
+	public void «asInsertIn(name)»(«type.name» _in, «assocClass().name» _at);
 «ENDIF-»
 «ENDDEFINE»
 
@@ -135,14 +137,14 @@
 «DEFINE InsertInImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void insertIn«name.toFirstUpper()»(«type.name» _in) {
+	public void «asInsertIn(name)»(«type.name» _in) {
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» == _in) {
 				return;
 			}
 			«IF opposite != null-»
 				if («asVariableName(name)» != null) {
-					«asVariableName(name)».removeFrom«opposite.name.toFirstUpper()»(this);
+					«asVariableName(name)».«asRemoveFrom(opposite.name)»(this);
 				}
 			«ENDIF-»
 			«asVariableName(name)» = _in;
@@ -153,17 +155,17 @@
 			«asVariableName(name)».add(_in);
 		«ENDIF-»
 		«IF opposite != null-»
-			_in.insertIn«opposite.name.toFirstUpper()»(this);
+			_in.«asInsertIn(opposite.name)»(this);
 		«ENDIF-»
 	}
 «ELSE-»
-	public void insertIn«name.toFirstUpper()»(«type.name» _in, «assocClass().name» _at) {
+	public void «asInsertIn(name)»(«type.name» _in, «assocClass().name» _at) {
 		if («asVariableName(name)».keySet().contains(_in) && «asVariableName(name)».get(_in) == _at) {
 				return;
 		}
 		«asVariableName(name)».put(_in, _at);
 	«IF opposite != null-»
-		_in.insertIn«opposite.name.toFirstUpper()»(this, _at); 
+		_in.«asInsertIn(opposite.name)»(this, _at); 
 	«ENDIF-»
 	}
 «ENDIF-»
@@ -173,14 +175,14 @@
 // generate a remove from declaration method
 «DEFINE RemoveFromDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
-public void removeFrom«name.toFirstUpper()»(«type.name» _ex);
+public void «asRemoveFrom(name)»(«type.name» _ex);
 «ENDDEFINE»
 
 
 // generate a remove from implementation method
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
-public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
+public void «asRemoveFrom(name)»(«type.name» _ex) {
 	«IF isPlainAssociation()-»
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» != _ex) {
@@ -200,7 +202,7 @@ public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
 			«asVariableName(name)».remove(_ex);
 	«ENDIF-»
 	«IF opposite != null-»
-		_ex.removeFrom«opposite.name.toFirstUpper()»(this);
+		_ex.«asRemoveFrom(opposite.name)»(this);
 	«ENDIF-»
 }
 «ENDDEFINE»
@@ -243,5 +245,5 @@ public void removeFrom«name.toFirstUpper()»(«type.name» _ex) {
 
 // generate modifiers for mclassifier
 «DEFINE _Modifier FOR MAssociationRole-»
-«visibility.toString()»
+«visibility»
 «ENDDEFINE»

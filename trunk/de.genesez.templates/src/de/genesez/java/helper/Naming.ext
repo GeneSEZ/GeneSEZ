@@ -7,6 +7,22 @@ import genesezMM;
 
 String asClassifierName(String s) :
 	s.toFirstUpper();
+	
+	
+String asVariableName(String s) :
+	s.toFirstLower();
+
+
+String asConstantName(String s) :
+	s.toUpperCase();
+
+
+String asOperationName(String s) :
+	s.toFirstLower();
+
+
+String asParameterName(String s) : 
+	s.toFirstLower();
 
 
 // 
@@ -19,17 +35,22 @@ String asSetter(String s) :
 	"set" + s.toFirstUpper();
 
 
+String asIterator(String s) :
+	asGetter(s) + "Iterator";
+
+	
+String asInsertIn(String s) :
+	"insertIn" + s.toFirstUpper();
+
+	
+String asRemoveFrom(String s) :
+	"removeFrom" + s.toFirstUpper();
+
+
 //
 String asAttributeName(MAttribute a) :
-	a.final ? _asConstantName(a.name) : _asVariableName(a.name);
+	a.final ? asConstantName(a.name) : asVariableName(a.name);
 
-
-String asVariableName(String name) :
-	_asVariableName(name);
-
-
-String asConstantName(String name) :
-	_asConstantName(name);
 
 ////////////////////////////////////////////////////////////////////////////////
 // public java functions
@@ -39,14 +60,6 @@ String asConstantName(String name) :
 ////////////////////////////////////////////////////////////////////////////////
 // private extend functions
 ////////////////////////////////////////////////////////////////////////////////
-
-
-private String _asConstantName(String constantName) :
-	constantName.toUpperCase();	
-
-
-private String _asVariableName(String attributeName) :
-	attributeName.toFirstLower();
 
 
 ////////////////////////////////////////////////////////////////////////////////
