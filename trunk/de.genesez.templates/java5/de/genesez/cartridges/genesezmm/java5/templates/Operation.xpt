@@ -75,19 +75,19 @@
 
 «DEFINE _CommentParameter FOR MOperation-»
 «FOREACH parameter.typeSelect(MParameter) AS p-»
- * @param  «p.name»  «getCommentText(p.ownedComment)»
+ * @param  «asParameterName(p.name)»  «getCommentText(p.ownedComment)»
 «ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE _CommentReturn FOR MOperation-»
 «IF returnType.name.toLowerCase() != "void" -»
- * @return «getCommentText(returnType.ownedComment)»
+ * @return  «getCommentText(returnType.ownedComment)»
 «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE _CommentExeception FOR MOperation-»
 «FOREACH raisedException.typeSelect(MClassifier) AS c-»
- * @throws  «c.name»  «getCommentText(c.ownedComment)»
+ * @throws  «asClassifierName(c.name)»  «getCommentText(c.ownedComment)»
 «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -109,14 +109,26 @@
 
 // generate a parameter list for moperation
 «DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "»«p.type.name» «p.name»«ENDFOREACH»
+«FOREACH parameter AS p SEPARATOR ", "»
+	«EXPAND _Parameter FOR p-»
+«ENDFOREACH»
+«ENDDEFINE»
+
+
+// generate a parameter for moperation
+«DEFINE _Parameter FOR MParameter»
+«IF multiplicity == 1-»
+	«typeMap(type.name)» «asParameterName(name)»
+«ELSE-»
+	«typeMap(type.name)»[] «asParameterName(name)»
+«ENDIF-»
 «ENDDEFINE»
 
 
 // generate exceptions for a moperation
 «DEFINE _Exception FOR MOperation-»
 «IF !raisedException.isEmpty-»
-	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name»«ENDFOREACH»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«asClassifierName(e.name)»«ENDFOREACH»
 «ENDIF-»
 «ENDDEFINE»
 
