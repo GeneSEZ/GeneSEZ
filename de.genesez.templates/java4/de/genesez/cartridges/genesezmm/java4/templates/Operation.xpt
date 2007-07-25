@@ -43,17 +43,17 @@
 // generate a declaration for an abstract operation
 «DEFINE OperationDecl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «getMapTo(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
+«EXPAND _Modifier» «typeMap(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception»;
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «getMapTo(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
-	«getReturnTypeDeclaration(getMapTo(returnType.name))»
+«EXPAND _Modifier» «typeMap(returnType.name)» «name»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«getReturnTypeDeclaration(typeMap(returnType.name))»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
-	«getReturnTypeReturn(getMapTo(returnType.name))»
+	«getReturnTypeReturn(typeMap(returnType.name))»
 }
 «ENDDEFINE»
 
@@ -118,9 +118,9 @@
 // generate a parameter for moperation
 «DEFINE _Parameter FOR MParameter»
 «IF multiplicity == 1-»
-	«getMapTo(type.name)» «name»
+	«typeMap(type.name)» «name»
 «ELSE-»
-	«getMapTo(type.name)»[] «name»
+	«typeMap(type.name)»[] «name»
 «ENDIF-»
 «ENDDEFINE»
 
