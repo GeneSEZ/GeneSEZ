@@ -4,16 +4,19 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EcoreFactoryImpl;
 
 /**
- * Helper Class whose single operation is called from the mapTypeName
- * extension in uml2ecore.ext
+ * Helper Class for transformation uml2ecore. 
+ * Methods are called from the functions in uml2ecore.ext
+ * 
+ * @author geobe, nicher
  */
+
 public class TransUtils {
 
 	/**
-	 * JAVA extension functions must be static methods
-	 * @param typeName the name of the UML primitive type to 
-	 * 				   be mapped to Ecore 
-	 * @return the EDataType object to which the type is mapped
+	 * Map the uml primitiv type to an ecore type.
+	 * 
+	 * @param typeName
+	 * @return
 	 */
 	public static Object mapType(String typeName) {
 		if (typeName == null ) return null;
