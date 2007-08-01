@@ -1,19 +1,19 @@
 // TODO:	returntype comment form operations export
 
-// this is the transformation that transforms UML2 
+// This is the transformation that transforms UML2 
 // class models into code generation models.
 
-// this imports the ecore metamodel; since we want to 
+// This imports the ecore metamodel; since we want to 
 // transform into an instance of ecore, we need to load 
-// this metamodel
+// this metamodel.
 import ecore;
-// import the UML2 metamodel - this is what we transform from
+// Import the UML2 metamodel - this is what we transform from.
 import uml;
-// import genesezMM metamodel
+// Import genesezMM metamodel - transform the uml2 into this metamodel.
 import genesezMM;
     
-// and we also load the io extensions, for the purpose of
-// debugging, in case we need it   
+// And we also load the io extensions, for the purpose of
+// debugging, in case we need it.
 extension de::genesez::uml2genesezmm::io;   
    
 
@@ -22,11 +22,11 @@ extension de::genesez::uml2genesezmm::io;
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// on top level, we transform a UML model into an EPackage. A 
+// on top level, we transform a UML model into an MModel. A 
 // create extension is used for this. Create extensions have
 // the sideeffect of creating an instance of the type given
 // after the create keyword. Note that the newly created 
-// EPackage can be accessed by "this" inside the function
+// MModels can be accessed by "this" inside the function
 MModel transform(Model m): 
 	let mm = makeModel(m) :
 		// add comment to model
@@ -54,7 +54,7 @@ private MComment processComment(Comment c) :
 		mc;
 
 
-
+// create new MStereotype from uml2 stereotype
 create MStereotype makeStereotype(Stereotype s) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(s))->
@@ -70,7 +70,7 @@ private MStereotype processStereotype(Stereotype s) :
 		ms;
 
 
-
+// create new MTag from uml2 property
 create MTag makeTag(Property p) :
 	// set the unique xmiId and name
 	//setXmiGuid(xmiId(p))->
@@ -80,11 +80,11 @@ create MTag makeTag(Property p) :
 private MTag processTag(Property p) :
 	let mt = makeTag(p) :
 		// add comment to taggedvalue
-//		mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt))->
+		//mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt))->
 		mt;
 
 
-
+// create new MTaggedValue
 create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	setTag(t)->
 	setValue(val)->
@@ -158,7 +158,6 @@ create MClassifier makeClassifier(Type c):
 	setXmiGuid(xmiId(c))->
 	setName(c.name);
 
-
 // create a new MEnumeration frum uml2 enumeration
 create MEnumeration makeClassifier(Enumeration c):
 	// set the unique xmiId and name
@@ -199,7 +198,7 @@ private MClass processClassifier(Classifier c) :
 		mc.setTaggedValue(makeTaggedValues(mc, c))->
 		// add client dependency (<<use>>)
 		mc.setSupplier(c.clientDependency.supplier.makeClassifier())->
-		// add superclasses
+		// add superclasses (generalizations and realizations)
 		mc.setSupertype(c.general.makeClassifier())->
 		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.makeClassifier())->
 		// add attributes and association ends
@@ -211,6 +210,7 @@ private MClass processClassifier(Classifier c) :
 
 
 
+// create new MLiteral for MEnumeration from uml2 enumeration literal
 create MLiteral makeLiteral(EnumerationLiteral l) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(l))->
@@ -224,6 +224,7 @@ private MLiteral processLiteral(EnumerationLiteral l) :
 
 
 
+// create new MGeneric from uml2 classifier template parameter
 create MGeneric makeGenericParameter(ClassifierTemplateParameter c) :
 	setSpecification(((Class)c.ownedParameteredElement).name);
 	
@@ -233,6 +234,7 @@ private MGeneric processGenericParameter(ClassifierTemplateParameter c) :
 
 
 
+// create new MGeneric from uml2 classifier template parameter
 create MGeneric makeGenericRealization(ClassifierTemplateParameter c) :
 	setSpecification(((Class)c.ownedParameteredElement).name);
 	
@@ -242,7 +244,7 @@ private MGeneric processGenericRealization(ClassifierTemplateParameter c) :
 
 
 
-// create new MAttribute from uml2 Property
+// create new MAttribute from uml2 property
 create MAttribute makeAttribute(Property p) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(p))->
@@ -254,7 +256,6 @@ create MAttribute makeAttribute(Property p) :
 	setStatic(p.isStatic)->
 	setFinal(p.isReadOnly);	
 
-// attributes at the moment are leafs in the model tree, so do nearly nothing here.
 private MAttribute processAttribute(Property p) :
 	let ma = makeAttribute(p) :
 		// add comment to attribute
@@ -268,7 +269,7 @@ private MAttribute processAttribute(Property p) :
 		ma;
 
 
-
+// create new MOperation from uml2 operation
 create MOperation makeOperation(Operation o) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(o))->
@@ -277,7 +278,6 @@ create MOperation makeOperation(Operation o) :
 	setStatic(o.isStatic)->
 	setAbstract(o.isAbstract)->
 	setFinal(o.isLeaf);
-
 
 private MOperation processOperaration(Operation o) :
 	let mo = makeOperation(o) :
@@ -299,6 +299,7 @@ private MOperation processOperaration(Operation o) :
 
 
 
+// create new MParameter from uml2 parameter
 create MParameter makeParameter(Parameter p) :
 	// set the unique xmiId and name
 	setXmiGuid(p.xmiId())->
@@ -323,6 +324,7 @@ private MParameter processParameter(Parameter p) :
 
 
 
+// create new MAssociationRole from uml2 property
 create MAssociationRole makeAssociationRole(Property aend) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(aend))->
@@ -348,7 +350,7 @@ private MAssociationRole processAssociationRole(Property aend) :
 
 
 
-// create new MAssociation from uml2 Association
+// create new MAssociation from uml2 association
 create MAssociation makeAssociation(Association a) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(a))->
@@ -436,4 +438,3 @@ private List[String] eToString(Object obj):
 
 // the model is passed in as a global variable
 private Model getUml2Model() : GLOBALVAR uml2model;
-  
