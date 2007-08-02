@@ -13,12 +13,24 @@
 // aspect oriented association functions
 // //////////////////////////////////////////////////////////////////////////////
 
+// override the java4 getter method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::GetterDecl FOR MAssociationRole»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")»
+	«EXPAND Association::GetterDecl»
+«ENDIF»
+«ENDAROUND»
+
 
 // override the java4 getter method for associations
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::GetterImpl FOR MAssociationRole»
 «IF !hasTaggedValue("AccessorModifier", "getter", "false")»
 	«EXPAND Association::GetterImpl»
 «ENDIF»
+«ENDAROUND»
+
+
+// override the java4 iterator method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::IteratorDecl FOR MAssociationRole»
 «ENDAROUND»
 
 
@@ -67,7 +79,7 @@
 // addition to the java 4 setter method for attribute
 «AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::SetterImpl FOR MAttribute»
 «IF !hasTaggedValue("AccessorModifier", "setter", "false")»
-	«EXPAND Attribute::SetterImpl-»
+	«targetDef.proceed()-»
 «ENDIF»
 «ENDAROUND»
 
