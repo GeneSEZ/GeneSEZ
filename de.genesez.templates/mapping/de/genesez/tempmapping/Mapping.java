@@ -69,7 +69,7 @@ public class Mapping {
 	 */
 	private static Document getDocument(String xmlFile) throws FileNotFoundException, DocumentException, IOException {
 		FileReader fileReader = new FileReader(xmlFile);
-		SAXReader saxReader = new SAXReader(false);
+		SAXReader saxReader = new SAXReader(true);
 		Document doc = saxReader.read(new InputSource(fileReader));
 		fileReader.close();
 		return doc;

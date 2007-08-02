@@ -9,7 +9,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.InputSource;
 
-public class Mapping {
+public class OldMapping {
 	
 	//private static String xmlFile = "E:\\workspaceDiplomarbeit\\de.genesez.templates\\mapping\\de\\genesez\\mapping\\templatemapping.xml";
 	private static String xmlFile = "..\\de.genesez.templates\\mapping\\de\\genesez\\mapping\\templatemapping.xml";
