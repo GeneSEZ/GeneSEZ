@@ -7,9 +7,9 @@
 			codeGeneratorAOP).
 			
 			Following parameters are required:
-			----------------------------------
+			==================================
 			
-			$mapTarget: 		name of the output language (i.e. Java)
+			$xmlMappingFile:	name of the xml mapping file
 			$rootTemplate: 		the root xpt-file where the generation starts
 			$outputDir: 		the path where the generated file are produced
 			$proRegDir: 		the path where the protected reagions are found
@@ -21,12 +21,15 @@
 		
 		<!-- Template files are written in the utf-8 charset. -->
 		<fileEncoding value="utf-8" />
+		
+		<!-- Working on genesezMM models also requires the EcorePackage to 
+			 be configured as a meta model. -->
 		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
 			<metaModelPackage value="genesezMM.GenesezMMPackage" />
 		</metaModel>
 		
 		<!-- Define the map target as global variable. -->
-		<globalVarDef name="mapTarget" value="'${mapTarget}'"/>
+		<globalVarDef name="xmlMappingFile" value="'${xmlMappingFile}'"/>
 		
 		<expand value="${rootTemplate}" />
 		<genPath value="${outputDir}" />
