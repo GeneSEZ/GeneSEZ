@@ -34,26 +34,13 @@ private Thread runner;
 		return «asAttributeName()»;
 	}
 «ELSE-»
-	public «IF static»static«ENDIF» «typeMap("Set")» «asGetter(name)»() {
-		return «asAttributeName()»;
+	public «IF static»static«ENDIF» «typeMap(type.name)» «asGetter(name)»(int _index) {
+		return («type.name»)«asVariableName(name)».elementAt(_index);
 	}
-«ENDIF-»
-«ENDDEFINE»
-
-
-// generate a setter implementation method for a mattribute
-«DEFINE SetterImpl FOR MAttribute-»
-«EXPAND _CommentAccessor-»
-«IF multiplicity == 1-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap(type.name)» _«asAttributeName()») {
-		«asAttributeName()» = _«asAttributeName()»;
+	
+	public «IF static»static«ENDIF» int «asGetter(name + "Count")»() {
+		return «asVariableName(name)».size();
 	}
-«ELSE-»
-«REM»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap("Set", "Implementation")» _«asAttributeName()») {
-		«asAttributeName()» = _«asAttributeName()»;
-	}
-«ENDREM»
 «ENDIF-»
 «ENDDEFINE»
 
