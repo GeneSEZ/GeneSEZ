@@ -12,21 +12,27 @@ extension de::genesez::io::io;
 ////////////////////////////////////////////////////////////////////////////////
 
 String typeMap(String map) :
-	typeMapping(map, mapTarget());
+	typeMapping(xmlMappingFile(), map);
 
 String typeMap(String map, String context) :
-	"";
+	typeMapping(xmlMappingFile(), map, context);
 	
 ////////////////////////////////////////////////////////////////////////////////
 // private extend functions
 ////////////////////////////////////////////////////////////////////////////////
 
-String mapTarget(): GLOBALVAR mapTarget;
+String xmlMappingFile(): GLOBALVAR xmlMappingFile;
 
 ////////////////////////////////////////////////////////////////////////////////
 // private java functions
 ////////////////////////////////////////////////////////////////////////////////
 
-// return the imports of a classifier
-private String typeMapping(String map, String target) :
+
+// return the mapping of a type
+private String typeMapping(String xmlFile, String map) :
 	JAVA de.genesez.mapping.Mapping.typeMapping(java.lang.String, java.lang.String);
+
+
+// return the mapping of a type with context
+private String typeMapping(String xmlFile, String map, String context) :
+	JAVA de.genesez.mapping.Mapping.typeMapping(java.lang.String, java.lang.String, java.lang.String);

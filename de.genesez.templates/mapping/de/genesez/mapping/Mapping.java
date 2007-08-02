@@ -1,4 +1,4 @@
-package de.genesez.tempmapping;
+package de.genesez.mapping;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -36,10 +36,9 @@ public class Mapping {
 	 */
 	public static String typeMapping(String xmlFile, String map, String context) {
 		try {
-			System.out.println("Search in File: " + xmlFile);
-
+			//System.out.println("Search in File: " + xmlFile);
 			Document doc = getDocument(xmlFile);
-
+			
 			String mappingType = getMappingType(doc, map, context);
 			if (mappingType != null) {
 				return mappingType;
@@ -311,9 +310,9 @@ public class Mapping {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String xmlFile = "..\\de.genesez.templates\\mapping\\de\\genesez\\tempmapping\\java4mappingimsys.xml";
+		String xmlFile = "../de.genesez.templates/imsys/de/genesez/cartridges/genesezmm/imsys/mapping/java4mappingIMSYS.xml";
 
-		String str = typeMapping(xmlFile, "List", "Implementation");
+		String str = typeMapping(xmlFile, "Set", "Implementation");
 
 		System.out.println(str);
 	}

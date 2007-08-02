@@ -45,7 +45,7 @@
 «IF multiplicity == 1-»
 	«EXPAND _Modifier» «typeMap(type.name)» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
-	«EXPAND _Modifier» «typeMap("Set")»<«type.name»> «asAttributeName()» = new «typeMap("HashSet")»<«type.name»>();
+	«EXPAND _Modifier» «typeMap("Set")»<«type.name»> «asAttributeName()» = new «typeMap("Set", "Implementation")»<«type.name»>();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -92,7 +92,7 @@
 	}
 «ELSE-»
 «REM»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap("HashSet")»t<«type.name»> _«asAttributeName()») {
+	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap("Set", "Implementation")»t<«type.name»> _«asAttributeName()») {
 		«asAttributeName()» = _«asAttributeName()»;
 	}
 «ENDREM»
