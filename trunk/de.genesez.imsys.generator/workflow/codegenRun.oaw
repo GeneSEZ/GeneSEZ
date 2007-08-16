@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- Reading the example file. -->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::xmiReader.oaw" 
+		inputModelFile="../de.genesez.imsys.pressuresensor/model/pressuresensor.uml"
+	/>
+	
+	
+	<!-- Transform uml2genesezMM. /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::uml2genesezMMProfile.oaw"
+		profile="../de.genesez.imsys.pressuresensor/model/IMSYS_Profile.profile.uml"
+		excludePackage="UML Standard Profile"
+		invokeScript="de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)"
+	/>
+	
+	
+	<!-- Do platform specific model transformations. /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::pim2psm.oaw"
+		invokeScript="de::genesez::cartridges::genesezmm::imsys::extensions::makePSM::convert(generatorModel)"
+	/>
+	
+	
+	<!-- Check constraints. /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::constraintChecker.oaw"
+		checkScript="de::genesez::cartridges::genesezmm::java4::constraints::syntax"
+		abortOnError="true"
+	/>
+	<cartridge
+		file="de::genesez::genesezmm::workflows::constraintChecker.oaw"
+		checkScript="de::genesez::cartridges::genesezmm::java4::constraints::naming"
+		abortOnError="true"
+	/>
+	<cartridge
+		file="de::genesez::genesezmm::workflows::constraintChecker.oaw"
+		checkScript="de::genesez::cartridges::genesezmm::imsys::constraints::imsys"
+		abortOnError="true"
+	/>
+	
+	
+	<!-- Write the transformed model file.  /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::xmiWriter.oaw"
+		outputModelFile="../de.genesez.imsys.pressuresensor/model/pressuresensor.ecore"
+	/>
+	
+	
+	<!-- Clean the src-gen directory.  /-->
+	<!-- cartridge
+		file="de::genesez::genesezmm::workflows::directoryCleaner.oaw"
+		cleaningDirs="../de.genesez.imsys.pressuresensor/src-gen/"
+	-->
+	
+	
+	<!-- Create java code with AOP in xpand templates.  /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::codeGeneratorAOP.oaw"
+		rootTemplate="de::genesez::cartridges::genesezmm::imsys::templates::Root::Root FOR generatorModel"
+		aspects="de::genesez::cartridges::genesezmm::imsys::templates::Aspects"
+		outputDir="../de.genesez.imsys.pressuresensor/src-gen"
+		proRegDir="../de.genesez.imsys.pressuresensor/src-gen"
+		xmlMappingFile="../de.genesez.templates/imsys/de/genesez/cartridges/genesezmm/imsys/mapping/java4mappingIMSYS.xml"
+	/>
+	
+
+</workflow>
