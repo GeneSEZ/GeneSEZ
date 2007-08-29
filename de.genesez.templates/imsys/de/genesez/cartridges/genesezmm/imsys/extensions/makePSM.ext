@@ -15,31 +15,39 @@ extension de::genesez::io::io;
 // after the create keyword. Note that the newly created 
 // EPackage can be accessed by "this" inside the function
 MModel convert(MModel m): 
-	m.ownedPackage.convert();	
+	//m.ownedPackage.convert();
+	"";
 
-	
 convert(MPackage p):
 	p.nestedPackage.convert()->
-	p.classifier.typeSelect(MClass).select(e|!e.stereotype.select(s|s.name == "Component").isEmpty).componentClass();
+	p.classifier.typeSelect(MClass)
+		.select(e|!e.stereotype.select(s|s.name == "Exception").isEmpty)
+		.convertExceptionClass();
+
+convertExceptionClass(MClass c) :
+	c.property.add(makeSerialVersionUID(c).setClassifier(c));
+
+create MAttribute makeSerialVersionUID(MClass c) :
+	setXmiGuid(c.xmiGuid + "serialVersionUID")->
+	setName("serialVersionUID")->
+	setVisibility("private")->
+	setMultiplicity(1)->
+	setDerived(false)->
+	setDefaultvalue("1L")->
+	setStatic(true)->
+	setFinal(true)->
+	setType(makeTypeLong(c));
 	
+create MClassifier makeTypeLong(MClass c) :
+	setXmiGuid(c.xmiGuid + "DataTypeLong")->
+	setName("long");
 	
-componentClass(MClass c) :
-	"";/*
-	info("set class abstract: " + c.name)->
-	c.setAbstract(true)->
-	c.operation.typeSelect(MOperation).select(e|e.name != c.name).componentOperations();
-
-componentOperations(MOperation op) :
-	info("--set operation abstract: " + op.name)->
-	op.setAbstract(true);
-*/
-
-
 
 /*
 convert(MClassifier c):
 		c.supertype.add(c.makeBeanInterface())->
 		c.setName(c.name+"Bean");
+
 
 
 
@@ -81,12 +89,9 @@ create MClass makeDto(MClassifier c):
 		setVisibility("public")->
 		setProperty(c.property.makeAttribute(this));
 
-create MAttribute makeAttribute (MProperty a, MClass c):
-		setXmiGuid(a.xmiGuid+"Dto")->
-		setName(a.name)->
-		setVisibility("public")->
-		setType(a.type)->
-		setMultiplicity(a.multiplicity);
+
+
+
 */
 		
 
