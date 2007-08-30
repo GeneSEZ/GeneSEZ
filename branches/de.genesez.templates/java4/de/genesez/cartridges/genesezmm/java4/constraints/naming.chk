@@ -1,0 +1,45 @@
+// import genesezMM meta model
+import genesezMM;
+
+// //////////////////////////////////////////////////////////////////////////////
+// java naming conventions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// checks if the package name is written in all-lowercase chars
+context MPackage WARNING "GeneSEZ-Gen: package name isn't written in all-lowercase letters (" + "package: " + name + ")" :
+	name == name.toLowerCase();
+
+
+// checks if an interface starts with a upper-case char
+context MInterface WARNING "GeneSEZ-Gen: interface name doesn't start with a capital letter (" + "classifier: " + name + ")" :
+	name == name.toFirstUpper();
+	
+
+// checks if a class starts with a upper-case char
+context MClass WARNING "GeneSEZ-Gen: class name doesn't start with a capital letter (" + "classifier: " + name + ")" :
+	name == name.toFirstUpper();
+	
+	
+// checks if an enumeration starts with a upper-case char
+context MEnumeration WARNING "GeneSEZ-Gen: enumeration name doesn't start with a capital letter (" + "classifier: " + name + ")" :
+	name == name.toFirstUpper();
+
+
+// checks if the parameter name starts with a lower-case char
+context MParameter WARNING "GeneSEZ-Gen: parameter name doesn't start with a lowercase letter (" + "parameter: " + name + " in operation: " + operation.name + " in classifier: " + operation.classifier.name + ")" : 
+	name == name.toFirstLower();
+
+
+// check if the attribute name starts with a lower-case char
+context MAttribute WARNING "GeneSEZ-Gen: variable name doesn't start with a lowercase letter (" + "variable: " + name + " in classifier: " + classifier.name + ")" :
+	final == false
+		? (name == name.toFirstLower() ? true : false)
+		: true;
+
+
+// checks if the constant name is to upper-case
+context MAttribute WARNING "GeneSEZ-Gen: constant name isn't written in all-uppercase letters (" + "constant: " + name + " in classifier: " + classifier.name + ")" :
+	final == true
+		? (name == name.toUpperCase() ? true : false)
+		: true;
