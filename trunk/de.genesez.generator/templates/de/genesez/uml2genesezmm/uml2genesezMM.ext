@@ -32,7 +32,7 @@ MModel transform(Model m):
 		// add comment to model
 		mm.setOwnedComment(m.ownedComment.typeSelect(Comment).processComment().setOwningElement(mm))->
 		// start descending package tree
-		mm.setOwnedPackage(m.ownedElement.typeSelect(Package).reject(e|((Package) e).name == ignoredPackage()).processPackage().setModel(mm))->
+		mm.setOwnedPackage(m.ownedElement.typeSelect(Package).rejectIgnoredPackages().processPackage().setModel(mm))->
 		mm;
 	
 create MModel makeModel(Model m):
@@ -418,7 +418,7 @@ private String xmiId (Element obj) :
 
 
 // externally configure packages to ignore, e.g. UML standard profile ;-)
-private String ignoredPackage(): GLOBALVAR excludePackage;
+private String ignoredPackages(): GLOBALVAR excludePackages;
 
 
 // process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)
@@ -438,3 +438,14 @@ private List[String] eToString(Object obj):
 
 // the model is passed in as a global variable
 private Model getUml2Model() : GLOBALVAR uml2model;
+
+
+// reject the ignored packages from the given package list
+private List[Package] rejectIgnoredPackages(List[Package] packages):
+	rejectPackages(packages, ignoredPackages());
+	
+
+// reject a given comma or semicolon separated list of package names from the given package list
+private List[Package] rejectPackages(List[Package] packages, String excludePackages):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.rejectExcludedPackages(java.util.List, java.lang.String);
+

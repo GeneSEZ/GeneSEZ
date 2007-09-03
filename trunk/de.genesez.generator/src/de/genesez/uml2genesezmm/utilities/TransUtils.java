@@ -6,17 +6,24 @@ import genesezMM.MPackage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.uml2.uml.Package;
 
 
 /**
  * Helper Class for transformation uml2genesezMM. 
  * Methods are called from the functions in uml2genesezMM.ext
  * 
- * @author geobe, nicher
+ * @author geobe
+ * @author nicher
+ * @author toh
+ * 
+ * 2007-08-23 toh - added possibility to exclude packages with a comma or semicolon separated list
  */
 public class TransUtils {
 	
@@ -97,5 +104,36 @@ public class TransUtils {
 	 */
 	public static String getUserName() {
 		return System.getProperty("user.name", "unknown user");
+	}
+	
+	
+	/**
+	 * Filters a list of packages with a comma or semicolon separated list of package names.
+	 * The package names can contain white space. The separation between the package names
+	 * can also contain white space for better looking.
+	 * 
+	 * @param packages			a list with uml packages, found in a model
+	 * @param excludePackages	comma or semicolon separated list with package names to exclude
+	 * @return					given list with uml packages without the excluded packages
+	 */
+	public static List<Package> rejectExcludedPackages(List<Package> packages, String excludePackages) {
+		// can't remove packages from the list while iterating over it, so store all packages to remove here
+		List<Package> toRemove = new ArrayList<Package>();
+		// note that some packages can contain the blank (' ') in their name!
+		StringTokenizer st = new StringTokenizer(excludePackages, ",;");
+		while (st.hasMoreTokens()) {
+			String s = st.nextToken().trim();
+			Iterator<Package> it = packages.iterator();
+			while (it.hasNext()) {
+				Package p = it.next();
+				if (p.getName().equals(s)) {
+					toRemove.add(p);
+				}
+			}
+		}
+		// remove all excluded packages
+		List<Package> toReturn = new ArrayList<Package>(packages);
+		toReturn.removeAll(toRemove);
+		return toReturn;
 	}
 }
