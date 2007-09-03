@@ -10,7 +10,10 @@
 			Following parameters are required:
 			==================================
 			
-			$excludePackage: 	names of the excludes packages
+			$uml2Model			name of the slot which holds the uml2 model
+			$uml2ProfileFile	name of the uml2 profile file
+			$excludePackages	comma or semicolon separated list of package names to exclude (comma blank are also permitted)
+			$genesezModel		name of the slot which holds the genesez model
 	 -->
 	
 	
@@ -34,11 +37,11 @@
 		<!-- Workin with uml2 profiles also requires the file where 
 			 the profiles are specified. -->
 		<metaModel class="oaw.uml2.profile.ProfileMetaModel">
-			<profile value="${profile}" />
+			<profile value="${uml2ProfileFile}" />
 		</metaModel>
 		
-		<globalVarDef name="uml2model" value="uml2model" />
-		<globalVarDef name="excludePackage" value="'${excludePackage}'" />
+		<globalVarDef name="uml2model" value="${uml2Model}" />
+		<globalVarDef name="excludePackages" value="'${excludePackages}'" />
 		
 		<!-- Run the model to model transformation itself. There's an 
 			 extension file called uml2genesezMM.ext in the respective location
@@ -49,7 +52,7 @@
 		
 		<!-- Finally, the return value of the transformation is put into the 
 			 generatorModel slot in the workflow. -->
-		<outputSlot value="generatorModel" />
+		<outputSlot value="${genesezModel}" />
 	</component>
 
 </workflow>
