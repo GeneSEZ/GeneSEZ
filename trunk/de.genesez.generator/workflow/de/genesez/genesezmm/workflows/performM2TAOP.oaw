@@ -3,7 +3,8 @@
 <workflow>
 	
 	<!-- 	This workflow component is provided to perform the code generation
-			with the AOP of templates.
+			(Model-to-Text Transformation) with the AOP of templates
+			(without AOP see the workflow component 'performM2T').
 			
 			Following parameters are required:
 			==================================
@@ -14,12 +15,12 @@
 			$outputDir: 		the path where the generated file are produced
 			$proRegDir: 		the path where the protected reagions are found
 								(usually the same as the output directory
-	 -->
-
-
+	-->
+	
+	
 	<!-- This component calls the codeGenerator workflow file. -->
 	<cartridge
-		file="de::genesez::genesezmm::workflows::codeGenerator.oaw"
+		file="de::genesez::genesezmm::workflows::performM2T.oaw"
 		rootTemplate="${rootTemplate}"
 		outputDir="${outputDir}"
 		proRegDir="${proRegDir}"
@@ -28,7 +29,7 @@
 	
 	
 	<!-- This component map advices around the code generation. -->
-	<component adviceTarget="codeGenerator" id="codeGeneratorAOP" class="oaw.xpand2.GeneratorAdvice">
+	<component adviceTarget="performM2T" id="performM2TAOP" class="oaw.xpand2.GeneratorAdvice">
 		<advices value="${aspects}"/>
 	</component>
 
