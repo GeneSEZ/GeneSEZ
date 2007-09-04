@@ -1,4 +1,4 @@
-package de.genesez.mapping;
+package de.genesez.typemapping;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
