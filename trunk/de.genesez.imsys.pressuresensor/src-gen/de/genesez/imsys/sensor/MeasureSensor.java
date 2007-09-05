@@ -18,27 +18,13 @@ public abstract class MeasureSensor extends Sensor implements IMeasureSensor {
 
     /**
      * variable
-     * @see {@link getMin}
      */
-    private float min = 0;
+    private float gradient = 1;
 
     /**
      * variable
-     * @see {@link getMax}
      */
-    private float max = 0;
-
-    /**
-     * variable
-     * @see {@link getAutoMeasureStop}
-     */
-    private boolean autoMeasureStop = false;
-
-    /**
-     * variable
-     * @see {@link getAutoMeasureCycleTime}
-     */
-    private int autoMeasureCycleTime = 10000;
+    private float offset = 0;
 
     /**
      * variable for association to measureController
@@ -52,15 +38,15 @@ public abstract class MeasureSensor extends Sensor implements IMeasureSensor {
 
     /**
      * @param  address
-     * @param  min
-     * @param  max
+     * @param  gradient
+     * @param  offset
      */
-    public MeasureSensor(int address, float min, float max) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184786271876_234871_596) ENABLED START --> */
+    public MeasureSensor(int address, float gradient, float offset) {
+        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188991545820_140894_1317) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
         super(address);
-        this.min = min;
-        this.max = max;
+        this.gradient = gradient;
+        this.offset = offset;
 
         /* <!-- PROTECTED REGION END --> */
     }
@@ -108,136 +94,43 @@ public abstract class MeasureSensor extends Sensor implements IMeasureSensor {
     // ////////////////////////////////////////////////////////////////////////
 
     /**
-     * Starts one measure.
      */
-    public abstract void manualMeasure();
-
-    /**
-     * Starts the auto measure mode.
-     */
-    public abstract void autoMeasure();
+    public abstract void measure();
 
     // ////////////////////////////////////////////////////////////////////////
     // generated normal method implementations
     // ////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param  measureValue
-     * @return
-     */
-    public final boolean isMeasureValueToHigh(float measureValue) {
-        boolean returnValue = false;
-
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184787485715_883554_760) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
-        if (measureValue > max) {
-            returnValue = true;
-        }
-
-        /* <!-- PROTECTED REGION END --> */
-        return returnValue;
-    }
-
-    /**
-     * @param  measureValue
-     * @return
-     */
-    public final boolean isMeasureValueNormal(float measureValue) {
-        boolean returnValue = false;
-
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184787485715_137785_761) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
-        if ((measureValue >= min) && (measureValue <= max)) {
-            returnValue = true;
-        }
-
-        /* <!-- PROTECTED REGION END --> */
-        return returnValue;
-    }
-
-    /**
-     * @param  measureValue
-     * @return
-     */
-    public final boolean isMeasureValueToLow(float measureValue) {
-        boolean returnValue = false;
-
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184787485716_66151_762) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
-        if (measureValue < min) {
-            returnValue = true;
-        }
-
-        /* <!-- PROTECTED REGION END --> */
-        return returnValue;
-    }
 
     // ////////////////////////////////////////////////////////////////////////
     // generated getter and setter method implementations
     // ////////////////////////////////////////////////////////////////////////
 
     /**
-     * accessor for attribute min
-     * Minimum value of the green range.
+     * accessor for attribute gradient
      */
-    public float getMin() {
-        return min;
+    public float getGradient() {
+        return gradient;
     }
 
     /**
-     * accessor for attribute min
-     * @see {@link getMin}
+     * accessor for attribute gradient
      */
-    public void setMin(float _min) {
-        min = _min;
+    public void setGradient(float _gradient) {
+        gradient = _gradient;
     }
 
     /**
-     * accessor for attribute max
-     * Maximum value of the green range.
+     * accessor for attribute offset
      */
-    public float getMax() {
-        return max;
+    public float getOffset() {
+        return offset;
     }
 
     /**
-     * accessor for attribute max
-     * @see {@link getMax}
+     * accessor for attribute offset
      */
-    public void setMax(float _max) {
-        max = _max;
-    }
-
-    /**
-     * accessor for attribute autoMeasureStop
-     * Starts / stops the auto measure.
-     */
-    public boolean getAutoMeasureStop() {
-        return autoMeasureStop;
-    }
-
-    /**
-     * accessor for attribute autoMeasureStop
-     * @see {@link getAutoMeasureStop}
-     */
-    public void setAutoMeasureStop(boolean _autoMeasureStop) {
-        autoMeasureStop = _autoMeasureStop;
-    }
-
-    /**
-     * accessor for attribute autoMeasureCycleTime
-     * Time between two measure events.
-     */
-    public int getAutoMeasureCycleTime() {
-        return autoMeasureCycleTime;
-    }
-
-    /**
-     * accessor for attribute autoMeasureCycleTime
-     * @see {@link getAutoMeasureCycleTime}
-     */
-    public void setAutoMeasureCycleTime(int _autoMeasureCycleTime) {
-        autoMeasureCycleTime = _autoMeasureCycleTime;
+    public void setOffset(float _offset) {
+        offset = _offset;
     }
 
     // ////////////////////////////////////////////////////////////////////////

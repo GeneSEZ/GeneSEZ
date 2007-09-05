@@ -27,11 +27,14 @@ public class PressureSensorController extends MeasureController {
 
     /**
      * @param  pressureSensor
+     * @param  min
+     * @param  max
      */
-    public PressureSensorController(PressureSensor pressureSensor) {
+    public PressureSensorController(PressureSensor pressureSensor, float min,
+        float max) {
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184788838512_821977_1247) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
-        super(pressureSensor);
+        super(pressureSensor, min, max);
         pressureSensor.insertInMeasureController(this);
 
         /* <!-- PROTECTED REGION END --> */
@@ -61,7 +64,6 @@ public class PressureSensorController extends MeasureController {
 
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185458858941_864914_1523) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
-        IMeasureSensor sensor = getMeasureSensor();
         IMeasureListener listener;
 
         // notify all listeners witch listens to the pressure sensor
@@ -69,12 +71,12 @@ public class PressureSensorController extends MeasureController {
             listener = getMeasureListener(i);
 
             listener.measureValue(e);
-            if (sensor.isMeasureValueToHigh(e.getMeasureValue())) {
-                listener.measureValueToHigh(e);
-            } else if (sensor.isMeasureValueNormal(e.getMeasureValue())) {
+            if (isMeasureValueTooHigh(e.getMeasureValue())) {
+                listener.measureValueTooHigh(e);
+            } else if (isMeasureValueNormal(e.getMeasureValue())) {
                 listener.measureValueNormal(e);
-            } else if (sensor.isMeasureValueToLow(e.getMeasureValue())) {
-                listener.measureValueToLow(e);
+            } else if (isMeasureValueTooLow(e.getMeasureValue())) {
+                listener.measureValueTooLow(e);
             }
         }
 

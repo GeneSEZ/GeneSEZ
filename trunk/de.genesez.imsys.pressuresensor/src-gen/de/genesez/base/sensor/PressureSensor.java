@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.Random;
 
 import com.dalsemi.system.I2CPort;
-import com.dalsemi.system.IllegalAddressException;
 
 import de.genesez.imsys.sensor.MeasureEvent;
 import de.genesez.imsys.sensor.MeasureSensor;
@@ -34,6 +33,16 @@ public class PressureSensor extends MeasureSensor implements Runnable {
     private boolean isAutoMeasureMode = false;
 
     /**
+     * variable
+     */
+    private boolean autoMeasureStop = false;
+
+    /**
+     * variable
+     */
+    private int autoMeasureCycleTime = 10000;
+
+    /**
      */
     private Thread runner;
 
@@ -49,16 +58,21 @@ public class PressureSensor extends MeasureSensor implements Runnable {
 
     /**
      * @param  address
-     * @param  min
-     * @param  max
+     * @param  gradient
+     * @param  offset
      */
-    public PressureSensor(int address, float min, float max) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184788551360_101481_1081) ENABLED START --> */
+    public PressureSensor(int address, float gradient, float offset) {
+        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188991660230_164612_1324) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
-        super(address, min, max);
+        super(address, gradient, offset);
 
-        // init the i2c port
-        inialI2C();
+        // initial the i2c port
+        i2c = new I2CPort();
+        // use the standard CTX, CRX pin set for i2c communication
+        SNAP.setI2CPinSet(SNAP.I2C_STDPINS);
+
+        //i2c.setClockDelay(8)
+        //i2c.setAddress(address);
 
         /* <!-- PROTECTED REGION END --> */
     }
@@ -70,36 +84,6 @@ public class PressureSensor extends MeasureSensor implements Runnable {
     // ////////////////////////////////////////////////////////////////////////
     // generated association method implementations
     // ////////////////////////////////////////////////////////////////////////
-
-    /**
-     * accessor for association to i2c
-     * Reference to the i2c bus system.
-     */
-    public I2CPort getI2c() {
-        return i2c;
-    }
-
-    /**
-     * accessor for association to i2c
-     * @see {@link getI2c}
-     */
-    public void insertInI2c(I2CPort _in) {
-        if (i2c == _in) {
-            return;
-        }
-        i2c = _in;
-    }
-
-    /**
-     * accessor for association to i2c
-     * @see {@link getI2c}
-     */
-    public void removeFromI2c(I2CPort _ex) {
-        if (i2c != _ex) {
-            return;
-        }
-        i2c = null;
-    }
 
     // ////////////////////////////////////////////////////////////////////////
     // generated abstract method declaration
@@ -160,24 +144,6 @@ public class PressureSensor extends MeasureSensor implements Runnable {
     }
 
     /**
-     * Init the i2c bus system.
-     */
-    private void inialI2C() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185799515486_913643_550) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
-
-        // initial the i2c port
-        i2c = new I2CPort();
-        // use the standard CTX, CRX pin set for i2c communication
-        SNAP.setI2CPinSet(SNAP.I2C_STDPINS);
-
-        //i2c.setClockDelay(8)
-        //i2c.setAddress(address);
-
-        /* <!-- PROTECTED REGION END --> */
-    }
-
-    /**
      */
     public void run() {
 
@@ -185,11 +151,11 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         /* <!-- TODO put your own implementation code here --> */
         synchronized (this) {
             if (isAutoMeasureMode) {
-                while (!getAutoMeasureStop()) {
+                while (!autoMeasureStop) {
                     measure();
 
                     try {
-                        Thread.sleep(getAutoMeasureCycleTime());
+                        Thread.sleep(autoMeasureCycleTime);
                     } catch (InterruptedException e) {
                     }
                 }
@@ -219,6 +185,34 @@ public class PressureSensor extends MeasureSensor implements Runnable {
      */
     public void setIsAutoMeasureMode(boolean _isAutoMeasureMode) {
         isAutoMeasureMode = _isAutoMeasureMode;
+    }
+
+    /**
+     * accessor for attribute autoMeasureStop
+     */
+    public boolean getAutoMeasureStop() {
+        return autoMeasureStop;
+    }
+
+    /**
+     * accessor for attribute autoMeasureStop
+     */
+    public void setAutoMeasureStop(boolean _autoMeasureStop) {
+        autoMeasureStop = _autoMeasureStop;
+    }
+
+    /**
+     * accessor for attribute autoMeasureCycleTime
+     */
+    public int getAutoMeasureCycleTime() {
+        return autoMeasureCycleTime;
+    }
+
+    /**
+     * accessor for attribute autoMeasureCycleTime
+     */
+    public void setAutoMeasureCycleTime(int _autoMeasureCycleTime) {
+        autoMeasureCycleTime = _autoMeasureCycleTime;
     }
 
     // ////////////////////////////////////////////////////////////////////////

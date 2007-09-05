@@ -19,6 +19,16 @@ public abstract class MeasureController implements IMeasureController {
     // ////////////////////////////////////////////////////////////////////////
 
     /**
+     * variable
+     */
+    private float min = 30;
+
+    /**
+     * variable
+     */
+    private float max = 70;
+
+    /**
      * variable for association to measureSensor
      */
     private IMeasureSensor measureSensor;
@@ -34,11 +44,15 @@ public abstract class MeasureController implements IMeasureController {
 
     /**
      * @param  measureSensor
+     * @param  min
+     * @param  max
      */
-    public MeasureController(IMeasureSensor measureSensor) {
+    public MeasureController(IMeasureSensor measureSensor, float min, float max) {
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184786332336_927305_604) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
         this.measureSensor = measureSensor;
+        this.min = min;
+        this.max = max;
 
         /* <!-- PROTECTED REGION END --> */
     }
@@ -123,9 +137,94 @@ public abstract class MeasureController implements IMeasureController {
     // generated normal method implementations
     // ////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @param  measureValue
+     * @return
+     */
+    public boolean isMeasureValueTooHigh(float measureValue) {
+        boolean returnValue = false;
+
+        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925038620_221622_1046) ENABLED START --> */
+        /* <!-- TODO put your own implementation code here --> */
+        if (measureValue > max) {
+            returnValue = true;
+        } else {
+            returnValue = false;
+        }
+
+        /* <!-- PROTECTED REGION END --> */
+        return returnValue;
+    }
+
+    /**
+     * @param  measureValue
+     * @return
+     */
+    public boolean isMeasureValueNormal(float measureValue) {
+        boolean returnValue = false;
+
+        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925045347_172705_1051) ENABLED START --> */
+        /* <!-- TODO put your own implementation code here --> */
+        if ((measureValue >= min) && (measureValue <= max)) {
+            returnValue = true;
+        } else {
+            returnValue = false;
+        }
+
+        /* <!-- PROTECTED REGION END --> */
+        return returnValue;
+    }
+
+    /**
+     * @param  measureValue
+     * @return
+     */
+    public boolean isMeasureValueTooLow(float measureValue) {
+        boolean returnValue = false;
+
+        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925050723_332702_1056) ENABLED START --> */
+        /* <!-- TODO put your own implementation code here --> */
+        if (measureValue < min) {
+            returnValue = true;
+        } else {
+            returnValue = false;
+        }
+
+        /* <!-- PROTECTED REGION END --> */
+        return returnValue;
+    }
+
     // ////////////////////////////////////////////////////////////////////////
     // generated getter and setter method implementations
     // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * accessor for attribute min
+     */
+    public float getMin() {
+        return min;
+    }
+
+    /**
+     * accessor for attribute min
+     */
+    public void setMin(float _min) {
+        min = _min;
+    }
+
+    /**
+     * accessor for attribute max
+     */
+    public float getMax() {
+        return max;
+    }
+
+    /**
+     * accessor for attribute max
+     */
+    public void setMax(float _max) {
+        max = _max;
+    }
 
     // ////////////////////////////////////////////////////////////////////////
     // own implementations
