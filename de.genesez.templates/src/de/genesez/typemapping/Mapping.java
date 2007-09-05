@@ -310,7 +310,7 @@ public class Mapping {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String xmlFile = "../de.genesez.templates/imsys/de/genesez/cartridges/genesezmm/imsys/mapping/java4mappingIMSYS.xml";
+		String xmlFile = "../de.genesez.templates/imsys/de/genesez/genesezmm/imsys/typemapping/java4mappingIMSYS.xml";
 
 		String str = typeMapping(xmlFile, "Set", "Implementation");
 
