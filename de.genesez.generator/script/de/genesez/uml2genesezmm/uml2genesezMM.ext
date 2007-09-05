@@ -75,7 +75,7 @@ create MTag makeTag(Property p) :
 	// set the unique xmiId and name
 	//setXmiGuid(xmiId(p))->
 	setName(p.name)->
-	setType(p.type.makeClassifier().toString());
+	setType(p.type.makeClassifier().name);
 
 private MTag processTag(Property p) :
 	let mt = makeTag(p) :
@@ -93,7 +93,7 @@ create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	;
 	
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	me.stereotype.property.reject(t|t.name == "base_Class").collect(
+	me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
 		mtag|e.getAppliedStereotypes().collect(
 			styp | e.getValue(styp, mtag.name).eToString().collect(
 				tagval | makeTaggedValue(mtag, tagval, me)
@@ -126,11 +126,13 @@ private MPackage processPackage(Package p) :
 
 
 // create new MPrimitivType from uml2 data type
+/* seems to be nonsense, see below -geobe-
 create MPrimitiveType makeClassifier(DataType c) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
 	setName(c.name)->
 	makeModel(getUml2Model()).primitiveTypes.add(this);
+*/
 
 // create new MPrimitivType from uml2 primitive type
 create MPrimitiveType makeClassifier(PrimitiveType c):
@@ -152,13 +154,16 @@ create MClassifier makeClassifier(NamedElement c) :
 	setXmiGuid(xmiId(c))->
 	setName(c.name);
 	
-// create new MClassifier from uml2 type
-create MClassifier makeClassifier(Type c):
+// create new MDataType from uml2 type
+create MDataType makeClassifier(DataType c):
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
-	setName(c.name);
+	setVisibility(c.visibility == null ? "public" : c.visibility.toString())->
+	setName(c.name)
+	//->info(this)
+	;
 
-// create a new MEnumeration frum uml2 enumeration
+// create a new MEnumeration from uml2 enumeration
 create MEnumeration makeClassifier(Enumeration c):
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
@@ -254,7 +259,9 @@ create MAttribute makeAttribute(Property p) :
 	setDerived(p.isDerived)->
 	setDefaultvalue(p.getDefault())->
 	setStatic(p.isStatic)->
-	setFinal(p.isReadOnly);	
+	setFinal(p.isReadOnly);
+	// @toh - needs discussion if metamodel should provide this or not
+//	setUnique(p.isUnique);	
 
 private MAttribute processAttribute(Property p) :
 	let ma = makeAttribute(p) :
