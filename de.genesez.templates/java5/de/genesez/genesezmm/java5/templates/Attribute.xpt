@@ -26,16 +26,20 @@
 «ENDDEFINE»
 
 
-// generate getter and setter methodes for all attributes of a classifier
+// generate getter and setter methods for all attributes of a classifier
 «DEFINE GetterSetterImpl FOR MClass-»
 «EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
 «FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-»
 	«EXPAND GetterImpl FOR a-»
 	«EXPAND SetterImpl FOR a-»
-	«EXPAND IteratorImpl FOR a-»
 	«EXPAND InsertInImpl FOR a-»
 	«EXPAND RemoveFromImpl FOR a-»
 «ENDFOREACH-»
+«ENDDEFINE»
+
+// generate getter methods for all attributes of a data type
+«DEFINE GetterImpl FOR MDataType-»
+«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|!e.derived)-»
 «ENDDEFINE»
 
 
@@ -100,26 +104,12 @@
 «ENDDEFINE»
 
 
-// generate a iterator implementation method for a mattribute
-«DEFINE IteratorImpl FOR MAttribute-»
-«IF multiplicity != 1-»
-	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» java.util.Iterator<«type.name»> «asIterator(name)»() {
-		return «asAttributeName()».iterator();
-	}
-«ELSE-»
-«ENDIF-»
-«ENDDEFINE»
-
 
 // generate a insert in implementation method
 «DEFINE InsertInImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» void «asInsertIn(name)»(«typeMap(type.name)» _in) {
-		if («asAttributeName()».contains(_in)) {
-			return;
-		}
+	public «IF static»static«ENDIF» void «asAddTo(name)»(«typeMap(type.name)» _in) {
 		«asAttributeName()».add(_in);
 	}
 «ELSE-»
@@ -132,9 +122,6 @@
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
 	public void «asRemoveFrom(name)»(«typeMap(type.name)» _ex) {
-		if (!«asAttributeName()».contains(_ex)) {
-			return;
-		}
 		«asAttributeName()».remove(_ex);
 	}
 «ELSE-»
@@ -148,32 +135,25 @@
 
 
 «DEFINE _CommentAttribute FOR MAttribute-»
-/**
- * variable
 «IF hasComment()-»
- * @see {@link «asGetter(name)»}
+/** @see {@link «asGetter(name)»} */
 «ENDIF-»
- */
 «ENDDEFINE»
 
 
 «DEFINE _CommentGetter FOR MAttribute-»
-/**
- * accessor for attribute «asAttributeName()»
 «IF hasComment()-»
- * «getCommentText(ownedComment)»
+/**
+  * «getCommentText(ownedComment)»
+  */
 «ENDIF-»
- */
 «ENDDEFINE»
 
 
 «DEFINE _CommentAccessor FOR MAttribute-»
-/**
- * accessor for attribute «asAttributeName()»
 «IF hasComment()-»
- * @see {@link «asGetter(name)»}
+/** @see {@link «asGetter(name)»} */
 «ENDIF-»
- */
 «ENDDEFINE»
 
 
