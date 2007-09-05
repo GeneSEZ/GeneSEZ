@@ -39,12 +39,6 @@ public class TcpIpSocket {
     private Socket server;
 
     /**
-     * variable for association to reader
-     * @see {@link getReader}
-     */
-    private SocketReader reader;
-
-    /**
      * variable for association to writer
      * @see {@link getWriter}
      */
@@ -96,7 +90,6 @@ public class TcpIpSocket {
             throw new IOException("Host or port not initialized");
         }
         server = new Socket(address, port);
-        reader = new SocketReader(server.getInputStream());
         writer = new SocketWriter(server.getOutputStream());
 
         /* <!-- PROTECTED REGION END --> */
@@ -109,7 +102,6 @@ public class TcpIpSocket {
     public void close() throws IOException {
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185392319195_711499_1236) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
-        reader.close();
         writer.close();
         server.close();
 

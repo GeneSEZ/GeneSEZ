@@ -30,6 +30,24 @@ public interface IMeasureController {
      */
     public abstract void sendMeasureValue(MeasureEvent e);
 
+    /**
+     * @param  measureValue
+     * @return
+     */
+    public abstract boolean isMeasureValueTooHigh(float measureValue);
+
+    /**
+     * @param  measureValue
+     * @return
+     */
+    public abstract boolean isMeasureValueNormal(float measureValue);
+
+    /**
+     * @param  measureValue
+     * @return
+     */
+    public abstract boolean isMeasureValueTooLow(float measureValue);
+
     // ////////////////////////////////////////////////////////////////////////
     // own implementations
     // ////////////////////////////////////////////////////////////////////////

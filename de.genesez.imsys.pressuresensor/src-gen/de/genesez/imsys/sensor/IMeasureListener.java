@@ -31,22 +31,22 @@ public interface IMeasureListener {
     public abstract void measureValue(MeasureEvent e);
 
     /**
+     * Receives the measure value if the measure value is to high.
+     * @param  e
+     */
+    public abstract void measureValueTooHigh(MeasureEvent e);
+
+    /**
      * Receives the measure event if the measure value is in the green range.
      * @param  e
      */
     public abstract void measureValueNormal(MeasureEvent e);
 
     /**
-     * Receives the measure value if the measure value is to high.
-     * @param  e
-     */
-    public abstract void measureValueToHigh(MeasureEvent e);
-
-    /**
      * Receives the measure value if the measure value is to low.
      * @param  e
      */
-    public abstract void measureValueToLow(MeasureEvent e);
+    public abstract void measureValueTooLow(MeasureEvent e);
 
     // ////////////////////////////////////////////////////////////////////////
     // own implementations

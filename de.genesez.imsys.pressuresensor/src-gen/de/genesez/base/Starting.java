@@ -70,13 +70,12 @@ public class Starting {
                 ConfigParameter.getFTP_PASSWORT());
 
         // create a i2c pressure sensor
-        final PressureSensor ps =
-            new PressureSensor(4711, ConfigParameter.getPS_MIN(),
-                ConfigParameter.getPS_MAX());
+        final PressureSensor ps = new PressureSensor(4711, 1, 0);
         ps.setAutoMeasureCycleTime(ConfigParameter.getPS_CYCLETIME());
 
         // create a presure sensor controller and add the i2c pressure sensor
-        final PressureSensorController psc = new PressureSensorController(ps);
+        final PressureSensorController psc = new PressureSensorController(ps, ConfigParameter.getPS_MIN(),
+                ConfigParameter.getPS_MAX());
 
         // create socket and smtp mailer for the pressure watcher
         final Mailbox mb = new Mailbox();

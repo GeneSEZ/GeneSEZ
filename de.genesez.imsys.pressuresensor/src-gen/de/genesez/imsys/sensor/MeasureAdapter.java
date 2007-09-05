@@ -59,6 +59,18 @@ public class MeasureAdapter implements IMeasureListener {
     }
 
     /**
+     * Receives the measure value if the measure value is to low.
+     * @param  e
+     */
+    public void measureValueTooHigh(MeasureEvent e) {
+
+        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184786144595_530424_586) ENABLED START --> */
+        /* <!-- TODO put your own implementation code here --> */
+
+        /* <!-- PROTECTED REGION END --> */
+    }
+
+    /**
      * Receives the measure event if the measure value is in the green range.
      * @param  e
      */
@@ -74,21 +86,9 @@ public class MeasureAdapter implements IMeasureListener {
      * Receives the measure value if the measure value is to high.
      * @param  e
      */
-    public void measureValueToLow(MeasureEvent e) {
+    public void measureValueTooLow(MeasureEvent e) {
 
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184786144594_386678_584) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
-
-        /* <!-- PROTECTED REGION END --> */
-    }
-
-    /**
-     * Receives the measure value if the measure value is to low.
-     * @param  e
-     */
-    public void measureValueToHigh(MeasureEvent e) {
-
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184786144595_530424_586) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
 
         /* <!-- PROTECTED REGION END --> */

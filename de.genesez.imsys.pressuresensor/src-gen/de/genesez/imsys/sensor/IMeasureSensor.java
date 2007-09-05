@@ -25,32 +25,8 @@ public interface IMeasureSensor {
     // ////////////////////////////////////////////////////////////////////////
 
     /**
-     * Starts the manual measure mode which measure only one time.
      */
-    public abstract void manualMeasure();
-
-    /**
-     * Starts the auto measure mode.
-     */
-    public abstract void autoMeasure();
-
-    /**
-     * @param  measureValue
-     * @return
-     */
-    public abstract boolean isMeasureValueToHigh(float measureValue);
-
-    /**
-     * @param  measureValue
-     * @return
-     */
-    public abstract boolean isMeasureValueNormal(float measureValue);
-
-    /**
-     * @param  measureValue
-     * @return
-     */
-    public abstract boolean isMeasureValueToLow(float measureValue);
+    public abstract void measure();
 
     // ////////////////////////////////////////////////////////////////////////
     // own implementations
