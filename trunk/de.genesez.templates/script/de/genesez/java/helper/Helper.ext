@@ -3,7 +3,7 @@ import genesezMM;
 
 extension de::genesez::java::helper::DataType;
 extension de::genesez::java::helper::Naming;
-
+extension de::genesez::io::io;
 
 ////////////////////////////////////////////////////////////////////////////////
 // public extend functions
@@ -59,6 +59,17 @@ isPlainAssociation(MAssociationRole aend) :
 assocClass(MAssociationRole aend) :
 	aend.association.associationClass;
 
+// get a list of all own member attributes excluding inherited
+List getOwnAttributes(MClassifier c) :
+	c.property.typeSelect(MAttribute).select(a|!a.final && !a.derived);
+
+// get a list of all member attributes including inherited
+List getAllAttributes(MClassifier c) :
+	{}.add(c.getOwnAttributes()).add(c.getParentAttributes()).flatten();
+
+// get a list of all inherited member attributes
+List getParentAttributes(MClassifier c) :
+	c.supertype.isEmpty ? {} : c.supertype.first().getAllAttributes();
 
 // find out if an element has an stereotype
 Boolean hasStereotype(MElement e, String stereotype) :
@@ -68,6 +79,14 @@ Boolean hasStereotype(MElement e, String stereotype) :
 // find out if an element has an stereotype with the tag and the correct value
 Boolean hasTaggedValue(MElement e, String stereotype, String tag, String value) :
 	!e.taggedValue.typeSelect(MTaggedValue).select(e|e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype).isEmpty;
+
+// find out if an element has an aspect with specified domain and name
+Boolean hasAspect(MElement e, String domain, String name) :
+	!e.aspect.select(a|a.domain == domain && a.name == name).isEmpty;
+
+// find out if an element has an aspect with specified domain
+Boolean hasAspect(MElement e, String domain) :
+	!e.aspect.select(a|a.domain == domain).isEmpty;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -96,6 +115,14 @@ String getUserName() :
 // return the imports of a classifier
 String getImports(MClassifier clazz) :
 	JAVA de.genesez.java.helper.ImportChecker.getImports(genesezMM.MClassifier);
+	
+// save a model reference in GlobalStore
+Void saveModel(MModel model) :
+	JAVA de.genesez.java.helper.GlobalStore.setModel(genesezMM.MModel);
+	
+// retrieve a model reference from GobalStore
+MModel retrieveModel() :
+	JAVA de.genesez.java.helper.GlobalStore.getModel();
 
 ////////////////////////////////////////////////////////////////////////////////
 // private extend functions
