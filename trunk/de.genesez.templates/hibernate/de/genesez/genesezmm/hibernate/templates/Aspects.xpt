@@ -1,7 +1,7 @@
 «REM» import code gen meta model «ENDREM»
 «IMPORT genesezMM»
-«IMPORT de::genesez::cartridges::genesezmm::java5::templates»
-«IMPORT de::genesez::cartridges::genesezmm::hibernate::templates»
+«IMPORT de::genesez::genesezmm::java5::templates»
+«IMPORT de::genesez::genesezmm::hibernate::templates»
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::java::helper::DataType»
@@ -9,7 +9,7 @@
 «EXTENSION de::genesez::java::helper::HibernateHelper»
 «EXTENSION de::genesez::java::helper::Naming»
 
-«EXTENSION de::genesez::mapping::Mapping»
+«EXTENSION de::genesez::typemapping::Mapping»
 «EXTENSION de::genesez::io::io» 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 // override the java5 setter method for immutable attributes
-«AROUND de::genesez::cartridges::genesezmm::java5::templates::Attribute::SetterImpl FOR MAttribute»
+«AROUND de::genesez::genesezmm::java5::templates::Attribute::SetterImpl FOR MAttribute»
 «IF !hasAspect("generate", "immutable")-»
 	«targetDef.proceed()»
 «ELSE-»
@@ -26,7 +26,7 @@
 «ENDAROUND»
 
 // add class mapping to persistent classes
-«AROUND de::genesez::cartridges::genesezmm::java5::templates::Root::Root FOR MClass»
+«AROUND de::genesez::genesezmm::java5::templates::Root::Root FOR MClass»
 «IF hasAspect("persistent")-»
 	«name.rememberHibernateClassForMapping()»
 	«EXPAND HibernateConfig::HbMappingFile»
@@ -35,7 +35,7 @@
 «ENDAROUND»
 
 // write hibernate mapping file
-«AROUND de::genesez::cartridges::genesezmm::java5::templates::Root::Root FOR MModel»
+«AROUND de::genesez::genesezmm::java5::templates::Root::Root FOR MModel»
 	«targetDef.proceed()»
 «IF !classToMap().isEmpty-»
 	«EXPAND HibernateConfig::HbmConfigFile FOR null»
