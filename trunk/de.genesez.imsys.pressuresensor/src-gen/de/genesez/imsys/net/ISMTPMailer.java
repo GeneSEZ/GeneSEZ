@@ -27,56 +27,6 @@ public interface ISMTPMailer {
     // ////////////////////////////////////////////////////////////////////////
 
     /**
-     * @return
-     */
-    public abstract String getDomain();
-
-    /**
-     * @param  domain
-     */
-    public abstract void setDomain(String domain);
-
-    /**
-     * @return
-     */
-    public abstract String getServer();
-
-    /**
-     * @param  server
-     */
-    public abstract void setServer(String server);
-
-    /**
-     * @return
-     */
-    public abstract int getPort();
-
-    /**
-     * @param  port
-     */
-    public abstract void setPort(int port);
-
-    /**
-     * @return
-     */
-    public abstract String getUserName();
-
-    /**
-     * @param  userName
-     */
-    public abstract void setUserName(String userName);
-
-    /**
-     * @return
-     */
-    public abstract String getPassWord();
-
-    /**
-     * @param  passWord
-     */
-    public abstract void setPassWord(String passWord);
-
-    /**
      * Send the mail.
      * @param  smtpMail
      */

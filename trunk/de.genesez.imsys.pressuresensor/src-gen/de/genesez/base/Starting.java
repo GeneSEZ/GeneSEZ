@@ -74,7 +74,8 @@ public class Starting {
         ps.setAutoMeasureCycleTime(ConfigParameter.getPS_CYCLETIME());
 
         // create a presure sensor controller and add the i2c pressure sensor
-        final PressureSensorController psc = new PressureSensorController(ps, ConfigParameter.getPS_MIN(),
+        final PressureSensorController psc =
+            new PressureSensorController(ps, ConfigParameter.getPS_MIN(),
                 ConfigParameter.getPS_MAX());
 
         // create socket and smtp mailer for the pressure watcher
