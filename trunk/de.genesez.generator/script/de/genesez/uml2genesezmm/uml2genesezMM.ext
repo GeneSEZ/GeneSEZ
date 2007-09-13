@@ -12,9 +12,8 @@ import uml;
 // Import genesezMM metamodel - transform the uml2 into this metamodel.
 import genesezMM;
     
-// And we also load the io extensions, for the purpose of
-// debugging, in case we need it.
-extension de::genesez::uml2genesezmm::io;   
+//	using logging functionality (contained metamodel project)
+extension de::genesez::io::io;
    
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -96,6 +95,7 @@ create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	;
 	
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
+	info("--> make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
 		mtag|e.getAppliedStereotypes().collect(
 			styp | e.getValue(styp, mtag.name).eToString().collect(
