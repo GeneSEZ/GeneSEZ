@@ -31,11 +31,6 @@ public class PressureWatcher implements Runnable {
     private boolean autoSendingStop = false;
 
     /**
-     * variable
-     */
-    private int autoSendingCycleTime = 10000;
-
-    /**
      */
     private Thread runner;
 
@@ -109,8 +104,9 @@ public class PressureWatcher implements Runnable {
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185645360153_389597_875) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
         synchronized (mailbox) {
-            mailbox.setValue(DateFormatter.getUTCFormat(e.getTimeStamp()) +
-                " " + e.getMeasureValue());
+            mailbox.setValue("Sensor: " + e.getAddress() + " send: " +
+                e.getMeasureValue() + " at: " +
+                DateFormatter.getUTCFormat(e.getTimeStamp()));
             mailbox.notifyAll();
         }
 
@@ -192,20 +188,6 @@ public class PressureWatcher implements Runnable {
      */
     public void setAutoSendingStop(boolean _autoSendingStop) {
         autoSendingStop = _autoSendingStop;
-    }
-
-    /**
-     * accessor for attribute autoSendingCycleTime
-     */
-    public int getAutoSendingCycleTime() {
-        return autoSendingCycleTime;
-    }
-
-    /**
-     * accessor for attribute autoSendingCycleTime
-     */
-    public void setAutoSendingCycleTime(int _autoSendingCycleTime) {
-        autoSendingCycleTime = _autoSendingCycleTime;
     }
 
     // ////////////////////////////////////////////////////////////////////////

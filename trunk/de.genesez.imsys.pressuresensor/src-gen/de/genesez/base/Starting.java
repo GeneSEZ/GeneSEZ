@@ -70,7 +70,7 @@ public class Starting {
                 ConfigParameter.getFTP_PASSWORT());
 
         // create a i2c pressure sensor
-        final PressureSensor ps = new PressureSensor(4711, 1, 0);
+        final PressureSensor ps = new PressureSensor(0x78, 1, 0);
         ps.setAutoMeasureCycleTime(ConfigParameter.getPS_CYCLETIME());
 
         // create a presure sensor controller and add the i2c pressure sensor
