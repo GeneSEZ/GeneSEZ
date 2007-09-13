@@ -8,12 +8,12 @@ import java.lang.Thread;
 import java.util.Date;
 import java.util.Random;
 
+import com.dalsemi.onewire.utils.Address;
 import com.dalsemi.system.I2CPort;
+import com.dalsemi.system.IllegalAddressException;
 
 import de.genesez.imsys.sensor.MeasureEvent;
 import de.genesez.imsys.sensor.MeasureSensor;
-
-import se.imsys.system.SNAP;
 
 /* <!-- PROTECTED REGION END --> */
 /**
@@ -67,12 +67,17 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         super(address, gradient, offset);
 
         // initial the i2c port
-        i2c = new I2CPort();
-        // use the standard CTX, CRX pin set for i2c communication
-        SNAP.setI2CPinSet(SNAP.I2C_STDPINS);
+        //i2c = new I2CPort();
 
-        //i2c.setClockDelay(8)
-        //i2c.setAddress(address);
+        // The PCF8574 is capable of I2C clock frequency of 100kHz, so
+        // set the I2C bus speed to 8 (will result in a 10.8µs clock
+        // period on the I2C bus).
+        //i2c.setClockDelay(8);
+
+        // Set the device address to use for subsequent read and write
+        // operations. The low three bits should match the setting on
+        // the hardware address pins of the device. 
+        //i2c.setAddress((byte) (0x20 | (address & 0x07)));
 
         /* <!-- PROTECTED REGION END --> */
     }
@@ -100,18 +105,43 @@ public class PressureSensor extends MeasureSensor implements Runnable {
 
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184788568835_800356_1085) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
-        float measure =
-            Math.abs(new Random(new Date().getTime()).nextInt()) % 100;
-        getMeasureController().sendMeasureValue(new MeasureEvent(measure));
+        float measure;
+        MeasureEvent me;
+
+        // actual way to get a pressurevalue
+        // by random
+        measure = Math.abs(new Random(new Date().getTime()).nextInt()) % 100;
+        // correct measurevalue
+        measure = getGradient() * measure + getOffset();
+        // create measureevent
+        me = new MeasureEvent(getAddress(), measure);
+        // send measurevalue to pressurecontroller
+        getMeasureController().sendMeasureValue(me);
 
         /*
-        byte[] bytes = new byte[1];
+        // right way to get a pressurevaule
+        // by i2c-bus
+        byte[] buf = new byte[1];
         try {
-            i2c.read(bytes, 0, 1);
+            // posible write command to get
+            // the pressuevalue
+            buf[0] = 0x55;
+            // write command for pressurevalue
+            i2c.write(buf, 0, 1);
+            // read pressurevalue
+            i2c.read(buf, 0, 1);
+            // get preadure value from substring 4-7
+            // for example buf = 25253520,
+            // pressurevalue = 3520
+            measure = Float.parseFloat(new String(buf).substring(4, 7));
+            // correct measurevalue
+            measure = getGradient() * measure + getOffset();
+            // create measureevent
+            me = new MeasureEvent(getAddress(), measure);
+            // send measurevalue to pressurecontroller
+            getMeasureController().sendMeasureValue(me);
         } catch (IllegalAddressException e) {
         }
-        float measure = Integer.parseInt(new String(bytes));
-        getMeasureController().sendMeasureValue(new MeasureEvent(measure));
         */
 
         /* <!-- PROTECTED REGION END --> */

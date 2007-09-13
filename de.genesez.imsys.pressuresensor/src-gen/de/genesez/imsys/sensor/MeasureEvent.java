@@ -20,6 +20,11 @@ public class MeasureEvent {
 
     /**
      * variable
+     */
+    private int address;
+
+    /**
+     * variable
      * @see {@link getMeasureValue}
      */
     private float measureValue;
@@ -35,11 +40,13 @@ public class MeasureEvent {
     // ////////////////////////////////////////////////////////////////////////
 
     /**
+     * @param  address
      * @param  measureValue
      */
-    public MeasureEvent(float measureValue) {
+    public MeasureEvent(int address, float measureValue) {
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184785764716_332171_526) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
+        this.address = address;
         this.measureValue = measureValue;
         this.timeStamp = new Date();
 
@@ -65,6 +72,20 @@ public class MeasureEvent {
     // ////////////////////////////////////////////////////////////////////////
     // generated getter and setter method implementations
     // ////////////////////////////////////////////////////////////////////////
+
+    /**
+     * accessor for attribute address
+     */
+    public int getAddress() {
+        return address;
+    }
+
+    /**
+     * accessor for attribute address
+     */
+    public void setAddress(int _address) {
+        address = _address;
+    }
 
     /**
      * accessor for attribute measureValue
