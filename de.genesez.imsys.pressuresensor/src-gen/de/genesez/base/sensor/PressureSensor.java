@@ -125,9 +125,10 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         try {
             // posible write command to get
             // the pressuevalue
-            buf[0] = 0x55;
+            //buf[0] = 0x55;
+            buf = new String("IR_78004").getBytes();
             // write command for pressurevalue
-            i2c.write(buf, 0, 1);
+            i2c.write(buf, 0, buf.length);
             // read pressurevalue
             i2c.read(buf, 0, 1);
             // get preadure value from substring 4-7
