@@ -156,6 +156,7 @@ public class PressureWatcher implements Runnable {
                     mail.setTo(ConfigParameter.getEMAIL_TO());
                     mail.setSubject("PressureSensor");
                     mail.setMessage(mailbox.getValue());
+                    mailbox.setValue(null);
                     mailer.sendMail(mail);
                 }
             }
