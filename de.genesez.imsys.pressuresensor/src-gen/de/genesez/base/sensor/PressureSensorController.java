@@ -65,7 +65,7 @@ public class PressureSensorController extends MeasureController {
         /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185458858941_864914_1523) ENABLED START --> */
         /* <!-- TODO put your own implementation code here --> */
         IMeasureListener listener;
-
+        
         // notify all listeners witch listens to the pressure sensor
         for (int i = 0; i < getMeasureListenerCount(); i++) {
             listener = getMeasureListener(i);
