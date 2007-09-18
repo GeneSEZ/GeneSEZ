@@ -3,15 +3,17 @@
 	ant build file for automation of model transformation steps
 	@author	dreamer
 	
-	includes:
-	- starts oaw workflow to generate *.ecore file from emf uml2 model
+	includes following ant tasks:
+	- oaw workflow task to generate *.ecore file from emf uml2 model
 	  [ uml2ecore ]
-	- starts ecore code generation to generate the *.genmodel file and
+	- ecore code generation task to generate the *.genmodel file and
 	  the java metamodel implementation
 	  [ ecore2java ]
+	
+	note: it's a kind of an abstract build file
 -->
 
-<project name="de.genesez.metamodel.user" basedir=".." default="generate.metamodel.implementation">
+<project name="de.genesez.metamodel.user" basedir=".." default="">
 	
 	<!--
 		include oaw properties + build properties
@@ -33,21 +35,8 @@
 		classpathref = "de.genesez.metamodel.classpath" />
 	
 	
-	<!--
-		executes uml2ecore + ecore2java
-		- starts the oaw workflow to generate the ecore model from the emf uml2 model
-		- starts ecore code generation to generate the genmodel file and the metamodel implementation from the ecore model 
-	-->
-	<target name = "generate.metamodel.implementation"
-		depends="uml2ecore, ecore2java"
-		description="executes the oaw workflow to create the ecore model + then generates the metamodel implementation from it">
-	</target>
-	
-	
-	<!-- transform uml2 model to ecore -->
-	<target name = "uml2ecore"
-		description="transform emf uml2 model to ecore model" >
-		
+	<!-- transform emf uml2 models to ecore models using oaw workflow -->
+	<target name = "uml2ecore">
 		<!-- workflow task is derived from the java ant task -->
 		<oaw.workflow file = "${oaw.workflow.file}"
 			classpathref="de.genesez.metamodel.classpath"
@@ -77,42 +66,10 @@
 	
 	
 	<!--
-		start ecore code generation
-		
-		note: 
-		when starting ant build file from eclipse, it runs as an 'external' tool,
-		not having the 'contibuted liberies' in the classpath from the ant runtime view
-		
-		so another headless eclipse instance is started and runs the ant runner with the 
-		specified build file and build target
-	-->
-	<target name="ecore2java"
-		description="performs the ecore java codegen with an headless eclipse instance">
-		
-		<java classname="org.eclipse.core.launcher.Main" 
-			fork="true">
-			
-			<classpath>
-				<fileset dir="${ECLIPSE_HOME}" includes="startup.jar"/>
-			</classpath>
-			<arg value="-noupdate" />
-			<arg value="-data" />
-			<arg value="${workspace.location}" />
-			<arg value="-application" />
-			<arg value="org.eclipse.ant.core.antRunner" />
-			<arg value="-buildfile" />
-			<arg value="${build.file}" />
-			<arg value="ecore2java.private" />
-			<!--arg value="-verbose" /-->
-		</java>
-	</target>
-	
-	
-	<!--
 		generate *.genmodel + java code impl from *.ecore model
 		note: genModel must be set in task and must be generated!
 	-->
-	<target name = "ecore2java.private">
+	<target name = "ecore2java">
 		<emf.Ecore2Java model = "${ecoreMetaModelPath}${ecoreMetaModelFile}"
 			genModel = "${genModelPath}/${genModelFile}"
 			reconcileGenModel="overwrite"
