@@ -109,7 +109,7 @@ public class Starting {
                     }
                 });
 
-            confFileLoader.autoDownload();
+            //confFileLoader.autoDownload();
 
         } else {
             // This mode is a DEMO MODE and shows if the 
@@ -163,7 +163,7 @@ public class Starting {
         // and after the sleep the automeasure will
         // be stopped.
         try {
-            Thread.sleep(180000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
         } finally {
             ps.setAutoMeasureStop(true);
