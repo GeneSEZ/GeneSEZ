@@ -1,8 +1,8 @@
 package de.genesez.base.sensor;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185627683353_829337_549) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185627683353_829337_549) ENABLED START */
+/* TODO put your imports here */
 import java.io.IOException;
 
 import de.genesez.base.ConfigParameter;
@@ -14,7 +14,7 @@ import de.genesez.imsys.util.DateFormatter;
 
 import se.imsys.net.Email;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * Listener which is interested in preasure sensor events.
  * @author nicher
@@ -60,13 +60,13 @@ public class PressureWatcher implements Runnable {
      */
     public PressureWatcher(Mailbox mailbox, TcpIpSocket socket,
         ISMTPMailer mailer) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185627716667_538887_575) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185627716667_538887_575) ENABLED START */
+        /* TODO put your own implementation code here */
         this.mailbox = mailbox;
         this.socket = socket;
         this.mailer = mailer;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -88,12 +88,12 @@ public class PressureWatcher implements Runnable {
     /**
      */
     public void autoSending() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185630686443_675808_743) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185630686443_675808_743) ENABLED START */
+        /* TODO put your own implementation code here */
         runner = new Thread(this);
         runner.start();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
@@ -101,8 +101,8 @@ public class PressureWatcher implements Runnable {
      */
     public void addPressureValue(MeasureEvent e) {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185645360153_389597_875) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185645360153_389597_875) ENABLED START */
+        /* TODO put your own implementation code here */
         synchronized (mailbox) {
             mailbox.setValue("Sensor: " + e.getAddress() + " send: " +
                 e.getMeasureValue() + " at: " +
@@ -110,15 +110,15 @@ public class PressureWatcher implements Runnable {
             mailbox.notifyAll();
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
      */
     public void run() {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1185627683353_829337_549) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1185627683353_829337_549) ENABLED START */
+        /* TODO put your own implementation code here */
         boolean isSocket = true;
 
         try {
@@ -170,7 +170,7 @@ public class PressureWatcher implements Runnable {
             isSocket = false;
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -195,8 +195,8 @@ public class PressureWatcher implements Runnable {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185627683353_829337_549) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185627683353_829337_549) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

@@ -1,11 +1,11 @@
 package de.genesez.imsys.sensor;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754234092_251260_709) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754234092_251260_709) ENABLED START */
+/* TODO put your imports here */
 import java.lang.String;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * This abstect class represents a sensor with an address.
  * @author nicher
@@ -30,11 +30,11 @@ public abstract class Sensor {
      * @param  address
      */
     public Sensor(int address) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184837743029_850350_580) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184837743029_850350_580) ENABLED START */
+        /* TODO put your own implementation code here */
         this.address = address;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -77,8 +77,8 @@ public abstract class Sensor {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754234092_251260_709) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754234092_251260_709) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

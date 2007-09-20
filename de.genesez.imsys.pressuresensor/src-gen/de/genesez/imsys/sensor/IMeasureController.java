@@ -1,11 +1,11 @@
 package de.genesez.imsys.sensor;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754622251_213885_857) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754622251_213885_857) ENABLED START */
+/* TODO put your imports here */
 import java.lang.String;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * The measure controller interface contains all interesting methods of a measure controller.
  * @author nicher
@@ -52,8 +52,8 @@ public interface IMeasureController {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754622251_213885_857) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754622251_213885_857) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

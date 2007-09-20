@@ -1,8 +1,8 @@
 package de.genesez.base;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184755478944_579173_1194) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184755478944_579173_1194) ENABLED START */
+/* TODO put your imports here */
 import java.lang.String;
 
 import de.genesez.base.net.ConfigFTPFileLoader;
@@ -20,7 +20,7 @@ import de.genesez.imsys.util.DateFormatter;
 
 import se.imsys.system.PortIO;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * Starts the application.
  * @author nicher
@@ -55,8 +55,8 @@ public class Starting {
      */
     public static void main(String[] args) {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.staticmain.code._12_5_8a7027a_1184755478944_579173_1194) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.staticmain.code._12_5_8a7027a_1184755478944_579173_1194) ENABLED START */
+        /* TODO put your own implementation code here */
         if (args.length < 1) {
             System.out.println("No mode specificed (LIVE or DEMO)");
             return;
@@ -110,7 +110,6 @@ public class Starting {
                 });
 
             //confFileLoader.autoDownload();
-
         } else {
             // This mode is a DEMO MODE and shows if the 
             // pressure sensor work right. It is not the
@@ -173,7 +172,7 @@ public class Starting {
 
         System.out.println("System terminated normal.");
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -184,8 +183,8 @@ public class Starting {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184755478944_579173_1194) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184755478944_579173_1194) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }
