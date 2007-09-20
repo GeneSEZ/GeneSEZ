@@ -1,11 +1,11 @@
 package de.genesez.imsys.sensor;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754703767_466983_906) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754703767_466983_906) ENABLED START */
+/* TODO put your imports here */
 import java.lang.String;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * This abstrct class represents a measure sensor. This sensor can measure manual of in a specificated cycletime automatic.
  * @author nicher
@@ -42,13 +42,13 @@ public abstract class MeasureSensor extends Sensor implements IMeasureSensor {
      * @param  offset
      */
     public MeasureSensor(int address, float gradient, float offset) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188991545820_140894_1317) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188991545820_140894_1317) ENABLED START */
+        /* TODO put your own implementation code here */
         super(address);
         this.gradient = gradient;
         this.offset = offset;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -137,8 +137,8 @@ public abstract class MeasureSensor extends Sensor implements IMeasureSensor {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754703767_466983_906) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754703767_466983_906) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

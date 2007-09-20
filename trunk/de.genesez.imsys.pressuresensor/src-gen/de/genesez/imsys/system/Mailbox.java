@@ -1,11 +1,11 @@
 package de.genesez.imsys.system;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185645152162_728694_615) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185645152162_728694_615) ENABLED START */
+/* TODO put your imports here */
 import java.lang.String;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * Stores a string value in a mailbox.
  * @author nicher
@@ -29,11 +29,11 @@ public class Mailbox {
     /**
      */
     public Mailbox() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185645171417_403500_639) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185645171417_403500_639) ENABLED START */
+        /* TODO put your own implementation code here */
         this.value = null;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -76,8 +76,8 @@ public class Mailbox {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185645152162_728694_615) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185645152162_728694_615) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

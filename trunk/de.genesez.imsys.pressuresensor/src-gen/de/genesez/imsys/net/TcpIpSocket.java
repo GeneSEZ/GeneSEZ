@@ -1,15 +1,15 @@
 package de.genesez.imsys.net;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185388034362_849599_466) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185388034362_849599_466) ENABLED START */
+/* TODO put your imports here */
 import java.io.IOException;
 
 import java.lang.String;
 
 import java.net.Socket;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * This class implements a client socket. A socket is an endpoint for communication between two machines.
  * @author nicher
@@ -54,12 +54,12 @@ public class TcpIpSocket {
      * @param  port
      */
     public TcpIpSocket(String address, int port) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185388542727_468457_804) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185388542727_468457_804) ENABLED START */
+        /* TODO put your own implementation code here */
         this.address = address;
         this.port = port;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -84,15 +84,15 @@ public class TcpIpSocket {
      */
     public void open() throws IOException {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185434979537_159417_702) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185434979537_159417_702) ENABLED START */
+        /* TODO put your own implementation code here */
         if (address == null || port <= 0) {
             throw new IOException("Host or port not initialized");
         }
         server = new Socket(address, port);
         writer = new SocketWriter(server.getOutputStream());
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
@@ -100,12 +100,12 @@ public class TcpIpSocket {
      * @throws  IOException
      */
     public void close() throws IOException {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185392319195_711499_1236) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185392319195_711499_1236) ENABLED START */
+        /* TODO put your own implementation code here */
         writer.close();
         server.close();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
@@ -114,11 +114,11 @@ public class TcpIpSocket {
      * @throws  IOException
      */
     public void write(String str) throws IOException {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185627850372_132998_830) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185627850372_132998_830) ENABLED START */
+        /* TODO put your own implementation code here */
         writer.write(str);
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -161,8 +161,8 @@ public class TcpIpSocket {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185388034362_849599_466) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185388034362_849599_466) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

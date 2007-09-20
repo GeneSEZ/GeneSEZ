@@ -1,13 +1,13 @@
 package de.genesez.imsys.sensor;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754863065_958703_1059) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184754863065_958703_1059) ENABLED START */
+/* TODO put your imports here */
 import java.lang.String;
 
 import java.util.Vector;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * The measure controller contains all methods from the measure interface.
  * @author nicher
@@ -48,13 +48,13 @@ public abstract class MeasureController implements IMeasureController {
      * @param  max
      */
     public MeasureController(IMeasureSensor measureSensor, float min, float max) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184786332336_927305_604) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184786332336_927305_604) ENABLED START */
+        /* TODO put your own implementation code here */
         this.measureSensor = measureSensor;
         this.min = min;
         this.max = max;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -144,15 +144,15 @@ public abstract class MeasureController implements IMeasureController {
     public boolean isMeasureValueTooHigh(float measureValue) {
         boolean returnValue = false;
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925038620_221622_1046) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925038620_221622_1046) ENABLED START */
+        /* TODO put your own implementation code here */
         if (measureValue > max) {
             returnValue = true;
         } else {
             returnValue = false;
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
         return returnValue;
     }
 
@@ -163,15 +163,15 @@ public abstract class MeasureController implements IMeasureController {
     public boolean isMeasureValueNormal(float measureValue) {
         boolean returnValue = false;
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925045347_172705_1051) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925045347_172705_1051) ENABLED START */
+        /* TODO put your own implementation code here */
         if ((measureValue >= min) && (measureValue <= max)) {
             returnValue = true;
         } else {
             returnValue = false;
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
         return returnValue;
     }
 
@@ -182,15 +182,15 @@ public abstract class MeasureController implements IMeasureController {
     public boolean isMeasureValueTooLow(float measureValue) {
         boolean returnValue = false;
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925050723_332702_1056) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188925050723_332702_1056) ENABLED START */
+        /* TODO put your own implementation code here */
         if (measureValue < min) {
             returnValue = true;
         } else {
             returnValue = false;
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
         return returnValue;
     }
 
@@ -230,8 +230,8 @@ public abstract class MeasureController implements IMeasureController {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754863065_958703_1059) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184754863065_958703_1059) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

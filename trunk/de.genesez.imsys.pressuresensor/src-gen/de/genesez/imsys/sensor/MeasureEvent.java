@@ -1,13 +1,13 @@
 package de.genesez.imsys.sensor;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184785728932_224001_502) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184785728932_224001_502) ENABLED START */
+/* TODO put your imports here */
 import java.lang.String;
 
 import java.util.Date;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * An event which indicates that a measure action occurred in a measure sensor. The event contains a timestamp and the measure value.
  * @author nicher
@@ -44,13 +44,13 @@ public class MeasureEvent {
      * @param  measureValue
      */
     public MeasureEvent(int address, float measureValue) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184785764716_332171_526) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184785764716_332171_526) ENABLED START */
+        /* TODO put your own implementation code here */
         this.address = address;
         this.measureValue = measureValue;
         this.timeStamp = new Date();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -123,8 +123,8 @@ public class MeasureEvent {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184785728932_224001_502) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184785728932_224001_502) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

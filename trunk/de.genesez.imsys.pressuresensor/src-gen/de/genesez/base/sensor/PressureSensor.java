@@ -1,8 +1,8 @@
 package de.genesez.base.sensor;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184788436265_449095_937) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184788436265_449095_937) ENABLED START */
+/* TODO put your imports here */
 import java.lang.Thread;
 
 import java.util.Date;
@@ -15,7 +15,7 @@ import com.dalsemi.system.IllegalAddressException;
 import de.genesez.imsys.sensor.MeasureEvent;
 import de.genesez.imsys.sensor.MeasureSensor;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * This class represents the pressure sensor form the whz in zwickau germany.
  * @author nicher
@@ -62,8 +62,8 @@ public class PressureSensor extends MeasureSensor implements Runnable {
      * @param  offset
      */
     public PressureSensor(int address, float gradient, float offset) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188991660230_164612_1324) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1188991660230_164612_1324) ENABLED START */
+        /* TODO put your own implementation code here */
         super(address, gradient, offset);
 
         // initial the i2c port
@@ -79,7 +79,7 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         // the hardware address pins of the device. 
         i2c.setAddress((byte) (0x20 | (address & 0x07)));
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -103,11 +103,11 @@ public class PressureSensor extends MeasureSensor implements Runnable {
      */
     public void measure() {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184788568835_800356_1085) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184788568835_800356_1085) ENABLED START */
+        /* TODO put your own implementation code here */
         float measure;
         MeasureEvent me;
-        
+
         /*
         // actual way to get a pressurevalue
         // by random
@@ -119,7 +119,7 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         // send measurevalue to pressurecontroller
         getMeasureController().sendMeasureValue(me);
          */
-        
+
         // right way to get a pressurevaule
         // by i2c-bus
         byte[] buf = new byte[1];
@@ -133,9 +133,9 @@ public class PressureSensor extends MeasureSensor implements Runnable {
             // read pressurevalue
             i2c.read(buf, 0, 1);
             System.out.println(buf);
-            
-            System.out.println("--" + buf[4]+ buf[5]+ buf[6]+ buf[7]);
-            
+
+            System.out.println("--" + buf[4] + buf[5] + buf[6] + buf[7]);
+
             // get preadure value from substring 4-7
             // for example buf = 25253520,
             // pressurevalue = 3520
@@ -148,43 +148,44 @@ public class PressureSensor extends MeasureSensor implements Runnable {
             // send measurevalue to pressurecontroller
             getMeasureController().sendMeasureValue(me);
         } catch (IllegalAddressException e) {
-        	System.out.println(e.toString());
+            System.out.println(e.toString());
         }
-        /* <!-- PROTECTED REGION END --> */
+
+        /* PROTECTED REGION END */
     }
 
     /**
      * Starts the manual measure measure mode in a Thread.
      */
     public void manualMeasure() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184939798112_183751_634) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184939798112_183751_634) ENABLED START */
+        /* TODO put your own implementation code here */
         isAutoMeasureMode = false;
         runner = new Thread(this);
         runner.start();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
      * Starts the auto measure mode in a thread.
      */
     public void autoMeasure() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184939024358_452624_613) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184939024358_452624_613) ENABLED START */
+        /* TODO put your own implementation code here */
         isAutoMeasureMode = true;
         runner = new Thread(this);
         runner.start();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
      */
     public void run() {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1184788436265_449095_937) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1184788436265_449095_937) ENABLED START */
+        /* TODO put your own implementation code here */
         synchronized (this) {
             if (isAutoMeasureMode) {
                 while (!autoMeasureStop) {
@@ -200,7 +201,7 @@ public class PressureSensor extends MeasureSensor implements Runnable {
             }
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -255,8 +256,8 @@ public class PressureSensor extends MeasureSensor implements Runnable {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184788436265_449095_937) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184788436265_449095_937) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

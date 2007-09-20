@@ -1,13 +1,13 @@
 package de.genesez.imsys.system;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184931277350_172600_683) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1184931277350_172600_683) ENABLED START */
+/* TODO put your imports here */
 import java.lang.Thread;
 
 import se.imsys.system.PortIO;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * This class gives access to a led which is sored on the Cjip.
  * @author nicher
@@ -55,12 +55,12 @@ public class Led implements Runnable {
      * @param  address
      */
     public Led(int port, int address) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184933993632_341296_1119) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184933993632_341296_1119) ENABLED START */
+        /* TODO put your own implementation code here */
         portIO = new PortIO(port);
         this.address = address;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
@@ -70,13 +70,13 @@ public class Led implements Runnable {
      * @param  flashCycle
      */
     public Led(int port, int address, int flashTime, int flashCycle) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184934020007_670827_1123) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184934020007_670827_1123) ENABLED START */
+        /* TODO put your own implementation code here */
         this(port, address);
         this.flashTime = flashTime;
         this.flashCycle = flashCycle;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -99,44 +99,44 @@ public class Led implements Runnable {
      * Turn the led on.
      */
     public void on() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184931388497_129978_723) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184931388497_129978_723) ENABLED START */
+        /* TODO put your own implementation code here */
         portIO.setControlBit(address);
         portIO.setDataBit(address);
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
      * Turn the led off.
      */
     public void off() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184931393653_435832_727) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184931393653_435832_727) ENABLED START */
+        /* TODO put your own implementation code here */
         portIO.clearDataBit(address);
         portIO.clearControlBit(address);
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
      * Turn the led on and off in the specificated flashtime and flashcycles.
      */
     public void flash() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184933624553_150896_1111) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1184933624553_150896_1111) ENABLED START */
+        /* TODO put your own implementation code here */
         runner = new Thread(this);
         runner.start();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
      */
     public void run() {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1184931277350_172600_683) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1184931277350_172600_683) ENABLED START */
+        /* TODO put your own implementation code here */
         synchronized (this) {
             for (int i = 0; i < flashCycle; i++) {
                 on();
@@ -155,7 +155,7 @@ public class Led implements Runnable {
             }
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -214,8 +214,8 @@ public class Led implements Runnable {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184931277350_172600_683) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1184931277350_172600_683) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

@@ -1,8 +1,8 @@
 package de.genesez.imsys.net;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185482037977_264407_642) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185482037977_264407_642) ENABLED START */
+/* TODO put your imports here */
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.lang.String;
 import se.imsys.net.FtpClient;
 import se.imsys.net.FtpFile;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * This class implements an FTP client, following the specifications in RFC 959 - File Transfer Protocol.
  * @author nicher
@@ -59,14 +59,14 @@ public class FTPLoader {
      * @param  passWord
      */
     public FTPLoader(String host, int port, String userName, String passWord) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482236292_798682_785) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482236292_798682_785) ENABLED START */
+        /* TODO put your own implementation code here */
         this.host = host;
         this.port = port;
         this.userName = userName;
         this.passWord = passWord;
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -90,11 +90,11 @@ public class FTPLoader {
      * @throws  IOException
      */
     public void open() throws IOException {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482153897_606143_765) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482153897_606143_765) ENABLED START */
+        /* TODO put your own implementation code here */
         ftpClient = new FtpClient(host, port, userName, passWord);
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
@@ -102,11 +102,11 @@ public class FTPLoader {
      * @throws  IOException
      */
     public void close() throws IOException {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482159517_960344_769) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482159517_960344_769) ENABLED START */
+        /* TODO put your own implementation code here */
         ftpClient.close();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
@@ -117,8 +117,8 @@ public class FTPLoader {
      */
     public void download(String ftpFile, String localFile) throws IOException {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482167676_936413_773) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482167676_936413_773) ENABLED START */
+        /* TODO put your own implementation code here */
         FtpFile ff = ftpClient.get(ftpFile);
         if (ff == null) {
             throw (new IOException("no such file"));
@@ -131,7 +131,7 @@ public class FTPLoader {
         fos.write(b);
         fos.close();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
@@ -142,8 +142,8 @@ public class FTPLoader {
      */
     public void upload(String localFile, String ftpFile) throws IOException {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482194494_355974_778) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185482194494_355974_778) ENABLED START */
+        /* TODO put your own implementation code here */
         FileInputStream fis = new FileInputStream(localFile);
         byte[] b = new byte[fis.available()];
         fis.read(b);
@@ -157,7 +157,7 @@ public class FTPLoader {
         ff.setData(b);
         ftpClient.put(ff);
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -224,8 +224,8 @@ public class FTPLoader {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185482037977_264407_642) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185482037977_264407_642) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }

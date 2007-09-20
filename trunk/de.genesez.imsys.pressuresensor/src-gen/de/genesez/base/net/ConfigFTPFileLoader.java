@@ -1,8 +1,8 @@
 package de.genesez.base.net;
 
 
-/* <!-- PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185115357700_382500_709) ENABLED START --> */
-/* <!-- TODO put your imports here --> */
+/* PROTECTED REGION ID(java.mclassifier.other.import.code_12_5_8a7027a_1185115357700_382500_709) ENABLED START */
+/* TODO put your imports here */
 import java.io.IOException;
 
 import java.lang.String;
@@ -10,7 +10,7 @@ import java.lang.String;
 import de.genesez.imsys.conf.Configurator;
 import de.genesez.imsys.net.FTPLoader;
 
-/* <!-- PROTECTED REGION END --> */
+/* PROTECTED REGION END */
 /**
  * @author nicher
  */
@@ -51,11 +51,11 @@ public class ConfigFTPFileLoader extends FTPLoader implements Runnable {
      */
     public ConfigFTPFileLoader(String host, int port, String userName,
         String passWord) {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185115718034_872414_759) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185115718034_872414_759) ENABLED START */
+        /* TODO put your own implementation code here */
         super(host, port, userName, passWord);
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -77,20 +77,20 @@ public class ConfigFTPFileLoader extends FTPLoader implements Runnable {
     /**
      */
     public void autoDownload() {
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185197427492_723109_1104) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_8a7027a_1185197427492_723109_1104) ENABLED START */
+        /* TODO put your own implementation code here */
         runner = new Thread(this);
         runner.start();
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     /**
      */
     public void run() {
 
-        /* <!-- PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1185115357700_382500_709) ENABLED START --> */
-        /* <!-- TODO put your own implementation code here --> */
+        /* PROTECTED REGION ID(java.moperation.implementation.threadrun.code._12_5_8a7027a_1185115357700_382500_709) ENABLED START */
+        /* TODO put your own implementation code here */
         synchronized (this) {
             while (!autoDownLoadStop) {
                 try {
@@ -111,7 +111,7 @@ public class ConfigFTPFileLoader extends FTPLoader implements Runnable {
             }
         }
 
-        /* <!-- PROTECTED REGION END --> */
+        /* PROTECTED REGION END */
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -164,8 +164,8 @@ public class ConfigFTPFileLoader extends FTPLoader implements Runnable {
     // own implementations
     // ////////////////////////////////////////////////////////////////////////
 
-    /* <!-- PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185115357700_382500_709) ENABLED START --> */
-    /* <!-- TODO put your own implementation code here --> */
+    /* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._12_5_8a7027a_1185115357700_382500_709) ENABLED START */
+    /* TODO put your own implementation code here */
 
-    /* <!-- PROTECTED REGION END --> */
+    /* PROTECTED REGION END */
 }
