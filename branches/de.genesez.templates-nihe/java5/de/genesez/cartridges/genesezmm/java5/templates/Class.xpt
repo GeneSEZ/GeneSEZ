@@ -8,12 +8,13 @@
 
 «EXTENSION de::genesez::mapping::Mapping»
 
+
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate a interface
+// generate a java interface
 «DEFINE Root FOR MInterface-»
 package «getPackagePath()»;
 «EXPAND Import::Import-»
@@ -47,7 +48,7 @@ public interface «asClassifierName(name)»«EXPAND _Generics» «EXPAND General
 «ENDDEFINE»
 
 
-// generate a class
+// generate a java class
 «DEFINE Root FOR MClass-»
 package «getPackagePath()»;
 «EXPAND Import::Import-»
@@ -106,7 +107,7 @@ package «getPackagePath()»;
 «ENDDEFINE»
 
 
-// generate an enumeration
+// generate an java enumeration
 «DEFINE Root FOR MEnumeration-»
 package «getPackagePath()»;
 «EXPAND Import::Import-»
@@ -133,13 +134,13 @@ package «getPackagePath()»;
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate a comment for a java file
+// generate a comment for a classifier
 «DEFINE _CommentClassifier FOR MClassifier-»
 /**
 «IF hasComment()-»
  * «getCommentText(ownedComment)»
 «ENDIF-»
- * @author «getUserName()» «REM»(generated at «getTimeStamp()»)«ENDREM»
+ * @author «getUserName()»
  */
 «ENDDEFINE»
 
@@ -153,13 +154,13 @@ package «getPackagePath()»;
 «ENDDEFINE»
 
 
-// generate modifiers for mclassifier
+// generate modifiers for a classifier
 «DEFINE _Modifier FOR MClassifier-»
 «visibility.toString()» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
 «ENDDEFINE»
 
 
-// generate generics
+// generate generics for a classifier
 «DEFINE _Generics FOR MClassifier-»
 «IF hasGenericParameter()-»
 	<«getGenericList(genericParameter)»>

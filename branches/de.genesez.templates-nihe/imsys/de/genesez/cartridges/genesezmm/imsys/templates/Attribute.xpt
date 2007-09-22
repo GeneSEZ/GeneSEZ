@@ -8,12 +8,13 @@
 
 «EXTENSION de::genesez::mapping::Mapping»
 
+
 // //////////////////////////////////////////////////////////////////////////////
 // additional functions
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate a declaration for an attribute
+// generate a thread declaration for a class
 «DEFINE ThreadDecl FOR MClassifier-»
 /**
  */
@@ -26,7 +27,7 @@ private Thread runner;
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate a getter implementation method for a mattribute
+// generate a getter implementation method for an attribute
 «DEFINE GetterImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
@@ -45,7 +46,7 @@ private Thread runner;
 «ENDDEFINE»
 
 
-// generate a insert in implementation method
+// generate a insert in implementation method for an attribute
 «DEFINE InsertInImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
@@ -59,7 +60,7 @@ private Thread runner;
 «ENDDEFINE»
 
 
-// generate a remove from implementation method
+// generate a remove from implementation method for an attribute
 «DEFINE RemoveFromImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
@@ -78,6 +79,7 @@ private Thread runner;
 // //////////////////////////////////////////////////////////////////////////////
 
 
+// generate a comment for an attribute declaration
 «DEFINE _CommentAttribute FOR MAttribute-»
 /**
  * variable
@@ -88,6 +90,7 @@ private Thread runner;
 «ENDDEFINE»
 
 
+// generate a comment for an attribute accessor (getter)
 «DEFINE _CommentGetter FOR MAttribute-»
 /**
  * accessor for attribute «asAttributeName()»
@@ -98,6 +101,7 @@ private Thread runner;
 «ENDDEFINE»
 
 
+// generate a comment for an attribute accessor
 «DEFINE _CommentAccessor FOR MAttribute-»
 /**
  * accessor for attribute «asAttributeName()»
@@ -117,13 +121,13 @@ private Thread runner;
 «ENDDEFINE»
 
 
-// generate modifiers for mattribute
+// generate modifiers for an attribute
 «DEFINE _Modifier FOR MAttribute-»
 «visibility»«IF static» static«ENDIF»«IF final» final«ENDIF»
 «ENDDEFINE»
 
 
-// generate defaultvalue for mattribute
+// generate defaultvalue for an attribute
 «DEFINE _DefaultValue FOR MAttribute-»
 «IF defaultvalue.length > 0»= «defaultvalue»«ENDIF»
 «ENDDEFINE»

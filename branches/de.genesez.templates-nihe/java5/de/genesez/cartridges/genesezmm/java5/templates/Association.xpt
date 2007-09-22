@@ -14,12 +14,13 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate attributes for a classifier
+// generate associations for a classifier
 «DEFINE AssociationDecl FOR MClassifier-»
 «EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
 «ENDDEFINE»
 
 
+// generate declarations for association accessors
 «DEFINE OperationDecl FOR MInterface-»
 «FOREACH property.typeSelect(MAssociationRole) AS a-»
 	«EXPAND GetterDecl FOR a-»
@@ -30,6 +31,7 @@
 «ENDDEFINE»
 
 
+// generate implementations for association accessors
 «DEFINE OperationImpl FOR MClass-»
 «FOREACH property.typeSelect(MAssociationRole) AS a-»
 	«EXPAND GetterImpl FOR a-»
@@ -40,7 +42,7 @@
 «ENDDEFINE»
 
 
-// generate a declaration for an attribute
+// generate a declaration for an association
 «DEFINE AssociationDecl FOR MAssociationRole-»
 «EXPAND _CommentAssociation-»
 «IF isPlainAssociation()-»
@@ -55,7 +57,7 @@
 «ENDDEFINE»
 
 
-// generate a getter declaration method for a massociation
+// generate a getter declaration method for an association
 «DEFINE GetterDecl FOR MAssociationRole-»
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
@@ -72,7 +74,7 @@
 
 
 
-// generate a getter implementation method for a MAssociation
+// generate a getter implementation method for an association
 «DEFINE GetterImpl FOR MAssociationRole-»
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
@@ -97,7 +99,7 @@
 «ENDDEFINE»
 
 
-// generate a iterator declaration method for a massociation
+// generate a iterator declaration method for an association
 «DEFINE IteratorDecl FOR MAssociationRole-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
@@ -107,7 +109,7 @@
 «ENDDEFINE»
 
 
-// generate a iterator implementation method for a massociation
+// generate a iterator implementation method for an association
 «DEFINE IteratorImpl FOR MAssociationRole-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
@@ -123,7 +125,7 @@
 «ENDDEFINE»
 
 
-// generate a insert in declaration method
+// generate a insert in declaration method for an association
 «DEFINE InsertInDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
@@ -134,7 +136,7 @@
 «ENDDEFINE»
 
 
-// generate a insert in implementation method
+// generate a insert in implementation method for an association
 «DEFINE InsertInImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
@@ -173,14 +175,14 @@
 «ENDDEFINE»
 
 
-// generate a remove from declaration method
+// generate a remove from declaration method for an association
 «DEFINE RemoveFromDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 public void «asRemoveFrom(name)»(«type.name» _ex);
 «ENDDEFINE»
 
 
-// generate a remove from implementation method
+// generate a remove from implementation method for an association
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 public void «asRemoveFrom(name)»(«type.name» _ex) {
@@ -214,6 +216,7 @@ public void «asRemoveFrom(name)»(«type.name» _ex) {
 // //////////////////////////////////////////////////////////////////////////////
 
 
+// generate a comment for an association declaration
 «DEFINE _CommentAssociation FOR MAssociationRole-»
 /**
  * variable for association to «name»
@@ -224,6 +227,7 @@ public void «asRemoveFrom(name)»(«type.name» _ex) {
 «ENDDEFINE»
 
 
+// generate a comment for an association accessor (getter)
 «DEFINE _CommentGetter FOR MAssociationRole-»
 /**
  * accessor for association to «name»
@@ -234,6 +238,7 @@ public void «asRemoveFrom(name)»(«type.name» _ex) {
 «ENDDEFINE»
 
 
+// generate a comment for an association accessor
 «DEFINE _CommentAccessor FOR MAssociationRole-»
 /**
  * accessor for association to «name»
@@ -244,7 +249,7 @@ public void «asRemoveFrom(name)»(«type.name» _ex) {
 «ENDDEFINE»
 
 
-// generate modifiers for mclassifier
+// generate modifiers for an association
 «DEFINE _Modifier FOR MAssociationRole-»
 «visibility»
 «ENDDEFINE»

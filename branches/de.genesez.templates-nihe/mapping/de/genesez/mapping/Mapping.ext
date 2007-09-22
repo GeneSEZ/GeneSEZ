@@ -2,6 +2,7 @@ import genesezMM;
 
 extension de::genesez::io::io;
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // public extend functions
 ////////////////////////////////////////////////////////////////////////////////
@@ -11,16 +12,22 @@ extension de::genesez::io::io;
 // public java functions
 ////////////////////////////////////////////////////////////////////////////////
 
+
+// public typeMap function without a context
 String typeMap(String map) :
 	typeMapping(xmlMappingFile(), map);
 
+
+// public typeMap function with a context
 String typeMap(String map, String context) :
 	typeMapping(xmlMappingFile(), map, context);
+	
 	
 ////////////////////////////////////////////////////////////////////////////////
 // private extend functions
 ////////////////////////////////////////////////////////////////////////////////
 
+// load global variable from oaw workflow file
 String xmlMappingFile(): GLOBALVAR xmlMappingFile;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,11 +35,11 @@ String xmlMappingFile(): GLOBALVAR xmlMappingFile;
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// return the mapping of a type
+// return the mapping of a type without a context
 private String typeMapping(String xmlFile, String map) :
 	JAVA de.genesez.mapping.Mapping.typeMapping(java.lang.String, java.lang.String);
 
 
-// return the mapping of a type with context
+// return the mapping of a type with a context
 private String typeMapping(String xmlFile, String map, String context) :
 	JAVA de.genesez.mapping.Mapping.typeMapping(java.lang.String, java.lang.String, java.lang.String);

@@ -1,32 +1,34 @@
 // import genesezMM metamodel
 import genesezMM;
+
 // and we also load the io extensions, for the purpose of
 // debugging, in case we need it   
 extension de::genesez::io::io;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // public extend functions
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// on top level, we transform a UML model into an EPackage. A 
-// create extension is used for this. Create extensions have
-// the sideeffect of creating an instance of the type given
-// after the create keyword. Note that the newly created 
-// EPackage can be accessed by "this" inside the function
+// nothing to do
 MModel convert(MModel m): 
 	//m.ownedPackage.convert();
 	"";
 
+// testing
 convert(MPackage p):
 	p.nestedPackage.convert()->
 	p.classifier.typeSelect(MClass)
 		.select(e|!e.stereotype.select(s|s.name == "Exception").isEmpty)
 		.convertExceptionClass();
 
+// testing
 convertExceptionClass(MClass c) :
 	c.property.add(makeSerialVersionUID(c).setClassifier(c));
 
+
+// testing
 create MAttribute makeSerialVersionUID(MClass c) :
 	setXmiGuid(c.xmiGuid + "serialVersionUID")->
 	setName("serialVersionUID")->
@@ -37,62 +39,9 @@ create MAttribute makeSerialVersionUID(MClass c) :
 	setStatic(true)->
 	setFinal(true)->
 	setType(makeTypeLong(c));
-	
+
+// testing
 create MClassifier makeTypeLong(MClass c) :
 	setXmiGuid(c.xmiGuid + "DataTypeLong")->
 	setName("long");
 	
-
-/*
-convert(MClassifier c):
-		c.supertype.add(c.makeBeanInterface())->
-		c.setName(c.name+"Bean");
-
-
-
-
-
-		
-create MInterface makeBeanInterface (MClassifier c):
-		setXmiGuid(c.xmiGuid+"BeanInterface")->
-		setOwningPackage(c.owningPackage)->
-		c.owningPackage.classifier.add(this)->
-		setStereotype(c.stereotype)->
-		setName(c.name)->
-		setOperation(c.operation.select(o|o.visibility == "public" && ! o.static)
-			.makeInterfaceOperation(this));
-		
-create MOperation makeInterfaceOperation(MOperation op, MClassifier owner):
-		setXmiGuid(op.xmiGuid + "BeanInterface")->
-		setName(op.name)->
-		setClassifier(owner)->
-		setReturnType(op.returnType)->
-		setRaisedException(op.raisedException)->
-		setVisibility("public")->
-		setStatic(false)->
-		setAbstract(true)->
-		setParameter(op.parameter.makeParameter(this));
-		
-create MParameter makeParameter(MParameter pa, MOperation owner):
-		setXmiGuid(pa.xmiGuid + "BeanInterface")->
-		setName(pa.name)->
-		setOperation(owner)->
-		setType(pa.type)->
-		setDefaultvalue(pa.defaultvalue)->
-		setDirection(pa.direction);
-
-create MClass makeDto(MClassifier c):
-		setXmiGuid(c.xmiGuid+"Dto")->
-		setOwningPackage(c.owningPackage)->
-		c.owningPackage.classifier.add(this)->
-		setName(c.name+"Dto")->
-		setVisibility("public")->
-		setProperty(c.property.makeAttribute(this));
-
-
-
-
-*/
-		
-
-

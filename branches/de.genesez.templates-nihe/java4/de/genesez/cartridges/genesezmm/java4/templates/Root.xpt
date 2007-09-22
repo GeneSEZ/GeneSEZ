@@ -12,17 +12,20 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 
+// starting point of transformation
 «DEFINE Root FOR MModel-»
 «EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
 «ENDDEFINE»
 
 
+// recursively descend package tree and expand classifier
 «DEFINE Root FOR MPackage-»
 «EXPAND Root FOREACH nestedPackage-»
 «EXPAND Root FOREACH classifier-»
 «ENDDEFINE»
 
 
+// create new java interface
 «DEFINE Root FOR MInterface-»
 «FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 	«EXPAND Class::Root-»
@@ -30,6 +33,7 @@
 «ENDDEFINE»
 
 
+// create new java class
 «DEFINE Root FOR MClass-»
 «FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 	«EXPAND Class::Root-»
@@ -37,6 +41,7 @@
 «ENDDEFINE»
 
 
+// create new java enumeration
 «DEFINE Root FOR MEnumeration-»
 «FILE getFQNPackagePath() + "/" + asClassifierName(name) + ".java"-»
 	«EXPAND Class::Root-»
@@ -44,6 +49,7 @@
 «ENDDEFINE»
 
 
+// for other classifier
 «DEFINE Root FOR MClassifier-»
 «ENDDEFINE»
 

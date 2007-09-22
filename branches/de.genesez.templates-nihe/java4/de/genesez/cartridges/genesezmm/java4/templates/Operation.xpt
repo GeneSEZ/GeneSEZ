@@ -8,12 +8,13 @@
 
 «EXTENSION de::genesez::mapping::Mapping»
 
+
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate constructor for mclass
+// generate constructor for a class
 «DEFINE ConstructorImpl FOR MClass-»
 «EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
 «ENDDEFINE»
@@ -31,7 +32,7 @@
 «ENDDEFINE»
 
 
-// generate constructor for mclass
+// generate constructor for a class
 «DEFINE ConstructorImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
 «EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
@@ -57,11 +58,13 @@
 }
 «ENDDEFINE»
 
+
 // //////////////////////////////////////////////////////////////////////////////
 // private functions
 // //////////////////////////////////////////////////////////////////////////////
 
 
+// generate a comment for an operation
 «DEFINE _CommentOperation FOR MOperation-»
 /**
 «IF hasComment()-»
@@ -73,18 +76,24 @@
  */
 «ENDDEFINE»
 
+
+// generate a comment for every parameter of an operation
 «DEFINE _CommentParameter FOR MOperation-»
 «FOREACH parameter.typeSelect(MParameter) AS p-»
  * @param  «asParameterName(p.name)»  «getCommentText(p.ownedComment)»
 «ENDFOREACH-»
 «ENDDEFINE»
 
+
+// generate a comment for the return type of an operation
 «DEFINE _CommentReturn FOR MOperation-»
 «IF returnType.name.toLowerCase() != "void" -»
  * @return  «getCommentText(returnType.ownedComment)»
 «ENDIF-»
 «ENDDEFINE»
 
+
+// generate a comment for every execption of an operation
 «DEFINE _CommentExeception FOR MOperation-»
 «FOREACH raisedException.typeSelect(MClassifier) AS c-»
  * @throws  «asClassifierName(c.name)»  «getCommentText(c.ownedComment)»
@@ -101,13 +110,13 @@
 «ENDDEFINE»
 
 
-// generate modifiers for moperation
+// generate modifiers for an operation
 «DEFINE _Modifier FOR MOperation-»
 «visibility»«IF static» static«ENDIF»«IF final» final«ENDIF»«IF abstract» abstract«ENDIF»
 «ENDDEFINE»
 
 
-// generate a parameter list for moperation
+// generate a parameter list for an operation
 «DEFINE _Parameter FOR MOperation-»
 «FOREACH parameter AS p SEPARATOR ", "»
 	«EXPAND _Parameter FOR p-»
@@ -115,7 +124,7 @@
 «ENDDEFINE»
 
 
-// generate a parameter for moperation
+// generate a parameter for an operation
 «DEFINE _Parameter FOR MParameter»
 «IF multiplicity == 1-»
 	«typeMap(type.name)» «asParameterName(name)»
@@ -125,7 +134,7 @@
 «ENDDEFINE»
 
 
-// generate exceptions for a moperation
+// generate exceptions list for an operation
 «DEFINE _Exception FOR MOperation-»
 «IF !raisedException.isEmpty-»
 	throws «FOREACH raisedException AS e SEPARATOR ", "»«asClassifierName(e.name)»«ENDFOREACH»
