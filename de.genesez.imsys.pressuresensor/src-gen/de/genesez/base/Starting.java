@@ -109,7 +109,8 @@ public class Starting {
                     }
                 });
 
-            //confFileLoader.autoDownload();
+            // download config file
+            confFileLoader.autoDownload();
         } else {
             // This mode is a DEMO MODE and shows if the 
             // pressure sensor work right. It is not the

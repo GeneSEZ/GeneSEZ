@@ -67,17 +67,17 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         super(address, gradient, offset);
 
         // initial the i2c port
-        i2c = new I2CPort();
+        //i2c = new I2CPort();
 
         // The PCF8574 is capable of I2C clock frequency of 100kHz, so
         // set the I2C bus speed to 8 (will result in a 10.8µs clock
         // period on the I2C bus).
-        i2c.setClockDelay(8);
+        //i2c.setClockDelay(8);
 
         // Set the device address to use for subsequent read and write
         // operations. The low three bits should match the setting on
         // the hardware address pins of the device. 
-        i2c.setAddress((byte) (0x20 | (address & 0x07)));
+        //i2c.setAddress((byte) (0x20 | (address & 0x07)));
 
         /* PROTECTED REGION END */
     }
@@ -107,8 +107,7 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         /* TODO put your own implementation code here */
         float measure;
         MeasureEvent me;
-
-        /*
+        
         // actual way to get a pressurevalue
         // by random
         measure = Math.abs(new Random(new Date().getTime()).nextInt()) % 100;
@@ -118,10 +117,10 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         me = new MeasureEvent(getAddress(), measure);
         // send measurevalue to pressurecontroller
         getMeasureController().sendMeasureValue(me);
-         */
 
         // right way to get a pressurevaule
         // by i2c-bus
+        /*
         byte[] buf = new byte[1];
         try {
             // posible write command to get
@@ -150,6 +149,7 @@ public class PressureSensor extends MeasureSensor implements Runnable {
         } catch (IllegalAddressException e) {
             System.out.println(e.toString());
         }
+        */
 
         /* PROTECTED REGION END */
     }
