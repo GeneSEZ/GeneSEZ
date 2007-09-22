@@ -63,24 +63,19 @@ create MStereotype makeStereotype(Stereotype s) :
 
 private MStereotype processStereotype(Stereotype s) :
 	let ms = makeStereotype(s) :
-		// add comment to stereotype
-		//ms.setOwnedComment(s.ownedComment.typeSelect(Comment).processComment().setOwningElement(ms))->
-		// add tagged values FAIL
+		// add tagged values
 		ms.setProperty(s.ownedAttribute.typeSelect(Property).processTag().setStereotype(ms))->
 		ms;
 
 
 // create new MTag from uml2 property
 create MTag makeTag(Property p) :
-	// set the unique xmiId and name
-	//setXmiGuid(xmiId(p))->
+	// set the name
 	setName(p.name)->
-	setType(p.type.makeClassifier().toString());
+	setType(p.type.checkClassifier().toString());
 
 private MTag processTag(Property p) :
 	let mt = makeTag(p) :
-		// add comment to taggedvalue
-		//mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt))->
 		mt;
 
 
@@ -88,9 +83,7 @@ private MTag processTag(Property p) :
 create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	setTag(t)->
 	setValue(val)->
-	setOwningElement(owner)
-//	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
-	;
+	setOwningElement(owner);
 	
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	me.stereotype.property.reject(t|t.name == "base_Class").collect(
@@ -125,13 +118,6 @@ private MPackage processPackage(Package p) :
 
 
 
-// create new MPrimitivType from uml2 data type
-create MPrimitiveType makeClassifier(DataType c) :
-	// set the unique xmiId and name
-	setXmiGuid(xmiId(c))->
-	setName(c.name)->
-	makeModel(getUml2Model()).primitiveTypes.add(this);
-
 // create new MPrimitivType from uml2 primitive type
 create MPrimitiveType makeClassifier(PrimitiveType c):
 	// set the unique xmiId and name
@@ -139,21 +125,25 @@ create MPrimitiveType makeClassifier(PrimitiveType c):
 	setName(c.name)->
 	makeModel(getUml2Model()).primitiveTypes.add(this);
 
-// create new MPrimitiveType from uml2 void
-create MPrimitiveType makeClassifier(Void c):
+// creates the primitive type 'void'
+// note: uml standard profile :: magic draw profile :: datatypes 
+// defines 'void' as datatype, not primitive type
+// the call function is checkClassifier
+create MPrimitiveType makeVoid():
 	// set the unique xmiId and name
 	setXmiGuid("void")->
 	setName("void")->
 	makeModel(getUml2Model()).primitiveTypes.add(this);
+
+// create new MDataType from uml2 datatype
+create MDataType makeClassifier(DataType c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c))->
+	setName(c.name)->
+	setVisibility(c.visibility.toString());
 	
 // create new MClassifier from uml2 named element
 create MClassifier makeClassifier(NamedElement c) :
-	// set the unique xmiId and name
-	setXmiGuid(xmiId(c))->
-	setName(c.name);
-	
-// create new MClassifier from uml2 type
-create MClassifier makeClassifier(Type c):
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
 	setName(c.name);
@@ -187,7 +177,7 @@ create MClass makeClassifier(Class c) :
 // classes are contained in packages. 
 // they own attributes and association ends
 private MClassifier processClassifier(Classifier c) :
-	let mc = makeClassifier(c) :
+	let mc = checkClassifier(c) :
 		// add comment to classifier
 		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment().setOwningElement(mc))->
 		// set generics
@@ -199,8 +189,8 @@ private MClassifier processClassifier(Classifier c) :
 		// add client dependency (<<use>>)
 		mc.setSupplier(c.clientDependency.supplier.makeClassifier())->
 		// add superclasses (generalizations and realizations)
-		mc.setSupertype(c.general.makeClassifier())->
-		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.makeClassifier())->
+		mc.setSupertype(c.general.checkClassifier())->
+		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.checkClassifier())->
 		// add attributes and association ends
 		mc.setProperty(c.attribute.reject(p|p.association != null).processAttribute().setClassifier(mc))->
 		mc.property.addAll(c.attribute.select(p|p.association != null).processAssociationRole().setClassifier(mc))->
@@ -208,6 +198,31 @@ private MClassifier processClassifier(Classifier c) :
 		mc.setOperation(c.getOperations().processOperaration().setClassifier(mc))->
 		mc;
 
+// the uml2 metamodel doesn't define the type 'void'
+// if you use the datatype 'void' from the profile 
+// (UML Standard Profile::Magic Draw Profile::datatypes)
+// it is mapped as a primitive type in genesez model
+private MClassifier checkClassifier(Classifier c) :
+	c.metaType.name == "uml::DataType" && c.name == "void" ?
+		makeVoid() :
+		makeClassifier(c);
+
+// the uml2 metamodel doesn't define the type 'void'
+// if you use the datatype 'void' from the profile 
+// (UML Standard Profile::Magic Draw Profile::datatypes)
+// it is mapped as a primitive type in genesez model
+private MClassifier checkClassifier(Type c):
+	c == null ?
+		makeVoid() :
+		makeClassifier(c);
+
+// if you leave some type fields in your model blank 
+// (maybe an alternative to specify 'void')
+// oaw returns the type 'oaw::void'
+// simply mapping this type to 'void'
+private MClassifier checkClassifier(Void c):
+	makeVoid();
+		
 
 
 // create new MLiteral for MEnumeration from uml2 enumeration literal
@@ -265,7 +280,7 @@ private MAttribute processAttribute(Property p) :
 		// set tagged values
 		ma.setTaggedValue(makeTaggedValues(ma, p))->
 		// add type of attribute
-		ma.setType(p.type.makeClassifier())->
+		ma.setType(p.type.checkClassifier())->
 		ma;
 
 
@@ -292,9 +307,9 @@ private MOperation processOperaration(Operation o) :
 		// add parameter to operation
 		mo.setParameter(o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter().setOperation(mo))->
 		// set return type
-		mo.setReturnType(o.type.makeClassifier())->
+		mo.setReturnType(o.type.checkClassifier())->
 		// set raised exceptions
-		mo.setRaisedException(o.raisedException.makeClassifier())->
+		mo.setRaisedException(o.raisedException.checkClassifier())->
 		mo;
 
 
@@ -319,7 +334,7 @@ private MParameter processParameter(Parameter p) :
 		// set tagged values
 		mp.setTaggedValue(makeTaggedValues(mp, p))->
 		// add type of parameter
-		mp.setType(p.type.makeClassifier())->
+		mp.setType(p.type.checkClassifier())->
 		mp;
 
 
@@ -345,7 +360,7 @@ private MAssociationRole processAssociationRole(Property aend) :
 		ma.setTaggedValue(makeTaggedValues(ma, aend))->
 		// set classifier
 		ma.setClassifier(assocEndClass(aend))->
-		ma.setType(aend.type.makeClassifier())->
+		ma.setType(aend.type.checkClassifier())->
 		ma;
 
 
