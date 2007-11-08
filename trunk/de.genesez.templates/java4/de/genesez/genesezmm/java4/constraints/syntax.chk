@@ -21,16 +21,16 @@ context MOperation WARNING "GeneSEZ-Gen: visibility was set to 'public' (" + "op
 	classifier.metaType == MInterface
 		? (visibility == null || visibility == ""
 				? (setVisibility("public") -> false)
-				: false)
-		: false;
+				: true)
+		: true;
 
 //	repairable bugs in model - interface methods in java can only be abstract
 context MOperation WARNING "GeneSEZ-Gen: method was made 'abstract' (" + "operation: " + name + " in interface: " + classifier.name + ")" :
 	classifier.metaType == MInterface
 		? (abstract == false
 			? (setAbstract(true) -> false)
-			: false)
-		: false;
+			: true)
+		: true;
 
 // checks if all methods are defined public and abstract
 context MOperation ERROR "GeneSEZ-Gen: method has illegal modifiers (" + "operation: " + name + " in interface: " + classifier.name + ")" :
