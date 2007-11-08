@@ -31,7 +31,7 @@ public class AccessHelper {
 		int i = fullQualifiedName.lastIndexOf(".");
 		if (i != -1) {
 			String pkg = fullQualifiedName.substring(0, i);
-			String clazz = fullQualifiedName.substring(i +1);
+			String clazz = fullQualifiedName.substring(i + 1);
 //			System.err.println("fqn: " + fullQualifiedName + ", pkg: " + pkg + ", clazz = " + clazz);
 			MPackage p = getPackage(packages, pkg);
 			for (Object o : p.getClassifier()) {
