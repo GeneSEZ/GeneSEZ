@@ -12,7 +12,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.InputSource;
 
-public class Mapping {
+public class TypeMapping {
 
 	/**
 	 * Returns the type map. This is the top method for type mapping when no
@@ -51,7 +51,7 @@ public class Mapping {
 		} catch (Exception e) {
 			System.out.println("Genesez-Gen: " + e.toString());
 		}
-		// if an error occurs, the parameter _map will be returned
+		// if an error occurs, the parameter _map will returned
 		return map;
 	}
 
@@ -303,18 +303,5 @@ public class Mapping {
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Test the mapping.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		String xmlFile = "../de.genesez.templates/imsys/de/genesez/genesezmm/imsys/typemapping/java4mappingIMSYS.xml";
-
-		String str = typeMapping(xmlFile, "Set", "Implementation");
-
-		System.out.println(str);
-	}
 
 }
