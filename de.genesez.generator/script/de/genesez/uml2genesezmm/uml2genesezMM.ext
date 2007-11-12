@@ -55,7 +55,7 @@ private MComment processComment(Comment c) :
 
 // create new MStereotype from uml2 stereotype
 create MStereotype makeStereotype(Stereotype s) :
-	info("--> make stereotype: " + s.name) ->
+	info("make stereotype: " + s.name) ->
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(s))->
 	makeModel(getUml2Model()).anyStereotype.add(this)->
@@ -72,7 +72,7 @@ private MStereotype processStereotype(Stereotype s) :
 
 // create new MTag from uml2 property
 create MTag makeTag(Property p) :
-	info("--> make tag: " + p.name) ->
+	info("make tag: " + p.name) ->
 	// set the unique xmiId and name
 	//setXmiGuid(xmiId(p))->
 	setName(p.name)->
@@ -87,7 +87,7 @@ private MTag processTag(Property p) :
 
 // create new MTaggedValue
 create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
-	info("--> make tagged value: " + val + ", tag: " + t.name) ->
+	info("make tagged value: " + val + ", tag: " + t.name) ->
 	setTag(t)->
 	setValue(val)->
 	setOwningElement(owner)
@@ -95,7 +95,7 @@ create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	;
 	
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	info("--> make tagged values: " + me.name + ", elem: " + e.toString()) ->
+	info("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
 		mtag|e.getAppliedStereotypes().collect(
 			styp | e.getValue(styp, mtag.name).eToString().collect(
@@ -139,7 +139,7 @@ create MPrimitiveType makeClassifier(DataType c) :
 
 // create new MPrimitivType from uml2 primitive type
 create MPrimitiveType makeClassifier(PrimitiveType c):
-	info("--> make classifier(primitive type -> primitive type): " + c.name) ->
+	info("make classifier(primitive type -> primitive type): " + c.name) ->
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
 	setName(c.name)->
@@ -149,15 +149,15 @@ create MPrimitiveType makeClassifier(PrimitiveType c):
 //	note: uml standard profile :: magic draw profile :: datatypes defines 'void'
 //	      as datatype, not primitive type
 create MPrimitiveType makeVoid(DataType c) :
-	info("--> make void: " + c.name) ->
+	info("make void: " + c.name) ->
 	setXmiGuid(xmiId(c)) ->
 	setName(c.name) ->
 	makeModel(getUml2Model()).primitiveTypes.add(this);
 	
 //	creates the primitive type 'void'
-//	note: the call function 'determineClassifier' distinct, when this primitive type is needed
+//	note: the caller function 'determineClassifier' distinct, when this primitive type is needed
 create MPrimitiveType makeVoid() :
-	info("--> make void:void ") ->
+	info("make void:void ") ->
 	setXmiGuid("void") ->
 	setName("void") ->
 	makeModel(getUml2Model()).primitiveTypes.add(this);
@@ -212,6 +212,7 @@ create MInterface makeClassifier(Interface c) :
 	
 // create new MClass from uml2 class
 create MClass makeClassifier(Class c) :
+	info("makeClass: " + c.metaType.name + ", " + c.name) ->
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c))->
 	setName(c.name)->
@@ -227,7 +228,11 @@ private MClassifier processClassifier(Classifier c) :
 		// add comment to classifier
 		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment().setOwningElement(mc))->
 		// set generics
-		(c.ownedTemplateSignature != null ? mc.setGenericParameter(c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGenericParameter()) : "")->
+	info("pre generics: " + c.ownedTemplateSignature.ownedParameter) ->
+		c.ownedTemplateSignature != null ? 
+			mc.setGenericParameter(c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGeneric())
+			: mc ->
+	info("generics: " + mc.genericParameter) ->
 		// set stereotype
 		mc.setStereotype(c.getAppliedStereotypes().processStereotype())->
 		// set tagged values
@@ -245,12 +250,32 @@ private MClassifier processClassifier(Classifier c) :
 		mc
 	);
 	
+//	checks if given classifier is a generic or not and delegates to the appropriate function
+//	the first one is possibly not needed -toh-
+private MType determineType(Classifier c) :
+	info("determine type (classifier): " + c.name + ", type: " + c.metaType.name + ", supertypes: " + c.metaType.superTypes) ->
+	c.isTemplateParameter() ?
+		((ClassifierTemplateParameter)c.templateParameter).makeGeneric() :
+		determineClassifier(c)
+	;
+	
+private MType determineType(Type t) :
+	info("determine type (type): " + t.metaType.name + ", " + t.name) ->
+	t.isTemplateParameter() ?
+		((ClassifierTemplateParameter)t.templateParameter).makeGeneric() :
+		determineClassifier(t)
+	;
+	
 //	the uml2 metamodel doesn't define the type 'void'
 //	if you use the datatype 'void' from the profile 
 //  (UML Standard Profile::Magic Draw Profile::datatypes)
 //	it is mapped as a primitive type in genesez model
 private MClassifier determineClassifier(Classifier c) :
-	info("--> determine classifier: " + c.metaType.name + ", " + c.name) ->
+	info("-> generic: " + c.isTemplateParameter()) ->
+	info("-> metaType: " + c.metaType + ", supertypes: " + c.metaType.superTypes) ->
+	info("-> template paramter: " + c.templateParameter + ", " + c.templateParameter.metaType + ", " + c.templateParameter.metaType.superTypes) ->
+	info("determine classifier: " + c.metaType.name + ", " + c.name) ->
+	// check if it's void
 	c.metaType.name == "uml::DataType" && c.name == "void" ? (
 		//	then
 		getVoid() == null ?
@@ -263,7 +288,7 @@ private MClassifier determineClassifier(Classifier c) :
 	
 //	don't know if the if expression 't ==  null' is needed or not -toh-
 private MClassifier determineClassifier(Type t) :
-	info("--> determine classifier (type): " + t.name) ->
+	info("determine classifier (type): " + t.name) ->
 	t == null ? (
 		// then
 		getVoid() == null ? 
@@ -274,11 +299,11 @@ private MClassifier determineClassifier(Type t) :
 		makeClassifier(t)
 	;
 	
-//	if you leave some type fields in your model blank (maybe an alternative to specify 'void')
+//	if you leave some type fields in your model blank (maybe as an alternative to specify 'void')
 //	oaw returns the type 'oaw::void'
 //	simply mapping this type to 'void'
 private MClassifier determineClassifier(Void v) :
-	info("--> determine classifier (oaw::void): " + v) ->
+	info("determine classifier (oaw::void): " + v) ->
 	getVoid() == null ? makeVoid() : getVoid();
 	
 //	helper to ensure, that the primitive type 'void' is only once contained in genesez model
@@ -303,23 +328,30 @@ private MLiteral processLiteral(EnumerationLiteral l) :
 
 
 // create new MGeneric from uml2 classifier template parameter
-create MGeneric makeGenericParameter(ClassifierTemplateParameter c) :
+create MGeneric makeGeneric(ClassifierTemplateParameter c) :
+	info("-> metaType: " + c.metaType + ", supertypes: " + c.metaType.superTypes) ->
+	info("makeGeneric: '" + ((Class)c.ownedParameteredElement).name + "' [" + this + "] from: '" + c + "'") ->
 	setSpecification(((Class)c.ownedParameteredElement).name);
 	
-private MGeneric processGenericParameter(ClassifierTemplateParameter c) :
-	let mg = makeGenericParameter(c) :
+private MGeneric processGeneric(ClassifierTemplateParameter c) :
+	let mg = makeGeneric(c) :
 		mg;
 
 
-
+// -toh- has the same implementation but different function names
+//	unified it to 'makeGeneric' instead of '-Parameter' and '-Realization'
+//	got confused/in trouble with it when implement the use of generics as type
 // create new MGeneric from uml2 classifier template parameter
+/*
 create MGeneric makeGenericRealization(ClassifierTemplateParameter c) :
+	info("-> metaType: " + c.metaType + ", supertypes: " + c.metaType.superTypes) ->
+	info("makeGenericRealization: '" + ((Class)c.ownedParameteredElement).name + "' [" + this + "] from: '" + c + "'") ->
 	setSpecification(((Class)c.ownedParameteredElement).name);
 	
 private MGeneric processGenericRealization(ClassifierTemplateParameter c) :
 	let mg = makeGenericRealization(c) :
 		mg;
-
+*/
 
 
 // create new MAttribute from uml2 property
@@ -337,7 +369,7 @@ create MAttribute makeAttribute(Property p) :
 //	setUnique(p.isUnique);	
 
 private MAttribute processAttribute(Property p) :
-	info("--> process attribute: " + p.name) -> (
+	info("process attribute: " + p.name) -> (
 	let ma = makeAttribute(p) :
 		// add comment to attribute
 		ma.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
@@ -345,8 +377,8 @@ private MAttribute processAttribute(Property p) :
 		ma.setStereotype(p.getAppliedStereotypes().processStereotype())->
 		// set tagged values
 		ma.setTaggedValue(makeTaggedValues(ma, p))->
-		// add type of attribute
-		ma.setType(p.type.determineClassifier())->
+		// add type of attribute (can be a generic or classifier)
+		ma.setType(p.type.determineType())->
 		ma
 	);
 
@@ -362,12 +394,12 @@ create MOperation makeOperation(Operation o) :
 	setFinal(o.isLeaf);
 
 private MOperation processOperaration(Operation o) :
-	info("--> process operation: " + o.name) -> (
+	info("process operation: " + o.name) -> (
 	let mo = makeOperation(o) :
 		// add comment to operation
 		mo.setOwnedComment(o.ownedComment.typeSelect(Comment).processComment().setOwningElement(mo))->
 		// set generics
-		(o.ownedTemplateSignature != null ? mo.setGenericParameter(o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGenericParameter()) : "")->
+		(o.ownedTemplateSignature != null ? mo.setGenericParameter(o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGeneric()) : "")->
 		// set stereotype
 		mo.setStereotype(o.getAppliedStereotypes().processStereotype())->
 		// set tagged values
@@ -375,9 +407,12 @@ private MOperation processOperaration(Operation o) :
 		// add parameter to operation
 		mo.setParameter(o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter().setOperation(mo))->
 		// set return type
-		mo.setReturnType(o.type.determineClassifier())->
+		//	what about template parameters ???
+	info("! return type: " + o.type.isTemplateParameter()) ->
+	info("! return type: " + o.type) ->
+		mo.setReturnType(o.type.determineType())->
 		// set raised exceptions
-		mo.setRaisedException(o.raisedException.determineClassifier())->
+		mo.setRaisedException(o.raisedException.determineType())->
 		mo
 	);
 
@@ -393,18 +428,21 @@ create MParameter makeParameter(Parameter p) :
 	setMultiplicity(p.getUpper());
 	
 private MParameter processParameter(Parameter p) :
-	info("--> process parameter: " + p.name) -> (
+	info("process parameter: " + p.name) -> (
 	let mp = makeParameter(p) :
 		// add comment to parameter
 		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mp))->
 		// set generic
-		//info(p.getAppliedStereotypes().getAllAttributes().typeSelect(Property).select(e|e.name == "typeModifier"))->
+	//info(p.getAppliedStereotypes().getAllAttributes().typeSelect(Property).select(e|e.name == "typeModifier"))->
 		// set stereotype
 		mp.setStereotype(p.getAppliedStereotypes().processStereotype())->
 		// set tagged values
 		mp.setTaggedValue(makeTaggedValues(mp, p))->
 		// add type of parameter
-		mp.setType(p.type.determineClassifier())->
+		//	what about template parameters ???
+	info("! parameter type: " + p.type.isTemplateParameter()) ->
+	info("! parameter type: " + p.type) ->
+		mp.setType(p.type.determineType())->
 		mp
 	);
 
@@ -422,7 +460,7 @@ create MAssociationRole makeAssociationRole(Property aend) :
 	setComposition(aend.aggregation.toString() == "composite" ? true : false);
 
 private MAssociationRole processAssociationRole(Property aend) :
-	info("--> association role: " + aend.name) -> (
+	info("association role: " + aend.name) -> (
 	let ma = makeAssociationRole(aend) :
 		// add comment to associationrole
 		ma.setOwnedComment(aend.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
@@ -432,6 +470,7 @@ private MAssociationRole processAssociationRole(Property aend) :
 		ma.setTaggedValue(makeTaggedValues(ma, aend))->
 		// set classifier
 		ma.setClassifier(assocEndClass(aend))->
+		// an asscociation couldn't have a generic as type i guess
 		ma.setType(aend.type.determineClassifier())->
 		ma
 	);
@@ -467,7 +506,7 @@ private MAssociation associationClass(MAssociation ma, Association a):
 	ma;
 
 private MAssociation associationClass(MAssociation ma, AssociationClass a):
-	info("--> association class: " + ma.name + ", " + a.name) -> 
+	info("association class: " + ma.name + ", " + a.name) -> 
 	ma.setAssociationClass(makeClassifier(a).setOwnedAssociation(ma));
 
 private String assocName(Association a):
@@ -481,7 +520,7 @@ private String assocEndName(Property a):
 		a.name ;
 
 private MClass assocEndClass(Property a):
-	info("--> assoc end class: " + a.name) ->
+	info("assoc end class: " + a.name) ->
 	// Note: we can call makeClassifier() as often as we want, since create
 	// extensions are cached and, when invoked several times with the 
 	// same arguments are executed only upon first invocation. Subsequent
