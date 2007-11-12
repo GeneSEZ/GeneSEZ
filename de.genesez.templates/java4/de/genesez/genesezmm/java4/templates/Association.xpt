@@ -2,7 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
@@ -44,7 +46,7 @@
 «EXPAND _CommentAssociation-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _Modifier» «type.name» «asVariableName(name)»;
+		«EXPAND _Modifier» «type.name()» «asVariableName(name)»;
 	«ELSE-»
 		«EXPAND _Modifier» «typeMap("Set")» «asVariableName(name)» = new «typeMap("Set", "Implementation")»();
 	«ENDIF-»
@@ -59,13 +61,13 @@
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		public «type.name» «asGetter(name)»();
+		public «type.name()» «asGetter(name)»();
 	«ELSE-»
 		public «typeMap("Set")» «asGetter(name)»();
 	«ENDIF-»
 «ELSE-»
 	public «typeMap("Map")» «asGetter(name)»();
-	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name» _other);
+	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name()» _other);
 «ENDIF-»
 «ENDDEFINE»
 
@@ -76,7 +78,7 @@
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		public «type.name» «asGetter(name)»() {
+		public «type.name()» «asGetter(name)»() {
 			return «asVariableName(name)»;
 		}
 	«ELSE-»
@@ -89,7 +91,7 @@
 			return java.util.Collections.unmodifiableMap(«asVariableName(name)»);
 	}
 	
-	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name» _other) {
+	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name()» _other) {
 		return «asVariableName(name)».get(_other);
 	}
 «ENDIF-»
@@ -126,9 +128,9 @@
 «DEFINE InsertInDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void «asInsertIn(name)»(«type.name» _in);
+	public void «asInsertIn(name)»(«type.name()» _in);
 «ELSE-»
-	public void «asInsertIn(name)»(«type.name» _in, «assocClass().name» _at);
+	public void «asInsertIn(name)»(«type.name()» _in, «assocClass().name» _at);
 «ENDIF-»
 «ENDDEFINE»
 
@@ -137,7 +139,7 @@
 «DEFINE InsertInImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void «asInsertIn(name)»(«type.name» _in) {
+	public void «asInsertIn(name)»(«type.name()» _in) {
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» == _in) {
 				return;
@@ -159,7 +161,7 @@
 		«ENDIF-»
 	}
 «ELSE-»
-	public void «asInsertIn(name)»(«type.name» _in, «assocClass().name» _at) {
+	public void «asInsertIn(name)»(«type.name()» _in, «assocClass().name» _at) {
 		if («asVariableName(name)».keySet().contains(_in) && «asVariableName(name)».get(_in) == _at) {
 				return;
 		}
@@ -175,14 +177,14 @@
 // generate a remove from declaration method
 «DEFINE RemoveFromDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
-public void «asRemoveFrom(name)»(«type.name» _ex);
+public void «asRemoveFrom(name)»(«type.name()» _ex);
 «ENDDEFINE»
 
 
 // generate a remove from implementation method
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
-public void «asRemoveFrom(name)»(«type.name» _ex) {
+public void «asRemoveFrom(name)»(«type.name()» _ex) {
 	«IF isPlainAssociation()-»
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» != _ex) {

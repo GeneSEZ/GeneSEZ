@@ -2,7 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
@@ -43,7 +45,7 @@
 «DEFINE AttributeDecl FOR MAttribute-»
 «EXPAND _CommentAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «typeMap(type.name)» «asAttributeName()» «EXPAND _DefaultValue»;
+	«EXPAND _Modifier» «typeMap(type.name())» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
 	«EXPAND _Modifier» «typeMap("Set")» «asAttributeName()» = new «typeMap("Set", "Implementation")»();
 «ENDIF-»
@@ -53,16 +55,16 @@
 «DEFINE AttributeDerivedImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «typeMap(type.name)» «asGetter(name)»() {
-		«getReturnTypeDeclaration(typeMap(type.name))»
+	«EXPAND _Modifier» «typeMap(type.name())» «asGetter(name)»() {
+		«getReturnTypeDeclaration(typeMap(type.name()))»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(typeMap(type.name))»
+		«getReturnTypeReturn(typeMap(type.name()))»
 	}
 «ELSE-»
 	«EXPAND _Modifier» «typeMap("Set")» «asGetter(name)»() {
-		«getReturnTypeDeclaration(typeMap(type.name))»
+		«getReturnTypeDeclaration(typeMap(type.name()))»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(typeMap(type.name))»
+		«getReturnTypeReturn(typeMap(type.name()))»
 	}
 «ENDIF-»
 «ENDDEFINE»
@@ -72,7 +74,7 @@
 «DEFINE GetterImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	public «IF static»static«ENDIF» «typeMap(type.name)» «asGetter(name)»() {
+	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»() {
 		return «asAttributeName()»;
 	}
 «ELSE-»
@@ -87,7 +89,7 @@
 «DEFINE SetterImpl FOR MAttribute-»
 «EXPAND _CommentAccessor-»
 «IF multiplicity == 1-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap(type.name)» _«asAttributeName()») {
+	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap(type.name())» _«asAttributeName()») {
 		«asAttributeName()» = _«asAttributeName()»;
 	}
 «ELSE-»
@@ -111,7 +113,7 @@
 «DEFINE InsertInImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» void «asInsertIn(name)»(«typeMap(type.name)» _in) {
+	public «IF static»static«ENDIF» void «asInsertIn(name)»(«typeMap(type.name())» _in) {
 		if («asAttributeName()».contains(_in)) {
 			return;
 		}
@@ -126,7 +128,7 @@
 «DEFINE RemoveFromImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public void «asRemoveFrom(name)»(«typeMap(type.name)» _ex) {
+	public void «asRemoveFrom(name)»(«typeMap(type.name())» _ex) {
 		if (!«asAttributeName()».contains(_ex)) {
 			return;
 		}

@@ -2,7 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
@@ -231,7 +233,7 @@ public «asClassifierName(name)» («EXPAND _AllAttributesAsParam») {
 
 // get all attributes as parameter list
 «DEFINE _AllAttributesAsParam FOR MClassifier-»
-«FOREACH this.getAllAttributes() AS attr SEPARATOR ", "»«((MAttribute)attr).type.name» _«((MAttribute)attr).asAttributeName()»«ENDFOREACH-»
+«FOREACH this.getAllAttributes() AS attr SEPARATOR ", "»«((MAttribute)attr).type.name()» _«((MAttribute)attr).asAttributeName()»«ENDFOREACH-»
 «ENDDEFINE»
 
 // init all attributes in initializing constructor
@@ -258,7 +260,7 @@ public «asClassifierName(name)» («EXPAND _AssocAttributesAsParam») {
 
 // get association attributes as parameter list
 «DEFINE _AssocAttributesAsParam FOR MClass-»
-«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.name» _«aend.name.asVariableName()»«ENDFOREACH-»
+«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.name()» _«aend.name.asVariableName()»«ENDFOREACH-»
 «ENDDEFINE»
 
 // init all association attributes in initializing constructor

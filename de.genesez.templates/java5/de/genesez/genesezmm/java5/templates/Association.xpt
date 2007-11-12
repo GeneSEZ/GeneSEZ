@@ -2,7 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
@@ -50,9 +52,9 @@
 «EXPAND _CommentAssociation-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _Modifier» «type.name» «asVariableName(name)»;
+		«EXPAND _Modifier» «type.name()» «asVariableName(name)»;
 	«ELSE-»
-		«EXPAND _Modifier» «typeMap("Set")»<«type.name»> «asVariableName(name)» = new «typeMap("Set", "Implementation")»<«type.name»>();
+		«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asVariableName(name)» = new «typeMap("Set", "Implementation")»<«type.name()»>();
 	«ENDIF-»
 «ELSE-»
 	«EXPAND _Modifier» «typeMap("Set")»<«assocClass().name»> «asVariableName(name)» = new «typeMap("Set", "Implementation")»<«assocClass().name»>();
@@ -65,12 +67,12 @@
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		public «type.name» «asGetter(name)»();
+		public «type.name()» «asGetter(name)»();
 	«ELSE-»
-		public «typeMap("Set")»<«type.name»> «asGetter(name)»();
+		public «typeMap("Set")»<«type.name()»> «asGetter(name)»();
 	«ENDIF-»
 «ELSE-»
-	public «typeMap("Set")»<«type.name»> «asGetter(name)»();
+	public «typeMap("Set")»<«type.name()»> «asGetter(name)»();
 	public «typeMap("Set")»<«assocClass().name»> «asGetter(name)»«assocClass().name»();
 «ENDIF-»
 «ENDDEFINE»
@@ -82,17 +84,17 @@
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		public «type.name» «asGetter(name)»() {
+		public «type.name()» «asGetter(name)»() {
 			return «asVariableName(name)»;
 		}
 	«ELSE-»
-		public «typeMap("Set")»<«type.name»> «asGetter(name)»() {
+		public «typeMap("Set")»<«type.name()»> «asGetter(name)»() {
 			return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
 		}
 	«ENDIF-»
 «ELSE-»
-	public «typeMap("Set")»<«type.name»> «asGetter(name)»() {
-		«typeMap("Set", "Implementation")»<«type.name»> _result = new «typeMap("Set", "Implementation")»<«type.name»>();
+	public «typeMap("Set")»<«type.name()»> «asGetter(name)»() {
+		«typeMap("Set", "Implementation")»<«type.name()»> _result = new «typeMap("Set", "Implementation")»<«type.name()»>();
 		for(«assocClass().name» _assoc : «asVariableName(name)») {
 			_result.add(_assoc.«asGetter(name)»());
 		}
@@ -113,9 +115,9 @@
 «DEFINE InsertInDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void «asInsertIn(name)»(«type.name» _in);
+	public void «asInsertIn(name)»(«type.name()» _in);
 «ELSE-»
-	public void «asInsertIn(name)»(«type.name» _in, «assocClass().name» _at);
+	public void «asInsertIn(name)»(«type.name()» _in, «assocClass().name» _at);
 «ENDIF-»
 «ENDDEFINE»
 
@@ -124,7 +126,7 @@
 «DEFINE InsertInImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void «asInsertIn(name)»(«type.name» _in) {
+	public void «asInsertIn(name)»(«type.name()» _in) {
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» == _in) {
 				return;
@@ -151,7 +153,7 @@
 	  * @param _other partner object
 	  * @return newly generated linked association class object
 	  */
-	public «assocClass().name» «asInsertIn(name)»(«type.name» _other) {
+	public «assocClass().name» «asInsertIn(name)»(«type.name()» _other) {
 		«IF association.end.first() != this-»
 			«assocClass().name» _assoc = new «assocClass().name»(this, _other);
 		«ELSE-»
@@ -184,7 +186,7 @@
 // generate a remove from declaration method
 «DEFINE RemoveFromDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
-public void «asRemoveFrom(name)»(«type.name» _ex);
+public void «asRemoveFrom(name)»(«type.name()» _ex);
 «ENDDEFINE»
 
 
@@ -192,7 +194,7 @@ public void «asRemoveFrom(name)»(«type.name» _ex);
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void «asRemoveFrom(name)»(«type.name» _ex) {
+	public void «asRemoveFrom(name)»(«type.name()» _ex) {
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» != _ex) {
 				return;
@@ -268,14 +270,14 @@ public void «asRemoveFrom(name)»(«type.name» _ex);
 «DEFINE _AssocClassReferences FOR MAssociation-»
 «FOREACH end AS aend-»
 	/** reference attribute to the managed association end */
-	private «aend.type.name» «aend.name.asVariableName()»;
+	private «aend.type.name()» «aend.name.asVariableName()»;
 «ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE _AssocClassReferenceGetters FOR MAssociation-»
 «FOREACH end AS aend-»
 	/** getter of reference attribute to the managed association end  «aend.name.asVariableName()»*/
-	public «aend.type.name» «aend.name.asGetter()»() {
+	public «aend.type.name()» «aend.name.asGetter()»() {
 		return «aend.name.asVariableName()»;
 	}
 «ENDFOREACH-»
