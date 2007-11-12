@@ -2,7 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
@@ -63,8 +65,8 @@ public void run() {
 «ENDDEFINE»
 
 «DEFINE _CommentReturn FOR MOperation-»
-«IF returnType.name.toLowerCase() != "void" -»
- * @return «getCommentText(returnType.ownedComment)»
+«IF returnType.name().toLowerCase() != "void" -»
+ * @return «getCommentText(returnType.ownedComment())»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -99,13 +101,13 @@ public void run() {
 
 // generate a parameter list for moperation
 «DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "»«typeMap(p.type.name)» «p.name»«ENDFOREACH»
+«FOREACH parameter AS p SEPARATOR ", "»«typeMap(p.type.name())» «p.name»«ENDFOREACH»
 «ENDDEFINE»
 
 
 // generate exceptions for a moperation
 «DEFINE _Exception FOR MOperation-»
 «IF !raisedException.isEmpty-»
-	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name»«ENDFOREACH»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name()»«ENDFOREACH»
 «ENDIF-»
 «ENDDEFINE»
