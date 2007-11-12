@@ -6,6 +6,24 @@ import genesezMM;
 
 extension de::genesez::io::io;
 
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//	-- generics + classifiers --
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+//	distinct the type + returns the name of the type
+String name(MType type) :
+	type.metaType == MGeneric
+		? ((MGeneric)type).specification
+		: ((MClassifier)type).name
+	;
+	
+//	distinct the type + returns the ownedComment
+List ownedComment(MType type) :
+	type.metaType == MGeneric
+		? {}
+		: ((MClassifier)type).ownedComment
+	;
+	
 
 //	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //	-- stereotypes + tagged values --

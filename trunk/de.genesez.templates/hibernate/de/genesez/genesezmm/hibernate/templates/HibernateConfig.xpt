@@ -3,8 +3,11 @@
 «REM» import code gen meta model «ENDREM»
 «IMPORT genesezMM»
 
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
 «EXTENSION de::genesez::java::helper::HibernateHelper»
 «EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Type»
 
 «DEFINE HbmConfigFile FOR Object»
 «FILE "xml/hibernate.cfg.xml" -»
@@ -99,7 +102,7 @@
 			«FOREACH collectionKey() AS key»
 				<key column="«((MAttribute)key).name»" «IF ((MAttribute)key).hasStereotype("key")»property-ref="«((MAttribute)key).name»" not-null="true"«ENDIF» on-delete="cascade"/>
 			«ENDFOREACH»
-				<element type="«pa.type.name»" column="«pa.name»" not-null="true"/>
+				<element type="«pa.type.name()»" column="«pa.name»" not-null="true"/>
 			</set>
 		«ENDIF»
 	«ENDFOREACH»
