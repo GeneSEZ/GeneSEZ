@@ -2,7 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::java::helper::DataType»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
 «EXTENSION de::genesez::java::helper::Helper»
 «EXTENSION de::genesez::java::helper::Naming»
 
@@ -30,12 +32,12 @@ private Thread runner;
 «DEFINE GetterImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	public «IF static»static«ENDIF» «typeMap(type.name)» «asGetter(name)»() {
+	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»() {
 		return «asAttributeName()»;
 	}
 «ELSE-»
-	public «IF static»static«ENDIF» «typeMap(type.name)» «asGetter(name)»(int _index) {
-		return («type.name»)«asVariableName(name)».elementAt(_index);
+	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»(int _index) {
+		return («type.name()»)«asVariableName(name)».elementAt(_index);
 	}
 	
 	public «IF static»static«ENDIF» int «asGetter(name + "Count")»() {
@@ -49,7 +51,7 @@ private Thread runner;
 «DEFINE InsertInImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«typeMap(type.name)» _in) {
+	public «IF static»static«ENDIF» void insertIn«name.toFirstUpper()»(«typeMap(type.name())» _in) {
 		if («asAttributeName()».contains(_in)) {
 			return;
 		}
@@ -63,7 +65,7 @@ private Thread runner;
 «DEFINE RemoveFromImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public void removeFrom«name.toFirstUpper()»(«typeMap(type.name)» _ex) {
+	public void removeFrom«name.toFirstUpper()»(«typeMap(type.name())» _ex) {
 		if (!«asAttributeName()».contains(_ex)) {
 			return;
 		}

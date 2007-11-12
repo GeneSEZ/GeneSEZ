@@ -45,7 +45,7 @@ public class ImportChecker {
 
 		while (it.hasNext()) {
 			p = (MProperty) it.next();
-			insertInImports(p.getType());
+			//insertInImports(p.getType());
 		}
 	}
 	
@@ -55,7 +55,7 @@ public class ImportChecker {
 		
 		while (it.hasNext()) {
 			op = (MOperation) it.next();
-			insertInImports(op.getReturnType());
+			//insertInImports(op.getReturnType());
 			checkParameter(op);
 		}
 	}
@@ -66,7 +66,7 @@ public class ImportChecker {
 		
 		while (it.hasNext()) {
 			pa = (MParameter) it.next();
-			insertInImports(pa.getType());
+			//insertInImports(pa.getType());
 		}
 	}
 
