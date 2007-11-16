@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- this component runs the transformation from UML2 to genesezMM. -->
+	
+	<!-- 	This workflow component is provided to perform the transformation
+			from uml2 to the genesezMM with profile mechanism.
+			
+			Following parameters are required:
+			==================================
+			
+			$uml2Model			name of the slot which holds the uml2 model
+			$uml2ProfileFile	name of the uml2 profile file
+			$excludePackages	comma or semicolon separated list of package names to exclude
+								(comma blank [, ] or semicolon blank [; ] are also permitted)
+			$genesezModel		name of the slot which holds the genesez model
+	 -->
+	
+	
+	
+	<component id="uml2genesezMM" class="oaw.xtend.XtendComponent">
+		
+		<!-- Working on genesezMM models also requires the EcorePackage to 
+			 be configured as a meta model. -->
+		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="genesezMM.GenesezMMPackage" />
+		</metaModel>
+		
+		<!-- Workin with ecore models also requires the ecore meta model. -->
+		<metaModel id="mm.emf" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="org.eclipse.emf.ecore.EcorePackage" />
+		</metaModel>
+		
+		<!-- Workin with uml2 models also requires the UML2 meta model. -->
+		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
+		
+		<!-- Workin with uml2 profiles also requires the file where 
+			 the profiles are specified. -->
+		<metaModel class="oaw.uml2.profile.ProfileMetaModel">
+			<profile value="${uml2ProfileFile}" />
+		</metaModel>
+		
+		<globalVarDef name="uml2model" value="${uml2Model}" />
+		<globalVarDef name="excludePackages" value="'${excludePackages}'" />
+		
+		<!-- Run the model to model transformation itself. There's an 
+			 extension file called uml2genesezMM.ext in the respective location
+			 in the classpath that contains a function called transform that
+			 takes an object of type UML2::Model as its parameter. Note that 
+			 we can use the slot name uml2model as a variable in this expression. -->
+		<invoke	value="de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)" />
+		
+		<!-- Finally, the return value of the transformation is put into the 
+			 generatorModel slot in the workflow. -->
+		<outputSlot value="${genesezModel}" />
+	</component>
+
+</workflow>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 	This workflow component is provided to read a uml2 file.
+			
+			Following parameters are required:
+			==================================
+			
+			$inputModelFile		name of the uml2 file
+			$modelSlot			name of the slot which holds the instantiated model
+	 -->
+
+	<!-- First is to initialize the support for UML2 models. -->
+	<bean class="oaw.uml2.Setup" standardUML2Setup="true" />
+
+	<!-- Read the UML2 model file into the uml2model workflow slot. -->
+	<component id="xmiReader" class="oaw.emf.XmiReader">
+		<modelFile value="${inputModelFile}" />
+		<outputSlot value="${modelSlot}" />
+	</component>
+
+</workflow>

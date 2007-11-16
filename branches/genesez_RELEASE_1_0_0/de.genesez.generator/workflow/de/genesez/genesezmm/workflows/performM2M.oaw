@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 	
+			workflow component to perform model-2-model transformations
+			
+			Following parameters are required:
+			==================================
+			
+			$invokeScript 		extention call which starts the transformation
+								contains the xTend file, xTend function and the name of the input model slot
+								[e.g.: de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)]
+			$outputModelSlot	name of the slot which holds the transformed model
+	-->
+	
+	<component id="performM2M" class="oaw.xtend.XtendComponent">
+		
+		<!-- Working on genesezMM models also requires the EcorePackage to 
+			 be configured as a meta model. -->
+		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="genesezMM.GenesezMMPackage" />
+		</metaModel>
+		
+		<!-- run the model to model transformation itself -->
+		<invoke	value="${invokeScript}" />
+		
+		<!-- Finally, the return value of the transformation is put into the 
+			 outputModel slot in the workflow. -->
+		<outputSlot value="${outputModelSlot}" />
+		
+	</component>
+
+</workflow>
