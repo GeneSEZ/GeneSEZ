@@ -1,0 +1,47 @@
+// import genesezMM metamodel
+import genesezMM;
+
+// and we also load the io extensions, for the purpose of
+// debugging, in case we need it   
+extension de::genesez::io::io;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// public extend functions
+////////////////////////////////////////////////////////////////////////////////
+
+
+// nothing to do
+MModel convert(MModel m): 
+	//m.ownedPackage.convert();
+	"";
+
+// testing
+convert(MPackage p):
+	p.nestedPackage.convert()->
+	p.classifier.typeSelect(MClass)
+		.select(e|!e.stereotype.select(s|s.name == "Exception").isEmpty)
+		.convertExceptionClass();
+
+// testing
+convertExceptionClass(MClass c) :
+	c.property.add(makeSerialVersionUID(c).setClassifier(c));
+
+
+// testing
+create MAttribute makeSerialVersionUID(MClass c) :
+	setXmiGuid(c.xmiGuid + "serialVersionUID")->
+	setName("serialVersionUID")->
+	setVisibility("private")->
+	setMultiplicity(1)->
+	setDerived(false)->
+	setDefaultvalue("1L")->
+	setStatic(true)->
+	setFinal(true)->
+	setType(makeTypeLong(c));
+
+// testing
+create MDataType makeTypeLong(MClass c) :
+	setXmiGuid(c.xmiGuid + "DataTypeLong")->
+	setName("long");
+	
