@@ -1,0 +1,64 @@
+/*
+	provides functionality for easier access to genesez models
+*/
+
+import genesezMM;
+
+extension de::genesez::io::io;
+
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//	-- generics + classifiers --
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+//	distinct the type + returns the name of the type
+String name(MType type) :
+	type.metaType == MGeneric
+		? ((MGeneric)type).specification
+		: ((MClassifier)type).name
+	;
+	
+//	distinct the type + returns the ownedComment
+List ownedComment(MType type) :
+	type.metaType == MGeneric
+		? {}
+		: ((MClassifier)type).ownedComment
+	;
+	
+
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//	-- stereotypes + tagged values --
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	
+//	determines, if an element has a stereotype or not
+boolean hasStereotype(MElement elem, String stereotype) :
+	elem.stereotype.name.contains(stereotype);
+	
+//	determines, if an element has a tagged value or not
+boolean hasTaggedValue(MElement elem, String tag, String value) :
+	elem.taggedValue.exists(e|e.tag.name == tag && e.value == value);
+	
+	
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//	-- pick classes + packages by full qualified name --
+//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	
+//	returns the specified class from the model
+MClass getClass(MModel model, String fullQualifiedName) :
+	getClass(model.ownedPackage, fullQualifiedName);
+	
+//	returns the specified class
+//	should only work, if the list contains the root package in the name
+private MClass getClass(List[MClass] packages, String fullQualifiedName) :
+	JAVA de.genesez.genesezmm.AccessHelper.getClass(java.util.List, java.lang.String);
+	
+//	returns the package, specified with the given full qualified name
+MPackage getPackage(MModel model, String fullQualifiedPackageName) :
+	info("package count = " + model.ownedPackage.size) ->
+	getPackage(model.ownedPackage, fullQualifiedPackageName);
+	
+//	returns the package, specified with the given full qualified name
+//	should only work, if the list contains only the root package from the qualified name
+private MPackage getPackage(List[MPackage] packages, String fullQualifiedPackageName) :
+	JAVA de.genesez.genesezmm.AccessHelper.getPackage(java.util.List, java.lang.String);
+	
+	
