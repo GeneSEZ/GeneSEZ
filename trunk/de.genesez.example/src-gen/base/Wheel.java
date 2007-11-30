@@ -5,10 +5,6 @@ package base;
 /* <!-- TODO put your imports here --> */
 import java.lang.String;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import base.parts.Screw;
 
 /* <!-- PROTECTED REGION END --> */

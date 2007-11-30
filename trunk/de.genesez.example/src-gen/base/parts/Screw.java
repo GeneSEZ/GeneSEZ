@@ -5,9 +5,6 @@ package base.parts;
 /* <!-- TODO put your imports here --> */
 import java.lang.String;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /* <!-- PROTECTED REGION END --> */
 /**
@@ -23,8 +20,6 @@ public class Screw {
     private float length;
     private float diameter;
     private boolean metric;
-    private java.util.Set<String> strengthClasses =
-        new java.util.HashSet<String>();
 
     // ////////////////////////////////////////////////////////////////////////
     // generated constructor implementations
@@ -87,18 +82,6 @@ public class Screw {
 
     public void setMetric(boolean _metric) {
         metric = _metric;
-    }
-
-    public java.util.Set getStrengthClasses() {
-        return java.util.Collections.unmodifiableSet(strengthClasses);
-    }
-
-    public void addToStrengthClasses(String _in) {
-        strengthClasses.add(_in);
-    }
-
-    public void removeFromStrengthClasses(String _ex) {
-        strengthClasses.remove(_ex);
     }
 
     // ////////////////////////////////////////////////////////////////////////

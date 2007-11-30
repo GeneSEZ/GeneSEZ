@@ -14,7 +14,7 @@ import java.util.Set;
  * A car is a vehicle with four wheels and drives on the road.
  * @author nicher
  */
-public class Car<T> extends Vehicle<T> {
+public class Car extends Vehicle {
 
     // ////////////////////////////////////////////////////////////////////////
     // generated variable, constant and association declarations
@@ -179,7 +179,7 @@ public class Car<T> extends Vehicle<T> {
       * @return newly generated linked association class object
       */
     public Owner insertInLicense(License _other) {
-        Owner _assoc = new Owner(this, _other);
+        Owner _assoc = new Owner(_other, this);
         license.add(_assoc);
         _other.insertInCar(_assoc);
         return _assoc;
