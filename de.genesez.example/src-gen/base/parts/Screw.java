@@ -5,7 +5,6 @@ package base.parts;
 /* <!-- TODO put your imports here --> */
 import java.lang.String;
 
-
 /* <!-- PROTECTED REGION END --> */
 /**
  * @author nicher
