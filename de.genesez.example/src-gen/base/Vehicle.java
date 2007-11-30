@@ -10,7 +10,7 @@ import java.lang.String;
  * This abstract class Vehicle is the superclass for all things that can drive (for example: car, boat, air plane, ...).
  * @author nicher
  */
-public abstract class Vehicle<T> {
+public abstract class Vehicle {
 
     // ////////////////////////////////////////////////////////////////////////
     // generated variable, constant and association declarations
