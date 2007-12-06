@@ -18,14 +18,12 @@
 
 <project name="de.genesez.metamodel.external" basedir=".." default="generate.metamodel.implementation.eclipse-3.2">
 	
-	<!-- using additional properties for executing ant external -->
-	<property file="build/external.properties" />
-	
 	<!--
 		import build file containing
 		- needed properties
 		- uml2ecore task [oaw workflow]
 		- ecore2java task
+		- environment specific properties
 	-->
 	<import file="build-user.xml" />
 	
@@ -36,6 +34,11 @@
 	-->
 	<target name = "generate.metamodel.implementation.eclipse-3.2"
 		depends="uml2ecore, ecore2java.eclipse-3.2"
+		description="executes the oaw workflow to create the ecore model + then generates the metamodel implementation from it">
+	</target>
+	
+	<target name = "generate.metamodel.implementation.eclipse-3.3"
+		depends="uml2ecore, ecore2java.eclipse-3.3"
 		description="executes the oaw workflow to create the ecore model + then generates the metamodel implementation from it">
 	</target>
 	
@@ -56,29 +59,45 @@
 				<fileset dir="${ECLIPSE_HOME}" includes="startup.jar"/>
 			</classpath>
 			<arg value="-noupdate" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
 			<arg value="-data" />
 			<arg value="${workspace.location}" />
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
 			<arg value="-buildfile" />
-			<arg value="${build.file}" />
+			<arg value="build/build-user.xml" />
 			<arg value="ecore2java" />
-			<!--arg value="-verbose" /-->
+			<arg value="-verbose" />
 		</java>
 	</target>
 	
 	<target name="ecore2java.eclipse-3.3">
-	<!--
-This is the usual command line to run an Ant script using a headless Eclipse instance (remove the line breaks):
-
-eclipse 
-  -noSplash 
-  -data <full path to a workspace - ideally an empty directory> 
-  -application org.eclipse.ant.core.antRunner 
-  -buildfile <full path to your script>
-
-In Windows you should execute eclipsec instead of eclipse in order to have access to the Ant build script console output.
-	-->	
+		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="build/build-user.xml" />
+			<arg value="ecore2java" />
+			<arg value="-verbose" />
+		</exec>
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="build/build-user.xml" />
+			<arg value="ecore2java" />
+			<arg value="-verbose" />
+		</exec>
 	</target>
-	
 </project>
