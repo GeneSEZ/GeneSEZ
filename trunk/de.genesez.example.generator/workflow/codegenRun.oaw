@@ -2,11 +2,14 @@
 
 <workflow>
 	
+	<!-- example project where the generated artifacts are stored -->
+	<property name="de.genesez.example.project.dir" value="../de.genesez.example" />
+	
 	<!-- Reading the example file. -->
 	<cartridge
 		file="de::genesez::genesezmm::workflows::makeGenesezModelProfile.oaw" 
-		uml2ProfileFile="../de.genesez.example/model-exp/profile.profile.uml"
-		inputModelFile="../de.genesez.example/model-exp/example.uml"
+		uml2ProfileFile="${de.genesez.example.project.dir}/model-exp/profile.profile.uml"
+		inputModelFile="${de.genesez.example.project.dir}/model-exp/example.uml"
 		excludePackages="UML Standard Profile"
 		genesezModel="genesezModel"
 	/>
@@ -29,7 +32,7 @@
 	<cartridge
 		file="de::genesez::genesezmm::workflows::xmiWriter.oaw"
 		modelSlot="genesezModel"
-		outputModelFile="../de.genesez.example/model-gen/example.ecore"
+		outputModelFile="${de.genesez.example.project.dir}/model-gen/example.ecore"
 	/>
 	
 	<!-- Create java code with AOP in xpand templates.  /-->
@@ -37,8 +40,8 @@
 		file="de::genesez::genesezmm::workflows::performM2T.oaw"
 		rootTemplate="de::genesez::genesezmm::java5::templates::Root::Root FOR genesezModel"
 		excludePackages="java, java.util"
-		outputDir="../de.genesez.example/src-gen"
-		proRegDir="../de.genesez.example/src-gen"
+		outputDir="${de.genesez.example.project.dir}/src-gen"
+		proRegDir="${de.genesez.example.project.dir}/src-gen"
 		xmlMappingFile="../de.genesez.templates/java5/de/genesez/genesezmm/java5/typemapping/typemapping4java5.xml"
 	/>
 	
