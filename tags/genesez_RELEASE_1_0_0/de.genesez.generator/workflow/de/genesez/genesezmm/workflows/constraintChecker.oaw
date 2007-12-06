@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- 	This workflow component is provided to check some constraints to keep
+			the model consistent. Also used to check language specific properties.
+			
+			Following parameters are required:
+			==================================
+			
+			$modelSlot			name of the model slot which holds the model to check
+			$checkScript: 		the chk-file where the constraints are defined
+			$abortOnError:		set true, if the generation stops on errors
+	 -->
+	
+	<component id="constraintChecker" class="org.openarchitectureware.check.CheckComponent">
+		
+		<!-- Working on genesezMM models also requires the EcorePackage to 
+			 be configured as a meta model. -->
+		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="genesezMM.GenesezMMPackage" />
+		</metaModel>
+		
+		<!-- Workin with uml2 models also requires the UML2 meta model. -->
+		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
+		
+		<!-- This is the file that contains the constraints. Note the use of
+			 :: as the namespace delimiter. Also don't specify the .chk
+			 extension of the uml2Constraints file. The namespaces correspond
+			 to Java packages. -->
+		<checkFile value="${checkScript}" />
+		
+		<!-- Check the complete set of model elements under the generatorModel 
+			 slot in the workflow. This will be the model object and all its
+			 children, recusively.  -->
+		<emfAllChildrenSlot value="${modelSlot}" />
+		
+		<!-- Finally, if encounter errors here (i.e. failed constraints)
+			 we stop the workflow here. We won't invoke the transformation if
+			 the model is faulty. -->
+		<abortOnError value="${abortOnError}" />
+	</component>
+
+</workflow>

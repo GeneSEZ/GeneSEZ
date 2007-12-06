@@ -1,0 +1,149 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::java::helper::Type»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented association functions
+// //////////////////////////////////////////////////////////////////////////////
+
+// override the java4 getter method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::GetterDecl FOR MAssociationRole»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")»
+	«EXPAND Association::GetterDecl»
+«ENDIF»
+«ENDAROUND»
+
+
+// override the java4 getter method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::GetterImpl FOR MAssociationRole»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")»
+	«EXPAND Association::GetterImpl»
+«ENDIF»
+«ENDAROUND»
+
+
+// override the java4 iterator method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::IteratorDecl FOR MAssociationRole»
+«ENDAROUND»
+
+
+// override the java4 iterator method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::IteratorImpl FOR MAssociationRole»
+«ENDAROUND»
+
+
+// override the java4 insertin method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::InsertInImpl FOR MAssociationRole»
+«IF !hasTaggedValue("AccessorModifier", "insertIn", "false")»
+	«EXPAND Association::InsertInImpl»
+«ENDIF»	
+«ENDAROUND»
+
+
+// override the java4 removefrom method for associations
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Association::RemoveFromImpl FOR MAssociationRole»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")»
+	«EXPAND Association::RemoveFromImpl»
+«ENDIF»
+«ENDAROUND»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented attribute functions
+// //////////////////////////////////////////////////////////////////////////////
+
+// additional the java 4 declaration method for attribute
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::AttributeDecl FOR MClassifier»
+«targetDef.proceed()-»
+«IF hasStereotype("ThreadComponent")-»
+	«EXPAND Attribute::ThreadDecl-»
+«ENDIF-»
+«ENDAROUND»
+
+
+// addition to the java 4 getter method for attribute
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::GetterImpl FOR MAttribute»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")-»
+	«EXPAND Attribute::GetterImpl-»
+«ENDIF»
+«ENDAROUND»
+
+
+// addition to the java 4 setter method for attribute
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::SetterImpl FOR MAttribute»
+«IF !hasTaggedValue("AccessorModifier", "setter", "false")»
+	«targetDef.proceed()-»
+«ENDIF»
+«ENDAROUND»
+
+
+// override the java4 iterator method for attributes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::IteratorImpl FOR MAttribute»
+«ENDAROUND»
+
+
+// addition to the java 4 insertIn method for attribute
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::InsertInImpl FOR MAttribute»
+«IF !hasTaggedValue("AccessorModifier", "insertIn", "false")»
+	«EXPAND Attribute::InsertInImpl-»
+«ENDIF»
+«ENDAROUND»
+
+
+// addition to the java 4 removeFrom method for attribute
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Attribute::RemoveFromImpl FOR MAttribute»
+«IF !hasTaggedValue("AccessorModifier", "removeFrom", "false")»
+	«EXPAND Attribute::RemoveFromImpl-»
+«ENDIF»
+«ENDAROUND»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented generalization functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// addition to the java4 generalization method classes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Generalization::Generalization FOR MClass»
+«targetDef.proceed()-»
+«IF hasStereotype("Exception")-»
+	«EXPAND Generalization::Exception-»
+«ENDIF-»
+«ENDAROUND»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented operation functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// addition to the java4 operation implementation method for classes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Operation::OperationImpl FOR MClassifier»
+«targetDef.proceed()-»
+«IF hasTaggedValue("Application", "starting", "true")-»
+	«EXPAND Operation::StaticMain-»
+«ENDIF-»
+«IF hasStereotype("ThreadComponent")-»
+	«EXPAND Operation::ThreadRun-»
+«ENDIF-»
+«ENDAROUND»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented realization functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// addition to the java4 realization method classes
+«AROUND de::genesez::cartridges::genesezmm::java4::templates::Realization::Realization FOR MClass»
+«targetDef.proceed()-»
+«IF hasStereotype("ThreadComponent")-»
+	«EXPAND Realization::RunnableInterface-»
+«ENDIF-»
+«ENDAROUND»

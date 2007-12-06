@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- Reading the example file. -->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::makeGenesezModelProfile.oaw" 
+		uml2ProfileFile="../de.genesez.example/model-exp/profile.profile.uml"
+		inputModelFile="../de.genesez.example/model-exp/example.uml"
+		excludePackages="UML Standard Profile"
+		genesezModel="genesezModel"
+	/>
+	
+	<!-- Check constraints. /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::constraintChecker.oaw"
+		modelSlot="genesezModel"
+		checkScript="de::genesez::genesezmm::java5::constraints::syntax"
+		abortOnError="true"
+	/>
+	<cartridge
+		file="de::genesez::genesezmm::workflows::constraintChecker.oaw"
+		modelSlot="genesezModel"
+		checkScript="de::genesez::genesezmm::java5::constraints::naming"
+		abortOnError="true"
+	/>
+	
+	<!-- Write the transformed model file.  /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::xmiWriter.oaw"
+		modelSlot="genesezModel"
+		outputModelFile="../de.genesez.example/model-gen/example.ecore"
+	/>
+	
+	<!-- Create java code with AOP in xpand templates.  /-->
+	<cartridge
+		file="de::genesez::genesezmm::workflows::performM2T.oaw"
+		rootTemplate="de::genesez::genesezmm::java5::templates::Root::Root FOR genesezModel"
+		excludePackages="java, java.util"
+		outputDir="../de.genesez.example/src-gen"
+		proRegDir="../de.genesez.example/src-gen"
+		xmlMappingFile="../de.genesez.templates/java5/de/genesez/genesezmm/java5/typemapping/typemapping4java5.xml"
+	/>
+	
+
+</workflow>

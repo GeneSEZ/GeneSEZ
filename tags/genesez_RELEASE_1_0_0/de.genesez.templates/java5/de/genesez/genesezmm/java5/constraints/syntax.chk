@@ -1,0 +1,46 @@
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::io::io;
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// java syntax conventions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// checks if all attributes are defined static final 
+context MAttribute ERROR "GeneSEZ-Gen: constant has illegal modifiers (" + "attribute: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (visibility == "public" && static && final ? true : false)
+		: true;
+
+
+//	repairable bugs in model - if no visibility is set, set it to public
+context MOperation WARNING "GeneSEZ-Gen: visibility was set to 'public' (" + "operation: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (visibility == null || visibility == ""
+				? (setVisibility("public") -> false)
+				: true)
+		: true;
+
+//	repairable bugs in model - interface methods in java can only be abstract
+context MOperation WARNING "GeneSEZ-Gen: method was made 'abstract' (" + "operation: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (abstract == false
+			? (setAbstract(true) -> false)
+			: true)
+		: true;
+
+// checks if all methods are defined public and abstract
+context MOperation ERROR "GeneSEZ-Gen: method has illegal modifiers (" + "operation: " + name + " in interface: " + classifier.name + ")" :
+	classifier.metaType == MInterface
+		? (
+			visibility == "public" && abstract ? true : false
+			)
+		: true;
+
+// checks if all names are not a java reserved word
+// NOCH WEITER AUSPROGRAMMIEREN
+context MElement ERROR "GeneSEZ-Gen: name is a reserved java word" :
+	name != "super";

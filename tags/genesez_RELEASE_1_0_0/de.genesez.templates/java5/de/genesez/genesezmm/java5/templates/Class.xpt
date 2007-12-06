@@ -1,0 +1,273 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::genesezmm::AccessHelper»
+
+«EXTENSION de::genesez::java::helper::Type»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate an interface
+«DEFINE Root FOR MInterface-»
+package «getPackagePath()»;
+«EXPAND Import::Import-»
+«EXPAND _CommentClassifier-»
+public interface «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» {
+
+	// ////////////////////////////////////////////////////////////////////////
+	// generated variable and constant declarations
+	// ////////////////////////////////////////////////////////////////////////
+
+	«EXPAND Attribute::AttributeDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated association method declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Association::OperationDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated abstract method declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// own implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+// generate a class
+«DEFINE Root FOR MClass-»
+package «getPackagePath()»;
+«EXPAND Import::Import-»
+«EXPAND _CommentClassifier-»
+«EXPAND _Modifier» class «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated variable, constant and association declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Attribute::AttributeDecl-»
+	«EXPAND Association::AssociationDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated constructor implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::ConstructorImpl-»
+	«IF ownedAssociation != null»«EXPAND _InitialisingConstructorForAssocClass»«ENDIF-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated derived attribute method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Attribute::AttributeDerivedImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated association method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Association::OperationImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated abstract method declaration
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated normal method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated getter and setter method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Attribute::GetterSetterImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// own implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+// generate an enumeration
+«DEFINE Root FOR MEnumeration-»
+package «getPackagePath()»;
+«EXPAND Import::Import-»
+«EXPAND _CommentClassifier-»
+«EXPAND _Modifier» enum «asClassifierName(name)» {
+/* «this.metaType.toString()» */
+
+	// ////////////////////////////////////////////////////////////////////////
+	// generated variable, constant and association declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«FOREACH literal AS l SEPARATOR ", "»«l.name»«ENDFOREACH»;
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// own implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+// generate a data type
+«DEFINE Root FOR MDataType-»
+package «getPackagePath()»;
+«EXPAND Import::Import-»
+«EXPAND _CommentClassifier-»
+«EXPAND _Modifier» class «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated variable and constant declarations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Attribute::AttributeDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated constructor implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::ConstructorImpl-»
+	«EXPAND _InitialisingConstructorImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated abstract method declaration
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationDecl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated normal method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Operation::OperationImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// generated getter method implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND Attribute::GetterImpl-»
+	
+	// ////////////////////////////////////////////////////////////////////////
+	// own implementations
+	// ////////////////////////////////////////////////////////////////////////
+	
+	«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate a comment for a java file
+«DEFINE _CommentClassifier FOR MClassifier-»
+/**
+«IF hasComment()-»
+ * «getCommentText(ownedComment)»
+«ENDIF-»
+ * @author «getUserName()» «REM»(generated at «getTimeStamp()»)«ENDREM»
+ */
+«ENDDEFINE»
+
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+
+// generate modifiers for mclassifier
+«DEFINE _Modifier FOR MClassifier-»
+«visibility.toString()» «IF final»final «ENDIF»«IF abstract»abstract «ENDIF-»
+«ENDDEFINE»
+
+
+// generate generics
+«DEFINE _Generics FOR MClassifier-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate initialising constructor for MClassifier
+«DEFINE _InitialisingConstructorImpl FOR MClassifier-»
+/**
+  * A DataType should only have a public initializing constructor
+  */
+public «asClassifierName(name)» («EXPAND _AllAttributesAsParam») {
+	«EXPAND _InitAttributes»
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+// get all attributes as parameter list
+«DEFINE _AllAttributesAsParam FOR MClassifier-»
+«FOREACH this.getAllAttributes() AS attr SEPARATOR ", "»«((MAttribute)attr).type.name()» _«((MAttribute)attr).asAttributeName()»«ENDFOREACH-»
+«ENDDEFINE»
+
+// init all attributes in initializing constructor
+«DEFINE _InitAttributes FOR MClassifier»
+«IF !supertype.isEmpty-»
+	super(«FOREACH this.getParentAttributes() AS attr SEPARATOR ", "»_«((MAttribute)attr).asAttributeName()»«ENDFOREACH»);
+«ENDIF-»
+«FOREACH this.getOwnAttributes() AS attr-»
+«((MAttribute)attr).asAttributeName()» = _«((MAttribute)attr).asAttributeName()»;
+«ENDFOREACH-»
+«ENDDEFINE»
+
+// generate initialising constructor for MClassifier
+«DEFINE _InitialisingConstructorForAssocClass FOR MClass-»
+/**
+  * An AssociationClass should only have a public initializing constructor
+  * that sets the references to its association ends
+  */
+public «asClassifierName(name)» («EXPAND _AssocAttributesAsParam») {
+	«EXPAND _InitAssocAttributes»
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+// get association attributes as parameter list
+«DEFINE _AssocAttributesAsParam FOR MClass-»
+«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.name()» _«aend.name.asVariableName()»«ENDFOREACH-»
+«ENDDEFINE»
+
+// init all association attributes in initializing constructor
+«DEFINE _InitAssocAttributes FOR MClass»
+«FOREACH ownedAssociation.end AS aend-»
+	«aend.name.asVariableName()» =  _«aend.name.asVariableName()»;
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
