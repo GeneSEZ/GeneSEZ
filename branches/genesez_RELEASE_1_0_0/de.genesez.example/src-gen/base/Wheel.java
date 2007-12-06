@@ -21,8 +21,7 @@ public class Wheel implements Changeable {
     // generated variable, constant and association declarations
     // ////////////////////////////////////////////////////////////////////////
     private float diameter;
-    private java.util.Set<String> specification =
-        new java.util.HashSet<String>();
+    private Set<String> specification = new HashSet<String>();
 
     /**
      * variable for association to mycar
@@ -32,7 +31,7 @@ public class Wheel implements Changeable {
     /**
      * variable for association to screw
      */
-    private java.util.Set<Screw> screw = new java.util.HashSet<Screw>();
+    private Set<Screw> screw = new HashSet<Screw>();
 
     // ////////////////////////////////////////////////////////////////////////
     // generated constructor implementations
@@ -81,8 +80,8 @@ public class Wheel implements Changeable {
     /**
      * accessor for association to screw
      */
-    public java.util.Set<Screw> getScrew() {
-        return java.util.Collections.unmodifiableSet(screw);
+    public Set<Screw> getScrew() {
+        return Collections.unmodifiableSet(screw);
     }
 
     /**
@@ -148,8 +147,8 @@ public class Wheel implements Changeable {
         diameter = _diameter;
     }
 
-    public java.util.Set getSpecification() {
-        return java.util.Collections.unmodifiableSet(specification);
+    public Set getSpecification() {
+        return Collections.unmodifiableSet(specification);
     }
 
     public void addToSpecification(String _in) {
