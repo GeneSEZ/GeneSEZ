@@ -9,6 +9,8 @@
 	- ecore code generation task to generate the *.genmodel file and
 	  the java metamodel implementation
 	  [ ecore2java ]
+	- creates a jar library which contains the java metamodel implementation classes
+	  [ genesezmm2jar ]
 	
 	note: it's a kind of an abstract build file
 -->
@@ -22,7 +24,7 @@
 	<property file="build/build.properties" />
 	
 	<!--
-		exported ant buildfile from eclipse containing all referenced libraries
+		include genesez metamodel classpath
 		provides classpathref 'de.genesez.metamodel.classpath'
 	-->
 	<import file="build-cp.xml" />
@@ -87,4 +89,36 @@
 		</emf.Ecore2Java>
 	</target>
 	
+	<!--
+		create jar library
+	-->
+	<target name="genesezmm2jar"
+		description="creates a jar library which contains the genesez metamodel implementation">
+		
+		<jar destfile="${dist.dir}/genesezmm.jar">
+			<fileset dir="${bin.dir}">
+				<include name="genesezMM/**" />
+			</fileset>
+			<manifest>
+				<section name="genesezMM">
+					<attribute name="Specification-Title" value="GeneSEZ MetaModel"/>
+					<attribute name="Specification-Version" value="1.0.0"/>
+					<attribute name="Specification-Vendor" value="Zwickau University of Applied Sciences"/>
+					<attribute name="Implementation-Title" value="GeneSEZ MetaModel"/>
+					<attribute name="Implementation-Version" value="1.0.0"/> 
+					<attribute name="Implementation-Vendor" value="Zwickau University of Applied Sciences"/>
+				</section>
+			</manifest>
+		</jar>
+	</target>
+	
+	<!-- cleaning lady -->
+	<target name="clean"
+			description="clears the distribution directory">
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
 </project>
