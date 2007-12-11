@@ -1,4 +1,4 @@
-package de.genesez.hibernate.HibernateHelper;
+package de.genesez.genesezmm.hibernate;
 
 import java.util.ArrayList;
 import java.util.List;
