@@ -8,6 +8,9 @@ import genesezMM.MPackage;
 
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+
 /**
  * Provides some helper functions for accessing the genesez model
  * 
@@ -20,8 +23,16 @@ import java.util.List;
 public class AccessHelper {
 	
 	/**
+	 * getter for the xmi id from an element
+	 * @param	pObj	a model element
+	 * @return	string representing the xmi id
+	 */
+	public static String getXmiId(EObject pObj) {
+		return ((XMLResource) pObj.eResource()).getID(pObj);
+	}
+	
+	/**
 	 * returns the class specified with a full qualified name
-	 * 
 	 * @param packages			list of root packages in a genesez model
 	 * @param fullQualifiedName	full qualified type name from a class
 	 * @return					the class you specified
