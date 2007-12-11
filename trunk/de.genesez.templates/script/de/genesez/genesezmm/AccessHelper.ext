@@ -2,6 +2,7 @@
 	simplifies access to genesez models | working with genesez meta model
 */
 
+//	based on genesez meta model
 import genesezMM;
 
 extension de::genesez::io::io;
@@ -47,7 +48,7 @@ MClass assocClass(MAssociationRole aend) :
  * @param	c	a classifier
  * @return	a list with attributes or an empty list
  */
-List getAllAttributes(MClassifier c) :
+List[MAttribute] getAllAttributes(MClassifier c) :
 	{}.add(c.getOwnAttributes()).add(c.getParentAttributes()).flatten();
 
 /**
@@ -55,7 +56,7 @@ List getAllAttributes(MClassifier c) :
  * @param	c	a classifier
  * @return	a list with attributes or an empty list
  */
-List getOwnAttributes(MClassifier c) :
+List[MAttribute] getOwnAttributes(MClassifier c) :
 	c.property.typeSelect(MAttribute).select(a|!a.final && !a.derived);
 
 /**
@@ -63,7 +64,7 @@ List getOwnAttributes(MClassifier c) :
  * @param	c	a classifier
  * @return	a list with attributes or an empty list
  */
-List getParentAttributes(MClassifier c) :
+List[MAttribute] getParentAttributes(MClassifier c) :
 	c.supertype.isEmpty ? {} : c.supertype.first().getAllAttributes();
 
 /*
@@ -126,7 +127,7 @@ String getCommentText(List l) :
  * @param	c	an classifier
  * @return	true if the classifier has at least one generic parameter, otherwise false
  */
-Boolean hasGenericParameter(MClassifier c) :
+boolean hasGenericParameter(MClassifier c) :
 	c.genericParameter.size > 0;
 
 /**
@@ -134,7 +135,7 @@ Boolean hasGenericParameter(MClassifier c) :
  * @param	o	an operation
  * @return	true if the operation has at least one generic parameter, otherwise false
  */
-Boolean hasGenericParameter(MOperation o) :
+boolean hasGenericParameter(MOperation o) :
 	o.genericParameter.size > 0;
 
 /*
@@ -159,7 +160,7 @@ String name(MType type) :
  * @param	type	type element
  * @return	list with owned comments
  */
-List ownedComment(MType type) :
+List[MComment] ownedComment(MType type) :
 	type.metaType == MGeneric
 		? {}
 		: ((MClassifier)type).ownedComment
