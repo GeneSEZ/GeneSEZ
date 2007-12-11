@@ -1,33 +1,35 @@
-package de.genesez.java.helper;
+package de.genesez.hibernate.HibernateHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import genesezMM.MModel;
-
-public class GlobalStore {
-
-	private static MModel model;
+public class HibernateHelper {
 	
+	/**
+	 * holds a list with class names that should be persisted with hibernate
+	 */
 	private static List<String> hibernateClasses = new ArrayList<String>();
 	
-	public static MModel getModel() {
-		return model;
+	/**
+	 * getter for all class names that should be persisted with hibernate
+	 * @return	list with names of classes to persist
+	 */
+	public static List<String> getHibernateClasses() {
+		return HibernateHelper.hibernateClasses;
 	}
 	
-	public static void setModel(MModel mod) {
-		model = mod;
-	}
-
-	public static List<String> getHibernateClasses() {
-		return hibernateClasses;
-	}
-
+	/**
+	 * clears all stored hibernate classes
+	 */
 	public static void clearHibernateClasses() {
-		hibernateClasses.clear();
+		HibernateHelper.hibernateClasses.clear();
 	}
-
+	
+	/**
+	 * adder for classes to persist with hibernate
+	 * @param hibernateClass	name of the class to persist
+	 */
 	public static void addHibernateClass(String hibernateClass) {
-		GlobalStore.hibernateClasses.add(hibernateClass);
+		HibernateHelper.hibernateClasses.add(hibernateClass);
 	}
 }
