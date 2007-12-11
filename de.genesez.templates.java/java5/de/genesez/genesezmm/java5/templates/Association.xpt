@@ -3,26 +3,28 @@
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::genesezmm::AccessHelper»
-
-«EXTENSION de::genesez::java::helper::Type»
-«EXTENSION de::genesez::java::helper::Helper»
-«EXTENSION de::genesez::java::helper::Naming»
+«EXTENSION de::genesez::genesezmm::java::Naming»
 
 «EXTENSION de::genesez::typemapping::TypeMapping»
 
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
 
-
-// generate attributes for a classifier
+«REM»
+	generate attributes for a class
+«ENDREM»
 «DEFINE AssociationDecl FOR MClass-»
 «EXPAND _AssocClassReferences FOR ownedAssociation-»
 «EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
 «ENDDEFINE»
 
-// generate attributes for a classifier
+«REM»
+	generate attributes for a classifier
+«ENDREM»
 «DEFINE AssociationDecl FOR MClassifier-»
 «EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
 «ENDDEFINE»
