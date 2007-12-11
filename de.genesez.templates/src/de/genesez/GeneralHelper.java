@@ -7,8 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author dreamer
- *
+ * @author nihe
+ * @author geobe
+ * @author toh
  */
 public class GeneralHelper {
 	
