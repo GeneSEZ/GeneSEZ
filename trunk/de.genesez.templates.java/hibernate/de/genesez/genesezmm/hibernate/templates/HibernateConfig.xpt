@@ -4,10 +4,9 @@
 «IMPORT genesezMM»
 
 «EXTENSION de::genesez::genesezmm::AccessHelper»
+«EXTENSION de::genesez::genesezmm::java::Conversion»
+«EXTENSION de::genesez::genesezmm::hibernate::HibernateHelper»
 
-«EXTENSION de::genesez::java::helper::HibernateHelper»
-«EXTENSION de::genesez::java::helper::Helper»
-«EXTENSION de::genesez::java::helper::Type»
 
 «DEFINE HbmConfigFile FOR Object»
 «FILE "xml/hibernate.cfg.xml" -»
@@ -52,7 +51,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<hibernate-mapping package="«getPackagePath()»">
+<hibernate-mapping package="«owningPackage.getFullQualifiedName()»">
 	<class name="«name»" table="T_«name»">
 		«EXPAND _PersistAttributes»
 		«EXPAND _PlainAttributes»

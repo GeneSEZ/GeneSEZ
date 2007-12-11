@@ -1,22 +1,33 @@
-// import genesezMM meta model
+/*
+	java syntax check
+	Todo: enhance!
+*/
+
+//	based genesez meta model
 import genesezMM;
 
 extension de::genesez::io::io;
 
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	java syntax convention checks
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
-// //////////////////////////////////////////////////////////////////////////////
-// java syntax conventions
-// //////////////////////////////////////////////////////////////////////////////
-
-
-// checks if all attributes are defined static final 
+/**
+ * checks if all attributes of an interface are defined as static final
+ * @return	true, if the attribute of an interface is defined as static final
+ */
 context MAttribute ERROR "GeneSEZ-Gen: constant has illegal modifiers (" + "attribute: " + name + " in interface: " + classifier.name + ")" :
 	classifier.metaType == MInterface
 		? (visibility == "public" && static && final ? true : false)
 		: true;
 
-
-//	repairable bugs in model - if no visibility is set, set it to public
+/**
+ * checks if operations of an interface has a defined visibility, if not
+ * the default visibility 'public' is assigned
+ * @return	true, if the visibility is set, otherwise false
+ */
 context MOperation WARNING "GeneSEZ-Gen: visibility was set to 'public' (" + "operation: " + name + " in interface: " + classifier.name + ")" :
 	classifier.metaType == MInterface
 		? (visibility == null || visibility == ""
@@ -24,7 +35,11 @@ context MOperation WARNING "GeneSEZ-Gen: visibility was set to 'public' (" + "op
 				: true)
 		: true;
 
-//	repairable bugs in model - interface methods in java can only be abstract
+/**
+ * checks if operations of an interface are defined as abstract, if not
+ * the 'abstract' modifier is assigned
+ * @return	true, if the operation has the modifier 'abstract', otherwise false
+ */
 context MOperation WARNING "GeneSEZ-Gen: method was made 'abstract' (" + "operation: " + name + " in interface: " + classifier.name + ")" :
 	classifier.metaType == MInterface
 		? (abstract == false
@@ -32,7 +47,10 @@ context MOperation WARNING "GeneSEZ-Gen: method was made 'abstract' (" + "operat
 			: true)
 		: true;
 
-// checks if all methods are defined public and abstract
+/**
+ * checks if all operations of an interface are 'public' and 'abstract'
+ * @return	true, if the operation is 'public' and 'abstract'
+ */
 context MOperation ERROR "GeneSEZ-Gen: method has illegal modifiers (" + "operation: " + name + " in interface: " + classifier.name + ")" :
 	classifier.metaType == MInterface
 		? (
@@ -40,7 +58,10 @@ context MOperation ERROR "GeneSEZ-Gen: method has illegal modifiers (" + "operat
 			)
 		: true;
 
-// checks if all names are not a java reserved word
-// NOCH WEITER AUSPROGRAMMIEREN
+/**
+ * checks if all names of elements are not reserved java words
+ * @return	 true, if the name is not a reserved java word, otherwise false
+ */
 context MElement ERROR "GeneSEZ-Gen: name is a reserved java word" :
 	name != "super";
+
