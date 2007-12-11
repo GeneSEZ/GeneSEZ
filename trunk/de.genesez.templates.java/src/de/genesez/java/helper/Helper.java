@@ -68,6 +68,4 @@ public class Helper {
 	public static String getUserName() {
 		return System.getProperty("user.name", "unknown user");
 	}
-
-	
 }
