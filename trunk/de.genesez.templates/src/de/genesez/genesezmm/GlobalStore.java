@@ -8,7 +8,7 @@ import genesezMM.MModel;
 /**
  * @author nihe
  * @author geobe
- * @author dreamer
+ * @author toh
  */
 public class GlobalStore {
 	

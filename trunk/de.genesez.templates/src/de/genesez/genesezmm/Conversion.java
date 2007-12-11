@@ -7,8 +7,9 @@ import genesezMM.MClassifier;
 import genesezMM.MPackage;
 
 /**
- * @author dreamer
- *
+ * @author nihe
+ * @author geobe
+ * @author toh
  */
 public class Conversion {
 	

@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
  * it was not possible for me to get the list with owned packages from a model in java
  * MModel.getOwnedPackage() returns an empty list !!! why???
  * 
+ * @author nihe
+ * @author geobe
  * @author toh
  */
 public class AccessHelper {
