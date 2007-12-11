@@ -1,0 +1,64 @@
+/*
+------------------------------------------------------------------------
+Helper for include statements.
+
+author: Frank Grimm, 
+date: 07/12/07
+------------------------------------------------------------------------
+*/
+
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::genesezmm::AccessHelper;
+extension de::genesez::genesezmm::cpp::helper::ConfigHelper;
+extension de::genesez::genesezmm::cpp::helper::TypeHelper;
+extension de::genesez::genesezmm::cpp::helper::Helper;
+
+cached boolean needsIncludeStmt(MAttribute a) :
+	a.hasBuildInType() == false && alreadyRegisterAsIncludeFile(a.classifier, a.type) == false;
+
+/**
+Get pool of include files for given classifier. 
+The classifier's xmiGuid is used as the key to
+its include files pool. 
+*/
+List[MElement] getIncludeFilesPool(MClassifier c) :
+	JAVA de.genesez.genesezmm.cpp.helper.GlobalVarProvider.getIncludeFilesPool(genesezMM.MClassifier);
+
+/**
+Add the given element to the include files pool
+of the given classifier. The classifier's xmiGuid
+is used as the key to its include files pool. 
+*/
+registerAsIncludeFile(MClassifier c, MElement e) :
+	let pool = getIncludeFilesPool(c) :
+	pool.contains(e) == false ? pool.add(e) : null;
+
+boolean alreadyRegisterAsIncludeFile(MClassifier c, MElement e) :
+	let pool = getIncludeFilesPool(c) :
+	pool.contains(e);
+
+/**
+Get include statement for the given classifier c
+which is used by the given classifier usedBy.
+The classifier's xmiGuid is used as the key to
+its include files pool. 
+*/
+String getIncludeStmt(MClassifier usedBy, MClassifier c) :
+	alreadyRegisterAsIncludeFile(usedBy, c) ? "" 
+		: registerAsIncludeFile(usedBy, c) ->
+		  "#include \"" + c.name + "." + getHeaderFileExtention() + "\""
+	;
+	
+String getIncludeStmt(MAttribute a) :
+	let name = a.hasStandardType() 
+					? "<" + a.type.name() + ">"
+					: "\"" + a.type.name() + "." + getHeaderFileExtention() + "\"" :
+	alreadyRegisterAsIncludeFile(a.classifier, a) ? ""
+		: registerAsIncludeFile(a.classifier, a.type) ->
+		  "#include " + name
+	;
+	
+cached String getIncludeGuardName(MClass c) :
+	c.name.toUpperCase() + "_H_";

@@ -1,0 +1,48 @@
+«REM»
+------------------------------------------------------------------------
+Root of C++ code generation templates.
+
+author: Frank Grimm
+date: 28/11/07
+------------------------------------------------------------------------
+«ENDREM»
+
+«IMPORT genesezMM»
+
+«EXTENSION de::genesez::io::io»
+
+«REM»
+------------------------------------------------------------------------
+Public functions
+------------------------------------------------------------------------
+«ENDREM»
+
+«DEFINE Root FOR MModel-»
+«enableLogging("finest")»
+«EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MPackage-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClassifier-»
+«warning("Classifier " + name + " not handled: " + this)»
+«ENDDEFINE»
+
+«DEFINE Root FOR MInterface-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClass-»
+«EXPAND Class::Root-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MEnumeration-»
+«ENDDEFINE»
+
+«REM»
+------------------------------------------------------------------------
+Private functions
+------------------------------------------------------------------------
+«ENDREM»
