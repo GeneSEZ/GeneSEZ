@@ -1,0 +1,48 @@
+/*
+------------------------------------------------------------------------
+Convenience helpers regarding names and paths for the C++ code generator.
+
+author: Frank Grimm, 
+date: 07/12/07
+------------------------------------------------------------------------
+*/
+
+// import genesezMM meta model
+import genesezMM;
+
+extension de::genesez::genesezmm::cpp::helper::Helper;
+extension de::genesez::genesezmm::cpp::helper::ConfigHelper;
+
+boolean isPrivate(MClassifier c) :
+	c.visibility == "private";
+
+boolean isPrivate(MAttribute a) :
+	a.visibility == "private";
+
+String getFQImplementationDir(MClassifier c) :
+	getImplementationDir() + "/" + getFQPackageDirName(c);
+
+String getFQHeaderDir(MClassifier c) :
+	c.isPrivate() ? getPrivateHeaderDir() + "/" + getFQPackageDirName(c)
+                  : getPublicHeaderDir() + "/" + getFQPackageDirName(c);
+
+String getImplementationFileName(MClassifier c) :
+	c.name + "." + getCppFileExtention();
+	
+String getHeaderFileName(MClassifier c) :
+	c.name + "." + getHeaderFileExtention();
+			
+String getFQPackageDirName(MClassifier c) :
+	JAVA de.genesez.genesezmm.cpp.helper.Helper.getFQNPackagePath(genesezMM.MClassifier); 
+	
+String getFQNamespace(MClassifier c) :
+	JAVA de.genesez.genesezmm.cpp.helper.Helper.getFQNPackagePath(genesezMM.MClassifier);
+
+String getFQName(MClassifier c) :
+	getFQNamespace(c) + "::" + c.name;
+
+boolean hasBaseType(MClassifier c) :
+	c.supertype.isEmpty == false;
+	
+String getInheritanceVisibility(MClassifier baseClassifier) :
+	baseClassifier.visibility;

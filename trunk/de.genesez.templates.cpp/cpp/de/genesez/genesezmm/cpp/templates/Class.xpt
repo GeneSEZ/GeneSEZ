@@ -1,0 +1,96 @@
+«REM»
+ Handling of MClass and MInterface elements.
+ 
+ author: Frank Grimm
+ date: 28/11/07
+«ENDREM»
+
+«IMPORT genesezMM»
+
+«EXTENSION de::genesez::io::io»
+
+«EXTENSION de::genesez::genesezmm::cpp::helper::Helper»
+«EXTENSION de::genesez::genesezmm::cpp::helper::ConfigHelper»
+«EXTENSION de::genesez::genesezmm::cpp::helper::IncludeHelper»
+
+«REM»
+ ------------------------------------------------------------------------
+ public functions
+ ------------------------------------------------------------------------
+«ENDREM»
+
+«REM»
+ ------------------------------------------------------------------------
+ Handle MClass elements.
+ ------------------------------------------------------------------------
+«ENDREM»
+«DEFINE Root FOR MClass-»
+«EXPAND _GenHeaderFile FOR this»
+«EXPAND _GenImplementationFile FOR this»
+«ENDDEFINE»
+
+«REM»
+ ------------------------------------------------------------------------
+ Handle MInterface elements.
+ ------------------------------------------------------------------------
+«ENDREM»
+«DEFINE Root FOR MInterface-»
+«ENDDEFINE»
+
+«REM»
+ **************************************
+ private functions
+ **************************************
+«ENDREM»
+
+«DEFINE _GenHeaderFile FOR MClass-»
+«FILE getFQHeaderDir() + "/" + getHeaderFileName()-»
+#ifndef «getIncludeGuardName()»
+#define «getIncludeGuardName()»
+
+«EXPAND _GenIncludeStmts FOR this»
+
+namespace «getFQNamespace()» {
+
+class «name» «EXPAND _GenInheritanceStmts FOR this» {
+public:
+protected:
+private:
+	«EXPAND _GenPrivateAttributeDeclarations FOR this»
+} // class «name»
+} // namespace «getFQNamespace()»
+#endif // «getIncludeGuardName()»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE _GenImplementationFile FOR MClass-»
+«FILE getFQImplementationDir(this) + "/" + getImplementationFileName(this)-»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE _GenIncludeStmts FOR MClass-»
+«EXPAND _GenIncludeStmt FOREACH property.typeSelect(MAttribute)-»
+«EXPAND _GenIncludeStmtForBaseType(this) FOREACH supertype-»
+«ENDDEFINE»
+
+«DEFINE _GenIncludeStmt FOR MAttribute-»
+«IF needsIncludeStmt()-»
+«getIncludeStmt()-»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _GenIncludeStmtForBaseType(MClassifier subtype) FOR MClassifier-»
+«IF alreadyRegisterAsIncludeFile(subtype, this) == false»
+«getIncludeStmt(subtype, this)»
+«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _GenPrivateAttributeDeclarations FOR MClass-»
+	«EXPAND Attribute::GenAttributeDeclaration FOREACH property.typeSelect(MAttribute).select(a|a.isPrivate())-»
+«ENDDEFINE»
+
+«DEFINE _GenInheritanceStmts FOR MClass-»
+«IF hasBaseType()-»
+: «FOREACH supertype AS superType SEPARATOR ", "-»«superType.getInheritanceVisibility()» «superType.getFQName()»«ENDFOREACH-»
+«ENDIF-»
+«ENDDEFINE»
