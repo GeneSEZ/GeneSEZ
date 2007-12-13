@@ -1,4 +1,4 @@
-package de.genesez.java.helper;
+package de.genesez.genesezmm.java;
 
 import genesezMM.MClassifier;
 import genesezMM.MOperation;
@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * @author dreamer
+ */
 public class ImportChecker {
 
 	private static Set<String> imports = new HashSet<String>();
