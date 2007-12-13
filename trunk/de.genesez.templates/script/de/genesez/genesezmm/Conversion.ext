@@ -37,6 +37,23 @@ String getGenericList(List l) :
 			? ((MGeneric) l.first()).specification
 			: "");
 
+/**
+ * getter for the full qualified name of a classifier
+ * @param	clazz	a classifier
+ * @return	string representation of the full qualified name
+ */
+String getFullQualifiedName(MClassifier clazz, String separator) : 
+//	JAVA de.genesez.genesezmm.Conversion.getFQNPackagePath(genesezMM.MClassifier);
+	clazz.owningPackage.getFullQualifiedName(separator) + separator + clazz.name;
+
+/**
+ * getter for the filename of a classifier based on it's namespace separated with dashes
+ * @param	classifier	a classifier
+ * @return	the full qualified name of the classifier based on it's namespace
+ */
+String getFilename(MClassifier classifier) : 
+	classifier.getFullQualifiedName(getFileSeparator());
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public java functions
@@ -52,15 +69,6 @@ String getGenericList(List l) :
 String getFullQualifiedName(MPackage pkg, String separator) : 
 	JAVA de.genesez.genesezmm.Conversion.getFullQualifiedName(genesezMM.MPackage, java.lang.String);
 
-/**
- * getter for the full qualified name of a classifier
- * @param	clazz	a classifier
- * @return	string representation of the full qualified name
- */
-String getFullQualifiedName(MClassifier clazz, String separator) : 
-//	JAVA de.genesez.genesezmm.Conversion.getFQNPackagePath(genesezMM.MClassifier);
-	clazz.owningPackage.getFullQualifiedName(separator) + separator + clazz.name;
-
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private extend functions
@@ -72,3 +80,8 @@ String getFullQualifiedName(MClassifier clazz, String separator) :
 	private java functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * getter for the separator within a file name
+ */
+private String getFileSeparator() : "/";

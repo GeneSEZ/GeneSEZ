@@ -65,7 +65,9 @@ List[MAttribute] getOwnAttributes(MClassifier c) :
  * @return	a list with attributes or an empty list
  */
 List[MAttribute] getParentAttributes(MClassifier c) :
-	c.supertype.isEmpty ? {} : c.supertype.first().getAllAttributes();
+	c.supertype.isEmpty
+		? {}
+		: c.supertype.first().getAllAttributes();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -152,8 +154,7 @@ boolean hasGenericParameter(MOperation o) :
 String name(MType type) :
 	type.metaType == MGeneric
 		? ((MGeneric)type).specification
-		: ((MClassifier)type).name
-	;
+		: ((MClassifier)type).name;
 	
 /**
  * getter for owned comments of a type
@@ -163,8 +164,7 @@ String name(MType type) :
 List[MComment] ownedComment(MType type) :
 	type.metaType == MGeneric
 		? {}
-		: ((MClassifier)type).ownedComment
-	;
+		: ((MClassifier)type).ownedComment;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -201,7 +201,9 @@ boolean hasTaggedValue(MElement elem, String tag, String value) :
  * @return	true, if the element has a tag with the given value, otherwise false
  */
 boolean hasTaggedValue(MElement e, String stereotype, String tag, String value) :
-	!e.taggedValue.typeSelect(MTaggedValue).select(e|e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype).isEmpty;
+	!e.taggedValue.typeSelect(MTaggedValue).
+		select(e|e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype).
+		isEmpty;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
