@@ -15,12 +15,13 @@ extension de::genesez::common::Conversion;
 */
 
 /**
- * getter for the full qualified name of a package using dot's as separator
- * @param	pkg		a package
- * @return	the full qualified name of a package
+ * getter for the filename of a classifier based on it's namespace separated with dashes
+ * @param	classifier		a classifier
+ * @return	the full qualified name of the classifier based on it's namespace
  */
-String getFullQualifiedName(MPackage pkg) : 
-	pkg.getFullQualifiedName(getFqnSeparator());
+String getFilename(MClassifier classifier) : 
+	// delegate to general Conversion script and append file extension
+	classifier.getFilename(getFileExtension());
 
 /**
  * getter for the full qualified name of a package, which owns a classifier
@@ -29,6 +30,14 @@ String getFullQualifiedName(MPackage pkg) :
  */
 String getPackagePath(MClassifier classifier) :
 	classifier.owningPackage.getFullQualifiedName();
+
+/**
+ * getter for the full qualified name of a package using dot's as separator
+ * @param	pkg		a package
+ * @return	the full qualified name of a package
+ */
+String getFullQualifiedName(MPackage pkg) : 
+	pkg.getFullQualifiedName(getFqnSeparator());
 
 /**
  * getter for the full qualified name of a classifier using dot's as separator
