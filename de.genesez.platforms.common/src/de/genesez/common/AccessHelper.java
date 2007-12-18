@@ -4,6 +4,7 @@
 package de.genesez.common;
 
 import genesezMM.MClass;
+import genesezMM.MClassifier;
 import genesezMM.MPackage;
 
 import java.util.List;
@@ -34,13 +35,13 @@ public class AccessHelper {
 	}
 	
 	/**
-	 * returns the class specified with a full qualified name
+	 * returns the classifier specified with a full qualified name
 	 * @param packages			list of root packages in a genesez model
-	 * @param fullQualifiedName	full qualified type name from a class
-	 * @return					the class you specified
-	 * @throws Exception		if the class isn't found in the model
+	 * @param fullQualifiedName	full qualified type name from a classifier
+	 * @return					the classifier you specified
+	 * @throws Exception		if the classifier isn't found
 	 */
-	public static MClass getClass(List<MPackage> packages, String fullQualifiedName) throws Exception {
+	public static MClassifier getClassifier(List<MPackage> packages, String fullQualifiedName) throws Exception {
 		int i = fullQualifiedName.lastIndexOf(".");
 		if (i != -1) {
 			String pkg = fullQualifiedName.substring(0, i);
@@ -48,15 +49,15 @@ public class AccessHelper {
 //			System.err.println("fqn: " + fullQualifiedName + ", pkg: " + pkg + ", clazz = " + clazz);
 			MPackage p = getPackage(packages, pkg);
 			for (Object o : p.getClassifier()) {
-				if (o instanceof MClass) {
-					MClass cls = (MClass)o;
+				if (o instanceof MClassifier) {
+					MClassifier cls = (MClassifier)o;
 					if (cls.getName().equals(clazz)) {
 						return cls;
 					}
 				}
 			}
 		}
-		throw new Exception("class not exist:" + fullQualifiedName);
+		throw new Exception("classifier not exist:" + fullQualifiedName);
 	}
 	
 	/**
