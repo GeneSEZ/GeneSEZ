@@ -1,4 +1,4 @@
-package de.genesez.platforms.hibernate;
+package de.genesez.platforms.java.hibernate;
 
 import java.util.ArrayList;
 import java.util.List;
