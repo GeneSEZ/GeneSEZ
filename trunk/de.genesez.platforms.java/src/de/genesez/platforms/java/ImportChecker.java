@@ -1,4 +1,4 @@
-package de.genesez.genesezmm.java;
+package de.genesez.platforms.java;
 
 import genesezMM.MClassifier;
 import genesezMM.MOperation;

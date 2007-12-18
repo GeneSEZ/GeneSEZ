@@ -1,7 +1,7 @@
 //	based genesez meta model
 import genesezMM;
-
-extension de::genesez::genesezmm::java::scripts::Naming;
+//	using java naming conventions
+extension de::genesez::platforms::java::scripts::Naming;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -51,12 +51,16 @@ context MParameter WARNING "GeneSEZ-Gen: parameter name doesn't start with a low
  * @return	true, if the attribute name starts with a lower-case letter, otherwise false
  */
 context MAttribute WARNING "GeneSEZ-Gen: variable name doesn't start with a lowercase letter (" + "variable: " + name + " in classifier: " + classifier.name + ")" :
-	name == asAttributeName();
+	final
+		? name == asAttributeName()
+		: true;
 
 /**
  * checks if a constant name is to upper-case
  * @return	true, if the name of a constant is in upper-case, otherwise false
  */
 context MAttribute WARNING "GeneSEZ-Gen: constant name isn't written in all-uppercase letters (" + "constant: " + name + " in classifier: " + classifier.name + ")" :
-	name == asAttributeName();
+	!final
+		? name == asAttributeName()
+		: true;
 
