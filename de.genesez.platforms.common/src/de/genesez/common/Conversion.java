@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.genesez.genesezmm;
+package de.genesez.common;
 
 import genesezMM.MPackage;
 
