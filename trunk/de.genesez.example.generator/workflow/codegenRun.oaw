@@ -7,7 +7,7 @@
 	
 	<!-- Reading the example file. -->
 	<cartridge
-		file="de::genesez::genesezmm::workflows::makeGenesezModelProfile.oaw" 
+		file="de::genesez::workflows::makeGenesezModelProfile.oaw" 
 		uml2ProfileFile="${de.genesez.example.project.dir}/model-exp/profile.profile.uml"
 		inputModelFile="${de.genesez.example.project.dir}/model-exp/example.uml"
 		excludePackages="UML Standard Profile"
@@ -16,33 +16,33 @@
 	
 	<!-- Check constraints. /-->
 	<cartridge
-		file="de::genesez::genesezmm::workflows::constraintChecker.oaw"
+		file="de::genesez::workflows::constraintChecker.oaw"
 		modelSlot="genesezModel"
-		checkScript="de::genesez::genesezmm::java::constraints::syntax"
+		checkScript="de::genesez::platforms::java::constraints::Syntax"
 		abortOnError="true"
 	/>
 	<cartridge
-		file="de::genesez::genesezmm::workflows::constraintChecker.oaw"
+		file="de::genesez::workflows::constraintChecker.oaw"
 		modelSlot="genesezModel"
-		checkScript="de::genesez::genesezmm::java::constraints::naming"
+		checkScript="de::genesez::platforms::java::constraints::Naming"
 		abortOnError="true"
 	/>
 	
 	<!-- Write the transformed model file.  /-->
 	<cartridge
-		file="de::genesez::genesezmm::workflows::xmiWriter.oaw"
+		file="de::genesez::workflows::xmiWriter.oaw"
 		modelSlot="genesezModel"
 		outputModelFile="${de.genesez.example.project.dir}/model-gen/example.ecore"
 	/>
 	
 	<!-- Create java code with AOP in xpand templates.  /-->
 	<cartridge
-		file="de::genesez::genesezmm::workflows::java::performM2T.oaw"
-		rootTemplate="de::genesez::genesezmm::java5::templates::Root::Root FOR genesezModel"
+		file="de::genesez::workflows::java::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
 		excludePackages="java, java.util"
 		outputDir="${de.genesez.example.project.dir}/src-gen"
 		proRegDir="${de.genesez.example.project.dir}/src-gen"
-		xmlMappingFile="../de.genesez.templates.java/java/de/genesez/genesezmm/java/typemapping/typemapping4java.xml"
+		xmlMappingFile="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typemapping4java.xml"
 	/>
 	
 
