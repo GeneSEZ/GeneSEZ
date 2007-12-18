@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.genesez.common.Conversion;
+
 /**
  * @author dreamer
  */
@@ -109,7 +111,7 @@ public class ImportChecker {
 	}
 
 	private static String getFQN(MClassifier clazz) {
-		return Helper.getFQNPackagePath(clazz).trim();
+		return Conversion.getFullQualifiedName(clazz, ".").trim();
 	}
 
 	private static String getName(MClassifier clazz) {
