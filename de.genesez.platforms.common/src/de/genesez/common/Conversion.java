@@ -3,6 +3,7 @@
  */
 package de.genesez.common;
 
+import genesezMM.MClassifier;
 import genesezMM.MPackage;
 
 /**
@@ -27,5 +28,15 @@ public class Conversion {
 			}
 		}
 		return fqn.toString();
+	}
+	
+	/**
+	 * getter for the full qualified name of a classifier
+	 * @param	classifier			a classifier
+	 * @param	separator	a separator used for the full qualified name
+	 * @return	full qualified name of the classifier
+	 */
+	public static String getFullQualifiedName(MClassifier classifier, String separator) {
+		return getFullQualifiedName(classifier.getOwningPackage(), separator) + separator + classifier.getName();
 	}
 }
