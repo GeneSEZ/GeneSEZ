@@ -11,7 +11,7 @@ import ecore;
 import uml;
 // Import genesezMM metamodel - transform the uml2 into this metamodel.
 import genesezMM;
-   
+    
 //	using logging functionality (contained metamodel project)
 extension de::genesez::io::io;
    
@@ -251,19 +251,19 @@ private MClassifier processClassifier(Classifier c) :
 	);
 	
 //	checks if given classifier is a generic or not and delegates to the appropriate function
+//	the first one is possibly not needed -toh-
 private MType determineType(Classifier c) :
 	info("determine type (classifier): " + c.name + ", type: " + c.metaType.name + ", supertypes: " + c.metaType.superTypes) ->
-	c.isTemplateParameter()
-		? ((ClassifierTemplateParameter)c.templateParameter).makeGeneric()
-		: determineClassifier(c)
+	c.isTemplateParameter() ?
+		((ClassifierTemplateParameter)c.templateParameter).makeGeneric() :
+		determineClassifier(c)
 	;
 	
-//	possibly not needed -toh-
 private MType determineType(Type t) :
 	info("determine type (type): " + t.metaType.name + ", " + t.name) ->
-	t.isTemplateParameter()
-		? ((ClassifierTemplateParameter)t.templateParameter).makeGeneric()
-		: determineClassifier(t)
+	t.isTemplateParameter() ?
+		((ClassifierTemplateParameter)t.templateParameter).makeGeneric() :
+		determineClassifier(t)
 	;
 	
 //	the uml2 metamodel doesn't define the type 'void'
@@ -410,8 +410,7 @@ private MOperation processOperaration(Operation o) :
 		//	what about template parameters ???
 	info("! return type: " + o.type.isTemplateParameter()) ->
 	info("! return type: " + o.type) ->
-		mo.setReturnType(o.type.determineType()) ->
-		mo.setMultiplicity(o.getUpper()) ->
+		mo.setReturnType(o.type.determineType())->
 		// set raised exceptions
 		mo.setRaisedException(o.raisedException.determineType())->
 		mo
