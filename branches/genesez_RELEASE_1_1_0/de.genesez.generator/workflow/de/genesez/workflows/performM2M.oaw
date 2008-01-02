@@ -3,9 +3,9 @@
 <workflow>
 
 	<!-- 
-		workflow component to perform model-2-model transformations
+		performs model-2-model transformations
 		
-		Following parameters are required:
+		following parameters are required:
 		==================================
 		
 		$invokeScript		extention call which starts the transformation
@@ -15,13 +15,19 @@
 		$configFile			xml file for configuration settings
 	-->
 	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="genesezMM.GenesezMMPackage" />
+	</bean>
+	<!-- bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="genesezMM.ecore" />
+	</bean -->
+	
+	
 	<component id="performM2M" class="oaw.xtend.XtendComponent">
 		
-		<!-- Working on genesezMM models also requires the EcorePackage to 
-			 be configured as a meta model. -->
-		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
-			<metaModelPackage value="genesezMM.GenesezMMPackage" />
-		</metaModel>
+		<metaModel idRef="genesezMM" />
 		
 		<!-- make config file accessible as global variable -->
 		<globalVarDef name="configFile" value="'${configFile}'"/>

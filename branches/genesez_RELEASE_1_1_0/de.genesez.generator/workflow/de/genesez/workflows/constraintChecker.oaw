@@ -3,10 +3,9 @@
 <workflow>
 	
 	<!-- 
-		This workflow component is provided to check some constraints to keep
-		the model consistent. Also used to check language specific properties.
+		executes a check script to validate the model against constraints
 		
-		Following parameters are required:
+		following parameters are required:
 		==================================
 		
 		$modelSlot			name of the model slot which holds the model to check
@@ -14,16 +13,26 @@
 		$abortOnError		set true, if the generation stops on errors
 	 -->
 	
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="genesezMM.GenesezMMPackage" />
+	</bean>
+	<!-- bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="genesezMM.ecore" />
+	</bean -->
+	
+    <!-- working with uml2 models requires the uml2 meta model -->
+	<bean id="uml2MM" class="org.openarchitectureware.uml2.UML2MetaModel"/>
+	
+	
 	<component id="constraintChecker" class="org.openarchitectureware.check.CheckComponent">
 		
-		<!-- Working on genesezMM models also requires the EcorePackage to 
-			 be configured as a meta model. -->
-		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
-			<metaModelPackage value="genesezMM.GenesezMMPackage" />
-		</metaModel>
-		
-		<!-- Workin with uml2 models also requires the UML2 meta model. -->
-		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
+		<metaModel idRef="genesezMM" />
+		<metaModel idRef="uml2MM" />
 		
 		<!-- This is the file that contains the constraints. Note the use of
 			 :: as the namespace delimiter. Also don't specify the .chk
