@@ -1,0 +1,103 @@
+<?xml version="1.0" ?>
+<!--
+	ant build file for automation of model transformation steps,
+	if ant runs in another JVM as eclipse
+	
+	@author	dreamer
+	
+	if ant runs in another JVM as eclipse, the 'contributed ant tasks' (ant 
+	task provided from eclipse plugins, e.g. the 'emf.Ecore2Java' task) are 
+	not available for ant
+	
+	to make them available, we use a headless eclipse which executes the 'ant runner'
+	application shipped with eclipse, which executes the ecore2java task
+	
+	note: currently only worked up to eclipse 3.2, for eclipse 3.3 no ant target exist yet,
+		  but see the comment below, which shows, how to write such a task
+-->
+
+<project name="de.genesez.metamodel.external" basedir=".." default="generate.metamodel.implementation.eclipse-3.2">
+	
+	<!--
+		import build file containing
+		- needed properties
+		- uml2ecore task [oaw workflow]
+		- ecore2java task
+		- environment specific properties
+	-->
+	<import file="build-user.xml" />
+	
+	<!--
+		executes uml2ecore + ecore2java
+		- starts the oaw workflow to generate the ecore model from the emf uml2 model
+		- starts ecore code generation to generate the genmodel file and the metamodel implementation from the ecore model 
+	-->
+	<target name = "generate.metamodel.implementation.eclipse-3.2"
+		depends="uml2ecore, ecore2java.eclipse-3.2"
+		description="executes the oaw workflow to create the ecore model + then generates the metamodel implementation from it">
+	</target>
+	
+	<target name = "generate.metamodel.implementation.eclipse-3.3"
+		depends="uml2ecore, ecore2java.eclipse-3.3"
+		description="executes the oaw workflow to create the ecore model + then generates the metamodel implementation from it">
+	</target>
+	
+	
+	<!--
+		start ecore code generation
+		
+		note:
+		this target starts an headless eclipse instance which starts the application
+		ant runner, with specified build file and build target
+	-->
+	<target name="ecore2java.eclipse-3.2">
+		
+		<java classname="org.eclipse.core.launcher.Main" 
+			fork="true">
+			
+			<classpath>
+				<fileset dir="${ECLIPSE_HOME}" includes="startup.jar"/>
+			</classpath>
+			<arg value="-noupdate" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="build/build-user.xml" />
+			<arg value="ecore2java" />
+			<arg value="-verbose" />
+		</java>
+	</target>
+	
+	<target name="ecore2java.eclipse-3.3">
+		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="build/build-user.xml" />
+			<arg value="ecore2java" />
+			<arg value="-verbose" />
+		</exec>
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="build/build-user.xml" />
+			<arg value="ecore2java" />
+			<arg value="-verbose" />
+		</exec>
+	</target>
+</project>
