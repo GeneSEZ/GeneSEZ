@@ -38,7 +38,10 @@ create EPackage this transformToplevelPackage(Package p):
 	setName(p.name) -> 
 	// the nsUri will be concatenated by the return value of nsUri() - 
 	// a function call - and the name
-	setNsURI( nsUri().endsWith("/") ? nsUri()+name : nsUri()+"/"+name ) ->
+//	setNsURI( nsUri().endsWith("/") ? nsUri()+name : nsUri()+"/"+name ) ->
+// -toh- we are using the provided namespace uri to ensure that each genesez model
+	// xmi can be opened using a tree editor
+	setNsURI( nsUri() ) ->
 	// ... and the prefix ...
 	setNsPrefix( name ) ->
 	// handle the rest of the content, just like any other packages
@@ -72,7 +75,7 @@ private String resourcePerToplevelPackage(uml::Package p): GLOBALVAR resourcePer
 // this one returns the value of the global variable nsUriPrefix
 // global variables are defined in the workflow file, take a look
 // at uml2ecoreWorkflow.oaw	
-private String nsUri(): GLOBALVAR nsUriPrefix;	
+private String nsUri(): GLOBALVAR nsUri;	
 	
 // this one returns the value of the global variable addNameAttribute
 // global variables are defined in the workflow file, take a look
