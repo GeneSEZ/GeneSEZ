@@ -17,7 +17,7 @@ public class Screw {
 	/** @see {@link getLength} */
 	private float length;
 	private float diameter;
-	private Boolean metric;
+	private boolean metric;
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated constructor implementations
@@ -74,11 +74,11 @@ public class Screw {
 		diameter = _diameter;
 	}
 	
-	public Boolean getMetric() {
+	public boolean getMetric() {
 		return metric;
 	}
 	
-	public void setMetric(Boolean _metric) {
+	public void setMetric(boolean _metric) {
 		metric = _metric;
 	}
 	

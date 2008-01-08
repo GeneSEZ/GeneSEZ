@@ -21,7 +21,7 @@ public class Wheel implements Changeable {
 	// ////////////////////////////////////////////////////////////////////////
 	
 	private float diameter;
-	private Set<String> specification = new Set<String>();
+	private java.util.Set<String> specification = new java.util.HashSet<String>();
 	/**
 	 * variable for association to mycar
 	 */
@@ -29,7 +29,7 @@ public class Wheel implements Changeable {
 	/**
 	 * variable for association to screw
 	 */
-	private Set<Screw> screw = new Set<Screw>();
+	private java.util.Set<Screw> screw = new java.util.HashSet<Screw>();
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated constructor implementations
@@ -78,7 +78,7 @@ public class Wheel implements Changeable {
 	/**
 	 * accessor for association to screw
 	 */
-	public Set<Screw> getScrew() {
+	public java.util.Set<Screw> getScrew() {
 		return java.util.Collections.unmodifiableSet(screw);
 	}
 	
@@ -114,7 +114,7 @@ public class Wheel implements Changeable {
 	 * @param  newWheel  
 	 * @return  
 	 */
-	public Boolean change(Changeable newWheel) {
+	public boolean change(Changeable newWheel) {
 		Boolean returnValue = null;
 		/* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._11_5_6340215_1179139054625_520706_1) ENABLED START --> */
 		/* <!-- TODO put your own implementation code here --> */
@@ -144,7 +144,7 @@ public class Wheel implements Changeable {
 		diameter = _diameter;
 	}
 	
-	public Set getSpecification() {
+	public java.util.Set getSpecification() {
 		return java.util.Collections.unmodifiableSet(specification);
 	}
 	

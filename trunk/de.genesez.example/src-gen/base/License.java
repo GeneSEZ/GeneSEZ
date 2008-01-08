@@ -22,7 +22,7 @@ public class License {
 	/**
 	 * variable for association to car
 	 */
-	private Set<Owner> car = new Set<Owner>();
+	private java.util.Set<Owner> car = new java.util.HashSet<Owner>();
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated constructor implementations
@@ -39,8 +39,8 @@ public class License {
 	/**
 	 * accessor for association to car
 	 */
-	public Set<Car> getCar() {
-		Set<Car> _result = new Set<Car>();
+	public java.util.Set<Car> getCar() {
+		java.util.HashSet<Car> _result = new java.util.HashSet<Car>();
 		for (Owner _assoc : car) {
 			_result.add(_assoc.getCar());
 		}
@@ -50,7 +50,7 @@ public class License {
 	/** 
 	 * accessor to the association class objects
 	 */
-	public Set<Owner> getCarOwner() {
+	public java.util.Set<Owner> getCarOwner() {
 		return java.util.Collections.unmodifiableSet(car);
 	}
 	
