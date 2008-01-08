@@ -2,13 +2,11 @@
 
 <workflow>
 
-	<!-- this component runs the transformation from UML2 to genesezMM. -->
-	
 	<!-- 
-		This workflow component is provided to perform the transformation
-		from uml2 to the genesezMM with profile mechanism.
+		executes the transformation from an uml2 model to an genesez model
+		with profile mechanism
 		
-		Following parameters are required:
+		following parameters are required:
 		==================================
 		
 		$uml2Model			name of the slot which holds the uml2 model
@@ -19,28 +17,36 @@
 	 -->
 	
 	
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+	<!-- working with genesez models requires the genesez meta model -->
+	<!-- bean class="org.eclipse.mwe.emf.StandaloneSetup" >
+		<platformUri value=".." />
+		<registerGeneratedEPackage value="genesezMM.GenesezMMPackage"/>
+	</bean -->
+	<bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="genesezMM.GenesezMMPackage" />
+	</bean>
+	<!-- bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="genesezMM.ecore" />
+	</bean -->
 	
-	<component id="uml2genesezMM" class="oaw.xtend.XtendComponent">
+	
+    <!-- working with uml2 models requires the uml2 meta model -->
+	<bean id="uml2MM" class="org.openarchitectureware.uml2.UML2MetaModel"/>
+	
+	<!-- additional use an uml2 profile -->
+	<bean id="profileMM" class="oaw.uml2.profile.ProfileMetaModel">
+         <profile value="${uml2ProfileFile}"/>
+    </bean>
+	
+	
+	<component id="uml2genesezMMProfile" class="oaw.xtend.XtendComponent">
 		
-		<!-- Working on genesezMM models also requires the EcorePackage to 
-			 be configured as a meta model. -->
-		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
-			<metaModelPackage value="genesezMM.GenesezMMPackage" />
-		</metaModel>
-		
-		<!-- Workin with ecore models also requires the ecore meta model. -->
-		<metaModel id="mm.emf" class="oaw.type.emf.EmfMetaModel">
-			<metaModelPackage value="org.eclipse.emf.ecore.EcorePackage" />
-		</metaModel>
-		
-		<!-- Workin with uml2 models also requires the UML2 meta model. -->
-		<metaModel id="mm.UML2" class="oaw.uml2.UML2MetaModel" />
-		
-		<!-- Workin with uml2 profiles also requires the file where 
-			 the profiles are specified. -->
-		<metaModel class="oaw.uml2.profile.ProfileMetaModel">
-			<profile value="${uml2ProfileFile}" />
-		</metaModel>
+		<metaModel idRef="genesezMM" />
+		<metaModel idRef="uml2MM" />
+		<metaModel idRef="profileMM" />
 		
 		<globalVarDef name="uml2model" value="${uml2Model}" />
 		<globalVarDef name="excludePackages" value="'${excludePackages}'" />
