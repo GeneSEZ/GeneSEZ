@@ -29,9 +29,9 @@ extension de::genesez::io::io;
 MModel transform(Model m): 
 	let mm = makeModel(m) :
 		// add comment to model
-		mm.setOwnedComment(m.ownedComment.typeSelect(Comment).processComment().setOwningElement(mm))->
+		mm.setOwnedComment(m.ownedComment.typeSelect(Comment).processComment())->
 		// start descending package tree
-		mm.setOwnedPackage(m.ownedElement.typeSelect(Package).rejectIgnoredPackages().processPackage().setModel(mm))->
+		mm.setOwnedPackage(m.ownedElement.typeSelect(Package).rejectIgnoredPackages().processPackage())->
 		mm;
 	
 create MModel makeModel(Model m):
@@ -49,7 +49,7 @@ create MComment makeComment(Comment c) :
 
 private MComment processComment(Comment c) :
 	let mc = makeComment(c) :
-		mc.setNestedComment(c.ownedComment.typeSelect(Comment).processComment().setNestingComment(mc))->
+		mc.setNestedComment(c.ownedComment.typeSelect(Comment).processComment())->
 		mc;
 
 
@@ -66,7 +66,7 @@ private MStereotype processStereotype(Stereotype s) :
 		// add comment to stereotype
 		//ms.setOwnedComment(s.ownedComment.typeSelect(Comment).processComment().setOwningElement(ms))->
 		// add tagged values FAIL
-		ms.setProperty(s.ownedAttribute.typeSelect(Property).processTag().setStereotype(ms))->
+		ms.setProperty(s.ownedAttribute.typeSelect(Property).processTag())->
 		ms;
 
 
@@ -90,7 +90,8 @@ create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	info("make tagged value: " + val + ", tag: " + t.name) ->
 	setTag(t)->
 	setValue(val)->
-	setOwningElement(owner)
+//	setOwningElement(owner)
+	owner.taggedValue.add(this)
 //	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
 	;
 	
@@ -117,13 +118,13 @@ create MPackage makePackage(Package p) :
 private MPackage processPackage(Package p) :
 	let mp = makePackage(p) :
 		// add comment to package
-		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mp))->
+		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment())->
 		// recursively descend package tree
-		mp.setNestedPackage(p.ownedElement.typeSelect(Package).processPackage().setNestingPackage(mp))->
+		mp.setNestedPackage(p.ownedElement.typeSelect(Package).processPackage())->
 		// add classifier in package
-		mp.setClassifier(p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).processClassifier().setOwningPackage(mp))->
+		mp.setClassifier(p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).processClassifier())->
 		// map associations in package 
-		mp.setAssociation(p.ownedElement.typeSelect(Association).processAssociationPackage(mp).setOwningPackage(mp))->
+		mp.setAssociation(p.ownedElement.typeSelect(Association).processAssociationPackage(mp))->
 		mp;
 
 
@@ -199,7 +200,7 @@ create MEnumeration makeClassifier(Enumeration c):
 	setXmiGuid(xmiId(c))->
 	setName(c.name)->
 	setVisibility(c.visibility.toString())->
-	setLiteral(c.ownedLiteral.typeSelect(EnumerationLiteral).processLiteral().setOwningEnumeration(this));
+	setLiteral(c.ownedLiteral.typeSelect(EnumerationLiteral).processLiteral());
 	
 // create new MClass from uml2 class
 create MInterface makeClassifier(Interface c) :
@@ -226,7 +227,7 @@ private MClassifier processClassifier(Classifier c) :
 	info("--> processClassifier: " + c.name) -> (
 	let mc = determineClassifier(c) :
 		// add comment to classifier
-		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment().setOwningElement(mc))->
+		mc.setOwnedComment(c.ownedComment.typeSelect(Comment).processComment())->
 		// set generics
 	info("pre generics: " + c.ownedTemplateSignature.ownedParameter) ->
 		c.ownedTemplateSignature != null ? 
@@ -243,10 +244,10 @@ private MClassifier processClassifier(Classifier c) :
 		mc.setSupertype(c.general.determineClassifier())->
 		mc.supertype.addAll(c.clientDependency.typeSelect(InterfaceRealization).contract.determineClassifier())->
 		// add attributes and association ends
-		mc.setProperty(c.attribute.reject(p|p.association != null).processAttribute().setClassifier(mc))->
-		mc.property.addAll(c.attribute.select(p|p.association != null).processAssociationRole().setClassifier(mc))->
+		mc.setProperty(c.attribute.reject(p|p.association != null).processAttribute())->
+		mc.property.addAll(c.attribute.select(p|p.association != null).processAssociationRole())->
 		// add operations
-		mc.setOperation(c.getOperations().processOperaration().setClassifier(mc))->
+		mc.setOperation(c.getOperations().processOperaration())->
 		mc
 	);
 	
@@ -322,7 +323,7 @@ create MLiteral makeLiteral(EnumerationLiteral l) :
 private MLiteral processLiteral(EnumerationLiteral l) :
 	let ml = makeLiteral(l) :
 		// add comment to classifier
-		ml.setOwnedComment(l.ownedComment.typeSelect(Comment).processComment().setOwningElement(ml))->
+		ml.setOwnedComment(l.ownedComment.typeSelect(Comment).processComment())->
 		ml;
 
 
@@ -372,7 +373,7 @@ private MAttribute processAttribute(Property p) :
 	info("process attribute: " + p.name) -> (
 	let ma = makeAttribute(p) :
 		// add comment to attribute
-		ma.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		ma.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment())->
 		// set stereotype
 		ma.setStereotype(p.getAppliedStereotypes().processStereotype())->
 		// set tagged values
@@ -397,7 +398,7 @@ private MOperation processOperaration(Operation o) :
 	info("process operation: " + o.name) -> (
 	let mo = makeOperation(o) :
 		// add comment to operation
-		mo.setOwnedComment(o.ownedComment.typeSelect(Comment).processComment().setOwningElement(mo))->
+		mo.setOwnedComment(o.ownedComment.typeSelect(Comment).processComment())->
 		// set generics
 		(o.ownedTemplateSignature != null ? mo.setGenericParameter(o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).processGeneric()) : "")->
 		// set stereotype
@@ -405,7 +406,7 @@ private MOperation processOperaration(Operation o) :
 		// set tagged values
 		mo.setTaggedValue(makeTaggedValues(mo, o))->
 		// add parameter to operation
-		mo.setParameter(o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter().setOperation(mo))->
+		mo.setParameter(o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter())->
 		// set return type
 		//	what about template parameters ???
 	info("! return type: " + o.type.isTemplateParameter()) ->
@@ -431,7 +432,7 @@ private MParameter processParameter(Parameter p) :
 	info("process parameter: " + p.name) -> (
 	let mp = makeParameter(p) :
 		// add comment to parameter
-		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mp))->
+		mp.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment())->
 		// set generic
 	//info(p.getAppliedStereotypes().getAllAttributes().typeSelect(Property).select(e|e.name == "typeModifier"))->
 		// set stereotype
@@ -463,13 +464,14 @@ private MAssociationRole processAssociationRole(Property aend) :
 	info("association role: " + aend.name) -> (
 	let ma = makeAssociationRole(aend) :
 		// add comment to associationrole
-		ma.setOwnedComment(aend.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		ma.setOwnedComment(aend.ownedComment.typeSelect(Comment).processComment())->
 		// set stereotype
 		ma.setStereotype(aend.getAppliedStereotypes().processStereotype())->
 		// set tagged values
 		ma.setTaggedValue(makeTaggedValues(ma, aend))->
 		// set classifier
-		ma.setClassifier(assocEndClass(aend))->
+//		ma.setClassifier(assocEndClass(aend))->
+		assocEndClass(aend).property.add(ma) ->
 		// an asscociation couldn't have a generic as type i guess
 		ma.setType(aend.type.determineClassifier())->
 		ma
@@ -487,7 +489,7 @@ create MAssociation makeAssociation(Association a) :
 private MAssociation processAssociation(Association a) :
 	let ma = makeAssociation(a) :
 		// add comment to association
-		ma.setOwnedComment(a.ownedComment.typeSelect(Comment).processComment().setOwningElement(ma))->
+		ma.setOwnedComment(a.ownedComment.typeSelect(Comment).processComment())->
 		ma;
 
 
@@ -495,7 +497,8 @@ private MAssociation processAssociation(Association a) :
 // associations are contained in packages and contain their ends
 private MAssociation processAssociationPackage(Association a, MPackage owningPackage): 
 	let ma = processAssociation(a) :
-		ma.setOwningPackage(owningPackage)->
+//		ma.setOwningPackage(owningPackage)->
+		owningPackage.association.add(ma) ->
 		ma.setEnd(a.memberEnd.select(e|e.class != null).processAssociationRole())->
 		ma.end.setAssociation(ma).setDerived(a.isDerived)->
 		ma.linkEnds()->
