@@ -5,6 +5,7 @@
 	<!-- example project where the generated artifacts are stored -->
 	<property name="de.genesez.example.project.dir" value="../de.genesez.example" />
 	
+	
 	<!-- Reading the example file. -->
 	<cartridge
 		file="de::genesez::workflows::makeGenesezModelProfile.oaw" 
@@ -32,14 +33,15 @@
 	<cartridge
 		file="de::genesez::workflows::xmiWriter.oaw"
 		modelSlot="genesezModel"
-		outputModelFile="${de.genesez.example.project.dir}/model-gen/example.ecore"
+		outputModelFile="${de.genesez.example.project.dir}/model-gen/example.xmi"
 	/>
 	
-	<!-- Create java code with AOP in xpand templates.  /-->
+	<!-- Create java code without AOP in xpand templates.  /-->
 	<cartridge
 		file="de::genesez::workflows::java::performM2T.oaw"
 		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
 		excludePackages="java, java.util"
+		configFile=""
 		outputDir="${de.genesez.example.project.dir}/src-gen"
 		proRegDir="${de.genesez.example.project.dir}/src-gen"
 		xmlMappingFile="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typemapping4java.xml"
