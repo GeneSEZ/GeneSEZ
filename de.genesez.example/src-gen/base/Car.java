@@ -25,7 +25,7 @@ public class Car extends Vehicle {
 	 * variable for association to wheels
 	 * @see {@link getWheels}
 	 */
-	private Set<Wheel> wheels = new Set<Wheel>();
+	private java.util.Set<Wheel> wheels = new java.util.HashSet<Wheel>();
 	/**
 	 * variable for association to spare
 	 * @see {@link getSpare}
@@ -34,7 +34,7 @@ public class Car extends Vehicle {
 	/**
 	 * variable for association to license
 	 */
-	private Set<Owner> license = new Set<Owner>();
+	private java.util.Set<Owner> license = new java.util.HashSet<Owner>();
 	/**
 	 * variable for association to licensePlate
 	 */
@@ -85,7 +85,7 @@ public class Car extends Vehicle {
 	 * accessor for association to wheels
 	 * reference to normal wheels on a car
 	 */
-	public Set<Wheel> getWheels() {
+	public java.util.Set<Wheel> getWheels() {
 		return java.util.Collections.unmodifiableSet(wheels);
 	}
 	
@@ -146,8 +146,8 @@ public class Car extends Vehicle {
 	/**
 	 * accessor for association to license
 	 */
-	public Set<License> getLicense() {
-		Set<License> _result = new Set<License>();
+	public java.util.Set<License> getLicense() {
+		java.util.HashSet<License> _result = new java.util.HashSet<License>();
 		for (Owner _assoc : license) {
 			_result.add(_assoc.getLicense());
 		}
@@ -157,7 +157,7 @@ public class Car extends Vehicle {
 	/** 
 	 * accessor to the association class objects
 	 */
-	public Set<Owner> getLicenseOwner() {
+	public java.util.Set<Owner> getLicenseOwner() {
 		return java.util.Collections.unmodifiableSet(license);
 	}
 	
@@ -284,7 +284,7 @@ public class Car extends Vehicle {
 	 * @throws  WhatAMessException  
 	 * @throws  NotReallySeriousException  this is a comment; this is the second comment
 	 */
-	public final Boolean drive(int speed) throws WhatAMessException, NotReallySeriousException {
+	public final boolean drive(int speed) throws WhatAMessException, NotReallySeriousException {
 		Boolean returnValue = null;
 		/* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._11_5_6340215_1179222914421_654419_131) ENABLED START --> */
 		/* <!-- TODO put your own implementation code here --> */

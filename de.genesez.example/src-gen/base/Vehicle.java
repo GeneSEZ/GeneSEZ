@@ -41,7 +41,7 @@ public abstract class Vehicle {
 	 * @throws  WhatAMessException  
 	 * @throws  NotReallySeriousException  this is a comment; this is the second comment
 	 */
-	public abstract Boolean drive(int speed) throws WhatAMessException, NotReallySeriousException;
+	public abstract boolean drive(int speed) throws WhatAMessException, NotReallySeriousException;
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated normal method implementations

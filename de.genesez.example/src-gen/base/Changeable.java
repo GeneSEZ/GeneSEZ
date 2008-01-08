@@ -28,7 +28,7 @@ public interface Changeable {
 	 * @param  newInstance  
 	 * @return  
 	 */
-	public abstract Boolean change(Changeable newInstance);
+	public abstract boolean change(Changeable newInstance);
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// own implementations
