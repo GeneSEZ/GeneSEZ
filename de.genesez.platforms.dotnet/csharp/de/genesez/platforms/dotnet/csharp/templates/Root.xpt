@@ -1,0 +1,37 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE Root FOR MModel-»
+«EXPAND Root FOREACH ownedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPackage-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MEnumeration-»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClassifier-»
+«FILE getFilename()-»
+	«EXPAND Classifier::Root-»
+«ENDFILE-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
