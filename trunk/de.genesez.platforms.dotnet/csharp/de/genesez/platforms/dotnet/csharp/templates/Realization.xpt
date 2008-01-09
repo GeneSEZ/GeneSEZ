@@ -1,0 +1,27 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate realization for a class
+«DEFINE Realization FOR MClassifier-»
+«IF !supertype.typeSelect(MInterface).isEmpty-»
+	: «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«ENDFOREACH»
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+

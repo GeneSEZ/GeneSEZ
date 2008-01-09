@@ -1,0 +1,33 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate an interface
+«DEFINE Root FOR MInterface-»
+	public interface «asClassifierName(name)» «EXPAND Generalization::Generalization»
+	{
+
+	}
+«ENDDEFINE»
+
+
+// generate a class
+«DEFINE Root FOR MClass-»
+	public class «asClassifierName(name)» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization»
+	{
+
+	}
+«ENDDEFINE»
+
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
