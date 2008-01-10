@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import de.genesez.common.Conversion;
+import de.genesez.io.IOExtensions;
+
 /**
  * Provides some utilities and helper functions for M2T transformations
  * 
@@ -25,14 +28,16 @@ public class TransUtils {
 	 * @return					list of packages, without the ignored packages
 	 */
 	public static List<MPackage> rejectIgnoredPackages(List<MPackage> packages, String ignoredPackages) {
-		List<MPackage> toReturn = new ArrayList<MPackage>();
+		List<MPackage> toReturn = new ArrayList<MPackage>(packages);
 		List<String> pkgs = getPackages(ignoredPackages);
-		for (MPackage p : packages) {
-			String fqn = getFullQualifiedName(p);
-			for (String s : pkgs) {
-				if (!s.equals(fqn)) {
-//					System.err.println("--> reject: '" + s + "' != '" + fqn + "'");
-					toReturn.add(p);
+		for (String s : pkgs) {
+			IOExtensions.fine("to reject: " + s);
+			for (MPackage p : packages) {
+				String fqn = Conversion.getFullQualifiedName(p, ".");
+				IOExtensions.fine("test to reject: " + fqn);
+				if (s.equals(fqn)) {
+					IOExtensions.fine("reject: '" + s + "' == '" + fqn + "'");
+					toReturn.remove(p);
 				}
 			}
 		}
@@ -54,22 +59,5 @@ public class TransUtils {
 			packages.add(tokenizer.nextToken().trim());
 		}
 		return packages;
-	}
-	
-	/**
-	 * returns the full qualified name of the given package
-	 * 
-	 * @param pkg	a package
-	 * @return		full qualified name of the given package (package path)
-	 */
-	private static String getFullQualifiedName(MPackage pkg) {
-		StringBuffer fqn = new StringBuffer();
-		for (MPackage p = pkg; p != null; p = p.getNestingPackage()) {
-			fqn.insert(0, p.getName());
-			if (p.getNestingPackage() != null) {
-				fqn.insert(0, ".");
-			}
-		}
-		return fqn.toString();
 	}
 }

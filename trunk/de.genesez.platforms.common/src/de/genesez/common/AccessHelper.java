@@ -12,6 +12,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
+import de.genesez.io.IOExtensions;
+
 /**
  * Provides some helper functions for accessing the genesez model
  * 
@@ -46,7 +48,7 @@ public class AccessHelper {
 		if (i != -1) {
 			String pkg = fullQualifiedName.substring(0, i);
 			String clazz = fullQualifiedName.substring(i + 1);
-//			System.err.println("fqn: " + fullQualifiedName + ", pkg: " + pkg + ", clazz = " + clazz);
+//			IOExtensions.fine("fqn: " + fullQualifiedName + ", pkg: " + pkg + ", clazz = " + clazz);
 			MPackage p = getPackage(packages, pkg);
 			for (Object o : p.getClassifier()) {
 				if (o instanceof MClassifier) {
@@ -71,7 +73,7 @@ public class AccessHelper {
 	public static MPackage getPackage(List<MPackage> packages, String fullQualifiedPackagePath) throws Exception {
 		//	packages to search
 		List<MPackage> subPackages = packages;
-//		System.err.println("package count = " + subPackages.size());
+//		IOExtensions.fine("package count = " + subPackages.size());
 		MPackage pSearchedFor = null;
 		//	check if a root package is specified
 		if (containsPackage(subPackages, fullQualifiedPackagePath)) {
@@ -82,7 +84,6 @@ public class AccessHelper {
 //		String packagePathFound = "";
 		boolean found = false;
 		while (!found) {
-//			System.err.println("MPackage.getPackage");
 			MPackage mp = getNextPackage(subPackages, packagePath);
 			if (mp == null) {
 				throw new Exception("package not exist: " + fullQualifiedPackagePath);
