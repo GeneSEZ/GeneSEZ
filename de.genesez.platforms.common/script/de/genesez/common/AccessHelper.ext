@@ -75,6 +75,29 @@ List[MAttribute] getParentAttributes(MClassifier c) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+
+/**
+ * getter for the model element using a classifier
+ * @param	classifier	a classifier
+ * @return	the model element
+ */
+MModel getModel(MClassifier this) :
+	owningPackage.metaType == MModel
+		? owningPackage
+		: owningPackage.getModel()
+	;
+	
+/**
+ * getter for the model element using a package
+ * @param	package		a package
+ * @return	the model element
+ */
+MModel getModel(MPackage this) :
+	metaType == MModel
+		? this
+		: nestingPackage.getModel()
+	;
+
 /**
  * getter for a class by it's full qualified name which is separed by dot's
  * @param	model				a model
@@ -94,7 +117,7 @@ MClass getClass(MModel model, String fullQualifiedName) :
  * @return	the classifier with the full qualified name or null
  */
 MClassifier getClassifier(MModel model, String fullQualifiedName) :
-	getClassifier(model.ownedPackage, fullQualifiedName);
+	getClassifier(model.nestedPackage, fullQualifiedName);
 
 /**
  * getter for a package by it's full qualified name, which is separated by dot's
@@ -102,9 +125,10 @@ MClassifier getClassifier(MModel model, String fullQualifiedName) :
  * @param	fullQualifiedPackageName	full qualified name of a package
  * @return	the package with the full qualified name or null
  */
-MPackage getPackage(MModel model, String fullQualifiedPackageName) :
-//	info("package count = " + model.ownedPackage.size) ->
-	getPackage(model.ownedPackage, fullQualifiedPackageName);
+MPackage getPackage(MModel this, String fullQualifiedPackageName) :
+	info(name) ->
+	info("package count = " + nestedPackage.size) ->
+	getPackage({this}, fullQualifiedPackageName);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -151,6 +175,14 @@ boolean hasGenericParameter(MClassifier c) :
  */
 boolean hasGenericParameter(MOperation o) :
 	o.genericParameter.size > 0;
+
+/**
+ * checks if an attribute has generic realization(s) or not
+ * @param	o	an attribute
+ * @return	true if the attribute has at least one generic realization, otherwise false
+ */
+boolean hasGenericRealization(MAttribute a) :
+	a.genericRealization.size > 0;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
