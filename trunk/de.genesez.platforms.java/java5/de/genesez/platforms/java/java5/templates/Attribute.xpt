@@ -2,7 +2,9 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
 «EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 
@@ -48,7 +50,7 @@
 «DEFINE AttributeDecl FOR MAttribute-»
 «EXPAND _CommentAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «typeMap(type.name())» «asAttributeName()» «EXPAND _DefaultValue»;
+	«EXPAND _Modifier» «typeMap(type.name())»«EXPAND _Generics» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
 	«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asAttributeName()» = new «typeMap("Set", "Implementation")»<«type.name()»>();
 «ENDIF-»
@@ -75,6 +77,7 @@
 
 // generate a getter implementation method for a mattribute
 «DEFINE GetterImpl FOR MAttribute-»
+«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "getter", "true")»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
 	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»() {
@@ -85,11 +88,13 @@
 		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
 	}
 «ENDIF-»
+«ENDIF-»
 «ENDDEFINE»
 
 
 // generate a setter implementation method for a mattribute
 «DEFINE SetterImpl FOR MAttribute-»
+«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
 «EXPAND _CommentAccessor-»
 «IF multiplicity == 1-»
 	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap(type.name())» _«asAttributeName()») {
@@ -101,6 +106,7 @@
 		«asAttributeName()» = _«asAttributeName()»;
 	}
 «ENDREM»
+«ENDIF-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -134,6 +140,13 @@
 // private functions
 // //////////////////////////////////////////////////////////////////////////////
 
+// generate generics
+«DEFINE _Generics FOR MAttribute-»
+«IF hasGenericRealization()»
+	<«genericRealization.getGenericList()»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
 
 «DEFINE _CommentAttribute FOR MAttribute-»
 «IF hasComment()-»

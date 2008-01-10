@@ -53,9 +53,7 @@
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
 «EXPAND _Modifier» «typeMap(returnType.name())»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
-	«getReturnTypeDeclaration(returnType.name())»
-	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
-	«getReturnTypeReturn(returnType.name())»
+	«EXPAND _DefaultReturnAndOwnCodeImpl»
 }
 «ENDDEFINE»
 
@@ -93,6 +91,12 @@
 «ENDFOREACH-»
 «ENDDEFINE»
 
+
+«DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation»
+	«getReturnTypeDeclaration(returnType.name())»
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+	«getReturnTypeReturn(returnType.name())»
+«ENDDEFINE»
 
 // generate a protected region for own implementations
 «DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
