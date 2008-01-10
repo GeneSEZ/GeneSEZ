@@ -11,7 +11,7 @@ import ecore;
 import uml;
 // Import genesezMM metamodel - transform the uml2 into this metamodel.
 import genesezMM;
-    
+   
 //	using logging functionality (contained metamodel project)
 extension de::genesez::io::io;
    
@@ -31,7 +31,9 @@ MModel transform(Model m):
 		// add comment to model
 		mm.setOwnedComment(m.ownedComment.typeSelect(Comment).processComment())->
 		// start descending package tree
-		mm.setOwnedPackage(m.ownedElement.typeSelect(Package).rejectIgnoredPackages().processPackage())->
+		mm.nestedPackage.addAll(
+			m.ownedElement.typeSelect(Package).rejectIgnoredPackages().processPackage()
+		) ->
 		mm;
 	
 create MModel makeModel(Model m):
@@ -252,19 +254,19 @@ private MClassifier processClassifier(Classifier c) :
 	);
 	
 //	checks if given classifier is a generic or not and delegates to the appropriate function
-//	the first one is possibly not needed -toh-
 private MType determineType(Classifier c) :
 	info("determine type (classifier): " + c.name + ", type: " + c.metaType.name + ", supertypes: " + c.metaType.superTypes) ->
-	c.isTemplateParameter() ?
-		((ClassifierTemplateParameter)c.templateParameter).makeGeneric() :
-		determineClassifier(c)
+	c.isTemplateParameter()
+		? ((ClassifierTemplateParameter)c.templateParameter).makeGeneric()
+		: determineClassifier(c)
 	;
 	
+//	possibly not needed -toh-
 private MType determineType(Type t) :
 	info("determine type (type): " + t.metaType.name + ", " + t.name) ->
-	t.isTemplateParameter() ?
-		((ClassifierTemplateParameter)t.templateParameter).makeGeneric() :
-		determineClassifier(t)
+	t.isTemplateParameter()
+		? ((ClassifierTemplateParameter)t.templateParameter).makeGeneric()
+		: determineClassifier(t)
 	;
 	
 //	the uml2 metamodel doesn't define the type 'void'
@@ -361,13 +363,14 @@ create MAttribute makeAttribute(Property p) :
 	setXmiGuid(xmiId(p))->
 	setName(p.name)->
 	setVisibility(p.visibility.toString())->
-	setMultiplicity(p.getUpper())->
 	setDerived(p.isDerived)->
 	setDefaultvalue(p.getDefault())->
 	setStatic(p.isStatic)->
-	setFinal(p.isReadOnly);
-	// @toh - needs discussion if metamodel should provide this or not
-//	setUnique(p.isUnique);	
+	setFinal(p.isReadOnly) ->
+	// multiplicity, unique, ordered
+	setMultiplicity(p.getUpper())->
+	setUnique(p.isUnique) ->
+	setOrdered(p.isOrdered);
 
 private MAttribute processAttribute(Property p) :
 	info("process attribute: " + p.name) -> (
@@ -389,10 +392,15 @@ create MOperation makeOperation(Operation o) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(o))->
 	setName(o.name)->
+	// properties
 	setVisibility(o.visibility.toString())->
 	setStatic(o.isStatic)->
 	setAbstract(o.isAbstract)->
-	setFinal(o.isLeaf);
+	setFinal(o.isLeaf) ->
+	// multiplicity, unique, ordered
+	setMultiplicity(o.getUpper())->
+	setUnique(o.isUnique) ->
+	setOrdered(o.isOrdered);
 
 private MOperation processOperaration(Operation o) :
 	info("process operation: " + o.name) -> (
@@ -406,12 +414,14 @@ private MOperation processOperaration(Operation o) :
 		// set tagged values
 		mo.setTaggedValue(makeTaggedValues(mo, o))->
 		// add parameter to operation
-		mo.setParameter(o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter())->
+		mo.parameter.addAll(
+			o.ownedParameter.reject(e|e.direction.toString() == "return").processParameter()
+		)->
 		// set return type
 		//	what about template parameters ???
 	info("! return type: " + o.type.isTemplateParameter()) ->
 	info("! return type: " + o.type) ->
-		mo.setReturnType(o.type.determineType())->
+		mo.setReturnType(o.type.determineType()) ->
 		// set raised exceptions
 		mo.setRaisedException(o.raisedException.determineType())->
 		mo
@@ -426,7 +436,10 @@ create MParameter makeParameter(Parameter p) :
 	setName(p.name)->
 	setDefaultvalue(p.getDefault())->
 	setDirection(p.direction.toString())->
-	setMultiplicity(p.getUpper());
+	// multiplicity, unique, ordered
+	setMultiplicity(p.getUpper()) ->
+	setUnique(p.isUnique) ->
+	setOrdered(p.isOrdered);
 	
 private MParameter processParameter(Parameter p) :
 	info("process parameter: " + p.name) -> (
