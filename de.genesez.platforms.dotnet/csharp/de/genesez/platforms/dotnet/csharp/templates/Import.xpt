@@ -2,26 +2,26 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
-«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
 
 // //////////////////////////////////////////////////////////////////////////////
 // public functions
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate realization for a class
-«DEFINE Realization FOR MClassifier-»
-«IF !supertype.typeSelect(MInterface).isEmpty-»
-: «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asInterfaceName(c.name)»«ENDFOREACH»
-«ELSE-»
-«ENDIF-»
+// generate imports for a classifier
+«DEFINE Import FOR MClassifier-»
+	#region Imports
+	using System;
+	«PROTECT CSTART "/* " CEND " */" ID ("java.mclassifier.other.import.code" + xmiGuid)»
+	/* TODO put your imports here */
+	
+	«ENDPROTECT»
+	#endregion
 «ENDDEFINE»
 
 
 // //////////////////////////////////////////////////////////////////////////////
 // private functions
 // //////////////////////////////////////////////////////////////////////////////
-
 
