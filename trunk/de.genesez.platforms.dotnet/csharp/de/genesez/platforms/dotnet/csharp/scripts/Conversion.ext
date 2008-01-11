@@ -19,9 +19,10 @@ extension de::genesez::common::Conversion;
  * @param	interface		an interface
  * @return	the full qualified name of the interface based on it's namespace
  */
-String getFilename(MInterface interface) : 
+String getFilename(MInterface this) : 
 	// delegate to general Conversion script and append file extension
-	"I" + interface.getFilename(getFileExtension());
+//	interface.getFilename(getFileExtension());
+	owningPackage.getFullQualifiedName(getFileSeparator()) + getFileSeparator() + "I" + name + getFileExtension(); 
 
 /**
  * getter for the filename of a classifier based on it's namespace separated with dashes
@@ -56,6 +57,15 @@ String getFullQualifiedName(MPackage pkg) :
 String getFullQualifiedName(MClassifier clazz) : 
 //	C# de.genesez.genesezmm.Conversion.getFQNPackagePath(genesezMM.MClassifier);
 	clazz.owningPackage.getFullQualifiedName() + getFqnSeparator() + clazz.name;
+
+/**
+ * getter for the filename of a classifier based on it's namespace separated with dashes
+ * @param	classifier		a classifier
+ * @param	fileExtension	the file extension including the beginning dot
+ * @return	the full qualified name of the classifier based on it's namespace
+ */
+String getFilename(MInterface interface, String fileExtension) : 
+	interface.getFullQualifiedName(getFileSeparator()) + fileExtension;
 
 /**
  * getter for the separator for full qualified names
