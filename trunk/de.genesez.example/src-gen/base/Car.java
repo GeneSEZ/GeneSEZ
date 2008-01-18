@@ -170,7 +170,7 @@ public class Car extends Vehicle {
 	 * @return newly generated linked association class object
 	 */
 	public Owner insertInLicense(License _other) {
-		Owner _assoc = new Owner(_other, this);
+		Owner _assoc = new Owner(this, _other);
 		license.add(_assoc);
 		_other.insertInCar(_assoc);
 		return _assoc;
@@ -285,12 +285,14 @@ public class Car extends Vehicle {
 	 * @throws  NotReallySeriousException  this is a comment; this is the second comment
 	 */
 	public final boolean drive(int speed) throws WhatAMessException, NotReallySeriousException {
+		
 		Boolean returnValue = null;
 		/* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._11_5_6340215_1179222914421_654419_131) ENABLED START --> */
 		/* <!-- TODO put your own implementation code here --> */
 
 		/* <!-- PROTECTED REGION END --> */
 		return returnValue;
+		
 	}
 	
 	// ////////////////////////////////////////////////////////////////////////

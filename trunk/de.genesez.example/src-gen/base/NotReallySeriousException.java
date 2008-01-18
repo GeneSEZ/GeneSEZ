@@ -9,7 +9,7 @@ import java.lang.String;
  * this is a comment; this is the second comment
  * @author dreamer 
  */
-public class NotReallySeriousException extends Exception {
+public class NotReallySeriousException {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations
