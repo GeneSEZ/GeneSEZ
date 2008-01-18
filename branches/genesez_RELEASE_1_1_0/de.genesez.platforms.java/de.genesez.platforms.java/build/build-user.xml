@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<!--
+	ant build file for creating jar library for java generator support
+	@author	dreamer
+	
+	includes following ant tasks:
+	- jar library creation to support java for genesez generator
+	  [ genesezJava2jar ] 
+-->
+
+<project name="de.genesez.platforms.java" basedir=".." default="">
+	
+	<!-- directory settings -->
+	<property name="dist.dir" value="dist" />
+	
+	<!--
+		create jar library
+	-->
+	<target name="genesez.java2jar"
+		description="creates a jar library which contains all scripts and templates for the java platform">
+		
+		<!-- build jar file -->
+		<jar destfile="${dist.dir}/genesez.java.jar">
+			
+			<!-- exported entries -->
+			<fileset dir="bin" includes="**/*" />
+			<fileset dir="java" includes="**/*" />
+			<fileset dir="java4" includes="**/*" />
+			<fileset dir="java5" includes="**/*" />
+			<fileset dir="hibernate" includes="**/*" />
+			<fileset dir="imsys" includes="**/*" />
+			
+			<!-- manifest content -->
+			<manifest>
+				<section name="de">
+					<attribute name="Specification-Title" value="GeneSEZ Generator Support for Java"/>
+					<attribute name="Specification-Version" value="1.0.0"/>
+					<attribute name="Specification-Vendor" value="Zwickau University of Applied Sciences"/>
+					<attribute name="Implementation-Title" value="GeneSEZ Generator Support for Java"/>
+					<attribute name="Implementation-Version" value="1.0.0"/> 
+					<attribute name="Implementation-Vendor" value="Zwickau University of Applied Sciences"/>
+				</section>
+			</manifest>
+		</jar>
+	</target>
+	
+	<!-- cleaning lady -->
+	<target name="clean"
+			description="clears the distribution directory">
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+</project>

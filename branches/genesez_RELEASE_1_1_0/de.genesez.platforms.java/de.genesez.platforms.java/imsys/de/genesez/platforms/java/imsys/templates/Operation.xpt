@@ -1,0 +1,110 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// additional functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate constructor for mclass
+«DEFINE StaticMain FOR MClassifier-»
+/**
+ */
+public static void main(String[] args) {
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.staticmain.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+«DEFINE ThreadRun FOR MClassifier-»
+/**
+ */
+public void run() {
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.threadrun.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// override functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE _CommentOperation FOR MOperation-»
+/**
+«IF hasComment()-»
+ * «getCommentText(ownedComment)»
+«ENDIF-»
+«EXPAND _CommentParameter-»
+«EXPAND _CommentReturn-»
+«EXPAND _CommentExeception-»
+ */
+«ENDDEFINE»
+
+«DEFINE _CommentParameter FOR MOperation-»
+«FOREACH parameter.typeSelect(MParameter) AS p-»
+ * @param  «p.name»  «getCommentText(p.ownedComment)»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE _CommentReturn FOR MOperation-»
+«IF returnType.name().toLowerCase() != "void" -»
+ * @return «getCommentText(returnType.ownedComment())»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _CommentExeception FOR MOperation-»
+«FOREACH raisedException.typeSelect(MClassifier) AS c-»
+ * @throws  «c.name»  «getCommentText(c.ownedComment)»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+// generate modifiers for moperation
+«DEFINE _Modifier FOR MOperation-»
+«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+«ENDDEFINE»
+
+
+// generate a parameter list for moperation
+«DEFINE _Parameter FOR MOperation-»
+«FOREACH parameter AS p SEPARATOR ", "»«typeMap(p.type.name())» «p.name»«ENDFOREACH»
+«ENDDEFINE»
+
+
+// generate exceptions for a moperation
+«DEFINE _Exception FOR MOperation-»
+«IF !raisedException.isEmpty-»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.name()»«ENDFOREACH»
+«ENDIF-»
+«ENDDEFINE»
