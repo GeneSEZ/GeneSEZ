@@ -115,11 +115,13 @@ public class Wheel implements Changeable {
 	 * @return  
 	 */
 	public boolean change(Changeable newWheel) {
+		
 		Boolean returnValue = null;
 		/* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._11_5_6340215_1179139054625_520706_1) ENABLED START --> */
 		/* <!-- TODO put your own implementation code here --> */
 		/* <!-- PROTECTED REGION END --> */
 		return returnValue;
+		
 	}
 	
 	/**

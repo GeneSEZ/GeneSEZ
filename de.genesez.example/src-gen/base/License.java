@@ -63,7 +63,7 @@ public class License {
 	 * @return newly generated linked association class object
 	 */
 	public Owner insertInCar(Car _other) {
-		Owner _assoc = new Owner(this, _other);
+		Owner _assoc = new Owner(_other, this);
 		car.add(_assoc);
 		_other.insertInLicense(_assoc);
 		return _assoc;

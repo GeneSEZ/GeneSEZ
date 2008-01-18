@@ -8,7 +8,7 @@ import java.lang.String;
 /**
  * @author dreamer 
  */
-public class WhatAMessException extends Exception {
+public class WhatAMessException {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations

@@ -16,9 +16,9 @@ public class Owner {
 	
 	private String name;
 	/** reference attribute to the managed association end */
-	private License license;
-	/** reference attribute to the managed association end */
 	private Car car;
+	/** reference attribute to the managed association end */
+	private License license;
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated constructor implementations
@@ -28,10 +28,10 @@ public class Owner {
 	 * An AssociationClass should only have a public initializing constructor
 	 * that sets the references to its association ends
 	 */
-	public Owner(License _license, Car _car) {
+	public Owner(Car _car, License _license) {
 		
-		license = _license;
 		car = _car;
+		license = _license;
 		
 		/* <!-- PROTECTED REGION ID(java.moperation.implementation.operation.code._12_5_6340215_1182161516984_21570_380) ENABLED START --> */
 		/* <!-- TODO put your own implementation code here --> */
@@ -46,14 +46,14 @@ public class Owner {
 	// generated association method implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	/** getter of reference attribute to the managed association end  license*/
-	public License getLicense() {
-		return license;
-	}
-	
 	/** getter of reference attribute to the managed association end  car*/
 	public Car getCar() {
 		return car;
+	}
+	
+	/** getter of reference attribute to the managed association end  license*/
+	public License getLicense() {
+		return license;
 	}
 	
 	// ////////////////////////////////////////////////////////////////////////
