@@ -1,0 +1,57 @@
+«REM»
+	Interface template for C#
+	
+	@autor	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate an interface
+«ENDREM»
+«DEFINE Root FOR MInterface-»
+	public interface «asInterfaceName(name)» «EXPAND Generalization::Generalization»
+	{		
+		«EXPAND Association::FieldDecl-»
+		«EXPAND Association::OperationDecl-»
+		«EXPAND Operation::OperationDecl-»
+		«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+	}
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate a protected region for own implementations
+«ENDREM»
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-»
+		«PROTECT CSTART "/* " CEND " */" ID (proRegId)»
+		/* TODO put your own implementation code here */
+		
+		«ENDPROTECT»
+«ENDDEFINE»

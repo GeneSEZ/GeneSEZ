@@ -1,3 +1,10 @@
+«REM»
+	Association Template for C# interfaces
+	
+	@autor	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
 «REM» import code gen meta model «ENDREM»
 «IMPORT genesezMM»
 
@@ -6,19 +13,89 @@
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
 
 
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
 
-
-// generate attributes for a classifier
-«DEFINE OperationDecl FOR MClassifier-»
+«REM»
+	generate attributes for an interface
+«ENDREM»
+«DEFINE FieldDecl FOR MInterface-»
+«FOREACH property.typeSelect(MAssociationRole) AS a-»
+	«EXPAND FieldDecl FOR a-»
+«ENDFOREACH-»
 «ENDDEFINE»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// private functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+	generate attributes for an interface
+«ENDREM»
+«DEFINE OperationDecl FOR MInterface-»
+«FOREACH property.typeSelect(MAssociationRole) AS a-»
+	«EXPAND InsertInDecl FOR a-»
+	«EXPAND RemoveFromDecl FOR a-»
+«ENDFOREACH-»
+«ENDDEFINE»
 
 
+«REM>
+	generate field declaration for an association
+«ENDREM»
+«DEFINE FieldDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _FieldDecl( type.name(),
+		                    asPublicFieldName() )-»
+	«ELSE-»
+		«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + type.name() + ">",
+		                    asPublicFieldName() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + type.name() + ">",
+	                    asPublicFieldName() )-»
+	«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
+                        asPublicFieldName() + assocClass().name )-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM>
+	generate insert into declaration for an association
+«ENDREM»
+«DEFINE InsertIntoDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	public void «asAddTo(name)»(«type.name()» _add);
+«ELSE-»
+	public void «asInsertIn(name)»(«type.name()» _insert, «assocClass().name» _at);
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM>
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE RemoveFromDecl FOR MAssociationRole-»
+	public void «asRemoveFrom(name)»(«type.name()» _remove);
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate public field declaration for an association
+«ENDREM»
+«DEFINE _FieldDecl(String type, String name) FOR MAssociationRole-»
+«EXPAND Field::Comment-»
+public «type» «name»
+{
+	get;
+}
+«ENDDEFINE»
