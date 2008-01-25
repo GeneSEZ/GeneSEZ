@@ -22,11 +22,11 @@
 
 
 «REM»
-	generate attributes for an interface
+	generate association attributes for an interface
 «ENDREM»
-«DEFINE FieldDecl FOR MInterface-»
+«DEFINE PropertyDecl FOR MInterface-»
 «FOREACH property.typeSelect(MAssociationRole) AS a-»
-	«EXPAND FieldDecl FOR a-»
+	«EXPAND PropertyDecl FOR a-»
 «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -43,21 +43,21 @@
 
 
 «REM>
-	generate field declaration for an association
+	generate property declaration for an association
 «ENDREM»
-«DEFINE FieldDecl FOR MAssociationRole-»
+«DEFINE PropertyDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _FieldDecl( type.name(),
+		«EXPAND _PropertyDecl( type.name(),
 		                    asPublicFieldName() )-»
 	«ELSE-»
-		«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + type.name() + ">",
+		«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + type.name() + ">",
 		                    asPublicFieldName() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + type.name() + ">",
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + type.name() + ">",
 	                    asPublicFieldName() )-»
-	«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
                         asPublicFieldName() + assocClass().name )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -93,9 +93,9 @@
 «REM»
 	generate public field declaration for an association
 «ENDREM»
-«DEFINE _FieldDecl(String type, String name) FOR MAssociationRole-»
-«EXPAND templates::Field::Comment-»
-public «type» «name»
+«DEFINE _PropertyDecl(String type, String name) FOR MAssociationRole-»
+«EXPAND templates::Attribute::Comment-»
+public «type» «asPropertyName()»
 {
 	get;
 }

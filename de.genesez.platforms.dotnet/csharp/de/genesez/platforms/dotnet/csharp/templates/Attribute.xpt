@@ -1,10 +1,17 @@
+«REM»
+	Attribute template for C#
+	
+	@autor	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
 «REM» import code gen meta model «ENDREM»
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::common::AccessHelper»
 «EXTENSION de::genesez::typemapping::TypeMapping»
-«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Type»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
 
 
@@ -15,92 +22,26 @@
 «ENDREM»
 
 
-«REM»generate attributes for MClassifier«ENDREM»
-«DEFINE AttributeDecl FOR MClassifier-»
-«IF ! property.typeSelect(MAttribute).select(e|e.static && !e.derived).isEmpty»
-		#region Static Fields
-		«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
-		#endregion
-«ENDIF»
-«IF ! property.typeSelect(MAttribute).select(e|!e.static && !e.derived).isEmpty»
-		#region Private Fields
-		«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
-		#endregion
-«ENDIF»
-«ENDDEFINE»
-
-«REM»generate declaration for MAttribute«ENDREM»
-«DEFINE AttributeDecl FOR MAttribute-»
-«EXPAND _CommentPrivateField-»
+«REM»
+	generate field declaration
+«ENDREM»
+«DEFINE FieldDecl FOR MAttribute-»
+		«EXPAND _Comment-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «typeMap(type.name())» «asPrivateFieldName()» «EXPAND _DefaultValue»;
+		«EXPAND _Modifier» «typeMap(type.name())» «asFieldName()»«EXPAND _DefaultValue-»;
 «ELSE-»
-	«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asPrivateFieldName()» = new «typeMap("Set", "Implementation")»<«type.name()»>();
+		«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asFieldName()» = new «typeMap("Set", "Implementation")»<«type.name()»>();
 «ENDIF-»
 «ENDDEFINE»
 
-«REM»generate getter and setter for MClass«ENDREM»
-«DEFINE GetterSetterImpl FOR MClass-»
-«IF !property.typeSelect(MAttribute).select(e|!e.derived && e.multiplicity == 1).isEmpty»
-#region Public Fields
-«FOREACH property.typeSelect(MAttribute).select(e|!e.derived && e.multiplicity == 1) AS a-»
-	«EXPAND _CommentPublicField FOR a»
-	public «typeMap(a.type.name())» «asPublicFieldName(a)»
-	{
-		«EXPAND GetterImpl FOR a»
-		«IF !a.final»«EXPAND SetterImpl FOR a»«ENDIF»
-	}
-«ENDFOREACH-»
-#endregion
-«ENDIF»
-«IF !property.typeSelect(MAttribute).select(e|!e.derived && e.multiplicity != 1).isEmpty»
-#region Public Collections
-«FOREACH property.typeSelect(MAttribute).select(e|!e.derived && e.multiplicity != 1) AS a-»
-	«EXPAND InsertInImpl FOR a»
-	«EXPAND RemoveFromImpl FOR a»
-«ENDFOREACH-»
-#endregion
-«ENDIF»
+
+«REM»
+	generate property implementation
+«ENDREM»
+«DEFINE PropertyImpl FOR MAttribute-»
+«EXPAND _Property( type.name(), asPropertyName() )-»
 «ENDDEFINE»
 
-«REM»generate getter implementation for MAttribute«ENDREM»
-«DEFINE GetterImpl FOR MAttribute-»
-get { return this.«asPrivateFieldName()»; }
-«ENDDEFINE»
-
-«REM»generate setter implementation for MAttribute«ENDREM»
-«DEFINE SetterImpl FOR MAttribute-»
-set { this.«asPrivateFieldName()» = value; }
-«ENDDEFINE»
-
-«REM»generate insert in implementation for MAttribute«ENDREM»
-«DEFINE InsertInImpl FOR MAttribute-»
-«IF multiplicity != 1-» 
-	public «IF static»static«ENDIF» void «asAddTo(name)»(«typeMap(type.name())» _in)
-	{
-		«IF static»
-		«classifier.name».«asPrivateFieldName()».add(_in);
-		«ELSE»
-		this.«asPrivateFieldName()».add(_in);
-		«ENDIF»
-		 
-	}
-«ENDIF»
-«ENDDEFINE»
-
-«REM»generate insert in implementation for MAttribute«ENDREM»
-«DEFINE RemoveFromImpl FOR MAttribute-»
-«IF multiplicity != 1-»
-	public «IF static»static«ENDIF» void «asRemoveFrom(name)»(«typeMap(type.name())» _ex)
-	{
-		«IF static»
-		«classifier.name».«asPrivateFieldName()».remove(_ex);
-		«ELSE»
-		this.«asPrivateFieldName()».remove(_ex);
-		«ENDIF»
-	}
-«ENDIF»
-«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -109,26 +50,52 @@ set { this.«asPrivateFieldName()» = value; }
 «ENDREM»
 
 
-«REM»generate comment for MAttribute«ENDREM»
-«DEFINE _CommentPrivateField FOR MAttribute-»
-«IF hasComment()-»
-/** comment «asPrivateFieldName()» */
-«ENDIF-»
+«REM»
+	generate public field declaration for an association
+«ENDREM»
+«DEFINE _Field(String type, String name) FOR MAttribute-»
+			«EXPAND _Comment»
+			«EXPAND _Modifier» «type» «name»;
 «ENDDEFINE»
 
-«REM»generate comment for MAttribute«ENDREM»
-«DEFINE _CommentPublicField FOR MAttribute-»
-«IF hasComment()-»
-/** comment «asPublicFieldName()» */
-«ENDIF-»
+
+«REM»
+	generate public field declaration for an association
+«ENDREM»
+«DEFINE _Property(String type, String name) FOR MAttribute-»
+		«EXPAND _Comment-»
+		public «type» «name»
+		{
+			get { return this.«asFieldName()»; }
+		}
+		
 «ENDDEFINE»
 
-«REM»generate modifiers for MAttribute«ENDREM»
+
+«REM»
+	generate a modifier for an attribute
+«ENDREM»
 «DEFINE _Modifier FOR MAttribute-»
-«visibility» «IF static»static«ENDIF» «IF final»readonly«ENDIF»
+		«visibility-»«IF static» static«ENDIF-»«IF final» readonly«ENDIF-»
 «ENDDEFINE»
 
-«REM»generate default value for MAttribute«ENDREM»
+
+«REM»
+	generate default value for an attribute
+«ENDREM»
 «DEFINE _DefaultValue FOR MAttribute-»
-«IF defaultvalue.length > 0»= «defaultvalue»«ENDIF»
+«IF defaultvalue.length > 0-»
+ = «defaultvalue»
+«ENDIF-»
 «ENDDEFINE»
+
+
+«REM»
+	generate attribute comment
+«ENDREM»
+«DEFINE _Comment FOR MProperty-»
+«IF hasComment()-»
+		/// «getCommentText(ownedComment)»
+«ENDIF-»
+«ENDDEFINE»
+

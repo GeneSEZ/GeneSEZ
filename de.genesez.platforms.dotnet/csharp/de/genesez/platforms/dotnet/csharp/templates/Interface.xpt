@@ -10,6 +10,7 @@
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
 
@@ -27,9 +28,13 @@
 «DEFINE Root FOR MInterface-»
 	public interface «asInterfaceName(name)» «EXPAND Generalization::Generalization»
 	{		
-		«EXPAND Association::FieldDecl-»
-		«EXPAND Association::OperationDecl-»
-		«EXPAND Operation::OperationDecl-»
+«REM»		«IF hasStaticFields()»«EXPAND _StaticFields»«ENDIF-»
+		«IF hasPrivateFields()»«EXPAND _PrivateFields»«ENDIF-»
+		«IF hasPublicFields()»«EXPAND _PublicFields»«ENDIF-»
+		«IF hasProperties()»«EXPAND _Properties»«ENDIF-»«ENDREM»
+		«EXPAND Interface::Association::PropertyDecl-»
+		«EXPAND Interface::Association::OperationDecl-»
+		«EXPAND Interface::Operation::OperationDecl-»
 		«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
 	}
 «ENDDEFINE»
@@ -44,6 +49,50 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+
+«REM»
+	generate a region for static fields
+«ENDREM»
+«DEFINE _StaticFields FOR MInterface-»
+		#region Static Fields
+		«EXPAND Interface::Attribute::StaticFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for private fields
+«ENDREM»
+«DEFINE _PrivateFields FOR MInterface-»
+		#region Private Fields
+		«EXPAND Interface::Attribute::PrivateFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for public fields
+«ENDREM»
+«DEFINE _PublicFields FOR MInterface-»
+		#region Public Fields
+		«EXPAND Interface::Attribute::PublicFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for properties
+«ENDREM»
+«DEFINE _Properties FOR MInterface-»
+		#region Properties
+		«EXPAND Interface::Attribute::Properties-»
+		#endregion
+		
+«ENDDEFINE»
 
 
 «REM»
