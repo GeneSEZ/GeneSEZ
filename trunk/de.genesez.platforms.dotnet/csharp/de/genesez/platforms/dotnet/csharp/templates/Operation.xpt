@@ -10,10 +10,9 @@
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::typemapping::TypeMapping»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
-
-«EXTENSION de::genesez::typemapping::TypeMapping»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -22,11 +21,15 @@
 «ENDREM»
 
 «REM»
-	generate operation declarations for an interface
+	generate an implementation for a constructor
 «ENDREM»
-«DEFINE OperationDecl FOR MInterface-»
-«EXPAND OperationDecl FOREACH operation.select(e|e.name != name)-»
-
+«DEFINE ConstructorImpl FOR MOperation-»
+		«EXPAND Comment-»
+		«EXPAND Modifier» «asClassifierName(name)»(«EXPAND Parameter-»)
+		{
+			«EXPAND OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+		}
+		
 «ENDDEFINE»
 
 
@@ -34,8 +37,60 @@
 	generate an declaration for an operation
 «ENDREM»
 «DEFINE OperationDecl FOR MOperation-»
-«EXPAND _Comment»
-		public «typeMap(returnType.name)» «asOperationName(name)»( «EXPAND _Parameter-» );
+		«EXPAND Comment-»
+		«EXPAND Modifier-» «typeMap(returnType.name)» «asOperationName(name)»(«EXPAND Parameter-»);
+«ENDDEFINE»
+
+
+«REM»
+	generate a implementation for an operation
+«ENDREM»
+«DEFINE OperationImpl FOR MOperation-»
+		«EXPAND Comment-»
+		«EXPAND Modifier» «typeMap(returnType.name)» «asOperationName(name)»(«EXPAND Parameter-»)
+		{
+			«EXPAND OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+		}
+«ENDDEFINE»
+
+
+
+«REM»
+	generate operation comment
+«ENDREM»
+«DEFINE Comment FOR MOperation-»
+«IF hasComment()-»
+		/// «getCommentText(ownedComment)»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate parameter list for an operation
+«ENDREM»
+«DEFINE Parameter FOR MOperation-»
+«FOREACH parameter AS p SEPARATOR ", "-»
+«EXPAND _Parameter FOR p-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a modifier for an operation
+«ENDREM»
+«DEFINE Modifier FOR MOperation-»
+		«visibility»«IF static» static«ENDIF»«IF abstract» abstract«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a protected region for own implementations
+«ENDREM»
+«DEFINE OwnCodeImpl(String proRegId) FOR MOperation-»
+			«PROTECT CSTART "/* " CEND " */" ID (proRegId)»
+			/* TODO put your own implementation code here */
+			
+			«ENDPROTECT»
 «ENDDEFINE»
 
 
@@ -44,26 +99,6 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
-
-
-«REM»
-	generate operation comment
-«ENDREM»
-«DEFINE _Comment FOR MOperation-»
-«IF hasComment()-»
-/// «getCommentText(ownedComment)-»
-«ENDIF-»
-«ENDDEFINE»
-
-
-«REM»
-	generate parameter list for operation
-«ENDREM»
-«DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "-»
-«EXPAND _Parameter FOR p-»
-«ENDFOREACH-»
-«ENDDEFINE»
 
 
 «REM»
@@ -76,4 +111,3 @@
 «typeMap(type.name())»[] «asParameterName(name)-»
 «ENDIF-»
 «ENDDEFINE»
-

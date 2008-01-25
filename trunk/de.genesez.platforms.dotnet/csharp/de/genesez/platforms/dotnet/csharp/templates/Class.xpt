@@ -10,8 +10,10 @@
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -19,40 +21,26 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«REM»
-	generate an interface
-«ENDREM»
-«DEFINE Root FOR MInterface-»
-	public interface «asInterfaceName(name)» «EXPAND Generalization::Generalization»
-	{
-		
-		«EXPAND Attribute::AttributeDecl-»
-		
-		«EXPAND Association::OperationDecl-»
-				
-		«EXPAND Operation::OperationDecl-»
-		
-		«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
-		
-	}
-«ENDDEFINE»
-
 
 «REM»
 	generate a class
 «ENDREM»
 «DEFINE Root FOR MClass-»
-	public class «asClassifierName(name)» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization»
+	public class «asClassifierName(name)» «EXPAND Generalization::Generalization-» «EXPAND Realization::Realization-»
 	{
-
-		«EXPAND Attribute::AttributeDecl-»
-				
-		«EXPAND Attribute::GetterSetterImpl-»
-		
+		«IF hasStaticFields()»«EXPAND _StaticFields»«ENDIF-»
+		«IF hasPrivateFields()»«EXPAND _PrivateFields»«ENDIF-»
+		«IF hasPublicFields()»«EXPAND _PublicFields»«ENDIF-»
+		«IF hasProperties()»«EXPAND _Properties»«ENDIF-»
+		«IF hasConstructors()»«EXPAND _Constructors»«ENDIF-»
+		«IF hasAbstractMethods()»«EXPAND _AbstractMethods»«ENDIF-»
+		«IF hasStaticMethods()»«EXPAND _StaticMethods»«ENDIF-»
+		«IF hasPublicMethods()»«EXPAND _PublicMethods»«ENDIF-»
+		«IF hasPrivateMethods()»«EXPAND _PrivateMethods»«ENDIF-»
 		«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
-		
 	}
 «ENDDEFINE»
+
 
 «DEFINE Root FOR MClassifier-»
 «ENDDEFINE»
@@ -66,11 +54,116 @@
 
 
 «REM»
+	generate a region for static fields
+«ENDREM»
+«DEFINE _StaticFields FOR MClass-»
+		#region Static Fields
+		«EXPAND Class::Attribute::StaticFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for private fields
+«ENDREM»
+«DEFINE _PrivateFields FOR MClass-»
+		#region Private Fields
+		«EXPAND Class::Attribute::PrivateFields-»
+		«EXPAND Class::Association::PrivateFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for public fields
+«ENDREM»
+«DEFINE _PublicFields FOR MClass-»
+		#region Public Fields
+		«EXPAND Class::Attribute::PublicFields-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for properties
+«ENDREM»
+«DEFINE _Properties FOR MClass-»
+		#region Properties
+		«EXPAND Class::Attribute::Properties-»
+		«EXPAND Class::Association::Properties-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for constructors
+«ENDREM»
+«DEFINE _Constructors FOR MClass-»
+		#region Constructors
+		«EXPAND Class::Operation::ConstructorImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for abstract methods
+«ENDREM»
+«DEFINE _AbstractMethods FOR MClass-»
+		#region Abstract Methods
+		«EXPAND Class::Operation::OperationDecl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for static methods
+«ENDREM»
+«DEFINE _StaticMethods FOR MClass-»
+		#region Static Methods
+		«EXPAND Class::Operation::StaticOperationImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for public methods
+«ENDREM»
+«DEFINE _PublicMethods FOR MClass-»
+		#region Public Methods
+		«EXPAND Class::Operation::PublicOperationImpl-»
+		«EXPAND Class::Association::InsertImpl-»
+		«EXPAND Class::Association::RemoveImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for private methods
+«ENDREM»
+«DEFINE _PrivateMethods FOR MClass-»
+		#region Private Methods
+		«EXPAND Class::Operation::PrivateOperationImpl-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
 	generate a protected region for own implementations
 «ENDREM»
-«DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-»
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClass-»
+		#region Your Own Implementations
 		«PROTECT CSTART "/* " CEND " */" ID (proRegId)»
 		/* TODO put your own implementation code here */
 		
 		«ENDPROTECT»
+		#endregion
 «ENDDEFINE»

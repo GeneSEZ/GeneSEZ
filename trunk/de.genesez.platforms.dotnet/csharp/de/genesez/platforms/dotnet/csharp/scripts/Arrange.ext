@@ -1,0 +1,80 @@
+//	based on genesez meta model
+import genesezMM;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+boolean hasStaticFields(MClass class) :
+	0 != staticFields(class).size;
+
+boolean hasConstantFields(MClass class) :
+	0 != constantFields(class).size;
+
+boolean hasPrivateFields(MClass class) :
+	0 != privateFields(class).size || 0 != associationFields(class).size;
+
+boolean hasPublicFields(MClass class) :
+	0 != publicFields(class).size;
+
+boolean hasAssociations(MClass class) :
+	0 != associationFields(class).size;
+
+boolean hasProperties(MClass class) :
+	0 != properties(class).size || 0 != associationProperties(class).size;
+
+boolean hasConstructors(MClass class) :
+	0 != constructors(class).size;
+
+boolean hasAbstractMethods(MClass class) :
+	0 != abstractMethods(class).size;
+
+boolean hasStaticMethods(MClass class) :
+	0 != staticMethods(class).size;
+
+boolean hasPublicMethods(MClass class) :
+	0 != publicMethods(class).size;
+
+boolean hasPrivateMethods(MClass class) :
+	0 != privateMethods(class).size;
+
+List[MAttribute] staticFields(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|e.static);
+
+List[MAttribute] constantFields(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|e.final);
+
+List[MProperty] privateFields(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|e.visibility == "private");
+
+List[MProperty] publicFields(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|e.visibility == "public");
+
+List[MProperty] properties(MClass class) :
+	class.property.typeSelect(MAttribute);
+	//.select(e|e.stereotype.name.contains("accessor"));
+
+List[MProperty] associationFields(MClass class) :
+	class.property.typeSelect(MAssociationRole);
+
+List[MProperty] associationProperties(MClass class) :
+	class.property.typeSelect(MAssociationRole);
+	//.select(e|e.stereotype.name.contains("accessor"));
+
+List[MOperation] constructors(MClass class) :
+	class.operation.select(e|e.name == class.name);
+
+List[MOperation] abstractMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && e.abstract);
+
+List[MOperation] staticMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && !e.abstract && e.static);
+
+List[MOperation] publicMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && !e.abstract && !e.static && e.visibility == "public");
+
+List[MOperation] privateMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && !e.abstract && !e.static && e.visibility == "private");
+

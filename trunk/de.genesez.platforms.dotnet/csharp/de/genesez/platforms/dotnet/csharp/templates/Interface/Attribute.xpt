@@ -1,0 +1,94 @@
+«REM»
+	Attribute template for C# classes
+	
+	@autor	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Type»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+«IMPORT de::genesez::platforms::dotnet::csharp»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate static attributes for a class
+«ENDREM»
+«DEFINE StaticFields FOR MInterface-»
+	«EXPAND _FieldDecl FOREACH staticFields()»
+«ENDDEFINE»
+
+
+«REM»
+	generate private attributes for a class
+«ENDREM»
+«DEFINE PrivateFields FOR MInterface-»
+	«EXPAND _FieldDecl FOREACH privateFields()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate public attributes for a class
+«ENDREM»
+«DEFINE PublicFields FOR MInterface-»
+	«EXPAND _FieldDecl FOREACH publicFields()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate public attributes for a class
+«ENDREM»
+«DEFINE Properties FOR MInterface-»
+	«EXPAND _PropertyDecl FOREACH properties()-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate field declaration for an attribute
+«ENDREM»
+«DEFINE _FieldDecl FOR MAttribute-»
+	«EXPAND templates::Attribute::FieldDecl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate field declaration for an association role
+«ENDREM»
+«DEFINE _FieldDecl FOR MAssociationRole-»
+«ENDDEFINE»
+
+
+«REM»
+	generate property for an attribute
+«ENDREM»
+«DEFINE _PropertyImpl FOR MAttribute-»
+	«EXPAND templates::Attribute::PropertyImpl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate property for an association role
+«ENDREM»
+«DEFINE _PropertyImpl FOR MAssociationRole-»
+«ENDDEFINE»

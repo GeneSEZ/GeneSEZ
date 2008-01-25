@@ -1,14 +1,16 @@
 «REM»
-	Association Template for C# interfaces
+	Association Template for C#
 	
 	@autor	Gerrit Beine
-	@date	2008/01/18
+	@date	2008/01/25
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::typemapping::TypeMapping»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
 
@@ -21,64 +23,75 @@
 
 
 «REM»
-	generate attributes for an interface
-«ENDREM»
-«DEFINE FieldDecl FOR MInterface-»
-«FOREACH property.typeSelect(MAssociationRole) AS a-»
-	«EXPAND FieldDecl FOR a-»
-«ENDFOREACH-»
-«ENDDEFINE»
-
-
-«REM»
-	generate attributes for an interface
-«ENDREM»
-«DEFINE OperationDecl FOR MInterface-»
-«FOREACH property.typeSelect(MAssociationRole) AS a-»
-	«EXPAND InsertInDecl FOR a-»
-	«EXPAND RemoveFromDecl FOR a-»
-«ENDFOREACH-»
-«ENDDEFINE»
-
-
-«REM>
-	generate field declaration for an association
+	generate field declaration
 «ENDREM»
 «DEFINE FieldDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _FieldDecl( type.name(),
-		                    asPublicFieldName() )-»
+		«EXPAND _Field( type.name(),
+		                asFieldName() )-»
 	«ELSE-»
-		«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + type.name() + ">",
-		                    asPublicFieldName() )-»
+		«EXPAND _Field( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+		                asFieldName() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + type.name() + ">",
-	                    asPublicFieldName() )-»
-	«EXPAND _FieldDecl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
-                        asPublicFieldName() + assocClass().name )-»
+	«EXPAND _Field( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+	                asFieldName() )-»
+«ENDIF»
+«ENDDEFINE»
+
+
+«REM»
+	generate property implementation
+«ENDREM»
+«DEFINE PropertyImpl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _Property( type.name(),
+		                   asPropertyName() )-»
+	«ELSE-»
+		«EXPAND _Property( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+		                   asPropertyName() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _Property( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+	                   asPropertyName() )-»
+	«EXPAND _Property( typeMap( "Set" ) + "<" + asClassifierName(assocClass().name()) + ">",
+                       asPropertyName() + asClassifierName(assocClass().name) )-»
 «ENDIF-»
 «ENDDEFINE»
 
 
-«REM>
+«REM»
 	generate insert into declaration for an association
 «ENDREM»
-«DEFINE InsertIntoDecl FOR MAssociationRole-»
+«DEFINE InsertImpl FOR MAssociationRole-»
+		«EXPAND _Comment-»
 «IF isPlainAssociation()-»
-	public void «asAddTo(name)»(«type.name()» _add);
+		public void «asAddTo(name)»(«type.name()» _add)
+		{
+			
+		}
 «ELSE-»
-	public void «asInsertIn(name)»(«type.name()» _insert, «assocClass().name» _at);
+		public void «asInsertIn(name)»(«type.name()» _insert, «assocClass().name» _at)
+		{
+			
+		}
 «ENDIF-»
+		
 «ENDDEFINE»
 
 
-«REM>
-	generate remove from declaration for an association
+«REM»
+	generate insert into declaration for an association
 «ENDREM»
-«DEFINE RemoveFromDecl FOR MAssociationRole-»
-	public void «asRemoveFrom(name)»(«type.name()» _remove);
+«DEFINE RemoveImpl FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public void «asAddTo(name)»(«type.name()» _add)
+		{
+			
+		}
+		
 «ENDDEFINE»
 
 
@@ -92,10 +105,40 @@
 «REM»
 	generate public field declaration for an association
 «ENDREM»
-«DEFINE _FieldDecl(String type, String name) FOR MAssociationRole-»
-«EXPAND Field::Comment-»
-public «type» «name»
-{
-	get;
-}
+«DEFINE _Field(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier» «type» «name»;
+		
 «ENDDEFINE»
+
+
+«REM»
+	generate public field declaration for an association
+«ENDREM»
+«DEFINE _Property(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public «type» «name»
+		{
+			get { return this.«asFieldName()»; }
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a modifier for an association
+«ENDREM»
+«DEFINE _Modifier FOR MAssociationRole-»
+		«visibility-»
+«ENDDEFINE»
+
+
+«REM»
+	generate attribute comment
+«ENDREM»
+«DEFINE _Comment FOR MAssociationRole-»
+«IF hasComment()-»
+		/// «getCommentText(ownedComment)»
+«ENDIF-»
+«ENDDEFINE»
+
