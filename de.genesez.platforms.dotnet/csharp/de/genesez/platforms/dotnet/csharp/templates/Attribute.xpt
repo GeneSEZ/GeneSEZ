@@ -26,11 +26,25 @@
 	generate field declaration
 «ENDREM»
 «DEFINE FieldDecl FOR MAttribute-»
-		«EXPAND _Comment-»
 «IF multiplicity == 1-»
-		«EXPAND _Modifier» «typeMap(type.name())» «asFieldName()»«EXPAND _DefaultValue-»;
+		«EXPAND _Field( type.name(),
+		                asFieldName() )-»
 «ELSE-»
-		«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asFieldName()» = new «typeMap("Set", "Implementation")»<«type.name()»>();
+		«EXPAND _Field( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+		                asFieldName() )-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate property declaration
+«ENDREM»
+«DEFINE PropertyDecl FOR MAttribute-»
+«IF multiplicity == 1-»
+	«EXPAND _PropertyDecl( type.name(), asPropertyName() )-»
+«ELSE-»
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + asClassifierName(type.name())+ ">",
+	                   asPropertyName() )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -39,7 +53,12 @@
 	generate property implementation
 «ENDREM»
 «DEFINE PropertyImpl FOR MAttribute-»
-«EXPAND _Property( type.name(), asPropertyName() )-»
+«IF multiplicity == 1-»
+	«EXPAND _PropertyImpl( type.name(), asPropertyName() )-»
+«ELSE-»
+	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + asClassifierName(type.name())+ ">",
+	                   asPropertyName() )-»
+«ENDIF-»
 «ENDDEFINE»
 
 
@@ -54,15 +73,30 @@
 	generate public field declaration for an association
 «ENDREM»
 «DEFINE _Field(String type, String name) FOR MAttribute-»
-			«EXPAND _Comment»
+			«EXPAND _Comment-»
 			«EXPAND _Modifier» «type» «name»;
+«REM»		«EXPAND _Modifier» «typeMap(type.name())» «asFieldName()»«EXPAND _DefaultValue-»;«ENDREM»
+«REM»		«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asFieldName()» = new «typeMap("Set", "Implementation")»<«type.name()»>();«ENDREM»
 «ENDDEFINE»
 
 
 «REM»
-	generate public field declaration for an association
+	generate property declaration
 «ENDREM»
-«DEFINE _Property(String type, String name) FOR MAttribute-»
+«DEFINE _PropertyDecl(String type, String name) FOR MAttribute-»
+		«EXPAND _Comment-»
+		public «type» «name»
+		{
+			get;
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate property implemenation
+«ENDREM»
+«DEFINE _PropertyImpl(String type, String name) FOR MAttribute-»
 		«EXPAND _Comment-»
 		public «type» «name»
 		{
@@ -93,7 +127,7 @@
 «REM»
 	generate attribute comment
 «ENDREM»
-«DEFINE _Comment FOR MProperty-»
+«DEFINE _Comment FOR MAttribute-»
 «IF hasComment()-»
 		/// «getCommentText(ownedComment)»
 «ENDIF-»

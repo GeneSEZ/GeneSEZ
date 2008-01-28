@@ -26,15 +26,11 @@
 	generate an interface
 «ENDREM»
 «DEFINE Root FOR MInterface-»
-	public interface «asInterfaceName(name)» «EXPAND Generalization::Generalization»
+	«EXPAND _Interface-»
 	{		
-«REM»		«IF hasStaticFields()»«EXPAND _StaticFields»«ENDIF-»
-		«IF hasPrivateFields()»«EXPAND _PrivateFields»«ENDIF-»
 		«IF hasPublicFields()»«EXPAND _PublicFields»«ENDIF-»
-		«IF hasProperties()»«EXPAND _Properties»«ENDIF-»«ENDREM»
-		«EXPAND Interface::Association::PropertyDecl-»
-		«EXPAND Interface::Association::OperationDecl-»
-		«EXPAND Interface::Operation::OperationDecl-»
+		«IF hasProperties()»«EXPAND _Properties»«ENDIF-»
+		«IF hasPublicMethods()»«EXPAND _Operations»«ENDIF-»
 		«EXPAND _OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
 	}
 «ENDDEFINE»
@@ -50,31 +46,15 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-
 «REM»
-	generate a region for static fields
+	generate the interface declaration
 «ENDREM»
-«DEFINE _StaticFields FOR MInterface-»
-		#region Static Fields
-		«EXPAND Interface::Attribute::StaticFields-»
-		#endregion
-		
+«DEFINE _Interface FOR MInterface-»
+	public interface «asInterfaceName(name)-»«EXPAND Generalization::Generalization»
 «ENDDEFINE»
 
-
 «REM»
-	generate a region for private fields
-«ENDREM»
-«DEFINE _PrivateFields FOR MInterface-»
-		#region Private Fields
-		«EXPAND Interface::Attribute::PrivateFields-»
-		#endregion
-		
-«ENDDEFINE»
-
-
-«REM»
-	generate a region for public fields
+	generate a region for public field declarations
 «ENDREM»
 «DEFINE _PublicFields FOR MInterface-»
 		#region Public Fields
@@ -85,11 +65,24 @@
 
 
 «REM»
-	generate a region for properties
+	generate a region for property declarations
 «ENDREM»
 «DEFINE _Properties FOR MInterface-»
 		#region Properties
 		«EXPAND Interface::Attribute::Properties-»
+		«EXPAND Interface::Association::Properties-»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a region for operation declarations
+«ENDREM»
+«DEFINE _OperationDecl FOR MInterface-»
+		#region Public Methods
+		«EXPAND Interface::Association::OperationDecl-»
+		«EXPAND Interface::Operation::OperationDecl-»
 		#endregion
 		
 «ENDDEFINE»

@@ -24,10 +24,8 @@
 «REM»
 	generate association attributes for an interface
 «ENDREM»
-«DEFINE PropertyDecl FOR MInterface-»
-«FOREACH property.typeSelect(MAssociationRole) AS a-»
-	«EXPAND PropertyDecl FOR a-»
-«ENDFOREACH-»
+«DEFINE Properties FOR MInterface-»
+	«EXPAND _PropertyDecl FOREACH associationProperties()-»
 «ENDDEFINE»
 
 
@@ -35,51 +33,8 @@
 	generate attributes for an interface
 «ENDREM»
 «DEFINE OperationDecl FOR MInterface-»
-«FOREACH property.typeSelect(MAssociationRole) AS a-»
-	«EXPAND InsertInDecl FOR a-»
-	«EXPAND RemoveFromDecl FOR a-»
-«ENDFOREACH-»
-«ENDDEFINE»
-
-
-«REM>
-	generate property declaration for an association
-«ENDREM»
-«DEFINE PropertyDecl FOR MAssociationRole-»
-«IF isPlainAssociation()-»
-	«IF multiplicity == 1-»
-		«EXPAND _PropertyDecl( type.name(),
-		                    asPublicFieldName() )-»
-	«ELSE-»
-		«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + type.name() + ">",
-		                    asPublicFieldName() )-»
-	«ENDIF-»
-«ELSE-»
-	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + type.name() + ">",
-	                    asPublicFieldName() )-»
-	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
-                        asPublicFieldName() + assocClass().name )-»
-«ENDIF-»
-«ENDDEFINE»
-
-
-«REM>
-	generate insert into declaration for an association
-«ENDREM»
-«DEFINE InsertIntoDecl FOR MAssociationRole-»
-«IF isPlainAssociation()-»
-	public void «asAddTo(name)»(«type.name()» _add);
-«ELSE-»
-	public void «asInsertIn(name)»(«type.name()» _insert, «assocClass().name» _at);
-«ENDIF-»
-«ENDDEFINE»
-
-
-«REM>
-	generate remove from declaration for an association
-«ENDREM»
-«DEFINE RemoveFromDecl FOR MAssociationRole-»
-	public void «asRemoveFrom(name)»(«type.name()» _remove);
+	«EXPAND _InsertDecl FOREACH property.typeSelect(MAssociationRole)-»
+	«EXPAND _RemovemDecl FOREACH  property.typeSelect(MAssociationRole)-»
 «ENDDEFINE»
 
 
@@ -90,13 +45,26 @@
 «ENDREM»
 
 
+«REM>
+	generate insert into declaration for an association
+«ENDREM»
+«DEFINE _InsertDecl FOR MAssociationRole-»
+	«EXPAND templates::Association::InsertDecl-»
+«ENDDEFINE»
+
+
+«REM>
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE _RemoveDecl FOR MAssociationRole-»
+	«EXPAND templates::Association::RemoveDecl-»
+«ENDDEFINE»
+
+
 «REM»
 	generate public field declaration for an association
 «ENDREM»
-«DEFINE _PropertyDecl(String type, String name) FOR MAssociationRole-»
-«EXPAND templates::Attribute::Comment-»
-public «type» «asPropertyName()»
-{
-	get;
-}
+«DEFINE _PropertyDecl FOR MAssociationRole-»
+	«EXPAND templates::Association::PropertyDecl-»
 «ENDDEFINE»
+
