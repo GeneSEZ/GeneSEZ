@@ -13,8 +13,6 @@
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
 
-«EXTENSION de::genesez::typemapping::TypeMapping»
-
 «IMPORT de::genesez::platforms::dotnet::csharp»
 
 «REM»
@@ -27,17 +25,7 @@
 	generate operation declarations for an interface
 «ENDREM»
 «DEFINE OperationDecl FOR MInterface-»
-«EXPAND OperationDecl FOREACH operation.select(e|e.name != name)-»
-
-«ENDDEFINE»
-
-
-«REM»
-	generate an declaration for an operation
-«ENDREM»
-«DEFINE OperationDecl FOR MOperation-»
-«EXPAND templates::Operation::Comment-»
-		public «typeMap(returnType.name)» «asOperationName(name)»( «EXPAND templates::Operation::Parameter-» );
+	«EXPAND _OperationDecl FOREACH allPublicMethods-»
 «ENDDEFINE»
 
 
@@ -46,4 +34,12 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+
+«REM»
+	generate an declaration for an operation
+«ENDREM»
+«DEFINE _OperationDecl FOR MOperation-»
+	«EXPAND templates::Operation::OperationDecl-»
+«ENDDEFINE»
 

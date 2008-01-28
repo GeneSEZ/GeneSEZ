@@ -42,56 +42,82 @@
 
 
 «REM»
+	generate declaration declaration for an association
+«ENDREM»
+«DEFINE PropertyDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _PropertyDecl( type.name(),
+		                    asPropertyName() )-»
+	«ELSE-»
+		«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + type.name() + ">",
+		                    asPropertyName() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + type.name() + ">",
+	                    asPropertyName() )-»
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
+                        asPropertyName() + assocClass().name )-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
 	generate property implementation
 «ENDREM»
 «DEFINE PropertyImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _Property( type.name(),
+		«EXPAND _PropertyImpl( type.name(),
 		                   asPropertyName() )-»
 	«ELSE-»
-		«EXPAND _Property( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+		«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + type.name() + ">",
 		                   asPropertyName() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _Property( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + type.name() + ">",
 	                   asPropertyName() )-»
-	«EXPAND _Property( typeMap( "Set" ) + "<" + asClassifierName(assocClass().name()) + ">",
-                       asPropertyName() + asClassifierName(assocClass().name) )-»
+	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
+                       asPropertyName() + assocClass().name )-»
 «ENDIF-»
 «ENDDEFINE»
 
 
 «REM»
 	generate insert into declaration for an association
+«ENDREM»
+«DEFINE _InsertDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«EXPAND _AddToDecl(asAddTo(name), type.name())»
+«ELSE-»
+	«EXPAND _InsertIntoDecl(asAddTo(name), type.name(),  assocClass().name)»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into implemenation for an association
 «ENDREM»
 «DEFINE InsertImpl FOR MAssociationRole-»
-		«EXPAND _Comment-»
 «IF isPlainAssociation()-»
-		public void «asAddTo(name)»(«type.name()» _add)
-		{
-			
-		}
+	«EXPAND _AddToImpl(asAddTo(name), type.name())»
 «ELSE-»
-		public void «asInsertIn(name)»(«type.name()» _insert, «assocClass().name» _at)
-		{
-			
-		}
-«ENDIF-»
-		
+	«EXPAND _InsertIntoImpl(asAddTo(name), type.name(),  assocClass().name)»
+«ENDIF-»		
 «ENDDEFINE»
 
 
+«REM>
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE RemoveDecl FOR MAssociationRole-»
+	«EXPAND _RemoveDecl(asRemoveFrom(name), type.name())-»
+«ENDDEFINE»
+
 «REM»
-	generate insert into declaration for an association
+	generate remove from implemenation for an association
 «ENDREM»
 «DEFINE RemoveImpl FOR MAssociationRole-»
-		«EXPAND _Comment-»
-		public void «asAddTo(name)»(«type.name()» _add)
-		{
-			
-		}
-		
+	«EXPAND _RemoveImpl(asRemoveFrom(name), type.name())-»
 «ENDDEFINE»
 
 
@@ -113,13 +139,91 @@
 
 
 «REM»
-	generate public field declaration for an association
+	generate property declaration for an association
 «ENDREM»
-«DEFINE _Property(String type, String name) FOR MAssociationRole-»
+«DEFINE _PropertyDecl(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public «type» «asPropertyName()»
+		{
+			get;
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate property declaration for an association
+«ENDREM»
+«DEFINE _PropertyImpl(String type, String name) FOR MAssociationRole-»
 		«EXPAND _Comment-»
 		public «type» «name»
 		{
 			get { return this.«asFieldName()»; }
+		}
+		
+«ENDDEFINE»
+
+
+«REM>
+	generate add to declaration for an association
+«ENDREM»
+«DEFINE _AddToDecl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public void «name»(«type» _remove);
+		
+«ENDDEFINE»
+
+«REM»
+	generate add to implemenation for an association
+«ENDREM»
+«DEFINE _AddToImpl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public void «name»(«type» _add)
+		{
+			// TODO: implement in template
+		}
+		
+«ENDDEFINE»
+
+
+«REM>
+	generate insert into declaration for an association
+«ENDREM»
+«DEFINE _InsertIntoDecl(String name, String type, String aClass) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public void «name»(«type» _remove, «aClass» _at);
+		
+«ENDDEFINE»
+
+«REM»
+	generate insert into implemenation for an association
+«ENDREM»
+«DEFINE _InsertIntoImpl(String name, String type, String aClass) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public void «name»(«type» _insert, «aClass» _at)
+		{
+			// TODO: implement in template
+		}
+		
+«ENDDEFINE»
+
+
+«REM>
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE _RemoveDecl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public void «name»(«type» _remove);
+«ENDDEFINE»
+
+«REM»
+	generate remove from implemenation for an association
+«ENDREM»
+«DEFINE _RemoveImpl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		public void «name»(«type» _remove)
+		{
+			// TODO: implement in template
 		}
 		
 «ENDDEFINE»
