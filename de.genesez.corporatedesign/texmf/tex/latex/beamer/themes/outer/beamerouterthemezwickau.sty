@@ -1,0 +1,48 @@
+% Copyright 2008 by Gerrit Beine <gerrit.beine@gmx.de>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\newif\ifbeamer@theme@subsection
+\beamer@theme@subsectiontrue
+
+\DeclareOptionBeamer{footline}{\csname beamer@theme@footline@#1\endcsname}
+\DeclareOptionBeamer{subsection}[true]{\csname beamer@theme@subsection#1\endcsname}
+\ProcessOptionsBeamer
+
+\mode<presentation>
+
+% Layout der Kopfzeile
+\defbeamertemplate*{headline}{zwickau theme}
+{%
+  \begin{beamercolorbox}[ignorebg,ht=2.75ex,dp=3.0ex]{section in head/foot}
+    \insertnavigation{\paperwidth}
+  \end{beamercolorbox}%
+  \ifbeamer@theme@subsection%
+    \begin{beamercolorbox}[ignorebg,ht=2ex,dp=1ex,%
+      leftskip=.3cm,rightskip=.3cm plus1fil]{subsection in head/foot}
+      \usebeamerfont{subsection in head/foot}\insertsubsectionhead
+    \end{beamercolorbox}%
+  \fi%
+  \vskip2.5pt%
+}
+
+% Layout der Fußzeile
+\defbeamertemplate*{footline}{zwickau theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.6\paperwidth,left]{subsection in head/foot}%
+    \hspace*{2ex}\hspace*{2ex}\insertshortauthor~~(\insertshortinstitute)
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.15\paperwidth,center]{subsection in head/foot}%
+    \insertshortdate{}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.15\paperwidth,right]{subsection in head/foot}%
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip2pt%
+}
+
+\mode
+<all>

@@ -1,0 +1,89 @@
+% Copyright 2008 by Gerrit Beine <gerrit.beine@gmx.de>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\mode<presentation>
+
+% structure importieren
+\usecolortheme[named=black]{structure}
+
+\setbeamercolor{palette primary}{parent=structure}
+\setbeamercolor{palette secondary}{parent=palette primary}
+\setbeamercolor{palette tertiary}{parent=palette secondary}
+\setbeamercolor{palette quaternary}{parent=palette tertiary}
+
+% Aus dem Corporate Design Guide
+\definecolor{whzblue}{RGB}{24,60,142}
+\definecolor{whzgray}{RGB}{213,222,217}
+\definecolor{whzred}{RGB}{178,52,39}
+
+% Titelfarben definieren
+\setbeamercolor{titlelike}{parent=structure}
+\setbeamercolor{title}{parent=titlelike}
+
+% Block
+\setbeamercolor{normal text}{parent=structure}
+\setbeamercolor{block title}{fg=white,bg=whzblue!65!black}
+\setbeamercolor{block body}{use=block title,fg=black,bg=block title.bg!10}
+
+% Example Block
+\setbeamercolor{example text}{fg=whzgray!65!black}
+\setbeamercolor{block title example}{fg=white,bg=example text.fg!65!black}
+\setbeamercolor{block body example}{use=block title example,fg=black,bg=block title example.bg!10}
+
+% Alerted Block
+\setbeamercolor{alerted text}{fg=whzred!65!black}
+\setbeamercolor{block title alerted}{fg=white,bg=alerted text.fg!65!black}
+\setbeamercolor{block body alerted}{use=block title alerted,fg=black,bg=block title alerted.bg!10}
+
+% Farben für Kopf- und Fußzeilen definieren
+\setbeamercolor{section in head/foot}{parent=structure}
+\setbeamercolor{subsection in head/foot}{parent=section in head/foot}
+
+\AtBeginDocument{%
+  {
+    \usebeamercolor{section in head/foot}
+  }
+
+% Dieser Abschnitt erzeugt den Farbverlauf im Hintergrund der Kopfzeile
+  \pgfdeclareverticalshading{beamer@whzhead@blue}{0.7\paperwidth}
+  {%
+    color(0cm)=(bg);
+    color(0.95cm)=(whzblue)%
+  }
+  \pgfdeclareverticalshading{beamer@whzhead@red}{0.15\paperwidth}
+  {%
+    color(0cm)=(bg);
+    color(0.95cm)=(whzred)%
+  }
+  \pgfdeclareverticalshading{beamer@whzhead@gray}{0.15\paperwidth}
+  {%
+    color(0cm)=(bg);
+    color(0.95cm)=(whzgray)%
+  }
+
+% Dieser Abschnitt erzeugt den Farbverlauf im Hintergrund der Fußzeile
+  \pgfdeclareverticalshading{beamer@whzfoot@blue}{0.7\paperwidth}
+  {%
+    color(0cm)=(whzblue);
+    color(0.5cm)=(bg)%
+  }
+  \pgfdeclareverticalshading{beamer@whzfoot@red}{0.15\paperwidth}
+  {%
+    color(0cm)=(whzred);
+    color(0.5cm)=(bg)%
+  }
+  \pgfdeclareverticalshading{beamer@whzfoot@gray}{0.15\paperwidth}
+  {%
+    color(0cm)=(whzgray);
+    color(0.5cm)=(bg)%
+  }
+
+  \setbeamercolor{section in head/foot}{bg=}
+}
+
+\beamertemplatedotitem
+
+\mode
+<all>
