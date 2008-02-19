@@ -2,7 +2,8 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 
 
@@ -12,7 +13,7 @@
 
 
 «DEFINE Root FOR MModel-»
-«EXPAND Root FOREACH ownedPackage.reject(e|e.name == "java")-»
+«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()-»
 «ENDDEFINE»
 
 
@@ -25,21 +26,31 @@
 «DEFINE Root FOR MInterface-»
 «FILE getFilename()-»
 	«EXPAND Class::Root-»
-«ENDFILE-»
+«ENDFILE»
 «ENDDEFINE»
 
 
 «DEFINE Root FOR MClass-»
 «FILE getFilename()-»
 	«EXPAND Class::Root-»
-«ENDFILE-»
+«ENDFILE»
 «ENDDEFINE»
 
 
 «DEFINE Root FOR MEnumeration-»
 «FILE getFilename()-»
 	«EXPAND Class::Root-»
-«ENDFILE-»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Root FOR MDataType-»
+«FILE getFilename()-»
+	«EXPAND Class::Root-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE Root FOR MPrimitiveType-»
 «ENDDEFINE»
 
 
