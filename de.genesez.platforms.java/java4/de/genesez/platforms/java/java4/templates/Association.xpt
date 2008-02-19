@@ -1,43 +1,57 @@
-«REM» import code gen meta model «ENDREM»
+«REM» based on genesez meta model «ENDREM»
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
 «EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
-«EXTENSION de::genesez::typemapping::TypeMapping»
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+	generate attributes for a class
+«ENDREM»
+«DEFINE AssociationDecl FOR MClass-»
+«EXPAND _AssocClassReferences FOR ownedAssociation-»
+«EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
 
-
-// generate attributes for a classifier
+«REM»
+	generate attributes for a classifier
+«ENDREM»
 «DEFINE AssociationDecl FOR MClassifier-»
 «EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
 «ENDDEFINE»
 
 
-«DEFINE OperationDecl FOR MInterface-»
+«DEFINE AccessorDecl FOR MInterface-»
 «FOREACH property.typeSelect(MAssociationRole) AS a-»
 	«EXPAND GetterDecl FOR a-»
-	«EXPAND IteratorDecl FOR a-»
 	«EXPAND InsertInDecl FOR a-»
 	«EXPAND RemoveFromDecl FOR a-»
 «ENDFOREACH-»
 «ENDDEFINE»
 
-
-«DEFINE OperationImpl FOR MClass-»
+«DEFINE AccessorImpl FOR MClass-»
+«EXPAND _AssocClassReferenceGetters FOR ownedAssociation-»
 «FOREACH property.typeSelect(MAssociationRole) AS a-»
 	«EXPAND GetterImpl FOR a-»
-	«EXPAND IteratorImpl FOR a-»
 	«EXPAND InsertInImpl FOR a-»
 	«EXPAND RemoveFromImpl FOR a-»
 «ENDFOREACH-»
 «ENDDEFINE»
-
 
 // generate a declaration for an attribute
 «DEFINE AssociationDecl FOR MAssociationRole-»
@@ -46,10 +60,10 @@
 	«IF multiplicity == 1-»
 		«EXPAND _Modifier» «type.name()» «asVariableName(name)»;
 	«ELSE-»
-		«EXPAND _Modifier» «typeMap("Set")» «asVariableName(name)» = new «typeMap("Set", "Implementation")»();
+		«EXPAND _Modifier» «mapType()» «asVariableName(name)» = new «mapType("Implementation")»();
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _Modifier» «typeMap("Map")» «asVariableName(name)» = new «typeMap("Map", "Implementation")»();
+	«EXPAND _Modifier» «mapType()» «asVariableName(name)» = new «mapType("Implementation")»();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -61,11 +75,11 @@
 	«IF multiplicity == 1-»
 		public «type.name()» «asGetter(name)»();
 	«ELSE-»
-		public «typeMap("Set")» «asGetter(name)»();
+		public «mapType()»<«type.mapName()»> «asGetter(name)»();
 	«ENDIF-»
 «ELSE-»
-	public «typeMap("Map")» «asGetter(name)»();
-	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name()» _other);
+	public «mapType()» «asGetter(name)»();
+	public «mapType()» «asGetter(name)»«assocClass().name»();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -76,48 +90,29 @@
 «EXPAND _CommentGetter-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		public «type.name()» «asGetter(name)»() {
+		public «type.mapName()» «asGetter(name)»() {
 			return «asVariableName(name)»;
 		}
 	«ELSE-»
-		public «typeMap("Set")» «asGetter(name)»() {
-			return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
+		public «mapType()» «asGetter(name)»() {
+			return «asVariableName(name)»;
 		}
 	«ENDIF-»
 «ELSE-»
-	public «typeMap("Map")» «asGetter(name)»() {
-			return java.util.Collections.unmodifiableMap(«asVariableName(name)»);
+	public «mapType()» «asGetter(name)»() {
+		«mapType("Implementation")» _result = new «mapType("Implementation")»();
+		for(«assocClass().mapName()» _assoc : «asVariableName(name)») {
+			_result.add(_assoc.«asGetter(name)»());
+		}
+		return _result;
 	}
 	
-	public «assocClass().name» «asGetter(name)»AssociatedObject(«type.name()» _other) {
-		return «asVariableName(name)».get(_other);
+	/** 
+	  * accessor to the association class objects
+	  */
+	public «mapType()» «asGetter(name)»«assocClass().name»() {
+		return «asVariableName(name)»;
 	}
-«ENDIF-»
-«ENDDEFINE»
-
-
-// generate a iterator declaration method for a massociation
-«DEFINE IteratorDecl FOR MAssociationRole-»
-«IF multiplicity != 1-»
-	«EXPAND _CommentAccessor-»
-	public java.util.Iterator «asIterator(name)»();
-«ELSE-»
-«ENDIF-»
-«ENDDEFINE»
-
-
-// generate a iterator implementation method for a massociation
-«DEFINE IteratorImpl FOR MAssociationRole-»
-«IF multiplicity != 1-»
-	«EXPAND _CommentAccessor-»
-	public java.util.Iterator «asIterator(name)»() {
-	«IF  isPlainAssociation()-»
-		return «asVariableName(name)».iterator();
-	«ELSE-»
-		return «asVariableName(name)».keySet().iterator();
-	«ENDIF-»
-	}
-«ELSE-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -126,9 +121,9 @@
 «DEFINE InsertInDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void «asInsertIn(name)»(«type.name()» _in);
+	public void «asInsertIn(name)»(«type.mapName()» _in);
 «ELSE-»
-	public void «asInsertIn(name)»(«type.name()» _in, «assocClass().name» _at);
+	public void «asInsertIn(name)»(«type.mapName()» _in, «assocClass().mapName()» _at);
 «ENDIF-»
 «ENDDEFINE»
 
@@ -137,7 +132,7 @@
 «DEFINE InsertInImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
 «IF isPlainAssociation()-»
-	public void «asInsertIn(name)»(«type.name()» _in) {
+	public void «asInsertIn(name)»(«type.mapName()» _in) {
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» == _in) {
 				return;
@@ -159,14 +154,37 @@
 		«ENDIF-»
 	}
 «ELSE-»
-	public void «asInsertIn(name)»(«type.name()» _in, «assocClass().name» _at) {
-		if («asVariableName(name)».keySet().contains(_in) && «asVariableName(name)».get(_in) == _at) {
+	/**
+	  * insert into association, generate linked association class object
+	  * @param _other partner object
+	  * @return newly generated linked association class object
+	  */
+	public «assocClass().mapName()» «asInsertIn(name)»(«type.mapName()» _other) {
+		«IF association.end.first() != this-»
+			«assocClass().mapName()» _assoc = new «assocClass().mapName()»(this, _other);
+		«ELSE-»
+			«assocClass().mapName()» _assoc = new «assocClass().mapName()»(_other, this);
+		«ENDIF-»
+		«asVariableName(name)».add(_assoc);
+	«IF opposite != null-»
+		_other.«asInsertIn(opposite.name)»(_assoc); 
+	«ENDIF-»
+		return _assoc;
+	}
+	
+	/**
+	  * insert linked association class object into association
+	  * @param _other partner object
+	  * @return newly generated linked association class object
+	  */
+	public void «asInsertIn(name)»(«assocClass().mapName()» _assoc) {
+		if («asVariableName(name)».contains(_assoc)) {
 				return;
 		}
-		«asVariableName(name)».put(_in, _at);
-	«IF opposite != null-»
-		_in.«asInsertIn(opposite.name)»(this, _at); 
-	«ENDIF-»
+		if(_assoc.«opposite.name.asGetter()»() != this) {
+			throw new RuntimeException("inconsistent association object");
+		}
+		«asVariableName(name)».add(_assoc);
 	}
 «ENDIF-»
 «ENDDEFINE»
@@ -175,15 +193,15 @@
 // generate a remove from declaration method
 «DEFINE RemoveFromDecl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
-public void «asRemoveFrom(name)»(«type.name()» _ex);
+public void «asRemoveFrom(name)»(«type.mapName()» _ex);
 «ENDDEFINE»
 
 
 // generate a remove from implementation method
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
 «EXPAND _CommentAccessor-»
-public void «asRemoveFrom(name)»(«type.name()» _ex) {
-	«IF isPlainAssociation()-»
+«IF isPlainAssociation()-»
+	public void «asRemoveFrom(name)»(«type.mapName()» _ex) {
 		«IF multiplicity == 1-»
 			if («asVariableName(name)» != _ex) {
 				return;
@@ -195,22 +213,32 @@ public void «asRemoveFrom(name)»(«type.name()» _ex) {
 			}
 			«asVariableName(name)».remove(_ex);
 		«ENDIF-»
-	«ELSE-»
-			if (!«asVariableName(name)».keySet().contains(_ex)) {
-				return;
-			}
-			«asVariableName(name)».remove(_ex);
-	«ENDIF-»
-	«IF opposite != null-»
-		_ex.«asRemoveFrom(opposite.name)»(this);
-	«ENDIF-»
+		«IF opposite != null-»
+			_ex.«asRemoveFrom(opposite.name)»(this);
+		«ENDIF-»
 }
+«ELSE-»
+	/**
+	  * remove entry from association indexed by its association class object
+	  */
+	public void «asRemoveFrom(name)»(«assocClass().mapName()» _assoc) {
+		if (!«asVariableName(name)».contains(_assoc)) {
+			return;
+		}
+		«asVariableName(name)».remove(_assoc);
+		«IF opposite != null-»
+			_assoc.«asGetter(name)»().«asRemoveFrom(opposite.name)»(_assoc);
+		«ENDIF-»
+	}
+«ENDIF-»
 «ENDDEFINE»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// private functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
 
 «DEFINE _CommentAssociation FOR MAssociationRole-»
@@ -227,7 +255,7 @@ public void «asRemoveFrom(name)»(«type.name()» _ex) {
 /**
  * accessor for association to «name»
 «IF hasComment()-»
- * «getCommentText(ownedComment)»
+ * «ownedComment.getCommentText()»
 «ENDIF-»
  */
 «ENDDEFINE»
@@ -246,4 +274,20 @@ public void «asRemoveFrom(name)»(«type.name()» _ex) {
 // generate modifiers for mclassifier
 «DEFINE _Modifier FOR MAssociationRole-»
 «visibility»
+«ENDDEFINE»
+
+«DEFINE _AssocClassReferences FOR MAssociation-»
+«FOREACH end AS aend-»
+	/** reference attribute to the managed association end */
+	private «aend.type.mapName()» «asVariableName(aend.name)»;
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE _AssocClassReferenceGetters FOR MAssociation-»
+«FOREACH end AS aend-»
+	/** getter of reference attribute to the managed association end  «aend.name.asVariableName()»*/
+	public «aend.type.mapName()» «asGetter(aend.name)»() {
+		return «asVariableName(aend.name)»;
+	}
+«ENDFOREACH-»
 «ENDDEFINE»
