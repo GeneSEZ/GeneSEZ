@@ -2,9 +2,16 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
 «EXTENSION de::genesez::common::AccessHelper»
 «EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -14,23 +21,23 @@
 
 // generate generalization for a minterface
 «DEFINE Generalization FOR MInterface-»
-«IF !supertype.typeSelect(MInterface).isEmpty-»
-	extends «supertype.typeSelect(MInterface).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MInterface).first()»
+«IF !generalization.isEmpty-»
+	extends «generalization.first().mapName()»«EXPAND _Generics FOR generalization.first()»
 «ENDIF-»
 «ENDDEFINE»
 
 
 // generate generalization for a mclass
 «DEFINE Generalization FOR MClass-»
-«IF !supertype.typeSelect(MClass).isEmpty-»
-	extends «supertype.typeSelect(MClass).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MClass).first()»
+«IF !generalization.isEmpty-»
+	extends «generalization.first().mapName()»«EXPAND _Generics FOR generalization.first()»
 «ENDIF-»
 «ENDDEFINE»
 
 // generate generalization for a mclass
 «DEFINE Generalization FOR MDataType-»
-«IF !supertype.typeSelect(MDataType).isEmpty-»
-	extends «supertype.typeSelect(MDataType).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MDataType).first()»
+«IF !generalization.isEmpty-»
+	extends «generalization.first().mapName()»«EXPAND _Generics FOR generalization.first()»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -46,4 +53,16 @@
 	<«getGenericList(genericParameter)»>
 «ELSE-»
 «ENDIF-»
+«ENDDEFINE»
+
+// generate generics
+«DEFINE _Generics FOR MExternal-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+// generate generics
+«DEFINE _Generics FOR MType-»
 «ENDDEFINE»

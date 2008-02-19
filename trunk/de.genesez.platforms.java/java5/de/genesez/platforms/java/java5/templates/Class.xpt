@@ -2,11 +2,17 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::io::io»
+
 «EXTENSION de::genesez::common::AccessHelper»
 «EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -19,7 +25,7 @@
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
-public interface «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» {
+public interface «mapName()»«EXPAND _Generics» «EXPAND Generalization::Generalization» {
 
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable and constant declarations
@@ -31,7 +37,7 @@ public interface «asClassifierName(name)»«EXPAND _Generics» «EXPAND General
 	// generated association method declarations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Association::OperationDecl-»
+	«EXPAND Association::AccessorDecl-»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated abstract method declarations
@@ -53,7 +59,7 @@ public interface «asClassifierName(name)»«EXPAND _Generics» «EXPAND General
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
-«EXPAND _Modifier» class «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
+«EXPAND _Modifier» class «mapName()»«EXPAND _Generics» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations
@@ -79,7 +85,7 @@ package «getPackagePath()»;
 	// generated association method implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Association::OperationImpl-»
+	«EXPAND Association::AccessorImpl-»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated abstract method declaration
@@ -97,7 +103,7 @@ package «getPackagePath()»;
 	// generated getter and setter method implementations
 	// ////////////////////////////////////////////////////////////////////////
 	
-	«EXPAND Attribute::GetterSetterImpl-»
+	«EXPAND Attribute::AccessorImpl-»
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// own implementations
@@ -113,8 +119,7 @@ package «getPackagePath()»;
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
-«EXPAND _Modifier» enum «asClassifierName(name)» {
-/* «this.metaType.toString()» */
+«EXPAND _Modifier» enum «mapName()» {
 
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable, constant and association declarations
@@ -135,7 +140,7 @@ package «getPackagePath()»;
 package «getPackagePath()»;
 «EXPAND Import::Import-»
 «EXPAND _CommentClassifier-»
-«EXPAND _Modifier» class «asClassifierName(name)»«EXPAND _Generics» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
+«EXPAND _Modifier» class «mapName()»«EXPAND _Generics» «EXPAND Generalization::Generalization» «EXPAND Realization::Realization» {
 	
 	// ////////////////////////////////////////////////////////////////////////
 	// generated variable and constant declarations
@@ -187,17 +192,17 @@ package «getPackagePath()»;
 «DEFINE _CommentClassifier FOR MClassifier-»
 /**
 «IF hasComment()-»
- * «getCommentText(ownedComment)»
+ * «ownedComment.getCommentText()»
 «ENDIF-»
- * @author «getUserName()» «REM»(generated at «getTimeStamp()»)«ENDREM»
+ * @author «getUserName()»
  */
 «ENDDEFINE»
 
 
 // generate a protected region for own implementations
 «DEFINE _OwnCodeImpl(String proRegId) FOR MClassifier-»
-/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
-/* <!-- TODO put your own implementation code here --> */
+/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
+/* TODO put your own implementation code here */
 
 /* «ENDPROTECT» */
 «ENDDEFINE»
@@ -223,7 +228,7 @@ package «getPackagePath()»;
 /**
   * A DataType should only have a public initializing constructor
   */
-public «asClassifierName(name)» («EXPAND _AllAttributesAsParam») {
+public «mapName()» («EXPAND _AllAttributesAsParam») {
 	«EXPAND _InitAttributes»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 }
@@ -232,7 +237,7 @@ public «asClassifierName(name)» («EXPAND _AllAttributesAsParam») {
 
 // get all attributes as parameter list
 «DEFINE _AllAttributesAsParam FOR MClassifier-»
-«FOREACH this.getAllAttributes() AS attr SEPARATOR ", "»«((MAttribute)attr).type.name()» _«((MAttribute)attr).asAttributeName()»«ENDFOREACH-»
+«FOREACH this.getAllAttributes() AS attr SEPARATOR ", "»«((MAttribute)attr).type.mapName()» _«((MAttribute)attr).asAttributeName()»«ENDFOREACH-»
 «ENDDEFINE»
 
 // init all attributes in initializing constructor
@@ -241,7 +246,7 @@ public «asClassifierName(name)» («EXPAND _AllAttributesAsParam») {
 	super(«FOREACH this.getParentAttributes() AS attr SEPARATOR ", "»_«((MAttribute)attr).asAttributeName()»«ENDFOREACH»);
 «ENDIF-»
 «FOREACH this.getOwnAttributes() AS attr-»
-«((MAttribute)attr).asAttributeName()» = _«((MAttribute)attr).asAttributeName()»;
+	«((MAttribute)attr).asAttributeName()» = _«((MAttribute)attr).asAttributeName()»;
 «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -259,7 +264,7 @@ public «asClassifierName(name)» («EXPAND _AssocAttributesAsParam») {
 
 // get association attributes as parameter list
 «DEFINE _AssocAttributesAsParam FOR MClass-»
-«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.name()» _«aend.name.asVariableName()»«ENDFOREACH-»
+«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.mapName()» _«aend.name.asVariableName()»«ENDFOREACH-»
 «ENDDEFINE»
 
 // init all association attributes in initializing constructor
