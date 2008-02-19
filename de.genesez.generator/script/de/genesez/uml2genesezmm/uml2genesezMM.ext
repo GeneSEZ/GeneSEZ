@@ -460,6 +460,11 @@ private create MExternal makeExternal(Classifier c) :
 	setSpecification( c.name ) ->
 	// container
 	transform( getUml2Model() ).externalTypes.add( this ) ->
+	// set generics
+	c.ownedTemplateSignature != null
+		? genericParameter.addAll( 
+			c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
+		: this ->
 	this;
 	
 private create MPrimitiveType makePrimitiveType(PrimitiveType p) :
@@ -510,8 +515,12 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// only process types, because we have no opposite to NamedElement... or do we want MElement objects in our model?
 	supplier.addAll( c.clientDependency.supplier.typeSelect(Type).makeType() ) ->
 	// add superclasses (generalizations and realizations)
-	supertype.addAll( c.general.makeType() ) ->
-	supertype.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
+	supertype.addAll( generalization.addAll( c.general.makeType() ) ) ->
+	supertype.addAll( realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ) ->
+	// add superclasses (realizations)
+	//realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
+	// add superclasses (generalizations)
+	//generalization.addAll( c.general.makeType() ) ->
 	// containments
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).makeComment() ) ->
