@@ -2,12 +2,16 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
 «EXTENSION de::genesez::common::AccessHelper»
 «EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::platforms::java::scripts::Naming»
-«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
 
-«EXTENSION de::genesez::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -45,15 +49,27 @@
 // generate a declaration for an abstract operation
 «DEFINE OperationDecl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «typeMap(returnType.name())»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+«IF multiplicity == 1-»
+	«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+«ELSE-»
+	«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+«ENDIF-»
 «ENDDEFINE»
 
 
 // generate an implementation for an normal operation
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
-«EXPAND _Modifier» «typeMap(returnType.name())»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
-	«EXPAND _DefaultReturnAndOwnCodeImpl»
+«IF multiplicity == 1-»
+	«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+«ELSE-»
+	«IF returnType.metaType == MPrimitiveType-»
+		«EXPAND _Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«ELSE-»
+		«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«ENDIF-»
+«ENDIF-»
+	«EXPAND _DefaultReturnAndOwnCodeImpl-»
 }
 «ENDDEFINE»
 
@@ -65,7 +81,7 @@
 «DEFINE _CommentOperation FOR MOperation-»
 /**
 «IF hasComment()-»
- * «getCommentText(ownedComment)»
+ * «ownedComment.getCommentText()»
 «ENDIF-»
 «EXPAND _CommentParameter-»
 «EXPAND _CommentReturn-»
@@ -75,7 +91,7 @@
 
 «DEFINE _CommentParameter FOR MOperation-»
 «FOREACH parameter.typeSelect(MParameter) AS p-»
- * @param  «asParameterName(p.name)»  «getCommentText(p.ownedComment)»
+ * @param  «asParameterName(p.name)»  «p.ownedComment.getCommentText()»
 «ENDFOREACH-»
 «ENDDEFINE»
 
@@ -87,21 +103,29 @@
 
 «DEFINE _CommentExeception FOR MOperation-»
 «FOREACH raisedException.typeSelect(MClassifier) AS c-»
- * @throws  «asClassifierName(c.name)»  «getCommentText(c.ownedComment)»
+ * @throws  «(c.mapName())»  «c.ownedComment.getCommentText()»
 «ENDFOREACH-»
 «ENDDEFINE»
 
 
 «DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation»
-	«getReturnTypeDeclaration(returnType.name())»
+«IF multiplicity == 1-»
+	«getReturnTypeDeclaration(returnType.mapName())»
+«ELSE-»
+	«IF returnType.metaType == MPrimitiveType-»
+		«mapType()»<«returnType.mapName("Wrapper")»> returnValue = null;
+	«ELSE-»
+		«mapType()»<«returnType.mapName()»> returnValue = null;
+	«ENDIF-»
+«ENDIF-»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
-	«getReturnTypeReturn(returnType.name())»
+	«getReturnTypeReturn(returnType.mapName())»
 «ENDDEFINE»
 
 // generate a protected region for own implementations
 «DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
-/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
-/* <!-- TODO put your own implementation code here --> */
+/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
+/* TODO put your own implementation code here */
 
 /* «ENDPROTECT» */
 «ENDDEFINE»
@@ -124,9 +148,9 @@
 // generate a parameter for moperation
 «DEFINE _Parameter FOR MParameter»
 «IF multiplicity == 1-»
-	«typeMap(type.name())» «asParameterName(name)»
+	«type.mapName()» «asParameterName(name)»
 «ELSE-»
-	«typeMap(type.name())»[] «asParameterName(name)»
+	«mapType()»<«type.mapName()»> «asParameterName(name)»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -134,7 +158,7 @@
 // generate exceptions for a moperation
 «DEFINE _Exception FOR MOperation-»
 «IF !raisedException.isEmpty-»
-	throws «FOREACH raisedException AS e SEPARATOR ", "»«asClassifierName(e.name())»«ENDFOREACH»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.mapName()»«ENDFOREACH»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -147,6 +171,14 @@
 «ENDIF-»
 «ENDDEFINE»
 
-«REM» MGeneric + MClassifier are both MType, so it must be there «ENDREM»
+// generate generics
+«DEFINE _Generics FOR MExternal-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+// generate generics
 «DEFINE _Generics FOR MType-»
 «ENDDEFINE»

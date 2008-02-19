@@ -2,9 +2,16 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
 «EXTENSION de::genesez::common::AccessHelper»
 «EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -14,8 +21,8 @@
 
 // generate realization for a class
 «DEFINE Realization FOR MClassifier-»
-«IF !supertype.typeSelect(MInterface).isEmpty-»
-	implements «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«EXPAND _Generics FOR c»«ENDFOREACH»
+«IF !realization.isEmpty-»
+	implements «FOREACH realization AS c SEPARATOR ", "»«c.mapName()»«EXPAND _Generics FOR c»«ENDFOREACH»
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»
@@ -31,4 +38,16 @@
 	<«getGenericList(genericParameter)»>
 «ELSE-»
 «ENDIF-»
+«ENDDEFINE»
+
+// generate generics
+«DEFINE _Generics FOR MExternal-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+// generate generics
+«DEFINE _Generics FOR MType-»
 «ENDDEFINE»

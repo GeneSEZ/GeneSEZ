@@ -3,12 +3,15 @@
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::io::io»
+
 «EXTENSION de::genesez::common::AccessHelper»
 «EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
-
-«EXTENSION de::genesez::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -30,7 +33,7 @@
 
 
 // generate getter and setter methods for all attributes of a classifier
-«DEFINE GetterSetterImpl FOR MClass-»
+«DEFINE AccessorImpl FOR MClass-»
 «EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
 «FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-»
 	«EXPAND GetterImpl FOR a-»
@@ -50,9 +53,9 @@
 «DEFINE AttributeDecl FOR MAttribute-»
 «EXPAND _CommentAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «typeMap(type.name())»«EXPAND _Generics» «asAttributeName()» «EXPAND _DefaultValue»;
+	«EXPAND _Modifier» «type.mapName()»«EXPAND _Generics» «asAttributeName()» «EXPAND _DefaultValue»;
 «ELSE-»
-	«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asAttributeName()» = new «typeMap("Set", "Implementation")»<«type.name()»>();
+	«EXPAND _Modifier» «mapType()»<«type.mapName()»> «asAttributeName()» = new «mapType("Implementation")»<«type.mapName()»>();
 «ENDIF-»
 «ENDDEFINE»
 
@@ -60,16 +63,16 @@
 «DEFINE AttributeDerivedImpl FOR MAttribute-»
 «EXPAND _CommentGetter-»
 «IF multiplicity == 1-»
-	«EXPAND _Modifier» «typeMap(type.name())» «asGetter(name)»() {
-		«getReturnTypeDeclaration(typeMap(type.name()))»
+	«EXPAND _Modifier» «type.mapName()» «asGetter(name)»() {
+		«getReturnTypeDeclaration(type.mapName())»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(typeMap(type.name()))»
+		«getReturnTypeReturn(type.mapName())»
 	}
 «ELSE-»
-	«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asGetter(name)»() {
-		«getReturnTypeDeclaration(typeMap(type.name()))»
+	«EXPAND _Modifier» «mapType()»<«type.mapName()»> «asGetter(name)»() {
+		«getReturnTypeDeclaration(type.mapName())»
 		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(typeMap(type.name()))»
+		«getReturnTypeReturn(type.mapName())»
 	}
 «ENDIF-»
 «ENDDEFINE»
@@ -78,16 +81,20 @@
 // generate a getter implementation method for a mattribute
 «DEFINE GetterImpl FOR MAttribute-»
 «IF !hasStereotype("accessor") || hasTaggedValue("accessor", "getter", "true")»
-«EXPAND _CommentGetter-»
-«IF multiplicity == 1-»
-	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»() {
-		return «asAttributeName()»;
-	}
-«ELSE-»
-	public «IF static»static«ENDIF» «typeMap("Set")» «asGetter(name)»() {
-		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
-	}
-«ENDIF-»
+	«EXPAND _CommentGetter-»
+	«IF multiplicity == 1-»
+		public «IF static»static«ENDIF» «type.mapName()» «asGetter(name)»() {
+			return «asAttributeName()»;
+		}
+	«ELSE-»
+		public «IF static»static«ENDIF» «mapType()»<«type.mapName()»> «asGetter(name)»() {
+			«IF unique == true-»
+				return java.util.Collections.unmodifiableSet(«asAttributeName()»);
+			«ELSE-»
+				return java.util.Collections.unmodifiableList(«asAttributeName()»);
+			«ENDIF-»
+		}
+	«ENDIF-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -95,18 +102,13 @@
 // generate a setter implementation method for a mattribute
 «DEFINE SetterImpl FOR MAttribute-»
 «IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
-«EXPAND _CommentAccessor-»
-«IF multiplicity == 1-»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap(type.name())» _«asAttributeName()») {
-		«asAttributeName()» = _«asAttributeName()»;
-	}
-«ELSE-»
-«REM»
-	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap("Set", "Implementation")»t<«type.name()»> _«asAttributeName()») {
-		«asAttributeName()» = _«asAttributeName()»;
-	}
-«ENDREM»
-«ENDIF-»
+	«EXPAND _CommentAccessor-»
+	«IF multiplicity == 1-»
+		public «IF static»static«ENDIF» void «asSetter(name)»(«type.mapName()» _«asAttributeName()») {
+			«asAttributeName()» = _«asAttributeName()»;
+		}
+	«ELSE-»
+	«ENDIF-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -116,7 +118,7 @@
 «DEFINE InsertInImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public «IF static»static«ENDIF» void «asAddTo(name)»(«typeMap(type.name())» _in) {
+	public «IF static»static«ENDIF» void «asAddTo(name)»(«type.mapName()» _in) {
 		«asAttributeName()».add(_in);
 	}
 «ELSE-»
@@ -128,7 +130,7 @@
 «DEFINE RemoveFromImpl FOR MAttribute-»
 «IF multiplicity != 1-»
 	«EXPAND _CommentAccessor-»
-	public void «asRemoveFrom(name)»(«typeMap(type.name())» _ex) {
+	public void «asRemoveFrom(name)»(«type.mapName()» _ex) {
 		«asAttributeName()».remove(_ex);
 	}
 «ELSE-»
@@ -150,7 +152,7 @@
 
 «DEFINE _CommentAttribute FOR MAttribute-»
 «IF hasComment()-»
-/** @see {@link «asGetter(name)»} */
+/** @see {@link «name.asGetter()»} */
 «ENDIF-»
 «ENDDEFINE»
 
@@ -158,7 +160,7 @@
 «DEFINE _CommentGetter FOR MAttribute-»
 «IF hasComment()-»
 /**
-  * «getCommentText(ownedComment)»
+  * «ownedComment.getCommentText()»
   */
 «ENDIF-»
 «ENDDEFINE»
@@ -173,8 +175,8 @@
 
 // generate a protected region for own implementations
 «DEFINE _OwnCodeImpl(String proRegId) FOR MAttribute-»
-/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
-/* <!-- TODO put your own implementation code here --> */
+/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
+/* TODO put your own implementation code here */
 
 /* «ENDPROTECT» */
 «ENDDEFINE»
