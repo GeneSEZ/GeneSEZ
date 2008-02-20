@@ -136,10 +136,10 @@ private MType makeType(Type this) :
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
 		// external class
-		case metaType == Class
-			&& ( ((Class)this).isExternalClass() 
-				|| mapClassesInModelToExternal() && ((Class)this).isRootClassifier()
-			) : ((Class)this).makeExternal()
+		case metaType == Class || metaType == Interface 
+			&& ( ((Classifier)this).isExternalClass() 
+				|| mapClassesInModelToExternal() && ((Classifier)this).isRootClassifier()
+			) : ((Classifier)this).makeExternal()
 		// primitive type
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
 		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
@@ -361,7 +361,7 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	taggedValue.addAll( makeTaggedValues(this, aend) ) ->
 	// set classifier
 //	ma.setClassifier(assocEndClass(aend))->
-	assocEndClass(aend).property.add( this ) ->
+//	assocEndClass(aend).property.add( this ) ->
 	this;
 
 
@@ -513,7 +513,7 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	stereotype.addAll( c.getAppliedStereotypes().makeStereotype() ) ->
 	// add client dependency (<<use>>)
 	// only process types, because we have no opposite to NamedElement... or do we want MElement objects in our model?
-	supplier.addAll( c.clientDependency.supplier.typeSelect(Type).makeType() ) ->
+	//supplier.addAll( c.clientDependency.supplier.typeSelect(Type).makeType() ) ->
 	// add superclasses (generalizations and realizations)
 	supertype.addAll( generalization.addAll( c.general.makeType() ) ) ->
 	supertype.addAll( realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ) ->
