@@ -9,6 +9,7 @@
 «IMPORT genesezMM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
 
@@ -33,8 +34,8 @@
 	generate attributes for an interface
 «ENDREM»
 «DEFINE OperationDecl FOR MInterface-»
-	«EXPAND _InsertDecl FOREACH property.typeSelect(MAssociationRole)-»
-	«EXPAND _RemovemDecl FOREACH  property.typeSelect(MAssociationRole)-»
+	«EXPAND _InsertDecl FOREACH associations()-»
+	«EXPAND _RemoveDecl FOREACH associations()-»
 «ENDDEFINE»
 
 
@@ -45,7 +46,15 @@
 «ENDREM»
 
 
-«REM>
+«REM»
+	generate property declaration for an association
+«ENDREM»
+«DEFINE _PropertyDecl FOR MAssociationRole-»
+	«EXPAND templates::Association::PropertyDecl-»
+«ENDDEFINE»
+
+
+«REM»
 	generate insert into declaration for an association
 «ENDREM»
 «DEFINE _InsertDecl FOR MAssociationRole-»
@@ -53,18 +62,10 @@
 «ENDDEFINE»
 
 
-«REM>
+«REM»
 	generate remove from declaration for an association
 «ENDREM»
 «DEFINE _RemoveDecl FOR MAssociationRole-»
 	«EXPAND templates::Association::RemoveDecl-»
-«ENDDEFINE»
-
-
-«REM»
-	generate public field declaration for an association
-«ENDREM»
-«DEFINE _PropertyDecl FOR MAssociationRole-»
-	«EXPAND templates::Association::PropertyDecl-»
 «ENDDEFINE»
 

@@ -27,10 +27,10 @@
 «ENDREM»
 «DEFINE FieldDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-		«EXPAND _Field( type.name(),
+		«EXPAND Field( type.name(),
 		                asFieldName() )-»
 «ELSE-»
-		«EXPAND _Field( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+		«EXPAND Field( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
 		                asFieldName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -72,7 +72,7 @@
 «REM»
 	generate public field declaration for an association
 «ENDREM»
-«DEFINE _Field(String type, String name) FOR MAttribute-»
+«DEFINE Field(String type, String name) FOR MAttribute-»
 			«EXPAND _Comment-»
 			«EXPAND _Modifier» «type» «name»;
 «REM»		«EXPAND _Modifier» «typeMap(type.name())» «asFieldName()»«EXPAND _DefaultValue-»;«ENDREM»
