@@ -21,15 +21,16 @@
 «ENDREM»
 
 «REM»
-
+	generate namespace and imports for all classifiers
 «ENDREM»
 «DEFINE Root FOR MClassifier-»
 namespace «getPackagePath()»
 {
 	«EXPAND Import::Import-»
 	
-	«EXPAND Interface::Root-»
-	«EXPAND Class::Root-»
+	«IF metaType == MInterface»«EXPAND Interface::Root»«ENDIF-»
+	«IF metaType == MClass»«EXPAND Class::Root»«ENDIF-»
+«REM»	«IF metaType == MEnumeration»«EXPAND Enumeration::Root»«ENDIF-»«ENDREM»
 }
 «ENDDEFINE»
 
@@ -39,5 +40,4 @@ namespace «getPackagePath()»
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
-
 
