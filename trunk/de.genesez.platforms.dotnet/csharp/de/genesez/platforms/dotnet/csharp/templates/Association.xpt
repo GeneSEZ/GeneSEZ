@@ -1,7 +1,7 @@
 «REM»
 	Association Template for C#
 	
-	@autor	Gerrit Beine
+	@author	Gerrit Beine
 	@date	2008/01/25
 «ENDREM»
 
@@ -11,7 +11,7 @@
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::common::AccessHelper»
 «EXTENSION de::genesez::typemapping::TypeMapping»
-«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»«REM never used ENDREM»
 «EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
 
 
@@ -23,7 +23,7 @@
 
 
 «REM»
-	generate field declaration
+	generate field declaration for an association
 «ENDREM»
 «DEFINE FieldDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
@@ -42,7 +42,7 @@
 
 
 «REM»
-	generate declaration declaration for an association
+	generate property declaration for an association
 «ENDREM»
 «DEFINE PropertyDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
@@ -62,7 +62,7 @@
 «ENDDEFINE»
 
 «REM»
-	generate property implementation
+	generate property implementation for an association
 «ENDREM»
 «DEFINE PropertyImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
@@ -95,7 +95,7 @@
 
 
 «REM»
-	generate insert into implemenation for an association
+	generate insert into implementation for an association
 «ENDREM»
 «DEFINE InsertImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
@@ -115,7 +115,7 @@
 
 
 «REM»
-	generate remove from implemenation for an association
+	generate remove from implementation for an association
 «ENDREM»
 «DEFINE RemoveImpl FOR MAssociationRole-»
 	«EXPAND _RemoveImpl(asRemoveFrom(name), type.name())-»
@@ -128,7 +128,7 @@
 «ENDREM»
 
 «REM»
-	generate public field declaration for an association
+	generate field declaration for an association
 «ENDREM»
 «DEFINE _Field(String type, String name) FOR MAssociationRole-»
 		«EXPAND _Comment-»
@@ -151,7 +151,7 @@
 
 
 «REM»
-	generate property declaration for an association
+	generate property implementation for an association
 «ENDREM»
 «DEFINE _PropertyImpl(String type, String name) FOR MAssociationRole-»
 		«EXPAND _Comment-»
@@ -173,7 +173,7 @@
 «ENDDEFINE»
 
 «REM»
-	generate add to implemenation for an association
+	generate add to implementation for an association
 «ENDREM»
 «DEFINE _AddToImpl(String name, String type) FOR MAssociationRole-»
 		«EXPAND _Comment-»
@@ -195,7 +195,7 @@
 «ENDDEFINE»
 
 «REM»
-	generate insert into implemenation for an association
+	generate insert into implementation for an association
 «ENDREM»
 «DEFINE _InsertIntoImpl(String name, String type, String aClass) FOR MAssociationRole-»
 		«EXPAND _Comment-»
@@ -216,7 +216,7 @@
 «ENDDEFINE»
 
 «REM»
-	generate remove from implemenation for an association
+	generate remove from implementation for an association
 «ENDREM»
 «DEFINE _RemoveImpl(String name, String type) FOR MAssociationRole-»
 		«EXPAND _Comment-»
@@ -229,7 +229,7 @@
 
 
 «REM»
-	generate a modifier for an association
+	generate modifier for an association
 «ENDREM»
 «DEFINE _Modifier FOR MAssociationRole-»
 		«visibility-»
@@ -237,7 +237,7 @@
 
 
 «REM»
-	generate attribute comment
+	generate comment
 «ENDREM»
 «DEFINE _Comment FOR MAssociationRole-»
 «IF hasComment()-»
