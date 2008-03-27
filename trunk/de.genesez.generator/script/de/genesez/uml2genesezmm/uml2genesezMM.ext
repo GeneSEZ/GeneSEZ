@@ -136,9 +136,9 @@ private MType makeType(Type this) :
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
 		// external class
-		case metaType == Class || metaType == Interface 
+		case (metaType == Class || metaType == Interface) 
 			&& ( ((Classifier)this).isExternalClass() 
-				|| mapClassesInModelToExternal() && ((Classifier)this).isRootClassifier()
+				|| (mapClassesInModelToExternal() && ((Classifier)this).isRootClassifier())
 			) : ((Classifier)this).makeExternal()
 		// primitive type
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
@@ -475,18 +475,18 @@ private create MPrimitiveType makePrimitiveType(PrimitiveType p) :
 	this;
 
 // exception for magic draw uml type 'void'
-// TODO: also handle in uml2genesezmm constraints
-private create MPrimitiveType makePrimitiveType(DataType d) :
+private MPrimitiveType makePrimitiveType(DataType d) :
 	// basic element properties
-	transformBasics(d) ->
+//	transformBasics(d) ->
 	// container
-	transform( getUml2Model() ).primitiveTypes.add( this ) ->
-	this;
+//	transform( getUml2Model() ).primitiveTypes.add( this ) ->
+//	this;
+	// delegate
+	makePrimitiveType(null);
 	
 // exception, i guess when no type is set, it is interpreted as oaw::Void/null
-// TODO: should be fixed in uml2genesezmm constraints
 private create MPrimitiveType makePrimitiveType(Void v) :
-	info("fixme: make primitive type from void") ->
+//	info("fixme: make primitive type from void") ->
 	setXmiGuid("void") ->
 	setName("void") ->
 	transform( getUml2Model() ).primitiveTypes.add( this ) ->
