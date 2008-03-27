@@ -1,0 +1,31 @@
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::common::m2t::Helper»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::io::io»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	main entry point for generating php artefacts
+	@param	this	a model
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«enableLogging("finest")»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	@param	this	a package
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Types::Root FOREACH classifier»
+«ENDDEFINE»

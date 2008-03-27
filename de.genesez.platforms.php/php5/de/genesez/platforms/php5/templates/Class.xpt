@@ -1,0 +1,55 @@
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes a class
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«EXPAND _Modifier FOR this»class «name» «EXPAND _Generalization» «EXPAND _Realization» {
+	«EXPAND Attribute::Declaration FOR this -»
+}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the modifiers of a class
+	a class can be either abstract or final, not both!
+«ENDREM»
+«DEFINE _Modifier FOR MClass -»
+«IF abstract»abstract «ELSEIF final»final «ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the generalizations of a class
+	only single inheritance is allowed
+	@param	this	a class
+«ENDREM»
+«DEFINE _Generalization FOR MClass -»
+«IF !generalization.isEmpty -»
+extends «generalization.first().name()»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the realizations of a class
+	@param	this	a class
+«ENDREM»
+«DEFINE _Realization FOR MClass -»
+«IF !realization.isEmpty -»
+implements «FOREACH realization AS e SEPARATOR ", "»«e.name()»«ENDFOREACH»
+«ENDIF -»
+«ENDDEFINE»

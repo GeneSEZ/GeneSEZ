@@ -1,0 +1,65 @@
+«REM»
+	handles everything about attriutes
+	
+	currently implemented:
+	- constants
+	- static, normal attributes
+	
+	TODO:
+	- derived attributes
+	- getter + setter
+	- insertIn + removeFrom
+	- comment support
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the attributes of a classifier
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Const FOREACH property.typeSelect(MAttribute).select(e|e.final && e.static && e.defaultvalue.length > 0) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.final && !e.derived) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.final && !e.derived) -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an attribute declaration as a class constant
+«ENDREM»
+«DEFINE _Const FOR MAttribute -»
+	const «name» «EXPAND _DefaultValue -»
+«ENDDEFINE»
+
+«REM»
+	generates an attribute declaration
+«ENDREM»
+«DEFINE _Declaration FOR MAttribute -»
+	«EXPAND _Modifier» $«name»«EXPAND _DefaultValue -»;
+«ENDDEFINE»
+
+«REM»
+	processes the modifiers of an attribute
+«ENDREM»
+«DEFINE _Modifier FOR MAttribute -»
+	«visibility» «IF static»static«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the default value of an attribute
+«ENDREM»
+«DEFINE _DefaultValue FOR MAttribute -»
+«IF defaultvalue.length > 0» = «defaultvalue»«ENDIF -»
+«ENDDEFINE»
