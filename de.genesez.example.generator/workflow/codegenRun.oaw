@@ -2,20 +2,79 @@
 
 <workflow>
 	
-	<!-- example project where the generated artifacts are stored -->
-	<property name="de.genesez.example.project.dir" value="../de.genesez.example" />
+	<!-- 
+			CONFIGURATION SECTION
+			===================== 
+	-->
 	
+	<!-- select between the values "makeGenesezModel.oaw" and "makeGenesezModelProfile.oaw" 
+		 "makeGenesezModel.oaw"		   - transform the model from uml2 meta model to genesez meta model
+		  								 without profile support
+		 "makeGenesezModelProfile.oaw" - transform the model from uml2 meta model to genesez meta model
+		  								 with profile support
+	-->
+	<property name="input.workflowCartridge" value="makeGenesezModelProfile.oaw" />
+	
+	<!-- if the property "input.workflowCartridge" has the value "makeGenesezModelProfile.oaw" then 
+		 set the name of the uml2 profile file else leave blank -->
+	<property name="input.uml2ProfileFile" value="../de.genesez.example/model-exp/profile.profile.uml" />
+	
+	<!-- name of the uml2 file -->
+	<property name="input.uml2ModelFile" value="../de.genesez.example/model-exp/example.uml" />
+	
+	<!-- comma or comma blank [, ] separated list of package names to exclude from transformation -->
+	<property name="input.excludePackages" value="UML Standard Profile" />
+	
+	<!-- comma or comma blank [, ] separated list of package names which are used as container
+		 for external classes (therefor are not transformed to genesez packages) -->
+	<property name="input.externalPackages" value="" />
+	
+	<!-- comma or comma blank [, ] separated list of names of stereotypes which are applied 
+		 to packages or classes, indicating that the package is a container for external classes
+		 or the classes are external classes -->
+	<property name="input.externalStereotypes" value="external" />
+	
+
+	<!-- select between the values "performM2T.oaw" and "performM2TAOP.oaw"
+		 "performM2T.oaw"    - performs a model-to-text transformation (code generation)
+							   without the AOP of templates
+		 "performM2TAOP.oaw" - performs a model-to-text transformation (code generation)
+							   using AOP of templates
+	 -->
+	<property name="output.workflowCartridge" value="performM2T.oaw" />
+	
+	<!-- if the property "output.workflowCartridge" has the value "performM2TAOP.oaw" then 
+		 set the root xpt-file where the aspects are defined else leave blank -->
+	<property name="output.aspectsTemplate" value="" />
+	
+	<!-- name of the ouput xmi file -->
+	<property name="output.xmiModelFile" value="../de.genesez.example/model-gen/example.xmi" />
+
+	<!-- comma or semicola separated list with packages to exclude from code generation -->	
+	<property name="output.excludePackages" value="" />
+	
+	<!-- the path where the generated file are produced -->
+	<property name="output.generatePath" value="../de.genesez.example/src-gen" />
+	
+	<!-- name of the type mapping xml file -->
+	<property name="output.typeMappingFile" value="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
+	
+	
+	<!-- 
+			GENERATION SEQUENCE SECTION - DON'T MODIFY THIS
+			=============================================== 
+	-->
 	
 	<!-- Reading the example file. -->
 	<cartridge
-		file="de::genesez::workflows::makeGenesezModelProfile.oaw" 
-		uml2ProfileFile="${de.genesez.example.project.dir}/model-exp/profile.profile.uml"
-		inputModelFile="${de.genesez.example.project.dir}/model-exp/example.uml"
+		file="de::genesez::workflows::${input.workflowCartridge}" 
+		inputModelFile="${input.uml2ModelFile}"
+		uml2ProfileFile="${input.uml2ProfileFile}"
 		genesezModel="genesezModel"
-		excludePackages="UML Standard Profile"
+		excludePackages="${input.excludePackages}"
 		mapClassesInModelToExternal="false"
-		externalPackages = ""
-		externalStereotypes = "external"
+		externalPackages = "${input.externalPackages}"
+		externalStereotypes = "${input.externalStereotypes}"
 	/>
 	
 	<!-- Check constraints. /-->
@@ -36,19 +95,19 @@
 	<cartridge
 		file="de::genesez::workflows::xmiWriter.oaw"
 		modelSlot="genesezModel"
-		outputModelFile="${de.genesez.example.project.dir}/model-gen/example.xmi"
+		outputModelFile="${output.xmiModelFile}"
 	/>
 	
-	<!-- Create java code without AOP in xpand templates.  /-->
+	<!-- Create java code with or without AOP in xpand templates.  /-->
 	<cartridge
-		file="de::genesez::workflows::java::performM2T.oaw"
+		file="de::genesez::workflows::java::${output.workflowCartridge}"
 		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
-		excludePackages="java, java.util"
+		excludePackages="${output.excludePackages}"
 		configFile=""
-		outputDir="${de.genesez.example.project.dir}/src-gen"
-		proRegDir="${de.genesez.example.project.dir}/src-gen"
-		typeMappingFile="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml"
+		aspectsTemplate="${output.aspectsTemplate}"
+		outputDir="${output.generatePath}"
+		proRegDir="${output.generatePath}"
+		typeMappingFile="${output.typeMappingFile}"
 	/>
-	
 
 </workflow>
