@@ -26,10 +26,10 @@
 «ENDREM»
 «DEFINE FieldDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-		«EXPAND Field( type.name(),
+		«EXPAND Field( asClassifierName(type),
 		                asFieldName() )-»
 «ELSE-»
-		«EXPAND Field( typeMap( "Set" ) + "<" + asClassifierName(type.name()) + ">",
+		«EXPAND Field( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
 		                asFieldName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -40,9 +40,9 @@
 «ENDREM»
 «DEFINE PropertyDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _PropertyDecl( type.name(), asPropertyName() )-»
+	«EXPAND _PropertyDecl( asClassifierName(type), asPropertyName() )-»
 «ELSE-»
-	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + asClassifierName(type.name())+ ">",
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + asClassifierName(type)+ ">",
 	                   asPropertyName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -53,9 +53,9 @@
 «ENDREM»
 «DEFINE PropertyImpl FOR MAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _PropertyImpl( type.name(), asPropertyName() )-»
+	«EXPAND _PropertyImpl( asClassifierName(type), asPropertyName() )-»
 «ELSE-»
-	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + asClassifierName(type.name())+ ">",
+	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + asClassifierName(type)+ ">",
 	                   asPropertyName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -84,7 +84,7 @@
 «ENDREM»
 «DEFINE _PropertyDecl(String type, String name) FOR MAttribute-»
 		«EXPAND _Comment-»
-		public «type» «name»
+		«EXPAND _Modifier» «type» «name»
 		{
 			get;
 			set;
@@ -98,7 +98,7 @@
 «ENDREM»
 «DEFINE _PropertyImpl(String type, String name) FOR MAttribute-»
 		«EXPAND _Comment-»
-		public «type» «name»
+		«EXPAND _Modifier» «type» «name»
 		{
 			get { return this.«asFieldName()»; }
 			set { this.«asFieldName()» = value; }
@@ -111,7 +111,11 @@
 	generate modifier for an attribute
 «ENDREM»
 «DEFINE _Modifier FOR MAttribute-»
+«IF classifier.metaType == MInterface-»
+		«IF static» static«ENDIF-»«IF final» readonly«ENDIF-»
+«ELSE-»
 		«visibility-»«IF static» static«ENDIF-»«IF final» readonly«ENDIF-»
+«ENDIF-»
 «ENDDEFINE»
 
 

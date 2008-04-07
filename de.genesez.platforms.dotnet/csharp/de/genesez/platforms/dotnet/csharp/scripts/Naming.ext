@@ -1,6 +1,8 @@
 //	based on genesez meta model
 import genesezMM;
 
+extension de::genesez::common::AccessHelper;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public extend functions
@@ -9,11 +11,19 @@ import genesezMM;
 
 /**
  * formats a name of a classifier according naming convention
- * @param	s	name of a classifier
+ * @param	type	an interface
  * @return	name of a classifier
  */
-String asClassifierName(String s) :
-	s.toFirstUpper();
+String asClassifierName(MInterface type) :
+	asInterfaceName(type.name);
+
+/**
+ * formats a name of a classifier according naming convention
+ * @param	type	a classifier
+ * @return	name of a classifier
+ */
+String asClassifierName(MType type) :
+	name(type).toFirstUpper();
 
 /**
  * formats a name of an interface according naming convention
