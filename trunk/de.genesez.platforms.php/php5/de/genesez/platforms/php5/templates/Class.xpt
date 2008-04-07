@@ -1,3 +1,17 @@
+«REM»
+	performs the generation of classes
+	
+	currently handled:
+	- extends, implements
+	- attributes
+	- operations
+	- associations
+	
+	TODO:
+	- comments
+«ENDREM»
+
+
 «REM» based on genesez meta model «ENDREM»
 «IMPORT genesezMM»
 
@@ -13,8 +27,32 @@
 	processes a class
 «ENDREM»
 «DEFINE Root FOR MClass -»
-«EXPAND _Modifier FOR this»class «name» «EXPAND _Generalization» «EXPAND _Realization» {
-	«EXPAND Attribute::Declaration FOR this -»
+«EXPAND _Modifier FOR this»class «name» «EXPAND _Generalization -» «EXPAND _Realization -» {
+	
+	// -- attributes --------------------------------------------------------
+	«EXPAND Attribute::Declaration -»
+	
+	// -- associations ------------------------------------------------------
+	«EXPAND Association::Declaration -»
+	
+	// -- constructors + destructors ----------------------------------------
+	«EXPAND Operation::Constructor -»
+	«EXPAND Operation::Destructor -»
+	
+	// -- method declarations -----------------------------------------------
+	«EXPAND Operation::Declaration -»
+	
+	// -- method implementations --------------------------------------------
+	«EXPAND Operation::Implementation -»
+	
+	// -- methods for derived attributes ------------------------------------
+	«EXPAND Attribute::Derived -»
+	
+	// -- association accessors ---------------------------------------------
+	«EXPAND Association::GetterImpl -»
+	
+	// -- attribute accessors -----------------------------------------------
+	«EXPAND Attribute::Accessors -»
 }
 «ENDDEFINE»
 
@@ -40,7 +78,7 @@
 «ENDREM»
 «DEFINE _Generalization FOR MClass -»
 «IF !generalization.isEmpty -»
-extends «generalization.first().name()»
+extends «generalization.first().name() -»
 «ENDIF -»
 «ENDDEFINE»
 
