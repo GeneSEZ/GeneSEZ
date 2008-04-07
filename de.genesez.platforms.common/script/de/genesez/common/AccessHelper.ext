@@ -13,6 +13,38 @@ extension de::genesez::io::io;
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * checks if an operation is a constructor method of a classifier or not
+ * @param	this	an operation
+ * @return	true, if the operation is a constructor method, otherwise false
+ */
+boolean isConstructor(MOperation this) :
+	classifier.name == name;
+
+/**
+ * checks if an operation is a destructor method of a classifier or not
+ * @param	this	an operation
+ * @return	true, if the operation is a destructor method, otherwise false
+ */
+boolean isDestructor(MOperation this) :
+	name.startsWith("~");
+
+/**
+ * checks if a parameter has a default value or not
+ * @param	this	a parameter
+ * @return	true, if the parameter has a default value, otherwise false
+ */
+boolean hasDefaultValue(MParameter this) :
+	defaultvalue.length > 0;
+
+/**
+ * checks if an operation has a return type or not
+ * @param	this	an operation
+ * @return	true, if the operation has a return type, otherwise false
+ */
+boolean hasReturnType(MOperation this) :
+	returnType != null && returnType.name().toLowerCase() != "void";
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	associations
@@ -42,6 +74,14 @@ MClass assocClass(MAssociationRole aend) :
 	attributes
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * checks weather an attribute has a default value or not
+ * @param	this	an attribute
+ * @return	true, if the attribute has a default value, otherwise false
+ */
+boolean hasDefaultValue(MAttribute this) :
+	defaultvalue.length > 0;
 
 /**
  * getter for a list with all attributes including inherited
