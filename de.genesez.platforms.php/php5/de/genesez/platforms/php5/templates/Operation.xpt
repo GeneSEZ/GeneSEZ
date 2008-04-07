@@ -1,0 +1,144 @@
+«REM»
+	handles everything about operations
+	
+	currently implemented:
+	- modifiers (visibility, static, final)
+	- constructors, destructors, declarations, implementations
+	- parameters, protected regions
+	- default value for params
+	- type mapping, param types
+	
+	TODO:
+	- revise default return value when included in typemapping xml file
+	- comment support
+	- exceptions
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the operations of a classifier
+	order: constructor, destructor, declarations, implementations
+«ENDREM»
+«DEFINE All FOR MClassifier -»
+	«EXPAND Constructor -»
+	«EXPAND Destructor -»
+	«EXPAND Declaration -»
+	«EXPAND Implementation -»
+«ENDDEFINE»
+
+«REM»
+	processes all constructors
+«ENDREM»
+«DEFINE Constructor FOR MClassifier -»
+	«EXPAND _Constructor FOREACH operation.select( e| e.isConstructor() ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all destructors
+«ENDREM»
+«DEFINE Destructor FOR MClassifier -»
+	«EXPAND _Destructor FOREACH operation.select( e| e.isDestructor() ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all operations to declare
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Declaration FOREACH operation.select( e| !e.isConstructor() && e.abstract ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all operations to implement
+«ENDREM»
+«DEFINE Implementation FOR MClassifier -»
+	«EXPAND _Implementation FOREACH operation.select( e| !e.isConstructor() && !e.abstract ) -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an operation declaration
+	@param	this	an operation to declare
+«ENDREM»
+«DEFINE _Declaration FOR MOperation -»
+	«EXPAND _Modifier -» function «name»(«EXPAND _Params -»);
+«ENDDEFINE»
+
+«REM»
+	generates an operation implementation
+	@param	this	an operation to implement
+«ENDREM»
+«DEFINE _Implementation FOR MOperation -»
+	«EXPAND _Modifier -» function «name»(«EXPAND _Params -») {
+		«IF hasReturnType()»$returnValue = NULL;«ENDIF»
+		«EXPAND _OwnCodeImpl("php.implementation." + xmiGuid) -»
+		«IF hasReturnType()»return returnValue;«ENDIF»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a constructor
+	@param	this	an constructor operation
+«ENDREM»
+«DEFINE _Constructor FOR MOperation -»
+	«visibility» function __construct(«EXPAND _Params -») {
+		«EXPAND _OwnCodeImpl("php.constructor." + xmiGuid) -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a destructor
+	@param	this	an destructor operation
+«ENDREM»
+«DEFINE _Destructor FOR MOperation -»
+	«visibility» public function __destruct(«EXPAND _Params -») {
+		«EXPAND _OwnCodeImpl("php.destructor." + xmiGuid) -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the visibility and the modifiers static and final for an operation
+	@param	this	an operation
+«ENDREM»
+«DEFINE _Modifier FOR MOperation -»
+	«visibility»«IF static» static«ENDIF -»«IF final» final«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the parameters of an operation
+	@param	this	an operation
+«ENDREM»
+«DEFINE _Params FOR MOperation -»
+«FOREACH parameter AS p SEPARATOR ", " -»
+«p.type.mapName()» $«p.name»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the protected region of an operation
+	@param	this	an operation
+«ENDREM»
+«DEFINE _OwnCodeImpl(String s) FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (s)»
+		// TODO: implementation of method '«classifier.name».«name»(...)'
+		«ENDPROTECT»
+«ENDDEFINE»
+

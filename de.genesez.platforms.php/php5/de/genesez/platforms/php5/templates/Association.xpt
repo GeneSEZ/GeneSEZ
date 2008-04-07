@@ -1,0 +1,73 @@
+«REM»
+	handles everything about associations
+	
+	currently implemented:
+	- assoc attributes
+	- assoc getters, declaration + implementation
+	
+	TODO:
+	- association classes
+	- comment support
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the declaration of association attributes
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the declaration of a getter method for an association
+«ENDREM»
+«DEFINE GetterDecl FOR MClassifier -»
+	«EXPAND _GetterDecl FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the implementation of a getter method for an association
+«ENDREM»
+«DEFINE GetterImpl FOR MClassifier -»
+	«EXPAND _GetterImpl FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the declaration of an association attribute
+«ENDREM»
+«DEFINE _Declaration FOR MAssociationRole -»
+	private $«name»;
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of a getter method for an association attribute
+«ENDREM»
+«DEFINE _GetterDecl FOR MAssociationRole -»
+	«visibility» function «name.asGetter()»();
+«ENDDEFINE»
+
+«REM»
+	generates the implementation of a getter method for an association attribute
+«ENDREM»
+«DEFINE _GetterImpl FOR MAssociationRole -»
+	«visibility» function «name.asGetter()»() {
+		return $«name»;
+	}
+«ENDDEFINE»
