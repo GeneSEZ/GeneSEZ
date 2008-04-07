@@ -24,7 +24,7 @@
 	generate a class
 «ENDREM»
 «DEFINE Root FOR MClass-»
-	public class «asClassifierName()» «EXPAND Generalization::Generalization-» «EXPAND Realization::Realization-»
+	«EXPAND _Class»
 	{
 		«IF hasStaticFields()»«EXPAND _StaticFields»«ENDIF-»
 		«IF hasPrivateFields()»«EXPAND _PrivateFields»«ENDIF-»
@@ -41,10 +41,25 @@
 
 
 «REM»
+	do nothing for other classifiers
+«ENDREM»
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+«REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+
+«REM»
+	generate the class declaration
+«ENDREM»
+«DEFINE _Class FOR MClass-»
+		public class «asClassifierName()-»«EXPAND _Supertype-»
+«ENDDEFINE»
 
 
 «REM»
@@ -147,6 +162,16 @@
 		«EXPAND Class::Operation::PrivateOperationImpl-»
 		#endregion
 		
+«ENDDEFINE»
+
+
+«REM»
+	generate generalization for an interface
+«ENDREM»
+«DEFINE _Supertype FOR MClass-»
+«IF hasSupertypes() -»
+ : «FOREACH supertypes() AS t SEPARATOR ", "»«asClassifierName(t)»«ENDFOREACH-» 
+«ENDIF-»
 «ENDDEFINE»
 
 

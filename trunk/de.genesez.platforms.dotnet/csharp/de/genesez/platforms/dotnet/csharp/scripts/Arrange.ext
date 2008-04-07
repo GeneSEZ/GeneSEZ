@@ -14,6 +14,14 @@ import genesezMM;
  */
 
 /**
+ * return if an interface has supertypes
+ * @param	interface	an interface
+ * @return	true, if supertypes exist
+ */
+boolean hasSupertypes(MInterface interface) :
+	0 != interface.supertype.size;
+
+/**
  * return if an interface has public fields
  * @param	interface	an interface
  * @return	true, if public fields exist
@@ -44,6 +52,14 @@ boolean hasProperties(MInterface interface) :
  */
 boolean hasPublicMethods(MInterface interface) :
 	0 != publicMethods(interface).size || 0 != associations(interface).size;
+
+/**
+ * returns the supertypes of an interface
+ * @param	interface	an interface
+ * @return	a list of interfaces
+ */
+List[MInterface] supertypes(MInterface interface) :
+	interface.supertype.typeSelect(MInterface);
 
 /**
  * returns the public fields of an interface
@@ -91,6 +107,14 @@ List[MOperation] publicMethods(MInterface interface) :
  * The following statements are related to MClass
  * 
  */
+
+/**
+ * return if a class has supertypes
+ * @param	class	a class
+ * @return	true, if supertypes exist
+ */
+boolean hasSupertypes(MClass class) :
+	0 != class.supertype.size;
 
 /**
  * return if a class has static fields
@@ -179,6 +203,12 @@ boolean hasPublicMethods(MClass class) :
  */
 boolean hasPrivateMethods(MClass class) :
 	0 != privateMethods(class).size;
+
+List[MClassifier] supertypes(MClass class) :
+	class.supertype.typeSelect(MClass).size	== 0
+	? class.supertype.typeSelect(MInterface)
+	: {class.supertype.typeSelect(MClass).first()}
+		.addAll(class.supertype.typeSelect(MInterface));
 
 List[MAttribute] staticFields(MClass class) :
 	class.property.typeSelect(MAttribute).select(e|e.static && !e.final);
