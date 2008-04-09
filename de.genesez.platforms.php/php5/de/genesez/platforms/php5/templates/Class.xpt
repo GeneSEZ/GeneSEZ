@@ -6,17 +6,20 @@
 	- attributes
 	- operations
 	- associations
+	- comments
 	
 	TODO:
-	- comments
 «ENDREM»
 
 
 «REM» based on genesez meta model «ENDREM»
 «IMPORT genesezMM»
 
-«REM» use helper to access information «ENDREM»
-«EXTENSION de::genesez::common::AccessHelper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«REM» use php naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
 
 
 «REM»
@@ -27,7 +30,8 @@
 	processes a class
 «ENDREM»
 «DEFINE Root FOR MClass -»
-«EXPAND _Modifier FOR this»class «name» «EXPAND _Generalization -» «EXPAND _Realization -» {
+«EXPAND Comment::Type -»
+«EXPAND _Modifier FOR this»class «asTypeName()» «EXPAND _Generalization -» «EXPAND _Realization -» {
 	
 	// -- attributes --------------------------------------------------------
 	«EXPAND Attribute::Declaration -»
@@ -49,10 +53,13 @@
 	«EXPAND Attribute::Derived -»
 	
 	// -- association accessors ---------------------------------------------
-	«EXPAND Association::GetterImpl -»
+	«EXPAND Association::Accessors -»
 	
 	// -- attribute accessors -----------------------------------------------
 	«EXPAND Attribute::Accessors -»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND _OwnCodeImpl("php.class.own.code.implementation." + xmiGuid) -»
 }
 «ENDDEFINE»
 
@@ -72,22 +79,31 @@
 «ENDDEFINE»
 
 «REM»
-	processes the generalizations of a class
+	generates the generalization of a class
 	only single inheritance is allowed
 	@param	this	a class
 «ENDREM»
 «DEFINE _Generalization FOR MClass -»
 «IF !generalization.isEmpty -»
-extends «generalization.first().name() -»
+extends «generalization.first().mapName().asTypeName( generalization.first() ) -»
 «ENDIF -»
 «ENDDEFINE»
 
 «REM»
-	processes the realizations of a class
+	generates the realizations of a class
 	@param	this	a class
 «ENDREM»
 «DEFINE _Realization FOR MClass -»
 «IF !realization.isEmpty -»
-implements «FOREACH realization AS e SEPARATOR ", "»«e.name()»«ENDFOREACH»
+implements «FOREACH realization AS r SEPARATOR ", " -»«r.mapName().asTypeName(r)»«ENDFOREACH -»
 «ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates a region for own code implementations
+«ENDREM»
+«DEFINE _OwnCodeImpl(String id) FOR MClass -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further code implementations for class '«asTypeName()»' here
+	«ENDPROTECT»
 «ENDDEFINE»

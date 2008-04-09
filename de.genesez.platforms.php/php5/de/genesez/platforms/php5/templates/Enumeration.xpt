@@ -1,0 +1,70 @@
+«REM»
+	performs the generation of enumerations
+	- enumerations are not natively supported by php5!
+	- they are transformed into final classes with a private constructor
+	
+	currently handled:
+	- literals
+	
+	TODO:
+	- revise literals with default value, if metamodel supports them
+	- extends, implements, attributes, operations, associations ???
+	- comments
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«REM» use php naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an enumeration
+«ENDREM»
+«DEFINE Root FOR MEnumeration -»
+«EXPAND Comment::Type -»
+final class «asTypeName()» {
+	
+	// -- enumeration literals --------------------------------------------
+	«EXPAND _Literals FOREACH literal -»
+	
+	// -- private constructor to prevent instantiation of objects ---------
+	private function __construct() {
+	}
+	
+	// -- own code declarations -------------------------------------------
+	«EXPAND _OwnCodeImpl("php.enumeration.own.code." + xmiGuid) -»
+}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an enumeration literal
+«ENDREM»
+«DEFINE _Literals FOR MLiteral -»
+	const «asEnumLiteral()» = "";
+«ENDDEFINE»
+
+«REM»
+	generates a region for own code declarations
+«ENDREM»
+«DEFINE _OwnCodeImpl(String id) FOR MEnumeration -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further code declarations for enumeration '«asTypeName()»' here
+	«ENDPROTECT»
+«ENDDEFINE»
