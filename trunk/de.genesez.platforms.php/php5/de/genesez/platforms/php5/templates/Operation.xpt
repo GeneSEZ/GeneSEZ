@@ -7,11 +7,10 @@
 	- parameters, protected regions
 	- default value for params
 	- type mapping, param types
+	- comment support with exceptions
 	
 	TODO:
 	- revise default return value when included in typemapping xml file
-	- comment support
-	- exceptions
 «ENDREM»
 
 
@@ -22,6 +21,9 @@
 «EXTENSION de::genesez::common::AccessHelper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«REM» use naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
 
 
 «REM»
@@ -79,7 +81,8 @@
 	@param	this	an operation to declare
 «ENDREM»
 «DEFINE _Declaration FOR MOperation -»
-	«EXPAND _Modifier -» function «name»(«EXPAND _Params -»);
+	«EXPAND Comment::Operation -»
+	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -»);
 «ENDDEFINE»
 
 «REM»
@@ -87,7 +90,8 @@
 	@param	this	an operation to implement
 «ENDREM»
 «DEFINE _Implementation FOR MOperation -»
-	«EXPAND _Modifier -» function «name»(«EXPAND _Params -») {
+	«EXPAND Comment::Operation -»
+	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -») {
 		«IF hasReturnType()»$returnValue = NULL;«ENDIF»
 		«EXPAND _OwnCodeImpl("php.implementation." + xmiGuid) -»
 		«IF hasReturnType()»return returnValue;«ENDIF»
@@ -96,9 +100,11 @@
 
 «REM»
 	generates a constructor
+	has no return value
 	@param	this	an constructor operation
 «ENDREM»
 «DEFINE _Constructor FOR MOperation -»
+	«EXPAND Comment::Constructor -»
 	«visibility» function __construct(«EXPAND _Params -») {
 		«EXPAND _OwnCodeImpl("php.constructor." + xmiGuid) -»
 	}
@@ -106,10 +112,12 @@
 
 «REM»
 	generates a destructor
+	cannot have parameters or a return value
 	@param	this	an destructor operation
 «ENDREM»
 «DEFINE _Destructor FOR MOperation -»
-	«visibility» public function __destruct(«EXPAND _Params -») {
+	«EXPAND Comment::Destructor -»
+	«visibility» public function __destruct() {
 		«EXPAND _OwnCodeImpl("php.destructor." + xmiGuid) -»
 	}
 «ENDDEFINE»
@@ -128,7 +136,7 @@
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
 «FOREACH parameter AS p SEPARATOR ", " -»
-«p.type.mapName()» $«p.name»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«p.type.mapName().asTypeName(p.type)» $«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -136,9 +144,9 @@
 	generates the protected region of an operation
 	@param	this	an operation
 «ENDREM»
-«DEFINE _OwnCodeImpl(String s) FOR MOperation -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (s)»
-		// TODO: implementation of method '«classifier.name».«name»(...)'
+«DEFINE _OwnCodeImpl(String id) FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
 		«ENDPROTECT»
 «ENDDEFINE»
 

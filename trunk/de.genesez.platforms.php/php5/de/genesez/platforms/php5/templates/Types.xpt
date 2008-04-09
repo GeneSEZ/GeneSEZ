@@ -2,10 +2,10 @@
 	delegates the transformation of types to source code to specific templates
 	
 	currently delegated:
-	- class
+	- class, interface, enumeration
 	
 	TODO:
-	- interface, enumeration, data type, primitive type
+	- data type
 «ENDREM»
 
 
@@ -25,12 +25,14 @@
 «REM»
 	processes the generation of a type
 	every type is contained in a single source file
-	@param	this	a type to transform into text
+	@context	a type to transform into text
 «ENDREM»
 «DEFINE Root FOR MClassifier»
 «FILE getFilename(".php") -»
 <?php
-«EXPAND _TypeDef FOR this -»
+«EXPAND Comment::File -»
+
+«EXPAND _TypeDef -»
 ?>
 «ENDFILE»
 «ENDDEFINE»
@@ -42,27 +44,37 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM»
+	processes the generation of a class
+«ENDREM»
 «DEFINE _TypeDef FOR MClass -»
-«EXPAND Class::Root FOR this -»
+«EXPAND Class::Root -»
 «ENDDEFINE»
 
+«REM»
+	processes the generation of an interface
+«ENDREM»
 «DEFINE _TypeDef FOR MInterface -»
-	«severe("generation of 'MInterface's is currently not supported")»
+«EXPAND Interface::Root -»
 «ENDDEFINE»
 
+«REM»
+	processes the generation of an enumeration
+«ENDREM»
 «DEFINE _TypeDef FOR MEnumeration -»
-	«severe("generation of 'MEnumeration's is currently not supported")»
+«EXPAND Enumeration::Root -»
 «ENDDEFINE»
 
+«REM»
+	processes the generation of a data type
+«ENDREM»
 «DEFINE _TypeDef FOR MDataType -»
 	«severe("generation of 'MDataType's is currently not supported")»
 «ENDDEFINE»
 
-«DEFINE _TypeDef FOR MPrimitiveType -»
-	«severe("generation of 'MPrimitiveType's is currently not supported")»
-«ENDDEFINE»
-
+«REM»
+	while 'MClassifier' is abstract, an object from type MClassifier cannot exist!
+«ENDREM»
 «DEFINE _TypeDef FOR MClassifier -»
 	«severe("generation of 'MClassifier's is currently not supported")»
 «ENDDEFINE»
-
