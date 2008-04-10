@@ -1,0 +1,42 @@
+<!--
+	build file for deploying the php example to a directory
+-->
+
+<project name="de.genesez.example.php" basedir=".">
+	
+	<property name="deploy.dir" value="D:/httpd/fh3/example.php" />
+	<property name="src.dir" value="src" />
+	<property name="src-gen.dir" value="src-gen" />
+	<property name="api-doc.dir" value="bin/api-doc/phpdoc" />
+	
+	<target name="doc">
+		<!--pathconvert property="input.dir">
+			<path location="${basedir}/${src-gen.dir}" />
+		</pathconvert>
+		<pathconvert property="output.dir">
+			<path location="${basedir}/${api-doc.dir}"></path>
+		</pathconvert -->
+		<exec executable="cmd" dir="${basedir}">
+			<arg value="/c" />
+			<arg value="phpdoc.bat" />
+			<arg value="-d" />
+			<arg value="${src-gen.dir}" />
+			<arg value="-o" />
+			<arg value="HTML:default:default" />
+			<arg value="-t" />
+			<arg value="${api-doc.dir}" />
+		</exec>
+	</target>
+	
+	<target name="deploy">
+		<copy todir="${deploy.dir}">
+			<fileset dir="${src.dir}" />
+			<fileset dir="${src-gen.dir}" />
+		</copy>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${deploy.dir}" />
+		<delete dir="${api-doc.dir}" />
+	</target>
+</project>
