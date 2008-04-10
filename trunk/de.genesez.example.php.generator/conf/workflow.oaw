@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- this is the generator for the following project -->
+	<property name="project.dir" value="../de.genesez.example.php" />
+	<property name="model.name" value="example" />
+	
+	<!-- reading model + transform it into a genesez model -->
+	<cartridge
+		file="de::genesez::workflows::makeGenesezModel.oaw" 
+		inputModelFile="model-exp/${model.name}.uml"
+		uml2ProfileFile="model-exp/profile.profile.uml"
+		genesezModel="genesezModel"
+		excludePackages="UML Standard Profile"
+		mapClassesInModelToExternal="false"
+		externalPackages = ""
+		externalStereotypes = "external"
+	/>
+	
+	<!-- add all types which are used within a classifier to 'supplier's -->
+	<cartridge
+		file="de::genesez::workflows::performMM.oaw" 
+		invokeScript="de::genesez::common::AddDependencies::process( genesezModel )"
+		configFile=""
+	/>
+	
+	<!-- validates the model for php code gen -->
+	<cartridge
+		file="de::genesez::workflows::constraintChecker.oaw"
+		modelSlot="genesezModel"
+		checkScript="de::genesez::platforms::php::constraints::Syntax"
+		abortOnError="true"
+	/>
+	
+	<!-- serialize genesez model -->
+	<cartridge
+		file="de::genesez::workflows::xmiWriter.oaw"
+		modelSlot="genesezModel"
+		outputModelFile="model-gen/${model.name}.xmi"
+	/>
+	
+	<!-- generate source code -->
+	<cartridge
+		file="de::genesez::workflows::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::php5::templates::Root::Root FOR genesezModel"
+		excludePackages=""
+		typeMappingFile="../de.genesez.platforms.php/php/de/genesez/platforms/php/typemapping/typemapping.xml"
+		configFile=""
+		outputDir="${project.dir}/src-gen"
+		proRegDir="${project.dir}/src-gen"
+	/>
+	
+</workflow>
