@@ -8,6 +8,7 @@
 	- own comment section - really needed?
 	
 	TODO:
+	- comments are currently for 'phpdocumentor', 'doxygen' support is not best :/
 	- maybe @uses tags?
 «ENDREM»
 
@@ -206,7 +207,8 @@
 	«IF raisedException.size > 0 -»
 	 * 
 	 * the operation may throw the following exceptions:
-	«EXPAND _Exception FOREACH raisedException -»
+	«EXPAND _ExceptionList -»
+	«EXPAND _ExceptionLink FOREACH raisedException -»
 	 * 
 	«ENDIF -»
 	«EXPAND _Parameter FOREACH parameter -»
@@ -227,7 +229,8 @@
 	«IF raisedException.size > 0 -»
 	 * 
 	 * the constructor may throw the following exceptions:
-	«EXPAND _Exception FOREACH raisedException -»
+	«EXPAND _ExceptionList -»
+	«EXPAND _ExceptionLink FOREACH raisedException -»
 	 * 
 	«ENDIF -»
 	«EXPAND _Parameter FOREACH parameter -»
@@ -247,7 +250,8 @@
 	«IF raisedException.size > 0 -»
 	 * 
 	 * the destructor may throw the following exceptions:
-	«EXPAND _Exception FOREACH raisedException -»
+	«EXPAND _ExceptionList -»
+	«EXPAND _ExceptionLink FOREACH raisedException -»
 	 * 
 	«ENDIF -»
 	«EXPAND _Parameter FOREACH parameter -»
@@ -265,9 +269,9 @@
 	generates a region for own code comments
 «ENDREM»
 «DEFINE _OwnComment(String indent, String id) FOR MElement -»
-«indent» * «PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-«indent» * <!-- TODO: put your own comments here -->
-«indent» * «ENDPROTECT»
+«indent» * @internal «PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+«indent» * @internal <!-- TODO: put your own comments here -->
+«indent» * @internal «ENDPROTECT»
 «ENDDEFINE»
 
 «REM»
@@ -287,6 +291,13 @@
 «REM»
 	generates the exceptions that may be thrown by an operation
 «ENDREM»
-«DEFINE _Exception FOR MType -»
+«DEFINE _ExceptionLink FOR MType -»
 	 * @see		«mapName().asTypeName(this)»
+«ENDDEFINE»
+
+«REM»
+	generates an exception list
+«ENDREM»
+«DEFINE _ExceptionList FOR MOperation -»
+	 * «FOREACH raisedException AS e SEPARATOR ", " -»{@link «e.mapName().asTypeName(e)» «e.mapName().asTypeName(e)»}«ENDFOREACH»
 «ENDDEFINE»
