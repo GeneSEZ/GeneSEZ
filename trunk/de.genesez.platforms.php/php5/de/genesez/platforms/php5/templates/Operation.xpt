@@ -117,17 +117,18 @@
 «ENDREM»
 «DEFINE _Destructor FOR MOperation -»
 	«EXPAND Comment::Destructor -»
-	«visibility» public function __destruct() {
+	«visibility» function __destruct() {
 		«EXPAND _OwnCodeImpl("php.destructor." + xmiGuid) -»
 	}
 «ENDDEFINE»
 
 «REM»
-	generates the visibility and the modifiers static and final for an operation
+	generates the visibility and the modifiers static, final + abstract for an operation
+	abstract only if the class is also abstract
 	@param	this	an operation
 «ENDREM»
 «DEFINE _Modifier FOR MOperation -»
-	«visibility»«IF static» static«ENDIF -»«IF final» final«ENDIF -»
+	«visibility»«IF static» static«ENDIF -»«IF final» final«ENDIF -»«IF abstract && classifier.abstract» abstract«ENDIF -»
 «ENDDEFINE»
 
 «REM»
