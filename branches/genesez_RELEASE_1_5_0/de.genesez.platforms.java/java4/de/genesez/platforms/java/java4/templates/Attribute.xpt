@@ -1,0 +1,194 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate attributes for a classifier
+«DEFINE AttributeDecl FOR MClassifier-»
+«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
+«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
+«ENDDEFINE»
+
+
+«DEFINE AttributeDerivedImpl FOR MClassifier-»
+«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-»
+«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static && e.derived)-»
+«ENDDEFINE»
+
+
+// generate getter and setter methodes for all attributes of a classifier
+«DEFINE GetterSetterImpl FOR MClass-»
+«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
+«FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-»
+	«EXPAND GetterImpl FOR a-»
+	«EXPAND SetterImpl FOR a-»
+	«EXPAND IteratorImpl FOR a-»
+	«EXPAND InsertInImpl FOR a-»
+	«EXPAND RemoveFromImpl FOR a-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+// generate a declaration for an attribute
+«DEFINE AttributeDecl FOR MAttribute-»
+«EXPAND _CommentAttribute-»
+«IF multiplicity == 1-»
+	«EXPAND _Modifier» «typeMap(type.name())» «asAttributeName()» «EXPAND _DefaultValue»;
+«ELSE-»
+	«EXPAND _Modifier» «typeMap("Set")» «asAttributeName()» = new «typeMap("Set", "Implementation")»();
+«ENDIF-»
+«ENDDEFINE»
+
+
+«DEFINE AttributeDerivedImpl FOR MAttribute-»
+«EXPAND _CommentGetter-»
+«IF multiplicity == 1-»
+	«EXPAND _Modifier» «typeMap(type.name())» «asGetter(name)»() {
+		«getReturnTypeDeclaration(typeMap(type.name()))»
+		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
+		«getReturnTypeReturn(typeMap(type.name()))»
+	}
+«ELSE-»
+	«EXPAND _Modifier» «typeMap("Set")» «asGetter(name)»() {
+		«getReturnTypeDeclaration(typeMap(type.name()))»
+		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
+		«getReturnTypeReturn(typeMap(type.name()))»
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a getter implementation method for a mattribute
+«DEFINE GetterImpl FOR MAttribute-»
+«EXPAND _CommentGetter-»
+«IF multiplicity == 1-»
+	public «IF static»static«ENDIF» «typeMap(type.name())» «asGetter(name)»() {
+		return «asAttributeName()»;
+	}
+«ELSE-»
+	public «IF static»static«ENDIF» «typeMap("Set")» «asGetter(name)»() {
+		return java.util.Collections.unmodifiableSet(«asAttributeName()»);
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a setter implementation method for a mattribute
+«DEFINE SetterImpl FOR MAttribute-»
+«EXPAND _CommentAccessor-»
+«IF multiplicity == 1-»
+	public «IF static»static«ENDIF» void «asSetter(name)»(«typeMap(type.name())» _«asAttributeName()») {
+		«asAttributeName()» = _«asAttributeName()»;
+	}
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a iterator implementation method for a mattribute
+«DEFINE IteratorImpl FOR MAttribute-»
+«IF multiplicity != 1-»
+	«EXPAND _CommentAccessor-»
+	public «IF static»static«ENDIF» java.util.Iterator «asIterator(name)»() {
+		return «asAttributeName()».iterator();
+	}
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a insert in implementation method
+«DEFINE InsertInImpl FOR MAttribute-»
+«IF multiplicity != 1-»
+	«EXPAND _CommentAccessor-»
+	public «IF static»static«ENDIF» void «asInsertIn(name)»(«typeMap(type.name())» _in) {
+		if («asAttributeName()».contains(_in)) {
+			return;
+		}
+		«asAttributeName()».add(_in);
+	}
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a remove from implementation method
+«DEFINE RemoveFromImpl FOR MAttribute-»
+«IF multiplicity != 1-»
+	«EXPAND _CommentAccessor-»
+	public void «asRemoveFrom(name)»(«typeMap(type.name())» _ex) {
+		if (!«asAttributeName()».contains(_ex)) {
+			return;
+		}
+		«asAttributeName()».remove(_ex);
+	}
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE _CommentAttribute FOR MAttribute-»
+/**
+ * variable
+«IF hasComment()-»
+ * @see {@link «asGetter(name)»}
+«ENDIF-»
+ */
+«ENDDEFINE»
+
+
+«DEFINE _CommentGetter FOR MAttribute-»
+/**
+ * accessor for attribute «asAttributeName()»
+«IF hasComment()-»
+ * «getCommentText(ownedComment)»
+«ENDIF-»
+ */
+«ENDDEFINE»
+
+
+«DEFINE _CommentAccessor FOR MAttribute-»
+/**
+ * accessor for attribute «asAttributeName()»
+«IF hasComment()-»
+ * @see {@link «asGetter(name)»}
+«ENDIF-»
+ */
+«ENDDEFINE»
+
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MAttribute-»
+/* «PROTECT CSTART "<!-- " CEND " -->" ID (proRegId)» */
+/* <!-- TODO put your own implementation code here --> */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+
+// generate modifiers for mattribute
+«DEFINE _Modifier FOR MAttribute-»
+«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF»
+«ENDDEFINE»
+
+
+// generate defaultvalue for mattribute
+«DEFINE _DefaultValue FOR MAttribute-»
+«IF defaultvalue.length > 0»= «defaultvalue»«ENDIF»
+«ENDDEFINE»
