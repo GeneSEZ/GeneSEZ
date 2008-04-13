@@ -1,0 +1,93 @@
+«REM»
+	Operation template for C# classes
+	
+	@autor	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+
+«IMPORT de::genesez::platforms::dotnet::csharp»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate constructors for a class
+«ENDREM»
+«DEFINE ConstructorImpl FOR MClass-»
+«EXPAND _ConstructorImpl FOREACH constructors()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate abstract operation delcarations for a class
+«ENDREM»
+«DEFINE OperationDecl FOR MClass-»
+«EXPAND _OperationDecl FOREACH abstractMethods()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate static operation delcarations for a class
+«ENDREM»
+«DEFINE StaticOperationImpl FOR MClass-»
+«EXPAND _OperationImpl FOREACH staticMethods()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate public operations for a class
+«ENDREM»
+«DEFINE PublicOperationImpl FOR MClass-»
+«EXPAND _OperationImpl FOREACH publicMethods()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate private operations for a class
+«ENDREM»
+«DEFINE PrivateOperationImpl FOR MClass-»
+«EXPAND _OperationImpl FOREACH privateMethods()-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate an implementation for a constructor
+«ENDREM»
+«DEFINE _ConstructorImpl FOR MOperation-»
+«EXPAND templates::Operation::ConstructorImpl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate an declaration for an operation
+«ENDREM»
+«DEFINE _OperationDecl FOR MOperation-»
+«EXPAND templates::Operation::OperationDecl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a implementation for an operation
+«ENDREM»
+«DEFINE _OperationImpl FOR MOperation-»
+«EXPAND templates::Operation::OperationImpl-»
+«ENDDEFINE»
+

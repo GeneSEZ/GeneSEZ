@@ -1,0 +1,248 @@
+«REM»
+	Association Template for C#
+	
+	@author	Gerrit Beine
+	@date	2008/01/25
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate field declaration for an association
+«ENDREM»
+«DEFINE FieldDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _Field( asClassifierName(type),
+		                asFieldName() )-»
+	«ELSE-»
+		«EXPAND _Field( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
+		                asFieldName() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _Field( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
+	                asFieldName() )-»
+«ENDIF»
+«ENDDEFINE»
+
+
+«REM»
+	generate property declaration for an association
+«ENDREM»
+«DEFINE PropertyDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _PropertyDecl( asClassifierName(type),
+		                    asPropertyName() )-»
+	«ELSE-»
+		«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
+		                    asPropertyName() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
+	                    asPropertyName() )-»
+	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
+                        asPropertyName() + assocClass().name )-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	generate property implementation for an association
+«ENDREM»
+«DEFINE PropertyImpl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«IF multiplicity == 1-»
+		«EXPAND _PropertyImpl( asClassifierName(type),
+		                   asPropertyName() )-»
+	«ELSE-»
+		«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
+		                   asPropertyName() )-»
+	«ENDIF-»
+«ELSE-»
+	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
+	                   asPropertyName() )-»
+	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + assocClass().name() + ">",
+                       asPropertyName() + assocClass().name )-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into declaration for an association
+«ENDREM»
+«DEFINE InsertDecl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«EXPAND _AddToDecl(asAddTo(name), asClassifierName(type))»
+«ELSE-»
+	«EXPAND _InsertIntoDecl(asAddTo(name), asClassifierName(type),  assocClass().name)»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into implementation for an association
+«ENDREM»
+«DEFINE InsertImpl FOR MAssociationRole-»
+«IF isPlainAssociation()-»
+	«EXPAND _AddToImpl(asAddTo(name), asClassifierName(type))»
+«ELSE-»
+	«EXPAND _InsertIntoImpl(asAddTo(name), asClassifierName(type),  assocClass().name)»
+«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM»
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE RemoveDecl FOR MAssociationRole-»
+	«EXPAND _RemoveDecl(asRemoveFrom(name), asClassifierName(type))-»
+«ENDDEFINE»
+
+
+«REM»
+	generate remove from implementation for an association
+«ENDREM»
+«DEFINE RemoveImpl FOR MAssociationRole-»
+	«EXPAND _RemoveImpl(asRemoveFrom(name), asClassifierName(type))-»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generate field declaration for an association
+«ENDREM»
+«DEFINE _Field(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»«type» «name»;
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate property declaration for an association
+«ENDREM»
+«DEFINE _PropertyDecl(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»«type» «asPropertyName()»
+		{
+			get;
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate property implementation for an association
+«ENDREM»
+«DEFINE _PropertyImpl(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»«type» «name»
+		{
+			get { return this.«asFieldName()»; }
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate add to declaration for an association
+«ENDREM»
+«DEFINE _AddToDecl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»void «name»(«type» _add);
+		
+«ENDDEFINE»
+
+«REM»
+	generate add to implementation for an association
+«ENDREM»
+«DEFINE _AddToImpl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»void «name»(«type» _add)
+		{
+			// TODO: implement in template
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into declaration for an association
+«ENDREM»
+«DEFINE _InsertIntoDecl(String name, String type, String aClass) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»void «name»(«type» _insert, «aClass» _at);
+		
+«ENDDEFINE»
+
+«REM»
+	generate insert into implementation for an association
+«ENDREM»
+«DEFINE _InsertIntoImpl(String name, String type, String aClass) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»void «name»(«type» _insert, «aClass» _at)
+		{
+			// TODO: implement in template
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate remove from declaration for an association
+«ENDREM»
+«DEFINE _RemoveDecl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»void «name»(«type» _remove);
+«ENDDEFINE»
+
+«REM»
+	generate remove from implementation for an association
+«ENDREM»
+«DEFINE _RemoveImpl(String name, String type) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier»void «name»(«type» _remove)
+		{
+			// TODO: implement in template
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate modifier for an association
+«ENDREM»
+«DEFINE _Modifier FOR MAssociationRole-»
+«IF classifier.metaType != MInterface-»
+		«visibility -»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate comment
+«ENDREM»
+«DEFINE _Comment FOR MAssociationRole-»
+«IF hasComment()-»
+		/// «getCommentText(ownedComment)»
+«ENDIF-»
+«ENDDEFINE»
+
