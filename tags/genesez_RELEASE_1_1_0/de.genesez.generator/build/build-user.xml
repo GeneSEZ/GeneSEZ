@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<!--
+	ant build file for creating generator jar library
+	@author	dreamer
+	
+	includes following ant tasks:
+	- jar library creation of the genesez generator
+	  [ genesezGen2jar ] 
+-->
+
+<project name="de.genesez.generator" basedir=".." default="">
+	
+	<!--
+		include generator classpath
+		provides classpathref 'de.genesez.generator.classpath'
+	-->
+	<import file="build-cp.xml" />
+	
+	<property name="bin.dir" value="bin" />
+	<property name="script.dir" value="script" />
+	<property name="workflow.dir" value="workflow" />
+	<property name="dist.dir" value="dist" />
+	<property name="dist.lib.eclipse.dir" value="dist/lib/eclipse" />
+	<property name="dist.lib.emf.dir" value="dist/lib/emf" />
+	<property name="dist.lib.uml2.dir" value="dist/lib/uml2" />
+	<property name="dist.lib.oaw.dir" value="dist/lib/oaw" />
+	
+	<!--
+		create jar library + copy all referenced libraries
+	-->
+	<target name="genesezGen2jar"
+		description="creates a jar library which contains the genesez generator + copies all referenced libraries to the distribution dir">
+		
+		<!-- build jar file -->
+		<jar destfile="${dist.dir}/genesezGen.jar">
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${script.dir}" />
+			<fileset dir="${workflow.dir}" />
+			<manifest>
+				<section name="de">
+					<attribute name="Specification-Title" value="GeneSEZ Generator"/>
+					<attribute name="Specification-Version" value="1.0.0"/>
+					<attribute name="Specification-Vendor" value="Zwickau University of Applied Sciences"/>
+					<attribute name="Implementation-Title" value="GeneSEZ Generator"/>
+					<attribute name="Implementation-Version" value="1.0.0"/> 
+					<attribute name="Implementation-Vendor" value="Zwickau University of Applied Sciences"/>
+				</section>
+			</manifest>
+		</jar>
+		
+		<!-- copy referenced libraries -->
+		<copy todir="${dist.lib.eclipse.dir}">
+			<fileset refid="eclipse.plugins" />
+		</copy>
+		<copy todir="${dist.lib.emf.dir}">
+			<fileset refid="emf.plugins" />
+		</copy>
+		<copy todir="${dist.lib.uml2.dir}">
+			<fileset refid="uml2.plugins" />
+		</copy>
+		<copy todir="${dist.lib.oaw.dir}" flatten="true">
+			<fileset refid="oaw.plugins" />
+		</copy>
+	</target>
+	
+	<!-- cleaning lady -->
+	<target name="clean"
+			description="clears the distribution directory">
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+</project>
