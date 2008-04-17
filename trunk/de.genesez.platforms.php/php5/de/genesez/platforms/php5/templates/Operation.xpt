@@ -137,7 +137,11 @@
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
 «FOREACH parameter AS p SEPARATOR ", " -»
+«IF p.multiplicity == 1 -»
 «p.type.mapName().asTypeName(p.type)» $«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«ELSE -»
+array $«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -146,8 +150,18 @@
 	@param	this	an operation
 «ENDREM»
 «DEFINE _OwnCodeImpl(String id) FOR MOperation -»
+«IF isConstructor() -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
+		«ENDPROTECT»
+«ELSEIF isDestructor() -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of destructor for class '«classifier.asTypeName()»'
+		«ENDPROTECT»
+«ELSE -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
 		«ENDPROTECT»
+«ENDIF -»
 «ENDDEFINE»
 

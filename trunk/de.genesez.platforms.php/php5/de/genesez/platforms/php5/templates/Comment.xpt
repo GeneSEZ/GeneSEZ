@@ -278,7 +278,11 @@
 	generates the @param tag
 «ENDREM»
 «DEFINE _Parameter FOR MParameter -»
+«IF multiplicity == 1 -»
 	 * @param	«type.mapName().asTypeName(type)»	$«asParameter()»	«ownedComment.getCommentText()»
+«ELSE -»
+	 * @param	array	$«asParameter()»	«ownedComment.getCommentText()»
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -292,7 +296,7 @@
 	generates the exceptions that may be thrown by an operation
 «ENDREM»
 «DEFINE _ExceptionLink FOR MType -»
-	 * @see		«mapName().asTypeName(this)»
+	 * @throws		«mapName().asTypeName(this)»
 «ENDDEFINE»
 
 «REM»
