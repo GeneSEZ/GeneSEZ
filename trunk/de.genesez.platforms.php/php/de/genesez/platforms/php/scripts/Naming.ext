@@ -85,7 +85,7 @@ String asConstant(MAttribute this) : name.toUpperCase();
  * @context	the attribute to format
  * @return	the formatted attribute name
  */
-String asAttribute(MAttribute this) : name;
+String asAttribute(MAttribute this) : name.toFirstLower();
 
 /**
  * formats an attribute name as a getter method
@@ -127,7 +127,7 @@ String asRemoveFrom(MAttribute this) : "removeFrom" + name.toFirstUpper();
  * @context	the association role to format
  * @return	the formatted name of the association attribute
  */
-String asAttribute(MAssociationRole this) : name;
+String asAttribute(MAssociationRole this) : name.toFirstLower();
 
 /**
  * formats an association role as a getter method
@@ -194,3 +194,17 @@ String asConstructor(MOperation this) : name.toFirstUpper();
  */
 String asParameter(MParameter this) : name.toFirstLower();
 
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type compatibility functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats a property as an attribute
+ * just there for error-free templates (polymorphism)
+ * @see	asAttribute(MAttribute this)
+ * @see asAttribtue(MAssociationRole this)
+ */
+String asAttribute(MProperty this) : name.toFirstLower();
