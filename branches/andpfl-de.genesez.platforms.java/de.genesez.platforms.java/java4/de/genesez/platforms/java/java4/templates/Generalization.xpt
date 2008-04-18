@@ -1,0 +1,47 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate generalization for a minterface
+«DEFINE Generalization FOR MInterface-»
+«IF !generalization.isEmpty-»
+	extends «generalization.first().mapName()»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate generalization for a mclass
+«DEFINE Generalization FOR MClass-»
+«IF !generalization.isEmpty-»
+	extends «generalization.first().mapName()»
+«ENDIF-»
+«ENDDEFINE»
+
+// generate generalization for a mclass
+«DEFINE Generalization FOR MDataType-»
+«IF !generalization.isEmpty-»
+	extends «generalization.first().mapName()»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
