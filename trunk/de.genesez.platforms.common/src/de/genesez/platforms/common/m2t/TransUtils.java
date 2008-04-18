@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import de.genesez.io.IOExtensions;
 import de.genesez.platforms.common.Conversion;
+import de.genesez.platforms.common.log.IOExtensions;
 
 /**
  * Provides some utilities and helper functions for M2T transformations

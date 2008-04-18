@@ -1,4 +1,4 @@
-package de.genesez.io;
+package de.genesez.platforms.common.log;
 
 import java.util.logging.Level;
 
