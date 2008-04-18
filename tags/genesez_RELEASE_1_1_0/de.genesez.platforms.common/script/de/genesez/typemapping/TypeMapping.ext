@@ -1,0 +1,63 @@
+//	based on genesez meta model
+import genesezMM;
+
+extension de::genesez::io::io;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * performs type mapping
+ * @param	map	type to map
+ * @return	the mapped type
+ */
+String typeMap(String map) :
+	typeMapping(xmlMappingFile(), map);
+
+/**
+ * performs type mapping using the specified context
+ * @param	map		type to map
+ * @param	context	context in which the type should be mapped
+ * @return	the mapped type
+ */
+String typeMap(String map, String mapContext) :
+	typeMapping(xmlMappingFile(), map, mapContext);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * accessor for the global variable 'xmlMappingFile'
+ */
+private String xmlMappingFile(): GLOBALVAR xmlMappingFile;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * maps the type using a specified xml file
+ * @param	xmlFile	file describing the type mapping
+ * @param	map		type to map
+ * @return	the mapped type
+ */
+private String typeMapping(String xmlFile, String map) :
+	JAVA de.genesez.typemapping.TypeMapping.typeMapping(java.lang.String, java.lang.String);
+
+/**
+ * maps the type using a specified file and a specified context
+ * @param	xmlFile	file describing the type mapping
+ * @param	map		type to map
+ * @param	context	context in which the type should be mapped
+ * @return	the mapped type
+ */
+private String typeMapping(String xmlFile, String map, String mapContext) :
+	JAVA de.genesez.typemapping.TypeMapping.typeMapping(java.lang.String, java.lang.String, java.lang.String);
