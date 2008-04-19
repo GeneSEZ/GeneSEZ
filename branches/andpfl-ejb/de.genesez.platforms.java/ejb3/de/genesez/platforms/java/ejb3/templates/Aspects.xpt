@@ -1,0 +1,100 @@
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for Enterprise JavaBeans (Version 3)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	check for stereotype "ejb3Remote" and taggedValue "stateful" in Class::Root for MClass
+
+«AROUND de::genesez::platforms::java::java5::templates::Class::Root FOR MClass-»
+	«IF !hasStereotype("ejb3Remote")»
+		«targetDef.proceed()»
+	«ELSEIF hasStereotype("ejb3Remote") || hasTaggedValue("ejb3Remote", "stateful")»
+		package «getPackagePath()»;
+		«EXPAND de::genesez::platforms::java::java5::templates::Import::Import-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Class::_CommentClassifier-»
+		@Remote
+		«IF hasTaggedValue("ejb3Remote", "stateful", "true")»
+			@Stateful
+		«ELSEIF hasTaggedValue("ejb3Remote", "stateful", "false")»
+			@Stateless
+		«ENDIF»		
+		«EXPAND de::genesez::platforms::java::java5::templates::Class::Class-»
+	«ENDIF»
+«ENDAROUND»
+«ENDREM»
+
+«REM»
+	check for stereotype "ejb3Entity" in Class::Root for MClass
+
+«AROUND de::genesez::platforms::java::java5::templates::Class::Root FOR MClass-»
+	«IF !hasStereotype("ejb3Entity")»
+		«targetDef.proceed()»
+	«ELSEIF hasStereotype("ejb3Entity")»
+		package «getPackagePath()»;
+		«EXPAND de::genesez::platforms::java::java5::templates::Import::Import-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Class::_CommentClassifier-»
+		@Entity
+		@Table(name="«mapName()»")	
+		«EXPAND de::genesez::platforms::java::java5::templates::Class::Class-»
+	«ENDIF»
+«ENDAROUND»
+«ENDREM»
+
+«REM»
+	check for stereotype "ejb3Id" in Class::Attribute for MAttribute
+
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::AttributeDecl FOR MAttribute-»
+	«IF !hasStereotype("ejb3Id") && !hasStereotype("ejb3GeneratedValue")»
+		«targetDef.proceed()»
+	«ELSEIF hasStereotype("ejb3Id") || hasStereotype("ejb3GeneratedValue")»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_CommentAttribute-»
+		«IF hasStereotype("ejb3Id")»
+			@Id
+		«ENDIF-»
+		«IF hasStereotype("ejb3GeneratedValue")»
+			@GeneratedValue(strategy=GenerationType.AUTO)
+		«ENDIF-»
+		«IF multiplicity == 1-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «type.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Generics» «asAttributeName()» «EXPAND de::genesez::platforms::java::java5::templates::Attribute::_DefaultValue»;
+		«ELSE-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «mapType()»<«type.mapName()»> «asAttributeName()» = new «mapType("Implementation")»<«type.mapName()»>();
+		«ENDIF-»
+	«ENDIF-»
+«ENDAROUND»
+«ENDREM»
+
+«REM»
+	check for stereotype "ejb3PersistenceContext" in Class::Attribute for MAttribute
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::AttributeDecl FOR MAttribute-»
+	«IF !hasStereotype("ejb3Persistence")»
+		«targetDef.proceed()»
+	«ELSEIF hasStereotype("ejb3Persistence")»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_CommentAttribute-»
+		«IF hasTaggedValue("ejb3Persistence", "context", "true")»
+			@PersistenceContext
+		«ENDIF-»
+		«IF multiplicity == 1-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «type.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Generics» «asAttributeName()» «EXPAND de::genesez::platforms::java::java5::templates::Attribute::_DefaultValue»;
+		«ELSE-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «mapType()»<«type.mapName()»> «asAttributeName()» = new «mapType("Implementation")»<«type.mapName()»>();
+		«ENDIF-»
+	«ENDIF-»
+«ENDAROUND»
+«ENDREM»

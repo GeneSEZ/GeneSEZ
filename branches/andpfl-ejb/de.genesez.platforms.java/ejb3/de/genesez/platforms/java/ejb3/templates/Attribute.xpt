@@ -1,0 +1,31 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+«DEFINE Annotation FOR MAttribute»
+	«IF hasStereotype("ejb3Id")»
+		@Id
+	«ENDIF»
+	«IF hasStereotype("ejb3GeneratedValue")»
+		@GeneratedValue(strategy=GenerationType.AUTO)
+	«ENDIF»
+	«IF hasTaggedValue("ejb3Persistence", "context", "true")»
+		@PersistenceContext
+	«ENDIF»
+«ENDDEFINE»

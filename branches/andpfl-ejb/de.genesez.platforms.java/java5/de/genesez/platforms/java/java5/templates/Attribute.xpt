@@ -21,66 +21,66 @@
 
 // generate attributes for a classifier
 «DEFINE AttributeDecl FOR MClassifier-»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
-«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
+	«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
+	«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
 «ENDDEFINE»
-
-
+	
+	
 «DEFINE AttributeDerivedImpl FOR MClassifier-»
-«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-»
-«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static && e.derived)-»
+	«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|e.static && e.derived)-»
+	«EXPAND AttributeDerivedImpl FOREACH property.typeSelect(MAttribute).select(e|!e.static && e.derived)-»
 «ENDDEFINE»
 
 
 // generate getter and setter methods for all attributes of a classifier
 «DEFINE AccessorImpl FOR MClass-»
-«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
-«FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-»
-	«EXPAND GetterImpl FOR a-»
-	«EXPAND SetterImpl FOR a-»
-	«EXPAND InsertInImpl FOR a-»
-	«EXPAND RemoveFromImpl FOR a-»
-«ENDFOREACH-»
+	«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|e.final && !e.derived)-»
+	«FOREACH property.typeSelect(MAttribute).select(e|!e.final && !e.derived) AS a-»
+		«EXPAND GetterImpl FOR a-»
+		«EXPAND SetterImpl FOR a-»
+		«EXPAND InsertInImpl FOR a-»
+		«EXPAND RemoveFromImpl FOR a-»
+	«ENDFOREACH-»
 «ENDDEFINE»
 
 // generate getter methods for all attributes of a data type
 «DEFINE GetterImpl FOR MDataType-»
-«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|!e.derived)-»
+	«EXPAND GetterImpl FOREACH property.typeSelect(MAttribute).select(e|!e.derived)-»
 «ENDDEFINE»
 
 
 // generate a declaration for an attribute
 «DEFINE AttributeDecl FOR MAttribute-»
-«EXPAND _CommentAttribute-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «type.mapName()»«EXPAND _Generics» «asAttributeName()» «EXPAND _DefaultValue»;
-«ELSE-»
-	«EXPAND _Modifier» «mapType()»<«type.mapName()»> «asAttributeName()» = new «mapType("Implementation")»<«type.mapName()»>();
-«ENDIF-»
+	«EXPAND _CommentAttribute-»	
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Attribute::Annotation-»
+	«IF multiplicity == 1-»
+		«EXPAND _Modifier» «type.mapName()»«EXPAND _Generics» «asAttributeName()» «EXPAND _DefaultValue»;
+	«ELSE-»
+		«EXPAND _Modifier» «mapType()»<«type.mapName()»> «asAttributeName()» = new «mapType("Implementation")»<«type.mapName()»>();
+	«ENDIF-»
 «ENDDEFINE»
 
 
 «DEFINE AttributeDerivedImpl FOR MAttribute-»
-«EXPAND _CommentGetter-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «type.mapName()» «asGetter(name)»() {
-		«getReturnTypeDeclaration(type.mapName())»
-		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(type.mapName())»
-	}
-«ELSE-»
-	«EXPAND _Modifier» «mapType()»<«type.mapName()»> «asGetter(name)»() {
-		«getReturnTypeDeclaration(type.mapName())»
-		«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
-		«getReturnTypeReturn(type.mapName())»
-	}
-«ENDIF-»
+	«EXPAND _CommentGetter-»
+	«IF multiplicity == 1-»
+		«EXPAND _Modifier» «type.mapName()» «asGetter(name)»() {
+			«getReturnTypeDeclaration(type.mapName())»
+			«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
+			«getReturnTypeReturn(type.mapName())»
+		}
+	«ELSE-»
+		«EXPAND _Modifier» «mapType()»<«type.mapName()»> «asGetter(name)»() {
+			«getReturnTypeDeclaration(type.mapName())»
+			«EXPAND _OwnCodeImpl("java.mattribute.implementation.attribute.code." + xmiGuid)-»
+			«getReturnTypeReturn(type.mapName())»
+		}
+	«ENDIF-»
 «ENDDEFINE»
 
 
 // generate a getter implementation method for a mattribute
 «DEFINE GetterImpl FOR MAttribute-»
-«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "getter", "true")»
 	«EXPAND _CommentGetter-»
 	«IF multiplicity == 1-»
 		public «IF static»static«ENDIF» «type.mapName()» «asGetter(name)»() {
@@ -95,13 +95,11 @@
 			«ENDIF-»
 		}
 	«ENDIF-»
-«ENDIF-»
 «ENDDEFINE»
 
 
-// generate a setter implementation method for a mattribute
+// generate a setter implementation method for a MAttribute
 «DEFINE SetterImpl FOR MAttribute-»
-«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
 	«IF multiplicity == 1-»
 		«EXPAND _CommentAccessor-»
 		public «IF static»static«ENDIF» void «asSetter(name)»(«type.mapName()» _«asAttributeName()») {
@@ -109,7 +107,6 @@
 		}
 	«ELSE-»
 	«ENDIF-»
-«ENDIF-»
 «ENDDEFINE»
 
 

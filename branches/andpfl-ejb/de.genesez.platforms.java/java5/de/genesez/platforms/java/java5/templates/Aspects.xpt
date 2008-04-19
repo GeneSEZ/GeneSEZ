@@ -1,0 +1,116 @@
+«REM» based on genesez meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for associations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "getter" in GetterDecl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::GetterDecl FOR MAssociationRole-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "getter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "getter" in GetterImpl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::GetterImpl FOR MAssociationRole-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "getter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "setter" in InsertInDecl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::InsertInDecl FOR MAssociationRole-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "setter" in RemoveFromDecl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::RemoveFromDecl FOR MAssociationRole-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "setter" in InsertInImpl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::InsertInImpl FOR MAssociationRole-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "setter" in RemoveFromImpl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::RemoveFromImpl FOR MAssociationRole-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "getter" in GetterImpl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::GetterImpl FOR MAttribute-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "getter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "setter" in InsertInImpl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::InsertInImpl FOR MAttribute-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "setter" in RemoveFromImpl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::RemoveFromImpl FOR MAttribute-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	check for stereotype "accessor" and taggedValue "setter" in SetterImpl
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::SetterImpl FOR MAttribute-»
+	«IF !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")»
+		«targetDef.proceed()»
+	«ENDIF»
+«ENDAROUND»
