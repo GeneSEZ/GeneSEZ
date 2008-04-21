@@ -8,6 +8,7 @@
 	- default value for params
 	- type mapping, param types
 	- comment support with exceptions
+	- type hints are not used!
 	
 	TODO:
 	- revise default return value when included in typemapping xml file
@@ -94,7 +95,7 @@
 	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -») {
 		«IF hasReturnType()»$returnValue = NULL;«ENDIF»
 		«EXPAND _OwnCodeImpl("php.implementation." + xmiGuid) -»
-		«IF hasReturnType()»return returnValue;«ENDIF»
+		«IF hasReturnType()»return $returnValue;«ENDIF»
 	}
 «ENDDEFINE»
 
@@ -138,9 +139,9 @@
 «DEFINE _Params FOR MOperation -»
 «FOREACH parameter AS p SEPARATOR ", " -»
 «IF p.multiplicity == 1 -»
-«p.type.mapName().asTypeName(p.type)» $«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«REM»«p.type.mapName().asTypeName(p.type)» «ENDREM»$«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
 «ELSE -»
-array $«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«REM»array «ENDREM»$«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
 «ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»

@@ -33,6 +33,7 @@
 	«EXPAND _Create -»
 	«EXPAND _Edit -»
 	«EXPAND _List -»
+	«EXPAND _Delete -»
 «ENDDEFINE»
 
 
@@ -123,6 +124,38 @@ class «asEditActionClassName()» {
 ?>
 «ENDFILE»
 «ENDDEFINE»
+
+«REM»
+	generates a delete action class
+«ENDREM»
+«DEFINE _Delete FOR MClass -»
+«FILE asDeleteActionFilename()»
+<?php
+«EXPAND _Includes -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.delete.includes." + xmiGuid)»
+// TODO: put your further includes for class '«asDeleteActionClassName()»' here
+«ENDPROTECT»
+
+class «asDeleteActionClassName()» {
+	public static function main() {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.delete.main.impl." + xmiGuid)»
+		// TODO: put your implementation for '«asDeleteActionClassName()»::main()' here
+		«ENDPROTECT»
+	}
+	
+	«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.delete.own.impl." + xmiGuid)»
+	// TODO: put your further implementations for the '«asDeleteActionClassName()»' here
+	«ENDPROTECT»
+}
+«asDeleteActionClassName()»::main();
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
 
 «REM»
 	generates the include for the 'bootstrap' file
