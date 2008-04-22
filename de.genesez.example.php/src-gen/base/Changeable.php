@@ -23,18 +23,14 @@ require_once '../base/Changeable.php';
 interface Changeable  {
 	
 	// -- attributes --------------------------------------------------------
-	
 	/**
-	 * @var		int	$DEFAULT_PERIOD	
+	 * @var		int	$dEFAULT_PERIOD	
 	 * @see		Changeable::getDEFAULT_PERIOD()
 	 */
 	const DEFAULT_PERIOD  = 66;
 	
-	// -- associations ------------------------------------------------------
 	
-	// -- method declarations -----------------------------------------------
 	
-	// -- association accessors ---------------------------------------------
 	
 	// -- own code declarations -------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._11_5_6340215_1179139231828_754744_209) ENABLED START */

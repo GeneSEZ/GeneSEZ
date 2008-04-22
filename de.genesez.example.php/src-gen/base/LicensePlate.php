@@ -20,10 +20,9 @@ require_once '../base/Car.php';
  * @author	dreamer
  * @package	base
  */
- class LicensePlate   {
+class LicensePlate   {
 	
 	// -- attributes --------------------------------------------------------
-	
 	/**
 	 * @var		string	$key	
 	 * @see		LicensePlate::getKey()
@@ -31,23 +30,17 @@ require_once '../base/Car.php';
 	private $key;
 	
 	// -- associations ------------------------------------------------------
-	
 	/**
 	 * @var		Car	$car	
 	 * @see		LicensePlate::getCar()
 	 */
 	private $car;
 	
-	// -- constructors + destructors ----------------------------------------
 	
-	// -- method declarations -----------------------------------------------
 	
-	// -- method implementations --------------------------------------------
 	
-	// -- methods for derived attributes ------------------------------------
 	
 	// -- association accessors ---------------------------------------------
-	
 	/**
 	 * getter for the association attribute $car
 	 * 
@@ -59,7 +52,6 @@ require_once '../base/Car.php';
 	private function getCar() {
 		return $car;
 	}
-	
 	/**
 	 * setter for the association attribute $car
 	 * @param	Car	$car	the value to set
@@ -70,7 +62,6 @@ require_once '../base/Car.php';
 	}
 	
 	// -- attribute accessors -----------------------------------------------
-	
 	/**
 	 * getter for the attribute $key
 	 * 
@@ -82,7 +73,6 @@ require_once '../base/Car.php';
 	private function getKey() {
 		return $key;
 	}
-	
 	/**
 	 * setter for the attribute $key
 	 * @param	string	$key	the value to set

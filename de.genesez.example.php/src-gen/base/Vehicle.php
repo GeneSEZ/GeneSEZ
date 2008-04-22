@@ -27,22 +27,18 @@ require_once '../base/NotReallySeriousException.php';
 abstract class Vehicle   {
 	
 	// -- attributes --------------------------------------------------------
-	
 	/**
 	 * @var		string	$make	
 	 * @see		Vehicle::getMake()
 	 */
 	private $make;
-	
 	/**
 	 * @var		VehicleStatus	$state	
 	 * @see		Vehicle::getState()
 	 */
 	private $state;
 	
-	// -- associations ------------------------------------------------------
 	
-	// -- constructors + destructors ----------------------------------------
 	
 	// -- method declarations -----------------------------------------------
 	/**
@@ -50,22 +46,19 @@ abstract class Vehicle   {
 	 * 
 	 * the operation may throw the following exceptions:
 	 * {@link WhatAMessException WhatAMessException}, {@link NotReallySeriousException NotReallySeriousException}
-	 * @see		WhatAMessException
-	 * @see		NotReallySeriousException
+	 * @throws		WhatAMessException
+	 * @throws		NotReallySeriousException
 	 * 
 	 * @param	int	$distance	
 	 * @return	boolean	
 	 */
-	public abstract function drive(int $distance);
+	public abstract function drive($distance);
 	
 	// -- method implementations --------------------------------------------
 	
-	// -- methods for derived attributes ------------------------------------
 	
-	// -- association accessors ---------------------------------------------
 	
 	// -- attribute accessors -----------------------------------------------
-	
 	/**
 	 * getter for the attribute $make
 	 * 
@@ -77,7 +70,6 @@ abstract class Vehicle   {
 	private function getMake() {
 		return $make;
 	}
-	
 	/**
 	 * setter for the attribute $make
 	 * @param	string	$make	the value to set
@@ -86,7 +78,6 @@ abstract class Vehicle   {
 	private function setMake(string $make) {
 		self::$make = $make;
 	}
-	
 	/**
 	 * getter for the attribute $state
 	 * 
@@ -98,7 +89,6 @@ abstract class Vehicle   {
 	private function getState() {
 		return $state;
 	}
-	
 	/**
 	 * setter for the attribute $state
 	 * @param	VehicleStatus	$state	the value to set

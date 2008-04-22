@@ -27,10 +27,9 @@ require_once '../base/Vehicle.php';
  * @author	dreamer
  * @package	base
  */
- class Car extends Vehicle  {
+class Car extends Vehicle  {
 	
 	// -- attributes --------------------------------------------------------
-	
 	/**
 	 * @var		int	$maxSpeed	describs the maximum speed of a car
 	 * @see		Car::getMaxSpeed()
@@ -38,31 +37,26 @@ require_once '../base/Vehicle.php';
 	private $maxSpeed;
 	
 	// -- associations ------------------------------------------------------
-	
 	/**
 	 * @var		Wheel	$spare	reference to the spared wheel
 	 * @see		Car::getSpare()
 	 */
 	private $spare;
-	
 	/**
 	 * @var		License	$license	
 	 * @see		Car::getLicense()
 	 */
 	private $license;
-	
 	/**
 	 * @var		LicensePlate	$licensePlate	
 	 * @see		Car::getLicensePlate()
 	 */
 	private $licensePlate;
-	
 	/**
 	 * @var		Engine	$engine	
 	 * @see		Car::getEngine()
 	 */
 	private $engine;
-	
 	/**
 	 * @var		Wheel	$wheels	reference to normal wheels on a car
 	 * @see		Car::getWheels()
@@ -77,18 +71,17 @@ require_once '../base/Vehicle.php';
 	 * 
 	 * the constructor may throw the following exceptions:
 	 * {@link NotReallySeriousException NotReallySeriousException}
-	 * @see		NotReallySeriousException
+	 * @throws		NotReallySeriousException
 	 * 
 	 * @param	int	$mxs	maximum of speed
 	 * @param	string	$make	i don't know what make do
 	 */
-	public function __construct(int $mxs, string $make) {
+	public function __construct($mxs, $make) {
 		/* PROTECTED REGION ID(php.constructor._11_5_6340215_1179229080562_965427_117) ENABLED START */
 		// TODO: implementation of method 'Car.car(...)'
 		/* PROTECTED REGION END */
 	}
 	
-	// -- method declarations -----------------------------------------------
 	
 	// -- method implementations --------------------------------------------
 	/**
@@ -98,16 +91,15 @@ require_once '../base/Vehicle.php';
 	 * @param	int	$distance	
 	 * @return	boolean	
 	 */
-	public function drive(int $distance) {
+	public function drive($distance) {
 		$returnValue = NULL;
 		/* PROTECTED REGION ID(php.implementation._12_5_b6f02e1_1204102049578_778385_691) ENABLED START */
 		// TODO: implementation of method 'Car.drive(...)'
 		/* PROTECTED REGION END */
-		return returnValue;
+		return $returnValue;
 	}
 	
 	// -- methods for derived attributes ------------------------------------
-	
 	/**
 	 * getter for the attribute $noOfWheels
 	 * 
@@ -123,7 +115,6 @@ require_once '../base/Vehicle.php';
 	}
 	
 	// -- association accessors ---------------------------------------------
-	
 	/**
 	 * getter for the association attribute $spare
 	 * 
@@ -133,7 +124,6 @@ require_once '../base/Vehicle.php';
 	private function getSpare() {
 		return $spare;
 	}
-	
 	/**
 	 * setter for the association attribute $spare
 	 * @param	Wheel	$spare	the value to set
@@ -142,7 +132,6 @@ require_once '../base/Vehicle.php';
 	private function setSpare(Wheel $spare) {
 		self::$spare = $spare;
 	}
-	
 	/**
 	 * getter for the association attribute $license
 	 * 
@@ -154,7 +143,6 @@ require_once '../base/Vehicle.php';
 	private function getLicense() {
 		return $license;
 	}
-	
 	/**
 	 * setter for the association attribute $license
 	 * @param	License	$license	the value to set
@@ -163,7 +151,6 @@ require_once '../base/Vehicle.php';
 	private function setLicense(License $license) {
 		self::$license = $license;
 	}
-	
 	/**
 	 * getter for the association attribute $licensePlate
 	 * 
@@ -175,7 +162,6 @@ require_once '../base/Vehicle.php';
 	private function getLicensePlate() {
 		return $licensePlate;
 	}
-	
 	/**
 	 * setter for the association attribute $licensePlate
 	 * @param	LicensePlate	$licensePlate	the value to set
@@ -184,7 +170,6 @@ require_once '../base/Vehicle.php';
 	private function setLicensePlate(LicensePlate $licensePlate) {
 		self::$licensePlate = $licensePlate;
 	}
-	
 	/**
 	 * getter for the association attribute $engine
 	 * 
@@ -196,7 +181,6 @@ require_once '../base/Vehicle.php';
 	private function getEngine() {
 		return $engine;
 	}
-	
 	/**
 	 * setter for the association attribute $engine
 	 * @param	Engine	$engine	the value to set
@@ -205,7 +189,6 @@ require_once '../base/Vehicle.php';
 	private function setEngine(Engine $engine) {
 		self::$engine = $engine;
 	}
-	
 	/**
 	 * getter for the association attribute $wheels
 	 * 
@@ -215,7 +198,6 @@ require_once '../base/Vehicle.php';
 	private function getWheels() {
 		return array_values($wheels);
 	}
-	
 	/**
 	 * adds the given value to the association attribute $wheels
 	 * @param	Wheel	$toAdd	the value to add
@@ -224,7 +206,6 @@ require_once '../base/Vehicle.php';
 	private function insertInWheels(Wheel $toAdd) {
 		self::$wheels[] = $toAdd;
 	}
-	
 	/**
 	 * removes the given value from the association attribute $wheels
 	 * @param	Wheel	$toRemove	the value to remove
@@ -238,7 +219,6 @@ require_once '../base/Vehicle.php';
 	}
 	
 	// -- attribute accessors -----------------------------------------------
-	
 	/**
 	 * getter for the attribute $maxSpeed
 	 * 
@@ -248,7 +228,6 @@ require_once '../base/Vehicle.php';
 	private function getMaxSpeed() {
 		return $maxSpeed;
 	}
-	
 	/**
 	 * setter for the attribute $maxSpeed
 	 * @param	int	$maxSpeed	the value to set

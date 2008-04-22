@@ -20,23 +20,15 @@ require_once 'Exception';
  * @author	dreamer
  * @package	base
  */
- class WhatAMessException extends Exception  {
+class WhatAMessException extends Exception  {
 	
-	// -- attributes --------------------------------------------------------
 	
-	// -- associations ------------------------------------------------------
 	
-	// -- constructors + destructors ----------------------------------------
 	
-	// -- method declarations -----------------------------------------------
 	
-	// -- method implementations --------------------------------------------
 	
-	// -- methods for derived attributes ------------------------------------
 	
-	// -- association accessors ---------------------------------------------
 	
-	// -- attribute accessors -----------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._11_5_6340215_1179244945187_500153_35) ENABLED START */

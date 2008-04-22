@@ -22,23 +22,15 @@ require_once 'Exception';
  * @author	dreamer
  * @package	base
  */
- class NotReallySeriousException extends Exception  {
+class NotReallySeriousException extends Exception  {
 	
-	// -- attributes --------------------------------------------------------
 	
-	// -- associations ------------------------------------------------------
 	
-	// -- constructors + destructors ----------------------------------------
 	
-	// -- method declarations -----------------------------------------------
 	
-	// -- method implementations --------------------------------------------
 	
-	// -- methods for derived attributes ------------------------------------
 	
-	// -- association accessors ---------------------------------------------
 	
-	// -- attribute accessors -----------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._11_5_6340215_1179244974031_673010_60) ENABLED START */

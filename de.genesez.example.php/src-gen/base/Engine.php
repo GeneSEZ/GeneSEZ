@@ -20,16 +20,14 @@ require_once '../base/Car.php';
  * @author	dreamer
  * @package	base
  */
- class Engine   {
+class Engine   {
 	
 	// -- attributes --------------------------------------------------------
-	
 	/**
 	 * @var		byte	$ps	
 	 * @see		Engine::getPs()
 	 */
 	private $ps;
-	
 	/**
 	 * @var		string	$name	
 	 * @see		Engine::getName()
@@ -37,7 +35,6 @@ require_once '../base/Car.php';
 	private $name;
 	
 	// -- associations ------------------------------------------------------
-	
 	/**
 	 * @var		Car	$car	
 	 * @see		Engine::getCar()
@@ -50,20 +47,17 @@ require_once '../base/Car.php';
 	 * @param	byte	$ps	
 	 * @param	string	$name	
 	 */
-	public function __construct(byte $ps, string $name) {
+	public function __construct($ps, $name) {
 		/* PROTECTED REGION ID(php.constructor._12_5_8a7027a_1182275619895_618915_478) ENABLED START */
 		// TODO: implementation of method 'Engine.engine(...)'
 		/* PROTECTED REGION END */
 	}
 	
-	// -- method declarations -----------------------------------------------
 	
 	// -- method implementations --------------------------------------------
 	
-	// -- methods for derived attributes ------------------------------------
 	
 	// -- association accessors ---------------------------------------------
-	
 	/**
 	 * getter for the association attribute $car
 	 * 
@@ -75,7 +69,6 @@ require_once '../base/Car.php';
 	private function getCar() {
 		return $car;
 	}
-	
 	/**
 	 * setter for the association attribute $car
 	 * @param	Car	$car	the value to set
@@ -86,7 +79,6 @@ require_once '../base/Car.php';
 	}
 	
 	// -- attribute accessors -----------------------------------------------
-	
 	/**
 	 * getter for the attribute $ps
 	 * 
@@ -98,7 +90,6 @@ require_once '../base/Car.php';
 	private function getPs() {
 		return $ps;
 	}
-	
 	/**
 	 * setter for the attribute $ps
 	 * @param	byte	$ps	the value to set
@@ -107,7 +98,6 @@ require_once '../base/Car.php';
 	private function setPs(byte $ps) {
 		self::$ps = $ps;
 	}
-	
 	/**
 	 * getter for the attribute $name
 	 * 
@@ -119,7 +109,6 @@ require_once '../base/Car.php';
 	private function getName() {
 		return $name;
 	}
-	
 	/**
 	 * setter for the attribute $name
 	 * @param	string	$name	the value to set
