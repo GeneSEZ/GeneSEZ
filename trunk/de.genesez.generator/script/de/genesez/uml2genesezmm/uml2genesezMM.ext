@@ -410,11 +410,13 @@ private create MStereotype makeStereotype(Stereotype s) :
 	transform( getUml2Model() ).anyStereotype.add( this ) ->
 	// containments
 	// add tagged values FAIL
-	property.addAll( s.ownedAttribute.typeSelect(Property).makeTag() ) ->
+	// owned attributes returns a list of properties, reject the 'base_' property
+//	property.addAll( s.ownedAttribute.typeSelect(Property).makeTag() ) ->
+	property.addAll( s.ownedAttribute.reject( t| t.name.startsWith("base_") ).makeTag() )->
 	// add comment to stereotype
 	//ms.setOwnedComment(s.ownedComment.typeSelect(Comment).processComment().setOwningElement(ms))->
 	this;
-
+	
 private create MTag makeTag(Property p) :
 	// set the unique xmiId and name
 	//setXmiGuid(xmiId(p))->
@@ -425,7 +427,7 @@ private create MTag makeTag(Property p) :
 	// add comment to taggedvalue
 	//mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt)) ->
 	this;
-
+	
 private create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
 	info("make tagged value: " + val + ", tag: " + t.name) ->
 	setTag(t) ->
@@ -435,15 +437,53 @@ private create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) 
 //	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
 	this;
 	
+/**
+ * transforms tagged values
+ * note: assums that all tags are transformed correctly, as this function calls 'makeTag' which
+ * creates an MTag, which is not added to a container!
+ * @param	me	the genesez model element
+ * @param	e	the uml model element
+ * @return	list with tagged values
+ */
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	info("make tagged values: " + me.name + ", elem: " + e.toString()) ->
-	me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
+	/*
+	info("tagged values: " + me.stereotype.property.reject( t| t.name.startsWith("base_") )) ->
+	info("tvs: " + e.getAppliedStereotypes().ownedAttribute.name) ->
+	info("stereotypes: " + e.getAppliedStereotypes().name) ->
+	//info("value : " + e.getValue(e.getAppliedStereotypes().first(), "getter")) ->
+	info(" : " + 
+		me.stereotype.property.reject( t| t.name.startsWith("base_") ).collect(
+			mtag | e.getAppliedStereotypes()
+		)
+	) ->
+	*/
+	e.getAppliedStereotypes().collect(
+		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
+			tag | e.getValue(s, tag.name).eToString().collect(
+				val | makeTaggedValue(makeTag(tag), val, me)
+			)
+		)
+	).flatten().reject(e|e == null);
+	/*
+	me.stereotype.property.reject( t| t.name.startsWith("base_") ).collect(
+	//me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
 		mtag|e.getAppliedStereotypes().collect(
-			styp | e.getValue(styp, mtag.name).eToString().collect(
+			styp | getTaggedValue(e, mtag, styp).collect(
 				tagval | makeTaggedValue(mtag, tagval, me)
 			)
 	  	)
 	).flatten().reject(e|e == null);
+	*/
+	
+	/*
+private String getTaggedValue(Element e, MTag mtag, Stereotype styp) :
+	info("e: " + e) ->
+	info("mtag: " + mtag) ->
+	info("styp: " + styp) ->
+	info("back: " + e.getValue(styp, mtag.name)) ->
+	e.getValue(styp, mtag.name).eToString();
+	*/
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -535,7 +575,7 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 			c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
 		: this ->
 	// set tagged values
-	taggedValue.addAll( makeTaggedValues(this, c) ) ->
+	taggedValue.addAll( makeTaggedValues(c) ) ->
 	this;
 	
 	
