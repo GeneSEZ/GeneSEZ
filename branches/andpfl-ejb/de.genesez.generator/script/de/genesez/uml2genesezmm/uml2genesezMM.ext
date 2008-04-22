@@ -1,0 +1,650 @@
+/*
+ * UML » GeneSEZ-MetaModel transformation script
+ *
+ * TODO: line 548 - should be fixed in uml2genesezmm constraints
+ */
+
+// TODO:	returntype comment form operations export
+
+// This is the transformation that transforms UML2 
+// class models into genesezMM models.
+
+// This imports the ecore metamodel; since we want to 
+// transform into an instance of ecore, we need to load 
+// this metamodel.
+import ecore;
+// Import the UML2 metamodel - this is what we transform from.
+import uml;
+// Import genesezMM metamodel - transform the uml2 into this metamodel.
+import genesezMM;
+
+//	using logging functionality (contained metamodel project)
+extension de::genesez::io::io;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	parameters passed to the transformation
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * the model is passed in as a global variable
+ * @return	
+ */
+private Model getUml2Model() : GLOBALVAR uml2model;
+
+/**
+ * externally configure packages to ignore, e.g. UML standard profile ;-)
+ * @return	
+ */
+private String ignoredPackages(): GLOBALVAR excludePackages == null ? "" : GLOBALVAR excludePackages;
+
+/**
+ * indicates if all classes contained in the model should be mapped to 
+ * external classes or not
+ * @return	true, if classes contained in the model are mapped to external classes
+ */
+private boolean mapClassesInModelToExternal() : GLOBALVAR mapClassesInModelToExternal == null ? false : GLOBALVAR mapClassesInModelToExternal;
+
+/**
+ * getter for all stereotypes, which are used to mark external classes or 
+ * packages containing classes to map to external classes
+ * @return	names of stereotypes
+ */
+private String externalStereotypes() : GLOBALVAR externalStereotypes == null ? "" : GLOBALVAR externalStereotypes;
+
+/**
+ * getter for all names of packages, which contain classes that should
+ * be mapped to external classes (packages must be containted in the model)
+ * @return	names of packages
+ */
+private String externalPackages() : GLOBALVAR externalPackages == null ? "" : GLOBALVAR externalPackages;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+create MModel transform(Model m) :
+	// basic element properties
+	transformBasics(m) ->
+	// containments
+	ownedComment.addAll( m.ownedComment.typeSelect(Comment).makeComment() ) ->
+//	nestedPackage.addAll( m.ownedElement.typeSelect(Package).transform() ) ->
+	m.ownedElement.typeSelect(Package).transform( this ) ->
+//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
+//	transform( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
+	m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform( this ) ->
+	this;
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private extend functions
+	» filter + distinction functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+// transform root package
+private MPackage transform(Package p, MModel this) :
+	switch {
+		// reject ignored package
+		case p.isIgnoredPackage() : Void
+		// reject package by name when used as container for external classes (isContainerForExternalClasses)
+		// reject package by stereotype when used as container for external classes
+		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Class ).makeExternal()
+		// else transform the package
+		default : nestedPackage.add( p.makePackage() )
+	} ->
+	this;
+
+// check if package is container for external classes or not
+private MPackage transform(Package p, MPackage this) :
+	switch {
+		// reject package by stereotype when used as container for external classes
+		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Class ).makeExternal()
+		// else transform the package
+		default : nestedPackage.add( p.makePackage() )
+	} ->
+	this;
+	
+// transform root classifier
+private MClassifier transform(Classifier c, MModel this) :
+	switch {
+		// check if classifier should be mapped to an external class
+		case mapClassesInModelToExternal() : c.makeExternal()
+		// check if classifier has stereotype used to indicate external classes
+		case c.isExternalClass() : c.makeExternal()
+		default : classifier.add( c.makeClassifier() )
+	} ->
+	this;
+	
+// check if classifier is external class
+private MClassifier transform(Classifier c, MPackage this) :
+	// check if classifier has stereotype used to indicate external classes
+	switch {
+		case c.isExternalClass() : c.makeExternal()
+		default : classifier.add( c.makeClassifier() )
+	} ->
+	this;
+
+// used to determine the correct genesez type for an uml type
+private MType makeType(Type this) :
+	info("transform [ " + metaType + " ] " + this) ->
+	switch {
+		// generic
+		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
+		// external class
+		case (metaType == Class || metaType == Interface) 
+			&& ( ((Classifier)this).isExternalClass() 
+				|| (mapClassesInModelToExternal() && ((Classifier)this).isRootClassifier())
+			) : ((Classifier)this).makeExternal()
+		// primitive type
+		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
+		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
+		// classifier
+//		case metaType.isAssignableFrom(Classifier) : ((Classifier)this).makeClassifier()
+//		default : (severe("should transform type: " + metaType) -> Void)
+		default : ((Classifier)this).makeClassifier()
+	};
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	package + classifiers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+private create MPackage makePackage(Package p) :
+	// basic element properties
+	transformBasics(p) ->
+	// containments
+	// add comment to package
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+//	nestedPackage.addAll( p.ownedElement.typeSelect(Package).transform() ) ->
+//	transform( p.ownedElement.typeSelect(Package) ) ->
+	p.ownedElement.typeSelect(Package).transform( this ) ->
+//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
+//	transform( p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
+	p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform( this ) ->
+	// map associations in package
+	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
+	this;
+	
+private create MClass makeClassifier(Class c) :
+	// basic element properties
+	transformBasics(c) ->
+	// properties
+	setVisibility( c.visibility.toString() ) ->
+	setAbstract( c.isAbstract ) ->
+	setFinal( c.isLeaf ) ->
+	// transform classifier
+	transformClassifier(c) ->
+	this;
+	
+private create MInterface makeClassifier(Interface i) :
+	// basic element properties
+	transformBasics(i) ->
+	// properties
+	setVisibility( i.visibility.toString() ) ->
+	setAbstract( i.isAbstract ) ->
+	setFinal( i.isLeaf ) ->
+	// transform classifier
+	transformClassifier(i) ->
+	this;
+
+private create MEnumeration makeClassifier(Enumeration e) :
+	// basic element properties
+	transformBasics(e) ->
+	// properties
+	setVisibility( e.visibility.toString() ) ->
+	// ignoring: abstract, final
+	// containments
+	literal.addAll( e.ownedLiteral.typeSelect(EnumerationLiteral).makeLiteral() ) ->
+	// transform classifier
+	transformClassifier(e) ->
+	this;
+	
+private create MDataType makeClassifier(DataType d) :
+	// basic element properties
+	transformBasics(d) ->
+	// properties
+	// TODO: should be done by uml2genesezmm constraints
+	setVisibility( d.visibility == null ? "public" : d.visibility.toString() ) ->
+	// ignore abstract + final
+	// transform classifier
+	transformClassifier(d) ->
+	this;
+	
+private MClassifier makeClassifier(Classifier c) :
+	severe("try to construct a MClassifier object from: " + c) ->
+	Void;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	classifier containments
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+private create MLiteral makeLiteral(EnumerationLiteral l) :
+	// basic element properties
+	transformBasics(l) ->
+	// add comment to classifier
+	ownedComment.addAll( l.ownedComment.typeSelect(Comment).makeComment() ) ->
+	this;
+	
+private create MAttribute makeAttribute(Property p) :
+	// set the unique xmiId and name
+	transformBasics(p) ->
+	// properties
+	setVisibility( p.visibility.toString() ) ->
+	setDerived( p.isDerived ) ->
+	setStatic( p.isStatic ) ->
+	setFinal( p.isReadOnly ) ->
+	setMultiplicity( p.getUpper() ) ->
+	setUnique( p.isUnique ) ->
+	setOrdered( p.isOrdered ) ->
+	setDefaultvalue( p.getDefault() ) ->
+	// associations
+	// set stereotype
+	stereotype.addAll( p.getAppliedStereotypes().makeStereotype() ) ->
+	// add type of attribute (can be a generic or classifier)
+	setType( p.type.makeType() ) ->
+	// containments
+	// add comment to attribute
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	this;
+
+private create MOperation makeOperation(Operation o) :
+	// set the unique xmiId and name
+	transformBasics(o) ->
+	// properties
+	setVisibility( o.visibility.toString() ) ->
+	setStatic( o.isStatic ) ->
+	setAbstract( o.isAbstract ) ->
+	setFinal( o.isLeaf ) ->
+	setMultiplicity( o.getUpper() ) ->
+	setUnique( o.isUnique ) ->
+	setOrdered( o.isOrdered ) ->
+	// associations
+	// set stereotype
+	stereotype.addAll( o.getAppliedStereotypes().makeStereotype() ) ->
+	// set return type
+	setReturnType( o.type.makeType() ) ->
+	// set raised exceptions
+	raisedException.addAll( o.raisedException.makeType() ) ->
+	// containments
+	// add comment to operation
+	ownedComment.addAll( o.ownedComment.typeSelect(Comment).makeComment() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, o) ) ->
+	// set generics
+	o.ownedTemplateSignature != null
+		? genericParameter.addAll(
+			o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric()
+		)
+		: this ->
+	// add parameter to operation
+	parameter.addAll(
+		o.ownedParameter.reject(e|e.direction.toString() == "return").makeParameter()
+	) ->
+	this;
+
+private create MParameter makeParameter(Parameter p) :
+	// set the unique xmiId and name
+	transformBasics(p) ->
+	// properties
+	setDefaultvalue( p.getDefault() ) ->
+	setDirection( p.direction.toString() ) ->
+	setMultiplicity( p.getUpper() ) ->
+	setUnique( p.isUnique ) ->
+	setOrdered( p.isOrdered ) ->
+	// associations
+	setType( p.type.makeType() ) ->
+	// set stereotype
+	stereotype.addAll( p.getAppliedStereotypes().makeStereotype() ) ->
+	// containments
+	// add comment to parameter
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	// set generic
+	//info(p.getAppliedStereotypes().getAllAttributes().typeSelect(Property).select(e|e.name == "typeModifier"))->
+	this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	associations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+private create MAssociation makeAssociation(Association a, MPackage container) :
+	// set the unique xmiId and name
+	setXmiGuid( xmiId(a) ) ->
+	setName( assocName(a) ) ->
+	// properties
+	setDerived( a.isDerived ) ->
+	// container - is it really needed ? already set in package...
+	container.association.add( this ) ->
+	// containments
+	// add comment to association
+	ownedComment.addAll( a.ownedComment.typeSelect(Comment).makeComment() ) ->
+	// associations
+	end.addAll( a.memberEnd.select( e|e.class != null ).makeAssociationRole() ) ->
+	// double set, isn't it ?
+//	end.setAssociation(ma).setDerived(a.isDerived)->
+	linkEnds() ->
+	associationClass(a) ->
+	this;
+	
+private create MAssociationRole makeAssociationRole(Property aend) :
+	// set the unique xmiId and name
+	setXmiGuid( xmiId(aend) ) ->
+	setName( assocEndName(aend) ) ->
+	stereotype.addAll( aend.getAppliedStereotypes().makeStereotype() ) ->
+	// properties
+	setVisibility( aend.visibility.toString() ) ->
+	setMultiplicity( aend.getUpper() ) ->
+	setDerived( aend.isDerived ) ->
+	// unique
+	// ordered
+	setAggregation( aend.aggregation.toString() == "shared" ? true : false ) ->
+	setComposition( aend.aggregation.toString() == "composite" ? true : false ) ->
+	// an asscociation couldn't have a generic as type i guess
+	setType( aend.type.makeType() ) ->
+	// containments
+	// add comment to associationrole
+	ownedComment.addAll( aend.ownedComment.typeSelect(Comment).makeComment() ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(this, aend) ) ->
+	// set classifier
+//	ma.setClassifier(assocEndClass(aend))->
+//	assocEndClass(aend).property.add( this ) ->
+	this;
+
+
+private MAssociation linkEnds(MAssociation ma) :
+	let mend = ma.end :
+		mend.size == 2
+			? (mend.get(0).setOpposite( mend.get(1) ) ->
+				mend.get(1).setOpposite( mend.get(0) ) ->
+				ma
+			)
+			: ma;
+
+private MAssociation associationClass(MAssociation ma, Association a):
+	ma;
+
+private MAssociation associationClass(MAssociation ma, AssociationClass a):
+//	info("association class: " + ma.name + ", " + a.name) -> 
+	ma.setAssociationClass( a.makeClassifier().setOwnedAssociation(ma) );
+
+private String assocName(Association a):
+	(a.name == null || a.name == "")
+		? ""
+		: a.name ;
+		
+private String assocEndName(Property a):
+	(a.name == null || a.name == "")
+		? a.type.name.toFirstLower()
+		: a.name;
+
+private MClass assocEndClass(Property a):
+//	info("assoc end class: " + a.name) ->
+	a.class == null
+		? null
+		: a.class.makeType();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	stereotypes + tagged values
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+private create MStereotype makeStereotype(Stereotype s) :
+	// basic element properties
+	transformBasics(s) ->
+	// container
+	transform( getUml2Model() ).anyStereotype.add( this ) ->
+	// containments
+	// add tagged values FAIL
+	// owned attributes returns a list of properties, reject the 'base_' property
+//	property.addAll( s.ownedAttribute.typeSelect(Property).makeTag() ) ->
+	property.addAll( s.ownedAttribute.reject( t| t.name.startsWith("base_") ).makeTag() )->
+	// add comment to stereotype
+	//ms.setOwnedComment(s.ownedComment.typeSelect(Comment).processComment().setOwningElement(ms))->
+	this;
+	
+private create MTag makeTag(Property p) :
+	// set the unique xmiId and name
+	//setXmiGuid(xmiId(p))->
+	setName(p.name) ->
+	// TODO: is it really need to transform the type of a tag ?
+//	setType(p.type.makeType().name()) ->
+	setType(p.type.name) ->
+	// add comment to taggedvalue
+	//mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt)) ->
+	this;
+	
+private create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
+	info("make tagged value: " + val + ", tag: " + t.name) ->
+	setTag(t) ->
+	setValue(val) ->
+//	setOwningElement(owner)
+	owner.taggedValue.add(this) ->
+//	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
+	this;
+	
+/**
+ * transforms tagged values
+ * note: assums that all tags are transformed correctly, as this function calls 'makeTag' which
+ * creates an MTag, which is not added to a container!
+ * @param	me	the genesez model element
+ * @param	e	the uml model element
+ * @return	list with tagged values
+ */
+private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
+	info("make tagged values: " + me.name + ", elem: " + e.toString()) ->
+	/*
+	info("tagged values: " + me.stereotype.property.reject( t| t.name.startsWith("base_") )) ->
+	info("tvs: " + e.getAppliedStereotypes().ownedAttribute.name) ->
+	info("stereotypes: " + e.getAppliedStereotypes().name) ->
+	//info("value : " + e.getValue(e.getAppliedStereotypes().first(), "getter")) ->
+	info(" : " + 
+		me.stereotype.property.reject( t| t.name.startsWith("base_") ).collect(
+			mtag | e.getAppliedStereotypes()
+		)
+	) ->
+	*/
+	e.getAppliedStereotypes().collect(
+		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
+			tag | e.getValue(s, tag.name).eToString().collect(
+				val | makeTaggedValue(makeTag(tag), val, me)
+			)
+		)
+	).flatten().reject(e|e == null);
+	/*
+	me.stereotype.property.reject( t| t.name.startsWith("base_") ).collect(
+	//me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
+		mtag|e.getAppliedStereotypes().collect(
+			styp | getTaggedValue(e, mtag, styp).collect(
+				tagval | makeTaggedValue(mtag, tagval, me)
+			)
+	  	)
+	).flatten().reject(e|e == null);
+	*/
+	
+	/*
+private String getTaggedValue(Element e, MTag mtag, Stereotype styp) :
+	info("e: " + e) ->
+	info("mtag: " + mtag) ->
+	info("styp: " + styp) ->
+	info("back: " + e.getValue(styp, mtag.name)) ->
+	e.getValue(styp, mtag.name).eToString();
+	*/
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	genesez types
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+private create MGeneric makeGeneric(ClassifierTemplateParameter c) :
+	setSpecification( ((Class)c.ownedParameteredElement).name ) ->
+	this;
+	
+private create MExternal makeExternal(Classifier c) :
+	// properties
+	setSpecification( c.name ) ->
+	// container
+	transform( getUml2Model() ).externalTypes.add( this ) ->
+	// set generics
+	c.ownedTemplateSignature != null
+		? genericParameter.addAll( 
+			c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
+		: this ->
+	this;
+	
+private create MPrimitiveType makePrimitiveType(PrimitiveType p) :
+	// basic element properties
+	transformBasics(p) ->
+	// container
+	transform( getUml2Model() ).primitiveTypes.add( this ) ->
+	this;
+
+// exception for magic draw uml type 'void'
+private MPrimitiveType makePrimitiveType(DataType d) :
+	// basic element properties
+//	transformBasics(d) ->
+	// container
+//	transform( getUml2Model() ).primitiveTypes.add( this ) ->
+//	this;
+	// delegate
+	makePrimitiveType(null);
+	
+// exception, i guess when no type is set, it is interpreted as oaw::Void/null
+private create MPrimitiveType makePrimitiveType(Void v) :
+//	info("fixme: make primitive type from void") ->
+	setXmiGuid("void") ->
+	setName("void") ->
+	transform( getUml2Model() ).primitiveTypes.add( this ) ->
+	this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	comments + property copy helpers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+	
+private create MComment makeComment(Comment c) :
+	// set the unique xmiId and name
+	setXmiGuid(xmiId(c)) ->
+	setAnnotation(c.body) ->
+	// containment
+	nestedComment.addAll( (c.ownedComment.typeSelect(Comment).makeComment()) ) ->
+	this;
+	
+
+private MClassifier transformClassifier(MClassifier this, Classifier c) :
+	// associations
+	// set stereotype
+	stereotype.addAll( c.getAppliedStereotypes().makeStereotype() ) ->
+	// add client dependency (<<use>>)
+	// only process types, because we have no opposite to NamedElement... or do we want MElement objects in our model?
+	//supplier.addAll( c.clientDependency.supplier.typeSelect(Type).makeType() ) ->
+	// add superclasses (generalizations and realizations)
+	supertype.addAll( generalization.addAll( c.general.makeType() ) ) ->
+	supertype.addAll( realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ) ->
+	// add superclasses (realizations)
+	//realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
+	// add superclasses (generalizations)
+	//generalization.addAll( c.general.makeType() ) ->
+	// containments
+	// add comment to classifier
+	ownedComment.addAll( c.ownedComment.typeSelect(Comment).makeComment() ) ->
+	// add attributes and association ends
+	property.addAll( c.attribute.reject( p|p.association != null ).makeAttribute() ) ->
+	property.addAll( c.attribute.select( p|p.association != null ).makeAssociationRole() ) ->
+	// add operations
+	operation.addAll( c.getOperations().makeOperation() ) ->
+	// set generics
+	c.ownedTemplateSignature != null
+		? genericParameter.addAll( 
+			c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
+		: this ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(c) ) ->
+	this;
+	
+	
+private MElement transformBasics(MElement this, NamedElement n) :
+	// set the unique xmiId and name
+	setXmiGuid( xmiId(n) ) ->
+	setName(n.name) ->
+	this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	filter + identification helpers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+private boolean isIgnoredPackage(Package this) :
+	ignoredPackages().toList().contains( name );
+	
+// check if package is used as container for external classes by name
+// check if package is used as container external classes by stereotype
+private boolean isContainerForExternalClasses(Package this) :
+	externalPackages().toList().contains( name )
+		|| getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) );
+
+// check if classifier is contained in a model
+private boolean isRootClassifier(Classifier this) :
+	owner.metaType == Model;
+
+// check if classifier has stereotype used to indicate external classes
+private boolean isExternalClass(Classifier this) :
+	getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) );
+
+/**
+ * splits a comma separated list of strings into a list of strings and 
+ * removing all unnessesary whitespace
+ * @param	s	comma separated list
+ * @return		list with each item in the string
+ */
+private List[String] toList(String s) :
+	s.split(",").trim();
+
+private String name(MType this) :
+	switch (metaType) {
+		case MGeneric : ((MGeneric)this).specification
+		case MExternal: ((MExternal)this).specification
+		case MPrimitiveType : ((MPrimitiveType)this).name
+		case MClassifier : ((MClassifier)this).name
+		default : severe("cannot determine name of type from object: " + metaType)
+	};
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private java extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+// get unique xmiId from ecore file, requires Java method
+private String xmiId (Element obj) : 
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
+
+// process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)
+private List[String] eToString(ecore::EJavaObject obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(java.lang.Object);
+
+// process List structured EJavaObject externally
+private List[String] eToString(List obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.lToString(org.eclipse.emf.ecore.util.EDataTypeUniqueEList);
+
+// process flat EJavaObject externally
+private List[String] eToString(Object obj):
+	JAVA de.genesez.uml2genesezmm.utilities.TransUtils.eToString(java.lang.Object);
+
