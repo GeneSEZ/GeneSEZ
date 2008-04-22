@@ -15,6 +15,8 @@
 «REM» based on genesez meta model «ENDREM»
 «IMPORT genesezMM»
 
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::common::typemapping::TypeMapping»
 
@@ -33,29 +35,45 @@
 «EXPAND Comment::Type -»
 «EXPAND _Modifier -»class «asTypeName()» «EXPAND _Generalization -» «EXPAND _Realization -» {
 	
+	«IF hasAttributes() -»
 	// -- attributes --------------------------------------------------------
+	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
 	
+	«IF hasAssociationRoles() -»
 	// -- associations ------------------------------------------------------
+	«ENDIF -»
 	«EXPAND Association::Declaration -»
 	
+	«IF hasConstructors() || hasDestructors() -»
 	// -- constructors + destructors ----------------------------------------
+	«ENDIF -»
 	«EXPAND Operation::Constructor -»
 	«EXPAND Operation::Destructor -»
 	
+	«IF hasOperationDeclarations() -»
 	// -- method declarations -----------------------------------------------
+	«ENDIF -»
 	«EXPAND Operation::Declaration -»
 	
+	«IF hasOperations() -»
 	// -- method implementations --------------------------------------------
+	«ENDIF -»
 	«EXPAND Operation::Implementation -»
 	
+	«IF hasDerivedAttributes() -»
 	// -- methods for derived attributes ------------------------------------
+	«ENDIF -»
 	«EXPAND Attribute::Derived -»
 	
+	«IF hasAssociationRoles() -»
 	// -- association accessors ---------------------------------------------
+	«ENDIF -»
 	«EXPAND Association::Accessors -»
 	
+	«IF hasAttributes() -»
 	// -- attribute accessors -----------------------------------------------
+	«ENDIF -»
 	«EXPAND Attribute::Accessors -»
 	
 	// -- own code implementation -------------------------------------------
