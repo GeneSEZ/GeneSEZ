@@ -19,30 +19,22 @@
  * @author	dreamer
  * @package	base
  */
- class Owner   {
+class Owner   {
 	
 	// -- attributes --------------------------------------------------------
-	
 	/**
 	 * @var		string	$name	
 	 * @see		Owner::getName()
 	 */
 	private $name;
 	
-	// -- associations ------------------------------------------------------
 	
-	// -- constructors + destructors ----------------------------------------
 	
-	// -- method declarations -----------------------------------------------
 	
-	// -- method implementations --------------------------------------------
 	
-	// -- methods for derived attributes ------------------------------------
 	
-	// -- association accessors ---------------------------------------------
 	
 	// -- attribute accessors -----------------------------------------------
-	
 	/**
 	 * getter for the attribute $name
 	 * 
@@ -54,7 +46,6 @@
 	private function getName() {
 		return $name;
 	}
-	
 	/**
 	 * setter for the attribute $name
 	 * @param	string	$name	the value to set

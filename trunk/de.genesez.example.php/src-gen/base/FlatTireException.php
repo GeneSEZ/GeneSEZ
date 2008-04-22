@@ -20,23 +20,15 @@ require_once 'Exception';
  * @author	dreamer
  * @package	base
  */
- class FlatTireException extends Exception  {
+class FlatTireException extends Exception  {
 	
-	// -- attributes --------------------------------------------------------
 	
-	// -- associations ------------------------------------------------------
 	
-	// -- constructors + destructors ----------------------------------------
 	
-	// -- method declarations -----------------------------------------------
 	
-	// -- method implementations --------------------------------------------
 	
-	// -- methods for derived attributes ------------------------------------
 	
-	// -- association accessors ---------------------------------------------
 	
-	// -- attribute accessors -----------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._12_5_b6f02e1_1204100267031_575890_564) ENABLED START */

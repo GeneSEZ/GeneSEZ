@@ -23,22 +23,19 @@ require_once '../base/Changeable.php';
  * @author	dreamer
  * @package	base
  */
- class Wheel  implements Changeable {
+class Wheel  implements Changeable {
 	
 	// -- attributes --------------------------------------------------------
-	
 	/**
 	 * @var		float	$diameter	
 	 * @see		Wheel::getDiameter()
 	 */
 	private $diameter;
-	
 	/**
 	 * @var		string	$specification	
 	 * @see		Wheel::getSpecification()
 	 */
 	private $specification = array();
-	
 	/**
 	 * @var		int	$durability	
 	 * @see		Wheel::getDurability()
@@ -46,22 +43,18 @@ require_once '../base/Changeable.php';
 	private $durability = 100000;
 	
 	// -- associations ------------------------------------------------------
-	
 	/**
 	 * @var		Car	$mycar	
 	 * @see		Wheel::getMycar()
 	 */
 	private $mycar;
-	
 	/**
 	 * @var		Screw	$screw	
 	 * @see		Wheel::getScrew()
 	 */
 	private $screw = array();
 	
-	// -- constructors + destructors ----------------------------------------
 	
-	// -- method declarations -----------------------------------------------
 	
 	// -- method implementations --------------------------------------------
 	/**
@@ -71,12 +64,12 @@ require_once '../base/Changeable.php';
 	 * @param	Changeable	$newWheel	
 	 * @return	boolean	
 	 */
-	public function change(Changeable $newWheel) {
+	public function change($newWheel) {
 		$returnValue = NULL;
 		/* PROTECTED REGION ID(php.implementation._11_5_6340215_1179139054625_520706_1) ENABLED START */
 		// TODO: implementation of method 'Wheel.change(...)'
 		/* PROTECTED REGION END */
-		return returnValue;
+		return $returnValue;
 	}
 	/**
 	 * @internal <!-- PROTECTED REGION ID(php.own.operation.comment._11_5_6340215_1179238960437_25222_122) ENABLED START -->
@@ -85,7 +78,7 @@ require_once '../base/Changeable.php';
 	 * 
 	 * the operation may throw the following exceptions:
 	 * {@link FlatTireException FlatTireException}
-	 * @see		FlatTireException
+	 * @throws		FlatTireException
 	 * 
 	 * @return	NULL	
 	 */
@@ -97,10 +90,8 @@ require_once '../base/Changeable.php';
 		
 	}
 	
-	// -- methods for derived attributes ------------------------------------
 	
 	// -- association accessors ---------------------------------------------
-	
 	/**
 	 * getter for the association attribute $mycar
 	 * 
@@ -112,7 +103,6 @@ require_once '../base/Changeable.php';
 	private function getMycar() {
 		return $mycar;
 	}
-	
 	/**
 	 * setter for the association attribute $mycar
 	 * @param	Car	$mycar	the value to set
@@ -121,7 +111,6 @@ require_once '../base/Changeable.php';
 	private function setMycar(Car $mycar) {
 		self::$mycar = $mycar;
 	}
-	
 	/**
 	 * getter for the association attribute $screw
 	 * 
@@ -133,7 +122,6 @@ require_once '../base/Changeable.php';
 	private function getScrew() {
 		return array_values($screw);
 	}
-	
 	/**
 	 * adds the given value to the association attribute $screw
 	 * @param	Screw	$toAdd	the value to add
@@ -142,7 +130,6 @@ require_once '../base/Changeable.php';
 	private function insertInScrew(Screw $toAdd) {
 		self::$screw[] = $toAdd;
 	}
-	
 	/**
 	 * removes the given value from the association attribute $screw
 	 * @param	Screw	$toRemove	the value to remove
@@ -156,7 +143,6 @@ require_once '../base/Changeable.php';
 	}
 	
 	// -- attribute accessors -----------------------------------------------
-	
 	/**
 	 * getter for the attribute $diameter
 	 * 
@@ -168,7 +154,6 @@ require_once '../base/Changeable.php';
 	private function getDiameter() {
 		return $diameter;
 	}
-	
 	/**
 	 * setter for the attribute $diameter
 	 * @param	float	$diameter	the value to set
@@ -177,7 +162,6 @@ require_once '../base/Changeable.php';
 	private function setDiameter(float $diameter) {
 		self::$diameter = $diameter;
 	}
-	
 	/**
 	 * getter for the attribute $specification
 	 * 
@@ -189,7 +173,6 @@ require_once '../base/Changeable.php';
 	private function getSpecification() {
 		return array_values($specification);
 	}
-	
 	/**
 	 * adds the given value to the attribute $specification
 	 * @param	string	$toAdd	the value to add
@@ -198,7 +181,6 @@ require_once '../base/Changeable.php';
 	private function insertInSpecification(string $toAdd) {
 		self::$specification[] = $toAdd;
 	}
-	
 	/**
 	 * removes the given value from the attribute $specification
 	 * @param	string	$toRemove	the value to remove
@@ -210,7 +192,6 @@ require_once '../base/Changeable.php';
 			unset(self::$specification[$entry]);
 		}
 	}
-	
 	/**
 	 * getter for the attribute $durability
 	 * 
@@ -222,7 +203,6 @@ require_once '../base/Changeable.php';
 	private function getDurability() {
 		return $durability;
 	}
-	
 	/**
 	 * setter for the attribute $durability
 	 * @param	int	$durability	the value to set
