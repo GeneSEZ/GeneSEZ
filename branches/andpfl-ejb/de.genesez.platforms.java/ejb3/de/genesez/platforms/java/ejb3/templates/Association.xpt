@@ -1,3 +1,11 @@
+«REM»
+	Template for ejb3-Association
+	
+	@author	André Pflüger
+	@date	2008/04/22
+	- todo 1: implement all ejb3 stereotypes
+«ENDREM»
+
 «REM» based on genesez meta model «ENDREM»
 «IMPORT genesezMM»
 
@@ -19,6 +27,7 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM» evaluate stereotypes for associations «ENDREM»
 «DEFINE Annotation FOR MAssociationRole-»
 	«IF hasStereotype("ejb3OneToOne")»
 		«IF hasTaggedValue("ejb3OneToOne", "bidirectional", "false")»
@@ -56,6 +65,7 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM» evaluate the taggedValue cascadeType for relation-stereotypes «ENDREM»
 «DEFINE _CascadeType FOR MAssociationRole-»
 	«IF hasTaggedValue("ejb3OneToMany", "cascadeType", "ALL") || hasTaggedValue("ejb3ManyToOne", "cascadeType", "ALL")»
 		ALL
@@ -69,17 +79,3 @@
 		REFRESH
 	«ENDIF»
 «ENDDEFINE»
-«REM»
-	«IF multiplicity == 1 && opposite.multiplicity == 1»
-		@OneToOne
-	«ENDIF»
-	«IF multiplicity == 1 && opposite.multiplicity == -1»
-		@OneToMany(cascade={CascadeType.ALL})
-	«ENDIF»
-	«IF multiplicity == -1 && opposite.multiplicity == 1»
-		@ManyToOne(cascade={CascadeType.ALL})
-	«ENDIF»	
-	«IF multiplicity == -1 && opposite.multiplicity == -1»
-		@ManyToMany(cascade={CascadeType.ALL})
-	«ENDIF»
-«ENDREM»
