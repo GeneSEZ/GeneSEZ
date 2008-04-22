@@ -27,7 +27,19 @@
 		provides classpathref 'de.genesez.metamodel.classpath'
 	-->
 	<import file="build-cp.xml" />
+
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 	
+	<!-- compile required java classes -->
+	<target name="compile">
+		<mkdir dir="${basedir}/bin" />
+		<javac srcdir="${basedir}/src" 
+			destdir="${basedir}/bin"
+			classpathref="de.genesez.metamodel.classpath"
+			debug="on">
+			<exclude name="de/genesez/metamodel/**/*"/>
+		</javac>
+	</target>
 	
 	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 	
@@ -36,9 +48,8 @@
 		classname = "org.openarchitectureware.workflow.ant.WorkflowAntTask"
 		classpathref = "de.genesez.metamodel.classpath" />
 	
-	
 	<!-- transform emf uml2 models to ecore models using oaw workflow -->
-	<target name = "uml2ecore">
+	<target name="uml2ecore" depends="compile" >
 		<!-- workflow task is derived from the java ant task -->
 		<oaw.workflow file = "${oaw.workflow.file}"
 			classpathref="de.genesez.metamodel.classpath"
@@ -47,25 +58,7 @@
 			
 			<param name="baseDir" value="${basedir}/" />
 		</oaw.workflow>
-	</target>
-	
-	<!-- other method to start oaw workflow with java ant task -->
-	<!--target name = "uml2ecore2">
-		<java classname = "org.openarchitectureware.workflow.WorkflowRunner"
-			classpathref="de.genesez.metamodel.classpath"
-			fork = "true"
-			dir = "${basedir}">
-			
-			<classpath>
-				<path refid="de.genesez.metamodel.classpath" />
-				<pathelement location="${basedir}" />
-			</classpath>
-			
-			<arg value = "-pbaseDir=${basedir}/" />
-			<arg value = "genesezMMRun.oaw" />
-		</java>
-	</target-->
-	
+	</target>	
 	
 	<!--
 		generate *.genmodel + java code impl from *.ecore model
