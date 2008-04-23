@@ -17,6 +17,8 @@
 
 «REM» use logging «ENDREM»
 «EXTENSION de::genesez::io::io»
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
 «REM» neat m2t helper functions «ENDREM»
 «EXTENSION de::genesez::common::m2t::Helper»
 
@@ -63,18 +65,22 @@
 «ENDDEFINE»
 
 «REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
 	generates a list view
 «ENDREM»
 «DEFINE Root FOR MClass»
-«FILE asTemplateFileName("list")»
+«FILE asTemplateFileName("listTable")»
 <table>
 	<tr>
-		«EXPAND _Header FOREACH property.select( e| e.multiplicity == 1 ).reject( e| e.name == "password" || e.name == "passwd" ) -»
+		«EXPAND _Header FOREACH property.select( e| e.multiplicity == 1 ).reject( e| e.hasTaggedValue("html", "type", "PASSWORD") ) -»
 		«EXPAND _OwnHeader -»
 	</tr>
 	{foreach from=$«asSmartyTemplateVariablePlural()» item="«asSmartyTemplateVariable()»"}
 	<tr>
-		«EXPAND _Body FOREACH property.select( e| e.multiplicity == 1 ).reject( e| e.name == "password" || e.name == "passwd" ) -»
+		«EXPAND _Body FOREACH property.select( e| e.multiplicity == 1 ).reject( e| e.hasTaggedValue("html", "type", "PASSWORD") ) -»
 		«EXPAND _OwnBody -»
 	</tr>
 	{/foreach}

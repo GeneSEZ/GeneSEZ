@@ -72,6 +72,7 @@
 
 «REM»
 	generates an action class
+	- distincts private + public action classes
 «ENDREM»
 «DEFINE _Root FOR MOperation -»
 «FILE asActionFilename(name)»
@@ -93,7 +94,7 @@ class «asActionClassName()» {
 }
 «PROTECT CSTART '/* ' CEND ' */' ID ("php.action.own.script." + xmiGuid)»
 // TODO: put your script commands for the '«asActionClassName()»' here
-«asActionClassName()»::main();
+«IF visibility == "public" -»«asActionClassName()»::main();«ENDIF -»
 «ENDPROTECT»
 ?>
 «ENDFILE»
