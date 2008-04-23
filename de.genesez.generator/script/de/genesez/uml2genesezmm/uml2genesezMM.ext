@@ -428,10 +428,21 @@ private create MTag makeTag(Property p) :
 	//mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt)) ->
 	this;
 	
-private create MTaggedValue makeTaggedValue(MTag t, String val, MElement owner) :
-	info("make tagged value: " + val + ", tag: " + t.name) ->
+/**
+ * creates a tagged value
+ * @param	t		the tag this value belongs to
+ * @param	owner	the element which contains this tagged value
+ * @param	o		the value of the tag in the uml model
+ * @return	freshly created tagged value
+ */
+private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
+	info("make tagged value: " + o + ", tag: " + t.name) ->
 	setTag(t) ->
-	setValue(val) ->
+	switch (o.metaType) {
+		case NamedElement : setValue( ((NamedElement)o).name )
+		case EnumerationLiteral : setValue( ((EnumerationLiteral)o).name )
+		default : setValue( o.toString() )
+	} ->
 //	setOwningElement(owner)
 	owner.taggedValue.add(this) ->
 //	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
@@ -460,11 +471,20 @@ private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	*/
 	e.getAppliedStereotypes().collect(
 		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
+			tag | makeTaggedValue( makeTag(tag), me, e.getValue(s, tag.name) )
+		)
+	).flatten().reject(e|e == null);
+	// new version that works
+	/*
+	e.getAppliedStereotypes().collect(
+		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
 			tag | e.getValue(s, tag.name).eToString().collect(
 				val | makeTaggedValue(makeTag(tag), val, me)
 			)
 		)
 	).flatten().reject(e|e == null);
+	*/
+	// old version which has a bug
 	/*
 	me.stereotype.property.reject( t| t.name.startsWith("base_") ).collect(
 	//me.stereotype.property.reject(t|t.name == "base_Classifier").collect(
