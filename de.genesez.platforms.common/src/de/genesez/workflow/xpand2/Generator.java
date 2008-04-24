@@ -1,6 +1,6 @@
-package de.genesez.xpand2;
+package de.genesez.workflow.xpand2;
 
-import de.genesez.common.typemapping.TypeMapper;
+import de.genesez.platforms.common.typemapping.TypeMapper;
 
 
 public class Generator extends org.openarchitectureware.xpand2.Generator {

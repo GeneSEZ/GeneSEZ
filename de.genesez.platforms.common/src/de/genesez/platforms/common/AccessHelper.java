@@ -3,7 +3,6 @@
  */
 package de.genesez.platforms.common;
 
-import genesezMM.MClass;
 import genesezMM.MClassifier;
 import genesezMM.MPackage;
 
@@ -11,8 +10,6 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-
-import de.genesez.platforms.common.log.IOExtensions;
 
 /**
  * Provides some helper functions for accessing the genesez model
