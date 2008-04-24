@@ -3,12 +3,11 @@
  */
 package de.genesez.platforms.common.m2t;
 
-import genesezMM.MPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import de.genesez.metamodel.genesezMM.MPackage;
 import de.genesez.platforms.common.Conversion;
 import de.genesez.platforms.common.log.IOExtensions;
 
