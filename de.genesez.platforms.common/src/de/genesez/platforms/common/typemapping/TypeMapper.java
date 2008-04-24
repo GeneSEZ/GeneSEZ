@@ -1,15 +1,14 @@
 package de.genesez.platforms.common.typemapping;
 
-import genesezMM.MClassifier;
-import genesezMM.MExternal;
-import genesezMM.MGeneric;
-import genesezMM.MPrimitiveType;
-import genesezMM.MType;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 
+import de.genesez.metamodel.genesezMM.MClassifier;
+import de.genesez.metamodel.genesezMM.MExternal;
+import de.genesez.metamodel.genesezMM.MGeneric;
+import de.genesez.metamodel.genesezMM.MPrimitiveType;
+import de.genesez.metamodel.genesezMM.MType;
 import de.genesez.platforms.common.typemapping.mappingtypes.CollectionMappingType;
 import de.genesez.platforms.common.typemapping.mappingtypes.ExternalMappingType;
 import de.genesez.platforms.common.typemapping.mappingtypes.PrimitiveMappingType;

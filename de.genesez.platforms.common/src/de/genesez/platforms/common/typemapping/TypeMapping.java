@@ -1,6 +1,6 @@
 package de.genesez.platforms.common.typemapping;
 
-import genesezMM.MType;
+import de.genesez.metamodel.genesezMM.MType;
 
 public class TypeMapping {
 	

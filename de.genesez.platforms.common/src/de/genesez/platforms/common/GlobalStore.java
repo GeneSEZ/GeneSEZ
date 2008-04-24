@@ -3,7 +3,7 @@
  */
 package de.genesez.platforms.common;
 
-import genesezMM.MModel;
+import de.genesez.metamodel.genesezMM.MModel;
 
 /**
  * @author nihe
