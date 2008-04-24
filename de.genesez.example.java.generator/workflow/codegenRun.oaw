@@ -67,7 +67,7 @@
 	
 	<!-- Reading the example file. -->
 	<cartridge
-		file="de::genesez::workflows::${input.workflowCartridge}" 
+		file="de::genesez::platforms::common::workflow::${input.workflowCartridge}" 
 		inputModelFile="${input.uml2ModelFile}"
 		uml2ProfileFile="${input.uml2ProfileFile}"
 		genesezModel="genesezModel"
@@ -79,13 +79,13 @@
 	
 	<!-- Check constraints. /-->
 	<cartridge
-		file="de::genesez::workflows::constraintChecker.oaw"
+		file="de::genesez::platforms::common::workflow::constraintChecker.oaw"
 		modelSlot="genesezModel"
 		checkScript="de::genesez::platforms::java::constraints::Syntax"
 		abortOnError="true"
 	/>
 	<cartridge
-		file="de::genesez::workflows::constraintChecker.oaw"
+		file="de::genesez::platforms::common::workflow::constraintChecker.oaw"
 		modelSlot="genesezModel"
 		checkScript="de::genesez::platforms::java::constraints::Naming"
 		abortOnError="true"
@@ -93,14 +93,14 @@
 	
 	<!-- Write the transformed model file.  /-->
 	<cartridge
-		file="de::genesez::workflows::xmiWriter.oaw"
+		file="de::genesez::platforms::common::workflow::xmiWriter.oaw"
 		modelSlot="genesezModel"
 		outputModelFile="${output.xmiModelFile}"
 	/>
 	
 	<!-- Create java code with or without AOP in xpand templates.  /-->
 	<cartridge
-		file="de::genesez::workflows::java::${output.workflowCartridge}"
+		file="de::genesez::platforms::java::workflow::${output.workflowCartridge}"
 		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
 		excludePackages="${output.excludePackages}"
 		configFile=""
