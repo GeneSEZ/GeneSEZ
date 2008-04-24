@@ -14,12 +14,13 @@
 		$rootTemplate 		the root xpt-file where the generation starts
 		$excludePackages	comma or semicola separated list with packages to exclude from code generation
 							(full qualified package names, ', ' or '; ' are also permitted)
-		$xmlMappingFile		name of the xml mapping file
+		$typeMappingFile	name of the xml type mapping file
 		$outputDir 			the path where the generated file are produced
 		$proRegDir 			the path where the protected reagions are found
 							(usually the same as the output directory
 		$configFile			xml file for configuration settings
 	-->
+	
 	
 	<!-- working with genesez models requires the genesez meta model -->
 	<bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" />
@@ -28,15 +29,15 @@
 	</bean -->
 	
 	
-	<component id="performM2T" class="oaw.xpand2.Generator" skipOnErrors="true">
+	<component id="performM2T" class="de.genesez.workflow.xpand2.Generator" skipOnErrors="true">
 		
 		<metaModel idRef="genesezMM" />
 		
 		<!-- Template files are written in the utf-8 charset. -->
 		<fileEncoding value="utf-8" />
 		
-		<!-- Define the map target as global variable. -->
-		<globalVarDef name="xmlMappingFile" value="'${xmlMappingFile}'"/>
+		<!-- Define the type mapping file -->
+		<typeMappingFile value="${typeMappingFile}" />
 		
 		<!-- exclude packages from code gen -->
 		<globalVarDef name="excludePackages" value="'${excludePackages}'"/>
@@ -57,11 +58,13 @@
 			class="org.hybridlabs.source.formatter.JavaImportBeautifier"
 			conventionFilePath="-filename-"
 			organizeImports="true"
-			format="true" / -->
+			format="true" -->
 		<!-- use eclipse beautifier with eclipse settings -->
 		<beautifier
 			class="org.openarchitectureware.xpand2.output.JavaBeautifier"
 			configFile="de/genesez/workflows/java/eclipse.java.formatter.settings.xml" />
+		<beautifier
+			class="de.genesez.output.java.JavaImportBeautifier" />
 		<beautifier
 			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
 		
