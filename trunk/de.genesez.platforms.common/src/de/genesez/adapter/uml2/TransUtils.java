@@ -1,19 +1,11 @@
-package de.genesez.uml2genesezmm.utilities;
+package de.genesez.adapter.uml2;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.uml2.uml.Package;
-
-import de.genesez.metamodel.MClassifier;
-import de.genesez.metamodel.MPackage;
 
 
 /**
