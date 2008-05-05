@@ -1,5 +1,5 @@
 «REM»
-	performs the generation of classes
+	Performs the generation of classes
 	
 	currently handled:
 	- extends, implements
@@ -8,7 +8,8 @@
 	- associations
 	- comments
 	
-	TODO:
+	@author	tobias haubold
+	@date	2008-03-27
 «ENDREM»
 
 
@@ -99,7 +100,6 @@
 «REM»
 	generates the generalization of a class
 	only single inheritance is allowed
-	@param	this	a class
 «ENDREM»
 «DEFINE _Generalization FOR MClass -»
 «IF !generalization.isEmpty -»
@@ -109,7 +109,6 @@ extends «generalization.first().mapName().asTypeName( generalization.first() ) 
 
 «REM»
 	generates the realizations of a class
-	@param	this	a class
 «ENDREM»
 «DEFINE _Realization FOR MClass -»
 «IF !realization.isEmpty -»
@@ -119,6 +118,7 @@ implements «FOREACH realization AS r SEPARATOR ", " -»«r.mapName().asTypeName
 
 «REM»
 	generates a region for own code implementations
+	@param	id	protected region id
 «ENDREM»
 «DEFINE _OwnCodeImpl(String id) FOR MClass -»
 	«PROTECT CSTART '/* ' CEND ' */' ID (id)»

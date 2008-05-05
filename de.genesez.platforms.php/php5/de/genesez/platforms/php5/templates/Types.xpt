@@ -1,12 +1,13 @@
 «REM»
-	delegates the transformation of types to source code to specific templates
+	Handles classifiers, creates files and delegates the transformation of types to specific templates
 	
 	currently delegated:
 	- class, interface, enumeration
 	- require_once statements for imports of other php files
 	
-	TODO:
-	- data type
+	@author	tobias haubold
+	@date	2008-03-27
+	@todo	data type
 «ENDREM»
 
 
@@ -103,7 +104,7 @@ require_once '«EXPAND _Require(s) -»';
 «ENDDEFINE»
 
 «REM»
-	generates the require path for an classifier
+	generates the require path for an classifier to include
 	@param	used	the classifier which is required
 «ENDREM»
 «DEFINE _Require(MClassifier used) FOR MClassifier -»
@@ -111,7 +112,7 @@ require_once '«EXPAND _Require(s) -»';
 «ENDDEFINE»
 
 «REM»
-	generates the require path for an type
+	generates the require path for an type to include
 	only for external types important!
 	@param	used	the type which is required
 «ENDREM»
@@ -121,6 +122,7 @@ require_once '«EXPAND _Require(s) -»';
 
 «REM»
 	generates a region for own import declarations
+	@param	id	protected region id
 «ENDREM»
 «DEFINE _OwnImports(String id) FOR MClassifier -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»

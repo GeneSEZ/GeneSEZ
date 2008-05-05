@@ -1,15 +1,15 @@
 «REM»
-	generates a html formular definition based on PEAR::HTML_QuickForm
+	Handles all classes and generates an html formular definition based on PEAR::HTML_QuickForm.
 	
 	currently covered:
 	- just text fields for simple types + a submit button
 	
-	TODO:
-	- customizable output folder for form classes
-	- remove static 'password' field check
-	- 
-	
+	@author		tobias haubold
+	@date		2008-04-17
 	@version	alpha
+	
+	@todo	customizable output folder for form classes
+	@todo	remove static 'password' field check
 «ENDREM»
 
 
@@ -37,17 +37,15 @@
 
 «REM»
 	processes the contents of a model to generate forms from classes
-	@param	this	a model
+	rejects all ignored packages from further processing
 «ENDREM»
 «DEFINE Root FOR MModel»
-	«enableLogging("finest")»
 	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
 «ENDDEFINE»
 
 «REM»
 	processes the contents of a package
 	reject all data types from further processing
-	@context	a package
 «ENDREM»
 «DEFINE Root FOR MPackage»
 	«EXPAND Root FOREACH nestedPackage»
@@ -123,7 +121,6 @@ class «asFormTypeName()» {
 
 «REM»
 	generates a formular element
-	TODO: remove 'password' field check
 «ENDREM»
 «DEFINE _Element FOR MProperty -»
 		«IF hasTaggedValue("html", "type", "PASSWORD") -»

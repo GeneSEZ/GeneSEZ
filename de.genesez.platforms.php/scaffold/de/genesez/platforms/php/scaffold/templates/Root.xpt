@@ -1,10 +1,10 @@
 «REM»
-	main entry point for scaffolding
+	Scaffolds all classes.
+	Generates views, actions and forms for simple CRUD operations.
 	
-	generates views, actions and forms for simple CRUD operations
-	
-	
-	@version	alpha, test
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
 «ENDREM»
 
 
@@ -23,10 +23,9 @@
 
 «REM»
 	processes the contents of a model for scaffolding
-	@param	this	a model
+	rejects all ignored packages from further processing
 «ENDREM»
 «DEFINE Root FOR MModel»
-	«enableLogging("finest")»
 	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
 	«EXPAND Bootstrap::Root -»
 «ENDDEFINE»
@@ -34,7 +33,6 @@
 «REM»
 	processes the contents of a package for scaffolding
 	rejects all data types from further processing
-	@context	a package
 «ENDREM»
 «DEFINE Root FOR MPackage»
 	«EXPAND Root FOREACH nestedPackage»

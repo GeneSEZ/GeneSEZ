@@ -1,6 +1,4 @@
 /* 
- * Syntax.chk
- * 
  * validates the model syntax for php code generation
  * 
  * currently covered:
@@ -14,8 +12,8 @@
  * - constructor + destructor operations with return types
  * - destructor operations with parameters
  * 
- * TODO:
- * - 
+ * @author	tobias haubold
+ * @date	2008-04-10
  */
 
 // based on genesez meta model
@@ -24,6 +22,9 @@ import genesezMM;
 // use helper to access information more easily
 extension de::genesez::common::AccessHelper;
 
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
  * checks if the model contains 'MDataType's
@@ -39,13 +40,16 @@ context MDataType WARNING "GeneSEZ-Gen: generation of 'MDataType's are currently
 context MClass WARNING "GeneSEZ-GEN: association class '" + name + "': association classes are currently NOT supported!" :
 	ownedAssociation == null;
 
-
 /**
  * checks if the model contains 'MEnumeration's
  * @return	false, if the model contains enumerations
  */
 context MEnumeration WARNING "GeneSEZ-GEN: Enumerations are NOT nativly supported by PHP; generating them as 'final' classes with constant's" :
 	!( metaType == MEnumeration );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
  * checks if an interface has realizations
@@ -75,6 +79,9 @@ context MInterface WARNING "GeneSEZ-GEN: the abstract modifier of interface '" +
 context MInterface WARNING "GeneSEZ-GEN: the final modifier of interface '" + name + "' will be ignored, because NOT it is supported by PHP" :
 	!final;
 
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
  * checks if a class has a visibility
@@ -97,6 +104,9 @@ context MClass WARNING "GeneSEZ-GEN: the class '" + name + "' is both, abstract 
 context MClass WARNING "GeneSEZ-GEN: the class '" + name + "' cannot have more than one generalization, because multiple inheritance is NOT supported by PHP - only the first one is used!" :
 	!( generalization.size > 1 );
 
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
  * checks if an operation has an illegal visibility
@@ -133,5 +143,4 @@ context MOperation WARNING "GeneSEZ-GEN: the destructor operation '" + name + "'
  */
 context MOperation WARNING "GeneSEZ-GEN: the destructor operation '" + name + "' cannot have parameters - they will be ignored!" :
 	!( isDestructor() && parameter.size > 0 );
-
 

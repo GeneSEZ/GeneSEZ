@@ -1,10 +1,9 @@
 «REM»
-	main entry point for controller generation
+	Generates a controller + action infrastructure for all classes.
 	
-	generate controller + action infrastructure from classes
-	
-	
-	@version	alpha, test
+	@author		tobias haubold
+	@date		2008-04-21
+	@version	alpha
 «ENDREM»
 
 
@@ -26,17 +25,15 @@
 
 «REM»
 	processes the contents of a model
-	@param	this	a model
+	rejects all ignored packages from further processing
 «ENDREM»
 «DEFINE Root FOR MModel»
-	«enableLogging("finest")»
 	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
 «ENDDEFINE»
 
 «REM»
 	processes the contents of a package
 	rejects all data types from further processing
-	@context	a package
 «ENDREM»
 «DEFINE Root FOR MPackage»
 	«EXPAND Root FOREACH nestedPackage»

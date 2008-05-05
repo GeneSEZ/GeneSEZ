@@ -1,10 +1,9 @@
 /* 
- * Naming.ext
- * 
  * naming conventions for php
  * 
- * TODO:
- * - concept for filename conventions
+ * @author	tobias haubold
+ * @date	2008-04-07
+ * @todo	concept for filename conventions
  */
 
 // based on genesez meta model
@@ -40,6 +39,24 @@ String asTypeName(MClassifier this) :
  * formats the name of a type
  * don't touch generics, primitive types or external types (external are mapped correctly)
  * just format the own created + generated types (classifiers)
+ * 
+ * @context	name of the type after type mapping
+ * @return	formatted name of the type
+ */
+String asTypeName(MType this) :
+	switch (metaType) {
+		case MPrimitiveType : ((MPrimitiveType)this).name
+		case MGeneric : ((MGeneric)this).specification
+		case MExternal : ((MExternal)this).specification
+		default : ((MClassifier)this).asTypeName()
+	};
+	
+/**
+ * formats the name of a type
+ * don't touch generics, primitive types or external types (external are mapped correctly)
+ * just format the own created + generated types (classifiers)
+ * 
+ * @deprecated	can be removed, when type-mapping is revised (upper function works then)
  * 
  * @context	name of the type after type mapping
  * @return	formatted name of the type
@@ -204,7 +221,7 @@ String asParameter(MParameter this) : name.toFirstLower();
 /**
  * formats a property as an attribute
  * just there for error-free templates (polymorphism)
- * @see	asAttribute(MAttribute this)
- * @see asAttribtue(MAssociationRole this)
+ * @see	asAttribute(MAttribute)
+ * @see asAttribtue(MAssociationRole)
  */
 String asAttribute(MProperty this) : name.toFirstLower();
