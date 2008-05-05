@@ -27,11 +27,11 @@
 // //////////////////////////////////////////////////////////////////////////////
 «REM» evaluate stereotypes for attributes «ENDREM»
 «DEFINE Annotation FOR MAttribute»
-	«IF hasStereotype("ejb3Id")»
+	«IF hasTaggedValue("ejb3PrimaryKey", "id", "true")»
 		@Id
 	«ENDIF»
-	«IF hasStereotype("ejb3GeneratedValue")»
-		@GeneratedValue(strategy=GenerationType.AUTO)
+	«IF hasTaggedValue("ejb3PrimaryKey", "generatedValue", "true")»
+		@GeneratedValue(strategy=GenerationType.«taggedValue.selectFirst(e|e.tag.name == "generationType").value»)
 	«ENDIF»
 	«IF hasTaggedValue("ejb3Persistence", "context", "true")»
 		@PersistenceContext

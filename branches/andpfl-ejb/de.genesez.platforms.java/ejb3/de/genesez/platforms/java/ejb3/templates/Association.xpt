@@ -29,32 +29,32 @@
 
 «REM» evaluate stereotypes for associations «ENDREM»
 «DEFINE Annotation FOR MAssociationRole-»
-	«IF hasStereotype("ejb3OneToOne")»
-		«IF hasTaggedValue("ejb3OneToOne", "bidirectional", "false")»
+	«IF hasTaggedValue("ejb3Association", "associationType", "OneToOne")»
+		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
 			@OneToOne
-		«ELSEIF hasTaggedValue("ejb3OneToOne", "bidirectional", "true")»
-			/* bidirectional One-To-Many relationship is not implemented yet */
+		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
+			«REM» NOCH ZU IMPLEMENTIEREN «ENDREM»
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("ejb3OneToMany")»
-		«IF hasTaggedValue("ejb3OneToMany", "bidirectional", "false")»
-			@OneToMany(cascade={CascadeType.«EXPAND _CascadeType»})
-		«ELSEIF hasTaggedValue("ejb3OneToMany", "bidirectional", "true")»
-			/* bidirectional One-To-Many relationship is not implemented yet */
+	«IF hasTaggedValue("ejb3Association", "associationType", "OneToMany")»
+		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
+			@OneToMany(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascadeType").value»})
+		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
+			«REM» NOCH ZU IMPLEMENTIEREN «ENDREM»
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("ejb3ManyToOne")»
-		«IF hasTaggedValue("ejb3OneToMany", "bidirectional", "false")»
-			@ManyToOne(cascade={CascadeType.«EXPAND _CascadeType»})
-		«ELSEIF hasTaggedValue("ejb3ManyToOne", "bidirectional", "true")»
-			/* bidirectional Many-To-One relationship is not implemented yet */
+	«IF hasTaggedValue("ejb3Association", "associationType", "ManyToOne")»
+		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
+			@ManyToOne(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascadeType").value»})
+		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
+			«REM» NOCH ZU IMPLEMENTIEREN «ENDREM»
 		«ENDIF»
-	«ENDIF»	
-	«IF hasStereotype("ejb3ManyToMany")»
-		«IF hasTaggedValue("ejb3ManyToMany", "bidirectional", "false")»
-			/* unidirectional Many-To-Many relationship is not implemented yet */
-		«ELSEIF hasTaggedValue("ejb3ManyToMany", "bidirectional", "true")»
-			/* bidirectional Many-To-Many relationship is not implemented yet */
+	«ENDIF»
+	«IF hasTaggedValue("ejb3Association", "associationType", "ManyToMany")»
+		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
+			«REM» NOCH ZU IMPLEMENTIEREN «ENDREM»
+		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
+			«REM» NOCH ZU IMPLEMENTIEREN «ENDREM»
 		«ENDIF»
 	«ENDIF»		
 «ENDDEFINE»
@@ -64,18 +64,3 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
-
-«REM» evaluate the taggedValue cascadeType for relation-stereotypes «ENDREM»
-«DEFINE _CascadeType FOR MAssociationRole-»
-	«IF hasTaggedValue("ejb3OneToMany", "cascadeType", "ALL") || hasTaggedValue("ejb3ManyToOne", "cascadeType", "ALL")»
-		ALL
-	«ELSEIF hasTaggedValue("ejb3OneToMany", "cascadeType", "PERSIST") || hasTaggedValue("ejb3ManyToOne", "cascadeType", "PERSIST")»
-		PERSIST
-	«ELSEIF hasTaggedValue("ejb3OneToMany", "cascadeType", "MERGE") || hasTaggedValue("ejb3ManyToOne", "cascadeType", "MERGE")»
-		MERGE
-	«ELSEIF hasTaggedValue("ejb3OneToMany", "cascadeType", "REMOVE") || hasTaggedValue("ejb3ManyToOne", "cascadeType", "REMOVE")»
-		REMOVE
-	«ELSEIF hasTaggedValue("ejb3OneToMany", "cascadeType", "REFRESH") || hasTaggedValue("ejb3ManyToOne", "cascadeType", "REFRESH")»
-		REFRESH
-	«ENDIF»
-«ENDDEFINE»

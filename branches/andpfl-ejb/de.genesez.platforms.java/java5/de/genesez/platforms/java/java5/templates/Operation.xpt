@@ -19,25 +19,24 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 
-// generate constructor for mclass
+«REM» generate constructor for mclass «ENDREM»
 «DEFINE ConstructorImpl FOR MClassifier-»
 «EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
 «ENDDEFINE»
 
 
-// generate all abstract methods for a classifier
+«REM» generate all abstract methods for a classifier «ENDREM»
 «DEFINE OperationDecl FOR MClassifier-»
 «EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)-»
 «ENDDEFINE»
 
 
-// generate all methods for a classifier
+«REM» generate all methods for a classifier «ENDREM»
 «DEFINE OperationImpl FOR MClassifier-»
 «EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
 «ENDDEFINE»
 
-
-// generate constructor for mclass
+«REM» generate constructor for mclass «ENDREM»
 «DEFINE ConstructorImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
 «EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
@@ -46,18 +45,19 @@
 «ENDDEFINE»
 
 
-// generate a declaration for an abstract operation
+«REM» generate a declaration for an abstract operation «ENDREM»
 «DEFINE OperationDecl FOR MOperation-»
-«EXPAND _CommentOperation-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
-«ELSE-»
-	«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
-«ENDIF-»
+	«EXPAND _CommentOperation-»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Operation::Annotation-»
+	«IF multiplicity == 1-»
+		«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+	«ELSE-»
+		«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+	«ENDIF-»
 «ENDDEFINE»
 
 
-// generate an implementation for an normal operation
+«REM» generate an implementation for an normal operation «ENDREM»
 «DEFINE OperationImpl FOR MOperation-»
 «EXPAND _CommentOperation-»
 «IF multiplicity == 1-»
@@ -122,7 +122,7 @@
 	«getReturnTypeReturn(returnType.mapName())»
 «ENDDEFINE»
 
-// generate a protected region for own implementations
+«REM» generate a protected region for own implementations «ENDREM»
 «DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
 /* «PROTECT CSTART "" CEND "" ID (proRegId)» */
 /* TODO put your own implementation code here */
@@ -131,13 +131,13 @@
 «ENDDEFINE»
 
 
-// generate modifiers for moperation
+«REM» generate modifiers for moperation «ENDREM»
 «DEFINE _Modifier FOR MOperation-»
 «visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
 «ENDDEFINE»
 
 
-// generate a parameter list for moperation
+«REM» generate a parameter list for moperation «ENDREM»
 «DEFINE _Parameter FOR MOperation-»
 «FOREACH parameter AS p SEPARATOR ", "-»
 	«EXPAND _Parameter FOR p-»
@@ -145,7 +145,7 @@
 «ENDDEFINE»
 
 
-// generate a parameter for moperation
+«REM» generate a parameter for moperation «ENDREM»
 «DEFINE _Parameter FOR MParameter»
 «IF multiplicity == 1-»
 	«type.mapName()» «asParameterName(name)»
@@ -155,7 +155,7 @@
 «ENDDEFINE»
 
 
-// generate exceptions for a moperation
+«REM» generate exceptions for a moperation «ENDREM»
 «DEFINE _Exception FOR MOperation-»
 «IF !raisedException.isEmpty-»
 	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.mapName()»«ENDFOREACH»
@@ -163,7 +163,7 @@
 «ENDDEFINE»
 
 
-// generate generics
+«REM» generate generics «ENDREM»
 «DEFINE _Generics FOR MClassifier-»
 «IF hasGenericParameter()-»
 	<«getGenericList(genericParameter)»>
@@ -171,7 +171,7 @@
 «ENDIF-»
 «ENDDEFINE»
 
-// generate generics
+«REM» generate generics «ENDREM»
 «DEFINE _Generics FOR MExternal-»
 «IF hasGenericParameter()-»
 	<«getGenericList(genericParameter)»>
@@ -179,6 +179,6 @@
 «ENDIF-»
 «ENDDEFINE»
 
-// generate generics
+«REM» generate generics «ENDREM»
 «DEFINE _Generics FOR MType-»
 «ENDDEFINE»

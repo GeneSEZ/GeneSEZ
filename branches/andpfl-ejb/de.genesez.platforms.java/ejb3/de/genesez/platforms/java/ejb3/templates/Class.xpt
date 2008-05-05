@@ -29,16 +29,23 @@
 
 «REM» evaluate stereotypes for classes «ENDREM»
 «DEFINE Annotation FOR MClass»
-	«IF hasStereotype("ejb3Remote")»
+	«IF hasTaggedValue("ejb3SessionBean", "remote", "true")»
 		@Remote
 	«ENDIF»
-	«IF hasStereotype("ejb3Entity")»
+	«IF hasStereotype("ejb3PersistentEntity")»
 		@Entity
-		@Table(name="«mapName()»")
+		«IF hasTaggedValue("ejb3PersistentEntity", "tableName")»
+			@Table(name="«taggedValue.selectFirst(e|e.tag.name == "tableName").value»")
+		«ELSE»
+			@Table(name="«mapName()»")
+		«ENDIF»
 	«ENDIF»
-	«IF hasTaggedValue("ejb3Remote", "stateful", "true")»
+	«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
 		@Stateful
-	«ELSEIF hasTaggedValue("ejb3Remote", "stateful", "false")»
+	«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "false")»
 		@Stateless
 	«ENDIF»	
+	«IF hasStereotype("ejb3MessageDrivenBean")»
+		@MessageDriven
+	«ENDIF»
 «ENDDEFINE»
