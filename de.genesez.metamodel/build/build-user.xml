@@ -79,27 +79,13 @@
 		</emf.Ecore2Java>
 	</target>
 	
-	<!--
-		create jar library
-	-->
-	<target name="genesezmm2jar"
-		description="creates a jar library which contains the genesez metamodel implementation">
-		
-		<jar destfile="${dist.dir}/genesez-metamodel.jar">
-			<fileset dir="${bin.dir}">
-				<include name="de/genesez/metamodel/**" />
-			</fileset>
-			<manifest>
-				<section name="de.genesez.metamodel">
-					<attribute name="Specification-Title" value="GeneSEZ Metamodel"/>
-					<attribute name="Specification-Version" value="1.5.0"/>
-					<attribute name="Specification-Vendor" value="Generative Software Engineering Zwickau"/>
-					<attribute name="Implementation-Title" value="GeneSEZ Metamodel"/>
-					<attribute name="Implementation-Version" value="1.5.0"/> 
-					<attribute name="Implementation-Vendor" value="Generative Software Engineering Zwickau"/>
-				</section>
-			</manifest>
-		</jar>
+	<!-- compile metamodel java classes -->
+	<target name="compileMetamodel">
+		<mkdir dir="${basedir}/bin" />
+		<javac srcdir="${basedir}/src" 
+			destdir="${basedir}/bin"
+			classpathref="de.genesez.metamodel.classpath"
+			debug="on" />
 	</target>
 	
 	<!-- cleaning lady -->
