@@ -39,33 +39,63 @@
 		</fileset>
 		<fileset dir="${OAW_PLUGIN_DIR}">
 			<include name="org.openarchitectureware.base_4.2.0.*.jar" />
-			<!--include name="org.openarchitectureware.core.check_4.1.2.*.jar" /-->
 			<include name="org.openarchitectureware.core.expressions_4.2.0.*.jar" />
 			<include name="org.openarchitectureware.core.workflow_4.2.0.*.jar" />
 			<include name="org.openarchitectureware.core.emftools_4.2.0.*.jar" />
 			<include name="org.openarchitectureware.core.xpand2_4.2.0.*.jar" />
 			<include name="org.openarchitectureware.uml2.adapter_4.2.0.*.jar" />
 			<include name="org.openarchitectureware.workflow_4.2.0.*.jar" />
-			
 			<include name="org.openarchitectureware.util.stdlib_4.2.0.*.jar" />
-			
 			<include name="org.antlr.runtime_3.0.0/antlr-runtime-3.0.jar"/>
 			<include name="org.apache.commons.cli_1.0.0.jar" />
 			<include name="org.apache.commons.logging_1.0.*/org.apache.commons.logging_1.0.*.jar" />
 			<include name="org.apache.log4j_1.2.8.*/org.apache.log4j_1.2.8.*.jar" />
-			
-			
-			<!--include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/antlr-2.7.6.jar" />
-			
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/antlr-2.7.6.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/beanutils-1.7.0.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/dom4j-1.6.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/jalopy-1.5rc3.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/log4j-1.2.8.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/logging-1.0.3.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/xercesImpl-2.7.1.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/xml-apis.jar"/>
-			<include name="org.openarchitectureware.core.libraries_4.1.2.*/lib/xstream-1.1.3.jar"/-->
+		</fileset>
+		<fileset dir="${MAGICDRAW_DIR}">
+			<include name="lib/patch.jar" />
+			<include name="lib/uml2.jar" />
+			<include name="plugins/com.nomagic.magicdraw.eclipseintegrator/eclipse/plugins/com.nomagic.magicdraw.rcp/md_eclipse.jar" />
+			<include name="lib/md.jar" />
+			<include name="lib/fl_common.jar" />
+			<include name="lib/md_common.jar" />
+			<include name="lib/tw_common.jar" />
+			<include name="lib/launcher.jar" />
+			<include name="lib/bcprov-jdk14-134.jar" />
+			<include name="lib/antlr_2.7.6.1.jar" />
+			<include name="lib/cmof14.jar" />
+			<include name="lib/javax_jmi-1_0-fr.jar" />
+			<include name="lib/activation.jar" />
+			<include name="lib/batik.jar" />
+			<include name="lib/cvsclient.jar" />
+			<include name="lib/fop.jar" />
+			<include name="lib/jedit_syntax.jar" />
+			<include name="lib/xfc.jar" />
+			<include name="lib/jhall.jar" />
+			<include name="lib/jimi.jar" />
+			<include name="lib/log4j-1.2.7.jar" />
+			<include name="lib/mail.jar" />
+			<include name="lib/xalan.jar" />
+			<include name="lib/xercesImpl.jar" />
+			<include name="lib/xml-apis.jar" />
+			<include name="lib/jide-components.jar" />
+			<include name="lib/jide-action.jar" />
+			<include name="lib/jide-dock.jar" />
+			<include name="lib/jide-common.jar" />
+			<include name="lib/jide-grids.jar" />
+			<include name="lib/y.jar" />
+			<include name="lib/jax-qname.jar" />
+			<include name="lib/jaxb-api.jar" />
+			<include name="lib/jaxb-impl.jar" />
+			<include name="lib/jaxb-libs.jar" />
+			<include name="lib/namespace.jar" />
+			<include name="lib/relaxngDatatype.jar" />
+			<include name="lib/xsdlib.jar" />
+			<include name="lib/graphics/freehep-base.jar" />
+			<include name="lib/graphics/freehep-graphics2d.jar" />
+			<include name="lib/graphics/freehep-graphicsio.jar" />
+			<include name="lib/graphics/freehep-graphicsio-emf.jar" />
+			<include name="lib/graphics/freehep-graphicsio-ps.jar" />
+			<include name="plugins/eclipse/plugins/com.nomagic.magicdraw.oaw/oawplugin.jar" />
 		</fileset>
 	</path>
 	
@@ -75,49 +105,5 @@
 		<pathelement location="model-gen"/>
 		<path refid="Plug-in Dependencies.libraryclasspath"/>
 	</path>
-	
-	<!--
-	<target name="init">
-		<mkdir dir="bin"/>
-		<copy includeemptydirs="false" todir="bin">
-			<fileset dir="src" excludes="**/*.launch, **/*.java"/>
-		</copy>
-		<copy includeemptydirs="false" todir="bin">
-			<fileset dir="genesezMM" excludes="**/*.launch, **/*.java"/>
-		</copy>
-	</target>
-	<target name="clean">
-		<delete dir="bin"/>
-	</target>
-	<target depends="clean" name="cleanall"/>
-	<target depends="build-subprojects,build-project" name="build"/>
-	<target name="build-subprojects"/>
-	<target depends="init" name="build-project">
-		<echo message="${ant.project.name}: ${ant.file}"/>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-			<src path="src"/>
-			<exclude name="**/.svn"/>
-			<classpath refid="de.genesez.metamodel.classpath"/>
-		</javac>
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-			<src path="genesezMM"/>
-			<exclude name="**/.svn"/>
-			<classpath refid="de.genesez.metamodel.classpath"/>
-		</javac>
-	</target>
-	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-	<target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-		<copy todir="${ant.library.dir}">
-			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-		</copy>
-		<unzip dest="${ant.library.dir}">
-			<patternset includes="jdtCompilerAdapter.jar"/>
-			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-		</unzip>
-	</target>
-	<target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-		<antcall target="build"/>
-	</target>
-	-->
+
 </project>
