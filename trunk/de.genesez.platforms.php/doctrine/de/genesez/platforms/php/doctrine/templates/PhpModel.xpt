@@ -1,16 +1,17 @@
 «REM»
-	generates the table definition for phpdoctrine as php file
+	Handles all classes and generates the table definition for phpdoctrine as php file.
 	
 	currently covered:
 	- properties with simple types as columns
 	
-	TODO:
-	- associations + collection mappings
-	- simple types, size + constraints
-	- comments (class, methods + maybe virtual attributes (table columns)? )
-	- maybe introduce a parameter (name of a stereotype) which indicates persistent classes in the model
-	
+	@author		tobias haubold
+	@date		2008-04-17
 	@version	alpha
+	
+	@todo	associations + collection mappings
+	@todo	simple types, size + constraints
+	@todo	comments (class, methods + maybe virtual attributes (table columns)? )
+	@todo	maybe introduce a parameter (name of a stereotype) which indicates persistent classes in the model
 «ENDREM»
 
 
@@ -37,18 +38,16 @@
 «ENDREM»
 
 «REM»
-	main entry point for generating a model definition
-	@param	this	a model
+	processes the contents of the model
+	rejects all ignored packages from further processing
 «ENDREM»
 «DEFINE Root FOR MModel»
-	«enableLogging("finest")»
 	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
 «ENDDEFINE»
 
 «REM»
 	processes the contents of a package
 	reject all data types from further processing
-	@context	a package
 «ENDREM»
 «DEFINE Root FOR MPackage»
 	«EXPAND Root FOREACH nestedPackage»

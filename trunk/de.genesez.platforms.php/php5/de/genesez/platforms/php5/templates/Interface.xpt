@@ -1,5 +1,5 @@
 «REM»
-	performs the generation of interfaces
+	Performs the generation of interfaces
 	
 	currently handled:
 	- extends, implements
@@ -8,7 +8,8 @@
 	- associations
 	- comments
 	
-	TODO:
+	@author	tobias haubold
+	@date	2008-04-09
 «ENDREM»
 
 
@@ -55,7 +56,7 @@ interface «asTypeName()» «EXPAND _Generalization -» {
 	«ENDIF -»
 	«EXPAND Association::Accessors -»
 	
-	// -- own code declarations -------------------------------------------
+	// -- own code declarations ---------------------------------------------
 	«EXPAND _OwnCodeImpl("php.interface.own.code.declaration." + xmiGuid) -»
 }
 «ENDDEFINE»
@@ -69,7 +70,6 @@ interface «asTypeName()» «EXPAND _Generalization -» {
 
 «REM»
 	processes the generalizations of an interface
-	multiple inheritance is allowed
 	@context	an interface
 «ENDREM»
 «DEFINE _Generalization FOR MInterface -»
@@ -80,6 +80,7 @@ extends «FOREACH generalization AS g SEPARATOR ", " -»«g.mapName().asTypeName
 
 «REM»
 	generates a region for own code declarations
+	@param	id	protected region id
 «ENDREM»
 «DEFINE _OwnCodeImpl(String id) FOR MInterface -»
 	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
