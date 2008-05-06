@@ -1,32 +1,34 @@
-/*
-	some useful functions for M2T transformations
-*/
+/**
+ * Helper function for M2T Transformations which filters lists of packages 
+ * to simply exclude packages from code generation.
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-18
+ */
 
-//	based on genesez meta model
+// based on genesez meta model
 import genesezMM;
-extension de::genesez::platforms::common::log::Log;
-
 
 /**
- * accessor for the global variable 'excludePackages'
+ * getter accessor for the global variable 'excludePackages', configured in the workflow component
  * @return	value of the global variable 'excludePackages'
  */
 String ignoredPackages() : (String) GLOBALVAR excludePackages;
 
 /**
- * reject all packages in the 'excludePackages' variable from the list
- * @param	packages	list of packages
- * @return	list without the ignored packages
+ * rejects all packages contained in the 'excludePackages' variable from the specified list of packages
+ * @context	list of packages to filter
+ * @return	list of packages without the packages to ignore
  */
-List[MPackage] rejectIgnoredPackages(List[MPackage] packages) :
-	packages.rejectIgnoredPackages(ignoredPackages());
-	
+List[MPackage] rejectIgnoredPackages(List[MPackage] this) :
+	rejectIgnoredPackages( ignoredPackages() );
+
 /**
  * rejects all packages from the given list, specified in the given string as a comma 
  * or semicolon separated list with full qualified package names
- * @param	packages		list of packages
- * @param	ignoredPackages	comma or semicola separated list with package names
- * @return	list of packages without the ignored
+ * @param	packages		list of packages to filter
+ * @param	ignoredPackages	comma or semicola separated list with full qualified package names
+ * @return	list of packages without the packages to ignore
  */
 private List[MPackage] rejectIgnoredPackages(List[MPackage] packages, String ignoredPackages) :
 	JAVA de.genesez.platforms.common.m2t.TransUtils.rejectIgnoredPackages(java.util.List, java.lang.String);
