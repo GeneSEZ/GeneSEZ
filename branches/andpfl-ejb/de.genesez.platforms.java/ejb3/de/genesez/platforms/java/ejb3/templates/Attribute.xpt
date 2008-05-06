@@ -27,13 +27,97 @@
 // //////////////////////////////////////////////////////////////////////////////
 «REM» evaluate stereotypes for attributes «ENDREM»
 «DEFINE Annotation FOR MAttribute»
+	«EXPAND Column»
+	«EXPAND PrimaryKey»
+	«REM» persistence context «ENDREM»
+	«IF hasTaggedValue("ejb3Persistence", "context", "true")»
+		@PersistenceContext
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype ejb3PrimaryKey
+	is used by attribute and operation
+ «ENDREM»
+«DEFINE PrimaryKey FOR MElement»
+«REM» primary key «ENDREM»
 	«IF hasTaggedValue("ejb3PrimaryKey", "id", "true")»
 		@Id
 	«ENDIF»
-	«IF hasTaggedValue("ejb3PrimaryKey", "generatedValue", "true")»
-		@GeneratedValue(strategy=GenerationType.«taggedValue.selectFirst(e|e.tag.name == "generationType").value»)
+	«IF hasTaggedValue("ejb3PrimaryKey", "generationType", "TABLE") && !hasTaggedValue("ejb3PrimaryKey", "generatorName", "null")»
+		@TableGenerator(name="«taggedValue.selectFirst(e|e.tag.name == "generatorName").value-»"
+		«IF !hasTaggedValue("ejb3PrimaryKey", "table", "null")-»
+			, table="«taggedValue.selectFirst(e|e.tag.name == "table").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3PrimaryKey", "pkColumnName", "null")-»
+			, pkColumnName="«taggedValue.selectFirst(e|e.tag.name == "pkColumnName").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3PrimaryKey", "valueColumnName", "null")-»
+			, valueColumnName="«taggedValue.selectFirst(e|e.tag.name == "valueColumnName").value-»"
+		«ENDIF-»	
+		«IF !hasTaggedValue("ejb3PrimaryKey", "pkColumnValue", "null")-»
+			, pkColumnValue="«taggedValue.selectFirst(e|e.tag.name == "pkColumnValue").value-»"
+		«ENDIF-»	
+		)	
 	«ENDIF»
-	«IF hasTaggedValue("ejb3Persistence", "context", "true")»
-		@PersistenceContext
+	«IF hasTaggedValue("ejb3PrimaryKey", "generationType", "SEQUENCE")&& !hasTaggedValue("ejb3PrimaryKey", "generatorName", "null")»
+		@SequenceGenerator(name="«taggedValue.selectFirst(e|e.tag.name == "generatorName").value-»"
+		«IF !hasTaggedValue("ejb3PrimaryKey", "sequenceName", "null")-»
+			, sequenceName="«taggedValue.selectFirst(e|e.tag.name == "sequenceName").value-»"
+		«ENDIF-»
+		)
+	«ENDIF»
+	«IF hasTaggedValue("ejb3PrimaryKey", "generatedValue", "true")»
+		@GeneratedValue(strategy=GenerationType.«taggedValue.selectFirst(e|e.tag.name == "generationType").value-»
+		«IF hasTaggedValue("ejb3PrimaryKey", "generationType", "TABLE") || hasTaggedValue("ejb3PrimaryKey", "generationType", "SEQUENCE")-»
+			«IF !hasTaggedValue("ejb3PrimaryKey", "generatorName", "null")-»
+				, generator="«taggedValue.selectFirst(e|e.tag.name == "generatorName").value-»"
+			«ENDIF-»
+		«ENDIF-»	
+		)
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype ejb3Column
+	is used by attribute and operation
+ «ENDREM»
+«DEFINE Column FOR MElement»
+	«REM» column «ENDREM»
+	«IF hasStereotype("ejb3Column")»
+		@Column(
+		«IF !hasTaggedValue("ejb3Column", "name", "null")-»
+			name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«ELSE-»
+			name="«this.name-»"
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "unique", "true")-»
+			, unique=true, nullable=false
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "nullable", "false") && !hasTaggedValue("ejb3Column", "unique", "true")-»
+			, nullable=false
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "insertable", "false")-»
+			, insertable=false
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "updateable", "false")-»
+			, updateable=false
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "columnDefinition", "null")-»
+			, columnDefinition="«taggedValue.selectFirst(e|e.tag.name == "columnDefinition").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "table", "null")-»
+			, table="«taggedValue.selectFirst(e|e.tag.name == "table").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "length", "255")-»
+			, length=«taggedValue.selectFirst(e|e.tag.name == "length").value-»
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "precision", "0")-»
+			, precision=«taggedValue.selectFirst(e|e.tag.name == "precision").value-»
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "scale", "0")-»
+			, scale=«taggedValue.selectFirst(e|e.tag.name == "scale").value-»
+		«ENDIF-»
+		)
 	«ENDIF»
 «ENDDEFINE»

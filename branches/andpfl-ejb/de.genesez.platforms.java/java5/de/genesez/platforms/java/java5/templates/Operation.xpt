@@ -59,16 +59,17 @@
 
 «REM» generate an implementation for an normal operation «ENDREM»
 «DEFINE OperationImpl FOR MOperation-»
-«EXPAND _CommentOperation-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
-«ELSE-»
-	«IF returnType.metaType == MPrimitiveType-»
-		«EXPAND _Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«EXPAND _CommentOperation-»
+	«EXPAND de::genesez::platforms::java::ejb3::templates::Operation::Annotation-»
+	«IF multiplicity == 1-»
+		«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
 	«ELSE-»
-		«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+		«IF returnType.metaType == MPrimitiveType-»
+			«EXPAND _Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+		«ELSE-»
+			«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+		«ENDIF-»
 	«ENDIF-»
-«ENDIF-»
 	«EXPAND _DefaultReturnAndOwnCodeImpl-»
 }
 «ENDDEFINE»

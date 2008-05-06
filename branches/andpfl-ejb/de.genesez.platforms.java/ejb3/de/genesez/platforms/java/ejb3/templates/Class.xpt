@@ -29,22 +29,47 @@
 
 «REM» evaluate stereotypes for classes «ENDREM»
 «DEFINE Annotation FOR MClass»
-	«IF hasTaggedValue("ejb3SessionBean", "remote", "true")»
-		@Remote
-	«ENDIF»
+	«REM» PersistentEntity «ENDREM»
 	«IF hasStereotype("ejb3PersistentEntity")»
 		@Entity
-		«IF hasTaggedValue("ejb3PersistentEntity", "tableName")»
-			@Table(name="«taggedValue.selectFirst(e|e.tag.name == "tableName").value»")
-		«ELSE»
-			@Table(name="«mapName()»")
-		«ENDIF»
+		@Table(
+		«IF !hasTaggedValue("ejb3PersistentEntity", "tableName", "null")-»
+			name="«taggedValue.selectFirst(e|e.tag.name == "tableName").value»"
+		«ELSE-»
+			name="«mapName()»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3PersistentEntity", "tableCatalog", "null")-»
+			, catalog = "«taggedValue.selectFirst(e|e.tag.name == "tableCatalog").value»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3PersistentEntity", "tableSchema", "null")-»
+			, schema = "«taggedValue.selectFirst(e|e.tag.name == "tableSchema").value»"
+		«ENDIF-»
+		)
 	«ENDIF»
-	«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
-		@Stateful
-	«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "false")»
-		@Stateless
+	«REM» SessionBean «ENDREM»
+	«IF hasTaggedValue("ejb3SessionBean", "remote", "true")»
+		@Remote
+		«IF !hasTaggedValue("ejb3SessionBean", "remoteInterface", "null")-»
+			(«taggedValue.selectFirst(e|e.tag.name == "remoteInterface").value».class)
+		«ENDIF»
+	«ELSEIF hasTaggedValue("ejb3SessionBean", "remote", "false") && !hasTaggedValue("ejb3SessionBean", "localInterface", "null")»
+		@Local(«taggedValue.selectFirst(e|e.tag.name == "localInterface").value».class)
 	«ENDIF»	
+	«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
+		«IF hasTaggedValue("ejb3SessionBean", "name")»
+			@Stateful(name = "«taggedValue.selectFirst(e|e.tag.name == "name").value»") 
+ 		«ELSE»
+			@Stateful
+		«ENDIF»
+	«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "false")»
+		«IF hasTaggedValue("ejb3SessionBean", "name")»
+			@Stateless(name = "«taggedValue.selectFirst(e|e.tag.name == "name").value»") 
+ 		«ELSE»
+			@Stateless
+		«ENDIF»
+		«REM» TODO: declarative transactionality for stateless beans «ENDREM»
+	«ENDIF»	
+	«REM» MessageDriven «ENDREM»
 	«IF hasStereotype("ejb3MessageDrivenBean")»
 		@MessageDriven
 	«ENDIF»
