@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<!--
+	build file for deploying the php example to a web server directory
+	
+	@author	tobias haubold
+	@date	2008-04-21
+-->
+<project name="de.genesez.example.php" basedir=".">
+	
+	<property name="deploy.dir" value="D:/httpd/fh3/de.genesez.example.php" />
+	<property name="src-gen.dir" value="src-gen" />
+	<property name="api-doc.dir" value="bin/api-doc" />
+	
+	<!--
+		generates the api doc using phpdocumentor
+	-->
+	<target name="doc">
+		<!--pathconvert property="input.dir">
+			<path location="${basedir}/${src-gen.dir}" />
+		</pathconvert>
+		<pathconvert property="output.dir">
+			<path location="${basedir}/${api-doc.dir}"></path>
+		</pathconvert -->
+		<exec executable="cmd" dir="${basedir}">
+			<arg value="/c" />
+			<arg value="phpdoc.bat" />
+			<arg value="-d" />
+			<arg value="${src-gen.dir}" />
+			<arg value="-o" />
+			<arg value="HTML:default:default" />
+			<arg value="-t" />
+			<arg value="${api-doc.dir}" />
+			<!-- source code includes -->
+			<arg value="-s" />
+			<arg value="on" />
+		</exec>
+	</target>
+	
+	<!--
+		deploys the source directories to a directory of an web server
+	-->
+	<target name="deploy">
+		<copy todir="${deploy.dir}">
+			<fileset dir="${src-gen.dir}" />
+		</copy>
+	</target>
+	
+	<!--
+		deletes all contents from the deploy directory
+	-->
+	<target name="undeploy">
+		<delete>
+			<fileset dir="${deploy.dir}">
+				<include name="**/*" />
+			</fileset>
+			<dirset dir="${deploy.dir}">
+				<include name="**/*" />
+			</dirset>
+		</delete>
+	</target>
+	
+	<!--
+		removes the generated api doc and all source folders from the web server directory
+	-->
+	<target name="clean" depends="undeploy">
+		<delete dir="${api-doc.dir}" />
+	</target>
+</project>
