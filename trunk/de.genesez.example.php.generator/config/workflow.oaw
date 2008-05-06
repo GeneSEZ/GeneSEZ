@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	workflow for generating the php example application
+	
+	@author	tobias haubold
+	@date	2008-03-27 
+ -->
+<workflow>
+	
+	<!-- this is the generator for the following project -->
+	<property name="project.dir" value="../de.genesez.example.php" />
+	
+	<!-- reading model + transform it into a genesez model -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::makeGenesezModel.oaw" 
+		inputModelFile="model-exp/php_example.uml"
+		genesezModel="genesezModel"
+		excludePackages="UML Standard Profile"
+		mapClassesInModelToExternal="false"
+		externalPackages = ""
+		externalStereotypes = "external"
+	/>
+	
+	<!-- serialize genesez model -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::xmiWriter.oaw"
+		modelSlot="genesezModel"
+		outputModelFile="model-gen/php_example.xmi"
+	/>
+	
+	<!-- generate the utility class using standard php templates -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::php5::templates::Root::Root FOR genesezModel"
+		excludePackages="core, controller"
+		typeMappingFile="config/typemapping.xml"
+		configFile=""
+		outputDir="${project.dir}/src-gen"
+		proRegDir="${project.dir}/src-gen"
+	/>
+	
+	<!-- generate core files using phpdoctrine (DB Access) -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::php::doctrine::templates::PhpModel::Root FOR genesezModel"
+		excludePackages="util, controller"
+		typeMappingFile="../de.genesez.platforms.php/doctrine/de/genesez/platforms/php/doctrine/typemapping/typemapping.xml"
+		configFile=""
+		outputDir="${project.dir}/src-gen"
+		proRegDir="${project.dir}/src-gen"
+	/>
+	
+	<!-- generate forms using QuickForm -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::php::pear::templates::QuickForm::Root FOR genesezModel"
+		excludePackages="util, controller"
+		typeMappingFile="../de.genesez.platforms.php/php/de/genesez/platforms/php/typemapping/typemapping.xml"
+		configFile=""
+		outputDir="${project.dir}/src-gen"
+		proRegDir="${project.dir}/src-gen"
+	/>
+	
+	<!-- generate smarty templates -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::php::smarty::templates::ListView::Root FOR genesezModel"
+		excludePackages="util, controller"
+		typeMappingFile="../de.genesez.platforms.php/php/de/genesez/platforms/php/typemapping/typemapping.xml"
+		configFile=""
+		outputDir="${project.dir}/src-gen"
+		proRegDir="${project.dir}/src-gen"
+	/>
+	
+	<!-- scaffold application -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::php::scaffold::templates::Root::Root FOR genesezModel"
+		excludePackages="util, controller"
+		typeMappingFile="../de.genesez.platforms.php/php/de/genesez/platforms/php/typemapping/typemapping.xml"
+		configFile=""
+		outputDir="${project.dir}/src-gen"
+		proRegDir="${project.dir}/src-gen"
+	/>
+	
+	<!-- generates the controller infrastructure -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::php::controller::templates::Root::Root FOR genesezModel"
+		excludePackages="core, util"
+		typeMappingFile="../de.genesez.platforms.php/php/de/genesez/platforms/php/typemapping/typemapping.xml"
+		configFile=""
+		outputDir="${project.dir}/src-gen"
+		proRegDir="${project.dir}/src-gen"
+	/>
+	
+</workflow>
