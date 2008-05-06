@@ -2,12 +2,16 @@
 <!-- this file runs the uml2ecore Workflow from the oaw Model-to-Model -->
 
 <workflow>
-
 	<!-- properties for this workflow -->
 	<property name="uml2MetaModelPath" value="model-exp/" />
 	<property name="uml2MetaModelFile" value="genesezMM.uml" />
 	<property name="ecoreMetaModelPath" value="model-gen/" />
 	<property name="ecoreMetaModelFile" value="genesezMM.ecore" />
+	
+	<!-- make workflow working with 'environment.properties' file -->
+	<property name="basedir" value="${baseDir}" />
+	<!-- include magic draw home directory -->
+	<property file="build/environment.properties" />
 	
 	<!-- maybe in future, when we have an update site or similiar and our metamodel is robust -->
 	<!-- property name="nsUri" value="http://genesez.de/metamodel.ecore" / -->
@@ -34,7 +38,7 @@
            exportDirectory="model-exp"
            skipUpToDate="false"
            requiredVersion="2.x"
-           magicdrawHome="/usr/share/magicdraw" />
+           magicdrawHome="${MAGICDRAW_DIR}" />
     
     <!-- Read the uml2 model file into the uml2model workflow slot. -->
 	<component id="xmiReader" class="org.openarchitectureware.emf.XmiReader">
