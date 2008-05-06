@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._11_5_6340215_1178034133828_951385_16) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base.parts
  */
@@ -13,9 +11,8 @@
 /* PROTECTED REGION END */
 
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._11_5_6340215_1178034133828_951385_16) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
  * @author	dreamer
  * @package	base.parts
  */
@@ -23,17 +20,23 @@ class Screw   {
 	
 	// -- attributes --------------------------------------------------------
 	/**
-	 * @var		float	$length	describes the length of a screw
+	 * describes the length of a screw
+	 * @generated	attribute definition, documented here {@link Screw::getLength()}
+	 * @var		float	$length
 	 * @see		Screw::getLength()
 	 */
 	private $length;
 	/**
-	 * @var		float	$diameter	
+	 * 
+	 * @generated	attribute definition, documented here {@link Screw::getDiameter()}
+	 * @var		float	$diameter
 	 * @see		Screw::getDiameter()
 	 */
 	private $diameter;
 	/**
-	 * @var		boolean	$metric	
+	 * 
+	 * @generated	attribute definition, documented here {@link Screw::getMetric()}
+	 * @var		boolean	$metric
 	 * @see		Screw::getMetric()
 	 */
 	private $metric;
@@ -43,11 +46,10 @@ class Screw   {
 	
 	// -- method implementations --------------------------------------------
 	/**
-	 * @internal <!-- PROTECTED REGION ID(php.own.operation.comment._12_5_8a7027a_1183038841674_975104_475) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
+	
+	 * @generated	method stub for implementation
 	 * @param	int	$count	
-	 * @return	NULL	
+	 * @return	null	
 	 */
 	public function screwOn($count) {
 		
@@ -61,16 +63,15 @@ class Screw   {
 	
 	// -- attribute accessors -----------------------------------------------
 	/**
-	 * getter for the attribute $length
-	 * 
 	 * describes the length of a screw
-	 * @return	float	the value of $length
-	 */
+	 * @generated	accessor to get the value of the attribute {@link Screw::$length}
+	 * @return	float	the value of {@link Screw::$length}		 */
 	private function getLength() {
 		return $length;
 	}
 	/**
-	 * setter for the attribute $length
+	 * setter method of the attribute {@link Screw::getLength() $length}
+	 * @generated	setter method for the attribute {@link Screw::getLength() $length}
 	 * @param	float	$length	the value to set
 	 * @see		Screw::getLength()
 	 */
@@ -78,18 +79,15 @@ class Screw   {
 		self::$length = $length;
 	}
 	/**
-	 * getter for the attribute $diameter
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._11_5_6340215_1178034174218_253052_39) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	float	the value of $diameter
-	 */
+	 * getter method of the attribute {@link Screw::$diameter}
+	 * @generated	accessor to get the value of the attribute {@link Screw::$diameter}
+	 * @return	float	the value of {@link Screw::$diameter}		 */
 	private function getDiameter() {
 		return $diameter;
 	}
 	/**
-	 * setter for the attribute $diameter
+	 * setter method of the attribute {@link Screw::getDiameter() $diameter}
+	 * @generated	setter method for the attribute {@link Screw::getDiameter() $diameter}
 	 * @param	float	$diameter	the value to set
 	 * @see		Screw::getDiameter()
 	 */
@@ -97,18 +95,15 @@ class Screw   {
 		self::$diameter = $diameter;
 	}
 	/**
-	 * getter for the attribute $metric
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._11_5_6340215_1178034186171_435038_41) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	boolean	the value of $metric
-	 */
+	 * getter method of the attribute {@link Screw::$metric}
+	 * @generated	accessor to get the value of the attribute {@link Screw::$metric}
+	 * @return	boolean	the value of {@link Screw::$metric}		 */
 	private function getMetric() {
 		return $metric;
 	}
 	/**
-	 * setter for the attribute $metric
+	 * setter method of the attribute {@link Screw::getMetric() $metric}
+	 * @generated	setter method for the attribute {@link Screw::getMetric() $metric}
 	 * @param	boolean	$metric	the value to set
 	 * @see		Screw::getMetric()
 	 */

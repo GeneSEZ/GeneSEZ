@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._12_5_6340215_1182161516984_21570_380) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -13,9 +11,8 @@
 /* PROTECTED REGION END */
 
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._12_5_6340215_1182161516984_21570_380) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
  * @author	dreamer
  * @package	base
  */
@@ -23,7 +20,9 @@ class Owner   {
 	
 	// -- attributes --------------------------------------------------------
 	/**
-	 * @var		string	$name	
+	 * 
+	 * @generated	attribute definition, documented here {@link Owner::getName()}
+	 * @var		string	$name
 	 * @see		Owner::getName()
 	 */
 	private $name;
@@ -36,18 +35,15 @@ class Owner   {
 	
 	// -- attribute accessors -----------------------------------------------
 	/**
-	 * getter for the attribute $name
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._12_5_6340215_1182161551437_953885_449) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	string	the value of $name
-	 */
+	 * getter method of the attribute {@link Owner::$name}
+	 * @generated	accessor to get the value of the attribute {@link Owner::$name}
+	 * @return	string	the value of {@link Owner::$name}		 */
 	private function getName() {
 		return $name;
 	}
 	/**
-	 * setter for the attribute $name
+	 * setter method of the attribute {@link Owner::getName() $name}
+	 * @generated	setter method for the attribute {@link Owner::getName() $name}
 	 * @param	string	$name	the value to set
 	 * @see		Owner::getName()
 	 */

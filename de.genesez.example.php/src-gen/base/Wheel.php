@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._11_5_6340215_1177945943625_542159_161) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -17,9 +15,9 @@ require_once '../base/Changeable.php';
 /* PROTECTED REGION END */
 
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._11_5_6340215_1177945943625_542159_161) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
+ * @see		Changeable
  * @author	dreamer
  * @package	base
  */
@@ -27,29 +25,39 @@ class Wheel  implements Changeable {
 	
 	// -- attributes --------------------------------------------------------
 	/**
-	 * @var		float	$diameter	
+	 * 
+	 * @generated	attribute definition, documented here {@link Wheel::getDiameter()}
+	 * @var		float	$diameter
 	 * @see		Wheel::getDiameter()
 	 */
 	private $diameter;
 	/**
-	 * @var		string	$specification	
+	 * 
+	 * @generated	attribute definition, documented here {@link Wheel::getSpecification()}
+	 * @var		string	$specification
 	 * @see		Wheel::getSpecification()
 	 */
 	private $specification = array();
 	/**
-	 * @var		int	$durability	
+	 * 
+	 * @generated	attribute definition, documented here {@link Wheel::getDurability()}
+	 * @var		int	$durability
 	 * @see		Wheel::getDurability()
 	 */
 	private $durability = 100000;
 	
 	// -- associations ------------------------------------------------------
 	/**
-	 * @var		Car	$mycar	
+	 * 
+	 * @generated	attribute definition for association to {@link Car}, documented here {@link Wheel::getMycar()}
+	 * @var		Car	$mycar
 	 * @see		Wheel::getMycar()
 	 */
 	private $mycar;
 	/**
-	 * @var		Screw	$screw	
+	 * 
+	 * @generated	attribute definition for association to {@link }, documented here {@link Wheel::getScrew()}
+	 * @var		Screw	$screw
 	 * @see		Wheel::getScrew()
 	 */
 	private $screw = array();
@@ -58,9 +66,8 @@ class Wheel  implements Changeable {
 	
 	// -- method implementations --------------------------------------------
 	/**
-	 * @internal <!-- PROTECTED REGION ID(php.own.operation.comment._11_5_6340215_1179139054625_520706_1) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
+	
+	 * @generated	method stub for implementation
 	 * @param	Changeable	$newWheel	
 	 * @return	boolean	
 	 */
@@ -72,15 +79,12 @@ class Wheel  implements Changeable {
 		return $returnValue;
 	}
 	/**
-	 * @internal <!-- PROTECTED REGION ID(php.own.operation.comment._11_5_6340215_1179238960437_25222_122) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
+	
+	 * @generated	method stub for implementation
 	 * 
-	 * the operation may throw the following exceptions:
-	 * {@link FlatTireException FlatTireException}
-	 * @throws		FlatTireException
+	 * @throws		{@link FlatTireException}
 	 * 
-	 * @return	NULL	
+	 * @return	null	
 	 */
 	public function roll() {
 		
@@ -93,18 +97,16 @@ class Wheel  implements Changeable {
 	
 	// -- association accessors ---------------------------------------------
 	/**
-	 * getter for the association attribute $mycar
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.association.comment._11_5_6340215_1177945988421_335383_193) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	Car	the value of $mycar
+	 * getter method of the association attribute {@link Wheel::$mycar}
+	 * @generated	accessor to get the value of the association attribute {@link Wheel::$mycar} from association to {@link Car}
+	 * @return	Car	the value of {@link Wheel::$mycar}
 	 */
 	private function getMycar() {
 		return $mycar;
 	}
 	/**
-	 * setter for the association attribute $mycar
+	 * setter method of the association attribute {@link Wheel::getMycar() $mycar}
+	 * @generated	setter method for the association attribute from association to {@link Car}
 	 * @param	Car	$mycar	the value to set
 	 * @see		Wheel::getMycar()
 	 */
@@ -112,18 +114,16 @@ class Wheel  implements Changeable {
 		self::$mycar = $mycar;
 	}
 	/**
-	 * getter for the association attribute $screw
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.association.comment._11_5_6340215_1178037495031_331770_169) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	array	the value of $screw as an array of type Screw
+	 * getter method of the association attribute {@link Wheel::$screw}
+	 * @generated	accessor to get the value of the association attribute {@link Wheel::$screw} from association to {@link Screw}
+	 * @return	array	the value of {@link Wheel::$screw} as an array of type Screw
 	 */
 	private function getScrew() {
 		return array_values($screw);
 	}
 	/**
-	 * adds the given value to the association attribute $screw
+	 * adds the given value to the association attribute {@link Wheel::getScrew() $screw}
+	 * @generated	adder method for the multi-valued association attribute from association to {@link Screw}
 	 * @param	Screw	$toAdd	the value to add
 	 * @see		Wheel::getScrew()
 	 */
@@ -131,7 +131,8 @@ class Wheel  implements Changeable {
 		self::$screw[] = $toAdd;
 	}
 	/**
-	 * removes the given value from the association attribute $screw
+	 * removes the given value from the association attribute {@link Wheel::getScrew() $screw}
+	 * @generated	method to remove values from the multi-valued association attribute from association to {@link Screw}
 	 * @param	Screw	$toRemove	the value to remove
 	 * @see		Wheel::getScrew()
 	 */
@@ -144,18 +145,15 @@ class Wheel  implements Changeable {
 	
 	// -- attribute accessors -----------------------------------------------
 	/**
-	 * getter for the attribute $diameter
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._11_5_6340215_1177945958000_326546_182) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	float	the value of $diameter
-	 */
+	 * getter method of the attribute {@link Wheel::$diameter}
+	 * @generated	accessor to get the value of the attribute {@link Wheel::$diameter}
+	 * @return	float	the value of {@link Wheel::$diameter}		 */
 	private function getDiameter() {
 		return $diameter;
 	}
 	/**
-	 * setter for the attribute $diameter
+	 * setter method of the attribute {@link Wheel::getDiameter() $diameter}
+	 * @generated	setter method for the attribute {@link Wheel::getDiameter() $diameter}
 	 * @param	float	$diameter	the value to set
 	 * @see		Wheel::getDiameter()
 	 */
@@ -163,18 +161,16 @@ class Wheel  implements Changeable {
 		self::$diameter = $diameter;
 	}
 	/**
-	 * getter for the attribute $specification
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._11_5_6340215_1178785354859_924284_117) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	array	the value of $specification as an array of type string
+	 * getter method of the attribute {@link Wheel::$specification}
+	 * @generated	accessor to get the value of the attribute {@link Wheel::$specification}
+	 * @return	array	the value of {@link Wheel::$specification} as an array of type {@link string}
 	 */
 	private function getSpecification() {
 		return array_values($specification);
 	}
 	/**
-	 * adds the given value to the attribute $specification
+	 * adds the given value to the attribute {@link Wheel::getSpecification() $specification}
+	 * @generated	adder method for the multi-valued attribute {@link Wheel::getSpecification() $specification}
 	 * @param	string	$toAdd	the value to add
 	 * @see		Wheel::getSpecification()
 	 */
@@ -182,7 +178,8 @@ class Wheel  implements Changeable {
 		self::$specification[] = $toAdd;
 	}
 	/**
-	 * removes the given value from the attribute $specification
+	 * removes the given value from the attribute {@link Wheel::getSpecification() $specification}
+	 * @generated	method to remove values from the multi-valued attribute {@link Wheel::getSpecification() $specification}
 	 * @param	string	$toRemove	the value to remove
 	 * @see		Wheel::getSpecification()
 	 */
@@ -193,18 +190,15 @@ class Wheel  implements Changeable {
 		}
 	}
 	/**
-	 * getter for the attribute $durability
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._12_5_b6f02e1_1204100686109_604917_680) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	int	the value of $durability
-	 */
+	 * getter method of the attribute {@link Wheel::$durability}
+	 * @generated	accessor to get the value of the attribute {@link Wheel::$durability}
+	 * @return	int	the value of {@link Wheel::$durability}		 */
 	private function getDurability() {
 		return $durability;
 	}
 	/**
-	 * setter for the attribute $durability
+	 * setter method of the attribute {@link Wheel::getDurability() $durability}
+	 * @generated	setter method for the attribute {@link Wheel::getDurability() $durability}
 	 * @param	int	$durability	the value to set
 	 * @see		Wheel::getDurability()
 	 */

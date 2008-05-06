@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._12_5_b6f02e1_1204100267031_575890_564) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -14,9 +12,9 @@ require_once 'Exception';
 /* PROTECTED REGION END */
 
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._12_5_b6f02e1_1204100267031_575890_564) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
+ * @see		Exception
  * @author	dreamer
  * @package	base
  */

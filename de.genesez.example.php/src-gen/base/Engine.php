@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._12_5_8a7027a_1182165491328_680838_471) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -14,9 +12,8 @@ require_once '../base/Car.php';
 /* PROTECTED REGION END */
 
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._12_5_8a7027a_1182165491328_680838_471) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
  * @author	dreamer
  * @package	base
  */
@@ -24,26 +21,33 @@ class Engine   {
 	
 	// -- attributes --------------------------------------------------------
 	/**
-	 * @var		byte	$ps	
+	 * 
+	 * @generated	attribute definition, documented here {@link Engine::getPs()}
+	 * @var		byte	$ps
 	 * @see		Engine::getPs()
 	 */
 	private $ps;
 	/**
-	 * @var		string	$name	
+	 * 
+	 * @generated	attribute definition, documented here {@link Engine::getName()}
+	 * @var		string	$name
 	 * @see		Engine::getName()
 	 */
 	private $name;
 	
 	// -- associations ------------------------------------------------------
 	/**
-	 * @var		Car	$car	
+	 * 
+	 * @generated	attribute definition for association to {@link Car}, documented here {@link Engine::getCar()}
+	 * @var		Car	$car
 	 * @see		Engine::getCar()
 	 */
 	private $car;
 	
 	// -- constructors + destructors ----------------------------------------
 	/**
-	 * constructs an object of class Engine
+	 * constructs an object of class {@link Engine}
+	 * @generated	constructor for class {@link Engine}
 	 * @param	byte	$ps	
 	 * @param	string	$name	
 	 */
@@ -59,18 +63,16 @@ class Engine   {
 	
 	// -- association accessors ---------------------------------------------
 	/**
-	 * getter for the association attribute $car
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.association.comment._12_5_8a7027a_1182165513891_692901_501) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	Car	the value of $car
+	 * getter method of the association attribute {@link Engine::$car}
+	 * @generated	accessor to get the value of the association attribute {@link Engine::$car} from association to {@link Car}
+	 * @return	Car	the value of {@link Engine::$car}
 	 */
 	private function getCar() {
 		return $car;
 	}
 	/**
-	 * setter for the association attribute $car
+	 * setter method of the association attribute {@link Engine::getCar() $car}
+	 * @generated	setter method for the association attribute from association to {@link Car}
 	 * @param	Car	$car	the value to set
 	 * @see		Engine::getCar()
 	 */
@@ -80,18 +82,15 @@ class Engine   {
 	
 	// -- attribute accessors -----------------------------------------------
 	/**
-	 * getter for the attribute $ps
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._12_5_8a7027a_1182165634143_800264_551) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	byte	the value of $ps
-	 */
+	 * getter method of the attribute {@link Engine::$ps}
+	 * @generated	accessor to get the value of the attribute {@link Engine::$ps}
+	 * @return	byte	the value of {@link Engine::$ps}		 */
 	private function getPs() {
 		return $ps;
 	}
 	/**
-	 * setter for the attribute $ps
+	 * setter method of the attribute {@link Engine::getPs() $ps}
+	 * @generated	setter method for the attribute {@link Engine::getPs() $ps}
 	 * @param	byte	$ps	the value to set
 	 * @see		Engine::getPs()
 	 */
@@ -99,18 +98,15 @@ class Engine   {
 		self::$ps = $ps;
 	}
 	/**
-	 * getter for the attribute $name
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._12_5_8a7027a_1182275655836_342436_482) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	string	the value of $name
-	 */
+	 * getter method of the attribute {@link Engine::$name}
+	 * @generated	accessor to get the value of the attribute {@link Engine::$name}
+	 * @return	string	the value of {@link Engine::$name}		 */
 	private function getName() {
 		return $name;
 	}
 	/**
-	 * setter for the attribute $name
+	 * setter method of the attribute {@link Engine::getName() $name}
+	 * @generated	setter method for the attribute {@link Engine::getName() $name}
 	 * @param	string	$name	the value to set
 	 * @see		Engine::getName()
 	 */
