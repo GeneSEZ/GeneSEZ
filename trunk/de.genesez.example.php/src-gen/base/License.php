@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._12_5_6340215_1182161482703_876307_352) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -14,9 +12,8 @@ require_once '../base/Car.php';
 /* PROTECTED REGION END */
 
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._12_5_6340215_1182161482703_876307_352) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
  * @author	dreamer
  * @package	base
  */
@@ -24,14 +21,18 @@ class License   {
 	
 	// -- attributes --------------------------------------------------------
 	/**
-	 * @var		string	$registration	
+	 * 
+	 * @generated	attribute definition, documented here {@link License::getRegistration()}
+	 * @var		string	$registration
 	 * @see		License::getRegistration()
 	 */
 	private $registration;
 	
 	// -- associations ------------------------------------------------------
 	/**
-	 * @var		Car	$car	
+	 * 
+	 * @generated	attribute definition for association to {@link Car}, documented here {@link License::getCar()}
+	 * @var		Car	$car
 	 * @see		License::getCar()
 	 */
 	private $car;
@@ -42,18 +43,16 @@ class License   {
 	
 	// -- association accessors ---------------------------------------------
 	/**
-	 * getter for the association attribute $car
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.association.comment._12_5_6340215_1182161516984_430722_382) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	Car	the value of $car
+	 * getter method of the association attribute {@link License::$car}
+	 * @generated	accessor to get the value of the association attribute {@link License::$car} from association to {@link Car}
+	 * @return	Car	the value of {@link License::$car}
 	 */
 	private function getCar() {
 		return $car;
 	}
 	/**
-	 * setter for the association attribute $car
+	 * setter method of the association attribute {@link License::getCar() $car}
+	 * @generated	setter method for the association attribute from association to {@link Car}
 	 * @param	Car	$car	the value to set
 	 * @see		License::getCar()
 	 */
@@ -63,18 +62,15 @@ class License   {
 	
 	// -- attribute accessors -----------------------------------------------
 	/**
-	 * getter for the attribute $registration
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._12_5_6340215_1182161578281_520275_451) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	string	the value of $registration
-	 */
+	 * getter method of the attribute {@link License::$registration}
+	 * @generated	accessor to get the value of the attribute {@link License::$registration}
+	 * @return	string	the value of {@link License::$registration}		 */
 	private function getRegistration() {
 		return $registration;
 	}
 	/**
-	 * setter for the attribute $registration
+	 * setter method of the attribute {@link License::getRegistration() $registration}
+	 * @generated	setter method for the attribute {@link License::getRegistration() $registration}
 	 * @param	string	$registration	the value to set
 	 * @see		License::getRegistration()
 	 */

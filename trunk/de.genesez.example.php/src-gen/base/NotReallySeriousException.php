@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._11_5_6340215_1179244974031_673010_60) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -16,9 +14,9 @@ require_once 'Exception';
 /**
  * this is a comment; this is the second comment
  * 
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._11_5_6340215_1179244974031_673010_60) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
+ * @see		Exception
  * @author	dreamer
  * @package	base
  */

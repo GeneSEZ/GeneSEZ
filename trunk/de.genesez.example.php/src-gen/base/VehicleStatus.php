@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._12_5_8a7027a_1181722156333_15747_346) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -15,9 +13,8 @@
 /**
  * state of a vehicle
  * 
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._12_5_8a7027a_1181722156333_15747_346) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
  * @author	dreamer
  * @package	base
  */

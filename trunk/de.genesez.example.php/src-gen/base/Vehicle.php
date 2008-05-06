@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._11_5_6340215_1179139182234_646597_164) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -18,9 +16,8 @@ require_once '../base/NotReallySeriousException.php';
 /**
  * This abstract class Vehicle is the superclass for all things that can drive (for example: car, boat, air plane, ...).
  * 
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._11_5_6340215_1179139182234_646597_164) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
  * @author	dreamer
  * @package	base
  */
@@ -28,12 +25,16 @@ abstract class Vehicle   {
 	
 	// -- attributes --------------------------------------------------------
 	/**
-	 * @var		string	$make	
+	 * 
+	 * @generated	attribute definition, documented here {@link Vehicle::getMake()}
+	 * @var		string	$make
 	 * @see		Vehicle::getMake()
 	 */
 	private $make;
 	/**
-	 * @var		VehicleStatus	$state	
+	 * 
+	 * @generated	attribute definition, documented here {@link Vehicle::getState()}
+	 * @var		VehicleStatus	$state
 	 * @see		Vehicle::getState()
 	 */
 	private $state;
@@ -43,11 +44,10 @@ abstract class Vehicle   {
 	// -- method declarations -----------------------------------------------
 	/**
 	 * nothing
+	 * @generated	method stub for implementation
 	 * 
-	 * the operation may throw the following exceptions:
-	 * {@link WhatAMessException WhatAMessException}, {@link NotReallySeriousException NotReallySeriousException}
-	 * @throws		WhatAMessException
-	 * @throws		NotReallySeriousException
+	 * @throws		{@link WhatAMessException}
+	 * @throws		{@link NotReallySeriousException}
 	 * 
 	 * @param	int	$distance	
 	 * @return	boolean	
@@ -60,18 +60,15 @@ abstract class Vehicle   {
 	
 	// -- attribute accessors -----------------------------------------------
 	/**
-	 * getter for the attribute $make
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._11_5_6340215_1177946075218_295795_245) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	string	the value of $make
-	 */
+	 * getter method of the attribute {@link Vehicle::$make}
+	 * @generated	accessor to get the value of the attribute {@link Vehicle::$make}
+	 * @return	string	the value of {@link Vehicle::$make}		 */
 	private function getMake() {
 		return $make;
 	}
 	/**
-	 * setter for the attribute $make
+	 * setter method of the attribute {@link Vehicle::getMake() $make}
+	 * @generated	setter method for the attribute {@link Vehicle::getMake() $make}
 	 * @param	string	$make	the value to set
 	 * @see		Vehicle::getMake()
 	 */
@@ -79,18 +76,15 @@ abstract class Vehicle   {
 		self::$make = $make;
 	}
 	/**
-	 * getter for the attribute $state
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.attribute.comment._12_5_8a7027a_1181722336392_384956_511) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	VehicleStatus	the value of $state
-	 */
+	 * getter method of the attribute {@link Vehicle::$state}
+	 * @generated	accessor to get the value of the attribute {@link Vehicle::$state}
+	 * @return	VehicleStatus	the value of {@link Vehicle::$state}		 */
 	private function getState() {
 		return $state;
 	}
 	/**
-	 * setter for the attribute $state
+	 * setter method of the attribute {@link Vehicle::getState() $state}
+	 * @generated	setter method for the attribute {@link Vehicle::getState() $state}
 	 * @param	VehicleStatus	$state	the value to set
 	 * @see		Vehicle::getState()
 	 */

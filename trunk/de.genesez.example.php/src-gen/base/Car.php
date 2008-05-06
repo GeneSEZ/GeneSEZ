@@ -1,8 +1,6 @@
 <?php
 /**
- * @internal <!-- PROTECTED REGION ID(php.own.file.comment._11_5_6340215_1177945913718_872802_139) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
  * @author	dreamer
  * @package	base
  */
@@ -21,9 +19,9 @@ require_once '../base/Vehicle.php';
 /**
  * A car is a vehicle with four wheels and drives on the road.
  * 
- * @internal <!-- PROTECTED REGION ID(php.own.type.comment._11_5_6340215_1177945913718_872802_139) ENABLED START -->
- * @internal <!-- TODO: put your own comments here -->
- * @internal <!-- PROTECTED REGION END -->
+
+ * 
+ * @see		Vehicle
  * @author	dreamer
  * @package	base
  */
@@ -31,47 +29,56 @@ class Car extends Vehicle  {
 	
 	// -- attributes --------------------------------------------------------
 	/**
-	 * @var		int	$maxSpeed	describs the maximum speed of a car
+	 * describs the maximum speed of a car
+	 * @generated	attribute definition, documented here {@link Car::getMaxSpeed()}
+	 * @var		int	$maxSpeed
 	 * @see		Car::getMaxSpeed()
 	 */
 	private $maxSpeed;
 	
 	// -- associations ------------------------------------------------------
 	/**
-	 * @var		Wheel	$spare	reference to the spared wheel
+	 * reference to the spared wheel
+	 * @generated	attribute definition for association to {@link }, documented here {@link Car::getSpare()}
+	 * @var		Wheel	$spare
 	 * @see		Car::getSpare()
 	 */
 	private $spare;
 	/**
-	 * @var		License	$license	
+	 * 
+	 * @generated	attribute definition for association to {@link License}, documented here {@link Car::getLicense()}
+	 * @var		License	$license
 	 * @see		Car::getLicense()
 	 */
 	private $license;
 	/**
-	 * @var		LicensePlate	$licensePlate	
+	 * 
+	 * @generated	attribute definition for association to {@link LicensePlate}, documented here {@link Car::getLicensePlate()}
+	 * @var		LicensePlate	$licensePlate
 	 * @see		Car::getLicensePlate()
 	 */
 	private $licensePlate;
 	/**
-	 * @var		Engine	$engine	
+	 * 
+	 * @generated	attribute definition for association to {@link Engine}, documented here {@link Car::getEngine()}
+	 * @var		Engine	$engine
 	 * @see		Car::getEngine()
 	 */
 	private $engine;
 	/**
-	 * @var		Wheel	$wheels	reference to normal wheels on a car
+	 * reference to normal wheels on a car
+	 * @generated	attribute definition for association to {@link Wheel}, documented here {@link Car::getWheels()}
+	 * @var		Wheel	$wheels
 	 * @see		Car::getWheels()
 	 */
 	private $wheels = array();
 	
 	// -- constructors + destructors ----------------------------------------
 	/**
-	 * constructs an object of class Car
-	 * 
 	 * constructor of the class car
+	 * @generated	constructor for class {@link Car}
 	 * 
-	 * the constructor may throw the following exceptions:
-	 * {@link NotReallySeriousException NotReallySeriousException}
-	 * @throws		NotReallySeriousException
+	 * @throws		{@link NotReallySeriousException}
 	 * 
 	 * @param	int	$mxs	maximum of speed
 	 * @param	string	$make	i don't know what make do
@@ -85,9 +92,8 @@ class Car extends Vehicle  {
 	
 	// -- method implementations --------------------------------------------
 	/**
-	 * @internal <!-- PROTECTED REGION ID(php.own.operation.comment._12_5_b6f02e1_1204102049578_778385_691) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
+	
+	 * @generated	method stub for implementation
 	 * @param	int	$distance	
 	 * @return	boolean	
 	 */
@@ -101,11 +107,9 @@ class Car extends Vehicle  {
 	
 	// -- methods for derived attributes ------------------------------------
 	/**
-	 * getter for the attribute $noOfWheels
-	 * 
 	 * count the number of wheels
-	 * @return	int	the value of $noOfWheels
-	 */
+	 * @generated	accessor to get the value of the derived attribute $noOfWheels
+	 * @return	int	the value of $noOfWheels		 */
 	private function getNoOfWheels() {
 		$returnValue = NULL;
 		/* PROTECTED REGION ID(php.derived.attribute.implementation._11_5_6340215_1178786244296_257674_121) ENABLED START */
@@ -116,16 +120,16 @@ class Car extends Vehicle  {
 	
 	// -- association accessors ---------------------------------------------
 	/**
-	 * getter for the association attribute $spare
-	 * 
 	 * reference to the spared wheel
-	 * @return	Wheel	the value of $spare
+	 * @generated	accessor to get the value of the association attribute {@link Car::$spare} from association to {@link Wheel}
+	 * @return	Wheel	the value of {@link Car::$spare}
 	 */
 	private function getSpare() {
 		return $spare;
 	}
 	/**
-	 * setter for the association attribute $spare
+	 * setter method of the association attribute {@link Car::getSpare() $spare}
+	 * @generated	setter method for the association attribute from association to {@link Wheel}
 	 * @param	Wheel	$spare	the value to set
 	 * @see		Car::getSpare()
 	 */
@@ -133,18 +137,16 @@ class Car extends Vehicle  {
 		self::$spare = $spare;
 	}
 	/**
-	 * getter for the association attribute $license
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.association.comment._12_5_6340215_1182161516984_882840_381) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	License	the value of $license
+	 * getter method of the association attribute {@link Car::$license}
+	 * @generated	accessor to get the value of the association attribute {@link Car::$license} from association to {@link License}
+	 * @return	License	the value of {@link Car::$license}
 	 */
 	private function getLicense() {
 		return $license;
 	}
 	/**
-	 * setter for the association attribute $license
+	 * setter method of the association attribute {@link Car::getLicense() $license}
+	 * @generated	setter method for the association attribute from association to {@link License}
 	 * @param	License	$license	the value to set
 	 * @see		Car::getLicense()
 	 */
@@ -152,18 +154,16 @@ class Car extends Vehicle  {
 		self::$license = $license;
 	}
 	/**
-	 * getter for the association attribute $licensePlate
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.association.comment._12_5_8a7027a_1182165461531_196368_421) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	LicensePlate	the value of $licensePlate
+	 * getter method of the association attribute {@link Car::$licensePlate}
+	 * @generated	accessor to get the value of the association attribute {@link Car::$licensePlate} from association to {@link LicensePlate}
+	 * @return	LicensePlate	the value of {@link Car::$licensePlate}
 	 */
 	private function getLicensePlate() {
 		return $licensePlate;
 	}
 	/**
-	 * setter for the association attribute $licensePlate
+	 * setter method of the association attribute {@link Car::getLicensePlate() $licensePlate}
+	 * @generated	setter method for the association attribute from association to {@link LicensePlate}
 	 * @param	LicensePlate	$licensePlate	the value to set
 	 * @see		Car::getLicensePlate()
 	 */
@@ -171,18 +171,16 @@ class Car extends Vehicle  {
 		self::$licensePlate = $licensePlate;
 	}
 	/**
-	 * getter for the association attribute $engine
-	 * 
-	 * @internal <!-- PROTECTED REGION ID(php.own.association.comment._12_5_8a7027a_1182165513891_613516_500) ENABLED START -->
-	 * @internal <!-- TODO: put your own comments here -->
-	 * @internal <!-- PROTECTED REGION END -->
-	 * @return	Engine	the value of $engine
+	 * getter method of the association attribute {@link Car::$engine}
+	 * @generated	accessor to get the value of the association attribute {@link Car::$engine} from association to {@link Engine}
+	 * @return	Engine	the value of {@link Car::$engine}
 	 */
 	private function getEngine() {
 		return $engine;
 	}
 	/**
-	 * setter for the association attribute $engine
+	 * setter method of the association attribute {@link Car::getEngine() $engine}
+	 * @generated	setter method for the association attribute from association to {@link Engine}
 	 * @param	Engine	$engine	the value to set
 	 * @see		Car::getEngine()
 	 */
@@ -190,16 +188,16 @@ class Car extends Vehicle  {
 		self::$engine = $engine;
 	}
 	/**
-	 * getter for the association attribute $wheels
-	 * 
 	 * reference to normal wheels on a car
-	 * @return	array	the value of $wheels as an array of type Wheel
+	 * @generated	accessor to get the value of the association attribute {@link Car::$wheels} from association to {@link Wheel}
+	 * @return	array	the value of {@link Car::$wheels} as an array of type Wheel
 	 */
 	private function getWheels() {
 		return array_values($wheels);
 	}
 	/**
-	 * adds the given value to the association attribute $wheels
+	 * adds the given value to the association attribute {@link Car::getWheels() $wheels}
+	 * @generated	adder method for the multi-valued association attribute from association to {@link Wheel}
 	 * @param	Wheel	$toAdd	the value to add
 	 * @see		Car::getWheels()
 	 */
@@ -207,7 +205,8 @@ class Car extends Vehicle  {
 		self::$wheels[] = $toAdd;
 	}
 	/**
-	 * removes the given value from the association attribute $wheels
+	 * removes the given value from the association attribute {@link Car::getWheels() $wheels}
+	 * @generated	method to remove values from the multi-valued association attribute from association to {@link Wheel}
 	 * @param	Wheel	$toRemove	the value to remove
 	 * @see		Car::getWheels()
 	 */
@@ -220,16 +219,15 @@ class Car extends Vehicle  {
 	
 	// -- attribute accessors -----------------------------------------------
 	/**
-	 * getter for the attribute $maxSpeed
-	 * 
 	 * describs the maximum speed of a car
-	 * @return	int	the value of $maxSpeed
-	 */
+	 * @generated	accessor to get the value of the attribute {@link Car::$maxSpeed}
+	 * @return	int	the value of {@link Car::$maxSpeed}		 */
 	private function getMaxSpeed() {
 		return $maxSpeed;
 	}
 	/**
-	 * setter for the attribute $maxSpeed
+	 * setter method of the attribute {@link Car::getMaxSpeed() $maxSpeed}
+	 * @generated	setter method for the attribute {@link Car::getMaxSpeed() $maxSpeed}
 	 * @param	int	$maxSpeed	the value to set
 	 * @see		Car::getMaxSpeed()
 	 */
