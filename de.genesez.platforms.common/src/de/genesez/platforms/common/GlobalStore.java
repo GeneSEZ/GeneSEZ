@@ -1,14 +1,13 @@
-/**
- * 
- */
 package de.genesez.platforms.common;
 
 import de.genesez.metamodel.genesezMM.MModel;
 
 /**
- * @author nihe
- * @author geobe
- * @author toh
+ * Utility class for storing a model
+ * 
+ * @author	nihe
+ * @author	geobe
+ * @date	2008-04-18
  */
 public class GlobalStore {
 	

@@ -1,5 +1,5 @@
 /**
- * 
+ * common transformation utilities for model to text transformations
  */
 package de.genesez.platforms.common.m2t;
 
@@ -12,19 +12,20 @@ import de.genesez.platforms.common.Conversion;
 import de.genesez.platforms.common.log.IOExtensions;
 
 /**
- * Provides some utilities and helper functions for M2T transformations
+ * Utility class with helper functions for model to text (M2T) transformations
  * 
- * @author toh
+ * @author	toh
+ * @date	2008-04-18
  */
 public class TransUtils {
 	
 	/**
-	 * removes all packages specified with full qualified name (package path) as a comma
+	 * removes all specified packages with full qualified name (package path) as a comma
 	 * or semicolon separated string from the given list of packages.
 	 * 
-	 * @param packages			list of packages
+	 * @param packages			a list of packages to filter
 	 * @param ignoredPackages	comma or semicolon separated string with full qualified package names
-	 * @return					list of packages, without the ignored packages
+	 * @return					the filtered list of packages
 	 */
 	public static List<MPackage> rejectIgnoredPackages(List<MPackage> packages, String ignoredPackages) {
 		List<MPackage> toReturn = new ArrayList<MPackage>(packages);
@@ -44,15 +45,14 @@ public class TransUtils {
 	}
 	
 	/**
-	 * splits a comma or semicolon separated string of package names into
-	 * a list of packages
+	 * splits a comma or semicolon separated string of values into a list
 	 * 
-	 * @param packageList	string containing packages separated by comma or semicolon
-	 * @return				list of packages in given string
+	 * @param	list	a string with comma or semicolon separated values
+	 * @return	the list of values
 	 */
-	public static List<String> getPackages(String packageList) {
+	public static List<String> getPackages(String list) {
 		List<String> packages = new ArrayList<String>();
-		StringTokenizer tokenizer = new StringTokenizer(packageList, ",;");
+		StringTokenizer tokenizer = new StringTokenizer(list, ",;");
 		while (tokenizer.hasMoreTokens()) {
 			//	cut leading + trailing spaces if separator was ', ' or '; '
 			packages.add(tokenizer.nextToken().trim());

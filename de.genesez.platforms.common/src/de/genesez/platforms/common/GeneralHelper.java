@@ -1,15 +1,15 @@
-/**
- * 
- */
 package de.genesez.platforms.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @author nihe
- * @author geobe
- * @author toh
+ * Utility class with general helper functions
+ * 
+ * @author	nihe
+ * @author	geobe
+ * @author	toh
+ * @date	2008-04-18
  */
 public class GeneralHelper {
 	
@@ -18,8 +18,7 @@ public class GeneralHelper {
 	 * @return	nice string representation of the current timestamp
 	 */
 	public static String getTimeStamp() {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z")
-				.format(new Date());
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z").format(new Date());
 	}
 	
 	/**
