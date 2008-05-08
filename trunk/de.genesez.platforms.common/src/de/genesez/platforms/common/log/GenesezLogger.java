@@ -15,6 +15,13 @@ import org.apache.commons.logging.LogFactory;
  */
 public class GenesezLogger {
 	
+	static {
+		// re-configure log4j with genesez properties ???
+		// but then the log output changes when different layouts are used!
+		//URL url = GenesezLogger.class.getResource("log4j.properties");
+		//PropertyConfigurator.configure(url);
+	}
+	
 	/**
 	 * holds the current used logger
 	 */
