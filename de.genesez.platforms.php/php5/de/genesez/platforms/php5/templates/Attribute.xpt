@@ -20,9 +20,9 @@
 «IMPORT genesezMM»
 
 «REM» use helper to access information «ENDREM»
-«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
 «REM» use the type mapping «ENDREM»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «REM» use naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
@@ -104,7 +104,7 @@
 «DEFINE _Getter FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor -» function «asGetter()»() {
-	«IF isSimpleType() -»
+	«IF isSingleValuedType() -»
 		return $«asAttribute()»;
 	«ELSE -»
 		return array_values($«asAttribute()»);
@@ -116,9 +116,9 @@
 	generates the setter method for an attribute, if the attribut has a simple type
 «ENDREM»
 «DEFINE _Setter FOR MAttribute -»
-«IF isSimpleType() -»
+«IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
-	«EXPAND _ModifierAccessor -» function «asSetter()»(«type.mapName().asTypeName(type)» $«asAttribute()») {
+	«EXPAND _ModifierAccessor -» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()») {
 		self::$«asAttribute()» = $«asAttribute()»;
 	}
 «ENDIF -»
@@ -128,9 +128,9 @@
 	generates the insert in method for an attribute with a collection type
 «ENDREM»
 «DEFINE _InsertIn FOR MAttribute -»
-«IF isCollectionType() -»
+«IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
-	«EXPAND _ModifierAccessor -» function «asInsertIn()»(«type.mapName().asTypeName(type)» $toAdd) {
+	«EXPAND _ModifierAccessor -» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd) {
 		self::$«asAttribute()»[] = $toAdd;
 	}
 «ENDIF -»
@@ -140,9 +140,9 @@
 	generates the remove from method for an attribute with a collection type
 «ENDREM»
 «DEFINE _RemoveFrom FOR MAttribute -»
-«IF isCollectionType() -»
+«IF isMultiValuedType() -»
 	«EXPAND Comment::RemoveFrom -»
-	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»(«type.mapName().asTypeName(type)» $toRemove) {
+	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
 		if ($entry !== FALSE) {
 			unset(self::$«asAttribute()»[$entry]);
@@ -170,7 +170,7 @@
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
 «IF hasDefaultValue() -» = «defaultvalue -»
-«ELSEIF isCollectionType() -» = array()«ENDIF -»
+«ELSEIF isMultiValuedType() -» = array()«ENDIF -»
 «ENDDEFINE»
 
 «REM»

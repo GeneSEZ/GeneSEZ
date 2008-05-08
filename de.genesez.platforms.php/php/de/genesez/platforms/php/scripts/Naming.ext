@@ -22,20 +22,6 @@ String asFileName(String this) : toFirstUpper();
 */
 
 /**
- * formats the name of a classifier
- * @context	the classifier which name to format
- * @return	formatted name of the classifier
- */
-String asTypeName(MClassifier this) :
-	switch (metaType) {
-		case MClass : name.toFirstUpper()
-		case MInterface : name.toFirstUpper()
-		case MEnumeration : name.toFirstUpper()
-		case MDataType : name.toFirstUpper()
-		default : name.toFirstUpper()
-	};
-
-/**
  * formats the name of a type
  * don't touch generics, primitive types or external types (external are mapped correctly)
  * just format the own created + generated types (classifiers)
@@ -45,29 +31,24 @@ String asTypeName(MClassifier this) :
  */
 String asTypeName(MType this) :
 	switch (metaType) {
+		// don't touch the names of the following types - it's nonsense
 		case MPrimitiveType : ((MPrimitiveType)this).name
 		case MGeneric : ((MGeneric)this).specification
 		case MExternal : ((MExternal)this).specification
-		default : ((MClassifier)this).asTypeName()
+		// format the classifiers
+		case MClass : ((MClass)this).name.toFirstUpper()
+		case MInterface : ((MInterface)this).name.toFirstUpper()
+		case MEnumeration : ((MEnumeration)this).name.toFirstUpper()
+		case MDataType : ((MDataType)this).name.toFirstUpper()
+		default : ((MClassifier)this).name.toFirstUpper()
 	};
 	
 /**
- * formats the name of a type
- * don't touch generics, primitive types or external types (external are mapped correctly)
- * just format the own created + generated types (classifiers)
- * 
- * @deprecated	can be removed, when type-mapping is revised (upper function works then)
- * 
- * @context	name of the type after type mapping
- * @return	formatted name of the type
+ * formats the name of a type after typemapping
+ * don't touch the type, the name of the type is given by typemapping
+ * @return	the name of the type
  */
-String asTypeName(String this, MType t) :
-	switch (t.metaType) {
-		case MPrimitiveType : this
-		case MGeneric : this
-		case MExternal : this
-		default : ((MClassifier)t).asTypeName()
-	};
+String asTypeName(String this) : this;
 
 
 /*
