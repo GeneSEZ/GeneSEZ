@@ -17,9 +17,9 @@
 «IMPORT genesezMM»
 
 «REM» use helper to access information «ENDREM»
-«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
 «REM» use the type mapping «ENDREM»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «REM» use naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
@@ -80,7 +80,7 @@
 	@param	this	an association role
 «ENDREM»
 «DEFINE _Init FOR MAssociationRole -»
-«IF isCollectionType()» = array()«ENDIF -»
+«IF isMultiValuedType()» = array()«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -97,7 +97,7 @@
 «DEFINE _GetterImpl FOR MAssociationRole -»
 	«EXPAND Comment::Getter -»
 	«visibility» function «asGetter()»() {
-	«IF isSimpleType() -»
+	«IF isSingleValuedType() -»
 		return $«asAttribute()»;
 	«ELSE -»
 		return array_values($«asAttribute()»);
@@ -110,9 +110,9 @@
 	only if it has a simple type
 «ENDREM»
 «DEFINE _SetterDecl FOR MAssociationRole -»
-«IF isSimpleType() -»
+«IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
-	«visibility» function «asSetter()»(«type.mapName().asTypeName(type)» $«asAttribute()»);
+	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()»);
 «ENDIF -»
 «ENDDEFINE»
 
@@ -121,9 +121,9 @@
 	only if it has a simple type
 «ENDREM»
 «DEFINE _SetterImpl FOR MAssociationRole -»
-«IF isSimpleType() -»
+«IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
-	«visibility» function «asSetter()»(«type.mapName().asTypeName(type)» $«asAttribute()») {
+	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()») {
 		self::$«asAttribute()» = $«asAttribute()»;
 	}
 «ENDIF -»
@@ -134,9 +134,9 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _InsertInDecl FOR MAssociationRole -»
-«IF isCollectionType() -»
+«IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
-	«visibility» function «asInsertIn()»(«type.mapName().asTypeName(type)» $toAdd);
+	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd);
 «ENDIF -»
 «ENDDEFINE»
 
@@ -145,9 +145,9 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _InsertInImpl FOR MAssociationRole -»
-«IF isCollectionType() -»
+«IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
-	«visibility» function «asInsertIn()»(«type.mapName().asTypeName(type)» $toAdd) {
+	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd) {
 		self::$«asAttribute()»[] = $toAdd;
 	}
 «ENDIF -»
@@ -158,9 +158,9 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _RemoveFromDecl FOR MAssociationRole -»
-«IF isCollectionType() -»
+«IF isMultiValuedType() -»
 	«EXPAND Comment::RemoveFrom -»
-	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName(type)» $toRemove);
+	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove);
 «ENDIF -»
 «ENDDEFINE»
 
@@ -169,9 +169,9 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _RemoveFromImpl FOR MAssociationRole -»
-«IF isCollectionType() -»
+«IF isMultiValuedType() -»
 	«EXPAND Comment::RemoveFrom -»
-	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName(type)» $toRemove) {
+	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
 		if ($entry !== FALSE) {
 			unset(self::$«asAttribute()»[$entry]);

@@ -17,9 +17,9 @@
 «IMPORT genesezMM»
 
 «REM» use helper to access information «ENDREM»
-«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
 «REM» use the type mapping «ENDREM»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «REM» use php naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
@@ -103,7 +103,7 @@
 «ENDREM»
 «DEFINE _Generalization FOR MClass -»
 «IF !generalization.isEmpty -»
-extends «generalization.first().mapName().asTypeName( generalization.first() ) -»
+extends «generalization.first().mapName().asTypeName() -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -112,7 +112,7 @@ extends «generalization.first().mapName().asTypeName( generalization.first() ) 
 «ENDREM»
 «DEFINE _Realization FOR MClass -»
 «IF !realization.isEmpty -»
-implements «FOREACH realization AS r SEPARATOR ", " -»«r.mapName().asTypeName(r)»«ENDFOREACH -»
+implements «FOREACH realization AS r SEPARATOR ", " -»«r.mapName().asTypeName()»«ENDFOREACH -»
 «ENDIF -»
 «ENDDEFINE»
 
