@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 import de.genesez.metamodel.genesezMM.MPackage;
 import de.genesez.platforms.common.Conversion;
-import de.genesez.platforms.common.log.IOExtensions;
+import de.genesez.platforms.common.log.GenesezLogger;
 
 /**
  * Utility class with helper functions for model to text (M2T) transformations
@@ -28,15 +28,18 @@ public class TransUtils {
 	 * @return					the filtered list of packages
 	 */
 	public static List<MPackage> rejectIgnoredPackages(List<MPackage> packages, String ignoredPackages) {
+		// init logging
+		GenesezLogger.selectLogger("de.genesez.platforms.common.m2t");
+		// perform actions
 		List<MPackage> toReturn = new ArrayList<MPackage>(packages);
 		List<String> pkgs = getPackages(ignoredPackages);
 		for (String s : pkgs) {
-			IOExtensions.fine("to reject: " + s);
+			GenesezLogger.debug("to reject: " + s);
 			for (MPackage p : packages) {
 				String fqn = Conversion.getFullQualifiedName(p, ".");
-				IOExtensions.fine("test to reject: " + fqn);
+				GenesezLogger.debug("test to reject: " + fqn);
 				if (s.equals(fqn)) {
-					IOExtensions.fine("reject: '" + s + "' == '" + fqn + "'");
+					GenesezLogger.debug("reject: '" + s + "' == '" + fqn + "'");
 					toReturn.remove(p);
 				}
 			}

@@ -89,6 +89,7 @@ private String externalPackages() :
  * @return	the newly created GeneSEZ model
  */
 create MModel transform(Model m) :
+	useLogger("de.genesez.adapter.uml2") ->
 	// basic element properties
 	transformBasics(m) ->
 	// containments
@@ -181,7 +182,7 @@ private MClassifier transform(Classifier c, MPackage this) :
  * @return	the transformed GeneSEZ type
  */
 private MType makeType(Type this) :
-	info("transform [ " + metaType + " ] " + this) ->
+	debug("transform [ " + metaType + " ] " + this) ->
 	switch {
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
@@ -298,7 +299,7 @@ private create MDataType makeClassifier(DataType d) :
  * @return	void
  */
 private MClassifier makeClassifier(Classifier c) :
-	severe("try to construct a MClassifier object from: " + c) ->
+	fatal("try to construct a MClassifier object from: " + c) ->
 	Void;
 
 /*
@@ -587,7 +588,7 @@ private create MTag makeTag(Property p) :
  * @return	the GeneSEZ tagged value
  */
 private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
-	info("make tagged value: " + o + ", tag: " + t.name) ->
+	debug("make tagged value: " + o + ", tag: " + t.name) ->
 	setTag(t) ->
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
@@ -608,7 +609,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @return	a list of GeneSEZ tagged values
  */
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	info("make tagged values: " + me.name + ", elem: " + e.toString()) ->
+	debug("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
 		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
@@ -815,7 +816,7 @@ private String name(MType this) :
 		case MExternal: ((MExternal)this).specification
 		case MPrimitiveType : ((MPrimitiveType)this).name
 		case MClassifier : ((MClassifier)this).name
-		default : severe("cannot determine name of type from object: " + metaType)
+		default : fatal("cannot determine name of type from object: " + metaType)
 	};
 
 /*
