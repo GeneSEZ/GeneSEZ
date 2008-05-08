@@ -1,15 +1,15 @@
-/*
-	general conversions for easier code generation
-*/
+/**
+ * Helper functions for conversions for easier code generation
+ * 
+ * @author	nico herbig
+ * @author	tobias haubold (last)
+ * @date	2008-04-18
+ */
 
-//	based on genesez meta model
+// based on genesez meta model
 import genesezMM;
 
-extension de::genesez::platforms::common::log::Log;
-
 /*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public extend functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -30,7 +30,7 @@ String getNameList(List[MElement] l) :
  * @param	l	list of model elements of type MGeneric
  * @return	comma blank (', ') separated list of generic specifications
  */
-String getGenericList(List l) :
+String getGenericList(List[MGeneric] l) :
 	l.size > 1 
 		? ((MGeneric) l.first()).specification + ", " + getGenericList(l.withoutFirst())
 		: (l.size > 0
@@ -72,17 +72,7 @@ String getFullQualifiedName(MPackage pkg, String separator) :
 
 /**
  * getter for the separator within a file name
+ * @return	the separator for directories in file names
  */
 String getFileSeparator() : "/";
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private extend functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private java functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
