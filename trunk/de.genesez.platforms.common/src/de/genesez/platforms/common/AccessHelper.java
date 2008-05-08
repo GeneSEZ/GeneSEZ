@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.genesez.platforms.common;
 
 import java.util.List;
@@ -8,37 +5,41 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
+import de.genesez.adapter.uml2.TransUtils;
 import de.genesez.metamodel.genesezMM.MClassifier;
 import de.genesez.metamodel.genesezMM.MPackage;
 
 /**
- * Provides some helper functions for accessing the genesez model
+ * Utility class with some helper functions for accessing GeneSEZ models
  * 
  * note:
  * it was not possible for me to get the list with owned packages from a model in java
  * MModel.getOwnedPackage() returns an empty list !!! why???
  * 
- * @author nihe
- * @author geobe
- * @author toh
+ * @author	nihe
+ * @author	geobe
+ * @author	toh
+ * @date	2008-04-18
  */
 public class AccessHelper {
 	
 	/**
 	 * getter for the xmi id from an element
 	 * @param	pObj	a model element
-	 * @return	string representing the xmi id
+	 * @return	the xmi id
+	 * @see		TransUtils#getXmiId(EObject)
 	 */
 	public static String getXmiId(EObject pObj) {
-		return ((XMLResource) pObj.eResource()).getID(pObj);
+		return TransUtils.getXmiId(pObj);
 	}
 	
 	/**
-	 * returns the classifier specified with a full qualified name
-	 * @param packages			list of root packages in a genesez model
-	 * @param fullQualifiedName	full qualified type name from a classifier
-	 * @return					the classifier you specified
-	 * @throws Exception		if the classifier isn't found
+	 * getter for a classifier by it's full qualified name
+	 * the full qualified name must start with a package in the specified list
+	 * @param	packages			a list of packages
+	 * @param	fullQualifiedName	a full qualified type name of a classifier
+	 * @return	the classifier you specified
+	 * @throws	Exception			if the classifier is not found
 	 */
 	public static MClassifier getClassifier(List<MPackage> packages, String fullQualifiedName) throws Exception {
 		int i = fullQualifiedName.lastIndexOf(".");
@@ -60,12 +61,12 @@ public class AccessHelper {
 	}
 	
 	/**
-	 * returns the package specified with a full qualified name
-	 * 
-	 * @param packages			list of root packages in a genesez model
-	 * @param fullQualifiedPackagePath	full qualified package name
-	 * @return					the package you specified
-	 * @throws Exception		if the package isn't found in the model
+	 * getter for a package by it's full qualified name
+	 * the full qualified name must start with a package in the specified list
+	 * @param	packages					a list of packages
+	 * @param	fullQualifiedPackagePath	a full qualified package name
+	 * @return	the package you specified
+	 * @throws	Exception		if the package is not found
 	 */
 	public static MPackage getPackage(List<MPackage> packages, String fullQualifiedPackagePath) throws Exception {
 		//	packages to search
@@ -97,18 +98,18 @@ public class AccessHelper {
 		return pSearchedFor;
 	}
 	
-	
-//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//	-- private methods --
-//	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * private methods
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+
 	/**
 	 * returns the package element specified as the first package in package path
 	 * allows the possibility that a dot '.' is in the package name
 	 * 
-	 * @param subPackages	list of packages
-	 * @param packagePath	string containing a package path
-	 * @return				first package from the package path or null if not found
+	 * @param	subPackages	a list of packages
+	 * @param	packagePath	a string containing a package path
+	 * @return	the first package from the package path or null if not found
 	 */
 	private static MPackage getNextPackage(List<MPackage> subPackages, String packagePath) {
 		//	get name of first package in package path
@@ -139,13 +140,12 @@ public class AccessHelper {
 		return getPackageFromList(subPackages, pkgName);
 	}
 	
-	
 	/**
-	 * returns the package from the list with the given package name
+	 * returns the package from a list with the given package name
 	 * 
-	 * @param pkgs			list with packages
-	 * @param packageName	package name
-	 * @return				package element with package name
+	 * @param	pkgs		a list of packages
+	 * @param	packageName	a package name
+	 * @return	the package specified by name or null
 	 */
 	private static MPackage getPackageFromList(List<MPackage> pkgs, String packageName) {
 		for (MPackage p : pkgs) {
@@ -156,14 +156,13 @@ public class AccessHelper {
 		return null;
 	}
 	
-	
 	/**
 	 * determines if the package specified with the package name is in 
-	 * the given list of packages or not
+	 * the given list of packages
 	 * 
-	 * @param pkgs			list of packages
-	 * @param packageName	name of a package
-	 * @return				package in list with the specified name
+	 * @param	pkgs		a list of packages
+	 * @param	packageName	a name of a package
+	 * @return	true if the package is contained in the list, otherwise false
 	 */
 	private static boolean containsPackage(List<MPackage> pkgs, String packageName) {
 		for (MPackage p : pkgs) {
