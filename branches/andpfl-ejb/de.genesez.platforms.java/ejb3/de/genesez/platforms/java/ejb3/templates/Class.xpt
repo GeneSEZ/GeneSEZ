@@ -46,6 +46,7 @@
 		«ENDIF-»
 		)
 	«ENDIF»
+	
 	«REM» SessionBean «ENDREM»
 	«IF hasTaggedValue("ejb3SessionBean", "remote", "true")»
 		@Remote
@@ -69,8 +70,21 @@
 		«ENDIF»
 		«REM» TODO: declarative transactionality for stateless beans «ENDREM»
 	«ENDIF»	
+	
 	«REM» MessageDriven «ENDREM»
 	«IF hasStereotype("ejb3MessageDrivenBean")»
 		@MessageDriven
 	«ENDIF»
+	
+	«REM» primary key «ENDREM»
+	«IF hasStereotype("ejb3PrimaryKey")»
+		«REM» primary key with extern primary key class «ENDREM»
+		«IF !hasTaggedValue("ejb3PrimaryKey", "idClass", "null")»
+			@IdClass(«taggedValue.selectFirst(e|e.tag.name == "idClass").value»)
+		«ENDIF»
+		«REM» primary key with embedded primary key class «ENDREM»
+		«IF hasTaggedValue("ejb3PrimaryKey", "embeddable", "true")»
+			@Embeddable
+		«ENDIF»		
+	«ENDIF»	
 «ENDDEFINE»

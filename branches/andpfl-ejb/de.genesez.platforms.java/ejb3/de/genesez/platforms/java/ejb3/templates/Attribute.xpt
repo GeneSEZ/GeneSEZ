@@ -40,10 +40,17 @@
 	is used by attribute and operation
  «ENDREM»
 «DEFINE PrimaryKey FOR MElement»
-«REM» primary key «ENDREM»
+	«REM» simple primary key «ENDREM»
 	«IF hasTaggedValue("ejb3PrimaryKey", "id", "true")»
 		@Id
 	«ENDIF»
+	
+	«REM» composed primary key «ENDREM»
+	«IF hasTaggedValue("ejb3PrimaryKey", "embeddedId", "true")»
+		@EmbeddedId
+	«ENDIF»
+	
+	«REM» generation of primary keys «ENDREM»
 	«IF hasTaggedValue("ejb3PrimaryKey", "generationType", "TABLE") && !hasTaggedValue("ejb3PrimaryKey", "generatorName", "null")»
 		@TableGenerator(name="«taggedValue.selectFirst(e|e.tag.name == "generatorName").value-»"
 		«IF !hasTaggedValue("ejb3PrimaryKey", "table", "null")-»
