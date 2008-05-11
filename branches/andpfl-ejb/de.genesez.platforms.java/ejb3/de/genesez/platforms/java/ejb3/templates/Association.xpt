@@ -29,34 +29,45 @@
 
 «REM» evaluate stereotypes for associations «ENDREM»
 «DEFINE Annotation FOR MAssociationRole-»
+	«REM» OneToOne association «ENDREM»
 	«IF hasTaggedValue("ejb3Association", "associationType", "OneToOne")»
-		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
-			@OneToOne
-		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
-			«REM» ToDo «ENDREM»
-		«ENDIF»
+		@OneToOne(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
+		«IF !hasTaggedValue("ejb3Association", "targetEntity", "null")-»
+			, targetEntity="«taggedValue.selectFirst(e|e.tag.name == "targetEntity").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Association", "cascade", "null")-»
+			, cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Association", "optional", "false")-»
+			, optional=«taggedValue.selectFirst(e|e.tag.name == "optional").value-»
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Association", "direction", "bidirectional") && !hasTaggedValue("ejb3Association", "mappedBy", "null")-»
+			, mappedBy="«taggedValue.selectFirst(e|e.tag.name == "mappedBy").value-»"
+		«ENDIF-»
+		)
+		«EXPAND _JoinColumn»
 	«ENDIF»
+	
+	«REM» OneToMany association «ENDREM»
 	«IF hasTaggedValue("ejb3Association", "associationType", "OneToMany")»
-		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
-			@OneToMany(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascadeType").value-»})
-		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
-			«REM» ToDo «ENDREM»
-		«ENDIF»
+		@OneToMany«EXPAND _ManyAssociations-»
+		«EXPAND _JoinColumn»
+		«EXPAND _JoinTable»
 	«ENDIF»
+	
+	«REM» ManyToOne association «ENDREM»
 	«IF hasTaggedValue("ejb3Association", "associationType", "ManyToOne")»
-		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
-			@ManyToOne(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascadeType").value-»})
-		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
-			«REM» ToDo «ENDREM»
-		«ENDIF»
+		@ManyToOne«EXPAND _ManyAssociations-»
+		«EXPAND _JoinColumn»
+		«EXPAND _JoinTable»
 	«ENDIF»
+	
+	«REM» ManyToMany association «ENDREM»
 	«IF hasTaggedValue("ejb3Association", "associationType", "ManyToMany")»
-		«IF hasTaggedValue("ejb3Association", "direction", "unidirectional")»
-			«REM» ToDo «ENDREM»
-		«ELSEIF hasTaggedValue("ejb3Association", "direction", "bidirectional")»
-			«REM» ToDo «ENDREM»
-		«ENDIF»
-	«ENDIF»		
+		@ManyToMany«EXPAND _ManyAssociations-»
+		«EXPAND _JoinColumn»
+		«EXPAND _JoinTable»
+	«ENDIF»	
 «ENDDEFINE»
 
 «REM»
@@ -64,3 +75,59 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«REM» evaluates the stereotype ejb3ASsociation for the three many associations «ENDREM»
+«DEFINE _ManyAssociations FOR MAssociationRole-»
+	«IF !hasTaggedValue("ejb3Association", "name", "null")-»
+		(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
+		«IF !hasTaggedValue("ejb3Association", "targetEntity", "null")-»
+			, targetEntity="«taggedValue.selectFirst(e|e.tag.name == "targetEntity").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Association", "cascade", "null")-»
+			, cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Association", "direction", "bidirectional") && !hasTaggedValue("ejb3Association", "mappedBy", "null")-»
+			, mappedBy="«taggedValue.selectFirst(e|e.tag.name == "mappedBy").value-»"
+		«ENDIF-»
+		)
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» evaluates the stereotype ejb3JoinColumn «ENDREM»
+«DEFINE _JoinColumn FOR MAssociationRole-»
+	«IF hasStereotype("ejb3JoinColumn")»
+		«IF !hasTaggedValue("ejb3JoinColumn", "name", "null")»
+			@JoinColumn(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+			«IF !hasTaggedValue("ejb3JoinColumn", "referencedColumnName", "null")-»
+				, referencedColumnName="«taggedValue.selectFirst(e|e.tag.name == "referencedColumnName").value-»"
+			«ENDIF-»
+			)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» evaluates the stereotype ejb3JoinTable «ENDREM»
+«DEFINE _JoinTable FOR MAssociationRole-»
+	«IF hasStereotype("ejb3JoinTable")»
+		«IF hasTaggedValue("ejb3JoinTable", "name", "null")-»
+			@JoinTable(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+			«IF !hasTaggedValue("ejb3JoinTable", "joinColumnsName", "null")-»
+				, joinColumns=
+				@JoinColumn(name="«taggedValue.selectFirst(e|e.tag.name == "joinColumnsName").value-»"
+				«IF !hasTaggedValue("ejb3JoinTable", "joinColumnsReferencedColumnName", "null")-»
+					, referencedColumnName="«taggedValue.selectFirst(e|e.tag.name == "joinColumnsReferencedColumnName").value-»"
+				«ENDIF-»
+				)
+			«ENDIF-»
+			«IF !hasTaggedValue("ejb3JoinTable", "inverseJoinColumnsName", "null")-»
+				, inverseJoinColumns=
+				@JoinColumn(name="«taggedValue.selectFirst(e|e.tag.name == "inverseJoinColumnsName").value-»"
+				«IF !hasTaggedValue("ejb3JoinTable", "inverseJoinColumnsReferencedColumnName", "null")-»
+					, referencedColumnName="«taggedValue.selectFirst(e|e.tag.name == "inverseJoinColumnsReferencedColumnName").value-»"
+				«ENDIF-»
+				)
+			«ENDIF-»
+			)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»

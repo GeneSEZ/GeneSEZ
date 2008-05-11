@@ -68,7 +68,6 @@
  		«ELSE»
 			@Stateless
 		«ENDIF»
-		«REM» TODO: declarative transactionality for stateless beans «ENDREM»
 	«ENDIF»	
 	
 	«REM» MessageDriven «ENDREM»
@@ -76,11 +75,20 @@
 		@MessageDriven
 	«ENDIF»
 	
+	«REM» container-managed transaction demarcation «ENDREM»	
+	«EXPAND Operation::CMTransactionality»
+	
 	«REM» primary key «ENDREM»
 	«IF hasStereotype("ejb3PrimaryKey")»
 		«REM» primary key with extern primary key class «ENDREM»
 		«IF !hasTaggedValue("ejb3PrimaryKey", "idClass", "null")»
-			@IdClass(«taggedValue.selectFirst(e|e.tag.name == "idClass").value»)
+			@IdClass(«mapName()»PK.class)
+			«FILE getFilename()PK-»
+				«REM» 
+					implement generation of primary key class
+					need to know the used ids (xtend?!?) 
+				«ENDREM»
+			«ENDFILE»
 		«ENDIF»
 		«REM» primary key with embedded primary key class «ENDREM»
 		«IF hasTaggedValue("ejb3PrimaryKey", "embeddable", "true")»

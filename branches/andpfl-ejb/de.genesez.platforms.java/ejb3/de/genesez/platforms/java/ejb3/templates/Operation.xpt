@@ -37,6 +37,48 @@
 	«EXPAND Attribute::Column»
 	«REM» stereotype ejb3PrimaryKey «ENDREM»
 	«EXPAND Attribute::PrimaryKey»
+	«REM» stereotype ejb3Callback for different bean types «ENDREM»
+	«IF hasStereotype("ejb3SessionBean") || hasStereotype("ejb3MessageDrivenBean")»
+		«IF hasTaggedValue("ejb3Callback", "postConstruct", "true")»
+			@PostConstruct
+		«ENDIF»
+		«IF hasTaggedValue("ejb3Callback", "preDestroy", "true")»
+			@PreDestroy
+		«ENDIF»
+	«ENDIF»
+	«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
+		«IF hasTaggedValue("ejb3Callback", "postActivate", "true")»
+			@PostActivate
+		«ENDIF»
+		«IF hasTaggedValue("ejb3Callback", "prePassivate", "true")»
+			@PrePassivate
+		«ENDIF»
+	«ENDIF»
+	«IF hasStereotype("ejb3PersistentEntity")»
+		«IF hasTaggedValue("ejb3Callback", "postPersist", "true")»
+			@PostPersist
+		«ENDIF»
+		«IF hasTaggedValue("ejb3Callback", "prePersist", "true")»
+			@PrePersist
+		«ENDIF»
+		«IF hasTaggedValue("ejb3Callback", "postUpdate", "true")»
+			@PostUpdate
+		«ENDIF»
+		«IF hasTaggedValue("ejb3Callback", "preUpdate", "true")»
+			@PreUpdate
+		«ENDIF»	
+		«IF hasTaggedValue("ejb3Callback", "postRemove", "true")»
+			@PostRemove
+		«ENDIF»
+		«IF hasTaggedValue("ejb3Callback", "preRemove", "true")»
+			@PreRemove
+		«ENDIF»
+		«IF hasTaggedValue("ejb3Callback", "postLoad", "true")»
+			@PostLoad
+		«ENDIF»
+	«ENDIF»
+	«REM» stereotype ejb3TransactionAttribute «ENDREM»
+	«EXPAND CMTransactionality»
 «ENDDEFINE»
 
 «REM»
@@ -44,3 +86,15 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«REM» 
+	container-managed transaction demarcation
+	for operations and classes
+«ENDREM»
+«DEFINE CMTransactionality FOR MElement-»
+	«IF hasStereotype("ejb3TransactionAttribute")»
+		«IF !hasTaggedValue("ejb3TransactionAttribute", "type", "null") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
+			@TransactionAttribute(TransactionAttributeType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
