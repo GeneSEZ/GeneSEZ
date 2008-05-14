@@ -4,6 +4,8 @@
 	@author	André Pflüger
 	@date	2008/04/22
 	- todo 1: implement all ejb3 stereotypes
+	- todo 2: check use of getter/setter of java5::Class.xpt
+	- todo 3: check use of asAttributeName() instead of ids.name
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
@@ -23,9 +25,11 @@
 
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
 «REM» evaluate stereotypes for classes «ENDREM»
 «DEFINE Annotation FOR MClass»
@@ -80,19 +84,84 @@
 	
 	«REM» primary key «ENDREM»
 	«IF hasStereotype("ejb3PrimaryKey")»
+
 		«REM» primary key with extern primary key class «ENDREM»
 		«IF !hasTaggedValue("ejb3PrimaryKey", "idClass", "null")»
 			@IdClass(«mapName()»PK.class)
-			«FILE getFilename()PK-»
-				«REM» 
-					implement generation of primary key class
-					need to know the used ids (xtend?!?) 
-				«ENDREM»
-			«ENDFILE»
+			«EXPAND _PrimaryKeyClass»
 		«ENDIF»
 		«REM» primary key with embedded primary key class «ENDREM»
 		«IF hasTaggedValue("ejb3PrimaryKey", "embeddable", "true")»
 			@Embeddable
 		«ENDIF»		
 	«ENDIF»	
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+«REM» creates a primary key class for stereotype "idClass" «ENDREM»
+«DEFINE _PrimaryKeyClass FOR MClass-»
+	«FILE getFilename("", "PK")-»
+		package «getPackagePath()»;
+		public class «mapName()+"PK"-» implements java.io.Serializable {
+			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+				private «ids.type.mapName()» «ids.name»;
+			«ENDFOREACH»
+			public «mapName()+"PK"-»() {}
+			public «mapName()+"PK"-»(
+			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR ", "-»
+				«ids.type.mapName()» «ids.name»
+			«ENDFOREACH-») {
+				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR ";"-»
+					this.«ids.name» = «ids.name»
+				«ENDFOREACH-»;
+			}
+			
+			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+				public «ids.type.mapName()» «asGetter(ids.name)»() {
+					return «ids.name»;
+				}
+			«ENDFOREACH»
+			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+				public  void «asSetter(ids.name)»(«ids.type.mapName()» «ids.name») {
+					this.«ids.name» = «ids.name»;
+				}	
+			«ENDFOREACH»
+			public boolean equals(Object obj){
+				if (obj == this) return true;
+				if (!(obj instanceof «mapName()+"PK"-»)) return false;
+				«mapName()+"PK"-» pk = («mapName()+"PK"-») obj;
+				return ( 
+				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR "&&"-»
+					this.«ids.name»
+					«IF isPrimitiveDatatype(ids.type.mapName())-»
+						 == pk.«ids.name»
+					«ELSE-»
+						.equals(pk.«ids.name-»)
+					«ENDIF-»
+				«ENDFOREACH-»
+				);
+			}
+			
+			public int hashCode() {
+				return (int)
+				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR "+"-»
+					this.«ids.name-»
+					«IF !isPrimitiveDatatype(ids.type.mapName())-»
+						.hashCode()
+					«ENDIF-»	
+				«ENDFOREACH-»
+				;				
+			}
+		}
+	«ENDFILE»
+	
+	«REM» 
+	«FOREACH "[Name, name]".getArrayElements() AS ids SEPARATOR "//und"»
+		//«ids»
+	«ENDFOREACH»	
+	«ENDREM»
 «ENDDEFINE»
