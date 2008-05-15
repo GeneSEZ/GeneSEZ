@@ -30,14 +30,43 @@
 «REM» evaluate stereotypes for associations «ENDREM»
 «DEFINE Annotation FOR MOperation-»
 	«REM» stereotype ejb3Timer «ENDREM»
-	«IF hasStereotype("ejb3Timer")»
+	«IF hasStereotype("ejb3Timer") && (hasStereotype("ejb3MessageDrivenBean") || hasTaggedValue("ejb3SessionBean", "stateless", "true"))»
 		@Timeout
 	«ENDIF»
 	«REM» stereotype ejb3Column «ENDREM»
 	«EXPAND Attribute::Column»
 	«REM» stereotype ejb3PrimaryKey «ENDREM»
 	«EXPAND Attribute::PrimaryKey»
+	«REM» stereotype ejb3DatatypeMapping«ENDREM»
+	«EXPAND Attribute::DatatypeMapping»
 	«REM» stereotype ejb3Callback for different bean types «ENDREM»
+	«EXPAND _Callback»
+	«REM» stereotype ejb3TransactionAttribute «ENDREM»
+	«EXPAND CMTransactionality»
+«ENDDEFINE»
+
+«REM» 
+	container-managed transaction demarcation
+	for operations and classes
+«ENDREM»
+«DEFINE CMTransactionality FOR MElement-»
+	«IF hasStereotype("ejb3TransactionAttribute")»
+		«IF !hasTaggedValue("ejb3TransactionAttribute", "type", "null") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
+			@TransactionAttribute(TransactionAttributeType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluate the stereotype ejb3Callback 
+«ENDREM»
+«DEFINE _Callback FOR MElement-»
 	«IF hasStereotype("ejb3SessionBean") || hasStereotype("ejb3MessageDrivenBean")»
 		«IF hasTaggedValue("ejb3Callback", "postConstruct", "true")»
 			@PostConstruct
@@ -77,24 +106,5 @@
 			@PostLoad
 		«ENDIF»
 	«ENDIF»
-	«REM» stereotype ejb3TransactionAttribute «ENDREM»
-	«EXPAND CMTransactionality»
 «ENDDEFINE»
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
-
-«REM» 
-	container-managed transaction demarcation
-	for operations and classes
-«ENDREM»
-«DEFINE CMTransactionality FOR MElement-»
-	«IF hasStereotype("ejb3TransactionAttribute")»
-		«IF !hasTaggedValue("ejb3TransactionAttribute", "type", "null") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
-			@TransactionAttribute(TransactionAttributeType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»)
-		«ENDIF»
-	«ENDIF»
-«ENDDEFINE»

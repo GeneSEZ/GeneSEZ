@@ -36,6 +36,9 @@
 	«REM» PersistentEntity «ENDREM»
 	«IF hasStereotype("ejb3PersistentEntity")»
 		@Entity
+		«IF !hasTaggedValue("ejb3PersistentEntity", "name", "null")-»
+			(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»")
+		«ENDIF»
 		@Table(
 		«IF !hasTaggedValue("ejb3PersistentEntity", "tableName", "null")-»
 			name="«taggedValue.selectFirst(e|e.tag.name == "tableName").value»"
@@ -61,22 +64,47 @@
 		@Local(«taggedValue.selectFirst(e|e.tag.name == "localInterface").value».class)
 	«ENDIF»	
 	«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
-		«IF hasTaggedValue("ejb3SessionBean", "name")»
-			@Stateful(name = "«taggedValue.selectFirst(e|e.tag.name == "name").value»") 
- 		«ELSE»
-			@Stateful
-		«ENDIF»
+		@Stateful(
+		«IF !hasTaggedValue("ejb3SessionBean", "name", "null")-»
+			name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«ELSE-»
+			name = "«mapName()-»"
+		«ENDIF-» 
+ 		«IF !hasTaggedValue("ejb3SessionBean", "mappedName", "null")-»
+ 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
+ 		«ENDIF-»
+ 		«IF !hasTaggedValue("ejb3SessionBean", "description", "null")-»
+ 			, description = "«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
+ 		«ENDIF-»)
 	«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "false")»
-		«IF hasTaggedValue("ejb3SessionBean", "name")»
-			@Stateless(name = "«taggedValue.selectFirst(e|e.tag.name == "name").value»") 
- 		«ELSE»
-			@Stateless
-		«ENDIF»
+		@Stateless(
+		«IF !hasTaggedValue("ejb3SessionBean", "name", "null")-»
+			name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«ELSE-»
+			name = "«mapName()-»"
+		«ENDIF-» 
+ 		«IF !hasTaggedValue("ejb3SessionBean", "mappedName", "null")-»
+ 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
+ 		«ENDIF-»
+ 		«IF !hasTaggedValue("ejb3SessionBean", "description", "null")-»
+ 			, description = "«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
+ 		«ENDIF-»)
 	«ENDIF»	
 	
 	«REM» MessageDriven «ENDREM»
 	«IF hasStereotype("ejb3MessageDrivenBean")»
-		@MessageDriven
+		@MessageDriven(
+		«IF !hasTaggedValue("ejb3MessageDrivenBean", "name", "null")-»
+			name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«ELSE-»
+			name = "«mapName()-»"
+		«ENDIF-» 
+ 		«IF !hasTaggedValue("ejb3MessageDrivenBean", "mappedName", "null")-»
+ 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
+ 		«ENDIF-»
+ 		«IF !hasTaggedValue("ejb3MessageDrivenBean", "description", "null")-»
+ 			, description = "«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
+ 		«ENDIF-»)		
 	«ENDIF»
 	
 	«REM» container-managed transaction demarcation «ENDREM»	

@@ -22,17 +22,18 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
 «REM» evaluate stereotypes for attributes «ENDREM»
 «DEFINE Annotation FOR MAttribute»
 	«EXPAND Column»
 	«EXPAND PrimaryKey»
-	«REM» persistence context «ENDREM»
-	«IF hasTaggedValue("ejb3Persistence", "context", "true")»
-		@PersistenceContext
-	«ENDIF»
+	«EXPAND DatatypeMapping»
+	«EXPAND _Persistence»
 «ENDDEFINE»
 
 «REM» 
@@ -127,5 +128,64 @@
 		«ENDIF-»
 		)
 		
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype ejb3DatatypeMapping
+	is used by attribute and operation
+ «ENDREM»
+«DEFINE DatatypeMapping FOR MElement»
+	«IF hasStereotype("ejb3DatatypeMapping")»
+		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Basic") && (hasTaggedValue("ejb3DataypeMapping", "fetch", "LAZY") || hasTaggedValue("ejb3DataypeMapping", "optional", "true"))»
+			@Basic(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
+			«IF hasTaggedValue("ejb3DatatypeMapping", "optional", "true")-»
+			, optional=true
+			«ENDIF-»)
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Embeddable")»
+			@Embeddable
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Lob")»
+			@Lob
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Temporal")»
+			@Temporal
+			«IF !hasTaggedValue("ejb3DatatypeMapping", "temporalType", "null")-»
+				(«taggedValue.selectFirst(e|e.tag.name == "temporalType").value-»)
+			«ENDIF»
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Enumerated")»
+			@Enumerated
+			«IF !hasTaggedValue("ejb3DatatypeMapping", "enumType", "ORDINAL")-»
+				(«taggedValue.selectFirst(e|e.tag.name == "enumType").value-»)
+			«ENDIF»
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM» 
+	evaluate the stereotype ejb3Persistence 
+«ENDREM»
+«DEFINE _Persistence FOR MAttribute»
+	«IF hasStereotype("ejb3Persistence")»
+		«IF hasTaggedValue("ejb3Persistence", "factory", "true")»
+			@PersistenceUnit
+			«IF !hasTaggedValue("ejb3Persistence", "unitName", "null")-»
+				(unitName="«taggedValue.selectFirst(e|e.tag.name == "unitName").value-»")
+			«ENDIF-»
+		«ELSEIF hasTaggedValue("ejb3Persistence", "factory", "false")»
+			@PersistenceContext
+			«IF !hasTaggedValue("ejb3Persistence", "contextType", "TRANSACTION")-»
+				(type = «taggedValue.selectFirst(e|e.tag.name == "contextType").value-»)
+			«ENDIF»
+		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
