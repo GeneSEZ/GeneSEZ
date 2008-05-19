@@ -29,7 +29,7 @@
 		«EXPAND Field( asClassifierName(type),
 		                asFieldName() )-»
 «ELSE-»
-		«EXPAND Field( typeMap( "Set" ) + "<" + asClassifierName(type) + ">",
+		«EXPAND Field( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
 		                asFieldName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -42,7 +42,7 @@
 «IF multiplicity == 1-»
 	«EXPAND _PropertyDecl( asClassifierName(type), asPropertyName() )-»
 «ELSE-»
-	«EXPAND _PropertyDecl( typeMap( "Set" ) + "<" + asClassifierName(type)+ ">",
+	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asClassifierName(type)+ ">",
 	                   asPropertyName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -55,7 +55,7 @@
 «IF multiplicity == 1-»
 	«EXPAND _PropertyImpl( asClassifierName(type), asPropertyName() )-»
 «ELSE-»
-	«EXPAND _PropertyImpl( typeMap( "Set" ) + "<" + asClassifierName(type)+ ">",
+	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asClassifierName(type)+ ">",
 	                   asPropertyName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -74,8 +74,8 @@
 «DEFINE Field(String type, String name) FOR MAttribute-»
 			«EXPAND _Comment-»
 			«EXPAND _Modifier» «type» «name»;
-«REM»		«EXPAND _Modifier» «typeMap(type.name())» «asFieldName()»«EXPAND _DefaultValue-»;«ENDREM»
-«REM»		«EXPAND _Modifier» «typeMap("Set")»<«type.name()»> «asFieldName()» = new «typeMap("Set", "Implementation")»<«type.name()»>();«ENDREM»
+«REM»		«EXPAND _Modifier» «mapType(type.name())» «asFieldName()»«EXPAND _DefaultValue-»;«ENDREM»
+«REM»		«EXPAND _Modifier» «mapType("Set")»<«type.name()»> «asFieldName()» = new «mapType("Set", "Implementation")»<«type.name()»>();«ENDREM»
 «ENDDEFINE»
 
 
