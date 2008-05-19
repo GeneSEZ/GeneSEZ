@@ -1,4 +1,4 @@
-package de.genesez.workflow.xpand2;
+package de.genesez.platforms.common.workflow.xpand2;
 
 import de.genesez.platforms.common.typemapping.TypeMapper;
 
