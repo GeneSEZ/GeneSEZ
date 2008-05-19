@@ -1,7 +1,7 @@
 package de.genesez.platforms.common;
 
-import de.genesez.metamodel.genesezMM.MModel;
-import de.genesez.metamodel.genesezMM.MPackage;
+import de.genesez.metamodel.gcore.MModel;
+import de.genesez.metamodel.gcore.MPackage;
 
 /**
  * Utility class for Conversion of model informations

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import de.genesez.metamodel.genesezMM.MPackage;
+import de.genesez.metamodel.gcore.MPackage;
 import de.genesez.platforms.common.Conversion;
 import de.genesez.platforms.common.log.GenesezLogger;
 

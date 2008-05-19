@@ -1,6 +1,6 @@
 package de.genesez.platforms.common;
 
-import de.genesez.metamodel.genesezMM.MModel;
+import de.genesez.metamodel.gcore.MModel;
 
 /**
  * Utility class for storing a model
