@@ -4,11 +4,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 
-import de.genesez.metamodel.genesezMM.MClassifier;
-import de.genesez.metamodel.genesezMM.MExternal;
-import de.genesez.metamodel.genesezMM.MGeneric;
-import de.genesez.metamodel.genesezMM.MPrimitiveType;
-import de.genesez.metamodel.genesezMM.MType;
+import de.genesez.metamodel.gcore.MClassifier;
+import de.genesez.metamodel.gcore.MExternal;
+import de.genesez.metamodel.gcore.MGeneric;
+import de.genesez.metamodel.gcore.MPrimitiveType;
+import de.genesez.metamodel.gcore.MType;
 import de.genesez.platforms.common.typemapping.mappingtypes.CollectionMappingType;
 import de.genesez.platforms.common.typemapping.mappingtypes.ExternalMappingType;
 import de.genesez.platforms.common.typemapping.mappingtypes.PrimitiveMappingType;

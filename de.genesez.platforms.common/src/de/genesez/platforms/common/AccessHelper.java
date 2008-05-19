@@ -3,11 +3,10 @@ package de.genesez.platforms.common;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import de.genesez.adapter.uml2.TransUtils;
-import de.genesez.metamodel.genesezMM.MClassifier;
-import de.genesez.metamodel.genesezMM.MPackage;
+import de.genesez.metamodel.gcore.MClassifier;
+import de.genesez.metamodel.gcore.MPackage;
 
 /**
  * Utility class with some helper functions for accessing GeneSEZ models

@@ -1,0 +1,310 @@
+/*
+	provides functionality to clone genesez-models
+	- useful for M2M (genesez-model 2 genesez-model) transformations
+	
+	based on gcore model revision 380
+	- core chart should be fully implemented
+	- base chart should be fully implemented
+	- types chart should be fully implemented
+	- generic chart should be fully implemented
+ */
+
+// import genesez meta model
+import gcore;
+
+// and we also load the io extensions, for the purpose of
+// debugging, in case we need it   
+extension de::genesez::platforms::common::log::Log;
+
+
+//	clone MModel
+create MModel cloneMModel(MModel orig) :
+	fine("clone MModel: " + orig.name) ->
+	//	base class
+	processMElement(orig) ->
+	//	containments
+	nestedPackage.addAll(orig.nestedPackage.cloneMPackage()) ->
+	anyStereotype.addAll(orig.anyStereotype.cloneMStereotype()) ->
+	primitiveTypes.addAll(orig.primitiveTypes.cloneMPrimitiveType()) ->
+	this;
+
+//	clone MPackage
+create MPackage cloneMPackage(MPackage orig) :
+	fine("clone MPackage: " + orig.name) ->
+	//	base class
+	processMElement(orig) ->
+	//	containments
+	nestedPackage.addAll(orig.nestedPackage.cloneMPackage()) ->
+	classifier.addAll(orig.classifier.determineMClassifier()) ->
+	association.addAll(orig.association.cloneMAssociation()) ->
+	this;
+	
+	
+//	-- associations ---------------------------------------------------------
+	
+create MAssociation cloneMAssociation(MAssociation orig) :
+	fine("clone MAssociation: " + orig.name + ", " + orig.xmiGuid) ->
+	//	base class
+	processMElement(orig) ->
+	//	properties
+	setDerived(orig.derived) ->
+	//	associations
+	end.addAll(orig.end.cloneMAssociationRole().setAssociation(this)) ->
+	orig.associationClass != null ?
+		setAssociationClass(orig.associationClass.cloneMClass()) : 
+		info("MAssociation.associationClass: " + orig.associationClass) ->
+	this;
+	
+	
+//	-- classifiers ----------------------------------------------------------
+	
+create MClass cloneMClass(MClass orig) :
+	fine("clone MClass: " + orig.name) ->
+	//	base class
+	processMClassifier(orig) ->
+	//	associations
+	orig.ownedAssociation != null ?
+		setOwnedAssociation(orig.ownedAssociation.cloneMAssociation()) :
+		info("MClass.ownedAssociation: " + orig.ownedAssociation) ->
+	this;
+	
+create MInterface cloneMInterface(MInterface orig) :
+	fine("clone MInterface: " + orig.name) ->
+	//	base class
+	processMClassifier(orig) ->
+	this;
+	
+create MClassifier cloneMClassifier(MClassifier orig) :
+	fine("clone MClassifier: " + orig.name) ->
+	//	process classifier
+	processMClassifier(orig) ->
+	this;
+	
+create MGeneric cloneMGeneric(MGeneric orig) :
+	fine("clone MGeneric: " + orig.specification) ->
+	processMGeneric(orig) ->
+	this;
+	
+create MType cloneMType(MType orig) :
+	fine("clone MType: " + orig.metaType) ->
+	//	shouldn't be called
+	this;
+	
+	
+//	-- classifier containments ----------------------------------------------
+	
+create MOperation cloneMOperation(MOperation orig) :
+	fine("clone MOperation: " + orig.name) ->
+	//	base class
+	processMElement(orig) ->
+	//	properties
+	//	containment
+	parameter.addAll(orig.parameter.cloneMParameter()) ->
+	genericParameter.addAll(orig.genericParameter.cloneMGeneric()) ->
+	//	associations
+	setReturnType(orig.returnType.determineMType()) ->
+	raisedException.addAll(orig.raisedException.determineMType()) ->
+	this;
+	
+create MParameter cloneMParameter(MParameter orig) :
+	fine("clone MParameter: " + orig.name) ->
+	//	base class
+	processMElement(orig) ->
+	//	properties
+	setDefaultvalue(orig.defaultvalue) ->
+	setDirection(orig.direction) ->
+	setMultiplicity(orig.multiplicity) ->
+	//	containment
+	genericRealization.addAll(orig.genericRealization.cloneMGeneric()) ->
+	//	associations
+	setType(orig.type.determineMType()) ->
+	this;
+	
+create MProperty cloneMProperty(MProperty orig) :
+	fine("clone MProperty: " + orig.name) ->
+	//	process property
+	processMProperty(orig) ->
+	//	containment
+	genericRealization.addAll(orig.genericRealization.cloneMGeneric()) ->
+	this;
+	
+create MAttribute cloneMAttribute(MAttribute orig) :
+	fine("clone MAttribute: " + orig.name) ->
+	//	base class
+	processMProperty(orig) ->
+	//	properties
+	setDefaultvalue(orig.defaultvalue) ->
+	setStatic(orig.static) ->
+	setFinal(orig.final) ->
+	this;
+	
+create MAssociationRole cloneMAssociationRole(MAssociationRole orig) :
+	fine("clone MAssociationRole: " + orig.name) ->
+	//	base class
+	processMProperty(orig) ->
+	//	properties
+	setAggregation(orig.aggregation) ->
+	setComposition(orig.composition) ->
+	//	associations
+	setAssociation(orig.association.cloneMAssociation()) ->
+	orig.opposite != null ?
+		setOpposite(orig.opposite.cloneMAssociationRole()) :
+		info("MAssociationRole.opposite: " + orig.opposite) ->
+	this;
+	
+//	-- data types -----------------------------------------------------------
+	
+create MDataType cloneMDataType(MDataType orig) :
+	fine("clone MDataType: " + orig.name) ->
+	processMDataType(orig) ->
+	this;
+	
+create MPrimitiveType cloneMPrimitiveType(MPrimitiveType orig) :
+	fine("clone MPrimitiveType: " + orig.name) ->
+	//	base class
+	processMElement(orig) ->
+	this;
+	
+create MEnumeration cloneMEnumeration(MEnumeration orig) :
+	fine("clone MEnumeration: " + orig.name) ->
+	//	base class
+	processMDataType(orig) ->
+	//	containments
+	literal.addAll(orig.literal.cloneMLiteral()) ->
+	this;
+	
+create MLiteral cloneMLiteral(MLiteral orig) :
+	fine("clone MLiteral: " + orig.name) ->
+	//	base class
+	processMElement(orig) ->
+	this;
+	
+	
+//	-- stereotypes + tagged values ------------------------------------------
+	
+create MStereotype cloneMStereotype(MStereotype orig) :
+	//	base class
+	processMElement(orig) ->
+	//	containment
+	property.addAll(orig.property.cloneMTag()) ->
+	this;
+	
+create MTag cloneMTag(MTag orig) :
+	//	properties
+	setName(orig.name) ->
+	setType(orig.type) ->
+	this;
+	
+create MTaggedValue cloneMTaggedValue(MTaggedValue orig) :
+	//	properties
+	setValue(orig.value) ->
+	//	associations
+	setTag(orig.tag.cloneMTag()) ->
+	this;
+	
+	
+//	-- maybe can be removed in future versions, because xtend should be polymorphic
+//	-- but i got some problems with polymorphism in xtend
+//	-- determine meta model types -----------------------------------
+	
+MProperty determineMProperty(MProperty orig) :
+	switch (orig.metaType.name) {
+		case MAttribute.name : ((MAttribute)orig).cloneMAttribute()
+		case MAssociationRole.name : ((MAssociationRole)orig).cloneMAssociationRole()
+		default : orig.cloneMProperty()
+	};
+	
+MType determineMType(MType orig) :
+	switch (orig.metaType) {
+		case MGeneric : ((MGeneric)orig).cloneMGeneric()
+		case MPrimitiveType : ((MPrimitiveType)orig).cloneMPrimitiveType()
+		default : ((MClassifier)orig).determineMClassifier()
+	};
+	
+MClassifier determineMClassifier(MClassifier orig) :
+	switch (orig.metaType) {
+		case MClass : ((MClass)orig).cloneMClass()
+		case MInterface : ((MInterface)orig).cloneMInterface()
+		case MEnumeration : ((MEnumeration)orig).cloneMEnumeration()
+		case MDataType : ((MDataType)orig).cloneMDataType()
+		//	is this useful ??? maybe classifier is more an abstract meta class ?
+		default : orig.cloneMClassifier()
+	};
+	
+//	-- copy properties from orig to clone -----------------------------------
+	
+MOperation processMOperation(MOperation clone, MOperation orig) :
+	//	properties
+	clone.setVisibility(orig.visibility) ->
+	clone.setStatic(orig.static) ->
+	clone.setAbstract(orig.abstract) ->
+	clone.setFinal(orig.final) ->
+	clone.setMultiplicity(orig.multiplicity) ->
+	clone;
+	
+MDataType processMDataType(MDataType clone, MDataType orig) :
+	//	base class
+	clone.processMClassifier(orig) ->
+	//	return statement
+	clone;
+	
+MProperty processMProperty(MProperty clone, MProperty orig) :
+	//	base class
+	clone.processMElement(orig) ->
+	//	properties
+	clone.setVisibility(orig.visibility) ->
+	clone.setMultiplicity(orig.multiplicity) ->
+	clone.setDerived(orig.derived) ->
+	//	associations
+	clone.setType(orig.type.determineMType()) ->
+	//	return statement
+	clone;
+	
+MGeneric processMGeneric(MGeneric clone, MGeneric orig) :
+	//	no base class
+	//	properties
+	clone.setSpecification(orig.specification) ->
+	clone;
+	
+MClassifier processMClassifier(MClassifier clone, MClassifier orig) :
+	//	base class
+	clone.processMElement(orig) ->
+	//	properties
+	clone.setVisibility(orig.visibility) ->
+	clone.setAbstract(orig.abstract) ->
+	clone.setFinal(orig.final) ->
+	//	containments
+	clone.operation.addAll(orig.operation.cloneMOperation()) ->
+	clone.property.addAll(orig.property.determineMProperty()) ->
+	clone.genericParameter.addAll(orig.genericParameter.cloneMGeneric()) ->
+	//	associations
+	clone.supertype.addAll(orig.supertype.determineMClassifier()) ->
+	clone.supplier.addAll(orig.supplier.determineMClassifier()) ->
+	//	return statement
+	clone;
+	
+MElement processMElement(MElement clone, MElement orig) :
+	//	properties
+	clone.setXmiGuid(orig.xmiGuid) ->
+	clone.setName(orig.name) ->
+	//	containments
+	clone.ownedComment.addAll(orig.ownedComment.cloneMComment()) ->
+	clone.taggedValue.addAll(orig.taggedValue.cloneMTaggedValue()) ->
+	//	associations
+	clone.stereotype.addAll(orig.stereotype.cloneMStereotype()) ->
+	//	return statement
+	clone;
+	
+	
+//	-- clone comment --------------------------------------------------------
+	
+create MComment cloneMComment(MComment orig) :
+	//	properties
+	setXmiGuid(orig.xmiGuid) ->
+	setAnnotation(orig.annotation) ->
+	//	containments
+	nestedComment.addAll(orig.nestedComment.cloneMComment()) ->
+	//	return statement
+	this;
+	
+	
