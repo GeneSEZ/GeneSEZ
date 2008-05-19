@@ -2,21 +2,20 @@
 <!-- this file runs the uml2ecore Workflow from the oaw Model-to-Model -->
 
 <workflow>
-	<!-- properties for this workflow -->
-	<property name="uml2MetaModelPath" value="model-exp/" />
-	<property name="uml2MetaModelFile" value="genesezMM.uml" />
-	<property name="ecoreMetaModelPath" value="model-gen/" />
-	<property name="ecoreMetaModelFile" value="genesezMM.ecore" />
-	
-	<!-- make workflow working with 'environment.properties' file -->
+	<!--
+		make workflow working with 'environment.properties' file
+		ANT uses 'basedir', oAW uses 'baseDir' instead, other name, same meaning ;-)
+	-->
 	<property name="basedir" value="${baseDir}" />
+	<!-- include ANT build properties (file + directory settings) -->
+	<property file="build/build.properties" />
 	<!-- include magic draw home directory -->
 	<property file="build/environment.properties" />
 	
 	<!-- maybe in future, when we have an update site or similiar and our metamodel is robust -->
 	<!-- property name="nsUri" value="http://genesez.de/metamodel.ecore" / -->
 	<!-- now just referencing the ecore file within the genesez metamodel plugin -->
-	<property name="nsUri" value="platform:/plugin/de.genesez.metamodel/${ecoreMetaModelPath}${ecoreMetaModelFile}" />
+	<property name="nsUri" value="platform:/plugin/de.genesez.metamodel/${ecore.file}" />
 	
 	
 	<!-- following variables should be defined for transformation file -->
@@ -28,21 +27,22 @@
 	<property name="resourcePerToplevelPackage" value="false" />
 	
 	
+	<!-- export uml2 files from magic draw model -->
+	<component id="xmiExport"
+		class="com.nomagic.magicdraw.oaw.ExportWorkflowComponent"
+		projectFile="${magicdraw.file}"
+		exportDirectory="${model.export.dir}"
+		skipUpToDate="false"
+		requiredVersion="2.x"
+		magicdrawHome="${MAGICDRAW_DIR}">
+	</component>
 	
 	<!-- First is to initialize the support for uml2 models. -->
     <bean class="oaw.uml2.Setup" standardUML2Setup="true"/> 
 	
-	<component id="xmiExport"
-           class="com.nomagic.magicdraw.oaw.ExportWorkflowComponent"
-           projectFile="model/genesezMM.mdzip"
-           exportDirectory="model-exp"
-           skipUpToDate="false"
-           requiredVersion="2.x"
-           magicdrawHome="${MAGICDRAW_DIR}" />
-    
     <!-- Read the uml2 model file into the uml2model workflow slot. -->
 	<component id="xmiReader" class="org.openarchitectureware.emf.XmiReader">
-		<modelFile value="${uml2MetaModelPath}${uml2MetaModelFile}"/>
+		<modelFile value="${model.export.dir}${uml2.file}"/>
 		<outputSlot value="uml2model"/>
 	</component>
 	
@@ -109,7 +109,7 @@
 	<!-- Write the ecore model into the ecore file. -->
 	<component id="xmiWriter" class="org.openarchitectureware.emf.XmiWriter">
 		<inputSlot value="ecoreModel"/>
-		<modelFile value="${ecoreMetaModelPath}${ecoreMetaModelFile}"/>
+		<modelFile value="${ecore.file}"/>
 	</component>
     
 </workflow>
