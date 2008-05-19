@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 	ant build file for automation of model transformation steps
-	@author	dreamer
+	@author	toh
 	
 	includes following ant tasks:
 	- oaw workflow task to generate *.ecore file from emf uml2 model
@@ -90,6 +90,31 @@
 			debug="on" />
 	</target>
 	
+	<target name="build.create.jar"
+			description="Create the plugin jar for de.genesez.metamodel">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/de.genesez.metamodel_1.5.0.jar"
+			 compress="true"
+			 manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${basedir}">
+    			<include name="plugin.xml"/>
+    			<include name="plugin.properties"/>
+    			<include name="model-gen/*.ecore"/>
+			</fileset>
+			<fileset dir="${workflow.dir}">
+    			<include name="log4j.properties"/>
+			</fileset>
+			<fileset dir="bin">
+    			<exclude name="org/"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="build.update.jar"
+			description="Build the plug-in: de.genesez.metamodel for an update site.">
+		<!-- copy jar to distribution location -->
+	</target>
+
 	<!-- cleaning lady -->
 	<target name="clean"
 			description="clears the distribution directory">
@@ -110,8 +135,14 @@
 		
 		<!-- remove exported magic draw models -->
 		<delete includeemptydirs="true">
+			<fileset dir="${src.dir}">
+				<include name="de/**/*" />
+			</fileset>
+			<fileset dir="${model.generate.dir}">
+				<include name="*.ecore" />
+			</fileset>
 			<fileset dir="${model.export.dir}">
-				<include name="**/*" />
+				<include name="*.uml" />
 			</fileset>
 		</delete>
 	</target>
