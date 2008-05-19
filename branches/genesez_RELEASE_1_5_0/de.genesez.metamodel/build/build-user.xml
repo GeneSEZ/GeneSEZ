@@ -65,8 +65,8 @@
 		note: genModel must be set in task and must be generated!
 	-->
 	<target name = "ecore2java">
-		<emf.Ecore2Java model = "${ecoreMetaModelFile}"
-			genModel = "${genModelFile}"
+		<emf.Ecore2Java model = "${ecore.file}"
+			genModel = "${genmodel.file}"
 			reconcileGenModel="reload"
 			
 			generateJavaCode="true"
@@ -93,8 +93,24 @@
 	<!-- cleaning lady -->
 	<target name="clean"
 			description="clears the distribution directory">
+			
+		<!-- remove all binary files -->
 		<delete includeemptydirs="true">
-			<fileset dir="${dist.dir}">
+			<fileset dir="${bin.dir}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+		
+		<!-- remove generated java code -->
+		<delete includeemptydirs="true">
+			<fileset dir="${ecore2java.path}">
+				<include name="${ecore.base}/**/*" />
+			</fileset>
+		</delete>
+		
+		<!-- remove exported magic draw models -->
+		<delete includeemptydirs="true">
+			<fileset dir="${model.export.dir}">
 				<include name="**/*" />
 			</fileset>
 		</delete>
