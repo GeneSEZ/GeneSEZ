@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.build" basedir="." default="all">
+	
+	<!-- import environment and required scripts -->
+	<import file="build/imports.xml"/>
+
+	<target name="all"
+		description=""
+		depends="pluginjar.all" />
+	
+	<target name="clean"
+		description=""
+		depends="clean.all" />
+	
+	<!-- check auf eclipse.running -->
+
+	<target name="build.all"
+		description="">
+		<for list="${projects}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="build"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="pluginjar.all"
+		description="">
+		<for list="${projects}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="pluginjar"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="clean.all"
+		description="">
+		<for list="${projects}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="clean"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+	
+</project>
