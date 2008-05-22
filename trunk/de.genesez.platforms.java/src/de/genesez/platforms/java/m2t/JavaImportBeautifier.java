@@ -1,9 +1,9 @@
-package de.genesez.output.java;
+package de.genesez.platforms.java.m2t;
 
 import org.openarchitectureware.xpand2.output.FileHandle;
 
-import de.genesez.output.ImportBeautifier;
-import de.genesez.output.Properties;
+import de.genesez.platforms.common.m2t.ImportBeautifier;
+import de.genesez.platforms.common.m2t.Properties;
 
 
 public class JavaImportBeautifier extends ImportBeautifier {

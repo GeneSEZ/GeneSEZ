@@ -1,4 +1,4 @@
-package de.genesez.platforms.formatter.java;
+package de.genesez.platforms.java.m2t;
 
 public class JavaImportIncluder {
 //	private static Set<String> imports = new HashSet<String>();
