@@ -1,4 +1,4 @@
-package de.genesez.output;
+package de.genesez.platforms.common.m2t;
 
 import java.util.HashMap;
 

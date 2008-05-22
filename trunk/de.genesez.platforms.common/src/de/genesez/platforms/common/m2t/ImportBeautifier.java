@@ -1,4 +1,4 @@
-package de.genesez.output;
+package de.genesez.platforms.common.m2t;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
