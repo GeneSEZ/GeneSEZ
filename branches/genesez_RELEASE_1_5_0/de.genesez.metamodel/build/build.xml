@@ -31,7 +31,7 @@
 	<!-- Public target section -->
 	
 	<target name="build"
-		description=""
+		description="Build de.genesez.metamodel"
 		depends="metamodel.compile.internal,metamodel.compile.external">
 	</target>
 
@@ -57,19 +57,16 @@
 	</target>
 	
 	<target name="clean"
-		description="">
+		description="Clean de.genesez.metamodel">
 		<delete includeemptydirs="true">
 			<!-- remove all binary files -->
-			<fileset dir="${bin.dir}">
-				<include name="**/*" />
-			</fileset>
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${dist.dir}" includes="*.jar" />
 			<!-- remove generated java code -->
 			<fileset dir="${ecore2java.path}">
 				<include name="${ecore.base}/**/*" />
 			</fileset>
-			<fileset dir="${src.dir}">
-				<include name="de/**/*" />
-			</fileset>
+			<!-- remove ecore model -->
 			<fileset dir="${model.generate.dir}">
 				<include name="*.ecore" />
 			</fileset>
