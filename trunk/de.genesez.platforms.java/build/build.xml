@@ -11,13 +11,19 @@
 	
 	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
 	
+	<!-- Set the classpath -->
+	<path id="de.genesez.platforms.java.classpath">
+		<path refid="Plug-in Dependencies.libraryclasspath"/>
+	</path>
+
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 	
 	<!-- Public target section -->
 	
 	<target name="build"
-		description="">
+		description=""
+		depends="platforms.java.compile" >
 	</target>
 
 	<target name="pluginjar"
@@ -42,5 +48,13 @@
 	</target>
 	
 	<!-- Private target section -->
+
+	<target name="platforms.java.compile">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.platforms.java.classpath"
+			debug="on" />
+	</target>
 
 </project>
