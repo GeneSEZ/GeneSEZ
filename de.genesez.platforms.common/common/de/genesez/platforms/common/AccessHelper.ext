@@ -13,7 +13,7 @@
  * - classifiers
  * 
  * @author	nico herbig
- * @author	tobias haubold
+ * @author	tobias haubold (last)
  * @date	2008-04-18
  * 
  * @todo	getCommentText(List[MComment]), line 250
@@ -24,11 +24,9 @@
 // based on genesez meta model
 import gcore;
 
-extension de::genesez::platforms::common::log::Log;
-
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	properties in general
+	multiplicity elements (properties, parameters, operations)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -40,10 +38,38 @@ boolean isSingleValuedType(MProperty this) :
 	multiplicity == 1;
 
 /**
+ * checks if an operation has a simple valued type
+ * @return	true if the operation has a simple valued type, otherwise false
+ */
+boolean isSingleValuedType(MOperation this) :
+	multiplicity == 1;
+
+/**
+ * checks if a parameter has a simple valued type
+ * @return	true if the parameter has a simple valued type, otherwise false
+ */
+boolean isSingleValuedType(MParameter this) :
+	multiplicity == 1;
+
+/**
  * checks if a property has a multi-valued type
  * @return	true if the property has a multi-valued type, otherwise false
  */
 boolean isMultiValuedType(MProperty this) :
+	multiplicity != 1;
+
+/**
+ * checks if an operation has a multi-valued type
+ * @return	true if the operation has a multi-valued type, otherwise false
+ */
+boolean isMultiValuedType(MOperation this) :
+	multiplicity != 1;
+
+/**
+ * checks if a parameter has a multi-valued type
+ * @return	true if the parameter has a multi-valued type, otherwise false
+ */
+boolean isMultiValuedType(MParameter this) :
 	multiplicity != 1;
 
 /*
@@ -123,6 +149,16 @@ boolean hasAssociationRoles(MClassifier this) :
  * @return	true, if it's a plain association role and doesn't belongs to an association class and 
  * 			false, if the association role belongs to an association class
  */
+boolean hasAssociationClass(MAssociationRole this) :
+	association.associationClass != null;
+
+/**
+ * checks if an association role belongs to an association class or not
+ * @param	aend	an association role
+ * @return	true, if it's a plain association role and doesn't belongs to an association class and 
+ * 			false, if the association role belongs to an association class
+ * @deprecated, use {@link hasAssociationClass(MAssociationRole)}
+ */
 boolean isPlainAssociation(MAssociationRole aend) :
 	aend.association.associationClass == null;
 
@@ -195,6 +231,12 @@ boolean hasReturnType(MOperation this) :
  */
 boolean hasDefaultValue(MParameter this) :
 	defaultvalue.length > 0;
+
+/**
+ * checks if an operation can throw exceptions
+ * @return	true if the operation can throw exceptions, otherwise false
+ */
+boolean hasExceptions(MOperation this) : !raisedException.isEmpty;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -330,6 +372,30 @@ boolean hasAspect(MElement this, String domain) :
 	type helpers
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * checks if the type is a primitive type
+ * @return	true if the type is a primitive type, otherwise false
+ */
+boolean isPrimitiveType(MType this) : metaType == MPrimitiveType;
+
+/**
+ * checks if the type is a generic
+ * @return	true if the type is a generic, otherwise false
+ */
+boolean isGenericType(MType this) : metaType == MGeneric;
+
+/**
+ * checks if the type is an external type
+ * @return	true if the type is an external type, otherwise false
+ */
+boolean isExternalType(MType this) : metaType == MExternal;
+
+/**
+ * checks if the type is a data type
+ * @return	true if the type is a data type, otherwise false
+ */
+boolean isDataType(MType this) : metaType == MDataType;
 
 /**
  * getter for the name of a type or the specification of a generic

@@ -1,6 +1,12 @@
 /**
  * Helper functions for conversions for easier code generation
  * 
+ * conventions used:
+ * - fileName is only the file name, e.g. 'Conversion.ext'
+ * - dirName is the name of the directory, e.g. 'common'
+ * - dirPath is the path of directries, e.g. 'de/genesez/platforms/common'
+ * - filePath is the full filename, e.g. 'de/genesez/platforms/common/Conversion.ext'
+ * 
  * @author	nico herbig
  * @author	tobias haubold (last)
  * @date	2008-04-18
@@ -44,115 +50,101 @@ String getGenericList(List[MGeneric] l) :
 */
 
 /**
- * getter for the filename of a classifier and only the filename without path
- * @param	prefix			the prefix to add to the name of the classifier
- * @param	suffix			the suffix to add to the name of the classifier
- * @param	fileExtension	the file extension including the beginning dot
- * @return	the file name of the classifier
+ * getter for the directory name of a classifier
+ * @return	the name of the directory
  */
-String fileName(MClassifier this, String prefix, String suffix, String fileExtension) :
-	prefix + name.toFirstUpper() + suffix + fileExtension;
-
-/**
- * getter for the filename of a classifier based on it's basename
- * @param	basename		the name of a classifier, e.g. name after typemapping
- * @param	prefix			the prefix to add to the name of the classifier
- * @param	suffix			the suffix to add to the name of the classifier
- * @param	fileExtension	the file extension including the beginning dot
- * @return	the file name of the classifier
- */
-String fileName(String basename, String prefix, String suffix, String fileExtension) :
-	prefix + basename.toFirstUpper() + suffix + fileExtension;
+String dirName(MClassifier this) : owningPackage.name;
 
 /**
  * getter for the path of a classifier based on it's namespace
  * @return	the path of the classifier
  */
-String dirName(MClassifier this) :
-	fullQualifiedName(owningPackage, fileSeparator());
+String dirPath(MClassifier this) :
+	owningPackage.fullQualifiedName(fileSeparator());
 
 /**
  * getter for the path of a classifier based on it's namespace
  * @param	base	the base path of the classifier
  * @return	the path of the classifier
+ * @see		dirPath(MClassifier)
  */
-String dirName(MClassifier this, String base) :
-	base + fileSeparator() + fullQualifiedName(owningPackage, fileSeparator());
+String dirPath(MClassifier this, String base) :
+	base + fileSeparator() + dirPath();
 
 /**
- * getter for the full filename of a classifier based on it's name, including path
- * @param	prefix			the prefix to add to the name of the classifier
- * @param	suffix			the suffix to add to the name of the classifier
- * @param	fileExtension	the file extension including the beginning dot
+ * getter for the full filename of a classifier based it's namespace
+ * @param	filename	the filename of the classifier, usually the name according to naming conventions
  * @return	the full file name of the classifier including the path
- * @see		dirName(MClassifier)
- * @see		fileName(MClassifier, String, String, String)
+ * @see		dirPath(MClassifier)
  */
-String filePath(MClassifier this, String prefix, String suffix, String fileExtension) :
-	dirName() + fileSeparator() + fileName(prefix, suffix, fileExtension);
-
-/**
- * getter for the full filename of a classifier based on the given basename, including path
- * @param	basename		the name of the classifier, e.g. name after typemapping
- * @param	prefix			the prefix to add to the name of the classifier
- * @param	suffix			the suffix to add to the name of the classifier
- * @param	fileExtension	the file extension including the beginning dot
- * @return	the full file name of the classifier including the path
- * @see		dirName(MClassifier)
- * @see		fileName(String, String, String, String)
- */
-String filePath(MClassifier this, String basename, String prefix, String suffix, String fileExtension) :
-	dirName() + fileSeparator() + fileName(basename, prefix, suffix, fileExtension);
-
-/**
- * getter for the full filename of a classifier based on it's name, including path
- * @param	basePath		the base path which is prepended on the namespace
- * @param	prefix			the prefix to add to the name of the classifier
- * @param	suffix			the suffix to add to the name of the classifier
- * @param	fileExtension	the file extension including the beginning dot
- * @return	the full file name of the classifier including the path
- * @see		dirName(MClassifier, String)
- * @see		fileName(MClassifier, String, String, String)
- */
-String filePath(MClassifier this, String basePath, String prefix, String suffix, String fileExtension) :
-	dirName(basePath) + fileSeparator() + fileName(prefix, suffix, fileExtension);
+String filePath(MClassifier this, String filename) :
+	dirPath() + fileSeparator() + filename;
 
 /**
  * getter for the full filename of a classifier based on the given basename, including path
- * @param	basename		the name of the classifier, e.g. name after typemapping
- * @param	basePath		the base path which is prepended on the namespace
- * @param	prefix			the prefix to add to the name of the classifier
- * @param	suffix			the suffix to add to the name of the classifier
- * @param	fileExtension	the file extension including the beginning dot
+ * @param	filename	the filename of the classifier, usually the name according to naming conventions
+ * @param	base		the base path which is prepended to the namespace
  * @return	the full file name of the classifier including the path
- * @see		dirName(MClassifier, String)
- * @see		fileName(String, String, String, String)
+ * @see		dirPath(MClassifier, String)
  */
-String filePath(MClassifier this, String basename, String basePath, String prefix, String suffix, String fileExtension) :
-	dirName(basePath) + fileSeparator() + fileName(basename, prefix, suffix, fileExtension);
+String filePath(MClassifier this, String filename, String base) :
+	dirPath(base) + fileSeparator() + filename;
+
+/**
+ * getter for the file path of a package based on it's namespace
+ * @return	the relative path of a package
+ */
+String filePath(MPackage this) :
+	fullQualifiedName(fileSeparator());
+
+/**
+ * getter for the file path of a package based on it's namespace
+ * @param	base	the base package of the package
+ * @return	the relative path of a package
+ */
+String filePath(MPackage this, String base) :
+	base + fileSeparator() + filePath();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * getter for the full qualified name of a classifier
- * @param	base		the base package to prepend
+ * getter for the full qualified name of a classifier based on it's namespace
  * @param	spearator	the separator to use between the names
  * @return	string representation of the full qualified name
  */
-String fullQualifiedName(MClassifier this, String base, String separator) : 
-	base + separator + owningPackage.fullQualifiedName(separator) + separator + name;
+String fullQualifiedNameSep(MClassifier this, String separator) : 
+	owningPackage.fullQualifiedName(separator) + separator + name.toFirstUpper();
 
 /**
- * getter for the full qualified name of a classifier based on the given name
- * @param	name		the name of the classifier to use, e.g. after typemapping
+ * getter for the full qualified name of a classifier based on it's namespace
+ * @param	typename	the typename of the classifier, usually according naming conventions
+ * @param	spearator	the separator to use between the names
+ * @return	string representation of the full qualified name
+ */
+String fullQualifiedNameSep(MClassifier this, String typename, String separator) : 
+	owningPackage.fullQualifiedName(separator) + separator + typename;
+
+/**
+ * getter for the full qualified name of a classifier based on a base package and it's namespace
+ * @param	typename	the typename of the classifier, usually according naming conventions
  * @param	base		the base package to prepend
  * @param	spearator	the separator to use between the names
  * @return	string representation of the full qualified name
  */
-String fullQualifiedName(MClassifier this, String name, String base, String separator) : 
-	base + separator + owningPackage.fullQualifiedName(separator) + separator + name;
+String fullQualifiedNameSep(MClassifier this, String typename, String base, String separator) : 
+	owningPackage.fullQualifiedName(base, separator) + separator + typename;
+
+/**
+ * getter for the full qualified name of a package
+ * @param	base		a base package to prepend
+ * @param	separator	a separator used to build the package path
+ * @return	the full qualified name of the package
+ */
+String fullQualifiedName(MPackage this, String base, String separator) : 
+	base + separator + fullQualifiedName(separator);
+
 
 /**
  * getter for the separator within a file name
@@ -162,7 +154,7 @@ String fileSeparator() : "/";
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	java function
+	mapping to java functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
