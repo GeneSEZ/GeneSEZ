@@ -1,63 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <workflow>
-	
 	<!-- 
 			CONFIGURATION SECTION
 			===================== 
 	-->
 	
-	<!-- select between the values "makeGenesezModel.oaw" and "makeGenesezModelProfile.oaw" 
-		 "makeGenesezModel.oaw"		   - transform the model from uml2 meta model to genesez meta model
-		  								 without profile support
-		 "makeGenesezModelProfile.oaw" - transform the model from uml2 meta model to genesez meta model
-		  								 with profile support
+	<!-- project + directory layout + name settings - - - - - - - - - - - - - - -->
+	
+	<!-- directory of the project, this generator project belongs to -->
+	<property name="project.dir" value="../de.genesez.example.java" />
+	<!-- property name="magicdraw.dir" value="C:/appz-copied/MD_UML_140_standard_no_install" / -->
+	<!-- directory which contains the model file -->
+	<property name="model.dir" value="model" />
+	<!-- directory in which the generated files are placed -->
+	<property name="model2text.dir" value="src-gen" />
+	<!-- directory which contains the exported uml2 model -->
+	<property name="model.export.dir" value="model-exp" />
+	<!-- directory in which the generated genesez model is serialized (just for info) -->
+	<property name="model.gen.dir" value="model-gen" />
+	<!-- name of the model file -->
+	<property name="model.name" value="example" />
+	<!-- name of the profile file, if you need to specify an additional uml2 profile as metamodel -->
+	<property name="profile.name" value="profile" />
+	
+	
+	<!-- uml to genesez transformation settings - - - - - - - - - - - - - - - - -->
+	
+	<!--
+		workflow component which is used to transform the uml model into a genesez model
+		
+		makeGenesezModel.oaw		- if you don't need to specify an additional uml2 profile
+		makeGenesezModelProfile.oaw	- if you used an uml profile in your model, which is specified 
+									  with the property ${profile.name}
+		
 	-->
-	<property name="input.workflowCartridge" value="makeGenesezModelProfile.oaw" />
-	
-	<!-- if the property "input.workflowCartridge" has the value "makeGenesezModelProfile.oaw" then 
-		 set the name of the uml2 profile file else leave blank -->
-	<property name="input.uml2ProfileFile" value="model-exp/profile.profile.uml" />
-	
-	<!-- name of the uml2 file -->
-	<property name="input.uml2ModelFile" value="model-exp/example.uml" />
-	
+	<property name="uml2genesez.component" value="makeGenesezModelProfile.oaw" />
 	<!-- comma or comma blank [, ] separated list of package names to exclude from transformation -->
-	<property name="input.excludePackages" value="UML Standard Profile" />
-	
+	<property name="uml2genesez.exclude.packages" value="UML Standard Profile" />
+	<!-- determines if all classes directly contained in the model are transformed to external types instead of classifiers -->
+	<property name="uml2genesez.external.type.allClassesInModel" value="false" />
 	<!-- comma or comma blank [, ] separated list of package names which are used as container
-		 for external classes (therefor are not transformed to genesez packages) -->
-	<property name="input.externalPackages" value="" />
-	
+		 for external types (therefor are not transformed to genesez packages) -->
+	<property name="uml2genesez.external.type.packages" value="" />
 	<!-- comma or comma blank [, ] separated list of names of stereotypes which are applied 
-		 to packages or classes, indicating that the package is a container for external classes
-		 or the classes are external classes -->
-	<property name="input.externalStereotypes" value="external" />
+		 to packages or classes, indicating that the package is a container for external types
+		 or the classes are external types -->
+	<property name="uml2genesez.external.type.stereotypes" value="external" />
 	
-
-	<!-- select between the values "performM2T.oaw" and "performM2TAOP.oaw"
-		 "performM2T.oaw"    - performs a model-to-text transformation (code generation)
-							   without the AOP of templates
-		 "performM2TAOP.oaw" - performs a model-to-text transformation (code generation)
-							   using AOP of templates
-	 -->
-	<property name="output.workflowCartridge" value="performM2T.oaw" />
 	
-	<!-- if the property "output.workflowCartridge" has the value "performM2TAOP.oaw" then 
-		 set the root xpt-file where the aspects are defined else leave blank -->
-	<property name="output.aspectsTemplate" value="" />
+	<!-- model to java transformation settings - - - - - - - - - - - - - - - - - - -->
 	
-	<!-- name of the ouput xmi file -->
-	<property name="output.xmiModelFile" value="model-gen/example.xmi" />
-
-	<!-- comma or semicola separated list with packages to exclude from code generation -->	
-	<property name="output.excludePackages" value="" />
+	<!--
+		workflow component which is used to transform the genesez model into text / source code
+		
+		performM2T.oaw		- performs the transformation without the AOP-Feature of templates
+		performM2TAOP.oaw	- performs the transformation using the AOP-Feature of templates and the 
+							aspect templates specified with the property ${model2text.aspect.templates}
+	-->
+	<property name="model2text.component" value="performM2T.oaw" />
+	<!-- comma or semicola separated list with package names to exclude from code generation -->
+	<property name="model2text.exclude.packages" value="" />
+	<!-- comma separated list of aspect templates, used for the tempalte AOP-Feature -->
+	<property name="model2text.aspect.templates" value="" />
+	<!-- filename, relative to project root, where the mapping of types are defined -->
+	<property name="model2text.typemapping.file" value="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
 	
-	<!-- the path where the generated file are produced -->
-	<property name="output.generatePath" value="../de.genesez.example.java/src-gen" />
 	
-	<!-- name of the type mapping xml file -->
-	<property name="output.typeMappingFile" value="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
+	<!-- general file extension settings, usually no need to adjust - - - - - - - - - - - - -->
+	
+	<!-- file extension of the magic draw model file -->
+	<property name="magicdraw.extension" value=".mdzip" />
+	<!-- file extension of the uml2 model file -->
+	<property name="uml2.model.extension" value=".uml" />
+	<!-- file extension of the uml2 profile file -->
+	<property name="uml2.profile.extension" value=".profile.uml" />
+	<!-- file extension of the serialized genesez model -->
+	<property name="genesez.model.extension" value=".xmi" />
+	
+	
+	<!-- calculated properties, usually no need to adjust - - - - - - - - - - - - - - - - - -->
+	
+	<!-- relative filename of the magic draw model file -->
+	<property name="magicdraw.model.file" value="${project.dir}/${model.dir}/${model.name}${magicdraw.extension}" />
+	<!-- relative filename of the uml2 model file -->
+	<property name="uml2.model.file" value="${model.export.dir}/${model.name}${uml2.model.extension}" />
+	<!-- relative filename of the uml2 profile file -->
+	<property name="uml2.profile.file" value="${model.export.dir}/${profile.name}${uml2.profile.extension}" />
+	<!-- relative filename of the serialized genesez model -->
+	<property name="genesez.model.file" value="${model.gen.dir}/${model.name}${genesez.model.extension}" />
 	
 	
 	<!-- 
@@ -65,49 +96,59 @@
 			=============================================== 
 	-->
 	
+	<!-- Export uml2 files from magic draw model -->
+	<!-- component id="uml-export"
+		class="com.nomagic.magicdraw.oaw.ExportWorkflowComponent"
+		projectFile="${magicdraw.model.file}"
+		exportDirectory="${model.export.dir}"
+		skipUpToDate="false"
+		requiredVersion="2.x"
+		magicdrawHome="${magicdraw.dir}">
+	</component -->
+	
 	<!-- Reading the example file. -->
-	<cartridge
-		file="de::genesez::platforms::common::workflow::${input.workflowCartridge}" 
-		inputModelFile="${input.uml2ModelFile}"
-		uml2ProfileFile="${input.uml2ProfileFile}"
+	<cartridge id="uml2genesez"
+		file="de::genesez::platforms::common::workflow::${uml2genesez.component}" 
+		inputModelFile="${uml2.model.file}"
+		uml2ProfileFile="${uml2.profile.file}"
 		genesezModel="genesezModel"
-		excludePackages="${input.excludePackages}"
-		mapClassesInModelToExternal="false"
-		externalPackages = "${input.externalPackages}"
-		externalStereotypes = "${input.externalStereotypes}"
+		excludePackages="${uml2genesez.exclude.packages}"
+		mapClassesInModelToExternal="${uml2genesez.external.type.allClassesInModel}"
+		externalPackages = "${uml2genesez.external.type.packages}"
+		externalStereotypes = "${uml2genesez.external.type.stereotypes}"
 	/>
 	
 	<!-- Check constraints. /-->
-	<cartridge
+	<cartridge id="model.validation"
 		file="de::genesez::platforms::common::workflow::constraintChecker.oaw"
 		modelSlot="genesezModel"
 		checkScript="de::genesez::platforms::java::constraints::Syntax"
 		abortOnError="true"
 	/>
-	<cartridge
+	<!-- cartridge
 		file="de::genesez::platforms::common::workflow::constraintChecker.oaw"
 		modelSlot="genesezModel"
 		checkScript="de::genesez::platforms::java::constraints::Naming"
 		abortOnError="true"
-	/>
+	/ -->
 	
 	<!-- Write the transformed model file.  /-->
-	<cartridge
+	<cartridge id="model.dump"
 		file="de::genesez::platforms::common::workflow::xmiWriter.oaw"
 		modelSlot="genesezModel"
-		outputModelFile="${output.xmiModelFile}"
+		outputModelFile="${genesez.model.file}"
 	/>
 	
 	<!-- Create java code with or without AOP in xpand templates.  /-->
-	<cartridge
-		file="de::genesez::platforms::java::workflow::${output.workflowCartridge}"
+	<cartridge id="model2text"
+		file="de::genesez::platforms::java::workflow::${model2text.component}"
 		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
-		excludePackages="${output.excludePackages}"
+		excludePackages="${model2text.exclude.packages}"
 		configFile=""
-		aspectsTemplate="${output.aspectsTemplate}"
-		outputDir="${output.generatePath}"
-		proRegDir="${output.generatePath}"
-		typeMappingFile="${output.typeMappingFile}"
+		aspectsTemplate="${model2text.aspect.templates}"
+		outputDir="${project.dir}/${model2text.dir}"
+		proRegDir="${project.dir}/${model2text.dir}"
+		typeMappingFile="${model2text.typemapping.file}"
 	/>
 
 </workflow>
