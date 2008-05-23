@@ -1,12 +1,17 @@
-«REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+«REM»
+	Handles everything about Operations.
+	Performs the generation of operations + constructors.
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+	@date	2007-07-13
+«ENDREM»
 
-«REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
 
+«REM» useful support functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
-«EXTENSION de::genesez::platforms::common::Conversion»
-«EXTENSION de::genesez::platforms::common::GeneralHelper»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
@@ -14,171 +19,145 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
+«REM»
+	processes the operations of a classifier
+	order: constructor, declarations, implementations
+«ENDREM»
+«DEFINE All FOR MClassifier -»
+	«EXPAND Constructor -»
+	«EXPAND Declaration -»
+	«EXPAND Implementation -»
+«ENDDEFINE»
 
-// generate constructor for mclass
-«DEFINE ConstructorImpl FOR MClassifier-»
-«EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
+«REM»
+	processes all constructors
+«ENDREM»
+«DEFINE Constructor FOR MClassifier -»
+	«EXPAND _Constructor FOREACH operation.select( e| e.isConstructor() ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all operations to declare
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Declaration FOREACH operation.select( e| !e.isConstructor() && e.abstract ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all operations to implement
+«ENDREM»
+«DEFINE Implementation FOR MClassifier -»
+	«EXPAND _Implementation FOREACH operation.select( e| !e.isConstructor() && !e.abstract ) -»
 «ENDDEFINE»
 
 
-// generate all abstract methods for a classifier
-«DEFINE OperationDecl FOR MClassifier-»
-«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)-»
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an operation declaration
+«ENDREM»
+«DEFINE _Declaration FOR MOperation -»
+	«EXPAND Comment::Operation -»
+	«IF isSingleValuedType() -»
+	«EXPAND _Modifier» «returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
+	«ELSE -»
+	«EXPAND _Modifier» «mapType()»<«returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType»> «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
+	«ENDIF -»
 «ENDDEFINE»
 
-
-// generate all methods for a classifier
-«DEFINE OperationImpl FOR MClassifier-»
-«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
+«REM»
+	generates an operation implementation
+«ENDREM»
+«DEFINE _Implementation FOR MOperation -»
+	«EXPAND Comment::Operation -»
+	«IF isSingleValuedType() -»
+	«EXPAND _Modifier» «returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
+	«ELSEIF returnType.isPrimitiveType() -»
+	«EXPAND _Modifier» «mapType()»<«returnType.mapName("wrapper").asTypeName()»«EXPAND Type::Generics FOR returnType»> «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
+	«ELSE -»
+	«EXPAND _Modifier» «mapType()»<«returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType»> «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
+	«ENDIF -»
+	«EXPAND _DefaultReturnAndOwnCodeImpl -»
+	}
 «ENDDEFINE»
 
-
-// generate constructor for mclass
-«DEFINE ConstructorImpl FOR MOperation-»
-«EXPAND _CommentOperation-»
-«EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
-«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
-}
+«REM»
+	generates a constructor
+	has no return value
+«ENDREM»
+«DEFINE _Constructor FOR MOperation -»
+	«EXPAND Comment::Constructor -»
+	«EXPAND _Modifier» «classifier.asTypeName()»(«EXPAND _Params») «EXPAND _Exception» {
+		«EXPAND _OwnCodeImpl("java.constructor." + xmiGuid) -»
+	}
 «ENDDEFINE»
 
+«REM»
+	generates the visibility and the modifiers static, final + abstract for an operation
+«ENDREM»
+«DEFINE _Modifier FOR MOperation -»
+	«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+«ENDDEFINE»
 
-// generate a declaration for an abstract operation
-«DEFINE OperationDecl FOR MOperation-»
-«EXPAND _CommentOperation-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
-«ELSE-»
-	«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+«REM»
+	generates the parameters of an operation
+«ENDREM»
+«DEFINE _Params FOR MOperation -»
+	«FOREACH parameter AS p SEPARATOR ", " -»
+	«IF p.isSingleValuedType() -»
+		«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+	«ELSE -»
+		«p.mapType() -»<«p.type.asTypeName()»> «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+	«ENDIF -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the exceptions an operation can throw
+«ENDREM»
+«DEFINE _Exception FOR MOperation -»
+«IF hasExceptions() -»
+	throws «FOREACH raisedException AS e SEPARATOR ", " -» «e.mapName().asTypeName()» «ENDFOREACH -»
 «ENDIF-»
 «ENDDEFINE»
 
-
-// generate an implementation for an normal operation
-«DEFINE OperationImpl FOR MOperation-»
-«EXPAND _CommentOperation-»
-«IF multiplicity == 1-»
-	«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
-«ELSE-»
-	«IF returnType.metaType == MPrimitiveType-»
-		«EXPAND _Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
-	«ELSE-»
-		«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
-	«ENDIF-»
-«ENDIF-»
-	«EXPAND _DefaultReturnAndOwnCodeImpl-»
-}
+«REM»
+	generates the body of an operation with a default return statement and a region for own code implementations
+«ENDREM»
+«DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation -»
+	«IF isSingleValuedType() -»
+		«getReturnTypeDeclaration(returnType.mapName().asTypeName())»
+	«ELSE -»
+		«IF returnType.isPrimitiveType() -»
+		«mapType()»<«returnType.mapName("wrapper").asTypeName()»> returnValue = null;
+		«ELSE -»
+		«mapType()»<«returnType.mapName().asTypeName()»> returnValue = null;
+		«ENDIF -»
+	«ENDIF -»
+	«EXPAND _OwnCodeImpl("java.implementation." + xmiGuid) -»
+	«getReturnTypeReturn(returnType.mapName().asTypeName())»
 «ENDDEFINE»
 
-// //////////////////////////////////////////////////////////////////////////////
-// private functions
-// //////////////////////////////////////////////////////////////////////////////
-
-
-«DEFINE _CommentOperation FOR MOperation-»
-/**
-«IF hasComment()-»
- * «ownedComment.getCommentText()»
-«ENDIF-»
-«EXPAND _CommentParameter-»
-«EXPAND _CommentReturn-»
-«EXPAND _CommentExeception-»
- */
-«ENDDEFINE»
-
-«DEFINE _CommentParameter FOR MOperation-»
-«FOREACH parameter.typeSelect(MParameter) AS p-»
- * @param  «asParameterName(p.name)»  «p.ownedComment.getCommentText()»
-«ENDFOREACH-»
-«ENDDEFINE»
-
-«DEFINE _CommentReturn FOR MOperation-»
-«IF returnType.name().toLowerCase() != "void" -»
- * @return  «getCommentText(returnType.ownedComment())»
-«ENDIF-»
-«ENDDEFINE»
-
-«DEFINE _CommentExeception FOR MOperation-»
-«FOREACH raisedException.typeSelect(MClassifier) AS c-»
- * @throws  «(c.mapName())»  «c.ownedComment.getCommentText()»
-«ENDFOREACH-»
-«ENDDEFINE»
-
-
-«DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation»
-«IF multiplicity == 1-»
-	«getReturnTypeDeclaration(returnType.mapName())»
-«ELSE-»
-	«IF returnType.metaType == MPrimitiveType-»
-		«mapType()»<«returnType.mapName("Wrapper")»> returnValue = null;
-	«ELSE-»
-		«mapType()»<«returnType.mapName()»> returnValue = null;
-	«ENDIF-»
-«ENDIF-»
-	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
-	«getReturnTypeReturn(returnType.mapName())»
-«ENDDEFINE»
-
-// generate a protected region for own implementations
-«DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
-/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
-/* TODO put your own implementation code here */
-
-/* «ENDPROTECT» */
-«ENDDEFINE»
-
-
-// generate modifiers for moperation
-«DEFINE _Modifier FOR MOperation-»
-«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
-«ENDDEFINE»
-
-
-// generate a parameter list for moperation
-«DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "-»
-	«EXPAND _Parameter FOR p-»
-«ENDFOREACH-»
-«ENDDEFINE»
-
-
-// generate a parameter for moperation
-«DEFINE _Parameter FOR MParameter»
-«IF multiplicity == 1-»
-	«type.mapName()» «asParameterName(name)»
-«ELSE-»
-	«mapType()»<«type.mapName()»> «asParameterName(name)»
-«ENDIF-»
-«ENDDEFINE»
-
-
-// generate exceptions for a moperation
-«DEFINE _Exception FOR MOperation-»
-«IF !raisedException.isEmpty-»
-	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.mapName()»«ENDFOREACH»
-«ENDIF-»
-«ENDDEFINE»
-
-
-// generate generics
-«DEFINE _Generics FOR MClassifier-»
-«IF hasGenericParameter()-»
-	<«getGenericList(genericParameter)»>
-«ELSE-»
-«ENDIF-»
-«ENDDEFINE»
-
-// generate generics
-«DEFINE _Generics FOR MExternal-»
-«IF hasGenericParameter()-»
-	<«getGenericList(genericParameter)»>
-«ELSE-»
-«ENDIF-»
-«ENDDEFINE»
-
-// generate generics
-«DEFINE _Generics FOR MType-»
+«REM»
+	generates the protected region of an operation
+	@param	id	protected region id
+«ENDREM»
+«DEFINE _OwnCodeImpl(String id) FOR MOperation -»
+	«IF isConstructor() -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
+		«ENDPROTECT»
+	«ELSE -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
+		«ENDPROTECT»
+	«ENDIF -»
 «ENDDEFINE»
