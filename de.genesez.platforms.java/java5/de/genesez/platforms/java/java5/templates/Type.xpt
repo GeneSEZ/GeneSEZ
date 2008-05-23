@@ -1,0 +1,103 @@
+«REM»
+	Helper for the generation of java types.
+	
+	@author	tobias haubold
+	@date	2008-05-19
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful support functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates modifiers
+«ENDREM»
+«DEFINE Modifier FOR MClassifier -»
+«visibility» «IF final»final«ENDIF -» «IF abstract»abstract«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the generalizations
+	only single inheritance is allowed!
+«ENDREM»
+«DEFINE Generalization FOR MClassifier -»
+«IF !generalization.isEmpty -»
+	extends «generalization.first().mapName().asTypeName()»«EXPAND Generics FOR generalization.first()»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the realizations
+«ENDREM»
+«DEFINE Realization FOR MClassifier-»
+«IF !realization.isEmpty-»
+	implements «FOREACH realization AS c SEPARATOR ", " -»«c.mapName().asTypeName()»«EXPAND Generics FOR c»«ENDFOREACH -»
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own code implementations
+	@param	id	the globally unique protected region id
+«ENDREM»
+«DEFINE OwnCodeImpl(String id) FOR MClassifier -»
+	«PROTECT CSTART "/* " CEND " */" ID (id)»
+	// TODO: put your own implementation code here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	generics
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the type parameters / generics
+«ENDREM»
+«DEFINE Generics FOR MClassifier -»
+«IF hasGenericParameter() -»
+	<«getGenericList(genericParameter) -»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	generates the type parameters / generics
+«ENDREM»
+«DEFINE Generics FOR MExternal-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	does nothing, just there for error free templates ;-)
+«ENDREM»
+«DEFINE Generics FOR MType-»
+«ENDDEFINE»
+
+«REM»
+	generates the type parameters / generics
+«ENDREM»
+«DEFINE Generics FOR MAttribute -»
+«IF hasGenericRealization() -»
+	<«getGenericList(genericRealization) -»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+

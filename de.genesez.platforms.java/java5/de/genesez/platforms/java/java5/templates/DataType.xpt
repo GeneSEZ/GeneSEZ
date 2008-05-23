@@ -1,5 +1,5 @@
 «REM»
-	Performs the generation of classes
+	Performs the generation of data types
 	
 	@author	nico herbig
 	@author	tobias haubold (last)
@@ -9,12 +9,13 @@
 «REM» based on genesez meta model «ENDREM»
 «IMPORT gcore»
 
-«REM» useful support fuctions «ENDREM»
+«REM» useful support functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
-«EXTENSION de::genesez::platforms::java::scripts::Type»
+«REM» use java naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«REM» use java conversions «ENDREM»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
@@ -23,26 +24,22 @@
 «ENDREM»
 
 «REM»
-	processes a class
+	processes a data type
 «ENDREM»
-«DEFINE Root FOR MClass -»
+«DEFINE Root FOR MDataType -»
 package «packageDeclaration() -»;
 «EXPAND Import::Import -»
-«REM» generate a newline between imports + type comment «ENDREM»
 «EXPAND Comment::Type -»
-«EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
+«EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
 	
-	«IF hasAttributes() || hasAssociationRoles() -»
+	«IF hasAttributes() -»
 	// -- generated attribute, constant + association declarations ----------
 	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
-	«EXPAND Association::Declaration -»
 	
-	«IF hasConstructors() -»
 	// -- generated constructors --------------------------------------------
-	«ENDIF -»
 	«EXPAND Operation::Constructor -»
-	«IF ownedAssociation != null»«EXPAND _InitialisingConstructorForAssocClass»«ENDIF -»
+	«EXPAND _InitialisingConstructor -»
 	
 	«IF hasOperationDeclarations() -»
 	// -- generated method declarations -------------------------------------
@@ -53,16 +50,14 @@ package «packageDeclaration() -»;
 	// -- generated method stubs for implementations + derived attributes ---
 	«ENDIF -»
 	«EXPAND Operation::Implementation -»
-	«EXPAND Attribute::Derived -»
 	
-	«IF hasAssociationRoles() || hasAttributes() -»
+	«IF hasAttributes() -»
 	// -- generated association + attribute accessors -----------------------
 	«ENDIF -»
-	«EXPAND Association::Accessors -»
-	«EXPAND Attribute::Accessors -»
+	«EXPAND Attribute::Getter FOREACH property.typeSelect(MAttribute).select( e| !e.derived ) -»
 	
 	// -- own code implementation -------------------------------------------
-	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
+	«EXPAND Type::OwnCodeImpl("java.datatype.own.code.implementation." + xmiGuid) -»
 }
 «ENDDEFINE»
 
@@ -74,34 +69,36 @@ package «packageDeclaration() -»;
 «ENDREM»
 
 «REM»
-	generates an initializing contructor for association classes
-	all association attributes are initialized
-	@see	_AssocAttributesAsParam(MClass)
-	@see	_InitAssocAttributes(MClass)
+	generates an initialising constructor
+	all attributes of class + superclasses are set within constructor
 «ENDREM»
-«DEFINE _InitialisingConstructorForAssocClass FOR MClass -»
-«EXPAND Comment::InitConstructorAssocClass -»
-public «asTypeName()» («EXPAND _AssocAttributesAsParam») {
-	«EXPAND _InitAssocAttributes»
+«DEFINE _InitialisingConstructor FOR MClassifier -»
+«EXPAND Comment::InitConstructor -»
+public «mapName().asTypeName()» («EXPAND _AllAttributesAsParams») {
+	«EXPAND _InitAttributes -»
 	«EXPAND _OwnCodeImplInitConstructor("java.initializing.constructor.own.code." + xmiGuid) -»
 }
 «ENDDEFINE»
 
 «REM»
-	generates the attributes of an association class as parameters
-	@see	_InitialisingConstructorForAssocClass(MClass)
-«ENDREM»// get association attributes as parameter list
-«DEFINE _AssocAttributesAsParam FOR MClass -»
-«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.mapName().asTypeName()» _«aend.asAttribute()»«ENDFOREACH -»
+	generates all attributes as parameters
+«ENDREM»
+// get all attributes as parameter list
+«DEFINE _AllAttributesAsParams FOR MClassifier -»
+«FOREACH getAllAttributes() AS attr SEPARATOR ", "»«attr.type.mapName().asTypeName()» _«attr.asAttribute()»«ENDFOREACH -»
 «ENDDEFINE»
 
 «REM»
-	generates the initialization code for the constructor of an association class
-	@see	_InitialisingConstructorForAssocClass(MClass)
+	generates the constructor initialization code
+	all properties are initialized with parameters
 «ENDREM»
-«DEFINE _InitAssocAttributes FOR MClass -»
-«FOREACH ownedAssociation.end AS aend -»
-	«aend.asAttribute()» =  _«aend.asAttribute()»;
+// init all attributes in initializing constructor
+«DEFINE _InitAttributes FOR MClassifier -»
+«IF !supertype.isEmpty -»
+	super(«FOREACH getParentAttributes() AS attr SEPARATOR ", "» _«attr.asAttribute()»«ENDFOREACH»);
+«ENDIF -»
+«FOREACH getOwnAttributes() AS attr -»
+	«attr.asAttribute()» = _«attr.asAttribute()»;
 «ENDFOREACH -»
 «ENDDEFINE»
 
