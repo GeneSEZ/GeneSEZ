@@ -27,15 +27,15 @@
 «DEFINE FieldDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _Field( asClassifierName(type),
-		                asFieldName() )-»
+		«EXPAND _Field( asTypeName(type),
+		                asAttribute() )-»
 	«ELSE-»
-		«EXPAND _Field( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
-		                asFieldName() )-»
+		«EXPAND _Field( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+		                asAttribute() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _Field( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
-	                asFieldName() )-»
+	«EXPAND _Field( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+	                asAttribute() )-»
 «ENDIF»
 «ENDDEFINE»
 
@@ -46,17 +46,17 @@
 «DEFINE PropertyDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _PropertyDecl( asClassifierName(type),
-		                    asPropertyName() )-»
+		«EXPAND _PropertyDecl( asTypeName(type),
+		                    asProperty() )-»
 	«ELSE-»
-		«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
-		                    asPropertyName() )-»
+		«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+		                    asProperty() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
-	                    asPropertyName() )-»
+	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+	                    asProperty() )-»
 	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + assocClass().name() + ">",
-                        asPropertyName() + assocClass().name )-»
+                        asProperty() + assocClass().name )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -66,17 +66,17 @@
 «DEFINE PropertyImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _PropertyImpl( asClassifierName(type),
-		                   asPropertyName() )-»
+		«EXPAND _PropertyImpl( asTypeName(type),
+		                   asProperty() )-»
 	«ELSE-»
-		«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
-		                   asPropertyName() )-»
+		«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+		                   asProperty() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
-	                   asPropertyName() )-»
+	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+	                   asProperty() )-»
 	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + assocClass().name() + ">",
-                       asPropertyName() + assocClass().name )-»
+                       asProperty() + assocClass().name )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -86,9 +86,9 @@
 «ENDREM»
 «DEFINE InsertDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
-	«EXPAND _AddToDecl(asAddTo(name), asClassifierName(type))»
+	«EXPAND _AddToDecl(asAddTo(), asTypeName(type))»
 «ELSE-»
-	«EXPAND _InsertIntoDecl(asAddTo(name), asClassifierName(type),  assocClass().name)»
+	«EXPAND _InsertIntoDecl(asAddTo(), asTypeName(type),  assocClass().name)»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -98,9 +98,9 @@
 «ENDREM»
 «DEFINE InsertImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
-	«EXPAND _AddToImpl(asAddTo(name), asClassifierName(type))»
+	«EXPAND _AddToImpl(asAddTo(), asTypeName(type))»
 «ELSE-»
-	«EXPAND _InsertIntoImpl(asAddTo(name), asClassifierName(type),  assocClass().name)»
+	«EXPAND _InsertIntoImpl(asAddTo(), asTypeName(type),  assocClass().name)»
 «ENDIF-»		
 «ENDDEFINE»
 
@@ -109,7 +109,7 @@
 	generate remove from declaration for an association
 «ENDREM»
 «DEFINE RemoveDecl FOR MAssociationRole-»
-	«EXPAND _RemoveDecl(asRemoveFrom(name), asClassifierName(type))-»
+	«EXPAND _RemoveDecl(asRemoveFrom(), asTypeName(type))-»
 «ENDDEFINE»
 
 
@@ -117,8 +117,9 @@
 	generate remove from implementation for an association
 «ENDREM»
 «DEFINE RemoveImpl FOR MAssociationRole-»
-	«EXPAND _RemoveImpl(asRemoveFrom(name), asClassifierName(type))-»
+	«EXPAND _RemoveImpl(asRemoveFrom(), asTypeName(type))-»
 «ENDDEFINE»
+
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -141,7 +142,7 @@
 «ENDREM»
 «DEFINE _PropertyDecl(String type, String name) FOR MAssociationRole-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«type» «asPropertyName()»
+		«EXPAND _Modifier»«type» «asProperty()»
 		{
 			get;
 		}
@@ -156,7 +157,7 @@
 		«EXPAND _Comment-»
 		«EXPAND _Modifier»«type» «name»
 		{
-			get { return this.«asFieldName()»; }
+			get { return this.«asAttribute()»; }
 		}
 		
 «ENDDEFINE»
