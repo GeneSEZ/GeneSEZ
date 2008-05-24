@@ -26,11 +26,11 @@
 «ENDREM»
 «DEFINE FieldDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-		«EXPAND Field( asClassifierName(type),
-		                asFieldName() )-»
+		«EXPAND _Field( asTypeName(type),
+		                asAttribute() )-»
 «ELSE-»
-		«EXPAND Field( mapType( "Set" ) + "<" + asClassifierName(type) + ">",
-		                asFieldName() )-»
+		«EXPAND _Field( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+		                asAttribute() )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -40,10 +40,10 @@
 «ENDREM»
 «DEFINE PropertyDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _PropertyDecl( asClassifierName(type), asPropertyName() )-»
+	«EXPAND _PropertyDecl( asTypeName(type), asAttribute() )-»
 «ELSE-»
-	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asClassifierName(type)+ ">",
-	                   asPropertyName() )-»
+	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asTypeName(type)+ ">",
+	                   asProperty() )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -53,10 +53,10 @@
 «ENDREM»
 «DEFINE PropertyImpl FOR MAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _PropertyImpl( asClassifierName(type), asPropertyName() )-»
+	«EXPAND _PropertyImpl( asTypeName(type), asProperty() )-»
 «ELSE-»
-	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asClassifierName(type)+ ">",
-	                   asPropertyName() )-»
+	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asTypeName(type)+ ">",
+	                   asProperty() )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -71,9 +71,9 @@
 «REM»
 	generate public field declaration
 «ENDREM»
-«DEFINE Field(String type, String name) FOR MAttribute-»
+«DEFINE _Field(String type, String name) FOR MAttribute-»
 			«EXPAND _Comment-»
-			«EXPAND _Modifier» «type» «name»;
+			«EXPAND _Modifier» «type» «name»«EXPAND _DefaultValue-»;
 «REM»		«EXPAND _Modifier» «mapType(type.name())» «asFieldName()»«EXPAND _DefaultValue-»;«ENDREM»
 «REM»		«EXPAND _Modifier» «mapType("Set")»<«type.name()»> «asFieldName()» = new «mapType("Set", "Implementation")»<«type.name()»>();«ENDREM»
 «ENDDEFINE»
@@ -100,8 +100,8 @@
 		«EXPAND _Comment-»
 		«EXPAND _Modifier» «type» «name»
 		{
-			get { return this.«asFieldName()»; }
-			set { this.«asFieldName()» = value; }
+			get { return this.«asAttribute()»; }
+			set { this.«asAttribute()» = value; }
 		}
 		
 «ENDDEFINE»

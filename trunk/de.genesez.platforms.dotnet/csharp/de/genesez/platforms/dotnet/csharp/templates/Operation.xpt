@@ -24,7 +24,7 @@
 «ENDREM»
 «DEFINE ConstructorImpl FOR MOperation-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«asClassifierName(classifier)»(«EXPAND Parameter-»)
+		«EXPAND _Modifier»«asTypeName(classifier)»(«EXPAND Parameter-»)
 		{
 			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 		}
@@ -37,7 +37,7 @@
 «ENDREM»
 «DEFINE OperationDecl FOR MOperation-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«EXPAND _Return» «asOperationName(name)»(«EXPAND Parameter-»);
+		«EXPAND _Modifier»«EXPAND _Return» «asOperation()»(«EXPAND Parameter-»);
 «ENDDEFINE»
 
 
@@ -46,7 +46,7 @@
 «ENDREM»
 «DEFINE OperationImpl FOR MOperation-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«EXPAND _Return» «asOperationName(name)»(«EXPAND Parameter-»)
+		«EXPAND _Modifier»«EXPAND _Return» «asOperation()»(«EXPAND Parameter-»)
 		{
 			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 		}
@@ -75,9 +75,9 @@
 «ENDREM»
 «DEFINE _Parameter FOR MParameter-»
 «IF multiplicity == 1-»
-«direction» «mapType(asClassifierName(type))» «asParameterName(name)-»
+«direction» «mapType(asTypeName(type))» «asParameter()-»
 «ELSE-»
-«direction» «mapType(asClassifierName(type))»[] «asParameterName(name)-»
+«direction» «mapType(asTypeName(type))»[] «asParameter()-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -99,9 +99,9 @@
 «ENDREM»
 «DEFINE _Return FOR MOperation-»
 «IF multiplicity == 1-»
-«mapType(asClassifierName(returnType))»
+«mapType(asTypeName(returnType))»
 «ELSE-»
-«mapType(asClassifierName(returnType))»[]
+«mapType(asTypeName(returnType))»[]
 «ENDIF-»
 «ENDDEFINE»
 
