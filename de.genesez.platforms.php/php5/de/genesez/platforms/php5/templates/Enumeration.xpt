@@ -17,6 +17,8 @@
 «REM» based on genesez meta model «ENDREM»
 «IMPORT gcore»
 
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
@@ -35,10 +37,12 @@
 «EXPAND Comment::Type -»
 final class «asTypeName()» {
 	
+	«IF generateSectionComments()»
 	// -- enumeration literals --------------------------------------------
+	«ENDIF»
 	«EXPAND _Literals FOREACH literal -»
 	
-	// -- private constructor to prevent instantiation of objects ---------
+	«EXPAND Comment::Constructor -»
 	private function __construct() {
 	}
 	

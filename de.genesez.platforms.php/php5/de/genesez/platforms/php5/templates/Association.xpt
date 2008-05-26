@@ -42,7 +42,7 @@
 «DEFINE Accessors FOR MClass -»
 	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
 		«EXPAND _GetterImpl FOR p -»
-		«EXPAND _SetterImpl FOR p -»
+		«REM»«EXPAND _SetterImpl FOR p -»«ENDREM»
 		«EXPAND _InsertInImpl FOR p -»
 		«EXPAND _RemoveFromImpl FOR p -»
 	«ENDFOREACH -»
@@ -54,7 +54,7 @@
 «DEFINE Accessors FOR MInterface -»
 	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
 		«EXPAND _GetterDecl FOR p -»
-		«EXPAND _SetterDecl FOR p -»
+		«REM»«EXPAND _SetterDecl FOR p -»«ENDREM»
 		«EXPAND _InsertInDecl FOR p -»
 		«EXPAND _RemoveFromDecl FOR p -»
 	«ENDFOREACH -»
@@ -88,7 +88,7 @@
 «ENDREM»
 «DEFINE _GetterDecl FOR MAssociationRole -»
 	«EXPAND Comment::Getter -»
-	«visibility» function «asGetter()»();
+	public function «asGetter()»();
 «ENDDEFINE»
 
 «REM»

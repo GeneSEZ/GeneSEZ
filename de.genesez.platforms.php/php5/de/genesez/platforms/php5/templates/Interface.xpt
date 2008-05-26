@@ -18,6 +18,8 @@
 
 «REM» use helper to access information «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
@@ -36,22 +38,18 @@
 «EXPAND Comment::Type -»
 interface «asTypeName()» «EXPAND _Generalization -» {
 	
-	«IF hasAttributes() -»
-	// -- attributes --------------------------------------------------------
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+	// -- attribute + associations declarations  ----------------------------
 	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
-	
-	«IF hasAssociationRoles() -»
-	// -- associations ------------------------------------------------------
-	«ENDIF -»
 	«EXPAND Association::Declaration -»
 	
-	«IF hasOperationDeclarations() -»
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- method declarations -----------------------------------------------
 	«ENDIF -»
 	«EXPAND Operation::Declaration -»
 	
-	«IF hasAssociationRoles() -»
+	«IF generateSectionComments() && ( hasAssociationRoles() ) -»
 	// -- association accessors ---------------------------------------------
 	«ENDIF -»
 	«EXPAND Association::Accessors -»

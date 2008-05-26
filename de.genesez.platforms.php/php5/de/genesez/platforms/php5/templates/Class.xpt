@@ -18,6 +18,8 @@
 
 «REM» use helper to access information «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
@@ -36,45 +38,37 @@
 «EXPAND Comment::Type -»
 «EXPAND _Modifier -»class «asTypeName()» «EXPAND _Generalization -» «EXPAND _Realization -» {
 	
-	«IF hasAttributes() -»
-	// -- attributes --------------------------------------------------------
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+	// -- generated attribute, constant + association declarations ----------
 	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
-	
-	«IF hasAssociationRoles() -»
-	// -- associations ------------------------------------------------------
-	«ENDIF -»
 	«EXPAND Association::Declaration -»
 	
-	«IF hasConstructors() || hasDestructors() -»
+	«IF generateSectionComments() && ( hasConstructors() || hasDestructors() ) -»
 	// -- constructors + destructors ----------------------------------------
 	«ENDIF -»
 	«EXPAND Operation::Constructor -»
 	«EXPAND Operation::Destructor -»
 	
-	«IF hasOperationDeclarations() -»
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- method declarations -----------------------------------------------
 	«ENDIF -»
 	«EXPAND Operation::Declaration -»
 	
-	«IF hasOperations() -»
+	«IF generateSectionComments() && ( hasOperations() ) -»
 	// -- method implementations --------------------------------------------
 	«ENDIF -»
 	«EXPAND Operation::Implementation -»
 	
-	«IF hasDerivedAttributes() -»
+	«IF generateSectionComments() && ( hasDerivedAttributes() ) -»
 	// -- methods for derived attributes ------------------------------------
 	«ENDIF -»
 	«EXPAND Attribute::Derived -»
 	
-	«IF hasAssociationRoles() -»
-	// -- association accessors ---------------------------------------------
+	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
+	// -- association + attribute accessors ---------------------------------
 	«ENDIF -»
 	«EXPAND Association::Accessors -»
-	
-	«IF hasAttributes() -»
-	// -- attribute accessors -----------------------------------------------
-	«ENDIF -»
 	«EXPAND Attribute::Accessors -»
 	
 	// -- own code implementation -------------------------------------------
