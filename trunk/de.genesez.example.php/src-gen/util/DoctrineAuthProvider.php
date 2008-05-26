@@ -2,7 +2,6 @@
 /**
  * <html>;   <head>; ;   </head>;   <body>;     <p>;       contains additional utilitiy classes;     </p>;   </body>; </html>; 
  * 
-
  * @author	dreamer
  * @package	util
  */
@@ -16,14 +15,11 @@ require_once 'Auth/Container.php';
 /**
  * <html>;   <head>;     ;   </head>;   <body>;     <p>;       represents an authentication provider for <b>PEAR::Auth</b> using the db ;       abstraction layer <b>phpdoctrine</b><br>;     </p>;     <p>;       needed, because the authentication framework <b>PEAR::Auth</b> doesn't ;       provide an appropriate authentication provider to work with the db ;       abstraction framework <b>phpdoctrine</b>;     </p>;   </body>; </html>; 
  * 
-
- * 
  * @see		Auth_Container
  * @author	dreamer
  * @package	util
  */
 class DoctrineAuthProvider extends Auth_Container  {
-	
 	
 	
 	// -- constructors + destructors ----------------------------------------
@@ -86,7 +82,6 @@ class DoctrineAuthProvider extends Auth_Container  {
 		/* PROTECTED REGION END */
 		return $returnValue;
 	}
-	
 	
 	
 	
