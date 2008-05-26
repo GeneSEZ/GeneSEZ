@@ -25,17 +25,15 @@
 	generate field declaration for an association
 «ENDREM»
 «DEFINE FieldDecl FOR MAssociationRole-»
+«EXPAND _Comment-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _Field( asTypeName(type),
-		                asAttribute() )-»
+		«EXPAND _FieldDecl(type.mapName().asTypeName(), asAttribute())-»
 	«ELSE-»
-		«EXPAND _Field( mapType( "Set" ) + "<" + asTypeName(type) + ">",
-		                asAttribute() )-»
+		«EXPAND _FieldImpl(type.mapName().asTypeName(), asAttribute())-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _Field( mapType( "Set" ) + "<" + asTypeName(type) + ">",
-	                asAttribute() )-»
+	«EXPAND _FieldImpl(assocClass().asTypeName(), asAttribute())-»
 «ENDIF»
 «ENDDEFINE»
 
@@ -44,19 +42,19 @@
 	generate property declaration for an association
 «ENDREM»
 «DEFINE PropertyDecl FOR MAssociationRole-»
+«EXPAND _Comment-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _PropertyDecl( asTypeName(type),
-		                    asProperty() )-»
+		«EXPAND _PropertyDecl( type.mapName().asTypeName(), asProperty()-»
 	«ELSE-»
-		«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
-		                    asProperty() )-»
+		«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
+                        asProperty()-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
-	                    asProperty() )-»
-	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + assocClass().name() + ">",
-                        asProperty() + assocClass().name )-»
+	«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
+                        asProperty()-»
+	«EXPAND _PropertyDecl( mapType() + "<" + assocClass().asTypeName() + ">",
+                        asProperty() + assocClass().asTypeName() )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -66,17 +64,16 @@
 «DEFINE PropertyImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _PropertyImpl( asTypeName(type),
-		                   asProperty() )-»
+		«EXPAND _PropertyImpl( type.mapName().asTypeName(), asProperty(), asAttribute() )-»
 	«ELSE-»
-		«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+		«EXPAND _PropertyImpl( mapType() + "<" + type.mapName().asTypeName() + ">",
 		                   asProperty() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asTypeName(type) + ">",
-	                   asProperty() )-»
-	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + assocClass().name() + ">",
-                       asProperty() + assocClass().name )-»
+	«EXPAND _PropertyImpl( mapType() + "<" + type.mapName().asTypeName() + ">",
+                        asProperty()-»
+	«EXPAND _PropertyImpl( mapType() + "<" + assocClass().asTypeName() + ">",
+                        asProperty() + assocClass().asTypeName() )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -86,9 +83,9 @@
 «ENDREM»
 «DEFINE InsertDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
-	«EXPAND _AddToDecl(asAddTo(), asTypeName(type))»
+	«EXPAND _AddToDecl(asAddTo(), type.mapName().asTypeName())»
 «ELSE-»
-	«EXPAND _InsertIntoDecl(asAddTo(), asTypeName(type),  assocClass().name)»
+	«EXPAND _InsertIntoDecl(asAddTo(), type.mapName().asTypeName(),  assocClass().name)»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -98,9 +95,9 @@
 «ENDREM»
 «DEFINE InsertImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
-	«EXPAND _AddToImpl(asAddTo(), asTypeName(type))»
+	«EXPAND _AddToImpl( asAddTo(), type.mapName().asTypeName() )»
 «ELSE-»
-	«EXPAND _InsertIntoImpl(asAddTo(), asTypeName(type),  assocClass().name)»
+	«EXPAND _InsertIntoImpl( asAddTo(), type.mapName().asTypeName(),  assocClass().asTypeName() )»
 «ENDIF-»		
 «ENDDEFINE»
 
@@ -109,7 +106,7 @@
 	generate remove from declaration for an association
 «ENDREM»
 «DEFINE RemoveDecl FOR MAssociationRole-»
-	«EXPAND _RemoveDecl(asRemoveFrom(), asTypeName(type))-»
+	«EXPAND _RemoveDecl( asRemoveFrom(), type.mapName().asTypeName() )-»
 «ENDDEFINE»
 
 
@@ -117,7 +114,7 @@
 	generate remove from implementation for an association
 «ENDREM»
 «DEFINE RemoveImpl FOR MAssociationRole-»
-	«EXPAND _RemoveImpl(asRemoveFrom(), asTypeName(type))-»
+	«EXPAND _RemoveImpl( asRemoveFrom(), type.mapName().asTypeName() )-»
 «ENDDEFINE»
 
 
@@ -130,9 +127,19 @@
 «REM»
 	generate field declaration for an association
 «ENDREM»
-«DEFINE _Field(String type, String name) FOR MAssociationRole-»
+«DEFINE _FieldDecl(String type, String name) FOR MAssociationRole-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«type» «name»;
+		private «type» «name»;
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate field implementation for an association
+«ENDREM»
+«DEFINE _FieldImpl(String type, String name) FOR MAssociationRole-»
+		«EXPAND _Comment-»
+		private «type» «name» = new «mapType("Implementation")»<«name»>;;
 		
 «ENDDEFINE»
 
@@ -142,7 +149,7 @@
 «ENDREM»
 «DEFINE _PropertyDecl(String type, String name) FOR MAssociationRole-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«type» «asProperty()»
+		public «type» «name»
 		{
 			get;
 		}
@@ -153,11 +160,11 @@
 «REM»
 	generate property implementation for an association
 «ENDREM»
-«DEFINE _PropertyImpl(String type, String name) FOR MAssociationRole-»
+«DEFINE _PropertyImpl(String type, String name, String attribute) FOR MAssociationRole-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«type» «name»
+		public «type» «name»
 		{
-			get { return this.«asAttribute()»; }
+			get { return this.«attribute»; }
 		}
 		
 «ENDDEFINE»
