@@ -24,7 +24,7 @@
 «ENDREM»
 «DEFINE ConstructorImpl FOR MOperation-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«asTypeName(classifier)»(«EXPAND Parameter-»)
+		«EXPAND _Modifier» «classifier.asTypeName()»(«EXPAND Parameter-»)
 		{
 			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 		}
@@ -37,7 +37,7 @@
 «ENDREM»
 «DEFINE OperationDecl FOR MOperation-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«EXPAND _Return» «asOperation()»(«EXPAND Parameter-»);
+		«EXPAND _Modifier» «EXPAND _Return-» «asOperation()-»(«EXPAND Parameter-»);
 «ENDDEFINE»
 
 
@@ -46,7 +46,7 @@
 «ENDREM»
 «DEFINE OperationImpl FOR MOperation-»
 		«EXPAND _Comment-»
-		«EXPAND _Modifier»«EXPAND _Return» «asOperation()»(«EXPAND Parameter-»)
+		«EXPAND _Modifier» «EXPAND _Return-» «asOperation()-»(«EXPAND Parameter-»)
 		{
 			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 		}
@@ -75,9 +75,9 @@
 «ENDREM»
 «DEFINE _Parameter FOR MParameter-»
 «IF multiplicity == 1-»
-«direction» «mapType(asTypeName(type))» «asParameter()-»
+«direction» «type.mapName().asTypeName()» «asParameter()-»
 «ELSE-»
-«direction» «mapType(asTypeName(type))»[] «asParameter()-»
+«direction» «type.mapName().asTypeName()»[] «asParameter()-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -87,9 +87,9 @@
 «ENDREM»
 «DEFINE _Modifier FOR MOperation-»
 «IF classifier.metaType == MInterface-»
-		«IF static» static«ENDIF-»
+	«IF static» static«ENDIF-»
 «ELSE-»
-		«visibility-»«IF static» static«ENDIF-»«IF abstract» abstract«ENDIF-»
+	«visibility-»«IF static» static«ENDIF-»«IF abstract» abstract«ENDIF-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -99,9 +99,9 @@
 «ENDREM»
 «DEFINE _Return FOR MOperation-»
 «IF multiplicity == 1-»
-«mapType(asTypeName(returnType))»
+		«returnType.mapName().asTypeName()»
 «ELSE-»
-«mapType(asTypeName(returnType))»[]
+		«returnType.mapName().asTypeName()»[]
 «ENDIF-»
 «ENDDEFINE»
 
