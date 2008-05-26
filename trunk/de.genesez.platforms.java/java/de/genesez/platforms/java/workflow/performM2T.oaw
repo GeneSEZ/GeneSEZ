@@ -14,6 +14,8 @@
 		$rootTemplate 		the root xpt-file where the generation starts
 		$excludePackages	comma or semicola separated list with packages to exclude from code generation
 							(full qualified package names, ', ' or '; ' are also permitted)
+		$basePackage		the base package for source code artefacts
+		$generateSectionComments	boolean flag which indicates if section comments are generated or not
 		$typeMappingFile	name of the xml type mapping file
 		$outputDir 			the path where the generated file are produced
 		$proRegDir 			the path where the protected reagions are found
@@ -29,7 +31,7 @@
 	</bean -->
 	
 	
-	<component id="performM2T" class="de.genesez.workflow.xpand2.Generator" skipOnErrors="true">
+	<component id="performM2T" class="de.genesez.platforms.common.workflow.xpand2.Generator" skipOnErrors="true">
 		
 		<metaModel idRef="gcore" />
 		
@@ -41,6 +43,12 @@
 		
 		<!-- exclude packages from code gen -->
 		<globalVarDef name="excludePackages" value="'${excludePackages}'"/>
+		
+		<!-- base package to use for generated artefacts -->
+		<globalVarDef name="basePackage" value="'${basePackage}'"/>
+		
+		<!-- boolean which indicates if section comments are generated or not -->
+		<globalVarDef name="generateSectionComments" value="'${generateSectionComments}'"/>
 		
 		<!-- make config file accessible as global variable -->
 		<globalVarDef name="configFile" value="'${configFile}'"/>
@@ -64,7 +72,7 @@
 			class="org.openarchitectureware.xpand2.output.JavaBeautifier"
 			configFile="../de.genesez.platforms.java/java/de/genesez/platforms/java/workflow/eclipse.java.formatter.settings.xml" />
 		<beautifier
-			class="de.genesez.output.java.JavaImportBeautifier" />
+			class="de.genesez.platforms.java.m2t.JavaImportBeautifier" />
 		<beautifier
 			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
 		

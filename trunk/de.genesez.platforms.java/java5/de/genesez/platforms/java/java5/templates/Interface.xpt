@@ -11,6 +11,7 @@
 
 «REM» useful support functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 
 «REM» use java naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
@@ -26,23 +27,23 @@
 	processes an interface
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-package «packageDeclaration() -»;
+package «packageDeclaration( basePackage() ) -»;
 «EXPAND Import::Import -»
 «EXPAND Comment::Type -»
 public interface «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» {
 	
-	«IF hasAttributes() || hasAssociationRoles() -»
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
 	// -- generated attribute, constant + association declarations ----------
 	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
 	«EXPAND Association::Declaration -»
 	
-	«IF hasOperationDeclarations() -»
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- generated method declarations -------------------------------------
 	«ENDIF -»
 	«EXPAND Operation::Declaration -»
 	
-	«IF hasAssociationRoles() -»
+	«IF generateSectionComments() && ( hasAssociationRoles() ) -»
 	// -- generated association accessors -----------------------------------
 	«ENDIF -»
 	«EXPAND Association::Accessors -»

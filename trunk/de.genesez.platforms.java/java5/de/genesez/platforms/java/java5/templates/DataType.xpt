@@ -11,6 +11,7 @@
 
 «REM» useful support functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «REM» use java naming conventions «ENDREM»
@@ -27,31 +28,33 @@
 	processes a data type
 «ENDREM»
 «DEFINE Root FOR MDataType -»
-package «packageDeclaration() -»;
+package «packageDeclaration( basePackage() ) -»;
 «EXPAND Import::Import -»
 «EXPAND Comment::Type -»
 «EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
 	
-	«IF hasAttributes() -»
+	«IF generateSectionComments() && ( hasAttributes() ) -»
 	// -- generated attribute, constant + association declarations ----------
 	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
 	
+	«IF generateSectionComments()»
 	// -- generated constructors --------------------------------------------
+	«ENDIF»
 	«EXPAND Operation::Constructor -»
 	«EXPAND _InitialisingConstructor -»
 	
-	«IF hasOperationDeclarations() -»
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- generated method declarations -------------------------------------
 	«ENDIF -»
 	«EXPAND Operation::Declaration -»
 	
-	«IF hasOperations() -»
+	«IF generateSectionComments() && ( hasOperations() ) -»
 	// -- generated method stubs for implementations + derived attributes ---
 	«ENDIF -»
 	«EXPAND Operation::Implementation -»
 	
-	«IF hasAttributes() -»
+	«IF generateSectionComments() && ( hasAttributes() ) -»
 	// -- generated association + attribute accessors -----------------------
 	«ENDIF -»
 	«EXPAND Attribute::Getter FOREACH property.typeSelect(MAttribute).select( e| !e.derived ) -»
