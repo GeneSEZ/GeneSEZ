@@ -1,54 +1,169 @@
-/* 
+/**
  * naming conventions for php
+ * 
+ * - fileName is only the file name, e.g. 'FooBar.php'
  * 
  * @author	tobias haubold
  * @date	2008-04-07
- * @todo	concept for filename conventions
  */
 
 // based on genesez meta model
 import gcore;
 
-/**
- * formats the filename of an type
-String asFileName(String this) : toFirstUpper();
- */
-
+extension de::genesez::platforms::common::AccessHelper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	types (+ classifiers)
+	prefix + suffix + file extensions for types
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * formats the name of a type
- * don't touch generics, primitive types or external types (external are mapped correctly)
- * just format the own created + generated types (classifiers)
- * 
- * @context	name of the type after type mapping
- * @return	formatted name of the type
+ * getter of the separator for full qualified names
+ * @return	the separator for full qualified names on the java platform ('.')
  */
-String asTypeName(MType this) :
-	switch (metaType) {
-		// don't touch the names of the following types - it's nonsense
-		case MPrimitiveType : ((MPrimitiveType)this).name
-		case MGeneric : ((MGeneric)this).specification
-		case MExternal : ((MExternal)this).specification
-		// format the classifiers
-		case MClass : ((MClass)this).name.toFirstUpper()
-		case MInterface : ((MInterface)this).name.toFirstUpper()
-		case MEnumeration : ((MEnumeration)this).name.toFirstUpper()
-		case MDataType : ((MDataType)this).name.toFirstUpper()
-		default : ((MClassifier)this).name.toFirstUpper()
-	};
-	
+String fqnSeparator() : ".";
+
+/**
+ * getter of the file extension including the beginning dot
+ * @return	the file extension for java artefacts ('.php')
+ */
+String fileExtension() : ".php";
+
+/**
+ * getter of the prefix which is added to the name of an interface
+ * @return	the prefix to prepend
+ */
+String prefix(MInterface this) : "";
+
+/**
+ * getter of the suffix which is added to the name of an interface
+ * @return	the suffix to append
+ */
+String suffix(MInterface this) : "";
+
+/**
+ * getter of the prefix which is added to the name of a class
+ * @return	the prefix to prepend
+ */
+String prefix(MClass this) : abstract ? "" : "";
+
+/**
+ * getter of the suffix which is added to the name of a class
+ * @return	the suffix to append
+ */
+String suffix(MClass this) : abstract ? "" : "";
+
+/**
+ * getter of the prefix which is added to the name of an enumeration
+ * @return	the prefix to prepend
+ */
+String prefix(MEnumeration this) : "";
+
+/**
+ * getter of the suffix which is added to the name of an enumeration
+ * @return	the suffix to append
+ */
+String suffix(MEnumeration this) : "";
+
+/**
+ * just there for error free templates ;-)
+ * @return	an empty string
+ */
+String prefix(MClassifier this) : "";
+
+/**
+ * just there for error free templates ;-)
+ * @return	an empty string
+ */
+String suffix(MClassifier this) : "";
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the name of a class using prefix + suffix
+ * @return	formatted name of the class
+ */
+String asTypeName(MClass this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of an interface using prefix + suffix
+ * @return	formatted name of the interface
+ */
+String asTypeName(MInterface this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of an enumeration using prefix + suffix
+ * @return	formatted name of the enumeration
+ */
+String asTypeName(MEnumeration this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a data type using prefix + suffix
+ * @return	formatted name of the data type
+ */
+String asTypeName(MDataType this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a classifier using prefix + suffix
+ * @return	formatted name of the classifier
+ */
+String asTypeName(MClassifier this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a type, it should NOT do anything, it's just there for error free templates ;-)
+ * don't touch generics, primitive types or external types (external are mapped correctly)
+ * @return	the name of the type
+ */
+String asTypeName(MType this) : name();
+
 /**
  * formats the name of a type after typemapping
- * don't touch the type, the name of the type is given by typemapping
+ * don't touch the type - the name of the type is determined by typemapping
  * @return	the name of the type
  */
 String asTypeName(String this) : this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	file names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the filename of a class
+ * @return	the filename of the class
+ */
+String asFileName(MClass this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of an interface
+ * @return	the filename of the interface
+ */
+String asFileName(MInterface this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of an enumeration
+ * @return	the filename of the enumeration
+ */
+String asFileName(MEnumeration this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of a data type
+ * @return	the filename of the data type
+ */
+String asFileName(MDataType this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of a classifier
+ * it's usually not called!
+ * @return	the filename of a classifier
+ */
+String asFileName(MClassifier this) : asTypeName() + fileExtension();
 
 
 /*

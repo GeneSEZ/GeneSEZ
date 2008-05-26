@@ -20,13 +20,15 @@
 
 «REM» use helper to access information «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
-«REM» useful conversions «ENDREM»
-«EXTENSION de::genesez::platforms::common::Conversion»
 «REM» useful helper for current user + timestamp «ENDREM»
 «EXTENSION de::genesez::platforms::common::GeneralHelper»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
+«REM» useful conversions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Conversion»
 «REM» use naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
 
@@ -45,9 +47,8 @@
  * «owningPackage.ownedComment.getCommentText()»
  * 
 «ENDIF -»
-«REM»«EXPAND _OwnComment("", "php.own.file.comment." + xmiGuid) -»«ENDREM»
  * @author	«getUserName()»
- * @package	«owningPackage.getFullQualifiedName(".")»
+ * @package	«packageDeclaration( basePath() )»
  */
 «ENDDEFINE»
 
@@ -60,11 +61,9 @@
  * «ownedComment.getCommentText()»
  * 
 «ENDIF -»
-«REM»«EXPAND _OwnComment("", "php.own.type.comment." + xmiGuid) -»«ENDREM»
- * 
 «EXPAND _Supertypes -»
  * @author	«getUserName()»
- * @package	«owningPackage.getFullQualifiedName(".")»
+ * @package	«packageDeclaration( basePath() )»
  */
 «ENDDEFINE»
 
@@ -271,6 +270,15 @@
 	 */
 «ENDDEFINE»
 
+«REM»
+	generates the constructor comment for enumerations
+«ENDREM»
+«DEFINE Constructor FOR MEnumeration -»
+	/**
+	 * private constructor to prevent instantiation of enumeration objects
+	 * @generated	private constructor to prevent instantiation of enumeration objects
+	 */
+«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

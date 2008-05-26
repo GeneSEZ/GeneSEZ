@@ -20,6 +20,8 @@
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 «REM» use conversion functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
@@ -39,7 +41,7 @@
 	@context	a type to transform into text
 «ENDREM»
 «DEFINE Root FOR MClassifier»
-«FILE getFilename(".php") -»
+«FILE filePath( asFileName(), basePath() ) -»
 <?php
 «EXPAND Comment::File -»
 
@@ -88,7 +90,7 @@
 «ENDDEFINE»
 
 «REM»
-	while 'MClassifier' is abstract, an object from type MClassifier cannot exist!
+	because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
 «ENDREM»
 «DEFINE _TypeDef FOR MClassifier -»
 // TODO: «fatal("generation of 'MClassifier's is currently not supported")»
@@ -108,7 +110,7 @@ require_once '«EXPAND _Require(s) -»';
 	@param	used	the classifier which is required
 «ENDREM»
 «DEFINE _Require(MClassifier used) FOR MClassifier -»
-«used.getRequirePath(this) + used.asTypeName() + ".php" -»
+«used.getRequirePath(this) + used.asFileName() -»
 «ENDDEFINE»
 
 «REM»
@@ -117,7 +119,7 @@ require_once '«EXPAND _Require(s) -»';
 	@param	used	the type which is required
 «ENDREM»
 «DEFINE _Require(MType used) FOR MClassifier -»
-«used.mapName("import").asTypeName() -»
+«used.mapName("import") -»
 «ENDDEFINE»
 
 «REM»
