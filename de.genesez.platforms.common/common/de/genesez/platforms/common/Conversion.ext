@@ -69,7 +69,9 @@ String dirPath(MClassifier this) :
  * @see		dirPath(MClassifier)
  */
 String dirPath(MClassifier this, String base) :
-	base + fileSeparator() + dirPath();
+	base == ""
+		? dirPath()
+		: base + fileSeparator() + dirPath();
 
 /**
  * getter for the full filename of a classifier based it's namespace
@@ -103,7 +105,9 @@ String filePath(MPackage this) :
  * @return	the relative path of a package
  */
 String filePath(MPackage this, String base) :
-	base + fileSeparator() + filePath();
+	base == ""
+		? filePath()
+		: base + fileSeparator() + filePath();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -143,7 +147,9 @@ String fullQualifiedNameSep(MClassifier this, String typename, String base, Stri
  * @return	the full qualified name of the package
  */
 String fullQualifiedName(MPackage this, String base, String separator) : 
-	base + separator + fullQualifiedName(separator);
+	base == ""
+		? fullQualifiedName( separator )
+		: base + separator + fullQualifiedName( separator );
 
 
 /**
