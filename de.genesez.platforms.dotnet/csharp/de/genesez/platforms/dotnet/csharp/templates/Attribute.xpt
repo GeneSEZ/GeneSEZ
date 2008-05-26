@@ -26,10 +26,10 @@
 «ENDREM»
 «DEFINE FieldDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-		«EXPAND _Field( asTypeName(type),
+		«EXPAND _Field( type.mapName().asTypeName(),
 		                asAttribute() )-»
 «ELSE-»
-		«EXPAND _Field( mapType( "Set" ) + "<" + asTypeName(type) + ">",
+		«EXPAND _Field( mapType() + "<" + type.mapName().asTypeName() + ">",
 		                asAttribute() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -40,9 +40,9 @@
 «ENDREM»
 «DEFINE PropertyDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _PropertyDecl( asTypeName(type), asAttribute() )-»
+	«EXPAND _PropertyDecl( type.mapName().asTypeName(), asAttribute() )-»
 «ELSE-»
-	«EXPAND _PropertyDecl( mapType( "Set" ) + "<" + asTypeName(type)+ ">",
+	«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
 	                   asProperty() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -53,9 +53,9 @@
 «ENDREM»
 «DEFINE PropertyImpl FOR MAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _PropertyImpl( asTypeName(type), asProperty() )-»
+	«EXPAND _PropertyImpl( type.mapName().asTypeName(), asProperty() )-»
 «ELSE-»
-	«EXPAND _PropertyImpl( mapType( "Set" ) + "<" + asTypeName(type)+ ">",
+	«EXPAND _PropertyImpl( mapType() + "<" + type.mapName().asTypeName() + ">",
 	                   asProperty() )-»
 «ENDIF-»
 «ENDDEFINE»

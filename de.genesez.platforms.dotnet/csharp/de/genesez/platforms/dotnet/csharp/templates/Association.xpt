@@ -45,14 +45,14 @@
 «EXPAND _Comment-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _PropertyDecl( type.mapName().asTypeName(), asProperty()-»
+		«EXPAND _PropertyDecl( type.mapName().asTypeName(), asProperty() )-»
 	«ELSE-»
 		«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
-                        asProperty()-»
+                        asProperty() )-»
 	«ENDIF-»
 «ELSE-»
 	«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
-                        asProperty()-»
+                        asProperty() )-»
 	«EXPAND _PropertyDecl( mapType() + "<" + assocClass().asTypeName() + ">",
                         asProperty() + assocClass().asTypeName() )-»
 «ENDIF-»
@@ -64,16 +64,28 @@
 «DEFINE PropertyImpl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
 	«IF multiplicity == 1-»
-		«EXPAND _PropertyImpl( type.mapName().asTypeName(), asProperty(), asAttribute() )-»
+		«EXPAND _PropertyImpl( type.mapName().asTypeName(),
+							asProperty(), asAttribute() )-»
 	«ELSE-»
 		«EXPAND _PropertyImpl( mapType() + "<" + type.mapName().asTypeName() + ">",
-		                   asProperty() )-»
+							asProperty(), asAttribute() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _PropertyImpl( mapType() + "<" + type.mapName().asTypeName() + ">",
-                        asProperty()-»
+	«EXPAND _Comment-»
+	public «mapType()»<«type.mapName().asTypeName()»> «asProperty()»
+	{
+		get {
+			«mapType("Implementation")»<«type.mapName().asTypeName()»> _result
+				= new «mapType("Implementation")»<«type.mapName().asTypeName()»>();
+			foreach ( var _assoc in this.«asAttribute()» ){
+				_result.add( _assoc.«asProperty()» );
+			}
+			return _result;
+		}
+	} 
+	
 	«EXPAND _PropertyImpl( mapType() + "<" + assocClass().asTypeName() + ">",
-                        asProperty() + assocClass().asTypeName() )-»
+						asProperty() + assocClass().asTypeName(), asAttribute() )-»
 «ENDIF-»
 «ENDDEFINE»
 
@@ -83,9 +95,10 @@
 «ENDREM»
 «DEFINE InsertDecl FOR MAssociationRole-»
 «IF isPlainAssociation()-»
-	«EXPAND _AddToDecl(asAddTo(), type.mapName().asTypeName())»
+	«EXPAND _Modifier» void «asInsertIn()»( «type.mapName().asTypeName()» _insert );
 «ELSE-»
-	«EXPAND _InsertIntoDecl(asAddTo(), type.mapName().asTypeName(),  assocClass().name)»
+	«EXPAND _Modifier» void «asInsertIn()»( «assocClass().asTypeName()» _assoc );
+	«EXPAND _Modifier»  «assocClass().asTypeName()» «asInsertIn()»( «type.mapName().asTypeName()» _other );
 «ENDIF-»
 «ENDDEFINE»
 
@@ -94,10 +107,54 @@
 	generate insert into implementation for an association
 «ENDREM»
 «DEFINE InsertImpl FOR MAssociationRole-»
+«EXPAND _Comment-»
 «IF isPlainAssociation()-»
-	«EXPAND _AddToImpl( asAddTo(), type.mapName().asTypeName() )»
+		public void «asInsertIn()»(«type.mapName().asTypeName()» _insert)
+		{
+	«IF multiplicity == 1-»
+			if ( «asAttribute()» == _insert ) {
+				return;
+			}
+		«IF opposite != null-»
+			if ( «asAttribute()» != null ) {
+				«asAttribute()».«opposite.asRemoveFrom()»( this );
+			}
+		«ENDIF-»
+		«asAttribute()» = _insert;
+	«ELSE-»
+			if ( «asAttribute()».contains( _insert ) ) {
+				return;
+			}
+			«asAttribute()».add( _insert );
+	«ENDIF-»
+	«IF opposite != null -»
+			_insert.«opposite.asInsertIn()»( this );
+	«ENDIF -»
+		}
 «ELSE-»
-	«EXPAND _InsertIntoImpl( asAddTo(), type.mapName().asTypeName(),  assocClass().asTypeName() )»
+		public void «asInsertIn()»(«assocClass().asTypeName()» _assoc)
+		{
+			if ( «asAttribute()».contains( _assoc ) ) {
+				return;
+			}
+			if( _assoc.«opposite.asProperty()»() != this ) {
+				throw new InvalidOperationException("inconsistent association object");
+			}
+			«asAttribute()».add(_at);
+		}
+		
+		public «assocClass().asTypeName()» «asInsertIn()»( «type.mapName().asTypeName()» _other ) {
+	«IF association.end.first() != this -»
+			«assocClass().asTypeName()» _assoc = new «assocClass().asTypeName()»(this, _other);
+	«ELSE -»
+			«assocClass().asTypeName()» _assoc = new «assocClass().asTypeName()»(_other, this);
+	«ENDIF -»
+			«asAttribute()».add( _assoc );
+	«IF opposite != null -»
+			_other.«opposite.asInsertIn()»( _assoc ); 
+	«ENDIF -»
+			return _assoc;
+		}
 «ENDIF-»		
 «ENDDEFINE»
 
@@ -106,7 +163,11 @@
 	generate remove from declaration for an association
 «ENDREM»
 «DEFINE RemoveDecl FOR MAssociationRole-»
-	«EXPAND _RemoveDecl( asRemoveFrom(), type.mapName().asTypeName() )-»
+«IF isPlainAssociation()-»
+	«EXPAND _Modifier» void «asRemoveFrom()»( «type.mapName().asTypeName()» _remove );
+«ELSE-»
+	«EXPAND _Modifier» void «asRemoveFrom()»( «assocClass().asTypeName()» _assoc );
+«ENDIF-»		
 «ENDDEFINE»
 
 
@@ -114,7 +175,35 @@
 	generate remove from implementation for an association
 «ENDREM»
 «DEFINE RemoveImpl FOR MAssociationRole-»
-	«EXPAND _RemoveImpl( asRemoveFrom(), type.mapName().asTypeName() )-»
+«EXPAND _Comment-»
+«IF isPlainAssociation() »
+	public void «asRemoveFrom()»(«type.mapName().asTypeName()» _remove) {
+	«IF multiplicity == 1 -»
+		if ( «asAttribute()» != _remove ) {
+			return;
+		}
+		«asAttribute()» = null;
+	«ELSE -»
+		if ( ! «asAttribute()».contains( _remove ) ) {
+			return;
+		}
+		«asAttribute()».remove( _remove );
+	«ENDIF -»«EXPAND _Comment-»
+	«IF opposite != null -»
+		_remove.«opposite.asRemoveFrom()»( this );
+	«ENDIF -»
+	}
+«ELSE-»
+	public void «asRemoveFrom()»(«assocClass().asTypeName()» _assoc) {
+		if ( ! «asAttribute()».contains( _assoc ) ) {
+			return;
+		}
+		«asAttribute()».remove( _assoc );
+	«IF opposite != null -»
+		_assoc.«asProperty()»().«opposite.asRemoveFrom()»( _assoc );
+	«ENDIF -»
+	}
+«ENDIF-»
 «ENDDEFINE»
 
 
@@ -171,76 +260,11 @@
 
 
 «REM»
-	generate add to declaration for an association
-«ENDREM»
-«DEFINE _AddToDecl(String name, String type) FOR MAssociationRole-»
-		«EXPAND _Comment-»
-		«EXPAND _Modifier»void «name»(«type» _add);
-		
-«ENDDEFINE»
-
-«REM»
-	generate add to implementation for an association
-«ENDREM»
-«DEFINE _AddToImpl(String name, String type) FOR MAssociationRole-»
-		«EXPAND _Comment-»
-		«EXPAND _Modifier»void «name»(«type» _add)
-		{
-			// TODO: implement in template
-		}
-		
-«ENDDEFINE»
-
-
-«REM»
-	generate insert into declaration for an association
-«ENDREM»
-«DEFINE _InsertIntoDecl(String name, String type, String aClass) FOR MAssociationRole-»
-		«EXPAND _Comment-»
-		«EXPAND _Modifier»void «name»(«type» _insert, «aClass» _at);
-		
-«ENDDEFINE»
-
-«REM»
-	generate insert into implementation for an association
-«ENDREM»
-«DEFINE _InsertIntoImpl(String name, String type, String aClass) FOR MAssociationRole-»
-		«EXPAND _Comment-»
-		«EXPAND _Modifier»void «name»(«type» _insert, «aClass» _at)
-		{
-			// TODO: implement in template
-		}
-		
-«ENDDEFINE»
-
-
-«REM»
-	generate remove from declaration for an association
-«ENDREM»
-«DEFINE _RemoveDecl(String name, String type) FOR MAssociationRole-»
-		«EXPAND _Comment-»
-		«EXPAND _Modifier»void «name»(«type» _remove);
-«ENDDEFINE»
-
-«REM»
-	generate remove from implementation for an association
-«ENDREM»
-«DEFINE _RemoveImpl(String name, String type) FOR MAssociationRole-»
-		«EXPAND _Comment-»
-		«EXPAND _Modifier»void «name»(«type» _remove)
-		{
-			// TODO: implement in template
-		}
-		
-«ENDDEFINE»
-
-
-«REM»
 	generate modifier for an association
 «ENDREM»
 «DEFINE _Modifier FOR MAssociationRole-»
 «IF classifier.metaType != MInterface-»
-		«visibility -»
+		«visibility-»
 «ENDIF-»
 «ENDDEFINE»
 
