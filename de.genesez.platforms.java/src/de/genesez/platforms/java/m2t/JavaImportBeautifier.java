@@ -1,48 +1,56 @@
 package de.genesez.platforms.java.m2t;
 
+import java.util.Properties;
+
 import org.openarchitectureware.xpand2.output.FileHandle;
 
 import de.genesez.platforms.common.m2t.ImportBeautifier;
-import de.genesez.platforms.common.m2t.Properties;
 
-
+/**
+ * This class is a concrete import beautifier for the java programming language.
+ * It uses the "\n" value for the "de.genesez.importformatter.delim" property
+ * key and the "(import)( )" regular expression for the
+ * "de.genesez.importformatter.regex" property key.
+ * 
+ * @author nihe
+ * @date 2008-02-24
+ */
 public class JavaImportBeautifier extends ImportBeautifier {
-
+	
 	/**
-	 * 
+	 * Sole constructor which sets the properties.
 	 */
 	public JavaImportBeautifier() {
 		super();
 		Properties options = new Properties();
-		options.put("de.genesez.importformatter.delim", "\n");
-		options.put("de.genesez.importformatter.regex", "(import)( )");
+		options.setProperty("de.genesez.importformatter.delim", "\n");
+		options.setProperty("de.genesez.importformatter.regex", "(import)( )");
 		setOptions(options);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.openarchitectureware.xpand2.output.PostProcessor#afterClose(org.openarchitectureware.xpand2.output.FileHandle)
-	 */
 	
-	public void afterClose(FileHandle arg0) {
+	/**
+	 * This method is implemented from the oAW PostProcessor interface. It is
+	 * called after the file is closed.
+	 * 
+	 * @param file the file which shall be modified.
+	 */
+	public void afterClose(FileHandle file) {
 		// nothing to do
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.openarchitectureware.xpand2.output.PostProcessor#beforeWriteAndClose(org.openarchitectureware.xpand2.output.FileHandle)
-	 */
 	
+	/**
+	 * This method is implemented from the oAW PostProcessor interface. It is
+	 * called before the file will be written and closed.
+	 * 
+	 * @param file the file which shall be modified.
+	 */
 	public void beforeWriteAndClose(FileHandle file) {
-		if (file.getTargetFile() != null
-				&& file.getTargetFile().getAbsolutePath().endsWith(".java")) {
-
+		if (file.getTargetFile() != null && file.getTargetFile().getAbsolutePath().endsWith(".java")) {
+			
 			String edit = file.getBuffer().toString();
 			edit = getImportFormatter().format(edit);
-
-			// check if text formatted successfully
+			
+			// check if the text is successfully formatted
 			file.setBuffer(new StringBuffer(edit));
 		}
 	}
