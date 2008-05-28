@@ -1,0 +1,496 @@
+/**
+ * Simplifies access to genesez models + makes working with the genesez metamodel more easier
+ * 
+ * currently covered:
+ * - properties, attributes, association roles
+ * - associations
+ * - operations
+ * - comments
+ * - generics
+ * - stereotypes + tagged values
+ * - aspects
+ * - type helpers
+ * - classifiers
+ * 
+ * @author	nico herbig
+ * @author	tobias haubold (last)
+ * @date	2008-04-18
+ * 
+ * @todo	getCommentText(List[MComment]), line 250
+ * 	- revise, replace substitution of '\n' by ';' with another concept
+ * 	  (maybe precede each line with ' *') -> more target language related
+ */
+
+// based on genesez meta model
+import gcore;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	multiplicity elements (properties, parameters, operations)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a property has a simple valued type
+ * @return	true if the property has a simple valued type, otherwise false
+ */
+boolean isSingleValuedType(MProperty this) :
+	multiplicity == 1;
+
+/**
+ * checks if an operation has a simple valued type
+ * @return	true if the operation has a simple valued type, otherwise false
+ */
+boolean isSingleValuedType(MOperation this) :
+	multiplicity == 1;
+
+/**
+ * checks if a parameter has a simple valued type
+ * @return	true if the parameter has a simple valued type, otherwise false
+ */
+boolean isSingleValuedType(MParameter this) :
+	multiplicity == 1;
+
+/**
+ * checks if a property has a multi-valued type
+ * @return	true if the property has a multi-valued type, otherwise false
+ */
+boolean isMultiValuedType(MProperty this) :
+	multiplicity != 1;
+
+/**
+ * checks if an operation has a multi-valued type
+ * @return	true if the operation has a multi-valued type, otherwise false
+ */
+boolean isMultiValuedType(MOperation this) :
+	multiplicity != 1;
+
+/**
+ * checks if a parameter has a multi-valued type
+ * @return	true if the parameter has a multi-valued type, otherwise false
+ */
+boolean isMultiValuedType(MParameter this) :
+	multiplicity != 1;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a classifier has attributes
+ * @return	true if the classifier has attributes, otherwise false
+ */
+boolean hasAttributes(MClassifier this) : 
+	property.typeSelect(MAttribute).size > 0;
+
+/**
+ * checks if a classifier has derived attributes
+ * @return	true if the classifier has derived attributes, otherwise false
+ */
+boolean hasDerivedAttributes(MClassifier this) : 
+	property.typeSelect(MAttribute).exists( a|a.derived );
+
+/**
+ * checks if an attribute has a default value
+ * @return	true if the attribute has a default value, otherwise false
+ */
+boolean hasDefaultValue(MAttribute this) :
+	defaultvalue.length > 0;
+
+/**
+ * getter for a list of all attributes including inherited
+ * @return	a list with attributes or an empty list
+ */
+List[MAttribute] getAllAttributes(MClassifier this) :
+	{}.add( getOwnAttributes() )
+		.add( getParentAttributes() ).flatten();
+
+/**
+ * it's just there for error free templates
+ * @return	an empty list
+ * @see		getParentAttributes(MClassifier)
+ */
+List[MAttribute] getAllAttributes(MType this) : {};
+
+/**
+ * getter for a list with all owned attributes excluding final and derived
+ * @return	a list with attributes or an empty list
+ */
+List[MAttribute] getOwnAttributes(MClassifier this) :
+	property.typeSelect(MAttribute).select( a| !a.final && !a.derived );
+
+/**
+ * getter for a list of all inherited attributes of the first supertype
+ * @return	a list with attributes or an empty list
+ */
+List[MAttribute] getParentAttributes(MClassifier this) :
+	supertype.isEmpty
+		? {}
+		: supertype.first().getAllAttributes();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	association + association roles
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a classifier has association roles
+ * @return	true if the classifier has association roles, otherwise false
+ */
+boolean hasAssociationRoles(MClassifier this) : 
+	property.typeSelect(MAssociationRole).size > 0;
+
+/**
+ * checks if an association role belongs to an association class or not
+ * @param	aend	an association role
+ * @return	true, if it's a plain association role and doesn't belongs to an association class and 
+ * 			false, if the association role belongs to an association class
+ */
+boolean hasAssociationClass(MAssociationRole this) :
+	association.associationClass != null;
+
+/**
+ * checks if an association role belongs to an association class or not
+ * @param	aend	an association role
+ * @return	true, if it's a plain association role and doesn't belongs to an association class and 
+ * 			false, if the association role belongs to an association class
+ * @deprecated, use {@link hasAssociationClass(MAssociationRole)}
+ */
+boolean isPlainAssociation(MAssociationRole aend) :
+	aend.association.associationClass == null;
+
+/**
+ * getter for the association class of an association role
+ * @param	aend	an association role
+ * @return	the association class of an association role (or null)
+ * @see		isPlainAssociation
+ */
+MClass assocClass(MAssociationRole aend) :
+	aend.association.associationClass;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	operations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a classifier has operations
+ * @return	true if the classifier has operations, otherwise false
+ */
+boolean hasOperations(MClassifier this) : operation.size > 0;
+
+/**
+ * checks if a classifier has operation declarations, that is, if it has abstract operations
+ * @return	true if the classifier has abstract operations, otherwise false
+ */
+boolean hasOperationDeclarations(MClassifier this) : 
+	operation.reject( o|o.isConstructor() || o.isDestructor() || !o.abstract ).size > 0;
+
+/**
+ * checks if a classifier has one or more constructors
+ * @return	true if the classifier has constructors, otherwise false
+ * @see		isConstructor(MOperation)
+ */
+boolean hasConstructors(MClassifier this) : operation.exists( o|o.isConstructor() );
+
+/**
+ * checks if an operation is a constructor of a classifier
+ * @return	true if the operation is a constructor, otherwise false
+ */
+boolean isConstructor(MOperation this) :
+	classifier.name == name;
+
+/**
+ * checks if a classifier has one or more destructors
+ * @return	true if the classifier has destructors, otherwise false
+ * @see		isDestructor(MOperation)
+ */
+boolean hasDestructors(MClassifier this) : operation.exists( o|o.isDestructor() );
+
+/**
+ * checks if an operation is a destructor of a classifier
+ * @return	true if the operation is a destructor, otherwise false
+ */
+boolean isDestructor(MOperation this) :
+	name.startsWith("~");
+
+/**
+ * checks if an operation has a return type
+ * @return	true if the operation has a return type, otherwise false
+ */
+boolean hasReturnType(MOperation this) :
+	returnType != null && returnType.name().toLowerCase() != "void";
+
+/**
+ * checks if a parameter has a default value
+ * @return	true if the parameter has a default value, otherwise false
+ */
+boolean hasDefaultValue(MParameter this) :
+	defaultvalue.length > 0;
+
+/**
+ * checks if an operation can throw exceptions
+ * @return	true if the operation can throw exceptions, otherwise false
+ */
+boolean hasExceptions(MOperation this) : !raisedException.isEmpty;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	comments
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if an element has one or more comments
+ * @return	true if the element has at least one comment, otherwise false
+ */
+boolean hasComment(MElement this) :
+	ownedComment.size > 0;
+
+/**
+ * getter for the comment text of a list of comments
+ * @param	l	list of comments of an element
+ * @return	the comment text as a string or an empty string
+ * @todo	revise, see file comment for further details
+ */
+String getCommentText(List[MComment] this) :
+	size > 0
+		? getComment( first() ).replaceAll("\n", "; ")
+		: "";
+
+/**
+ * getter for the owned comments of a type
+ * @return	the list of owned comments
+ */
+List[MComment] ownedComment(MType this) :
+	switch (metaType) {
+		case MGeneric : {}
+		case MExternal : {}
+		case MPrimitiveType : {}
+		default : ((MClassifier)this).ownedComment
+	};
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	generics
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a classifier has one or more generic parameters
+ * @return	true if the classifier has at least one generic parameter, otherwise false
+ */
+boolean hasGenericParameter(MClassifier this) :
+	genericParameter.size > 0;
+	
+/**
+ * checks if an external type has one or more generic parameters
+ * @return	true if the external type has at least one generic parameter, otherwise false
+ */
+boolean hasGenericParameter(MExternal this) :
+	genericParameter.size > 0;
+
+/**
+ * checks if an operation has one or more generic parameter
+ * @return	true if the operation has at least one generic parameter, otherwise false
+ */
+boolean hasGenericParameter(MOperation this) :
+	genericParameter.size > 0;
+
+/**
+ * checks if an attribute has one or more generic realizations
+ * @return	true if the attribute has at least one generic realization, otherwise false
+ */
+boolean hasGenericRealization(MAttribute this) :
+	genericRealization.size > 0;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	stereotypes + tagged values
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if an element is annotated with a stereotype
+ * @param	stereotype	the name of a stereotype
+ * @return	true if the element has the stereotype, otherwise false
+ */
+boolean hasStereotype(MElement this, String stereotype) :
+	//!e.stereotype.typeSelect(MStereotype).select(e|e.name == stereotype).isEmpty;
+	this.stereotype.name.contains(stereotype);
+
+/**
+ * checks if an element has a tagged value by ignoring the stereotype
+ * @param	tag		the name of a tagged value
+ * @param	value	the value of a tagged value
+ * @return	true if the element has a tag with the given value, otherwise false
+ */
+boolean hasTaggedValue(MElement this, String tag, String value) :
+	taggedValue.exists( e| e.tag.name == tag && e.value == value );
+
+/**
+ * checks if an element has a tagged value of a specific stereotype
+ * @param	sterotype	the name of a stereotype
+ * @param	tag			the name of a tagged value
+ * @param	value		the value of a tagged value
+ * @return	true if the element has a tag with the given value, otherwise false
+ */
+boolean hasTaggedValue(MElement this, String stereotype, String tag, String value) :
+	!taggedValue.typeSelect(MTaggedValue)
+		.select( e| e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype)
+		.isEmpty;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if an element has an aspect with the specified name and domain name
+ * @param	domain	the name of a domain
+ * @param	name	the name of an aspect
+ * @return	true if an element has an aspect with a specified name and domain name, otherwise false
+ */
+boolean hasAspect(MElement this, String domain, String name) :
+	!aspect.select( a| a.domain == domain && a.name == name ).isEmpty;
+
+/**
+ * checks if an element has an aspect with a specified domain name or not
+ * @param	domain	the name of a domain
+ * @return	true if an element has an aspect with a specified domain name, otherwise false
+ */
+boolean hasAspect(MElement this, String domain) :
+	!aspect.select( a| a.domain == domain ).isEmpty;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type helpers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if the type is a primitive type
+ * @return	true if the type is a primitive type, otherwise false
+ */
+boolean isPrimitiveType(MType this) : metaType == MPrimitiveType;
+
+/**
+ * checks if the type is a generic
+ * @return	true if the type is a generic, otherwise false
+ */
+boolean isGenericType(MType this) : metaType == MGeneric;
+
+/**
+ * checks if the type is an external type
+ * @return	true if the type is an external type, otherwise false
+ */
+boolean isExternalType(MType this) : metaType == MExternal;
+
+/**
+ * checks if the type is a data type
+ * @return	true if the type is a data type, otherwise false
+ */
+boolean isDataType(MType this) : metaType == MDataType;
+
+/**
+ * getter for the name of a type or the specification of a generic
+ * @return	the name (or specification) of the type
+ */
+String name(MType this) :
+	switch (metaType) {
+		case MGeneric : ((MGeneric)this).specification
+		case MExternal : ((MExternal)this).specification
+		case MPrimitiveType : ((MPrimitiveType)this).name
+		default : ((MClassifier)this).name
+	};
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	classifiers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the model element by using a classifier
+ * @return	the model element
+ */
+MModel getModel(MClassifier this) :
+	owningPackage.metaType == MModel
+		? owningPackage
+		: owningPackage.getModel();
+
+/**
+ * getter for the model element by using a package
+ * @return	the model element
+ */
+MModel getModel(MPackage this) :
+	metaType == MModel
+		? this
+		: nestingPackage.getModel();
+
+/**
+ * getter for a class by it's full qualified name which is separed by dot's
+ * @param	fullQualifiedName	full qualified name of the class
+ * @return	the class found or Void
+ */
+MClass getClass(MModel this, String fullQualifiedName) :
+	let c = getClassifier(fullQualifiedName) :
+		c.metaType == MClass
+			? c
+			: Void;
+
+/**
+ * getter for a classifier by it's full qualified name which is separed by dot's
+ * @param	fullQualifiedName	full qualified name of the classifier
+ * @return	the classifier found or null
+ */
+MClassifier getClassifier(MModel this, String fullQualifiedName) :
+	getClassifier(nestedPackage, fullQualifiedName);
+
+/**
+ * getter for a package by it's full qualified name, which is separated by dot's
+ * @param	fullQualifiedPackageName	full qualified name of a package
+ * @return	the package found or null
+ */
+MPackage getPackage(MModel this, String fullQualifiedPackageName) :
+	getPackage(nestedPackage, fullQualifiedPackageName);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for a string representation of a comment
+ * @return	the string representation of a comment
+ */
+private String getComment(MComment this) :
+	annotation != "null"
+		? annotation
+		: "";
+
+/**
+ * getter for a class by it's full qualified name from a list of classes
+ * note: should actually only work, if the list contains the package, which is the first in the full qualified name
+ * @param	packages			a list of packages
+ * @param	fullQualifiedName	the full qualified name of a class
+ * @return	the class found or null
+ */
+private MClassifier getClassifier(List[MClass] packages, String fullQualifiedName) :
+	JAVA de.genesez.platforms.common.AccessHelper.getClassifier(java.util.List, java.lang.String);
+
+/**
+ * getter for a package by it's full qualified name from a list of packages
+ * note: should actually only work, if the list contains the package, which is the first in the full qualified name
+ * @param	packages					a list of packages
+ * @param	fullQualifiedPackageName	full qualifed name of a package
+ * @return	the package found or null
+ */
+private MPackage getPackage(List[MPackage] packages, String fullQualifiedPackageName) :
+	JAVA de.genesez.platforms.common.AccessHelper.getPackage(java.util.List, java.lang.String);
