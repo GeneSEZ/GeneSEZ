@@ -1,0 +1,185 @@
+«REM»
+	Handles everything about attriutes.
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+	@date	2007-07-13
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the attributes of a classifier
+	order: static final, static, non static
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && e.final && !e.derived ) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && !e.final && !e.derived ) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| !e.static && !e.final && !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the derived attributes of a classifier
+	order: static, non static
+«ENDREM»
+«DEFINE Derived FOR MClassifier -»
+	«EXPAND _Derived FOREACH property.typeSelect(MAttribute).select( e| e.static && e.derived ) -»
+	«EXPAND _Derived FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the accessors for attributes of a classifier
+«ENDREM»
+«DEFINE Accessors FOR MClass-»
+«EXPAND Getter FOREACH property.typeSelect(MAttribute).select( e| e.final && !e.derived ) -»
+«FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
+	«EXPAND Getter FOR a -»
+	«EXPAND _Setter FOR a -»
+	«EXPAND _InsertIn FOR a -»
+	«EXPAND _RemoveFrom FOR a -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the getter method for an attribute
+«ENDREM»
+«DEFINE Getter FOR MAttribute -»
+	«EXPAND Comment::Getter -»
+	«IF isSingleValuedType() -»
+	«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
+		return «asAttribute()»;
+	«ELSE -»
+	«EXPAND _ModifierAccessor» «mapType()»<«type.mapName().asTypeName()»> «asGetter()»() {
+	«IF unique -»
+		return java.util.Collections.unmodifiableSet(«asAttribute()»);
+	«ELSE -»
+		return java.util.Collections.unmodifiableList(«asAttribute()»);
+	«ENDIF -»
+	«ENDIF -»
+	}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an attribute declaration
+«ENDREM»
+«DEFINE _Declaration FOR MAttribute -»
+	«EXPAND Comment::Attribute -»
+	«IF isSingleValuedType() -»
+	«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue»;
+	«ELSE -»
+	«EXPAND _Modifier -» «mapType() -»<«type.mapName().asTypeName()»> «asAttribute()» = new «mapType("Implementation")»<«type.mapName().asTypeName() -»>();
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the accessor method for an derived attribute
+«ENDREM»
+«DEFINE _Derived FOR MAttribute -»
+	«EXPAND Comment::Getter -»
+	«IF isSingleValuedType() -»
+	«EXPAND _Modifier» «type.mapName()» «asGetter()»() {
+		«getReturnTypeDeclaration(type.mapName().asTypeName())»
+		«EXPAND _OwnCodeImpl("java.derived.attribute.implementation." + xmiGuid) -»
+		«getReturnTypeReturn(type.mapName().asTypeName())»
+	}
+	«ELSE -»
+	«EXPAND _Modifier» «mapType().asTypeName()»<«type.mapName().asTypeName()»> «asGetter()»() {
+		«getReturnTypeDeclaration(type.mapName().asTypeName())»
+		«EXPAND _OwnCodeImpl("java.derived.attribute.implementation." + xmiGuid) -»
+		«getReturnTypeReturn(type.mapName().asTypeName())»
+	}
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the setter method for an attribute, if the attribut has a simple type
+«ENDREM»
+«DEFINE _Setter FOR MAttribute -»
+«IF isSingleValuedType() -»
+	«EXPAND Comment::Setter -»
+	«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» _«asAttribute()») {
+		«asAttribute()» = _«asAttribute()»;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the insert in method for an attribute with a multivalued (collection) type
+«ENDREM»
+«DEFINE _InsertIn FOR MAttribute -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::InsertIn -»
+	«EXPAND _ModifierAccessor» void «asAddTo()»(«type.mapName().asTypeName()» toAdd) {
+		«asAttribute()».add(toAdd);
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the remove from method for an attribute with a collection type
+«ENDREM»
+«DEFINE _RemoveFrom FOR MAttribute -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::RemoveFrom -»
+	«EXPAND _ModifierAccessor» void «asRemoveFrom()»(«type.mapName().asTypeName()» toRemove) {
+		«asAttribute()».remove(toRemove);
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	processes the modifiers of an attribute
+«ENDREM»
+«DEFINE _Modifier FOR MAttribute -»
+«IF classifier.metaType == MInterface -»
+	«visibility» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
+«ELSE -»
+	private «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the modifiers of an attribute accessor method
+«ENDREM»
+«DEFINE _ModifierAccessor FOR MAttribute -»
+	public «IF static»static«ENDIF» «IF final»final«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	processes the default value of an attribute
+«ENDREM»
+«DEFINE _DefaultValue FOR MAttribute -»
+«IF hasDefaultValue() -» = «defaultvalue -»
+«ELSEIF isMultiValuedType() -» = new «mapType("Implementation")»<«type.mapName().asTypeName() -»>()
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates a protected region
+«ENDREM»
+«DEFINE _OwnCodeImpl(String id) FOR MAttribute -»
+		«PROTECT CSTART "/* " CEND " */" ID (id)»
+		// TODO: put the implementation of derived (calculated) attribute '«asAttribute()»' here
+		«ENDPROTECT»
+«ENDDEFINE»
