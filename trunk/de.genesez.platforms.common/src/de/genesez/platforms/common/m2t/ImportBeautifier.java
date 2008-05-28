@@ -19,7 +19,7 @@ import org.openarchitectureware.xpand2.output.PostProcessor;
 public abstract class ImportBeautifier implements PostProcessor {
 	
 	/**
-	 * Using log4j-mechanism for logging errors.
+	 * Using log4j-mechanism for error logging.
 	 */
 	protected final Log log = LogFactory.getLog(getClass());
 	
