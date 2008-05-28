@@ -60,7 +60,7 @@ String dirName(MClassifier this) : owningPackage.name;
  * @return	the path of the classifier
  */
 String dirPath(MClassifier this) :
-	owningPackage.fullQualifiedName(fileSeparator());
+	owningPackage.fullQualifiedNameSep( fileSeparator() );
 
 /**
  * getter for the path of a classifier based on it's namespace
@@ -97,7 +97,7 @@ String filePath(MClassifier this, String filename, String base) :
  * @return	the relative path of a package
  */
 String filePath(MPackage this) :
-	fullQualifiedName(fileSeparator());
+	fullQualifiedNameSep( fileSeparator() );
 
 /**
  * getter for the file path of a package based on it's namespace
@@ -119,7 +119,7 @@ String filePath(MPackage this, String base) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String separator) : 
-	owningPackage.fullQualifiedName(separator) + separator + name.toFirstUpper();
+	owningPackage.fullQualifiedNameSep(separator) + separator + name.toFirstUpper();
 
 /**
  * getter for the full qualified name of a classifier based on it's namespace
@@ -128,7 +128,7 @@ String fullQualifiedNameSep(MClassifier this, String separator) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String separator) : 
-	owningPackage.fullQualifiedName(separator) + separator + typename;
+	owningPackage.fullQualifiedNameSep(separator) + separator + typename;
 
 /**
  * getter for the full qualified name of a classifier based on a base package and it's namespace
@@ -138,7 +138,7 @@ String fullQualifiedNameSep(MClassifier this, String typename, String separator)
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String base, String separator) : 
-	owningPackage.fullQualifiedName(base, separator) + separator + typename;
+	owningPackage.fullQualifiedNameSep(base, separator) + separator + typename;
 
 /**
  * getter for the full qualified name of a package
@@ -146,10 +146,10 @@ String fullQualifiedNameSep(MClassifier this, String typename, String base, Stri
  * @param	separator	a separator used to build the package path
  * @return	the full qualified name of the package
  */
-String fullQualifiedName(MPackage this, String base, String separator) : 
+String fullQualifiedNameSep(MPackage this, String base, String separator) : 
 	base == ""
-		? fullQualifiedName( separator )
-		: base + separator + fullQualifiedName( separator );
+		? fullQualifiedNameSep( separator )
+		: base + separator + fullQualifiedNameSep( separator );
 
 
 /**
@@ -170,6 +170,6 @@ String fileSeparator() : "/";
  * @param	separator	a separator used to build the package path
  * @return	string representation of the package path
  */
-String fullQualifiedName(MPackage pkg, String separator) : 
+String fullQualifiedNameSep(MPackage pkg, String separator) : 
 	JAVA de.genesez.platforms.common.Conversion.getFullQualifiedName(de.genesez.metamodel.gcore.MPackage, java.lang.String);
 
