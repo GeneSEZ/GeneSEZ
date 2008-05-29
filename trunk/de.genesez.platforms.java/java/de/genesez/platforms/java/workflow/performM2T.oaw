@@ -4,14 +4,14 @@
 	
 	<!-- 
 		performs a model-to-text transformation (code generation)
-		without the AOP of templates
-		(for this see the workflow component 'performM2TAOP')
 		- includes beautifier for java + xml
 		
 		following parameters are required:
 		==================================
 		
-		$rootTemplate 		the root xpt-file where the generation starts
+		$rootTemplate		the root xpt-file where the generation starts
+		$aspectTemplates	comma separated list of templates with aspect advices for XPand AOP
+		$aspectScripts		comma separated list of scripts with aspect advices for Xtend AOP
 		$excludePackages	comma or semicola separated list with packages to exclude from code generation
 							(full qualified package names, ', ' or '; ' are also permitted)
 		$basePackage		the base package for source code artefacts
@@ -55,6 +55,10 @@
 		
 		<expand value="${rootTemplate}" />
 		<genPath value="${outputDir}" />
+		
+		<!-- config AOP features -->
+		<advices value="${aspectTemplates}"/>
+		<extensionAdvices value="${aspectScripts}" />
 		
 		<!-- Config the protected regions resolver. -->
 		<prSrcPaths value="${proRegDir}" />
