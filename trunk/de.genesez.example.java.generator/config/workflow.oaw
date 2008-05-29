@@ -32,7 +32,6 @@
 		makeGenesezModel.oaw		- if you don't need to specify an additional uml2 profile
 		makeGenesezModelProfile.oaw	- if you used an uml profile in your model, which is specified 
 									  with the property ${profile.name}
-		
 	-->
 	<property name="uml2genesez.component" value="makeGenesezModelProfile.oaw" />
 	<!-- comma or comma blank [, ] separated list of package names to exclude from transformation -->
@@ -50,22 +49,16 @@
 	
 	<!-- model to java transformation settings - - - - - - - - - - - - - - - - - - -->
 	
-	<!--
-		workflow component which is used to transform the genesez model into text / source code
-		
-		performM2T.oaw		- performs the transformation without the AOP-Feature of templates
-		performM2TAOP.oaw	- performs the transformation using the AOP-Feature of templates and the 
-							aspect templates specified with the property ${model2text.aspect.templates}
-	-->
-	<property name="model2text.component" value="performM2T.oaw" />
 	<!-- comma or semicola separated list with package names to exclude from code generation -->
 	<property name="model2text.exclude.packages" value="" />
 	<!-- specifies the base package for all generated artefacts -->
 	<property name="model2text.base.package" value="" />
 	<!-- boolean value indicates if section comments are generated or not -->
 	<property name="model2text.generate.section.comments" value="true" />
-	<!-- comma separated list of aspect templates, used for the tempalte AOP-Feature -->
-	<property name="model2text.aspect.templates" value="" />
+	<!-- comma separated list of aspect templates, used for the XPand AOP-Feature -->
+	<property name="model2text.aspect.templates" value="Attrib" />
+	<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
+	<property name="model2text.aspect.scripts" value="Naming" />
 	<!-- filename, relative to project root, where the mapping of types are defined -->
 	<property name="model2text.typemapping.file" value="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
 	
@@ -143,16 +136,17 @@
 	
 	<!-- run the java code generation and transform the model into java source code /-->
 	<cartridge id="model2text"
-		file="de::genesez::platforms::java::workflow::${model2text.component}"
+		file="de::genesez::platforms::java::workflow::performM2T.oaw"
 		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
 		excludePackages="${model2text.exclude.packages}"
 		basePackage="${model2text.base.package}"
 		generateSectionComments="${model2text.generate.section.comments}"
 		configFile=""
-		aspectsTemplate="${model2text.aspect.templates}"
+		aspectTemplates="${model2text.aspect.templates}"
+		aspectScripts="${model2text.aspect.scripts}"
 		outputDir="${project.dir}/${model2text.dir}"
 		proRegDir="${project.dir}/${model2text.dir}"
 		typeMappingFile="${model2text.typemapping.file}"
 	/>
-
+	
 </workflow>
