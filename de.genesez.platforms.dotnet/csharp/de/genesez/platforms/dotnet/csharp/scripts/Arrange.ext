@@ -67,7 +67,7 @@ List[MInterface] supertypes(MInterface interface) :
  * @return	a list of attribute
  */
 List[MAttribute] publicFields(MInterface interface) :
-	interface.property.typeSelect(MAttribute).select(e|e.visibility == "public");
+	interface.property.typeSelect(MAttribute).select(e|e.visibility == "public" && e.static);
 
 /**
  * returns the properties of an interface
@@ -75,7 +75,7 @@ List[MAttribute] publicFields(MInterface interface) :
  * @return	a list of attribute
  */
 List[MAttribute] properties(MInterface interface) :
-	interface.property.typeSelect(MAttribute);
+	interface.property.typeSelect(MAttribute).select(e| ! (e.visibility == "public" && e.static) );
 
 /**
  * returns the associations of an interface
