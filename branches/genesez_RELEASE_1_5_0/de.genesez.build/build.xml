@@ -7,17 +7,34 @@
 
 	<target name="all"
 		description=""
-		depends="pluginjar.all" />
+		depends="checkout.all,pluginjar.all" />
+	
+	<target name="distribute"
+		description=""
+		depends="plugindist.all,featuredist.all" />
 	
 	<target name="clean"
 		description=""
 		depends="clean.all" />
 	
-	<!-- check auf eclipse.running -->
-
+	<target name="checkout.all"
+		description="">
+		<for list="${checkout}" param="project">
+			<sequential>
+				<available property="dir.@{project}"
+					file="${build.basedir}/${prefix}.@{project}"
+					type="dir" />
+				<antcall target="checkoutOrUpdate">
+					<param name="project" value="${prefix}.@{project}" />
+					<param name="update" value="${dir.@{project}}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+	
 	<target name="build.all"
 		description="">
-		<for list="${projects}" param="project">
+		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
 					dir="${build.basedir}/${prefix}.@{project}"
@@ -31,7 +48,7 @@
 
 	<target name="pluginjar.all"
 		description="">
-		<for list="${projects}" param="project">
+		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
 					dir="${build.basedir}/${prefix}.@{project}"
@@ -39,6 +56,48 @@
 					inheritAll="false">
 					<property name="build.basedir" value="${build.basedir}" />
 				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="featurejar.all"
+		description="">
+		<for list="${features}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="featurejar"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="plugindist.all"
+		description=""
+		depends="pluginjar.all">
+		<for list="${plugins}" param="project">
+			<sequential>
+				<copy todir="${updatesite.plugins}">
+					<fileset dir="${build.basedir}/${prefix}.@{project}/dist">
+						<include name="*_${release}.jar"/>
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="featuredist.all"
+		description=""
+		depends="featurejar.all">
+		<for list="${features}" param="project">
+			<sequential>
+				<copy todir="${updatesite.features}">
+					<fileset dir="${build.basedir}/${prefix}.@{project}/dist">
+						<include name="*_${release}.jar"/>
+					</fileset>
+				</copy>
 			</sequential>
 		</for>
 	</target>
