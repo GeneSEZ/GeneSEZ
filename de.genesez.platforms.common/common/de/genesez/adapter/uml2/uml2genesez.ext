@@ -121,7 +121,8 @@ private MPackage transform(Package p, MModel this) :
 		case p.isIgnoredPackage() : Void
 		// reject package by name when used as container for external classes (isContainerForExternalClasses)
 		// reject package by stereotype when used as container for external classes
-		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Class ).makeExternal()
+		case p.isContainerForExternalClasses() : 
+			p.ownedElement.typeSelect( Classifier ).makeExternal()
 		// else transform the package
 		default : nestedPackage.add( p.makePackage() )
 	} ->
@@ -137,7 +138,7 @@ private MPackage transform(Package p, MModel this) :
 private MPackage transform(Package p, MPackage this) :
 	switch {
 		// reject package by stereotype when used as container for external classes
-		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Class ).makeExternal()
+		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
 		// else transform the package
 		default : nestedPackage.add( p.makePackage() )
 	} ->
@@ -152,10 +153,8 @@ private MPackage transform(Package p, MPackage this) :
  */
 private MClassifier transform(Classifier c, MModel this) :
 	switch {
-		// check if classifier should be mapped to an external class
-		case mapClassesInModelToExternal() : c.makeExternal()
-		// check if classifier has stereotype used to indicate external classes
-		case c.isExternalClass() : c.makeExternal()
+		// check if classifier is an external type
+		case c.isExternalType() : c.makeExternal()
 		default : classifier.add( c.makeClassifier() )
 	} ->
 	this;
@@ -168,9 +167,10 @@ private MClassifier transform(Classifier c, MModel this) :
  * @return	the transformed classifier
  */
 private MClassifier transform(Classifier c, MPackage this) :
-	// check if classifier has stereotype used to indicate external classes
+	trace( "transform [ " + c.metaType + " ] - " + c ) ->
 	switch {
-		case c.isExternalClass() : c.makeExternal()
+		// check if classifier is an external type
+		case c.isExternalType() : c.makeExternal()
 		default : classifier.add( c.makeClassifier() )
 	} ->
 	this;
@@ -183,14 +183,13 @@ private MClassifier transform(Classifier c, MPackage this) :
  */
 private MType makeType(Type this) :
 	debug("transform [ " + metaType + " ] " + this) ->
+	trace("    isTemplateParameter: " + isTemplateParameter()) ->
+	trace("    isExternalType:      " + isExternalType()) ->
 	switch {
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
 		// external class
-		case (metaType == Class || metaType == Interface) 
-			&& ( ((Classifier)this).isExternalClass() 
-				|| (mapClassesInModelToExternal() && ((Classifier)this).isRootClassifier())
-			) : ((Classifier)this).makeExternal()
+		case isExternalType() : ((Classifier)this).makeExternal()
 		// primitive type
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
 		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
@@ -233,6 +232,7 @@ private create MPackage makePackage(Package p) :
  * @return	the GeneSEZ class
  */
 private create MClass makeClassifier(Class c) :
+	trace( "make [ " + metaType + " ] - " + c ) ->
 	// basic element properties
 	transformBasics(c) ->
 	// properties
@@ -249,6 +249,7 @@ private create MClass makeClassifier(Class c) :
  * @return	the GeneSEZ interface
  */
 private create MInterface makeClassifier(Interface i) :
+	trace( "make [ " + metaType + " ] - " + i ) ->
 	// basic element properties
 	transformBasics(i) ->
 	// properties
@@ -265,6 +266,7 @@ private create MInterface makeClassifier(Interface i) :
  * @return	the GeneSEZ enumeration
  */
 private create MEnumeration makeClassifier(Enumeration e) :
+	trace( "make [ " + metaType + " ] - " + e ) ->
 	// basic element properties
 	transformBasics(e) ->
 	// properties
@@ -282,6 +284,7 @@ private create MEnumeration makeClassifier(Enumeration e) :
  * @return	the GeneSEZ datatype
  */
 private create MDataType makeClassifier(DataType d) :
+	trace( "make [ " + metaType + " ] - " + d ) ->
 	// basic element properties
 	transformBasics(d) ->
 	// properties
@@ -792,8 +795,13 @@ private boolean isRootClassifier(Classifier this) :
  * checks if a classifier should be transformed into an external type
  * @return	true if the uml classifier should be transformed to a GeneSEZ external type
  */
-private boolean isExternalClass(Classifier this) :
-	getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) );
+private boolean isExternalType(Type this) :
+	// is annotated with stereotype to mark as external
+	getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) )
+	// or is root classifier + all classes in model are treated as externals
+	|| ( mapClassesInModelToExternal() && ((Classifier)this).isRootClassifier() )
+	// or is contained in a package which is a container for external classes
+	|| ( package.isContainerForExternalClasses() );
 
 /**
  * splits a comma separated list of values into a list of strings and 
