@@ -45,6 +45,67 @@ String getGenericList(List[MGeneric] l) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	comment handling
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * builds a string from a list of comments, by placing an empty line between the comments and nested comments
+ * @return	the comment string
+ * @see		comment(String, String)
+ */
+String comment(List[MComment] this) :
+	comment("\n\n", "\n\n");
+
+/**
+ * builds a string from a list of comments
+ * @param	commentSeparator		separator which is placed between comments
+ * @param	nestedCommentSeparator	separator which is placed between a comment and it's nested comment
+ * @return	the comment string
+ */
+String comment(List[MComment] this, String commentSeparator, String nestedCommentSeparator) :
+	JAVA de.genesez.platforms.common.Conversion.comment(java.util.List, java.lang.String, java.lang.String);
+
+/**
+ * formats a list of comments by using the asterix (*) as line prefix and the newline character as line suffix
+ * @return	the formatted comment string
+ * @see		format(List[MComment], String, String)
+ */
+String format(List[MComment] this) : 
+	format(" * ", "\n");
+
+/**
+ * formats a list of comments by using the standard comment separators
+ * @param	linePrefix	prefix which is prepended to each line of the comment
+ * @param	lineSuffix	suffix which is appended to each line of the comment
+ * @return	the formatted comment string
+ * @see		comment(List[MComment])
+ */
+String format(List[MComment] this, String linePrefix, String lineSuffix) :
+	comment().format(linePrefix, lineSuffix);
+
+/**
+ * formats a list of comments
+ * @param	commentSeparator		separator which is placed between comments
+ * @param	nestedCommentSeparator	separator which is placed between a comment and it's nested comment
+ * @param	linePrefix				prefix which is prepended to each line of the comment
+ * @param	lineSuffix				suffix which is appended to each line of the comment
+ * @return	the formatted comment string
+ */
+String format(List[MComment] this, String commentSeparator, String nestedCommentSeparator, String linePrefix, String lineSuffix) :
+	comment(commentSeparator, nestedCommentSeparator).format(linePrefix, lineSuffix);
+
+/**
+ * formats a string by adding a prefix + suffix to each line within the string
+ * @param	linePrefix	prefix which is prepended to each line
+ * @param	lineSuffix	suffix which is appended to each line
+ * @return	the formatted string
+ */
+String format(String this, String linePrefix, String lineSuffix) :
+	JAVA de.genesez.platforms.common.Conversion.format(java.lang.String, java.lang.String, java.lang.String);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	file names, file paths + directory paths
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
