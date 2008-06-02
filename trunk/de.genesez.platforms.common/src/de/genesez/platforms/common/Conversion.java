@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.genesez.metamodel.gcore.MComment;
+import de.genesez.metamodel.gcore.MElement;
 import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MPackage;
 import de.genesez.platforms.common.log.GenesezLogger;
@@ -37,15 +38,27 @@ public class Conversion {
 		}
 		return fqn.toString();
 	}
-	
+
 	/**
-	 * builds the comment string
+	 * builds the comment text of an element
 	 * @param	comments				a list of comments to process (usually associated with an element)
 	 * @param	commentSeparator		string which is used as separator between the comments
 	 * @param	nestedCommentSeparator	string which is used as separator between a comment and it's nested comment
 	 * @return	the comment string
 	 */
-	public static String comment(List<MComment> comments, String commentSeparator, String nestedCommentSeparator) {
+	public static String comment(MElement elem, String commentSeparator, String nestedCommentSeparator) {
+		List<MComment> comments = elem.getOwnedComment();
+		return comment(comments, commentSeparator, nestedCommentSeparator);
+	}
+
+	/**
+	 * builds the comment text from a list of comments
+	 * @param	comments				a list of comments to process (usually associated with an element)
+	 * @param	commentSeparator		string which is used as separator between the comments
+	 * @param	nestedCommentSeparator	string which is used as separator between a comment and it's nested comment
+	 * @return	the comment string
+	 */
+	private static String comment(List<MComment> comments, String commentSeparator, String nestedCommentSeparator) {
 		StringBuffer result = new StringBuffer();
 		for (MComment c : comments) {
 			// obtain annotation and only append if it's not null to avoid a NullPointerException
