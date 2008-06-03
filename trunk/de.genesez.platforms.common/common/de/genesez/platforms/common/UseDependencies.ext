@@ -15,7 +15,16 @@ import gcore;
  * @return	the same model as given
  */
 MModel addUseDependencies(MModel this) :
-	nestedPackage.classifier.process() ->
+	process() ->
+	this;
+
+/**
+ * processes all subpackages + classifiers within a package
+ * @return	the same package as given
+ */
+private MPackage process(MPackage this) :
+	nestedPackage.process() ->
+	classifier.process() ->
 	this;
 
 /**
