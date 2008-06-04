@@ -1,1 +1,0 @@
-/** * <html>;   <head>; ;   </head>;   <body>;     <p>;       contains some additional parts;     </p>;   </body>; </html>;  */package base.parts;
