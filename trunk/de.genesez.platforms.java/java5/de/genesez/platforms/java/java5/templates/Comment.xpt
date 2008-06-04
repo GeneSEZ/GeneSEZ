@@ -13,6 +13,7 @@
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 «REM» useful helper for current user + timestamp «ENDREM»
 «EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
@@ -27,11 +28,11 @@
 	is used for the package summary
 «ENDREM»
 «DEFINE Package FOR MPackage -»
-«FILE filePath() + fileSeparator() + "package-info.java"»
+«FILE filePath( basePath() ) + fileSeparator() + "package-info.java"»
 /**
- * «ownedComment.getCommentText()»
+«comment().format() -»
  */
-package «packageDeclaration() -»;
+package «packageDeclaration( basePackage() ) -»;
 «ENDFILE»
 «ENDDEFINE»
 
@@ -238,6 +239,7 @@ package «packageDeclaration() -»;
 «ENDREM»
 «DEFINE Operation FOR MOperation -»
 	/**
+	«PROTECT CSTART '<!-- ' CEND ' -->' ID ("test." + xmiGuid) DISABLE»
 	«IF hasComment() -»
 	 * «ownedComment.getCommentText()»
 	«ENDIF -»
@@ -245,6 +247,7 @@ package «packageDeclaration() -»;
 	«EXPAND _Params FOREACH parameter -»
 	«EXPAND _Return -»
 	«EXPAND _Exceptions FOREACH raisedException -»
+	«ENDPROTECT»
 	 */
 «ENDDEFINE»
 
