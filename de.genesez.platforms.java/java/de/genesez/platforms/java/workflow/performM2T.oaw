@@ -14,6 +14,7 @@
 		$aspectScripts		comma separated list of scripts with aspect advices for Xtend AOP
 		$excludePackages	comma or semicola separated list with packages to exclude from code generation
 							(full qualified package names, ', ' or '; ' are also permitted)
+		$useModelNameAsBasePackage	boolean which indicates if the model name is used as base package
 		$basePackage		the base package for source code artefacts
 		$generateSectionComments	boolean flag which indicates if section comments are generated or not
 		$typeMappingFile	name of the xml type mapping file
@@ -44,11 +45,14 @@
 		<!-- exclude packages from code gen -->
 		<globalVarDef name="excludePackages" value="'${excludePackages}'"/>
 		
+		<!-- boolean which indicates if the model name is used as base package -->
+		<globalVarDef name="useModelNameAsBasePackage" value="${useModelNameAsBasePackage}"/>
+		
 		<!-- base package to use for generated artefacts -->
 		<globalVarDef name="basePackage" value="'${basePackage}'"/>
 		
 		<!-- boolean which indicates if section comments are generated or not -->
-		<globalVarDef name="generateSectionComments" value="'${generateSectionComments}'"/>
+		<globalVarDef name="generateSectionComments" value="${generateSectionComments}"/>
 		
 		<!-- make config file accessible as global variable -->
 		<globalVarDef name="configFile" value="'${configFile}'"/>
@@ -72,13 +76,13 @@
 			organizeImports="true"
 			format="true" -->
 		<!-- use eclipse beautifier with eclipse settings -->
-		<beautifier
+		<!-- beautifier
 			class="org.openarchitectureware.xpand2.output.JavaBeautifier"
 			configFile="../de.genesez.platforms.java/java/de/genesez/platforms/java/workflow/eclipse.java.formatter.settings.xml" />
 		<beautifier
 			class="de.genesez.platforms.java.m2t.JavaImportBeautifier" />
 		<beautifier
-			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
+			class="org.openarchitectureware.xpand2.output.XmlBeautifier" / -->
 		
 	</component>
 
