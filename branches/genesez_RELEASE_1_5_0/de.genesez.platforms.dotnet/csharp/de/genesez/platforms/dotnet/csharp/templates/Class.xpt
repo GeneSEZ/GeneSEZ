@@ -26,9 +26,9 @@
 «DEFINE Root FOR MClass-»
 	«EXPAND _Class»
 	{
+		«IF hasConstantFields()»«EXPAND _ConstantFields»«ENDIF-»
 		«IF hasStaticFields()»«EXPAND _StaticFields»«ENDIF-»
 		«IF hasPrivateFields()»«EXPAND _PrivateFields»«ENDIF-»
-		«IF hasPublicFields()»«EXPAND _PublicFields»«ENDIF-»
 		«IF hasProperties()»«EXPAND _Properties»«ENDIF-»
 		«IF hasConstructors()»«EXPAND _Constructors»«ENDIF-»
 		«IF hasAbstractMethods()»«EXPAND _AbstractMethods»«ENDIF-»
@@ -63,6 +63,17 @@
 
 
 «REM»
+	generate a region for constant fields
+«ENDREM»
+«DEFINE _ConstantFields FOR MClass-»
+		#region Constant Fields
+		«EXPAND Attribute::FieldDecl FOREACH constantFields()»
+		#endregion
+		
+«ENDDEFINE»
+
+
+«REM»
 	generate a region for static fields
 «ENDREM»
 «DEFINE _StaticFields FOR MClass-»
@@ -80,17 +91,6 @@
 		#region Private Fields
 		«EXPAND Attribute::FieldDecl FOREACH privateFields()-»
 		«EXPAND Association::FieldDecl FOREACH associations()-»
-		#endregion
-		
-«ENDDEFINE»
-
-
-«REM»
-	generate a region for public fields
-«ENDREM»
-«DEFINE _PublicFields FOR MClass-»
-		#region Public Fields
-		«EXPAND Attribute::FieldDecl FOREACH publicFields()-»
 		#endregion
 		
 «ENDDEFINE»
