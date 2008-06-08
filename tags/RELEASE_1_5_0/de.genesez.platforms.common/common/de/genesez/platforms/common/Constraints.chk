@@ -1,0 +1,80 @@
+/**
+ * validates a GeneSEZ model
+ * 
+ * currently covered:
+ * - realizations of interfaces
+ * - abstract + final classifiers, operations
+ * - abstract operations must be contained within abstract classifiers
+ * - constructor + destructor return type, parameters of destructors
+ * 
+ * @author	tobias haubold
+ * @date	2008-05-26
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use helper to access model information more easily
+extension de::genesez::platforms::common::AccessHelper;
+
+/**
+ * checks if an interface has realizations
+ * @return	false, if the interface has realizations, otherwise true
+ */
+context MInterface ERROR "GeneSEZ: the realizations '" + realization.name() + "' of the interface '" + name + "' will be ignored; interfaces cannot have realizations!" :
+	realization.isEmpty;
+
+/**
+ * checks if a classifier is both, abstract + final
+ * @return	false, if the classifier is abstract + final, otherwise true
+ */
+context MClassifier ERROR "GeneSEZ: the classifier '" + name + "' cannot be both, 'final' and 'abstract'" :
+	!( abstract && final );
+
+/**
+ * checks if a non-abstract classifier has abstract operations
+ * @return	false, if the classifier is not abstract and has abstract operations, otherwise true
+ */
+context MClassifier WARNING "GeneSEZ: the classifier '" + name + "' cannot have abstract operations: '" + operation.select( e| e.abstract == true ).name + "' !" :
+	!( !abstract && operation.exists( e| e.abstract == true ) );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	operations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if an operation is both, abstract + final
+ * @return	false, if the operation is both, abstract + final, otherwise true
+ */
+context MOperation ERROR "GeneSEZ: the operation '" + classifier.name + "::" + name + "' cannot be both, 'final' and 'abstract'" :
+	!( abstract && final );
+
+/**
+ * checks if an abstract operation is contained in an abstract class
+ * @return	false, if the operation is abstract and not within an abstract class, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the abstract operation '" + classifier.name + "::" + name + "' MUST be contained within an abstract class, NOT within the non-abstract class '" + classifier.name + "' !" :
+	!( abstract && !classifier.abstract );
+
+/**
+ * checks if an constructor operation has a return type set
+ * @return	false, if the constructor has a return type, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the constructor operation '" + name + "' cannot have a return type ('" + returnType + "') - it will be ignored!" :
+	!( isConstructor() && returnType != null && returnType.name().toLowerCase() != "void" );
+
+/**
+ * checks if an destructor operation has a return type set
+ * @return	false, if the destructor has a return type, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the destructor operation '" + name + "' cannot have a return type ('" + returnType + "') - it will be ignored!" :
+	!( isDestructor() && returnType != null && returnType.name().toLowerCase() != "void" );
+
+/**
+ * checks if an destructor operation has parameters
+ * @return	false, if the destructor operation has parameters, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the destructor operation '" + name + "' cannot have parameters - they will be ignored!" :
+	!( isDestructor() && parameter.size > 0 );
