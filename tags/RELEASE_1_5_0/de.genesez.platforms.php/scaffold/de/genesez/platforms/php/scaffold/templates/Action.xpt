@@ -1,0 +1,175 @@
+«REM»
+	Handles a domain class and creates an 'create', 'edit', 'list' and 'delete' action class.
+	
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
+	
+	@todo	customizable output folder for action classes
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use conversion functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
+
+«REM» use smarty naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::smarty::scripts::Naming»
+«REM» use scaffold naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scaffold::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes a class to scaffold
+	creates an edit, create + list action class
+«ENDREM»
+«DEFINE Root FOR MClass -»
+	«EXPAND _Create -»
+	«EXPAND _Edit -»
+	«EXPAND _List -»
+	«EXPAND _Delete -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates a list action class
+«ENDREM»
+«DEFINE _List FOR MClass -»
+«FILE asListActionFilename()»
+<?php
+«EXPAND _Includes -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.list.includes." + xmiGuid)»
+// TODO: put your further includes for class '«asListActionClassName()»' here
+«ENDPROTECT»
+
+class «asListActionClassName()» {
+	public static function main() {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.list.main.impl." + xmiGuid)»
+		// TODO: put your implementation for '«asListActionClassName()»::main()' here
+		«EXPAND _ListActionImpl -»
+		«ENDPROTECT»
+	}
+	
+	«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.list.own.impl." + xmiGuid)»
+	// TODO: put your further implementations for the '«asListActionClassName()»' here
+	«ENDPROTECT»
+}
+«asListActionClassName()»::main();
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	generates an create action class
+«ENDREM»
+«DEFINE _Create FOR MClass -»
+«FILE asCreateActionFilename()»
+<?php
+«EXPAND _Includes -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.create.includes." + xmiGuid)»
+// TODO: put your further includes for class '«asCreateActionClassName()»' here
+«ENDPROTECT»
+
+class «asCreateActionClassName()» {
+	public static function main() {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.create.main.impl." + xmiGuid)»
+		// TODO: put your implementation for '«asCreateActionClassName()»::main()' here
+		«ENDPROTECT»
+	}
+	
+	«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.create.own.impl." + xmiGuid)»
+	// TODO: put your further implementations for the '«asCreateActionClassName()»' here
+	«ENDPROTECT»
+}
+«asCreateActionClassName()»::main();
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	generates an edit action class
+«ENDREM»
+«DEFINE _Edit FOR MClass -»
+«FILE asEditActionFilename()»
+<?php
+«EXPAND _Includes -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.edit.includes." + xmiGuid)»
+// TODO: put your further includes for class '«asEditActionClassName()»' here
+«ENDPROTECT»
+
+class «asEditActionClassName()» {
+	public static function main() {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.edit.main.impl." + xmiGuid)»
+		// TODO: put your implementation for '«asEditActionClassName()»::main()' here
+		«ENDPROTECT»
+	}
+	
+	«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.edit.own.impl." + xmiGuid)»
+	// TODO: put your further implementations for the '«asCreateActionClassName()»' here
+	«ENDPROTECT»
+}
+«asEditActionClassName()»::main();
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	generates a delete action class
+«ENDREM»
+«DEFINE _Delete FOR MClass -»
+«FILE asDeleteActionFilename()»
+<?php
+«EXPAND _Includes -»
+«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.delete.includes." + xmiGuid)»
+// TODO: put your further includes for class '«asDeleteActionClassName()»' here
+«ENDPROTECT»
+
+class «asDeleteActionClassName()» {
+	public static function main() {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.delete.main.impl." + xmiGuid)»
+		// TODO: put your implementation for '«asDeleteActionClassName()»::main()' here
+		«ENDPROTECT»
+	}
+	
+	«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.delete.own.impl." + xmiGuid)»
+	// TODO: put your further implementations for the '«asDeleteActionClassName()»' here
+	«ENDPROTECT»
+}
+«asDeleteActionClassName()»::main();
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generates the include for the 'bootstrap' file
+«ENDREM»
+«DEFINE _Includes FOR MClass -»
+require_once '«bootstrapPath()»';
+«ENDDEFINE»
+
+«REM»
+	generates the implementation for the list action
+	just to show the possibilities of scaffolding :-)
+«ENDREM»
+«DEFINE _ListActionImpl FOR MClass -»
+		«EXPAND Doctrine::Fetch('$query', asPhpVariablePlural()) -»
+		«EXPAND Smarty::Assign(asSmartyTemplateVariablePlural(), asPhpVariablePlural()) -»
+		«EXPAND Smarty::Display(asTemplateName("list")) -»
+«ENDDEFINE»
+
