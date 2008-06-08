@@ -1,0 +1,306 @@
+//	based on genesez meta model
+import gcore;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ *
+ * The following statements are related to MInterface
+ * 
+ */
+
+/**
+ * return if an interface has supertypes
+ * @param	interface	an interface
+ * @return	true, if supertypes exist
+ */
+boolean hasSupertypes(MInterface interface) :
+	0 != interface.supertype.size;
+
+/**
+ * return if an interface has public fields
+ * @param	interface	an interface
+ * @return	true, if public fields exist
+ */
+boolean hasPublicFields(MInterface interface) :
+	0 != publicFields(interface).size;
+
+/**
+ * return if an interface has associations
+ * @param	interface	an interface
+ * @return	true, if associations exist
+ */
+boolean hasAssociations(MInterface interface) :
+	0 != associations(interface).size;
+
+/**
+ * return if an interface has properties
+ * @param	interface	an interface
+ * @return	true, if properties exist
+ */
+boolean hasProperties(MInterface interface) :
+	0 != properties(interface).size || 0 != associationProperties(interface).size;
+
+/**
+ * return if an interface has public methods
+ * @param	interface	an interface
+ * @return	true, if public methods exist
+ */
+boolean hasPublicMethods(MInterface interface) :
+	0 != publicMethods(interface).size || 0 != associations(interface).size;
+
+/**
+ * returns the supertypes of an interface
+ * @param	interface	an interface
+ * @return	a list of interfaces
+ */
+List[MInterface] supertypes(MInterface interface) :
+	interface.supertype.typeSelect(MInterface);
+
+/**
+ * returns the public fields of an interface
+ * @param	interface	an interface
+ * @return	a list of attributes
+ */
+List[MAttribute] publicFields(MInterface interface) :
+	interface.property.typeSelect(MAttribute).select(e|e.visibility == "public" && e.static);
+
+/**
+ * returns the properties of an interface
+ * @param	interface	an interface
+ * @return	a list of attributes
+ */
+List[MAttribute] properties(MInterface interface) :
+	interface.property.typeSelect(MAttribute).select(e| ! (e.visibility == "public" && e.static) );
+
+/**
+ * returns the associations of an interface
+ * @param	interface	an interface
+ * @return	a list of associations
+ */
+List[MAssociationRole] associations(MInterface interface) :
+	interface.property.typeSelect(MAssociationRole);
+
+/**
+ * returns the association properties of an interface
+ * @param	interface	an interface
+ * @return	a list of associations
+ */
+List[MAssociationRole] associationProperties(MInterface interface) :
+	interface.property.typeSelect(MAssociationRole);
+/*.select(e|e.stereotype.name.contains("accessor"));*/
+
+/**
+ * returns the public methods of an interface
+ * @param	interface	an interface
+ * @return	a list of public methods
+ */
+List[MOperation] publicMethods(MInterface interface) :
+	interface.operation.select(e|e.name != interface.name && e.visibility == "public");
+
+/**
+ *
+ * The following statements are related to MClass
+ * 
+ */
+
+/**
+ * return if a class has supertypes
+ * @param	class	a class
+ * @return	true, if supertypes exist
+ */
+boolean hasSupertypes(MClass class) :
+	0 != class.supertype.size;
+
+/**
+ * return if a class has static fields
+ * @param	class	a class
+ * @return	true, if static fields exist
+ */
+boolean hasStaticFields(MClass class) :
+	0 != staticFields(class).size;
+
+/**
+ * return if a class has constant fields
+ * @param	class	a class
+ * @return	true, if constant fields exist
+ */
+boolean hasConstantFields(MClass class) :
+	0 != constantFields(class).size;
+
+/**
+ * return if a class has private fields
+ * @param	class	a class
+ * @return	true, if private fields exist
+ */
+boolean hasPrivateFields(MClass class) :
+	0 != privateFields(class).size || 0 != associations(class).size;
+
+/**
+ * return if a class has public fields
+ * @param	class	a class
+ * @return	true, if public fields exist
+ */
+boolean hasPublicFields(MClass class) :
+	0 != publicFields(class).size;
+
+/**
+ * return if a class has associations
+ * @param	class	a class
+ * @return	true, if associations exist
+ */
+boolean hasAssociations(MClass class) :
+	0 != associations(class).size;
+
+/**
+ * return if a class has properties
+ * @param	class	a class
+ * @return	true, if properties exist
+ */
+boolean hasProperties(MClass class) :
+	0 != properties(class).size || 0 != associationProperties(class).size;
+
+/**
+ * return if a class has constructors
+ * @param	class	a class
+ * @return	true, if constructors exist
+ */
+boolean hasConstructors(MClass class) :
+	0 != constructors(class).size;
+
+/**
+ * return if a class has abstract methods
+ * @param	class	a class
+ * @return	true, if abstract methods exist
+ */
+boolean hasAbstractMethods(MClass class) :
+	0 != abstractMethods(class).size;
+
+/**
+ * return if a class has static methods
+ * @param	class	a class
+ * @return	true, if static methods exist
+ */
+boolean hasStaticMethods(MClass class) :
+	0 != staticMethods(class).size;
+
+/**
+ * return if a class has public methods
+ * @param	class	a class
+ * @return	true, if public methods exist
+ */
+boolean hasPublicMethods(MClass class) :
+	0 != publicMethods(class).size;
+
+/**
+ * return if a class has private methods
+ * @param	class	a class
+ * @return	true, if private methods exist
+ */
+boolean hasPrivateMethods(MClass class) :
+	0 != privateMethods(class).size;
+
+/**
+ * returns the supertypes of a class
+ * @param	class	a class
+ * @return	the supertype list
+ */
+List[MClassifier] supertypes(MClass class) :
+	class.supertype.typeSelect(MClass).size == 0
+	? class.supertype.typeSelect(MInterface)
+	: {class.supertype.typeSelect(MClass).first()}
+		.addAll(class.supertype.typeSelect(MInterface));
+
+/**
+ * returns the static fields of a class
+ * @param	class	a class
+ * @return	a list of attributes
+ */
+List[MAttribute] staticFields(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|e.static && !e.final);
+
+/**
+ * returns the constant fields of a class
+ * @param	class	a class
+ * @return	a list of attributes
+ */
+List[MAttribute] constantFields(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|e.static && e.final);
+
+/**
+ * returns the private fields of a class
+ * @param	class	a class
+ * @return	a list of attributes
+ */
+List[MAttribute] privateFields(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|!e.static && !e.final);
+
+/**
+ * returns the properties of a class
+ * @param	class	a class
+ * @return	a list of attributes
+ */
+List[MAttribute] properties(MClass class) :
+	class.property.typeSelect(MAttribute).select(e|!e.static && !e.final && e.visibility == "public");
+/*.select(e|e.stereotype.name.contains("accessor"));*/
+
+/**
+ * returns the associations of a class
+ * @param	class	a class
+ * @return	a list of associations
+ */
+List[MAssociationRole] associations(MClass class) :
+	class.property.typeSelect(MAssociationRole);
+
+/**
+ * returns the associations properties of a class
+ * @param	class	a class
+ * @return	a list of associations
+ */
+List[MAssociationRole] associationProperties(MClass class) :
+	class.property.typeSelect(MAssociationRole);
+/*.select(e|e.stereotype.name.contains("accessor"));*/
+
+/**
+ * returns the constructors of a class
+ * @param	class	a class
+ * @return	a list of constructors
+ */
+List[MOperation] constructors(MClass class) :
+	class.operation.select(e|e.name == class.name);
+
+/**
+ * returns the abstract methods of a class
+ * @param	class	a class
+ * @return	a list of abstract methods
+ */
+List[MOperation] abstractMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && e.abstract);
+
+/**
+ * returns the static methods of a class
+ * @param	class	a class
+ * @return	a list of static methods
+ */
+List[MOperation] staticMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && !e.abstract && e.static);
+
+/**
+ * returns the public methods of a class
+ * @param	class	a class
+ * @return	a list of public methods
+ */
+List[MOperation] publicMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && !e.abstract && !e.static && e.visibility == "public");
+
+/**
+ * returns the private methods of a class
+ * @param	class	a class
+ * @return	a list of private methods
+ */
+List[MOperation] privateMethods(MClass class) :
+	class.operation.select(e|e.name != class.name && !e.abstract && !e.static && e.visibility == "private");
