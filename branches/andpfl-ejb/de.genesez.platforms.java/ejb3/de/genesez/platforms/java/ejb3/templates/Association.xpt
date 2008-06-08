@@ -31,12 +31,12 @@
 «DEFINE Annotation FOR MAssociationRole-»
 	«REM» OneToOne association «ENDREM»
 	«IF hasTaggedValue("ejb3Association", "associationType", "OneToOne")»
-		@OneToOne(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
+		@OneToOne(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
 		«IF !hasTaggedValue("ejb3Association", "targetEntity", "null")-»
 			, targetEntity="«taggedValue.selectFirst(e|e.tag.name == "targetEntity").value-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3Association", "cascade", "null")-»
-			, cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
+		«IF !hasTaggedValue("ejb3Association", "fetch", "EAGER") && !hasTaggedValue("ejb3Association", "fetch", "null")-»
+			, fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
 		«ENDIF-»
 		«IF hasTaggedValue("ejb3Association", "optional", "false")-»
 			, optional=«taggedValue.selectFirst(e|e.tag.name == "optional").value-»
@@ -79,12 +79,12 @@
 «REM» evaluates the stereotype ejb3ASsociation for the three many associations «ENDREM»
 «DEFINE _ManyAssociations FOR MAssociationRole-»
 	«IF !hasTaggedValue("ejb3Association", "name", "null")-»
-		(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
+		(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
 		«IF !hasTaggedValue("ejb3Association", "targetEntity", "null")-»
 			, targetEntity="«taggedValue.selectFirst(e|e.tag.name == "targetEntity").value-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3Association", "cascade", "null")-»
-			, cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
+		«IF !hasTaggedValue("ejb3Association", "fetch", "EAGER") && !hasTaggedValue("ejb3Association", "fetch", "null")-»
+			, fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
 		«ENDIF-»
 		«IF hasTaggedValue("ejb3Association", "direction", "bidirectional") && !hasTaggedValue("ejb3Association", "mappedBy", "null")-»
 			, mappedBy="«taggedValue.selectFirst(e|e.tag.name == "mappedBy").value-»"

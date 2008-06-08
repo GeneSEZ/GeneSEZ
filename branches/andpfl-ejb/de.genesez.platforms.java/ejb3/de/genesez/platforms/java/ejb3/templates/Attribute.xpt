@@ -183,8 +183,8 @@
 			«ENDIF-»
 		«ELSEIF hasTaggedValue("ejb3Persistence", "factory", "false")»
 			@PersistenceContext
-			«IF !hasTaggedValue("ejb3Persistence", "contextType", "TRANSACTION")-»
-				(type = «taggedValue.selectFirst(e|e.tag.name == "contextType").value-»)
+			«IF !hasTaggedValue("ejb3Persistence", "contextType", "null") && !hasTaggedValue("ejb3Persistence", "contextType", "TRANSACTION")-»
+				(type = PersistenceContextType.«taggedValue.selectFirst(e|e.tag.name == "contextType").value-»)
 			«ENDIF»
 		«ENDIF»
 	«ENDIF»
