@@ -50,11 +50,15 @@
 	<!-- name of the ouput xmi file -->
 	<property name="output.xmiModelFile" value="../de.genesez.BankEJB3/model-gen/BankEJB3.xmi" />
 
-	<!-- comma or semicola separated list with packages to exclude from code generation -->	
+	<!-- comma or semicola separated list (NO blanks) with packages to exclude from code generation -->	
 	<property name="output.excludePackages" value="" />
 	
 	<!-- the path where the generated file are produced -->
 	<property name="output.generatePath" value="../de.genesez.BankEJB3/src-gen" />
+	
+	<!-- the pathes where the protected region resolver scans for protected regions to save and restore 
+		 paths have to been comma or semicola seperated but with NO blank after it -->
+	<property name="output.proRegResolvePaths" value="${output.generatePath},../de.genesez.BankEJB3/test-gen" />
 	
 	<!-- name of the type mapping xml file -->
 	<property name="output.typeMappingFile" value="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
@@ -106,7 +110,7 @@
 		configFile=""
 		aspectsTemplate="${output.aspectsTemplate}"
 		outputDir="${output.generatePath}"
-		proRegDir="${output.generatePath}"
+		proRegDir="${output.proRegResolvePaths}"
 		typeMappingFile="${output.typeMappingFile}"
 	/>
 
