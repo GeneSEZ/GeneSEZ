@@ -1,0 +1,187 @@
+«REM»
+	template for JUnit class generation
+	
+	description:
+	This template evaluates the two stereotypes "junitClass" and "junitOperation"
+	of the stereotype-profile "junit". For generating a test class for a normal class 
+	just add the stereotype "junitClass" to the class of your choice.
+	For getter and setter methods there will be a special test method generated, even
+	if the stereotype "accessor" is in use. For all other operations add the stereotype
+	"junitOperation" to the chosen operation and a test-function will be generated. Also
+	you can add names to the taggedValue "name" of the stereotype "junitOperation".
+	These names will be test-operations for more complex tests of a function. For
+	limiting the execution time of a test-function the stereotype "junitOperation" have the 
+	taggedValue "timeout". Set the time in milli seconds and the test-function will be aborted
+	after running longer than the given time. The test result will be "failed".
+	
+	@author	André Pflüger
+	@date	2008/06/10
+	@version 1.0
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::junit::scripts::Conversion»
+
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» evaluate stereotypes for classes «ENDREM»
+«DEFINE Annotation FOR MClass»
+		«EXPAND _JUnitClass»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» creates a junit class for stereotype "junitClass" «ENDREM»
+«DEFINE _JUnitClass FOR MClass-»
+	«IF hasStereotype("junitClass")»
+		«FILE getTestFilename("", "Test")-»
+			/**
+			  *	templates for generation of JUnit classes have been written by
+			  *
+			  * André Pflüger
+			  * Email: admin@andre-pflueger.de
+			  * Date: 2008 Jun 10
+			  * Version: 1.0
+			  *
+			  */
+			package «getPackagePath()»;
+			import org.junit.*;
+			import static org.junit.Assert.*;
+			
+			/**
+			  * generated JUnit test class for "«mapName()»"
+			  *
+			  */
+			public class «mapName()+"Test"-» {
+				«FOREACH operation.select(e|e.hasStereotype("junitOperation")) AS ops-»
+					«FOREACH ops.taggedValue.select(e|e.tag.name == "name").value.getElements() AS names-»
+						/**
+						  * generated method for testing "«ops.name-»()"
+						  */ 
+						@Test(timeout = «ops.taggedValue.selectFirst(e|e.tag.name == "testTimeout").value-»
+						«IF !ops.hasTaggedValue("junitOperation", "testExpected", "null")-»
+							, expected=«taggedValue.selectFirst(e|e.tag.name == "testExpected").value-»
+						«ENDIF-»)
+						«IF (names != "[]" && names != "")-»
+							public void «names-»() {
+								«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_" + names)-»
+							}
+						«ELSE»
+							public void «ops.name-»Test() {
+								«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_" + ops.name)-»
+							}				
+						«ENDIF»
+					«ENDFOREACH»
+				«ENDFOREACH»
+				
+				/**
+				  * generated method for actions before all test methods run
+				  *
+				  */				
+				@Before
+				public void setUp(){
+					t1 = new «mapName()»();
+					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_setUp")-»
+				}
+				
+				/**
+				  * generated method for actions after all test methods have been run
+				  *
+				  */
+				@After
+				public void tearDown(){
+					t1 = null;
+					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_tearDown")-»
+				}
+				
+				/**
+				  * generated test method for getter and setter methods
+				  *
+				  * implemented test cases: 
+				  *		getter and setter methods are available 
+				  *		getter method is available
+				  *
+				  * the test of a variable with only a setter method is not implemented
+				  * because the author holds that variables should be private or
+				  * protected
+				  *
+				  */
+				@Test
+				public void getterSetterTest(){				
+					«FOREACH property.select(e|!e.hasStereotype("accessor") 
+							|| (!e.hasTaggedValue("accessor", "getter", "false") 
+							&&  !e.hasTaggedValue("accessor", "setter", "false"))) AS ids-»
+						«REM» if getter and setter methods are generated «ENDREM»
+						{
+							«ids.type.mapName()-» temp;
+							temp = t1.«asGetter(ids.name)-»();
+							t1.«asSetter(ids.name)-»(
+							«IF ids.type.mapName() == "String"-»
+								"test"
+							«ENDIF-»);
+							try {
+								assertEquals(
+								«IF ids.type.mapName() == "String"-»
+									"test"
+								«ENDIF-», t1.«asGetter(ids.name)-»());
+								t1.«asSetter(ids.name)-»(temp);
+							} catch (NullPointerException npe){
+								assertFalse(true);
+							}
+						}
+					«ENDFOREACH»
+					«FOREACH property.select(e|e.hasStereotype("accessor")
+							&& e.hasTaggedValue("accessor", "getter", "true")
+							&& e.hasTaggedValue("accessor", "setter", "false")) AS ids-»
+						«REM» if only getter method is generated «ENDREM»
+						{
+							«ids.type.mapName()-» temp;
+							temp = t1.«asGetter(ids.name)-»();
+							assertEquals(temp, t1.«asGetter(ids.name)-»());
+						}
+					«ENDFOREACH»
+					«REM»
+						It is not possible to test a setter without a getter method, if the 
+						variable is private or protected (that should be the normal case)						
+					«ENDREM»
+				}
+				
+				/* generated variables for testing purposes */
+				«mapName()» t1;
+				
+				«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_restOfClass")-»
+			}
+		«ENDFILE»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» generate a protected region for own implementations «ENDREM»
+«DEFINE _OwnCodeImpl(String proRegId) FOR MClass-»
+	/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
+	/* TODO: put your own testing code here */
+	
+	/* «ENDPROTECT» */
+«ENDDEFINE»
