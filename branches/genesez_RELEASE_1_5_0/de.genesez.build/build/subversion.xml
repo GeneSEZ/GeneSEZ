@@ -17,9 +17,13 @@
 
 	<!-- generate repository url -->
 	<condition property="repository"
-		value="${svn.branches}/${svn.release}"
+		value="${svn.tags}/${svn.tag}">
+		<isset property="svn.tag" />
+	</condition>
+	<condition property="repository"
+		value="${svn.branches}/${svn.branch}"
 		else="${svn.trunk}">
-		<isset property="svn.release" />
+		<isset property="svn.branch" />
 	</condition>
 
 	<target name="checkoutOrUpdate"
@@ -38,6 +42,13 @@
 				</svn>
 			</else>
 		</if>
+	</target>
+	
+	<target name="revert"
+		description="Revert changes on build project">
+		<svn>
+			<revert dir="eclipse-development"/>
+		</svn>
 	</target>
 	
 </project>

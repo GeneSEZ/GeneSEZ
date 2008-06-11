@@ -104,7 +104,7 @@
 
 	<target name="clean.all"
 		description="">
-		<for list="${projects}" param="project">
+		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
 					dir="${build.basedir}/${prefix}.@{project}"
@@ -114,6 +114,17 @@
 				</ant>
 			</sequential>
 		</for>
+		<for list="${features}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="clean"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+		<antcall target="revert" />
 	</target>
 	
 </project>
