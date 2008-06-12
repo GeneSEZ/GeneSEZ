@@ -5,17 +5,28 @@
 	<!-- import environment and required scripts -->
 	<import file="build/imports.xml"/>
 
+	<!-- public targets -->
+	
 	<target name="all"
 		description=""
-		depends="checkout.all,pluginjar.all" />
+		depends="checkout.all,createjar.all,distribute" />
 	
 	<target name="distribute"
-		description=""
-		depends="plugindist.all,featuredist.all" />
+		description="Distributes plugins and features"
+		depends="distribute.all">
+		<ant antfile="${build.file}"
+			dir="${build.basedir}/${prefix}.updatesite"
+			target="distribute"
+			inheritAll="false">
+			<property name="build.basedir" value="${build.basedir}" />
+		</ant>
+	</target>
 	
 	<target name="clean"
 		description=""
 		depends="clean.all" />
+
+	<!-- private targets -->
 	
 	<target name="checkout.all"
 		description="">
@@ -46,7 +57,7 @@
 		</for>
 	</target>
 
-	<target name="pluginjar.all"
+	<target name="createjar.all"
 		description="">
 		<for list="${plugins}" param="project">
 			<sequential>
@@ -58,10 +69,6 @@
 				</ant>
 			</sequential>
 		</for>
-	</target>
-
-	<target name="featurejar.all"
-		description="">
 		<for list="${features}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
@@ -74,9 +81,9 @@
 		</for>
 	</target>
 
-	<target name="plugindist.all"
-		description=""
-		depends="pluginjar.all">
+	<target name="distribute.all"
+		description="Distributes plugins and features"
+		depends="createjar.all">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<copy todir="${updatesite.plugins}">
@@ -86,11 +93,6 @@
 				</copy>
 			</sequential>
 		</for>
-	</target>
-
-	<target name="featuredist.all"
-		description=""
-		depends="featurejar.all">
 		<for list="${features}" param="project">
 			<sequential>
 				<copy todir="${updatesite.features}">
@@ -103,7 +105,7 @@
 	</target>
 
 	<target name="clean.all"
-		description="">
+		description="Cleaning lady">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
