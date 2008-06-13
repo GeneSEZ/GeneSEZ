@@ -1,0 +1,324 @@
+«REM»
+	Handles everything about associations
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+	@date	2007-07-13
+	
+	@todo	initialization of attributes, default value
+	@todo	replace insertIn + removeFrom of single valued types with setter
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the declaration of association attributes
+«ENDREM»
+«DEFINE Declaration FOR MClass -»
+	«EXPAND _AssocClassReferences FOR ownedAssociation -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the declaration of association attributes
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the implementation of accessor methods for an association attribute
+«ENDREM»
+«DEFINE Accessors FOR MClass -»
+	«EXPAND _AssocClassReferenceGetters FOR ownedAssociation -»
+	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
+		«EXPAND _GetterImpl FOR p -»
+		«EXPAND _InsertInImpl FOR p -»
+		«EXPAND _RemoveFromImpl FOR p -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	processes the declaration of accessor methods for an association attribute
+«ENDREM»
+«DEFINE Accessors FOR MInterface -»
+	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
+		«EXPAND _GetterDecl FOR p -»
+		«EXPAND _InsertInDecl FOR p -»
+		«EXPAND _RemoveFromDecl FOR p -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the declaration of an association attribute
+«ENDREM»
+«DEFINE _Declaration FOR MAssociationRole -»
+	«EXPAND Comment::Association -»
+	«IF !hasAssociationClass() -»
+	«IF isSingleValuedType() -»
+		private «type.mapName().asTypeName()» «asAttribute()»;
+	«ELSE -»
+		private «mapType()»<«type.mapName().asTypeName()»> «asAttribute()» = new «mapType("Implementation")»<«type.mapName().asTypeName()»>();
+	«ENDIF -»
+	«ELSE -»
+		private «mapType()»<«assocClass().asTypeName()»> «asAttribute()» = new «mapType("Implementation")»<«assocClass().mapName().asTypeName()»>();
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of a getter method for an association attribute
+«ENDREM»
+«DEFINE _GetterDecl FOR MAssociationRole -»
+	«EXPAND Comment::Getter -»
+	«IF !hasAssociationClass() -»
+	«IF isSingleValuedType() -»
+		public «type.mapName().asTypeName()» «asGetter()»();
+	«ELSE -»
+		public «mapType()»<«type.mapName().asTypeName()»> «asGetter()»();
+	«ENDIF -»
+	«ELSE -»
+		public «mapType()»<«type.mapName().asTypeName()»> «asGetter()»();
+		public «mapType()»<«assocClass().mapName().asTypeName()»> «asGetter()»«assocClass().asTypeName()»();
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the implementation of a getter method for an association attribute
+«ENDREM»
+«DEFINE _GetterImpl FOR MAssociationRole -»
+	«EXPAND Comment::Getter -»
+	«IF hasAssociationClass() -»
+	public «mapType()»<«type.mapName().asTypeName()»> «asGetter()»() {
+		«mapType("Implementation")»<«type.mapName().asTypeName()»> _result = new «mapType("Implementation")»<«type.mapName().asTypeName()»>();
+		for(«assocClass().asTypeName()» _assoc : «asAttribute()») {
+			_result.add(_assoc.«asGetter()»());
+		}
+		return _result;
+	}
+	
+	/** 
+	  * accessor to the association class objects
+	  */
+	public «mapType()»<«assocClass().asTypeName()»> «asGetter()»«assocClass().asTypeName()»() {
+		«IF unique -»
+		return java.util.Collections.unmodifiableSet(«asAttribute()»);
+		«ELSE -»
+		return java.util.Collections.unmodifiableList(«asAttribute()»);
+		«ENDIF -»
+	}
+	«ELSE -»
+	«IF isSingleValuedType() -»
+	public «type.mapName().asTypeName()» «asGetter()»() {
+		return «asAttribute()»;
+	}
+	«ELSE -»
+	public «mapType()»<«type.mapName().asTypeName()»> «asGetter()»() {
+		«IF unique -»
+		return java.util.Collections.unmodifiableSet(«asAttribute()»);
+		«ELSE -»
+		return java.util.Collections.unmodifiableList(«asAttribute()»);
+		«ENDIF -»
+	}
+	«ENDIF -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of the setter method for an association attribute
+	only if it's a single valued type
+«DEFINE _SetterDecl FOR MAssociationRole -»
+«IF isSingleValuedType() -»
+	public void «asSetter()»(«type.mapName().asTypeName()» _in);
+«ENDIF -»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	generates the implementation of the setter method for an association attribute
+	only if it's a single valued type
+«DEFINE _SetterImpl FOR MAssociationRole -»
+«IF isSingleValuedType() -»
+		if («asAttribute()» == _in) {
+			return;
+		}
+		«asAttribute()» = _in;
+		«IF opposite != null -»
+		if (_in != null) {
+			_in.«opposite.asSetter()»(this);
+		}
+		«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	generates the declaration of the 'insert in' method for an association attribute
+	only if it has a collection type
+«ENDREM»
+«DEFINE _InsertInDecl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::InsertIn -»
+	«IF hasAssociationClass() -»
+	public void «asInsertIn()»(«type.mapName().asTypeName()» _in, «assocClass().asTypeName()» -at);
+	«ELSE -»
+	public void «asInsertIn()»(«type.mapName().asTypeName()» _in);
+	«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the 'insert in' method for an association attribute with a collection type
+	only if it has a collection type
+«ENDREM»
+«DEFINE _InsertInImpl FOR MAssociationRole -»
+«EXPAND Comment::InsertIn -»
+«IF hasAssociationClass() -»
+	/**
+	 * insert into association, generate linked association class object
+	 * @param _other partner object
+	 * @return newly generated linked association class object
+	 */
+	public «assocClass().asTypeName()» «asInsertIn()»(«type.mapName().asTypeName()» _other) {
+		«IF association.end.first() != this -»
+			«assocClass().asTypeName()» _assoc = new «assocClass().asTypeName()»(this, _other);
+		«ELSE -»
+			«assocClass().asTypeName()» _assoc = new «assocClass().asTypeName()»(_other, this);
+		«ENDIF -»
+		«asAttribute()».add(_assoc);
+	«IF opposite != null -»
+		_other.«opposite.asInsertIn()»(_assoc); 
+	«ENDIF -»
+		return _assoc;
+	}
+	
+	/**
+	 * insert linked association class object into association
+	 * @param _other partner object
+	 * @return newly generated linked association class object
+	 */
+	public void «asInsertIn()»(«assocClass().asTypeName()» _assoc) {
+		if («asAttribute()».contains(_assoc)) {
+				return;
+		}
+		if(_assoc.«opposite.asGetter()»() != this) {
+			throw new RuntimeException("inconsistent association object");
+		}
+		«asAttribute()».add(_assoc);
+	}
+«ELSE -»
+	public void «asInsertIn()»(«type.mapName().asTypeName()» _in) {
+	«IF isSingleValuedType() -»
+		if («asAttribute()» == _in) {
+			return;
+		}
+		«IF opposite != null-»
+			if («asAttribute()» != null) {
+				«asAttribute()».«opposite.asRemoveFrom()»(this);
+			}
+		«ENDIF-»
+		«asAttribute()» = _in;
+	«ELSE-»
+		if («asAttribute()».contains(_in)) {
+			return;
+		}
+		«asAttribute()».add(_in);
+	«ENDIF-»
+	«IF opposite != null -»
+		_in.«opposite.asInsertIn()»(this);
+	«ENDIF -»
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of the 'remove from' method for an association attribute
+	only if it has a collection type
+«ENDREM»
+«DEFINE _RemoveFromDecl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::RemoveFrom -»
+	public void «asRemoveFrom()»(«type.mapName().asTypeName()» _ex);
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the 'remove from' method for an association attribute with a collection type
+	only if it has a collection type
+«ENDREM»
+«DEFINE _RemoveFromImpl FOR MAssociationRole -»
+«EXPAND Comment::RemoveFrom -»
+«IF !hasAssociationClass() -»
+	public void «asRemoveFrom()»(«type.mapName().asTypeName()» _ex) {
+		«IF isSingleValuedType() -»
+		if («asAttribute()» != _ex) {
+			return;
+		}
+		«asAttribute()» = null;
+		«ELSE -»
+		if (!«asAttribute()».contains(_ex)) {
+			return;
+		}
+		«asAttribute()».remove(_ex);
+		«ENDIF -»
+		«IF opposite != null -»
+			_ex.«opposite.asRemoveFrom()»(this);
+		«ENDIF -»
+	}
+«ELSE -»
+	/**
+	 * remove entry from association indexed by its association class object
+	 */
+	public void «asRemoveFrom()»(«assocClass().asTypeName()» _assoc) {
+		if (!«asAttribute()».contains(_assoc)) {
+			return;
+		}
+		«asAttribute()».remove(_assoc);
+		«IF opposite != null -»
+			_assoc.«asGetter()»().«opposite.asRemoveFrom()»(_assoc);
+		«ENDIF -»
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the attribute for the association class
+«ENDREM»
+«DEFINE _AssocClassReferences FOR MAssociation -»
+«FOREACH end AS aend-»
+	/** reference attribute to the managed association end */
+	private «aend.type.mapName().asTypeName()» «asAttribute(aend)»;
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«REM»
+	generates the getter method for the association class
+«ENDREM»
+«DEFINE _AssocClassReferenceGetters FOR MAssociation -»
+«FOREACH end AS aend-»
+	/** getter of reference attribute to the managed association end «aend.asAttribute()» */
+	public «aend.type.mapName().asTypeName()» «aend.asGetter()»() {
+		return «asAttribute(aend)»;
+	}
+«ENDFOREACH-»
+«ENDDEFINE»
