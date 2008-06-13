@@ -29,7 +29,7 @@
 		description="Build de.genesez.platforms.common"
 		depends="platforms.common.compile">
 	</target>
-
+	
 	<target name="pluginjar"
 		description="Create the plugin jar for de.genesez.platforms.common"
 		depends="build">
@@ -40,8 +40,7 @@
 			<fileset dir="${basedir}">
 				<include name="plugin.properties"/>
 			</fileset>
-			<fileset dir="${common.dir}" includes="**/*" />
-			<fileset dir="${bin.dir}" includes="**/*" />
+			<fileset dir="${dist.dir}" includes="platforms.common.jar" />
 			<fileset dir="${lib.dir}" includes="**/*" />
 		</jar>
 	</target>
@@ -62,6 +61,11 @@
 			destdir="${bin.dir}"
 			classpathref="de.genesez.platforms.common.classpath"
 			debug="on" />
+		<jar destfile="${dist.dir}/platforms.common.jar"
+			compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+			<fileset dir="${common.dir}" includes="**/*" />
+		</jar>
 	</target>
 
 </project>
