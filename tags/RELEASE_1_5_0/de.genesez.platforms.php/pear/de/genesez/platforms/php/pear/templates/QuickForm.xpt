@@ -1,0 +1,139 @@
+«REM»
+	Handles all classes and generates an html formular definition based on PEAR::HTML_QuickForm.
+	
+	currently covered:
+	- just text fields for simple types + a submit button
+	
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
+	
+	@todo	customizable output folder for form classes
+	@todo	remove static 'password' field check
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» use conversion functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use pear naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::pear::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of a model to generate forms from classes
+	rejects all ignored packages from further processing
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	reject all data types from further processing
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier.reject( e| e.metaType == MDataType || e.metaType == MEnumeration )»
+«ENDDEFINE»
+
+«REM»
+	interfaces are not mapped to QuickForm fomular definitions!
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«fatal("'MInterfaces's are not mapped to a QuickForm formular definitions!")»
+«ENDDEFINE»
+
+«REM»
+	should not happend, because 'MClassifier' is an abstract class!
+	it's just there for error-free templates :-)
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("'MClassifier's are currently not supported by the QuickForm formular definition templates!")»
+«ENDDEFINE»
+
+«REM»
+	generates the formular definition
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE asFormFileName() -»
+<?php
+
+require_once 'HTML/QuickForm.php';
+«EXPAND _Class -»
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates a form class
+«ENDREM»
+«DEFINE _Class FOR MClass -»
+class «asFormTypeName()» {
+	«EXPAND _BuildForm -»
+}
+«ENDDEFINE»
+
+«REM»
+	generates a method which builds the form
+«ENDREM»
+«DEFINE _BuildForm FOR MClass -»
+	public static function buildForm( $defaultValues = array() ) {
+		$form = new HTML_QuickForm('«asFormName()»');
+		$form->setDefaults( $defaultValues );
+		
+		$form->addElement('hidden', 'id');
+		«EXPAND _Element FOREACH property.select( e| e.multiplicity == 1 ) -»
+		
+		«EXPAND _Filter FOREACH property.select( e| e.multiplicity == 1 ) -»
+		
+		«PROTECT CSTART '/* ' CEND ' */' ID ("pear.quickform.buildform." + xmiGuid)»
+		// TODO: further formular definitions for class '«asFormTypeName()»'
+		«ENDPROTECT»
+		
+		$form->addElement('submit', 'save', 'save');
+		
+		return $form;
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a formular element
+«ENDREM»
+«DEFINE _Element FOR MProperty -»
+		«IF hasTaggedValue("html", "type", "PASSWORD") -»
+		$form->addElement('password', '«asFormElementName()»', 'Enter the «asFormElementName()»');
+		«ELSE -»
+		$form->addElement('text', '«asFormElementName()»', 'Enter the «asFormElementName()»');
+		«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates filters
+«ENDREM»
+«DEFINE _Filter FOR MProperty -»
+		$form->applyFilter('«asFormElementName()»', 'trim');
+«ENDDEFINE»
+
