@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.build" basedir="." default="all">
+	
+	<!-- import environment and required scripts -->
+	<import file="build/imports.xml"/>
+
+	<!-- public targets -->
+	
+	<target name="all"
+		description=""
+		depends="checkout.all,createjar.all,distribute" />
+	
+	<target name="distribute"
+		description="Distributes plugins and features"
+		depends="distribute.all">
+		<ant antfile="${build.file}"
+			dir="${build.basedir}/${prefix}.updatesite"
+			target="distribute"
+			inheritAll="false">
+			<property name="build.basedir" value="${build.basedir}" />
+			<property name="UpdateSiteStagingLocation" value="${updatesite.location}" />
+		</ant>
+	</target>
+	
+	<target name="clean"
+		description=""
+		depends="clean.all" />
+
+	<!-- private targets -->
+	
+	<target name="checkout.all"
+		description="">
+		<for list="${checkout}" param="project">
+			<sequential>
+				<available property="dir.@{project}"
+					file="${build.basedir}/${prefix}.@{project}"
+					type="dir" />
+				<antcall target="checkoutOrUpdate">
+					<param name="project" value="${prefix}.@{project}" />
+					<param name="update" value="${dir.@{project}}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+	
+	<target name="build.all"
+		description="">
+		<for list="${plugins}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="build"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="createjar.all"
+		description="">
+		<for list="${plugins}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="pluginjar"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+		<for list="${features}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="featurejar"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="distribute.all"
+		description="Distributes plugins and features"
+		depends="createjar.all">
+		<for list="${plugins}" param="project">
+			<sequential>
+				<copy todir="${updatesite.plugins}">
+					<fileset dir="${build.basedir}/${prefix}.@{project}/dist">
+						<include name="*_${release}.jar"/>
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+		<for list="${features}" param="project">
+			<sequential>
+				<copy todir="${updatesite.features}">
+					<fileset dir="${build.basedir}/${prefix}.@{project}/dist">
+						<include name="*_${release}.jar"/>
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="clean.all"
+		description="Cleaning lady">
+		<for list="${plugins}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="clean"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+		<for list="${features}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="clean"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+		<antcall target="revert" />
+	</target>
+	
+</project>
