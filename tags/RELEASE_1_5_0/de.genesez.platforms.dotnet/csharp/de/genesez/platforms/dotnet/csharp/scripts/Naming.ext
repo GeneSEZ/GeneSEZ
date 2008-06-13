@@ -1,0 +1,252 @@
+/**
+ * naming conventions for C#
+ * 
+ * @author	gerrit beine
+ * @date	2007-07-16
+ */
+
+//	based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	prefix + suffix + file extensions for types
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter of the separator for full qualified names
+ * @return	the separator for full qualified names for C# ('.')
+ */
+String fqnSeparator() : ".";
+
+/**
+ * getter of the separator for directories
+ * @return	the separator for directory names for C# ('.')
+ */
+String dirSeparator() : ".";
+
+/**
+ * getter of the file extension including the beginning dot
+ * @return	the file extension for C# artefacts ('.cs')
+ */
+String fileExtension() : ".cs";
+
+/**
+ * getter of the prefix which is added to the name of an interface
+ * @return	the prefix to prepend
+ */
+String prefix(MInterface this) : "I";
+
+/**
+ * just there for error free templates ;-)
+ * @return	an empty string
+ */
+String prefix(MClassifier this) : "";
+
+/**
+ * just there for error free templates ;-)
+ * @return	an empty string
+ */
+String suffix(MClassifier this) : "";
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the name of a classifier using prefix + suffix
+ * @return	formatted name of the classifier
+ */
+String asTypeName(MClassifier this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a type, it should NOT do anything, it's just there for error free templates ;-)
+ * don't touch generics, primitive types or external types (external are mapped correctly)
+ * @return	the name of the type
+ */
+String asTypeName(MType this) : name();
+
+/**
+ * formats the name of a type after typemapping
+ * don't touch the type - the name of the type is determined by typemapping
+ * @return	the name of the type
+ */
+String asTypeName(String this) : this;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	file names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the filename of a classifier
+ * it's usually not called!
+ * @return	the filename of a classifier
+ */
+String asFileName(MClassifier this) : asTypeName() + fileExtension();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an attribute name as a property
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asProperty(MAttribute this) : name.toFirstUpper();
+
+/**
+ * formats an attribute name as a constant
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asConstant(MAttribute this) : name.toUpperCase();
+
+/**
+ * formats an attribute name as a normal attribute
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asField(MAttribute this) : name.toFirstLower();
+
+/**
+ * formats an attribute name according to the value of it's 'final' property
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asAttribute(MAttribute this) : final ? asConstant() : asField();
+
+/**
+ * formats an attribute name as a 'insert in' method
+ * @context	the attribute to format
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertIn(MAttribute this) : "InsertIn" + name.toFirstUpper();
+
+/**
+ * formats an attribute name as a 'remove from' method
+ * @context	the attribute to format
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFrom(MAttribute this) : "RemoveFrom" + name.toFirstUpper();
+
+/**
+ * formats an attribute name as a 'add to' method
+ * @context	the attribute to format
+ * @return	the formatted name of the add-to method
+ */
+String asAddTo(MAttribute this) : "AddTo" + name.toFirstUpper();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	association attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an association role as a association attribute
+ * @context	the association role to format
+ * @return	the formatted name of the association attribute
+ */
+String asAttribute(MAssociationRole this) : name.toFirstLower();
+
+/**
+ * formats an association role as a property
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asProperty(MAssociationRole this) : name.toFirstUpper();
+
+/**
+ * formats an association role as a 'insert in' method
+ * @context	the association role to format
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertIn(MAssociationRole this) : "InsertIn" + name.toFirstUpper();
+
+/**
+ * formats an association role as a 'remove from' method
+ * @context	the association role to format
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFrom(MAssociationRole this) : "RemoveFrom" + name.toFirstUpper();
+
+/**
+ * formats an association role as a 'add to' method
+ * @context	the association role to format
+ * @return	the formatted name of the add-to method
+ */
+String asAddTo(MAssociationRole this) : "AddTo" + name.toFirstUpper();
+
+/**
+ * formats an association role as a 'iterator' method
+ * @context	the association role to format
+ * @return	the formatted name of the 'iterator' method
+ */
+String asIterator(MAssociationRole this) : asProperty() + "Iterator";
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	operations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asOperation(MOperation this) :
+	name.toFirstUpper();
+
+/**
+ * formats an operation name as a constructor
+ * only for php4, not called for php5 and higher
+ * 
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asConstructor(MOperation this) : name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	parameters
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asParameter(MParameter this) : name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type compatibility functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats a property as an attribute
+ * just there for error-free templates (polymorphism)
+ * @see	asAttribute(MAttribute)
+ * @see asAttribtue(MAssociationRole)
+ */
+String asAttribute(MProperty this) : name.toFirstLower();
