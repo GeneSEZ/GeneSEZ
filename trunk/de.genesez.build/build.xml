@@ -5,17 +5,29 @@
 	<!-- import environment and required scripts -->
 	<import file="build/imports.xml"/>
 
+	<!-- public targets -->
+	
 	<target name="all"
 		description=""
-		depends="pluginjar.all" />
+		depends="checkout.all,createjar.all" />
 	
 	<target name="distribute"
-		description=""
-		depends="plugindist.all,featuredist.all" />
+		description="Distributes plugins and features"
+		depends="distribute.all">
+		<ant antfile="${build.file}"
+			dir="${build.basedir}/${prefix}.updatesite"
+			target="distribute"
+			inheritAll="false">
+			<property name="build.basedir" value="${build.basedir}" />
+			<property name="UpdateSiteStagingLocation" value="${updatesite.location}" />
+		</ant>
+	</target>
 	
 	<target name="clean"
 		description=""
 		depends="clean.all" />
+
+	<!-- private targets -->
 	
 	<target name="checkout.all"
 		description="">
@@ -46,7 +58,7 @@
 		</for>
 	</target>
 
-	<target name="pluginjar.all"
+	<target name="createjar.all"
 		description="">
 		<for list="${plugins}" param="project">
 			<sequential>
@@ -58,10 +70,6 @@
 				</ant>
 			</sequential>
 		</for>
-	</target>
-
-	<target name="featurejar.all"
-		description="">
 		<for list="${features}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
@@ -74,9 +82,9 @@
 		</for>
 	</target>
 
-	<target name="plugindist.all"
-		description=""
-		depends="pluginjar.all">
+	<target name="distribute.all"
+		description="Distributes plugins and features"
+		depends="createjar.all">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<copy todir="${updatesite.plugins}">
@@ -86,11 +94,6 @@
 				</copy>
 			</sequential>
 		</for>
-	</target>
-
-	<target name="featuredist.all"
-		description=""
-		depends="featurejar.all">
 		<for list="${features}" param="project">
 			<sequential>
 				<copy todir="${updatesite.features}">
@@ -103,8 +106,8 @@
 	</target>
 
 	<target name="clean.all"
-		description="">
-		<for list="${projects}" param="project">
+		description="Cleaning lady">
+		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
 					dir="${build.basedir}/${prefix}.@{project}"
@@ -114,24 +117,17 @@
 				</ant>
 			</sequential>
 		</for>
-	</target>
-	
-	<target name="checkoutOrUpdate"
-		description="">
-		<if>
-			<istrue value="${update}"/>
-			<then>
-				<svn>
-					<update dir="${build.basedir}/${project}" />
-				</svn>
-			</then>
-			<else>
-				<svn>
-					<checkout url="${svn.trunk}/${project}"
-						destpath="${build.basedir}/${project}" />
-				</svn>
-			</else>
-		</if>
+		<for list="${features}" param="project">
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="${build.basedir}/${prefix}.@{project}"
+					target="clean"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+				</ant>
+			</sequential>
+		</for>
+		<antcall target="revert" />
 	</target>
 	
 </project>
