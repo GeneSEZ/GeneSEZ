@@ -50,8 +50,8 @@
 «ENDREM»
 
 «REM» evaluate stereotypes for classes «ENDREM»
-«DEFINE Annotation FOR MClass»
-		«EXPAND _JUnitClass»
+«DEFINE Annotation FOR MClass-»
+		«EXPAND _JUnitClass-»
 «ENDDEFINE»
 
 «REM»
@@ -62,7 +62,7 @@
 
 «REM» creates a junit class for stereotype "junitClass" «ENDREM»
 «DEFINE _JUnitClass FOR MClass-»
-	«IF hasStereotype("junitClass")»
+	«IF hasStereotype("junitClass")-»
 		«FILE getTestFilename("", "Test")-»
 			/**
 			  *	templates for generation of JUnit classes have been written by
@@ -124,7 +124,8 @@
 				}
 				
 				/**
-				  * generated test method for getter and setter methods
+				  * generated test method for getter and setter methods of 
+				  * primitive data types and strings
 				  *
 				  * implemented test cases: 
 				  *		getter and setter methods are available 
@@ -136,10 +137,11 @@
 				  *
 				  */
 				@Test
-				public void getterSetterTest(){				
-					«FOREACH property.select(e|!e.hasStereotype("accessor") 
+				public void getterSetterTest(){	
+					«FOREACH property.select(e|(!e.hasStereotype("accessor") 
 							|| (!e.hasTaggedValue("accessor", "getter", "false") 
-							&&  !e.hasTaggedValue("accessor", "setter", "false"))) AS ids-»
+							&&  !e.hasTaggedValue("accessor", "setter", "false")))
+							&& (isPrimitiveDatatype(e.type.mapName()) || e.type.mapName() == "String")) AS ids-»
 						«REM» if getter and setter methods are generated «ENDREM»
 						{
 							«ids.type.mapName()-» temp;
@@ -147,11 +149,33 @@
 							t1.«asSetter(ids.name)-»(
 							«IF ids.type.mapName() == "String"-»
 								"test"
+							«ELSEIF ids.type.mapName() == "int" || ids.type.mapName() == "long" 
+									|| ids.type.mapName() == "short" || ids.type.mapName() == "byte"-»
+								15
+							«ELSEIF ids.type.mapName() == "float"-»
+								15.3f
+							«ELSEIF ids.type.mapName() == "double"-»
+								15.3d
+							«ELSEIF ids.type.mapName() == "char"-»
+								"z"	
+							«ELSEIF ids.type.mapName() == "boolean"-»
+								true					
 							«ENDIF-»);
 							try {
 								assertEquals(
 								«IF ids.type.mapName() == "String"-»
 									"test"
+								«ELSEIF ids.type.mapName() == "int" || ids.type.mapName() == "long" 
+									|| ids.type.mapName() == "short" || ids.type.mapName() == "byte"-»
+									15
+								«ELSEIF ids.type.mapName() == "float"-»
+									15.3f
+								«ELSEIF ids.type.mapName() == "double"-»
+									15.3d
+								«ELSEIF ids.type.mapName() == "char"-»
+									"z"
+								«ELSEIF ids.type.mapName() == "boolean"-»
+									true
 								«ENDIF-», t1.«asGetter(ids.name)-»());
 								t1.«asSetter(ids.name)-»(temp);
 							} catch (NullPointerException npe){
@@ -181,7 +205,7 @@
 				«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_restOfClass")-»
 			}
 		«ENDFILE»
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» generate a protected region for own implementations «ENDREM»
