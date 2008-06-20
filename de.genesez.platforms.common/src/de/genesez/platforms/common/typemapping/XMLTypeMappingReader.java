@@ -3,6 +3,7 @@ package de.genesez.platforms.common.typemapping;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -198,11 +199,16 @@ public abstract class XMLTypeMappingReader<T extends MappingType> implements ITy
 	 * @throws IOException this exception is thrown when any I/O error occurs
 	 */
 	private Document getXMLDocument(String typeMappingFile) throws FileNotFoundException, DocumentException, IOException {
-		FileReader fileReader = new FileReader(typeMappingFile);
+//		FileReader fileReader = new FileReader(typeMappingFile);
+		// find the type mapping file within the class path
+		InputStream is = ClassLoader.getSystemResourceAsStream(typeMappingFile);
+		if (is == null) {
+			throw new FileNotFoundException("couldn't find the type-mapping file '" + typeMappingFile + "' on the classpath!");
+		}
 		// Validation disabled
 		SAXReader saxReader = new SAXReader(false);
-		Document doc = saxReader.read(new InputSource(fileReader));
-		fileReader.close();
+		Document doc = saxReader.read(new InputSource(is));
+//		fileReader.close();
 		return doc;
 	}
 	
