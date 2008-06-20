@@ -21,7 +21,7 @@
 	<!-- name of the model file -->
 	<property name="model.name" value="example" />
 	<!-- name of the profile file, if you need to specify an additional uml2 profile as metamodel -->
-	<property name="profile.name" value="genesez" />
+	<property name="profile.name" value="" />
 	
 	
 	<!-- uml to genesez transformation settings - - - - - - - - - - - - - - - - -->
@@ -33,7 +33,7 @@
 		makeGenesezModelProfile.oaw	- if you used an uml profile in your model, which is specified 
 									  with the property ${profile.name}
 	-->
-	<property name="uml2genesez.component" value="makeGenesezModelProfile.oaw" />
+	<property name="uml2genesez.component" value="makeGenesezModel.oaw" />
 	<!-- comma or comma blank [, ] separated list of package names to exclude from transformation -->
 	<property name="uml2genesez.exclude.packages" value="UML Standard Profile" />
 	<!-- determines if all classes directly contained in the model are transformed to external types instead of classifiers -->
@@ -51,7 +51,7 @@
 	
 	<!-- comma or semicola separated list with package names to exclude from code generation -->
 	<property name="model2text.exclude.packages" value="" />
-	<!-- specifies the base package for all generated artefacts -->
+	<!-- boolean value indicates if the model name is used as base package or not -->
 	<property name="model2text.use.model.name.as.base.package" value="true" />
 	<!-- specifies the base package for all generated artefacts -->
 	<property name="model2text.base.package" value="" />
@@ -61,8 +61,8 @@
 	<property name="model2text.aspect.templates" value="config::Attrib" />
 	<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
 	<property name="model2text.aspect.scripts" value="config::Naming" />
-	<!-- filename, relative to project root, where the mapping of types are defined -->
-	<property name="model2text.typemapping.file" value="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
+	<!-- type mapping file to use, is searched within the classpath -->
+	<property name="model2text.typemapping.file" value="de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
 	
 	
 	<!-- general file extension settings, usually no need to adjust - - - - - - - - - - - - -->
@@ -140,13 +140,13 @@
 	<cartridge id="model2text"
 		file="de::genesez::platforms::java::workflow::performM2T.oaw"
 		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
+		aspectTemplates="${model2text.aspect.templates}"
+		aspectScripts="${model2text.aspect.scripts}"
 		excludePackages="${model2text.exclude.packages}"
 		useModelNameAsBasePackage="${model2text.use.model.name.as.base.package}"
 		basePackage="${model2text.base.package}"
 		generateSectionComments="${model2text.generate.section.comments}"
 		configFile=""
-		aspectTemplates="${model2text.aspect.templates}"
-		aspectScripts="${model2text.aspect.scripts}"
 		outputDir="${project.dir}/${model2text.dir}"
 		proRegDir="${project.dir}/${model2text.dir}"
 		typeMappingFile="${model2text.typemapping.file}"
