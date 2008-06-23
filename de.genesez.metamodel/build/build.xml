@@ -10,10 +10,10 @@
 	</condition>
 	
 	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
-		
+	
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
-
+	
 	<!-- Set the classpath -->
 	<path id="de.genesez.metamodel.classpath">
 		<pathelement location="${bin.dir}" />
@@ -93,14 +93,24 @@
 	<target name="metamodel.uml2ecore"
 		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI"
 		depends="metamodel.precompile" >
-		<oaw.workflow file="${oaw.workflow.file}"
+		<java classname="org.openarchitectureware.workflow.WorkflowRunner"
+			classpathref="de.genesez.metamodel.classpath"
+			fork = "true"
+			dir="${basedir}">
+			<arg value="${oaw.workflow.file}" />
+			<arg value="-pbaseDir=${basedir}" />
+			<arg value="-pmagicdrawDir=${MAGICDRAW_DIR}" />
+			<arg value="--ant" />
+		</java>
+		<!-- during a bug in the oAW ant task, this task is not used -->
+		<!-- oaw.workflow file="${oaw.workflow.file}"
 			classpathref="de.genesez.metamodel.classpath"
 			fork = "true"
 			dir="${basedir}">
 			<param name="baseDir" value="${basedir}/" />
 			<param name="magicdrawDir" value="${MAGICDRAW_DIR}/" />
-		</oaw.workflow>
-	</target>	
+		</oaw.workflow -->
+	</target>
 
 	<target name="metamodel.ecore2java"
 		description=""
