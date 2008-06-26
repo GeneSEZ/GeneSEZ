@@ -1,0 +1,19 @@
+import genesezMM;
+
+extension de::genesez::common::AccessHelper;
+
+MModel addMessageListener(MModel this) :
+	nestedPackage.addMessageListener();
+	
+MPackage addMessageListener(MPackage this) :
+	nestedPackage.addMessageListener() ->
+	classifier.addMessageListener();
+	
+MClassifier addMessageListener(MClassifier this) :
+	stereotype.name.exists(e|e == "ejb3MessageDrivenBean")
+		? realization.add(makeMessageListener())
+		: "";
+
+create MExternal makeMessageListener(MClassifier container) : 
+	setSpecification("MessageListener") ->
+	container.getModel().externalTypes.add(this);

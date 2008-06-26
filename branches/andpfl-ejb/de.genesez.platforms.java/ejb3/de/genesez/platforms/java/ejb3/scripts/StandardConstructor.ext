@@ -1,0 +1,21 @@
+import genesezMM;
+
+extension de::genesez::common::AccessHelper;
+
+MModel addStandardConstructor(MModel this) :
+	nestedPackage.addStandardConstructor();
+	
+MPackage addStandardConstructor(MPackage this) :
+	nestedPackage.addStandardConstructor() ->
+	classifier.addStandardConstructor();
+	
+MClassifier addStandardConstructor(MClassifier this) :
+	operation.exists(e|e.name == name) && operation.select(e|e.name == name).parameter == "[]"
+	? ""
+	: operation.add(makeStandardConstructor());
+
+create MOperation makeStandardConstructor(MClassifier container) : 
+	setName(container.name) ->
+	setVisibility("public") ->
+	setXmiGuid("StandardConstructor" + container.name) ->
+	container.operation.add(this);

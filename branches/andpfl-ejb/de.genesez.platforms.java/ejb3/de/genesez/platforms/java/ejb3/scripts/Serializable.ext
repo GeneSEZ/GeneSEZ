@@ -1,0 +1,20 @@
+import genesezMM;
+
+extension de::genesez::common::AccessHelper;
+
+MModel addSerializable(MModel this) :
+	nestedPackage.addSerializable();
+	
+MPackage addSerializable(MPackage this) :
+	nestedPackage.addSerializable() ->
+	classifier.addSerializable();
+	
+MClassifier addSerializable(MClassifier this) :
+	stereotype.name.exists(e|e == "ejb3PersistentEntity") 
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Serializable") 
+		? realization.add(makeSerializable())
+		: "";
+
+create MExternal makeSerializable(MClassifier container) : 
+	setSpecification("Serializable") ->
+	container.getModel().externalTypes.add(this);

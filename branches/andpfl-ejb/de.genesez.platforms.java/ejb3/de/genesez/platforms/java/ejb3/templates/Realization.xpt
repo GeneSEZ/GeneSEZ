@@ -1,0 +1,59 @@
+«REM»
+	Template for ejb3 realization
+	
+	@author	André Pflüger
+	@date	2008/06/21
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Serializable»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::MessageListener»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» generate realization for a class «ENDREM»
+«DEFINE Realization FOR MClassifier-»
+	«addSerializable() -> ""-»
+	«addMessageListener() -> ""-»
+	«IF !realization.isEmpty-»
+		implements «FOREACH realization AS c SEPARATOR ", "»«c.mapName()-»«EXPAND _Generics FOR c-»«ENDFOREACH»
+	«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» generate generics «ENDREM»
+«DEFINE _Generics FOR MClassifier-»
+	«IF hasGenericParameter()-»
+		<«getGenericList(genericParameter)»>
+	«ELSE-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» generate generics «ENDREM»
+«DEFINE _Generics FOR MExternal-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM» generate generics «ENDREM»
+«DEFINE _Generics FOR MType-»
+«ENDDEFINE»

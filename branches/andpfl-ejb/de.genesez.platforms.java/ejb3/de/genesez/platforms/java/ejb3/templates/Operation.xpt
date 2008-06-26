@@ -2,8 +2,7 @@
 	Template for ejb3-Association
 	
 	@author	André Pflüger
-	@date	2008/04/22
-	- todo 1: implement all ejb3 stereotypes
+	@date	2008/06/15
 «ENDREM»
 
 «REM» based on genesez meta model «ENDREM»
@@ -27,22 +26,48 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«REM» evaluate stereotypes for associations «ENDREM»
-«DEFINE Annotation FOR MOperation-»
+«REM» generate all methods for a classifier «ENDREM»
+«DEFINE OperationImpl FOR MClassifier-»
+	«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
+«ENDDEFINE»
+
+«REM» generate an implementation for an normal operation «ENDREM»
+«DEFINE OperationImpl FOR MOperation-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Operation::_CommentOperation-»
 	«REM» stereotype ejb3Timer «ENDREM»
-	«IF hasStereotype("ejb3Timer") && (hasStereotype("ejb3MessageDrivenBean") || hasTaggedValue("ejb3SessionBean", "stateless", "true"))»
+	«IF hasStereotype("ejb3Timer") && (classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateless", "true"))-»
 		@Timeout
-	«ENDIF»
+	«ENDIF-»
 	«REM» stereotype ejb3Column «ENDREM»
-	«EXPAND Attribute::Column»
+	«EXPAND Attribute::Column-»
 	«REM» stereotype ejb3PrimaryKey «ENDREM»
-	«EXPAND Attribute::PrimaryKey»
+	«EXPAND Attribute::PrimaryKey(this.classifier)-»
 	«REM» stereotype ejb3DatatypeMapping«ENDREM»
-	«EXPAND Attribute::DatatypeMapping»
-	«REM» stereotype ejb3Callback for different bean types «ENDREM»
-	«EXPAND _Callback»
+	«EXPAND Attribute::DatatypeMapping-»
+	«REM»
+		stereotype ejb3Callback for different bean types 
+		(only if there is no external callback handling 
+		(-> EntityListener and Interceptor))
+	«ENDREM»
+	«EXPAND _Callback-»
 	«REM» stereotype ejb3TransactionAttribute «ENDREM»
-	«EXPAND CMTransactionality»
+	«EXPAND CMTransactionality-»
+	«REM» stereotype ejb3Interceptor «ENDREM»
+	«EXPAND _Interceptor-»
+	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
+	«EXPAND Class::DiscriminatorValue-»
+	«REM» stereotype "ejb3WebMethod" «ENDREM»
+	«EXPAND _WebMethod-»
+	«IF multiplicity == 1-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «returnType.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Generics FOR returnType» «asOperationName(name)»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Parameter») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+	«ELSE-»
+		«IF returnType.metaType == MPrimitiveType-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Generics FOR returnType»> «asOperationName(name)»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Parameter») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+		«ELSE-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «mapType()»<«returnType.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Generics FOR returnType»> «asOperationName(name)»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Parameter») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+		«ENDIF-»
+	«ENDIF-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Operation::_DefaultReturnAndOwnCodeImpl-»}
 «ENDDEFINE»
 
 «REM» 
@@ -63,48 +88,94 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM»
+	evaluates the stereotype ejb3WebMethod
+«ENDREM»
+«DEFINE _WebMethod FOR MOperation-»
+	«IF hasStereotype("ejb3WebMethod")-»
+		@WebMethod(operationName=
+		«IF !hasTaggedValue("ejb3WebMethod", "operationName", "null")-»
+			"«taggedValue.select(e|e.tag.name == "operationName").value-»"
+		«ELSE»
+			"«name-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3WebMethod", "action", "null")-»
+			, action="«taggedValue.select(e|e.tag.name == "action").value-»"
+		«ENDIF-»)
+		«IF hasTaggedValue("ejb3WebMethod", "oneway", "true")-»
+			@Oneway
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
 «REM» 
 	evaluate the stereotype ejb3Callback 
 «ENDREM»
-«DEFINE _Callback FOR MElement-»
-	«IF hasStereotype("ejb3SessionBean") || hasStereotype("ejb3MessageDrivenBean")»
-		«IF hasTaggedValue("ejb3Callback", "postConstruct", "true")»
-			@PostConstruct
-		«ENDIF»
-		«IF hasTaggedValue("ejb3Callback", "preDestroy", "true")»
-			@PreDestroy
-		«ENDIF»
-	«ENDIF»
-	«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
-		«IF hasTaggedValue("ejb3Callback", "postActivate", "true")»
-			@PostActivate
-		«ENDIF»
-		«IF hasTaggedValue("ejb3Callback", "prePassivate", "true")»
-			@PrePassivate
-		«ENDIF»
-	«ENDIF»
-	«IF hasStereotype("ejb3PersistentEntity")»
-		«IF hasTaggedValue("ejb3Callback", "postPersist", "true")»
-			@PostPersist
-		«ENDIF»
-		«IF hasTaggedValue("ejb3Callback", "prePersist", "true")»
-			@PrePersist
-		«ENDIF»
-		«IF hasTaggedValue("ejb3Callback", "postUpdate", "true")»
-			@PostUpdate
-		«ENDIF»
-		«IF hasTaggedValue("ejb3Callback", "preUpdate", "true")»
-			@PreUpdate
-		«ENDIF»	
-		«IF hasTaggedValue("ejb3Callback", "postRemove", "true")»
-			@PostRemove
-		«ENDIF»
-		«IF hasTaggedValue("ejb3Callback", "preRemove", "true")»
-			@PreRemove
-		«ENDIF»
-		«IF hasTaggedValue("ejb3Callback", "postLoad", "true")»
-			@PostLoad
-		«ENDIF»
-	«ENDIF»
+«DEFINE _Callback FOR MOperation-»
+	«IF hasTaggedValue("ejb3Callback", "external", "false")-»
+		«IF classifier.hasStereotype("ejb3SessionBean") || classifier.hasStereotype("ejb3MessageDrivenBean")-»
+			«IF hasTaggedValue("ejb3Callback", "postConstruct", "true")-»
+				@PostConstruct
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preDestroy", "true")-»
+				@PreDestroy
+			«ENDIF-»
+		«ENDIF-»
+		«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+			«IF hasTaggedValue("ejb3Callback", "postActivate", "true")-»
+				@PostActivate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePassivate", "true")-»
+				@PrePassivate
+			«ENDIF-»
+		«ENDIF-»
+		«IF classifier.hasStereotype("ejb3PersistentEntity")»
+			«IF hasTaggedValue("ejb3Callback", "postPersist", "true")-»
+				@PostPersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePersist", "true")-»
+				@PrePersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postUpdate", "true")-»
+				@PostUpdate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preUpdate", "true")-»
+				@PreUpdate
+			«ENDIF-»	
+			«IF hasTaggedValue("ejb3Callback", "postRemove", "true")-»
+				@PostRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preRemove", "true")-»
+				@PreRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postLoad", "true")-»
+				@PostLoad
+			«ENDIF-»
+		«ENDIF-»
+	«ENDIF-»
 «ENDDEFINE»
 
+«REM» 
+	evaluate the stereotype ejb3Interceptor 
+«ENDREM»
+«DEFINE _Interceptor FOR MOperation-»
+	«IF hasStereotype("ejb3OperationInterceptor")-»
+		«IF !(hasTaggedValue("ejb3OperationInterceptor", "classes", "[]") || hasTaggedValue("ejb3OperationInterceptor", "classes", "null"))-»
+			@Interceptors(
+			«FOREACH taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements() AS classes SEPARATOR ", "-»
+				«IF (classes != "[]" && classes != "")-»
+					«classes-»
+					«IF !classes.contains(".class")-»
+					 	.class
+					 «ENDIF-»
+				«ENDIF-»
+			«ENDFOREACH-»)
+		«ENDIF»
+		«IF hasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")-»
+			@AroundInvoke
+		«ENDIF»	
+		«IF hasTaggedValue("ejb3OperationInterceptor", "excludeClassInterceptors", "true")-»
+			@ExcludeClassInterceptors
+		«ENDIF»	
+	«ENDIF»
+«ENDDEFINE»

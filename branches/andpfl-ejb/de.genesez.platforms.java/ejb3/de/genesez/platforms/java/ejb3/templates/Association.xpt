@@ -2,7 +2,7 @@
 	Template for ejb3-Association
 	
 	@author	André Pflüger
-	@date	2008/04/22
+	@date	2008/06/08
 	- todo 1: implement all ejb3 stereotypes
 «ENDREM»
 
@@ -27,8 +27,49 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM»
+	generate attributes for a class
+«ENDREM»
+«DEFINE AssociationDecl FOR MClass-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Association::_AssocClassReferences FOR ownedAssociation-»
+	«EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
+
+«REM»
+	generate attributes for a classifier
+«ENDREM»
+«DEFINE AssociationDecl FOR MClassifier-»
+	«EXPAND AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
+
+«REM»
+	generate a declaration for an attribute
+«ENDREM»
+«DEFINE AssociationDecl FOR MAssociationRole-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Association::_CommentAssociation-»
+	«IF isPlainAssociation()-»
+		«EXPAND _Annotation-»
+		«IF multiplicity == 1-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Association::_Modifier» «type.name()» «asVariableName(name)»;
+		«ELSE-»
+			«IF !hasStereotype("ejb3Association")-»
+				@org.hibernate.annotations.CollectionOfElements
+			«ENDIF-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Association::_Modifier» «mapType()»<«type.mapName()»> «asVariableName(name)» = new «mapType("Implementation")»<«type.mapName()»>();
+		«ENDIF-»
+	«ELSE-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Association::_Modifier» «mapType()»<«assocClass().mapName()»> «asVariableName(name)» = new «mapType("Implementation")»<«assocClass().mapName()»>();
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
 «REM» evaluate stereotypes for associations «ENDREM»
-«DEFINE Annotation FOR MAssociationRole-»
+«DEFINE _Annotation FOR MAssociationRole-»
 	«REM» OneToOne association «ENDREM»
 	«IF hasTaggedValue("ejb3Association", "associationType", "OneToOne")»
 		@OneToOne(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
@@ -70,12 +111,6 @@
 	«ENDIF»	
 «ENDDEFINE»
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
-
 «REM» evaluates the stereotype ejb3ASsociation for the three many associations «ENDREM»
 «DEFINE _ManyAssociations FOR MAssociationRole-»
 	«IF !hasTaggedValue("ejb3Association", "name", "null")-»
@@ -109,7 +144,7 @@
 «REM» evaluates the stereotype ejb3JoinTable «ENDREM»
 «DEFINE _JoinTable FOR MAssociationRole-»
 	«IF hasStereotype("ejb3JoinTable")»
-		«IF hasTaggedValue("ejb3JoinTable", "name", "null")-»
+		«IF !hasTaggedValue("ejb3JoinTable", "name", "null")-»
 			@JoinTable(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
 			«IF !hasTaggedValue("ejb3JoinTable", "joinColumnsName", "null")-»
 				, joinColumns=

@@ -2,7 +2,7 @@
 	Template for ejb3-Attributes
 	
 	@author	André Pflüger
-	@date	2008/04/22
+	@date	2008/06/08
 	- todo 1: implement all ejb3 stereotypes
 «ENDREM»
 
@@ -20,6 +20,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::ColumnForPrimaryKeyInheritance»
 
 
 «REM»
@@ -28,24 +29,57 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«REM» evaluate stereotypes for attributes «ENDREM»
-«DEFINE Annotation FOR MAttribute»
-	«EXPAND Column»
-	«EXPAND PrimaryKey»
-	«EXPAND DatatypeMapping»
-	«EXPAND _Persistence»
+«REM»
+	generate attributes for a classifier
+«ENDREM»
+«DEFINE AttributeDecl FOR MClassifier-»
+	«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|e.static && !e.derived)-»
+	«EXPAND AttributeDecl FOREACH property.typeSelect(MAttribute).select(e|!e.static && !e.derived)-»
+«ENDDEFINE»
+
+«REM»
+	generate a declaration for an attribute
+«ENDREM»
+«DEFINE AttributeDecl FOR MAttribute-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_CommentAttribute-»	
+	«EXPAND _Annotation-»
+	«IF multiplicity == 1-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «type.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Generics» «asAttributeName()» «EXPAND de::genesez::platforms::java::java5::templates::Attribute::_DefaultValue»;
+	«ELSE-»
+		«IF !hasStereotype("ejb3Association")-»
+			@org.hibernate.annotations.CollectionOfElements
+		«ENDIF-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «mapType()»<«type.mapName()»> «asAttributeName()» = new «mapType("Implementation")»<«type.mapName()»>();
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» 
 	evaluates the stereotype ejb3PrimaryKey
 	is used by attribute and operation
  «ENDREM»
-«DEFINE PrimaryKey FOR MElement»
+«DEFINE PrimaryKey(MClassifier classifier) FOR MElement»
 	«REM» simple primary key «ENDREM»
 	«IF hasTaggedValue("ejb3PrimaryKey", "id", "true")»
 		@Id
 	«ENDIF»
-	
+	«REM» 
+		look for primary key in superclass
+		if the names are equal there must be an column annotation with insertable = false
+		and updatable = false
+		otherwise there will be a mapping error because hibernate tries to map the
+		primary key of the superclass and of the subclass in the same column
+	«ENDREM»
+	«IF classifier.generalization.typeSelect(MClassifier).property.exists(e|e.name == name 
+		&& e.hasStereotype("ejb3PrimaryKey")
+		&& e.hasTaggedValue("ejb3PrimaryKey", "id", "true"))-»
+		«IF !hasStereotype("ejb3Column")-»
+			«addColumnForPrimaryKeyInheritance(classifier) -> ""-»
+		«ELSE»
+			«stereotype.selectFirst(e|e == "ejb3Column").taggedValue.selectFirst(e|e == "insertable").setValue("false")-»
+			«stereotype.selectFirst(e|e == "ejb3Column").taggedValue.selectFirst(e|e == "updatable").setValue("false")-»
+		«ENDIF»
+	«ENDIF»
+
 	«REM» composed primary key «ENDREM»
 	«IF hasTaggedValue("ejb3PrimaryKey", "embeddedId", "true")»
 		@EmbeddedId
@@ -108,8 +142,8 @@
 		«IF hasTaggedValue("ejb3Column", "insertable", "false")-»
 			, insertable=false
 		«ENDIF-»
-		«IF hasTaggedValue("ejb3Column", "updateable", "false")-»
-			, updateable=false
+		«IF hasTaggedValue("ejb3Column", "updatable", "false")-»
+			, updatable=false
 		«ENDIF-»
 		«IF !hasTaggedValue("ejb3Column", "columnDefinition", "null")-»
 			, columnDefinition="«taggedValue.selectFirst(e|e.tag.name == "columnDefinition").value-»"
@@ -137,25 +171,25 @@
  «ENDREM»
 «DEFINE DatatypeMapping FOR MElement»
 	«IF hasStereotype("ejb3DatatypeMapping")»
-		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Basic") && (hasTaggedValue("ejb3DataypeMapping", "fetch", "LAZY") || hasTaggedValue("ejb3DataypeMapping", "optional", "true"))»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Basic") && (hasTaggedValue("ejb3DatatypeMapping", "fetch", "LAZY") || hasTaggedValue("ejb3DatatypeMapping", "optional", "true"))»
 			@Basic(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
 			«IF hasTaggedValue("ejb3DatatypeMapping", "optional", "true")-»
 			, optional=true
 			«ENDIF-»)
 		«ENDIF»
-		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Embeddable")»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Embeddable")»
 			@Embeddable
 		«ENDIF»
-		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Lob")»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Lob")»
 			@Lob
 		«ENDIF»
-		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Temporal")»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Temporal")»
 			@Temporal
 			«IF !hasTaggedValue("ejb3DatatypeMapping", "temporalType", "null")-»
-				(«taggedValue.selectFirst(e|e.tag.name == "temporalType").value-»)
+				(TemporalType.«taggedValue.selectFirst(e|e.tag.name == "temporalType").value-»)
 			«ENDIF»
 		«ENDIF»
-		«IF hasTaggedValue("ejb3DataypeMapping", "type", "Enumerated")»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Enumerated")»
 			@Enumerated
 			«IF !hasTaggedValue("ejb3DatatypeMapping", "enumType", "ORDINAL")-»
 				(«taggedValue.selectFirst(e|e.tag.name == "enumType").value-»)
@@ -170,6 +204,43 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+
+«REM» evaluate stereotypes for attributes «ENDREM»
+«DEFINE _Annotation FOR MAttribute»
+	«EXPAND PrimaryKey(this.classifier)»
+	«EXPAND Column»	
+	«EXPAND DatatypeMapping»
+	«EXPAND _Persistence»
+	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
+	«EXPAND Class::DiscriminatorValue-»	
+	«EXPAND _WebParam-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype ejb3WebParam 
+«ENDREM»
+«DEFINE _WebParam FOR MAttribute-»
+	«IF hasStereotype("ejb3WebParam")-»
+		@WebParam(header=
+		«IF hasTaggedValue("ejb3WebParam", "header", "true")-»
+			true
+		«ELSE»
+			false
+		«ENDIF»
+		«IF !hasTaggedValue("ejb3WebParam", "name", "null")-»
+			, name="«taggedValue.select(e|e.tag.name == "name").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3WebParam", "partName", "null")-»
+			, partName="«taggedValue.select(e|e.tag.name == "partName").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3WebParam", "targetNamespace", "null")-»
+			, targetNamespace="«taggedValue.select(e|e.tag.name == "targetNamespace").value-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3WebParam", "mode", "null")-»
+			, mode="«taggedValue.select(e|e.tag.name == "mode").value-»"
+		«ENDIF-»)
+	«ENDIF-»
+«ENDDEFINE»
 
 «REM» 
 	evaluate the stereotype ejb3Persistence 
