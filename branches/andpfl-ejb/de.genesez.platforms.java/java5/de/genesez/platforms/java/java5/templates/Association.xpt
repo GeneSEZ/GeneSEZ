@@ -57,7 +57,6 @@
 «DEFINE AssociationDecl FOR MAssociationRole-»
 	«EXPAND _CommentAssociation-»
 	«IF isPlainAssociation()-»
-		«EXPAND de::genesez::platforms::java::ejb3::templates::Association::Annotation-»
 		«IF multiplicity == 1-»
 			«EXPAND _Modifier» «type.name()» «asVariableName(name)»;
 		«ELSE-»
@@ -73,9 +72,7 @@
 «DEFINE GetterDecl FOR MAssociationRole-»
 	«EXPAND _CommentGetter-»
 	«IF isPlainAssociation()-»
-		«IF multiplicity == 1-»
-			public «type.name()» «asGetter(name)»();
-		«ELSE-»
+		«IF multiplicity != 1-»
 			public «mapType()»<«type.mapName()»> «asGetter(name)»();
 		«ENDIF-»
 	«ELSE-»
@@ -95,7 +92,7 @@
 		«ELSE-»
 			public «mapType()»<«type.mapName()»> «asGetter(name)»() {
 				«IF unique == true-»
-					return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
+					return java.util.Collections.unmodifiableList(«asVariableName(name)»);
 				«ELSE-»
 					return java.util.Collections.unmodifiableList(«asVariableName(name)»);
 				«ENDIF-»
@@ -115,7 +112,7 @@
 		  */
 		public «mapType()»<«assocClass().mapName()»> «asGetter(name)»«assocClass().name»() {
 			«IF unique == true-»
-				return java.util.Collections.unmodifiableSet(«asVariableName(name)»);
+				return java.util.Collections.unmodifiableList(«asVariableName(name)»);
 			«ELSE-»
 				return java.util.Collections.unmodifiableList(«asVariableName(name)»);
 			«ENDIF-»
@@ -125,12 +122,14 @@
 
 // generate a insert in declaration method
 «DEFINE InsertInDecl FOR MAssociationRole-»
-«EXPAND _CommentAccessor-»
-«IF isPlainAssociation()-»
-	public void «asInsertIn(name)»(«type.mapName()» _in);
-«ELSE-»
-	public void «asInsertIn(name)»(«type.mapName()» _in, «assocClass().mapName()» _at);
-«ENDIF-»
+	«EXPAND _CommentAccessor-»
+	«IF isPlainAssociation()-»
+		«IF multiplicity != 1»
+			public void «asInsertIn(name)»(«type.mapName()» «name-»);
+		«ENDIF»
+	«ELSE-»
+		public void «asInsertIn(name)»(«type.mapName()» _in, «assocClass().mapName()» _at);
+	«ENDIF-»
 «ENDDEFINE»
 
 
@@ -138,27 +137,33 @@
 «DEFINE InsertInImpl FOR MAssociationRole-»
 	«EXPAND _CommentAccessor-»
 	«IF isPlainAssociation()-»
-		public void «asInsertIn(name)»(«type.mapName()» _in) {
-			«IF multiplicity == 1-»
-				if («asVariableName(name)» == _in) {
-					return;
-				}
-				«IF opposite != null-»
-					if («asVariableName(name)» != null) {
-						«asVariableName(name)».«asRemoveFrom(opposite.name)»(this);
+		«IF multiplicity != 1-»
+			public void «asInsertIn(name)»(«type.mapName()» «name-») {
+				«IF multiplicity == 1-»
+					if (this.«asVariableName(name)» == «name-») {
+						return;
 					}
+					«IF opposite != null && opposite.multiplicity != 1-»
+						if (this.«asVariableName(name)» != null) {
+							this.«asVariableName(name)».«asRemoveFrom(opposite.name)»(this);
+						}
+					«ENDIF-»
+					this.«asVariableName(name)» = «name-»;
+				«ELSE-»
+					if (this.«asVariableName(name)».contains(«name-»)) {
+						return;
+					}
+					this.«asVariableName(name)».add(«name-»);
 				«ENDIF-»
-				«asVariableName(name)» = _in;
-			«ELSE-»
-				if («asVariableName(name)».contains(_in)) {
-					return;
-				}
-				«asVariableName(name)».add(_in);
-			«ENDIF-»
-			«IF opposite != null-»
-				_in.«asInsertIn(opposite.name)»(this);
-			«ENDIF-»
-		}
+				«IF opposite != null && opposite.multiplicity != 1 
+					&& opposite.hasTaggedValue("accessor", "setter", "true")-»
+					«name-».«asInsertIn(opposite.name)-»(this);
+				«ELSEIF opposite != null && opposite.multiplicity == 1 
+						&& opposite.hasTaggedValue("accessor", "setter", "true")-»
+					«name-».«asSetter(opposite.name)-»(this);
+				«ENDIF-»
+			}
+		«ENDIF»
 	«ELSE-»
 		/**
 		  * insert into association, generate linked association class object
@@ -171,7 +176,7 @@
 			«ELSE-»
 				«assocClass().mapName()» _assoc = new «assocClass().mapName()»(_other, this);
 			«ENDIF-»
-			«asVariableName(name)».add(_assoc);
+			this.«asVariableName(name)».add(_assoc);
 		«IF opposite != null-»
 			_other.«asInsertIn(opposite.name)»(_assoc); 
 		«ENDIF-»
@@ -184,13 +189,13 @@
 		  * @return newly generated linked association class object
 		  */
 		public void «asInsertIn(name)»(«assocClass().mapName()» _assoc) {
-			if («asVariableName(name)».contains(_assoc)) {
+			if (this.«asVariableName(name)».contains(_assoc)) {
 					return;
 			}
 			if(_assoc.«opposite.name.asGetter()»() != this) {
 				throw new RuntimeException("inconsistent association object");
 			}
-			«asVariableName(name)».add(_assoc);
+			this.«asVariableName(name)».add(_assoc);
 		}
 	«ENDIF-»
 «ENDDEFINE»
@@ -198,8 +203,10 @@
 
 // generate a remove from declaration method
 «DEFINE RemoveFromDecl FOR MAssociationRole-»
-«EXPAND _CommentAccessor-»
-public void «asRemoveFrom(name)»(«type.mapName()» _ex);
+	«EXPAND _CommentAccessor-»
+	«IF multiplicity != 1-»
+		public void «asRemoveFrom(name)»(«type.mapName()» «name-»);
+	«ENDIF»
 «ENDDEFINE»
 
 
@@ -207,22 +214,24 @@ public void «asRemoveFrom(name)»(«type.mapName()» _ex);
 «DEFINE RemoveFromImpl FOR MAssociationRole-»
 	«EXPAND _CommentAccessor-»
 	«IF isPlainAssociation()-»
-		public void «asRemoveFrom(name)»(«type.mapName()» _ex) {
-			«IF multiplicity == 1-»
-				if («asVariableName(name)» != _ex) {
-					return;
-				}
-				«asVariableName(name)» = null;
-			«ELSE-»
-				if (!«asVariableName(name)».contains(_ex)) {
-					return;
-				}
-				«asVariableName(name)».remove(_ex);
-			«ENDIF-»
-			«IF opposite != null-»
-				_ex.«asRemoveFrom(opposite.name)»(this);
-			«ENDIF-»
-	}
+		«IF multiplicity != 1-»
+			public void «asRemoveFrom(name)»(«type.mapName()» «name-») {
+				«IF multiplicity == 1-»
+					if (this.«asVariableName(name)» != «name-») {
+						return;
+					}
+					this.«asVariableName(name)» = null;
+				«ELSE-»
+					if (!this.«asVariableName(name)».contains(«name-»)) {
+						return;
+					}
+					this.«asVariableName(name)».remove(«name-»);
+				«ENDIF-»
+				«IF opposite != null && opposite.multiplicity != 1-»
+					«name-».«asRemoveFrom(opposite.name)»(this);
+				«ENDIF-»
+			}
+		«ENDIF»
 	«ELSE-»
 		/**
 		  * remove entry from association indexed by its association class object

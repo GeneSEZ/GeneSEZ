@@ -12,6 +12,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Serializable»
 
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -21,9 +22,11 @@
 
 // generate realization for a class
 «DEFINE Realization FOR MClassifier-»
+	«addSerializable() -> ""-»
 	«IF !realization.isEmpty-»
 		implements «FOREACH realization AS c SEPARATOR ", "»«c.mapName()»«EXPAND _Generics FOR c»«ENDFOREACH»
 	«ELSE-»
+		«REM»«EXPAND de::genesez::platforms::java::ejb3::templates::Realization::Annotation-»«ENDREM»
 	«ENDIF-»
 «ENDDEFINE»
 

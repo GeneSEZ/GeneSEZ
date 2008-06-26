@@ -52,7 +52,6 @@
 // generate a declaration for an attribute
 «DEFINE AttributeDecl FOR MAttribute-»
 	«EXPAND _CommentAttribute-»	
-	«EXPAND de::genesez::platforms::java::ejb3::templates::Attribute::Annotation-»
 	«IF multiplicity == 1-»
 		«EXPAND _Modifier» «type.mapName()»«EXPAND _Generics» «asAttributeName()» «EXPAND _DefaultValue»;
 	«ELSE-»
@@ -89,7 +88,7 @@
 	«ELSE-»
 		public «IF static»static«ENDIF» «mapType()»<«type.mapName()»> «asGetter(name)»() {
 			«IF unique == true-»
-				return java.util.Collections.unmodifiableSet(«asAttributeName()»);
+				return java.util.Collections.unmodifiableList(«asAttributeName()»);
 			«ELSE-»
 				return java.util.Collections.unmodifiableList(«asAttributeName()»);
 			«ENDIF-»

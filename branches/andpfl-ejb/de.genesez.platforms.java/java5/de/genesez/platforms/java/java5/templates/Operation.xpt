@@ -14,41 +14,42 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
 
 «REM» generate constructor for mclass «ENDREM»
 «DEFINE ConstructorImpl FOR MClassifier-»
-«EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
+	«EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
 «ENDDEFINE»
 
 
 «REM» generate all abstract methods for a classifier «ENDREM»
 «DEFINE OperationDecl FOR MClassifier-»
-«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)-»
+	«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)-»
 «ENDDEFINE»
 
 
 «REM» generate all methods for a classifier «ENDREM»
 «DEFINE OperationImpl FOR MClassifier-»
-«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
+	«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
 «ENDDEFINE»
 
 «REM» generate constructor for mclass «ENDREM»
 «DEFINE ConstructorImpl FOR MOperation-»
-«EXPAND _CommentOperation-»
-«EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
-«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
-}
+	«EXPAND _CommentOperation-»
+	«EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+	}
 «ENDDEFINE»
 
 
 «REM» generate a declaration for an abstract operation «ENDREM»
 «DEFINE OperationDecl FOR MOperation-»
 	«EXPAND _CommentOperation-»
-	«EXPAND de::genesez::platforms::java::ejb3::templates::Operation::Annotation-»
 	«IF multiplicity == 1-»
 		«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
 	«ELSE-»
@@ -60,7 +61,6 @@
 «REM» generate an implementation for an normal operation «ENDREM»
 «DEFINE OperationImpl FOR MOperation-»
 	«EXPAND _CommentOperation-»
-	«EXPAND de::genesez::platforms::java::ejb3::templates::Operation::Annotation-»
 	«IF multiplicity == 1-»
 		«EXPAND _Modifier» «returnType.mapName()»«EXPAND _Generics FOR returnType» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
 	«ELSE-»
@@ -70,8 +70,7 @@
 			«EXPAND _Modifier» «mapType()»<«returnType.mapName()»«EXPAND _Generics FOR returnType»> «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
 		«ENDIF-»
 	«ENDIF-»
-	«EXPAND _DefaultReturnAndOwnCodeImpl-»
-}
+	«EXPAND _DefaultReturnAndOwnCodeImpl-»}
 «ENDDEFINE»
 
 // //////////////////////////////////////////////////////////////////////////////
@@ -80,104 +79,108 @@
 
 
 «DEFINE _CommentOperation FOR MOperation-»
-/**
-«IF hasComment()-»
- * «ownedComment.getCommentText()»
-«ENDIF-»
-«EXPAND _CommentParameter-»
-«EXPAND _CommentReturn-»
-«EXPAND _CommentExeception-»
- */
+	/**
+	«IF hasComment()-»
+	 * «ownedComment.getCommentText()»
+	«ENDIF-»
+	«EXPAND _CommentParameter-»
+	«EXPAND _CommentReturn-»
+	«EXPAND _CommentExeception-»
+	 */
 «ENDDEFINE»
 
 «DEFINE _CommentParameter FOR MOperation-»
-«FOREACH parameter.typeSelect(MParameter) AS p-»
- * @param  «asParameterName(p.name)»  «p.ownedComment.getCommentText()»
-«ENDFOREACH-»
+	«FOREACH parameter.typeSelect(MParameter) AS p-»
+	 * @param  «asParameterName(p.name)»  «p.ownedComment.getCommentText()»
+	«ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE _CommentReturn FOR MOperation-»
-«IF returnType.name().toLowerCase() != "void" -»
- * @return  «getCommentText(returnType.ownedComment())»
-«ENDIF-»
+	«IF returnType.name().toLowerCase() != "void" -»
+	 * @return  «getCommentText(returnType.ownedComment())»
+	«ENDIF-»
 «ENDDEFINE»
 
 «DEFINE _CommentExeception FOR MOperation-»
-«FOREACH raisedException.typeSelect(MClassifier) AS c-»
- * @throws  «(c.mapName())»  «c.ownedComment.getCommentText()»
-«ENDFOREACH-»
+	«FOREACH raisedException.typeSelect(MClassifier) AS c-»
+	 * @throws  «(c.mapName())»  «c.ownedComment.getCommentText()»
+	«ENDFOREACH-»
 «ENDDEFINE»
 
 
 «DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation»
-«IF multiplicity == 1-»
-	«getReturnTypeDeclaration(returnType.mapName())»
-«ELSE-»
-	«IF returnType.metaType == MPrimitiveType-»
-		«mapType()»<«returnType.mapName("Wrapper")»> returnValue = null;
+	«IF multiplicity == 1-»
+		«getReturnTypeDeclaration(returnType.mapName())»
 	«ELSE-»
-		«mapType()»<«returnType.mapName()»> returnValue = null;
+		«IF returnType.metaType == MPrimitiveType-»
+			«mapType()»<«returnType.mapName("Wrapper")»> returnValue = null;
+		«ELSE-»
+			«mapType()»<«returnType.mapName()»> returnValue = null;
+		«ENDIF-»
 	«ENDIF-»
-«ENDIF-»
 	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
 	«getReturnTypeReturn(returnType.mapName())»
 «ENDDEFINE»
 
 «REM» generate a protected region for own implementations «ENDREM»
 «DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
-/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
-/* TODO put your own implementation code here */
-
-/* «ENDPROTECT» */
+	/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
+	/* TODO put your own implementation code here */
+	
+	/* «ENDPROTECT» */
 «ENDDEFINE»
 
 
 «REM» generate modifiers for moperation «ENDREM»
 «DEFINE _Modifier FOR MOperation-»
-«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+	«visibility-» «IF static-»static«ENDIF-» «IF final-»final«ENDIF-»
+	«IF (classifier.metaType == "Class" && classifier.abstract == true)
+		|| classifier.metaType == "Interface"-»
+		«IF abstract-»abstract«ENDIF-»
+	«ENDIF-»	
 «ENDDEFINE»
 
 
 «REM» generate a parameter list for moperation «ENDREM»
 «DEFINE _Parameter FOR MOperation-»
-«FOREACH parameter AS p SEPARATOR ", "-»
-	«EXPAND _Parameter FOR p-»
-«ENDFOREACH-»
+	«FOREACH parameter AS p SEPARATOR ", "-»
+		«EXPAND _Parameter FOR p-»
+	«ENDFOREACH-»
 «ENDDEFINE»
 
 
 «REM» generate a parameter for moperation «ENDREM»
 «DEFINE _Parameter FOR MParameter»
-«IF multiplicity == 1-»
-	«type.mapName()» «asParameterName(name)»
-«ELSE-»
-	«mapType()»<«type.mapName()»> «asParameterName(name)»
-«ENDIF-»
+	«IF multiplicity == 1-»
+		«type.mapName()» «asParameterName(name)»
+	«ELSE-»
+		«mapType()»<«type.mapName()»> «asParameterName(name)»
+	«ENDIF-»
 «ENDDEFINE»
 
 
 «REM» generate exceptions for a moperation «ENDREM»
 «DEFINE _Exception FOR MOperation-»
-«IF !raisedException.isEmpty-»
-	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.mapName()»«ENDFOREACH»
-«ENDIF-»
+	«IF !raisedException.isEmpty-»
+		throws «FOREACH raisedException AS e SEPARATOR ", "»«e.mapName()»«ENDFOREACH»
+	«ENDIF-»
 «ENDDEFINE»
 
 
 «REM» generate generics «ENDREM»
 «DEFINE _Generics FOR MClassifier-»
-«IF hasGenericParameter()-»
-	<«getGenericList(genericParameter)»>
-«ELSE-»
-«ENDIF-»
+	«IF hasGenericParameter()-»
+		<«getGenericList(genericParameter)»>
+	«ELSE-»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» generate generics «ENDREM»
 «DEFINE _Generics FOR MExternal-»
-«IF hasGenericParameter()-»
-	<«getGenericList(genericParameter)»>
-«ELSE-»
-«ENDIF-»
+	«IF hasGenericParameter()-»
+		<«getGenericList(genericParameter)»>
+	«ELSE-»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» generate generics «ENDREM»
