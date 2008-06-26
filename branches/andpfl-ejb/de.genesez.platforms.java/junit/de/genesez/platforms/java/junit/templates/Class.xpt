@@ -39,7 +39,6 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
-«EXTENSION de::genesez::platforms::java::junit::scripts::Conversion»
 
 
 
@@ -50,8 +49,8 @@
 «ENDREM»
 
 «REM» evaluate stereotypes for classes «ENDREM»
-«DEFINE Annotation FOR MClass-»
-		«EXPAND _JUnitClass-»
+«DEFINE Root FOR MClass-»
+	«EXPAND _JUnitClass-»
 «ENDDEFINE»
 
 «REM»
@@ -63,7 +62,7 @@
 «REM» creates a junit class for stereotype "junitClass" «ENDREM»
 «DEFINE _JUnitClass FOR MClass-»
 	«IF hasStereotype("junitClass")-»
-		«FILE getTestFilename("", "Test")-»
+		«FILE getFilename("", "Test")-»
 			/**
 			  *	templates for generation of JUnit classes have been written by
 			  *
@@ -74,8 +73,8 @@
 			  *
 			  */
 			package «getPackagePath()»;
-			import org.junit.*;
-			import static org.junit.Assert.*;
+			
+			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_ManualImports")-»
 			
 			/**
 			  * generated JUnit test class for "«mapName()»"
@@ -138,10 +137,12 @@
 				  */
 				@Test
 				public void getterSetterTest(){	
+				
 					«FOREACH property.select(e|(!e.hasStereotype("accessor") 
 							|| (!e.hasTaggedValue("accessor", "getter", "false") 
 							&&  !e.hasTaggedValue("accessor", "setter", "false")))
-							&& (isPrimitiveDatatype(e.type.mapName()) || e.type.mapName() == "String")) AS ids-»
+							&& (isPrimitiveDatatype(e.type.mapName()) || e.type.mapName() == "String")
+							&& e.multiplicity == 1) AS ids-»
 						«REM» if getter and setter methods are generated «ENDREM»
 						{
 							«ids.type.mapName()-» temp;
@@ -202,6 +203,9 @@
 «DEFINE _OwnCodeImpl(String proRegId) FOR MClass-»
 	/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
 	/* TODO: put your own testing code here */
+
+			import org.junit.*;
+			import static org.junit.Assert.*;	
 	
 	/* «ENDPROTECT» */
 «ENDDEFINE»
