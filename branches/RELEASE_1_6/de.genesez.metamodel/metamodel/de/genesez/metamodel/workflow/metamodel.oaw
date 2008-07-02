@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- this file runs the uml2ecore Workflow from the oaw Model-to-Model -->
+
+<workflow>
+	<!--
+		make workflow working with 'environment.properties' file
+		ANT uses 'basedir', oAW uses 'baseDir' instead, other name, same meaning ;-)
+	-->
+	<property name="local.basedir" value="${baseDir}" />
+	<property name="magicdraw.dir" value="${magicdrawDir}" />
+	<!-- include ANT build properties (file + directory settings) -->
+	<property file="build/build.properties" />
+	
+	<!-- maybe in future, when we have an update site or similiar and our metamodel is robust -->
+	<!-- property name="nsUri" value="http://genesez.de/metamodel.ecore" / -->
+	<!-- now just referencing the ecore file within the genesez metamodel plugin -->
+	<property name="nsUri" value="platform:/plugin/de.genesez.metamodel/${ecore.file}" />
+	
+	
+	<!-- following variables should be defined for transformation file -->
+	<!-- root package (model) should be included -->
+	<property name="includedPackages" value="de.genesez.metamodel" />
+	<!-- don't add anything -->
+	<property name="addNameAttribute" value="false" />
+	<!-- we want just one resource -->
+	<property name="resourcePerToplevelPackage" value="false" />
+	
+	
+	<!-- export uml2 files from magic draw model -->
+	<component id="xmiExport"
+		class="com.nomagic.magicdraw.oaw.ExportWorkflowComponent"
+		projectFile="${magicdraw.file}"
+		exportDirectory="${model.export.dir}"
+		skipUpToDate="true"
+		requiredVersion="2.x"
+		magicdrawHome="${magicdraw.dir}">
+	</component>
+	
+	<!-- First is to initialize the support for uml2 models. -->
+    <bean class="oaw.uml2.Setup" standardUML2Setup="true"/> 
+	
+    <!-- Read the uml2 model file into the uml2model workflow slot. -->
+	<component id="xmiReader" class="org.openarchitectureware.emf.XmiReader">
+		<modelFile value="${uml2.file}"/>
+		<outputSlot value="uml2model"/>
+	</component>
+	
+	
+	<!-- Check some constraints to keep	the model consistent. -->
+	<component id="constraintChecker" class="org.openarchitectureware.check.CheckComponent">
+		
+		<!-- Workin with ecore models also requires the ecore meta model. -->
+	    <metaModel id="metamodel.emf" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="org.eclipse.emf.ecore.EcorePackage"/>
+		</metaModel>
+		
+		<!-- Workin with uml2 models also requires the UML2 meta model. -->
+		<metaModel id="metamodel.uml2" class="oaw.uml2.UML2MetaModel"/>
+		
+		<!-- This is the file that contains the constraints. Note the use of
+			 :: as the namespace delimiter. Also don't specify the .chk
+			 extension of the uml2Constraints file. The namespaces correspond
+			 to Java packages. -->
+		<checkFile value="org::openarchitectureware::util::uml2ecore::uml2Constraints"/>
+		
+		<!-- Check the complete set of model elements under the generatorModel 
+			 slot in the workflow. This will be the model object and all its
+			 children, recusively.  -->
+		<emfAllChildrenSlot value="uml2model"/>
+		
+		<!-- Finally, if encounter errors here (i.e. failed constraints)
+			 we stop the workflow here. We won't invoke the transformation if
+			 the model is faulty. -->
+		<abortOnError value="true"/>
+	</component>
+	
+	
+	<!-- This one runs the transformation from UML2 to Ecore. -->
+	<component id="uml2ecore" class="oaw.xtend.XtendComponent">
+		
+		<!-- Workin with ecore models also requires the ecore meta model. -->
+		<metaModel idRef="metamodel.emf"/>
+		
+		<!-- Workin with uml2 models also requires the UML2 meta model. -->
+		<metaModel idRef="metamodel.uml2"/>
+		
+		<!-- This statement makes the value "${nsUriPrefix"} passed in
+			by the external workflow file available as a global variable
+			that is accessed by the nsUri() function in uml2ecore.ext -->
+		<globalVarDef name="nsUri" value="'${nsUri}'"/>
+		<globalVarDef name="includedPackages" value="'${includedPackages}'" />
+		<globalVarDef name="addNameAttribute" value="${addNameAttribute}" />
+		<globalVarDef name="resourcePerToplevelPackage" value="${resourcePerToplevelPackage}" />	   	
+		
+	   	<!-- Run the model to model transformation itself. There's an 
+			 extension file called uml2ecore.ext in the respective location
+		 	 in the classpath that contains a function called transform that
+		 	 takes an object of type UML2::Model as its parameter. Note that 
+		 	 we can use the slot name ecoremodel as a variable in this expression. -->
+	   	<invoke value="org::openarchitectureware::util::uml2ecore::uml2ecore::top(uml2model)"/>
+		
+	   	<!-- Finally, the return value of the transformation is put into the 
+			 ecoreModel slot in the workflow. -->
+	   <outputSlot value="ecoreModel"/>
+	</component>
+	
+	
+	<!-- Write the ecore model into the ecore file. -->
+	<component id="xmiWriter" class="org.openarchitectureware.emf.XmiWriter">
+		<inputSlot value="ecoreModel"/>
+		<modelFile value="${ecore.file}"/>
+	</component>
+    
+</workflow>
