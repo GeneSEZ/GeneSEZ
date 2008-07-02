@@ -1,5 +1,5 @@
 /**
- * naming conventions for java
+ * Naming conventions for java
  * 
  * - fileName is only the file name, e.g. 'FooBar.java'
  * 
@@ -15,7 +15,7 @@ extension de::genesez::platforms::common::AccessHelper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	prefix + suffix + file extensions for types
+	prefix + suffix + file extensions for java types
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -166,18 +166,6 @@ String asFileName(MDataType this) : asTypeName() + fileExtension();
  */
 String asFileName(MClassifier this) : asTypeName() + fileExtension();
 
-/**
- * 
- */
-//String asFileName(MType this) : this;
-
-/**
- * formats the name of a type after typemapping
- * don't touch the type, the name of the type is determined by typemapping
- * @return	the name of the type
- */
-//String asFileName(String this) : this;
-
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	enumeration literals
@@ -199,6 +187,13 @@ String asEnumLiteral(MLiteral this) : name.toUpperCase();
 */
 
 /**
+ * formats an attribute name according to the value of it's 'final' property
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asAttribute(MAttribute this) : final ? asConstant() : asVariable();
+
+/**
  * formats an attribute name as a constant
  * @context	the attribute to format
  * @return	the formatted attribute name
@@ -213,13 +208,6 @@ String asConstant(MAttribute this) : name.toUpperCase();
 String asVariable(MAttribute this) : name.toFirstLower();
 
 /**
- * formats an attribute name according to the value of it's 'final' property
- * @context	the attribute to format
- * @return	the formatted attribute name
- */
-String asAttribute(MAttribute this) : final ? asConstant() : asVariable();
-
-/**
  * formats an attribute name as a getter method
  * @context	the attribute to format
  * @return	the formatted name of the getter method
@@ -232,28 +220,6 @@ String asGetter(MAttribute this) : "get" + name.toFirstUpper();
  * @return	the formatted name of the setter method
  */
 String asSetter(MAttribute this) : "set" + name.toFirstUpper();
-
-/**
- * formats an attribute name as a 'insert in' method
- * @context	the attribute to format
- * @return	the formatted name of the 'insert in' method
- */
-String asInsertIn(MAttribute this) : "insertIn" + name.toFirstUpper();
-
-/**
- * formats an attribute name as a 'remove from' method
- * @context	the attribute to format
- * @return	the formatted name of the 'remove from' method
- */
-String asRemoveFrom(MAttribute this) : "removeFrom" + name.toFirstUpper();
-
-/**
- * formats an attribute name as a 'add to' method
- * @context	the attribute to format
- * @return	the formatted name of the add-to method
- */
-String asAddTo(MAttribute this) : "addTo" + name.toFirstUpper();
-
 
 
 /*
@@ -270,39 +236,11 @@ String asAddTo(MAttribute this) : "addTo" + name.toFirstUpper();
 String asAttribute(MAssociationRole this) : name.toFirstLower();
 
 /**
- * formats an association role as a getter method
- * @context	the association role to format
- * @return	the formatted name of the getter method
+ * formats the accessor method of an association role
+ * @context	the accessor method of an association role to format
+ * @return	the formatted name of the accessor method
  */
-String asGetter(MAssociationRole this) : "get" + name.toFirstUpper();
-
-/**
- * formats an association role as a setter method
- * @context	the association role to format
- * @return	the formatted name of the setter method
- */
-String asSetter(MAssociationRole this) : "set" + name.toFirstUpper();
-
-/**
- * formats an association role as a 'insert in' method
- * @context	the association role to format
- * @return	the formatted name of the 'insert in' method
- */
-String asInsertIn(MAssociationRole this) : "insertIn" + name.toFirstUpper();
-
-/**
- * formats an association role as a 'remove from' method
- * @context	the association role to format
- * @return	the formatted name of the 'remove from' method
- */
-String asRemoveFrom(MAssociationRole this) : "removeFrom" + name.toFirstUpper();
-
-/**
- * formats an association role as a 'iterator' method
- * @context	the association role to format
- * @return	the formatted name of the 'iterator' method
- */
-String asIterator(MAssociationRole this) : asGetter() + "Iterator";
+String asAccessor(MAssociationRole this) : name.toFirstLower();
 
 
 /*
