@@ -8,15 +8,26 @@
 		following parameters are required:
 		==================================
 		
-		$rootTemplate 		the root xpt-file where the generation starts
-		$aspectTemplates	comma separated list of templates with aspect advices for XPand AOP
-		$aspectScripts		comma separated list of scripts with aspect advices for Xtend AOP
-		$excludePackages	comma or semicola separated list with packages to exclude from code generation
-							(full qualified package names, ', ' or '; ' are also permitted)
-		$typeMappingFile	name of the xml type mapping file
+		$rootTemplate		the root xpt-file where the generation starts
 		$outputDir 			the path where the generated file are produced
 		$proRegDir 			the path where the protected reagions are found
 							(usually the same as the output directory
+		
+		$aspectTemplates	comma separated list of templates with aspect advices for XPand AOP
+		$aspectScripts		comma separated list of scripts with aspect advices for Xtend AOP
+		
+		$typeMappingFile	name of the xml type mapping file
+		$excludePackages	comma or semicola separated list with packages to exclude from code generation
+							(full qualified package names, ', ' or '; ' are also permitted)
+		$useModelNameAsBasePackage	boolean which indicates if the model name is used as base package
+		$basePackage		the base package for source code artefacts
+		$generateSectionComments	boolean flag which indicates if section comments are generated or not
+		$disableAccessors	boolean which indicates if accessor methods are generated or not
+		$useAccessorStereotype	boolean which indicates if the «accessor» stereotype is used to 
+							distinct the generation of accessor methods
+		$usePropertyVisibilityForAccessors	boolean which indicates if properties should be always private and 
+							the visibility of the property is used as the visibility of the accessor method
+		
 		$configFile			xml file for configuration settings
 	-->
 	
@@ -41,6 +52,19 @@
 		
 		<!-- exclude packages from code gen -->
 		<globalVarDef name="excludePackages" value="'${excludePackages}'"/>
+		
+		<!-- boolean which indicates if the model name is used as base package -->
+		<globalVarDef name="useModelNameAsBasePackage" value="${useModelNameAsBasePackage}"/>
+		
+		<!-- base package to use for generated artefacts -->
+		<globalVarDef name="basePackage" value="'${basePackage}'"/>
+		
+		<!-- boolean which indicates if section comments are generated or not -->
+		<globalVarDef name="generateSectionComments" value="${generateSectionComments}"/>
+		
+		<globalVarDef name="disableAccessors" value="${disableAccessors}"/>
+		<globalVarDef name="useAccessorStereotype" value="${useAccessorStereotype}"/>
+		<globalVarDef name="usePropertyVisibilityForAccessors" value="${usePropertyVisibilityForAccessors}"/>
 		
 		<!-- make config file accessible as global variable -->
 		<globalVarDef name="configFile" value="'${configFile}'"/>
