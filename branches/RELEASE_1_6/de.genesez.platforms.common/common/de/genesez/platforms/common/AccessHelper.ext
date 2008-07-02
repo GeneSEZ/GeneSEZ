@@ -15,10 +15,6 @@
  * @author	nico herbig
  * @author	tobias haubold (last)
  * @date	2008-04-18
- * 
- * @todo	getCommentText(List[MComment]), line 250
- * 	- revise, replace substitution of '\n' by ';' with another concept
- * 	  (maybe precede each line with ' *') -> more target language related
  */
 
 // based on genesez meta model
@@ -52,25 +48,46 @@ boolean isSingleValuedType(MParameter this) :
 	multiplicity == 1;
 
 /**
- * checks if a property has a multi-valued type
+ * checks if a property is a multi-valued type
  * @return	true if the property has a multi-valued type, otherwise false
  */
 boolean isMultiValuedType(MProperty this) :
 	multiplicity != 1;
 
 /**
- * checks if an operation has a multi-valued type
+ * checks if an operation is a multi-valued type
  * @return	true if the operation has a multi-valued type, otherwise false
  */
 boolean isMultiValuedType(MOperation this) :
 	multiplicity != 1;
 
 /**
- * checks if a parameter has a multi-valued type
+ * checks if a parameter is a multi-valued type
  * @return	true if the parameter has a multi-valued type, otherwise false
  */
 boolean isMultiValuedType(MParameter this) :
 	multiplicity != 1;
+
+/**
+ * checks if a property has a fixed count of values
+ * @return	true if the property has a fixed count of values, otherwise false
+ */
+boolean hasFixedMultiplicity(MProperty this) : 
+	multiplicity > -1;
+
+/**
+ * checks if a parameter has a fixed count of values
+ * @return	true if the parameter has a fixed count of values, otherwise false
+ */
+boolean hasFixedMultiplicity(MParameter this) : 
+	multiplicity > -1;
+
+/**
+ * checks if an operation has a fixed count of values
+ * @return	true if the operation has a fixed count of values, otherwise false
+ */
+boolean hasFixedMultiplicity(MOperation this) : 
+	multiplicity > -1;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -130,6 +147,24 @@ List[MAttribute] getParentAttributes(MClassifier this) :
 		? {}
 		: supertype.first().getAllAttributes();
 
+/**
+ * getter for a list of all instance attributes
+ * @return 	a list with instance attributes or an empty list
+ */
+List[MAttribute] instanceAttributes(MClassifier this):
+	{}.addAll(property.typeSelect(MAttribute).select( a| !a.static && !a.derived )).addAll(
+		generalization.isEmpty
+			? {}
+			: generalization.instanceAttributes() 
+	);
+
+/**
+ * just there for error free templates
+ * @see		instanceAttributes(MClassifier)
+ * @return	an empty list
+ */
+List[MAttribute] instanceAttributes(MType this) : {};
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	association + association roles
@@ -144,13 +179,31 @@ boolean hasAssociationRoles(MClassifier this) :
 	property.typeSelect(MAssociationRole).size > 0;
 
 /**
+ * checks if an association role has an opposite or not
+ * @return	true, if the association role has an opposite
+ */
+boolean hasOpposite(MAssociationRole this) : opposite != null;
+
+/**
  * checks if an association role belongs to an association class or not
- * @param	aend	an association role
  * @return	true, if it's a plain association role and doesn't belongs to an association class and 
  * 			false, if the association role belongs to an association class
  */
 boolean hasAssociationClass(MAssociationRole this) :
 	association.associationClass != null;
+
+/**
+ * check if a class is an association class or not
+ * @return	true, if the class is an association class, otherwise false
+ */
+boolean isAssociationClass(MClass this) : ownedAssociation != null;
+
+/**
+ * check if a classifier is an association class or not
+ * @see		isAssociationClass(MClass)
+ * @return	false
+ */
+boolean isAssociationClass(MClassifier this) : false;
 
 /**
  * checks if an association role belongs to an association class or not
