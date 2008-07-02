@@ -1,0 +1,58 @@
+/**
+ * Adds all use dependencies to the model elements.
+ * All used types of a classifier are added to the 'supplier' association.
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-18
+ */
+
+// based on genesez meta model
+import gcore;
+
+
+/**
+ * iterates over the model and contained packages and processes all classifiers
+ * @return	the same model as given
+ */
+MModel addUseDependencies(MModel this) :
+	process() ->
+	this;
+
+/**
+ * processes all subpackages + classifiers within a package
+ * @return	the same package as given
+ */
+private MPackage process(MPackage this) :
+	nestedPackage.process() ->
+	classifier.process() ->
+	this;
+
+/**
+ * adds all used types to the supplier (use dependency) collection
+ * used types are: class, interface, enumeration, data type, external types
+ * not included: primitive types, generics
+ */
+private MClassifier process(MClassifier this) :
+	// add types of properties
+	supplier.addAll( property.type.filter() ) ->
+	// add return types of operations
+	supplier.addAll( operation.returnType.filter() ) ->
+	// add raised exceptions
+	supplier.addAll( operation.raisedException.filter() ) ->
+	// add parameter types of operation parameters
+	supplier.addAll( operation.parameter.type.filter() ) ->
+	// add supertypes
+	supplier.addAll( generalization ) ->
+	supplier.addAll( realization ) ->
+	
+	// remove duplicates !?! - but don't appear, maybe ecore removes them for us :)
+	this;
+
+/**
+ * removes all primitive types and all generics from the list
+ * don't change parameter l to context - currently doesn't work with oAW 4.2
+ * @param	l	list with types
+ * @return		list with filtered types
+ */
+private List[MType] filter(List[MType] l) :
+	l.reject( e| e.metaType == MPrimitiveType || e.metaType == MGeneric );
