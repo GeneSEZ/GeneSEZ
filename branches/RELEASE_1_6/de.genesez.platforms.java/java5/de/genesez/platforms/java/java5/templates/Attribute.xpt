@@ -1,5 +1,6 @@
 «REM»
 	Handles everything about attriutes.
+	- supports the stereotype '<<primitive>>' for multi-valued attributes
 	
 	@author	nico herbig
 	@author	tobias haubold (last)
@@ -11,10 +12,13 @@
 
 «REM» useful helper functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Accociation»
 
 
 «REM»
@@ -22,8 +26,10 @@
 «ENDREM»
 
 «REM»
-	processes the attributes of a classifier
-	order: static final, static, non static
+	processes all attributes
+	
+	for interfaces, all attributes are treated as 'public', 'static' and 'final'
+	for classifiers the attributes are ordered: static final, static, non static
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && e.final && !e.derived ) -»
@@ -32,44 +38,34 @@
 «ENDDEFINE»
 
 «REM»
+	processes the derived attributes of an interface
+	only the attributes with visibility 'public' are processed, because the fact that all interface methods must be 'public'
+«ENDREM»
+«DEFINE Derived FOR MInterface -»
+	«EXPAND _DerivedDeclaration FOREACH property.typeSelect(MAttribute).select( e| e.derived && e.visibility == "public" ) -»
+«ENDDEFINE»
+
+«REM»
 	processes the derived attributes of a classifier
 	order: static, non static
 «ENDREM»
 «DEFINE Derived FOR MClassifier -»
-	«EXPAND _Derived FOREACH property.typeSelect(MAttribute).select( e| e.static && e.derived ) -»
-	«EXPAND _Derived FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.derived ) -»
+	«EXPAND _DerivedImplementation FOREACH property.typeSelect(MAttribute).select( e| e.static && e.derived ) -»
+	«EXPAND _DerivedImplementation FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.derived ) -»
 «ENDDEFINE»
 
 «REM»
-	processes the accessors for attributes of a classifier
+	processes the accessors methods for attributes
+	
+	distincts the features 'disableAccessors' + 'useAccessorStereotype' using the m2t-helper functions
+	for 'final' attributes, the generation of setter's is suppressed
 «ENDREM»
-«DEFINE Accessors FOR MClass-»
-«EXPAND Getter FOREACH property.typeSelect(MAttribute).select( e| e.final && !e.derived ) -»
+«DEFINE Accessors FOR MClass -»
+«EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| e.generateGetter() && e.final && !e.derived ) -»
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
-	«EXPAND Getter FOR a -»
-	«EXPAND _Setter FOR a -»
-	«EXPAND _InsertIn FOR a -»
-	«EXPAND _RemoveFrom FOR a -»
+	«IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -»
+	«IF a.generateSetter() && !a.hasAspect(associationAspectDomain(), associationAspectName()) -»«EXPAND _Setter FOR a -»«ENDIF -»
 «ENDFOREACH -»
-«ENDDEFINE»
-
-«REM»
-	generates the getter method for an attribute
-«ENDREM»
-«DEFINE Getter FOR MAttribute -»
-	«EXPAND Comment::Getter -»
-	«IF isSingleValuedType() -»
-	«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
-		return «asAttribute()»;
-	«ELSE -»
-	«EXPAND _ModifierAccessor» «mapType()»<«type.mapName().asTypeName()»> «asGetter()»() {
-	«IF unique -»
-		return java.util.Collections.unmodifiableSet(«asAttribute()»);
-	«ELSE -»
-		return java.util.Collections.unmodifiableList(«asAttribute()»);
-	«ENDIF -»
-	«ENDIF -»
-	}
 «ENDDEFINE»
 
 
@@ -81,97 +77,81 @@
 
 «REM»
 	generates an attribute declaration
+	for attributes, the implicit modifiers 'public', 'static' + 'final' are generated
 «ENDREM»
 «DEFINE _Declaration FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
 	«IF isSingleValuedType() -»
-	«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue»;
+		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ELSE -»
-	«EXPAND _Modifier -» «mapType() -»<«type.mapName().asTypeName()»> «asAttribute()» = new «mapType("Implementation")»<«type.mapName().asTypeName() -»>();
+		«EXPAND _Modifier -» «EXPAND Type::MultiValuedType -» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
-	generates the accessor method for an derived attribute
+	generates the accessor method declaration of an derived attribute of an interface
+	visibility is set to 'public' because it must be 'public'
 «ENDREM»
-«DEFINE _Derived FOR MAttribute -»
+«DEFINE _DerivedDeclaration FOR MAttribute -»
+	«EXPAND Comment::Getter -»
+	«IF isSingleValuedType() -»
+	public «type.mapName()» «asGetter()»();
+	«ELSE -»
+	public «EXPAND Type::MultiValuedType -» «asGetter()»();
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the accessor method of an derived attribute
+«ENDREM»
+«DEFINE _DerivedImplementation FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«IF isSingleValuedType() -»
 	«EXPAND _Modifier» «type.mapName()» «asGetter()»() {
-		«getReturnTypeDeclaration(type.mapName().asTypeName())»
 		«EXPAND _OwnCodeImpl("java.derived.attribute.implementation." + xmiGuid) -»
-		«getReturnTypeReturn(type.mapName().asTypeName())»
 	}
 	«ELSE -»
-	«EXPAND _Modifier» «mapType().asTypeName()»<«type.mapName().asTypeName()»> «asGetter()»() {
-		«getReturnTypeDeclaration(type.mapName().asTypeName())»
+	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asGetter()»() {
 		«EXPAND _OwnCodeImpl("java.derived.attribute.implementation." + xmiGuid) -»
-		«getReturnTypeReturn(type.mapName().asTypeName())»
 	}
 	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
-	generates the setter method for an attribute, if the attribut has a simple type
-«ENDREM»
-«DEFINE _Setter FOR MAttribute -»
-«IF isSingleValuedType() -»
-	«EXPAND Comment::Setter -»
-	«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» _«asAttribute()») {
-		«asAttribute()» = _«asAttribute()»;
-	}
-«ENDIF -»
-«ENDDEFINE»
-
-«REM»
-	generates the insert in method for an attribute with a multivalued (collection) type
-«ENDREM»
-«DEFINE _InsertIn FOR MAttribute -»
-«IF isMultiValuedType() -»
-	«EXPAND Comment::InsertIn -»
-	«EXPAND _ModifierAccessor» void «asAddTo()»(«type.mapName().asTypeName()» toAdd) {
-		«asAttribute()».add(toAdd);
-	}
-«ENDIF -»
-«ENDDEFINE»
-
-«REM»
-	generates the remove from method for an attribute with a collection type
-«ENDREM»
-«DEFINE _RemoveFrom FOR MAttribute -»
-«IF isMultiValuedType() -»
-	«EXPAND Comment::RemoveFrom -»
-	«EXPAND _ModifierAccessor» void «asRemoveFrom()»(«type.mapName().asTypeName()» toRemove) {
-		«asAttribute()».remove(toRemove);
-	}
-«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-	processes the modifiers of an attribute
+	processes the modifiers for the declaration of an attribute
+	
+	visibility of attributes depends on:
+	* if the attribute belongs to an interface
+	* the feature 'usePropertyModifiersForAccessors'
+	* if the attribute is 'derived'
 «ENDREM»
 «DEFINE _Modifier FOR MAttribute -»
 «IF classifier.metaType == MInterface -»
-	«visibility» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
+	public static final
+«ELSEIF usePropertyVisibilityForAccessors() && !derived -»
+	private «IF static -»static«ENDIF -» «IF final -»final «ENDIF -»
 «ELSE -»
-	private «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
+	«visibility» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
 «ENDIF -»
-«ENDDEFINE»
-
-«REM»
-	processes the modifiers of an attribute accessor method
-«ENDREM»
-«DEFINE _ModifierAccessor FOR MAttribute -»
-	public «IF static»static«ENDIF» «IF final»final«ENDIF»
 «ENDDEFINE»
 
 «REM»
 	processes the default value of an attribute
+	for non-final, multi-valued attributes, a default is always generated (for type safety)
+	final multi-valued attributes should be initialized within the constructor
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
 «IF hasDefaultValue() -» = «defaultvalue -»
-«ELSEIF isMultiValuedType() -» = new «mapType("Implementation")»<«type.mapName().asTypeName() -»>()
+«ELSEIF isMultiValuedType() && !final -»
+	«IF usePrimitiveType() && !hasFixedMultiplicity() -»
+	 = null
+	«ELSEIF usePrimitiveType() && hasFixedMultiplicity() -»
+	 = new «type.mapName().asTypeName()»[«multiplicity»];
+	«ELSEIF type.isPrimitiveType() -»
+	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»>()
+	«ELSE -»
+	 = new «mapType("Implementation") -»<«type.mapName().asTypeName() -»>()
+	«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -179,7 +159,57 @@
 	generates a protected region
 «ENDREM»
 «DEFINE _OwnCodeImpl(String id) FOR MAttribute -»
+		«getReturnTypeDeclaration(type.mapName().asTypeName())»
 		«PROTECT CSTART "/* " CEND " */" ID (id)»
 		// TODO: put the implementation of derived (calculated) attribute '«asAttribute()»' here
 		«ENDPROTECT»
+		«getReturnTypeReturn(type.mapName().asTypeName())»
 «ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the getter method for an attribute
+	the attribute is simply returned
+«ENDREM»
+«DEFINE _Getter FOR MAttribute -»
+«IF isSingleValuedType() -»
+	«EXPAND Comment::Getter -»
+	«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
+		return «asAttribute()»;
+	}
+«ELSE -»
+	«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType -» «asGetter()»() {
+		return «asAttribute()»;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the setter method for an single valued attribute
+«ENDREM»
+«DEFINE _Setter FOR MAttribute -»
+«IF isSingleValuedType() -»
+	«EXPAND Comment::Setter -»
+	«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «asAttribute()») {
+		this.«asAttribute()» = «asAttribute()»;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the modifiers of an attribute accessor method
+	
+	distincts if the visibility of the property should be used or simply 'public'
+«ENDREM»
+«DEFINE _ModifierAccessor FOR MAttribute -»
+	«IF usePropertyVisibilityForAccessors() -»
+	«visibility» «IF static»static«ENDIF -» «IF final»final«ENDIF -»
+	«ELSE -»
+	public «IF static»static«ENDIF -» «IF final»final«ENDIF -»
+	«ENDIF -»
+«ENDDEFINE»
+
