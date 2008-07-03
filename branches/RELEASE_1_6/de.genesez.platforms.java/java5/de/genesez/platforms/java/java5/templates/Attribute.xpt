@@ -117,13 +117,11 @@
 	«EXPAND Comment::Getter -»
 	«IF isSingleValuedType() -»
 	«EXPAND _Modifier» «type.mapName()» «asGetter()»() {
-		«EXPAND _OwnCodeImpl("java.derived.attribute.implementation." + xmiGuid) -»
-	}
 	«ELSE -»
 	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asGetter()»() {
-		«EXPAND _OwnCodeImpl("java.derived.attribute.implementation." + xmiGuid) -»
-	}
 	«ENDIF -»
+		«EXPAND _DerivedImplementationBody -»
+	}
 «ENDDEFINE»
 
 «REM»
@@ -170,14 +168,14 @@
 «ENDDEFINE»
 
 «REM»
-	generates a protected region
+	generates the body for the implementation of derived attributes
 «ENDREM»
-«DEFINE _OwnCodeImpl(String id) FOR MAttribute -»
-		«getReturnTypeDeclaration(type.mapName().asTypeName())»
-		«PROTECT CSTART "/* " CEND " */" ID (id)»
-		// TODO: put the implementation of derived (calculated) attribute '«asAttribute()»' here
+«DEFINE _DerivedImplementationBody FOR MAttribute -»
+		«PROTECT CSTART "/* " CEND " */" ID ("java.derived.attribute.implementation." + xmiGuid)»
+		// TODO: implementation of derived (calculated) attribute '«asAttribute()»'
+		throw new UnsupportedOperationException(
+				"The implementation of the derived attribute '«asAttribute()»' is missing!");
 		«ENDPROTECT»
-		«getReturnTypeReturn(type.mapName().asTypeName())»
 «ENDDEFINE»
 
 

@@ -26,8 +26,18 @@
 	checks if a import of a type is really needed
 «ENDREM»
 «DEFINE Import FOR MClassifier -»
+«EXPAND _FixedImports -»
 «EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this) )»
 «EXPAND _OwnImports -»
+«ENDDEFINE»
+
+«REM»
+	generates fixed import statements
+	imports the types for association handling + java.util package
+«ENDREM»
+«DEFINE _FixedImports FOR MClassifier -»
+import java.util.*;
+import de.genesez.platforms.java.umlsupport.associations.*;
 «ENDDEFINE»
 
 «REM»
