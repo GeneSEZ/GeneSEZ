@@ -119,6 +119,7 @@ boolean hasDefaultValue(MAttribute this) :
 /**
  * getter for a list of all attributes including inherited
  * @return	a list with attributes or an empty list
+ * @deprecated	replaced by {@link allInitializableAttributes(MClassifier)}
  */
 List[MAttribute] getAllAttributes(MClassifier this) :
 	{}.add( getOwnAttributes() )
@@ -128,12 +129,14 @@ List[MAttribute] getAllAttributes(MClassifier this) :
  * it's just there for error free templates
  * @return	an empty list
  * @see		getParentAttributes(MClassifier)
+ * @deprecated	replaced by {@link allInitializableAttributes(MType)}
  */
 List[MAttribute] getAllAttributes(MType this) : {};
 
 /**
  * getter for a list with all owned attributes excluding final and derived
  * @return	a list with attributes or an empty list
+ * @deprecated	replaced by {@link owningInitializableAttributes(MClassifier)}
  */
 List[MAttribute] getOwnAttributes(MClassifier this) :
 	property.typeSelect(MAttribute).select( a| !a.final && !a.derived );
@@ -141,6 +144,7 @@ List[MAttribute] getOwnAttributes(MClassifier this) :
 /**
  * getter for a list of all inherited attributes of the first supertype
  * @return	a list with attributes or an empty list
+ * @deprecated	replaced by {@link allInitializableAttributes(MClassifier)}
  */
 List[MAttribute] getParentAttributes(MClassifier this) :
 	supertype.isEmpty
@@ -148,22 +152,38 @@ List[MAttribute] getParentAttributes(MClassifier this) :
 		: supertype.first().getAllAttributes();
 
 /**
- * getter for a list of all instance attributes
- * @return 	a list with instance attributes or an empty list
+ * checks if a classifier has initializable attributes or not
+ * @return	true, if a classifier has initializable attributes, otherwise false
  */
-List[MAttribute] instanceAttributes(MClassifier this):
-	{}.addAll(property.typeSelect(MAttribute).select( a| !a.static && !a.derived )).addAll(
+boolean hasInitializableAttributes(MClassifier this) : !allInitializableAttributes().isEmpty;
+
+/**
+ * getter for a list of all owning initializable attributes
+ * @return	a list of initializable attributes or an empty list
+ */
+List[MAttribute] owningInitializableAttributes(MClassifier this) :
+	property.typeSelect(MAttribute).select( e| 
+		!e.static && !e.derived && !( e.final && e.hasDefaultValue() )
+	);
+
+/**
+ * getter for a list of all initializable attributes
+ * @return 	a list of initializable attributes or an empty list
+ */
+List[MAttribute] allInitializableAttributes(MClassifier this):
+	owningInitializableAttributes().addAll(
 		generalization.isEmpty
 			? {}
-			: generalization.instanceAttributes() 
+			: generalization.allInitializableAttributes()
 	);
 
 /**
  * just there for error free templates
- * @see		instanceAttributes(MClassifier)
+ * @see		allInitializableAttributes(MClassifier)
  * @return	an empty list
  */
-List[MAttribute] instanceAttributes(MType this) : {};
+List[MAttribute] allInitializableAttributes(MType this) : {};
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
