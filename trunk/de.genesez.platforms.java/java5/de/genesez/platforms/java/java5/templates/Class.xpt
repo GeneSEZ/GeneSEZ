@@ -43,7 +43,6 @@ package «packageDeclaration( basePackage() ) -»;
 	// -- generated constructors --------------------------------------------
 	«ENDIF -»
 	«EXPAND Operation::Constructor -»
-	«IF ownedAssociation != null»«EXPAND _InitialisingConstructorForAssocClass»«ENDIF -»
 	
 	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- generated method declarations -------------------------------------
@@ -65,53 +64,4 @@ package «packageDeclaration( basePackage() ) -»;
 	// -- own code implementation -------------------------------------------
 	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
 }
-«ENDDEFINE»
-
-
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
-
-«REM»
-	generates an initializing contructor for association classes
-	all association attributes are initialized
-	@see	_AssocAttributesAsParam(MClass)
-	@see	_InitAssocAttributes(MClass)
-«ENDREM»
-«DEFINE _InitialisingConstructorForAssocClass FOR MClass -»
-«EXPAND Comment::InitConstructorAssocClass -»
-public «asTypeName()» («EXPAND _AssocAttributesAsParam») {
-	«EXPAND _InitAssocAttributes»
-	«EXPAND _OwnCodeImplInitConstructor("java.initializing.constructor.own.code." + xmiGuid) -»
-}
-«ENDDEFINE»
-
-«REM»
-	generates the attributes of an association class as parameters
-	@see	_InitialisingConstructorForAssocClass(MClass)
-«ENDREM»// get association attributes as parameter list
-«DEFINE _AssocAttributesAsParam FOR MClass -»
-«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.mapName().asTypeName()» _«aend.asAttribute()»«ENDFOREACH -»
-«ENDDEFINE»
-
-«REM»
-	generates the initialization code for the constructor of an association class
-	@see	_InitialisingConstructorForAssocClass(MClass)
-«ENDREM»
-«DEFINE _InitAssocAttributes FOR MClass -»
-«FOREACH ownedAssociation.end AS aend -»
-	«aend.asAttribute()» =  _«aend.asAttribute()»;
-«ENDFOREACH -»
-«ENDDEFINE»
-
-«REM»
-	generates a region for own code implementations
-	within an initializing constructor
-«ENDREM»
-«DEFINE _OwnCodeImplInitConstructor(String id) FOR MClassifier -»
-	«PROTECT CSTART "/* " CEND " */" ID (id)»
-	// TODO: put your further initialization code here
-	«ENDPROTECT»
 «ENDDEFINE»

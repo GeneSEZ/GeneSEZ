@@ -46,9 +46,23 @@ package «packageDeclaration( basePackage() ) -»;
 «DEFINE Type FOR MClassifier -»
 /**
 «IF hasComment() -»
- * «ownedComment.getCommentText()»
+«comment().format() -»
 «ENDIF -»
  * @author	«getUserName()»
+ */
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	enumeration literals
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+«DEFINE EnumerationLiteral FOR MLiteral -»
+/**
+«IF hasComment() -»
+«comment().format() -»
+«ENDIF -»
+ * @generated	enumeration literal definition
  */
 «ENDDEFINE»
 
@@ -64,8 +78,10 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Attribute FOR MAttribute -»
 /**
+«IF hasComment() -»
+ * documented here {@link «asGetter()»()}
+«ENDIF -»
  * @generated	attribute definition
- * @see			{@link «asGetter()»}
  */
 «ENDDEFINE»
 
@@ -75,7 +91,7 @@ package «packageDeclaration( basePackage() ) -»;
 «DEFINE Getter FOR MAttribute -»
 /**
 «IF hasComment() -»
- * «ownedComment.getCommentText()»
+«comment().format() -»
 «ENDIF -»
  * @generated	getter for the attribute '<em><b>«asAttribute()»</b></em>'
  */
@@ -87,32 +103,11 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Setter FOR MAttribute -»
 /**
+ * documented here {@link «asGetter()»()}
  * @generated	setter method for the attribute '<em><b>«asAttribute()»</b></em>'
- * @see			{@link «asGetter()»}
  */
 «ENDDEFINE»
 
-«REM»
-	generates the comment of an 'insertIn' method
-	simply delegates to the getter method comment
-«ENDREM»
-«DEFINE InsertIn FOR MAttribute -»
-/**
- * @generated	method to insert values in the multi-valued attribute '<em><b>«asAttribute()»</b></em>'
- * @see			{@link «asGetter()»}
- */
-«ENDDEFINE»
-
-«REM»
-	generates the comment of a 'removeFrom' method
-	simply delegates to the getter method comment
-«ENDREM»
-«DEFINE RemoveFrom FOR MAttribute -»
-/**
- * @generated	method to remove values from the multi-valued attribute '<em><b>«asAttribute()»</em>
- * @see			{@link «asGetter()»}
- */
-«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -121,70 +116,36 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 
 «REM»
-	generates the comment of an attribute definition
-	simply delegates to the getter method comment
+	generates the comment of the initializer block for association attributes
+«ENDREM»
+«DEFINE AssociationInit FOR MClass -»
+// initializer block for association attributes
+«ENDDEFINE»
+
+«REM»
+	generates the comment of an association attribute
 «ENDREM»
 «DEFINE Association FOR MAssociationRole -»
 /**
- * @generated	variable definition of association to '<em><b>«type.mapName().asTypeName()»</b></em>'
- * @see			{@link «asGetter()»}
- */
-«ENDDEFINE»
-
-«REM»
-	generates the comment of the 'getter' method
-«ENDREM»
-«DEFINE Getter FOR MAssociationRole -»
-/**
 «IF hasComment() -»
- * «ownedComment.getCommentText()»
+ * documented here {@link «asAttribute()»()}
 «ENDIF -»
- * @generated	getter method for the association to '<em><b>«type.mapName().asTypeName()»</b></em>'
+ * @generated	association attribute definition
  */
 «ENDDEFINE»
 
 «REM»
-	generates the comment of a 'setter' method
-	simply delegates to the getter method comment
+	generates the comment of the 'getter' method accessor
 «ENDREM»
-«DEFINE Setter FOR MAttribute -»
-/**
- * @generated	setter method for the attribute '<em><b>«asAttribute()»</b></em>'
- * @see			{@link «asGetter()»}
- */
-«ENDDEFINE»
-«REM»
-	generates the comment of a 'setter' method
-	simply delegates to the getter method comment
-«ENDREM»
-«DEFINE Setter FOR MAssociationRole -»
-/**
- * @generated	setter method for the association to '<em><b>«type.mapName().asTypeName()»</b></em>'
- * @see			{@link «asGetter()»}
+«DEFINE Accessor FOR MAssociationRole -»
+/** 
+«IF hasComment() -»
+«comment().format() -»
+«ENDIF -»
+ * @generated	accessor of the association '<em><b>«asAttribute()»</b></em>' to {@link «type.mapName().asTypeName()»}
  */
 «ENDDEFINE»
 
-«REM»
-	generates the comment of an 'insertIn' method
-	simply delegates to the getter method comment
-«ENDREM»
-«DEFINE InsertIn FOR MAssociationRole -»
-/**
- * @generated	method to insert values in the multi-valued association to '<em><b>«type.mapName().asTypeName()»</b></em>'
- * @see			{@link «asGetter()»}
- */
-«ENDDEFINE»
-
-«REM»
-	generates the comment of a 'removeFrom' method
-	simply delegates to the getter method comment
-«ENDREM»
-«DEFINE RemoveFrom FOR MAssociationRole -»
-/**
- * @generated	method to remove values from the multi-valued association to '<em><b>«type.mapName().asTypeName()»</b></em>'
- * @see			{@link «asGetter()»}
- */
-«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -198,7 +159,7 @@ package «packageDeclaration( basePackage() ) -»;
 «DEFINE Constructor FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	 * «ownedComment.getCommentText()»
+	«comment().format() -»
 	«ENDIF -»
 	 * @generated	constructor for class '<em><b>«classifier.asTypeName()»</b></em>'
 	«EXPAND _Params FOREACH parameter -»
@@ -207,29 +168,29 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDDEFINE»
 
 «REM»
-	generates the comment of an initializing constructor for a data type
-	comments all attributes as parameters
+	generates the comment of an initializing constructor
+	comments instance attributes as parameters
 «ENDREM»
 «DEFINE InitConstructor FOR MClassifier -»
 	/**
-	 * constructor which initializes all attribute values
-	 * @generated	initializing constructor
-	«FOREACH getAllAttributes() AS a -»
-	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»}
+	 * constructor which initializes all instance attributes
+	 * @generated	initializing constructor for class '<em><b>«asTypeName()»</b></em>'
+	«FOREACH allInitializableAttributes() AS a -»
+	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»()}
 	«ENDFOREACH -»
 	 */
 «ENDDEFINE»
 
 «REM»
-	generates the comment of an initializing construtor for an association class
-	comments all association ends as parameters
+	generates the comment of an initializing constructor for a data type
+	comments all attributes as parameters
 «ENDREM»
-«DEFINE InitConstructorAssocClass FOR MClass -»
+«DEFINE InitConstructor FOR MDataType -»
 	/**
-	 * constructor which initializes the managed association ends
-	 * @generated	initializing constructor for the association class
-	«FOREACH ownedAssociation.end AS p -»
-	 * @param	«p.asAttribute()»	{@link «p.type.asTypeName()».«p.asGetter()»}
+	 * constructor which initializes all instance attributes
+	 * @generated	initializing constructor for class '<em><b>«asTypeName()»</b></em>'
+	«FOREACH getAllAttributes() AS a -»
+	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»()}
 	«ENDFOREACH -»
 	 */
 «ENDDEFINE»
@@ -239,15 +200,13 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Operation FOR MOperation -»
 	/**
-	«PROTECT CSTART '<!-- ' CEND ' -->' ID ("test." + xmiGuid) DISABLE»
 	«IF hasComment() -»
-	 * «ownedComment.getCommentText()»
+	«comment().format() -»
 	«ENDIF -»
 	 * @generated	method stub for further implementation
 	«EXPAND _Params FOREACH parameter -»
 	«EXPAND _Return -»
 	«EXPAND _Exceptions FOREACH raisedException -»
-	«ENDPROTECT»
 	 */
 «ENDDEFINE»
 
@@ -255,7 +214,7 @@ package «packageDeclaration( basePackage() ) -»;
 	generates the comments of the parameters
 «ENDREM»
 «DEFINE _Params FOR MParameter -»
- * @param	«asParameter()»	«ownedComment.getCommentText()»
+ * @param	«asParameter()»	«comment().format("", ". ") -»
 «ENDDEFINE»
 
 «REM»
@@ -263,7 +222,7 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE _Return FOR MOperation -»
 «IF hasReturnType() -»
- * @return	«returnType.ownedComment().getCommentText()»
+ * @return	«comment().format("", ". ") -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -271,7 +230,7 @@ package «packageDeclaration( basePackage() ) -»;
 	generates the comments of the exceptions an operation can throw
 «ENDREM»
 «DEFINE _Exceptions FOR MClassifier -»
- * @throws	«asTypeName()»	«ownedComment.getCommentText()»
+ * @throws	«asTypeName()»
 «ENDDEFINE»
 
 «REM»

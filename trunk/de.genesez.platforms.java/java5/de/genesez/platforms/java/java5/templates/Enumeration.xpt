@@ -1,6 +1,10 @@
 «REM»
 	Performs the generation of enumerations
 	
+	The following features are provided:
+	- enumeration literals
+	- operation implementations
+	
 	@author	nico herbig
 	@author	tobias haubold (last)
 	@date	2008-05-19
@@ -9,11 +13,11 @@
 «REM» based on genesez meta model «ENDREM»
 «IMPORT gcore»
 
+«EXTENSION de::genesez::platforms::common::AccessHelper»
 «EXTENSION de::genesez::platforms::common::m2t::Helper»
 
 «REM» use java naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
-«REM» use java conversions «ENDREM»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 
 
@@ -33,9 +37,23 @@ package «packageDeclaration( basePackage() ) -»;
 	«IF generateSectionComments()»
 	// -- enumeration literals ----------------------------------------------
 	«ENDIF»
-	«FOREACH literal AS l SEPARATOR ", " -»«l.asEnumLiteral() -»«ENDFOREACH -»;
+	«EXPAND _Literal FOREACH literal SEPARATOR "," »;
+	
+	«IF generateSectionComments() && ( hasOperations() ) -»
+	// -- generated method stubs for implementations ------------------------
+	«ENDIF -»
+	«EXPAND Operation::Implementation -»
 	
 	// -- own code implementation -------------------------------------------
 	«EXPAND Type::OwnCodeImpl("java.enumeration.own.code.implementation." + xmiGuid) -»
 }
 «ENDDEFINE»
+
+«REM»
+	generates an enumeration literal
+«ENDREM»
+«DEFINE _Literal FOR MLiteral -»
+	«EXPAND Comment::EnumerationLiteral -»
+	«asEnumLiteral()»
+«ENDDEFINE»
+
