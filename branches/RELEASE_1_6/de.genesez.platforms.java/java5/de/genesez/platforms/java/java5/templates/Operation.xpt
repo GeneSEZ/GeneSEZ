@@ -52,7 +52,9 @@
 	processes all constructors
 «ENDREM»
 «DEFINE Constructor FOR MClassifier -»
-	«EXPAND _InitializingConstructor FOR this -»
+	«IF isAssociationClass() -»
+	«EXPAND _InitializingConstructor -»
+	«ENDIF -»
 	«EXPAND _Constructor FOREACH operation.select( e| e.isConstructor() ) -»
 «ENDDEFINE»
 
@@ -78,6 +80,7 @@
 «ENDREM»
 «DEFINE _InitializingConstructor FOR MClassifier -»
 «IF ! instanceAttributes().isEmpty -»
+	«EXPAND Comment::InitConstructor -»
 	public «asTypeName()»(«EXPAND _Params FOREACH instanceAttributes() SEPARATOR ", " -») {
 		«EXPAND _SuperInit FOREACH generalization -»
 		«FOREACH property.typeSelect(MAttribute).reject( a|a.static || a.derived ) AS attr -»
@@ -124,7 +127,7 @@
 «DEFINE _Constructor FOR MOperation -»
 	«EXPAND Comment::Constructor -»
 	«visibility» «classifier.asTypeName()»(«EXPAND _Params») «EXPAND _Exception» {
-		«EXPAND _OwnCodeImpl("java.constructor." + xmiGuid) -»
+		«EXPAND _ConstructorBody -»
 	}
 «ENDDEFINE»
 
@@ -152,7 +155,7 @@
 	«ELSE -»
 	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
 	«ENDIF -»
-	«EXPAND _DefaultReturnAndOwnCodeImpl -»
+	«EXPAND _ImplementationBody -»
 	}
 «ENDDEFINE»
 
@@ -190,9 +193,39 @@
 «ENDIF-»
 «ENDDEFINE»
 
+
+«REM»
+	generates the constructor body with a protected region, an eclipse task and
+	an implementation which throws an exception that this method is not yet supported
+«ENDREM»
+«DEFINE _ConstructorBody FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("java.constructor." + xmiGuid)»
+		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
+		throw new UnsupportedOperationException(
+				"The implementation of this generated constructor is missing!");
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+	generates the implementation body with a protected region, an eclipse task and
+	an implementation which throws an exception that this method is not yet supported
+«ENDREM»
+«DEFINE _ImplementationBody FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
+		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
+		throw new UnsupportedOperationException(
+				"The implementation of this generated method stub is missing!");
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
 «REM»
 	generates the body of an operation with a default return statement and a region for own code implementations
 	distincts the multi-valued return type
+	@deprecated		replaced by {@link _ImplmentationBody} + {@link _ConstructorBody}
 «ENDREM»
 «DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation -»
 	«IF isSingleValuedType() -»
@@ -207,6 +240,7 @@
 «REM»
 	generates the protected region of an operation
 	@param	id	protected region id
+	@deprecated
 «ENDREM»
 «DEFINE _OwnCodeImpl(String id) FOR MOperation -»
 	«IF isConstructor() -»

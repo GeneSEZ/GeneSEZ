@@ -154,10 +154,24 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDDEFINE»
 
 «REM»
+	generates the comment of an initializing constructor
+	comments instance attributes as parameters
+«ENDREM»
+«DEFINE InitConstructor FOR MClassifier -»
+	/**
+	 * constructor which initializes all instance attributes
+	 * @generated	initializing constructor for class '<em><b>«asTypeName()»</b></em>'
+	«FOREACH instanceAttributes() AS a -»
+	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»()}
+	«ENDFOREACH -»
+	 */
+«ENDDEFINE»
+
+«REM»
 	generates the comment of an initializing constructor for a data type
 	comments all attributes as parameters
 «ENDREM»
-«DEFINE InitConstructor FOR MClassifier -»
+«DEFINE InitConstructor FOR MDataType -»
 	/**
 	 * constructor which initializes all instance attributes
 	 * @generated	initializing constructor for class '<em><b>«asTypeName()»</b></em>'
