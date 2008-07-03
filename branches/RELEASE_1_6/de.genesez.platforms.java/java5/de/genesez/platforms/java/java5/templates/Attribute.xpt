@@ -150,7 +150,12 @@
 	final multi-valued attributes should be initialized within the constructor
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
-«IF hasDefaultValue() -» = «defaultvalue -»
+«IF hasDefaultValue() -»
+	«IF type.isEnumeration() -»
+	 = «type.mapName().asTypeName()».«defaultvalue.asEnumLiteral() -»
+	«ELSE -»
+	 = «defaultvalue -»
+	«ENDIF -»
 «ELSEIF isMultiValuedType() && !final -»
 	«IF usePrimitiveType() && !hasFixedMultiplicity() -»
 	 = null
