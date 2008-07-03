@@ -1,6 +1,6 @@
 «REM»
-	Handles everything about Operations.
 	Performs the generation of operations + constructors.
+	- supports the stereotype '<<primitive>>' for multi-valued return types
 	
 	@author	nico herbig
 	@author	tobias haubold (last)
@@ -12,6 +12,7 @@
 
 «REM» useful support functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
@@ -34,10 +35,10 @@
 «ENDDEFINE»
 
 «REM»
-	processes all constructors
+	processes all operations to declare
 «ENDREM»
-«DEFINE Constructor FOR MClassifier -»
-	«EXPAND _Constructor FOREACH operation.select( e| e.isConstructor() ) -»
+«DEFINE Declaration FOR MInterface -»
+	«EXPAND _Declaration FOREACH operation -»
 «ENDDEFINE»
 
 «REM»
@@ -48,10 +49,24 @@
 «ENDDEFINE»
 
 «REM»
-	processes all operations to implement
+	processes all constructors
+	generates an initializing constructor for association classes + data types
+«ENDREM»
+«DEFINE Constructor FOR MClassifier -»
+	«IF isAssociationClass() || isDataType() -»
+	«EXPAND _InitializingConstructor -»
+	«ENDIF -»
+	«EXPAND _Constructor FOREACH operation.select( e| e.isConstructor() ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all operations to implement, that means no constructors + no abstract operations
+	order: normal method, final methods, static methods
 «ENDREM»
 «DEFINE Implementation FOR MClassifier -»
-	«EXPAND _Implementation FOREACH operation.select( e| !e.isConstructor() && !e.abstract ) -»
+	«EXPAND _Implementation FOREACH operation.select( e| !e.isConstructor() && !e.abstract && !e.final && !e.static) -»
+	«EXPAND _Implementation FOREACH operation.select( e| !e.isConstructor() && !e.abstract && e.final && !e.static) -»
+	«EXPAND _Implementation FOREACH operation.select( e| !e.isConstructor() && !e.abstract && !e.final && e.static) -»
 «ENDDEFINE»
 
 
@@ -62,49 +77,100 @@
 «ENDREM»
 
 «REM»
+	generates an initializing constructor
+	all initializable attributes of the type and supertypes are set within the constructor
+«ENDREM»
+«DEFINE _InitializingConstructor FOR MClassifier -»
+«IF hasInitializableAttributes() -»
+	«EXPAND Comment::InitConstructor -»
+	public «asTypeName()»(«EXPAND _Params FOREACH allInitializableAttributes() SEPARATOR ", " -») {
+		«EXPAND _SuperInit FOREACH generalization -»
+		«FOREACH owningInitializableAttributes() AS attr -»
+			this.«attr.asAttribute() -» = «attr.asAttribute() -»;
+		«ENDFOREACH -»
+	}
+«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	generates the parameter list for the initializing constructor
+«ENDREM»
+«DEFINE _Params FOR MAttribute -»
+«IF isSingleValuedType() -»
+	«type.mapName().asTypeName()»«EXPAND Type::Generics FOR type» «asAttribute() -»
+«ELSE -»
+	«EXPAND Type::MultiValuedType -» «asAttribute() -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the super constructor call for initializing constructors
+«ENDREM»
+«DEFINE _SuperInit FOR MClassifier -»
+	super(«FOREACH allInitializableAttributes() AS attr SEPARATOR ", "-» «attr.asAttribute() -»«ENDFOREACH -»);
+«ENDDEFINE»
+
+«REM»
+	generates the super constructor call for initializing constructors
+	if you inherit from external types, this is your define for your 'around' statement
+«ENDREM»
+«DEFINE _SuperInit FOR MType -»
+	super();
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates a constructor
+	a constructor has no 'modifiers' and no 'return value'
+«ENDREM»
+«DEFINE _Constructor FOR MOperation -»
+	«EXPAND Comment::Constructor -»
+	«visibility» «classifier.asTypeName()»(«EXPAND _Params») «EXPAND _Exception» {
+		«EXPAND _ConstructorBody -»
+	}
+«ENDDEFINE»
+
+«REM»
 	generates an operation declaration
+	distincts the multiplicity of the return type
 «ENDREM»
 «DEFINE _Declaration FOR MOperation -»
 	«EXPAND Comment::Operation -»
 	«IF isSingleValuedType() -»
 	«EXPAND _Modifier» «returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
 	«ELSE -»
-	«EXPAND _Modifier» «mapType()»<«returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType»> «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
+	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
 	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	generates an operation implementation
+	distincts the multiplicity of the return type
 «ENDREM»
 «DEFINE _Implementation FOR MOperation -»
 	«EXPAND Comment::Operation -»
 	«IF isSingleValuedType() -»
 	«EXPAND _Modifier» «returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
-	«ELSEIF returnType.isPrimitiveType() -»
-	«EXPAND _Modifier» «mapType()»<«returnType.mapName("wrapper").asTypeName()»«EXPAND Type::Generics FOR returnType»> «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
 	«ELSE -»
-	«EXPAND _Modifier» «mapType()»<«returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType»> «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
+	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
 	«ENDIF -»
-	«EXPAND _DefaultReturnAndOwnCodeImpl -»
-	}
-«ENDDEFINE»
-
-«REM»
-	generates a constructor
-	has no return value
-«ENDREM»
-«DEFINE _Constructor FOR MOperation -»
-	«EXPAND Comment::Constructor -»
-	«EXPAND _Modifier» «classifier.asTypeName()»(«EXPAND _Params») «EXPAND _Exception» {
-		«EXPAND _OwnCodeImpl("java.constructor." + xmiGuid) -»
+	«EXPAND _ImplementationBody -»
 	}
 «ENDDEFINE»
 
 «REM»
 	generates the visibility and the modifiers static, final + abstract for an operation
+	interfaces methods are always 'public' and 'abstract'
 «ENDREM»
 «DEFINE _Modifier FOR MOperation -»
+	«IF classifier.metaType == MInterface -»
+	public
+	«ELSE -»
 	«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -115,7 +181,7 @@
 	«IF p.isSingleValuedType() -»
 		«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
 	«ELSE -»
-		«p.mapType() -»<«p.type.asTypeName()»> «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+		«EXPAND Type::MultiValuedType FOR p -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
 	«ENDIF -»
 	«ENDFOREACH -»
 «ENDDEFINE»
@@ -129,18 +195,45 @@
 «ENDIF-»
 «ENDDEFINE»
 
+
+«REM»
+	generates the constructor body with a protected region, an eclipse task and
+	an implementation which throws an exception that this method is not yet supported
+«ENDREM»
+«DEFINE _ConstructorBody FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("java.constructor." + xmiGuid)»
+		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
+		throw new UnsupportedOperationException(
+				"The implementation of this generated constructor is missing!");
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+	generates the implementation body with a protected region, an eclipse task and
+	an implementation which throws an exception that this method is not yet supported
+«ENDREM»
+«DEFINE _ImplementationBody FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
+		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
+		throw new UnsupportedOperationException(
+				"The implementation of this generated method stub is missing!");
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
 «REM»
 	generates the body of an operation with a default return statement and a region for own code implementations
+	distincts the multi-valued return type
+	@deprecated		replaced by {@link _ImplmentationBody} + {@link _ConstructorBody}
 «ENDREM»
 «DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation -»
 	«IF isSingleValuedType() -»
 		«getReturnTypeDeclaration(returnType.mapName().asTypeName())»
 	«ELSE -»
-		«IF returnType.isPrimitiveType() -»
-		«mapType()»<«returnType.mapName("wrapper").asTypeName()»> returnValue = null;
-		«ELSE -»
-		«mapType()»<«returnType.mapName().asTypeName()»> returnValue = null;
-		«ENDIF -»
+		«EXPAND Type::MultiValuedType -» returnValue = null;
 	«ENDIF -»
 	«EXPAND _OwnCodeImpl("java.implementation." + xmiGuid) -»
 	«getReturnTypeReturn(returnType.mapName().asTypeName())»
@@ -149,6 +242,7 @@
 «REM»
 	generates the protected region of an operation
 	@param	id	protected region id
+	@deprecated
 «ENDREM»
 «DEFINE _OwnCodeImpl(String id) FOR MOperation -»
 	«IF isConstructor() -»

@@ -42,7 +42,6 @@ package «packageDeclaration( basePackage() ) -»;
 	// -- generated constructors --------------------------------------------
 	«ENDIF»
 	«EXPAND Operation::Constructor -»
-	«EXPAND _InitialisingConstructor -»
 	
 	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- generated method declarations -------------------------------------
@@ -57,60 +56,9 @@ package «packageDeclaration( basePackage() ) -»;
 	«IF generateSectionComments() && ( hasAttributes() ) -»
 	// -- generated association + attribute accessors -----------------------
 	«ENDIF -»
-	«EXPAND Attribute::Getter FOREACH property.typeSelect(MAttribute).select( e| !e.derived ) -»
+	«EXPAND Attribute::Accessors -»
 	
 	// -- own code implementation -------------------------------------------
 	«EXPAND Type::OwnCodeImpl("java.datatype.own.code.implementation." + xmiGuid) -»
 }
-«ENDDEFINE»
-
-
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
-
-«REM»
-	generates an initialising constructor
-	all attributes of class + superclasses are set within constructor
-«ENDREM»
-«DEFINE _InitialisingConstructor FOR MClassifier -»
-«EXPAND Comment::InitConstructor -»
-public «mapName().asTypeName()» («EXPAND _AllAttributesAsParams») {
-	«EXPAND _InitAttributes -»
-	«EXPAND _OwnCodeImplInitConstructor("java.initializing.constructor.own.code." + xmiGuid) -»
-}
-«ENDDEFINE»
-
-«REM»
-	generates all attributes as parameters
-«ENDREM»
-// get all attributes as parameter list
-«DEFINE _AllAttributesAsParams FOR MClassifier -»
-«FOREACH getAllAttributes() AS attr SEPARATOR ", "»«attr.type.mapName().asTypeName()» _«attr.asAttribute()»«ENDFOREACH -»
-«ENDDEFINE»
-
-«REM»
-	generates the constructor initialization code
-	all properties are initialized with parameters
-«ENDREM»
-// init all attributes in initializing constructor
-«DEFINE _InitAttributes FOR MClassifier -»
-«IF !supertype.isEmpty -»
-	super(«FOREACH getParentAttributes() AS attr SEPARATOR ", "» _«attr.asAttribute()»«ENDFOREACH»);
-«ENDIF -»
-«FOREACH getOwnAttributes() AS attr -»
-	«attr.asAttribute()» = _«attr.asAttribute()»;
-«ENDFOREACH -»
-«ENDDEFINE»
-
-«REM»
-	generates a region for own code implementations
-	within an initializing constructor
-«ENDREM»
-«DEFINE _OwnCodeImplInitConstructor(String id) FOR MClassifier -»
-	«PROTECT CSTART "/* " CEND " */" ID (id)»
-	// TODO: put your further initialization code here
-	«ENDPROTECT»
 «ENDDEFINE»

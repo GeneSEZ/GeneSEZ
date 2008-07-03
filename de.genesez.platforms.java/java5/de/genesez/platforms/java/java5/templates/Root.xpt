@@ -5,8 +5,6 @@
 	@author	nico herbig
 	@author	tobias haubold (last)
 	@date	2007-07-13
-	
-	@todo	add the possibility of a base package
 «ENDREM»
 
 «REM» based on genesez meta model «ENDREM»
@@ -21,6 +19,7 @@
 
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Association»
 
 
 «REM»
@@ -28,12 +27,14 @@
 «ENDREM»
 
 «REM»
-	processes the contents of the model, adds use dependencies to all classifiers and 
-	rejects all ignored packages
+	processes the contents of the model, adds use dependencies to all classifiers, 
+	prepares all association classes and rejects all ignored packages
 	@context	a genesez model
 «ENDREM»
 «DEFINE Root FOR MModel»
 	«addUseDependencies()»
+	«addAssociationHandling()»
+	«useLogger("de.genesez.platforms.java")»
 	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
 «ENDDEFINE»
 

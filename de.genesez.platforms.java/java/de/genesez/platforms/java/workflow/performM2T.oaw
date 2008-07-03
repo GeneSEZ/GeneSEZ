@@ -10,26 +10,37 @@
 		==================================
 		
 		$rootTemplate		the root xpt-file where the generation starts
+		$outputDir 			the path where the generated file are produced
+		$proRegDir 			the path where the protected reagions are found
+							(usually the same as the output directory
+		
 		$aspectTemplates	comma separated list of templates with aspect advices for XPand AOP
 		$aspectScripts		comma separated list of scripts with aspect advices for Xtend AOP
+		
+		$typeMappingFile	name of the xml type mapping file
 		$excludePackages	comma or semicola separated list with packages to exclude from code generation
 							(full qualified package names, ', ' or '; ' are also permitted)
 		$useModelNameAsBasePackage	boolean which indicates if the model name is used as base package
 		$basePackage		the base package for source code artefacts
 		$generateSectionComments	boolean flag which indicates if section comments are generated or not
-		$typeMappingFile	name of the xml type mapping file
-		$outputDir 			the path where the generated file are produced
-		$proRegDir 			the path where the protected reagions are found
-							(usually the same as the output directory
+		$disableAccessors	boolean which indicates if accessor methods are generated or not
+		$useAccessorStereotype	boolean which indicates if the «accessor» stereotype is used to 
+							distinct the generation of accessor methods
+		$usePropertyVisibilityForAccessors	boolean which indicates if properties should be always private and 
+							the visibility of the property is used as the visibility of the accessor method
+		
 		$configFile			xml file for configuration settings
 	-->
 	
 	
 	<!-- working with genesez models requires the genesez meta model -->
-	<bean id="gcore" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" />
+	<bean id="gcore" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="de.genesez.metamodel.gcore.GcorePackage" />
+	</bean>
+	<!-- bean id="gcore" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
 	<!-- bean id="gcore" class="oaw.type.emf.EmfMetaModel">
 		<metaModelFile value="gcore.ecore" />
-	</bean -->
+	</bean-->
 	
 	
 	<component id="performM2T" class="de.genesez.platforms.common.workflow.xpand2.Generator" skipOnErrors="true">
@@ -53,6 +64,10 @@
 		
 		<!-- boolean which indicates if section comments are generated or not -->
 		<globalVarDef name="generateSectionComments" value="${generateSectionComments}"/>
+		
+		<globalVarDef name="disableAccessors" value="${disableAccessors}"/>
+		<globalVarDef name="useAccessorStereotype" value="${useAccessorStereotype}"/>
+		<globalVarDef name="usePropertyVisibilityForAccessors" value="${usePropertyVisibilityForAccessors}"/>
 		
 		<!-- make config file accessible as global variable -->
 		<globalVarDef name="configFile" value="'${configFile}'"/>
