@@ -58,11 +58,15 @@
 	<!-- boolean value indicates if section comments are generated or not -->
 	<property name="model2text.generate.section.comments" value="true" />
 	<!-- comma separated list of aspect templates, used for the XPand AOP-Feature -->
-	<property name="model2text.aspect.templates" value="config::Attrib" />
+	<property name="model2text.aspect.templates" value="customization::Attrib" />
 	<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
-	<property name="model2text.aspect.scripts" value="config::Naming" />
+	<property name="model2text.aspect.scripts" value="customization::Naming" />
 	<!-- type mapping file to use, is searched within the classpath -->
-	<property name="model2text.typemapping.file" value="de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
+	<property name="model2text.typemapping.file" value="typemapping.xml" />
+	
+	<property name="model2text.disableAccessors" value="false" />
+	<property name="model2text.useAccessorStereotype" value="false" />
+	<property name="model2text.usePropertyVisibilityForAccessors" value="false" />
 	
 	
 	<!-- general file extension settings, usually no need to adjust - - - - - - - - - - - - -->
@@ -150,6 +154,16 @@
 		outputDir="${project.dir}/${model2text.dir}"
 		proRegDir="${project.dir}/${model2text.dir}"
 		typeMappingFile="${model2text.typemapping.file}"
+		disableAccessors="${model2text.disableAccessors}"
+		useAccessorStereotype="${model2text.useAccessorStereotype}"
+		usePropertyVisibilityForAccessors="${model2text.usePropertyVisibilityForAccessors}"
+	/>
+	
+	<!-- serialize the GeneSEZ model  /-->
+	<cartridge id="model.dump"
+		file="de::genesez::platforms::common::workflow::xmiWriter.oaw"
+		modelSlot="genesezModel"
+		outputModelFile="${genesez.model.file}_a.xmi"
 	/>
 	
 </workflow>
