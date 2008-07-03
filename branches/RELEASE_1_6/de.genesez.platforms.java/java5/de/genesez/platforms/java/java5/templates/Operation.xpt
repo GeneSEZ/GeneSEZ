@@ -50,9 +50,10 @@
 
 «REM»
 	processes all constructors
+	generates an initializing constructor for association classes + data types
 «ENDREM»
 «DEFINE Constructor FOR MClassifier -»
-	«IF isAssociationClass() -»
+	«IF isAssociationClass() || isDataType() -»
 	«EXPAND _InitializingConstructor -»
 	«ENDIF -»
 	«EXPAND _Constructor FOREACH operation.select( e| e.isConstructor() ) -»
@@ -77,13 +78,14 @@
 
 «REM»
 	generates an initializing constructor
+	all initializable attributes of the type and supertypes are set within the constructor
 «ENDREM»
 «DEFINE _InitializingConstructor FOR MClassifier -»
-«IF ! instanceAttributes().isEmpty -»
+«IF hasInitializableAttributes() -»
 	«EXPAND Comment::InitConstructor -»
-	public «asTypeName()»(«EXPAND _Params FOREACH instanceAttributes() SEPARATOR ", " -») {
+	public «asTypeName()»(«EXPAND _Params FOREACH allInitializableAttributes() SEPARATOR ", " -») {
 		«EXPAND _SuperInit FOREACH generalization -»
-		«FOREACH property.typeSelect(MAttribute).reject( a|a.static || a.derived ) AS attr -»
+		«FOREACH owningInitializableAttributes() AS attr -»
 			this.«attr.asAttribute() -» = «attr.asAttribute() -»;
 		«ENDFOREACH -»
 	}
@@ -105,7 +107,7 @@
 	generates the super constructor call for initializing constructors
 «ENDREM»
 «DEFINE _SuperInit FOR MClassifier -»
-	super(«FOREACH instanceAttributes() AS attr SEPARATOR ", "-» «attr.asAttribute() -»«ENDFOREACH -»);
+	super(«FOREACH allInitializableAttributes() AS attr SEPARATOR ", "-» «attr.asAttribute() -»«ENDFOREACH -»);
 «ENDDEFINE»
 
 «REM»
