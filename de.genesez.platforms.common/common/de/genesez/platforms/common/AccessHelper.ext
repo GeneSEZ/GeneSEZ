@@ -275,7 +275,7 @@ boolean hasConstructors(MClassifier this) : operation.exists( o|o.isConstructor(
  * @return	true if the operation is a constructor, otherwise false
  */
 boolean isConstructor(MOperation this) :
-	classifier.name == name;
+	hasStereotype("create") || classifier.name == name;
 
 /**
  * checks if a classifier has one or more destructors
@@ -289,7 +289,7 @@ boolean hasDestructors(MClassifier this) : operation.exists( o|o.isDestructor() 
  * @return	true if the operation is a destructor, otherwise false
  */
 boolean isDestructor(MOperation this) :
-	name.startsWith("~");
+	hasStereotype("destroy") || name.startsWith("~");
 
 /**
  * checks if an operation has a return type
