@@ -1,0 +1,176 @@
+/**
+ * Frontend for the type mapping
+ * 
+ * @author	nico herbig
+ * @author	tobias haubold (last)
+ * @date	2008-04-18
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use logging
+extension de::genesez::platforms::common::log::Log;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping the name of types
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * the name of generic types are not mapped with type mapping
+ * @return	the generic type itself
+ */
+MGeneric mapName(MGeneric this) : this;
+
+/**
+ * the name of generic types are not mapped with type mapping
+ * @contextType	the context in which the generic type is mapped
+ * @return	the generic type itself
+ */
+MGeneric mapName(MGeneric this, String contextType) : this;
+
+/**
+ * the name of classifiers are not mapped with type mapping
+ * @return	the classifier itself
+ */
+MClassifier mapName(MClassifier this) : this;
+
+/**
+ * the name of classifiers are not mapped with type mapping
+ * @contextType	the context in which the classifier is mapped
+ * @return	the classifier itself
+ */
+MClassifier mapName(MClassifier this, String contextType) : this;
+
+/**
+ * maps the name of a primitive type using the type mapping
+ * @return	the name of the primitive type according type mapping
+ */
+String mapName(MPrimitiveType this) : mappingName();
+
+/**
+ * maps the name of a primitive type within the given context using the type mapping
+ * @contextType	the context in which the primitive type is mapped
+ * @return	the name of the primitive type according type mapping
+ */
+String mapName(MPrimitiveType this, String contextType) : mappingName(contextType);
+
+/**
+ * maps the name of an external type using the type mapping
+ * @return	the name of the external type according type mapping
+ */
+String mapName(MExternal this) : mappingName();
+
+/**
+ * maps the name of an external type within the given context using the type mapping
+ * @contextType	the context in which the external type is mapped
+ * @return	the name of the external type according context and type mapping
+ */
+String mapName(MExternal this, String contextType) : mappingName(contextType);
+
+/**
+ * it does nothing, it's just there for error free templates :-)
+ * @return	the given type itself
+ */
+MType mapName(MType this) : this;
+
+/**
+ * it does nothing, it's just there for error free templates :-)
+ * @contextType	the context in which the type is mapped
+ * @return	the given type itself
+ */
+MType mapName(MType this, String contextType) : this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type mapping of model elements
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * maps the type of a parameter
+ * @return	the name of the type
+ */
+String mapType(MParameter this) :
+	mappingType(unique, ordered);
+
+/**
+ * maps the type of a parameter using the specified context
+ * @param	contextType	context in which the type is mapped
+ * @return	the name of the type
+ */
+String mapType(MParameter this, String contextType) :
+	mappingType(unique, ordered, contextType);
+
+/**
+ * maps the type of an operation
+ * @return	the name of the type
+ */
+String mapType(MOperation this) :
+	mappingType(unique, ordered);
+
+/**
+ * maps the type of an operation using the specified context
+ * @param	contextTYpe	context in which the type is mapped
+ * @return	the name of the type
+ */
+String mapType(MOperation this, String contextType) :
+	mappingType(unique, ordered, contextType);
+
+/**
+ * maps the type of a property
+ * @return	the name of the type
+ */
+String mapType(MProperty this) :
+	mappingType(unique, ordered);
+
+/**
+ * maps the type of a property using the specified context
+ * @param	contextType	context in which the type is mapped
+ * @return	the name of the type
+ */
+String mapType(MProperty this, String contextType) :
+	mappingType(unique, ordered, contextType);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping eXtend functions to private java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * maps the name of a type
+ * @return	the name of the type
+ */
+private String mappingName(MType this) :
+	JAVA de.genesez.platforms.common.typemapping.TypeMapping.mappingName(de.genesez.metamodel.gcore.MType);
+
+/**
+ * maps the name of a type using the specified context
+ * @param	contextType	context in which the name is mapped 
+ * @return	the name of the type
+ */
+private String mappingName(MType this, String contextType) :
+	JAVA de.genesez.platforms.common.typemapping.TypeMapping.mappingName(de.genesez.metamodel.gcore.MType, java.lang.String);	
+
+/**
+ * maps the type using the specified type modificators
+ * @param	unique	if the values in a multi-valued type are unique or not
+ * @param	ordered	if the values in a multi-valued type are ordered or not
+ * @return	the name of the type
+ */
+private String mappingType(Boolean unique, Boolean ordered) :
+	JAVA de.genesez.platforms.common.typemapping.TypeMapping.mappingType(java.lang.Boolean, java.lang.Boolean);
+
+/**
+ * maps the type using the specified context and type modificators
+ * @param	unique	if the values in a multi-valued type are unique or not
+ * @param	ordered	if the values in a multi-valued type are ordered or not
+ * @param	contextType	context in which the type is mapped 
+ * @return	the name of the type
+ */	
+private String mappingType(Boolean unique, Boolean ordered, String contextType) :
+	JAVA de.genesez.platforms.common.typemapping.TypeMapping.mappingType(java.lang.Boolean, java.lang.Boolean, java.lang.String);	
+
