@@ -40,7 +40,7 @@
 «ENDREM»
 «DEFINE PropertyDecl FOR MAttribute-»
 «IF multiplicity == 1-»
-	«EXPAND _PropertyDecl( type.mapName().asTypeName(), asAttribute() )-»
+	«EXPAND _PropertyDecl( type.mapName().asTypeName(), asProperty() )-»
 «ELSE-»
 	«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
 	                   asProperty() )-»
@@ -79,8 +79,8 @@
 		public «IF static»static«ENDIF»«type» «name»
 «ENDIF»
 		{
-			get;
-			set;
+			«IF getter()»get;«ENDIF»
+			«IF setter()»set;«ENDIF»
 		}
 		
 «ENDDEFINE»
@@ -91,15 +91,15 @@
 «ENDREM»
 «DEFINE _PropertyImpl(String type, String name) FOR MAttribute-»
 		«EXPAND _Comment-»
-		public «IF static»static«ENDIF-» «type.asTypeName()» «name»
+		public «IF static»static«ENDIF-» «type» «name»
 		{
 «IF static»
-			get { return «classifier.asTypeName()».«asAttribute()»; }
-			set { «classifier.asTypeName()».«asAttribute()» = value; }
+			«IF getter()»get { return «classifier.asTypeName()».«asAttribute()»; }«ENDIF»
+			«IF setter()»set { «classifier.asTypeName()».«asAttribute()» = value; }«ENDIF»
 «ELSE»
-			get { return this.«asAttribute()»; }
-			set { this.«asAttribute()» = value; }
-«ENDIF»
+			«IF getter()»get { return this.«asAttribute()»; }«ENDIF»
+			«IF setter()»set { this.«asAttribute()» = value; }«ENDIF»
+«ENDIF-»
 		}
 «ENDDEFINE»
 
@@ -108,7 +108,11 @@
 	generate modifier for an attribute
 «ENDREM»
 «DEFINE _Modifier FOR MAttribute-»
+<<<<<<< .working
 		«visibility()» «IF static»static«ENDIF-» «IF final»readonly«ENDIF-»
+=======
+		«visibility()» «IF hasStereotype("volatile")»volatile«ENDIF-» «IF static»static«ENDIF-» «IF final»readonly«ENDIF-»
+>>>>>>> .merge-right.r1466
 «ENDDEFINE»
 
 
