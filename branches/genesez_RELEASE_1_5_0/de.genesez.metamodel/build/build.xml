@@ -135,7 +135,7 @@
 		description=""
 		if="eclipse.running">
 		<echo>Eclipse is running...</echo>
-		<antcall target="metamodel.compile" />
+		<antcall target="metamodel.ecore2java" />
 	</target> 
 	
 	<target name="metamodel.ecore2java.external"
@@ -156,7 +156,7 @@
 			<arg value="-Dbuild.basedir=${build.basedir}" />
 			<arg value="-vmargs -Xmx768m -XX:MaxPermSize=312m" />
 		</exec>
-		<exec executable="${build.dir}/eclipse" osfamily="unix">
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
 			<arg value="-noSplash" />
 			<arg value="-configuration" />
 			<arg value="${configuration.location}" />
@@ -168,7 +168,7 @@
 			<arg value="${build.file}" />
 			<arg value="metamodel.ecore2java" />
 			<arg value="-Dbuild.basedir=${build.basedir}" />
-			<arg value="-vmargs -Xmx768m -XX:MaxPermSize=312m" />
+<!--			<arg value="-vmargs -Xmx768m -XX:MaxPermSize=312m" />-->
 		</exec>
 	</target> 
 
