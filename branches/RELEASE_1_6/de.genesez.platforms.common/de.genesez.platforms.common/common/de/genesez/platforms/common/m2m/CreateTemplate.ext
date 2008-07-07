@@ -1,0 +1,51 @@
+/**
+ * Helper scripts to create GeneSEZ model elements
+ * - useful for m2m transformations + model modifications
+ * 
+ * @author	tobias haubold
+ * @date	2008-07-01
+ */
+
+// based on genesez meta model
+import gcore;
+
+create MExternal createExternal(MModel container, String specification) :
+	setSpecification( specification ) ->
+	container.externalTypes.add( this ) ->
+	this;
+
+create MAttribute createAttribute(MClassifier container, String xmiGuid, String name) :
+	processElement(this, xmiGuid, name) ->
+	container.property.add( this ) ->
+	this;
+
+create MAspect createAspect(MElement container, String domain, String name) :
+	setDomain(domain) ->
+	setName(name) ->
+	container.aspect.add( this ) ->
+	this;
+
+MAttribute processAttribute(MAttribute this, String defaultvalue, boolean static, boolean final) :
+	// set attribute values
+	setDefaultvalue(defaultvalue) ->
+	setStatic(static) ->
+	setFinal(final) ->
+	this;
+
+MProperty processProperty(MProperty this, String visibility, boolean derived, Integer multiplicity, boolean unique, boolean ordered) :
+	setVisibility(visibility) ->
+	setDerived(derived) ->
+	setMultiplicity(multiplicity) ->
+	setUnique(unique) ->
+	setOrdered(ordered) ->
+	this;
+
+/**
+ * processes the given model element and sets all parameters
+ * @param	xmiGuid	
+ * @param	name	
+ */
+MElement processElement(MElement this, String xmiGuid, String name) :
+	setName(name) ->
+	setXmiGuid(xmiGuid) ->
+	this;
