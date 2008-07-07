@@ -1,6 +1,9 @@
 //	based on genesez meta model
 import gcore;
 
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::dotnet::csharp::scripts::Uml;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public extend functions
@@ -141,14 +144,6 @@ boolean hasPrivateFields(MClass class) :
 	0 != privateFields(class).size || 0 != associations(class).size;
 
 /**
- * return if a class has public fields
- * @param	class	a class
- * @return	true, if public fields exist
- */
-boolean hasPublicFields(MClass class) :
-	0 != properties(class).size;
-
-/**
  * return if a class has associations
  * @param	class	a class
  * @return	true, if associations exist
@@ -245,8 +240,10 @@ List[MAttribute] privateFields(MClass class) :
  * @return	a list of attributes
  */
 List[MAttribute] properties(MClass class) :
-	class.property.typeSelect(MAttribute).select(e|!e.static && !e.final && e.visibility == "public");
-/*.select(e|e.stereotype.name.contains("accessor"));*/
+	class.property.typeSelect(MAttribute).select(e|
+		(!e.static && !e.final && e.visibility == "public") ||
+	 	( e.hasStereotype('accessor') && ( e.getter() || e.setter() ) )
+	 	);
 
 /**
  * returns the associations of a class
