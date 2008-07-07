@@ -19,8 +19,19 @@ String direction(MParameter this) :
 		default: ''
 	};
 
+/**
+ * return the visibility modifier of an attribute
+ * @return the visibility
+ */
 String visibility(MAttribute this) :
 	switch {
 		case static && final: visibility
 		default: 'private'
 	};
+
+/**
+ * return if an attribute is marked with a stereotype
+ * @return	true, if the attribute is marked
+ */
+boolean hasStereotype(MAttribute this, String stype) :
+	stereotype.name.contains(stype);
