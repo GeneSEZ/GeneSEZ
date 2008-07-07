@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Startup Script for Eclipse IDE
+#
+# Copyright (c) 2007 - Gerrit Beine <gerrit.beine@gmx.de>
+#
+
+ECLIPSE_PATH="/usr/share/eclipse"
+ECLIPSE_BIN="${ECLIPSE_PATH}/eclipse.bin"
+
+STARTUP_JAR="$( find ${ECLIPSE_PATH} | grep -i "equinox\.launcher.*\.jar"  )"
+
+ECLIPSE_OPTS="-startup ${STARTUP_JAR} $@"
+
+exec ${ECLIPSE_BIN} ${ECLIPSE_OPTS} ""
