@@ -36,7 +36,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 */
 	@Override
 	public void addAdvice(String advice) {
-		if ( !advice.isEmpty() ) {
+		if ( advice.length() > 0 ) {
 			super.addAdvice(advice);
 		}
 	}
@@ -47,7 +47,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 */
 	@Override
 	public void addAdvices(String advices) {
-		if ( !advices.isEmpty()) {
+		if ( advices.length() > 0 ) {
 			List<String> filtered = split(advices);
 			for (String s : filtered) {
 				addAdvice(s);
@@ -61,7 +61,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 */
 	@Override
 	public void addExtensionAdvice(String extensionAdvice) {
-		if ( !extensionAdvice.isEmpty() ) {
+		if ( extensionAdvice.length() > 0 ) {
 			super.addExtensionAdvice(extensionAdvice);
 		}
 	}
@@ -72,7 +72,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 */
 	@Override
 	public void addExtensionAdvices(String extensionAdvices) {
-		if ( !extensionAdvices.isEmpty()) {
+		if ( extensionAdvices.length() > 0 ) {
 			List<String> filtered = split(extensionAdvices);
 			for (String s : filtered) {
 				addExtensionAdvice(s);
