@@ -1,0 +1,117 @@
+«REM»
+	Performs the generation of classes
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+	@date	2007-07-13
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful support fuctions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes a class
+«ENDREM»
+«DEFINE Root FOR MClass -»
+package «packageDeclaration( basePackage() ) -»;
+«EXPAND Import::Import -»
+«REM» generate a newline between imports + type comment «ENDREM»
+«EXPAND Comment::Type -»
+«EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
+	
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+	// -- generated attribute, constant + association declarations ----------
+	«ENDIF -»
+	«EXPAND Attribute::Declaration -»
+	«EXPAND Association::Declaration -»
+	
+	«IF generateSectionComments() && ( hasConstructors() ) -»
+	// -- generated constructors --------------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Constructor -»
+	«IF ownedAssociation != null»«EXPAND _InitialisingConstructorForAssocClass»«ENDIF -»
+	
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
+	// -- generated method declarations -------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Declaration -»
+	
+	«IF generateSectionComments() && ( hasOperations() ) -»
+	// -- generated method stubs for implementations + derived attributes ---
+	«ENDIF -»
+	«EXPAND Operation::Implementation -»
+	«EXPAND Attribute::Derived -»
+	
+	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
+	// -- generated association + attribute accessors -----------------------
+	«ENDIF -»
+	«EXPAND Association::Accessors -»
+	«EXPAND Attribute::Accessors -»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
+}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an initializing contructor for association classes
+	all association attributes are initialized
+	@see	_AssocAttributesAsParam(MClass)
+	@see	_InitAssocAttributes(MClass)
+«ENDREM»
+«DEFINE _InitialisingConstructorForAssocClass FOR MClass -»
+«EXPAND Comment::InitConstructorAssocClass -»
+public «asTypeName()» («EXPAND _AssocAttributesAsParam») {
+	«EXPAND _InitAssocAttributes»
+	«EXPAND _OwnCodeImplInitConstructor("java.initializing.constructor.own.code." + xmiGuid) -»
+}
+«ENDDEFINE»
+
+«REM»
+	generates the attributes of an association class as parameters
+	@see	_InitialisingConstructorForAssocClass(MClass)
+«ENDREM»// get association attributes as parameter list
+«DEFINE _AssocAttributesAsParam FOR MClass -»
+«FOREACH ownedAssociation.end AS aend SEPARATOR ", "»«aend.type.mapName().asTypeName()» _«aend.asAttribute()»«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the initialization code for the constructor of an association class
+	@see	_InitialisingConstructorForAssocClass(MClass)
+«ENDREM»
+«DEFINE _InitAssocAttributes FOR MClass -»
+«FOREACH ownedAssociation.end AS aend -»
+	«aend.asAttribute()» =  _«aend.asAttribute()»;
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates a region for own code implementations
+	within an initializing constructor
+«ENDREM»
+«DEFINE _OwnCodeImplInitConstructor(String id) FOR MClassifier -»
+	«PROTECT CSTART "/* " CEND " */" ID (id)»
+	// TODO: put your further initialization code here
+	«ENDPROTECT»
+«ENDDEFINE»
