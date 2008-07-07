@@ -1,0 +1,48 @@
+/**
+ * calculates include paths for php files
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-10
+ */
+
+//	based on genesez meta model
+import gcore;
+
+
+/**
+ * calculates the path for the require statement for a required classifier
+ * builds the path from classifier back to model root and
+ * then the path from model root to the used type
+ * 
+ * @context	the classifier for which the require statements are created
+ * @param	used	the type which is used
+ * @return	relative path to the required (used) classifier
+ */
+String getRequirePath(MClassifier used, MClassifier this) :
+	getPathBack(owningPackage, "") + getPathForward(used.owningPackage, "");
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * builds a relative file path back to the model root from the given package
+ * @context	the package from which the file path is build
+ * @param	path	the current path back, initial an empty string
+ * @return	relative file path back to the model root
+ */
+private String getPathBack(MPackage this, String path) :
+	nestingPackage.metaType == MModel
+		? "../" + path
+		: getPathBack(nestingPackage, "../");
+	
+/**
+ * builds a relative file path up from the model root up to the given package
+ * @context	the package for which the file path is build
+ * @param	path	the current path, initial an empty string
+ * @return	relative file path from the model root to the given package
+ */
+private String getPathForward(MPackage this, String path) :
+	nestingPackage.metaType == MModel
+		? name + "/" + path
+		: getPathForward(nestingPackage, name + "/" + path);
