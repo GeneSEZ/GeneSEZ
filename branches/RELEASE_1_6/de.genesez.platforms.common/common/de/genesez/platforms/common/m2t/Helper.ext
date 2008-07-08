@@ -16,6 +16,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::log::Log;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -47,6 +48,15 @@ boolean usePrimitiveType(MOperation this) :
  */
 boolean usePrimitiveType(MParameter this) :
 	hasStereotype("primitive");
+
+/**
+ * just there for error free templates :-)
+ * shouldn't be called!
+ */
+boolean usePrimitiveType(MElement this) : 
+	fatal("somethings goes totally wrong within your templates... " +
+	"   the function 'usePrimitiveType' shouldn't be called with an 'MElement': " + this) ->
+	false;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
