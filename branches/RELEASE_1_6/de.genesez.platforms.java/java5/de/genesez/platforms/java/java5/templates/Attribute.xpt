@@ -160,9 +160,9 @@
 	«ELSEIF usePrimitiveType() && hasFixedMultiplicity() -»
 	 = new «type.mapName().asTypeName()»[«multiplicity»];
 	«ELSEIF type.isPrimitiveType() -»
-	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»>()
+	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::Generics FOR type»>()
 	«ELSE -»
-	 = new «mapType("Implementation") -»<«type.mapName().asTypeName() -»>()
+	 = new «mapType("Implementation") -»<«type.mapName().asTypeName() -»«EXPAND Type::Generics FOR type»>()
 	«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»

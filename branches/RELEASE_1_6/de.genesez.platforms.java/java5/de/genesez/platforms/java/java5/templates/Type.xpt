@@ -22,58 +22,24 @@
 «ENDREM»
 
 «REM»
-	generates the multi-valued type statement of an attribute
+	generates the multi-valued type statement of an attribute, operation or parameter
 	distinction is as follows:
 	* feature 'usePrimitiveTyp' to use arrays instead of collections
 	* if type is a primitive type, the wrapper type must be used as generic type for collections
 «ENDREM»
-«DEFINE MultiValuedType FOR MAttribute -»
+«DEFINE MultiValuedType FOR MElement -»
 	«IF usePrimitiveType() -»
-		«type.mapName().asTypeName() -»«EXPAND Generics FOR type»[]
-	«ELSEIF type.isPrimitiveType() -»
-		«mapType() -»<«type.mapName("Wrapper").asTypeName()»«EXPAND Generics FOR type»>
+		«type().mapName().asTypeName() -»«EXPAND Generics FOR type()»[]
+	«ELSEIF type().isPrimitiveType() -»
+		«mapType() -»<«type().mapName("Wrapper").asTypeName()»«EXPAND Generics FOR type()»>
 	«ELSE -»
-		«mapType() -»<«type.mapName().asTypeName()»«EXPAND Generics FOR type»>
+		«mapType() -»<«type().mapName().asTypeName()»«EXPAND Generics FOR type()»>
 	«ENDIF -»
 «ENDDEFINE»
-
-«REM»
-	generates the multi-valued return type statement of an operation
-	distinction is as follows:
-	* feature 'usePrimitiveTyp' to use arrays instead of collections
-	* if return type is a primitive type, the wrapper type must be used as type parameter for collections
-«ENDREM»
-«DEFINE MultiValuedType FOR MOperation -»
-	«IF usePrimitiveType() -»
-		«returnType.mapName().asTypeName()»«EXPAND Generics FOR returnType»[]
-	«ELSEIF returnType.isPrimitiveType() -»
-		«mapType()»<«returnType.mapName("Wrapper").asTypeName()»«EXPAND Generics FOR returnType»>
-	«ELSE -»
-		«mapType()»<«returnType.mapName().asTypeName()»«EXPAND Generics FOR returnType»>
-	«ENDIF -»
-«ENDDEFINE»
-
-«REM»
-	generates the multi-valued type statement of a parameter
-	distinction is as follows:
-	* feature 'usePrimitiveTyp' to use arrays instead of collections
-	* if type is a primitive type, the wrapper type must be used as type parameter for collections
-«ENDREM»
-«DEFINE MultiValuedType FOR MParameter -»
-	«IF usePrimitiveType() -»
-		«type.mapName().asTypeName() -»«EXPAND Generics FOR type»[]
-	«ELSEIF type.isPrimitiveType() -»
-		«mapType() -»<«type.mapName("Wrapper").asTypeName()»«EXPAND Generics FOR type»>
-	«ELSE -»
-		«mapType() -»<«type.mapName().asTypeName()»«EXPAND Generics FOR type»>
-	«ENDIF -»
-«ENDDEFINE»
-
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
-
 
 «REM»
 	generates modifiers
