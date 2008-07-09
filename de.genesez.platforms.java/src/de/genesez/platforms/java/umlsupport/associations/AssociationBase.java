@@ -1,5 +1,6 @@
 package de.genesez.platforms.java.umlsupport.associations;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -47,7 +48,7 @@ public abstract class AssociationBase<From, To> implements
 		try {
 			associationGetter = refClass.getMethod(assocGetter);
 		} catch (Exception e) {
-			throw new RuntimeException("no getter method for association");
+			throw new RuntimeException("no getter method for association! " + "class: " + refClass + ", method: " + assocGetter);
 		}
 	}
 
@@ -75,8 +76,12 @@ public abstract class AssociationBase<From, To> implements
 			return (Association<To, From>) associationGetter.invoke(associated);
 			// The catch clause cannot be reached because it is shielded by the
 			// try/catch clause in the constructor
-		} catch (Exception e) {
-			throw new RuntimeException("no getter method for association");
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("access to getter method for association is denied!", e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("the getter method for association has a parameter of a wrong type!", e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException("getter method for association throws an exception!", e);
 		}
 	}
 

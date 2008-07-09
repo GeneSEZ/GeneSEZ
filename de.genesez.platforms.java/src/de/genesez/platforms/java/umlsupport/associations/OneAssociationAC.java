@@ -51,20 +51,20 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 	 *      java.lang.Object)
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
+//	@Override
 	public To insert(To associated, Assoc aco) {
 		linkAssoc(aco);
 		insert(associated);
 		return associated;
 	}
 
-	@Override
+//	@Override
 	public To remove(To associated) {
 		unlinkAssoc();
 		return super.remove(associated);
 	}
 
-	@Override
+//	@Override
 	public Assoc getAssoc(To associated) {
 		if (associated == getReference())
 			return assocObject;
@@ -72,7 +72,7 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 			return null;
 	}
 
-	@Override
+//	@Override
 	public Assoc setAssoc(To associated, Assoc assoc) {
 		if (associated == getReference()) {
 			// unlinkAssoc();
@@ -85,7 +85,7 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
+//	@Override
 	/*
 	 * (non-Javadoc)
 	 * 
