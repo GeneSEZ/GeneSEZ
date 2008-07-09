@@ -5,7 +5,7 @@
  * - realizations of interfaces
  * - abstract + final classifiers, operations
  * - abstract operations must be contained within abstract classifiers
- * - constructor + destructor return type, parameters of destructors
+ * - destructor return type, parameters of destructors
  * 
  * @author	tobias haubold
  * @date	2008-05-26
@@ -16,6 +16,7 @@ import gcore;
 
 // use helper to access model information more easily
 extension de::genesez::platforms::common::AccessHelper;
+
 
 /**
  * checks if an interface has realizations
@@ -57,13 +58,6 @@ context MOperation ERROR "GeneSEZ: the operation '" + classifier.name + "::" + n
  */
 context MOperation WARNING "GeneSEZ: the abstract operation '" + classifier.name + "::" + name + "' MUST be contained within an abstract class, NOT within the non-abstract class '" + classifier.name + "' !" :
 	!( abstract && !classifier.abstract );
-
-/**
- * checks if an constructor operation has a return type set
- * @return	false, if the constructor has a return type, otherwise true
- */
-context MOperation WARNING "GeneSEZ: the constructor operation '" + name + "' cannot have a return type ('" + returnType + "') - it will be ignored!" :
-	!( isConstructor() && returnType != null && returnType.name().toLowerCase() != "void" );
 
 /**
  * checks if an destructor operation has a return type set
