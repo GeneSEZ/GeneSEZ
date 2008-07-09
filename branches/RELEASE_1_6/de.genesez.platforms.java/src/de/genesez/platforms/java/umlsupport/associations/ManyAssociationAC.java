@@ -53,7 +53,7 @@ public class ManyAssociationAC<From, To, Assoc extends AssociationClass>
 	 * 
 	 * @see de.genesez.umlsupport.AssociationAC#getAssoc(java.lang.Object)
 	 */
-	@Override
+//	@Override
 	public Assoc getAssoc(To associated) {
 		return refMap.get(associated);
 	}
@@ -63,7 +63,7 @@ public class ManyAssociationAC<From, To, Assoc extends AssociationClass>
 	 * 
 	 * @see de.genesez.umlsupport.ManyAssociation#insert(java.lang.Object)
 	 */
-	@Override
+//	@Override
 	public To insert(To associated) {
 		return insert(associated, null);
 	}
@@ -74,7 +74,7 @@ public class ManyAssociationAC<From, To, Assoc extends AssociationClass>
 	 * @see de.genesez.umlsupport.AssociationAC#insert(java.lang.Object,
 	 *      java.lang.Object)
 	 */
-	@Override
+//	@Override
 	public To insert(To associated, Assoc aco) {
 		if (!refMap.containsKey(associated)) {
 			refMap.put(associated, aco);
@@ -97,7 +97,7 @@ public class ManyAssociationAC<From, To, Assoc extends AssociationClass>
 	 * @see de.genesez.umlsupport.AssociationAC#setAssoc(java.lang.Object,
 	 *      java.lang.Object)
 	 */
-	@Override
+//	@Override
 	public Assoc setAssoc(To associated, Assoc assoc) {
 		if (refMap.containsKey(associated) && refMap.get(associated) != assoc) {
 			unlinkAssoc(refMap.get(associated));

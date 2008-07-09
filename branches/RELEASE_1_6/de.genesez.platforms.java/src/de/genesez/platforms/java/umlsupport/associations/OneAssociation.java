@@ -39,7 +39,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 		super(owner, refClass, assocGetter);
 	}
 
-	@Override
+//	@Override
 	public To insert(To associated) {
 		if (getReference() != associated) {
 			if (isSymmetric()) {
@@ -62,7 +62,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * 
 	 * @see de.genesez.umlsupport.Association#remove(java.lang.Object)
 	 */
-	@Override
+//	@Override
 	public To remove(To associated) {
 		if (getReference() == associated) {
 			if (isSymmetric()) {
@@ -78,12 +78,12 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 		return null;
 	}
 
-	@Override
+//	@Override
 	public To get() {
 		return getReference();
 	}
 
-	@Override
+//	@Override
 	public Iterator<To> iterator() {
 		return new OneIterator();
 	}
@@ -113,7 +113,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * @see de.genesez.umlsupport.AssociationBase#link(java.lang.Object,
 	 *      java.lang.Object)
 	 */
-	@Override
+//	@Override
 	protected void link(To associated, Object assoc) {
 		if (isSymmetric()) {
 			To to = getReference();
@@ -129,7 +129,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * 
 	 * @see de.genesez.umlsupport.AssociationBase#unlink(java.lang.Object)
 	 */
-	@Override
+//	@Override
 	protected void unlink(To associated) {
 		setReference(null);
 	}
@@ -155,12 +155,12 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 
 		private boolean unused = true;
 
-		@Override
+//		@Override
 		public boolean hasNext() {
 			return unused && getReference() != null;
 		}
 
-		@Override
+//		@Override
 		public To next() {
 			if (!unused)
 				throw new NoSuchElementException();
@@ -168,7 +168,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 			return getReference();
 		}
 
-		@Override
+//		@Override
 		public void remove() {
 			throw new UnsupportedOperationException(
 					"remove not supported on OneIterator");

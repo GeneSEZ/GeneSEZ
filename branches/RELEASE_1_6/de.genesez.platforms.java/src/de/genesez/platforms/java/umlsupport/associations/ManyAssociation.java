@@ -53,7 +53,7 @@ public class ManyAssociation<From, To> extends AssociationBase<From, To> {
 		ref = reference;
 	}
 
-	@Override
+//	@Override
 	public To insert(To associated) {
 		if (!getReference().contains(associated)) {
 			getReference().add(associated);
@@ -70,7 +70,7 @@ public class ManyAssociation<From, To> extends AssociationBase<From, To> {
 	 * 
 	 * @see de.genesez.umlsupport.Association#remove(java.lang.Object)
 	 */
-	@Override
+//	@Override
 	public To remove(To associated) {
 		if (getReference().contains(associated)) {
 			getReference().remove(associated);
@@ -83,7 +83,7 @@ public class ManyAssociation<From, To> extends AssociationBase<From, To> {
 		return null;
 	}
 
-	@Override
+//	@Override
 	public To get() {
 		if (ref.isEmpty())
 			return null;
@@ -91,7 +91,7 @@ public class ManyAssociation<From, To> extends AssociationBase<From, To> {
 			return ref.iterator().next();
 	}
 
-	@Override
+//	@Override
 	public Iterator<To> iterator() {
 		return ref.iterator();
 	}
@@ -113,7 +113,7 @@ public class ManyAssociation<From, To> extends AssociationBase<From, To> {
 	 * @see de.genesez.umlsupport.AssociationBase#link(java.lang.Object,
 	 *      java.lang.Object)
 	 */
-	@Override
+//	@Override
 	protected void link(To associated, Object assoc) {
 		getReference().add(associated);
 	}
@@ -123,9 +123,8 @@ public class ManyAssociation<From, To> extends AssociationBase<From, To> {
 	 * 
 	 * @see de.genesez.umlsupport.AssociationBase#unlink(java.lang.Object)
 	 */
-	@Override
+//	@Override
 	protected void unlink(To associated) {
 		getReference().remove(associated);
 	}
-
 }

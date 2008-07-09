@@ -9,7 +9,7 @@ public class Assoc implements AssociationClass {
 	/* (non-Javadoc)
 	 * @see de.genesez.umlsupport.AssociationClass#getAssociationClassLink()
 	 */
-	@Override
+//	@Override
 	public ACLink getAssociationClassLink() {
 		return link;
 	}
