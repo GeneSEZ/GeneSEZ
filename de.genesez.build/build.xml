@@ -8,12 +8,24 @@
 	<!-- public targets -->
 	
 	<target name="all"
-		description=""
-		depends="createjar.all" />
+		description="Default target"
+		depends="checkout.all, tag.all, build.all" />
+
+	<target name="checkout"
+		description="Checkout the projects and tag them"
+		depends="checkout.all, tag.all" />
+
+	<target name="build"
+		description="Checkout the projects and build the plugins"
+		depends="checkout.all, tag.all, build.all" />
+
+	<target name="createjar"
+		description="Create the jar files for all plugins and features"
+		depends="checkout.all, tag.all, build.all, createjar.all" />
 
 	<target name="distribute"
 		description="Distributes plugins and features"
-		depends="distribute.all">
+		depends="checkout.all, tag.all, build.all, createjar.all, distribute.all">
 		<ant antfile="${build.file}"
 			dir="${build.basedir}/${prefix}.updatesite"
 			target="distribute"
@@ -24,7 +36,7 @@
 	</target>
 	
 	<target name="clean"
-		description=""
+		description="Clean the projects"
 		depends="clean.all" />
 
 	<!-- private targets -->
@@ -75,7 +87,7 @@
 	</target>
 	
 	<target name="build.all"
-		description="">
+		description="Runs the build targets for all plugins">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
@@ -89,7 +101,7 @@
 	</target>
 
 	<target name="createjar.all"
-		description="">
+		description="Creates jar files for all plugins and features">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
@@ -113,8 +125,7 @@
 	</target>
 
 	<target name="distribute.all"
-		description="Distributes plugins and features"
-		depends="checkout.all,tag.all,createjar.all">
+		description="Distributes plugins and features">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<copy todir="${updatesite.plugins}">
