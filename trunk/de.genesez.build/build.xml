@@ -9,8 +9,8 @@
 	
 	<target name="all"
 		description=""
-		depends="checkout.all,createjar.all" />
-	
+		depends="createjar.all" />
+
 	<target name="distribute"
 		description="Distributes plugins and features"
 		depends="distribute.all">
@@ -30,8 +30,8 @@
 	<!-- private targets -->
 	
 	<target name="checkout.all"
-		description="">
-		<for list="${checkout}" param="project">
+		description="Checks out or update the projects from subversion repository">
+		<for list="${projects}" param="project">
 			<sequential>
 				<available property="dir.@{project}"
 					file="${build.basedir}/${prefix}.@{project}"
@@ -42,6 +42,36 @@
 				</antcall>
 			</sequential>
 		</for>
+	</target>
+	
+	<target name="tag.all"
+		description="Set the GENESEZ_RELEASE_VERSION in all projects">
+		<for list="${plugins}" param="project">
+			<sequential>
+				<replace file="${build.basedir}/${prefix}.@{project}/META-INF/MANIFEST.MF" 
+					propertyfile="${project.build.dir}/release.properties">
+					<replacefilter
+						token="@@@GENESEZ_RELEASE_VERSION@@@"
+						property="release"/>
+				</replace>
+			</sequential>
+		</for>
+		<for list="${features}" param="project">
+			<sequential>
+				<replace file="${build.basedir}/${prefix}.@{project}/feature.xml" 
+					propertyfile="${project.build.dir}/release.properties">
+					<replacefilter
+						token="@@@GENESEZ_RELEASE_VERSION@@@"
+						property="release"/>
+				</replace>
+			</sequential>
+		</for>
+		<replace file="${build.basedir}/${prefix}.updatesite/site.xml" 
+			propertyfile="${project.build.dir}/release.properties">
+			<replacefilter
+				token="@@@GENESEZ_RELEASE_VERSION@@@"
+				property="release"/>
+		</replace>
 	</target>
 	
 	<target name="build.all"
@@ -84,7 +114,7 @@
 
 	<target name="distribute.all"
 		description="Distributes plugins and features"
-		depends="all">
+		depends="checkout.all,tag.all,createjar.all">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<copy todir="${updatesite.plugins}">
@@ -127,7 +157,6 @@
 				</ant>
 			</sequential>
 		</for>
-		<antcall target="revert" />
 	</target>
 	
 </project>
