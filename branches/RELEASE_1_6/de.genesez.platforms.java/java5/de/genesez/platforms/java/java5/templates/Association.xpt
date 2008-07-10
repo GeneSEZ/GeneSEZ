@@ -1,6 +1,8 @@
 «REM»
 	Handles everything about associations
 	
+	generates the association handling based on the java umlsupport association handling
+	
 	@author georg beier
 	@author	nico herbig
 	@author	tobias haubold (last)
@@ -30,20 +32,7 @@
 	processes the declaration of association attributes
 «ENDREM»
 «DEFINE Declaration FOR MClass -»
-«IF hasAssociationRoles() -»
-	«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole) -»
-	
-	{	«EXPAND Comment::AssociationInit -»
-	«EXPAND _Initialization FOREACH property.typeSelect(MAssociationRole) -»
-	}
-«ENDIF»
-«ENDDEFINE»
-
-«REM»
-	processes the declaration of association attributes
-«ENDREM»
-«DEFINE Declaration FOR MClassifier -»
-«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole) -»
+	«EXPAND _DeclarationWithInitialization FOREACH property.typeSelect(MAssociationRole) -»
 «ENDDEFINE»
 
 «REM»
@@ -63,14 +52,19 @@
 «REM»
 	generates the declaration of the association attribute
 «ENDREM»
-«DEFINE _Declaration FOR MAssociationRole -»
-«EXPAND Comment::Association -»
+«DEFINE _DeclarationWithInitialization FOR MAssociationRole -»
+	«EXPAND Comment::Association -»
+	private «EXPAND _Type -» «asAttribute()» = «EXPAND _Initialization -»;
+«ENDDEFINE»
+
+«REM»
+	generates the type of an association attribute
+«ENDREM»
+«DEFINE _Type FOR MAssociationRole -»
 «IF hasAssociationClass() -»
-	private AssociationAC<«classifier.asTypeName()», «type.asTypeName()»,
-			«association.associationClass.asTypeName()»> «asAttribute()»;
+AssociationAC<«classifier.asTypeName()», «type.asTypeName()», «association.associationClass.asTypeName()»>
 «ELSE -»
-	private Association<«classifier.asTypeName()»,
-			«type.asTypeName()»> «asAttribute()»;
+Association<«classifier.asTypeName()», «type.asTypeName()»>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -80,39 +74,36 @@
 «DEFINE _Initialization FOR MAssociationRole -»
 «IF hasAssociationClass() -»
 	«IF isSingleValuedType() -»
-		«asAttribute()» = new OneAssociationAC<«classifier.asTypeName() -»,
-				«type.asTypeName() -»,
+	new OneAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -»,
 				«association.associationClass.asTypeName() -»> (this
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».class, "«opposite.asAttribute() -»"
 		«ENDIF -»
-		);
+		)
 	«ELSE -»
-		«asAttribute()» = new ManyAssociationAC<«classifier.asTypeName() -»,
-				«type.asTypeName() -», 
+	new ManyAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -», 
 				«association.associationClass.asTypeName() -»>
 				(this, new LinkedHashMap<«type.asTypeName() -»,
 					«association.associationClass.asTypeName() -»>()
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».class, "«opposite.asAttribute() -»"
 		«ENDIF -»
-		);
+		)
 	«ENDIF -»
 «ELSE -»«REM» association without association class «ENDREM»
 	«IF isSingleValuedType() -»
-		«asAttribute()» = new OneAssociation<«classifier.asTypeName() -»,
-				«type.asTypeName() -»>(this
+	new OneAssociation<«classifier.asTypeName() -», «type.asTypeName() -»>(this
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».class, "«opposite.asAttribute() -»"
 		«ENDIF -»
-		);
+		)
 	«ELSE -»
-		«asAttribute()» = new ManyAssociation<«classifier.asTypeName() -»,
+	new ManyAssociation<«classifier.asTypeName() -»,
 				«type.asTypeName() -»>(this, new LinkedHashSet<«type.asTypeName() -»>()
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».class, "«opposite.asAttribute() -»"
 		«ENDIF -»
-		);
+		)
 	«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»

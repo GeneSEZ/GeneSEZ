@@ -68,12 +68,16 @@ context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays, you w
  * 'assert' was added in java 1.4, 'enum' was added in java 5
  * @return	 true, if the name is not a reserved java word, otherwise false
  */
-context MElement ERROR "GeneSEZ-Gen: the name '" + name + "' is a reserved java word" :
-	{"abstract", "continue", "for", "new", "switch", "assert", "default", "goto", 
+context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word" :
+	metaType == MPrimitiveType
+		? true
+		: (
+	!{"abstract", "continue", "for", "new", "switch", "assert", "default", "goto", 
 		"package", "synchronized", "boolean", "do", "if", "private", "this", "break", 
 		"double", "implements", "protected", "throw", "byte", "else", "import", "public", 
 		"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", 
 		"int", "short", "try", "char", "final", "interface", "static", "void", "class", 
 		"finally", "long", "strictfp", "volatile", "const", "float", "native", "super", "while"
-	}.contains(name);
+	}.contains(name)
+	);
 
