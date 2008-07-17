@@ -18,7 +18,6 @@
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
-«EXTENSION de::genesez::platforms::java::scripts::Association»
 
 
 «REM»
@@ -64,7 +63,7 @@
 «EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| e.generateGetter() && e.final && !e.derived ) -»
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
 	«IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -»
-	«IF a.generateSetter() && !a.hasAspect(associationAspectDomain(), associationAspectName()) -»«EXPAND _Setter FOR a -»«ENDIF -»
+	«IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
