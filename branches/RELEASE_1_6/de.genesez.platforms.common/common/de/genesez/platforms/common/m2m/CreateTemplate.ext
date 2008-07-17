@@ -19,6 +19,23 @@ create MAttribute createAttribute(MClassifier container, String xmiGuid, String 
 	container.property.add( this ) ->
 	this;
 
+create MStereotype createStereotype(MModel container, String xmiGuid, String name) :
+	processElement(this, xmiGuid, name) ->
+	container.anyStereotype.add( this ) ->
+	this;
+
+create MTag createTag(MStereotype container, String name, String type) :
+	setName( name ) ->
+	setType( type ) ->
+	container.property.add( this ) ->
+	this;
+
+create MTaggedValue createTaggedValue(MElement container, MTag tag, String value) :
+	setValue( value ) ->
+	setTag( tag ) ->
+	container.taggedValue.add( this ) ->
+	this;
+
 create MAspect createAspect(MElement container, String domain, String name) :
 	setDomain(domain) ->
 	setName(name) ->

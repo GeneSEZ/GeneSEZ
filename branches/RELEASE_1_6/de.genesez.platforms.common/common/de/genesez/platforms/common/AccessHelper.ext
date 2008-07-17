@@ -522,13 +522,45 @@ String name(MType this) :
 	
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	classifiers
+	model accessors
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
+ * getter for the model element by using a property
+ * @return	the model element
+ */
+MModel model(MProperty this) : classifier.model();
+
+/**
+ * getter for the model element by using an operation
+ * @return	the model element
+ */
+MModel model(MOperation this) : classifier.model();
+
+/**
  * getter for the model element by using a classifier
  * @return	the model element
+ */
+MModel model(MClassifier this) :
+	owningPackage.metaType == MModel
+		? owningPackage
+		: owningPackage.getModel();
+
+/**
+ * getter for the model element by using a package
+ * @return	the model element
+ */
+MModel model(MPackage this) :
+	metaType == MModel
+		? this
+		: nestingPackage.getModel();
+
+
+/**
+ * getter for the model element by using a classifier
+ * @return	the model element
+ * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MClassifier this) :
 	owningPackage.metaType == MModel
@@ -538,11 +570,18 @@ MModel getModel(MClassifier this) :
 /**
  * getter for the model element by using a package
  * @return	the model element
+ * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MPackage this) :
 	metaType == MModel
 		? this
 		: nestingPackage.getModel();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	classifiers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
  * getter for a class by it's full qualified name which is separed by dot's
