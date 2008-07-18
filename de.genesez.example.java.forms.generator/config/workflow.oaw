@@ -63,7 +63,12 @@
 	<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
 	<property name="model2text.aspect.scripts" value="" />
 	<!-- filename, relative to project root, where the mapping of types are defined -->
-	<property name="model2text.typemapping.file" value="../de.genesez.platforms.java/java/de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
+	<property name="model2text.typemapping.file" value="de/genesez/platforms/java/typemapping/typeMapping4Java.xml" />
+	
+	<property name="model2text.disableAccessors" value="false" />
+	<property name="model2text.useAccessorStereotype" value="false" />
+	<property name="model2text.usePropertyVisibilityForAccessors" value="false" />
+	<property name="model2text.usePublicAccessors" value="true" />
 	
 	
 	<!-- general file extension settings, usually no need to adjust - - - - - - - - - - - - -->
@@ -140,17 +145,20 @@
 	<!-- run the java code generation and transform the model into java source code /-->
 	<cartridge id="model2text"
 		file="de::genesez::platforms::java::workflow::performM2T.oaw"
+		outputDir="${project.dir}/${model2text.dir}"
+		proRegDir="${project.dir}/${model2text.dir}"
 		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
 		aspectTemplates="${model2text.aspect.templates}"
 		aspectScripts="${model2text.aspect.scripts}"
+		typeMappingFile="${model2text.typemapping.file}"
 		excludePackages="${model2text.exclude.packages}"
 		useModelNameAsBasePackage="${model2text.use.model.name.as.base.package}"
 		basePackage="${model2text.base.package}"
 		generateSectionComments="${model2text.generate.section.comments}"
+		disableAccessors="${model2text.disableAccessors}"
+		useAccessorStereotype="${model2text.useAccessorStereotype}"
+		usePropertyVisibilityForAccessors="${model2text.usePropertyVisibilityForAccessors}"
 		configFile=""
-		outputDir="${project.dir}/${model2text.dir}"
-		proRegDir="${project.dir}/${model2text.dir}"
-		typeMappingFile="${model2text.typemapping.file}"
 	/>
 
 </workflow>
