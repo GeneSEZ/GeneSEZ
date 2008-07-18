@@ -1,0 +1,56 @@
+/* 
+ * naming conventions for the pear plattform artefacts
+ * 
+ * currently covered:
+ * - some for QuickForm
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-17
+ * @todo	read 'formDir' from configuration file
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use php naming conventions
+extension de::genesez::platforms::php::scripts::Naming;
+
+
+/**
+ * getter for the relative file path + name for a form for an classifier
+ * @return	relative filepath incl. name
+ */
+String asFormFileName(MClassifier this) :
+	formDir() + "/" + asFormTypeName() + fileExtension();
+
+/**
+ * getter for the directory which contains the formulars
+ * 
+ * @todo	should extracted from a configuration file
+ * @return	relative path to the directory, which holds the forms
+ */
+String formDir() : "form";
+
+/**
+ * formats the name of a classifier as a formular name
+ * @context	the classifier to build a form class name from
+ * @return	name of the form class
+ */
+String asFormTypeName(MClassifier this) :
+	asTypeName() + "Form";
+
+/**
+ * formats the name of a classifier as an html formular name
+ * @context	the classifier to build an html formular name from
+ * @return	name of the html form element
+ */
+String asFormName(MClassifier this) :
+	asFormTypeName().toFirstLower();
+
+/**
+ * formats the name of a property as an html element name
+ * @context	the property to build an html element name from
+ * @return	name of the html element
+ */
+String asFormElementName(MProperty this) :
+	name.toFirstLower();

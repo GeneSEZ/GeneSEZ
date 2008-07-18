@@ -1,0 +1,133 @@
+/* 
+ * naming conventions + configuration settings for scaffolding
+ * 
+ * currently covered:
+ * - filenames + class names of actions
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-17
+ * @todo	read directory settings from configuration file
+ */
+
+// based on genesez meta model
+import gcore;
+
+
+/**
+ * getter for the directory which contains the php files, accessible by web browser
+ * @return	directory for public php files
+ */
+String pubDir() : "pub";
+
+/**
+ * getter for the directory which contains the form classes for quickform
+ * @return	directory for form classes
+ */
+String formDir() : "form";
+
+/**
+ * getter for the directory which contains utility classes
+ * @return	directory for utility classes
+ */
+String utilDir() : "util";
+
+/**
+ * getter for the include of the 'bootstrap' file
+ * @return	relative filename to the bootstrap file
+ */
+String bootstrapPath() : "../../Bootstrap.php";
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	filenames of classes (relative, including path)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the relative filename of action classes
+ * @param	action	the action which is executed by the class
+ * @return	relative filename of the given action class
+ */
+String asActionFilename(MClass this, String action) : pubDir() + "/" + name.toLowerCase() + "/" + action.toFirstLower() + ".php";
+
+/**
+ * getter for the relative filename of a list action class
+ * @return	relative filename of the list action class
+ */
+String asListActionFilename(MClass this) : asActionFilename("list");
+
+/**
+ * getter for the relative filename of an edit action class
+ * @return	relative filename of the edit action class
+ */
+String asEditActionFilename(MClass this) : asActionFilename("edit");
+
+/**
+ * getter for the relative filename of a create action class
+ * @return	relative filename of the create action class
+ */
+String asCreateActionFilename(MClass this) : asActionFilename("create");
+
+/**
+ * getter for the relative filename of a delete action class
+ * @return	relative filename of the delete action class
+ */
+String asDeleteActionFilename(MClass this) : asActionFilename("delete");
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	names of action classes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the name of action classes
+ * @return	name of the given action class
+ */
+String asActionClassName(MClass this, String action) : name.toFirstUpper() + action.toFirstUpper() + "Action";
+
+/**
+ * getter for the name of a list action class
+ * @return	name of the list action class
+ */
+String asListActionClassName(MClass this) : asActionClassName("list");
+
+/**
+ * getter for the name of an edit action class
+ * @return	name of the edit action class
+ */
+String asEditActionClassName(MClass this) : asActionClassName("edit");
+
+/**
+ * getter for the name of a create action class
+ * @return	name of the create action class
+ */
+String asCreateActionClassName(MClass this) : asActionClassName("create");
+
+/**
+ * getter for the name of a delete action class
+ * @return	name of the delete action class
+ */
+String asDeleteActionClassName(MClass this) : asActionClassName("delete");
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	implementation specific
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the given class as a php variable
+ * @return	name of a php variable
+ */
+String asPhpVariable(MClass this) : "$" + name.toFirstLower();
+
+/**
+ * formats the given class as a php variable in plural
+ * @return	name of a php variable in plural
+ */
+String asPhpVariablePlural(MClass this) : asPhpVariable() + "s";
+

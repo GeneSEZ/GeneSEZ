@@ -1,0 +1,68 @@
+/* 
+ * naming conventions for smarty
+ * 
+ * currently covered:
+ * - 
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-17
+ * @todo	read 'templateDir' from configuration file
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use php naming conventions
+extension de::genesez::platforms::php::scripts::Naming;
+
+
+/**
+ * getter for the smarty templates directory
+ * 
+ * @todo	should extracted from a configuration file
+ * @return	relative path to the smarty template directory
+ */
+String templateDir() : "smarty/templates";
+
+/**
+ * getter for the relative filename for a template
+ * @param	action	the action the template is used for
+ * @return	relative filename of a template
+ */
+String asTemplateFileName(MClass this, String name) : 
+	templateDir() + "/" + this.name.toLowerCase() + "/" + name.toFirstLower() + ".tpl";
+
+/**
+ * getter for the name of a template
+ * @param	action	the action the template is used for
+ * @return	name of the template
+ */
+String asTemplateName(MClass this, String name) : this.name.toFirstUpper();
+
+
+/**
+ * formats a property as a table header name
+ * @return	formatted name of the table header
+ */
+String asHeaderName(MProperty this) : name.toFirstLower();
+
+/**
+ * formats a classifier as a template variable name (singular)
+ * @return	formatted template variable name (singular)
+ */
+String asSmartyTemplateVariable(MClassifier this) : name.toFirstLower();
+
+/**
+ * formats a classifier as a template variable name (plural)
+ * @return	formatted name of the template variable name (plural)
+ */
+String asSmartyTemplateVariablePlural(MClassifier this) : name.toFirstLower() + "s";
+
+/**
+ * formats a property as an attribute name
+ * delegates to php naming conventions
+ * @see		de::genesez::platforms::php::scripts::Naming::asAttribute(MProperty)
+ * @return	formatted attribute name
+ */
+String asAttributeName(MProperty this) : asAttribute();
+
