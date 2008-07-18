@@ -8,12 +8,24 @@
 	<!-- public targets -->
 	
 	<target name="all"
-		description=""
-		depends="checkout.all,createjar.all" />
-	
+		description="Default target"
+		depends="checkout.all, tag.all, build.all" />
+
+	<target name="checkout"
+		description="Checkout the projects and tag them"
+		depends="checkout.all, tag.all" />
+
+	<target name="build"
+		description="Checkout the projects and build the plugins"
+		depends="checkout.all, tag.all, build.all" />
+
+	<target name="createjar"
+		description="Create the jar files for all plugins and features"
+		depends="checkout.all, tag.all, build.all, createjar.all" />
+
 	<target name="distribute"
 		description="Distributes plugins and features"
-		depends="distribute.all">
+		depends="checkout.all, tag.all, build.all, createjar.all, distribute.all">
 		<ant antfile="${build.file}"
 			dir="${build.basedir}/${prefix}.updatesite"
 			target="distribute"
@@ -24,14 +36,14 @@
 	</target>
 	
 	<target name="clean"
-		description=""
+		description="Clean the projects"
 		depends="clean.all" />
 
 	<!-- private targets -->
 	
 	<target name="checkout.all"
-		description="">
-		<for list="${checkout}" param="project">
+		description="Checks out or update the projects from subversion repository">
+		<for list="${projects}" param="project">
 			<sequential>
 				<available property="dir.@{project}"
 					file="${build.basedir}/${prefix}.@{project}"
@@ -44,8 +56,38 @@
 		</for>
 	</target>
 	
+	<target name="tag.all"
+		description="Set the GENESEZ_RELEASE_VERSION in all projects">
+		<for list="${plugins}" param="project">
+			<sequential>
+				<replace file="${build.basedir}/${prefix}.@{project}/META-INF/MANIFEST.MF" 
+					propertyfile="${project.build.dir}/release.properties">
+					<replacefilter
+						token="@@@GENESEZ_RELEASE_VERSION@@@"
+						property="release"/>
+				</replace>
+			</sequential>
+		</for>
+		<for list="${features}" param="project">
+			<sequential>
+				<replace file="${build.basedir}/${prefix}.@{project}/feature.xml" 
+					propertyfile="${project.build.dir}/release.properties">
+					<replacefilter
+						token="@@@GENESEZ_RELEASE_VERSION@@@"
+						property="release"/>
+				</replace>
+			</sequential>
+		</for>
+		<replace file="${build.basedir}/${prefix}.updatesite/site.xml" 
+			propertyfile="${project.build.dir}/release.properties">
+			<replacefilter
+				token="@@@GENESEZ_RELEASE_VERSION@@@"
+				property="release"/>
+		</replace>
+	</target>
+	
 	<target name="build.all"
-		description="">
+		description="Runs the build targets for all plugins">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
@@ -59,7 +101,7 @@
 	</target>
 
 	<target name="createjar.all"
-		description="">
+		description="Creates jar files for all plugins and features">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<ant antfile="${build.file}"
@@ -83,8 +125,7 @@
 	</target>
 
 	<target name="distribute.all"
-		description="Distributes plugins and features"
-		depends="createjar.all">
+		description="Distributes plugins and features">
 		<for list="${plugins}" param="project">
 			<sequential>
 				<copy todir="${updatesite.plugins}">
@@ -127,7 +168,6 @@
 				</ant>
 			</sequential>
 		</for>
-		<antcall target="revert" />
 	</target>
 	
 </project>
