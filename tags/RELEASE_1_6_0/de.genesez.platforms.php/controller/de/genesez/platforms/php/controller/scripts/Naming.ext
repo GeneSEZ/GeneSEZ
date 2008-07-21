@@ -1,0 +1,45 @@
+/* 
+ * naming conventions + configuration settings for controller + action generation
+ * 
+ * currently covered:
+ * - filenames + class names for actions
+ * - distinction of private and public actions
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-21
+ * @todo	read directory settings from configuration file
+ */
+
+// based on genesez meta model
+import gcore;
+
+
+/**
+ * getter for the directory which contains the php files, accessible by web browser
+ * @return	directory for public php files
+ */
+String pubDir() : "pub";
+
+/**
+ * getter for the directory which contains the php files with action classes, which are NOT
+ * accessible by the web browser
+ * @return	directory for private php files containg action classes
+ */
+String privDir() : "priv";
+
+/**
+ * getter for the relative filename of action classes
+ * @param	action	the action which is executed by the class
+ * @return	relative filename
+ */
+String asActionFilename(MOperation this, String action) : 
+	visibility == "private"
+		? privDir() + "/" + classifier.name.toLowerCase() + "/" + name.toFirstLower() + ".php"
+		: pubDir() + "/" + classifier.name.toLowerCase() + "/" + name.toFirstLower() + ".php";
+
+/**
+ * getter for the name of action classes
+ * @return	name of the action class
+ */
+String asActionClassName(MOperation this) : name.toFirstUpper() + "Action";
+

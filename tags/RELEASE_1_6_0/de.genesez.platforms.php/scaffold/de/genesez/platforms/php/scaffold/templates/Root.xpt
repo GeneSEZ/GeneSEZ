@@ -1,0 +1,63 @@
+«REM»
+	Scaffolds all classes.
+	Generates views, actions and forms for simple CRUD operations.
+	
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of a model for scaffolding
+	rejects all ignored packages from further processing
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+	«EXPAND Bootstrap::Root -»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package for scaffolding
+	rejects all data types from further processing
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier.reject( e| e.metaType == MDataType || e.metaType == MEnumeration )»
+«ENDDEFINE»
+
+«REM»
+	interfaces are currently ignored during scaffolding
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«fatal("'MInterfaces's are currently not used for scaffolding!")»
+«ENDDEFINE»
+
+«REM»
+	should not happend, because 'MClassifier' is an abstract class!
+	it's just there for error-free templates :-)
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("'MClassifier's are currently not used for scaffolding!")»
+«ENDDEFINE»
+
+«REM»
+	processes a class for scaffolding
+«ENDREM»
+«DEFINE Root FOR MClass»
+	«EXPAND Action::Root»
+«ENDDEFINE»
+
