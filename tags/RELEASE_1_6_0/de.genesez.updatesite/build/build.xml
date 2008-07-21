@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." name="GeneSEZ Update-Site">
+
+	<property name="updatesite.destination" value="${UpdateSiteStagingLocation}" />
+	<property name="feature.destination" value="${updatesite.destination}/features" />
+	<property name="plugin.destination" value="${updatesite.destination}/plugins" />
+
+<!--======================================================-->
+<!-- UpdateSite Export target -->
+<!-- ==================================================== -->
+	<target name="distribute">
+		<copy includeemptydirs="false" todir="${feature.destination}">
+			<fileset dir="features" includes="**/*.jar" />
+		</copy>
+		<copy includeemptydirs="false" todir="${plugin.destination}">
+			<fileset dir="plugins" includes="**/*.jar" />
+		</copy>
+		<copy file="site.xml" todir="${updatesite.destination}" />
+ 	</target>
+
+</project>
