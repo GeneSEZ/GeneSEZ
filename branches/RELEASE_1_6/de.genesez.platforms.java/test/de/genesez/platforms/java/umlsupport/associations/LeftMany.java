@@ -1,10 +1,8 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import de.genesez.platforms.java.umlsupport.associations.modified.Related.Associations;
 
 public class LeftMany implements AssociationRole {
 	

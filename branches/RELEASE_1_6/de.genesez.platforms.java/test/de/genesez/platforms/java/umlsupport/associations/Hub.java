@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -14,7 +14,7 @@ public class Hub implements AssociationRole {
 		UNI_TO_ONE, BIDI_ONE_TO_ONE, UNI_TO_MANY, BIDI_ONE_TO_MANY, BIDI_MANY_TO_MANY
 	}
 	
-	private Map<RelatedAssociationRole, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends AssociationRole,? extends AssociationRole>>();
+	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object,? extends Object>>();
 	{
 		association.put(Associations.UNI_TO_ONE, new OneAssociation<Hub, Related>(this));
 		association.put(Associations.BIDI_ONE_TO_ONE, new OneAssociation<Hub, Related>(this, Related.Associations.BIDI_ONE_TO_ONE));
@@ -34,16 +34,21 @@ public class Hub implements AssociationRole {
 	 * 
 	 * @see de.genesez.platforms.java.umlsupport.associations.modified.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
-	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(
+	public Association<? extends Object, ? extends Object> getAssociation(
 			RelatedAssociationRole role) {
 		if (association.containsKey(role)) return association.get(role);
 		throw new RuntimeException("wrong association role specified");
 	}
 	
+	/**
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
 	public Association<Hub, Related> getUniToOne() {
 		return (Association<Hub, Related>) association.get(Associations.UNI_TO_ONE);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Association<Hub, Related> getBidiOneToOne() {
 		return (Association<Hub, Related>) association.get(Associations.BIDI_ONE_TO_ONE);
 	}

@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 public interface AssociationRole {
 	
@@ -11,7 +11,7 @@ public interface AssociationRole {
 	 * @param role
 	 * @return
 	 */
-	public <From extends AssociationRole, To extends AssociationRole> Association<From, To> getAssociation(RelatedAssociationRole role);
+	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role);
 	
 	// other version which forces client code to define generic parameters for every method call
 	// -> simply not useable

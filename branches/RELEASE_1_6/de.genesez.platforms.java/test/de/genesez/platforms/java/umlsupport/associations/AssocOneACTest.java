@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

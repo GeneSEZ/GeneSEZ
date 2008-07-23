@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 /**
  * additional operations for association class associations.

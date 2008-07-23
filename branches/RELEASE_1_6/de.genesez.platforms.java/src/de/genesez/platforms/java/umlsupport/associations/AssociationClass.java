@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 /**
  * Interface to be implemented by all association classes. Specifies a getter

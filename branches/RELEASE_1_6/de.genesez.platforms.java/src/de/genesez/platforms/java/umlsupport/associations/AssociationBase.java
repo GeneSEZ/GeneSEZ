@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 /**
  * abstract base class for all association implementations.
@@ -10,7 +10,7 @@ package de.genesez.platforms.java.umlsupport.associations.modified;
  * @param <To>
  *            other side of association
  */
-public abstract class AssociationBase<From extends AssociationRole, To extends AssociationRole> implements
+public abstract class AssociationBase<From, To> implements
 		Association<From, To> {
 	private boolean symmetric;
 	private From owner;
@@ -69,7 +69,13 @@ public abstract class AssociationBase<From extends AssociationRole, To extends A
 	 */
 	@SuppressWarnings("unchecked")
 	protected Association<To, From> getRelatedAssociation(To associated) {
-		return associated.<To, From>getAssociation(opposite);
+		if (!(associated instanceof AssociationRole)) {
+			throw new RuntimeException("association is not symmetric");
+		}
+		AssociationRole obj = (AssociationRole)associated;
+		Association<? extends Object, ? extends Object> assoc = obj.getAssociation(opposite);
+		// we can do this cast because we know it's the inverse association
+		return (Association<To, From>) assoc;
 //		try {
 //			return (Association<To, From>) associationGetter.invoke(associated);
 //			

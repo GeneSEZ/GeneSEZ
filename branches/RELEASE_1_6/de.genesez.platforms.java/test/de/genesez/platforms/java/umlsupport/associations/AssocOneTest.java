@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -138,10 +138,14 @@ public class AssocOneTest {
 	@Test(expected = RuntimeException.class)
 	public void wrongAssociationRoleSpecified() {
 		// use generic accessor method to access association
-		Association<Hub, Related> association = hub1.<Hub, Related>getAssociation(Hub.Associations.UNI_TO_ONE);
+//		Association<Hub, Related> association = hub1.getUniToOne();
+		Association<? extends Object, ? extends Object> association = hub1.getAssociation(Hub.Associations.UNI_TO_ONE);
+		Association<Hub, Related> works = (Association<Hub, Related>)association;
 		assertNotNull("generic association getter should work", association);
 		// use generic accessor with wrong association literal
-		association = hub1.<Hub, Related>getAssociation(Related.Associations.BIDI_ONE_TO_ONE);
+//		association = hub1.getBidiOneToOne();
+		association = hub1.getAssociation(Related.Associations.BIDI_ONE_TO_ONE);
+		Association<Hub, Related> dontWorks = (Association<Hub, Related>)association;
 		fail("association roles from other classes should cause exceptions");
 	}
 }

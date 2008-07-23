@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;

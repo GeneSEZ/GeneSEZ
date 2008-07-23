@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import java.util.Iterator;
  * @param <To>
  *            other side of association
  */
-public class ManyAssociation<From extends AssociationRole, To extends AssociationRole> extends AssociationBase<From, To> {
+public class ManyAssociation<From, To> extends AssociationBase<From, To> {
 
 	Collection<To> ref;
 

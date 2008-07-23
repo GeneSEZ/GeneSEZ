@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class ACLink {
 
-	private Map<RelatedAssociationRole, AssociationRole> links = new HashMap<RelatedAssociationRole, AssociationRole>(2);
+	private Map<RelatedAssociationRole, Object> links = new HashMap<RelatedAssociationRole, Object>(2);
 
 	/**
 	 * get the association end for a role name. this method cannot use a
@@ -29,7 +29,7 @@ public class ACLink {
 	 *            name of the role, identifies side of the association
 	 * @return association end at named role
 	 */
-	public AssociationRole getAssociationEnd(RelatedAssociationRole role) {
+	public Object getAssociationEnd(RelatedAssociationRole role) {
 		return links.get(role);
 	}
 
@@ -41,7 +41,7 @@ public class ACLink {
 	 * @param role
 	 *            the role name of the association end
 	 */
-	protected void link(AssociationRole assocEnd, RelatedAssociationRole role) {
+	protected void link(Object assocEnd, RelatedAssociationRole role) {
 		// the following code cannot be reached anymore, because it is shielded by
 		// the generic accessor method for the association in each class which has associations
 //		if (links.containsKey(role)

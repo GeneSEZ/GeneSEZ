@@ -1,4 +1,4 @@
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
  * @param <To>
  *            other side of association
  */
-public class OneAssociation<From extends AssociationRole, To extends AssociationRole> extends AssociationBase<From, To> {
+public class OneAssociation<From, To> extends AssociationBase<From, To> {
 
 	/** reference to the associated object */
 	private To ref;

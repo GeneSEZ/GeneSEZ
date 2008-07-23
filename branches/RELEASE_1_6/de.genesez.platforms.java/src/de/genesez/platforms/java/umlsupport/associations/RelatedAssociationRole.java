@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.genesez.platforms.java.umlsupport.associations.modified;
+package de.genesez.platforms.java.umlsupport.associations;
 
 /**
  * marker interface to identify an association role / end
