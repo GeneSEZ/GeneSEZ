@@ -4,13 +4,17 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Hub implements RelatedAssociation {
+/**
+ * test domain class which has an association to another class to test the association handling
+ * @author georg beier
+ */
+public class Hub implements AssociationRole {
 	
-	public enum Associations implements AssociationRole {
+	public enum Associations implements RelatedAssociationRole {
 		UNI_TO_ONE, BIDI_ONE_TO_ONE, UNI_TO_MANY, BIDI_ONE_TO_MANY, BIDI_MANY_TO_MANY
 	}
 	
-	private Map<AssociationRole, Association<? extends RelatedAssociation, ? extends RelatedAssociation>> association = new LinkedHashMap<AssociationRole, Association<? extends RelatedAssociation,? extends RelatedAssociation>>();
+	private Map<RelatedAssociationRole, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends AssociationRole,? extends AssociationRole>>();
 	{
 		association.put(Associations.UNI_TO_ONE, new OneAssociation<Hub, Related>(this));
 		association.put(Associations.BIDI_ONE_TO_ONE, new OneAssociation<Hub, Related>(this, Related.Associations.BIDI_ONE_TO_ONE));
@@ -22,12 +26,39 @@ public class Hub implements RelatedAssociation {
 			this, new HashSet<Related>(), Related.Associations.BIDI_MANY_TO_MANY));
 	}
 	
-	public Association<? extends RelatedAssociation, ? extends RelatedAssociation> getAssociation(
-			AssociationRole role) {
+	/**
+	 * generic accessor for the association objects used by the framework
+	 * 
+	 * because the fact that generic getters will force you to use generic definitions or casts when
+	 * accessing an association, there are also getter for each association directly
+	 * 
+	 * @see de.genesez.platforms.java.umlsupport.associations.modified.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 */
+	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(
+			RelatedAssociationRole role) {
 		if (association.containsKey(role)) return association.get(role);
 		throw new RuntimeException("wrong association role specified");
 	}
 	
+	public Association<Hub, Related> getUniToOne() {
+		return (Association<Hub, Related>) association.get(Associations.UNI_TO_ONE);
+	}
+	
+	public Association<Hub, Related> getBidiOneToOne() {
+		return (Association<Hub, Related>) association.get(Associations.BIDI_ONE_TO_ONE);
+	}
+	
+	public Association<Hub, Related> getUniToMany() {
+		return (Association<Hub, Related>) association.get(Associations.UNI_TO_MANY);
+	}
+	
+	public Association<Hub, Related> getBidiOneToMany() {
+		return (Association<Hub, Related>) association.get(Associations.BIDI_ONE_TO_MANY);
+	}
+	
+	public Association<Hub, Related> getBidiManyToMany() {
+		return (Association<Hub, Related>) association.get(Associations.BIDI_MANY_TO_MANY);
+	}
 	
 	// -- old stuff
 	/*

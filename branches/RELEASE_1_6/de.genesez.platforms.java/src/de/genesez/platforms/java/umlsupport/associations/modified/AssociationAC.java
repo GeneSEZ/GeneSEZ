@@ -10,7 +10,7 @@ package de.genesez.platforms.java.umlsupport.associations.modified;
  * @param <To>
  *            the to class
  */
-public interface AssociationAC<From extends RelatedAssociation, To extends RelatedAssociation, Assoc> extends
+public interface AssociationAC<From, To, Assoc> extends
 		Association<From, To> {
 	/**
 	 * insert associated object and association class object into the

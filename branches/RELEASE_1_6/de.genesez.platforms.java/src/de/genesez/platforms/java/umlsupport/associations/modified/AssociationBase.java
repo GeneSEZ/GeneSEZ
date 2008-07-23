@@ -1,6 +1,5 @@
 package de.genesez.platforms.java.umlsupport.associations.modified;
 
-
 /**
  * abstract base class for all association implementations.
  * 
@@ -11,12 +10,12 @@ package de.genesez.platforms.java.umlsupport.associations.modified;
  * @param <To>
  *            other side of association
  */
-public abstract class AssociationBase<From extends RelatedAssociation, To extends RelatedAssociation> implements
+public abstract class AssociationBase<From extends AssociationRole, To extends AssociationRole> implements
 		Association<From, To> {
 	private boolean symmetric;
 	private From owner;
 //	private Method associationGetter;
-	private AssociationRole opposite;
+	private RelatedAssociationRole opposite;
 
 	/**
 	 * build unidirectional association
@@ -39,7 +38,7 @@ public abstract class AssociationBase<From extends RelatedAssociation, To extend
 	 * @param assocGetter
 	 *            name of getter function on the other side
 	 */
-	public AssociationBase(From owner, AssociationRole opposite) {
+	public AssociationBase(From owner, RelatedAssociationRole opposite) {
 		this.owner = owner;
 		symmetric = true;
 		this.opposite = opposite;
@@ -70,15 +69,15 @@ public abstract class AssociationBase<From extends RelatedAssociation, To extend
 	 */
 	@SuppressWarnings("unchecked")
 	protected Association<To, From> getRelatedAssociation(To associated) {
-		try {
+		return associated.<To, From>getAssociation(opposite);
+//		try {
 //			return (Association<To, From>) associationGetter.invoke(associated);
-			return associated.<Association<To, From>>getAssociation(opposite);
-			
-			// The catch clause cannot be reached because it is shielded by the
-			// try/catch clause in the constructor
-		} catch (Exception e) {
-			throw new RuntimeException("no getter method for association");
-		}
+//			
+//			// The catch clause cannot be reached because it is shielded by the
+//			// try/catch clause in the constructor
+//		} catch (Exception e) {
+//			throw new RuntimeException("no getter method for association");
+//		}
 	}
 
 	/**
@@ -109,7 +108,7 @@ public abstract class AssociationBase<From extends RelatedAssociation, To extend
 		return symmetric;
 	}
 
-	protected AssociationRole getOpposite() {
+	protected RelatedAssociationRole getOpposite() {
 		return opposite;
 	}
 }

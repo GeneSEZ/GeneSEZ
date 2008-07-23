@@ -16,7 +16,7 @@ package de.genesez.platforms.java.umlsupport.associations.modified;
  *            association class type
  * 
  */
-public class OneAssociationAC<From extends RelatedAssociation, To extends RelatedAssociation, Assoc extends AssociationClass> extends
+public class OneAssociationAC<From extends AssociationRole, To extends AssociationRole, Assoc extends AssociationClass> extends
 		OneAssociation<From, To> implements AssociationAC<From, To, Assoc> {
 
 	/** reference to the association class object */
@@ -39,7 +39,7 @@ public class OneAssociationAC<From extends RelatedAssociation, To extends Relate
 	 *            name of the accessor method that returns the opposite
 	 *            association end
 	 */
-	public OneAssociationAC(From owner, AssociationRole opposite) {
+	public OneAssociationAC(From owner, RelatedAssociationRole opposite) {
 		super(owner, opposite);
 	}
 

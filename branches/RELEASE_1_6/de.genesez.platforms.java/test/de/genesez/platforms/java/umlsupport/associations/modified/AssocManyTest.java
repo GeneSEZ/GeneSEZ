@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -35,48 +36,48 @@ public class AssocManyTest {
 	
 	@Test
 	public void insertTest() {
-		Iterator<Related> it = hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).iterator();
+		Iterator<Related> it = hub1.getUniToMany().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
-		assertNull("content not nulled", hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).get());
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).insert(or1);
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).insert(or2);
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).insert(or3);
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).insert(or3);
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).insert(or1);
-		it = hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).iterator();
+		assertNull("content not nulled", hub1.getUniToMany().get());
+		hub1.getUniToMany().insert(or1);
+		hub1.getUniToMany().insert(or2);
+		hub1.getUniToMany().insert(or3);
+		hub1.getUniToMany().insert(or3);
+		hub1.getUniToMany().insert(or1);
+		it = hub1.getUniToMany().iterator();
 		assertTrue("iterator should have next", it.hasNext());
-		for(Related r: hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY)){
+		for(Related r: hub1.getUniToMany()){
 			rels.add(r);
 		}
 		assertTrue("related not in association", rels.contains(or1));
 		assertTrue("related not in association", rels.contains(or2));
 		assertTrue("related not in association", rels.contains(or3));
 		assertEquals("wrong association size", 3, rels.size());
-		assertEquals("internal inconsistency", it.next(), hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).get());
+		assertEquals("internal inconsistency", it.next(), hub1.getUniToMany().get());
 	}
 
 	@Test
 	public void removeTest() {
-		assertNull("there should be nothing to remove", hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).remove(or1));
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).insert(or1);
-		Related ot = hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).remove(or1);
+		assertNull("there should be nothing to remove", hub1.getUniToMany().remove(or1));
+		hub1.getUniToMany().insert(or1);
+		Related ot = hub1.getUniToMany().remove(or1);
 		assertEquals("related not removed", or1, ot);
-		Iterator<Related> it = hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).iterator();
+		Iterator<Related> it = hub1.getUniToMany().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
-		assertNull("content not nulled", hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.UNI_TO_MANY).get());
+		assertNull("content not nulled", hub1.getUniToMany().get());
 	}
 
 	
 	@Test
 	public void insertTestSym() {
-		Iterator<Related> it = hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY).iterator();
+		Iterator<Related> it = hub1.getBidiOneToMany().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY).insert(or1);
-		or2.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).insert(hub1);
-		or3.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).insert(hub1);
-		it = hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY).iterator();
+		hub1.getBidiOneToMany().insert(or1);
+		or2.getBidiOneToMany().insert(hub1);
+		or3.getBidiOneToMany().insert(hub1);
+		it = hub1.getBidiOneToMany().iterator();
 		assertTrue("iterator should have next", it.hasNext());
-		for(Related r: hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY)){
+		for(Related r: hub1.getBidiOneToMany()){
 			rels.add(r);
 		}
 		assertTrue("related not in association", rels.contains(or1));
@@ -84,7 +85,7 @@ public class AssocManyTest {
 		assertTrue("related not in association", rels.contains(or3));
 		assertEquals("wrong association size", 3, rels.size());
 
-		Iterator<Hub> hit = or1.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).iterator();
+		Iterator<Hub> hit = or1.getBidiOneToMany().iterator();
 		assertTrue("iterator should have next", hit.hasNext());
 		Hub thub = hit.next();
 		assertEquals("related not found backwards", hub1, thub);
@@ -92,29 +93,29 @@ public class AssocManyTest {
 
 	@Test
 	public void removeTestSym() {
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY).insert(or1);
-		or2.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).insert(hub1);
-		or3.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).insert(hub1);
-		or1.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).remove(hub1);
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY).remove(or3);
-		for(Related r: hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY)){
+		hub1.getBidiOneToMany().insert(or1);
+		or2.getBidiOneToMany().insert(hub1);
+		or3.getBidiOneToMany().insert(hub1);
+		or1.getBidiOneToMany().remove(hub1);
+		hub1.getBidiOneToMany().remove(or3);
+		for(Related r: hub1.getBidiOneToMany()){
 			rels.add(r);
 		}
 		assertFalse("related not removed from association", rels.contains(or1));
 		assertFalse("related not removed from association", rels.contains(or3));
 		assertTrue("related not in association", rels.contains(or2));
-		assertFalse("not removed on one side", or3.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).iterator().hasNext());
+		assertFalse("not removed on one side", or3.getBidiOneToMany().iterator().hasNext());
 
 	}
 
 	@Test
 	public void replaceTestSym() {
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY).insert(or1);
-		or2.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).insert(hub1);
-		or3.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).insert(hub1);
-		or1.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_ONE_TO_MANY).insert(hub2);
-		hub2.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY).insert(or3);
-		for(Related r: hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_ONE_TO_MANY)){
+		hub1.getBidiOneToMany().insert(or1);
+		or2.getBidiOneToMany().insert(hub1);
+		or3.getBidiOneToMany().insert(hub1);
+		or1.getBidiOneToMany().insert(hub2);
+		hub2.getBidiOneToMany().insert(or3);
+		for(Related r: hub1.getBidiOneToMany()){
 			rels.add(r);
 		}
 		assertFalse("related not replaced in association", rels.contains(or1));
@@ -125,11 +126,11 @@ public class AssocManyTest {
 	
 	@Test
 	public void manyManyAllTest() {
-		hub1.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_MANY_TO_MANY).insert(or1);
-		hub3.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_MANY_TO_MANY).insert(or3);
-		or1.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_MANY_TO_MANY).insert(hub2);
-		or1.<Association<Related, Hub>>getAssociation(Related.Associations.BIDI_MANY_TO_MANY).insert(hub3);
-		for(Related r: hub3.<Association<Hub, Related>>getAssociation(Hub.Associations.BIDI_MANY_TO_MANY)){
+		hub1.getBidiManyToMany().insert(or1);
+		hub3.getBidiManyToMany().insert(or3);
+		or1.getBidiManyToMany().insert(hub2);
+		or1.getBidiManyToMany().insert(hub3);
+		for(Related r: hub3.getBidiManyToMany()) {
 			rels.add(r);
 		}
 		assertTrue("related not in association", rels.contains(or1));
@@ -137,5 +138,14 @@ public class AssocManyTest {
 		assertTrue("related not in association", rels.contains(or3));
 		assertEquals("wrong association size", 2, rels.size());
 	}
-/*	*/
+	
+	@Test
+	public void getAllTest() {
+		hub1.getBidiOneToMany().insert(or1);
+		hub1.getBidiOneToMany().insert(or2);
+		Collection<Related> associated = hub1.getBidiOneToMany().getAll();
+		assertEquals("collection should contain 2 associated objects", 2, associated.size());
+		assertTrue("collection should contain the inserted object", associated.contains(or1));
+		assertTrue("collection should contain the inserted object", associated.contains(or2));
+	}
 }

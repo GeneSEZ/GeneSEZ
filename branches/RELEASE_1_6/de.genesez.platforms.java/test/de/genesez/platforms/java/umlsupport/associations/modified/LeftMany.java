@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class LeftMany implements RelatedAssociation {
+import de.genesez.platforms.java.umlsupport.associations.modified.Related.Associations;
+
+public class LeftMany implements AssociationRole {
 	
-	public enum Associations implements AssociationRole {
+	public enum Associations implements RelatedAssociationRole {
 		RIGHT, RIGHT_SYM, RIGHT_MANY
 	}
 	
-	private Map<Associations, Association<? extends RelatedAssociation, ? extends RelatedAssociation>> association = new LinkedHashMap<Associations, Association<? extends RelatedAssociation, ? extends RelatedAssociation>>();
+	private Map<Associations, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<Associations, Association<? extends AssociationRole, ? extends AssociationRole>>();
 	{
 		association.put(Associations.RIGHT, new ManyAssociationAC<LeftMany, RightMany, Assoc>(this,
 				new HashMap<RightMany, Assoc>()));
@@ -20,11 +22,24 @@ public class LeftMany implements RelatedAssociation {
 				new HashMap<RightMany, Assoc>(), RightMany.Associations.LEFT_SYM_MANY));
 	}
 	
-	public Association<? extends RelatedAssociation, ? extends RelatedAssociation> getAssociation(
-			AssociationRole role) {
+	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(
+			RelatedAssociationRole role) {
 		if (association.containsKey(role)) return association.get(role);
 		throw new RuntimeException("wrong association role specified");
 	}
+	
+	public AssociationAC<LeftMany, RightMany, Assoc> getRight() {
+		return (AssociationAC<LeftMany, RightMany, Assoc>) association.get(Associations.RIGHT);
+	}
+	
+	public AssociationAC<LeftMany, RightMany, Assoc> getRightSym() {
+		return (AssociationAC<LeftMany, RightMany, Assoc>) association.get(Associations.RIGHT_SYM);
+	}
+	
+	public AssociationAC<LeftMany, RightMany, Assoc> getRightMany() {
+		return (AssociationAC<LeftMany, RightMany, Assoc>) association.get(Associations.RIGHT_MANY);
+	}
+	
 	
 	/*
 	private AssociationAC<LeftMany, RightMany, Assoc> right;

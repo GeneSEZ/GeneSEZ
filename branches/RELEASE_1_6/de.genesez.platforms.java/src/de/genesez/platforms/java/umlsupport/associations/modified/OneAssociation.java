@@ -1,6 +1,10 @@
 package de.genesez.platforms.java.umlsupport.associations.modified;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -13,7 +17,7 @@ import java.util.NoSuchElementException;
  * @param <To>
  *            other side of association
  */
-public class OneAssociation<From extends RelatedAssociation, To extends RelatedAssociation> extends AssociationBase<From, To> {
+public class OneAssociation<From extends AssociationRole, To extends AssociationRole> extends AssociationBase<From, To> {
 
 	/** reference to the associated object */
 	private To ref;
@@ -35,7 +39,7 @@ public class OneAssociation<From extends RelatedAssociation, To extends RelatedA
 	 *            name of the getter method in the referenced type that gives
 	 *            access to the other association end
 	 */
-	public OneAssociation(From owner, AssociationRole opposite) {
+	public OneAssociation(From owner, RelatedAssociationRole opposite) {
 		super(owner, opposite);
 	}
 
@@ -81,6 +85,12 @@ public class OneAssociation<From extends RelatedAssociation, To extends RelatedA
 //	@Override
 	public To get() {
 		return getReference();
+	}
+	
+	public Collection<To> getAll() {
+		List<To> l = new ArrayList<To>();
+		l.add(ref);
+		return Collections.unmodifiableCollection(l);
 	}
 
 //	@Override

@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Related implements RelatedAssociation {
+public class Related implements AssociationRole {
 
-	public enum Associations implements AssociationRole {
+	public enum Associations implements RelatedAssociationRole {
 		BIDI_ONE_TO_ONE, BIDI_ONE_TO_MANY, BIDI_MANY_TO_MANY
 	}
 	
-	private Map<AssociationRole, Association<? extends RelatedAssociation, ? extends RelatedAssociation>> association = new LinkedHashMap<AssociationRole, Association<? extends RelatedAssociation,? extends RelatedAssociation>>();
+	private Map<RelatedAssociationRole, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends AssociationRole,? extends AssociationRole>>();
 	{
 		association.put(Associations.BIDI_ONE_TO_ONE, new OneAssociation<Related, Hub>(
 				this, Hub.Associations.BIDI_ONE_TO_ONE));
@@ -20,10 +20,22 @@ public class Related implements RelatedAssociation {
 				this, new HashSet<Hub>(), Hub.Associations.BIDI_MANY_TO_MANY));
 	}
 	
-	public Association<? extends RelatedAssociation, ? extends RelatedAssociation> getAssociation(
-			AssociationRole role) {
+	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(
+			RelatedAssociationRole role) {
 		if (association.containsKey(role)) return association.get(role);
 		throw new RuntimeException("wrong association role specified");
+	}
+	
+	public Association<Related, Hub> getBidiOneToOne() {
+		return (Association<Related, Hub>) association.get(Associations.BIDI_ONE_TO_ONE);
+	}
+	
+	public Association<Related, Hub> getBidiOneToMany() {
+		return (Association<Related, Hub>) association.get(Associations.BIDI_ONE_TO_MANY);
+	}
+	
+	public Association<Related, Hub> getBidiManyToMany() {
+		return (Association<Related, Hub>) association.get(Associations.BIDI_MANY_TO_MANY);
 	}
 	
 	

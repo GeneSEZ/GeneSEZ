@@ -21,7 +21,7 @@ import java.util.Map;
  * @param <Assoc>
  *            association class type
  */
-public class ManyAssociationAC<From extends RelatedAssociation, To extends RelatedAssociation, Assoc extends AssociationClass>
+public class ManyAssociationAC<From extends AssociationRole, To extends AssociationRole, Assoc extends AssociationClass>
 		extends ManyAssociation<From, To> implements
 		AssociationAC<From, To, Assoc> {
 
@@ -43,7 +43,7 @@ public class ManyAssociationAC<From extends RelatedAssociation, To extends Relat
 	 * @param assocGetter
 	 */
 	public ManyAssociationAC(From owner, Map<To, Assoc> reference,
-			AssociationRole opposite) {
+			RelatedAssociationRole opposite) {
 		super(owner, reference.keySet(), opposite);
 		refMap = reference;
 	}

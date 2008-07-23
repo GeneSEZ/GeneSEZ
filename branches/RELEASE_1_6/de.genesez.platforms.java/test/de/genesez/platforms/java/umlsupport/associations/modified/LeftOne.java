@@ -3,30 +3,41 @@ package de.genesez.platforms.java.umlsupport.associations.modified;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.genesez.platforms.java.umlsupport.associations.modified.LeftMany.Associations;
-
-
-public class LeftOne implements RelatedAssociation {
+public class LeftOne implements AssociationRole {
 	
-	public enum Associations implements AssociationRole {
+	public enum Associations implements RelatedAssociationRole {
 		RIGHT, RIGHT_SYM, BAD_NAME
 	}
 	
-	private Map<Associations, Association<? extends RelatedAssociation, ? extends RelatedAssociation>> association = new LinkedHashMap<Associations, Association<? extends RelatedAssociation, ? extends RelatedAssociation>>();
+	private Map<Associations, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<Associations, Association<? extends AssociationRole, ? extends AssociationRole>>();
 	{
 		association.put(Associations.RIGHT, new OneAssociationAC<LeftOne, RightOne, Assoc>(this));
 		association.put(Associations.RIGHT_SYM, new OneAssociationAC<LeftOne, RightOne, Assoc>(this,
 				RightOne.Associations.LEFT_SYM));
+		// using wrong enum literals to specify association should cause runtime exception
 		association.put(Associations.BAD_NAME, new OneAssociationAC<LeftOne, RightOne, Assoc>(this,
-				RightOne.Associations.BAD_NAME));
+				/*RightOne.*/ Associations.BAD_NAME));
 	}
 	
-	public Association<? extends RelatedAssociation, ? extends RelatedAssociation> getAssociation(
-			AssociationRole role) {
+	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(
+			RelatedAssociationRole role) {
 		if (association.containsKey(role)) return association.get(role);
 		throw new RuntimeException("wrong association role specified");
 	}
-
+	
+	public OneAssociationAC<LeftOne, RightOne, Assoc> getRight() {
+		return (OneAssociationAC<LeftOne, RightOne, Assoc>) association.get(Associations.RIGHT);
+	}
+	
+	public OneAssociationAC<LeftOne, RightOne, Assoc> getRightSym() {
+		return (OneAssociationAC<LeftOne, RightOne, Assoc>) association.get(Associations.RIGHT_SYM);
+	}
+	
+	public OneAssociationAC<LeftOne, RightOne, Assoc> getBadName() {
+		return (OneAssociationAC<LeftOne, RightOne, Assoc>) association.get(Associations.BAD_NAME);
+	}
+	
+	
 	/*
 	private AssociationAC<LeftOne, RightOne, Assoc> right;
 	private AssociationAC<LeftOne, RightOne, Assoc> rightSym;

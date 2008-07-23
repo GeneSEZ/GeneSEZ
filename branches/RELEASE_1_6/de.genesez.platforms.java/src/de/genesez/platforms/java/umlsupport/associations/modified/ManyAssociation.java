@@ -1,6 +1,7 @@
 package de.genesez.platforms.java.umlsupport.associations.modified;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Iterator;
  * @param <To>
  *            other side of association
  */
-public class ManyAssociation<From extends RelatedAssociation, To extends RelatedAssociation> extends AssociationBase<From, To> {
+public class ManyAssociation<From extends AssociationRole, To extends AssociationRole> extends AssociationBase<From, To> {
 
 	Collection<To> ref;
 
@@ -48,7 +49,7 @@ public class ManyAssociation<From extends RelatedAssociation, To extends Related
 	 * 
 	 */
 	public ManyAssociation(From owner, Collection<To> reference,
-			AssociationRole opposite) {
+			RelatedAssociationRole opposite) {
 		super(owner, opposite);
 		ref = reference;
 	}
@@ -89,6 +90,10 @@ public class ManyAssociation<From extends RelatedAssociation, To extends Related
 			return null;
 		else
 			return ref.iterator().next();
+	}
+	
+	public Collection<To> getAll() {
+		return Collections.unmodifiableCollection(ref);
 	}
 
 //	@Override

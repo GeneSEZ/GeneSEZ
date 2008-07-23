@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class ACLink {
 
-	private Map<AssociationRole, RelatedAssociation> links = new HashMap<AssociationRole, RelatedAssociation>(2);
+	private Map<RelatedAssociationRole, AssociationRole> links = new HashMap<RelatedAssociationRole, AssociationRole>(2);
 
 	/**
 	 * get the association end for a role name. this method cannot use a
@@ -29,7 +29,7 @@ public class ACLink {
 	 *            name of the role, identifies side of the association
 	 * @return association end at named role
 	 */
-	public RelatedAssociation getAssociationEnd(AssociationRole role) {
+	public AssociationRole getAssociationEnd(RelatedAssociationRole role) {
 		return links.get(role);
 	}
 
@@ -41,11 +41,13 @@ public class ACLink {
 	 * @param role
 	 *            the role name of the association end
 	 */
-	protected void link(RelatedAssociation assocEnd, AssociationRole role) {
-		if (links.containsKey(role)
-				&& !links.get(role).getClass().equals(assocEnd.getClass()))
-			throw new RuntimeException(
-					"Role names for association class associations have to be different");
+	protected void link(AssociationRole assocEnd, RelatedAssociationRole role) {
+		// the following code cannot be reached anymore, because it is shielded by
+		// the generic accessor method for the association in each class which has associations
+//		if (links.containsKey(role)
+//				&& !links.get(role).getClass().equals(assocEnd.getClass()))
+//			throw new RuntimeException(
+//					"Role names for association class associations have to be different");
 		links.put(role, assocEnd);
 	}
 
@@ -55,7 +57,7 @@ public class ACLink {
 	 * @param role
 	 *            the role to clear
 	 */
-	protected void clear(AssociationRole role) {
+	protected void clear(RelatedAssociationRole role) {
 		links.remove(role);
 	}
 }

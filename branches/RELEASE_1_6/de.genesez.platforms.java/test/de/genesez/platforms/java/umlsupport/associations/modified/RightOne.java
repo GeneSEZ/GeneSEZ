@@ -3,16 +3,13 @@ package de.genesez.platforms.java.umlsupport.associations.modified;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.genesez.platforms.java.umlsupport.associations.modified.RightMany.Associations;
-
-
-public class RightOne implements RelatedAssociation {
+public class RightOne implements AssociationRole {
 	
-	public enum Associations implements AssociationRole {
+	public enum Associations implements RelatedAssociationRole {
 		LEFT_SYM, BAD_NAME
 	}
 	
-	private Map<Associations, Association<? extends RelatedAssociation, ? extends RelatedAssociation>> association = new LinkedHashMap<Associations, Association<? extends RelatedAssociation, ? extends RelatedAssociation>>();
+	private Map<Associations, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<Associations, Association<? extends AssociationRole, ? extends AssociationRole>>();
 	{
 		association.put(Associations.LEFT_SYM, new OneAssociationAC<RightOne, LeftOne, Assoc>(this,
 				LeftOne.Associations.RIGHT_SYM));
@@ -20,11 +17,20 @@ public class RightOne implements RelatedAssociation {
 				LeftOne.Associations.BAD_NAME));
 	}
 	
-	public Association<? extends RelatedAssociation, ? extends RelatedAssociation> getAssociation(
-			AssociationRole role) {
+	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(
+			RelatedAssociationRole role) {
 		if (association.containsKey(role)) return association.get(role);
 		throw new RuntimeException("wrong association role specified");
 	}
+	
+	public OneAssociationAC<RightOne, LeftOne, Assoc> getLeftSym() {
+		return (OneAssociationAC<RightOne, LeftOne, Assoc>) association.get(Associations.LEFT_SYM);
+	}
+	
+	public OneAssociationAC<RightOne, LeftOne, Assoc> getBadName() {
+		return (OneAssociationAC<RightOne, LeftOne, Assoc>) association.get(Associations.BAD_NAME);
+	}
+	
 	
 	/*
 	private AssociationAC<RightOne, LeftOne, Assoc> leftSym;
