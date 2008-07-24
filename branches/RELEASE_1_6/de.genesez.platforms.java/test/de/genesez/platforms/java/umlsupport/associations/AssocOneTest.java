@@ -20,6 +20,7 @@ public class AssocOneTest {
 	private Related or1;
 	private Related or2;
 	private Related or3;
+	private RelatedWithoutAssociation rwoa;
 
 	@Before
 	public void setUp() throws Exception {
@@ -27,6 +28,7 @@ public class AssocOneTest {
 		or1 = new Related();
 		or2 = new Related();
 		or3 = new Related();
+		rwoa = new RelatedWithoutAssociation();
 	}
 
 	@Test
@@ -147,5 +149,11 @@ public class AssocOneTest {
 		association = hub1.getAssociation(Related.Associations.BIDI_ONE_TO_ONE);
 		Association<Hub, Related> dontWorks = (Association<Hub, Related>)association;
 		fail("association roles from other classes should cause exceptions");
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void unidirectionalAsBidirectionalDeclared() {
+		hub1.getUniToRelatedWoAssociations().insert(rwoa);
+		fail("association is unidirectional, not bidirectional");
 	}
 }

@@ -42,11 +42,6 @@ public abstract class AssociationBase<From, To> implements
 		this.owner = owner;
 		symmetric = true;
 		this.opposite = opposite;
-//		try {
-//			associationGetter = refClass.getMethod(assocGetter);
-//		} catch (Exception e) {
-//			throw new RuntimeException("no getter method for association");
-//		}
 	}
 
 	/*
@@ -76,14 +71,6 @@ public abstract class AssociationBase<From, To> implements
 		Association<? extends Object, ? extends Object> assoc = obj.getAssociation(opposite);
 		// we can do this cast because we know it's the inverse association
 		return (Association<To, From>) assoc;
-//		try {
-//			return (Association<To, From>) associationGetter.invoke(associated);
-//			
-//			// The catch clause cannot be reached because it is shielded by the
-//			// try/catch clause in the constructor
-//		} catch (Exception e) {
-//			throw new RuntimeException("no getter method for association");
-//		}
 	}
 
 	/**

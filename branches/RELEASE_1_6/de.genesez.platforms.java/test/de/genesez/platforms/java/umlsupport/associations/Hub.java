@@ -5,13 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * test domain class which has an association to another class to test the association handling
+ * test class which has an association to another class to test the association handling
  * @author georg beier
  */
 public class Hub implements AssociationRole {
 	
 	public enum Associations implements RelatedAssociationRole {
-		UNI_TO_ONE, BIDI_ONE_TO_ONE, UNI_TO_MANY, BIDI_ONE_TO_MANY, BIDI_MANY_TO_MANY
+		UNI_TO_ONE, BIDI_ONE_TO_ONE, UNI_TO_MANY, BIDI_ONE_TO_MANY, BIDI_MANY_TO_MANY, UNI_TO_RELATED_WO_ASSOCIATIONS
 	}
 	
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object,? extends Object>>();
@@ -24,6 +24,8 @@ public class Hub implements AssociationRole {
 				this, new HashSet<Related>(), Related.Associations.BIDI_ONE_TO_MANY));
 		association.put(Associations.BIDI_MANY_TO_MANY, new ManyAssociation<Hub, Related>(
 			this, new HashSet<Related>(), Related.Associations.BIDI_MANY_TO_MANY));
+		// test wrong declaration of an unidirectional association as a bidirectional, given a wrong inverse related association role
+		association.put(Associations.UNI_TO_RELATED_WO_ASSOCIATIONS, new OneAssociation<Hub, RelatedWithoutAssociation>(this, Associations.UNI_TO_RELATED_WO_ASSOCIATIONS));
 	}
 	
 	/**
@@ -53,16 +55,24 @@ public class Hub implements AssociationRole {
 		return (Association<Hub, Related>) association.get(Associations.BIDI_ONE_TO_ONE);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Association<Hub, Related> getUniToMany() {
 		return (Association<Hub, Related>) association.get(Associations.UNI_TO_MANY);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Association<Hub, Related> getBidiOneToMany() {
 		return (Association<Hub, Related>) association.get(Associations.BIDI_ONE_TO_MANY);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Association<Hub, Related> getBidiManyToMany() {
 		return (Association<Hub, Related>) association.get(Associations.BIDI_MANY_TO_MANY);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Association<Hub, RelatedWithoutAssociation> getUniToRelatedWoAssociations() {
+		return (Association<Hub, RelatedWithoutAssociation>) association.get(Associations.UNI_TO_RELATED_WO_ASSOCIATIONS);
 	}
 	
 	// -- old stuff
