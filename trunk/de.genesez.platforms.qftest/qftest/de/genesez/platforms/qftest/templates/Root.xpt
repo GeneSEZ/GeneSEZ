@@ -1,0 +1,60 @@
+«REM»
+	Root Template for C#
+
+	@author Gerrit Beine
+	@date   2008/07/29
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	starting generation for a model
+«ENDREM»
+«DEFINE Root FOR MModel-»
+«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+«REM»
+	process packages
+«ENDREM»
+«DEFINE Root FOR MPackage-»
+«EXPAND Root FOREACH nestedPackage-»
+«EXPAND Root FOREACH classifier-»
+«ENDDEFINE»
+
+
+«REM»
+	process use cases
+	create file for each use cases
+«ENDREM»
+«DEFINE Root FOR MUseCase-»
+«FILE name + ".txt"-»
+«ENDFILE-»
+«ENDDEFINE»
+
+
+«REM»
+	process classifiers
+	do nothing for other classifiers
+«ENDREM»
+«DEFINE Root FOR MClassifier-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
