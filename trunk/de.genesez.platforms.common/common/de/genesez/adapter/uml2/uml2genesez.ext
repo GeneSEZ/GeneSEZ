@@ -221,9 +221,13 @@ private create MPackage makePackage(Package p) :
 	p.ownedElement.typeSelect(Package).transform( this ) ->
 //	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
 //	transform( p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
-	p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform( this ) ->
+	p.ownedElement.typeSelect(Classifier).reject(
+		e|{Activity, Actor, Association}.contains(e.metaType) 
+		).transform( this ) ->
 	// map associations in package
 	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
+	// create behaviours in package
+	p.ownedElement.typeSelect(Behavior).transform( this ) ->
 	this;
 	
 /**
@@ -293,6 +297,18 @@ private create MDataType makeClassifier(DataType d) :
 	// ignore abstract + final
 	// transform classifier
 	transformClassifier(d) ->
+	this;
+	
+/**
+ * creates a GeneSEZ usecase from an uml usecase
+ * @param	u	an uml usecase
+ * @return	the GeneSEZ usecase
+ */
+private create MUseCase makeClassifier(UseCase u) :
+	trace( "make [ " + metaType + " ] - " + u ) ->
+	// basic element properties
+	transformBasics(u) ->
+	ownedBehavior.addAll( u.ownedBehavior.makeBehavior() ) ->
 	this;
 	
 /**
@@ -540,6 +556,62 @@ private MClass assocEndClass(Property a):
 		? null
 		: a.class.makeType();
 */
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	behavior
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * transforms a behavior, that has a containment reference to a package
+ * @param	b	an uml behavior to transform
+ * @context	the package which is the container for the specified behavior
+ * @return	the transformed behavior
+ */
+private MBehavior transform(Behavior b, MPackage this) :
+	trace( "transform [ " + b.metaType + " ] - " + b ) ->
+	behavior.add( b.makeBehavior() ) ->
+	this;
+
+/**
+ * creates a GeneSEZ activity
+ */
+private create MActivity makeBehavior(Activity a) :
+	trace( "make [ " + metaType + " ] - " + a ) ->
+	// basic element properties
+	transformBasics(a) ->
+	// add owned sub behaviors
+	ownedBehavior.addAll( a.ownedBehavior.makeBehavior() ) ->
+	this;
+
+/**
+ * creates a GeneSEZ state machine
+ */
+/*private create MStateMachine makeBehavior(StateMachine s) :
+	trace( "make [ " + metaType + " ] - " + s ) ->
+	// basic element properties
+	transformBasics(s) ->
+	this;*/
+
+/**
+ * just a marker for error free templates
+ * no GeneSEZ behaviour is created, because the GeneSEZ behaviour is an abstract class
+ * prints a 'severe' log message to report such an transformation
+ * @return	void
+ */
+private MBehavior makeBehavior(Behavior b) :
+	fatal("try to construct a MBehavior object from: " + b) ->
+	Void;
+
+/**
+ * creates a GeneSEZ action
+ */
+/*private create MAction makeAction(Action a) :
+	trace( "make [ " + metaType + " ] - " + a ) ->
+	// basic element properties
+	transformBasics(a) ->
+	this;*/
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
