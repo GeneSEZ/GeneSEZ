@@ -1,0 +1,38 @@
+/**
+ * conversion for QF-Test
+ *
+ * @author      gerrit beine
+ * @date        2008-08-04
+ */
+
+//      based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::Conversion reexport;
+extension de::genesez::platforms::qftest::scripts::Naming;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the full qualified name of a classifier
+ * @param       spearator       the separator to use between the names
+ * @return      string representation of the full qualified name
+ */
+String fullFileName(MClassifier this) :
+        dirPath() + fileSeparator() + asFileName();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        file names, file paths + directory paths
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the path of a classifier based on it's namespace
+ * @return      the path of the classifier
+ */
+String dirPath(MClassifier this) :
+        owningPackage.fullQualifiedNameSep( dirSeparator() );

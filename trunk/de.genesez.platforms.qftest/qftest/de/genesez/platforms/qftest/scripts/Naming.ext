@@ -1,0 +1,83 @@
+/**
+ * naming conventions for QF-Test
+ *
+ * @author      gerrit beine
+ * @date        2008-08-04
+ */
+
+//      based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        prefix + suffix + file extensions for types
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter of the separator for full qualified names
+ * @return      the separator for full qualified names for QF-Test
+ */
+String fqnSeparator() : "";
+
+/**
+ * getter of the separator for directories
+ * @return      the separator for directory names
+ */
+String dirSeparator() : "/";
+
+/**
+ * getter of the file extension including the beginning dot
+ * @return      the file extension for QF-Test artefacts ('.qft')
+ */
+String fileExtension() : ".qft";
+
+/**
+ * just there for error free templates ;-)
+ * @return      an empty string
+ */
+String prefix(MClassifier this) : "";
+
+/**
+ * just there for error free templates ;-)
+ * @return      an empty string
+ */
+String suffix(MClassifier this) : "";
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        type names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the name of a classifier using prefix + suffix
+ * @return      formatted name of the classifier
+ */
+String asTypeName(MClassifier this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a type after typemapping
+ * don't touch the type - the name of the type is determined by typemapping
+ * @return      the name of the type
+ */
+String asTypeName(String this) : this;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        file names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the filename of a classifier
+ * it's usually not called!
+ * @return      the filename of a classifier
+ */
+String asFileName(MClassifier this) : asTypeName() + fileExtension();
+

@@ -1,0 +1,81 @@
+/**
+ * QF-Test script steps
+ *
+ * @author	Gerrit Beine
+ * @date	2008-08-04
+ */
+
+//      based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::qftest::scripts::Helper;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	RootStep related xTend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * generates the RootStep
+ * @return      the xml code for the RootStep
+ */
+String rootStep(MUseCase this) :
+	"<RootStep id=\"" + id() + "\" name=\"root\"\n" +
+	"signature=\"" + signature() + "\"\n" +
+	"version=\"" + version() + "\"\n" +
+	"xmiguid=\"" + xmiGuid + "\">\n" +
+	testSet() + "\n" +
+	packageRoot() + "\n" +
+	extraSequence() + "\n" +
+	windowList() + "\n" +
+	"</RootStep>";
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	children of the RootStep
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * generates the TestSet
+ * @return      the xml code for the TestSet
+ */
+String testSet(MUseCase this) :
+	toString( ownedBehavior.typeSelect(MActivity).testSet() );
+
+/**
+ * generates the PackageRoot
+ * @return      the xml code for the PackageRoot
+ */
+String packageRoot(MUseCase this) :
+	"<PackageRoot id=\"" + id() + "\">\n" +
+	"</PackageRoot>";
+
+/**
+ * generates the ExtraSequence
+ * @return      the xml code for the ExtraSequence
+ */
+String extraSequence(MUseCase this) :
+	"<ExtraSequence id=\"" + id() + "\">\n" +
+	"</ExtraSequence>";
+
+/**
+ * generates the WindowList
+ * @return      the xml code for the WindowList
+ */
+String windowList(MUseCase this) :
+	"<WindowList id=\"" + id() + "\">\n" +
+	"</WindowList>";
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String testSet(MActivity this) :
+	"<TestSet id=\"" + id() + "\" name=\"" + name + "\">\n" +
+	"</TestSet>\n";
