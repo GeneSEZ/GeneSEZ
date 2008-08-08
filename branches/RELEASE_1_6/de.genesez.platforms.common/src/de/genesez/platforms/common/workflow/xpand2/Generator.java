@@ -9,10 +9,13 @@ import de.genesez.platforms.common.typemapping.TypeMapper;
 /**
  * GeneSEZ specific Generator Class supporting the GeneSEZ type mapping
  * 
+ * @deprecated use the 'Model2Text' component of the GeneSEZ workflow infrastructure instead
+ * 
  * @author	nico herbig
  * @author	tobias haubold (last)
  * @date	2008-02-19
  */
+@Deprecated
 public class Generator extends org.openarchitectureware.xpand2.Generator {
 	
 	/**

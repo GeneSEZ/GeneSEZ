@@ -9,6 +9,11 @@
 // based on genesez meta model
 import gcore;
 
+create MPackage createPackage(MPackage container, String xmiGuid, String name) :
+	processElement(xmiGuid, name) ->
+	container.nestedPackage.add(this) ->
+	this;
+
 create MExternal createExternal(MModel container, String specification) :
 	setSpecification( specification ) ->
 	container.externalTypes.add( this ) ->
