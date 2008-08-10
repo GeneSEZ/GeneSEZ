@@ -11,18 +11,29 @@ import org.eclipse.uml2.uml.InitialNode;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.UseCase;
 import org.sparx.Collection;
 
 public class TransformHelper {
 
 	private final static Log log = LogFactory.getLog(XmiWriter.class);
-	private static XMIResource resource;
+	private static XMIResource resource = null;
 	
 	public static void setResource(XMIResource r) {
 		TransformHelper.resource = r;
 	}
 	
+	/**
+	 * Built the corresponding UML model of an EA model
+	 * @param in	the EA package reference of the model
+	 * @return		the UML model reference
+	 */
+	public static Model transform(org.sparx.Package in) {
+		Model m = UMLFactory.eINSTANCE.createModel();
+		TransformHelper.transform(in, m);
+		return m;
+	}
 	/**
 	 * Transforms an Enterprise Architect model into an UML model
 	 * @param in	the EA package reference of the model
@@ -145,10 +156,31 @@ public class TransformHelper {
 	/**
 	 * Basic transformations for all elements
 	 * @param in	the EA element reference
-	 * @param out	the UML namedelement reference 
+	 * @param out	the UML named element reference 
 	 */
 	private static void basicTransform(org.sparx.Element in, NamedElement out) {
 		out.setName(in.GetName());
 		TransformHelper.resource.setID(out, in.GetElementGUID());
+		TransformHelper.applyStereotypes(in, out);
+	}
+	
+	/**
+	 * Apply stereotypes to elements
+	 * @param in	the EA element reference
+	 * @param out	the UML named element reference
+	 */
+	private static void applyStereotypes(org.sparx.Element in, NamedElement out) {
+		log.info("Transforming FinalNode: " + in.GetName());
+		
+		// Read and apply stereotypes
+		for (String s : in.GetStereotypeList().split(",")) {
+			log.info("Apply stereotype " + s);
+		}
+		
+		// Set tagged values
+		Collection<org.sparx.TaggedValue> tgvs = in.GetTaggedValues();
+		for (org.sparx.TaggedValue t : tgvs) {
+			log.info("Set tagged value" + t.GetName() + " to " + t.GetValue());
+		}
 	}
 }

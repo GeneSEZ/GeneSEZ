@@ -6,13 +6,13 @@ import org.eclipse.uml2.uml.Action;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityFinalNode;
 import org.eclipse.uml2.uml.Actor;
-import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.FlowFinalNode;
 import org.eclipse.uml2.uml.InitialNode;
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.UseCase;
-import org.eclipse.uml2.uml.internal.impl.ActivityImpl;
 
 public class ElementFactory {
 
