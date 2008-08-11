@@ -581,6 +581,8 @@ private create MActivity makeBehavior(Activity a) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
+	// add nodes
+	node.addAll( a.node.typeSelect(ActivityNode).makeActivityNode() ) ->
 	// add owned sub behaviors
 	ownedBehavior.addAll( a.ownedBehavior.makeBehavior() ) ->
 	this;
@@ -588,11 +590,17 @@ private create MActivity makeBehavior(Activity a) :
 /**
  * creates a GeneSEZ state machine
  */
-/*private create MStateMachine makeBehavior(StateMachine s) :
+private create MStateMachine makeBehavior(StateMachine s) :
 	trace( "make [ " + metaType + " ] - " + s ) ->
 	// basic element properties
 	transformBasics(s) ->
-	this;*/
+	this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	activity behavior
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
  * just a marker for error free templates
@@ -605,13 +613,55 @@ private MBehavior makeBehavior(Behavior b) :
 	Void;
 
 /**
- * creates a GeneSEZ action
+ * creates a GeneSEZ call behaviour action
  */
-/*private create MAction makeAction(Action a) :
+private create MCallBehaviorAction makeActivityNode(CallBehaviorAction a) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
-	this;*/
+	this;
+
+/**
+ * creates a GeneSEZ action
+ */
+private create MCallOperationAction makeActivityNode(Action a) :
+	trace( "make [ " + metaType + " ] - " + a ) ->
+	// basic element properties
+	transformBasics(a) ->
+	this;
+
+/**
+ * creates a GeneSEZ initial node
+ */
+private create MInitial makeActivityNode(InitialNode a) :
+	trace( "make [ " + metaType + " ] - " + a ) ->
+	// basic element properties
+	transformBasics(a) ->
+	this;
+
+/**
+ * creates a GeneSEZ final node
+ */
+private create MFinal makeActivityNode(FinalNode a) :
+	trace( "make [ " + metaType + " ] - " + a ) ->
+	// basic element properties
+	transformBasics(a) ->
+	this;
+
+/**
+ *
+ */
+private MNode makeActivityNode(ActivityNode a) :
+	fatal("try to construct a ActivityNode object from: " + a) ->
+	Void;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	state machine behavior
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+// to do
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
