@@ -37,11 +37,12 @@ public class XmiWriter extends AbstractWorkflowComponent {
 		try {
 			org.sparx.Package inputModel = (org.sparx.Package)ctx.get(inputSlot);
 
+			TransformHelper t = new TransformHelper();
 			// The resource is required for applying GUIDs
-			TransformHelper.setResource(this.resource);
+			t.setResource(this.resource);
 
 			// Start transforming the model
-			Model outputModel = TransformHelper.transform(inputModel);
+			Model outputModel = t.transform(inputModel);
 
 			// Save the XMI output
 			this.save(outputModel);
