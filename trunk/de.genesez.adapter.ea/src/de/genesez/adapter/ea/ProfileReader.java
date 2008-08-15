@@ -41,10 +41,13 @@ public class ProfileReader extends AbstractWorkflowComponent {
 				//	this is a very ugly hack to transform
 				//	./profile/testing.profile.uml into
 				//	../profile/testing.profile.uml
+				String profileURI = profile.eResource().getURI().toString();
+				log.debug("Profile URI: " + profileURI);
 				profile.eResource().setURI(
-						URI.createURI("." + profile.eResource().getURI().toString())
-						);
-				log.debug(profile.eResource().getURI().toString());
+					URI.createURI(
+						profileURI.replace(this.profileDirectory+"/", ""))
+					);
+				log.debug("Profile URI: " + profile.eResource().getURI().toString());
 				log.debug("Profile " + s + " successfully loaded");
 			} catch (Exception e) {
 				issues.addError(e.toString());
