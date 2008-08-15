@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+
+	<!-- 
+		export an Enterprise Architect model into an UML profile
+		
+		following parameters are required:
+		==================================
+		
+		$ea_profile			name of the ea repository file
+		$profile_name		name of the profile
+		$profile_file		name of the xmi output file
+	 -->
+
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+
+	<property file="eaWorkflow.properties" />
+
+	<component class="de.genesez.adapter.ea.RepositoryReader">
+		<repositoryFile value="${ea_profile}" />
+		<modelName value="${profile_name}" />
+		<outputSlot value="${ea_profile_slot}" />
+	</component>
+
+	<component class="de.genesez.adapter.ea.Profile2UML">
+		<inputSlot value="${ea_profile_slot}" />
+		<outputSlot value="${uml_profile_slot}" />
+		<resourceSlot value="${resource_profile_slot}" />
+	</component>
+
+	<component class="de.genesez.adapter.ea.XmiWriter">
+		<inputSlot value="${uml_profile_slot}" />
+		<resourceSlot value="${resource_profile_slot}" />
+		<xmiFile value="${profile_file}" />
+	</component>
+
+</workflow>

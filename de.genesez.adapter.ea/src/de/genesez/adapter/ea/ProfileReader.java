@@ -18,8 +18,7 @@ import org.openarchitectureware.workflow.monitor.ProgressMonitor;
 
 public class ProfileReader extends AbstractWorkflowComponent {
 
-	private static final ResourceSetImpl RESOURCE_SET = new ResourceSetImpl();
-	private static final Log log = LogFactory.getLog(RepositoryReader.class);
+	private static final Log log = LogFactory.getLog(ProfileReader.class);
 
 	private String profileDirectory = null;
 	private String profileExtension = "profile.uml";
@@ -35,7 +34,7 @@ public class ProfileReader extends AbstractWorkflowComponent {
 				URI uri = URI.createFileURI(this.profileFiles.get(s));
 				log.debug("Profile URI for " + s + ": " + uri.toString());
 				log.info("Loading profile " + s);
-				Resource resource = RESOURCE_SET.getResource(uri, true);
+				Resource resource = ResourceRegistry.instance.load(s, uri);
 				Profile profile = (Profile)EcoreUtil.getObjectByType(resource.getContents(), UMLPackage.Literals.PACKAGE);
 				ProfileRegistry.instance.register(s, profile);
 				//	this is a very ugly hack to transform
@@ -79,7 +78,7 @@ public class ProfileReader extends AbstractWorkflowComponent {
 	 */
 	public void addProfile(String value) {
 		String file = this.profileDirectory + "/" + value + this.profileExtension;
-		log.info("Adding profile " + value + " from " + file);
+		log.debug("Adding profile " + value + " from " + file);
 		this.profileFiles.put(value, file);
 	}
 }

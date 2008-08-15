@@ -6,8 +6,8 @@ import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.CallBehaviorAction;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
 
 public class CallBehaviorActionTransformer {
 
@@ -19,7 +19,7 @@ public class CallBehaviorActionTransformer {
 		this.callBehaviorAction = UMLFactory.eINSTANCE.createCallBehaviorAction();
 		this.callBehaviorAction.setActivity(_parent);
 		this.callBehaviorAction.setName(_e.GetName());
-		XmiFile.instance.addElement(this.callBehaviorAction, _e.GetElementGUID());
+		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.callBehaviorAction);
 		PostProcessor.instance.registerElement(_e, this.callBehaviorAction);
 		PostProcessor.instance.setCalledBehavior(this.callBehaviorAction, _e.GetClassifierID());
 		return this.callBehaviorAction;

@@ -3,12 +3,11 @@ package de.genesez.adapter.ea.transform;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Activity;
-import org.eclipse.uml2.uml.CallBehaviorAction;
 import org.eclipse.uml2.uml.CallOperationAction;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
 
 public class CallOperationActionTransformer {
 
@@ -20,7 +19,7 @@ public class CallOperationActionTransformer {
 		this.callOperationAction = UMLFactory.eINSTANCE.createCallOperationAction();
 		this.callOperationAction.setActivity(_parent);
 		this.callOperationAction.setName(_e.GetName());
-		XmiFile.instance.addElement(this.callOperationAction, _e.GetElementGUID());
+		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.callOperationAction);
 		PostProcessor.instance.registerElement(_e, this.callOperationAction);
 		return this.callOperationAction;
 	}

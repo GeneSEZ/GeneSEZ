@@ -6,8 +6,8 @@ import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.UseCase;
 
+import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
 
 public class UseCaseTransformer {
 
@@ -20,7 +20,7 @@ public class UseCaseTransformer {
 		this.useCase.setPackage(_parent);
 		this.useCase.setName(_e.GetName());
 		this.transformElements(_e);
-		XmiFile.instance.addElement(this.useCase, _e.GetElementGUID());
+		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.useCase);
 		PostProcessor.instance.registerElement(_e, this.useCase);
 		return this.useCase;
 	}

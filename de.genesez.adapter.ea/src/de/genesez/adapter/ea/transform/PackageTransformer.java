@@ -5,8 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
+import de.genesez.adapter.ea.ElementRegistry;
 
 public class PackageTransformer {
 
@@ -19,7 +18,7 @@ public class PackageTransformer {
 				UMLFactory.eINSTANCE.createPackage().eClass());
 		this.transformPackages(_p);
 		this.transformElements(_p);
-		XmiFile.instance.addElement(this.pckage, _p.GetPackageGUID());
+		ElementRegistry.instance.addElement(_p.GetPackageGUID(), this.pckage);
 		return this.pckage;
 	}
 
