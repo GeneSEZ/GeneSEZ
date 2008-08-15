@@ -6,8 +6,8 @@ import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityFinalNode;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
 
 public class ActivityFinalNodeTransformer {
 
@@ -19,7 +19,7 @@ public class ActivityFinalNodeTransformer {
 		this.activityFinalNode = UMLFactory.eINSTANCE.createActivityFinalNode();
 		this.activityFinalNode.setActivity(_parent);
 		this.activityFinalNode.setName(_e.GetName());
-		XmiFile.instance.addElement(this.activityFinalNode, _e.GetElementGUID());
+		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.activityFinalNode);
 		PostProcessor.instance.registerElement(_e, this.activityFinalNode);
 		return this.activityFinalNode;
 	}

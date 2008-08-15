@@ -6,8 +6,7 @@ import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ControlFlow;
 import org.eclipse.uml2.uml.UMLFactory;
 
-import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
+import de.genesez.adapter.ea.ElementRegistry;
 
 public class ControlFlowTransformer {
 
@@ -19,7 +18,7 @@ public class ControlFlowTransformer {
 		this.controlFlow = UMLFactory.eINSTANCE.createControlFlow();
 		this.controlFlow.setActivity(_parent);
 		this.controlFlow.setName(_c.GetName());
-		XmiFile.instance.addElement(this.controlFlow, _c.GetConnectorGUID());
+		ElementRegistry.instance.addElement(_c.GetConnectorGUID(), this.controlFlow);
 		return this.controlFlow;
 	}
 

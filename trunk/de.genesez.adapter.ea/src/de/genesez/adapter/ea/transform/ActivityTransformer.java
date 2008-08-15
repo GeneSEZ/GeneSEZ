@@ -11,14 +11,11 @@ import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 import org.eclipse.uml2.uml.BehavioredClassifier;
-import org.eclipse.uml2.uml.CallBehaviorAction;
-import org.eclipse.uml2.uml.CallOperationAction;
-import org.eclipse.uml2.uml.ControlFlow;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
 
 public class ActivityTransformer {
 
@@ -34,7 +31,7 @@ public class ActivityTransformer {
 		this.activity = (Activity) _parent.createOwnedBehavior(_e.GetName(),
 				UMLFactory.eINSTANCE.createActivity().eClass());
 		this.transform(_e);
-		XmiFile.instance.addElement(this.activity, _e.GetElementGUID());
+		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.activity);
 		PostProcessor.instance.registerElement(_e, this.activity);
 		return this.activity;
 	}
@@ -45,7 +42,7 @@ public class ActivityTransformer {
 		this.activity.setName(_e.GetName());
 		this.activity.setPackage(_parent);
 		this.transform(_e);
-		XmiFile.instance.addElement(this.activity, _e.GetElementGUID());
+		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.activity);
 		PostProcessor.instance.registerElement(_e, this.activity);
 		return this.activity;
 	}

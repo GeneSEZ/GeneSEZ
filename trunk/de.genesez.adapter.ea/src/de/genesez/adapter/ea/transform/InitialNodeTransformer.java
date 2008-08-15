@@ -3,12 +3,11 @@ package de.genesez.adapter.ea.transform;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Activity;
-import org.eclipse.uml2.uml.CallBehaviorAction;
 import org.eclipse.uml2.uml.InitialNode;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.XmiFile;
 
 public class InitialNodeTransformer {
 
@@ -20,7 +19,7 @@ public class InitialNodeTransformer {
 		this.initialNode = UMLFactory.eINSTANCE.createInitialNode();
 		this.initialNode.setActivity(_parent);
 		this.initialNode.setName(_e.GetName());
-		XmiFile.instance.addElement(this.initialNode, _e.GetElementGUID());
+		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.initialNode);
 		PostProcessor.instance.registerElement(_e, this.initialNode);
 		return this.initialNode;
 	}

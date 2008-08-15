@@ -84,7 +84,7 @@ public class PostProcessor {
 					log.debug("Apply stereotype " + st.getName() );
 					EObject o = e.applyStereotype(st);
 					if (null != o) {
-						XmiFile.instance.addContent(o);
+						ContentRegistry.instance.addContent(o);
 					}
 				}
 			}
