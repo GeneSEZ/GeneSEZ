@@ -13,6 +13,7 @@ import org.openarchitectureware.workflow.monitor.ProgressMonitor;
 
 import org.sparx.Collection;
 import org.sparx.Package;
+import org.sparx.ProjectResource;
 import org.sparx.Repository;
 
 public class RepositoryReader extends AbstractWorkflowComponent {
