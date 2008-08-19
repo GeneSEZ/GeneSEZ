@@ -39,14 +39,9 @@
 
 «REM»
 	generates a file comment (page scope)
-	uses the comment of the package
 «ENDREM»
 «DEFINE File FOR MClassifier -»
 /**
-«IF owningPackage.hasComment() -»
- * «owningPackage.ownedComment.getCommentText()»
- * 
-«ENDIF -»
  * @author	«getUserName()»
  * @package	«packageDeclaration( basePath() )»
  */
@@ -58,8 +53,7 @@
 «DEFINE Type FOR MClassifier -»
 /**
 «IF hasComment() -»
- * «ownedComment.getCommentText()»
- * 
+«comment().format() -»
 «ENDIF -»
 «EXPAND _Supertypes -»
  * @author	«getUserName()»
@@ -77,10 +71,11 @@
 «ENDREM»
 «DEFINE Attribute FOR MAttribute -»
 	/**
-	 * «ownedComment.getCommentText()»
-	 * @generated	attribute definition, documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	attribute definition
 	 * @var		«type.mapName().asTypeName()»	$«asAttribute()»
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -90,10 +85,11 @@
 «ENDREM»
 «DEFINE Association FOR MAssociationRole -»
 	/**
-	 * «ownedComment.getCommentText()»
-	 * @generated	attribute definition for association to {@link «opposite.classifier.asTypeName()»}, documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	attribute definition for association to {@link «opposite.classifier.asTypeName()»}
 	 * @var		«type.mapName().asTypeName()»	$«asAttribute()»
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -102,10 +98,11 @@
 «ENDREM»
 «DEFINE Setter FOR MAttribute -»
 	/**
-	 * setter method of the attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
 	 * @generated	setter method for the attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
 	 * @param	«type.mapName().asTypeName()»	$«asAttribute()»	the value to set
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -114,10 +111,11 @@
 «ENDREM»
 «DEFINE InsertIn FOR MAttribute -»
 	/**
-	 * adds the given value to the attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
 	 * @generated	adder method for the multi-valued attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
 	 * @param	«type.mapName().asTypeName()»	$toAdd	the value to add
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -126,10 +124,11 @@
 «ENDREM»
 «DEFINE RemoveFrom FOR MAttribute -»
 	/**
-	 * removes the given value from the attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
 	 * @generated	method to remove values from the multi-valued attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
 	 * @param	«type.mapName().asTypeName()»	$toRemove	the value to remove
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -138,10 +137,11 @@
 «ENDREM»
 «DEFINE Setter FOR MAssociationRole -»
 	/**
-	 * setter method of the association attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
-	 * @generated	setter method for the association attribute from association to {@link «type.mapName().asTypeName()»}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	setter method for the association to {@link «type.mapName().asTypeName()»}
 	 * @param	«type.mapName().asTypeName()»	$«asAttribute()»	the value to set
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -150,10 +150,11 @@
 «ENDREM»
 «DEFINE InsertIn FOR MAssociationRole -»
 	/**
-	 * adds the given value to the association attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
-	 * @generated	adder method for the multi-valued association attribute from association to {@link «type.mapName().asTypeName()»}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	adder method for the multi-valued association  to {@link «type.mapName().asTypeName()»}
 	 * @param	«type.mapName().asTypeName()»	$toAdd	the value to add
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -162,10 +163,11 @@
 «ENDREM»
 «DEFINE RemoveFrom FOR MAssociationRole -»
 	/**
-	 * removes the given value from the association attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
-	 * @generated	method to remove values from the multi-valued association attribute from association to {@link «type.mapName().asTypeName()»}
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	method to remove values from the multi-valued association to {@link «type.mapName().asTypeName()»}
 	 * @param	«type.mapName().asTypeName()»	$toRemove	the value to remove
-	 * @see		«classifier.asTypeName()»::«asGetter()»()
 	 */
 «ENDDEFINE»
 
@@ -176,7 +178,7 @@
 «DEFINE Getter FOR MAttribute -»
 	/**
 	«IF hasComment() -»
-	 * «ownedComment.getCommentText()»
+	«comment().format() -»
 	«ELSE -»
 	 * getter method of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
 	«ENDIF -»
@@ -196,7 +198,7 @@
 «DEFINE Getter FOR MAssociationRole -»
 	/**
 	«IF hasComment() -»
-	 * «ownedComment.getCommentText()»
+	«comment().format()»
 	«ELSE -»
 	 * getter method of the «IF derived»derived «ENDIF»association attribute «EXPAND _PropertyName»
 	«ENDIF -»
@@ -215,12 +217,10 @@
 «DEFINE Operation FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	 * «ownedComment.getCommentText()»
-	«ELSE -»
-	«REM»«EXPAND _OwnComment("	", "php.own.operation.comment." + xmiGuid) -»«ENDREM»
+	«comment().format() -»
 	«ENDIF -»
 	 * @generated	method stub for implementation
-	«IF raisedException.size > 0 -»
+	«IF hasExceptions() -»
 	 * 
 	«EXPAND _ExceptionLink FOREACH raisedException -»
 	 * 
@@ -236,12 +236,12 @@
 «DEFINE Constructor FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	 * «ownedComment.getCommentText()»
+	«comment().format() -»
 	«ELSE -»
 	 * constructs an object of class {@link «classifier.asTypeName()»}
 	«ENDIF -»
-	 * @generated	constructor for class {@link «classifier.asTypeName()»}
-	«IF raisedException.size > 0 -»
+	 * @generated	constructor stub for implementation
+	«IF hasExceptions() -»
 	 * 
 	«EXPAND _ExceptionLink FOREACH raisedException -»
 	 * 
@@ -256,12 +256,12 @@
 «DEFINE Destructor FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	 * «ownedComment.getCommentText()»
+	«comment().format() -»
 	«ELSE -»
-	 * destructs the object of class {@link «classifier.asTypeName()»} and frees all memory
+	 * destructor for the class {@link «classifier.asTypeName()»}
 	«ENDIF -»
-	 * @generated	destructor for class {@link «classifier.asTypeName()»}
-	«IF raisedException.size > 0 -»
+	 * @generated	destructor stub for implementation
+	«IF hasExceptions() -»
 	 * 
 	«EXPAND _ExceptionLink FOREACH raisedException -»
 	 * 
@@ -275,7 +275,6 @@
 «ENDREM»
 «DEFINE Constructor FOR MEnumeration -»
 	/**
-	 * private constructor to prevent instantiation of enumeration objects
 	 * @generated	private constructor to prevent instantiation of enumeration objects
 	 */
 «ENDDEFINE»
@@ -318,7 +317,7 @@
 	generates the @param tag
 «ENDREM»
 «DEFINE _Parameter FOR MParameter -»
-«IF multiplicity == 1 -»
+«IF isSingleValuedType() -»
 	 * @param	«type.mapName().asTypeName()»	$«asParameter()»	«ownedComment.getCommentText()»
 «ELSE -»
 	 * @param	array	$«asParameter()»	«ownedComment.getCommentText()»
@@ -329,7 +328,9 @@
 	generates the @return tag
 «ENDREM»
 «DEFINE _Return FOR MOperation -»
-	 * @return	«returnType.mapName().asTypeName()»	«returnType.ownedComment().getCommentText()»
+«IF hasReturnType() -»
+	 * @return	«returnType.mapName().asTypeName()»	«comment().format("", "")»
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -337,12 +338,4 @@
 «ENDREM»
 «DEFINE _ExceptionLink FOR MType -»
 	 * @throws		{@link «mapName().asTypeName()»}
-«ENDDEFINE»
-
-«REM»
-	generates an exception list
-	@deprecated	not further used, because phpdoc supports @throws tag
-«ENDREM»
-«DEFINE _ExceptionList FOR MOperation -»
-	 * «FOREACH raisedException AS e SEPARATOR ", " -»{@link «e.mapName().asTypeName()» «e.mapName().asTypeName()»}«ENDFOREACH»
 «ENDDEFINE»
