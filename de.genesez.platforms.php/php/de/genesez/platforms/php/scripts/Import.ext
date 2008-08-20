@@ -8,6 +8,21 @@
 //	based on genesez meta model
 import gcore;
 
+/**
+ * checks if an import is needed or not
+ * @param	used	the type which is used
+ * @return	true, because every type must be included (exernal type)
+ */
+boolean isImportNeeded(MType used, MClassifier this) :
+	true;
+
+/**
+ * checks if an import is needed or not
+ * @param	used	the classifier which is used
+ * @return	true, if the used classifier must be imported, otherwise false
+ */
+boolean isImportNeeded(MClassifier used, MClassifier this) :
+	used != this;
 
 /**
  * calculates the path for the require statement for a required classifier
@@ -33,8 +48,8 @@ String getRequirePath(MClassifier used, MClassifier this) :
  */
 private String getPathBack(MPackage this, String path) :
 	nestingPackage.metaType == MModel
-		? "../" + path
-		: getPathBack(nestingPackage, "../");
+		? path
+		: getPathBack(nestingPackage, "");
 	
 /**
  * builds a relative file path up from the model root up to the given package
