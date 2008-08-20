@@ -124,7 +124,7 @@
 «IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
 	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()») {
-		self::$«asAttribute()» = $«asAttribute()»;
+		$this->$«asAttribute()» = $«asAttribute()»;
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -148,7 +148,7 @@
 «IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
 	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd) {
-		self::$«asAttribute()»[] = $toAdd;
+		$this->$«asAttribute()»[] = $toAdd;
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -174,7 +174,7 @@
 	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
 		if ($entry !== FALSE) {
-			unset(self::$«asAttribute()»[$entry]);
+			unset($this->$«asAttribute()»[$entry]);
 		}
 	}
 «ENDIF -»
