@@ -100,7 +100,7 @@
 	generate import statements for referenced classes from other php files
 «ENDREM»
 «DEFINE _Imports FOR MClassifier -»
-«FOREACH supplier AS s -»
+«FOREACH supplier.select(e|e.isImportNeeded(this)) AS s -»
 require_once '«EXPAND _Require(s) -»';
 «ENDFOREACH -»
 «ENDDEFINE»
