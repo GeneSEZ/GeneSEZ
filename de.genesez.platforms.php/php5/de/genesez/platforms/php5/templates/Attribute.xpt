@@ -106,9 +106,9 @@
 	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor -» function «asGetter()»() {
 	«IF isSingleValuedType() -»
-		return $«asAttribute()»;
+		return $this->«asAttribute()»;
 	«ELSE -»
-		return array_values($«asAttribute()»);
+		return array_values($this->«asAttribute()»);
 	«ENDIF -»
 	}
 «ENDDEFINE»
@@ -120,7 +120,7 @@
 «IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
 	«EXPAND _ModifierAccessor -» function «asSetter()»($«asAttribute()») {
-		$this->$«asAttribute()» = $«asAttribute()»;
+		$this->«asAttribute()» = $«asAttribute()»;
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -132,7 +132,7 @@
 «IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND _ModifierAccessor -» function «asInsertIn()»($toAdd) {
-		$this->$«asAttribute()»[] = $toAdd;
+		$this->«asAttribute()»[] = $toAdd;
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -146,7 +146,7 @@
 	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»($toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
 		if ($entry !== FALSE) {
-			unset($this->$«asAttribute()»[$entry]);
+			unset($this->«asAttribute()»[$entry]);
 		}
 	}
 «ENDIF -»
