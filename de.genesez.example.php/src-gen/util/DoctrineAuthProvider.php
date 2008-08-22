@@ -1,7 +1,5 @@
 <?php
 /**
- * <html>;   <head>; ;   </head>;   <body>;     <p>;       contains additional utilitiy classes;     </p>;   </body>; </html>; 
- * 
  * @author	dreamer
  * @package	util
  */
@@ -13,8 +11,15 @@ require_once 'Auth/Container.php';
 /* PROTECTED REGION END */
 
 /**
- * <html>;   <head>;     ;   </head>;   <body>;     <p>;       represents an authentication provider for <b>PEAR::Auth</b> using the db ;       abstraction layer <b>phpdoctrine</b><br>;     </p>;     <p>;       needed, because the authentication framework <b>PEAR::Auth</b> doesn't ;       provide an appropriate authentication provider to work with the db ;       abstraction framework <b>phpdoctrine</b>;     </p>;   </body>; </html>; 
- * 
+ * <p>
+ *   represents an authentication provider for <b>PEAR::Auth</b> using the db 
+ *   abstraction layer <b>phpdoctrine</b><br>
+ * </p>
+ * <p>
+ *   needed, because the authentication framework <b>PEAR::Auth</b> doesn't 
+ *   provide an appropriate authentication provider to work with the db 
+ *   abstraction framework <b>phpdoctrine</b>
+ * </p>
  * @see		Auth_Container
  * @author	dreamer
  * @package	util
@@ -25,7 +30,7 @@ class DoctrineAuthProvider extends Auth_Container  {
 	// -- constructors + destructors ----------------------------------------
 	/**
 	 * constructs an object of class {@link DoctrineAuthProvider}
-	 * @generated	constructor for class {@link DoctrineAuthProvider}
+	 * @generated	constructor stub for implementation
 	 * @param	array	$params	
 	 */
 	public function __construct($params = array()) {
@@ -40,7 +45,6 @@ class DoctrineAuthProvider extends Auth_Container  {
 	
 	// -- method implementations --------------------------------------------
 	/**
-	
 	 * @generated	method stub for implementation
 	 * @param	string	$username	
 	 * @param	string	$password	
