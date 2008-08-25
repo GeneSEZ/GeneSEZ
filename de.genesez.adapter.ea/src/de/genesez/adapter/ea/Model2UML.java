@@ -18,18 +18,22 @@ public class Model2UML extends AbstractWorkflowComponent {
 	private String outputSlot = null;
 	
 	public void checkConfiguration(Issues issues) {
-		
+		PostProcessor.instance.initialize();
 	}
 	
 	public void invoke(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+		log.debug("Get package from slot: " + this.inputSlot);
 		org.sparx.Package inputModel = (org.sparx.Package)ctx.get(this.inputSlot);
 		
-		// Start transforming the model
+		log.info("Start transforming the model...");
 		ModelTransformer t = new ModelTransformer();
 		Model outputModel = t.transform(inputModel);
 		PostProcessor.instance.startPostProcessing();
 		
+		log.debug("Set model to slot: " + this.outputSlot);
 		ctx.set(this.outputSlot, outputModel);
+
+		log.info("Model transformation finished!");
 	}
 
 	public void setInputSlot(String value) {

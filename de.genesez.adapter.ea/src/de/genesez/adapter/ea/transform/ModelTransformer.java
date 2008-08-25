@@ -9,32 +9,29 @@ import org.eclipse.uml2.uml.UMLFactory;
 import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.ProfileRegistry;
 
-public class ModelTransformer {
+public class ModelTransformer extends AbstractPackageTransformer {
 
 	private static final Log log = LogFactory.getLog(ModelTransformer.class);
-	private Model model;
 	
 	public Model transform(org.sparx.Package _p) {
 		log.debug("Creating Model " + _p.GetName());
-		this.model = UMLFactory.eINSTANCE.createModel();
-		this.model.setName(_p.GetName());
-		this.transformPackages(_p);
+		Model model = UMLFactory.eINSTANCE.createModel();
+		model.setName(_p.GetName());
+		
+		this.umlPackage = model;
+		this.eaPackage = _p;
+		
 		this.applyProfiles();
-		ElementRegistry.instance.addElement(_p.GetPackageGUID(), this.model);
-		return this.model;
-	}
-	
-	private void transformPackages(org.sparx.Package _p) {
-		for (org.sparx.Package p: _p.GetPackages()) {
-			PackageTransformer t = new PackageTransformer();
-			t.transform(p, this.model);
-		}
+		this.transformPackages();
+
+		ElementRegistry.instance.addElement(_p, model);
+		return model;
 	}
 	
 	private void applyProfiles() {
 		for (Profile p : ProfileRegistry.instance.getProfiles()) {
 			log.info("Applying Profile " + p.getName());
-			this.model.applyProfile(p);
+			this.umlPackage.applyProfile(p);
 		}
 	}
 }

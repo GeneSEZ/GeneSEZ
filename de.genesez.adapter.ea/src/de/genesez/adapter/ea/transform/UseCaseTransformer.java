@@ -2,36 +2,44 @@ package de.genesez.adapter.ea.transform;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.UseCase;
 
+import de.genesez.adapter.ea.ContentRegistry;
 import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
+import de.genesez.adapter.ea.ProfileRegistry;
 
-public class UseCaseTransformer {
+public class UseCaseTransformer extends AbstractElementTransformer {
 
 	private static final Log log = LogFactory.getLog(UseCaseTransformer.class);
-	private UseCase useCase;
 	
 	UseCase transform(org.sparx.Element _e, Package _parent) {
 		log.debug("Creating UseCase " + _e.GetName() + ", parent " + _parent.getName());
-		this.useCase = UMLFactory.eINSTANCE.createUseCase();
-		this.useCase.setPackage(_parent);
-		this.useCase.setName(_e.GetName());
-		this.transformElements(_e);
-		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.useCase);
-		PostProcessor.instance.registerElement(_e, this.useCase);
-		return this.useCase;
+
+		UseCase useCase = UMLFactory.eINSTANCE.createUseCase();
+		useCase.setPackage(_parent);
+		useCase.setName(_e.GetName());
+
+		this.umlElement = useCase;
+		this.eaElement = _e;
+
+		this.transformElements();
+		this.applyStereotypes();
+
+		ElementRegistry.instance.addElement(_e, useCase);
+		return useCase;
 	}
 	
-	private void transformElements(org.sparx.Element _e) {
-		for (org.sparx.Element e : _e.GetElements()) {
-			if ( e.GetType().equals("Activity") ) {
-				log.debug("Element is a Activity");
-				ActivityTransformer t = new ActivityTransformer();
-				t.transform(e, this.useCase);
-			}
+	@Override
+	protected void transformElement(org.sparx.Element _e) {
+		if ( _e.GetType().equals("Activity") ) {
+			log.debug("Element is a Activity");
+			ActivityTransformer t = new ActivityTransformer();
+			t.transform(_e, (UseCase)this.umlElement);
 		}
 	}
 }
