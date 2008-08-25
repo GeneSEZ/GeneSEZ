@@ -3,10 +3,10 @@
 */
 
 //	based on genesez meta model
-import genesezMM;
+import gcore;
 
-extension de::genesez::io::io;
-extension de::genesez::common::Conversion;
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::java::scripts::Conversion;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,7 +39,7 @@ String getPackagePath(MClassifier classifier) :
  * @return	the full qualified name of a package
  */
 String getFullQualifiedName(MPackage pkg) : 
-	pkg.getFullQualifiedName(getFqnSeparator());
+	pkg.packageDeclaration();
 
 /**
  * getter for the full qualified name of a classifier using dot's as separator
@@ -59,3 +59,7 @@ private String getFqnSeparator() : ".";
  * getter for the file extension
  */
 private String getFileExtension() : ".java";
+
+/** toDo: write a comment */
+List[String] getElements(String this) :
+	subString(1, length -1).split(",").trim();

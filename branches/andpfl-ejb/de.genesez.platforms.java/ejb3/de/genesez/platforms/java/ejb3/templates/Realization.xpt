@@ -6,15 +6,15 @@
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+«IMPORT gcore»
 
-«EXTENSION de::genesez::common::AccessHelper»
-«EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::common::GeneralHelper»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Serializable»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::MessageListener»
-
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,7 +27,7 @@
 	«addSerializable() -> ""-»
 	«addMessageListener() -> ""-»
 	«IF !realization.isEmpty-»
-		implements «FOREACH realization AS c SEPARATOR ", "»«c.mapName()-»«EXPAND _Generics FOR c-»«ENDFOREACH»
+		implements «FOREACH realization AS c SEPARATOR ", "»«c.mapName().asTypeName()-»«EXPAND _Generics FOR c-»«ENDFOREACH»
 	«ENDIF-»
 «ENDDEFINE»
 

@@ -9,15 +9,16 @@
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+«IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::io::io»
+«EXTENSION de::genesez::platforms::common::log::Log»
 
-«EXTENSION de::genesez::common::AccessHelper»
-«EXTENSION de::genesez::common::GeneralHelper»
-«EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
@@ -36,9 +37,9 @@
 «REM» generates a class «ENDREM»
 «DEFINE Root FOR MClass-»
 	«addStandardConstructor()-> ""-»
-	package «getPackagePath()»;
+	package «packageDeclaration( basePackage() ) -»;
 	«EXPAND _Import-»
-	«EXPAND de::genesez::platforms::java::java5::templates::Class::_CommentClassifier-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Type-»
 	«EXPAND _Annotation-»	
 	«REM» generates the rest of the class «ENDREM»
 	«EXPAND Class-»
@@ -46,9 +47,9 @@
 
 
 «DEFINE Class FOR MClass-»
-	«EXPAND de::genesez::platforms::java::java5::templates::Class::_Modifier-» class «mapName()-»
-	«EXPAND de::genesez::platforms::java::java5::templates::Class::_Generics-» 
-	«EXPAND de::genesez::platforms::java::java5::templates::Generalization::Generalization-» 
+	«EXPAND de::genesez::platforms::java::java5::templates::Type::Modifier-» class «asTypeName()-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics-» 
+	«EXPAND de::genesez::platforms::java::java5::templates::Type::Generalization-» 
 	«EXPAND Realization::Realization-» {
 		
 		/**
@@ -62,54 +63,51 @@
 		  * generated constructor implementations
 		  *
 		  */		
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::ConstructorImpl-»
-		«IF ownedAssociation != null»«EXPAND de::genesez::platforms::java::java5::templates::Class::_InitialisingConstructorForAssocClass»«ENDIF-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Constructor-»
 		
 		/**
 		  * generated derived attribute method implementations
 		  *
 		  */		
-		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::AttributeDerivedImpl-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::Derived-»
 		
 		/**
 		  * generated association method implementations
 		  *
 		  */		
-		«EXPAND de::genesez::platforms::java::java5::templates::Association::AccessorImpl-»
+		«EXPAND de::genesez::platforms::java::ejb3::templates::Association::AccessorImpl-»
 		
 		/**
 		  * generated abstract method declaration
 		  *
 		  */		
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::OperationDecl-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Declaration-»
 		
 		/**
 		  * generated normal method implementations
 		  *
 		  */	
 		
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::OperationImpl-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Implementation-»
 		
 		/**
 		  * generated getter and setter method implementations
 		  *
 		  */		
-		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::AccessorImpl-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::Accessors-»
 		
 		/**
 		  * generated methods from the implementing interface(s)
-		  * «FOREACH realization.name() AS names SEPARATOR ", "-»«names-»«ENDFOREACH»
+		  * «FOREACH realization.asTypeName() AS names SEPARATOR ", "-»«names-»«ENDFOREACH»
 		  *
 		  */
-		«FOREACH realization.typeSelect(MClassifier).operation AS ops-»
-			«EXPAND de::genesez::platforms::java::java5::templates::Operation::OperationImpl FOR ops-»
-		«ENDFOREACH»
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Implementation FOREACH realization.typeSelect(MClassifier) -»
 		
 		/**
 		  * own implementations
 		  *
 		  */		
-		«EXPAND de::genesez::platforms::java::java5::templates::Class::_OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Type::OwnCodeImpl("java.mclassifier.implementation.owncode.code." + xmiGuid)-»
 	}
 «ENDDEFINE»
 
@@ -160,7 +158,7 @@
 		«IF !hasTaggedValue("ejb3PersistentEntity", "tableName", "null")-»
 			name="tbl_«taggedValue.selectFirst(e|e.tag.name == "tableName").value-»"
 		«ELSE-»
-			name="tbl_«mapName()-»"
+			name="tbl_«asTypeName()-»"
 		«ENDIF-»
 		«IF !hasTaggedValue("ejb3PersistentEntity", "tableCatalog", "null")-»
 			, catalog = "«taggedValue.selectFirst(e|e.tag.name == "tableCatalog").value-»"
@@ -182,15 +180,15 @@
 			@Remote
 			«IF !hasTaggedValue("ejb3SessionBean", "remoteInterface", "null")-»
 				(«taggedValue.selectFirst(e|e.tag.name == "remoteInterface").value».class)
-			«ELSEIF realization.get(0).mapName() != "null"-»
-				(«realization.get(0).mapName()-».class)
+			«ELSEIF realization.get(0).asTypeName() != "null"-»
+				(«realization.get(0).asTypeName()-».class)
 			«ENDIF»
 		«ELSEIF hasTaggedValue("ejb3SessionBean", "remote", "false")-»
 			@Local
 			«IF !hasTaggedValue("ejb3SessionBean", "localInterface", "null")-»
 				(«taggedValue.selectFirst(e|e.tag.name == "localInterface").value-».class)
-			«ELSEIF realization.get(0).mapName() != "null"-»
-				(«realization.get(0).mapName()-».class)
+			«ELSEIF realization.get(0).asTypeName() != "null"-»
+				(«realization.get(0).asTypeName()-».class)
 			«ENDIF»				
 		«ENDIF»	
 		«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
@@ -198,7 +196,7 @@
 			«IF !hasTaggedValue("ejb3SessionBean", "name", "null")-»
 				name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
 			«ELSE-»
-				name = "«mapName()-»"
+				name = "«asTypeName()-»"
 			«ENDIF-» 
 	 		«IF !hasTaggedValue("ejb3SessionBean", "mappedName", "null")-»
 	 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
@@ -213,7 +211,7 @@
 			«IF !hasTaggedValue("ejb3SessionBean", "name", "null")-»
 				name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
 			«ELSE-»
-				name = "«mapName()-»"
+				name = "«asTypeName()-»"
 			«ENDIF-» 
 	 		«IF !hasTaggedValue("ejb3SessionBean", "mappedName", "null")-»
 	 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
@@ -235,7 +233,7 @@
 		«IF !hasTaggedValue("ejb3MessageDrivenBean", "name", "null")-»
 			name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
 		«ELSE-»
-			name = "«mapName()-»"
+			name = "«asTypeName()-»"
 		«ENDIF-» 
  		«IF !hasTaggedValue("ejb3MessageDrivenBean", "mappedName", "null")-»
  			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
@@ -269,7 +267,7 @@
 		«IF !hasTaggedValue("ejb3WebService", "webServiceName", "null")-»
 			"«taggedValue.select(e|e.tag.name == "webServiceName").value.getElements()-»"
 		«ELSE»
-			"«this.name-»"
+			"«asTypeName()-»"
 		«ENDIF-»
 		«IF !hasTaggedValue("ejb3WebService", "targetNamespace", "null")-»
 			, targetNamespace="«taggedValue.select(e|e.tag.name == "targetNamespace").value-»"
@@ -332,7 +330,7 @@
 	«IF hasStereotype("ejb3PrimaryKey")»
 		«REM» primary key with extern primary key class «ENDREM»
 		«IF !hasTaggedValue("ejb3PrimaryKey", "idClass", "null")»
-			@IdClass(«mapName()»PK.class)
+			@IdClass(«asTypeName()-»PK.class)
 			«EXPAND _PrimaryKeyClass»
 		«ENDIF»
 		«REM» primary key with embedded primary key class «ENDREM»
@@ -344,7 +342,7 @@
 
 «REM» creates a primary key class for stereotype "idClass" «ENDREM»
 «DEFINE _PrimaryKeyClass FOR MClass-»
-	«FILE getFilename("", "PK")-»
+	«FILE filePath( asTypeName() + "PK", basePath() )-»
 		/**
 		  *	templates for generation of ejb3 source code have been written by
 		  *
@@ -357,41 +355,41 @@
 		package «getPackagePath()»;
 		
 		/**
-		  * generated primary key class for "«mapName()»"
+		  * generated primary key class for "«asTypeName()-»"
 		  *
 		  */
-		public class «mapName()+"PK"-» implements java.io.Serializable {
+		public class «asTypeName()+"PK"-» implements java.io.Serializable {
 			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
 				private «ids.type.mapName()» «ids.name»;
 			«ENDFOREACH»
-			public «mapName()+"PK"-»() {}
-			public «mapName()+"PK"-»(
+			public «asTypeName()+"PK"-»() {}
+			public «asTypeName()+"PK"-»(
 			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR ", "-»
-				«ids.type.mapName()» «ids.name»
+				«ids.type.asTypeName()» «ids.name»
 			«ENDFOREACH-») {
 				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR ";"-»
 					this.«ids.name» = «ids.name»
 				«ENDFOREACH-»;
 			}
 			
-			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
-				public «ids.type.mapName()» «asGetter(ids.name)»() {
+			«FOREACH property.typeSelect(MAttribute).select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+				public «ids.type.asTypeName()» «ids.asGetter()»() {
 					return «ids.name»;
 				}
 			«ENDFOREACH»
-			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
-				public  void «asSetter(ids.name)»(«ids.type.mapName()» «ids.name») {
+			«FOREACH property.typeSelect(MAttribute).select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+				public  void «ids.asSetter()»(«ids.type.asTypeName()» «ids.name») {
 					this.«ids.name» = «ids.name»;
 				}	
 			«ENDFOREACH»
 			public boolean equals(Object obj){
 				if (obj == this) return true;
-				if (!(obj instanceof «mapName()+"PK"-»)) return false;
-				«mapName()+"PK"-» pk = («mapName()+"PK"-») obj;
+				if (!(obj instanceof «asTypeName()+"PK"-»)) return false;
+				«asTypeName()+"PK"-» pk = («asTypeName()+"PK"-») obj;
 				return ( 
 				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR "&&"-»
 					this.«ids.name»
-					«IF isPrimitiveDatatype(ids.type.mapName())-»
+					«IF ids.type.isPrimitiveType()-»
 						 == pk.«ids.name»
 					«ELSE-»
 						.equals(pk.«ids.name-»)
@@ -404,7 +402,7 @@
 				return (int)
 				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR "+"-»
 					this.«ids.name-»
-					«IF !isPrimitiveDatatype(ids.type.mapName())-»
+					«IF !isPrimitiveType(ids.type)-»
 						.hashCode()
 					«ENDIF-»	
 				«ENDFOREACH-»
@@ -437,7 +435,7 @@
 			«ENDFOREACH-»
 			«IF taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements().first() == ""
 				&& operation.taggedValue.exists(e|e.tag.name == "external" && e.value == "true")-»
-				«mapName()+"EntityListener.class"-»
+				«asTypeName()+"EntityListener.class"-»
 			«ENDIF-»)
 		«ENDIF»
 		«IF hasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "true")»
@@ -461,8 +459,8 @@
 				look for class name + "EntityListener" and create them
 				if this class does not exist
 			«ENDREM»
-			«IF !owningPackage.classifier.exists(e|e.name == (mapName()+"EntityListener"))-»
-				«EXPAND _EntityListenerClass(mapName()+"EntityListener")»
+			«IF !owningPackage.classifier.exists(e|e.name == (asTypeName()+"EntityListener"))-»
+				«EXPAND _EntityListenerClass(asTypeName()+"EntityListener")»
 			«ENDIF-»
 		«ENDIF-»
 	«ENDIF»
@@ -488,16 +486,16 @@
 		«EXPAND _CallbackImport»
 		
 		/* your own imports */
-		«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + mapName() + "_Imports")-»
+		«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + asTypeName() + "_Imports")-»
 		
 		/**
-		  * generated entity listener class for "«mapName()»"
+		  * generated entity listener class for "«asTypeName()»"
 		  *
 		  */
 		public class «filename-» {
 			«EXPAND _CallbackMethods-»
 			
-			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_restOf" + mapName() + "EntityListenerClass")-»
+			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_restOf" + asTypeName() + "EntityListenerClass")-»
 		}
 	«ENDFILE»
 «ENDDEFINE»
@@ -538,8 +536,8 @@
 		«ENDIF-»
 		«IF hasTaggedValue("ejb3ClassInterceptor", "generateInterceptorClass", "true") 
 			&& hasTaggedValue("ejb3ClassInterceptor", "generatedInterceptorClassName", "null")-»
-			@Interceptors(«mapName()+"Interceptor"»)
-			«EXPAND _InterceptorClass(mapName()+"Interceptor")-»
+			@Interceptors(«asTypeName()+"Interceptor"»)
+			«EXPAND _InterceptorClass(asTypeName()+"Interceptor")-»
 		«ENDIF-»
 		«IF hasTaggedValue("ejb3ClassInterceptor", "excludeDefaultInterceptors", "true")-»
 			@ExcludeDefaultInterceptors
@@ -568,7 +566,7 @@
 		  * Version: 1.0
 		  *
 		  */
-		package «getPackagePath()»;
+		package «packageDeclaration( basePackage() ) -»»;
 		
 		/* generated imports */
 		«EXPAND _CallbackImport»
@@ -576,10 +574,10 @@
 		import javax.interceptor.InvocationContext;
 		
 		/* your own imports */
-		«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + mapName() + "_Imports")-»
+		«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + asTypeName() + "_Imports")-»
 		
 		/**
-		  * generated interceptor class for "«mapName()»"
+		  * generated interceptor class for "«asTypeName()-»"
 		  *
 		  */
 		public class «filename-» {
@@ -587,7 +585,7 @@
 			
 			«EXPAND _CallbackMethods-»
 			
-			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_restOf" + mapName() + "InterzeptorClass")-»
+			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_restOf" + asTypeName() + "InterzeptorClass")-»
 		}
 	«ENDFILE»
 «ENDDEFINE»
@@ -672,8 +670,8 @@
 				&& methods.hasTaggedValue("ejb3Callback", "prePassivate", "true"))
 		-»
 			/**
-			  *	generated callback method for class "«mapName()»"
-			  * method has been annotated in "«mapName()»"
+			  *	generated callback method for class "«asTypeName()»"
+			  * method has been annotated in "«asTypeName()»"
 			  *
 			  */
 			«IF methods.hasTaggedValue("ejb3Callback", "external", "true")-»
@@ -737,9 +735,9 @@
 	«IF !(hasTaggedValue("ejb3ClassInterceptor", "generatedInterceptorClassMethods", "[]") || hasTaggedValue("ejb3ClassInterceptor", "generatedInterceptorClassMethods", "null"))-»
 		«FOREACH taggedValue.select(e|e.tag.name == "generatedInterceptorClassMethods").value.getElements() AS tags-»
 			/**
-			  *	generated business method for class "«mapName()»"
+			  *	generated business method for class "«asTypeName()»"
 			  * method has been mentioned in "ejb3Interceptor"-annotation 
-			  * at class "«mapName()»"
+			  * at class "«asTypeName()»"
 			  *
 			  */
 			@AroundInvoke
@@ -752,10 +750,21 @@
 	«ENDIF»
 «ENDDEFINE»
 
-«REM» generates import statements for ejb classes«ENDREM»
+«REM» 
+	generates import proReg and statements for ejb classes
+«ENDREM»
 «DEFINE _Import FOR MClass-»
-/* «PROTECT CSTART "" CEND "" ID ("java.moperation.implementation.operation.code." + xmiGuid + "OwnManualImports")» */
+	/* «PROTECT CSTART "" CEND "" ID ("java.moperation.implementation.operation.code." + xmiGuid + "OwnManualImports")» */
 	/* TODO: put your own source code here */
+	«EXPAND _ImportStatements-»
+	
+	/* «ENDPROTECT» */
+«ENDDEFINE»
+
+«REM» 
+	generates import statements for ejb classes
+«ENDREM»
+«DEFINE _ImportStatements FOR MClass-»
 	«EXPAND _CallbackImport»
 	«IF hasStereotype("ejb3PersistentEntity")-»
 		import javax.persistence.Entity;
@@ -813,10 +822,7 @@
 		import javax.jms.MessageListener;
 		import javax.ejb.ActivationConfigProperty;		
 	«ENDIF»
-	
-	/* «ENDPROTECT» */
 «ENDDEFINE»
-
 
 «REM» 
 	generates a protected region for own implementations

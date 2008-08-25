@@ -7,15 +7,15 @@
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+«IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::io::io»
+«EXTENSION de::genesez::platforms::common::log::Log»
 
-«EXTENSION de::genesez::common::AccessHelper»
-«EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::common::GeneralHelper»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
@@ -41,15 +41,15 @@
 	generate a declaration for an attribute
 «ENDREM»
 «DEFINE AttributeDecl FOR MAttribute-»
-	«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_CommentAttribute-»	
+	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Attribute-»	
 	«EXPAND _Annotation-»
 	«IF multiplicity == 1-»
-		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «type.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Generics» «asAttributeName()» «EXPAND de::genesez::platforms::java::java5::templates::Attribute::_DefaultValue»;
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «type.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics» «asAttribute()» «EXPAND de::genesez::platforms::java::java5::templates::Attribute::_DefaultValue»;
 	«ELSE-»
 		«IF !hasStereotype("ejb3Association")-»
 			@org.hibernate.annotations.CollectionOfElements
 		«ENDIF-»
-		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «mapType()»<«type.mapName()»> «asAttributeName()» = new «mapType("Implementation")»<«type.mapName()»>();
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «mapType()»<«type.mapName()»> «asAttribute()» = new «mapType("Implementation")»<«type.mapName()»>();
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -171,7 +171,7 @@
  «ENDREM»
 «DEFINE DatatypeMapping FOR MElement»
 	«IF hasStereotype("ejb3DatatypeMapping")»
-		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Basic") && (hasTaggedValue("ejb3DatatypeMapping", "fetch", "LAZY") || hasTaggedValue("ejb3DatatypeMapping", "optional", "true"))»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Basic") && (!hasTaggedValue("ejb3DatatypeMapping", "null", "DEFAULT") || hasTaggedValue("ejb3DatatypeMapping", "optional", "true"))»
 			@Basic(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
 			«IF hasTaggedValue("ejb3DatatypeMapping", "optional", "true")-»
 			, optional=true

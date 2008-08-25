@@ -26,19 +26,21 @@
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+«IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::io::io»
+«EXTENSION de::genesez::platforms::common::log::Log»
 
-«EXTENSION de::genesez::common::AccessHelper»
-«EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::common::GeneralHelper»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 
 
 
@@ -62,7 +64,7 @@
 «REM» creates a junit class for stereotype "junitClass" «ENDREM»
 «DEFINE _JUnitClass FOR MClass-»
 	«IF hasStereotype("junitClass")-»
-		«FILE getFilename("", "Test")-»
+		«FILE filePath( name.toFirstUpper() + "Test", basePath() )-»
 			/**
 			  *	templates for generation of JUnit classes have been written by
 			  *
@@ -72,7 +74,7 @@
 			  * Version: 1.0
 			  *
 			  */
-			package «getPackagePath()»;
+			package «packageDeclaration()»;
 			
 			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_ManualImports")-»
 			
@@ -80,7 +82,7 @@
 			  * generated JUnit test class for "«mapName()»"
 			  *
 			  */
-			public class «mapName()+"Test"-» {
+			public class «asTypeName()+"Test"-» {
 				«FOREACH operation.select(e|e.hasStereotype("junitOperation")) AS ops-»
 					«FOREACH ops.taggedValue.select(e|e.tag.name == "name").value.getElements() AS names-»
 						/**
@@ -138,32 +140,32 @@
 				@Test
 				public void getterSetterTest(){	
 				
-					«FOREACH property.select(e|(!e.hasStereotype("accessor") 
+					«FOREACH property.typeSelect(MAttribute).select(e|(!e.hasStereotype("accessor") 
 							|| (!e.hasTaggedValue("accessor", "getter", "false") 
 							&&  !e.hasTaggedValue("accessor", "setter", "false")))
-							&& (isPrimitiveDatatype(e.type.mapName()) || e.type.mapName() == "String")
+							&& (e.type.isPrimitiveType() || e.type.mapName() == "String")
 							&& e.multiplicity == 1) AS ids-»
 						«REM» if getter and setter methods are generated «ENDREM»
 						{
 							«ids.type.mapName()-» temp;
-							temp = t1.«asGetter(ids.name)-»();
-							t1.«asSetter(ids.name)-»(«EXPAND _PrimitiveDataType(ids)-»);
+							temp = t1.«ids.asGetter()-»();
+							t1.«ids.asSetter()-»(«EXPAND _PrimitiveDataType(ids)-»);
 							try {
-								assertEquals(«EXPAND _PrimitiveDataType(ids)-», t1.«asGetter(ids.name)-»());
-								t1.«asSetter(ids.name)-»(temp);
+								assertEquals(«EXPAND _PrimitiveDataType(ids)-», t1.«ids.asGetter()-»());
+								t1.«ids.asSetter()-»(temp);
 							} catch (NullPointerException npe){
 								assertFalse(true);
 							}
 						}
 					«ENDFOREACH»
-					«FOREACH property.select(e|e.hasStereotype("accessor")
+					«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("accessor")
 							&& e.hasTaggedValue("accessor", "getter", "true")
 							&& e.hasTaggedValue("accessor", "setter", "false")) AS ids-»
 						«REM» if only getter method is generated «ENDREM»
 						{
 							«ids.type.mapName()-» temp;
-							temp = t1.«asGetter(ids.name)-»();
-							assertEquals(temp, t1.«asGetter(ids.name)-»());
+							temp = t1.«ids.asGetter()-»();
+							assertEquals(temp, t1.«ids.asGetter()-»());
 						}
 					«ENDFOREACH»
 					«REM»
@@ -203,9 +205,6 @@
 «DEFINE _OwnCodeImpl(String proRegId) FOR MClass-»
 	/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
 	/* TODO: put your own testing code here */
-
-			import org.junit.*;
-			import static org.junit.Assert.*;	
 	
 	/* «ENDPROTECT» */
 «ENDDEFINE»

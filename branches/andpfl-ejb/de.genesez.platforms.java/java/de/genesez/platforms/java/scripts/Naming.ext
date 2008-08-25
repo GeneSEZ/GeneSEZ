@@ -1,140 +1,313 @@
-//	based on genesez meta model
-import genesezMM;
+/**
+ * Naming conventions for java
+ * 
+ * - fileName is only the file name, e.g. 'FooBar.java'
+ * 
+ * @author	nico herbig
+ * @author	tobias haubold (last)
+ * @date	2007-07-16
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public extend functions
+	prefix + suffix + file extensions for java types
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * formats a name of a package according naming convention
- * @param	s	name of a package
- * @return	name of a package
+ * getter of the separator for full qualified names
+ * @return	the separator for full qualified names on the java platform ('.')
  */
-String asPackageName(String s) :
-	s.toLowerCase();
+String fqnSeparator() : ".";
 
 /**
- * formats a name of a classifier according naming convention
- * @param	s	name of a classifier
- * @return	name of a classifier
+ * getter of the file extension including the beginning dot
+ * @return	the file extension for java artefacts ('.java')
  */
-String asClassifierName(String s) :
-	s;
+String fileExtension() : ".java";
 
 /**
- * formats a name of an attribute according naming convention
- * @param	s	name of an attribute
- * @return	name of the attribute
+ * getter of the prefix which is added to the name of an interface
+ * @return	the prefix to prepend
  */
-String asAttributeName(MAttribute a) :
-	a.final
-		? asConstantName(a.name)
-		: asVariableName(a.name);
+String prefix(MInterface this) : "";
 
 /**
- * formats a name of a variable according naming convention
- * @param	s	name of a variable
- * @return	name of a variable
+ * getter of the suffix which is added to the name of an interface
+ * @return	the suffix to append
  */
-String asVariableName(String s) :
-	s.toFirstLower();
+String suffix(MInterface this) : "";
 
 /**
- * formats a name of a constant according naming convention
- * @param	s	name of a constant
- * @return	name of a constant
+ * getter of the prefix which is added to the name of a class
+ * @return	the prefix to prepend
  */
-String asConstantName(String s) :
-	s.toUpperCase();
-	
-/**
- * formats a name of a literal according naming convention
- * @param	s	name of a literal
- * @return	name of a literal
- */
-String asLiteralName(String s) :
-	s.toUpperCase();
+String prefix(MClass this) : abstract ? "" : "";
 
 /**
- * formats a name of an operation according naming convention
- * @param	s	name of a operation
- * @return	name of a operation
+ * getter of the suffix which is added to the name of a class
+ * @return	the suffix to append
  */
-String asOperationName(String s) :
-	s.toFirstLower();
+String suffix(MClass this) : abstract ? "" : "";
 
 /**
- * formats a name of a parameter according naming convention
- * @param	s	name of a parameter
- * @return	name of a parameter
+ * getter of the prefix which is added to the name of an enumeration
+ * @return	the prefix to prepend
  */
-String asParameterName(String s) : 
-	s.toFirstLower();
+String prefix(MEnumeration this) : "";
 
 /**
- * formats a name as a getter method according naming convention
- * @param	s	name of an attribute/method
- * @return	name as getter method
+ * getter of the suffix which is added to the name of an enumeration
+ * @return	the suffix to append
  */
-String asGetter(String s) :
-	"get" + s.toFirstUpper();
+String suffix(MEnumeration this) : "";
 
 /**
- * formats a name as a setter method according naming convention
- * @param	s	name of an attribute/method
- * @return	name as setter method
+ * just there for error free templates ;-)
+ * @return	an empty string
  */
-String asSetter(String s) :
-	"set" + s.toFirstUpper();
+String prefix(MClassifier this) : "";
 
 /**
- * formats a name of a getter method which returns an iterator according naming convention
- * @param	s	name of an attribute/method
- * @return	name of a getter method which returns an iterator
+ * just there for error free templates ;-)
+ * @return	an empty string
  */
-String asIterator(String s) :
-	asGetter(s) + "Iterator";
-
-/**
- * formats a name of a method used to insert something in a collection according naming convention
- * @param	s	name of an attribute
- * @return	name of the insert-in method
- */
-String asInsertIn(String s) :
-	"insertIn" + s.toFirstUpper();
-
-/**
- * formats a name of a method used to add something to a collection according naming convention
- * @param	s	name of an attribute
- * @return	name of the add-to method
- */
-String asAddTo(String s) :
-	"addTo" + s.toFirstUpper();
-
-/**
- * formats a name of a method used to remove something from a collection according naming convention
- * @param	s	name of an attribute
- * @return	name of the remove-from method
- */
-String asRemoveFrom(String s) :
-	"removeFrom" + s.toFirstUpper();
+String suffix(MClassifier this) : "";
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public java functions
+	type names
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private extend functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+/**
+ * formats the name of a class using prefix + suffix
+ * @return	formatted name of the class
+ */
+String asTypeName(MClass this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of an interface using prefix + suffix
+ * @return	formatted name of the interface
+ */
+String asTypeName(MInterface this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of an enumeration using prefix + suffix
+ * @return	formatted name of the enumeration
+ */
+String asTypeName(MEnumeration this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a data type using prefix + suffix
+ * @return	formatted name of the data type
+ */
+String asTypeName(MDataType this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a classifier using prefix + suffix
+ * @return	formatted name of the classifier
+ */
+String asTypeName(MClassifier this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a type, it should NOT do anything, it's just there for error free templates ;-)
+ * don't touch generics, primitive types or external types (external are mapped correctly)
+ * @return	the name of the type
+ */
+String asTypeName(MType this) : name();
+
+/**
+ * formats the name of a type after typemapping
+ * don't touch the type - the name of the type is determined by typemapping
+ * @return	the name of the type
+ */
+String asTypeName(String this) : this;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private java functions
+	file names
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * formats the filename of a class
+ * @return	the filename of the class
+ */
+String asFileName(MClass this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of an interface
+ * @return	the filename of the interface
+ */
+String asFileName(MInterface this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of an enumeration
+ * @return	the filename of the enumeration
+ */
+String asFileName(MEnumeration this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of a data type
+ * @return	the filename of the data type
+ */
+String asFileName(MDataType this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of a classifier
+ * it's usually not called!
+ * @return	the filename of a classifier
+ */
+String asFileName(MClassifier this) : asTypeName() + fileExtension();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	enumeration literals
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an enumeration literal
+ * @context	the enumeration literal to format
+ * @return	the formatted enum literal
+ * @see		asEnumLiteral(String)
+ */
+String asEnumLiteral(MLiteral this) : name.asEnumLiteral();
+
+/**
+ * formats an enumeration literal using a string
+ * this is needed for the generation of default values!
+ * @context	the enumeration literal to format
+ * @return	the formatted enum literal
+ */
+String asEnumLiteral(String this) : toUpperCase();
+
+/**
+ * formats an association role as enum literal
+ * this is needed for the association handling
+ * @return	the formatted enum literal
+ */
+String asEnumLiteral(MAssociationRole this) : 
+	name.length == 0
+		? type.name().toUpperCase()
+		: name.toUpperCase();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an attribute name according to the value of it's 'final' property
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asAttribute(MAttribute this) : final ? asConstant() : asVariable();
+
+/**
+ * formats an attribute name as a constant
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asConstant(MAttribute this) : name.toUpperCase();
+
+/**
+ * formats an attribute name as a normal attribute
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asVariable(MAttribute this) : name.toFirstLower();
+
+/**
+ * formats an attribute name as a getter method
+ * @context	the attribute to format
+ * @return	the formatted name of the getter method
+ */
+String asGetter(MAttribute this) : "get" + name.toFirstUpper();
+
+/**
+ * formats an attribute name as a setter method
+ * @context	the attribute to format
+ * @return	the formatted name of the setter method
+ */
+String asSetter(MAttribute this) : "set" + name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	association attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an association role as a association attribute
+ * @context	the association role to format
+ * @return	the formatted name of the association attribute
+ */
+String asAttribute(MAssociationRole this) : name.toFirstLower();
+
+/**
+ * formats the accessor method of an association role
+ * @context	the accessor method of an association role to format
+ * @return	the formatted name of the accessor method
+ */
+String asAccessor(MAssociationRole this) : name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	operations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asOperation(MOperation this) : name.toFirstLower();
+
+/**
+ * formats an operation name as a constructor
+ * only for php4, not called for php5 and higher
+ * 
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asConstructor(MOperation this) : name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	parameters
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asParameter(MParameter this) : name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type compatibility functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats a property as an attribute
+ * just there for error-free templates (polymorphism)
+ * @see	asAttribute(MAttribute)
+ * @see asAttribtue(MAssociationRole)
+ */
+String asAttribute(MProperty this) : name.toFirstLower();

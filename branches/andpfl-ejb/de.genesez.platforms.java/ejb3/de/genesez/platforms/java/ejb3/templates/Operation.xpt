@@ -6,19 +6,20 @@
 «ENDREM»
 
 «REM» based on genesez meta model «ENDREM»
-«IMPORT genesezMM»
+«IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::io::io»
+«EXTENSION de::genesez::platforms::common::log::Log»
 
-«EXTENSION de::genesez::common::AccessHelper»
-«EXTENSION de::genesez::common::Conversion»
-«EXTENSION de::genesez::common::GeneralHelper»
-«EXTENSION de::genesez::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,13 +28,42 @@
 «ENDREM»
 
 «REM» generate all methods for a classifier «ENDREM»
-«DEFINE OperationImpl FOR MClassifier-»
-	«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
+«DEFINE OperationImpl(MClassifier class) FOR MClassifier-»
+	«EXPAND OperationImpl(class) FOREACH operation.select(e|e.name != name && !e.abstract)-»
 «ENDDEFINE»
 
 «REM» generate an implementation for an normal operation «ENDREM»
-«DEFINE OperationImpl FOR MOperation-»
-	«EXPAND de::genesez::platforms::java::java5::templates::Operation::_CommentOperation-»
+«DEFINE OperationImpl(MClassifier class) FOR MOperation-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Operation-»
+	«EXPAND Annotation-»
+	«IF multiplicity == 1-»
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «returnType.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType» «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+	«ELSE-»
+		«IF returnType.metaType == MPrimitiveType-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType»> «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+		«ELSE-»
+			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «mapType()»<«returnType.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType»> «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+		«ENDIF-»
+	«ENDIF-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Operation::_ImplementationBody-»}
+«ENDDEFINE»
+
+«REM» 
+	container-managed transaction demarcation
+	for operations and classes
+«ENDREM»
+«DEFINE CMTransactionality FOR MElement-»
+	«IF hasStereotype("ejb3TransactionAttribute")»
+		«IF !hasTaggedValue("ejb3TransactionAttribute", "type", "null") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
+			@TransactionAttribute(TransactionAttributeType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	main method for evaluation of the annotations	
+«ENDREM»
+«DEFINE Annotation FOR MOperation»
 	«REM» stereotype ejb3Timer «ENDREM»
 	«IF hasStereotype("ejb3Timer") && (classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateless", "true"))-»
 		@Timeout
@@ -57,29 +87,7 @@
 	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
 	«EXPAND Class::DiscriminatorValue-»
 	«REM» stereotype "ejb3WebMethod" «ENDREM»
-	«EXPAND _WebMethod-»
-	«IF multiplicity == 1-»
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «returnType.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Generics FOR returnType» «asOperationName(name)»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Parameter») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
-	«ELSE-»
-		«IF returnType.metaType == MPrimitiveType-»
-			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Generics FOR returnType»> «asOperationName(name)»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Parameter») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
-		«ELSE-»
-			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «mapType()»<«returnType.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Generics FOR returnType»> «asOperationName(name)»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Parameter») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
-		«ENDIF-»
-	«ENDIF-»
-	«EXPAND de::genesez::platforms::java::java5::templates::Operation::_DefaultReturnAndOwnCodeImpl-»}
-«ENDDEFINE»
-
-«REM» 
-	container-managed transaction demarcation
-	for operations and classes
-«ENDREM»
-«DEFINE CMTransactionality FOR MElement-»
-	«IF hasStereotype("ejb3TransactionAttribute")»
-		«IF !hasTaggedValue("ejb3TransactionAttribute", "type", "null") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
-			@TransactionAttribute(TransactionAttributeType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»)
-		«ENDIF»
-	«ENDIF»
+	«EXPAND _WebMethod-»	
 «ENDDEFINE»
 
 «REM»
