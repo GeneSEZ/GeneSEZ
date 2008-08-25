@@ -7,24 +7,24 @@
 		following parameters are required:
 		==================================
 		
-		$ea_model			name of the ea repository file
+		$model_file			name of the xmi output file
 		$model_name			name of the model
+		$model_repository	name of the ea repository file
 		$profile_dir		directory name where profiles are located
 		$profile_name		name of the profile to apply to the model
-		$model_file			name of the xmi output file
 	 -->
 
 	<!-- initialize the support for UML2 models -->
 	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
 	
-	<property name="ea_model_slot" value="de_genesez_adapter_ea_ea_model" />
-	<property name="uml_model_slot" value="de_genesez_adapter_ea_uml_model" />
-	<property name="resource_model_slot" value="de_genesez_adapter_ea_model_resource" />
+	<property name="model_slot" value="de_genesez_adapter_ea_ea_model" />
+	<property name="model_uml_slot" value="de_genesez_adapter_ea_uml_model" />
+	<property name="model_resource_slot" value="de_genesez_adapter_ea_model_resource" />
 	
 	<component class="de.genesez.adapter.ea.RepositoryReader">
-		<repositoryFile value="${ea_model}" />
+		<repositoryFile value="${model_repository}" />
 		<modelName value="${model_name}" />
-		<outputSlot value="${ea_model_slot}" />
+		<outputSlot value="${model_slot}" />
 	</component>
 
 	<component class="de.genesez.adapter.ea.ProfileReader">
@@ -34,13 +34,13 @@
 	</component>
 
 	<component class="de.genesez.adapter.ea.Model2UML">
-		<inputSlot value="${ea_model_slot}" />
-		<outputSlot value="${uml_model_slot}" />
+		<inputSlot value="${model_slot}" />
+		<outputSlot value="${model_uml_slot}" />
 	</component>
 
 	<component class="de.genesez.adapter.ea.XmiWriter">
-		<inputSlot value="${uml_model_slot}" />
-		<resourceSlot value="${resource_model_slot}" />
+		<inputSlot value="${model_uml_slot}" />
+		<resourceSlot value="${model_resource_slot}" />
 		<xmiFile value="${model_file}" />
 	</component>
 

@@ -7,20 +7,23 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ContentRegistry;
 import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
+import de.genesez.adapter.ea.ProfileRegistry;
 
-public class ActivityTransformer {
+public class ActivityTransformer extends AbstractElementTransformer {
 
 	private static final Log log = LogFactory.getLog(ActivityTransformer.class);
-	private Activity activity;
 
 	private Map<String, ActivityEdge> edges = new HashMap<String, ActivityEdge>();
 	private Map<Integer, Set<String>> edgeSources = new HashMap<Integer, Set<String>>();
@@ -28,31 +31,39 @@ public class ActivityTransformer {
 
 	Activity transform(org.sparx.Element _e, BehavioredClassifier _parent) {
 		log.debug("Creating Activity " + _e.GetName() + ", parent " + _parent.getName());
-		this.activity = (Activity) _parent.createOwnedBehavior(_e.GetName(),
+		Activity activity = (Activity) _parent.createOwnedBehavior(_e.GetName(),
 				UMLFactory.eINSTANCE.createActivity().eClass());
+
+		this.umlElement = activity;
 		this.transform(_e);
-		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.activity);
-		PostProcessor.instance.registerElement(_e, this.activity);
-		return this.activity;
+
+		return activity;
 	}
 
 	Activity transform(org.sparx.Element _e, Package _parent) {
 		log.debug("Creating Activity " + _e.GetName() + ", parent " + _parent.getName());
-		this.activity = UMLFactory.eINSTANCE.createActivity();
-		this.activity.setName(_e.GetName());
-		this.activity.setPackage(_parent);
+		Activity activity = UMLFactory.eINSTANCE.createActivity();
+		activity.setName(_e.GetName());
+		activity.setPackage(_parent);
+		
+		this.umlElement = activity;
 		this.transform(_e);
-		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.activity);
-		PostProcessor.instance.registerElement(_e, this.activity);
-		return this.activity;
+
+		return activity;
 	}
 	
 	private void transform(org.sparx.Element _e) {
+		this.eaElement = _e;
+		this.transformConnectors();
+		this.transformElements();
+		this.applyStereotypes();
 
-		// Transform the Connectors of all children of the Activity,
-		// because the Edges should be contained by the Activity
-		// before adding the children Nodes
-		for (org.sparx.Element e : _e.GetElements()) {
+		ElementRegistry.instance.addElement(_e, this.umlElement);
+	}
+	
+	@Override
+	protected void transformConnectors() {
+		for (org.sparx.Element e : this.eaElement.GetElements()) {
 			for (org.sparx.Connector c : e.GetConnectors()) {
 				// Connectors are always found two times:
 				// At the source node and at the target node
@@ -62,59 +73,57 @@ public class ActivityTransformer {
 				this.transformConnector(c);
 			}
 		}
-
-		for (org.sparx.Element e : _e.GetElements()) {
-			this.transformElement(e);
-		}
 	}
 
-	private void transformConnector(org.sparx.Connector _c) {
+	@Override
+	protected void transformConnector(org.sparx.Connector _c) {
 		log.debug("Transforming connector " + _c.GetName());
 		
 		if (_c.GetType().equals("ControlFlow")) {
 			log.debug("Connector is a ControlFlow");
 			ControlFlowTransformer t = new ControlFlowTransformer();
-			this.addActivityEdge(_c, t.transform(_c, this.activity));
+			this.addActivityEdge(_c, t.transform(_c, (Activity)this.umlElement ));
 		}
 	}
 	
-	private void transformElement(org.sparx.Element _e) {
+	@Override
+	protected void transformElement(org.sparx.Element _e) {
 		log.debug("Transforming element " + _e.GetName());
 
 		if ( _e.GetType().equals("Action") && _e.GetClassfierID() > 0 ) {
 			log.debug("Element is a CallBehaviorAction");
 			CallBehaviorActionTransformer t = new CallBehaviorActionTransformer();
-			ActivityNode node = t.transform(_e, this.activity);
+			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
 			this.applyActivityEdges(_e, node);
 		}
 		else if ( _e.GetType().equals("Action") ) {
 			log.debug("Element is an Action");
 			CallOperationActionTransformer t = new CallOperationActionTransformer();
-			ActivityNode node = t.transform(_e, this.activity);
+			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
 			this.applyActivityEdges(_e, node);
 		}
 		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 100 ) {
 			log.debug("Element is an InitialNode");
 			InitialNodeTransformer t = new InitialNodeTransformer();
-			ActivityNode node = t.transform(_e, this.activity);
+			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
 			this.applyActivityEdges(_e, node);
 		}
 		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 101 ) {
 			log.debug("Element is an ActivityFinialNode");
 			ActivityFinalNodeTransformer t = new ActivityFinalNodeTransformer();
-			ActivityNode node = t.transform(_e, this.activity);
+			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
 			this.applyActivityEdges(_e, node);
 		}
 		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 102 ) {
 			log.debug("Element is an FlowFinalNode");
 			FlowFinalNodeTransformer t = new FlowFinalNodeTransformer();
-			ActivityNode node = t.transform(_e, this.activity);
+			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
 			this.applyActivityEdges(_e, node);
 		}
 		else if ( _e.GetType().equals("Activity") ) {
 			log.debug("Element is an Activity");
 			ActivityTransformer t = new ActivityTransformer();
-			t.transform(_e, this.activity);
+			t.transform(_e, (Activity)this.umlElement);
 		}
 	}
 	

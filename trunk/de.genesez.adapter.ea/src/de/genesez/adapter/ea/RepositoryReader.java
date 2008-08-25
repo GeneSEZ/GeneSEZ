@@ -44,6 +44,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	 * @param	filename of the Enterprise Architect repository
 	 */
 	public void setRepositoryFile(String value) {
+		log.debug("Setting repository to " + value);
 		this.repositoryFile = value;
 	}
 	
@@ -52,6 +53,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	 * @param the name of the model
 	 */
 	public void setModelName(String value) {
+		log.debug("Setting modelName to " + value);
 		this.modelName = value;
 	}
 	
@@ -60,6 +62,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	 * @param the name of the output slot
 	 */
 	public void setOutputSlot(String value) {
+		log.debug("Setting outputSlot to " + value);
 		this.outputSlot = value;
 	}
 	

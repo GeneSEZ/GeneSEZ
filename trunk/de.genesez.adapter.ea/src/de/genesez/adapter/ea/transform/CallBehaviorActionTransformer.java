@@ -2,26 +2,35 @@ package de.genesez.adapter.ea.transform;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.CallBehaviorAction;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ContentRegistry;
 import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
+import de.genesez.adapter.ea.ProfileRegistry;
 
-public class CallBehaviorActionTransformer {
+public class CallBehaviorActionTransformer extends AbstractElementTransformer {
 
 	private static final Log log = LogFactory.getLog(CallBehaviorActionTransformer.class);
-	private CallBehaviorAction callBehaviorAction;
 	
 	CallBehaviorAction transform(org.sparx.Element _e, Activity _parent) {
 		log.debug("Creating CallBehaviorAction " + _e.GetName() + ", parent " + _parent.getName());
-		this.callBehaviorAction = UMLFactory.eINSTANCE.createCallBehaviorAction();
-		this.callBehaviorAction.setActivity(_parent);
-		this.callBehaviorAction.setName(_e.GetName());
-		ElementRegistry.instance.addElement(_e.GetElementGUID(), this.callBehaviorAction);
-		PostProcessor.instance.registerElement(_e, this.callBehaviorAction);
-		PostProcessor.instance.setCalledBehavior(this.callBehaviorAction, _e.GetClassifierID());
-		return this.callBehaviorAction;
+
+		CallBehaviorAction action = UMLFactory.eINSTANCE.createCallBehaviorAction();
+		action.setActivity(_parent);
+		action.setName(_e.GetName());
+		
+		this.umlElement = action;
+		this.eaElement = _e;
+
+		this.applyStereotypes();
+
+		PostProcessor.instance.setCalledBehavior(action, _e.GetClassifierID());
+		ElementRegistry.instance.addElement(_e, action);
+		return action;
 	}
 }

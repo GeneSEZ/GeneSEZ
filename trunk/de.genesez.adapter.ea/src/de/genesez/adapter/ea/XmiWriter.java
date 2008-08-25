@@ -9,7 +9,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.Package;
 import org.openarchitectureware.workflow.WorkflowContext;
 import org.openarchitectureware.workflow.issues.Issues;
 import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
@@ -32,10 +32,10 @@ public class XmiWriter extends AbstractWorkflowComponent {
 		try {
 			log.info("Start writing XMI file...");
 			log.debug("Get model from slot: " + this.inputSlot);
-			Model outputModel = (Model) ctx.get(this.inputSlot);
+			Package output = (Package) ctx.get(this.inputSlot);
 			log.debug("Get resource from slot: " + this.resourceSlot);
 			XMIResource resource = (XMIResource) ResourceRegistry.instance.get(this.resourceSlot);
-			resource.getContents().add(outputModel);
+			resource.getContents().add(output);
 			for (Entry<String, Element> e : ElementRegistry.instance.getElements()) {
 				log.debug("Add element " + e.getKey());
 				resource.setID(e.getValue(), e.getKey());

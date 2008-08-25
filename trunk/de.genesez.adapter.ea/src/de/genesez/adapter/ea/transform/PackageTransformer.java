@@ -2,42 +2,35 @@ package de.genesez.adapter.ea.transform;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ContentRegistry;
 import de.genesez.adapter.ea.ElementRegistry;
+import de.genesez.adapter.ea.ProfileRegistry;
 
-public class PackageTransformer {
+public class PackageTransformer extends AbstractPackageTransformer {
 
 	private static final Log log = LogFactory.getLog(PackageTransformer.class);
-	private Package pckage;
 	
 	Package transform(org.sparx.Package _p, Package _parent) {
 		log.debug("Creating Package " + _p.GetName());
-		this.pckage = _parent.createNestedPackage(_p.GetName(),
+
+		this.umlPackage = _parent.createNestedPackage(_p.GetName(),
 				UMLFactory.eINSTANCE.createPackage().eClass());
-		this.transformPackages(_p);
-		this.transformElements(_p);
-		ElementRegistry.instance.addElement(_p.GetPackageGUID(), this.pckage);
-		return this.pckage;
+		this.eaPackage = _p;
+
+		this.transformPackages();
+		this.transformElements();
+
+		ElementRegistry.instance.addElement(_p, this.umlPackage);
+		return this.umlPackage;
 	}
 
-	private void transformPackages(org.sparx.Package _p) {
-		for (org.sparx.Package p: _p.GetPackages()) {
-			PackageTransformer t = new PackageTransformer();
-			t.transform(p, this.pckage);
-		}
-	}
-
-	private void transformElements(org.sparx.Package _p) {
-		for (org.sparx.Element e: _p.GetElements()) {
-			if ( 0 == e.GetParentID() ) {
-				this.transformElement(e);
-			}
-		}
-	}
-	
-	private void transformElement(org.sparx.Element _e) {
+	@Override
+	protected void transformElement(org.sparx.Element _e) {
 		log.debug("Transforming element " + _e.GetName());
 		
 		if ( _e.GetType().equals("Actor") ) {
@@ -46,12 +39,12 @@ public class PackageTransformer {
 		else if ( _e.GetType().equals("UseCase") ) {
 			log.debug("Element is a UseCase");
 			UseCaseTransformer t = new UseCaseTransformer();
-			t.transform(_e, this.pckage);
+			t.transform(_e, this.umlPackage);
 		}
 		else if ( _e.GetType().equals("Activity") ) {
 			log.debug("Element is a Activity");
 			ActivityTransformer t = new ActivityTransformer();
-			t.transform(_e, this.pckage);
+			t.transform(_e, this.umlPackage);
 		}
 	}
 }

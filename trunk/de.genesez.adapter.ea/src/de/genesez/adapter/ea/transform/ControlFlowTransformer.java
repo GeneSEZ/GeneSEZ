@@ -2,11 +2,15 @@ package de.genesez.adapter.ea.transform;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ControlFlow;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 
+import de.genesez.adapter.ea.ContentRegistry;
 import de.genesez.adapter.ea.ElementRegistry;
+import de.genesez.adapter.ea.ProfileRegistry;
 
 public class ControlFlowTransformer {
 
@@ -18,8 +22,7 @@ public class ControlFlowTransformer {
 		this.controlFlow = UMLFactory.eINSTANCE.createControlFlow();
 		this.controlFlow.setActivity(_parent);
 		this.controlFlow.setName(_c.GetName());
-		ElementRegistry.instance.addElement(_c.GetConnectorGUID(), this.controlFlow);
+		ElementRegistry.instance.addElement(_c, this.controlFlow);
 		return this.controlFlow;
 	}
-
 }
