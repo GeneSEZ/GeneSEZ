@@ -13,6 +13,7 @@
  * @todo	a call stack problem may occur, see 'List[MTaggedValue] makeTaggedValues(MElement me, Element e)'
  * @todo	revise magic draw 12.5 specific exception handling, see 'MPrimitiveType makePrimitiveType(DataType d)'
  * @todo	revise the externally processing functions which maps to java functions - seams that they are never called and not needed
+ * @todo	implement state machine support
  */
 
 // uses ecore metamodel
@@ -581,8 +582,10 @@ private create MActivity makeBehavior(Activity a) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
-	// add nodes
-	node.addAll( a.node.typeSelect(ActivityNode).makeActivityNode() ) ->
+	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
+	// add nodes and edges
+	node.addAll( a.node.typeSelect(ActivityNode).makeActivityNode( this ) ) ->
+	edge.addAll( a.edge.makeActivityEdge( this ) ) ->
 	// add owned sub behaviors
 	ownedBehavior.addAll( a.ownedBehavior.makeBehavior() ) ->
 	this;
@@ -596,12 +599,6 @@ private create MStateMachine makeBehavior(StateMachine s) :
 	transformBasics(s) ->
 	this;
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	activity behavior
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
 /**
  * just a marker for error free templates
  * no GeneSEZ behaviour is created, because the GeneSEZ behaviour is an abstract class
@@ -612,19 +609,27 @@ private MBehavior makeBehavior(Behavior b) :
 	fatal("try to construct a MBehavior object from: " + b) ->
 	Void;
 
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	activity behavior
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
 /**
  * creates a GeneSEZ call behaviour action
  */
-private create MCallBehaviorAction makeActivityNode(CallBehaviorAction a) :
+private create MCallBehaviorAction makeActivityNode(CallBehaviorAction a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
+	// set the called behavior
+	setBehavior( makeBehavior(a.behavior) ) ->
 	this;
 
 /**
  * creates a GeneSEZ action
  */
-private create MCallOperationAction makeActivityNode(Action a) :
+private create MCallOperationAction makeActivityNode(Action a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
@@ -633,7 +638,7 @@ private create MCallOperationAction makeActivityNode(Action a) :
 /**
  * creates a GeneSEZ initial node
  */
-private create MInitial makeActivityNode(InitialNode a) :
+private create MInitial makeActivityNode(InitialNode a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
@@ -642,17 +647,42 @@ private create MInitial makeActivityNode(InitialNode a) :
 /**
  * creates a GeneSEZ final node
  */
-private create MFinal makeActivityNode(FinalNode a) :
+private create MFinal makeActivityNode(FinalNode a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
 	this;
 
 /**
+ * just a marker for error free templates
+ * no GeneSEZ node is created, because the GeneSEZ node is an abstract class
+ * prints a 'severe' log message to report such an transformation
+ * @return	void
+ */
+private MNode makeActivityNode(ActivityNode a, MActivity activity) :
+	fatal("try to construct a MNode object from: " + a) ->
+	Void;
+
+/**
  *
  */
-private MNode makeActivityNode(ActivityNode a) :
-	fatal("try to construct a ActivityNode object from: " + a) ->
+private create MControlFlow makeActivityEdge(ControlFlow c, MActivity a) :
+	trace( "make [ " + metaType + " ] - " + c ) ->
+	// set source and target of the control flow
+	trace( "source is: " + a.node.select(e|e.xmiGuid == xmiId(c.source)).first().name ) -> 
+	a.node.select(e|e.xmiGuid == xmiId(c.source)).first().to.add(this) ->
+	trace( "target is: " + a.node.select(e|e.xmiGuid == xmiId(c.target)).first().name ) -> 
+	a.node.select(e|e.xmiGuid == xmiId(c.target)).first().from.add(this) ->
+	this;
+	
+/**
+ * just a marker for error free templates
+ * no GeneSEZ control flow is created
+ * prints a 'severe' log message to report such an transformation
+ * @return	void
+ */
+private MControlFlow makeActivityEdge(ActivityEdge e, MActivity a) : 
+	fatal("try to construct a MControlFlow object from: " + e) ->
 	Void;
 
 /*
