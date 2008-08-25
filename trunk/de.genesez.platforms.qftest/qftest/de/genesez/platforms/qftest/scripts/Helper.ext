@@ -34,5 +34,8 @@ String version() : "2.2.3";
  * @return		a string made from the list
  */
 String toString(List[String] l) :
-	( l.isEmpty ) ? ""
-		: l.first() + toString( l.select(e|e != l.first()) );
+	switch (l.size) {
+		case 0 : ""
+		case 1 : l.first()
+		default : l.first() + "\n" + toString( l.select(e|e != l.first()) )
+	};
