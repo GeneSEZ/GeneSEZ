@@ -103,10 +103,10 @@
 	«EXPAND _ContextDemarcation-»
 	«EXPAND _Asynchronity-»
 	«EXPAND _Remoting-»
-	«IF hasTaggedValue("seam2JavaBean", "transactional", "true")»
+	«IF hasStereotype("seam2JavaBeanTransactional")»
 		@Transactional
 	«ENDIF»	
-	«IF hasTaggedValue("seam2Component", "readOnly", "true")»
+	«IF hasStereotype("seam2ComponentReadOnly")»
 		@ReadOnly
 	«ENDIF»	
 	«IF !hasStereotype("seam2BijectionUnwrap")»
@@ -253,13 +253,13 @@
 	Warning: Not for usage in ejb3 environment!!!
 «ENDREM»
 «DEFINE _JavaBean FOR MClass-»
-	«IF hasStereotype("seam2JavaBean")»
-		«IF hasTaggedValue("seam2JavaBean", "transactional", "true")»
-			@Transactional
-		«ENDIF»
-		«IF (!hasTaggedValue("seam2JavaBean", "interceptors", "null") || !hasTaggedValue("seam2JavaBean", "interceptors", "[]"))-»
+	«IF hasStereotype("seam2JavaBeanTransactional")»
+		@Transactional
+	«ENDIF»
+	«IF hasStereotype("seam2JavaBeanInterceptors")»
+		«IF (!hasTaggedValue("seam2JavaBeanInterceptors", "value", "null") || !hasTaggedValue("seam2JavaBeanInterceptors", "value", "[]"))-»
 			@Interceptors(
-			{«FOREACH taggedValue.select(e|e.tag.name == "interceptors").value.getElements() AS values SEPARATOR ", "-»
+			{«FOREACH taggedValue.select(e|e.tag.name == "value").value.getElements() AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»})
 		«ENDIF»
@@ -341,21 +341,21 @@
 	evaluates the seam2Exceptions stereotypes 
 «ENDREM»
 «DEFINE _Exceptions FOR MClass-»
-	«IF hasStereotype("seam2ExceptionsRedirect")»
+	«IF hasStereotype("seam2ExceptionRedirect")»
 		@Redirect(end=«taggedValue.selectFirst(e|e.tag.name == "end").value-»
-		«IF (!hasTaggedValue("seam2ExceptionsRedirect", "viewId", "null") || !hasTaggedValue("seam2ExceptionsRedirect", "viewId", ""))-»
+		«IF (!hasTaggedValue("seam2ExceptionRedirect", "viewId", "null") || !hasTaggedValue("seam2ExceptionRedirect", "viewId", ""))-»
 			, viewId="«taggedValue.selectFirst(e|e.tag.name == "viewId").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ExceptionsRedirect", "message", "null") || !hasTaggedValue("seam2ExceptionsRedirect", "message", ""))-»
+		«IF (!hasTaggedValue("seam2ExceptionRedirect", "message", "null") || !hasTaggedValue("seam2ExceptionRedirect", "message", ""))-»
 			, message="«taggedValue.selectFirst(e|e.tag.name == "message").value-»"
 		«ENDIF-»)
 	«ENDIF»
-	«IF hasStereotype("seam2ExceptionsHttpError")»
+	«IF hasStereotype("seam2ExceptionHttpError")»
 		@HttpError(end=«taggedValue.selectFirst(e|e.tag.name == "end").value-»
-		«IF (!hasTaggedValue("seam2ExceptionsHttpError", "errorCode", "null") || !hasTaggedValue("seam2ExceptionsHttpError", "errorCode", "500"))-»
+		«IF (!hasTaggedValue("seam2ExceptionHttpError", "errorCode", "null") || !hasTaggedValue("seam2ExceptionHttpError", "errorCode", "500"))-»
 			, errorCode="«taggedValue.selectFirst(e|e.tag.name == "errorCode").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ExceptionsHttpError", "message", "null") || !hasTaggedValue("seam2ExceptionsHttpError", "message", ""))-»
+		«IF (!hasTaggedValue("seam2ExceptionHttpError", "message", "null") || !hasTaggedValue("seam2ExceptionHttpError", "message", ""))-»
 			, message="«taggedValue.selectFirst(e|e.tag.name == "message").value-»"
 		«ENDIF-»)
 	«ENDIF»
@@ -426,7 +426,7 @@
 		«ENDIF»)	
 	«ENDIF»	
 	«IF hasStereotype("seam2ContextDemarcation")»
-		«IF !hasTaggedValue("seamContextDemarcation", "createProcessDefinition", "null")»
+		«IF !hasTaggedValue("seam2ContextDemarcation", "createProcessDefinition", "null")»
 			@CreateProcess(definition="«taggedValue.selectFirst(e|e.tag.name == "createProcessDefinition").value-»")
 		«ENDIF»
 		«IF !hasTaggedValue("seam2ContextDemarcation", "resumeProcessIdParameter", "null")»
@@ -435,7 +435,7 @@
 				(processIdParameter="«taggedValue.selectFirst(e|e.tag.name == "resumeProcessIdParameter").value-»")
 			«ENDIF»
 		«ENDIF»
-		«IF !hasTaggedValue("seamContextDemarcation", "transition", "null")»
+		«IF !hasTaggedValue("seam2ContextDemarcation", "transition", "null")»
 			@Transition("«taggedValue.selectFirst(e|e.tag.name == "transition").value-»")
 		«ENDIF»
 	«ENDIF»
@@ -468,13 +468,13 @@
 		«IF (!hasTaggedValue("seam2Component", "synchronizedTimeout", "null") && !hasTaggedValue("seam2Component", "synchronizedTimeout", "1000"))»
 			@Synchronized(timeout=«taggedValue.selectFirst(e|e.tag.name == "synchronizedTimeout").value-»)
 		«ENDIF»
-		«IF hasTaggedValue("seam2Component", "readOnly", "true")»
-			@ReadOnly
-		«ENDIF»	
 		«IF hasTaggedValue("seam2Component", "autoCreate", "true")»
 			@AutoCreate
 		«ENDIF»	
 	«ENDIF»
+	«IF hasStereotype("seam2ComponentReadOnly")»
+		@ReadOnly
+	«ENDIF»		
 	«IF hasStereotype("seam2ComponentRole") && (
 		(!hasTaggedValue("seam2ComponentRole", "name", "null") || !hasTaggedValue("seam2ComponentRole", "name", "[]")) ||
 		(!hasTaggedValue("seam2ComponentRole", "scope", "null") || !hasTaggedValue("seam2ComponentRole", "scope", "[]"))
@@ -540,5 +540,38 @@
 	create import statements
 «ENDREM»
 «DEFINE _Import FOR MClass-»
-	import org.jboss.seam.annotations.*;
+	«IF hasStereotype("seam2ComponentStartup")
+		|| hasStereotype("seam2ComponentInstall")
+		|| hasStereotype("seam2Component")
+		|| hasStereotype("seam2ComponentReadOnly")
+		|| hasStereotype("seam2ContextDemarcation")
+		|| hasStereotype("seam2ContextDemarcationBeginTask")
+		|| hasStereotype("seam2ContextDemarcationEndTask")
+		|| hasStereotype("seam2ContextDemarcationStartTask")
+		|| hasStereotype("seam2ContextDemarcationBegin")
+		|| hasStereotype("seam2ContextDemarcationEnd")
+		|| hasStereotype("seam2Lifecycle")
+		|| hasStereotype("seam2LifecycleObserver")
+		|| hasStereotype("seam2BijectionUnwrap")
+		|| hasStereotype("seam2BijectionIn")
+		|| hasStereotype("seam2BijectionOut")
+		|| hasStereotype("seam2BijectionLogger")
+		|| hasStereotype("seam2BijectionFactory")
+		|| hasStereotype("seam2BijectionRequestParameter")
+		|| hasStereotype("seam2ExceptionRedirect")
+		|| hasStereotype("seam2ExceptionHttpError")
+		|| hasStereotype("seam2Remoting")
+		|| hasStereotype("seam2JSFValidator")
+		|| hasStereotype("seam2JSFConverter")
+		|| hasStereotype("seam2Asynchronity")
+		|| hasStereotype("seam2ServletContainerIntegration")
+		|| hasStereotype("seam2DataModel")
+		|| hasStereotype("seam2DataTable")
+		|| hasStereotype("seam2Packaging")
+		|| hasStereotype("seam2JavaBeanTransactional")
+		|| hasStereotype("seam2JavaBeanInterceptors")
+		|| hasStereotype("seam2JavaBeanApplicationException")
+		|| hasStereotype("seam2Interceptors")»
+		import org.jboss.seam.annotations.*;
+	«ENDIF»
 «ENDDEFINE»

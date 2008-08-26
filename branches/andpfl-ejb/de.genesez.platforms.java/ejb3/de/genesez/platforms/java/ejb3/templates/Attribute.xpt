@@ -44,12 +44,12 @@
 	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Attribute-»	
 	«EXPAND _Annotation-»
 	«IF multiplicity == 1-»
-		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «type.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics» «asAttribute()» «EXPAND de::genesez::platforms::java::java5::templates::Attribute::_DefaultValue»;
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «type.asTypeName()»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics» «asAttribute()» «EXPAND de::genesez::platforms::java::java5::templates::Attribute::_DefaultValue»;
 	«ELSE-»
 		«IF !hasStereotype("ejb3Association")-»
 			@org.hibernate.annotations.CollectionOfElements
 		«ENDIF-»
-		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «mapType()»<«type.mapName()»> «asAttribute()» = new «mapType("Implementation")»<«type.mapName()»>();
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Modifier» «mapType()-»<«this.type.asTypeName()»> «asAttribute()» = new «mapType("Implementation")»<«this.type.asTypeName()»>();
 	«ENDIF-»
 «ENDDEFINE»
 
