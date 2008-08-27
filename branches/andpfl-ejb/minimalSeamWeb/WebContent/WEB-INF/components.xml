@@ -1,0 +1,72 @@
+<components xmlns="http://jboss.com/products/seam/components"
+	xmlns:web="http://jboss.com/products/seam/web"
+	xmlns:transaction="http://jboss.com/products/seam/transaction"
+	xmlns:security="http://jboss.com/products/seam/security"
+	xmlns:core="http://jboss.com/products/seam/core">
+	
+    <!-- 
+    	Mapping for Seam to get JNDI name from EJB name
+    	this mapping is for JBoss AS 
+    -->
+    <component name="org.jboss.seam.core.init">
+    	<property name="jndiPattern">minimalSeam/#{ejbName}/local</property>
+	</component>
+	 
+	
+	<!-- Exception handling -->	
+	<web:exception-filter url-pattern="*.seam"/>
+	
+	<!-- conversation propagation with redirect -->	
+	<web:redirect-filter url-pattern="*.seam"/>
+	
+	<!-- 
+		add special built-in transaction management component
+		otherwise Seam won't know when container-managed transactions end 
+	
+	<transaction:ejb-transaction/> -->
+
+	<!-- RichFaces Ajax filter
+	<web:ajax4jsf-filter force-parser="true"
+		enable-cache="true"
+		log4j-init-file="custom-log4j.xml"
+		url-pattern="*.seam" />	
+	 -->
+	 
+	<!-- Drools 
+	<drools:rule-base name="securityRules">
+		<drools:rule-files>
+			<value>/security.drl</value>
+		</drools:rule-files>
+	</drools:rule-base> -->
+	
+	<!-- 
+		Seam secuurity with identity
+		security-rules="#{securityRules}" 
+	-->
+	<security:identity authenticate-method="#{authenticator.authenticate}" remember-me="true"/>	
+	
+	<!-- redirect for bookmarks 
+	<event type="org.jboss.seam.security.notLoggedIn">
+       <action execute="#{redirect.captureCurrentView}"/>
+   </event>
+   <event type="org.jboss.seam.security.loginSuccessful">
+       <action execute="#{redirect.returnToCapturedView}"/>
+   </event>	-->
+
+	<!-- mail feature 
+	<mail:mail-session host="localhost" port="2525" username="test" password="test" /> -->
+
+	<!--  multipart form submissions (for file upload)	
+	<web:multipart-filter create-temp-files="true"
+		max-request-size="1000000"
+		url-pattern="*.seam"/>	-->
+
+	
+	<!-- Encoding for submitted form data -->	
+	<web:character-encoding-filter encoding="UTF-16"
+		override-client="true"
+		url-pattern="*.seam"/>	
+		
+	<!-- Identity logging Filter -->	
+	<web:logging-filter url-pattern="*.seam"/>			
+</components>

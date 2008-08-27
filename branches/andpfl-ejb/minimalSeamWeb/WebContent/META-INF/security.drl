@@ -1,0 +1,27 @@
+package BankingPermissions;
+
+import org.jboss.seam.security.PermissionCheck;
+import org.jboss.seam.security.Role;
+
+import eu.webbeans.entity.Kunde;
+
+
+rule KundeIstVolljaehrig
+  activation-group "permissions"
+when
+  check: PermissionCheck(name == "ueberweisungHandler", action == "ueberweisen")
+  Role(name == "Kunde") or Role(name == "Premiumkunde")
+  Kunde(volljaehrig == true)
+then
+  check.grant();
+end;
+
+rule PremiumkundeUndInternet
+  activation-group "permissions"
+when
+  check: PermissionCheck(name == "kontenHandler", action == "kreditkartenkontoAnlegen")
+  Role(name == "Premiumkunde")
+  Role(name == "Internet")
+then
+  check.grant();
+end;

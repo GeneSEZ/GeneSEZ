@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC 
+	"-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.com/products/seam/taglib">
+	<head>
+		<link type="text/css" rel="stylesheet" href="css/styles.css" />
+		<title>minimalSeam - Authentifizierung</title>
+	</head>
+	<body>
+		<h:outputText rendered="#{identity.loggedIn}" value="#{user.username}" />
+		<h:form id="anmeldung">
+			<div class="usrFormEntry">
+			    <h:outputLabel for="kundennummer" styleClass="usrFormLabel">Kundennummer:</h:outputLabel>
+		   	    <h:inputText id="kundennummer" value="#{identity.username}" 
+		                     required="true" styleClass="usrFormValue" />
+		    </div>        		
+		    <div class="usrFormEntry">
+			    <h:outputLabel for="passwort" styleClass="usrFormLabel">Passwort:</h:outputLabel>
+		   	    <h:inputSecret id="passwort" value="#{identity.password}" 
+		                     required="true" styleClass="usrFormValue" />
+		    </div>        		
+		    <div class="usrFormEntry">
+		      <h:commandButton action="#{identity.login}" value="Anmelden" styleClass="usrFormSubmit" />
+		    </div>
+		   		
+		   	<s:div styleClass="errors">
+		   		<h:messages />
+		   	</s:div>						
+		</h:form>
+	</body>
+</html>
