@@ -21,6 +21,7 @@
 
 «REM» use helper to access information «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
@@ -105,9 +106,9 @@
 	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor -» function «asGetter()»() {
 	«IF isSingleValuedType() -»
-		return $«asAttribute()»;
+		return $this->«asAttribute()»;
 	«ELSE -»
-		return array_values($«asAttribute()»);
+		return array_values($this->«asAttribute()»);
 	«ENDIF -»
 	}
 «ENDDEFINE»
@@ -118,8 +119,8 @@
 «DEFINE _Setter FOR MAttribute -»
 «IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
-	«EXPAND _ModifierAccessor -» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()») {
-		self::$«asAttribute()» = $«asAttribute()»;
+	«EXPAND _ModifierAccessor -» function «asSetter()»($«asAttribute()») {
+		$this->«asAttribute()» = $«asAttribute()»;
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -130,8 +131,8 @@
 «DEFINE _InsertIn FOR MAttribute -»
 «IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
-	«EXPAND _ModifierAccessor -» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd) {
-		self::$«asAttribute()»[] = $toAdd;
+	«EXPAND _ModifierAccessor -» function «asInsertIn()»($toAdd) {
+		$this->«asAttribute()»[] = $toAdd;
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -142,10 +143,10 @@
 «DEFINE _RemoveFrom FOR MAttribute -»
 «IF isMultiValuedType() -»
 	«EXPAND Comment::RemoveFrom -»
-	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove) {
+	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»($toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
 		if ($entry !== FALSE) {
-			unset(self::$«asAttribute()»[$entry]);
+			unset($this->«asAttribute()»[$entry]);
 		}
 	}
 «ENDIF -»
@@ -162,7 +163,11 @@
 	processes the modifiers of an attribute accessor method
 «ENDREM»
 «DEFINE _ModifierAccessor FOR MAttribute -»
-	«visibility»«IF static» static«ENDIF -»
+	«IF usePropertyVisibilityForAccessors() -»
+	«visibility» «IF static»static«ENDIF -»
+	«ELSE -»
+	public «IF static»static«ENDIF -»
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
