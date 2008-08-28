@@ -34,6 +34,19 @@
 «ENDREM»
 
 «REM»
+	evaluates Seam package annotations
+«ENDREM»
+«AROUND de::genesez::platforms::java::ejb3::templates::Class::_Package FOR MClass-»
+	«IF (hasStereotype("seam2Packaging") && !hasTaggedValue("seam2Packaging", "value", "null"))»
+		@Namespace(«taggedValue.selectFirst(e|e.tag.name == "value").value-»
+		«IF !hasTaggedValue("seam2Packaging", "prefix", "null")-»
+			, prefix="«taggedValue.selectFirst(e|e.tag.name == "prefix").value-»"
+		«ENDIF-»)
+	«ENDIF»
+	«targetDef.proceed()»
+«ENDAROUND»
+
+«REM»
 	evaluates Seam class annotations
 «ENDREM»
 «AROUND de::genesez::platforms::java::ejb3::templates::Class::_Annotation FOR MClass-»
@@ -65,8 +78,7 @@
 	include import statements in import-proReg of ejb3 cartridge
 «ENDREM»
 «AROUND de::genesez::platforms::java::ejb3::templates::Class::_ImportStatements FOR MClass»
-	«EXPAND _Import»
-	
+	«EXPAND _Import»	
 	«targetDef.proceed()»
 «ENDAROUND»
 

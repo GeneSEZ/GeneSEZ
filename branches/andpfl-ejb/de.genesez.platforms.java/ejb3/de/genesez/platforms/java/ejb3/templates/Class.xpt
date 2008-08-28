@@ -37,7 +37,7 @@
 «REM» generates a class «ENDREM»
 «DEFINE Root FOR MClass-»
 	«addStandardConstructor()-> ""-»
-	package «packageDeclaration( basePackage() ) -»;
+	«EXPAND _Package-»
 	«EXPAND _Import-»
 	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Type-»
 	«EXPAND _Annotation-»	
@@ -98,10 +98,14 @@
 		
 		/**
 		  * generated methods from the implementing interface(s)
-		  * «FOREACH realization.asTypeName() AS names SEPARATOR ", "-»«names-»«ENDFOREACH»
+		  * «FOREACH realization.typeSelect(MInterface).asTypeName() AS name SEPARATOR ", "-»«IF ((name != "I"+asTypeName()+"Local") || (name != "I"+asTypeName()+"Remote"))-»«name-»«ENDIF-»«ENDFOREACH»
 		  *
 		  */
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Implementation FOREACH realization.typeSelect(MClassifier) -»
+		«FOREACH realization.typeSelect(MInterface) AS interface»
+		  	«IF ((interface.asTypeName() != "I"+asTypeName()+"Local") || (interface.asTypeName() != "I"+asTypeName()+"Remote"))»
+		  		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Implementation FOR interface -»
+		  	«ENDIF»
+		«ENDFOREACH»
 		
 		/**
 		  * own implementations
@@ -177,19 +181,28 @@
 «DEFINE _SessionBean FOR MClass-»
 	«IF hasStereotype("ejb3SessionBean")-»
 		«IF hasTaggedValue("ejb3SessionBean", "remote", "true")»
-			@Remote
 			«IF !hasTaggedValue("ejb3SessionBean", "remoteInterface", "null")-»
-				(«taggedValue.selectFirst(e|e.tag.name == "remoteInterface").value».class)
-			«ELSEIF realization.get(0).asTypeName() != "null"-»
+				@Remote(«taggedValue.selectFirst(e|e.tag.name == "remoteInterface").value».class)
+			«ELSE»
+				«EXPAND _Interface-»
+			«ENDIF»
+			«REM»
+			«IF realization.get(0).asTypeName() != "null"-»
 				(«realization.get(0).asTypeName()-».class)
 			«ENDIF»
+			«ENDREM»
 		«ELSEIF hasTaggedValue("ejb3SessionBean", "remote", "false")-»
-			@Local
+			
 			«IF !hasTaggedValue("ejb3SessionBean", "localInterface", "null")-»
-				(«taggedValue.selectFirst(e|e.tag.name == "localInterface").value-».class)
-			«ELSEIF realization.get(0).asTypeName() != "null"-»
+				@Local(«taggedValue.selectFirst(e|e.tag.name == "localInterface").value-».class)
+			«ELSE»
+				«EXPAND _Interface-»
+			«ENDIF»
+			«REM»
+			«IF realization.get(0).asTypeName() != "null"-»
 				(«realization.get(0).asTypeName()-».class)
-			«ENDIF»				
+			«ENDIF»
+			«ENDREM»				
 		«ENDIF»	
 		«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
 			@Stateful(
@@ -340,6 +353,77 @@
 	«ENDIF»	
 «ENDDEFINE»
 
+«REM» 
+	creates a remote or local interface for a session bean 
+«ENDREM»
+«DEFINE _Interface FOR MClass-»
+	«IF hasTaggedValue("ejb3SessionBean", "remote", "true")»
+		«FILE filePath( "I" + asTypeName() + "Remote", basePath() )-»
+			/**
+			  *	templates for generation of ejb3 source code have been written by
+			  *
+			  * @author		André Pflüger
+			  * @email	 	admin@andre-pflueger.de
+			  * @date	 	2008 Aug 28
+			  * @version	1.0
+			  *
+			  */	
+			«EXPAND _Package-»
+			
+			/**
+			  * generated interface for "«asTypeName()-»"
+			  *
+			  */
+			@Remote
+			public interface «"I" + asTypeName()+"Remote"-» {
+			
+			/**
+			  * generated method declaration
+			  *
+			  */	
+			 «FOREACH operation AS op»
+			 	«IF op.visibility == 'public'»
+			 		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Declaration FOR op-»
+			 	«ENDIF»
+			 «ENDFOREACH»			
+			}
+		«ENDFILE»		
+	«ELSE»
+		«FILE filePath( "I" + asTypeName() + "Local", basePath() )-»
+			/**
+			  *	templates for generation of ejb3 source code have been written by
+			  *
+			  * @author		André Pflüger
+			  * @email	 	admin@andre-pflueger.de
+			  * @date	 	2008 Aug 28
+			  * @version	1.0
+			  *
+			  */	
+			«EXPAND _Package-»
+			
+			/**
+			  * generated interface for "«asTypeName()-»"
+			  *
+			  */
+			@Local
+			public interface «"I" + asTypeName()+"Local"-» {
+			
+			/**
+			  * generated method declaration
+			  *
+			  */	
+			 «FOREACH operation AS op»
+			 	«IF op.visibility == 'public'»
+			 		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Declaration FOR op-»
+			 	«ENDIF»
+			 «ENDFOREACH»			
+			}
+		«ENDFILE»				
+
+	«ENDIF»
+
+«ENDDEFINE»
+
 «REM» creates a primary key class for stereotype "idClass" «ENDREM»
 «DEFINE _PrimaryKeyClass FOR MClass-»
 	«FILE filePath( asTypeName() + "PK", basePath() )-»
@@ -352,7 +436,7 @@
 		  * Version: 1.0
 		  *
 		  */	
-		package «getPackagePath()»;
+		«EXPAND _Package-»
 		
 		/**
 		  * generated primary key class for "«asTypeName()-»"
@@ -480,7 +564,7 @@
 		  * Version: 1.0
 		  *
 		  */
-		package «getPackagePath()»;
+		«EXPAND _Package-»
 		
 		/* generated imports */
 		«EXPAND _CallbackImport»
@@ -566,7 +650,7 @@
 		  * Version: 1.0
 		  *
 		  */
-		package «packageDeclaration( basePackage() ) -»»;
+		«EXPAND _Package-»
 		
 		/* generated imports */
 		«EXPAND _CallbackImport»
@@ -822,6 +906,15 @@
 		import javax.jms.MessageListener;
 		import javax.ejb.ActivationConfigProperty;		
 	«ENDIF»
+«ENDDEFINE»
+
+
+
+«REM» 
+	generates the package of the class
+«ENDREM»
+«DEFINE _Package FOR MClass-»
+	package «packageDeclaration( basePackage() ) -»;
 «ENDDEFINE»
 
 «REM» 
