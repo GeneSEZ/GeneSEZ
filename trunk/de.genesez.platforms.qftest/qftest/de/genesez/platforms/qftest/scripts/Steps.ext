@@ -8,6 +8,7 @@
 //      based on genesez meta model
 import gcore;
 
+extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::qftest::scripts::Helper;
 
 
@@ -24,7 +25,7 @@ extension de::genesez::platforms::qftest::scripts::Helper;
 String rootStep(MUseCase this) :
 	"<RootStep id=\"" + xmiGuid + "\" name=\"root\"\n" +
 	"signature=\"" + signature() + "\"\n" +
-	"version=\"" + version() + "\"\n" +
+	"version=\"" + version() + "\">\n" +
 	testSet() + "\n" +
 	packageRoot() + "\n" +
 	extraSequence() + "\n" +
@@ -42,14 +43,18 @@ String rootStep(MUseCase this) :
  * generates the TestSet
  * @return      the xml code for the TestSet
  */
-String testSet(MUseCase this) :
-	toString( ownedBehavior.typeSelect(MActivity).testSet() );
+private String testSet(MUseCase this) :
+	"<TestSet id=\"" + xmiGuid + "\" name=\"" + name + "\">\n" +
+	toString( ownedBehavior.
+		select(e|e.metaType == MActivity && e.hasStereotype("testCase")).
+		testCase() ) + "\n" +
+	"</TestSet>";
 
 /**
  * generates the PackageRoot
  * @return      the xml code for the PackageRoot
  */
-String packageRoot(MUseCase this) :
+private String packageRoot(MUseCase this) :
 	"<PackageRoot id=\"" + id() + "\">\n" +
 	"</PackageRoot>";
 
@@ -57,7 +62,7 @@ String packageRoot(MUseCase this) :
  * generates the ExtraSequence
  * @return      the xml code for the ExtraSequence
  */
-String extraSequence(MUseCase this) :
+private String extraSequence(MUseCase this) :
 	"<ExtraSequence id=\"" + id() + "\">\n" +
 	"</ExtraSequence>";
 
@@ -65,21 +70,50 @@ String extraSequence(MUseCase this) :
  * generates the WindowList
  * @return      the xml code for the WindowList
  */
-String windowList(MUseCase this) :
+private String windowList(MUseCase this) :
 	"<WindowList id=\"" + id() + "\">\n" +
 	"</WindowList>";
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TestSet
+	TestCase
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-String testSet(MActivity this) :
-	"<TestSet id=\"" + id() + "\" name=\"" + name + "\">\n" +
-	"" +
-	"</TestSet>";
+/**
+ * generates the testCase for an Activity
+ * @return      the xml code for the TestCase
+ */
+private String testCase(MActivity this) :
+	"<TestCase id=\"" + xmiGuid + "\" name=\"" + name + "\">\n" +
+	toString( node.typeSelect(MInitial).testCaseInitial() ) + "\n" +
+	toString( ownedBehavior.
+		select(e|e.metaType == MActivity && e.hasStereotype("testCase")).
+		testCase() ) + "\n" +
+	"</TestCase>";
+
+private String testCase(MBehavior this) : "";
+
+private String testCaseInitial(MInitial this) :
+	toString(
+		to.target.typeSelect(MCallBehaviorAction).testCaseAction()
+	 );
+
+private String testCaseAction(MCallBehaviorAction this) :
+	toTestCase() + 
+	toString(
+		to.target.typeSelect(MCallBehaviorAction).testCaseAction()
+	);
+	
+private String toTestCase(MCallBehaviorAction this) :
+	switch {
+		case behavior.hasStereotype("testCase"):
+			testCase(behavior)
+		case behavior.hasStereotype("test"):
+			test(behavior)
+		default: ""
+	};
 
 
 /*
@@ -88,3 +122,33 @@ String testSet(MActivity this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+private String test(MActivity this) :
+	"<Test id=\"" + xmiGuid + "\" name=\"" + name + "\">\n" +
+	toString( node.typeSelect(MInitial).testInitial() ) + "\n" +
+	"</Test>";
+
+private String test(MBehavior this) : "";
+
+private String testInitial(MInitial this) :
+	toString(
+		to.target.typeSelect(MAction).testAction()
+	);
+
+private String testAction(MAction this) :
+	toTest() + 
+	toString(
+		to.target.typeSelect(MAction).testAction()
+	);
+
+private String toTest(MAction this) :
+	switch {
+		case hasStereotype("mouse"): toMouseEventStep()
+		case hasStereotype("keyboard") : toKeyEventStep()
+		default: ""
+	};
+
+private String toMouseEventStep(MAction this) :
+	"<MouseEventStep id=\"" + xmiGuid + "\" name=\"" + name + "\" />\n";
+
+private String toKeyEventStep(MAction this) :
+	"<KeyEventStep id=\"" + xmiGuid + "\" name=\"" + name + "\" />\n";
