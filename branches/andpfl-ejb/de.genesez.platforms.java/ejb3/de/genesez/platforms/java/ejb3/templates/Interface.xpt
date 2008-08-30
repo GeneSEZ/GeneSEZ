@@ -1,0 +1,81 @@
+«REM»
+	Performs the generation of interfaces
+	
+	@author	nico herbig
+	@author	tobias haubold 
+	@author andre pflueger (last)
+	@date	2008-08-29
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful support functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«REM» use java naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«REM» use java conversions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+	public functions
+«ENDREM»
+
+«REM»
+	processes an interface
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+	package «packageDeclaration( basePackage() ) -»;
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::Import -»
+	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Type -»
+	«EXPAND _Annotations-»
+	public interface «asTypeName() -» «EXPAND de::genesez::platforms::java::java5::templates::Type::Generics -» «EXPAND de::genesez::platforms::java::java5::templates::Type::Generalization -» {
+		
+		«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+		// -- generated attribute, constant + association declarations ----------
+		«ENDIF -»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::Declaration -»
+		
+		«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
+		// -- generated method declarations -------------------------------------
+		«ENDIF -»
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Declaration -»
+		
+		«IF generateSectionComments() && ( hasAssociationRoles() ) -»
+		// -- generated association accessors -----------------------------------
+		«ENDIF -»
+		«EXPAND de::genesez::platforms::java::java5::templates::Attribute::Derived -»
+		«EXPAND de::genesez::platforms::java::java5::templates::Association::Accessors -»
+		
+		// -- own code implementation -------------------------------------------
+		«EXPAND de::genesez::platforms::java::java5::templates::Type::OwnCodeImpl("java.interface.own.code.declaration." + xmiGuid)-»
+	}
+«ENDDEFINE»
+
+
+«REM»
+	private functions
+«ENDREM»
+
+«REM»
+	evaluate all stereotypes for interfaces
+«ENDREM»
+«DEFINE _Annotations FOR MInterface»
+	«EXPAND Class::_RemoteLocal-»
+«ENDDEFINE»
+
+
+«REM»
+	handle imports for ejb3 annotations
+«ENDREM»
+«DEFINE _Import FOR MInterface»
+	«IF hasStereotype("ejb3Remote")-»
+		import javax.ejb.Remote;
+	«ENDIF-»
+	«IF hasStereotype("ejb3Local")-»
+		import javax.ejb.Local;
+	«ENDIF-»
+«ENDDEFINE»

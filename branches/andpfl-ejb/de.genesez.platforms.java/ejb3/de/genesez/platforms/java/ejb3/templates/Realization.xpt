@@ -14,7 +14,6 @@
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Serializable»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::MessageListener»
-«EXTENSION de::genesez::platforms::java::ejb3::scripts::SessionBeanInterface»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 
 «REM»
@@ -27,9 +26,42 @@
 «DEFINE Realization FOR MClassifier-»
 	«addSerializable() -> ""-»
 	«addMessageListener() -> ""-»
-	«addSessionBeanInterface() -> ""-»
 	«IF !realization.isEmpty-»
 		implements «FOREACH realization AS c SEPARATOR ", "»«c.mapName().asTypeName()-»«EXPAND _Generics FOR c-»«ENDFOREACH»
+	«ENDIF-»
+	«IF hasStereotype("ejb3SessionBean")-»
+		«IF hasStereotype("ejb3Remote")-»
+			«IF !( hasTaggedValue("ejb3Remote", "remoteInterfaceName", "null")
+				|| hasTaggedValue("ejb3Remote", "remoteInterfaceName", "") )-»
+				«IF !realization.isEmpty-»
+					, I«taggedValue.selectFirst(e|e.tag.name == "remoteInterfaceName").value-»
+				«ELSE-»
+					implements I«taggedValue.selectFirst(e|e.tag.name  == "remoteInterfaceName").value-»
+				«ENDIF-»
+			«ELSE-»
+				«IF !realization.isEmpty-»
+					, I«asTypeName()-»Remote
+				«ELSE-»
+					implements I«asTypeName()-»Remote
+				«ENDIF-»
+			«ENDIF-»
+		«ENDIF-»
+		«IF hasStereotype("ejb3Local")-»
+			«IF !( hasTaggedValue("ejb3Local", "localInterfaceName", "null")
+				|| hasTaggedValue("ejb3Local", "localInterfaceName", "") )-»
+				«IF !realization.isEmpty || hasStereotype("ejb3Remote")-»
+					, I«taggedValue.selectFirst(e|e.tag.name  == "localInterfaceName").value-»
+				«ELSE-»
+					implements I«taggedValue.selectFirst(e|e.tag.name  == "localInterfaceName").value-»
+				«ENDIF-»	
+			«ELSE-»
+				«IF !realization.isEmpty || hasStereotype("ejb3Remote")-»
+					, I«asTypeName()-»Local
+				«ELSE-»
+					implements I«asTypeName()-»Local
+				«ENDIF-»				
+			«ENDIF-»			
+		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
 
