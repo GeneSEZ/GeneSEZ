@@ -19,6 +19,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -33,6 +34,59 @@
 «AROUND de::genesez::platforms::java::java5::templates::Import::_FixedImports FOR MClassifier-»
 	import java.util.*;
 «ENDAROUND»
+
+«REM»
+	evaluates the stereotype "accessor" of the genesez-profile for the old association handling
+	needed for the ejb3 cartridge
+«ENDREM»
+«AROUND de::genesez::platforms::java::ejb3::templates::Association::GetterDecl FOR MAssociationRole-»
+	«IF !hasTaggedValue("accessor", "getter", "false")-»
+		«targetDef.proceed()-»
+	«ENDIF-»
+«ENDAROUND»
+
+«AROUND de::genesez::platforms::java::ejb3::templates::Association::GetterImpl FOR MAssociationRole-»
+	«IF !hasTaggedValue("accessor", "getter", "false")-»
+		«targetDef.proceed()-»
+	«ENDIF-»
+«ENDAROUND»
+
+«AROUND de::genesez::platforms::java::ejb3::templates::Association::InsertInDecl FOR MAssociationRole-»
+	«IF !hasTaggedValue("accessor", "setter", "false")-»
+		«targetDef.proceed()-»
+	«ENDIF-»
+«ENDAROUND»
+
+«AROUND de::genesez::platforms::java::ejb3::templates::Association::InsertInImpl FOR MAssociationRole-»
+	«IF !hasTaggedValue("accessor", "setter", "false")-»
+		«targetDef.proceed()-»
+	«ENDIF-»
+«ENDAROUND»
+
+«AROUND de::genesez::platforms::java::ejb3::templates::Association::RemoveFromDecl FOR MAssociationRole-»
+	«IF !hasTaggedValue("accessor", "setter", "false")-»
+		«targetDef.proceed()-»
+	«ENDIF-»
+«ENDAROUND»
+
+«AROUND de::genesez::platforms::java::ejb3::templates::Association::RemoveFromImpl FOR MAssociationRole-»
+	«IF !hasTaggedValue("accessor", "setter", "false")-»
+		«targetDef.proceed()-»
+	«ENDIF-»
+«ENDAROUND»
+
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::Accessors FOR MClass-»
+	«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Getter FOREACH property.typeSelect(MAttribute).select( e| e.generateGetter() && e.final && !e.derived ) -»
+	«FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
+		«IF !a.hasTaggedValue("accessor", "getter", "false")-»			
+			«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Getter FOR a -»
+		«ENDIF -»
+		«IF !a.hasTaggedValue("accessor", "setter", "false")-»	
+			«EXPAND de::genesez::platforms::java::java5::templates::Attribute::_Setter FOR a -»
+		«ENDIF -»
+	«ENDFOREACH -»
+«ENDAROUND»
+
 
 «REM»
 	check for stereotype "ejb3Remote" and taggedValue "stateful" in Class::Root for MClass
