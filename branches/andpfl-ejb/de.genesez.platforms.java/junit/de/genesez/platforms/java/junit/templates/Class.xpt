@@ -20,9 +20,9 @@
 	seperated with comma or semicola. Don't write a blank after the seperation sign because this 
 	will cause an error of the proReg-resolver (cannot find the folder).
 	
-	@author	André Pflüger
-	@date	2008/06/10
-	@version 1.0
+	@author		andre pflueger
+	@date		2008 Aug 31
+	@version 	1.0
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
@@ -64,29 +64,28 @@
 «REM» creates a junit class for stereotype "junitClass" «ENDREM»
 «DEFINE _JUnitClass FOR MClass-»
 	«IF hasStereotype("junitClass")-»
-		«FILE filePath( name.toFirstUpper() + "Test", basePath() )-»
+		«FILE filePath( name.toFirstUpper() + "Test.java", basePath() )-»
 			/**
 			  *	templates for generation of JUnit classes have been written by
 			  *
-			  * André Pflüger
-			  * Email: admin@andre-pflueger.de
-			  * Date: 2008 Jun 10
-			  * Version: 1.0
+			  * @author		andre pflueger
+			  * @date	 	2008 Jun 10
+			  * @version	1.0
 			  *
 			  */
-			package «packageDeclaration()»;
+			package «packageDeclaration( basePackage() ) -»;
 			
 			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_ManualImports")-»
 			
 			/**
-			  * generated JUnit test class for "«mapName()»"
+			  * generated JUnit test class for "«asTypeName()-»"
 			  *
 			  */
 			public class «asTypeName()+"Test"-» {
 				«FOREACH operation.select(e|e.hasStereotype("junitOperation")) AS ops-»
 					«FOREACH ops.taggedValue.select(e|e.tag.name == "name").value.getElements() AS names-»
 						/**
-						  * generated method for testing "«ops.name-»()"
+						  * generated method for testing "«ops.asOperation()-»()"
 						  */ 
 						@Test(timeout = «ops.taggedValue.selectFirst(e|e.tag.name == "testTimeout").value-»
 						«IF !ops.hasTaggedValue("junitOperation", "testExpected", "null")-»
@@ -110,7 +109,7 @@
 				  */				
 				@Before
 				public void setUp(){
-					t1 = new «mapName()»();
+					«REM»t1 = new «asTypeName()-»();«ENDREM»
 					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_setUp")-»
 				}
 				
@@ -120,10 +119,10 @@
 				  */
 				@After
 				public void tearDown(){
-					t1 = null;
+					«REM»t1 = null;«ENDREM»
 					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_tearDown")-»
 				}
-				
+				«REM»
 				/**
 				  * generated test method for getter and setter methods of 
 				  * primitive data types and strings
@@ -144,8 +143,8 @@
 							|| (!e.hasTaggedValue("accessor", "getter", "false") 
 							&&  !e.hasTaggedValue("accessor", "setter", "false")))
 							&& (e.type.isPrimitiveType() || e.type.mapName() == "String")
-							&& e.multiplicity == 1) AS ids-»
-						«REM» if getter and setter methods are generated «ENDREM»
+							&& e.multiplicity == 1) AS ids-»«ENDREM»
+						«REM» if getter and setter methods are generated «ENDREM»«REM»
 						{
 							«ids.type.mapName()-» temp;
 							temp = t1.«ids.asGetter()-»();
@@ -160,22 +159,22 @@
 					«ENDFOREACH»
 					«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("accessor")
 							&& e.hasTaggedValue("accessor", "getter", "true")
-							&& e.hasTaggedValue("accessor", "setter", "false")) AS ids-»
-						«REM» if only getter method is generated «ENDREM»
+							&& e.hasTaggedValue("accessor", "setter", "false")) AS ids-»«ENDREM»
+						«REM» if only getter method is generated «ENDREM»«REM»
 						{
 							«ids.type.mapName()-» temp;
 							temp = t1.«ids.asGetter()-»();
 							assertEquals(temp, t1.«ids.asGetter()-»());
 						}
-					«ENDFOREACH»
+					«ENDFOREACH»«ENDRAM»
 					«REM»
 						It is not possible to test a setter without a getter method, if the 
 						variable is private or protected (that should be the normal case)						
 					«ENDREM»
-				}
+				«REM»}«ENDREM»
 				
 				/* generated variables for testing purposes */
-				«mapName()» t1;
+				«REM»«asTypeName()-» t1;«ENDREM»
 				
 				«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + "_restOfClass")-»
 			}
