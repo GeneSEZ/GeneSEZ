@@ -21,6 +21,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Naming»
 
 
@@ -74,7 +75,12 @@
 «DEFINE _Annotation FOR MAssociationRole-»
 	«REM» OneToOne association «ENDREM»
 	«IF hasTaggedValue("ejb3Association", "associationType", "OneToOne")»
-		@OneToOne(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
+		@OneToOne(cascade={
+		«IF (taggedValue.selectFirst(e|e.tag.name == "cascade").value != "[]" && taggedValue.selectFirst(e|e.tag.name == "cascade").value != "null")-»
+			«FOREACH taggedValue.selectFirst(e|e.tag.name == "cascade").value.getElements() AS cascades SEPARATOR ", "-»
+				CascadeType.«cascades-»
+			«ENDFOREACH-»
+		«ENDIF-»}
 		«IF !hasTaggedValue("ejb3Association", "targetEntity", "null")-»
 			, targetEntity="«taggedValue.selectFirst(e|e.tag.name == "targetEntity").value-»"
 		«ENDIF-»
@@ -118,7 +124,12 @@
 «ENDREM»
 «DEFINE _ManyAssociations FOR MAssociationRole-»
 	«IF !hasTaggedValue("ejb3Association", "name", "null")-»
-		(cascade={CascadeType.«taggedValue.selectFirst(e|e.tag.name == "cascade").value-»}
+		(cascade={
+		«IF (taggedValue.selectFirst(e|e.tag.name == "cascade").value != "[]" && taggedValue.selectFirst(e|e.tag.name == "cascade").value != "null")-»
+			«FOREACH taggedValue.selectFirst(e|e.tag.name == "cascade").value.getElements() AS cascades SEPARATOR ", "-»
+				CascadeType.«cascades-»
+			«ENDFOREACH-»
+		«ENDIF-»}
 		«IF !hasTaggedValue("ejb3Association", "targetEntity", "null")-»
 			, targetEntity="«taggedValue.selectFirst(e|e.tag.name == "targetEntity").value-»"
 		«ENDIF-»
