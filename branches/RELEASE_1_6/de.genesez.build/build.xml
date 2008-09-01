@@ -69,20 +69,21 @@
 		</for>
 		<for list="${features}" param="project">
 			<sequential>
-				<replace file="${build.basedir}/${prefix}.@{project}/feature.xml" 
-					propertyfile="${project.build.dir}/release.properties">
-					<replacefilter
-						token="@@@GENESEZ_RELEASE_VERSION@@@"
-						property="release"/>
-				</replace>
+				<replaceregexp byline="true"
+					file="${build.basedir}/${prefix}.@{project}/feature.xml"
+					match='(?&lt;!xml )version=".*"'
+					replace='version="${release}"'>
+				</replaceregexp>
 			</sequential>
 		</for>
-		<replace file="${build.basedir}/${prefix}.updatesite/site.xml" 
-			propertyfile="${project.build.dir}/release.properties">
-			<replacefilter
-				token="@@GENESEZ_RELEASE_VERSION@@"
-				property="release"/>
-		</replace>
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match='version=".*"'
+			replace='version="${release}"' />
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match="feature_(\d|\.)*.jar"
+			replace="feature_${release}.jar" />
 	</target>
 	
 	<target name="build.all"
