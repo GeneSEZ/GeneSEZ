@@ -1,0 +1,21 @@
+/**
+ * 	funtion for the automatic annotation of session bean interface attributes
+ *	for dependency injection
+ * 
+ * 
+ * @author	andre pflueger
+ * @date	2008-09-03
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+boolean isSessionBeanInterface(String attributeType) :
+	(
+		(attributeType.endsWith("Remote") || attributeType.endsWith("Local")) &&
+		attributeType.startsWith("I")		
+	)
+		? true
+		: false;

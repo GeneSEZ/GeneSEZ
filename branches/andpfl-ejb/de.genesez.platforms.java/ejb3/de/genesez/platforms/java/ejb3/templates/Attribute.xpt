@@ -21,6 +21,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::ColumnForPrimaryKeyInheritance»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::SessionBeanInterfaces»
 
 
 «REM»
@@ -199,6 +200,32 @@
 «ENDDEFINE»
 
 «REM»
+	evaluates the stereotype "ejb3EJB" for classes, attributes and setter operations
+«ENDREM»
+«DEFINE EJB FOR MElement»
+	«IF hasStereotype("ejb3EJB")-»
+		@EJB(name=
+		«IF !(hasTaggedValue("ejb3EJB", "name", "null") || hasTaggedValue("ejb3EJB", "name", ""))-»
+			"«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«ELSE-»
+			"ejb/«name.toFirstUpper()-»"
+		«ENDIF-»
+		«IF !(hasTaggedValue("ejb3EJB", "beanInterface", "null") || hasTaggedValue("ejb3EJB", "beanInterface", ""))-»
+			, beanInterface=«taggedValue.selectFirst(e|e.tag.name == "beanInterface").value-».class
+		«ENDIF-»
+		«IF !(hasTaggedValue("ejb3EJB", "beanName", "null") || hasTaggedValue("ejb3EJB", "beanName", ""))-»
+			, beanName="«taggedValue.selectFirst(e|e.tag.name == "beanName").value-»"
+		«ENDIF-»
+		«IF !(hasTaggedValue("ejb3EJB", "description", "null") || hasTaggedValue("ejb3EJB", "description", ""))-»
+			, description="«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
+		«ENDIF-»
+		«IF !(hasTaggedValue("ejb3EJB", "mappedName", "null") || hasTaggedValue("ejb3EJB", "mappedName", ""))-»
+			, mappedName="«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
+		«ENDIF-»)
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -214,6 +241,17 @@
 	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
 	«EXPAND Class::DiscriminatorValue-»	
 	«EXPAND _WebParam-»
+	«REM» 
+		stereotype "ejb3EJB" and automatic annotation of EJB for session bean interfaces
+		following the naming convention "I + <Name> + {Remote|Local}" 
+	«ENDREM»
+	«IF !hasStereotype("ejb3EJB")-»
+		«IF isSessionBeanInterface(type.asTypeName())-»
+			@EJB
+		«ENDIF-»
+	«ELSE-»
+		«EXPAND EJB-»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» 
