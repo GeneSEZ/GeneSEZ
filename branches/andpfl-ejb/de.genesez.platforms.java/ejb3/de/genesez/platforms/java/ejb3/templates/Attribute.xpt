@@ -295,6 +295,8 @@
 			«IF !hasTaggedValue("ejb3Persistence", "contextType", "null") && !hasTaggedValue("ejb3Persistence", "contextType", "TRANSACTION")-»
 				(type = PersistenceContextType.«taggedValue.selectFirst(e|e.tag.name == "contextType").value-»)
 			«ENDIF»
-		«ENDIF»
-	«ENDIF»
+		«ENDIF-»
+	«ELSEIF type.asTypeName() == "EntityManager"-»
+		@PersistenceContext
+	«ENDIF-»
 «ENDDEFINE»

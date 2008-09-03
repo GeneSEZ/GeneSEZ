@@ -876,9 +876,10 @@
 		«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
 			import javax.ejb.Stateful;
 		«ENDIF-»
-		«IF hasTaggedValue("ejb3SessionBean", "remote", "true")-»
+		«IF hasStereotype("ejb3Remote")-»
 			import javax.ejb.Remote;
-		«ELSE»
+		«ENDIF-»
+		«IF hasStereotype("ejb3Local")-»
 			import javax.ejb.Local;
 		«ENDIF-»
 		«IF hasStereotype("ejb3WebService")-»
