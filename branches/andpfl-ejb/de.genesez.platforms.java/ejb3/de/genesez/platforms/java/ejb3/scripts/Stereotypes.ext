@@ -1,0 +1,139 @@
+/**
+ * 	functions for creating new MStereotypes, MTags, MTaggedValues and for changing the value
+ *	of an MTaggedValue 
+ * 
+ * 
+ * @author	andre pflueger
+ * @date	2008-09-05
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+/**
+ *	function to add the stereotype "ejb3Column" to an existing (in the classifier) MElement
+ *
+ *	@param		elem		MElement
+ *	@param		classifier	classifier of the MElement
+ *
+ */
+MElement addColumnForPrimaryKeyInheritance(MElement elem, MClassifier classifier) :
+	classifier.property.exists(e|e.name == elem.name) 
+		? classifier.property.selectFirst(e|e.name == elem.name).makeColumn(classifier.getModel())
+		: "";
+/**
+ *	function to create the stereotype "ejb3Column" for primary key inheritance
+ *	function can not be used for general "ejb3Column" stereotype creation!!!
+ *	function adds the MStereotype to the stereotype list of the MElement and
+ *	to the anyStereotype list of the MModel 
+ *
+ *	@param		elem		MElement
+ *	@param		container	model of the MElement
+ *
+ */
+create MStereotype makeColumn(MProperty elem, MModel container) :
+	setName("ejb3Column") ->
+	property.add(makeTag("updatable", "String")) ->
+	property.add(makeTag("insertable", "String")) ->
+	property.add(makeTag("name", "String")) ->
+	property.add(makeTag("scale", "String")) ->
+	property.add(makeTag("precision", "String")) ->
+	property.add(makeTag("length", "String")) ->
+	property.add(makeTag("columnDefinition", "String")) ->
+	property.add(makeTag("table", "String")) ->	
+	property.add(makeTag("nullable", "String")) ->
+	property.add(makeTag("unique", "String")) ->
+	container.anyStereotype.add(this) ->
+	elem.stereotype.add(this) ->
+	elem.taggedValue.add(makeTaggedValue("false", makeTag("updatable", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue(elem.name, makeTag("name", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("false", makeTag("unique", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("true", makeTag("nullable", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("255", makeTag("length", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("0", makeTag("precision", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("0", makeTag("scale", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("null", makeTag("columnDefinition", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("null", makeTag("table", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("false", makeTag("insertable", "String")));
+
+/**
+ *	function to set any existing tagged value
+ *
+ *	@param		this	MProperty
+ *	@param		name	name of the tagged value
+ *	@param		value	new value
+ *
+ */
+Void setTaggedValue(MProperty this, String name, String value) :
+	this.taggedValue.selectFirst(e|e.tag.name == name).setValue(value);
+
+/**
+ *	function to add an "ejb3Association" stereotype to a MProperty
+ *	standard values are not set by this function!
+ *
+ *	@param		associationType		value of "ejb3AssociationType" (standard: "AutoDetect")
+ *	@param		targetEntity		String (standard: "")
+ *	@param		cascade 			value of "ejb3CascadeType" as array (standard: "[]")
+ *	@param		fetch				value of "ejb3FetchType" (standard: "DEFAULT")
+ *	@param		optional			boolean value (standard: true)
+ *	@param		mappedBy			String (standard: "")
+ *
+ */
+Void addAssociationStereotype(MProperty this, String associationType, String targetEntity, String cascade, String fetch, String optional, String mappedBy) :
+	this.classifier.owningPackage.getModel().anyStereotype.add(makeAssociationStereotype(this, associationType, targetEntity, cascade, fetch, optional, mappedBy));
+
+/**
+ *	function to create an "ejb3Association" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MProperty, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		associationType		value of "ejb3AssociationType" (standard: "AutoDetect")
+ *	@param		targetEntity		String (standard: "")
+ *	@param		cascade 			value of "ejb3CascadeType" as array (standard: "[]")
+ *	@param		fetch				value of "ejb3FetchType" (standard: "DEFAULT")
+ *	@param		optional			boolean value (standard: true)
+ *	@param		mappedBy			String (standard: "")
+ *
+ */
+create MStereotype makeAssociationStereotype(MProperty elem, String associationType, String targetEntity, String cascade, String fetch, String optional, String mappedBy) :
+	setName("ejb3Association") ->
+	property.add(makeTag("associationType", "ejb3AssociationType")) ->
+	property.add(makeTag("cascade", "ejb3CascadeType")) ->
+	property.add(makeTag("fetch", "ejb3FetchType")) ->
+	property.add(makeTag("optional", "Boolean")) ->	
+	property.add(makeTag("mappedBy", "String")) ->
+	property.add(makeTag("targetEntity", "String")) ->
+	elem.taggedValue.add(makeTaggedValue(associationType, makeTag("associationType", "ejb3AssociationType"))) ->
+	elem.taggedValue.add(makeTaggedValue(cascade, makeTag("cascade", "ejb3CascadeType"))) ->
+	elem.taggedValue.add(makeTaggedValue(fetch, makeTag("fetch", "ejb3FetchType"))) ->
+	elem.taggedValue.add(makeTaggedValue(optional, makeTag("optional", "Boolean"))) ->
+	elem.taggedValue.add(makeTaggedValue(mappedBy, makeTag("mappedBy", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue(targetEntity, makeTag("targetEntity", "String"))) ->
+	elem.stereotype.add(this);
+	
+/**
+ *	function to create a MTag (i.e. for use with MTaggedvalue)
+ *
+ *	@param		name	name of the MTag
+ *	@param		type	type of the value (i.e. the value in MTaggedValue)
+ *
+ */
+create MTag makeTag(String name, String type) :
+	setName(name) ->
+	setType(type);
+
+/**
+ *	function to create a MTaggedValue
+ *	MTaggedvalue consists of value and a tag which contains the name of the 
+ *	MTaggedValue and the data type of the value
+ *
+ *	@param		value	value of the MTaggedvalue
+ *	@param		tag		containing MTag to this value
+ *
+ */
+create MTaggedValue makeTaggedValue(String value, MTag tag) :
+	setValue(value) ->
+	setTag(tag);
