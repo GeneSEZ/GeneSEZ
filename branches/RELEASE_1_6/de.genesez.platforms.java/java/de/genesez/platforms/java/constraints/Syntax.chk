@@ -10,6 +10,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
 extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::m2t::Helper;
 
@@ -21,9 +22,9 @@ extension de::genesez::platforms::common::m2t::Helper;
 
 /**
  * checks the inheritance of java types
- * @return	generates an error, if multiple inheritance is used on a classifier which is not an interface
+ * @return	false generates an error, if multiple inheritance is used on a classifier which is not an interface
  */
-context MClassifier ERROR "GeneSEZ: multiple inheritance is only allowed for interfaces: " + name : 
+context MClassifier ERROR "GeneSEZ: multiple inheritance is only allowed for interfaces: " + fqn() : 
 	generalization.size > 1
 		? (metaType == MInterface ? true : false)
 		: true;
@@ -32,7 +33,7 @@ context MClassifier ERROR "GeneSEZ: multiple inheritance is only allowed for int
  * checks the modifiers of an attribute of an interface
  * @return	generates a warning if the attibute has other modifiers than 'public', 'static' and 'final'
  */
-context MAttribute WARNING "GeneSEZ: the modifiers of the attribute '" + name + "' of the interface '" + classifier.name + "' will be ignored, only 'public', 'stataic + 'final' are permitted" :
+context MAttribute WARNING "GeneSEZ: the modifiers of the interface attribute will be ignored! only 'public', 'stataic + 'final' are permitted! " + fqn() :
 	classifier.metaType == MInterface
 		? (visibility == "public" && static && final ? true : false)
 		: true;
@@ -41,7 +42,7 @@ context MAttribute WARNING "GeneSEZ: the modifiers of the attribute '" + name + 
  * checks the modifiers of an operations of an interface
  * @return	generates a warning if the operation has other modifiers than 'public' and 'abstract'
  */
-context MOperation WARNING "GeneSEZ: the modifiers of the operation '" + name + "' of the interface '" + classifier.name + "' will be ignored, only 'public' and 'abstract' are permitted" :
+context MOperation WARNING "GeneSEZ: the modifiers of the interface operation will be ignored! only 'public' and 'abstract' are permitted! " + fqn() :
 	classifier.metaType == MInterface
 		? (visibility == "public" && abstract ? true : false)
 		: true;
@@ -52,7 +53,7 @@ context MOperation WARNING "GeneSEZ: the modifiers of the operation '" + name + 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays, you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf" :
+context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf! " + fqn() :
 	isMultiValuedType() && usePrimitiveType() && hasGenericRealization()
 		? false
 		: true;
@@ -68,7 +69,7 @@ context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays, you w
  * 'assert' was added in java 1.4, 'enum' was added in java 5
  * @return	 true, if the name is not a reserved java word, otherwise false
  */
-context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word" :
+context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word! " + fqn() :
 	metaType == MPrimitiveType
 		? true
 		: (
