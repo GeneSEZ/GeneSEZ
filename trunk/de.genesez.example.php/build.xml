@@ -11,10 +11,18 @@
 	<property name="src-gen.dir" value="src-gen" />
 	<property name="api-doc.dir" value="bin/api-doc" />
 	
+	
+	<!-- syntax check -->
+	<target name="check" description="performs a syntax check on all php files">
+		<phplint>
+			<fileset dir="${src-gen.dir}" />
+		</phplint>
+	</target>
+	
 	<!--
 		generates the api doc using phpdocumentor
 	-->
-	<target name="doc" description="creates the API-Documentation">
+	<target name="doc" depends="check" description="creates the API-Documentation">
 		<!-- definition for phing -->
 		<phpdoc title="API Documentation for PHP-Example Project"
 			destdir="${api-doc.dir}"
@@ -43,7 +51,7 @@
 	<!--
 		deploys the source directories to a directory of a web server
 	-->
-	<target name="deploy" description="copies the webapp to a web server">
+	<target name="deploy" depends="check" description="copies the webapp to a web server">
 		<copy todir="${deploy.dir}">
 			<fileset dir="${src-gen.dir}" />
 		</copy>
