@@ -24,16 +24,10 @@ class UserEditAction {
 		);
 		
 		// build user edit form
-		$form = UserForm::buildForm($defaults);
+		$form = UserForm::create($defaults);
 		
 		if ($form->validate()) {
-			
-			$user->login = $form->exportValue('login');
-			$user->password = $form->exportValue('password');
-			$user->firstName = $form->exportValue('firstName');
-			$user->lastName = $form->exportValue('lastName');
-			$user->email = $form->exportValue('email');
-			
+			$user = UserForm::buildUser($form, $user);
 			$user->save();
 			
 			HTTP::redirect(Bootstrap::CONTEXT_PATH . "user/list.php");

@@ -11,15 +11,10 @@ class UserCreateAction {
 		// TODO: put your implementation for 'UserCreateAction::main()' here
 		
 		// build user edit form
-		$form = UserForm::buildForm();
+		$form = UserForm::create();
 		
 		if ($form->validate()) {
-			$user = new User();
-			$user->login = $form->exportValue('login');
-			$user->password = $form->exportValue('password');
-			$user->firstName = $form->exportValue('firstName');
-			$user->lastName = $form->exportValue('lastName');
-			$user->email = $form->exportValue('email');
+			$user = UserForm::buildUser($form);
 			
 			// stores the user in db
 			$user->save();
