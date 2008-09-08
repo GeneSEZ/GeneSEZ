@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.openarchitectureware.workflow.issues.Issues;
+
 import de.genesez.platforms.common.typemapping.TypeMapper;
 
 /**
@@ -18,6 +20,8 @@ import de.genesez.platforms.common.typemapping.TypeMapper;
 @Deprecated
 public class Generator extends org.openarchitectureware.xpand2.Generator {
 	
+	private boolean isSetTypeMappingFile = false;
+	
 	/**
 	 * constructs the GeneSEZ Generator
 	 */
@@ -30,8 +34,17 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 * @param	typeMappingFile		name of the file used by the generator for type mapping
 	 */
 	public void setTypeMappingFile(final String typeMappingFile) {
+		isSetTypeMappingFile = true;
 		TypeMapper.initTypeMapper(typeMappingFile);
     }
+	
+	@Override
+	protected void checkConfigurationInternal(Issues issues) {
+		if (!isSetTypeMappingFile) {
+			issues.addError(this, "no type mapping file set!");
+		}
+		super.checkConfigurationInternal(issues);
+	}
 
 	/**
 	 * overridden adder for advice templates which filters empty strings
