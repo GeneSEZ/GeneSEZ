@@ -237,7 +237,7 @@ public class TypeMapper {
 	 */
 	public static TypeMapper getInstance() {
 		if (typeMapper == null) {
-			typeMapper = new TypeMapper("../de.genesez.platforms.common/script/de/genesez/common/typemapping/typeMapping.xml");
+			typeMapper = new TypeMapper("de/genesez/common/typemapping/typeMapping.xml");
 		}
 		return typeMapper;
 	}
