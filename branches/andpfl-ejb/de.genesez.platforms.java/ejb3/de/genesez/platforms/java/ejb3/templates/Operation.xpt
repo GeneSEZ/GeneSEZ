@@ -20,6 +20,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -54,8 +55,8 @@
 «ENDREM»
 «DEFINE CMTransactionality FOR MElement-»
 	«IF hasStereotype("ejb3TransactionAttribute")»
-		«IF !hasTaggedValue("ejb3TransactionAttribute", "type", "null") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
-			@TransactionAttribute(TransactionAttributeType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»)
+		«IF hasUtilizableValue("ejb3TransactionAttribute", "type") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
+			@TransactionAttribute(TransactionAttributeType.«getTaggedValue("ejb3TransactionAttributeType", "type")-»)
 		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»

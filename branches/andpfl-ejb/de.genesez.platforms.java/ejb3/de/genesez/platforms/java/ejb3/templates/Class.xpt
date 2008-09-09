@@ -2,7 +2,7 @@
 	template for ejb3 class
 	
 	@author		andre pflueger
-	@date		2008/08/28	
+	@date		2008/09/08	
 	@version	1.0
 «ENDREM»
 
@@ -23,6 +23,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::StandardConstructor»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
 
 
 
@@ -156,20 +157,20 @@
 «DEFINE _PersistentEntity FOR MClass-»
 	«IF hasStereotype("ejb3PersistentEntity")»
 		@Entity
-		«IF !hasTaggedValue("ejb3PersistentEntity", "name", "null")-»
-			(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»")
+		«IF	hasUtilizableValue("ejb3PersistentEntity", "name")-»
+			(name="«getTaggedValue("ejb3PersistentEntity", "name")-»")
 		«ENDIF»
 		@Table(
-		«IF !hasTaggedValue("ejb3PersistentEntity", "tableName", "null")-»
-			name="tbl_«taggedValue.selectFirst(e|e.tag.name == "tableName").value-»"
+		«IF hasUtilizableValue("ejb3PersistentEntity", "tableName")-»
+			name="tbl_«getTaggedValue("ejb3PersistentEntity", "tableName")-»"
 		«ELSE-»
 			name="tbl_«asTypeName()-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3PersistentEntity", "tableCatalog", "null")-»
-			, catalog = "«taggedValue.selectFirst(e|e.tag.name == "tableCatalog").value-»"
+		«IF hasUtilizableValue("ejb3PersistentEntity", "tableCatalog")-»
+			, catalog = "«getTaggedValue("ejb3PersistentEntity", "tableCatalog")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3PersistentEntity", "tableSchema", "null")-»
-			, schema = "«taggedValue.selectFirst(e|e.tag.name == "tableSchema").value-»"
+		«IF hasUtilizableValue("ejb3PersistentEntity", "tableSchema")-»
+			, schema = "«getTaggedValue("ejb3PersistentEntity", "tableSchema")-»"
 		«ENDIF-»)
 		«REM» entity listener «ENDREM»
 		«EXPAND _EntityListener»
@@ -184,20 +185,20 @@
 «DEFINE _RemoteLocal FOR MClassifier-»
 	«IF hasStereotype("ejb3SessionBean")-»
 		«IF hasStereotype("ejb3Remote")»
-			«IF !(hasTaggedValue("ejb3Remote", "remoteInterfaceName", "null") || hasTaggedValue("ejb3Remote", "remoteInterfaceName", ""))»
+			«IF hasUtilizableValue("ejb3Remote", "name")-»
 				«REM»erzeuge remote interface mit angegebenem namen«ENDREM»
-				@Remote(I«taggedValue.selectFirst(e|e.tag.name == "remoteInterfaceName").value».class)
-				«EXPAND _Interface(taggedValue.selectFirst(e|e.tag.name == "remoteInterfaceName").value, "")-»
+				@Remote(I«getTaggedValue("ejb3Remote", "name")-».class)
+				«EXPAND _Interface(getTaggedValue("ejb3Remote", "name"), "")-»
 			«ELSE»
 				«REM»erzeuge remote interface mit standardnamen«ENDREM»
 				«EXPAND _Interface(asTypeName(), "Remote")-»
 			«ENDIF»
 		«ENDIF»
 		«IF hasStereotype("ejb3Local")»
-			«IF !(hasTaggedValue("ejb3Local", "localInterfaceName", "null") || hasTaggedValue("ejb3Local", "localInterfaceName", ""))»
+			«IF hasUtilizableValue("ejb3Local", "name")-»
 				«REM»erzeuge local interface mit angegebenem namen«ENDREM»
-				@Local(I«taggedValue.selectFirst(e|e.tag.name == "localInterfaceName").value».class)
-				«EXPAND _Interface(taggedValue.selectFirst(e|e.tag.name == "localInterfaceName").value, "")-»
+				@Local(I«getTaggedValue("ejb3Local", "name")-».class)
+				«EXPAND _Interface(getTaggedValue("ejb3Local", "name"), "")-»
 			«ELSE»
 				«REM»erzeuge local interface mit standardnamen«ENDREM»
 				«EXPAND _Interface(asTypeName(), "Local")-»
@@ -218,36 +219,25 @@
 		«EXPAND _RemoteLocal-»	
 		«IF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
 			@Stateful(
-			«IF !hasTaggedValue("ejb3SessionBean", "name", "null")-»
-				name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
-			«ELSE-»
-				name = "«asTypeName()-»"
-			«ENDIF-» 
-	 		«IF !hasTaggedValue("ejb3SessionBean", "mappedName", "null")-»
-	 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
-	 		«ENDIF-»
-	 		«IF !hasTaggedValue("ejb3SessionBean", "description", "null")-»
-	 			, description = "«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
-	 		«ENDIF-»)
-			«REM» interceptors «ENDREM»
-			«EXPAND _Interceptor»
-		«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "false")»
+		«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
 			@Stateless(
-			«IF !hasTaggedValue("ejb3SessionBean", "name", "null")-»
-				name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
-			«ELSE-»
-				name = "«asTypeName()-»"
-			«ENDIF-» 
-	 		«IF !hasTaggedValue("ejb3SessionBean", "mappedName", "null")-»
-	 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
-	 		«ENDIF-»
-	 		«IF !hasTaggedValue("ejb3SessionBean", "description", "null")-»
-	 			, description = "«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
-	 		«ENDIF-»)
-			«REM» interceptors «ENDREM»
-			«EXPAND _Interceptor»
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3SessionBean", "name")-»
+			name = "«getTaggedValue("ejb3SessionBean", "name")-»"
+		«ELSE-»
+			name = "«asTypeName()-»"
+		«ENDIF-» 
+ 		«IF hasUtilizableValue("ejb3SessionBean", "mappedName")-»
+ 			, mappedName = "«getTaggedValue("ejb3SessionBean", "mappedName")-»"
+ 		«ENDIF-»
+ 		«IF hasUtilizableValue("ejb3SessionBean", "description")-»
+ 			, description = "«getTaggedValue("ejb3SessionBean", "description")-»"
+ 		«ENDIF-»)
+		«REM» interceptors «ENDREM»
+		«EXPAND _Interceptor»
+		«IF hasTaggedValue("ejb3SessionBean", "stateful", "false")»
 			«EXPAND _WebService»
-		«ENDIF»	
+		«ENDIF»
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -255,25 +245,25 @@
 «DEFINE _MessageDriven FOR MClass-»
 	«IF hasStereotype("ejb3MessageDrivenBean")»
 		@MessageDriven(
-		«IF !hasTaggedValue("ejb3MessageDrivenBean", "name", "null")-»
-			name = "«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«IF hasUtilizableValue("ejb3MessageDrivenBean", "name")-»
+			name = "«getTaggedValue("ejb3MessageDrivenBean", "name")-»"
 		«ELSE-»
 			name = "«asTypeName()-»"
 		«ENDIF-» 
- 		«IF !hasTaggedValue("ejb3MessageDrivenBean", "mappedName", "null")-»
- 			, mappedName = "«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
+ 		«IF hasUtilizableValue("ejb3MessageDrivenBean", "mappedName")-»
+ 			, mappedName = "«getTaggedValue("ejb3MessageDrivenBean", "mappedName")-»"
  		«ENDIF-»
- 		«IF !hasTaggedValue("ejb3MessageDrivenBean", "description", "null")-»
- 			, description = "«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
+ 		«IF hasUtilizableValue("ejb3MessageDrivenBean", "description")-»
+ 			, description = "«getTaggedValue("ejb3MessageDrivenBean", "description")-»"
  		«ENDIF-»
  		«IF hasTaggedValue("ejb3MessageDrivenBean", "activationConfig", "true")-»
- 			«IF !hasTaggedValue("ejb3MessageDrivenBean", "activationConfigPropertyName", "[]") && !hasTaggedValue("ejb3MessageDrivenBean", "ejb3ActivationConfigPropertyValue", "[]")-»
+ 			«IF hasUtilizableValue("ejb3MessageDrivenBean", "activationConfigPropertyName") && hasUtilizableValue("ejb3MessageDrivenBean", "ejb3ActivationConfigPropertyValue")-»
  				, activationConfig = {
- 				«FOREACH taggedValue.select(e|e.tag.name == "activationConfigPropertyName").value.getElements() AS names SEPARATOR ","»
+ 				«FOREACH getTaggedValue("ejb3MessageDrivenBean", "activationConfigPropertyName").getElements() AS names SEPARATOR ","»
  					@ActivationConfigProperty(
  						propertyName = "«names-»",  						
- 						«LET taggedValue.select(e|e.tag.name == "activationConfigPropertyName").value.getElements().indexOf(names) AS index-»
- 							propertyValue = "«taggedValue.select(e|e.tag.name == "activationConfigPropertyValue").value.getElements().get(index)-»")
+ 						«LET getTaggedValue("ejb3MessageDrivenBean", "activationConfigPropertyName").getElements().indexOf(names) AS index-»
+ 							propertyValue = "«getTaggedValue("ejb3MessageDrivenBean", "activationConfigPropertyValue").getElements().get(index)-»")
  						«ENDLET»
  				«ENDFOREACH»
  				}
@@ -289,22 +279,22 @@
 «DEFINE _WebService FOR MClass-»
 	«IF hasStereotype("ejb3WebService") && hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
 		@WebService(name=
-		«IF !hasTaggedValue("ejb3WebService", "webServiceName", "null")-»
-			"«taggedValue.select(e|e.tag.name == "webServiceName").value.getElements()-»"
+		«IF hasUtilizableValue("ejb3WebService", "webServiceName")-»
+			"«getTaggedValue("ejb3WebService", "webServiceName").getElements()-»"
 		«ELSE»
 			"«asTypeName()-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebService", "targetNamespace", "null")-»
-			, targetNamespace="«taggedValue.select(e|e.tag.name == "targetNamespace").value-»"
+		«IF hasUtilizableValue("ejb3WebService", "targetNamespace")-»
+			, targetNamespace="«getTaggedValue("ejb3WebService", "targetNamespace")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebService", "serviceName", "null")-»
-			, serviceName="«taggedValue.select(e|e.tag.name == "serviceName").value-»"
+		«IF hasUtilizableValue("ejb3WebService", "serviceName")-»
+			, serviceName="«getTaggedValue("ejb3WebService", "serviceName")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebService", "portName", "null")-»
-			, portName="«taggedValue.select(e|e.tag.name == "portName").value-»"
+		«IF hasUtilizableValue("ejb3WebService", "portName")-»
+			, portName="«getTaggedValue("ejb3WebService", "portName")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebService", "endpointInterface", "null")-»
-			, endpointInterface="«taggedValue.select(e|e.tag.name == "endpointInterface").value-»"
+		«IF hasUtilizableValue("ejb3WebService", "endpointInterface")-»
+			, endpointInterface="«getTaggedValue("ejb3WebService", "endpointInterface")-»"
 		«ENDIF-»)
 		«IF hasStereotype("ejb3SOAPBinding")-»
 			@SOAPBinding(use=SOAPBinding.Use.LITERAL
@@ -352,14 +342,17 @@
 
 «REM» evaluates the stereotype "ejb3PrimaryKey"«ENDREM»
 «DEFINE _PrimaryKey FOR MClass-»
-	«IF hasStereotype("ejb3PrimaryKey")»
+	«IF hasStereotype("ejb3PrimaryKeyClass")»
 		«REM» primary key with extern primary key class «ENDREM»
-		«IF !hasTaggedValue("ejb3PrimaryKey", "idClass", "null")»
+		«IF hasUtilizableValue("ejb3PrimaryKeyClass", "name")-»
+			@IdClass(«getTaggedValue("ejb3PrimaryKeyClass", "name")-».class)
+			«EXPAND _PrimaryKeyClass(getTaggedValue("ejb3PrimaryKeyClass", "name"))-»
+		«ELSE-»
 			@IdClass(«asTypeName()-»PK.class)
-			«EXPAND _PrimaryKeyClass»
+			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
 		«ENDIF»
 		«REM» primary key with embedded primary key class «ENDREM»
-		«IF hasTaggedValue("ejb3PrimaryKey", "embeddable", "true")»
+		«IF hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "true")»
 			@Embeddable
 		«ENDIF»		
 	«ENDIF»	
@@ -415,15 +408,13 @@
 «ENDDEFINE»
 
 «REM» creates a primary key class for stereotype "idClass" «ENDREM»
-«DEFINE _PrimaryKeyClass FOR MClass-»
-	«FILE filePath( asTypeName() + "PK", basePath() )-»
+«DEFINE _PrimaryKeyClass(String filename) FOR MClass-»
+	«FILE filePath( filename, basePath() )-»
 		/**
-		  *	templates for generation of ejb3 source code have been written by
+		  *	generated primary key class of the ejb3 cartridge
 		  *
-		  * André Pflüger
-		  * Email: admin@andre-pflueger.de
-		  * Date: 2008 May 22
-		  * Version: 1.0
+		  * @author		andre pflueger
+		  * @version	1.0
 		  *
 		  */	
 		«EXPAND _Package-»
@@ -432,12 +423,12 @@
 		  * generated primary key class for "«asTypeName()-»"
 		  *
 		  */
-		public class «asTypeName()+"PK"-» implements java.io.Serializable {
+		public class «filename-» implements java.io.Serializable {
 			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
 				private «ids.type.mapName()» «ids.name»;
 			«ENDFOREACH»
-			public «asTypeName()+"PK"-»() {}
-			public «asTypeName()+"PK"-»(
+			public «filename-»() {}
+			public «filename-»(
 			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR ", "-»
 				«ids.type.asTypeName()» «ids.name»
 			«ENDFOREACH-») {
@@ -458,8 +449,8 @@
 			«ENDFOREACH»
 			public boolean equals(Object obj){
 				if (obj == this) return true;
-				if (!(obj instanceof «asTypeName()+"PK"-»)) return false;
-				«asTypeName()+"PK"-» pk = («asTypeName()+"PK"-») obj;
+				if (!(obj instanceof «filename-»)) return false;
+				«filename-» pk = («filename-») obj;
 				return ( 
 				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR "&&"-»
 					this.«ids.name»
@@ -484,12 +475,6 @@
 			}
 		}
 	«ENDFILE»
-	
-	«REM» 
-	«FOREACH "[Name, name]".getArrayElements() AS ids SEPARATOR "//und"»
-		//«ids»
-	«ENDFOREACH»	
-	«ENDREM»
 «ENDDEFINE»
 
 «REM»
@@ -497,7 +482,7 @@
 «ENDREM»
 «DEFINE _EntityListener FOR MClass-»
 	«IF hasStereotype("ejb3EntityListener")»
-		«IF !hasTaggedValue("ejb3EntityListener", "classes", "null")
+		«IF hasUtilizableValue("ejb3EntityListener", "classes")
 			&& hasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "false")»
 			@EntityListeners(«FOREACH taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements() AS classes SEPARATOR ", "»
 				«IF (classes != "")-»

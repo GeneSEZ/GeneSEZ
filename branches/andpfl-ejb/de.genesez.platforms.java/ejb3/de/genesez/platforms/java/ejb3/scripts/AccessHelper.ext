@@ -1,0 +1,47 @@
+/**
+ * Simplifies access to genesez models + makes working with the genesez metamodel more easier
+ *  
+ * @author	andre pflueger
+ * @date	2008-09-08
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	stereotypes + tagged values
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * 	returns a tagged value of a stereotype if exists
+ *
+ * 	@param	stereotype		the name of a stereotype
+ *	@param	taggedValue		the name of a tagged value
+ *	
+ * 	@return		value of the tagged value
+ */
+String getTaggedValue(MElement this, String stereotype, String taggedValue) :
+	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value
+		: "";
+
+/**
+ * 	checks if a tagged value of a stereotype exists and has a utilizable value (not empty or null)
+ *
+ * 	@param	sterotype		the name of a stereotype
+ * 	@param	tagggedValue	the name of a tagged value
+ * 	@param	value		the value of a tagged value
+ * 	
+ *	@return		true if the value exists and is utilizable
+ */
+boolean hasUtilizableValue(MElement this, String stereotype, String taggedValue) :
+	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype) &&
+	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "" &&
+	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "null" &&
+	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "[]"
+		? true
+		: false;

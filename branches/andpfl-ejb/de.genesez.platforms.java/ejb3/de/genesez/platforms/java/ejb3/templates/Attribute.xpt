@@ -1,9 +1,8 @@
 «REM»
 	Template for ejb3-Attributes
 	
-	@author	André Pflüger
-	@date	2008/06/08
-	- todo 1: implement all ejb3 stereotypes
+	@author		andre pflueger
+	@date		2008/09/08
 «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
@@ -22,6 +21,8 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Stereotypes»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::SessionBeanInterfaces»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 
 
 «REM»
@@ -60,7 +61,7 @@
  «ENDREM»
 «DEFINE PrimaryKey(MClassifier classifier) FOR MElement»
 	«REM» simple primary key «ENDREM»
-	«IF hasTaggedValue("ejb3PrimaryKey", "id", "true")»
+	«IF hasStereotype("ejb3PrimaryKey")»
 		@Id
 	«ENDIF»
 	«REM» 
@@ -71,8 +72,7 @@
 		primary key of the superclass and of the subclass in the same column
 	«ENDREM»
 	«IF classifier.generalization.typeSelect(MClassifier).property.exists(e|e.name == name 
-		&& e.hasStereotype("ejb3PrimaryKey")
-		&& e.hasTaggedValue("ejb3PrimaryKey", "id", "true"))-»
+		&& e.hasStereotype("ejb3PrimaryKey"))-»
 		«IF !hasStereotype("ejb3Column")-»
 			«addColumnForPrimaryKeyInheritance(classifier) -> ""-»
 		«ELSE»
@@ -87,34 +87,45 @@
 	«ENDIF»
 	
 	«REM» generation of primary keys «ENDREM»
-	«IF hasTaggedValue("ejb3PrimaryKey", "generationType", "TABLE") && !hasTaggedValue("ejb3PrimaryKey", "generatorName", "null")»
-		@TableGenerator(name="«taggedValue.selectFirst(e|e.tag.name == "generatorName").value-»"
-		«IF !hasTaggedValue("ejb3PrimaryKey", "table", "null")-»
-			, table="«taggedValue.selectFirst(e|e.tag.name == "table").value-»"
+	«IF hasStereotype("ejb3TableGenerator") && hasUtilizableValue("ejb3TableGenerator", "name")-»
+		@TableGenerator(name="«getTaggedValue("ejb3TableGenerator", "name")-»"
+		«IF hasUtilizableValue("ejb3TableGenerator", "table")-»
+			, table="«getTaggedValue("ejb3TableGenerator", "table")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3PrimaryKey", "pkColumnName", "null")-»
-			, pkColumnName="«taggedValue.selectFirst(e|e.tag.name == "pkColumnName").value-»"
+		«IF hasUtilizableValue("ejb3TableGenerator", "pkColumnName")-»
+			, pkColumnName="«getTaggedValue("ejb3TableGenerator", "pkColumnName")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3PrimaryKey", "valueColumnName", "null")-»
-			, valueColumnName="«taggedValue.selectFirst(e|e.tag.name == "valueColumnName").value-»"
+		«IF hasUtilizableValue("ejb3TableGenerator", "valueColumnName")-»
+			, valueColumnName="«getTaggedValue("ejb3TableGenerator", "valueColumnName")-»"
 		«ENDIF-»	
-		«IF !hasTaggedValue("ejb3PrimaryKey", "pkColumnValue", "null")-»
-			, pkColumnValue="«taggedValue.selectFirst(e|e.tag.name == "pkColumnValue").value-»"
+		«IF hasUtilizableValue("ejb3TableGenerator", "pkColumnValue")-»
+			, pkColumnValue="«getTaggedValue("ejb3TableGenerator", "pkColumnValue")-»"
 		«ENDIF-»	
+		«IF hasUtilizableValue("ejb3TableGenerator", "initialValue")-»
+			, initialValue = «getTaggedValue("ejb3TableGenerator", "initialValue")-»
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3TableGenerator", "allocationSize")-»
+			, allocationSize = «getTaggedValue("ejb3TableGenerator", "allocationSize")-»
+		«ENDIF»
 		)	
 	«ENDIF»
-	«IF hasTaggedValue("ejb3PrimaryKey", "generationType", "SEQUENCE")&& !hasTaggedValue("ejb3PrimaryKey", "generatorName", "null")»
-		@SequenceGenerator(name="«taggedValue.selectFirst(e|e.tag.name == "generatorName").value-»"
-		«IF !hasTaggedValue("ejb3PrimaryKey", "sequenceName", "null")-»
-			, sequenceName="«taggedValue.selectFirst(e|e.tag.name == "sequenceName").value-»"
+	«IF hasStereotype("ejb3SequenceGenerator") && hasUtilizableValue("ejb3SequenceGenerator", "name")-»
+		@SequenceGenerator(name="«getTaggedValue("ejb3SequenceGenerator", "name")-»"
+		«IF hasUtilizableValue("ejb3SequenceGenerator", "sequenceName")-»
+			, sequenceName="«getTaggedValue("ejb3SequenceGenerator", "sequenceName")-»"
+		«ENDIF-»	
+		«IF hasUtilizableValue("ejb3SequenceGenerator", "initialValue")-»
+			, initialValue = «getTaggedValue("ejb3SequenceGenerator", "initialValue")-»
 		«ENDIF-»
-		)
+		«IF hasUtilizableValue("ejb3SequenceGenerator", "allocationSize")-»
+			, allocationSize = «getTaggedValue("ejb3SequenceGenerator", "allocationSize")-»
+		«ENDIF-»)
 	«ENDIF»
-	«IF hasTaggedValue("ejb3PrimaryKey", "generatedValue", "true")»
-		@GeneratedValue(strategy=GenerationType.«taggedValue.selectFirst(e|e.tag.name == "generationType").value-»
-		«IF hasTaggedValue("ejb3PrimaryKey", "generationType", "TABLE") || hasTaggedValue("ejb3PrimaryKey", "generationType", "SEQUENCE")-»
-			«IF !hasTaggedValue("ejb3PrimaryKey", "generatorName", "null")-»
-				, generator="«taggedValue.selectFirst(e|e.tag.name == "generatorName").value-»"
+	«IF hasTaggedValue("ejb3PrimaryKey", "generatedValue", "true")-»
+		@GeneratedValue(strategy=GenerationType.«getTaggedValue("ejb3PrimaryKey", "strategy")-»
+		«IF hasTaggedValue("ejb3PrimaryKey", "strategy", "TABLE") || hasTaggedValue("ejb3PrimaryKey", "strategy", "SEQUENCE")-»
+			«IF hasUtilizableValue("ejb3PrimaryKey", "generatorName")-»
+				, generator="«getTaggedValue("ejb3PrimaryKey", "generatorName")-»"
 			«ENDIF-»
 		«ENDIF-»	
 		)
@@ -129,10 +140,10 @@
 	«REM» column «ENDREM»
 	«IF hasStereotype("ejb3Column")»
 		@Column(
-		«IF !hasTaggedValue("ejb3Column", "name", "null")-»
-			name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«IF hasUtilizableValue("ejb3Column", "name")-»
+			name="«getTaggedValue("ejb3Column", "name")-»"
 		«ELSE-»
-			name="«this.name-»"
+			name="«type().asTypeName()-»"
 		«ENDIF-»
 		«IF hasTaggedValue("ejb3Column", "unique", "true")-»
 			, unique=true, nullable=false
@@ -146,11 +157,11 @@
 		«IF hasTaggedValue("ejb3Column", "updatable", "false")-»
 			, updatable=false
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3Column", "columnDefinition", "null")-»
-			, columnDefinition="«taggedValue.selectFirst(e|e.tag.name == "columnDefinition").value-»"
+		«IF hasUtilizableValue("ejb3Column", "columnDefinition")-»
+			, columnDefinition="«getTaggedValue("ejb3Column", "columnDefinition")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3Column", "table", "null")-»
-			, table="«taggedValue.selectFirst(e|e.tag.name == "table").value-»"
+		«IF hasUtilizableValue("ejb3Column", "table")-»
+			, table="«getTaggedValue("ejb3Column", "table")-»"
 		«ENDIF-»
 		«IF !hasTaggedValue("ejb3Column", "length", "255")-»
 			, length=«taggedValue.selectFirst(e|e.tag.name == "length").value-»
@@ -161,8 +172,7 @@
 		«IF !hasTaggedValue("ejb3Column", "scale", "0")-»
 			, scale=«taggedValue.selectFirst(e|e.tag.name == "scale").value-»
 		«ENDIF-»
-		)
-		
+		)		
 	«ENDIF»
 «ENDDEFINE»
 
@@ -205,22 +215,22 @@
 «DEFINE EJB FOR MElement»
 	«IF hasStereotype("ejb3EJB")-»
 		@EJB(name=
-		«IF !(hasTaggedValue("ejb3EJB", "name", "null") || hasTaggedValue("ejb3EJB", "name", ""))-»
-			"«taggedValue.selectFirst(e|e.tag.name == "name").value-»"
+		«IF hasUtilizableValue("ejb3EJB", "name")-»
+			"«getTaggedValue("ejb3EJB", "name")-»"
 		«ELSE-»
 			"ejb/«name.toFirstUpper()-»"
 		«ENDIF-»
-		«IF !(hasTaggedValue("ejb3EJB", "beanInterface", "null") || hasTaggedValue("ejb3EJB", "beanInterface", ""))-»
-			, beanInterface=«taggedValue.selectFirst(e|e.tag.name == "beanInterface").value-».class
+		«IF hasUtilizableValue("ejb3EJB", "beanInterface")-»
+			, beanInterface=«getTaggedValue("ejb3EJB", "beanInterface")-».class
 		«ENDIF-»
-		«IF !(hasTaggedValue("ejb3EJB", "beanName", "null") || hasTaggedValue("ejb3EJB", "beanName", ""))-»
-			, beanName="«taggedValue.selectFirst(e|e.tag.name == "beanName").value-»"
+		«IF hasUtilizableValue("ejb3EJB", "beanName")-»
+			, beanName="«getTaggedValue("ejb3EJB", "beanName")-»"
 		«ENDIF-»
-		«IF !(hasTaggedValue("ejb3EJB", "description", "null") || hasTaggedValue("ejb3EJB", "description", ""))-»
-			, description="«taggedValue.selectFirst(e|e.tag.name == "description").value-»"
+		«IF hasUtilizableValue("ejb3EJB", "description")-»
+			, description="«getTaggedValue("ejb3EJB", "description")-»"
 		«ENDIF-»
-		«IF !(hasTaggedValue("ejb3EJB", "mappedName", "null") || hasTaggedValue("ejb3EJB", "mappedName", ""))-»
-			, mappedName="«taggedValue.selectFirst(e|e.tag.name == "mappedName").value-»"
+		«IF hasUtilizableValue("ejb3EJB", "mappedName")-»
+			, mappedName="«getTaggedValue("ejb3EJB", "mappedName")-»"
 		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»
@@ -262,41 +272,61 @@
 		@WebParam(header=
 		«IF hasTaggedValue("ejb3WebParam", "header", "true")-»
 			true
-		«ELSE»
+		«ELSE-»
 			false
 		«ENDIF»
-		«IF !hasTaggedValue("ejb3WebParam", "name", "null")-»
-			, name="«taggedValue.select(e|e.tag.name == "name").value-»"
+		«IF hasUtilizableValue("ejb3WebParam", "name")-»
+			, name="«getTaggedValue("ejb3WebParam", "name")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebParam", "partName", "null")-»
-			, partName="«taggedValue.select(e|e.tag.name == "partName").value-»"
+		«IF hasUtilizableValue("ejb3WebParam", "partName")-»
+			, partName="«getTaggedValue("ejb3WebParam", "partName")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebParam", "targetNamespace", "null")-»
-			, targetNamespace="«taggedValue.select(e|e.tag.name == "targetNamespace").value-»"
+		«IF hasUtilizableValue("ejb3WebParam", "targetNamespace")-»
+			, targetNamespace="«getTaggedValue("ejb3WebParam", "targetNamespace")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebParam", "mode", "null")-»
-			, mode="«taggedValue.select(e|e.tag.name == "mode").value-»"
+		«IF hasUtilizableValue("ejb3WebParam", "mode")-»
+			, mode="«getTaggedValue("ejb3WebParam", "mode")-»"
 		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»
 
 «REM» 
-	evaluate the stereotype ejb3Persistence 
+	evaluate the stereotype ejb3PersistenceContext and ejb3PersistenceUnit 
 «ENDREM»
 «DEFINE _Persistence FOR MAttribute»
-	«IF hasStereotype("ejb3Persistence")»
-		«IF hasTaggedValue("ejb3Persistence", "factory", "true")»
-			@PersistenceUnit
-			«IF !hasTaggedValue("ejb3Persistence", "unitName", "null")-»
-				(unitName="«taggedValue.selectFirst(e|e.tag.name == "unitName").value-»")
-			«ENDIF-»
-		«ELSEIF hasTaggedValue("ejb3Persistence", "factory", "false")»
-			@PersistenceContext
-			«IF !hasTaggedValue("ejb3Persistence", "contextType", "null") && !hasTaggedValue("ejb3Persistence", "contextType", "TRANSACTION")-»
-				(type = PersistenceContextType.«taggedValue.selectFirst(e|e.tag.name == "contextType").value-»)
-			«ENDIF»
-		«ENDIF-»
+	«IF hasStereotype("ejb3PersistenceContext") && hasUtilizableValue("ejb3PersistenceContext", "type")»
+		@PersistemceContexts
+		«FOREACH getTaggedValue("ejb3PersistenceContext", "type").getElements() AS types SEPARATOR ","-»
+ 			@PersistenceContext (
+ 				type = PersistenceContextType."«types-»"
+ 				«IF hasUtilizableValue("ejb3PerssistenceContext", "unitName")-»  						
+	 				«LET getTaggedValue("ejb3PersistenceContext", "unitName").getElements().indexOf(types) AS index-»
+	 					, unitName = "«getTaggedValue("ejb3PersistenceContext", "unitName").getElements().get(index)-»"
+	 				«ENDLET»
+	 			«ENDIF»
+ 				«IF hasUtilizableValue("ejb3PerssistenceContext", "name")-»  						
+	 				«LET getTaggedValue("ejb3PersistenceContext", "name").getElements().indexOf(types) AS index-»
+	 					, name = "«getTaggedValue("ejb3PersistenceContext", "name").getElements().get(index)-»"
+	 				«ENDLET-»
+	 			«ENDIF-»)	 			
+ 		«ENDFOREACH-»)		
+	«ELSEIF hasStereotype("ejb3PersistenceContext")-»
+		@PersistenceContext
+	«ELSEIF hasStereotype("ejb3PersistenceUnit") && hasUtilizableValue("ejb3PersistenceUnit", "name") && hasUtilizableValue("ejb3PersistenceUnit", "unitName")-»
+		@PersistenceUnits {
+		 «FOREACH getTaggedValue("ejb3PersistenceUnit", "name").getElements() AS names SEPARATOR ","-»
+ 			@PersistenceUnit(
+ 				name = "«names-»",  						
+ 				«LET getTaggedValue("ejb3PersistenceUnit", "unitName").getElements().indexOf(names) AS index-»
+ 					unitName = "«getTaggedValue("ejb3PersistenceUnit", "unitName").getElements().get(index)-»")
+ 				«ENDLET»
+ 		«ENDFOREACH-»)
+ 		}
+ 	«ELSEIF hasStereotype("ejb3PersistenceUnit")-»
+ 		@PersistenceUnit
 	«ELSEIF type.asTypeName() == "EntityManager"-»
 		@PersistenceContext
+	«ELSEIF type.asTypeName() == "EntityManagerFactory"-»
+		@PersistenceUnit
 	«ENDIF-»
 «ENDDEFINE»

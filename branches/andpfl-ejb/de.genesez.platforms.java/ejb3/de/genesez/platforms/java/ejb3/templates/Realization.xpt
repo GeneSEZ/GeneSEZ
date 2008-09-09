@@ -14,6 +14,7 @@
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Serializable»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::MessageListener»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 
 «REM»
@@ -31,12 +32,11 @@
 	«ENDIF-»
 	«IF hasStereotype("ejb3SessionBean")-»
 		«IF hasStereotype("ejb3Remote")-»
-			«IF !( hasTaggedValue("ejb3Remote", "remoteInterfaceName", "null")
-				|| hasTaggedValue("ejb3Remote", "remoteInterfaceName", "") )-»
+			«IF hasUtilizableValue("ejb3Remote", "name")-»
 				«IF !realization.isEmpty-»
-					, I«taggedValue.selectFirst(e|e.tag.name == "remoteInterfaceName").value-»
+					, I«getTaggedValue("ejb3Remote", "name")-»
 				«ELSE-»
-					implements I«taggedValue.selectFirst(e|e.tag.name  == "remoteInterfaceName").value-»
+					implements I«getTaggedValue("ejb3Remote", "name")-»
 				«ENDIF-»
 			«ELSE-»
 				«IF !realization.isEmpty-»
@@ -47,12 +47,11 @@
 			«ENDIF-»
 		«ENDIF-»
 		«IF hasStereotype("ejb3Local")-»
-			«IF !( hasTaggedValue("ejb3Local", "localInterfaceName", "null")
-				|| hasTaggedValue("ejb3Local", "localInterfaceName", "") )-»
+			«IF hasUtilizableValue("ejb3Local", "name")-»
 				«IF !realization.isEmpty || hasStereotype("ejb3Remote")-»
-					, I«taggedValue.selectFirst(e|e.tag.name  == "localInterfaceName").value-»
+					, I«getTaggedValue("ejb3Local", "name")-»
 				«ELSE-»
-					implements I«taggedValue.selectFirst(e|e.tag.name  == "localInterfaceName").value-»
+					implements I«getTaggedValue("ejb3Local", "name")-»
 				«ENDIF-»	
 			«ELSE-»
 				«IF !realization.isEmpty || hasStereotype("ejb3Remote")-»
