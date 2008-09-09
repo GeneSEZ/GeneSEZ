@@ -24,6 +24,7 @@
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::StandardConstructor»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Stereotypes»
 
 
 
@@ -160,23 +161,40 @@
 		«IF	hasUtilizableValue("ejb3PersistentEntity", "name")-»
 			(name="«getTaggedValue("ejb3PersistentEntity", "name")-»")
 		«ENDIF»
-		@Table(
-		«IF hasUtilizableValue("ejb3PersistentEntity", "tableName")-»
-			name="tbl_«getTaggedValue("ejb3PersistentEntity", "tableName")-»"
+		«REM»@Table is not allowed with SINGLE_TABLE inheritance strategy«ENDREM»
+		«IF generalization.isEmpty-»
+			«EXPAND _Table-»
 		«ELSE-»
-			name="tbl_«asTypeName()-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3PersistentEntity", "tableCatalog")-»
-			, catalog = "«getTaggedValue("ejb3PersistentEntity", "tableCatalog")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3PersistentEntity", "tableSchema")-»
-			, schema = "«getTaggedValue("ejb3PersistentEntity", "tableSchema")-»"
-		«ENDIF-»)
+			«FOREACH generalization.typeSelect(MClass) AS classes-»
+				«IF !classes.hasStereotype("ejb3Inheritance") && !hasTaggedValue("ejb3Inheritance", "discriminatorType", "SINGLE_TABLE")-»
+					«EXPAND _Table-»
+				«ENDIF»
+			«ENDFOREACH-»
+		«ENDIF»
 		«REM» entity listener «ENDREM»
 		«EXPAND _EntityListener»
 		«REM» inheritance «ENDREM»
 		«EXPAND _Inheritance-»
 	«ENDIF»
+«ENDDEFINE»
+
+
+«REM»
+	evaluates tagged values of @Table in "ejb3PersistentEntity"
+«ENDREM»
+«DEFINE _Table FOR MClass-»
+	@Table(
+	«IF hasUtilizableValue("ejb3PersistentEntity", "tableName")-»
+		name="tbl_«getTaggedValue("ejb3PersistentEntity", "tableName")-»"
+	«ELSE-»
+		name="tbl_«asTypeName()-»"
+	«ENDIF-»
+	«IF hasUtilizableValue("ejb3PersistentEntity", "tableCatalog")-»
+		, catalog = "«getTaggedValue("ejb3PersistentEntity", "tableCatalog")-»"
+	«ENDIF-»
+	«IF hasUtilizableValue("ejb3PersistentEntity", "tableSchema")-»
+		, schema = "«getTaggedValue("ejb3PersistentEntity", "tableSchema")-»"
+	«ENDIF-»)
 «ENDDEFINE»
 
 «REM»
@@ -314,30 +332,100 @@
 «ENDREM»
 «DEFINE _Inheritance FOR MClass-»
 	«IF hasStereotype("ejb3Inheritance")-»
+		«REM» Klasse ist selbst die vererbende Klasse «ENDREM»
 		@Inheritance(strategy=InheritanceType.«taggedValue.selectFirst(e|e.tag.name == "strategy").value-»)
+		«IF hasStereotype("ejb3DiscriminatorColumn")-»
+			@DiscriminatorColumn(discriminatorType=DiscriminatorType.«getTaggedValue("ejb3DiscriminatorColumn", "discriminatorType")-»
+			«IF hasUtilizableValue("ejb3DiscriminatorColumn", "name") && !hasTaggedValue("ejb3DiscriminatorColumn", "name", "DTYPE")-»
+				, name="«getTaggedValue("ejb3DiscriminatorColumn", "name")-»", 
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3DiscriminatorColumn", "columnDefinition")-»
+				, columnDefinition="«getTaggedValue("ejb3DiscriminatorColumn", "columnDefinition")-»"
+			«ENDIF-»
+			«IF !hasTaggedValue("ejb3DiscriminatorColumn", "length", "31") && hasTaggedValue("ejb3DiscriminatorColumn", "discriminatorType", "STRING")-»
+				, length=«getTaggedValue("ejb3DiscriminatorColumn", "length")-»
+			«ENDIF-»)
+		«ENDIF-»
+		«EXPAND DiscriminatorValue-»		
+	«ELSEIF hasStereotype("ejb3DiscriminatorValue")-»
+		«REM» class is a derived class «ENDREM»
+		«EXPAND DiscriminatorValue-»
+		«IF hasStereotype("ejb3PrimaryKeyJoinColumn")-»
+			«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "name", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "name", "")-»
+				@PrimaryKeyJoinColumn(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"			
+			«ENDIF-»
+			«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedColumnName", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedColumnName", "")-»
+				, referencedColumnName="«taggedValue.selectFirst(e|e.tag.name == "referencedColumnName").value-»"			
+			«ENDIF-»
+			«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition", "")-»
+				, columnDefinition="«taggedValue.selectFirst(e|e.tag.name == "ColumnDefinition").value-»"			
+			«ENDIF-»)
+		«ENDIF-»
+	«ELSE-»
+		«REM» automatic annotation of inheritance «ENDREM»
+		«IF !generalization.isEmpty-»
+			«FOREACH generalization.typeSelect(MClass) AS class-»
+				«REM» only inheritance of depth one «ENDREM»
+				«IF (hasStereotype(class, "ejb3Inheritance") || hasStereotype(class, "ejb3DiscriminatorColumn")) &&
+					class.generalization.isEmpty-»
+					«REM»a«ENDREM»
+					«IF hasStereotype("ejb3Inheritance")-»
+						«REM»
+							logically there is no discriminator column stereotype in super class
+							it cannot be annotated to class if @Inheritance is not available
+						«ENDREM»
+						«IF getTaggedValue(class, "ejb3Inheritance", "strategy") == "SINGLE_TABLE"-»
+							«IF getTaggedValue(class, "ejb3Inheritance", "discriminatorType") == "STRING"-»
+								«addDiscriminatorColumnStereotype(class, "", "STRING", "31", "DTYPE") ->""-»
+								«REM»
+									ejb3DiscriminatorValue is not needed here because class name
+									is choosen by default as identifier of the discriminator column
+									if "@DiscriminatorValue" is missing
+								«ENDREM»
+							«ELSEIF getTaggedValue(class, "ejb3Inheritance", "discriminatorType") == "INT"-»
+								«addDiscriminatorColumnStereotype(class, "", "INT", "31", "DTYPE") ->""-»
+								«addDiscriminatorValueStereotype(class, class.name.asTypeName().length.toString()) ->""-»
+								«addDiscriminatorValueStereotype(this, asTypeName().length.toString()) ->""-»
+							«ELSEIF getTaggedValue(class, "ejb3Inheritance", "discriminatorType") == "CHAR"-»
+								«addDiscriminatorColumnStereotype(class, "", "CHAR", "31", "DTYPE") ->""-»
+								«addDiscriminatorValueStereotype(class, class.name.asTypeName().subString(0, 1)) ->""-»
+								«addDiscriminatorValueStereotype(this, asTypeName().subString(0, 1).toString()) ->""-»
+							«ENDIF»
+						«ENDIF»
+					«ENDIF»
+				«ELSE-»
+					«REM» there is no "@Inheritance" and "@DiscriminatorColumn" at super class «ENDREM»
+					«addInheritanceStereotype(class, "SINGLE_TABLE") ->""-»
+					«addDiscriminatorColumnStereotype(class, "", "STRING", "31", "DTYPE") ->""-»
+					«REM»
+						equal named primary keys in super and derived class are 
+						detected by primary key annotation in Attribute.xpt
+						--> nothing to do here 
+					«ENDREM»
+					«REM»
+						ejb3DiscriminatorValue is not needed here because class name
+						is choosen by default as identifier of the discriminator column
+						if "@DiscriminatorValue" is missing
+					«ENDREM»
+				«ENDIF-»
+			«ENDFOREACH»
+		«ELSE-»
+			«REM» look for this class in generalizations of other classes «ENDREM»
+			«FOREACH this.owningPackage.classifier.typeSelect(MClass) AS classes-»
+				«IF !hasStereotype("ejb3Inheritance") && !classes.generalization.isEmpty && 
+					classes.generalization.typeSelect(MClass).name.exists(e|e == this.name)-»
+					«addInheritanceStereotype(this, "SINGLE_TABLE") ->""-»
+					«addDiscriminatorColumnStereotype(this, "", "STRING", "31", "DTYPE") ->""-»
+					«REM»
+						ejb3DiscriminatorValue is not needed here because class name
+						is choosen by default as identifier of the discriminator column
+						if "@DiscriminatorValue" is missing
+					«ENDREM»					
+					«EXPAND _Inheritance-»
+				«ENDIF»			
+			«ENDFOREACH»
+		«ENDIF-»
 	«ENDIF»
-	«IF hasStereotype("ejb3DiscriminatorColumn")-»
-		@DiscriminatorColumn(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»", 
-		discriminatorType=«taggedValue.selectFirst(e|e.tag.name == "discriminatorType").value-»
-		«IF !hasTaggedValue("ejb3DiscriminatorColumn", "columnDefinition", "null") || !hasTaggedValue("ejb3DiscriminatorColumn", "columnDefinition", "")-»
-			, columnDefinition="«taggedValue.selectFirst(e|e.tag.name == "columnDefinition").value-»"
-		«ENDIF-»
-		«IF !hasTaggedValue("ejb3DiscriminatorColumn", "length", "31") && hasTaggedValue("ejb3DiscriminatorColumn", "discriminatorType", "STRING")-»
-			, length=«taggedValue.selectFirst(e|e.tag.name == "length").value-»
-		«ENDIF-»)
-	«ENDIF-»
-	«EXPAND DiscriminatorValue-»
-	«IF hasStereotype("ejb3PrimaryKeyJoinColumn")-»
-		«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "name", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "name", "")-»
-			@PrimaryKeyJoinColumn(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"			
-		«ENDIF-»
-		«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedColumnName", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedColumnName", "")-»
-			, referencedColumnName="«taggedValue.selectFirst(e|e.tag.name == "referencedColumnName").value-»"			
-		«ENDIF-»
-		«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition", "")-»
-			, columnDefinition="«taggedValue.selectFirst(e|e.tag.name == "ColumnDefinition").value-»"			
-		«ENDIF-»)
-	«ENDIF-»
 «ENDDEFINE»
 
 «REM» evaluates the stereotype "ejb3PrimaryKey"«ENDREM»

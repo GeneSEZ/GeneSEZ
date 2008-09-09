@@ -124,6 +124,7 @@
 				opposite has no stereotype "ejb3Association"
 				set necessary annotation and add value to tagged value "type" for easy
 				evaluation of the opposite association later in the generation process. 
+				Cannot create stereotype on opposite because it does not work for some reason!!! 
 			«ENDREM»
 			«IF multiplicity == 1-»
 				«IF opposite.multiplicity == 1-»
@@ -178,25 +179,25 @@
 			«IF multiplicity == 1-»
 				«IF opposite.multiplicity == 1-»
 					«addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
-					@OneToOne«EXPAND _EvaluateAssociationTaggedValues-»
 					«addAssociationStereotype(opposite, "OneToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
+					@OneToOne«EXPAND _EvaluateAssociationTaggedValues-»
 					«EXPAND _JoinTable»
 				«ELSE-»
 					«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
-					@OneToMany«EXPAND _EvaluateAssociationTaggedValues-»
 					«addAssociationStereotype(opposite, "ManyToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
+					@OneToMany«EXPAND _EvaluateAssociationTaggedValues-»
 					«EXPAND _JoinTable»
 				«ENDIF-»
 			«ELSE-»
 				«IF opposite.multiplicity == 1-»
 					«addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
-					@ManyToOne«EXPAND _EvaluateAssociationTaggedValues-»
 					«addAssociationStereotype(opposite, "OneToMany", "null", "[]", "DEFAULT", "true", asAttribute()) ->""-»
+					@ManyToOne«EXPAND _EvaluateAssociationTaggedValues-»
 					«EXPAND _JoinTable»			
 				«ELSE-»
 					«addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
+					«addAssociationStereotype(opposite, "ManyToMany", "null", "[]", "DEFAULT", "true", "null") ->""-»					
 					@ManyToMany«EXPAND _EvaluateAssociationTaggedValues-»
-					«addAssociationStereotype(opposite, "ManyToMany", "null", "[]", "DEFAULT", "true", "null") ->""-»
 					«EXPAND _JoinTable»
 				«ENDIF-»				
 			«ENDIF-»
@@ -263,14 +264,14 @@
 		«ENDIF-»	
 	«ELSE-»
 		«IF opposite.hasTaggedValue("ejb3Association", "associationyType", "OneToOne")-»
-			«IF opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
+			«IF !opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
 				«IF hasStereotype("ejb3Association")-»
 					«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
 				«ELSE-»
 					«addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 				«ENDIF-»
 			«ELSE-»
-				«addAssociationStereotype(this, "OneToOne", "null", "[]", "", "true", "null") ->""-»
+				«addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
 			«ENDIF-»		
 			@OneToOne«EXPAND _EvaluateAssociationTaggedValues-»
 		«ELSEIF opposite.hasTaggedValue("ejb3Association", "type", "OneToMany")-»
@@ -280,7 +281,7 @@
 			@ManyToOne«EXPAND _EvaluateAssociationTaggedValues-»			
 			«EXPAND _JoinTable»
 		«ELSEIF opposite.hasTaggedValue("ejb3Association", "type", "ManyToOne")-»
-			«IF (opposite.hasTaggedValue("ejb3Association", "mappedBy", "null") || opposite.hasTaggedValue("ejb3Association", "mappedBy", ""))-»
+			«IF !opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
 				«IF hasStereotype("ejb3Association")-»
 					«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
 				«ELSE-»
@@ -292,7 +293,8 @@
 			@OneToMany«EXPAND _EvaluateAssociationTaggedValues-»
 			«EXPAND _JoinTable»
 		«ELSEIF opposite.hasTaggedValue("ejb3Association", "type", "ManyToMany")-»
-			«IF opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
+			«IF !opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
+				//kein mappedBy auf Gegenseite
 				«IF hasStereotype("ejb3Association")-»
 					«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
 				«ELSE-»

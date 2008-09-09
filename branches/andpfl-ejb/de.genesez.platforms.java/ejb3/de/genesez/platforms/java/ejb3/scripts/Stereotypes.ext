@@ -115,10 +115,98 @@ create MStereotype makeAssociationStereotype(MProperty elem, String associationT
 	elem.stereotype.add(this);
 	
 /**
+ *	function to add an "ejb3Inheritance" stereotype to a MClass
+ *	standard values are not set by this function!
+ *
+ *	@param		strategy		value of "ejb3InheritanceType" (standard: "SINGLE_TABLE")
+ *
+ */
+Void addInheritanceStereotype(MClass this, String strategy) :
+	this.owningPackage.getModel().anyStereotype.add(makeInheritanceStereotype(this, strategy));
+
+/**
+ *	function to create an "ejb3Inheritance" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MClass, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		strategy		value of "ejb3InheritanceType" (standard: "SINGLE_TABLE")
+ *
+ */
+create MStereotype makeInheritanceStereotype(MClass class, String strategy) :
+	setName("ejb3Inheritance") ->
+	property.add(makeTag("strategy", "ejb3InheritanceType")) ->
+	class.taggedValue.add(makeTaggedValue(strategy, makeTag("strategy", "ejb3InheritanceType"))) ->
+	class.stereotype.add(this);
+	
+/**
+ *	function to add an "ejb3DiscriminatorColumn" stereotype to a MClass
+ *	standard values are not set by this function!
+ *
+ *	@param		columnDefinition	
+ *	@param		description			
+ *	@param		length				
+ *	@param		name				
+ *
+ */
+Void addDiscriminatorColumnStereotype(MClass this, String columnDefinition, String discriminatorType, String length, String name) :
+	this.owningPackage.getModel().anyStereotype.add(makeDiscriminatorColumnStereotype(this, columnDefinition, discriminatorType, length, name));
+
+/**
+ *	function to create an "ejb3DiscriminatorColumn" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MClass, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		columnDefinition	
+ *	@param		description			
+ *	@param		length				
+ *	@param		name				name of the discrimnator column
+ *
+ */
+create MStereotype makeDiscriminatorColumnStereotype(MClass class, String columnDefinition, String discriminatorType, String length, String name) :
+	setName("ejb3DiscriminatorColumn") ->
+	property.add(makeTag("columnDefinition", "String")) ->
+	property.add(makeTag("discriminatorType", "ejb3DiscriminatorType")) ->
+	property.add(makeTag("length", "String")) ->
+	property.add(makeTag("name", "String")) ->
+	class.taggedValue.add(makeTaggedValue(columnDefinition, makeTag("columnDefinition", "String"))) ->
+	class.taggedValue.add(makeTaggedValue(discriminatorType, makeTag("discriminatorType", "ejb3DiscriminatorType"))) ->
+	class.taggedValue.add(makeTaggedValue(length, makeTag("length", "String"))) ->
+	class.taggedValue.add(makeTaggedValue(name, makeTag("name", "String"))) ->
+	class.stereotype.add(this);
+	
+/**
+ *	function to add an "ejb3DiscriminatorValue" stereotype to a MClass
+ *	standard values are not set by this function!
+ *
+ *	@param		value		identifier of discriminator column
+ *
+ */
+Void addDiscriminatorValueStereotype(MClass this, String value) :
+	this.owningPackage.getModel().anyStereotype.add(makeDiscriminatorValueStereotype(this, value));
+
+/**
+ *	function to create an "ejb3DiscriminatorValue" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MClass, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		value		identifier of discriminator column
+ *
+ */
+create MStereotype makeDiscriminatorValueStereotype(MClass class, String value) :
+	setName("ejb3DiscriminatorValue") ->
+	property.add(makeTag("value", "String")) ->
+	class.taggedValue.add(makeTaggedValue(value, makeTag("value", "String"))) ->
+	class.stereotype.add(this);
+	
+/**
  *	function to create a MTag (i.e. for use with MTaggedvalue)
  *
- *	@param		name	name of the MTag
- *	@param		type	type of the value (i.e. the value in MTaggedValue)
+ *	@param		name				name of the MTag
+ *	@param		type				type of the value (i.e. the value in MTaggedValue)
+ *	[@param		stereotypeName		name of the containing stereotype]
  *
  */
 create MTag makeTag(String name, String type) :
