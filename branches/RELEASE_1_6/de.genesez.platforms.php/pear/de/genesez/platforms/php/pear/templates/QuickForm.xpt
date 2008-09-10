@@ -31,9 +31,10 @@
 «REM» use the type mapping «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
+«EXTENSION de::genesez::platforms::php::scripts::Import»
 «REM» use pear naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::pear::scripts::QuickFormNaming»
-«EXTENSION de::genesez::platforms::php::scripts::Import»
+«EXTENSION de::genesez::platforms::php::pear::scripts::QuickFormUtil»
 
 
 «REM»
@@ -332,10 +333,16 @@ class «asQuickFormTypeName()» {
 «ENDDEFINE»
 
 «REM»
-	exports a value of the form and sets it on the object using a setter method
+	exports a value of the form and sets it on the object using the specified kind of access
 «ENDREM»
 «DEFINE _ExportNormalValue FOR MProperty -»
+«IF isAttributeAccess() -»
+		$«classifier.asQuickFormBuildObjectMethodObjectParameterName()»->«asAttribute()» = $«asQuickFormBuildObjectMethodFormParameterName()»->exportValue('«asQuickFormElementName()»');
+«ELSEIF isArrayAccess() -»
+		$«classifier.asQuickFormBuildObjectMethodObjectParameterName()»['«asAttribute()»'] = $«asQuickFormBuildObjectMethodFormParameterName()»->exportValue('«asQuickFormElementName()»');
+«ELSE -»
 		$«classifier.asQuickFormBuildObjectMethodObjectParameterName()»->«asSetter()»($«asQuickFormBuildObjectMethodFormParameterName()»->exportValue('«asQuickFormElementName()»'));
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
