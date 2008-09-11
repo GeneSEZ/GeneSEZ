@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- example project where the generated artifacts are stored -->
+	<property name="de.genesez.applicationproject.dir" value="../de.genesez.example.csharp.forms" />
+	
+	<!-- Reading the example file. -->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::makeGenesezModelProfile.oaw" 
+		uml2ProfileFile="${de.genesez.applicationproject.dir}/model-exp/genesez.profile.uml"
+		inputModelFile="${de.genesez.applicationproject.dir}/model-exp/Forms_Example.uml"
+		excludePackages="UML Standard Profile"
+		genesezModel="genesezModel"
+		mapClassesInModelToExternal="false"
+		externalPackages=""
+		externalStereotypes="external"
+	/>
+		
+	<!-- Write the transformed model file.  /-->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::xmiWriter.oaw"
+		modelSlot="genesezModel"
+		outputModelFile="${de.genesez.applicationproject.dir}/model-gen/application.xmi"
+	/>
+	
+	<!-- Create java code with AOP in xpand templates.  /-->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::dotnet::csharp::templates::Root::Root FOR genesezModel"
+		aspectTemplates=""
+		aspectScripts=""
+		excludePackages="java, java.util"
+		configFile=""
+		outputDir="${de.genesez.applicationproject.dir}/src-gen"
+		proRegDir="${de.genesez.applicationproject.dir}/src-gen"
+		typeMappingFile="de/genesez/platforms/dotnet/csharp/typemapping/typemapping4csharp.xml"
+	/>
+	
+
+</workflow>
