@@ -83,7 +83,6 @@
 	«ELSE-»
 		«EXPAND _AssociationStereotypeNotExists-»
 	«ENDIF»
-	«EXPAND _JoinColumn-»
 «ENDDEFINE»
 
 «REM»
@@ -180,26 +179,22 @@
 				«IF opposite.multiplicity == 1-»
 					«addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 					«addAssociationStereotype(opposite, "OneToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
-					@OneToOne«EXPAND _EvaluateAssociationTaggedValues-»
-					«EXPAND _JoinTable»
 				«ELSE-»
 					«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 					«addAssociationStereotype(opposite, "ManyToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
-					@OneToMany«EXPAND _EvaluateAssociationTaggedValues-»
-					«EXPAND _JoinTable»
 				«ENDIF-»
 			«ELSE-»
 				«IF opposite.multiplicity == 1-»
 					«addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
 					«addAssociationStereotype(opposite, "OneToMany", "null", "[]", "DEFAULT", "true", asAttribute()) ->""-»
-					@ManyToOne«EXPAND _EvaluateAssociationTaggedValues-»
-					«EXPAND _JoinTable»			
 				«ELSE-»
 					«addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 					«addAssociationStereotype(opposite, "ManyToMany", "null", "[]", "DEFAULT", "true", "null") ->""-»					
-					@ManyToMany«EXPAND _EvaluateAssociationTaggedValues-»
-					«EXPAND _JoinTable»
 				«ENDIF-»				
+			«ENDIF-»
+			@«getTaggedValue("ejb3Association", "type")-»«EXPAND _EvaluateAssociationTaggedValues-»
+			«IF !hasTaggedValue("ejb3Association", "type", "OneToOne")-»
+				«EXPAND _JoinTable»
 			«ENDIF-»
 		«ELSE-»
 			«REM»
@@ -231,6 +226,9 @@
 			«ELSE-»
 				«IF !hasStereotype("ejb3Association")-»
 					«addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
+				«ELSE-»
+					«setTaggedValue(this, "type", "ManyToOne")->""-»
+					«setTaggedValue(this, "mappedBy", "null")->""-»
 				«ENDIF-»	
 				«setTaggedValue(opposite, "type", "OneToMany") ->""-»
 				«setTaggedValue(opposite, "mappedBy", asAttribute()) ->""-»
@@ -277,31 +275,35 @@
 		«ELSEIF opposite.hasTaggedValue("ejb3Association", "type", "OneToMany")-»
 			«IF !hasStereotype("ejb3Association")-»
 				«addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null") ->""-»
+			«ELSE-»
+				«setTaggedValue(this, "type", "ManyToOne")->""-»
+				«setTaggedValue(this, "mappedBy", "null") ->""-»				
 			«ENDIF-»	
 			@ManyToOne«EXPAND _EvaluateAssociationTaggedValues-»			
 			«EXPAND _JoinTable»
 		«ELSEIF opposite.hasTaggedValue("ejb3Association", "type", "ManyToOne")-»
 			«IF !opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
 				«IF hasStereotype("ejb3Association")-»
+					«setTaggedValue(this, "type", "OneToMany")->""-»
 					«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
 				«ELSE-»
 					«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 				«ENDIF-»	
 			«ELSE-»
-				«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "null") ->""-»
+				«setTaggedValue(opposite, "mappedBy", "null")->""-»
+				«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 			«ENDIF-»		
 			@OneToMany«EXPAND _EvaluateAssociationTaggedValues-»
 			«EXPAND _JoinTable»
 		«ELSEIF opposite.hasTaggedValue("ejb3Association", "type", "ManyToMany")-»
 			«IF !opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
-				//kein mappedBy auf Gegenseite
 				«IF hasStereotype("ejb3Association")-»
 					«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
 				«ELSE-»
 					«addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 				«ENDIF-»
 			«ELSE-»
-				«addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "null") ->""-»
+				«addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 			«ENDIF-»		
 			@ManyToMany«EXPAND _EvaluateAssociationTaggedValues-»
 			«EXPAND _JoinTable»			
@@ -322,7 +324,7 @@
 	«IF hasUtilizableValue("ejb3Association", "targetEntity")-»
 		, targetEntity="«getTaggedValue("ejb3Association", "targetEntity")-»"
 	«ENDIF-»
-	«IF !hasTaggedValue("ejb3Association", "fetch", "DEFAULT")-»
+	«IF !hasTaggedValue("ejb3Association", "fetch", "DEFAULT") && hasUtilizableValue("ejb3Association", "fetch")-»
 		, fetch=FetchType.«getTaggedValue("ejb3Association", "fetch")-»
 	«ENDIF-»
 	«IF ( hasTaggedValue("ejb3Association", "type", "OneToOne") && hasTaggedValue("ejb3Association", "optional", "false") )-»
@@ -335,7 +337,7 @@
 			«IF opposite.hasStereotype("ejb3Association")-»
 				«IF	!opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»
 					«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
-					, mappedBy="«getTaggedValue("ejb3Association", "mappedBy")-»"			
+					, mappedBy="«getTaggedValue("ejb3Association", "mappedBy")-»"
 				«ENDIF-»
 			«ELSEIF hasStereotype("ejb3Association") && !hasUtilizableValue("ejb3Association", "mappedBy")-»
 				«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
@@ -352,7 +354,7 @@
 	«IF hasStereotype("ejb3JoinColumn")»
 		«IF hasUtilizableValue("ejb3JoinColumn", "name")»
 			@JoinColumn(name="«getTaggedValue("ejb3JoinColumn", "name")-»"
-			«IF hasUtilizableValue("ejb3JoinColumn", "referencedColumnName")-»
+			«IF hasUtilizableValue("ejb3JoinColumn", "referencedName")-»
 				, referencedColumnName="«getTaggedValue("ejb3JoinColumn", "referencedName")-»"
 			«ENDIF-»
 			«IF hasUtilizableValue("ejb3JoinColumn", "table")-»
@@ -385,7 +387,7 @@
 	«IF hasStereotype("ejb3IJoinColumn")»
 		«IF hasUtilizableValue("ejb3IJoinColumn", "name")»
 			@JoinColumn(name="«getTaggedValue("ejb3IJoinColumn", "name")-»"
-			«IF hasUtilizableValue("ejb3IJoinColumn", "referencedColumnName")-»
+			«IF hasUtilizableValue("ejb3IJoinColumn", "referencedName")-»
 				, referencedColumnName="«getTaggedValue("ejb3IJoinColumn", "referencedName")-»"
 			«ENDIF-»
 			«IF hasUtilizableValue("ejb3IJoinColumn", "table")-»

@@ -183,10 +183,11 @@
  «ENDREM»
 «DEFINE DatatypeMapping FOR MElement»
 	«IF hasStereotype("ejb3DatatypeMapping")»
-		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Basic") && (!hasTaggedValue("ejb3DatatypeMapping", "null", "DEFAULT") || hasTaggedValue("ejb3DatatypeMapping", "optional", "true"))»
-			@Basic(fetch=FetchType.«taggedValue.selectFirst(e|e.tag.name == "fetch").value-»
-			«IF hasTaggedValue("ejb3DatatypeMapping", "optional", "true")-»
-			, optional=true
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Basic")»
+			@Basic(optional=«getTaggedValue("ejb3DatatypeMapping", "optional")-»
+			«IF hasUtilizableValue("ejb3DatatypeMapping", "fetch") && 
+				!hasTaggedValue("ejb3DatatypeMapping", "fetch", "DEFAULT")-»
+				, fetch=FetchType.«getTaggedValue("ejb3DatatypeMapping", "fetch")-»
 			«ENDIF-»)
 		«ENDIF»
 		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Embeddable")»
@@ -198,14 +199,18 @@
 		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Temporal")»
 			@Temporal
 			«IF !hasTaggedValue("ejb3DatatypeMapping", "temporalType", "null")-»
-				(TemporalType.«taggedValue.selectFirst(e|e.tag.name == "temporalType").value-»)
+				(TemporalType.«getTaggedValue("ejb3DatatypeMapping", "temporalType")-»)
 			«ENDIF»
 		«ENDIF»
 		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Enumerated")»
 			@Enumerated
-			«IF !hasTaggedValue("ejb3DatatypeMapping", "enumType", "ORDINAL")-»
-				(«taggedValue.selectFirst(e|e.tag.name == "enumType").value-»)
+			«IF hasUtilizableValue("ejb3DatatypeMapping", "enumType") && 
+				!hasTaggedValue("ejb3DatatypeMapping", "enumType", "ORDINAL")-»
+				(«getTaggedValue("ejb3DatatypeMapping", "enumType")-»)
 			«ENDIF»
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "transient", "true")-»
+			@Transient
 		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
@@ -236,6 +241,27 @@
 	«ENDIF-»
 «ENDDEFINE»
 
+«REM» 
+	evaluate the stereotype ejb3WebParam 
+«ENDREM»
+«DEFINE WebParam FOR MElement-»
+	«IF hasStereotype("jwsWebParam")-»
+		@WebParam(header=«getTaggedValue("jwsWebParam", "header")-»
+		«IF hasUtilizableValue("jwsWebParam", "name")-»
+			, name="«getTaggedValue("jwsWebParam", "name")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebParam", "partName")-»
+			, partName="«getTaggedValue("jwsWebParam", "partName")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebParam", "targetNamespace")-»
+			, targetNamespace="«getTaggedValue("jwsWebParam", "targetNamespace")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebParam", "mode")-»
+			, mode=WebParam.Mode.«getTaggedValue("jwsWebParam", "mode")-»
+		«ENDIF-»)
+	«ENDIF-»
+«ENDDEFINE»
+
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private functions
@@ -251,7 +277,9 @@
 	«EXPAND _Persistence»
 	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
 	«EXPAND Class::DiscriminatorValue-»	
-	«EXPAND _WebParam-»
+	«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«EXPAND WebParam-»
+	«ENDIF-»
 	«REM» 
 		stereotype "ejb3EJB" and automatic annotation of EJB for session bean interfaces
 		following the naming convention "I + <Name> + {Remote|Local}" 
@@ -262,32 +290,6 @@
 		«ENDIF-»
 	«ELSE-»
 		«EXPAND EJB-»
-	«ENDIF-»
-«ENDDEFINE»
-
-«REM» 
-	evaluate the stereotype ejb3WebParam 
-«ENDREM»
-«DEFINE _WebParam FOR MAttribute-»
-	«IF hasStereotype("ejb3WebParam")-»
-		@WebParam(header=
-		«IF hasTaggedValue("ejb3WebParam", "header", "true")-»
-			true
-		«ELSE-»
-			false
-		«ENDIF»
-		«IF hasUtilizableValue("ejb3WebParam", "name")-»
-			, name="«getTaggedValue("ejb3WebParam", "name")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3WebParam", "partName")-»
-			, partName="«getTaggedValue("ejb3WebParam", "partName")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3WebParam", "targetNamespace")-»
-			, targetNamespace="«getTaggedValue("ejb3WebParam", "targetNamespace")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3WebParam", "mode")-»
-			, mode="«getTaggedValue("ejb3WebParam", "mode")-»"
-		«ENDIF-»)
 	«ENDIF-»
 «ENDDEFINE»
 

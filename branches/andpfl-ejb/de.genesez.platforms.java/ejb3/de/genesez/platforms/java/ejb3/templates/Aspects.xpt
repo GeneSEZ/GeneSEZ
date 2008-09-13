@@ -20,6 +20,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -33,6 +34,24 @@
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Import::_FixedImports FOR MClassifier-»
 	import java.util.*;
+«ENDAROUND»
+
+«REM»
+	annotate jmsWebResult after the modifier of an operation
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_Modifier FOR MOperation-»
+	«targetDef.proceed()-» «IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false") && hasStereotype("jwsWebResult")-»
+		@WebResult(header=«getTaggedValue("jwsWebResult", "header")-»
+		«IF hasUtilizableValue("jwsWebResult", "name")-»
+			name="«getTaggedValue("jwsWebResult", "name")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebResult", "partName")-»
+			partName="«getTaggedValue("jwsWebResult", "partName")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebResult", "targetNamespace")-»
+			targetNamespace="«getTaggedValue("jwsWebResult", "targetNamespace")-»"
+		«ENDIF-»)
+	«ENDIF»
 «ENDAROUND»
 
 «REM»

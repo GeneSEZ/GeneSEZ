@@ -88,7 +88,7 @@
 	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
 	«EXPAND Class::DiscriminatorValue-»
 	«REM» stereotype "ejb3WebMethod" «ENDREM»
-	«EXPAND _WebMethod-»	
+	«EXPAND _JWS-»	
 	«REM» stereotype "ejb3EJB" «ENDREM»
 	«EXPAND Attribute::EJB-»
 «ENDDEFINE»
@@ -102,20 +102,21 @@
 «REM»
 	evaluates the stereotype ejb3WebMethod
 «ENDREM»
-«DEFINE _WebMethod FOR MOperation-»
-	«IF hasStereotype("ejb3WebMethod")-»
-		@WebMethod(operationName=
-		«IF !hasTaggedValue("ejb3WebMethod", "operationName", "null")-»
-			"«taggedValue.select(e|e.tag.name == "operationName").value-»"
-		«ELSE»
-			"«name-»"
+«DEFINE _JWS FOR MOperation-»
+	«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«IF hasStereotype("jwsWebMethod")-»
+			@WebMethod(exclude=«getTaggedValue("jwsWebMethod", "exclude")-»
+			«IF hasUtilizableValue("jwsWebMethod", "operationName")-»
+				, operationName="«getTaggedValue("jwsWebMethod", "operationName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebMethod", "action")-»
+				, action="«getTaggedValue("jwsWebMethod", "action")-»"
+			«ENDIF-»)
 		«ENDIF-»
-		«IF !hasTaggedValue("ejb3WebMethod", "action", "null")-»
-			, action="«taggedValue.select(e|e.tag.name == "action").value-»"
-		«ENDIF-»)
 		«IF hasTaggedValue("ejb3WebMethod", "oneway", "true")-»
 			@Oneway
 		«ENDIF-»
+		«EXPAND Attribute::WebParam-»	 	
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -171,15 +172,9 @@
 «ENDREM»
 «DEFINE _Interceptor FOR MOperation-»
 	«IF hasStereotype("ejb3OperationInterceptor")-»
-		«IF !(hasTaggedValue("ejb3OperationInterceptor", "classes", "[]") || hasTaggedValue("ejb3OperationInterceptor", "classes", "null"))-»
-			@Interceptors(
-			«FOREACH taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements() AS classes SEPARATOR ", "-»
-				«IF (classes != "[]" && classes != "")-»
-					«classes-»
-					«IF !classes.contains(".class")-»
-					 	.class
-					 «ENDIF-»
-				«ENDIF-»
+		«IF hasUtilizableValue("ejb3OperationInterceptor", "interceptors")-»
+			@Interceptors(«FOREACH getTaggedValue("ejb3OperationInterceptor", "interceptors").getElements() AS interceptor SEPARATOR ", "-»
+					«interceptor-».class
 			«ENDFOREACH-»)
 		«ENDIF»
 		«IF hasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")-»

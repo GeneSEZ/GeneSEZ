@@ -254,7 +254,7 @@
 		«REM» interceptors «ENDREM»
 		«EXPAND _Interceptor»
 		«IF hasTaggedValue("ejb3SessionBean", "stateful", "false")»
-			«EXPAND _WebService»
+			«EXPAND _JWS»
 		«ENDIF»
 	«ENDIF-»
 «ENDDEFINE»
@@ -274,14 +274,15 @@
  		«IF hasUtilizableValue("ejb3MessageDrivenBean", "description")-»
  			, description = "«getTaggedValue("ejb3MessageDrivenBean", "description")-»"
  		«ENDIF-»
- 		«IF hasTaggedValue("ejb3MessageDrivenBean", "activationConfig", "true")-»
- 			«IF hasUtilizableValue("ejb3MessageDrivenBean", "activationConfigPropertyName") && hasUtilizableValue("ejb3MessageDrivenBean", "ejb3ActivationConfigPropertyValue")-»
+ 		«IF hasStereotype("ejb3ActivationConfigProperty")-»
+ 			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "name") && 
+ 				hasUtilizableValue("ejb3ActivationConfigProperty", "value")-»
  				, activationConfig = {
- 				«FOREACH getTaggedValue("ejb3MessageDrivenBean", "activationConfigPropertyName").getElements() AS names SEPARATOR ","»
+ 				«FOREACH getTaggedValue("ejb3ActivationConfigProperty", "name").getElements() AS name SEPARATOR ","»
  					@ActivationConfigProperty(
- 						propertyName = "«names-»",  						
- 						«LET getTaggedValue("ejb3MessageDrivenBean", "activationConfigPropertyName").getElements().indexOf(names) AS index-»
- 							propertyValue = "«getTaggedValue("ejb3MessageDrivenBean", "activationConfigPropertyValue").getElements().get(index)-»")
+ 						propertyName = "«name-»",  						
+ 						«LET getTaggedValue("ejb3ActivationConfigProperty", "name").getElements().indexOf(name) AS index-»
+ 							propertyValue = "«getTaggedValue("ejb3ActivationConfigProperty", "value").getElements().get(index)-»")
  						«ENDLET»
  				«ENDFOREACH»
  				}
@@ -294,36 +295,44 @@
 «ENDDEFINE»
 
 «REM» evaluates the stereotype "ejb3WebService" «ENDREM»
-«DEFINE _WebService FOR MClass-»
-	«IF hasStereotype("ejb3WebService") && hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
-		@WebService(name=
-		«IF hasUtilizableValue("ejb3WebService", "webServiceName")-»
-			"«getTaggedValue("ejb3WebService", "webServiceName").getElements()-»"
-		«ELSE»
-			"«asTypeName()-»"
+«DEFINE _JWS FOR MClass-»
+	«IF hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«IF hasStereotype("jwsWebService")-»
+			@WebService(name=
+			«IF hasUtilizableValue("jwsWebService", "name")-»
+				"«getTaggedValue("jwsWebService", "name")-»"
+			«ELSE»
+				"«asTypeName()-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "targetNamespace")-»
+				, targetNamespace="«getTaggedValue("jwsWebService", "targetNamespace")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "serviceName")-»
+				, serviceName="«getTaggedValue("jwsWebService", "serviceName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "portName")-»
+				, portName="«getTaggedValue("jwsWebService", "portName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "endpointInterface")-»
+				, endpointInterface="«getTaggedValue("jwsWebService", "endpointInterface")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "wsdlLocation")-»
+				, wsdlLocation="«getTaggedValue("jwsWebService", "wsdlLocation")-»"
+			«ENDIF-»)
+		«ENDIF»
+		«IF hasUtilizableValue("jwsHandlerChain", "file")-»
+			@HandlerChain(file="«getTaggedValue("jwsHandlerChain", "file")-»")
 		«ENDIF-»
-		«IF hasUtilizableValue("ejb3WebService", "targetNamespace")-»
-			, targetNamespace="«getTaggedValue("ejb3WebService", "targetNamespace")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3WebService", "serviceName")-»
-			, serviceName="«getTaggedValue("ejb3WebService", "serviceName")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3WebService", "portName")-»
-			, portName="«getTaggedValue("ejb3WebService", "portName")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("ejb3WebService", "endpointInterface")-»
-			, endpointInterface="«getTaggedValue("ejb3WebService", "endpointInterface")-»"
-		«ENDIF-»)
-		«IF hasStereotype("ejb3SOAPBinding")-»
+		«IF hasStereotype("jwsSOAPBinding")-»
 			@SOAPBinding(use=SOAPBinding.Use.LITERAL
-			«IF hasTaggedValue("ejb3SOAPBinding", "style", "RPC")-»
+			«IF hasTaggedValue("jwsSOAPBinding", "style", "RPC")-»
 				, style=SOAPBinding.Style.RPC
 			«ENDIF-»
-			«IF hasTaggedValue("ejb3SOAPBinding", "parameterStyle", "BARE") && !hasTaggedValue("ejb3SOAPBinding", "style", "RPC")-»
+			«IF hasTaggedValue("jwsSOAPBinding", "parameterStyle", "BARE") && !hasTaggedValue("jwsSOAPBinding", "style", "RPC")-»
 				, parameterStyle=SOAPBinding.ParameterStyle.BARE
 			«ENDIF-»)			
 		«ENDIF-»
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» 
@@ -347,19 +356,25 @@
 			«ENDIF-»)
 		«ENDIF-»
 		«EXPAND DiscriminatorValue-»		
-	«ELSEIF hasStereotype("ejb3DiscriminatorValue")-»
+	«ELSEIF hasStereotype("ejb3DiscriminatorValue") || hasStereotype("ejb3PrimaryKeyJoinColumn")-»
 		«REM» class is a derived class «ENDREM»
 		«EXPAND DiscriminatorValue-»
 		«IF hasStereotype("ejb3PrimaryKeyJoinColumn")-»
-			«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "name", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "name", "")-»
-				@PrimaryKeyJoinColumn(name="«taggedValue.selectFirst(e|e.tag.name == "name").value-»"			
-			«ENDIF-»
-			«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedColumnName", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedColumnName", "")-»
-				, referencedColumnName="«taggedValue.selectFirst(e|e.tag.name == "referencedColumnName").value-»"			
-			«ENDIF-»
-			«IF !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition", "null") || !hasTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition", "")-»
-				, columnDefinition="«taggedValue.selectFirst(e|e.tag.name == "ColumnDefinition").value-»"			
-			«ENDIF-»)
+			@PrimaryKeyJoinColumns {
+			«FOREACH getTaggedValue("ejb3PrimaryKeyJoinColumn", "name").getElements() AS value-»
+				@PrimaryKeyJoinColumn(
+					name="«value-»"				
+					«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "referencedName")-»
+ 						«LET getTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedName").getElements().indexOf(value) AS index-»
+ 							, referencedColumnName="«getTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedName").getElements().get(index)-»"
+ 						«ENDLET-»
+ 					«ENDIF-»
+					«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "columnDefinition")-»
+ 						«LET getTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition").getElements().indexOf(value) AS index2-»
+ 							, columnDefinition="«getTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition").getElements().get(index2)-»"
+ 						«ENDLET-»
+ 					«ENDIF-») 					
+			«ENDFOREACH»}
 		«ENDIF-»
 	«ELSE-»
 		«REM» automatic annotation of inheritance «ENDREM»
@@ -452,10 +467,9 @@
 «DEFINE _Interface(String filename, String type) FOR MClassifier-»
 	«FILE filePath( "I" + filename + type + ".java", basePath() )-»
 		/**
-		  *	templates for generation of ejb3 source code have been written by
+		  *	generated interface of the ejb3 cartridge
 		  *
-		  * @author		André Pflüger
-		  * @email	 	admin@andre-pflueger.de
+		  * @author		andre pflueger
 		  * @date	 	2008 Aug 28
 		  * @version	1.0
 		  *
@@ -502,6 +516,7 @@
 		  *	generated primary key class of the ejb3 cartridge
 		  *
 		  * @author		andre pflueger
+		  *	@date		2008 May 18
 		  * @version	1.0
 		  *
 		  */	
@@ -570,46 +585,26 @@
 «ENDREM»
 «DEFINE _EntityListener FOR MClass-»
 	«IF hasStereotype("ejb3EntityListener")»
-		«IF hasUtilizableValue("ejb3EntityListener", "classes")
-			&& hasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "false")»
-			@EntityListeners(«FOREACH taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements() AS classes SEPARATOR ", "»
-				«IF (classes != "")-»
-					«classes-»
-					«IF !classes.contains(".class")-»
-					 	.class
-					 «ENDIF-»
-				«ENDIF-»
+		«IF hasUtilizableValue("ejb3EntityListener", "listeners")-»
+			@EntityListeners(«FOREACH getTaggedValue("ejb3EntityListener", "listeners").getElements() AS listeners SEPARATOR ", "»
+				«listeners-».class
 			«ENDFOREACH-»
-			«IF taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements().first() == ""
-				&& operation.taggedValue.exists(e|e.tag.name == "external" && e.value == "true")-»
-				«asTypeName()+"EntityListener.class"-»
+			«IF hasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
+				operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true"))-»
+				, «asTypeName()+"Listener.class"-»
+				«EXPAND _EntityListenerClass(asTypeName()+"Listener")-»
 			«ENDIF-»)
+		«ELSEIF hasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
+				operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true"))-»
+			@EntityListeners(«asTypeName()-»Listener.class)
+			«EXPAND _EntityListenerClass(asTypeName()+"Listener")-»
 		«ENDIF»
 		«IF hasTaggedValue("ejb3EntityListener", "excludeDefaultListeners", "true")»
 			@ExcludeDefaultListeners
 		«ENDIF»
 		«IF hasTaggedValue("ejb3EntityListener", "excludeSuperclassListeners", "true")»
 			@ExcludeSuperclassListeners
-		«ENDIF»
-		«REM» test if entity listener classes have been modelled by the designer «ENDREM»
-		«IF !(hasTaggedValue("ejb3EntityListener", "classes", "null") || hasTaggedValue("ejb3EntityListener", "classes", "[]"))
-			&& operation.taggedValue.exists(e|e.tag.name == "external" && e.value == "true")-»
-			«FOREACH taggedValue.select(e|e.tag.name == "classes").value.getElements() AS tags-»
-				«IF !owningPackage.classifier.exists(e|e.name == tags)»
-					«REM» there are entity listener classes which are not modelled «ENDREM»
-				«ENDIF-»
-			«ENDFOREACH-»
-		«ELSE-»
-			«REM» 
-				there is no entity listener class mentioned but at least one callback method
-				is annotated with external
-				look for class name + "EntityListener" and create them
-				if this class does not exist
-			«ENDREM»
-			«IF !owningPackage.classifier.exists(e|e.name == (asTypeName()+"EntityListener"))-»
-				«EXPAND _EntityListenerClass(asTypeName()+"EntityListener")»
-			«ENDIF-»
-		«ENDIF-»
+		«ENDIF»				
 	«ENDIF»
 «ENDDEFINE»
 
@@ -617,14 +612,13 @@
 	evaluates the stereotype "ejb3EntityListener"
 «ENDREM»
 «DEFINE _EntityListenerClass(String filename) FOR MClass-»
-	«FILE getManualFilename(filename)»
+	«FILE filePath( filename, basePath() )-»
 		/**
-		  *	templates for generation of ejb3 source code have been written by
+		  *	generated entity listener class by the ejb3 cartridge
 		  *
-		  * André Pflüger
-		  * Email: admin@andre-pflueger.de
-		  * Date: 2008 Jun 13
-		  * Version: 1.0
+		  * @author		andre pflueger
+		  * @date		2008 Jun 13
+		  * @Version	1.0
 		  *
 		  */
 		«EXPAND _Package-»
@@ -652,49 +646,26 @@
 «ENDREM»
 «DEFINE _Interceptor FOR MClass-»
 	«IF hasStereotype("ejb3ClassInterceptor")-»
-		«IF !(hasTaggedValue("ejb3ClassInterceptor", "classes", "[]") || hasTaggedValue("ejb3ClassInterceptor", "classes", "null"))-»
+		«IF hasUtilizableValue("ejb3ClassInterceptor", "interceptors")-»
 			@Interceptors(
-			«FOREACH taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements() AS classes SEPARATOR ", "-»
-				«IF (classes != "[]" && classes != "")-»
-					«classes-»
-					«IF !classes.contains(".class")-»
-					 	.class
-					 «ENDIF-»
-				«ENDIF-»
+			«FOREACH getTaggedValue("ejb3ClassInterceptor", "interceptors").getElements() AS interceptor SEPARATOR ", "-»
+				«interceptor-».class
 			«ENDFOREACH-»
-			«IF hasTaggedValue("ejb3ClassInterceptor", "generateInterceptorClass", "true")
-				&& taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value != "null"-»
-				«IF !taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements().contains(taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value)-»
-					, «taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value-»
-					«IF !taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value.contains(".class")-»
-					 	.class
-					 «ENDIF-»
-				«ENDIF-»
+			«IF hasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
+				( operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true")) ||
+				hasUtilizableValue("ejb3ClassInterceptor", "methods") )-»
+				«EXPAND _InterceptorClass(asTypeName()+"Interceptor")-»
+				, «asTypeName()-»Interceptor.class
 			«ENDIF-»)
-		«ENDIF»
-		«IF hasTaggedValue("ejb3ClassInterceptor", "generateInterceptorClass", "true")
-			&& taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value != "null"-»
-			«IF !taggedValue.selectFirst(e|e.tag.name == "classes").value.getElements().contains(taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value)-»
-				@Interceptors(«taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value-»
-				«IF !taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value.contains(".class")-»
-				 	.class
-				 «ENDIF-»
-			«ENDIF-»)
-		«ENDIF-»
-		«IF hasTaggedValue("ejb3ClassInterceptor", "generateInterceptorClass", "true") 
-			&& hasTaggedValue("ejb3ClassInterceptor", "generatedInterceptorClassName", "null")-»
-			@Interceptors(«asTypeName()+"Interceptor"»)
+		«ELSEIF hasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
+				( operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true")) ||
+				hasUtilizableValue("ejb3ClassInterceptor", "methods") )-»
+			@Interceptors(«asTypeName()»Interceptor.class)
 			«EXPAND _InterceptorClass(asTypeName()+"Interceptor")-»
 		«ENDIF-»
 		«IF hasTaggedValue("ejb3ClassInterceptor", "excludeDefaultInterceptors", "true")-»
 			@ExcludeDefaultInterceptors
 		«ENDIF»
-		«IF hasTaggedValue("ejb3ClassInterceptor", "generateInterceptorClass", "true")
-			&& !hasTaggedValue("ejb3ClassInterceptor", "generatedInterceptorClassName", "null")-»
-			«IF !owningPackage.classifier.exists(e|e.name == taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value)-»
-				«EXPAND _InterceptorClass(taggedValue.selectFirst(e|e.tag.name == "generatedInterceptorClassName").value)-»
-			«ENDIF-»
-		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -703,14 +674,13 @@
 	generates an interceptor class
 «ENDREM»
 «DEFINE _InterceptorClass(String filename) FOR MClass-»
-	«FILE getManualFilename(filename)»
+	«FILE filePath( filename, basePath() )-»
 		/**
-		  *	templates for generation of ejb3 source code have been written by
+		  *	generated interceptor class of the ejb3 cartridge
 		  *
-		  * André Pflüger
-		  * Email: admin@andre-pflueger.de
-		  * Date: 2008 Jun 15
-		  * Version: 1.0
+		  *	@author		andre pflueger
+		  * @date		2008 Jun 15
+		  * @version 	1.0
 		  *
 		  */
 		«EXPAND _Package-»
@@ -864,7 +834,7 @@
 			«ENDIF-»
 			public void «methods.name-»(«IF hasStereotype("ejb3EntityListener")-»
 				Object obj){
-					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + methods.name + "EntityListener")-»
+					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + methods.name + "Listener")-»
 			«ELSEIF hasStereotype("ejb3ClassInterceptor")-»
 				InvocationContext ctx){
 					«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + methods.name + "Interceptor")-»
@@ -879,8 +849,8 @@
 	associated business methods
 «ENDREM»
 «DEFINE _BusinessMethods FOR MClass-»
-	«IF !(hasTaggedValue("ejb3ClassInterceptor", "generatedInterceptorClassMethods", "[]") || hasTaggedValue("ejb3ClassInterceptor", "generatedInterceptorClassMethods", "null"))-»
-		«FOREACH taggedValue.select(e|e.tag.name == "generatedInterceptorClassMethods").value.getElements() AS tags-»
+	«IF hasUtilizableValue("ejb3ClassInterceptor", "methods")-»
+		«FOREACH getTaggedValue("ejb3ClassInterceptor", "methods").getElements() AS methods-»
 			/**
 			  *	generated business method for class "«asTypeName()»"
 			  * method has been mentioned in "ejb3Interceptor"-annotation 
@@ -888,9 +858,9 @@
 			  *
 			  */
 			@AroundInvoke
-			public Object «tags-»(InvocationContext ctx) throws Exception {
+			public Object «methods-»(InvocationContext ctx) throws Exception {
 				/* throw an exception to avoid execution of the business method */
-				«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + tags + "Interceptor")-»
+				«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid + methods + "Interceptor")-»
 				return ctx.proceed();
 			}
 		«ENDFOREACH»
