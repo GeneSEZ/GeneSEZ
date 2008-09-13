@@ -64,7 +64,7 @@
 «REM» creates a junit class for stereotype "junitClass" «ENDREM»
 «DEFINE _JUnitClass FOR MClass-»
 	«IF hasStereotype("junitClass")-»
-		«FILE filePath( name.toFirstUpper() + "Test.java", basePath() )-»
+		«FILE filePath( asTypeName() + "Test.java", basePath() )-»
 			/**
 			  *	templates for generation of JUnit classes have been written by
 			  *
@@ -182,7 +182,7 @@
 	«ENDIF-»
 «ENDDEFINE»
 
-«REM» generate value for a primitive data type or a string «ENDREM»
+«REM» generate value for a primitive data type or a string 
 «DEFINE _PrimitiveDataType(MProperty ids) FOR MClass-»
 	«IF ids.type.mapName() == "String"-»
 		"test"
@@ -198,7 +198,7 @@
 	«ELSEIF ids.type.mapName() == "boolean"-»
 		true
 	«ENDIF-»
-«ENDDEFINE»
+«ENDDEFINE» «ENDREM»
 
 «REM» generate a protected region for own implementations «ENDREM»
 «DEFINE _OwnCodeImpl(String proRegId) FOR MClass-»
