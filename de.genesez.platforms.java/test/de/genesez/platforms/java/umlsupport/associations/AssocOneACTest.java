@@ -3,6 +3,7 @@ package de.genesez.platforms.java.umlsupport.associations;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -27,47 +28,47 @@ public class AssocOneACTest {
 
 	@Test
 	public void insertTest() {
-		Iterator<RightOne> it = l1.right().iterator();
+		Iterator<RightOne> it = l1.getRight().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
-		l1.right().insert(r1);
+		l1.getRight().insert(r1);
 		assertTrue("iterator should have next", it.hasNext());
 		RightOne ot = it.next();
 		assertEquals("RightOne not found", r1, ot);
-		assertEquals("internal inconsistency", ot, l1.right().get());
+		assertEquals("internal inconsistency", ot, l1.getRight().get());
 		assertFalse("iterator should not have next", it.hasNext());
 	}
 
 	@Test
 	public void removeTest() {
-		assertNull("there should be nothing to remove", l1.right().remove(r1));
-		l1.right().insert(r1);
-		RightOne ot = l1.right().remove(r1);
+		assertNull("there should be nothing to remove", l1.getRight().remove(r1));
+		l1.getRight().insert(r1);
+		RightOne ot = l1.getRight().remove(r1);
 		assertEquals("RightOne not removed", r1, ot);
-		Iterator<RightOne> it = l1.right().iterator();
+		Iterator<RightOne> it = l1.getRight().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
-		assertNull("internal reference not nulled", l1.right().get());
+		assertNull("internal reference not nulled", l1.getRight().get());
 	}
 
 	@Test
 	public void replaceTest() {
-		l1.right().insert(r1);
-		RightOne ot = l1.right().insert(r2);
+		l1.getRight().insert(r1);
+		RightOne ot = l1.getRight().insert(r2);
 		assertEquals("RightOne not removed", r2, ot);
-		Iterator<RightOne> it = l1.right().iterator();
+		Iterator<RightOne> it = l1.getRight().iterator();
 		RightOne ot2 = it.next();
 		assertEquals("RightOne not found", r2, ot2);
 	}
 
 	@Test
 	public void insertTestSym() {
-		Iterator<RightOne> it = l1.rightSym().iterator();
+		Iterator<RightOne> it = l1.getRightSym().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
-		l1.rightSym().insert(r1);
+		l1.getRightSym().insert(r1);
 		assertTrue("iterator should have next", it.hasNext());
 		RightOne ot = it.next();
 		assertEquals("RightOne not found", r1, ot);
 		assertFalse("iterator should not have next", it.hasNext());
-		Iterator<LeftOne> lit = r1.leftSym().iterator();
+		Iterator<LeftOne> lit = r1.getLeftSym().iterator();
 		assertTrue("iterator should have next", lit.hasNext());
 		LeftOne tl = lit.next();
 		assertEquals("RightOne not found backwards", l1, tl);
@@ -75,84 +76,84 @@ public class AssocOneACTest {
 
 	@Test
 	public void removeTestSym() {
-		assertNull("there should be nothing to remove", l1.rightSym()
+		assertNull("there should be nothing to remove", l1.getRightSym()
 				.remove(r1));
-		l1.rightSym().insert(r1);
-		RightOne ot = l1.rightSym().remove(r1);
+		l1.getRightSym().insert(r1);
+		RightOne ot = l1.getRightSym().remove(r1);
 		assertEquals("RightOne not removed", r1, ot);
-		Iterator<RightOne> it = l1.rightSym().iterator();
+		Iterator<RightOne> it = l1.getRightSym().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
-		Iterator<LeftOne> lit = r1.leftSym().iterator();
+		Iterator<LeftOne> lit = r1.getLeftSym().iterator();
 		assertFalse("iterator should not have next", lit.hasNext());
-		l1.rightSym().insert(r3);
-		r3.leftSym().remove(l1);
-		it = l1.rightSym().iterator();
+		l1.getRightSym().insert(r3);
+		r3.getLeftSym().remove(l1);
+		it = l1.getRightSym().iterator();
 		assertFalse("iterator should not have next", it.hasNext());
 	}
 
 	@Test
 	public void replaceTestSym() {
-		r1.leftSym().insert(l1);
-		RightOne ot = l1.rightSym().insert(r2);
+		r1.getLeftSym().insert(l1);
+		RightOne ot = l1.getRightSym().insert(r2);
 		assertEquals("RightOne not removed", r2, ot);
-		Iterator<RightOne> it = l1.rightSym().iterator();
+		Iterator<RightOne> it = l1.getRightSym().iterator();
 		RightOne ot2 = it.next();
 		assertEquals("RightOne not found", r2, ot2);
-		ot2.leftSym().insert(l2);
-		it = l1.rightSym().iterator();
+		ot2.getLeftSym().insert(l2);
+		it = l1.getRightSym().iterator();
 		assertFalse("RightOne not removed", it.hasNext());
 
 	}
 
 	@Test
 	public void assocObjectTest() {
-		r1.leftSym().insert(l1);
+		r1.getLeftSym().insert(l1);
 		Assoc a1 = new Assoc();
 		Assoc a2 = new Assoc();
-		r1.leftSym().setAssoc(l1, a1);
-		assertEquals("association object was lost", a1, r1.leftSym().getAssoc(
+		r1.getLeftSym().setAssoc(l1, a1);
+		assertEquals("association object was lost", a1, r1.getLeftSym().getAssoc(
 				l1));
-		assertEquals("association object was lost", a1, l1.rightSym().getAssoc(
+		assertEquals("association object was lost", a1, l1.getRightSym().getAssoc(
 				r1));
-		assertNull("bad associated object was ignored", r1.leftSym().getAssoc(
+		assertNull("bad associated object was ignored", r1.getLeftSym().getAssoc(
 				l2));
-		r1.leftSym().setAssoc(l2, a2);
-		assertEquals("association was messed up", a1, r1.leftSym().getAssoc(l1));
-		r1.leftSym().insert(l2, a2);
-		assertEquals("insert failed", a2, l2.rightSym().getAssoc(r1));
-		assertEquals("insert failed", r1, l2.rightSym().get());
-		assertEquals("insert failed", l2, r1.leftSym().get());
-		assertEquals("insert failed", a2, r1.leftSym().getAssoc(l2));
+		r1.getLeftSym().setAssoc(l2, a2);
+		assertEquals("association was messed up", a1, r1.getLeftSym().getAssoc(l1));
+		r1.getLeftSym().insert(l2, a2);
+		assertEquals("insert failed", a2, l2.getRightSym().getAssoc(r1));
+		assertEquals("insert failed", r1, l2.getRightSym().get());
+		assertEquals("insert failed", l2, r1.getLeftSym().get());
+		assertEquals("insert failed", a2, r1.getLeftSym().getAssoc(l2));
 		assertEquals("access from association class failed", a2
-				.getAssociationClassLink().getAssociationEnd("leftSym"), l2);
+				.getAssociationClassLink().getAssociationEnd(RightOne.Associations.LEFT_SYM), l2);
 		assertEquals("access from association class failed", a2
-				.getAssociationClassLink().getAssociationEnd("rightSym"), r1);
-		r1.leftSym().setAssoc(l2, a1);
+				.getAssociationClassLink().getAssociationEnd(LeftOne.Associations.RIGHT_SYM), r1);
+		r1.getLeftSym().setAssoc(l2, a1);
 		assertEquals("access from association class failed", a1
-				.getAssociationClassLink().getAssociationEnd("leftSym"), l2);
+				.getAssociationClassLink().getAssociationEnd(RightOne.Associations.LEFT_SYM), l2);
 		assertEquals("access from association class failed", a1
-				.getAssociationClassLink().getAssociationEnd("rightSym"), r1);
+				.getAssociationClassLink().getAssociationEnd(LeftOne.Associations.RIGHT_SYM), r1);
 		assertNull("association class link was not cleared", a2
-				.getAssociationClassLink().getAssociationEnd("leftSym"));
+				.getAssociationClassLink().getAssociationEnd(RightOne.Associations.LEFT_SYM));
 		assertNull("association class link was not cleared", a2
-				.getAssociationClassLink().getAssociationEnd("rightSym"));
+				.getAssociationClassLink().getAssociationEnd(LeftOne.Associations.RIGHT_SYM));
 
-	}
-
-	@Test(expected = RuntimeException.class)
-	public void badNamedAssocTest() {
-		Assoc a1 = new Assoc();
-		l1.badName().insert(r1, a1);
-		fail("equal role names should cause Exception");
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void oneIteratorDeleteTest() {
-		l1.right().insert(r1);
-		Iterator<RightOne> it = l1.right().iterator();
+		l1.getRight().insert(r1);
+		Iterator<RightOne> it = l1.getRight().iterator();
 		assertTrue("iterator should have next", it.hasNext());
 		it.remove();
 		fail("Iterator should throw Exception");
 	}
-
+	
+	@Test(expected = RuntimeException.class)
+	public void badNamedAssocTest() {
+		Assoc a1 = new Assoc();
+		// using wrong enum literals to specify association should cause runtime exception
+		l1.getBadName().insert(r1, a1);
+		fail("wrong association role specified");
+	}
 }

@@ -1,8 +1,5 @@
 package de.genesez.platforms.java.umlsupport.associations;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 /**
  * abstract base class for all association implementations.
  * 
@@ -17,8 +14,8 @@ public abstract class AssociationBase<From, To> implements
 		Association<From, To> {
 	private boolean symmetric;
 	private From owner;
-	private Method associationGetter;
-	private String roleName;
+//	private Method associationGetter;
+	private RelatedAssociationRole opposite;
 
 	/**
 	 * build unidirectional association
@@ -41,15 +38,10 @@ public abstract class AssociationBase<From, To> implements
 	 * @param assocGetter
 	 *            name of getter function on the other side
 	 */
-	public AssociationBase(From owner, Class<To> refClass, String assocGetter) {
+	public AssociationBase(From owner, RelatedAssociationRole opposite) {
 		this.owner = owner;
 		symmetric = true;
-		roleName = assocGetter;
-		try {
-			associationGetter = refClass.getMethod(assocGetter);
-		} catch (Exception e) {
-			throw new RuntimeException("no getter method for association! " + "class: " + refClass + ", method: " + assocGetter);
-		}
+		this.opposite = opposite;
 	}
 
 	/*
@@ -72,17 +64,13 @@ public abstract class AssociationBase<From, To> implements
 	 */
 	@SuppressWarnings("unchecked")
 	protected Association<To, From> getRelatedAssociation(To associated) {
-		try {
-			return (Association<To, From>) associationGetter.invoke(associated);
-			// The catch clause cannot be reached because it is shielded by the
-			// try/catch clause in the constructor
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException("access to getter method for association is denied!", e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("the getter method for association has a parameter of a wrong type!", e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException("getter method for association throws an exception!", e);
+		if (!(associated instanceof AssociationRole)) {
+			throw new RuntimeException("association is not symmetric");
 		}
+		AssociationRole obj = (AssociationRole)associated;
+		Association<? extends Object, ? extends Object> assoc = obj.getAssociation(opposite);
+		// we can do this cast because we know it's the inverse association
+		return (Association<To, From>) assoc;
 	}
 
 	/**
@@ -113,7 +101,7 @@ public abstract class AssociationBase<From, To> implements
 		return symmetric;
 	}
 
-	protected String getRoleName() {
-		return roleName;
+	protected RelatedAssociationRole getOpposite() {
+		return opposite;
 	}
 }

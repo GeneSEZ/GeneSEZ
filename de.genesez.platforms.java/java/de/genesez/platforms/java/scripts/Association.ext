@@ -43,6 +43,8 @@ private MPackage process(MPackage this) :
  * process classifiers
  */
 private MClassifier process(MClassifier this) :
+	// prepare classes with associations
+	hasAssociationRoles() ? prepareClass() : Void ->
 	// prepare association class
 	isAssociationClass() ? prepareAssociationClass() : Void ->
 	this;
@@ -50,6 +52,16 @@ private MClassifier process(MClassifier this) :
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  */
+
+/**
+ * prepares a class which has associations
+ * - adds the interface 'association role'
+ */
+Void prepareClass(MClassifier this) :
+	let i = makeAssociationRole(getModel()) :
+		realization.add(i) ->
+		supertype.add(i) ->
+		Void;
 
 /**
  * prepares an association class for the association handling
@@ -89,6 +101,16 @@ String associationAspectName() : "linkAccess";
 	functions to create all external types for association handling
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  */
+
+/**
+ * creates the 'AssociationRole' interface as external type
+ */
+MExternal makeAssociationRole(MModel this) : createExternal("AssociationRole");
+
+/**
+ * creates the 'RelatedAssociationRole' interface as external type
+ */
+MExternal makeRelatedAssociationRole(MModel this) : createExternal("RelatedAssociationRole");
 
 /**
  * creates the 'AssociationClass' interface as external type

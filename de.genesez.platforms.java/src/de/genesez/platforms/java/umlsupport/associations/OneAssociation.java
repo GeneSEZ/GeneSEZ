@@ -1,6 +1,10 @@
 package de.genesez.platforms.java.umlsupport.associations;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -35,8 +39,8 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 *            name of the getter method in the referenced type that gives
 	 *            access to the other association end
 	 */
-	public OneAssociation(From owner, Class<To> refClass, String assocGetter) {
-		super(owner, refClass, assocGetter);
+	public OneAssociation(From owner, RelatedAssociationRole opposite) {
+		super(owner, opposite);
 	}
 
 //	@Override
@@ -82,6 +86,12 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	public To get() {
 		return getReference();
 	}
+	
+	public Collection<To> getAll() {
+		List<To> l = new ArrayList<To>();
+		l.add(ref);
+		return Collections.unmodifiableCollection(l);
+	}
 
 //	@Override
 	public Iterator<To> iterator() {
@@ -113,7 +123,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * @see de.genesez.umlsupport.AssociationBase#link(java.lang.Object,
 	 *      java.lang.Object)
 	 */
-//	@Override
+	@Override
 	protected void link(To associated, Object assoc) {
 		if (isSymmetric()) {
 			To to = getReference();
@@ -129,7 +139,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * 
 	 * @see de.genesez.umlsupport.AssociationBase#unlink(java.lang.Object)
 	 */
-//	@Override
+	@Override
 	protected void unlink(To associated) {
 		setReference(null);
 	}
