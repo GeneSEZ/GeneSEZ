@@ -88,7 +88,7 @@
 		  *
 		  */	
 		
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Implementation-»
+		«EXPAND Operation::OperationImpl(this)-»
 		
 		/**
 		  * generated getter and setter method implementations
@@ -482,7 +482,11 @@
 		«IF type == "Local"-»
 			import javax.ejb.Local;
 		«ENDIF-»
-		
+		«IF hasTaggedValue("ejb3SessionBean", "stateful", "false") && 
+			(operation.exists(e|e.hasStereotype("ejb3Timer")) || operation.parameter.type.mapName().asTypeName().exists(e|e == "Timer"))-»
+			import javax.ejb.Timer;
+		«ENDIF»
+				
 		/**
 		  * generated interface for "«asTypeName()-»"
 		  *

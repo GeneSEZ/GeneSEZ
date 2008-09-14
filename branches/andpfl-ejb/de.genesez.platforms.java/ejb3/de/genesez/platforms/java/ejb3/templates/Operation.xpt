@@ -36,9 +36,9 @@
 «REM» generate an implementation for an normal operation «ENDREM»
 «DEFINE OperationImpl(MClassifier class) FOR MOperation-»
 	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Operation-»
-	«EXPAND Annotation-»
+	«EXPAND Annotation(class)-»
 	«IF multiplicity == 1-»
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «returnType.mapName()»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType» «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «returnType.mapName().asTypeName()-»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType-» «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
 	«ELSE-»
 		«IF returnType.metaType == MPrimitiveType-»
 			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier» «mapType()»<«returnType.mapName("Wrapper")»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType»> «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
@@ -64,9 +64,10 @@
 «REM» 
 	main method for evaluation of the annotations	
 «ENDREM»
-«DEFINE Annotation FOR MOperation»
+«DEFINE Annotation(MClassifier class) FOR MOperation»
 	«REM» stereotype ejb3Timer «ENDREM»
-	«IF hasStereotype("ejb3Timer") && (classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateless", "true"))-»
+	«IF (hasStereotype("ejb3Timer") || (parameter.exists(e|e.type.mapName().asTypeName() == "Timer") && parameter.size == 1)) && 
+		(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false"))-»
 		@Timeout
 	«ENDIF-»
 	«REM» stereotype ejb3Column «ENDREM»
