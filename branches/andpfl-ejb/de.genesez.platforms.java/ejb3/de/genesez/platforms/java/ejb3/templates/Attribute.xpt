@@ -61,7 +61,7 @@
  «ENDREM»
 «DEFINE PrimaryKey(MClassifier classifier) FOR MElement»
 	«REM» simple primary key «ENDREM»
-	«IF hasStereotype("ejb3PrimaryKey")»
+	«IF hasStereotype("ejb3PrimaryKey") && hasTaggedValue("ejb3PrimaryKey", "embeddedId", "false")»
 		@Id
 	«ENDIF»
 	«REM» 
@@ -189,9 +189,6 @@
 				!hasTaggedValue("ejb3DatatypeMapping", "fetch", "DEFAULT")-»
 				, fetch=FetchType.«getTaggedValue("ejb3DatatypeMapping", "fetch")-»
 			«ENDIF-»)
-		«ENDIF»
-		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Embeddable")»
-			@Embeddable
 		«ENDIF»
 		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Lob")»
 			@Lob

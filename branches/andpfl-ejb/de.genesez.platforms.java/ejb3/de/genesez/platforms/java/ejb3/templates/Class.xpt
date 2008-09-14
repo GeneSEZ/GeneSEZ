@@ -360,21 +360,19 @@
 		«REM» class is a derived class «ENDREM»
 		«EXPAND DiscriminatorValue-»
 		«IF hasStereotype("ejb3PrimaryKeyJoinColumn")-»
-			@PrimaryKeyJoinColumns {
+			@PrimaryKeyJoinColumns(
 			«FOREACH getTaggedValue("ejb3PrimaryKeyJoinColumn", "name").getElements() AS value-»
 				@PrimaryKeyJoinColumn(
-					name="«value-»"				
-					«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "referencedName")-»
- 						«LET getTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedName").getElements().indexOf(value) AS index-»
+					name="«value-»"
+					«LET getTaggedValue("ejb3PrimaryKeyJoinColumn", "name").getElements().indexOf(value) AS index-»		
+						«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "referencedName")-»
  							, referencedColumnName="«getTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedName").getElements().get(index)-»"
- 						«ENDLET-»
- 					«ENDIF-»
-					«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "columnDefinition")-»
- 						«LET getTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition").getElements().indexOf(value) AS index2-»
- 							, columnDefinition="«getTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition").getElements().get(index2)-»"
- 						«ENDLET-»
- 					«ENDIF-») 					
-			«ENDFOREACH»}
+	 					«ENDIF-»
+						«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "columnDefinition")-»
+ 							, columnDefinition="«getTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition").getElements().get(index)-»"
+ 						«ENDIF-»
+ 					«ENDLET-») 					
+			«ENDFOREACH»)
 		«ENDIF-»
 	«ELSE-»
 		«REM» automatic annotation of inheritance «ENDREM»
@@ -445,7 +443,7 @@
 
 «REM» evaluates the stereotype "ejb3PrimaryKey"«ENDREM»
 «DEFINE _PrimaryKey FOR MClass-»
-	«IF hasStereotype("ejb3PrimaryKeyClass")»
+	«IF hasStereotype("ejb3PrimaryKeyClass") && hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "false")-»
 		«REM» primary key with extern primary key class «ENDREM»
 		«IF hasUtilizableValue("ejb3PrimaryKeyClass", "name")-»
 			@IdClass(«getTaggedValue("ejb3PrimaryKeyClass", "name")-».class)
@@ -454,10 +452,30 @@
 			@IdClass(«asTypeName()-»PK.class)
 			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
 		«ENDIF»
+	«ELSEIF hasStereotype("ejb3PrimaryKeyClass") && hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "true")-»
 		«REM» primary key with embedded primary key class «ENDREM»
-		«IF hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "true")»
-			@Embeddable
-		«ENDIF»		
+		@Embeddable
+		«REM»«IF hasUtilizableValue("ejb3PrimaryKeyClass", "name")-»
+			«EXPAND _PrimaryKeyClass(getTaggedValue("ejb3PrimaryKeyClass", "name"))-»
+		«ELSE-»
+			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
+		«ENDIF»
+		«FOREACH property AS id-»
+			«IF id.hasStereotype("ejb3PrimaryKey")-»
+				«property.remove(id)-»
+			«ENDIF-»
+		«ENDFOREACH-»
+		«IF hasUtilizableValue("ejb3PrimaryKeyClass", "name")-»
+			«property.add(makeAttribute(getTaggedValue("ejb3PrimaryKeyClass", "name").toFirstLower(), getTaggedValue("ejb3PrimaryKeyClass", "name"), 1, false, false, false))->""-»
+			«property.selectFirst(e|e.name == getTaggedValue("ejb3PrimaryKeyClass", "name").toFirstLower()).addPrimaryKeyStereotype("true", "null", "false", "AUTO")->""-»
+		«ELSE-»
+			«property.add(makeAttribute(asTypeName().toLowerCase()+"Pk", asTypeName()+"PK", 1, false, false, false))->""-»
+			«property.selectFirst(e|e.name == asTypeName().toLowerCase()+"Pk").addPrimaryKeyStereotype("true", "null", "false", "AUTO")->""-»
+		«ENDIF-»
+		//properties: «property.name»
+		//Stereotype: «property.stereotype.name»
+		//taggedValue namen: «property.taggedValue.tag.name»
+		//taggedvalue werte: «property.taggedValue.value»«ENDREM»
 	«ENDIF»	
 «ENDDEFINE»
 
@@ -515,7 +533,7 @@
 
 «REM» creates a primary key class for stereotype "idClass" «ENDREM»
 «DEFINE _PrimaryKeyClass(String filename) FOR MClass-»
-	«FILE filePath( filename, basePath() )-»
+	«FILE filePath( filename + ".java", basePath() )-»
 		/**
 		  *	generated primary key class of the ejb3 cartridge
 		  *
@@ -531,25 +549,25 @@
 		  *
 		  */
 		public class «filename-» implements java.io.Serializable {
-			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+			«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids»
 				private «ids.type.mapName()» «ids.name»;
 			«ENDFOREACH»
 			public «filename-»() {}
 			public «filename-»(
-			«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR ", "-»
+			«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR ", "-»
 				«ids.type.asTypeName()» «ids.name»
 			«ENDFOREACH-») {
-				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR ";"-»
+				«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR ";"-»
 					this.«ids.name» = «ids.name»
 				«ENDFOREACH-»;
 			}
 			
-			«FOREACH property.typeSelect(MAttribute).select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+			«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids»
 				public «ids.type.asTypeName()» «ids.asGetter()»() {
 					return «ids.name»;
 				}
 			«ENDFOREACH»
-			«FOREACH property.typeSelect(MAttribute).select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids»
+			«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids»
 				public  void «ids.asSetter()»(«ids.type.asTypeName()» «ids.name») {
 					this.«ids.name» = «ids.name»;
 				}	
@@ -559,7 +577,7 @@
 				if (!(obj instanceof «filename-»)) return false;
 				«filename-» pk = («filename-») obj;
 				return ( 
-				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR "&&"-»
+				«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR "&&"-»
 					this.«ids.name»
 					«IF ids.type.isPrimitiveType()-»
 						 == pk.«ids.name»
@@ -571,10 +589,12 @@
 			}
 			
 			public int hashCode() {
-				return (int)
-				«FOREACH property.select(e|e.hasTaggedValue("ejb3PrimaryKey", "id", "true")) AS ids SEPARATOR "+"-»
+				return (int) 
+				«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR " + "-»
 					this.«ids.name-»
 					«IF !isPrimitiveType(ids.type)-»
+						.hashCode()
+					«ELSEIF ids.type.mapName() == "String"-»
 						.hashCode()
 					«ENDIF-»	
 				«ENDFOREACH-»
@@ -616,7 +636,7 @@
 	evaluates the stereotype "ejb3EntityListener"
 «ENDREM»
 «DEFINE _EntityListenerClass(String filename) FOR MClass-»
-	«FILE filePath( filename, basePath() )-»
+	«FILE filePath( filename + ".java", basePath() )-»
 		/**
 		  *	generated entity listener class by the ejb3 cartridge
 		  *
@@ -678,7 +698,7 @@
 	generates an interceptor class
 «ENDREM»
 «DEFINE _InterceptorClass(String filename) FOR MClass-»
-	«FILE filePath( filename, basePath() )-»
+	«FILE filePath( filename + ".java", basePath() )-»
 		/**
 		  *	generated interceptor class of the ejb3 cartridge
 		  *
