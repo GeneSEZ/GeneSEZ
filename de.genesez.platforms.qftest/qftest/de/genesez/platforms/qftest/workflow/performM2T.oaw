@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 
+		performs a model-to-text transformation (code generation)
+		
+		following parameters are required:
+		==================================
+		
+		$outputDir 			the path where the generated file are produced
+		$testingModel		name of the slot which holds the genesez testing model
+	-->
+
+	<!-- working with genesez models requires the genesez testing meta model -->
+	<bean id="gtesting" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="de.genesez.testing.gtesting.GtestingPackage" />
+	</bean>
+
+	<component id="model2text" class="oaw.xtend.XtendComponent">
+		<metaModel idRef="gtesting" />
+		<globalVarDef name="testingmodel" value="'${testingModel}'" />
+		<globalVarDef name="outputdir" value="'${outputDir}'" />
+		<invoke	value="de::genesez::platforms::qftest::scripts::model2text::transform(testingmodel)" />
+	</component>
+
+</workflow>
