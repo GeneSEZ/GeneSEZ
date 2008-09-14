@@ -116,22 +116,27 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 
 «REM»
-	generates the comment of the initializer block for association attributes
+	generates the comment of the enum definition
 «ENDREM»
-«DEFINE AssociationInit FOR MClass -»
-// initializer block for association attributes
+«DEFINE AssociationEnum FOR MClass -»
+/** defines an identifier for each association */
 «ENDDEFINE»
 
 «REM»
 	generates the comment of an association attribute
 «ENDREM»
-«DEFINE Association FOR MAssociationRole -»
-/**
-«IF hasComment() -»
- * documented here {@link «asAttribute()»()}
-«ENDIF -»
- * @generated	association attribute definition
- */
+«DEFINE Association FOR MClassifier -»
+/** holds the references to the association objects */
+«ENDDEFINE»
+
+«REM»
+	generates the comment of the generic accessor method for association objects
+«ENDREM»
+«DEFINE AssociationGenericAccessor FOR MClassifier -»
+	/**
+	 * generic accessor for association objects used by the association handling framework
+	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 */
 «ENDDEFINE»
 
 «REM»
@@ -200,7 +205,6 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Operation FOR MOperation -»
 	/**
-	«PROTECT CSTART '<!-- ' CEND ' -->' ID ("test." + xmiGuid) DISABLE»
 	«IF hasComment() -»
 	«comment().format() -»
 	«ENDIF -»
@@ -208,7 +212,6 @@ package «packageDeclaration( basePackage() ) -»;
 	«EXPAND _Params FOREACH parameter -»
 	«EXPAND _Return -»
 	«EXPAND _Exceptions FOREACH raisedException -»
-	«ENDPROTECT»
 	 */
 «ENDDEFINE»
 
@@ -216,7 +219,7 @@ package «packageDeclaration( basePackage() ) -»;
 	generates the comments of the parameters
 «ENDREM»
 «DEFINE _Params FOR MParameter -»
- * @param	«asParameter()»	«comment().format("", ". ") -»
+ * @param	«asParameter()»	«comment().format("", "")»
 «ENDDEFINE»
 
 «REM»
@@ -224,7 +227,7 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE _Return FOR MOperation -»
 «IF hasReturnType() -»
- * @return	«comment().format("", ". ") -»
+ * @return	«comment().format("", "")»
 «ENDIF -»
 «ENDDEFINE»
 

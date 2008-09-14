@@ -39,9 +39,8 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 	 *            name of the accessor method that returns the opposite
 	 *            association end
 	 */
-	public OneAssociationAC(From owner, Class<To> refClass, String assocGetter) {
-		super(owner, refClass, assocGetter);
-		// TODO Auto-generated constructor stub
+	public OneAssociationAC(From owner, RelatedAssociationRole opposite) {
+		super(owner, opposite);
 	}
 
 	/*
@@ -85,7 +84,7 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 	}
 
 	@SuppressWarnings("unchecked")
-//	@Override
+	@Override
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -134,7 +133,7 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 		if (assoc != null) {
 			unlinkAssoc();
 			assocObject = assoc;
-			assoc.getAssociationClassLink().link(getOwner(), getRoleName());
+			assoc.getAssociationClassLink().link(getOwner(), getOpposite());
 		}
 	}
 
@@ -144,7 +143,6 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 	 */
 	private void unlinkAssoc() {
 		if (assocObject != null)
-			assocObject.getAssociationClassLink().clear(getRoleName());
+			assocObject.getAssociationClassLink().clear(getOpposite());
 	}
-
 }

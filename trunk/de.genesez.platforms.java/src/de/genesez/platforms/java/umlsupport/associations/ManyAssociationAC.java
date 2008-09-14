@@ -43,8 +43,8 @@ public class ManyAssociationAC<From, To, Assoc extends AssociationClass>
 	 * @param assocGetter
 	 */
 	public ManyAssociationAC(From owner, Map<To, Assoc> reference,
-			Class<To> refClass, String assocGetter) {
-		super(owner, reference.keySet(), refClass, assocGetter);
+			RelatedAssociationRole opposite) {
+		super(owner, reference.keySet(), opposite);
 		refMap = reference;
 	}
 
@@ -136,7 +136,7 @@ public class ManyAssociationAC<From, To, Assoc extends AssociationClass>
 	 */
 	private void linkAssoc(Assoc assoc) {
 		if (assoc != null) {
-			assoc.getAssociationClassLink().link(getOwner(), getRoleName());
+			assoc.getAssociationClassLink().link(getOwner(), getOpposite());
 		}
 	}
 
@@ -148,6 +148,6 @@ public class ManyAssociationAC<From, To, Assoc extends AssociationClass>
 	 */
 	private void unlinkAssoc(Assoc assoc) {
 		if (assoc != null)
-			assoc.getAssociationClassLink().clear(getRoleName());
+			assoc.getAssociationClassLink().clear(getOpposite());
 	}
 }

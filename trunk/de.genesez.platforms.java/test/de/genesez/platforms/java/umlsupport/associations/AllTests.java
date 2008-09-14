@@ -15,7 +15,7 @@ public class AllTests {
 		suite.addTest(adapter);
 		adapter = new JUnit4TestAdapter(AssocOneACTest.class);
 		suite.addTest(adapter);
-		adapter = new JUnit4TestAdapter(AssocManyTestAC.class);
+		adapter = new JUnit4TestAdapter(AssocManyACTest.class);
 		suite.addTest(adapter);
 		//$JUnit-END$
 		return suite;
