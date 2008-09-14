@@ -6,14 +6,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.StructuredClassifier;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.resource.UMLResource;
 
-import de.genesez.adapter.ea.ElementRegistry;
-import de.genesez.adapter.ea.PostProcessor;
 import de.genesez.adapter.ea.ResourceRegistry;
 
 public class PropertySimpleTransformer extends PropertyTransformer {

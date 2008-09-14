@@ -10,7 +10,6 @@ import org.eclipse.uml2.uml.UMLFactory;
 
 import de.genesez.adapter.ea.ContentRegistry;
 import de.genesez.adapter.ea.ElementRegistry;
-import de.genesez.adapter.ea.PostProcessor;
 import de.genesez.adapter.ea.ProfileRegistry;
 
 public class FlowFinalNodeTransformer {
