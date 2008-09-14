@@ -228,6 +228,46 @@ String fileSeparator() : "/";
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for a human readable identifier for the model element
+ */
+String fqn(MModel this) :
+	name;
+
+/**
+ * getter for a human readable identifier for a package
+ */
+String fqn(MPackage this) : 
+	nestingPackage.fqn() + "::" + name;
+
+/**
+ * getter for a human readable identifier for a classifier
+ */
+String fqn(MClassifier this) :
+	owningPackage.fqn() + "::" + name;
+
+/**
+ * getter for a human readable identifier for an operation
+ */
+String fqn(MOperation this) :
+	classifier.fqn() + "::" + name + "(" + parameter.toString(", ") + ")";
+
+/**
+ * returns a human readable representation to identify a property
+ */
+String fqn(MProperty this) :
+	classifier.fqn() + "::" + name;
+
+/**
+ * returns a human readable represenataion to identify an element
+ */
+String fqn(MElement this) :
+	name;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	mapping to java functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */

@@ -1,6 +1,16 @@
 /**
- * Adds all use dependencies to the model elements.
- * All used types of a classifier are added to the 'supplier' association.
+ * Helper for dealing with use dependencies of model elements
+ * 
+ * there are two different ways to handle use dependencies:
+ * <ul>
+ *   <li>
+ *     you can add them to the model during a model modification or a model-to-model transformation, 
+ *     that means the 'supplier' reference from MClassifier to MType
+ *   </li>
+ *   <li>
+ *     you can just get them as a collection of MType without touching the model
+ *   </li>
+ * </ul>
  * 
  * @author	tobias haubold
  * @date	2008-04-18
@@ -11,6 +21,14 @@ import gcore;
 
 
 /**
+ * collects the use dependencies of a classifier
+ * @return	the use dependencies
+ */
+Collection[MType] useDependencies(MClassifier this) : 
+	collectUseDependencies();
+
+/**
+ * adds all use dependencies of types to the 'supplier' reference of classifiers
  * iterates over the model and contained packages and processes all classifiers
  * @return	the same model as given
  */
@@ -33,20 +51,29 @@ private MPackage process(MPackage this) :
  * not included: primitive types, generics
  */
 private MClassifier process(MClassifier this) :
-	// add types of properties
-	supplier.addAll( property.type.filter() ) ->
-	// add return types of operations
-	supplier.addAll( operation.returnType.filter() ) ->
-	// add raised exceptions
-	supplier.addAll( operation.raisedException.filter() ) ->
-	// add parameter types of operation parameters
-	supplier.addAll( operation.parameter.type.filter() ) ->
-	// add supertypes
-	supplier.addAll( generalization ) ->
-	supplier.addAll( realization ) ->
-	
-	// remove duplicates !?! - but don't appear, maybe ecore removes them for us :)
+	supplier.addAll( collectUseDependencies() ) ->
 	this;
+
+/**
+ * collects the use dependencies of a classifier
+ * @return	the use dependencies
+ */
+private Collection[MType] collectUseDependencies(MClassifier this) :
+	let deps = {} :
+		// add types of properties
+		deps.addAll( property.type.filter() ) ->
+		// add return types of operations
+		deps.addAll( operation.returnType.filter() ) ->
+		// add raised exceptions
+		deps.addAll( operation.raisedException.filter() ) ->
+		// add parameter types of operation parameters
+		deps.addAll( operation.parameter.type.filter() ) ->
+		// add supertypes
+		deps.addAll( generalization ) ->
+		deps.addAll( realization ) ->
+		
+		// remove duplicates !?! - but don't appear, maybe ecore removes them for us :)
+	deps;
 
 /**
  * removes all primitive types and all generics from the list
