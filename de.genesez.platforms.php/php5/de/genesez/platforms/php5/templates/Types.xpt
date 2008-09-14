@@ -100,9 +100,11 @@
 	generate import statements for referenced classes from other php files
 «ENDREM»
 «DEFINE _Imports FOR MClassifier -»
+«IF generateIncludes() -»
 «FOREACH supplier.select(e|e.isImportNeeded(this)) AS s -»
 require_once '«EXPAND _Require(s) -»';
 «ENDFOREACH -»
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -110,7 +112,7 @@ require_once '«EXPAND _Require(s) -»';
 	@param	used	the classifier which is required
 «ENDREM»
 «DEFINE _Require(MClassifier used) FOR MClassifier -»
-«used.getRequirePath(this) + used.asFileName() -»
+«used.includePath(this) + used.asFileName() -»
 «ENDDEFINE»
 
 «REM»
