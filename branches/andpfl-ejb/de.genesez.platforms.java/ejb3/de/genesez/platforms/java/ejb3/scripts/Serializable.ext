@@ -10,7 +10,7 @@ MPackage addSerializable(MPackage this) :
 	classifier.addSerializable();
 	
 MClassifier addSerializable(MClassifier this) :
-	stereotype.name.exists(e|e == "ejb3PersistentEntity") 
+	this.hasStereotype("ejb3PersistentEntity") || this.hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "true") 
 	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Serializable") 
 		? realization.add(makeSerializable())
 		: "";
