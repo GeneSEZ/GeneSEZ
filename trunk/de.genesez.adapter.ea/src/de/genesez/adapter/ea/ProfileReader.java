@@ -7,7 +7,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.UMLPackage;
@@ -16,6 +15,14 @@ import org.openarchitectureware.workflow.issues.Issues;
 import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
 import org.openarchitectureware.workflow.monitor.ProgressMonitor;
 
+/**
+ * An oAW workflow component to import UML profiles
+ * 
+ * @author gerbe
+ *
+ * The profile reader imports a number of UML profiles and make these profiles
+ * available for applying them to a transformed UML model.
+ */
 public class ProfileReader extends AbstractWorkflowComponent {
 
 	private static final Log log = LogFactory.getLog(ProfileReader.class);
@@ -55,8 +62,8 @@ public class ProfileReader extends AbstractWorkflowComponent {
 	}
 	
 	/**
-	 * 
-	 * @param value
+	 * Set the directory where to search for the profiles
+	 * @param value	the directory path
 	 */
 	public void  setProfileDirectory(String value) {
 		log.debug("Setting profile directory to " + value);
@@ -64,8 +71,8 @@ public class ProfileReader extends AbstractWorkflowComponent {
 	}
 
 	/**
-	 * 
-	 * @param value
+	 * Set the extension of UML profile files
+	 * @param value	The extension string
 	 */
 	public void  setProfileExtension(String value) {
 		log.debug("Setting profile extension to " + value);
@@ -73,8 +80,8 @@ public class ProfileReader extends AbstractWorkflowComponent {
 	}
 
 	/**
-	 * 
-	 * @param value
+	 * Add profile names
+	 * @param value	Name of a profile to import
 	 */
 	public void addProfile(String value) {
 		String file = this.profileDirectory + "/" + value + this.profileExtension;

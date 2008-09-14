@@ -15,6 +15,14 @@ import org.openarchitectureware.workflow.issues.Issues;
 import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
 import org.openarchitectureware.workflow.monitor.ProgressMonitor;
 
+/**
+ * An oAW workflow component to write an UML XWI file
+ * 
+ * @author gerbe
+ *
+ * The XmiWriter creates an XMI output file from a UML model.
+ * The model needs to be placed in the input slot.
+ */
 public class XmiWriter extends AbstractWorkflowComponent {
 
 	private static final Log log = LogFactory.getLog(XmiWriter.class);
@@ -46,7 +54,7 @@ public class XmiWriter extends AbstractWorkflowComponent {
 			}
 			log.debug("Save XMI file");
 			resource.save(Collections.EMPTY_MAP);
-			log.info("Finished writing XMI file!");
+			log.info("Finished!");
 		} catch (Exception e) {
 			issues.addError(e.toString());
 		}

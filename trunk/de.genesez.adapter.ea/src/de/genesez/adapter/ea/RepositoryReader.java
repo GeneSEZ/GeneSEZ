@@ -5,17 +5,22 @@ import java.io.FileNotFoundException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.openarchitectureware.workflow.WorkflowContext;
 import org.openarchitectureware.workflow.issues.Issues;
 import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
 import org.openarchitectureware.workflow.monitor.ProgressMonitor;
-
 import org.sparx.Collection;
 import org.sparx.Package;
-import org.sparx.ProjectResource;
 import org.sparx.Repository;
 
+/**
+ * An oAW workflow component to read a model from an Enterprise Architect repository
+ * 
+ * @author gerbe
+ *
+ * The RepositoryReader fetches an Enterprise Architect model by its name
+ * from a repository and set the model to the output slot.
+ */
 public class RepositoryReader extends AbstractWorkflowComponent {
 
 	private final static Log log = LogFactory.getLog(RepositoryReader.class);
@@ -25,7 +30,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	private String outputSlot = null;
 	
 	public void checkConfiguration(Issues issues) {
-		
+		// nothing to do here
 	}
 	
 	public void invoke(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
@@ -41,7 +46,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 
 	/**
 	 * Set the filename of the Enterprise Architect repository
-	 * @param	filename of the Enterprise Architect repository
+	 * @param value	filename of the Enterprise Architect repository
 	 */
 	public void setRepositoryFile(String value) {
 		log.debug("Setting repository to " + value);
@@ -50,7 +55,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	
 	/**
 	 * Set the name of the model to transform
-	 * @param the name of the model
+	 * @param value	the name of the model
 	 */
 	public void setModelName(String value) {
 		log.debug("Setting modelName to " + value);
@@ -59,7 +64,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	
 	/**
 	 * Set the name of the output slot of the model
-	 * @param the name of the output slot
+	 * @param value	the name of the output slot
 	 */
 	public void setOutputSlot(String value) {
 		log.debug("Setting outputSlot to " + value);
