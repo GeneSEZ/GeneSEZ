@@ -128,14 +128,18 @@
 			«IF multiplicity == 1-»
 				«IF opposite.multiplicity == 1-»
 					«setTaggedValue(this, "type", "OneToOne") ->""-»
+					«setTaggedValue(this, "mappedBy", opposite.asAttribute())->""-»
 				«ELSE-»
-					«setTaggedValue(this, "type", "ManyToOne") ->""-»					
+					«setTaggedValue(this, "type", "ManyToOne") ->""-»	
+					«setTaggedValue(this, "mappedBy", "null")->""-»				
 				«ENDIF-»
 			«ELSE-»
 				«IF opposite.multiplicity == 1-»
 					«setTaggedValue(this, "type", "OneToMany") ->""-»
+					«setTaggedValue(this, "mappedBy", opposite.asAttribute())->""-»
 				«ELSE-»
-					«setTaggedValue(this, "type", "ManyToMany") ->""-»	
+					«setTaggedValue(this, "type", "ManyToMany") ->""-»
+					«setTaggedValue(this, "mappedBy", opposite.asAttribute())->""-»
 				«ENDIF-»				
 			«ENDIF-»
 			@«getTaggedValue("ejb3Association", "type")-»«EXPAND _EvaluateAssociationTaggedValues-»
@@ -242,21 +246,11 @@
 			«ENDIF-»
 		«ELSE-»
 			«IF opposite.multiplicity == 1-»
-				«IF !opposite.hasUtilizableValue("ejb3Association", "mappedBy")-»	
-					
-					«IF hasStereotype("ejb3Association")-»
-						«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
-						«setTaggedValue(this, "type", "OneToMany")->""-»
-					«ELSE-»
-						«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
-					«ENDIF-»
+				«IF hasStereotype("ejb3Association")-»
+					«setTaggedValue(this, "mappedBy", opposite.asAttribute()) ->""-»
+					«setTaggedValue(this, "type", "OneToMany")->""-»
 				«ELSE-»
-					«IF hasStereotype("ejb3Association")-»
-						«setTaggedValue(this, "mappedBy", "null") ->""-»
-						«setTaggedValue(this, "type", "OneToMany")->""-»
-					«ELSE-»
-						«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "null") ->""-»
-					«ENDIF-»
+					«addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
 				«ENDIF-»
 				«setTaggedValue(opposite, "type", "ManyToOne") ->""-»
 			«ELSE-»
@@ -324,10 +318,10 @@
 				«ENDIF-»
 			«ELSE-»
 				«IF !hasStereotype("ejb3Association")-»
-					«addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->""-»
+					«addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "") ->""-»
 				«ELSE-»
 					«setTaggedValue(this, "type", "ManyToMany")->""-»
-					«setTaggedValue(this, "mappedBy", opposite.asAttribute())->""-»
+					«setTaggedValue(this, "mappedBy", "")->""-»
 				«ENDIF-»
 			«ENDIF-»		
 		«ENDIF-»
