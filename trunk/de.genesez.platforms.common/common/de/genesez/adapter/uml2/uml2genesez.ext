@@ -584,7 +584,18 @@ private create MActivity makeBehavior(Activity a) :
 	transformBasics(a) ->
 	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
 	// add nodes and edges
-	node.addAll( a.node.typeSelect(ActivityNode).makeActivityNode( this ) ) ->
+	node.addAll(
+		a.node.makeActivityNode( this )
+//		a.node.typeSelect(ActivityNode).reject(
+//			e|{DecisionNode, MergeNode, ForkNode, JoinNode}.contains(e.metaType) 
+//			).makeActivityNode( this )
+		) ->
+//	trace( a.edge.select(e|e.target.metaType == MergeNode).xmiId().toString() ) ->
+//	edge.addAll( a.edge.select(e|e.target.metaType == MergeNode).makeMergeActivityEdge( this ) ) ->
+//	trace( a.edge.select(e|e.target.metaType == JoinNode).xmiId().toString() ) ->
+//	edge.addAll( a.edge.select(e|e.target.metaType == MergeNode).makeMergeActivityEdge( this ) ) ->
+//	trace( a.edge.select(e|e.source.metaType == ForkNode).xmiId().toString() ) ->
+//	edge.addAll( a.edge.select(e|e.target.metaType == MergeNode).makeMergeActivityEdge( this ) ) ->
 	edge.addAll( a.edge.makeActivityEdge( this ) ) ->
 	// add owned sub behaviors
 	ownedBehavior.addAll( a.ownedBehavior.makeBehavior() ) ->
@@ -618,11 +629,12 @@ private MBehavior makeBehavior(Behavior b) :
 /**
  * creates a GeneSEZ call behaviour action
  */
-private create MCallBehaviorAction makeActivityNode(CallBehaviorAction a, MActivity activity) :
+private create MAction makeActivityNode(CallBehaviorAction a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
 	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
+	taggedValue.addAll( makeTaggedValues(a) ) ->
 	// set the called behavior
 	setBehavior( makeBehavior(a.behavior) ) ->
 	this;
@@ -630,45 +642,43 @@ private create MCallBehaviorAction makeActivityNode(CallBehaviorAction a, MActiv
 /**
  * creates a GeneSEZ action
  */
-private create MCallOperationAction makeActivityNode(Action a, MActivity activity) :
+private create MAction makeActivityNode(Action a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
 	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
+	taggedValue.addAll( makeTaggedValues(a) ) ->
 	this;
 
 /**
- * creates a GeneSEZ initial node
+ * creates a GeneSEZ synchronisation fork node
  */
-private create MInitial makeActivityNode(InitialNode a, MActivity activity) :
+private create MSynchronisation makeActivityNode(ForkNode a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
-	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
 	this;
 
 /**
- * creates a GeneSEZ final node
+ * creates a GeneSEZ synchronisation join node
  */
-private create MFinal makeActivityNode(FinalNode a, MActivity activity) :
+private create MSynchronisation makeActivityNode(JoinNode a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
-	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
 	this;
 
 /**
- * just a marker for error free templates
- * no GeneSEZ node is created, because the GeneSEZ node is an abstract class
- * prints a 'severe' log message to report such an transformation
- * @return	void
+ * creates a GeneSEZ activity node
  */
-private MNode makeActivityNode(ActivityNode a, MActivity activity) :
-	fatal("try to construct a MNode object from: " + a) ->
-	Void;
+private create MNode makeActivityNode(ActivityNode a, MActivity activity) :
+	trace( "make [ " + metaType + " ] - " + a ) ->
+	// basic element properties
+	transformBasics(a) ->
+	this;
 
 /**
- *
+ * creates a GeneSEZ activity edge
  */
 private create MControlFlow makeActivityEdge(ControlFlow c, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + c ) ->
@@ -771,9 +781,11 @@ private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	debug("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
-		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
-			tag | makeTaggedValue( makeTag(tag), me, e.getValue(s, tag.name) )
-		)
+		s | s.ownedAttribute.
+			reject( a| a.name.startsWith("base_") || null == e.getValue(s, a.name) ).
+			collect(
+				tag | makeTaggedValue( makeTag(tag), me, e.getValue(s, tag.name) )
+			)
 	).flatten().reject(e|e == null);
 
 /*

@@ -544,6 +544,17 @@ MPackage getPackage(MModel this, String fullQualifiedPackageName) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	activities
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+MNode getInitialNode(MActivity this) :
+	node.reject(e|e.metaType == MSynchronisation || e.metaType == MAction)
+		.select(e|e.from.isEmpty)
+		.first();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
