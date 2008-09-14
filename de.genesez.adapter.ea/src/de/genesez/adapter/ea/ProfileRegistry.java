@@ -11,6 +11,17 @@ import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.Stereotype;
 
+/**
+ * Collect imported UML profiles and provide access to Stereotypes
+ *
+ * @author gerbe
+ *
+ * The ProfileRegistry is a singleton which provides the possibility to
+ * register a loaded UML profile under its name.
+ * All stereotypes of the registered profiles can be accessed via their names.
+ * 
+ * Note: at the moment all the stereotypes must have unique names
+ */
 public class ProfileRegistry {
 
 	private static final Log log = LogFactory.getLog(ProfileRegistry.class);
@@ -19,6 +30,9 @@ public class ProfileRegistry {
 	private Map<String, Profile> profiles = new HashMap<String, Profile>();
 	private Map<String, Stereotype> stereotypes = new HashMap<String, Stereotype>();
 
+	/**
+	 * Just to make constructor private
+	 */
 	private ProfileRegistry() {
 		// nothing to do here ;-)
 	}
