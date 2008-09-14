@@ -27,6 +27,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
 
 
 «REM»
@@ -37,10 +38,10 @@
 	evaluates Seam package annotations
 «ENDREM»
 «AROUND de::genesez::platforms::java::ejb3::templates::Class::_Package FOR MClass-»
-	«IF (hasStereotype("seam2Packaging") && !hasTaggedValue("seam2Packaging", "value", "null"))»
-		@Namespace(«taggedValue.selectFirst(e|e.tag.name == "value").value-»
-		«IF !hasTaggedValue("seam2Packaging", "prefix", "null")-»
-			, prefix="«taggedValue.selectFirst(e|e.tag.name == "prefix").value-»"
+	«IF hasStereotype("seam2Packaging") && hasUtilizableValue("seam2Packaging", "value")-»
+		@Namespace(«getTaggedValue("seam2Packing", "value")-»
+		«IF hasUtilizableValue("seam2Packaging", "prefix")-»
+			, prefix="«getTaggedValue("seam2Packaging", "prefix")-»"
 		«ENDIF-»)
 	«ENDIF»
 	«targetDef.proceed()»
@@ -95,14 +96,14 @@
 	«EXPAND _DataTable-»
 	«IF hasStereotype("seam2BijectionLogger")»
 		@Logger
-		«IF !hasTaggedValue("seam2BijectionLogger", "value", "null")»
-			("«taggedValue.selectFirst(e|e.tag.name == "value").value-»")
+		«IF hasUtilizableValue("seam2BijectionLogger", "value")»
+			("«getTaggedValue("seam2BijectionLogger", "value")-»")
 		«ENDIF»
 	«ENDIF»
 	«IF hasStereotype("seam2BijectionRequestParameter")»
 		@RequestParameter
-		«IF !hasTaggedValue("seam2BijectionRequestParamter", "name", "null")»
-			("«taggedValue.selectFirst(e|e.tag.name == "name").value-»")
+		«IF hasUtilizableValue("seam2BijectionRequestParamter", "name")»
+			("«getTaggedValue("seam2BijectionRequestParameter", "name")-»")
 		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
@@ -121,16 +122,16 @@
 	«IF hasStereotype("seam2ComponentReadOnly")»
 		@ReadOnly
 	«ENDIF»	
-	«IF !hasStereotype("seam2BijectionUnwrap")»
+	«IF hasStereotype("seam2BijectionUnwrap")»
 		@Unwrap
 	«ENDIF»
-	«IF !hasStereotype("seam2BijectionFactory")»
-		@Factory(autocreate=«taggedValue.selectFirst(e|e.tag.name == "autoCreate").value-»
-		«IF !hasTaggedValue("seam2BijectionFactory", "scope", "null")-»
-			, scope(ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»
+	«IF hasStereotype("seam2BijectionFactory")»
+		@Factory(autocreate=«getTaggedValue("seam2BijectionFactory", "autoCreate")-»
+		«IF hasUtilizableValue("seam2BijectionFactory", "scope")-»
+			, scope(ScopeType.«getTaggedValue("seam2BijectionFactory", "scope")-»
 		«ENDIF-»
-		«IF !hasTaggedValue("seam2BijectionFactory", "value", "null")-»
-			, "«taggedValue.selectFirst(e|e.tag.name == "value").value-»"
+		«IF hasUtilizableValue("seam2BijectionFactory", "value")-»
+			, "«getTaggedValue("seam2BijectionFactory", "value")-»"
 		«ENDIF-»)
 	«ENDIF»	
 «ENDDEFINE»
@@ -140,25 +141,25 @@
 	annotations for operations and attributes
 «ENDREM»
 «DEFINE _Bijection FOR MElement-»
-	«IF !hasStereotype("seam2BijectionIn")»
-		@In(create=«taggedValue.selectFirst(e|e.tag.name == "create").value-»
+	«IF hasStereotype("seam2BijectionIn")»
+		@In(create=«getTaggedValue("seam2BijectionIn", "create")-»
 		«IF hasTaggedValue("seam2BijectionIn", "required", "false")-»
 			, required=false
 		«ENDIF-»
-		«IF !hasTaggedValue("seam2BijectionIn", "value", "null")-»
-			, value="«taggedValue.selectFirst(e|e.tag.name == "value").value-»"
+		«IF hasUtilizableValue("seam2BijectionIn", "value")-»
+			, value="«getTaggedValue("seamBijectionIn", "value")-»"
 		«ENDIF-»
-		«IF !hasTaggedValue("seam2BijectionIn", "scope", "null")-»
-			, scope=ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»
+		«IF hasUtilizableValue("seam2BijectionIn", "scope")-»
+			, scope=ScopeType.«getTaggedValue("seam2BijectionIn", "scope")-»
 		«ENDIF-»)
 	«ENDIF»
-	«IF !hasStereotype("seam2BijectionOut")»
-		@Out(required=«taggedValue.selectFirst(e|e.tag.name == "required").value-»
-		«IF !hasTaggedValue("seam2BijectionOut", "scope", "null")-»
-			, scope=ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»
+	«IF hasStereotype("seam2BijectionOut")»
+		@Out(required=«getTaggedValue("seam2BijectionOut", "required")-»
+		«IF hasUtilizableValue("seam2BijectionOut", "scope")-»
+			, scope=ScopeType.«getTaggedValue("seam2BijectionOut", "scope")-»
 		«ENDIF-»
-		«IF !hasTaggedValue("seam2BijectionOut", "value", "null")-»
-			, value="«taggedValue.selectFirst(e|e.tag.name == "value").value-»"
+		«IF hasUtilizableValue("seam2BijectionOut", "value")-»
+			, value="«getTaggedValue("seam2BijectionOut", "value")-»"
 		«ENDIF-»)
 	«ENDIF»
 «ENDDEFINE»
@@ -176,10 +177,10 @@
 		«ENDIF»
 	«ENDIF»
 	«IF hasStereotype("seam2LifecycleObserver")»
-		@Observer(create=«taggedValue.selectFirst(e|e.tag.name == "create").value-»
-		«IF (!hasTaggedValue("seam2ComponentObserver", "value", "null") || !hasTaggedValue("seam2ComponentObserver", "value", "[]"))-»
-			{«FOREACH taggedValue.select(e|e.tag.name == "value").value.getElements() AS values SEPARATOR ","-»
-				"«values-»"
+		@Observer(create=«getTaggedValue("seam2LifecycleObserver", "create")-»,
+		«IF hasUtilizableValue("seam2ComponentObserver", "value")-»
+			{«FOREACH getTaggedValue("seam2ComponentObserver", "value").getElements() AS value SEPARATOR ","-»
+				"«value-»"
 			«ENDFOREACH-»}		
 		«ENDIF-»)
 	«ENDIF»	
@@ -196,28 +197,27 @@
 				(scope=ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»)
 			«ENDIF»
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2DataModel", "value", "null") || !hasTaggedValue("seam2DataModel", "value", ""))-»
+		«IF hasUtilizableValue("seam2DataModel", "value")-»
 			@DataModel("«taggedValue.selectFirst(e|e.tag.name == "value").value-»"
-			«IF (hasTaggedValue("seam2DataModel", "scope", "null") || hasTaggedValue("seam2DataModel", "scope", ""))-»
+			«IF hasUtilizableValue("seam2DataModel", "scope")-»
 				, scope=ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»
 			«ENDIF-»)
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2DataBinding", "dataBinderClass", "null") || !hasTaggedValue("seam2DataBinding", "dataBinderClass", ""))»
+		«IF hasUtilizableValue("seam2DataBinding", "dataBinderClass")»
 			@DataBinderClass(«taggedValue.selectFirst(e|e.tag.name == "dataBinderClass").value-»)
 		«ENDIF»
 	«ENDIF»
-	«IF (hasStereotype("seam2DataTable") && 
-		(!hasTaggedValue("seam2DataTable", "dataModelSelectionIndexValue", "null") || !hasTaggedValue("seam2DataTable", "dataModelSelectionIndexValue", "")))»
-		«IF (hasTaggedValue("seam2DataTable", "dataModelSelectionValue", "null") || hasTaggedValue("seam2DataTable", "dataModelSelectionValue", ""))-»
+	«IF hasStereotype("seam2DataTable") && hasUtilizableValue("seam2DataTable", "dataModelSelectionIndexValue")»
+		«IF !hasUtilizableValue("seam2DataTable", "dataModelSelectionValue")-»
 			@DataModelSelection
 		«ELSE»
 			@DataModelSelection("«taggedValue.selectFirst(e|e.tag.name == "dataModelSelectionValue").value-»")
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2DataBinding", "dataSelectorClass", "null") || !hasTaggedValue("seam2DataBinding", "dataSelectorClass", ""))»
+		«IF hasUtilizableValue("seam2DataBinding", "dataSelectorClass")»
 			@DataSelectorClass(«taggedValue.selectFirst(e|e.tag.name == "dataSelectorClass").value-»)
 		«ENDIF»
 	«ENDIF»
-	«IF (hasTaggedValue("seam2DataTable", "dataModelSelectionIndexValue", "null") || hasTaggedValue("seam2DataTable", "dataModelSelectionIndexValue", ""))-»
+	«IF !hasUtilizableValue("seam2DataTable", "dataModelSelectionIndexValue")-»
 		@DataModelSelectionIndex
 	«ELSE»
 		@DataModelSelectionIndex("«taggedValue.selectFirst(e|e.tag.name == "dataModelSelectionIndexValue").value-»")
@@ -230,7 +230,7 @@
 «DEFINE _Remoting FOR MOperation-»
 	«IF hasStereotype("seam2Remoting")»
 		@WebRemote
-		«IF (!hasTaggedValue("seam2Remoting", "exclude", "null") || !hasTaggedValue("seam2Remoting", "exclude", "[]"))-»
+		«IF hasUtilizableValue("seam2Remoting", "exclude")-»
 			{«FOREACH taggedValue.select(e|e.tag.name == "exclude").value.getElements() AS values SEPARATOR ", "-»
 				"«values-»"
 			«ENDFOREACH-»}	
@@ -244,15 +244,15 @@
 «DEFINE _Interceptor FOR MClass-»
 	«IF hasStereotype("seam2Interceptor")»
 		@Interceptor(stateless=«taggedValue.selectFirst(e|e.tag.name == "stateless").value-»
-		«IF (!hasTaggedValue("seam2Interceptor", "type", "null") || !hasTaggedValue("seam2Interceptor", "type", ""))-»
+		«IF hasUtilizableValue("seam2Interceptor", "type")-»
 			, type=InterceptorType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»	
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2Interceptor", "around", "null") || !hasTaggedValue("seam2Interceptor", "around", "[]"))-»
+		«IF hasUtilizableValue("seam2Interceptor", "around")-»
 			, around={«FOREACH taggedValue.select(e|e.tag.name == "around").value.getElements() AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»}	
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2Interceptor", "within", "null") || !hasTaggedValue("seam2Interceptor", "within", "[]"))-»
+		«IF hasUtilizableValue("seam2Interceptor", "within")-»
 			, within={«FOREACH taggedValue.select(e|e.tag.name == "within").value.getElements() AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»}	
@@ -269,7 +269,7 @@
 		@Transactional
 	«ENDIF»
 	«IF hasStereotype("seam2JavaBeanInterceptors")»
-		«IF (!hasTaggedValue("seam2JavaBeanInterceptors", "value", "null") || !hasTaggedValue("seam2JavaBeanInterceptors", "value", "[]"))-»
+		«IF hasUtilizableValue("seam2JavaBeanInterceptors", "value")-»
 			@Interceptors(
 			{«FOREACH taggedValue.select(e|e.tag.name == "value").value.getElements() AS values SEPARATOR ", "-»
 				«values-»
@@ -290,17 +290,17 @@
 «DEFINE _JSF FOR MClass-»
 	«IF hasStereotype("seam2JSFValidator")»
 		@Validator
-		«IF (!hasTaggedValue("seam2JSFValidator", "id", "null") || !hasTaggedValue("seam2JSFValidator", "id", ""))-»
+		«IF hasUtilizableValue("seam2JSFValidator", "id")-»
 			{«taggedValue.selectFirst(e|e.tag.name == "id").value-»)	
 		«ENDIF»
 	«ENDIF»
 	«IF hasStereotype("seam2JSFConverter")»
-		«IF (hasTaggedValue("seam2JSFConverter", "id", "null") || hasTaggedValue("seam2JSFConverter", "id", ""))-»
+		«IF !hasUtilizableValue("seam2JSFConverter", "id")-»
 			@Converter("«name-»"
 		«ELSE»
 			@Converter("«taggedValue.selectFirst(e|e.tag.name == "id").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2JSFConverter", "forClass", "null") || !hasTaggedValue("seam2JSFConverter", "forClass", ""))-»
+		«IF hasUtilizableValue("seam2JSFConverter", "forClass")-»
 			, «taggedValue.selectFirst(e|e.tag.name == "forClass").value-»	
 		«ENDIF-»
 		)		
@@ -312,15 +312,15 @@
 «ENDREM»
 «DEFINE _ServletContainerIntegration FOR MClass-»
 	«IF hasStereotype("seam2ServletContainerIntegration")»
-		«IF (!hasTaggedValue("seam2ServletContainerIntegration", "within", "null") || !hasTaggedValue("seam2ServletContainerIntegration", "within", ""))
-			|| (!hasTaggedValue("seam2ServletContainerIntegration", "around", "null") || !hasTaggedValue("seam2ServletContainerIntegration", "around", ""))»
+		«IF hasUtilizableValue("seam2ServletContainerIntegration", "within") || 
+			hasUtilizableValue("seam2ServletContainerIntegration", "around")»
 			@Filter
-			«IF (!hasTaggedValue("seam2ServletContainerIntegration", "around", "null") || !hasTaggedValue("seam2ServletContainerIntegration", "around", ""))-»
+			«IF hasUtilizableValue("seam2ServletContainerIntegration", "around")-»
 				({«FOREACH taggedValue.select(e|e.tag.name == "around").value.getElements() AS values SEPARATOR ", "-»
 					"«values-»"
 				«ENDFOREACH-»})	
 			«ENDIF-»
-			«IF (!hasTaggedValue("seam2ServletContainerIntegration", "within", "null") || !hasTaggedValue("seam2ServletContainerIntegration", "within", ""))-»
+			«IF hasUtilizableValue("seam2ServletContainerIntegration", "within")»
 				({«FOREACH taggedValue.select(e|e.tag.name == "within").value.getElements() AS values SEPARATOR ", "-»
 					"«values-»"
 				«ENDFOREACH-»})	
@@ -355,19 +355,19 @@
 «DEFINE _Exceptions FOR MClass-»
 	«IF hasStereotype("seam2ExceptionRedirect")»
 		@Redirect(end=«taggedValue.selectFirst(e|e.tag.name == "end").value-»
-		«IF (!hasTaggedValue("seam2ExceptionRedirect", "viewId", "null") || !hasTaggedValue("seam2ExceptionRedirect", "viewId", ""))-»
+		«IF hasUtilizableValue("seam2ExceptionRedirect", "viewId")-»
 			, viewId="«taggedValue.selectFirst(e|e.tag.name == "viewId").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ExceptionRedirect", "message", "null") || !hasTaggedValue("seam2ExceptionRedirect", "message", ""))-»
+		«IF hasUtilizableValue("seam2ExceptionRedirect", "message")-»
 			, message="«taggedValue.selectFirst(e|e.tag.name == "message").value-»"
 		«ENDIF-»)
 	«ENDIF»
 	«IF hasStereotype("seam2ExceptionHttpError")»
 		@HttpError(end=«taggedValue.selectFirst(e|e.tag.name == "end").value-»
-		«IF (!hasTaggedValue("seam2ExceptionHttpError", "errorCode", "null") || !hasTaggedValue("seam2ExceptionHttpError", "errorCode", "500"))-»
+		«IF hasUtilizableValue("seam2ExceptionHttpError", "errorCode") || !hasTaggedValue("seam2ExceptionHttpError", "errorCode", "500")-»
 			, errorCode="«taggedValue.selectFirst(e|e.tag.name == "errorCode").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ExceptionHttpError", "message", "null") || !hasTaggedValue("seam2ExceptionHttpError", "message", ""))-»
+		«IF hasUtilizableValue("seam2ExceptionHttpError", "message")-»
 			, message="«taggedValue.selectFirst(e|e.tag.name == "message").value-»"
 		«ENDIF-»)
 	«ENDIF»
@@ -379,16 +379,16 @@
 «DEFINE _ContextDemarcation FOR MOperation-»
 	«IF hasStereotype("seam2ContextDemarcationBegin")»
 		@Begin(nested=«taggedValue.selectFirst(e|e.tag.name == "nested").value-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationBegin", "flushMode", "null") || !hasTaggedValue("seam2ContextDemarcationBegin", "flushMode", "AUTO"))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationBegin", "flushMode") || !hasTaggedValue("seam2ContextDemarcationBegin", "flushMode", "AUTO")-»
 			, flushMode=FlushModeType.«taggedValue.selectFirst(e|e.tag.name == "flushMode").value-»
 		«ENDIF-»
 		«IF hasTaggedValue("seam2ContextDemarcationBegin", "join", "true")-»
 			, join=«taggedValue.selectFirst(e|e.tag.name == "join").value-»
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationBegin", "pageflow", "null") || !hasTaggedValue("seam2ContextDemarcationBegin", "pageflow", ""))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationBegin", "pageflow")-»
 			, pageflow="«taggedValue.selectFirst(e|e.tag.name == "pageflow").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationBegin", "ifOutcome", "null") || !hasTaggedValue("seam2ContextDemarcationBegin", "ifOutcome", "[]"))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationBegin", "ifOutcome")-»
 			, ifOutcome={«FOREACH taggedValue.select(e|e.tag.name == "ifOutcome").value.getElements() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
@@ -396,7 +396,7 @@
 	«ENDIF»	
 	«IF hasStereotype("seam2ContextDemarcationEnd")»
 		@End(beforeRedirect=«taggedValue.selectFirst(e|e.tag.name == "beforeRedirect").value-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationEnd", "ifOutcome", "null") || !hasTaggedValue("seam2ContextDemarcationEnd", "ifOutcome", "[]"))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationEnd", "ifOutcome")-»
 			, ifOutcome={«FOREACH taggedValue.select(e|e.tag.name == "ifOutcome").value.getElements() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
@@ -404,50 +404,50 @@
 	«ENDIF»		
 	«IF hasStereotype("seam2ContextDemarcationStartTask")»
 		@StartTask(flushMode=FlushModeType.«taggedValue.selectFirst(e|e.tag.name == "flushMode").value-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationStartTask", "id", "null") || hasTaggedValue("seam2ContextDemarcationStartTask", "id", ""))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationStartTask", "id")-»
 			, id="«taggedValue.selectFirst(e|e.tag.name == "id").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationStartTask", "pageflow", "null") || !hasTaggedValue("seam2ContextDemarcationStartTask", "pageflow", ""))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationStartTask", "pageflow")-»
 			, pageflow="«taggedValue.selectFirst(e|e.tag.name == "pageflow").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationStartTask", "taskIdParameter", "null") || hasTaggedValue("seam2ContextDemarcationStartTask", "taskIdParameter", "taskId"))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationStartTask", "taskIdParameter") || hasTaggedValue("seam2ContextDemarcationStartTask", "taskIdParameter", "taskId")-»
 			, taskIdParameter="«taggedValue.selectFirst(e|e.tag.name == "taskIdParameter").value-»"
 		«ENDIF-»
 	«ENDIF»	
 	«IF hasStereotype("seam2ContextDemarcationBeginTask")»
 		@BeginTask(flushMode=FlushModeType.«taggedValue.selectFirst(e|e.tag.name == "flushMode").value-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationBeginTask", "id", "null") || hasTaggedValue("seam2ContextDemarcationBeginTask", "id", ""))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationBeginTask", "id")-»
 			, id="«taggedValue.selectFirst(e|e.tag.name == "id").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationBeginTask", "pageflow", "null") || !hasTaggedValue("seam2ContextDemarcationBeginTask", "pageflow", ""))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationBeginTask", "pageflow")-»
 			, pageflow="«taggedValue.selectFirst(e|e.tag.name == "pageflow").value-»"
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationBeginTask", "taskIdParameter", "null") || hasTaggedValue("seam2ContextDemarcationBeginTask", "taskIdParameter", "taskId"))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationBeginTask", "taskIdParameter") || hasTaggedValue("seam2ContextDemarcationBeginTask", "taskIdParameter", "taskId")-»
 			, taskIdParameter="«taggedValue.selectFirst(e|e.tag.name == "taskIdParameter").value-»"
 		«ENDIF-»
 	«ENDIF»	
 	«IF hasStereotype("seam2ContextDemarcationEndTask")»
 		@EndTask(beforeRedirect=«taggedValue.selectFirst(e|e.tag.name == "beforeRedirect").value-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationEndTask", "ifOutcome", "null") || !hasTaggedValue("seam2ContextDemarcationEndTask", "ifOutcome", "[]"))-»
+		«IF hasUtilizableValue("seam2ContextDemarcationEndTask", "ifOutcome")-»
 			, ifOutcome={«FOREACH taggedValue.select(e|e.tag.name == "ifOutcome").value.getElements() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»
-		«IF (!hasTaggedValue("seam2ContextDemarcationEndTask", "transition", "null") || hasTaggedValue("seam2ContextDemarcationEndTask", "transition", ""))»
+		«IF hasUtilizableValue("seam2ContextDemarcationEndTask", "transition")»
 			, transition="«taggedValue.selectFirst(e|e.tag.name == "transition").value-»")
 		«ENDIF»)	
 	«ENDIF»	
 	«IF hasStereotype("seam2ContextDemarcation")»
-		«IF !hasTaggedValue("seam2ContextDemarcation", "createProcessDefinition", "null")»
+		«IF hasUtilizableValue("seam2ContextDemarcation", "createProcessDefinition")»
 			@CreateProcess(definition="«taggedValue.selectFirst(e|e.tag.name == "createProcessDefinition").value-»")
 		«ENDIF»
-		«IF !hasTaggedValue("seam2ContextDemarcation", "resumeProcessIdParameter", "null")»
+		«IF hasUtilizableValue("seam2ContextDemarcation", "resumeProcessIdParameter")»
 			@ResumeProcess
 			«IF !hasTaggedValue("seam2ContextDemarcation", "resumeProcessIdParameter", "processId")-»
 				(processIdParameter="«taggedValue.selectFirst(e|e.tag.name == "resumeProcessIdParameter").value-»")
 			«ENDIF»
 		«ENDIF»
-		«IF !hasTaggedValue("seam2ContextDemarcation", "transition", "null")»
+		«IF hasUtilizableValue("seam2ContextDemarcation", "transition")»
 			@Transition("«taggedValue.selectFirst(e|e.tag.name == "transition").value-»")
 		«ENDIF»
 	«ENDIF»
@@ -459,13 +459,13 @@
 «ENDREM»
 «DEFINE _Component FOR MClass-»
 	«IF hasStereotype("seam2Component")»
-		«IF !hasTaggedValue("seam2Component", "name", "null")»
+		«IF hasUtilizableValue("seam2Component", "name")»
 			@Name("«taggedValue.selectFirst(e|e.tag.name == "name").value-»")
 		«ENDIF»
-		«IF !hasTaggedValue("seam2Component", "scope", "null")»
+		«IF hasUtilizableValue("seam2Component", "scope")»
 			@Scope(ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»)
 		«ENDIF»
-		«IF !hasTaggedValue("seam2Component", "jndiName", "null")»
+		«IF hasUtilizableValue("seam2Component", "jndiName")»
 			@JndiName("«taggedValue.selectFirst(e|e.tag.name == "jndiname").value-»")
 		«ENDIF»
 		«IF hasTaggedValue("seam2Component", "byPassInterceptor", "true")»
@@ -474,10 +474,10 @@
 		«IF hasTaggedValue("seam2Component", "conversational", "true")»
 			@Conversational
 		«ENDIF»
-		«IF !hasTaggedValue("seam2Component", "intercept", "null")»
+		«IF hasUtilizableValue("seam2Component", "intercept")»
 			@Intercept(InterceptionType.«taggedValue.selectFirst(e|e.tag.name == "intercept").value-»)
 		«ENDIF»
-		«IF (!hasTaggedValue("seam2Component", "synchronizedTimeout", "null") && !hasTaggedValue("seam2Component", "synchronizedTimeout", "1000"))»
+		«IF hasUtilizableValue("seam2Component", "synchronizedTimeout") && !hasTaggedValue("seam2Component", "synchronizedTimeout", "1000")»
 			@Synchronized(timeout=«taggedValue.selectFirst(e|e.tag.name == "synchronizedTimeout").value-»)
 		«ENDIF»
 		«IF hasTaggedValue("seam2Component", "autoCreate", "true")»
@@ -487,10 +487,8 @@
 	«IF hasStereotype("seam2ComponentReadOnly")»
 		@ReadOnly
 	«ENDIF»		
-	«IF hasStereotype("seam2ComponentRole") && (
-		(!hasTaggedValue("seam2ComponentRole", "name", "null") || !hasTaggedValue("seam2ComponentRole", "name", "[]")) ||
-		(!hasTaggedValue("seam2ComponentRole", "scope", "null") || !hasTaggedValue("seam2ComponentRole", "scope", "[]"))
-		)»
+	«IF hasStereotype("seam2ComponentRole") && 
+		(hasUtilizableValue("seam2ComponentRole", "name") || hasUtilizableValue("seam2ComponentRole", "scope"))»
 		@Roles({
 		«FOREACH taggedValue.select(e|e.tag.name == "name").value.getElements() AS names SEPARATOR ","-»
 			@Role(name="«names-»"
@@ -504,26 +502,31 @@
 		«IF hasTaggedValue("seam2ComponentInstall", "value", "false")»
 			@Install(false)
 		«ENDIF»		
-		«IF (hasTaggedValue("seam2ComponentInstall", "value", "true") && ( 
-			hasTaggedValue("seam2ComponentInstall", "installDebug", "true") ||
-			(!hasTaggedValue("seam2ComponentInstall", "dependencies", "null") || !hasTaggedValue("seam2ComponentInstall", "dependencies", "[]")) ||
-			(!hasTaggedValue("seam2ComponentInstall", "genericDependencies", "null") || !hasTaggedValue("seam2ComponentInstall", "genericDependencies", "[]")) ||
-			(!hasTaggedValue("seam2ComponentInstall", "classDependencies", "null") || !hasTaggedValue("seam2ComponentInstall", "classDependencies", "[]")) ||
-			(!hasTaggedValue("seam2ComponentInstall", "precedence", "null") && !hasTaggedValue("seam2ComponentInstall", "precedence", "20"))))»
+		«IF hasTaggedValue("seam2ComponentInstall", "value", "true") && 
+			( 
+				hasTaggedValue("seam2ComponentInstall", "installDebug", "true") ||
+				hasUtilizableValue("seam2ComponentInstall", "dependencies") ||
+				hasUtilizableValue("seam2ComponentInstall", "genericDependencies") ||
+				hasUtilizableValue("seam2ComponentInstall", "classDependencies") || 
+				(
+					hasUtilizableValue("seam2ComponentInstall", "precedence") && 
+					!hasTaggedValue("seam2ComponentInstall", "precedence", "20")
+				)
+			)-»
 			@Install(debug="«taggedValue.selectFirst(e|e.tag.name == "debug").value-»"
-			«IF (!hasTaggedValue("seam2ComponentInstall", "dependencies", "null") || !hasTaggedValue("seam2ComponentInstall", "dependencies", "[]"))-»
+			«IF hasUtilizableValue("seam2ComponentInstall", "dependencies")-»
 				, dependencies={
 				«FOREACH taggedValue.select(e|e.tag.name == "dependencies").value.getElements() AS value SEPARATOR ", "-»
 					"«value-»"
 				«ENDFOREACH-»}				
 			«ENDIF-»
-			«IF (!hasTaggedValue("seam2ComponentInstall", "installGenericDependencies", "null") || !hasTaggedValue("seam2ComponentInstall", "genericDependencies", "[]"))-»
+			«IF hasUtilizableValue("seam2ComponentInstall", "installGenericDependencies")-»
 				, genericDependencies={
 				«FOREACH taggedValue.select(e|e.tag.name == "genericDependencies").value.getElements() AS value SEPARATOR ", "-»
 					«value-»
 				«ENDFOREACH-»}	
 			«ENDIF-»
-			«IF (!hasTaggedValue("seam2ComponentInstall", "classDependencies", "null") || !hasTaggedValue("seam2ComponentInstall", "classDependencies", "[]"))-»
+			«IF hasUtilizableValue("seam2ComponentInstall", "classDependencies")-»
 				, classDependencies={
 				«FOREACH taggedValue.select(e|e.tag.name == "classDependencies").value.getElements() AS value SEPARATOR ", "-»
 					"«value-»"
@@ -538,7 +541,7 @@
 		@Startup
 		«IF hasTaggedValue("seam2ComponentStartup", "depends", "true")»
 			@Startup
-			«IF (!hasTaggedValue("seam2ComponentStartup", "depends", "null") || !hasTaggedValue("seam2ComponentStartup", "depends", "[]"))»
+			«IF hasUtilizableValue("seam2ComponentStartup", "depends")»
 				(depends={
 				«FOREACH taggedValue.select(e|e.tag.name == "depends").value.getElements() AS value SEPARATOR ", "-»
 					"«value-»"
