@@ -5,12 +5,11 @@
  * @date	2008-08-04
  */
 
-//      based on genesez meta model
-import gcore;
+//      based on genesez testing meta model
+import gtesting;
 
-extension de::genesez::platforms::common::AccessHelper;
-extension de::genesez::platforms::qftest::scripts::Helper;
-
+// use logging
+extension de::genesez::platforms::common::log::Log;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -20,135 +19,128 @@ extension de::genesez::platforms::qftest::scripts::Helper;
 
 /**
  * generates the RootStep
- * @return      the xml code for the RootStep
  */
-String rootStep(MUseCase this) :
-	"<RootStep id=\"" + xmiGuid + "\" name=\"root\"\n" +
-	"signature=\"" + signature() + "\"\n" +
-	"version=\"" + version() + "\">\n" +
-	testSet() + "\n" +
-	packageRoot() + "\n" +
-	extraSequence() + "\n" +
-	windowList() + "\n" +
-	"</RootStep>";
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	children of the RootStep
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+Void rootStep(TTestSuite this) :
+	trace("Creating RootStep for " + name ) -> 
+	qfRootStep() ->
+	testSet();
 
 /**
  * generates the TestSet
- * @return      the xml code for the TestSet
  */
-private String testSet(MUseCase this) :
-	"<TestSet id=\"" + xmiGuid + "\" name=\"" + name + "\">\n" +
-	toString( ownedBehavior.
-		select(e|e.metaType == MActivity && e.hasStereotype("testCase")).
-		testCase() ) + "\n" +
-	"</TestSet>";
+Void testSet(TTestSuite this) :
+	trace("Creating TestSet for " + name ) -> 
+	qfTestSet() ->
+	testcase.testCase();
 
 /**
- * generates the PackageRoot
- * @return      the xml code for the PackageRoot
+ * generates a TestCase
  */
-private String packageRoot(MUseCase this) :
-	"<PackageRoot id=\"" + id() + "\">\n" +
-	"</PackageRoot>";
+Void testCase(TTestCase this) :
+	trace("Creating TestCase for " + name ) ->
+	qfTestCase() ->
+	testcase.testCase() ->
+	test.sequence() ->
+	qfReset();
 
 /**
- * generates the ExtraSequence
- * @return      the xml code for the ExtraSequence
+ * generates a Sequence
  */
-private String extraSequence(MUseCase this) :
-	"<ExtraSequence id=\"" + id() + "\">\n" +
-	"</ExtraSequence>";
+Void sequence(TTest this) :
+	trace("Creating Sequence for " + name ) ->
+	qfSequence() ->
+	action.actionStep() ->
+	qfReset();
 
-/**
- * generates the WindowList
- * @return      the xml code for the WindowList
- */
-private String windowList(MUseCase this) :
-	"<WindowList id=\"" + id() + "\">\n" +
-	"</WindowList>";
+Void actionStep(TKeyEvent this) :
+	trace("Creating KeyEventStep for " + name ) ->
+	qfKeyEventStep();
 
+Void actionStep(TMouseEvent this) :
+	trace("Creating MouseEventStep for " + name ) ->
+	qfMouseEventStep();
+
+Void actionStep(TMouseMove this) :
+	trace("Creating MouseEventStep for " + name ) ->
+	qfMouseEventStep();
+
+Void actionStep(TAction this) :
+	trace("...");
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TestCase
+	mapping to java functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * generates the testCase for an Activity
- * @return      the xml code for the TestCase
+ * create the root step
+ * @param	t	the Test Suite
+ * @return	void
  */
-private String testCase(MActivity this) :
-	"<TestCase id=\"" + xmiGuid + "\" name=\"" + name + "\">\n" +
-	toString( node.typeSelect(MInitial).testCaseInitial() ) + "\n" +
-	toString( ownedBehavior.
-		select(e|e.metaType == MActivity && e.hasStereotype("testCase")).
-		testCase() ) + "\n" +
-	"</TestCase>";
+private Void qfRootStep(TTestSuite t) :
+	JAVA de.genesez.platforms.qftest.QftFile.qfRootStep(de.genesez.testing.gtesting.TTestSuite);
 
-private String testCase(MBehavior this) : "";
+/**
+ * create the test set
+ * @param	t	the Test Suite
+ * @return	void
+ */
+private Void qfTestSet(TTestSuite t) :
+	qfElement(t, "TestSet");
 
-private String testCaseInitial(MInitial this) :
-	toString(
-		to.target.typeSelect(MCallBehaviorAction).testCaseAction()
-	 );
+/**
+ * create a test case
+ * @param	t	the Test Case
+ * @return	void
+ */
+private Void qfTestCase(TTestCase t) :
+	qfElement(t, "TestCase");
 
-private String testCaseAction(MCallBehaviorAction this) :
-	toTestCase() + 
-	toString(
-		to.target.typeSelect(MCallBehaviorAction).testCaseAction()
-	);
-	
-private String toTestCase(MCallBehaviorAction this) :
-	switch {
-		case behavior.hasStereotype("testCase"):
-			testCase(behavior)
-		case behavior.hasStereotype("test"):
-			test(behavior)
-		default: ""
-	};
+/**
+ * create a sequence
+ * @param	t	the Test
+ * @return	void
+ */
+private Void qfSequence(TTest t) :
+	qfElement(t, "BasicSequence");
 
+/**
+ * create a key event
+ * @param	t	the KeyEvent
+ * @return	void
+ */
+private Void qfKeyEventStep(TKeyEvent t) :
+	JAVA de.genesez.platforms.qftest.QftFile.qfKeyEventStep(de.genesez.testing.gtesting.TKeyEvent);
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	Test
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+/**
+ * create a mouse event
+ * @param	t	the MouseEvent
+ * @return	void
+ */
+private Void qfMouseEventStep(TMouseEvent t) :
+	JAVA de.genesez.platforms.qftest.QftFile.qfMouseEventStep(de.genesez.testing.gtesting.TMouseEvent);
 
-private String test(MActivity this) :
-	"<Test id=\"" + xmiGuid + "\" name=\"" + name + "\">\n" +
-	toString( node.typeSelect(MInitial).testInitial() ) + "\n" +
-	"</Test>";
+/**
+ * create a mouse move
+ * @param	t	the MouseMove
+ * @return	void
+ */
+private Void qfMouseEventStep(TMouseMove t) :
+	JAVA de.genesez.platforms.qftest.QftFile.qfMouseEventStep(de.genesez.testing.gtesting.TMouseMove);
 
-private String test(MBehavior this) : "";
+/**
+ * creates a QF Test XML Element
+ * @param	t	the test model element
+ * @param	s	the tag name of the element
+ * return	void
+ */
+private Void qfElement(TElement t, String s) :
+ 	JAVA de.genesez.platforms.qftest.QftFile.qfElement(de.genesez.testing.gtesting.TElement, java.lang.String);
 
-private String testInitial(MInitial this) :
-	toString(
-		to.target.typeSelect(MAction).testAction()
-	);
-
-private String testAction(MAction this) :
-	toTest() + 
-	toString(
-		to.target.typeSelect(MAction).testAction()
-	);
-
-private String toTest(MAction this) :
-	switch {
-		case hasStereotype("mouse"): toMouseEventStep()
-		case hasStereotype("keyboard") : toKeyEventStep()
-		default: ""
-	};
-
-private String toMouseEventStep(MAction this) :
-	"<MouseEventStep id=\"" + xmiGuid + "\" name=\"" + name + "\" />\n";
-
-private String toKeyEventStep(MAction this) :
-	"<KeyEventStep id=\"" + xmiGuid + "\" name=\"" + name + "\" />\n";
+/**
+ * resets the active element
+ * @return	void
+ */
+private Void qfReset() :
+	JAVA de.genesez.platforms.qftest.QftFile.qfReset();

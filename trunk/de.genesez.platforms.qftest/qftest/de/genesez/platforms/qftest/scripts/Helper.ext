@@ -1,41 +1,63 @@
 /**
- * QF-Test helper functions
+ * QF-Test helper
  *
  * @author	Gerrit Beine
  * @date	2008-08-04
  */
 
-//      based on genesez meta model
-import gcore;
+// uses GeneSEZ testing metamodel
+import gtesting;
+
+
+// use logging
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::qftest::scripts::Conversion;
+extension de::genesez::platforms::qftest::scripts::Naming;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	File helper functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
- * getter of the step id 
- * @return      the id string for a step
+ * open the QF-Test file
+ * @context	the TestSuite
+ * @return	void
  */
-String id() :
-	JAVA de.genesez.platforms.qftest.Helper.getId();
+Void openFile(TTestSuite t, String d) :
+	trace("opening file " + t.fullFileName() ) ->
+	openFile( d + dirSeparator() + t.fullFileName() );
 
 /**
- * getter of the signature for the root step
- * @return      the root step signature
+ * save the QF-Test file
+ * @context	the TestSuite
+ * @return	void
  */
-String signature() : "59EFF2985C66AC1DCEC2F145A0F0B9BAA68FE84E";
+Void saveFile(TTestSuite t, String d) :
+	trace("saving file " + t.fullFileName() ) ->
+	saveFile( d + dirSeparator() + t.fullFileName() );
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping to java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
- * getter of the QF-Test version
- * @return      the version string
+ * open the QF-Test file
+ * @param	s	the file name
+ * @return	void
  */
-String version() : "2.2.3";
+private Void openFile(String s) :
+	JAVA de.genesez.platforms.qftest.QftFile.open(java.lang.String);
 
 /**
- * transforms a list of string into one string
- *
- * @param		a list of strings
- * @return		a string made from the list
+ * save the QF-Test file
+ * @param	s	the file name
+ * @return	void
  */
-String toString(List[String] l) :
-	switch (l.size) {
-		case 0 : ""
-		case 1 : l.first()
-		default : l.first() + "\n" + toString( l.select(e|e != l.first()) )
-	};
+private Void saveFile(String s) :
+	JAVA de.genesez.platforms.qftest.QftFile.save(java.lang.String);
+
