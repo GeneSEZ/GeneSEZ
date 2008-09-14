@@ -37,6 +37,15 @@
 	<bean id="uml2" class="org.openarchitectureware.uml2.UML2MetaModel"/>
 	
 	
+	<!-- validate the uml2 model for transformation into a GeneSEZ model -->
+	<cartridge
+		file = "de::genesez::platforms::common::workflow::constraintChecker.oaw"
+		modelSlot = "uml2model"
+		checkScript = "de::genesez::adapter::uml2::uml2constraints"
+		abortOnError = "true"
+	/>
+	
+	<!-- run uml2genesez transformation -->
 	<component id="uml2gcore" class="oaw.xtend.XtendComponent">
 		
 		<metaModel idRef="gcore" />

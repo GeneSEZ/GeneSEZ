@@ -20,6 +20,8 @@
 // based on genesez meta model
 import gcore;
 
+extension de::genesez::platforms::common::log::Log;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	multiplicity elements (properties, parameters, operations)
@@ -88,6 +90,33 @@ boolean hasFixedMultiplicity(MParameter this) :
  */
 boolean hasFixedMultiplicity(MOperation this) : 
 	multiplicity > -1;
+
+/**
+ * getter for the return type of an operation
+ * @return	the return type of the operation
+ */
+MType type(MOperation this) : returnType;
+
+/**
+ * getter for the type of a parameter
+ * @return	the type of the parameter
+ */
+MType type(MParameter this) : type;
+
+/**
+ * getter for the type of a property
+ * @return	the type of the property
+ */
+MType type(MProperty this) : type;
+
+/**
+ * just there for error free templates
+ * should NOT be called!
+ */
+MType type(MElement this) : 
+	fatal("somethings goes totally wrong within your templates... " +
+	"   you cannot determine the type of an 'MElement': " + this) ->
+	Void;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -378,10 +407,10 @@ boolean hasGenericParameter(MOperation this) :
 	genericParameter.size > 0;
 
 /**
- * checks if an attribute has one or more generic realizations
- * @return	true if the attribute has at least one generic realization, otherwise false
+ * checks if a property has one or more generic realizations
+ * @return	true if the property has at least one generic realization, otherwise false
  */
-boolean hasGenericRealization(MAttribute this) :
+boolean hasGenericRealization(MProperty this) :
 	genericRealization.size > 0;
 
 /*
@@ -493,13 +522,45 @@ String name(MType this) :
 	
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	classifiers
+	model accessors
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
+ * getter for the model element by using a property
+ * @return	the model element
+ */
+MModel model(MProperty this) : classifier.model();
+
+/**
+ * getter for the model element by using an operation
+ * @return	the model element
+ */
+MModel model(MOperation this) : classifier.model();
+
+/**
  * getter for the model element by using a classifier
  * @return	the model element
+ */
+MModel model(MClassifier this) :
+	owningPackage.metaType == MModel
+		? owningPackage
+		: owningPackage.getModel();
+
+/**
+ * getter for the model element by using a package
+ * @return	the model element
+ */
+MModel model(MPackage this) :
+	metaType == MModel
+		? this
+		: nestingPackage.getModel();
+
+
+/**
+ * getter for the model element by using a classifier
+ * @return	the model element
+ * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MClassifier this) :
 	owningPackage.metaType == MModel
@@ -509,11 +570,18 @@ MModel getModel(MClassifier this) :
 /**
  * getter for the model element by using a package
  * @return	the model element
+ * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MPackage this) :
 	metaType == MModel
 		? this
 		: nestingPackage.getModel();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	classifiers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 /**
  * getter for a class by it's full qualified name which is separed by dot's
