@@ -7,19 +7,14 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 
-import de.genesez.adapter.ea.ContentRegistry;
 import de.genesez.adapter.ea.ElementRegistry;
-import de.genesez.adapter.ea.PostProcessor;
-import de.genesez.adapter.ea.ProfileRegistry;
 
 public class ActivityTransformer extends AbstractElementTransformer {
 
@@ -90,40 +85,66 @@ public class ActivityTransformer extends AbstractElementTransformer {
 	protected void transformElement(org.sparx.Element _e) {
 		log.debug("Transforming element " + _e.GetName());
 
-		if ( _e.GetType().equals("Action") && _e.GetClassfierID() > 0 ) {
+		ActivityNode node = null;
+
+		// Owned activities
+		if ( _e.GetType().equals("Activity") ) {
+				log.debug("Element is an Activity");
+				ActivityTransformer t = new ActivityTransformer();
+				t.transform(_e, (Activity)this.umlElement);
+		}
+		// Call behavior actions
+		else if ( _e.GetType().equals("Action") && _e.GetClassfierID() > 0 ) {
 			log.debug("Element is a CallBehaviorAction");
 			CallBehaviorActionTransformer t = new CallBehaviorActionTransformer();
-			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
-			this.applyActivityEdges(_e, node);
+			node = t.transform(_e, (Activity)this.umlElement);
 		}
+		// All other actions
 		else if ( _e.GetType().equals("Action") ) {
 			log.debug("Element is an Action");
 			CallOperationActionTransformer t = new CallOperationActionTransformer();
-			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
-			this.applyActivityEdges(_e, node);
+			node = t.transform(_e, (Activity)this.umlElement);
 		}
 		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 100 ) {
 			log.debug("Element is an InitialNode");
 			InitialNodeTransformer t = new InitialNodeTransformer();
-			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
-			this.applyActivityEdges(_e, node);
+			node = t.transform(_e, (Activity)this.umlElement);
 		}
 		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 101 ) {
 			log.debug("Element is an ActivityFinialNode");
 			ActivityFinalNodeTransformer t = new ActivityFinalNodeTransformer();
-			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
-			this.applyActivityEdges(_e, node);
+			node = t.transform(_e, (Activity)this.umlElement);
 		}
 		else if ( _e.GetType().equals("StateNode") && _e.GetSubtype() == 102 ) {
-			log.debug("Element is an FlowFinalNode");
+			log.debug("Element is a FlowFinalNode");
 			FlowFinalNodeTransformer t = new FlowFinalNodeTransformer();
-			ActivityNode node = t.transform(_e, (Activity)this.umlElement);
-			this.applyActivityEdges(_e, node);
+			node = t.transform(_e, (Activity)this.umlElement);
 		}
-		else if ( _e.GetType().equals("Activity") ) {
-			log.debug("Element is an Activity");
-			ActivityTransformer t = new ActivityTransformer();
-			t.transform(_e, (Activity)this.umlElement);
+		else if ( _e.GetType().equals("Decision") ) {
+			log.debug("Element is a DecisionNode");
+			DecisionNodeTransformer t = new DecisionNodeTransformer();
+			node = t.transform(_e, (Activity)this.umlElement);
+		}
+		else if ( _e.GetType().equals("MergeNode") ) {
+			log.debug("Element is a MergeNode");
+			MergeNodeTransformer t = new MergeNodeTransformer();
+			node = t.transform(_e, (Activity)this.umlElement);
+		}
+		// Fork nodes
+		else if ( _e.GetType().equals("Synchronization") && isForkNode(_e) ) {
+			log.debug("Element is a ForkNode");
+			ForkNodeTransformer t = new ForkNodeTransformer();
+			node = t.transform(_e, (Activity)this.umlElement);
+		}
+		// Join nodes
+		else if ( _e.GetType().equals("Synchronization") && isJoinNode(_e) ) {
+			log.debug("Element is a JoinNode");
+			JoinNodeTransformer t = new JoinNodeTransformer();
+			node = t.transform(_e, (Activity)this.umlElement);
+		}
+		
+		if ( null != node ) {
+			this.applyActivityEdges(_e, node);
 		}
 	}
 	
@@ -166,5 +187,25 @@ public class ActivityTransformer extends AbstractElementTransformer {
 				this.edges.get(connectorGuid).setTarget(_node);
 			}
 		}
+	}
+	
+	private static boolean isForkNode(org.sparx.Element _e) {
+		int i = 0;
+		for (org.sparx.Connector c: _e.GetConnectors()) {
+			if (c.GetClientID() == _e.GetElementID()) {
+				i++;
+			}
+		}			
+		return i>1;
+	}
+
+	private static boolean isJoinNode(org.sparx.Element _e) {
+		int i = 0;
+		for (org.sparx.Connector c: _e.GetConnectors()) {
+			if (c.GetSupplierID() == _e.GetElementID()) {
+				i++;
+			}
+		}
+		return i>1;
 	}
 }

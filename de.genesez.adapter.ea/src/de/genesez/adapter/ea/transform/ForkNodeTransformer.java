@@ -3,19 +3,19 @@ package de.genesez.adapter.ea.transform;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Activity;
-import org.eclipse.uml2.uml.ActivityFinalNode;
+import org.eclipse.uml2.uml.ForkNode;
 import org.eclipse.uml2.uml.UMLFactory;
 
 import de.genesez.adapter.ea.ElementRegistry;
 
-public class ActivityFinalNodeTransformer extends AbstractElementTransformer {
+public class ForkNodeTransformer extends AbstractElementTransformer {
 
-	private static final Log log = LogFactory.getLog(ActivityFinalNodeTransformer.class);
+	private static final Log log = LogFactory.getLog(ForkNodeTransformer.class);
 	
-	ActivityFinalNode transform(org.sparx.Element _e, Activity _parent) {
-		log.debug("Creating ActivityFinalNode " + _e.GetName() + ", parent " + _parent.getName());
-
-		ActivityFinalNode node = UMLFactory.eINSTANCE.createActivityFinalNode();
+	ForkNode transform(org.sparx.Element _e, Activity _parent) {
+		log.debug("Creating ForkNode " + _e.GetName() + ", parent " + _parent.getName());
+		
+		ForkNode node = UMLFactory.eINSTANCE.createForkNode();
 		node.setActivity(_parent);
 		node.setName(_e.GetName());
 		

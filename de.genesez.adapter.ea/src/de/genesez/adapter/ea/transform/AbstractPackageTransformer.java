@@ -2,7 +2,6 @@ package de.genesez.adapter.ea.transform;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Package;
 
 public abstract class AbstractPackageTransformer {
