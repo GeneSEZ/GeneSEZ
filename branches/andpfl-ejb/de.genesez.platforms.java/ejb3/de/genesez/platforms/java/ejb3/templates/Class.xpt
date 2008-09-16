@@ -504,6 +504,9 @@
 			(operation.exists(e|e.hasStereotype("ejb3Timer")) || operation.parameter.type.mapName().asTypeName().exists(e|e == "Timer"))-»
 			import javax.ejb.Timer;
 		«ENDIF»
+		«IF operation.exists(e|e.hasStereotype("ejb3OperationInterceptor")) || operation.parameter.type.mapName().asTypeName().exists(e|e == "InvocationContext")-»
+			import javax.interceptor.InvocationContext;
+		«ENDIF-»
 				
 		/**
 		  * generated interface for "«asTypeName()-»"
