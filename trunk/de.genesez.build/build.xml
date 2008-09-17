@@ -63,7 +63,7 @@
 				<replaceregexp byline="true"
 					file="${build.basedir}/${prefix}.@{project}/META-INF/MANIFEST.MF"
 					match="Bundle-Version:.*"
-					replace="Bundle-Version: ${release}">
+					replace="Bundle-Version: ${plugin.version}">
 				</replaceregexp>
 			</sequential>
 		</for>
@@ -72,18 +72,18 @@
 				<replaceregexp byline="true"
 					file="${build.basedir}/${prefix}.@{project}/feature.xml"
 					match='(?&lt;!xml )version=".*"'
-					replace='version="${release}"'>
+					replace='version="${plugin.version}"'>
 				</replaceregexp>
 			</sequential>
 		</for>
 		<replaceregexp byline="true"
 			file="${build.basedir}/${prefix}.updatesite/site.xml"
 			match='(?&lt;!xml )version=".*"'
-			replace='version="${release}"' />
+			replace='version="${plugin.version}"' />
 		<replaceregexp byline="true"
 			file="${build.basedir}/${prefix}.updatesite/site.xml"
 			match="feature_(\d|\.)*.jar"
-			replace="feature_${release}.jar" />
+			replace="feature_${plugin.version}.jar" />
 	</target>
 	
 	<target name="build.all"
