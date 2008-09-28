@@ -494,6 +494,7 @@
 		  */	
 		«EXPAND _Package-»
 		
+		import java.util.*;
 		«IF type == "Remote"-»
 			import javax.ejb.Remote;
 		«ENDIF-»
@@ -529,7 +530,21 @@
 		 		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Declaration FOR op-»
 		 	«ENDIF»
 		 «ENDFOREACH»
-					
+		
+		«IF hasStereotype("seam2Component")-»
+			/**
+			  * generated getter and setter method declaration
+			  *
+			  */
+			«FOREACH property.typeSelect(MAttribute) AS attribute-»
+				«IF !attribute.hasTaggedValue("accessor", "getter", "false")-»
+					public «attribute.type.mapName().asTypeName()-» «attribute.asGetter()-»();
+				«ENDIF»
+				«IF !attribute.hasTaggedValue("accessor", "setter", "false")-»
+					public void «attribute.asSetter()-»(«attribute.type.mapName().asTypeName()-» «attribute.name-»);
+				«ENDIF»
+			«ENDFOREACH-»
+		«ENDIF»		
 		}
 	«ENDFILE»	
 «ENDDEFINE»
@@ -917,7 +932,9 @@
 		import javax.persistence.Inheritance;
 		import javax.persistence.InheritanceType;
 	«ENDIF»
-	«IF property.exists(e|e.hasStereotype("ejb3Persistence"))-»
+	«IF property.exists(e|e.hasStereotype("ejb3Persistence")) 
+		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManager")
+		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManagerFactory")-»
 		import javax.persistence.EntityManager;
 		import javax.persistence.PersistenceUnit;
 		import javax.persistence.PersistenceContext;
