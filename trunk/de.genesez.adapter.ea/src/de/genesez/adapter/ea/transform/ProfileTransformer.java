@@ -52,9 +52,20 @@ public class ProfileTransformer extends AbstractPackageTransformer {
 			MetaclassTransformer t = new MetaclassTransformer();
 			this.metaclasses.put(_e.GetElementID(), t.transform(_e, (Profile)this.umlPackage));
 		}
+		else if ( _e.GetType().equals("Interface") ) {
+			log.debug("Element is an Interface");
+			InterfaceTransformer t = new InterfaceTransformer();
+			t.transform(_e, (Profile)this.umlPackage);
+//			this.metaclasses.put(_e.GetElementID(), t.transform(_e, (Profile)this.umlPackage));
+		}
 		else if (_e.GetType().equals("Class") && _e.GetStereotypeList().equals("enumeration") ) {
 			log.debug("Element is an Enumeration");
 			EnumerationTransformer t = new EnumerationTransformer();
+			t.transform(_e, this.umlPackage);
+		}
+		else if (_e.GetType().equals("Class") && _e.GetStereotypeList().equals("primitive") ) {
+			log.debug("Element is a Primitive Type");
+			PrimitiveTransformer t = new PrimitiveTransformer();
 			t.transform(_e, this.umlPackage);
 		}
 	}

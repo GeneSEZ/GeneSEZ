@@ -36,6 +36,12 @@ public abstract class AbstractElementTransformer {
 		}
 	}
 
+	protected void transformOperations() {
+		for (org.sparx.Method m : this.eaElement.GetMethods()) {
+			this.transformMethod(m);
+		}
+	}
+
 	protected void transformAttribute(org.sparx.Attribute _a) {
 		log.fatal("Transforming attributes is not implemented!");
 	}
@@ -46,6 +52,10 @@ public abstract class AbstractElementTransformer {
 	
 	protected void transformElement(org.sparx.Element _e) {
 		log.fatal("Transforming elements is not implemented!");
+	}
+
+	protected void transformMethod(org.sparx.Method _m) {
+		log.fatal("Transforming methods is not implemented!");
 	}
 
 	protected void applyStereotypes() {

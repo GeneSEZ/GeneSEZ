@@ -49,7 +49,7 @@ public class ElementRegistry {
 	 */
 	public void addElement(org.sparx.Attribute _a, Element _e) {
 		this.addElementGuid(_a.GetAttributeGUID(), _e);
-		this.addElementIdGuid(_a.GetAttributeID(), _a.GetAttributeGUID());
+//		this.addElementIdGuid(_a.GetAttributeID(), _a.GetAttributeGUID());
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class ElementRegistry {
 	 */
 	public void addElement(org.sparx.Connector _c, Element _e) {
 		this.addElementGuid(_c.GetConnectorGUID(), _e);
-		this.addElementIdGuid(_c.GetConnectorID(), _c.GetConnectorGUID());
+//		this.addElementIdGuid(_c.GetConnectorID(), _c.GetConnectorGUID());
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class ElementRegistry {
 	 */
 	public void addElement(org.sparx.Package _p, Element _e) {
 		this.addElementGuid(_p.GetPackageGUID(), _e);
-		this.addElementIdGuid(_p.GetPackageID(), _p.GetPackageGUID());
+//		this.addElementIdGuid(_p.GetPackageID(), _p.GetPackageGUID());
 	}
 	
 	/**
@@ -88,7 +88,11 @@ public class ElementRegistry {
 	 * @param _e	The uml model element
 	 */
 	private void addElementGuid(String _guid, Element _e) {
-		this.elements.put(_guid, _e);
+		if (this.elements.containsKey(_guid)) {
+			log.fatal("Key " + _guid + " already contained");
+		} else {
+			this.elements.put(_guid, _e);
+		}
 	}
 	
 	/**
@@ -97,7 +101,11 @@ public class ElementRegistry {
 	 * @param _guid	The GUID of the element
 	 */
 	private void addElementIdGuid(int _id, String _guid) {
-		this.idGuidMap.put(_id, _guid);
+		if (this.idGuidMap.containsKey(_id)) {
+			log.fatal("Key " + _id + " already contained");
+		} else {
+			this.idGuidMap.put(_id, _guid);
+		}
 	}
 	
 	/**
@@ -135,6 +143,7 @@ public class ElementRegistry {
 	 * @return
 	 */
 	public Element get(String _guid) {
+		log.debug("Return Element with GUID " + _guid);
 		return this.elements.get(_guid);
 	}
 	
@@ -144,6 +153,7 @@ public class ElementRegistry {
 	 * @return
 	 */
 	public Element getById(int _id) {
+		log.debug("Return Element with ID " + _id);
 		if (this.idGuidMap.containsKey(_id)) {
 			return this.get(this.idGuidMap.get(_id));
 		}

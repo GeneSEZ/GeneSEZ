@@ -26,15 +26,15 @@ public class PropertySimpleTransformer extends PropertyTransformer {
 	protected Type findType() {
 		Type type = null;
 		
-		if ( "int".equals(this.eaAttribute.GetType()) ) {
+		if ( "Integer".equals(this.eaAttribute.GetType()) || "int".equals(this.eaAttribute.GetType()) ) {
 			log.debug("Property is an integer");
 			type = PropertySimpleTransformer.metamodel.getOwnedType("Integer");
 		}
-		else if ( "string".equals(this.eaAttribute.GetType()) || "char".equals(this.eaAttribute.GetType()) ) {
+		else if ( "String".equals(this.eaAttribute.GetType()) || "string".equals(this.eaAttribute.GetType()) || "char".equals(this.eaAttribute.GetType()) ) {
 			log.debug("Property is a string");
 			type = PropertySimpleTransformer.metamodel.getOwnedType("String");
 		}
-		else if ( "boolean".equals(this.eaAttribute.GetType()) ) {
+		else if ( "Boolean".equals(this.eaAttribute.GetType()) || "boolean".equals(this.eaAttribute.GetType()) ) {
 			log.debug("Property is a boolean");
 			type = PropertySimpleTransformer.metamodel.getOwnedType("Boolean");
 		} else {
