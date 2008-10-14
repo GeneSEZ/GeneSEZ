@@ -2,6 +2,7 @@ package de.genesez.adapter.ea.transform;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.StructuredClassifier;
 import org.eclipse.uml2.uml.Type;
@@ -19,13 +20,12 @@ public class PropertyClassifierTransformer extends PropertyTransformer {
 	
 	@Override
 	protected Type findType() {
-		log.info(this.eaAttribute.GetName());
-		Type type = (Type)ElementRegistry.instance.getById(this.eaAttribute.GetClassifierID());
+		Element type = ElementRegistry.instance.getById(this.eaAttribute.GetClassifierID());
 
 		if (type == null) {
 			log.fatal("Classifier for attribute " + this.eaAttribute.GetName() + " not found");
 		}
-		
-		return type;
+
+		return (Type)type;
 	}
 }
