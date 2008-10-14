@@ -60,7 +60,7 @@ TModel transform(MModel m) :
 private create TModel makeModel(MModel m) :
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
-	nestedPackage.addAll(
+	nestedPackages.addAll(
 		m.nestedPackage.makePackage()
 		) ->
 	this;
@@ -73,8 +73,8 @@ private create TModel makeModel(MModel m) :
 private create TPackage makePackage(MPackage m) :
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
-	test.addAll(
-		m.classifier.typeSelect(MUseCase).
+	testsuites.addAll(
+		m.classifier.typeSelect(MUseCase)
 		makeTestSuite()
 		) ->
 	this;
@@ -87,7 +87,7 @@ private create TPackage makePackage(MPackage m) :
 private create TTestSuite makeTestSuite(MUseCase m) : 
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
-	testcase.addAll(
+	testcases.addAll(
 		m.ownedBehavior.typeSelect(MActivity).
 		select(e|e.hasStereotype("testCase") ).
 		makeTestCase()
@@ -102,27 +102,6 @@ private create TTestSuite makeTestSuite(MUseCase m) :
 private create TTestCase makeTestCase(MActivity m) : 
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
-	testcase.addAll(
-		m.ownedBehavior.typeSelect(MActivity).
-		select(e|e.hasStereotype("testCase") ).
-		makeTestCase()
-		) ->
-	test.addAll(
-		m.ownedBehavior.typeSelect(MActivity).
-		select(e|e.hasStereotype("test") ).
-		makeTest()
-		) ->
-	this;
-
-/**
- * creates a GeneSEZ Test
- * @param	m	a GeneSEZ activity
- * @return	the GeneSEZ Test
- */
-private create TTest makeTest(MActivity m) :
-	trace("creating " + metaType + " for " + m.name) ->
-	transformBasics(m) ->
-	m.getInitialNode().transform(this) ->
 	this;
 
 /**
@@ -130,7 +109,7 @@ private create TTest makeTest(MActivity m) :
  * @param	m	a GeneSEZ action
  * @return	the GeneSEZ Input
  */
-private create TInput makeInput(MAction m) :
+private create TEnter makeInput(MAction m) :
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
 	this;
@@ -140,7 +119,7 @@ private create TInput makeInput(MAction m) :
  * @param	m	a GeneSEZ action
  * @return	the GeneSEZ Key Event
  */
-private create TKeyEvent makeKeyEvent(MAction m) :
+private create TKey makeKeyEvent(MAction m) :
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
 	trace( m.taggedValue.select(e|e.tag.name == "key").first().value ) ->
@@ -152,7 +131,7 @@ private create TKeyEvent makeKeyEvent(MAction m) :
  * @param	m	a GeneSEZ action
  * @return	the GeneSEZ Mouse Event
  */
-private create TMouseEvent makeMouseEvent(MAction m) :
+private create TClick makeMouseEvent(MAction m) :
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
 	trace( m.taggedValue.select(e|e.tag.name == "clicks").first().value ) ->
@@ -161,33 +140,6 @@ private create TMouseEvent makeMouseEvent(MAction m) :
 //	setButton( TMouseButton.getStaticProperty( m.taggedValue.select(e|e.tag.name == "button").first().value ) ) ->
 	this;
 
-/**
- * creates a GeneSEZ Mouse Move 
- * @param	m	a GeneSEZ action
- * @return	the GeneSEZ Mouse Move
- */
-private create TMouseMove makeMouseMove(MAction m) :
-	trace("creating " + metaType + " for " + m.name) ->
-	transformBasics(m) ->
-	this;
-
-/**
- * transform a GeneSEZ Test, adding events to it
- * @param	m	a GeneSEZ activity node
- * @context	the GeneSEZ test
- * @return	the GeneSEZ Test
- */
-private TTest transform(MNode m, TTest this) :
-	trace("transforming " + m.metaType + ", " + m.name) ->
-	switch {
-		case m.isKeyEvent(): action.add( makeKeyEvent(m) )
-		case m.isMouseEvent(): action.add( makeMouseEvent(m) )
-		case m.isMouseMove(): action.add( makeMouseMove(m) )
-		case m.isInput(): action.add( makeInput(m) )
-		default: trace("Not a transformable test action " + m.metaType + ", " + m.name )
-	} ->
-	m.to.target.transform(this) ->
-	this;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -217,8 +169,8 @@ private TElement transformBasics(TElement this, MElement m) :
  * prints a 'severe' log message to report such an transformation
  * @return	void
  */
-private TInput makeInput(MNode m) :
-	fatal("try to construct a TInput object from: " + m) ->
+private TEnter makeEnter(MNode m) :
+	fatal("try to construct a TEnter object from: " + m) ->
 	Void;
 
 /**
@@ -226,8 +178,8 @@ private TInput makeInput(MNode m) :
  * prints a 'severe' log message to report such an transformation
  * @return	void
  */
-private TKeyEvent makeKeyEvent(MNode m) :
-	fatal("try to construct a TKeyEvent object from: " + m) ->
+private TKey makeKey(MNode m) :
+	fatal("try to construct a TKey object from: " + m) ->
 	Void;
 
 /**
@@ -235,15 +187,6 @@ private TKeyEvent makeKeyEvent(MNode m) :
  * prints a 'severe' log message to report such an transformation
  * @return	void
  */
-private TMouseEvent makeMouseEvent(MNode m) :
-	fatal("try to construct a TMouseEvent object from: " + m) ->
-	Void;
-
-/**
- * just a marker for error free templates
- * prints a 'severe' log message to report such an transformation
- * @return	void
- */
-private TMouseMove makeMouseMove(MNode m) :
-	fatal("try to construct a TMouseMove object from: " + m) ->
+private TClick makeClick(MNode m) :
+	fatal("try to construct a TClick object from: " + m) ->
 	Void;
