@@ -1,0 +1,18 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+MModel addOperation(MModel this, String name) :
+	nestedPackage.addOperation(name);
+	
+MPackage addOperation(MPackage this, String name) :
+	classifier.addOperation(name);
+	
+MClassifier addOperation(MClassifier this, String name) :
+	operation.add(makeOperation(this, name));
+
+create MOperation makeOperation(MClassifier container, String name) : 
+	setName(name) ->
+	setVisibility("public") ->
+	setXmiGuid(name + container.name) ->
+	container.operation.add(this);
