@@ -7,7 +7,7 @@
 	of the ejb annotations in the Xpand files of the ejb3 cartridge.
 	
 	@author		andre pflueger
-	@date		2008/08/21
+	@date		2008/10/21
 	@version 	1.0
 «ENDREM»
 
@@ -28,6 +28,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::java::seam2::scripts::Operation»
 
 
 «REM»
@@ -51,6 +52,7 @@
 	evaluates Seam class annotations
 «ENDREM»
 «AROUND de::genesez::platforms::java::ejb3::templates::Class::_Annotation FOR MClass-»
+	«EXPAND _StatefulComponent»
 	«EXPAND _Component-»
 	«EXPAND _Exceptions-»
 	«EXPAND _JSF-»
@@ -89,6 +91,20 @@
 	private functions
 «ENDREM»
 		
+«REM»
+	checks existence of a destroy method for stateful seam components
+«ENDREM»
+«DEFINE _StatefulComponent FOR MClass-»		
+	«IF hasStereotype("ejb3SessionBean") && hasStereotype("seam2Component") &&
+		hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+		«IF this.operation.notExists(e|e.name == "destroy" && e.parameter.size == 0)-»
+			«IF this.operation.notExists(e|e.hasStereotype("seam2Lifecycle") && e.hasTaggedValue("seam2Lifecycle", "destroy", "true"))-»
+				«this.operation.add(makeOperation(this, "destroy"))-»
+			«ENDIF-»
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+				
 «REM»
 	evaluates the stereotypes for attributes only 
 «ENDREM»
