@@ -1,0 +1,175 @@
+«REM»
+	Handles everything about associations
+	
+	generates the association handling based on the java umlsupport association handling
+	
+	@author georg beier
+	@author	nico herbig
+	@author	tobias haubold (last)
+	@date	2007-07-13
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::Association»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the declaration of association attributes
+«ENDREM»
+«DEFINE Declaration FOR MClass -»
+«IF hasAssociationRoles() -»
+	«EXPAND _EnumDefinition -»
+	«EXPAND _DeclarationWithInitialization -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of accessors for association attributes
+«ENDREM»
+«DEFINE Accessors FOR MClass -»
+«IF hasAssociationRoles() -»
+	«EXPAND _GenericAccessor -»
+	«EXPAND _Accessors FOREACH property.typeSelect(MAssociationRole) -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Accessors FOR MInterface -»
+«EXPAND _AccessorDeclaration FOREACH property.typeSelect(MAssociationRole) -»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the enum definition for the associations
+«ENDREM»
+«DEFINE _EnumDefinition FOR MClassifier -»
+	public enum Associations implements RelatedAssociationRole {
+		«EXPAND _EnumLiteralDefinition FOREACH property.typeSelect(MAssociationRole) SEPARATOR ", " -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the enum literal for an association role
+«ENDREM»
+«DEFINE _EnumLiteralDefinition FOR MAssociationRole -»
+	«asEnumLiteral() -»
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of the association attribute and the initialization
+«ENDREM»
+«DEFINE _DeclarationWithInitialization FOR MClassifier -»
+	«EXPAND Comment::Association -»
+	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object,? extends Object>>();
+	{
+		«EXPAND _InitializationEntry FOREACH property.typeSelect(MAssociationRole) -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the initialization for an association
+«ENDREM»
+«DEFINE _InitializationEntry FOR MAssociationRole -»
+		association.put(Associations.«asEnumLiteral()», «EXPAND _Initialization -»);
+«ENDDEFINE»
+
+«REM»
+	generates the initialization for an association attribute
+«ENDREM»
+«DEFINE _Initialization FOR MAssociationRole -»
+«IF hasAssociationClass() -»
+	«IF isSingleValuedType() -»
+	new OneAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -»,
+				«association.associationClass.asTypeName() -»> (this
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ELSE -»
+	new ManyAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -», 
+				«association.associationClass.asTypeName() -»>
+				(this, new LinkedHashMap<«type.asTypeName() -»,
+					«association.associationClass.asTypeName() -»>()
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ENDIF -»
+«ELSE -»«REM» association without association class «ENDREM»
+	«IF isSingleValuedType() -»
+	new OneAssociation<«classifier.asTypeName() -», «type.asTypeName() -»>(this
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ELSE -»
+	new ManyAssociation<«classifier.asTypeName() -»,
+				«type.asTypeName() -»>(this, new LinkedHashSet<«type.asTypeName() -»>()
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the generic accessor for the association handling framework
+«ENDREM»
+«DEFINE _GenericAccessor FOR MClassifier -»
+	«EXPAND Comment::AssociationGenericAccessor -»
+	public Association<? extends Object, ? extends Object> getAssociation(
+			RelatedAssociationRole role) {
+		if (association.containsKey(role)) return association.get(role);
+		throw new RuntimeException("the class doesn't have the association you specified!");
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the accessors for an association attribute
+	only a getter accessor is generated
+«ENDREM»
+«DEFINE _Accessors FOR MAssociationRole -»
+«EXPAND Comment::Accessor -»
+	@SuppressWarnings("unchecked")
+	public «EXPAND _Type -» «asAccessor()»() {
+		return («EXPAND _Type -») association.get(Associations.«asEnumLiteral()»);
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the accessor declaration for an interface
+«ENDREM»
+«DEFINE _AccessorDeclaration FOR MAssociationRole -»
+	public «EXPAND _Type -» «asAccessor()»();
+«ENDDEFINE»
+
+«REM»
+	generates the type of an association attribute
+«ENDREM»
+«DEFINE _Type FOR MAssociationRole -»
+«IF hasAssociationClass() -»
+AssociationAC<«classifier.asTypeName()», «type.asTypeName()», «association.associationClass.asTypeName()»>
+«ELSE -»
+Association<«classifier.asTypeName()», «type.asTypeName()»>
+«ENDIF -»
+«ENDDEFINE»
