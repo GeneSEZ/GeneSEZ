@@ -1,9 +1,9 @@
 // import genesezMM metamodel
-import genesezMM;
+import gcore;
 
-extension de::genesez::io::io;
-extension de::genesez::common::AccessHelper;
-extension de::genesez::common::GlobalStore;
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::GlobalStore;
 
 ////////////////////////////////////////////////////////////////////////////////
 // public extend functions
@@ -13,7 +13,7 @@ extension de::genesez::common::GlobalStore;
 // process all packages
 MModel makeAspects(MModel m): 
 	saveModel(m)->
-	m.ownedPackage.processPackage()
+	m.nestedPackage.processPackage()
 	;
 
 // process all packages recursively, only consider taged values belonging to <<mdsd>>
@@ -34,12 +34,12 @@ private MClassifier processClassifier(MClassifier c) :
 	;
 	
 private create MAspect makeAspect(MTaggedValue tv) :
-	setElement(tv.owningElement)->
+	tv.owningElement.aspect.add(this)->
 	setDomain(tv._getDomain())->
 	setName(tv._getName());
 	
 private create MAspect makeAspect(MElement e, String domain, String name) :
-	setElement(e)->
+	e.aspect.add(this)->
 	setDomain(domain)->
 	setName(name);
 
@@ -77,7 +77,7 @@ private _mapPersistence(MAspect aspect) :
 		;
 
 private _hasNoPersistentSupertype(MClass c) :
-	(c.supertype.size == 0) || (c.supertype.select(s|s.hasAspect("persistent")).isEmpty);
+	(c.supertype.size == 0) || (c.supertype.typeSelect(MClassifier).select(s|s.hasAspect("persistent")).isEmpty);
 
 
 private _mapUi(MAspect aspect) :
@@ -89,13 +89,13 @@ create MOperation makeOperation() :
 create MAttribute makeAttribute(MClassifier c, String xid, String name, String comment) :
 	setXmiGuid(xid + c.xmiGuid)->
 	setName(name)->
-	setClassifier(c)->
+	c.property.add(this)->
 	setMultiplicity(1)->
 	setType(retrieveModel().primitiveTypes.selectFirst(ty|ty.name.startsWith("Integer")))->
 	setVisibility("private")->
 	setFinal(false)->
-	setOwnedComment(
-			{makeComment("c_" + xid + c.xmiGuid).setAnnotation(comment).setOwningElement(this)}
+	ownedComment.add(
+			makeComment("c_" + xid + c.xmiGuid).setAnnotation(comment)
 		)->
 	setAspect({makeAspect(this, "generate", "immutable")})->
 //	info(this.name + ": " + this.aspect)->
