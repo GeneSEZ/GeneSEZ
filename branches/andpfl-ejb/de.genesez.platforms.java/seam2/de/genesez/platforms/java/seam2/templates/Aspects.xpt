@@ -111,16 +111,16 @@
 «DEFINE _Attributes FOR MAttribute-»
 	«EXPAND _Bijection-»
 	«EXPAND _DataTable-»
-	«IF hasStereotype("seam2BijectionLogger")»
+	«IF hasStereotype("seam2Logger")»
 		@Logger
-		«IF hasUtilizableValue("seam2BijectionLogger", "value")»
-			("«getTaggedValue("seam2BijectionLogger", "value")-»")
+		«IF hasUtilizableValue("seam2Logger", "value")»
+			("«getTaggedValue("seam2Logger", "value")-»")
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("seam2BijectionRequestParameter")»
+	«IF hasStereotype("seam2RequestParameter")»
 		@RequestParameter
-		«IF hasUtilizableValue("seam2BijectionRequestParamter", "name")»
-			("«getTaggedValue("seam2BijectionRequestParameter", "name")-»")
+		«IF hasUtilizableValue("seam2RequestParamter", "name")»
+			("«getTaggedValue("seam2RequestParameter", "name")-»")
 		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
@@ -133,22 +133,22 @@
 	«EXPAND _ContextDemarcation-»
 	«EXPAND _Asynchronity-»
 	«EXPAND _Remoting-»
-	«IF hasStereotype("seam2JavaBeanTransactional")»
+	«IF hasStereotype("seam2Transactional")»
 		@Transactional
 	«ENDIF»	
-	«IF hasStereotype("seam2ComponentReadOnly")»
+	«IF hasStereotype("seam2ReadOnly")»
 		@ReadOnly
 	«ENDIF»	
-	«IF hasStereotype("seam2BijectionUnwrap")»
+	«IF hasStereotype("seam2Unwrap")»
 		@Unwrap
 	«ENDIF»
-	«IF hasStereotype("seam2BijectionFactory")»
-		@Factory(autocreate=«getTaggedValue("seam2BijectionFactory", "autoCreate")-»
-		«IF hasUtilizableValue("seam2BijectionFactory", "scope") && !hasTaggedValue("seam2BijectionFactory", "scope", "DEFAULT")-»
-			, scope(ScopeType.«getTaggedValue("seam2BijectionFactory", "scope")-»
+	«IF hasStereotype("seam2Factory")»
+		@Factory(autocreate=«getTaggedValue("seam2Factory", "autoCreate")-»
+		«IF hasUtilizableValue("seam2Factory", "scope") && !hasTaggedValue("seam2Factory", "scope", "DEFAULT")-»
+			, scope(ScopeType.«getTaggedValue("seam2Factory", "scope")-»
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2BijectionFactory", "value")-»
-			, "«getTaggedValue("seam2BijectionFactory", "value")-»"
+		«IF hasUtilizableValue("seam2Factory", "value")-»
+			, "«getTaggedValue("seam2Factory", "value")-»"
 		«ENDIF-»)
 	«ENDIF»	
 	«IF this.name == "destroy" && this.parameter.size == 0-»
@@ -162,25 +162,25 @@
 	annotations for operations and attributes
 «ENDREM»
 «DEFINE _Bijection FOR MElement-»
-	«IF hasStereotype("seam2BijectionIn")»
-		@In(create=«getTaggedValue("seam2BijectionIn", "create")-»
-		«IF hasTaggedValue("seam2BijectionIn", "required", "false")-»
+	«IF hasStereotype("seam2Injection")»
+		@In(create=«getTaggedValue("seam2Injection", "create")-»
+		«IF hasTaggedValue("seam2Injection", "required", "false")-»
 			, required=false
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2BijectionIn", "value")-»
-			, value="«getTaggedValue("seamBijectionIn", "value")-»"
+		«IF hasUtilizableValue("seam2Injection", "value")-»
+			, value="«getTaggedValue("seam2In", "value")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2BijectionIn", "scope") && !hasTaggedValue("seam2BijectionIn", "scope", "DEFAULT")-»
-			, scope=ScopeType.«getTaggedValue("seam2BijectionIn", "scope")-»
+		«IF hasUtilizableValue("seam2Injection", "scope") && !hasTaggedValue("seam2Injection", "scope", "DEFAULT")-»
+			, scope=ScopeType.«getTaggedValue("seam2Injection", "scope")-»
 		«ENDIF-»)
 	«ENDIF»
-	«IF hasStereotype("seam2BijectionOut")»
-		@Out(required=«getTaggedValue("seam2BijectionOut", "required")-»
-		«IF hasUtilizableValue("seam2BijectionOut", "scope") && !hasTaggedValue("seam2BijectionOut", "scope", "DEFAULT")-»
-			, scope=ScopeType.«getTaggedValue("seam2BijectionOut", "scope")-»
+	«IF hasStereotype("seam2Outjection")»
+		@Out(required=«getTaggedValue("seam2Outjection", "required")-»
+		«IF hasUtilizableValue("seam2Outjection", "scope") && !hasTaggedValue("seam2Outjection", "scope", "DEFAULT")-»
+			, scope=ScopeType.«getTaggedValue("seam2Outjection", "scope")-»
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2BijectionOut", "value")-»
-			, value="«getTaggedValue("seam2BijectionOut", "value")-»"
+		«IF hasUtilizableValue("seam2Outjection", "value")-»
+			, value="«getTaggedValue("seam2Outjection", "value")-»"
 		«ENDIF-»)
 	«ENDIF»
 «ENDDEFINE»
@@ -197,10 +197,10 @@
 			@Destroy
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("seam2LifecycleObserver")»
-		@Observer(create=«getTaggedValue("seam2LifecycleObserver", "create")-»,
-		«IF hasUtilizableValue("seam2ComponentObserver", "value")-»
-			{«FOREACH getTaggedValue("seam2ComponentObserver", "value").getElements() AS value SEPARATOR ","-»
+	«IF hasStereotype("seam2Observer")»
+		@Observer(create=«getTaggedValue("seam2Observer", "create")-»,
+		«IF hasUtilizableValue("seam2Observer", "value")-»
+			{«FOREACH getTaggedValue("seam2Observer", "value").getElements() AS value SEPARATOR ","-»
 				"«value-»"
 			«ENDFOREACH-»}		
 		«ENDIF-»)
@@ -287,7 +287,7 @@
 	Warning: Not for usage in ejb3 environment!!!
 «ENDREM»
 «DEFINE _JavaBean FOR MClass-»
-	«IF hasStereotype("seam2JavaBeanTransactional")»
+	«IF hasStereotype("seam2Transactional")»
 		@Transactional
 	«ENDIF»
 	«IF hasStereotype("seam2JavaBeanInterceptors")»
@@ -297,9 +297,9 @@
 				«values-»
 			«ENDFOREACH-»})
 		«ENDIF»
-		«IF hasStereotype("seam2JavaBeanApplicationException")»
+		«IF hasStereotype("seam2ApplicationException")»
 			@ApplicationException(rollback=«taggedValue.selectFirst(e|e.tag.name == "rollback").value-»
-			«IF hasTaggedValue("seam2JavaBeanApplicationException", "end", "true")-»
+			«IF hasTaggedValue("seam2ApplicationException", "end", "true")-»
 				, end=true
 			«ENDIF-»)
 		«ENDIF»
@@ -310,19 +310,19 @@
 	evaluates the JSF stereotypes
 «ENDREM»
 «DEFINE _JSF FOR MClass-»
-	«IF hasStereotype("seam2JSFValidator")»
+	«IF hasStereotype("seam2Validator")»
 		@Validator
-		«IF hasUtilizableValue("seam2JSFValidator", "id")-»
+		«IF hasUtilizableValue("seam2Validator", "id")-»
 			{«taggedValue.selectFirst(e|e.tag.name == "id").value-»)	
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("seam2JSFConverter")»
-		«IF !hasUtilizableValue("seam2JSFConverter", "id")-»
+	«IF hasStereotype("seam2Converter")»
+		«IF !hasUtilizableValue("seam2Converter", "id")-»
 			@Converter("«name-»"
 		«ELSE»
 			@Converter("«taggedValue.selectFirst(e|e.tag.name == "id").value-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2JSFConverter", "forClass")-»
+		«IF hasUtilizableValue("seam2Converter", "forClass")-»
 			, «taggedValue.selectFirst(e|e.tag.name == "forClass").value-»	
 		«ENDIF-»
 		)		
@@ -375,22 +375,22 @@
 	evaluates the seam2Exceptions stereotypes 
 «ENDREM»
 «DEFINE _Exceptions FOR MClass-»
-	«IF hasStereotype("seam2ExceptionRedirect")»
-		@Redirect(end=«getTaggedValue("seam2ExceptionRedirect", "end")-»
-		«IF hasUtilizableValue("seam2ExceptionRedirect", "viewId")-»
-			, viewId="«getTaggedValue("seam2ExceptionRedirect", "viewId")-»"
+	«IF hasStereotype("seam2Redirect")»
+		@Redirect(end=«getTaggedValue("seam2Redirect", "end")-»
+		«IF hasUtilizableValue("seam2Redirect", "viewId")-»
+			, viewId="«getTaggedValue("seam2Redirect", "viewId")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ExceptionRedirect", "message")-»
+		«IF hasUtilizableValue("seam2Redirect", "message")-»
 			, message="«getTaggedValue("seam2ExceptionRedirect", "message")-»"
 		«ENDIF-»)
 	«ENDIF»
-	«IF hasStereotype("seam2ExceptionHttpError")»
-		@HttpError(end=«getTaggedValue("seam2ExceptionHttpError", "end")-»
-		«IF hasUtilizableValue("seam2ExceptionHttpError", "errorCode") || !hasTaggedValue("seam2ExceptionHttpError", "errorCode", "500")-»
-			, errorCode="«getTaggedValue("seam2ExceptionHttpError", "errorCode")-»"
+	«IF hasStereotype("seam2HttpError")»
+		@HttpError(end=«getTaggedValue("seam2HttpError", "end")-»
+		«IF hasUtilizableValue("seam2HttpError", "errorCode") || !hasTaggedValue("seam2HttpError", "errorCode", "500")-»
+			, errorCode="«getTaggedValue("seam2HttpError", "errorCode")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ExceptionHttpError", "message")-»
-			, message="«getTaggedValue("seam2ExceptionHttpError", "message")-»"
+		«IF hasUtilizableValue("seam2HttpError", "message")-»
+			, message="«getTaggedValue("seam2HttpError", "message")-»"
 		«ENDIF-»)
 	«ENDIF»
 «ENDDEFINE»
@@ -399,64 +399,64 @@
 	evaluates the context demarcation stereotypes
 «ENDREM»
 «DEFINE _ContextDemarcation FOR MOperation-»
-	«IF hasStereotype("seam2ContextDemarcationBegin")»
-		@Begin(nested=«getTaggedValue("seam2ContextDemarcationBegin", "nested")-»
-		«IF hasUtilizableValue("seam2ContextDemarcationBegin", "flushMode") || !hasTaggedValue("seam2ContextDemarcationBegin", "flushMode", "AUTO")-»
-			, flushMode=FlushModeType.«getTaggedValue("seam2ContextDemarcationBegin", "flushMode")-»
+	«IF hasStereotype("seam2Begin")»
+		@Begin(nested=«getTaggedValue("seam2Begin", "nested")-»
+		«IF hasUtilizableValue("seam2Begin", "flushMode") || !hasTaggedValue("seam2Begin", "flushMode", "AUTO")-»
+			, flushMode=FlushModeType.«getTaggedValue("seam2Begin", "flushMode")-»
 		«ENDIF-»
-		«IF hasTaggedValue("seam2ContextDemarcationBegin", "join", "true")-»
-			, join=«getTaggedValue("seam2ContextDemarcationBegin", "join")-»
+		«IF hasTaggedValue("seam2Begin", "join", "true")-»
+			, join=«getTaggedValue("seam2Begin", "join")-»
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ContextDemarcationBegin", "pageflow")-»
-			, pageflow="«getTaggedValue("seam2ContextDemarcationBegin", "pageflow")-»"
+		«IF hasUtilizableValue("seam2Begin", "pageflow")-»
+			, pageflow="«getTaggedValue("seam2Begin", "pageflow")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ContextDemarcationBegin", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2ContextDemarcationBegin", "ifOutcome").getElements() AS values SEPARATOR ","-»
+		«IF hasUtilizableValue("seam2Begin", "ifOutcome")-»
+			, ifOutcome={«FOREACH getTaggedValue("seam2Begin", "ifOutcome").getElements() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)		
 	«ENDIF»	
-	«IF hasStereotype("seam2ContextDemarcationEnd")»
-		@End(beforeRedirect=«getTaggedValue("seam2ContextDemarcationEnd", "beforeRedirect")-»
-		«IF hasUtilizableValue("seam2ContextDemarcationEnd", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2ContextDemarcationEnd", "ifOutcome").getElements() AS values SEPARATOR ","-»
+	«IF hasStereotype("seam2End")»
+		@End(beforeRedirect=«getTaggedValue("seam2End", "beforeRedirect")-»
+		«IF hasUtilizableValue("seam2End", "ifOutcome")-»
+			, ifOutcome={«FOREACH getTaggedValue("seam2End", "ifOutcome").getElements() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)	
 	«ENDIF»		
-	«IF hasStereotype("seam2ContextDemarcationStartTask")»
-		@StartTask(flushMode=FlushModeType.«getTaggedValue("seam2ContextDemarcationStartTask", "flushMode")-»
-		«IF hasUtilizableValue("seam2ContextDemarcationStartTask", "id")-»
-			, id="«getTaggedValue("seam2ContextDemarcationStartTask", "id")-»"
+	«IF hasStereotype("seam2StartTask")»
+		@StartTask(flushMode=FlushModeType.«getTaggedValue("seam2StartTask", "flushMode")-»
+		«IF hasUtilizableValue("seam2StartTask", "id")-»
+			, id="«getTaggedValue("seam2StartTask", "id")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ContextDemarcationStartTask", "pageflow")-»
-			, pageflow="«getTaggedValue("seam2ContextDemarcationStartTask", "pageflow")-»"
+		«IF hasUtilizableValue("seam2StartTask", "pageflow")-»
+			, pageflow="«getTaggedValue("seam2StartTask", "pageflow")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ContextDemarcationStartTask", "taskIdParameter") || hasTaggedValue("seam2ContextDemarcationStartTask", "taskIdParameter", "taskId")-»
-			, taskIdParameter="«getTaggedValue("seam2ContextDemarcationStartTask", "taskIdParameter")-»"
+		«IF hasUtilizableValue("seam2StartTask", "taskIdParameter") || hasTaggedValue("seam2StartTask", "taskIdParameter", "taskId")-»
+			, taskIdParameter="«getTaggedValue("seam2StartTask", "taskIdParameter")-»"
 		«ENDIF-»
 	«ENDIF»	
-	«IF hasStereotype("seam2ContextDemarcationBeginTask")»
+	«IF hasStereotype("seam2BeginTask")»
 		@BeginTask(flushMode=FlushModeType.«taggedValue.selectFirst(e|e.tag.name == "flushMode").value-»
-		«IF hasUtilizableValue("seam2ContextDemarcationBeginTask", "id")-»
-			, id="«getTaggedValue("seam2ContextDemarcationBeginTask", "id")-»"
+		«IF hasUtilizableValue("seam2BeginTask", "id")-»
+			, id="«getTaggedValue("seam2BeginTask", "id")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ContextDemarcationBeginTask", "pageflow")-»
-			, pageflow="«getTaggedValue("seam2ContextDemarcationBeginTask", "pageflow")-»"
+		«IF hasUtilizableValue("seam2BeginTask", "pageflow")-»
+			, pageflow="«getTaggedValue("seam2BeginTask", "pageflow")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ContextDemarcationBeginTask", "taskIdParameter") || hasTaggedValue("seam2ContextDemarcationBeginTask", "taskIdParameter", "taskId")-»
-			, taskIdParameter="«getTaggedValue("seam2ContextDemarcationBeginTask", "taskIdParameter")-»"
+		«IF hasUtilizableValue("seam2BeginTask", "taskIdParameter") || hasTaggedValue("seam2BeginTask", "taskIdParameter", "taskId")-»
+			, taskIdParameter="«getTaggedValue("seam2BeginTask", "taskIdParameter")-»"
 		«ENDIF-»
 	«ENDIF»	
-	«IF hasStereotype("seam2ContextDemarcationEndTask")»
-		@EndTask(beforeRedirect=«getTaggedValue("seam2ContextDemarcationEndTask", "beforeRedirect")-»
-		«IF hasUtilizableValue("seam2ContextDemarcationEndTask", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2ContextDemarcationEndTask", "ifOutcome").getElements() AS values SEPARATOR ","-»
+	«IF hasStereotype("seam2EndTask")»
+		@EndTask(beforeRedirect=«getTaggedValue("seam2EndTask", "beforeRedirect")-»
+		«IF hasUtilizableValue("seam2EndTask", "ifOutcome")-»
+			, ifOutcome={«FOREACH getTaggedValue("seam2EndTask", "ifOutcome").getElements() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2ContextDemarcationEndTask", "transition")»
-			, transition="«getTaggedValue("seam2ContextDemarcationEndTask", "transition")-»")
+		«IF hasUtilizableValue("seam2EndTask", "transition")»
+			, transition="«getTaggedValue("seam2EndTask", "transition")-»")
 		«ENDIF»)	
 	«ENDIF»	
 	«IF hasStereotype("seam2ContextDemarcation")»
@@ -486,9 +486,6 @@
 		«ELSE-»
 			@Name("«asTypeName().toFirstLower()-»")
 		«ENDIF»
-		«IF hasUtilizableValue("seam2Component", "scope") && !hasTaggedValue("seam2Component", "scope", "DEFAULT")»
-			@Scope(ScopeType.«getTaggedValue("seam2Component", "scope")-»)
-		«ENDIF»
 		«IF hasUtilizableValue("seam2Component", "jndiName")»
 			@JndiName("«getTaggedValue("seam2Component", "jndiName")-»")
 		«ENDIF»
@@ -508,68 +505,73 @@
 			@AutoCreate
 		«ENDIF»	
 	«ENDIF»
-	«IF hasStereotype("seam2ComponentReadOnly")»
+	«IF hasStereotype("seam2Scope")-»
+		«IF hasUtilizableValue("seam2Scope", "type")-»
+			@Scope(ScopeType.«getTaggedValue("seam2Scope", "type")-»)
+		«ENDIF»
+	«ENDIF»
+	«IF hasStereotype("seam2ReadOnly")»
 		@ReadOnly
 	«ENDIF»		
-	«IF hasStereotype("seam2ComponentRole") && 
-		(hasUtilizableValue("seam2ComponentRole", "name") || hasUtilizableValue("seam2ComponentRole", "scope"))»
+	«IF hasStereotype("seam2Role") && 
+		(hasUtilizableValue("seam2Role", "name") || hasUtilizableValue("seam2Role", "scope"))»
 		@Roles({
-		«FOREACH getTaggedValue("seam2ComponentRole", "name").getElements() AS names SEPARATOR ","-»
+		«FOREACH getTaggedValue("seam2Role", "name").getElements() AS names SEPARATOR ","-»
 			@Role(name="«names-»"
-			«LET getTaggedValue("seam2ComponentRole", "scope").getElements().indexOf(names) AS index-»
-				«IF !hasTaggedValue("seam2ComponentRole", "scope", "DEFAULT") && hasUtilizableValue("seam2ComponentRole", "scope")-»
-					, scope=ScopeType.«getTaggedValue("seam2ComponentRole", "scope").getElements().get(index)-»
+			«LET getTaggedValue("seam2Role", "scope").getElements().indexOf(names) AS index-»
+				«IF !hasTaggedValue("seam2Role", "scope", "DEFAULT") && hasUtilizableValue("seam2Role", "scope")-»
+					, scope=ScopeType.«getTaggedValue("seam2Role", "scope").getElements().get(index)-»
 				«ENDIF-»
 			«ENDLET-»)
 		«ENDFOREACH»	
 		})
 	«ENDIF»
-	«IF hasStereotype("seam2ComponentInstall")»
-		«IF hasTaggedValue("seam2ComponentInstall", "value", "false")»
+	«IF hasStereotype("seam2Install")»
+		«IF hasTaggedValue("seam2Install", "value", "false")»
 			@Install(false)
 		«ENDIF»		
-		«IF hasTaggedValue("seam2ComponentInstall", "value", "true") && 
+		«IF hasTaggedValue("seam2Install", "value", "true") && 
 			( 
-				hasTaggedValue("seam2ComponentInstall", "installDebug", "true") ||
-				hasUtilizableValue("seam2ComponentInstall", "dependencies") ||
-				hasUtilizableValue("seam2ComponentInstall", "genericDependencies") ||
-				hasUtilizableValue("seam2ComponentInstall", "classDependencies") || 
+				hasTaggedValue("seam2Install", "installDebug", "true") ||
+				hasUtilizableValue("seam2Install", "dependencies") ||
+				hasUtilizableValue("seam2Install", "genericDependencies") ||
+				hasUtilizableValue("seam2Install", "classDependencies") || 
 				(
-					hasUtilizableValue("seam2ComponentInstall", "precedence") && 
-					!hasTaggedValue("seam2ComponentInstall", "precedence", "20")
+					hasUtilizableValue("seam2Install", "precedence") && 
+					!hasTaggedValue("seam2Install", "precedence", "20")
 				)
 			)-»
-			@Install(debug="«getTaggedValue("seam2ComponentInstall", "debug")-»"
-			«IF hasUtilizableValue("seam2ComponentInstall", "dependencies")-»
+			@Install(debug="«getTaggedValue("seam2Install", "debug")-»"
+			«IF hasUtilizableValue("seam2Install", "dependencies")-»
 				, dependencies={
-				«FOREACH getTaggedValue("seam2ComponentInstall", "dependencies").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Install", "dependencies").getElements() AS value SEPARATOR ", "-»
 					"«value-»"
 				«ENDFOREACH-»}				
 			«ENDIF-»
-			«IF hasUtilizableValue("seam2ComponentInstall", "installGenericDependencies")-»
+			«IF hasUtilizableValue("seam2Install", "genericDependencies")-»
 				, genericDependencies={
-				«FOREACH getTaggedValue("seam2ComponentInstall", "genericDependencies").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Install", "genericDependencies").getElements() AS value SEPARATOR ", "-»
 					«value-»
 				«ENDFOREACH-»}	
 			«ENDIF-»
-			«IF hasUtilizableValue("seam2ComponentInstall", "classDependencies")-»
+			«IF hasUtilizableValue("seam2Install", "classDependencies")-»
 				, classDependencies={
-				«FOREACH getTaggedValue("seam2ComponentInstall", "classDependencies").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Install", "classDependencies").getElements() AS value SEPARATOR ", "-»
 					"«value-»"
 				«ENDFOREACH-»}	
 			«ENDIF-»
-			«IF hasTaggedValue("seam2ComponentInstall", "precedence", "false")»
-				, precedence=Install.«getTaggedValue("seam2ComponentInstall", "precedence")-»
+			«IF hasTaggedValue("seam2Install", "precedence", "false")»
+				, precedence=Install.«getTaggedValue("seam2Install", "precedence")-»
 			«ENDIF-»)
 		«ENDIF»	
 	«ENDIF»
-	«IF hasStereotype("seam2ComponentStartup")»
+	«IF hasStereotype("seam2Startup")»
 		@Startup
-		«IF hasTaggedValue("seam2ComponentStartup", "depends", "true")»
+		«IF hasTaggedValue("seam2Startup", "depends", "true")»
 			@Startup
-			«IF hasUtilizableValue("seam2ComponentStartup", "depends")»
+			«IF hasUtilizableValue("seam2Startup", "depends")»
 				(depends={
-				«FOREACH getTaggedValue("seam2ComponentStartup", "depends").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Startup", "depends").getElements() AS value SEPARATOR ", "-»
 					"«value-»"
 				«ENDFOREACH-»})
 			«ENDIF»
@@ -581,37 +583,37 @@
 	create import statements
 «ENDREM»
 «DEFINE _Import FOR MClass-»
-	«IF hasStereotype("seam2ComponentStartup")
-		|| hasStereotype("seam2ComponentInstall")
+	«IF hasStereotype("seam2Startup")
+		|| hasStereotype("seam2Install")
 		|| hasStereotype("seam2Component")
-		|| hasStereotype("seam2ComponentReadOnly")
+		|| hasStereotype("seam2ReadOnly")
 		|| hasStereotype("seam2ContextDemarcation")
-		|| hasStereotype("seam2ContextDemarcationBeginTask")
-		|| hasStereotype("seam2ContextDemarcationEndTask")
-		|| hasStereotype("seam2ContextDemarcationStartTask")
-		|| hasStereotype("seam2ContextDemarcationBegin")
-		|| hasStereotype("seam2ContextDemarcationEnd")
+		|| hasStereotype("seam2BeginTask")
+		|| hasStereotype("seam2EndTask")
+		|| hasStereotype("seam2StartTask")
+		|| hasStereotype("seam2Begin")
+		|| hasStereotype("seam2End")
 		|| hasStereotype("seam2Lifecycle")
-		|| hasStereotype("seam2LifecycleObserver")
-		|| hasStereotype("seam2BijectionUnwrap")
-		|| hasStereotype("seam2BijectionIn")
-		|| hasStereotype("seam2BijectionOut")
-		|| hasStereotype("seam2BijectionLogger")
-		|| hasStereotype("seam2BijectionFactory")
-		|| hasStereotype("seam2BijectionRequestParameter")
-		|| hasStereotype("seam2ExceptionRedirect")
-		|| hasStereotype("seam2ExceptionHttpError")
+		|| hasStereotype("seam2Observer")
+		|| hasStereotype("seam2Unwrap")
+		|| hasStereotype("seam2Injection")
+		|| hasStereotype("seam2Outjection")
+		|| hasStereotype("seam2Logger")
+		|| hasStereotype("seam2Factory")
+		|| hasStereotype("seam2RequestParameter")
+		|| hasStereotype("seam2Redirect")
+		|| hasStereotype("seam2HttpError")
 		|| hasStereotype("seam2Remoting")
-		|| hasStereotype("seam2JSFValidator")
-		|| hasStereotype("seam2JSFConverter")
+		|| hasStereotype("seam2Validator")
+		|| hasStereotype("seam2Converter")
 		|| hasStereotype("seam2Asynchronity")
 		|| hasStereotype("seam2ServletContainerIntegration")
 		|| hasStereotype("seam2DataModel")
 		|| hasStereotype("seam2DataTable")
 		|| hasStereotype("seam2Packaging")
-		|| hasStereotype("seam2JavaBeanTransactional")
+		|| hasStereotype("seam2Transactional")
 		|| hasStereotype("seam2JavaBeanInterceptors")
-		|| hasStereotype("seam2JavaBeanApplicationException")
+		|| hasStereotype("seam2ApplicationException")
 		|| hasStereotype("seam2Interceptors")»
 		import org.jboss.seam.annotations.*;
 	«ENDIF»
