@@ -1,0 +1,25 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+MClassifier addConverter(MClassifier this) :
+	this.hasStereotype("seam2Converter")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Converter") 
+		? realization.add(makeExternal("Converter"))
+		: "";
+		
+MClassifier addValidator(MClassifier this) :
+	this.hasStereotype("seam2Validator")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Converter") 
+		? realization.add(makeExternal("Validator"))
+		: "";
+		
+MClassifier addFilter(MClassifier this) :
+	this.hasStereotype("seam2ServletContainerIntegration")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Converter") 
+		? realization.add(makeExternal("Filter"))
+		: "";
+
+create MExternal makeExternal(MClassifier container, String name) : 
+	setSpecification(name) ->
+	container.getModel().externalTypes.add(this);

@@ -38,7 +38,7 @@
 	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Operation-»
 	«EXPAND Annotation(class)-»
 	«IF multiplicity == 1-»
-		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier-» «returnType.mapName().asTypeName()-»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType-» «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
+		«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier-» «returnType.mapName().asTypeName()-»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType-» «asOperation()-»(«EXPAND _Params-») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
 	«ELSE-»
 		«IF returnType.metaType == MPrimitiveType-»
 			«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Modifier-» «mapType()»<«returnType.mapName("Wrapper").asTypeName()-»«EXPAND de::genesez::platforms::java::java5::templates::Type::Generics FOR returnType»> «asOperation()»(«EXPAND de::genesez::platforms::java::java5::templates::Operation::_Params») «EXPAND de::genesez::platforms::java::java5::templates::Operation::_Exception» {
@@ -95,10 +95,31 @@
 «ENDDEFINE»
 
 «REM»
+	generates annotations for operation parameter
+«ENDREM»
+«DEFINE ParamAnnotations FOR MOperation-»
+	«EXPAND Attribute::WebParam-»		
+«ENDDEFINE»
+
+«REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«REM»
+	generates the operation parameter
+«ENDREM»
+«DEFINE _Params FOR MOperation-»
+	«FOREACH parameter AS p SEPARATOR ", " -»
+		«EXPAND ParamAnnotations-»
+		«IF p.isSingleValuedType() -»
+			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+		«ELSE -»
+			«EXPAND de::genesez::platforms::java::java5::templates::Type::MultiValuedType FOR p -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+		«ENDIF -»
+	«ENDFOREACH -»
+«ENDDEFINE»
 
 «REM»
 	evaluates the stereotype ejb3WebMethod
@@ -114,10 +135,9 @@
 				, action="«getTaggedValue("jwsWebMethod", "action")-»"
 			«ENDIF-»)
 		«ENDIF-»
-		«IF hasTaggedValue("ejb3WebMethod", "oneway", "true")-»
+		«IF hasTaggedValue("jwsWebMethod", "oneway", "true")-»
 			@Oneway
-		«ENDIF-»
-		«EXPAND Attribute::WebParam-»	 	
+		«ENDIF-» 	
 	«ENDIF-»
 «ENDDEFINE»
 

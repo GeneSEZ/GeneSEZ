@@ -7,7 +7,7 @@
 	of the ejb annotations in the Xpand files of the ejb3 cartridge.
 	
 	@author		andre pflueger
-	@date		2008/10/21
+	@date		2008/10/29
 	@version 	1.0
 «ENDREM»
 
@@ -29,6 +29,7 @@
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::java::seam2::scripts::Operation»
+«EXTENSION de::genesez::platforms::java::seam2::scripts::Interface»
 
 
 «REM»
@@ -61,12 +62,37 @@
 	«targetDef.proceed()»
 «ENDAROUND» 
 
+«REM»
+	adds some interfaces to the seam component
+«ENDREM»
+«AROUND de::genesez::platforms::java::ejb3::templates::Realization::Realization FOR MClassifier-»
+	«addValidator() -> ""-»
+	«addConverter() -> ""-»
+	«addFilter() -> ""-»
+	«targetDef.proceed()»
+«ENDAROUND» 
+
+«REM»
+	evaluates Seam interface annotations
+«ENDREM»
+«AROUND de::genesez::platforms::java::ejb3::templates::Interface::_Annotations FOR MClass-»
+	«EXPAND _Remoting-»
+	«targetDef.proceed()»
+«ENDAROUND» 
 
 «REM»
 	evaluates Seam operation annotations
 «ENDREM»
 «AROUND de::genesez::platforms::java::ejb3::templates::Operation::Annotation(MClassifier class) FOR MOperation-»
 	«EXPAND _Operations-»
+	«targetDef.proceed()»
+«ENDAROUND»
+
+«REM»
+	evaluates Seam method parameter annotations
+«ENDREM»
+«AROUND de::genesez::platforms::java::ejb3::templates::Operation::ParamAnnotations FOR MOperation-»
+	«EXPAND _Asynchronity-»
 	«targetDef.proceed()»
 «ENDAROUND»
 
@@ -133,6 +159,9 @@
 	«EXPAND _ContextDemarcation-»
 	«EXPAND _Asynchronity-»
 	«EXPAND _Remoting-»
+	«IF hasStereotype("seam2AroundInvoke")»
+		@AroundInvoke
+	«ENDIF»
 	«IF hasStereotype("seam2Transactional")»
 		@Transactional
 	«ENDIF»	
@@ -195,6 +224,7 @@
 		«ENDIF»
 		«IF hasTaggedValue("seam2Lifecycle", "destroy", "true")»
 			@Destroy
+			@Remove
 		«ENDIF»
 	«ENDIF»
 	«IF hasStereotype("seam2Observer")»
@@ -225,23 +255,28 @@
 			«ENDIF-»)
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2DataBinding", "dataBinderClass")»
-			@DataBinderClass(«taggedValue.selectFirst(e|e.tag.name == "dataBinderClass").value-»)
+			@DataBinderClass(«getTaggedValue("seam2DataBinding", "dataBinderClass")-»
+			«IF getTaggedValue("seam2DataBinding", "dataBinderClass").contains("class")-»
+				.class
+			«ENDIF-»)
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("seam2DataTable") && hasUtilizableValue("seam2DataTable", "dataModelSelectionIndexValue")»
-		«IF !hasUtilizableValue("seam2DataTable", "dataModelSelectionValue")-»
-			@DataModelSelection
-		«ELSE»
-			@DataModelSelection("«taggedValue.selectFirst(e|e.tag.name == "dataModelSelectionValue").value-»")
-		«ENDIF-»
+	«IF hasStereotype("seam2Selection")»
+		@DataModelSelection
+		«IF hasUtilizableValue("seam2Selection", "value")-»
+			(«getTaggedValue("seam2Selection", "value")-»)
+		«ENDIF»	
 		«IF hasUtilizableValue("seam2DataBinding", "dataSelectorClass")»
-			@DataSelectorClass(«taggedValue.selectFirst(e|e.tag.name == "dataSelectorClass").value-»)
+			@DataSelectorClass(«getTaggedValue("seam2DataBinding", "dataSelectorClass")-»
+			«IF getTaggedValue("seam2DataBinding", "dataSelectorClass").contains("class")-»
+				.class
+			«ENDIF-»)
 		«ENDIF»
 	«ENDIF»
-	«IF hasStereotype("seam2DataTable")-»
+	«IF hasStereotype("seam2SelectionIndex")-»
 		@DataModelSelectionIndex
-		«IF hasUtilizableValue("seam2DataTable", "dataModelSelectionValue")-»
-			(«getTaggedValue("seam2DataTable", "dataModelSelectionValue")-»)
+		«IF hasUtilizableValue("seam2SelectionIndex", "value")-»
+			(«getTaggedValue("seam2SelectionIndex", "value")-»)
 		«ENDIF»
 	«ENDIF-»
 «ENDDEFINE»
@@ -249,7 +284,7 @@
 «REM»
 	evaluates the stereotype seam2Remoting
 «ENDREM»
-«DEFINE _Remoting FOR MOperation-»
+«DEFINE _Remoting FOR MElement-»
 	«IF hasStereotype("seam2Remoting")»
 		@WebRemote
 		«IF hasUtilizableValue("seam2Remoting", "exclude")-»
@@ -293,12 +328,12 @@
 	«IF hasStereotype("seam2JavaBeanInterceptors")»
 		«IF hasUtilizableValue("seam2JavaBeanInterceptors", "value")-»
 			@Interceptors(
-			{«FOREACH taggedValue.select(e|e.tag.name == "value").value.getElements() AS values SEPARATOR ", "-»
+			{«FOREACH getTaggedValue("seam2JavaBeanInterceptor", "value").getElements() AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»})
 		«ENDIF»
 		«IF hasStereotype("seam2ApplicationException")»
-			@ApplicationException(rollback=«taggedValue.selectFirst(e|e.tag.name == "rollback").value-»
+			@ApplicationException(rollback=«getTaggedValue("seam2ApplicationException", "rollback")-»
 			«IF hasTaggedValue("seam2ApplicationException", "end", "true")-»
 				, end=true
 			«ENDIF-»)
@@ -354,7 +389,7 @@
 «REM»
 	evaluates the stereotype seam2Asynchronity
 «ENDREM»
-«DEFINE _Asynchronity FOR MOperation-»
+«DEFINE _Asynchronity FOR MElement-»
 	«IF hasStereotype("seam2Asynchronity")»
 		«IF hasTaggedValue("seam2Asynchronity", "asynchronous", "true")»
 			@Asynchronous
@@ -367,6 +402,12 @@
 		«ENDIF»
 		«IF hasTaggedValue("seam2Asynchronity", "intervalDuration", "true")»
 			@IntervalDuration
+		«ENDIF»
+		«IF hasTaggedValue("seam2Asynchronity", "finalExpiration", "true")»
+			@FinalExpiration
+		«ENDIF»
+		«IF hasTaggedValue("seam2Asynchronity", "intervalCron", "true")»
+			@IntervalCron
 		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
@@ -609,12 +650,22 @@
 		|| hasStereotype("seam2Asynchronity")
 		|| hasStereotype("seam2ServletContainerIntegration")
 		|| hasStereotype("seam2DataModel")
-		|| hasStereotype("seam2DataTable")
+		|| hasStereotype("seam2Selection")
+		|| hasStereotype("seam2SelectionIndex")
 		|| hasStereotype("seam2Packaging")
 		|| hasStereotype("seam2Transactional")
 		|| hasStereotype("seam2JavaBeanInterceptors")
 		|| hasStereotype("seam2ApplicationException")
 		|| hasStereotype("seam2Interceptors")»
 		import org.jboss.seam.annotations.*;
+		«IF hasStereotype("seam2ServletContainerIntegration")»
+			import javax.servlet.Filter;
+		«ENDIF»
+		«IF hasStereotype("seam2Validator")»
+			import javax.faces.validator.Validator;
+		«ENDIF»
+		«IF hasStereotype("seam2Converter")»
+			import javax.faces.converter.Converter;
+		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
