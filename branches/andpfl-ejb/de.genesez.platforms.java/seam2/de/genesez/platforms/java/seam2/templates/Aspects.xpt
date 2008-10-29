@@ -527,6 +527,9 @@
 		«ELSE-»
 			@Name("«asTypeName().toFirstLower()-»")
 		«ENDIF»
+		«IF hasUtilizableValue("seam2Component", "scope") && !hasTaggedValue("seam2Component", "scope", "UNSPECIFIED")-»
+			@Scope(ScopeType.«getTaggedValue("seam2Component", "scope")-»)
+		«ENDIF»
 		«IF hasUtilizableValue("seam2Component", "jndiName")»
 			@JndiName("«getTaggedValue("seam2Component", "jndiName")-»")
 		«ENDIF»
@@ -545,11 +548,6 @@
 		«IF hasTaggedValue("seam2Component", "autoCreate", "true")»
 			@AutoCreate
 		«ENDIF»	
-	«ENDIF»
-	«IF hasStereotype("seam2Scope")-»
-		«IF hasUtilizableValue("seam2Scope", "type")-»
-			@Scope(ScopeType.«getTaggedValue("seam2Scope", "type")-»)
-		«ENDIF»
 	«ENDIF»
 	«IF hasStereotype("seam2ReadOnly")»
 		@ReadOnly
