@@ -274,9 +274,12 @@
 	«EXPAND _Persistence»
 	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
 	«EXPAND Class::DiscriminatorValue-»	
-	«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
-		«EXPAND WebParam-»
-	«ENDIF-»
+	«REM»
+		«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+			«EXPAND WebParam-»
+		«ENDIF-»
+	«ENDREM»
+	«EXPAND _Resource-»
 	«REM» 
 		stereotype "ejb3EJB" and automatic annotation of EJB for session bean interfaces
 		following the naming convention "I + <Name> + {Remote|Local}" 
@@ -288,12 +291,20 @@
 	«ELSE-»
 		«EXPAND EJB-»
 	«ENDIF-»
-	«EXPAND _Timer-»
 «ENDDEFINE»
 
-«DEFINE _Timer FOR MAttribute-»
+«REM»
+	evaluates the stereotype ejb3Resource
+«ENDREM»
+«DEFINE _Resource FOR MAttribute-»
 	«IF hasStereotype("ejb3Resource")-»
+		@Resource«IF hasUtilizableValue("ejb3Resource", "value")-»
+			(«getTaggedValue("ejb3Resource", "value")-»)
+		«ENDIF-»
 	«ELSEIF type.asTypeName() == "TimerService"-»
+		«REM»
+			automatic generation of @Resource for not annotated TimerService attribute
+		«ENDREM»
 		@Resource		
 	«ENDIF»
 «ENDDEFINE»
