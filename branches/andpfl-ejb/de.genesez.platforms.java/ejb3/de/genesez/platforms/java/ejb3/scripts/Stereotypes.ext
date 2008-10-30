@@ -13,6 +13,25 @@ import gcore;
 extension de::genesez::platforms::common::AccessHelper;
 
 /**
+ *	function to create a MAttribute
+ *
+ *	@param		name			name of the attribute
+ *	@param		visibility		modifier of the attribute
+ *	@param		multiplicity	multiplicity of the attribute	
+ *	@param		derived			attribute is part of a superclass
+ *	@param		unique			attribute is unique
+ *	@param		ordered			attribute is ordered
+ *
+ */
+create MAttribute makeAttribute(String name, String visibility, int multiplicity, boolean derived, boolean unique, boolean ordered) :
+	setName(name) ->
+	setVisibility(visibility) ->
+	setMultiplicity(multiplicity) ->
+	setDerived(derived) ->
+	setUnique(unique) ->
+	setOrdered(ordered);
+
+/**
  *	function to add the stereotype "ejb3Column" to an existing (in the classifier) MElement
  *
  *	@param		elem		MElement
@@ -23,6 +42,7 @@ MElement addColumnForPrimaryKeyInheritance(MElement elem, MClassifier classifier
 	classifier.property.exists(e|e.name == elem.name) 
 		? classifier.property.selectFirst(e|e.name == elem.name).makeColumn(classifier.getModel())
 		: "";
+		
 /**
  *	function to create the stereotype "ejb3Column" for primary key inheritance
  *	function can not be used for general "ejb3Column" stereotype creation!!!
@@ -225,3 +245,21 @@ create MTag makeTag(String name, String type) :
 create MTaggedValue makeTaggedValue(String value, MTag tag) :
 	setValue(value) ->
 	setTag(tag);
+	
+/*
+Void addPrimaryKeyStereotype(MProperty this, String embeddedId, String generatorName, String generatedValue, String strategy) :
+	this.classifier.owningPackage.getModel().anyStereotype.add(makePrimaryKey(this, embeddedId, generatorName, generatedValue, strategy));
+	
+
+create MStereotype makePrimaryKey(MProperty elem, String embeddedId, String generatorName, String generatedValue, String strategy) :
+	setName("ejb3PrimaryKey") ->
+	property.add(makeTag("embeddedId", "Boolean")) ->
+	property.add(makeTag("generatorName", "String")) ->
+	property.add(makeTag("generatedValue", "Boolean")) ->
+	property.add(makeTag("strategy", "ejb3GenerationType")) ->
+	elem.taggedValue.add(makeTaggedValue(embeddedId, makeTag("embeddedId", "Boolean"))) ->
+	elem.taggedValue.add(makeTaggedValue(generatorName, makeTag("generatorName", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue(generatedValue, makeTag("generatedValue", "Boolean"))) ->
+	elem.taggedValue.add(makeTaggedValue(strategy, makeTag("strategy", "ejb3GenerationType"))) ->
+	elem.stereotype.add(this);
+*/
