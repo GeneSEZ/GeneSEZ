@@ -11,14 +11,8 @@ namespace forms
 	public class Point : IForm
 	{
 		#region Private Fields
-<< << <<<.working
-		private  =======
-		        private   >> >> >>>.merge-right.r1466
-		        double x;
-<< << <<<.working
-		private  =======
-		        private   >> >> >>>.merge-right.r1466
-		        double y;
+		private double x;
+		private double y;
 		#endregion
 
 		#region Constructors

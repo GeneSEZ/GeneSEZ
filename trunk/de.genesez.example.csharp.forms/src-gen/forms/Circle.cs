@@ -11,14 +11,8 @@ namespace forms
 	public class Circle : IForm
 	{
 		#region Private Fields
-<< << <<<.working
-		private  =======
-		        private   >> >> >>>.merge-right.r1466
-		        Point center;
-<< << <<<.working
-		private  =======
-		        private   >> >> >>>.merge-right.r1466
-		        double radius;
+		private Point center;
+		private double radius;
 		#endregion
 
 		#region Constructors
