@@ -11,14 +11,8 @@ namespace forms
 	public class Line : IForm
 	{
 		#region Private Fields
-<< << <<<.working
-		private  =======
-		        private   >> >> >>>.merge-right.r1466
-		        Point start;
-<< << <<<.working
-		private  =======
-		        private   >> >> >>>.merge-right.r1466
-		        Point end;
+		private Point start;
+		private Point end;
 		#endregion
 
 		#region Constructors
