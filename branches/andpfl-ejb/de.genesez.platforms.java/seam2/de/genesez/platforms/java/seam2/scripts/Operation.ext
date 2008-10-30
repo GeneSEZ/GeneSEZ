@@ -16,3 +16,28 @@ create MOperation makeOperation(MClassifier container, String name) :
 	setVisibility("public") ->
 	setXmiGuid(name + container.name) ->
 	container.operation.add(this);
+	
+create MOperation createOperation(MClassifier container, String xmiGuid, String name) :
+	// set containment
+	container.operation.add(this) ->
+	// set basics inherit from MElement
+	setName(name) ->
+	setXmiGuid(xmiGuid) ->
+	// set operation properties
+	setVisibility("public") ->
+	setStatic(false) ->
+	setAbstract(false) ->
+	setFinal(false) ->
+	setMultiplicity(1) ->
+	setUnique(true) ->
+	setOrdered(false) ->
+	// set operation associations
+	setReturnType(container.getModel().createVoid()) ->
+	this;
+
+create MPrimitiveType createVoid(MModel container) :
+	// containment
+	container.primitiveTypes.add(this) ->
+	setXmiGuid("void") ->
+	setName("void") ->
+	this;
