@@ -499,7 +499,7 @@
 		«EXPAND _Package-»
 		
 		«FOREACH this.getModel().nestedPackage AS p-»
-			import «this.basePackage()-».«p.name-».*;
+			import «IF this.basePackage() != ""-»«this.basePackage()-».«ENDIF-»«p.name-».*;
 		«ENDFOREACH»
 		import java.util.*;
 		«IF type == "Remote"-»
@@ -995,7 +995,7 @@
 	import javax.annotation.*;
 	import javax.ejb.*;
 	«FOREACH this.getModel().nestedPackage AS p-»
-		import «this.basePackage()-».«p.name-».*;
+			import «IF this.basePackage() != ""-»«this.basePackage()-».«ENDIF-»«p.name-».*;
 	«ENDFOREACH»	
 «ENDDEFINE»
 
