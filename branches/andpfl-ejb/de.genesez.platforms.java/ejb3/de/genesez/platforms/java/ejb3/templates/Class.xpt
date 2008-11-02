@@ -25,6 +25,7 @@
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::StandardConstructor»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::java::ejb3::scripts::Stereotypes»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Attribute»
 
 
 
@@ -37,6 +38,9 @@
 «REM» generates a class «ENDREM»
 «DEFINE Root FOR MClass-»
 	«addStandardConstructor()-> ""-»
+	«IF generalization.isEmpty && hasStereotype("ejb3PersistentEntity") && property.notExists(e|e.hasStereotype("ejb3PrimaryKey")) && property.notExists(e|e.name == "id" && e.type.name() == "int")-»
+		«addDefaultPrimaryKey(this, "id", "int", "private") -> ""-»
+	«ENDIF»
 	«EXPAND _Package-»
 	«EXPAND _Import-»
 	«EXPAND de::genesez::platforms::java::java5::templates::Comment::Type-»
@@ -494,6 +498,9 @@
 		  */	
 		«EXPAND _Package-»
 		
+		«FOREACH this.getModel().nestedPackage AS p-»
+			import «this.basePackage()-».«p.name-».*;
+		«ENDFOREACH»
 		import java.util.*;
 		«IF type == "Remote"-»
 			import javax.ejb.Remote;
@@ -984,6 +991,12 @@
 		import javax.jms.MessageListener;
 		import javax.ejb.ActivationConfigProperty;		
 	«ENDIF»
+	import javax.persistence.*;
+	import javax.annotation.*;
+	import javax.ejb.*;
+	«FOREACH this.getModel().nestedPackage AS p-»
+		import «this.basePackage()-».«p.name-».*;
+	«ENDFOREACH»	
 «ENDDEFINE»
 
 

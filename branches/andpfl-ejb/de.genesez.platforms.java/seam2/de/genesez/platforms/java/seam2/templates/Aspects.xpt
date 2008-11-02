@@ -173,7 +173,7 @@
 	«ENDIF»
 	«IF hasStereotype("seam2Factory")»
 		@Factory(autocreate=«getTaggedValue("seam2Factory", "autoCreate")-»
-		«IF hasUtilizableValue("seam2Factory", "scope") && !hasTaggedValue("seam2Factory", "scope", "DEFAULT")-»
+		«IF hasUtilizableValue("seam2Factory", "scope") && !hasTaggedValue("seam2Factory", "scope", "UNSPECIFIED")-»
 			, scope(ScopeType.«getTaggedValue("seam2Factory", "scope")-»
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Factory", "value")-»
@@ -199,13 +199,13 @@
 		«IF hasUtilizableValue("seam2Injection", "value")-»
 			, value="«getTaggedValue("seam2In", "value")-»"
 		«ENDIF-»
-		«IF hasUtilizableValue("seam2Injection", "scope") && !hasTaggedValue("seam2Injection", "scope", "DEFAULT")-»
+		«IF hasUtilizableValue("seam2Injection", "scope") && !hasTaggedValue("seam2Injection", "scope", "UNSPECIFIED")-»
 			, scope=ScopeType.«getTaggedValue("seam2Injection", "scope")-»
 		«ENDIF-»)
 	«ENDIF»
 	«IF hasStereotype("seam2Outjection")»
 		@Out(required=«getTaggedValue("seam2Outjection", "required")-»
-		«IF hasUtilizableValue("seam2Outjection", "scope") && !hasTaggedValue("seam2Outjection", "scope", "DEFAULT")-»
+		«IF hasUtilizableValue("seam2Outjection", "scope") && !hasTaggedValue("seam2Outjection", "scope", "UNSPECIFIED")-»
 			, scope=ScopeType.«getTaggedValue("seam2Outjection", "scope")-»
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Outjection", "value")-»
@@ -244,13 +244,13 @@
 	«IF hasStereotype("seam2DataModel")-»
 		«IF (hasTaggedValue("seam2DataModel", "value", "null") || hasTaggedValue("seam2DataModel", "value", ""))-»
 			@DataModel
-			«IF (hasTaggedValue("seam2DataModel", "scope", "null") || hasTaggedValue("seam2DataModel", "scope", ""))  && !hasTaggedValue("seam2DataModel", "scope", "DEFAULT")-»
+			«IF (hasTaggedValue("seam2DataModel", "scope", "null") || hasTaggedValue("seam2DataModel", "scope", ""))  && !hasTaggedValue("seam2DataModel", "scope", "UNSPECIFIED")-»
 				(scope=ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»)
 			«ENDIF»
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2DataModel", "value")-»
 			@DataModel("«taggedValue.selectFirst(e|e.tag.name == "value").value-»"
-			«IF hasUtilizableValue("seam2DataModel", "scope") && !hasTaggedValue("seam2DataModel", "scope", "DEFAULT")-»
+			«IF hasUtilizableValue("seam2DataModel", "scope") && !hasTaggedValue("seam2DataModel", "scope", "UNSPECIFIED")-»
 				, scope=ScopeType.«taggedValue.selectFirst(e|e.tag.name == "scope").value-»
 			«ENDIF-»)
 		«ENDIF-»
@@ -539,9 +539,6 @@
 		«IF hasTaggedValue("seam2Component", "conversational", "true")»
 			@Conversational
 		«ENDIF»
-		«IF hasUtilizableValue("seam2Component", "intercept") && !hasTaggedValue("seam2Component", "intercept", "DEFAULT")»
-			@Intercept(InterceptionType.«getTaggedValue("seam2Component", "intercept")-»)
-		«ENDIF»
 		«IF hasUtilizableValue("seam2Component", "synchronizedTimeout") && !hasTaggedValue("seam2Component", "synchronizedTimeout", "1000")»
 			@Synchronized(timeout=«getTaggedValue("seam2Component", "synchronizedTimeout")-»)
 		«ENDIF»
@@ -558,7 +555,7 @@
 		«FOREACH getTaggedValue("seam2Role", "name").getElements() AS names SEPARATOR ","-»
 			@Role(name="«names-»"
 			«LET getTaggedValue("seam2Role", "scope").getElements().indexOf(names) AS index-»
-				«IF !hasTaggedValue("seam2Role", "scope", "DEFAULT") && hasUtilizableValue("seam2Role", "scope")-»
+				«IF !hasTaggedValue("seam2Role", "scope", "UNSPECIFIED") && hasUtilizableValue("seam2Role", "scope")-»
 					, scope=ScopeType.«getTaggedValue("seam2Role", "scope").getElements().get(index)-»
 				«ENDIF-»
 			«ENDLET-»)

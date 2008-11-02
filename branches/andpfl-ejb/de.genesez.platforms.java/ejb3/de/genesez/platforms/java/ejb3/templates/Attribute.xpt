@@ -87,7 +87,13 @@
 		@EmbeddedId
 	«ENDIF»
 	
-	«REM» generation of primary keys «ENDREM»
+	«REM» automatic primary key generation «ENDREM»
+	«IF classifier.generalization.isEmpty && classifier.hasStereotype("ejb3PersistentEntity") && !hasStereotype("ejb3PrimaryKey") && this.name == "id" && this.type().name() == "int"-»
+		@Id
+		@GeneratedValue(strategy = GenerationType.AUTO)
+	«ENDIF»
+	
+	«REM» generationtype of primary keys «ENDREM»
 	«IF hasStereotype("ejb3TableGenerator") && hasUtilizableValue("ejb3TableGenerator", "name")-»
 		@TableGenerator(name="«getTaggedValue("ejb3TableGenerator", "name")-»"
 		«IF hasUtilizableValue("ejb3TableGenerator", "table")-»
