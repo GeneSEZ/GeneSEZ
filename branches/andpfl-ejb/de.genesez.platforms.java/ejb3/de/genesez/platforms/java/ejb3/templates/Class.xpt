@@ -168,13 +168,18 @@
 		«REM»@Table is not allowed with SINGLE_TABLE inheritance strategy«ENDREM»
 		«IF generalization.isEmpty-»
 			«EXPAND _Table-»
-		«ELSE-»
-			«FOREACH generalization.typeSelect(MClass) AS classes-»
-				«IF !classes.hasStereotype("ejb3Inheritance") && !hasTaggedValue("ejb3Inheritance", "discriminatorType", "SINGLE_TABLE")-»
-					«EXPAND _Table-»
-				«ENDIF»
-			«ENDFOREACH-»
 		«ENDIF»
+		«REM»
+			Causes Warnings in Hibernate configuration, no @Table in derived class
+			annotation will be ignored, no fatal error occurs
+			«ELSE-»
+				«FOREACH generalization.typeSelect(MClass) AS classes-»
+					«IF !classes.hasStereotype("ejb3Inheritance") && !hasTaggedValue("ejb3Inheritance", "discriminatorType", "SINGLE_TABLE")-»
+						«EXPAND _Table-»
+					«ENDIF»
+				«ENDFOREACH-»
+			«ENDIF»
+		«ENDREM»
 		«REM» entity listener «ENDREM»
 		«EXPAND _EntityListener»
 		«REM» inheritance «ENDREM»
@@ -412,8 +417,11 @@
 					«ENDIF»
 				«ELSE-»
 					«REM» there is no "@Inheritance" and "@DiscriminatorColumn" at super class «ENDREM»
-					«addInheritanceStereotype(class, "SINGLE_TABLE") ->""-»
-					«addDiscriminatorColumnStereotype(class, "", "STRING", "31", "DTYPE") ->""-»
+					«IF this.generalization.isEmpty-»
+						«REM»these two annotations are only needed if this is not a derived class«ENDREM»
+						«addInheritanceStereotype(class, "SINGLE_TABLE") ->""-»
+						«addDiscriminatorColumnStereotype(class, "", "STRING", "31", "DTYPE") ->""-»
+					«ENDIF-»
 					«REM»
 						equal named primary keys in super and derived class are 
 						detected by primary key annotation in Attribute.xpt
