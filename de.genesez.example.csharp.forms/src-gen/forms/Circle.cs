@@ -15,6 +15,31 @@ namespace forms
 		private double radius;
 		#endregion
 
+		#region Properties
+		public Point Center
+		{
+			get
+			{
+				return this.center;
+			}
+			set
+			{
+				this.center = value;
+			}
+		}
+		public double Radius
+		{
+			get
+			{
+				return this.radius;
+			}
+			set
+			{
+				this.radius = value;
+			}
+		}
+		#endregion
+
 		#region Constructors
 		public Circle()
 		{
@@ -30,7 +55,22 @@ namespace forms
 		/* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._14_0_b6f02e1_1211871307421_631477_281) ENABLED START */
 		/* TODO put your own implementation code here */
 
+        public void Move(double dx, double dy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Rotate(double phi)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Rotate(double phi, double dx, double dy)
+        {
+            throw new NotImplementedException();
+        }
+
 		/* PROTECTED REGION END */
-		#endregion
-	}
+		#endregion              
+    }
 }
