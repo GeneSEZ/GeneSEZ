@@ -1,0 +1,283 @@
+/**
+ * Helper functions for conversions for easier code generation
+ * 
+ * conventions used:
+ * - fileName is only the file name, e.g. 'Conversion.ext'
+ * - dirName is the name of the directory, e.g. 'common'
+ * - dirPath is the path of directries, e.g. 'de/genesez/platforms/common'
+ * - filePath is the full filename, e.g. 'de/genesez/platforms/common/Conversion.ext'
+ * 
+ * @author	nico herbig
+ * @author	tobias haubold (last)
+ * @date	2008-04-18
+ */
+
+// based on genesez meta model
+import gcore;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for a comma separated string of element names
+ * @param	l	list of model elements of type MElement
+ * @return	comma blank (', ') separated list of element names or an empty string
+ */
+String getNameList(List[MElement] l) :
+	l.size > 1 
+		? ((MElement) l.first()).name + ", " + getNameList(l.withoutFirst())
+		: (l.size > 0
+			? ((MElement) l.first()).name
+			: "");
+
+/**
+ * getter for a comma separated string of generic specifications
+ * @param	l	list of model elements of type MGeneric
+ * @return	comma blank (', ') separated list of generic specifications
+ */
+String getGenericList(List[MGeneric] l) :
+	l.size > 1 
+		? ((MGeneric) l.first()).specification + ", " + getGenericList(l.withoutFirst())
+		: (l.size > 0
+			? ((MGeneric) l.first()).specification
+			: "");
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	comment handling
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * builds the comment text of an element by placing an empty line between the comments and nested comments
+ * @return	the comment string
+ * @see		comment(String, String)
+ */
+String comment(MElement this) :
+	comment("\n\n", "\n\n");
+
+/**
+ * builds the comment text of an element
+ * @param	commentSeparator		separator which is placed between comments
+ * @param	nestedCommentSeparator	separator which is placed between a comment and it's nested comment
+ * @return	the comment string
+ */
+String comment(MElement this, String commentSeparator, String nestedCommentSeparator) :
+	JAVA de.genesez.platforms.common.Conversion.comment(de.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String);
+
+/**
+ * formats the comment text of an element by using the asterix (*) as line prefix and the newline character as line suffix
+ * @return	the formatted comment string
+ * @see		format(List[MComment], String, String)
+ */
+String formatComment(MElement this) : 
+	formatComment(" * ", "\n");
+
+/**
+ * formats the comment text of an element by using the standard comment separators
+ * @param	linePrefix	prefix which is prepended to each line of the comment
+ * @param	lineSuffix	suffix which is appended to each line of the comment
+ * @return	the formatted comment string
+ * @see		comment(List[MComment])
+ */
+String formatComment(MElement this, String linePrefix, String lineSuffix) :
+	comment().format(linePrefix, lineSuffix);
+
+/**
+ * formats the comment text of an element
+ * @param	commentSeparator		separator which is placed between comments
+ * @param	nestedCommentSeparator	separator which is placed between a comment and it's nested comment
+ * @param	linePrefix				prefix which is prepended to each line of the comment
+ * @param	lineSuffix				suffix which is appended to each line of the comment
+ * @return	the formatted comment string
+ */
+String formatComment(MElement this, String commentSeparator, String nestedCommentSeparator, String linePrefix, String lineSuffix) :
+	comment(commentSeparator, nestedCommentSeparator).format(linePrefix, lineSuffix);
+
+/**
+ * formats a string by adding ' * ' as prefix + '\n' as suffix to each line within the string
+ * @return	the formatted string
+ */
+String format(String this) :
+	format(" * ", "\n");
+
+/**
+ * formats a string by adding a prefix + suffix to each line within the string
+ * @param	linePrefix	prefix which is prepended to each line
+ * @param	lineSuffix	suffix which is appended to each line
+ * @return	the formatted string
+ */
+String format(String this, String linePrefix, String lineSuffix) :
+	JAVA de.genesez.platforms.common.Conversion.format(java.lang.String, java.lang.String, java.lang.String);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	file names, file paths + directory paths
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the directory name of a classifier
+ * @return	the name of the directory
+ */
+String dirName(MClassifier this) : owningPackage.name;
+
+/**
+ * getter for the path of a classifier based on it's namespace
+ * @return	the path of the classifier
+ */
+String dirPath(MClassifier this) :
+	owningPackage.fullQualifiedNameSep( fileSeparator() );
+
+/**
+ * getter for the path of a classifier based on it's namespace
+ * @param	base	the base path of the classifier
+ * @return	the path of the classifier
+ * @see		dirPath(MClassifier)
+ */
+String dirPath(MClassifier this, String base) :
+	base == ""
+		? dirPath()
+		: base + fileSeparator() + dirPath();
+
+/**
+ * getter for the full filename of a classifier based it's namespace
+ * @param	filename	the filename of the classifier, usually the name according to naming conventions
+ * @return	the full file name of the classifier including the path
+ * @see		dirPath(MClassifier)
+ */
+String filePath(MClassifier this, String filename) :
+	dirPath() + fileSeparator() + filename;
+
+/**
+ * getter for the full filename of a classifier based on the given basename, including path
+ * @param	filename	the filename of the classifier, usually the name according to naming conventions
+ * @param	base		the base path which is prepended to the namespace
+ * @return	the full file name of the classifier including the path
+ * @see		dirPath(MClassifier, String)
+ */
+String filePath(MClassifier this, String filename, String base) :
+	dirPath(base) + fileSeparator() + filename;
+
+/**
+ * getter for the file path of a package based on it's namespace
+ * @return	the relative path of a package
+ */
+String filePath(MPackage this) :
+	fullQualifiedNameSep( fileSeparator() );
+
+/**
+ * getter for the file path of a package based on it's namespace
+ * @param	base	the base package of the package
+ * @return	the relative path of a package
+ */
+String filePath(MPackage this, String base) :
+	base == ""
+		? filePath()
+		: base + fileSeparator() + filePath();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the full qualified name of a classifier based on it's namespace
+ * @param	spearator	the separator to use between the names
+ * @return	string representation of the full qualified name
+ */
+String fullQualifiedNameSep(MClassifier this, String separator) : 
+	owningPackage.fullQualifiedNameSep(separator) + separator + name.toFirstUpper();
+
+/**
+ * getter for the full qualified name of a classifier based on it's namespace
+ * @param	typename	the typename of the classifier, usually according naming conventions
+ * @param	spearator	the separator to use between the names
+ * @return	string representation of the full qualified name
+ */
+String fullQualifiedNameSep(MClassifier this, String typename, String separator) : 
+	owningPackage.fullQualifiedNameSep(separator) + separator + typename;
+
+/**
+ * getter for the full qualified name of a classifier based on a base package and it's namespace
+ * @param	typename	the typename of the classifier, usually according naming conventions
+ * @param	base		the base package to prepend
+ * @param	spearator	the separator to use between the names
+ * @return	string representation of the full qualified name
+ */
+String fullQualifiedNameSep(MClassifier this, String typename, String base, String separator) : 
+	owningPackage.fullQualifiedNameSep(base, separator) + separator + typename;
+
+/**
+ * getter for the full qualified name of a package
+ * @param	base		a base package to prepend
+ * @param	separator	a separator used to build the package path
+ * @return	the full qualified name of the package
+ */
+String fullQualifiedNameSep(MPackage this, String base, String separator) : 
+	base == ""
+		? fullQualifiedNameSep( separator )
+		: base + separator + fullQualifiedNameSep( separator );
+
+
+/**
+ * getter for the separator within a file name
+ * @return	the separator for directories in file names
+ */
+String fileSeparator() : "/";
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for a human readable identifier for the model element
+ */
+String fqn(MModel this) :
+	name;
+
+/**
+ * getter for a human readable identifier for a package
+ */
+String fqn(MPackage this) : 
+	nestingPackage.fqn() + "::" + name;
+
+/**
+ * getter for a human readable identifier for a classifier
+ */
+String fqn(MClassifier this) :
+	owningPackage.fqn() + "::" + name;
+
+/**
+ * getter for a human readable identifier for an operation
+ */
+String fqn(MOperation this) :
+	classifier.fqn() + "::" + name + "(" + parameter.toString(", ") + ")";
+
+/**
+ * returns a human readable representation to identify a property
+ */
+String fqn(MProperty this) :
+	classifier.fqn() + "::" + name;
+
+/**
+ * returns a human readable represenataion to identify an element
+ */
+String fqn(MElement this) :
+	name;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping to java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the package path of a classifier
+ * @param	pkg			a package
+ * @param	separator	a separator used to build the package path
+ * @return	string representation of the package path
+ */
+String fullQualifiedNameSep(MPackage pkg, String separator) : 
+	JAVA de.genesez.platforms.common.Conversion.getFullQualifiedName(de.genesez.metamodel.gcore.MPackage, java.lang.String);
+

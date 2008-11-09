@@ -1,0 +1,56 @@
+/**
+ * Conversion functions to display full qualified names of model elements
+ * 
+ * @author	tobias haubold
+ * @date	2008-07-17
+ */
+import uml;
+
+/**
+ * calculates the full qualfied name of a model
+ * @return	full qualified name
+ */
+String fqn(Model this) : name;
+
+/**
+ * calculates the full qualfied name of a package
+ * @return	full qualified name
+ */
+
+String fqn(Package this) : nestingPackage != null ? nestingPackage.fqn() + "::" + name : name;
+/**
+ * calculates the full qualfied name of a classifier
+ * @return	full qualified name
+ */
+String fqn(Classifier this) : owner.fqn() + "::" + name;
+
+/**
+ * calculates the full qualfied name of an operation
+ * @return	full qualified name
+ */
+String fqn(Operation this) : owner.fqn() + "::" + name + "(...)";
+
+/**
+ * calculates the full qualfied name of a parameter
+ * @return	full qualified name
+ */
+String fqn(Parameter this) : owner.fqn() + "::" + name;
+
+/**
+ * calculates the full qualfied name of a property
+ * @return	full qualified name
+ */
+String fqn(Property this) : owner.fqn() + "::" + name;
+
+
+/**
+ * calculates the full qualfied name of a named element
+ * @return	full qualified name
+ */
+String fqn(NamedElement this) : owner != null ? owner.fqn() + "::" + name : name;
+
+/**
+ * calculates the full qualfied name of a named element
+ * @return	full qualified name
+ */
+String fqn(Element this) : owner != null ? owner.fqn() + "::" + toString() : toString();
