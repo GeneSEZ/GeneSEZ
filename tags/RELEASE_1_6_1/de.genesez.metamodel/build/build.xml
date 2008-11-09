@@ -1,0 +1,184 @@
+<?xml version="1.0" ?>
+
+<project name="de.genesez.metamodel" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+	
+	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	
+	<!-- Import project related properties -->
+	<property file="build/build.properties" />
+	
+	<!-- Set the classpath -->
+	<path id="de.genesez.metamodel.classpath">
+		<pathelement location="${bin.dir}" />
+		<pathelement location="${workflow.dir}" />
+		<pathelement location="${model.generate.dir}" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+
+	<!-- Task definition section -->
+
+	<taskdef name="oaw.workflow"
+		classname="org.openarchitectureware.workflow.ant.WorkflowAntTask"
+		classpathref="de.genesez.metamodel.classpath" />
+
+	<!-- Public target section -->
+	
+	<target name="build"
+		description="Build de.genesez.metamodel"
+		depends="metamodel.compile">
+	</target>
+
+	<target name="pluginjar"
+		description="Create the plugin jar for de.genesez.metamodel"
+		depends="build">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${basedir}">
+				<include name="plugin.xml"/>
+				<include name="${model.generate.dir}/*.ecore"/>
+			</fileset>
+			<fileset dir="${workflow.dir}">
+				<include name="log4j.properties"/>
+			</fileset>
+			<fileset dir="${bin.dir}">
+				<exclude name="org/"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="clean"
+		description="Clean de.genesez.metamodel">
+		<delete includeemptydirs="true" failonerror="false">
+			<!-- remove all binary files -->
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${dist.dir}" includes="*.jar" />
+			<!-- remove generated java code -->
+			<fileset dir="${ecore2java.path}">
+				<include name="${ecore.base}/**/*" />
+			</fileset>
+			<!-- remove ecore model -->
+			<fileset dir="${model.generate.dir}">
+				<include name="*.ecore" />
+			</fileset>
+			<!-- remove exported magic draw models -->
+			<fileset dir="${model.export.dir}">
+				<include name="*.uml" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- Private target section -->
+	
+	<target name="metamodel.precompile"
+		description="Compiles required Java classes for transforming the metamodel">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.metamodel.classpath"
+			debug="on">
+			<exclude name="de/genesez/metamodel/**/*"/>
+		</javac>
+	</target>
+	
+	<target name="metamodel.uml2ecore"
+		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI"
+		depends="metamodel.precompile" >
+		<java classname="org.openarchitectureware.workflow.WorkflowRunner"
+			classpathref="de.genesez.metamodel.classpath"
+			fork = "true"
+			dir="${basedir}">
+			<arg value="${oaw.workflow.file}" />
+			<arg value="-pbaseDir=${basedir}" />
+			<arg value="-pmagicdrawDir=${MAGICDRAW_DIR}" />
+			<arg value="--ant" />
+		</java>
+		<!-- during a bug in the oAW ant task, this task is not used -->
+		<!-- oaw.workflow file="${oaw.workflow.file}"
+			classpathref="de.genesez.metamodel.classpath"
+			fork = "true"
+			dir="${basedir}">
+			<param name="baseDir" value="${basedir}/" />
+			<param name="magicdrawDir" value="${MAGICDRAW_DIR}/" />
+		</oaw.workflow -->
+	</target>
+
+	<target name="metamodel.ecore2java"
+		description=""
+		if="eclipse.running">
+		<emf.Ecore2Java model="${ecore.file}"
+			genModel="${genmodel.file}"
+			reconcileGenModel="reload"
+			
+			generateJavaCode="true"
+			generateModelProject="false"
+			generateEditProject="false"
+			generateEditorProject="false"
+			
+			modelProject="${basedir}"
+			modelProjectFragmentPath="${ecore2java.path}">
+			
+			<arg line="-package ${ecore.package}" />
+		</emf.Ecore2Java>
+	</target>
+
+	<target name="metamodel.compile"
+		description=""
+		depends="metamodel.uml2ecore,metamodel.ecore2java.internal,metamodel.ecore2java.external">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.metamodel.classpath"
+			debug="on" />
+	</target>
+	
+	<target name="metamodel.ecore2java.internal"
+		description=""
+		if="eclipse.running">
+		<echo>Eclipse is running...</echo>
+		<antcall target="metamodel.ecore2java" />
+	</target> 
+	
+	<target name="metamodel.ecore2java.external"
+		description=""
+		unless="eclipse.running">
+		<echo>Eclipse is not running...</echo>
+		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="metamodel.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+<!--			<arg value="-vmargs -Xmx768m -XX:MaxPermSize=312m" />-->
+		</exec>
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="metamodel.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+<!--			<arg value="-vmargs -Xmx768m -XX:MaxPermSize=312m" />-->
+		</exec>
+	</target> 
+
+</project>
