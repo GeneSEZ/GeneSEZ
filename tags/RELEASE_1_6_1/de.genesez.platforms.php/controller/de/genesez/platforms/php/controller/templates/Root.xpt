@@ -1,0 +1,99 @@
+«REM»
+	Generates a controller + action infrastructure for all classes.
+	
+	@author		tobias haubold
+	@date		2008-04-21
+	@version	alpha
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«REM» use naming conventions for controller + actions «ENDREM»
+«EXTENSION de::genesez::platforms::php::controller::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of a model
+	rejects all ignored packages from further processing
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	rejects all data types from further processing
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier.reject( e| e.metaType == MDataType || e.metaType == MEnumeration )»
+«ENDDEFINE»
+
+«REM»
+	interfaces are currently ignored
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«fatal("'MInterfaces's are currently not used for controller generation!")»
+«ENDDEFINE»
+
+«REM»
+	should not happend, because 'MClassifier' is an abstract class!
+	it's just there for error-free templates :-)
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("'MClassifier's are currently not used for controller generation!")»
+«ENDDEFINE»
+
+«REM»
+	processes a class for controller generation
+«ENDREM»
+«DEFINE Root FOR MClass»
+«EXPAND _Root FOREACH operation -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an action class
+	- distincts private + public action classes
+«ENDREM»
+«DEFINE _Root FOR MOperation -»
+«FILE asActionFilename(name)»
+<?php
+«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.includes." + xmiGuid)»
+// TODO: put your further includes for class '«asActionClassName()»' here
+«ENDPROTECT»
+
+class «asActionClassName()» {
+	public static function main() {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.main.impl." + xmiGuid)»
+		// TODO: put your implementation for '«asActionClassName()»::main()' here
+		«ENDPROTECT»
+	}
+	
+	«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.own.impl." + xmiGuid)»
+	// TODO: put your further implementations for the '«asActionClassName()»' here
+	«ENDPROTECT»
+}
+«PROTECT CSTART '/* ' CEND ' */' ID ("php.action.own.script." + xmiGuid)»
+// TODO: put your script commands for the '«asActionClassName()»' here
+«IF visibility == "public" -»«asActionClassName()»::main();«ENDIF -»
+«ENDPROTECT»
+?>
+«ENDFILE»
+«ENDDEFINE»
+
