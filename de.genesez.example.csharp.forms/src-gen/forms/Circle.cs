@@ -41,11 +41,12 @@ namespace forms
 		#endregion
 
 		#region Constructors
-		public Circle()
+		public Circle( Point c,  double r )
 		{
 			/* PROTECTED REGION ID(java.moperation.implementation.operation.code._14_0_b6f02e1_1211871354437_848983_304) ENABLED START */
 			/* TODO put your own implementation code here */
-
+            this.center = c;
+            this.radius = r;
 			/* PROTECTED REGION END */
 		}
 
@@ -55,22 +56,17 @@ namespace forms
 		/* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._14_0_b6f02e1_1211871307421_631477_281) ENABLED START */
 		/* TODO put your own implementation code here */
 
-        public void Move(double dx, double dy)
-        {
-            throw new NotImplementedException();
-        }
+		public void Move( double dx, double dy )
+		{
+			this.center.Move( dx, dy );
+		}
 
-        public void Rotate(double phi)
+        public void Rotate(Point c, double phi)
         {
-            throw new NotImplementedException();
+            this.center.Rotate(c, phi);
         }
-
-        public void Rotate(double phi, double dx, double dy)
-        {
-            throw new NotImplementedException();
-        }
-
+		
 		/* PROTECTED REGION END */
-		#endregion              
+		#endregion        
     }
 }
