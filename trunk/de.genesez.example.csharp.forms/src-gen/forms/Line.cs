@@ -45,7 +45,8 @@ namespace forms
 		{
 			/* PROTECTED REGION ID(java.moperation.implementation.operation.code._14_0_b6f02e1_1211871400078_573707_331) ENABLED START */
 			/* TODO put your own implementation code here */
-
+			this.start = start;
+			this.end = end;
 			/* PROTECTED REGION END */
 		}
 
@@ -54,23 +55,20 @@ namespace forms
 		#region Your Own Implementations
 		/* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._14_0_b6f02e1_1211871374078_396988_308) ENABLED START */
 		/* TODO put your own implementation code here */
-  
-        public void Move(double dx, double dy)
-                {
-                    throw new NotImplementedException();
-                }
 
-                public void Rotate(double phi)
-                {
-                    throw new NotImplementedException();
-                }
+		public void Move( double dx, double dy )
+		{
+			this.start.Move( dx, dy );
+			this.end.Move( dx, dy );
+		}
 
-                public void Rotate(double phi, double dx, double dy)
-                {
-                    throw new NotImplementedException();
-                }
-		
-        /* PROTECTED REGION END */
-		#endregion
+        public void Rotate(Point c, double phi)
+        {
+            this.start.Rotate(c, phi);
+            this.end.Rotate(c, phi);
+        }
+
+		/* PROTECTED REGION END */
+		#endregion        
     }
 }

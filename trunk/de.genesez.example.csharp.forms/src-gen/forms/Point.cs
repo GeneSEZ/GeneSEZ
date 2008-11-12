@@ -41,12 +41,12 @@ namespace forms
 		#endregion
 
 		#region Constructors
-		public Point()
+		public Point( double x,  double y )
 		{
 			/* PROTECTED REGION ID(java.moperation.implementation.operation.code._14_0_b6f02e1_1211871240109_473577_277) ENABLED START */
 			/* TODO put your own implementation code here */
-            this.x = 0.0;
-            this.y = 0.0;
+			this.x = x;
+			this.y = y;
 			/* PROTECTED REGION END */
 		}
 
@@ -56,22 +56,25 @@ namespace forms
 		/* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._14_0_b6f02e1_1211871095796_723781_254) ENABLED START */
 		/* TODO put your own implementation code here */
 
-        public void Move(double dx, double dy)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Rotate(double phi)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Rotate(double phi, double dx, double dy)
-        {
-            throw new NotImplementedException();
-        }
+		public void Move( double dx, double dy )
+		{
+			this.x += dx;
+			this.y += dy;
+		}
+        		
+        public void Rotate(Point c, double phi)
+		{
+			double phiAsRadian = (phi * Math.PI) / 180;
+			double tx = this.x - c.x;
+			double ty = this.y - c.y;
+			double h = Math.Sqrt( Math.Pow( tx, 2 ) + Math.Pow( ty, 2 ));
+			double dx = Math.Cos( phiAsRadian ) * h;
+			double dy = Math.Sin( phiAsRadian ) * h;
+			this.x = dx + c.x;
+			this.y = dy + c.y;
+		}
 
 		/* PROTECTED REGION END */
-		#endregion
+		#endregion        
     }
 }
