@@ -1,6 +1,5 @@
 package swing.simple;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -24,12 +23,6 @@ public class SimpleJFrameExample {
 		LayoutManager manager = new FlowLayout();
 		theFrame.setLayout(manager);
 
-		Icon icon1 = new ImageIcon(SimpleJFrameExample.class
-				.getResource("/images/smiley.jpeg"));
-		JButton button = new JButton();
-		button.setIcon(icon1);
-		theFrame.add(button);
-
 		// f.setLocation( 0, 0 );
 		// f.setSize( Toolkit.getDefaultToolkit().getScreenSize() );
 
@@ -38,16 +31,35 @@ public class SimpleJFrameExample {
 		uiDefaults.put("Label.font", ((Font) uiDefaults.get("Label.font"))
 				.deriveFont(25f));
 
-		JLabel label1 = new JLabel("Double-click me!", JLabel.RIGHT);
-		// label1.setForeground(Color.ORANGE);
-		// label1.setFont(new Font("Serif", Font.BOLD, 30));
+		// define a label and set some of its properties
+		final JLabel label1 = new JLabel("Double-click me!", JLabel.RIGHT);
+		label1.setForeground(Color.ORANGE);
+		label1.setFont(new Font("Serif", Font.BOLD, 30));
 		theFrame.add(label1);
 
+		// usage of icons
+		Icon icon1 = new ImageIcon(SimpleJFrameExample.class
+				.getResource("/images/smiley.jpeg"));
+		JButton button = new JButton();
+		button.setIcon(icon1);
+		theFrame.add(button);
+		
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() > 1)
 					System.exit(0);
+			}
+		});
+		
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e){
+				label1.setForeground(Color.BLUE);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				label1.setForeground(Color.ORANGE);
 			}
 		});
 
