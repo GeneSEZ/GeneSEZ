@@ -20,8 +20,7 @@ public class SimpleJFrameExample {
 		theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theFrame.setSize(500, 400);
 
-		LayoutManager manager = new FlowLayout();
-		theFrame.setLayout(manager);
+		theFrame.setLayout(new FlowLayout());
 
 //		theFrame.setLocation( 0, 0 );
 //		theFrame.setSize( Toolkit.getDefaultToolkit().getScreenSize() );
