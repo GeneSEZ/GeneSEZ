@@ -23,8 +23,8 @@ public class SimpleJFrameExample {
 		LayoutManager manager = new FlowLayout();
 		theFrame.setLayout(manager);
 
-		// f.setLocation( 0, 0 );
-		// f.setSize( Toolkit.getDefaultToolkit().getScreenSize() );
+//		theFrame.setLocation( 0, 0 );
+//		theFrame.setSize( Toolkit.getDefaultToolkit().getScreenSize() );
 
 		// set global font default for JLabel
 		UIDefaults uiDefaults = UIManager.getDefaults();
@@ -63,7 +63,7 @@ public class SimpleJFrameExample {
 			}
 		});
 
-		theFrame.pack();
+//		theFrame.pack();
 		theFrame.setVisible(true);
 	}
 }
