@@ -12,7 +12,7 @@ public class SwingWorkerDemo extends JFrame {
 
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new ClockPrecision().execute();
+				new NanoClock().execute();
 			}
 		};
 
@@ -21,7 +21,7 @@ public class SwingWorkerDemo extends JFrame {
 		pack();
 	}
 
-	class ClockPrecision extends SwingWorker<Long, Void> {
+	class NanoClock extends SwingWorker<Long, Void> {
 		@Override
 		public Long doInBackground() {
 			try {
