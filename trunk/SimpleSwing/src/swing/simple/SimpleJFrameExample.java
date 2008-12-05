@@ -22,8 +22,8 @@ public class SimpleJFrameExample {
 
 		theFrame.setLayout(new FlowLayout());
 
-//		theFrame.setLocation( 0, 0 );
-//		theFrame.setSize( Toolkit.getDefaultToolkit().getScreenSize() );
+		theFrame.setLocation( 0, 0 );
+		theFrame.setSize( Toolkit.getDefaultToolkit().getScreenSize() );
 
 		// set global font default for JLabel
 		UIDefaults uiDefaults = UIManager.getDefaults();
