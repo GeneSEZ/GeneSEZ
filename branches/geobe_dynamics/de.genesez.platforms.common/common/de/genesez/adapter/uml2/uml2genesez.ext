@@ -25,6 +25,8 @@ import gcore;
 // use logging
 extension de::genesez::platforms::common::log::Log;
 
+// create dynamic model
+extension de::genesez::adapter::uml2::uml2genesezdynamicmodel;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -167,24 +169,32 @@ private MClassifier transform(Classifier c, MModel this) :
  * @return	the transformed classifier
  */
 private MClassifier transform(Classifier c, MPackage this) :
-	trace( "transform [ " + c.metaType + " ] - " + c ) ->
+//	trace( "transform [ " + c.metaType + " ] - " + c ) ->
 	switch {
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
-		default : classifier.add( c.makeClassifier() )
+		default : ( let mc = c.makeClassifier() :
+					classifier.add( mc ) ->
+					c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(mc) : null
+				  )
 	} ->
 	this;
 
+private setOwnerIfPossible(MClassifier mc, MDefinitionContext ctx) :
+	trace("		owner of Classifier " + mc.name + " [" +  mc.metaType + "] is a " + ctx.metaType) ->
+	mc.setOwner(ctx)
+;
+
 /**
  * transforms the uml type into an GeneSEZ type
- * distincts uml types and determines the correct GeneSEZ type for an uml type 
+ * distincts uml types and determines the correct GeneSEZ type for an uml type
  * @context	an uml type to transform
  * @return	the transformed GeneSEZ type
  */
-private MType makeType(Type this) :
-	debug("transform [ " + metaType + " ] " + this) ->
-	trace("    isTemplateParameter: " + isTemplateParameter()) ->
-	trace("    isExternalType:      " + isExternalType()) ->
+MType makeType(Type this) :
+//	debug("transform [ " + metaType + " ] " + this) ->
+//	trace("    isTemplateParameter: " + isTemplateParameter()) ->
+//	trace("    isExternalType:      " + isExternalType()) ->
 	switch {
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
@@ -232,7 +242,7 @@ private create MPackage makePackage(Package p) :
  * @return	the GeneSEZ class
  */
 private create MClass makeClassifier(Class c) :
-	trace( "make [ " + metaType + " ] - " + c ) ->
+//	trace( "make [ " + metaType + " ] - " + c ) ->
 	// basic element properties
 	transformBasics(c) ->
 	// properties
@@ -241,6 +251,7 @@ private create MClass makeClassifier(Class c) :
 	setFinal( c.isLeaf ) ->
 	// transform classifier
 	transformClassifier(c) ->
+//	c.ownedBehavior.transformBehavior(this)->
 	this;
 	
 /**
@@ -249,7 +260,7 @@ private create MClass makeClassifier(Class c) :
  * @return	the GeneSEZ interface
  */
 private create MInterface makeClassifier(Interface i) :
-	trace( "make [ " + metaType + " ] - " + i ) ->
+//	trace( "make [ " + metaType + " ] - " + i ) ->
 	// basic element properties
 	transformBasics(i) ->
 	// properties
@@ -266,7 +277,7 @@ private create MInterface makeClassifier(Interface i) :
  * @return	the GeneSEZ enumeration
  */
 private create MEnumeration makeClassifier(Enumeration e) :
-	trace( "make [ " + metaType + " ] - " + e ) ->
+//	trace( "make [ " + metaType + " ] - " + e ) ->
 	// basic element properties
 	transformBasics(e) ->
 	// properties
@@ -284,7 +295,7 @@ private create MEnumeration makeClassifier(Enumeration e) :
  * @return	the GeneSEZ datatype
  */
 private create MDataType makeClassifier(DataType d) :
-	trace( "make [ " + metaType + " ] - " + d ) ->
+//	trace( "make [ " + metaType + " ] - " + d ) ->
 	// basic element properties
 	transformBasics(d) ->
 	// properties
@@ -591,7 +602,7 @@ private create MTag makeTag(Property p) :
  * @return	the GeneSEZ tagged value
  */
 private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
-	debug("make tagged value: " + o + ", tag: " + t.name) ->
+//	debug("make tagged value: " + o + ", tag: " + t.name) ->
 	setTag(t) ->
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
@@ -612,7 +623,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @return	a list of GeneSEZ tagged values
  */
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	debug("make tagged values: " + me.name + ", elem: " + e.toString()) ->
+//	debug("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
 		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
@@ -756,10 +767,10 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
  * @param	c	an uml named element
  * @return	the GeneSEZ element
  */
-private MElement transformBasics(MElement this, NamedElement n) :
+MElement transformBasics(MElement this, NamedElement n) :
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(n) ) ->
-	setName(n.name) ->
+	setName(n.name == null ? "" : n.name) ->
 	this;
 
 /*
@@ -818,7 +829,7 @@ private List[String] toList(String s) :
  * the name is derived from special type attributes
  * @return	the name of the GeneSEZ type
  */
-private String name(MType this) :
+String name(MType this) :
 	switch (metaType) {
 		case MGeneric : ((MGeneric)this).specification
 		case MExternal: ((MExternal)this).specification

@@ -15,6 +15,8 @@
 // based on genesez meta model
 import gcore;
 
+extension de::genesez::platforms::common::AccessHelper;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
@@ -121,14 +123,15 @@ String format(String this, String linePrefix, String lineSuffix) :
  * getter for the directory name of a classifier
  * @return	the name of the directory
  */
-String dirName(MClassifier this) : owningPackage.name;
+String dirName(MClassifier this) : 
+	nestingPackage().name;
 
 /**
  * getter for the path of a classifier based on it's namespace
  * @return	the path of the classifier
  */
 String dirPath(MClassifier this) :
-	owningPackage.fullQualifiedNameSep( fileSeparator() );
+	nestingPackage().fullQualifiedNameSep( fileSeparator() );
 
 /**
  * getter for the path of a classifier based on it's namespace
@@ -187,7 +190,7 @@ String filePath(MPackage this, String base) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String separator) : 
-	owningPackage.fullQualifiedNameSep(separator) + separator + name.toFirstUpper();
+	nestingPackage().fullQualifiedNameSep(separator) + separator + name.toFirstUpper();
 
 /**
  * getter for the full qualified name of a classifier based on it's namespace
@@ -196,7 +199,7 @@ String fullQualifiedNameSep(MClassifier this, String separator) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String separator) : 
-	owningPackage.fullQualifiedNameSep(separator) + separator + typename;
+	nestingPackage().fullQualifiedNameSep(separator) + separator + typename;
 
 /**
  * getter for the full qualified name of a classifier based on a base package and it's namespace
@@ -206,7 +209,7 @@ String fullQualifiedNameSep(MClassifier this, String typename, String separator)
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String base, String separator) : 
-	owningPackage.fullQualifiedNameSep(base, separator) + separator + typename;
+	nestingPackage().fullQualifiedNameSep(base, separator) + separator + typename;
 
 /**
  * getter for the full qualified name of a package
@@ -246,7 +249,7 @@ String fqn(MPackage this) :
  * getter for a human readable identifier for a classifier
  */
 String fqn(MClassifier this) :
-	owningPackage.fqn() + "::" + name;
+	nestingPackage().fqn() + "::" + name;
 
 /**
  * getter for a human readable identifier for an operation

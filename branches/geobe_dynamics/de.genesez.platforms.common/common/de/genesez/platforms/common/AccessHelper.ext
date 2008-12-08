@@ -1,5 +1,5 @@
 /**
- * Simplifies access to genesez models + makes working with the genesez metamodel more easier
+ * Simplifies access to genesez models + makes working with the genesez metamodel easier
  * 
  * currently covered:
  * - properties, attributes, association roles
@@ -543,9 +543,9 @@ MModel model(MOperation this) : classifier.model();
  * @return	the model element
  */
 MModel model(MClassifier this) :
-	owningPackage.metaType == MModel
-		? owningPackage
-		: owningPackage.getModel();
+	owningContext.metaType == MModel
+		? owningContext
+		: owningContext.model();
 
 /**
  * getter for the model element by using a package
@@ -554,7 +554,14 @@ MModel model(MClassifier this) :
 MModel model(MPackage this) :
 	metaType == MModel
 		? this
-		: nestingPackage.getModel();
+		: nestingPackage.model();
+
+/**
+ * getter for the model element by using a package
+ * @return	the model element
+ */
+MModel model(MDefinitionContext this) :
+	error("function 'model()' should be defined for all subtypes of MDefinitionContext");
 
 
 /**
@@ -563,9 +570,7 @@ MModel model(MPackage this) :
  * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MClassifier this) :
-	owningPackage.metaType == MModel
-		? owningPackage
-		: owningPackage.getModel();
+	model();
 
 /**
  * getter for the model element by using a package
@@ -573,9 +578,7 @@ MModel getModel(MClassifier this) :
  * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MPackage this) :
-	metaType == MModel
-		? this
-		: nestingPackage.getModel();
+	model();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -609,6 +612,15 @@ MClassifier getClassifier(MModel this, String fullQualifiedName) :
  */
 MPackage getPackage(MModel this, String fullQualifiedPackageName) :
 	getPackage(nestedPackage, fullQualifiedPackageName);
+
+/**
+ * getter for the package of a possibly nested classifier
+ * @return	the package
+ */
+MPackage nestingPackage(MClassifier this) :
+	owningContext.metaType == MPackage
+		? owningContext
+		: nestingPackage(((MClassifier)owningContext));
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

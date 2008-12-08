@@ -1,0 +1,465 @@
+/**
+ * UML 2 GeneSEZ transformation script.
+ * Transforms UML State Models models into GeneSEZ models.
+ * 
+ * @author	georg beier
+ */
+
+// uses ecore metamodel
+import ecore;
+// uses uml metamodel - the source metamodel
+import uml;
+// uses GeneSEZ metamodel - the target metamodel
+import gcore;
+
+// use logging
+extension de::genesez::platforms::common::log::Log;
+
+// access helper functions
+extension de::genesez::adapter::uml2::uml2genesez;
+
+/**
+ * create a GeneSEZ StateMachine from UML Behavior
+ * @param sm UML Behavior subclass StateMachine
+ * @context the Classifier that owns the behavior
+ * @return newly generated MStateMachine
+ */
+MStateMachine transformBehavior(StateMachine sm, MClassifier this):
+//	trace("transforming UML StateMachine for class " + name + " in package " + owningContext) ->
+	ownedBehavior.add(makeStateMachine(sm, this));
+
+/**
+ * create a GeneSEZ Activity from UML Behavior
+ * @param a UML Behavior subclass Activity
+ * @context the Classifier that owns the behavior
+ * @return newly generated MActivity
+ */
+MActivity transformBehavior(Activity a, MClassifier this):
+	info("transforming UML Activity for class " + name);
+
+/**
+ * create a GeneSEZ Activity from UML Behavior
+ * @param a UML Behavior subclass Activity
+ * @context the Package that owns the behavior
+ * @return newly generated MActivity
+ */
+MActivity transformBehavior(Activity a, MPackage this):
+	info("transforming UML unbound Activity");
+	
+/**
+ * create nothing, just catch unimplemented behavior
+ * @param a any UML Behavior subclass 
+ * @context any Context that owns the behavior
+ * @return null
+ */
+MActivity transformBehavior(Behavior a, MDefinitionContext this):
+	error("found unknown behaviour") ->
+	null;
+
+/**
+ * create StateMachine
+ * @param sm uml::StateMachine
+ * @context none
+ * @return new MStateMachine
+ */
+private create MStateMachine makeStateMachine(StateMachine sm, MDefinitionContext ctx) :
+	transformBasics(sm)->
+	ctx.ownedBehavior.add(this) ->
+	sm.region.transition.makeTransition(this) ->
+	displayStateMachine() ->
+	this;
+
+/**
+ * for debugging: trace this state machine element
+ */
+private displayStateMachine(MStateMachine msm) :
+	trace("StateMachine of " + msm.owningContext.name + " (" + msm.owningContext.metaType.toString() + ")") ->
+	msm.smstate.sortBy(e|e.name).displayState() ->
+	msm.smtransition.select(tr|tr.kind == 'ext').displayTransition("	")
+	;
+
+/**
+ * for debugging: trace this state machine element
+ */
+private displayState(MState mst) :
+	trace("	" + mst.name + " [" + 
+		(switch (mst.metaType) {
+			case gcore::MLeafState: 'L'
+			case MCompositeState: 'C'
+			case MInitialState: 'I'
+			case MFinalState: 'F'
+			case MHistoryState: 'H' + (((MHistoryState) mst).deep ? '*':'')
+			default: mst.metaType.toString()
+		}) + "]"
+	) ->
+	mst.entry != null ? trace("		entry/" + mst.entry.name) : null -> 
+	mst.exit != null ? trace("		exit/" + mst.exit.name) : null -> 
+	mst.do != null ? trace("		do/" + mst.do.name) : null -> 
+	mst.outgoing.select(tr|tr.kind != 'ext').displayTransition("		")
+	;
+
+/**
+ * for debugging: trace this state machine element
+ */
+private displayTransition(MTransition mtr, String ind) :
+	trace(ind + "[" + mtr.source.name + "]-- " +
+		(mtr.trigger.first() != null ? mtr.trigger.first().displayEvent() : '***') +
+		(mtr.guard != null ? mtr.guard.name : '') + (mtr.action != null ? "/" + mtr.action.name : '') +
+		" -->[" + mtr.target.name + "]")
+	;	
+
+/**
+ * for debugging: trace this state machine element
+ */
+private displayEvent(MEvent mev) :
+	mev.name + "(" + 
+	(mev.parameter.size > 0 ? mev.parameter.collect(e|' ' + e.name + ":" + e.type.name()) + ' ' : '')
+		.toString().replaceAll('[\\[\\]]', '') + ")";
+ 
+/**
+ * for debugging: trace this state machine element
+ */
+private displayEvent(MTimeEvent mev) :
+	(mev.isRelative? "after" : "at") + "(" + mev.when + "): " + mev.name;
+ 
+/**
+ * create the right kind of State
+ * @param  uml::State
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(State s, MStateMachine sm) :
+	switch {
+		case s.isComposite:
+			makeCompositeState(s, sm)
+		case s.isSimple:
+			makeLeafState(s, sm)
+		default:
+			error("unsupported State " + s)
+	};
+
+/**
+ * create the right kind of Pseudostate
+ * @param  uml::Pseudostate
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(Pseudostate ps, MStateMachine sm) :
+	switch {
+		case ps.kind.toString() == "initial":
+			makeInitialState(ps, sm)
+		case ps.kind.toString().endsWith("History"):
+			makeHistoryState(ps, sm)
+		default:
+			error("unsupported Pseudostate " + ps)
+	};
+	
+/**
+ * propagate to the referenced state
+ * @param  uml::ConnectionPointReference
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(Vertex v, MStateMachine sm) :
+	error("should never be called: " + v);
+
+/**
+ * propagate to the referenced state
+ * @param  uml::ConnectionPointReference
+ * @context none
+ * @return right kind of new MState 
+ */
+private MState makeState(ConnectionPointReference ref, MStateMachine sm) :
+	ref.state.makeState(sm);
+
+/**
+ * create Final State
+ * @param  uml::FinalState
+ * @context none
+ * @return new MLeafState 
+ */
+private create MFinalState makeState(FinalState s, MStateMachine sm) :
+ 	transformBasics(s) ->
+ 	sm.smstate.add(this) ->
+ 	setName(stateName(s, "_f")) ->
+ 	this;
+ 
+
+/**
+ * create Composite State 
+ * @param  uml::State
+ * @context none
+ * @return new MCompositeState
+ */
+private create MCompositeState makeCompositeState(State s, MStateMachine sm) :
+ 	transformBasics(s) ->
+ 	sm.smstate.add(this) ->
+ 	s.region.transition.makeTransition(sm) ->
+	linkActions(s, sm) ->
+ 	this;
+
+/**
+ * create Leaf State
+ * @param s uml::State
+ * @context none
+ * @return new MLeafState 
+ */
+private create MLeafState makeLeafState(State s, MStateMachine sm) :
+// 	debug("\t\t Leaf State " + s.name) ->
+ 	transformBasics(s) ->
+ 	sm.smstate.add(this) ->
+	linkActions(s, sm) ->
+ 	this;
+ 
+/**
+ * link actions into MState, creating them if not present 
+ * @param  gcore::MState
+ * @param  uml::State
+ * @param  gcore::MStateMachine	the owning state machine
+ * @context none
+ * @return new Metaobject
+ */
+private linkActions(MState ms, State s, MStateMachine sm) :
+ 	s.entry != null ? ms.setEntry(s.entry.makeActivity(sm)) : null ->
+ 	s.exit != null ? ms.setExit(s.exit.makeActivity(sm)) : null ->
+ 	s.doActivity != null ? ms.setDo(s.doActivity.makeActivity(sm)) : null ;
+ 
+ 
+/**
+ * create Initial State 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return new Metaobject
+ */
+ private create MInitialState makeInitialState(Pseudostate ps, MStateMachine sm) :
+// 	debug("\t\t Initial state " + ps.name) ->
+ 	transformBasics(ps) ->
+ 	sm.smstate.add(this) ->
+	setName(psName(ps, "_i")) ->
+ 	this;
+
+/**
+ * build a meaningful default name for an unnamed Pseudostate 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return name
+ */
+private String psName(Pseudostate ps, String prefix) :
+ 	ps.name == "" ?
+ 		prefix + 
+ 			(switch {
+ 				case ps.container.stateMachine != null:
+ 					ps.container.stateMachine.name
+ 				case ps.container.state != null:
+ 					ps.container.state.name
+ 				default:
+ 					error("free floating state " + ps)
+ 			}).toFirstUpper()
+ 		: ps.name; 
+
+/**
+ * build a meaningful default name for an unnamed Pseudostate 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return name
+ */
+private String stateName(State s, String prefix) :
+ 	s.name == "" ?
+ 		prefix + 
+ 			(switch {
+ 				case s.region.stateMachine != null:
+ 					s.region.stateMachine.name
+ 				case s.region.state != null:
+ 					s.region.state.name
+ 				default:
+ 					error("free floating state " + s)
+ 			}).toFirstUpper()
+ 		: s.name; 
+
+/**
+ * create History State 
+ * @param  uml::Pseudostate
+ * @context none
+ * @return new Metaobject 
+ */
+ private create MHistoryState makeHistoryState(Pseudostate ps, MStateMachine sm) :
+ 	transformBasics(ps) ->
+ 	sm.smstate.add(this) ->
+ 	setDeep(ps.kind.toString() == "deepHistory") ->
+	setName(psName(ps, "_h")) ->
+ 	this;
+ 
+ 
+/**
+ * create transition
+ * @param t uml::transition
+ * @param  gcore::MStateMachine	the owning state machine
+ * @context
+ * @return new Metaobject
+ */
+ private create MTransition makeTransition(Transition t, MStateMachine sm) :
+ 	transformBasics(t) ->
+ 	setKind(t.kind.toString().subString(0,3)) ->
+	setSource(makeState(t.source, sm)) ->
+	setTarget(makeState(t.target, sm)) ->
+	setName(kind + ": " + source.name + " -> " + target.name) ->
+	sm.smtransition.add(this) ->
+ 	t.effect != null ? setAction(t.effect.makeActivity(sm)): null ->
+ 	t.guard != null ? setGuard(t.guard.makeGuard(sm)) : null ->
+	t.trigger.event.isEmpty ? 
+		null : trigger.addAll(t.trigger.event.makeEvent(sm)) ->
+ 	this;
+ 
+/**
+ * create a new MActivity  
+ * @param b uml::Behavior, usually the Activity or Action linked to this transition
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context
+ * @return new Metaobject
+ */
+private create MActivity makeActivity(Behavior bh, MStateMachine sm) :
+	transformBasics(bh) ->
+//	debug("		activity: " + name) ->
+	sm.ownedBehavior.add(this) ->
+	this; 
+ 
+/**
+ * create a new MGuard  
+ * @param g uml::Constraint guard attached to transition
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context
+ * @return new Metaobject
+ */
+private create MGuard makeGuard(Constraint guard, MStateMachine sm) :
+	transformBasics(guard) ->
+	sm.guard.add(this) ->
+	setName(xtractValue(guard.specification)) ->
+	this; 
+	
+/**
+ * extract some meaningful specification string from a uml guard.specification
+ * @param ox uml::OpaqueExpression (a ValueSpecification subtype)
+ * @return specification string
+ */
+ private String xtractValue(OpaqueExpression ox) :
+ 	ox.body.toString()
+ 	;
+
+/**
+ * extract some meaningful specification string from a uml guard.specification
+ * @param vs uml::ValueSpecification subtype
+ * @return specification string
+ */
+ private String xtractValue(ValueSpecification vs) :
+ 	"cannot process ValueSpec of type " + vs.metaType.toString()
+ 	;
+
+/**
+ * create event
+ * @param s a uml::SignalEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeEvent(SignalEvent s, MStateMachine sm) :
+	transformBasics(s.signal) ->
+	sm.event.add(this) ->
+	setIsCall(false) ->
+	setIsChange(false) ->
+	parameter.addAll(s.signal.ownedAttribute.makeEventParameter()) ->
+	this;
+	
+/**
+ * create event
+ * @param s a uml::CallEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeEvent(CallEvent s, MStateMachine sm) :
+	transformBasics(s) ->
+	sm.event.add(this) ->
+	setIsCall(true) ->
+	setIsChange(false) ->
+	parameter.addAll(s.operation.ownedParameter.makeEventParameter()) ->
+	this;
+	
+/**
+ * create event
+ * @param s a uml::TimeEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MTimeEvent makeEvent(TimeEvent s, MStateMachine sm) :
+	transformBasics(s) ->
+	sm.event.add(this) ->
+	setIsCall(false) ->
+	setIsChange(false) ->
+	setIsRelative(s.isRelative) ->
+	setWhen(s.when.stringValue()) ->
+	this;
+	
+/**
+ * create event
+ * @param s a uml::ChangeEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeEvent(ChangeEvent s, MStateMachine sm) :
+	transformBasics(s) ->
+	sm.event.add(this) ->
+	setIsCall(false) ->
+	setIsChange(true) ->
+	setName(s.changeExpression.stringValue()) ->
+	this;
+	
+/**
+ * create event
+ * @param s a uml::SignalEvent
+ * @param sm gcore::MStateMachine	the owning state machine
+ * @context the owning state machine
+ * @return new MEvent
+ */
+private create MEvent makeEvent(Event s, MStateMachine sm) :
+	error("not supported kind of event: " + s.metaType + " for event " + s.name) ->
+	this;
+
+/**
+ * create Event Parameter
+ * @param p uml::Parameter
+ * @context nne
+ * @return new MEventParameter
+ */
+private create MEventParameter makeEventParameter(Parameter p) :
+	transformBasics(p) ->
+	setType(p.type.makeType()) ->
+	this;
+
+/**
+ * create Event Parameter
+ * @param p uml::Property
+ * @context nne
+ * @return new MEventParameter
+ */
+private create MEventParameter makeEventParameter(Property p) :
+	transformBasics(p) ->
+	setType(p.type.makeType()) ->
+	this;
+ 
+/**
+ * create 
+ * @param  
+ * @param  gcore::MStateMachine	the owning state machine
+ * @context
+ * @return 
+ */
+	/**
+ * create 
+ * @param  
+ * @param  gcore::MStateMachine	the owning state machine
+ * @context
+ * @return 
+ */
+	
