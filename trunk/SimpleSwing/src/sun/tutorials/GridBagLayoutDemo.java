@@ -41,7 +41,7 @@ import javax.swing.JFrame;
 
 public class GridBagLayoutDemo {
 	final static boolean shouldFill = true;
-	final static boolean shouldWeightX = true;
+	final static boolean shouldWeightX = false;
 	final static boolean RIGHT_TO_LEFT = false;
 
 	public static void addComponentsToPane(Container pane) {
@@ -75,7 +75,7 @@ public class GridBagLayoutDemo {
 
 		button = new JButton("Button 3");
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.5;
+		c.weightx = 1.0;
 		c.gridx = 2;
 		c.gridy = 0;
 		pane.add(button, c);
@@ -92,7 +92,7 @@ public class GridBagLayoutDemo {
 		button = new JButton("5");
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.ipady = 0; // reset to default
-		c.weighty = 1.0; // request any extra vertical space
+		c.weighty = 0.5; // request any extra vertical space
 		c.anchor = GridBagConstraints.PAGE_END; // bottom of space
 		c.insets = new Insets(10, 0, 0, 0); // top padding
 		c.gridx = 1; // aligned with button 2

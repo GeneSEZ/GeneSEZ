@@ -73,8 +73,8 @@ public class BorderLayoutDemo {
 		button = new JButton("5 (LINE_END)");
 		pane.add(button, BorderLayout.LINE_END);
 
-		// button = new JButton("6 (LINE_END)");
-		// pane.add(button, BorderLayout.LINE_END);
+		button = new JButton("6 (LINE_END)");
+		pane.add(button, BorderLayout.LINE_END);
 	}
 
 	/**
