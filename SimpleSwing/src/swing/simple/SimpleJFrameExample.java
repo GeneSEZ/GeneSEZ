@@ -22,8 +22,8 @@ public class SimpleJFrameExample {
 
 		theFrame.setLayout(new FlowLayout());
 
-		theFrame.setLocation( 0, 0 );
-		theFrame.setSize( Toolkit.getDefaultToolkit().getScreenSize() );
+//		theFrame.setLocation(0, 0);
+//		theFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 
 		// set global font default for JLabel
 		UIDefaults uiDefaults = UIManager.getDefaults();
@@ -43,6 +43,9 @@ public class SimpleJFrameExample {
 		button.setIcon(icon1);
 		theFrame.add(button);
 		
+		JButton button1 = new JButton("Just a Button");
+		theFrame.add(button1);
+
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -50,19 +53,45 @@ public class SimpleJFrameExample {
 					System.exit(0);
 			}
 		});
-		
+
 		button.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent e){
+			public void mouseEntered(MouseEvent e) {
 				label1.setForeground(Color.BLUE);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				label1.setForeground(Color.ORANGE);
 			}
 		});
 
-//		theFrame.pack();
+		// key bindings and actions
+		Action paintItGreenAction = new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				label1.setForeground(Color.GREEN);
+			}
+		};
+
+		Action paintItRedAction = new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				label1.setForeground(Color.RED);
+			}
+		};
+
+		
+		button.getInputMap().put(KeyStroke.getKeyStroke("F7"), "f7Pressed");
+		button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK),
+				"rAndCtrlPressed");
+		button.getActionMap().put("f7Pressed", paintItGreenAction);
+		button.getActionMap().put("rAndCtrlPressed", paintItRedAction);
+
+		theFrame.pack();
 		theFrame.setVisible(true);
 	}
 }

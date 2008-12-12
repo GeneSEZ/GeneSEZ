@@ -49,7 +49,7 @@ public class BoxLayoutDemo {
 
 		addAButton("Button 1", pane);
 		addAButton("Button 2", pane);
-		// pane.add(Box.createVerticalGlue());
+		pane.add(Box.createVerticalGlue());
 		addAButton("Button 3", pane);
 		addAButton("Long-Named Button 4", pane);
 		addAButton("5", pane);
