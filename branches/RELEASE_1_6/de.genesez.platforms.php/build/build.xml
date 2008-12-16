@@ -8,14 +8,17 @@
 			<isset property="build.basedir" />
 		</not>
 	</condition>
-	
+
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+
 	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
-	
+
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
-	
+
 	<!-- Public target section -->
-	
+
 	<target name="build"
 		description="Build de.genesez.platforms.php">
 	</target>
@@ -36,7 +39,7 @@
 			<fileset dir="${scaffold.dir}" />
 		</jar>
 	</target>
-	
+
 	<target name="clean"
 		description="Clean de.genesez.platforms.php">
 		<delete includeemptydirs="true" failonerror="false">
@@ -44,7 +47,7 @@
 			<fileset dir="${dist.dir}" includes="*.jar" />
 		</delete>
 	</target>
-	
+
 	<!-- Private target section -->
 
 </project>

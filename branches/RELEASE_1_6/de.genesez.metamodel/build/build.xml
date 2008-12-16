@@ -8,12 +8,15 @@
 			<isset property="build.basedir" />
 		</not>
 	</condition>
-	
+
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+
 	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
-	
+
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
-	
+
 	<!-- Set the classpath -->
 	<path id="de.genesez.metamodel.classpath">
 		<pathelement location="${bin.dir}" />
@@ -29,7 +32,7 @@
 		classpathref="de.genesez.metamodel.classpath" />
 
 	<!-- Public target section -->
-	
+
 	<target name="build"
 		description="Build de.genesez.metamodel"
 		depends="metamodel.compile">
@@ -77,7 +80,7 @@
 	</target>
 
 	<!-- Private target section -->
-	
+
 	<target name="metamodel.precompile"
 		description="Compiles required Java classes for transforming the metamodel">
 		<mkdir dir="${bin.dir}" />
@@ -88,7 +91,7 @@
 			<exclude name="de/genesez/metamodel/**/*"/>
 		</javac>
 	</target>
-	
+
 	<target name="metamodel.uml2ecore"
 		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI"
 		depends="metamodel.precompile" >
@@ -139,14 +142,14 @@
 			classpathref="de.genesez.metamodel.classpath"
 			debug="on" />
 	</target>
-	
+
 	<target name="metamodel.ecore2java.internal"
 		description=""
 		if="eclipse.running">
 		<echo>Eclipse is running...</echo>
 		<antcall target="metamodel.ecore2java" />
 	</target> 
-	
+
 	<target name="metamodel.ecore2java.external"
 		description=""
 		unless="eclipse.running">
