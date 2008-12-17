@@ -7,6 +7,7 @@
 
 	<!-- private targets -->
 
+	
 	<target name="checkout.all"
 		description="Checks out or update the projects from subversion repository">
 		<for list="${projects}" param="project">
@@ -24,19 +25,21 @@
 
 	<target name="tag.all"
 		description="Set the GENESEZ_RELEASE_VERSION in all projects">
-		<for list="${plugins}" param="project">
+		<for param="project">
+			<path refid="build.plugins" />
 			<sequential>
 				<replaceregexp byline="true"
-					file="${build.basedir}/${prefix}.@{project}/META-INF/MANIFEST.MF"
+					file="@{project}/META-INF/MANIFEST.MF"
 					match="Bundle-Version:.*"
 					replace="Bundle-Version: ${plugin.version}">
 				</replaceregexp>
 			</sequential>
 		</for>
-		<for list="${features}" param="project">
+		<for param="project">
+			<path refid="build.features" />
 			<sequential>
 				<replaceregexp byline="true"
-					file="${build.basedir}/${prefix}.@{project}/feature.xml"
+					file="@{project}/feature.xml"
 					match='(?&lt;!xml )version=".*"'
 					replace='version="${plugin.version}"'>
 				</replaceregexp>
@@ -54,10 +57,11 @@
 
 	<target name="build.all"
 		description="Runs the build targets for all plugins">
-		<for list="${plugins}" param="project">
+		<for param="project">
+			<path refid="build.projects" />
 			<sequential>
 				<ant antfile="${build.file}"
-					dir="${build.basedir}/${prefix}.@{project}"
+					dir="@{project}"
 					target="build"
 					inheritAll="false">
 					<property name="build.basedir" value="${build.basedir}" />
@@ -69,22 +73,12 @@
 
 	<target name="createjar.all"
 		description="Creates jar files for all plugins and features">
-		<for list="${plugins}" param="project">
+		<for param="project">
+			<path refid="build.projects" />
 			<sequential>
 				<ant antfile="${build.file}"
-					dir="${build.basedir}/${prefix}.@{project}"
+					dir="@{project}"
 					target="pluginjar"
-					inheritAll="false">
-					<property name="build.basedir" value="${build.basedir}" />
-					<property name="plugin.version" value="${plugin.version}"/>
-				</ant>
-			</sequential>
-		</for>
-		<for list="${features}" param="project">
-			<sequential>
-				<ant antfile="${build.file}"
-					dir="${build.basedir}/${prefix}.@{project}"
-					target="featurejar"
 					inheritAll="false">
 					<property name="build.basedir" value="${build.basedir}" />
 					<property name="plugin.version" value="${plugin.version}"/>
@@ -95,19 +89,21 @@
 
 	<target name="distribute.all"
 		description="Distributes plugins and features">
-		<for list="${plugins}" param="project">
+		<for param="project">
+			<path refid="build.plugins" />
 			<sequential>
 				<copy todir="${updatesite.plugins}">
-					<fileset dir="${build.basedir}/${prefix}.@{project}/dist">
+					<fileset dir="@{project}/dist">
 						<include name="*_${plugin.version}.jar"/>
 					</fileset>
 				</copy>
 			</sequential>
 		</for>
-		<for list="${features}" param="project">
+		<for param="project">
+			<path refid="build.features" />
 			<sequential>
 				<copy todir="${updatesite.features}">
-					<fileset dir="${build.basedir}/${prefix}.@{project}/dist">
+					<fileset dir="@{project}/dist">
 						<include name="*_${plugin.version}.jar"/>
 					</fileset>
 				</copy>
@@ -117,20 +113,11 @@
 
 	<target name="clean.all"
 		description="Cleaning lady">
-		<for list="${plugins}" param="project">
+		<for param="project">
+			<path refid="build.projects" />
 			<sequential>
 				<ant antfile="${build.file}"
-					dir="${build.basedir}/${prefix}.@{project}"
-					target="clean"
-					inheritAll="false">
-					<property name="build.basedir" value="${build.basedir}" />
-				</ant>
-			</sequential>
-		</for>
-		<for list="${features}" param="project">
-			<sequential>
-				<ant antfile="${build.file}"
-					dir="${build.basedir}/${prefix}.@{project}"
+					dir="@{project}"
 					target="clean"
 					inheritAll="false">
 					<property name="build.basedir" value="${build.basedir}" />

@@ -21,4 +21,27 @@
 	<property name="plugin.name" value="${project.name}_${plugin.version}"/>
 	<property name="plugin.jar" value="${plugin.name}.jar"/>
 
+	<path id="build.plugins">
+		<dirset dir="${build.basedir}">
+			<include name="*" />
+			<exclude name="${prefix}.build" />
+			<exclude name="${prefix}.feature" />
+			<exclude name="${prefix}.updatesite" />
+			<exclude name=".metadata" />
+			<exclude name="workspace" />
+		</dirset>
+	</path>
+
+	<path id="build.features">
+		<dirset dir="${build.basedir}">
+			<exclude name="*" />
+			<include name="${prefix}*feature" />
+		</dirset>
+	</path>
+
+	<path id="build.projects">
+		<path refid="build.features" />
+		<path refid="build.plugins" />
+	</path>
+
 </project>
