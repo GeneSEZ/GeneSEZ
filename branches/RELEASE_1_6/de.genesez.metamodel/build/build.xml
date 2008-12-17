@@ -42,7 +42,7 @@
 		description="Create the plugin jar for de.genesez.metamodel"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/${plugin.jar}"
+		<jar destfile="${dist.dir}/${pluginexecutable=.jar}"
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}">
@@ -95,15 +95,30 @@
 	<target name="metamodel.uml2ecore"
 		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI"
 		depends="metamodel.precompile" >
-		<java classname="org.openarchitectureware.workflow.WorkflowRunner"
-			classpathref="de.genesez.metamodel.classpath"
-			fork = "true"
-			dir="${basedir}">
-			<arg value="${oaw.workflow.file}" />
-			<arg value="-pbaseDir=${basedir}" />
-			<arg value="-pmagicdrawDir=${MAGICDRAW_DIR}" />
-			<arg value="--ant" />
-		</java>
+		<parallel>
+			<exec executable="${STARTPROC_BIN}" osfamily="unix">
+				<arg value="${XVFB_BIN}" />
+				<arg value=":1" />
+				<arg value="-screen" />
+				<arg value="0" />
+				<arg value="800x600x8" />
+			</exec>
+			<sequential>
+				<sleep seconds="5"/>
+				<java classname="org.openarchitectureware.workflow.WorkflowRunner"
+					classpathref="de.genesez.metamodel.classpath"
+					fork = "true"
+					dir="${basedir}">
+					<arg value="${oaw.workflow.file}" />
+					<arg value="-pbaseDir=${basedir}" />
+					<arg value="-pmagicdrawDir=${MAGICDRAW_DIR}" />
+					<arg value="--ant" />
+				</java>
+				<exec executable="${KILLPROC_BIN}" osfamily="unix">
+					<arg value="${XVFB_BIN}" />
+				</exec>
+			</sequential>
+		</parallel>
 		<!-- during a bug in the oAW ant task, this task is not used -->
 		<!-- oaw.workflow file="${oaw.workflow.file}"
 			classpathref="de.genesez.metamodel.classpath"
@@ -154,6 +169,7 @@
 		description=""
 		unless="eclipse.running">
 		<echo>Eclipse is not running...</echo>
+		<mkdir dir="${workspace.location}" />
 		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows">
 			<arg value="-noSplash" />
 			<arg value="-configuration" />
