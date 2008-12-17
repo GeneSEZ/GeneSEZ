@@ -9,6 +9,12 @@
 		</not>
 	</condition>
 
+	<condition property="build.display"
+		value="${env.DISPLAY}"
+		else=":1">
+		<isset property="${env.DISPLAY}" />
+	</condition>
+
 	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
 	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
 
@@ -92,32 +98,40 @@
 		</javac>
 	</target>
 
+	<target name="metamodel.uml2ecore.startx" unless="env.DISPLAY">
+		<exec executable="${STARTPROC_BIN}" osfamily="unix">
+			<arg value="${XVFB_BIN}" />
+			<arg value="${build.display}" />
+			<arg value="-screen" />
+			<arg value="0" />
+			<arg value="800x600x8" />
+		</exec>
+	</target>
+
+	<target name="metamodel.uml2ecore.endx" unless="env.DISPLAY">
+		<exec executable="${KILLPROC_BIN}" osfamily="unix">
+			<arg value="${XVFB_BIN}" />
+		</exec>
+	</target>
+
 	<target name="metamodel.uml2ecore"
 		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI"
-		depends="metamodel.precompile" >
+		depends="metamodel.precompile">
 		<parallel>
-			<exec executable="${STARTPROC_BIN}" osfamily="unix">
-				<arg value="${XVFB_BIN}" />
-				<arg value=":1" />
-				<arg value="-screen" />
-				<arg value="0" />
-				<arg value="800x600x8" />
-			</exec>
+			<antcall target="metamodel.uml2ecore.startx" />
 			<sequential>
-				<sleep seconds="5"/>
+				<sleep seconds="5" />
 				<java classname="org.openarchitectureware.workflow.WorkflowRunner"
 					classpathref="de.genesez.metamodel.classpath"
 					fork = "true"
 					dir="${basedir}">
-					<env key="DISPLAY" value=":1" />
+					<env key="DISPLAY" value="${build.display}" />
 					<arg value="${oaw.workflow.file}" />
 					<arg value="-pbaseDir=${basedir}" />
 					<arg value="-pmagicdrawDir=${MAGICDRAW_DIR}" />
 					<arg value="--ant" />
 				</java>
-				<exec executable="${KILLPROC_BIN}" osfamily="unix">
-					<arg value="${XVFB_BIN}" />
-				</exec>
+				<antcall target="metamodel.uml2ecore.endx" />
 			</sequential>
 		</parallel>
 		<!-- during a bug in the oAW ant task, this task is not used -->
