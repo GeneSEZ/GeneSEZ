@@ -5,9 +5,12 @@
 
 	<!-- Append the build number when running under cruise control -->
 	<if>
-		<isset property="label" />
+		<and>
+			<isset property="label" />
+			<not><isset property="build.number" /></not>
+		</and>
 		<then>
-			<buildnumber/>
+			<buildnumber file="${build.basedir}/build.number" />
 		</then>
 	</if>
 
