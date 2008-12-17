@@ -9,16 +9,16 @@
 		</not>
 	</condition>
 
-	<condition property="build.display"
-		value="${env.DISPLAY}"
-		else=":1">
-		<isset property="${env.DISPLAY}" />
-	</condition>
-
 	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
 	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
 
 	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+
+	<condition property="build.display"
+		value="${env.DISPLAY}"
+		else=":1">
+		<isset property="env.DISPLAY" />
+	</condition>
 
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
