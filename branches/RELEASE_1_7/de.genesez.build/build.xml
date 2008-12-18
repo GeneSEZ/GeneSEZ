@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.build" basedir="." default="all">
+
+	<!-- is build local or on cruisecontrol -->
+	<!-- cruisecontrol uses label for the build id -->
+	<condition property="build.targets"
+		value="build/targets-cruisecontrol.xml"
+		else="build/targets-local.xml">
+		<isset property="label" />
+	</condition>
+
+	<import file="${build.targets}" />
+
+</project>
