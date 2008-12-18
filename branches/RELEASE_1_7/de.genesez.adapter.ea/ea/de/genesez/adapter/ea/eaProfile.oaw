@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+
+	<!-- 
+		export an Enterprise Architect model into an UML profile
+		
+		following parameters are required:
+		==================================
+		
+		$profile_file		name of the xmi output file
+		$profile_model		name of the model containing the profile
+		$profile_package	name of the package containing the profile	
+		$profile_repository	name of the ea repository file
+	 -->
+
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+
+	<property name="profile_model_slot" value="de_genesez_adapter_ea_profile_model" />
+	<property name="profile_package_slot" value="de_genesez_adapter_ea_profile_package" />
+	<property name="profile_uml_slot" value="de_genesez_adapter_ea_profile_uml" />
+	<property name="profile_resource_slot" value="de_genesez_adapter_ea_profile_resource" />
+	
+	<component class="de.genesez.adapter.ea.RepositoryReader">
+		<repositoryFile value="${profile_repository}" />
+		<modelName value="${profile_model}" />
+		<outputSlot value="${profile_model_slot}" />
+	</component>
+
+	<component class="de.genesez.adapter.ea.PackageFinder">
+		<inputSlot value="${profile_model_slot}" />
+		<outputSlot value="${profile_package_slot}" />
+		<packagePath value="${profile_package}" />
+	</component>
+
+	<component class="de.genesez.adapter.ea.Profile2UML">
+		<inputSlot value="${profile_package_slot}" />
+		<outputSlot value="${profile_uml_slot}" />
+	</component>
+
+	<component class="de.genesez.adapter.ea.XmiWriter">
+		<inputSlot value="${profile_uml_slot}" />
+		<resourceSlot value="${profile_resource_slot}" />
+		<xmiFile value="${profile_file}" />
+	</component>
+
+</workflow>
