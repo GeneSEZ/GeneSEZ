@@ -8,26 +8,29 @@
 			<isset property="build.basedir" />
 		</not>
 	</condition>
-	
+
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+
 	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
-	
+
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
-	
+
 	<!-- Set the classpath -->
 	<path id="de.genesez.platforms.qftest.classpath">
 		<pathelement path="${build.basedir}/de.genesez.testing/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath"/>
 	</path>
-
-	<!-- Public target section -->
 	
+	<!-- Public target section -->
+
 	<target name="build"
 		description="Build de.genesez.platforms.qftest"
 		depends="platforms.qftest.compile">
 	</target>
-	
-	<target name="pluginjar"
+
+	<target name="createjar"
 		description="Create the plugin jar for de.genesez.platforms.qftest"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
@@ -38,7 +41,7 @@
 			<fileset dir="${qftest.dir}" includes="**/*" />
 		</jar>
 	</target>
-	
+
 	<target name="clean"
 		description="Clean de.genesez.platforms.qftest">
 		<delete includeemptydirs="true" failonerror="false">
@@ -46,9 +49,9 @@
 			<fileset dir="${dist.dir}" includes="*.jar" />
 		</delete>
 	</target>
-	
+
 	<!-- Private target section -->
-	
+
 	<target name="platforms.qftest.compile">
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 

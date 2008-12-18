@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.build.common" basedir=".">
+
+	<!-- import environment and required scripts -->
+	<import file="imports.xml"/>
+
+	<!-- private targets -->
+
+	<target name="tag.all"
+		description="Set the GENESEZ_RELEASE_VERSION in all projects">
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<replaceregexp byline="true"
+					file="@{project}/META-INF/MANIFEST.MF"
+					match="Bundle-Version:.*"
+					replace="Bundle-Version: ${plugin.version}">
+				</replaceregexp>
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<replaceregexp byline="true"
+					file="@{project}/feature.xml"
+					match='(?&lt;!xml )version=".*"'
+					replace='version="${plugin.version}"'>
+				</replaceregexp>
+			</sequential>
+		</for>
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match='(?&lt;!xml )version=".*"'
+			replace='version="${plugin.version}"' />
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match="feature_(\d|\.)*.jar"
+			replace="feature_${plugin.version}.jar" />
+	</target>
+
+	<target name="build.all"
+		description="Runs the build targets for all plugins">
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="@{project}"
+					target="build"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+					<property name="build.number" value="${build.number}" />
+					<property name="plugin.version" value="${plugin.version}"/>
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="createjar.all"
+		description="Creates jar files for all plugins and features">
+		<for param="project">
+			<path refid="build.projects" />
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="@{project}"
+					target="createjar"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+					<property name="build.number" value="${build.number}" />
+					<property name="plugin.version" value="${plugin.version}"/>
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="distribute.all"
+		description="Distributes plugins and features">
+		<for param="project">
+			<path refid="build.projects" />
+			<sequential>
+				<copy todir="${updatesite.plugins}">
+					<fileset dir="@{project}/dist">
+						<include name="*_${plugin.version}.jar"/>
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="clean.all"
+		description="Cleaning lady">
+		<for param="project">
+			<path refid="build.projects" />
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="@{project}"
+					target="clean"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+					<property name="build.number" value="${build.number}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+</project>
