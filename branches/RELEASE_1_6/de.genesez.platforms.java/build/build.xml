@@ -20,9 +20,8 @@
 	<!-- Set the classpath -->
 	<path id="de.genesez.platforms.java.classpath">
 		<pathelement path="${build.basedir}/de.genesez.platforms.common/${bin.dir}" />
-		<path refid="Plug-in Dependencies.libraryclasspath"/>
+		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
-
 	
 	<!-- Public target section -->
 
@@ -31,13 +30,14 @@
 		depends="platforms.java.compile" >
 	</target>
 
-	<target name="pluginjar"
+	<target name="createjar"
 		description="Create the plugin jar for de.genesez.platforms.java"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}" includes="${project.name}.umlsupport.jar" />
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${java.dir}" />
 			<fileset dir="${java4.dir}" />
@@ -62,14 +62,9 @@
 			destdir="${bin.dir}"
 			classpathref="de.genesez.platforms.java.classpath"
 			debug="on" />
-	</target>
-
-	<target name="association.handling.jar"
-			description="creates the jar library, needed for projects using the association handling of the java platform"
-			depends="build">
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/de.genesez.platforms.java.umlsupport.jar"
-				compress="true">
+		<jar destfile="${dist.dir}/${project.name}.umlsupport.jar"
+			compress="true">
 			<fileset dir="${bin.dir}">
 				<include name="de/genesez/platforms/java/umlsupport/**/*" />
 			</fileset>

@@ -59,24 +59,11 @@
 	<target name="createjar.all"
 		description="Creates jar files for all plugins and features">
 		<for param="project">
-			<path refid="build.plugins" />
+			<path refid="build.projects" />
 			<sequential>
 				<ant antfile="${build.file}"
 					dir="@{project}"
-					target="pluginjar"
-					inheritAll="false">
-					<property name="build.basedir" value="${build.basedir}" />
-					<property name="build.number" value="${build.number}" />
-					<property name="plugin.version" value="${plugin.version}"/>
-				</ant>
-			</sequential>
-		</for>
-		<for param="project">
-			<path refid="build.features" />
-			<sequential>
-				<ant antfile="${build.file}"
-					dir="@{project}"
-					target="featurejar"
+					target="createjar"
 					inheritAll="false">
 					<property name="build.basedir" value="${build.basedir}" />
 					<property name="build.number" value="${build.number}" />
