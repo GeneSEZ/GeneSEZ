@@ -1,0 +1,121 @@
+«REM»
+	Performs the generation of classes
+	
+	currently handled:
+	- extends, implements
+	- attributes
+	- operations
+	- associations
+	- comments
+	
+	@author	tobias haubold
+	@date	2008-03-27
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use php naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes a class
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«EXPAND Comment::Type -»
+«EXPAND _Modifier -»class «asTypeName()» «EXPAND _Generalization -» «EXPAND _Realization -» {
+	
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+	// -- generated attribute, constant + association declarations ----------
+	«ENDIF -»
+	«EXPAND Attribute::Declaration -»
+	«EXPAND Association::Declaration -»
+	
+	«IF generateSectionComments() && ( hasConstructors() || hasDestructors() ) -»
+	// -- constructors + destructors ----------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Constructor -»
+	«EXPAND Operation::Destructor -»
+	
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
+	// -- method declarations -----------------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Declaration -»
+	
+	«IF generateSectionComments() && ( hasOperations() ) -»
+	// -- method implementations --------------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Implementation -»
+	
+	«IF generateSectionComments() && ( hasDerivedAttributes() ) -»
+	// -- methods for derived attributes ------------------------------------
+	«ENDIF -»
+	«EXPAND Attribute::Derived -»
+	
+	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
+	// -- association + attribute accessors ---------------------------------
+	«ENDIF -»
+	«EXPAND Association::Accessors -»
+	«EXPAND Attribute::Accessors -»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND _OwnCodeImpl("php.class.own.code.implementation." + xmiGuid) -»
+}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the modifiers of a class
+	a class can be either abstract or final, not both!
+«ENDREM»
+«DEFINE _Modifier FOR MClass -»
+«IF abstract»abstract «ELSEIF final»final «ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the generalization of a class
+	only single inheritance is allowed
+«ENDREM»
+«DEFINE _Generalization FOR MClass -»
+«IF !generalization.isEmpty -»
+extends «generalization.first().mapName().asTypeName() -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the realizations of a class
+«ENDREM»
+«DEFINE _Realization FOR MClass -»
+«IF !realization.isEmpty -»
+implements «FOREACH realization AS r SEPARATOR ", " -»«r.mapName().asTypeName()»«ENDFOREACH -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates a region for own code implementations
+	@param	id	protected region id
+«ENDREM»
+«DEFINE _OwnCodeImpl(String id) FOR MClass -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further code implementations for class '«asTypeName()»' here
+	«ENDPROTECT»
+«ENDDEFINE»

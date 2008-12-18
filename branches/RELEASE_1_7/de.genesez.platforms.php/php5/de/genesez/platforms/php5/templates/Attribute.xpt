@@ -1,0 +1,189 @@
+«REM»
+	Handles everything about attriutes.
+	
+	currently implemented:
+	- constants
+	- static, normal attributes
+	- derived attributes
+	- getter + setter
+	- insertIn + removeFrom with plain arrays
+	- multiplicity
+	- comment support
+	
+	@author	tobias haubold
+	@date	2008-03-27
+	@todo	revise default return value for derived attributes accessor methods (default value from typemapping xml)
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the attributes of a classifier
+	order: constants, static, non static
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Const FOREACH property.typeSelect(MAttribute).select( e| e.final && e.static && e.hasDefaultValue() ) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && !e.final && !e.derived ) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| !e.static && !e.final && !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the derived attributes of a classifier
+	order: static, non static
+«ENDREM»
+«DEFINE Derived FOR MClass -»
+	«EXPAND _Derived FOREACH property.typeSelect(MAttribute).select( e| e.static && e.derived ) -»
+	«EXPAND _Derived FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the accessors for attributes of a classifier
+«ENDREM»
+«DEFINE Accessors FOR MClass -»
+	«FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS p -»
+		«EXPAND _Getter FOR p -»
+		«EXPAND _Setter FOR p -»
+		«EXPAND _InsertIn FOR p -»
+		«EXPAND _RemoveFrom FOR p -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an attribute declaration as a class constant
+«ENDREM»
+«DEFINE _Const FOR MAttribute -»
+	«EXPAND Comment::Attribute -»
+	const «asConstant()» «EXPAND _DefaultValue -»;
+«ENDDEFINE»
+
+«REM»
+	generates an attribute declaration
+«ENDREM»
+«DEFINE _Declaration FOR MAttribute -»
+	«EXPAND Comment::Attribute -»
+	«EXPAND _Modifier» $«asAttribute()»«EXPAND _DefaultValue -»;
+«ENDDEFINE»
+
+«REM»
+	generates the accessor method for an derived attribute
+«ENDREM»
+«DEFINE _Derived FOR MAttribute -»
+	«EXPAND Comment::Getter -»
+	«EXPAND _ModifierAccessor -» function «asGetter()»() {
+		$returnValue = NULL;
+		«EXPAND _OwnCodeImpl("php.derived.attribute.implementation." + xmiGuid) -»
+		return returnValue;
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the getter method for an attribute
+«ENDREM»
+«DEFINE _Getter FOR MAttribute -»
+	«EXPAND Comment::Getter -»
+	«EXPAND _ModifierAccessor -» function «asGetter()»() {
+	«IF isSingleValuedType() -»
+		return $this->«asAttribute()»;
+	«ELSE -»
+		return array_values($this->«asAttribute()»);
+	«ENDIF -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the setter method for an attribute, if the attribut has a simple type
+«ENDREM»
+«DEFINE _Setter FOR MAttribute -»
+«IF isSingleValuedType() -»
+	«EXPAND Comment::Setter -»
+	«EXPAND _ModifierAccessor -» function «asSetter()»($«asAttribute()») {
+		$this->«asAttribute()» = $«asAttribute()»;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the insert in method for an attribute with a collection type
+«ENDREM»
+«DEFINE _InsertIn FOR MAttribute -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::InsertIn -»
+	«EXPAND _ModifierAccessor -» function «asInsertIn()»($toAdd) {
+		$this->«asAttribute()»[] = $toAdd;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the remove from method for an attribute with a collection type
+«ENDREM»
+«DEFINE _RemoveFrom FOR MAttribute -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::RemoveFrom -»
+	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»($toRemove) {
+		$entry = array_search($toRemove, $«asAttribute()»);
+		if ($entry !== FALSE) {
+			unset($this->«asAttribute()»[$entry]);
+		}
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the modifiers of an attribute
+«ENDREM»
+«DEFINE _Modifier FOR MAttribute -»
+	private«IF static» static«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the modifiers of an attribute accessor method
+«ENDREM»
+«DEFINE _ModifierAccessor FOR MAttribute -»
+	«IF usePropertyVisibilityForAccessors() -»
+	«visibility» «IF static»static«ENDIF -»
+	«ELSE -»
+	public «IF static»static«ENDIF -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	processes the default value of an attribute
+«ENDREM»
+«DEFINE _DefaultValue FOR MAttribute -»
+«IF hasDefaultValue() -» = «defaultvalue -»
+«ELSEIF isMultiValuedType() -» = array()«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the protected region of an operation
+	@param	id	protected region id
+«ENDREM»
+«DEFINE _OwnCodeImpl(String s) FOR MAttribute -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (s)»
+		// TODO: implementation of method '«classifier.asTypeName()».«asGetter()»(...)'
+		«ENDPROTECT»
+«ENDDEFINE»
