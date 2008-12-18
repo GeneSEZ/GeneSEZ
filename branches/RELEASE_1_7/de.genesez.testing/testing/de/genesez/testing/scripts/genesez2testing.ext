@@ -1,0 +1,192 @@
+/**
+ * GeneSEZ 2 Testing transformation script.
+ * Transforms GeneSEZ Generator models into GeneSEZ Testing models.
+ */
+
+// uses ecore metamodel
+import ecore;
+// uses GeneSEZ metamodel - the source metamodel
+import gcore;
+// uses GeneSEZ Testing metamodel - the target metamodel
+import gtesting;
+
+// use logging
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::testing::scripts::Helper;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	parameters passed to the transformation
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * the model is passed in as a global variable
+ * @return	the genesez model
+ */
+private MModel getGenesezModel() : GLOBALVAR genesezmodel;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend function to transform a uml2 model
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * transforms a GeneSEZ model to a GeneSEZ testing model
+ * @param	m	an GeneSEZ model to transform
+ * @return	the newly created GeneSEZ Testing model
+ */
+TModel transform(MModel m) :
+	useLogger("de.genesez.testing") ->
+	trace("transforming " + m.metaType + ", " + m.name) ->
+	makeModel(m);
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend function to transform a uml2 model
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * creates a GeneSEZ Testing model
+ * @param	m	a GeneSEZ model
+ * @return	the GeneSEZ Testing model
+ */
+private create TModel makeModel(MModel m) :
+	trace("creating " + metaType + " for " + m.name) ->
+	transformBasics(m) ->
+	nestedPackages.addAll(
+		m.nestedPackage.makePackage()
+		) ->
+	this;
+
+/**
+ * creates a GeneSEZ Testing package
+ * @param	m	a GeneSEZ package
+ * @return	the GeneSEZ Testing package
+ */
+private create TPackage makePackage(MPackage m) :
+	trace("creating " + metaType + " for " + m.name) ->
+	transformBasics(m) ->
+	testsuites.addAll(
+		m.classifier.typeSelect(MUseCase)
+		makeTestSuite()
+		) ->
+	this;
+
+/**
+ * creates a GeneSEZ TestSuite
+ * @param	m	a GeneSEZ usecase
+ * @return	the GeneSEZ TestSuite
+ */
+private create TTestSuite makeTestSuite(MUseCase m) : 
+	trace("creating " + metaType + " for " + m.name) ->
+	transformBasics(m) ->
+	testcases.addAll(
+		m.ownedBehavior.typeSelect(MActivity).
+		select(e|e.hasStereotype("testCase") ).
+		makeTestCase()
+		) ->
+	this;
+
+/**
+ * creates a GeneSEZ TestCase
+ * @param	m	a GeneSEZ activity
+ * @return	the GeneSEZ TestCase
+ */
+private create TTestCase makeTestCase(MActivity m) : 
+	trace("creating " + metaType + " for " + m.name) ->
+	transformBasics(m) ->
+	this;
+
+/**
+ * creates a GeneSEZ Input
+ * @param	m	a GeneSEZ action
+ * @return	the GeneSEZ Input
+ */
+private create TEnter makeInput(MAction m) :
+	trace("creating " + metaType + " for " + m.name) ->
+	transformBasics(m) ->
+	this;
+
+/**
+ * creates a GeneSEZ Key Event 
+ * @param	m	a GeneSEZ action
+ * @return	the GeneSEZ Key Event
+ */
+private create TKey makeKeyEvent(MAction m) :
+	trace("creating " + metaType + " for " + m.name) ->
+	transformBasics(m) ->
+	trace( m.taggedValue.select(e|e.tag.name == "key").first().value ) ->
+	setKeycode( m.taggedValue.select(e|e.tag.name == "key").first().value.asInteger() ) ->
+	this;
+
+/**
+ * creates a GeneSEZ Mouse Event 
+ * @param	m	a GeneSEZ action
+ * @return	the GeneSEZ Mouse Event
+ */
+private create TClick makeMouseEvent(MAction m) :
+	trace("creating " + metaType + " for " + m.name) ->
+	transformBasics(m) ->
+	trace( m.taggedValue.select(e|e.tag.name == "clicks").first().value ) ->
+	setClicks( m.taggedValue.select(e|e.tag.name == "clicks").first().value.asInteger() ) ->
+	trace( m.taggedValue.select(e|e.tag.name == "button").first().value ) ->
+//	setButton( TMouseButton.getStaticProperty( m.taggedValue.select(e|e.tag.name == "button").first().value ) ) ->
+	this;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	property copy helpers
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * processes the basic transformation of an GeneSEZ element to a GeneSEZ Testing element
+ * @param	m	a GeneSEZelement
+ * @return	the GeneSEZ Testing element
+ */
+private TElement transformBasics(TElement this, MElement m) :
+	// set the unique xmiId and name
+	setXmiGuid( m.xmiGuid ) ->
+	setName( m.name ) ->
+	this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	dummy functions to prevent editor errors
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * just a marker for error free templates
+ * prints a 'severe' log message to report such an transformation
+ * @return	void
+ */
+private TEnter makeEnter(MNode m) :
+	fatal("try to construct a TEnter object from: " + m) ->
+	Void;
+
+/**
+ * just a marker for error free templates
+ * prints a 'severe' log message to report such an transformation
+ * @return	void
+ */
+private TKey makeKey(MNode m) :
+	fatal("try to construct a TKey object from: " + m) ->
+	Void;
+
+/**
+ * just a marker for error free templates
+ * prints a 'severe' log message to report such an transformation
+ * @return	void
+ */
+private TClick makeClick(MNode m) :
+	fatal("try to construct a TClick object from: " + m) ->
+	Void;
