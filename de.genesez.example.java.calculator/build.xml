@@ -1,0 +1,27 @@
+<!--
+	ant build file for generating api-doc
+-->
+
+<project name="de.genesez.example.java.calculator" basedir="." default="doc">
+	
+	<property name="src.dir" value="src" />
+	<property name="src-gen.dir" value="src-gen" />
+	<property name="api-doc.dir" value="dist/api-doc" />
+	
+	<!--
+		generates the api doc using javadoc
+	-->
+	<target name="doc">
+		<javadoc destdir="${api-doc.dir}" author="true" version="true" use="true" private="true">
+			<sourcefiles>
+				<fileset dir="${src.dir}">
+					<include name="**/*.java" />
+				</fileset>
+				<fileset dir="${src-gen.dir}">
+					<include name="**/*.java" />
+				</fileset>
+			</sourcefiles>
+			<tag name="generated" scope="all" description="Generated:"/>
+		</javadoc>
+	</target>
+</project>
