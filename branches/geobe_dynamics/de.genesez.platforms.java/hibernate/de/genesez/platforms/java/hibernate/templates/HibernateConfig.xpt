@@ -1,9 +1,10 @@
 «REM» templates for hibernate mapping «ENDREM»
 
 «REM» import code gen meta model «ENDREM»
-«IMPORT genesezMM»
+«IMPORT gcore»
 
-«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::hibernate::scripts::HibernateHelper»
 
@@ -51,7 +52,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<hibernate-mapping package="«owningPackage.getFullQualifiedName()»">
+<hibernate-mapping package="«((MPackage)owningContext).packageDeclaration()»">
 	<class name="«name»" table="T_«name»">
 		«EXPAND _PersistAttributes»
 		«EXPAND _PlainAttributes»

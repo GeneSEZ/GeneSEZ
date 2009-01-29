@@ -152,6 +152,8 @@
 «IF hasDefaultValue() -»
 	«IF type.isEnumeration() -»
 	 = «type.mapName().asTypeName()».«defaultvalue.asEnumLiteral() -»
+	«ELSEIF type.isExternalType() || type.isDataType() -»
+	 = new «type.mapName().asTypeName()»(«defaultvalue»)
 	«ELSE -»
 	 = «defaultvalue -»
 	«ENDIF -»
@@ -159,7 +161,7 @@
 	«IF usePrimitiveType() && !hasFixedMultiplicity() -»
 	 = null
 	«ELSEIF usePrimitiveType() && hasFixedMultiplicity() -»
-	 = new «type.mapName().asTypeName()»[«multiplicity»];
+	 = new «type.mapName().asTypeName()»[«multiplicity»]
 	«ELSEIF type.isPrimitiveType() -»
 	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::Generics FOR type»>()
 	«ELSE -»
