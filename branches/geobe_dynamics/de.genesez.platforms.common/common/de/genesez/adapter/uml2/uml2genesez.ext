@@ -470,6 +470,7 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	// properties
 	setVisibility( aend.visibility.toString() ) ->
 	setMultiplicity( aend.getUpper() ) ->
+	setSourceMultiplicity(aend.sourceMultiplicity()) ->
 	setDerived( aend.isDerived ) ->
 	// unique
 	// ordered
@@ -499,6 +500,17 @@ private MAssociation linkEnds(MAssociation ma) :
 				ma
 			)
 			: ma;
+
+/**
+ * find the multiplicity of the other end of an association from the uml model
+ * @param aend uml association end property
+ */
+ private Integer sourceMultiplicity(Property aend) :
+ 	aend.opposite != null ?
+ 		aend.opposite.getUpper() :
+ 		aend.association.memberEnd.reject(e|e == aend).first().getUpper()
+ 	;
+
 
 /**
  * it's just there for error free templates
@@ -558,7 +570,7 @@ private MClass assocEndClass(Property a):
  * @param	s	an uml stereotype
  * @return	the GeneSEZ stereotype
  */
-private create MStereotype makeStereotype(Stereotype s) :
+create MStereotype makeStereotype(Stereotype s) :
 	// basic element properties
 	transformBasics(s) ->
 	// container
@@ -617,7 +629,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @param	e	the uml element
  * @return	a list of GeneSEZ tagged values
  */
-private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
+List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 //	debug("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
@@ -707,7 +719,7 @@ private create MPrimitiveType makePrimitiveType(Void v) :
  * @param	c	an uml comment
  * @return	the GeneSEZ comment
  */
-private create MComment makeComment(Comment c) :
+create MComment makeComment(Comment c) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c)) ->
 	setAnnotation(c.body) ->
@@ -830,6 +842,7 @@ String name(MType this) :
 		case MExternal: ((MExternal)this).specification
 		case MPrimitiveType : ((MPrimitiveType)this).name
 		case MClassifier : ((MClassifier)this).name
+		case MEnumeration : ((MClassifier)this).name
 		default : fatal("cannot determine name of type from object: " + metaType)
 	};
 
