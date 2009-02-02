@@ -48,7 +48,7 @@
 	private StateId currentState = StateId.«startupState().name»;
 «ENDDEFINE»
 
-«DEFINE _EventIds FOR MStateMachine -»
+«DEFINE _EventIds FOR MStateMachine -» 
 	/** enum for all trigger events */
 	private enum EventId {
 		«FOREACH event.name.toSet().sortBy(name|name) AS evname SEPARATOR ", " -»«evname»«ENDFOREACH»  
@@ -254,6 +254,9 @@
 	@SuppressWarnings("unused")
 	public StateId exec(EventQueue.Event<EventId> ev, «statemachine.owningContext.name.asTypeName()» obj) {
 		«EXPAND _SMDebugMsg("\"exec(" + trigger.name + ")\"") -»
+		«FOREACH stopTimer AS timer -»
+		obj.stopTimerFor«timer.asTypeName()»();	// stop time triggers in source state
+		«ENDFOREACH -»
 		«IF exit.isEmpty && action.isEmpty && entry.isEmpty && endDo.isEmpty && startDo.isEmpty -»
 		// no action bound to this transition
 		«ENDIF -»
@@ -277,6 +280,9 @@
 		«ENDFOREACH -»
 		«FOREACH startDo AS action -»
 		obj.«action.asStartDo()»();	// call all startDo's
+		«ENDFOREACH -»
+		«FOREACH startTimer AS timer -»
+		obj.startTimerFor«timer.asTypeName()»();	// start time triggers in target state
 		«ENDFOREACH -»
 		return super.exec(ev, obj);
 	}
@@ -338,11 +344,22 @@
 «ENDDEFINE»
 
 «DEFINE _EventCreators FOR MStateMachine -»
-	«FOREACH event.sortBy(ev|ev.name).reject(e|e.name.startsWith("_")) AS event -»
+	«FOREACH event.sortBy(ev|ev.name).reject(e|e.name.startsWith("_") || e.metaType == MTimeEvent) AS event -»
 	public void take«event.asTypeName()»(«EXPAND _Params FOR event») {
 		new «event.asTypeName()»(«
 			FOREACH event.parameter AS p SEPARATOR ", " -»
 			«p.asParameter()»«ENDFOREACH»).«IF event.isCall -»sendImmediate«ELSE»send«ENDIF»();
+	}
+	«ENDFOREACH»  
+	«FOREACH event.sortBy(ev|ev.name).typeSelect(MTimeEvent) AS event -»
+	private Timer timerFor«event.asTypeName()»;
+	private void startTimerFor«event.asTypeName()»() {
+		timerFor«event.asTypeName()» = new «event.asTypeName()»().sendDelayed(«event.when»); 
+	}
+	private void stopTimerFor«event.asTypeName()»() {
+		if(timerFor«event.asTypeName()» != null)
+			timerFor«event.asTypeName()».cancel();
+		timerFor«event.asTypeName()» = null; 
 	}
 	«ENDFOREACH»  
 «ENDDEFINE»
