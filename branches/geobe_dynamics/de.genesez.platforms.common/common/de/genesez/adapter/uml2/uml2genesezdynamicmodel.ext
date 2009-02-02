@@ -29,6 +29,7 @@ MStateMachine transformBehavior(StateMachine sm, MClassifier this):
 	let msm = makeStateMachine(sm, this) :
 		ownedBehavior.add(msm) ->
 		msm.atomize() ->
+		msm.linkTimeTrigger() ->
 		msm.display()
 		;
 
@@ -578,6 +579,41 @@ private create MAtomicTransition makeAtomicTransition(MLeafState src, MLeafState
  	;
  
 /**
+ * build a list of all states that have a leaving transition with a MTimeEvent
+ * @param msm top level state machine
+ * @return list of time triggered states
+ */
+private cached List[MState] timeTriggeredStates(MStateMachine sm) :
+	sm.smtransition.select(tr|
+		(!tr.trigger.isEmpty) && 
+		(! tr.trigger.typeSelect(MTimeEvent).isEmpty)
+	).source
+	;
+ 
+/**
+ * build a list of all states that have a leaving transition with a MTimeEvent
+ * can only be called after atomic transitions are resolved
+ * @param msm top level state machine
+ * @return list of time triggered states
+ */
+private linkTimeTrigger(MStateMachine this) :
+	timeTriggeredStates().collect(ttsource|
+		let src = ttsource.sourceStates() :
+			atomicTransition.select(a|
+				src.contains(a.source) && ! src.contains(a.target)
+			).collect(a|
+				a.stopTimer.addAll(ttsource.outgoing.trigger.typeSelect(MTimeEvent))
+			) ->
+			atomicTransition.select(a|
+				! src.contains(a.source) && src.contains(a.target)
+			).collect(a|
+				a.startTimer.addAll(ttsource.outgoing.trigger.typeSelect(MTimeEvent)) 
+			)
+	) ->
+	null
+	;
+ 
+/**
  * build a list of all states that are left on a transition to an other state
  * @param fstate from state, where the transition starts
  * @param tstate target state, where the transition ends
@@ -773,6 +809,7 @@ private display(MAtomicTransition mtr, String ind) :
 		" exit: " + mtr.exit.name + " endDo: " + mtr.endDo.name + " " +
 		(mtr.action.isEmpty ? "" : "/" + mtr.action.name) +
 		" entry: " + mtr.entry.name + " startDo: " + mtr.startDo.name + " " +
+		" start Timer: " + mtr.startTimer.name + " stop Timer: " + mtr.stopTimer.name + " " +
 		" -->(" + mtr.target.name + ")")
 	;	
 
