@@ -10,17 +10,22 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.genesez.metamodel.gcore.MActivity;
 import de.genesez.metamodel.gcore.MAtomicTransition;
 import de.genesez.metamodel.gcore.MElement;
 import de.genesez.metamodel.gcore.MEvent;
 import de.genesez.metamodel.gcore.MExternal;
 import de.genesez.metamodel.gcore.MGuard;
+import de.genesez.metamodel.gcore.MHistoryState;
+import de.genesez.metamodel.gcore.MLeafState;
 import de.genesez.metamodel.gcore.MParameter;
 import de.genesez.metamodel.gcore.MState;
+import de.genesez.metamodel.gcore.MTimeEvent;
 import de.genesez.metamodel.gcore.MTransition;
 
 /**
@@ -194,6 +199,70 @@ public class StateMachineHelper {
 			}
 		}
 		return atl;
+	}
+
+	/**
+	 * build list of all entry actions to call on a history transition
+	 * 
+	 * @param history
+	 *            history state that was encountered
+	 * @param target
+	 *            leaf state that history state delegates to
+	 * @return list of all entry actions in order outer to inner
+	 */
+	public static List<MActivity> resultingEntries(MHistoryState history,
+			MLeafState target) {
+		List<MActivity> result = new LinkedList<MActivity>();
+		if (target.getEntry() != null)
+			result.add(target.getEntry());
+		for (MState state = target.getSuperstate(); state != history
+				.getSuperstate(); state = state.getSuperstate()) {
+			if (state.getEntry() != null)
+				result.add(0, state.getEntry());
+		}
+		return result;
+	}
+
+	/**
+	 * build list of all do activities to be started on a history transition
+	 * 
+	 * @param history
+	 *            history state that was encountered
+	 * @param target
+	 *            leaf state that history state delegates to
+	 * @return list of all do activities in order outer to inner
+	 */
+	public static List<MActivity> resultingStartDo(MHistoryState history,
+			MLeafState target) {
+		List<MActivity> result = new LinkedList<MActivity>();
+		if (target.getDo() != null)
+			result.add(target.getDo());
+		for (MState state = target.getSuperstate(); state != history
+				.getSuperstate(); state = state.getSuperstate()) {
+			if (state.getDo() != null)
+				result.add(0, state.getDo());
+		}
+		return result;
+	}
+
+	/**
+	 * build list of all visited states on a history transition
+	 * 
+	 * @param history
+	 *            history state that was encountered
+	 * @param target
+	 *            leaf state that history state delegates to
+	 * @return list of all states in order outer to inner
+	 */
+	public static List<MState> visitedStates(MHistoryState history,
+			MLeafState target) {
+		List<MState> result = new LinkedList<MState>();
+			result.add(target);
+		for (MState state = target.getSuperstate(); state != history
+				.getSuperstate(); state = state.getSuperstate()) {
+				result.add(0, state);
+		}
+		return result;
 	}
 
 }

@@ -29,7 +29,9 @@ MStateMachine transformBehavior(StateMachine sm, MClassifier this):
 	let msm = makeStateMachine(sm, this) :
 		ownedBehavior.add(msm) ->
 		msm.atomize() ->
+		msm.smstate.typeSelect(MHistoryState).buildHistoryContext() ->
 		msm.linkTimeTrigger() ->
+		msm.linkHistoryContext() ->
 		msm.display()
 		;
 
@@ -268,8 +270,6 @@ private String stateName(State s, String prefix) :
 	sm.smtransition.add(this) ->
  	t.effect != null ? setAction(t.effect.makeActivity(sm)): null ->
  	t.guard != null ? setGuard(t.guard.makeGuard(sm)) : null ->
- 	info("triggers: " + t.trigger) ->
- 	info("events: " + t.trigger.event) ->
 	t.trigger.event.isEmpty ? 
 		trigger.add(makeAnonymousEvent(sm)) : trigger.addAll(t.trigger.event.makeEvent(sm)) ->
  	this;
@@ -496,7 +496,10 @@ private create MParameter makeEventParameter(Property p) :
  * @param msm top level state machine
  */
 private atomize(MStateMachine this) :
-	atomicTransition.addAll(smtransition.decompose()) ->
+	atomicTransition.addAll(smtransition.
+		reject(t|{MInitialState, MHistoryState}.contains(t.source.metaType) && t.source.superstate != null).
+		decompose()
+	) ->
 	this;
 	
 /**
@@ -504,9 +507,6 @@ private atomize(MStateMachine this) :
  * source and target states
  */
 private decompose(MTransition this) :
-//	trace("	decomposing >" + name + "<") ->
-//	trace("		sources: " + source.name + " -> " + (source.sourceStates()).name) ->
-//	trace("		target: " + target.name + " -> " + target.targetState().name) ->
 	switch {
 		case kind == "int" :
 			source.sourceStates().makeInternalAtomicTransition(this)
@@ -555,8 +555,8 @@ private create MAtomicTransition makeAtomicTransition(MLeafState src, MLeafState
 		default:	
 		(let from = src.leftStates(trg) :
 			(let to = src.enteredStates(trg) :
-				setSource((MFinalState)from.first()) ->
-				setTarget((MFinalState)to.last()) ->
+				setSource((MLeafState)from.first()) ->
+				setTarget((MLeafState)to.last()) ->
 				from.collect(state|(state.exit != null ? exit.add(state.exit) : null) -> 
 								   (state.do != null ? endDo.add(state.do) : null)) ->
 				to.collect(state|(state.entry != null ? entry.add(state.entry) : null) -> 
@@ -565,6 +565,28 @@ private create MAtomicTransition makeAtomicTransition(MLeafState src, MLeafState
 		)
 	} ->
 	this;
+
+/**
+ * link default of a History State as defined by its outgoing default transition<br>
+ * @return probably a Leaf State
+ */
+private MLeafState buildHistoryContext(MHistoryState this) :
+	setReachableHistory(
+		deep ?
+			superstate.sourceStates().select(st|st.metaType == MLeafState) :
+			shallowContext()
+	) ->
+	setDefaultHistory(
+		switch {
+			case outgoing.isEmpty : 
+				null
+			case outgoing.first().target.metaType == MHistoryState :
+				((MHistoryState) outgoing.first().target).buildHistoryContext()
+			default :
+				outgoing.first().target.targetState()
+		}
+	)
+	;
 
 /**
  * find all actions that are bound to a possibly chained transition
@@ -591,10 +613,10 @@ private cached List[MState] timeTriggeredStates(MStateMachine sm) :
 	;
  
 /**
- * build a list of all states that have a leaving transition with a MTimeEvent
+ * link all MAtomicTransitions that are connected with a MTimeEvent to
+ * this event, either on start or stop meta association
  * can only be called after atomic transitions are resolved
  * @param msm top level state machine
- * @return list of time triggered states
  */
 private linkTimeTrigger(MStateMachine this) :
 	timeTriggeredStates().collect(ttsource|
@@ -611,6 +633,37 @@ private linkTimeTrigger(MStateMachine this) :
 			)
 	) ->
 	null
+	;
+ 
+/**
+ * link all MAtomicTransitions that leave a compound state with a history state
+ * to that MHistoryState(s)
+ * can only be called after atomic transitions are resolved
+ * @param msm top level state machine
+ */
+private linkHistoryContext(MStateMachine this) :
+	smstate.typeSelect(MHistoryState).collect(history|
+		let src = history.superstate.sourceStates() :
+			atomicTransition.select(a|
+				src.contains(a.source) && ! src.contains(a.target)
+			).collect(a|
+				a.historyContext.add(history)
+			)
+	) ->
+	null
+	;
+	
+/**
+ * build a list of all states selectable for a shallow history state
+ * i.e all final states on same level plus
+ * all entry states of composite states on same level
+ * @param tstate target state, where the transition ends
+ * @return list of states
+ */
+private List[MState] shallowContext(MHistoryState history) :
+	let ctx = history.superstate.substate.select(st|st.metaType == MLeafState): 
+		ctx.addAll(history.superstate.substate.typeSelect(MCompositeState).targetState()) ->
+		ctx
 	;
  
 /**
@@ -642,8 +695,6 @@ private List[MState] enteredStates(MLeafState fstate, MLeafState tstate) :
  * recursively build a list of all leaf substates of a state
  */
 private cached List[MLeafState] sourceStates(MCompositeState this) :
-//	trace("	superstate: " + (superstate != null ? superstate.name : "TOP")) ->
-//	trace("	substates: " + substate.name) ->
 	substate.sourceStates()
 		.reject(state|state.metaType == MInitialState || 
 		              state.metaType == MHistoryState || 
@@ -655,7 +706,6 @@ private cached List[MLeafState] sourceStates(MCompositeState this) :
  * list of all leaf substates of a state is itself
  */
 private cached List[MLeafState] sourceStates(MLeafState this) :
-//	trace("	superstate: " + (superstate != null ? superstate.name : "TOP")) ->
 	{this};
 
 /**
@@ -712,7 +762,13 @@ private cached MLeafState targetState(MInitialState this) :
  * but has to be evaluated by generated code
  */
 private cached MLeafState targetState(MHistoryState this) :
-	outgoing.isEmpty ? error("Initializing History State has no outgoing transition: " + name) : null ->
+	switch {
+		case outgoing.isEmpty : 
+			error("Initializing History State has no outgoing transition: " + name)
+		default : (
+			null
+		) 
+	} ->
 	this
 	;
 
@@ -738,8 +794,6 @@ private cached MLeafState targetState(MState this) :
  */
 private display(MStateMachine msm) :
 	trace("StateMachine of " + msm.owningContext.name + " (" + msm.owningContext.metaType.toString() + ")") ->
-//	msm.smstate.sortBy(e|e.name).displayState() ->
-//	msm.smtransition.select(tr|tr.kind == 'ext').displayTransition("	") ->
 	trace("	Actions") ->
 	msm.ownedBehavior.typeSelect(MActivity).sortBy(e|e.name).display("		") ->
 	trace("	Atomic Transitions") ->
@@ -810,6 +864,7 @@ private display(MAtomicTransition mtr, String ind) :
 		(mtr.action.isEmpty ? "" : "/" + mtr.action.name) +
 		" entry: " + mtr.entry.name + " startDo: " + mtr.startDo.name + " " +
 		" start Timer: " + mtr.startTimer.name + " stop Timer: " + mtr.stopTimer.name + " " +
+		(mtr.historyContext.isEmpty ? "" : " left history context " + mtr.historyContext.name) + 
 		" -->(" + mtr.target.name + ")")
 	;	
 
