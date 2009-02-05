@@ -155,19 +155,6 @@ cached Collection[MTransition] referencedTransitions(MActivity this) :
 		.addAll(entry.incoming)
 		.addAll(exit.outgoing)
 	;
-
-/**
- * get a list of parameter lists and make parameter lists unique.
- * because the same action can be triggered by different events, there could be
- * different signatures.
-cached List signatureList(MActivity this) :
-	!isActivityWithParameters() ? {{}} :
-	(
-//		trace("		unique Signatures: " + transition.trigger.collect(e|e.parameter.type.mapName()).toSet()) ->
-		transition.trigger.collect(e|e.parameter.type).toSet().sortBy(e|e.size)
-	)
-;
- */
 	
 /**
  * because the same action can be triggered by different events, there could be
@@ -208,12 +195,65 @@ List[MParameter] getCommonParams(List l) :
  * normalized expression and parameter list
  */
 initGuards(MDefinitionContext this) :
-	info("		we are in " + name) ->
 	clearGuardInfo() ->
-	guard.collect(e|e.registerGuard() -> info("		guard: " + e.name)) ->
-	info("		registered all guards")
+	guard.collect(e|e.registerGuard()) ->
+	""
 	;
 
+/**
+ * return state to be remembered in history state when
+ * leaving a history region
+ */
+historyToSave(MHistoryState history, MLeafState source) :
+	history.deep ?
+		source :
+		history.reachableHistory.nearestReachable(source)
+	;
+	
+/**
+ * go up in state hierarchy until a reachable state is found
+ */
+MState nearestReachable(List[MHistoryState] reachable, MState from) :
+	switch {
+		case reachable.contains(from) : from
+		case reachable.exists(st|st.superstate == from.superstate) :
+			reachable.select(st|st.superstate == from.superstate).first()
+		default : nearestReachable(reachable, from.superstate)
+	}
+	;
+
+/**
+ * build a list of entry activities on the way from history state to target
+ */
+List [MActivity] resultingEntries(MHistoryState history, MLeafState target) :
+//	visitedStates(history, target).entry
+	JAVA de.genesez.platforms.common.StateMachineHelper.
+		resultingEntries(de.genesez.metamodel.gcore.MHistoryState, de.genesez.metamodel.gcore.MLeafState)
+	;
+
+/**
+ * build a list of do activities on the way from history state to target
+ */
+List [MActivity] resultingStartDo(MHistoryState history, MLeafState target) :
+//	visitedStates(history, target).do
+	JAVA de.genesez.platforms.common.StateMachineHelper.
+		resultingStartDo(de.genesez.metamodel.gcore.MHistoryState, de.genesez.metamodel.gcore.MLeafState)
+	;
+
+/**
+ * build a list of timers to be started on the way from history state to target
+ */
+resultingTimer(MHistoryState history, MLeafState target) :
+	visitedStates(history, target).outgoing.trigger.typeSelect(MTimeEvent)
+	;
+
+/**
+ * build a list of visited states on the way from history state to target
+ */
+List [MState] visitedStates(MHistoryState history, MLeafState target) :
+	JAVA de.genesez.platforms.common.StateMachineHelper.
+		visitedStates(de.genesez.metamodel.gcore.MHistoryState, de.genesez.metamodel.gcore.MLeafState)
+	;
 
 /**
  * build a map of guards mapping equal conditions to the same method name

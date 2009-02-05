@@ -32,6 +32,7 @@
 «EXPAND _GuardMethods -»
 «EXPAND _States -»
 «EXPAND _EventIds -»
+«EXPAND _HistoryStateFields -»
 «EXPAND _Events -»
 «EXPAND _TakeEvent -»
 «EXPAND _StateMachineImpl -»
@@ -40,17 +41,29 @@
 
 «DEFINE _States FOR MStateMachine -»
 	/** enum for all leaf states */
-	private enum StateId {
+	static enum StateId {
 		«FOREACH smstate.leafStates() AS state SEPARATOR ", " -»«state.name»«ENDFOREACH»  
 	};
 	
 	/** member variable holding current state */
 	private StateId currentState = StateId.«startupState().name»;
+	/** package visible getter for debug purposes */
+	StateId getCurrentState() {
+		return currentState;
+	}
+«ENDDEFINE»
+
+«DEFINE _HistoryStateFields FOR MStateMachine -»
+	«FOREACH smstate.typeSelect(MHistoryState) AS history -»  
+	/** remember «history.deep ? "deep":"shallow"» history for «history.name» */
+	private StateId «history.asHistoryField()»«
+		history.defaultHistory == null ? "" : " = StateId." + history.defaultHistory.asState()»;
+	«ENDFOREACH»
 «ENDDEFINE»
 
 «DEFINE _EventIds FOR MStateMachine -» 
 	/** enum for all trigger events */
-	private enum EventId {
+	static enum EventId {
 		«FOREACH event.name.toSet().sortBy(name|name) AS evname SEPARATOR ", " -»«evname»«ENDFOREACH»  
 	};
 «ENDDEFINE»
@@ -254,6 +267,9 @@
 	@SuppressWarnings("unused")
 	public StateId exec(EventQueue.Event<EventId> ev, «statemachine.owningContext.name.asTypeName()» obj) {
 		«EXPAND _SMDebugMsg("\"exec(" + trigger.name + ")\"") -»
+		«FOREACH historyContext AS history -»
+			obj.«history.asHistoryField()» = StateId.«history.historyToSave(source).asState()»;
+		«ENDFOREACH -»
 		«FOREACH stopTimer AS timer -»
 		obj.stopTimerFor«timer.asTypeName()»();	// stop time triggers in source state
 		«ENDFOREACH -»
@@ -275,18 +291,60 @@
 		obj.«action.asAction()»((«trigger.asTypeName()») ev);	// call all onTransition actions
 			«ENDIF -»
 		«ENDFOREACH -»
-		«FOREACH entry AS action -»
-		obj.«action.asAction()»((«trigger.asTypeName()») ev);	// call all entry actions
-		«ENDFOREACH -»
-		«FOREACH startDo AS action -»
-		obj.«action.asStartDo()»();	// call all startDo's
-		«ENDFOREACH -»
-		«FOREACH startTimer AS timer -»
-		obj.startTimerFor«timer.asTypeName()»();	// start time triggers in target state
-		«ENDFOREACH -»
-		return super.exec(ev, obj);
+		«IF target.metaType == MHistoryState -»
+			«EXPAND _HistoryTransitionEndMethods(trigger) -»
+		«ELSE -»
+			«EXPAND _NormalTransitionEndMethods(trigger) -»
+		«ENDIF -»
 	}
 	«ENDFOREACH»
+«ENDDEFINE»
+
+«REM»
+	generates calls to methods at the end of a normal transition 
+	(i.e. entry, startDo, startTimer)
+«ENDREM»
+«DEFINE _NormalTransitionEndMethods(MEvent trigger) FOR MAtomicTransition -»
+	«FOREACH entry AS action -»
+	obj.«action.asAction()»((«trigger.asTypeName()») ev);	// call all entry actions
+	«ENDFOREACH -»
+	«FOREACH startDo AS action -»
+	obj.«action.asStartDo()»();	// call all startDo's
+	«ENDFOREACH -»
+	«FOREACH startTimer AS timer -»
+	obj.startTimerFor«timer.asTypeName()»();	// start time triggers in target state
+	«ENDFOREACH -»
+	return super.exec(ev, obj);
+«ENDDEFINE»
+
+«REM»
+	generates calls to methods at the end of a history transition 
+	(i.e. entry, startDo, startTimer)
+	depending on remembered history state 
+«ENDREM»
+«DEFINE _HistoryTransitionEndMethods(MEvent trigger) FOR MAtomicTransition -»
+	«LET (MHistoryState) target AS history -»
+	switch(obj.«history.asHistoryField()») {
+		«FOREACH source.metaType == MInitialState ?
+					{history.defaultHistory} :
+					history.reachableHistory
+				 AS target -»
+		case «target.asState()»:
+			«FOREACH history.resultingEntries(target) AS action -»
+			obj.«action.asAction()»((«trigger.asTypeName()») ev);	// call all entry actions
+			«ENDFOREACH -»
+			«FOREACH history.resultingStartDo(target) AS action -»
+			obj.«action.asStartDo()»();	// call all startDo's
+			«ENDFOREACH -»
+			«FOREACH history.resultingTimer(target) AS timer -»
+			obj.startTimerFor«timer.asTypeName()»();	// start time triggers in target state
+			«ENDFOREACH -»
+			super.exec(ev, obj);
+			return StateId.«target.asState()»;
+		«ENDFOREACH -»
+	}
+	«ENDLET -»
+	return super.exec(ev, obj);
 «ENDDEFINE»
 
 «REM»
