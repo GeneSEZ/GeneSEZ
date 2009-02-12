@@ -5,7 +5,7 @@
 	@date	2008-12-11
 «ENDREM»
 
-«REM» based on genesez meta model «ENDREM»
+«REM» based on genesez meta model «ENDREM» 
 «IMPORT gcore»
 
 «REM» useful support fuctions «ENDREM»
@@ -412,11 +412,14 @@
 	«FOREACH event.sortBy(ev|ev.name).typeSelect(MTimeEvent) AS event -»
 	private Timer timerFor«event.asTypeName()»;
 	private void startTimerFor«event.asTypeName()»() {
+		«EXPAND _SMDebugMsg("\"startet\"") FOR event -»
 		timerFor«event.asTypeName()» = new «event.asTypeName()»().sendDelayed(«event.when»); 
 	}
 	private void stopTimerFor«event.asTypeName()»() {
-		if(timerFor«event.asTypeName()» != null)
+		if(timerFor«event.asTypeName()» != null) {
 			timerFor«event.asTypeName()».cancel();
+			«EXPAND _SMDebugMsg("\"stopped\"")  FOR event -»
+		}
 		timerFor«event.asTypeName()» = null; 
 	}
 	«ENDFOREACH»  

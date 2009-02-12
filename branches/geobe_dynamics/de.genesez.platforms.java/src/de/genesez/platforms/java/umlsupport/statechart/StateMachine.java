@@ -24,7 +24,7 @@ public class StateMachine<RCV, EV, ST> {
         TransitionSelector<EV, ST> key = new TransitionSelector<EV, ST>(eventId, state);
         AbstractTransition<RCV, EV, ST> trans = transitionTable.get(key);
         if(trans != null) {
-            stateId = trans.exec(ev, rcv);
+        	stateId = trans.exec(ev, rcv);
             if(stateId != null)
                 return stateId;
             else
