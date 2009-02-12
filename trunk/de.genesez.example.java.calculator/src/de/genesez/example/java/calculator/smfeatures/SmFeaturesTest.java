@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.genesez.platforms.java.umlsupport.statechart.EventQueue;
+import de.genesez.platforms.java.umlsupport.statechart.EventQueue.Event;
 import static org.junit.Assert.*;
 
 /**
@@ -31,11 +32,23 @@ public class SmFeaturesTest {
 	public void tearDown() throws Exception {
 	}
 	
-//	@Test
+	@Test
 	public void testTimerEvents() {
-		TimerTest timerTest = new TimerTest();
+		new TimerTest();
+		new TimerTest();
 		try {
-			Thread.sleep(15000);
+			Thread.sleep(1300);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		new TimerTest();
+		new TimerTest();
+		new TimerTest();
+		new TimerTest();
+		new TimerTest();
+		new TimerTest();
+		try {
+			Thread.sleep(300);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -43,85 +56,111 @@ public class SmFeaturesTest {
 	
 	@Test
 	public void testHistoryStates() {
+		EventQueue.cancelTimers();
+		EventQueue.waitQEmpty();
 		HistoryStateExerciser exerciser = new HistoryStateExerciser();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a1, exerciser.getCurrentState());
 		exerciser.takeT1();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a2, exerciser.getCurrentState());
 		exerciser.takeT2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a3, exerciser.getCurrentState());
 		exerciser.takeT3();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a1, exerciser.getCurrentState());
 		exerciser.takeH4();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b1, exerciser.getCurrentState());
 		exerciser.takeT5();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b2, exerciser.getCurrentState());
 		exerciser.takeT8();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a2, exerciser.getCurrentState());
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b2, exerciser.getCurrentState());
 		exerciser.takeT6();
 		exerciser.takeT7();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b2, exerciser.getCurrentState());
 		exerciser.takeH0();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a2, exerciser.getCurrentState());
 		exerciser.takeT2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a3, exerciser.getCurrentState());
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b2, exerciser.getCurrentState());
 		exerciser.takeH0();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a2, exerciser.getCurrentState());
 		exerciser.takeT2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a3, exerciser.getCurrentState());
 		exerciser.takeT9();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b2, exerciser.getCurrentState());
 		exerciser.takeH0();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a2, exerciser.getCurrentState());
 		exerciser.takeT2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a3, exerciser.getCurrentState());
 		exerciser.takeT3();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a1, exerciser.getCurrentState());
 		exerciser.takeH4();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b2, exerciser.getCurrentState());
 
 		exerciser.takeT11();
 		exerciser.takeT10();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b1, exerciser.getCurrentState());
 		exerciser.takeT11();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a1, exerciser.getCurrentState());
 		exerciser.takeH4();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b1, exerciser.getCurrentState());
 		
 		exerciser.takeT5();
 		exerciser.takeT11();
 		exerciser.takeH4();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b2, exerciser.getCurrentState());
 		
 		exerciser.takeT6();
 		exerciser.takeT11();
 		exerciser.takeH4();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b1, exerciser.getCurrentState());
 		
 		exerciser.takeH0();
@@ -131,6 +170,7 @@ public class SmFeaturesTest {
 		exerciser.takeT2();
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b1, exerciser.getCurrentState());
 		
 		exerciser.takeT5();
@@ -139,6 +179,7 @@ public class SmFeaturesTest {
 		exerciser.takeT2();
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b2, exerciser.getCurrentState());
 		
 		exerciser.takeT6();
@@ -147,6 +188,7 @@ public class SmFeaturesTest {
 		exerciser.takeT2();
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b1, exerciser.getCurrentState());
 		
 		exerciser.takeT7();
@@ -154,6 +196,7 @@ public class SmFeaturesTest {
 		exerciser.takeT2();
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b2, exerciser.getCurrentState());
 	
 		exerciser.takeH0();
@@ -164,6 +207,7 @@ public class SmFeaturesTest {
 		exerciser.takeT1();
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1b1, exerciser.getCurrentState());
 		
 		exerciser.takeT5();
@@ -174,6 +218,7 @@ public class SmFeaturesTest {
 		exerciser.takeH0();
 		exerciser.takeH2();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b1, exerciser.getCurrentState());
 		
 		exerciser.takeT7();
@@ -185,7 +230,15 @@ public class SmFeaturesTest {
 		exerciser.takeH0();
 		exerciser.takeH4();
 		EventQueue.waitQEmpty();
+		assertNull("unexpected event occurred", EventQueue.getLastErrorEvent());
 		assertEquals("not in expected state", HistoryStateExerciser.StateId.level2b2, exerciser.getCurrentState());
+		exerciser.takeT1();
+		EventQueue.waitQEmpty();
+		assertNotNull("unexpected event not detected", EventQueue.getLastErrorEvent());
+		EventQueue.resume();
+		exerciser.takeT11();
+		EventQueue.waitQEmpty();
+		assertEquals("not in expected state", HistoryStateExerciser.StateId.level1a1, exerciser.getCurrentState());
 		
 	}
 
