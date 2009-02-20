@@ -38,8 +38,6 @@ public class JavaGenerator extends Generator {
 		super();
 		properties.putAll(defaults);
 		WorkflowUtils.loadAllProperties(properties, logger, propertyFile);
-		
-		configureBeautifiers();
 	}
 	
 	/**
@@ -53,6 +51,8 @@ public class JavaGenerator extends Generator {
 		// check parameters
 		if (isNotSetTemplate) super.setTemplate(properties.getProperty("template"));
 		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
+		
+		configureBeautifiers();
 		super.checkConfigurationInternal(issues);
 	}
 	
@@ -95,5 +95,9 @@ public class JavaGenerator extends Generator {
 	public void addTypeMappingFile(String typeMappingFile) {
 		super.addTypeMappingFile(typeMappingFile);
 		isNotAddTypeMappingFile = false;
+	}
+	
+	public void setFormatterConfig(String formatterConfigFile) {
+		properties.put("formatterConfig", formatterConfigFile);
 	}
 }
