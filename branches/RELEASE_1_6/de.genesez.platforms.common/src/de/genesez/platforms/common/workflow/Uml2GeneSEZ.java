@@ -170,14 +170,6 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		isNotSetUml2genesezScriptCall = false;
 	}
 	
-//	/**
-//	 * setter for Invoke parameter in xtendComponent.
-//	 */
-//	public void setInvoke(String umlSlot) {
-//		xtendComponent.setInvoke(uml2GenesezScript + "(" + umlSlot + ")");
-//		isNotSetUml2genesezScript = false;
-//	}
-	
 	/**
 	 * setter for ignoreValidationErrors parameter in checkComponent.
 	 */

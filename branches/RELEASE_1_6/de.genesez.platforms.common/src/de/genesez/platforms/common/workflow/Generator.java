@@ -205,7 +205,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	/**
 	 * setter for AspectTemplates parameter in super class.
 	 */
-	public void setAspectTemplates(String aspectTemplates) {
+	public void addAspectTemplates(String aspectTemplates) {
 		if (aspectTemplates.length() > 0) {
 			List<String> filtered = WorkflowUtils.split(aspectTemplates);
 			for (String s : filtered) {
@@ -227,7 +227,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	/**
 	 * setter for AspectScripts parameter in super class.
 	 */
-	public void setAspectScripts(String aspectScripts) {
+	public void addAspectScripts(String aspectScripts) {
 		if (aspectScripts.length() > 0) {
 			List<String> filtered = WorkflowUtils.split(aspectScripts);
 			for (String s : filtered) {
