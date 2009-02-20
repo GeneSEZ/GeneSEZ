@@ -11,7 +11,7 @@ import de.genesez.platforms.common.typemapping.TypeMapper;
 /**
  * GeneSEZ specific Generator Class supporting the GeneSEZ type mapping
  * 
- * @deprecated use the 'Model2Text' component of the GeneSEZ workflow infrastructure instead
+ * @deprecated use the {@link de.genesez.platforms.common.workflow.Generator} component of the GeneSEZ workflow infrastructure instead
  * 
  * @author	nico herbig
  * @author	tobias haubold (last)
@@ -61,7 +61,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 * overridden adder for a comma separated list of advice templates which filters empty strings
 	 * @see org.openarchitectureware.xpand2.Generator#addAdvices(java.lang.String)
 	 */
-	@Override
+//	@Override
 	public void addAdvices(String advices) {
 		if ( advices.length() > 0 ) {
 			List<String> filtered = split(advices);
@@ -86,7 +86,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 * overridden adder for a comma separated list of advice scripts which filters empty strings
 	 * @see org.openarchitectureware.xpand2.Generator#addExtensionAdvices(java.lang.String)
 	 */
-	@Override
+//	@Override
 	public void addExtensionAdvices(String extensionAdvices) {
 		if ( extensionAdvices.length() > 0 ) {
 			List<String> filtered = split(extensionAdvices);
