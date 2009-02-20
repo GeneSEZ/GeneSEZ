@@ -103,7 +103,7 @@
 «DEFINE _DerivedDeclaration FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«IF isSingleValuedType() -»
-	public «type.mapName()» «asGetter()»();
+	public «type.mapName().asTypeName()» «asGetter()»();
 	«ELSE -»
 	public «EXPAND Type::MultiValuedType -» «asGetter()»();
 	«ENDIF -»
@@ -115,7 +115,7 @@
 «DEFINE _DerivedImplementation FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«IF isSingleValuedType() -»
-	«EXPAND _Modifier» «type.mapName()» «asGetter()»() {
+	«EXPAND _Modifier» «type.mapName().asTypeName()» «asGetter()»() {
 	«ELSE -»
 	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asGetter()»() {
 	«ENDIF -»
