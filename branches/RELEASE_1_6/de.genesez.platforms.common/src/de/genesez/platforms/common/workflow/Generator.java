@@ -1,5 +1,7 @@
 package de.genesez.platforms.common.workflow;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -117,6 +119,9 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		if (isNotSetUsePropertyVisibilityForAccessors) {
 			setUsePropertyVisibilityForAccessors(new Boolean(properties.getProperty("usePropertyVisibilityForAccessors")));
 		}
+		// check output dir, create if it not exists
+		checkAndCreateDirectory(outputDir);
+		// delete config check to super class
 		super.checkConfigurationInternal(issues);
 	}
 	
@@ -322,5 +327,14 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 */
 	public void setConfigFile(String value) {
 		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("configFile", "'" + value + "'"));
+	}
+	
+	private void checkAndCreateDirectory(String file) {
+		File f = new File(file);
+		if (!f.exists()) {
+			if (!f.mkdir()) {
+				logger.warn("cannot create output directory");
+			}
+		}
 	}
 }
