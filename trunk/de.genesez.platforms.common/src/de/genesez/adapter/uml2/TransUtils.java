@@ -14,8 +14,6 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
  * @author	nihe
  * @author	toh
  * @date	2007-06-11
- * 
- * 2007-08-23 toh - added possibility to exclude packages with a comma or semicolon separated list
  */
 public class TransUtils {
 	
@@ -25,7 +23,12 @@ public class TransUtils {
 	 * @return	the xmi id
 	 */
 	public static String getXmiId (EObject pObj) {
-		return ((XMLResource)pObj.eResource()).getID(pObj);
+		// note: pObj.eResource() can be null, if its unresolved proxy is (a type, defined within another model file)
+		try {
+			return ((XMLResource)pObj.eResource()).getID(pObj);
+		} catch (NullPointerException npe) {
+			return pObj.toString();
+		}
 	}
 	
 	/**
