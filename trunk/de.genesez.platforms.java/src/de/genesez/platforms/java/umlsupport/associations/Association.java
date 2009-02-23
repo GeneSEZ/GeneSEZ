@@ -1,5 +1,6 @@
 package de.genesez.platforms.java.umlsupport.associations;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -39,7 +40,14 @@ public interface Association<From, To> extends Iterable<To> {
 	 * @return an (or the) associated object or null, if none exists
 	 */
 	To get();
-
+	
+	/**
+	 * returns all associated objects as an unmodifiable collection
+	 * 
+	 * @return the associated objects or an empty collection
+	 */
+	Collection<To> getAll();
+	
 	/**
 	 * get an iterator on all associated objects
 	 * 
@@ -48,5 +56,4 @@ public interface Association<From, To> extends Iterable<To> {
 	 *         association
 	 */
 	Iterator<To> iterator();
-
 }
