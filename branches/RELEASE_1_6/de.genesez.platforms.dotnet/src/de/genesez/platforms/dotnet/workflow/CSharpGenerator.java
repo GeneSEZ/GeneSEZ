@@ -15,7 +15,6 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  */
 public class CSharpGenerator extends Generator {
 	
-	private static final String propertyFile = CSharpGenerator.class.getSimpleName() + ".properties";
 	private static final Properties defaults = new Properties();
 	static {
 		defaults.put("template", "de::genesez::platforms::dotnet::csharp::templates::Root::Root");
@@ -30,7 +29,7 @@ public class CSharpGenerator extends Generator {
 	public CSharpGenerator() {
 		super();
 		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, propertyFile);
+		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 	}
 	
 	/**
