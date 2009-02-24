@@ -41,9 +41,9 @@ public class WorkflowUtils {
 	 * @param logger		a log object
 	 * @param file			the name of the file
 	 */
-	public static void loadAllProperties(Properties properties, Log logger, String file) {
+	public static void loadAllProperties(Properties properties, Log logger, Class<?> clazz) {
 		loadPropertyFile(properties, logger, propertyFile);
-		loadPropertyFile(properties, logger, file);
+		loadPropertyFile(properties, logger, getFileName(clazz));
 	}
 	
 	public static void loadDefaultProperties(Properties properties, Log logger) {
@@ -110,10 +110,18 @@ public class WorkflowUtils {
 		return s.toString();
 	}
 	
+	private static String getFilePath(Class<?> clazz) {
+		return clazz.getPackage().getName().replace('.', '/') + '/';
+	}
+	
+	private static String getFileName(Class<?> clazz) {
+		return getFilePath(clazz) + clazz.getSimpleName() + ".properties";
+	}
+	
 	private static void loadPropertyFile(Properties properties, Log logger, String file) {
 		InputStream is = ClassLoader.getSystemResourceAsStream(file);
 		if (is == null) {
-			String alternate = WorkflowUtils.class.getPackage().getName().replace('.', '/') + '/' + file;
+			String alternate = getFilePath(WorkflowUtils.class) + file;
 			is = ClassLoader.getSystemResourceAsStream(alternate);
 		}
 		if (is == null) {

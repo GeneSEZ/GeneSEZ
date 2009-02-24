@@ -24,7 +24,6 @@ import org.openarchitectureware.xtend.XtendComponent;
  */
 public class Uml2GeneSEZ extends CompositeComponent {
 	
-	private static final String propertyFile = Uml2GeneSEZ.class.getSimpleName() + ".properties";
 	private static final Properties defaults = new Properties();
 	static {
 		defaults.putAll(WorkflowUtils.defaults);
@@ -68,7 +67,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	 */
 	public Uml2GeneSEZ() {
 		super(Uml2GeneSEZ.class.getSimpleName());
-		WorkflowUtils.loadAllProperties(properties, logger, propertyFile);
+		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 		
 		// uml standard setup
 		Setup uml2Setup = new Setup();
