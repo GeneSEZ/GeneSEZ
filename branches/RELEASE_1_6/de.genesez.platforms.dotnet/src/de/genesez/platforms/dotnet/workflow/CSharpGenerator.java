@@ -1,10 +1,13 @@
-package de.genesez.platforms.common.workflow;
+package de.genesez.platforms.dotnet.workflow;
 
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openarchitectureware.workflow.issues.Issues;
+
+import de.genesez.platforms.common.workflow.Generator;
+import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Performs model to text transformations for the .net platform and C#.
