@@ -1,10 +1,13 @@
-package de.genesez.platforms.common.workflow;
+package de.genesez.platforms.php.workflow;
 
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openarchitectureware.workflow.issues.Issues;
+
+import de.genesez.platforms.common.workflow.Generator;
+import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Performs source code generation for the PHP platform
