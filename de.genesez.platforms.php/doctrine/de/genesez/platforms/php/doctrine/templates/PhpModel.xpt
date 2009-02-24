@@ -103,7 +103,7 @@ class «asTypeName()» extends Doctrine_Record {
 «ENDREM»
 «DEFINE _TableDefinition FOR MClass -»
 	public function setTableDefinition() {
-		«EXPAND _SimpleType FOREACH property.select( e| e.multiplicity == 1 )»
+		«EXPAND _SimpleType FOREACH property.typeSelect(MAttribute).select( e| e.multiplicity == 1 )»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("php.doctrine.record.definition." + xmiGuid)»
 		// TODO: further table definitions for class '«asTypeName()»'
 		«ENDPROTECT»
