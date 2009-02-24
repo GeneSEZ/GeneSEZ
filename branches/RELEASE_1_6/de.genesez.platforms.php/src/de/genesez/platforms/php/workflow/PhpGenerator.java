@@ -15,6 +15,9 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  */
 public class PhpGenerator extends Generator {
 	
+	/**
+	 * default values in case the property file is not found
+	 */
 	private static final Properties defaults = new Properties();
 	static {
 		defaults.put("template", "de::genesez::platforms::php5::templates::Root::Root");
@@ -26,6 +29,9 @@ public class PhpGenerator extends Generator {
 	private boolean isNotAddTypeMappingFile = true;
 	
 	
+	/**
+	 * constructs the workflow component and initializes the default values for the parameter
+	 */
 	public PhpGenerator() {
 		super();
 		properties.putAll(defaults);
@@ -34,8 +40,7 @@ public class PhpGenerator extends Generator {
 	
 	
 	/**
-	 * Overridden for checking all parameters. If parameter's value is null,
-	 * then set default value.
+	 * checks configuration of the workflow component and sets configured default values
 	 * 
 	 * @see Generator#checkConfigurationInternal(org.openarchitectureware.workflow.issues.Issues)
 	 */
@@ -47,7 +52,7 @@ public class PhpGenerator extends Generator {
 	}
 	
 	/**
-	 * setter for Template parameter in super class
+	 * setter for the workflow parameter <em><b>template</b></em>
 	 * 
 	 * @see Generator#setTemplate(java.lang.String)
 	 */
@@ -57,10 +62,9 @@ public class PhpGenerator extends Generator {
 	}
 	
 	/**
-	 * setter for the type mapping file
+	 * setter for the workflow parameter <em><b>type mapping file</b></em>
 	 * 
-	 * @param typeMappingFile
-	 *            name of the file used by the generator for type mapping
+	 * @param typeMappingFile	location of the type mapping file in the classpath
 	 */
 	public void addTypeMappingFile(String typeMappingFile) {
 		super.addTypeMappingFile(typeMappingFile);
