@@ -16,7 +16,6 @@ import org.openarchitectureware.workflow.issues.Issues;
  */
 public class Validator extends org.openarchitectureware.check.CheckComponent {
 	
-	private static final String propertyFile = Validator.class.getSimpleName() + ".properties";
 	private static final Properties defaults = new Properties();
 	static {
 		defaults.putAll(WorkflowUtils.defaults);
@@ -33,7 +32,7 @@ public class Validator extends org.openarchitectureware.check.CheckComponent {
 	 * creates a validator object
 	 */
 	public Validator() {
-		WorkflowUtils.loadAllProperties(properties, logger, propertyFile);
+		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 		// add GeneSEZ meta model
 		EmfMetaModel gcore = new EmfMetaModel();
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));

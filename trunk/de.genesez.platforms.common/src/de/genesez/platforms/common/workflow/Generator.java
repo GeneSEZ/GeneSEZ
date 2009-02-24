@@ -1,7 +1,6 @@
 package de.genesez.platforms.common.workflow;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -21,7 +20,6 @@ import de.genesez.platforms.common.typemapping.TypeMapper;
  */
 public class Generator extends org.openarchitectureware.xpand2.Generator {
 	
-	private static final String propertyFile = Generator.class.getSimpleName() + ".properties";
 	private static Properties defaults = new Properties();
 	static {
 		defaults.putAll(WorkflowUtils.defaults);
@@ -63,7 +61,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 * create a generator object
 	 */
 	public Generator() {
-		WorkflowUtils.loadAllProperties(properties, logger, propertyFile);
+		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 		
 		EmfMetaModel gcore = new EmfMetaModel();
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
