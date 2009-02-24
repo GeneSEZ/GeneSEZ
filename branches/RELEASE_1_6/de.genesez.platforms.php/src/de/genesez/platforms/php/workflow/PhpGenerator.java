@@ -15,7 +15,6 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  */
 public class PhpGenerator extends Generator {
 	
-	private static final String propertyFile = PhpGenerator.class.getSimpleName() + ".properties";
 	private static final Properties defaults = new Properties();
 	static {
 		defaults.put("template", "de::genesez::platforms::php5::templates::Root::Root");
@@ -30,7 +29,7 @@ public class PhpGenerator extends Generator {
 	public PhpGenerator() {
 		super();
 		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, propertyFile);
+		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 	}
 	
 	
