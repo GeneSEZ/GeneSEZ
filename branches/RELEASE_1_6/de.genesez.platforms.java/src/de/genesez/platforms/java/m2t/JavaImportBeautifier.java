@@ -13,7 +13,7 @@ import de.genesez.platforms.common.m2t.ImportBeautifier;
  * "de.genesez.importformatter.regex" property key.
  * 
  * @author nihe
- * @date 2008-02-24
+ * @date 2009-02-24
  */
 public class JavaImportBeautifier extends ImportBeautifier {
 	
@@ -48,9 +48,9 @@ public class JavaImportBeautifier extends ImportBeautifier {
 		if (file.getTargetFile() != null && file.getTargetFile().getAbsolutePath().endsWith(".java")) {
 			
 			String edit = file.getBuffer().toString();
+			// detect and delete double import statements
 			edit = getImportFormatter().format(edit);
-			
-			// check if the text is successfully formatted
+			// write string to file
 			file.setBuffer(new StringBuffer(edit));
 		}
 	}

@@ -2,7 +2,6 @@ package de.genesez.platforms.common.m2t;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -21,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
  * regular expressions.
  * 
  * @author nihe
- * @date 2008-02-24
+ * @date 2009-02-24
  * @todo support more than one import section
  */
 public class ImportFormatter {
@@ -68,9 +67,9 @@ public class ImportFormatter {
 	public ImportFormatter(Properties options) {
 		this.options = options;
 		
-		if (!options.containsKey("de.genesez.importformatter.delim"))
+		if (!this.options.containsKey("de.genesez.importformatter.delim"))
 			log.error("The property: 'de.genesez.importformatter.delim' isn't set.");
-		if (!options.containsKey("de.genesez.importformatter.regex"))
+		if (!this.options.containsKey("de.genesez.importformatter.regex"))
 			log.error("The property: 'de.genesez.importformatter.regex' isn't set.");
 	}
 	
@@ -84,13 +83,13 @@ public class ImportFormatter {
 	public String format(String edit) {
 		String returnValue = null;
 		
-		String delim = options.getProperty("de.genesez.importformatter.delim");
-		String regex = options.getProperty("de.genesez.importformatter.regex");
+		String delim = this.options.getProperty("de.genesez.importformatter.delim");
+		String regex = this.options.getProperty("de.genesez.importformatter.regex");
 		
 		splitStringInLines(edit, delim);
 		findImports(regex);
 		
-		returnValue = generateModifiedFileContent();
+		returnValue = generateModifiedFileContent(delim);
 		
 		return returnValue;
 	}
@@ -104,13 +103,13 @@ public class ImportFormatter {
 	 * @return
 	 */
 	private List<String> splitStringInLines(String edit, String delim) {
-		fileLines = new LinkedList<String>();
+		this.fileLines = new LinkedList<String>();
 		StringTokenizer st = new StringTokenizer(edit, delim);
 		
 		while (st.hasMoreTokens()) {
-			fileLines.add(st.nextToken());
+			this.fileLines.add(st.nextToken());
 		}
-		return Collections.unmodifiableList(fileLines);
+		return Collections.unmodifiableList(this.fileLines);
 	}
 	
 	/**
@@ -121,30 +120,30 @@ public class ImportFormatter {
 	 * @return the detected import lines as set of strings
 	 */
 	private Set<String> findImports(String regex) {
-		importStatements = new HashSet<String>();
+		this.importStatements = new HashSet<String>();
 		
-		firstImportStatement = -1;
-		lastImportStatement = -1;
+		this.firstImportStatement = -1;
+		this.lastImportStatement = -1;
 		
 		Matcher matcher = null;
 		String actLine = null;
 		
-		for (int i = 0; i < fileLines.size(); i++) {
-			actLine = fileLines.get(i);
+		for (int i = 0; i < this.fileLines.size(); i++) {
+			actLine = this.fileLines.get(i);
 			matcher = initRegex(regex, actLine);
 			if (matcher != null) {
 				if (matcher.find()) {
-					if (firstImportStatement == -1)
-						firstImportStatement = i;
-					if (lastImportStatement < i)
-						lastImportStatement = i;
-					importStatements.add(actLine);
+					if (this.firstImportStatement == -1)
+						this.firstImportStatement = i;
+					if (this.lastImportStatement < i)
+						this.lastImportStatement = i;
+					this.importStatements.add(actLine);
 				}
 			} else {
 				log.error("Error in regular expression: " + regex);
 			}
 		}
-		return Collections.unmodifiableSet(importStatements);
+		return Collections.unmodifiableSet(this.importStatements);
 	}
 	
 	/**
@@ -152,23 +151,22 @@ public class ImportFormatter {
 	 * 
 	 * @return the modified context
 	 */
-	private String generateModifiedFileContent() {
+	private String generateModifiedFileContent(String delim) {
 		String returnValue = "";
 		
 		// text before the first import statement
-		for (int i = 0; i < firstImportStatement; i++) {
-			returnValue += fileLines.get(i);
+		for (int i = 0; i < this.firstImportStatement; i++) {
+			returnValue += this.fileLines.get(i) + delim;
 		}
 		
 		// the import statements
-		Iterator<String> it = importStatements.iterator();
-		while (it.hasNext()) {
-			returnValue += it.next();
+		for (String importStament : this.importStatements) {
+			returnValue += importStament + delim;
 		}
 		
 		// text after the last import statement
-		for (int i = lastImportStatement + 1; i < fileLines.size(); i++) {
-			returnValue += fileLines.get(i);
+		for (int i = this.lastImportStatement + 1; i < this.fileLines.size(); i++) {
+			returnValue += this.fileLines.get(i) + delim;
 		}
 		
 		return returnValue;
