@@ -17,6 +17,7 @@ import de.genesez.platforms.common.typemapping.TypeMapper;
  * Common class for model to text (M2T) transformations
  * @author Aibek Isaev
  * @author Beishen
+ * @author toh (last)
  */
 public class Generator extends org.openarchitectureware.xpand2.Generator {
 	
@@ -40,6 +41,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	
 	private Log logger = LogFactory.getLog(getClass());
 	private List<String> excludePackages = new ArrayList<String>();
+	private List<String> typeMappingFiles = new ArrayList<String>();
 	private String outputDir;
 	private String template;
 	
@@ -117,6 +119,8 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		if (isNotSetUsePropertyVisibilityForAccessors) {
 			setUsePropertyVisibilityForAccessors(new Boolean(properties.getProperty("usePropertyVisibilityForAccessors")));
 		}
+		// init type mapper
+		TypeMapper.initTypeMapper(typeMappingFiles.toArray(new String[0]));
 		// check output dir, create if it not exists
 		checkAndCreateDirectory(outputDir);
 		// delete config check to super class
@@ -241,14 +245,14 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 *            name of the file used by the generator for type mapping
 	 */
 	public void addTypeMappingFile(final String typeMappingFile) {
-		TypeMapper.initTypeMapper(typeMappingFile);
+		typeMappingFiles.add(typeMappingFile);
 	}
 	
-	public void setTypeMappingFiles(final String typeMappingFiles) {
+	public void addTypeMappingFiles(final String typeMappingFiles) {
 		if (typeMappingFiles.length() > 0) {
 			List<String> filtered = WorkflowUtils.split(typeMappingFiles);
 			for (String s : filtered) {
-				addTypeMappingFile(s);	
+				addTypeMappingFile(s);
 			}
 		}
 	}
