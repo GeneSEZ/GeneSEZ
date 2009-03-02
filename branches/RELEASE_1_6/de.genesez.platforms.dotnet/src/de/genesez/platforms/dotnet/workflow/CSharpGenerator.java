@@ -17,8 +17,8 @@ public class CSharpGenerator extends Generator {
 	
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.put("template", "de::genesez::platforms::dotnet::csharp::templates::Root::Root");
-		defaults.put("typeMappingFile", "de/genesez/platforms/dotnet/csharp/typemapping/typemapping.xml");
+		CSharpGenerator.defaults.put("template", "de::genesez::platforms::dotnet::csharp::templates::Root::Root");
+		CSharpGenerator.defaults.put("typeMappingFile", "de/genesez/platforms/dotnet/csharp/typemapping/typemapping.xml");
 	}
 	
 	private Log logger = LogFactory.getLog(getClass());
@@ -28,8 +28,8 @@ public class CSharpGenerator extends Generator {
 	
 	public CSharpGenerator() {
 		super();
-		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
+		this.properties.putAll(CSharpGenerator.defaults);
+		WorkflowUtils.loadAllProperties(this.properties, this.logger, this.getClass());
 	}
 	
 	/**
@@ -40,8 +40,12 @@ public class CSharpGenerator extends Generator {
 	 */
 	@Override
 	protected void checkConfigurationInternal(Issues issues) {
-		if (isNotSetTemplate) super.setTemplate(properties.getProperty("template"));
-		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
+		if (this.isNotSetTemplate) {
+			super.setTemplate(this.properties.getProperty("template"));
+		}
+		if (this.isNotAddTypeMappingFile) {
+			super.addTypeMappingFile(this.properties.getProperty("typeMappingFile"));
+		}
 		super.checkConfigurationInternal(issues);
 	}
 	
@@ -52,7 +56,7 @@ public class CSharpGenerator extends Generator {
 	 */
 	public void setTemplate(String template) {
 		super.setTemplate(template);
-		isNotSetTemplate = false;
+		this.isNotSetTemplate = false;
 	}
 	
 	/**
@@ -63,6 +67,6 @@ public class CSharpGenerator extends Generator {
 	 */
 	public void addTypeMappingFile(String typeMappingFile) {
 		super.addTypeMappingFile(typeMappingFile);
-		isNotAddTypeMappingFile = false;
+		this.isNotAddTypeMappingFile = false;
 	}
 }
