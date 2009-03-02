@@ -68,7 +68,6 @@ public class Activator extends AbstractUIPlugin {
 				.getExtensionRegistry()
 				.getConfigurationElementsFor("de.genesez.core.platforms");
 			for ( IConfigurationElement p : platforms) {
-				System.out.println(p.toString());
 				final Object o = p.createExecutableExtension("class");
 				if ( o instanceof IPlatformWizard ) {
 					final IPlatformWizard pw = (IPlatformWizard) o;
