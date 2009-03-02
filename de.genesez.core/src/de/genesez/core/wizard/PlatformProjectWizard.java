@@ -1,4 +1,4 @@
-package de.genesez.core;
+package de.genesez.core.wizard;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.openarchitectureware.wizards.EclipseHelper;
 
+
 public class PlatformProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
 
 	private PlatformProjectWizardPage page;
@@ -45,12 +46,11 @@ public class PlatformProjectWizard extends Wizard implements INewWizard, IExecut
 
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
-		final String name = page.getProjectName();
+		final String name = this.page.getProjectName();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
-					doFinish(name, monitor);
+					PlatformProjectWizard.this.doFinish(name, monitor);
 				} finally {
 					monitor.done();
 				}
@@ -70,13 +70,11 @@ public class PlatformProjectWizard extends Wizard implements INewWizard, IExecut
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		// TODO Auto-generated method stub
 		this.selection = selection;
 	}
 
 	public void setInitializationData(IConfigurationElement config,
 			String propertyName, Object data) throws CoreException {
-		// TODO Auto-generated method stub
 		this.configElement = config;
 	}
 	
@@ -84,9 +82,7 @@ public class PlatformProjectWizard extends Wizard implements INewWizard, IExecut
 		monitor.beginTask("Creating GeneSEZ Platform Project " + name, 2);
 
 		Set<String> reqbundles = new HashSet<String>();
-		reqbundles.add("de.genesez.metamodel");
-		reqbundles.add("de.genesez.platforms.common");
-		reqbundles.add("org.openarchitectureware.org.dependencies");
+		reqbundles.add("de.genesez.platforms.common;visibility:=reexport");
 
 		List<String> srcfolders = new ArrayList<String>();
 		srcfolders.add("src");
@@ -98,23 +94,24 @@ public class PlatformProjectWizard extends Wizard implements INewWizard, IExecut
 		if (p == null) {
 			return;
 		}
-
-		EclipseHelper.createFile("build/build.xml", p, getContents("build/build.xml"), monitor);
-		EclipseHelper.createFile("build/build.properties", p, getContents("build/build.properties"), monitor);
+		
+		EclipseHelper.createFile("build/build.xml", p, this.getContents("build/build.xml"), monitor);
+		EclipseHelper.createFile("build/build.properties", p, this.getContents("build/build.properties"), monitor);
 		
 		monitor.worked(1);
 	}
 	
 	private String getContents(String resource) {
-		try {
-			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(
-					"skeleton/platform/" + resource);
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		byte[] buffer = new byte[4096];
+		int read;
 
-			byte[] buffer = new byte[4096];
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try {
+			InputStream inputStream = this.getClass()
+				.getClassLoader()
+				.getResourceAsStream( "skeleton/platform/" + resource );
 
 			while (true) {
-				int read;
 				read = inputStream.read(buffer);
 
 				if (-1 == read) {
@@ -126,7 +123,6 @@ public class PlatformProjectWizard extends Wizard implements INewWizard, IExecut
 
 			outputStream.close();
 			inputStream.close();
-
 			return outputStream.toString("iso-8859-1");
 		} catch (IOException e) {
 			return "";
