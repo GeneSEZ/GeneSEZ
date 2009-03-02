@@ -26,16 +26,24 @@
 	<property name="resourcePerToplevelPackage" value="false" />
 	
 	
-	<!-- export uml2 files from magic draw model -->
-		<!--class="com.nomagic.magicdraw.oaw.ExportWorkflowComponent"-->
-	<component id="xmiExport"
-		class="com.nomagic.magicdraw.oaw.eclipse.plugins.oaw.ExportWorkflowComponent"
-		projectFile="${magicdraw.file}"
-		exportDirectory="${model.export.dir}"
-		skipUpToDate="true"
-		requiredVersion="2.x"
-		magicdrawHome="${magicdraw.dir}">
+	<!--
+		magic draw uml2 export
+		- check variable definitions in 'build.properties' for magic draw export
+		  ( ${magic.draw.uml2.export} + ${magic.draw.export.class} )
+	-->
+	<component id="magic.draw.uml2.export" class="org.openarchitectureware.workflow.container.IfComponent"
+			cond="${magic.draw.uml2.export}">
+		<!-- export uml2 files from magic draw model -->
+		<component id="magic.draw.uml2.export"
+			class="${magic.draw.export.class}"
+			projectFile="${magicdraw.file}"
+			exportDirectory="${model.export.dir}"
+			skipUpToDate="true"
+			requiredVersion="2.x"
+			magicdrawHome="${magicdraw.dir}">
+		</component>
 	</component>
+	
 	
 	<!-- First is to initialize the support for uml2 models. -->
     <bean class="oaw.uml2.Setup" standardUML2Setup="true"/> 
