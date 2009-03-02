@@ -1,4 +1,4 @@
-package de.genesez.core;
+package de.genesez.core.wizard;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class PlatformProjectWizardPage extends WizardPage {
 
+	// Contains the name of the project to create
 	private Text projectText;
 
 	public PlatformProjectWizardPage(ISelection selection) {
@@ -22,20 +23,20 @@ public class PlatformProjectWizardPage extends WizardPage {
 	}
 	
 	public void createControl(Composite parent) {
-		// TODO Auto-generated method stub
-
-		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
 		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		Composite container = new Composite(parent, SWT.NULL);
+		container.setLayout(layout);
+
 		Label label = new Label(container, SWT.NULL);
 		label.setText("&Project name:");
 
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+
 		this.projectText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		this.projectText.setText("de.genesez.platforms.newplatform");
 		this.projectText.setLayoutData(gd);
 		this.projectText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -43,7 +44,6 @@ public class PlatformProjectWizardPage extends WizardPage {
 			}
 		});
 
-		this.initialize();
 		this.dialogChanged();
 		this.setControl(container);
 	}
@@ -61,9 +61,4 @@ public class PlatformProjectWizardPage extends WizardPage {
 		setErrorMessage(null);
 		setPageComplete(true);
 	}
-
-	private void initialize() {
-		this.projectText.setText("de.genesez.platforms.newplatform");
-	}
-
 }

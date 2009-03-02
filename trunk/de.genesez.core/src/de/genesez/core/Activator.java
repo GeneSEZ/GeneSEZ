@@ -1,5 +1,7 @@
 package de.genesez.core;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -19,6 +21,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+		// nothing to do here yet
 	}
 
 	/*
@@ -28,6 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		this.loadPlatformWizards();
 	}
 
 	/*
@@ -49,13 +53,30 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path
+	 * Returns an image descriptor for the image file at the given plug-in relative path
 	 *
 	 * @param path the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+	
+	private void loadPlatformWizards() {
+		try {
+			final IConfigurationElement[] platforms = Platform
+				.getExtensionRegistry()
+				.getConfigurationElementsFor("de.genesez.core.platforms");
+			for ( IConfigurationElement p : platforms) {
+				System.out.println(p.toString());
+				final Object o = p.createExecutableExtension("class");
+				if ( o instanceof IPlatformWizard ) {
+					final IPlatformWizard pw = (IPlatformWizard) o;
+					PlatformWizardRegistry.INSTANCE.add(pw);
+				}
+			}
+		} catch (final Exception e) {
+			System.out.println(e.toString());
+		}		
 	}
 }
