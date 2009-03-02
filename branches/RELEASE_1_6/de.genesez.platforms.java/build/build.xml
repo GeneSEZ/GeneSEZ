@@ -38,11 +38,10 @@
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
 			<fileset dir="${dist.dir}" includes="${project.name}.umlsupport.jar" />
-			<fileset dir="${bin.dir}" />
-			<fileset dir="${java.dir}" />
-			<fileset dir="${java4.dir}" />
-			<fileset dir="${java5.dir}" />
-			<fileset dir="${hibernate.dir}" />
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
+			<fileset dir="${basedir}">
+				<include name="plugin.xml"/>
+			</fileset>
 		</jar>
 	</target>
 
@@ -68,6 +67,14 @@
 			<fileset dir="${bin.dir}">
 				<include name="de/genesez/platforms/java/umlsupport/**/*" />
 			</fileset>
+		</jar>
+		<jar destfile="${dist.dir}/${project.name}.jar"
+			compress="true">
+			<fileset dir="${bin.dir}" excludes="de/genesez/platforms/java/umlsupport/**/*"/>
+			<fileset dir="${java.dir}" />
+			<fileset dir="${java4.dir}" />
+			<fileset dir="${java5.dir}" />
+			<fileset dir="${hibernate.dir}" />
 		</jar>
 	</target>
 
