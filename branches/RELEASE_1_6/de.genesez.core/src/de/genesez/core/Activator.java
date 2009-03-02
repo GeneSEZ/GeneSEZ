@@ -61,14 +61,13 @@ public class Activator extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
-	
+
 	private void loadPlatformWizards() {
 		try {
 			final IConfigurationElement[] platforms = Platform
 				.getExtensionRegistry()
 				.getConfigurationElementsFor("de.genesez.core.platforms");
 			for ( IConfigurationElement p : platforms) {
-				System.out.println(p.toString());
 				final Object o = p.createExecutableExtension("class");
 				if ( o instanceof IPlatformWizard ) {
 					final IPlatformWizard pw = (IPlatformWizard) o;
