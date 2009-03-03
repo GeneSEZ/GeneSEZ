@@ -17,10 +17,17 @@
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
+	<!-- Set the classpath -->
+	<path id="de.genesez.platforms.php.classpath">
+		<pathelement path="${build.basedir}/de.genesez.core/${bin.dir}" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+	
 	<!-- Public target section -->
 
 	<target name="build"
-		description="Build de.genesez.platforms.php">
+		description="Build de.genesez.platforms.php"
+		depends="platforms.php.compile" >
 	</target>
 
 	<target name="createjar"
@@ -53,5 +60,13 @@
 	</target>
 
 	<!-- Private target section -->
+
+	<target name="platforms.php.compile">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.platforms.php.classpath"
+			debug="on" />
+	</target>
 
 </project>
