@@ -76,9 +76,19 @@
 	<target name="distribute.all"
 		description="Distributes plugins and features">
 		<for param="project">
-			<path refid="build.projects" />
+			<path refid="build.plugins" />
 			<sequential>
 				<copy todir="${updatesite.plugins}">
+					<fileset dir="@{project}/dist">
+						<include name="*_${plugin.version}.jar"/>
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<copy todir="${updatesite.features}">
 					<fileset dir="@{project}/dist">
 						<include name="*_${plugin.version}.jar"/>
 					</fileset>
