@@ -90,15 +90,11 @@ private String externalPackages() :
  */
 create MModel transform(Model m) :
 	useLogger("de.genesez.adapter.uml2") ->
+	trace( "make [" + metaType + " ] - " + m ) ->
 	// basic element properties
 	transformBasics(m) ->
-	// containments
-	ownedComment.addAll( m.ownedComment.typeSelect(Comment).makeComment() ) ->
-//	nestedPackage.addAll( m.ownedElement.typeSelect(Package).transform() ) ->
-	m.ownedElement.typeSelect(Package).transform( this ) ->
-//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
-//	transform( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
-	m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform( this ) ->
+	// package properties
+	transformPackage(m) ->
 	this;
 	
 /*
@@ -211,19 +207,10 @@ private MType makeType(Type this) :
  * @return	the GeneSEZ package
  */
 private create MPackage makePackage(Package p) :
+	trace( "make [" + metaType + " ] - " + p ) ->
 	// basic element properties
 	transformBasics(p) ->
-	// containments
-	// add comment to package
-	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
-//	nestedPackage.addAll( p.ownedElement.typeSelect(Package).transform() ) ->
-//	transform( p.ownedElement.typeSelect(Package) ) ->
-	p.ownedElement.typeSelect(Package).transform( this ) ->
-//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
-//	transform( p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
-	p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform( this ) ->
-	// map associations in package
-	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
+	transformPackage(p) ->
 	this;
 	
 /**
@@ -433,6 +420,7 @@ private create MParameter makeParameter(Parameter p) :
  * @return	the GeneSEZ association
  */
 private create MAssociation makeAssociation(Association a, MPackage container) :
+	debug("make [" + metaType + "] - " + a) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(a) ) ->
 	setName( assocName(a) ) ->
@@ -447,6 +435,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	end.addAll( a.memberEnd.select( e|e.class != null ).makeAssociationRole() ) ->
 	// double set, isn't it ?
 //	end.setAssociation(ma).setDerived(a.isDerived)->
+	trace("link ends: " + end) ->
 	linkEnds() ->
 	associationClass(a) ->
 	this;
@@ -457,6 +446,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
  * @return	the GeneSEZ association role
  */
 private create MAssociationRole makeAssociationRole(Property aend) :
+	debug("make [" + metaType + "] - " + aend) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(aend) ) ->
 	setName( assocEndName(aend) ) ->
@@ -486,13 +476,14 @@ private create MAssociationRole makeAssociationRole(Property aend) :
  * @param	ma	a GeneSEZ association
  */
 private MAssociation linkEnds(MAssociation ma) :
+	debug("link association roles: " + ma) -> (
 	let mend = ma.end :
 		mend.size == 2
 			? (mend.get(0).setOpposite( mend.get(1) ) ->
 				mend.get(1).setOpposite( mend.get(0) ) ->
 				ma
 			)
-			: ma;
+			: ma);
 
 /**
  * it's just there for error free templates
@@ -714,6 +705,25 @@ private create MComment makeComment(Comment c) :
 	property copy helpers
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * process the transformation of an uml package to a GeneSEZ package
+ * @param	p	an uml package
+ * @return	the GeneSEZ package
+ */
+private MPackage transformPackage(MPackage this, Package p) :
+	// containments
+	// add comment to package
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+//	nestedPackage.addAll( p.ownedElement.typeSelect(Package).transform() ) ->
+//	transform( p.ownedElement.typeSelect(Package) ) ->
+	p.ownedElement.typeSelect(Package).transform( this ) ->
+//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
+//	transform( p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
+	p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform( this ) ->
+	// map associations in package
+	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
+	this;
 
 /**
  * processes the transformation of an uml classifier to a GeneSEZ classifier
