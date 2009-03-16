@@ -58,10 +58,7 @@ public class JavaGenerator extends Generator {
 	protected void configureBeautifiers() {
 		// java beautifier
 		JavaBeautifier javaBeautifier = new JavaBeautifier();
-		// convert the classpath identifier of the config file to an absolute file name
-		URL config = ClassLoader.getSystemResource(properties.getProperty("formatterConfig"));
-		logger.debug("formatter config: " + config);
-		javaBeautifier.setConfigFile(config.getFile());
+		javaBeautifier.setConfigFile(properties.getProperty("formatterConfig"));
 		
 		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier();
 		
