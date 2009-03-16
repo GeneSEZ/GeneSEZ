@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<component id="uml2genesez" class="de.genesez.platforms.common.workflow.Uml2GeneSEZ">
+		<model value="model-exp/model.uml" />
+		<profile value="model-exp/genesez.profile.uml" />
+	</component>
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::java::constraints::Syntax" />
+	</component>
+	<component id="serializeBeforeM2T" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="model-gen/example.xmi" />
+	</component>
+	<component id="model2java" class="de.genesez.platforms.java.workflow.JavaGenerator">
+		<outputDir value="../de.genesez.example.java.car/src-gen" />
+		<aspectTemplate value="customization::Attrib" />
+		<aspectScript value="customization::Naming" />
+		<!-- now it's possible to specify more than one type mapping file -->
+		<typeMappingFile value="de/genesez/platforms/java/typemapping/typemapping.xml" />
+		<typeMappingFile value="typemapping.xml" />
+		<useModelNameAsBasePackage value="true" />
+	</component>
+	<component id="serializeAfterM2T" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="model-gen/example_after.xmi" />
+		<cloneSlotContents value="true" />
+	</component>
+</workflow>

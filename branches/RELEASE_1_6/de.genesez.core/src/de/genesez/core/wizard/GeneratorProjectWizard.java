@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -84,8 +86,17 @@ public class GeneratorProjectWizard extends Wizard implements IExecutableExtensi
 		monitor.beginTask("Creating GeneSEZ Platform Project " + name, 2);
 
 		Set<String> reqbundles = new HashSet<String>();
+		Set<String> generatorDirectories = new HashSet<String>();
+		Set<String> projectDirectories = new HashSet<String>();
+		Map<String, String> generatorFiles = new HashMap<String, String>();
+		Map<String, String> projectFiles = new HashMap<String, String>();
+
 		for( IPlatformWizard pw: this.page.getWizards() ) {
 			reqbundles.addAll(pw.getBundles());
+			generatorDirectories.addAll(pw.getGeneratorDirectories());
+			projectDirectories.addAll(pw.getProjectDirectories());
+			generatorFiles.putAll(pw.getGeneratorFiles());
+			projectFiles.putAll(pw.getProjectFiles());
 		}
 		
 		List<String> srcfolders = new ArrayList<String>();
@@ -97,9 +108,6 @@ public class GeneratorProjectWizard extends Wizard implements IExecutableExtensi
 		if (p == null) {
 			return;
 		}
-		
-		EclipseHelper.createFile("build/build.xml", p, this.getContents("build/build.xml"), monitor);
-		EclipseHelper.createFile("build/build.properties", p, this.getContents("build/build.properties"), monitor);
 		
 		monitor.worked(1);
 	}

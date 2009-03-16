@@ -6,10 +6,10 @@ import java.util.Set;
 
 import de.genesez.core.IPlatformWizard;
 
-public class PHP5Wizard implements IPlatformWizard {
+public class PHP53Wizard implements IPlatformWizard {
 
 	public String getName() {
-		return "GeneSEZ PHP 5 Platform";
+		return "GeneSEZ PHP 5.3 Platform";
 	}
 
 	public Set<String> getBundles() {
