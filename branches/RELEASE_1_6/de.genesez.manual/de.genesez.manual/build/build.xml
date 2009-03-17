@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.manual" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+
+<!--	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />-->
+
+	<!-- Import project related properties -->
+	<property file="build/build.properties" />
+
+	<!-- Public target section -->
+
+	<target name="build"
+		description="Build de.genesez.manual"
+		depends="manual.db2html, manual.db2tex, manual.pdftex" >
+	</target>
+
+	<target name="clean"
+		description="Clean de.genesez.manual">
+		<delete>
+			<fileset dir="${basedir}" includes="*.tex"/>
+		</delete>
+		<delete dir="${basedir}/${html.dir}" />
+		<delete dir="${basedir}/${tex.dir}" />
+	</target>
+
+	<!-- Private target section -->
+
+	<target name="manual.db2html">
+		<mkdir dir="${basedir}/${html.dir}" />
+		<exec executable="${jade.bin}" dir="${basedir}/${html.dir}">
+			<arg value="${jade.html.opt}" />
+			<arg value="${jade.html.dsl}" />
+			<arg value="../main.xml" />
+		</exec>
+	</target>
+
+	<target name="manual.db2tex">
+		<mkdir dir="${basedir}/${tex.dir}" />
+		<exec executable="${jade.bin}" dir="${basedir}/${tex.dir}">
+			<arg value="${jade.tex.opt}" />
+			<arg value="${jade.tex.dsl}" />
+			<arg value="../main.xml" />
+		</exec>
+	</target>
+
+	<target name="manual.pdftex">
+		<exec executable="${pdfjadetex.bin}" dir="${basedir}/${tex.dir}">
+			<arg value="../main.tex" />
+		</exec>
+	</target>
+
+</project>
