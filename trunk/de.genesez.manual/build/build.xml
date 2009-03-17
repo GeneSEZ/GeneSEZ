@@ -19,33 +19,41 @@
 
 	<target name="build"
 		description="Build de.genesez.manual"
-		depends="manual.db2tex, manual.pdftex" >
+		depends="manual.db2html, manual.db2tex, manual.pdftex" >
 	</target>
 
 	<target name="clean"
 		description="Clean de.genesez.manual">
-		<delete includeemptydirs="true" failonerror="false">
-			<fileset dir="${basedir}" includes="*.fot" />
-			<fileset dir="${basedir}" includes="*.tex" />
+		<delete>
+			<fileset dir="${basedir}" includes="*.tex"/>
 		</delete>
-		<delete dir="${basedir}/${pdfjadetex.dir}" />
+		<delete dir="${basedir}/${html.dir}" />
+		<delete dir="${basedir}/${tex.dir}" />
 	</target>
 
 	<!-- Private target section -->
 
+	<target name="manual.db2html">
+		<mkdir dir="${basedir}/${html.dir}" />
+		<exec executable="${jade.bin}" dir="${basedir}/${html.dir}">
+			<arg value="${jade.html.opt}" />
+			<arg value="${jade.html.dsl}" />
+			<arg value="../main.xml" />
+		</exec>
+	</target>
+
 	<target name="manual.db2tex">
-		<exec executable="${jade.bin}">
-			<arg value="${jade.opt}" />
-			<arg value="${jade.dsl}" />
-			<arg value="main.xml" />
+		<mkdir dir="${basedir}/${tex.dir}" />
+		<exec executable="${jade.bin}" dir="${basedir}/${tex.dir}">
+			<arg value="${jade.tex.opt}" />
+			<arg value="${jade.tex.dsl}" />
+			<arg value="../main.xml" />
 		</exec>
 	</target>
 
 	<target name="manual.pdftex">
-		<mkdir dir="${basedir}/${pdfjadetex.dir}" />
-		<exec executable="${pdfjadetex.bin}">
-			<arg value="${pdfjadetex.opt}" />
-			<arg value="main.tex" />
+		<exec executable="${pdfjadetex.bin}" dir="${basedir}/${tex.dir}">
+			<arg value="../main.tex" />
 		</exec>
 	</target>
 
