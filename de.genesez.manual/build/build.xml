@@ -25,8 +25,10 @@
 	<target name="distribute"
 		description="Distribute de.genesez.manual"
 		depends="build" >
-		<copydir dest="${distribution.dir}" src="${html.dir}"/>
-		<copyfile dest="${distribution.dir}" src="${tex.dir}/${docbook.pdf}"/>
+		<copy todir="${distribution.dir}">
+			<fileset dir="${html.dir}"/>
+		</copy>
+		<copy todir="${distribution.dir}" file="${tex.dir}/${docbook.pdf}"/>
 	</target>
 
 	<target name="clean"
