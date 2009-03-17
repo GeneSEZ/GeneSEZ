@@ -22,6 +22,13 @@
 		depends="manual.db2html, manual.db2tex, manual.pdftex" >
 	</target>
 
+	<target name="distribute"
+		description="Distribute de.genesez.manual"
+		depends="build" >
+		<copydir dest="${distribution.dir}" src="${html.dir}"/>
+		<copyfile dest="${distribution.dir}" src="${tex.dir}/${docbook.pdf}"/>
+	</target>
+
 	<target name="clean"
 		description="Clean de.genesez.manual">
 		<delete>
@@ -38,7 +45,7 @@
 		<exec executable="${jade.bin}" dir="${basedir}/${html.dir}">
 			<arg value="${jade.html.opt}" />
 			<arg value="${jade.html.dsl}" />
-			<arg value="../main.xml" />
+			<arg value="../${docbook.src}" />
 		</exec>
 	</target>
 
@@ -47,13 +54,13 @@
 		<exec executable="${jade.bin}" dir="${basedir}/${tex.dir}">
 			<arg value="${jade.tex.opt}" />
 			<arg value="${jade.tex.dsl}" />
-			<arg value="../main.xml" />
+			<arg value="../${docbook.src}" />
 		</exec>
 	</target>
 
 	<target name="manual.pdftex">
 		<exec executable="${pdfjadetex.bin}" dir="${basedir}/${tex.dir}">
-			<arg value="../main.tex" />
+			<arg value="../${docbook.tex}" />
 		</exec>
 	</target>
 
