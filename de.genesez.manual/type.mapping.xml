@@ -1,0 +1,497 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd">
+<chapter>
+
+  <title>Type Mapping</title>
+
+  <para>Die Type-Mapping-Komponente dient dazu, im Modell verwendete 
+  Typen auf Typen in einer Programmiersprache abzubilden. Die Abbildung 
+  <xref linkend="genesez.type.system"/> zeigt eine Übersicht der 
+  möglichen Typen:</para>
+
+  <figure id="genesez.type.system">
+
+    <title xreflabel="GeneSEZ Typ-System">Das GeneSEZ Typ-System</title>
+
+    <mediaobject><imageobject><imagedata align="center"
+     fileref="images/genesez.meta.model.type.system.png" scalefit="1"
+     width="172mm"/></imageobject><textobject><para>Das GeneSEZ 
+    Typ-System besteht aus den folgenden Typen: Class, Interface, 
+    DataType, Enumeration, Generic, Primitive und 
+    External.</para></textobject></mediaobject>
+  </figure>
+
+  <para><literal>MClassifier</literal> bezeichnet selbst erstellte 
+  Typen im Modell. <literal>MGeneric</literal> stellt einen generischen 
+  Typ dar und wird verwendet, um eine Klasse mit einem oder mehreren 
+  Typen zu parametrisieren. <literal>MPrimitiveType</literal> stellt 
+  die primitiven Typen der jeweiligen Programmiersprache dar. Dabei 
+  handelt es sich meist um Hardware-nahe Typen, die in der Regel ohne 
+  include- oder import-Anweisung verwendbar sind. <literal>
+  MExternal</literal> stellt die Typen einer Programmiersprache dar, 
+  die durch Standardbibliotheken oder andere verwendete externe 
+  Bibliotheken verfügbar gemacht werden.</para>
+
+  <section>
+
+    <title>Konzept des Type-Mapping</title>
+
+    <para>Das Type-Mapping realisiert zwei verschiedene Aufgaben. Zum 
+    einen werden mit einem <emphasis>Namens-Mapping</emphasis> die 
+    Namen der Typen im Modell auf die zu verwendenden Namen in der 
+    jeweiligen Zielsprache abgebildet. Bei <literal>
+    MClassifier</literal> und <literal>MGeneric</literal> wird beim 
+    Aufruf der Funktion <computeroutput>mapName()</computeroutput> kein 
+    Namens-Mapping durchgeführt, da es sich ja um selbst modellierte 
+    Typen handelt, deren Namen nicht abgebildet werden müssen. Hier 
+    wird der <computeroutput>name</computeroutput> bzw. die 
+    <computeroutput>specification</computeroutput> zurück 
+    gegeben.</para>
+
+    <para>Die zweite Aufgabe ist ein <emphasis>Typ-Mapping</emphasis>, 
+    welches die Typ-Modifikatoren auswertet und gegebenenfalls den im 
+    Modell verwendeten Typ ersetzt. Typ-Modifikatoren werden im Modell 
+    nicht am Typ selbst festgelegt, sondern bei dem Modellelement, 
+    welches den Typ aufweist (also z.B. bei einem Attribut). Die 
+    Funktion <computeroutput>mapType()</computeroutput> realisiert das 
+    Typ-Mapping. Folgende Typ-Modifikatoren werden ausgewertet:</para>
+
+    <variablelist>
+
+      <varlistentry>
+
+        <term>multiplicity</term>
+
+        <listitem>
+
+          <para>Anzahl der zu speichernden Objekte eines Typs (d.h. ob 
+          der Typ an sich ausreicht oder eine Collection oder ein Array 
+          des Typs verwendet werden muss)</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>unique</term>
+
+        <listitem>
+
+          <para>gibt an, ob ein Objekt mehrmals vorkommen kann, wenn 
+          die <literal>multiplicity</literal> größer als 1 ist</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>ordered</term>
+
+        <listitem>
+
+          <para>gibt an, ob die Objekte geordnet abgelegt werden</para>
+
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
+
+    <para>Die Typ-Modifikatoren <literal>unique</literal> und <literal>
+    ordered</literal> beziehen sich auf 
+    <emphasis>multi-value</emphasis> Typen, d.h. Typen, deren <literal>
+    multiplicity</literal> größer als 1 ist.</para>
+
+    <para>Die Abbildungsvorschriften für das 
+    <emphasis>Namens</emphasis>- und <emphasis>Typ</emphasis>-Mapping 
+    werden in einer XML-Datei festgelegt.</para>
+
+    <para>Weiterhin sind für die Auswahl des passenden Typs oft die im 
+    Quellcode angestrebte Verwendung bzw. die vorliegenden 
+    Rahmenbedingungen wesentlich. Hierzu können 
+    <emphasis>Kontexte</emphasis> definiert werden, die ein spezielles 
+    Mapping für eine bestimmte Situation/Verwendung darstellen.</para>
+
+    <section>
+
+      <title>Aufbau einer Type-Mapping Datei</title>
+
+      <para>Eine Type-Mapping Datei besteht aus 4 Abschnitten:</para>
+
+      <variablelist>
+
+        <varlistentry>
+
+          <term>include</term>
+
+          <listitem>
+
+            <para>Angabe einer oder mehrerer Type-Mapping Dateien die 
+            eingebunden bzw. erweitert werden soll</para>
+
+          </listitem>
+
+        </varlistentry>
+
+        <varlistentry>
+
+          <term>multiValuedTypes</term>
+
+          <listitem>
+
+            <para>Angabe wie Type-Modifikatoren behandelt werden</para>
+
+          </listitem>
+
+        </varlistentry>
+
+        <varlistentry>
+
+          <term>primitiveTypes</term>
+
+          <listitem>
+
+            <para>Angabe wie primitive Typen gemappt werden</para>
+
+          </listitem>
+
+        </varlistentry>
+
+        <varlistentry>
+
+          <term>externalTypes</term>
+
+          <listitem>
+
+            <para>Abbildung von externen Typen</para>
+
+          </listitem>
+
+        </varlistentry>
+
+      </variablelist>
+
+      <para>Das folgende Listing zeigt den schematischen Aufbau der 
+      Type-Mapping Datei.</para>
+
+      <programlisting>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; 
+&lt;tns:typeMapping xmlns:tns=&quot;http://www.genesez.de/typemapping&quot; 
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt; 
+    &lt;tns:include&gt; 
+        &lt;tns:file&gt;
+            de/genesez/platforms/common/typemapping/typemapping.xml
+        &lt;/tns:file&gt; 
+    &lt;/tns:include&gt; 
+    &lt;tns:multiValuedTypes&gt; ... &lt;/tns:multiValuedTypes&gt; 
+    &lt;tns:primitiveTypes&gt; ... &lt;/tns:primitiveTypes&gt; 
+    &lt;tns:externalTypes&gt; ... &lt;/tns:externalTypes&gt; 
+&lt;/tns:typeMapping&gt;</programlisting>
+      <para>Für die Type-Mapping Dateien gibt es ein 
+      <ulink url="https://server.genesez.de/trac/browser/trunk/de.genesez.platforms.common/common/de/genesez/platforms/common/typemapping/typemapping.xsd">
+      XML Schema</ulink> welches zur Validierung genutzt wird. Das 
+      Schema wird immer automatisch aus dem Classpath (Ressource: 
+      <literal>de/genesez/platforms/common/typemapping/typemapping.xsd</literal>) 
+      geladen und muss nicht explizit in der XML Datei per 
+      <literal>schemaLocation</literal> angegeben werden!</para>
+
+      <section>
+
+        <title>Includes</title>
+
+        <para>Angabe einer oder mehrerer Type-Mapping Dateien mit einem 
+        Identifier der genutzt wird um die referenzierten Type-Mapping 
+        Dateien aus dem Classpath zu laden. Alle in dieser Datei 
+        definierten Mappings werden eingebunden.</para>
+
+        <programlisting>&lt;tns:include&gt; 
+    &lt;tns:file&gt;
+        de/genesez/platforms/common/typemapping/typemapping.xml
+    &lt;/tns:file&gt; 
+&lt;/tns:include&gt;</programlisting>
+      </section>
+
+      <section>
+
+        <title>Multi-Value Types</title>
+
+        <para>In diesem Abschnitt wird definiert, wie Typen unter 
+        Berücksichtigung der Typ-Modifikatoren abgebildet werden. Dazu 
+        stehen die beiden <emphasis>optionalen</emphasis> Attribute 
+        <literal>unique</literal> und <literal>ordered</literal> 
+        bereit.</para>
+
+        <programlisting>&lt;tns:multiValuedType ordered=&quot;true&quot; unique=&quot;true&quot;&gt; 
+    &lt;tns:default&gt;java.util.Set&lt;/tns:default&gt; 
+&lt;/tns:multiValuedType&gt;</programlisting>
+        <para>Die beiden Attribute sind optional da in der UML 
+        Standardwerte festgelegt sind: <literal>unique == 
+        true</literal> und <literal>ordered == false</literal>. Eine 
+        andere Möglichkeit der Angabe für das obige Mapping unter 
+        Nutzung der Standardwerte ist die folgende:</para>
+
+        <programlisting>&lt;tns:multiValuedType ordered=&quot;true&quot;&gt; 
+    &lt;tns:default&gt;java.util.Set&lt;/tns:default&gt; 
+&lt;/tns:multiValuedType&gt;</programlisting>
+        <para>Für den Typ-Modifikator <literal>unique</literal> ist 
+        kein Wert angegeben wodurch der Standartwert aus der UML 
+        genutzt wird. Da dieser <literal>true</literal> ist entsteht 
+        ein identisches Mapping wie bei der Angabe beider 
+        Modifikatoren.</para>
+
+      </section>
+
+      <section>
+
+        <title>Primitive Types und External Types</title>
+
+        <para>Um Mappings für primitive und externe Typen zu erstellen 
+        wird die gleiche Syntax genutzt:</para>
+
+        <programlisting>&lt;tns:type from=&quot;boolean&quot;&gt; 
+    &lt;tns:to&gt; boolean &lt;/tns:to&gt; 
+&lt;/tns:type&gt;</programlisting>
+        <para>Das Element <literal>type</literal> steht für eine 
+        Type-Mapping Definition. Mit dem <literal>from</literal> 
+        Attribut wird der im Modell verwendete Name des abzubildenden 
+        Typs angegeben. Mit dem Element <literal>to</literal> wird der 
+        Name des Typs in der Zielsprache angegeben auf den der Typ 
+        abgebildet wird. Im Beispiel oben wird der im UML-Metamodell 
+        enthaltene primitive Typ <literal>Boolean</literal> auf den Typ 
+        <literal>boolean</literal> der Zielprogrammiersprache 
+        abgebildet.</para>
+
+      </section>
+
+      <section>
+
+        <title>Kontexte</title>
+
+        <para>Kontexte werden genutzt um die verschiedenen 
+        Verwendungsmöglichkeiten von Typen in der Zielsprache zu 
+        adressieren. Es können beliebig viele Kontext-Mappings für 
+        einen Typ angegeben werden. Jedes Kontext-Mapping stellt einen 
+        bestimmten Bereich bzw. Situation dar, in welcher ein Typ im 
+        Xpand-Template gemappt wird. Diese Kontexte werden also nicht 
+        im Modell angegeben, sondern bei dem Aufruf des Type-Mappings 
+        im Xpand-Template.</para>
+
+        <para>Zur Verringerung der Kopplung in Quellcode werden z.B. 
+        Attributen mit dem Interface-Typ definiert und nur in deren 
+        Initialisierung die gewünschte konkrete Implementierung 
+        verwendet. Um solche Probleme zu Adressieren können die 
+        Standardmappings mit Kontext-bezogenen Mappings erweitert 
+        werden.</para>
+
+        <section>
+
+          <title>Kontexte und Multi-Value Typen</title>
+
+        <para>Das folgende Beispiel zeigt ein 
+        <emphasis>Multi-Value</emphasis> Type-Mapping, das zwischen 
+        Interface-Typ und konkreter Implementierung 
+        unterscheidet:</para>
+
+        <programlisting>&lt;tns:multiValuedType ordered=&quot;true&quot;&gt; 
+    &lt;tns:default&gt; java.util.Set &lt;/tns:default&gt; 
+    &lt;tns:context name=&quot;Implementation&quot;&gt;
+        java.util.LinkedHashSet
+    &lt;/tns:context&gt; 
+&lt;/tns:multiValuedType&gt;</programlisting>
+        <para>In der Programmiersprache Java könnte das obige Mapping 
+        in folgendem Quellcode resultieren:</para>
+
+        <programlisting>java.util.Set&lt;String&gt; strings = new java.util.LinkedHashSet&lt;String&gt;();</programlisting>
+        <para>Für den Typ der Variablen wird der Standardtyp 
+        (Interface-Typ) genutzt. Nur bei der Initialisierung der 
+        Variablen wird die konkrete Implementierung verwendet. Dies 
+        resultiert in einer geringeren Kopplung zu genutzten 
+        Implementierung.</para>
+
+        </section>
+
+        <section>
+
+          <title>Kontexte und Primitive Typen</title>
+
+        <para>Kontexte können darüber hinaus auch in 
+        <emphasis>Primitive Type</emphasis> und External Type Mappings 
+        verwendet werden. Ein Kontext kann bei Java z.B. dazu genutzt 
+        werden um die Primitiven Typen auf ihre Wrapper-Typen in Java 
+        abzubilden:</para>
+
+        <programlisting>&lt;tns:type from=&quot;boolean&quot;&gt; 
+    &lt;tns:to&gt;boolean&lt;/tns:to&gt; 
+    &lt;tns:context name=&quot;Wrapper&quot;&gt;Boolean&lt;/tns:context&gt; 
+&lt;/tns:type&gt;</programlisting>
+        <para>Dadurch ist es möglich bei einer speziellen Verwendung 
+        des Typs <literal>Boolean</literal> auf den Wrapper Typ 
+        <literal>Boolean</literal> zu mappen anstatt auf den Primitiven 
+        Typ <literal>boolean</literal>. Notwendig ist dies z.B. bei 
+        Multi-Value Typen:</para>
+
+        <programlisting>java.util.Set&lt;Boolean&gt; bs = new java.util.LinkedHashSet&lt;Boolean&gt;();</programlisting>
+        <para>Der Primitive Typ <literal>boolean</literal> kann in Java 
+        nicht als generischer Parameter verwendet werden. Deshalb muss 
+        sein Wrapper Typ genutzt werden.</para>
+
+        <para>Für <emphasis>External Type</emphasis> Mappings sind 
+        Kontexte u.a. in Bezug auf die Generierung von 
+        <emphasis>import</emphasis> bzw. <emphasis>include</emphasis> 
+        Statements sinnvoll:</para>
+
+        <programlisting>&lt;!-- container is the base class for custom authentication providers
+     from the &apos;PEAR::Auth&apos; package --&gt; 
+&lt;tns:type from=&quot;Auth_Container&quot;&gt; 
+    &lt;!-- default mapping is to the class name --&gt; 
+    &lt;tns:to&gt;Auth_Container&lt;/tns:to&gt; 
+    &lt;!-- used to generate imports --&gt; 
+    &lt;tns:context name=&quot;import&quot;&gt;Auth/Container.php&lt;/tns:context&gt; 
+&lt;/tns:type&gt;</programlisting>
+        <para>Standardmäßig wird der Typ in dem Beispiel auf den 
+        Klassennamen abgebildet. Wird jedoch der Kontext 
+        <literal>import</literal> angegeben, wird der benötigte Teil 
+        für die PHP <emphasis>include</emphasis> Anweisung 
+        zurückgegeben.</para>
+
+      </section>
+
+    </section>
+
+    </section>
+
+    <section>
+
+      <title>Verwendung des Type-Mappings</title>
+
+      <para>Das Type-Mapping kann in Xpand-Templates einfach durch das 
+      Einbinden des Type-Mapping Xtend-Skriptes genutzt werden:</para>
+
+      <programlisting>«REM» use the type mapping «ENDREM» 
+«EXTENSION de::genesez::common::typemapping::TypeMapping»</programlisting>
+      <para>Das Xtend-Skript stellt prinzipiell zwei verschiedene 
+      Funktionen bereit, bei denen jeweils optional noch ein 
+      Kontext-Parameter angegeben werden kann:</para>
+
+      <variablelist>
+
+        <varlistentry>
+
+          <term><computeroutput>mapName()</computeroutput></term>
+
+          <listitem>
+
+            <para>bildet den als Parameter übergebenen Typ auf den 
+            Namen des Typs in der Zielsprache ab</para>
+
+          </listitem>
+
+        </varlistentry>
+
+        <varlistentry>
+
+          <term><computeroutput>mapType()</computeroutput></term>
+
+          <listitem>
+
+            <para>wertet die Typ-Modifikatoren (des 
+            Metamodellelementes) aus und gibt die entsprechenden 
+            Multi-Value-Typen zurück</para>
+
+          </listitem>
+
+        </varlistentry>
+
+      </variablelist>
+
+      <para>Als Beispiel hier die Deklaration von Attributen in 
+      Java:</para>
+
+      <programlisting>«IF isSingleValuedType() -» 
+    «EXPAND _Modifier -» «type.mapName().asTypeName()» \
+    «EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue»; 
+«ELSE -» 
+    «EXPAND _Modifier -» «mapType() -» \
+        &lt;«type.mapName().asTypeName()»&gt; \
+        «asAttribute()» = new «mapType(&quot;Implementation&quot;)» \
+        &lt;«type.mapName().asTypeName() -»&gt;(); 
+«ENDIF -»</programlisting>
+      <para>Bei einem normalen, <emphasis>single-value</emphasis> Typen 
+      (<literal>multiplicity == 1</literal>) wird lediglich der 
+      verwendete Typ auf den zu verwendenden Namen in der Zielsprache 
+      gemappt. Ist der übergebene Typ ein 
+      <literal>MClassifier</literal> oder ein 
+      <literal>MGeneric</literal>, so wird das eigentliche Type-Mapping 
+      nicht durchgeführt sondern lediglich der übergebene Typ 
+      unverändert wieder zurückgegeben. Bei 
+      <literal>MExternal</literal> und 
+      <literal>MPrimitiveType</literal> werden die Informationen aus 
+      der Type-Mapping-Datei ausgewertet und der Typ als 
+      <emphasis>String</emphasis> zurückgegeben. Der Aufruf von 
+      <computeroutput>asTypeName()</computeroutput> wird zur Anwendung 
+      der <emphasis>Naming Conventions</emphasis> durchgeführt.</para>
+
+      <para>Bei <emphasis>multi-value</emphasis> Typen 
+      (<literal>multiplicity &gt; 1</literal>) wird zuerst der Typ 
+      gemappt. Im obigen Beispiel wird dazu als Parameter ein 
+      <literal>MAttribute</literal> übergeben. Das Type-Mapping wertet 
+      dann die Typ-Modifikatoren <literal>unique</literal> und 
+      <literal>ordered</literal> aus und gibt den entsprechenden 
+      Multi-Value-Typ zurück. Der eigentlich verwendete Typ im Modell 
+      wird auf den Namen in der Zielsprache gemappt und als 
+      Typ-Parameter der Collection angegeben.</para>
+
+    </section>
+
+    <section>
+
+      <title>Zusammenhang Type-Mapping + Naming Conventions</title>
+
+      <para>Wie bereits im letzten Abschnitt aufgezeigt wird nur das 
+      Type-Mapping aufgerufen, welches dann selbst anhand des 
+      übergebenen Typs entscheidet, ob die Informationen der 
+      Type-Mapping-Datei ausgewertet werden müssen oder nicht. Im 
+      Folgenden nun ein Beispiel zur Generalisierung:</para>
+
+      <programlisting>extends «generalization.first().mapName().asTypeName() -»</programlisting>
+      <para>Hier wird nach dem Schlüsselwort <literal>extends</literal> 
+      die (erste) Basisklasse generiert. Diese Basisklasse kann vom Typ 
+      <literal>MClass</literal> oder auch vom Typ 
+      <literal>MExternal</literal> sein. Ist die Basisklasse vom Typ 
+      <literal>MClass</literal> ist es eine modellierte Klasse (des 
+      Domain-Modells) und muss daher den <emphasis>Naming 
+      Conventions</emphasis> unterworfen werden. Ist es ein 
+      <literal>MExternal</literal>, muss lediglich das Type-Mapping 
+      durchgeführt werden.</para>
+
+      <para>Um die Xpand-Templates nicht unnötig mit dem Test, um 
+      welchen Meta-Typ es sich handelt, zu verkomplizieren, wurden die 
+      Funktionen für die Namensgebung so definiert, dass sie diese 
+      Aufgabe erledigen. Die Funktion 
+      <computeroutput>mapName()</computeroutput> liefert bei Typen, bei 
+      denen kein Type-Mapping durchgeführt werden muss, den Typ 
+      unverändert wieder zurück (z.B. <literal>MClassifier</literal>, 
+      <literal>MGeneric</literal>). Wird bei 
+      <literal>MPrimitiveType</literal> oder 
+      <literal>MExternal</literal> ein Type-Mapping durchgeführt, 
+      liefert die Funktion einen <emphasis>String</emphasis> 
+      zurück.</para>
+
+      <para>Die Funktion <computeroutput>asTypeName()</computeroutput> 
+      für die Namensgebung erkennt am übergebenen Parameter (Typ oder 
+      String), ob das Type-Mapping durchgeführt wurde oder nicht. Wird 
+      ein String übergeben, wird dieser unverändert zurückgegeben, da 
+      das Type-Mapping den Typ bereits ermittelt hat. Wird ein Typ 
+      übergeben, werden die <emphasis>Naming Conventions</emphasis> 
+      angewandt und ein String zurückgegeben.</para>
+
+      <para>Somit werden auf elegante Weise beide Aspekte 
+      behandelt.</para>
+
+    </section>
+
+  </section>
+
+</chapter>
+
