@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="de.emnis.ddmfw" basedir="." default="build">
+	
+	<property name="report.dir" value="reports" />
+	<property name="coverage.report.dir" value="${report.dir}/coverage" />
+	<property name="test.report.dir" value="${report.dir}/test" />
+	<property name="api.doc.dir" value="${report.dir}/api-doc" />
+	
+	<includepath classpath="src" />
+	<includepath classpath="tests" />
+	<includepath classpath="D:\settings\eclipse\workspace.web.dev\de.genesez.platforms.php.umlsupport\src" />
+	<includepath classpath="C:\appz-copied\php-5.2.5-Win32\PEAR" />
+	<includepath classpath="C:\appz-copied\php-5.2.5-Win32\includes" />
+	
+	<target name="build" depends="prepare, test, report" />
+	
+	<target name="prepare" description="create needed directories">
+		<mkdir dir="${report.dir}"/>
+		<mkdir dir="${coverage.report.dir}"/>
+		<mkdir dir="${test.report.dir}"/>
+		<mkdir dir="${api.doc.dir}"/>
+	</target>
+	
+	<target name="coverage.prepare" depends="prepare">
+	    <coverage-setup database="${report.dir}/coverage.database">
+	      <fileset dir="src">
+	        <include name="**/*.php" />
+	      </fileset>
+	      <fileset dir="tests">
+	        <include name="*.php" />
+	      	<exclude name="*Test.php" />
+	      </fileset>
+	    </coverage-setup>
+	</target>
+	
+	<target name="test" depends="coverage.prepare" description="execute php unit tests">
+		<phpunit2 codecoverage="true" haltonfailure="true" haltonerror="true" printsummary="true">
+			<batchtest>
+				<fileset dir="tests">
+					<include name="**/*Test.php"/>
+				</fileset>
+			</batchtest>
+			<formatter type="xml" todir="${report.dir}" outfile="phpunit.logfile.xml"/>
+		</phpunit2>
+	</target>
+	
+	<target name="report" depends="test">
+		<phpunit2report infile="${report.dir}/phpunit.logfile.xml" styledir="resources" todir="${test.report.dir}" format="noframes"/>
+		<coverage-report outfile="${report.dir}/coverage.xml">
+			<report styledir="resources" todir="${coverage.report.dir}" />
+		</coverage-report>
+	</target>
+	
+	<target name="doc" description="generate the API documentation">
+		<phpdoc title="Web Framework Documentation"
+				destdir="${api.doc.dir}"
+				output="HTML:frames:phphtmllib"
+				parseprivate="true"
+			>
+			<fileset dir="src">
+				<include name="**/*.php" />
+			</fileset>
+			<fileset dir="tests">
+				<include name="*.php" />
+			</fileset>
+		</phpdoc>
+	</target>
+</project>
