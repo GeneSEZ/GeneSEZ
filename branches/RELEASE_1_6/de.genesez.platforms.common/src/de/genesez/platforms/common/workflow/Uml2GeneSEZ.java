@@ -36,6 +36,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		defaults.put("mapClassesInModelToExternal", "false");
 		defaults.put("externalPackages", "");
 		defaults.put("externalStereotypes", "external");
+		defaults.put("excludeStereotypes", "exclude");
 	}
 	
 	private Properties properties = new Properties(defaults);
@@ -49,6 +50,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	private List<String> excludePackages = new ArrayList<String>();
 	private List<String> externalPackages = new ArrayList<String>();
 	private List<String> externalStereotypes = new ArrayList<String>();
+	private List<String> excludeStereotypes = new ArrayList<String>();
 	private boolean isNotSetUmlSlot = true;
 	private boolean isNotSetIgnoreValidationErrors = true;
 	private boolean isNotSetAddCheckFile = true;
@@ -58,6 +60,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	private boolean isNotSetMapClassesInModelToExternal = true;
 	private boolean isNotSetExternalPackages = true;
 	private boolean isNotSetExternalStereotypes = true;
+	private boolean isNotSetExcludeStereotypes = true;
 	
 	
 	/**
@@ -136,6 +139,13 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		} else {
 			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
 					"externalStereotypes", "'" + WorkflowUtils.arrayToString(externalStereotypes) + "'"));
+		}
+		if (isNotSetExcludeStereotypes) {
+			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
+					"excludeStereotypes", "'" + properties.getProperty("excludeStereotypes") + "'"));
+		} else {
+			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
+					"excludeStereotypes", "'" + WorkflowUtils.arrayToString(excludeStereotypes) + "'"));
 		}
 		super.checkConfiguration(issues);
 	}
@@ -268,6 +278,23 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	public void addExternalStereotypes(String externalStereotypes) {
 		if (externalStereotypes.length() > 0) {
 			List<String> filtered = WorkflowUtils.split(externalStereotypes);
+			for (String s : filtered) {
+				addExternalStereotype(s);
+			}
+		}
+	}
+	
+	public void addExcludeStereotype(String excludeStereotype) {
+		this.excludeStereotypes.add(excludeStereotype);
+		isNotSetExcludePackages = false;
+	}
+	
+	/**
+	 * adder for ExternalStereotypes parameter, which in GlobalVarDef add.
+	 */
+	public void addExcludeStereotypes(String excludeStereotypes) {
+		if (excludeStereotypes.length() > 0) {
+			List<String> filtered = WorkflowUtils.split(excludeStereotypes);
 			for (String s : filtered) {
 				addExternalStereotype(s);
 			}

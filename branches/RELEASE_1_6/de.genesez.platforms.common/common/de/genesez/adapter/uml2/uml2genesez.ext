@@ -48,6 +48,15 @@ private String ignoredPackages():
 		: GLOBALVAR excludePackages;
 
 /**
+ * stereotypes used to exclude packages within the UML model from the transformation
+ * @return	comma or semicolon separated list of stereotypes
+ */
+private String excludeStereotypes() :
+	GLOBALVAR excludeStereotypes == null
+		? ""
+		: GLOBALVAR excludeStereotypes;
+
+/**
  * indicates if all classes contained in the model should be mapped to 
  * external classes
  * @return	true if all classes contained directly in the model are mapped to external classes, otherwise false
@@ -133,6 +142,8 @@ private MPackage transform(Package p, MModel this) :
  */
 private MPackage transform(Package p, MPackage this) :
 	switch {
+		// exclude elements by stereotypes
+		case p.isIgnoredElement() : Void
 		// reject package by stereotype when used as container for external classes
 		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
 		// else transform the package
@@ -149,6 +160,8 @@ private MPackage transform(Package p, MPackage this) :
  */
 private MClassifier transform(Classifier c, MModel this) :
 	switch {
+		// check if classifier should be excluded
+		case c.isIgnoredElement() : Void
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
 		default : classifier.add( c.makeClassifier() )
@@ -165,6 +178,8 @@ private MClassifier transform(Classifier c, MModel this) :
 private MClassifier transform(Classifier c, MPackage this) :
 	trace( "transform [ " + c.metaType + " ] - " + c ) ->
 	switch {
+		// check if classifier should be excluded
+		case c.isIgnoredElement() : Void
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
 		default : classifier.add( c.makeClassifier() )
@@ -784,8 +799,16 @@ private MElement transformBasics(MElement this, NamedElement n) :
  * @return	true if the package should be excluded from transformation, otherwise false
  */
 private boolean isIgnoredPackage(Package this) :
-	ignoredPackages().toList().contains( name );
-	
+	ignoredPackages().toList().contains( name )
+	|| isIgnoredElement();
+
+/**
+ * checks if an element should be excluded from transformation
+ * @return	true if the element should be excluded, otherwise false
+ */
+private boolean isIgnoredElement(Element this) :
+	getAppliedStereotypes().exists( s|excludeStereotypes().toList().contains( s.name) );
+
 /**
  * checks if a package is used as container for external types either by name or 
  * by an assigned stereotype

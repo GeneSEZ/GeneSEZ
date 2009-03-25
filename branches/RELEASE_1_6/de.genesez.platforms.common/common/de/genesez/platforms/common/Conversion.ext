@@ -187,7 +187,10 @@ String filePath(MPackage this, String base) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String separator) : 
-	owningPackage.fullQualifiedNameSep(separator) + separator + name.toFirstUpper();
+	let fqn = owningPackage.fullQualifiedNameSep(separator) :
+		fqn.length == 0
+			? name.toFirstUpper()
+			: fqn + separator + name.toFirstUpper();
 
 /**
  * getter for the full qualified name of a classifier based on it's namespace
@@ -196,7 +199,10 @@ String fullQualifiedNameSep(MClassifier this, String separator) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String separator) : 
-	owningPackage.fullQualifiedNameSep(separator) + separator + typename;
+	let fqn = owningPackage.fullQualifiedNameSep(separator) :
+		fqn.length == 0
+			? typename
+			: fqn + separator + typename;
 
 /**
  * getter for the full qualified name of a classifier based on a base package and it's namespace
@@ -206,7 +212,10 @@ String fullQualifiedNameSep(MClassifier this, String typename, String separator)
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String base, String separator) : 
-	owningPackage.fullQualifiedNameSep(base, separator) + separator + typename;
+	let fqn = owningPackage.fullQualifiedNameSep(base, separator) :
+		fqn.length == 0
+			? name.toFirstUpper()
+			: fqn + separator + typename;
 
 /**
  * getter for the full qualified name of a package
