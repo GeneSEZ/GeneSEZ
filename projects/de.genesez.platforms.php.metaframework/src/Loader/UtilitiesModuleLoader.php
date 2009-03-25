@@ -28,7 +28,7 @@ class Loader_UtilitiesModuleLoader extends Loader_InvisibleModuleLoader  {
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237982234093_59205_924) ENABLED START */
 		return array(
-			Seasar_PhpSeasarBuilder::newComponent('FlashNotifier', 'notifier')
+			Adapter_SeasarPhpBuilder::newComponent('FlashNotifier', 'notifier')
 		);
 		/* PROTECTED REGION END */
 	}

@@ -1,18 +1,18 @@
 <?php
 require_once 's2container/S2Container.php';
-require_once 'seasar/PhpSeasarBuilder.php';
+require_once 'Adapter/SeasarPhpBuilder.php';
 
 require_once 'SeasarTestClass.php';
 
 spl_autoload_register(array('S2ContainerClassLoader', 'load'));
 S2ContainerClassLoader::import(S2CONTAINER_PHP5);
 
-class PhpSeasarBuilderTest extends PHPUnit_Framework_TestCase {
+class SeasarPhpBuilderTest extends PHPUnit_Framework_TestCase {
 	
 	private $builder;
 	
 	protected function setUp() {
-		$this->builder = new Seasar_PhpSeasarBuilder();
+		$this->builder = new Adapter_SeasarPhpBuilder();
 	}
 	
 	/**
@@ -20,10 +20,10 @@ class PhpSeasarBuilderTest extends PHPUnit_Framework_TestCase {
 	 * - uses builder to construct a container with components
 	 * - verifies if the definitions are set correctly
 	 * - note: no components are instantiated and checked
-	 * @see PhpSeasarBuilder::newContainer()
-	 * @see PhpSeasarBuilder::newComponent()
-	 * @see PhpSeasarBuilder::newArgument()
-	 * @see PhpSeasarBuilder::newProperty()
+	 * @see Adapter_SeasarPhpBuilder::newContainer()
+	 * @see Adapter_SeasarPhpBuilder::newComponent()
+	 * @see Adapter_SeasarPhpBuilder::newArgument()
+	 * @see Adapter_SeasarPhpBuilder::newProperty()
 	 */
 	public function testInlineConstruction() {
 		$container = $this->builder->newContainer(array(

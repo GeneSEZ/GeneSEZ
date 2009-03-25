@@ -5,9 +5,10 @@
  */
 
 require_once 'Loader/ModuleLoader.php';
+require_once 'Core/Context.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1236332587625_21111_386) ENABLED START */
-// TODO: put your further include + require statements here
+spl_autoload_register(array('Metaframework', 'autoload'));
 /* PROTECTED REGION END */
 
 /**
@@ -19,21 +20,20 @@ class Metaframework   {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		Loader_ModuleLoader	$_modules
+	 * @var		Loader_ModuleLoader	$modules
 	 */
-	private $_modules = array();
-	
-	// -- constructors + destructors ----------------------------------------
+	protected $modules = array();
 	/**
-	 * constructs an object of class {@link Metaframework}
-	 * @generated	constructor stub for implementation
+	 * @generated	attribute definition
+	 * @var		Core_Context	$rootContext
 	 */
-	public function __construct() {
-		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236332596843_897793_405) ENABLED START */
-		// TODO: implementation of constructor for class 'Metaframework'
-		throw new Exception('The implementation of the constructor of the class Metaframework is missing !');
-		/* PROTECTED REGION END */
-	}
+	protected $rootContext;
+	/**
+	 * @generated	attribute definition
+	 * @var		S2Container	$container
+	 */
+	protected $container;
+	
 	
 	
 	// -- method implementations --------------------------------------------
@@ -44,8 +44,7 @@ class Metaframework   {
 	 */
 	public function registerModuleLoader($name, $loader) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332689875_601091_430) ENABLED START */
-		// TODO: implementation of method 'DdmFw.registerModuleLoader(...)'
-		throw new Exception('The implementation of the method DdmFw::registerModuleLoader is missing !');
+		$this->modules[$name] = $loader;
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -54,8 +53,9 @@ class Metaframework   {
 	 */
 	public function registerModuleLoaders($loaders = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236345050000_299364_554) ENABLED START */
-		// TODO: add loaders to current modules so the method can be called more than once!
-		$this->_modules = $loaders;
+		foreach ($loaders as $name => $loader) {
+			$this->registerModuleLoader($name, $loader);
+		}
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -63,22 +63,88 @@ class Metaframework   {
 	 */
 	public function proceed() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237975349578_500094_665) ENABLED START */
+		$this->buildContainer();
+		// config frameworks
+		reset($this->modules);
+		current($this->modules)->configureFrameworks($this->container);
+		// process request
+		$dispatcher = $this->container->getComponent('dispatcher');
+		$dispatcher->dispatch($this->rootContext);
+		/* PROTECTED REGION END */
+	}
+	/**
+	 * @generated	method stub for implementation
+	 */
+	protected function buildContainer() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237987504359_726879_1039) ENABLED START */
 		// TODO: check plug-in dependencies, if all needed plug-ins exist
+		$it = new ArrayIterator($this->modules);
 		// core plugin has to be the 1st one!
-		$root = $this->_modules[0];
-		$container = Seasar_PhpSeasarBuilder::newContainer();
+		if (!$it->valid()) {
+			throw new Exception('no core plug-in found!');
+		}
+		$this->rootContext = $it->current()->getModuleContext();
+		$container = Adapter_SeasarPhpBuilder::newContainer();
 		$isAdding = false;
-		foreach ($this->_modules as $name => $module) {
+		$it->rewind();
+		while ($it->valid()) {
+			$module = $it->current();
+			// add context structure
 			if ($isAdding && $module->hasModuleContext()) {
-				$root->nestedContext->insert($module->getModuleContext());
+				$this->rootContext->nestedContext->insert($module->getModuleContext());
 			}
 			// register module components
 			foreach ($module->getComponents() as $component) {
 				$container->register($component);
 			}
-			// don't add the first component but all others
+			// don't add the first component (core plug-in) but all others
 			$isAdding = true;
+			$it->next();
 		}
+		$this->container = $container->getComponent('serviceRegistry');
+		/* PROTECTED REGION END */
+	}
+	/**
+	 * @generated	method stub for implementation
+	 * @param	string	$classname	
+	 * @return	boolean
+	 */
+	public static function autoload($classname) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238019127843_233433_1477) ENABLED START */
+		$path = str_replace('_', '/', $classname);
+		$file = self::baseDir() . $path . '.php';
+		if (file_exists($file) && is_readable($file)) {
+			require_once $file;
+			return true;
+		}
+		return false;
+		/* PROTECTED REGION END */
+	}
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	public function baseDir() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238019277984_968240_1483) ENABLED START */
+		return dirname(__FILE__) . '/';
+		/* PROTECTED REGION END */
+	}
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	public static function baseUri() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238019295890_719184_1487) ENABLED START */
+		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') +1);
+		/* PROTECTED REGION END */
+	}
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	public static function baseRequestUri() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238019301890_127500_1491) ENABLED START */
+		return $_SERVER['SCRIPT_NAME'] . '/';
 		/* PROTECTED REGION END */
 	}
 	
@@ -91,4 +157,5 @@ class Metaframework   {
 	// TODO: put your further code implementations for class 'DdmFw' here
 	/* PROTECTED REGION END */
 }
+
 ?>
