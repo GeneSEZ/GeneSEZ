@@ -31,7 +31,7 @@ class Model_AllTests
 
 	public static function suite()
 	{
-		$suite = new Model_TestSuite('DDM_Model');
+		$suite = new DDM_TestSuite('DDM_Model');
 
 		$suite->addTestSuite('TypeTest');
 		$suite->addTestSuite('ClassTest');

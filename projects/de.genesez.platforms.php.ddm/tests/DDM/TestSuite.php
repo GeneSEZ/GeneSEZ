@@ -7,7 +7,7 @@
 
 require_once('PHPUnit/Framework/TestSuite.php');
  
-class TestSuite extends PHPUnit_Framework_TestSuite
+class DDM_TestSuite extends PHPUnit_Framework_TestSuite
 {
 	protected function setUp()
 	{

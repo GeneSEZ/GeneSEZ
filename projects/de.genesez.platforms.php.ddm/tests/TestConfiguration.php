@@ -9,7 +9,7 @@ define('TESTCONFIGURATION', 1);
 
 # Add the tests directory to the include_path
 $include_path = ini_get('include_path');
-ini_set('include_path', $include_path . ':./tests');
+ini_set('include_path', $include_path . ':./tests:..');
 
 # Load and initialize Doctrine
 require_once('Doctrine/Doctrine.php');

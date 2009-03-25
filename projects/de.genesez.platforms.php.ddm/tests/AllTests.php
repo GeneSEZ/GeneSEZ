@@ -25,7 +25,7 @@ class AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('DDM');
-        $suite->addTest(Model_AllTests::suite());
+        $suite->addTest(DDM_AllTests::suite());
         return $suite;
     }
 }
