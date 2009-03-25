@@ -1,12 +1,25 @@
 <?php
 
-require_once('DDM/BaseDDM_Object.php');
-
-class DDM_Object extends BaseDDM_Object
+class DDM_Object extends Doctrine_Record
 {
 
 	private $attributes = array();
 	private $associations = array();
+
+	public function setTableDefinition()
+	{
+		$this->setTableName('ddm_object');
+
+		$this->hasColumn('o_class', 'integer', null);
+	}
+
+	public function setUp()
+	{
+		parent::setUp();
+		$this->hasOne('DDM_Class as class', array('local' => 'o_class',
+			'foreign' => 'id',
+			'onDelete' => 'RESTRICT'));
+	}
 
 	/**
 	 * Overrides the magic __set method of Doctrine_Record 
