@@ -11,7 +11,7 @@ require_once('PHPUnit/Framework.php');
 require_once('DDM.php');
 
 
-class ChangingObjectsTest extends PHPUnit_Framework_TestCase
+class DDM_ChangingObjectsTest extends PHPUnit_Framework_TestCase
 {
 	public function testChangingObjects()
 	{

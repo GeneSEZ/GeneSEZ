@@ -15,7 +15,7 @@ require_once('PHPUnit/Framework.php');
 // Import DDM
 require_once('DDM.php');
 
-class TypeTest extends PHPUnit_Framework_TestCase
+class DDM_TypeTest extends PHPUnit_Framework_TestCase
 {
 
 	public function testNewType()

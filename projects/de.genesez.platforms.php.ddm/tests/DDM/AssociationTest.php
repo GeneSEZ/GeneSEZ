@@ -15,7 +15,7 @@ require_once('PHPUnit/Framework.php');
 // Import DDM
 require_once('DDM.php');
 
-class AssociationTest extends PHPUnit_Framework_TestCase
+class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 {
 
 	private $classTable;

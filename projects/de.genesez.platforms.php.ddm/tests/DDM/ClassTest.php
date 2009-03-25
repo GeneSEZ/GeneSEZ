@@ -16,7 +16,7 @@ require_once('PHPUnit/Framework.php');
 require_once('DDM.php');
 
 
-class ClassTest extends PHPUnit_Framework_TestCase
+class DDM_ClassTest extends PHPUnit_Framework_TestCase
 {
 
 	public function testNewClass()
