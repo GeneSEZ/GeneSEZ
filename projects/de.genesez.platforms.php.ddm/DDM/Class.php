@@ -41,7 +41,7 @@ class DDM_Class extends Doctrine_Record
 	/**
 	 * 
 	 */
-	function getAssociations() {
+	public function getAssociations() {
 		return new ArrayObject( array_merge($this->leftSides->getData(), $this->rightSides->getData()) );
 	}
 	
@@ -51,7 +51,7 @@ class DDM_Class extends Doctrine_Record
 	 * @param string $name
 	 * @return boolean
 	 */
-	function getAssociation($name) {
+	public function getAssociation($name) {
 		foreach ($this->associations as $s) {
 			if ( $s->s_name == $name ) {
 				return $s;
@@ -66,7 +66,7 @@ class DDM_Class extends Doctrine_Record
 	 * @param string $name
 	 * @return boolean
 	 */
-	function hasAssociation($name) {
+	public function hasAssociation($name) {
 		foreach ($this->associations as $s) {
 			if ( $s->s_name == $name ) {
 				return true;
@@ -81,7 +81,7 @@ class DDM_Class extends Doctrine_Record
 	 * @param string $name
 	 * @return boolean
 	 */
-	function hasAttribute($name) {
+	public function hasAttribute($name) {
 		foreach ($this->attributes as $a) {
 			if ( $a->a_name == $name ) {
 				return true;
@@ -96,8 +96,8 @@ class DDM_Class extends Doctrine_Record
 	 * @param string $name
 	 * @return mixed
 	 */
-	function __get($name) {
-		if ( 'associations' == $name ) {
+	public function __get($name) {
+		if ( 'associations' === $name ) {
 			return $this->getAssociations();
 		}
 		else {
@@ -105,7 +105,7 @@ class DDM_Class extends Doctrine_Record
 		}
 	}
 
-	function __set($name, $value) {
+	public function __set($name, $value) {
 		if ($name === 'c_name') {
 			$view = preg_replace('/[^a-zA-Z0-9]/', '', $value);
 			$this->c_view = $view;
@@ -116,8 +116,8 @@ class DDM_Class extends Doctrine_Record
 		}
 		parent::__set($name, $value);
 	}
-	
-	function __toString() {
+
+	public function __toString() {
 		return 'Name: ' . $this->c_name . ', View: ' . $this->c_view;
 	}
 }

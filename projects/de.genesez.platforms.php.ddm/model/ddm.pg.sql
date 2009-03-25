@@ -4,6 +4,8 @@
 
 DROP LANGUAGE IF EXISTS plpgsql CASCADE;
 CREATE LANGUAGE plpgsql;
+DROP LANGUAGE IF EXISTS plperl CASCADE;
+CREATE LANGUAGE plperl;
 
 --- -------------------------------------------
 --- Typdefinitionen
@@ -81,8 +83,8 @@ CREATE TABLE ddm_attribute (
 	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_attribute_id_seq'),
 	a_class INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE NOT NULL,
 	a_type INTEGER REFERENCES ddm_type(id) ON DELETE RESTRICT NOT NULL,
-	a_name VARCHAR(1024) UNIQUE NOT NULL,
-	a_column VARCHAR(1024) UNIQUE NOT NULL,
+	a_name VARCHAR(1024) NOT NULL,
+	a_column VARCHAR(1024) NOT NULL,
 	a_description VARCHAR(1024) UNIQUE
 );
 
@@ -154,6 +156,8 @@ CREATE TABLE ddm_reference_o2n (
 --- Indizes
 --- -------------------------------------------
 
+CREATE UNIQUE INDEX ddm_attribute_unique ON ddm_attribute (a_class, a_name);
+CREATE UNIQUE INDEX ddm_attribute_unique ON ddm_attribute (a_class, a_column);
 CREATE UNIQUE INDEX ddm_value_integer_unique ON ddm_value_integer (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_string_unique ON ddm_value_string (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_boolean_unique ON ddm_value_boolean (v_object, v_attribute);
@@ -282,43 +286,58 @@ $$ LANGUAGE plpgsql;
 --- ---------------------
 DROP FUNCTION IF EXISTS _create_view(c_view varchar, c_id integer, c_parent integer);
 CREATE FUNCTION _create_view(c_view varchar, c_id integer, c_parent integer) RETURNS void AS $$
-DECLARE
-	create_view TEXT;
-	value_table TEXT;
-	attributes RECORD;
-BEGIN
-	create_view := 'CREATE VIEW '
-		|| c_view
-		|| ' AS SELECT id';
-	FOR attributes IN SELECT a.id AS a_id, a_type, a_column, t_basetype FROM ddm_attribute AS a, ddm_type AS t WHERE a_class=c_id AND a_type=t.id LOOP
-		IF attributes.t_basetype = 'STRING' THEN
-			value_table := 'ddm_value_string';
-		ELSIF attributes.t_basetype = 'INTEGER' THEN
-			value_table := 'ddm_value_integer';
-		ELSIF attributes.t_basetype = 'BOOLEAN' THEN
-			value_table := 'ddm_value_boolean';
-		ELSE
-			RAISE EXCEPTION 'Unknown type %', attributes.t_basetype;
-		END IF;
-		create_view := create_view
-			|| ', (SELECT v_value FROM '
-			|| value_table
-			|| ' WHERE v_object=ddm_object.id AND v_attribute='
-			|| attributes.a_id
-			|| ') AS '
-			|| attributes.a_column;
-	END LOOP;
-	create_view := create_view
-		|| ' FROM ddm_object WHERE o_class='
-		|| c_id;
-	RAISE DEBUG '%', create_view;
-	EXECUTE create_view;
-	PERFORM _create_insert_rule(c_view, c_id);
-	PERFORM _create_update_rule(c_view, c_id);
-	PERFORM _create_delete_rule(c_view);
-	RETURN;
+	my ($view, $id, $parent) = @_;
+	my $statement;
+	my %attributes;
+	my @classes = ($id);
+
+	while ($parent) {
+		push( @classes, $parent );
+		$statement = 'SELECT c_parent FROM ddm_class WHERE id=' . $parent;
+		elog(INFO, $statement);
+		my $sth = spi_query($statement);
+		my $row = spi_fetchrow($sth);
+		$parent = $row{'c_parent'};
+	}
+
+	for my $cid (@classes) {
+		$statement ='SELECT a.id AS a_id, a_type, a_column, t_basetype FROM ddm_attribute AS a, ddm_type AS t WHERE a.a_type=t.id AND a.a_class=' . $cid;
+		elog(INFO, $statement);
+		my $sth = spi_query($statement);
+		while ( my $row = spi_fetchrow($sth) ) {
+			elog(WARNING, $row->{'a_column'});
+			if ( ! exists( $attributes{$row->{'a_column'}} ) ) {
+				$attributes{$row->{'a_column'}} = $row;
+			}
+		}
+	}
+
+	$statement = 'CREATE VIEW ' . $view . ' AS SELECT id';
+	while ( my ($a_column, $attr) = each( %attributes ) ) {
+		my $table;
+		if ( 'STRING' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_string';
+		} elsif ( 'INTEGER' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_integer';
+		} elsif ( 'BOOLEAN' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_boolean';
+		}
+		$statement .= ', (SELECT v_value FROM ' . $table . ' WHERE v_object=ddm_object.id AND v_attribute=' . $attr->{'a_id'} . ') AS ' . $a_column;
+	}
+	$statement .= ' FROM ddm_object WHERE o_class='. $id;
+	elog(INFO, $statement);
+	spi_exec_query($statement, 1);
+	$statement = 'SELECT _create_insert_rule(\'' . $view . '\',' . $id . ')';
+	elog(INFO, $statement);
+	spi_exec_query($statement, 1);
+	$statement = 'SELECT _create_update_rule(\'' . $view . '\',' . $id . ')';
+	elog(INFO, $statement);
+	spi_exec_query($statement, 1);
+	$statement = 'SELECT _create_delete_rule(\'' . $view . '\')';
+	elog(INFO, $statement);
+	spi_exec_query($statement, 1);
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plperl;
 
 --- ---------------------
 --- Anlegen neuer Rules zum Erzeugen von Objekten

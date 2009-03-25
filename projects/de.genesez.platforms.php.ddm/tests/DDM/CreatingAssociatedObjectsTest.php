@@ -10,7 +10,7 @@ require_once('PHPUnit/Framework.php');
 // Import DDM
 require_once('DDM.php');
 
-
+// TODO: Implement Tests with variable Class Names
 class DDM_CreatingAssociatedObjectsTest extends PHPUnit_Framework_TestCase
 {
 

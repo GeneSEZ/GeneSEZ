@@ -170,7 +170,7 @@ class DDM_Object extends Doctrine_Record
 	 */
 	function loadAttributes() {
 		$conn = $this->_table->getConnection();
-		$statement = 'SELECT * FROM ' . strtolower($this->class->c_name) . ' WHERE id=' . $this->id;
+		$statement = 'SELECT * FROM ' . strtolower($this->class->c_view) . ' WHERE id=' . $this->id;
 		$row = $conn->getDbh()->query($statement)->fetch(PDO::FETCH_ASSOC);
 		
 		foreach ( $this->class->attributes as $a) {
@@ -225,7 +225,7 @@ class DDM_Object extends Doctrine_Record
 			}
 		}
 	
-		$statement = 'UPDATE ' . strtolower( $this->class->c_name ) . ' SET '
+		$statement = 'UPDATE ' . strtolower( $this->class->c_view ) . ' SET '
 			. join( ',', $update )
 			. ' WHERE id=' . $this->id;
 	
