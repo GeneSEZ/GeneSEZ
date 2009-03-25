@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="DDM" basedir="." default="build">
+
+	<property name="report.dir" value="${project.basedir}/report"/>
+	<property name="model.dir" value="${project.basedir}/model"/>
+
+	<target name="build" depends="prepare, test, generate-report" />
+
+	<target name="prepare">
+		<mkdir dir="${report.dir}"/>
+	</target>
+	
+	<target name="test">
+		<exec command="psql -c 'CREATE DATABASE de_emnis_ddm_test' -U postgres" dir="${model.dir}" />
+		<exec command="psql -f ddm.pg.sql -U postgres de_emnis_ddm_test" dir="${model.dir}" />
+		<phpunit haltonfailure="true" haltonerror="true" printsummary="true">
+			<batchtest>
+				<fileset dir="tests">
+					<include name="**/*Test.php"/>
+				</fileset>
+			</batchtest>
+			<formatter type="xml" todir="${report.dir}" outfile="logfile.xml"/>
+		</phpunit>
+		<exec command="psql -c 'DROP DATABASE de_emnis_ddm_test' -U postgres" dir="${model.dir}" />
+	</target>
+
+	<target name="generate-report">
+		<phpunit2report infile="${report.dir}/logfile.xml" styledir="resources/xsl" todir="report" format="noframes"/>
+	</target>
+
+</project>
