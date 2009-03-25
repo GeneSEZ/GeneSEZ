@@ -27,6 +27,7 @@
 «EXTENSION de::genesez::platforms::php::scripts::AccessHelper»
 «REM» use naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 
 «REM»
@@ -100,9 +101,7 @@
 «DEFINE _Implementation FOR MOperation -»
 	«EXPAND Comment::Operation -»
 	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -») {
-		«IF hasReturnType()»$returnValue = NULL;«ENDIF»
 		«EXPAND _OwnCodeImpl("php.implementation." + xmiGuid) -»
-		«IF hasReturnType()»return $returnValue;«ENDIF»
 	}
 «ENDDEFINE»
 
@@ -157,14 +156,17 @@
 «IF isConstructor() -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
+		throw new Exception('The implementation of the constructor of the class «classifier.asTypeName()» is missing !');
 		«ENDPROTECT»
 «ELSEIF isDestructor() -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 		// TODO: implementation of destructor for class '«classifier.asTypeName()»'
+		throw new Exception('The implementation of the destructor of the class «classifier.asTypeName()» is missing !');
 		«ENDPROTECT»
 «ELSE -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
+		throw new Exception('The implementation of the method «classifier.asTypeName()»::«asOperation()» is missing !');
 		«ENDPROTECT»
 «ENDIF -»
 «ENDDEFINE»

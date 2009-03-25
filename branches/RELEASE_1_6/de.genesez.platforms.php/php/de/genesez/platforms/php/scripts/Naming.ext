@@ -1,5 +1,5 @@
 /**
- * naming conventions for php
+ * naming conventions for php, shall be PEAR compatible
  * 
  * - fileName is only the file name, e.g. 'FooBar.php'
  * 
@@ -11,6 +11,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -22,7 +23,7 @@ extension de::genesez::platforms::common::AccessHelper;
  * getter of the separator for full qualified names
  * @return	the separator for full qualified names on the java platform ('.')
  */
-String fqnSeparator() : ".";
+String fqnSeparator() : "_";
 
 /**
  * getter of the file extension including the beginning dot
@@ -78,6 +79,9 @@ String prefix(MClassifier this) : "";
  */
 String suffix(MClassifier this) : "";
 
+String prefix(MAttribute this) : visibility == "private" ? "_" : "";
+String prefix(MOperation this) : visibility == "private" ? "_" : "";
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	type names
@@ -88,31 +92,31 @@ String suffix(MClassifier this) : "";
  * formats the name of a class using prefix + suffix
  * @return	formatted name of the class
  */
-String asTypeName(MClass this) : prefix() + name.toFirstUpper() + suffix();
+String asTypeName(MClass this) : fullQualifiedNameSep( prefix() + name.toFirstUpper() + suffix(), fqnSeparator() );
 
 /**
  * formats the name of an interface using prefix + suffix
  * @return	formatted name of the interface
  */
-String asTypeName(MInterface this) : prefix() + name.toFirstUpper() + suffix();
+String asTypeName(MInterface this) : fullQualifiedNameSep( prefix() + name.toFirstUpper() + suffix(), fqnSeparator() );
 
 /**
  * formats the name of an enumeration using prefix + suffix
  * @return	formatted name of the enumeration
  */
-String asTypeName(MEnumeration this) : prefix() + name.toFirstUpper() + suffix();
+String asTypeName(MEnumeration this) : fullQualifiedNameSep( prefix() + name.toFirstUpper() + suffix(), fqnSeparator() );
 
 /**
  * formats the name of a data type using prefix + suffix
  * @return	formatted name of the data type
  */
-String asTypeName(MDataType this) : prefix() + name.toFirstUpper() + suffix();
+String asTypeName(MDataType this) : fullQualifiedNameSep( prefix() + name.toFirstUpper() + suffix(), fqnSeparator() );
 
 /**
  * formats the name of a classifier using prefix + suffix
  * @return	formatted name of the classifier
  */
-String asTypeName(MClassifier this) : prefix() + name.toFirstUpper() + suffix();
+String asTypeName(MClassifier this) : fullQualifiedNameSep( prefix() + name.toFirstUpper() + suffix(), fqnSeparator() );
 
 /**
  * formats the name of a type, it should NOT do anything, it's just there for error free templates ;-)
@@ -138,32 +142,32 @@ String asTypeName(String this) : this;
  * formats the filename of a class
  * @return	the filename of the class
  */
-String asFileName(MClass this) : asTypeName() + fileExtension();
+String asFileName(MClass this) : name.toFirstUpper() + fileExtension();
 
 /**
  * formats the filename of an interface
  * @return	the filename of the interface
  */
-String asFileName(MInterface this) : asTypeName() + fileExtension();
+String asFileName(MInterface this) : name.toFirstUpper() + fileExtension();
 
 /**
  * formats the filename of an enumeration
  * @return	the filename of the enumeration
  */
-String asFileName(MEnumeration this) : asTypeName() + fileExtension();
+String asFileName(MEnumeration this) : name.toFirstUpper() + fileExtension();
 
 /**
  * formats the filename of a data type
  * @return	the filename of the data type
  */
-String asFileName(MDataType this) : asTypeName() + fileExtension();
+String asFileName(MDataType this) : name.toFirstUpper() + fileExtension();
 
 /**
  * formats the filename of a classifier
  * it's usually not called!
  * @return	the filename of a classifier
  */
-String asFileName(MClassifier this) : asTypeName() + fileExtension();
+String asFileName(MClassifier this) : name.toFirstUpper() + fileExtension();
 
 
 /*
@@ -198,17 +202,17 @@ String asConstant(MAttribute this) : name.toUpperCase();
  * @context	the attribute to format
  * @return	the formatted attribute name
  */
-String asAttribute(MAttribute this) : name.toFirstLower();
+String asAttribute(MAttribute this) : prefix() + name.toFirstLower();
 
 /**
- * formats an attribute name as a getter method
+ * formats an attribute name as a API-style getter method
  * @context	the attribute to format
  * @return	the formatted name of the getter method
  */
 String asGetter(MAttribute this) : "get" + name.toFirstUpper();
 
 /**
- * formats an attribute name as a setter method
+ * formats an attribute name as a API-style setter method
  * @context	the attribute to format
  * @return	the formatted name of the setter method
  */
@@ -235,12 +239,33 @@ String asRemoveFrom(MAttribute this) : "removeFrom" + name.toFirstUpper();
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+String associationManagementAttribute() : "associations";
+String associationInitializationParameter() : "name";
+String associationInitializationFunction() : "getInitializedAssociation";
+String asOneAssociationClassName() : "UML_OneAssociation";
+String asManyAssociationClassName() : "UML_ManyAssociation";
+String asAssociationClassName(MAssociationRole this) :
+	isMultiValuedType() ? asManyAssociationClassName() : asOneAssociationClassName();
+String direction(MAssociationRole this) :
+	hasOpposite() ? "bidirectional" : "unidirectional";
+String type(MAssociationRole this) :
+	isSingleValuedType() && hasOpposite() && opposite.isSingleValuedType() ? "one to one" : (
+	isSingleValuedType() && hasOpposite() && opposite.isMultiValuedType() ? "many to one" : (
+	isMultiValuedType() && hasOpposite() && opposite.isSingleValuedType() ? "one to many" : (
+	isMultiValuedType() && hasOpposite() && opposite.isMultiValuedType() ? "many to many" : (
+	isSingleValuedType() ? "to one" : (
+	isMultiValuedType() ? "to many" : (
+	""))))));
+
+String prefix(MAssociationRole this) : "_";
+
 /**
  * formats an association role as a association attribute
  * @context	the association role to format
  * @return	the formatted name of the association attribute
  */
-String asAttribute(MAssociationRole this) : name.toFirstLower();
+String asAttribute(MAssociationRole this) : prefix() + name.toFirstLower();
+String asAssociation(MAssociationRole this) : name.toFirstLower();
 
 /**
  * formats an association role as a getter method
@@ -270,6 +295,22 @@ String asInsertIn(MAssociationRole this) : "insertIn" + name.toFirstUpper();
  */
 String asRemoveFrom(MAssociationRole this) : "removeFrom" + name.toFirstUpper();
 
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	magic methods
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String asMagicGetParameter() : "name";
+String asMagicSetParameter() : asMagicGetParameter();
+String asMagicSetValueParameter() : "value";
+String asMagicIsSetParameter() : asMagicGetParameter();
+String asMagicUnSetParameter() : asMagicGetParameter();
+String asMagicGetException() : "cannot get the value of an inaccessible or unavailable property";
+String asMagicSetException() : "cannot set the value of an inaccessible or unavailable property";
+String asMagicIsSetException() : "cannot check if the value of an inaccessible or unavailable property is set";
+String asMagicUnSetException() : "cannot unset the value of an inaccessible or unavailable property";
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -282,7 +323,7 @@ String asRemoveFrom(MAssociationRole this) : "removeFrom" + name.toFirstUpper();
  * @context	the operation to format
  * @return	the formatted name of the operation
  */
-String asOperation(MOperation this) : name.toFirstLower();
+String asOperation(MOperation this) : prefix() + name.toFirstLower();
 
 /**
  * formats an operation name as a constructor

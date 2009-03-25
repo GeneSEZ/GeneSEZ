@@ -25,6 +25,7 @@
 
 «REM» use php naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 
 «REM»
@@ -42,7 +43,9 @@
 	// -- generated attribute, constant + association declarations ----------
 	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
-	«EXPAND Association::Declaration -»
+	«IF useOldAssociationHandling() -»
+	«EXPAND AssociationOld::Declaration -»«ELSE -»«EXPAND Association::Declaration -»
+	«ENDIF -»
 	
 	«IF generateSectionComments() && ( hasConstructors() || hasDestructors() ) -»
 	// -- constructors + destructors ----------------------------------------
@@ -68,8 +71,11 @@
 	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
 	// -- association + attribute accessors ---------------------------------
 	«ENDIF -»
-	«EXPAND Association::Accessors -»
+	«IF useOldAssociationHandling() -»«EXPAND AssociationOld::Accessors -»«ENDIF -»
 	«EXPAND Attribute::Accessors -»
+	«EXPAND MagicMethods::Accessors -»
+	
+	«IF !useOldAssociationHandling() -»«EXPAND Association::Initialization -»«ENDIF -»
 	
 	// -- own code implementation -------------------------------------------
 	«EXPAND _OwnCodeImpl("php.class.own.code.implementation." + xmiGuid) -»

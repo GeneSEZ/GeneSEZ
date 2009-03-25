@@ -1,0 +1,129 @@
+«REM»
+	Handles the implementation of associations using the GeneSEZ association library.
+	This library allows a very concise way to implement associations without bloated source code.
+	
+	@author	tobias haubold
+	@date	2009-03-12
+	@todo	association classes
+	@todo	comment support
+	@todo	store assocation management objects in a multi-valued attribute (array)
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the declaration of association attributes
+	- generates an association attribute to store the related objects
+	- generates an attribute to store the association management object
+«ENDREM»
+«DEFINE Declaration FOR MClass -»
+	«EXPAND _AssociationAttributeDecl FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+	«EXPAND _AssociationManagementDecl FOR property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«ENDDEFINE»
+
+«DEFINE Declaration FOR MInterface -»
+«ENDDEFINE»
+
+«REM»
+	processes the initialization of association management objects
+	- only if the classifier has more than one association
+«ENDREM»
+«DEFINE Initialization FOR MClass -»
+«LET property.typeSelect(MAssociationRole).select( e| !e.derived ) AS association -»
+«IF association.size > 1 -»
+	/**
+	 * lazily initializes the requested association management objects
+	 * @param	string	&$«associationInitializationParameter()»	the name of the association role
+	 * @return	Association		the association management object
+	 */
+	private function getInitializedAssociation(&$«associationInitializationParameter()») {
+		if (!array_key_exists($«associationInitializationParameter()», $this->«associationManagementAttribute()»)) {
+			switch ($«associationInitializationParameter()») {
+				«EXPAND _Initialization FOREACH association -»
+				default: throw new Exception('non-existing association specified: ' . $«associationInitializationParameter()»); break;
+			}
+		}
+		return $this->«associationManagementAttribute()»[$«associationInitializationParameter()»];
+	}
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+«REM»
+	processes the initialization the only association a classifier has
+	- used to generate the lazy initialization code within the magic get method
+«ENDREM»
+«DEFINE SingleInitialization FOR MAssociationRole -»
+	«EXPAND _CreateAssociation -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the declaration of an association attribute
+«ENDREM»
+«DEFINE _AssociationAttributeDecl FOR MAssociationRole -»
+	«EXPAND Comment::Association -»
+	private $«asAttribute()»«EXPAND _Init -»;
+«ENDDEFINE»
+
+«REM»
+	generates the initialization of an association attribute
+	@param	this	an association role
+«ENDREM»
+«DEFINE _Init FOR MAssociationRole -»
+«IF isMultiValuedType()» = array()«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	generates the attribute declaration of the association management object
+	- for only one association, the attribute is single-valued
+	- for more than one association, the attribute is multi-valued
+«ENDREM»
+«DEFINE _AssociationManagementDecl FOR List[MAssociationRole] -»
+«IF !isEmpty -»
+	«EXPAND Comment::AssociationManagementAttribute -»
+	«IF size == 1 -»
+	private $«associationManagementAttribute()»;
+	«ELSE -»
+	private $«associationManagementAttribute()» = array();
+	«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the initialization code for an association management object
+«ENDREM»
+«DEFINE _Initialization FOR MAssociationRole -»
+				case '«asAssociation()»': $this->«associationManagementAttribute()»[$«associationInitializationParameter()»] = «EXPAND _CreateAssociation -» break;
+«ENDDEFINE»
+
+«REM»
+	generates the code to create a new association management object
+«ENDREM»
+«DEFINE _CreateAssociation FOR MAssociationRole -»
+«IF hasOpposite() -»
+new «asAssociationClassName()»($this, $this->«asAttribute()», '«opposite.asAssociation()»');«ELSE -»
+new «asAssociationClassName()»($this, $this->«asAttribute()»);«ENDIF -»
+«ENDDEFINE»

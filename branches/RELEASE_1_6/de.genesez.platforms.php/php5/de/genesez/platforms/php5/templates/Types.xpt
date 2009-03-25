@@ -29,6 +29,7 @@
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
 «REM» need import helper «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Import»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 
 «REM»
@@ -102,7 +103,7 @@
 «DEFINE _Imports FOR MClassifier -»
 «IF generateIncludes() -»
 «FOREACH supplier.select(e|e.isImportNeeded(this)) AS s -»
-require_once '«EXPAND _Require(s) -»';
+	«EXPAND _Require(s) -»
 «ENDFOREACH -»
 «ENDIF -»
 «ENDDEFINE»
@@ -112,16 +113,21 @@ require_once '«EXPAND _Require(s) -»';
 	@param	used	the classifier which is required
 «ENDREM»
 «DEFINE _Require(MClassifier used) FOR MClassifier -»
-«used.includePath(this) + used.asFileName() -»
+require_once '«used.includePath(this) + used.asFileName() -»';
 «ENDDEFINE»
 
 «REM»
 	generates the require path for an type to include
-	only for external types important!
+	- only for external types important!
+	- if include is empty no require statement is generated
 	@param	used	the type which is required
 «ENDREM»
 «DEFINE _Require(MType used) FOR MClassifier -»
-«used.mapName("import") -»
+«LET used.mapName("import").toString() AS inc -»
+«IF inc.toString().length > 0 -»
+require_once '«inc -»';
+«ENDIF -»
+«ENDLET -»
 «ENDDEFINE»
 
 «REM»
