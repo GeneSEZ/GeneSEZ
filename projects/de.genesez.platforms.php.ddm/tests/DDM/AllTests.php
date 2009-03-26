@@ -25,11 +25,17 @@ require_once('DDM/CreatingAssociatedObjectsTest.php');
 
 class DDM_AllTests
 {
+	/**
+	 * Run DDM_AllTests 
+	 */
 	public static function main()
 	{
 		PHPUnit_TextUI_TestRunner::run(self::suite());
 	}
 
+	/**
+	 * Create TestSuite for DDM_AllTests 
+	 */
 	public static function suite()
 	{
 		$suite = new DDM_TestSuite('DDM_Model');

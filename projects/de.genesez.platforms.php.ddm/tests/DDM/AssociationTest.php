@@ -25,6 +25,9 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$this->classTable = Doctrine::getTable("DDM_Class");
 	}
 
+	/**
+	 * Test creating a new association
+	 */
 	public function testNewAssociation()
 	{
 		$left = new DDM_Class();
@@ -42,6 +45,9 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$association->save();
 	}
 
+	/**
+	 * Test creating a new one-to-one association
+	 */
 	public function testNewAssociationO2O()
 	{
 		$left = new DDM_Class();
@@ -61,6 +67,9 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$association->save();
 	}
 
+	/**
+	 * Test creating a new one-to-n association
+	 */
 	public function testNewAssociationO2N()
 	{
 		$left = new DDM_Class();
@@ -80,6 +89,9 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$association->save();
 	}
 
+	/**
+	 * Test creating a new n-to-n association
+	 */
 	public function testNewAssociationN2N()
 	{
 		$left = new DDM_Class();

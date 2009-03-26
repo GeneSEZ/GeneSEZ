@@ -19,6 +19,9 @@ require_once('DDM.php');
 class DDM_ClassTest extends PHPUnit_Framework_TestCase
 {
 
+	/**
+	 * Test creating a new class
+	 */
 	public function testNewClass()
 	{
 		$method = ucfirst('testNewClass');
@@ -28,6 +31,9 @@ class DDM_ClassTest extends PHPUnit_Framework_TestCase
 		$class->save();
 	}
 
+	/**
+	 * Test creating a parent and child class
+	 */
 	public function testParentClass()
 	{
 		$method = ucfirst('testParentClass');
@@ -42,6 +48,9 @@ class DDM_ClassTest extends PHPUnit_Framework_TestCase
 		$class->save();
 	}
 
+	/**
+	 * Test creating child classes
+	 */
 	public function testChildrenClass()
 	{
 		$method = ucfirst('testChildrenClass');
@@ -69,6 +78,9 @@ class DDM_ClassTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(3, count($parent->children));
 	}
 
+	/**
+	 * Test toString method of class
+	 */
 	public function testClassToString()
 	{
 		$class = new DDM_Class();
@@ -78,6 +90,9 @@ class DDM_ClassTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('Name: Test Class To String, View: TestClassToString', $class->__toString());
 	}
 
+	/**
+	 * Test setting a bad name for class view
+	 */
 	public function testClassWrongViewName()
 	{
 		$class = new DDM_Class();

@@ -13,10 +13,6 @@ require_once('DDM.php');
 class DDM_InheritanceTest extends PHPUnit_Framework_TestCase
 {
 
-	protected function setUp()
-	{
-	}
-
 	/**
 	 * Test if attributes are inherited
 	 */

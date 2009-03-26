@@ -14,6 +14,9 @@ require_once('DDM.php');
 class DDM_CreatingObjectsTest extends PHPUnit_Framework_TestCase
 {
 
+	/**
+	 * Test creating new objects 
+	 */
 	public function testCreatingObjects()
 	{
 		$method = ucfirst('testCreatingObjects');

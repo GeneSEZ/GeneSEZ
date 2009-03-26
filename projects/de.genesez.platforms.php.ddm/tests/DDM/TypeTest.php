@@ -18,6 +18,9 @@ require_once('DDM.php');
 class DDM_TypeTest extends PHPUnit_Framework_TestCase
 {
 
+	/**
+	 * Test creating a new type 
+	 */
 	public function testNewType()
 	{
 		$method = ucfirst(__METHOD__);
@@ -29,7 +32,10 @@ class DDM_TypeTest extends PHPUnit_Framework_TestCase
 		$type->save();
     }
     
-	public function testEmptyName()
+	/**
+	 * Test creating a new type with empty name
+	 */
+    public function testEmptyName()
 	{
 		$this->setExpectedException('Doctrine_Connection_Exception');
 
@@ -40,6 +46,9 @@ class DDM_TypeTest extends PHPUnit_Framework_TestCase
 		$type->save();
 	}
 
+	/**
+	 * Test creating a new type with empty basetype 
+	 */
 	public function testEmptyBasetype()
 	{
 		$method = ucfirst(__METHOD__);
@@ -52,6 +61,9 @@ class DDM_TypeTest extends PHPUnit_Framework_TestCase
    		$type->save();
 	}
 
+	/**
+	 * Test creating a new type with empty constraint
+	 */
 	public function testEmptyConstraint()
 	{
    		$method = ucfirst(__METHOD__);
@@ -64,6 +76,9 @@ class DDM_TypeTest extends PHPUnit_Framework_TestCase
    		$type->save();
 	}
 
+	/**
+	 * Test creating two types with same names  
+	 */
 	public function testDuplicateType()
 	{
    		$method = ucfirst(__METHOD__);

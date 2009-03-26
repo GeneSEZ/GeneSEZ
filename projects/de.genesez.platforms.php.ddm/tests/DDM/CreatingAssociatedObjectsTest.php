@@ -14,6 +14,9 @@ require_once('DDM.php');
 class DDM_CreatingAssociatedObjectsTest extends PHPUnit_Framework_TestCase
 {
 
+	/**
+	 * Test creating one-to-one associated objects 
+	 */
 	public function testCreatingAssociatedObjects()
 	{
 		$method = ucfirst('testCreatingAssociatedObjects');
@@ -59,6 +62,9 @@ class DDM_CreatingAssociatedObjectsTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($oleft->TestCreatingAssociatedObjectsAssociation->id, $found->TestCreatingAssociatedObjectsAssociation->id);
 	}
 
+	/**
+	 * Test creating one-to-n associated objects 
+	 */
 	public function testCreatingAssociatedObjectsO2N()
 	{
 		$method = ucfirst('testCreatingAssociatedObjectsO2N');

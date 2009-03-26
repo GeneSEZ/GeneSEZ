@@ -21,11 +21,17 @@ require_once('DDM/AllTests.php');
 
 class AllTests
 {
-    public static function main()
+	/**
+	 * Run AllTests 
+	 */
+	public static function main()
     {
         PHPUnit_TextUI_TestRunner::run(self::suite());
     }
 
+	/**
+	 * Create TestSuite for AllTests 
+	 */
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('DDM');

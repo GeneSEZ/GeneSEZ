@@ -27,6 +27,9 @@ class DDM_AttributeTest extends PHPUnit_Framework_TestCase
 		$this->classTable = Doctrine::getTable("DDM_Class");
 	}
 
+	/**
+	 * Test creating a new attribute
+	 */
 	public function testNewAttribute()
 	{
 		$class = new DDM_Class();
@@ -47,6 +50,9 @@ class DDM_AttributeTest extends PHPUnit_Framework_TestCase
 		$attribute->save();
 	}
  
+	/**
+	 * Test toString method of attribute
+	 */
 	public function testAttributeToString()
 	{
 		$class = new DDM_Class();
@@ -69,6 +75,9 @@ class DDM_AttributeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('Name: Test Attribute To String, Column: TestAttributeToString', $attribute->__toString());
 	}
 
+	/**
+	 * Test setting a wrong attribute column name
+	 */
 	public function testAttributesWrongColumnName()
 	{
 		$class = new DDM_Class();
@@ -96,6 +105,9 @@ class DDM_AttributeTest extends PHPUnit_Framework_TestCase
 		$this->fail('An expected exception has not been raised.');
 	}
 
+	/**
+	 * Test creating two class attributes from same type
+	 */
 	public function testTwoAttributes()
 	{
 		$class = new DDM_Class();
@@ -122,7 +134,10 @@ class DDM_AttributeTest extends PHPUnit_Framework_TestCase
 		$attribute2->save();
     }
 
-	public function testTwoDifferentAttributes()
+	/**
+	 * Test creating two class attributes with different types
+	 */
+        public function testTwoDifferentAttributes()
 	{
 		$class = new DDM_Class();
 		$class->c_name = 'TestTwoDifferentAttributesClass';
@@ -155,6 +170,9 @@ class DDM_AttributeTest extends PHPUnit_Framework_TestCase
 		$attribute2->save();
     }
 
+	/**
+	 * Test creating two attributes with the same name
+	 */
     public function testTwoAttributesSameName()
 	{
 		$method = ucfirst('testTwoAttributesSameName');

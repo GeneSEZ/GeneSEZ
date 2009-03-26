@@ -13,6 +13,9 @@ require_once('DDM.php');
 
 class DDM_DeletingObjectsTest extends PHPUnit_Framework_TestCase
 {
+	/**
+	 * Test deleting objects 
+	 */
 	public function testDeletingObjects()
 	{
 		$method = ucfirst('testDeletingObjects');

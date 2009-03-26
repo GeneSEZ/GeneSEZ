@@ -13,6 +13,9 @@ require_once('DDM.php');
 
 class DDM_ChangingObjectsTest extends PHPUnit_Framework_TestCase
 {
+	/**
+	 * Test changing object data
+	 */
 	public function testChangingObjects()
 	{
 		$method = ucfirst('testChangingObjects');
