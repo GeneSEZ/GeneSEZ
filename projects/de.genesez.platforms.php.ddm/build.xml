@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="DDM" basedir="." default="build">
+<project name="DDM" basedir="." default="all">
 
 	<property name="report.dir" value="${project.basedir}/report"/>
+	<property name="coverage.report.dir" value="${report.dir}/coverage" />
+	<property name="test.report.dir" value="${report.dir}/test" />
 	<property name="model.dir" value="${project.basedir}/model"/>
+	<property name="api.doc.dir" value="${report.dir}/api-doc" />
+	<property name="style.dir" value="resources/xsl" />
 
-	<target name="build" depends="prepare, test, generate-report" />
+	<includepath classpath="src" />
+	<includepath classpath="tests" />
+	
+	<fileset id="src.files" dir="src">
+		<include name="**/*.php" />
+	</fileset>
+
+	<target name="all" depends="prepare, test, report" />
 
 	<target name="prepare">
 		<mkdir dir="${report.dir}"/>
+		<mkdir dir="${coverage.report.dir}"/>
+		<mkdir dir="${test.report.dir}"/>
+		<mkdir dir="${api.doc.dir}"/>
 	</target>
 	
-	<target name="test">
-		<exec command="psql -c 'CREATE DATABASE de_emnis_ddm_test' -U postgres" dir="${model.dir}" />
-		<exec command="psql -f ddm.pg.sql -U postgres de_emnis_ddm_test" dir="${model.dir}" />
+	<target name="test" depends="database.create" description="execute php unit tests">
 		<phpunit haltonfailure="true" haltonerror="true" printsummary="true">
 			<batchtest>
 				<fileset dir="tests">
@@ -21,11 +33,45 @@
 			</batchtest>
 			<formatter type="xml" todir="${report.dir}" outfile="logfile.xml"/>
 		</phpunit>
-		<exec command="psql -c 'DROP DATABASE de_emnis_ddm_test' -U postgres" dir="${model.dir}" />
 	</target>
 
-	<target name="generate-report">
-		<phpunit2report infile="${report.dir}/logfile.xml" styledir="resources/xsl" todir="report" format="noframes"/>
+	<target name="report" depends="test">
+		<phpunit2report infile="${report.dir}/logfile.xml" styledir="${style.dir}" todir="${test.report.dir}" format="noframes"/>
+	</target>
+
+	<target name="coverage.prepare" depends="prepare">
+	    <coverage-setup database="${report.dir}/coverage.database">
+	      <fileset dir="tests">
+	        <include name="**/*.php" />
+	      	<exclude name="**/AllTests.php" />
+	      	<exclude name="**/*Test.php" />
+	      </fileset>
+	      <fileset refid="src.files" />
+	    </coverage-setup>
+	</target>
+	
+	<target name="coverage.test" depends="database.create, coverage.prepare" description="execute php unit tests with code coverage">
+		<phpunit2 codecoverage="true" haltonfailure="true" haltonerror="true" printsummary="true">
+			<batchtest>
+				<fileset dir="tests">
+					<include name="**/*Test.php"/>
+				</fileset>
+			</batchtest>
+			<formatter type="xml" todir="${report.dir}" outfile="logfile.xml"/>
+		</phpunit2>
+	</target>
+	
+	<target name="coverage.report" depends="coverage.test" description="generates test + coverage report">
+		<phpunit2report infile="${report.dir}/logfile.xml" styledir="${style.dir}" todir="${test.report.dir}" format="noframes"/>
+		<coverage-report outfile="${report.dir}/coverage.xml">
+			<report styledir="${style.dir}" todir="${coverage.report.dir}" />
+		</coverage-report>
+	</target>
+	
+	<target name="database.create" description="Create database">
+		<exec command="psql -c 'DROP DATABASE de_emnis_ddm_test' -U postgres" dir="${model.dir}" />
+		<exec command="psql -c 'CREATE DATABASE de_emnis_ddm_test' -U postgres" dir="${model.dir}" />
+		<exec command="psql -f ddm.pg.sql -U postgres de_emnis_ddm_test" dir="${model.dir}" />
 	</target>
 
 </project>
