@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Core
- */
-
 require_once 'Core/ServiceRegistry.php';
 require_once 'Core/HandlerInfo.php';
 require_once 'Core/Dispatcher.php';

@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Core
- */
-
 require_once 'Core/HandlerInfo.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237827400500_227958_281) ENABLED START */
@@ -14,7 +9,7 @@ require_once 'Core/HandlerInfo.php';
  * @author	dreamer
  * @package	Core
  */
-interface Core_UrlMapper  {
+interface Core_Resolver  {
 	
 	
 	/**
@@ -23,6 +18,12 @@ interface Core_UrlMapper  {
 	 * @return	Core_HandlerInfo
 	 */
 	public function resolveHandler($path);
+	/**
+	 * @generated	method stub for implementation
+	 * @param	string	$path	
+	 * @return	string
+	 */
+	public function resolveLayout($path);
 	
 	
 	// -- own code declarations ---------------------------------------------

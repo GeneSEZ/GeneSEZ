@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Adapter
- */
-
 require_once 'Core/ServiceRegistry.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999613687_255843_1112) ENABLED START */

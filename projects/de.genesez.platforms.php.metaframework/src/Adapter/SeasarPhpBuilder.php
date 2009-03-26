@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Adapter
- */
-
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237058774562_708044_281) ENABLED START */
 // TODO: put your further include + require statements here
@@ -21,7 +16,7 @@ class Adapter_SeasarPhpBuilder   {
 	// -- method implementations --------------------------------------------
 	/**
 	 * @generated	method stub for implementation
-	 * @param	array	$components	
+	 * @param	array	$components	array of type 'S2Container_ComponentDef', default value is 'array()'
 	 * @return	S2Container
 	 */
 	public static function newContainer($components = array()) {
@@ -35,10 +30,10 @@ class Adapter_SeasarPhpBuilder   {
 	}
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$class	
-	 * @param	string	$name	
-	 * @param	array	$arguments	
-	 * @param	array	$properties	
+	 * @param	string	$class	default value is ''''
+	 * @param	string	$name	default value is ''''
+	 * @param	array	$arguments	array of type 'S2Container_ArgDef', default value is 'array()'
+	 * @param	array	$properties	array of type 'S2Container_PropertyDef', default value is 'array()'
 	 * @return	S2Container_ComponentDef
 	 */
 	public static function newComponent($class = '', $name = '', $arguments = array(), $properties = array()) {
@@ -55,7 +50,7 @@ class Adapter_SeasarPhpBuilder   {
 	}
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$value	
+	 * @param	string	$value	default value is 'null'
 	 * @return	S2Container_ArgDef
 	 */
 	public static function newArgument($value = null) {
@@ -66,8 +61,8 @@ class Adapter_SeasarPhpBuilder   {
 	}
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$name	
-	 * @param	string	$value	
+	 * @param	string	$name	default value is 'null'
+	 * @param	string	$value	default value is 'null'
 	 * @return	S2Container_PropertyDef
 	 */
 	public static function newProperty($name = null, $value = null) {

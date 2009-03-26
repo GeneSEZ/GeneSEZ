@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Loader
- */
-
 require_once 'Core/Context.php';
 require_once 'Loader/ModuleLoader.php';
 

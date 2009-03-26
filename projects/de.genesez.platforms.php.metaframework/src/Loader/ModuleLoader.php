@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Loader
- */
-
 require_once 'Core/Context.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1236332715609_785989_435) ENABLED START */

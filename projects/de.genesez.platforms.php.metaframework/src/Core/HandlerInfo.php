@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Core
- */
-
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1236337727984_243900_412) ENABLED START */
 // TODO: put your further include + require statements here
@@ -39,12 +34,13 @@ class Core_HandlerInfo  implements ArrayAccess {
 	 * @generated	constructor stub for implementation
 	 * @param	string	$handler	
 	 * @param	string	$pathInfo	
-	 * @param	string	$url	
+	 * @param	string	$url	default value is 'null'
 	 */
-	public function __construct($handler, $pathInfo, $url) {
+	public function __construct($handler, $pathInfo, $url = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338137828_752628_437) ENABLED START */
-		// TODO: implementation of constructor for class 'HandlerInfo'
-		throw new Exception('The implementation of the constructor of the class HandlerInfo is missing !');
+		$this->_handler = $handler;
+		$this->_pathInfo = $pathInfo;
+		$this->_url = $url;
 		/* PROTECTED REGION END */
 	}
 	

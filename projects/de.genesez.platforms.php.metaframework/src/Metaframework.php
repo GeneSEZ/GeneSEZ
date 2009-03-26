@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	
- */
-
 require_once 'Loader/ModuleLoader.php';
 require_once 'Core/Context.php';
 
@@ -13,7 +8,6 @@ spl_autoload_register(array('Metaframework', 'autoload'));
 
 /**
  * @author	dreamer
- * @package	
  */
 class Metaframework   {
 	
@@ -44,12 +38,13 @@ class Metaframework   {
 	 */
 	public function registerModuleLoader($name, $loader) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332689875_601091_430) ENABLED START */
+		// TODO: in a reviced implementation, insert the plug-ins additionally into a depencency tree
 		$this->modules[$name] = $loader;
 		/* PROTECTED REGION END */
 	}
 	/**
 	 * @generated	method stub for implementation
-	 * @param	array	$loaders	
+	 * @param	array	$loaders	array of type 'Loader_ModuleLoader', default value is 'array()'
 	 */
 	public function registerModuleLoaders($loaders = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236345050000_299364_554) ENABLED START */
@@ -63,6 +58,7 @@ class Metaframework   {
 	 */
 	public function proceed() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237975349578_500094_665) ENABLED START */
+		$this->checkPlugIns();
 		$this->buildContainer();
 		// config frameworks
 		reset($this->modules);
@@ -78,17 +74,15 @@ class Metaframework   {
 	protected function buildContainer() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237987504359_726879_1039) ENABLED START */
 		// TODO: check plug-in dependencies, if all needed plug-ins exist
-		$it = new ArrayIterator($this->modules);
 		// core plugin has to be the 1st one!
-		if (!$it->valid()) {
+		reset($this->modules);
+		if (current($this->modules) === false) {
 			throw new Exception('no core plug-in found!');
 		}
-		$this->rootContext = $it->current()->getModuleContext();
+		$this->rootContext = current($this->modules)->getModuleContext();
 		$container = Adapter_SeasarPhpBuilder::newContainer();
 		$isAdding = false;
-		$it->rewind();
-		while ($it->valid()) {
-			$module = $it->current();
+		foreach ($this->modules as $name => $module) {
 			// add context structure
 			if ($isAdding && $module->hasModuleContext()) {
 				$this->rootContext->nestedContext->insert($module->getModuleContext());
@@ -99,9 +93,39 @@ class Metaframework   {
 			}
 			// don't add the first component (core plug-in) but all others
 			$isAdding = true;
-			$it->next();
 		}
 		$this->container = $container->getComponent('serviceRegistry');
+		/* PROTECTED REGION END */
+	}
+	/**
+	 * @generated	method stub for implementation
+	 */
+	protected function checkPlugIns() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238097872890_554445_715) ENABLED START */
+		// store all dependencies in one array, key -> needed, value -> array of dependants
+		// just a simple implementation, not one with a high performance
+		$dependencies = array();
+		foreach ($this->modules as $name => $module) {
+			if ($module->hasModuleDependencies()) {
+				foreach ($module->getModuleDependencies() as $required) {
+					if (array_key_exists($required, $dependencies)) {
+						$dependencies[$required][] = $name;
+					} else {
+						$dependencies[$required] = array($name);
+					}
+				}
+			}
+		}
+		$missing = array();
+		// check if all required modules exist
+		foreach ($dependencies as $name => $required) {
+			if (!array_key_exists($name, $this->modules)) {
+				$missing[$name] = $required;
+			}
+		}
+		if (count($missing) > 0) {
+			throw new Exception('there are missing required modules, all direct dependencies:\n' . var_export($missing, true));
+		}
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -157,5 +181,4 @@ class Metaframework   {
 	// TODO: put your further code implementations for class 'DdmFw' here
 	/* PROTECTED REGION END */
 }
-
 ?>

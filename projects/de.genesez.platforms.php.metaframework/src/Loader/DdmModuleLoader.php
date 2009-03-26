@@ -1,22 +1,17 @@
 <?php
-/**
- * @author	dreamer
- * @package	Loader
- */
-
 require_once 'Core/Context.php';
-require_once 'Loader/InvisibleModuleLoader.php';
+require_once 'Loader/ModuleLoader.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237982284390_612829_940) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Loader_InvisibleModuleLoader
+ * @see		Loader_ModuleLoader
  * @author	dreamer
  * @package	Loader
  */
-class Loader_DdmModuleLoader extends Loader_InvisibleModuleLoader  {
+class Loader_DdmModuleLoader  implements Loader_ModuleLoader {
 	
 	
 	

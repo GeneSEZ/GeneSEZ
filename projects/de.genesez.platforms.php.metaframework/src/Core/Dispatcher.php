@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Core
- */
-
 require_once 'Core/HandlerInfo.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1238000869500_873239_1272) ENABLED START */

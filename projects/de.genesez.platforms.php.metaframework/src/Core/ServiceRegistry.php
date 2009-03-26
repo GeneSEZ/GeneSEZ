@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Core
- */
-
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999613687_797910_1115) ENABLED START */
 // TODO: put your further include + require statements here

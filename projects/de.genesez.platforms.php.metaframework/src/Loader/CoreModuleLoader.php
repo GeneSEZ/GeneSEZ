@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Loader
- */
-
 require_once 'Core/Context.php';
 require_once 'Core/ServiceRegistry.php';
 require_once 'Loader/InvisibleModuleLoader.php';
@@ -11,9 +6,9 @@ require_once 'Loader/InvisibleModuleLoader.php';
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237975932171_599452_831) ENABLED START */
 require_once 's2container/S2Container.php';
 require_once 'Doctrine/Doctrine.php';
+require_once 'Smarty/Smarty.class.php';
 
 spl_autoload_register(array('Doctrine', 'autoload'));
-//require_once 'Smarty/Smarty.class.php';
 /* PROTECTED REGION END */
 
 /**
@@ -33,7 +28,7 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 	/**
 	 * constructs an object of class {@link Loader_CoreModuleLoader}
 	 * @generated	constructor stub for implementation
-	 * @param	array	$config	
+	 * @param	array	$config	array of type 'string'
 	 */
 	public function __construct($config) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1237997953375_167741_1072) ENABLED START */
@@ -85,7 +80,11 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 	 */
 	public function getModuleContext() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237994233234_645847_1052) ENABLED START */
-		return new Core_Context('/', '');
+		$handler = '';
+		if (array_key_exists('root.handler', $this->config)) {
+			$handler = $this->config('root.handler');
+		}
+		return new Core_Context('/', $handler);
 		/* PROTECTED REGION END */
 	}
 	/**

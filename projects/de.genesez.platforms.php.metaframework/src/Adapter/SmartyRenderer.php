@@ -1,9 +1,4 @@
 <?php
-/**
- * @author	dreamer
- * @package	Adapter
- */
-
 require_once 'Smarty/Smarty.class.php';
 require_once 'Core/Renderer.php';
 

@@ -8,12 +8,27 @@ class MetaframeworkTestClass extends Metaframework {
 	public function buildContainer() {
 		parent::buildContainer();
 	}
+	public function checkPlugIns() {
+		parent::checkPlugIns();
+	}
 	public function __get($name) {
 		switch ($name) {
 			case 'container' : return $this->container;
 			case 'modules' : return $this->modules;
 			case 'rootContext' : return $this->rootContext;
 		}
+	}
+}
+
+class TestModuleLoader extends Loader_InvisibleModuleLoader {
+	public function getComponents() {
+		return array();
+	}
+	public function hasModuleDependencies() {
+		return true;
+	}
+	public function getModuleDependencies() {
+		return array('non.existing.module');
 	}
 }
 
@@ -62,6 +77,13 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($this->metafw->container->hasComponent('notifier'), 'component flash notifier should exist');
 		
 		$this->assertTrue($this->metafw->container->hasComponent('classFormAdapter'), 'component classFormAdapter should exist');
+	}
+	
+	public function testModuleDependenciesFail() {
+		$this->testConstruction();
+		$this->metafw->registerModuleLoader('test.module.loader', new TestModuleLoader());
+		$this->setExpectedException('Exception');
+		$this->metafw->checkPlugIns();
 	}
 }
 ?>
