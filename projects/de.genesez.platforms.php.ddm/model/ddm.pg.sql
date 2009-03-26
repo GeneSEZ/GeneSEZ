@@ -344,89 +344,102 @@ $$ LANGUAGE plperl;
 --- ---------------------
 DROP FUNCTION IF EXISTS _create_insert_rule(c_view varchar, c_id integer);
 CREATE FUNCTION _create_insert_rule(c_view varchar, c_id integer) RETURNS void AS $$
-DECLARE
-	create_rule TEXT;
-	value_table TEXT;
-	attributes RECORD;
-BEGIN
-	create_rule := 'CREATE RULE insert_'
-		|| c_view
-		|| '  AS ON INSERT TO '
-		|| c_view
-		|| ' DO INSTEAD ( INSERT INTO ddm_object(o_class) VALUES('
-		|| c_id
-        || ');';
-	FOR attributes IN SELECT a.id AS a_id, a_type, a_column, t_basetype FROM ddm_attribute AS a, ddm_type AS t WHERE a_class=c_id AND a_type=t.id LOOP
-		IF attributes.t_basetype = 'STRING' THEN
-			value_table := 'ddm_value_string';
-		ELSIF attributes.t_basetype = 'INTEGER' THEN
-			value_table := 'ddm_value_integer';
-		ELSIF attributes.t_basetype = 'BOOLEAN' THEN
-			value_table := 'ddm_value_boolean';
-		ELSE
-			RAISE EXCEPTION 'Unknown type %', attributes.t_basetype;
-		END IF;
-		create_rule := create_rule
-			|| 'INSERT INTO '
-			|| value_table
-			||'(v_object, v_attribute, v_value) VALUES(currval(''ddm_object_id_seq''), '
-			|| attributes.a_id
-			|| ', NEW.'
-			|| attributes.a_column
-			|| ');';
-	END LOOP;
-	create_rule := create_rule
-		|| ' );';
-	RAISE DEBUG '%', create_rule;
-	EXECUTE create_rule;
-	RETURN;
+	my ($view, $id) = @_;
+	my $statement;
+	my %attributes;
+	my @classes = ();
+	my $cid = $id;
+
+	while ($cid) {
+		push( @classes, $cid );
+		$statement = 'SELECT c_parent FROM ddm_class WHERE id=' . $cid;
+		elog(INFO, $statement);
+		my $sth = spi_query($statement);
+		my $row = spi_fetchrow($sth);
+		$cid = $row{'c_parent'};
+	}
+
+	for my $cid (@classes) {
+		$statement ='SELECT a.id AS a_id, a_type, a_column, t_basetype FROM ddm_attribute AS a, ddm_type AS t WHERE a.a_type=t.id AND a.a_class=' . $cid;
+		elog(INFO, $statement);
+		my $sth = spi_query($statement);
+		while ( my $row = spi_fetchrow($sth) ) {
+			elog(WARNING, $row->{'a_column'});
+			if ( ! exists( $attributes{$row->{'a_column'}} ) ) {
+				$attributes{$row->{'a_column'}} = $row;
+			}
+		}
+	}
+
+	$statement = 'CREATE RULE insert_' . $view . '  AS ON INSERT TO ' . $view . ' DO INSTEAD ( INSERT INTO ddm_object(o_class) VALUES(' . $id . ');';
+
+	while ( my ($a_column, $attr) = each( %attributes ) ) {
+		my $table;
+		if ( 'STRING' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_string';
+		} elsif ( 'INTEGER' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_integer';
+		} elsif ( 'BOOLEAN' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_boolean';
+		}
+		$statement .= 'INSERT INTO ' . $table . ' (v_object, v_attribute, v_value) VALUES(currval(\'ddm_object_id_seq\'),' . $attr->{'a_id'} . ', NEW.' . $a_column . ');';
+	}
+	$statement .= '  );';
+	elog(INFO, $statement);
+	spi_exec_query($statement, 1);
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plperl;
 
 --- ---------------------
 --- Anlegen neuer Rules zum Aktualisieren von Objekten
 --- ---------------------
 DROP FUNCTION IF EXISTS _create_update_rule(c_view varchar, c_id integer);
 CREATE FUNCTION _create_update_rule(c_view varchar, c_id integer) RETURNS void AS $$
-DECLARE
-	create_rule TEXT;
-		value_table TEXT;
-	attributes RECORD;
-BEGIN
-	
-	create_rule := 'CREATE RULE update_'
-		|| c_view
-		|| '  AS ON UPDATE TO '
-		|| c_view
-		|| ' DO INSTEAD ( ';
-	FOR attributes IN SELECT a.id AS a_id, a_type, a_column, t_basetype FROM ddm_attribute AS a, ddm_type AS t WHERE a_class=c_id AND a_type=t.id LOOP
-		IF attributes.t_basetype = 'STRING' THEN
-			value_table := 'ddm_value_string';
-		ELSIF attributes.t_basetype = 'INTEGER' THEN
-			value_table := 'ddm_value_integer';
-		ELSIF attributes.t_basetype = 'BOOLEAN' THEN
-			value_table := 'ddm_value_boolean';
-		ELSE
-			RAISE EXCEPTION 'Unknown type %', attributes.t_basetype;
-		END IF;
-		create_rule := create_rule
-			|| ' SELECT _update_attribute( '''
-			|| value_table
-			|| ''', NEW.id, '
-			|| attributes.a_id
-			|| ', OLD.'
-			|| attributes.a_column
-			|| ', NEW.'
-			|| attributes.a_column
-			|| ');';
-	END LOOP;
-	create_rule := create_rule
-		|| ' );';
-	RAISE DEBUG '%', create_rule;
-	EXECUTE create_rule;
-	RETURN;
+	my ($view, $id) = @_;
+	my $statement;
+	my %attributes;
+	my @classes = ();
+	my $cid = $id;
+
+	while ($cid) {
+		push( @classes, $cid );
+		$statement = 'SELECT c_parent FROM ddm_class WHERE id=' . $cid;
+		elog(WARNING, $statement);
+		my $sth = spi_query($statement);
+		my $row = spi_fetchrow($sth);
+		$cid = $row{'c_parent'};
+	}
+
+	for my $cid (@classes) {
+		$statement ='SELECT a.id AS a_id, a_type, a_column, t_basetype FROM ddm_attribute AS a, ddm_type AS t WHERE a.a_type=t.id AND a.a_class=' . $cid;
+		elog(WARNING, $statement);
+		my $sth = spi_query($statement);
+		while ( my $row = spi_fetchrow($sth) ) {
+			elog(WARNING, $row->{'a_column'});
+			if ( ! exists( $attributes{$row->{'a_column'}} ) ) {
+				$attributes{$row->{'a_column'}} = $row;
+			}
+		}
+	}
+
+	$statement = 'CREATE RULE update_' . $view . '  AS ON UPDATE TO ' . $view . ' DO INSTEAD ( INSERT INTO ddm_object(o_class) VALUES(' . $id . ');';
+
+	while ( my ($a_column, $attr) = each( %attributes ) ) {
+		my $table;
+		if ( 'STRING' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_string';
+		} elsif ( 'INTEGER' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_integer';
+		} elsif ( 'BOOLEAN' eq $attr->{'t_basetype'} ) {
+			$table = 'ddm_value_boolean';
+		}
+		$statement .= 'SELECT _update_attribute( \'' . $table . '\', NEW.id, ' . $attr->{'a_id'} . ', OLD.' . $attr->{'a_column'} . ', NEW.' . $attr->{'a_column'} . ');';
+	}
+	$statement .= '  );';
+	elog(WARNING, $statement);
+	spi_exec_query($statement, 1);
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plperl;
 
 --- ---------------------
 --- Anlegen neuer Rules zum Löschen von Objekten
