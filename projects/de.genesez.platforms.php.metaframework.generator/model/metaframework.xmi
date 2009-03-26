@@ -3,13 +3,18 @@
   <ownedComment xmiGuid="_16_0_b6f02e1_1236332434171_634398_230" annotation="Author:dreamer.&#xA;Created:06.03.09 10:40.&#xA;Title:.&#xA;Comment:.&#xA;"/>
   <nestedPackage name="Core" xmiGuid="_16_0_b6f02e1_1236332450156_458657_364">
     <classifier xsi:type="gcore:MClass" name="Context" xmiGuid="_16_0_b6f02e1_1236334265906_925929_844" visibility="public" supertype="//@nestedPackage.0/@classifier.2" realization="//@nestedPackage.0/@classifier.2">
+      <ownedComment xmiGuid="_16_0_b6f02e1_1238083140406_168920_714" annotation="The context describes an accessible part of an URL and provides an handler for it. &#xA;&#xA;A URL can be splitted on each occurence of the slash &lt;code>/&lt;/code>. Then each part &#xA;forms a context. For example, the following URL:&#xA;&lt;code>web.server/web.app.root/subcontext/subsub&lt;/code>&#xA;consists of three contexts:&#xA;&lt;ul>&#xA;&lt;li>the root context &lt;code>web.server/web.app.root/&lt;/code>&lt;/li>&#xA;&lt;li>a nested sub context &lt;code>subcontext&lt;/code> below the root context&lt;/li>&#xA;&lt;li>and a nested context below the subcontext &lt;code>subsub&lt;/code>.&lt;/li>&#xA;&lt;/ul>"/>
       <operation name="Context" xmiGuid="_16_0_b6f02e1_1236338382406_230888_479" stereotype="//@anyStereotype.1 //@anyStereotype.2" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
         <parameter name="name" xmiGuid="_16_0_b6f02e1_1236338394750_968265_481" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
-        <parameter name="handler" xmiGuid="_16_0_b6f02e1_1236338394750_864013_482" defaultvalue="NULL" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+        <parameter name="handler" xmiGuid="_16_0_b6f02e1_1236338394750_864013_482" defaultvalue="null" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
         <parameter name="nestedContext" xmiGuid="_16_0_b6f02e1_1236343059171_71122_515" defaultvalue="array()" direction="in" multiplicity="-1" unique="true" type="//@nestedPackage.0/@classifier.0"/>
+        <parameter name="layout" xmiGuid="_16_0_b6f02e1_1238063300171_786947_705" defaultvalue="null" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
       <operation name="resolveHandler" xmiGuid="_16_0_b6f02e1_1236344597078_642983_540" visibility="public" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.1">
         <parameter name="path" xmiGuid="_16_0_b6f02e1_1236344611343_626913_542" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+      </operation>
+      <operation name="resolveLayout" xmiGuid="_16_0_b6f02e1_1238062942906_584232_690" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+        <parameter name="path" xmiGuid="_16_0_b6f02e1_1238062942906_348385_691" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
       <operation name="getContextName" xmiGuid="_16_0_b6f02e1_1236344451046_376159_524" visibility="private" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
         <parameter name="path" xmiGuid="_16_0_b6f02e1_1236344462703_248717_526" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
@@ -24,19 +29,26 @@
         <parameter name="name" xmiGuid="_16_0_b6f02e1_1236344531421_711145_538" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
       <operation name="__toString" xmiGuid="_16_0_b6f02e1_1236344802625_729711_545" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
-      <property xsi:type="gcore:MAttribute" name="name" xmiGuid="_16_0_b6f02e1_1236334274046_971215_863" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+      <property xsi:type="gcore:MAttribute" name="name" xmiGuid="_16_0_b6f02e1_1236334274046_971215_863" stereotype="//@anyStereotype.0" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+      </property>
       <property xsi:type="gcore:MAttribute" name="handler" xmiGuid="_16_0_b6f02e1_1236334278375_890325_865" stereotype="//@anyStereotype.0" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.1"/>
       </property>
-      <property xsi:type="gcore:MAssociationRole" name="nestedContext" xmiGuid="_16_0_b6f02e1_1236338605953_733262_494" visibility="private" multiplicity="-1" type="//@nestedPackage.0/@classifier.0" association="//@association.0" opposite="//@nestedPackage.0/@classifier.0/@property.3"/>
-      <property xsi:type="gcore:MAssociationRole" name="parent" xmiGuid="_16_0_b6f02e1_1236338605953_77036_495" visibility="private" multiplicity="1" type="//@nestedPackage.0/@classifier.0" association="//@association.0" opposite="//@nestedPackage.0/@classifier.0/@property.2"/>
+      <property xsi:type="gcore:MAttribute" name="layout" xmiGuid="_16_0_b6f02e1_1238063249875_968228_700" stereotype="//@anyStereotype.0" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.1"/>
+      </property>
+      <property xsi:type="gcore:MAssociationRole" name="nestedContext" xmiGuid="_16_0_b6f02e1_1236338605953_733262_494" visibility="private" multiplicity="-1" type="//@nestedPackage.0/@classifier.0" association="//@association.0" opposite="//@nestedPackage.0/@classifier.0/@property.4"/>
+      <property xsi:type="gcore:MAssociationRole" name="parent" xmiGuid="_16_0_b6f02e1_1236338605953_77036_495" visibility="private" multiplicity="1" type="//@nestedPackage.0/@classifier.0" association="//@association.0" opposite="//@nestedPackage.0/@classifier.0/@property.3"/>
     </classifier>
     <classifier xsi:type="gcore:MClass" name="HandlerInfo" xmiGuid="_16_0_b6f02e1_1236337727984_243900_412" visibility="public" supertype="//@externalTypes.0" realization="//@externalTypes.0">
       <operation name="HandlerInfo" xmiGuid="_16_0_b6f02e1_1236338137828_752628_437" stereotype="//@anyStereotype.1 //@anyStereotype.2" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
         <parameter name="handler" xmiGuid="_16_0_b6f02e1_1236338163234_390686_439" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
         <parameter name="pathInfo" xmiGuid="_16_0_b6f02e1_1236338163234_187349_440" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
-        <parameter name="url" xmiGuid="_16_0_b6f02e1_1236338342859_975754_478" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+        <parameter name="url" xmiGuid="_16_0_b6f02e1_1236338342859_975754_478" defaultvalue="null" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
       <property xsi:type="gcore:MAttribute" name="handler" xmiGuid="_16_0_b6f02e1_1236337809703_378209_433" stereotype="//@anyStereotype.0" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
@@ -51,9 +63,12 @@
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
       </property>
     </classifier>
-    <classifier xsi:type="gcore:MInterface" name="UrlMapper" xmiGuid="_16_0_b6f02e1_1237827400500_227958_281" visibility="public">
+    <classifier xsi:type="gcore:MInterface" name="Resolver" xmiGuid="_16_0_b6f02e1_1237827400500_227958_281" visibility="public">
       <operation name="resolveHandler" xmiGuid="_16_0_b6f02e1_1237827425625_150554_301" visibility="public" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.1">
         <parameter name="path" xmiGuid="_16_0_b6f02e1_1237827425625_577257_302" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+      </operation>
+      <operation name="resolveLayout" xmiGuid="_16_0_b6f02e1_1238062906453_136367_685" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+        <parameter name="path" xmiGuid="_16_0_b6f02e1_1238062923796_600399_688" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
     </classifier>
     <classifier xsi:type="gcore:MInterface" name="ServiceRegistry" xmiGuid="_16_0_b6f02e1_1237999613687_797910_1115" visibility="public">
@@ -111,7 +126,7 @@
     <classifier xsi:type="gcore:MClass" name="UtilitiesModuleLoader" xmiGuid="_16_0_b6f02e1_1237982205234_346906_901" visibility="public" supertype="//@nestedPackage.1/@classifier.4" generalization="//@nestedPackage.1/@classifier.4">
       <operation name="getComponents" xmiGuid="_16_0_b6f02e1_1237982234093_59205_924" visibility="public" multiplicity="-1" unique="true" returnType="//@externalTypes.1"/>
     </classifier>
-    <classifier xsi:type="gcore:MClass" name="DdmModuleLoader" xmiGuid="_16_0_b6f02e1_1237982284390_612829_940" visibility="public" supertype="//@nestedPackage.1/@classifier.4" generalization="//@nestedPackage.1/@classifier.4">
+    <classifier xsi:type="gcore:MClass" name="DdmModuleLoader" xmiGuid="_16_0_b6f02e1_1237982284390_612829_940" visibility="public" supertype="//@nestedPackage.1/@classifier.0" realization="//@nestedPackage.1/@classifier.0">
       <operation name="hasModuleDependencies" xmiGuid="_16_0_b6f02e1_1237982820437_568347_1028" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.2"/>
       <operation name="getModuleDependencies" xmiGuid="_16_0_b6f02e1_1237982313375_834057_962" visibility="public" multiplicity="-1" unique="true" returnType="//@primitiveTypes.0"/>
       <operation name="hasModuleContext" xmiGuid="_16_0_b6f02e1_1237982313390_339484_965" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.2"/>
@@ -125,7 +140,6 @@
       <operation name="getModuleContext" xmiGuid="_16_0_b6f02e1_1237982413781_734867_998" visibility="public" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.0"/>
     </classifier>
   </nestedPackage>
-  <nestedPackage name="Seasar" xmiGuid="_16_0_b6f02e1_1236979707968_738431_280"/>
   <nestedPackage name="Adapter" xmiGuid="_16_0_b6f02e1_1237999905656_853442_1198">
     <classifier xsi:type="gcore:MClass" name="SmartyRenderer" xmiGuid="_16_0_b6f02e1_1237999928437_189680_1219" visibility="public" supertype="//@nestedPackage.0/@classifier.4" realization="//@nestedPackage.0/@classifier.4">
       <operation name="render" xmiGuid="_16_0_b6f02e1_1238000667953_464139_1265" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.3">
@@ -168,7 +182,7 @@
       </operation>
     </classifier>
   </nestedPackage>
-  <association name="" xmiGuid="_16_0_b6f02e1_1236338605953_910948_493" end="//@nestedPackage.0/@classifier.0/@property.2 //@nestedPackage.0/@classifier.0/@property.3"/>
+  <association name="" xmiGuid="_16_0_b6f02e1_1236338605953_910948_493" end="//@nestedPackage.0/@classifier.0/@property.4 //@nestedPackage.0/@classifier.0/@property.3"/>
   <classifier xsi:type="gcore:MClass" name="Metaframework" xmiGuid="_16_0_b6f02e1_1236332587625_21111_386" visibility="public">
     <operation name="registerModuleLoader" xmiGuid="_16_0_b6f02e1_1236332689875_601091_430" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.3">
       <parameter name="name" xmiGuid="_16_0_b6f02e1_1237972989062_20338_642" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
@@ -179,6 +193,7 @@
     </operation>
     <operation name="proceed" xmiGuid="_16_0_b6f02e1_1237975349578_500094_665" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.3"/>
     <operation name="buildContainer" xmiGuid="_16_0_b6f02e1_1237987504359_726879_1039" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.3"/>
+    <operation name="checkPlugIns" xmiGuid="_16_0_b6f02e1_1238097872890_554445_715" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.3"/>
     <operation name="autoload" xmiGuid="_16_0_b6f02e1_1238019127843_233433_1477" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.2">
       <parameter name="classname" xmiGuid="_16_0_b6f02e1_1238019200375_438353_1481" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
     </operation>
