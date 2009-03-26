@@ -43,7 +43,7 @@
 «DEFINE File FOR MClassifier -»
 /**
  * @author	«getUserName()»
- * @package	«packageDeclaration( basePath() )»
+«EXPAND PackageDeclaration -»
  */
 «ENDDEFINE»
 
@@ -57,8 +57,19 @@
 «ENDIF -»
 «EXPAND _Supertypes -»
  * @author	«getUserName()»
- * @package	«packageDeclaration( basePath() )»
+«EXPAND PackageDeclaration -»
  */
+«ENDDEFINE»
+
+«REM»
+	generates the @package declaration
+«ENDREM»
+«DEFINE PackageDeclaration FOR MClassifier -»
+«LET packageDeclaration( basePath() ) AS p -»
+«IF p.length > 0 -»
+ * @package	«p»
+«ENDIF -»
+«ENDLET -»
 «ENDDEFINE»
 
 
@@ -432,9 +443,24 @@
 «ENDREM»
 «DEFINE _Parameter FOR MParameter -»
 «IF isSingleValuedType() -»
-	 * @param	«type.mapName().asTypeName()»	$«asParameter()»	«comment().format("", "")»
+	 * @param	«type.mapName().asTypeName()»	$«asParameter()»	«EXPAND _ParameterComment -»
 «ELSE -»
-	 * @param	array	$«asParameter()»	«comment().format("", "")»
+	 * @param	array	$«asParameter()»	«EXPAND _ParameterComment -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the comment text for parameters
+	- if a model documentation exist, it is used
+	- else a default text including type and default value may be generated
+«ENDREM»
+«DEFINE _ParameterComment FOR MParameter -»
+«IF hasComment() -»
+«comment().format("", "")»
+«ELSE -»
+«IF isMultiValuedType() -»array of type '«type.mapName().asTypeName() -»'«ENDIF -»
+«IF isMultiValuedType() && hasDefaultValue() -», «ENDIF -»
+«IF hasDefaultValue() -»default value is '«defaultvalue -»'«ENDIF»
 «ENDIF -»
 «ENDDEFINE»
 

@@ -44,8 +44,7 @@
 «DEFINE Root FOR MClassifier»
 «FILE filePath( asFileName(), basePath() ) -»
 <?php
-«EXPAND Comment::File -»
-
+«REM»«EXPAND Comment::File -»«ENDREM»«EXPAND _ -»
 «EXPAND _Imports -»
 
 «EXPAND _OwnImports("php.own.imports." + xmiGuid) -»
@@ -138,4 +137,12 @@ require_once '«inc -»';
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
 // TODO: put your further include + require statements here
 «ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+	generates nothing but removes all whitespace within a line
+	- e.g. used after a comment suppresses the generation of an empty line
+	  (which is usually generated for a comment)
+«ENDREM»
+«DEFINE _ FOR MElement -»
 «ENDDEFINE»
