@@ -212,6 +212,7 @@ CREATE FUNCTION check_attribute() RETURNS TRIGGER AS $$
 	my $id = $_TD->{'new'}{'a_class'};
 
 	my @classes = ();
+	my @classqueue = ($id);
 	my $cid = $id;
 
 	while ($cid) {
@@ -221,6 +222,17 @@ CREATE FUNCTION check_attribute() RETURNS TRIGGER AS $$
 		my $sth = spi_query($statement);
 		my $row = spi_fetchrow($sth);
 		$cid = $row->{'c_parent'};
+	}
+
+	while (-1 < $#classqueue ) {
+		my $cid = shift( @classqueue );
+		$statement = 'SELECT id FROM ddm_class WHERE c_parent=' . $cid;
+		elog(WARNING, $statement);
+		my $sth = spi_query($statement);
+		while ( defined( my $row = spi_fetchrow($sth) ) ) {
+			push( @classqueue, $row->{'id'} );
+			push( @classes, $row->{'id'} );
+		}
 	}
 
 	for my $cid (@classes) {

@@ -46,6 +46,9 @@ class DDM_InheritanceTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($child->hasAttribute('TestInheritanceAttribute'));
 	}
 
+	/**
+	 * Test for exception if parent class has attribute
+	 */
 	public function testDoubledAttributesInChild() {
 		$parent = new DDM_Class();
 		$parent->c_name = 'TestDoubledAttributesInChildParent';
@@ -80,8 +83,10 @@ class DDM_InheritanceTest extends PHPUnit_Framework_TestCase
 		}
 		$this->fail('An expected exception has not been raised.');
 	}
-	
 
+	/**
+	 * Test for exception if child class has attribute
+	 */
 	public function testDoubledAttributesInParent() {
 		$parent = new DDM_Class();
 		$parent->c_name = 'TestDoubledAttributesInParentParent';
