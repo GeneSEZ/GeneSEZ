@@ -204,6 +204,39 @@ END;
 $$ LANGUAGE plpgsql;
 
 --- ---------------------
+--- Pruefung vor dem Anlegen neuer Attribute
+--- ---------------------
+DROP FUNCTION IF EXISTS check_attribute() CASCADE;
+CREATE FUNCTION check_attribute() RETURNS TRIGGER AS $$
+	my $name = $_TD->{'new'}{'a_name'};
+	my $id = $_TD->{'new'}{'a_class'};
+
+	my @classes = ();
+	my $cid = $id;
+
+	while ($cid) {
+		push( @classes, $cid );
+		$statement = 'SELECT c_parent FROM ddm_class WHERE id=' . $cid;
+		elog(WARNING, $statement);
+		my $sth = spi_query($statement);
+		my $row = spi_fetchrow($sth);
+		$cid = $row->{'c_parent'};
+	}
+
+	for my $cid (@classes) {
+		$statement ='SELECT a.id AS a_id FROM ddm_attribute AS a WHERE a.a_name=\'' . $name . '\' AND a.a_class=' . $cid;
+		elog(WARNING, $statement);
+		my $sth = spi_query($statement);
+		while ( defined( my $row = spi_fetchrow($sth) ) ) {
+			elog(ERROR, 'Attribute named "' . $name . '" already exists');
+			return 'SKIP';
+		}
+	}
+
+	return;
+$$ LANGUAGE plperl;
+
+--- ---------------------
 --- Anlegen neuer Attribute
 --- ---------------------
 DROP FUNCTION IF EXISTS create_attribute() CASCADE;
@@ -297,7 +330,7 @@ CREATE FUNCTION _create_view(c_view varchar, c_id integer, c_parent integer) RET
 		elog(INFO, $statement);
 		my $sth = spi_query($statement);
 		my $row = spi_fetchrow($sth);
-		$parent = $row{'c_parent'};
+		$parent = $row->{'c_parent'};
 	}
 
 	for my $cid (@classes) {
@@ -356,7 +389,7 @@ CREATE FUNCTION _create_insert_rule(c_view varchar, c_id integer) RETURNS void A
 		elog(INFO, $statement);
 		my $sth = spi_query($statement);
 		my $row = spi_fetchrow($sth);
-		$cid = $row{'c_parent'};
+		$cid = $row->{'c_parent'};
 	}
 
 	for my $cid (@classes) {
@@ -509,6 +542,7 @@ CREATE TRIGGER ddm_class_create AFTER INSERT ON ddm_class FOR EACH ROW EXECUTE P
 CREATE TRIGGER ddm_class_modify AFTER UPDATE ON ddm_class FOR EACH ROW EXECUTE PROCEDURE modify_class();
 CREATE TRIGGER ddm_class_delete BEFORE DELETE ON ddm_class FOR EACH ROW EXECUTE PROCEDURE delete_class();
 
+CREATE TRIGGER ddm_attribute_check BEFORE INSERT OR UPDATE ON ddm_attribute FOR EACH ROW EXECUTE PROCEDURE check_attribute();
 CREATE TRIGGER ddm_attribute_create AFTER INSERT ON ddm_attribute FOR EACH ROW EXECUTE PROCEDURE create_attribute();
 CREATE TRIGGER ddm_attribute_modify AFTER UPDATE ON ddm_attribute FOR EACH ROW EXECUTE PROCEDURE modify_attribute();
 CREATE TRIGGER ddm_attribute_delete AFTER DELETE ON ddm_attribute FOR EACH ROW EXECUTE PROCEDURE delete_attribute();

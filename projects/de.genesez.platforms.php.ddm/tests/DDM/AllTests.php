@@ -17,6 +17,7 @@ require_once('DDM/ClassTest.php');
 require_once('DDM/TypeTest.php');
 require_once('DDM/AttributeTest.php');
 require_once('DDM/AssociationTest.php');
+require_once('DDM/InheritanceTest.php');
 require_once('DDM/ChangingObjectsTest.php');
 require_once('DDM/DeletingObjectsTest.php');
 require_once('DDM/CreatingObjectsTest.php');
@@ -37,6 +38,7 @@ class DDM_AllTests
 		$suite->addTestSuite('DDM_ClassTest');
 		$suite->addTestSuite('DDM_AttributeTest');
 		$suite->addTestSuite('DDM_AssociationTest');
+		$suite->addTestSuite('DDM_InheritanceTest');
 		$suite->addTestSuite('DDM_CreatingObjectsTest');
 		$suite->addTestSuite('DDM_ChangingObjectsTest');
 		$suite->addTestSuite('DDM_DeletingObjectsTest');

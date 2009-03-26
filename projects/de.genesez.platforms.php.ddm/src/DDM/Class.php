@@ -87,6 +87,9 @@ class DDM_Class extends Doctrine_Record
 				return true;
 			}
 		}
+		if (null !== $this->c_parent) {
+			return $this->parent->hasAttribute($name);
+		}
 		return false;
 	}
 
