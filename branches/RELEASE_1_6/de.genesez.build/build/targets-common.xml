@@ -96,7 +96,95 @@
 			</sequential>
 		</for>
 	</target>
-
+	
+	<target name="bundle.all"
+		description="bundles GeneSEZ with oAW + eclipse">
+		<mkdir dir="${temp.dir}" />
+		<!-- create the new gensez bundle zip -->
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<unjar dest="${temp.dir}/genesez/features/@{project}_${plugin.version}">
+					<fileset dir="@{project}/dist">
+						<include name="*_${plugin.version}.jar"/>
+					</fileset>
+				</unjar>
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<if>
+					<!-- filter plug-ins for unpacking -->
+					<contains string="@{project}" substring="platforms.common" />
+					<then>
+						<unjar dest="${temp.dir}/genesez/plugins/@{project}_${plugin.version}">
+							<fileset dir="@{project}/dist">
+								<include name="*_${plugin.version}.jar" />
+							</fileset>
+						</unjar>
+					</then>
+					<else>
+						<copy todir="${temp.dir}/genesez/plugins">
+							<fileset dir="@{project}/dist">
+								<include name="*_${plugin.version}.jar" />
+							</fileset>
+						</copy>
+					</else>
+				</if>
+			</sequential>
+		</for>
+		<zip destfile="${temp.dir}/genesez.zip" basedir="${temp.dir}/genesez" includes="**/*"></zip>
+		
+		<mkdir dir="${bundle.dir}" />
+		<!-- create genesez + oAW + eclipse all-in-one bundles -->
+		<!-- zip bundles -->
+		<for param="bundle" list="${eclipse.33.zip.dists}">
+			<sequential>
+				<zip destfile="${bundle.dir}/genesez.@{bundle}">
+					<zipfileset src="${eclipse.dist.dir}/@{bundle}" />
+					<zipfileset src="${prereq.zip}" prefix="eclipse" />
+					<zipfileset src="${temp.dir}/genesez.zip" prefix="eclipse" />
+				</zip>
+			</sequential>
+		</for>
+		<for param="bundle" list="${eclipse.34.zip.dists}">
+			<sequential>
+				<zip destfile="${bundle.dir}/genesez.@{bundle}">
+					<zipfileset src="${eclipse.dist.dir}/@{bundle}" />
+					<zipfileset src="${prereq.zip}" prefix="eclipse/dropins/prerequisites" />
+					<zipfileset src="${temp.dir}/genesez.zip" prefix="eclipse/dropins/genesez" />
+				</zip>
+			</sequential>
+		</for>
+		<!-- tar.gz bundles -->
+		<for param="bundle" list="${eclipse.33.tar.gz.dists}">
+			<sequential>
+				<mkdir dir="${unpack.dir}" />
+				<untar src="${eclipse.dist.dir}/@{bundle}" dest="${unpack.dir}" compression="gzip" />
+				<unzip src="${prereq.zip}" dest="${unpack.dir}/eclipse" />
+				<unzip src="${temp.dir}/genesez.zip" dest="${unpack.dir}/eclipse" />
+				<tar destfile="${bundle.dir}/genesez.@{bundle}" compression="gzip" longfile="gnu">
+					<fileset dir="${unpack.dir}" includes="**/*" />
+				</tar>
+				<delete dir="${unpack.dir}" />
+			</sequential>
+		</for>
+		<for param="bundle" list="${eclipse.34.tar.gz.dists}">
+			<sequential>
+				<mkdir dir="${unpack.dir}" />
+				<untar src="${eclipse.dist.dir}/@{bundle}" dest="${unpack.dir}" compression="gzip" />
+				<unzip src="${prereq.zip}" dest="${unpack.dir}/eclipse/dropins/prerequisites" />
+				<unzip src="${temp.dir}/genesez.zip" dest="${unpack.dir}/eclipse/dropins/genesez" />
+				<tar destfile="${bundle.dir}/genesez.@{bundle}" compression="gzip" longfile="gnu">
+					<fileset dir="${unpack.dir}" includes="**/*" />
+				</tar>
+				<delete dir="${unpack.dir}" />
+			</sequential>
+		</for>
+		<delete dir="${temp.dir}" />
+	</target>
+	
 	<target name="clean.all"
 		description="Cleaning lady">
 		<for param="project">
