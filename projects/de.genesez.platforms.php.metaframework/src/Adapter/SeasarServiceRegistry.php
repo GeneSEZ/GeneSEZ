@@ -8,7 +8,7 @@ require_once 'Core/ServiceRegistry.php';
 /**
  * @see		Core_ServiceRegistry
  * @author	dreamer
- * @package	Adapter
+ * @package	Metaframework
  */
 class Adapter_SeasarServiceRegistry  implements Core_ServiceRegistry {
 	

@@ -6,7 +6,7 @@
 
 /**
  * @author	dreamer
- * @package	Adapter
+ * @package	Metaframework
  */
 class Adapter_SeasarPhpBuilder   {
 	

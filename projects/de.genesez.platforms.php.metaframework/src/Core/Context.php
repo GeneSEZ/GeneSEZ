@@ -22,7 +22,7 @@ require_once 'UML/OneAssociation.php';
  * </ul>
  * @see		Core_Resolver
  * @author	dreamer
- * @package	Core
+ * @package	Metaframework
  */
 class Core_Context  implements Core_Resolver {
 	
@@ -37,11 +37,6 @@ class Core_Context  implements Core_Resolver {
 	 * @var		string	$_handler
 	 */
 	private $_handler;
-	/**
-	 * @generated	attribute definition
-	 * @var		string	$_layout
-	 */
-	private $_layout;
 	/**
 	 * stores the linked objects of the bidirectional one to many association to {@link Core_Context}
 	 * @var		array	documented here {@link __get()}
@@ -69,13 +64,11 @@ class Core_Context  implements Core_Resolver {
 	 * @param	string	$name	
 	 * @param	string	$handler	default value is 'null'
 	 * @param	array	$nestedContext	array of type 'Core_Context', default value is 'array()'
-	 * @param	string	$layout	default value is 'null'
 	 */
-	public function __construct($name, $handler = null, $nestedContext = array(), $layout = null) {
+	public function __construct($name, $handler = null, $nestedContext = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338382406_230888_479) ENABLED START */
 		$this->_name = $name;
 		$this->_handler = $handler;
-		$this->_layout = $layout;
 		foreach ($nestedContext as $context) {
 			$this->nestedContext->insert($context);
 		}
@@ -118,17 +111,6 @@ class Core_Context  implements Core_Resolver {
 		} else {
 			return new Core_HandlerInfo($handler, $path);
 		}
-		/* PROTECTED REGION END */
-	}
-	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$path	
-	 * @return	string
-	 */
-	public function resolveLayout($path) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238062942906_584232_690) ENABLED START */
-		// TODO: implementation of method 'Core_Context.resolveLayout(...)'
-		throw new Exception('The implementation of the method Core_Context::resolveLayout is missing !');
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -214,7 +196,6 @@ class Core_Context  implements Core_Resolver {
 	 * <ul>
 	 *   <li><var>name</var>: </li>
 	 *   <li><var>handler</var>: </li>
-	 *   <li><var>layout</var>: </li>
 	 *   <li><var>nestedContext</var>: the bidirectional one to many association to {@link Core_Context}</li>
 	 *   <li><var>parent</var>: the bidirectional many to one association to {@link Core_Context}</li>
 	 * </ul>
@@ -226,7 +207,6 @@ class Core_Context  implements Core_Resolver {
 		switch ($name) {
 			case 'name': return $this->_name;
 			case 'handler': return $this->_handler;
-			case 'layout': return $this->_layout;
 			case 'nestedContext': return $this->getInitializedAssociation($name);
 			case 'parent': return $this->getInitializedAssociation($name);
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
@@ -236,7 +216,6 @@ class Core_Context  implements Core_Resolver {
 	 * magic setter to set the values of the following members:
 	 * <ul>
 	 *   <li><var>handler</var>: </li>
-	 *   <li><var>layout</var>: </li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @param	mixed	$value	the value to set
@@ -245,7 +224,6 @@ class Core_Context  implements Core_Resolver {
 	public function __set($name, $value) {
 		switch ($name) {
 			case 'handler': $this->_handler = $value; return;
-			case 'layout': $this->_layout = $value; return;
 			default: throw new Exception('cannot set the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
@@ -253,7 +231,6 @@ class Core_Context  implements Core_Resolver {
 	 * checks if a value is assigned to one the following members:
 	 * <ul>
 	 *   <li><var>handler</var>: </li>
-	 *   <li><var>layout</var>: </li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the member is neither accessible nor available
@@ -262,7 +239,6 @@ class Core_Context  implements Core_Resolver {
 	public function __isset($name) {
 		switch ($name) {
 			case 'handler': return isset($this->_handler);
-			case 'layout': return isset($this->_layout);
 			default: throw new Exception('cannot check if the value of an inaccessible or unavailable property is set: ' . $name); break;
 		}
 	}
@@ -270,7 +246,6 @@ class Core_Context  implements Core_Resolver {
 	 * unsets (set to <var>null</var>) the value of the following members:
 	 * <ul>
 	 *   <li><var>handler</var>: </li>
-	 *   <li><var>layout</var>: </li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the member is neither accessible nor available
@@ -278,7 +253,6 @@ class Core_Context  implements Core_Resolver {
 	public function __unset($name) {
 		switch ($name) {
 			case 'handler': $this->_handler = null; return;
-			case 'layout': $this->_layout = null; return;
 			default: throw new Exception('cannot unset the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}

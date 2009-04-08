@@ -1,5 +1,6 @@
 <?php
 require_once 'Smarty/Smarty.class.php';
+require_once 'Core/Dto.php';
 require_once 'Core/Renderer.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999928437_189680_1219) ENABLED START */
@@ -9,7 +10,7 @@ require_once 'Core/Renderer.php';
 /**
  * @see		Core_Renderer
  * @author	dreamer
- * @package	Adapter
+ * @package	Metaframework
  */
 class Adapter_SmartyRenderer  implements Core_Renderer {
 	
@@ -25,10 +26,10 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	// -- method implementations --------------------------------------------
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$view	
-	 * @param	null	$dto	
+	 * @param	string	$template	
+	 * @param	Core_Dto	$dto	
 	 */
-	public function render($view, $dto) {
+	public function render($template, $dto) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
 		$this->smarty->assign('dto', $dto);
 		$this->smarty->display($view);

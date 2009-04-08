@@ -7,23 +7,17 @@ require_once 'Core/HandlerInfo.php';
 
 /**
  * @author	dreamer
- * @package	Core
+ * @package	Metaframework
  */
 interface Core_Resolver  {
 	
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$path	
+	 * @param	string	$urlpath	
 	 * @return	Core_HandlerInfo
 	 */
-	public function resolveHandler($path);
-	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$path	
-	 * @return	string
-	 */
-	public function resolveLayout($path);
+	public function resolveHandler($urlpath);
 	
 	
 	// -- own code declarations ---------------------------------------------

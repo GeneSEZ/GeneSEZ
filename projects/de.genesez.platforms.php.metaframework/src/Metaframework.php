@@ -8,6 +8,7 @@ spl_autoload_register(array('Metaframework', 'autoload'));
 
 /**
  * @author	dreamer
+ * @package	Metaframework
  */
 class Metaframework   {
 	

@@ -7,7 +7,7 @@ require_once 'Core/Context.php';
 
 /**
  * @author	dreamer
- * @package	Loader
+ * @package	Metaframework
  */
 interface Loader_ModuleLoader  {
 	

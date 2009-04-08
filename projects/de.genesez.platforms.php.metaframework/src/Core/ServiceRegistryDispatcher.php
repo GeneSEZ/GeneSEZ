@@ -10,7 +10,7 @@ require_once 'Core/Dispatcher.php';
 /**
  * @see		Core_Dispatcher
  * @author	dreamer
- * @package	Core
+ * @package	Metaframework
  */
 class Core_ServiceRegistryDispatcher  implements Core_Dispatcher {
 	

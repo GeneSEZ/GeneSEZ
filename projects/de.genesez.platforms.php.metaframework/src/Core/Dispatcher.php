@@ -7,7 +7,7 @@ require_once 'Core/HandlerInfo.php';
 
 /**
  * @author	dreamer
- * @package	Core
+ * @package	Metaframework
  */
 interface Core_Dispatcher  {
 	

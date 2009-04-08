@@ -9,7 +9,7 @@ require_once 'Loader/ModuleLoader.php';
 /**
  * @see		Loader_ModuleLoader
  * @author	dreamer
- * @package	Loader
+ * @package	Metaframework
  */
 abstract class Loader_InvisibleModuleLoader  implements Loader_ModuleLoader {
 	

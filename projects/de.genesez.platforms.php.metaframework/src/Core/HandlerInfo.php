@@ -7,7 +7,7 @@
 /**
  * @see		ArrayAccess
  * @author	dreamer
- * @package	Core
+ * @package	Metaframework
  */
 class Core_HandlerInfo  implements ArrayAccess {
 	

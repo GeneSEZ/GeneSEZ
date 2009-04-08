@@ -14,7 +14,7 @@ spl_autoload_register(array('Doctrine', 'autoload'));
 /**
  * @see		Loader_InvisibleModuleLoader
  * @author	dreamer
- * @package	Loader
+ * @package	Metaframework
  */
 class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 	

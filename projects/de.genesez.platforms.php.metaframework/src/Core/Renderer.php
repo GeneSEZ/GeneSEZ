@@ -1,4 +1,5 @@
 <?php
+require_once 'Core/Dto.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999928437_779424_1221) ENABLED START */
 // TODO: put your further include + require statements here
@@ -6,7 +7,7 @@
 
 /**
  * @author	dreamer
- * @package	Core
+ * @package	Metaframework
  */
 interface Core_Renderer  {
 	
@@ -14,7 +15,7 @@ interface Core_Renderer  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$view	
-	 * @param	null	$dto	
+	 * @param	Core_Dto	$dto	
 	 */
 	public function render($view, $dto);
 	

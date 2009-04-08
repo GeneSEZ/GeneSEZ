@@ -6,7 +6,7 @@
 
 /**
  * @author	dreamer
- * @package	Core
+ * @package	Metaframework
  */
 interface Core_ServiceRegistry  {
 	
