@@ -472,7 +472,7 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	setVisibility( aend.visibility.toString() ) ->
 	setMultiplicity( aend.getUpper() ) ->
 	setDerived( aend.isDerived ) ->
-	setSourceMultiplicity( aend.sourceMultiplicity() ) ->
+	setOppositeMultiplicity( aend.oppositeMultiplicity() ) ->
 	// unique
 	// ordered
 	setAggregation( aend.aggregation.toString() == "shared" ? true : false ) ->
@@ -495,7 +495,7 @@ private create MAssociationRole makeAssociationRole(Property aend) :
  * find the multiplicity of the other end of an association from the uml model
  * @param	aend	uml association end property
  */
-private Integer sourceMultiplicity(Property aend) :
+private Integer oppositeMultiplicity(Property aend) :
 	aend.opposite != null
 		? aend.opposite.getUpper()
 		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
