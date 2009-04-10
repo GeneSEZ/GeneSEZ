@@ -361,6 +361,7 @@ private create MAttribute makeAttribute(Property p) :
  * @return	the GeneSEZ operation
  */
 private create MOperation makeOperation(Operation o) :
+	debug( "make [ " + metaType + " ] - " + o ) ->
 	// set the unique xmiId and name
 	transformBasics(o) ->
 	// properties
@@ -376,6 +377,12 @@ private create MOperation makeOperation(Operation o) :
 	stereotype.addAll( o.getAppliedStereotypes().makeStereotype() ) ->
 	// set return type
 	setReturnType( o.type.makeType() ) ->
+	// set return type comment
+	o.ownedParameter.exists( e|e.direction.toString() == "return" )
+		? returnTypeComment.addAll( 
+			o.ownedParameter.select(e|e.direction.toString() == "return").first()
+			.ownedComment.typeSelect(Comment).makeComment() )
+		: this ->
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
