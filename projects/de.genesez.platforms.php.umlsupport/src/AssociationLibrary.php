@@ -1,6 +1,6 @@
 <?php
-require_once 'uml/Association.php';
-require_once 'uml/AssociationBase.php';
-require_once 'uml/OneAssociation.php';
-require_once 'uml/ManyAssociation.php';
+require_once 'UML/Association.php';
+require_once 'UML/AssociationBase.php';
+require_once 'UML/OneAssociation.php';
+require_once 'UML/ManyAssociation.php';
 ?>
