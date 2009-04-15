@@ -109,7 +109,11 @@ class UML_OneAssociation extends UML_AssociationBase  {
 	 */
 	public function iterator() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239223557625_384024_567) ENABLED START */
-		return new ArrayIterator(array($this->getReference()));
+		if ($this->getReference() === null) {
+			return new ArrayIterator(array());
+		} else {
+			return new ArrayIterator(array($this->getReference()));
+		}
 		/* PROTECTED REGION END */
 	}
 

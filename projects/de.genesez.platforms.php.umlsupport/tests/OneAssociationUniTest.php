@@ -1,6 +1,6 @@
 <?php
-require_once 'tests/Hub.php';
-require_once 'tests/Related.php';
+require_once 'Hub.php';
+require_once 'Related.php';
 
 /**
  * Tests the <b>unidirectional to one association</b> from the class {@link Hub} to the class {@link Related}.
@@ -61,6 +61,7 @@ class OneAssociationUniTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testGetAll() {
 		$this->assertNull($this->hub->unidiToOneRelated->get(), 'no link to related object should exist');
+		$this->assertEquals(0, count($this->hub->unidiToOneRelated->getAll()), 'no link to related object should exist');
 		$this->testInsert();
 		$this->assertNotNull($this->hub->unidiToOneRelated->getAll(), 'link to related object should exist');
 		$this->assertEquals(1, count($this->hub->unidiToOneRelated->getAll()), 'should be exactly 1 related object');

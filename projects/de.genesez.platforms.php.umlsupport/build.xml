@@ -30,7 +30,18 @@
 		<mkdir dir="${api.doc.dir}"/>
 	</target>
 	
-	<target name="coverage.prepare" depends="prepare" description="prepare test coverage">
+	<target name="test" depends="prepare" description="execute phpunit tests">
+		<phpunit2 codecoverage="false" haltonfailure="true" haltonerror="true" printsummary="true">
+			<batchtest>
+				<fileset dir="tests">
+					<include name="**/*Test.php"/>
+				</fileset>
+			</batchtest>
+			<formatter type="xml" todir="${report.dir}" outfile="phpunit.logfile.xml"/>
+		</phpunit2>
+	</target>
+	
+	<target name="coverage.prepare" depends="prepare, check" description="prepare test coverage">
 		<coverage-setup database="${report.dir}/coverage.database">
 			<fileset dir="src-gen">
 				<include name="**/*.php" />
@@ -42,7 +53,7 @@
 		</coverage-setup>
 	</target>
 	
-	<target name="test" depends="coverage.prepare" description="execute phpunit tests">
+	<target name="coverage.test" depends="coverage.prepare" description="execute phpunit tests">
 		<phpunit2 codecoverage="true" haltonfailure="true" haltonerror="true" printsummary="true">
 			<batchtest>
 				<fileset dir="tests">
@@ -53,14 +64,14 @@
 		</phpunit2>
 	</target>
 	
-	<target name="report" depends="test" description="generate phpunit + coverage report">
+	<target name="report" depends="coverage.test" description="generate phpunit + coverage report">
 		<phpunit2report infile="${report.dir}/phpunit.logfile.xml" styledir="resources" todir="${test.report.dir}" format="noframes"/>
 		<coverage-report outfile="${report.dir}/coverage.xml">
 			<report styledir="resources" todir="${coverage.report.dir}" />
 		</coverage-report>
 	</target>
 	
-	<target name="doc" description="generate the API documentation">
+	<target name="doc" depends="check" description="generate the API documentation">
 		<phpdoc title="PHP UML Support Library Documentation"
 				destdir="${api.doc.dir}"
 				output="HTML:frames:phphtmllib"
@@ -73,5 +84,9 @@
 				<include name="**/*.php" />
 			</fileset>
 		</phpdoc>
+	</target>
+	
+	<target name="clean" description="cleaning lady :-)">
+		<delete dir="${report.dir}" />
 	</target>
 </project>

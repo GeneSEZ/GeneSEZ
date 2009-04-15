@@ -19,12 +19,22 @@ class Related {
 	 * @var Hub	stores the linked objects of the bidirectional many to many association
 	 */
 	private $bidiManyToManyHub;
+	/**
+	 * @var Hub	stores the linked object of the bidirectional one to single qualified one association
+	 */
+	private $bidiOneToSingleQualifiedOneHub;
+	/**
+	 * @var Hub	stores the linked object of the bidirectional one to multi qualified one association
+	 */
+	private $bidiOneToMultiQualifiedOneHub;
 	
 	/**
 	 * holds all association management objects
 	 * <ul>
 	 *   <li><var>bidiOneToOne</var>: for the bidirectional one to one association</li>
 	 *   <li><var>bidiManyToMany</var>: for the bidirectional many to many association</li>
+	 *   <li><var>bidiOneToSingleQualifiedOneHub</var>: for the bidirectional one to one single qualified association</li>
+	 *   <li><var>bidiOneToMultiQualifiedOneHub</var>: for the bidirectional one to one multi qualified association</li>
 	 * </ul>
 	 * @var Association
 	 */
@@ -39,8 +49,11 @@ class Related {
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'bidiOneToOneHub': return $this->getInitializedAssociation($name);
-			case 'bidiManyToManyHub' : return $this->getInitializedAssociation($name);
+			case 'bidiOneToOneHub':
+			case 'bidiManyToManyHub':
+			case 'bidiOneToSingleQualifiedOneHub':
+			case 'bidiOneToMultiQualifiedOneHub':
+				return $this->getInitializedAssociation($name);
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
@@ -55,6 +68,8 @@ class Related {
 			switch ($name) {
 				case 'bidiOneToOneHub': $this->associations[$name] = new UML_OneAssociation($this, $this->bidiOneToOneHub, 'bidiOneToOneRelated'); break;
 				case 'bidiManyToManyHub' : $this->associations[$name] = new UML_ManyAssociation($this, $this->bidiManyToManyHub, 'bidiManyToManyRelated'); break;
+				case 'bidiOneToSingleQualifiedOneHub': $this->associations[$name] = new UML_OneAssociation($this, $this->bidiOneToSingleQualifiedOneHub); break;
+				case 'bidiOneToMultiQualifiedOneHub': $this->associations[$name] = new UML_OneAssociation($this, $this->bidiOneToSingleQualifiedOneHub); break;
 				default: throw new Exception('non-existing association specified: ' . $name); break;
 			}
 		}
