@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	performs the model transformations
+	
+	@author	tobias haubold
+	@date	2009-03-07 
+ -->
+<workflow>
+	<component id="uml2genesez" class="de.genesez.platforms.common.workflow.Uml2GeneSEZ">
+		<model value="model/umlsupport.uml" />
+		<profile value="model/genesez.profile.uml" />
+	</component>
+	<component id="uml2genesez.test" class="de.genesez.platforms.common.workflow.Uml2GeneSEZ">
+		<model value="model/umlsupport.test.uml" />
+		<slot value="testModel" />
+	</component>
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::php::constraints::Syntax" />
+	</component>
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<slot value="testModel" />
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::php::constraints::Syntax" />
+	</component>
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="model/umlsupport.xmi" />
+	</component>
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<slot value="testModel" />
+		<file value="model/umlsupport.test.xmi" />
+	</component>
+	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
+		<outputDir value="../../workspace.web.dev/de.genesez.platforms.php.umlsupport/src-gen" />
+		<useAccessorStereotype value="true" />
+	</component>
+	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
+		<slot value="testModel" />
+		<outputDir value="../../workspace.web.dev/de.genesez.platforms.php.umlsupport/test-gen" />
+		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
+	</component>
+</workflow>
