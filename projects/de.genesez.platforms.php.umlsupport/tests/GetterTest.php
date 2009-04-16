@@ -1,6 +1,6 @@
 <?php
-require_once 'tests/Hub.php';
-require_once 'tests/Related.php';
+require_once 'Hub.php';
+require_once 'Related.php';
 
 /**
  * Tests the getter accessor methods {@link Hub::__get()} and {@link Related::__get()}

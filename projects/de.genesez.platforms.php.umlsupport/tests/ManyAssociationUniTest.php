@@ -1,6 +1,6 @@
 <?php
-require_once 'tests/Hub.php';
-require_once 'tests/Related.php';
+require_once 'Hub.php';
+require_once 'Related.php';
 
 /**
  * Tests the <b>unidirectional to many association</b> from the class {@link Hub} to the class {@link Related}.
