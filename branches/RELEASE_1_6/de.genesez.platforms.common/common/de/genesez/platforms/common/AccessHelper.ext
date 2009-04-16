@@ -92,6 +92,20 @@ boolean hasFixedMultiplicity(MOperation this) :
 	multiplicity > -1;
 
 /**
+ * checks if a qualified association role has a single qualifier
+ * @return	true, if a qualified association has a single qualifier, otherwise false
+ */
+boolean isSingleQualified(MAssociationRole this) :
+	qualifierMultiplicity == 1;
+
+/**
+ * checks if a qualified association role can have more qualifier values
+ * @return	true, if a qualified association role can have more qualifier values, otherwise false
+ */
+boolean isMultiQualified(MAssociationRole this) :
+	qualifierMultiplicity != 1;
+
+/**
  * getter for the return type of an operation
  * @return	the return type of the operation
  */
@@ -234,6 +248,33 @@ boolean hasAssociationRoles(MClassifier this) :
 boolean hasOpposite(MAssociationRole this) : opposite != null;
 
 /**
+ * checks if an association role has a qualifier
+ * @return	true, if the association role has a qualifier
+ */
+boolean hasQualifier(MAssociationRole this) : qualifier != null;
+
+/**
+ * checks if an association role is qualified
+ * @return	true, if the association role has a qualifier
+ * @see		hasQualifier(MAssociationRole)
+ */
+boolean isQualified(MAssociationRole this) : hasQualifier();
+
+/**
+ * checks if the opposite of an association role is qualified
+ * @return	true, if the opposite has a qualifier, otherwise false
+ */
+boolean hasQualifiedOpposite(MAssociationRole this) :
+	hasOpposite() ? opposite.isQualified() : false;
+
+/**
+ * checks if the opposite of an association role is qualified
+ * @return	true, if the opposite has a qualifier, otherwise false
+ */
+boolean isOppositeQualified(MAssociationRole this) :
+	hasOpposite() && opposite.isQualified();
+
+/**
  * checks if an association role belongs to an association class or not
  * @return	true, if it's a plain association role and doesn't belongs to an association class and 
  * 			false, if the association role belongs to an association class
@@ -272,6 +313,21 @@ boolean isPlainAssociation(MAssociationRole aend) :
  */
 MClass assocClass(MAssociationRole aend) :
 	aend.association.associationClass;
+
+/**
+ * returns all owning association roles
+ */
+List[MAssociationRole] owningAssociationRoles(MClassifier this) :
+	property.typeSelect(MAssociationRole).reject( e|e.derived );
+
+/**
+ * returns all initializable association roles
+ */
+List[MAssociationRole] allInitializableAssociationRoles(MClassifier this) :
+	let assocs = {} :
+		assocs.addAll( owningAssociationRoles() ) ->
+		assocs.addAll( realization.typeSelect(MClassifier).owningAssociationRoles() ) ->
+	assocs.flatten();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
