@@ -22,9 +22,13 @@
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
 
 
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	just for compatibility reasons with old association handling
 «ENDREM»
+«DEFINE Declaration FOR MInterface -»
+«ENDDEFINE»
 
 «REM»
 	processes the declaration of association attributes
@@ -32,11 +36,8 @@
 	- generates an attribute to store the association management object
 «ENDREM»
 «DEFINE Declaration FOR MClass -»
-	«EXPAND _AssociationAttributeDecl FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
-	«EXPAND _AssociationManagementDecl FOR property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
-«ENDDEFINE»
-
-«DEFINE Declaration FOR MInterface -»
+	«EXPAND _AssociationAttributeDecl FOREACH allInitializableAssociationRoles() -»
+	«EXPAND _AssociationManagementDecl FOR allInitializableAssociationRoles() -»
 «ENDDEFINE»
 
 «REM»
@@ -44,12 +45,12 @@
 	- only if the classifier has more than one association
 «ENDREM»
 «DEFINE Initialization FOR MClass -»
-«LET property.typeSelect(MAssociationRole).select( e| !e.derived ) AS association -»
+«LET allInitializableAssociationRoles() AS association -»
 «IF association.size > 1 -»
 	/**
 	 * lazily initializes the requested association management objects
 	 * @param	string	&$«associationInitializationParameter()»	the name of the association role
-	 * @return	Association		the association management object
+	 * @return	Association|QualifiedAssociation	the association management object
 	 */
 	private function getInitializedAssociation(&$«associationInitializationParameter()») {
 		if (!array_key_exists($«associationInitializationParameter()», $this->«associationManagementAttribute()»)) {
@@ -69,9 +70,24 @@
 	- used to generate the lazy initialization code within the magic get method
 «ENDREM»
 «DEFINE SingleInitialization FOR MAssociationRole -»
-	«EXPAND _CreateAssociation -»
+«EXPAND _CreateAssociation -»
 «ENDDEFINE»
 
+«REM»
+	generates the magic get method declaration if the interface has associations
+«ENDREM»
+«DEFINE Accessors FOR MInterface -»
+«IF hasAssociationRoles() -»
+	«EXPAND Comment::MagicGet FOR property.typeSelect(MAssociationRole) -»
+	public function __get($«asMagicGetParameter()»);
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	just for compatibility reasons with old association handling
+«ENDREM»
+«DEFINE Accessors FOR MClass -»
+«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -92,7 +108,7 @@
 	@param	this	an association role
 «ENDREM»
 «DEFINE _Init FOR MAssociationRole -»
-«IF isMultiValuedType()» = array()«ENDIF -»
+«IF isMultiValuedType() || isQualified()» = array()«ENDIF -»
 «ENDDEFINE»
 
 
@@ -123,7 +139,20 @@
 	generates the code to create a new association management object
 «ENDREM»
 «DEFINE _CreateAssociation FOR MAssociationRole -»
-«IF hasOpposite() -»
-new «asAssociationClassName()»($this, $this->«asAttribute()», '«opposite.asAssociation()»');«ELSE -»
-new «asAssociationClassName()»($this, $this->«asAttribute()»);«ENDIF -»
+new «asAssociationManagementClassName()»($this, $this->«asAttribute()»«EXPAND _Opposite»«EXPAND _QualifiedMany»);«EXPAND Types::_ -»
+«ENDDEFINE»
+
+«REM»
+	generates the opposite parameter for the constructor of an association management object
+«ENDREM»
+«DEFINE _Opposite FOR MAssociationRole -»
+«IF hasOpposite() && !isOppositeQualified() -», '«opposite.asAssociation()»'«ENDIF -»
+«IF !hasOpposite() && isQualified() && isMultiValuedType() -», null«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the 'toMany' parameter for the constructor of an association management object
+«ENDREM»
+«DEFINE _QualifiedMany FOR MAssociationRole -»
+«IF isQualified() && isMultiValuedType()», true«ENDIF -»
 «ENDDEFINE»

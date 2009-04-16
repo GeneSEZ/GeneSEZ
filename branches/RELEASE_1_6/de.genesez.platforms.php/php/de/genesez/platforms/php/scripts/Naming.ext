@@ -244,8 +244,16 @@ String associationInitializationParameter() : "name";
 String associationInitializationFunction() : "getInitializedAssociation";
 String asOneAssociationClassName() : "UML_OneAssociation";
 String asManyAssociationClassName() : "UML_ManyAssociation";
-String asAssociationClassName(MAssociationRole this) :
-	isMultiValuedType() ? asManyAssociationClassName() : asOneAssociationClassName();
+String asSingleQualifiedAssociationClassName() : "UML_SingleQualifiedAssociation";
+String asMultiQualifiedAssociationClassName() : "UML_MultiQualifiedAssociation";
+String asAssociationManagementClassName(MAssociationRole this) :
+	isQualified()
+		? ( isSingleQualified() ? asSingleQualifiedAssociationClassName() : asMultiQualifiedAssociationClassName() )
+		: ( isSingleValuedType() ? asOneAssociationClassName() : asManyAssociationClassName() );
+String qualifier(MAssociationRole this) :
+	isQualified()
+		? ( isSingleQualified() ? " single qualified" : " multi qualified" )
+		: "";
 String direction(MAssociationRole this) :
 	hasOpposite() ? "bidirectional" : "unidirectional";
 String type(MAssociationRole this) :
@@ -256,6 +264,8 @@ String type(MAssociationRole this) :
 	isSingleValuedType() ? "to one" : (
 	isMultiValuedType() ? "to many" : (
 	""))))));
+String symmetry(MAssociationRole this) :
+	isOppositeQualified() ? "symmetry not ensured, opposite is qualified" : "symmetry ensured";
 
 String prefix(MAssociationRole this) : "_";
 

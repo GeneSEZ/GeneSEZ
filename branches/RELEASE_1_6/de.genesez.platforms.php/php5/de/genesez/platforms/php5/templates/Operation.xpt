@@ -89,8 +89,9 @@
 
 «REM»
 	generates an operation declaration
+	note: generates a line feed after each declaration
 «ENDREM»
-«DEFINE _Declaration FOR MOperation -»
+«DEFINE _Declaration FOR MOperation»
 	«EXPAND Comment::Operation -»
 	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -»);
 «ENDDEFINE»
@@ -98,7 +99,7 @@
 «REM»
 	generates an operation implementation
 «ENDREM»
-«DEFINE _Implementation FOR MOperation -»
+«DEFINE _Implementation FOR MOperation»
 	«EXPAND Comment::Operation -»
 	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -») {
 		«EXPAND _OwnCodeImpl("php.implementation." + xmiGuid) -»
@@ -109,7 +110,7 @@
 	generates a constructor
 	has no return value
 «ENDREM»
-«DEFINE _Constructor FOR MOperation -»
+«DEFINE _Constructor FOR MOperation»
 	«EXPAND Comment::Constructor -»
 	«visibility» function __construct(«EXPAND _Params -») {
 		«EXPAND _OwnCodeImpl("php.constructor." + xmiGuid) -»
@@ -120,7 +121,7 @@
 	generates a destructor
 	cannot have parameters or a return value
 «ENDREM»
-«DEFINE _Destructor FOR MOperation -»
+«DEFINE _Destructor FOR MOperation»
 	«EXPAND Comment::Destructor -»
 	«visibility» function __destruct() {
 		«EXPAND _OwnCodeImpl("php.destructor." + xmiGuid) -»

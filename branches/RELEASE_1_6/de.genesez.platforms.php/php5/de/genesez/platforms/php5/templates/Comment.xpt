@@ -94,12 +94,10 @@
 «ENDREM»
 «DEFINE Association FOR MAssociationRole -»
 	/**
-	«IF isSingleValuedType() -»
-	 * stores the linked object of «EXPAND _DefaultAssociationCommentText»
-	 * @var		«type.mapName().asTypeName()»	documented here {@link __get()}
+	«IF isSingleValuedType() && !isQualified() -»
+	 * @var	«type.mapName().asTypeName()»	stores the linked object of «EXPAND _DefaultAssociationCommentText» «IF hasComment()»({@link __get() documented here})«ENDIF»
 	«ELSE -»
-	 * stores the linked objects of «EXPAND _DefaultAssociationCommentText»
-	 * @var		array	documented here {@link __get()}
+	 * @var	array of «type.mapName().asTypeName()»	stores the linked objects of «EXPAND _DefaultAssociationCommentText» «IF hasComment()»({@link __get() documented here})«ENDIF»
 	«ENDIF -»
 	 */
 «ENDDEFINE»
@@ -115,14 +113,14 @@
 «DEFINE AssociationManagementAttribute FOR List[MAssociationRole] -»
 	/**
 «IF size == 1 -»
-	 * holds the association management object for the «direction()» «type()» association to {@link «type.asTypeName()»}
-	 * @var «asAssociationClassName()»
+	 * holds the association management object for the«first().qualifier()» «first().direction()» «first().type()» association to {@link «first().type.asTypeName()»} («first().symmetry()»)
+	 * @var «first().asAssociationManagementClassName()»
 «ELSE -»
 	 * holds all association management objects
 	 * <ul>
 	«EXPAND _AssociationManagementAttribute FOREACH this -»
 	 * </ul>
-	 * @var Association
+	 * @var array of Association and/or QualifiedAssociation
 «ENDIF -»
 	 */
 «ENDDEFINE»
@@ -131,7 +129,7 @@
 	generates a comment line for each association mangement object
 «ENDREM»
 «DEFINE _AssociationManagementAttribute FOR MAssociationRole -»
-	 *   <li><var>«asAssociation()»</var>: the «direction()» «type()» association to {@link «type.asTypeName()»}</li>
+	 *   <li><var>«asAssociation()»</var>: the«qualifier()» «direction()» «type()» association to {@link «type.asTypeName()»} («symmetry()»)</li>
 «ENDDEFINE»
 
 
@@ -269,9 +267,10 @@
 «DEFINE Operation FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	«comment().format() -»
-	«ENDIF -»
+«comment().format("	 * ", "\n") -»
+	«ELSE -»
 	 * @generated	method stub for implementation
+	«ENDIF -»
 	«IF hasExceptions() -»
 	 * 
 	«EXPAND _ExceptionLink FOREACH raisedException -»
@@ -339,7 +338,7 @@
 «ENDREM»
 «DEFINE MagicGet FOR List[MProperty] -»
 	/**
-	 * magic getter to obtain the unmodifiable values of the following members:
+	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
 	«FOREACH typeSelect(MAttribute) AS a -»
 	 *   <li><var>«a.name»</var>: «a.comment()»</li>
@@ -349,8 +348,8 @@
 	«ENDFOREACH -»
 	 * </ul>
 	 * @param	string	$«asMagicGetParameter()»	the name of the member
-	 * @throws	{@link Exception} if the member is neither accessible nor available
-	 * @return	mixed	the value of the member or an exception if the member is neither accessible nor available
+	 * @throws	{@link Exception} if the specified member is neither accessible nor available
+	 * @return	mixed	the value of the member or an association management object
 	 */
 «ENDDEFINE»
 
@@ -489,4 +488,4 @@
 	- don't place the ENDDEFINE on the next line, disrupts generated layout
 «ENDREM»
 «DEFINE _DefaultAssociationCommentText FOR MAssociationRole -»
-the «direction()» «type()» association to {@link «type.mapName().asTypeName()»}«ENDDEFINE»
+the «qualifier()» «direction()» «type()» association to {@link «type.mapName().asTypeName()»} («symmetry()»)«ENDDEFINE»

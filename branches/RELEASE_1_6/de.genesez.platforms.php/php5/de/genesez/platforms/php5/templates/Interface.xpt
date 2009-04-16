@@ -38,26 +38,26 @@
 «DEFINE Root FOR MInterface -»
 «EXPAND Comment::Type -»
 interface «asTypeName()» «EXPAND _Generalization -» {
-	
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
 	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
 	// -- attribute + associations declarations  ----------------------------
 	«ENDIF -»
 	«EXPAND Attribute::Declaration -»
-	«IF useOldAssociationHandling() -»
-	«EXPAND AssociationOld::Declaration -»«ELSE -»«EXPAND Association::Declaration -»
-	«ENDIF -»
-	
+	«EXPAND Association::Declaration -»
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
 	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- method declarations -----------------------------------------------
 	«ENDIF -»
-	«EXPAND Operation::Declaration -»
-	
+	«EXPAND Operation::Declaration»
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
 	«IF generateSectionComments() && ( hasAssociationRoles() ) -»
 	// -- association accessors ---------------------------------------------
 	«ENDIF -»
-	«IF useOldAssociationHandling() -»«EXPAND AssociationOld::Accessors -»«ENDIF -»
-	
+	«EXPAND Association::Accessors -»
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
+	«IF generateSectionComments() -»
 	// -- own code declarations ---------------------------------------------
+	«ENDIF -»
 	«EXPAND _OwnCodeImpl("php.interface.own.code.declaration." + xmiGuid) -»
 }
 «ENDDEFINE»

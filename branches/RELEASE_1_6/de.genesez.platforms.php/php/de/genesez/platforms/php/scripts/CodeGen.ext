@@ -1,5 +1,6 @@
 import gcore;
 
+extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::m2t::Helper;
 
@@ -11,6 +12,6 @@ boolean useOldAssociationHandling() : GLOBALVAR useOldAssociationHandling == nul
 
 List[MProperty] magicGet(MClassifier this) :
 	let p = {} :
-		p.addAll(property.select( e|e.generateGetter() )) ->
-		p.addAll(property.typeSelect(MAssociationRole)) ->
+		p.addAll( property.typeSelect(MAttribute).select( e|e.generateGetter() ) ) ->
+		p.addAll( allInitializableAssociationRoles() ) ->
 		p;
