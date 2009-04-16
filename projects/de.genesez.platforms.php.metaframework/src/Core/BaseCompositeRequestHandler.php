@@ -15,11 +15,21 @@ require_once 'Core/CompositeRequestHandler.php';
  * @package	Metaframework
  */
 class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implements Core_CompositeRequestHandler {
-	
-	
-	
-	
+
+	/**
+	 * @var	array of Core_RequestHandler	stores the linked objects of the  single qualified unidirectional to many association to {@link Core_RequestHandler} (symmetry ensured) 
+	 */
+	private $_nestedRequestHandler = array();
+	/**
+	 * holds the association management object for the single qualified unidirectional to many association to {@link Core_RequestHandler} (symmetry ensured)
+	 * @var UML_SingleQualifiedAssociation
+	 */
+	private $associations;
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	Core_HandlerInfo	$handlerInfo	
@@ -31,10 +41,29 @@ class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implement
 		throw new Exception('The implementation of the method Core_BaseCompositeRequestHandler::handle is missing !');
 		/* PROTECTED REGION END */
 	}
-	
-	
-	
-	
+
+
+
+	/**
+	 * magic getter to obtain associations or unmodifiable values of the following members:
+	 * <ul>
+	 *   <li><var>nestedRequestHandler</var>: the  single qualified unidirectional to many association to {@link Core_RequestHandler} (symmetry ensured)</li>
+	 * </ul>
+	 * @param	string	$name	the name of the member
+	 * @throws	{@link Exception} if the specified member is neither accessible nor available
+	 * @return	mixed	the value of the member or an association management object
+	 */
+	public function __get($name) {
+		switch ($name) {
+			case 'nestedRequestHandler' :
+				if ($this->associations === null) {
+					$this->associations = new UML_SingleQualifiedAssociation($this, $this->_nestedRequestHandler, null, true);
+				}
+				return $this->associations;
+			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
+		}
+	}
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126507031_967775_1198) ENABLED START */
 	// TODO: put your further code implementations for class 'Core_BaseCompositeRequestHandler' here

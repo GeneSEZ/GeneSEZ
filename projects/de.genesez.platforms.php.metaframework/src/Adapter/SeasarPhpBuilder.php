@@ -9,11 +9,12 @@
  * @package	Metaframework
  */
 class Adapter_SeasarPhpBuilder   {
-	
-	
-	
-	
+
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	array	$components	array of type 'S2Container_ComponentDef', default value is 'array()'
@@ -28,6 +29,7 @@ class Adapter_SeasarPhpBuilder   {
 		return $container;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$class	default value is ''''
@@ -48,6 +50,7 @@ class Adapter_SeasarPhpBuilder   {
 		return $component;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$value	default value is 'null'
@@ -59,6 +62,7 @@ class Adapter_SeasarPhpBuilder   {
 		return $argument;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$name	default value is 'null'
@@ -71,10 +75,10 @@ class Adapter_SeasarPhpBuilder   {
 		return $property;
 		/* PROTECTED REGION END */
 	}
-	
-	
-	
-	
+
+
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237058774562_708044_281) ENABLED START */
 	// TODO: put your further code implementations for class 'Adapter_SeasarPhpBuilder' here

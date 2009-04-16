@@ -13,17 +13,18 @@ require_once 'Core/Renderer.php';
  * @package	Metaframework
  */
 class Adapter_SmartyRenderer  implements Core_Renderer {
-	
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
 	 * @var		Smarty	$_smarty
 	 */
 	private $_smarty;
-	
-	
-	
+
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$template	
@@ -35,8 +36,8 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 		$this->smarty->display($view);
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Adapter_SmartyRenderer::getSmarty() $_smarty}
@@ -45,8 +46,8 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	public 	 function setSmarty(Smarty $smarty) {
 		$this->_smarty = $smarty;
 	}
-	
-	
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237999928437_189680_1219) ENABLED START */
 	// TODO: put your further code implementations for class 'Smarty_SmartyRenderer' here

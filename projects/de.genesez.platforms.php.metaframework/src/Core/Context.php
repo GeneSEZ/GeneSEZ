@@ -25,7 +25,6 @@ require_once 'UML/OneAssociation.php';
  * @package	Metaframework
  */
 class Core_Context  implements Core_Resolver {
-	
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -37,27 +36,26 @@ class Core_Context  implements Core_Resolver {
 	 * @var		string	$_handler
 	 */
 	private $_handler;
+
 	/**
-	 * stores the linked objects of the bidirectional one to many association to {@link Core_Context}
-	 * @var		array	documented here {@link __get()}
+	 * @var	array of Core_Context	stores the linked objects of the  bidirectional one to many association to {@link Core_Context} (symmetry ensured) 
 	 */
 	private $_nestedContext = array();
 	/**
-	 * stores the linked object of the bidirectional many to one association to {@link Core_Context}
-	 * @var		Core_Context	documented here {@link __get()}
+	 * @var	Core_Context	stores the linked object of the  bidirectional many to one association to {@link Core_Context} (symmetry ensured) 
 	 */
 	private $_parent;
 	/**
 	 * holds all association management objects
 	 * <ul>
-	 *   <li><var>nestedContext</var>: the bidirectional one to many association to {@link Core_Context}</li>
-	 *   <li><var>parent</var>: the bidirectional many to one association to {@link Core_Context}</li>
+	 *   <li><var>nestedContext</var>: the bidirectional one to many association to {@link Core_Context} (symmetry ensured)</li>
+	 *   <li><var>parent</var>: the bidirectional many to one association to {@link Core_Context} (symmetry ensured)</li>
 	 * </ul>
-	 * @var Association
+	 * @var array of Association and/or QualifiedAssociation
 	 */
 	private $associations = array();
-	
 	// -- constructors + destructors ----------------------------------------
+	
 	/**
 	 * constructs an object of class {@link Core_Context}
 	 * @generated	constructor stub for implementation
@@ -74,9 +72,11 @@ class Core_Context  implements Core_Resolver {
 		}
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$path	
@@ -113,6 +113,7 @@ class Core_Context  implements Core_Resolver {
 		}
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$path	
@@ -129,6 +130,7 @@ class Core_Context  implements Core_Resolver {
 		return $context;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$path	
@@ -148,6 +150,7 @@ class Core_Context  implements Core_Resolver {
 		return substr($path, $start);
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$name	
@@ -163,6 +166,7 @@ class Core_Context  implements Core_Resolver {
 		return false;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$name	
@@ -178,6 +182,7 @@ class Core_Context  implements Core_Resolver {
 		return null;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	string
@@ -188,27 +193,29 @@ class Core_Context  implements Core_Resolver {
 		throw new Exception('The implementation of the method Context::__toString is missing !');
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
 	// -- association + attribute accessors ---------------------------------
+
 	/**
-	 * magic getter to obtain the unmodifiable values of the following members:
+	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
 	 *   <li><var>name</var>: </li>
 	 *   <li><var>handler</var>: </li>
-	 *   <li><var>nestedContext</var>: the bidirectional one to many association to {@link Core_Context}</li>
-	 *   <li><var>parent</var>: the bidirectional many to one association to {@link Core_Context}</li>
+	 *   <li><var>nestedContext</var>: the  bidirectional one to many association to {@link Core_Context} (symmetry ensured)</li>
+	 *   <li><var>parent</var>: the  bidirectional many to one association to {@link Core_Context} (symmetry ensured)</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
-	 * @throws	{@link Exception} if the member is neither accessible nor available
-	 * @return	mixed	the value of the member or an exception if the member is neither accessible nor available
+	 * @throws	{@link Exception} if the specified member is neither accessible nor available
+	 * @return	mixed	the value of the member or an association management object
 	 */
 	public function __get($name) {
 		switch ($name) {
 			case 'name': return $this->_name;
 			case 'handler': return $this->_handler;
-			case 'nestedContext': return $this->getInitializedAssociation($name);
-			case 'parent': return $this->getInitializedAssociation($name);
+			case 'nestedContext':
+			case 'parent':
+				return $this->getInitializedAssociation($name);
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
@@ -256,11 +263,11 @@ class Core_Context  implements Core_Resolver {
 			default: throw new Exception('cannot unset the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-	
+
 	/**
 	 * lazily initializes the requested association management objects
 	 * @param	string	&$name	the name of the association role
-	 * @return	Association		the association management object
+	 * @return	Association|QualifiedAssociation	the association management object
 	 */
 	private function getInitializedAssociation(&$name) {
 		if (!array_key_exists($name, $this->associations)) {
@@ -272,7 +279,6 @@ class Core_Context  implements Core_Resolver {
 		}
 		return $this->associations[$name];
 	}
-	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1236334265906_925929_844) ENABLED START */
 	// TODO: put your further code implementations for class 'Context' here

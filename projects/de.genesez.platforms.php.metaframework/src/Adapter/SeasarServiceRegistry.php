@@ -11,17 +11,18 @@ require_once 'Core/ServiceRegistry.php';
  * @package	Metaframework
  */
 class Adapter_SeasarServiceRegistry  implements Core_ServiceRegistry {
-	
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
 	 * @var		S2Container	$_container
 	 */
 	private $_container;
-	
-	
-	
+
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$name	
@@ -32,6 +33,7 @@ class Adapter_SeasarServiceRegistry  implements Core_ServiceRegistry {
 		return $this->_container->hasComponentDef($name);
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$name	
@@ -41,8 +43,8 @@ class Adapter_SeasarServiceRegistry  implements Core_ServiceRegistry {
 		return $this->_container->getComponent($name);
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Adapter_SeasarServiceRegistry::getContainer() $_container}
@@ -51,8 +53,8 @@ class Adapter_SeasarServiceRegistry  implements Core_ServiceRegistry {
 	public 	 function setContainer(S2Container $container) {
 		$this->_container = $container;
 	}
-	
-	
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237999613687_255843_1112) ENABLED START */
 	// TODO: put your further code implementations for class 'Seasar_SeasarServiceRegistry' here

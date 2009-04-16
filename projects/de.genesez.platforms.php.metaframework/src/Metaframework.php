@@ -11,7 +11,6 @@ spl_autoload_register(array('Metaframework', 'autoload'));
  * @package	Metaframework
  */
 class Metaframework   {
-	
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -28,10 +27,12 @@ class Metaframework   {
 	 * @var		S2Container	$container
 	 */
 	protected $container;
-	
-	
-	
+
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$name	
@@ -43,6 +44,7 @@ class Metaframework   {
 		$this->modules[$name] = $loader;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	array	$loaders	array of type 'Loader_ModuleLoader', default value is 'array()'
@@ -54,6 +56,7 @@ class Metaframework   {
 		}
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 */
@@ -69,6 +72,7 @@ class Metaframework   {
 		$dispatcher->dispatch($this->rootContext);
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 */
@@ -98,6 +102,7 @@ class Metaframework   {
 		$this->container = $container->getComponent('serviceRegistry');
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 */
@@ -129,6 +134,7 @@ class Metaframework   {
 		}
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$classname	
@@ -145,6 +151,7 @@ class Metaframework   {
 		return false;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	string
@@ -154,6 +161,7 @@ class Metaframework   {
 		return dirname(__FILE__) . '/';
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	string
@@ -163,6 +171,7 @@ class Metaframework   {
 		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') +1);
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	string
@@ -172,11 +181,11 @@ class Metaframework   {
 		return $_SERVER['SCRIPT_NAME'] . '/';
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
 	// -- association + attribute accessors ---------------------------------
-	
-	
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1236332587625_21111_386) ENABLED START */
 	// TODO: put your further code implementations for class 'DdmFw' here

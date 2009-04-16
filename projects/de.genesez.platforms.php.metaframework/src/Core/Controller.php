@@ -13,37 +13,43 @@ require_once 'Core/BaseRequestHandler.php';
  * @package	Metaframework
  */
 abstract class Core_Controller extends Core_BaseRequestHandler  {
-	
-	
-	
+
+
+
 	// -- method declarations -----------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Dto
 	 */
 	public abstract function create();
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Dto
 	 */
 	public abstract function delete();
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Dto
 	 */
 	public abstract function edit();
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Dto
 	 */
 	public abstract function show();
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Dto
 	 */
 	public abstract function listing();
-	
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	Core_HandlerInfo	$handlerInfo	
@@ -55,10 +61,10 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 		throw new Exception('The implementation of the method Core_Controller::handle is missing !');
 		/* PROTECTED REGION END */
 	}
-	
-	
-	
-	
+
+
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126599921_834943_1226) ENABLED START */
 	// TODO: put your further code implementations for class 'Core_Controller' here

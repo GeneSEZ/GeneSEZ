@@ -13,24 +13,26 @@ require_once 'Core/RequestHandler.php';
  * @package	Metaframework
  */
 abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
-	
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$_view
 	 */
 	private $_view;
-	
-	
+
+
+
 	// -- method declarations -----------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	Core_HandlerInfo	$handlerInfo	
 	 * @return	Core_Dto
 	 */
 	public abstract function handle($handlerInfo);
-	
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @return	string
@@ -41,8 +43,8 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 		throw new Exception('The implementation of the method Core_BaseRequestHandler::baseUri is missing !');
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Core_BaseRequestHandler::getView() $_view}
@@ -52,14 +54,15 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	public 	 function setView($view) {
 		$this->_view = $view;
 	}
+
 	/**
-	 * magic getter to obtain the unmodifiable values of the following members:
+	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
 	 *   <li><var>view</var>: </li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
-	 * @throws	{@link Exception} if the member is neither accessible nor available
-	 * @return	mixed	the value of the member or an exception if the member is neither accessible nor available
+	 * @throws	{@link Exception} if the specified member is neither accessible nor available
+	 * @return	mixed	the value of the member or an association management object
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -67,8 +70,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-	
-	
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239125989500_25423_1168) ENABLED START */
 	// TODO: put your further code implementations for class 'Core_BaseRequestHandler' here

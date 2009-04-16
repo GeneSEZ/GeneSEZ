@@ -14,15 +14,15 @@ require_once 'Core/Dto.php';
  * @package	Metaframework
  */
 class Core_BaseDto extends ArrayObject implements Core_Dto {
-	
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$_view
 	 */
 	private $_view;
-	
+
 	// -- constructors + destructors ----------------------------------------
+	
 	/**
 	 * constructs an object of class {@link Core_BaseDto}
 	 * @generated	constructor stub for implementation
@@ -35,9 +35,11 @@ class Core_BaseDto extends ArrayObject implements Core_Dto {
 		$this->_view = $view;
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @return	string
@@ -47,11 +49,11 @@ class Core_BaseDto extends ArrayObject implements Core_Dto {
 		return $this->_view;
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
 	// -- association + attribute accessors ---------------------------------
-	
-	
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239096659828_207401_865) ENABLED START */
 	// TODO: put your further code implementations for class 'Core_BaseDto' here

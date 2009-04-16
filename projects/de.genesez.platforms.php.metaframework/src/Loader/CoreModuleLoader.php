@@ -17,13 +17,13 @@ spl_autoload_register(array('Doctrine', 'autoload'));
  * @package	Metaframework
  */
 class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
-	
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$config
 	 */
 	protected $config = array();
+
 	
 	/**
 	 * constructs an object of class {@link Loader_CoreModuleLoader}
@@ -40,9 +40,11 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 		S2ContainerClassLoader::import(S2CONTAINER_PHP5);
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @return	array of S2Container_ComponentDef
@@ -65,6 +67,7 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 		);
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	boolean
@@ -74,6 +77,7 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 		return true;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Context
@@ -87,6 +91,7 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 		return new Core_Context('/', $handler);
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	Core_ServiceRegistry	$serviceRegistry	
@@ -103,6 +108,7 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 		$smarty->compile_dir = $smarty_compile_dir;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$key	
@@ -116,11 +122,11 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 		}
 		/* PROTECTED REGION END */
 	}
-	
-	
+
+
 	// -- association + attribute accessors ---------------------------------
-	
-	
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237975932171_599452_831) ENABLED START */
 	// TODO: put your further code implementations for class 'Loader_CoreModuleLoader' here

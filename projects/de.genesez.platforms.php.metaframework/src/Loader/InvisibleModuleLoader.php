@@ -12,11 +12,12 @@ require_once 'Loader/ModuleLoader.php';
  * @package	Metaframework
  */
 abstract class Loader_InvisibleModuleLoader  implements Loader_ModuleLoader {
-	
-	
-	
-	
+
+
+
+
 	// -- method implementations --------------------------------------------
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @return	boolean
@@ -26,6 +27,7 @@ abstract class Loader_InvisibleModuleLoader  implements Loader_ModuleLoader {
 		return false;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	array of string
@@ -35,6 +37,7 @@ abstract class Loader_InvisibleModuleLoader  implements Loader_ModuleLoader {
 		return array();
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	boolean
@@ -44,6 +47,7 @@ abstract class Loader_InvisibleModuleLoader  implements Loader_ModuleLoader {
 		return false;
 		/* PROTECTED REGION END */
 	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Context
@@ -53,10 +57,10 @@ abstract class Loader_InvisibleModuleLoader  implements Loader_ModuleLoader {
 		return null;
 		/* PROTECTED REGION END */
 	}
-	
-	
-	
-	
+
+
+
+
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237982393703_618181_979) ENABLED START */
 	// TODO: put your further code implementations for class 'Loader_InvisibleModuleLoader' here
