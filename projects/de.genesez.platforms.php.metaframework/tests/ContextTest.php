@@ -54,31 +54,24 @@ class ContextTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testRootContext() {
 		$this->testConstruct();
-		$ch = $this->root->resolveHandler('');
-		$this->assertEquals('root', $ch->handler, 'root context not found!');
-		$this->assertEquals('/', $ch->pathInfo, 'root context path incorrect');
-		
-		$ch = $this->root->resolveHandler('/');
-		$this->assertEquals('root', $ch->handler, 'root context with leading slash not found!');
-		$this->assertEquals('/', $ch->pathInfo, 'root context path with leading slash incorrect');
+		$context = $this->root->resolveContext(array());
+		$this->assertEquals('root', $context->handler, 'root context not found!');
 	}
 	/**
 	 * tests access to a context directly below root context
 	 */
 	public function testSubContext() {
 		$this->testConstruct();
-		$ch = $this->root->resolveHandler('/context1');
+		$ch = $this->root->resolveContext(array('context1'));
 		$this->assertEquals('root.context1', $ch->handler, '/context1 not found!');
-		$this->assertEquals('/', $ch->pathInfo, '/context1 path incorrect');
 	}
 	/**
 	 * tests access to a second context directly below root context
 	 */
 	public function testTwoSubContexts() {
 		$this->testConstruct();
-		$ch = $this->root->resolveHandler('/context2');
+		$ch = $this->root->resolveContext(array('context2'));
 		$this->assertEquals('root.context2', $ch->handler, '/context2 not found!');
-		$this->assertEquals('/', $ch->pathInfo, '/context2 path incorrect');
 	}
 	/**
 	 * tests access to a sub context
@@ -86,36 +79,32 @@ class ContextTest extends PHPUnit_Framework_TestCase {
 	public function testSubSubContext() {
 		$this->testConstruct();
 		$this->context1Sub1->handler = 'root.context1.sub1';
-		$ch = $this->root->resolveHandler('/context1/sub1');
+		$ch = $this->root->resolveContext(array('context1', 'sub1'));
 		$this->assertEquals('root.context1.sub1', $ch->handler, '/context1/sub1 not found!');
-		$this->assertEquals('/', $ch->pathInfo, '/context1/sub1 path incorrect');
 	}
 	/**
 	 * tests access to a sub context with handler fallback
 	 */
 	public function testSubSubContextFallback() {
 		$this->testConstruct();
-		$ch = $this->root->resolveHandler('/context1/sub1');
+		$ch = $this->root->resolveContext(array('context1', 'sub1'));
 		$this->assertEquals('root.context1', $ch->handler, '/context1/sub1 fallback not found!');
-		$this->assertEquals('/sub1', $ch->pathInfo, '/context1/sub1 path incorrect');
 	}
 	/**
 	 * tests access to an invalid context
 	 */
 	public function testInvalidSubContext() {
 		$this->testConstruct();
-		$ch = $this->root->resolveHandler('/blub');
+		$ch = $this->root->resolveContext(array('blub'));
 		$this->assertEquals('root', $ch->handler, 'invalid context check!');
-		$this->assertEquals('/blub', $ch->pathInfo, '/blub path incorrect');
 	}
 	/**
 	 * tests access to an invalid sub context
 	 */
 	public function testInvalidSubSubContext() {
 		$this->testConstruct();
-		$ch = $this->root->resolveHandler('/context1/blub');
+		$ch = $this->root->resolveContext(array('context1', 'blub'));
 		$this->assertEquals('root.context1', $ch->handler, 'invalid sub context not found!');
-		$this->assertEquals('/blub', $ch->pathInfo, '/context1/blub path incorrect');
 	}
 	/**
 	 * tests access to a context with a same name but different location
@@ -125,9 +114,8 @@ class ContextTest extends PHPUnit_Framework_TestCase {
 		$test = new Core_Context('sub1');
 		$test->handler = 'root.context1.sub1.sub1';
 		$this->context1Sub1->nestedContext->insert($test);
-		$ch = $this->root->resolveHandler('/context1/sub1/sub1');
+		$ch = $this->root->resolveContext(array('context1', 'sub1', 'sub1'));
 		$this->assertEquals('root.context1.sub1.sub1', $ch->handler, 'context with same name + different location not found!');
-		$this->assertEquals('/', $ch->pathInfo, '/context1/sub1/sub1 path incorrect');
 	}
 }
 ?>

@@ -1,5 +1,4 @@
 <?php
-require_once 'AssociativeArray';
 require_once 'ArrayObject';
 require_once 'Core/Dto.php';
 
@@ -27,7 +26,7 @@ class Core_BaseDto extends ArrayObject implements Core_Dto {
 	 * constructs an object of class {@link Core_BaseDto}
 	 * @generated	constructor stub for implementation
 	 * @param	string	$view	
-	 * @param	AssociativeArray	$container	default value is 'array()'
+	 * @param	array	$container	default value is 'array()'
 	 */
 	public function __construct($view, $container = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1239096659828_334898_869) ENABLED START */

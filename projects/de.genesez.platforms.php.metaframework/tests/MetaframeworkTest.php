@@ -1,36 +1,10 @@
 <?php
-require_once 'Metaframework.php';
 require_once 'Loader/CoreModuleLoader.php';
-require_once 'Loader/UtilitiesModuleLoader.php';
-require_once 'Loader/DdmModuleLoader.php';
 
-class MetaframeworkTestClass extends Metaframework {
-	public function buildContainer() {
-		parent::buildContainer();
-	}
-	public function checkPlugIns() {
-		parent::checkPlugIns();
-	}
-	public function __get($name) {
-		switch ($name) {
-			case 'container' : return $this->container;
-			case 'modules' : return $this->modules;
-			case 'rootContext' : return $this->rootContext;
-		}
-	}
-}
-
-class TestModuleLoader extends Loader_InvisibleModuleLoader {
-	public function getComponents() {
-		return array();
-	}
-	public function hasModuleDependencies() {
-		return true;
-	}
-	public function getModuleDependencies() {
-		return array('non.existing.module');
-	}
-}
+require_once 'MetaframeworkTestClass.php';
+require_once 'TestModuleLoader.php';
+require_once 'DdmModuleLoader.php';
+require_once 'UtilitiesModuleLoader.php';
 
 class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 	private $metafw;
@@ -48,8 +22,8 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 				'smarty.template.dir' => 'view/templates',
 				'smarty.compile.dir' => 'view/templates_compiled'
 			)),
-			'de.genesez.platforms.php.metaframework.util' => new Loader_UtilitiesModuleLoader(),
-			'de.genesez.platforms.php.ddm' => new Loader_DdmModuleLoader()
+			'de.genesez.platforms.php.metaframework.util' => new UtilitiesModuleLoader(),
+			'de.genesez.platforms.php.ddm' => new DdmModuleLoader()
 		));
 		$this->assertEquals(3, count($this->metafw->modules), 'there should be 3 registered modules');
 		$this->assertTrue(array_key_exists('de.genesez.platforms.php.metaframework.core', $this->metafw->modules), 'core plug-in should be registered');

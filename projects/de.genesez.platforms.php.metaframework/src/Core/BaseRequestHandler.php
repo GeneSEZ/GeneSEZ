@@ -16,9 +16,9 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		string	$_view
+	 * @var		string	$view
 	 */
-	private $_view;
+	protected $view;
 
 
 
@@ -37,22 +37,45 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 * @generated	method stub for implementation
 	 * @return	string
 	 */
-	public function baseUri() {
+	public static function baseUri() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239126458937_358804_1194) ENABLED START */
-		// TODO: implementation of method 'Core_BaseRequestHandler.baseUri(...)'
-		throw new Exception('The implementation of the method Core_BaseRequestHandler::baseUri is missing !');
+		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') +1);
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	public static function baseRequestUri() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240211928703_764012_723) ENABLED START */
+		return $_SERVER['SCRIPT_NAME'] . '/';
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	public static function defaultView() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240240687687_163465_951) ENABLED START */
+		$view = $_SERVER['PATH_INFO'];
+		if (substr($view, 0, 1) === '/') {
+			$view = substr($view, 1);
+		}
+		return $view;
 		/* PROTECTED REGION END */
 	}
 
 
 	// -- association + attribute accessors ---------------------------------
 	/**
-	 * @generated	setter method for the attribute {@link Core_BaseRequestHandler::getView() $_view}
+	 * @generated	setter method for the attribute {@link Core_BaseRequestHandler::getView() $view}
 	 * @param	string	$view	the value to set
 	 */
 	
 	public 	 function setView($view) {
-		$this->_view = $view;
+		$this->view = $view;
 	}
 
 	/**
@@ -66,7 +89,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'view': return $this->_view;
+			case 'view': return $this->view;
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}

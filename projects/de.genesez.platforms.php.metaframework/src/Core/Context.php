@@ -1,6 +1,4 @@
 <?php
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/Resolver.php';
 require_once 'UML/ManyAssociation.php';
 require_once 'UML/OneAssociation.php';
 
@@ -20,11 +18,10 @@ require_once 'UML/OneAssociation.php';
  * <li>a nested sub context <code>subcontext</code> below the root context</li>
  * <li>and a nested context below the subcontext <code>subsub</code>.</li>
  * </ul>
- * @see		Core_Resolver
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_Context  implements Core_Resolver {
+class Core_Context   {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -78,108 +75,45 @@ class Core_Context  implements Core_Resolver {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$path	
-	 * @return	Core_HandlerInfo
+	 * resolves the context for the specified path. In case of an unresolvable 
+	 * context, the root context is returned.
+	 * @param	array	$path	the path specifying a context
+	 * @return	Core_Context
 	 */
-	public function resolveHandler($path) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236344597078_642983_540) ENABLED START */
-		$handler = null;
-		// check if this context is addressed
-		if ($path === '' || $path === '/') {
-			$path = '/';
-			$handler = $this->handler;
-		} else {
-			// check if sub context exists
-			$name = $this->_getContextName($path);
-			if ($this->_hasNestedContext($name)) {
-				$subPath = $this->_getNestedContextPath($path);
-				$subHandler = $this->_getNestedContext($name)->resolveHandler($subPath);
-				// check handler of sub context
-				if ($subHandler !== null) {
-					return $subHandler;
-				}
-				// no nested context handler -> fallback
-				$handler = $this->handler;
+	public function resolveContext($path = array()) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240297503531_187744_1117) ENABLED START */
+		// leaf context, check handler
+		if (!array_key_exists(0, $path)) {
+			if ($this->_handler === null) {
+				return null;
 			} else {
-				$handler = $this->handler;
+				return $this;
 			}
 		}
-		// return context handler
-		if ($handler === null) {
-			return null;
-		} else {
-			return new Core_HandlerInfo($handler, $path);
+		// goto leaf context
+		$name = array_shift($path);
+		$context = null;
+		foreach ($this->nestedContext->iterator() as $item) {
+			if ($item->name === $name) {
+				$context = $item->resolveContext($path);
+				break;
+			}
 		}
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$path	
-	 * @return	string
-	 */
-	private function _getContextName($path) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236344451046_376159_524) ENABLED START */
-		$start = stripos($path, '/') +1;
-		$end = stripos($path, '/', $start);
-		if ($end === false) {
-			$end = strlen($path);
+		// determine which context to return
+		if ($context === null) {
+			if ($this->_handler === null) {
+				// if no handler could be found, always return the root context
+				if ($this->parent->get() === null) {
+					return $this;
+				} else {
+					return null;
+				}
+			} else {
+				return $this;
+			}
 		}
-		$context = substr($path, $start, $end - $start);
+		// return the handler found
 		return $context;
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$path	
-	 * @return	string
-	 */
-	private function _getNestedContextPath($path) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236344470703_627145_528) ENABLED START */
-		if (substr($path, 0, 1) === '/') {
-			$offset = 1;
-		} else {
-			$offset = 0;
-		}
-		$start = stripos($path, '/', $offset);
-		if ($start === false) {
-			return '';
-		}
-		return substr($path, $start);
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$name	
-	 * @return	boolean
-	 */
-	private function _hasNestedContext($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236344500656_69056_532) ENABLED START */
-		foreach ($this->nestedContext->getAll() as $context) {
-			if ($context->name === $name) {
-				return true;
-			}
-		}
-		return false;
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$name	
-	 * @return	string
-	 */
-	private function _getNestedContext($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236344519843_703618_536) ENABLED START */
-		foreach ($this->nestedContext->getAll() as $context) {
-			if ($context->name === $name) {
-				return $context;
-			}
-		}
-		return null;
 		/* PROTECTED REGION END */
 	}
 
@@ -189,8 +123,12 @@ class Core_Context  implements Core_Resolver {
 	 */
 	public function __toString() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236344802625_729711_545) ENABLED START */
-		// TODO: implementation of method 'Context.__toString(...)'
-		throw new Exception('The implementation of the method Context::__toString is missing !');
+		$path = '/';
+		$parent = $this->parent->get();
+		if ($parent !== null) {
+			$path = $parent . '/';
+		}
+		return $path . $this->_name;
 		/* PROTECTED REGION END */
 	}
 

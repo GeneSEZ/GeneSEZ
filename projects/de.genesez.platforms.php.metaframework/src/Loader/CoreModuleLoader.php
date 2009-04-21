@@ -1,7 +1,7 @@
 <?php
 require_once 'Core/Context.php';
 require_once 'Core/ServiceRegistry.php';
-require_once 'Loader/InvisibleModuleLoader.php';
+require_once 'Loader/ModuleLoader.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237975932171_599452_831) ENABLED START */
 require_once 's2container/S2Container.php';
@@ -12,11 +12,11 @@ spl_autoload_register(array('Doctrine', 'autoload'));
 /* PROTECTED REGION END */
 
 /**
- * @see		Loader_InvisibleModuleLoader
+ * @see		Loader_ModuleLoader
  * @author	dreamer
  * @package	Metaframework
  */
-class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
+class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -47,6 +47,26 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 	
 	/**
 	 * @generated	method stub for implementation
+	 * @return	boolean
+	 */
+	public function hasModuleDependencies() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240212756328_399075_727) ENABLED START */
+		return false;
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	array of string
+	 */
+	public function getModuleDependencies() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240212756328_897389_728) ENABLED START */
+		return array();
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
 	 * @return	array of S2Container_ComponentDef
 	 */
 	public function getComponents() {
@@ -56,6 +76,9 @@ class Loader_CoreModuleLoader extends Loader_InvisibleModuleLoader  {
 				// don't use special 'container' value to get a container instance - doesn't work :-(
 				// insead, use auto binding
 //				Adapter_SeasarPhpBuilder::newProperty('container', 'container')
+			)),
+			Adapter_SeasarPhpBuilder::newComponent('Core_UrlResolver', 'resolver', array(), array(
+				Adapter_SeasarPhpBuilder::newProperty('dispatcher', 'dispatcher')
 			)),
 			Adapter_SeasarPhpBuilder::newComponent('Core_ServiceRegistryDispatcher', 'dispatcher', array(), array(
 				Adapter_SeasarPhpBuilder::newProperty('serviceRegistry', 'serviceRegistry')

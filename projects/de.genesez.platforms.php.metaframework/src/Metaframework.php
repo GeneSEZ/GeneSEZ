@@ -68,8 +68,8 @@ class Metaframework   {
 		reset($this->modules);
 		current($this->modules)->configureFrameworks($this->container);
 		// process request
-		$dispatcher = $this->container->getComponent('dispatcher');
-		$dispatcher->dispatch($this->rootContext);
+		$resolver = $this->container->getComponent('resolver');
+		$resolver->resolveHandler($this->rootContext);
 		/* PROTECTED REGION END */
 	}
 

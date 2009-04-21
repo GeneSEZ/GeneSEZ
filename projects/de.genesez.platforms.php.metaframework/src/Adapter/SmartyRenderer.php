@@ -27,13 +27,12 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$template	
 	 * @param	Core_Dto	$dto	
 	 */
-	public function render($template, $dto) {
+	public function render($dto) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
 		$this->smarty->assign('dto', $dto);
-		$this->smarty->display($view);
+		$this->smarty->display($dto->view());
 		/* PROTECTED REGION END */
 	}
 
