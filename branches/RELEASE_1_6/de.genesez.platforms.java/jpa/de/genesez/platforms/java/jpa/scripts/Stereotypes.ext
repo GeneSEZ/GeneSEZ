@@ -1,0 +1,345 @@
+/**
+ * 	functions for creating new MStereotypes, MTags, MTaggedValues and for changing the value
+ *	of an MTaggedValue 
+ * 
+ * 
+ * @author	andre pflueger
+ * @date	2008-09-05
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+/**
+ *	function to create a MAttribute
+ *
+ *	@param		name			name of the attribute
+ *	@param		visibility		modifier of the attribute
+ *	@param		multiplicity	multiplicity of the attribute	
+ *	@param		derived			attribute is part of a superclass
+ *	@param		unique			attribute is unique
+ *	@param		ordered			attribute is ordered
+ *
+ */
+create MAttribute makeAttribute(String name, String visibility, int multiplicity, boolean derived, boolean unique, boolean ordered) :
+	setName(name) ->
+	setVisibility(visibility) ->
+	setMultiplicity(multiplicity) ->
+	setDerived(derived) ->
+	setUnique(unique) ->
+	setOrdered(ordered);
+
+/**
+ *	function to add the stereotype "ejb3Column" to an existing (in the classifier) MElement
+ *
+ *	@param		elem		MElement
+ *	@param		classifier	classifier of the MElement
+ *
+ */
+MElement addColumnForPrimaryKeyInheritance(MElement elem, MClassifier classifier) :
+	classifier.property.exists(e|e.name == elem.name) 
+		? classifier.property.selectFirst(e|e.name == elem.name).makeColumn(classifier.getModel())
+		: "";
+		
+/**
+ *	function to create the stereotype "ejb3Column" for primary key inheritance
+ *	function can not be used for general "ejb3Column" stereotype creation!!!
+ *	function adds the MStereotype to the stereotype list of the MElement and
+ *	to the anyStereotype list of the MModel 
+ *
+ *	@param		elem		MElement
+ *	@param		container	model of the MElement
+ *
+ */
+create MStereotype makeColumn(MProperty elem, MModel container) :
+	setName("ejb3Column") ->
+	property.add(makeTag("updatable", "String")) ->
+	property.add(makeTag("insertable", "String")) ->
+	property.add(makeTag("name", "String")) ->
+	property.add(makeTag("scale", "String")) ->
+	property.add(makeTag("precision", "String")) ->
+	property.add(makeTag("length", "String")) ->
+	property.add(makeTag("columnDefinition", "String")) ->
+	property.add(makeTag("table", "String")) ->	
+	property.add(makeTag("nullable", "String")) ->
+	property.add(makeTag("unique", "String")) ->
+	container.anyStereotype.add(this) ->
+	elem.stereotype.add(this) ->
+	elem.taggedValue.add(makeTaggedValue("false", makeTag("updatable", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue(elem.name, makeTag("name", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("false", makeTag("unique", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("true", makeTag("nullable", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("255", makeTag("length", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("0", makeTag("precision", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("0", makeTag("scale", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("null", makeTag("columnDefinition", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("null", makeTag("table", "String"))) ->
+	elem.taggedValue.add(makeTaggedValue("false", makeTag("insertable", "String")));
+
+/**
+ *	function to add an "ejb3Association" stereotype to a MProperty
+ *	standard values are not set by this function!
+ *
+ *	@param		associationType		value of "ejb3AssociationType" (standard: "AutoDetect")
+ *	@param		targetEntity		String (standard: "")
+ *	@param		cascade 			value of "ejb3CascadeType" as array (standard: "[]")
+ *	@param		fetch				value of "ejb3FetchType" (standard: "DEFAULT")
+ *	@param		optional			boolean value (standard: true)
+ *	@param		mappedBy			String (standard: "")
+ *
+ */
+Void addAssociationStereotype(MProperty this, String associationType, String targetEntity, String cascade, String fetch, String optional, String mappedBy) :
+	let s = makeAssociationStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "type", "ejb3AssociationType"), associationType) ->
+		createTaggedValue(this, createTag(s, "cascade", "ejb3CascadeType"), cascade) ->
+		createTaggedValue(this, createTag(s, "fetch", "ejb3FetchType"), fetch) ->
+		createTaggedValue(this, createTag(s, "optional", "Boolean"), optional) ->
+		createTaggedValue(this, createTag(s, "mappedBy", "String"), mappedBy) ->
+		createTaggedValue(this, createTag(s, "targetEntity", "String"), targetEntity);
+		
+/**
+ *	function to create an "ejb3Association" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MProperty, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		associationType		value of "ejb3AssociationType" (standard: "AutoDetect")
+ *	@param		targetEntity		String (standard: "")
+ *	@param		cascade 			value of "ejb3CascadeType" as array (standard: "[]")
+ *	@param		fetch				value of "ejb3FetchType" (standard: "DEFAULT")
+ *	@param		optional			boolean value (standard: true)
+ *	@param		mappedBy			String (standard: "")
+ *
+ */
+MStereotype makeAssociationStereotype(MProperty container) :
+	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3Association", "ejb3Association") :
+		s.property.add(createTag(s, "type", "ejb3AssociationType")) ->
+		s.property.add(createTag(s, "cascade", "ejb3CascadeType")) ->
+		s.property.add(createTag(s, "fetch", "ejb3FetchType")) ->
+		s.property.add(createTag(s, "optional", "Boolean")) ->	
+		s.property.add(createTag(s, "mappedBy", "String")) ->
+		s.property.add(createTag(s, "targetEntity", "String")) ->
+		s;
+
+/**
+ *	function to add an "ejb3PrimaryKey" stereotype to a MProperty
+ *	default values are not set by this function!
+ *
+ *	@param		this			instance of MProperty
+ *	@param		generatedValue	boolean value
+ *	@param		embeddedId		boolean value
+ *	@param		strategy		generation strategy
+ *	@param		generatorName	name of the generator
+ *
+ */
+Void addPrimaryKeyStereotype(MProperty this, String generatedValue, String embeddedId, String strategy, String generatorName) :
+	let s = makePrimaryKeyStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "generatedValue", "Boolean"), generatedValue) ->
+		createTaggedValue(this, createTag(s, "embeddedId", "Boolean"), embeddedId) ->
+		createTaggedValue(this, createTag(s, "strategy", "String"), strategy) ->
+		createTaggedValue(this, createTag(s, "generatorName", "String"), generatorName);
+
+/**
+ *	function to create an "ejb3PrimaryKey" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MProperty
+ *
+ */
+MStereotype makePrimaryKeyStereotype(MProperty container) :
+	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3PrimaryKey", "ejb3PrimaryKey") :
+		s.property.add(createTag(s, "generatedValue", "Boolean")) ->
+		s.property.add(createTag(s, "embeddedId", "Boolean")) ->
+		s.property.add(createTag(s, "strategy", "String")) ->
+		s.property.add(createTag(s, "generatorName", "String")) ->
+		s;
+	
+/**
+ *	function to add an "ejb3Inheritance" stereotype to a MClass
+ *	standard values are not set by this function!
+ *
+ *	@param		strategy		value of "ejb3InheritanceType" (standard: "SINGLE_TABLE")
+ *
+ */
+Void addInheritanceStereotype(MClass this, String strategy) :
+	this.owningPackage.getModel().anyStereotype.add(makeInheritanceStereotype(this, strategy));
+
+/**
+ *	function to create an "ejb3Inheritance" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MClass, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		strategy		value of "ejb3InheritanceType" (standard: "SINGLE_TABLE")
+ *
+ */
+create MStereotype makeInheritanceStereotype(MClass class, String strategy) :
+	setName("ejb3Inheritance") ->
+	property.add(makeTag("strategy", "ejb3InheritanceType")) ->
+	class.taggedValue.add(makeTaggedValue(strategy, makeTag("strategy", "ejb3InheritanceType"))) ->
+	class.stereotype.add(this);
+	
+/**
+ *	function to add an "ejb3DiscriminatorColumn" stereotype to a MClass
+ *	standard values are not set by this function!
+ *
+ *	@param		columnDefinition	
+ *	@param		description			
+ *	@param		length				
+ *	@param		name				
+ *
+ */
+Void addDiscriminatorColumnStereotype(MClass this, String columnDefinition, String discriminatorType, String length, String name) :
+	this.owningPackage.getModel().anyStereotype.add(makeDiscriminatorColumnStereotype(this, columnDefinition, discriminatorType, length, name));
+
+/**
+ *	function to create an "ejb3DiscriminatorColumn" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MClass, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		columnDefinition	
+ *	@param		description			
+ *	@param		length				
+ *	@param		name				name of the discrimnator column
+ *
+ */
+create MStereotype makeDiscriminatorColumnStereotype(MClass class, String columnDefinition, String discriminatorType, String length, String name) :
+	setName("ejb3DiscriminatorColumn") ->
+	property.add(makeTag("columnDefinition", "String")) ->
+	property.add(makeTag("discriminatorType", "ejb3DiscriminatorType")) ->
+	property.add(makeTag("length", "String")) ->
+	property.add(makeTag("name", "String")) ->
+	class.taggedValue.add(makeTaggedValue(columnDefinition, makeTag("columnDefinition", "String"))) ->
+	class.taggedValue.add(makeTaggedValue(discriminatorType, makeTag("discriminatorType", "ejb3DiscriminatorType"))) ->
+	class.taggedValue.add(makeTaggedValue(length, makeTag("length", "String"))) ->
+	class.taggedValue.add(makeTaggedValue(name, makeTag("name", "String"))) ->
+	class.stereotype.add(this);
+	
+/**
+ *	function to add an "ejb3DiscriminatorValue" stereotype to a MClass
+ *	default values are not set by this function!
+ *
+ *	@param		value		identifier of discriminator column
+ *
+ */
+Void addDiscriminatorValueStereotype(MClass this, String value) :
+	this.owningPackage.getModel().anyStereotype.add(makeDiscriminatorValueStereotype(this, value));
+
+/**
+ *	function to create an "ejb3DiscriminatorValue" stereotype
+ *	standard values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MClass, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		value		identifier of discriminator column
+ *
+ */
+create MStereotype makeDiscriminatorValueStereotype(MClass class, String value) :
+	setName("ejb3DiscriminatorValue") ->
+	property.add(makeTag("value", "String")) ->
+	class.taggedValue.add(makeTaggedValue(value, makeTag("value", "String"))) ->
+	class.stereotype.add(this);
+
+/**
+ *	function to add an "ejb3ersistenceUnit" stereotype to a MAttribute
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MAttribute 
+ *	@param		name		
+ *	@param		unitName	
+ *
+ */
+Void addPersistenceUnitStereotype(MAttribute this, String name, String unitName) :
+	this.classifier.owningPackage.getModel().anyStereotype.add(makePersistenceUnitStereotype(this, name, unitName));
+
+/**
+ *	function to create an "ejb3PersistenceUnit" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MAttribute, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		attribute	instance of MAttribute 
+ *	@param		name		
+ *	@param		unitName	
+ *
+ */
+create MStereotype makePersistenceUnitStereotype(MAttribute attri, String name, String unitName) :
+	setName("ejb3PersistenceUnit") ->
+	property.add(makeTag("unitName", "String")) ->
+	property.add(makeTag("name", "String")) ->
+	attri.taggedValue.add(makeTaggedValue(unitName, makeTag("unitName", "String"))) ->
+	attri.taggedValue.add(makeTaggedValue(name, makeTag("name", "String"))) ->
+	attri.stereotype.add(this);
+
+/**
+ *	function to add an "ejb3ersistenceContext" stereotype to a MAttribute
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MAttribute 
+ *	@param		type		
+ *	@param		name		
+ *	@param		unitName	
+ *
+ */
+Void addPersistenceContextStereotype(MAttribute this, String type, String name, String unitName) :
+	this.classifier.owningPackage.getModel().anyStereotype.add(makePersistenceContextStereotype(this, type, name, unitName));
+
+/**
+ *	function to create an "ejb3PersistenceContext" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MAttribute, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		attribute	instance of MAttribute 
+ *	@param		type		
+ *	@param		name		
+ *	@param		unitName	
+ *
+ */
+create MStereotype makePersistenceContextStereotype(MAttribute attri, String type, String name, String unitName) :
+	setName("ejb3PersistenceContext") ->
+	property.add(makeTag("type", "ejb3PersistenceContextType")) ->
+	property.add(makeTag("unitName", "String")) ->
+	property.add(makeTag("name", "String")) ->
+	attri.taggedValue.add(makeTaggedValue(type, makeTag("type", "ejb3PersistenceContextType"))) ->
+	attri.taggedValue.add(makeTaggedValue(unitName, makeTag("unitName", "String"))) ->
+	attri.taggedValue.add(makeTaggedValue(name, makeTag("name", "String"))) ->
+	attri.stereotype.add(this);
+
+/**
+ *	function to create a MTag (i.e. for use with MTaggedvalue)
+ *
+ *	@param		name				name of the MTag
+ *	@param		type				type of the value (i.e. the value in MTaggedValue)
+ *	[@param		stereotypeName		name of the containing stereotype]
+ *
+ */
+create MTag makeTag(String name, String type) :
+	setName(name) ->
+	setType(type);
+/*
+makeNewTag(String name, String type) : 
+	let t = new MTag :
+		t.setName(name) -> t.setType(type) ->
+	t;
+*/
+
+/**
+ *	function to create a MTaggedValue
+ *	MTaggedvalue consists of value and a tag which contains the name of the 
+ *	MTaggedValue and the data type of the value
+ *
+ *	@param		value	value of the MTaggedvalue
+ *	@param		tag		containing MTag to this value
+ *
+ */
+create MTaggedValue makeTaggedValue(String value, MTag tag) :
+	setValue(value) ->
+	setTag(tag);

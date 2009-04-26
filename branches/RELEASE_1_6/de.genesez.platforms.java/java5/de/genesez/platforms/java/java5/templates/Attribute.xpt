@@ -3,7 +3,8 @@
 	- supports the stereotype '<<primitive>>' for multi-valued attributes
 	
 	@author	nico herbig
-	@author	tobias haubold (last)
+	@author	tobias haubold
+	@author andre pflueger (last)
 	@date	2007-07-13
 «ENDREM»
 
@@ -89,6 +90,9 @@
 «ENDREM»
 «DEFINE _Declaration FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
+	«IF fieldAccess()-»
+		«EXPAND _Annotation-»
+	«ENDIF»
 	«IF isSingleValuedType() -»
 		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ELSE -»
@@ -189,8 +193,11 @@
 	the attribute is simply returned
 «ENDREM»
 «DEFINE _Getter FOR MAttribute -»
+«EXPAND Comment::Getter -»
+«IF !fieldAccess()-»
+	«EXPAND _Annotation-»
+«ENDIF»
 «IF isSingleValuedType() -»
-	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
 		return «asAttribute()»;
 	}
@@ -202,12 +209,19 @@
 «ENDDEFINE»
 
 «REM»
-	generates the setter method for an single valued attribute
+	generates the setter method for an attribute
 «ENDREM»
 «DEFINE _Setter FOR MAttribute -»
+«EXPAND Comment::Setter -»
+«IF !fieldAccess() && !this.generateGetter()-»
+	«EXPAND _Annotation-»
+«ENDIF»
 «IF isSingleValuedType() -»
-	«EXPAND Comment::Setter -»
 	«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «asAttribute()») {
+		this.«asAttribute()» = «asAttribute()»;
+	}
+«ELSE -»
+	«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «asAttribute()») {
 		this.«asAttribute()» = «asAttribute()»;
 	}
 «ENDIF -»
@@ -226,3 +240,8 @@
 	«ENDIF -»
 «ENDDEFINE»
 
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MAttribute-»
+«ENDDEFINE»

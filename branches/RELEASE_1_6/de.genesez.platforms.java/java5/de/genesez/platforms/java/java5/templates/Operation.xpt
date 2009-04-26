@@ -3,7 +3,8 @@
 	- supports the stereotype '<<primitive>>' for multi-valued return types
 	
 	@author	nico herbig
-	@author	tobias haubold (last)
+	@author	tobias haubold
+	@author andre pflueger (last)
 	@date	2007-07-13
 «ENDREM»
 
@@ -96,6 +97,7 @@
 	generates the parameter list for the initializing constructor
 «ENDREM»
 «DEFINE _Params FOR MAttribute -»
+«EXPAND _Annotation-»
 «IF isSingleValuedType() -»
 	«type.mapName().asTypeName()»«EXPAND Type::Generics FOR type» «asAttribute() -»
 «ELSE -»
@@ -140,7 +142,7 @@
 «DEFINE _Declaration FOR MOperation -»
 	«EXPAND Comment::Operation -»
 	«IF isSingleValuedType() -»
-	«EXPAND _Modifier» «returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
+	«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
 	«ELSE -»
 	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
 	«ENDIF -»
@@ -152,8 +154,9 @@
 «ENDREM»
 «DEFINE _Implementation FOR MOperation -»
 	«EXPAND Comment::Operation -»
+	«EXPAND _Annotation-»
 	«IF isSingleValuedType() -»
-	«EXPAND _Modifier» «returnType.mapName().asTypeName()»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
+	«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
 	«ELSE -»
 	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
 	«ENDIF -»
@@ -174,15 +177,23 @@
 «ENDDEFINE»
 
 «REM»
+	generates the return type of the operation
+«ENDREM»
+«DEFINE _SingleValueReturn FOR MOperation -»
+	«returnType.mapName().asTypeName()»
+«ENDDEFINE»
+
+«REM»
 	generates the parameters of an operation
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
 	«FOREACH parameter AS p SEPARATOR ", " -»
-	«IF p.isSingleValuedType() -»
-		«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
-	«ELSE -»
-		«EXPAND Type::MultiValuedType FOR p -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
-	«ENDIF -»
+		«EXPAND _Annotation FOR p-»
+		«IF p.isSingleValuedType() -»
+			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+		«ELSE -»
+			«EXPAND Type::MultiValuedType FOR p -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+		«ENDIF -»
 	«ENDFOREACH -»
 «ENDDEFINE»
 
@@ -254,4 +265,24 @@
 		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
 		«ENDPROTECT»
 	«ENDIF -»
+«ENDDEFINE»
+
+
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MOperation-»
+«ENDDEFINE»
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MParameter-»
+«ENDDEFINE»
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MAttribute-»
 «ENDDEFINE»

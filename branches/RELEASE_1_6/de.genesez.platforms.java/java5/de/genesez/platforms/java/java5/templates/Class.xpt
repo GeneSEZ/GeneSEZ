@@ -2,7 +2,8 @@
 	Performs the generation of classes
 	
 	@author	nico herbig
-	@author	tobias haubold (last)
+	@author	tobias haubold
+	@author andre pflueger (last)
 	@date	2007-07-13
 «ENDREM»
 
@@ -31,6 +32,7 @@ package «packageDeclaration( basePackage() ) -»;
 «EXPAND Import::Import -»
 «REM» generate a newline between imports + type comment «ENDREM»
 «EXPAND Comment::Type -»
+«EXPAND _Annotation-»
 «EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
 	
 	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
@@ -61,7 +63,22 @@ package «packageDeclaration( basePackage() ) -»;
 	«EXPAND Attribute::Accessors -»
 	«EXPAND Association::Accessors -»
 	
+	// -- generated code of other cartridges --------------------------------
+	«EXPAND _Extension-»
+	
 	// -- own code implementation -------------------------------------------
 	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
 }
+«ENDDEFINE»
+
+«REM»
+	this define block can be used by other cartridges to add some generation code
+«ENDREM»
+«DEFINE _Extension FOR MClass-»
+«ENDDEFINE»
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MClass-»
 «ENDDEFINE»

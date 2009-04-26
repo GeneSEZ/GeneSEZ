@@ -7,8 +7,10 @@
  * - flag to use the model name as base package for generation
  * - flag which indicates if section comments are generated or not
  * - distinctions if accessors are generated or not
+ * - distinctions if old or new association handling is used 
  * 
  * @author	tobias haubold
+ * @author	andre pflueger (last)
  * @date	2008-04-18
  */
 
@@ -86,7 +88,7 @@ boolean generateGetter(MProperty this):
 	disableAccessors()
 		? false				// generation of accessor methods is disabled
 		: ( useAccessorStereotype() 
-			? ( hasStereotype("accessor") && hasTaggedValue("accessor", "getter", "true")
+			? ( !hasStereotype("accessor") || hasTaggedValue("accessor", "getter", "true")
 				? true		// return the tagged value
 				: false		// else false
 			) : true		// accessor stereotype is not available, return the default 'true'
@@ -100,11 +102,37 @@ boolean generateSetter(MProperty this):
 	disableAccessors()
 		? false				// generation of accessor methods is disabled
 		: ( useAccessorStereotype() 
-			? ( hasStereotype("accessor") && hasTaggedValue("accessor", "setter", "true")
+			? ( !hasStereotype("accessor") || hasTaggedValue("accessor", "setter", "true")
 				? true		// return the tagged value
 				: false		// else false
 			) : true		// accessor stereotype is not available, return the default 'true'
 		);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with the association handling
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if the old or new association handling is activated
+ * regular case is the new association handling
+ * @return	true, if the new association handling should be used (standard case)
+ */
+boolean newAssociationHandling() : GLOBALVAR newAssociationHandling == null ? true : GLOBALVAR newAssociationHandling;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with access type of annotations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if field or property access is activated
+ * default is field access
+ * @return	true, if field access should be used (default) 
+ */
+boolean fieldAccess() : GLOBALVAR fieldAccess == null ? true : GLOBALVAR fieldAccess;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
