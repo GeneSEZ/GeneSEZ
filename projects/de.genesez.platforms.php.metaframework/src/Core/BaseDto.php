@@ -1,5 +1,4 @@
 <?php
-require_once 'ArrayObject';
 require_once 'Core/Dto.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1239096659828_207401_865) ENABLED START */
@@ -30,7 +29,7 @@ class Core_BaseDto extends ArrayObject implements Core_Dto {
 	 */
 	public function __construct($view, $container = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1239096659828_334898_869) ENABLED START */
-		parent::__construct($container, ArrayObject::ARRAY_AS_PROPS);
+		parent::__construct($container/*, ArrayObject::ARRAY_AS_PROPS*/);
 		$this->_view = $view;
 		/* PROTECTED REGION END */
 	}

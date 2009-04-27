@@ -9,6 +9,9 @@ require_once 'Doctrine/Doctrine.php';
 require_once 'Smarty/Smarty.class.php';
 
 spl_autoload_register(array('Doctrine', 'autoload'));
+
+S2ContainerClassLoader::import(S2CONTAINER_PHP5);
+spl_autoload_register(array('S2ContainerClassLoader', 'load'));
 /* PROTECTED REGION END */
 
 /**
@@ -37,7 +40,7 @@ class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 		$datasource = $this->checkConfigEntry('data.source');
 		Doctrine_Manager::connection($datasource);
 		// config seasar
-		S2ContainerClassLoader::import(S2CONTAINER_PHP5);
+		
 		/* PROTECTED REGION END */
 	}
 
@@ -74,17 +77,17 @@ class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 		return array(
 			Adapter_SeasarPhpBuilder::newComponent('Adapter_SeasarServiceRegistry', 'serviceRegistry', array(), array(
 				// don't use special 'container' value to get a container instance - doesn't work :-(
-				// insead, use auto binding
-//				Adapter_SeasarPhpBuilder::newProperty('container', 'container')
+				// insead, use auto binding - now it seams to work :-)
+				Adapter_SeasarPhpBuilder::newProperty('container', 'container')
+			)),
+			Adapter_SeasarPhpBuilder::newComponent('Core_ServiceRegistryDispatcher', 'dispatcher', array(), array(
+				Adapter_SeasarPhpBuilder::newProperty('serviceRegistry', 'serviceRegistry'),
 			)),
 			Adapter_SeasarPhpBuilder::newComponent('Core_UrlResolver', 'resolver', array(), array(
 				Adapter_SeasarPhpBuilder::newProperty('dispatcher', 'dispatcher')
 			)),
-			Adapter_SeasarPhpBuilder::newComponent('Core_ServiceRegistryDispatcher', 'dispatcher', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('serviceRegistry', 'serviceRegistry')
-			)),
 			Adapter_SeasarPhpBuilder::newComponent('Smarty', 'smarty'),
-			Adapter_SeasarPhpBuilder::newComponent('Core_SmartyRenderer', 'renderer', array(), array(
+			Adapter_SeasarPhpBuilder::newComponent('Adapter_SmartyRenderer', 'renderer', array(), array(
 				Adapter_SeasarPhpBuilder::newProperty('smarty', 'smarty')
 			))
 		);
@@ -124,10 +127,10 @@ class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 		$smarty = $serviceRegistry->getComponent('smarty');
 		
 		// smarty
-		$smarty_template_dir = $this->checkConfig('smarty.template.dir');
+		$smarty_template_dir = $this->checkConfigEntry('smarty.template.dir');
 		$smarty->template_dir = $smarty_template_dir;
 		
-		$smarty_compile_dir = $this->checkConfig('smarty.compile.dir');
+		$smarty_compile_dir = $this->checkConfigEntry('smarty.compile.dir');
 		$smarty->compile_dir = $smarty_compile_dir;
 		/* PROTECTED REGION END */
 	}

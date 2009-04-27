@@ -99,6 +99,7 @@ class Metaframework   {
 			// don't add the first component (core plug-in) but all others
 			$isAdding = true;
 		}
+		Adapter_SeasarPhpBuilder::finishContainer($container);
 		$this->container = $container->getComponent('serviceRegistry');
 		/* PROTECTED REGION END */
 	}

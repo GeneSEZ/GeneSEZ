@@ -16,9 +16,9 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		Smarty	$_smarty
+	 * @var		Smarty	$smarty
 	 */
-	private $_smarty;
+	protected $smarty;
 
 
 
@@ -31,19 +31,43 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	 */
 	public function render($dto) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
+		$view = $dto->view();
+		if (!$this->smarty->template_exists($view)) {
+			$view = $this->defaultView();
+		}
+		if (!$this->smarty->template_exists($view)) {
+			$view = $this->defaultView() . '.html';
+		}
+		if (!$this->smarty->template_exists($view)) {
+			$view = $this->defaultView() . '/index.html';
+		}
 		$this->smarty->assign('dto', $dto);
-		$this->smarty->display($dto->view());
+		$this->smarty->display($view);
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	protected function defaultView() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240433824734_817533_526) ENABLED START */
+		$view = $_SERVER['PATH_INFO'];
+		if (substr($view, 0, 1) === '/') {
+			$view = substr($view, 1);
+		}
+		return $view;
 		/* PROTECTED REGION END */
 	}
 
 
 	// -- association + attribute accessors ---------------------------------
 	/**
-	 * @generated	setter method for the attribute {@link Adapter_SmartyRenderer::getSmarty() $_smarty}
+	 * @generated	setter method for the attribute {@link Adapter_SmartyRenderer::getSmarty() $smarty}
 	 * @param	Smarty	$smarty	the value to set
 	 */
 	public 	 function setSmarty(Smarty $smarty) {
-		$this->_smarty = $smarty;
+		$this->smarty = $smarty;
 	}
 
 

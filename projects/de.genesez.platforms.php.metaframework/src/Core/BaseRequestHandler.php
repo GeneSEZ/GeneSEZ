@@ -1,5 +1,4 @@
 <?php
-require_once 'Core/Dto.php';
 require_once 'Core/HandlerInfo.php';
 require_once 'Core/RequestHandler.php';
 
@@ -22,14 +21,6 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 
 
 
-	// -- method declarations -----------------------------------------------
-	
-	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 * @return	Core_Dto
-	 */
-	public abstract function handle($handlerInfo);
 
 	// -- method implementations --------------------------------------------
 	
@@ -37,7 +28,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 * @generated	method stub for implementation
 	 * @return	string
 	 */
-	public static function baseUri() {
+	public static function baseServerUri() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239126458937_358804_1194) ENABLED START */
 		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') +1);
 		/* PROTECTED REGION END */
@@ -50,6 +41,17 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	public static function baseRequestUri() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240211928703_764012_723) ENABLED START */
 		return $_SERVER['SCRIPT_NAME'] . '/';
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Core_HandlerInfo	$handlerInfo	
+	 * @return	string
+	 */
+	public static function baseHandlerUri($handlerInfo) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240404866671_222215_518) ENABLED START */
+		return $_SERVER['SCRIPT_NAME'] . $handlerInfo->context;
 		/* PROTECTED REGION END */
 	}
 

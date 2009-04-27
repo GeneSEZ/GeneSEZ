@@ -1,5 +1,6 @@
 <?php
 require_once 'Core/HandlerInfo.php';
+require_once 'Core/ServiceRegistry.php';
 require_once 'Core/Action.php';
 require_once 'Core/Dto.php';
 require_once 'Core/BaseRequestHandler.php';
@@ -22,6 +23,11 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 * @var		Core_HandlerInfo	$handlerInfo
 	 */
 	protected $handlerInfo;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_ServiceRegistry	$serviceRegistry
+	 */
+	protected $serviceRegistry;
 
 	/**
 	 * @var	array of Core_Action	stores the linked objects of the  multi qualified unidirectional to one association to {@link Core_Action} (symmetry ensured) 
@@ -216,6 +222,13 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 
 
 	// -- association + attribute accessors ---------------------------------
+	/**
+	 * @generated	setter method for the attribute {@link Core_Controller::getServiceRegistry() $serviceRegistry}
+	 * @param	Core_ServiceRegistry	$serviceRegistry	the value to set
+	 */
+	public 	 function setServiceRegistry(Core_ServiceRegistry $serviceRegistry) {
+		$this->serviceRegistry = $serviceRegistry;
+	}
 
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:

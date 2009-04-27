@@ -40,12 +40,12 @@ class Core_ServiceRegistryDispatcher  implements Core_Dispatcher {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238001182281_78033_1414) ENABLED START */
 		// look up in seasar config for handler
 		$name = $handlerInfo->handler;
-		if ($name === null) {
-			$this->noHandlerGiven();
+		if ($name === null || $name === '') {
+			$this->unresolvableHandler($handlerInfo);
 			return;
 		}
 		if (!$this->_serviceRegistry->hasComponent($name)) {
-			$this->noHandlerFound();
+			$this->noHandlerFound($handlerInfo);
 			return;
 		}
 		// invoke request handler with context path

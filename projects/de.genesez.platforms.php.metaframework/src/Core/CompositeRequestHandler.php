@@ -1,6 +1,6 @@
 <?php
 require_once 'Core/RequestHandler.php';
-require_once 'UML/SingleQualifiedAssociation.php';
+require_once 'UML/MultiQualifiedAssociation.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1239096309671_611315_815) ENABLED START */
 // TODO: put your further include + require statements here
@@ -18,7 +18,7 @@ interface Core_CompositeRequestHandler extends Core_RequestHandler {
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>nestedRequestHandler</var>: the  single qualified unidirectional to many association to {@link Core_RequestHandler} (symmetry ensured)</li>
+	 *   <li><var>nestedRequestHandler</var>: the  multi qualified unidirectional to one association to {@link Core_RequestHandler} (symmetry ensured)</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available

@@ -1,5 +1,6 @@
 <?php
 require_once 'Core/Dto.php';
+require_once 'Core/RequestHandler.php';
 require_once 'Core/HandlerInfo.php';
 require_once 'Core/BaseRequestHandler.php';
 require_once 'Core/CompositeRequestHandler.php';
@@ -17,14 +18,28 @@ require_once 'Core/CompositeRequestHandler.php';
 class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implements Core_CompositeRequestHandler {
 
 	/**
-	 * @var	array of Core_RequestHandler	stores the linked objects of the  single qualified unidirectional to many association to {@link Core_RequestHandler} (symmetry ensured) 
+	 * @var	array of Core_RequestHandler	stores the linked objects of the  multi qualified unidirectional to one association to {@link Core_RequestHandler} (symmetry ensured) 
 	 */
 	private $_nestedRequestHandler = array();
 	/**
-	 * holds the association management object for the single qualified unidirectional to many association to {@link Core_RequestHandler} (symmetry ensured)
-	 * @var UML_SingleQualifiedAssociation
+	 * holds the association management object for the multi qualified unidirectional to one association to {@link Core_RequestHandler} (symmetry ensured)
+	 * @var UML_MultiQualifiedAssociation
 	 */
 	private $associations;
+	// -- constructors + destructors ----------------------------------------
+	
+	/**
+	 * constructs an object of class {@link Core_BaseCompositeRequestHandler}
+	 * @generated	constructor stub for implementation
+	 * @param	array	$requestHandlers	array of type 'Core_RequestHandler'
+	 */
+	public function __construct($requestHandlers) {
+		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240398478812_21504_360) ENABLED START */
+		foreach ($requestHandlers as $key => $handler) {
+			$this->nestedRequestHandler->insert($key, $handler);
+		}
+		/* PROTECTED REGION END */
+	}
 
 
 
@@ -53,7 +68,7 @@ class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implement
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>nestedRequestHandler</var>: the  single qualified unidirectional to many association to {@link Core_RequestHandler} (symmetry ensured)</li>
+	 *   <li><var>nestedRequestHandler</var>: the  multi qualified unidirectional to one association to {@link Core_RequestHandler} (symmetry ensured)</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available
@@ -63,7 +78,7 @@ class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implement
 		switch ($name) {
 			case 'nestedRequestHandler' :
 				if ($this->associations === null) {
-					$this->associations = new UML_SingleQualifiedAssociation($this, $this->_nestedRequestHandler, null, true);
+					$this->associations = new UML_MultiQualifiedAssociation($this, $this->_nestedRequestHandler);
 				}
 				return $this->associations;
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
