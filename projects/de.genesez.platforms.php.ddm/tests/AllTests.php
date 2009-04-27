@@ -6,18 +6,18 @@
  */
 
 // PHPUnit
-require_once('PHPUnit/Framework/TestSuite.php');
-require_once('PHPUnit/TextUI/TestRunner.php');
+require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'PHPUnit/TextUI/TestRunner.php';
 
 # Add the tests directory to the include_path
 $include_path = ini_get('include_path');
 ini_set('include_path', '..:./tests:./src:' . $include_path );
 
 // Test configuration
-require_once('tests/TestConfiguration.php');
+require_once 'tests/TestConfiguration.php';
 
 // Model tests
-require_once('DDM/AllTests.php');
+require_once 'DDM/AllTests.php';
 
 class AllTests
 {

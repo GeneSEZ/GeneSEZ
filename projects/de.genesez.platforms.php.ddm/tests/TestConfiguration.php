@@ -8,7 +8,7 @@
 define('TESTCONFIGURATION', 1);
 
 # Load and initialize Doctrine
-require_once('Doctrine/Doctrine.php');
+require_once 'Doctrine/Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 Doctrine_Manager::connection('pgsql://postgres@localhost/de_emnis_ddm_test');
 

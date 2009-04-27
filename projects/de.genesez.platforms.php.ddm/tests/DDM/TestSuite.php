@@ -5,7 +5,7 @@
  * @author Gerrit Beine
  */
 
-require_once('PHPUnit/Framework/TestSuite.php');
+require_once 'PHPUnit/Framework/TestSuite.php';
  
 class DDM_TestSuite extends PHPUnit_Framework_TestSuite
 {

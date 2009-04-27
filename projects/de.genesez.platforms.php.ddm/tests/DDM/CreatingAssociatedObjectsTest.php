@@ -1,14 +1,14 @@
 <?php
 
 if ( ! defined('TESTCONFIGURATION') ) {
-	require_once('tests/TestConfiguration.php');
+	require_once 'tests/TestConfiguration.php';
 }
 
 // PHPUnit
-require_once('PHPUnit/Framework.php');
+require_once 'PHPUnit/Framework.php';
 
 // Import DDM
-require_once('DDM.php');
+require_once 'DDM.php';
 
 // TODO: Implement Tests with variable Class Names
 class DDM_CreatingAssociatedObjectsTest extends PHPUnit_Framework_TestCase
