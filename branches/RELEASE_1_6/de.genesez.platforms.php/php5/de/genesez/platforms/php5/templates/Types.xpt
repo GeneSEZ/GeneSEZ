@@ -122,9 +122,13 @@ require_once '«used.includePath(this) + used.asFileName() -»';
 	@param	used	the type which is required
 «ENDREM»
 «DEFINE _Require(MType used) FOR MClassifier -»
-«LET used.mapName("import").toString() AS inc -»
-«IF inc.toString().length > 0 -»
+«LET used.mapName("import").toString().toString() AS inc -»
+«IF inc.length > 0 -»
+«IF used.name() == inc -»
+require_once '«inc.replaceAll("_", "/") -».php';
+«ELSE -»
 require_once '«inc -»';
+«ENDIF -»
 «ENDIF -»
 «ENDLET -»
 «ENDDEFINE»
