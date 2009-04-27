@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	performs the model transformations
+	
+	@author	tobias haubold
+	@date	2009-04-21
+ -->
+<workflow>
+	<component id="uml2genesez" class="de.genesez.platforms.common.workflow.Uml2GeneSEZ">
+		<model value="utilities.model/de.genesez.modules.util.uml" />
+		<profile value="utilities.model/genesez.profile.uml" />
+	</component>
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::php::constraints::Syntax" />
+	</component>
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="utilities.model/de.genesez.modules.util.xmi" />
+	</component>
+	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
+		<outputDir value="../de.genesez.platforms.php.metaframework.modules/de.genesez.modules.util" />
+		<useAccessorStereotype value="true" />
+		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
+		<typeMappingFile value="de/genesez/platforms/php/seasar/typemapping/typemapping.xml" />
+	</component>
+</workflow>
