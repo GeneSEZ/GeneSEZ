@@ -17,7 +17,9 @@ require_once 'DDM/TestSuite.php';
 require_once 'DDM/ClassTest.php';
 require_once 'DDM/ClassTableTest.php';
 require_once 'DDM/TypeTest.php';
+require_once 'DDM/TypeTableTest.php';
 require_once 'DDM/AttributeTest.php';
+require_once 'DDM/AttributeTableTest.php';
 require_once 'DDM/AssociationTest.php';
 require_once 'DDM/InheritanceTest.php';
 require_once 'DDM/ChangingObjectsTest.php';
@@ -43,9 +45,11 @@ class DDM_AllTests
 		$suite = new DDM_TestSuite('DDM_Model');
 
 		$suite->addTestSuite('DDM_TypeTest');
+		$suite->addTestSuite('DDM_TypeTableTest');
 		$suite->addTestSuite('DDM_ClassTest');
 		$suite->addTestSuite('DDM_ClassTableTest');
 		$suite->addTestSuite('DDM_AttributeTest');
+		$suite->addTestSuite('DDM_AttributeTableTest');
 		$suite->addTestSuite('DDM_AssociationTest');
 		$suite->addTestSuite('DDM_InheritanceTest');
 		$suite->addTestSuite('DDM_CreatingObjectsTest');
