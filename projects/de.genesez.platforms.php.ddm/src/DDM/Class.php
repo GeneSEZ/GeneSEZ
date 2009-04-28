@@ -31,18 +31,30 @@ class DDM_Class extends Doctrine_Record
 		$this->hasMany('DDM_Attribute as attributes', array('local' => 'id',
 			'foreign' => 'a_class'));
 
-		$this->hasMany('DDM_Association as leftSides', array('local' => 'id',
-			'foreign' => 's_left'));
-
-		$this->hasMany('DDM_Association as rightSides', array('local' => 'id',
-			'foreign' => 's_right'));
+		$this->hasMany('DDM_Association as associations', array('local' => 'id',
+			'foreign' => 's_from'));
+		
 	}
 
-	/**
-	 * 
-	 */
-	public function getAssociations() {
-		return new ArrayObject( array_merge($this->leftSides->getData(), $this->rightSides->getData()) );
+	public function createObject() {
+		$o = new DDM_Object();
+		$o->class = $this;
+		return $o;
+	}
+	
+	public function addAssociation($name, DDM_Class $class, $myCardinality = 1, $foreignCardinality = 1) {
+		$this->addAssociationTo($name, $class, $myCardinality, $foreignCardinality);
+		$class->addAssociationTo($name, $this, $foreignCardinality, $myCardinality);
+	}
+	
+	public function addAssociationTo($name, DDM_Class $class, $myCardinality = 1, $foreignCardinality = 1) {
+		$association = new DDM_Association();
+		$association->s_name = $name;
+		$association->from = $this;
+		$association->to = $class;
+		$association->s_from_cardinality = $myCardinality;
+		$association->s_to_cardinality = $foreignCardinality;
+		$association->save();
 	}
 	
 	/**
@@ -94,20 +106,12 @@ class DDM_Class extends Doctrine_Record
 	}
 
 	/**
-	 * Overrides the magic __get method of Doctrine_Record 
+	 * Overrides the magic __set method of Doctrine_Record 
 	 *
 	 * @param string $name
+	 * @param string $value
 	 * @return mixed
 	 */
-	public function __get($name) {
-		if ( 'associations' === $name ) {
-			return $this->getAssociations();
-		}
-		else {
-			return parent::__get($name);
-		}
-	}
-
 	public function __set($name, $value) {
 		if ($name === 'c_name') {
 			$view = preg_replace('/[^a-zA-Z0-9]/', '', $value);
@@ -120,6 +124,11 @@ class DDM_Class extends Doctrine_Record
 		parent::__set($name, $value);
 	}
 
+	/**
+	 * Returns string representaion of the class object 
+	 *
+	 * @return string
+	 */
 	public function __toString() {
 		return 'Name: ' . $this->c_name . ', View: ' . $this->c_view;
 	}

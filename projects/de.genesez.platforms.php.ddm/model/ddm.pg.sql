@@ -92,12 +92,12 @@ CREATE TABLE ddm_attribute (
 DROP TABLE IF EXISTS ddm_association CASCADE;
 CREATE TABLE ddm_association (
 	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_association_id_seq'),
-	s_left INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE NOT NULL,
-	s_left_cardinality ddm_cardinalities NOT NULL DEFAULT '1',
-	s_right INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE NOT NULL,
-	s_right_cardinality ddm_cardinalities NOT NULL DEFAULT '1',
-	s_name VARCHAR(1024) UNIQUE NOT NULL,
-	s_description VARCHAR(1024) UNIQUE
+	s_from INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE NOT NULL,
+	s_from_cardinality ddm_cardinalities NOT NULL DEFAULT '1',
+	s_to INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE NOT NULL,
+	s_to_cardinality ddm_cardinalities NOT NULL DEFAULT '1',
+	s_name VARCHAR(1024) NOT NULL,
+	s_description VARCHAR(1024) NOT NULL DEFAULT ''
 );
 
 -- Objekte
@@ -158,6 +158,7 @@ CREATE TABLE ddm_reference_o2n (
 
 CREATE UNIQUE INDEX ddm_attribute_unique ON ddm_attribute (a_class, a_name);
 CREATE UNIQUE INDEX ddm_attribute_unique ON ddm_attribute (a_class, a_column);
+CREATE UNIQUE INDEX ddm_association_unique ON ddm_association (s_from, a_name);
 CREATE UNIQUE INDEX ddm_value_integer_unique ON ddm_value_integer (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_string_unique ON ddm_value_string (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_boolean_unique ON ddm_value_boolean (v_object, v_attribute);

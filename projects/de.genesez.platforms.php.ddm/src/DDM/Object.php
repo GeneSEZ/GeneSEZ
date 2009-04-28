@@ -62,12 +62,12 @@ class DDM_Object extends Doctrine_Record
 	function setAssociation($name, $value) {
 		if ( $this->class->hasAssociation($name) ) {
 			$association = $this->class->getAssociation($name);
-			if ( 1 == $association->s_left_cardinality
-				&& 1 == $association->s_right_cardinality ) {
+			if ( 1 == $association->s_from_cardinality
+				&& 1 == $association->s_to_cardinality ) {
 				$this->associations[$name] = $value;
 			}
-			elseif  ( 1 == $association->s_left_cardinality
-				&& 'N' == $association->s_right_cardinality ) {
+			elseif  ( 1 == $association->s_from_cardinality
+				&& 'N' == $association->s_to_cardinality ) {
 					if ( ! array_key_exists( $name, $this->associations )
 						|| is_null( $this->associations[$name] ) ) {
 						$this->associations[$name] = new ArrayObject();
@@ -117,12 +117,12 @@ class DDM_Object extends Doctrine_Record
 	function getAssociation($name) {
 		if ( $this->class->hasAssociation($name) && isset($this->associations[$name]) ) {
 			$association = $this->class->getAssociation($name);
-			if ( 1 == $association->s_left_cardinality
-				&& 1 == $association->s_right_cardinality ) {
+			if ( 1 == $association->s_from_cardinality
+				&& 1 == $association->s_to_cardinality ) {
 				return $this->associations[$name];
 			}
-			elseif  ( 1 == $association->s_left_cardinality
-				&& 'N' == $association->s_right_cardinality ) {
+			elseif  ( 1 == $association->s_from_cardinality
+				&& 'N' == $association->s_to_cardinality ) {
 					return $this->associations[$name];
 			}
 		}
@@ -189,16 +189,16 @@ class DDM_Object extends Doctrine_Record
 	function loadAssociations() {
 		$conn = $this->_table->getConnection();
 		
-		foreach ( $this->class->leftSides as $s) {
-			if ( 1 == $s->s_left_cardinality
-				&& 1 == $s->s_right_cardinality ) {
+		foreach ( $this->class->associations as $s) {
+			if ( 1 == $s->s_from_cardinality
+				&& 1 == $s->s_to_cardinality ) {
 				$statement = 'SELECT r_right FROM ddm_reference_o2o WHERE r_association=' . $s->id . ' AND r_left=' . $this->id;
 				$row = $conn->getDbh()->query($statement)->fetch(PDO::FETCH_ASSOC);
 				$objectTable = Doctrine::getTable('DDM_Object');
 				$this->associations[$s->s_name] = $objectTable->find($row['r_right']);
 			}
-			elseif  ( 1 == $s->s_left_cardinality
-				&& 'N' == $s->s_right_cardinality ) {
+			elseif  ( 1 == $s->s_from_cardinality
+				&& 'N' == $s->s_to_cardinality ) {
 				$q = new Doctrine_RawSql();
 				$q->select('{o.*}')
 					->from('ddm_object o')
@@ -241,15 +241,15 @@ class DDM_Object extends Doctrine_Record
 	function saveAssociations() {
 		$conn = $this->_table->getConnection();
 		
-		foreach ( $this->class->leftSides as $s) {
-			if ( 1 == $s->s_left_cardinality
-				&& 1 == $s->s_right_cardinality ) {
+		foreach ( $this->class->associations as $s) {
+			if ( 1 == $s->s_from_cardinality
+				&& 1 == $s->s_to_cardinality ) {
 				$statement = 'INSERT INTO ddm_reference_o2o (r_association, r_left, r_right) '
 					. ' VALUES(' . $s->id . ',' . $this->id . ','. $this->associations[$s->s_name]->id . ')';
 				$conn->execute($statement);
 			}
-			elseif  ( 1 == $s->s_left_cardinality
-				&& 'N' == $s->s_right_cardinality ) {
+			elseif  ( 1 == $s->s_from_cardinality
+				&& 'N' == $s->s_to_cardinality ) {
 					$iterator = $this->associations[$s->s_name]->getIterator();
 					while($iterator->valid()) {
 						$statement = 'INSERT INTO ddm_reference_o2n (r_association, r_left, r_right) '

@@ -12,7 +12,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     chdir(dirname(dirname(__FILE__)));
 }
 
-require_once 'DDM/AbtractDoctrineTestCase.php';
 require_once 'DDM/TestSuite.php';
 require_once 'DDM/ClassTest.php';
 require_once 'DDM/ClassTableTest.php';

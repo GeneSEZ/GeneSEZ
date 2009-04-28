@@ -29,31 +29,17 @@ class DDM_CreatingAssociatedObjectsTest extends PHPUnit_Framework_TestCase
 		$right->c_name = $method.'RightClass';
 		$right->save();
 		
-		$association = new DDM_Association();
-		$association->s_name = $method.'Association';
-		$association->s_left = $left;
-		$association->s_right = $right;
-		$association->save();
+		$left->addAssociationTo( $method . 'Association', $right);
 		
-		$oright = new DDM_Object();
-		$oright->class = $right;
+		$oright = $right->createObject();
 		$oright->save();
 
-		$oleft = new DDM_Object();
-		$oleft->class = $left;
+		$oleft = $left->createObject();
 		$oleft->TestCreatingAssociatedObjectsAssociation = $oright;
 		$oleft->save();
 		
-		$query = new Doctrine_Query();
-		$query->from('ddm_object');
-		$objects = $query->execute();
-		
-		$found = null;
-		foreach ($objects as $o) {
-			if ($o->id === $oleft->id) {
-				$found = $o;
-			}
-		}
+		$t = Doctrine::getTable('DDM_Object');
+		$found = $t->fetch($oleft->id);
 		
 		$this->assertNotNull($found);
 		$this->assertEquals($oleft->id, $found->id);
@@ -77,33 +63,18 @@ class DDM_CreatingAssociatedObjectsTest extends PHPUnit_Framework_TestCase
 		$right->c_name = $method.'RightClass';
 		$right->save();
 		
-		$association = new DDM_Association();
-		$association->s_name = $method.'Association';
-		$association->s_left = $left;
-		$association->s_right = $right;
-		$association->s_right_cardinality = 'N';
-		$association->save();
+		$left->addAssociationTo( $method . 'Association', $right, 1, 'N');
 		
-		$oright = new DDM_Object();
-		$oright->class = $right;
+		$oright = $right->createObject();
 		$oright->save();
 
-		$oleft = new DDM_Object();
-		$oleft->class = $left;
+		$oleft = $left->createObject();
 		$oleft->TestCreatingAssociatedObjectsO2NAssociation = $oright;
 		$oleft->save();
 		
-		$query = new Doctrine_Query();
-		$query->from('ddm_object');
-		$objects = $query->execute();
-		
-		$found = null;
-		foreach ($objects as $o) {
-			if ($o->id === $oleft->id) {
-				$found = $o;
-			}
-		}
-		
+		$t = Doctrine::getTable('DDM_Object');
+		$found = $t->fetch($oleft->id);
+				
 		$this->assertNotNull($found);
 		$this->assertEquals($oleft->id, $found->id);
 
