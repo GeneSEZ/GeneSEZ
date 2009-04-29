@@ -1,6 +1,8 @@
 <?php
+require_once 'Msg/FlashNotifier.php';
 require_once 'Core/Dto.php';
 require_once 'Core/HandlerInfo.php';
+require_once 'Core/RequestHandler.php';
 require_once 'Core/BaseCompositeRequestHandler.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240398668828_377703_375) ENABLED START */
@@ -13,6 +15,12 @@ require_once 'Core/BaseCompositeRequestHandler.php';
  * @package	DDM
  */
 class Editor_EditorRequestHandler extends Core_BaseCompositeRequestHandler  {
+	// -- generated attribute, constant + association declarations ----------
+	/**
+	 * @generated	attribute definition
+	 * @var		Msg_FlashNotifier	$_notifier
+	 */
+	private $_notifier;
 
 	// -- constructors + destructors ----------------------------------------
 	
@@ -25,6 +33,7 @@ class Editor_EditorRequestHandler extends Core_BaseCompositeRequestHandler  {
 		parent::__construct(array(
 			'navigation' => new Editor_NavigationHandler()
 		));
+		$this->view = 'ddm/editor.html';
 		/* PROTECTED REGION END */
 	}
 
@@ -40,13 +49,33 @@ class Editor_EditorRequestHandler extends Core_BaseCompositeRequestHandler  {
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240399318375_689601_530) ENABLED START */
 		$dto = parent::handle($handlerInfo);
+		$dto->notifier = $this->_notifier;
 		$dto->title = 'dynamic data model editor';
-		$dto->css = array('base.css');
+		$dto->css = array($this->baseServerUri() . 'base.css');
 		$dto->scripts = array();
+		return $dto;
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Core_RequestHandler	$contentHandle	
+	 */
+	public function setContentHandler($contentHandle) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240850470891_866457_512) ENABLED START */
+		$this->nestedRequestHandler->insert('content', $contentHandle);
 		/* PROTECTED REGION END */
 	}
 
 
+	// -- association + attribute accessors ---------------------------------
+	/**
+	 * @generated	setter method for the attribute {@link Editor_EditorRequestHandler::getNotifier() $_notifier}
+	 * @param	Msg_FlashNotifier	$notifier	the value to set
+	 */
+	public 	 function setNotifier(Msg_FlashNotifier $notifier) {
+		$this->_notifier = $notifier;
+	}
 
 
 	// -- own code implementation -------------------------------------------

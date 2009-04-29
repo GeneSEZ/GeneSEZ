@@ -26,7 +26,12 @@ class Editor_DdmHomeHandler extends Core_BaseRequestHandler  {
 	 */
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240412984828_697646_652) ENABLED START */
-		return new Core_BaseDto($this->view);
+		return new Core_BaseDto(array(
+			'title' => 'dynamic data model editor',
+			'css' => array($this->baseServerUri() . 'base.css'),
+			'scripts' => array()
+		));
+//		$dto = new Core_BaseDto('ddm/editor.html');
 		/* PROTECTED REGION END */
 	}
 

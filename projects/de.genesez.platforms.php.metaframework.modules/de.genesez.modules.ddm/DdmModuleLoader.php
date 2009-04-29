@@ -60,7 +60,7 @@ class DdmModuleLoader  implements Loader_ModuleLoader {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240383988250_305730_692) ENABLED START */
 		return new Core_Context('ddm', 'ddm.home.handler', array(
 			new Core_Context('class', 'web.ddm.class.handler'),
-			new Core_Context('type', 'web.ddm.type.handler'),
+			new Core_Context('type', 'ddm.type.handler'),
 			new Core_Context('attribute', 'web.ddm.attribute.handler'),
 			new Core_Context('association', 'web.ddm.association.handler'),
 		));
@@ -75,25 +75,23 @@ class DdmModuleLoader  implements Loader_ModuleLoader {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240384049984_368807_718) ENABLED START */
 		spl_autoload_register(array('DdmModuleLoader', 'autoload'));
 		return array(
-			// data access objects
-			Adapter_SeasarPhpBuilder::newComponent('DoctrineTypeDao', 'typeDao'),
-			Adapter_SeasarPhpBuilder::newComponent('DoctrineAttributeDao', 'attributeDao'),
-			Adapter_SeasarPhpBuilder::newComponent('DoctrineClassDao', 'classDao'),
-			Adapter_SeasarPhpBuilder::newComponent('DoctrineAssociationDao', 'associationDao'),
-			Adapter_SeasarPhpBuilder::newComponent('DoctrineObjectDao', 'objectDao'),
 			// quickform adapter
-			Adapter_SeasarPhpBuilder::newComponent('TypeFormAdapter', 'typeFormAdapter'),
+			Adapter_SeasarPhpBuilder::newComponent('Form_TypeAdapter', 'typeAdapter'),
 			Adapter_SeasarPhpBuilder::newComponent('AttributeFormAdapter', 'attributeFormAdapter'),
 			Adapter_SeasarPhpBuilder::newComponent('ClassFormAdapter', 'classFormAdapter'),
 			Adapter_SeasarPhpBuilder::newComponent('AssociationFormAdapter', 'associationFormAdapter'),
 			Adapter_SeasarPhpBuilder::newComponent('ObjectFormAdapter', 'objectFormAdapter'),
 			// request handler
+			Adapter_SeasarPhpBuilder::newComponent('Editor_TypeHandler', 'type.handler'),
 			Adapter_SeasarPhpBuilder::newComponent('Editor_DdmHomeHandler', 'ddm.home.handler'),
 			Adapter_SeasarPhpBuilder::newComponent('WebDdmClassHandler', 'web.ddm.class.handler'),
-			Adapter_SeasarPhpBuilder::newComponent('WebDdmTypeHandler', 'web.ddm.type.handler'),
+			Adapter_SeasarPhpBuilder::newComponent('Editor_EditorRequestHandler', 'ddm.type.handler', array(), array(
+				Adapter_SeasarPhpBuilder::newProperty('notifier', 'notifier'),
+				Adapter_SeasarPhpBuilder::newProperty('contentHandler', 'type.handler'),
+			)),
 			Adapter_SeasarPhpBuilder::newComponent('WebDdmAttributeHandler', 'web.ddm.attribute.handler'),
 			Adapter_SeasarPhpBuilder::newComponent('WebDdmAssociationHandler', 'web.ddm.association.handler')
-			);
+		);
 		/* PROTECTED REGION END */
 	}
 

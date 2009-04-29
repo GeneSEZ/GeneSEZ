@@ -33,8 +33,7 @@ class Editor_NavigationHandler extends Core_BaseRequestHandler  {
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240397637656_702620_305) ENABLED START */
 		$this->handlerInfo = $handlerInfo;
-		$dto = new Core_BaseDto($this->view);
-		$dto->editor = new Menu_MenuBar(array(
+		$dto = new Menu_MenuBar(array(
 			new Menu_Menu('class', $this->createLinkTo('/class'), array(
 				new Menu_MenuItem('create new', $this->createLinkTo('/class/create'), $this->isCurrentContext('/class/create')),
 				new Menu_MenuItem('list', $this->createLinkTo('/class/list'), $this->isCurrentContext('/class/list'))
@@ -64,7 +63,7 @@ class Editor_NavigationHandler extends Core_BaseRequestHandler  {
 	 */
 	protected function createLinkTo($path) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240409683421_667990_618) ENABLED START */
-		return $this->baseHandlerUri($this->handlerInfo) . $path;
+		return $_SERVER['SCRIPT_NAME'] . $this->handlerInfo->context->parent->get() . $path;
 		/* PROTECTED REGION END */
 	}
 
@@ -76,7 +75,7 @@ class Editor_NavigationHandler extends Core_BaseRequestHandler  {
 	 */
 	protected function isCurrentContext($path) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240410059718_458730_623) ENABLED START */
-		$pathinfo = '/' . implode('/', $this->handlerInfo->pathInfo);
+		$pathinfo = '/' . $this->handlerInfo->context->name . '/' . implode('/', $this->handlerInfo->pathInfo);
 		if ($pathinfo == $path) {
 			return true;
 		} else {

@@ -10,13 +10,13 @@ require_once 'Core/Dto.php';
  * Helps to store data in the session of an user for a given count of 
  * request-response cycles. Such a concept is often used to show inform the 
  * user with messages which disappear after subsequent requests.
- * @see		Countable
- * @see		IteratorAggregate
  * @see		Core_Dto
+ * @see		IteratorAggregate
+ * @see		Countable
  * @author	dreamer
  * @package	Utilities
  */
-class Msg_FlashNotifier  implements Countable, IteratorAggregate, Core_Dto {
+class Msg_FlashNotifier  implements Core_Dto, IteratorAggregate, Countable {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -33,11 +33,6 @@ class Msg_FlashNotifier  implements Countable, IteratorAggregate, Core_Dto {
 	 * @var		null	$_iD_DATA
 	 */
 	const ID_DATA  = 'data';
-	/**
-	 * @generated	attribute definition
-	 * @var		string	$view
-	 */
-	protected $view;
 	/**
 	 * @generated	attribute definition
 	 * @var		array	$_expiration
@@ -76,7 +71,7 @@ class Msg_FlashNotifier  implements Countable, IteratorAggregate, Core_Dto {
 	 */
 	public function view() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240323454906_411152_591) ENABLED START */
-		return $this->view;
+		return 'de.genesez.modules.util/notifier.html';
 		/* PROTECTED REGION END */
 	}
 
@@ -121,6 +116,9 @@ class Msg_FlashNotifier  implements Countable, IteratorAggregate, Core_Dto {
 		// determine container
 		if ($container === NULL) {
 			// init messages in session
+			if (!isset($_SESSION)) {
+				session_start();
+			}
 			if (!array_key_exists(self::ID_MESSAGES, $_SESSION)) {
 				$_SESSION[self::ID_MESSAGES] = array();
 			}
@@ -156,14 +154,6 @@ class Msg_FlashNotifier  implements Countable, IteratorAggregate, Core_Dto {
 
 
 	// -- association + attribute accessors ---------------------------------
-	/**
-	 * @generated	setter method for the attribute {@link Msg_FlashNotifier::getView() $view}
-	 * @param	string	$view	the value to set
-	 */
-	
-	public 	 function setView($view) {
-		$this->view = $view;
-	}
 
 
 	// -- own code implementation -------------------------------------------

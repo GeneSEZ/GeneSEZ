@@ -11,7 +11,7 @@ require_once 'Core/Controller.php';
  * @author	dreamer
  * @package	Utilities
  */
-class Util_NotifierController extends Core_Controller  {
+abstract class Util_NotifierController extends Core_Controller  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition

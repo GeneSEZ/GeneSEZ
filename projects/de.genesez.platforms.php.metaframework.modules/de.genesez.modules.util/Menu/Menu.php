@@ -117,6 +117,14 @@ class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240323706500_563325_694) ENABLED START */
 	// TODO: put your further code implementations for class 'Menu_Menu' here
+	public function offsetGet($offset) {
+		switch ($offset) {
+			case 'menuBar' :
+			case 'items' :
+				return $this->__get($offset);
+		}
+		return parent::offsetGet($offset);
+	}
 	/* PROTECTED REGION END */
 }
 ?>

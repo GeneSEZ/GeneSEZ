@@ -22,7 +22,7 @@ class Msg_Message extends Core_BaseDto  {
 	 */
 	public function __construct($message) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240322762234_410753_447) ENABLED START */
-		parent::__construct('utilities/message.html');
+		parent::__construct();
 		$this->message = $message;
 		/* PROTECTED REGION END */
 	}
@@ -30,6 +30,16 @@ class Msg_Message extends Core_BaseDto  {
 
 
 	// -- method implementations --------------------------------------------
+	
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	public function view() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241034790140_715684_434) ENABLED START */
+		return 'de.genesez.modules.util/message.html';
+		/* PROTECTED REGION END */
+	}
 
 
 

@@ -34,7 +34,7 @@ class Menu_MenuBar extends Core_BaseDto implements IteratorAggregate {
 	 */
 	public function __construct($menus = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240323723765_268360_733) ENABLED START */
-		parent::__construct($this->getView());
+		parent::__construct();
 		foreach ($menus as $menu) {
 			$this->menus->insert($menu);
 		}
@@ -59,9 +59,9 @@ class Menu_MenuBar extends Core_BaseDto implements IteratorAggregate {
 	 * @generated	method stub for implementation
 	 * @return	string
 	 */
-	protected function getView() {
+	public function view() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240396182187_280751_455) ENABLED START */
-		return 'utilities/menu.bar.html';
+		return 'de.genesez.modules.util/menu.bar.html';
 		/* PROTECTED REGION END */
 	}
 
@@ -91,6 +91,12 @@ class Menu_MenuBar extends Core_BaseDto implements IteratorAggregate {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240323712078_686210_714) ENABLED START */
 	// TODO: put your further code implementations for class 'Menu_MenuBar' here
+	public function offsetGet($offset) {
+		if ($offset == 'menus') {
+			return $this->__get($offset);
+		}
+		return parent::offsetGet($offset);
+	}
 	/* PROTECTED REGION END */
 }
 ?>

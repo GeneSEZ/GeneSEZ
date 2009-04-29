@@ -35,7 +35,7 @@ class Menu_MenuItem extends Core_BaseDto  {
 	 */
 	public function __construct($name, $link, $isSelected = false) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240324079234_758890_830) ENABLED START */
-		parent::__construct($this->getView());
+//		parent::__construct();
 		$this->name = $name;
 		$this->link = $link;
 		$this->isSelected = $isSelected;
@@ -90,9 +90,9 @@ class Menu_MenuItem extends Core_BaseDto  {
 	 * @generated	method stub for implementation
 	 * @return	string
 	 */
-	protected function getView() {
+	public function view() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240396212515_458066_459) ENABLED START */
-		return 'utilities/menu.item.html';
+		return 'de.genesez.modules.util/menu.item.html';
 		/* PROTECTED REGION END */
 	}
 
@@ -122,11 +122,11 @@ class Menu_MenuItem extends Core_BaseDto  {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240323698234_181024_674) ENABLED START */
 	// TODO: put your further code implementations for class 'Menu_MenuItem' here
-	public function offsetExists($index) {
-		echo 'offset exists called...';
-	}
-	public function offsetGet($index) {
-		echo 'offset get called...';
+	public function offsetGet($offset) {
+		if ($offset == 'menu') {
+			return $this->__get($offset);
+		}
+		return parent::offsetGet($offset);
 	}
 	/* PROTECTED REGION END */
 }
