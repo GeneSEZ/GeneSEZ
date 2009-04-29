@@ -9,6 +9,7 @@ require_once 'UML/OneAssociation.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1239126599921_834943_1226) ENABLED START */
 // TODO: put your further include + require statements here
+require_once 'HTTP.php';
 /* PROTECTED REGION END */
 
 /**
@@ -54,13 +55,13 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	public function __construct() {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240241341890_219976_955) ENABLED START */
-		$list = new Action('list', 'listing', false);
+		$list = new Core_Action('list', false, 'listing');
 		$this->defaultAction->insert($list);
 		$this->actions->insert('list', $list);
-		$this->actions->insert('create', new Action('create'));
-		$this->actions->insert('edit', new Action('edit'));
-		$this->actions->insert('delete', new Action('delete'));
-		$this->actions->insert('show', new Action('show'));
+		$this->actions->insert('create', new Core_Action('create', false));
+		$this->actions->insert('edit', new Core_Action('edit'));
+		$this->actions->insert('delete', new Core_Action('delete'));
+		$this->actions->insert('show', new Core_Action('show'));
 		/* PROTECTED REGION END */
 	}
 
@@ -69,10 +70,9 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$id	
 	 * @return	Core_Dto
 	 */
-	public abstract function create($id);
+	public abstract function create();
 
 	/**
 	 * @generated	method stub for implementation
@@ -137,19 +137,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function redirect($action = null, $controller = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240245232109_266957_1067) ENABLED START */
-		if ($controller === null) {
-			if ($action === null) {
-				HTTP::redirect(self::baseRequestUri() . $this->handlerInfo->context);
-			} else {
-				HTTP::redirect(self::baseRequestUri() . $this->handlerInfo->context . '/' . $action);
-			}
-		} else {
-			if ($action === null) {
-				HTTP::redirect(self::baseRequestUri() . $this->handlerInfo->context->parent->get() . '/' . $controller);
-			} else {
-				HTTP::redirect(self::baseRequestUri() . $this->handlerInfo->context->parent->get() . '/' . $controller . '/' . $action);
-			}
-		}
+		HTTP::redirect($this->newLink($action, $controller));
 		/* PROTECTED REGION END */
 	}
 
@@ -159,8 +147,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238021984_342013_941) ENABLED START */
-		$method = $this->defaultAction->method;
-		return $this->$method();
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -267,6 +254,23 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126599921_834943_1226) ENABLED START */
 	// TODO: put your further code implementations for class 'Core_Controller' here
+	protected function newLink($action = null, $controller = null) {
+		$url;
+		if ($controller === null) {
+			if ($action === null) {
+				$url = self::baseRequestUri() . $this->handlerInfo->context;
+			} else {
+				$url = self::baseRequestUri() . $this->handlerInfo->context . '/' . $action;
+			}
+		} else {
+			if ($action === null) {
+				$url = self::baseRequestUri() . $this->handlerInfo->context->parent->get() . '/' . $controller;
+			} else {
+				$url = self::baseRequestUri() . $this->handlerInfo->context->parent->get() . '/' . $controller . '/' . $action;
+			}
+		}
+		return $url;
+	}
 	/* PROTECTED REGION END */
 }
 ?>

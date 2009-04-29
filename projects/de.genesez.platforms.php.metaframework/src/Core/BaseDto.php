@@ -24,12 +24,12 @@ class Core_BaseDto extends ArrayObject implements Core_Dto {
 	/**
 	 * constructs an object of class {@link Core_BaseDto}
 	 * @generated	constructor stub for implementation
-	 * @param	string	$view	
 	 * @param	array	$container	default value is 'array()'
+	 * @param	string	$view	default value is 'null'
 	 */
-	public function __construct($view, $container = array()) {
+	public function __construct($container = array(), $view = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1239096659828_334898_869) ENABLED START */
-		parent::__construct($container/*, ArrayObject::ARRAY_AS_PROPS*/);
+		parent::__construct($container, ArrayObject::ARRAY_AS_PROPS);
 		$this->_view = $view;
 		/* PROTECTED REGION END */
 	}

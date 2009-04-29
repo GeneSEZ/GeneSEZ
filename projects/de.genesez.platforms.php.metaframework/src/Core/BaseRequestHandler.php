@@ -40,7 +40,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 */
 	public static function baseRequestUri() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240211928703_764012_723) ENABLED START */
-		return $_SERVER['SCRIPT_NAME'] . '/';
+		return $_SERVER['SCRIPT_NAME'];
 		/* PROTECTED REGION END */
 	}
 

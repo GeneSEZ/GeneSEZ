@@ -117,5 +117,13 @@ class ContextTest extends PHPUnit_Framework_TestCase {
 		$ch = $this->root->resolveContext(array('context1', 'sub1', 'sub1'));
 		$this->assertEquals('root.context1.sub1.sub1', $ch->handler, 'context with same name + different location not found!');
 	}
+	
+	public function testToString() {
+		$this->testConstruct();
+		$this->assertEquals('/', $this->root->__toString(), 'root toString() should be /');
+		$this->assertEquals('/context1', $this->context1->__toString(), '/context1 toString() should match');
+		$this->assertEquals('/context2', $this->context2->__toString(), '/context2 toString() should match');
+		$this->assertEquals('/context1/sub1', $this->context1Sub1->__toString(), '/context1/sub1 should match');
+	}
 }
 ?>

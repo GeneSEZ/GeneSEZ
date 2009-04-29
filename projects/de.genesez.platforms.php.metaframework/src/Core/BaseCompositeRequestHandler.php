@@ -52,12 +52,9 @@ class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implement
 	 */
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239127196828_615219_1284) ENABLED START */
-		if ($this->view === null) {
-			$this->view = $this->defaultView();
-		}
-		$dto = new Core_BaseCompositeDto($this->view);
+		$dto = new Core_BaseDto(array(), $this->view);
 		foreach ($this->nestedRequestHandler->iterator() as $key => $value) {
-			$dto->nestedDto->insert($key, $value->handle($handlerInfo));
+			$dto->$key = $value->handle($handlerInfo);
 		}
 		return $dto;
 		/* PROTECTED REGION END */

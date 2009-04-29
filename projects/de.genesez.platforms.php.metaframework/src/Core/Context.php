@@ -123,12 +123,15 @@ class Core_Context   {
 	 */
 	public function __toString() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236344802625_729711_545) ENABLED START */
-		$path = '/';
 		$parent = $this->parent->get();
-		if ($parent !== null) {
-			$path = $parent . '/';
+		if ($parent === null) {
+			return '/';
 		}
-		return $path . $this->_name;
+		$path = $parent;
+		if (strrpos($path, '/') +1 == strlen($path)) {
+			return $parent . $this->_name;
+		}
+		return $parent . '/' . $this->_name;
 		/* PROTECTED REGION END */
 	}
 

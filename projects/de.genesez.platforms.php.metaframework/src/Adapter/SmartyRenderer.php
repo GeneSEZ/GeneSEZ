@@ -8,6 +8,8 @@ require_once 'Core/Renderer.php';
 /* PROTECTED REGION END */
 
 /**
+ * A <b>renderer</b> implementation which generates a response using the 
+ * smarty template engine.
  * @see		Core_Renderer
  * @author	dreamer
  * @package	Metaframework
@@ -32,31 +34,71 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	public function render($dto) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
 		$view = $dto->view();
-		if (!$this->smarty->template_exists($view)) {
-			$view = $this->defaultView();
-		}
-		if (!$this->smarty->template_exists($view)) {
-			$view = $this->defaultView() . '.html';
-		}
-		if (!$this->smarty->template_exists($view)) {
-			$view = $this->defaultView() . '/index.html';
-		}
 		$this->smarty->assign('dto', $dto);
 		$this->smarty->display($view);
 		/* PROTECTED REGION END */
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * tries to find a template resource for a specified, non-existing template 
+	 * resource. This method is registered as 
+	 * &lt;code&gt;default_template_handler_func&lt;/code&gt;. Smarty uses this method to 
+	 * obtain the source of a template when the specified template resource 
+	 * doesn't exist.
+	 * @param	string	$resource_type	the type of the non-existing template resource
+	 * @param	string	$resource_name	the name of the non-existing template resource
+	 * @param	string	$template_source	variable to return the template content
+	 * @param	int	$template_timestamp	variable to return the timestamp of the template content
+	 * @param	Smarty	$smarty_obj	reference to the smarty object
+	 * @return	boolean
+	 */
+	public function defaultTemplateHandler($resource_type, $resource_name, &$template_source, &$template_timestamp, &$smarty_obj) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241024432671_172546_369) ENABLED START */
+		if ($resource_type == 'file') {
+			$base = './' . $smarty_obj->template_dir . '/';
+			foreach ($this->defaultSuffixes() as $value) {
+				$view = $this->defaultView($value);
+				if (is_file($base . $view) && is_readable($base . $view)) {
+					// does not work: caching problems, every template determined by this function has same compiled template name
+//					$template_source = file_get_contents($base . $view);
+//					$template_timestamp = filemtime($base . $view);
+					$smarty_obj->display($view);
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * generates the default template based on the path info of the current url 
+	 * location and an optional suffix.
+	 * @param	string	$suffix	the suffix for the template resource
 	 * @return	string
 	 */
-	protected function defaultView() {
+	protected function defaultView($suffix = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240433824734_817533_526) ENABLED START */
 		$view = $_SERVER['PATH_INFO'];
 		if (substr($view, 0, 1) === '/') {
 			$view = substr($view, 1);
 		}
-		return $view;
+		if ($suffix === null) {
+			return $view;
+		}
+		return $view . $suffix;
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * returns an array of possible template resource suffixes, used to find a 
+	 * default template file resource
+	 * @return	array of string
+	 */
+	protected function defaultSuffixes() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241024375453_409016_363) ENABLED START */
+		return array('', '.html', '.tpl', '/index.html', '/index.tpl');
 		/* PROTECTED REGION END */
 	}
 

@@ -32,10 +32,10 @@ class Core_Action   {
 	 * constructs an object of class {@link Core_Action}
 	 * @generated	constructor stub for implementation
 	 * @param	string	$name	
-	 * @param	string	$method	default value is 'null'
 	 * @param	boolean	$withId	default value is 'true'
+	 * @param	string	$method	default value is 'null'
 	 */
-	public function __construct($name, $method = null, $withId = true) {
+	public function __construct($name, $withId = true, $method = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240242723296_780498_1026) ENABLED START */
 		$this->_name = $name;
 		if ($method === null) {

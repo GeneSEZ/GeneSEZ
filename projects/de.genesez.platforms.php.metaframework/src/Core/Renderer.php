@@ -6,6 +6,7 @@ require_once 'Core/Dto.php';
 /* PROTECTED REGION END */
 
 /**
+ * A <b>renderer</b> is used to generate a response.
  * @author	dreamer
  * @package	Metaframework
  */
