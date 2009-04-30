@@ -89,15 +89,15 @@
 	for attributes, the implicit modifiers 'public', 'static' + 'final' are generated
 «ENDREM»
 «DEFINE _Declaration FOR MAttribute -»
-	«EXPAND Comment::Attribute -»
+	«EXPAND Comment::Attribute-»
 	«IF fieldAccess()-»
 		«EXPAND _Annotation-»
-	«ENDIF»
-	«IF isSingleValuedType() -»
+	«ENDIF-»
+	«IF isSingleValuedType()-»
 		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue -»;
-	«ELSE -»
+	«ELSE»
 		«EXPAND _Modifier -» «EXPAND Type::MultiValuedType -» «asAttribute()» «EXPAND _DefaultValue -»;
-	«ENDIF -»
+	«ENDIF»
 «ENDDEFINE»
 
 «REM»
@@ -193,38 +193,38 @@
 	the attribute is simply returned
 «ENDREM»
 «DEFINE _Getter FOR MAttribute -»
-«EXPAND Comment::Getter -»
-«IF !fieldAccess()-»
-	«EXPAND _Annotation-»
-«ENDIF»
-«IF isSingleValuedType() -»
-	«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
-		return «asAttribute()»;
-	}
-«ELSE -»
-	«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType -» «asGetter()»() {
-		return «asAttribute()»;
-	}
-«ENDIF -»
+	«EXPAND Comment::Getter -»
+	«IF !fieldAccess()-»
+		«EXPAND _Annotation-»
+	«ENDIF-»
+	«IF isSingleValuedType() -»
+		«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
+			return «asAttribute()»;
+		}
+	«ELSE -»
+		«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType -» «asGetter()»() {
+			return «asAttribute()»;
+		}
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	generates the setter method for an attribute
 «ENDREM»
 «DEFINE _Setter FOR MAttribute -»
-«EXPAND Comment::Setter -»
-«IF !fieldAccess() && !this.generateGetter()-»
-	«EXPAND _Annotation-»
-«ENDIF»
-«IF isSingleValuedType() -»
-	«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «asAttribute()») {
-		this.«asAttribute()» = «asAttribute()»;
-	}
-«ELSE -»
-	«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «asAttribute()») {
-		this.«asAttribute()» = «asAttribute()»;
-	}
-«ENDIF -»
+	«EXPAND Comment::Setter -»
+	«IF !fieldAccess() && !this.generateGetter()-»
+		«EXPAND _Annotation-»
+	«ENDIF-»
+	«IF isSingleValuedType() -»
+		«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «asAttribute()») {
+			this.«asAttribute()» = «asAttribute()»;
+		}
+	«ELSE -»
+		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «asAttribute()») {
+			this.«asAttribute()» = «asAttribute()»;
+		}
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»

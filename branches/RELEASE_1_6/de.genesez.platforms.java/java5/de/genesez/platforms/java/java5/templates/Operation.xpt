@@ -81,14 +81,14 @@
 	generates an initializing constructor
 	all initializable attributes of the type and supertypes are set within the constructor
 «ENDREM»
-«DEFINE _InitializingConstructor FOR MClassifier -»
-«IF hasInitializableAttributes() -»
-	«EXPAND Comment::InitConstructor -»
-	public «asTypeName()»(«EXPAND _Params FOREACH allInitializableAttributes() SEPARATOR ", " -») {
-		«EXPAND _SuperInit FOREACH generalization -»
-		«FOREACH owningInitializableAttributes() AS attr -»
-			this.«attr.asAttribute() -» = «attr.asAttribute() -»;
-		«ENDFOREACH -»
+«DEFINE _InitializingConstructor FOR MClassifier-»
+«IF hasInitializableAttributes()-»
+	«EXPAND Comment::InitConstructor-»
+	public «asTypeName()-»(«EXPAND _Params FOREACH allInitializableAttributes() SEPARATOR ", "-») {
+		«EXPAND _SuperInit FOREACH generalization-»
+		«FOREACH owningInitializableAttributes() AS attr-»
+			this.«attr.asAttribute()-» = «attr.asAttribute()-»;
+		«ENDFOREACH-»
 	}
 «ENDIF»
 «ENDDEFINE»
@@ -96,13 +96,13 @@
 «REM»
 	generates the parameter list for the initializing constructor
 «ENDREM»
-«DEFINE _Params FOR MAttribute -»
+«DEFINE _Params FOR MAttribute-»
 «EXPAND _Annotation-»
-«IF isSingleValuedType() -»
-	«type.mapName().asTypeName()»«EXPAND Type::Generics FOR type» «asAttribute() -»
-«ELSE -»
-	«EXPAND Type::MultiValuedType -» «asAttribute() -»
-«ENDIF -»
+«IF isSingleValuedType()-»
+	«type.mapName().asTypeName()-»«EXPAND Type::Generics FOR type-» «asAttribute()-»
+«ELSE-»
+	«EXPAND Type::MultiValuedType-» «asAttribute()-»
+«ENDIF-»
 «ENDDEFINE»
 
 «REM»
@@ -128,10 +128,10 @@
 	generates a constructor
 	a constructor has no 'modifiers' and no 'return value'
 «ENDREM»
-«DEFINE _Constructor FOR MOperation -»
-	«EXPAND Comment::Constructor -»
-	«visibility» «classifier.asTypeName()»(«EXPAND _Params») «EXPAND _Exception» {
-		«EXPAND _ConstructorBody -»
+«DEFINE _Constructor FOR MOperation-»
+	«EXPAND Comment::Constructor-»
+	«visibility-» «classifier.asTypeName()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+		«EXPAND _ConstructorBody-»
 	}
 «ENDDEFINE»
 
@@ -139,28 +139,28 @@
 	generates an operation declaration
 	distincts the multiplicity of the return type
 «ENDREM»
-«DEFINE _Declaration FOR MOperation -»
-	«EXPAND Comment::Operation -»
-	«IF isSingleValuedType() -»
+«DEFINE _Declaration FOR MOperation-»
+	«EXPAND Comment::Operation-»
+	«IF isSingleValuedType()-»
 	«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
-	«ELSE -»
+	«ELSE-»
 	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
-	«ENDIF -»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM»
 	generates an operation implementation
 	distincts the multiplicity of the return type
 «ENDREM»
-«DEFINE _Implementation FOR MOperation -»
-	«EXPAND Comment::Operation -»
+«DEFINE _Implementation FOR MOperation-»
+	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
-	«IF isSingleValuedType() -»
-	«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
-	«ELSE -»
-	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
-	«ENDIF -»
-	«EXPAND _ImplementationBody -»
+	«IF isSingleValuedType()-»
+		«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR returnType-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+	«ELSE-»
+		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+	«ENDIF-»
+	«EXPAND _ImplementationBody-»
 	}
 «ENDDEFINE»
 
@@ -187,14 +187,13 @@
 	generates the parameters of an operation
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
-	«FOREACH parameter AS p SEPARATOR ", " -»
-		«EXPAND _Annotation FOR p-»
-		«IF p.isSingleValuedType() -»
-			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
-		«ELSE -»
-			«EXPAND Type::MultiValuedType FOR p -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
-		«ENDIF -»
-	«ENDFOREACH -»
+	«FOREACH parameter AS p SEPARATOR ", "-»
+		«EXPAND _Annotation FOR p-» «IF p.isSingleValuedType()-»
+			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
+		«ELSE-»
+			«EXPAND Type::MultiValuedType FOR p-» «p.asParameter()-» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
+		«ENDIF-»
+	«ENDFOREACH-»
 «ENDDEFINE»
 
 «REM»
@@ -272,17 +271,14 @@
 «REM»
 	will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
-«DEFINE _Annotation FOR MOperation-»
-«ENDDEFINE»
+«DEFINE _Annotation FOR MOperation-»«ENDDEFINE»
 
 «REM»
 	will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
-«DEFINE _Annotation FOR MParameter-»
-«ENDDEFINE»
+«DEFINE _Annotation FOR MParameter-»«ENDDEFINE»
 
 «REM»
 	will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
-«DEFINE _Annotation FOR MAttribute-»
-«ENDDEFINE»
+«DEFINE _Annotation FOR MAttribute-»«ENDDEFINE»
