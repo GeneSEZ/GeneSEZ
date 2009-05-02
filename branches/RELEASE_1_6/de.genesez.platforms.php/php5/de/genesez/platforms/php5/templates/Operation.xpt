@@ -142,11 +142,25 @@
 «DEFINE _Params FOR MOperation -»
 «FOREACH parameter AS p SEPARATOR ", " -»
 «IF p.multiplicity == 1 -»
-«REM»«p.type.mapName().asTypeName(p.type)» «ENDREM»$«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«REM»«p.type.mapName().asTypeName(p.type)» «ENDREM»«EXPAND _Parameter FOR p -»
 «ELSE -»
-«REM»array «ENDREM»$«p.asParameter()»«IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+«REM»array «ENDREM»«EXPAND _Parameter FOR p -»
 «ENDIF -»
 «ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the parameter name and the type of call (call by value or call by reference)
+«ENDREM»
+«DEFINE _Parameter FOR MParameter -»
+«IF direction == "out" || direction == "inout" -»&«ENDIF -»$«asParameter()»«EXPAND _DefaultValue -»
+«ENDDEFINE»
+
+«REM»
+	generates the default value
+«ENDREM»
+«DEFINE _DefaultValue FOR MParameter -»
+«IF hasDefaultValue() -» = «defaultvalue»«ENDIF -»
 «ENDDEFINE»
 
 «REM»
