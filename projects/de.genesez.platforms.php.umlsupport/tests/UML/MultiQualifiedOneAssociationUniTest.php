@@ -91,5 +91,19 @@ class UML_MultiQualifiedOneAssociationUniTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->related2, $related[0], 'related object should be equal');
 		$this->assertSame($this->related2, $related[0], 'related object should be the same');
 	}
+	
+	public function testIterator() {
+		$this->testGet();
+		$it = $this->hub->unidiMultiQualifiedToOneRelated->iterator();
+		$this->assertTrue($it->valid(), 'iterator should be valid');
+		$this->assertEquals('related', $it->key(), '1st key should be related');
+		$this->assertSame($this->related, $it->current(), '1st value should be related object');
+		$it->next();
+		$this->assertTrue($it->valid(), 'iterator should be valid');
+		$this->assertEquals('related2', $it->key(), '2nd key should be related2');
+		$this->assertEquals($this->related2, $it->current(), '2nd value should be related2 object');
+		$it->next();
+		$this->assertFalse($it->valid(), 'iterator should be invalid');
+	}
 }
 ?>

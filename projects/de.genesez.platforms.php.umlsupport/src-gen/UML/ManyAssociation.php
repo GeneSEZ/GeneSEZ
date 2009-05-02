@@ -27,7 +27,7 @@ class UML_ManyAssociation extends UML_AssociationBase  {
 	 * @param	mixed	$variable	
 	 * @param	mixed	$opposite	default value is 'null'
 	 */
-	public function __construct($owner, $variable, $opposite = null) {
+	public function __construct($owner, &$variable, $opposite = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1239223810921_908628_619) ENABLED START */
 		parent::__construct($owner, $variable, $opposite);
 		if (!is_array($this->variable)) {

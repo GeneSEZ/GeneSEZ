@@ -42,10 +42,10 @@ interface UML_QualifiedAssociation  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	mixed	$qualifier	
+	 * @param	mixed	$qualifier	default value is 'null'
 	 * @return	Iterator
 	 */
-	public function iterator($qualifier);
+	public function iterator($qualifier = null);
 
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1239725542718_817217_267) ENABLED START */

@@ -102,11 +102,19 @@ class UML_MultiQualifiedAssociation extends UML_QualifiedAssociationBase  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	mixed	$qualifier	
+	 * @param	mixed	$qualifier	default value is 'null'
 	 * @return	Iterator
 	 */
-	public function iterator($qualifier) {
+	public function iterator($qualifier = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239726330875_218919_678) ENABLED START */
+		if ($qualifier === null) {
+			if ($this->toMany === true) {
+				// TODO: much work to do...
+				throw new Exception('not yet implemented');
+			} else {
+				return new ArrayIterator($this->variable);
+			}
+		}
 		if (array_key_exists($qualifier, $this->variable)) {
 			return $this->associations[$qualifier]->iterator();
 		}

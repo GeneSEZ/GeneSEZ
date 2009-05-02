@@ -21,7 +21,7 @@ class UML_OneAssociation extends UML_AssociationBase  {
 	 * @param	mixed	$variable	
 	 * @param	mixed	$opposite	default value is 'null'
 	 */
-	public function __construct($owner, $variable, $opposite = null) {
+	public function __construct($owner, &$variable, $opposite = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1239223439078_306373_553) ENABLED START */
 		parent::__construct($owner, $variable, $opposite);
 		/* PROTECTED REGION END */

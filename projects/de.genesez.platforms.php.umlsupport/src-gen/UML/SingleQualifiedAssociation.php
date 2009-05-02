@@ -102,10 +102,10 @@ class UML_SingleQualifiedAssociation extends UML_QualifiedAssociationBase  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	mixed	$qualifier	
+	 * @param	mixed	$qualifier	default value is 'null'
 	 * @return	Iterator
 	 */
-	public function iterator($qualifier) {
+	public function iterator($qualifier = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239726163609_547169_639) ENABLED START */
 		if (array_key_exists($qualifier, $this->variable)) {
 			return $this->association->iterator();

@@ -37,10 +37,10 @@ abstract class UML_AssociationBase  implements UML_Association {
 	 * @param	mixed	$variable	
 	 * @param	mixed	$opposite	default value is 'null'
 	 */
-	public function __construct($owner, $variable, $opposite = null) {
+	public function __construct($owner, &$variable, $opposite = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1239224069812_771902_665) ENABLED START */
 		$this->owner = $owner;
-		$this->variable = $variable;
+		$this->variable = &$variable;
 		$this->opposite = $opposite;
 		/* PROTECTED REGION END */
 	}
