@@ -143,6 +143,32 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 
 	/**
 	 * @generated	method stub for implementation
+	 * @param	string	$action	default value is 'null'
+	 * @param	string	$controller	default value is 'null'
+	 * @return	string
+	 */
+	protected function newLink($action = null, $controller = null) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241252566718_740823_756) ENABLED START */
+		$url = self::baseRequestUri();
+		if ($controller === null) {
+			if ($action === null) {
+				$url .= $this->handlerInfo->context;
+			} else {
+				$url .= $this->handlerInfo->context . '/' . $action;
+			}
+		} else {
+			if ($action === null) {
+				$url .= $this->handlerInfo->context->parent->get() . '/' . $controller;
+			} else {
+				$url .= $this->handlerInfo->context->parent->get() . '/' . $controller . '/' . $action;
+			}
+		}
+		return $url;
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
 	 * @return	Core_Dto
 	 */
 	protected function noActionSpecified() {
@@ -254,23 +280,6 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126599921_834943_1226) ENABLED START */
 	// TODO: put your further code implementations for class 'Core_Controller' here
-	protected function newLink($action = null, $controller = null) {
-		$url;
-		if ($controller === null) {
-			if ($action === null) {
-				$url = self::baseRequestUri() . $this->handlerInfo->context;
-			} else {
-				$url = self::baseRequestUri() . $this->handlerInfo->context . '/' . $action;
-			}
-		} else {
-			if ($action === null) {
-				$url = self::baseRequestUri() . $this->handlerInfo->context->parent->get() . '/' . $controller;
-			} else {
-				$url = self::baseRequestUri() . $this->handlerInfo->context->parent->get() . '/' . $controller . '/' . $action;
-			}
-		}
-		return $url;
-	}
 	/* PROTECTED REGION END */
 }
 ?>

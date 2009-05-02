@@ -13,6 +13,7 @@ class MetaframeworkTestClass extends Metaframework {
 			case 'container' : return $this->container;
 			case 'modules' : return $this->modules;
 			case 'rootContext' : return $this->rootContext;
+			case 'autoloadDirs' : return self::$autoloadDirs;
 		}
 	}
 }

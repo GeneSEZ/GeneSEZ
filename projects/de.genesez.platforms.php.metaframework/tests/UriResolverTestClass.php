@@ -1,4 +1,5 @@
 <?php
+require_once 'Core/UrlResolver.php';
 class UriResolverTestClass extends Core_UrlResolver {
 	private $pathinfo;
 	

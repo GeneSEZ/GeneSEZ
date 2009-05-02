@@ -13,6 +13,12 @@ spl_autoload_register(array('Metaframework', 'autoload'));
 class Metaframework   {
 	// -- generated attribute, constant + association declarations ----------
 	/**
+	 * documented here {@link Metaframework::getAutoloadDirs()}
+	 * @generated	attribute definition
+	 * @var		string	$autoloadDirs
+	 */
+	protected static $autoloadDirs = array();
+	/**
 	 * @generated	attribute definition
 	 * @var		Loader_ModuleLoader	$modules
 	 */
@@ -28,15 +34,42 @@ class Metaframework   {
 	 */
 	protected $container;
 
+	// -- constructors + destructors ----------------------------------------
+	
+	/**
+	 * Constructs the frontend of the framework. Additional plugin folders can be 
+ * specified for autoloading classes.
+	 * @generated	constructor stub for implementation
+	 * @param	null	$additionalPluginDirs	an array of additional plugin folders
+	 */
+	public function __construct($additionalPluginDirs = array()) {
+		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241076400375_384996_361) ENABLED START */
+		$sourceDirs = array();
+		$pluginDirs = array_merge(array(dirname($_SERVER['SCRIPT_FILENAME']) . '/modules'), $additionalPluginDirs);
+		foreach ($pluginDirs as $pluginDir) {
+			if (!is_dir($pluginDir)) {
+				continue;
+			}
+			$content = scandir($pluginDir);
+			foreach ($content as $dir) {
+				$path = $pluginDir . '/' . $dir;
+				if (is_dir($path) && $dir != '.' && $dir != '..') {
+					$sourceDirs[] = $path;
+				}
+			}
+		}
+		self::$autoloadDirs = array_merge(array(self::baseDir()), $sourceDirs);
+		/* PROTECTED REGION END */
+	}
 
 
 
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$name	
-	 * @param	Loader_ModuleLoader	$loader	
+	 * registers a module loader instance with the given name
+	 * @param	string	$name	name of the plugin
+	 * @param	Loader_ModuleLoader	$loader	module loader instance of the plugin
 	 */
 	public function registerModuleLoader($name, $loader) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332689875_601091_430) ENABLED START */
@@ -46,8 +79,8 @@ class Metaframework   {
 	}
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	array	$loaders	array of type 'Loader_ModuleLoader', default value is 'array()'
+	 * registers several plugins
+	 * @param	array	$loaders	associative array of plugin loader instances, key is plugin name
 	 */
 	public function registerModuleLoaders($loaders = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236345050000_299364_554) ENABLED START */
@@ -144,10 +177,12 @@ class Metaframework   {
 	public static function autoload($classname) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238019127843_233433_1477) ENABLED START */
 		$path = str_replace('_', '/', $classname);
-		$file = self::baseDir() . $path . '.php';
-		if (file_exists($file) && is_readable($file)) {
-			require_once $file;
-			return true;
+		foreach (self::$autoloadDirs as $dir) {
+			$file = $dir . '/' . $path . '.php';
+			if (is_file($file) && is_readable($file)) {
+				require_once $file;
+				return true;
+			}
 		}
 		return false;
 		/* PROTECTED REGION END */
@@ -157,9 +192,9 @@ class Metaframework   {
 	 * @generated	method stub for implementation
 	 * @return	string
 	 */
-	public function baseDir() {
+	public static function baseDir() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238019277984_968240_1483) ENABLED START */
-		return dirname(__FILE__) . '/';
+		return dirname(__FILE__);
 		/* PROTECTED REGION END */
 	}
 

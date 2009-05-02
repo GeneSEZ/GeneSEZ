@@ -59,5 +59,13 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 		$this->setExpectedException('Exception');
 		$this->metafw->checkPlugIns();
 	}
+	
+	public function testAutoloadDirs() {
+		$mfw = new MetaframeworkTestClass(array('../de.genesez.platforms.php.metaframework.modules'));
+		$dirs = $mfw->autoloadDirs;
+//		print_r($dirs);
+//		$this->assertContains('de.genesez.modules.ddm', $dirs, 'ddm module dir should be contained');
+//		$this->assertContains('de.genesez.modules.util', $dirs, 'ddm module dir should be contained');
+	}
 }
 ?>
