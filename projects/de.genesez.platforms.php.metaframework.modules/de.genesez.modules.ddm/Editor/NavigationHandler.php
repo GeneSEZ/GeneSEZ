@@ -1,7 +1,4 @@
 <?php
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/Dto.php';
-require_once 'Core/BaseRequestHandler.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240397545109_914177_263) ENABLED START */
 // TODO: put your further include + require statements here

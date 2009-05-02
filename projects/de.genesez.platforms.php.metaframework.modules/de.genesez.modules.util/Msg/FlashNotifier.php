@@ -1,6 +1,4 @@
 <?php
-require_once 'Msg/Message.php';
-require_once 'Core/Dto.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240322907125_749427_515) ENABLED START */
 // TODO: put your further include + require statements here

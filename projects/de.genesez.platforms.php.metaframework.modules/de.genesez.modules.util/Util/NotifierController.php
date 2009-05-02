@@ -1,6 +1,4 @@
 <?php
-require_once 'Msg/FlashNotifier.php';
-require_once 'Core/Controller.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240411825406_497558_455) ENABLED START */
 // TODO: put your further include + require statements here

@@ -1,37 +1,20 @@
 <?php
 class Form_ClassAdapter extends Form_BaseAdapter {
+	protected $classDao;
 	
-	public function object($class = null) {
-		if ($class === NULL) {
-			$class = new DDM_Class();
-		}
-		$class->c_name = $form->exportValue('name');
-		if ($form->exportValue('editable')) {
-			$class->c_editable = true;
-		} else {
-			$class->c_editable = false;
-		}
-		return $class;
+	public function __construct($object = null, $action = null) {
+		parent::__construct('classForm', $object, $action);
+		$this->classDao = Doctrine::getTable('ddm_class');
 	}
 	
-	public function errors() {
-		$errors = array();
-		$errors['name'] = $this->form->getElementError('name');
-		$errors['editable'] = $this->form->getElementError('editable');
-		$errors = $this->customErrors($errors);
-		return $errors;
-	}
-	
-	protected function createForm($class = null) {
-		$defaults = $this->defaults($class);
-		$this->form = new HTML_QuickForm('classForm');
-		$this->form->setDefaults($defaults);
+	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
 		$this->form->addElement('text', 'name', 'name:');
 		$editable = $form->addElement('checkbox', 'editable', 'editable:');
 		$parent = $form->addElement('select', 'parent', 'parent:');
 		$parent->addOption('', '');
 		$classes;
+		$dao = Doctrine::getTable('ddm_class');
 		if (array_key_exists('id', $defaults)) {
 			$classes = $this->classDao->fetchAllExcept($defaults['id']);
 		} else {
@@ -45,17 +28,40 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 		$this->customFormElements();
 	}
 	
-	protected function defaults($class = null) {
+	public function object($class = null) {
+		if ($class === null) {
+			$class = new DDM_Class();
+		}
+		$class->c_name = $this->form->exportValue('name');
+		$class->c_parent = $this->form->exportValue('parent');
+		if ($this->form->exportValue('editable')) {
+			$class->c_editable = true;
+		} else {
+			$class->c_editable = false;
+		}
+		return $class;
+	}
+	
+	public function errors() {
+		$errors = array();
+		$errors['name'] = $this->form->getElementError('name');
+		$errors['editable'] = $this->form->getElementError('editable');
+		$errors['parent'] = $this->form->getElementError('parent');
+		$errors = $this->customErrors($errors);
+		return $errors;
+	}
+	
+	protected function defaults() {
 		$defaults = array();
-		if ($class !== NULL) {
+		if ($this->object !== null) {
 			$defaults = array(
-				'id' => $class->id, 
-				'name' => $class->c_name,
-				'editable' => $class->c_editable,
-				'parent' => $class->c_parent
+				'id' => $$this->object->id, 
+				'name' => $this->object->c_name,
+				'editable' => $this->object->c_editable,
+				'parent' => $this->object->c_parent
 			);
 		}
-		$defaults = $this->customDefaults($defaults, $class);
+		$defaults = $this->customDefaults($defaults);
 		return $defaults;
 	}
 }

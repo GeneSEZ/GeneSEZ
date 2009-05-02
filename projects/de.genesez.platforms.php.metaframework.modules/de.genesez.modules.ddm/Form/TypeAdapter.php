@@ -1,13 +1,21 @@
 <?php
 class Form_TypeAdapter extends Form_BaseAdapter {
 	
-	public function errors() {
-		$errors = array();
-		$errors['name'] = $this->form->getElementError('name');
-		$errors['basetype'] = $this->form->getElementError('basetype');
-		$errors['constraint'] = $this->form->getElementError('constraint');
-		$errors = $this->customErrors($errors);
-		return $errors;
+	public function __construct($object = null, $action = null) {
+		parent::__construct('typeForm', $object, $action);
+	}
+	
+	protected function fillForm() {
+		$this->form->addElement('hidden', 'id');
+		$this->form->addElement('text', 'name', 'name:');
+		$basetype = $this->form->addElement('select', 'basetype', 'basetype:');
+		$basetypeValues = array('INTEGER' => 'integer', 'BOOLEAN' => 'boolean', 'STRING' => 'string');
+		foreach ($basetypeValues as $key => $value) {
+			$basetype->addOption($value, $key);
+		}
+		$this->form->addElement('text', 'constraint', 'constraint:');
+		$this->form->addElement('submit', 'save', 'save');
+		$this->customFormElements();
 	}
 	
 	public function object($type = null) {
@@ -21,25 +29,18 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		return $type;
 	}
 	
-	protected function createForm($type = null) {
-		$defaults = $this->defaults($type);
-		$this->form = new HTML_QuickForm('typeForm');
-		$this->form->setDefaults($defaults);
-		$this->form->addElement('hidden', 'id');
-		$this->form->addElement('text', 'name', 'name:');
-		$basetype = $this->form->addElement('select', 'basetype', 'basetype:');
-		$basetypeValues = array('INTEGER' => 'integer', 'BOOLEAN' => 'boolean', 'STRING' => 'string');
-		foreach ($basetypeValues as $key => $value) {
-			$basetype->addOption($value, $key);
-		}
-		$this->form->addElement('text', 'constraint', 'constraint:');
-		$this->form->addElement('submit', 'save', 'save');
-		$this->customFormElements();
+	public function errors() {
+		$errors = array();
+		$errors['name'] = $this->form->getElementError('name');
+		$errors['basetype'] = $this->form->getElementError('basetype');
+		$errors['constraint'] = $this->form->getElementError('constraint');
+		$errors = $this->customErrors($errors);
+		return $errors;
 	}
 	
-	protected function defaults($type = null) {
+	protected function defaults() {
 		$defaults = array();
-		if ($type !== NULL) {
+		if ($this->object !== null) {
 			$defaults = array(
 				'id' => $type->id,
 				'name' => $type->t_name,
@@ -47,6 +48,7 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 				'constraint' => $type->t_constraint
 			);
 		}
+		$defaults = $this->customDefaults($defaults);
 		return $defaults;
 	}
 }

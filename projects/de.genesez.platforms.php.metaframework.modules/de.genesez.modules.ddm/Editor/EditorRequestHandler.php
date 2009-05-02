@@ -1,9 +1,4 @@
 <?php
-require_once 'Msg/FlashNotifier.php';
-require_once 'Core/Dto.php';
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/RequestHandler.php';
-require_once 'Core/BaseCompositeRequestHandler.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240398668828_377703_375) ENABLED START */
 // TODO: put your further include + require statements here

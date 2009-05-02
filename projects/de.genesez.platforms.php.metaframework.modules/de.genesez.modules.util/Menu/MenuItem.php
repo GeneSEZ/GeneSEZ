@@ -1,7 +1,4 @@
 <?php
-require_once 'Menu/Menu.php';
-require_once 'Core/BaseDto.php';
-require_once 'UML/OneAssociation.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240323698234_181024_674) ENABLED START */
 // TODO: put your further include + require statements here

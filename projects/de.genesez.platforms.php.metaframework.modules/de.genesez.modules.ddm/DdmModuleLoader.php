@@ -1,10 +1,8 @@
 <?php
-require_once 'Core/Context.php';
-require_once 'Loader/ModuleLoader.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240383889812_628548_635) ENABLED START */
 // TODO: put your further include + require statements here
-
+require_once 'DDM.php';
 /* PROTECTED REGION END */
 
 /**
@@ -73,7 +71,6 @@ class DdmModuleLoader  implements Loader_ModuleLoader {
 	 */
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240384049984_368807_718) ENABLED START */
-		spl_autoload_register(array('DdmModuleLoader', 'autoload'));
 		return array(
 			// quickform adapter
 			Adapter_SeasarPhpBuilder::newComponent('Form_TypeAdapter', 'typeAdapter'),
@@ -101,15 +98,6 @@ class DdmModuleLoader  implements Loader_ModuleLoader {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240383889812_628548_635) ENABLED START */
 	// TODO: put your further code implementations for class 'DdmModuleLoader' here
-	public static function autoload($classname) {
-		$path = str_replace('_', '/', $classname);
-		$file = dirname(__FILE__) . '/' . $path . '.php';
-		if (file_exists($file) && is_readable($file)) {
-			require_once $file;
-			return true;
-		}
-		return false;
-	}
 	/* PROTECTED REGION END */
 }
 ?>

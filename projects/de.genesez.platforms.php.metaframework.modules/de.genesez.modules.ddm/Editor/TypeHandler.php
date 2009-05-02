@@ -1,5 +1,7 @@
 <?php
 class Editor_TypeHandler extends Util_NotifierController {
+	protected $typeDao; // = Doctrine::getTable('ddm_type')
+	
 	public function create() {
 		$adapter = new Form_TypeAdapter();
 		if ($adapter->isValid()) {
@@ -17,7 +19,7 @@ class Editor_TypeHandler extends Util_NotifierController {
 			$this->notifier->add(new Msg_Message('no id specified'));
 			$this->redirect('list');
 		}
-		$type = $this->dao->fetch($_REQUEST['id']);
+		$type = Doctrine::getTable('ddm_type')->fetch($_REQUEST['id']);
 		if ($type === false) {
 			// message + redirect to list view
 			$this->notifier->add(new Msg_Message('type with given id not found'));
@@ -27,7 +29,6 @@ class Editor_TypeHandler extends Util_NotifierController {
 		if ($adapter->isValid()) {
 			$type = $adapter->object($type);
 			$type->save();
-			// TODO: message + redirect to list view
 			$this->notifier->add(new Msg_Message('type successfully stored'));
 			$this->redirect('list');
 		}
@@ -40,7 +41,7 @@ class Editor_TypeHandler extends Util_NotifierController {
 			$this->notifier->add(new Msg_Message('no id specified'));
 			$this->redirect('list');
 		}
-		$type = $this->dao->fetch($_REQUEST['id']);
+		$type = $this->typeDao->fetch($_REQUEST['id']);
 		if ($type === false) {
 			$this->notifier->add(new Msg_Message('type with given id not found'));
 			$this->redirect('list');
@@ -52,11 +53,12 @@ class Editor_TypeHandler extends Util_NotifierController {
 	}
 	public function show($id) {
 		// comming soon :-)
+		$this->notifier->add(new Msg_Message('show view for types comming soon'));
+		$this->redirect('list');
 	}
 	public function listing() {
-		$types = array('bla', 'bla', 'bla');
 		return new Core_BaseDto(array(
-			'types' => $types,
+			'types' => $this->typeDao->fetchAll(),
 			'edit' => $this->newLink('edit'),
 			'delete' => $this->newLink('delete'),
 			'create' => $this->newLink('create')
