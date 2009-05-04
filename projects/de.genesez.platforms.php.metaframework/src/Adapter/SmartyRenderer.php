@@ -80,7 +80,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	 */
 	protected function defaultView($suffix = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240433824734_817533_526) ENABLED START */
-		$view = $_SERVER['PATH_INFO'];
+		$view = Core_Php::requestPath();
 		if (substr($view, 0, 1) === '/') {
 			$view = substr($view, 1);
 		}

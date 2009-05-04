@@ -61,7 +61,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 */
 	public static function defaultView() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240240687687_163465_951) ENABLED START */
-		$view = $_SERVER['PATH_INFO'];
+		$view = Core_Php::requestPath();
 		if (substr($view, 0, 1) === '/') {
 			$view = substr($view, 1);
 		}
