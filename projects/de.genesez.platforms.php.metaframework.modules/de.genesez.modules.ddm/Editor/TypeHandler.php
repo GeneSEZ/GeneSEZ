@@ -1,8 +1,33 @@
 <?php
-class Editor_TypeHandler extends Util_NotifierController {
-	protected $typeDao; // = Doctrine::getTable('ddm_type')
+
+/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1241430197741_12901_263) ENABLED START */
+// TODO: put your further include + require statements here
+/* PROTECTED REGION END */
+
+/**
+ * @see		Util_NotifierController
+ * @author	dreamer
+ * @package	DDM
+ */
+class Editor_TypeHandler extends Util_NotifierController  {
+	// -- generated attribute, constant + association declarations ----------
+	/**
+	 * @generated	attribute definition
+	 * @var		mixed	$typeDao
+	 */
+	protected $typeDao;
+
+
+
+
+	// -- method implementations --------------------------------------------
 	
+	/**
+	 * @generated	method stub for implementation
+	 * @return	Core_Dto
+	 */
 	public function create() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430235319_200085_285) ENABLED START */
 		$adapter = new Form_TypeAdapter();
 		if ($adapter->isValid()) {
 			$type = $adapter->object();
@@ -13,8 +38,16 @@ class Editor_TypeHandler extends Util_NotifierController {
 		return new Core_BaseDto(array(
 			'form' => $adapter->dto()
 		));
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	int	$id	
+	 * @return	Core_Dto
+	 */
 	public function edit($id) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430268054_596774_289) ENABLED START */
 		if (!array_key_exists('id', $_REQUEST)) {
 			$this->notifier->add(new Msg_Message('no id specified'));
 			$this->redirect('list');
@@ -35,8 +68,16 @@ class Editor_TypeHandler extends Util_NotifierController {
 		return new BaseDto(array(
 			'form' => $adapter->dto(),
 		));
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	int	$id	
+	 * @return	Core_Dto
+	 */
 	public function delete($id) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430278772_879323_293) ENABLED START */
 		if (!array_key_exists('id', $_REQUEST)) {
 			$this->notifier->add(new Msg_Message('no id specified'));
 			$this->redirect('list');
@@ -50,19 +91,51 @@ class Editor_TypeHandler extends Util_NotifierController {
 		// message + redirect to list view
 		$this->notifier->add(new Msg_Message('type successfully deleted'));
 		$this->redirect('list');
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	int	$id	
+	 * @return	Core_Dto
+	 */
 	public function show($id) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430288663_397254_297) ENABLED START */
 		// comming soon :-)
 		$this->notifier->add(new Msg_Message('show view for types comming soon'));
 		$this->redirect('list');
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	Core_Dto
+	 */
 	public function listing() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430298413_462039_301) ENABLED START */
 		return new Core_BaseDto(array(
 			'types' => $this->typeDao->fetchAll(),
 			'edit' => $this->newLink('edit'),
 			'delete' => $this->newLink('delete'),
 			'create' => $this->newLink('create')
 		));
+		/* PROTECTED REGION END */
 	}
+
+
+	// -- association + attribute accessors ---------------------------------
+	/**
+	 * @generated	setter method for the attribute {@link Editor_TypeHandler::getTypeDao() $typeDao}
+	 * @param	mixed	$typeDao	the value to set
+	 */
+	public 	 function setTypeDao( $typeDao) {
+		$this->typeDao = $typeDao;
+	}
+
+
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430197741_12901_263) ENABLED START */
+	// TODO: put your further code implementations for class 'TypeHandler' here
+	/* PROTECTED REGION END */
 }
 ?>

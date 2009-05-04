@@ -72,15 +72,11 @@ class DdmModuleLoader  implements Loader_ModuleLoader {
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240384049984_368807_718) ENABLED START */
 		return array(
-			// quickform adapter
-			Adapter_SeasarPhpBuilder::newComponent('Form_TypeAdapter', 'typeAdapter'),
-			Adapter_SeasarPhpBuilder::newComponent('AttributeFormAdapter', 'attributeFormAdapter'),
-			Adapter_SeasarPhpBuilder::newComponent('ClassFormAdapter', 'classFormAdapter'),
-			Adapter_SeasarPhpBuilder::newComponent('AssociationFormAdapter', 'associationFormAdapter'),
-			Adapter_SeasarPhpBuilder::newComponent('ObjectFormAdapter', 'objectFormAdapter'),
 			// request handler
-			Adapter_SeasarPhpBuilder::newComponent('Editor_TypeHandler', 'type.handler'),
 			Adapter_SeasarPhpBuilder::newComponent('Editor_DdmHomeHandler', 'ddm.home.handler'),
+			Adapter_SeasarPhpBuilder::newComponent('Editor_TypeHandler', 'type.handler', array(), array(
+				Adapter_SeasarPhpBuilder::newProperty('typeDao', Doctrine::getTable('ddm_type'))
+			)),
 			Adapter_SeasarPhpBuilder::newComponent('WebDdmClassHandler', 'web.ddm.class.handler'),
 			Adapter_SeasarPhpBuilder::newComponent('Editor_EditorRequestHandler', 'ddm.type.handler', array(), array(
 				Adapter_SeasarPhpBuilder::newProperty('notifier', 'notifier'),

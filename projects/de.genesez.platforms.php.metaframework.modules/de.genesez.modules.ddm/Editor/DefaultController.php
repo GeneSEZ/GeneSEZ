@@ -13,7 +13,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		null	$classDao
+	 * @var		mixed	$classDao
 	 */
 	protected $classDao;
 
@@ -28,7 +28,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 */
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_406447_303) ENABLED START */
-			$this->handlerInfo = $handlerInfo;
+		$this->handlerInfo = $handlerInfo;
 		if ($this->hasClass()) {
 			if ($this->classDao->exist( $this->getClass() )) {
 				parent::handle($handlerInfo);
@@ -169,6 +169,13 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 
 
 	// -- association + attribute accessors ---------------------------------
+	/**
+	 * @generated	setter method for the attribute {@link Editor_DefaultController::getClassDao() $classDao}
+	 * @param	mixed	$classDao	the value to set
+	 */
+	public 	 function setClassDao( $classDao) {
+		$this->classDao = $classDao;
+	}
 
 
 	// -- own code implementation -------------------------------------------

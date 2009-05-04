@@ -1,8 +1,33 @@
 <?php
-class Editor_ObjectHandler extends Editor_DefaultController {
+
+/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1241433671335_950930_821) ENABLED START */
+// TODO: put your further include + require statements here
+/* PROTECTED REGION END */
+
+/**
+ * @see		Editor_DefaultController
+ * @author	dreamer
+ * @package	DDM
+ */
+class Editor_ObjectHandler extends Editor_DefaultController  {
+	// -- generated attribute, constant + association declarations ----------
+	/**
+	 * @generated	attribute definition
+	 * @var		mixed	$objectDao
+	 */
 	protected $objectDao;
+
+
+
+
+	// -- method implementations --------------------------------------------
 	
+	/**
+	 * @generated	method stub for implementation
+	 * @return	Core_Dto
+	 */
 	public function create() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_420232_843) ENABLED START */
 		$adapter = new Form_ObjectAdapter($this->getClass());
 		if ($adapter->isValid()) {
 			$object = $adapter->object();
@@ -17,8 +42,16 @@ class Editor_ObjectHandler extends Editor_DefaultController {
 			'form' => $adapter->dto(),
 			'list' => $this->newLink('list')
 		));
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	int	$id	
+	 * @return	Core_Dto
+	 */
 	public function edit($id) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_768508_844) ENABLED START */
 		if (!array_key_exists('id', $_REQUEST)) {
 			$this->notifier->add(new Message('no id specified'));
 			$this->redirect('');
@@ -42,8 +75,16 @@ class Editor_ObjectHandler extends Editor_DefaultController {
 			'form' => $adapter->dto(),
 			'list' => $this->newLink('list')
 		));
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	int	$id	
+	 * @return	Core_Dto
+	 */
 	public function delete($id) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_757871_845) ENABLED START */
 		if (!array_key_exists('id', $_REQUEST)) {
 			$this->notifier->add(new Message('no id specified'));
 			$this->redirect('');
@@ -56,13 +97,28 @@ class Editor_ObjectHandler extends Editor_DefaultController {
 		$entity->delete();
 		$this->notifier->add(new Message('object successfully deleted'));
 		$this->redirect('');
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	int	$id	
+	 * @return	Core_Dto
+	 */
 	public function show($id) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_510778_846) ENABLED START */
 		// comming soon :-)
 		$this->notifier->add(new Msg_Message('show view for objects comming soon'));
 		$this->redirect('');
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	Core_Dto
+	 */
 	public function listing() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_601136_847) ENABLED START */
 		return new Core_BaseDto(array(
 			'class' => $this->getClass(),
 			'objects' => $this->objectDao->fetchAllByClass($this->getClass()),
@@ -73,6 +129,23 @@ class Editor_ObjectHandler extends Editor_DefaultController {
 			'create' => $this->newLink('create'),
 			'showAssociated' => $this->newLink()
 		));
+		/* PROTECTED REGION END */
 	}
+
+
+	// -- association + attribute accessors ---------------------------------
+	/**
+	 * @generated	setter method for the attribute {@link Editor_ObjectHandler::getObjectDao() $objectDao}
+	 * @param	mixed	$objectDao	the value to set
+	 */
+	public 	 function setObjectDao( $objectDao) {
+		$this->objectDao = $objectDao;
+	}
+
+
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241433671335_950930_821) ENABLED START */
+	// TODO: put your further code implementations for class 'ObjectHandler' here
+	/* PROTECTED REGION END */
 }
 ?>
