@@ -65,8 +65,8 @@ class Adapter_SeasarPhpBuilder   {
 	 */
 	public static function newArgument($value = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237058878859_43574_308) ENABLED START */
-		$argument = new S2Container_ArgDefImpl($value);
-		S2Container_ChildComponentDefBindingUtil::put($value, $argument);
+		$argument = new S2Container_ArgDefImpl();
+		self::setValue($argument, $value);
 		return $argument;
 		/* PROTECTED REGION END */
 	}
@@ -83,8 +83,8 @@ class Adapter_SeasarPhpBuilder   {
 	 */
 	public static function newProperty($name = null, $value = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237058882687_664177_311) ENABLED START */
-		$property = new S2Container_PropertyDefImpl($name, $value);
-		S2Container_ChildComponentDefBindingUtil::put($value, $property);
+		$property = new S2Container_PropertyDefImpl($name);
+		self::setValue($property, $value);
 		return $property;
 		/* PROTECTED REGION END */
 	}
@@ -97,6 +97,27 @@ class Adapter_SeasarPhpBuilder   {
 	// TODO: put your further code implementations for class 'Adapter_SeasarPhpBuilder' here
 	public static function finishContainer($container) {
 		S2Container_ChildComponentDefBindingUtil::bind($container);
+	}
+	protected static function setValue($argDef, $value) {
+		if (is_object($value)) {
+			$argDef->setValue($value);
+		} elseif (self::isValue($value)) {
+			$argDef->setValue(self::injectionValue());
+		} else {
+			$argDef->setExpression($value);
+			S2Container_ChildComponentDefBindingUtil::put($value, $argDef);
+		}
+	}
+	protected static function isValue($value) {
+		return preg_match('/^(\'|\")(.*)(\'|\")$/', $value) == 1;
+	}
+	protected static function injectionValue($value) {
+		$value = trim($value);
+		$rep = preg_replace('/^(\'|\")(.*)(\'|\")$/', '$2', $value);
+		if ($rep == $value) {
+			return null;
+		}
+		return $rep;
 	}
 	/* PROTECTED REGION END */
 }
