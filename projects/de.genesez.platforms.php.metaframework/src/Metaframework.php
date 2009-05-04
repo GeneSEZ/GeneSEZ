@@ -45,7 +45,7 @@ class Metaframework   {
 	public function __construct($additionalPluginDirs = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241076400375_384996_361) ENABLED START */
 		$sourceDirs = array();
-		$pluginDirs = array_merge(array(dirname($_SERVER['SCRIPT_FILENAME']) . '/modules'), $additionalPluginDirs);
+		$pluginDirs = array_merge(array(realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../modules')), $additionalPluginDirs);
 		foreach ($pluginDirs as $pluginDir) {
 			if (!is_dir($pluginDir)) {
 				continue;

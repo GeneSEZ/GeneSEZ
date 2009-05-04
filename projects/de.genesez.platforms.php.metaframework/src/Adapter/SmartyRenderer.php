@@ -55,7 +55,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	public function defaultTemplateHandler($resource_type, $resource_name, &$template_source, &$template_timestamp, &$smarty_obj) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241024432671_172546_369) ENABLED START */
 		if ($resource_type == 'file') {
-			$base = './' . $smarty_obj->template_dir . '/';
+			$base = realpath('./' . $smarty_obj->template_dir) . '/';
 			foreach ($this->defaultSuffixes() as $value) {
 				$view = $this->defaultView($value);
 				if (is_file($base . $view) && is_readable($base . $view)) {
