@@ -371,7 +371,9 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 				«IF opposite != null && opposite.multiplicity != 1 
 					&& (opposite.hasTaggedValue("accessor", "setter", "true")
 						|| !opposite.hasStereotype("accessor"))-»
-					«asAttribute()-».«opposite.asInsertIn()-»(this);
+					if (!«asAttribute()-».«opposite.asGetter()-»().contains(this)) {
+						«asAttribute()-».«opposite.asInsertIn()-»(this);
+					}
 				«ELSEIF opposite != null && opposite.multiplicity == 1 
 						&& (opposite.hasTaggedValue("accessor", "setter", "true") 
 							|| !opposite.hasStereotype("accessor"))-»
@@ -447,7 +449,9 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 					this.«asAttribute()-».remove(«asAttribute()-»);
 				«ENDIF-»
 				«IF opposite != null && opposite.multiplicity != 1-»
-					«asAttribute()-».«opposite.asRemoveFrom()-»(this);
+					if («asAttribute()-».«opposite.asGetter()-»().contains(this)) {
+						«asAttribute()-».«opposite.asRemoveFrom()-»(this);
+					}
 				«ENDIF-»
 			}
 		«ENDIF»
