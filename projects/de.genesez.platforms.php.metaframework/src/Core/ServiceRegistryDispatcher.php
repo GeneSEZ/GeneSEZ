@@ -51,7 +51,9 @@ class Core_ServiceRegistryDispatcher  implements Core_Dispatcher {
 		// invoke request handler with context path
 		$handler = $this->_serviceRegistry->getComponent($name);
 		$dto = $handler->handle($handlerInfo);
-		$this->render($dto);
+		if ($dto !== true) {
+			$this->render($dto);
+		}
 		/* PROTECTED REGION END */
 	}
 

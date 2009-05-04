@@ -26,10 +26,9 @@ class Core_Php   {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241445345522_596318_380) ENABLED START */
 		$requesturi = $_SERVER['REQUEST_URI'];
 		$scriptname = $_SERVER['SCRIPT_NAME'];
-		if (strpos($requesturi, $scriptname) == 0) {
-			return substr($requesturi, strlen($scriptname));
-		}
-		return $requesturi;
+		$path = preg_replace('#^' . $scriptname . '#', '', $requesturi);
+		$path = preg_replace('/\?(.*)/', '', $path);
+		return $path;
 		/* PROTECTED REGION END */
 	}
 
