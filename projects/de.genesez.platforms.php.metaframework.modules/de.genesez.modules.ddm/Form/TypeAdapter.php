@@ -22,10 +22,10 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		if ($type === null) {
 			$type = new DDM_Type();
 		}
-		$type->t_name = $form->exportValue('name');
-		$type->t_basetype = $form->exportValue('basetype');
-		$type->t_constraint = $form->exportValue('constraint');
-		$type = $this->customObject($form, $type);
+		$type->t_name = $this->form->exportValue('name');
+		$type->t_basetype = $this->form->exportValue('basetype');
+		$type->t_constraint = $this->form->exportValue('constraint');
+		$type = $this->customObject($type);
 		return $type;
 	}
 	

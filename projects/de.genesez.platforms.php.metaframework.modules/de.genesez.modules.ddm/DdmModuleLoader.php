@@ -6,11 +6,11 @@ require_once 'DDM.php';
 /* PROTECTED REGION END */
 
 /**
- * @see		Loader_ModuleLoader
+ * @see		Loader_InvisibleModuleLoader
  * @author	dreamer
  * @package	DDM
  */
-class DdmModuleLoader  implements Loader_ModuleLoader {
+class DdmModuleLoader extends Loader_InvisibleModuleLoader  {
 
 
 
@@ -37,31 +37,6 @@ class DdmModuleLoader  implements Loader_ModuleLoader {
 			'de.genesez.metaframework.core',
 			'de.genesez.metaframework.util'
 		);
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @return	boolean
-	 */
-	public function hasModuleContext() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240383978406_699905_688) ENABLED START */
-		return true;
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @return	Core_Context
-	 */
-	public function getModuleContext() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240383988250_305730_692) ENABLED START */
-		return new Core_Context('ddm', 'ddm.home.handler', array(
-			new Core_Context('class', 'ddm.class.editor'),
-			new Core_Context('type', 'ddm.type.editor'),
-			new Core_Context('attribute', 'ddm.attribute.editor'),
-			new Core_Context('association', 'ddm.association.editor'),
-		));
 		/* PROTECTED REGION END */
 	}
 
