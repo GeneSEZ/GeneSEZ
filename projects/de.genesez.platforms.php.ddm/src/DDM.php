@@ -8,6 +8,7 @@ require_once('DDM/ClassTable.php');
 require_once('DDM/Attribute.php');
 require_once('DDM/AttributeTable.php');
 require_once('DDM/Association.php');
+require_once('DDM/AssociationTable.php');
 require_once('DDM/Object.php');
 require_once('DDM/ObjectTable.php');
 
