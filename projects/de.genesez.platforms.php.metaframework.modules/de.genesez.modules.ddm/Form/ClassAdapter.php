@@ -10,6 +10,8 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
 		$this->form->addElement('text', 'name', 'name:');
+		$this->form->addElement('text', 'view', 'view:');
+		$this->form->addElement('text', 'description', 'description:');
 		$editable = $form->addElement('checkbox', 'editable', 'editable:');
 		$parent = $form->addElement('select', 'parent', 'parent:');
 		$parent->addOption('', '');
@@ -33,6 +35,8 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 			$class = new DDM_Class();
 		}
 		$class->c_name = $this->form->exportValue('name');
+		$class->c_view = $this->form->exportValue('view');
+		$class->c_description = $this->form->exportValue('description');
 		$class->c_parent = $this->form->exportValue('parent');
 		if ($this->form->exportValue('editable')) {
 			$class->c_editable = true;
@@ -45,6 +49,8 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 	public function errors() {
 		$errors = array();
 		$errors['name'] = $this->form->getElementError('name');
+		$errors['view'] = $this->form->getElementError('view');
+		$errors['description'] = $this->form->getElementError('description');
 		$errors['editable'] = $this->form->getElementError('editable');
 		$errors['parent'] = $this->form->getElementError('parent');
 		$errors = $this->customErrors($errors);
@@ -57,6 +63,8 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 			$defaults = array(
 				'id' => $$this->object->id, 
 				'name' => $this->object->c_name,
+				'view' => $this->object->c_view,
+				'description' => $this->object->c_description,
 				'editable' => $this->object->c_editable,
 				'parent' => $this->object->c_parent
 			);

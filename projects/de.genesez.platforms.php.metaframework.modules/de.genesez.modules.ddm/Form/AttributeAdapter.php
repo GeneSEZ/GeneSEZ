@@ -12,6 +12,8 @@ class Form_AttributeAdapter extends BaseAdapter {
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
 		$this->form->addElement('text', 'name', 'name:');
+		$this->form->addElement('text', 'column', 'column:');
+		$this->form->addElement('text', 'description', 'description:');
 		// type
 		$type = $this->form->addElement('select', 'type', 'type:');
 		$types = $this->typeDao->fetchAll();
@@ -34,6 +36,8 @@ class Form_AttributeAdapter extends BaseAdapter {
 			$attribute = new DDM_Attribute();
 		}
 		$attribute->a_name = $this->form->exportValue('name');
+		$attribute->a_name = $this->form->exportValue('column');
+		$attribute->a_name = $this->form->exportValue('description');
 		// type
 		$typeId = $this->form->exportValue('type');
 		$type = $this->typeDao->fetch($typeId);
@@ -49,6 +53,8 @@ class Form_AttributeAdapter extends BaseAdapter {
 	public function errors() {
 		$errors = array();
 		$errors['name'] = $this->form->getElementError('name');
+		$errors['column'] = $this->form->getElementError('column');
+		$errors['description'] = $this->form->getElementError('description');
 		$errors['type'] = $this->form->getElementError('type');
 		$errors['class'] = $this->form->getElementError('class');
 		$errors = $this->customErrors($errors);
@@ -61,6 +67,8 @@ class Form_AttributeAdapter extends BaseAdapter {
 			$defaults = array(
 				'id' => $this->object->id,
 				'name' => $this->object->a_name,
+				'column' => $this->object->a_column,
+				'description' => $this->object->a_description,
 				'type' => $this->object->a_type,
 				'class' => $this->object->a_class
 			);

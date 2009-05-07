@@ -47,12 +47,6 @@ class DdmModuleLoader extends Loader_InvisibleModuleLoader  {
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240384049984_368807_718) ENABLED START */
 		return array(
-			// request handler
-			Adapter_SeasarPhpBuilder::newComponent('Editor_DdmHomeHandler', 'ddm.home.handler'),
-			Adapter_SeasarPhpBuilder::newComponent('Editor_EditorRequestHandler', 'ddm.type.editor', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('notifier', 'notifier'),
-				Adapter_SeasarPhpBuilder::newProperty('contentHandler', 'ddm.type.handler'),
-			)),
 			Adapter_SeasarPhpBuilder::newComponent('Editor_TypeHandler', 'ddm.type.handler', array(), array(
 				Adapter_SeasarPhpBuilder::newProperty('typeDao', Doctrine::getTable('ddm_type'))
 			)),

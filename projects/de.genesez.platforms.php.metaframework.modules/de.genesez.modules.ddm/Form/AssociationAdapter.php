@@ -10,9 +10,10 @@ class Form_AssociationAdapter extends BaseAdapter {
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
 		$this->form->addElement('text', 'name', 'name:');
+		$this->form->addElement('text', 'description', 'description:');
 		// cardinalities
-		$leftCard = $this->form->addElement('select', 'leftCardinality', 'left cardinality:');
-		$rightCard = $this->form->addElement('select', 'rightCardinality', 'right cardinality:');
+		$leftCard = $this->form->addElement('select', 'fromCardinality', 'from cardinality:');
+		$rightCard = $this->form->addElement('select', 'toCardinality', 'to cardinality:');
 		$leftCard->addOption('0..1', '0..1');
 		$leftCard->addOption('1', '1');
 		$leftCard->addOption('*', '*');
@@ -22,8 +23,8 @@ class Form_AssociationAdapter extends BaseAdapter {
 		$rightCard->addOption('*', '*');
 		$rightCard->addOption('1..*', '1..*');
 		// types
-		$left = $this->form->addElement('select', 'left', 'left:');
-		$right = $this->form->addElement('select', 'right', 'right:');
+		$left = $this->form->addElement('select', 'from', 'from:');
+		$right = $this->form->addElement('select', 'to', 'to:');
 		$classes = $this->classDao->fetchAll();
 		foreach ($classes as $key => $value) {
 			$left->addOption($value, $value->id);
@@ -39,18 +40,19 @@ class Form_AssociationAdapter extends BaseAdapter {
 			$association = new DDM_Association();
 		}
 		$association->s_name = $this->form->exportValue('name');
+		$association->s_description = $this->form->exportValue('description');
 		// left cardinality
-		$association->s_left_cardinality = $this->form->exportValue('leftCardinality');
+		$association->s_from_cardinality = $this->form->exportValue('fromCardinality');
 		// right cardinality
-		$association->s_right_cardinality = $this->form->exportValue('rightCardinality');
+		$association->s_to_cardinality = $this->form->exportValue('toCardinality');
 		// left
-		$leftId = $fthis->orm->exportValue('left');
+		$leftId = $this->form->exportValue('from');
 		//$left = $this->classDao->fetch($leftId);
-		$association->s_left = $leftId;
+		$association->s_from = $leftId;
 		// right
-		$rightId = $this->form->exportValue('right');
+		$rightId = $this->form->exportValue('to');
 		//$right = $this->classDao->fetch($rightId);
-		$association->s_right = $rightId;
+		$association->s_to = $rightId;
 		$association = $this->customObject($association);
 		return $association;
 	}
@@ -58,10 +60,11 @@ class Form_AssociationAdapter extends BaseAdapter {
 	public function errors() {
 		$errors = array();
 		$errors['name'] = $this->form->getElementError('name');
-		$errors['leftCardinality'] = $this->form->getElementError('leftCardinality');
-		$errors['rightCardinality'] = $this->form->getElementError('rightCardinality');
-		$errors['left'] = $this->form->getElementError('left');
-		$errors['right'] = $this->form->getElementError('right');
+		$errors['description'] = $this->form->getElementError('description');
+		$errors['fromCardinality'] = $this->form->getElementError('fromCardinality');
+		$errors['toCardinality'] = $this->form->getElementError('toCardinality');
+		$errors['from'] = $this->form->getElementError('from');
+		$errors['to'] = $this->form->getElementError('to');
 		$errors = $this->customErrors($errors);
 		return $errors;
 	}
@@ -72,10 +75,11 @@ class Form_AssociationAdapter extends BaseAdapter {
 			$defaults = array(
 				'id' => $this->object->id,
 				'name' => $this->object->s_name,
-				'left' => $this->object->s_left,
-				'leftCardinality' => $this->object->s_left_cardinality,
-				'right' => $this->object->s_right,
-				'rightCardinality' => $this->object->s_right_cardinality
+				'description' => $this->object->s_description,
+				'from' => $this->object->s_from,
+				'fromCardinality' => $this->object->s_from_cardinality,
+				'to' => $this->object->s_to,
+				'toCardinality' => $this->object->s_to_cardinality
 			);
 		}
 		$defaults = $this->customDefaults($defaults);
