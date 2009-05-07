@@ -98,7 +98,11 @@
     </classifier>
     <classifier xsi:type="gcore:MInterface" name="RequestHandler" xmiGuid="_16_0_b6f02e1_1239095178265_502885_711" visibility="public">
       <operation name="handle" xmiGuid="_16_0_b6f02e1_1239095178265_88385_712" visibility="public" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.8">
-        <parameter name="handlerInfo" xmiGuid="_16_0_b6f02e1_1239095178265_734402_713" direction="in" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.1"/>
+        <ownedComment xmiGuid="_16_0_b6f02e1_1241612041359_801561_731" annotation="&lt;html>&#xA;  &lt;head>&#xA;    P&#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Processes the current request. It returns either a &lt;b>DTO&lt;/b> which &#xA;    contains all data to be rendered or it returns &lt;b>true&lt;/b> to indicate &#xA;    that rendering was already done.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+        <parameter name="handlerInfo" xmiGuid="_16_0_b6f02e1_1239095178265_734402_713" direction="in" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.1">
+          <ownedComment xmiGuid="_16_0_b6f02e1_1241612120250_104671_733" annotation="provides additional information"/>
+        </parameter>
+        <returnTypeComment xmiGuid="_16_0_b6f02e1_1241612099812_59101_732" annotation="a dto containing all data to render or true if rendering is already done"/>
       </operation>
       <operation name="setView" xmiGuid="_16_0_b6f02e1_1239174794093_368714_362" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.3">
         <parameter name="view" xmiGuid="_16_0_b6f02e1_1239174808296_155639_365" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
@@ -118,13 +122,17 @@
     <classifier xsi:type="gcore:MClass" name="BaseRequestHandler" xmiGuid="_16_0_b6f02e1_1239125989500_25423_1168" visibility="public" abstract="true" supertype="//@nestedPackage.0/@classifier.7" realization="//@nestedPackage.0/@classifier.7">
       <operation name="baseServerUri" xmiGuid="_16_0_b6f02e1_1239126458937_358804_1194" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
       <operation name="baseRequestUri" xmiGuid="_16_0_b6f02e1_1240211928703_764012_723" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
-      <operation name="baseHandlerUri" xmiGuid="_16_0_b6f02e1_1240404866671_222215_518" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+      <operation name="baseHandlerUri" xmiGuid="_16_0_b6f02e1_1240404866671_222215_518" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
         <parameter name="handlerInfo" xmiGuid="_16_0_b6f02e1_1240404881890_97007_520" direction="in" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.1"/>
       </operation>
       <operation name="defaultView" xmiGuid="_16_0_b6f02e1_1240240687687_163465_951" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
       <property xsi:type="gcore:MAttribute" name="view" xmiGuid="_16_0_b6f02e1_1239175102906_856509_732" stereotype="//@anyStereotype.0 //@anyStereotype.3" visibility="protected" multiplicity="1" unique="true" type="//@primitiveTypes.0">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.3/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.3/@property.1"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="serviceRegistry" xmiGuid="_16_0_b6f02e1_1241615439781_150030_734" stereotype="//@anyStereotype.3" visibility="protected" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.3">
         <taggedValue value="true" tag="//@anyStereotype.3/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.3/@property.1"/>
       </property>
@@ -226,12 +234,43 @@
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
       </property>
     </classifier>
-    <classifier xsi:type="gcore:MClass" name="Php" xmiGuid="_16_0_b6f02e1_1241445333663_239738_361" visibility="public">
-      <ownedComment xmiGuid="_16_0_b6f02e1_1241445363976_60015_384" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Helper class to access PHP-specific data.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+    <classifier xsi:type="gcore:MClass" name="Url" xmiGuid="_16_0_b6f02e1_1241445333663_239738_361" visibility="public">
+      <ownedComment xmiGuid="_16_0_b6f02e1_1241445363976_60015_384" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Helper class to access common parts of URLs.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
       <operation name="requestPath" xmiGuid="_16_0_b6f02e1_1241445345522_596318_380" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
         <ownedComment xmiGuid="_16_0_b6f02e1_1241445397272_728479_385" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Returns the &lt;b>PATH_INFO&lt;/b> of an PHP script. Because the correct setting &#xA;    of the PATH_INFO variable is not ensured, this method implements a work &#xA;    aroud to get this information.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
-        <returnTypeComment xmiGuid="_16_0_b6f02e1_1241445552772_501585_518" annotation="the path info of the currently executing script"/>
       </operation>
+      <operation name="baseServerUri" xmiGuid="_16_0_b6f02e1_1241611215187_279485_360" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+        <ownedComment xmiGuid="_16_0_b6f02e1_1241611422812_629806_373" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Returns the base server URL, i.e. the base URL which is accessible from a &#xA;    web browser. This URL &lt;b>ends&lt;/b> with a&lt;b> slash&lt;/b> and does &lt;b>not&lt;/b> &#xA;    contain the script called.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      </operation>
+      <operation name="baseRequestUri" xmiGuid="_16_0_b6f02e1_1241611279953_458538_368" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+        <ownedComment xmiGuid="_16_0_b6f02e1_1241611316687_921821_372" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Returns the URL of the current request, i.e. the script which was called, &#xA;    without any additional path information.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      </operation>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="DecorateRequestHandler" xmiGuid="_16_0_b6f02e1_1241623038062_2281_361" visibility="public" abstract="true" supertype="//@nestedPackage.0/@classifier.10" generalization="//@nestedPackage.0/@classifier.10">
+      <ownedComment xmiGuid="_16_0_b6f02e1_1241623472281_336989_755" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Abstract implementation of the &lt;b>Decorator&lt;/b> and &lt;b>Delegator&lt;/b> &#xA;    design pattern for request handlers, allowing the addition of &#xA;    functionality to existing request handlers &#xA;as well as the delegation to other request handlers.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <operation name="DecoratedRequestHandler" xmiGuid="_16_0_b6f02e1_1241623229562_999301_382" stereotype="//@anyStereotype.1 //@anyStereotype.2" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
+        <ownedComment xmiGuid="_16_0_b6f02e1_1241631240468_681287_776" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &lt;title>C    &lt;/title>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Creates a new request handler which uses other request handlers to process &#xA;    the request.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+        <parameter name="handler" xmiGuid="_16_0_b6f02e1_1241623246375_640102_384" direction="in" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.7">
+          <ownedComment xmiGuid="_16_0_b6f02e1_1241631306750_555347_777" annotation="the request handler to decorate"/>
+        </parameter>
+        <parameter name="delegateHandler" xmiGuid="_16_0_b6f02e1_1241630001609_862540_765" defaultvalue="array()" direction="in" multiplicity="-1" unique="true" type="//@nestedPackage.0/@classifier.7">
+          <ownedComment xmiGuid="_16_0_b6f02e1_1241631351203_85032_778" annotation="an associative array with key => value pairs of delegated request handlers"/>
+        </parameter>
+      </operation>
+      <operation name="handle" xmiGuid="_16_0_b6f02e1_1241623279562_741440_386" visibility="public" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.8">
+        <ownedComment xmiGuid="_16_0_b6f02e1_1241631419812_317289_779" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Handles the requst using the decorated and the delegation request &#xA;    handlers. The data transfer objects of the delegation request handlers are &#xA;    added to the data transfer object of the decorated request handler. The &#xA;    DTO is then passed to the decorate method.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+        <parameter name="handlerInfo" xmiGuid="_16_0_b6f02e1_1241623290875_121761_388" direction="in" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.1"/>
+      </operation>
+      <operation name="decorate" xmiGuid="_16_0_b6f02e1_1241623292453_160942_390" visibility="protected" abstract="true" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.8">
+        <ownedComment xmiGuid="_16_0_b6f02e1_1241631923656_304563_780" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Decorates the data transfer objects of the delegation and the decorated &#xA;    request handler.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+        <parameter name="dto" xmiGuid="_16_0_b6f02e1_1241623308515_814409_392" direction="in" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.8">
+          <ownedComment xmiGuid="_16_0_b6f02e1_1241705664812_971758_859" annotation="the data transfer object to decorate"/>
+        </parameter>
+        <parameter name="handlerInfo" xmiGuid="_16_0_b6f02e1_1241627413250_968917_763" direction="in" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.1"/>
+      </operation>
+      <property xsi:type="gcore:MAttribute" name="handler" xmiGuid="_16_0_b6f02e1_1241623214562_247686_380" visibility="protected" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.7"/>
+      <property xsi:type="gcore:MAttribute" name="handlerInfo" xmiGuid="_16_0_b6f02e1_1241623915343_539423_756" visibility="protected" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.1"/>
+      <property xsi:type="gcore:MAttribute" name="delegateHandler" xmiGuid="_16_0_b6f02e1_1241630063109_254472_768" visibility="protected" multiplicity="-1" unique="true" type="//@nestedPackage.0/@classifier.7"/>
     </classifier>
   </nestedPackage>
   <nestedPackage name="Loader" xmiGuid="_16_0_b6f02e1_1236333415687_125736_729">

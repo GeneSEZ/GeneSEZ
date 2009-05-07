@@ -13,8 +13,10 @@ require_once 'Core/HandlerInfo.php';
 interface Core_RequestHandler  {
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
+	 * Processes the current request. It returns either a <b>DTO</b> which 
+	 * contains all data to be rendered or it returns <b>true</b> to indicate 
+	 * that rendering was already done.
+	 * @param	Core_HandlerInfo	$handlerInfo	provides additional information
 	 * @return	Core_Dto
 	 */
 	public function handle($handlerInfo);

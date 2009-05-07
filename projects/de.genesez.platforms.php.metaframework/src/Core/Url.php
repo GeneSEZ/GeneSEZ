@@ -5,11 +5,11 @@
 /* PROTECTED REGION END */
 
 /**
- * Helper class to access PHP-specific data.
+ * Helper class to access common parts of URLs.
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_Php   {
+class Core_Url   {
 
 
 
@@ -32,12 +32,35 @@ class Core_Php   {
 		/* PROTECTED REGION END */
 	}
 
+	/**
+	 * Returns the base server URL, i.e. the base URL which is accessible from a 
+	 * web browser. This URL <b>ends</b> with a<b> slash</b> and does <b>not</b> 
+	 * contain the script called.
+	 * @return	string
+	 */
+	public static function baseServerUri() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241611215187_279485_360) ENABLED START */
+		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') +1);
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * Returns the URL of the current request, i.e. the script which was called, 
+	 * without any additional path information.
+	 * @return	string
+	 */
+	public static function baseRequestUri() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241611279953_458538_368) ENABLED START */
+		return $_SERVER['SCRIPT_NAME'];
+		/* PROTECTED REGION END */
+	}
+
 
 
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241445333663_239738_361) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_Php' here
+	// TODO: put your further code implementations for class 'Core_Url' here
 	/* PROTECTED REGION END */
 }
 ?>

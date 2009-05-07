@@ -1,4 +1,5 @@
 <?php
+require_once 'Core/ServiceRegistry.php';
 require_once 'Core/HandlerInfo.php';
 require_once 'Core/RequestHandler.php';
 
@@ -18,6 +19,11 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 * @var		string	$view
 	 */
 	protected $view;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_ServiceRegistry	$serviceRegistry
+	 */
+	protected $serviceRegistry;
 
 
 
@@ -49,7 +55,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 * @param	Core_HandlerInfo	$handlerInfo	
 	 * @return	string
 	 */
-	public static function baseHandlerUri($handlerInfo) {
+	public function baseHandlerUri($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240404866671_222215_518) ENABLED START */
 		return $_SERVER['SCRIPT_NAME'] . $handlerInfo->context;
 		/* PROTECTED REGION END */
@@ -61,7 +67,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 */
 	public static function defaultView() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240240687687_163465_951) ENABLED START */
-		$view = Core_Php::requestPath();
+		$view = Core_Url::requestPath();
 		if (substr($view, 0, 1) === '/') {
 			$view = substr($view, 1);
 		}
@@ -78,6 +84,13 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	
 	public 	 function setView($view) {
 		$this->view = $view;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Core_BaseRequestHandler::getServiceRegistry() $serviceRegistry}
+	 * @param	Core_ServiceRegistry	$serviceRegistry	the value to set
+	 */
+	public 	 function setServiceRegistry(Core_ServiceRegistry $serviceRegistry) {
+		$this->serviceRegistry = $serviceRegistry;
 	}
 
 	/**

@@ -112,7 +112,7 @@ class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237994233234_645847_1052) ENABLED START */
 		$handler = '';
 		if (array_key_exists('root.handler', $this->config)) {
-			$handler = $this->config('root.handler');
+			$handler = $this->config['root.handler'];
 		}
 		return new Core_Context('/', $handler);
 		/* PROTECTED REGION END */

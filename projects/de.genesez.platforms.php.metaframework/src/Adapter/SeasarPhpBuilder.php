@@ -102,7 +102,7 @@ class Adapter_SeasarPhpBuilder   {
 		if (is_object($value)) {
 			$argDef->setValue($value);
 		} elseif (self::isValue($value)) {
-			$argDef->setValue(self::injectionValue());
+			$argDef->setValue(self::injectionValue($value));
 		} else {
 			$argDef->setExpression($value);
 			S2Container_ChildComponentDefBindingUtil::put($value, $argDef);

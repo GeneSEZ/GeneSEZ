@@ -34,6 +34,8 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	public function render($dto) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
 		$view = $dto->view();
+		$this->smarty->assign('webbase', Core_Url::baseServerUri());
+		$this->smarty->assign('requestbase', Core_Url::baseRequestUri());
 		$this->smarty->assign('dto', $dto);
 		$this->smarty->display($view);
 		/* PROTECTED REGION END */
@@ -80,14 +82,12 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	 */
 	protected function defaultView($suffix = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240433824734_817533_526) ENABLED START */
-		$view = Core_Php::requestPath();
-		if (substr($view, 0, 1) === '/') {
-			$view = substr($view, 1);
+		$view = Core_Url::requestPath();
+		if ($suffix !== null) {
+			$view .= $suffix;
 		}
-		if ($suffix === null) {
-			return $view;
-		}
-		return $view . $suffix;
+		$view = preg_replace('#^/+#', '', $view);
+		return $view;
 		/* PROTECTED REGION END */
 	}
 

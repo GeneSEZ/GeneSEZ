@@ -53,7 +53,7 @@ class Core_UrlResolver  implements Core_Resolver {
 	 */
 	protected function pathInfo() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240215501687_611602_772) ENABLED START */
-		$path = Core_Php::requestPath();
+		$path = Core_Url::requestPath();
 		if (substr($path, 0, 1) !== '/') {
 			$path = '/' + $path;
 		}
