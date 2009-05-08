@@ -4,7 +4,7 @@
   <nestedPackage name="Core" xmiGuid="_16_0_b6f02e1_1236332450156_458657_364">
     <association name="" xmiGuid="_16_0_b6f02e1_1240242613171_890431_1007" end="//@nestedPackage.0/@classifier.11/@property.2"/>
     <association name="" xmiGuid="_16_0_b6f02e1_1239096328875_981016_839"/>
-    <association name="" xmiGuid="_16_0_b6f02e1_1236338605953_910948_493" end="//@nestedPackage.0/@classifier.0/@property.2 //@nestedPackage.0/@classifier.0/@property.3"/>
+    <association name="" xmiGuid="_16_0_b6f02e1_1236338605953_910948_493" end="//@nestedPackage.0/@classifier.0/@property.3 //@nestedPackage.0/@classifier.0/@property.2"/>
     <association name="" xmiGuid="_16_0_b6f02e1_1240243254812_262194_1043" end="//@nestedPackage.0/@classifier.11/@property.3"/>
     <classifier xsi:type="gcore:MClass" name="Context" xmiGuid="_16_0_b6f02e1_1236334265906_925929_844" visibility="public">
       <ownedComment xmiGuid="_16_0_b6f02e1_1238083140406_168920_714" annotation="The context describes an accessible part of an URL and provides an handler for it. &#xA;&#xA;A URL can be splitted on each occurence of the slash &lt;code>/&lt;/code>. Then each part &#xA;forms a context. For example, the following URL:&#xA;&lt;code>web.server/web.app.root/subcontext/subsub&lt;/code>&#xA;consists of three contexts:&#xA;&lt;ul>&#xA;&lt;li>the root context &lt;code>web.server/web.app.root/&lt;/code>&lt;/li>&#xA;&lt;li>a nested sub context &lt;code>subcontext&lt;/code> below the root context&lt;/li>&#xA;&lt;li>and a nested context below the subcontext &lt;code>subsub&lt;/code>.&lt;/li>&#xA;&lt;/ul>"/>
@@ -163,6 +163,7 @@
       </operation>
       <operation name="noActionSpecified" xmiGuid="_16_0_b6f02e1_1240238021984_342013_941" visibility="protected" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.8"/>
       <operation name="unknownActionSpecified" xmiGuid="_16_0_b6f02e1_1240238044687_348789_945" visibility="protected" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.8"/>
+      <operation name="noIdSpecified" xmiGuid="_16_0_b6f02e1_1241765470421_127482_360" visibility="protected" multiplicity="1" unique="true" returnType="//@nestedPackage.0/@classifier.8"/>
       <operation name="hasAction" xmiGuid="_16_0_b6f02e1_1240237592375_894118_929" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.2"/>
       <operation name="getAction" xmiGuid="_16_0_b6f02e1_1240241847671_159587_962" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
       <operation name="hasId" xmiGuid="_16_0_b6f02e1_1240237600734_364201_933" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.2"/>
@@ -238,6 +239,13 @@
       <ownedComment xmiGuid="_16_0_b6f02e1_1241445363976_60015_384" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Helper class to access common parts of URLs.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
       <operation name="requestPath" xmiGuid="_16_0_b6f02e1_1241445345522_596318_380" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
         <ownedComment xmiGuid="_16_0_b6f02e1_1241445397272_728479_385" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Returns the &lt;b>PATH_INFO&lt;/b> of an PHP script. Because the correct setting &#xA;    of the PATH_INFO variable is not ensured, this method implements a work &#xA;    aroud to get this information.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      </operation>
+      <operation name="requestInfo" xmiGuid="_16_0_b6f02e1_1241767443046_404329_497" visibility="public" static="true" multiplicity="-1" unique="true" returnType="//@primitiveTypes.0">
+        <ownedComment xmiGuid="_16_0_b6f02e1_1241767496171_778288_503" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Transforms the &lt;b>request path&lt;/b> to an array for easier access to &#xA;    context names of the URL.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+        <parameter name="requestPath" xmiGuid="_16_0_b6f02e1_1241767715953_578318_504" defaultvalue="null" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0">
+          <ownedComment xmiGuid="_16_0_b6f02e1_1241767766578_594075_509" annotation="optional parameter specifying the request path to use, otherwise {@link requestPath()} is used"/>
+        </parameter>
+        <returnTypeComment xmiGuid="_16_0_b6f02e1_1241767865625_677917_510" annotation="the context names of the request path as an array"/>
       </operation>
       <operation name="baseServerUri" xmiGuid="_16_0_b6f02e1_1241611215187_279485_360" visibility="public" static="true" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
         <ownedComment xmiGuid="_16_0_b6f02e1_1241611422812_629806_373" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Returns the base server URL, i.e. the base URL which is accessible from a &#xA;    web browser. This URL &lt;b>ends&lt;/b> with a&lt;b> slash&lt;/b> and does &lt;b>not&lt;/b> &#xA;    contain the script called.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
@@ -330,16 +338,19 @@
         </parameter>
         <returnTypeComment xmiGuid="_16_0_b6f02e1_1241033464031_344345_765" annotation="true, if a template source could be found and the template content was set, otherwise false"/>
       </operation>
-      <operation name="defaultView" xmiGuid="_16_0_b6f02e1_1240433824734_817533_526" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+      <operation name="buildView" xmiGuid="_16_0_b6f02e1_1240433824734_817533_526" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
         <ownedComment xmiGuid="_16_0_b6f02e1_1241032848968_55863_754" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    generates the default template based on the path info of the current url &#xA;    location and an optional suffix.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
         <parameter name="suffix" xmiGuid="_16_0_b6f02e1_1241024373375_328643_361" defaultvalue="null" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0">
           <ownedComment xmiGuid="_16_0_b6f02e1_1241032950078_368224_755" annotation="the suffix for the template resource"/>
         </parameter>
-        <returnTypeComment xmiGuid="_16_0_b6f02e1_1241032979390_640347_756" annotation="the default template resource for the current request"/>
+        <parameter name="view" xmiGuid="_16_0_b6f02e1_1241768797171_200306_513" defaultvalue="null" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
       <operation name="defaultSuffixes" xmiGuid="_16_0_b6f02e1_1241024375453_409016_363" visibility="protected" multiplicity="-1" unique="true" returnType="//@primitiveTypes.0">
         <ownedComment xmiGuid="_16_0_b6f02e1_1241033047750_261024_757" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    returns an array of possible template resource suffixes, used to find a &#xA;    default template file resource&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
         <returnTypeComment xmiGuid="_16_0_b6f02e1_1241033129375_870846_758" annotation="array of possible suffixes"/>
+      </operation>
+      <operation name="isSmartyTemplate" xmiGuid="_16_0_b6f02e1_1241769056828_26378_516" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.2">
+        <parameter name="name" xmiGuid="_16_0_b6f02e1_1241769070859_697319_518" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
       <property xsi:type="gcore:MAttribute" name="smarty" xmiGuid="_16_0_b6f02e1_1237999928437_190390_1220" stereotype="//@anyStereotype.3" visibility="protected" multiplicity="1" unique="true" type="//@externalTypes.4">
         <taggedValue value="true" tag="//@anyStereotype.3/@property.0"/>

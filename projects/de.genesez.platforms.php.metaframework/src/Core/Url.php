@@ -33,6 +33,28 @@ class Core_Url   {
 	}
 
 	/**
+	 * Transforms the <b>request path</b> to an array for easier access to 
+	 * context names of the URL.
+	 * @param	string	$requestPath	optional parameter specifying the request path to use, otherwise {@link requestPath()} is used
+	 * @return	array of string
+	 */
+	public static function requestInfo($requestPath = null) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241767443046_404329_497) ENABLED START */
+		if ($requestPath === null) {
+			$requestPath = $this->requestPath();
+		}
+		$items = array();
+		$parts = explode('/', $requestPath);
+		foreach ($parts as $item) {
+			if ($item !== '') {
+				$items[] = $item;
+			}
+		}
+		return $items;
+		/* PROTECTED REGION END */
+	}
+
+	/**
 	 * Returns the base server URL, i.e. the base URL which is accessible from a 
 	 * web browser. This URL <b>ends</b> with a<b> slash</b> and does <b>not</b> 
 	 * contain the script called.

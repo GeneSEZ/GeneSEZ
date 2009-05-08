@@ -40,12 +40,7 @@ class Core_HandlerInfo  implements ArrayAccess {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338137828_752628_437) ENABLED START */
 		$this->_context = $context;
 		$this->_handler = $context->handler;
-		$parts = explode('/', $pathInfo);
-		foreach ($parts as $item) {
-			if ($item !== '') {
-				$this->_pathInfo[] = $item;
-			}
-		}
+		$this->_pathInfo = Core_Url::requestInfo($pathInfo);
 		/* PROTECTED REGION END */
 	}
 
