@@ -69,7 +69,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 				}
 			}
 			// check url fallback
-			$requestPath = Core_Url::requestPath();
+			$requestPath = Core_Url::requestInfo();
 			for ($i = count($requestPath); $i > 0; --$i) {
 				$part = array_slice($requestPath, 0, $i);
 				$view = implode('/', $part);
