@@ -86,7 +86,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 		if ($view === null || $view === '') {
 			// check suffixes with url fallback
 			$requestPath = Core_Url::requestInfo();
-			for ($i = count($requestPath); $i > 0; --$i) {
+			for ($i = count($requestPath); $i >= 0; --$i) {
 				$part = array_slice($requestPath, 0, $i);
 				$view = implode('/', $part);
 				foreach ($this->defaultSuffixes() as $suffix) {
