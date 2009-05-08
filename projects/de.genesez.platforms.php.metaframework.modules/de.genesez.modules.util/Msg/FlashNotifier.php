@@ -8,13 +8,13 @@
  * Helps to store data in the session of an user for a given count of 
  * request-response cycles. Such a concept is often used to show inform the 
  * user with messages which disappear after subsequent requests.
+ * @see		Countable
  * @see		Core_Dto
  * @see		IteratorAggregate
- * @see		Countable
  * @author	dreamer
  * @package	Utilities
  */
-class Msg_FlashNotifier  implements Core_Dto, IteratorAggregate, Countable {
+class Msg_FlashNotifier  implements Countable, Core_Dto, IteratorAggregate {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition

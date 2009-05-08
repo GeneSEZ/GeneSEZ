@@ -29,9 +29,9 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		$type->t_basetype = $this->form->exportValue('basetype');
 		$type->t_constraint = $this->form->exportValue('constraint');
 		if ($this->form->exportValue('editable')) {
-			$class->t_editable = true;
+			$type->t_editable = true;
 		} else {
-			$class->t_editable = false;
+			$type->t_editable = false;
 		}
 		$type = $this->customObject($type);
 		return $type;
@@ -52,12 +52,12 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		$defaults = array();
 		if ($this->object !== null) {
 			$defaults = array(
-				'id' => $type->id,
-				'name' => $type->t_name,
-				'description' => $type->t_description,
-				'basetype' => $type->t_basetype,
-				'constraint' => $type->t_constraint,
-				'editable' => $type->t_editable,
+				'id' => $this->object->id,
+				'name' => $this->object->t_name,
+				'description' => $this->object->t_description,
+				'basetype' => $this->object->t_basetype,
+				'constraint' => $this->object->t_constraint,
+				'editable' => $this->object->t_editable,
 			);
 		}
 		$defaults = $this->customDefaults($defaults);

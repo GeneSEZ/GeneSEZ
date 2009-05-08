@@ -33,7 +33,7 @@ class Editor_TypeHandler extends Util_NotifierController  {
 			$type = $adapter->object();
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully created'));
-			$this->redirect();
+			return $this->redirect();
 		}
 		return new Core_BaseDto(array(
 			'form' => $adapter->dto()
@@ -48,24 +48,20 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 */
 	public function edit($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430268054_596774_289) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Msg_Message('no id specified'));
-			$this->redirect('list');
-		}
-		$type = Doctrine::getTable('ddm_type')->fetch($_REQUEST['id']);
+		$type = Doctrine::getTable('ddm_type')->fetch($id);
 		if ($type === false) {
 			// message + redirect to list view
 			$this->notifier->add(new Msg_Message('type with given id not found'));
-			$this->redirect('list');
+			return $this->redirect('list');
 		}
 		$adapter = new Form_TypeAdapter($type);
 		if ($adapter->isValid()) {
 			$type = $adapter->object($type);
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully stored'));
-			$this->redirect('list');
+			return $this->redirect('list');
 		}
-		return new BaseDto(array(
+		return new Core_BaseDto(array(
 			'form' => $adapter->dto(),
 		));
 		/* PROTECTED REGION END */
@@ -78,19 +74,15 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 */
 	public function delete($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430278772_879323_293) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Msg_Message('no id specified'));
-			$this->redirect('list');
-		}
-		$type = $this->typeDao->fetch($_REQUEST['id']);
+		$type = $this->typeDao->fetch($id);
 		if ($type === false) {
 			$this->notifier->add(new Msg_Message('type with given id not found'));
-			$this->redirect('list');
+			return $this->redirect('list');
 		}
 		$type->delete();
 		// message + redirect to list view
 		$this->notifier->add(new Msg_Message('type successfully deleted'));
-		$this->redirect('list');
+		return $this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -103,7 +95,7 @@ class Editor_TypeHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430288663_397254_297) ENABLED START */
 		// comming soon :-)
 		$this->notifier->add(new Msg_Message('show view for types comming soon'));
-		$this->redirect('list');
+		return $this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
