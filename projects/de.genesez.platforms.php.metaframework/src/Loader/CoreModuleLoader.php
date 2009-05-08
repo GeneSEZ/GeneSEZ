@@ -133,9 +133,14 @@ class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 		$smarty_compile_dir = $this->checkConfigEntry('smarty.compile.dir');
 		$smarty->compile_dir = $smarty_compile_dir;
 		
-		// register default template handler function
+		// register smarty template render function
 		$renderer = $serviceRegistry->getComponent('renderer');
-		$smarty->default_template_handler_func = array($renderer, 'defaultTemplateHandler');
+		$smarty->register_function('render', array($renderer, 'checkInclude'));
+//		$smarty->register_resource('mfw', array(
+//			$renderer, 'fetchMfwResourceSource', 'fetchMfwResourceTimestamp', 
+//			'isMfwResourceSecured', 'isMfwResourceTrusted'));
+//		$smarty->default_resource_type = 'mfw';
+//		$smarty->default_template_handler_func = array($renderer, 'defaultTemplateHandler');
 		/* PROTECTED REGION END */
 	}
 
