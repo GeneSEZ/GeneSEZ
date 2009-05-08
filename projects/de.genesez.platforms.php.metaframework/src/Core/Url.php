@@ -41,7 +41,7 @@ class Core_Url   {
 	public static function requestInfo($requestPath = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241767443046_404329_497) ENABLED START */
 		if ($requestPath === null) {
-			$requestPath = $this->requestPath();
+			$requestPath = self::requestPath();
 		}
 		$items = array();
 		$parts = explode('/', $requestPath);
