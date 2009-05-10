@@ -114,8 +114,9 @@ class Msg_FlashNotifier  implements Countable, Core_Dto, IteratorAggregate {
 		// determine container
 		if ($container === NULL) {
 			// init messages in session
-			if (!isset($_SESSION)) {
+			if (!session_id()) {
 				session_start();
+				$_SESSION[self::ID_MESSAGES] = array();
 			}
 			if (!array_key_exists(self::ID_MESSAGES, $_SESSION)) {
 				$_SESSION[self::ID_MESSAGES] = array();
