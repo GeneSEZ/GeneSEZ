@@ -46,23 +46,7 @@ class DdmModuleLoader extends Loader_InvisibleModuleLoader  {
 	 */
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240384049984_368807_718) ENABLED START */
-		return array(
-			Adapter_SeasarPhpBuilder::newComponent('Editor_TypeHandler', 'ddm.type.handler', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('typeDao', Doctrine::getTable('ddm_type'))
-			)),
-			Adapter_SeasarPhpBuilder::newComponent('Editor_ClassHandler', 'ddm.class.handler', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('classDao', Doctrine::getTable('ddm_class'))
-			)),
-			Adapter_SeasarPhpBuilder::newComponent('Editor_AttributeHandler', 'ddm.attribute.handler', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('attributeDao', Doctrine::getTable('ddm_attribute'))
-			)),
-			Adapter_SeasarPhpBuilder::newComponent('Editor_AssociationHandler', 'ddm.association.handler', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('associationDao', Doctrine::getTable('ddm_association'))
-			)),
-			Adapter_SeasarPhpBuilder::newComponent('Editor_ObjectHandler', 'ddm.object.handler', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('objectDao', Doctrine::getTable('ddm_object'))
-			))
-		);
+		return array();
 		/* PROTECTED REGION END */
 	}
 

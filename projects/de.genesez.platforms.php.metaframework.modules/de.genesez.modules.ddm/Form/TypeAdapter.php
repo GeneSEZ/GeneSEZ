@@ -1,8 +1,8 @@
 <?php
 class Form_TypeAdapter extends Form_BaseAdapter {
 	
-	public function __construct($object = null, $action = null) {
-		parent::__construct('typeForm', $object, $action);
+	public function create($object = null, $action = null) {
+		parent::create('typeForm', $object, $action);
 	}
 	
 	protected function fillForm() {

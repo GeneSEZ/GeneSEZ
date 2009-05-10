@@ -12,6 +12,10 @@
  */
 class Msg_Message extends Core_BaseDto  {
 
+	const INFO = 'info';
+	const WARNING = 'warning';
+	const ERROR = 'error';
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -19,10 +23,11 @@ class Msg_Message extends Core_BaseDto  {
 	 * @generated	constructor stub for implementation
 	 * @param	string	$message	
 	 */
-	public function __construct($message) {
+	public function __construct($message, $severity = self::INFO) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240322762234_410753_447) ENABLED START */
 		parent::__construct();
 		$this->message = $message;
+		$this->severity = $severity;
 		/* PROTECTED REGION END */
 	}
 

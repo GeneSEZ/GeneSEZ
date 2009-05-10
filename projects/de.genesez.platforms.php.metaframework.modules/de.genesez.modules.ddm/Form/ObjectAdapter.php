@@ -1,5 +1,5 @@
 <?php
-class Form_ObjectAdapter extends BaseAdapter {
+class Form_ObjectAdapter extends Form_BaseAdapter {
 	protected $class;
 	protected $classDao;
 	protected $objectDao;

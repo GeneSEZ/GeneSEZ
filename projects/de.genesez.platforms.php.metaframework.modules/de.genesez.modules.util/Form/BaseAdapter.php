@@ -1,13 +1,15 @@
 <?php
 require_once 'HTML/QuickForm.php';
 require_once 'HTML/QuickForm/Renderer/ArraySmarty.php';
+
 abstract class Form_BaseAdapter {
 	
 	protected $form;
+	protected $defaults;
 	protected $object;
 	protected $action;
 	
-	public function __construct($name, $object = null, $action = null) {
+	public function create($name, $object = null, $action = null) {
 		$this->object = $object;
 		$this->action = $action;
 		if ($action !== null) {
@@ -15,7 +17,8 @@ abstract class Form_BaseAdapter {
 		} else {
 			$this->form = new HTML_QuickForm($name);
 		}
-		$this->form->setDefaults($this->defaults());
+		$this->defaults = $this->defaults();
+		$this->form->setDefaults($this->defaults);
 		$this->fillForm();
 	}
 	
@@ -49,8 +52,8 @@ abstract class Form_BaseAdapter {
 		return $errors;
 	}
 	
-	protected function customDefaults($defaults) {
-		return $defaults;
+	protected function customDefaults() {
+		return $this->defaults;
 	}
 }
 ?>

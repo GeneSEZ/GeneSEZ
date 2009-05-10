@@ -28,7 +28,7 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430826226_496216_393) ENABLED START */
-		$adapter = new Form_AttributeAdapter();
+		$adapter = $this->attributeAdapter->create();
 		if ($adapter->isValid()) {
 			$attribute = $adapter->object();
 			$attribute->save();
@@ -37,7 +37,6 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 		}
 		return new Core_BaseDto(array(
 			'form' => $adapter->dto(),
-			'headline' => 'Create'
 		));
 		/* PROTECTED REGION END */
 	}
@@ -49,16 +48,12 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 */
 	public function edit($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430826226_526148_394) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Message('no id specified'));
-			$this->redirect('list');
-		}
-		$attribute = $this->attributeDao->fetch($_REQUEST['id']);
+		$attribute = $this->attributeDao->fetch($id);
 		if ($attribute === false) {
 			$this->notifier->add(new Message('no attribute with the given id found'));
 			$this->redirect('list');
 		}
-		$adapter = new Form_AttributeAdapter($attribute);
+		$adapter = $this->attributeAdapter->create($attribute);
 		if ($adapter->isValid()) {
 			$attribute = $adapter->object($attribute);
 			$attribute->save();
@@ -67,7 +62,6 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 		}
 		return new Core_BaseDto(array(
 			'form' => $adapter->dto(), 
-			'headline' => 'Edit'
 		));
 		/* PROTECTED REGION END */
 	}
@@ -79,11 +73,7 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 */
 	public function delete($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430826226_45703_395) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Message('no id specified'));
-			$this->redirect('list');
-		}
-		$attribute = $this->attributeDao->fetch($_REQUEST['id']);
+		$attribute = $this->attributeDao->fetch($id);
 		if ($attribute === false) {
 			$this->notifier->add(new Message('attribute with the given id not found'));
 			$this->redirect('list');
@@ -138,6 +128,10 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430670929_72136_374) ENABLED START */
 	// TODO: put your further code implementations for class 'AttributeHandler' here
+	protected $attributeAdapter;
+	public function setAttributeAdapter($attributeAdapter) {
+		$this->attributeAdapter = $attributeAdapter;
+	}
 	/* PROTECTED REGION END */
 }
 ?>

@@ -28,7 +28,7 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_487550_349) ENABLED START */
-		$adapter = new Form_ClassAdapter();
+		$adapter = $this->classAdpater->create();
 		if ($adapter->isValid()) {
 			$class = $adapter->object();
 			$class->save();
@@ -48,24 +48,20 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	 */
 	public function edit($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_2647_350) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Message('no id specified'));
-			$this->redirect('list');
-		}
-		$class = $this->classDao->fetch($_REQUEST['id']);
+		$class = $this->classDao->fetch($id);
 		if ($class === false) {
 			$this->notifier->add(new Message('class with given id not found'));
 			$this->redirect('list');
 		}
-		$adapter = new Form_ClassAdapter($class);
+		$adapter = $this->classAdpater->create($class);
 		if ($adapter->isValid()) {
 			$class = $adapter->object($class);
 			$class->save();
 			$this->notifier->add(new Message('class successfully stored'));
 			$this->redirect('list');
 		}
-		$attributeAdapter = new Form_AttributeAdapter(null, $this->newLink('create', 'attribute'));
-		$associationAdapter = new Form_AssociationAdapter(null, $this->newLink('create', 'association'));
+		$attributeAdapter = $this->attributeAdapter->create(null, $this->newLink('create', 'attribute'));
+		$associationAdapter = $this->associationAdapter->create(null, $this->newLink('create', 'association'));
 		return new Core_BaseDto(array(
 			'form' => $adapter->dto(),
 			'class' => $class,
@@ -88,11 +84,7 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	 */
 	public function delete($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_8676_351) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Message('no id specified'));
-			$this->redirect('list');
-		}
-		$class = $this->classDao->fetch($_REQUEST['id']);
+		$class = $this->classDao->fetch($id);
 		if ($class === false) {
 			$this->notifier->add(new Message('class with given id not found'));
 			$this->redirect('ist');
@@ -146,6 +138,18 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430480132_499562_330) ENABLED START */
 	// TODO: put your further code implementations for class 'ClassHandler' here
+	protected $classAdpater;
+	public function setClassAdapter($classAdapter) {
+		$this->classAdpater = $classAdapter;
+	}
+	protected $attributeAdapter;
+	public function setAttributeAdapter($attributeAdapter) {
+		$this->attributeAdapter = $attributeAdapter;
+	}
+	protected $associationAdapter;
+	public function setAssociationAdapter($associationAdapter) {
+		$this->associationAdapter = $associationAdapter;
+	}
 	/* PROTECTED REGION END */
 }
 ?>

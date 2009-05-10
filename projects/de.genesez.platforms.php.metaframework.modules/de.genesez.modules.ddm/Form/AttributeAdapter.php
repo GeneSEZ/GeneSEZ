@@ -1,12 +1,10 @@
 <?php
-class Form_AttributeAdapter extends BaseAdapter {
+class Form_AttributeAdapter extends Form_BaseAdapter {
 	protected $typeDao;
 	protected $classDao;
 	
-	public function __construct($object = null, $action = null) {
-		parent::__construct('attributeForm', $object, $action);
-		$this->typeDao = Doctrine::getTable('ddm_type');
-		$this->classDao = Doctrine::getTable('ddm_class');
+	public function create($object = null, $action = null) {
+		parent::create('attributeForm', $object, $action);
 	}
 	
 	protected function fillForm() {
@@ -31,21 +29,21 @@ class Form_AttributeAdapter extends BaseAdapter {
 		$this->customFormElements();
 	}
 	
-	public function object($type = null) {
+	public function object($attribute = null) {
 		if ($attribute === null) {
 			$attribute = new DDM_Attribute();
 		}
 		$attribute->a_name = $this->form->exportValue('name');
-		$attribute->a_name = $this->form->exportValue('column');
-		$attribute->a_name = $this->form->exportValue('description');
+		$attribute->a_column = $this->form->exportValue('column');
+		$attribute->a_description = $this->form->exportValue('description');
 		// type
 		$typeId = $this->form->exportValue('type');
-		$type = $this->typeDao->fetch($typeId);
-		$attribute->type = $type;
+//		$type = $this->typeDao->fetch($typeId);
+		$attribute->a_type = $typeId;
 		// class
 		$classId = $this->form->exportValue('class');
-		$class = $this->classDao->fetch($classId);
-		$attribute->class = $class;
+//		$class = $this->classDao->fetch($classId);
+		$attribute->a_class = $classId;
 		$attribute = $this->customObject($attribute);
 		return $attribute;
 	}
@@ -75,6 +73,13 @@ class Form_AttributeAdapter extends BaseAdapter {
 		}
 		$defaults = $this->customDefaults($defaults);
 		return $defaults;
+	}
+	
+	public function setClassDao($classDao) {
+		$this->classDao = $classDao;
+	}
+	public function setTypeDao($typeDao) {
+		$this->typeDao = $typeDao;
 	}
 }
 ?>

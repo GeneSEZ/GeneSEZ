@@ -2,9 +2,8 @@
 class Form_ClassAdapter extends Form_BaseAdapter {
 	protected $classDao;
 	
-	public function __construct($object = null, $action = null) {
-		parent::__construct('classForm', $object, $action);
-		$this->classDao = Doctrine::getTable('ddm_class');
+	public function create($object = null, $action = null) {
+		parent::create('classForm', $object, $action);
 	}
 	
 	protected function fillForm() {
@@ -12,20 +11,18 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 		$this->form->addElement('text', 'name', 'name:');
 		$this->form->addElement('text', 'view', 'view:');
 		$this->form->addElement('text', 'description', 'description:');
-		$editable = $form->addElement('checkbox', 'editable', 'editable:');
-		$parent = $form->addElement('select', 'parent', 'parent:');
+		$this->form->addElement('checkbox', 'editable', 'editable:');
+		$parent = $this->form->addElement('select', 'parent', 'parent:');
 		$parent->addOption('', '');
 		$classes;
-		$dao = Doctrine::getTable('ddm_class');
-		if (array_key_exists('id', $defaults)) {
-			$classes = $this->classDao->fetchAllExcept($defaults['id']);
+		if (array_key_exists('id', $this->defaults)) {
+			$classes = $this->classDao->fetchAllExcept($this->defaults['id']);
 		} else {
 			$classes = $this->classDao->fetchAll();
 		}
 		foreach ($classes as $key => $value) {
 			$parent->addOption($value, $value->id);
 		}
-		$form->addElement('submit', 'save', 'save');
 		$this->form->addElement('submit', 'save', 'save');
 		$this->customFormElements();
 	}
@@ -61,7 +58,7 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 		$defaults = array();
 		if ($this->object !== null) {
 			$defaults = array(
-				'id' => $$this->object->id, 
+				'id' => $this->object->id, 
 				'name' => $this->object->c_name,
 				'view' => $this->object->c_view,
 				'description' => $this->object->c_description,
@@ -71,6 +68,10 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 		}
 		$defaults = $this->customDefaults($defaults);
 		return $defaults;
+	}
+	
+	public function setClassDao($classDao) {
+		$this->classDao = $classDao;
 	}
 }
 ?>

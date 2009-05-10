@@ -28,12 +28,12 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430235319_200085_285) ENABLED START */
-		$adapter = new Form_TypeAdapter();
+		$adapter = $this->typeAdapter->create();
 		if ($adapter->isValid()) {
 			$type = $adapter->object();
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully created'));
-			return $this->redirect();
+			$this->redirect();
 		}
 		return new Core_BaseDto(array(
 			'form' => $adapter->dto()
@@ -51,15 +51,15 @@ class Editor_TypeHandler extends Util_NotifierController  {
 		$type = Doctrine::getTable('ddm_type')->fetch($id);
 		if ($type === false) {
 			// message + redirect to list view
-			$this->notifier->add(new Msg_Message('type with given id not found'));
-			return $this->redirect('list');
+			$this->notifier->add(new Msg_Message('type with given id not found', Msg_Message::ERROR));
+			$this->redirect('list');
 		}
-		$adapter = new Form_TypeAdapter($type);
+		$adapter = $this->typeAdapter->create($type);
 		if ($adapter->isValid()) {
 			$type = $adapter->object($type);
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully stored'));
-			return $this->redirect('list');
+			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
 			'form' => $adapter->dto(),
@@ -76,13 +76,13 @@ class Editor_TypeHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430278772_879323_293) ENABLED START */
 		$type = $this->typeDao->fetch($id);
 		if ($type === false) {
-			$this->notifier->add(new Msg_Message('type with given id not found'));
-			return $this->redirect('list');
+			$this->notifier->add(new Msg_Message('type with given id not found', Msg_Message::ERROR));
+			$this->redirect('list');
 		}
 		$type->delete();
 		// message + redirect to list view
 		$this->notifier->add(new Msg_Message('type successfully deleted'));
-		return $this->redirect('list');
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -95,7 +95,7 @@ class Editor_TypeHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430288663_397254_297) ENABLED START */
 		// comming soon :-)
 		$this->notifier->add(new Msg_Message('show view for types comming soon'));
-		return $this->redirect('list');
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -128,6 +128,10 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430197741_12901_263) ENABLED START */
 	// TODO: put your further code implementations for class 'TypeHandler' here
+	protected $typeAdapter;
+	public function setTypeAdapter($typeAdapter) {
+		$this->typeAdapter = $typeAdapter;
+	}
 	/* PROTECTED REGION END */
 }
 ?>

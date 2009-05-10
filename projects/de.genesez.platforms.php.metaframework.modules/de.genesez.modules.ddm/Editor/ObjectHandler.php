@@ -52,11 +52,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	 */
 	public function edit($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_768508_844) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Message('no id specified'));
-			$this->redirect('');
-		}
-		$entity = $this->objectDao->fetch($_REQUEST['id']);
+		$entity = $this->objectDao->fetch($id);
 		if ($entity === false) {
 			$this->notifier->add(new Message('object of class' . $this->getClass() . ' with given id not found'));
 			$this->redirect('');
@@ -85,11 +81,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	 */
 	public function delete($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_757871_845) ENABLED START */
-		if (!array_key_exists('id', $_REQUEST)) {
-			$this->notifier->add(new Message('no id specified'));
-			$this->redirect('');
-		}
-		$entity = $this->objectDao->fetch($_REQUEST['id']);
+		$entity = $this->objectDao->fetch($id);
 		if ($entity === false) {
 			$this->notifier->add(new Message('object of class' . $this->getClass() . ' with given id not found'));
 			$this->redirect('');
