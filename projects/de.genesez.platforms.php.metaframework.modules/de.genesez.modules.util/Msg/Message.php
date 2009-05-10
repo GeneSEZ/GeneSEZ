@@ -11,17 +11,30 @@
  * @package	Utilities
  */
 class Msg_Message extends Core_BaseDto  {
+	// -- generated attribute, constant + association declarations ----------
+	/**
+	 * @generated	attribute definition
+	 * @var		string	$_info
+	 */
+	const INFO  = 'info';
+	/**
+	 * @generated	attribute definition
+	 * @var		string	$_warning
+	 */
+	const WARNING  = 'warning';
+	/**
+	 * @generated	attribute definition
+	 * @var		string	$_error
+	 */
+	const ERROR  = 'error';
 
-	const INFO = 'info';
-	const WARNING = 'warning';
-	const ERROR = 'error';
-	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
 	 * constructs an object of class {@link Msg_Message}
 	 * @generated	constructor stub for implementation
 	 * @param	string	$message	
+	 * @param	string	$severity	default value is 'self::INFO'
 	 */
 	public function __construct($message, $severity = self::INFO) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240322762234_410753_447) ENABLED START */
@@ -46,6 +59,7 @@ class Msg_Message extends Core_BaseDto  {
 	}
 
 
+	// -- association + attribute accessors ---------------------------------
 
 
 	// -- own code implementation -------------------------------------------

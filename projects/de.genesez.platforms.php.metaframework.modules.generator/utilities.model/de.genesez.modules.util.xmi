@@ -4,18 +4,22 @@
   <nestedPackage name="Msg" xmiGuid="_16_0_b6f02e1_1240324320468_160180_854">
     <classifier xsi:type="gcore:MClass" name="Message" xmiGuid="_16_0_b6f02e1_1240322753437_323386_425" visibility="public" supertype="//@externalTypes.0" generalization="//@externalTypes.0">
       <ownedComment xmiGuid="_16_0_b6f02e1_1240783813218_349909_294" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Simple class to represent a message.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
-      <operation name="Message" xmiGuid="_16_0_b6f02e1_1240322762234_410753_447" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
-        <parameter name="message" xmiGuid="_16_0_b6f02e1_1240322787328_729828_452" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.1"/>
+      <operation name="Message" xmiGuid="_16_0_b6f02e1_1240322762234_410753_447" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
+        <parameter name="message" xmiGuid="_16_0_b6f02e1_1240322787328_729828_452" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+        <parameter name="severity" xmiGuid="_16_0_b6f02e1_1241966504671_880679_666" defaultvalue="self::INFO" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
       </operation>
-      <operation name="view" xmiGuid="_16_0_b6f02e1_1241034790140_715684_434" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
+      <operation name="view" xmiGuid="_16_0_b6f02e1_1241034790140_715684_434" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
+      <property xsi:type="gcore:MAttribute" name="info" xmiGuid="_16_0_b6f02e1_1241966208718_935792_653" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0" defaultvalue="'info'" static="true" final="true"/>
+      <property xsi:type="gcore:MAttribute" name="warning" xmiGuid="_16_0_b6f02e1_1241966219593_591723_656" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0" defaultvalue="'warning'" static="true" final="true"/>
+      <property xsi:type="gcore:MAttribute" name="error" xmiGuid="_16_0_b6f02e1_1241966226890_692224_659" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0" defaultvalue="'error'" static="true" final="true"/>
     </classifier>
     <classifier xsi:type="gcore:MClass" name="FlashNotifier" xmiGuid="_16_0_b6f02e1_1240322907125_749427_515" visibility="public" supertype="//@externalTypes.1 //@externalTypes.2 //@externalTypes.3" realization="//@externalTypes.1 //@externalTypes.2 //@externalTypes.3">
       <ownedComment xmiGuid="_16_0_b6f02e1_1240328179718_165117_947" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Helps to store data in the session of an user for a given count of &#xA;    request-response cycles. Such a concept is often used to show inform the &#xA;    user with messages which disappear after subsequent requests.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
-      <operation name="FlashNotifier" xmiGuid="_16_0_b6f02e1_1240323336359_632974_586" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+      <operation name="FlashNotifier" xmiGuid="_16_0_b6f02e1_1240323336359_632974_586" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
         <ownedComment xmiGuid="_16_0_b6f02e1_1240328511484_447650_948" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    constructs a flash notifer object using the specified container for &#xA;    storage. If the parameter is null, the current session is used.&lt;br>&lt;br>Note: &#xA;    the parameter has to be an object (e.g. ArrayObject) instead of a simple &#xA;    array due to the missing reference operator.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
-        <parameter name="container" xmiGuid="_16_0_b6f02e1_1240328657781_15242_951" defaultvalue="null" direction="in" multiplicity="1" unique="true" type="//@externalTypes.4"/>
+        <parameter name="container" xmiGuid="_16_0_b6f02e1_1240328657781_15242_951" defaultvalue="null" direction="inout" multiplicity="1" unique="true" type="//@externalTypes.4"/>
       </operation>
-      <operation name="view" xmiGuid="_16_0_b6f02e1_1240323454906_411152_591" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
+      <operation name="view" xmiGuid="_16_0_b6f02e1_1240323454906_411152_591" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
       <operation name="count" xmiGuid="_16_0_b6f02e1_1240323473109_362519_595" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.2"/>
       <operation name="getIterator" xmiGuid="_16_0_b6f02e1_1240323485000_255595_599" visibility="public" multiplicity="1" unique="true" returnType="//@externalTypes.5"/>
       <operation name="add" xmiGuid="_16_0_b6f02e1_1240323524687_783348_624" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.3">
@@ -23,12 +27,12 @@
         <parameter name="expiration" xmiGuid="_16_0_b6f02e1_1240323549171_529369_627" defaultvalue="1" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.2"/>
       </operation>
       <operation name="initContainer" xmiGuid="_16_0_b6f02e1_1240323561812_616133_630" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.3">
-        <parameter name="container" xmiGuid="_16_0_b6f02e1_1240323587984_789188_632" direction="in" multiplicity="1" unique="true" type="//@externalTypes.4"/>
+        <parameter name="container" xmiGuid="_16_0_b6f02e1_1240323587984_789188_632" direction="inout" multiplicity="1" unique="true" type="//@externalTypes.4"/>
       </operation>
       <operation name="decrementExpiration" xmiGuid="_16_0_b6f02e1_1240323588000_409313_634" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.3"/>
-      <property xsi:type="gcore:MAttribute" name="ID_MESSAGES" xmiGuid="_16_0_b6f02e1_1240322950593_967275_544" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.1" defaultvalue="'flash.notifier'" static="true" final="true"/>
-      <property xsi:type="gcore:MAttribute" name="ID_EXPIRATION" xmiGuid="_16_0_b6f02e1_1240322995625_955740_548" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0" defaultvalue="'expiration'" static="true" final="true"/>
-      <property xsi:type="gcore:MAttribute" name="ID_DATA" xmiGuid="_16_0_b6f02e1_1240323009531_982723_551" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0" defaultvalue="'data'" static="true" final="true"/>
+      <property xsi:type="gcore:MAttribute" name="ID_MESSAGES" xmiGuid="_16_0_b6f02e1_1240322950593_967275_544" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.0" defaultvalue="'flash.notifier'" static="true" final="true"/>
+      <property xsi:type="gcore:MAttribute" name="ID_EXPIRATION" xmiGuid="_16_0_b6f02e1_1240322995625_955740_548" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.1" defaultvalue="'expiration'" static="true" final="true"/>
+      <property xsi:type="gcore:MAttribute" name="ID_DATA" xmiGuid="_16_0_b6f02e1_1240323009531_982723_551" visibility="private" multiplicity="1" unique="true" type="//@primitiveTypes.1" defaultvalue="'data'" static="true" final="true"/>
       <property xsi:type="gcore:MAttribute" name="expiration" xmiGuid="_16_0_b6f02e1_1240323126828_779835_556" visibility="private" multiplicity="1" unique="true" type="//@externalTypes.4"/>
       <property xsi:type="gcore:MAttribute" name="container" xmiGuid="_16_0_b6f02e1_1240323145734_565289_558" visibility="private" multiplicity="1" unique="true" type="//@externalTypes.4"/>
     </classifier>
@@ -37,22 +41,22 @@
     <association name="" xmiGuid="_16_0_b6f02e1_1240323974421_818554_792" end="//@nestedPackage.1/@classifier.1/@property.1 //@nestedPackage.1/@classifier.0/@property.0"/>
     <association name="" xmiGuid="_16_0_b6f02e1_1240323858562_477522_750" end="//@nestedPackage.1/@classifier.1/@property.0 //@nestedPackage.1/@classifier.2/@property.0"/>
     <classifier xsi:type="gcore:MClass" name="MenuItem" xmiGuid="_16_0_b6f02e1_1240323698234_181024_674" visibility="public" supertype="//@externalTypes.0" generalization="//@externalTypes.0">
-      <operation name="MenuItem" xmiGuid="_16_0_b6f02e1_1240324079234_758890_830" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
-        <parameter name="name" xmiGuid="_16_0_b6f02e1_1240324101937_576085_832" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.1"/>
-        <parameter name="link" xmiGuid="_16_0_b6f02e1_1240324101937_246_833" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.1"/>
+      <operation name="MenuItem" xmiGuid="_16_0_b6f02e1_1240324079234_758890_830" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
+        <parameter name="name" xmiGuid="_16_0_b6f02e1_1240324101937_576085_832" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+        <parameter name="link" xmiGuid="_16_0_b6f02e1_1240324101937_246_833" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
         <parameter name="isSelected" xmiGuid="_16_0_b6f02e1_1240324101937_290520_834" defaultvalue="false" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.4"/>
       </operation>
       <operation name="isMenuItem" xmiGuid="_16_0_b6f02e1_1240323947796_532814_782" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.4"/>
-      <operation name="getName" xmiGuid="_16_0_b6f02e1_1240324215875_985191_842" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
-      <operation name="getLink" xmiGuid="_16_0_b6f02e1_1240324224343_475448_846" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
+      <operation name="getName" xmiGuid="_16_0_b6f02e1_1240324215875_985191_842" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
+      <operation name="getLink" xmiGuid="_16_0_b6f02e1_1240324224343_475448_846" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
       <operation name="isSelected" xmiGuid="_16_0_b6f02e1_1240324228453_172161_850" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.4"/>
-      <operation name="view" xmiGuid="_16_0_b6f02e1_1240396212515_458066_459" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
+      <operation name="view" xmiGuid="_16_0_b6f02e1_1240396212515_458066_459" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
       <property xsi:type="gcore:MAssociationRole" name="menu" xmiGuid="_16_0_b6f02e1_1240323974421_464050_794" visibility="private" multiplicity="1" type="//@nestedPackage.1/@classifier.1" oppositeMultiplicity="-1" association="//@nestedPackage.1/@association.0" opposite="//@nestedPackage.1/@classifier.1/@property.1"/>
     </classifier>
-    <classifier xsi:type="gcore:MClass" name="Menu" xmiGuid="_16_0_b6f02e1_1240323706500_563325_694" visibility="public" supertype="//@nestedPackage.1/@classifier.0 //@externalTypes.3" realization="//@externalTypes.3" generalization="//@nestedPackage.1/@classifier.0">
-      <operation name="Menu" xmiGuid="_16_0_b6f02e1_1240390896390_12048_437" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
-        <parameter name="name" xmiGuid="_16_0_b6f02e1_1240390957921_722132_439" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.1"/>
-        <parameter name="link" xmiGuid="_16_0_b6f02e1_1240390957921_652677_440" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.1"/>
+    <classifier xsi:type="gcore:MClass" name="Menu" xmiGuid="_16_0_b6f02e1_1240323706500_563325_694" visibility="public" supertype="//@nestedPackage.1/@classifier.0 //@externalTypes.1" realization="//@externalTypes.1" generalization="//@nestedPackage.1/@classifier.0">
+      <operation name="Menu" xmiGuid="_16_0_b6f02e1_1240390896390_12048_437" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
+        <parameter name="name" xmiGuid="_16_0_b6f02e1_1240390957921_722132_439" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
+        <parameter name="link" xmiGuid="_16_0_b6f02e1_1240390957921_652677_440" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.0"/>
         <parameter name="items" xmiGuid="_16_0_b6f02e1_1240390957921_524248_441" defaultvalue="array()" direction="in" multiplicity="-1" unique="true" type="//@nestedPackage.1/@classifier.0"/>
         <parameter name="isSelected" xmiGuid="_16_0_b6f02e1_1240390957921_816418_444" defaultvalue="false" direction="in" multiplicity="1" unique="true" type="//@primitiveTypes.4"/>
       </operation>
@@ -61,20 +65,20 @@
       <property xsi:type="gcore:MAssociationRole" name="menuBar" xmiGuid="_16_0_b6f02e1_1240323858562_475477_752" visibility="private" multiplicity="1" type="//@nestedPackage.1/@classifier.2" oppositeMultiplicity="-1" association="//@nestedPackage.1/@association.1" opposite="//@nestedPackage.1/@classifier.2/@property.0"/>
       <property xsi:type="gcore:MAssociationRole" name="items" xmiGuid="_16_0_b6f02e1_1240323974421_337384_793" visibility="private" multiplicity="-1" type="//@nestedPackage.1/@classifier.0" oppositeMultiplicity="1" association="//@nestedPackage.1/@association.0" opposite="//@nestedPackage.1/@classifier.0/@property.0"/>
     </classifier>
-    <classifier xsi:type="gcore:MClass" name="MenuBar" xmiGuid="_16_0_b6f02e1_1240323712078_686210_714" visibility="public" supertype="//@externalTypes.0 //@externalTypes.3" realization="//@externalTypes.3" generalization="//@externalTypes.0">
-      <operation name="MenuBar" xmiGuid="_16_0_b6f02e1_1240323723765_268360_733" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0">
+    <classifier xsi:type="gcore:MClass" name="MenuBar" xmiGuid="_16_0_b6f02e1_1240323712078_686210_714" visibility="public" supertype="//@externalTypes.0 //@externalTypes.1" realization="//@externalTypes.1" generalization="//@externalTypes.0">
+      <operation name="MenuBar" xmiGuid="_16_0_b6f02e1_1240323723765_268360_733" stereotype="//@anyStereotype.0 //@anyStereotype.1" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1">
         <parameter name="menus" xmiGuid="_16_0_b6f02e1_1240391031593_657923_446" defaultvalue="array()" direction="in" multiplicity="-1" unique="true" type="//@nestedPackage.1/@classifier.1"/>
       </operation>
       <operation name="getIterator" xmiGuid="_16_0_b6f02e1_1240323910734_156992_778" visibility="public" multiplicity="1" unique="true" returnType="//@externalTypes.5"/>
-      <operation name="view" xmiGuid="_16_0_b6f02e1_1240396182187_280751_455" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
+      <operation name="view" xmiGuid="_16_0_b6f02e1_1240396182187_280751_455" visibility="public" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
       <property xsi:type="gcore:MAssociationRole" name="menus" xmiGuid="_16_0_b6f02e1_1240323858562_930244_751" visibility="private" multiplicity="-1" type="//@nestedPackage.1/@classifier.1" oppositeMultiplicity="1" association="//@nestedPackage.1/@association.1" opposite="//@nestedPackage.1/@classifier.1/@property.0"/>
     </classifier>
   </nestedPackage>
   <nestedPackage name="Util" xmiGuid="_16_0_b6f02e1_1240411788546_367051_411">
     <classifier xsi:type="gcore:MClass" name="NotifierController" xmiGuid="_16_0_b6f02e1_1240411825406_497558_455" visibility="public" abstract="true" supertype="//@externalTypes.6" generalization="//@externalTypes.6">
-      <operation name="noActionSpecified" xmiGuid="_16_0_b6f02e1_1241765803687_477311_294" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
-      <operation name="noIdSpecified" xmiGuid="_16_0_b6f02e1_1241765803750_832752_295" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
-      <operation name="unknownActionSpecified" xmiGuid="_16_0_b6f02e1_1241765803750_878544_296" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.0"/>
+      <operation name="noActionSpecified" xmiGuid="_16_0_b6f02e1_1241765803687_477311_294" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
+      <operation name="noIdSpecified" xmiGuid="_16_0_b6f02e1_1241765803750_832752_295" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
+      <operation name="unknownActionSpecified" xmiGuid="_16_0_b6f02e1_1241765803750_878544_296" visibility="protected" multiplicity="1" unique="true" returnType="//@primitiveTypes.1"/>
       <property xsi:type="gcore:MAttribute" name="notifier" xmiGuid="_16_0_b6f02e1_1240411834390_685234_477" stereotype="//@anyStereotype.2" visibility="protected" multiplicity="1" unique="true" type="//@nestedPackage.0/@classifier.1">
         <taggedValue value="true" tag="//@anyStereotype.2/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.2/@property.1"/>
@@ -84,8 +88,8 @@
   <classifier xsi:type="gcore:MClass" name="UtilitiesModuleLoader" xmiGuid="_16_0_b6f02e1_1240324483359_514108_877" visibility="public" supertype="//@externalTypes.7" generalization="//@externalTypes.7">
     <operation name="getComponents" xmiGuid="_16_0_b6f02e1_1240324545343_620417_920" visibility="public" multiplicity="-1" unique="true" returnType="//@externalTypes.8"/>
   </classifier>
-  <primitiveTypes name="void" xmiGuid="void"/>
   <primitiveTypes name="String" xmiGuid="String"/>
+  <primitiveTypes name="void" xmiGuid="void"/>
   <primitiveTypes name="Integer" xmiGuid="Integer"/>
   <primitiveTypes name="void" xmiGuid="eee_1045467100323_249638_60"/>
   <primitiveTypes name="Boolean" xmiGuid="Boolean"/>
@@ -96,9 +100,9 @@
     <property name="constructor" type="Boolean"/>
   </anyStereotype>
   <externalTypes specification="Core_BaseDto"/>
-  <externalTypes specification="Countable"/>
-  <externalTypes specification="Core_Dto"/>
   <externalTypes specification="IteratorAggregate"/>
+  <externalTypes specification="Core_Dto"/>
+  <externalTypes specification="Countable"/>
   <externalTypes specification="AssociativeArray"/>
   <externalTypes specification="Iterator"/>
   <externalTypes specification="Core_Controller"/>

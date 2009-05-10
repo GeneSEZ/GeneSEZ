@@ -8,13 +8,13 @@
  * Helps to store data in the session of an user for a given count of 
  * request-response cycles. Such a concept is often used to show inform the 
  * user with messages which disappear after subsequent requests.
- * @see		Countable
- * @see		Core_Dto
  * @see		IteratorAggregate
+ * @see		Core_Dto
+ * @see		Countable
  * @author	dreamer
  * @package	Utilities
  */
-class Msg_FlashNotifier  implements Countable, Core_Dto, IteratorAggregate {
+class Msg_FlashNotifier  implements IteratorAggregate, Core_Dto, Countable {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -52,7 +52,7 @@ class Msg_FlashNotifier  implements Countable, Core_Dto, IteratorAggregate {
 	 * @generated	constructor stub for implementation
 	 * @param	array	$container	default value is 'null'
 	 */
-	public function __construct($container = null) {
+	public function __construct(&$container = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240323336359_632974_586) ENABLED START */
 		$this->initContainer($container);
 		$this->decrementExpiration();
@@ -109,14 +109,13 @@ class Msg_FlashNotifier  implements Countable, Core_Dto, IteratorAggregate {
 	 * @generated	method stub for implementation
 	 * @param	array	$container	
 	 */
-	protected function initContainer($container) {
+	protected function initContainer(&$container) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240323561812_616133_630) ENABLED START */
 		// determine container
-		if ($container === NULL) {
+		if ($container === null) {
 			// init messages in session
 			if (!session_id()) {
 				session_start();
-				$_SESSION[self::ID_MESSAGES] = array();
 			}
 			if (!array_key_exists(self::ID_MESSAGES, $_SESSION)) {
 				$_SESSION[self::ID_MESSAGES] = array();
