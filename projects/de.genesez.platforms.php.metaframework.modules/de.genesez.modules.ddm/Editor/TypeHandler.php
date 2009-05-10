@@ -28,15 +28,15 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430235319_200085_285) ENABLED START */
-		$adapter = $this->typeAdapter->create();
-		if ($adapter->isValid()) {
-			$type = $adapter->object();
+		$this->typeAdapter->create();
+		if ($this->typeAdapter->isValid()) {
+			$type = $this->typeAdapter->object();
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully created'));
 			$this->redirect();
 		}
 		return new Core_BaseDto(array(
-			'form' => $adapter->dto()
+			'form' => $this->typeAdapter->dto()
 		));
 		/* PROTECTED REGION END */
 	}
@@ -48,21 +48,21 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 */
 	public function edit($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430268054_596774_289) ENABLED START */
-		$type = Doctrine::getTable('ddm_type')->fetch($id);
+		$type = $this->typeDao->fetch($id);
 		if ($type === false) {
 			// message + redirect to list view
 			$this->notifier->add(new Msg_Message('type with given id not found', Msg_Message::ERROR));
 			$this->redirect('list');
 		}
-		$adapter = $this->typeAdapter->create($type);
-		if ($adapter->isValid()) {
-			$type = $adapter->object($type);
+		$this->typeAdapter->create($type);
+		if ($this->typeAdapter->isValid()) {
+			$type = $this->typeAdapter->object($type);
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully stored'));
 			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
-			'form' => $adapter->dto(),
+			'form' => $this->typeAdapter->dto(),
 		));
 		/* PROTECTED REGION END */
 	}

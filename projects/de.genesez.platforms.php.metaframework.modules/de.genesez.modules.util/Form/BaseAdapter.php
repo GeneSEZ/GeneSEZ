@@ -39,21 +39,5 @@ abstract class Form_BaseAdapter {
 		$dto = $renderer->toArray();
 		return $dto;
 	}
-	
-	protected function customFormElements() {
-		// overwrite to add custom form elements
-	}
-	
-	protected function customObject($object) {
-		return $object;
-	}
-	
-	protected function customErrors($errors = array()) {
-		return $errors;
-	}
-	
-	protected function customDefaults() {
-		return $this->defaults;
-	}
 }
 ?>

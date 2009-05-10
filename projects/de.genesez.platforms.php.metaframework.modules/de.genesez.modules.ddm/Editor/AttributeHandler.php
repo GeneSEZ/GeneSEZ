@@ -28,15 +28,15 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430826226_496216_393) ENABLED START */
-		$adapter = $this->attributeAdapter->create();
-		if ($adapter->isValid()) {
-			$attribute = $adapter->object();
+		$this->attributeAdapter->create();
+		if ($this->attributeAdapter->isValid()) {
+			$attribute = $this->attributeAdapter->object();
 			$attribute->save();
 			$this->notifier->add(new Message('attribute successfully stored'));
 			$this->redirect('edit/' . $attribute->a_class, 'class');
 		}
 		return new Core_BaseDto(array(
-			'form' => $adapter->dto(),
+			'form' => $this->attributeAdapter->dto(),
 		));
 		/* PROTECTED REGION END */
 	}
@@ -53,15 +53,15 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 			$this->notifier->add(new Message('no attribute with the given id found'));
 			$this->redirect('list');
 		}
-		$adapter = $this->attributeAdapter->create($attribute);
-		if ($adapter->isValid()) {
-			$attribute = $adapter->object($attribute);
+		$this->attributeAdapter->create($attribute);
+		if ($this->attributeAdapter->isValid()) {
+			$attribute = $this->attributeAdapter->object($attribute);
 			$attribute->save();
 			$this->notifier->add(new Message('attribute successfully stored'));
 			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
-			'form' => $adapter->dto(), 
+			'form' => $this->attributeAdapter->dto(), 
 		));
 		/* PROTECTED REGION END */
 	}

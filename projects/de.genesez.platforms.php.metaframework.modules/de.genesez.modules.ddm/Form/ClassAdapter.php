@@ -24,7 +24,6 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 			$parent->addOption($value, $value->id);
 		}
 		$this->form->addElement('submit', 'save', 'save');
-		$this->customFormElements();
 	}
 	
 	public function object($class = null) {
@@ -50,14 +49,12 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 		$errors['description'] = $this->form->getElementError('description');
 		$errors['editable'] = $this->form->getElementError('editable');
 		$errors['parent'] = $this->form->getElementError('parent');
-		$errors = $this->customErrors($errors);
 		return $errors;
 	}
 	
 	protected function defaults() {
-		$defaults = array();
 		if ($this->object !== null) {
-			$defaults = array(
+			return array(
 				'id' => $this->object->id, 
 				'name' => $this->object->c_name,
 				'view' => $this->object->c_view,
@@ -66,8 +63,7 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 				'parent' => $this->object->c_parent
 			);
 		}
-		$defaults = $this->customDefaults($defaults);
-		return $defaults;
+		return array();
 	}
 	
 	public function setClassDao($classDao) {

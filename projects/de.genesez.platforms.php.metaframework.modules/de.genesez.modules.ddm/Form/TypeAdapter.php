@@ -17,7 +17,6 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		$this->form->addElement('text', 'constraint', 'constraint:');
 		$this->form->addElement('checkbox', 'editable', 'editable:');
 		$this->form->addElement('submit', 'save', 'save');
-		$this->customFormElements();
 	}
 	
 	public function object($type = null) {
@@ -33,7 +32,6 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		} else {
 			$type->t_editable = false;
 		}
-		$type = $this->customObject($type);
 		return $type;
 	}
 	
@@ -44,14 +42,12 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		$errors['basetype'] = $this->form->getElementError('basetype');
 		$errors['constraint'] = $this->form->getElementError('constraint');
 		$errors['editable'] = $this->form->getElementError('editable');
-		$errors = $this->customErrors($errors);
 		return $errors;
 	}
 	
 	protected function defaults() {
-		$defaults = array();
 		if ($this->object !== null) {
-			$defaults = array(
+			return array(
 				'id' => $this->object->id,
 				'name' => $this->object->t_name,
 				'description' => $this->object->t_description,
@@ -60,8 +56,7 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 				'editable' => $this->object->t_editable,
 			);
 		}
-		$defaults = $this->customDefaults($defaults);
-		return $defaults;
+		return array();
 	}
 }
 ?>

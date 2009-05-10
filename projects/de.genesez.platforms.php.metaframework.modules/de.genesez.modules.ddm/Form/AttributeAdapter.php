@@ -26,7 +26,6 @@ class Form_AttributeAdapter extends Form_BaseAdapter {
 		}
 		// finish form
 		$this->form->addElement('submit', 'save', 'save');
-		$this->customFormElements();
 	}
 	
 	public function object($attribute = null) {
@@ -44,7 +43,6 @@ class Form_AttributeAdapter extends Form_BaseAdapter {
 		$classId = $this->form->exportValue('class');
 //		$class = $this->classDao->fetch($classId);
 		$attribute->a_class = $classId;
-		$attribute = $this->customObject($attribute);
 		return $attribute;
 	}
 	
@@ -55,14 +53,12 @@ class Form_AttributeAdapter extends Form_BaseAdapter {
 		$errors['description'] = $this->form->getElementError('description');
 		$errors['type'] = $this->form->getElementError('type');
 		$errors['class'] = $this->form->getElementError('class');
-		$errors = $this->customErrors($errors);
 		return $errors;
 	}
 	
 	protected function defaults() {
-		$defaults = array();
 		if ($this->object !== null) {
-			$defaults = array(
+			return array(
 				'id' => $this->object->id,
 				'name' => $this->object->a_name,
 				'column' => $this->object->a_column,
@@ -71,8 +67,7 @@ class Form_AttributeAdapter extends Form_BaseAdapter {
 				'class' => $this->object->a_class
 			);
 		}
-		$defaults = $this->customDefaults($defaults);
-		return $defaults;
+		return array();
 	}
 	
 	public function setClassDao($classDao) {

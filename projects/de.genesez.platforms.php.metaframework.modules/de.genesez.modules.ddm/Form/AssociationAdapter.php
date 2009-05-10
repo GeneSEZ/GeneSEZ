@@ -31,7 +31,6 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 		}
 		// finish form
 		$this->form->addElement('submit', 'save', 'save');
-		$this->customFormElements();
 	}
 	
 	public function object($association = null) {
@@ -48,7 +47,6 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 		$toId = $this->form->exportValue('to');
 		//$to = $this->classDao->fetch($toId);
 		$association->s_to = $toId;
-		$association = $this->customObject($association);
 		return $association;
 	}
 	
@@ -60,14 +58,12 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 		$errors['toCardinality'] = $this->form->getElementError('toCardinality');
 		$errors['from'] = $this->form->getElementError('from');
 		$errors['to'] = $this->form->getElementError('to');
-		$errors = $this->customErrors($errors);
 		return $errors;
 	}
 	
 	protected function defaults() {
-		$defaults = array();
 		if ($this->object !== null) {
-			$defaults = array(
+			return array(
 				'id' => $this->object->id,
 				'name' => $this->object->s_name,
 				'description' => $this->object->s_description,
@@ -77,8 +73,7 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 				'toCardinality' => $this->object->s_to_cardinality
 			);
 		}
-		$defaults = $this->customDefaults($defaults);
-		return $defaults;
+		return array();
 	}
 	
 	public function setClassDao($classDao) {

@@ -28,15 +28,15 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_487550_349) ENABLED START */
-		$adapter = $this->classAdpater->create();
-		if ($adapter->isValid()) {
-			$class = $adapter->object();
+		$this->classAdpater->create();
+		if ($this->classAdpater->isValid()) {
+			$class = $this->classAdpater->object();
 			$class->save();
 			$this->notifier->add(new Message('class successfully created'));
 			$this->redirect($this->newLink('edit/' . $class->id));
 		}
 		$this->view->content = new Core_BaseDto(array(
-			'form' => $adapter->dto()
+			'form' => $this->classAdpater->dto()
 		));
 		/* PROTECTED REGION END */
 	}
@@ -53,24 +53,24 @@ class Editor_ClassHandler extends Util_NotifierController  {
 			$this->notifier->add(new Message('class with given id not found'));
 			$this->redirect('list');
 		}
-		$adapter = $this->classAdpater->create($class);
-		if ($adapter->isValid()) {
-			$class = $adapter->object($class);
+		$this->classAdpater->create($class);
+		if ($this->classAdpater->isValid()) {
+			$class = $this->classAdpater->object($class);
 			$class->save();
 			$this->notifier->add(new Message('class successfully stored'));
 			$this->redirect('list');
 		}
-		$attributeAdapter = $this->attributeAdapter->create(null, $this->newLink('create', 'attribute'));
-		$associationAdapter = $this->associationAdapter->create(null, $this->newLink('create', 'association'));
+		$this->attributeAdapter->create(null, $this->newLink('create', 'attribute'));
+		$this->associationAdapter->create(null, $this->newLink('create', 'association'));
 		return new Core_BaseDto(array(
-			'form' => $adapter->dto(),
+			'form' => $this->classAdpater->dto(),
 			'class' => $class,
 			'editAction' => $this->newLink('edit'),
 			'editTypeAction' => $this->newLink('edit', 'type'),
-			'attributeForm' => $attributeAdapter->dto(),
+			'attributeForm' => $this->attributeAdapter->dto(),
 			'removeAttributeAction' => $this->newLink('delete', 'attribute'),
 			'editAttributeAction' => $this->newLink('edit', 'attribute'),
-			'associationForm' => $associationAdapter->dto(),
+			'associationForm' => $this->associationAdapter->dto(),
 			'editAssociationAction' => $this->newLink('edit', 'association'),
 			'removeAssociationAction' => $this->newLink('delete', 'association')
 		));
