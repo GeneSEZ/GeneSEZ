@@ -8,9 +8,9 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 	
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
-		$this->form->addElement('text', 'name', 'name:');
-		$this->form->addElement('text', 'view', 'view:');
-		$this->form->addElement('text', 'description', 'description:');
+		$this->form->addElement('text', 'name', 'name:', array('size' => 80));
+		$this->form->addElement('text', 'view', 'view:', array('size' => 80));
+		$this->form->addElement('textarea', 'description', 'description:', array('cols' => 80, 'rows' => 2));
 		$this->form->addElement('checkbox', 'editable', 'editable:');
 		$parent = $this->form->addElement('select', 'parent', 'parent:');
 		$parent->addOption('', '');
@@ -21,7 +21,7 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 			$classes = $this->classDao->fetchAll();
 		}
 		foreach ($classes as $key => $value) {
-			$parent->addOption($value, $value->id);
+			$parent->addOption($value->c_name, $value->id);
 		}
 		$this->form->addElement('submit', 'save', 'save');
 	}
@@ -33,8 +33,11 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 		$class->c_name = $this->form->exportValue('name');
 		$class->c_view = $this->form->exportValue('view');
 		$class->c_description = $this->form->exportValue('description');
-		$class->c_parent = $this->form->exportValue('parent');
-		if ($this->form->exportValue('editable')) {
+		$parent = $this->form->exportValue('parent');
+		if ($parent != '') {
+			$class->c_parent = $parent;
+		}
+		if ($this->form->exportValue('editable') == '1') {
 			$class->c_editable = true;
 		} else {
 			$class->c_editable = false;

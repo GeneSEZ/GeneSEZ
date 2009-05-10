@@ -32,10 +32,10 @@ class Editor_ClassHandler extends Util_NotifierController  {
 		if ($this->classAdpater->isValid()) {
 			$class = $this->classAdpater->object();
 			$class->save();
-			$this->notifier->add(new Message('class successfully created'));
+			$this->notifier->add(new Msg_Message('class successfully created'));
 			$this->redirect($this->newLink('edit/' . $class->id));
 		}
-		$this->view->content = new Core_BaseDto(array(
+		return new Core_BaseDto(array(
 			'form' => $this->classAdpater->dto()
 		));
 		/* PROTECTED REGION END */
@@ -50,14 +50,14 @@ class Editor_ClassHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_2647_350) ENABLED START */
 		$class = $this->classDao->fetch($id);
 		if ($class === false) {
-			$this->notifier->add(new Message('class with given id not found'));
+			$this->notifier->add(new Msg_Message('class with given id not found'));
 			$this->redirect('list');
 		}
 		$this->classAdpater->create($class);
 		if ($this->classAdpater->isValid()) {
 			$class = $this->classAdpater->object($class);
 			$class->save();
-			$this->notifier->add(new Message('class successfully stored'));
+			$this->notifier->add(new Msg_Message('class successfully stored'));
 			$this->redirect('list');
 		}
 		$this->attributeAdapter->create(null, $this->newLink('create', 'attribute'));
@@ -86,12 +86,12 @@ class Editor_ClassHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_8676_351) ENABLED START */
 		$class = $this->classDao->fetch($id);
 		if ($class === false) {
-			$this->notifier->add(new Message('class with given id not found'));
+			$this->notifier->add(new Msg_Message('class with given id not found'));
 			$this->redirect('ist');
 		}
 		$class->delete();
-		// message + redirect to list view
-		$this->notifier->add(new Message('class successfully deleted'));
+		// Msg_Message + redirect to list view
+		$this->notifier->add(new Msg_Message('class successfully deleted'));
 		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}

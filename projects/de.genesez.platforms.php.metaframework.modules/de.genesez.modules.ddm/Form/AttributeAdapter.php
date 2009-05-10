@@ -9,20 +9,20 @@ class Form_AttributeAdapter extends Form_BaseAdapter {
 	
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
-		$this->form->addElement('text', 'name', 'name:');
-		$this->form->addElement('text', 'column', 'column:');
-		$this->form->addElement('text', 'description', 'description:');
+		$this->form->addElement('text', 'name', 'name:', array('size' => 80));
+		$this->form->addElement('text', 'column', 'column:', array('size' => 80));
+		$this->form->addElement('textarea', 'description', 'description:', array('cols' => 80, 'rows' => 2));
 		// type
 		$type = $this->form->addElement('select', 'type', 'type:');
 		$types = $this->typeDao->fetchAll();
 		foreach ($types as $key => $value) {
-			$type->addOption($value, $value->id);
+			$type->addOption($value->t_name, $value->id);
 		}
 		// class
 		$class = $this->form->addElement('select', 'class', 'class:');
 		$classes = $this->classDao->fetchAll();
 		foreach ($classes as $key => $value) {
-			$class->addOption($value, $value->id);
+			$class->addOption($value->c_name, $value->id);
 		}
 		// finish form
 		$this->form->addElement('submit', 'save', 'save');

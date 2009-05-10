@@ -7,14 +7,14 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 	
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
-		$this->form->addElement('text', 'name', 'name:');
-		$this->form->addElement('text', 'description', 'description:');
+		$this->form->addElement('text', 'name', 'name:', array('size' => 80));
+		$this->form->addElement('textarea', 'description', 'description:', array('cols' => 80, 'rows' => 2));
 		$basetype = $this->form->addElement('select', 'basetype', 'basetype:');
 		$basetypeValues = array('INTEGER' => 'integer', 'BOOLEAN' => 'boolean', 'STRING' => 'string');
 		foreach ($basetypeValues as $key => $value) {
 			$basetype->addOption($value, $key);
 		}
-		$this->form->addElement('text', 'constraint', 'constraint:');
+		$this->form->addElement('text', 'constraint', 'constraint:', array('size' => 80));
 		$this->form->addElement('checkbox', 'editable', 'editable:');
 		$this->form->addElement('submit', 'save', 'save');
 	}
@@ -27,7 +27,7 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 		$type->t_description = $this->form->exportValue('description');
 		$type->t_basetype = $this->form->exportValue('basetype');
 		$type->t_constraint = $this->form->exportValue('constraint');
-		if ($this->form->exportValue('editable')) {
+		if ($this->form->exportValue('editable') == '1') {
 			$type->t_editable = true;
 		} else {
 			$type->t_editable = false;

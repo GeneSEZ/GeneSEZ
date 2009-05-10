@@ -32,7 +32,7 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 		if ($this->attributeAdapter->isValid()) {
 			$attribute = $this->attributeAdapter->object();
 			$attribute->save();
-			$this->notifier->add(new Message('attribute successfully stored'));
+			$this->notifier->add(new Msg_Message('attribute successfully stored'));
 			$this->redirect('edit/' . $attribute->a_class, 'class');
 		}
 		return new Core_BaseDto(array(
@@ -50,14 +50,14 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430826226_526148_394) ENABLED START */
 		$attribute = $this->attributeDao->fetch($id);
 		if ($attribute === false) {
-			$this->notifier->add(new Message('no attribute with the given id found'));
+			$this->notifier->add(new Msg_Message('no attribute with the given id found'));
 			$this->redirect('list');
 		}
 		$this->attributeAdapter->create($attribute);
 		if ($this->attributeAdapter->isValid()) {
 			$attribute = $this->attributeAdapter->object($attribute);
 			$attribute->save();
-			$this->notifier->add(new Message('attribute successfully stored'));
+			$this->notifier->add(new Msg_Message('attribute successfully stored'));
 			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
@@ -75,11 +75,11 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430826226_45703_395) ENABLED START */
 		$attribute = $this->attributeDao->fetch($id);
 		if ($attribute === false) {
-			$this->notifier->add(new Message('attribute with the given id not found'));
+			$this->notifier->add(new Msg_Message('attribute with the given id not found'));
 			$this->redirect('list');
 		}
 		$attribute->delete();
-		$this->notifier->add(new Message('attribute successfully deleted'));
+		$this->notifier->add(new Msg_Message('attribute successfully deleted'));
 		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}

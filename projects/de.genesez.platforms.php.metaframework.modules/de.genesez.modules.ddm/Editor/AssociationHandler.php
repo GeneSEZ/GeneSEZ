@@ -28,15 +28,15 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430902491_716900_439) ENABLED START */
-		$adapter = $this->associationAdapter->create();
-		if ($adapter->isValid()) {
-			$association = $adapter->object();
+		$this->associationAdapter->create();
+		if ($this->associationAdapter->isValid()) {
+			$association = $this->associationAdapter->object();
 			$association->save();
-			$this->notifier->add(new Message('association successfully stored'));
+			$this->notifier->add(new Msg_Message('association successfully stored'));
 			$this->redirect('edit/' . $association->s_from, 'class');
 		}
 		return new Core_BaseDto(array(
-			'form' => $adapter->dto(),
+			'form' => $this->associationAdapter->dto(),
 		));
 		/* PROTECTED REGION END */
 	}
@@ -50,18 +50,18 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430902491_562824_440) ENABLED START */
 		$association = $this->associationDao->fetch($id);
 		if ($association === false) {
-			$this->notifier->add(new Message('no association with the given id found'));
+			$this->notifier->add(new Msg_Message('no association with the given id found'));
 			$this->redirect('list');
 		}
-		$adapter = $this->associationAdapter->create($association);
-		if ($adapter->isValid()) {
-			$association = $adapter->object($association);
+		$this->associationAdapter->create($association);
+		if ($this->associationAdapter->isValid()) {
+			$association = $this->associationAdapter->object($association);
 			$association->save();
-			$this->notifier->add(new Message('association successfully stored'));
+			$this->notifier->add(new Msg_Message('association successfully stored'));
 			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
-			'form' => $adapter->dto(), 
+			'form' => $this->associationAdapter->dto(), 
 		));
 		/* PROTECTED REGION END */
 	}

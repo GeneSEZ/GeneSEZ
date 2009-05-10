@@ -8,8 +8,8 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 	
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
-		$this->form->addElement('text', 'name', 'name:');
-		$this->form->addElement('text', 'description', 'description:');
+		$this->form->addElement('text', 'name', 'name:', array('size' => 80));
+		$this->form->addElement('textarea', 'description', 'description:', array('cols' => 80, 'rows' => 2));
 		// cardinalities
 		$fromCard = $this->form->addElement('select', 'fromCardinality', 'from cardinality:');
 		$toCard = $this->form->addElement('select', 'toCardinality', 'to cardinality:');
@@ -26,8 +26,8 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 		$to = $this->form->addElement('select', 'to', 'to:');
 		$classes = $this->classDao->fetchAll();
 		foreach ($classes as $key => $value) {
-			$from->addOption($value, $value->id);
-			$to->addOption($value, $value->id);
+			$from->addOption($value->c_name, $value->id);
+			$to->addOption($value->c_name, $value->id);
 		}
 		// finish form
 		$this->form->addElement('submit', 'save', 'save');

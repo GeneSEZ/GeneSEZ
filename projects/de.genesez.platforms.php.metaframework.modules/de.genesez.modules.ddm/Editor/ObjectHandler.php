@@ -32,7 +32,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		if ($adapter->isValid()) {
 			$object = $adapter->object();
 			$object->save();
-			$this->notifier->add(new Message('object created successfully'));
+			$this->notifier->add(new Msg_Message('object created successfully'));
 			$this->redirect('');
 		}
 		return new Core_BaseDto(array(
@@ -54,14 +54,14 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_768508_844) ENABLED START */
 		$entity = $this->objectDao->fetch($id);
 		if ($entity === false) {
-			$this->notifier->add(new Message('object of class' . $this->getClass() . ' with given id not found'));
+			$this->notifier->add(new Msg_Message('object of class' . $this->getClass() . ' with given id not found'));
 			$this->redirect('');
 		}
 		$adapter = new Form_ObjectAdapter($this->getClass(), $entity);
 		if ($adapter->isValid()) {
 			$object = $adapter->object($entity);
 			$object->save();
-			$this->notifier->add(new Message('object saved successfully'));
+			$this->notifier->add(new Msg_Message('object saved successfully'));
 			$this->redirect('');
 		}
 		return new Core_BaseDto(array(
@@ -83,11 +83,11 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_757871_845) ENABLED START */
 		$entity = $this->objectDao->fetch($id);
 		if ($entity === false) {
-			$this->notifier->add(new Message('object of class' . $this->getClass() . ' with given id not found'));
+			$this->notifier->add(new Msg_Message('object of class' . $this->getClass() . ' with given id not found'));
 			$this->redirect('');
 		}
 		$entity->delete();
-		$this->notifier->add(new Message('object successfully deleted'));
+		$this->notifier->add(new Msg_Message('object successfully deleted'));
 		$this->redirect('');
 		/* PROTECTED REGION END */
 	}
