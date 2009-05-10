@@ -142,7 +142,6 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	protected function redirect($action = null, $controller = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240245232109_266957_1067) ENABLED START */
 		HTTP::redirect($this->newLink($action, $controller));
-		return true;
 		/* PROTECTED REGION END */
 	}
 
@@ -178,7 +177,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238021984_342013_941) ENABLED START */
-		return $this->redirect('list');
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -188,7 +187,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238044687_348789_945) ENABLED START */
-		return $this->redirect();
+		$this->redirect();
 		/* PROTECTED REGION END */
 	}
 
@@ -198,7 +197,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function noIdSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765470421_127482_360) ENABLED START */
-		return $this->redirect();
+		$this->redirect();
 		/* PROTECTED REGION END */
 	}
 
