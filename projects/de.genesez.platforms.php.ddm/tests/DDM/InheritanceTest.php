@@ -10,7 +10,7 @@ require_once 'PHPUnit/Framework.php';
 // Import DDM
 require_once 'DDM.php';
 
-class DDM_InheritanceTest extends PHPUnit_Framework_TestCase
+class DDM_InheritanceTest extends AbstractDoctrineTestCase
 {
 
 	/**

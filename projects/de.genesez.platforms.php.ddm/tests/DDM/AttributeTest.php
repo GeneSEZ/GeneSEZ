@@ -15,7 +15,7 @@ require_once 'PHPUnit/Framework.php';
 // Import DDM
 require_once 'DDM.php';
 
-class DDM_AttributeTest extends PHPUnit_Framework_TestCase
+class DDM_AttributeTest extends AbstractDoctrineTestCase
 {
 
 	private $typeTable;
@@ -25,6 +25,7 @@ class DDM_AttributeTest extends PHPUnit_Framework_TestCase
 	{
 		$this->typeTable = Doctrine::getTable("DDM_Type");
 		$this->classTable = Doctrine::getTable("DDM_Class");
+		parent::setUp();
 	}
 
 	/**

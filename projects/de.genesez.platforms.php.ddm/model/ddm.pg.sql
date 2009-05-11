@@ -85,7 +85,7 @@ CREATE TABLE ddm_attribute (
 	a_type INTEGER REFERENCES ddm_type(id) ON DELETE RESTRICT NOT NULL,
 	a_name VARCHAR(1024) NOT NULL,
 	a_column VARCHAR(1024) NOT NULL,
-	a_description VARCHAR(1024) UNIQUE
+	a_description VARCHAR(1024)
 );
 
 -- Assoziationen
@@ -156,9 +156,9 @@ CREATE TABLE ddm_reference_o2n (
 --- Indizes
 --- -------------------------------------------
 
-CREATE UNIQUE INDEX ddm_attribute_unique ON ddm_attribute (a_class, a_name);
-CREATE UNIQUE INDEX ddm_attribute_unique ON ddm_attribute (a_class, a_column);
-CREATE UNIQUE INDEX ddm_association_unique ON ddm_association (s_from, a_name);
+CREATE UNIQUE INDEX ddm_attribute_name_unique ON ddm_attribute (a_class, a_name);
+CREATE UNIQUE INDEX ddm_attribute_column_unique ON ddm_attribute (a_class, a_column);
+CREATE UNIQUE INDEX ddm_association_unique ON ddm_association (s_from, s_name);
 CREATE UNIQUE INDEX ddm_value_integer_unique ON ddm_value_integer (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_string_unique ON ddm_value_string (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_boolean_unique ON ddm_value_boolean (v_object, v_attribute);

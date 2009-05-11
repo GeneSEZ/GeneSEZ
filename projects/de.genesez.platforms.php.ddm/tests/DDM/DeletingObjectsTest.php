@@ -11,7 +11,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'DDM.php';
 
 
-class DDM_DeletingObjectsTest extends PHPUnit_Framework_TestCase
+class DDM_DeletingObjectsTest extends AbstractDoctrineTestCase
 {
 	/**
 	 * Test deleting objects 

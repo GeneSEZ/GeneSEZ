@@ -19,14 +19,6 @@ require_once 'DDM.php';
 
 class DDM_AttributeTableTest extends AbstractDoctrineTestCase
 {
-
-	protected function setUp()
-	{
-		$manager = Doctrine_Manager::getInstance();
-		$conn = $manager->getCurrentConnection();
-		$conn->execute('DELETE FROM ddm_attribute CASCADE');
-	}
-	
 	/**
 	 * Test fetching an attribute by its id
 	 */

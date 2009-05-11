@@ -42,12 +42,12 @@ class DDM_Class extends Doctrine_Record
 		return $o;
 	}
 	
-	public function addAssociation($name, DDM_Class $class, $myCardinality = 1, $foreignCardinality = 1) {
-		$this->addAssociationTo($name, $class, $myCardinality, $foreignCardinality);
-		$class->addAssociationTo($name, $this, $foreignCardinality, $myCardinality);
+	public function addAssociation($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1) {
+		$this->addAssociationTo($name, $class, $foreignCardinality, $myCardinality);
+		$class->addAssociationTo($name, $this, $myCardinality, $foreignCardinality);
 	}
 	
-	public function addAssociationTo($name, DDM_Class $class, $myCardinality = 1, $foreignCardinality = 1) {
+	public function addAssociationTo($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1) {
 		$association = new DDM_Association();
 		$association->s_name = $name;
 		$association->from = $this;

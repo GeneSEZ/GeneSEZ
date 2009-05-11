@@ -20,13 +20,6 @@ require_once 'DDM.php';
 class DDM_TypeTableTest extends AbstractDoctrineTestCase
 {
 
-	protected function setUp()
-	{
-		$manager = Doctrine_Manager::getInstance();
-		$conn = $manager->getCurrentConnection();
-		$conn->execute('DELETE FROM ddm_type CASCADE');
-	}
-	
 	/**
 	 * Test fetching a type by its id
 	 */

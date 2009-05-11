@@ -25,6 +25,7 @@
 	</target>
 	
 	<target name="test" depends="database.create" description="execute php unit tests">
+		<mkdir dir="${report.dir}"/>
 		<phpunit2 haltonfailure="true" haltonerror="true" printsummary="true">
 			<batchtest>
 				<fileset dir="tests">
@@ -51,6 +52,7 @@
 	</target>
 	
 	<target name="coverage.test" depends="database.create, coverage.prepare" description="execute php unit tests with code coverage">
+		<mkdir dir="${report.dir}"/>
 		<phpunit2 codecoverage="true" haltonfailure="true" haltonerror="true" printsummary="true">
 			<batchtest>
 				<fileset dir="tests">

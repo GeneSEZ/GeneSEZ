@@ -7,22 +7,10 @@ class DDM_Association extends Doctrine_Record
 	{
 		$this->setTableName('ddm_association');
 
-//		$this->hasColumn('s_left', 'integer', array('notnull' => true));
-//		$this->hasColumn('s_left_cardinality', 'enum', 4 ,array(
-//			'notnull' => true,
-//			'values' => array ( '0..1', '1', 'N', '1..N')
-//			)
-//		);
-//		$this->hasColumn('s_right', 'integer', array('notnull' => true));
-//		$this->hasColumn('s_right_cardinality', 'enum', 4 ,array(
-//			'notnull' => true,
-//			'values' => array ( '0..1', '1', 'N', '1..N')
-//			)
-//		);
 		$this->hasColumn('s_from', 'integer', array('notnull' => true));
 		$this->hasColumn('s_from_cardinality', 'enum', 4 ,array(
 			'notnull' => true,
-			'values' => array ( '0..1', '1', 'N', '1..N')
+			'values' => array ( '0..1', '1' )
 			)
 		);
 		$this->hasColumn('s_to', 'integer', array('notnull' => true));
@@ -38,13 +26,7 @@ class DDM_Association extends Doctrine_Record
 	public function setUp()
 	{
 		parent::setUp();
-//		$this->hasOne('DDM_Class as left', array('local' => 's_left',
-//			'foreign' => 'id',
-//			'onDelete' => 'CASCADE'));
-//
-//		$this->hasOne('DDM_Class as right', array('local' => 's_right',
-//			'foreign' => 'id',
-//			'onDelete' => 'CASCADE'));
+
 		$this->hasOne('DDM_Class as from', array('local' => 's_from',
 			'foreign' => 'id',
 			'onDelete' => 'CASCADE'));
@@ -54,6 +36,28 @@ class DDM_Association extends Doctrine_Record
 			'onDelete' => 'CASCADE'));
 	}
 
+	public function cardinality($from, $to) {
+		$cardinality = false;
+
+		if ( 1 == $from && '0..1' == $this->s_from_cardinality ) {
+			$cardinality = true;
+		} elseif ( 'N' == $from && '1..N' == $this->s_from_cardinality ) {
+			$cardinality = true;
+		} else {
+			$cardinality = $this->s_from_cardinality == $from;
+		}
+		
+		if ( 1 == $to && '0..1' == $this->s_to_cardinality ) {
+			$cardinality = $cardinality && true;
+		} elseif ( 'N' == $to && '1..N' == $this->s_to_cardinality ) {
+			$cardinality = $cardinality && true;
+		} else {
+			$cardinality = $cardinality && $this->s_to_cardinality == $to;
+		}
+		
+		return $cardinality; 
+	}
+	
 	public function __toString() {
 		return 'Name: ' . $this->s_name;
 	}

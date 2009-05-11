@@ -19,13 +19,6 @@ require_once 'DDM.php';
 class DDM_ClassTableTest extends AbstractDoctrineTestCase
 {
 
-	protected function setUp()
-	{
-		$manager = Doctrine_Manager::getInstance();
-		$conn = $manager->getCurrentConnection();
-		$conn->execute('DELETE FROM ddm_class');
-	}
-	
 	/**
 	 * Test fetching a class by its id
 	 */
