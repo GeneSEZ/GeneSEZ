@@ -39,8 +39,8 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 		}
 		$association->s_name = $this->form->exportValue('name');
 		$association->s_description = $this->form->exportValue('description');
-		$association->s_from_cardinality = $this->form->exportValue('fromCardinality');
-		$association->s_to_cardinality = $this->form->exportValue('toCardinality');
+		$association->s_from_cardinality = preg_replace('/\*/', 'N', $this->form->exportValue('fromCardinality'));
+		$association->s_to_cardinality = preg_replace('/\*/', 'N', $this->form->exportValue('toCardinality'));
 		$fromId = $this->form->exportValue('from');
 		//$from = $this->classDao->fetch($fromId);
 		$association->s_from = $fromId;
