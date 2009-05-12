@@ -40,15 +40,15 @@ class DDM_ObjectTable extends Doctrine_Table
 	/**
 	 * Fetches a collection of objects of a specified class
 	 *
-	 * @param DDM_Class $class
+	 * @param $class
 	 * @param integer $max
 	 * @param integer $offset
 	 * @return Doctrine_Collection
 	 */
-	public function fetchAllByClass(DDM_Class $class, $max = 0, $offset = 0) {
+	public function fetchAllByClass($class, $max = 0, $offset = 0) {
 		$query = new Doctrine_Query();
 		$query->from('ddm_object o');
-		$query->where('o.class = \'' . $class . '\'');
+		$query->where('o.class.c_name = \'' . $class . '\'');
 
 		if ( $max > 0 && $offset > 0 ) {
 			$query->limit($max);

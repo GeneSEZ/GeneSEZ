@@ -79,6 +79,33 @@ class DDM_ClassTable extends Doctrine_Table
 	public function exist($name) {
 		return is_a($this->fetchByName($name) , 'DDM_Class');
 	}
+	
+	/**
+	 * Returns the inheritance hierarchie (array of superclasses) of a class by its name.
+	 * The last entry is specified class itself.
+	 * 
+	 * @param $name
+	 * @return array of ddm_class
+	 */
+	public function fetchSuperclasses($name) {
+		$classes = array();
+		if (!$this->exist($name)) {
+			return $classes;
+		}
+		$class = $this->fetchByName($name);
+		$end = false;
+		while (!$end) {
+			$classes[] = $class;
+			// i need a very strange check here...
+			if (is_int($class->c_parent)) {
+				$class = $class->parent;
+			} else {
+				$end = true;
+			}
+		}
+//		return array_reverse($classes);
+		return $classes;
+	}
 }
 
 ?>
