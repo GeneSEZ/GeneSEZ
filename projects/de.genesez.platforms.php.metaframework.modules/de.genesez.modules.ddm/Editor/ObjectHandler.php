@@ -28,18 +28,19 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_420232_843) ENABLED START */
-		$adapter = new Form_ObjectAdapter($this->getClass());
-		if ($adapter->isValid()) {
-			$object = $adapter->object();
+		$this->objectAdapter->create($this->getClass());
+		if ($this->objectAdapter->isValid()) {
+			$object = $this->objectAdapter->object();
 			$object->save();
 			$this->notifier->add(new Msg_Message('object created successfully'));
 			$this->redirect('');
 		}
 		return new Core_BaseDto(array(
-			'class' => $this->entity,
-			'attributes' => $this->objectDao->fetchAllAttributes($this->entity),
-			'associations' => $this->objectDao->fetchOwnAssociations($this->entity),
-			'form' => $adapter->dto(),
+			'class' => $this->getClass(),
+			'classes' => $this->classDao->fetchSuperclasses($this->getClass()),
+//			'attributes' => $this->objectDao->fetchAllAttributes($this->getClass()),
+//			'associations' => $this->objectDao->fetchOwnAssociations($this->getClass()),
+			'form' => $this->objectAdapter->dto(),
 			'list' => $this->newLink('list')
 		));
 		/* PROTECTED REGION END */
@@ -57,18 +58,19 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 			$this->notifier->add(new Msg_Message('object of class' . $this->getClass() . ' with given id not found'));
 			$this->redirect('');
 		}
-		$adapter = new Form_ObjectAdapter($this->getClass(), $entity);
-		if ($adapter->isValid()) {
-			$object = $adapter->object($entity);
+		$this->objectAdapter->create($this->getClass(), $entity);
+		if ($this->objectAdapter->isValid()) {
+			$object = $this->objectAdapter->object($entity);
 			$object->save();
 			$this->notifier->add(new Msg_Message('object saved successfully'));
 			$this->redirect('');
 		}
 		return new Core_BaseDto(array(
-			'class' => $this->entity,
-			'attributes' => $this->objectDao->fetchAllAttributes($this->entity),
-			'associations' => $this->objectDao->fetchOwnAssociations($this->entity),
-			'form' => $adapter->dto(),
+			'class' => $this->getClass(),
+			'classes' => $this->classDao->fetchSuperclasses($this->getClass()),
+//			'attributes' => $this->objectDao->fetchAllAttributes($this->getClass()),
+//			'associations' => $this->objectDao->fetchOwnAssociations($this->getClass()),
+			'form' => $this->objectAdapter->dto(),
 			'list' => $this->newLink('list')
 		));
 		/* PROTECTED REGION END */
@@ -113,9 +115,10 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_601136_847) ENABLED START */
 		return new Core_BaseDto(array(
 			'class' => $this->getClass(),
+			'classes' => $this->classDao->fetchSuperclasses($this->getClass()),
 			'objects' => $this->objectDao->fetchAllByClass($this->getClass()),
-			'attributes' => $this->objectDao->fetchAllAttributes($this->getClass()),
-			'associations' => $this->objectDao->fetchOwnAssociations($this->getClass()),
+//			'attributes' => $this->objectDao->fetchAllAttributes($this->getClass()),
+//			'associations' => $this->objectDao->fetchOwnAssociations($this->getClass()),
 			'edit' => $this->newLink('edit'),
 			'delete' => $this->newLink('delete'),
 			'create' => $this->newLink('create'),
@@ -138,6 +141,10 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241433671335_950930_821) ENABLED START */
 	// TODO: put your further code implementations for class 'ObjectHandler' here
+	protected $objectAdapter;
+	public function setObjectAdapter($objectAdapter) {
+		$this->objectAdapter = $objectAdapter;
+	}
 	/* PROTECTED REGION END */
 }
 ?>

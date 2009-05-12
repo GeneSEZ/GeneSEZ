@@ -31,7 +31,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 		$this->handlerInfo = $handlerInfo;
 		if ($this->hasClass()) {
 			if ($this->classDao->exist( $this->getClass() )) {
-				parent::handle($handlerInfo);
+				return parent::handle($handlerInfo);
 			} else {
 				return $this->unknownClassSpecified();
 			}
