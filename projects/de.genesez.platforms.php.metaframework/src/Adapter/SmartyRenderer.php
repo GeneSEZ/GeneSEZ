@@ -35,8 +35,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
 		$this->templateBasePath = realpath('./' . $this->smarty->template_dir) . '/';
 		$view = $dto->view();
-		$this->smarty->assign('webbase', Core_Url::baseServerUri());
-		$this->smarty->assign('requestbase', Core_Url::baseRequestUri());
+		$this->assignGlobalVariables($this->smarty);
 		$this->smarty->assign('dto', $dto);
 		$this->smarty->display($view);
 		/* PROTECTED REGION END */
@@ -95,6 +94,30 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 						return $this->renderInclude($name, $params);
 					}
 				}
+				// fallback for default controller
+				if ($i == count($requestPath)) {
+					// exclude 'class' context
+					$context = Core_Url::requestInfo();
+					array_splice($context, $i -2, 1);
+					$view = implode('/', $context);
+					foreach ($this->defaultSuffixes() as $suffix) {
+						$name = $this->buildView($suffix, $view);
+						if ($this->isSmartyTemplate($name)) {
+							return $this->renderInclude($name, $params);
+						}
+					}
+					// exclude 'class' context and 'id'
+					$context = Core_Url::requestInfo();
+					array_splice($context, $i -1, 1);
+					array_splice($context, $i -3, 1);
+					$view = implode('/', $context);
+					foreach ($this->defaultSuffixes() as $suffix) {
+						$name = $this->buildView($suffix, $view);
+						if ($this->isSmartyTemplate($name)) {
+							return $this->renderInclude($name, $params);
+						}
+					}
+				}
 			}
 		} else {
 			// check only suffixes
@@ -123,8 +146,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 		$smarty->template_dir = $this->smarty->template_dir;
 		$smarty->compile_dir = $this->smarty->compile_dir;
 		$smarty->register_function('render', array($this, 'checkInclude'));
-		$smarty->assign('webbase', Core_Url::baseServerUri());
-		$smarty->assign('requestbase', Core_Url::baseRequestUri());
+		$this->assignGlobalVariables($smarty);
 		$smarty->assign($params);
 		return $smarty->fetch($view);
 		// this does NOT work!  it works for the first time 'render' is used, further usage results in lost dto parameters
@@ -197,6 +219,11 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237999928437_189680_1219) ENABLED START */
 	// TODO: put your further code implementations for class 'Smarty_SmartyRenderer' here
+	protected function assignGlobalVariables(&$smarty) {
+		$smarty->assign('webbase', Core_Url::baseServerUri());
+		$smarty->assign('requestbase', Core_Url::baseRequestUri());
+		$smarty->assign('context', Core_Url::requestPath());
+	}
 	/* PROTECTED REGION END */
 }
 ?>
