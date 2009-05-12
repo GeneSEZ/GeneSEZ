@@ -103,7 +103,7 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 			case 'STRING': ;
 			case 'INTEGER': ;
 			default:
-				$this->form->addElement('text', $formname, $attribute->a_name . ':');
+				$this->form->addElement('text', $formname, $attribute->a_name . ':', array('size' => 80));
 				break;
 		}
 	}
@@ -120,11 +120,11 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 		$entity;
 		$cardinality;
 		if ($association->from->c_name == $class->c_name) {
-			$entity = $association->from->c_name;
-			$cardinality = $association->s_from_cardinality;
-		} else if ($association->to->c_name == $class->c_name) {
 			$entity = $association->to->c_name;
 			$cardinality = $association->s_to_cardinality;
+		} else if ($association->to->c_name == $class->c_name) {
+			$entity = $association->from->c_name;
+			$cardinality = $association->s_from_cardinality;
 		}
 		// check multiplicity, only if optional
 		if ($cardinality === '0..1' || $cardinality === 'N') {
@@ -132,8 +132,7 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 		}
 		$values = $this->objectDao->fetchAllByClass($entity);
 		foreach ($values as $value) {
-			// TODO: change the text representation of the objects!
-			$assoc->addOption($value->id, $value->id);
+			$assoc->addOption($this->getReadableValue($value), $value->id);
 		}
 	}
 	
@@ -180,6 +179,25 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 		}
 		$ref = $this->objectDao->fetch($id);
 		$object->$name = $ref;
+	}
+	
+	protected function getReadableValue($object) {
+		$end = false;
+		$value = '[' . $object->id . '] ';
+		$class = $object->class;
+		while (!$end) {
+			if (!is_int($class->c_parent)) {
+				$end = true;
+			}
+			if (count($class->attributes) > 0) {
+				$name = $class->attributes[0]->a_name;
+				$value .= $object->$name;
+				$end = true;
+			} else {
+				$class = $class->parent;
+			}
+		}
+		return $value;
 	}
 	
 	protected function getAttributePrefix($class) {
