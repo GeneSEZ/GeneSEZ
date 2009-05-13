@@ -175,9 +175,9 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 			case 'BOOLEAN':
 				$value = $this->form->exportValue($formname);
 				if ($value == '1') {
-					$object->$name = true;
+					$value = true;
 				} else {
-					$object->$name = false;
+					$value = false;
 				}
 				break;
 			case 'STRING':
@@ -189,17 +189,18 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 			default:
 				break;
 		}
+		$constraint = $attribute->type->t_constraint;
 		if ($constraint != '' && preg_match('/^[a-zA-Z].*/', $constraint) == 1) {
 			if (class_exists($constraint) && method_exists($constraint, 'parse')) {
 				try {
 					$obj = call_user_func(array($constraint, 'parse'), $this->form->exportValue($formname));
-					$object->$name = strval($obj);
+					$value = strval($obj);
 				} catch (ParseException $exception) {
 					// should not happen: values are validated before object() is called
-					$object->$name = $value;
 				}
 			}
 		}
+		$object->$name = $value;
 	}
 	
 	/**

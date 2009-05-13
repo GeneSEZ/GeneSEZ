@@ -110,8 +110,32 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	public function show($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_510778_846) ENABLED START */
 		// comming soon :-)
-		$this->notifier->add(new Msg_Message('show view for objects comming soon'));
-		$this->redirect('list');
+//		$this->notifier->add(new Msg_Message('show view for objects comming soon'));
+//		$this->redirect('list');
+		$entity = $this->objectDao->fetch($id);
+		if ($entity === false) {
+			$this->notifier->add(new Msg_Message('object of class' . $this->getClass() . ' with given id not found'));
+			$this->redirect('list');
+		}
+		$classes = $this->classDao->fetchSuperclasses($this->getClass());
+		$selected = $this->getClass();
+		if (array_key_exists('class', $_REQUEST)) {
+			$show = $_REQUEST['class'];
+			foreach ($classes as $class) {
+				if ($class->c_name == $show) {
+					$selected = $class->c_name;
+					break;
+				}
+			}
+		}
+		return new Core_BaseDto(array(
+			'object' => $entity,
+			'class' => $selected,
+			'classes' => $classes,
+			'show' => $this->newLink('show'),
+			'edit' => $this->newLink('edit'),
+			'showAssociated' => $this->newLink()
+		));
 		/* PROTECTED REGION END */
 	}
 
