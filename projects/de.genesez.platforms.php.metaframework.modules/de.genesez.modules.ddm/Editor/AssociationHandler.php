@@ -83,11 +83,11 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430902491_280209_441) ENABLED START */
 		$association = $this->associationDao->fetch($id);
 		if ($association === false) {
-			$this->notifier->add(new Message('association with the given id not found'));
+			$this->notifier->add(new Msg_Message('association with the given id not found'));
 			$this->redirect('list');
 		}
 		$association->delete();
-		$this->notifier->add(new Message('association successfully deleted'));
+		$this->notifier->add(new Msg_Message('association successfully deleted'));
 		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}

@@ -38,11 +38,13 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 	
 	public function errors() {
 		$errors = array();
-		$errors['name'] = $this->form->getElementError('name');
-		$errors['description'] = $this->form->getElementError('description');
-		$errors['basetype'] = $this->form->getElementError('basetype');
-		$errors['constraint'] = $this->form->getElementError('constraint');
-		$errors['editable'] = $this->form->getElementError('editable');
+		$fields = array('name', 'description', 'basetype', 'constraint', 'editable');
+		foreach ($fields as $field) {
+			$error = $this->form->getElementError($field);
+			if ($error != '') {
+				$errors[$field] = $error;
+			}
+		}
 		return $errors;
 	}
 	

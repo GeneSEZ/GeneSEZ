@@ -53,11 +53,13 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 	
 	public function errors() {
 		$errors = array();
-		$errors['name'] = $this->form->getElementError('name');
-		$errors['view'] = $this->form->getElementError('view');
-		$errors['description'] = $this->form->getElementError('description');
-		$errors['editable'] = $this->form->getElementError('editable');
-		$errors['parent'] = $this->form->getElementError('parent');
+		$fields = array('name', 'view', 'description', 'editable', 'parent');
+		foreach ($fields as $field) {
+			$error = $this->form->getElementError($field);
+			if ($error != '') {
+				$errors[$field] = $error;
+			}
+		}
 		return $errors;
 	}
 	

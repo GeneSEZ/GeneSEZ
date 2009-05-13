@@ -54,11 +54,13 @@ class Form_AttributeAdapter extends Form_BaseAdapter {
 	
 	public function errors() {
 		$errors = array();
-		$errors['name'] = $this->form->getElementError('name');
-		$errors['column'] = $this->form->getElementError('column');
-		$errors['description'] = $this->form->getElementError('description');
-		$errors['type'] = $this->form->getElementError('type');
-		$errors['class'] = $this->form->getElementError('class');
+		$fields = array('name', 'column', 'description', 'type', 'class');
+		foreach ($fields as $field) {
+			$error = $this->form->getElementError($field);
+			if ($error != '') {
+				$errors[$field] = $error;
+			}
+		}
 		return $errors;
 	}
 	

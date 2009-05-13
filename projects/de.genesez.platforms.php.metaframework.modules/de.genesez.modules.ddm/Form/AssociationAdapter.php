@@ -53,12 +53,13 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 	
 	public function errors() {
 		$errors = array();
-		$errors['name'] = $this->form->getElementError('name');
-		$errors['description'] = $this->form->getElementError('description');
-		$errors['fromCardinality'] = $this->form->getElementError('fromCardinality');
-		$errors['toCardinality'] = $this->form->getElementError('toCardinality');
-		$errors['from'] = $this->form->getElementError('from');
-		$errors['to'] = $this->form->getElementError('to');
+		$fields = array('name', 'description', 'fromCardinality', 'toCardinality', 'from', 'to');
+		foreach ($fields as $field) {
+			$error = $this->form->getElementError($field);
+			if ($error != '') {
+				$errors[$field] = $error;
+			}
+		}
 		return $errors;
 	}
 	
