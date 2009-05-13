@@ -210,11 +210,11 @@ class DDM_Object extends Doctrine_Record
 		}
 	
 		$statement = 'UPDATE ' . strtolower( $this->class->c_view ) . ' SET '
-			. join( ',', $update )
+			. join( ', ', $update )
 			. ' WHERE id=' . $this->id;
 	
-		$conn = $this->_table->getConnection();
-		$conn->execute($statement);
+		$conn = $this->getTable()->getConnection()->getDbh();
+		$conn->exec($statement);
 	}
 
 	/**

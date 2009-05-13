@@ -61,7 +61,7 @@ CREATE TABLE ddm_type (
 	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_type_id_seq'),
 	t_basetype ddm_basetypes NOT NULL,
 	t_name VARCHAR(1024) UNIQUE NOT NULL,
-	t_description VARCHAR(1024) UNIQUE,
+	t_description VARCHAR(1024) NOT NULL DEFAULT '',
 	t_constraint TEXT NOT NULL,
 	t_editable BOOLEAN NOT NULL DEFAULT TRUE
 );
@@ -73,7 +73,7 @@ CREATE TABLE ddm_class (
 	c_parent INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE,
 	c_name VARCHAR(1024) UNIQUE NOT NULL,
 	c_view VARCHAR(1024) UNIQUE NOT NULL,
-	c_description VARCHAR(1024) UNIQUE,
+	c_description VARCHAR(1024)NOT NULL DEFAULT '',
 	c_editable BOOLEAN NOT NULL DEFAULT TRUE
 );
 
@@ -85,7 +85,7 @@ CREATE TABLE ddm_attribute (
 	a_type INTEGER REFERENCES ddm_type(id) ON DELETE RESTRICT NOT NULL,
 	a_name VARCHAR(1024) NOT NULL,
 	a_column VARCHAR(1024) NOT NULL,
-	a_description VARCHAR(1024)
+	a_description VARCHAR(1024) NOT NULL DEFAULT ''
 );
 
 -- Assoziationen
@@ -417,7 +417,7 @@ CREATE FUNCTION _create_insert_rule(c_view varchar, c_id integer) RETURNS void A
 		}
 	}
 
-	$statement = 'CREATE RULE insert_' . $view . '  AS ON INSERT TO ' . $view . ' DO INSTEAD ( INSERT INTO ddm_object(o_class) VALUES(' . $id . ');';
+	$statement = 'CREATE RULE insert_' . $view . '  AS ON INSERT TO ' . $view . ' DO INSTEAD ( ';
 
 	while ( my ($a_column, $attr) = each( %attributes ) ) {
 		my $table;
@@ -468,7 +468,7 @@ CREATE FUNCTION _create_update_rule(c_view varchar, c_id integer) RETURNS void A
 		}
 	}
 
-	$statement = 'CREATE RULE update_' . $view . '  AS ON UPDATE TO ' . $view . ' DO INSTEAD ( INSERT INTO ddm_object(o_class) VALUES(' . $id . ');';
+	$statement = 'CREATE RULE update_' . $view . '  AS ON UPDATE TO ' . $view . ' DO INSTEAD ( ';
 
 	while ( my ($a_column, $attr) = each( %attributes ) ) {
 		my $table;
@@ -541,7 +541,7 @@ BEGIN
 			|| ' AND v_attribute = '
 			|| a_id;
 	END IF;
-	RAISE DEBUG '%', update_statement;
+	RAISE WARNING '%', update_statement;
 	EXECUTE update_statement;
 	RETURN;
 END;
