@@ -34,6 +34,10 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 			$attribute->save();
 			$this->notifier->add(new Msg_Message('attribute successfully stored'));
 			$this->redirect('edit/' . $attribute->a_class, 'class');
+		} else {
+			foreach ($this->attributeAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->attributeAdapter->dto(),
@@ -59,6 +63,10 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 			$attribute->save();
 			$this->notifier->add(new Msg_Message('attribute successfully stored'));
 			$this->redirect('list');
+		} else {
+			foreach ($this->attributeAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->attributeAdapter->dto(), 

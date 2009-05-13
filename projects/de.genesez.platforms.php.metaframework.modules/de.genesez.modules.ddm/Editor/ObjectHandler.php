@@ -34,6 +34,10 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 			$object->save();
 			$this->notifier->add(new Msg_Message('object created successfully'));
 			$this->redirect('list');
+		} else {
+			foreach ($this->objectAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'class' => $this->getClass(),
@@ -64,6 +68,10 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 			$object->save();
 			$this->notifier->add(new Msg_Message('object saved successfully'));
 			$this->redirect('list');
+		} else {
+			foreach ($this->objectAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'class' => $this->getClass(),

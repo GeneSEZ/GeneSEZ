@@ -8,6 +8,7 @@ class Form_TypeAdapter extends Form_BaseAdapter {
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
 		$this->form->addElement('text', 'name', 'name:', array('size' => 80));
+		$this->form->addRule('name', 'the name is required', 'required', null, 'client');
 		$this->form->addElement('textarea', 'description', 'description:', array('cols' => 80, 'rows' => 2));
 		$basetype = $this->form->addElement('select', 'basetype', 'basetype:');
 		$basetypeValues = array('INTEGER' => 'integer', 'BOOLEAN' => 'boolean', 'STRING' => 'string');

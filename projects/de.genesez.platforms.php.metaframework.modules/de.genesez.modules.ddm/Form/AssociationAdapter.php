@@ -9,18 +9,19 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
 		$this->form->addElement('text', 'name', 'name:', array('size' => 80));
+		$this->form->addRule('name', 'the name is required', 'required', null, 'client');
 		$this->form->addElement('textarea', 'description', 'description:', array('cols' => 80, 'rows' => 2));
 		// cardinalities
 		$fromCard = $this->form->addElement('select', 'fromCardinality', 'from cardinality:');
 		$toCard = $this->form->addElement('select', 'toCardinality', 'to cardinality:');
 		$fromCard->addOption('0..1', '0..1');
 		$fromCard->addOption('1', '1');
-		$fromCard->addOption('*', '*');
-		$fromCard->addOption('1..*', '1..*');
+		$fromCard->addOption('N', 'N');
+		$fromCard->addOption('1..N', '1..N');
 		$toCard->addOption('0..1', '0..1');
 		$toCard->addOption('1', '1');
-		$toCard->addOption('*', '*');
-		$toCard->addOption('1..*', '1..*');
+		$toCard->addOption('N', 'N');
+		$toCard->addOption('1..N', '1..N');
 		// types
 		$from = $this->form->addElement('select', 'from', 'from:');
 		$to = $this->form->addElement('select', 'to', 'to:');
@@ -39,8 +40,8 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 		}
 		$association->s_name = $this->form->exportValue('name');
 		$association->s_description = $this->form->exportValue('description');
-		$association->s_from_cardinality = preg_replace('/\*/', 'N', $this->form->exportValue('fromCardinality'));
-		$association->s_to_cardinality = preg_replace('/\*/', 'N', $this->form->exportValue('toCardinality'));
+		$association->s_from_cardinality = $this->form->exportValue('fromCardinality');
+		$association->s_to_cardinality = $this->form->exportValue('toCardinality');
 		$fromId = $this->form->exportValue('from');
 		//$from = $this->classDao->fetch($fromId);
 		$association->s_from = $fromId;

@@ -34,6 +34,10 @@ class Editor_TypeHandler extends Util_NotifierController  {
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully created'));
 			$this->redirect('list');
+		} else {
+			foreach ($this->typeAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->typeAdapter->dto()
@@ -60,6 +64,10 @@ class Editor_TypeHandler extends Util_NotifierController  {
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully stored'));
 			$this->redirect('list');
+		} else {
+			foreach ($this->typeAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->typeAdapter->dto(),

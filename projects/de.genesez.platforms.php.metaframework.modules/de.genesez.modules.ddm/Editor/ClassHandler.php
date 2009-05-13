@@ -34,6 +34,10 @@ class Editor_ClassHandler extends Util_NotifierController  {
 			$class->save();
 			$this->notifier->add(new Msg_Message('class successfully created'));
 			$this->redirect($this->newLink('edit/' . $class->id));
+		} else {
+			foreach ($this->classAdpater->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->classAdpater->dto()
@@ -59,6 +63,10 @@ class Editor_ClassHandler extends Util_NotifierController  {
 			$class->save();
 			$this->notifier->add(new Msg_Message('class successfully stored'));
 			$this->redirect('list');
+		} else {
+			foreach ($this->classAdpater->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		$this->attributeAdapter->create(null, $this->newLink('create', 'attribute'));
 		$this->associationAdapter->create(null, $this->newLink('create', 'association'));

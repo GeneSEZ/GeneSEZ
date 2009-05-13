@@ -59,6 +59,15 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 	
 	public function errors() {
 		$errors = array();
+		foreach ($this->classDao->fetchSuperclasses($this->class) as $class) {
+			foreach ($class->attributes as $attrib) {
+				$formname = $this->getAttributePrefix($class) . $attrib->a_name;
+				$error = $this->form->getElementError($formname);
+				if ($error != '') {
+					$errors[$formname] = $error;
+				}
+			}
+		}
 		return $errors;
 	}
 	
@@ -100,11 +109,19 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 			case 'BOOLEAN':
 				$this->form->addElement('checkbox', $formname , $attribute->a_name . ':');
 				break;
-			case 'STRING': ;
-			case 'INTEGER': ;
+			case 'STRING':
+				$this->form->addElement('text', $formname, $attribute->a_name . ':', array('size' => 80));
+				break;
+			case 'INTEGER':
+				$this->form->addElement('text', $formname, $attribute->a_name . ':', array('size' => 80));
+				$this->form->addRule($formname, 'value must be a number', 'numeric', null, 'client');
+				break;
 			default:
 				$this->form->addElement('text', $formname, $attribute->a_name . ':', array('size' => 80));
 				break;
+		}
+		if ($attribute->type->t_constraint != '') {
+			$this->form->addRule($formname, 'invalid value', 'regex', $attribute->type->t_constraint, 'client');
 		}
 	}
 	

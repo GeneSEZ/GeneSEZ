@@ -9,6 +9,7 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 	protected function fillForm() {
 		$this->form->addElement('hidden', 'id');
 		$this->form->addElement('text', 'name', 'name:', array('size' => 80));
+		$this->form->addRule('name', 'the name is required', 'required', null, 'client');
 		$this->form->addElement('text', 'view', 'view:', array('size' => 80));
 		$this->form->addElement('textarea', 'description', 'description:', array('cols' => 80, 'rows' => 2));
 		$this->form->addElement('checkbox', 'editable', 'editable:');
@@ -31,7 +32,12 @@ class Form_ClassAdapter extends Form_BaseAdapter {
 			$class = new DDM_Class();
 		}
 		$class->c_name = $this->form->exportValue('name');
-		$class->c_view = $this->form->exportValue('view');
+		$view = $this->form->exportValue('view');
+		if ($view == '') {
+			$class->c_view = $this->form->exportValue('name');
+		} else {
+			$class->c_view = $this->form->exportValue('view');
+		}
 		$class->c_description = $this->form->exportValue('description');
 		$parent = $this->form->exportValue('parent');
 		if ($parent != '') {

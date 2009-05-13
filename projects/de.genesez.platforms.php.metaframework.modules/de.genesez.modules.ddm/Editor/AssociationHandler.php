@@ -34,6 +34,10 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 			$association->save();
 			$this->notifier->add(new Msg_Message('association successfully stored'));
 			$this->redirect('edit/' . $association->s_from, 'class');
+		} else {
+			foreach ($this->associationAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->associationAdapter->dto(),
@@ -59,6 +63,10 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 			$association->save();
 			$this->notifier->add(new Msg_Message('association successfully stored'));
 			$this->redirect('list');
+		} else {
+			foreach ($this->associationAdapter->errors() as $error) {
+				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
+			}
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->associationAdapter->dto(), 
