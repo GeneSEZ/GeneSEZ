@@ -14,7 +14,7 @@
  * @author	dreamer
  * @package	Utilities
  */
-class Msg_FlashNotifier  implements IteratorAggregate, Core_Dto, Countable {
+class Msg_FlashNotifier  implements ArrayAccess, IteratorAggregate, Core_Dto, Countable {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
