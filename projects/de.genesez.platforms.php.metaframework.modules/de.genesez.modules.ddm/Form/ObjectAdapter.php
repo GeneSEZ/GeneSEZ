@@ -120,8 +120,16 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 				$this->form->addElement('text', $formname, $attribute->a_name . ':', array('size' => 80));
 				break;
 		}
-		if ($attribute->type->t_constraint != '') {
-			$this->form->addRule($formname, 'invalid value', 'regex', $attribute->type->t_constraint, 'client');
+		$constraint = $attribute->type->t_constraint;
+		if ($constraint != '') {
+			if (preg_match('/^[a-zA-Z].*/', $constraint) == 1) {
+				if (class_exists($constraint) && method_exists($constraint, 'validate')) {
+//					$this->form->registerRule();
+					$this->form->addRule($formname, 'invalid value', 'callback', array($constraint, 'validate'));
+				}
+			} else {
+				$this->form->addRule($formname, 'invalid value', 'regex', $constraint, 'client');
+			}
 		}
 	}
 	
@@ -162,6 +170,7 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 	protected function addValue(DDM_Object $object, DDM_Attribute $attribute, $prefix) {
 		$name = $attribute->a_name;
 		$formname = $prefix . $attribute->a_name;
+		$value;
 		switch ($attribute->type->t_basetype) {
 			case 'BOOLEAN':
 				$value = $this->form->exportValue($formname);
@@ -171,11 +180,25 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 					$object->$name = false;
 				}
 				break;
-			case 'STRING': ;
-			case 'INTEGER': ;
-			default:
-				$object->$name = $this->form->exportValue($formname);
+			case 'STRING':
+				$value = $this->form->exportValue($formname);
 				break;
+			case 'INTEGER':
+				$value = intval($this->form->exportValue($formname));
+				break;
+			default:
+				break;
+		}
+		if ($constraint != '' && preg_match('/^[a-zA-Z].*/', $constraint) == 1) {
+			if (class_exists($constraint) && method_exists($constraint, 'parse')) {
+				try {
+					$obj = call_user_func(array($constraint, 'parse'), $this->form->exportValue($formname));
+					$object->$name = strval($obj);
+				} catch (ParseException $exception) {
+					// should not happen: values are validated before object() is called
+					$object->$name = $value;
+				}
+			}
 		}
 	}
 	
