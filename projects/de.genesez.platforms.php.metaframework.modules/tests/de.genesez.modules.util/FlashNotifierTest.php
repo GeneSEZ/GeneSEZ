@@ -1,13 +1,18 @@
 <?php
 require_once 'PHPUnit/Framework.php';
+require_once 'Core/Dto.php';
 require_once 'Msg/FlashNotifier.php';
+require_once 'Core/BaseDto.php';
+require_once 'Msg/Message.php';
 
 class FlashNotifierTest extends PHPUnit_Framework_TestCase {
 	private $notifier;
 	private $container;
+	private $message;
 	
 	protected function setUp() {
 		$this->container = new ArrayObject();
+		$this->message = new Msg_Message('an important test message');
 	}
 	
 	public function testInitialization() {
@@ -20,7 +25,7 @@ class FlashNotifierTest extends PHPUnit_Framework_TestCase {
 	
 	public function testOneMessageExpire() {
 		$this->notifier = new Msg_FlashNotifier($this->container);
-		$this->notifier->add('an important test message', 0);
+		$this->notifier->add($this->message, 0);
 		$this->assertEquals(1, $this->notifier->count(), 'notifier should contain 1 message');
 		
 		// test iteration
@@ -29,6 +34,7 @@ class FlashNotifierTest extends PHPUnit_Framework_TestCase {
 			$count++;
 		}
 		$this->assertEquals(1, $count, 'iteration should be possible over 1 message');
+		$this->assertEquals($this->message->message, $this->notifier->offsetGet(0)->message, 'message should be equal');
 		
 		// test second construction
 		$this->notifier = new Msg_FlashNotifier($this->container);

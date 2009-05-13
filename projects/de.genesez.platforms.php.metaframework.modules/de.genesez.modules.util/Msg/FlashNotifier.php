@@ -20,7 +20,7 @@ class Msg_FlashNotifier  implements IteratorAggregate, Core_Dto, Countable {
 	 * @generated	attribute definition
 	 * @var		string	$_iD_MESSAGES
 	 */
-	const ID_MESSAGES  = 'flash.notifier';
+	const ID_MESSAGES  = 'de.genesez.modules.util.flash.notifier';
 	/**
 	 * @generated	attribute definition
 	 * @var		null	$_iD_EXPIRATION
@@ -157,6 +157,18 @@ class Msg_FlashNotifier  implements IteratorAggregate, Core_Dto, Countable {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240322907125_749427_515) ENABLED START */
 	// TODO: put your further code implementations for class 'Msg_FlashNotifier' here
+	public function offsetExists($offset) {
+		return array_key_exists($offset, $this->container);
+	}
+	public function offsetGet($offset) {
+		return $this->container[$offset];
+	}
+	public function offsetSet($offset, $value) {
+		$this->container[$offset] = $value;
+	}
+	public function offsetUnset($offset) {
+		unset($this->container[$offset]);
+	}
 	/* PROTECTED REGION END */
 }
 ?>

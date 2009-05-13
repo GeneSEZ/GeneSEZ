@@ -58,10 +58,10 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 * @param	string	$controller	default value is 'null'
 	 * @return	string
 	 */
-	protected function newLink($action = null, $controller = null) {
+	protected function newLink($action = null, $class = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_175507_305) ENABLED START */
 		$url = self::baseRequestUri() . $this->handlerInfo->context;
-		if ($controller === null) {
+		if ($class === null) {
 			if ($action === null) {
 				// url already complete
 			} else {
@@ -69,9 +69,9 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 			}
 		} else {
 			if ($action === null) {
-				$url .= '/' . $controller;
+				$url .= '/' . $class;
 			} else {
-				$url .= '/' . $controller . '/' . $action;
+				$url .= '/' . $class . '/' . $action;
 			}
 		}
 		return $url;

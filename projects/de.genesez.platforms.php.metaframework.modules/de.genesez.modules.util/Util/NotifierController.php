@@ -27,7 +27,7 @@ abstract class Util_NotifierController extends Core_Controller  {
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803687_477311_294) ENABLED START */
-		$this->notifier->add(new Msg_Message('no action specified'));
+		$this->notifier->add(new Msg_Message('no action specified, redirecting to default action'));
 		parent::noActionSpecified();
 		/* PROTECTED REGION END */
 	}
@@ -47,7 +47,7 @@ abstract class Util_NotifierController extends Core_Controller  {
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803750_878544_296) ENABLED START */
-		$this->notifier->add(new Msg_Message('unknown action specified'));
+		$this->notifier->add(new Msg_Message('unknown action specified, redirecting to default action'));
 		parent::unknownActionSpecified();
 		/* PROTECTED REGION END */
 	}

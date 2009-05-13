@@ -1,5 +1,9 @@
 <?php
+require_once 'Core/BaseDto.php';
+require_once 'UML/OneAssociation.php';
+require_once 'UML/ManyAssociation.php';
 require_once 'Menu/MenuItem.php';
+require_once 'Menu/Menu.php';
 
 class MenuItemTest extends PHPUnit_Framework_TestCase {
 	

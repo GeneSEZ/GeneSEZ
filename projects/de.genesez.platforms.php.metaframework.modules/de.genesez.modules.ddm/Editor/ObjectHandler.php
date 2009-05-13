@@ -33,7 +33,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 			$object = $this->objectAdapter->object();
 			$object->save();
 			$this->notifier->add(new Msg_Message('object created successfully'));
-			$this->redirect('');
+			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
 			'class' => $this->getClass(),
@@ -56,14 +56,14 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		$entity = $this->objectDao->fetch($id);
 		if ($entity === false) {
 			$this->notifier->add(new Msg_Message('object of class' . $this->getClass() . ' with given id not found'));
-			$this->redirect('');
+			$this->redirect('list');
 		}
 		$this->objectAdapter->create($this->getClass(), $entity);
 		if ($this->objectAdapter->isValid()) {
 			$object = $this->objectAdapter->object($entity);
 			$object->save();
 			$this->notifier->add(new Msg_Message('object saved successfully'));
-			$this->redirect('');
+			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
 			'class' => $this->getClass(),
@@ -86,11 +86,11 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		$entity = $this->objectDao->fetch($id);
 		if ($entity === false) {
 			$this->notifier->add(new Msg_Message('object of class' . $this->getClass() . ' with given id not found'));
-			$this->redirect('');
+			$this->redirect('list');
 		}
 		$entity->delete();
 		$this->notifier->add(new Msg_Message('object successfully deleted'));
-		$this->redirect('');
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -103,7 +103,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_510778_846) ENABLED START */
 		// comming soon :-)
 		$this->notifier->add(new Msg_Message('show view for objects comming soon'));
-		$this->redirect('');
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 

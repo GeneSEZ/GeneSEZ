@@ -33,7 +33,7 @@ class Editor_TypeHandler extends Util_NotifierController  {
 			$type = $this->typeAdapter->object();
 			$type->save();
 			$this->notifier->add(new Msg_Message('type successfully created'));
-			$this->redirect();
+			$this->redirect('list');
 		}
 		return new Core_BaseDto(array(
 			'form' => $this->typeAdapter->dto()

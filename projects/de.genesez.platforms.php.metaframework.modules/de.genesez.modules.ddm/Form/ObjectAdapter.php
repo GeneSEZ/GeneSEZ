@@ -58,7 +58,7 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 	}
 	
 	public function errors() {
-		$errors = $this->customErrors($errors);
+		$errors = array();
 		return $errors;
 	}
 	
@@ -148,7 +148,7 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 		switch ($attribute->type->t_basetype) {
 			case 'BOOLEAN':
 				$value = $this->form->exportValue($formname);
-				if ($value) {
+				if ($value == '1') {
 					$object->$name = true;
 				} else {
 					$object->$name = false;
