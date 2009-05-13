@@ -187,7 +187,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238044687_348789_945) ENABLED START */
-		$this->redirect();
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -197,7 +197,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function noIdSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765470421_127482_360) ENABLED START */
-		$this->redirect();
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
