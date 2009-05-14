@@ -56,10 +56,10 @@ class DDM_O2NReference extends DDM_Reference
 		$result = $dbh->query($statement);
 		if ( 0 < $result->rowCount() ) {
 			foreach ( $result as $row ) {
-				$row = $result->fetch(PDO::FETCH_ASSOC);
 				$this->id[] = $row['id'];
 				$this->to[] = Doctrine::getTable('DDM_Object')->find($row['r_to']);
 			}
+			$this->from = $from;
 			$this->loaded = true;
 		}
 	}
