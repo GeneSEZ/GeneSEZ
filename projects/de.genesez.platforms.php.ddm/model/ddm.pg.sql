@@ -494,7 +494,7 @@ CREATE FUNCTION _create_update_rule(c_view varchar, c_id integer) RETURNS void A
 		elog(WARNING, $statement);
 		my $sth = spi_query($statement);
 		my $row = spi_fetchrow($sth);
-		$cid = $row{'c_parent'};
+		$cid = $row->{'c_parent'};
 	}
 
 	for my $cid (@classes) {
