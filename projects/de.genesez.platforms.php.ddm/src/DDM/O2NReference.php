@@ -61,6 +61,7 @@ class DDM_O2NReference extends DDM_Reference
 			}
 			$this->from = $from;
 			$this->loaded = true;
+			$this->modified = false;
 		}
 	}
 }

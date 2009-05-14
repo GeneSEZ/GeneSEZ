@@ -59,6 +59,7 @@ class DDM_O2OReference extends DDM_Reference
 			$this->to = Doctrine::getTable('DDM_Object')->find($row['r_to']);
 			$this->from = $from;
 			$this->loaded = true;
+			$this->modified = false;
 		}
 	}
 }
