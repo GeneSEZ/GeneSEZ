@@ -58,6 +58,25 @@ class DDM_Association extends Doctrine_Record
 		return $cardinality; 
 	}
 	
+	public function toOne() {
+		return $this->s_to_cardinality == 1 || $this->s_to_cardinality == '0..1'; 
+	}
+	
+	public function createReference() {
+		$reference = null;
+		if ( $this->cardinality(1, 1)) {
+			$reference = new DDM_O2OReference();
+		} elseif ( $this->cardinality(1, 'N')) {
+			$reference = new DDM_O2NReference();
+		} elseif ( $this->cardinality('N', 1)) {
+			$reference = new DDM_N2OReference();
+		} else {
+			$reference = new DDM_N2NReference();
+		}
+		$reference->association = $this;
+		return $reference;
+	}
+	
 	public function __toString() {
 		return 'Name: ' . $this->s_name;
 	}

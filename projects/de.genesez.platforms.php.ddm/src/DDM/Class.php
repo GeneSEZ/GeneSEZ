@@ -42,9 +42,9 @@ class DDM_Class extends Doctrine_Record
 		return $o;
 	}
 	
-	public function addAssociation($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1) {
-		$this->addAssociationTo($name, $class, $foreignCardinality, $myCardinality);
-		$class->addAssociationTo($name, $this, $myCardinality, $foreignCardinality);
+	public function addAssociation($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1 ) {
+		$association = $this->addAssociationTo($name, $class, $foreignCardinality, $myCardinality);
+		$class->addAssociationFrom($this->c_name, $association);
 	}
 	
 	public function addAssociationTo($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1) {
@@ -55,6 +55,14 @@ class DDM_Class extends Doctrine_Record
 		$association->s_from_cardinality = $myCardinality;
 		$association->s_to_cardinality = $foreignCardinality;
 		$association->save();
+		return $association;
+	}
+	
+	public function addAssociationFrom($name, $association) {
+		$reverseAssociation = new DDM_Reverse_Association();
+		$reverseAssociation->s_name = $name;
+		$reverseAssociation->association = $association;
+		$reverseAssociation->save();
 	}
 	
 	/**
@@ -69,7 +77,7 @@ class DDM_Class extends Doctrine_Record
 				return $s;
 			}
 		}
-		return null;
+		return $this->getReverseAssociation($name);
 	}
 
 	/**
@@ -84,7 +92,7 @@ class DDM_Class extends Doctrine_Record
 				return true;
 			}
 		}
-		return false;
+		return $this->hasReverseAssociation($name);
 	}
 
 	/**
@@ -131,6 +139,28 @@ class DDM_Class extends Doctrine_Record
 	 */
 	public function __toString() {
 		return 'Name: ' . $this->c_name . ', View: ' . $this->c_view;
+	}
+	
+	private function getReverseAssociation($name) {
+		if ( $this->hasReverseAssociation($name) ) {
+			$query = Doctrine_Query::create()
+				->from('ddm_reverse_association r')
+				->leftJoin('r.association a')
+				->addWhere('a.s_to = ?', $this->id)
+				->addWhere('r.s_name LIKE ?', $name);
+			return $query->fetchOne();
+		}
+		return null;
+	}
+	
+	private function hasReverseAssociation($name) {
+		$query = Doctrine_Query::create()
+			->from('ddm_reverse_association r')
+			->leftJoin('r.association a')
+			->addWhere('a.s_to = ?', $this->id)
+			->addWhere('r.s_name LIKE ?', $name);
+		$result = $query->execute();
+		return 0 < $result->count();
 	}
 }
 

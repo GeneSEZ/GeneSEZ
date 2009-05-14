@@ -39,6 +39,10 @@ CREATE SEQUENCE ddm_attribute_id_seq;
 DROP SEQUENCE IF EXISTS ddm_association_id_seq CASCADE;
 CREATE SEQUENCE ddm_association_id_seq;
 
+-- Sequenz fuer die Reverse Assoziations-IDs
+DROP SEQUENCE IF EXISTS ddm_reverse_association_id_seq CASCADE;
+CREATE SEQUENCE ddm_reverse_association_id_seq;
+
 -- Sequenz fuer die Objekt-IDs
 DROP SEQUENCE IF EXISTS ddm_object_id_seq CASCADE;
 CREATE SEQUENCE ddm_object_id_seq;
@@ -47,9 +51,15 @@ CREATE SEQUENCE ddm_object_id_seq;
 DROP SEQUENCE IF EXISTS ddm_value_id_seq CASCADE;
 CREATE SEQUENCE ddm_value_id_seq;
 
--- Sequenz fuer die Referenz-IDs
-DROP SEQUENCE IF EXISTS ddm_reference_id_seq CASCADE;
-CREATE SEQUENCE ddm_reference_id_seq;
+-- Sequenzen fuer die Referenz-IDs
+DROP SEQUENCE IF EXISTS ddm_reference_o2o_id_seq CASCADE;
+CREATE SEQUENCE ddm_reference_o2o_id_seq;
+DROP SEQUENCE IF EXISTS ddm_reference_o2n_id_seq CASCADE;
+CREATE SEQUENCE ddm_reference_o2n_id_seq;
+DROP SEQUENCE IF EXISTS ddm_reference_n2o_id_seq CASCADE;
+CREATE SEQUENCE ddm_reference_n2o_id_seq;
+DROP SEQUENCE IF EXISTS ddm_reference_n2n_id_seq CASCADE;
+CREATE SEQUENCE ddm_reference_n2n_id_seq;
 
 --- -------------------------------------------
 --- Tabellendefinitionen
@@ -100,6 +110,16 @@ CREATE TABLE ddm_association (
 	s_description VARCHAR(1024) NOT NULL DEFAULT ''
 );
 
+-- Reverse Assoziationen
+DROP TABLE IF EXISTS ddm_reverse_association CASCADE;
+CREATE TABLE ddm_reverse_association (
+	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reverse_association_id_seq'),
+	s_association INTEGER REFERENCES ddm_association(id) ON DELETE RESTRICT NOT NULL,
+--	s_class INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE NOT NULL,
+	s_name VARCHAR(1024) NOT NULL,
+	s_description VARCHAR(1024) NOT NULL DEFAULT ''
+);
+
 -- Objekte
 DROP TABLE IF EXISTS ddm_object CASCADE;
 CREATE TABLE ddm_object (
@@ -137,19 +157,37 @@ CREATE TABLE ddm_value_boolean (
 -- 1:1 Assoziationen
 DROP TABLE IF EXISTS ddm_reference_o2o CASCADE;
 CREATE TABLE ddm_reference_o2o (
-	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reference_id_seq'),
+	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reference_o2o_id_seq'),
 	r_association INTEGER REFERENCES ddm_association(id) ON DELETE RESTRICT NOT NULL,
-	r_left INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL,
-	r_right INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL
+	r_from INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL,
+	r_to INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL
 );
 
 -- 1:N Assoziationen
 DROP TABLE IF EXISTS ddm_reference_o2n CASCADE;
 CREATE TABLE ddm_reference_o2n (
-	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reference_id_seq'),
+	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reference_o2n_id_seq'),
 	r_association INTEGER REFERENCES ddm_association(id) ON DELETE RESTRICT NOT NULL,
-	r_left INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL,
-	r_right INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL
+	r_from INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL,
+	r_to INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL
+);
+
+-- N:1 Assoziationen
+DROP TABLE IF EXISTS ddm_reference_n2o CASCADE;
+CREATE TABLE ddm_reference_n2o (
+	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reference_n2o_id_seq'),
+	r_association INTEGER REFERENCES ddm_association(id) ON DELETE RESTRICT NOT NULL,
+	r_from INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL,
+	r_to INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL
+);
+
+-- N:N Assoziationen
+DROP TABLE IF EXISTS ddm_reference_n2n CASCADE;
+CREATE TABLE ddm_reference_n2n (
+	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reference_n2n_id_seq'),
+	r_association INTEGER REFERENCES ddm_association(id) ON DELETE RESTRICT NOT NULL,
+	r_from INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL,
+	r_to INTEGER REFERENCES ddm_object(id) ON DELETE CASCADE NOT NULL
 );
 
 --- -------------------------------------------
@@ -159,12 +197,17 @@ CREATE TABLE ddm_reference_o2n (
 CREATE UNIQUE INDEX ddm_attribute_name_unique ON ddm_attribute (a_class, a_name);
 CREATE UNIQUE INDEX ddm_attribute_column_unique ON ddm_attribute (a_class, a_column);
 CREATE UNIQUE INDEX ddm_association_unique ON ddm_association (s_from, s_name);
+CREATE UNIQUE INDEX ddm_reverse_association_unique ON ddm_reverse_association (s_association);
 CREATE UNIQUE INDEX ddm_value_integer_unique ON ddm_value_integer (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_string_unique ON ddm_value_string (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_value_boolean_unique ON ddm_value_boolean (v_object, v_attribute);
-CREATE UNIQUE INDEX ddm_reference_o2o_left_unique ON ddm_reference_o2o (r_association, r_left);
-CREATE UNIQUE INDEX ddm_reference_o2o_right_unique ON ddm_reference_o2o (r_association, r_right);
-CREATE UNIQUE INDEX ddm_reference_o2n_unique ON ddm_reference_o2n (r_association, r_left);
+CREATE UNIQUE INDEX ddm_reference_o2o_from_unique ON ddm_reference_o2o (r_association, r_from);
+CREATE UNIQUE INDEX ddm_reference_o2o_to_unique ON ddm_reference_o2o (r_association, r_to);
+CREATE UNIQUE INDEX ddm_reference_o2n_from_unique ON ddm_reference_o2n (r_association, r_from);
+CREATE UNIQUE INDEX ddm_reference_o2n_unique ON ddm_reference_o2n (r_association, r_from, r_to);
+CREATE UNIQUE INDEX ddm_reference_n2o_to_unique ON ddm_reference_n2o (r_association, r_to);
+CREATE UNIQUE INDEX ddm_reference_n2o_unique ON ddm_reference_n2o (r_association, r_to, r_from);
+CREATE UNIQUE INDEX ddm_reference_n2n_unique ON ddm_reference_n2n (r_association, r_from, r_to);
 
 --- -------------------------------------------
 --- Prozeduren

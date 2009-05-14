@@ -15,7 +15,7 @@ require_once 'PHPUnit/Framework.php';
 // Import DDM
 require_once 'DDM.php';
 
-class DDM_AssociationTest extends PHPUnit_Framework_TestCase
+class DDM_AssociationTest extends AbstractDoctrineTestCase
 {
 
 	/**
@@ -42,6 +42,9 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( $right, $association->to );
 		$this->assertNull( $right->getAssociation('TestAssociation') );
 		$this->assertTrue( $association->cardinality(1, 1) );
+		
+		$reference = $association->createReference();
+		$this->assertIsA('DDM_O2OReference', $reference);
 	}
 
 	/**
@@ -61,16 +64,22 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$left->save();
 
 		$this->assertTrue( $left->hasAssociation('TestAssociation') );
-		$this->assertTrue( $right->hasAssociation('TestAssociation') );
+		$this->assertTrue( $right->hasAssociation('TestBAssociationClassLeft') );
 		
 		$association = $left->getAssociation('TestAssociation');
 		$this->assertEquals( $left, $association->from );
 		$this->assertEquals( $right, $association->to );
 		$this->assertTrue( $association->cardinality(1, 1) );
-		$reverse = $right->getAssociation('TestAssociation');
+		$reverse = $right->getAssociation('TestBAssociationClassLeft');
+		$this->assertIsA('DDM_Reverse_Association', $reverse);
 		$this->assertEquals( $left, $reverse->to );
 		$this->assertEquals( $right, $reverse->from );
+		$this->assertEquals( $association, $reverse->association );
+		$this->assertEquals( 'TestBAssociationClassLeft', $reverse->s_name );
 		$this->assertTrue( $reverse->cardinality(1, 1) );
+
+		$reference = $association->createReference();
+		$this->assertIsA('DDM_O2OReference', $reference);
 	}
 	
 	/**
@@ -90,7 +99,7 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$left->save();
 
 		$this->assertTrue( $left->hasAssociation('TestAssociation') );
-		$this->assertTrue( $right->hasAssociation('TestAssociation') );
+		$this->assertTrue( $right->hasAssociation('TestAssociationO2OClassLeft') );
 		
 		$association = $left->getAssociation('TestAssociation');
 		$this->assertEquals( $left, $association->from );
@@ -99,13 +108,16 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( '0..1', $association->s_to_cardinality );
 		$this->assertTrue( $association->cardinality(1, 1) );
 		$this->assertTrue( $association->cardinality(1, '0..1') );
-		$reverse = $right->getAssociation('TestAssociation');
+		$reverse = $right->getAssociation('TestAssociationO2OClassLeft');
 		$this->assertEquals( $left, $reverse->to );
 		$this->assertEquals( $right, $reverse->from );
 		$this->assertEquals( '0..1', $reverse->s_from_cardinality );
 		$this->assertEquals( '1', $reverse->s_to_cardinality );
 		$this->assertTrue( $reverse->cardinality(1, 1) );
 		$this->assertTrue( $reverse->cardinality('0..1', 1) );
+
+		$reference = $association->createReference();
+		$this->assertIsA('DDM_O2OReference', $reference);
 	}
 
 	/**
@@ -125,7 +137,7 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$left->save();
 
 		$this->assertTrue( $left->hasAssociation('TestAssociation') );
-		$this->assertTrue( $right->hasAssociation('TestAssociation') );
+		$this->assertTrue( $right->hasAssociation('TestAssociationO2NClassLeft') );
 		
 		$association = $left->getAssociation('TestAssociation');
 		$this->assertEquals( $left, $association->from );
@@ -133,13 +145,52 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( '1', $association->s_from_cardinality );
 		$this->assertEquals( 'N', $association->s_to_cardinality );
 		$this->assertTrue( $association->cardinality(1, 'N') );
-		$reverse = $right->getAssociation('TestAssociation');
+		$reverse = $right->getAssociation('TestAssociationO2NClassLeft');
 		$this->assertEquals( $left, $reverse->to );
 		$this->assertEquals( $right, $reverse->from );
 		$this->assertEquals( 'N', $reverse->s_from_cardinality );
 		$this->assertEquals( '1', $reverse->s_to_cardinality );
 		$this->assertTrue( $reverse->cardinality('N', 1) );
+
+		$reference = $association->createReference();
+		$this->assertIsA('DDM_O2NReference', $reference);
 	}
+
+	/**
+	 * Test creating a new n-to-n association
+	 */
+	public function testNewAssociationN2O()
+	{
+		$left = new DDM_Class();
+		$left->c_name = 'TestAssociationN2OClassLeft';
+		$left->save();
+
+		$right = new DDM_Class();
+		$right->c_name = 'TestAssociationN2OClassRight';
+		$right->save();
+		
+		$left->addAssociation('TestAssociation', $right, 1, 'N');
+		$left->save();
+
+		$this->assertTrue( $left->hasAssociation('TestAssociation') );
+		$this->assertTrue( $right->hasAssociation('TestAssociationN2OClassLeft') );
+		
+		$association = $left->getAssociation('TestAssociation');
+		$this->assertEquals( $left, $association->from );
+		$this->assertEquals( $right, $association->to );
+		$this->assertEquals( 'N', $association->s_from_cardinality );
+		$this->assertEquals( 1, $association->s_to_cardinality );
+		$this->assertTrue( $association->cardinality('N', 1) );
+		$reverse = $right->getAssociation('TestAssociationN2OClassLeft');
+		$this->assertEquals( $left, $reverse->to );
+		$this->assertEquals( $right, $reverse->from );
+		$this->assertEquals( 1, $reverse->s_from_cardinality );
+		$this->assertEquals( 'N', $reverse->s_to_cardinality );
+		$this->assertTrue( $reverse->cardinality(1, 'N') );
+		$reference = $association->createReference();
+		$this->assertIsA('DDM_N2OReference', $reference);
+	}
+	
 
 	/**
 	 * Test creating a new n-to-n association
@@ -158,7 +209,7 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$left->save();
 
 		$this->assertTrue( $left->hasAssociation('TestAssociation') );
-		$this->assertTrue( $right->hasAssociation('TestAssociation') );
+		$this->assertTrue( $right->hasAssociation('TestAssociationN2NClassLeft') );
 		
 		$association = $left->getAssociation('TestAssociation');
 		$this->assertEquals( $left, $association->from );
@@ -166,12 +217,14 @@ class DDM_AssociationTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( 'N', $association->s_from_cardinality );
 		$this->assertEquals( 'N', $association->s_to_cardinality );
 		$this->assertTrue( $association->cardinality('N', 'N') );
-		$reverse = $right->getAssociation('TestAssociation');
+		$reverse = $right->getAssociation('TestAssociationN2NClassLeft');
 		$this->assertEquals( $left, $reverse->to );
 		$this->assertEquals( $right, $reverse->from );
 		$this->assertEquals( 'N', $reverse->s_from_cardinality );
 		$this->assertEquals( 'N', $reverse->s_to_cardinality );
 		$this->assertTrue( $reverse->cardinality('N', 'N') );
+		$reference = $association->createReference();
+		$this->assertIsA('DDM_N2NReference', $reference);
 	}
 }
 

@@ -36,6 +36,7 @@ class DDM_AssociationTable extends Doctrine_Table
 			return $this->findAll();
 		}
 	}
+	
 }
 
 ?>

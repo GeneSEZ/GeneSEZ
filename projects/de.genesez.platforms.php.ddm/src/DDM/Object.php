@@ -28,7 +28,7 @@ class DDM_Object extends Doctrine_Record
 	 * @param mixed $value
 	 * @return void
 	 */
-	function __set($name, $value) {
+	public function __set($name, $value) {
 		// An object attribute in Doctrine
 		if ( $this->hasRelation($name) ) {
 			return parent::set($name, $value);
@@ -37,7 +37,7 @@ class DDM_Object extends Doctrine_Record
 			$this->setAttribute($name, $value);
 		}
 		elseif ( $this->class->hasAssociation($name) ) {
-			$this->setAssociation($name, $value);
+			$this->setReference($name, $value);
 		}
 	}
 
@@ -47,7 +47,7 @@ class DDM_Object extends Doctrine_Record
 	 * @param string $name
 	 * @param mixed $value
 	 */
-	function setAttribute($name, $value) {
+	public function setAttribute($name, $value) {
 		if ( $this->class->hasAttribute($name) ) {
 			$this->attributes[$name] = $value;
 		}
@@ -59,14 +59,14 @@ class DDM_Object extends Doctrine_Record
 	 * @param string $name
 	 * @param DDM_Object $value
 	 */
-	function setAssociation($name, $value) {
+	public function setReference($name, $value) {
 		if ( $this->class->hasAssociation($name) ) {
-			$this->setAssociationValue($name, $value);
+			$this->setReferenceValue($name, $value);
 		}
-		$association = $this->class->getAssociation($name);
-		if ( $association->to->hasAssociation($name) ) {
-			$value->setAssociationValue($name, $this);
-		}
+//		$association = $this->class->getAssociation($name);
+//		if ( $association->to->hasAssociation($name) ) {
+//			$value->setReferenceValue($name, $this);
+//		}
 	}
 
 	/**
@@ -75,7 +75,7 @@ class DDM_Object extends Doctrine_Record
 	 * @param string $name
 	 * @return mixed
 	 */
-	function __get($name) {
+	public function __get($name) {
 		// An object attribute in Doctrine
 		if ( $this->hasRelation($name) ) {
 			return parent::get($name);
@@ -84,7 +84,7 @@ class DDM_Object extends Doctrine_Record
 			return $this->getAttribute($name);
 		}
 		elseif ( $this->class->hasAssociation($name) ) {
-			return $this->getAssociation($name);
+			return $this->getReferenceValue($name);
 		}
 	}
 
@@ -94,7 +94,7 @@ class DDM_Object extends Doctrine_Record
 	 * @param string $name
 	 * @return mixed
 	 */
-	function getAttribute($name) {
+	public function getAttribute($name) {
 		if ( $this->class->hasAttribute($name) && isset($this->attributes[$name]) ) {
 			return $this->attributes[$name];
 		}
@@ -107,7 +107,7 @@ class DDM_Object extends Doctrine_Record
 	 * @param string $name
 	 * @return mixed
 	 */
-	function getAssociation($name) {
+	public function getReference($name) {
 		if ( $this->class->hasAssociation($name) && isset($this->associations[$name]) ) {
 			return $this->associations[$name];
 		}
@@ -119,7 +119,7 @@ class DDM_Object extends Doctrine_Record
 	 * 
 	 * @return void
 	 */
-	function construct() {
+	public function construct() {
 		if ( $this->id <= 0 ) {
 			return;
 		}
@@ -137,7 +137,7 @@ class DDM_Object extends Doctrine_Record
 	 *
 	 * @return void
 	 */
-	function save() {
+	public function save() {
 		parent::save();
 		
 		if ( 0 < count($this->class->attributes) ) {
@@ -154,7 +154,7 @@ class DDM_Object extends Doctrine_Record
 	 *
 	 * @return void
 	 */
-	function loadAttributes() {
+	private function loadAttributes() {
 		$conn = $this->_table->getConnection();
 		$statement = 'SELECT * FROM ' . strtolower($this->class->c_view) . ' WHERE id=' . $this->id;
 		$row = $conn->getDbh()->query($statement)->fetch(PDO::FETCH_ASSOC);
@@ -172,25 +172,17 @@ class DDM_Object extends Doctrine_Record
 	 *
 	 * @return void
 	 */
-	function loadAssociations() {
+	private function loadAssociations() {
 		$conn = $this->_table->getConnection();
 		
 		foreach ( $this->class->associations as $s) {
-			if ( $s->cardinality(1, 1) ) {
-				$statement = 'SELECT r_right FROM ddm_reference_o2o WHERE r_association=' . $s->id . ' AND r_left=' . $this->id;
-				$row = $conn->getDbh()->query($statement)->fetch(PDO::FETCH_ASSOC);
-				$objectTable = Doctrine::getTable('DDM_Object');
-				$this->associations[$s->s_name] = $objectTable->find($row['r_right']);
-			}
-			elseif  ( $s->cardinality(1, 'N') ) {
-				$q = new Doctrine_RawSql();
-				$q->select('{o.*}')
-					->from('ddm_object o')
-					->where('o.id IN (SELECT r_right FROM ddm_reference_o2n WHERE r_association=' . $s->id . ' AND r_left=' . $this->id . ')')
-					->addComponent('o', 'DDM_Object');
-				$this->associations[$s->s_name] = new ArrayObject( $q->execute()->getData() );
-			}
+			$this->loadReferenceValue($s);
 		}
+	}
+	
+	private function loadReferenceValue(DDM_Association $association) {
+		$this->associations[$association->s_name] = $association->createReference();
+		$this->associations[$association->s_name]->load($this);
 	}
 
 	/**
@@ -198,7 +190,7 @@ class DDM_Object extends Doctrine_Record
 	 *
 	 * @return void
 	 */
-	function saveAttributes() {
+	private function saveAttributes() {
 		$update = array();
 		
 		foreach ($this->class->attributes as $a) {
@@ -222,39 +214,50 @@ class DDM_Object extends Doctrine_Record
 	 *
 	 * @return void
 	 */
-	function saveAssociations() {
+	private function saveAssociations() {
 		$conn = $this->_table->getConnection();
 		
 		foreach ( $this->class->associations as $s) {
-			if ( $s->cardinality(1, 1) ) {
-				$statement = 'INSERT INTO ddm_reference_o2o (r_association, r_left, r_right) '
-					. ' VALUES(' . $s->id . ',' . $this->id . ','. $this->associations[$s->s_name]->id . ')';
-				$conn->execute($statement);
+			$name = $s->s_name;
+			if ( isset( $this->associations[$name] ) && $this->associations[$name]->isModified() ) {
+				$this->associations[$name]->save();
 			}
-			elseif  ( $s->cardinality(1, 'N') ) {
-					$iterator = $this->associations[$s->s_name]->getIterator();
-					while($iterator->valid()) {
-						$statement = 'INSERT INTO ddm_reference_o2n (r_association, r_left, r_right) '
-							. ' VALUES(' . $s->id . ',' . $this->id . ','. $iterator->current()->id . ')';
-						$conn->execute($statement);
-						$iterator->next();
-					}
-			}
+			
+//			if ( $s->cardinality(1, 1) ) {
+//				$statement = 'INSERT INTO ddm_reference_o2o (r_association, r_left, r_right) '
+//					. ' VALUES(' . $s->id . ',' . $this->id . ','. $this->associations[$s->s_name]->id . ')';
+//				$conn->execute($statement);
+//			}
+//			elseif  ( $s->cardinality(1, 'N') ) {
+//					$iterator = $this->associations[$s->s_name]->getIterator();
+//					while($iterator->valid()) {
+//						$statement = 'INSERT INTO ddm_reference_o2n (r_association, r_left, r_right) '
+//							. ' VALUES(' . $s->id . ',' . $this->id . ','. $iterator->current()->id . ')';
+//						$conn->execute($statement);
+//						$iterator->next();
+//					}
+//			}
 		}
 	}
 
-	private function setAssociationValue($name, $value) {
+	private function setReferenceValue($name, DDM_Object $object) {
 		$association = $this->class->getAssociation($name);
-
-		if ( $association->cardinality(1, 1) ) {
-			$this->associations[$name] = $value;
+		
+		if ( ! isset( $this->associations[$name] ) ) {
+			$this->associations[$name] = $association->createReference();
+			$this->associations[$name]->from = $this;
 		}
-		elseif  ( $association->cardinality(1, 'N') || $association->cardinality('N', 'N') ) {
-				if ( ! array_key_exists( $name, $this->associations ) || is_null( $this->associations[$name] ) ) {
-					$this->associations[$name] = new ArrayObject();
-				}
-				$this->associations[$name]->append( $value );
+		$reference = $this->associations[$name];
+		
+		if ( $association->toOne() ) {
+			$reference->to = $object;
+		} else {
+			$reference->addTo( $object );
 		}
+	}
+	
+	private function getReferenceValue($name) {
+		return $this->associations[$name]->to;
 	}
 }
 

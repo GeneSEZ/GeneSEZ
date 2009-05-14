@@ -9,11 +9,14 @@ abstract class AbstractDoctrineTestCase extends PHPUnit_Framework_TestCase
 		$conn = $manager->getCurrentConnection();
 		$conn->execute('DELETE FROM ddm_reference_o2o CASCADE');
 		$conn->execute('DELETE FROM ddm_reference_o2n CASCADE');
+		$conn->execute('DELETE FROM ddm_reference_n2o CASCADE');
+		$conn->execute('DELETE FROM ddm_reference_n2n CASCADE');
 		$conn->execute('DELETE FROM ddm_value_boolean CASCADE');
 		$conn->execute('DELETE FROM ddm_value_integer CASCADE');
 		$conn->execute('DELETE FROM ddm_value_string CASCADE');
 		$conn->execute('DELETE FROM ddm_object CASCADE');
 		$conn->execute('DELETE FROM ddm_attribute CASCADE');
+		$conn->execute('DELETE FROM ddm_reverse_association CASCADE');
 		$conn->execute('DELETE FROM ddm_association CASCADE');
 		$conn->execute('DELETE FROM ddm_class CASCADE');
 		$conn->execute('DELETE FROM ddm_type CASCADE');
@@ -37,6 +40,10 @@ abstract class AbstractDoctrineTestCase extends PHPUnit_Framework_TestCase
 			}
 		}
 		parent::assertFalse($found, $message);
+	}
+	
+	public static function assertIsA($name, $object) {
+		return parent::assertEquals($name, get_class($object));
 	}
 }
 
