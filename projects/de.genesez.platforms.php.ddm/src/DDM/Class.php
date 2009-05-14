@@ -116,6 +116,24 @@ class DDM_Class extends Doctrine_Record
 		return false;
 	}
 
+	public function __get($name) {
+/*		if ('attributes' === $name ) {
+			if ( isset($this->parent) ) {
+				return array_merge(parent::__get('attributes')->toArray(), $this->parent->attributes);
+			} else {
+				return parent::__get('attributes')->toArray();
+			}
+		}
+		if ('associations' === $name ) {
+			if ( isset($this->parent) ) {
+				return array_merge(parent::__get('associations')->toArray(), $this->parent->associations);
+			} else {
+				return parent::__get('associations')->toArray();
+			}
+		}*/
+		return parent::__get($name);
+	}
+	
 	/**
 	 * Overrides the magic __set method of Doctrine_Record 
 	 *

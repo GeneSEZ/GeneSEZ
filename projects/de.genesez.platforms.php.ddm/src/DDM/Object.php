@@ -140,11 +140,14 @@ class DDM_Object extends Doctrine_Record
 	public function save() {
 		parent::save();
 		
-		if ( 0 < count($this->class->attributes) ) {
+		// ugly hack
+#		if ( 0 < count($this->class->attributes) ) {
+		if ( 0 < count($this->class->attributes) || (isset($this->class->parent) && 0 < count($this->class->parent->attributes) ) ) {
 			$this->saveAttributes();
 		}
-		
-		if ( 0 < count($this->class->associations) ) {
+		// ugly hack
+#		if ( 0 < count($this->class->associations) ) {
+		if ( 0 < count($this->class->associations) || (isset($this->class->parent) && 0 < count($this->class->parent->associations) ) ) {
 			$this->saveAssociations();
 		}
 	}
@@ -203,7 +206,18 @@ class DDM_Object extends Doctrine_Record
 				array_push( $update, $a->a_name ." = NULL" );
 			}
 		}
-	
+		
+		// second part of ugly hack
+		if ( isset ($this->class->parent) ) {
+		foreach ($this->class->parent->attributes as $a) {
+			if ( isset($this->attributes[$a->a_name]) ) {
+				array_push( $update, $a->a_name ." = '" . $this->attributes[$a->a_name] . "'" );
+			} else {
+				array_push( $update, $a->a_name ." = NULL" );
+			}
+		}
+		}
+		
 		$statement = 'UPDATE ' . strtolower( $this->class->c_view ) . ' SET '
 			. join( ', ', $update )
 			. ' WHERE id=' . $this->id;
@@ -225,6 +239,16 @@ class DDM_Object extends Doctrine_Record
 			if ( isset( $this->associations[$name] ) && $this->associations[$name]->isModified() ) {
 				$this->associations[$name]->save();
 			}
+		}
+
+		// third part of ugly hack
+		if ( isset ($this->class->parent) ) {
+		foreach ( $this->class->parent->associations as $s) {
+			$name = $s->s_name;
+			if ( isset( $this->associations[$name] ) && $this->associations[$name]->isModified() ) {
+				$this->associations[$name]->save();
+			}
+		}
 		}
 	}
 
