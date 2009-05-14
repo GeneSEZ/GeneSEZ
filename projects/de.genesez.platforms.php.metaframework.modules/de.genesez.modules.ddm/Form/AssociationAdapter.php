@@ -48,7 +48,7 @@ class Form_AssociationAdapter extends Form_BaseAdapter {
 			$this->form->exportValue('fromCardinality'),
 			$this->form->exportValue('description')
 		);
-		return $from->{$name};
+		return $from->getAssociation($name);
 	}
 	
 	public function errors() {
