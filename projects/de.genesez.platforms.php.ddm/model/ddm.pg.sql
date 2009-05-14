@@ -201,9 +201,9 @@ CREATE UNIQUE INDEX ddm_value_string_unique ON ddm_value_string (v_object, v_att
 CREATE UNIQUE INDEX ddm_value_boolean_unique ON ddm_value_boolean (v_object, v_attribute);
 CREATE UNIQUE INDEX ddm_reference_o2o_from_unique ON ddm_reference_o2o (r_association, r_from);
 CREATE UNIQUE INDEX ddm_reference_o2o_to_unique ON ddm_reference_o2o (r_association, r_to);
-CREATE UNIQUE INDEX ddm_reference_o2n_from_unique ON ddm_reference_o2n (r_association, r_from);
+CREATE UNIQUE INDEX ddm_reference_o2n_to_unique ON ddm_reference_o2n (r_association, r_to);
 CREATE UNIQUE INDEX ddm_reference_o2n_unique ON ddm_reference_o2n (r_association, r_from, r_to);
-CREATE UNIQUE INDEX ddm_reference_n2o_to_unique ON ddm_reference_n2o (r_association, r_to);
+CREATE UNIQUE INDEX ddm_reference_n2o_from_unique ON ddm_reference_n2o (r_association, r_from);
 CREATE UNIQUE INDEX ddm_reference_n2o_unique ON ddm_reference_n2o (r_association, r_to, r_from);
 CREATE UNIQUE INDEX ddm_reference_n2n_unique ON ddm_reference_n2n (r_association, r_from, r_to);
 
