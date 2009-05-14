@@ -269,7 +269,10 @@ class DDM_Object extends Doctrine_Record
 	}
 	
 	private function getLinkValue($name) {
-		return $this->associations[$name]->to;
+		if ( isset($this->associations[$name]) ) {
+			return $this->associations[$name]->to;
+		}
+		return null;
 	}
 }
 
