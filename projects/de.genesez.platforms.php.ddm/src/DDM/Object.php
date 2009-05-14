@@ -126,7 +126,7 @@ class DDM_Object extends Doctrine_Record
 		
 		// ugly hack
 #		if ( 0 < count($this->class->attributes) ) {
-		if ( 0 < count($this->class->attributes) || (isset($this->class->parent) && 0 < count($this->class->parent->attributes) ) ) {
+		if ( 0 < count($this->class->attributes) || 0 < count($this->class->parent->attributes) ) {
 			$this->loadAttributes();
 		}
 		if ( 0 < count($this->class->associations) ) {
@@ -144,12 +144,12 @@ class DDM_Object extends Doctrine_Record
 		
 		// ugly hack
 #		if ( 0 < count($this->class->attributes) ) {
-		if ( 0 < count($this->class->attributes) || (isset($this->class->parent) && 0 < count($this->class->parent->attributes) ) ) {
+		if ( 0 < count($this->class->attributes) || 0 < count($this->class->parent->attributes) ) {
 			$this->saveAttributes();
 		}
 		// ugly hack
 #		if ( 0 < count($this->class->associations) ) {
-		if ( 0 < count($this->class->associations) || (isset($this->class->parent) && 0 < count($this->class->parent->associations) ) ) {
+		if ( 0 < count($this->class->associations) || 0 < count($this->class->parent->associations) ) {
 			$this->saveAssociations();
 		}
 	}
@@ -171,7 +171,7 @@ class DDM_Object extends Doctrine_Record
 			}
 		}
 // ugly hack
-		if ( isset($this->class->parent) && 0 < count($this->class->parent->attributes) ) {
+		if ( 0 < count($this->class->parent->attributes) ) {
 		foreach ( $this->class->parent->attributes as $a) {
 			$a_name = strtolower($a->a_name);
 			if ( isset($row[$a_name]) ) {
@@ -219,7 +219,7 @@ class DDM_Object extends Doctrine_Record
 		}
 		
 		// second part of ugly hack
-		if ( isset ($this->class->parent) ) {
+#		if ( isset ($this->class->parent) ) {
 		foreach ($this->class->parent->attributes as $a) {
 			if ( isset($this->attributes[$a->a_name]) ) {
 				array_push( $update, $a->a_name ." = '" . $this->attributes[$a->a_name] . "'" );
@@ -227,7 +227,7 @@ class DDM_Object extends Doctrine_Record
 				array_push( $update, $a->a_name ." = NULL" );
 			}
 		}
-		}
+#		}
 		
 		$statement = 'UPDATE ' . strtolower( $this->class->c_view ) . ' SET '
 			. join( ', ', $update )
@@ -253,14 +253,14 @@ class DDM_Object extends Doctrine_Record
 		}
 
 		// third part of ugly hack
-		if ( isset ($this->class->parent) ) {
+#		if ( isset ($this->class->parent) ) {
 		foreach ( $this->class->parent->associations as $s) {
 			$name = $s->s_name;
 			if ( isset( $this->associations[$name] ) && $this->associations[$name]->isModified() ) {
 				$this->associations[$name]->save();
 			}
 		}
-		}
+#		}
 	}
 
 	private function setLinkValue($name, DDM_Object $object) {
