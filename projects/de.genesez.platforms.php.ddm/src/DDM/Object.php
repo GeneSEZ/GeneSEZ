@@ -124,7 +124,9 @@ class DDM_Object extends Doctrine_Record
 			return;
 		}
 		
-		if ( 0 < count($this->class->attributes) ) {
+		// ugly hack
+#		if ( 0 < count($this->class->attributes) ) {
+		if ( 0 < count($this->class->attributes) || (isset($this->class->parent) && 0 < count($this->class->parent->attributes) ) ) {
 			$this->loadAttributes();
 		}
 		if ( 0 < count($this->class->associations) ) {
