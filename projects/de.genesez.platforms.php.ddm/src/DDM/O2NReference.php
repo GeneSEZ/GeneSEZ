@@ -27,7 +27,11 @@ class DDM_O2NReference extends DDM_Reference
 	}
 	
 	public function addTo($value) {
-		if ( ! in_array($value, $this->to) ) {
+		$add = true;
+		foreach ( $this->to as $to ) {
+			$add = $add && $to->id != $value->id;
+		}
+		if ( $add ) {
 			$this->to[] = $value;
 			$this->added[] = $value;
 			$this->modified = true;
