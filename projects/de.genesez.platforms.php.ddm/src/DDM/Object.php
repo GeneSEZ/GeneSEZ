@@ -168,6 +168,15 @@ class DDM_Object extends Doctrine_Record
 				$this->attributes[$a->a_name] = $row[$a_name];
 			}
 		}
+// ugly hack
+		if ( isset($this->class->parent) && 0 < count($this->class->parent->attributes) ) {
+		foreach ( $this->class->parent->attributes as $a) {
+			$a_name = strtolower($a->a_name);
+			if ( isset($row[$a_name]) ) {
+				$this->attributes[$a->a_name] = $row[$a_name];
+			}
+		}
+		}
 	}
 
 	/**
