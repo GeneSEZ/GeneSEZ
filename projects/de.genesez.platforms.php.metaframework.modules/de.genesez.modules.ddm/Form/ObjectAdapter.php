@@ -84,7 +84,14 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 				foreach ($class->associations as $assoc) {
 					$formname = $this->getAssociationPrefix($class) . $assoc->s_name;
 					$name = $assoc->s_name;
-					$defaults[$formname] = $this->object->$name;
+					if ($assoc->s_to_cardinality === '0..1' || $assoc->s_to_cardinality === '1') {
+						$defaults[$formname] = $this->object->$name->id;
+					} else {
+						$values = array();
+						foreach ($this->object->$name as $object) {
+							$values[] = $object->id;
+						}
+					}
 				}
 			}
 			// attributes
@@ -151,6 +158,11 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 			$entity = $association->from->c_name;
 			$cardinality = $association->s_from_cardinality;
 		}
+		// check multiplicity, multi-select
+		if ($cardinality === 'N' || $cardinality === '1..N') {
+			$assoc->setMultiple(true);
+			$assoc->setSize(5);
+		}
 		// check multiplicity, only if optional
 		if ($cardinality === '0..1' || $cardinality === 'N') {
 			$assoc->addOption('', '');
@@ -213,13 +225,21 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 	protected function addLink(DDM_Object $object, DDM_Association $association, $prefix) {
 		$name = $association->s_name;
 		$formname = $prefix . $name;
-		$id = $this->form->exportValue($formname);
-		// check if it's an optional reference
-		if ($id === '') {
-			return;
+		if ($cardinality === 'N' || $cardinality === '1..N') {
+			$ids = $this->form->exportValue($formname);
+			foreach ($ids as $id) {
+				$ref = $this->objectDao->fetch($id);
+				$object->$name = $ref;
+			}
+		} else {
+			$id = $this->form->exportValue($formname);
+			// check if it's an optional reference
+			if ($id === '') {
+				return;
+			}
+			$ref = $this->objectDao->fetch($id);
+			$object->$name = $ref;
 		}
-		$ref = $this->objectDao->fetch($id);
-		$object->$name = $ref;
 	}
 	
 	protected function getReadableValue($object) {

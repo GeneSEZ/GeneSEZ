@@ -37,6 +37,15 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		if ($this->objectAdapter->isValid()) {
 			$object = $this->objectAdapter->object();
 			$object->save();
+			if (array_key_exists('association_from_id', $_REQUEST) && array_key_exists('association_name', $_REQUEST)) {
+				$id = $_REQUEST['association_from_id'];
+				$assoc = $_REQUEST['association_name'];
+				if ($id !== null && $assoc !== null) {
+					$from = $this->objectDao->fetch($id);
+					$from->$assoc = $object;
+					$from->save();
+				}
+			}
 			$this->notifier->add(new Msg_Message('object created successfully'));
 			$this->redirect('list');
 		} else {
