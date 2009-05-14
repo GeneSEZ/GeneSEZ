@@ -228,7 +228,7 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 	protected function addLink(DDM_Object $object, DDM_Association $association, $prefix) {
 		$name = $association->s_name;
 		$formname = $prefix . $name;
-		if ($cardinality === 'N' || $cardinality === '1..N') {
+		if (!$association->toOne()) {
 			$ids = $this->form->exportValue($formname);
 			foreach ($ids as $id) {
 				$ref = $this->objectDao->fetch($id);
