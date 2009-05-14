@@ -260,7 +260,7 @@ CREATE FUNCTION check_attribute() RETURNS TRIGGER AS $$
 	while ($cid) {
 		push( @classes, $cid );
 		$statement = 'SELECT c_parent FROM ddm_class WHERE id=' . $cid;
-		elog(WARNING, $statement);
+		elog(INFO, $statement);
 		my $sth = spi_query($statement);
 		my $row = spi_fetchrow($sth);
 		$cid = $row->{'c_parent'};
@@ -269,7 +269,7 @@ CREATE FUNCTION check_attribute() RETURNS TRIGGER AS $$
 	while (-1 < $#classqueue ) {
 		my $cid = shift( @classqueue );
 		$statement = 'SELECT id FROM ddm_class WHERE c_parent=' . $cid;
-		elog(WARNING, $statement);
+		elog(INFO, $statement);
 		my $sth = spi_query($statement);
 		while ( defined( my $row = spi_fetchrow($sth) ) ) {
 			push( @classqueue, $row->{'id'} );
@@ -279,7 +279,7 @@ CREATE FUNCTION check_attribute() RETURNS TRIGGER AS $$
 
 	for my $cid (@classes) {
 		$statement ='SELECT a.id AS a_id FROM ddm_attribute AS a WHERE a.a_name=\'' . $name . '\' AND a.a_class=' . $cid;
-		elog(WARNING, $statement);
+		elog(INFO, $statement);
 		my $sth = spi_query($statement);
 		while ( defined( my $row = spi_fetchrow($sth) ) ) {
 			elog(ERROR, 'Attribute named "' . $name . '" already exists');
@@ -491,7 +491,7 @@ CREATE FUNCTION _create_update_rule(c_view varchar, c_id integer) RETURNS void A
 	while ($cid) {
 		push( @classes, $cid );
 		$statement = 'SELECT c_parent FROM ddm_class WHERE id=' . $cid;
-		elog(WARNING, $statement);
+		elog(INFO, $statement);
 		my $sth = spi_query($statement);
 		my $row = spi_fetchrow($sth);
 		$cid = $row->{'c_parent'};
@@ -499,10 +499,10 @@ CREATE FUNCTION _create_update_rule(c_view varchar, c_id integer) RETURNS void A
 
 	for my $cid (@classes) {
 		$statement ='SELECT a.id AS a_id, a_type, a_column, t_basetype FROM ddm_attribute AS a, ddm_type AS t WHERE a.a_type=t.id AND a.a_class=' . $cid;
-		elog(WARNING, $statement);
+		elog(INFO, $statement);
 		my $sth = spi_query($statement);
 		while ( my $row = spi_fetchrow($sth) ) {
-			elog(WARNING, $row->{'a_column'});
+			elog(INFO, $row->{'a_column'});
 			if ( ! exists( $attributes{$row->{'a_column'}} ) ) {
 				$attributes{$row->{'a_column'}} = $row;
 			}
@@ -523,7 +523,7 @@ CREATE FUNCTION _create_update_rule(c_view varchar, c_id integer) RETURNS void A
 		$statement .= 'SELECT _update_attribute( \'' . $table . '\', NEW.id, ' . $attr->{'a_id'} . ', OLD.' . $attr->{'a_column'} . ', NEW.' . $attr->{'a_column'} . ');';
 	}
 	$statement .= '  );';
-	elog(WARNING, $statement);
+	elog(INFO, $statement);
 	spi_exec_query($statement, 1);
 END;
 $$ LANGUAGE plperl;
