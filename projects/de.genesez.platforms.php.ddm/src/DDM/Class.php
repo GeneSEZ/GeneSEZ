@@ -144,12 +144,12 @@ class DDM_Class extends Doctrine_Record
 		return 'Name: ' . $this->c_name . ', View: ' . $this->c_view;
 	}
 	
-	private function getReverseAssociations() {
+	public function getReverseAssociations() {
 		$query = Doctrine_Query::create()
 			->from('ddm_reverse_association r')
 			->leftJoin('r.association a')
 			->addWhere('a.s_to = ?', $this->id);
-		return $query->execute()->toArray();
+		return $query->execute();
 	}
 	
 	private function getReverseAssociation($name) {

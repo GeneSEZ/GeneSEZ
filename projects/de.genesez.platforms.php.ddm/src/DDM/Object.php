@@ -40,6 +40,10 @@ class DDM_Object extends Doctrine_Record
 			$this->setLinkValue($name, $value);
 		}
 	}
+	
+	public function __toString() {
+		return 'Object: ' . $this->id;
+	}
 
 	/**
 	 * Set the value of an attribute

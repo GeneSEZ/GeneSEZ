@@ -30,6 +30,7 @@ class DDM_O2NReference extends DDM_Reference
 		if ( ! in_array($value, $this->to) ) {
 			$this->to[] = $value;
 			$this->added[] = $value;
+			$this->modified = true;
 		}
 	}
 	
