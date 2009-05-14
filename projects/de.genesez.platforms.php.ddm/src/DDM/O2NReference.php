@@ -54,10 +54,13 @@ class DDM_O2NReference extends DDM_Reference
 			. ' r_association = ' . $this->association->id . ' AND'
 			. ' r_from = ' . $from->id;
 		$result = $dbh->query($statement);
-		foreach ( $result as $row ) {
-			$row = $result->fetch(PDO::FETCH_ASSOC);
-			$this->id[] = $row['id'];
-			$this->to[] = Doctrine::getTable('DDM_Object')->find($row['r_to']);
+		if ( 0 < $result->rowCount() ) {
+			foreach ( $result as $row ) {
+				$row = $result->fetch(PDO::FETCH_ASSOC);
+				$this->id[] = $row['id'];
+				$this->to[] = Doctrine::getTable('DDM_Object')->find($row['r_to']);
+			}
+			$this->loaded = true;
 		}
 	}
 }

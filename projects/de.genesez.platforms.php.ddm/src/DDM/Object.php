@@ -181,8 +181,11 @@ class DDM_Object extends Doctrine_Record
 	}
 	
 	private function loadLinkValue(DDM_Association $association) {
-		$this->associations[$association->s_name] = $association->createLink();
-		$this->associations[$association->s_name]->load($this);
+		$link = $association->createLink();
+		$link->load($this);
+		if ( $link->isLoaded() ) {
+			$this->associations[$association->s_name] = $link;
+		}
 	}
 
 	/**

@@ -4,6 +4,7 @@ abstract class DDM_Reference {
 	
 	protected $association = null;
 	protected $modified = false;
+	protected $loaded = false;
 	
 	public function __set($name, $value) {
 		$this->{$name} = $value;
@@ -15,6 +16,10 @@ abstract class DDM_Reference {
 	
 	public function isModified() {
 		return $this->modified;
+	}
+
+	public function isLoaded() {
+		return $this->loaded;
 	}
 	
 	public abstract function save();

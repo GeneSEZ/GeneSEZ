@@ -57,6 +57,7 @@ class DDM_O2OReference extends DDM_Reference
 			$row = $result->fetch(PDO::FETCH_ASSOC);
 			$this->id = $row['id'];
 			$this->to = Doctrine::getTable('DDM_Object')->find($row['r_to']);
+			$this->loaded = true;
 		}
 	}
 }
