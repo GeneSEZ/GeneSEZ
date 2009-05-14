@@ -16,6 +16,11 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	 * @var		mixed	$objectDao
 	 */
 	protected $objectDao;
+	/**
+	 * @generated	attribute definition
+	 * @var		mixed	$objectAdapter
+	 */
+	protected $objectAdapter;
 
 
 
@@ -151,6 +156,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 			'objects' => $this->objectDao->fetchAllByClass($this->getClass()),
 //			'attributes' => $this->objectDao->fetchAllAttributes($this->getClass()),
 //			'associations' => $this->objectDao->fetchOwnAssociations($this->getClass()),
+			'show' => $this->newLink('show'),
 			'edit' => $this->newLink('edit'),
 			'delete' => $this->newLink('delete'),
 			'create' => $this->newLink('create'),
@@ -168,15 +174,18 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	public 	 function setObjectDao( $objectDao) {
 		$this->objectDao = $objectDao;
 	}
+	/**
+	 * @generated	setter method for the attribute {@link Editor_ObjectHandler::getObjectAdapter() $objectAdapter}
+	 * @param	mixed	$objectAdapter	the value to set
+	 */
+	public 	 function setObjectAdapter( $objectAdapter) {
+		$this->objectAdapter = $objectAdapter;
+	}
 
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241433671335_950930_821) ENABLED START */
 	// TODO: put your further code implementations for class 'ObjectHandler' here
-	protected $objectAdapter;
-	public function setObjectAdapter($objectAdapter) {
-		$this->objectAdapter = $objectAdapter;
-	}
 	/* PROTECTED REGION END */
 }
 ?>

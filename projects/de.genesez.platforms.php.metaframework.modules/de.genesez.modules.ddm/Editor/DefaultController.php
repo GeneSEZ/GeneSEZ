@@ -16,6 +16,16 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 * @var		mixed	$classDao
 	 */
 	protected $classDao;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_RequestHandler	$noClassSpecifiedHandler
+	 */
+	protected $noClassSpecifiedHandler;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_RequestHandler	$unknownClassSpecifiedHandler
+	 */
+	protected $unknownClassSpecifiedHandler;
 
 
 
@@ -44,9 +54,9 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$action	default value is 'null'
-	 * @param	string	$controller	default value is 'null'
+	 * @param	string	$class	default value is 'null'
 	 */
-	protected function redirect($action = null, $controller = null) {
+	protected function redirect($action = null, $class = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_689012_304) ENABLED START */
 		HTTP::redirect($this->newLink($action, $controller));
 		/* PROTECTED REGION END */
@@ -55,7 +65,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$action	default value is 'null'
-	 * @param	string	$controller	default value is 'null'
+	 * @param	string	$class	default value is 'null'
 	 * @return	string
 	 */
 	protected function newLink($action = null, $class = null) {
@@ -83,8 +93,12 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 */
 	protected function noClassSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_802451_306) ENABLED START */
-		$this->notifier->add(new Msg_Message('no class specified'));
-		$this->redirect();
+		if ($this->noClassSpecifiedHandler === null) {
+			$this->notifier->add(new Msg_Message('no class specified'));
+			HTTP::redirect($this->baseRequestUri() . $this->handlerInfo->context->parent->get());
+		} else {
+			return $this->noClassSpecifiedHandler->handle($this->handlerInfo);
+		}
 		/* PROTECTED REGION END */
 	}
 
@@ -93,8 +107,12 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 */
 	protected function unknownClassSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_257117_307) ENABLED START */
-		$this->notifier->add(new Msg_Message('unknown class specified'));
-		$this->redirect();
+		if ($this->unknownClassSpecifiedHandler === null) {
+			$this->notifier->add(new Msg_Message('unknown class specified'));
+			HTTP::redirect($this->baseRequestUri() . $this->handlerInfo->context->parent->get());
+		} else {
+			return $this->noClassSpecifiedHandler->handle($this->handlerInfo);
+		}
 		/* PROTECTED REGION END */
 	}
 
@@ -175,6 +193,20 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 */
 	public 	 function setClassDao( $classDao) {
 		$this->classDao = $classDao;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Editor_DefaultController::getNoClassSpecifiedHandler() $noClassSpecifiedHandler}
+	 * @param	Core_RequestHandler	$noClassSpecifiedHandler	the value to set
+	 */
+	public 	 function setNoClassSpecifiedHandler(Core_RequestHandler $noClassSpecifiedHandler) {
+		$this->noClassSpecifiedHandler = $noClassSpecifiedHandler;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Editor_DefaultController::getUnknownClassSpecifiedHandler() $unknownClassSpecifiedHandler}
+	 * @param	Core_RequestHandler	$unknownClassSpecifiedHandler	the value to set
+	 */
+	public 	 function setUnknownClassSpecifiedHandler(Core_RequestHandler $unknownClassSpecifiedHandler) {
+		$this->unknownClassSpecifiedHandler = $unknownClassSpecifiedHandler;
 	}
 
 

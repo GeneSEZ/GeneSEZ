@@ -16,6 +16,11 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 * @var		mixed	$attributeDao
 	 */
 	protected $attributeDao;
+	/**
+	 * @generated	attribute definition
+	 * @var		mixed	$attributeAdapter
+	 */
+	protected $attributeAdapter;
 
 
 
@@ -131,15 +136,18 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	public 	 function setAttributeDao( $attributeDao) {
 		$this->attributeDao = $attributeDao;
 	}
+	/**
+	 * @generated	setter method for the attribute {@link Editor_AttributeHandler::getAttributeAdapter() $attributeAdapter}
+	 * @param	mixed	$attributeAdapter	the value to set
+	 */
+	public 	 function setAttributeAdapter( $attributeAdapter) {
+		$this->attributeAdapter = $attributeAdapter;
+	}
 
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430670929_72136_374) ENABLED START */
 	// TODO: put your further code implementations for class 'AttributeHandler' here
-	protected $attributeAdapter;
-	public function setAttributeAdapter($attributeAdapter) {
-		$this->attributeAdapter = $attributeAdapter;
-	}
 	/* PROTECTED REGION END */
 }
 ?>

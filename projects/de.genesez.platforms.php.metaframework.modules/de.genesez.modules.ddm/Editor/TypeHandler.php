@@ -16,6 +16,11 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 * @var		mixed	$typeDao
 	 */
 	protected $typeDao;
+	/**
+	 * @generated	attribute definition
+	 * @var		mixed	$typeAdapter
+	 */
+	protected $typeAdapter;
 
 
 
@@ -131,15 +136,18 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	public 	 function setTypeDao( $typeDao) {
 		$this->typeDao = $typeDao;
 	}
+	/**
+	 * @generated	setter method for the attribute {@link Editor_TypeHandler::getTypeAdapter() $typeAdapter}
+	 * @param	mixed	$typeAdapter	the value to set
+	 */
+	public 	 function setTypeAdapter( $typeAdapter) {
+		$this->typeAdapter = $typeAdapter;
+	}
 
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430197741_12901_263) ENABLED START */
 	// TODO: put your further code implementations for class 'TypeHandler' here
-	protected $typeAdapter;
-	public function setTypeAdapter($typeAdapter) {
-		$this->typeAdapter = $typeAdapter;
-	}
 	/* PROTECTED REGION END */
 }
 ?>

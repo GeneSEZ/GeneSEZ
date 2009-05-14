@@ -16,6 +16,11 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 	 * @var		mixed	$associationDao
 	 */
 	protected $associationDao;
+	/**
+	 * @generated	attribute definition
+	 * @var		mixed	$associationAdapter
+	 */
+	protected $associationAdapter;
 
 
 
@@ -130,15 +135,18 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 	public 	 function setAssociationDao( $associationDao) {
 		$this->associationDao = $associationDao;
 	}
+	/**
+	 * @generated	setter method for the attribute {@link Editor_AssociationHandler::getAssociationAdapter() $associationAdapter}
+	 * @param	mixed	$associationAdapter	the value to set
+	 */
+	public 	 function setAssociationAdapter( $associationAdapter) {
+		$this->associationAdapter = $associationAdapter;
+	}
 
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430895757_359389_420) ENABLED START */
 	// TODO: put your further code implementations for class 'AssociationHandler' here
-	protected $associationAdapter;
-	public function setAssociationAdapter($associationAdapter) {
-		$this->associationAdapter = $associationAdapter;
-	}
 	/* PROTECTED REGION END */
 }
 ?>
