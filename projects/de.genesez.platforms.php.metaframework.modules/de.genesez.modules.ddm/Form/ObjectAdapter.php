@@ -21,6 +21,11 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 				$this->addAssociation($assoc, $class);
 			}
 		}
+		// TODO: i guess this should be replaced
+		if (array_key_exists('association_from_id', $_REQUEST) && array_key_exists('association_name', $_REQUEST)) {
+			$id = $this->form->addElement('hidden', 'association_from_id', $_REQUEST['association_from_id']);
+			$assoc = $this->form->addElement('hidden', 'association_name', $_REQUEST['association_name']);
+		}
 //		$attributes = $this->objectDao->fetchAllAttributes($class);
 //		foreach ($attributes as $attrib) {
 //			$this->addAttribute($attrib);
