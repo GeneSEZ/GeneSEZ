@@ -58,7 +58,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 */
 	protected function redirect($action = null, $class = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_689012_304) ENABLED START */
-		HTTP::redirect($this->newLink($action, $controller));
+		HTTP::redirect($this->newLink($action, $class));
 		/* PROTECTED REGION END */
 	}
 
