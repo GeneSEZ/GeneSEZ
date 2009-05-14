@@ -88,8 +88,11 @@ class Form_ObjectAdapter extends Form_BaseAdapter {
 						$defaults[$formname] = $this->object->$name->id;
 					} else {
 						$values = array();
-						foreach ($this->object->$name as $object) {
-							$values[] = $object->id;
+						$objects = $this->object->$name;
+						if ($objects !== null) {
+							foreach ($this->object->$name as $object) {
+								$values[] = $object->id;
+							}
 						}
 					}
 				}
