@@ -42,18 +42,21 @@ class DDM_Class extends Doctrine_Record
 		return $o;
 	}
 	
-	public function addAssociation($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1 ) {
+	public function addAssociation($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1, $description = null ) {
 		$association = $this->addAssociationTo($name, $class, $foreignCardinality, $myCardinality);
 		$class->addAssociationFrom($this->c_name, $association);
 	}
 	
-	public function addAssociationTo($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1) {
+	public function addAssociationTo($name, DDM_Class $class, $foreignCardinality = 1, $myCardinality = 1, $description = null) {
 		$association = new DDM_Association();
 		$association->s_name = $name;
 		$association->from = $this;
 		$association->to = $class;
 		$association->s_from_cardinality = $myCardinality;
 		$association->s_to_cardinality = $foreignCardinality;
+		if ( null !== $description ) {
+			$association->s_description = $description;
+		}
 		$association->save();
 		return $association;
 	}
@@ -139,6 +142,14 @@ class DDM_Class extends Doctrine_Record
 	 */
 	public function __toString() {
 		return 'Name: ' . $this->c_name . ', View: ' . $this->c_view;
+	}
+	
+	private function getReverseAssociations() {
+		$query = Doctrine_Query::create()
+			->from('ddm_reverse_association r')
+			->leftJoin('r.association a')
+			->addWhere('a.s_to = ?', $this->id);
+		return $query->execute()->toArray();
 	}
 	
 	private function getReverseAssociation($name) {

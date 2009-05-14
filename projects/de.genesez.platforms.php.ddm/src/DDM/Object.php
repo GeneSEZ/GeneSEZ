@@ -63,10 +63,6 @@ class DDM_Object extends Doctrine_Record
 		if ( $this->class->hasAssociation($name) ) {
 			$this->setReferenceValue($name, $value);
 		}
-//		$association = $this->class->getAssociation($name);
-//		if ( $association->to->hasAssociation($name) ) {
-//			$value->setReferenceValue($name, $this);
-//		}
 	}
 
 	/**
@@ -222,21 +218,6 @@ class DDM_Object extends Doctrine_Record
 			if ( isset( $this->associations[$name] ) && $this->associations[$name]->isModified() ) {
 				$this->associations[$name]->save();
 			}
-			
-//			if ( $s->cardinality(1, 1) ) {
-//				$statement = 'INSERT INTO ddm_reference_o2o (r_association, r_left, r_right) '
-//					. ' VALUES(' . $s->id . ',' . $this->id . ','. $this->associations[$s->s_name]->id . ')';
-//				$conn->execute($statement);
-//			}
-//			elseif  ( $s->cardinality(1, 'N') ) {
-//					$iterator = $this->associations[$s->s_name]->getIterator();
-//					while($iterator->valid()) {
-//						$statement = 'INSERT INTO ddm_reference_o2n (r_association, r_left, r_right) '
-//							. ' VALUES(' . $s->id . ',' . $this->id . ','. $iterator->current()->id . ')';
-//						$conn->execute($statement);
-//						$iterator->next();
-//					}
-//			}
 		}
 	}
 

@@ -9,7 +9,6 @@ class DDM_Reverse_Association extends Doctrine_Record
 
 		$this->hasColumn('s_association', 'integer', array('notnull' => true));
 		$this->hasColumn('s_name', 'string', 1024, array('notnull' => true));
-		$this->hasColumn('s_description', 'string', 1024, array('notnull' => true, 'default' => ''));
 		
 		$this->index('unique_index', array(
 				'fields' => array ( 'r_association' ),

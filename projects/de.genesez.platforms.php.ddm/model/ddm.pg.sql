@@ -115,9 +115,7 @@ DROP TABLE IF EXISTS ddm_reverse_association CASCADE;
 CREATE TABLE ddm_reverse_association (
 	id INTEGER PRIMARY KEY DEFAULT nextval('ddm_reverse_association_id_seq'),
 	s_association INTEGER REFERENCES ddm_association(id) ON DELETE RESTRICT NOT NULL,
---	s_class INTEGER REFERENCES ddm_class(id) ON DELETE CASCADE NOT NULL,
 	s_name VARCHAR(1024) NOT NULL,
-	s_description VARCHAR(1024) NOT NULL DEFAULT ''
 );
 
 -- Objekte
