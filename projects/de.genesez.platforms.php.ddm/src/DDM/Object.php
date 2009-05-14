@@ -37,7 +37,7 @@ class DDM_Object extends Doctrine_Record
 			$this->setAttribute($name, $value);
 		}
 		elseif ( $this->class->hasAssociation($name) ) {
-			$this->setReference($name, $value);
+			$this->setLinkValue($name, $value);
 		}
 	}
 
@@ -59,9 +59,9 @@ class DDM_Object extends Doctrine_Record
 	 * @param string $name
 	 * @param DDM_Object $value
 	 */
-	public function setReference($name, $value) {
+	public function setLink($name, $value) {
 		if ( $this->class->hasAssociation($name) ) {
-			$this->setReferenceValue($name, $value);
+			$this->setLinkValue($name, $value);
 		}
 	}
 
@@ -80,7 +80,7 @@ class DDM_Object extends Doctrine_Record
 			return $this->getAttribute($name);
 		}
 		elseif ( $this->class->hasAssociation($name) ) {
-			return $this->getReferenceValue($name);
+			return $this->getLinkValue($name);
 		}
 	}
 
@@ -103,7 +103,7 @@ class DDM_Object extends Doctrine_Record
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function getReference($name) {
+	public function getLink($name) {
 		if ( $this->class->hasAssociation($name) && isset($this->associations[$name]) ) {
 			return $this->associations[$name];
 		}
@@ -172,12 +172,12 @@ class DDM_Object extends Doctrine_Record
 		$conn = $this->_table->getConnection();
 		
 		foreach ( $this->class->associations as $s) {
-			$this->loadReferenceValue($s);
+			$this->loadLinkValue($s);
 		}
 	}
 	
-	private function loadReferenceValue(DDM_Association $association) {
-		$this->associations[$association->s_name] = $association->createReference();
+	private function loadLinkValue(DDM_Association $association) {
+		$this->associations[$association->s_name] = $association->createLink();
 		$this->associations[$association->s_name]->load($this);
 	}
 
@@ -221,23 +221,23 @@ class DDM_Object extends Doctrine_Record
 		}
 	}
 
-	private function setReferenceValue($name, DDM_Object $object) {
+	private function setLinkValue($name, DDM_Object $object) {
 		$association = $this->class->getAssociation($name);
 		
 		if ( ! isset( $this->associations[$name] ) ) {
-			$this->associations[$name] = $association->createReference();
+			$this->associations[$name] = $association->createLink();
 			$this->associations[$name]->from = $this;
 		}
-		$reference = $this->associations[$name];
+		$link = $this->associations[$name];
 		
 		if ( $association->toOne() ) {
-			$reference->to = $object;
+			$link->to = $object;
 		} else {
-			$reference->addTo( $object );
+			$link->addTo( $object );
 		}
 	}
 	
-	private function getReferenceValue($name) {
+	private function getLinkValue($name) {
 		return $this->associations[$name]->to;
 	}
 }

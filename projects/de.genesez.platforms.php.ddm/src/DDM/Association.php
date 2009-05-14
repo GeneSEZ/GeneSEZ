@@ -62,7 +62,7 @@ class DDM_Association extends Doctrine_Record
 		return $this->s_to_cardinality == 1 || $this->s_to_cardinality == '0..1'; 
 	}
 	
-	public function createReference() {
+	public function createLink() {
 		$reference = null;
 		if ( $this->cardinality(1, 1)) {
 			$reference = new DDM_O2OReference();

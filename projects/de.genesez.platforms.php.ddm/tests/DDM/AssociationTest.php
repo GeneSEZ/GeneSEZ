@@ -43,8 +43,8 @@ class DDM_AssociationTest extends AbstractDoctrineTestCase
 		$this->assertNull( $right->getAssociation('TestAssociation') );
 		$this->assertTrue( $association->cardinality(1, 1) );
 		
-		$reference = $association->createReference();
-		$this->assertIsA('DDM_O2OReference', $reference);
+		$link = $association->createLink();
+		$this->assertIsA('DDM_O2OReference', $link);
 	}
 
 	/**
@@ -78,8 +78,8 @@ class DDM_AssociationTest extends AbstractDoctrineTestCase
 		$this->assertEquals( 'TestBAssociationClassLeft', $reverse->s_name );
 		$this->assertTrue( $reverse->cardinality(1, 1) );
 
-		$reference = $association->createReference();
-		$this->assertIsA('DDM_O2OReference', $reference);
+		$link = $association->createLink();
+		$this->assertIsA('DDM_O2OReference', $link);
 	}
 	
 	/**
@@ -116,8 +116,8 @@ class DDM_AssociationTest extends AbstractDoctrineTestCase
 		$this->assertTrue( $reverse->cardinality(1, 1) );
 		$this->assertTrue( $reverse->cardinality('0..1', 1) );
 
-		$reference = $association->createReference();
-		$this->assertIsA('DDM_O2OReference', $reference);
+		$link = $association->createLink();
+		$this->assertIsA('DDM_O2OReference', $link);
 	}
 
 	/**
@@ -152,8 +152,8 @@ class DDM_AssociationTest extends AbstractDoctrineTestCase
 		$this->assertEquals( '1', $reverse->s_to_cardinality );
 		$this->assertTrue( $reverse->cardinality('N', 1) );
 
-		$reference = $association->createReference();
-		$this->assertIsA('DDM_O2NReference', $reference);
+		$link = $association->createLink();
+		$this->assertIsA('DDM_O2NReference', $link);
 	}
 
 	/**
@@ -187,8 +187,9 @@ class DDM_AssociationTest extends AbstractDoctrineTestCase
 		$this->assertEquals( 1, $reverse->s_from_cardinality );
 		$this->assertEquals( 'N', $reverse->s_to_cardinality );
 		$this->assertTrue( $reverse->cardinality(1, 'N') );
-		$reference = $association->createReference();
-		$this->assertIsA('DDM_N2OReference', $reference);
+		
+		$link = $association->createLink();
+		$this->assertIsA('DDM_N2OReference', $link);
 	}
 	
 
@@ -223,8 +224,8 @@ class DDM_AssociationTest extends AbstractDoctrineTestCase
 		$this->assertEquals( 'N', $reverse->s_from_cardinality );
 		$this->assertEquals( 'N', $reverse->s_to_cardinality );
 		$this->assertTrue( $reverse->cardinality('N', 'N') );
-		$reference = $association->createReference();
-		$this->assertIsA('DDM_N2NReference', $reference);
+		$link = $association->createLink();
+		$this->assertIsA('DDM_N2NReference', $link);
 	}
 }
 
