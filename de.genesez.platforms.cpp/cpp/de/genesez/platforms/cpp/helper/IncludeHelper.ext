@@ -1,0 +1,34 @@
+import gcore;
+
+extension de::genesez::platforms::common::typemapping::TypeMapping;
+
+extension de::genesez::platforms::cpp::scripts::Naming;
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String getIncludeGuard(MClassifier this) : asTypeName().toUpperCase() + "_H_";
+
+String getIncludeGuard(MClass this) : asTypeName().toUpperCase() + "_H_";
+
+/**	
+List[MType] getIncludes(MClassifier this) : JAVA
+	de.genesez.platforms.cpp.helper.IncludeHelper.getIncludes(de.genesez.metamodel.gcore.MClassifier);	
+*/
+
+Set[MType] getIncludes(MClassifier this) :
+	let deps = {} :
+		deps.addAll(property.type.reject(e|e == this)) ->
+		deps.addAll(operation.returnType.reject(e|e == this)) ->
+		deps.addAll(operation.parameter.type.reject(e|e == this)) ->
+		deps.addAll(realization.reject(e | e == this)) ->
+		deps.addAll(generalization.reject(e| e == this)) ->
+		deps.toSet();
+		
+Set[String] getCollectionIncludes(MClassifier this) :	
+	let deps = {} :
+		deps.addAll(property.select(e|e.multiplicity != 1).mapType("Include")) ->
+		deps.addAll(operation.select(e|e.multiplicity != 1).mapType("Include")) ->
+		deps.addAll(operation.parameter.select(e|e.multiplicity != 1).mapType("Include")) ->
+		deps.toSet();

@@ -1,17 +1,23 @@
 «REM»
- Handling of MClass and MInterface elements.
+ Handling of MClass elements.
  
- author: Frank Grimm
- date: 28/11/07
+ author: Robert Meichsner
+ date: 12/08/08
 «ENDREM»
 
-«IMPORT genesezMM»
+«IMPORT gcore»
 
-«EXTENSION de::genesez::io::io»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
-«EXTENSION de::genesez::genesezmm::cpp::helper::Helper»
-«EXTENSION de::genesez::genesezmm::cpp::helper::ConfigHelper»
-«EXTENSION de::genesez::genesezmm::cpp::helper::IncludeHelper»
+«EXTENSION de::genesez::platforms::cpp::scripts::Naming»
+«EXTENSION de::genesez::platforms::cpp::scripts::AccessHelper»
+
+«EXTENSION de::genesez::platforms::cpp::helper::IncludeHelper»
+«EXTENSION de::genesez::platforms::cpp::helper::PackageHelper»
+«EXTENSION de::genesez::platforms::cpp::helper::TypeHelper»
 
 «REM»
  ------------------------------------------------------------------------
@@ -24,73 +30,105 @@
  Handle MClass elements.
  ------------------------------------------------------------------------
 «ENDREM»
-«DEFINE Root FOR MClass-»
-«EXPAND _GenHeaderFile FOR this»
-«EXPAND _GenImplementationFile FOR this»
+«DEFINE Root FOR MClass -»		
+	«EXPAND Declaration -»	
+	«EXPAND Implementation -»
+«ENDDEFINE»
+
+«DEFINE Declaration FOR MClass -»	
+	«FILE getFQPackagePath() + asHeaderFileName()-»
+	«EXPAND Include::GuardBegin-»
+	«info("Class " + name + " has genericParameter: " + genericParameter.size)-»
+	«IF hasGenericParameter()-»
+		«EXPAND Include::TemplateInclude -»
+		«EXPAND Namespace::openNS -»
+		«EXPAND Type::TypeDef FOREACH property -»
+		«EXPAND Namespace::closeNS -»
+	«ELSE»
+		«EXPAND Include::Includes-»
+		«EXPAND Include::LocalIncludes-»
+		«EXPAND Namespace::openNS -»
+		«EXPAND _Declaration -»
+		«EXPAND Operation::ClassOperatorDeclaration-»
+		«EXPAND Type::TypeDef FOREACH property -»
+		«EXPAND Namespace::closeNS -»
+	«ENDIF-»	
+	«EXPAND Include::GuardEnd -»
+	«ENDFILE-»
+«ENDDEFINE»
+
+«DEFINE Implementation FOR MClass -»
+	«FILE getFQPackagePath() + asSourceFileName()-»	
+	«IF !hasGenericParameter() -»
+		#include "«asTypeName() + headerExtension() -»"
+	«ELSE»
+		«EXPAND Include::Includes-»
+		«EXPAND Include::LocalIncludes-»		
+	«ENDIF -»
+	
+	«EXPAND Namespace::openNS -»
+	«IF hasGenericParameter()-»
+		«EXPAND _Declaration -»
+	«ENDIF-»
+	«EXPAND _Implementation -»	
+	«EXPAND Namespace::closeNS -»
+	«EXPAND Operation::ClassOperatorImplementation-»
+	«ENDFILE -»
 «ENDDEFINE»
 
 «REM»
- ------------------------------------------------------------------------
- Handle MInterface elements.
- ------------------------------------------------------------------------
+ *******************************
+ private stuff
+ *******************************
 «ENDREM»
-«DEFINE Root FOR MInterface-»
+
+«DEFINE _Declaration FOR MClass -»	
+	«IF hasGenericParameter() -»«EXPAND Generic::Declaration -»«ENDIF-» class «asTypeName()» «EXPAND Type::SuperTypes -» {
+	«EXPAND _public -»
+	«EXPAND _protected -»
+	«EXPAND _private -»
+	};
 «ENDDEFINE»
 
-«REM»
- **************************************
- private functions
- **************************************
-«ENDREM»
-
-«DEFINE _GenHeaderFile FOR MClass-»
-«FILE getFQHeaderDir() + "/" + getHeaderFileName()-»
-#ifndef «getIncludeGuardName()»
-#define «getIncludeGuardName()»
-
-«EXPAND _GenIncludeStmts FOR this»
-
-namespace «getFQNamespace()» {
-
-class «name» «EXPAND _GenInheritanceStmts FOR this» {
+«DEFINE _public FOR MClass -»
 public:
+«EXPAND Operation::Declaration("public") -»
+«EXPAND Association::AccessorDecl -»
+«EXPAND Attribute::AccessorDecl -»
+«EXPAND Attribute::DerivedDecl("public") -»
+«EXPAND Association::Declaration("public") -»
+«EXPAND Attribute::Declaration("public") -»
+«ENDDEFINE»
+
+«DEFINE _protected FOR MClass -»
 protected:
+«EXPAND Operation::Declaration("protected") -»
+«EXPAND Attribute::DerivedDecl("protected") -»
+«EXPAND Association::Declaration("protected") -»
+«EXPAND Attribute::Declaration("protected") -»	
+«ENDDEFINE»
+
+«DEFINE _private FOR MClass -»
 private:
-	«EXPAND _GenPrivateAttributeDeclarations FOR this»
-} // class «name»
-} // namespace «getFQNamespace()»
-#endif // «getIncludeGuardName()»
-«ENDFILE»
+«EXPAND Operation::Declaration("private") -»
+«EXPAND Attribute::DerivedDecl("private") -»
+«EXPAND Association::Declaration("private") -»
+«EXPAND Attribute::Declaration("private") -»
 «ENDDEFINE»
 
-«DEFINE _GenImplementationFile FOR MClass-»
-«FILE getFQImplementationDir(this) + "/" + getImplementationFileName(this)-»
-«ENDFILE»
+«DEFINE _Implementation FOR MClass -»
+«EXPAND Attribute::DefaultValue -»
+«EXPAND Operation::Implementation -»
+«EXPAND Association::AccessorImpl -»
+«EXPAND Attribute::AccessorImpl -»
+«EXPAND Attribute::DerivedImpl -»
 «ENDDEFINE»
 
-«DEFINE _GenIncludeStmts FOR MClass-»
-«EXPAND _GenIncludeStmt FOREACH property.typeSelect(MAttribute)-»
-«EXPAND _GenIncludeStmtForBaseType(this) FOREACH supertype-»
-«ENDDEFINE»
+«REM»
+ **************************************
+ Placeholder for compatibility
+ **************************************
+«ENDREM»
 
-«DEFINE _GenIncludeStmt FOR MAttribute-»
-«IF needsIncludeStmt()-»
-«getIncludeStmt()-»
-«ENDIF-»
-«ENDDEFINE»
-
-«DEFINE _GenIncludeStmtForBaseType(MClassifier subtype) FOR MClassifier-»
-«IF alreadyRegisterAsIncludeFile(subtype, this) == false»
-«getIncludeStmt(subtype, this)»
-«ENDIF»
-«ENDDEFINE»
-
-«DEFINE _GenPrivateAttributeDeclarations FOR MClass-»
-	«EXPAND Attribute::GenAttributeDeclaration FOREACH property.typeSelect(MAttribute).select(a|a.isPrivate())-»
-«ENDDEFINE»
-
-«DEFINE _GenInheritanceStmts FOR MClass-»
-«IF hasBaseType()-»
-: «FOREACH supertype AS superType SEPARATOR ", "-»«superType.getInheritanceVisibility()» «superType.getFQName()»«ENDFOREACH-»
-«ENDIF-»
+«DEFINE Root FOR MClassifier -»
 «ENDDEFINE»
