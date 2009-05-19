@@ -10,7 +10,7 @@
 «EXTENSION de::genesez::platforms::cpp::scripts::Naming»
 
 «DEFINE GuardBegin FOR MEnumeration -»
-#ifndef «name.toUpperCase()-»_H_«EXPAND _-»
+#ifndef «name.toUpperCase()-»_H_
 #define «name.toUpperCase()-»_H_
 «ENDDEFINE»
 
@@ -32,15 +32,15 @@
 «ENDDEFINE»
 
 «DEFINE LocalIncludes FOR MClassifier -»
-	«EXPAND _include FOREACH getIncludes().typeSelect(MPrimitiveType) -»
-	«EXPAND _include FOREACH getIncludes().typeSelect(MExternal) -»	
-	«FOREACH getIncludes().typeSelect(MClassifier) AS itype -»
-	#include "«getRelativePath(this, itype) -»«itype.asFileName() -»"
-	«ENDFOREACH-»
+«EXPAND _include FOREACH getIncludes().typeSelect(MPrimitiveType) -»
+«EXPAND _include FOREACH getIncludes().typeSelect(MExternal) -»	
+«FOREACH getIncludes().typeSelect(MClassifier) AS itype -»
+#include "«getRelativePath(this, itype) -»«itype.asFileName() -»"
+«ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE Includes FOR MClassifier -»
-«IF hasOperations() »#include <exception>«ENDIF »
+«IF hasOperations() -»#include <exception>«ENDIF -»
 «EXPAND _collections FOREACH getCollectionIncludes()-»
 «ENDDEFINE»
 
