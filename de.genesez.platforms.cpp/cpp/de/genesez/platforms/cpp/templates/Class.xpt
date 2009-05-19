@@ -36,42 +36,46 @@
 
 «DEFINE Declaration FOR MClass -»	
 	«FILE getFQPackagePath() + asHeaderFileName()-»
-	«EXPAND Include::GuardBegin-»
-	«IF hasGenericParameter()-»
-		«EXPAND Include::TemplateInclude -»
-		«EXPAND Namespace::openNS -»
-		«EXPAND Type::TypeDef FOREACH property -»
-		«EXPAND Namespace::closeNS -»
-	«ELSE»
-		«EXPAND Include::Includes-»
-		«EXPAND Include::LocalIncludes-»
-		«EXPAND Namespace::openNS -»
-		«EXPAND _Declaration -»
-		«EXPAND Operation::ClassOperatorDeclaration-»
-		«EXPAND Type::TypeDef FOREACH property -»
-		«EXPAND Namespace::closeNS -»
-	«ENDIF-»	
-	«EXPAND Include::GuardEnd -»
-	«ENDFILE-»
+«EXPAND Include::GuardBegin-»
+«IF hasGenericParameter()-»
+«EXPAND Include::TemplateInclude -»
+«EXPAND Namespace::openNS -»
+«EXPAND Type::TypeDef FOREACH property -»
+«EXPAND Namespace::closeNS -»
+«ELSE»
+«EXPAND Include::Includes-»
+«EXPAND Include::LocalIncludes-»
+
+«EXPAND Namespace::openNS -»
+
+«EXPAND _Declaration -»
+
+«EXPAND Operation::ClassOperatorDeclaration-»
+«EXPAND Type::TypeDef FOREACH property -»
+«EXPAND Namespace::closeNS -»
+«ENDIF-»	
+«EXPAND Include::GuardEnd -»
+«ENDFILE-»
 «ENDDEFINE»
 
 «DEFINE Implementation FOR MClass -»
-	«FILE getFQPackagePath() + asSourceFileName()-»	
-	«IF !hasGenericParameter() -»
-		#include "«asTypeName() + headerExtension() -»"
-	«ELSE»
-		«EXPAND Include::Includes-»
-		«EXPAND Include::LocalIncludes-»		
-	«ENDIF -»
+«FILE getFQPackagePath() + asSourceFileName()-»	
+«IF !hasGenericParameter() -»
+#include "«asTypeName() + headerExtension() -»"
+«ELSE»
+«EXPAND Include::Includes-»
+«EXPAND Include::LocalIncludes-»		
+«ENDIF -»
 	
-	«EXPAND Namespace::openNS -»
-	«IF hasGenericParameter()-»
-		«EXPAND _Declaration -»
-	«ENDIF-»
-	«EXPAND _Implementation -»	
-	«EXPAND Namespace::closeNS -»
-	«EXPAND Operation::ClassOperatorImplementation-»
-	«ENDFILE -»
+«EXPAND Namespace::openNS -»
+
+«IF hasGenericParameter()-»
+	«EXPAND _Declaration -»
+«ENDIF-»
+«EXPAND _Implementation -»	
+«EXPAND Namespace::closeNS -»
+«EXPAND Operation::ClassOperatorImplementation-»
+«ENDFILE -»
 «ENDDEFINE»
 
 «REM»
@@ -81,11 +85,11 @@
 «ENDREM»
 
 «DEFINE _Declaration FOR MClass -»	
-	«IF hasGenericParameter() -»«EXPAND Generic::Declaration -»«ENDIF-» class «asTypeName()» «EXPAND Type::SuperTypes -» {
-	«EXPAND _public -»
-	«EXPAND _protected -»
-	«EXPAND _private -»
-	};
+«IF hasGenericParameter() -»«EXPAND Generic::Declaration -»«ENDIF-»class «asTypeName()» «EXPAND Type::SuperTypes -» {
+«EXPAND _public -»
+«EXPAND _protected -»
+«EXPAND _private -»
+};
 «ENDDEFINE»
 
 «DEFINE _public FOR MClass -»
@@ -99,6 +103,7 @@ public:
 «ENDDEFINE»
 
 «DEFINE _protected FOR MClass -»
+
 protected:
 «EXPAND Operation::Declaration("protected") -»
 «EXPAND Attribute::DerivedDecl("protected") -»
@@ -107,6 +112,7 @@ protected:
 «ENDDEFINE»
 
 «DEFINE _private FOR MClass -»
+
 private:
 «EXPAND Operation::Declaration("private") -»
 «EXPAND Attribute::DerivedDecl("private") -»
