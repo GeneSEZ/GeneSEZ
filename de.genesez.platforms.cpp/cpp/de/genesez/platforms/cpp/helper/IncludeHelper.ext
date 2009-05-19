@@ -12,11 +12,6 @@ String getIncludeGuard(MClassifier this) : asTypeName().toUpperCase() + "_H_";
 
 String getIncludeGuard(MClass this) : asTypeName().toUpperCase() + "_H_";
 
-/**	
-List[MType] getIncludes(MClassifier this) : JAVA
-	de.genesez.platforms.cpp.helper.IncludeHelper.getIncludes(de.genesez.metamodel.gcore.MClassifier);	
-*/
-
 Set[MType] getIncludes(MClassifier this) :
 	let deps = {} :
 		deps.addAll(property.type.reject(e|e == this)) ->
@@ -32,3 +27,6 @@ Set[String] getCollectionIncludes(MClassifier this) :
 		deps.addAll(operation.select(e|e.multiplicity != 1).mapType("Include")) ->
 		deps.addAll(operation.parameter.select(e|e.multiplicity != 1).mapType("Include")) ->
 		deps.toSet();
+		
+String getRelativePath(MClassifier this, MClassifier other) : JAVA
+	de.genesez.platforms.cpp.helper.IncludeHelper.getRelativePath(de.genesez.metamodel.gcore.MClassifier, de.genesez.metamodel.gcore.MClassifier);
