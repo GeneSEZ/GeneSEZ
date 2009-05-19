@@ -24,15 +24,19 @@
 «ENDDEFINE»
 
 «DEFINE GuardEnd FOR MClassifier -»
-#endif /*«name.toUpperCase()-»_H_*/
+#endif /*«name.toUpperCase() -»_H_*/
 «ENDDEFINE»
 
 «DEFINE IncludeDeclaration FOR MClassifier -»
 #include "«asFileName()-»"
 «ENDDEFINE»
 
-«DEFINE LocalIncludes FOR MClassifier-»
-	«EXPAND _include FOREACH getIncludes()-»
+«DEFINE LocalIncludes FOR MClassifier -»
+	«EXPAND _include FOREACH getIncludes().typeSelect(MPrimitiveType) -»
+	«EXPAND _include FOREACH getIncludes().typeSelect(MExternal) -»	
+	«FOREACH getIncludes().typeSelect(MClassifier) AS itype -»
+	#include "«getRelativePath(this, itype) -»«itype.asFileName() -»"
+	«ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE Includes FOR MClassifier -»
@@ -45,7 +49,7 @@
 «ENDDEFINE»
 
 «DEFINE _collections FOR String-»
-#include <«this-»>
+#include <«this -»>
 «ENDDEFINE»
 
 «DEFINE _include FOR MPrimitiveType-»
@@ -55,13 +59,7 @@
 «ENDDEFINE»
 
 «DEFINE _include FOR MExternal-»
-«REM»«warn("include for external/system type " + this + " ==> #include <" + mapName("Include") + ">")-»«ENDREM»
 #include <«mapName("Include")-»>
-«ENDDEFINE»
-
-«DEFINE _include FOR MClassifier-»
-«REM»«warn("include for local type " + this.name + " ==> #include \"" + asFileName() + "\"")-»«ENDREM»
-#include "«asFileName()-»"
 «ENDDEFINE»
 
 «DEFINE _include FOR MType-»
