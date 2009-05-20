@@ -17,6 +17,7 @@
 
 «DEFINE Declaration(String vis) FOR MClass -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && e.static && e.final && !e.derived) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && !e.static && e.final && !e.derived) -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && e.static && !e.final && !e.derived) -»	
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && !e.static && !e.final && !e.derived) -»
 «ENDDEFINE»
@@ -27,7 +28,7 @@
 «ENDDEFINE»
 
 «DEFINE AccessorDecl FOR MClass -»
-«EXPAND _GetterDecl FOREACH property.typeSelect(MAttribute).select(e| e.final && !e.derived) -»
+«REM»«EXPAND _GetterDecl FOREACH property.typeSelect(MAttribute).select(e| e.final && !e.derived) -»«ENDREM»
 «FOREACH property.typeSelect(MAttribute).select(e| !e.final && !e.derived) AS attrib -»
 	«IF generateGetter(attrib)-»«EXPAND _GetterDecl FOR attrib -»«ENDIF-»
 	«IF generateSetter(attrib)-»«EXPAND _SetterDecl FOR attrib -»«ENDIF-»
@@ -37,7 +38,7 @@
 «ENDDEFINE»
 
 «DEFINE AccessorImpl FOR MClass-»
-«EXPAND _GetterImpl FOREACH property.typeSelect(MAttribute).select(e| e.final && !e.derived) -»
+«REM»«EXPAND _GetterImpl FOREACH property.typeSelect(MAttribute).select(e| e.final && !e.derived) -»«ENDREM»
 «FOREACH property.typeSelect(MAttribute).select(e| !e.final && !e.derived) AS attrib -»
 	«IF generateGetter(attrib)-»«EXPAND _GetterImpl FOR attrib -»«ENDIF-»
 	«IF generateSetter(attrib)-»«EXPAND _SetterImpl FOR attrib -»«ENDIF-»
@@ -60,15 +61,15 @@
 «DEFINE _Declaration FOR MAttribute -»
 «IF type.isGenericType()-»
 	«IF isSingleValuedType()-»
-		«EXPAND _static-»«EXPAND _final-»«type.name()-»«getTypeModifier()-» «asAttribute() -»«IF final-»«EXPAND _DefaultValue-»«ENDIF-»;
+		«EXPAND _static -»«EXPAND _final -»«type.name() -»«getTypeModifier() -» «asAttribute() -»«IF final -»«EXPAND _DefaultValue -»«ENDIF -»;
 	«ELSE -»
-		«EXPAND _static-»«EXPAND _final-»«mapType()-»<«type.name()-»«getTypeModifier()»> «asAttribute()-»;
+		«EXPAND _static -»«EXPAND _final -»«mapType() -»<«type.name() -»«getTypeModifier() -»> «asAttribute() -»;
 	«ENDIF -»
 «ELSE-»
 	«IF isSingleValuedType() -»
-		«EXPAND _static-»«EXPAND _final-»«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics-»«type.getTypeModifier()» «asAttribute() -»«IF final-»«EXPAND _DefaultValue-»«ENDIF-»;
+		«EXPAND _static -»«EXPAND _final -»«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»«type.getTypeModifier() -» «asAttribute() -»«IF final -»«EXPAND _DefaultValue -»«ENDIF -»;
 	«ELSE -»
-		«EXPAND _static-»«EXPAND _final-»«mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics-»> «asAttribute()-»;
+		«EXPAND _static -»«EXPAND _final -»«mapType() -»<«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»> «asAttribute() -»;
 	«ENDIF -»
 «ENDIF-»
 «ENDDEFINE»
@@ -103,11 +104,11 @@
 «ENDDEFINE»
 
 «DEFINE _InsertInDecl FOR MAttribute -»
-«IF !final && isMultiValuedType() -»void «asInsertIn()-»(const «type.mapName().asTypeName()-»&);«ENDIF -»
+«IF !final && isMultiValuedType() -»void «asInsertIn()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»&);«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _RemoveFromDecl FOR MAttribute -»
-«IF !final && isMultiValuedType() -»void «asRemoveFrom()-»(const «type.mapName().asTypeName()-»&);«ENDIF -»
+«IF !final && isMultiValuedType() -»void «asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»&);«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _GetterDecl FOR MAttribute -»
@@ -124,7 +125,7 @@
 
 «DEFINE _InsertInImpl FOR MAttribute -»
 «IF isMultiValuedType() -»
-	void «classifier.asTypeName()-»::«asInsertIn()-»(const «type.mapName().asTypeName()-»& _toInsert) {
+	void «classifier.asTypeName()-»::«asInsertIn()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»& _toInsert) {
 		«IF unique-»«asAttribute()-».insert(«asAttribute()-».end(), _toInsert);
 		«ELSE-»«asAttribute()-».push_back(_toInsert);«ENDIF-»
 	}
@@ -133,7 +134,7 @@
 
 «DEFINE _RemoveFromImpl FOR MAttribute -»
 «IF isMultiValuedType() -»
-	void «classifier.asTypeName()-»::«asRemoveFrom()-»(const «type.mapName().asTypeName()-»& _toRemove)	{
+	void «classifier.asTypeName()-»::«asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»& _toRemove)	{
 		«mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»>::iterator it = «asAttribute()-».begin();
 		
 		for(; it != «asAttribute()-».end(); it++) {
@@ -178,7 +179,7 @@
 «ENDDEFINE»
 
 «DEFINE _final FOR MAttribute -»
-	«IF final-»const «ENDIF-»
+	«IF final-»«IF !static-»static «ENDIF-»const «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE _static FOR MAttribute -»
