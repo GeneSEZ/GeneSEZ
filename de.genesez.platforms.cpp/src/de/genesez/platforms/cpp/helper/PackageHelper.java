@@ -45,7 +45,7 @@ public class PackageHelper {
 			namespace.append("::");
 		}
 
-		return namespace.toString();
+		return namespace.toString().trim();
 	}
 	
 	public static List<String> getNSList(MClassifier mClassifier){

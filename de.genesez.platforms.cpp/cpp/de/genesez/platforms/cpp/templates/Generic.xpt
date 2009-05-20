@@ -17,31 +17,31 @@ template<«FOREACH genericParameter AS g SEPARATOR ", "-»typename «g.specifica
 
 «DEFINE Generics FOR MOperation-»
 «IF classifier.hasGenericParameter() && classifier == returnType -»
-	<«FOREACH classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH-»>
-«ELSE»
-	«IF isTyped() -»<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH-»>«ENDIF»
-«ENDIF-»
+	<«FOREACH classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH -»>
+«ELSE -»
+	«IF isTyped() -»<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH -»>«ENDIF -»
+«ENDIF -»
 «ENDDEFINE»
 
-«DEFINE Generics FOR MProperty-»
-«IF classifier.hasGenericParameter() && classifier == type-»
-	<«FOREACH classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH-»>
-«ELSE»
-	«IF isTyped() -»<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH-»>«ENDIF»
-«ENDIF-»
+«DEFINE Generics FOR MProperty -»
+«IF classifier.hasGenericParameter() && classifier == type -»
+<«FOREACH classifier.genericParameter AS g SEPARATOR ", " -»«g.name() -»«ENDFOREACH-»>
+«ELSE -»
+«IF isTyped() -»<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH -»>«ENDIF -»
+«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE Generics FOR MExternal -»
 «ENDDEFINE»
 
 «DEFINE Generics FOR MParameter -»
-«IF operation.classifier.hasGenericParameter() && operation.classifier == type-»
-	<«FOREACH operation.classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH-»>
-«ELSE»
+«IF operation.classifier.hasGenericParameter() && operation.classifier == type -»
+	<«FOREACH operation.classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH -»>
+«ELSE -»
 	«IF isTyped() -»
-		<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH-»>
-	«ENDIF»
-«ENDIF-»
+		<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH -»>
+	«ENDIF -»
+«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE Generics FOR MType-»

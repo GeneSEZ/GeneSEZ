@@ -36,19 +36,21 @@
 «EXPAND _include FOREACH getIncludes().typeSelect(MExternal) -»	
 «FOREACH getIncludes().typeSelect(MClassifier) AS itype -»
 #include "«getRelativePath(this, itype) -»«itype.asFileName() -»"
-«ENDFOREACH-»
+«ENDFOREACH -»
 «ENDDEFINE»
 
 «DEFINE Includes FOR MClassifier -»
-«IF hasOperations() -»#include <exception>«ENDIF -»
-«EXPAND _collections FOREACH getCollectionIncludes()-»
+«IF hasOperations() -»
+#include <exception>
+«ENDIF -»
+«EXPAND _collections FOREACH getCollectionIncludes() -»
 «ENDDEFINE»
 
 «DEFINE TemplateInclude FOR MClass -»
 #include "«asSourceFileName() -»"
 «ENDDEFINE»
 
-«DEFINE _collections FOR String-»
+«DEFINE _collections FOR String -»
 #include <«this -»>
 «ENDDEFINE»
 

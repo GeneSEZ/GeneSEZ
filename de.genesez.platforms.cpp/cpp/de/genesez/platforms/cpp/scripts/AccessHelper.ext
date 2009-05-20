@@ -38,7 +38,7 @@ String hasTypeModifier(MClass this) :
 	stereotype.select(e|e.name == "typeModifier").toString();
 
 boolean isOperatorOverload(MOperation this) : 
-	stereotype.exists(e| e.name == "operator");
+	stereotype.exists(e| e.name == "operator" || e.name == "globalOperator");
 	
 boolean hasBidirectionalAssociation(MClassifier this) :
 	property.typeSelect(MAssociationRole).isBidirectionalAssociation();
@@ -99,4 +99,8 @@ boolean isClassOperator(MOperation this) :
 	
 boolean hasGenericParameter(MType this) :
 	false;
+	
+boolean isConstOp(MOperation this) :
+	hasStereotype("const");
+	
 	

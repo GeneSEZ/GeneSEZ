@@ -11,7 +11,7 @@
 «EXTENSION de::genesez::platforms::cpp::helper::PackageHelper»
 
 «DEFINE Declaration(String vis) FOR MInterface -»
-«IF vis == "public" -»«EXPAND _destructorDecl(vis)-»«ENDIF -»	
+«IF vis == "public" -»«EXPAND _destructorDecl(vis) -»«ENDIF -»	
 «EXPAND _ioperations FOREACH operation.select(e | ( !e.isConstructor() && e.visibility == vis )) -»
 «ENDDEFINE»
 
@@ -92,17 +92,19 @@ virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
 «ENDDEFINE»
 
 «DEFINE _operationsDecl FOR MOperation -»
-«EXPAND Comment::Comment-»
-«IF isSingleValuedType()-»
-«EXPAND _modifier -» «EXPAND _returnTypeSingle -» «IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parameters -») «EXPAND _pureModifier -»;
+«EXPAND Comment::Comment -»
+«IF isSingleValuedType() -»
+«EXPAND _modifier -» «EXPAND _returnTypeSingle -» «IF isOperatorOverload() -»operator«ENDIF -»«asOperation() -»(«EXPAND _parameters -») «EXPAND _pureModifier -»«IF isConstOp() -» const«ENDIF -»;
 «ELSE-»
-«EXPAND _modifier -» «EXPAND _returnTypeMulti -» «IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parameters -») «EXPAND _pureModifier -»;
+«EXPAND _modifier -» «EXPAND _returnTypeMulti -» «IF isOperatorOverload() -»operator«ENDIF -»«asOperation() -»(«EXPAND _parameters -») «EXPAND _pureModifier -»;
 «ENDIF-»	
 «ENDDEFINE»
 
-«DEFINE _returnTypeSingle FOR MOperation-»
-«IF returnType.isGenericType()-»«returnType.name() -»«getTypeModifier()-»
-«ELSE-»«returnType.getFQNS() -»«returnType.mapName().asTypeName() -»«EXPAND Generic::Generics -»«getTypeModifier() -»«ENDIF-»
+«DEFINE _returnTypeSingle FOR MOperation -»
+«IF returnType.isGenericType() -»«returnType.name() -»«getTypeModifier() -»
+«ELSE -»
+«returnType.getFQNS() -»«returnType.mapName().asTypeName() -»«EXPAND Generic::Generics -»«getTypeModifier() -»
+«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _returnTypeMulti FOR MOperation-»
@@ -119,7 +121,7 @@ virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
 
 «DEFINE _parameters FOR MOperation -»
 «FOREACH parameter AS p SEPARATOR ", "-»
-	«IF p.isSingleValuedType()-»«IF isOperatorOverload()-»const «ENDIF-»«EXPAND _parameterSingle FOR p-»«IF p.hasDefaultValue()»«p.asParameter()-» «EXPAND _defaultValue FOR p-»«ENDIF-»
+	«IF p.isSingleValuedType() -»«IF isOperatorOverload() -»const «ENDIF -»«EXPAND _parameterSingle FOR p -»«IF p.hasDefaultValue() -»«p.asParameter() -» «EXPAND _defaultValue FOR p -»«ENDIF -»
 	«ELSE-»«IF isOperatorOverload()-»const «ENDIF-» «EXPAND _parameterMulti FOR p-»«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
@@ -134,16 +136,16 @@ virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
 «ELSE»«mapType()-»<«type.getFQNS()-»«type.asTypeName()-»«EXPAND Generic::Generics -»>«getTypeModifier() -»«ENDIF»
 «ENDDEFINE»
 
-«DEFINE _defaultValue FOR MParameter-»
-«IF hasDefaultValue()-»= «defaultvalue-»«ENDIF-»
+«DEFINE _defaultValue FOR MParameter -»
+«IF hasDefaultValue() -»= «defaultvalue -»«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _modifier FOR MOperation -»
-	«IF abstract -»virtual «ENDIF -»«IF static -»static «ENDIF -»
+«IF abstract -»virtual «ENDIF -»«IF static -»static «ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _imodifier FOR MOperation -»
-	virtual«IF static -» static«ENDIF -»
+virtual«IF static -» static«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _pureModifier FOR MOperation -»
@@ -191,9 +193,9 @@ virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
 «IF !abstract-»
 	«IF classifier.hasGenericParameter()-»«EXPAND Generic::Declaration FOR classifier»«ENDIF»
 	«IF isSingleValuedType()-»
-		«EXPAND _returnTypeSingle» «classifier.asTypeName()»«IF classifier.hasGenericParameter()-»«EXPAND Generic::Generics FOR classifier-»«ENDIF-»::«IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parametersImpl-»){					
+		«EXPAND _returnTypeSingle» «classifier.asTypeName()»«IF classifier.hasGenericParameter()-»«EXPAND Generic::Generics FOR classifier-»«ENDIF-»::«IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parametersImpl-»)«IF isConstOp() -» const«ENDIF -» {					
 	«ELSE-»
-		«EXPAND _returnTypeMulti» «classifier.asTypeName()»«IF classifier.hasGenericParameter()-»«EXPAND Generic::Generics FOR classifier-»«ENDIF-»::«IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parametersImpl-»){
+		«EXPAND _returnTypeMulti» «classifier.asTypeName()»«IF classifier.hasGenericParameter()-»«EXPAND Generic::Generics FOR classifier-»«ENDIF-»::«IF isOperatorOverload()-»operator«ENDIF-»«asOperation() -»(«EXPAND _parametersImpl-»)«IF isConstOp() -» const«ENDIF -» {
 	«ENDIF-»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("cpp.implementation." + xmiGuid)»
 		// TODO: implementation of '«asOperation()-»' for class '«classifier.asTypeName()»'
