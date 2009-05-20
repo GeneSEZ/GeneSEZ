@@ -373,6 +373,12 @@ private create MOperation makeOperation(Operation o) :
 	setUnique( o.isUnique ) ->
 	setOrdered( o.isOrdered ) ->
 	// associations
+	// add stereotypes of return type parameter
+	o.ownedParameter.exists(e|e.direction.toString() == "return")
+		? ( stereotype.addAll( o.ownedParameter.selectFirst(e|e.direction.toString() == "return").getAppliedStereotypes().makeStereotype() ) ->
+			taggedValue.addAll( makeTaggedValues(this, o.ownedParameter.selectFirst(e|e.direction.toString() == "return")) )
+		)
+		: this ->
 	// set stereotype
 	stereotype.addAll( o.getAppliedStereotypes().makeStereotype() ) ->
 	// set return type
