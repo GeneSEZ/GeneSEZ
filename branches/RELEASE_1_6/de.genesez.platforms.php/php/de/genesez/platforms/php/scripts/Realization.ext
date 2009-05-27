@@ -1,0 +1,29 @@
+/**
+ * Adds the method definition of implemented interfaces to non abstract classes
+ * (direct realization only, no further searches in the inheritance hierarchy)
+ * 
+ * @author	toh
+ * @date	2009-05-27
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+MPackage realize(MPackage this) :
+	useLogger("de.genesez.platforms.php.scripts.Realization") ->
+	nestedPackage.realize() ->
+	classifier.check() ->
+	this;
+
+MClassifier check(MClassifier this) :
+	metaType == MClass && !abstract && !realization.typeSelect(MInterface).isEmpty
+		? ((MClass)this).realize()
+		: this;
+
+MClass realize(MClass this) :
+	realization.typeSelect(MInterface).operation.cloneOperation( this ) ->
+	this;
