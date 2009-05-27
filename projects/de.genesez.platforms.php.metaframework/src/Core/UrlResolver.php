@@ -27,26 +27,6 @@ class Core_UrlResolver  implements Core_Resolver {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_Context	$context	
-	 * @return	Core_HandlerInfo
-	 */
-	public function resolveHandler($context) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240215396250_911205_762) ENABLED START */
-		$pathinfo = $this->pathInfo();
-		$pathparts = $this->checkPath($pathinfo);
-		$handleableContext = $context->resolveContext($pathparts);
-		$path = substr($pathinfo, strlen($handleableContext));
-		if ($path === false) {
-			$path = '/';
-		}
-		$handlerinfo = new Core_HandlerInfo($handleableContext, $path);
-		$this->_dispatcher->dispatch($handlerinfo);
-		return $handlerinfo;
-		/* PROTECTED REGION END */
-	}
-
-	/**
 	 * obtains the <i>path info</i> of the current executing script and ensures 
 	 * it begins with an slash '/'
 	 * @return	string
@@ -98,6 +78,26 @@ class Core_UrlResolver  implements Core_Resolver {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240219646828_34822_898) ENABLED START */
 		// TODO: implementation of method 'Core_ContextResolver.pathInvalid(...)'
 		throw new Exception('The implementation of the method Core_ContextResolver::pathInvalid is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Core_Context	$context	
+	 * @return	Core_HandlerInfo
+	 */
+	public function resolveHandler($context) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240215396250_911205_762) ENABLED START */
+		$pathinfo = $this->pathInfo();
+		$pathparts = $this->checkPath($pathinfo);
+		$handleableContext = $context->resolveContext($pathparts);
+		$path = substr($pathinfo, strlen($handleableContext));
+		if ($path === false) {
+			$path = '/';
+		}
+		$handlerinfo = new Core_HandlerInfo($handleableContext, $path);
+		$this->_dispatcher->dispatch($handlerinfo);
+		return $handlerinfo;
 		/* PROTECTED REGION END */
 	}
 

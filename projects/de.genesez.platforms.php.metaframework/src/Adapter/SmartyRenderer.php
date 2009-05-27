@@ -28,20 +28,6 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_Dto	$dto	
-	 */
-	public function render($dto) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
-		$this->templateBasePath = realpath('./' . $this->smarty->template_dir) . '/';
-		$view = $dto->view();
-		$this->assignGlobalVariables($this->smarty);
-		$this->smarty->assign('dto', $dto);
-		$this->smarty->display($view);
-		/* PROTECTED REGION END */
-	}
-
-	/**
 	 * The dynamically registered template function plugin <b>render</b> for 
 	 * smarty templates. It is the smarty template function port of the <b>Renderer</b> 
 	 * interface, i.e. you specifiy only a dto to render it. If there is no 
@@ -205,6 +191,33 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 		/* PROTECTED REGION END */
 	}
 
+	/**
+	 * Registers useful variables on the given Smarty instance to be globally 
+	 * available in templates.
+	 * @param	Smarty	$smarty	the smarty instance to which the variables are assigned
+	 */
+	protected function assignGlobalVariables($smarty) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156741484_229703_502) ENABLED START */
+		$smarty->assign('webbase', Core_Url::baseServerUri());
+		$smarty->assign('requestbase', Core_Url::baseRequestUri());
+		$smarty->assign('context', Core_Url::requestPath());
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Core_Dto	$dto	
+	 */
+	public function render($dto) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
+		$this->templateBasePath = realpath('./' . $this->smarty->template_dir) . '/';
+		$view = $dto->view();
+		$this->assignGlobalVariables($this->smarty);
+		$this->smarty->assign('dto', $dto);
+		$this->smarty->display($view);
+		/* PROTECTED REGION END */
+	}
+
 
 	// -- association + attribute accessors ---------------------------------
 	/**
@@ -219,11 +232,6 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237999928437_189680_1219) ENABLED START */
 	// TODO: put your further code implementations for class 'Smarty_SmartyRenderer' here
-	protected function assignGlobalVariables(&$smarty) {
-		$smarty->assign('webbase', Core_Url::baseServerUri());
-		$smarty->assign('requestbase', Core_Url::baseRequestUri());
-		$smarty->assign('context', Core_Url::requestPath());
-	}
 	/* PROTECTED REGION END */
 }
 ?>

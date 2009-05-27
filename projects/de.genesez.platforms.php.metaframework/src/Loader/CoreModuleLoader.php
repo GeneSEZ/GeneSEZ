@@ -1,7 +1,7 @@
 <?php
 require_once 'Core/Context.php';
 require_once 'Core/ServiceRegistry.php';
-require_once 'Loader/ModuleLoader.php';
+require_once 'Loader/PlugInLoader.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237975932171_599452_831) ENABLED START */
 require_once 's2container/S2Container.php';
@@ -15,11 +15,11 @@ spl_autoload_register(array('S2ContainerClassLoader', 'load'));
 /* PROTECTED REGION END */
 
 /**
- * @see		Loader_ModuleLoader
+ * @see		Loader_PlugInLoader
  * @author	dreamer
  * @package	Metaframework
  */
-class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
+class Loader_CoreModuleLoader  implements Loader_PlugInLoader {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -65,32 +65,6 @@ class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 	public function getModuleDependencies() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240212756328_897389_728) ENABLED START */
 		return array();
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @return	array of S2Container_ComponentDef
-	 */
-	public function getComponents() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237975998187_888171_855) ENABLED START */
-		return array(
-			Adapter_SeasarPhpBuilder::newComponent('Adapter_SeasarServiceRegistry', 'serviceRegistry', array(), array(
-				// don't use special 'container' value to get a container instance - doesn't work :-(
-				// insead, use auto binding - now it seams to work :-)
-				Adapter_SeasarPhpBuilder::newProperty('container', 'container')
-			)),
-			Adapter_SeasarPhpBuilder::newComponent('Core_ServiceRegistryDispatcher', 'dispatcher', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('serviceRegistry', 'serviceRegistry'),
-			)),
-			Adapter_SeasarPhpBuilder::newComponent('Core_UrlResolver', 'resolver', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('dispatcher', 'dispatcher')
-			)),
-			Adapter_SeasarPhpBuilder::newComponent('Smarty', 'smarty'),
-			Adapter_SeasarPhpBuilder::newComponent('Adapter_SmartyRenderer', 'renderer', array(), array(
-				Adapter_SeasarPhpBuilder::newProperty('smarty', 'smarty')
-			))
-		);
 		/* PROTECTED REGION END */
 	}
 
@@ -155,6 +129,120 @@ class Loader_CoreModuleLoader  implements Loader_ModuleLoader {
 		} else {
 			throw new Exception('configuration entry \'' . $key . '\' is missing');
 		}
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	boolean
+	 */
+	public function hasDependencies() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237982737328_890413_1016) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.hasDependencies(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::hasDependencies is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	array of string
+	 */
+	public function getDependencies() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332877468_371266_467) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.getDependencies(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::getDependencies is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	boolean
+	 */
+	public function hasContext() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237981281000_744457_889) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.hasContext(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::hasContext is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	Core_Context
+	 */
+	public function getContext() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236333144687_323957_482) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.getContext(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::getContext is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	boolean
+	 */
+	public function hasExtensions() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325216281_920907_679) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.hasExtensions(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::hasExtensions is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	array of mixed
+	 */
+	public function getExtensions() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325223515_604037_683) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.getExtensions(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::getExtensions is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	boolean
+	 */
+	public function hasInterceptors() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325602593_956710_714) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.hasInterceptors(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::hasInterceptors is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	array of mixed
+	 */
+	public function getInterceptors() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325639046_709407_718) ENABLED START */
+		// TODO: implementation of method 'Loader_CoreModuleLoader.getInterceptors(...)'
+		throw new Exception('The implementation of the method Loader_CoreModuleLoader::getInterceptors is missing !');
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	array of S2Container_ComponentDef
+	 */
+	public function getComponents() {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237975998187_888171_855) ENABLED START */
+		return array(
+			Adapter_SeasarPhpBuilder::newComponent('Adapter_SeasarServiceRegistry', 'serviceRegistry', array(), array(
+				// don't use special 'container' value to get a container instance - doesn't work :-(
+				// insead, use auto binding - now it seams to work :-)
+				Adapter_SeasarPhpBuilder::newProperty('container', 'container')
+			)),
+			Adapter_SeasarPhpBuilder::newComponent('Core_ServiceRegistryDispatcher', 'dispatcher', array(), array(
+				Adapter_SeasarPhpBuilder::newProperty('serviceRegistry', 'serviceRegistry'),
+			)),
+			Adapter_SeasarPhpBuilder::newComponent('Core_UrlResolver', 'resolver', array(), array(
+				Adapter_SeasarPhpBuilder::newProperty('dispatcher', 'dispatcher')
+			)),
+			Adapter_SeasarPhpBuilder::newComponent('Smarty', 'smarty'),
+			Adapter_SeasarPhpBuilder::newComponent('Adapter_SmartyRenderer', 'renderer', array(), array(
+				Adapter_SeasarPhpBuilder::newProperty('smarty', 'smarty')
+			))
+		);
 		/* PROTECTED REGION END */
 	}
 

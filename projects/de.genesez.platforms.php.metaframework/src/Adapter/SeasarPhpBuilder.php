@@ -89,16 +89,23 @@ class Adapter_SeasarPhpBuilder   {
 		/* PROTECTED REGION END */
 	}
 
-
-
-
-	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237058774562_708044_281) ENABLED START */
-	// TODO: put your further code implementations for class 'Adapter_SeasarPhpBuilder' here
-	public static function finishContainer($container) {
+	/**
+	 * @generated	method stub for implementation
+	 * @param	S2Container	$container	
+	 */
+	public function finishContainer($container) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156913765_600402_508) ENABLED START */
 		S2Container_ChildComponentDefBindingUtil::bind($container);
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	S2Container_ArgDef	$argDef	
+	 * @param	string	$value	
+	 */
 	protected static function setValue($argDef, $value) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156993453_652067_520) ENABLED START */
 		if (is_object($value)) {
 			$argDef->setValue($value);
 		} elseif (self::isValue($value)) {
@@ -107,18 +114,42 @@ class Adapter_SeasarPhpBuilder   {
 			$argDef->setExpression($value);
 			S2Container_ChildComponentDefBindingUtil::put($value, $argDef);
 		}
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	string	$value	
+	 * @return	boolean
+	 */
 	protected static function isValue($value) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156937468_924442_512) ENABLED START */
 		return preg_match('/^(\'|\")(.*)(\'|\")$/', $value) == 1;
+		/* PROTECTED REGION END */
 	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	string	$value	
+	 * @return	string
+	 */
 	protected static function injectionValue($value) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156968890_789200_516) ENABLED START */
 		$value = trim($value);
 		$rep = preg_replace('/^(\'|\")(.*)(\'|\")$/', '$2', $value);
 		if ($rep == $value) {
 			return null;
 		}
 		return $rep;
+		/* PROTECTED REGION END */
 	}
+
+
+
+
+	// -- own code implementation -------------------------------------------
+	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237058774562_708044_281) ENABLED START */
+	// TODO: put your further code implementations for class 'Adapter_SeasarPhpBuilder' here
 	/* PROTECTED REGION END */
 }
 ?>

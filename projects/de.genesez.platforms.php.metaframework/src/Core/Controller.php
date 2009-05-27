@@ -1,6 +1,7 @@
 <?php
-require_once 'Core/HandlerInfo.php';
 require_once 'Core/ServiceRegistry.php';
+require_once 'Core/RequestHandler.php';
+require_once 'Core/HandlerInfo.php';
 require_once 'Core/Action.php';
 require_once 'Core/Dto.php';
 require_once 'Core/BaseRequestHandler.php';
@@ -21,14 +22,29 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_HandlerInfo	$handlerInfo
-	 */
-	protected $handlerInfo;
-	/**
-	 * @generated	attribute definition
 	 * @var		Core_ServiceRegistry	$serviceRegistry
 	 */
 	protected $serviceRegistry;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_RequestHandler	$noActionSpecifiedHandler
+	 */
+	protected $noActionSpecifiedHandler;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_RequestHandler	$unknownActionSpecifiedHandler
+	 */
+	protected $unknownActionSpecifiedHandler;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_RequestHandler	$noIdSpecifiedHandler
+	 */
+	protected $noIdSpecifiedHandler;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_HandlerInfo	$handlerInfo
+	 */
+	protected $handlerInfo;
 
 	/**
 	 * @var	array of Core_Action	stores the linked objects of the  multi qualified unidirectional to one association to {@link Core_Action} (symmetry ensured) 
@@ -177,6 +193,9 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238021984_342013_941) ENABLED START */
+		if ($this->noActionSpecifiedHandler !== null) {
+			return $this->noActionSpecifiedHandler->handle($this->handlerInfo);
+		}
 		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
@@ -187,6 +206,9 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238044687_348789_945) ENABLED START */
+		if ($this->unknownActionSpecifiedHandler !== null) {
+			return $this->unknownActionSpecifiedHandler->handle($this->handlerInfo);
+		}
 		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
@@ -197,6 +219,9 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	protected function noIdSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765470421_127482_360) ENABLED START */
+		if ($this->noIdSpecifiedHandler !== null) {
+			return $this->noIdSpecifiedHandler->handle($this->handlerInfo);
+		}
 		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
@@ -255,6 +280,27 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	 */
 	public 	 function setServiceRegistry(Core_ServiceRegistry $serviceRegistry) {
 		$this->serviceRegistry = $serviceRegistry;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Core_Controller::getNoActionSpecifiedHandler() $noActionSpecifiedHandler}
+	 * @param	Core_RequestHandler	$noActionSpecifiedHandler	the value to set
+	 */
+	public 	 function setNoActionSpecifiedHandler(Core_RequestHandler $noActionSpecifiedHandler) {
+		$this->noActionSpecifiedHandler = $noActionSpecifiedHandler;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Core_Controller::getUnknownActionSpecifiedHandler() $unknownActionSpecifiedHandler}
+	 * @param	Core_RequestHandler	$unknownActionSpecifiedHandler	the value to set
+	 */
+	public 	 function setUnknownActionSpecifiedHandler(Core_RequestHandler $unknownActionSpecifiedHandler) {
+		$this->unknownActionSpecifiedHandler = $unknownActionSpecifiedHandler;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Core_Controller::getNoIdSpecifiedHandler() $noIdSpecifiedHandler}
+	 * @param	Core_RequestHandler	$noIdSpecifiedHandler	the value to set
+	 */
+	public 	 function setNoIdSpecifiedHandler(Core_RequestHandler $noIdSpecifiedHandler) {
+		$this->noIdSpecifiedHandler = $noIdSpecifiedHandler;
 	}
 
 	/**

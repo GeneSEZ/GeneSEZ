@@ -1,5 +1,5 @@
 <?php
-require_once 'Loader/ModuleLoader.php';
+require_once 'Loader/PlugInLoader.php';
 require_once 'Core/Context.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1236332587625_21111_386) ENABLED START */
@@ -20,7 +20,7 @@ class Metaframework   {
 	protected static $autoloadDirs = array();
 	/**
 	 * @generated	attribute definition
-	 * @var		Loader_ModuleLoader	$modules
+	 * @var		Loader_PlugInLoader	$modules
 	 */
 	protected $modules = array();
 	/**
@@ -69,7 +69,7 @@ class Metaframework   {
 	/**
 	 * registers a module loader instance with the given name
 	 * @param	string	$name	name of the plugin
-	 * @param	Loader_ModuleLoader	$loader	module loader instance of the plugin
+	 * @param	Loader_PlugInLoader	$loader	module loader instance of the plugin
 	 */
 	public function registerModuleLoader($name, $loader) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332689875_601091_430) ENABLED START */

@@ -1,17 +1,17 @@
 <?php
 require_once 'Core/Context.php';
-require_once 'Loader/ModuleLoader.php';
+require_once 'Loader/PlugInLoader.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237982393703_618181_979) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Loader_ModuleLoader
+ * @see		Loader_PlugInLoader
  * @author	dreamer
  * @package	Metaframework
  */
-abstract class Loader_InvisibleModuleLoader  implements Loader_ModuleLoader {
+abstract class Loader_InvisibleModuleLoader  implements Loader_PlugInLoader {
 
 
 

@@ -1,6 +1,7 @@
 <?php
 require_once 'Core/ServiceRegistry.php';
 require_once 'Core/Renderer.php';
+require_once 'Core/RequestHandler.php';
 require_once 'Core/HandlerInfo.php';
 require_once 'Core/Dto.php';
 require_once 'Core/Dispatcher.php';
@@ -26,12 +27,58 @@ class Core_ServiceRegistryDispatcher  implements Core_Dispatcher {
 	 * @var		Core_Renderer	$_renderer
 	 */
 	private $_renderer;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_RequestHandler	$noHandlerFoundHandler
+	 */
+	protected $noHandlerFoundHandler;
+	/**
+	 * @generated	attribute definition
+	 * @var		Core_RequestHandler	$unresolvableHandlerHandler
+	 */
+	protected $unresolvableHandlerHandler;
 
 
 
 
 	// -- method implementations --------------------------------------------
 	
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Core_HandlerInfo	$handlerInfo	
+	 */
+	protected function noHandlerFound($handlerInfo) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240231388968_524116_914) ENABLED START */
+		if ($this->noHandlerFoundHandler !== null) {
+			$dto = $this->noHandlerFoundHandler->handle($handlerInfo);
+			$this->render($dto);
+		}
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Core_HandlerInfo	$handlerInfo	
+	 */
+	protected function unresolvableHandler($handlerInfo) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240231367593_354798_910) ENABLED START */
+		if ($this->unresolvableHandlerHandler !== null) {
+			$dto = $this->unresolvableHandlerHandler->handle($handlerInfo);
+			$this->render($dto);
+		}
+		/* PROTECTED REGION END */
+	}
+
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Core_Dto	$dto	
+	 */
+	protected function render($dto) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240236389843_932232_920) ENABLED START */
+		$this->_renderer->render($dto);
+		/* PROTECTED REGION END */
+	}
+
 	/**
 	 * @generated	method stub for implementation
 	 * @param	Core_HandlerInfo	$handlerInfo	
@@ -57,44 +104,6 @@ class Core_ServiceRegistryDispatcher  implements Core_Dispatcher {
 		/* PROTECTED REGION END */
 	}
 
-	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 */
-	protected function noHandlerFound($handlerInfo) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240231388968_524116_914) ENABLED START */
-		if ($this->_serviceRegistry->hasComponent('default.handler')) {
-			$handler = $this->_serviceRegistry->getComponent('default.handler');
-			$dto = $handler->handle($handlerInfo);
-			$this->render($dto);
-		}
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 */
-	protected function unresolvableHandler($handlerInfo) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240231367593_354798_910) ENABLED START */
-		if ($this->_serviceRegistry->hasComponent('error.handler')) {
-			$handler = $this->_serviceRegistry->getComponent('error.handler');
-			$dto = $handler->handle($handlerInfo);
-			$this->render($dto);
-		}
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_Dto	$dto	
-	 */
-	protected function render($dto) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240236389843_932232_920) ENABLED START */
-		$this->_renderer->render($dto);
-		/* PROTECTED REGION END */
-	}
-
 
 	// -- association + attribute accessors ---------------------------------
 	/**
@@ -110,6 +119,20 @@ class Core_ServiceRegistryDispatcher  implements Core_Dispatcher {
 	 */
 	public 	 function setRenderer(Core_Renderer $renderer) {
 		$this->_renderer = $renderer;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Core_ServiceRegistryDispatcher::getNoHandlerFoundHandler() $noHandlerFoundHandler}
+	 * @param	Core_RequestHandler	$noHandlerFoundHandler	the value to set
+	 */
+	public 	 function setNoHandlerFoundHandler(Core_RequestHandler $noHandlerFoundHandler) {
+		$this->noHandlerFoundHandler = $noHandlerFoundHandler;
+	}
+	/**
+	 * @generated	setter method for the attribute {@link Core_ServiceRegistryDispatcher::getUnresolvableHandlerHandler() $unresolvableHandlerHandler}
+	 * @param	Core_RequestHandler	$unresolvableHandlerHandler	the value to set
+	 */
+	public 	 function setUnresolvableHandlerHandler(Core_RequestHandler $unresolvableHandlerHandler) {
+		$this->unresolvableHandlerHandler = $unresolvableHandlerHandler;
 	}
 
 

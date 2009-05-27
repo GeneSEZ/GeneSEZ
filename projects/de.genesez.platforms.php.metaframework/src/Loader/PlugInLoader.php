@@ -9,19 +9,19 @@ require_once 'Core/Context.php';
  * @author	dreamer
  * @package	Metaframework
  */
-interface Loader_ModuleLoader  {
+interface Loader_PlugInLoader  {
 	
 	/**
 	 * @generated	method stub for implementation
 	 * @return	boolean
 	 */
-	public function hasModuleDependencies();
+	public function hasDependencies();
 
 	/**
 	 * @generated	method stub for implementation
 	 * @return	array of string
 	 */
-	public function getModuleDependencies();
+	public function getDependencies();
 
 	/**
 	 * @generated	method stub for implementation
@@ -33,13 +33,37 @@ interface Loader_ModuleLoader  {
 	 * @generated	method stub for implementation
 	 * @return	boolean
 	 */
-	public function hasModuleContext();
+	public function hasContext();
 
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Core_Context
 	 */
-	public function getModuleContext();
+	public function getContext();
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	boolean
+	 */
+	public function hasExtensions();
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	array of mixed
+	 */
+	public function getExtensions();
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	boolean
+	 */
+	public function hasInterceptors();
+
+	/**
+	 * @generated	method stub for implementation
+	 * @return	array of mixed
+	 */
+	public function getInterceptors();
 
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1236332715609_785989_435) ENABLED START */
