@@ -172,6 +172,44 @@
 				@PostLoad
 			«ENDIF-»
 		«ENDIF-»
+		«REM»for entity listener classes«ENDREM»
+		«IF !classifier.hasStereotype("ejb3PersistentEntity") &&
+			!classifier.hasStereotype("ejb3SessionBean") && 
+			!classifier.hasStereotype("ejb3MessageDrivenBean")-»
+			«IF hasTaggedValue("ejb3Callback", "postPersist", "true")-»
+				@PostPersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePersist", "true")-»
+				@PrePersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postUpdate", "true")-»
+				@PostUpdate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preUpdate", "true")-»
+				@PreUpdate
+			«ENDIF-»	
+			«IF hasTaggedValue("ejb3Callback", "postRemove", "true")-»
+				@PostRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preRemove", "true")-»
+				@PreRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postLoad", "true")-»
+				@PostLoad
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postActivate", "true")-»
+				@PostActivate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePassivate", "true")-»
+				@PrePassivate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postConstruct", "true")-»
+				@PostConstruct
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preDestroy", "true")-»
+				@PreDestroy
+			«ENDIF-»
+		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
 

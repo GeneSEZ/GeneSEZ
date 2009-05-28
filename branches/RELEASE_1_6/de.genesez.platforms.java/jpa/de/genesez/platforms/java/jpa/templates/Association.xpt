@@ -33,7 +33,7 @@
 		«IF !hasTaggedValue("ejb3Association", "type", "OneToOne")-»
 			«EXPAND _JoinTable»
 		«ENDIF-»
-	«ELSEIF !hasStereotype("ejb3Association")-»
+	«ELSEIF !hasStereotype("ejb3Association") || !hasUtilizableValue("ejb3Association", "type")-»
 		«IF multiplicity != 1-»
 			«REM»//Stereotypen: «this.stereotype»«ENDREM»
 			@org.hibernate.annotations.CollectionOfElements
