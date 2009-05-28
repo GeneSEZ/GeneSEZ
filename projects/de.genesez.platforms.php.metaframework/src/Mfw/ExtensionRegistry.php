@@ -8,32 +8,32 @@
  * @author	dreamer
  * @package	Metaframework
  */
-interface Core_ExtensionRegistry  {
+interface Mfw_ExtensionRegistry  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$name	
-	 * @param	mixed	$value	
+	 * @param	string	$extension	
+	 * @param	mixed	$contribution	
 	 */
-	public function registerContribution($name, $value);
+	public function register($extension, $contribution);
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$name	
+	 * @param	string	$extension	
 	 * @return	boolean
 	 */
-	public function hasContribution($name);
+	public function hasContributions($extension);
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$name	
+	 * @param	string	$extension	
 	 * @return	array of mixed
 	 */
-	public function getContribution($name);
+	public function getContributions($extension);
 
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1243324717437_372929_361) ENABLED START */
-	// TODO: put your further code declarations for interface 'Core_ExtensionRegistry' here
+	// TODO: put your further code declarations for interface 'Mfw_ExtensionRegistry' here
 	/* PROTECTED REGION END */
 }
 ?>

@@ -8,7 +8,7 @@
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_Action   {
+class Mfw_Action   {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -29,7 +29,7 @@ class Core_Action   {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Core_Action}
+	 * constructs an object of class {@link Mfw_Action}
 	 * @generated	constructor stub for implementation
 	 * @param	string	$name	
 	 * @param	boolean	$withId	default value is 'true'
@@ -76,7 +76,7 @@ class Core_Action   {
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240242598453_62053_985) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_Action' here
+	// TODO: put your further code implementations for class 'Mfw_Action' here
 	/* PROTECTED REGION END */
 }
 ?>

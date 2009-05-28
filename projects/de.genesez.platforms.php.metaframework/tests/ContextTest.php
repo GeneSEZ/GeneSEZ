@@ -1,6 +1,6 @@
 <?php
 require_once 'PHPUnit/Framework.php';
-require_once 'core/Context.php';
+require_once 'Mfw/Context.php';
 
 class ContextTest extends PHPUnit_Framework_TestCase {
 	
@@ -10,13 +10,13 @@ class ContextTest extends PHPUnit_Framework_TestCase {
 	private $context1Sub1;
 	
 	public function testInlineConstruct() {
-		$this->root = new Core_Context('root', 'roothandler', array(
-			new Core_Context('s1', 's1h', array(
-				new Core_Context('s1s1', 's1s1h', array(
-					new Core_Context('s1s1s1', 's1s1s1h')
+		$this->root = new Mfw_Context('root', 'roothandler', array(
+			new Mfw_Context('s1', 's1h', array(
+				new Mfw_Context('s1s1', 's1s1h', array(
+					new Mfw_Context('s1s1s1', 's1s1s1h')
 				))
 			)),
-			new Core_Context('s2', 's2h')
+			new Mfw_Context('s2', 's2h')
 		));
 		$this->assertEquals('root', $this->root->name, 'root context name should be equal');
 		$this->assertEquals('roothandler', $this->root->handler, 'root context handler should be equal');
@@ -38,10 +38,10 @@ class ContextTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testConstruct() {
 		// building contexts
-		$this->context1Sub1 = new Core_Context('sub1');
-		$this->context1 = new Core_Context('context1', 'root.context1', array($this->context1Sub1));
-		$this->context2 = new Core_Context('context2');
-		$this->root = new Core_Context('', 'root', array(
+		$this->context1Sub1 = new Mfw_Context('sub1');
+		$this->context1 = new Mfw_Context('context1', 'root.context1', array($this->context1Sub1));
+		$this->context2 = new Mfw_Context('context2');
+		$this->root = new Mfw_Context('', 'root', array(
 			$this->context1, $this->context2
 		));
 		// assigning handlers not assigned in constructor
@@ -111,7 +111,7 @@ class ContextTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testSameContextName() {
 		$this->testConstruct();
-		$test = new Core_Context('sub1');
+		$test = new Mfw_Context('sub1');
 		$test->handler = 'root.context1.sub1.sub1';
 		$this->context1Sub1->nestedContext->insert($test);
 		$ch = $this->root->resolveContext(array('context1', 'sub1', 'sub1'));

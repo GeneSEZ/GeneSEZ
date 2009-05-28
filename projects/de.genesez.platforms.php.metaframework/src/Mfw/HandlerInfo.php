@@ -1,8 +1,9 @@
 <?php
-require_once 'Core/Context.php';
+require_once 'Mfw/Context.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1236337727984_243900_412) ENABLED START */
 // TODO: put your further include + require statements here
+require_once 'Mfw/Url.php';
 /* PROTECTED REGION END */
 
 /**
@@ -10,7 +11,7 @@ require_once 'Core/Context.php';
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_HandlerInfo  implements ArrayAccess {
+class Mfw_HandlerInfo  implements ArrayAccess {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -19,7 +20,7 @@ class Core_HandlerInfo  implements ArrayAccess {
 	private $_handler;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_Context	$_context
+	 * @var		Mfw_Context	$_context
 	 */
 	private $_context;
 	/**
@@ -31,16 +32,16 @@ class Core_HandlerInfo  implements ArrayAccess {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Core_HandlerInfo}
+	 * constructs an object of class {@link Mfw_HandlerInfo}
 	 * @generated	constructor stub for implementation
-	 * @param	Core_Context	$context	
+	 * @param	Mfw_Context	$context	
 	 * @param	string	$pathInfo	
 	 */
 	public function __construct($context, $pathInfo) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338137828_752628_437) ENABLED START */
 		$this->_context = $context;
 		$this->_handler = $context->handler;
-		$this->_pathInfo = Core_Url::requestInfo($pathInfo);
+		$this->_pathInfo = Mfw_Url::requestInfo($pathInfo);
 		/* PROTECTED REGION END */
 	}
 

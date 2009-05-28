@@ -1,6 +1,6 @@
 <?php
-require_once 'Core/Dto.php';
-require_once 'Core/HandlerInfo.php';
+require_once 'Mfw/Dto.php';
+require_once 'Mfw/HandlerInfo.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1239095178265_502885_711) ENABLED START */
 // TODO: put your further include + require statements here
@@ -10,14 +10,14 @@ require_once 'Core/HandlerInfo.php';
  * @author	dreamer
  * @package	Metaframework
  */
-interface Core_RequestHandler  {
+interface Mfw_RequestHandler  {
 	
 	/**
 	 * Processes the current request. It returns either a <b>DTO</b> which 
 	 * contains all data to be rendered or it returns <b>true</b> to indicate 
 	 * that rendering was already done.
-	 * @param	Core_HandlerInfo	$handlerInfo	provides additional information
-	 * @return	Core_Dto
+	 * @param	Mfw_HandlerInfo	$handlerInfo	provides additional information
+	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo);
 
@@ -29,7 +29,7 @@ interface Core_RequestHandler  {
 
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1239095178265_502885_711) ENABLED START */
-	// TODO: put your further code declarations for interface 'Core_RequestHandler' here
+	// TODO: put your further code declarations for interface 'Mfw_RequestHandler' here
 	/* PROTECTED REGION END */
 }
 ?>

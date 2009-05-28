@@ -1,6 +1,6 @@
 <?php
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/Context.php';
+require_once 'Mfw/HandlerInfo.php';
+require_once 'Mfw/Context.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237827400500_227958_281) ENABLED START */
 // TODO: put your further include + require statements here
@@ -10,18 +10,18 @@ require_once 'Core/Context.php';
  * @author	dreamer
  * @package	Metaframework
  */
-interface Core_Resolver  {
+interface Mfw_Resolver  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	Core_Context	$context	
-	 * @return	Core_HandlerInfo
+	 * @param	Mfw_Context	$context	
+	 * @return	Mfw_HandlerInfo
 	 */
 	public function resolveHandler($context);
 
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1237827400500_227958_281) ENABLED START */
-	// TODO: put your further code declarations for interface 'Core_UrlMapper' here
+	// TODO: put your further code declarations for interface 'Mfw_UrlMapper' here
 	/* PROTECTED REGION END */
 }
 ?>

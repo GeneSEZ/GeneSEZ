@@ -1,7 +1,7 @@
 <?php
 require_once 'Smarty/Smarty.class.php';
-require_once 'Core/Dto.php';
-require_once 'Core/Renderer.php';
+require_once 'Mfw/Dto.php';
+require_once 'Mfw/Renderer.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999928437_189680_1219) ENABLED START */
 // TODO: put your further include + require statements here
@@ -10,11 +10,11 @@ require_once 'Core/Renderer.php';
 /**
  * A <b>renderer</b> implementation which generates a response using the 
  * smarty template engine.
- * @see		Core_Renderer
+ * @see		Mfw_Renderer
  * @author	dreamer
  * @package	Metaframework
  */
-class Adapter_SmartyRenderer  implements Core_Renderer {
+class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -28,10 +28,24 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	// -- method implementations --------------------------------------------
 	
 	/**
+	 * @generated	method stub for implementation
+	 * @param	Mfw_Dto	$dto	
+	 */
+	public function render($dto) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237999928437_440329_1223) ENABLED START */
+		$this->templateBasePath = realpath('./' . $this->smarty->template_dir) . '/';
+		$view = $dto->view();
+		$this->assignGlobalVariables($this->smarty);
+		$this->smarty->assign('dto', $dto);
+		$this->smarty->display($view);
+		/* PROTECTED REGION END */
+	}
+	
+	/**
 	 * The dynamically registered template function plugin <b>render</b> for 
 	 * smarty templates. It is the smarty template function port of the <b>Renderer</b> 
 	 * interface, i.e. you specifiy only a dto to render it. If there is no 
-	 * &lt;code&gt;dto&lt;/code&gt; parameter with an instance of type &lt;code&gt;Core_Dto&lt;/code&gt; 
+	 * &lt;code&gt;dto&lt;/code&gt; parameter with an instance of type &lt;code&gt;Mfw_Dto&lt;/code&gt; 
 	 * a smarty error is triggered.<br><br>The view of a dto must not exist; in 
 	 * this case this function derives a default template from the URL.<br>
 	 * @param	array	$params	the parameters of the template function as an associative array with key:value pairs
@@ -41,14 +55,14 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	public function checkInclude($params, &$smarty) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241804745078_804374_559) ENABLED START */
 		if (array_key_exists('dto', $params)) {
-			if ($params['dto'] instanceof Core_Dto) {
+			if ($params['dto'] instanceof Mfw_Dto) {
 				$view = $params['dto']->view();
 				if ($this->isSmartyTemplate($view)) {
 					return $this->renderInclude($view, $params);
 				}
 				return $this->processInclude($view, $params);
 			} else {
-				$this->smarty->trigger_error('unable to render include: the dto type (' . gettype($params['dto']) . ') must implement the \'Core_Dto\' interface! ');
+				$this->smarty->trigger_error('unable to render include: the dto type (' . gettype($params['dto']) . ') must implement the \'Mfw_Dto\' interface! ');
 			}
 		} else {
 			$this->smarty->trigger_error('unable to render include: there is no \'dto\' parameter! ' . print_r($params, true));
@@ -70,7 +84,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241808386312_403388_581) ENABLED START */
 		if ($view === null || $view === '') {
 			// check suffixes with url fallback
-			$requestPath = Core_Url::requestInfo();
+			$requestPath = Mfw_Url::requestInfo();
 			for ($i = count($requestPath); $i >= 0; --$i) {
 				$part = array_slice($requestPath, 0, $i);
 				$view = implode('/', $part);
@@ -83,7 +97,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 				// fallback for default controller
 				if ($i == count($requestPath)) {
 					// exclude 'class' context
-					$context = Core_Url::requestInfo();
+					$context = Mfw_Url::requestInfo();
 					array_splice($context, $i -2, 1);
 					$view = implode('/', $context);
 					foreach ($this->defaultSuffixes() as $suffix) {
@@ -93,7 +107,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 						}
 					}
 					// exclude 'class' context and 'id'
-					$context = Core_Url::requestInfo();
+					$context = Mfw_Url::requestInfo();
 					array_splice($context, $i -1, 1);
 					array_splice($context, $i -3, 1);
 					$view = implode('/', $context);
@@ -170,7 +184,7 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	protected function buildView($suffix = null, $view = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240433824734_817533_526) ENABLED START */
 		if ($view === null) {
-			$view = Core_Url::requestPath();
+			$view = Mfw_Url::requestPath();
 		}
 		if ($suffix !== null) {
 			$view .= $suffix;
@@ -198,30 +212,16 @@ class Adapter_SmartyRenderer  implements Core_Renderer {
 	 */
 	protected function assignGlobalVariables($smarty) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156741484_229703_502) ENABLED START */
-		$smarty->assign('webbase', Core_Url::baseServerUri());
-		$smarty->assign('requestbase', Core_Url::baseRequestUri());
-		$smarty->assign('context', Core_Url::requestPath());
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_Dto	$dto	
-	 */
-	public function render($dto) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000667953_464139_1265) ENABLED START */
-		$this->templateBasePath = realpath('./' . $this->smarty->template_dir) . '/';
-		$view = $dto->view();
-		$this->assignGlobalVariables($this->smarty);
-		$this->smarty->assign('dto', $dto);
-		$this->smarty->display($view);
+		$smarty->assign('webbase', Mfw_Url::baseServerUri());
+		$smarty->assign('requestbase', Mfw_Url::baseRequestUri());
+		$smarty->assign('context', Mfw_Url::requestPath());
 		/* PROTECTED REGION END */
 	}
 
 
 	// -- association + attribute accessors ---------------------------------
 	/**
-	 * @generated	setter method for the attribute {@link Adapter_SmartyRenderer::getSmarty() $smarty}
+	 * @generated	setter method for the attribute {@link Mfw_SmartyRenderer::getSmarty() $smarty}
 	 * @param	Smarty	$smarty	the value to set
 	 */
 	public 	 function setSmarty(Smarty $smarty) {

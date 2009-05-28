@@ -1,15 +1,18 @@
 <?php
-require_once 'Loader/InvisibleModuleLoader.php';
+require_once 'Mfw/PluginBase.php';
 
-class TestModuleLoader extends Loader_InvisibleModuleLoader {
+class TestPlugIn extends Mfw_PlugInBase {
+	public function getId() {
+		return 'de.genesez.metaframeowork.test';
+	}
 	public function getComponents() {
 		return array();
 	}
-	public function hasModuleDependencies() {
+	public function hasDependencies() {
 		return true;
 	}
-	public function getModuleDependencies() {
-		return array('non.existing.module');
+	public function getDependencies() {
+		return array('non.existing.plugin');
 	}
 }
 ?>

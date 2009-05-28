@@ -1,6 +1,6 @@
 <?php
-require_once 'Core/UrlResolver.php';
-class UriResolverTestClass extends Core_UrlResolver {
+require_once 'Mfw/UrlResolver.php';
+class UriResolverTestClass extends Mfw_UrlResolver {
 	private $pathinfo;
 	
 	protected function pathInfo() {

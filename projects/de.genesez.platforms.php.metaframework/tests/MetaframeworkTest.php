@@ -1,39 +1,38 @@
 <?php
-require_once 'Loader/CoreModuleLoader.php';
-
+require_once 'PHPUnit/Framework.php';
 require_once 'MetaframeworkTestClass.php';
-require_once 'TestModuleLoader.php';
-require_once 'DdmModuleLoader.php';
-require_once 'UtilitiesModuleLoader.php';
+
+require_once 'TestPlugIn.php';
+require_once 'DdmPlugIn.php';
+require_once 'UtilitiesPlugIn.php';
+
+require_once 'Mfw/DefaultCorePlugIn.php';
+
 
 class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 	private $metafw;
+	private $core;
 	
 	protected function setUp() {
-		$this->metafw = new MetaframeworkTestClass();
+		$this->core = new Mfw_DefaultCorePlugIn(array(
+			'data.source' => 'pgsql://postgres:postgres@localhost/ddm',
+			'smarty.template.dir' => 'view/templates',
+			'smarty.compile.dir' => 'view/templates_compiled'
+		));
+		$this->metafw = new MetaframeworkTestClass($this->core);
 	}
 	
 	public function testConstruction() {
 		$this->assertNotNull($this->metafw, 'metafw object should not be null');
-		$this->assertEquals(0, count($this->metafw->modules), 'there should be no registered module');
-		$this->metafw->registerModuleLoaders(array(
-			'de.genesez.platforms.php.metaframework.core' => new Loader_CoreModuleLoader(array(
-				'data.source' => 'pgsql://postgres:postgres@localhost/ddm',
-				'smarty.template.dir' => 'view/templates',
-				'smarty.compile.dir' => 'view/templates_compiled'
-			)),
-			'de.genesez.platforms.php.metaframework.util' => new UtilitiesModuleLoader(),
-			'de.genesez.platforms.php.ddm' => new DdmModuleLoader()
+		$this->metafw->registerPlugIns(array(
+			new UtilitiesPlugIn(),
+			new DdmPlugIn()
 		));
-		$this->assertEquals(3, count($this->metafw->modules), 'there should be 3 registered modules');
-		$this->assertTrue(array_key_exists('de.genesez.platforms.php.metaframework.core', $this->metafw->modules), 'core plug-in should be registered');
-		$this->assertTrue(array_key_exists('de.genesez.platforms.php.metaframework.util', $this->metafw->modules), 'util plug-in should be registered');
-		$this->assertTrue(array_key_exists('de.genesez.platforms.php.ddm', $this->metafw->modules), 'ddm plug-in should be registered');
+		$this->assertFalse($this->metafw->plugInRegistry->hasMissingDependencies(), 'there should be no missing dependency');
 	}
 	
 	public function testContext() {
 		$this->testConstruction();
-		$this->metafw->buildContainer();
 		
 		$ddm = $this->metafw->rootContext->nestedContext->getAll();
 		$this->assertEquals(1, count($ddm), 'root context should have 1 nested context');
@@ -43,25 +42,17 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 	
 	public function testComponents() {
 		$this->testConstruction();
-		$this->metafw->buildContainer();
 		
-		$this->assertTrue($this->metafw->container->hasComponent('dispatcher'), 'component dispatcher should exist');
-		$this->assertTrue($this->metafw->container->hasComponent('smarty'), 'component smarty should exist');
-		$this->assertTrue($this->metafw->container->hasComponent('renderer'), 'component renderer should exist');
-		$this->assertTrue($this->metafw->container->hasComponent('notifier'), 'component flash notifier should exist');
+		$this->assertTrue($this->metafw->serviceRegistry->hasComponent('dispatcher'), 'component dispatcher should exist');
+		$this->assertTrue($this->metafw->serviceRegistry->hasComponent('smarty'), 'component smarty should exist');
+		$this->assertTrue($this->metafw->serviceRegistry->hasComponent('renderer'), 'component renderer should exist');
+		$this->assertTrue($this->metafw->serviceRegistry->hasComponent('notifier'), 'component flash notifier should exist');
 		
-		$this->assertTrue($this->metafw->container->hasComponent('classFormAdapter'), 'component classFormAdapter should exist');
-	}
-	
-	public function testModuleDependenciesFail() {
-		$this->testConstruction();
-		$this->metafw->registerModuleLoader('test.module.loader', new TestModuleLoader());
-		$this->setExpectedException('Exception');
-		$this->metafw->checkPlugIns();
+		$this->assertTrue($this->metafw->serviceRegistry->hasComponent('classFormAdapter'), 'component classFormAdapter should exist');
 	}
 	
 	public function testAutoloadDirs() {
-		$mfw = new MetaframeworkTestClass(array('../de.genesez.platforms.php.metaframework.modules'));
+		$mfw = new MetaframeworkTestClass($this->core, array('../de.genesez.platforms.php.metaframework.modules'));
 		$dirs = $mfw->autoloadDirs;
 //		print_r($dirs);
 //		$this->assertContains('de.genesez.modules.ddm', $dirs, 'ddm module dir should be contained');

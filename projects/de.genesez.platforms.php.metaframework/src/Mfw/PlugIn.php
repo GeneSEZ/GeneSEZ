@@ -1,5 +1,5 @@
 <?php
-require_once 'Core/Context.php';
+require_once 'Mfw/Context.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1236332715609_785989_435) ENABLED START */
 // TODO: put your further include + require statements here
@@ -9,8 +9,14 @@ require_once 'Core/Context.php';
  * @author	dreamer
  * @package	Metaframework
  */
-interface Loader_PlugInLoader  {
+interface Mfw_PlugIn  {
 	
+	/**
+	 * @generated	method stub for implementation
+	 * @return	string
+	 */
+	public function getId();
+
 	/**
 	 * @generated	method stub for implementation
 	 * @return	boolean
@@ -37,7 +43,7 @@ interface Loader_PlugInLoader  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Context
+	 * @return	Mfw_Context
 	 */
 	public function getContext();
 

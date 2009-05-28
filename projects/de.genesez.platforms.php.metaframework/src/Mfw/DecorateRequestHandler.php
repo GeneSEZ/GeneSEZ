@@ -1,8 +1,8 @@
 <?php
-require_once 'Core/RequestHandler.php';
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/Dto.php';
-require_once 'Core/BaseRequestHandler.php';
+require_once 'Mfw/RequestHandler.php';
+require_once 'Mfw/HandlerInfo.php';
+require_once 'Mfw/Dto.php';
+require_once 'Mfw/RequestHandlerBase.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1241623038062_2281_361) ENABLED START */
 // TODO: put your further include + require statements here
@@ -13,25 +13,25 @@ require_once 'Core/BaseRequestHandler.php';
  * design pattern for request handlers, allowing the addition of 
  * functionality to existing request handlers 
  * as well as the delegation to other request handlers.
- * @see		Core_BaseRequestHandler
+ * @see		Mfw_RequestHandlerBase
  * @author	dreamer
  * @package	Metaframework
  */
-abstract class Core_DecorateRequestHandler extends Core_BaseRequestHandler  {
+abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_RequestHandler	$handler
+	 * @var		Mfw_RequestHandler	$handler
 	 */
 	protected $handler;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_HandlerInfo	$handlerInfo
+	 * @var		Mfw_HandlerInfo	$handlerInfo
 	 */
 	protected $handlerInfo;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_RequestHandler	$delegateHandler
+	 * @var		Mfw_RequestHandler	$delegateHandler
 	 */
 	protected $delegateHandler = array();
 
@@ -41,7 +41,7 @@ abstract class Core_DecorateRequestHandler extends Core_BaseRequestHandler  {
 	 * Creates a new request handler which uses other request handlers to process 
  * the request.
 	 * @generated	constructor stub for implementation
-	 * @param	Core_RequestHandler	$handler	the request handler to decorate
+	 * @param	Mfw_RequestHandler	$handler	the request handler to decorate
 	 * @param	array	$delegateHandler	an associative array with key => value pairs of delegated request handlers
 	 */
 	public function __construct($handler, $delegateHandler = array()) {
@@ -57,9 +57,9 @@ abstract class Core_DecorateRequestHandler extends Core_BaseRequestHandler  {
 	/**
 	 * Decorates the data transfer objects of the delegation and the decorated 
 	 * request handler.
-	 * @param	Core_Dto	$dto	the data transfer object to decorate
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 * @return	Core_Dto
+	 * @param	Mfw_Dto	$dto	the data transfer object to decorate
+	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @return	Mfw_Dto
 	 */
 	protected abstract function decorate($dto, $handlerInfo);
 
@@ -70,8 +70,8 @@ abstract class Core_DecorateRequestHandler extends Core_BaseRequestHandler  {
 	 * handlers. The data transfer objects of the delegation request handlers are 
 	 * added to the data transfer object of the decorated request handler. The 
 	 * DTO is then passed to the decorate method.
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 * @return	Core_Dto
+	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241623279562_741440_386) ENABLED START */

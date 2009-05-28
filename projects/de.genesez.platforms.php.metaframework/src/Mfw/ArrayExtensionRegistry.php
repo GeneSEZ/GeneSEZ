@@ -1,16 +1,16 @@
 <?php
-require_once 'Core/ExtensionRegistry.php';
+require_once 'Mfw/ExtensionRegistry.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1243325164078_119756_635) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_ExtensionRegistry
+ * @see		Mfw_ExtensionRegistry
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_ArrayExtensionRegistry  implements Core_ExtensionRegistry {
+class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -25,38 +25,38 @@ class Core_ArrayExtensionRegistry  implements Core_ExtensionRegistry {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$name	
-	 * @param	mixed	$value	
+	 * @param	string	$extension	
+	 * @param	mixed	$contribution	
 	 */
-	public function registerContribution($name, $value) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325455421_669669_692) ENABLED START */
-		if ($this->hasContribution($name)) {
-			$this->registry[$name][] = $value;
+	public function register($extension, $contribution) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243328733390_261363_857) ENABLED START */
+		if ($this->hasContributions($extension)) {
+			$this->registry[$extension][] = $contribution;
 		} else {
-			$this->registry[$name] = array($value);
+			$this->registry[$extension] = array($contribution);
 		}
 		/* PROTECTED REGION END */
 	}
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$name	
+	 * @param	string	$extension	
 	 * @return	boolean
 	 */
-	public function hasContribution($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325525109_252799_696) ENABLED START */
-		return isset($this->registry[$name]);
+	public function hasContributions($extension) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243324733906_887340_379) ENABLED START */
+		return isset($this->registry[$extension]);
 		/* PROTECTED REGION END */
 	}
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	string	$name	
+	 * @param	string	$extension	
 	 * @return	array of mixed
 	 */
-	public function getContribution($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325525109_863194_697) ENABLED START */
-		return $this->registry[$name];
+	public function getContributions($extension) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243324770125_599488_383) ENABLED START */
+		return $this->registry[$extension];
 		/* PROTECTED REGION END */
 	}
 
@@ -66,7 +66,7 @@ class Core_ArrayExtensionRegistry  implements Core_ExtensionRegistry {
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243325164078_119756_635) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_ArrayExtensionRegistry' here
+	// TODO: put your further code implementations for class 'Mfw_ArrayExtensionRegistry' here
 	/* PROTECTED REGION END */
 }
 ?>

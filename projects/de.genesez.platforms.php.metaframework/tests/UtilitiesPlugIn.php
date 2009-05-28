@@ -1,16 +1,16 @@
 <?php
-require_once 'Loader/InvisibleModuleLoader.php';
+require_once 'Mfw/PlugInBase.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237982205234_346906_901) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Loader_InvisibleModuleLoader
+ * @see		Mfw_PlugInBase
  * @author	dreamer
  * @package	Metaframework
  */
-class UtilitiesModuleLoader extends Loader_InvisibleModuleLoader  {
+class UtilitiesPlugIn extends Mfw_PlugInBase  {
 	
 	
 	
@@ -23,7 +23,7 @@ class UtilitiesModuleLoader extends Loader_InvisibleModuleLoader  {
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237982234093_59205_924) ENABLED START */
 		return array(
-			Adapter_SeasarPhpBuilder::newComponent('FlashNotifier', 'notifier')
+			Mfw_SeasarPhpBuilder::newComponent('FlashNotifier', 'notifier')
 		);
 		/* PROTECTED REGION END */
 	}
@@ -33,7 +33,10 @@ class UtilitiesModuleLoader extends Loader_InvisibleModuleLoader  {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237982205234_346906_901) ENABLED START */
-	// TODO: put your further code implementations for class 'Loader_UtilitiesModuleLoader' here
+	// TODO: put your further code implementations for class 'Mfw_UtilitiesModuleLoader' here
+	public function getId() {
+		return 'de.genesez.metaframework.util';
+	}
 	/* PROTECTED REGION END */
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once 'Core/Dto.php';
+require_once 'Mfw/Dto.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1239096659828_207401_865) ENABLED START */
 // TODO: put your further include + require statements here
@@ -7,11 +7,11 @@ require_once 'Core/Dto.php';
 
 /**
  * @see		ArrayObject
- * @see		Core_Dto
+ * @see		Mfw_Dto
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_BaseDto extends ArrayObject implements Core_Dto {
+class Mfw_DtoBase extends ArrayObject implements Mfw_Dto {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -22,7 +22,7 @@ class Core_BaseDto extends ArrayObject implements Core_Dto {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Core_BaseDto}
+	 * constructs an object of class {@link Mfw_DtoBase}
 	 * @generated	constructor stub for implementation
 	 * @param	array	$container	default value is 'array()'
 	 * @param	string	$view	default value is 'null'
@@ -54,7 +54,7 @@ class Core_BaseDto extends ArrayObject implements Core_Dto {
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239096659828_207401_865) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_BaseDto' here
+	// TODO: put your further code implementations for class 'Mfw_DtoBase' here
 	/* PROTECTED REGION END */
 }
 ?>

@@ -9,7 +9,7 @@
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_Url   {
+class Mfw_Url   {
 
 
 
@@ -82,7 +82,7 @@ class Core_Url   {
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241445333663_239738_361) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_Url' here
+	// TODO: put your further code implementations for class 'Mfw_Url' here
 	/* PROTECTED REGION END */
 }
 ?>

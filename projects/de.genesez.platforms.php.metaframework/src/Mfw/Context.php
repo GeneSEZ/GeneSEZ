@@ -21,7 +21,7 @@ require_once 'UML/OneAssociation.php';
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_Context   {
+class Mfw_Context   {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -35,18 +35,18 @@ class Core_Context   {
 	private $_handler;
 
 	/**
-	 * @var	array of Core_Context	stores the linked objects of the  bidirectional one to many association to {@link Core_Context} (symmetry ensured) 
+	 * @var	array of Mfw_Context	stores the linked objects of the  bidirectional one to many association to {@link Mfw_Context} (symmetry ensured) 
 	 */
 	private $_nestedContext = array();
 	/**
-	 * @var	Core_Context	stores the linked object of the  bidirectional many to one association to {@link Core_Context} (symmetry ensured) 
+	 * @var	Mfw_Context	stores the linked object of the  bidirectional many to one association to {@link Mfw_Context} (symmetry ensured) 
 	 */
 	private $_parent;
 	/**
 	 * holds all association management objects
 	 * <ul>
-	 *   <li><var>nestedContext</var>: the bidirectional one to many association to {@link Core_Context} (symmetry ensured)</li>
-	 *   <li><var>parent</var>: the bidirectional many to one association to {@link Core_Context} (symmetry ensured)</li>
+	 *   <li><var>nestedContext</var>: the bidirectional one to many association to {@link Mfw_Context} (symmetry ensured)</li>
+	 *   <li><var>parent</var>: the bidirectional many to one association to {@link Mfw_Context} (symmetry ensured)</li>
 	 * </ul>
 	 * @var array of Association and/or QualifiedAssociation
 	 */
@@ -54,11 +54,11 @@ class Core_Context   {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Core_Context}
+	 * constructs an object of class {@link Mfw_Context}
 	 * @generated	constructor stub for implementation
 	 * @param	string	$name	
 	 * @param	string	$handler	default value is 'null'
-	 * @param	array	$nestedContext	array of type 'Core_Context', default value is 'array()'
+	 * @param	array	$nestedContext	array of type 'Mfw_Context', default value is 'array()'
 	 */
 	public function __construct($name, $handler = null, $nestedContext = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338382406_230888_479) ENABLED START */
@@ -78,7 +78,7 @@ class Core_Context   {
 	 * resolves the context for the specified path. In case of an unresolvable 
 	 * context, the root context is returned.
 	 * @param	array	$path	the path specifying a context
-	 * @return	Core_Context
+	 * @return	Mfw_Context
 	 */
 	public function resolveContext($path = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240297503531_187744_1117) ENABLED START */
@@ -143,8 +143,8 @@ class Core_Context   {
 	 * <ul>
 	 *   <li><var>name</var>: </li>
 	 *   <li><var>handler</var>: </li>
-	 *   <li><var>nestedContext</var>: the  bidirectional one to many association to {@link Core_Context} (symmetry ensured)</li>
-	 *   <li><var>parent</var>: the  bidirectional many to one association to {@link Core_Context} (symmetry ensured)</li>
+	 *   <li><var>nestedContext</var>: the  bidirectional one to many association to {@link Mfw_Context} (symmetry ensured)</li>
+	 *   <li><var>parent</var>: the  bidirectional many to one association to {@link Mfw_Context} (symmetry ensured)</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available

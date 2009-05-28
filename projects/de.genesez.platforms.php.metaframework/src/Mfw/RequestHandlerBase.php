@@ -1,18 +1,18 @@
 <?php
-require_once 'Core/ServiceRegistry.php';
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/RequestHandler.php';
+require_once 'Mfw/ServiceRegistry.php';
+require_once 'Mfw/HandlerInfo.php';
+require_once 'Mfw/RequestHandler.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1239125989500_25423_1168) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_RequestHandler
+ * @see		Mfw_RequestHandler
  * @author	dreamer
  * @package	Metaframework
  */
-abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
+abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -21,7 +21,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	protected $view;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_ServiceRegistry	$serviceRegistry
+	 * @var		Mfw_ServiceRegistry	$serviceRegistry
 	 */
 	protected $serviceRegistry;
 
@@ -52,7 +52,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
+	 * @param	Mfw_HandlerInfo	$handlerInfo	
 	 * @return	string
 	 */
 	public function baseHandlerUri($handlerInfo) {
@@ -67,7 +67,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 	 */
 	public static function defaultView() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240240687687_163465_951) ENABLED START */
-		$view = Core_Url::requestPath();
+		$view = Mfw_Url::requestPath();
 		if (substr($view, 0, 1) === '/') {
 			$view = substr($view, 1);
 		}
@@ -78,7 +78,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 
 	// -- association + attribute accessors ---------------------------------
 	/**
-	 * @generated	setter method for the attribute {@link Core_BaseRequestHandler::getView() $view}
+	 * @generated	setter method for the attribute {@link Mfw_RequestHandlerBase::getView() $view}
 	 * @param	string	$view	the value to set
 	 */
 	
@@ -86,10 +86,10 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 		$this->view = $view;
 	}
 	/**
-	 * @generated	setter method for the attribute {@link Core_BaseRequestHandler::getServiceRegistry() $serviceRegistry}
-	 * @param	Core_ServiceRegistry	$serviceRegistry	the value to set
+	 * @generated	setter method for the attribute {@link Mfw_RequestHandlerBase::getServiceRegistry() $serviceRegistry}
+	 * @param	Mfw_ServiceRegistry	$serviceRegistry	the value to set
 	 */
-	public 	 function setServiceRegistry(Core_ServiceRegistry $serviceRegistry) {
+	public 	 function setServiceRegistry(Mfw_ServiceRegistry $serviceRegistry) {
 		$this->serviceRegistry = $serviceRegistry;
 	}
 
@@ -111,7 +111,7 @@ abstract class Core_BaseRequestHandler  implements Core_RequestHandler {
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239125989500_25423_1168) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_BaseRequestHandler' here
+	// TODO: put your further code implementations for class 'Mfw_BaseRequestHandler' here
 	/* PROTECTED REGION END */
 }
 ?>

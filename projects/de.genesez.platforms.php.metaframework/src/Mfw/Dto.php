@@ -8,7 +8,7 @@
  * @author	dreamer
  * @package	Metaframework
  */
-interface Core_Dto  {
+interface Mfw_Dto  {
 	
 	/**
 	 * @generated	method stub for implementation
@@ -18,7 +18,7 @@ interface Core_Dto  {
 
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1239095244843_694740_733) ENABLED START */
-	// TODO: put your further code declarations for interface 'Core_Dto' here
+	// TODO: put your further code declarations for interface 'Mfw_Dto' here
 	/* PROTECTED REGION END */
 }
 ?>

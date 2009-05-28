@@ -1,5 +1,5 @@
 <?php
-require_once 'Core/Dto.php';
+require_once 'Mfw/Dto.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999928437_779424_1221) ENABLED START */
 // TODO: put your further include + require statements here
@@ -10,17 +10,17 @@ require_once 'Core/Dto.php';
  * @author	dreamer
  * @package	Metaframework
  */
-interface Core_Renderer  {
+interface Mfw_Renderer  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	Core_Dto	$dto	
+	 * @param	Mfw_Dto	$dto	
 	 */
 	public function render($dto);
 
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1237999928437_779424_1221) ENABLED START */
-	// TODO: put your further code declarations for interface 'Core_Renderer' here
+	// TODO: put your further code declarations for interface 'Mfw_Renderer' here
 	/* PROTECTED REGION END */
 }
 ?>

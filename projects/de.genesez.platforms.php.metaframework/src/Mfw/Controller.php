@@ -1,10 +1,10 @@
 <?php
-require_once 'Core/ServiceRegistry.php';
-require_once 'Core/RequestHandler.php';
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/Action.php';
-require_once 'Core/Dto.php';
-require_once 'Core/BaseRequestHandler.php';
+require_once 'Mfw/ServiceRegistry.php';
+require_once 'Mfw/RequestHandler.php';
+require_once 'Mfw/HandlerInfo.php';
+require_once 'Mfw/Action.php';
+require_once 'Mfw/Dto.php';
+require_once 'Mfw/RequestHandlerBase.php';
 require_once 'UML/MultiQualifiedAssociation.php';
 require_once 'UML/OneAssociation.php';
 
@@ -14,51 +14,51 @@ require_once 'HTTP.php';
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_BaseRequestHandler
+ * @see		Mfw_RequestHandlerBase
  * @author	dreamer
  * @package	Metaframework
  */
-abstract class Core_Controller extends Core_BaseRequestHandler  {
+abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_ServiceRegistry	$serviceRegistry
+	 * @var		Mfw_ServiceRegistry	$serviceRegistry
 	 */
 	protected $serviceRegistry;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_RequestHandler	$noActionSpecifiedHandler
+	 * @var		Mfw_RequestHandler	$noActionSpecifiedHandler
 	 */
 	protected $noActionSpecifiedHandler;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_RequestHandler	$unknownActionSpecifiedHandler
+	 * @var		Mfw_RequestHandler	$unknownActionSpecifiedHandler
 	 */
 	protected $unknownActionSpecifiedHandler;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_RequestHandler	$noIdSpecifiedHandler
+	 * @var		Mfw_RequestHandler	$noIdSpecifiedHandler
 	 */
 	protected $noIdSpecifiedHandler;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_HandlerInfo	$handlerInfo
+	 * @var		Mfw_HandlerInfo	$handlerInfo
 	 */
 	protected $handlerInfo;
 
 	/**
-	 * @var	array of Core_Action	stores the linked objects of the  multi qualified unidirectional to one association to {@link Core_Action} (symmetry ensured) 
+	 * @var	array of Mfw_Action	stores the linked objects of the  multi qualified unidirectional to one association to {@link Mfw_Action} (symmetry ensured) 
 	 */
 	private $_actions = array();
 	/**
-	 * @var	Core_Action	stores the linked object of the  unidirectional to one association to {@link Core_Action} (symmetry ensured) 
+	 * @var	Mfw_Action	stores the linked object of the  unidirectional to one association to {@link Mfw_Action} (symmetry ensured) 
 	 */
 	private $_defaultAction;
 	/**
 	 * holds all association management objects
 	 * <ul>
-	 *   <li><var>actions</var>: the multi qualified unidirectional to one association to {@link Core_Action} (symmetry ensured)</li>
-	 *   <li><var>defaultAction</var>: the unidirectional to one association to {@link Core_Action} (symmetry ensured)</li>
+	 *   <li><var>actions</var>: the multi qualified unidirectional to one association to {@link Mfw_Action} (symmetry ensured)</li>
+	 *   <li><var>defaultAction</var>: the unidirectional to one association to {@link Mfw_Action} (symmetry ensured)</li>
 	 * </ul>
 	 * @var array of Association and/or QualifiedAssociation
 	 */
@@ -66,18 +66,18 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Core_Controller}
+	 * constructs an object of class {@link Mfw_Controller}
 	 * @generated	constructor stub for implementation
 	 */
 	public function __construct() {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240241341890_219976_955) ENABLED START */
-		$list = new Core_Action('list', false, 'listing');
+		$list = new Mfw_Action('list', false, 'listing');
 		$this->defaultAction->insert($list);
 		$this->actions->insert('list', $list);
-		$this->actions->insert('create', new Core_Action('create', false));
-		$this->actions->insert('edit', new Core_Action('edit'));
-		$this->actions->insert('delete', new Core_Action('delete'));
-		$this->actions->insert('show', new Core_Action('show'));
+		$this->actions->insert('create', new Mfw_Action('create', false));
+		$this->actions->insert('edit', new Mfw_Action('edit'));
+		$this->actions->insert('delete', new Mfw_Action('delete'));
+		$this->actions->insert('show', new Mfw_Action('show'));
 		/* PROTECTED REGION END */
 	}
 
@@ -86,34 +86,34 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public abstract function create();
 
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public abstract function delete($id);
 
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public abstract function edit($id);
 
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public abstract function show($id);
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public abstract function listing();
 
@@ -121,8 +121,8 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 * @return	Core_Dto
+	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239126840906_396271_1264) ENABLED START */
@@ -189,7 +189,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238021984_342013_941) ENABLED START */
@@ -202,7 +202,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238044687_348789_945) ENABLED START */
@@ -215,7 +215,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	protected function noIdSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765470421_127482_360) ENABLED START */
@@ -275,39 +275,39 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 
 	// -- association + attribute accessors ---------------------------------
 	/**
-	 * @generated	setter method for the attribute {@link Core_Controller::getServiceRegistry() $serviceRegistry}
-	 * @param	Core_ServiceRegistry	$serviceRegistry	the value to set
+	 * @generated	setter method for the attribute {@link Mfw_Controller::getServiceRegistry() $serviceRegistry}
+	 * @param	Mfw_ServiceRegistry	$serviceRegistry	the value to set
 	 */
-	public 	 function setServiceRegistry(Core_ServiceRegistry $serviceRegistry) {
+	public 	 function setServiceRegistry(Mfw_ServiceRegistry $serviceRegistry) {
 		$this->serviceRegistry = $serviceRegistry;
 	}
 	/**
-	 * @generated	setter method for the attribute {@link Core_Controller::getNoActionSpecifiedHandler() $noActionSpecifiedHandler}
-	 * @param	Core_RequestHandler	$noActionSpecifiedHandler	the value to set
+	 * @generated	setter method for the attribute {@link Mfw_Controller::getNoActionSpecifiedHandler() $noActionSpecifiedHandler}
+	 * @param	Mfw_RequestHandler	$noActionSpecifiedHandler	the value to set
 	 */
-	public 	 function setNoActionSpecifiedHandler(Core_RequestHandler $noActionSpecifiedHandler) {
+	public 	 function setNoActionSpecifiedHandler(Mfw_RequestHandler $noActionSpecifiedHandler) {
 		$this->noActionSpecifiedHandler = $noActionSpecifiedHandler;
 	}
 	/**
-	 * @generated	setter method for the attribute {@link Core_Controller::getUnknownActionSpecifiedHandler() $unknownActionSpecifiedHandler}
-	 * @param	Core_RequestHandler	$unknownActionSpecifiedHandler	the value to set
+	 * @generated	setter method for the attribute {@link Mfw_Controller::getUnknownActionSpecifiedHandler() $unknownActionSpecifiedHandler}
+	 * @param	Mfw_RequestHandler	$unknownActionSpecifiedHandler	the value to set
 	 */
-	public 	 function setUnknownActionSpecifiedHandler(Core_RequestHandler $unknownActionSpecifiedHandler) {
+	public 	 function setUnknownActionSpecifiedHandler(Mfw_RequestHandler $unknownActionSpecifiedHandler) {
 		$this->unknownActionSpecifiedHandler = $unknownActionSpecifiedHandler;
 	}
 	/**
-	 * @generated	setter method for the attribute {@link Core_Controller::getNoIdSpecifiedHandler() $noIdSpecifiedHandler}
-	 * @param	Core_RequestHandler	$noIdSpecifiedHandler	the value to set
+	 * @generated	setter method for the attribute {@link Mfw_Controller::getNoIdSpecifiedHandler() $noIdSpecifiedHandler}
+	 * @param	Mfw_RequestHandler	$noIdSpecifiedHandler	the value to set
 	 */
-	public 	 function setNoIdSpecifiedHandler(Core_RequestHandler $noIdSpecifiedHandler) {
+	public 	 function setNoIdSpecifiedHandler(Mfw_RequestHandler $noIdSpecifiedHandler) {
 		$this->noIdSpecifiedHandler = $noIdSpecifiedHandler;
 	}
 
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>actions</var>: the  multi qualified unidirectional to one association to {@link Core_Action} (symmetry ensured)</li>
-	 *   <li><var>defaultAction</var>: the  unidirectional to one association to {@link Core_Action} (symmetry ensured)</li>
+	 *   <li><var>actions</var>: the  multi qualified unidirectional to one association to {@link Mfw_Action} (symmetry ensured)</li>
+	 *   <li><var>defaultAction</var>: the  unidirectional to one association to {@link Mfw_Action} (symmetry ensured)</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available
@@ -339,7 +339,7 @@ abstract class Core_Controller extends Core_BaseRequestHandler  {
 	}
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126599921_834943_1226) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_Controller' here
+	// TODO: put your further code implementations for class 'Mfw_Controller' here
 	/* PROTECTED REGION END */
 }
 ?>

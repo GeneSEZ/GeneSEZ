@@ -1,23 +1,23 @@
 <?php
-require_once 'Core/Dispatcher.php';
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/Context.php';
-require_once 'Core/Resolver.php';
+require_once 'Mfw/Dispatcher.php';
+require_once 'Mfw/HandlerInfo.php';
+require_once 'Mfw/Context.php';
+require_once 'Mfw/Resolver.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1240215363281_620116_738) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_Resolver
+ * @see		Mfw_Resolver
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_UrlResolver  implements Core_Resolver {
+class Mfw_UrlResolver  implements Mfw_Resolver {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_Dispatcher	$_dispatcher
+	 * @var		Mfw_Dispatcher	$_dispatcher
 	 */
 	private $_dispatcher;
 
@@ -27,13 +27,33 @@ class Core_UrlResolver  implements Core_Resolver {
 	// -- method implementations --------------------------------------------
 	
 	/**
+	 * @generated	method stub for implementation
+	 * @param	Mfw_Context	$context	
+	 * @return	Mfw_HandlerInfo
+	 */
+	public function resolveHandler($context) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237827425625_150554_301) ENABLED START */
+		$pathinfo = $this->pathInfo();
+		$pathparts = $this->checkPath($pathinfo);
+		$handleableContext = $context->resolveContext($pathparts);
+		$path = substr($pathinfo, strlen($handleableContext));
+		if ($path === false) {
+			$path = '/';
+		}
+		$handlerinfo = new Mfw_HandlerInfo($handleableContext, $path);
+		$this->_dispatcher->dispatch($handlerinfo);
+		return $handlerinfo;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
 	 * obtains the <i>path info</i> of the current executing script and ensures 
 	 * it begins with an slash '/'
 	 * @return	string
 	 */
 	protected function pathInfo() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240215501687_611602_772) ENABLED START */
-		$path = Core_Url::requestPath();
+		$path = Mfw_Url::requestPath();
 		if (substr($path, 0, 1) !== '/') {
 			$path = '/' + $path;
 		}
@@ -76,45 +96,25 @@ class Core_UrlResolver  implements Core_Resolver {
 	 */
 	protected function pathInvalid($path, $entry) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240219646828_34822_898) ENABLED START */
-		// TODO: implementation of method 'Core_ContextResolver.pathInvalid(...)'
-		throw new Exception('The implementation of the method Core_ContextResolver::pathInvalid is missing !');
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_Context	$context	
-	 * @return	Core_HandlerInfo
-	 */
-	public function resolveHandler($context) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240215396250_911205_762) ENABLED START */
-		$pathinfo = $this->pathInfo();
-		$pathparts = $this->checkPath($pathinfo);
-		$handleableContext = $context->resolveContext($pathparts);
-		$path = substr($pathinfo, strlen($handleableContext));
-		if ($path === false) {
-			$path = '/';
-		}
-		$handlerinfo = new Core_HandlerInfo($handleableContext, $path);
-		$this->_dispatcher->dispatch($handlerinfo);
-		return $handlerinfo;
+		// TODO: implementation of method 'Mfw_ContextResolver.pathInvalid(...)'
+		throw new Exception('The implementation of the method Mfw_ContextResolver::pathInvalid is missing !');
 		/* PROTECTED REGION END */
 	}
 
 
 	// -- association + attribute accessors ---------------------------------
 	/**
-	 * @generated	setter method for the attribute {@link Core_UrlResolver::getDispatcher() $_dispatcher}
-	 * @param	Core_Dispatcher	$dispatcher	the value to set
+	 * @generated	setter method for the attribute {@link Mfw_UrlResolver::getDispatcher() $_dispatcher}
+	 * @param	Mfw_Dispatcher	$dispatcher	the value to set
 	 */
-	public 	 function setDispatcher(Core_Dispatcher $dispatcher) {
+	public 	 function setDispatcher(Mfw_Dispatcher $dispatcher) {
 		$this->_dispatcher = $dispatcher;
 	}
 
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240215363281_620116_738) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_ContextResolver' here
+	// TODO: put your further code implementations for class 'Mfw_ContextResolver' here
 	/* PROTECTED REGION END */
 }
 ?>

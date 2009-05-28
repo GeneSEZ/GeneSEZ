@@ -5,7 +5,7 @@
 	@author	toh
 	@date	2009-03-25
 -->
-<project name="de.genesez.platforms.php.metaframework" basedir="." default="report">
+<project name="de.genesez.metaframework" basedir="." default="report">
 	
 	<property name="report.dir" value="reports" />
 	<property name="coverage.report.dir" value="${report.dir}/coverage" />
@@ -21,7 +21,7 @@
 	
 	
 	<target name="coverage" depends="coverage.report" />
-	<target name="all" depends="check, coverage.report, doc" />
+	<target name="all" depends="check, coverage.report, doc, dist" />
 	
 	<target name="prepare" description="create needed directories">
 		<mkdir dir="${report.dir}"/>
@@ -91,5 +91,109 @@
 				<include name="*.php" />
 			</fileset-->
 		</phpdocext>
+	</target>
+	
+	<target name="dist" description="generates a pear package" depends="test">
+		<mkdir dir="dist"/>
+		<pearpkg2 name="metaframework" dir="src">
+			<option name="outputdirectory" value="dist" />
+			<option name="packagefile" value="package2.xml" />
+			<fileset dir="src">
+				<include name="**/*.php" />
+			</fileset>
+			<option name="baseinstalldir" value="/" />
+			<option name="packagetype" value="php" />
+			<option name="uri" value="http://localhost:9998/fh3/" />
+			<!-- option name="channel" value="pear.genesez.de" / -->
+			<option name="summary">A framework over frameworks.</option>
+			<option name="description">
+				A plug-in based web framework for PHP using common concepts and common frameworks for implementations.
+				It comes with a core plug-in featuring support for the seasar dependency injection container and the smarty template engine.
+			</option>
+			<option name="license" value="GPL v2" />
+			<option name="apiversion" value="0.8" />
+			<option name="apistability" value="beta" />
+			<option name="releaseversion" value="0.8" />
+			<option name="releasestability" value="beta" />
+			<option name="notes">enjoy it!</option>
+			<mapping name="maintainers">
+				<element>
+					<element key="handle" value="toh" />
+					<element key="name" value="tobias" />
+					<element key="email" value="toh@fh-zwickau.de" />
+					<element key="role" value="lead" />
+				</element>
+				<element>
+					<element key="handle" value="gerbe" />
+					<element key="name" value="gerrit" />
+					<element key="email" value="gerbe@fh-zwickau.de" />
+				</element>
+			</mapping>
+			<option name="phpdep" value="5.2.0" />
+			<option name="pearinstallerdep" value="1.4.11" />
+			<mapping name="deps">
+				<element>
+					<element key="type" value="pkg" />
+					<element key="rel" value="has" />
+					<element key="name" value="HTTP" />
+					<element key="channel" value="pear.php.net" />
+					<element key="optional" value="true" />
+				</element>
+				<element>
+					<element key="type" value="pkg" />
+					<element key="rel" value="has" />
+					<element key="name" value="HTML_QuickForm" />
+					<element key="channel" value="pear.php.net" />
+					<element key="optional" value="true" />
+				</element>
+				<!-- element>
+					<element key="type" value="pkg" />
+					<element key="rel" value="has" />
+					<element key="name" value="Seasar Dependency Injection Container" />
+					<element key="uri" value="http://s2container.php5.seasar.org/index_en.html" />
+					<element key="optional" value="true" />
+				</element>
+				<element>
+					<element key="type" value="pkg" />
+					<element key="rel" value="has" />
+					<element key="name" value="Smarty" />
+					<element key="uri" value="http://www.smarty.net/" />
+					<element key="optional" value="true" />
+				</element>
+				<element>
+					<element key="type" value="pkg" />
+					<element key="rel" value="has" />
+					<element key="name" value="Doctrine" />
+					<element key="uri" value="http://www.doctrine-project.org/" />
+					<element key="optional" value="true" />
+				</element -->
+				<element>
+					<element key="type" value="ext" />
+					<element key="rel" value="has" />
+					<element key="name" value="pdo" />
+					<element key="channel" value="pear.php.net" />
+					<element key="optional" value="true" />
+				</element>
+				<element>
+					<element key="type" value="ext" />
+					<element key="rel" value="has" />
+					<element key="name" value="pdo_pgsql" />
+					<element key="channel" value="pear.php.net" />
+					<element key="optional" value="true" />
+				</element>
+				<element>
+					<element key="type" value="ext" />
+					<element key="rel" value="has" />
+					<element key="name" value="xsl" />
+					<element key="channel" value="pear.php.net" />
+					<element key="optional" value="true" />
+				</element>
+			</mapping>
+		</pearpkg2>
+		<tar destfile="dist/metaframework.tgz" compression="gzip">
+			<fileset dir="src">
+				<include name="**/*.php" />
+			</fileset>
+		</tar>
 	</target>
 </project>

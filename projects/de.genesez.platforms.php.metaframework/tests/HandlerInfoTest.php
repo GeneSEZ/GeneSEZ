@@ -1,21 +1,21 @@
 <?php
-require_once 'Core/HandlerInfo.php';
+require_once 'Mfw/HandlerInfo.php';
 
 class HandlerInfoTest extends PHPUnit_Framework_TestCase {
 	private $context;
 	private $handlerinfo;
 	
 	protected function setUp() {
-		$this->context = new Core_Context('root', 'roothandler', array(
-			new Core_Context('s1', 's1h', array(
-				new Core_Context('s1s1', 's1s1h', array(
-					new Core_Context('s1s1s1', 's1s1s1h')
+		$this->context = new Mfw_Context('root', 'roothandler', array(
+			new Mfw_Context('s1', 's1h', array(
+				new Mfw_Context('s1s1', 's1s1h', array(
+					new Mfw_Context('s1s1s1', 's1s1s1h')
 				))
 			)),
-			new Core_Context('s2', 's2h')
+			new Mfw_Context('s2', 's2h')
 		));
 		
-		$this->handlerinfo = new Core_HandlerInfo($this->context, '/path/info');
+		$this->handlerinfo = new Mfw_HandlerInfo($this->context, '/path/info');
 	}
 	
 	public function testContext() {

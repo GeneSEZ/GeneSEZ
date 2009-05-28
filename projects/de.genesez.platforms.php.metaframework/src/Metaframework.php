@@ -1,6 +1,11 @@
 <?php
-require_once 'Loader/PlugInLoader.php';
-require_once 'Core/Context.php';
+require_once 'Mfw/Context.php';
+require_once 'Mfw/CorePlugIn.php';
+require_once 'Mfw/ServiceRegistry.php';
+require_once 'Mfw/PlugInRegistry.php';
+require_once 'Mfw/ExtensionRegistry.php';
+require_once 'Mfw/InterceptorRegistry.php';
+require_once 'Mfw/PlugIn.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1236332587625_21111_386) ENABLED START */
 spl_autoload_register(array('Metaframework', 'autoload'));
@@ -20,19 +25,34 @@ class Metaframework   {
 	protected static $autoloadDirs = array();
 	/**
 	 * @generated	attribute definition
-	 * @var		Loader_PlugInLoader	$modules
-	 */
-	protected $modules = array();
-	/**
-	 * @generated	attribute definition
-	 * @var		Core_Context	$rootContext
+	 * @var		Mfw_Context	$rootContext
 	 */
 	protected $rootContext;
 	/**
 	 * @generated	attribute definition
-	 * @var		S2Container	$container
+	 * @var		Mfw_CorePlugIn	$corePlugIn
 	 */
-	protected $container;
+	protected $corePlugIn;
+	/**
+	 * @generated	attribute definition
+	 * @var		Mfw_ServiceRegistry	$serviceRegistry
+	 */
+	protected $serviceRegistry;
+	/**
+	 * @generated	attribute definition
+	 * @var		Mfw_PlugInRegistry	$plugInRegistry
+	 */
+	protected $plugInRegistry;
+	/**
+	 * @generated	attribute definition
+	 * @var		Mfw_ExtensionRegistry	$extensionRegistry
+	 */
+	protected $extensionRegistry;
+	/**
+	 * @generated	attribute definition
+	 * @var		Mfw_InterceptorRegistry	$interceptorRegistry
+	 */
+	protected $interceptorRegistry;
 
 	// -- constructors + destructors ----------------------------------------
 	
@@ -40,10 +60,12 @@ class Metaframework   {
 	 * Constructs the frontend of the framework. Additional plugin folders can be 
  * specified for autoloading classes.
 	 * @generated	constructor stub for implementation
-	 * @param	null	$additionalPluginDirs	an array of additional plugin folders
+	 * @param	Mfw_CorePlugIn	$corePlugIn	
+	 * @param	array	$additionalPluginDirs	an array of additional plugin folders
 	 */
-	public function __construct($additionalPluginDirs = array()) {
+	public function __construct($corePlugIn, $additionalPluginDirs = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241076400375_384996_361) ENABLED START */
+		// collect autoload source directories
 		$sourceDirs = array();
 		$pluginDirs = array_merge(array(realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../modules')), $additionalPluginDirs);
 		foreach ($pluginDirs as $pluginDir) {
@@ -59,6 +81,14 @@ class Metaframework   {
 			}
 		}
 		self::$autoloadDirs = array_merge(array(self::baseDir()), $sourceDirs);
+		// initialize
+		$this->corePlugIn = $corePlugIn;
+		$this->rootContext = $corePlugIn->getContext();
+		$this->serviceRegistry = $corePlugIn->getServiceRegistry();
+		$this->plugInRegistry = $this->serviceRegistry->getComponent('plugInRegistry');
+		$this->extensionRegistry = $this->serviceRegistry->getComponent('extensionRegistry');
+		$this->interceptorRegistry = $this->serviceRegistry->getComponent('interceptorRegistry');
+		$this->registerPlugInInRegistries($corePlugIn);
 		/* PROTECTED REGION END */
 	}
 
@@ -67,25 +97,31 @@ class Metaframework   {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * registers a module loader instance with the given name
-	 * @param	string	$name	name of the plugin
-	 * @param	Loader_PlugInLoader	$loader	module loader instance of the plugin
+	 * registers a plug-in
+	 * @param	Mfw_PlugIn	$plugin	
 	 */
-	public function registerModuleLoader($name, $loader) {
+	public function registerPlugIn($plugin) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332689875_601091_430) ENABLED START */
-		// TODO: in a reviced implementation, insert the plug-ins additionally into a depencency tree
-		$this->modules[$name] = $loader;
+		$this->registerPlugInInRegistries($plugin);
+		// add context structure
+		if ($plugin->hasContext()) {
+			$this->rootContext->nestedContext->insert($plugin->getContext());
+		}
+		// register plugin components
+		foreach ($plugin->getComponents() as $component) {
+			$this->serviceRegistry->register($component);
+		}
 		/* PROTECTED REGION END */
 	}
 
 	/**
-	 * registers several plugins
-	 * @param	array	$loaders	associative array of plugin loader instances, key is plugin name
+	 * registers several plug-ins
+	 * @param	array	$plugins	array of type 'Mfw_PlugIn', default value is 'array()'
 	 */
-	public function registerModuleLoaders($loaders = array()) {
+	public function registerPlugIns($plugins = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236345050000_299364_554) ENABLED START */
-		foreach ($loaders as $name => $loader) {
-			$this->registerModuleLoader($name, $loader);
+		foreach ($plugins as $plugin) {
+			$this->registerPlugIn($plugin);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -95,76 +131,33 @@ class Metaframework   {
 	 */
 	public function proceed() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237975349578_500094_665) ENABLED START */
-		$this->checkPlugIns();
-		$this->buildContainer();
+		if ($this->plugInRegistry->hasMissingDependencies() === true) {
+			echo 'there are missing plug-ins:' . '<br />';
+			print_r($this->plugInRegistry->getMissingDependencies());
+			exit;
+		}
 		// config frameworks
-		reset($this->modules);
-		current($this->modules)->configureFrameworks($this->container);
+		$this->corePlugIn->finalize();
 		// process request
-		$resolver = $this->container->getComponent('resolver');
-		$resolver->resolveHandler($this->rootContext);
+		$resolver = $this->serviceRegistry->getComponent('resolver');
+		$resolver->resolveHandler($this->corePlugIn->getContext());
 		/* PROTECTED REGION END */
 	}
 
 	/**
 	 * @generated	method stub for implementation
+	 * @param	Mfw_PlugIn	$plugin	
 	 */
-	protected function buildContainer() {
+	protected function registerPlugInInRegistries($plugin) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237987504359_726879_1039) ENABLED START */
-		// TODO: check plug-in dependencies, if all needed plug-ins exist
-		// core plugin has to be the 1st one!
-		reset($this->modules);
-		if (current($this->modules) === false) {
-			throw new Exception('no core plug-in found!');
+		$this->plugInRegistry->register($plugin);
+		// register extensions + contributions
+		foreach ($plugin->getExtensions() as $extension => $contribution) {
+			$this->extensionRegistry->register($extension, $contribution);
 		}
-		$this->rootContext = current($this->modules)->getModuleContext();
-		$container = Adapter_SeasarPhpBuilder::newContainer();
-		$isAdding = false;
-		foreach ($this->modules as $name => $module) {
-			// add context structure
-			if ($isAdding && $module->hasModuleContext()) {
-				$this->rootContext->nestedContext->insert($module->getModuleContext());
-			}
-			// register module components
-			foreach ($module->getComponents() as $component) {
-				$container->register($component);
-			}
-			// don't add the first component (core plug-in) but all others
-			$isAdding = true;
-		}
-		Adapter_SeasarPhpBuilder::finishContainer($container);
-		$this->container = $container->getComponent('serviceRegistry');
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 */
-	protected function checkPlugIns() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238097872890_554445_715) ENABLED START */
-		// store all dependencies in one array, key -> needed, value -> array of dependants
-		// just a simple implementation, not one with a high performance
-		$dependencies = array();
-		foreach ($this->modules as $name => $module) {
-			if ($module->hasModuleDependencies()) {
-				foreach ($module->getModuleDependencies() as $required) {
-					if (array_key_exists($required, $dependencies)) {
-						$dependencies[$required][] = $name;
-					} else {
-						$dependencies[$required] = array($name);
-					}
-				}
-			}
-		}
-		$missing = array();
-		// check if all required modules exist
-		foreach ($dependencies as $name => $required) {
-			if (!array_key_exists($name, $this->modules)) {
-				$missing[$name] = $required;
-			}
-		}
-		if (count($missing) > 0) {
-			throw new Exception('there are missing required modules, all direct dependencies:\n' . var_export($missing, true));
+		// register interceptors
+		foreach ($plugin->getInterceptors() as $pattern => $interceptor) {
+			$this->interceptorRegistry->register($pattern, $interceptor);
 		}
 		/* PROTECTED REGION END */
 	}

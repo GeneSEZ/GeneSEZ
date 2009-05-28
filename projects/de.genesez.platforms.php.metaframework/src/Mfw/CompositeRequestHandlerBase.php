@@ -1,37 +1,37 @@
 <?php
-require_once 'Core/Dto.php';
-require_once 'Core/RequestHandler.php';
-require_once 'Core/HandlerInfo.php';
-require_once 'Core/BaseRequestHandler.php';
-require_once 'Core/CompositeRequestHandler.php';
+require_once 'Mfw/Dto.php';
+require_once 'Mfw/RequestHandler.php';
+require_once 'Mfw/HandlerInfo.php';
+require_once 'Mfw/RequestHandlerBase.php';
+require_once 'Mfw/CompositeRequestHandler.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1239126507031_967775_1198) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_BaseRequestHandler
- * @see		Core_CompositeRequestHandler
+ * @see		Mfw_RequestHandlerBase
+ * @see		Mfw_CompositeRequestHandler
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implements Core_CompositeRequestHandler {
+class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements Mfw_CompositeRequestHandler {
 
 	/**
-	 * @var	array of Core_RequestHandler	stores the linked objects of the  multi qualified unidirectional to one association to {@link Core_RequestHandler} (symmetry ensured) 
+	 * @var	array of Mfw_RequestHandler	stores the linked objects of the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured) 
 	 */
 	private $_nestedRequestHandler = array();
 	/**
-	 * holds the association management object for the multi qualified unidirectional to one association to {@link Core_RequestHandler} (symmetry ensured)
+	 * holds the association management object for the multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured)
 	 * @var UML_MultiQualifiedAssociation
 	 */
 	private $associations;
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Core_BaseCompositeRequestHandler}
+	 * constructs an object of class {@link Mfw_CompositeRequestHandlerBase}
 	 * @generated	constructor stub for implementation
-	 * @param	array	$requestHandlers	array of type 'Core_RequestHandler'
+	 * @param	array	$requestHandlers	array of type 'Mfw_RequestHandler'
 	 */
 	public function __construct($requestHandlers) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240398478812_21504_360) ENABLED START */
@@ -46,13 +46,15 @@ class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implement
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 * @return	Core_Dto
+	 * Processes the current request. It returns either a <b>DTO</b> which 
+	 * contains all data to be rendered or it returns <b>true</b> to indicate 
+	 * that rendering was already done.
+	 * @param	Mfw_HandlerInfo	$handlerInfo	provides additional information
+	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239127196828_615219_1284) ENABLED START */
-		$dto = new Core_BaseDto(array(), $this->view);
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243428136578_635889_1061) ENABLED START */
+		$dto = new Mfw_DtoBase(array(), $this->view);
 		foreach ($this->nestedRequestHandler->iterator() as $key => $value) {
 			$dto->$key = $value->handle($handlerInfo);
 		}
@@ -65,7 +67,7 @@ class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implement
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>nestedRequestHandler</var>: the  multi qualified unidirectional to one association to {@link Core_RequestHandler} (symmetry ensured)</li>
+	 *   <li><var>nestedRequestHandler</var>: the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured)</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available
@@ -84,7 +86,7 @@ class Core_BaseCompositeRequestHandler extends Core_BaseRequestHandler implement
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126507031_967775_1198) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_BaseCompositeRequestHandler' here
+	// TODO: put your further code implementations for class 'Mfw_CompositeRequestHandlerBase' here
 	/* PROTECTED REGION END */
 }
 ?>

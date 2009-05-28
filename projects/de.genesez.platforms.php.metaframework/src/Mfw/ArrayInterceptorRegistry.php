@@ -1,17 +1,17 @@
 <?php
-require_once 'Core/Interceptor.php';
-require_once 'Core/InterceptorRegistry.php';
+require_once 'Mfw/Interceptor.php';
+require_once 'Mfw/InterceptorRegistry.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1243329579703_739060_909) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_InterceptorRegistry
+ * @see		Mfw_InterceptorRegistry
  * @author	dreamer
  * @package	Metaframework
  */
-class Core_ArrayInterceptorRegistry  implements Core_InterceptorRegistry {
+class Mfw_ArrayInterceptorRegistry  implements Mfw_InterceptorRegistry {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -27,12 +27,11 @@ class Core_ArrayInterceptorRegistry  implements Core_InterceptorRegistry {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$pattern	
-	 * @param	Core_Interceptor	$interceptor	
+	 * @param	Mfw_Interceptor	$interceptor	
 	 */
-	public function registerInterceptor($pattern, $interceptor) {
+	public function register($pattern, $interceptor) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243329511140_342525_904) ENABLED START */
-		// TODO: implementation of method 'Core_ArrayInterceptorRegistry.registerInterceptor(...)'
-		throw new Exception('The implementation of the method Core_ArrayInterceptorRegistry::registerInterceptor is missing !');
+		$this->registry[] = array($pattern => $interceptor);
 		/* PROTECTED REGION END */
 	}
 
@@ -42,7 +41,10 @@ class Core_ArrayInterceptorRegistry  implements Core_InterceptorRegistry {
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243329579703_739060_909) ENABLED START */
-	// TODO: put your further code implementations for class 'Core_ArrayInterceptorRegistry' here
+	// TODO: put your further code implementations for class 'Mfw_ArrayInterceptorRegistry' here
+	public function getIterator() {
+		return new ArrayIterator($this->registry);
+	}
 	/* PROTECTED REGION END */
 }
 ?>

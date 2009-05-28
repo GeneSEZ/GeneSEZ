@@ -1,6 +1,6 @@
 <?php
 require_once 's2container/S2Container.php';
-require_once 'Adapter/SeasarPhpBuilder.php';
+require_once 'Mfw/SeasarPhpBuilder.php';
 
 require_once 'SeasarTestClass.php';
 
@@ -12,7 +12,7 @@ class SeasarPhpBuilderTest extends PHPUnit_Framework_TestCase {
 	private $builder;
 	
 	protected function setUp() {
-		$this->builder = new Adapter_SeasarPhpBuilder();
+		$this->builder = new Mfw_SeasarPhpBuilder();
 	}
 	
 	/**
@@ -20,18 +20,18 @@ class SeasarPhpBuilderTest extends PHPUnit_Framework_TestCase {
 	 * - uses builder to construct a container with components
 	 * - verifies if the definitions are set correctly
 	 * - note: no components are instantiated and checked
-	 * @see Adapter_SeasarPhpBuilder::newContainer()
-	 * @see Adapter_SeasarPhpBuilder::newComponent()
-	 * @see Adapter_SeasarPhpBuilder::newArgument()
-	 * @see Adapter_SeasarPhpBuilder::newProperty()
+	 * @see Mfw_SeasarPhpBuilder::newContainer()
+	 * @see Mfw_SeasarPhpBuilder::newComponent()
+	 * @see Mfw_SeasarPhpBuilder::newArgument()
+	 * @see Mfw_SeasarPhpBuilder::newProperty()
 	 */
 	public function testInlineConstruction() {
 		$container = $this->builder->newContainer(array(
 			$this->builder->newComponent('SeasarTestClass', 'arg1', array(
-				$this->builder->newArgument('constructorArg1'),
-				$this->builder->newArgument('constructorArg2')
+				$this->builder->newArgument('"constructorArg1"'),
+				$this->builder->newArgument('"constructorArg2"')
 			), array(
-				$this->builder->newProperty('seasarTestClass', 'setter1')
+				$this->builder->newProperty('seasarTestClass', '"setter1"')
 			)),
 			$this->builder->newComponent('SeasarTestClass', 'arg2'),
 			$this->builder->newComponent('SeasarTestClass', 'setter1')

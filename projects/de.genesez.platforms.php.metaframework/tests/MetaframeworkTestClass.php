@@ -2,17 +2,14 @@
 require_once 'Metaframework.php';
 
 class MetaframeworkTestClass extends Metaframework {
-	public function buildContainer() {
-		parent::buildContainer();
-	}
-	public function checkPlugIns() {
-		parent::checkPlugIns();
+	public function proceed() {
+		parent::proceed();
 	}
 	public function __get($name) {
 		switch ($name) {
-			case 'container' : return $this->container;
-			case 'modules' : return $this->modules;
 			case 'rootContext' : return $this->rootContext;
+			case 'plugInRegistry' : return $this->plugInRegistry;
+			case 'serviceRegistry' : return $this->serviceRegistry;
 			case 'autoloadDirs' : return self::$autoloadDirs;
 		}
 	}

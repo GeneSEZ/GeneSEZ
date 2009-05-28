@@ -10,7 +10,7 @@
  * @author	dreamer
  * @package	Metaframework
  */
-class Adapter_SeasarPhpBuilder   {
+class Mfw_SeasarPhpBuilder   {
 
 
 
@@ -24,12 +24,10 @@ class Adapter_SeasarPhpBuilder   {
 	 */
 	public static function newContainer($components = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237058843921_766739_300) ENABLED START */
-		S2Container_ChildComponentDefBindingUtil::init();
 		$container = new S2ContainerImpl();
 		foreach ($components as $component) {
 			$container->register($component);
 		}
-		S2Container_ChildComponentDefBindingUtil::bind($container);
 		return $container;
 		/* PROTECTED REGION END */
 	}
@@ -93,7 +91,7 @@ class Adapter_SeasarPhpBuilder   {
 	 * @generated	method stub for implementation
 	 * @param	S2Container	$container	
 	 */
-	public function finishContainer($container) {
+	public static function finishContainer($container) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156913765_600402_508) ENABLED START */
 		S2Container_ChildComponentDefBindingUtil::bind($container);
 		/* PROTECTED REGION END */
@@ -149,7 +147,7 @@ class Adapter_SeasarPhpBuilder   {
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237058774562_708044_281) ENABLED START */
-	// TODO: put your further code implementations for class 'Adapter_SeasarPhpBuilder' here
+	// TODO: put your further code implementations for class 'Mfw_SeasarPhpBuilder' here
 	/* PROTECTED REGION END */
 }
 ?>
