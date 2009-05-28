@@ -57,13 +57,12 @@ class Metaframework   {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * Constructs the frontend of the framework. Additional plugin folders can be 
- * specified for autoloading classes.
+	 * Constructs the frontend of the framework. Additional plug-in folders can 
+ * be specified for autoloading support of plug-in classes.
 	 * @generated	constructor stub for implementation
-	 * @param	Mfw_CorePlugIn	$corePlugIn	
 	 * @param	array	$additionalPluginDirs	an array of additional plugin folders
 	 */
-	public function __construct($corePlugIn, $additionalPluginDirs = array()) {
+	public function __construct($additionalPluginDirs = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241076400375_384996_361) ENABLED START */
 		// collect autoload source directories
 		$sourceDirs = array();
@@ -81,7 +80,19 @@ class Metaframework   {
 			}
 		}
 		self::$autoloadDirs = array_merge(array(self::baseDir()), $sourceDirs);
-		// initialize
+		/* PROTECTED REGION END */
+	}
+
+
+
+	// -- method implementations --------------------------------------------
+	
+	/**
+	 * @generated	method stub for implementation
+	 * @param	Mfw_CorePlugIn	$corePlugIn	
+	 */
+	public function initialize($corePlugIn) {
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243525435078_136280_1251) ENABLED START */
 		$this->corePlugIn = $corePlugIn;
 		$this->rootContext = $corePlugIn->getContext();
 		$this->serviceRegistry = $corePlugIn->getServiceRegistry();
@@ -92,10 +103,6 @@ class Metaframework   {
 		/* PROTECTED REGION END */
 	}
 
-
-
-	// -- method implementations --------------------------------------------
-	
 	/**
 	 * registers a plug-in
 	 * @param	Mfw_PlugIn	$plugin	

@@ -1,12 +1,10 @@
 <?php
 require_once 'PHPUnit/Framework.php';
-require_once 'MetaframeworkTestClass.php';
 
+require_once 'MetaframeworkTestClass.php';
 require_once 'TestPlugIn.php';
 require_once 'DdmPlugIn.php';
 require_once 'UtilitiesPlugIn.php';
-
-require_once 'Mfw/DefaultCorePlugIn.php';
 
 
 class MetaframeworkTest extends PHPUnit_Framework_TestCase {
@@ -14,12 +12,15 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 	private $core;
 	
 	protected function setUp() {
+		$this->metafw = new MetaframeworkTestClass(array(
+			'../de.genesez.platforms.php.metaframework.modules'
+		));
 		$this->core = new Mfw_DefaultCorePlugIn(array(
 			'data.source' => 'pgsql://postgres:postgres@localhost/ddm',
 			'smarty.template.dir' => 'view/templates',
 			'smarty.compile.dir' => 'view/templates_compiled'
 		));
-		$this->metafw = new MetaframeworkTestClass($this->core);
+		$this->metafw->initialize($this->core);
 	}
 	
 	public function testConstruction() {
@@ -49,14 +50,6 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($this->metafw->serviceRegistry->hasComponent('notifier'), 'component flash notifier should exist');
 		
 		$this->assertTrue($this->metafw->serviceRegistry->hasComponent('classFormAdapter'), 'component classFormAdapter should exist');
-	}
-	
-	public function testAutoloadDirs() {
-		$mfw = new MetaframeworkTestClass($this->core, array('../de.genesez.platforms.php.metaframework.modules'));
-		$dirs = $mfw->autoloadDirs;
-//		print_r($dirs);
-//		$this->assertContains('de.genesez.modules.ddm', $dirs, 'ddm module dir should be contained');
-//		$this->assertContains('de.genesez.modules.util', $dirs, 'ddm module dir should be contained');
 	}
 }
 ?>

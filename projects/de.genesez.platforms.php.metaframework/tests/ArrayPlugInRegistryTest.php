@@ -2,7 +2,7 @@
 require_once 'PHPUnit/Framework.php';
 require_once 'Mfw/ArrayPlugInRegistry.php';
 
-require_once 'Mfw/DefaultCorePlugIn.php';
+require_once 'CorePlugIn.php';
 require_once 'TestPlugIn.php';
 require_once 'DdmPlugIn.php';
 require_once 'UtilitiesPlugIn.php';
@@ -16,11 +16,7 @@ class ArrayPlugInRegistryTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testNoMissingDependencies() {
-		$this->registry->register(new Mfw_DefaultCorePlugIn(array(
-				'data.source' => 'pgsql://postgres:postgres@localhost/ddm',
-				'smarty.template.dir' => 'view/templates',
-				'smarty.compile.dir' => 'view/templates_compiled'
-		)));
+		$this->registry->register(new CorePlugIn());
 		$this->registry->register(new UtilitiesPlugIn());
 		$this->registry->register(new DdmPlugIn());
 		
