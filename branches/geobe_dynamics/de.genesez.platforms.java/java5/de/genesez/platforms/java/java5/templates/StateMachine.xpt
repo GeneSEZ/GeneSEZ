@@ -27,16 +27,20 @@
 	processes a state machine
 «ENDREM»
 «DEFINE StateMachine FOR MStateMachine -»
-«EXPAND _EventCreators -»
+«EXPAND _SMDebug -»
 «EXPAND _ActionMethods -»
 «EXPAND _GuardMethods -»
+// <editor-fold defaultstate="collapsed" desc="Event Creator Methods">
+«EXPAND _EventCreators -»
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="Internal State Machine Implementation">
 «EXPAND _States -»
 «EXPAND _EventIds -»
 «EXPAND _HistoryStateFields -»
 «EXPAND _Events -»
 «EXPAND _TakeEvent -»
 «EXPAND _StateMachineImpl -»
-«EXPAND _SMDebug -»
+// </editor-fold>
 «ENDDEFINE»
 
 «DEFINE _States FOR MStateMachine -»
@@ -111,8 +115,7 @@
 		«EXPAND _SMDebugMsg("\"( ... )\"") -»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("action." + xmiGuid)»
 		// TODO: implementation of action method '«asAction()»(...)'
-		throw new UnsupportedOperationException(
-				"The implementation of this generated method stub is missing!");
+		«EXPAND _SMDebugMsg("\": Activity noch nicht implementiert\"")»
 		«ENDPROTECT»
 	}
 «ENDDEFINE»
@@ -127,8 +130,7 @@
 			Thread.sleep(1); // set this to reasonable value
 		} catch (InterruptedException e) {
 		} // set this to reasonable value
-		throw new UnsupportedOperationException(
-				"The implementation of this generated method stub is missing!");
+		«EXPAND _SMDebugMsg("\": Do-Activity noch nicht implementiert\"")»
 		«ENDPROTECT»
 	}
 	/** field to control thread execution */
@@ -379,7 +381,7 @@
 
 «DEFINE _Events FOR MStateMachine -»
 	/** inner class as local base class for all trigger events */
-	public class SmEvent extends EventQueue.Event<EventId> {
+	private class SmEvent extends EventQueue.Event<EventId> {
 		«PROTECT CSTART '/* ' CEND ' */' ID ("SmEvent." + xmiGuid)»
 		// Usually nothing to insert here, just in case ... 
 		«ENDPROTECT»
@@ -391,7 +393,7 @@
 		}
 	}
 	«FOREACH event.sortBy(ev|ev.name) AS event -»
-	public class «event.asTypeName()» extends SmEvent {
+	private class «event.asTypeName()» extends SmEvent {
 		«EXPAND _Members FOR event -»
 		public «event.asTypeName()»(«EXPAND _Params FOR event») {
 			super(EventId.«event.name»);

@@ -38,7 +38,9 @@ package «packageDeclaration( basePackage() ) -»;
 	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
 	// -- generated attribute, constant + association declarations ----------
 	«ENDIF -»
+	// <editor-fold defaultstate="collapsed" desc="declaration of association attributes">
 	«EXPAND Association::Declaration -»
+	// </editor-fold>
 	«EXPAND Attribute::Declaration -»
 	
 	«IF generateSectionComments() && ( hasConstructors() ) -»
@@ -63,12 +65,12 @@ package «packageDeclaration( basePackage() ) -»;
 	«EXPAND Attribute::Accessors -»
 	«EXPAND Association::Accessors -»
 	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
+	
 	«IF ! ownedBehavior.isEmpty -»
 	// -- generated state machine section -----------------------------------
 	«EXPAND StateMachine::StateMachine FOREACH ownedBehavior.typeSelect(MStateMachine) -»	
 	«ENDIF -»
-	
-	// -- own code implementation -------------------------------------------
-	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
 }
 «ENDDEFINE»
