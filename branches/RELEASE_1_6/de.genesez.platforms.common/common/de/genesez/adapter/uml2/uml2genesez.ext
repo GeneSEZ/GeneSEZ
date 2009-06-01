@@ -198,6 +198,8 @@ private MType makeType(Type this) :
 	trace("    isTemplateParameter: " + isTemplateParameter()) ->
 	trace("    isExternalType:      " + isExternalType()) ->
 	switch {
+		//  check if type is null (e.g. constructors usually don't have a return type)
+		case metaType == Void : ((PrimitiveType)this).makePrimitiveType()
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
 		// external class
@@ -205,6 +207,8 @@ private MType makeType(Type this) :
 		// primitive type
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
 		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
+		// classifier contained in profiles
+		case isContainedInProfile() && Classifier.isInstance(this) : ((Classifier)this).makeExternal()
 		// classifier
 //		case metaType.isAssignableFrom(Classifier) : ((Classifier)this).makeClassifier()
 //		default : (severe("should transform type: " + metaType) -> Void)
@@ -361,7 +365,7 @@ private create MAttribute makeAttribute(Property p) :
  * @return	the GeneSEZ operation
  */
 private create MOperation makeOperation(Operation o) :
-	debug( "make [ " + metaType + " ] - " + o ) ->
+	trace( "make [ " + metaType + " ] - " + o ) ->
 	// set the unique xmiId and name
 	transformBasics(o) ->
 	// properties
@@ -414,7 +418,7 @@ private create MOperation makeOperation(Operation o) :
  * @return	the GeneSEZ parameter
  */
 private create MParameter makeParameter(Parameter p) :
-	debug("make [" + metaType + "] - " + p) ->
+	trace("make [" + metaType + "] - " + p) ->
 	// set the unique xmiId and name
 	transformBasics(p) ->
 	// properties
@@ -450,7 +454,7 @@ private create MParameter makeParameter(Parameter p) :
  * @return	the GeneSEZ association
  */
 private create MAssociation makeAssociation(Association a, MPackage container) :
-	debug("make [" + metaType + "] - " + a) ->
+	trace("make [" + metaType + "] - " + a) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(a) ) ->
 	setName( assocName(a) ) ->
@@ -476,7 +480,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
  * @return	the GeneSEZ association role
  */
 private create MAssociationRole makeAssociationRole(Property aend) :
-	debug("make [" + metaType + "] - " + aend) ->
+	trace("make [" + metaType + "] - " + aend) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(aend) ) ->
 	setName( assocEndName(aend) ) ->
@@ -529,7 +533,7 @@ private Void checkQualifier(MAssociationRole this, Property aend) :
  * @param	aend	uml association end property
  */
 private MAssociationRole transformSimpleQualifier(MAssociationRole this, Property aend) :
-	debug("    qualifier multiplicity: " + aend.lower + ".." + aend.upper) ->
+	trace("    qualifier multiplicity: " + aend.lower + ".." + aend.upper) ->
 	setQualifierMultiplicity( aend.qualifier.first().upper ) ->
 	setQualifier( aend.qualifier.first().type.makeType() ) ->
 	this;
@@ -547,7 +551,7 @@ private MAssociationRole transformQualifier(MAssociationRole this, Property aend
  * @param	ma	a GeneSEZ association
  */
 private MAssociation linkEnds(MAssociation ma) :
-	debug("link association roles: " + ma) -> (
+	trace("link association roles: " + ma) -> (
 	let mend = ma.end :
 		mend.size == 2
 			? (mend.get(0).setOpposite( mend.get(1) ) ->
@@ -653,7 +657,7 @@ private create MTag makeTag(Property p) :
  * @return	the GeneSEZ tagged value
  */
 private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
-	debug("make tagged value: " + o + ", tag: " + t.name) ->
+	trace("make tagged value: " + o + ", tag: " + t.name) ->
 	setTag(t) ->
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
@@ -674,7 +678,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @return	a list of GeneSEZ tagged values
  */
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	debug("make tagged values: " + me.name + ", elem: " + e.toString()) ->
+	trace("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
 		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
@@ -872,6 +876,33 @@ private boolean isIgnoredElement(Element this) :
 private boolean isContainerForExternalClasses(Package this) :
 	externalPackages().toList().contains( name )
 		|| getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) );
+
+/**
+ * checks if a type is contained within a profile (deep recursive check)
+ * - if the type is not contained within a package, true is returned!
+ *   (to ensure its containment by transforming it into a GeneSEZ external type after this check)
+ * @return	true if the type is within a subtree of a profile
+ */
+private boolean isContainedInProfile(Type this) :
+	package == null
+		? true
+		: ( package.metaType == Profile
+			? true
+			: package.isContainedInProfile()
+		);
+
+/**
+ * checks if a package is contained within a profile (deep recursive check)
+ * - if nesting package is null, it returns false (because we reached the root of the model tree)
+ * @return	true if the package is in a subtree of a profile, otherwise false
+ */
+private boolean isContainedInProfile(Package this) :
+	nestingPackage == null
+		? false
+		: (	nestingPackage.metaType == Profile
+			? true
+			: nestingPackage.isContainedInProfile()
+		);
 
 /**
  * checks if a classifier has a containment association to the model

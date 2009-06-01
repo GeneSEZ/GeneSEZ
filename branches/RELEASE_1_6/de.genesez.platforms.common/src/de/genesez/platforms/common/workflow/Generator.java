@@ -199,6 +199,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 * @param aspectTemplate
 	 */
 	public void addAspectTemplate(String aspectTemplate) {
+		logger.trace("Generator.addAspectTemplate: " + aspectTemplate);
 		if (aspectTemplate.length() > 0) {
 			super.addAdvice(aspectTemplate);
 		}
