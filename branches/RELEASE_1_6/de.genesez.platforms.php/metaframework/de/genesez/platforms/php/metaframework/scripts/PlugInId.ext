@@ -1,0 +1,15 @@
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+
+/**
+ * checks if the operation is the getId() method of a plug-in
+ * @return	true if the operation is the getter of the plug-in id, otherwise false
+ */
+boolean isPlugInIdGetter(MOperation this) :
+	name == "getId"
+	&& ( classifier.generalization.exists( e|e.metaType == MExternal && e.name() == "PlugInBase" )
+	|| classifier.realization.exists( e|e.metaType == MExternal && ( e.name() == "PlugIn" || e.name() == "CorePlugIn") )
+	) ? true
+	: false;

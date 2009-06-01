@@ -68,16 +68,20 @@
 
 «REM»
 	processes all operations to declare
+	- realized operations from interfaces first
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND _Declaration FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract ) -»
+	«EXPAND _Declaration FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Declaration FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
 «ENDDEFINE»
 
 «REM»
 	processes all operations to implement
+	- realized operations from interfaces first
 «ENDREM»
 «DEFINE Implementation FOR MClassifier -»
-	«EXPAND _Implementation FOREACH operations().select( e| !e.isConstructor() && !e.abstract ) -»
+	«EXPAND _Implementation FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Implementation FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
 «ENDDEFINE»
 
 

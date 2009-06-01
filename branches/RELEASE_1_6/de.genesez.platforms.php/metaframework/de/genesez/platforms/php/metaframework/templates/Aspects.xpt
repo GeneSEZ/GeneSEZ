@@ -1,0 +1,15 @@
+«IMPORT gcore»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::php::metaframework::scripts::PlugInId»
+
+«REM»
+	implements the plug-in id getter by returning the model name
+«ENDREM»
+«AROUND de::genesez::platforms::php5::templates::Operation::_OwnCodeImpl(String id) FOR MOperation -»
+	«IF isPlugInIdGetter() -»
+		return '«model().name»';
+	«ELSE -»
+		«targetDef.proceed() -»
+	«ENDIF -»
+«ENDAROUND»
