@@ -6,11 +6,11 @@
 
 /**
  * Simple class to represent a message.
- * @see		Core_BaseDto
+ * @see		Mfw_DtoBase
  * @author	dreamer
- * @package	Utilities
+ * @package	de.genesez.metaframework.util
  */
-class Msg_Message extends Core_BaseDto  {
+class Msg_Message extends Mfw_DtoBase  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition

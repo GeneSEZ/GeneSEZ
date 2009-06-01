@@ -7,7 +7,7 @@
 /**
  * @see		Util_NotifierController
  * @author	dreamer
- * @package	DDM
+ * @package	de.genesez.metaframework.ddm
  */
 abstract class Editor_DefaultController extends Util_NotifierController  {
 	// -- generated attribute, constant + association declarations ----------
@@ -18,12 +18,12 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	protected $classDao;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_RequestHandler	$noClassSpecifiedHandler
+	 * @var		Mfw_RequestHandler	$noClassSpecifiedHandler
 	 */
 	protected $noClassSpecifiedHandler;
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_RequestHandler	$unknownClassSpecifiedHandler
+	 * @var		Mfw_RequestHandler	$unknownClassSpecifiedHandler
 	 */
 	protected $unknownClassSpecifiedHandler;
 
@@ -196,16 +196,16 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_DefaultController::getNoClassSpecifiedHandler() $noClassSpecifiedHandler}
-	 * @param	Core_RequestHandler	$noClassSpecifiedHandler	the value to set
+	 * @param	Mfw_RequestHandler	$noClassSpecifiedHandler	the value to set
 	 */
-	public 	 function setNoClassSpecifiedHandler(Core_RequestHandler $noClassSpecifiedHandler) {
+	public 	 function setNoClassSpecifiedHandler(Mfw_RequestHandler $noClassSpecifiedHandler) {
 		$this->noClassSpecifiedHandler = $noClassSpecifiedHandler;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_DefaultController::getUnknownClassSpecifiedHandler() $unknownClassSpecifiedHandler}
-	 * @param	Core_RequestHandler	$unknownClassSpecifiedHandler	the value to set
+	 * @param	Mfw_RequestHandler	$unknownClassSpecifiedHandler	the value to set
 	 */
-	public 	 function setUnknownClassSpecifiedHandler(Core_RequestHandler $unknownClassSpecifiedHandler) {
+	public 	 function setUnknownClassSpecifiedHandler(Mfw_RequestHandler $unknownClassSpecifiedHandler) {
 		$this->unknownClassSpecifiedHandler = $unknownClassSpecifiedHandler;
 	}
 

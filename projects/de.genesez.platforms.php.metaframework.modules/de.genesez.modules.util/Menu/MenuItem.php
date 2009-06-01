@@ -5,11 +5,11 @@
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_BaseDto
+ * @see		Mfw_DtoBase
  * @author	dreamer
- * @package	Utilities
+ * @package	de.genesez.metaframework.util
  */
-class Menu_MenuItem extends Core_BaseDto  {
+class Menu_MenuItem extends Mfw_DtoBase  {
 	// -- generated attribute, constant + association declarations ----------
 
 	/**

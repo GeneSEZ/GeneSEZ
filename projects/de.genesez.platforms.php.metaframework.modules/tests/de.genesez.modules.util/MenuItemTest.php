@@ -1,5 +1,5 @@
 <?php
-require_once 'Core/BaseDto.php';
+require_once 'Mfw/DtoBase.php';
 require_once 'UML/OneAssociation.php';
 require_once 'UML/ManyAssociation.php';
 require_once 'Menu/MenuItem.php';

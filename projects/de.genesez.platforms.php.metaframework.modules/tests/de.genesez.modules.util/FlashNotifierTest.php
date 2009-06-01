@@ -1,8 +1,8 @@
 <?php
 require_once 'PHPUnit/Framework.php';
-require_once 'Core/Dto.php';
+require_once 'Mfw/Dto.php';
 require_once 'Msg/FlashNotifier.php';
-require_once 'Core/BaseDto.php';
+require_once 'Mfw/DtoBase.php';
 require_once 'Msg/Message.php';
 
 class FlashNotifierTest extends PHPUnit_Framework_TestCase {

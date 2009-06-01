@@ -5,15 +5,15 @@
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_BaseRequestHandler
+ * @see		Mfw_RequestHandlerBase
  * @author	dreamer
- * @package	DDM
+ * @package	de.genesez.metaframework.ddm
  */
-class Editor_NavigationHandler extends Core_BaseRequestHandler  {
+class Editor_NavigationHandler extends Mfw_RequestHandlerBase  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
-	 * @var		Core_HandlerInfo	$handlerInfo
+	 * @var		Mfw_HandlerInfo	$handlerInfo
 	 */
 	protected $handlerInfo;
 
@@ -24,8 +24,8 @@ class Editor_NavigationHandler extends Core_BaseRequestHandler  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @param	Core_HandlerInfo	$handlerInfo	
-	 * @return	Core_Dto
+	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240397637656_702620_305) ENABLED START */

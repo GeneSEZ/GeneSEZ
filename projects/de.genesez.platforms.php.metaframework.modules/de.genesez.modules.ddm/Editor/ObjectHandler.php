@@ -7,7 +7,7 @@
 /**
  * @see		Editor_DefaultController
  * @author	dreamer
- * @package	DDM
+ * @package	de.genesez.metaframework.ddm
  */
 class Editor_ObjectHandler extends Editor_DefaultController  {
 	// -- generated attribute, constant + association declarations ----------
@@ -29,7 +29,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_420232_843) ENABLED START */
@@ -67,7 +67,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	int	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function edit($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_768508_844) ENABLED START */
@@ -101,7 +101,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	int	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function delete($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_757871_845) ENABLED START */
@@ -119,7 +119,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	int	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function show($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_510778_846) ENABLED START */
@@ -155,7 +155,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function listing() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_601136_847) ENABLED START */

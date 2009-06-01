@@ -5,12 +5,12 @@
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_BaseDto
+ * @see		Mfw_DtoBase
  * @see		IteratorAggregate
  * @author	dreamer
- * @package	Utilities
+ * @package	de.genesez.metaframework.util
  */
-class Menu_MenuBar extends Core_BaseDto implements IteratorAggregate {
+class Menu_MenuBar extends Mfw_DtoBase implements IteratorAggregate {
 	// -- generated attribute, constant + association declarations ----------
 
 	/**

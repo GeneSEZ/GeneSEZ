@@ -1,6 +1,6 @@
 <?php
 
-/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237058774562_708044_281) ENABLED START */
+/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1243537883500_527170_325) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
@@ -8,7 +8,7 @@
  * Supports the creation of the dependency injection container using a fluent 
  * API according the builder pattern.
  * @author	dreamer
- * @package	Metaframework
+ * @package	de.genesez.metaframework.core
  */
 class Mfw_SeasarPhpBuilder   {
 
@@ -23,7 +23,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @return	S2Container
 	 */
 	public static function newContainer($components = array()) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237058843921_766739_300) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_391164_328) ENABLED START */
 		$container = new S2ContainerImpl();
 		foreach ($components as $component) {
 			$container->register($component);
@@ -41,7 +41,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @return	S2Container_ComponentDef
 	 */
 	public static function newComponent($class = '', $name = '', $arguments = array(), $properties = array()) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237058871750_353203_305) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_740807_329) ENABLED START */
 		$component = new S2Container_ComponentDefImpl($class, $name);
 		foreach ($arguments as $arg) {
 			$component->addArgDef($arg);
@@ -62,7 +62,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @return	S2Container_ArgDef
 	 */
 	public static function newArgument($value = null) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237058878859_43574_308) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_703608_330) ENABLED START */
 		$argument = new S2Container_ArgDefImpl();
 		self::setValue($argument, $value);
 		return $argument;
@@ -80,7 +80,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @return	S2Container_PropertyDef
 	 */
 	public static function newProperty($name = null, $value = null) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237058882687_664177_311) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_861555_331) ENABLED START */
 		$property = new S2Container_PropertyDefImpl($name);
 		self::setValue($property, $value);
 		return $property;
@@ -92,7 +92,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @param	S2Container	$container	
 	 */
 	public static function finishContainer($container) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156913765_600402_508) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_511456_332) ENABLED START */
 		S2Container_ChildComponentDefBindingUtil::bind($container);
 		/* PROTECTED REGION END */
 	}
@@ -103,7 +103,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @param	string	$value	
 	 */
 	protected static function setValue($argDef, $value) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156993453_652067_520) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_40613_333) ENABLED START */
 		if (is_object($value)) {
 			$argDef->setValue($value);
 		} elseif (self::isValue($value)) {
@@ -121,7 +121,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @return	boolean
 	 */
 	protected static function isValue($value) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156937468_924442_512) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_211799_334) ENABLED START */
 		return preg_match('/^(\'|\")(.*)(\'|\")$/', $value) == 1;
 		/* PROTECTED REGION END */
 	}
@@ -132,7 +132,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @return	string
 	 */
 	protected static function injectionValue($value) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156968890_789200_516) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_812210_335) ENABLED START */
 		$value = trim($value);
 		$rep = preg_replace('/^(\'|\")(.*)(\'|\")$/', '$2', $value);
 		if ($rep == $value) {
@@ -146,7 +146,7 @@ class Mfw_SeasarPhpBuilder   {
 
 
 	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237058774562_708044_281) ENABLED START */
+	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243537883500_527170_325) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_SeasarPhpBuilder' here
 	/* PROTECTED REGION END */
 }

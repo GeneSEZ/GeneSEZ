@@ -7,7 +7,7 @@
 /**
  * @see		Util_NotifierController
  * @author	dreamer
- * @package	DDM
+ * @package	de.genesez.metaframework.ddm
  */
 class Editor_ClassHandler extends Util_NotifierController  {
 	// -- generated attribute, constant + association declarations ----------
@@ -39,7 +39,7 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function create() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_487550_349) ENABLED START */
@@ -63,7 +63,7 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	int	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function edit($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_2647_350) ENABLED START */
@@ -103,7 +103,7 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	int	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function delete($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_8676_351) ENABLED START */
@@ -122,7 +122,7 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	int	$id	
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function show($id) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_451936_352) ENABLED START */
@@ -134,7 +134,7 @@ class Editor_ClassHandler extends Util_NotifierController  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	Core_Dto
+	 * @return	Mfw_Dto
 	 */
 	public function listing() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430582663_850039_353) ENABLED START */

@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	transforms the de.genesez.metaframework.util plug-in of the metaframework
+	transforms the de.genesez.metaframework.core plug-in of the metaframework
 	
 	@author	tobias haubold
-	@date	2009-04-21
+	@date	2009-05-28
  -->
 <workflow>
 	<component id="uml2genesez" class="de.genesez.platforms.common.workflow.Uml2GeneSEZ">
-		<model value="utilities.model/de.genesez.modules.util.uml" />
-		<profile value="utilities.model/genesez.profile.uml" />
+		<model value="core.model/de.genesez.metaframework.core.uml" />
+		<profile value="core.model/genesez.profile.uml" />
 	</component>
 	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
 		<script value="de::genesez::platforms::common::Constraints" />
 		<script value="de::genesez::platforms::php::constraints::Syntax" />
 	</component>
 	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
-		<file value="utilities.model/de.genesez.modules.util.xmi" />
+		<file value="core.model/de.genesez.metaframework.core.xmi" />
 	</component>
 	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
-		<outputDir value="../de.genesez.platforms.php.metaframework.modules/de.genesez.modules.util" />
-		<useAccessorStereotype value="true" />
+		<outputDir value="../de.genesez.platforms.php.metaframework.modules/de.genesez.metaframework.core" />
 		<generateIncludes value="false" />
+		<useAccessorStereotype value="true" />
 		<aspectTemplate value="de::genesez::platforms::php::metaframework::templates::Aspects" />
 		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
 		<typeMappingFile value="de/genesez/platforms/php/metaframework/typemapping/typemapping.xml" />
+		<typeMappingFile value="de/genesez/platforms/php/smarty/typemapping/typemapping.xml" />
 		<typeMappingFile value="de/genesez/platforms/php/seasar/typemapping/typemapping.xml" />
 	</component>
 </workflow>

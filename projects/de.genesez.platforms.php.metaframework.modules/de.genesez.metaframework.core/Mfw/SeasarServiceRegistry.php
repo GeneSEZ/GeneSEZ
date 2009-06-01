@@ -1,14 +1,13 @@
 <?php
-require_once 'Mfw/ServiceRegistry.php';
 
-/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999613687_255843_1112) ENABLED START */
+/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1243539420937_141797_393) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
  * @see		Mfw_ServiceRegistry
  * @author	dreamer
- * @package	Metaframework
+ * @package	de.genesez.metaframework.core
  */
 class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
 	// -- generated attribute, constant + association declarations ----------
@@ -28,7 +27,7 @@ class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
 	 * @param	mixed	$component	
 	 */
 	public function register($component) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243435817093_715363_1072) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243604113781_343346_404) ENABLED START */
 		$this->_container->register($component);
 		/* PROTECTED REGION END */
 	}
@@ -39,7 +38,7 @@ class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
 	 * @return	boolean
 	 */
 	public function hasComponent($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237999613687_791397_1116) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243604113781_227526_405) ENABLED START */
 		return $this->_container->hasComponentDef($name);
 		/* PROTECTED REGION END */
 	}
@@ -50,7 +49,7 @@ class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
 	 * @return	mixed
 	 */
 	public function getComponent($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237999613703_927330_1117) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243604113781_445463_406) ENABLED START */
 		return $this->_container->getComponent($name);
 		/* PROTECTED REGION END */
 	}
@@ -67,8 +66,8 @@ class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
 
 
 	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237999613687_255843_1112) ENABLED START */
-	// TODO: put your further code implementations for class 'Seasar_SeasarServiceRegistry' here
+	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243539420937_141797_393) ENABLED START */
+	// TODO: put your further code implementations for class 'Mfw_SeasarServiceRegistry' here
 	/* PROTECTED REGION END */
 }
 ?>

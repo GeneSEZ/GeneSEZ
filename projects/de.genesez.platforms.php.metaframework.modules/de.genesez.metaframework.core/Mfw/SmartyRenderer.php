@@ -1,9 +1,6 @@
 <?php
-require_once 'Smarty/Smarty.class.php';
-require_once 'Mfw/Dto.php';
-require_once 'Mfw/Renderer.php';
 
-/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1237999928437_189680_1219) ENABLED START */
+/* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1243539497906_977189_432) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
@@ -12,7 +9,7 @@ require_once 'Mfw/Renderer.php';
  * smarty template engine.
  * @see		Mfw_Renderer
  * @author	dreamer
- * @package	Metaframework
+ * @package	de.genesez.metaframework.core
  */
 class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	// -- generated attribute, constant + association declarations ----------
@@ -32,7 +29,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @param	Mfw_Dto	$dto	
 	 */
 	public function render($dto) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237999928437_440329_1223) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243595046187_312569_400) ENABLED START */
 		$this->templateBasePath = realpath('./' . $this->smarty->template_dir) . '/';
 		$view = $dto->view();
 		$this->assignGlobalVariables($this->smarty);
@@ -40,20 +37,20 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 		$this->smarty->display($view);
 		/* PROTECTED REGION END */
 	}
-	
+
 	/**
 	 * The dynamically registered template function plugin <b>render</b> for 
 	 * smarty templates. It is the smarty template function port of the <b>Renderer</b> 
 	 * interface, i.e. you specifiy only a dto to render it. If there is no 
-	 * &lt;code&gt;dto&lt;/code&gt; parameter with an instance of type &lt;code&gt;Mfw_Dto&lt;/code&gt; 
-	 * a smarty error is triggered.<br><br>The view of a dto must not exist; in 
+	 * &lt;code&gt;dto&lt;/code&gt; parameter with an instance of type &lt;code&gt;Mfw_Dto&lt;/code&gt; a 
+	 * smarty error is triggered.<br><br>The view of a dto must not exist; in 
 	 * this case this function derives a default template from the URL.<br>
 	 * @param	array	$params	the parameters of the template function as an associative array with key:value pairs
 	 * @param	Smarty	$smarty	reference to the smarty object
 	 * @return	string
 	 */
 	public function checkInclude($params, &$smarty) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241804745078_804374_559) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497906_111858_437) ENABLED START */
 		if (array_key_exists('dto', $params)) {
 			if ($params['dto'] instanceof Mfw_Dto) {
 				$view = $params['dto']->view();
@@ -81,7 +78,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @return	string
 	 */
 	protected function processInclude($view, $params) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241808386312_403388_581) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497906_99424_438) ENABLED START */
 		if ($view === null || $view === '') {
 			// check suffixes with url fallback
 			$requestPath = Mfw_Url::requestInfo();
@@ -140,7 +137,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @return	string
 	 */
 	protected function renderInclude($view, $params) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241807872578_14321_574) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497906_926281_439) ENABLED START */
 		// TODO: exists another way to do this?
 		$smarty = new Smarty();
 		$smarty->template_dir = $this->smarty->template_dir;
@@ -164,7 +161,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @return	boolean
 	 */
 	protected function isSmartyTemplate($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241769056828_26378_516) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497921_826248_440) ENABLED START */
 		$view = realpath('./' . $this->smarty->template_dir) . '/' . $name;
 		if (is_file($view) && is_readable($view)) {
 			return true;
@@ -182,7 +179,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @return	string
 	 */
 	protected function buildView($suffix = null, $view = null) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240433824734_817533_526) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497921_581271_441) ENABLED START */
 		if ($view === null) {
 			$view = Mfw_Url::requestPath();
 		}
@@ -200,7 +197,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @return	array of string
 	 */
 	protected function defaultSuffixes() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241024375453_409016_363) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497921_845108_442) ENABLED START */
 		return array('', '.html', '.tpl', '/index.html', '/index.tpl');
 		/* PROTECTED REGION END */
 	}
@@ -211,7 +208,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @param	Smarty	$smarty	the smarty instance to which the variables are assigned
 	 */
 	protected function assignGlobalVariables($smarty) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1242156741484_229703_502) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497921_797542_443) ENABLED START */
 		$smarty->assign('webbase', Mfw_Url::baseServerUri());
 		$smarty->assign('requestbase', Mfw_Url::baseRequestUri());
 		$smarty->assign('context', Mfw_Url::requestPath());
@@ -230,8 +227,8 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 
 
 	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237999928437_189680_1219) ENABLED START */
-	// TODO: put your further code implementations for class 'Smarty_SmartyRenderer' here
+	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243539497906_977189_432) ENABLED START */
+	// TODO: put your further code implementations for class 'Mfw_SmartyRenderer' here
 	/* PROTECTED REGION END */
 }
 ?>

@@ -5,11 +5,11 @@
 /* PROTECTED REGION END */
 
 /**
- * @see		Core_Controller
+ * @see		Mfw_Controller
  * @author	dreamer
- * @package	Utilities
+ * @package	de.genesez.metaframework.util
  */
-abstract class Util_NotifierController extends Core_Controller  {
+abstract class Util_NotifierController extends Mfw_Controller  {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
@@ -24,6 +24,7 @@ abstract class Util_NotifierController extends Core_Controller  {
 	
 	/**
 	 * @generated	method stub for implementation
+	 * @return	Mfw_Dto
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803687_477311_294) ENABLED START */
@@ -34,6 +35,7 @@ abstract class Util_NotifierController extends Core_Controller  {
 
 	/**
 	 * @generated	method stub for implementation
+	 * @return	Mfw_Dto
 	 */
 	protected function noIdSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803750_832752_295) ENABLED START */
@@ -44,6 +46,7 @@ abstract class Util_NotifierController extends Core_Controller  {
 
 	/**
 	 * @generated	method stub for implementation
+	 * @return	Mfw_Dto
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803750_878544_296) ENABLED START */

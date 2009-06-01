@@ -8,7 +8,7 @@
  * @see		Menu_MenuItem
  * @see		IteratorAggregate
  * @author	dreamer
- * @package	Utilities
+ * @package	de.genesez.metaframework.util
  */
 class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
 	// -- generated attribute, constant + association declarations ----------
