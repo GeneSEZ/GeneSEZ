@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	performs the model transformations
+	transforms the metaframework
 	
 	@author	tobias haubold
 	@date	2009-03-07 
@@ -24,8 +24,13 @@
 	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
 		<outputDir value="../de.genesez.platforms.php.metaframework/src" />
 		<useAccessorStereotype value="true" />
+		<typeMappingFile value="de/genesez/platforms/php/typemapping/typemapping.xml" />
 		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
-		<typeMappingFile value="de/genesez/platforms/php/seasar/typemapping/typemapping.xml" />
-		<typeMappingFile value="de/genesez/platforms/php/smarty/typemapping/typemapping.xml" />
+	</component>
+	<component id="model2typemapping" class="de.genesez.platforms.common.workflow.Generator">
+		<outputDir value="../de.genesez.platforms.php.metaframework/typemapping" />
+		<template value="de::genesez::platforms::common::typemapping::mdsd::XmlFile::Root" />
+		<aspectScript value="TypemappingXmlFile" />
+		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
 	</component>
 </workflow>

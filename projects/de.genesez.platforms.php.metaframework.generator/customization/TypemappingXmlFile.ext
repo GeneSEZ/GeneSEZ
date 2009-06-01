@@ -1,0 +1,22 @@
+/**
+ * Generates the type mapping file for the types of the metaframework
+ * 
+ * @author	toh
+ * @date	2009-05-29
+ */
+
+// based on genesez meta model
+import gcore;
+
+// using php naming conventions
+extension de::genesez::platforms::php::scripts::Naming;
+
+// include the standard php typemapping file
+around de::genesez::platforms::common::typemapping::mdsd::XmlFile::includes() : 
+	{"de/genesez/platforms/php/typemapping/typemapping.xml"};
+// map to name formatted as type name
+around de::genesez::platforms::common::typemapping::mdsd::XmlFile::mapTo(MClassifier this) : 
+	asTypeName();
+// no imports, metaframework provides autoloading
+around de::genesez::platforms::common::typemapping::mdsd::XmlFile::mapToImport(MClassifier this) :
+	"";

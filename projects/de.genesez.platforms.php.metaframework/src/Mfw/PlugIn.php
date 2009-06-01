@@ -31,7 +31,7 @@ interface Mfw_PlugIn  {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	array of S2Container_ComponentDef
+	 * @return	array of mixed
 	 */
 	public function getComponents();
 

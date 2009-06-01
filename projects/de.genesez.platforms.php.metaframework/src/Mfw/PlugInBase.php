@@ -40,7 +40,7 @@ abstract class Mfw_PlugInBase  implements Mfw_PlugIn {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	array of S2Container_ComponentDef
+	 * @return	array of mixed
 	 */
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243425055984_834606_999) ENABLED START */
