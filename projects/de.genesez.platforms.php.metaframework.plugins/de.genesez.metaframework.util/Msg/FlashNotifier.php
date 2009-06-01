@@ -8,14 +8,14 @@
  * Helps to store data in the session of an user for a given count of 
  * request-response cycles. Such a concept is often used to show inform the 
  * user with messages which disappear after subsequent requests.
+ * @see		IteratorAggregate
  * @see		ArrayAccess
  * @see		Mfw_Dto
- * @see		IteratorAggregate
  * @see		Countable
  * @author	dreamer
  * @package	de.genesez.metaframework.util
  */
-class Msg_FlashNotifier  implements ArrayAccess, Mfw_Dto, IteratorAggregate, Countable {
+class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Countable {
 	// -- generated attribute, constant + association declarations ----------
 	/**
 	 * @generated	attribute definition
