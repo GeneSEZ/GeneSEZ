@@ -1,0 +1,87 @@
+«REM»
+	Performs the generation of a type mapping file based on the information of a GeneSEZ model
+	and further information of a Xtend file.
+	
+	It is useful when infrastructure code is generated and these classes are used as external classes
+	in other models + transformations.
+	
+	@author	toh
+	@date	2009-05-29
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«EXTENSION de::genesez::platforms::common::typemapping::mdsd::XmlFile»
+
+
+«REM»
+	generates the file structure
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE filename() -»
+<?xml version="1.0" encoding="UTF-8" ?>
+«EXPAND Comment -»
+<tns:typeMapping xmlns:tns="http://www.genesez.de/typemapping"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	«EXPAND Includes -»
+	«EXPAND ExternalTypes -»
+</tns:typeMapping>
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	generates the comment of the type mapping file
+«ENDREM»
+«DEFINE Comment FOR MModel -»
+<!--
+	«comment()»
+	
+	@author	«author()»
+	@date	«date()»
+ -->
+«ENDDEFINE»
+
+«REM»
+	generates the includes section
+«ENDREM»
+«DEFINE Includes FOR MModel -»
+	<tns:include>
+		«EXPAND Include FOREACH includes() -»
+	</tns:include>
+«ENDDEFINE»
+
+«REM»
+	generates a include statement
+«ENDREM»
+«DEFINE Include FOR String -»
+		<tns:file>«this»</tns:file>
+«ENDDEFINE»
+
+«REM»
+	generates the external types section
+«ENDREM»
+«DEFINE ExternalTypes FOR MModel -»
+	<tns:externalTypes>
+«EXPAND ExternalTypes FOREACH nestedPackage -»
+«EXPAND ExternalType FOREACH classifier -»
+	</tns:externalTypes>
+«ENDDEFINE»
+
+«REM»
+	iteration over packages to process with all classifiers
+«ENDREM»
+«DEFINE ExternalTypes FOR MPackage -»
+«EXPAND ExternalTypes FOREACH nestedPackage -»
+«EXPAND ExternalType FOREACH classifier -»
+«ENDDEFINE»
+
+«REM»
+	generates an external file definition
+«ENDREM»
+«DEFINE ExternalType FOR MClassifier -»
+		<tns:type from="«name»">
+			<tns:to>«mapTo()»</tns:to>
+			<tns:context name="import">«mapToImport()»</tns:context>
+		</tns:type>
+«ENDDEFINE»

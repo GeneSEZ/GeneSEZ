@@ -21,16 +21,23 @@
 	<path id="de.genesez.platforms.common.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="dom4j*.jar" />
+			<include name="**/*.jar" />
 		</fileset>
 		<pathelement path="${build.basedir}/de.genesez.metamodel/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath"/>
 	</path>
+	
+	<!-- ant task definitions -->
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask"
+		description="xml schema to java compiler task">
+    	<classpath refid="de.genesez.platforms.common.classpath" />
+  	</taskdef>
 
 	<!-- Public target section -->
 
 	<target name="build"
 		description="Build de.genesez.platforms.common"
-		depends="platforms.common.compile">
+		depends="typemapping.schema2java, platforms.common.compile">
 	</target>
 
 	<target name="createjar"
@@ -44,7 +51,7 @@
 			<fileset dir="${lib.dir}" includes="**/*" />
 		</jar>
 	</target>
-
+	
 	<target name="clean"
 		description="Clean de.genesez.platforms.common">
 		<delete includeemptydirs="true" failonerror="false">
@@ -57,8 +64,10 @@
 
 	<target name="platforms.common.compile">
 		<mkdir dir="${bin.dir}" />
-		<javac srcdir="${src.dir}" 
-			destdir="${bin.dir}"
+		<javac srcdir="${src.gen.dir}" destdir="${bin.dir}">
+			<classpath refid="de.genesez.platforms.common.classpath" />
+		</javac>
+		<javac srcdir="${src.dir}" destdir="${bin.dir}"
 			classpathref="de.genesez.platforms.common.classpath"
 			debug="on" />
 		<mkdir dir="${dist.dir}" />
@@ -68,5 +77,20 @@
 			<fileset dir="${common.dir}" includes="**/*" />
 		</jar>
 	</target>
-
+	
+	<target name="typemapping.schema2java"
+		description="generates the java type mapping types from xml schema">
+		<echo message="Compiling the schema..." />
+		<xjc destdir="${src.gen.dir}"
+				binding="${common.dir}/de/genesez/platforms/common/typemapping/typemapping.xjb"
+				removeOldOutput="yes" extension="true"
+				package="de.genesez.platforms.common.typemapping.types">
+			<produces dir="${src.gen.dir}/de/genesez/platforms/common/typemapping/types" includes="**/*" />
+			<schema dir="${common.dir}/de/genesez/platforms/common/typemapping/">
+				<include name="typemapping.xsd" />
+			</schema>
+			<arg value="-mark-generated" />
+			<arg value="-verbose" />
+		</xjc>
+	</target>
 </project>

@@ -73,3 +73,15 @@ context MOperation WARNING "GeneSEZ: destructor operations cannot have a return 
  */
 context MOperation WARNING "GeneSEZ: destructor operations cannot have parameters - they will be ignored! " + fqn() :
 	!( isDestructor() && parameter.size > 0 );
+
+
+// - - association roles - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * checks if there is a bidirectional association with qualifier attributes on the opposite
+ * @return	false, if a bidirectional association has qualifier attributes on the opposite, otherwise true
+ */
+context MAssociationRole WARNING "GeneSEZ: the symmetry of bidirectional associations with an qualified association end on the opposite is not supported by any platform! " + fqn() :
+	opposite != null
+		? true
+		: !( opposite.qualifier != null );

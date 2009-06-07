@@ -14,6 +14,7 @@
  * @todo	revise magic draw 12.5 specific exception handling, see 'MPrimitiveType makePrimitiveType(DataType d)'
  * @todo	revise the externally processing functions which maps to java functions - seams that they are never called and not needed
  * @todo	implement state machine support
+ * @todo	support qualified association ends with more than one qualifier attributes (e.g. create a class with these attributes)
  */
 
 // uses ecore metamodel
@@ -47,6 +48,15 @@ private String ignoredPackages():
 	GLOBALVAR excludePackages == null 
 		? "" 
 		: GLOBALVAR excludePackages;
+
+/**
+ * stereotypes used to exclude packages within the UML model from the transformation
+ * @return	comma or semicolon separated list of stereotypes
+ */
+private String excludeStereotypes() :
+	GLOBALVAR excludeStereotypes == null
+		? ""
+		: GLOBALVAR excludeStereotypes;
 
 /**
  * indicates if all classes contained in the model should be mapped to 
@@ -91,15 +101,11 @@ private String externalPackages() :
  */
 create MModel transform(Model m) :
 	useLogger("de.genesez.adapter.uml2") ->
+	trace( "make [" + metaType + " ] - " + m ) ->
 	// basic element properties
 	transformBasics(m) ->
-	// containments
-	ownedComment.addAll( m.ownedComment.typeSelect(Comment).makeComment() ) ->
-//	nestedPackage.addAll( m.ownedElement.typeSelect(Package).transform() ) ->
-	m.ownedElement.typeSelect(Package).transform( this ) ->
-//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
-//	transform( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
-	m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform( this ) ->
+	// package properties
+	transformPackage(m) ->
 	this;
 	
 /*
@@ -138,6 +144,8 @@ private MPackage transform(Package p, MModel this) :
  */
 private MPackage transform(Package p, MPackage this) :
 	switch {
+		// exclude elements by stereotypes
+		case p.isIgnoredElement() : Void
 		// reject package by stereotype when used as container for external classes
 		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
 		// else transform the package
@@ -154,6 +162,8 @@ private MPackage transform(Package p, MPackage this) :
  */
 private MClassifier transform(Classifier c, MModel this) :
 	switch {
+		// check if classifier should be excluded
+		case c.isIgnoredElement() : Void
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
 		default : classifier.add( c.makeClassifier() )
@@ -170,6 +180,8 @@ private MClassifier transform(Classifier c, MModel this) :
 private MClassifier transform(Classifier c, MPackage this) :
 	trace( "transform [ " + c.metaType + " ] - " + c ) ->
 	switch {
+		// check if classifier should be excluded
+		case c.isIgnoredElement() : Void
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
 		default : classifier.add( c.makeClassifier() )
@@ -187,6 +199,8 @@ private MType makeType(Type this) :
 	trace("    isTemplateParameter: " + isTemplateParameter()) ->
 	trace("    isExternalType:      " + isExternalType()) ->
 	switch {
+		//  check if type is null (e.g. constructors usually don't have a return type)
+		case metaType == Void : ((PrimitiveType)this).makePrimitiveType()
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
 		// external class
@@ -194,6 +208,8 @@ private MType makeType(Type this) :
 		// primitive type
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
 		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
+		// classifier contained in profiles
+		case isContainedInProfile() && Classifier.isInstance(this) : ((Classifier)this).makeExternal()
 		// classifier
 //		case metaType.isAssignableFrom(Classifier) : ((Classifier)this).makeClassifier()
 //		default : (severe("should transform type: " + metaType) -> Void)
@@ -212,21 +228,10 @@ private MType makeType(Type this) :
  * @return	the GeneSEZ package
  */
 private create MPackage makePackage(Package p) :
+	trace( "make [" + metaType + " ] - " + p ) ->
 	// basic element properties
 	transformBasics(p) ->
-	// containments
-	// add comment to package
-	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
-//	nestedPackage.addAll( p.ownedElement.typeSelect(Package).transform() ) ->
-//	transform( p.ownedElement.typeSelect(Package) ) ->
-	p.ownedElement.typeSelect(Package).transform( this ) ->
-//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
-//	transform( p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
-	p.ownedElement.typeSelect(Classifier).reject(
-		e|{Activity, Actor, Association}.contains(e.metaType) 
-		).transform( this ) ->
-	// map associations in package
-	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
+	transformPackage(p) ->
 	// create behaviours in package
 	p.ownedElement.typeSelect(Behavior).transform( this ) ->
 	this;
@@ -375,6 +380,7 @@ private create MAttribute makeAttribute(Property p) :
  * @return	the GeneSEZ operation
  */
 private create MOperation makeOperation(Operation o) :
+	trace( "make [ " + metaType + " ] - " + o ) ->
 	// set the unique xmiId and name
 	transformBasics(o) ->
 	// properties
@@ -386,10 +392,22 @@ private create MOperation makeOperation(Operation o) :
 	setUnique( o.isUnique ) ->
 	setOrdered( o.isOrdered ) ->
 	// associations
+	// add stereotypes of return type parameter
+	o.ownedParameter.exists(e|e.direction.toString() == "return")
+		? ( stereotype.addAll( o.ownedParameter.selectFirst(e|e.direction.toString() == "return").getAppliedStereotypes().makeStereotype() ) ->
+			taggedValue.addAll( makeTaggedValues(this, o.ownedParameter.selectFirst(e|e.direction.toString() == "return")) )
+		)
+		: this ->
 	// set stereotype
 	stereotype.addAll( o.getAppliedStereotypes().makeStereotype() ) ->
 	// set return type
 	setReturnType( o.type.makeType() ) ->
+	// set return type comment
+	o.ownedParameter.exists( e|e.direction.toString() == "return" )
+		? returnTypeComment.addAll( 
+			o.ownedParameter.select(e|e.direction.toString() == "return").first()
+			.ownedComment.typeSelect(Comment).makeComment() )
+		: this ->
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
@@ -415,6 +433,7 @@ private create MOperation makeOperation(Operation o) :
  * @return	the GeneSEZ parameter
  */
 private create MParameter makeParameter(Parameter p) :
+	trace("make [" + metaType + "] - " + p) ->
 	// set the unique xmiId and name
 	transformBasics(p) ->
 	// properties
@@ -450,6 +469,7 @@ private create MParameter makeParameter(Parameter p) :
  * @return	the GeneSEZ association
  */
 private create MAssociation makeAssociation(Association a, MPackage container) :
+	trace("make [" + metaType + "] - " + a) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(a) ) ->
 	setName( assocName(a) ) ->
@@ -464,6 +484,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	end.addAll( a.memberEnd.select( e|e.class != null ).makeAssociationRole() ) ->
 	// double set, isn't it ?
 //	end.setAssociation(ma).setDerived(a.isDerived)->
+	trace("link ends: " + end) ->
 	linkEnds() ->
 	associationClass(a) ->
 	this;
@@ -474,6 +495,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
  * @return	the GeneSEZ association role
  */
 private create MAssociationRole makeAssociationRole(Property aend) :
+	trace("make [" + metaType + "] - " + aend) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(aend) ) ->
 	setName( assocEndName(aend) ) ->
@@ -482,10 +504,13 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	setVisibility( aend.visibility.toString() ) ->
 	setMultiplicity( aend.getUpper() ) ->
 	setDerived( aend.isDerived ) ->
+	setOppositeMultiplicity( aend.oppositeMultiplicity() ) ->
 	// unique
 	// ordered
 	setAggregation( aend.aggregation.toString() == "shared" ? true : false ) ->
 	setComposition( aend.aggregation.toString() == "composite" ? true : false ) ->
+	// check for a qualified association end
+	checkQualifier( aend ) ->
 	// an asscociation couldn't have a generic as type i guess
 	setType( aend.type.makeType() ) ->
 	// containments
@@ -497,19 +522,58 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 //	ma.setClassifier(assocEndClass(aend))->
 //	assocEndClass(aend).property.add( this ) ->
 	this;
+	
+/**
+ * find the multiplicity of the other end of an association from the uml model
+ * @param	aend	uml association end property
+ */
+private Integer oppositeMultiplicity(Property aend) :
+	aend.opposite != null
+		? aend.opposite.getUpper()
+		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
+
+/**
+ * checks if the assocation end is qualified with attributes
+ * @param	aend	uml association end property
+ */
+private Void checkQualifier(MAssociationRole this, Property aend) :
+	aend.qualifier.size > 0
+		? (aend.qualifier.size == 1
+			? transformSimpleQualifier( aend )
+			: transformQualifier( aend )
+		) : Void;
+
+/**
+ * transforms the only qualifier attribute of an association end
+ * @param	aend	uml association end property
+ */
+private MAssociationRole transformSimpleQualifier(MAssociationRole this, Property aend) :
+	trace("    qualifier multiplicity: " + aend.lower + ".." + aend.upper) ->
+	setQualifierMultiplicity( aend.qualifier.first().upper ) ->
+	setQualifier( aend.qualifier.first().type.makeType() ) ->
+	this;
+
+/**
+ * transforms the qualifier attributes of an association end
+ * TODO: create a class (maybe named role name + qualifier) with all qualifier attributes
+ */
+private MAssociationRole transformQualifier(MAssociationRole this, Property aend) :
+	fatal("qualified associations with more than one qualifier attribute are currently not supported") ->
+	this;
 
 /**
  * links the ends of an GeneSEZ association (the association roles) to each other
  * @param	ma	a GeneSEZ association
  */
 private MAssociation linkEnds(MAssociation ma) :
+	trace("link association roles: " + ma) -> (
 	let mend = ma.end :
 		mend.size == 2
 			? (mend.get(0).setOpposite( mend.get(1) ) ->
 				mend.get(1).setOpposite( mend.get(0) ) ->
 				ma
 			)
-			: ma;
+			: ma);
 
 /**
  * it's just there for error free templates
@@ -572,7 +636,7 @@ private MClass assocEndClass(Property a):
  */
 private MBehavior transform(Behavior b, MPackage this) :
 	trace( "transform [ " + b.metaType + " ] - " + b ) ->
-	behavior.add( b.makeBehavior() ) ->
+	ownedBehavior.add( b.makeBehavior() ) ->
 	this;
 
 /**
@@ -757,7 +821,7 @@ private create MTag makeTag(Property p) :
  * @return	the GeneSEZ tagged value
  */
 private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
-	debug("make tagged value: " + o + ", tag: " + t.name) ->
+	trace("make tagged value: " + o + ", tag: " + t.name) ->
 	setTag(t) ->
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
@@ -778,7 +842,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @return	a list of GeneSEZ tagged values
  */
 private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	debug("make tagged values: " + me.name + ", elem: " + e.toString()) ->
+	trace("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
 		s | s.ownedAttribute.
@@ -884,6 +948,27 @@ private create MComment makeComment(Comment c) :
 */
 
 /**
+ * process the transformation of an uml package to a GeneSEZ package
+ * @param	p	an uml package
+ * @return	the GeneSEZ package
+ */
+private MPackage transformPackage(MPackage this, Package p) :
+	// containments
+	// add comment to package
+	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+//	nestedPackage.addAll( p.ownedElement.typeSelect(Package).transform() ) ->
+//	transform( p.ownedElement.typeSelect(Package) ) ->
+	p.ownedElement.typeSelect(Package).transform( this ) ->
+//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
+//	transform( p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
+	p.ownedElement.typeSelect(Classifier).reject(
+		e|{Activity, Actor, Association}.contains(e.metaType) 
+		).transform( this ) ->
+	// map associations in package
+	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
+	this;
+
+/**
  * processes the transformation of an uml classifier to a GeneSEZ classifier
  * @param	c	an uml classifier
  * @return	the GeneSEZ classifier
@@ -941,8 +1026,16 @@ private MElement transformBasics(MElement this, NamedElement n) :
  * @return	true if the package should be excluded from transformation, otherwise false
  */
 private boolean isIgnoredPackage(Package this) :
-	ignoredPackages().toList().contains( name );
-	
+	ignoredPackages().toList().contains( name )
+	|| isIgnoredElement();
+
+/**
+ * checks if an element should be excluded from transformation
+ * @return	true if the element should be excluded, otherwise false
+ */
+private boolean isIgnoredElement(Element this) :
+	getAppliedStereotypes().exists( s|excludeStereotypes().toList().contains( s.name) );
+
 /**
  * checks if a package is used as container for external types either by name or 
  * by an assigned stereotype
@@ -951,6 +1044,33 @@ private boolean isIgnoredPackage(Package this) :
 private boolean isContainerForExternalClasses(Package this) :
 	externalPackages().toList().contains( name )
 		|| getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) );
+
+/**
+ * checks if a type is contained within a profile (deep recursive check)
+ * - if the type is not contained within a package, true is returned!
+ *   (to ensure its containment by transforming it into a GeneSEZ external type after this check)
+ * @return	true if the type is within a subtree of a profile
+ */
+private boolean isContainedInProfile(Type this) :
+	package == null
+		? true
+		: ( package.metaType == Profile
+			? true
+			: package.isContainedInProfile()
+		);
+
+/**
+ * checks if a package is contained within a profile (deep recursive check)
+ * - if nesting package is null, it returns false (because we reached the root of the model tree)
+ * @return	true if the package is in a subtree of a profile, otherwise false
+ */
+private boolean isContainedInProfile(Package this) :
+	nestingPackage == null
+		? false
+		: (	nestingPackage.metaType == Profile
+			? true
+			: nestingPackage.isContainedInProfile()
+		);
 
 /**
  * checks if a classifier has a containment association to the model

@@ -14,7 +14,7 @@ import org.openarchitectureware.xpand2.output.PostProcessor;
  * attribute in the Xpand workflow component.
  * 
  * @author nihe
- * @date 2008-02-24
+ * @date 2009-02-24
  */
 public abstract class ImportBeautifier implements PostProcessor {
 	
@@ -45,7 +45,7 @@ public abstract class ImportBeautifier implements PostProcessor {
 	 * @return the settings as Properties class
 	 */
 	public Properties getOptions() {
-		return options;
+		return this.options;
 	}
 	
 	/**
@@ -63,10 +63,10 @@ public abstract class ImportBeautifier implements PostProcessor {
 	 * @return singleton import formatter instance
 	 */
 	protected ImportFormatter getImportFormatter() {
-		if (importFormatter == null) {
-			importFormatter = new ImportFormatter(options);
+		if (this.importFormatter == null) {
+			this.importFormatter = new ImportFormatter(this.options);
 		}
-		return importFormatter;
+		return this.importFormatter;
 	}
 	
 }

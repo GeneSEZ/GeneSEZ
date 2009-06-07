@@ -15,6 +15,8 @@
 // based on genesez meta model
 import gcore;
 
+extension de::genesez::platforms::common::AccessHelper;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
@@ -121,14 +123,13 @@ String format(String this, String linePrefix, String lineSuffix) :
  * getter for the directory name of a classifier
  * @return	the name of the directory
  */
-String dirName(MClassifier this) : owningPackage.name;
+String dirName(MClassifier this) : package().name;
 
 /**
  * getter for the path of a classifier based on it's namespace
  * @return	the path of the classifier
  */
-String dirPath(MClassifier this) :
-	owningPackage.fullQualifiedNameSep( fileSeparator() );
+String dirPath(MClassifier this) : package().fullQualifiedNameSep( fileSeparator() );
 
 /**
  * getter for the path of a classifier based on it's namespace
@@ -187,7 +188,10 @@ String filePath(MPackage this, String base) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String separator) : 
-	owningPackage.fullQualifiedNameSep(separator) + separator + name.toFirstUpper();
+	let fqn = package().fullQualifiedNameSep(separator) :
+		fqn.length == 0
+			? name.toFirstUpper()
+			: fqn + separator + name.toFirstUpper();
 
 /**
  * getter for the full qualified name of a classifier based on it's namespace
@@ -196,7 +200,10 @@ String fullQualifiedNameSep(MClassifier this, String separator) :
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String separator) : 
-	owningPackage.fullQualifiedNameSep(separator) + separator + typename;
+	let fqn = package().fullQualifiedNameSep(separator) :
+		fqn.length == 0
+			? typename
+			: fqn + separator + typename;
 
 /**
  * getter for the full qualified name of a classifier based on a base package and it's namespace
@@ -206,7 +213,10 @@ String fullQualifiedNameSep(MClassifier this, String typename, String separator)
  * @return	string representation of the full qualified name
  */
 String fullQualifiedNameSep(MClassifier this, String typename, String base, String separator) : 
-	owningPackage.fullQualifiedNameSep(base, separator) + separator + typename;
+	let fqn = package().fullQualifiedNameSep(base, separator) :
+		fqn.length == 0
+			? name.toFirstUpper()
+			: fqn + separator + typename;
 
 /**
  * getter for the full qualified name of a package
@@ -246,7 +256,7 @@ String fqn(MPackage this) :
  * getter for a human readable identifier for a classifier
  */
 String fqn(MClassifier this) :
-	owningPackage.fqn() + "::" + name;
+	package().fqn() + "::" + name;
 
 /**
  * getter for a human readable identifier for an operation
