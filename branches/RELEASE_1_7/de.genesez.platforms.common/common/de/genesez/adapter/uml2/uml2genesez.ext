@@ -27,6 +27,8 @@ import gcore;
 // use logging
 extension de::genesez::platforms::common::log::Log;
 
+// create dynamic model
+extension de::genesez::adapter::uml2::uml2genesezdynamicmodel;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -184,7 +186,10 @@ private MClassifier transform(Classifier c, MPackage this) :
 		case c.isIgnoredElement() : Void
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
-		default : classifier.add( c.makeClassifier() )
+		default : ( let mc = c.makeClassifier() :
+				classifier.add( mc ) ->
+				c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(mc) : null
+			)
 	} ->
 	this;
 
@@ -194,7 +199,7 @@ private MClassifier transform(Classifier c, MPackage this) :
  * @context	an uml type to transform
  * @return	the transformed GeneSEZ type
  */
-private MType makeType(Type this) :
+MType makeType(Type this) :
 	debug("transform [ " + metaType + " ] " + this) ->
 	trace("    isTemplateParameter: " + isTemplateParameter()) ->
 	trace("    isExternalType:      " + isExternalType()) ->
@@ -211,8 +216,6 @@ private MType makeType(Type this) :
 		// classifier contained in profiles
 		case isContainedInProfile() && Classifier.isInstance(this) : ((Classifier)this).makeExternal()
 		// classifier
-//		case metaType.isAssignableFrom(Classifier) : ((Classifier)this).makeClassifier()
-//		default : (severe("should transform type: " + metaType) -> Void)
 		default : ((Classifier)this).makeClassifier()
 	};
 
@@ -314,7 +317,7 @@ private create MUseCase makeClassifier(UseCase u) :
 	trace( "make [ " + metaType + " ] - " + u ) ->
 	// basic element properties
 	transformBasics(u) ->
-	ownedBehavior.addAll( u.ownedBehavior.makeBehavior() ) ->
+	ownedBehavior.addAll( u.ownedBehavior.transformBehavior(this) ) ->
 	this;
 	
 /**
@@ -451,8 +454,6 @@ private create MParameter makeParameter(Parameter p) :
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
-	// set generic
-	//info(p.getAppliedStereotypes().getAllAttributes().typeSelect(Property).select(e|e.name == "typeModifier"))->
 	this;
 
 /*
@@ -483,7 +484,6 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	// associations
 	end.addAll( a.memberEnd.select( e|e.class != null ).makeAssociationRole() ) ->
 	// double set, isn't it ?
-//	end.setAssociation(ma).setDerived(a.isDerived)->
 	trace("link ends: " + end) ->
 	linkEnds() ->
 	associationClass(a) ->
@@ -518,9 +518,6 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	ownedComment.addAll( aend.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, aend) ) ->
-	// set classifier
-//	ma.setClassifier(assocEndClass(aend))->
-//	assocEndClass(aend).property.add( this ) ->
 	this;
 	
 /**
@@ -614,164 +611,6 @@ private String assocEndName(Property a):
 		: a.name;
 
 /*
-	not used ???
-private MClass assocEndClass(Property a):
-//	info("assoc end class: " + a.name) ->
-	a.class == null
-		? null
-		: a.class.makeType();
-*/
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	behavior
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * transforms a behavior, that has a containment reference to a package
- * @param	b	an uml behavior to transform
- * @context	the package which is the container for the specified behavior
- * @return	the transformed behavior
- */
-private MBehavior transform(Behavior b, MPackage this) :
-	trace( "transform [ " + b.metaType + " ] - " + b ) ->
-	ownedBehavior.add( b.makeBehavior() ) ->
-	this;
-
-/**
- * creates a GeneSEZ activity
- */
-private create MActivity makeBehavior(Activity a) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
-	// add nodes and edges
-	node.addAll(
-		a.node.makeActivityNode( this )
-//		a.node.typeSelect(ActivityNode).reject(
-//			e|{DecisionNode, MergeNode, ForkNode, JoinNode}.contains(e.metaType) 
-//			).makeActivityNode( this )
-		) ->
-//	trace( a.edge.select(e|e.target.metaType == MergeNode).xmiId().toString() ) ->
-//	edge.addAll( a.edge.select(e|e.target.metaType == MergeNode).makeMergeActivityEdge( this ) ) ->
-//	trace( a.edge.select(e|e.target.metaType == JoinNode).xmiId().toString() ) ->
-//	edge.addAll( a.edge.select(e|e.target.metaType == MergeNode).makeMergeActivityEdge( this ) ) ->
-//	trace( a.edge.select(e|e.source.metaType == ForkNode).xmiId().toString() ) ->
-//	edge.addAll( a.edge.select(e|e.target.metaType == MergeNode).makeMergeActivityEdge( this ) ) ->
-	edge.addAll( a.edge.makeActivityEdge( this ) ) ->
-	// add owned sub behaviors
-	ownedBehavior.addAll( a.ownedBehavior.makeBehavior() ) ->
-	this;
-
-/**
- * creates a GeneSEZ state machine
- */
-private create MStateMachine makeBehavior(StateMachine s) :
-	trace( "make [ " + metaType + " ] - " + s ) ->
-	// basic element properties
-	transformBasics(s) ->
-	this;
-
-/**
- * just a marker for error free templates
- * no GeneSEZ behaviour is created, because the GeneSEZ behaviour is an abstract class
- * prints a 'severe' log message to report such an transformation
- * @return	void
- */
-private MBehavior makeBehavior(Behavior b) :
-	fatal("try to construct a MBehavior object from: " + b) ->
-	Void;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	activity behavior
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * creates a GeneSEZ call behaviour action
- */
-private create MAction makeActivityNode(CallBehaviorAction a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
-	taggedValue.addAll( makeTaggedValues(a) ) ->
-	// set the called behavior
-	setBehavior( makeBehavior(a.behavior) ) ->
-	this;
-
-/**
- * creates a GeneSEZ action
- */
-private create MAction makeActivityNode(Action a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
-	taggedValue.addAll( makeTaggedValues(a) ) ->
-	this;
-
-/**
- * creates a GeneSEZ synchronisation fork node
- */
-private create MSynchronisation makeActivityNode(ForkNode a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	this;
-
-/**
- * creates a GeneSEZ synchronisation join node
- */
-private create MSynchronisation makeActivityNode(JoinNode a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	this;
-
-/**
- * creates a GeneSEZ activity node
- */
-private create MNode makeActivityNode(ActivityNode a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	this;
-
-/**
- * creates a GeneSEZ activity edge
- */
-private create MControlFlow makeActivityEdge(ControlFlow c, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + c ) ->
-	// set source and target of the control flow
-	trace( "source is: " + a.node.select(e|e.xmiGuid == xmiId(c.source)).first().name ) -> 
-	a.node.select(e|e.xmiGuid == xmiId(c.source)).first().to.add(this) ->
-	trace( "target is: " + a.node.select(e|e.xmiGuid == xmiId(c.target)).first().name ) -> 
-	a.node.select(e|e.xmiGuid == xmiId(c.target)).first().from.add(this) ->
-	this;
-	
-/**
- * just a marker for error free templates
- * no GeneSEZ control flow is created
- * prints a 'severe' log message to report such an transformation
- * @return	void
- */
-private MControlFlow makeActivityEdge(ActivityEdge e, MActivity a) : 
-	fatal("try to construct a MControlFlow object from: " + e) ->
-	Void;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	state machine behavior
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-// to do
-
-/*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	stereotypes + tagged values
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -782,7 +621,7 @@ private MControlFlow makeActivityEdge(ActivityEdge e, MActivity a) :
  * @param	s	an uml stereotype
  * @return	the GeneSEZ stereotype
  */
-private create MStereotype makeStereotype(Stereotype s) :
+create MStereotype makeStereotype(Stereotype s) :
 	// basic element properties
 	transformBasics(s) ->
 	// container
@@ -790,10 +629,7 @@ private create MStereotype makeStereotype(Stereotype s) :
 	// containments
 	// add tagged values FAIL
 	// owned attributes returns a list of properties, reject the 'base_' property which indicates the base meta type
-//	property.addAll( s.ownedAttribute.typeSelect(Property).makeTag() ) ->
 	property.addAll( s.ownedAttribute.reject( t| t.name.startsWith("base_") ).makeTag() )->
-	// add comment to stereotype
-	//ms.setOwnedComment(s.ownedComment.typeSelect(Comment).processComment().setOwningElement(ms))->
 	this;
 	
 /**
@@ -806,10 +642,7 @@ private create MTag makeTag(Property p) :
 	//setXmiGuid(xmiId(p))->
 	setName(p.name) ->
 	// TODO: is it really need to transform the type of a tag ?
-//	setType(p.type.makeType().name()) ->
 	setType(p.type.name) ->
-	// add comment to taggedvalue
-	//mt.setOwnedComment(p.ownedComment.typeSelect(Comment).processComment().setOwningElement(mt)) ->
 	this;
 	
 /**
@@ -830,7 +663,6 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
 	} ->
 //	setOwningElement(owner)
 	owner.taggedValue.add(this) ->
-//	->info("TaggedValue("+owner.name+") "+t.name+" = >"+val+"<")
 	this;
 	
 /**
@@ -841,7 +673,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @param	e	the uml element
  * @return	a list of GeneSEZ tagged values
  */
-private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
+List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	trace("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
@@ -902,11 +734,6 @@ private create MPrimitiveType makePrimitiveType(PrimitiveType p) :
  * @see		makePrimitiveType(Void v)
  */
 private MPrimitiveType makePrimitiveType(DataType d) :
-	// basic element properties
-//	transformBasics(d) ->
-	// container
-//	transform( getUml2Model() ).primitiveTypes.add( this ) ->
-//	this;
 	// delegate
 	makePrimitiveType(null);
 	
@@ -933,7 +760,7 @@ private create MPrimitiveType makePrimitiveType(Void v) :
  * @param	c	an uml comment
  * @return	the GeneSEZ comment
  */
-private create MComment makeComment(Comment c) :
+create MComment makeComment(Comment c) :
 	// set the unique xmiId and name
 	setXmiGuid(xmiId(c)) ->
 	setAnnotation(c.body) ->
@@ -956,11 +783,7 @@ private MPackage transformPackage(MPackage this, Package p) :
 	// containments
 	// add comment to package
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
-//	nestedPackage.addAll( p.ownedElement.typeSelect(Package).transform() ) ->
-//	transform( p.ownedElement.typeSelect(Package) ) ->
 	p.ownedElement.typeSelect(Package).transform( this ) ->
-//	classifier.addAll( m.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association).transform() ) ->
-//	transform( p.ownedElement.typeSelect(Classifier).reject(e|e.metaType == Association) ) ->
 	p.ownedElement.typeSelect(Classifier).reject(
 		e|{Activity, Actor, Association}.contains(e.metaType) 
 		).transform( this ) ->
@@ -977,16 +800,9 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// associations
 	// set stereotype
 	stereotype.addAll( c.getAppliedStereotypes().makeStereotype() ) ->
-	// add client dependency (<<use>>)
-	// only process types, because we have no opposite to NamedElement... or do we want MElement objects in our model?
-	//supplier.addAll( c.clientDependency.supplier.typeSelect(Type).makeType() ) ->
-	// add superclasses (generalizations and realizations)
+// add superclasses (generalizations and realizations)
 	supertype.addAll( generalization.addAll( c.general.makeType() ) ) ->
 	supertype.addAll( realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ) ->
-	// add superclasses (realizations)
-	//realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
-	// add superclasses (generalizations)
-	//generalization.addAll( c.general.makeType() ) ->
 	// containments
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).makeComment() ) ->
@@ -1009,7 +825,7 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
  * @param	c	an uml named element
  * @return	the GeneSEZ element
  */
-private MElement transformBasics(MElement this, NamedElement n) :
+MElement transformBasics(MElement this, NamedElement n) :
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(n) ) ->
 	setName(n.name) ->
@@ -1106,7 +922,7 @@ private List[String] toList(String s) :
  * the name is derived from special type attributes
  * @return	the name of the GeneSEZ type
  */
-private String name(MType this) :
+String name(MType this) :
 	switch (metaType) {
 		case MGeneric : ((MGeneric)this).specification
 		case MExternal: ((MExternal)this).specification
@@ -1126,7 +942,7 @@ private String name(MType this) :
  * @param	obj	an uml object
  * @return	the unique xmi id
  */
-private String xmiId (Element obj) : 
+String xmiId (Element obj) : 
 	JAVA de.genesez.adapter.uml2.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
 
 /**
