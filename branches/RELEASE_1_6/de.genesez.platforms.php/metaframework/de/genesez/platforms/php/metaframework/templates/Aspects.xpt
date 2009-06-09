@@ -1,6 +1,12 @@
+«REM»
+	Aspect definitions to provide support for the metaframework for standard PHP templates.
+	
+	@author	tobias haubold
+	@date	2009-06-02
+«ENDREM»
+
 «IMPORT gcore»
 
-«EXTENSION de::genesez::platforms::common::AccessHelper»
 «EXTENSION de::genesez::platforms::php::metaframework::scripts::PlugInId»
 
 «REM»
@@ -8,7 +14,7 @@
 «ENDREM»
 «AROUND de::genesez::platforms::php5::templates::Operation::_OwnCodeImpl(String id) FOR MOperation -»
 	«IF isPlugInIdGetter() -»
-		return '«model().name»';
+		«EXPAND PlugIn::PlugInId -»
 	«ELSE -»
 		«targetDef.proceed() -»
 	«ENDIF -»
