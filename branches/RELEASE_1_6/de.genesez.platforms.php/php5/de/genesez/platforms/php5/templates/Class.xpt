@@ -38,44 +38,32 @@
 «DEFINE Root FOR MClass -»
 «EXPAND Comment::Type -»
 «EXPAND _Modifier -»class «asTypeName()» «EXPAND _Generalization -» «EXPAND _Realization -» {
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
-	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
-	// -- generated attribute, constant + association declarations ----------
-	«ENDIF -»
-	«EXPAND Attribute::Declaration»
+	
+	«EXPAND SectionComment::Member -»
+	«EXPAND Attribute::Declaration -»
 	«EXPAND Association::Declaration -»
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
-	«IF generateSectionComments() && ( hasConstructors() || hasDestructors() ) -»
-	// -- constructors + destructors ----------------------------------------
-	«ENDIF -»
-	«EXPAND Operation::Constructor»
-	«EXPAND Operation::Destructor»
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
-	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
-	// -- method declarations -----------------------------------------------
-	«ENDIF -»
-	«EXPAND Operation::Declaration»
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
-	«IF generateSectionComments() && ( hasOperations() ) -»
-	// -- method implementations --------------------------------------------
-	«ENDIF -»
-	«EXPAND Operation::Implementation»
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
-	«IF generateSectionComments() && ( hasDerivedAttributes() ) -»
-	// -- methods for derived attributes ------------------------------------
-	«ENDIF -»
+	
+	«EXPAND SectionComment::Constructor -»
+	«EXPAND Operation::Constructor -»
+	«EXPAND Operation::Destructor -»
+	
+	«EXPAND SectionComment::OperationDeclaration -»
+	«EXPAND Operation::Declaration -»
+	
+	«EXPAND SectionComment::OperationImplementation -»
+	«EXPAND Operation::Implementation -»
+	
+	«EXPAND SectionComment::DerivedAttribute -»
 	«EXPAND Attribute::Derived»
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
-	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
-	// -- association + attribute accessors ---------------------------------
-	«ENDIF -»
+	
+	«EXPAND SectionComment::Accessor -»
 	«EXPAND Association::Accessors -»
-	«EXPAND Attribute::Accessors»
-	«EXPAND MagicMethods::Accessors»
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
+	«EXPAND Attribute::Accessors -»
+	«EXPAND MagicMethods::Accessors -»
+	
 	«EXPAND Association::Initialization -»
-«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»«EXPAND Types::_ -»
-	// -- own code implementation -------------------------------------------
+	
+	«EXPAND SectionComment::OwnCode -»
 	«EXPAND _OwnCodeImpl("php.class.own.code.implementation." + xmiGuid) -»
 }
 «ENDDEFINE»
