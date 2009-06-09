@@ -356,6 +356,12 @@ private create MAttribute makeAttribute(Property p) :
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	// set generics
+	p.ownedTemplateSignature != null
+		? (
+		genericRealization.addAll(p.ownedTemplateSignature.parameter.parameteredElement.makeGeneric()))
+//		info("found template parameters for " +  name + " as " + p.ownedTemplateSignature.parameter.parameteredElement.name))
+		: this  ->
 	this;
 
 /**
@@ -651,6 +657,15 @@ List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
  */
 private create MGeneric makeGeneric(ClassifierTemplateParameter c) :
 	setSpecification( ((Class)c.ownedParameteredElement).name ) ->
+	this;
+	
+/**
+ * creates a GeneSEZ generic from an uml template parameter
+ * @param	p	an uml template parameter on a uml attribute
+ * @return	the GeneSEZ generic
+ */
+private create MGeneric makeGeneric(ParameterableElement p) :
+	setSpecification( p.name ) ->
 	this;
 	
 /**
