@@ -1,0 +1,431 @@
+<?xml version='1.0'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN" "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<section>
+
+  <sectioninfo><date>2009-06-09</date></sectioninfo>
+  <title id="de.genesez.platforms.php.ddm.mdsd">MDSD für das Dynamic 
+  Data Model (DDM)</title>
+
+  <para>Für das dynamische Datenmodell kann mit dem GeneSEZ PHP 
+  Platform Projekt eine PHP Datei mit DDM Definitionen generiert 
+  werden. Die in einem UML Modell enthaltenen Datentypen, Klassen, 
+  Attribute sowie Assoziationen werden auf Basis des DDM 
+  definiert.</para>
+
+  <section>
+
+    <title>Erstellung eines UML Modells</title>
+
+    <para>Für die Modellierung einer Anwendung die auf der Basis des 
+    DDM entwickelt werden soll gibt es ein UML Profil, welches in 
+    Abbildung <xref linkend="de.genesez.platforms.php.ddm.mdsd.umlprofile"/> 
+    dargestellt ist. Alle UML Klassen werden zu DDM Klassen und alle 
+    UML Datentypen werden zu DDM Typen. Attribute und Assoziationen 
+    werden analog abgebildet.</para>
+
+    <figure>
+
+      <title id="de.genesez.platforms.php.ddm.mdsd.umlprofile">UML 
+      Profil für das DDM</title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="images/de.genesez.platforms.php.ddm.mdsd.umlprofile.png"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Das Profil stellt fünf Stereotypen bereit. Die Stereotypen 
+    <computeroutput>type</computeroutput> und <computeroutput>
+    class</computeroutput> sind optional. Zur Definition eines DDM Typs 
+    ist jedoch einer der drei Basistypen erforderlich.</para>
+
+    <para>Dabei ist bewust keine Vererbungsbeziehung zwischen den 
+    Stereotypen <computeroutput>type</computeroutput> sowie den 
+    Stereotypen <computeroutput>boolean</computeroutput>, 
+    <computeroutput>integer</computeroutput> und <computeroutput>
+    string</computeroutput> spezifiziert. Dies hat die folgenden 
+    Konsequenzen:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>soll ein <emphasis>constraint</emphasis> für einen Typ 
+        angegeben werden muss zusätzlich der Stereotyp <computeroutput>
+        type</computeroutput> zugewiesen werden</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>ist kein <emphasis>constraint</emphasis> erforderlich, 
+        kann auf den Stereotyp <computeroutput>type</computeroutput> 
+        verzichtet werden</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>Soll der Name des Datentyps als 
+        <emphasis>constraint</emphasis> verwendet werden, so muss 
+        lediglich der Stereotyp <computeroutput>type</computeroutput> 
+        zugewiesen werden, <emphasis role="bold">ohne</emphasis> einen 
+        Tagged Value für <emphasis>constraint</emphasis> 
+        anzugeben</para>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Mit Vererbungsbeziehung müsste jedes nicht notwendige 
+    <emphasis>constraints</emphasis> explizit als leerer String 
+    modelliert werden.</para>
+
+  </section>
+
+  <section>
+
+    <title>Mapping: UML Datentypen -&gt; DDM Typen</title>
+
+    <para>Der Stereotyp <computeroutput>type</computeroutput> ist bei 
+    der Abbildung von UML Datentypen auf DDM Typen 
+    <emphasis>optional</emphasis>, jedoch muss ein Stereotyp zur Angabe 
+    des Basistyps angegeben werden. Es werden die folgenden 
+    Eigenschaften berücksichtigt:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>das Attribtue <emphasis>name</emphasis> eines DDM Typs 
+        ist durch den Namen des UML Datentyps gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>die <emphasis>description</emphasis> eines DDM Typs ist 
+        durch die Kommentare des UML Datentyps gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>das Attribut <emphasis>editable</emphasis> wird aus dem 
+        negierten Wert der UML Eigenschaft <emphasis>isLeaf</emphasis> 
+        gebildet. Im GeneSEZ Metamodell ist dieser Wert bereits negiert 
+        dem Attribut <emphasis>final</emphasis> zugewiesen</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>der <emphasis>basetype</emphasis> ergibt sich aus dem 
+        Namen des zugewiesenen Stereotypen: boolean, integer oder 
+        string</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>der Wert für <emphasis>constraint</emphasis> ergibt sich 
+        wie folgt:</para>
+
+        <itemizedlist>
+
+          <listitem>
+
+            <para>ist der Stereotyp <computeroutput>
+            type</computeroutput> nicht zugewiesen, ist der Wert ein 
+            leerer String</para>
+
+          </listitem>
+
+          <listitem>
+
+            <para>ist der Stereotyp <computeroutput>
+            type</computeroutput> zugewiesen, aber kein Wert für den 
+            Tagged Value <emphasis>constraint</emphasis> vergeben, so 
+            wird der Name des UML Datentyps als Wert genutzt</para>
+
+          </listitem>
+
+          <listitem>
+
+            <para>ist der Stereotyp <computeroutput>
+            type</computeroutput> zugewiesen sowie ein Tagged Value 
+            <emphasis>constraint</emphasis> vergeben, so wird der Wert 
+            des Tagged Values genutzt</para>
+
+          </listitem>
+
+        </itemizedlist>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Bei der Abbildung werden die auf die Werte von 
+    <emphasis>name</emphasis> und <emphasis>basetype</emphasis> noch 
+    Namenskonventionen angewendet die standardmäßig den Name mit einem 
+    Großbuchstaben beginnen lassen und den basetype komplett in 
+    Großbuchstaben konvertieren.</para>
+
+  </section>
+
+  <section>
+
+    <title>Mapping: UML Klassen -&gt; DDM Klassen</title>
+
+    <para>Der Stereotyp <computeroutput>class</computeroutput> ist bei 
+    der Abbildung von UML Klassen auf DDM Klassen 
+    <emphasis>optional</emphasis>. Die Eigenschafen beider Konstrukte 
+    werden wie folgt aufeinander abgebildet:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>das Attribtue <emphasis>name</emphasis> ist durch den 
+        Namen der UML Klasse gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>die <emphasis>description</emphasis> ist durch die 
+        Kommentare der UML Klasse gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>das Attribut <emphasis>editable</emphasis> wird aus dem 
+        negierten Wert der UML Eigenschaft <emphasis>isLeaf</emphasis> 
+        gebildet. Im GeneSEZ Metamodell ist dieser Wert bereits negiert 
+        dem Attribut <emphasis>final</emphasis> zugewiesen</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>als <emphasis>parent</emphasis> wird die erste 
+        Basisklasse genutzt</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>der Wert für <emphasis>view</emphasis> ergibt sich wie 
+        folgt:</para>
+
+        <itemizedlist>
+
+          <listitem>
+
+            <para>ist der Stereotyp <computeroutput>
+            class</computeroutput> nicht zugewiesen, wird der Name der 
+            UML Klasse genutzt</para>
+
+          </listitem>
+
+          <listitem>
+
+            <para>ist der Stereotyp <computeroutput>
+            class</computeroutput> zugewiesen, aber kein Wert für den 
+            Tagged Value <emphasis>view</emphasis> vergeben, so wird 
+            der Name der UML Klasse genutzt</para>
+
+          </listitem>
+
+          <listitem>
+
+            <para>ist der Stereotyp <computeroutput>
+            class</computeroutput> zugewiesen sowie ein Tagged Value 
+            <emphasis>view</emphasis> vergeben, so wird der Wert des 
+            Tagged Values genutzt</para>
+
+          </listitem>
+
+        </itemizedlist>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Bei der Abbildung werden auf die Werte von 
+    <emphasis>name</emphasis> und <emphasis>view</emphasis> noch 
+    Namenskonventionen angewandt die standardmäßig beide Werte mit 
+    einem Großbuchstaben beginnen lassen.</para>
+
+  </section>
+
+  <section>
+
+    <title>Mapping: UML Attribute -&gt; DDM Attribute</title>
+
+    <para>Die Abbildung von UML Attributen auf DDM Attribute ist ohne 
+    zusätzliche Informationen möglich. Dabei werden die Informationen 
+    aus dem UML Modell wie folgt genutzt:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>das Attribtue <emphasis>name</emphasis> ist durch den 
+        Namen des UML Attributes gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>die <emphasis>description</emphasis> ist durch die 
+        Kommentare des UML Attributes gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>das Attribut <emphasis>column</emphasis> ergibt sich wie 
+        folgt:</para>
+
+        <itemizedlist>
+
+          <listitem>
+
+            <para>ist kein Standardwert des UML Attributes angegeben 
+            oder ist ein leerer String als Standardwert angegeben, so 
+            wird der Name des UML Attributes genutzt</para>
+
+          </listitem>
+
+          <listitem>
+
+            <para>ist ein Standardwert des UML Attributes angegeben der 
+            kein leerer String ist, wird dieser genutzt</para>
+
+          </listitem>
+
+        </itemizedlist>
+
+      </listitem>
+
+      <listitem>
+
+        <para>als <emphasis>type</emphasis> wird der modellierte UML 
+        Datentyp genutzt</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>als <emphasis>class</emphasis> wird die modellierte UML 
+        Klasse genutzt</para>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Bei der Abbildung werden auf die Werte 
+    <emphasis>name</emphasis> und <emphasis>view</emphasis> noch 
+    Namenskonventionen angewandt die standardmäßig beide Werte mit 
+    einem Großbuchstaben beginnen lassen.</para>
+
+  </section>
+
+  <section>
+
+    <title>Mapping: UML Assoziationen -&gt; DDM Assoziationen</title>
+
+    <para>Die Abbildung von UML Assoziationen auf DDM Assoziationen ist 
+    ebenfalls ohne zusätzliche Informationen möglich. Dabei werden die 
+    Informationen des UML Modells wie folgt genutzt:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>der <emphasis>name</emphasis> ist durch den Namen der UML 
+        Assoziation gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>die <emphasis>description</emphasis> ist durch die 
+        Kommentare der UML Assoziation gegeben</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>das erste von beiden Assoziationsenden wird die 
+        <emphasis>from</emphasis> Seite</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>die <emphasis>to</emphasis> Seite ist durch die UML 
+        Klasse gegeben welche als Typ des ersten Assoziationsendes 
+        gesetzt ist</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>die <emphasis>to cardinality</emphasis> wird aus der 
+        <emphasis>multiplicity</emphasis> des ersten Assoziationsendes 
+        gesetzt</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>die <emphasis>from cardinality</emphasis> wird aus der 
+        multiplicity der Gegenseite gesetzt, welche im GeneSEZ 
+        Metamodell als <emphasis>oppositeMultiplicity</emphasis> des 
+        ersten Assoziationsendes zugänglich ist</para>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Auf den Wert von <emphasis>name</emphasis> wird noch eine 
+    Namenskonvention angewandt die den Wert mit einem Großbuchstaben 
+    beginnen lässt.</para>
+
+  </section>
+
+  <section>
+
+    <title>Workflow Definition</title>
+
+    <para>Bei der Uml2GeneSEZ Transformation sollte das 
+    <emphasis>GeneSEZ DDM UML Profil</emphasis> als Metamodell mit 
+    angegeben werden:</para>
+
+    <programlisting>&lt;component id=&quot;uml2genesez&quot; class=&quot;de.genesez.platforms.common.workflow.Uml2GeneSEZ&quot;&gt; 
+    &lt;model value=&quot;&lt;model name&gt;&quot; /&gt;
+    &lt;profile value=&quot;model/genesez.php.ddm.profile.uml&quot; /&gt;
+&lt;/component&gt;</programlisting>
+    <para>Zur Model-zu-Text Transformation kann ein PHP Generator 
+    genutzt werden, der das Template <computeroutput>
+    de::genesez::platforms::php::ddm::templates::Definition::Root</computeroutput> 
+    ausführt:</para>
+
+    <programlisting>&lt;component id=&quot;model2php&quot; class=&quot;de.genesez.platforms.php.workflow.PhpGenerator&quot;&gt; 
+    &lt;outputDir value=&quot;src-gen&quot; /&gt; 
+    &lt;template value=&quot;de::genesez::platforms::php::ddm::templates::Definition::Root&quot; /&gt; 
+&lt;/component&gt;</programlisting>
+    <para>Danach wird im angegebenen Verzeichnis eine PHP Datei mit den 
+    DDM Definitionen erstellt. Standardmäßig ist diese <filename>
+    ddm.definitions.php</filename> genannt.</para>
+
+    <para>Die Datei enthält am Anfang eine <emphasis>Protected 
+    Region</emphasis> um die Datenbankverbindung sowie Doctrine 
+    initialisieren zu können bevor mit der Erstellung des DDM Modells 
+    begonnen wird.</para>
+
+  </section>
+
+</section>
+
