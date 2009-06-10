@@ -1,0 +1,237 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter
+	PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"	"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+	[
+		<!ENTITY % isolat1 SYSTEM "http://www.w3.org/2003/entities/iso8879/isolat1.ent">
+		%isolat1;
+	]
+>
+<chapter>
+
+  <title>metaframework</title>
+
+  <section>
+
+    <title>Yet Another PHP Framework?</title>
+
+    <para>Die Idee basiert auf der Beschreibung fundamentaler Aspekte 
+    einer Webanwendung. Dabei werden zur Beschreibung Schnittstellen 
+    eingesetzt wobei jede Schnittstelle eine bestimmte Aufgabe 
+    repr&auml;sentiert. Diese Aufgaben sind notwendig oder sinnvoll 
+    innerhalb eines Request-Response Zykluses einer Webanwendung.</para>
+
+    <para>Zu den Schnittstellen gibt es auch 
+    Standard-Implementierungen. Diese k&ouml;nnen bereits vorhandene und 
+    weit verbreitete Frameworks und Bibliotheken nutzen. Das 
+    <emphasis>metaframework</emphasis> selbst hat allerdings keine 
+    Abh&auml;ngigkeiten zu anderen Frameworks und Bibliotheken - it&apos;s 
+    just that good.</para>
+
+    <para>Bisherige Frameworks basieren meist auf dem 
+    Model-View-Controller- (MVC) Pattern wodurch ein gro&szlig;teil der 
+    Architektur einer Webanwenung vordefiniert ist. Eine Klasse (Model) 
+    beschreibt Daten, die in einer Datenbanktabelle gespeichert werden. 
+    Ein Controller bietet mit Methoden (Actions) Zugriff auf die 
+    Objekte dieser Klasse. Views stellen die Objekte der Klassen dar. 
+    Dabei wird meist eine fixe URL Struktur nach dem Muster 
+    <computeroutput>/controller/action</computeroutput> festgelegt. 
+    Durch diese Art der Beschreibung entstehen 
+    Technologieabh&auml;ngigkeiten: Die Notwendigkeit der Betrachtung des 
+    objektrelationalen Mappings bzw. des Datenbankzugriffs oder die Art 
+    der View Technologie. Einige Frameworks verfolgen Plug-In Ans&auml;tze 
+    zur Austauschbarkeit der Technologien, jedoch sind solche Plug-In 
+    Schnittstellen auf relativ tiefer technischer Ebene nicht einfach 
+    zu beschreiben.</para>
+
+    <para>Das <emphasis>metaframework</emphasis> nutzt im Gegensatz zur 
+    Beschreibung einer Webanwendung keine technologischen Konzepte - 
+    man k&ouml;nnte die Konzepte mit einer h&ouml;heren Abstraktionsebene 
+    vergleichen. Dadurch werden konkrete Realisierungspattern wie das 
+    MVC ausgeklammert. Jedoch k&ouml;nnen solche MVC Architekturen mit dem 
+    Framework nachgebildet werden - sie sind aber kein muss. Es geht 
+    auch flexibler.</para>
+
+  </section>
+
+  <section>
+
+    <title>Anwendungsarchitektur</title>
+
+    <para>Das <emphasis>metaframework</emphasis> selbst besteht aus 
+    Schnittstellen und Klassen die Standardimplementierungen liefern. 
+    Durch die Verwendung von Schnittstellen k&ouml;nnen die 
+    Standardimplementierungen einfach an die eigenen Bed&uuml;rfnisse 
+    angepasst werden oder andere Frameworks und Schnittstellen 
+    nutzen.</para>
+
+    <para>Weiterhin basiert das Framework auf einem Plug-In Konzept. 
+    Dies erlaubt eine modulare Anwendungsentwicklung wie in Abbildung 
+    <xref linkend="de.genesez.php.metaframework.apparchitecture"/>
+     zu sehen ist. Das Framework selbst nutzt ebenfalls das Plug-In 
+    Konzept. Notwendig um das Framework einzusetzen ist ein 
+    <emphasis>Core Plug-In</emphasis> welches die Implementierungen der 
+    Schnittstellen bereitstellt und die Objekte entsprechend 
+    verkn&uuml;pft.</para>
+
+    <figure id="de.genesez.php.metaframework.apparchitecture">
+
+      <title>Architektur einer Anwendung basierend auf dem 
+      metaframework</title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.apparchitecture.png"/></imageobject><textobject><para>Das 
+      metaframework besteht aus Schnittstellen. Ein Core Plug-In stellt 
+      die Implementierungen f&uuml;r die Schnittstellen basierend auf 
+      vorhandenen Frameworks und Bibliotheken bereit. Die 
+      Anwendungsentwicklung erfolgt modular durch Plug-Ins die 
+      zus&auml;tzliche Schnittstellen definieren k&ouml;nnen sowie zus&auml;tzliche 
+      Implementierungen basierend auf weiteren Frameworks oder 
+      Bibliotheken bereitstellen 
+      k&ouml;nnen.</para></textobject></mediaobject>
+    </figure>
+
+    <para>Die Anwendung basiert dabei auf vorhandenen Frameworks und 
+    Bibliotheken. Das Core Plug-In sowie andere technische Plug-Ins 
+    stellen mit Adaptern die Implementierung der Schnittstellen des 
+    metaframeworks sicher. Die Frameworks und Bibliotheken die als 
+    Basis der Anwendung dienen k&ouml;nnen somit frei gew&auml;hlt werden und 
+    bleiben austauschbar. Die Anwendung besteht aus Plug-Ins die 
+    gegenseitig Abh&auml;ngigkeiten definierten k&ouml;nnen. Das metaframework 
+    stellt eine Art Laufzeitumgebung f&uuml;r die Plug-Ins bereit.</para>
+
+  </section>
+
+  <section>
+
+    <title>Gliederung einer Anwendung</title>
+
+    <para>Webanwendungen nutzen URLs um ihre Funktionalit&auml;t zur 
+    Verf&uuml;gung zu stellen. Der Zugriff auf eine bestimmte URL mit 
+    eventuell optionalen Parametern (Request) hat eine bestimmte Anwort 
+    (Response) zur Folge. Die Antwort k&ouml;nnte eine HTML Webseite sein 
+    oder aber auch JSON oder XML (wie bei AJAX oder SOAP). Die URLs 
+    stellen somit die Eingabedaten dar die mit der Funktionalit&auml;t auf 
+    Ausgabedaten abgebildet werden.</para>
+
+    <para>Sinnvollerweise werden URLs in aussagekr&auml;ftiger Weise 
+    strukturiert und aufgebaut werden. Viele MVC-Frameworks nutzen die 
+    <computeroutput>/controller/action</computeroutput> Struktur. 
+    Einige bieten f&uuml;r gr&ouml;&szlig;ere Webanwendungen noch einen optionalen 
+    Moduleintrag an: 
+    <computeroutput>/module/controller/action</computeroutput>. Dabei 
+    impliziert der <computeroutput>controller</computeroutput> h&auml;ufig 
+    eine Klasse und die <computeroutput>action</computeroutput> eine 
+    Methode.</para>
+
+    <para>Das metaframework stellt zur Strukturierung der Webanwendung 
+    die Klasse <emphasis>Context</emphasis> bereit. Mit den Objekten 
+    dieser Klasse kann mit der Assoziation 
+    <computeroutput>nestedContext</computeroutput> eine Baumstruktur 
+    nach dem Pattern in Abbildung 
+    <xref linkend="de.genesez.php.metaframework.urlpattern"/> 
+    aufgebaut werden.</para>
+
+    <figure id="de.genesez.php.metaframework.urlpattern">
+
+      <title>URL-Pattern zur Gliederung einer Anwendung</title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.urlpattern.png"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Die Klasse <computeroutput>Context</computeroutput> ist in 
+    Abbildung 
+    <xref linkend="de.genesez.php.metaframework.context"/> als 
+    UML Modell dargestellt. Sie definiert ein Attribut 
+    <computeroutput>name</computeroutput> welches in der URL 
+    dargestellt wird. Das Attribut 
+    <computeroutput>handler</computeroutput> ist ein Identifikator f&uuml;r 
+    die Funktionalit&auml;t die ausgef&uuml;hrt werden soll.</para>
+
+    <figure id="de.genesez.php.metaframework.context">
+
+      <title>UML Modell der Klasse <emphasis>Context</emphasis></title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="de.genesez.php.metaframework.context.png"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Definiert ein Kontext keinen handler so tritt ein Fallback 
+    Mechanismus ein und der handler eines <emphasis>parent</emphasis> 
+    Kontextes wird genutzt. Ein Handler kann auf den URL-Teil der 
+    zus&auml;tzlich zu seinem Kontext angegeben wurde zugreifen und diesen 
+    auswerten. Da Kontext Definitionen ohne handler wenig Sinn ergeben 
+    ist die Kontext-Struktur in der zugreifbaren URL-Struktur 
+    enthalten, beide sind aber nicht gleich. Somit sind an das 
+    REST-Pattern angelehnte URL-Strukturen m&ouml;glich.</para>
+
+  </section>
+
+  <section>
+
+    <title>Konzepte</title>
+
+    <section>
+
+      <title>Plug-Ins</title>
+
+    </section>
+
+    <section>
+
+      <title>Service Registry</title>
+
+    </section>
+
+    <section>
+
+      <title>Request Handler</title>
+
+    </section>
+
+    <section>
+
+      <title>Datentransferobjekte</title>
+
+    </section>
+
+    <section>
+
+      <title>Renderer</title>
+
+    </section>
+
+    <section>
+
+      <title>Interceptors</title>
+
+    </section>
+
+    <section>
+
+      <title>Extensions</title>
+
+    </section>
+
+    <section>
+
+      <title>Resolver</title>
+
+    </section>
+
+    <section>
+
+      <title>Dispatcher</title>
+
+    </section>
+
+    <section>
+
+      <title>Extension Registry</title>
+
+    </section>
+
+  </section>
+
+</chapter>
+
