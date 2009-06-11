@@ -13,12 +13,21 @@ require_once 'Mfw/PlugIn.php';
  */
 interface Mfw_CorePlugIn extends Mfw_PlugIn {
 	
+	
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @return	Mfw_ServiceRegistry
 	 */
 	public function getServiceRegistry();
 
+	/**
+	 * @generated	method stub for implementation
+	 */
+	public function finishInitialization();
+
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1243439308984_194621_1131) ENABLED START */
 	// TODO: put your further code declarations for interface 'Mfw_CorePlugInLoader' here

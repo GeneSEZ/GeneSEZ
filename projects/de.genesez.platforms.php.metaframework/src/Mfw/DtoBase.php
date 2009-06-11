@@ -12,13 +12,14 @@ require_once 'Mfw/Dto.php';
  * @package	Metaframework
  */
 class Mfw_DtoBase extends ArrayObject implements Mfw_Dto {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$_view
 	 */
 	private $_view;
-
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -33,9 +34,8 @@ class Mfw_DtoBase extends ArrayObject implements Mfw_Dto {
 		$this->_view = $view;
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -47,11 +47,12 @@ class Mfw_DtoBase extends ArrayObject implements Mfw_Dto {
 		return $this->_view;
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239096659828_207401_865) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_DtoBase' here

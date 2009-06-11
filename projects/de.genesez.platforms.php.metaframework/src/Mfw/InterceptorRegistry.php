@@ -12,6 +12,8 @@ require_once 'Mfw/Interceptor.php';
  */
 interface Mfw_InterceptorRegistry extends IteratorAggregate {
 	
+	
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$pattern	
@@ -19,6 +21,8 @@ interface Mfw_InterceptorRegistry extends IteratorAggregate {
 	 */
 	public function register($pattern, $interceptor);
 
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1243329496625_610259_886) ENABLED START */
 	// TODO: put your further code declarations for interface 'Mfw_InterceptorRegistry' here

@@ -13,7 +13,8 @@ require_once 'Mfw/RequestHandler.php';
  * @package	Metaframework
  */
 abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$view
@@ -24,10 +25,9 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	 * @var		Mfw_ServiceRegistry	$serviceRegistry
 	 */
 	protected $serviceRegistry;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -74,8 +74,9 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 		return $view;
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Mfw_RequestHandlerBase::getView() $view}
@@ -92,7 +93,6 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	public 	 function setServiceRegistry(Mfw_ServiceRegistry $serviceRegistry) {
 		$this->serviceRegistry = $serviceRegistry;
 	}
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -108,7 +108,8 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239125989500_25423_1168) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_BaseRequestHandler' here

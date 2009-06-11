@@ -9,7 +9,8 @@
  * @package	Metaframework
  */
 class Mfw_Action   {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$_name
@@ -25,7 +26,7 @@ class Mfw_Action   {
 	 * @var		boolean	$_withId
 	 */
 	private $_withId;
-
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -46,14 +47,13 @@ class Mfw_Action   {
 		$this->_withId = $withId;
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -73,7 +73,8 @@ class Mfw_Action   {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240242598453_62053_985) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_Action' here

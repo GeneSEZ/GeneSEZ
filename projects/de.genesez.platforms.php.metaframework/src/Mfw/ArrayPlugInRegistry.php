@@ -12,7 +12,8 @@ require_once 'Mfw/PlugInRegistry.php';
  * @package	Metaframework
  */
 class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		array	$registry
@@ -28,10 +29,9 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 	 * @var		array	$missing
 	 */
 	protected $missing = array();
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -83,13 +83,11 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 		// just a simple implementation, not one with a high performance
 		$dependencies = array();
 		foreach ($this->registry as $name => $plugin) {
-			if ($plugin->hasDependencies()) {
-				foreach ($plugin->getDependencies() as $required) {
-					if (array_key_exists($required, $dependencies)) {
-						$dependencies[$required][] = $name;
-					} else {
-						$dependencies[$required] = array($name);
-					}
+			foreach ($plugin->getDependencies() as $required) {
+				if (array_key_exists($required, $dependencies)) {
+					$dependencies[$required][] = $name;
+				} else {
+					$dependencies[$required] = array($name);
 				}
 			}
 		}
@@ -103,11 +101,12 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 		$this->checked = true;
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243436601140_962276_1091) ENABLED START */
 	// TODO: put your further code implementations for class 'ArrayPlugInRegistry' here

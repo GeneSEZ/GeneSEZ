@@ -7,57 +7,79 @@ require_once 'Mfw/Url.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides information about the request handler to call and useful urls for 
+ * request handlers.
  * @see		ArrayAccess
  * @author	dreamer
  * @package	Metaframework
  */
 class Mfw_HandlerInfo  implements ArrayAccess {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_HandlerInfo::getHandler()}
 	 * @generated	attribute definition
 	 * @var		string	$_handler
 	 */
 	private $_handler;
 	/**
+	 * documented here {@link Mfw_HandlerInfo::getContext()}
 	 * @generated	attribute definition
 	 * @var		Mfw_Context	$_context
 	 */
 	private $_context;
 	/**
+	 * documented here {@link Mfw_HandlerInfo::getPathInfo()}
 	 * @generated	attribute definition
 	 * @var		string	$_pathInfo
 	 */
 	private $_pathInfo = array();
-
+	/**
+	 * documented here {@link Mfw_HandlerInfo::getRequestedPath()}
+	 * @generated	attribute definition
+	 * @var		string	$_requestedPath
+	 */
+	private $_requestedPath;
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Mfw_HandlerInfo}
+	 * Creates a new handler info object.
 	 * @generated	constructor stub for implementation
-	 * @param	Mfw_Context	$context	
-	 * @param	string	$pathInfo	
+	 * @param	Mfw_Context	$context	the context of the request handler
+	 * @param	string	$pathInfo	the additional url part relative to the request handler
+	 * @param	string	$requestedPath	the path info of the currently executing script
 	 */
-	public function __construct($context, $pathInfo) {
+	public function __construct($context, $pathInfo, $requestedPath) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338137828_752628_437) ENABLED START */
 		$this->_context = $context;
 		$this->_handler = $context->handler;
 		$this->_pathInfo = Mfw_Url::requestInfo($pathInfo);
+		$this->_requestedPath = $requestedPath;
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>handler</var>: </li>
-	 *   <li><var>context</var>: </li>
-	 *   <li><var>pathInfo</var>: </li>
+	 *   <li><var>handler</var>: the request handler to call
+</li>
+	 *   <li><var>context</var>: the context on which the request handler operates (and therefore the 
+context defining the request handler)
+</li>
+	 *   <li><var>pathInfo</var>: The url part which is specified in addition to the url part on which the 
+request handler operates.
+</li>
+	 *   <li><var>requestedPath</var>: The complete path which was requested, i.e. the concatenated value of 
+context and path info. In other words the path info of the requested php 
+script (index.php).
+</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available
@@ -68,10 +90,12 @@ class Mfw_HandlerInfo  implements ArrayAccess {
 			case 'handler': return $this->_handler;
 			case 'context': return $this->_context;
 			case 'pathInfo': return $this->_pathInfo;
+			case 'requestedPath': return $this->_requestedPath;
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1236337727984_243900_412) ENABLED START */
 	// TODO: put your further code implementations for class 'HandlerInfo' here

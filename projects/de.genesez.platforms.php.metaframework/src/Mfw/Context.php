@@ -22,7 +22,8 @@ require_once 'UML/OneAssociation.php';
  * @package	Metaframework
  */
 class Mfw_Context   {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$_name
@@ -33,7 +34,6 @@ class Mfw_Context   {
 	 * @var		string	$_handler
 	 */
 	private $_handler;
-
 	/**
 	 * @var	array of Mfw_Context	stores the linked objects of the  bidirectional one to many association to {@link Mfw_Context} (symmetry ensured) 
 	 */
@@ -51,6 +51,7 @@ class Mfw_Context   {
 	 * @var array of Association and/or QualifiedAssociation
 	 */
 	private $associations = array();
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -69,9 +70,8 @@ class Mfw_Context   {
 		}
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -134,10 +134,10 @@ class Mfw_Context   {
 		return $parent . '/' . $this->_name;
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -204,7 +204,7 @@ class Mfw_Context   {
 			default: throw new Exception('cannot unset the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
 	/**
 	 * lazily initializes the requested association management objects
 	 * @param	string	&$name	the name of the association role
@@ -220,6 +220,7 @@ class Mfw_Context   {
 		}
 		return $this->associations[$name];
 	}
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1236334265906_925929_844) ENABLED START */
 	// TODO: put your further code implementations for class 'Context' here

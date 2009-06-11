@@ -12,16 +12,16 @@ require_once 'Mfw/InterceptorRegistry.php';
  * @package	Metaframework
  */
 class Mfw_ArrayInterceptorRegistry  implements Mfw_InterceptorRegistry {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		array	$registry
 	 */
 	protected $registry = array();
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -34,11 +34,12 @@ class Mfw_ArrayInterceptorRegistry  implements Mfw_InterceptorRegistry {
 		$this->registry[] = array($pattern => $interceptor);
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243329579703_739060_909) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_ArrayInterceptorRegistry' here

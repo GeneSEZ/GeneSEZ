@@ -11,6 +11,8 @@ require_once 'Mfw/PlugIn.php';
  */
 interface Mfw_PlugInRegistry  {
 	
+	
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	Mfw_PlugIn	$plugin	
@@ -29,6 +31,8 @@ interface Mfw_PlugInRegistry  {
 	 */
 	public function getMissingDependencies();
 
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1243329329406_140543_862) ENABLED START */
 	// TODO: put your further code declarations for interface 'Mfw_PlugInRegistry' here

@@ -12,6 +12,8 @@ require_once 'Mfw/HandlerInfo.php';
  */
 interface Mfw_RequestHandler  {
 	
+	
+	
 	/**
 	 * Processes the current request. It returns either a <b>DTO</b> which 
 	 * contains all data to be rendered or it returns <b>true</b> to indicate 
@@ -27,6 +29,8 @@ interface Mfw_RequestHandler  {
 	 */
 	public function setView($view);
 
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1239095178265_502885_711) ENABLED START */
 	// TODO: put your further code declarations for interface 'Mfw_RequestHandler' here

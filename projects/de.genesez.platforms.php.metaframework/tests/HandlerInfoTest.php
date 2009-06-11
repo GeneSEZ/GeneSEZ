@@ -15,7 +15,7 @@ class HandlerInfoTest extends PHPUnit_Framework_TestCase {
 			new Mfw_Context('s2', 's2h')
 		));
 		
-		$this->handlerinfo = new Mfw_HandlerInfo($this->context, '/path/info');
+		$this->handlerinfo = new Mfw_HandlerInfo($this->context, '/path/info', '');
 	}
 	
 	public function testContext() {

@@ -11,16 +11,16 @@ require_once 'Mfw/ExtensionRegistry.php';
  * @package	Metaframework
  */
 class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		array	$registry
 	 */
 	protected $registry = array();
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -59,11 +59,12 @@ class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 		return $this->registry[$extension];
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243325164078_119756_635) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_ArrayExtensionRegistry' here

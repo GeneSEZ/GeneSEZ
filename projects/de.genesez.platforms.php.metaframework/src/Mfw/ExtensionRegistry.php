@@ -10,6 +10,8 @@
  */
 interface Mfw_ExtensionRegistry  {
 	
+	
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$extension	
@@ -31,6 +33,8 @@ interface Mfw_ExtensionRegistry  {
 	 */
 	public function getContributions($extension);
 
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1243324717437_372929_361) ENABLED START */
 	// TODO: put your further code declarations for interface 'Mfw_ExtensionRegistry' here

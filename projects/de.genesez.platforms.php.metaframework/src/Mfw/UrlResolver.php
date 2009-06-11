@@ -1,5 +1,4 @@
 <?php
-require_once 'Mfw/Dispatcher.php';
 require_once 'Mfw/HandlerInfo.php';
 require_once 'Mfw/Context.php';
 require_once 'Mfw/Resolver.php';
@@ -14,16 +13,10 @@ require_once 'Mfw/Resolver.php';
  * @package	Metaframework
  */
 class Mfw_UrlResolver  implements Mfw_Resolver {
-	// -- generated attribute, constant + association declarations ----------
-	/**
-	 * @generated	attribute definition
-	 * @var		Mfw_Dispatcher	$_dispatcher
-	 */
-	private $_dispatcher;
-
-
-
-
+	
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -31,7 +24,7 @@ class Mfw_UrlResolver  implements Mfw_Resolver {
 	 * @param	Mfw_Context	$context	
 	 * @return	Mfw_HandlerInfo
 	 */
-	public function resolveHandler($context) {
+	public function resolve($context) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237827425625_150554_301) ENABLED START */
 		$pathinfo = $this->pathInfo();
 		$pathparts = $this->checkPath($pathinfo);
@@ -40,8 +33,7 @@ class Mfw_UrlResolver  implements Mfw_Resolver {
 		if ($path === false) {
 			$path = '/';
 		}
-		$handlerinfo = new Mfw_HandlerInfo($handleableContext, $path);
-		$this->_dispatcher->dispatch($handlerinfo);
+		$handlerinfo = new Mfw_HandlerInfo($handleableContext, $path, $pathinfo);
 		return $handlerinfo;
 		/* PROTECTED REGION END */
 	}
@@ -100,18 +92,11 @@ class Mfw_UrlResolver  implements Mfw_Resolver {
 		throw new Exception('The implementation of the method Mfw_ContextResolver::pathInvalid is missing !');
 		/* PROTECTED REGION END */
 	}
+	
 
-
-	// -- association + attribute accessors ---------------------------------
-	/**
-	 * @generated	setter method for the attribute {@link Mfw_UrlResolver::getDispatcher() $_dispatcher}
-	 * @param	Mfw_Dispatcher	$dispatcher	the value to set
-	 */
-	public 	 function setDispatcher(Mfw_Dispatcher $dispatcher) {
-		$this->_dispatcher = $dispatcher;
-	}
-
-
+	
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240215363281_620116_738) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_ContextResolver' here

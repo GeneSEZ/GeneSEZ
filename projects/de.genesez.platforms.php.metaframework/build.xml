@@ -19,6 +19,20 @@
 		<include name="**/*.php" />
 	</fileset>
 	
+	<fileset id="test.files" dir="tests">
+		<include name="**/*Test.php"/>
+		<!-- include name="ArrayExtensionRegistryTest.php" />
+		<include name="ArrayInterceptorRegistryTest.php" />
+		<include name="ArrayPlugInRegistryTest.php" />
+		<include name="CompositeRequestHandlerBaseTest.php" />
+		<include name="ContextTest.php" />
+		<include name="DecorateRequestHandlerTest.php" />
+		<include name="DtoBaseTest.php" />
+		<include name="HandlerInfoTest.php" />
+		<include name="PlugInBaseTest.php" />
+		<include name="UrlResolverTest.php" / -->
+	</fileset>
+	
 	
 	<target name="coverage" depends="coverage.report" />
 	<target name="all" depends="check, coverage.report, doc, dist" />
@@ -39,9 +53,7 @@
 	<target name="test" depends="prepare" description="execute php unit tests">
 		<phpunit2 codecoverage="false" haltonfailure="true" haltonerror="true" printsummary="true">
 			<batchtest>
-				<fileset dir="tests">
-					<include name="**/*Test.php"/>
-				</fileset>
+				<fileset refid="test.files" />
 			</batchtest>
 			<formatter type="xml" todir="${report.dir}" outfile="phpunit.logfile.xml"/>
 		</phpunit2>
@@ -64,9 +76,7 @@
 	<target name="coverage.test" depends="coverage.prepare" description="execute php unit tests">
 		<phpunit2 codecoverage="true" haltonfailure="true" haltonerror="true" printsummary="true">
 			<batchtest>
-				<fileset dir="tests">
-					<include name="**/*Test.php"/>
-				</fileset>
+				<fileset refid="test.files" />
 			</batchtest>
 			<formatter type="xml" todir="${report.dir}" outfile="phpunit.logfile.xml"/>
 		</phpunit2>
@@ -77,6 +87,17 @@
 		<coverage-report outfile="${report.dir}/coverage.xml">
 			<report styledir="resources" todir="${coverage.report.dir}" />
 		</coverage-report>
+	</target>
+	
+	<target name="clean" description="cleaning lady :-)">
+		<delete>
+			<fileset dir="${report.dir}">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="typemapping">
+				<include name="**/*" />
+			</fileset>
+		</delete>
 	</target>
 	
 	<target name="doc" description="generate the API documentation">

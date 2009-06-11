@@ -10,10 +10,10 @@
  * @package	Metaframework
  */
 class Mfw_Url   {
-
-
-
-
+	
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -76,10 +76,11 @@ class Mfw_Url   {
 		return $_SERVER['SCRIPT_NAME'];
 		/* PROTECTED REGION END */
 	}
+	
 
-
-
-
+	
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241445333663_239738_361) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_Url' here

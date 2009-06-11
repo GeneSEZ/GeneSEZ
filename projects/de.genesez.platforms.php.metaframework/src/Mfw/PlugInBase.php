@@ -12,22 +12,12 @@ require_once 'Mfw/PlugIn.php';
  * @package	Metaframework
  */
 abstract class Mfw_PlugInBase  implements Mfw_PlugIn {
-
-
-
-
+	
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
-	/**
-	 * @generated	method stub for implementation
-	 * @return	boolean
-	 */
-	public function hasDependencies() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243425055984_580928_997) ENABLED START */
-		return false;
-		/* PROTECTED REGION END */
-	}
-
 	/**
 	 * @generated	method stub for implementation
 	 * @return	array of string
@@ -50,31 +40,11 @@ abstract class Mfw_PlugInBase  implements Mfw_PlugIn {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	boolean
-	 */
-	public function hasContext() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243425055984_740253_1000) ENABLED START */
-		return false;
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
 	 * @return	Mfw_Context
 	 */
 	public function getContext() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243425055984_110478_1001) ENABLED START */
 		return null;
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @return	boolean
-	 */
-	public function hasExtensions() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243425055984_527756_1002) ENABLED START */
-		return false;
 		/* PROTECTED REGION END */
 	}
 
@@ -90,16 +60,6 @@ abstract class Mfw_PlugInBase  implements Mfw_PlugIn {
 
 	/**
 	 * @generated	method stub for implementation
-	 * @return	boolean
-	 */
-	public function hasInterceptors() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243425056000_180337_1004) ENABLED START */
-		return false;
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
 	 * @return	array of mixed
 	 */
 	public function getInterceptors() {
@@ -107,10 +67,11 @@ abstract class Mfw_PlugInBase  implements Mfw_PlugIn {
 		return array();
 		/* PROTECTED REGION END */
 	}
+	
 
-
-
-
+	
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1237982393703_618181_979) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_InvisibleModuleLoader' here

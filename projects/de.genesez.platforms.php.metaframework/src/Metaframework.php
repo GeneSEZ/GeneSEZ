@@ -16,7 +16,8 @@ spl_autoload_register(array('Metaframework', 'autoload'));
  * @package	Metaframework
  */
 class Metaframework   {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * documented here {@link Metaframework::getAutoloadDirs()}
 	 * @generated	attribute definition
@@ -53,7 +54,7 @@ class Metaframework   {
 	 * @var		Mfw_InterceptorRegistry	$interceptorRegistry
 	 */
 	protected $interceptorRegistry;
-
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -82,9 +83,8 @@ class Metaframework   {
 		self::$autoloadDirs = array_merge(array(self::baseDir()), $sourceDirs);
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -111,12 +111,13 @@ class Metaframework   {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332689875_601091_430) ENABLED START */
 		$this->registerPlugInInRegistries($plugin);
 		// add context structure
-		if ($plugin->hasContext()) {
-			$this->rootContext->nestedContext->insert($plugin->getContext());
+		$context = $plugin->getContext();
+		if ($context !== null) {
+			$this->rootContext->nestedContext->insert($context);
 		}
 		// register plugin components
-		foreach ($plugin->getComponents() as $component) {
-			$this->serviceRegistry->register($component);
+		foreach ($plugin->getComponents() as $name => $component) {
+			$this->serviceRegistry->register($name, $component);
 		}
 		/* PROTECTED REGION END */
 	}
@@ -141,13 +142,35 @@ class Metaframework   {
 		if ($this->plugInRegistry->hasMissingDependencies() === true) {
 			echo 'there are missing plug-ins:' . '<br />';
 			print_r($this->plugInRegistry->getMissingDependencies());
-			exit;
+			return;
 		}
 		// config frameworks
-		$this->corePlugIn->finalize();
+		$this->corePlugIn->finishInitialization();
 		// process request
 		$resolver = $this->serviceRegistry->getComponent('resolver');
-		$resolver->resolveHandler($this->corePlugIn->getContext());
+		$handlerInfo = $resolver->resolve($this->rootContext);
+		// check for interceptors
+		$url = $handlerInfo->requestedPath;
+		foreach ($this->interceptorRegistry->getIterator() as $value) {
+			$pattern = key($value);
+			$interceptor = current($value);
+			if (preg_match($pattern, $url) === 0) {
+				continue;
+			} else {
+				$proceed = $interceptor->intercept($handlerInfo);
+				if ($proceed === false) {
+					return;
+				}
+			}
+		}
+		// dispatch request
+		$dispatcher = $this->serviceRegistry->getComponent('dispatcher');
+		$dto = $dispatcher->dispatch($handlerInfo);
+		// render
+		if ($dto !== true) {
+			$renderer = $this->serviceRegistry->getComponent('renderer');
+			$renderer->render($dto);
+		}
 		/* PROTECTED REGION END */
 	}
 
@@ -217,11 +240,12 @@ class Metaframework   {
 		return $_SERVER['SCRIPT_NAME'] . '/';
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1236332587625_21111_386) ENABLED START */
 	// TODO: put your further code implementations for class 'DdmFw' here

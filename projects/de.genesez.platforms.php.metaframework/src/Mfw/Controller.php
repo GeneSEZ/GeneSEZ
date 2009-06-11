@@ -19,7 +19,8 @@ require_once 'HTTP.php';
  * @package	Metaframework
  */
 abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		Mfw_ServiceRegistry	$serviceRegistry
@@ -45,7 +46,6 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	 * @var		Mfw_HandlerInfo	$handlerInfo
 	 */
 	protected $handlerInfo;
-
 	/**
 	 * @var	array of Mfw_Action	stores the linked objects of the  multi qualified unidirectional to one association to {@link Mfw_Action} (symmetry ensured) 
 	 */
@@ -63,6 +63,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	 * @var array of Association and/or QualifiedAssociation
 	 */
 	private $associations = array();
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -80,8 +81,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 		$this->actions->insert('show', new Mfw_Action('show'));
 		/* PROTECTED REGION END */
 	}
-
-
+	
 	// -- method declarations -----------------------------------------------
 	
 	/**
@@ -116,7 +116,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	 * @return	Mfw_Dto
 	 */
 	public abstract function listing();
-
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -271,8 +271,9 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 		return $this->handlerInfo[1];
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Mfw_Controller::getServiceRegistry() $serviceRegistry}
@@ -302,7 +303,6 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	public 	 function setNoIdSpecifiedHandler(Mfw_RequestHandler $noIdSpecifiedHandler) {
 		$this->noIdSpecifiedHandler = $noIdSpecifiedHandler;
 	}
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -321,7 +321,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
 	/**
 	 * lazily initializes the requested association management objects
 	 * @param	string	&$name	the name of the association role
@@ -337,6 +337,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 		}
 		return $this->associations[$name];
 	}
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126599921_834943_1226) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_Controller' here

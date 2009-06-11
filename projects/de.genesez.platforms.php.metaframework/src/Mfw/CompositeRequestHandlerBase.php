@@ -16,7 +16,7 @@ require_once 'Mfw/CompositeRequestHandler.php';
  * @package	Metaframework
  */
 class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements Mfw_CompositeRequestHandler {
-
+	
 	/**
 	 * @var	array of Mfw_RequestHandler	stores the linked objects of the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured) 
 	 */
@@ -26,6 +26,7 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 	 * @var UML_MultiQualifiedAssociation
 	 */
 	private $associations;
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -40,9 +41,8 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 		}
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -55,15 +55,15 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243428136578_635889_1061) ENABLED START */
 		$dto = new Mfw_DtoBase(array(), $this->view);
-		foreach ($this->nestedRequestHandler->iterator() as $key => $value) {
-			$dto->$key = $value->handle($handlerInfo);
+		foreach ($this->nestedRequestHandler->iterator() as $name => $handler) {
+			$dto->$name = $handler->handle($handlerInfo);
 		}
 		return $dto;
 		/* PROTECTED REGION END */
 	}
+	
 
-
-
+	
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -83,7 +83,8 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239126507031_967775_1198) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_CompositeRequestHandlerBase' here

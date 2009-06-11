@@ -12,8 +12,11 @@ require_once 'UML/MultiQualifiedAssociation.php';
  * @package	Metaframework
  */
 interface Mfw_CompositeRequestHandler extends Mfw_RequestHandler {
-	// -- attribute + associations declarations  ----------------------------
+	
+	// -- attribute, constant + association declarations --------------------
+	
 
+	
 	// -- association accessors ---------------------------------------------
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
@@ -25,6 +28,7 @@ interface Mfw_CompositeRequestHandler extends Mfw_RequestHandler {
 	 * @return	mixed	the value of the member or an association management object
 	 */
 	public function __get($name);
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1239096309671_611315_815) ENABLED START */
 	// TODO: put your further code declarations for interface 'Mfw_CompositeRequestHandler' here

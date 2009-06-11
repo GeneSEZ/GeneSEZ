@@ -12,13 +12,17 @@ require_once 'Mfw/Context.php';
  */
 interface Mfw_Resolver  {
 	
+	
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	Mfw_Context	$context	
 	 * @return	Mfw_HandlerInfo
 	 */
-	public function resolveHandler($context);
+	public function resolve($context);
 
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1237827400500_227958_281) ENABLED START */
 	// TODO: put your further code declarations for interface 'Mfw_UrlMapper' here

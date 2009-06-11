@@ -3,6 +3,7 @@ require_once 'Mfw/RequestHandler.php';
 require_once 'Mfw/HandlerInfo.php';
 require_once 'Mfw/Dto.php';
 require_once 'Mfw/RequestHandlerBase.php';
+require_once 'Mfw/CompositeRequestHandler.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1241623038062_2281_361) ENABLED START */
 // TODO: put your further include + require statements here
@@ -14,11 +15,13 @@ require_once 'Mfw/RequestHandlerBase.php';
  * functionality to existing request handlers 
  * as well as the delegation to other request handlers.
  * @see		Mfw_RequestHandlerBase
+ * @see		Mfw_CompositeRequestHandler
  * @author	dreamer
  * @package	Metaframework
  */
-abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase  {
-	// -- generated attribute, constant + association declarations ----------
+abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase implements Mfw_CompositeRequestHandler {
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		Mfw_RequestHandler	$handler
@@ -30,11 +33,15 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase  {
 	 */
 	protected $handlerInfo;
 	/**
-	 * @generated	attribute definition
-	 * @var		Mfw_RequestHandler	$delegateHandler
+	 * @var	array of Mfw_RequestHandler	stores the linked objects of the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured) 
 	 */
-	protected $delegateHandler = array();
-
+	private $_nestedRequestHandler = array();
+	/**
+	 * holds the association management object for the multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured)
+	 * @var UML_MultiQualifiedAssociation
+	 */
+	private $associations;
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
@@ -47,11 +54,12 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase  {
 	public function __construct($handler, $delegateHandler = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241623229562_999301_382) ENABLED START */
 		$this->handler = $handler;
-		$this->delegateHandler = $delegateHandler;
+		foreach ($delegateHandler as $name => $handler) {
+			$this->nestedRequestHandler->insert($name, $handler);
+		}
 		/* PROTECTED REGION END */
 	}
-
-
+	
 	// -- method declarations -----------------------------------------------
 	
 	/**
@@ -62,7 +70,7 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase  {
 	 * @return	Mfw_Dto
 	 */
 	protected abstract function decorate($dto, $handlerInfo);
-
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -77,17 +85,37 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase  {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241623279562_741440_386) ENABLED START */
 //		$this->handlerInfo = $handlerInfo;
 		$dto = $this->handler->handle($handlerInfo);
-		foreach ($this->delegateHandler as $name => $handler) {
+		foreach ($this->nestedRequestHandler->iterator() as $name => $handler) {
 			$dto->$name = $handler->handle($handlerInfo);
 		}
 		return $this->decorate($dto, $handlerInfo);
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	/**
+	 * magic getter to obtain associations or unmodifiable values of the following members:
+	 * <ul>
+	 *   <li><var>nestedRequestHandler</var>: the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured)</li>
+	 * </ul>
+	 * @param	string	$name	the name of the member
+	 * @throws	{@link Exception} if the specified member is neither accessible nor available
+	 * @return	mixed	the value of the member or an association management object
+	 */
+	public function __get($name) {
+		switch ($name) {
+			case 'nestedRequestHandler' :
+				if ($this->associations === null) {
+					$this->associations = new UML_MultiQualifiedAssociation($this, $this->_nestedRequestHandler);
+				}
+				return $this->associations;
+			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
+		}
+	}
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241623038062_2281_361) ENABLED START */
 	// TODO: put your further code implementations for class 'DecoratedRequestHandler' here
