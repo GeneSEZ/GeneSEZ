@@ -217,12 +217,12 @@
 		«EXPAND _Annotation-»
 	«ENDIF-»
 	«IF isSingleValuedType() -»
-		«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «asAttribute()») {
-			this.«asAttribute()» = «asAttribute()»;
+		«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
+			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
 		}
 	«ELSE -»
-		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «asAttribute()») {
-			this.«asAttribute()» = «asAttribute()»;
+		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «IF static-»_«ENDIF-»«asAttribute()») {
+			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
 		}
 	«ENDIF -»
 «ENDDEFINE»
