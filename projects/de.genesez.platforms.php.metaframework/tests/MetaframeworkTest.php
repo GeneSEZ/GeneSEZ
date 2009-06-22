@@ -66,11 +66,9 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 		$this->dispatcher = new Mfw_ServiceRegistryDispatcher();
 		
 		$this->resolver = $this->getMock('Mfw_UrlResolver', array('pathInfo'));
-		
+		$this->renderer = $this->getMock('Mfw_Renderer', array('render'));
 		$this->rootHandler = $this->getMock('Mfw_RequestHandler');
 		$this->rootDto = new Mfw_DtoBase(array('rootDto' => 'root dto value'), 'view');
-		
-		$this->renderer = $this->getMock('Mfw_Renderer', array('render'));
 		
 		$this->serviceRegistry = new Mfw_ArrayServiceRegistry();
 		$this->serviceRegistry->register('serviceRegistry', $this->serviceRegistry);
