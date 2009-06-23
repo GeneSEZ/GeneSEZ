@@ -23,8 +23,7 @@ class Mfw_DtoBase extends ArrayObject implements Mfw_Dto {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Mfw_DtoBase}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Mfw_DtoBase}
 	 * @param	array	$container	default value is 'array()'
 	 * @param	string	$view	default value is 'null'
 	 */

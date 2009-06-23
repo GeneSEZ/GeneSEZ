@@ -30,11 +30,10 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Mfw_CompositeRequestHandlerBase}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Mfw_CompositeRequestHandlerBase}
 	 * @param	array	$requestHandlers	array of type 'Mfw_RequestHandler'
 	 */
-	public function __construct($requestHandlers) {
+	public function __construct(array $requestHandlers) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240398478812_21504_360) ENABLED START */
 		foreach ($requestHandlers as $key => $handler) {
 			$this->nestedRequestHandler->insert($key, $handler);

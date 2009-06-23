@@ -30,8 +30,7 @@ class Mfw_Action   {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Mfw_Action}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Mfw_Action}
 	 * @param	string	$name	
 	 * @param	boolean	$withId	default value is 'true'
 	 * @param	string	$method	default value is 'null'

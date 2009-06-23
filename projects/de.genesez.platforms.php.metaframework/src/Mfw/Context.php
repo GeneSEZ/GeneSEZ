@@ -55,13 +55,12 @@ class Mfw_Context   {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Mfw_Context}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Mfw_Context}
 	 * @param	string	$name	
 	 * @param	string	$handler	default value is 'null'
 	 * @param	array	$nestedContext	array of type 'Mfw_Context', default value is 'array()'
 	 */
-	public function __construct($name, $handler = null, $nestedContext = array()) {
+	public function __construct($name, $handler = null, array $nestedContext = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338382406_230888_479) ENABLED START */
 		$this->_name = $name;
 		$this->_handler = $handler;
@@ -80,7 +79,7 @@ class Mfw_Context   {
 	 * @param	array	$path	the path specifying a context
 	 * @return	Mfw_Context
 	 */
-	public function resolveContext($path = array()) {
+	public function resolveContext(array $path = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240297503531_187744_1117) ENABLED START */
 		// leaf context, check handler
 		if (!array_key_exists(0, $path)) {

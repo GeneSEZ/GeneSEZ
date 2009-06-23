@@ -59,15 +59,14 @@ class Metaframework   {
 	
 	/**
 	 * Constructs the frontend of the framework. Additional plug-in folders can 
- * be specified for autoloading support of plug-in classes.
-	 * @generated	constructor stub for implementation
+	 * be specified for autoloading support of plug-in classes.
 	 * @param	array	$additionalPluginDirs	an array of additional plugin folders
 	 */
-	public function __construct($additionalPluginDirs = array()) {
+	public function __construct(array $additionalPluginDirs = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241076400375_384996_361) ENABLED START */
 		// collect autoload source directories
 		$sourceDirs = array();
-		$pluginDirs = array_merge(array(realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../modules')), $additionalPluginDirs);
+		$pluginDirs = array_merge(array(realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../plugins')), $additionalPluginDirs);
 		foreach ($pluginDirs as $pluginDir) {
 			if (!is_dir($pluginDir)) {
 				continue;
@@ -126,7 +125,7 @@ class Metaframework   {
 	 * registers several plug-ins
 	 * @param	array	$plugins	array of type 'Mfw_PlugIn', default value is 'array()'
 	 */
-	public function registerPlugIns($plugins = array()) {
+	public function registerPlugIns(array $plugins = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236345050000_299364_554) ENABLED START */
 		foreach ($plugins as $plugin) {
 			$this->registerPlugIn($plugin);

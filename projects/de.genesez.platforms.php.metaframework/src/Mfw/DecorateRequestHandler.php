@@ -46,12 +46,11 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	
 	/**
 	 * Creates a new request handler which uses other request handlers to process 
- * the request.
-	 * @generated	constructor stub for implementation
+	 * the request.
 	 * @param	Mfw_RequestHandler	$handler	the request handler to decorate
 	 * @param	array	$delegateHandler	an associative array with key => value pairs of delegated request handlers
 	 */
-	public function __construct($handler, $delegateHandler = array()) {
+	public function __construct($handler, array $delegateHandler = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241623229562_999301_382) ENABLED START */
 		$this->handler = $handler;
 		foreach ($delegateHandler as $name => $handler) {

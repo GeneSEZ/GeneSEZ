@@ -45,7 +45,6 @@ class Mfw_HandlerInfo  implements ArrayAccess {
 	
 	/**
 	 * Creates a new handler info object.
-	 * @generated	constructor stub for implementation
 	 * @param	Mfw_Context	$context	the context of the request handler
 	 * @param	string	$pathInfo	the additional url part relative to the request handler
 	 * @param	string	$requestedPath	the path info of the currently executing script

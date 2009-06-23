@@ -1,6 +1,4 @@
 <?php
-require_once 'Mfw/ServiceRegistry.php';
-require_once 'Mfw/RequestHandler.php';
 require_once 'Mfw/HandlerInfo.php';
 require_once 'Mfw/Action.php';
 require_once 'Mfw/Dto.php';
@@ -21,26 +19,6 @@ require_once 'HTTP.php';
 abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	
 	// -- attribute, constant + association declarations --------------------
-	/**
-	 * @generated	attribute definition
-	 * @var		Mfw_ServiceRegistry	$serviceRegistry
-	 */
-	protected $serviceRegistry;
-	/**
-	 * @generated	attribute definition
-	 * @var		Mfw_RequestHandler	$noActionSpecifiedHandler
-	 */
-	protected $noActionSpecifiedHandler;
-	/**
-	 * @generated	attribute definition
-	 * @var		Mfw_RequestHandler	$unknownActionSpecifiedHandler
-	 */
-	protected $unknownActionSpecifiedHandler;
-	/**
-	 * @generated	attribute definition
-	 * @var		Mfw_RequestHandler	$noIdSpecifiedHandler
-	 */
-	protected $noIdSpecifiedHandler;
 	/**
 	 * @generated	attribute definition
 	 * @var		Mfw_HandlerInfo	$handlerInfo
@@ -67,8 +45,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Mfw_Controller}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Mfw_Controller}
 	 */
 	public function __construct() {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240241341890_219976_955) ENABLED START */
@@ -193,10 +170,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238021984_342013_941) ENABLED START */
-		if ($this->noActionSpecifiedHandler !== null) {
-			return $this->noActionSpecifiedHandler->handle($this->handlerInfo);
-		}
-		$this->redirect('list');
+		throw new Mfw_NoActionSpecifiedException();
 		/* PROTECTED REGION END */
 	}
 
@@ -206,10 +180,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240238044687_348789_945) ENABLED START */
-		if ($this->unknownActionSpecifiedHandler !== null) {
-			return $this->unknownActionSpecifiedHandler->handle($this->handlerInfo);
-		}
-		$this->redirect('list');
+		throw new Mfw_UnknownActionSpecifiedException();
 		/* PROTECTED REGION END */
 	}
 
@@ -219,10 +190,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	 */
 	protected function noIdSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765470421_127482_360) ENABLED START */
-		if ($this->noIdSpecifiedHandler !== null) {
-			return $this->noIdSpecifiedHandler->handle($this->handlerInfo);
-		}
-		$this->redirect('list');
+		throw new Mfw_NoIdSpecifiedException();
 		/* PROTECTED REGION END */
 	}
 
@@ -275,34 +243,6 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 
 	
 	// -- association + attribute accessors ---------------------------------
-	/**
-	 * @generated	setter method for the attribute {@link Mfw_Controller::getServiceRegistry() $serviceRegistry}
-	 * @param	Mfw_ServiceRegistry	$serviceRegistry	the value to set
-	 */
-	public 	 function setServiceRegistry(Mfw_ServiceRegistry $serviceRegistry) {
-		$this->serviceRegistry = $serviceRegistry;
-	}
-	/**
-	 * @generated	setter method for the attribute {@link Mfw_Controller::getNoActionSpecifiedHandler() $noActionSpecifiedHandler}
-	 * @param	Mfw_RequestHandler	$noActionSpecifiedHandler	the value to set
-	 */
-	public 	 function setNoActionSpecifiedHandler(Mfw_RequestHandler $noActionSpecifiedHandler) {
-		$this->noActionSpecifiedHandler = $noActionSpecifiedHandler;
-	}
-	/**
-	 * @generated	setter method for the attribute {@link Mfw_Controller::getUnknownActionSpecifiedHandler() $unknownActionSpecifiedHandler}
-	 * @param	Mfw_RequestHandler	$unknownActionSpecifiedHandler	the value to set
-	 */
-	public 	 function setUnknownActionSpecifiedHandler(Mfw_RequestHandler $unknownActionSpecifiedHandler) {
-		$this->unknownActionSpecifiedHandler = $unknownActionSpecifiedHandler;
-	}
-	/**
-	 * @generated	setter method for the attribute {@link Mfw_Controller::getNoIdSpecifiedHandler() $noIdSpecifiedHandler}
-	 * @param	Mfw_RequestHandler	$noIdSpecifiedHandler	the value to set
-	 */
-	public 	 function setNoIdSpecifiedHandler(Mfw_RequestHandler $noIdSpecifiedHandler) {
-		$this->noIdSpecifiedHandler = $noIdSpecifiedHandler;
-	}
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
