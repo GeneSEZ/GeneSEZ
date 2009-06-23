@@ -48,7 +48,7 @@ public class GeneSezM2M extends CompositeComponent {
 	public void checkConfiguration(Issues issues) {
 		// check settings
 		if (scripts.size() == 0) {
-			issues.addWarning("there are no model transformations scripts configured to execute!");
+			issues.addWarning("there are no model transformation scripts configured to execute!");
 		}
 		// add components
 		for (String script : scripts) {
