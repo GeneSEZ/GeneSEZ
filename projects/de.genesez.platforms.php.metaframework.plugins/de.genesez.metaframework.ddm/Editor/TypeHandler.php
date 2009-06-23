@@ -10,7 +10,8 @@
  * @package	de.genesez.metaframework.ddm
  */
 class Editor_TypeHandler extends Util_NotifierController  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		mixed	$typeDao
@@ -21,10 +22,9 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 * @var		mixed	$typeAdapter
 	 */
 	protected $typeAdapter;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -126,8 +126,9 @@ class Editor_TypeHandler extends Util_NotifierController  {
 		));
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Editor_TypeHandler::getTypeDao() $typeDao}
@@ -143,8 +144,8 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	public 	 function setTypeAdapter( $typeAdapter) {
 		$this->typeAdapter = $typeAdapter;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430197741_12901_263) ENABLED START */
 	// TODO: put your further code implementations for class 'TypeHandler' here

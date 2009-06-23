@@ -16,7 +16,8 @@
  * @package	de.genesez.metaframework.util
  */
 class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Countable {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$_iD_MESSAGES
@@ -42,15 +43,14 @@ class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Cou
 	 * @var		array	$_container
 	 */
 	private $_container;
-
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
 	 * constructs a flash notifer object using the specified container for 
- * storage. If the parameter is null, the current session is used.<br><br>Note: 
- * the parameter has to be an object (e.g. ArrayObject) instead of a simple 
- * array due to the missing reference operator.
-	 * @generated	constructor stub for implementation
+	 * storage. If the parameter is null, the current session is used.<br><br>Note: 
+	 * the parameter has to be an object (e.g. ArrayObject) instead of a simple 
+	 * array due to the missing reference operator.
 	 * @param	array	$container	default value is 'null'
 	 */
 	public function __construct(&$container = null) {
@@ -59,9 +59,8 @@ class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Cou
 		$this->decrementExpiration();
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -150,11 +149,12 @@ class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Cou
 		}
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240322907125_749427_515) ENABLED START */
 	// TODO: put your further code implementations for class 'Msg_FlashNotifier' here

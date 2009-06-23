@@ -10,8 +10,8 @@
  * @package	de.genesez.metaframework.util
  */
 class Menu_MenuItem extends Mfw_DtoBase  {
-	// -- generated attribute, constant + association declarations ----------
-
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @var	Menu_Menu	stores the linked object of the  bidirectional many to one association to {@link Menu_Menu} (symmetry ensured) 
 	 */
@@ -21,11 +21,11 @@ class Menu_MenuItem extends Mfw_DtoBase  {
 	 * @var UML_OneAssociation
 	 */
 	private $associations;
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Menu_MenuItem}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Menu_MenuItem}
 	 * @param	string	$name	
 	 * @param	string	$link	
 	 * @param	boolean	$isSelected	default value is 'false'
@@ -38,9 +38,8 @@ class Menu_MenuItem extends Mfw_DtoBase  {
 		$this->isSelected = $isSelected;
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -92,10 +91,10 @@ class Menu_MenuItem extends Mfw_DtoBase  {
 		return 'de.genesez.modules.util/menu.item.html';
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -115,7 +114,8 @@ class Menu_MenuItem extends Mfw_DtoBase  {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240323698234_181024_674) ENABLED START */
 	// TODO: put your further code implementations for class 'Menu_MenuItem' here

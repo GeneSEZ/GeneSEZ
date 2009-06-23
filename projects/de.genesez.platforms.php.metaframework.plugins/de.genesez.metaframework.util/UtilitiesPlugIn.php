@@ -10,10 +10,10 @@
  * @package	de.genesez.metaframework.util
  */
 class UtilitiesPlugIn extends Mfw_PlugInBase  {
-
-
-
-
+	
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -35,10 +35,11 @@ class UtilitiesPlugIn extends Mfw_PlugInBase  {
 		);
 		/* PROTECTED REGION END */
 	}
+	
 
-
-
-
+	
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240324483359_514108_877) ENABLED START */
 	/* PROTECTED REGION END */

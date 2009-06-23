@@ -10,16 +10,16 @@
  * @package	de.genesez.metaframework.ddm
  */
 class Editor_NavigationHandler extends Mfw_RequestHandlerBase  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		Mfw_HandlerInfo	$handlerInfo
 	 */
 	protected $handlerInfo;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -80,11 +80,12 @@ class Editor_NavigationHandler extends Mfw_RequestHandlerBase  {
 		}
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240397545109_914177_263) ENABLED START */
 	// TODO: put your further code implementations for class 'Editor_NavigationHandler' here

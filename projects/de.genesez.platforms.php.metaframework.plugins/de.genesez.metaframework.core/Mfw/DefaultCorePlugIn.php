@@ -12,13 +12,15 @@ spl_autoload_register(array('S2ContainerClassLoader', 'load'));
 /* PROTECTED REGION END */
 
 /**
+ * Provides a default implementation of the core plug-in interface.
  * @see		Mfw_PlugInBase
  * @see		Mfw_CorePlugIn
  * @author	dreamer
  * @package	de.genesez.metaframework.core
  */
 class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$config
@@ -29,14 +31,13 @@ class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
 	 * @var		S2Container	$container
 	 */
 	protected $container;
-
+	
 	
 	/**
-	 * constructs an object of class {@link Mfw_DefaultCorePlugIn}
-	 * @generated	constructor stub for implementation
+	 * Constructs a core plug-in with configuration options.
 	 * @param	array	$config	array of type 'string'
 	 */
-	public function __construct($config) {
+	public function __construct(array $config) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1243684038343_975520_335) ENABLED START */
 		$this->config = $config;
 		// config doctrine
@@ -45,9 +46,8 @@ class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
 		// config seasar
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -92,24 +92,12 @@ class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
 			Mfw_SeasarPhpBuilder::newComponent('Mfw_ServiceRegistryDispatcher', 'dispatcher', array(), array(
 				Mfw_SeasarPhpBuilder::newProperty('serviceRegistry', 'serviceRegistry'),
 			)),
-			Mfw_SeasarPhpBuilder::newComponent('Mfw_UrlResolver', 'resolver', array(), array(
-				Mfw_SeasarPhpBuilder::newProperty('dispatcher', 'dispatcher')
-			)),
+			Mfw_SeasarPhpBuilder::newComponent('Mfw_UrlResolver', 'resolver'),
 			Mfw_SeasarPhpBuilder::newComponent('Smarty', 'smarty'),
 			Mfw_SeasarPhpBuilder::newComponent('Mfw_SmartyRenderer', 'renderer', array(), array(
 				Mfw_SeasarPhpBuilder::newProperty('smarty', 'smarty')
 			))
 		);
-		/* PROTECTED REGION END */
-	}
-
-	/**
-	 * @generated	method stub for implementation
-	 * @return	boolean
-	 */
-	public function hasContext() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243684038343_315932_338) ENABLED START */
-		return true;
 		/* PROTECTED REGION END */
 	}
 
@@ -130,14 +118,14 @@ class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
 	/**
 	 * @generated	method stub for implementation
 	 */
-	public function finalize() {
+	public function finishInitialization() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243684038343_292645_340) ENABLED START */
-		$smarty = $serviceRegistry->getComponent('smarty');
+		$serviceRegistry = $this->container->getComponent('serviceRegistry');
 		
 		// smarty
+		$smarty = $serviceRegistry->getComponent('smarty');
 		$smarty_template_dir = $this->checkConfigEntry('smarty.template.dir');
 		$smarty->template_dir = $smarty_template_dir;
-		
 		$smarty_compile_dir = $this->checkConfigEntry('smarty.compile.dir');
 		$smarty->compile_dir = $smarty_compile_dir;
 		
@@ -169,11 +157,12 @@ class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
 		}
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243684038328_916775_329) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_DefaultCorePlugIn' here

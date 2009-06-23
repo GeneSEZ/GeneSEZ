@@ -10,16 +10,16 @@
  * @package	de.genesez.metaframework.util
  */
 abstract class Util_NotifierController extends Mfw_Controller  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		Msg_FlashNotifier	$notifier
 	 */
 	protected $notifier;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -28,8 +28,8 @@ abstract class Util_NotifierController extends Mfw_Controller  {
 	 */
 	protected function noActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803687_477311_294) ENABLED START */
-//		$this->notifier->add(new Msg_Message('no action specified, redirecting to default action'));
-		parent::noActionSpecified();
+		$this->notifier->add(new Msg_Message('no action specified, redirecting to default action'));
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -39,8 +39,8 @@ abstract class Util_NotifierController extends Mfw_Controller  {
 	 */
 	protected function noIdSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803750_832752_295) ENABLED START */
-//		$this->notifier->add(new Msg_Message('no id specified'));
-		parent::noIdSpecified();
+		$this->notifier->add(new Msg_Message('no id specified'));
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
 
@@ -50,12 +50,13 @@ abstract class Util_NotifierController extends Mfw_Controller  {
 	 */
 	protected function unknownActionSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241765803750_878544_296) ENABLED START */
-//		$this->notifier->add(new Msg_Message('unknown action specified, redirecting to default action'));
-		parent::unknownActionSpecified();
+		$this->notifier->add(new Msg_Message('unknown action specified, redirecting to default action'));
+		$this->redirect('list');
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Util_NotifierController::getNotifier() $notifier}
@@ -64,8 +65,8 @@ abstract class Util_NotifierController extends Mfw_Controller  {
 	public 	 function setNotifier(Msg_FlashNotifier $notifier) {
 		$this->notifier = $notifier;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240411825406_497558_455) ENABLED START */
 	// TODO: put your further code implementations for class 'Util_NotifierController' here

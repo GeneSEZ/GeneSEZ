@@ -11,8 +11,8 @@
  * @package	de.genesez.metaframework.util
  */
 class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
-	// -- generated attribute, constant + association declarations ----------
-
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @var	Menu_MenuBar	stores the linked object of the  bidirectional many to one association to {@link Menu_MenuBar} (symmetry ensured) 
 	 */
@@ -30,17 +30,17 @@ class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
 	 * @var array of Association and/or QualifiedAssociation
 	 */
 	private $associations = array();
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Menu_Menu}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Menu_Menu}
 	 * @param	string	$name	
 	 * @param	string	$link	
 	 * @param	array	$items	array of type 'Menu_MenuItem', default value is 'array()'
 	 * @param	boolean	$isSelected	default value is 'false'
 	 */
-	public function __construct($name, $link, $items = array(), $isSelected = false) {
+	public function __construct($name, $link, array $items = array(), $isSelected = false) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240390896390_12048_437) ENABLED START */
 		parent::__construct($name, $link, $isSelected);
 		foreach ($items as $item) {
@@ -48,9 +48,8 @@ class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
 		}
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -72,10 +71,10 @@ class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
 		return $this->items->iterator();
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -94,7 +93,7 @@ class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
 	/**
 	 * lazily initializes the requested association management objects
 	 * @param	string	&$name	the name of the association role
@@ -110,6 +109,7 @@ class Menu_Menu extends Menu_MenuItem implements IteratorAggregate {
 		}
 		return $this->associations[$name];
 	}
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240323706500_563325_694) ENABLED START */
 	// TODO: put your further code implementations for class 'Menu_Menu' here

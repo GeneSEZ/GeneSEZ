@@ -10,7 +10,8 @@
  * @package	de.genesez.metaframework.ddm
  */
 abstract class Editor_DefaultController extends Util_NotifierController  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		mixed	$classDao
@@ -26,10 +27,9 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 * @var		Mfw_RequestHandler	$unknownClassSpecifiedHandler
 	 */
 	protected $unknownClassSpecifiedHandler;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -184,8 +184,9 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 		return $this->handlerInfo[2];
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Editor_DefaultController::getClassDao() $classDao}
@@ -208,8 +209,8 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	public 	 function setUnknownClassSpecifiedHandler(Mfw_RequestHandler $unknownClassSpecifiedHandler) {
 		$this->unknownClassSpecifiedHandler = $unknownClassSpecifiedHandler;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241254501703_427300_301) ENABLED START */
 	// TODO: put your further code implementations for class 'Editor_DefaultController' here

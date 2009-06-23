@@ -11,7 +11,8 @@
  * @package	de.genesez.metaframework.util
  */
 class Msg_Message extends Mfw_DtoBase  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		string	$_info
@@ -27,12 +28,11 @@ class Msg_Message extends Mfw_DtoBase  {
 	 * @var		string	$_error
 	 */
 	const ERROR  = 'error';
-
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Msg_Message}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Msg_Message}
 	 * @param	string	$message	
 	 * @param	string	$severity	default value is 'self::INFO'
 	 */
@@ -43,9 +43,8 @@ class Msg_Message extends Mfw_DtoBase  {
 		$this->severity = $severity;
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -57,11 +56,12 @@ class Msg_Message extends Mfw_DtoBase  {
 		return 'de.genesez.modules.util/message.html';
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240322753437_323386_425) ENABLED START */
 	// TODO: put your further code implementations for class 'Msg_Message' here

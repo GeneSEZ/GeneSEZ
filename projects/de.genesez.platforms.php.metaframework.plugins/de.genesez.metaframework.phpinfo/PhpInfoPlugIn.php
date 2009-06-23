@@ -30,7 +30,7 @@ class PhpInfoPlugIn extends Mfw_PlugInBase  {
 	 */
 	public function getContext() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1245605581609_541946_674) ENABLED START */
-		return new Core_Context('phpinfo', 'phpinfo.handler');
+		return new Mfw_Context('phpinfo', 'phpinfo.handler');
 		/* PROTECTED REGION END */
 	}
 
@@ -41,7 +41,7 @@ class PhpInfoPlugIn extends Mfw_PlugInBase  {
 	public function getComponents() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1245605602328_933381_683) ENABLED START */
 		return array(
-			Adapter_SeasarPhpBuilder::newComponent('PhpInfoHandler', 'phpinfo.handler')
+			Mfw_SeasarPhpBuilder::newComponent('PhpInfoHandler', 'phpinfo.handler')
 		);
 		/* PROTECTED REGION END */
 	}

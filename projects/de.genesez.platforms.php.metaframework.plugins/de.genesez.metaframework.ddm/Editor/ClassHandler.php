@@ -10,7 +10,8 @@
  * @package	de.genesez.metaframework.ddm
  */
 class Editor_ClassHandler extends Util_NotifierController  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		mixed	$classDao
@@ -31,10 +32,9 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	 * @var		mixed	$associationAdapter
 	 */
 	protected $associationAdapter;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -146,8 +146,9 @@ class Editor_ClassHandler extends Util_NotifierController  {
 		));
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Editor_ClassHandler::getClassDao() $classDao}
@@ -177,8 +178,8 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	public 	 function setAssociationAdapter( $associationAdapter) {
 		$this->associationAdapter = $associationAdapter;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430480132_499562_330) ENABLED START */
 	// TODO: put your further code implementations for class 'ClassHandler' here

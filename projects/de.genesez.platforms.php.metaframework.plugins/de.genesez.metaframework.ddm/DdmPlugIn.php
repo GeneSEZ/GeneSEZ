@@ -2,6 +2,7 @@
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1243886078750_274309_265) ENABLED START */
 // TODO: put your further include + require statements here
+require_once 'DDM.php';
 /* PROTECTED REGION END */
 
 /**
@@ -10,10 +11,10 @@
  * @package	de.genesez.metaframework.ddm
  */
 class DdmPlugIn extends Mfw_PlugInBase  {
-
-
-
-
+	
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -56,10 +57,11 @@ class DdmPlugIn extends Mfw_PlugInBase  {
 		return array();
 		/* PROTECTED REGION END */
 	}
+	
 
-
-
-
+	
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243886078750_274309_265) ENABLED START */
 	// TODO: put your further code implementations for class 'DdmPlugIn' here

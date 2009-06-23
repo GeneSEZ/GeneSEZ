@@ -11,8 +11,8 @@
  * @package	de.genesez.metaframework.util
  */
 class Menu_MenuBar extends Mfw_DtoBase implements IteratorAggregate {
-	// -- generated attribute, constant + association declarations ----------
-
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @var	array of Menu_Menu	stores the linked objects of the  bidirectional one to many association to {@link Menu_Menu} (symmetry ensured) 
 	 */
@@ -22,14 +22,14 @@ class Menu_MenuBar extends Mfw_DtoBase implements IteratorAggregate {
 	 * @var UML_ManyAssociation
 	 */
 	private $associations;
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link Menu_MenuBar}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link Menu_MenuBar}
 	 * @param	array	$menus	array of type 'Menu_Menu', default value is 'array()'
 	 */
-	public function __construct($menus = array()) {
+	public function __construct(array $menus = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240323723765_268360_733) ENABLED START */
 		parent::__construct();
 		foreach ($menus as $menu) {
@@ -37,9 +37,8 @@ class Menu_MenuBar extends Mfw_DtoBase implements IteratorAggregate {
 		}
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -61,10 +60,10 @@ class Menu_MenuBar extends Mfw_DtoBase implements IteratorAggregate {
 		return 'de.genesez.modules.util/menu.bar.html';
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -84,7 +83,8 @@ class Menu_MenuBar extends Mfw_DtoBase implements IteratorAggregate {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1240323712078_686210_714) ENABLED START */
 	// TODO: put your further code implementations for class 'Menu_MenuBar' here

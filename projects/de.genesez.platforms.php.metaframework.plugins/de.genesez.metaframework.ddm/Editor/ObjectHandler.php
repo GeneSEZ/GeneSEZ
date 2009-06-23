@@ -10,7 +10,8 @@
  * @package	de.genesez.metaframework.ddm
  */
 class Editor_ObjectHandler extends Editor_DefaultController  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		mixed	$objectDao
@@ -21,10 +22,9 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	 * @var		mixed	$objectAdapter
 	 */
 	protected $objectAdapter;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -173,8 +173,9 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 		));
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Editor_ObjectHandler::getObjectDao() $objectDao}
@@ -190,8 +191,8 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	public 	 function setObjectAdapter( $objectAdapter) {
 		$this->objectAdapter = $objectAdapter;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241433671335_950930_821) ENABLED START */
 	// TODO: put your further code implementations for class 'ObjectHandler' here

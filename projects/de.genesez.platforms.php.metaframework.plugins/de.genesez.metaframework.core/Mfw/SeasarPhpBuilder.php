@@ -11,10 +11,10 @@
  * @package	de.genesez.metaframework.core
  */
 class Mfw_SeasarPhpBuilder   {
-
-
-
-
+	
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -22,7 +22,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @param	array	$components	array of type 'S2Container_ComponentDef', default value is 'array()'
 	 * @return	S2Container
 	 */
-	public static function newContainer($components = array()) {
+	public static function newContainer(array $components = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_391164_328) ENABLED START */
 		$container = new S2ContainerImpl();
 		foreach ($components as $component) {
@@ -40,7 +40,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @param	array	$properties	array of type 'S2Container_PropertyDef', default value is 'array()'
 	 * @return	S2Container_ComponentDef
 	 */
-	public static function newComponent($class = '', $name = '', $arguments = array(), $properties = array()) {
+	public static function newComponent($class = '', $name = '', array $arguments = array(), array $properties = array()) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_740807_329) ENABLED START */
 		$component = new S2Container_ComponentDefImpl($class, $name);
 		foreach ($arguments as $arg) {
@@ -141,10 +141,11 @@ class Mfw_SeasarPhpBuilder   {
 		return $rep;
 		/* PROTECTED REGION END */
 	}
+	
 
-
-
-
+	
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243537883500_527170_325) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_SeasarPhpBuilder' here

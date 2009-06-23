@@ -5,28 +5,33 @@
 /* PROTECTED REGION END */
 
 /**
+ * <p>
+ *   Implementation of the <b>service registry</b> interface using the <b>seasar</b> 
+ *   dependency injection framework.
+ * </p>
  * @see		Mfw_ServiceRegistry
  * @author	dreamer
  * @package	de.genesez.metaframework.core
  */
 class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		S2Container	$_container
 	 */
 	private $_container;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
 	 * @generated	method stub for implementation
+	 * @param	string	$name	
 	 * @param	mixed	$component	
 	 */
-	public function register($component) {
+	public function register($name, $component) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243604113781_343346_404) ENABLED START */
 		$this->_container->register($component);
 		/* PROTECTED REGION END */
@@ -53,8 +58,9 @@ class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
 		return $this->_container->getComponent($name);
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Mfw_SeasarServiceRegistry::getContainer() $_container}
@@ -63,8 +69,8 @@ class Mfw_SeasarServiceRegistry  implements Mfw_ServiceRegistry {
 	public 	 function setContainer(S2Container $container) {
 		$this->_container = $container;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243539420937_141797_393) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_SeasarServiceRegistry' here

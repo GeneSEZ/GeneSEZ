@@ -10,7 +10,8 @@
  * @package	de.genesez.metaframework.ddm
  */
 class Editor_AttributeHandler extends Util_NotifierController  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		mixed	$attributeDao
@@ -21,10 +22,9 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 * @var		mixed	$attributeAdapter
 	 */
 	protected $attributeAdapter;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -126,8 +126,9 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 		));
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Editor_AttributeHandler::getAttributeDao() $attributeDao}
@@ -143,8 +144,8 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	public 	 function setAttributeAdapter( $attributeAdapter) {
 		$this->attributeAdapter = $attributeAdapter;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1241430670929_72136_374) ENABLED START */
 	// TODO: put your further code implementations for class 'AttributeHandler' here

@@ -12,16 +12,16 @@
  * @package	de.genesez.metaframework.core
  */
 class Mfw_SmartyRenderer  implements Mfw_Renderer {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		Smarty	$smarty
 	 */
 	protected $smarty;
-
-
-
-
+	
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -49,7 +49,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @param	Smarty	$smarty	reference to the smarty object
 	 * @return	string
 	 */
-	public function checkInclude($params, &$smarty) {
+	public function checkInclude(array $params, &$smarty) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497906_111858_437) ENABLED START */
 		if (array_key_exists('dto', $params)) {
 			if ($params['dto'] instanceof Mfw_Dto) {
@@ -77,7 +77,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @param	array	$params	the parameters of the template function as an associative array with key:value pairs
 	 * @return	string
 	 */
-	protected function processInclude($view, $params) {
+	protected function processInclude($view, array $params) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497906_99424_438) ENABLED START */
 		if ($view === null || $view === '') {
 			// check suffixes with url fallback
@@ -136,7 +136,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	 * @param	array	$params	the parameters of the template function as an associative array with key:value pairs
 	 * @return	string
 	 */
-	protected function renderInclude($view, $params) {
+	protected function renderInclude($view, array $params) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497906_926281_439) ENABLED START */
 		// TODO: exists another way to do this?
 		$smarty = new Smarty();
@@ -214,8 +214,9 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 		$smarty->assign('context', Mfw_Url::requestPath());
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
 	/**
 	 * @generated	setter method for the attribute {@link Mfw_SmartyRenderer::getSmarty() $smarty}
@@ -224,8 +225,8 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	public 	 function setSmarty(Smarty $smarty) {
 		$this->smarty = $smarty;
 	}
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243539497906_977189_432) ENABLED START */
 	// TODO: put your further code implementations for class 'Mfw_SmartyRenderer' here
