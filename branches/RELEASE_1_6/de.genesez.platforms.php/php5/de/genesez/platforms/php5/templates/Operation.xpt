@@ -145,12 +145,17 @@
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
 «FOREACH parameter AS p SEPARATOR ", " -»
-«IF p.multiplicity == 1 -»
-«REM»«p.type.mapName().asTypeName(p.type)» «ENDREM»«EXPAND _Parameter FOR p -»
-«ELSE -»
-«REM»array «ENDREM»«EXPAND _Parameter FOR p -»
-«ENDIF -»
+«EXPAND _TypeHint FOR p -»«EXPAND _Parameter FOR p -»
 «ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates type hints for multi-valued types or type with <<di>> stereotype
+«ENDREM»
+«DEFINE _TypeHint FOR MParameter -»
+«IF multiplicity == 1 -»
+«IF ! {MPrimitiveType, MGeneric}.contains(metaType) && hasStereotype("di") -»«type.mapName().asTypeName()» «ENDIF -»
+«ELSE -»array «ENDIF -»
 «ENDDEFINE»
 
 «REM»
