@@ -1,5 +1,9 @@
 /**
- * Helper file for metaframework plug-in generation.
+ * Helper file for metaframework plug-in generation. It features:
+ * - a model transformation to transform packages contained by the model to model elements, 
+ *   supporting more than one metaframework plug-in within one uml model
+ * - a model transformation to check for the getId() method of an plug-in and if not existing,
+ *   creating it
  * 
  * @author	tobias haubold
  * @date	2009-06-02
@@ -40,6 +44,8 @@ create MModel makeModel(MPackage p) :
  */
 String name(MPackage this) : nestingPackage.name + "." + name;
 
+
+// - - model checks + fixes - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 /**
  * checks if a plug-in class has the getId() method, if not, one is added
