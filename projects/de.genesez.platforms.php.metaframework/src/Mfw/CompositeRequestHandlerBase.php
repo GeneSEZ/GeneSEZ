@@ -31,9 +31,9 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 	
 	/**
 	 * @generated	constructs an object of class {@link Mfw_CompositeRequestHandlerBase}
-	 * @param	array	$requestHandlers	array of type 'Mfw_RequestHandler'
+	 * @param	array	$requestHandlers	array of type 'Mfw_RequestHandler', default value is 'array()'
 	 */
-	public function __construct(array $requestHandlers) {
+	public function __construct(array $requestHandlers = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240398478812_21504_360) ENABLED START */
 		foreach ($requestHandlers as $key => $handler) {
 			$this->nestedRequestHandler->insert($key, $handler);
