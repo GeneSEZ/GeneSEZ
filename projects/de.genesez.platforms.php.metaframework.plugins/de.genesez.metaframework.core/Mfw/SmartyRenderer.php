@@ -5,13 +5,13 @@
 /* PROTECTED REGION END */
 
 /**
- * A <b>renderer</b> implementation which generates a response using the 
+ * A <b>rendering</b> implementation which generates a response using the 
  * smarty template engine.
- * @see		Mfw_Renderer
+ * @see		Mfw_Rendering
  * @author	dreamer
  * @package	de.genesez.metaframework.core
  */
-class Mfw_SmartyRenderer  implements Mfw_Renderer {
+class Mfw_SmartyRendering  implements Mfw_Rendering {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
@@ -40,7 +40,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 
 	/**
 	 * The dynamically registered template function plugin <b>render</b> for 
-	 * smarty templates. It is the smarty template function port of the <b>Renderer</b> 
+	 * smarty templates. It is the smarty template function port of the <b>Rendering</b> 
 	 * interface, i.e. you specifiy only a dto to render it. If there is no 
 	 * &lt;code&gt;dto&lt;/code&gt; parameter with an instance of type &lt;code&gt;Mfw_Dto&lt;/code&gt; a 
 	 * smarty error is triggered.<br><br>The view of a dto must not exist; in 
@@ -219,7 +219,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	
 	// -- association + attribute accessors ---------------------------------
 	/**
-	 * @generated	setter method for the attribute {@link Mfw_SmartyRenderer::getSmarty() $smarty}
+	 * @generated	setter method for the attribute {@link Mfw_SmartyRendering::getSmarty() $smarty}
 	 * @param	Smarty	$smarty	the value to set
 	 */
 	public 	 function setSmarty(Smarty $smarty) {
@@ -229,7 +229,7 @@ class Mfw_SmartyRenderer  implements Mfw_Renderer {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1243539497906_977189_432) ENABLED START */
-	// TODO: put your further code implementations for class 'Mfw_SmartyRenderer' here
+	// TODO: put your further code implementations for class 'Mfw_SmartyRendering' here
 	/* PROTECTED REGION END */
 }
 ?>

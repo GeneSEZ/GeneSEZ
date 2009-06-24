@@ -89,12 +89,12 @@ class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
 			Mfw_SeasarPhpBuilder::newComponent('Mfw_ArrayPlugInRegistry', 'plugInRegistry'),
 			Mfw_SeasarPhpBuilder::newComponent('Mfw_ArrayExtensionRegistry', 'extensionRegistry'),
 			Mfw_SeasarPhpBuilder::newComponent('Mfw_ArrayInterceptorRegistry', 'interceptorRegistry'),
-			Mfw_SeasarPhpBuilder::newComponent('Mfw_ServiceRegistryDispatcher', 'dispatcher', array(), array(
+			Mfw_SeasarPhpBuilder::newComponent('Mfw_ServiceRegistryLocator', 'locator', array(), array(
 				Mfw_SeasarPhpBuilder::newProperty('serviceRegistry', 'serviceRegistry'),
 			)),
 			Mfw_SeasarPhpBuilder::newComponent('Mfw_UrlResolver', 'resolver'),
 			Mfw_SeasarPhpBuilder::newComponent('Smarty', 'smarty'),
-			Mfw_SeasarPhpBuilder::newComponent('Mfw_SmartyRenderer', 'renderer', array(), array(
+			Mfw_SeasarPhpBuilder::newComponent('Mfw_SmartyRendering', 'rendering', array(), array(
 				Mfw_SeasarPhpBuilder::newProperty('smarty', 'smarty')
 			))
 		);
@@ -130,14 +130,14 @@ class Mfw_DefaultCorePlugIn extends Mfw_PlugInBase implements Mfw_CorePlugIn {
 		$smarty->compile_dir = $smarty_compile_dir;
 		
 		// register smarty template render function
-		$renderer = $serviceRegistry->getComponent('renderer');
-		$smarty->register_function('render', array($renderer, 'checkInclude'));
+		$rendering = $serviceRegistry->getComponent('rendering');
+		$smarty->register_function('render', array($rendering, 'checkInclude'));
 		
 //		$smarty->register_resource('mfw', array(
-//			$renderer, 'fetchMfwResourceSource', 'fetchMfwResourceTimestamp', 
+//			$rendering, 'fetchMfwResourceSource', 'fetchMfwResourceTimestamp', 
 //			'isMfwResourceSecured', 'isMfwResourceTrusted'));
 //		$smarty->default_resource_type = 'mfw';
-//		$smarty->default_template_handler_func = array($renderer, 'defaultTemplateHandler');
+//		$smarty->default_template_handler_func = array($rendering, 'defaultTemplateHandler');
 		
 		// finalize seasar container
 		Mfw_SeasarPhpBuilder::finishContainer($this->container);
