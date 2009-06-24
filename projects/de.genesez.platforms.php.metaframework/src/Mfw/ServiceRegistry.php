@@ -5,6 +5,10 @@
 /* PROTECTED REGION END */
 
 /**
+ * Defines the inteface for the <b>service registry</b>. A service registry 
+ * is used to <b>lookup </b>and <b>obtain</b> components according the 
+ * service locator pattern. An implementation can use a dependency injection 
+ * container.
  * @author	dreamer
  * @package	Metaframework
  */
@@ -13,22 +17,24 @@ interface Mfw_ServiceRegistry  {
 	
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$name	
-	 * @param	mixed	$component	
+	 * Registers a component using its <b>name</b> for further lookup.
+	 * @param	string	$name	the name of the component
+	 * @param	mixed	$component	the component to be registered
 	 */
 	public function register($name, $component);
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$name	
+	 * Checks if a component with the specified name <b>exists</b> or in other 
+	 * words was registered.
+	 * @param	string	$name	the name of the component
 	 * @return	boolean
 	 */
 	public function hasComponent($name);
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$name	
+	 * Returns the component with the specified name. Verify the existence of the 
+	 * component using {@link hasComponent()} first.
+	 * @param	string	$name	the name of the component
 	 * @return	mixed
 	 */
 	public function getComponent($name);

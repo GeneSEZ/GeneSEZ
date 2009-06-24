@@ -6,6 +6,9 @@ require_once 'Mfw/InterceptorRegistry.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides a simple <b>default implementation</b> of the inteceptor registry 
+ * interface using an associative array to manage the interceptors with their 
+ * patterns.
  * @see		Mfw_InterceptorRegistry
  * @author	dreamer
  * @package	Metaframework
@@ -14,6 +17,7 @@ class Mfw_ArrayInterceptorRegistry  implements Mfw_InterceptorRegistry {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_ArrayInterceptorRegistry::getRegistry()}
 	 * @generated	attribute definition
 	 * @var		array	$registry
 	 */

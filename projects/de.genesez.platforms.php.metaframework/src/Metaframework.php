@@ -12,6 +12,11 @@ spl_autoload_register(array('Metaframework', 'autoload'));
 /* PROTECTED REGION END */
 
 /**
+ * The frontend class of the metaframework. It provides autoloading for 
+ * metaframework and plug-in classes.
+ * <br>
+ * <br>To use it, create an instance, initialize it with the core plug-in, 
+ * register your plug-ins and then call proceed.
  * @author	dreamer
  * @package	Metaframework
  */
@@ -167,13 +172,13 @@ class Metaframework   {
 				}
 			}
 		}
-		// dispatch request
-		$dispatcher = $this->serviceRegistry->getComponent('dispatcher');
-		$dto = $dispatcher->dispatch($handlerInfo);
+		// locate request
+		$locator = $this->serviceRegistry->getComponent('locator');
+		$dto = $locator->locate($handlerInfo);
 		// render
 		if ($dto !== true) {
-			$renderer = $this->serviceRegistry->getComponent('renderer');
-			$renderer->render($dto);
+			$rendering = $this->serviceRegistry->getComponent('rendering');
+			$rendering->render($dto);
 		}
 		/* PROTECTED REGION END */
 	}

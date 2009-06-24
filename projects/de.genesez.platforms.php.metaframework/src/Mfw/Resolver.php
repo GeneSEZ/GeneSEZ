@@ -7,6 +7,8 @@ require_once 'Mfw/Context.php';
 /* PROTECTED REGION END */
 
 /**
+ * Defines the resolver interface used to <b>obtain</b> the information how a 
+ * request can be handled.
  * @author	dreamer
  * @package	Metaframework
  */
@@ -15,8 +17,8 @@ interface Mfw_Resolver  {
 	
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Mfw_Context	$context	
+	 * Resolves the needed information to handle a request.
+	 * @param	Mfw_Context	$context	the context structure of the application
 	 * @return	Mfw_HandlerInfo
 	 */
 	public function resolve($context);

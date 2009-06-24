@@ -8,6 +8,8 @@ require_once 'Mfw/Resolver.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides an <b>URL</b> based implementation of the resolver interface. The 
+ * requested functionality is defined by the requested URL.
  * @see		Mfw_Resolver
  * @author	dreamer
  * @package	Metaframework

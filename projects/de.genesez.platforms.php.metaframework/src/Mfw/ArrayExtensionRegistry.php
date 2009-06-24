@@ -6,6 +6,9 @@ require_once 'Mfw/ExtensionRegistry.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides a simple <b>default implementation</b> of the extension registry 
+ * interface using an associative array to manage the contributions made to 
+ * particular extensions.
  * @see		Mfw_ExtensionRegistry
  * @author	dreamer
  * @package	Metaframework
@@ -14,6 +17,7 @@ class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_ArrayExtensionRegistry::getRegistry()}
 	 * @generated	attribute definition
 	 * @var		array	$registry
 	 */

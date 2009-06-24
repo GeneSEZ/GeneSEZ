@@ -7,25 +7,27 @@ require_once 'Mfw/HandlerInfo.php';
 /* PROTECTED REGION END */
 
 /**
+ * Defines the locator inferface used to <b>obtain</b> the <b>request handler</b> 
+ * which is able to handle the request.
  * @author	dreamer
  * @package	Metaframework
  */
-interface Mfw_Dispatcher  {
+interface Mfw_Locator  {
 	
 	
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * Locates the request handler using the specified information.
+	 * @param	Mfw_HandlerInfo	$handlerInfo	the information needed to find the request handler
 	 * @return	Mfw_RequestHandler
 	 */
-	public function dispatch($handlerInfo);
+	public function locate($handlerInfo);
 
 	
 	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1238000869500_873239_1272) ENABLED START */
-	// TODO: put your further code declarations for interface 'Mfw_Dispatcher' here
+	// TODO: put your further code declarations for interface 'Mfw_Locator' here
 	/* PROTECTED REGION END */
 }
 ?>

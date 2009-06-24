@@ -7,6 +7,9 @@ require_once 'Mfw/PlugInRegistry.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides a simple <b>default implementation</b> of the plug-in registry 
+ * interface using an associative array to manage the plug-ins and determine 
+ * the dependencies.
  * @see		Mfw_PlugInRegistry
  * @author	dreamer
  * @package	Metaframework
@@ -15,16 +18,19 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_ArrayPlugInRegistry::getRegistry()}
 	 * @generated	attribute definition
 	 * @var		array	$registry
 	 */
 	protected $registry = array();
 	/**
+	 * documented here {@link Mfw_ArrayPlugInRegistry::getChecked()}
 	 * @generated	attribute definition
 	 * @var		boolean	$checked
 	 */
 	protected $checked = false;
 	/**
+	 * documented here {@link Mfw_ArrayPlugInRegistry::getMissing()}
 	 * @generated	attribute definition
 	 * @var		array	$missing
 	 */
@@ -75,7 +81,7 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 	}
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Checks for missing plug-ins by evaluating the plug-in dependencies.
 	 */
 	protected function checkPlugIns() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243436888468_309878_1116) ENABLED START */

@@ -5,6 +5,8 @@
 /* PROTECTED REGION END */
 
 /**
+ * Defines the <b>data transfer object</b> interface according the data 
+ * transfer object pattern (also known as value object pattern).
  * @author	dreamer
  * @package	Metaframework
  */
@@ -13,7 +15,8 @@ interface Mfw_Dto  {
 	
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Obtains the <b>identifier</b> of the <b>view</b> or template by which the 
+	 * dto is used to <i>render</i> an output.
 	 * @return	string
 	 */
 	public function view();

@@ -25,21 +25,23 @@ class Mfw_Context   {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_Context::getName()}
 	 * @generated	attribute definition
 	 * @var		string	$_name
 	 */
 	private $_name;
 	/**
+	 * documented here {@link Mfw_Context::getHandler()}
 	 * @generated	attribute definition
 	 * @var		string	$_handler
 	 */
 	private $_handler;
 	/**
-	 * @var	array of Mfw_Context	stores the linked objects of the  bidirectional one to many association to {@link Mfw_Context} (symmetry ensured) 
+	 * @var	array of Mfw_Context	stores the linked objects of the  bidirectional one to many association to {@link Mfw_Context} (symmetry ensured) ({@link __get() documented here})
 	 */
 	private $_nestedContext = array();
 	/**
-	 * @var	Mfw_Context	stores the linked object of the  bidirectional many to one association to {@link Mfw_Context} (symmetry ensured) 
+	 * @var	Mfw_Context	stores the linked object of the  bidirectional many to one association to {@link Mfw_Context} (symmetry ensured) ({@link __get() documented here})
 	 */
 	private $_parent;
 	/**
@@ -55,10 +57,10 @@ class Mfw_Context   {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * @generated	constructs an object of class {@link Mfw_Context}
-	 * @param	string	$name	
-	 * @param	string	$handler	default value is 'null'
-	 * @param	array	$nestedContext	array of type 'Mfw_Context', default value is 'array()'
+	 * Constructs a context with a name.
+	 * @param	string	$name	the mandatory name and url part of the context
+	 * @param	string	$handler	the optional identifier for the handler
+	 * @param	array	$nestedContext	an optional list with nested contexts
 	 */
 	public function __construct($name, $handler = null, array $nestedContext = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338382406_230888_479) ENABLED START */
@@ -76,7 +78,7 @@ class Mfw_Context   {
 	/**
 	 * resolves the context for the specified path. In case of an unresolvable 
 	 * context, the root context is returned.
-	 * @param	array	$path	the path specifying a context
+	 * @param	array	$path	the url path specifying a context
 	 * @return	Mfw_Context
 	 */
 	public function resolveContext(array $path = array()) {
@@ -117,7 +119,7 @@ class Mfw_Context   {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns a string representation of a context according the pattern <code>/context/context</code>, i.e. the url part
 	 * @return	string
 	 */
 	public function __toString() {
@@ -140,10 +142,10 @@ class Mfw_Context   {
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>name</var>: </li>
-	 *   <li><var>handler</var>: </li>
-	 *   <li><var>nestedContext</var>: the  bidirectional one to many association to {@link Mfw_Context} (symmetry ensured)</li>
-	 *   <li><var>parent</var>: the  bidirectional many to one association to {@link Mfw_Context} (symmetry ensured)</li>
+	 *   <li><var>name</var>: the name of the context, i.e. the url part</li>
+	 *   <li><var>handler</var>: an identifier for the handler of this url part</li>
+	 *   <li><var>nestedContext</var>: [the name of the context, i.e. the url part, an identifier for the handler of this url part, references to the nested contexts, reference to the parent context]</li>
+	 *   <li><var>parent</var>: [the name of the context, i.e. the url part, an identifier for the handler of this url part, references to the nested contexts, reference to the parent context]</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available
@@ -162,7 +164,7 @@ class Mfw_Context   {
 	/**
 	 * magic setter to set the values of the following members:
 	 * <ul>
-	 *   <li><var>handler</var>: </li>
+	 *   <li><var>handler</var>: an identifier for the handler of this url part</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @param	mixed	$value	the value to set
@@ -177,7 +179,7 @@ class Mfw_Context   {
 	/**
 	 * checks if a value is assigned to one the following members:
 	 * <ul>
-	 *   <li><var>handler</var>: </li>
+	 *   <li><var>handler</var>: an identifier for the handler of this url part</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the member is neither accessible nor available
@@ -192,7 +194,7 @@ class Mfw_Context   {
 	/**
 	 * unsets (set to <var>null</var>) the value of the following members:
 	 * <ul>
-	 *   <li><var>handler</var>: </li>
+	 *   <li><var>handler</var>: an identifier for the handler of this url part</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the member is neither accessible nor available

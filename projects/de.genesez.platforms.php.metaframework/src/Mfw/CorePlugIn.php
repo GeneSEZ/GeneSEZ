@@ -7,6 +7,11 @@ require_once 'Mfw/PlugIn.php';
 /* PROTECTED REGION END */
 
 /**
+ * Defines the special <b>core plug-in</b> interface for the metaframework. 
+ * The core plug-in provides <b>implementations</b> of the <b>infrastructure 
+ * interfaces</b> the metaframework defines and has therefore some more 
+ * methods to configure the underlying frameworks, libraries or 
+ * implementations.
  * @see		Mfw_PlugIn
  * @author	dreamer
  * @package	Metaframework
@@ -16,13 +21,17 @@ interface Mfw_CorePlugIn extends Mfw_PlugIn {
 	
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Returns the service registry of the metaframework
 	 * @return	Mfw_ServiceRegistry
 	 */
 	public function getServiceRegistry();
 
 	/**
-	 * @generated	method stub for implementation
+	 * <p>
+	 *   Finalizes the <b>construction</b> phase of the metaframework, i.e. 
+	 *   directly after the registration of the plug-ins and <b>before</b> the <b>request 
+	 *   processing is initiated</b>.
+	 * </p>
 	 */
 	public function finishInitialization();
 

@@ -6,6 +6,9 @@ require_once 'Mfw/PlugIn.php';
 /* PROTECTED REGION END */
 
 /**
+ * Defines the interface for the <b>plug-in registry</b>. A plug-in registry 
+ * is used to <b>register</b> plug-ins and to evaluate the <b>dependencies</b> 
+ * between plug-ins.
  * @author	dreamer
  * @package	Metaframework
  */
@@ -14,19 +17,21 @@ interface Mfw_PlugInRegistry  {
 	
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Mfw_PlugIn	$plugin	
+	 * Registers a plug-in.
+	 * @param	Mfw_PlugIn	$plugin	the plug-in to be registered
 	 */
 	public function register($plugin);
 
 	/**
-	 * @generated	method stub for implementation
+	 * Checks if there are <b>missing dependencies</b> between plug-ins or not.
 	 * @return	boolean
 	 */
 	public function hasMissingDependencies();
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns an associative array with <b>missing plug-in dependencies</b>. The 
+	 * array is structured as follows: identifier of the required plug-in <b>=&gt;</b> 
+	 * array of plug-in identifiers defining the dependency.
 	 * @return	array
 	 */
 	public function getMissingDependencies();

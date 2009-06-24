@@ -5,6 +5,10 @@
 /* PROTECTED REGION END */
 
 /**
+ * Defines the inteface for the <b>extension registry</b>. An extension 
+ * registry is used to manage contributions for particular extensions.<br><br>Note: 
+ * the data type and structure of the contributions must be known by the 
+ * accessing object.
  * @author	dreamer
  * @package	Metaframework
  */
@@ -13,22 +17,22 @@ interface Mfw_ExtensionRegistry  {
 	
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$extension	
-	 * @param	mixed	$contribution	
+	 * Registers a contribution for the specified extension.
+	 * @param	string	$extension	the extension on which a contribution is done
+	 * @param	mixed	$contribution	the contribution for the specified extension
 	 */
 	public function register($extension, $contribution);
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$extension	
+	 * Checks for <b>contributions</b> to the specified extension.
+	 * @param	string	$extension	the identifier of the extension
 	 * @return	boolean
 	 */
 	public function hasContributions($extension);
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$extension	
+	 * Returns an array with the <b>contributions</b> of the specified extensions.
+	 * @param	string	$extension	the identifier of the extension
 	 * @return	array of mixed
 	 */
 	public function getContributions($extension);

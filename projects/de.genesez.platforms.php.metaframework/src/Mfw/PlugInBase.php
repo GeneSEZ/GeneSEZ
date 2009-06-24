@@ -7,6 +7,8 @@ require_once 'Mfw/PlugIn.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides a <b>default implementation</b> of the plug-in interface plug-ins 
+ * can use to just implement the methods they need.
  * @see		Mfw_PlugIn
  * @author	dreamer
  * @package	Metaframework
@@ -19,7 +21,7 @@ abstract class Mfw_PlugInBase  implements Mfw_PlugIn {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * 
 	 * @return	array of string
 	 */
 	public function getDependencies() {

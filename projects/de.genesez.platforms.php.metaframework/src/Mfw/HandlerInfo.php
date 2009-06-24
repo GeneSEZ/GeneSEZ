@@ -7,8 +7,8 @@ require_once 'Mfw/Url.php';
 /* PROTECTED REGION END */
 
 /**
- * Provides information about the request handler to call and useful urls for 
- * request handlers.
+ * Provides information to <b>locate</b> request handler, the <b>execution 
+ * context</b> of the request handler and information about the url paths.
  * @see		ArrayAccess
  * @author	dreamer
  * @package	Metaframework
@@ -44,7 +44,7 @@ class Mfw_HandlerInfo  implements ArrayAccess {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * Creates a new handler info object.
+	 * Constructs a handler info object.
 	 * @param	Mfw_Context	$context	the context of the request handler
 	 * @param	string	$pathInfo	the additional url part relative to the request handler
 	 * @param	string	$requestedPath	the path info of the currently executing script
@@ -67,8 +67,7 @@ class Mfw_HandlerInfo  implements ArrayAccess {
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>handler</var>: the request handler to call
-</li>
+	 *   <li><var>handler</var>: the request handler to call</li>
 	 *   <li><var>context</var>: the context on which the request handler operates (and therefore the 
 context defining the request handler)
 </li>

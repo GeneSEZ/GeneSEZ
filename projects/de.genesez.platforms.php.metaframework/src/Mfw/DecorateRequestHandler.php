@@ -33,7 +33,7 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	 */
 	protected $handlerInfo;
 	/**
-	 * @var	array of Mfw_RequestHandler	stores the linked objects of the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured) 
+	 * @var	array of Mfw_RequestHandler	stores the linked objects of the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured) ({@link __get() documented here})
 	 */
 	private $_nestedRequestHandler = array();
 	/**
@@ -97,7 +97,7 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>nestedRequestHandler</var>: the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured)</li>
+	 *   <li><var>nestedRequestHandler</var>: [contains the request handlers to build the composite]</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available

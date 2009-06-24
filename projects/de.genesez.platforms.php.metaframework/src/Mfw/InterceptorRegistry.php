@@ -5,6 +5,9 @@
 /* PROTECTED REGION END */
 
 /**
+ * Defines the inteface for the <b>interceptor registry</b>. An interceptor 
+ * registry is used to register {@link Mfw_Interceptor interceptors} with 
+ * particular url patterns.
  * @see		IteratorAggregate
  * @author	dreamer
  * @package	Metaframework
@@ -14,9 +17,9 @@ interface Mfw_InterceptorRegistry extends IteratorAggregate {
 	
 	
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$pattern	
-	 * @param	string	$interceptor	
+	 * Registers an interceptor for the specified url pattern.
+	 * @param	string	$pattern	the url pattern, i.e. a regular expression a url must match
+	 * @param	string	$interceptor	the identifier of the interceptor
 	 */
 	public function register($pattern, $interceptor);
 

@@ -7,6 +7,8 @@ require_once 'UML/MultiQualifiedAssociation.php';
 /* PROTECTED REGION END */
 
 /**
+ * Defines a <b>composite structure</b> of request handlers, i.e. a request 
+ * is handled using several other request handlers.
  * @see		Mfw_RequestHandler
  * @author	dreamer
  * @package	Metaframework
@@ -21,7 +23,7 @@ interface Mfw_CompositeRequestHandler extends Mfw_RequestHandler {
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>nestedRequestHandler</var>: the  multi qualified unidirectional to one association to {@link Mfw_RequestHandler} (symmetry ensured)</li>
+	 *   <li><var>nestedRequestHandler</var>: [contains the request handlers to build the composite]</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available

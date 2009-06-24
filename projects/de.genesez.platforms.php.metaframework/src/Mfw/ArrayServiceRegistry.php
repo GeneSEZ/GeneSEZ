@@ -6,6 +6,8 @@ require_once 'Mfw/ServiceRegistry.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides a simple <b>default implementation</b> of the service registry 
+ * interface using an associative array to manage components.
  * @see		Mfw_ServiceRegistry
  * @author	dreamer
  * @package	Metaframework
@@ -14,6 +16,7 @@ class Mfw_ArrayServiceRegistry  implements Mfw_ServiceRegistry {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_ArrayServiceRegistry::getRegistry()}
 	 * @generated	attribute definition
 	 * @var		array	$registry
 	 */

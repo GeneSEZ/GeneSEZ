@@ -7,6 +7,7 @@ require_once 'Mfw/HandlerInfo.php';
 /* PROTECTED REGION END */
 
 /**
+ * Defines the request handler interface used to <b>handle</b> requests.
  * @author	dreamer
  * @package	Metaframework
  */
@@ -18,14 +19,14 @@ interface Mfw_RequestHandler  {
 	 * Processes the current request. It returns either a <b>DTO</b> which 
 	 * contains all data to be rendered or it returns <b>true</b> to indicate 
 	 * that rendering was already done.
-	 * @param	Mfw_HandlerInfo	$handlerInfo	provides additional information
+	 * @param	Mfw_HandlerInfo	$handlerInfo	additional information about the request and handler
 	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo);
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$view	
+	 * Setter for the view used to render the content
+	 * @param	string	$view	the identifier of the view
 	 */
 	public function setView($view);
 
