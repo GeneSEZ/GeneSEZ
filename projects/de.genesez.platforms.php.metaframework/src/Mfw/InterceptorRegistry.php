@@ -1,5 +1,4 @@
 <?php
-require_once 'Mfw/Interceptor.php';
 
 /* PROTECTED REGION ID(php.own.imports._16_0_b6f02e1_1243329496625_610259_886) ENABLED START */
 // TODO: put your further include + require statements here
@@ -17,7 +16,7 @@ interface Mfw_InterceptorRegistry extends IteratorAggregate {
 	/**
 	 * @generated	method stub for implementation
 	 * @param	string	$pattern	
-	 * @param	Mfw_Interceptor	$interceptor	
+	 * @param	string	$interceptor	
 	 */
 	public function register($pattern, $interceptor);
 

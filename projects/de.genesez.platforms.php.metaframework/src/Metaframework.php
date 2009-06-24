@@ -152,13 +152,18 @@ class Metaframework   {
 		$url = $handlerInfo->requestedPath;
 		foreach ($this->interceptorRegistry->getIterator() as $value) {
 			$pattern = key($value);
-			$interceptor = current($value);
 			if (preg_match($pattern, $url) === 0) {
 				continue;
 			} else {
-				$proceed = $interceptor->intercept($handlerInfo);
-				if ($proceed === false) {
-					return;
+				if ($this->serviceRegistry->hasComponent(current($value)) === true) {
+					$interceptor = $this->serviceRegistry->getComponent(current($value));
+					$proceed = $interceptor->intercept($handlerInfo);
+					if ($proceed === false) {
+						return;
+					}
+				} else {
+					// TODO: throw exception? error reporting
+					continue;
 				}
 			}
 		}
