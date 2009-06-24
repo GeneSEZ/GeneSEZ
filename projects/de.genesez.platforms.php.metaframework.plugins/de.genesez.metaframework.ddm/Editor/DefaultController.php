@@ -27,6 +27,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 * @throws		{@link Editor_NoClassSpecifiedException}
 	 * @throws		{@link Editor_UnknownClassSpecifiedException}
 	 * @param	null	$handlerInfo	
+	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_406447_303) ENABLED START */
@@ -82,6 +83,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 
 	/**
 	 * @throws		{@link Editor_NoClassSpecifiedException}
+	 * @return	Mfw_Dto
 	 */
 	protected function noClassSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_802451_306) ENABLED START */
@@ -92,6 +94,7 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	/**
 	 * @generated	method stub for implementation
 	 * @throws		{@link Editor_UnknownClassSpecifiedException}
+	 * @return	Mfw_Dto
 	 */
 	protected function unknownClassSpecified() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241254501703_257117_307) ENABLED START */
