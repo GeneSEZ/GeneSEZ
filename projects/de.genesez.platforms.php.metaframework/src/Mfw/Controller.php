@@ -2,6 +2,9 @@
 require_once 'Mfw/HandlerInfo.php';
 require_once 'Mfw/Action.php';
 require_once 'Mfw/Dto.php';
+require_once 'Mfw/NoActionSpecifiedException.php';
+require_once 'Mfw/NoIdSpecifiedException.php';
+require_once 'Mfw/UnknownActionSpecifiedException.php';
 require_once 'Mfw/RequestHandlerBase.php';
 require_once 'UML/MultiQualifiedAssociation.php';
 require_once 'UML/OneAssociation.php';
@@ -98,6 +101,9 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	
 	/**
 	 * @generated	method stub for implementation
+	 * @throws		{@link Mfw_NoActionSpecifiedException}
+	 * @throws		{@link Mfw_NoIdSpecifiedException}
+	 * @throws		{@link Mfw_UnknownActionSpecifiedException}
 	 * @param	Mfw_HandlerInfo	$handlerInfo	
 	 * @return	Mfw_Dto
 	 */
@@ -166,6 +172,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 
 	/**
 	 * @generated	method stub for implementation
+	 * @throws		{@link Mfw_NoActionSpecifiedException}
 	 * @return	Mfw_Dto
 	 */
 	protected function noActionSpecified() {
@@ -176,6 +183,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 
 	/**
 	 * @generated	method stub for implementation
+	 * @throws		{@link Mfw_UnknownActionSpecifiedException}
 	 * @return	Mfw_Dto
 	 */
 	protected function unknownActionSpecified() {
@@ -186,6 +194,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 
 	/**
 	 * @generated	method stub for implementation
+	 * @throws		{@link Mfw_NoIdSpecifiedException}
 	 * @return	Mfw_Dto
 	 */
 	protected function noIdSpecified() {
