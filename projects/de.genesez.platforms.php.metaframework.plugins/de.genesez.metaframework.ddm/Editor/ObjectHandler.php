@@ -53,7 +53,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
 			}
 		}
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'class' => $this->getClass(),
 			'classes' => $this->classDao->fetchSuperclasses($this->getClass()),
 //			'attributes' => $this->objectDao->fetchAllAttributes($this->getClass()),
@@ -87,7 +87,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
 			}
 		}
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'class' => $this->getClass(),
 			'classes' => $this->classDao->fetchSuperclasses($this->getClass()),
 //			'attributes' => $this->objectDao->fetchAllAttributes($this->getClass()),
@@ -142,7 +142,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 				}
 			}
 		}
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'object' => $entity,
 			'class' => $selected,
 			'classes' => $classes,
@@ -159,7 +159,7 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	 */
 	public function listing() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241433685616_601136_847) ENABLED START */
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'class' => $this->getClass(),
 			'classes' => $this->classDao->fetchSuperclasses($this->getClass()),
 			'objects' => $this->objectDao->fetchAllByClass($this->getClass()),

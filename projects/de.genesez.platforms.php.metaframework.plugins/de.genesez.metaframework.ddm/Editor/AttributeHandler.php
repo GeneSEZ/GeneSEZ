@@ -44,7 +44,7 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
 			}
 		}
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'form' => $this->attributeAdapter->dto(),
 		));
 		/* PROTECTED REGION END */
@@ -73,7 +73,7 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
 			}
 		}
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'form' => $this->attributeAdapter->dto(), 
 		));
 		/* PROTECTED REGION END */
@@ -116,7 +116,7 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 */
 	public function listing() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430826241_870334_397) ENABLED START */
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'attributes' => $this->attributeDao->fetchAll(),
 			'edit' => $this->newLink('edit'),
 			'delete' => $this->newLink('delete'),

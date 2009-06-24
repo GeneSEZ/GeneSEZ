@@ -44,7 +44,7 @@ class Editor_TypeHandler extends Util_NotifierController  {
 				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
 			}
 		}
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'form' => $this->typeAdapter->dto()
 		));
 		/* PROTECTED REGION END */
@@ -74,7 +74,7 @@ class Editor_TypeHandler extends Util_NotifierController  {
 				$this->notifier->add(new Msg_Message($error, Msg_Message::ERROR), 0);
 			}
 		}
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'form' => $this->typeAdapter->dto(),
 		));
 		/* PROTECTED REGION END */
@@ -118,7 +118,7 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 */
 	public function listing() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241430298413_462039_301) ENABLED START */
-		return new Core_BaseDto(array(
+		return new Mfw_DtoBase(array(
 			'types' => $this->typeDao->fetchAll(),
 			'edit' => $this->newLink('edit'),
 			'delete' => $this->newLink('delete'),
