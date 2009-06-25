@@ -10,10 +10,10 @@ require_once 'Mfw/CompositeRequestHandler.php';
 /* PROTECTED REGION END */
 
 /**
- * Abstract implementation of the <b>Decorator</b> and <b>Delegator</b> 
+ * Provides an abstract implementation of the <b>Decorator</b> and <b>Delegator</b> 
  * design pattern for request handlers, allowing the addition of 
- * functionality to existing request handlers 
- * as well as the delegation to other request handlers.
+ * functionality to existing request handlers as well as the delegation to 
+ * other request handlers.
  * @see		Mfw_RequestHandlerBase
  * @see		Mfw_CompositeRequestHandler
  * @author	dreamer
@@ -23,11 +23,13 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_DecorateRequestHandler::getHandler()}
 	 * @generated	attribute definition
 	 * @var		Mfw_RequestHandler	$handler
 	 */
 	protected $handler;
 	/**
+	 * documented here {@link Mfw_DecorateRequestHandler::getHandlerInfo()}
 	 * @generated	attribute definition
 	 * @var		Mfw_HandlerInfo	$handlerInfo
 	 */
@@ -45,8 +47,12 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * Creates a new request handler which uses other request handlers to process 
+	 * Constructs a request handler which uses other request handlers to process 
 	 * the request.
+	 * <br>
+	 * <br>Note: the second parameter takes an associative array with <i>key =&gt; value</i> 
+	 * pairs, the key specifying the <b>name</b> of the request handler and the 
+	 * value specifying the request handler.
 	 * @param	Mfw_RequestHandler	$handler	the request handler to decorate
 	 * @param	array	$delegateHandler	an associative array with key => value pairs of delegated request handlers
 	 */
@@ -65,7 +71,7 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	 * Decorates the data transfer objects of the delegation and the decorated 
 	 * request handler.
 	 * @param	Mfw_Dto	$dto	the data transfer object to decorate
-	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
 	protected abstract function decorate($dto, $handlerInfo);
@@ -73,11 +79,11 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * Handles the requst using the decorated and the delegation request 
+	 * Processes the requst using the <b>decorated</b> and the delegation request 
 	 * handlers. The data transfer objects of the delegation request handlers are 
 	 * added to the data transfer object of the decorated request handler. The 
 	 * DTO is then passed to the decorate method.
-	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {

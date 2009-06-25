@@ -5,6 +5,7 @@
 /* PROTECTED REGION END */
 
 /**
+ * Indicates an <b>unknown action</b> within the requested url.
  * @see		Exception
  * @author	dreamer
  * @package	Metaframework

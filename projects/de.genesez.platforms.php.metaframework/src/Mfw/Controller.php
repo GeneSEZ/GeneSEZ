@@ -15,6 +15,9 @@ require_once 'HTTP.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides an abstract <b>default implementation</b> of a common concept of 
+ * request handling of MVC web frameworks by relying on the url pattern: 
+ * &lt;code&gt;/&lt;controller&gt;/&lt;action&gt;&lt;/code&gt;
  * @see		Mfw_RequestHandlerBase
  * @author	dreamer
  * @package	Metaframework
@@ -23,6 +26,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_Controller::getHandlerInfo()}
 	 * @generated	attribute definition
 	 * @var		Mfw_HandlerInfo	$handlerInfo
 	 */
@@ -48,7 +52,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * @generated	constructs an object of class {@link Mfw_Controller}
+	 * Constructs a controller
 	 */
 	public function __construct() {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240241341890_219976_955) ENABLED START */
@@ -65,34 +69,34 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	// -- method declarations -----------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Creates a new domain object.
 	 * @return	Mfw_Dto
 	 */
 	public abstract function create();
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$id	
+	 * Deletes the domain object with the specified id.
+	 * @param	string	$id	the id of the domain object to be deleted
 	 * @return	Mfw_Dto
 	 */
 	public abstract function delete($id);
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$id	
+	 * Edits the domain object with the specified id.
+	 * @param	string	$id	the id of the domain object to be edited
 	 * @return	Mfw_Dto
 	 */
 	public abstract function edit($id);
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$id	
+	 * Shows the detailsof the domain object with the specified id.
+	 * @param	string	$id	the id of the domain object to be displayed
 	 * @return	Mfw_Dto
 	 */
 	public abstract function show($id);
 
 	/**
-	 * @generated	method stub for implementation
+	 * Lists all domain objects of the same type.
 	 * @return	Mfw_Dto
 	 */
 	public abstract function listing();
@@ -100,11 +104,12 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Processes the current request and <b>checks</b> for additional url parts 
+	 * specifying the <b>action</b> to be called.
 	 * @throws		{@link Mfw_NoActionSpecifiedException}
 	 * @throws		{@link Mfw_NoIdSpecifiedException}
 	 * @throws		{@link Mfw_UnknownActionSpecifiedException}
-	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {
@@ -134,9 +139,10 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$action	default value is 'null'
-	 * @param	string	$controller	default value is 'null'
+	 * Redirects the request to another controller and/or action. You may specify 
+	 * at least one of both parameters.
+	 * @param	string	$action	the optional action to redirect to
+	 * @param	string	$controller	the optional controller to redirect to
 	 */
 	protected function redirect($action = null, $controller = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240245232109_266957_1067) ENABLED START */
@@ -145,9 +151,9 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	string	$action	default value is 'null'
-	 * @param	string	$controller	default value is 'null'
+	 * Creates a <b>url</b> pointing to the specified action and the specified controller. If the controller is not specified, the current controller is used. If a controller is specified, it is assumed that it is on the same level as the current controller, i.e.: current url: <code>...fixed part.../current controller/action</code>, target url: <code>...fixed part.../controller/action</code>
+	 * @param	string	$action	the optional action of the url to be created
+	 * @param	string	$controller	the optional controller of the url to be created, default is the current controller
 	 * @return	string
 	 */
 	protected function newLink($action = null, $controller = null) {
@@ -171,7 +177,8 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Handles the request if the <b>action</b> is <b>missing</b> within the 
+	 * requested url.
 	 * @throws		{@link Mfw_NoActionSpecifiedException}
 	 * @return	Mfw_Dto
 	 */
@@ -182,7 +189,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Handles the request if the <b>action</b> of the requested url is <b>unknown</b>.
 	 * @throws		{@link Mfw_UnknownActionSpecifiedException}
 	 * @return	Mfw_Dto
 	 */
@@ -193,7 +200,8 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Handles the request if the requested action needs an id but the <b>id</b> 
+	 * is <b>missing</b> within the requested url.
 	 * @throws		{@link Mfw_NoIdSpecifiedException}
 	 * @return	Mfw_Dto
 	 */
@@ -204,7 +212,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Checks the requested url for a specified action.
 	 * @return	boolean
 	 */
 	protected function hasAction() {
@@ -217,7 +225,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns the action specified from the requested url.
 	 * @return	string
 	 */
 	protected function getAction() {
@@ -227,7 +235,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Checks the requested url for a specified id.
 	 * @return	boolean
 	 */
 	protected function hasId() {
@@ -240,7 +248,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns the specified id from the requested url.
 	 * @return	string
 	 */
 	protected function getId() {

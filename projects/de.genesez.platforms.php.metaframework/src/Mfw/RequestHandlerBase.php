@@ -8,6 +8,8 @@ require_once 'Mfw/RequestHandler.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides a <b>base implementation</b> for request handlers by providing 
+ * useful methods as well as a reference to the service registry..
  * @see		Mfw_RequestHandler
  * @author	dreamer
  * @package	Metaframework
@@ -16,11 +18,13 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
+	 * documented here {@link Mfw_RequestHandlerBase::getView()}
 	 * @generated	attribute definition
 	 * @var		string	$view
 	 */
 	protected $view;
 	/**
+	 * documented here {@link Mfw_RequestHandlerBase::getServiceRegistry()}
 	 * @generated	attribute definition
 	 * @var		Mfw_ServiceRegistry	$serviceRegistry
 	 */
@@ -31,28 +35,31 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Returns the base server URL, i.e. the accessible <b>root url</b> of the 
+	 * server, see {@link Mfw_Url::baseServerUri()}
 	 * @return	string
 	 */
 	public static function baseServerUri() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239126458937_358804_1194) ENABLED START */
-		return substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') +1);
+		return Mfw_Url::baseServerUri();
 		/* PROTECTED REGION END */
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns the base request URL, i.e. the url of the <b>requested</b> php 
+	 * script, see {@link Mfw_Url::baseRequestUri()}
 	 * @return	string
 	 */
 	public static function baseRequestUri() {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240211928703_764012_723) ENABLED START */
-		return $_SERVER['SCRIPT_NAME'];
+		return Mfw_Url::baseRequestUri();
 		/* PROTECTED REGION END */
 	}
 
 	/**
-	 * @generated	method stub for implementation
-	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * Returns the URL of the <b>current handler</b>, i.e. the base request uri 
+	 * concatenated with the context path of the current request handler.
+	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	string
 	 */
 	public function baseHandlerUri($handlerInfo) {
@@ -62,7 +69,8 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns a <b>default identifier</b> of the view used to render the output 
+	 * of the current request.
 	 * @return	string
 	 */
 	public static function defaultView() {
@@ -79,6 +87,7 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	
 	// -- association + attribute accessors ---------------------------------
 	/**
+	 * documented here {@link Mfw_RequestHandlerBase::getView()}
 	 * @generated	setter method for the attribute {@link Mfw_RequestHandlerBase::getView() $view}
 	 * @param	string	$view	the value to set
 	 */
@@ -87,6 +96,7 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 		$this->view = $view;
 	}
 	/**
+	 * documented here {@link Mfw_RequestHandlerBase::getServiceRegistry()}
 	 * @generated	setter method for the attribute {@link Mfw_RequestHandlerBase::getServiceRegistry() $serviceRegistry}
 	 * @param	Mfw_ServiceRegistry	$serviceRegistry	the value to set
 	 */
@@ -96,7 +106,7 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
-	 *   <li><var>view</var>: </li>
+	 *   <li><var>view</var>: the identifier of the view which generates the output</li>
 	 * </ul>
 	 * @param	string	$name	the name of the member
 	 * @throws	{@link Exception} if the specified member is neither accessible nor available

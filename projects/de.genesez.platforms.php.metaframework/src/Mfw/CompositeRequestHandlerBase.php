@@ -10,6 +10,9 @@ require_once 'Mfw/CompositeRequestHandler.php';
 /* PROTECTED REGION END */
 
 /**
+ * Provides a <b>default implementation</b> according the composite design 
+ * pattern, by delegating the handling of the request to all nested request 
+ * handlers.
  * @see		Mfw_RequestHandlerBase
  * @see		Mfw_CompositeRequestHandler
  * @author	dreamer
@@ -30,8 +33,9 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * @generated	constructs an object of class {@link Mfw_CompositeRequestHandlerBase}
-	 * @param	array	$requestHandlers	array of type 'Mfw_RequestHandler', default value is 'array()'
+	 * Constructs a composite request handler with an associative array 
+	 * specifying <b>name =&gt; request handler</b> pairs.
+	 * @param	array	$requestHandlers	an associative array specifying name => request handler pairs
 	 */
 	public function __construct(array $requestHandlers = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240398478812_21504_360) ENABLED START */
@@ -45,10 +49,9 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * Processes the current request. It returns either a <b>DTO</b> which 
-	 * contains all data to be rendered or it returns <b>true</b> to indicate 
-	 * that rendering was already done.
-	 * @param	Mfw_HandlerInfo	$handlerInfo	provides additional information
+	 * Processes the request using all nested request handlers by building a <b>composite</b> 
+	 * data transfer object.
+	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
 	public function handle($handlerInfo) {

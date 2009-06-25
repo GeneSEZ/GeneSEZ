@@ -55,7 +55,7 @@ class Mfw_Url   {
 	}
 
 	/**
-	 * Returns the base server URL, i.e. the base URL which is accessible from a 
+	 * Returns the base server URL, i.e. the root URL which is accessible from a 
 	 * web browser. This URL <b>ends</b> with a<b> slash</b> and does <b>not</b> 
 	 * contain the script called.
 	 * @return	string
@@ -67,8 +67,8 @@ class Mfw_Url   {
 	}
 
 	/**
-	 * Returns the URL of the current request, i.e. the script which was called, 
-	 * without any additional path information.
+	 * Returns the URL of the current request, i.e. the url of the <b>requested</b> 
+	 * php script, without any additional path information.
 	 * @return	string
 	 */
 	public static function baseRequestUri() {
