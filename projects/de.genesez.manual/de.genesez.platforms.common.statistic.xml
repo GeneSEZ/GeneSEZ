@@ -1,0 +1,448 @@
+<?xml version='1.0'?>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book
+	PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+	[
+		<!ENTITY % isolat1 SYSTEM "http://www.w3.org/2003/entities/iso8879/isolat1.ent">
+		%isolat1;
+	]
+>
+<chapter>
+
+  <title>Statistik-Komponente</title>
+
+  <para>Im Umfeld der modellgetriebenen Softwareentwicklung wird meist 
+  nach Informationen und Zahlen verlangt die Aufschlu&szlig; dar&uuml;ber geben 
+  sollen, ob sich der Einsatz von MDSD lohnt oder nicht. Zu den 
+  Informationen geh&ouml;rt dann oft wiederkehrender Quellcode sowie die 
+  Persistenzschicht und bei Zahlen l&auml;sst man sich zu prozentualen 
+  Sch&auml;tzungen bringen - die manchmal daneben liegen k&ouml;nnen.</para>
+
+  <para>Die Statistik-Komponente kann dazu genutzt werden, um die 
+  prozentualen Sch&auml;tzungen zu unterst&uuml;tzen und einen Einblick in die 
+  Quellcode-Zusammensetzung zu erlangen. Bewust auf wesentliche 
+  Informationen reduziert und sie f&uuml;r Entscheider nutzbar zu 
+  machen.</para>
+
+  <section>
+
+    <title>Funktionsumfang</title>
+
+    <para>Die Statistik-Komponente kann f&uuml;r ein Software-Projekt mit 
+    mehreren Quellcodeverzeichnissen konfiguriert werden. F&uuml;r alle 
+    Quellcodedateien werden die Anzahl der Quellcodezeilen (Lines of 
+    Code) f&uuml;r die folgenden Kategorien ermittelt:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>generierte Quellcodezeilen</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>manuell implementierter Quellcode</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>Dokumentation</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>Kommentare</para>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Leerzeilen werden beim z&auml;hlen nicht mit ber&uuml;cksichtigt. Die 
+    Werte werden getrennt f&uuml;r die einzelnen Quellcodedateien, f&uuml;r die 
+    Quellcodeverzeichnisse sowie f&uuml;r das Projekt gesamt 
+    angegeben.</para>
+
+    <para>Dokumentationskommentare und Kommentare werden separat 
+    aufgef&uuml;hrt, da sie das Verh&auml;ltnis zwischen generierten und 
+    nicht-generierten Quellcode sehr beeinflussen k&ouml;nnen. Kommentare 
+    sind meist manuell geschrieben und w&uuml;rden wobei 
+    Dokumentationskommentare meist auf dem Modell generiert werden. Die 
+    manuellen und generierten Quellcodezeilen enthalten keine 
+    Kommentare und umfassen demnach (meist) nur 
+    Programmanweisungen.</para>
+
+  </section>
+
+  <section>
+
+    <title>Workflow-Konfiguration</title>
+
+    <para>Um die Statistik-Komponente zu nutzen, muss lediglich eine 
+    Workflow Komponente hinzugef&uuml;gt werden:</para>
+
+    <programlisting>&lt;component id=&quot;statistics&quot; class=&quot;de.genesez.platforms.common.workflow.Statistics&quot;&gt; 
+    ...
+&lt;/component&gt;</programlisting>
+    <para>Die Statistik Workflow Komponente ist von der 
+    <link linkend="de.genesez.platforms.common.workflow.generator">
+    <emphasis>Generator</emphasis></link> Workflow Komponente 
+    abgeleitet und kann dadurch mit den selben Parametern konfiguriert 
+    werden. Die wichtigsten geerbten Parameter sind folgende:</para>
+
+    <variablelist>
+
+      <varlistentry>
+
+        <term><emphasis role="bold">outputDir</emphasis></term>
+
+        <term>mandatory</term>
+
+        <term>single-value</term>
+
+        <listitem>
+
+          <para>spezifiziert das Ausgabeverzeichnis f&uuml;r die 
+          Statistik-Datei, siehe 
+          <link linkend="de.genesez.platforms.common.workflow.generator.outputDir">
+          hier</link></para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>template</term>
+
+        <term>mandatory</term>
+
+        <term>single-value</term>
+
+        <term>Standard: 
+        <literal>de::genesez::platforms::common::statistic::Root::Root</literal></term>
+
+        <listitem>
+
+          <para>spezifiziert das Template welches die Statistik-Datei 
+          generiert. Soll das Aussehen der Statistik-Datei ge&auml;ndert 
+          werden, kann hier ein anderes Template spezifiziert werden 
+          oder der Parameter 
+          <link linkend="de.genesez.platforms.common.workflow.generator.aspectTemplate">
+          <emphasis>aspectTemplate</emphasis></link> genutzt 
+          werden.</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>slot</term>
+
+        <term>mandatory</term>
+
+        <term>single-value</term>
+
+        <term>Standard: <literal>statisticModel</literal></term>
+
+        <listitem>
+
+          <para>die Statistik-Komponente &auml;ndert den Standartwert des 
+          <link id="de.genesez.platforms.common.generator.slot">
+          <emphasis>Slot</emphasis></link>-Parameters zur Ablage des 
+          Statistik-Modells</para>
+
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
+
+    <para>Die Workflow Komponente selbst bietet folgende 
+    Paramete:</para>
+
+    <variablelist>
+
+      <varlistentry>
+
+        <term>name</term>
+
+        <term>optional</term>
+
+        <term>single-value</term>
+
+        <term>Standard: <literal>Statistic</literal></term>
+
+        <listitem>
+
+          <para>der Name des Software-Projekts f&uuml;r die Zusammenfassung 
+          sowie die Statistik-Datei</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>withDate</term>
+
+        <term>optional</term>
+
+        <term>single-value</term>
+
+        <term>Standard: <literal>false</literal></term>
+
+        <listitem>
+
+          <para>boolscher Wert der angibt ob der Name der 
+          Statistik-Datei um einen Zeitstempel erg&auml;nzt werden 
+          soll</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry id="de.genesez.platforms.common.statistic.generatedDir">
+
+        <term>generatedDir</term>
+
+        <term>optional</term>
+
+        <term>multi-value</term>
+
+        <listitem>
+
+          <para>ein Quellcodeverzeichnis mit generierten Quellcode, 
+          d.h. die Quellcodedateien wurden vom Generator erzeugt und 
+          innerhalb Protected Regions wurde manuel implementiert</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>generatedDirs</term>
+
+        <term>optional</term>
+
+        <term>multi-value</term>
+
+        <listitem>
+
+          <para>gleiche Bedeutung wie 
+          <link linkend="de.genesez.platforms.common.statistic.generatedDir">
+          <emphasis>generatedDir</emphasis></link> , jedoch kann als 
+          Wert eine mit Komma oder Semikolon getrennte Liste mit 
+          Quellcodeverzeichnissen angegeben werden</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry id="de.genesez.platforms.common.statistic.manualDir">
+
+        <term>manualDir</term>
+
+        <term>optional</term>
+
+        <term>multi-value</term>
+
+        <listitem>
+
+          <para>ein Quellcodeverzeichnis das ausschlie&szlig;lich manuellen 
+          Quellcode enth&auml;lt, d.h. die Quellcodedateien wurden manuell 
+          erzeugt und enthalten keinerlei generierten Quellcode</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>manualDirs</term>
+
+        <term>optional</term>
+
+        <term>multi-value</term>
+
+        <listitem>
+
+          <para>gleiche Bedeutung wie 
+          <link linkend="de.genesez.platforms.common.statistic.manualDir">
+          <emphasis>manualDir</emphasis></link> , jedoch kann als Wert 
+          eine mit Komma oder Semikolon getrennte Liste mit 
+          Quellcodeverzeichnissen angegeben werden</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>excludes</term>
+
+        <term>optional</term>
+
+        <term>single-value</term>
+
+        <term>Standard: <literal>.svn, .cvs</literal></term>
+
+        <listitem>
+
+          <para>spezifiziert die Namen f&uuml;r den Dateifilter der Dateien 
+          und Verzeichnisse mit diesen Namen von der Statistik 
+          ausschlie&szlig;t</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>comments</term>
+
+        <term>optional</term>
+
+        <term>single-value</term>
+
+        <listitem>
+
+          <para>spezifiziert die Kommentarzeichen um die 
+          Quellcodezeilen auszuwerten. Die Kommentarzeichen werden mit 
+          einer Objektdefinition angegeben. Folgend die 
+          Standardwerte:</para>
+
+          <programlisting>&lt;comments class=&quot;de.genesez.platforms.common.statistic.CommentSign&quot;&gt;
+    &lt;singleLineComment value=&quot;//&quot; /&gt;
+    &lt;multiLineCommentStart value=&quot;/\\*&quot; /&gt;
+    &lt;multiLineCommentEnd value=&quot;\\*/&quot; /&gt;
+    &lt;multiLineCommentLine value=&quot;\\*&quot; /&gt;
+    &lt;multiLineDocCommentStart value=&quot;/\\*\\*&quot; /&gt;
+&lt;/comments&gt;</programlisting>
+          <para>Standardm&auml;&szlig;ig beginnen Einzeilenkommentare mit 
+          <literal>//</literal>, Mehrzeilenkommentare mit 
+          <literal>/*</literal>, Dokumentationskommentare mit 
+          <literal>/**</literal>. Mehrzeilen- und 
+          Dokumentationskommentare enden mit <literal>*/</literal>. 
+          Kommentarzeilen innerhalb Mehrzeilen- und 
+          Dokumentationskommentaren beginnen mit 
+          <literal>*</literal>.</para>
+
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
+
+  </section>
+
+  <section>
+
+    <title>Logging</title>
+
+    <para>Die Statistik-Komponente nutzt das Logging-Konzept. Sollten 
+    zuviel unerw&uuml;nschte Log-Ausgaben im Workflow erscheinen, so kann in 
+    einer <literal>log4j.properties</literal> Datei der entsprechende 
+    Logger auf ein h&ouml;heres Log-Level gestellt werden:</para>
+
+    <programlisting>log4j.logger.de.genesez.platforms.common.statistic = INFO</programlisting>
+    <para>Weitere Informationen zum Logging und zur Konfiguration siehe 
+    <link linkend="de.genesez.platforms.common.logging">GeneSEZ Logging 
+    Konzept</link>.</para>
+
+  </section>
+
+  <section>
+
+    <title>Hinweis zu den Diagrammen in der Statistik</title>
+
+    <para>Die Diagramme in der Statistik werden aktuell von der 
+    <link linkend="http://code.google.com/intl/de-DE/apis/chart/">
+    Google Chart API</link> generiert. Dies ist ein Web-Service der die 
+    Diagramme als Bilder f&uuml;r eine URL mit den Daten liefert. Daher muss 
+    aktuell beim Betrachten der Statistik-Webseite eine 
+    Internetverbindung bestehen um die Diagramme sehen zu k&ouml;nnen!</para>
+
+  </section>
+
+  <section>
+
+    <title>Statstik-&Uuml;bersicht am Beispiel</title>
+
+    <para>Das Beispiel nutzt das metaframework als Software-Projekt. 
+    Die Statistik-Komponente ist im Workflow wie folgt definiert:</para>
+
+    <programlisting>&lt;component id=&quot;statistics&quot; class=&quot;de.genesez.platforms.common.workflow.Statistics&quot;&gt;
+    &lt;name value=&quot;metaframework&quot; /&gt;
+    &lt;outputDir value=&quot;../de.genesez.platforms.php.metaframework/reports/statistics&quot; /&gt;
+    &lt;generatedDir value=&quot;../de.genesez.platforms.php.metaframework/src&quot; /&gt;
+    &lt;manualDir value=&quot;../de.genesez.platforms.php.metaframework/tests&quot; /&gt;
+    &lt;comments class=&quot;de.genesez.platforms.common.statistic.CommentSign&quot;&gt;
+        &lt;singleLineComment value=&quot;//&quot; /&gt;
+        &lt;multiLineCommentStart value=&quot;/\\*&quot; /&gt;
+        &lt;multiLineCommentEnd value=&quot;\\*/&quot; /&gt;
+        &lt;multiLineCommentLine value=&quot;\\*&quot; /&gt;
+        &lt;multiLineDocCommentStart value=&quot;/\\*\\*&quot; /&gt;
+    &lt;/comments&gt;
+&lt;/component&gt;</programlisting>
+    <para>Das Zielverzeichnis des Generators ist hier als 
+    <emphasis>generatedDir</emphasis> angegeben. Das Verzeichnis mit 
+    den JUnit Tests ist ein Verzeichnis mit komplett manuell erstelltem 
+    Quellcode.</para>
+
+    <para>Nach Ausf&uuml;hrung des Workflows ist im Ausgabe-Verzeichnis die 
+    Datei <literal>metaframework.html</literal> zu finden, welche die 
+    Statistik-&Uuml;bersicht enth&auml;lt:</para>
+
+    <figure id="de.genesez.platforms.common.statistic.example.short.tests">
+
+      <title>&Uuml;bersicht zur Quellcode Zusammensetzung</title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.statistic.example.short.tests.png"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Ganz oben findet sich die Projekt-Statistik sowie zwei 
+    Diagramme welche die Quellcodezeilen je Kategorie aufzeigen. Unten 
+    folgen die konfigurierten Quellcodeverzeichnisse. Mit Klick auf den 
+    Button sind die Details der Quellcodedateien zu sehen:</para>
+
+    <figure id="de.genesez.platforms.common.statistic.example.details">
+
+      <title>Details zu den einzelnen Quellcodedateien</title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.statistic.example.details.png"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Es gibt auch eine Zusammenfassung f&uuml;r jedes 
+    Quellcodeverzeichnis:</para>
+
+    <figure id="de.genesez.platforms.common.statistic.example.details.sum">
+
+      <title>Zusammensetzung Quellcodeverzeichnis</title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.statistic.example.details.sum.png"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Werden die komplett manuell erstellten Tests aus der 
+    Statistik ausgeklammert wirken die Zahlen noch positiver ;-)</para>
+
+    <figure id="de.genesez.platforms.common.statistic.example.short">
+
+      <title>Statistik zum Quellcode ohne Tests</title>
+
+      <mediaobject><imageobject><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.statistic.example.short.png"/></imageobject></mediaobject>
+    </figure>
+
+  </section>
+
+</chapter>
+
