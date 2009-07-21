@@ -22,6 +22,8 @@ public class SProject {
 	/** the filename of the statistic file */
 	private String filename;
 	
+	private String excludes;
+	
 	
 	/**
 	 * Constructs a new statistic project
@@ -67,7 +69,7 @@ public class SProject {
 	 * @param directory		a source folder with generated source code
 	 */
 	public void addGeneratedSourceFolder(String directory) {
-		this.sourceFolders.add(new SDirectory(directory, true));
+		this.sourceFolders.add(new SDirectory(directory, true, excludes));
 	}
 	
 	/**
@@ -75,7 +77,7 @@ public class SProject {
 	 * @param directory		a source folder with manually written source code
 	 */
 	public void addManualSourceFolder(String directory) {
-		this.sourceFolders.add(new SDirectory(directory, false));
+		this.sourceFolders.add(new SDirectory(directory, false, excludes));
 	}
 	
 	/**
@@ -96,6 +98,14 @@ public class SProject {
 		for (String dir : directories) {
 			addManualSourceFolder(dir);
 		}
+	}
+	
+	/**
+	 * Sets the file names to exclude
+	 * @param excludes	file names to exclude
+	 */
+	public void setExcludes(String excludes) {
+		this.excludes = excludes;
 	}
 	
 	/**

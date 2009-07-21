@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openarchitectureware.xpand2.pr.util.GenericFileFilter;
 
 /**
  * Verzeichnis eines Projektes
@@ -15,6 +16,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SDirectory implements IStatistic {
 
+	public static final String EXCLUDES = ".svn, .cvs";
+	
 	/** aktuelles Verzeichnis als File */
 	public File dir;
 
@@ -40,7 +43,7 @@ public class SDirectory implements IStatistic {
 	 *            pfad des Verzeichnisses
 	 */
 	public SDirectory(String s) {
-		new SDirectory(s, true);
+		this(s, true, EXCLUDES);
 	}
 
 	/**
@@ -51,15 +54,18 @@ public class SDirectory implements IStatistic {
 	 * @param gen
 	 *            generierter Code im Verzeichnis?
 	 */
-	public SDirectory(String s, boolean gen) {
+	public SDirectory(String s, boolean gen, String excludes) {
 		dir = new File(s);
-
+		
 		// container für die Werte Initialisieren
 		statSet = new StatisticSet();
-
+		
+		// file filter
+		GenericFileFilter filter = new GenericFileFilter(excludes, false);
+		
 		// Unterteilen und abspeichern der Ordner und Dateien
 		if (dir.isDirectory()) {
-			File[] list = dir.listFiles();
+			File[] list = dir.listFiles(filter);
 			for (int i = list.length - 1; i >= 0; i--) // Rückwärtszählen fürs
 			// Alphabetische
 			// anordnen!
@@ -67,7 +73,7 @@ public class SDirectory implements IStatistic {
 				if (list[i].isDirectory()) // ist das File-Objekt ein
 				// Verzeichnis oder eine Datei?
 				{
-					subdirs.add(new SDirectory(list[i].getAbsolutePath(), gen));
+					subdirs.add(new SDirectory(list[i].getAbsolutePath(), gen, excludes));
 				} else
 					files.add(new SFile(list[i].getAbsolutePath(), gen));
 			}
@@ -274,5 +280,4 @@ public class SDirectory implements IStatistic {
 	public String getPath() {
 		return dir.getPath();
 	}
-
 }
