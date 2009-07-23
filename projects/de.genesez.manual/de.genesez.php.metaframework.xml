@@ -16,9 +16,10 @@
 
     <para>Die Idee basiert auf der Beschreibung fundamentaler Aspekte 
     einer Webanwendung. Dabei werden zur Beschreibung Schnittstellen 
-    eingesetzt wobei jede Schnittstelle eine bestimmte Aufgabe 
-    repr&auml;sentiert. Diese Aufgaben sind notwendig oder sinnvoll 
-    innerhalb eines Request-Response Zykluses einer Webanwendung.</para>
+    eingesetzt wobei jede Schnittstelle ein Konzept mit einer 
+    bestimmten Aufgabe impliziert. Diese Aufgaben sind entweder 
+    notwendig oder sinnvoll innerhalb eines Request-Response Zykluses 
+    einer Webanwendung.</para>
 
     <para>Zu den Schnittstellen gibt es auch 
     Standard-Implementierungen. Diese k&ouml;nnen bereits vorhandene und 
@@ -66,8 +67,8 @@
 
     <para>Weiterhin basiert das Framework auf einem Plug-In Konzept. 
     Dies erlaubt eine modulare Anwendungsentwicklung wie in Abbildung 
-    <xref linkend="de.genesez.php.metaframework.apparchitecture"/>
-     zu sehen ist. Das Framework selbst nutzt ebenfalls das Plug-In 
+    <xref linkend="de.genesez.php.metaframework.apparchitecture"/> zu 
+    sehen ist. Das Framework selbst nutzt ebenfalls das Plug-In 
     Konzept. Notwendig um das Framework einzusetzen ist ein 
     <emphasis>Core Plug-In</emphasis> welches die Implementierungen der 
     Schnittstellen bereitstellt und die Objekte entsprechend 
@@ -78,8 +79,11 @@
       <title>Architektur einer Anwendung basierend auf dem 
       metaframework</title>
 
-      <mediaobject><imageobject><imagedata align="center"
-       fileref="images/de.genesez.php.metaframework.apparchitecture.png"/></imageobject><textobject><para>Das 
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.apparchitecture.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.apparchitecture.png"
+       scalefit="1" width="100%"/></imageobject><textobject><para>Das 
       metaframework besteht aus Schnittstellen. Ein Core Plug-In stellt 
       die Implementierungen f&uuml;r die Schnittstellen basierend auf 
       vorhandenen Frameworks und Bibliotheken bereit. Die 
@@ -101,7 +105,7 @@
 
   </section>
 
-  <section>
+  <section id="de.genesez.php.metaframework.context">
 
     <title>Gliederung einer Anwendung</title>
 
@@ -117,43 +121,46 @@
     strukturiert und aufgebaut werden. Viele MVC-Frameworks nutzen die 
     <computeroutput>/controller/action</computeroutput> Struktur. 
     Einige bieten f&uuml;r gr&ouml;&szlig;ere Webanwendungen noch einen optionalen 
-    Moduleintrag an: 
-    <computeroutput>/module/controller/action</computeroutput>. Dabei 
-    impliziert der <computeroutput>controller</computeroutput> h&auml;ufig 
-    eine Klasse und die <computeroutput>action</computeroutput> eine 
-    Methode.</para>
+    Moduleintrag an: <computeroutput>
+    /module/controller/action</computeroutput>. Dabei impliziert der 
+    <computeroutput>controller</computeroutput> h&auml;ufig eine Klasse und 
+    die <computeroutput>action</computeroutput> eine Methode.</para>
 
     <para>Das metaframework stellt zur Strukturierung der Webanwendung 
     die Klasse <emphasis>Context</emphasis> bereit. Mit den Objekten 
-    dieser Klasse kann mit der Assoziation 
-    <computeroutput>nestedContext</computeroutput> eine Baumstruktur 
-    nach dem Pattern in Abbildung 
-    <xref linkend="de.genesez.php.metaframework.urlpattern"/> 
-    aufgebaut werden.</para>
+    dieser Klasse kann mit der Assoziation <computeroutput>
+    nestedContext</computeroutput> eine Baumstruktur nach dem Pattern 
+    in Abbildung 
+    <xref linkend="de.genesez.php.metaframework.urlpattern"/> aufgebaut 
+    werden.</para>
 
     <figure id="de.genesez.php.metaframework.urlpattern">
 
       <title>URL-Pattern zur Gliederung einer Anwendung</title>
 
-      <mediaobject><imageobject><imagedata align="center"
-       fileref="images/de.genesez.php.metaframework.urlpattern.png"/></imageobject></mediaobject>
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.urlpattern.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.urlpattern.png"
+       scalefit="1" width="100%"/></imageobject></mediaobject>
     </figure>
 
     <para>Die Klasse <computeroutput>Context</computeroutput> ist in 
-    Abbildung 
-    <xref linkend="de.genesez.php.metaframework.context"/> als 
-    UML Modell dargestellt. Sie definiert ein Attribut 
+    Abbildung <xref linkend="fig:de.genesez.php.metaframework.context"/>
+     als UML Modell dargestellt. Sie definiert ein Attribut 
     <computeroutput>name</computeroutput> welches in der URL 
-    dargestellt wird. Das Attribut 
-    <computeroutput>handler</computeroutput> ist ein Identifikator f&uuml;r 
-    die Funktionalit&auml;t die ausgef&uuml;hrt werden soll.</para>
+    dargestellt wird. Das Attribut <computeroutput>
+    handler</computeroutput> ist ein Identifikator f&uuml;r die 
+    Funktionalit&auml;t die ausgef&uuml;hrt werden soll.</para>
 
-    <figure id="de.genesez.php.metaframework.context">
+    <figure id="fig:de.genesez.php.metaframework.context">
 
       <title>UML Modell der Klasse <emphasis>Context</emphasis></title>
 
-      <mediaobject><imageobject><imagedata align="center"
-       fileref="images/de.genesez.php.metaframework.context.png"/></imageobject></mediaobject>
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.context.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="images/de.genesez.php.metaframework.context.svg"/></imageobject></mediaobject>
     </figure>
 
     <para>Definiert ein Kontext keinen handler so tritt ein Fallback 
@@ -169,47 +176,160 @@
 
   <section>
 
-    <title>Konzepte</title>
+    <title>Infrastruktur-Konzepte</title>
+
+    <para>Im folgenden werden die Konzepte des metaframeworks 
+    erl&auml;utert, welche die Infrastruktur f&uuml;r eine Anwendung 
+    darstellen.</para>
 
     <section>
 
       <title>Plug-Ins</title>
 
+      <para>Das metaframework selbst ist relativ einfach aufgebaut und 
+      stellt lediglich eine Ablaufumgebung bereit. Durch Plug-Ins kann 
+      eine Webanwendung basierend auf dem metaframework mit Leben 
+      gef&uuml;llt werden. In Abbildung 
+      <xref linkend="de.genesez.php.metaframework.concept.plug-in"/> 
+      ist das UML Modell der Plug-In Definition dargestellt.</para>
+
+      <figure id="de.genesez.php.metaframework.concept.plug-in">
+
+        <title>UML Modell des Plug-In Konzepts</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.plug-in.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.plug-in.svg"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Das metaframework unterscheidet dabei zwei Arten von 
+      Plug-Ins:</para>
+
+      <variablelist>
+
+        <varlistentry>
+
+          <term>PlugIn</term>
+
+          <listitem>
+
+            <para>Mit Plug-Ins kann eine Webanwendung modular aufgebaut 
+            werden. Jedes Plug-In stellt dazu einen zugreifbaren 
+            Kontext sowie die Request-Handler bereit um URL Anfragen zu 
+            beantworten.</para>
+
+          </listitem>
+
+        </varlistentry>
+
+        <varlistentry>
+
+          <term>CorePlugIn</term>
+
+          <listitem>
+
+            <para>Aktuell kann es nur ein Core Plug-In geben. Es stellt 
+            alle notwendigen Standard-Implementierungen der 
+            metaframework Schnittstellen bereit. Daher verf&uuml;gt es &uuml;ber 
+            eine zus&auml;tzliche Methode welche die Initialisierung 
+            eventuell genutzter Frameworks oder Bibliotheken sicher 
+            stellt.</para>
+
+            <para>Weiterhin stellt das Core Plug-In die 
+            <link linkend="de.genesez.php.metaframework.service.registry">
+            Service Registry</link> bereit &uuml;ber die zentral auf 
+            Infrastruktur-Objekte zugegriffen werden kann.</para>
+
+          </listitem>
+
+        </varlistentry>
+
+      </variablelist>
+
+      <para>Weiterhin gibt es eine Standardimplementierung <literal>
+      PlugInBase</literal> die als Basis f&uuml;r eigene Plug-Ins genutzt 
+      werden kann und die zu implementierenden Methoden auf eine ( 
+      <literal>getId()</literal>) reduziert.</para>
+
     </section>
 
-    <section>
+    <section id="de.genesez.php.metaframework.service.registry">
 
       <title>Service Registry</title>
 
+      <para>Die Service Registry verwaltet zentral alle 
+      Infrastruktur-Objekte, d.h. alle Instanzen der Implementierugnen 
+      der metaframework Schnittstellen. Dies umfasst die 
+      PlugInRegistry, ExtensionRegistry, InterceptorRegistry, Resolver, 
+      Locator, Rendering sowie die von den Plug-Ins definierten 
+      <link linkend="de.genesez.php.metaframework.request.handler">
+      RequestHandler</link> und 
+      <link linkend="de.genesez.php.metaframework.interceptor">
+      Interceptor</link>en.</para>
+
+      <para>Die Abbildung 
+      <xref linkend="de.genesez.php.metaframework.concept.service.registry"/>
+       zeigt die UML Definition der Service Registry sowie die im 
+      metaframework enthaltene Standard-Implementierung.</para>
+
+      <figure id="de.genesez.php.metaframework.concept.service.registry">
+
+        <title>UML Modell der Service Registry</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.service.registry.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.service.registry.svg"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Um die gegenseitigen Referenzen der Objekte untereinander 
+      elegant zu l&ouml;sen bietet sich als Implementierung ein 
+      <ulink url="http://martinfowler.com/articles/injection.html">
+      Dependency Injection</ulink> Container an. Siehe dazu 
+      <link linkend="de.genesez.php.metaframework.plug-ins">
+      metaframework Plug-Ins</link>.</para>
+
     </section>
 
     <section>
 
-      <title>Request Handler</title>
+      <title>Plug-In Registry, Interceptor Registry, Extension 
+      Registry</title>
 
-    </section>
+      <para>Diese drei Registries werden genutzt um Plug-Ins, 
+      Interceptor-Definitionen sowie Contributions auf Extensions zu 
+      verwalten. Die PlugInRegistry und die InterceptorRegistry werden 
+      nur von der Klasse Metaframework genutzt, w&auml;hrend die 
+      ExtensionRegistry vom Anwendungscode genutzt wird. In Abbildung 
+      <xref linkend="fig:de.genesez.php.metaframework.concept.registries"/>
+       ist das UML Klassendiagramm der drei Registries 
+      dargestellt.</para>
 
-    <section>
+      <figure id="fig:de.genesez.php.metaframework.concept.registries">
 
-      <title>Datentransferobjekte</title>
+        <title>UML Modell der Plug-In, Interceptor und Extension 
+        Registry</title>
 
-    </section>
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.registries.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.registries.svg"
+         scalefit="1" width="100%"/></imageobject></mediaobject>
+      </figure>
 
-    <section>
+      <para>Bei der Plug-In Registry werden alle Plug-Ins verwaltet 
+      sowie die Abh&auml;ngigkeiten zwischen ihnen gepr&uuml;ft. Bei fehlenden 
+      Plug-Ins wird die Abarbeitung durch das Framework gestoppt.</para>
 
-      <title>Renderer</title>
+      <para>Die Interceptor-Registry verwaltet die Interceptoren mit 
+      den zugeh&ouml;rigen URL-Pattern f&uuml;r welches sie ausgef&uuml;hrt 
+      werden.</para>
 
-    </section>
-
-    <section>
-
-      <title>Interceptors</title>
-
-    </section>
-
-    <section>
-
-      <title>Extensions</title>
+      <para>Die Extension-Registry verwaltet die Contributions von 
+      Plug-Ins zu Extensions. Das Extension-Contrubution Konzept wird 
+      <link linkend="de.genesez.php.metaframework.concept.extensions">
+      hier</link> n&auml;her erl&auml;utert.</para>
 
     </section>
 
@@ -217,17 +337,436 @@
 
       <title>Resolver</title>
 
+      <para>In Abschnitt 
+      <xref linkend="de.genesez.php.metaframework.context"/> wurde das 
+      <emphasis>Kontext</emphasis>-Konzept vorgestellt um eine 
+      Anwendung zu gliedern. Kontexte k&ouml;nnen dabei mit einem 
+      Identifikator auf einen <emphasis>RequestHandler</emphasis> 
+      verweisen. Die Aufgabe des Resolvers ist es einen Aufruf der 
+      Anwendung auf die Kontext-Struktur abzubilden und 
+      Kontext-Informationen &uuml;ber den aktuellen Request zu ermitteln. 
+      Diese Informationen werden in einem <literal>
+      HandlerInfo</literal> Objekt zusammengefasst und zur&uuml;ckgeliefert. 
+      Abbildung 
+      <xref linkend="de.genesez.php.metaframework.concept.resolver"/> 
+      zeigt die Definition des Resolvers in UML.</para>
+
+      <figure id="de.genesez.php.metaframework.concept.resolver">
+
+        <title>UML Modell des Resolvers</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.resolver.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.resolver.svg"
+         scalefit="1" width="100%"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Neben der Schnittstelle ist auch eine Implementierung f&uuml;r 
+      Webanwendungen vorhanden, welche die aufgerufene URL auf die 
+      Kontext-Struktur abbildet.</para>
+
     </section>
 
     <section>
 
-      <title>Dispatcher</title>
+      <title>Locator</title>
+
+      <para>Basierend auf den Informationen des 
+      <link>HandlerInfo</link> Objektes ermittelt der Loctor den 
+      RequestHandler welcher den aktuellen Request bearbeiten kann. 
+      Abbildung 
+      <xref linkend="de.genesez.php.metaframework.concept.locator"/> 
+      zeigt das UML Klassenmodell des Locators und einer 
+      Standardimplementierung.</para>
+
+      <figure id="de.genesez.php.metaframework.concept.locator">
+
+        <title>UML Modell des Locators</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.locator.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.locator.svg"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Die Standardimplementierung nutzt die 
+      <link linkend="de.genesez.php.metaframework.service.registry">
+      Service Registry</link> um eine Referenz auf den RequestHandler 
+      zu erlangen. Neben der Service Registry ist auch eine 
+      Instanziierung per <emphasis>Reflection</emphasis> denkbar, wie 
+      sie bei vielen MVC-Frameworks eingesetzt wird.</para>
+
+    </section>
+
+  </section>
+
+  <section>
+
+    <title>Konzepte zur Anwendungsentwicklung</title>
+
+    <para>In diesem Abschnitt werden die Konzepte erl&auml;utert die 
+    wesentlich f&uuml;r das entwickeln von Anwendungen sind.</para>
+
+    <section>
+
+      <title>Request Handler</title>
+
+      <para>Die Funktionalit&auml;t einer Anwendung wird von Request 
+      Handlern bereitgestellt. Diese bearbeiten einen Request und 
+      sammeln alle ben&ouml;tigten Daten f&uuml;r die Response. Die UML 
+      Definition der Request Handler ist in Abbildung 
+      <xref linkend="fig:de.genesez.php.metaframework.concept.request.handler.base"/>
+       dargestellt.</para>
+
+      <figure id="fig:de.genesez.php.metaframework.concept.request.handler.base">
+
+        <title>UML Modell der Request Handler</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.request.handler.base.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.request.handler.base.svg"
+         scalefit="1" width="100%"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Die Abarbeitung wird durch die Methode <literal>
+      handle</literal> initiiert die durch den &uuml;bermittelten Parameter 
+      Zugriff auf Kontext-Informationen des aktuellen Requests hat. Der 
+      R&uuml;ckgabewert der Methode ist ein 
+      <link linkend="de.genesez.php.metaframework.concept.dto">
+      Datentransferobjekt</link> oder der boolsche Wert <literal>
+      true</literal>. Der Wert <literal>true</literal> impliziert das 
+      die Antwort bereits generiert wurde wodurch das 
+      <link linkend="de.genesez.php.metaframework.concept.rendering">
+      <emphasis>Rendering</emphasis></link> nicht durchgef&uuml;hrt 
+      wird.</para>
+
+      <para>Die Standardimplementierung RequestHandlerBase bietet 
+      n&uuml;tzliche Funktionen u.a. zur Erstellung von Links / URLs.</para>
+
+      <para>Neben der Standardimplementierung gibt es eine weitere 
+      Implementierung welche den <emphasis>Controller</emphasis> des 
+      MVC-Konzepts realisiert. Dieser bildet eine zentrale Stelle zur 
+      Implementierung der <emphasis>CRUD</emphasis>-Funktionalit&auml;t und 
+      verf&uuml;gt &uuml;ber n&uuml;tzliche Methoden f&uuml;r Redirects und 
+      Link-Erstellung. Alle Aktionen (wie create, edit, retrieve, ...) 
+      des Controllers sind &uuml;ber die Assoziation zur Klasse Action 
+      modelliert und somit erweiterbar.</para>
+
+    </section>
+
+    <section id="de.genesez.php.metaframework.concept.dto">
+
+      <title>Datentransferobjekte</title>
+
+      <para>Die Daten f&uuml;r die Response werden in Datenobjekten verpackt 
+      die als Container dienen. Dieses Konzept findet sich in den 
+      Pattern <emphasis>Value Object</emphasis> oder <emphasis>Data 
+      Transfer Object</emphasis> wieder. Das UML Klassenmodell f&uuml;r die 
+      Datentransferobjekte ist in Abbildung 
+      <xref linkend="fig:de.genesez.php.metaframework.concept.dto"/> zu 
+      sehen.</para>
+
+      <figure id="fig:de.genesez.php.metaframework.concept.dto">
+
+        <title>UML Modell der Datentransferobjekte</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.dto.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.dto.svg"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Jedes Datentransferobjekt kennt seinen View durch den es 
+      dargestellt wird. Die Standardimplementierung erbt von der PHP 
+      Klasse <literal>ArrayObject</literal> wodurch auf einfache Weise 
+      Daten gespeichert werden k&ouml;nnen.</para>
 
     </section>
 
     <section>
 
-      <title>Extension Registry</title>
+      <title>Rendering</title>
+
+      <para>Die Aufgabe des Rending ist es die Daten die Request 
+      Handler zusammentragen in geeigneter Form zu rendern. Das UML 
+      Modell des Rendering ist in Abbildung 
+      <xref linkend="de.genesez.php.metaframework.concept.rendering"/> 
+      dargestellt.</para>
+
+      <figure id="de.genesez.php.metaframework.concept.rendering">
+
+        <title>UML Modell des Rendering</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.rendering.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.rendering.svg"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Es f&auml;llt auf das vom metaframework keine 
+      Standardimplementierung bereitgestellt wird da das Rendering 
+      optional ist. In den 
+      <link linkend="de.genesez.php.metaframework.plug-ins">
+      metaframework Plug-Ins</link> gibt es eine Implementierung auf 
+      Basis der <ulink url="http://www.smarty.net/">
+      <emphasis>Smarty</emphasis> Template Engine</ulink>.</para>
+
+    </section>
+
+    <section>
+
+      <title>Interceptors</title>
+
+      <para>F&uuml;r Aufgaben wie die Authentifizierung und Autorisierung 
+      die sich &uuml;ber weite Bereiche einer Anwendung erstrecken sind 
+      Request Handler nur bedingt geeignet da in jedem Request Handler 
+      die Berechtigungen gepr&uuml;ft werden m&uuml;ssten. F&uuml;r solche Aufgaben 
+      gibt es die Interceptoren welche einen Request abfangen und 
+      entscheiden k&ouml;nnen, wie dieser fortgesetzt werden soll. Die 
+      Definition in UML ist in Abbildung 
+      <xref linkend="fig:de.genesez.php.metaframework.concept.interceptor"/>
+       zu sehen.</para>
+
+      <figure id="fig:de.genesez.php.metaframework.concept.interceptor">
+
+        <title>UML Modell der Interceptoren</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.interceptor.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.interceptor.svg"/></imageobject></mediaobject>
+      </figure>
+
+      <para>F&uuml;r Interceptoren wird eine Schnittstelle mit einer Methode 
+      vorgegeben. Diese hat &uuml;ber den Parameter <literal>
+      handlerInfo</literal> Zugriff auf Kontext-Informationen zum 
+      Request und muss einen boolschen Wert zur&uuml;ckgeben der angibt ob 
+      der Request abgefangen wurde oder nicht. Der Wert <literal>
+      true</literal> bedeutet das der Request abgefangen wurde und die 
+      Response vom Interceptor erzeugt wird. Bei <literal>
+      false</literal> wird das Request Processing wie gehabt 
+      durchgef&uuml;hrt.</para>
+
+    </section>
+
+    <section id="de.genesez.php.metaframework.concept.extensions">
+
+      <title>Extensions und Contributions</title>
+
+      <para>Ein Problem von modularen Anwendungen kann eine 
+      Abh&auml;ngigkeit zwischen Modulen oder hier Plug-Ins sein. 
+      Beispielsweise betrifft dies das Men&uuml;. Auf die Funktionalit&auml;t 
+      einiger Plug-Ins soll durch Men&uuml;-Eintr&auml;ge direkt zugegriffen 
+      werden k&ouml;nnen. Sind die Plug-Ins aber nicht registriert 
+      (vorhanden), so sollen diese Men&uuml;-Eintr&auml;ge nicht erscheinen. 
+      Solch ein indirekter Informationsaustausch ist &uuml;ber das 
+      Extension-Contribution Konzept realisierbar (welches von Eclipse 
+      Extension Points inspiriert wurde).</para>
+
+      <para>Im Gegensatz zu den anderen Konzepten gibt es hier kein UML 
+      Modell - die einzige Definition ist die Extension Registry in 
+      Abbildung 
+      <xref linkend="fig:de.genesez.php.metaframework.concept.registries"/>
+       . Mit der Plug-In Schnittstelle k&ouml;nnen Plug-Ins beliebige 
+      Contributions f&uuml;r Extensions bereitstellen:</para>
+
+      <programlisting>public function getExtensions() {
+    return array(
+        &apos;de.example.navigation.simple&apos; =&gt; array(&apos;name&apos; =&gt; &apos;Datenmodell&apos;, &apos;link&apos; =&gt; &apos;/ddm&apos;, &apos;image&apos; =&gt; &apos;images/ddm.png&apos;), 
+        &apos;de.example.navigation.complex&apos; =&gt; new Menu_MenuBar(array(
+            new Menu_Menu(&apos;class&apos;, &apos;/class&apos;, array(
+                new Menu_MenuItem(&apos;create new&apos;, &apos;/class/create&apos;),
+                new Menu_MenuItem(&apos;list&apos;, &apos;/class/list&apos;)
+            )),
+            ...
+            ))
+    );
+}</programlisting>
+      <para>Im Beispiel ist die Contribution eines Arrays auf die 
+      Extension <computeroutput>
+      de.example.navigation.simple</computeroutput> sowie eine 
+      Objektstruktur auf <computeroutput>
+      de.example.navigation.complex</computeroutput> zu sehen. Wie der 
+      Name der Extension vermuten l&auml;sst handelt es sich beide male um 
+      Navigationseintr&auml;ge f&uuml;r das Men&uuml;. Der letztere wird bei einer 
+      komplexen Men&uuml;darstellung genutzt, der erste bei einem einfachen 
+      Men&uuml;. Die Contributions aller Plug-Ins werden durch die Extension 
+      Registry zusammengef&uuml;gt.</para>
+
+      <para>Der Zugriff auf die Extension Registry ist &uuml;ber die Service 
+      Registry w&auml;hrend des Request Processing jederzeit aus m&ouml;glich. So 
+      k&ouml;nnen die Contributions f&uuml;r bestimmte Extensions abgefragt und 
+      genutzt werden:</para>
+
+      <programlisting>$extensionRegistry = $this-&gt;serviceRegistry-&gt;getComponent(&apos;extensionRegistry&apos;);
+$contributions = array();
+if ($extensionRegistry-&gt;hasContributions(&apos;de.example.navigation.simple&apos;)) {
+    $contributions = $extensionRegistry-&gt;getContributions(&apos;de.example.navigation.simple&apos;);
+}</programlisting>
+      <para>Dabei ist es Aufgabe des Entwicklers sicherzustellen, das 
+      die Contributions von einem Datentyp sind, mit dem die 
+      zugreifende Logik etwas anfangen kann.</para>
+
+    </section>
+
+  </section>
+
+  <section>
+
+    <title>Weitere Konzepte zur effektiven Anwendungsentwicklung</title>
+
+    <para>Bei der Entwicklung von Anwendungen trifft man h&auml;ufig auf 
+    wiederkehrende Probleme f&uuml;r die es meist nicht nur eine L&ouml;sung 
+    gibt, sondern auch ein Design-Pattern. In diesem Abschnitt werden 
+    solche L&ouml;sungen die das metaframework mit Klassen bereits 
+    unterst&uuml;tzt erl&auml;utert. Diese sind nicht notwendig f&uuml;r das 
+    Verst&auml;ndnis des metaframeworks, aber sinnvoll f&uuml;r die 
+    Anwendungsentwicklung mit diesem.</para>
+
+    <section id="de.genesez.php.metaframework.concept.request.handler.composite">
+
+      <title>Composite-Struktur bei Request Handlern</title>
+
+      <para>Blickt man auf Anwendungen oder Webanwendungen so f&auml;llt auf 
+      das diese meist gegliedert sind. Es gibt einen Header, ein Men&uuml; 
+      zur Navigation, h&auml;ufig eine Sidebar, eine gro&szlig;e Fl&auml;che f&uuml;r den 
+      eigentlichen Inhalt und eventuell einen Footer. Technisch 
+      betrachtet m&ouml;chte man diese Dinge auch trennen, was in einem 
+      separaten Request Handler f&uuml;r jeden Bereich resultiert. Jeder 
+      Request Handler liefert dann ein Datentransferobjekt mit Daten 
+      f&uuml;r seinen Bereich.</para>
+
+      <para>Nun stellt sich die Frage wie diese Datentransferobjekte 
+      kombiniert und einem View zum Rendern &uuml;bergeben werden k&ouml;nnen. 
+      Hierf&uuml;r unterst&uuml;tzt das metaframework eine Composite-Struktur f&uuml;r 
+      Request Handler wie in Abbildung 
+      <xref linkend="fig:de.genesez.php.metaframework.concept.request.handler.composite"/>
+       dargestellt ist.</para>
+
+      <figure id="fig:de.genesez.php.metaframework.concept.request.handler.composite">
+
+        <title>Definition der Composite-Struktur von Request Handlern 
+        in UML</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.request.handler.composite.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.request.handler.composite.svg"
+         scalefit="1" width="100%"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Der <literal>CompositeRequestHandler</literal> ist 
+      ebenfalls ein Request Handler und besitzt eine qualifizierte 
+      Assoziation zu <literal>RequestHandler</literal>, d.h. der 
+      Zugriff auf einen <literal>nestedRequestHandler</literal> ist nur 
+      durch einen Wert vom Typ <literal>String</literal> m&ouml;glich. 
+      </para>
+
+      <para>Mit der Standardimplementierung 
+      <literal>CompositeRequestHandlerBase</literal> k&ouml;nnen Request 
+      Handler im Konstruktor &uuml;bergeben werden (als assoziatives Array) 
+      sowie &uuml;ber die qualifizierte Assoziation eingef&uuml;gt werden:</para>
+
+      <programlisting>$this-&gt;nestedRequestHandler-&gt;insert(&apos;header&apos;, $this-&gt;serviceRegistry-&gt;getComponent(&apos;header.handler&apos;));
+$this-&gt;nestedRequestHandler-&gt;insert(&apos;footer&apos;, $this-&gt;serviceRegistry-&gt;getComponent(&apos;footer.handler&apos;));</programlisting>
+      <para>Hier werden von der Service Registry ein Header- und Footer 
+      Handler geholt und diese in die qualifizierte Assoziation 
+      eingef&uuml;gt.</para>
+
+      <para>Die Implementierung der Methode <literal>handle</literal> 
+      delegiert das Request Processing einfach an alle Request Handler 
+      und kombiniert die Datentransferobjekte in einem, wobei der 
+      qualifier als Schl&uuml;ssel genutzt wird - analog zu den Request 
+      Handlern.</para>
+
+      <programlisting>$header = $compositeDto-&gt;header;
+$footer = $compositeDto-&gt;footer;</programlisting>
+      <para>Obiges Programmlisting zeigt den Zugriff auf die Daten der 
+      einzelnen Request Handler &uuml;ber das zur&uuml;ckgegebene 
+      Datentransferobjekt des Composite Request Handlers.</para>
+
+    </section>
+
+    <section>
+
+      <title>Delegate- und Decorator-Pattern bei Request 
+      Handlern</title>
+
+      <para>H&auml;ufig tritt bei der Entwicklung einer Anwendung auch der 
+      Fall auf, das man prinzipiell etwas wiederverwenden k&ouml;nnte, 
+      jedoch kleine Anpassungen notwendig sind. Da etwas &auml;ndern und 
+      etwas anderes hinzuf&uuml;gen. Solche Anwendungsf&auml;lle sind u.a. durch 
+      das Decorator-Pattern beschrieben, das vorhandene Funktionalit&auml;t 
+      ausschm&uuml;cken kann. Im metaframework wird das Decorator-Pattern 
+      kombiniert mit dem Delegate-Pattern durch eine spezielle 
+      Basisklasse f&uuml;r Request Handler unterst&uuml;tzt. In Abbildung 
+      <xref linkend="fig:de.genesez.php.metaframework.concept.request.handler.decorate"/>
+       ist das zugeh&ouml;rige UML Modell zu sehen.</para>
+
+      <figure id="fig:de.genesez.php.metaframework.concept.request.handler.decorate">
+
+        <title>UML Modell des Decorate Request Handlers</title>
+
+        <mediaobject><imageobject role="html"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.request.handler.decorate.png"/></imageobject>
+        <imageobject role="fo"><imagedata align="center"
+         fileref="images/de.genesez.php.metaframework.concept.request.handler.decorate.svg"
+         scalefit="1" width="100%"/></imageobject></mediaobject>
+      </figure>
+
+      <para>Im Konstruktor der Klasse DecorateRequestHandler ist zu 
+      erkennen das der Delegate-Teil optional ist - dieser wird 
+      ebenfalls durch den 
+      <link linkend="de.genesez.php.metaframework.concept.request.handler.composite">
+      CompositeRequestHandler</link> unterst&uuml;tzt. Die Methode 
+      <literal>handle</literal> ruft zuerst die Methode 
+      <literal>handle</literal> des dekorierten Request Handlers auf. 
+      Anschlie&szlig;end wird das erhaltene Datentransferobjekt mit den 
+      Datentransferobjekten der Delegate Request Handlern kombiniert, 
+      analog Abschnitt 
+      <xref linkend="de.genesez.php.metaframework.concept.request.handler.composite"/>
+      . Zum Schluss wird die Methode <literal>decorate</literal> 
+      aufgerufen und das von dieser Methode erhaltene 
+      Datentransferobjekt als R&uuml;ckgabewert der Methode 
+      <literal>handle</literal> genutzt.</para>
+
+      <para>Durch diesen Ablauf kann die Methode 
+      <literal>decorate</literal> alle Daten des Datentransferobjektes 
+      beliebig <emphasis>dekorieren</emphasis>. Ein weiterer Vorteil 
+      ist das nur eine loose Kopplung zur Schnittstelle RequestHandler 
+      existiert. Dadurch besteht die M&ouml;glichkeit zum Layering von 
+      Dekorierern, d.h. <literal>DecorateRequestHandler</literal> 
+      k&ouml;nnen wiederum dekoriert werden.</para>
+
+      <para>Eine Alternative kann allerdings die Verwendung der 
+      Vererbung sein. Hier muss genau definiert werden, was erreicht 
+      werden soll. Eine Vererbung hat eine viel st&auml;rkere Kopplung als 
+      das Decorator- oder Delegate Pattern, da bei den beiden Pattern 
+      nur eine Kopplung zur Schnittstelle 
+      <literal>RequestHandler</literal> existiert. Bei Vererbung 
+      besteht eine direkte Kopplung zum konkreten Typ, allerdings ist 
+      dadurch auch der Zugriff auf alle nicht privaten Member und 
+      Methoden m&ouml;glich.</para>
+
+      <para>Als Beispiel kann eine einfache Webanwendung herangezogen 
+      werden. Das Layout einer Webanwendung ist meist komplett oder f&uuml;r 
+      gr&ouml;&szlig;ere Bereiche einer Webanwendung gewollt gleich, d.h. es gibt 
+      einen Header, Footer, Sidebar, etc. Der eigentliche 
+      Inhaltswechsel findet im Haupt-Anzeigebereich statt, wo der 
+      Inhalt von unterschiedlichen Request Handlern bereitgestellt 
+      wird. Die Inhalts&auml;nderungen in den angliedernden Bereichen 
+      (Header, Footer, Sidebar, etc.) ist meist geringer. F&uuml;r solch ein 
+      Szenario kann ein 
+      <link linkend="de.genesez.php.metaframework.concept.request.handler.composite">
+      Composite Request Handler</link> genutzt werden, der die Request 
+      Handler f&uuml;r die einzelnen Bereiche zusammenfasst. Die Request 
+      Handler der Haupt-Anzeigebereiche werden 
+      <literal>DecorateRequestHandler</literal> und dekorieren den 
+      Request des Composite Request Handler. Somit kann auf einfache 
+      Weise ein einheitliches Design einer Webanwendung erreicht 
+      werden.</para>
 
     </section>
 
