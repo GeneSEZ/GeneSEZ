@@ -17,9 +17,9 @@ interface Mfw_Interceptor  {
 	
 	
 	/**
-	 * Interrupts the request processing. If <i>false</i> is returned, the 
-	 * request processing <b>stops</b> and the interceptor takes the 
-	 * responsibility to provide a meaningful output.
+	 * Interrupts the request processing. If <i>true</i> is returned, the request 
+	 * processing <b>stops</b> and the interceptor takes the responsibility to 
+	 * provide a meaningful output.
 	 * @param	Mfw_HandlerInfo	$handlerInfo	the handler and context information of the request
 	 * @return	boolean
 	 */

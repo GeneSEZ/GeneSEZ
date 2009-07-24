@@ -162,8 +162,9 @@ class Metaframework   {
 			} else {
 				if ($this->serviceRegistry->hasComponent(current($value)) === true) {
 					$interceptor = $this->serviceRegistry->getComponent(current($value));
-					$proceed = $interceptor->intercept($handlerInfo);
-					if ($proceed === false) {
+					$intercept = $interceptor->intercept($handlerInfo);
+					if ($intercept === true) {
+						// stop request processing
 						return;
 					}
 				} else {

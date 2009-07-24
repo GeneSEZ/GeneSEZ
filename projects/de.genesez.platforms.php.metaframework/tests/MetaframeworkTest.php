@@ -283,7 +283,7 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 		
 		$this->core->expects($this->once())->method('finishInitialization');
 		$this->resolver->expects($this->once())->method('pathInfo')->will($this->returnValue('/'));
-		$this->interceptor1->expects($this->once())->method('intercept')->will($this->returnValue(true));
+		$this->interceptor1->expects($this->once())->method('intercept')->will($this->returnValue(false));
 		$this->rootHandler->expects($this->once())->method('handle')->will($this->returnValue($this->rootDto));
 		$this->rendering->expects($this->once())->method('render')->with($this->equalTo($this->rootDto));
 		
@@ -306,7 +306,7 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 		
 		$this->core->expects($this->once())->method('finishInitialization');
 		$this->resolver->expects($this->once())->method('pathInfo')->will($this->returnValue('/'));
-		$this->interceptor1->expects($this->once())->method('intercept')->will($this->returnValue(true));
+		$this->interceptor1->expects($this->once())->method('intercept')->will($this->returnValue(false));
 		$this->interceptor2->expects($this->never())->method('intercept');
 		$this->rootHandler->expects($this->once())->method('handle')->will($this->returnValue(true));
 		$this->rendering->expects($this->never())->method('render');
@@ -329,7 +329,7 @@ class MetaframeworkTest extends PHPUnit_Framework_TestCase {
 		
 		$this->core->expects($this->once())->method('finishInitialization');
 		$this->resolver->expects($this->once())->method('pathInfo')->will($this->returnValue('/'));
-		$this->interceptor1->expects($this->once())->method('intercept')->will($this->returnValue(false));
+		$this->interceptor1->expects($this->once())->method('intercept')->will($this->returnValue(true));
 		$this->rootHandler->expects($this->never())->method('handle');
 		$this->rendering->expects($this->never())->method('render');
 		
