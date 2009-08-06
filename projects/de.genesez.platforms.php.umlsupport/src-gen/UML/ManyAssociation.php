@@ -11,18 +11,18 @@ require_once 'UML/AssociationBase.php';
  * @package	UmlSupport
  */
 class UML_ManyAssociation extends UML_AssociationBase  {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		Iterator	$iterator
 	 */
 	protected $iterator;
-
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link UML_ManyAssociation}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link UML_ManyAssociation}
 	 * @param	mixed	$owner	
 	 * @param	mixed	$variable	
 	 * @param	mixed	$opposite	default value is 'null'
@@ -36,9 +36,8 @@ class UML_ManyAssociation extends UML_AssociationBase  {
 		$this->renewIterator();
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -158,11 +157,12 @@ class UML_ManyAssociation extends UML_AssociationBase  {
 		$this->iterator = new ArrayIterator($this->variable);
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239223716375_693657_589) ENABLED START */
 	// TODO: put your further code implementations for class 'UML_ManyAssociation' here

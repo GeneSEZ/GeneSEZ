@@ -11,12 +11,12 @@ require_once 'UML/AssociationBase.php';
  * @package	UmlSupport
  */
 class UML_OneAssociation extends UML_AssociationBase  {
-
+	
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link UML_OneAssociation}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link UML_OneAssociation}
 	 * @param	mixed	$owner	
 	 * @param	mixed	$variable	
 	 * @param	mixed	$opposite	default value is 'null'
@@ -26,9 +26,8 @@ class UML_OneAssociation extends UML_AssociationBase  {
 		parent::__construct($owner, $variable, $opposite);
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -165,10 +164,11 @@ class UML_OneAssociation extends UML_AssociationBase  {
 		return $this->variable;
 		/* PROTECTED REGION END */
 	}
+	
 
-
-
-
+	
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239223376703_89982_525) ENABLED START */
 	// TODO: put your further code implementations for class 'UML_OneAssociation' here

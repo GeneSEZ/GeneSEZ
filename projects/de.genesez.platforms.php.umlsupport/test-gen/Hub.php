@@ -17,8 +17,8 @@ require_once 'UML/MultiQualifiedAssociation.php';
  * @package	UmlSupport
  */
 class Hub   {
-	// -- generated attribute, constant + association declarations ----------
-
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @var	Related	stores the linked object of the  unidirectional to one association to {@link Related} (symmetry ensured) 
 	 */
@@ -76,13 +76,13 @@ class Hub   {
 	 * @var array of Association and/or QualifiedAssociation
 	 */
 	private $associations = array();
+	
+	
+	
+	
 
-
-
-
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -117,7 +117,7 @@ class Hub   {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
 	/**
 	 * lazily initializes the requested association management objects
 	 * @param	string	&$name	the name of the association role
@@ -141,6 +141,7 @@ class Hub   {
 		}
 		return $this->associations[$name];
 	}
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239825669734_468125_386) ENABLED START */
 	// TODO: put your further code implementations for class 'Hub' here

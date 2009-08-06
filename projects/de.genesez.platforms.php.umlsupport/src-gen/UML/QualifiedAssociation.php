@@ -10,6 +10,8 @@
  */
 interface UML_QualifiedAssociation  {
 	
+	
+	
 	/**
 	 * @generated	method stub for implementation
 	 * @param	mixed	$qualifier	
@@ -47,6 +49,8 @@ interface UML_QualifiedAssociation  {
 	 */
 	public function iterator($qualifier = null);
 
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1239725542718_817217_267) ENABLED START */
 	// TODO: put your further code declarations for interface 'UML_QualifiedAssociation' here

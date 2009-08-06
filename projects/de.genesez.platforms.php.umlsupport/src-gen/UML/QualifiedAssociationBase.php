@@ -12,7 +12,8 @@ require_once 'UML/QualifiedAssociation.php';
  * @package	UmlSupport
  */
 abstract class UML_QualifiedAssociationBase  implements UML_QualifiedAssociation {
-	// -- generated attribute, constant + association declarations ----------
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @generated	attribute definition
 	 * @var		mixed	$owner
@@ -33,12 +34,11 @@ abstract class UML_QualifiedAssociationBase  implements UML_QualifiedAssociation
 	 * @var		boolean	$toMany
 	 */
 	protected $toMany;
-
+	
 	// -- constructors + destructors ----------------------------------------
 	
 	/**
-	 * constructs an object of class {@link UML_QualifiedAssociationBase}
-	 * @generated	constructor stub for implementation
+	 * @generated	constructs an object of class {@link UML_QualifiedAssociationBase}
 	 * @param	mixed	$owner	
 	 * @param	mixed	$variable	
 	 * @param	mixed	$opposite	default value is 'null'
@@ -55,9 +55,8 @@ abstract class UML_QualifiedAssociationBase  implements UML_QualifiedAssociation
 		}
 		/* PROTECTED REGION END */
 	}
-
-
-
+	
+	
 	// -- method implementations --------------------------------------------
 	
 	/**
@@ -74,11 +73,12 @@ abstract class UML_QualifiedAssociationBase  implements UML_QualifiedAssociation
 		}
 		/* PROTECTED REGION END */
 	}
+	
 
-
+	
 	// -- association + attribute accessors ---------------------------------
-
-
+	
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239725727578_8381_310) ENABLED START */
 	// TODO: put your further code implementations for class 'UML_QualifiedAssociationBase' here

@@ -12,6 +12,8 @@
  */
 interface UML_Association  {
 	
+	
+	
 	/**
 	 * inserts an associated object into the association, if not already present.
 	 * @param	mixed	$associated	the object to create a link with
@@ -47,6 +49,8 @@ interface UML_Association  {
 	 */
 	public function iterator();
 
+	
+	
 	// -- own code declarations ---------------------------------------------
 	/* PROTECTED REGION ID(php.interface.own.code.declaration._16_0_b6f02e1_1239222572640_136215_385) ENABLED START */
 	// TODO: put your further code declarations for interface 'UML_Association' here

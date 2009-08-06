@@ -15,8 +15,8 @@ require_once 'UML/ManyAssociation.php';
  * @package	UmlSupport
  */
 class Related   {
-	// -- generated attribute, constant + association declarations ----------
-
+	
+	// -- attribute, constant + association declarations --------------------
 	/**
 	 * @var	Hub	stores the linked object of the  bidirectional one to one association to {@link Hub} (symmetry ensured) 
 	 */
@@ -44,13 +44,13 @@ class Related   {
 	 * @var array of Association and/or QualifiedAssociation
 	 */
 	private $associations = array();
+	
+	
+	
+	
 
-
-
-
-
+	
 	// -- association + attribute accessors ---------------------------------
-
 	/**
 	 * magic getter to obtain associations or unmodifiable values of the following members:
 	 * <ul>
@@ -73,7 +73,7 @@ class Related   {
 			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
 		}
 	}
-
+	
 	/**
 	 * lazily initializes the requested association management objects
 	 * @param	string	&$name	the name of the association role
@@ -91,6 +91,7 @@ class Related   {
 		}
 		return $this->associations[$name];
 	}
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_0_b6f02e1_1239825675078_318048_406) ENABLED START */
 	// TODO: put your further code implementations for class 'Related' here
