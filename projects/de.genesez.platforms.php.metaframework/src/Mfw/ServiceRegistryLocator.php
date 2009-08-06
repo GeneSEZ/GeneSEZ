@@ -30,12 +30,12 @@ class Mfw_ServiceRegistryLocator  implements Mfw_Locator {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Locates the request handler using the specified information.
 	 * @param	Mfw_HandlerInfo	$handlerInfo	
 	 * @return	Mfw_RequestHandler
 	 */
 	public function locate($handlerInfo) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238000869515_422706_1273) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238001028515_778985_1381__16_0_b6f02e1_1238000869515_422706_1273) ENABLED START */
 		// look up in seasar config for handler
 		$name = $handlerInfo->handler;
 		if ($name === null || $name === '') {

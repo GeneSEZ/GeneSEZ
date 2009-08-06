@@ -42,11 +42,12 @@ class Mfw_DtoBase extends ArrayObject implements Mfw_Dto {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Obtains the <b>identifier</b> of the <b>view</b> or template by which the 
+	 * dto is used to <i>render</i> an output.
 	 * @return	string
 	 */
 	public function view() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239095244843_429695_734) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239096659828_207401_865__16_0_b6f02e1_1239095244843_429695_734) ENABLED START */
 		return $this->_view;
 		/* PROTECTED REGION END */
 	}

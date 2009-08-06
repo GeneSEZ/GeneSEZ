@@ -27,34 +27,36 @@ class Mfw_ArrayServiceRegistry  implements Mfw_ServiceRegistry {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Registers a component using its <b>name</b> for further lookup.
 	 * @param	string	$name	
 	 * @param	mixed	$component	
 	 */
 	public function register($name, $component) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243435817093_715363_1072) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1244721052593_172515_1194__16_0_b6f02e1_1243435817093_715363_1072) ENABLED START */
 		$this->registry[$name] = $component;
 		/* PROTECTED REGION END */
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Checks if a component with the specified name <b>exists</b> or in other 
+	 * words was registered.
 	 * @param	string	$name	
 	 * @return	boolean
 	 */
 	public function hasComponent($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237999613687_791397_1116) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1244721052593_172515_1194__16_0_b6f02e1_1237999613687_791397_1116) ENABLED START */
 		return isset($this->registry[$name]);
 		/* PROTECTED REGION END */
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns the component with the specified name. Verify the existence of the 
+	 * component using {@link hasComponent()} first.
 	 * @param	string	$name	
 	 * @return	mixed
 	 */
 	public function getComponent($name) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237999613703_927330_1117) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1244721052593_172515_1194__16_0_b6f02e1_1237999613703_927330_1117) ENABLED START */
 		return $this->registry[$name];
 		/* PROTECTED REGION END */
 	}

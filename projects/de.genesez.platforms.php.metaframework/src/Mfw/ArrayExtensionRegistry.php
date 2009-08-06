@@ -28,12 +28,12 @@ class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Registers a contribution for the specified extension.
 	 * @param	string	$extension	
 	 * @param	mixed	$contribution	
 	 */
 	public function register($extension, $contribution) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243328733390_261363_857) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325164078_119756_635__16_0_b6f02e1_1243328733390_261363_857) ENABLED START */
 		if ($this->hasContributions($extension)) {
 			$this->registry[$extension][] = $contribution;
 		} else {
@@ -43,23 +43,23 @@ class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Checks for <b>contributions</b> to the specified extension.
 	 * @param	string	$extension	
 	 * @return	boolean
 	 */
 	public function hasContributions($extension) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243324733906_887340_379) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325164078_119756_635__16_0_b6f02e1_1243324733906_887340_379) ENABLED START */
 		return isset($this->registry[$extension]);
 		/* PROTECTED REGION END */
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns an array with the <b>contributions</b> of the specified extensions.
 	 * @param	string	$extension	
 	 * @return	array of mixed
 	 */
 	public function getContributions($extension) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243324770125_599488_383) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325164078_119756_635__16_0_b6f02e1_1243324770125_599488_383) ENABLED START */
 		return $this->registry[$extension];
 		/* PROTECTED REGION END */
 	}

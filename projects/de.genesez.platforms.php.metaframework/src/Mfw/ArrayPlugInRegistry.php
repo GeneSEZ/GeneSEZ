@@ -41,11 +41,11 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Registers a plug-in.
 	 * @param	Mfw_PlugIn	$plugin	
 	 */
 	public function register($plugin) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243329382375_477947_880) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243436601140_962276_1091__16_0_b6f02e1_1243329382375_477947_880) ENABLED START */
 		// TODO: in a reviced implementation, insert the plug-ins additionally into a depencency tree
 		$this->registry[$plugin->getId()] = $plugin;
 		if ($this->checked === true) {
@@ -55,11 +55,11 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Checks if there are <b>missing dependencies</b> between plug-ins or not.
 	 * @return	boolean
 	 */
 	public function hasMissingDependencies() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243436372546_665562_1082) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243436601140_962276_1091__16_0_b6f02e1_1243436372546_665562_1082) ENABLED START */
 		if ($this->checked === false) {
 			$this->checkPlugIns();
 		}
@@ -68,11 +68,13 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 	}
 
 	/**
-	 * @generated	method stub for implementation
+	 * Returns an associative array with <b>missing plug-in dependencies</b>. The 
+	 * array is structured as follows: identifier of the required plug-in <b>=&gt;</b> 
+	 * array of plug-in identifiers defining the dependency.
 	 * @return	array
 	 */
 	public function getMissingDependencies() {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243436508921_306629_1086) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243436601140_962276_1091__16_0_b6f02e1_1243436508921_306629_1086) ENABLED START */
 		if ($this->checked === false) {
 			$this->checkPlugIns();
 		}

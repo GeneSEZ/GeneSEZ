@@ -22,12 +22,12 @@ class Mfw_UrlResolver  implements Mfw_Resolver {
 	// -- method implementations --------------------------------------------
 	
 	/**
-	 * @generated	method stub for implementation
+	 * Resolves the needed information to handle a request.
 	 * @param	Mfw_Context	$context	
 	 * @return	Mfw_HandlerInfo
 	 */
 	public function resolve($context) {
-		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237827425625_150554_301) ENABLED START */
+		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240215363281_620116_738__16_0_b6f02e1_1237827425625_150554_301) ENABLED START */
 		$pathinfo = $this->pathInfo();
 		$pathparts = $this->checkPath($pathinfo);
 		$handleableContext = $context->resolveContext($pathparts);
