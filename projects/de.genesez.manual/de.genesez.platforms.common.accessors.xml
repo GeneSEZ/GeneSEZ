@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter
+	PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"	"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+	[
+		<!ENTITY % isolat1 SYSTEM "http://www.w3.org/2003/entities/iso8879/isolat1.ent">
+		%isolat1;
+	]
+>
+<chapter>
+
+  <title>Generierung von Zugriffsfunktionen</title>
+
+  <para>Je nach Plattform werden Zugriffsfunktionen, d.h. 
+  <literal>Get</literal>- und <literal>Set</literal>- Methoden f&uuml;r 
+  Attribute unterschiedlich stark eingesetzt und auf verschiede Art 
+  implementiert. Die Logik zur Auswertung ist jedoch 
+  plattformunabh&auml;ngig definiert.</para>
+
+  <section>
+
+    <title>Spezifikation im Modell</title>
+
+    <para>Aktuell werden drei M&ouml;glichkeiten bereit gestellt um die 
+    Generierung von Zugriffsfunktionen auf unterschiedlich granularen 
+    Ebenen anzugeben:</para>
+
+    <orderedlist>
+
+      <listitem>
+
+        <para>Verwendung von Stereotypen die Klassen zugewiesen werden 
+        und die Generierung einer <literal>Get</literal> und 
+        <literal>Set</literal>- Methode f&uuml;r deren Attribute 
+        implizieren</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>Verwendung des Stereotyps <literal>accessor</literal> f&uuml;r 
+        Klassen um f&uuml;r alle ihre Attribute die Generierung von 
+        <literal>Get</literal>- und <literal>Set</literal>- Methoden zu 
+        steuern</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>Verwendung des Stereotyps <literal>accessor</literal> f&uuml;r 
+        Attribute um die Generierung von <literal>Get</literal>- und 
+        <literal>Set</literal>- Methoden detailliert zu steuern</para>
+
+      </listitem>
+
+    </orderedlist>
+
+    <para>Die Stereotypen f&uuml;r die M&ouml;glichkeit 1 werden in der 
+    Modelltransformation angegeben. Der Stereotyp 
+    <literal>accessor</literal> ist im GeneSEZ Profil enthalten. Jedoch 
+    kann auch jeder andere Stereotyp genutzt und in der 
+    Modelltransformation konfiguriert werden, der die Tags 
+    <literal>getter</literal> und <literal>setter</literal> mit 
+    boolschen Werten besitzt. In Abbildung 
+    <xref linkend="de.genesez.platforms.common.accessor.genesez.profile"/>
+     ist der plattformunabh&auml;ngige Teil des GeneSEZ UML Profils mit dem 
+    Stereotyp <literal>accessor</literal> dargestellt.</para>
+
+    <figure id="de.genesez.platforms.common.accessor.genesez.profile">
+
+      <title>Plattformunabh&auml;ngige Teil des GeneSEZ UML Profils</title>
+
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.accessor.genesez.profile.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.accessor.genesez.profile.svg"
+       scalefit="1" width="100%"/></imageobject></mediaobject>
+    </figure>
+
+  </section>
+
+  <section>
+
+    <title>Auswertung</title>
+
+    <para>Die Auswertungen der Modellierungsm&ouml;glichkeiten wird vom 
+    speziellen &uuml;ber Fallbacks auf die allgemeing&uuml;ltigen bis hin zum 
+    Standardfall, das keine Zugriffsfunktionen generiert werden, 
+    durchgef&uuml;hrt. F&uuml;r jedes Attribut wird die in Abbildung 
+    <xref linkend="de.genesez.platforms.common.accessor.evaluation"/> 
+    mit einem UML Aktivit&auml;tsdiagramm dargestellte Auswertung 
+    durchgef&uuml;hrt.</para>
+
+    <figure id="de.genesez.platforms.common.accessor.evaluation">
+
+      <title>Auswertung der Modellierungsm&ouml;glichkeiten</title>
+
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.accessor.evaluation.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.accessor.evaluation.svg"
+       scalefit="1" width="100%"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Zuerst wird der konfigurierte Stereotyp 
+    <literal>accessor</literal> am Attribut &uuml;berpr&uuml;ft. Ist dieser 
+    vorhanden wird dieser ausgewertet und entsprechend eine 
+    <literal>Get</literal> und/oder <literal>Set</literal> Methode 
+    generiert. Diese Auswertung ist in Abbildung 
+    <xref linkend="de.genesez.platforms.common.accessor.stereotype.evaluation"/>
+     dargestellt.</para>
+
+    <figure id="de.genesez.platforms.common.accessor.stereotype.evaluation">
+
+      <title>Auswertung des Stereotyps 
+      <literal>accessor</literal></title>
+
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.accessor.stereotype.evaluation.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="images/de.genesez.platforms.common.accessor.stereotype.evaluation.svg"
+       scalefit="1" width="100%"/></imageobject></mediaobject>
+    </figure>
+
+    <para>Ist der Stereotyp nicht vorhanden, wird gepr&uuml;ft ob die Klasse 
+    den konfigurierten Stereotyp <literal>accessor</literal> aufweist. 
+    Wenn ja, dann wird dieser ausgewertet. Ist dies nicht der Fall, 
+    wird gepr&uuml;ft ob die Klasse einen Stereotyp zugewiesen hat, der sich 
+    in der konfigurierten Liste der Stereotypen f&uuml;r Zugriffsfunktionen 
+    befindet. Ist dies der Fall, werden eine <literal>Get</literal>- 
+    und eine <literal>Set</literal>- Methode generiert. Falls nicht, 
+    wird keine Zugriffsfunktion f&uuml;r das Attribut generiert.</para>
+
+    <para>Die konfigurierten Stereotypen f&uuml;r Klassen haben somit 
+    Modellweite G&uuml;ltigkeit. Der Stereotyp <literal>accessor</literal> 
+    an Klassen hat Klassenweite G&uuml;ltigkeit und am Attribut nur lokale. 
+    Weiterhin k&ouml;nnen die globalen M&ouml;glichkeiten durch die lokalen 
+    eingeschr&auml;nkt werden.</para>
+
+  </section>
+
+  <section>
+
+    <title>Konfiguration der Modelltransformation</title>
+
+    <para>Zur Auswertung der Zugriffsfunktionen weisen die 
+    <link linkend="de.genesez.platforms.common.workflow.components.generator">
+    Generator</link>-Komponenten f&uuml;r die Modell-zu-Text Transformation 
+    alle die gleichen 
+    <link linkend="de.genesez.platforms.common.workflow.components">
+    Workflow</link>-Parameter auf:</para>
+
+    <variablelist>
+
+      <varlistentry>
+
+        <term>
+        <link linkend="de.genesez.platforms.common.workflow.components.generator.accessorsForStereotypes">accessorsForStereotypes</link></term>
+
+        <term>optional</term>
+
+        <term>single-value</term>
+
+        <term>Standard: <literal>entity</literal></term>
+
+        <listitem>
+
+          <para>spezifiziert eine Komma- separierte Liste mit Namen von 
+          Stereotypen welche die Generierung von 
+          <literal>Get</literal>- und <literal>Set</literal>- Methoden 
+          implizieren</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>
+        <link linkend="de.genesez.platforms.common.workflow.components.generator.accessorStereotype">accessorStereotype</link></term>
+
+        <term>optional</term>
+
+        <term>single-value</term>
+
+        <term>Standard: <literal>accessor</literal></term>
+
+        <listitem>
+
+          <para>dient zur Angabe des Namens des Stereotyps 
+          <literal>accessor</literal>. Standardwert ist der Name des 
+          Stereotyps im GeneSEZ UML Profil. Wird ein anderer Name 
+          angegeben, muss dieser Stereotyp mindestens &uuml;ber die gleichen 
+          Tags des Stereotyps <literal>accessor</literal> aus dem 
+          GeneSEZ Profil verf&uuml;gen (sofern die Auswertungslogik f&uuml;r 
+          Zugriffsfunktionen nicht ersetzt/erweitert wird).</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term>
+        <link linkend="de.genesez.platforms.common.workflow.components.generator.usePropertyVisibilityForAccessors">usePropertyVisibilityForAccessors</link></term>
+
+        <term>optional</term>
+
+        <term>single-value</term>
+
+        <term>Standard: <literal>false</literal></term>
+
+        <listitem>
+
+          <para>spezifiziert ob die Sichtbarkeit der Attribute stets 
+          <literal>private</literal> sein soll und die zugewiesene 
+          Sichtbarkeit der Attribute im Modell f&uuml;r die 
+          Zugriffsfunkionen (<literal>Get</literal>- und 
+          <literal>Set</literal> Methode) verwendet werden soll.</para>
+
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
+
+  </section>
+
+  <section>
+
+    <title>Beispiel</title>
+
+    <para>Am besten direkt mit einem unserer Beispielprojekte 
+    ausprobieren!</para>
+
+  </section>
+
+</chapter>
+
