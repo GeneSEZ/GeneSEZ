@@ -5,7 +5,7 @@
 /* PROTECTED REGION END */
 
 /**
- * A <b>rendering</b> implementation which generates a response using the 
+ * A <b>renderer</b> implementation which generates a response using the 
  * smarty template engine.
  * @see		Mfw_Rendering
  * @author	dreamer
@@ -40,7 +40,7 @@ class Mfw_SmartyRendering  implements Mfw_Rendering {
 
 	/**
 	 * The dynamically registered template function plugin <b>render</b> for 
-	 * smarty templates. It is the smarty template function port of the <b>Rendering</b> 
+	 * smarty templates. It is the smarty template function port of the <b>Renderer</b> 
 	 * interface, i.e. you specifiy only a dto to render it. If there is no 
 	 * &lt;code&gt;dto&lt;/code&gt; parameter with an instance of type &lt;code&gt;Mfw_Dto&lt;/code&gt; a 
 	 * smarty error is triggered.<br><br>The view of a dto must not exist; in 
