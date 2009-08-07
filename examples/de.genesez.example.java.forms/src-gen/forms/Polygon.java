@@ -4,53 +4,37 @@ import java.awt.Color;
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
 
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1211871374078_396988_308) ENABLED START */
+/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /**
- * Describes the geometrical form of a <i><b>line</b></i>
+ * Describes the geometrical form <b>polygon</b>
  * @author	dreamer
  */
-public class Line implements Form {
+public class Polygon implements Form {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
 	/**
-	 * documented here {@link getStart()}
+	 * documented here {@link getPoints()}
 	 * @generated	attribute definition
 	 */
-	private Point start;
 	
-	/**
-	 * documented here {@link getEnd()}
-	 * @generated	attribute definition
-	 */
-	private Point end;
+	private Point[] points = null;
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructs a line from the center of the coordinate system to the specified end
-	 * @generated	constructor for class '<em><b>Line</b></em>'
-	 * @param	end	the end point of the line
+	 * constructs a polygon with the specified points
+	 * @generated	constructor for class '<em><b>Polygon</b></em>'
+	 * @param	points	points describing a polygon in the given order
 	 */
-	public Line(Point end) {
-		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249463876609_953505_745) ENABLED START */
-		this.start = new Point();
-		this.end = end;
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * constructs a line from the specified start to the specified end
-	 * @generated	constructor for class '<em><b>Line</b></em>'
-	 * @param	start	the start point of the line
-	 * @param	end	the end point of the line
-	 */
-	public Line(Point start, Point end) {
-		/* PROTECTED REGION ID(java.constructor._14_0_b6f02e1_1211871400078_573707_331) ENABLED START */
-		this.start = start;
-		this.end = end;
+	public Polygon(Point[] points) {
+		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249463814500_484130_734) ENABLED START */
+		this.points = new Point[points.length];
+		for (int i = 0; i < points.length; i++) {
+			this.points[i] = points[i];
+		}
 		/* PROTECTED REGION END */
 	}
 	
@@ -61,8 +45,8 @@ public class Line implements Form {
 	 * @return	determines the center of area of the form
 	 */
 	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		// TODO: implementation of method 'Line.getCenterOfArea(...)'
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		// TODO: implementation of method 'Polygon.getCenterOfArea(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
@@ -74,8 +58,8 @@ public class Line implements Form {
 	 * @return	determines if the form is crossing another form
 	 */
 	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Line.isCrossing(...)'
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Polygon.isCrossing(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
@@ -88,8 +72,8 @@ public class Line implements Form {
 	 * @param	dy	delta value to move in <i><b>y</b></i> direction
 	 */
 	public void move(double dx, double dy) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__14_0_b6f02e1_1214478865734_965960_209) ENABLED START */
-		// TODO: implementation of method 'Line.move(...)'
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__14_0_b6f02e1_1214478865734_965960_209) ENABLED START */
+		// TODO: implementation of method 'Polygon.move(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
@@ -100,8 +84,8 @@ public class Line implements Form {
 	 * @param	phi	the angle in degrees
 	 */
 	public void rotate(double phi) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__14_0_b6f02e1_1212580097609_734698_127) ENABLED START */
-		// TODO: implementation of method 'Line.rotate(...)'
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__14_0_b6f02e1_1212580097609_734698_127) ENABLED START */
+		// TODO: implementation of method 'Polygon.rotate(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
@@ -113,8 +97,8 @@ public class Line implements Form {
 	 * @param	phi	the angle in degrees
 	 */
 	public void rotate(Point center, double phi) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__14_0_b6f02e1_1214478889937_90346_236) ENABLED START */
-		// TODO: implementation of method 'Line.rotate(...)'
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__14_0_b6f02e1_1214478889937_90346_236) ENABLED START */
+		// TODO: implementation of method 'Polygon.rotate(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
@@ -125,8 +109,8 @@ public class Line implements Form {
 	 * @param	color	the color to use for repainting
 	 */
 	public void repaint(Color color) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464738828_388422_1023) ENABLED START */
-		// TODO: implementation of method 'Line.repaint(...)'
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__16_0_b6f02e1_1249464738828_388422_1023) ENABLED START */
+		// TODO: implementation of method 'Polygon.repaint(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
@@ -136,7 +120,7 @@ public class Line implements Form {
 	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871374078_396988_308) ENABLED START */
+	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

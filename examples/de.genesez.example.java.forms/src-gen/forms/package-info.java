@@ -1,1 +1,5 @@
-/** * describes geometrical forms */package forms;
+/**
+ * contains all geometrical forms
+ */
+package forms;
+
