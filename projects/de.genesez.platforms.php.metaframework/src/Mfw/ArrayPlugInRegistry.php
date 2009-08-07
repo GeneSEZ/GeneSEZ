@@ -42,7 +42,7 @@ class Mfw_ArrayPlugInRegistry  implements Mfw_PlugInRegistry {
 	
 	/**
 	 * Registers a plug-in.
-	 * @param	Mfw_PlugIn	$plugin	
+	 * @param	Mfw_PlugIn	$plugin	the plug-in to be registered
 	 */
 	public function register($plugin) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243436601140_962276_1091__16_0_b6f02e1_1243329382375_477947_880) ENABLED START */

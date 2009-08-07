@@ -28,8 +28,8 @@ class Mfw_ArrayServiceRegistry  implements Mfw_ServiceRegistry {
 	
 	/**
 	 * Registers a component using its <b>name</b> for further lookup.
-	 * @param	string	$name	
-	 * @param	mixed	$component	
+	 * @param	string	$name	the name of the component
+	 * @param	mixed	$component	the component to be registered
 	 */
 	public function register($name, $component) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1244721052593_172515_1194__16_0_b6f02e1_1243435817093_715363_1072) ENABLED START */
@@ -40,7 +40,7 @@ class Mfw_ArrayServiceRegistry  implements Mfw_ServiceRegistry {
 	/**
 	 * Checks if a component with the specified name <b>exists</b> or in other 
 	 * words was registered.
-	 * @param	string	$name	
+	 * @param	string	$name	the name of the component
 	 * @return	boolean
 	 */
 	public function hasComponent($name) {
@@ -52,7 +52,7 @@ class Mfw_ArrayServiceRegistry  implements Mfw_ServiceRegistry {
 	/**
 	 * Returns the component with the specified name. Verify the existence of the 
 	 * component using {@link hasComponent()} first.
-	 * @param	string	$name	
+	 * @param	string	$name	the name of the component
 	 * @return	mixed
 	 */
 	public function getComponent($name) {

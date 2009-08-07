@@ -29,8 +29,8 @@ class Mfw_ArrayInterceptorRegistry  implements Mfw_InterceptorRegistry {
 	
 	/**
 	 * Registers an interceptor for the specified url pattern.
-	 * @param	string	$pattern	
-	 * @param	string	$interceptor	
+	 * @param	string	$pattern	the url pattern, i.e. a regular expression a url must match
+	 * @param	string	$interceptor	the identifier of the interceptor
 	 */
 	public function register($pattern, $interceptor) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243329579703_739060_909__16_0_b6f02e1_1243329511140_342525_904) ENABLED START */

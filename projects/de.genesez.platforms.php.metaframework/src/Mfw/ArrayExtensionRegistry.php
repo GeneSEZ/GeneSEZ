@@ -29,8 +29,8 @@ class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 	
 	/**
 	 * Registers a contribution for the specified extension.
-	 * @param	string	$extension	
-	 * @param	mixed	$contribution	
+	 * @param	string	$extension	the extension on which a contribution is done
+	 * @param	mixed	$contribution	the contribution for the specified extension
 	 */
 	public function register($extension, $contribution) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243325164078_119756_635__16_0_b6f02e1_1243328733390_261363_857) ENABLED START */
@@ -44,7 +44,7 @@ class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 
 	/**
 	 * Checks for <b>contributions</b> to the specified extension.
-	 * @param	string	$extension	
+	 * @param	string	$extension	the identifier of the extension
 	 * @return	boolean
 	 */
 	public function hasContributions($extension) {
@@ -55,7 +55,7 @@ class Mfw_ArrayExtensionRegistry  implements Mfw_ExtensionRegistry {
 
 	/**
 	 * Returns an array with the <b>contributions</b> of the specified extensions.
-	 * @param	string	$extension	
+	 * @param	string	$extension	the identifier of the extension
 	 * @return	array of mixed
 	 */
 	public function getContributions($extension) {

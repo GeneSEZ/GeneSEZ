@@ -31,7 +31,7 @@ class Mfw_ServiceRegistryLocator  implements Mfw_Locator {
 	
 	/**
 	 * Locates the request handler using the specified information.
-	 * @param	Mfw_HandlerInfo	$handlerInfo	
+	 * @param	Mfw_HandlerInfo	$handlerInfo	the information needed to find the request handler
 	 * @return	Mfw_RequestHandler
 	 */
 	public function locate($handlerInfo) {

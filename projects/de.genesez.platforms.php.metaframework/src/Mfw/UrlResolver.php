@@ -23,7 +23,7 @@ class Mfw_UrlResolver  implements Mfw_Resolver {
 	
 	/**
 	 * Resolves the needed information to handle a request.
-	 * @param	Mfw_Context	$context	
+	 * @param	Mfw_Context	$context	the context structure of the application
 	 * @return	Mfw_HandlerInfo
 	 */
 	public function resolve($context) {
