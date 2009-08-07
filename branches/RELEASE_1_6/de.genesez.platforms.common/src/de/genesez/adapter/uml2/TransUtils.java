@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Stereotype;
 
 /**
  * Utility class for UML to GeneSEZ transformation
@@ -16,6 +18,17 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
  * @date	2007-06-11
  */
 public class TransUtils {
+	
+	/**
+	 * Returns the tagged value of an uml model element
+	 * @param e		the uml model element
+	 * @param s		the applied uml stereotype
+	 * @param tag	the name of the tag
+	 * @return		the value of the tag
+	 */
+	public static Object getTaggedValue(Element e, Stereotype s, String tag) {
+		return e.getValue(s, tag);
+	}
 	
 	/**
 	 * Getter for the xmi id of an element

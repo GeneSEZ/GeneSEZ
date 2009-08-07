@@ -688,9 +688,22 @@ private List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
 		s | s.ownedAttribute.reject( e| e.name.startsWith("base_") ).collect(
-			tag | makeTaggedValue( makeTag(tag), me, e.getValue(s, tag.name) )
+			tag | makeTaggedValue( makeTag(tag), me, e.getTaggedValue(s, tag.name) )
 		)
 	).flatten().reject(e|e == null);
+
+/**
+ * returns the tagged value of the uml model element
+ * note: don't do it in Xtend! (using getValue(...)) - due to some error in oAW Xtend cannot find
+ *       the method getValue(...)   :´-(
+ * @param	s	the applied uml stereotype
+ * @param	tag	the name of the tag
+ * @return	the value of the tag
+ */
+private Object getTaggedValue(Element this, Stereotype s, String tag) :
+//	trace("get tagged value [ " + s.name + "::" + tag + " ]: " + toString() ) ->
+//	getValue(s, tag);
+	JAVA de.genesez.adapter.uml2.TransUtils.getTaggedValue(org.eclipse.uml2.uml.Element, org.eclipse.uml2.uml.Stereotype, java.lang.String);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
