@@ -31,7 +31,7 @@ class Mfw_DtoBase extends ArrayObject implements Mfw_Dto {
 	 * @param	array	$container	an optional container which is used to store the content
 	 * @param	string	$view	the optional identifier of the view
 	 */
-	public function __construct($container = array(), $view = null) {
+	public function __construct(array $container = array(), $view = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1239096659828_334898_869) ENABLED START */
 		parent::__construct($container, ArrayObject::ARRAY_AS_PROPS);
 		$this->_view = $view;

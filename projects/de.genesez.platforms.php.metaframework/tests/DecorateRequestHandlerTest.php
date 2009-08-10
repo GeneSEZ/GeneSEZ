@@ -9,7 +9,7 @@ require_once 'Mfw/DtoBase.php';
  * @author dreamer
  */
 class DecorateRequestHandler extends Mfw_DecorateRequestHandler {
-	public function decorate($dto, $handlerInfo) {
+	public function decorate(Mfw_Dto $dto, Mfw_HandlerInfo $handlerInfo) {
 		$dto->test = 'testing decoration';
 		return $dto;
 	}
@@ -55,7 +55,7 @@ class DecorateRequestHandlerTest extends PHPUnit_Framework_TestCase {
 		$this->rh1->expects($this->once())->method('handle')->will($this->returnValue($this->dto1));
 		$this->rh2->expects($this->once())->method('handle')->will($this->returnValue($this->dto2));
 		$this->rh3->expects($this->once())->method('handle')->will($this->returnValue($this->dto3));
-		$this->drh->handle(null);
+		$this->drh->handle(new Mfw_HandlerInfo(new Mfw_Context('/'), '/', '/'));
 	}
 	
 	public function testDecoration() {
@@ -64,7 +64,7 @@ class DecorateRequestHandlerTest extends PHPUnit_Framework_TestCase {
 		$this->rh1->expects($this->once())->method('handle')->will($this->returnValue($this->dto1));
 		$this->rh2->expects($this->once())->method('handle')->will($this->returnValue($this->dto2));
 		$this->rh3->expects($this->once())->method('handle')->will($this->returnValue($this->dto3));
-		$dto = $this->drh->handle(null);
+		$dto = $this->drh->handle(new Mfw_HandlerInfo(new Mfw_Context('/'), '/', '/'));
 		$this->assertEquals(5, count($dto), 'dto should have 5 values');
 		
 		// check if it is the handler dto

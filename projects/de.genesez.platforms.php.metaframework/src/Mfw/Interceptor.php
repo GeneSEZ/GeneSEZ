@@ -23,7 +23,7 @@ interface Mfw_Interceptor  {
 	 * @param	Mfw_HandlerInfo	$handlerInfo	the handler and context information of the request
 	 * @return	boolean
 	 */
-	public function intercept($handlerInfo);
+	public function intercept(Mfw_HandlerInfo $handlerInfo);
 
 	
 	

@@ -22,7 +22,7 @@ interface Mfw_RequestHandler  {
 	 * @param	Mfw_HandlerInfo	$handlerInfo	additional information about the request and handler
 	 * @return	Mfw_Dto
 	 */
-	public function handle($handlerInfo);
+	public function handle(Mfw_HandlerInfo $handlerInfo);
 
 	/**
 	 * Setter for the view used to render the content

@@ -49,7 +49,7 @@ class Mfw_HandlerInfo  implements ArrayAccess {
 	 * @param	string	$pathInfo	the additional url part relative to the request handler
 	 * @param	string	$requestedPath	the path info of the currently executing script
 	 */
-	public function __construct($context, $pathInfo, $requestedPath) {
+	public function __construct(Mfw_Context $context, $pathInfo, $requestedPath) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1236338137828_752628_437) ENABLED START */
 		$this->_context = $context;
 		$this->_handler = $context->handler;

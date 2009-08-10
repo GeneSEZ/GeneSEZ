@@ -62,7 +62,7 @@ abstract class Mfw_RequestHandlerBase  implements Mfw_RequestHandler {
 	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	string
 	 */
-	public function baseHandlerUri($handlerInfo) {
+	public function baseHandlerUri(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240404866671_222215_518) ENABLED START */
 		return $_SERVER['SCRIPT_NAME'] . $handlerInfo->context;
 		/* PROTECTED REGION END */

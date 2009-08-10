@@ -56,7 +56,7 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	 * @param	Mfw_RequestHandler	$handler	the request handler to decorate
 	 * @param	array	$delegateHandler	an associative array with key => value pairs of delegated request handlers
 	 */
-	public function __construct($handler, array $delegateHandler = array()) {
+	public function __construct(Mfw_RequestHandler $handler, array $delegateHandler = array()) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1241623229562_999301_382) ENABLED START */
 		$this->handler = $handler;
 		foreach ($delegateHandler as $name => $handler) {
@@ -74,7 +74,7 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
-	protected abstract function decorate($dto, $handlerInfo);
+	protected abstract function decorate(Mfw_Dto $dto, Mfw_HandlerInfo $handlerInfo);
 	
 	// -- method implementations --------------------------------------------
 	
@@ -86,7 +86,7 @@ abstract class Mfw_DecorateRequestHandler extends Mfw_RequestHandlerBase impleme
 	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
-	public function handle($handlerInfo) {
+	public function handle(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1241623279562_741440_386) ENABLED START */
 //		$this->handlerInfo = $handlerInfo;
 		$dto = $this->handler->handle($handlerInfo);

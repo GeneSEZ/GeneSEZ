@@ -34,7 +34,7 @@ class Mfw_ServiceRegistryLocator  implements Mfw_Locator {
 	 * @param	Mfw_HandlerInfo	$handlerInfo	the information needed to find the request handler
 	 * @return	Mfw_RequestHandler
 	 */
-	public function locate($handlerInfo) {
+	public function locate(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1238001028515_778985_1381__16_0_b6f02e1_1238000869515_422706_1273) ENABLED START */
 		// look up in seasar config for handler
 		$name = $handlerInfo->handler;
@@ -55,7 +55,7 @@ class Mfw_ServiceRegistryLocator  implements Mfw_Locator {
 	 * @generated	method stub for implementation
 	 * @param	Mfw_HandlerInfo	$handlerInfo	
 	 */
-	protected function noHandlerFound($handlerInfo) {
+	protected function noHandlerFound(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240231388968_524116_914) ENABLED START */
 		// TODO: implementation of method 'Mfw_ServiceRegistryLocator.noHandlerFound(...)'
 		throw new Exception('The implementation of the method Mfw_ServiceRegistryLocator::noHandlerFound is missing !');
@@ -66,7 +66,7 @@ class Mfw_ServiceRegistryLocator  implements Mfw_Locator {
 	 * @generated	method stub for implementation
 	 * @param	Mfw_HandlerInfo	$handlerInfo	
 	 */
-	protected function unresolvableHandler($handlerInfo) {
+	protected function unresolvableHandler(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240231367593_354798_910) ENABLED START */
 		// TODO: implementation of method 'Mfw_ServiceRegistryLocator.unresolvableHandler(...)'
 		throw new Exception('The implementation of the method Mfw_ServiceRegistryLocator::unresolvableHandler is missing !');

@@ -54,7 +54,7 @@ class Mfw_CompositeRequestHandlerBase extends Mfw_RequestHandlerBase implements 
 	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
-	public function handle($handlerInfo) {
+	public function handle(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243428136578_635889_1061) ENABLED START */
 		$dto = new Mfw_DtoBase(array(), $this->view);
 		foreach ($this->nestedRequestHandler->iterator() as $name => $handler) {

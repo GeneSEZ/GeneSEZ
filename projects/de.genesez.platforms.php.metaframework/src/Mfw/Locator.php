@@ -21,7 +21,7 @@ interface Mfw_Locator  {
 	 * @param	Mfw_HandlerInfo	$handlerInfo	the information needed to find the request handler
 	 * @return	Mfw_RequestHandler
 	 */
-	public function locate($handlerInfo);
+	public function locate(Mfw_HandlerInfo $handlerInfo);
 
 	
 	

@@ -112,7 +112,7 @@ abstract class Mfw_Controller extends Mfw_RequestHandlerBase  {
 	 * @param	Mfw_HandlerInfo	$handlerInfo	information about the current handled context
 	 * @return	Mfw_Dto
 	 */
-	public function handle($handlerInfo) {
+	public function handle(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1239126840906_396271_1264) ENABLED START */
 		$this->handlerInfo = $handlerInfo;
 		if ($this->hasAction()) {

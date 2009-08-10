@@ -21,7 +21,7 @@ interface Mfw_Resolver  {
 	 * @param	Mfw_Context	$context	the context structure of the application
 	 * @return	Mfw_HandlerInfo
 	 */
-	public function resolve($context);
+	public function resolve(Mfw_Context $context);
 
 	
 	

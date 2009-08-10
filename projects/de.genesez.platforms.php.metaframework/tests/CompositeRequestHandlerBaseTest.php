@@ -1,6 +1,7 @@
 <?php
 require_once 'PHPUnit/Framework.php';
 require_once 'Mfw/RequestHandler.php';
+require_once 'Mfw/HandlerInfo.php';
 require_once 'Mfw/CompositeRequestHandler.php';
 require_once 'Mfw/CompositeRequestHandlerBase.php';
 require_once 'Mfw/DtoBase.php';
@@ -40,7 +41,7 @@ class CompositeRequestHandlerBaseTest extends PHPUnit_Framework_TestCase {
 		$this->rh1->expects($this->once())->method('handle')->will($this->returnValue($this->dto1));
 		$this->rh2->expects($this->once())->method('handle')->will($this->returnValue($this->dto2));
 		$this->crh2->expects($this->once())->method('handle')->will($this->returnValue($this->dto3));
-		$this->crh->handle(null);
+		$this->crh->handle(new Mfw_HandlerInfo(new Mfw_Context('/'), '/', '/'));
 	}
 	
 	public function testHandleReturnValue() {
@@ -48,7 +49,7 @@ class CompositeRequestHandlerBaseTest extends PHPUnit_Framework_TestCase {
 		$this->rh1->expects($this->once())->method('handle')->will($this->returnValue($this->dto1));
 		$this->rh2->expects($this->once())->method('handle')->will($this->returnValue($this->dto2));
 		$this->crh2->expects($this->once())->method('handle')->will($this->returnValue($this->dto3));
-		$dto = $this->crh->handle(null);
+		$dto = $this->crh->handle(new Mfw_HandlerInfo(new Mfw_Context('/'), '/', '/'));
 		$this->assertType('Mfw_DtoBase', $dto, 'dto should be an array');
 		$this->assertEquals(3, count($dto), 'dto should have 3 values');
 		$this->assertType('Mfw_DtoBase', $dto->rh1, 'dto should contain dto1');

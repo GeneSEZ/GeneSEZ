@@ -18,7 +18,7 @@ interface Mfw_Rendering  {
 	 * Displays the information of the specified data transfer object.
 	 * @param	Mfw_Dto	$dto	the data to be displayed
 	 */
-	public function render($dto);
+	public function render(Mfw_Dto $dto);
 
 	
 	

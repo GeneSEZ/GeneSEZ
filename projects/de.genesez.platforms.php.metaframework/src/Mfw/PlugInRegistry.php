@@ -20,7 +20,7 @@ interface Mfw_PlugInRegistry  {
 	 * Registers a plug-in.
 	 * @param	Mfw_PlugIn	$plugin	the plug-in to be registered
 	 */
-	public function register($plugin);
+	public function register(Mfw_PlugIn $plugin);
 
 	/**
 	 * Checks if there are <b>missing dependencies</b> between plug-ins or not.

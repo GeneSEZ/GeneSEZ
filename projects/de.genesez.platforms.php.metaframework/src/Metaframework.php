@@ -95,7 +95,7 @@ class Metaframework   {
 	 * @generated	method stub for implementation
 	 * @param	Mfw_CorePlugIn	$corePlugIn	
 	 */
-	public function initialize($corePlugIn) {
+	public function initialize(Mfw_CorePlugIn $corePlugIn) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243525435078_136280_1251) ENABLED START */
 		$this->corePlugIn = $corePlugIn;
 		$this->rootContext = $corePlugIn->getContext();
@@ -111,7 +111,7 @@ class Metaframework   {
 	 * registers a plug-in
 	 * @param	Mfw_PlugIn	$plugin	
 	 */
-	public function registerPlugIn($plugin) {
+	public function registerPlugIn(Mfw_PlugIn $plugin) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1236332689875_601091_430) ENABLED START */
 		$this->registerPlugInInRegistries($plugin);
 		// add context structure
@@ -188,7 +188,7 @@ class Metaframework   {
 	 * @generated	method stub for implementation
 	 * @param	Mfw_PlugIn	$plugin	
 	 */
-	protected function registerPlugInInRegistries($plugin) {
+	protected function registerPlugInInRegistries(Mfw_PlugIn $plugin) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1237987504359_726879_1039) ENABLED START */
 		$this->plugInRegistry->register($plugin);
 		// register extensions + contributions
