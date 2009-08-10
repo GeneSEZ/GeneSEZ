@@ -154,28 +154,32 @@ class Editor_ClassHandler extends Util_NotifierController  {
 	 * @generated	setter method for the attribute {@link Editor_ClassHandler::getClassDao() $classDao}
 	 * @param	mixed	$classDao	the value to set
 	 */
-	public 	 function setClassDao( $classDao) {
+	
+	public 	 function setClassDao($classDao) {
 		$this->classDao = $classDao;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_ClassHandler::getClassAdapter() $classAdapter}
 	 * @param	mixed	$classAdapter	the value to set
 	 */
-	public 	 function setClassAdapter( $classAdapter) {
+	
+	public 	 function setClassAdapter($classAdapter) {
 		$this->classAdapter = $classAdapter;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_ClassHandler::getAttributeAdapter() $attributeAdapter}
 	 * @param	mixed	$attributeAdapter	the value to set
 	 */
-	public 	 function setAttributeAdapter( $attributeAdapter) {
+	
+	public 	 function setAttributeAdapter($attributeAdapter) {
 		$this->attributeAdapter = $attributeAdapter;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_ClassHandler::getAssociationAdapter() $associationAdapter}
 	 * @param	mixed	$associationAdapter	the value to set
 	 */
-	public 	 function setAssociationAdapter( $associationAdapter) {
+	
+	public 	 function setAssociationAdapter($associationAdapter) {
 		$this->associationAdapter = $associationAdapter;
 	}
 	

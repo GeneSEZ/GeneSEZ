@@ -178,7 +178,8 @@ abstract class Editor_DefaultController extends Util_NotifierController  {
 	 * @generated	setter method for the attribute {@link Editor_DefaultController::getClassDao() $classDao}
 	 * @param	mixed	$classDao	the value to set
 	 */
-	public 	 function setClassDao( $classDao) {
+	
+	public 	 function setClassDao($classDao) {
 		$this->classDao = $classDao;
 	}
 	

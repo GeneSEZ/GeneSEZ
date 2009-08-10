@@ -181,14 +181,16 @@ class Editor_ObjectHandler extends Editor_DefaultController  {
 	 * @generated	setter method for the attribute {@link Editor_ObjectHandler::getObjectDao() $objectDao}
 	 * @param	mixed	$objectDao	the value to set
 	 */
-	public 	 function setObjectDao( $objectDao) {
+	
+	public 	 function setObjectDao($objectDao) {
 		$this->objectDao = $objectDao;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_ObjectHandler::getObjectAdapter() $objectAdapter}
 	 * @param	mixed	$objectAdapter	the value to set
 	 */
-	public 	 function setObjectAdapter( $objectAdapter) {
+	
+	public 	 function setObjectAdapter($objectAdapter) {
 		$this->objectAdapter = $objectAdapter;
 	}
 	

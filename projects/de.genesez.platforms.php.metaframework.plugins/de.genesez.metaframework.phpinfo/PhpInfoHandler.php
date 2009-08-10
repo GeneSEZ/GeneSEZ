@@ -21,7 +21,7 @@ class PhpInfoHandler extends Mfw_RequestHandlerBase  {
 	 * @param	Mfw_HandlerInfo	$handlerInfo	
 	 * @return	Mfw_Dto
 	 */
-	public function handle($handlerInfo) {
+	public function handle(Mfw_HandlerInfo $handlerInfo) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1245605931015_826023_790) ENABLED START */
 		phpinfo();
 		return true;

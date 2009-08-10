@@ -91,7 +91,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @generated	method stub for implementation
 	 * @param	S2Container	$container	
 	 */
-	public static function finishContainer($container) {
+	public static function finishContainer(S2Container $container) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_511456_332) ENABLED START */
 		S2Container_ChildComponentDefBindingUtil::bind($container);
 		/* PROTECTED REGION END */
@@ -102,7 +102,7 @@ class Mfw_SeasarPhpBuilder   {
 	 * @param	S2Container_ArgDef	$argDef	
 	 * @param	string	$value	
 	 */
-	protected static function setValue($argDef, $value) {
+	protected static function setValue(S2Container_ArgDef $argDef, $value) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243537883500_40613_333) ENABLED START */
 		if (is_object($value)) {
 			$argDef->setValue($value);

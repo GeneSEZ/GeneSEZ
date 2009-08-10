@@ -134,14 +134,16 @@ class Editor_TypeHandler extends Util_NotifierController  {
 	 * @generated	setter method for the attribute {@link Editor_TypeHandler::getTypeDao() $typeDao}
 	 * @param	mixed	$typeDao	the value to set
 	 */
-	public 	 function setTypeDao( $typeDao) {
+	
+	public 	 function setTypeDao($typeDao) {
 		$this->typeDao = $typeDao;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_TypeHandler::getTypeAdapter() $typeAdapter}
 	 * @param	mixed	$typeAdapter	the value to set
 	 */
-	public 	 function setTypeAdapter( $typeAdapter) {
+	
+	public 	 function setTypeAdapter($typeAdapter) {
 		$this->typeAdapter = $typeAdapter;
 	}
 	

@@ -134,14 +134,16 @@ class Editor_AttributeHandler extends Util_NotifierController  {
 	 * @generated	setter method for the attribute {@link Editor_AttributeHandler::getAttributeDao() $attributeDao}
 	 * @param	mixed	$attributeDao	the value to set
 	 */
-	public 	 function setAttributeDao( $attributeDao) {
+	
+	public 	 function setAttributeDao($attributeDao) {
 		$this->attributeDao = $attributeDao;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_AttributeHandler::getAttributeAdapter() $attributeAdapter}
 	 * @param	mixed	$attributeAdapter	the value to set
 	 */
-	public 	 function setAttributeAdapter( $attributeAdapter) {
+	
+	public 	 function setAttributeAdapter($attributeAdapter) {
 		$this->attributeAdapter = $attributeAdapter;
 	}
 	

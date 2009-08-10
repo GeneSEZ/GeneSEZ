@@ -8,14 +8,14 @@
  * Helps to store data in the session of an user for a given count of 
  * request-response cycles. Such a concept is often used to show inform the 
  * user with messages which disappear after subsequent requests.
- * @see		IteratorAggregate
- * @see		ArrayAccess
  * @see		Mfw_Dto
  * @see		Countable
+ * @see		IteratorAggregate
+ * @see		ArrayAccess
  * @author	dreamer
  * @package	de.genesez.metaframework.util
  */
-class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Countable {
+class Msg_FlashNotifier  implements Mfw_Dto, Countable, IteratorAggregate, ArrayAccess {
 	
 	// -- attribute, constant + association declarations --------------------
 	/**
@@ -53,7 +53,7 @@ class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Cou
 	 * array due to the missing reference operator.
 	 * @param	array	$container	default value is 'null'
 	 */
-	public function __construct(&$container = null) {
+	public function __construct(array &$container = null) {
 		/* PROTECTED REGION ID(php.constructor._16_0_b6f02e1_1240323336359_632974_586) ENABLED START */
 		$this->initContainer($container);
 		$this->decrementExpiration();
@@ -98,7 +98,7 @@ class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Cou
 	 * @param	Msg_Message	$message	
 	 * @param	int	$expiration	default value is '1'
 	 */
-	public function add($message, $expiration = 1) {
+	public function add(Msg_Message $message, $expiration = 1) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240323524687_783348_624) ENABLED START */
 		$this->container[] = $message;
 		$this->expiration[] = $expiration;
@@ -109,7 +109,7 @@ class Msg_FlashNotifier  implements IteratorAggregate, ArrayAccess, Mfw_Dto, Cou
 	 * @generated	method stub for implementation
 	 * @param	array	$container	default value is 'null'
 	 */
-	protected function initContainer(&$container = null) {
+	protected function initContainer(array &$container = null) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1240323561812_616133_630) ENABLED START */
 		// determine container
 		if ($container === null) {

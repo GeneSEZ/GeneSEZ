@@ -28,7 +28,7 @@ class Mfw_SmartyRendering  implements Mfw_Rendering {
 	 * @generated	method stub for implementation
 	 * @param	Mfw_Dto	$dto	
 	 */
-	public function render($dto) {
+	public function render(Mfw_Dto $dto) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243595046187_312569_400) ENABLED START */
 		$this->templateBasePath = realpath('./' . $this->smarty->template_dir) . '/';
 		$view = $dto->view();
@@ -49,7 +49,7 @@ class Mfw_SmartyRendering  implements Mfw_Rendering {
 	 * @param	Smarty	$smarty	reference to the smarty object
 	 * @return	string
 	 */
-	public function checkInclude(array $params, &$smarty) {
+	public function checkInclude(array $params, Smarty &$smarty) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497906_111858_437) ENABLED START */
 		if (array_key_exists('dto', $params)) {
 			if ($params['dto'] instanceof Mfw_Dto) {
@@ -207,7 +207,7 @@ class Mfw_SmartyRendering  implements Mfw_Rendering {
 	 * available in templates.
 	 * @param	Smarty	$smarty	the smarty instance to which the variables are assigned
 	 */
-	protected function assignGlobalVariables($smarty) {
+	protected function assignGlobalVariables(Smarty $smarty) {
 		/* PROTECTED REGION ID(php.implementation._16_0_b6f02e1_1243539497921_797542_443) ENABLED START */
 		$smarty->assign('webbase', Mfw_Url::baseServerUri());
 		$smarty->assign('requestbase', Mfw_Url::baseRequestUri());

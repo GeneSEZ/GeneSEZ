@@ -133,14 +133,16 @@ class Editor_AssociationHandler extends Util_NotifierController  {
 	 * @generated	setter method for the attribute {@link Editor_AssociationHandler::getAssociationDao() $associationDao}
 	 * @param	mixed	$associationDao	the value to set
 	 */
-	public 	 function setAssociationDao( $associationDao) {
+	
+	public 	 function setAssociationDao($associationDao) {
 		$this->associationDao = $associationDao;
 	}
 	/**
 	 * @generated	setter method for the attribute {@link Editor_AssociationHandler::getAssociationAdapter() $associationAdapter}
 	 * @param	mixed	$associationAdapter	the value to set
 	 */
-	public 	 function setAssociationAdapter( $associationAdapter) {
+	
+	public 	 function setAssociationAdapter($associationAdapter) {
 		$this->associationAdapter = $associationAdapter;
 	}
 	
