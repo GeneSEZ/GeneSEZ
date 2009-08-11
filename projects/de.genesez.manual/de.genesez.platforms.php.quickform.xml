@@ -1,0 +1,298 @@
+<?xml version='1.0'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN" "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<section>
+
+  <title>QuickForm</title>
+
+  <para>Im <literal>PEAR</literal> Namespace des PHP 
+  Plattform-Projektes befindet sich die Unterst&uuml;tzung f&uuml;r das Erstellen 
+  und Auswerten von HTML Formularen auf Basis des Paketes <literal>
+  PEAR::HTML_QuickForm</literal>.</para>
+
+  <para>Das QuickForm Template generiert f&uuml;r jede Klasse eine spezielle 
+  Form Klasse mit 3 statischen Methoden:</para>
+
+  <variablelist>
+
+    <varlistentry>
+
+      <term><literal>create</literal></term>
+
+      <listitem>
+
+        <para>dient der Erstellung von QuickForm Formular Objekten, 
+        siehe 
+        <xref linkend="de.genesez.platforms.php.quickform.create"/>
+        </para>
+
+      </listitem>
+
+    </varlistentry>
+
+    <varlistentry>
+
+      <term><literal>build...</literal></term>
+
+      <listitem>
+
+        <para>dient der Erstellung von Domain Objekten aus QuickForm 
+        Objekten, siehe 
+        <xref linkend="de.genesez.platforms.php.quickform.convert"/>
+        </para>
+
+      </listitem>
+
+    </varlistentry>
+
+    <varlistentry>
+
+      <term><literal>addCustomDefinition</literal></term>
+
+      <listitem>
+
+        <para>dient der M&ouml;glichkeit Anpassungen und Erg&auml;nzungen an dem 
+        QuickForm Objekt innerhalb eines gesch&uuml;tzten Bereiches 
+        durchzuf&uuml;hren, siehe 
+        <xref linkend="de.genesez.platforms.php.quickform.custom"/>
+        </para>
+
+      </listitem>
+
+    </varlistentry>
+
+  </variablelist>
+
+  <section id="de.genesez.platforms.php.quickform.create">
+
+    <title>Erstellen von QuickForm Objekten</title>
+
+    <para>Mit der <literal>create</literal> Methode werden QuickForm 
+    Objekte erstellt die ein Formular repr&auml;sentieren. Die Methode hat 
+    einen Parameter <literal>defaultValues</literal> um den 
+    Formularfeldern Standardwerte zuzuweisen. Dem Formular Objekt 
+    werden neben versteckten Feldern f&uuml;r jedes Attribute der Klasse ein 
+    Feld hinzugef&uuml;gt. Weiterhin wird f&uuml;r jedes Attribut ein <literal>
+    trim</literal> Filter hinzugef&uuml;gt.</para>
+
+    <para>Am Ende wird die Methode <literal>
+    addCustomDefinitions</literal> aufgerufen, welche einen gesch&uuml;tzten 
+    Bereich f&uuml;r manuelle Implementierungen bereitstellt, um weitere 
+    Formulardefinitionen hinzuzuf&uuml;gen oder vorhandene abzu&auml;ndern.</para>
+
+  </section>
+
+  <section id="de.genesez.platforms.php.quickform.convert">
+
+    <title>Konvertierung von Formularen zu Domain Objekten</title>
+
+    <para>Mit der Methode <literal>build...</literal> kann aus 
+    QuickForm Formular Objekten wieder ein Domain Objekt erstellt 
+    werden. Dazu hat die Methode 2 Parameter:</para>
+
+    <variablelist>
+
+      <varlistentry>
+
+        <term><literal>form</literal></term>
+
+        <listitem>
+
+          <para>spezifiziert das notwendige QuickForm Objekt</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term><literal>&lt;klassenname&gt;</literal></term>
+
+        <listitem>
+
+          <para>spezifiziert ein optionales Domain Objekt</para>
+
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
+
+    <para>Wird der zweite Parameter nicht genutzt, wird einfach ein 
+    neues Domain Objekt mit dem Standardkonstruktor erstellt.</para>
+
+    <para>F&uuml;r jedes Attribut der Domain Klasse wird der Wert von dem 
+    Formular exportiert und dem Domain Objekt als Attributwert 
+    zugewiesen. Je nach verwendetem Persistenzframework kann sich die 
+    Art des Zugriffs auf Attribute unterschieden, weshalb die QuickForm 
+    Unterst&uuml;tzung mit dem Workflow Parameter 
+    <link linkend="de.genesez.platforms.common.workflow.components.php.generator.propertyAccess">
+    propertyAccess</link> die folgenden drei M&ouml;glichkeiten bereit 
+    stellt:</para>
+
+    <variablelist>
+
+      <varlistentry>
+
+        <term><literal>setter</literal></term>
+
+        <term>(Standard)</term>
+
+        <listitem>
+
+          <para>Nutzung einer <literal>set</literal> Methode</para>
+
+          <programlisting>$object-&gt;setAttribtue($form-&gt;exportValue(&apos;attribute&apos;));</programlisting>
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term><literal>attribute</literal></term>
+
+        <listitem>
+
+          <para>Setzen der Attributwerte mit direkten Zugriff auf die 
+          Attribute (bei nicht sichtbaren Attributen wird hier die 
+          <emphasis>magic</emphasis> <literal>set</literal> methode 
+          aufgerufen)</para>
+
+          <programlisting>$object-&gt;attribute = $form-&gt;exportValue(&apos;attribute&apos;);</programlisting>
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term><literal>array</literal></term>
+
+        <listitem>
+
+          <para>Setzen der Attributwerte als w&auml;re das Objekt ein 
+          Array</para>
+
+          <programlisting>$object[&apos;attribute&apos;] = $form-&gt;exportValue(&apos;attribute&apos;);</programlisting>
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
+
+    <para>Standardm&auml;&szlig;ig wird die Nutzung einer <literal>set</literal> 
+    Methode angenommen. Zum Schluss wird das Domain Objekt 
+    zur&uuml;ckgegeben.</para>
+
+  </section>
+
+  <section id="de.genesez.platforms.php.quickform.custom">
+
+    <title>Benutzerspezifische Definitionen</title>
+
+    <para>Die Methode <literal>addCustomDefinition</literal> ist 
+    lediglich ein Methoden-Stub mit einem Parameter <literal>
+    form</literal>, der das QuickForm Objekt enth&auml;lt. Innerhalb der 
+    gesch&uuml;tzten Bereichen k&ouml;nnen weitere Einstellungen am Formular 
+    Objekt vorgenommen werden, weitere Felder hinzugef&uuml;gt oder 
+    vorhandene Einstellungen ge&auml;ndert werden.</para>
+
+  </section>
+
+  <section>
+
+    <title>Spezielle Attribute</title>
+
+    <para>Neben dem oben beschriebenen Standard Pattern wird aktuell 
+    eine Ausnahme unterst&uuml;tzt: Attribute mit dem Stereotyp <literal>
+    html</literal>, dem Tag <literal>type</literal> und dem Tagged 
+    Value <literal>PASSWORD</literal> versehen sind.</para>
+
+    <para>F&uuml;r Passw&ouml;rter werden in der <literal>create</literal> 
+    Methode 2 Formularfelder generiert sowie eine Validierungsregel 
+    welche die Gleichheit beider Formularwerte mit dem 
+    Validierungskonzept von QuickForm pr&uuml;ft. Weiterhin wird in der 
+    <literal>build...</literal> Methode der Wert des Passwortfeldes nur 
+    exportiert, wenn dieser kein leerer String ist.</para>
+
+  </section>
+
+  <section>
+
+    <title>Beispielcode</title>
+
+    <para>Da die Klassen automatisch aus anderen Klassen erstellt 
+    werden und die Methoden ebenfalls automatisch erzeugt werden ist 
+    der generierte Quellcode nat&uuml;rlich bereits dokumentiert. Im 
+    folgenden Listing ist der PHP Quellcode f&uuml;r eine Klasse <literal>
+    xyz</literal> abgebildet.</para>
+
+    <programlisting>&lt;?php 
+require_once &apos;HTML/QuickForm.php&apos;; 
+
+/** 
+ * Support class for dealing with QuickForm form definitions 
+ *  
+ * It provides two methods for converting an object into a form definition and vise versa.  
+ * An additional method is used to add some custom definitions to the form object. 
+ *  
+ * @see  http://pear.php.net/manual/en/package.html.html-quickform.php 
+ * @author dreamer 
+ */ 
+class XyzForm { 
+
+ /** 
+  * creates a QuickForm form definition for a Xyz 
+  * @param array $defaultValues default form values 
+  * @return HTML_QuickForm form definition for a Xyz 
+  * @see  http://pear.php.net/manual/en/package.html.html-quickform.html-quickform.setdefaults.php 
+  */ 
+ public static function create($defaultValues = array()) { 
+  $form = new HTML_QuickForm(&apos;xyzForm&apos;); 
+  $form-&gt;setDefaults($defaultValues); 
+  $form-&gt;addElement(&apos;hidden&apos;, &apos;...&apos;); 
+  $form-&gt;addElement(&apos;text&apos;, &apos;...&apos;, &apos;...:&apos;); 
+  $form-&gt;addElement(&apos;password&apos;, &apos;password&apos;, &apos;password:&apos;); 
+  $form-&gt;addElement(&apos;password&apos;, &apos;passwordRepeat&apos;, &apos;Repeat password:&apos;); 
+  $form-&gt;addElement(&apos;submit&apos;, &apos;save&apos;, &apos;save&apos;); 
+  $form-&gt;addRule( 
+   array(&apos;password&apos;, &apos;passwordRepeat&apos;), 
+   &apos;The passwords you entered do not match!&apos;, &apos;compare&apos;);  
+  $form-&gt;applyFilter(&apos;...&apos;, &apos;trim&apos;); 
+  self::addCustomDefinition($form); 
+  return $form; 
+ }
+
+ /** 
+  * sets the values of the form object to the Xyz object 
+  * if the Xyz object is obmitted, a new instance is created 
+  * @param HTML_QuickForm a form, submitted by the user 
+  * @param Xyz an object to which the values of the form are set 
+  * @return Xyz the object with the submitted values 
+  */ 
+ public static function buildXyz($form, $xyz = null) { 
+  if ($xyz === null) { 
+   $xyz = new Xyz(); 
+  } 
+  $xyz-&gt;... = $form-&gt;exportValue(&apos;...&apos;); 
+  if ($form-&gt;exportValue(&apos;password&apos;) != &quot;&quot;) { 
+   $xyz-&gt;password = $form-&gt;exportValue(&apos;password&apos;); 
+  } 
+  return $xyz; 
+ }
+ 
+ /** 
+  * method to add custom definitions to the form object 
+  * @generated method stub for further implementation 
+  * @param HTML_QuickForm the created form for further adjustments 
+  * @see  create() 
+  */ 
+ private static function addCustomDefinition($form) { 
+  /* PROTECTED REGION ID(pear.quickform.custom.definitions._14_0_b6f02e1_1206538020843_168097_254) ENABLED START */ 
+  // TODO: further form definitions for class &apos;XyzForm&apos; 
+  /* PROTECTED REGION END */ 
+ } 
+} 
+?&gt;</programlisting>
+  </section>
+
+</section>
+
