@@ -75,6 +75,8 @@
 
 	<target name="bundle.all"
 		description="bundles GeneSEZ with oAW + eclipse">
+		<delete dir="${genesez.dir}" />
+		<delete dir="${bundle.dir}" />
 		<mkdir dir="${genesez.dir}" />
 		<mkdir dir="${bundle.dir}" />
 		<!-- create the new gensez bundle zip -->
@@ -216,7 +218,7 @@
 	</target>
 	
 	<target name="distribute.all"
-		description="Distributes plugins and features">
+		description="Distributes updatesite and bundles">
 		<ant antfile="${build.file}"
 			dir="${updatesite}"
 			target="distribute"
@@ -225,7 +227,8 @@
 			<property name="build.number" value="${build.number}" />
 			<property name="plugin.version" value="${plugin.version}"/>
 		</ant>
-		<copy todir="${download.location}">
+		<mkdir dir="${download.location}/${branch}" />
+		<copy todir="${download.location}/${branch}">
 			<fileset dir="${bundle.dir}" includes="*" />
 		</copy>
 	</target>
