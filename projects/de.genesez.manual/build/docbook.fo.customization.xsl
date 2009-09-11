@@ -3,10 +3,14 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"   
                 version="1.0">
 
-<xsl:import href="file:///d:/libraries/docbook/docbook-xsl-1.73.2/fo/docbook.xsl"/>
+<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl"/>
 
 <xsl:param name="use.extensions">1</xsl:param>
 <xsl:param name="fop1.extensions">1</xsl:param>
+
+<xsl:param name="draft.mode">yes</xsl:param>
+<xsl:param name="hyphenate">false</xsl:param>
+<xsl:param name="l10n.gentext.default.language">de</xsl:param>
 
 <xsl:param name="paper.type">A4</xsl:param>
 <xsl:param name="page.margin.inner">0.75in</xsl:param>
