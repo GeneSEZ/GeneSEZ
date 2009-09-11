@@ -57,7 +57,8 @@
 	</target>
 
 	<target name="createjar.all"
-		description="Creates jar files for all plugins and features">
+		description="Creates jar files for all plugins and features"
+		depends="build.all">
 		<for param="project">
 			<path refid="build.projects" />
 			<sequential>
@@ -74,7 +75,8 @@
 	</target>
 
 	<target name="distribute.all"
-		description="Distributes plugins and features">
+		description="Distributes plugins and features"
+		depends="bundle.all">
 		<for param="project">
 			<path refid="build.plugins" />
 			<sequential>
@@ -98,7 +100,8 @@
 	</target>
 	
 	<target name="bundle.all"
-		description="bundles GeneSEZ with oAW + eclipse">
+		description="bundles GeneSEZ with oAW + eclipse"
+		depends="createjar.all">
 		<mkdir dir="${genesez.dir}" />
 		<mkdir dir="${bundle.dir}" />
 		<!-- create the new gensez bundle zip -->
