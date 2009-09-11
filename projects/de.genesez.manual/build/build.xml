@@ -5,6 +5,12 @@
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
+	<condition property="build.display"
+		value="${env.DISPLAY}"
+		else=":1">
+		<isset property="env.DISPLAY" />
+	</condition>
+
 	<!-- Public target section -->
 
 	<target name="build"
@@ -17,12 +23,12 @@
 		depends="build" >
 		<copy todir="${distribution.dir}">
 			<fileset dir="${basedir}">
-					<include name="${html.dir}/*" />
+				<include name="${html.dir}/*" />
 			</fileset>
 		</copy>
 		<copy todir="${distribution.dir}/${html.dir}">
 			<fileset dir="${basedir}">
-					<include name="${images.dir}/*" />
+				<include name="${images.dir}/*" />
 			</fileset>
 		</copy>
 		<copy todir="${distribution.dir}" file="${docbook.pdf}"/>
@@ -126,11 +132,35 @@
 
 	<target name="manual.fop2pdf"
 		depends="manual.db2fop">
-		<exec executable="${fop.bin}">
-			<arg value="-fo"/>
-			<arg value="${docbook.fo}"/>
-			<arg value="-pdf"/>
-			<arg value="${docbook.pdf}"/>
+		<parallel>
+			<antcall target="manual.startx" />
+			<sequential>
+				<sleep seconds="5" />
+				<exec executable="${fop.bin}">
+					<env key="DISPLAY" value="${build.display}" />
+					<arg value="-fo"/>
+					<arg value="${docbook.fo}"/>
+					<arg value="-pdf"/>
+					<arg value="${docbook.pdf}"/>
+				</exec>
+				<antcall target="manual.endx" />
+			</sequential>
+		</parallel>
+	</target>
+
+	<target name="manual.startx" unless="env.DISPLAY">
+		<exec executable="${STARTPROC_BIN}" osfamily="unix">
+			<arg value="${XVFB_BIN}" />
+			<arg value="${build.display}" />
+			<arg value="-screen" />
+			<arg value="0" />
+			<arg value="800x600x8" />
+		</exec>
+	</target>
+
+	<target name="manual.endx" unless="env.DISPLAY">
+		<exec executable="${KILLPROC_BIN}" osfamily="unix">
+			<arg value="${XVFB_BIN}" />
 		</exec>
 	</target>
 
