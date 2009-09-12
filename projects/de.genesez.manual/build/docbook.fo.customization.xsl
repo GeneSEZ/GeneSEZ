@@ -5,6 +5,10 @@
 
 <xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl"/>
 
+<!--
+	if extensions are enabled, transformation aborts if tables are encountert:
+	manual.db2fop: No adjustColumnWidths function available
+-->
 <xsl:param name="use.extensions">0</xsl:param>
 <xsl:param name="fop1.extensions">1</xsl:param>
 
