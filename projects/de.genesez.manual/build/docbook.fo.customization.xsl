@@ -5,7 +5,7 @@
 
 <xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl"/>
 
-<xsl:param name="use.extensions">1</xsl:param>
+<xsl:param name="use.extensions">0</xsl:param>
 <xsl:param name="fop1.extensions">1</xsl:param>
 
 <xsl:param name="draft.mode">yes</xsl:param>
