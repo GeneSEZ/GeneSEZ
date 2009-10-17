@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN" "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<section>
+
+  <title>Idee des GeneSEZ Ansatzes</title>
+
+  <para>In der MDA/MDSD Vorgehensweise zur Softwareentwicklung werden 
+  erstellte Anwendungsmodelle automatisch durch Modelltransformationen 
+  in Quellcode überführt. Eine MDSD-Plattform stellt hierfür die 
+  folgenden Modelltransformationen unterstützen:</para>
+
+  <variablelist>
+
+    <varlistentry>
+
+      <term><emphasis role="bold">Modell-zu-Modell 
+      Transformationen</emphasis></term>
+
+      <listitem>
+
+        <para>Zur Erstellung neuer Modelle mit der Möglichkeit 
+        verschiedene Modellierungssprachen als Quelle und Ziel zu 
+        nutzen</para>
+
+      </listitem>
+
+    </varlistentry>
+
+    <varlistentry>
+
+      <term><emphasis role="bold">Modellmodifikationen</emphasis></term>
+
+      <listitem>
+
+        <para>Verändern ein Modell, meist um Informationen abzuändern 
+        oder weitere hinzuzufügen</para>
+
+      </listitem>
+
+    </varlistentry>
+
+    <varlistentry>
+
+      <term><emphasis role="bold">Modell-zu-Text 
+      Transformationen</emphasis></term>
+
+      <listitem>
+
+        <para>Werden genutzt um Quellcode und andere notwendige Dateien 
+        für eine Software zu generieren</para>
+
+      </listitem>
+
+    </varlistentry>
+
+  </variablelist>
+
+  <para>Modell-zu-Modell Transformationen und Modellmodifikationen 
+  stellen eine Vorverarbeitung von Modellen sicher während letztlich 
+  Modell-zu-Text Transformationen den Quellcode einer Software 
+  erzeugen. Das Transformationsziel ist meist eine objektorientierte 
+  Programmiersprache.</para>
+
+  <para>Je ähnlicher die Konzepte der Programmiersprache mit der in 
+  Modellierungssprachen verankerten sind, desto einfacher lassen sich 
+  Modelltransformationen erstellen, die beide Konzepte aufeinander 
+  abbilden. Weiterhin werden die Modelltransformationen dadurch 
+  intuitiver und wartbarer.</para>
+
+  <para>Bei den Modellierungssprachen für MDSD-Plattformen sind UML 
+  sowie DSLs weit verbreitet. Die UML stellt objektorientierte 
+  Modellierungskonzepte zur Verfügung und bietet die richtige 
+  Abstraktionsebene zur Quellcodegenerierung. Leider entwickelte sich 
+  die UML mit einer steigenden Anzahl von Modellierungskonzepten zu 
+  einer für Modelltransformationen ungeeigneten 
+  Modellierungssprache:</para>
+
+  <itemizedlist>
+
+    <listitem>
+
+      <para>sie wurde ziemlich komplex</para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>sie enthält Informationen die für die 
+      Programmcodegenerierung uninteressant ist</para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>es gibt keinen Überblick von dem UML Metamodell aus dem 
+      hervorgeht wie auf bestimmte Informationen zugegriffen werden 
+      kann</para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>sie enthält Informationen über die grafische Darstellung 
+      von Modellelementen, z.B. den Bildern von Stereotypen</para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>viele Ansätze zeigen auf, das nur ein Teil der UML sinnvoll 
+      für MDA/MDSD-Plattformen nutzbar ist (u.a. Stephen J. Mellor and 
+      Marc Balcer. Executable UML: A Foundation for Model-Driven 
+      Architectures. Addison-Wesley Longman Publishing Co., Inc., 
+      Boston, MA, USA, 2002. Foreword by Ivar Jacoboson. und Paul 
+      Baker, Zhen Ru Dai, Jens Grabowski, Øystein Haugen, Ina 
+      Schieferdecker, and Clay Williams. Model-Driven Testing: Using 
+      the UML Testing Profile. Springer-Verlag New York, Inc., 
+      Secaucus, NJ, USA, 2007.)</para>
+
+    </listitem>
+
+  </itemizedlist>
+
+  <para>Durch die komplexe und normalisierte Struktur des Metamodells 
+  ist UML relativ ungeeignet für Modelltransformationen. Erschwerend 
+  kommt hinzu das selbst die UML Spezifikation keine Übersicht des 
+  Metamodells bereit stellt.</para>
+
+  <para>Neben der UML gibt es die DSLs welche Konzepte eines 
+  Anwendungsbereich oder technische Aspekte zur Beschreibung von 
+  Modellen nutzen. Dabei sind vor allem die fachlichen DSLs 
+  interessant, da die Modelle mit den Experten der Anwendungsbereiche 
+  diskutiert werden können. Solche Modellierungssprachen vergrößern 
+  jedoch den Unterschied zwischen Modellierungskonzepten und den 
+  Konzepten der Programmiersprachen. Dies führt einerseits zu 
+  komplexeren Modelltransformationen und andererseits zu 
+  Modelltransformationen die anwendungsbereichspezifisch sind. Von der 
+  Perspektive der Abbildung führt dies bei verschiedenen 
+  Modellierungssprachen zur kontinuierlichen Neuerstellung von 
+  Modelltransformationen für die selbe Programmiersprache da von 
+  verschiedenen Modellierungssprachen aus transformiert wird.</para>
+
+  <para>Basierend auf den Konsequenzen des Einsatzes von UML bzw. DSLs 
+  war die Idee bei GeneSEZ nicht direkt die Metamodelle mit denen die 
+  Modelle erstellt wurden auszuwerten sondern ein separates Metamodell 
+  für eine MDSD-Plattform zu erstellen und dieses auszuwerten. Dessen 
+  Struktur sollte geeignet für die Auswertung durch 
+  Modelltransformationen sein und nur Informationen beinhalten die für 
+  die Quellcodegenerierung von Interesse sind. Dies führt zu einem 
+  Metamodell welches speziell für die letzten 
+  Modelltransformationsschritte in Quellcode geeignet ist. Für die 
+  MDSD-Plattform bedeutet dies eine stabile, wiederverwendbare und 
+  investitionssichere Basis für die Quellcodegenerierung.</para>
+
+  <para>Mit den Begriffen der MDA kann das GeneSEZ Metamodell als 
+  <emphasis>abstracting mapping</emphasis> klassifiziert werden, da 
+  viele Informationen in der UML uninteressant für die 
+  Quellcodegenerierung sind. Mit den Konzept der DSLs kann es als DSL 
+  für Modelltransformationen, speziell von Modell-zu-Text 
+  Transformationen gesehen werden. In Bezug zu UML ergibt sich ein 
+  einfacheres und knapperes Metamodell für Modelltransformationen. Mit 
+  Bezug auf fachliche DSLs wird ein Zwischenschritt in 
+  Modelltransformationen eingeführt welche das 
+  anwendungsbereichspezifische Metamodell auf das GeneSEZ Metamodell 
+  abbildet und dieses dann in einem weiteren Schritt in Quellcode 
+  abgebildet wird. Dadurch werden komplexere direkte Abbildungen in 
+  Quellcode vermieden und die Modelltransformationen des GeneSEZ 
+  Metamodells in Quellcode werden über verschiedene Anwendungsbereiche 
+  hinweg wiederverwendbar.</para>
+
+</section>
+

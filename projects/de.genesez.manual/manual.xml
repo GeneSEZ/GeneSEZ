@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
+<!--DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"-->
 <!DOCTYPE book
 	PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 	[
@@ -40,275 +41,31 @@
 
     <title>Getting Started</title>
 
-    <chapter>
+    <partintro>
 
-      <title>Der GeneSEZ-Ansatz</title>
+      <para>In <xref linkend="chapter:de.genesez.background"/>
+       wird etwas Hintergrundwissen zu modellgetriebenen Ansätzen und 
+      GeneSEZ vermittelt. Für einen praktischen Einstieg kann direkt zu 
+      <xref linkend="chapter:de.genesez.installation"/> 
+      gesprungen werden.</para>
 
-      <para>In diesem Kapitel sollen die Hintergr&uuml;nde f&uuml;r die 
-      Entstehung des GeneSEZ-Frameworks n&auml;her beschrieben werden. Dazu 
-      werden kurz die modellgetriebene Softwareentwicklung sowie einige 
-      Herausforderungen, denen sich diese Art der Softwareentwicklung 
-      gegen&uuml;bersieht, aufgezeigt. Davon ausgehend wird dann der 
-      GeneSEZ-Ansatz vorgestellt, der einigen dieser Herausforderungen 
-      begegnen soll.</para>
+    </partintro>
 
-      <sect1>
+    <chapter id="chapter:de.genesez.background">
 
-        <title>Modellgetriebene Softwareentwicklung</title>
+      <title>Hintergrund und Idee von GeneSEZ</title>
 
-        <para>Die modellgetriebene Softwareentwicklung (kurz MDSD f&uuml;r 
-        engl. model driven software development) besch&auml;ftigt sich 
-        allgemein mit der Generierung von Quellcode einer Software aus 
-        formalen Modellen.</para>
+      <para>Nach einem kleinen Einblick in modellgetriebene Ansätze 
+      wird die Idee des GeneSEZ Ansatzes beschrieben, gefolgt von einem 
+      kleinen Überblick von GeneSEZ.</para>
 
-        <para>Dabei dienen Modelle nicht mehr nur als Dokumentation 
-        oder Visualisierung von Realisierungsproblemen einer Software, 
-        sondern r&uuml;cken selbst in den Mittelpunkt der 
-        Softwareentwicklung. Dass es sich um formale Modelle handeln 
-        muss, ergibt sich daraus, dass sie automatisch in Quellcode 
-        transformiert werden sollen. Die Formalit&auml;t wird dabei durch 
-        die Verwendung eines Metamodells gew&auml;hrleistet.</para>
-
-        <para>Als Ziele der MDSD werden meist die Wiederverwendung von 
-        Architekturen, die gleichbleibend hohe Qualit&auml;t des Quellcodes 
-        sowie die Steigerung der Entwicklungsgeschwindigkeit 
-        genannt.</para>
-
-      </sect1>
-
-      <sect1>
-
-        <title>Herausforderungen und Hindernisse der MDSD</title>
-
-        <sect2>
-
-          <title>Wahl des Metamodells</title>
-
-          <para>Wie bereits erw&auml;hnt, bildet die Grundlage der MDSD ein 
-          Metamodell, welchem die Modelle der zu entwickelnden 
-          Applikation gen&uuml;gen. Basierend auf diesem Metamodell werden 
-          die Transformationen zur Generierung von Quellcode 
-          entwickelt.</para>
-
-          <para>Eine zentrale Herausforderung ist dabei die Wahl des 
-          Metamodells. Hier werden meist entweder dom&auml;nenspezifische 
-          Sprachen (sog. DSL f&uuml;r engl. domain specific language) oder 
-          die Unified Modeling Language (UML) eingesetzt. DSLs sind 
-          speziell f&uuml;r einen bestimmten Anwendungs- bzw. Problembereich 
-          geeignet. Sie besitzen eine sehr pr&auml;zise Ausdrucksweise mit 
-          der Semantik des Problembereichs und sind deshalb auch auf 
-          diesen beschr&auml;nkt. H&auml;ufig sind DSLs nicht standardisiert, 
-          wodurch die Kommunikation zwischen Entwicklern leiden kann, 
-          da jeder Entwickler erst diese spezielle Sprache erlernen 
-          muss. Werden DSLs durch die Entwickler selbst definiert, so 
-          m&uuml;ssen diese auch in einem Entwicklungsprozess mit gepflegt 
-          werden.</para>
-
-          <para>Die UML dagegen ist ein Standard zur Modellierung von 
-          Software, der von der OMG spezifiziert wurde. Sie ist 
-          allgemeing&uuml;ltig und unter Entwicklern i.d.R. bereits bekannt. 
-          Ein wesentlicher Nachteil der UML ist die Komplexit&auml;t und die 
-          fehlende Referenzimplementierung. Jedoch existiert mit dem 
-          Eclipse-UML2-Projekt eine Implementierung der UML, die einige 
-          Toolhersteller nutzen bzw. durch eine Export-Funktionalit&auml;t 
-          unterst&uuml;tzen, wodurch sich dieses Projekt de facto zu einer 
-          Referenzimplementierung entwickelt.</para>
-
-        </sect2>
-
-        <sect2>
-
-          <title>MDSD-Entwicklungsprozess</title>
-
-          <para>Im Vergleich zur herk&ouml;mmlichen Softwareentwicklung 
-          kommen bei modellgetriebener Softwareentwicklung einige 
-          weitere Tools zum Einsatz. Dazu geh&ouml;rt eine Software zur 
-          Erstellung der Modelle.</para>
-
-          <para>Weiterhin erfordert ein MDSD-Entwicklungsprozess:</para>
-
-          <para />
-
-          <para>* Modellvalidierungen zur &uuml;berpr&uuml;fung der Modelle</para>
-
-          <para>* Modellmodifikationen, um kleine &auml;nderungen an 
-          Modellen durchf&uuml;hren zu k&ouml;nnen</para>
-
-          <para>* Modell-zu-Modell-Transformationen</para>
-
-          <para>* Modell-zu-Text-Transformationen</para>
-
-          <para />
-
-          <para>Die Softwarebausteine zur Unterst&uuml;tzung der genannten 
-          Aufgaben m&uuml;ssen gut zusammenarbeiten. Aktualisierungen 
-          einzelner Bestandteile k&ouml;nnen sich hinderlich auf die 
-          Zusammenarbeit auswirken. Im Zusammenhang mit diesen 
-          aufeinander aufbauenden Aufgaben und Werkzeugen wird auch oft 
-          von der so genannten &quot;Tool-Chain&quot; (dt. 
-          Werkzeugkette).</para>
-
-        </sect2>
-
-        <sect2>
-
-          <title>Wiederverwendung</title>
-
-          <para>In einem MDSD-Entwicklungsprozess kommen verschiedene 
-          Quellcode-Artefakte zum Einsatz. Einen wesentlichen Teil 
-          bilden dabei die Templates f&uuml;r 
-          Modell-zu-Text-Transformationen, aber auch Skripte f&uuml;r 
-          Modell-Modifikationen, Modell-zu-Modell-Transformationen und 
-          Hilfsfunktionen. Mit Hilfe dieser Artefakte wird der 
-          Infrastruktur-Quellcode generiert, der anschlie&szlig;end fertig 
-          implementiert werden muss. Da die Erstellung dieser Artefakte 
-          eine nicht zu vernachl&auml;ssigende Zeit in Anspruch nimmt, 
-          sollten diese Artefakte in einem MDSD-Entwicklungsprozess so 
-          oft wie m&ouml;glich wiederverwendet werden.</para>
-
-          <para />
-
-          <para>All genannten Artefakte sind von dem verwendeten 
-          Metamodell abh&auml;ngig. Kommt hierbei die UML zum Einsatz, wird 
-          die Auswertung der Modellinformationen durch die Komplexit&auml;t 
-          und hochgradige Normalisierung erschwert. 
-          Modellmodifikationen und Modell-zu-Modell-Transformationen 
-          sind nur mit sehr viel Aufwand realisierbar. Modelle 
-          domainspezifischer Sprachen sind auf der anderen Seite 
-          aufgrund ihrer Beschr&auml;nkung auf einen Problembereich leichter 
-          auswertbar. Modellmodifikationen und 
-          Modell-zu-Modell-Transformationen sind durch den beschr&auml;nkten 
-          Umfang ebenfalls realisierbar. Problematisch kann allerdings 
-          die Zukunftssicherheit der DSL sein. Ein Problem entsteht 
-          beispielsweise, wenn Software f&uuml;r einen anderen 
-          Anwendungsbereich entwickelt werden muss, welche die DSL 
-          bisher nicht abdeckt.</para>
-
-        </sect2>
-
-      </sect1>
-
-      <sect1>
-
-        <title>GeneSEZ-Ansatz</title>
-
-        <para>Das wesentliche Alleinstellungsmerkmal des 
-        GeneSEZ-Ansatzes f&uuml;r modellgetriebene Softwareentwicklung ist 
-        das GeneSEZ-Metamodell. Dabei handelt es sich um ein 
-        allgemeing&uuml;ltiges Metamodell, welches die Basis des 
-        Entwicklungsprozesses bildet. Dadurch wird die bereits 
-        angesprochene Wiederverwendung der Artefakte des 
-        Entwicklungsprozesses sicher gestellt sowie eine Entkopplung 
-        von der verwendeten Modellierungssoftware erreicht.</para>
-
-        <sect2>
-
-          <title>GeneSEZ-Metamodell</title>
-
-          <para>Das GeneSEZ-Metamodell kann weitgehend als 
-          domainspezifisches Modell aufgefasst werden, wobei die Domain 
-          hier die Generierung von Quellcode selbst ist. Es ist ein 
-          allgemeing&uuml;ltiges Metamodell und ist dadurch der UML sehr 
-          &auml;hnlich. Allerdings ist es sehr viel einfacher strukturiert, 
-          um die Zugriffe auf Modellinformationen zu vereinfachen. Dazu 
-          geh&ouml;ren kurze Navigationspfade sowie keine unn&ouml;tigen 
-          abstrakten Elemente, die bei normalisierten Modellen 
-          enthalten w&auml;ren.</para>
-
-          <para />
-
-          <para>Durch diese Vorgehensweise werden dem 
-          Template-Entwickler die Modellinformationen in sinnvoller 
-          Weise pr&auml;sentiert und die einfache Erstellung von 
-          Modellmodifikationen sowie Modell-zu-Modell-Transformationen 
-          wird erm&ouml;glicht.</para>
-
-        </sect2>
-
-        <sect2>
-
-          <title>Modell-Adapter</title>
-
-          <para>Durch die feste Verankerung eines Metamodells im 
-          MDSD-Entwicklungsprozess stellt sich nat&uuml;rlich die Frage, wie 
-          darauf aufbauende Modelle erstellt werden k&ouml;nnen. Es kan 
-          schlie&szlig;lich kaum erwartet werden, dass Modellierer nur wegen 
-          der Nutzung des GeneSEZ-Ansatzes ihre bereits seit langer 
-          Zeit genutzte Modellierungssoftware aufgeben. Deshalb wurde 
-          das Konzept der Modelladapter eingef&uuml;hrt, die ein auf einem 
-          anderem Metamodell beruhendes Modell in ein 
-          GeneSEZ-Metamodell-basiertes Modell &uuml;berf&uuml;hren k&ouml;nnen.</para>
-
-          <para />
-
-          <para>Obwohl der GeneSEZ-Ansatz kein Ausgangs-Metamodell 
-          vorschreibt und somit jeder Anwender sein pr&auml;feriertes 
-          Metamodell zur Erstellung der Modelle nutzen kann, wird 
-          jedoch der Einsatz der UML empfohlen. Diese ist weit 
-          verbreitet, standardisiert und vielen Entwicklern bereits 
-          bekannt. Durch die wohldefinierte Semantik der 
-          UML-Modellelemente ist ein einheitliches Verst&auml;ndnis des 
-          Modells bei Entwicklern gegeben. Modelle auf Basis der 
-          Eclipse-UML2-Implementierung werden durch das 
-          GeneSEZ-Framework &quot;out-of-the-box&quot; 
-          unterst&uuml;tzt.</para>
-
-          <para />
-
-          <para>DSLs hingegen m&uuml;ssen von jedem Entwickler erst erlernt 
-          werden, wodurch ein einheitliches Grundverst&auml;ndnis der DSL 
-          nicht ohne Weiteres gegeben ist. Jedoch werden auch DSLs 
-          durch den GeneSEZ-Ansatz unterst&uuml;tzt. Ist die DSL auf Basis 
-          der UML definiert so wird diese &quot;out-of-the-box&quot; 
-          unterst&uuml;tzt. Andere DSLs k&ouml;nnen aufgrund deren zahlreichen 
-          Auspr&auml;gungen und vielf&auml;ltigen Definitionsm&ouml;glichkeiten nicht 
-          &quot;out-of-the-box&quot; unterst&uuml;tzt werden. F&uuml;r solche 
-          DSLs ist die Erstellung eines Modelladapters erforderlich, 
-          der das domainspezifische Modell in ein GeneSEZ-Modell 
-          transformiert.</para>
-
-        </sect2>
-
-        <sect2>
-
-          <title>GeneSEZ-Tooling</title>
-
-          <para>Das GeneSEZ-Framework basiert ausschlie&szlig;lich auf 
-          Open-Source-Software. Ein wesentlicher Bestandteil ist das 
-          Generator-Framework openArchitectureWare. Das 
-          GeneSEZ-Framwork besteht aus dem GeneSEZ-Metamodell, einigen 
-          weiteren Komponenten sowie den Artefakten zur 
-          Quellcodegenerierung.</para>
-
-        </sect2>
-
-      </sect1>
-
-      <sect1>
-
-        <title>Abschlussbemerkungen</title>
-
-        <para>Wesentlich f&uuml;r einen MDSD-Entwicklungsprozess ist das in 
-        ihm verankerte Metamodell. Der Stellenwert des Metamodells ist 
-        somit relativ hoch. Die Artefakte, die in einem 
-        Entwicklungsprozess genutzt werden, basieren ebenfalls auf dem 
-        Metamodell. Die Erstellung der Artefakte des GeneSEZ-Frameworks 
-        hat eine nicht unwesentliche Zeit in Anspruch genommen. Der 
-        Umfang des Metamodells ist verglichen mit denen der Artefakte 
-        relativ kompakt. Daher sollte der Umfang der Artefakte in einem 
-        Entwicklungsprozess nicht untersch&auml;tzt werden.</para>
-
-        <para />
-
-        <para>Im folgenden Bild ist beispielhaft ein m&ouml;glicher 
-        modellgetriebener Entwicklungsprozess auf Basis des 
-        GeneSEZ-Frameworks abgebildet:</para>
-
-      </sect1>
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.intro.mdsd.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.intro.idea.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.intro.overview.xml" />
 
     </chapter>
 
-    <chapter>
+    <chapter id="chapter:de.genesez.installation">
 
       <title>Installation von GeneSEZ</title>
 
@@ -1010,11 +767,9 @@
 
     <title>Benutzer-Referenz</title>
 
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.accessors.xml" />
-
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.workflow.components.xml" />
-
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.type.mapping.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.accessors.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.workflow.components.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.type.mapping.xml" />
 
     <chapter>
 
@@ -1162,7 +917,7 @@
 
     </chapter>
 
-    <chapter>
+    <chapter id="de.genesez.platforms.common.logging">
 
       <title>Das GeneSEZ-Logging-Konzept</title>
 
@@ -1273,8 +1028,8 @@
       n&auml;her erl&auml;utert.</para>
 
     </chapter>
-	  
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.statistic.xml" />
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.statistic.xml" />
 
   </part>
   
@@ -1371,8 +1126,8 @@
 
   <part>
     <title>Weitere GeneSEZ Projekte</title>
-	
-	  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.php.metaframework.xml" />
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.php.metaframework.xml" />
 	
   </part>
 
