@@ -41,5 +41,14 @@
     <xsl:attribute name="hyphenation-character">\</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="list.block.spacing">
+  <xsl:attribute name="margin-left">
+    <xsl:choose>
+      <xsl:when test="self::itemizedlist">1em</xsl:when>
+	  <xsl:when test="self::orderedlist">1em</xsl:when>
+      <xsl:otherwise>0em</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
 
 </xsl:stylesheet>
