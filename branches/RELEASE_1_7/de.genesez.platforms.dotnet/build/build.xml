@@ -19,6 +19,7 @@
 
 	<!-- Set the classpath -->
 	<path id="de.genesez.platforms.dotnet.classpath">
+		<pathelement path="${build.basedir}/de.genesez.platforms.common/${bin.dir}" />
 		<pathelement path="${build.basedir}/de.genesez.core/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
@@ -31,7 +32,8 @@
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.platforms.dotnet">
+		description="Create the plugin jar for de.genesez.platforms.dotnet"
+		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
