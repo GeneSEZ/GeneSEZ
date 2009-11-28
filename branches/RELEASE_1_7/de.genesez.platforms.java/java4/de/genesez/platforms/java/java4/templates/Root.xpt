@@ -1,63 +1,102 @@
-«REM» import code gen meta model «ENDREM»
+«REM»
+	Main entry point for generating java code.
+	Iterates over the model and delegates the handling of classifiers.
+	
+	@author	tobias haubold
+	@author	nico herbig (last)
+	@date	2009-05-26
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
 «IMPORT gcore»
 
-«REM» useful metamodel extensions «ENDREM»
-«EXTENSION de::genesez::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» use dependencies to generate imports «ENDREM»
+«EXTENSION de::genesez::platforms::common::UseDependencies»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Association»
 
 
-// //////////////////////////////////////////////////////////////////////////////
-// public functions
-// //////////////////////////////////////////////////////////////////////////////
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
+«REM»
+	processes the contents of the model, adds use dependencies to all classifiers, 
+	prepares all association classes and rejects all ignored packages
+	@context	a genesez model
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«REM» prepare model, init logger «ENDREM»
+	«addUseDependencies()»
+	«useLogger("de.genesez.platforms.java")»
+	«REM» start transformation «ENDREM»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+	«EXPAND Root FOREACH classifier»
+«ENDDEFINE»
 
-«DEFINE Root FOR MModel-»
-«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()-»
+«REM»
+	processes the contents of a package
+	generates the package documentation if there is any
+	delegates the handling of all classifiers
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«IF hasComment()»
+		«EXPAND Comment::Package -»
+	«ENDIF»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier»
 «ENDDEFINE»
 
 
-«DEFINE Root FOR MPackage-»
-«EXPAND Root FOREACH nestedPackage-»
-«EXPAND Root FOREACH classifier-»
-«ENDDEFINE»
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
-
-«DEFINE Root FOR MInterface-»
-«FILE getFilename()-»
-	«EXPAND Class::Root-»
+«REM»
+	processes the generation of an interface
+«ENDREM»
+«DEFINE Root FOR MInterface»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Interface::Root»
 «ENDFILE»
 «ENDDEFINE»
 
-
-«DEFINE Root FOR MClass-»
-«FILE getFilename()-»
-	«EXPAND Class::Root-»
+«REM»
+	processes the generation of a class
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Class::Root»
 «ENDFILE»
 «ENDDEFINE»
 
-
+«REM»
+	processes the generation of an enumeration
+«ENDREM»
 «DEFINE Root FOR MEnumeration-»
-«FILE getFilename()-»
-	«EXPAND Class::Root-»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Enumeration::Root»
 «ENDFILE»
 «ENDDEFINE»
 
-«DEFINE Root FOR MDataType-»
-«FILE getFilename()-»
-	«EXPAND Class::Root-»
+«REM»
+	processes the generation of a data type
+«ENDREM»
+«DEFINE Root FOR MDataType»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND DataType::Root»
 «ENDFILE»
 «ENDDEFINE»
 
-
-«DEFINE Root FOR MPrimitiveType-»
+«REM»
+	because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("generation of 'MClassifier's is currently not supported")»
 «ENDDEFINE»
-
-
-«DEFINE Root FOR MClassifier-»
-«ENDDEFINE»
-
-
-// //////////////////////////////////////////////////////////////////////////////
-// private functions
-// //////////////////////////////////////////////////////////////////////////////

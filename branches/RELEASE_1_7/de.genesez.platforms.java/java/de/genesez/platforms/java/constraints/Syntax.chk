@@ -70,7 +70,7 @@ context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you w
  * @return	 true, if the name is not a reserved java word, otherwise false
  */
 context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word! " + fqn() :
-	metaType == MPrimitiveType
+	{ MPrimitiveType, MStereotype, MTag, MTaggedValue }.contains( metaType )
 		? true
 		: (
 	!{"abstract", "continue", "for", "new", "switch", "assert", "default", "goto", 

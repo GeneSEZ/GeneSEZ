@@ -33,7 +33,7 @@
 		«IF !hasTaggedValue("ejb3Association", "type", "OneToOne")-»
 			«EXPAND _JoinTable»
 		«ENDIF-»
-	«ELSEIF !hasStereotype("ejb3Association")-»
+	«ELSEIF !hasStereotype("ejb3Association") || !hasUtilizableValue("ejb3Association", "type")-»
 		«IF multiplicity != 1-»
 			«REM»//Stereotypen: «this.stereotype»«ENDREM»
 			@org.hibernate.annotations.CollectionOfElements
@@ -69,6 +69,7 @@
 
 «REM» 
 	evaluates the stereotype ejb3JoinColumn 
+	complete this define block by adding evaluation of multiple values
 «ENDREM»
 «DEFINE _JoinColumn FOR MAssociationRole-»
 	«IF hasStereotype("ejb3JoinColumn")»
@@ -102,6 +103,7 @@
 
 «REM» 
 	evaluates the stereotype ejb3IJoinColumn 
+	complete this define block by adding evaluation of multiple values
 «ENDREM»
 «DEFINE _IJoinColumn FOR MAssociationRole-»
 	«IF hasStereotype("ejb3IJoinColumn")»
@@ -138,18 +140,20 @@
 «ENDREM»
 «DEFINE _JoinTable FOR MAssociationRole-»
 	«IF hasStereotype("ejb3JoinTable")»
-		«IF hasUtilizableValue("ejb3JoinTable", "name")-»
-			@JoinTable(name="«getTaggedValue("ejb3JoinTable", "name")-»"
-			«IF hasStereotype("ejb3JoinColumn")-»
-				, joinColumns=
-				«EXPAND _JoinColumn-»
-			«ENDIF-»
-			«IF hasStereotype("ejb3IJoinColumn")-»
-				, inverseJoinColumns=
-				«EXPAND _IJoinColumn-»
-			«ENDIF»
-			)
+		@JoinTable(name="«IF hasUtilizableValue("ejb3JoinTable", "name")-»
+			«getTaggedValue("ejb3JoinTable", "name")-»"
+		«ELSE-»
+			TBL_«this.classifier.name.toFirstUpper()-»_TBL_«this.name-»"
+		«ENDIF-»
+		«IF hasStereotype("ejb3JoinColumn")-»
+			, joinColumns=
+			«EXPAND _JoinColumn-»
+		«ENDIF-»
+		«IF hasStereotype("ejb3IJoinColumn")-»
+			, inverseJoinColumns=
+			«EXPAND _IJoinColumn-»
 		«ENDIF»
+		)
 	«ENDIF»
 «ENDDEFINE»
 
