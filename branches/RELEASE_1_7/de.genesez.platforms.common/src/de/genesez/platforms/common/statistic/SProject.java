@@ -19,9 +19,10 @@ public class SProject {
 	/** storage for the statistics */
 	private StatisticSet statSet = new StatisticSet();
 	
-	/** the filename of the statistic file */
-	private String filename;
-	
+	/** the name of the statistic project */
+	private String name;
+	private boolean withDate;
+	private String excludes;
 	
 	/**
 	 * Constructs a new statistic project
@@ -29,16 +30,8 @@ public class SProject {
 	 * @param withDate	true if the statistic file name should contain the current date, otherwise false
 	 */
 	public SProject(String name, boolean withDate) {
-		StringBuffer filename = new StringBuffer(name);
-		if (withDate == true) {
-			GregorianCalendar now = new GregorianCalendar();
-			DateFormat date = DateFormat.getDateInstance(DateFormat.SHORT);
-			if (filename.length() > 0) {
-				filename.append("_");
-			}
-			filename.append(date.format(now.getTime()).replace(".", "-"));
-		}
-		this.filename = filename.toString();
+		this.name = name;
+		this.withDate = withDate;
 	}
 	
 	/**
@@ -67,7 +60,7 @@ public class SProject {
 	 * @param directory		a source folder with generated source code
 	 */
 	public void addGeneratedSourceFolder(String directory) {
-		this.sourceFolders.add(new SDirectory(directory, true));
+		this.sourceFolders.add(new SDirectory(directory, true, excludes));
 	}
 	
 	/**
@@ -75,7 +68,7 @@ public class SProject {
 	 * @param directory		a source folder with manually written source code
 	 */
 	public void addManualSourceFolder(String directory) {
-		this.sourceFolders.add(new SDirectory(directory, false));
+		this.sourceFolders.add(new SDirectory(directory, false, excludes));
 	}
 	
 	/**
@@ -96,6 +89,14 @@ public class SProject {
 		for (String dir : directories) {
 			addManualSourceFolder(dir);
 		}
+	}
+	
+	/**
+	 * Sets the file names to exclude
+	 * @param excludes	file names to exclude
+	 */
+	public void setExcludes(String excludes) {
+		this.excludes = excludes;
 	}
 	
 	/**
@@ -136,6 +137,23 @@ public class SProject {
 	 * @return	the file name of the statistic file
 	 */
 	public String getFilename() {
-		return filename;
+		StringBuffer filename = new StringBuffer(name);
+		if (withDate == true) {
+			GregorianCalendar now = new GregorianCalendar();
+			DateFormat date = DateFormat.getDateInstance(DateFormat.SHORT);
+			if (filename.length() > 0) {
+				filename.append("_");
+			}
+			filename.append(date.format(now.getTime()).replace(".", "-"));
+		}
+		return filename.toString();
+	}
+	
+	/**
+	 * Returns the name of the statistic project
+	 * @return	name of the statistic project
+	 */
+	public String getName() {
+		return name;
 	}
 }

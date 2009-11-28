@@ -30,6 +30,7 @@ public class Statistics extends Generator {
 		defaults.put("slot", "statisticModel");
 		defaults.put("name", "Statistic");
 		defaults.put("withDate", "false");
+		defaults.put("excludes", ".svn, .cvs");
 	}
 	
 	private Log logger = LogFactory.getLog(getClass());
@@ -57,6 +58,7 @@ public class Statistics extends Generator {
 	protected void invokeInternal2(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		// calculate statistics
 		SProject project = new SProject(properties.getProperty("name"), Boolean.parseBoolean(properties.getProperty("withDate")));
+		project.setExcludes(properties.getProperty("excludes"));
 		project.calculate(generatedDirs, manualDirs);
 		
 		// add statistic model to slot
@@ -116,6 +118,14 @@ public class Statistics extends Generator {
 	 */
 	public void setName(String name) {
 		properties.put("name", name);
+	}
+	
+	/**
+	 * Sets the file names to exclude
+	 * @param excludes	file names to exclude
+	 */
+	public void setExcludes(String excludes) {
+		properties.put("excludes", excludes);
 	}
 	
 	/**
