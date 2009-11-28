@@ -67,7 +67,7 @@ MElement addColumnForPrimaryKeyInheritance(MElement this, MClassifier classifier
  *
  */
 MStereotype makeColumnStereotype(MProperty container) :
-	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3Column", "ejb3Column") :
+	let s = createStereotype(container.classifier.model(), "ejb3Column", "ejb3Column") :
 		s.property.add(createTag(s, "updatable", "String")) ->
 		s.property.add(createTag(s, "insertable", "String")) ->
 		s.property.add(createTag(s, "name", "String")) ->
@@ -117,7 +117,7 @@ Void addAssociationStereotype(MProperty this, String associationType, String tar
  *
  */
 MStereotype makeAssociationStereotype(MProperty container) :
-	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3Association", "ejb3Association") :
+	let s = createStereotype(container.classifier.model(), "ejb3Association", "ejb3Association") :
 		s.property.add(createTag(s, "type", "ejb3AssociationType")) ->
 		s.property.add(createTag(s, "cascade", "ejb3CascadeType")) ->
 		s.property.add(createTag(s, "fetch", "ejb3FetchType")) ->
@@ -155,7 +155,7 @@ Void addPrimaryKeyStereotype(MProperty this, String generatedValue, String embed
  *
  */
 MStereotype makePrimaryKeyStereotype(MProperty container) :
-	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3PrimaryKey", "ejb3PrimaryKey") :
+	let s = createStereotype(container.classifier.model(), "ejb3PrimaryKey", "ejb3PrimaryKey") :
 		s.property.add(createTag(s, "generatedValue", "Boolean")) ->
 		s.property.add(createTag(s, "embeddedId", "Boolean")) ->
 		s.property.add(createTag(s, "strategy", "String")) ->
@@ -184,7 +184,7 @@ Void addInheritanceStereotype(MClass this, String strategy) :
  *
  */
 MStereotype makeInheritanceStereotype(MClass container) :
-	let s = createStereotype(container.owningPackage.getModel(), "ejb3Inheritance", "ejb3Inheritance") :
+	let s = createStereotype(container.model(), "ejb3Inheritance", "ejb3Inheritance") :
 		s.property.add(createTag(s, "strategy", "ejb3InheritanceType")) ->
 		s;
 	
@@ -216,7 +216,7 @@ Void addDiscriminatorColumnStereotype(MClass this, String columnDefinition, Stri
  *
  */
 MStereotype makeDiscriminatorColumnStereotype(MClass container) :
-	let s = createStereotype(container.owningPackage.getModel(), "ejb3DiscriminatorColumn", "ejb3DiscriminatorColumn") :
+	let s = createStereotype(container.model(), "ejb3DiscriminatorColumn", "ejb3DiscriminatorColumn") :
 		s.property.add(createTag(s, "columnDefinition", "String")) ->
 		s.property.add(createTag(s, "discriminatorType", "ejb3DiscriminatorType")) ->
 		s.property.add(createTag(s, "length", "String")) ->
@@ -245,7 +245,7 @@ Void addDiscriminatorValueStereotype(MClass this, String value) :
  *
  */
 MStereotype makeDiscriminatorValueStereotype(MClass container) :
-	let s = createStereotype(container.owningPackage.getModel(), "ejb3DiscriminatorValue", "ejb3DiscriminatorValue") :
+	let s = createStereotype(container.model(), "ejb3DiscriminatorValue", "ejb3DiscriminatorValue") :
 		s.property.add(createTag(s, "columnDefinition", "String"));
 
 /**
@@ -275,7 +275,7 @@ Void addPersistenceUnitStereotype(MAttribute this, String name, String unitName)
  *
  */
 MStereotype makePersistenceUnitStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3PersistenceUnit", "ejb3PersistenceUnit") :
+	let s = createStereotype(container.classifier.model(), "ejb3PersistenceUnit", "ejb3PersistenceUnit") :
 		s.property.add(createTag(s, "unitName", "String")) ->
 		s.property.add(createTag(s, "name", "String"));
 
@@ -309,7 +309,7 @@ Void addPersistenceContextStereotype(MAttribute this, String type, String name, 
  *
  */
 MStereotype makePersistenceContextStereotype(MAttribute container) :
-	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3PersistenceContext", "ejb3PersistenceContext") :
+	let s = createStereotype(container.classifier.model(), "ejb3PersistenceContext", "ejb3PersistenceContext") :
 		s.property.add(createTag(s, "type", "ejb3PersistenceContextType")) ->
 		s.property.add(createTag(s, "unitName", "String")) ->
 		s.property.add(createTag(s, "name", "String")) ->
