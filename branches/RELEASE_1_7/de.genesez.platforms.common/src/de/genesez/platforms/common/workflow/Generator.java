@@ -35,6 +35,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		defaults.put("disableAccessors", "false");
 		defaults.put("useAccessorStereotype", "false");
 		defaults.put("usePropertyVisibilityForAccessors", "false");
+		defaults.put("singleValuedSlot", "true");
 	}
 	
 	protected Properties properties = new Properties(defaults);
@@ -82,8 +83,14 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		if (isNotSetProRegDir) {
 			setProRegDir(outputDir);
 		}
-		if (isSetTemplate) {
-			super.setExpand(template + " FOR " + properties.getProperty("slot"));
+		if (Boolean.parseBoolean(properties.getProperty("singleValuedSlot", "true"))) {
+			if (isSetTemplate) {
+				super.setExpand(template + " FOR " + properties.getProperty("slot"));
+			}
+		} else {
+			if (isSetTemplate) {
+				super.setExpand(template + " FOREACH " + properties.getProperty("slot"));
+			}
 		}
 		if (isNotSetFileEncoding) {
 			setFileEncoding(properties.getProperty("fileEncoding"));
@@ -185,6 +192,10 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	public void setTemplate(String template) {
  		this.template = template;
 		isSetTemplate = true;
+	}
+	
+	public void setSingleValuedSlot(String value) {
+		properties.put("singleValuedSlot", value);
 	}
 	
 	/**
