@@ -17,10 +17,17 @@
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
+	<!-- Set the classpath -->
+	<path id="de.genesez.platforms.dotnet.classpath">
+		<pathelement path="${build.basedir}/de.genesez.core/${bin.dir}" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+
 	<!-- Public target section -->
 
 	<target name="build"
-		description="Build de.genesez.platforms.dotnet">
+		description="Build de.genesez.platforms.dotnet"
+		depends="platforms.dotnet.compile">
 	</target>
 
 	<target name="createjar"
@@ -29,7 +36,11 @@
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${bin.dir}" />
 			<fileset dir="${csharp.dir}" />
+			<fileset dir="${basedir}">
+				<include name="plugin.xml"/>
+			</fileset>
 		</jar>
 	</target>
 
@@ -41,5 +52,13 @@
 	</target>
 
 	<!-- Private target section -->
+
+	<target name="platforms.dotnet.compile">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.platforms.dotnet.classpath"
+			debug="on" />
+	</target>
 
 </project>
