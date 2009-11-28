@@ -6,10 +6,10 @@ import java.util.Set;
 
 import de.genesez.core.IPlatformWizard;
 
-public class DotNetWizard implements IPlatformWizard {
+public class SharpDevelopWizard implements IPlatformWizard {
 
 	public String getName() {
-		return "GeneSEZ .NET Platform for Visual Studio 2008";
+		return "GeneSEZ .NET Platform for SharpDevelop";
 	}
 
 	public Set<String> getBundles() {
