@@ -6,6 +6,7 @@
  * modifies association classes
  * - adds an interface
  * - adds an association attribute
+ * - adds the stereotype accessor to the association attribute to supress the generation of a setter
  * 
  * @author	georg beier
  * @author	tobias haubold
@@ -16,6 +17,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateBasics;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 
 /*
@@ -82,19 +84,9 @@ private MAttribute makeAssociationClassLinkAttribute(MClassifier this) :
 	let attrib = createAttribute(xmiGuid + ".associationClassLink", "associationClassLink")
 			.processAttribute("new ACLink()", false, false)
 			.processProperty("private", false, 1, false, false) :
-		attrib.setType( getModel().makeACLink() ) ->
-		attrib.createAspect( associationAspectDomain(), associationAspectName() ) ->
+		attrib.setType( model().makeACLink() ) ->
+		attrib.createAccessor("true", "false") ->
 	attrib;
-
-/**
- * aspect domain to mark association class link attribute to supress the generation of a setter accessor
- */
-String associationAspectDomain() : "umlsupport";
-
-/**
- * aspect name to mark association class link attribute to supress the generation of a setter accessor
- */
-String associationAspectName() : "linkAccess";
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
