@@ -21,7 +21,6 @@ import de.genesez.platforms.java.m2t.JavaImportBeautifier;
  */
 public class JavaGenerator extends Generator {
 	
-	private static final String propertyFile = JavaGenerator.class.getSimpleName() + ".properties";
 	private static final Properties defaults = new Properties();
 	static {
 		defaults.put("template", "de::genesez::platforms::java::java5::templates::Root::Root");
@@ -37,9 +36,7 @@ public class JavaGenerator extends Generator {
 	public JavaGenerator() {
 		super();
 		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, propertyFile);
-		
-		configureBeautifiers();
+		WorkflowUtils.loadAllProperties(properties, logger, JavaGenerator.class);
 	}
 	
 	/**
@@ -53,6 +50,8 @@ public class JavaGenerator extends Generator {
 		// check parameters
 		if (isNotSetTemplate) super.setTemplate(properties.getProperty("template"));
 		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
+		
+		configureBeautifiers();
 		super.checkConfigurationInternal(issues);
 	}
 	
@@ -95,5 +94,9 @@ public class JavaGenerator extends Generator {
 	public void addTypeMappingFile(String typeMappingFile) {
 		super.addTypeMappingFile(typeMappingFile);
 		isNotAddTypeMappingFile = false;
+	}
+	
+	public void setFormatterConfig(String formatterConfigFile) {
+		properties.put("formatterConfig", formatterConfigFile);
 	}
 }
