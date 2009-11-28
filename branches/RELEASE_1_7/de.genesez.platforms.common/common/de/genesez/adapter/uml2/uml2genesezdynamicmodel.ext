@@ -123,20 +123,22 @@ private create MAction makeActivityNode(Action a, MActivity activity) :
 /**
  * creates a GeneSEZ synchronisation fork node
  */
-private create MSynchronisation makeActivityNode(ForkNode a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	this;
+//  switched off while join/fork not supported in metamodel 
+//private create MSynchronisation makeActivityNode(ForkNode a, MActivity activity) :
+//	trace( "make [ " + metaType + " ] - " + a ) ->
+//	// basic element properties
+//	transformBasics(a) ->
+//	this;
 
 /**
  * creates a GeneSEZ synchronisation join node
  */
-private create MSynchronisation makeActivityNode(JoinNode a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
-	// basic element properties
-	transformBasics(a) ->
-	this;
+//  switched off while join/fork not supported in metamodel 
+//private create MSynchronisation makeActivityNode(JoinNode a, MActivity activity) :
+//	trace( "make [ " + metaType + " ] - " + a ) ->
+//	// basic element properties
+//	transformBasics(a) ->
+//	this;
 
 /**
  * creates a GeneSEZ activity node
@@ -150,7 +152,7 @@ private create MNode makeActivityNode(ActivityNode a, MActivity activity) :
 /**
  * creates a GeneSEZ activity edge
  */
-private create MControlFlow makeActivityEdge(ControlFlow c, MActivity a) :
+private create MFlow makeActivityEdge(ControlFlow c, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + c ) ->
 	// set source and target of the control flow
 	trace( "source is: " + a.node.select(e|e.xmiGuid == xmiId(c.source)).first().name ) -> 
@@ -165,7 +167,7 @@ private create MControlFlow makeActivityEdge(ControlFlow c, MActivity a) :
  * prints a 'severe' log message to report such an transformation
  * @return	void
  */
-private MControlFlow makeActivityEdge(ActivityEdge e, MActivity a) : 
+private MFlow makeActivityEdge(ActivityEdge e, MActivity a) : 
 	fatal("try to construct a MControlFlow object from: " + e) ->
 	Void;
 
