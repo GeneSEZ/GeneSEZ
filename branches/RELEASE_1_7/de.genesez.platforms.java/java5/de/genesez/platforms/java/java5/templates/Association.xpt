@@ -274,12 +274,13 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 	generate a getter declaration method for a MAssociationRole
 «ENDREM»
 «DEFINE _GetterDecl FOR MAssociationRole-»
-	«EXPAND _CommentGetter-»
 	«IF isPlainAssociation()-»
 		«IF multiplicity != 1-»
+			«EXPAND _CommentGetter-»
 			public «mapType()»<«type.asTypeName()»> «asGetter()»();
 		«ENDIF-»
 	«ELSE-»
+		«EXPAND _CommentGetter-»
 		public «mapType()»<«type.asTypeName()»> «asGetter()»();
 		public «mapType()»<«type.asTypeName()»> «asGetter()»«type.asTypeName()»();
 	«ENDIF-»
@@ -288,10 +289,11 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 
 // generate a getter implementation method for a MAssociationRole
 «DEFINE _GetterImpl FOR MAssociationRole-»
-	«IF !fieldAccess()-»
-		«EXPAND _Annotation-»
-	«ENDIF-»
 	«IF isPlainAssociation()-»
+		«EXPAND _CommentGetter-»
+		«IF !fieldAccess()-»
+			«EXPAND _Annotation-»
+		«ENDIF-»
 		«IF multiplicity == 1-»
 			public «type.asTypeName()» «asGetter()»() {
 				return «asAttribute()»;
@@ -331,8 +333,8 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 
 // generate a insert in declaration method
 «DEFINE _InsertInDecl FOR MAssociationRole-»
-	«EXPAND _CommentAccessor-»
 	«IF isPlainAssociation()-»
+		«EXPAND _CommentAccessor-»
 		«IF multiplicity != 1-»
 			public void «asInsertIn()-»(«type.asTypeName()» «asAttribute()-»);
 		«ELSEIF multiplicity == 1»
@@ -346,8 +348,8 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 
 // generate a insert in implementation method
 «DEFINE _InsertInImpl FOR MAssociationRole-»
-	«EXPAND _CommentAccessor-»
 	«IF isPlainAssociation()-»
+		«EXPAND _CommentAccessor-»
 		«IF multiplicity != 1-»
 			public void «asInsertIn()-»(«type.asTypeName()-» «asAttribute()-») {
 				«IF multiplicity == 1-»
@@ -376,8 +378,7 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 					«asAttribute()-».«opposite.asSetter()-»(this);
 				«ENDIF-»
 			}
-		«ELSEIF multiplicity == 1»
-			«EXPAND _CommentAccessor-»
+		«ELSEIF multiplicity == 1-»
 			public void «asSetter()-»(«type.asTypeName()-» «asAttribute()-»){
 				this.«asAttribute()-» = «asAttribute()-»; 
 			}
@@ -421,8 +422,8 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 
 // generate a remove from declaration method
 «DEFINE _RemoveFromDecl FOR MAssociationRole-»
-	«EXPAND _CommentAccessor-»
 	«IF multiplicity != 1-»
+		«EXPAND _CommentAccessor-»
 		public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-»);
 	«ENDIF»
 «ENDDEFINE»
@@ -430,9 +431,9 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 
 // generate a remove from implementation method
 «DEFINE _RemoveFromImpl FOR MAssociationRole-»
-	«EXPAND _CommentAccessor-»
 	«IF isPlainAssociation()-»
 		«IF multiplicity != 1-»
+			«EXPAND _CommentAccessor-»
 			public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-») {
 				«IF multiplicity == 1-»
 					if (this.«asAttribute()-» != «asAttribute()-») {
