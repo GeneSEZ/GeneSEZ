@@ -13,7 +13,6 @@
  * @todo	a call stack problem may occur, see 'List[MTaggedValue] makeTaggedValues(MElement me, Element e)'
  * @todo	revise magic draw 12.5 specific exception handling, see 'MPrimitiveType makePrimitiveType(DataType d)'
  * @todo	revise the externally processing functions which maps to java functions - seams that they are never called and not needed
- * @todo	implement state machine support
  * @todo	support qualified association ends with more than one qualifier attributes (e.g. create a class with these attributes)
  */
 
@@ -325,7 +324,7 @@ private create MUseCase makeClassifier(UseCase u) :
 	transformBasics(u) ->
 	ownedBehavior.addAll( u.ownedBehavior.transformBehavior(this) ) ->
 	this;
-	
+
 /**
  * just a marker for error free templates
  * no GeneSEZ classifier is created, because the GeneSEZ classifier is an abstract class
@@ -684,11 +683,22 @@ List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	e.getAppliedStereotypes().collect(
 		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
 		s | s.ownedAttribute.
-			reject( a| a.name.startsWith("base_") || null == e.getValue(s, a.name) ).
+			reject( a| a.name.startsWith("base_") || null == e.getTaggedValue(s, a.name) ).
 			collect(
-				tag | makeTaggedValue( makeTag(tag), me, e.getValue(s, tag.name) )
+				tag | makeTaggedValue( makeTag(tag), me, e.getTaggedValue(s, tag.name) )
 			)
 	).flatten().reject(e|e == null);
+
+/**
+ * returns the tagged value of the uml model element
+ * note: don't do it in Xtend! (using getValue(...)) - due to some error in oAW Xtend cannot find
+ *       the method getValue(...)   :´-(
+ * @param	s	the applied uml stereotype
+ * @param	tag	the name of the tag
+ * @return	the value of the tag
+ */
+private Object getTaggedValue(Element this, Stereotype s, String tag) :
+	JAVA de.genesez.adapter.uml2.TransUtils.getTaggedValue(org.eclipse.uml2.uml.Element, org.eclipse.uml2.uml.Stereotype, java.lang.String);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

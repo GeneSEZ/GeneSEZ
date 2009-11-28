@@ -98,12 +98,13 @@ create MOperation cloneOperation(MOperation op, MClassifier container) :
 	raisedException.addAll( op.raisedException ) ->
 	// containments
 	op.parameter.cloneParameter( this ) ->
+	op.returnTypeComment.cloneComment( this ) ->
 	container.operation.add( this ) ->
 	this;
 
 create MParameter cloneParameter(MParameter param, MOperation container) :
 	trace("cloning: " + metaType + ": " + param) ->
-	this.processElement( param.cloneXmiGuid( container ), param.name ) ->
+	this.processElement( param.cloneXmiGuid( container ), param ) ->
 	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.unique, param.ordered) ->
 	setType( param.type ) ->
 	// containment
@@ -156,11 +157,11 @@ MOperation processOperation(MOperation this, String visibility, boolean static, 
 	this;
 
 MParameter processParameter(MParameter this, String defaultValue, String direction, int multiplicity, boolean unique, boolean ordered) :
-	setDefaultvalue(defaultvalue) ->
-	setDirection(direction) ->
-	setMultiplicity(multiplicity) ->
-	setUnique(unique) ->
-	setOrdered(ordered) ->
+	setDefaultvalue( defaultValue ) ->
+	setDirection( direction ) ->
+	setMultiplicity( multiplicity ) ->
+	setUnique( unique ) ->
+	setOrdered( ordered ) ->
 	this;
 
 MAttribute processAttribute(MAttribute this, String defaultvalue, boolean static, boolean final) :
