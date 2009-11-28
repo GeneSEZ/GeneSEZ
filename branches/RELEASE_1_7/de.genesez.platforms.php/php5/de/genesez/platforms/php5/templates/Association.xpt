@@ -1,15 +1,12 @@
 «REM»
-	Handles everything about associations
-	
-	currently implemented:
-	- assoc attributes
-	- getters, setter for simple types, insert in, remove from, declaration + implementation
+	Handles the implementation of associations using the GeneSEZ association library.
+	This library allows a very concise way to implement associations without bloated source code.
 	
 	@author	tobias haubold
-	@date	2008-04-07
+	@date	2009-03-12
 	@todo	association classes
 	@todo	comment support
-	@todo	revise initialization with default values when contained in typemapping xml
+	@todo	store assocation management objects in a multi-valued attribute (array)
 «ENDREM»
 
 
@@ -25,41 +22,72 @@
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
 
 
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	just for compatibility reasons with old association handling
 «ENDREM»
+«DEFINE Declaration FOR MInterface -»
+«ENDDEFINE»
 
 «REM»
 	processes the declaration of association attributes
+	- generates an association attribute to store the related objects
+	- generates an attribute to store the association management object
 «ENDREM»
-«DEFINE Declaration FOR MClassifier -»
-	«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«DEFINE Declaration FOR MClass -»
+	«EXPAND _AssociationAttributeDecl FOREACH allInitializableAssociationRoles() -»
+	«EXPAND _AssociationManagementDecl FOR allInitializableAssociationRoles() -»
 «ENDDEFINE»
 
 «REM»
-	processes the implementation of accessor methods for an association attribute
+	processes the initialization of association management objects
+	- only if the classifier has more than one association
 «ENDREM»
-«DEFINE Accessors FOR MClass -»
-	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
-		«EXPAND _GetterImpl FOR p -»
-		«REM»«EXPAND _SetterImpl FOR p -»«ENDREM»
-		«EXPAND _InsertInImpl FOR p -»
-		«EXPAND _RemoveFromImpl FOR p -»
-	«ENDFOREACH -»
+«DEFINE Initialization FOR MClass -»
+«LET allInitializableAssociationRoles() AS association -»
+«IF association.size > 1 -»
+	/**
+	 * lazily initializes the requested association management objects
+	 * @param	string	&$«associationInitializationParameter()»	the name of the association role
+	 * @return	Association|QualifiedAssociation	the association management object
+	 */
+	private function getInitializedAssociation(&$«associationInitializationParameter()») {
+		if (!array_key_exists($«associationInitializationParameter()», $this->«associationManagementAttribute()»)) {
+			switch ($«associationInitializationParameter()») {
+				«EXPAND _Initialization FOREACH association -»
+				default: throw new Exception('non-existing association specified: ' . $«associationInitializationParameter()»); break;
+			}
+		}
+		return $this->«associationManagementAttribute()»[$«associationInitializationParameter()»];
+	}
+«ENDIF -»
+«ENDLET -»
 «ENDDEFINE»
 
 «REM»
-	processes the declaration of accessor methods for an association attribute
+	processes the initialization the only association a classifier has
+	- used to generate the lazy initialization code within the magic get method
+«ENDREM»
+«DEFINE SingleInitialization FOR MAssociationRole -»
+«EXPAND _CreateAssociation -»
+«ENDDEFINE»
+
+«REM»
+	generates the magic get method declaration if the interface has associations
 «ENDREM»
 «DEFINE Accessors FOR MInterface -»
-	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
-		«EXPAND _GetterDecl FOR p -»
-		«REM»«EXPAND _SetterDecl FOR p -»«ENDREM»
-		«EXPAND _InsertInDecl FOR p -»
-		«EXPAND _RemoveFromDecl FOR p -»
-	«ENDFOREACH -»
+«IF hasAssociationRoles() -»
+	«EXPAND Comment::MagicGet FOR property.typeSelect(MAssociationRole) -»
+	public function __get($«asMagicGetParameter()»);
+«ENDIF -»
 «ENDDEFINE»
 
+«REM»
+	just for compatibility reasons with old association handling
+«ENDREM»
+«DEFINE Accessors FOR MClass -»
+«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -70,7 +98,7 @@
 «REM»
 	generates the declaration of an association attribute
 «ENDREM»
-«DEFINE _Declaration FOR MAssociationRole -»
+«DEFINE _AssociationAttributeDecl FOR MAssociationRole -»
 	«EXPAND Comment::Association -»
 	private $«asAttribute()»«EXPAND _Init -»;
 «ENDDEFINE»
@@ -80,103 +108,51 @@
 	@param	this	an association role
 «ENDREM»
 «DEFINE _Init FOR MAssociationRole -»
-«IF isMultiValuedType()» = array()«ENDIF -»
+«IF isMultiValuedType() || isQualified()» = array()«ENDIF -»
 «ENDDEFINE»
 
-«REM»
-	generates the declaration of a getter method for an association attribute
-«ENDREM»
-«DEFINE _GetterDecl FOR MAssociationRole -»
-	«EXPAND Comment::Getter -»
-	public function «asGetter()»();
-«ENDDEFINE»
 
 «REM»
-	generates the implementation of a getter method for an association attribute
+	generates the attribute declaration of the association management object
+	- for only one association, the attribute is single-valued
+	- for more than one association, the attribute is multi-valued
 «ENDREM»
-«DEFINE _GetterImpl FOR MAssociationRole -»
-	«EXPAND Comment::Getter -»
-	«visibility» function «asGetter()»() {
-	«IF isSingleValuedType() -»
-		return $this->«asAttribute()»;
+«DEFINE _AssociationManagementDecl FOR List[MAssociationRole] -»
+«IF !isEmpty -»
+	«EXPAND Comment::AssociationManagementAttribute -»
+	«IF size == 1 -»
+	private $«associationManagementAttribute()»;
 	«ELSE -»
-		return array_values($this->«asAttribute()»);
+	private $«associationManagementAttribute()» = array();
 	«ENDIF -»
-	}
-«ENDDEFINE»
-
-«REM»
-	generates the declaration of a setter method for an association attribute
-	only if it has a simple type
-«ENDREM»
-«DEFINE _SetterDecl FOR MAssociationRole -»
-«IF isSingleValuedType() -»
-	«EXPAND Comment::Setter -»
-	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()»);
 «ENDIF -»
 «ENDDEFINE»
 
 «REM»
-	generates the implementation of a setter method for an association attribute
-	only if it has a simple type
+	generates the initialization code for an association management object
 «ENDREM»
-«DEFINE _SetterImpl FOR MAssociationRole -»
-«IF isSingleValuedType() -»
-	«EXPAND Comment::Setter -»
-	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()») {
-		$this->«asAttribute()» = $«asAttribute()»;
-	}
-«ENDIF -»
+«DEFINE _Initialization FOR MAssociationRole -»
+				case '«asAssociation()»': $this->«associationManagementAttribute()»[$«associationInitializationParameter()»] = «EXPAND _CreateAssociation -» break;
 «ENDDEFINE»
 
 «REM»
-	generates the declaration of the 'insert in' method for an association attribute
-	only if it has a collection type
+	generates the code to create a new association management object
 «ENDREM»
-«DEFINE _InsertInDecl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
-	«EXPAND Comment::InsertIn -»
-	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd);
-«ENDIF -»
+«DEFINE _CreateAssociation FOR MAssociationRole -»
+new «asAssociationManagementClassName()»($this, $this->«asAttribute()»«EXPAND _Opposite»«EXPAND _QualifiedMany»);«EXPAND Types::_ -»
 «ENDDEFINE»
 
 «REM»
-	generates the 'insert in' method for an association attribute with a collection type
-	only if it has a collection type
+	generates the opposite parameter for the constructor of an association management object
 «ENDREM»
-«DEFINE _InsertInImpl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
-	«EXPAND Comment::InsertIn -»
-	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd) {
-		$this->«asAttribute()»[] = $toAdd;
-	}
-«ENDIF -»
+«DEFINE _Opposite FOR MAssociationRole -»
+«IF hasOpposite() && !isOppositeQualified() -», '«opposite.asAssociation()»'«ENDIF -»
+«IF !hasOpposite() && isQualified() && isMultiValuedType() -», null«ENDIF -»
 «ENDDEFINE»
 
 «REM»
-	generates the declaration of the 'remove from' method for an association attribute
-	only if it has a collection type
+	generates the 'toMany' parameter for the constructor of an association management object
 «ENDREM»
-«DEFINE _RemoveFromDecl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
-	«EXPAND Comment::RemoveFrom -»
-	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove);
-«ENDIF -»
+«DEFINE _QualifiedMany FOR MAssociationRole -»
+«IF isQualified() && isMultiValuedType()», true«ENDIF -»
 «ENDDEFINE»
-
-«REM»
-	generates the 'remove from' method for an association attribute with a collection type
-	only if it has a collection type
-«ENDREM»
-«DEFINE _RemoveFromImpl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
-	«EXPAND Comment::RemoveFrom -»
-	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove) {
-		$entry = array_search($toRemove, $«asAttribute()»);
-		if ($entry !== FALSE) {
-			unset($this->«asAttribute()»[$entry]);
-		}
-	}
-«ENDIF -»
-«ENDDEFINE»
-

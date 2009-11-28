@@ -11,8 +11,8 @@
 
 «REM» neat m2t helper functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::m2t::Helper»
-«REM» use dependencies to generate imports «ENDREM»
-«EXTENSION de::genesez::platforms::common::UseDependencies»
+«EXTENSION de::genesez::platforms::php::scripts::Association»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -24,8 +24,9 @@
 	@context	a genesez model
 «ENDREM»
 «DEFINE Root FOR MModel»
-	«addUseDependencies()»
+	«IF !useOldAssociationHandling()»«addAssociationIncludes()»«ENDIF»
 	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+	«EXPAND Types::Root FOREACH classifier»
 «ENDDEFINE»
 
 «REM»
