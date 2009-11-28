@@ -2,7 +2,8 @@
 	Performs the generation of the import region
 	
 	@author	nico herbig
-	@author	tobias haubold (last)
+	@author	tobias haubold
+	@author andre pflueger (last)
 	@date	2007-07-13
 «ENDREM»
 
@@ -27,7 +28,8 @@
 «ENDREM»
 «DEFINE Import FOR MClassifier -»
 «EXPAND _FixedImports -»
-«EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this) )»
+«EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this))»
+«EXPAND _OtherImports»
 «EXPAND _OwnImports -»
 «ENDDEFINE»
 
@@ -37,7 +39,9 @@
 «ENDREM»
 «DEFINE _FixedImports FOR MClassifier -»
 import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
+«IF newAssociationHandling()-»
+	import de.genesez.platforms.java.umlsupport.associations.*;
+«ENDIF»
 «ENDDEFINE»
 
 «REM»
@@ -61,4 +65,10 @@ import «mapName("Import")»;
 «PROTECT CSTART "/* " CEND " */" ID ("java.type.import." + xmiGuid)»
 // TODO: put your further include + require statements here
 «ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+	define block for the imports of other cartridges using aspects
+«ENDREM»
+«DEFINE _OtherImports FOR MClassifier-»
 «ENDDEFINE»

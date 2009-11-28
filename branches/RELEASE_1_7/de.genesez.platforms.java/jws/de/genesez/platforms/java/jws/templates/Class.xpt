@@ -1,0 +1,65 @@
+«REM»
+	Template for class-annotations
+	
+	@author		andre pflueger
+	@date		2009-04-10
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+	evaluates the stereotype "ejb3WebService"
+«ENDREM»
+«DEFINE JWS FOR MClass-»
+	«IF hasStereotype("ejb3MesageDrivenBean") || hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«IF hasStereotype("jwsWebService")-»
+			@WebService(name=
+			«IF hasUtilizableValue("jwsWebService", "name")-»
+				"«getTaggedValue("jwsWebService", "name")-»"
+			«ELSE»
+				"«asTypeName()-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "targetNamespace")-»
+				, targetNamespace="«getTaggedValue("jwsWebService", "targetNamespace")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "serviceName")-»
+				, serviceName="«getTaggedValue("jwsWebService", "serviceName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "portName")-»
+				, portName="«getTaggedValue("jwsWebService", "portName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "endpointInterface")-»
+				, endpointInterface="«getTaggedValue("jwsWebService", "endpointInterface")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "wsdlLocation")-»
+				, wsdlLocation="«getTaggedValue("jwsWebService", "wsdlLocation")-»"
+			«ENDIF-»)
+		«ENDIF»
+		«IF hasUtilizableValue("jwsHandlerChain", "file")-»
+			@HandlerChain(file="«getTaggedValue("jwsHandlerChain", "file")-»")
+		«ENDIF-»
+		«IF hasStereotype("jwsSOAPBinding")-»
+			@SOAPBinding(use=SOAPBinding.Use.LITERAL
+			«IF hasTaggedValue("jwsSOAPBinding", "style", "RPC")-»
+				, style=SOAPBinding.Style.RPC
+			«ENDIF-»
+			«IF hasTaggedValue("jwsSOAPBinding", "parameterStyle", "BARE") && !hasTaggedValue("jwsSOAPBinding", "style", "RPC")-»
+				, parameterStyle=SOAPBinding.ParameterStyle.BARE
+			«ENDIF-»)			
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»

@@ -10,6 +10,7 @@
  * 
  * @author	georg beier
  * @author	tobias haubold
+ * @author	andre pflueger (last)
  * @date	2008-07-01
  */
 
@@ -17,6 +18,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2t::Helper;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 
@@ -45,11 +47,16 @@ private MPackage process(MPackage this) :
  * process classifiers
  */
 private MClassifier process(MClassifier this) :
-	// prepare classes with associations
-	hasAssociationRoles() ? prepareClass() : Void ->
-	// prepare association class
-	isAssociationClass() ? prepareAssociationClass() : Void ->
-	this;
+	newAssociationHandling() 
+		? ( 
+			// new association handling
+			// prepare classes with associations
+			hasAssociationRoles() ? prepareClass() : Void ->
+			// prepare association class
+			isAssociationClass() ? prepareAssociationClass() : Void ->
+			this
+		)
+		: "";
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -123,7 +130,7 @@ MExternal makeAssociation(MModel this) : createExternal("Association");
  * creates the 'AssociationAC' interface as external type
  */
 MExternal makeAssociationAC(MModel this) : createExternal("AssociationAC");
-
+	
 /**
  * creates the 'OneAssociation' class as external type
  */

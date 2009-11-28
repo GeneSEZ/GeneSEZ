@@ -1,0 +1,144 @@
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2009-04-14
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::common::m2t::Helper;
+extension de::genesez::platforms::common::log::Log;
+
+Void modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MClass this) :
+	this.property.typeSelect(MAttribute).modifications();
+	
+Void modifications(MAttribute this) :
+	checkFieldAccess();
+
+/**
+  *
+  */
+Void checkFieldAccess(MProperty this) :
+	fieldAccess()
+		? (
+			// field access -> all annotations are located at the attribute declaration
+			copyStereotypesFromOperation(getGetter()) ->
+			copyStereotypesFromOperation(getSetter())
+		)
+		: (
+			/** property access -> all annotations are located at the automatic generated getter/automatic 
+			  * setter/existing getter/existing setter method of the attribute
+			  *
+			  *	if there is no automatic generated getter/setter or existing getter/setter the automatic 
+			  *	generation of the getter method will be activated
+			  *
+			  *	if automatic generated getter/automatic generated setter method is available, the stereotypes/
+			  *	taggedValues are saved at the attribute (code generation reacts on fieldAccess variable)
+			  *	if existing getter/existing setter method are available, the stereotypes/taggedValues are
+			  *	saved at the operation
+			  */
+			!this.generateGetter() && !this.generateSetter() && getGetter() == null && getSetter() == null
+				? (
+					this.taggedValue.selectFirst(e|e.tag.stereotype.name == "accessor" && e.tag.name == "getter").setValue("true") ->
+					info("property access type is selected but attribute "+this.name+" in class "+this.classifier.name+" has no getter/setter method. A getter method will be generated automatically.")
+				)
+				: "" ->
+			this.generateGetter() || this.generateSetter()
+				? (
+					copyStereotypesFromOperation(getGetter()) ->
+					copyStereotypesFromOperation(getSetter())
+				)
+				: (
+					let o = getGetter() :
+						o != null
+							? (
+								copyStereotypesToOperation(this, o) ->
+								(
+								let q = getSetter() :
+									q != null
+										? copyStereotypesToOperation(q, o)
+										: ""
+								)
+							)
+							: (
+								let p = getSetter() :
+									p != null
+										? (
+											copyStereotypesToOperation(this, p)
+										)
+										: error("no method for attribute +"+this.name+" in class "+this.classifier.name+" for annotation with property access found")
+							)
+				)
+			
+		);
+		
+Void copyStereotypesFromOperation(MProperty this, MOperation o) :
+	o != null
+		? (
+			/** copy the stereotypes and taggedValues to the attribute
+			  * and remove them from the operation
+			  *
+			  *	perhabs it makes sense to copy only the stereotypes really
+			  *	evaluated by the cartridge in attribute template
+			  *	Are there any stereotypes which can be seriously annotated to the getter
+			  *	method but not to the existing attribute?
+			  */
+			this.stereotype.addAll(o.stereotype) ->
+			this.taggedValue.addAll(o.taggedValue) ->
+			o.stereotype.removeAll(o.stereotype) ->
+			o.taggedValue.removeAll(o.taggedValue) 
+		)
+		: "";
+
+copyStereotypesToOperation(MProperty this, MOperation o) :
+	o != null && this != null
+		? (
+			/** copy the stereotypes and taggedValues from the attribute
+			  * to the operation and remove them at the attribute
+			  *
+			  *	perhabs it makes sense to copy only the stereotypes really
+			  *	evaluated by the cartridge in attribute template
+			  *	Are there any stereotypes which can be seriously annotated to the getter
+			  *	method but not to the existing attribute?
+			  */
+			o.stereotype.addAll(this.stereotype) ->
+			o.taggedValue.addAll(this.taggedValue) ->
+			this.stereotype.removeAll(this.stereotype) ->
+			this.taggedValue.removeAll(this.taggedValue) 
+		)
+		: "";
+
+copyStereotypesToOperation(MOperation source, MOperation target) :
+	source != null && target != null
+		? (
+			/** copy the stereotypes and taggedValues from the source operation
+			  * to the target operation and remove them at the source operation
+			  *
+			  *	perhabs it makes sense to copy only the stereotypes really
+			  *	evaluated by the cartridge in attribute template
+			  *	Are there any stereotypes which can be seriously annotated to the getter
+			  *	method but not to the existing attribute?
+			  */
+			target.stereotype.addAll(source.stereotype) ->
+			target.taggedValue.addAll(source.taggedValue) ->
+			source.stereotype.removeAll(source.stereotype) ->
+			source.taggedValue.removeAll(source.taggedValue) 
+		)
+		: "";
+		
+MOperation getGetter(MProperty this) :
+	this.classifier.operation.selectFirst(e|e.isGetter() && e.parameter.isEmpty);
+
+MOperation getSetter(MProperty this) :
+	this.classifier.operation.selectFirst(e|e.isSetter() && e.parameter.size == 1);

@@ -1,0 +1,44 @@
+/**
+ * 	functions for creating new MStereotypes, MTags, MTaggedValues and for changing the value
+ *	of an MTaggedValue 
+ * 
+ * 
+ * @author	andre pflueger
+ * @date	2008-04-21
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+/**
+ *	function to add an "ejb3Remote" stereotype to a MClassifier
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MClassifier
+ *	@param		name		name of the remote interface
+ *
+ */
+Void addLifecycleStereotype(MOperation this, String c, String d) :
+	let s = makeLifecycleStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "create", "Boolean"), c) ->
+		createTaggedValue(this, createTag(s, "destroy", "Boolean"), d);
+
+
+
+/**
+ *	function to create an "ejb3Remote" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MClassifier
+ *
+ */
+MStereotype makeLifecycleStereotype(MOperation container) :
+	let s = createStereotype(container.classifier.owningPackage.getModel(), "seam2Lifecycle", "seam2Lifecycle") :
+		s.property.add(createTag(s, "create", "Boolean")) ->
+		s.property.add(createTag(s, "destroy", "Boolean")) ->
+		s;
