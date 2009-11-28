@@ -520,6 +520,19 @@ String getTaggedValue(MElement this, String stereotype, String taggedValue) :
 		: "";
 
 /**
+ * returns the boolean value of a tagged value of a stereotype
+ * 
+ * @param	stereotype	the name of a stereotype
+ * @param	tag			the name of the tag
+ * 
+ * @return	true, if the tagged value is true, otherwise false
+ */
+boolean getTaggedBooleanValue(MElement this, String stereotype, String tag) :
+	hasTaggedValue( stereotype, tag, "true")
+		? true
+		: false;
+
+/**
  *	function to set any existing tagged value
  *
  *	@param		this	MProperty
@@ -691,7 +704,6 @@ MModel model(MPackage this) :
 		? this
 		: nestingPackage.getModel();
 
-
 /**
  * getter for the model element by using a classifier
  * @return	the model element
@@ -699,16 +711,14 @@ MModel model(MPackage this) :
  */
 MModel getModel(MClassifier this) :
 	this.model();
-	
+
 /**
  * getter for the model element by using a package
  * @return	the model element
  * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MPackage this) :
-	metaType == MModel
-		? this
-		: nestingPackage.getModel();
+	this.model();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

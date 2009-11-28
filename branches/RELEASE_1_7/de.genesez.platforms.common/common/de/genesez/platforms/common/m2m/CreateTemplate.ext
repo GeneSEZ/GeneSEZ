@@ -1,5 +1,5 @@
 /**
- * Helper scripts to create GeneSEZ model elements
+ * Helper scripts to create + clone GeneSEZ model elements
  * - useful for m2m transformations + model modifications
  * 
  * @author	tobias haubold
@@ -8,14 +8,23 @@
 
 // based on genesez meta model
 import gcore;
+extension de::genesez::platforms::common::log::Log;
+
+create List createList() :
+	this;
 
 create MPackage createPackage(MPackage container, String xmiGuid, String name) :
-	processElement(xmiGuid, name) ->
+	processElement( xmiGuid, name ) ->
 	container.nestedPackage.add(this) ->
 	this;
 
 create MClass createClass(MPackage container, String xmiGuid, String name) :
-	processElement(xmiGuid, name) ->
+	processElement( xmiGuid, name ) ->
+	container.classifier.add(this) ->
+	this;
+
+create MInterface createInterface(MPackage container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
 	container.classifier.add(this) ->
 	this;
 
@@ -24,33 +33,34 @@ create MExternal createExternal(MModel container, String specification) :
 	container.externalTypes.add( this ) ->
 	this;
 
+create MPrimitiveType createPrimitiveType(MModel container, String name, String xmiGuid) :
+	processElement( xmiGuid, name ) ->
+	container.primitiveTypes.add(this) ->
+	this;
+
 create MPrimitiveType createPrimitiveType(MModel container, String name) :
-	setXmiGuid(name) ->
-	setName(name) ->
+	processElement( name, name ) ->
 	container.primitiveTypes.add(this) ->
 	this;
 
 create MOperation createOperation(MClassifier container, String xmiGuid, String name) :
-	processElement(xmiGuid, name) ->
+	processElement( xmiGuid, name ) ->
 	container.operation.add(this) ->
 	this;
 
 create MParameter createParameter(MOperation container, String xmiGuid, String name) :
-	processElement(xmiGuid, name) ->
+	processElement( xmiGuid, name ) ->
 	container.parameter.add(this) ->
 	this;
 
 create MAttribute createAttribute(MClassifier container, String xmiGuid, String name) :
-	processElement(xmiGuid, name) ->
+	processElement( xmiGuid, name ) ->
 	container.property.add( this ) ->
 	this;
 
 create MStereotype createStereotype(MModel container, String xmiGuid, String name) :
-	processElement(xmiGuid, name) ->
+	processElement( xmiGuid, name ) ->
 	container.anyStereotype.add( this ) ->
-	this;
-
-create List createList() :
 	this;
 
 create MTag createTag(MStereotype container, String name, String type) :
@@ -72,58 +82,62 @@ create MAspect createAspect(MElement container, String domain, String name) :
 	this;
 
 
-create MPrimitiveType createPrimitiveType(MModel container, String name, String xmiGuid) :
-	processElement(xmiGuid, name) ->
-	container.primitiveTypes.add(this) ->
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	cloning
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+create MOperation cloneOperation(MOperation op, MClassifier container) :
+	trace("cloning: " + metaType + ": " + op) ->
+	// attributes
+	this.processElement( op.cloneXmiGuid( container ), op ) ->
+	this.processOperation(op.visibility, op.static, op.abstract, op.final, op.multiplicity, op.unique, op.ordered) ->
+	// references
+	setReturnType( op.returnType ) ->
+	raisedException.addAll( op.raisedException ) ->
+	// containments
+	op.parameter.cloneParameter( this ) ->
+	container.operation.add( this ) ->
 	this;
 
-create MClass createClassifier(MPackage container, String xmiGuid, String name) :
-	processElement(this, xmiGuid, name) ->
-	container.classifier.add(this) ->
-	this;	
-
-create MInterface createInterface(MPackage container, String xmiGuid, String name) :
-	processElement(this, xmiGuid, name) ->
-	container.classifier.add(this) ->
-	this;
-
-create MOperation copyOperation(MOperation op, MClassifier container) :
-	processOperation(this, op.xmiGuid, op.name, op.parameter, op.visibility, op.abstract, op.final, op.aspect, op.multiplicity, op.ordered, op.ownedComment, op.raisedException, op.returnType, op.static, op.unique) ->
-	container.operation.add(this) ->
-	this;
-
-create MParameter createParameter(MParameter param) :
-	this.setName(param.name) ->
-	this.setDefaultvalue(param.defaultvalue) ->
-	this.setMultiplicity(param.multiplicity) ->
-	this.setOrdered(param.ordered) ->
-	//achtung, eins zu n
-	this.setOwnedComment(param.ownedComment) ->
-	this.setStereotype(param.stereotype) ->
-	//achtung, eins zu n
-	this.setType(param.type) ->
-	this.setXmiGuid(param.xmiGuid) ->
+create MParameter cloneParameter(MParameter param, MOperation container) :
+	trace("cloning: " + metaType + ": " + param) ->
+	this.processElement( param.cloneXmiGuid( container ), param.name ) ->
+	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.unique, param.ordered) ->
+	setType( param.type ) ->
+	// containment
+	container.parameter.add( this ) ->
 	this;
 	
-Void copyParameter(MOperation this, MParameter param) :
-	this.parameter.add(createParameter(param));
-	
-MOperation processOperation(MOperation this, String xmiGuid, String name, List[MParameter] parameter, String visibility, Boolean abstract, Boolean final, List aspect, Integer multiplicity, Boolean ordered, List ownedComment, List raisedException, MType returnType, Boolean static, Boolean unique) :
-	setVisibility(visibility) ->
-	setName(name) ->
-	setXmiGuid(xmiGuid) ->
-	this.parameter.addAll(parameter.createParameter() ) ->
-	this.setAbstract(abstract) ->
-	this.setFinal(final) ->
-	this.setAspect(aspect) ->
-	this.setMultiplicity(multiplicity) ->
-	this.setOrdered(ordered) ->
-	this.setOwnedComment(ownedComment) ->
-	this.setRaisedException(raisedException) ->
-	this.setReturnType(returnType) ->
-	this.setStatic(static) ->
-	this.setUnique(unique) ->
+create MComment cloneComment(MComment comment, MElement container) :
+	trace("cloning: " + metaType + ": " + comment) ->
+	setXmiGuid( comment.cloneXmiGuid( container ) ) ->
+	setAnnotation( comment.annotation ) ->
+	nestedComment.addAll( comment.nestedComment.cloneComment( this ) ) ->
 	this;
+	
+create MComment cloneComment(MComment comment, MComment container) :
+	trace("cloning: " + metaType + ": " + comment) ->
+	setXmiGuid( comment.cloneXmiGuid( container ) ) ->
+	setAnnotation( comment.annotation ) ->
+	nestedComment.addAll( comment.nestedComment.cloneComment( this ) ) ->
+	this;
+
+String cloneXmiGuid(MElement elem, MElement container) :
+	container.xmiGuid + "_" + elem.xmiGuid;
+
+String cloneXmiGuid(MComment comment, MElement container) :
+	container.xmiGuid + "_" + comment.xmiGuid;
+
+String cloneXmiGuid(MComment comment, MComment container) :
+	container.xmiGuid + "_" + comment.xmiGuid;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	copying attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 MClassifier processClassifier(MClassifier this, String visibility, boolean abstract, boolean final) :
 	setVisibility(visibility) ->
@@ -169,7 +183,25 @@ MProperty processProperty(MProperty this, String visibility, boolean derived, In
  * @param	xmiGuid	
  * @param	name	
  */
-MElement processElement(MElement this, String xmiGuid, String name) :
-	setName(name) ->
+MElement processElement(MElement this, String xmiGuid, MElement elem) :
 	setXmiGuid(xmiGuid) ->
+	setName( elem.name ) ->
+	ownedComment.addAll( elem.ownedComment.cloneComment( this ) ) ->
 	this;
+
+MElement processElement(MElement this, String xmiGuid, String name) :
+	setXmiGuid(xmiGuid) ->
+	setName( name ) ->
+	this;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	basic types with existence check
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+MPrimitiveType createPrimitiveTypeString(MModel container) :
+	container.primitiveTypes.exists(e|e.name == "String")
+		? container.primitiveTypes.selectFirst(e|e.name == "String")
+		: container.createPrimitiveType("String");

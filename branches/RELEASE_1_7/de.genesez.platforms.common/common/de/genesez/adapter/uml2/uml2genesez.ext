@@ -168,6 +168,9 @@ private MClassifier transform(Classifier c, MModel this) :
 		case c.isIgnoredElement() : Void
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
+		// check if classifier is an primitive type
+		case c.metaType == PrimitiveType : c.makePrimitiveType()
+		// else classifier
 		default : classifier.add( c.makeClassifier() )
 	} ->
 	this;
@@ -186,6 +189,9 @@ private MClassifier transform(Classifier c, MPackage this) :
 		case c.isIgnoredElement() : Void
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
+		// check if classifier is an primitive type
+		case c.metaType == PrimitiveType : c.makePrimitiveType()
+		// else classifier
 		default : ( let mc = c.makeClassifier() :
 				classifier.add( mc ) ->
 				c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(mc) : null
@@ -748,6 +754,16 @@ private create MPrimitiveType makePrimitiveType(Void v) :
 	setName("void") ->
 	transform( getUml2Model() ).primitiveTypes.add( this ) ->
 	this;
+	
+/**
+ * just a marker for error free templates
+ * no GeneSEZ primitive type is created, should one?
+ * prints a 'severe' log message to report such an transformation
+ * @return	void
+ */
+private MPrimitiveType makePrimitiveType(Classifier c) :
+	fatal("try to construct a MPrimitiveType object from: " + c) ->
+	Void;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -800,7 +816,7 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// associations
 	// set stereotype
 	stereotype.addAll( c.getAppliedStereotypes().makeStereotype() ) ->
-// add superclasses (generalizations and realizations)
+	// add superclasses (generalizations and realizations)
 	supertype.addAll( generalization.addAll( c.general.makeType() ) ) ->
 	supertype.addAll( realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ) ->
 	// containments
