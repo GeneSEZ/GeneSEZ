@@ -2,7 +2,12 @@
 <project name="de.genesez.build.environment" basedir="..">
 
 	<!-- environment specific directories -->
-	<property file="${project.build.dir}/environment.properties" />
+	<condition property="environment.properties"
+		value="environment.properties"
+		else="environment.default.properties">
+		<available file="${project.build.dir}/environment.properties" />
+	</condition>
+	<property file="${project.build.dir}/${environment.properties}" />
 
 	<!-- build specific directories -->
 	<property file="${project.build.dir}/build.properties" />
