@@ -24,6 +24,7 @@ public class SProject {
 	private boolean withDate;
 	private String excludes;
 	
+	
 	/**
 	 * Constructs a new statistic project
 	 * @param name		the name of the application project
