@@ -33,7 +33,7 @@ public class SDirectory implements IStatistic {
 	/** Logger */
 	private Log logger = LogFactory.getLog(getClass());
 
-	/** SpeicherContainer für die Statistikwerte */
+	/** SpeicherContainer fuer die Statistikwerte */
 	private StatisticSet statSet;
 
 	/**
@@ -57,7 +57,7 @@ public class SDirectory implements IStatistic {
 	public SDirectory(String s, boolean gen, String excludes) {
 		dir = new File(s);
 		
-		// container für die Werte Initialisieren
+		// container fuer die Werte Initialisieren
 		statSet = new StatisticSet();
 		
 		// file filter
@@ -66,7 +66,7 @@ public class SDirectory implements IStatistic {
 		// Unterteilen und abspeichern der Ordner und Dateien
 		if (dir.isDirectory()) {
 			File[] list = dir.listFiles(filter);
-			for (int i = list.length - 1; i >= 0; i--) // Rückwärtszählen fürs
+			for (int i = list.length - 1; i >= 0; i--) // Rueckwaertszaehlen fuers
 			// Alphabetische
 			// anordnen!
 			{
@@ -119,7 +119,7 @@ public class SDirectory implements IStatistic {
 	}
 
 	/**
-	 * gibt den Absulten Pfad zurück (von File)
+	 * gibt den Absulten Pfad zurueck (von File)
 	 * 
 	 * @return den absoluten Pfad als String
 	 */
@@ -191,7 +191,7 @@ public class SDirectory implements IStatistic {
 	}
 
 	/**
-	 * Rückgabe des Fileobjekts des aktuellen Verzeichnisses
+	 * Rueckgabe des Fileobjekts des aktuellen Verzeichnisses
 	 * 
 	 * @return Fileobjekt des Verzeichnisses
 	 */
@@ -199,33 +199,33 @@ public class SDirectory implements IStatistic {
 		return dir;
 	}
 
-	/** Rückgabe der Anzahl an Codezeilen im Verzeichnis */
+	/** Rueckgabe der Anzahl an Codezeilen im Verzeichnis */
 	public int getLinesOfCode() {
 		return (statSet.getLinesOfCode());
 	}
 
-	/** Rückgabe der Anzahl an Kommentarzeilen im Verzeichnis */
+	/** Rueckgabe der Anzahl an Kommentarzeilen im Verzeichnis */
 	public int getLinesOfComments() {
 		return statSet.getLinesOfComments();
 	}
 
-	/** Rückgabe der Anzahl an generierten Codezeilen im Verzeichnis */
+	/** Rueckgabe der Anzahl an generierten Codezeilen im Verzeichnis */
 	public int getLinesOfGenCode() {
 		return statSet.getLinesOfGenCode();
 	}
 
-	/** Rückgabe der Anzahl an selbst implementierten Codezeilen im Verzeichnis */
+	/** Rueckgabe der Anzahl an selbst implementierten Codezeilen im Verzeichnis */
 	public int getLinesOfImplCode() {
 		return statSet.getLinesOfImplCode();
 	}
 
-	/** Rückgabe der Anzahl an Dokumentarzeilen im Verzeichnis */
+	/** Rueckgabe der Anzahl an Dokumentarzeilen im Verzeichnis */
 	public int getLinesOfDocu() {
 		return statSet.getLinesOfDocu();
 	}
 
 	/**
-	 * gibt eine Liste mit allen Dateien des Ordners zurück
+	 * gibt eine Liste mit allen Dateien des Ordners zurueck
 	 * 
 	 * @return Liste mit d. Dateien des Ordners
 	 */
@@ -234,7 +234,7 @@ public class SDirectory implements IStatistic {
 	}
 
 	/**
-	 * gibt eine Array mit dem Unterverzeichnissen zurück
+	 * gibt eine Array mit dem Unterverzeichnissen zurueck
 	 * 
 	 * @return Array mit Unterverzeichnissen des Ordners
 	 */
@@ -244,7 +244,7 @@ public class SDirectory implements IStatistic {
 
 	/**
 	 * gibt alle Dateien d. Ordners und aller Unterverzeichnisse und deren
-	 * Unterverzeichnisse zurück
+	 * Unterverzeichnisse zurueck
 	 * 
 	 * @return Liste mit alen Dateien
 	 */
@@ -273,7 +273,7 @@ public class SDirectory implements IStatistic {
 	}
 
 	/**
-	 * Rückgabe des relativen Pfades
+	 * Rueckgabe des relativen Pfades
 	 * 
 	 * @return relativer Pfad als String
 	 */

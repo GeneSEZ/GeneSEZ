@@ -1,13 +1,13 @@
 package de.genesez.platforms.common.statistic;
 
 /**
- * Interface für die Statistik Dateien
+ * Interface fuer die Statistik Dateien
  * 
  * @author T. Hartmann ( tomha@fh-zwickau.de )
  */
 public interface IStatistic extends IParser {
 	/**
-	 * analysiert die Datei(en) und zählt die entsprechenden Anteile des Codes
+	 * analysiert die Datei(en) und zaehlt die entsprechenden Anteile des Codes
 	 */
 	public void parseCode();
 
