@@ -9,6 +9,7 @@
 // based on genesez meta model
 import gcore;
 extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
 
 create List createList() :
 	this;
@@ -87,6 +88,34 @@ create MAspect createAspect(MElement container, String domain, String name) :
 	cloning
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+create MStereotype cloneStereotype(MStereotype st, MModel container) :
+	trace("cloning: " + metaType + ": " + st) ->
+	// attributes
+	this.processElement( st.cloneXmiGuid( container ), st ) ->
+	// references
+	// containments
+	st.property.cloneTag(MTag tag, MStereotype container) ->
+	container.anyStereotype.add( this ) ->
+	this;
+
+create MTag cloneTag(MTag tag, MStereotype container) :
+	trace("cloning: " + metaType + ": " + tag) ->
+	// attributes
+	this.processTag( tag.name, tag.type ) ->
+	// containment
+	container.property.add( this ) ->
+	this;
+
+create MTaggedValue cloneTaggedValue(MTaggedValue tv, MElement container) :
+	trace("cloning: " + metaType + ": " + tv) ->
+	// attributes
+	this.processTaggedValue( tv.value ) ->
+	// references
+	setTag( tv.tag.cloneTag( tv.tag.stereotype.cloneStereotype( container.model() ) )) ->
+	// containments
+	container.taggedValue.add( this ) ->
+	this;
 
 create MOperation cloneOperation(MOperation op, MClassifier container) :
 	trace("cloning: " + metaType + ": " + op) ->
@@ -179,6 +208,15 @@ MProperty processProperty(MProperty this, String visibility, boolean derived, In
 	setOrdered(ordered) ->
 	this;
 
+MTag processTag(MTag this, String name, String type) :
+	setName( name ) ->
+	setType( type ) ->
+	this;
+
+MTaggedValue processTaggedValue(MTaggedValue this, String value) :
+	setValue( value ) ->
+	this;
+
 /**
  * processes the given model element and sets all parameters
  * @param	xmiGuid	
@@ -188,6 +226,7 @@ MElement processElement(MElement this, String xmiGuid, MElement elem) :
 	setXmiGuid(xmiGuid) ->
 	setName( elem.name ) ->
 	ownedComment.addAll( elem.ownedComment.cloneComment( this ) ) ->
+	stereotype.addAll( elem.stereotype.cloneStereotype( this.model() ) ) ->
 	this;
 
 MElement processElement(MElement this, String xmiGuid, String name) :
