@@ -84,13 +84,13 @@ Void checkDestroyMethod(MClass this) :
 Void addEntityHome(MClass this) :
 	this.hasStereotype("jpaPersistentEntity") && this.hasStereotype("seam2Component")
 		? (
-			!this.owningPackage.nestedPackage.exists(e|e.name == "entityHome") 
-				? createPackage(this.owningPackage, "entityHome", "entityHome")
+			!this.package().nestedPackage.exists(e|e.name == "entityHome") 
+				? createPackage(this.package(), "entityHome", "entityHome")
 				: "" ->
-			createClass(this.owningPackage.nestedPackage.selectFirst(e|e.name == "entityHome"), this.name+"Home", this.name+"Home") ->
-			(let c = this.owningPackage.nestedPackage.selectFirst(e|e.name == "entityHome").classifier.typeSelect(MClass).selectFirst(e|e.name == this.name+"Home") :
+			createClass(this.package().nestedPackage.selectFirst(e|e.name == "entityHome"), this.name+"Home", this.name+"Home") ->
+			(let c = this.package().nestedPackage.selectFirst(e|e.name == "entityHome").classifier.typeSelect(MClass).selectFirst(e|e.name == this.name+"Home") :
 				c.addComponentStereotype(this.name.toFirstLower()+"Home", "false", "false") ->
-				(let e = createExternal(this.owningPackage.getModel(), "EntityHome<"+this.name+">") :
+				(let e = createExternal(this.model(), "EntityHome<"+this.name+">") :
 					c.generalization.add(e) ->
 					//e.createGeneric(this.name) ) ->					
 				//add seam2Component stereotype
@@ -107,13 +107,13 @@ Void addEntityHome(MClass this) :
 Void addQueryHome(MClass this) :
 	this.hasStereotype("jpaPersistentEntity") && this.hasStereotype("seam2Component")
 		? (
-			!this.owningPackage.nestedPackage.exists(e|e.name == "entityQuery") 
-				? createPackage(this.owningPackage, "entityQuery", "entityQuery")
+			!this.package().nestedPackage.exists(e|e.name == "entityQuery") 
+				? createPackage(this.package(), "entityQuery", "entityQuery")
 				: "" ->
-			createClass(this.owningPackage.nestedPackage.selectFirst(e|e.name == "entityQuery"), this.name+"Query", this.name+"Query") ->
-			(let c = this.owningPackage.nestedPackage.selectFirst(e|e.name == "entityQuery").classifier.typeSelect(MClass).selectFirst(e|e.name == this.name+"Query") :
+			createClass(this.package().nestedPackage.selectFirst(e|e.name == "entityQuery"), this.name+"Query", this.name+"Query") ->
+			(let c = this.package().nestedPackage.selectFirst(e|e.name == "entityQuery").classifier.typeSelect(MClass).selectFirst(e|e.name == this.name+"Query") :
 				c.addComponentStereotype(this.name.toFirstLower()+"Query", "false", "false") ->
-				(let e = createExternal(this.owningPackage.getModel(), "EntityQuery<"+this.name+">") :
+				(let e = createExternal(this.model(), "EntityQuery<"+this.name+">") :
 					c.generalization.add(e) ->
 					//e.createGeneric(this.name) ) ->					
 				//add seam2Component stereotype

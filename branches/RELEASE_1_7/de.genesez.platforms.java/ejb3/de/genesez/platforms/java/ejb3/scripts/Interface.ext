@@ -25,20 +25,20 @@ Void addSessionBeanInterfaces(MClassifier this) :
 		? ( 
 			this.hasUtilizableValue("ejb3Remote", "name")
 				? (
-					!this.owningPackage.getModel().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
+					!this.package().getModel().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
 						? (	
-							let interface = createInterface(this.owningPackage, this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
+							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
 								interface.addRemoteStereotype("") ->
-								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
 						)
 						: ""
 				)
 				: (
-					let interface = createInterface(this.owningPackage, asTypeName()+"Remote", asTypeName()+"Remote") : 
+					let interface = createInterface(this.package(), asTypeName()+"Remote", asTypeName()+"Remote") : 
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
 				)
 		) 
 		: "" ->
@@ -46,21 +46,21 @@ Void addSessionBeanInterfaces(MClassifier this) :
 		? (
 			this.hasUtilizableValue("ejb3Local", "name")
 				? (	
-					!this.owningPackage.getModel().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Local", "name"))
+					!this.model().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Local", "name"))
 						? (	
-							let interface = createInterface(this.owningPackage, this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
+							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
 								this.realization.add(interface) ->
 								interface.addLocalStereotype("") ->
-								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
+								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
 						)
 						: ""
 				)
 				: (
-					let interface = createInterface(this.owningPackage, asTypeName()+"Local", asTypeName()+"Local") : 
+					let interface = createInterface(this.package(), asTypeName()+"Local", asTypeName()+"Local") : 
 						this.realization.add(interface) ->
 						interface.addLocalStereotype("") ->
-						interface.owningPackage.getModel().externalTypes.remove("I"+asTypeName()+"Local") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
+						interface.package().getModel().externalTypes.remove("I"+asTypeName()+"Local") ->
+						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
 				)
 		)
 		: "";
