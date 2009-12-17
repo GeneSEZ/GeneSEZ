@@ -3,6 +3,7 @@
  */
 package de.genesez.platforms.common.workflow;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
@@ -10,6 +11,8 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.commons.logging.impl.Log4jFactory;
 import org.openarchitectureware.type.emf.EmfMetaModel;
 import org.openarchitectureware.workflow.container.CompositeComponent;
 import org.openarchitectureware.workflow.issues.Issues;
@@ -28,9 +31,11 @@ public class GeneSezM2M extends CompositeComponent {
 	private Log logger = LogFactory.getLog(getClass());
 	private Properties properties = new Properties(defaults);
 	
-	private Set<String> scripts = new LinkedHashSet<String>();
+	private List<String> scripts = new ArrayList<String>();
 	private boolean isSetOutputSlot = false;
-	private Set<String> aspects = new LinkedHashSet<String>();
+	private List<String> aspects = new ArrayList<String>();
+	private boolean newAssociationHandling = true;
+	private boolean fieldAccess = true;
 	
 	
 	public GeneSezM2M() {
@@ -66,6 +71,10 @@ public class GeneSezM2M extends CompositeComponent {
 			}
 			c.setInvoke(script + "(" + properties.getProperty("slot", "genesezModel") + ")");
 			super.addComponent(c);
+			// register global variables
+			c.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("newAssociationHandling", newAssociationHandling));
+			c.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("fieldAccess", fieldAccess));
+			logger.info("script: " + script + "(" + properties.getProperty("slot", "genesezModel") + ")");
 		}
 		setAbortOnError(new Boolean(properties.getProperty("abortOnError")));
 		// delegate
@@ -138,5 +147,12 @@ public class GeneSezM2M extends CompositeComponent {
 				addAspectScript(s);
 			}
 		}
+	}
+	public void setNewAssociationHandling(boolean newAssociationHandling) {
+		this.newAssociationHandling = newAssociationHandling;
+	}
+
+	public void setFieldAccess(boolean fieldAccess) {
+		this.fieldAccess = fieldAccess;
 	}
 }
