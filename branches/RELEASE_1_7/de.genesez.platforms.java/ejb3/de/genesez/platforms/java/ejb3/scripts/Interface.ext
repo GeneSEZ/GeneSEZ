@@ -8,42 +8,59 @@ extension de::genesez::platforms::common::m2m::CreateTemplate;
 
 MClassifier addMessageListener(MClassifier this) :
 	stereotype.name.exists(e|e == "ejb3MessageDrivenBean")
-		? realization.add(createExternal(this.model(), "MessageListener"))
+		? realization.add(createExternal(this.getModel(), "MessageListener"))
 		: "";
 
+/**
+  *	adds a business interface for the session bean if stereotype "ejb3Local" or "ejb3Remote" is used 
+  *	(see further conditions beyond)
+  *	for using an own business interface which is also modelled, annotate the interface with the named stereotypes
+  *	and DO NOT use these stereotypes at the session bean class
+  *
+  * the method checks if an interface with a given name in the "ejb3Local" or "ejb3Remote" stereotype exists and do not
+  *	create a new one (modelled interface over generated)
+  */
 Void addSessionBeanInterfaces(MClassifier this) :
 	isRemoteInterfaceNeeded()
 		? ( 
 			this.hasUtilizableValue("ejb3Remote", "name")
 				? (
-					let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
-						this.realization.add(interface) ->
-						interface.addRemoteStereotype("") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+					!this.owningPackage.getModel().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
+						? (	
+							let interface = createInterface(this.owningPackage, this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
+								this.realization.add(interface) ->
+								interface.addRemoteStereotype("") ->
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
+						)
+						: ""
 				)
 				: (
-					let interface = createInterface(this.package(), asTypeName()+"Remote", asTypeName()+"Remote") : 
+					let interface = createInterface(this.owningPackage, asTypeName()+"Remote", asTypeName()+"Remote") : 
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
 				)
 		) 
 		: "" ->
 	isLocalInterfaceNeeded()
 		? (
 			this.hasUtilizableValue("ejb3Local", "name")
-				? (
-					let interface = createInterface(this.package(), this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
-						this.realization.add(interface) ->
-						interface.addLocalStereotype("") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+				? (	
+					!this.owningPackage.getModel().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Local", "name"))
+						? (	
+							let interface = createInterface(this.owningPackage, this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
+								this.realization.add(interface) ->
+								interface.addLocalStereotype("") ->
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
+						)
+						: ""
 				)
 				: (
-					let interface = createInterface(this.package(), asTypeName()+"Local", asTypeName()+"Local") : 
+					let interface = createInterface(this.owningPackage, asTypeName()+"Local", asTypeName()+"Local") : 
 						this.realization.add(interface) ->
 						interface.addLocalStereotype("") ->
-						interface.model().externalTypes.remove("I"+asTypeName()+"Local") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+						interface.owningPackage.getModel().externalTypes.remove("I"+asTypeName()+"Local") ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).copyOperation(interface)
 				)
 		)
 		: "";
@@ -69,4 +86,4 @@ boolean isSessionBeanInterface(String attributeType) :
 		: false;
 
 Void addExternalInterface(MClassifier this, String name) :
-	realization.add(createExternal(this.model(), name));
+	realization.add(createExternal(this.getModel(), name));

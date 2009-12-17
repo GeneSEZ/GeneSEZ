@@ -353,59 +353,59 @@
 	downwards compability shoud be done by check language before generation starts 
 «ENDREM»
 «DEFINE _CallbackMethods FOR MClass-»
-	«FOREACH operation.select(e|e.hasTaggedValue("ejb3Callback", "external", "true")) AS methods»
+	«FOREACH operation.select(e|e.hasTaggedValue("jpaCallback", "external", "true")) AS methods»
 		«IF hasStereotype("ejb3ClassInterceptor")
 			&& !(methods.name == "ejbCreate" 
-				&& methods.hasTaggedValue("ejb3Callback", "postConstruct", "true"))
+				&& methods.hasTaggedValue("jpaCallback", "postConstruct", "true"))
 			|| !(methods.name == "ejbRemove" 
-				&& methods.hasTaggedValue("ejb3Callback", "preDestroy", "true"))
+				&& methods.hasTaggedValue("jpaCallback", "preDestroy", "true"))
 			|| !(methods.name == "ejbActivate" 
-				&& methods.hasTaggedValue("ejb3Callback", "postActivate", "true"))
+				&& methods.hasTaggedValue("jpaCallback", "postActivate", "true"))
 			|| !(methods.name == "ejbPassivate" 
-				&& methods.hasTaggedValue("ejb3Callback", "prePassivate", "true"))
+				&& methods.hasTaggedValue("jpaCallback", "prePassivate", "true"))
 		-»
 			/**
 			  *	generated callback method for class "«asTypeName()»"
 			  * method has been annotated in "«asTypeName()»"
 			  *
 			  */
-			«IF methods.hasTaggedValue("ejb3Callback", "external", "true")-»
+			«IF methods.hasTaggedValue("jpaCallback", "external", "true")-»
 				«IF methods.classifier.hasStereotype("ejb3SessionBean") || methods.classifier.hasStereotype("ejb3MessageDrivenBean")-»
-					«IF methods.hasTaggedValue("ejb3Callback", "postConstruct", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "postConstruct", "true")-»
 						@PostConstruct
 					«ENDIF-»
-					«IF methods.hasTaggedValue("ejb3Callback", "preDestroy", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "preDestroy", "true")-»
 						@PreDestroy
 					«ENDIF-»
 				«ENDIF-»
 				«IF methods.classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
-					«IF methods.hasTaggedValue("ejb3Callback", "postActivate", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "postActivate", "true")-»
 						@PostActivate
 					«ENDIF-»
-					«IF methods.hasTaggedValue("ejb3Callback", "prePassivate", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "prePassivate", "true")-»
 						@PrePassivate
 					«ENDIF-»
 				«ENDIF-»
 				«IF methods.classifier.hasStereotype("ejb3PersistentEntity")-»
-					«IF methods.hasTaggedValue("ejb3Callback", "postPersist", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "postPersist", "true")-»
 						@PostPersist
 					«ENDIF-»
-					«IF methods.hasTaggedValue("ejb3Callback", "prePersist", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "prePersist", "true")-»
 						@PrePersist
 					«ENDIF-»
-					«IF methods.hasTaggedValue("ejb3Callback", "postUpdate", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "postUpdate", "true")-»
 						@PostUpdate
 					«ENDIF-»
-					«IF methods.hasTaggedValue("ejb3Callback", "preUpdate", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "preUpdate", "true")-»
 						@PreUpdate
 					«ENDIF-»	
-					«IF methods.hasTaggedValue("ejb3Callback", "postRemove", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "postRemove", "true")-»
 						@PostRemove
 					«ENDIF-»
-					«IF methods.hasTaggedValue("ejb3Callback", "preRemove", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "preRemove", "true")-»
 						@PreRemove
 					«ENDIF-»
-					«IF methods.hasTaggedValue("ejb3Callback", "postLoad", "true")-»
+					«IF methods.hasTaggedValue("jpaCallback", "postLoad", "true")-»
 						@PostLoad
 					«ENDIF-»
 				«ENDIF-»

@@ -12,6 +12,8 @@ extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::java::seam2::scripts::Class;
+extension de::genesez::platforms::java::seam2::scripts::Attribute;
+extension de::genesez::platforms::java::seam2::scripts::Operation;
 extension de::genesez::platforms::java::seam2::scripts::Interface;
 
 Void modifications(MModel this) :
@@ -20,6 +22,8 @@ Void modifications(MModel this) :
 	
 Void modifications(MPackage this) :
 	this.nestedPackage.modifications() ->
+	//this.classifier.typeSelect(MClass).addEntityHome() ->
+	//this.classifier.typeSelect(MClass).addQueryHome() ->
 	this.classifier.typeSelect(MClass).modifications();
 	
 Void modifications(MClass this) :
@@ -27,14 +31,22 @@ Void modifications(MClass this) :
 	addConverter() ->
 	addFilter() ->
 	checkDestroyMethod() ->
-	this.property.typeSelect(MAttribute).modifications() ->
-	this.operation.typeSelect(MOperation).modifications();
+	addLoggerAttribute() ->
+	checkCreateMethod() ->
+	this.operation.typeSelect(MOperation).modifications() ->
+	this.property.typeSelect(MAttribute).modifications();
 	
 Void modifications(MOperation this) :
-	Void;
+	addFactoryValue();
 	
 Void modifications(MAttribute this) :
-	Void;
+	setupSeamManagedPersistence() ->
+	checkLogger() ->
+	checkAccessStereotypeOfSeamStereotypedAttributes()->
+	addDataModelValue() ->
+	addDataModelSelectionValue() ->
+	addDataModelSelectionIndexValue() ->
+	addFactoryMethodForDataModelAttributes();
 
 Void modifications(MInterface this) :
 	Void;

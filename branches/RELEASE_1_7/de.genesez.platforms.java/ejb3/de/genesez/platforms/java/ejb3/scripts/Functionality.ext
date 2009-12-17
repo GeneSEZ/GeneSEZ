@@ -13,6 +13,15 @@ extension de::genesez::platforms::java::ejb3::scripts::Interface;
 extension de::genesez::platforms::java::ejb3::scripts::Class;
 extension de::genesez::platforms::java::scripts::Naming;
 
+	
+Void additions(MPackage this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).addSessionBeanInterfaces() ->
+	this.classifier.typeSelect(MClass).addStandardConstructor() ->
+	this.classifier.typeSelect(MClass).checkUseOfEntityManager() ->
+	this.classifier.typeSelect(MClass).addMessageListener();
+
+
 Void modifications(MModel this) :
 	this.nestedPackage.modifications() ->
 	this.classifier.typeSelect(MClass).modifications();
@@ -22,9 +31,6 @@ Void modifications(MPackage this) :
 	this.classifier.typeSelect(MClass).modifications();
 	
 Void modifications(MClass this) :
-	addStandardConstructor() ->
-	addMessageListener() ->
-	addSessionBeanInterfaces() ->
 	//checkInterceptorClass() ->
 	this.property.typeSelect(MAttribute).modifications() ->
 	this.operation.typeSelect(MOperation).modifications();
@@ -33,6 +39,7 @@ Void modifications(MOperation this) :
 	checkTimerStereotype();
 	
 Void modifications(MAttribute this) :
+	changeSessionBeanAttributeDatatype() ->
 	checkEJBStereotype() ->
 	checkTimerServiceStereotype();
 

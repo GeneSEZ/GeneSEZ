@@ -1,5 +1,5 @@
 «REM»
-	template for hibernate-class annotations
+	template for jpa-class annotations
 	
 	@author		andre pflueger
 	@date		2009-04-20
@@ -31,12 +31,12 @@
 «ENDREM»
 
 «REM» 
-	evaluates the stereotype "ejb3DiscriminatorValue" for classes, 
+	evaluates the stereotype "jpaDiscriminatorValue" for classes, 
 	operations and properties
 «ENDREM»
 «DEFINE DiscriminatorValue FOR MElement-»	
-	«IF hasStereotype("ejb3DiscriminatorValue")-»
-		«IF !hasTaggedValue("ejb3DiscriminatorValue", "value", "null")-»
+	«IF hasStereotype("jpaDiscriminatorValue")-»
+		«IF !hasTaggedValue("jpaDiscriminatorValue", "value", "null")-»
 			@DiscriminatorValue("«taggedValue.selectFirst(e|e.tag.name == "value").value-»")
 		«ENDIF-»
 	«ENDIF»
@@ -57,23 +57,40 @@
 	«EXPAND _PrimaryKey-»
 «ENDDEFINE»
 
-«REM» evaluates the stereotype "ejb3PersistentEntity"«ENDREM»
+«REM» method searches the super classes recursively for class with annoted inheritance strategy«ENDREM»
+«DEFINE _superClassSearch(MClass super) FOR MClass-»
+	«FOREACH super.generalization.typeSelect(MClass) AS classes-»
+		«EXPAND _checkInheritanceStrategy(classes)-»
+		«EXPAND _superClassSearch(classes)-»
+	«ENDFOREACH-»	
+«ENDDEFINE»
+
+«DEFINE _checkInheritanceStrategy(MClass super) FOR MClass-»
+	«IF super.hasStereotype("jpaInheritance") && !super.hasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE")-»
+		«EXPAND _Table-»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» evaluates the stereotype "jpaPersistentEntity"«ENDREM»
 «DEFINE _PersistentEntity FOR MClass-»
-	«IF hasStereotype("ejb3PersistentEntity")»
+	«IF hasStereotype("jpaPersistentEntity")»
 		@Entity
-		«IF	hasUtilizableValue("ejb3PersistentEntity", "name")-»
-			(name="«getTaggedValue("ejb3PersistentEntity", "name")-»")
+		«IF	hasUtilizableValue("jpaPersistentEntity", "name")-»
+			(name="«getTaggedValue("jpaPersistentEntity", "name")-»")
 		«ENDIF»
 		«REM»@Table is not allowed with SINGLE_TABLE inheritance strategy«ENDREM»
 		«IF generalization.isEmpty-»
 			«EXPAND _Table-»
+		«ELSE-»
+			«REM»@Table is needed with JOINED or TABLE_PER_CLASS inheritance strategy«ENDREM»
+			«EXPAND _superClassSearch(this)-»
 		«ENDIF»
 		«REM»
 			Causes Warnings in Hibernate configuration, no @Table in derived class
 			annotation will be ignored, no fatal error occurs
 			«ELSE-»
 				«FOREACH generalization.typeSelect(MClass) AS classes-»
-					«IF !classes.hasStereotype("ejb3Inheritance") && !hasTaggedValue("ejb3Inheritance", "discriminatorType", "SINGLE_TABLE")-»
+					«IF !classes.hasStereotype("jpaInheritance") && !hasTaggedValue("jpaInheritance", "discriminatorType", "SINGLE_TABLE")-»
 						«EXPAND _Table-»
 					«ENDIF»
 				«ENDFOREACH-»
@@ -86,58 +103,58 @@
 
 
 «REM»
-	evaluates tagged values of @Table in "ejb3PersistentEntity"
+	evaluates tagged values of @Table in "jpaPersistentEntity"
 «ENDREM»
 «DEFINE _Table FOR MClass-»
 	@Table(
-	«IF hasUtilizableValue("ejb3PersistentEntity", "tableName")-»
-		name="tbl_«getTaggedValue("ejb3PersistentEntity", "tableName")-»"
+	«IF hasUtilizableValue("jpaPersistentEntity", "tableName")-»
+		name="tbl_«getTaggedValue("jpaPersistentEntity", "tableName")-»"
 	«ELSE-»
 		name="tbl_«asTypeName()-»"
 	«ENDIF-»
-	«IF hasUtilizableValue("ejb3PersistentEntity", "tableCatalog")-»
-		, catalog = "«getTaggedValue("ejb3PersistentEntity", "tableCatalog")-»"
+	«IF hasUtilizableValue("jpaPersistentEntity", "tableCatalog")-»
+		, catalog = "«getTaggedValue("jpaPersistentEntity", "tableCatalog")-»"
 	«ENDIF-»
-	«IF hasUtilizableValue("ejb3PersistentEntity", "tableSchema")-»
-		, schema = "«getTaggedValue("ejb3PersistentEntity", "tableSchema")-»"
+	«IF hasUtilizableValue("jpaPersistentEntity", "tableSchema")-»
+		, schema = "«getTaggedValue("jpaPersistentEntity", "tableSchema")-»"
 	«ENDIF-»)
 «ENDDEFINE»	
 
 «REM» 
-	evaluates the stereotype "ejb3Inheritance", "ejb3PrimaryKeyJoinColumn",
-	"ejb3DiscriminatorColumn" and "ejb3DiscriminatorValue" 
+	evaluates the stereotype "jpaInheritance", "jpaPrimaryKeyJoinColumn",
+	"jpaDiscriminatorColumn" and "jpaDiscriminatorValue" 
 «ENDREM»
 «DEFINE _Inheritance FOR MClass-»
-	«IF hasStereotype("ejb3Inheritance")-»
+	«IF hasStereotype("jpaInheritance")-»
 		«REM» Klasse ist selbst die vererbende Klasse «ENDREM»
 		@Inheritance(strategy=InheritanceType.«taggedValue.selectFirst(e|e.tag.name == "strategy").value-»)
-		«IF hasStereotype("ejb3DiscriminatorColumn")-»
-			@DiscriminatorColumn(discriminatorType=DiscriminatorType.«getTaggedValue("ejb3DiscriminatorColumn", "discriminatorType")-»
-			«IF hasUtilizableValue("ejb3DiscriminatorColumn", "name") && !hasTaggedValue("ejb3DiscriminatorColumn", "name", "DTYPE")-»
-				, name="«getTaggedValue("ejb3DiscriminatorColumn", "name")-»", 
+		«IF hasStereotype("jpaDiscriminatorColumn") && hasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE")-»
+			@DiscriminatorColumn(discriminatorType=DiscriminatorType.«getTaggedValue("jpaDiscriminatorColumn", "discriminatorType")-»
+			«IF hasUtilizableValue("jpaDiscriminatorColumn", "name") && !hasTaggedValue("jpaDiscriminatorColumn", "name", "DTYPE")-»
+				, name="«getTaggedValue("jpaDiscriminatorColumn", "name")-»", 
 			«ENDIF-»
-			«IF hasUtilizableValue("ejb3DiscriminatorColumn", "columnDefinition")-»
-				, columnDefinition="«getTaggedValue("ejb3DiscriminatorColumn", "columnDefinition")-»"
+			«IF hasUtilizableValue("jpaDiscriminatorColumn", "columnDefinition")-»
+				, columnDefinition="«getTaggedValue("jpaDiscriminatorColumn", "columnDefinition")-»"
 			«ENDIF-»
-			«IF !hasTaggedValue("ejb3DiscriminatorColumn", "length", "31") && hasTaggedValue("ejb3DiscriminatorColumn", "discriminatorType", "STRING")-»
-				, length=«getTaggedValue("ejb3DiscriminatorColumn", "length")-»
+			«IF !hasTaggedValue("jpaDiscriminatorColumn", "length", "31") && hasTaggedValue("jpaDiscriminatorColumn", "discriminatorType", "STRING")-»
+				, length=«getTaggedValue("jpaDiscriminatorColumn", "length")-»
 			«ENDIF-»)
 		«ENDIF-»
 		«EXPAND DiscriminatorValue-»		
-	«ELSEIF hasStereotype("ejb3DiscriminatorValue") || hasStereotype("ejb3PrimaryKeyJoinColumn")-»
+	«ELSEIF hasStereotype("jpaDiscriminatorValue") || hasStereotype("jpaPrimaryKeyJoinColumn")-»
 		«REM» class is a derived class «ENDREM»
 		«EXPAND DiscriminatorValue-»
-		«IF hasStereotype("ejb3PrimaryKeyJoinColumn")-»
+		«IF hasStereotype("jpaPrimaryKeyJoinColumn")-»
 			@PrimaryKeyJoinColumns(
-			«FOREACH getTaggedValue("ejb3PrimaryKeyJoinColumn", "name").getElements() AS value-»
+			«FOREACH getTaggedValue("jpaPrimaryKeyJoinColumn", "name").getElements() AS value-»
 				@PrimaryKeyJoinColumn(
 					name="«value-»"
-					«LET getTaggedValue("ejb3PrimaryKeyJoinColumn", "name").getElements().indexOf(value) AS index-»		
-						«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "referencedName")-»
- 							, referencedColumnName="«getTaggedValue("ejb3PrimaryKeyJoinColumn", "referencedName").getElements().get(index)-»"
+					«LET getTaggedValue("jpaPrimaryKeyJoinColumn", "name").getElements().indexOf(value) AS index-»		
+						«IF hasUtilizableValue("jpaPrimaryKeyJoinColumn", "referencedName")-»
+ 							, referencedColumnName="«getTaggedValue("jpaPrimaryKeyJoinColumn", "referencedName").getElements().get(index)-»"
 	 					«ENDIF-»
-						«IF hasUtilizableValue("ejb3PrimaryKeyJoinColumn", "columnDefinition")-»
- 							, columnDefinition="«getTaggedValue("ejb3PrimaryKeyJoinColumn", "columnDefinition").getElements().get(index)-»"
+						«IF hasUtilizableValue("jpaPrimaryKeyJoinColumn", "columnDefinition")-»
+ 							, columnDefinition="«getTaggedValue("jpaPrimaryKeyJoinColumn", "columnDefinition").getElements().get(index)-»"
  						«ENDIF-»
  					«ENDLET-») 					
 			«ENDFOREACH»)
@@ -145,33 +162,33 @@
 	«ENDIF»
 «ENDDEFINE»
 
-«REM» evaluates the stereotype "ejb3PrimaryKey"«ENDREM»
+«REM» evaluates the stereotype "jpaPrimaryKey"«ENDREM»
 «DEFINE _PrimaryKey FOR MClass-»
-	«IF hasStereotype("ejb3PrimaryKeyClass") && hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "false")-»
+	«IF hasStereotype("jpaPrimaryKeyClass") && hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "false")-»
 		«REM» primary key with extern primary key class «ENDREM»
-		«IF hasUtilizableValue("ejb3PrimaryKeyClass", "name")-»
-			@IdClass(«getTaggedValue("ejb3PrimaryKeyClass", "name")-».class)
-			«EXPAND _PrimaryKeyClass(getTaggedValue("ejb3PrimaryKeyClass", "name"))-»
+		«IF hasUtilizableValue("jpaPrimaryKeyClass", "name")-»
+			@IdClass(«getTaggedValue("jpaPrimaryKeyClass", "name")-».class)
+			«EXPAND _PrimaryKeyClass(getTaggedValue("jpaPrimaryKeyClass", "name"))-»
 		«ELSE-»
 			@IdClass(«asTypeName()-»PK.class)
 			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
 		«ENDIF»
-	«ELSEIF hasStereotype("ejb3PrimaryKeyClass") && hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "true")-»
+	«ELSEIF hasStereotype("jpaPrimaryKeyClass") && hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")-»
 		«REM» primary key with embedded primary key class «ENDREM»
 		@Embeddable
-		«REM»«IF hasUtilizableValue("ejb3PrimaryKeyClass", "name")-»
-			«EXPAND _PrimaryKeyClass(getTaggedValue("ejb3PrimaryKeyClass", "name"))-»
+		«REM»«IF hasUtilizableValue("jpaPrimaryKeyClass", "name")-»
+			«EXPAND _PrimaryKeyClass(getTaggedValue("jpaPrimaryKeyClass", "name"))-»
 		«ELSE-»
 			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
 		«ENDIF»
 		«FOREACH property AS id-»
-			«IF id.hasStereotype("ejb3PrimaryKey")-»
+			«IF id.hasStereotype("jpaPrimaryKey")-»
 				«property.remove(id)-»
 			«ENDIF-»
 		«ENDFOREACH-»
-		«IF hasUtilizableValue("ejb3PrimaryKeyClass", "name")-»
-			«property.add(makeAttribute(getTaggedValue("ejb3PrimaryKeyClass", "name").toFirstLower(), getTaggedValue("ejb3PrimaryKeyClass", "name"), 1, false, false, false))->""-»
-			«property.selectFirst(e|e.name == getTaggedValue("ejb3PrimaryKeyClass", "name").toFirstLower()).addPrimaryKeyStereotype("true", "null", "false", "AUTO")->""-»
+		«IF hasUtilizableValue("jpaPrimaryKeyClass", "name")-»
+			«property.add(makeAttribute(getTaggedValue("jpaPrimaryKeyClass", "name").toFirstLower(), getTaggedValue("jpaPrimaryKeyClass", "name"), 1, false, false, false))->""-»
+			«property.selectFirst(e|e.name == getTaggedValue("jpaPrimaryKeyClass", "name").toFirstLower()).addPrimaryKeyStereotype("true", "null", "false", "AUTO")->""-»
 		«ELSE-»
 			«property.add(makeAttribute(asTypeName().toLowerCase()+"Pk", asTypeName()+"PK", 1, false, false, false))->""-»
 			«property.selectFirst(e|e.name == asTypeName().toLowerCase()+"Pk").addPrimaryKeyStereotype("true", "null", "false", "AUTO")->""-»
@@ -187,7 +204,7 @@
 «DEFINE _PrimaryKeyClass(String filename) FOR MClass-»
 	«FILE filePath( filename + ".java", basePath() )-»
 		/**
-		  *	generated primary key class of the ejb3 cartridge
+		  *	generated primary key class of the jpa cartridge
 		  *
 		  * @author		andre pflueger
 		  *	@date		2008 May 18
@@ -201,25 +218,25 @@
 		  *
 		  */
 		public class «filename-» implements java.io.Serializable {
-			«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids»
+			«FOREACH property.select(e|e.hasStereotype("jpaPrimaryKey")) AS ids»
 				private «ids.type.mapName()» «ids.name»;
 			«ENDFOREACH»
 			public «filename-»() {}
 			public «filename-»(
-			«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR ", "-»
+			«FOREACH property.select(e|e.hasStereotype("jpaPrimaryKey")) AS ids SEPARATOR ", "-»
 				«ids.type.asTypeName()» «ids.name»
 			«ENDFOREACH-») {
-				«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR ";"-»
+				«FOREACH property.select(e|e.hasStereotype("jpaPrimaryKey")) AS ids SEPARATOR ";"-»
 					this.«ids.name» = «ids.name»
 				«ENDFOREACH-»;
 			}
 			
-			«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids»
+			«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("jpaPrimaryKey")) AS ids»
 				public «ids.type.asTypeName()» «ids.asGetter()»() {
 					return «ids.name»;
 				}
 			«ENDFOREACH»
-			«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids»
+			«FOREACH property.typeSelect(MAttribute).select(e|e.hasStereotype("jpaPrimaryKey")) AS ids»
 				public  void «ids.asSetter()»(«ids.type.asTypeName()» «ids.name») {
 					this.«ids.name» = «ids.name»;
 				}	
@@ -229,7 +246,7 @@
 				if (!(obj instanceof «filename-»)) return false;
 				«filename-» pk = («filename-») obj;
 				return ( 
-				«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR "&&"-»
+				«FOREACH property.select(e|e.hasStereotype("jpaPrimaryKey")) AS ids SEPARATOR "&&"-»
 					this.«ids.name»
 					«IF ids.type.isPrimitiveType()-»
 						 == pk.«ids.name»
@@ -242,7 +259,7 @@
 			
 			public int hashCode() {
 				return (int) 
-				«FOREACH property.select(e|e.hasStereotype("ejb3PrimaryKey")) AS ids SEPARATOR " + "-»
+				«FOREACH property.select(e|e.hasStereotype("jpaPrimaryKey")) AS ids SEPARATOR " + "-»
 					this.«ids.name-»
 					«IF !isPrimitiveType(ids.type)-»
 						.hashCode()
@@ -261,28 +278,28 @@
 	is used by aspects to extend´import generation of java5 cartridge
 «ENDREM»
 «DEFINE _ImportStatements FOR MClassifier-»
-	«IF hasStereotype("ejb3PersistentEntity")-»
+	«IF hasStereotype("jpaPersistentEntity")-»
 		import javax.persistence.Entity;
 		import javax.persistence.Table;
 		import java.io.Serializable;
 		import javax.persistence.Inheritance;
 		import javax.persistence.InheritanceType;
 	«ENDIF»
-	«IF property.exists(e|e.hasStereotype("ejb3Persistence")) 
+	«IF property.exists(e|e.hasStereotype("jpaPersistence")) 
 		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManager")
 		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManagerFactory")-»
 		import javax.persistence.EntityManager;
 		import javax.persistence.PersistenceUnit;
 		import javax.persistence.PersistenceContext;
 	«ENDIF»	
-	«IF operation.exists(e|e.hasStereotype("ejb3Association")) || property.exists(e|e.hasStereotype("ejb3Association"))-»
+	«IF operation.exists(e|e.hasStereotype("jpaAssociation")) || property.exists(e|e.hasStereotype("jpaAssociation"))-»
 		import javax.persistence.OneToMany;
 		import javax.persistence.ManyToOne;
 		import javax.persistence.OneToOne;
 		import javax.persistence.ManyToMany;
 		import javax.persistence.CascadeType;
 	«ENDIF»
-	«IF operation.exists(e|e.hasStereotype("ejb3PrimaryKey")) || property.exists(e|e.hasStereotype("ejb3PrimaryKey"))-»
+	«IF operation.exists(e|e.hasStereotype("jpaPrimaryKey")) || property.exists(e|e.hasStereotype("jpaPrimaryKey"))-»
 		import javax.persistence.Id;
 		import javax.persistence.IdClass;
 		import javax.persistence.EmbeddedId;

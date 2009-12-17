@@ -105,7 +105,7 @@
 	generate getter- and setter-operations in session beans with "seam2Component"-stereotype
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Interface::_Extension FOR MInterface-»
-	«FOREACH this.package().classifier.select(e|e.hasStereotype("ejb3SessionBean") && e.hasStereotype("seam2Component")) AS c-»
+	«FOREACH this.owningPackage.classifier.select(e|e.hasStereotype("ejb3SessionBean") && e.hasStereotype("seam2Component")) AS c-»
 		«FOREACH c.realization AS r-»	
 			«IF r.name() == this.name-»
 				«FOREACH c.property AS p-»
@@ -120,6 +120,17 @@
 		«ENDFOREACH-»
 	«ENDFOREACH-»
 	«targetDef.proceed()»
+«ENDAROUND»
+
+«REM»
+	surpress jpa annotation for entityManager if "seam2Injection" stereotype exists
+	this should be done by Xtend by removing "jpaPersistenceContext" stereotype
+«ENDREM»
+«AROUND de::genesez::platforms::java::jpa::templates::Attribute::_Persistence FOR MAttribute»
+	//Aspekt aufgerufen
+	«REM»«IF !this.hasStereotype("seam2Injection")-»
+		«targetDef.proceed()-»
+	«ENDIF-»«ENDREM»
 «ENDAROUND» 
 
 «REM»
@@ -685,6 +696,9 @@
 		import org.jboss.seam.annotations.*;
 		import org.jboss.seam.*;
 		import org.jboss.seam.security.*;
+		«IF hasStereotype("seam2Logger")»
+			import org.jboss.seam.log.Log;
+		«ENDIF»
 		«IF property.exists(e|e.hasStereotype("seam2DataModel") || e.hasStereotype("seam2Selection") || e.hasStereotype("seam2SelectionIndex"))-»
 			import org.jboss.seam.annotations.datamodel.*;
 		«ENDIF»
