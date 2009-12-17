@@ -255,18 +255,22 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 
 «DEFINE _AccessorDecl FOR MInterface-»
 	«FOREACH property.typeSelect(MAssociationRole) AS a-»
-		«EXPAND _GetterDecl FOR a-»
-		«EXPAND _InsertInDecl FOR a-»
-		«EXPAND _RemoveFromDecl FOR a-»
+		«IF a.generateGetter()-»«EXPAND _GetterDecl FOR a-»«ENDIF»
+		«IF a.generateSetter()-»
+			«EXPAND _InsertInDecl FOR a-»
+			«EXPAND _RemoveFromDecl FOR a-»
+		«ENDIF»
 	«ENDFOREACH-»
 «ENDDEFINE»
 
 «DEFINE _AccessorImpl FOR MClass-»
 	«REM»«EXPAND _AssocClassReferenceGetters FOR ownedAssociation-»«ENDREM»
 	«FOREACH property.typeSelect(MAssociationRole) AS a-»
-		«EXPAND _GetterImpl FOR a-»
-		«EXPAND _InsertInImpl FOR a-»
-		«EXPAND _RemoveFromImpl FOR a-»
+		«IF a.generateGetter()-»«EXPAND _GetterImpl FOR a-»«ENDIF»
+		«IF a.generateSetter()-»
+			«EXPAND _InsertInImpl FOR a-»
+			«EXPAND _RemoveFromImpl FOR a-»
+		«ENDIF»
 	«ENDFOREACH-»
 «ENDDEFINE»
 
@@ -369,14 +373,12 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 					this.«asAttribute()-».add(«asAttribute()-»);
 				«ENDIF-»
 				«IF opposite != null && opposite.multiplicity != 1 
-					&& (opposite.hasTaggedValue("accessor", "setter", "true")
-						|| !opposite.hasStereotype("accessor"))-»
+					&& opposite.generateSetter()-»
 					if (!«asAttribute()-».«opposite.asGetter()-»().contains(this)) {
 						«asAttribute()-».«opposite.asInsertIn()-»(this);
 					}
 				«ELSEIF opposite != null && opposite.multiplicity == 1 
-						&& (opposite.hasTaggedValue("accessor", "setter", "true") 
-							|| !opposite.hasStereotype("accessor"))-»
+						&& opposite.generateSetter()-»
 					«asAttribute()-».«opposite.asSetter()-»(this);
 				«ENDIF-»
 			}
@@ -448,7 +450,8 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 					}
 					this.«asAttribute()-».remove(«asAttribute()-»);
 				«ENDIF-»
-				«IF opposite != null && opposite.multiplicity != 1-»
+				«IF opposite != null && opposite.multiplicity != 1 
+					&& opposite.generateSetter()-»
 					if («asAttribute()-».«opposite.asGetter()-»().contains(this)) {
 						«asAttribute()-».«opposite.asRemoveFrom()-»(this);
 					}
