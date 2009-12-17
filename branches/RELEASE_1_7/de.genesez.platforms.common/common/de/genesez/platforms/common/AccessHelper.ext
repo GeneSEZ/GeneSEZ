@@ -540,8 +540,20 @@ boolean getTaggedBooleanValue(MElement this, String stereotype, String tag) :
  *	@param		value	new value
  *
  */
-Void setTaggedValue(MProperty this, String name, String value) :
+Void setTaggedValue(MElement this, String name, String value) :
 	this.taggedValue.selectFirst(e|e.tag.name == name).setValue(value);
+	
+/**
+ *	function to set any existing tagged value of a specific stereotype
+ *
+ *	@param		this		MProperty
+ *	@param		stereotype	name of the stereotype
+ *	@param		taggedValue	name of the tagged value
+ *	@param		value		new value
+ *
+ */
+Void setTaggedValue(MElement this, String stereotype, String taggedValue, String value) :
+	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).setValue(value);
 
 /**
  * 	checks if a tagged value of a stereotype exists and has a utilizable value (not empty or null)
@@ -665,7 +677,7 @@ MPackage package(MClassifier this) :
 		case MPackage : ((MPackage)owningContext)
 		default : (fatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
 	};
-
+	
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	model accessors
