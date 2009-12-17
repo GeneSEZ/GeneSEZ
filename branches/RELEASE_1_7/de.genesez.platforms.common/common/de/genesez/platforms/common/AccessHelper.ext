@@ -707,6 +707,15 @@ MModel model(MClassifier this) :
 		default : (fatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
 	};
 
+MModel model(MElement this) :
+	switch (metatype) {
+		case MClassifier : ((MClassifier).model())
+		case MOperation :  ((MOperation).model())
+		case MParameter :  ((MParameter).operation.model())
+		case MProperty :  ((MProperty).model())
+		default : fatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
+	};
+
 /**
  * getter for the model element by using a package
  * @return	the model element
