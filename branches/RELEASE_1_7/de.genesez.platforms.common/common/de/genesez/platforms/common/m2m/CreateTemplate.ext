@@ -126,7 +126,9 @@ create MOperation cloneOperation(MOperation op, MClassifier container) :
 	setReturnType( op.returnType ) ->
 	raisedException.addAll( op.raisedException ) ->
 	// containments
-	op.parameter.cloneParameter( this ) ->
+	parameter.addAll( op.parameter.cloneParameter( this ) ) ->
+	setReturn( op.return.cloneParameter( this ) ) ->
+	// @deprecated [toh] next line is to be removed!
 	op.returnTypeComment.cloneComment( this ) ->
 	container.operation.add( this ) ->
 	this;
@@ -137,7 +139,7 @@ create MParameter cloneParameter(MParameter param, MOperation container) :
 	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.unique, param.ordered) ->
 	setType( param.type ) ->
 	// containment
-	container.parameter.add( this ) ->
+	setOperation( container ) ->
 	this;
 	
 create MComment cloneComment(MComment comment, MElement container) :

@@ -400,14 +400,16 @@ private create MOperation makeOperation(Operation o) :
 	setUnique( o.isUnique ) ->
 	setOrdered( o.isOrdered ) ->
 	// associations
+	// set stereotype
+	stereotype.addAll( o.getAppliedStereotypes().makeStereotype() ) ->
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// @deprecated [toh] begin
 	// add stereotypes of return type parameter
 	o.ownedParameter.exists(e|e.direction.toString() == "return")
 		? ( stereotype.addAll( o.ownedParameter.selectFirst(e|e.direction.toString() == "return").getAppliedStereotypes().makeStereotype() ) ->
 			taggedValue.addAll( makeTaggedValues(this, o.ownedParameter.selectFirst(e|e.direction.toString() == "return")) )
 		)
 		: this ->
-	// set stereotype
-	stereotype.addAll( o.getAppliedStereotypes().makeStereotype() ) ->
 	// set return type
 	setReturnType( o.type.makeType() ) ->
 	// set return type comment
@@ -416,9 +418,21 @@ private create MOperation makeOperation(Operation o) :
 			o.ownedParameter.select(e|e.direction.toString() == "return").first()
 			.ownedComment.typeSelect(Comment).makeComment() )
 		: this ->
+// @deprecated [toh] end
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
+	// add parameter to operation
+	parameter.addAll(
+		o.ownedParameter.reject(e|e.direction.toString() == "return").makeParameter().setOperation(this)
+	) ->
+	// set return parameter
+	o.ownedParameter.exists( e|e.direction.toString() == "return" )
+		? setReturn(
+			o.ownedParameter.select(e|e.direction.toString() == "return").first()
+			.makeParameter().setOperation(this) )
+		: this ->
 	// add comment to operation
 	ownedComment.addAll( o.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// set tagged values
@@ -429,10 +443,6 @@ private create MOperation makeOperation(Operation o) :
 			o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric()
 		)
 		: this ->
-	// add parameter to operation
-	parameter.addAll(
-		o.ownedParameter.reject(e|e.direction.toString() == "return").makeParameter()
-	) ->
 	this;
 
 /**
