@@ -22,6 +22,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -544,17 +545,23 @@ Void setTaggedValue(MElement this, String name, String value) :
 	this.taggedValue.selectFirst(e|e.tag.name == name).setValue(value);
 	
 /**
- *	function to set any existing tagged value of a specific stereotype
+ *	function to set a tagged value of a specific stereotype
+ *	note: if a MTagggedValue already exists, it is used and it's value is changed
  *
- *	@param		this		MProperty
+ *	@param		this		MPropertye
  *	@param		stereotype	name of the stereotype
  *	@param		taggedValue	name of the tagged value
  *	@param		value		new value
  *
  */
 Void setTaggedValue(MElement this, String stereotype, String taggedValue, String value) :
-	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).setValue(value);
-
+	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).setValue(value)
+		: createTaggedValue(
+			this.stereotype.selectFirst(e|e.name == stereotype).property.selectFirst(e|e.name == taggedValue),
+			value
+		);
+	
 /**
  * 	checks if a tagged value of a stereotype exists and has a utilizable value (not empty or null)
  *
@@ -694,7 +701,7 @@ MModel model(MProperty this) : classifier.model();
  * getter for the model element by using an operation
  * @return	the model element
  */
-MModel model(MOperation this) : classifier.model();
+MModel model(MOperation this) :	classifier.model();
 
 /**
  * getter for the model element by using a classifier
@@ -713,6 +720,7 @@ MModel model(MElement this) :
 		case MOperation :  ((MOperation) this).model()
 		case MParameter :  ((MParameter) this).operation.model()
 		case MProperty :  ((MProperty) this).model()
+		case MStereotype : ((MStereotype) this).model
 		default : (fatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
 	};
 
@@ -788,6 +796,31 @@ MClassifier getClassifier(MModel this, String fullQualifiedName) :
 MPackage getPackage(MModel this, String fullQualifiedPackageName) :
 	getPackage(nestedPackage, fullQualifiedPackageName);
 	
+cached List[MClassifier] allClassifiers(MModel this) :
+	allPackages().allClassifiers();
+
+cached List[MClassifier] allClassifiers(MPackage this) :
+	addAllClassifier({});
+
+cached List[MClassifier] addAllClassifier(MPackage this, List[MClassifier] classifiers) :
+	classifiers.addAll(classifier) ->
+	nestedPackage.addAllClassifier(classifiers) ->
+	classifiers;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	packages
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+	
+cached List[MPackage] allPackages(MPackage this) :
+	addAllPackages({});
+
+cached List[MPackage] addAllPackages(MPackage this, List[MPackage] packages) :
+	packages.addAll(nestedPackage) ->
+	nestedPackage.addAllPackages(packages) ->
+	packages;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	elements
