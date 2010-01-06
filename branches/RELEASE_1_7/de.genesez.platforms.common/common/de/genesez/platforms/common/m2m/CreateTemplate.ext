@@ -91,55 +91,53 @@ create MAspect createAspect(MElement container, String domain, String name) :
 
 create MStereotype cloneStereotype(MStereotype st, MModel container) :
 	trace("cloning: " + metaType + ": " + st) ->
-	// attributes
-	this.processElement( st.cloneXmiGuid( container ), st ) ->
 	// references
 	// containments
-	st.property.cloneTag(st) ->
 	container.anyStereotype.add( this ) ->
+	st.property.cloneTag( this ) ->
+	// attributes
+	this.processElement( st.cloneXmiGuid( container ), st ) ->
 	this;
 
 create MTag cloneTag(MTag tag, MStereotype container) :
 	trace("cloning: " + metaType + ": " + tag) ->
-	// attributes
-	this.processTag( tag.name, tag.type ) ->
 	// containment
 	container.property.add( this ) ->
+	// attributes
+	this.processTag( tag.name, tag.type ) ->
 	this;
 
 create MTaggedValue cloneTaggedValue(MTaggedValue tv, MElement container) :
 	trace("cloning: " + metaType + ": " + tv) ->
+	// containments
+	container.taggedValue.add( this ) ->
 	// attributes
 	this.processTaggedValue( tv.value ) ->
 	// references
 	setTag( tv.tag.cloneTag( tv.tag.stereotype.cloneStereotype( container.model() ) )) ->
-	// containments
-	container.taggedValue.add( this ) ->
 	this;
 
 create MOperation cloneOperation(MOperation op, MClassifier container) :
 	trace("cloning: " + metaType + ": " + op) ->
-	// attributes
-	this.processElement( op.cloneXmiGuid( container ), op ) ->
-	this.processOperation(op.visibility, op.static, op.abstract, op.final, op.multiplicity, op.unique, op.ordered) ->
+	container.operation.add( this ) ->
 	// references
 	setReturnType( op.returnType ) ->
 	raisedException.addAll( op.raisedException ) ->
 	// containments
-	parameter.addAll( op.parameter.cloneParameter( this ) ) ->
-	setReturn( op.return.cloneParameter( this ) ) ->
-	// @deprecated [toh] next line is to be removed!
+	op.parameter.cloneParameter( this ) ->
 	op.returnTypeComment.cloneComment( this ) ->
-	container.operation.add( this ) ->
+	// attributes
+	this.processElement( op.cloneXmiGuid( container ), op ) ->
+	this.processOperation(op.visibility, op.static, op.abstract, op.final, op.multiplicity, op.unique, op.ordered) ->	
 	this;
 
 create MParameter cloneParameter(MParameter param, MOperation container) :
 	trace("cloning: " + metaType + ": " + param) ->
+	// containment
+	container.parameter.add( this ) ->
 	this.processElement( param.cloneXmiGuid( container ), param ) ->
 	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.unique, param.ordered) ->
 	setType( param.type ) ->
-	// containment
-	setOperation( container ) ->
 	this;
 	
 create MComment cloneComment(MComment comment, MElement container) :
@@ -220,9 +218,9 @@ MTaggedValue processTaggedValue(MTaggedValue this, String value) :
 	this;
 
 /**
- * processes the given model element and sets all parameters
- * @param	xmiGuid	
- * @param	name	
+ * 	processes the given model element and sets all parameters
+ * 	@param	xmiGuid	
+ *	@param	elem	original instance of MElement
  */
 MElement processElement(MElement this, String xmiGuid, MElement elem) :
 	setXmiGuid(xmiGuid) ->
