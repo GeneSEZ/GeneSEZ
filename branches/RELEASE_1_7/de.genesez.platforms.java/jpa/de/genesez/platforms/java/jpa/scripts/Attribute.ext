@@ -9,25 +9,7 @@ extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
 
 
 /**
-  *	adds an accessor stereotype for generating get and set methods if
-  *	classifier is a persistent entity and the attribute does not have an 
-  *	accessor stereotype (do not override modellers choices)
-  *
-  *	@param		this		instance of MAttribute
-  */
-Void addAccessorStereotype(MAttribute this) :
-	this.classifier.hasStereotype("jpaPersistentEntity")
-		? (
-			//add an accessor for get and set methods if no accessor 
-			//stereotype exists
-			!this.hasStereotype("accessor")
-				? createAccessor("true", "true")
-				: ""
-		)
-		: "";
-
-/**
-  *	adds the stereotype "jpaPersstenceContext" if attributes data type
+  *	adds the stereotype "jpaPersistenceContext" if attributes data type
   *	is "EntityManager" or "Session" and adds stereotype "jpaPersistenceUnit" 
   *	if attributes data type is "EntityManagerFactory" or "SessionFactory" and
   *	the attribute has no such stereotype
