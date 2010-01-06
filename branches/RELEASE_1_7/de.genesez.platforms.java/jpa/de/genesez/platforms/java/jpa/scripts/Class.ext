@@ -7,6 +7,24 @@ extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
 
 /**
+  *	adds an accessor stereotype for generating get and set methods if
+  *	classifier is a persistent entity and the attribute does not have an 
+  *	accessor stereotype (do not override modellers choices)
+  *
+  *	@param		this		instance of MClass
+  */
+Void addAccessorStereotype(MClass this) :
+	this.hasStereotype("jpaPersistentEntity")
+		? (
+			//add an accessor for get and set methods if no accessor 
+			//stereotype exists
+			!this.hasStereotype("accessor")
+				? createAccessor("true", "true")
+				: ""
+		)
+		: "";
+
+/**
   *	adds an attribute "version" of data type "int" with stereotype "jpaOptimisticLocking" to enable
   *	optimistic locking if stereotype "jpaPersistentEntity" has a tagged value "optimisticLocking"
   *	with the value "true", this class is not derived and there is no such attribute or another
