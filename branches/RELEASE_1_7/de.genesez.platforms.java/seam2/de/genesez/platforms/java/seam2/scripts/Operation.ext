@@ -24,7 +24,7 @@ MClassifier addOperation(MClassifier this, String name) :
 Void addFactoryValue(MOperation this) :
 	this.name.length > 8
 		? (
-			this.hasStereotype("seam2Factory") && this.hasTaggedValue("seam2Factory", "value", "null") &&
+			this.hasStereotype("seam2Factory") && !this.hasUtilizableValue("seam2Factory", "value") &&
 			this.name.asTypeName().subString(0,8).matches("initiate") &&
 			this.classifier.property.exists(e|e.name == this.name.subString(8,this.name.length).toFirstLower())
 				? this.setTaggedValue("seam2Factory", "value", this.name.subString(8,this.name.length).toFirstLower())

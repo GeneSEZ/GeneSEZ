@@ -5,6 +5,7 @@ extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
 extension de::genesez::platforms::java::seam2::scripts::Operation;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::common::m2m::CreateBasics;
 
 /**
   *	creates a logger attribute if there is no attribute with datatype "Log"
@@ -12,6 +13,15 @@ extension de::genesez::platforms::common::m2m::CreateTemplate;
 Void addLoggerAttribute(MClass this) :
 	!this.hasStereotype("jpaPersistentEntity") && this.hasTaggedValue("seam2Component", "logger", "true") && !this.existLoggerAttribute() 
 		? addAttribute("logger", "Log", "private")
+		: "";
+
+
+/**
+ *	
+ */
+Void checkAbstractClassesForComponentStereotype(MClass this) :
+	this.abstract && this.hasStereotype("seam2Component")
+		? this.stereotype.remove(this.stereotype.selectFirst(e|e.name == "seam2Component"))
 		: "";
 
 /**

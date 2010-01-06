@@ -27,14 +27,16 @@ Void modifications(MPackage this) :
 	this.classifier.typeSelect(MClass).modifications();
 	
 Void modifications(MClass this) :
+	checkAbstractClassesForComponentStereotype() ->
 	addValidator() -> 
 	addConverter() ->
 	addFilter() ->
 	checkDestroyMethod() ->
 	addLoggerAttribute() ->
 	checkCreateMethod() ->
+	this.property.typeSelect(MAttribute).modifications() ->
 	this.operation.typeSelect(MOperation).modifications() ->
-	this.property.typeSelect(MAttribute).modifications();
+	this.property.typeSelect(MAttribute).addAccessorStereotype();
 	
 Void modifications(MOperation this) :
 	addFactoryValue();
@@ -46,7 +48,8 @@ Void modifications(MAttribute this) :
 	addDataModelValue() ->
 	addDataModelSelectionValue() ->
 	addDataModelSelectionIndexValue() ->
-	addFactoryMethodForDataModelAttributes();
+	addFactoryMethodForDataModelAttributes() ->
+	checkAttributesWithInjectionStereotype();
 
 Void modifications(MInterface this) :
 	Void;
