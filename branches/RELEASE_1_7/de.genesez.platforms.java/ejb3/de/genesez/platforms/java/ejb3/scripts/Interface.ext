@@ -4,11 +4,12 @@ extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
 extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::common::log::Log;
 
 
 MClassifier addMessageListener(MClassifier this) :
 	stereotype.name.exists(e|e == "ejb3MessageDrivenBean")
-		? realization.add(createExternal(this.getModel(), "MessageListener"))
+		? realization.add(createExternal(this.model(), "MessageListener"))
 		: "";
 
 /**
@@ -25,7 +26,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 		? ( 
 			this.hasUtilizableValue("ejb3Remote", "name")
 				? (
-					!this.package().getModel().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
+					!this.model().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
 						? (	
 							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
@@ -38,6 +39,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 					let interface = createInterface(this.package(), asTypeName()+"Remote", asTypeName()+"Remote") : 
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
+						interface.model().externalTypes.remove("I"+asTypeName()+"Remote") ->
 						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
 				)
 		) 
@@ -59,7 +61,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 					let interface = createInterface(this.package(), asTypeName()+"Local", asTypeName()+"Local") : 
 						this.realization.add(interface) ->
 						interface.addLocalStereotype("") ->
-						interface.package().getModel().externalTypes.remove("I"+asTypeName()+"Local") ->
+						interface.model().externalTypes.remove("I"+asTypeName()+"Local") ->
 						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
 				)
 		)

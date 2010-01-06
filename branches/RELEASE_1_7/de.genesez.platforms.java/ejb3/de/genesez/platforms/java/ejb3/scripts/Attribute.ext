@@ -50,7 +50,7 @@ Void changeSessionBeanAttributeDatatype(MAttribute this) :
 			isSessionBean(this.classifier, this.type.asTypeName()) 
 				? (
 					//check for realization of the session bean which are business interfaces
-					let s = this.classifier.model().nestedPackage.classifier.typeSelect(MClass).selectFirst(e|e.name == this.type.asTypeName() && e.hasStereotype("ejb3SessionBean")) :
+					let s = this.classifier.model().allClassifiers().typeSelect(MClass).selectFirst(e|e.name == this.type.asTypeName() && e.hasStereotype("ejb3SessionBean")) :
 						//warn("SB: "+s) ->
 						//warn("SB Interfaces: "+s.realization.name()) ->
 						s.realization.typeSelect(MInterface).exists(e|e.hasStereotype("ejb3Local"))
