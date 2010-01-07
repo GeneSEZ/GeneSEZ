@@ -59,6 +59,37 @@ MElement addColumnForPrimaryKeyInheritance(MElement this, MClassifier classifier
 				createTaggedValue(this, createTag(s, "unique", "String"), "false")
 		)
 		: "";
+
+/**
+ *	function to add the stereotype "jpaColumn" to a MAttribute
+ *
+ *	@param		elem				MElement
+ *	@param		classifier			classifier of the MAttribute
+ *	@param		updatable			
+ *	@param		insertable			
+ *	@param		name				
+ *	@param		scale				
+ *	@param		precision			
+ *	@param		length				
+ *	@param		columnDefinition	
+ *	@param		table				
+ *	@param		nullable			
+ *	@param		unique				
+ *
+ */
+MElement addColumnStereotype(MAttribute this, String updatable, String insertable, String name, String scale, String precision, String length, String columnDefinition, String table, String nullable, String unique) :
+	let s = makeColumnStereotype((MProperty) this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "updatable", "String"), updatable) ->
+		createTaggedValue(this, createTag(s, "insertable", "String"), insertable) ->
+		createTaggedValue(this, createTag(s, "name", "String"), name) ->
+		createTaggedValue(this, createTag(s, "scale", "String"), scale) ->
+		createTaggedValue(this, createTag(s, "precision", "String"), precision) ->
+		createTaggedValue(this, createTag(s, "length", "String"), length) ->
+		createTaggedValue(this, createTag(s, "columnDefinition", "String"), columnDefinition) ->
+		createTaggedValue(this, createTag(s, "table", "String"), table) ->
+		createTaggedValue(this, createTag(s, "nullable", "String"), nullable) ->
+		createTaggedValue(this, createTag(s, "unique", "String"), unique);
 		
 /**
  *	function to create the stereotype "jpaColumn" for primary key inheritance
