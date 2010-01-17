@@ -62,7 +62,6 @@ package «packageDeclaration( basePackage() ) -»;
 «IF hasComment() -»
 «comment().format() -»
 «ENDIF -»
- * @generated	enumeration literal definition
  */
 «ENDDEFINE»
 
@@ -77,12 +76,11 @@ package «packageDeclaration( basePackage() ) -»;
 	simply delegates to the getter method comment
 «ENDREM»
 «DEFINE Attribute FOR MAttribute -»
-/**
 «IF hasComment() -»
- * documented here {@link «asGetter()»()}
-«ENDIF -»
- * @generated	attribute definition
+/**
+«comment().format() -»
  */
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -92,8 +90,9 @@ package «packageDeclaration( basePackage() ) -»;
 /**
 «IF hasComment() -»
 «comment().format() -»
+«ELSE -»
+ * getter for the attribute '<em><b>«asAttribute()»</b></em>'
 «ENDIF -»
- * @generated	getter for the attribute '<em><b>«asAttribute()»</b></em>'
  */
 «ENDDEFINE»
 
@@ -116,17 +115,34 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 
 «REM»
-	generates the comment of the enum definition
+	generates the comment for an association attribute
 «ENDREM»
-«DEFINE AssociationEnum FOR MClass -»
-/** defines an identifier for each association */
+«DEFINE Association FOR MAssociationRole -»
+	«IF isSingleValuedType() -»
+	/** stores the associated object of association «asEnumLiteral() -» to «this.type.asTypeName()» */
+	«ELSEIF hasAssociationClass() -»
+	/** stores associated objects of association «asEnumLiteral() -» to «this.type.asTypeName()» as keys and the association class objects as values */
+	«ELSE -»
+	/** stores associated objects of association «asEnumLiteral() -» to «this.type.asTypeName()» */
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE AssociationClass FOR MAssociationRole -»
+	/** stores the association class object of association «asEnumLiteral() -» to «this.type.asTypeName()» */
 «ENDDEFINE»
 
 «REM»
-	generates the comment of an association attribute
+	generates the comment of the enum definition
 «ENDREM»
-«DEFINE Association FOR MClassifier -»
-/** holds the references to the association objects */
+«DEFINE AssociationEnum FOR MClassifier -»
+/** defines an identifier for each association, used by the association handling library */
+«ENDDEFINE»
+
+«REM»
+	generates the comment of the map storing the association management objects
+«ENDREM»
+«DEFINE AssociationManagement FOR MClassifier -»
+/** stores the association management objects */
 «ENDDEFINE»
 
 «REM»
@@ -134,7 +150,7 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE AssociationGenericAccessor FOR MClassifier -»
 	/**
-	 * generic accessor for association objects used by the association handling framework
+	 * provides generic access to association objects, used by the association handling library
 	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 «ENDDEFINE»
@@ -146,8 +162,9 @@ package «packageDeclaration( basePackage() ) -»;
 /** 
 «IF hasComment() -»
 «comment().format() -»
+«ELSE -»
+ * provides access to the association '<em><b>«asAttribute()»</b></em>' to {@link «type.mapName().asTypeName()»}
 «ENDIF -»
- * @generated	accessor of the association '<em><b>«asAttribute()»</b></em>' to {@link «type.mapName().asTypeName()»}
  */
 «ENDDEFINE»
 
@@ -165,8 +182,9 @@ package «packageDeclaration( basePackage() ) -»;
 	/**
 	«IF hasComment() -»
 	«comment().format() -»
+	«ELSE -»
+	 * constructor for class '<em><b>«classifier.asTypeName()»</b></em>'
 	«ENDIF -»
-	 * @generated	constructor for class '<em><b>«classifier.asTypeName()»</b></em>'
 	«EXPAND _Params FOREACH parameter -»
 	«EXPAND _Exceptions FOREACH raisedException -»
 	 */
@@ -178,8 +196,7 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE InitConstructor FOR MClassifier -»
 	/**
-	 * constructor which initializes all instance attributes
-	 * @generated	initializing constructor for class '<em><b>«asTypeName()»</b></em>'
+	 * initializing constructor for class '<em><b>«asTypeName()»</b></em>'
 	«FOREACH allInitializableAttributes() AS a -»
 	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»()}
 	«ENDFOREACH -»
@@ -192,8 +209,7 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE InitConstructor FOR MDataType -»
 	/**
-	 * constructor which initializes all instance attributes
-	 * @generated	initializing constructor for class '<em><b>«asTypeName()»</b></em>'
+	 * initializing constructor for class '<em><b>«asTypeName()»</b></em>'
 	«FOREACH getAllAttributes() AS a -»
 	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»()}
 	«ENDFOREACH -»
@@ -207,8 +223,9 @@ package «packageDeclaration( basePackage() ) -»;
 	/**
 	«IF hasComment() -»
 	«comment().format() -»
+	«ELSE -»
+	 * method stub for further implementation
 	«ENDIF -»
-	 * @generated	method stub for further implementation
 	«EXPAND _Params FOREACH parameter -»
 	«EXPAND _Return -»
 	«EXPAND _Exceptions FOREACH raisedException -»

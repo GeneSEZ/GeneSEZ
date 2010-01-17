@@ -6,91 +6,83 @@ package de.genesez.platforms.java.umlsupport.associations;
 /**
  * implementation of a to-one association with association class
  * 
+ * @param <From>	one side of association
+ * @param <To>		other side of association
+ * @param <Assoc>	association class type
+ * 
  * @author georg beier
- * 
- * @param <From>
- *            one side of association
- * @param <To>
- *            other side of association
- * @param <Assoc>
- *            association class type
- * 
+ * @author toh (last modified)
  */
 public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 		OneAssociation<From, To> implements AssociationAC<From, To, Assoc> {
 
-	/** reference to the association class object */
-	private Assoc assocObject;
+	/** provides access to the associated class object */
+	private Accessor<Assoc> accessorAC;
 
 	/**
-	 * @param owner
-	 *            object that owns this association end
+	 * @param owner	object that owns this association end
+	 * @param accessor	object providing access to the associated object
 	 */
-	public OneAssociationAC(From owner) {
-		super(owner);
+	public OneAssociationAC(From owner, Accessor<To> accessor, Accessor<Assoc> accessorAC) {
+		super(owner, accessor);
+		this.accessorAC = accessorAC;
 	}
 
 	/**
-	 * @param owner
-	 *            the owning object of the association
-	 * @param refClass
-	 *            the referenced class on the other side of the association
-	 * @param assocGetter
-	 *            name of the accessor method that returns the opposite
-	 *            association end
+	 * @param owner		the owning object of the association
+	 * @param opposite	enumeration literal identifying the opposite of this association
+	 * @param accessor	object providing access to the associated object
 	 */
-	public OneAssociationAC(From owner, RelatedAssociationRole opposite) {
-		super(owner, opposite);
+	public OneAssociationAC(From owner, Accessor<To> accessor, Accessor<Assoc> accessorAC, RelatedAssociationRole opposite) {
+		super(owner, accessor, opposite);
+		this.accessorAC = accessorAC;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.genesez.umlsupport.TernaryAssociation#insert(java.lang.Object,
-	 *      java.lang.Object)
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationAC#insert(java.lang.Object, java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
-//	@Override
 	public To insert(To associated, Assoc aco) {
 		linkAssoc(aco);
 		insert(associated);
 		return associated;
 	}
 
-//	@Override
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.OneAssociation#remove(java.lang.Object)
+	 */
 	public To remove(To associated) {
 		unlinkAssoc();
 		return super.remove(associated);
 	}
 
-//	@Override
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationAC#getAssoc(java.lang.Object)
+	 */
 	public Assoc getAssoc(To associated) {
 		if (associated == getReference())
-			return assocObject;
+			return accessorAC.get();
 		else
 			return null;
 	}
 
-//	@Override
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationAC#setAssoc(java.lang.Object, java.lang.Object)
+	 */
 	public Assoc setAssoc(To associated, Assoc assoc) {
 		if (associated == getReference()) {
-			// unlinkAssoc();
 			linkAssoc(assoc);
 			((AssociationBase<To, From>) getRelatedAssociation(associated))
 					.link(getOwner(), getAssociationClassObject());
-			return assocObject;
+			return accessorAC.get();
 		} else
 			return null;
 	}
 
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.OneAssociation#link(java.lang.Object, java.lang.Object)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.genesez.umlsupport.OneAssociation#link(java.lang.Object,
-	 *      java.lang.Object)
-	 */
 	protected void link(To associated, Object assoc) {
 		if (isSymmetric()) {
 			To to = getReference();
@@ -109,13 +101,11 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 	 * @return the currently linked association class object
 	 */
 	protected AssociationClass getAssociationClassObject() {
-		return assocObject;
+		return accessorAC.get();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.genesez.umlsupport.AssociationBase#unlink(java.lang.Object)
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.OneAssociation#unlink(java.lang.Object)
 	 */
 	@Override
 	protected void unlink(To associated) {
@@ -126,23 +116,21 @@ public class OneAssociationAC<From, To, Assoc extends AssociationClass> extends
 	/**
 	 * make a link in the association class to this association end
 	 * 
-	 * @param assoc
-	 *            the association class object
+	 * @param assoc	the association class object
 	 */
 	private void linkAssoc(Assoc assoc) {
 		if (assoc != null) {
 			unlinkAssoc();
-			assocObject = assoc;
+			accessorAC.set(assoc);
 			assoc.getAssociationClassLink().link(getOwner(), getOpposite());
 		}
 	}
 
 	/**
 	 * remove link in the association class to this association end
-	 * 
 	 */
 	private void unlinkAssoc() {
-		if (assocObject != null)
-			assocObject.getAssociationClassLink().clear(getOpposite());
+		if (accessorAC.get() != null)
+			accessorAC.get().getAssociationClassLink().clear(getOpposite());
 	}
 }

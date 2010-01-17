@@ -36,11 +36,10 @@
 «IF newAssociationHandling()-»
 	«IF hasAssociationRoles() -»
 		«EXPAND _EnumDefinition -»
-		«EXPAND _DeclarationWithInitialization -»
+		«EXPAND _ManagementObjectDeclaration -»
 	«ENDIF -»
-«ELSE-»
-	«EXPAND _AssociationDecl»
 «ENDIF»
+«EXPAND _AssociationDecl -»
 «ENDDEFINE»
 
 «REM»
@@ -49,6 +48,7 @@
 «DEFINE Accessors FOR MClass -»
 «IF newAssociationHandling()-»
 	«IF hasAssociationRoles() -»
+		«EXPAND _ManagementObjectInitialization -»
 		«EXPAND _GenericAccessor -»
 		«EXPAND _Accessors FOREACH property.typeSelect(MAssociationRole) -»
 	«ENDIF -»
@@ -75,6 +75,7 @@
 	generates the enum definition for the associations
 «ENDREM»
 «DEFINE _EnumDefinition FOR MClassifier -»
+	«EXPAND Comment::AssociationEnum -»
 	public enum Associations implements RelatedAssociationRole {
 		«EXPAND _EnumLiteralDefinition FOREACH property.typeSelect(MAssociationRole) SEPARATOR ", " -»
 	}
@@ -88,11 +89,18 @@
 «ENDDEFINE»
 
 «REM»
-	generates the declaration of the association attribute and the initialization
+	generates the declaration to store the association management objects
 «ENDREM»
-«DEFINE _DeclarationWithInitialization FOR MClassifier -»
-	«EXPAND Comment::Association -»
+«DEFINE _ManagementObjectDeclaration FOR MClassifier -»
+	«EXPAND Comment::AssociationManagement -»
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object,? extends Object>>();
+«ENDDEFINE»
+
+«REM»
+	generates initialization of the association management objects
+«ENDREM»
+«DEFINE _ManagementObjectInitialization FOR MClassifier -»
+	// initialization block for association management objects
 	{
 		«EXPAND _InitializationEntry FOREACH property.typeSelect(MAssociationRole) -»
 	}
@@ -113,6 +121,22 @@
 	«IF isSingleValuedType() -»
 	new OneAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -»,
 				«association.associationClass.asTypeName() -»> (this
+		, new Accessor<«type.asTypeName() -»>() {
+			public «type.asTypeName() -» get() {
+				return «asAttribute()»;
+			}
+			public void set(«type.asTypeName() -» referenced) {
+				«asAttribute()» = referenced;
+			}
+		}
+		, new Accessor<«association.associationClass.asTypeName() -»>() {
+			public «association.associationClass.asTypeName() -» get() {
+				return «association.associationClass.asAttribute()»;
+			}
+			public void set(«association.associationClass.asTypeName() -» referenced) {
+				«association.associationClass.asAttribute()» = referenced;
+			}
+		}
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
 		«ENDIF -»
@@ -120,8 +144,7 @@
 	«ELSE -»
 	new ManyAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -», 
 				«association.associationClass.asTypeName() -»>
-				(this, new LinkedHashMap<«type.asTypeName() -»,
-					«association.associationClass.asTypeName() -»>()
+				(this, «asAttribute() -»
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
 		«ENDIF -»
@@ -130,13 +153,21 @@
 «ELSE -»«REM» association without association class «ENDREM»
 	«IF isSingleValuedType() -»
 	new OneAssociation<«classifier.asTypeName() -», «type.asTypeName() -»>(this
+		, new Accessor<«type.asTypeName() -»>() {
+			public «type.asTypeName() -» get() {
+				return «asAttribute()»;
+			}
+			public void set(«type.asTypeName() -» referenced) {
+				«asAttribute()» = referenced;
+			}
+		}
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
 		«ENDIF -»
 		)
 	«ELSE -»
 	new ManyAssociation<«classifier.asTypeName() -»,
-				«type.asTypeName() -»>(this, new LinkedHashSet<«type.asTypeName() -»>()
+				«type.asTypeName() -»>(this, «asAttribute() -»
 		«IF hasOpposite() -»
 		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
 		«ENDIF -»
@@ -189,31 +220,60 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 
 «DEFINE _Annotation FOR MAssociationRole-»
 «ENDDEFINE»
+
+
+«REM»
+	generate attributes for a class
+«ENDREM»
+«DEFINE _AssociationDecl FOR MClass -»
+	«REM»«EXPAND _AssocClassReferences FOR ownedAssociation-»«ENDREM»
+	«EXPAND _AssociationDecl FOREACH property.typeSelect(MAssociationRole) -»
+«ENDDEFINE»
+
+«REM»
+	generate attributes for a classifier
+«ENDREM»
+«DEFINE _AssociationDecl FOR MClassifier -»
+«ENDDEFINE»
+
+«REM»
+	generate an association attribute
+«ENDREM»
+«DEFINE _AssociationDecl FOR MAssociationRole -»
+	«EXPAND Comment::Association -»
+	«IF hasAssociationClass() -»
+		«IF isSingleValuedType() -»
+			«EXPAND _Modifier» «type.asTypeName()-» «asAttribute() -»;
+			«EXPAND Comment::AssociationClass -»
+			«EXPAND _Modifier» «association.associationClass.asTypeName()-» «association.associationClass.asAttribute() -»;
+		«ELSE -»
+			«EXPAND _Modifier» LinkedHashMap<«type.asTypeName() -», «association.associationClass.asTypeName() -»> «asAttribute()» = new LinkedHashMap<«type.asTypeName() -», «association.associationClass.asTypeName() -»>();
+		«ENDIF -»
+	«ELSE-»
+		«IF fieldAccess() -»
+			«EXPAND _Annotation -»
+		«ENDIF-»
+		«IF multiplicity == 1 -»
+			«EXPAND _Modifier» «type.asTypeName()-» «asAttribute() -»;
+		«ELSE-»
+			«EXPAND _Modifier» «mapType()»<«type.asTypeName()-»> «asAttribute()» = new «mapType("Implementation")»<«type.asTypeName() -»>();
+		«ENDIF-»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	 generate modifiers for mclassifier
+«ENDREM»
+«DEFINE _Modifier FOR MAssociationRole-»
+	«visibility-»
+«ENDDEFINE»
+
+
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	functions from old association handling
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
-
-
-«REM»
-	generate a declaration for an attribute
-«ENDREM»
-«DEFINE _AssociationDecl FOR MAssociationRole-»
-	«EXPAND _CommentAssociation-»
-	«IF isPlainAssociation()-»
-		«IF fieldAccess()-»
-			«EXPAND _Annotation-»
-		«ENDIF-»
-		«IF multiplicity == 1-»
-			«EXPAND _Modifier» «type.asTypeName()-» «asAttribute()-»;
-		«ELSE-»
-			«EXPAND _Modifier» «mapType()»<«type.asTypeName()-»> «asAttribute()» = new «mapType("Implementation")»<«type.asTypeName()-»>();
-		«ENDIF-»
-	«ELSE-»
-		«REM»«EXPAND _Modifier» «mapType()»<«type.asTypeName()-»> «asAttribute()» = new «mapType("Implementation")»<«type.asTypeName()-»>();«ENDREM»
-	«ENDIF»
-«ENDDEFINE»
 
 «REM»
 «DEFINE _AssocClassReferences FOR MAssociation-»
@@ -223,34 +283,6 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 	«ENDFOREACH-»
 «ENDDEFINE»
 «ENDREM»
-
-«REM»
-	generate attributes for a class
-«ENDREM»
-«DEFINE _AssociationDecl FOR MClass-»
-	«REM»«EXPAND _AssocClassReferences FOR ownedAssociation-»«ENDREM»
-	«EXPAND _AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
-«ENDDEFINE»
-
-«REM»
-	generate attributes for a classifier
-«ENDREM»
-«DEFINE _AssociationDecl FOR MClassifier-»
-	«EXPAND _AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
-«ENDDEFINE»
-
-«DEFINE _CommentAssociation FOR MAssociationRole-»
-	/**
-	 * variable for association to «this.type.asTypeName()»
-	 */
-«ENDDEFINE»
-
-«REM»
-	 generate modifiers for mclassifier
-«ENDREM»
-«DEFINE _Modifier FOR MAssociationRole-»
-	«visibility-»
-«ENDDEFINE»
 
 
 «DEFINE _AccessorDecl FOR MInterface-»

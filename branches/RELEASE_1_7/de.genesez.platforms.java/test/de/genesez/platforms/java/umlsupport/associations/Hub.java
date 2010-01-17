@@ -13,11 +13,27 @@ public class Hub implements AssociationRole {
 	public enum Associations implements RelatedAssociationRole {
 		UNI_TO_ONE, BIDI_ONE_TO_ONE, UNI_TO_MANY, BIDI_ONE_TO_MANY, BIDI_MANY_TO_MANY, UNI_TO_RELATED_WO_ASSOCIATIONS
 	}
-	
+	private Related uniToOneValue;
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object,? extends Object>>();
 	{
-		association.put(Associations.UNI_TO_ONE, new OneAssociation<Hub, Related>(this));
-		association.put(Associations.BIDI_ONE_TO_ONE, new OneAssociation<Hub, Related>(this, Related.Associations.BIDI_ONE_TO_ONE));
+		association.put(Associations.UNI_TO_ONE, new OneAssociation<Hub, Related>(this, new Accessor<Related>() {
+			private Related ref;
+			public Related get() {
+				return uniToOneValue;
+			}
+			public void set(Related referenced) {
+				uniToOneValue = referenced;
+			}
+		}));
+		association.put(Associations.BIDI_ONE_TO_ONE, new OneAssociation<Hub, Related>(this, new Accessor<Related>() {
+			private Related ref;
+			public Related get() {
+				return ref;
+			}
+			public void set(Related referenced) {
+				ref = referenced;
+			}
+		}, Related.Associations.BIDI_ONE_TO_ONE));
 		association.put(Associations.UNI_TO_MANY, new ManyAssociation<Hub, Related>(
 				this, new HashSet<Related>()));
 		association.put(Associations.BIDI_ONE_TO_MANY, new ManyAssociation<Hub, Related>(
@@ -25,7 +41,15 @@ public class Hub implements AssociationRole {
 		association.put(Associations.BIDI_MANY_TO_MANY, new ManyAssociation<Hub, Related>(
 			this, new HashSet<Related>(), Related.Associations.BIDI_MANY_TO_MANY));
 		// test wrong declaration of an unidirectional association as a bidirectional, given a wrong inverse related association role
-		association.put(Associations.UNI_TO_RELATED_WO_ASSOCIATIONS, new OneAssociation<Hub, RelatedWithoutAssociation>(this, Associations.UNI_TO_RELATED_WO_ASSOCIATIONS));
+		association.put(Associations.UNI_TO_RELATED_WO_ASSOCIATIONS, new OneAssociation<Hub, RelatedWithoutAssociation>(this, new Accessor<RelatedWithoutAssociation>() {
+			private RelatedWithoutAssociation ref;
+			public RelatedWithoutAssociation get() {
+				return ref;
+			}
+			public void set(RelatedWithoutAssociation referenced) {
+				ref = referenced;
+			}
+		}, Associations.UNI_TO_RELATED_WO_ASSOCIATIONS));
 	}
 	
 	/**

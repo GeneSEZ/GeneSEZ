@@ -13,7 +13,23 @@ public class RightMany implements AssociationRole {
 	private Map<Associations, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<Associations, Association<? extends AssociationRole, ? extends AssociationRole>>();
 	{
 		association.put(Associations.LEFT_SYM, new OneAssociationAC<RightMany, LeftMany, Assoc>(this,
-				LeftMany.Associations.RIGHT_SYM));
+				new Accessor<LeftMany>() {
+					private LeftMany ref;
+					public LeftMany get() {
+						return ref;
+					}
+					public void set(LeftMany referenced) {
+						ref = referenced;
+					}
+				}, new Accessor<Assoc>() {
+					private Assoc associationClassObject;
+					public Assoc get() {
+						return associationClassObject;
+					}
+					public void set(Assoc referenced) {
+						associationClassObject = referenced;
+					}
+				}, LeftMany.Associations.RIGHT_SYM));
 		association.put(Associations.LEFT_SYM_MANY, new ManyAssociationAC<RightMany, LeftMany, Assoc>(this,
 				new HashMap<LeftMany, Assoc>(), LeftMany.Associations.RIGHT_MANY));
 	}
