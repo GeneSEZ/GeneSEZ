@@ -1,8 +1,8 @@
 package de.genesez.example.java.car.base;
 
-import java.awt.Color;
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import java.awt.Color;
 
 /* PROTECTED REGION ID(java.type.import._11_5_6340215_1179139182234_646597_164) ENABLED START */
 // TODO: put your further include + require statements here
@@ -15,22 +15,16 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
 	// -- generated attribute, constant + association declarations ----------
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private String make;
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private Color color;
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private VehicleStatus state = VehicleStatus.STOP;
 	
 	// -- generated method declarations -------------------------------------
 	/**
-	 * @generated	method stub for further implementation
+	 * method stub for further implementation
 	 * @param	distance	
 	 * @return	
 	 * @throws	OutOfFuelException
@@ -40,7 +34,7 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * @generated	method stub for further implementation
+	 * method stub for further implementation
 	 * @param	color	
 	 * @return	
 	 */
@@ -52,26 +46,8 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	}
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>make</b></em>'
-	 */
-	public String getMake() {
-		return make;
-	}
 	
-	/**
-	 * @generated	getter for the attribute '<em><b>color</b></em>'
-	 */
-	public Color getColor() {
-		return color;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>state</b></em>'
-	 */
-	public VehicleStatus getState() {
-		return state;
-	}
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1179139182234_646597_164) ENABLED START */

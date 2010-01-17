@@ -15,15 +15,12 @@ public enum VehicleStatus {
 	// -- enumeration literals ----------------------------------------------
 	
 	/**
-	 * @generated	enumeration literal definition
 	 */
 	FORWARD,
 	/**
-	 * @generated	enumeration literal definition
 	 */
 	STOP,
 	/**
-	 * @generated	enumeration literal definition
 	 */
 	BACKWARD;
 	

@@ -12,13 +12,15 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 public interface IDriveable {
 	
 	/**
-	 * @generated	method stub for further implementation
+	 * method stub for further implementation
 	 * @param	distance	
 	 * @return	
 	 * @throws	FlatTireException
 	 * @throws	OutOfFuelException
 	 */
 	public boolean drive(Integer distance) throws FlatTireException, OutOfFuelException;
+	
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._14_0_b6f02e1_1214477826296_879096_488) ENABLED START */

@@ -14,32 +14,29 @@ import de.genesez.example.java.car.base.parts.Screw;
 public class Wheel implements IChangeable, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
+	/** defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		MYCAR, SCREW
 	}
 	
-	/** holds the references to the association objects */
+	/** stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
-	{
-		association.put(Associations.MYCAR, new OneAssociation<Wheel, Car>(this, Car.Associations.WHEELS));
-		association.put(Associations.SCREW, new ManyAssociation<Wheel, Screw>(this, new LinkedHashSet<Screw>()));
-	}
-	/**
-	 * @generated	attribute definition
-	 */
+	
+	/** stores the associated object of association MYCAR to Car */
+	private Car mycar;
+	
+	/** stores associated objects of association SCREW to Screw */
+	private java.util.Set<Screw> screw = new java.util.HashSet<Screw>();
+	
 	private float diameter;
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private java.util.Set<String> specification = new java.util.HashSet<String>();
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private Integer durability = 100000;
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * @generated	method stub for further implementation
+	 * method stub for further implementation
 	 * @param	newWheel	
 	 * @return	
 	 */
@@ -51,7 +48,7 @@ public class Wheel implements IChangeable, AssociationRole {
 	}
 	
 	/**
-	 * @generated	method stub for further implementation
+	 * method stub for further implementation
 	 * @throws	FlatTireException
 	 */
 	public void roll() throws FlatTireException {
@@ -62,26 +59,22 @@ public class Wheel implements IChangeable, AssociationRole {
 	}
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>diameter</b></em>'
-	 */
-	public float getDiameter() {
-		return diameter;
-	}
-	
-	public java.util.Set<String> getSpecification() {
-		return specification;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>durability</b></em>'
-	 */
-	public Integer getDurability() {
-		return durability;
+	// initialization block for association management objects
+	{
+		association.put(Associations.MYCAR, new OneAssociation<Wheel, Car>(this, new Accessor<Car>() {
+			public Car get() {
+				return mycar;
+			}
+			
+			public void set(Car referenced) {
+				mycar = referenced;
+			}
+		}, Car.Associations.WHEELS));
+		association.put(Associations.SCREW, new ManyAssociation<Wheel, Screw>(this, screw));
 	}
 	
 	/**
-	 * generic accessor for association objects used by the association handling framework
+	 * provides generic access to association objects, used by the association handling library
 	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
@@ -91,7 +84,7 @@ public class Wheel implements IChangeable, AssociationRole {
 	}
 	
 	/** 
-	 * @generated	accessor of the association '<em><b>mycar</b></em>' to {@link Car}
+	 * provides access to the association '<em><b>mycar</b></em>' to {@link Car}
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Wheel, Car> mycar() {
@@ -99,12 +92,14 @@ public class Wheel implements IChangeable, AssociationRole {
 	}
 	
 	/** 
-	 * @generated	accessor of the association '<em><b>screw</b></em>' to {@link Screw}
+	 * provides access to the association '<em><b>screw</b></em>' to {@link Screw}
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Wheel, Screw> screw() {
 		return (Association<Wheel, Screw>) association.get(Associations.SCREW);
 	}
+	
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945943625_542159_161) ENABLED START */

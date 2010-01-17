@@ -12,17 +12,16 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 public interface IChangeable {
 	
 	// -- generated attribute, constant + association declarations ----------
-	/**
-	 * @generated	attribute definition
-	 */
 	public static final Integer DEFAULT_PERIOD = 66;
 	
 	/**
-	 * @generated	method stub for further implementation
+	 * method stub for further implementation
 	 * @param	newInstance	
 	 * @return	
 	 */
 	public boolean change(IChangeable newInstance);
+	
+	// -- generated code of other cartridges --------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._11_5_6340215_1179139231828_754744_209) ENABLED START */
