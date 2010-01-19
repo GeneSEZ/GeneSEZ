@@ -11,12 +11,60 @@ public class LeftOne implements AssociationRole {
 	
 	private Map<Associations, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<Associations, Association<? extends AssociationRole, ? extends AssociationRole>>();
 	{
-		association.put(Associations.RIGHT, new OneAssociationAC<LeftOne, RightOne, Assoc>(this));
+		association.put(Associations.RIGHT, new OneAssociationAC<LeftOne, RightOne, Assoc>(this, new Accessor<RightOne>() {
+			private RightOne ref;
+			public RightOne get() {
+				return ref;
+			}
+			public void set(RightOne referenced) {
+				ref = referenced;
+			}
+		}, new Accessor<Assoc>() {
+			private Assoc associationClassObject;
+			public Assoc get() {
+				return associationClassObject;
+			}
+			public void set(Assoc referenced) {
+				associationClassObject = referenced;
+			}
+		}));
 		association.put(Associations.RIGHT_SYM, new OneAssociationAC<LeftOne, RightOne, Assoc>(this,
-				RightOne.Associations.LEFT_SYM));
+				new Accessor<RightOne>() {
+					private RightOne ref;
+					public RightOne get() {
+						return ref;
+					}
+					public void set(RightOne referenced) {
+						ref = referenced;
+					}
+				}, new Accessor<Assoc>() {
+					private Assoc associationClassObject;
+					public Assoc get() {
+						return associationClassObject;
+					}
+					public void set(Assoc referenced) {
+						associationClassObject = referenced;
+					}
+				}, RightOne.Associations.LEFT_SYM));
 		// using wrong enum literals to specify association should cause runtime exception
 		association.put(Associations.BAD_NAME, new OneAssociationAC<LeftOne, RightOne, Assoc>(this,
-				/*RightOne.*/ Associations.BAD_NAME));
+				new Accessor<RightOne>() {
+					private RightOne ref;
+					public RightOne get() {
+						return ref;
+					}
+					public void set(RightOne referenced) {
+						ref = referenced;
+					}
+				}, new Accessor<Assoc>() {
+					private Assoc associationClassObject;
+					public Assoc get() {
+						return associationClassObject;
+					}
+					public void set(Assoc referenced) {
+						associationClassObject = referenced;
+					}
+				}, /*RightOne.*/ Associations.BAD_NAME));
 	}
 	
 	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(

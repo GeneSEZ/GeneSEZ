@@ -239,6 +239,49 @@ String asGetter(MAttribute this) : "get" + name.toFirstUpper();
  */
 String asSetter(MAttribute this) : "set" + name.toFirstUpper();
 
+/**
+ * checks if operation is a getter method
+ * @context	the operation to check
+ * @return	true, if method follows the naming convention of a getter method
+ */
+boolean isGetter(MOperation this) : 
+	// do not use attributeName() in this method cause it creates call circle
+	(this.returnType.name() == "Boolean" || this.returnType.name() == "boolean") &&
+	(this.name == "is"+this.name.subString(2,this.name.length) || this.name == "has"+this.name.subString(3,this.name.length))
+		? true
+		: (
+			this.name == "get"+this.name.toFirstUpper()
+				? true
+				: false
+		);
+		
+/**
+ * checks if operation is a setter method
+ * @context	the operation to check
+ * @return	true, if method follows the naming convention of a setter method
+ */
+boolean isSetter(MOperation this) : 
+	this.name == "set"+this.name.toFirstUpper()
+		? true
+		: false;
+
+/**
+ * extracts the attribute name of a getter or setter method
+ * @context	the operation
+ * @return	name of the attribute
+ */
+String attributeName(MOperation this) : 
+	this.isSetter()
+		? this.name.subString(3,this.name.length)
+		: "" ->
+	this.isGetter()
+		? (
+			(this.returnType.name() == "Boolean" || this.returnType.name() == "boolean") &&
+			this.name.subString(0,1) == "is"	 
+				? this.name.subString(2,this.name.length)
+				: this.name.subString(3,this.name.length) 
+		)
+		: "";
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -254,12 +297,71 @@ String asSetter(MAttribute this) : "set" + name.toFirstUpper();
 String asAttribute(MAssociationRole this) : name.toFirstLower();
 
 /**
+ * formats a class as an attribute
+ * @context the association class of an association role to format
+ * @return	the formatted name of the association class
+ */
+String asAttribute(MClass this) : name.toFirstLower();
+
+/**
  * formats the accessor method of an association role
  * @context	the accessor method of an association role to format
  * @return	the formatted name of the accessor method
  */
 String asAccessor(MAssociationRole this) : name.toFirstLower();
 
+/*
+	Naming conventions for old association handling
+*/
+
+/**
+ * formats a name as a getter method according naming convention
+ * @param	s	name of an attribute/method
+ * @return	name as getter method
+ */
+String asGetter(MAssociationRole this) :
+	"get" + name.toFirstUpper();
+
+/**
+ * formats a name as a setter method according naming convention
+ * @param	s	name of an attribute/method
+ * @return	name as setter method
+ */
+String asSetter(MAssociationRole this) :
+	"set" + name.toFirstUpper();
+	
+/**
+ * formats a name of a method used to insert something in a collection according naming convention
+ * @param	s	name of an attribute
+ * @return	name of the insert-in method
+ */
+String asInsertIn(MAssociationRole this) :
+	"insertIn" + name.toFirstUpper();
+
+/**
+ * formats a name of a method used to add something to a collection according naming convention
+ * @param	s	name of an attribute
+ * @return	name of the add-to method
+ 
+String asAddTo(MAssociationRole this) :
+	"addTo" + name.toFirstUpper();
+*/
+
+/**
+ * formats a name of a method used to remove something from a collection according naming convention
+ * @param	s	name of an attribute
+ * @return	name of the remove-from method
+ */
+String asRemoveFrom(MAssociationRole this) :
+	"removeFrom" + name.toFirstUpper();
+
+/**
+ * formats a name of a method used to remove something from a collection according naming convention
+ * @param	s	name of an attribute
+ * @return	name of the remove-from method
+ */
+String asVariable(MAssociationRole this) :
+	name.toFirstLower();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
