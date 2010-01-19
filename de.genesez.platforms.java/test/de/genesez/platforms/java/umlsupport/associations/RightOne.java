@@ -12,9 +12,41 @@ public class RightOne implements AssociationRole {
 	private Map<Associations, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<Associations, Association<? extends AssociationRole, ? extends AssociationRole>>();
 	{
 		association.put(Associations.LEFT_SYM, new OneAssociationAC<RightOne, LeftOne, Assoc>(this,
-				LeftOne.Associations.RIGHT_SYM));
+				new Accessor<LeftOne>() {
+					private LeftOne ref;
+					public LeftOne get() {
+						return ref;
+					}
+					public void set(LeftOne referenced) {
+						ref = referenced;
+					}
+				}, new Accessor<Assoc>() {
+					private Assoc associationClassObject;
+					public Assoc get() {
+						return associationClassObject;
+					}
+					public void set(Assoc referenced) {
+						associationClassObject = referenced;
+					}
+				}, LeftOne.Associations.RIGHT_SYM));
 		association.put(Associations.BAD_NAME, new OneAssociationAC<RightOne, LeftOne, Assoc>(this,
-				LeftOne.Associations.BAD_NAME));
+				new Accessor<LeftOne>() {
+					private LeftOne ref;
+					public LeftOne get() {
+						return ref;
+					}
+					public void set(LeftOne referenced) {
+						ref = referenced;
+					}
+				}, new Accessor<Assoc>() {
+					private Assoc associationClassObject;
+					public Assoc get() {
+						return associationClassObject;
+					}
+					public void set(Assoc referenced) {
+						associationClassObject = referenced;
+					}
+				}, LeftOne.Associations.BAD_NAME));
 	}
 	
 	public Association<? extends AssociationRole, ? extends AssociationRole> getAssociation(

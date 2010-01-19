@@ -13,9 +13,25 @@ public class Related implements AssociationRole {
 	private Map<RelatedAssociationRole, Association<? extends AssociationRole, ? extends AssociationRole>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends AssociationRole,? extends AssociationRole>>();
 	{
 		association.put(Associations.BIDI_ONE_TO_ONE, new OneAssociation<Related, Hub>(
-				this, Hub.Associations.BIDI_ONE_TO_ONE));
+				this, new Accessor<Hub>() {
+					private Hub ref;
+					public Hub get() {
+						return ref;
+					}
+					public void set(Hub referenced) {
+						ref = referenced;
+					}
+				}, Hub.Associations.BIDI_ONE_TO_ONE));
 		association.put(Associations.BIDI_ONE_TO_MANY, new OneAssociation<Related, Hub>(
-				this, Hub.Associations.BIDI_ONE_TO_MANY));
+				this, new Accessor<Hub>() {
+					private Hub ref;
+					public Hub get() {
+						return ref;
+					}
+					public void set(Hub referenced) {
+						ref = referenced;
+					}
+				}, Hub.Associations.BIDI_ONE_TO_MANY));
 		association.put(Associations.BIDI_MANY_TO_MANY, new ManyAssociation<Related, Hub>(
 				this, new HashSet<Hub>(), Hub.Associations.BIDI_MANY_TO_MANY));
 	}

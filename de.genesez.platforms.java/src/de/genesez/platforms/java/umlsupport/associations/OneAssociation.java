@@ -10,40 +10,39 @@ import java.util.NoSuchElementException;
 /**
  * implementation of a binary to-one association 
  * 
- * @author georg beier
+ * @param <From>	one side of association
+ * @param <To>		other side of association
  * 
- * @param <From>
- *            one side of association
- * @param <To>
- *            other side of association
+ * @author georg beier
+ * @author toh (last modified)
  */
 public class OneAssociation<From, To> extends AssociationBase<From, To> {
 
-	/** reference to the associated object */
-	private To ref;
+	/** accessor object to the associated object */
+	private Accessor<To> accessor;
 
 	/**
-	 * @param owner
-	 *            object that owns this association end
+	 * @param owner		object that owns this association end
+	 * @param accessor	object providing access to the associated object
 	 */
-	public OneAssociation(From owner) {
+	public OneAssociation(From owner, Accessor<To> accessor) {
 		super(owner);
+		this.accessor = accessor;
 	}
 
 	/**
-	 * @param owner
-	 *            object that owns this association end
-	 * @param refClass
-	 *            type of the referenced objects
-	 * @param assocGetter
-	 *            name of the getter method in the referenced type that gives
-	 *            access to the other association end
+	 * @param owner		object that owns this association end
+	 * @param accessor	object providing access to the associated object
+	 * @param opposite	enumeration literal identifying the opposite of this association
 	 */
-	public OneAssociation(From owner, RelatedAssociationRole opposite) {
+	public OneAssociation(From owner, Accessor<To> accessor, RelatedAssociationRole opposite) {
 		super(owner, opposite);
+		this.accessor = accessor;
 	}
 
-//	@Override
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.Association#insert(java.lang.Object)
+	 */
 	public To insert(To associated) {
 		if (getReference() != associated) {
 			if (isSymmetric()) {
@@ -61,12 +60,9 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 		return associated;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.genesez.umlsupport.Association#remove(java.lang.Object)
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.Association#remove(java.lang.Object)
 	 */
-//	@Override
 	public To remove(To associated) {
 		if (getReference() == associated) {
 			if (isSymmetric()) {
@@ -82,18 +78,25 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 		return null;
 	}
 
-//	@Override
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.Association#get()
+	 */
 	public To get() {
 		return getReference();
 	}
 	
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.Association#getAll()
+	 */
 	public Collection<To> getAll() {
 		List<To> l = new ArrayList<To>();
-		l.add(ref);
+		l.add(getReference());
 		return Collections.unmodifiableCollection(l);
 	}
 
-//	@Override
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.Association#iterator()
+	 */
 	public Iterator<To> iterator() {
 		return new OneIterator();
 	}
@@ -104,7 +107,7 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * @return the referenced object
 	 */
 	protected To getReference() {
-		return ref;
+		return accessor.get();
 	}
 
 	/**
@@ -113,15 +116,12 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * @return the new referenced object
 	 */
 	protected To setReference(To newAssociated) {
-		ref = newAssociated;
-		return ref;
+		accessor.set(newAssociated);
+		return accessor.get();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.genesez.umlsupport.AssociationBase#link(java.lang.Object,
-	 *      java.lang.Object)
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationBase#link(java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	protected void link(To associated, Object assoc) {
@@ -134,10 +134,8 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 		setReference(associated);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.genesez.umlsupport.AssociationBase#unlink(java.lang.Object)
+	/**
+	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationBase#unlink(java.lang.Object)
 	 */
 	@Override
 	protected void unlink(To associated) {
@@ -159,18 +157,21 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 	 * object
 	 * 
 	 * @author georg beier
-	 * 
 	 */
 	protected class OneIterator implements Iterator<To> {
 
 		private boolean unused = true;
 
-//		@Override
+		/**
+		 * @see java.util.Iterator#hasNext()
+		 */
 		public boolean hasNext() {
 			return unused && getReference() != null;
 		}
 
-//		@Override
+		/**
+		 * @see java.util.Iterator#next()
+		 */
 		public To next() {
 			if (!unused)
 				throw new NoSuchElementException();
@@ -178,12 +179,12 @@ public class OneAssociation<From, To> extends AssociationBase<From, To> {
 			return getReference();
 		}
 
-//		@Override
+		/**
+		 * @see java.util.Iterator#remove()
+		 */
 		public void remove() {
 			throw new UnsupportedOperationException(
 					"remove not supported on OneIterator");
 		}
-
 	}
-
 }
