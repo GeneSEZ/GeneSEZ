@@ -1,7 +1,7 @@
 package de.genesez.platforms.common.m2t;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -120,7 +120,7 @@ public class ImportFormatter {
 	 * @return the detected import lines as set of strings
 	 */
 	private Set<String> findImports(String regex) {
-		this.importStatements = new HashSet<String>();
+		this.importStatements = new LinkedHashSet<String>();
 		
 		this.firstImportStatement = -1;
 		this.lastImportStatement = -1;
