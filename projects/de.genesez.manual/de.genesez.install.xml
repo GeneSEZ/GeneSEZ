@@ -22,6 +22,260 @@
   Servers</ulink> bieten einen schnellen Einstieg, da diese bereits 
   alle notwendigen Plug-Ins enthalten.</para>
 
+  <section>
+
+    <title>Konfiguration des Workspace</title>
+
+    <para>Für GeneSEZ Projekte sollte der Workspace UTF-8 als Standard 
+    Encoding nutzen. Dies kann über <literal>Window » 
+    Preferences</literal>, <literal>General » Workspace</literal> in 
+    der Gruppe <literal>Text file encoding</literal> eingestellt 
+    werden.</para>
+
+    <para>Weiterhin müssen <emphasis>openArchitectureWare</emphasis> 
+    bzw. <emphasis>XTend/XPand</emphasis> mit den zu verwendenten 
+    Metamodellen konfiguriert werden. Diese sollten über  
+    <literal>Window » Preferences</literal>, dann 
+    <literal>openArchitectureWare</literal> bzw. 
+    <literal>XTend/XPand</literal> in der folgenden Reihenfolge 
+    eingestellt sein:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>EMF Metamodels (aktiviert)</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>UML2 Profiles (aktiviert)</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>JavaBeans Metamodel (aktiviert)</para>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Alle anderen werden nicht benötigt und müssen somit nicht 
+    aktiviert werden.</para>
+
+  </section>
+
+  <section>
+
+    <title>Art der Installation</title>
+
+    <para>Die Installation von GeneSEZ kann einiges an zeitlichen 
+    Aufwand verursachen, daher sollte die Intention vorher festgelegt 
+    werden:</para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>Änderungen am GeneSEZ Metamodell</para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>Änderungen an Templates und Skripten zur 
+        Quellcodegenerierung, die nicht sinnvoll mit 
+        <ulink url="http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.m2t/org.eclipse.xpand/doc/org.eclipse.xpand.doc/html/xpand_reference.html?root=Modeling_Project&amp;view=co">
+        XPand AOP</ulink> durchgeführt werden können</para>
+
+      </listitem>
+
+    </itemizedlist>
+
+    <para>Treffen die beiden Punkte nicht zu, genügt die 
+    <link linkend="de.genesez.install.plugin">Installation des GeneSEZ 
+    Plug-Ins</link>. Trifft nur der letzte Punkt zu, kann durch 
+    <link linkend="de.genesez.install.platform.source">Nutzung des 
+    Metamodells aus dem GeneSEZ Plug-In</link> einiges an Aufwand 
+    eingespart werden. Treffen beide Punkte zu sollte GeneSEZ komplett 
+    in dem Workspace liegen.</para>
+
+    <section id="de.genesez.install.plugin">
+
+      <title>Installation des GeneSEZ Plug-Ins</title>
+
+      <para>Für eine Installation von GeneSEZ in ein vorhandenes 
+      Eclipse mit dem Eclipse Update Manager die notwendigen Features 
+      der Eclipse Plug-Ins unter 
+      <xref linkend="de.genesez.install.dependencies"/> sowie das 
+      <link linkend="de.genesez.install.genesez">GeneSEZ Eclipse 
+      Plug-In</link> installieren.</para>
+
+      <para>Bei GeneSEZ Eclipse Distributionen des 
+      <ulink url="http://download.genesez.de/">GeneSEZ Build 
+      Servers</ulink> ab Eclipse Version 3.4 wird das <literal>
+      dropins</literal> Verzeichnis genutzt. Das 
+      <link linkend="de.genesez.install.genesez">GeneSEZ Plug-In</link> 
+      befindet sich im Verzeichnis <literal>dropins/genesez</literal> 
+      und die für GeneSEZ 
+      <link linkend="de.genesez.install.dependencies">notwendigen 
+      Plug-Ins</link> im Ordner <literal>
+      dropins/prerequisites</literal>. Soll GeneSEZ in ein vorhandenes 
+      Eclipse ab Version 3.4 installiert werden, können einfach diese 
+      beiden Verzeichnisse in das <literal>dropins</literal> 
+      Verzeichnis der jeweiligen Eclipse kopiert werden. (Die Namen der 
+      Verzeichnisse <literal>genesez</literal> und <literal>
+      prerequisites</literal> können natürlich beliebig umbenannt 
+      werden!).</para>
+
+    </section>
+
+    <section id="de.genesez.install.platform.source">
+
+      <title>Plattform-Projekte im Workspace</title>
+
+      <para>Voraussetzung hierfür ist die 
+      <link linkend="de.genesez.install.plugin">Installation des 
+      GeneSEZ Plug-Ins</link>. Zusätzlich werden die gewünschten 
+      <link linkend="de.genesez.plugin.projects">
+      Plattform-Projekte</link> (alle Plug-In Projekte mit <literal>
+      de.genesez.platforms</literal> im Namen) aus dem 
+      <link linkend="de.genesez.install.repository">GeneSEZ 
+      Repository</link> ausgecheckt. Ist das Ziel Java Quellcode, 
+      betrifft es das Projekt <literal>
+      de.genesez.platforms.java</literal> und optional das Projekt 
+      <literal>de.genesez.platforms.common</literal>.</para>
+
+      <para>Wichtig ist hierbei die Wahl einer passenden Version der 
+      Plattform-Projekte zum GeneSEZ Plug-In. Daher sollten 
+      <emphasis>Tag</emphasis> oder 
+      <emphasis>Branch</emphasis>-Versionen genutzt werden.</para>
+
+    </section>
+
+    <section id="de.genesez.install.devel">
+
+      <title>Metamodell und Plattform-Projekte im Workspace</title>
+
+      <para>Bei dieser Art der Installation ist GeneSEZ komplett als 
+      Quellcode im Workspace vorhanden. Dazu müssen die folgenden 
+      Schritte ausgeführt werden.</para>
+
+      <orderedlist>
+
+        <listitem>
+
+          <para>Checkout der benötigten 
+          <link linkend="de.genesez.plugin.projects">GeneSEZ Eclipse 
+          Plug-In Projekte</link> aus dem 
+          <link linkend="de.genesez.install.repository">GeneSEZ 
+          Repository</link> (<emphasis>Tag</emphasis> oder 
+          <emphasis>Branch</emphasis>-Versionen sollten bevorzugt 
+          werden)</para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>Konfiguration von Verzeichnispfaden, siehe 
+          <xref linkend="de.genesez.install.config"/></para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>Erstellung der GeneSEZ Metamodell-Implementierung, 
+          siehe <xref linkend="de.genesez.install.mmimpl"/></para>
+
+        </listitem>
+
+      </orderedlist>
+
+      <section id="de.genesez.install.config">
+
+        <title>Konfiguration der <filename>
+        environment.properties</filename></title>
+
+        <para>Im Projekt <emphasis>de.genesez.build</emphasis> im 
+        Ordner <filename class="directory">build</filename> muss die 
+        Datei <filename>environment.properties</filename> angelegt 
+        werden. Hierzu kann die Datei <filename>
+        environment.properties.template</filename> als Vorlage genutzt 
+        werden, welche sich im selben Verzeichnis befindet. Die 
+        folgenden Eigenschaften sind obligatorisch:</para>
+
+        <variablelist>
+
+          <varlistentry>
+
+            <term><emphasis role="bold">ECLIPSE_HOME</emphasis></term>
+
+            <listitem>
+
+              <para>spezifiziert das eclipse <emphasis>home 
+              directory</emphasis>, d.h. dort wo 
+              <command>eclipse.exe</command> bzw. 
+              <command>eclipse</command> als ausführbare Datei 
+              liegt</para>
+
+            </listitem>
+
+          </varlistentry>
+
+          <varlistentry>
+
+            <term><emphasis role="bold">MAGICDRAW_DIR</emphasis></term>
+
+            <listitem>
+
+              <para>spezifiziert das MagicDraw <emphasis>home 
+              directory</emphasis>, d.h. das Verzeichnis wo MagicDraw 
+              installiert oder entpackt wurde</para>
+
+            </listitem>
+
+          </varlistentry>
+
+        </variablelist>
+
+        <para>Die anderen Eigenschaften können ignoriert werden und 
+        nicht nicht notwendig, um das Metamodell zu erstellen.</para>
+
+      </section>
+
+      <section id="de.genesez.install.mmimpl">
+
+        <title>Erstellung der Metamodell-Implementierung</title>
+
+        <para>Die Generierung der Implementierung des 
+        GeneSEZ-Metamodells erfolgt mit Hilfe von EMF. Dazu muss das 
+        Build-Skript <filename>build.xml</filename> im 
+        <filename class="directory">build</filename>-Ordner des 
+        <emphasis>Metamodell</emphasis>-Projektes <literal>
+        de.genesez.metamodel</literal> ausgeführt werden. Zum Ausführen 
+        den Menüpunkt <literal>Run As</literal> <literal>»</literal> 
+        <literal>Ant Build...</literal> wählen und im Tab <literal>
+        JRE</literal> den Punkt <literal>Run in same JRE as the 
+        workspace</literal> wählen.</para>
+
+        <para><emphasis role="bold">Hinweis:</emphasis> Zeigt die 
+        Umgebungsvariable <literal>JAVA_HOME</literal> auf eine 
+        <emphasis>JRE</emphasis> und nicht auf einen 
+        <emphasis>JDK</emphasis>, können die ANT Skripte nicht 
+        ausgeführt werden, da diese den Java Compiler aufrufen.</para>
+
+        <para>Nachdem die Metamodell-Implementierung generiert wurde, 
+        sollte sich das GeneSEZ-Framework genauso nutzen lassen, wie 
+        wenn die Plug-Ins installiert worden wären.</para>
+
+      </section>
+
+    </section>
+
+  </section>
+
   <section id="de.genesez.install.genesez">
 
     <title>GeneSEZ Eclipse Plug-In</title>
@@ -338,341 +592,253 @@
 
   </section>
 
-  <section>
+  <section id="de.genesez.install.repository">
 
-    <title>Benutzer-Installation</title>
+    <title>GeneSEZ Repository</title>
 
-    <para>F&uuml;r eine Installation von GeneSEZ in ein vorhandenes Eclipse 
-    mit dem Eclipse Update Manager die notwendigen Features der Eclipse 
-    Plug-Ins unter <xref linkend="de.genesez.install.dependencies"/> 
-    sowie das <link linkend="de.genesez.install.genesez">GeneSEZ 
-    Eclipse Plug-In</link> installieren.</para>
+    <para>Der Quellcode des GeneSEZ-Frameworks wird in einem 
+    Subversion-Repository verwaltet.</para>
 
-    <para>Bei GeneSEZ Eclipse Distributionen des 
-    <ulink url="http://download.genesez.de/">GeneSEZ Build 
-    Servers</ulink> ab Eclipse Version 3.4 wird das 
-    <literal>dropins</literal> Verzeichnis genutzt. Das 
-    <link linkend="de.genesez.install.genesez">GeneSEZ Plug-In</link> 
-    befindet sich im Verzeichnis <literal>dropins/genesez</literal> und 
-    die f&uuml;r GeneSEZ <link linkend="de.genesez.install.dependencies">
-    notwendigen Plug-Ins</link> im Ordner 
-    <literal>dropins/prerequisites</literal>. Soll GeneSEZ in ein 
-    vorhandenes Eclipse ab Version 3.4 installiert werden, k&ouml;nnen 
-    einfach diese beiden Verzeichnisse in das 
-    <literal>dropins</literal> Verzeichnis der jeweiligen Eclipse 
-    kopiert werden. (Die Namen der Verzeichnisse 
-    <literal>genesez</literal> und <literal>prerequisites</literal> 
-    k&ouml;nnen nat&uuml;rlich beliebig umbenannt werden!).</para>
+    <variablelist>
+
+      <varlistentry>
+
+        <term><emphasis role="bold">Repository URL</emphasis></term>
+
+        <listitem>
+
+          <para>
+          <ulink url="http://svn.genesez.de/genesez/">http://svn.genesez.de/genesez/</ulink></para>
+
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
+
+    <para>Im Repository wird das Standard-Repository-Layout von 
+    Subversion mit <literal>trunk</literal>, <literal>
+    branches</literal> und <literal>tags</literal> genutzt. Alle 
+    stabilen Releases sind als <emphasis>Tag</emphasis> verfügbar. Die 
+    <emphasis>branches</emphasis> sind die Entwicklungspfade, die die 
+    Releases hervorbringen. Im <emphasis>trunk</emphasis> befinden sich 
+    dann alle Projekte, also auch solche, die noch zu keinem Release 
+    gehören.</para>
+
+    <para>Neben diesem Standard-Subversion-Repository Layout gibt es im 
+    GeneSEZ Repository zwei weitere Top-Level Verzweigungen:</para>
+
+    <variablelist>
+
+      <varlistentry>
+
+        <term><emphasis role="bold">examples</emphasis></term>
+
+        <listitem>
+
+          <para>Hier befinden sich alle GeneSEZ Beispielprojekte für 
+          die verschiedenen Plattformen.</para>
+
+        </listitem>
+
+      </varlistentry>
+
+      <varlistentry>
+
+        <term><emphasis role="bold">projects</emphasis></term>
+
+        <listitem>
+
+          <para>Hier befinden sich weitere GeneSEZ Projekte, die nicht 
+          direkt etwas mit dem GeneSEZ Generator Framework zu tun haben 
+          müssen. Hier befindet sich aber beispielsweise die PHP 
+          Bibliothek zum Assoziationshandling.</para>
+
+        </listitem>
+
+      </varlistentry>
+
+    </variablelist>
 
   </section>
 
-  <section>
+  <section id="de.genesez.plugin.projects">
 
-    <title>Entwickler-Installation</title>
+    <title>GeneSEZ Eclipse Plug-In Projekte</title>
 
-    <para>F&uuml;r eine Entwickler Installation ist es interessant die 
-    Plug-In Projekte im Workspace zu haben.</para>
+    <para>Das GeneSEZ Framework besteht aus einem Set von 
+    Eclipse-Projekten. Die folgenden Projekte sind für die Benutzung 
+    des GeneSEZ-Frameworks erforderlich:</para>
 
-    <section>
+    <variablelist>
 
-      <title>GeneSEZ Repository</title>
+      <varlistentry>
 
-      <para>Der Quellcode des GeneSEZ-Frameworks wird in einem 
-      Subversion-Repository verwaltet.</para>
+        <term><emphasis role="bold">de.genesez.build</emphasis></term>
 
-      <variablelist>
+        <listitem>
 
-        <varlistentry>
+          <para>Enthält ANT-Build-Skripte, die von den anderen 
+          Projekten referenziert werden.</para>
 
-          <term><emphasis role="bold">Repository URL</emphasis></term>
+        </listitem>
 
-          <listitem>
+      </varlistentry>
 
-            <para>
-            <ulink url="http://svn.genesez.de/genesez/">http://svn.genesez.de/genesez/</ulink></para>
+      <varlistentry>
 
-          </listitem>
+        <term>
+        <emphasis role="bold">de.genesez.metamodel</emphasis></term>
 
-        </varlistentry>
+        <listitem>
 
-      </variablelist>
+          <para>Enthält das GeneSEZ-Metamodel.</para>
 
-      <para>Im Repository wird das Standard-Repository-Layout von 
-      Subversion mit <literal>trunk</literal>, 
-      <literal>branches</literal> und <literal>tags</literal> genutzt. 
-      Alle stabilen Releases sind als <emphasis>Tag</emphasis> 
-      verf&uuml;gbar. Die <emphasis>branches</emphasis> sind die 
-      Entwicklungspfade, die die Releases hervorbringen. Im 
-      <emphasis>trunk</emphasis> befinden sich dann alle Projekte, also 
-      auch solche, die noch zu keinem Release geh&ouml;ren.</para>
+        </listitem>
 
-      <para>Neben diesem Standard-Subversion-Repository Layout gibt es 
-      im GeneSEZ Repository zwei weitere Top-Level Verzweigungen:</para>
+      </varlistentry>
 
-      <variablelist>
+      <varlistentry>
 
-        <varlistentry>
+        <term>
+        <emphasis role="bold">de.genesez.platforms.common</emphasis></term>
 
-          <term><emphasis role="bold">examples</emphasis></term>
+        <listitem>
 
-          <listitem>
+          <para>Enthält allgemeine Komponenten und Skripte, die von den 
+          Plattform-Projekten genutzt werden.</para>
 
-            <para>Hier befinden sich alle GeneSEZ Beispielprojekte f&uuml;r 
-            die verschiedenen Plattformen.</para>
+        </listitem>
 
-          </listitem>
+      </varlistentry>
 
-        </varlistentry>
+    </variablelist>
 
-        <varlistentry>
+    <para>Weiterhin ist für die Benutzung des GeneSEZ-Frameworks noch 
+    mindestens eines der folgenden Plattformprojekte erforderlich, je 
+    nachdem für welche Plattform Quellcode generiert werden soll:</para>
 
-          <term><emphasis role="bold">projects</emphasis></term>
+    <variablelist>
 
-          <listitem>
+      <varlistentry>
 
-            <para>Hier befinden sich weitere GeneSEZ Projekte, die 
-            nicht direkt etwas mit dem GeneSEZ Generator Framework zu 
-            tun haben m&uuml;ssen. Hier befindet sich aber beispielsweise 
-            die PHP Bibliothek zum Assoziationshandling.</para>
+        <term>
+        <emphasis role="bold">de.genesez.platforms.java</emphasis></term>
 
-          </listitem>
+        <listitem>
 
-        </varlistentry>
+          <para>Notwendig um Java-Quellcode zu generieren.</para>
 
-      </variablelist>
+        </listitem>
 
-    </section>
+      </varlistentry>
 
-    <section>
+      <varlistentry>
 
-      <title>GeneSEZ Eclipse Plug-In Projekte</title>
+        <term>
+        <emphasis role="bold">de.genesez.platforms.dotnet</emphasis></term>
 
-      <para>Das GeneSEZ Framework besteht aus einem Set von 
-      Eclipse-Projekten. Die folgenden Projekte sind f&uuml;r die Benutzung 
-      des GeneSEZ-Frameworks auf Basis des Quellcodes 
-      erforderlich:</para>
+        <listitem>
 
-      <variablelist>
+          <para>Notwendig um C#-Quellcode zu generieren.</para>
 
-        <varlistentry>
+        </listitem>
 
-          <term><emphasis role="bold">de.genesez.build</emphasis></term>
+      </varlistentry>
 
-          <listitem>
+      <varlistentry>
 
-            <para>Enth&auml;lt ANT-Build-Skripte, die von den anderen 
-            Projekten referenziert werden.</para>
+        <term>
+        <emphasis role="bold">de.genesez.platforms.cpp</emphasis></term>
 
-          </listitem>
+        <listitem>
 
-        </varlistentry>
+          <para>Notwendig um C++-Quellcode zu generieren.</para>
 
-        <varlistentry>
+        </listitem>
 
-          <term>
-          <emphasis role="bold">de.genesez.metamodel</emphasis></term>
+      </varlistentry>
 
-          <listitem>
+      <varlistentry>
 
-            <para>Enth&auml;lt das GeneSEZ-Metamodel.</para>
+        <term>
+        <emphasis role="bold">de.genesez.platforms.php</emphasis></term>
 
-          </listitem>
+        <listitem>
 
-        </varlistentry>
+          <para>Notwendig um PHP-Quellcode zu generieren.</para>
 
-        <varlistentry>
+        </listitem>
 
-          <term>
-          <emphasis role="bold">de.genesez.platforms.common</emphasis></term>
+      </varlistentry>
 
-          <listitem>
+    </variablelist>
 
-            <para>Enth&auml;lt allgemeine Komponenten und Skripte, die von 
-            den Plattform-Projekten genutzt werden.</para>
+    <para>Die weiteren Projekte sind für die Nutzung von GeneSEZ nicht 
+    unbedingt notwendig:</para>
 
-          </listitem>
+    <variablelist>
 
-        </varlistentry>
+      <varlistentry>
 
-      </variablelist>
+        <term>
+        <emphasis role="bold">de.genesez.features</emphasis></term>
 
-      <para>Weiterhin ist f&uuml;r die Benutzung des GeneSEZ-Frameworks auf 
-      Basis des Quellcodes noch mindestens eines der folgenden 
-      Plattformprojekte erforderlich, je nachdem f&uuml;r welche Plattform 
-      Quellcode generiert werden soll:</para>
+        <listitem>
 
-      <variablelist>
+          <para>Das Eclipse Projekt welches GeneSEZ als Eclipse-Feature 
+          zur Verfügung stellt.</para>
 
-        <varlistentry>
+        </listitem>
 
-          <term>
-          <emphasis role="bold">de.genesez.platforms.java</emphasis></term>
+      </varlistentry>
 
-          <listitem>
+      <varlistentry>
 
-            <para>Notwendig um Java-Quellcode zu generieren.</para>
+        <term>
+        <emphasis role="bold">de.genesez.updatesite</emphasis></term>
 
-          </listitem>
+        <listitem>
 
-        </varlistentry>
+          <para>Das Eclipse Projekt um GeneSEZ auf einer Update-Site zu 
+          publizieren.</para>
 
-        <varlistentry>
+        </listitem>
 
-          <term>
-          <emphasis role="bold">de.genesez.platforms.dotnet</emphasis></term>
+      </varlistentry>
 
-          <listitem>
+      <varlistentry>
 
-            <para>Notwendig um C#-Quellcode zu generieren.</para>
+        <term><emphasis role="bold">de.genesez.manual</emphasis></term>
 
-          </listitem>
+        <listitem>
 
-        </varlistentry>
+          <para>Die Dokumentation zu GeneSEZ.</para>
 
-        <varlistentry>
+        </listitem>
 
-          <term>
-          <emphasis role="bold">de.genesez.platforms.cpp</emphasis></term>
+      </varlistentry>
 
-          <listitem>
+      <varlistentry>
 
-            <para>Notwendig um C++-Quellcode zu generieren.</para>
+        <term><emphasis role="bold">de.genesez.core</emphasis></term>
 
-          </listitem>
+        <listitem>
 
-        </varlistentry>
+          <para>Ist ein Projekt zur besseren Integration in die Eclipse 
+          IDE, u.a. mit Wizzards.</para>
 
-        <varlistentry>
+          <para>Hinweis: Einige Plattform-Projekte haben Abhängigkeiten 
+          zu diesem Projekt und werden fehlerhaft markiert, wenn dieses 
+          Projekt nicht vorhanden ist. Dennoch ist dieses Projekt nicht 
+          unbedingt erforderlich und GeneSEZ funktioniert ohne 
+          dieses.</para>
 
-          <term>
-          <emphasis role="bold">de.genesez.platforms.php</emphasis></term>
+        </listitem>
 
-          <listitem>
+      </varlistentry>
 
-            <para>Notwendig um PHP-Quellcode zu generieren.</para>
-
-          </listitem>
-
-        </varlistentry>
-
-      </variablelist>
-
-      <para>Die weiteren Projekte sind f&uuml;r die Nutzung von GeneSEZ 
-      nicht unbedingt notwendig:</para>
-
-      <variablelist>
-
-        <varlistentry>
-
-          <term>
-          <emphasis role="bold">de.genesez.features</emphasis></term>
-
-          <listitem>
-
-            <para>Das Eclipse Projekt welches GeneSEZ als 
-            Eclipse-Feature zur Verf&uuml;gung stellt.</para>
-
-          </listitem>
-
-        </varlistentry>
-
-        <varlistentry>
-
-          <term>
-          <emphasis role="bold">de.genesez.updatesite</emphasis></term>
-
-          <listitem>
-
-            <para>Das Eclipse Projekt um GeneSEZ auf einer Update-Site 
-            zu publizieren.</para>
-
-          </listitem>
-
-        </varlistentry>
-
-        <varlistentry>
-
-          <term>
-          <emphasis role="bold">de.genesez.manual</emphasis></term>
-
-          <listitem>
-
-            <para>Die Dokumentation zu GeneSEZ.</para>
-
-          </listitem>
-
-        </varlistentry>
-
-        <varlistentry>
-
-          <term><emphasis role="bold">de.genesez.core</emphasis></term>
-
-          <listitem>
-
-            <para>Ist ein Projekt zur besseren Integration in die 
-            Eclipse IDE, u.a. mit Wizzards.</para>
-
-            <para>Hinweis: Einige Plattform-Projekte haben 
-            Abh&auml;ngigkeiten zu diesem Projekt und werden fehlerhaft 
-            markiert, wenn dieses Projekt nicht vorhanden ist. Dennoch 
-            ist dieses Projekt nicht unbedingt erforderlich und GeneSEZ 
-            funktioniert ohne dieses.</para>
-
-          </listitem>
-
-        </varlistentry>
-
-      </variablelist>
-
-    </section>
-
-    <section>
-
-      <title>GeneSEZ Setup</title>
-
-      <para>Der einfache <emphasis>checkout</emphasis> der obigen 
-      Projekte in den Workspace gen&uuml;gt noch nicht um GeneSEZ lauff&auml;hig 
-      zu haben. Bevor das GeneSEZ-Framework genutzt werden kann, muss 
-      noch eine Konfiguration erfolgen und die Implementierung des 
-      GeneSEZ-Metamodells generiert werden.</para>
-
-      <section>
-
-        <title>Konfiguration der 
-        <filename>environment.properties</filename></title>
-
-        <para>Im Projekt <emphasis>de.genesez.build</emphasis> im 
-        Ordner <filename class="directory">build</filename> muss die 
-        Datei <filename>environment.properties</filename> angelegt 
-        werden. Hierzu kann die Datei 
-        <filename>environment.properties.template</filename> als 
-        Vorlage genutzt werden, welche sich im selben Verzeichnis 
-        befindet.</para>
-
-      </section>
-
-      <section>
-
-        <title>Erstellung der Metamodell-Implementierung</title>
-
-        <para>Die Generierung der Implementierung des 
-        GeneSEZ-Metamodells erfolgt mit Hilfe von EMF. Dazu muss das 
-        Build-Skript <filename>build.xml</filename> im 
-        <filename class="directory">build</filename>-Ordner des 
-        <emphasis>Metamodell</emphasis>-Projektes 
-        <literal>de.genesez.metamodel</literal> ausgef&uuml;hrt werden. Zum 
-        Ausf&uuml;hren den Men&uuml;punkt <literal>Run As</literal> 
-        <literal>»</literal> <literal>Ant Build...</literal> w&auml;hlen und 
-        im Tab <literal>JRE</literal> den Punkt <literal>Run in same 
-        JRE as the workspace</literal> w&auml;hlen.</para>
-
-        <para>Nachdem die Metamodell-Implementierung generiert wurde, 
-        sollte sich das GeneSEZ-Framework genauso nutzen lassen, wie 
-        wenn die Plug-Ins installiert worden w&auml;ren.</para>
-
-      </section>
-
-    </section>
+    </variablelist>
 
   </section>
 
