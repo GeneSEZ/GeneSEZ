@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN" "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<section>
+
+	<title>Modellierungshinweise zu Verwendung der Features JPA, EJB 3, Seam 2 und JWS</title>
+	
+	<para>Die genannten Features erg&auml;nzen den "normalen" 
+	Java 5-konformen Quellcode um einige Code-Schnipsel, meistens 
+	Annotationen. Die dazu notwendigen Informationen kann der 
+	Modellierer über Stereotypen modellieren. Dabei entsprechen
+	die Stereotypen mit ihren TaggedValues meist den in den 
+	verschiedenen Spezifikationen definierten Annotationen mit 
+	ihren Attributen. Dabei wurde auch das in den 
+	JavaEE-Spezifikationen verwendete Prinzip der 
+	"Convention over Configuration" ber&uuml;cksichtigt. Die 
+	Standard-Werte der TaggedValues entsprechen denen der  
+	Annotations-Attribute. Das folgende Bild zeigt dies am Beispiel
+	des Stereotypen "jpaPersistentEntity".</para>
+	
+	<figure id="de.genesez.platforms.java.modellingIntroduction.stereotypeMapping">
+
+      	<title>Mapping des Stereotypen "jpaPersistent" auf die Annotationen "@Entity"</title>
+
+      	<mediaobject>
+      		<imageobject role="html">
+      			<imagedata align="center"
+       			fileref="images/de.genesez.platforms.java.modellingIntroduction.stereotypeMapping.png"/>
+       		</imageobject>
+      		<imageobject role="fo">
+      			<imagedata align="center"
+       			fileref="images/de.genesez.platforms.java.modellingIntroduction.stereotypeMapping.svg"
+				scalefit="1" width="100%"/>
+			</imageobject>
+		</mediaobject>
+	</figure>
+	
+	<para>Diese Abbildung der Stereotypen mit ihren TaggedValues auf 
+	die Annotationen mit ihren Attributen erlaubt eine intuitive 
+	Verwendung der Stereotypen, falls der Modellierer die Sicht des 
+	Programmierers einnimmt. Er kann anhand der verwendeten Stereotypen
+	sehen wie der generierte Quellcode aussehen wird und gegebenenfalls
+	Schlu&szlig;folgerungen ziehen welche Informationen im Modell noch 
+	fehlen.</para>
+	
+	<para>Die Einnahme der Sicht eines Programmierers bei der Modellierung 
+	hat Vor- und Nachteile. Dem oben genannten Vorteil steht die
+	"Vertechnologisierung" des Modells entgegen. Damit ist die Anreicherung
+	des Modells mit technologiespezifischen Informationen gemeint. 
+	Unter Umständen werden einige Informationen auch redundant modelliert.</para>
+	
+	<para>Der folgende Ansatz erlaubt dem Modellierer sich ein paar Schritte 
+	von der Programmier-Sicht zu entfernen. Der Rückweg steht ihm dabei 
+	aber jederzeit offen.</para>
+	
+	<title>Automatische Quellcode-Erg&auml;nzung</title>
+	
+	<para>Die automatische Quellcode-Erg&auml;nzung verringert den 
+	Aufwand des Modellierers ein vollständiges Modell für eine bestimmte 
+	Technologie zu erstellen. Dabei &uuml;bernimmt GeneSEZ die Aufgabe 
+	bereits im Modell vorhandenen oder logisch herleitbare Informationen 
+	in die Generierung des Quellcodes einflie&szlig;en zu lassen. Der 
+	Modellierer muss keine redundanten Informationen oder 
+	technologiespezifischen Elemente (z.B. Interfaces, Klassen, Attribute 
+	oder Methoden) modellieren.</para>
+	
+	<para>Die notwendigen Informationen für die Codegenerierung k&ouml;nnen 
+	GeneSEZ im Allgemeinen auf drei verschiedene Weisen zur Verfügung gestellt 
+	werden:</para>
+	
+	<itemizedlist>
+	
+		<listitem>
+	
+			<para>vollautomatisch (Informationen ergeben sich vollständig durch
+	    	die Metadaten des Modells), </para>
+		
+		</listitem>
+	
+		<listitem>
+	
+			<para>halbautomatisch (Informationen ergeben sich aus Stereotypen 
+			und den Metadaten des Modells) oder</para>
+	
+		</listitem>
+	
+		<listitem>
+	
+	    	<para>manuell (Informationen ergeben sich ausschlie&szlig;lich aus
+	    	den verwendeten Stereotypen).</para>
+	
+		</listitem>
+	
+	</itemizedlist>
+	
+	<para>Dieses Konzept erm&ouml;glicht dem Modellierer seinen Aufwand auf ein
+	Minimum zu senken und das Modell frei von technologiespezifischen Elementen 
+	zu halten. Er kann aber jederzeit die automatische Quellcode-Erg&auml;nzung 
+	durch die Verwendung von Stereotypen beeinflussen (halbautomatisch) oder 
+	&uuml;berschreiben (manuell).</para>
+	
+	<para>GeneSEZ setzt einen m&uuml;ndigen Modellierer voraus, der wei&szlig; 
+	was er modelliert. Die manuellen Informationen haben bei der Codegenerierung 
+	die h&ouml;chste Priorit&auml;t.</para>
+</section>
