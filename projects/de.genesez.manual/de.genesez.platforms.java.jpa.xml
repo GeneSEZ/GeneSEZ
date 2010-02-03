@@ -4,14 +4,14 @@
 	
 	<title>JPA (Java Persistence API)</title>
 	
-	<para>Die Java Plattform Erweiterung JPA ermöglicht dem Modellierer 
+	<para>Die Java Plattform Erweiterung JPA erm&ouml;glicht dem Modellierer 
 	das Modell mit persistenzspezifische Informationen auf Basis der 
 	Java Persistence API (JPA) in der 
 	<ulink url="http://java.sun.com/javaee/technologies/persistence.jsp">
 	Version 1.0</ulink> zu versehen. GeneSEZ erzeugt aus diesen Informationen 
-	die entsprechenden Annotationen und fügt sie dem Quellcode hinzu. Die 
-	Generierung von XML-Konfigurationsdateien wird nicht unterstützt. 
-	Für die nachfolgende Beschreibung wird ein grundlegendes Verständnis 
+	die entsprechenden Annotationen und f&uuml;gt sie dem Quellcode hinzu. Die 
+	Generierung von XML-Konfigurationsdateien wird nicht unterst&uuml;tzt. 
+	F&uuml;r die nachfolgende Beschreibung wird ein grundlegendes Verst&auml;ndnis 
 	der JPA-Technologie vorausgesetzt.</para>
 	
 	<section>
@@ -33,24 +33,24 @@
 		</figure>
 		
 		<para><xref linkend="fig:de.genesez.platforms.java.jpa.profile"/> zeigt das 
-		UML-Profil für die Java Plattform-Erweiterung JPA. In dem Profil sind die 
-		verschiedenen Stereotypen mit ihren TaggedValues und den dazugehörigen 
+		UML-Profil f&uuml;r die Java Plattform-Erweiterung JPA. In dem Profil sind die 
+		verschiedenen Stereotypen mit ihren TaggedValues und den dazugeh&ouml;rigen 
 		Enumerations enthalten. Die Enumerations werden als Datentypen einiger 
 		TaggedValues verwendet, falls diesen fest definierte Werte zugewiesen werden 
-		müssen. Dadurch werden dem Modellierer direkt die möglichen Werte 
+		m&uuml;ssen. Dadurch werden dem Modellierer direkt die m&ouml;glichen Werte 
 		(am besten durch das Modellierungstool) vorgegeben und Tippfehler vermieden.
 		</para>
 	</section>
 	
 	<section>
-		<title>Eine Einführung - Die (Persistent) Entity</title>
+		<title>Eine Einf&uuml;hrung - Die (Persistent) Entity</title>
 		
 		<para>Eine normale UML-Klasse wird zu einer (Persistent) Entity, indem 
 		der Modellierer diese mit Hilfe des Stereotyps "jpaPersistentEntity" als 
-		solche charakterisiert. Jede Persistent Entity benötigt einen 
-		Primärschlüssel, der durch das Anhängen des Stereotyps 
+		solche charakterisiert. Jede Persistent Entity ben&ouml;tigt einen 
+		Prim&auml;rschl&uuml;ssel, der durch das Anh&auml;ngen des Stereotyps 
 		<emphasis>jpaPrimaryKey</emphasis> an ein Attribut oder eine Methode 
-		(field oder property access, siehe auch Kapitel über field/property 
+		(field oder property access, siehe auch Kapitel &uuml;ber field/property 
 		access-Umschaltung) festgelegt wird (siehe 
 		<xref linkend="fig:de.genesez.platforms.java.jpa.simplePersistentEntity"/>).
 		</para>
@@ -97,11 +97,11 @@
 		
 		<para>Die Generierung der Annotationen <emphasis>@Entity</emphasis> 
 		sowie <emphasis>@Id</emphasis> lassen sich durch die beiden 
-		verwendeten Stereotypen erklären. Woher kommen aber die anderen Stereotypen, 
+		verwendeten Stereotypen erkl&auml;ren. Woher kommen aber die anderen Stereotypen, 
 		das Attribut <emphasis>version</emphasis>, der Standardkonstruktor und das 
 		Interface <emphasis>Serializable</emphasis>?</para>
 		
-		<para>Die Antwort lautet <emphasis>automatische Quellcode-Ergänzung</emphasis>. 
+		<para>Die Antwort lautet <emphasis>automatische Quellcode-Erg&auml;nzung</emphasis>. 
 		Gehen wir die verschiedenen Punkte der Reihe nach durch:</para>
 		
 		<itemizedlist>
@@ -113,25 +113,25 @@
 				<emphasis>jpaPersistentEntity</emphasis>. Dies ist auch der Grund 
 				warum <emphasis>jpaPersistentEntity</emphasis> kein 1:1 Mapping der Annotation 
 				<emphasis>@Entity</emphasis> ist und auch nicht genauso benannt wurde. Er 
-				enthält zusätzlich die TaggedValues der Annotation <emphasis>@Table</emphasis>. 
-				Für die Zusammenfassung der beiden Annotationen zu einem Stereotyp 
+				enth&auml;lt zus&auml;tzlich die TaggedValues der Annotation <emphasis>@Table</emphasis>. 
+				F&uuml;r die Zusammenfassung der beiden Annotationen zu einem Stereotyp 
 				spricht vor allem, dass diese nicht getrennt verwendet werden. 
 				Aufgrund der "convention over configuration" ist die Angabe von 
-				<emphasis>@Table</emphasis> zwar optional, es können aber bei 
-				bestimmten Klassennamen, welche Schlüsselworte in Datenbanken sind, Probleme 
+				<emphasis>@Table</emphasis> zwar optional, es k&ouml;nnen aber bei 
+				bestimmten Klassennamen, welche Schl&uuml;sselworte in Datenbanken sind, Probleme 
 				entstehen. Aus diesem Grund wird automatisch ein Prefix (Standard "tbl_") vor den 
 				Klassennamen gesetzt und somit ein Tabellenname erzeugt, welcher Probleme 
-				mit reservierten Schlüsselworten in Datenbanken verhindert.</para>
+				mit reservierten Schl&uuml;sselworten in Datenbanken verhindert.</para>
 			
 			</listitem>
 			
 			<listitem>
 		
 				<para><emphasis>Serializable</emphasis>: 
-				Die Implementierung dieses Interfaces ermöglicht die Serialisierung der Klasse, 
-				was beispielsweise bei der Übertragung über ein Netzwerk benötigt wird. Der 
+				Die Implementierung dieses Interfaces erm&ouml;glicht die Serialisierung der Klasse, 
+				was beispielsweise bei der &Uuml;bertragung &uuml;ber ein Netzwerk ben&ouml;tigt wird. Der 
 				Programmierer hat durch die Implementierung dieses Interfaces keinerlei 
-				Mehraufwand. Durch die automatische Quellcode-Ergänzung muss die Implementierung 
+				Mehraufwand. Durch die automatische Quellcode-Erg&auml;nzung muss die Implementierung 
 				dieses Interfaces nicht modelliert werden. Das Modell wird frei von 
 				technologiespezifischen Elementen gehalten.</para>
 			
@@ -145,26 +145,26 @@
 				zugewiesen worden (Default-Wert: false). Wie bei <emphasis>jpaPersistentEntity</emphasis> 
 				verbergen sich auch hinter <emphasis>jpaPrimaryKey</emphasis> mehrere Annotationen, 
 				weshalb der Stereotyp auch nicht <emphasis>jpaId</emphasis> genannt wurde. 
-				Die Begründung ist analog zu <emphasis>jpaPersistentEntity</emphasis>. Die Annotation 
+				Die Begr&uuml;ndung ist analog zu <emphasis>jpaPersistentEntity</emphasis>. Die Annotation 
 				<emphasis>@GeneratedValue</emphasis> wird nur in Verbindung mit <emphasis>@Id</emphasis> 
 				verwendet. Durch die <emphasis>convention over configuration</emphasis> wird die 
-				Standard-Generierungsstrategie der Datenbank überlassen. Dies spiegelt sich im 
+				Standard-Generierungsstrategie der Datenbank &uuml;berlassen. Dies spiegelt sich im 
 				TaggedValue <emphasis>strategy</emphasis> wieder, der als Datentyp die Enumeration 
 				<emphasis>jpaGenerationType</emphasis> mit dem Standardwert <emphasis>AUTO</emphasis> 
 				besitzt.</para>
 				
 				<para>Bei diesem Beispiel wurden GeneSEZ die notwendigen Informationen zur Generierung 
 				manuell vom Modellierer vorgegeben. Es wurden keine Werte logisch hergeleitet oder 
-				automatisch ergänzt. Die Vorgabe der Standardstrategie basiert auf der JPA-Spezifikation.</para>
+				automatisch erg&auml;nzt. Die Vorgabe der Standardstrategie basiert auf der JPA-Spezifikation.</para>
 			
 			</listitem>
 			
 			<listitem>
 		
 				<para><emphasis>@Version und das Attribut "version"</emphasis>: 
-				Die automatische Quellcode-Ergänzung erzeugt für jede Persistent Entity, die über 
-				kein Attribut mit <emphasis>@Version</emphasis> verfügt, dieses Attribut und die 
-				dazugehörige Annotation für das optimistische Locking. Es handelt sich wiederum um 
+				Die automatische Quellcode-Erg&auml;nzung erzeugt f&uuml;r jede Persistent Entity, die &uuml;ber 
+				kein Attribut mit <emphasis>@Version</emphasis> verf&uuml;gt, dieses Attribut und die 
+				dazugeh&ouml;rige Annotation f&uuml;r das optimistische Locking. Es handelt sich wiederum um 
 				ein technologiespezifisches Element, welches nicht modelliert werden muss.</para>
 			
 			</listitem>
@@ -175,24 +175,24 @@
 				Zur Erzeugung von JavaBeans durch den Container ist ein parameterloser 
 				Standardkonstruktor notwendig. Dieser muss bei einer JavaBean (also auch 
 				SessionBeans, MessageDrivenBeans oder Seam-Komponenten) explizit 
-				vorhanden sein. Auch um diese technologiespezifische Eigenheit kümmert 
-				sich die automatische Quellcode-Ergänzung.</para>
+				vorhanden sein. Auch um diese technologiespezifische Eigenheit k&uuml;mmert 
+				sich die automatische Quellcode-Erg&auml;nzung.</para>
 			
 			</listitem>
 		</itemizedlist>
 		
-		<para>Bei dieser Klasse gibt es bezüglich des Primärschlüssels zwei notwendige Anmerkungen.
+		<para>Bei dieser Klasse gibt es bez&uuml;glich des Prim&auml;rschl&uuml;ssels zwei notwendige Anmerkungen.
 		Da mit der Bankleitzahl (sortCode) nicht gerechnet werden soll, ist die Wahl des Datentyps 
-		<emphasis>String</emphasis> hier dem <emphasis>int</emphasis> vorzuziehen. Aus Performanzgründen 
-		empfiehlt die JPA-Spezifikation aber auf Primärschlüssel mit dem Datentyp String zu verzichten.  
+		<emphasis>String</emphasis> hier dem <emphasis>int</emphasis> vorzuziehen. Aus Performanzgr&uuml;nden 
+		empfiehlt die JPA-Spezifikation aber auf Prim&auml;rschl&uuml;ssel mit dem Datentyp String zu verzichten.  
 		Hinzu kommt auch noch, dass die Vermischung von fachlichen und technischen Merkmalen nicht 
-		besonders schön ist. Aus diesem Grund wird das Attribut <emphasis>sortCode</emphasis> mit Hilfe des 
-		Stereotyps <emphasis>jpaColumn</emphasis> eine Unique-Beschränkung verpasst und für den 
-		Primärschlüssel wird das Attribut <emphasis>id</emphasis> mit dem Datentyp <emphasis>int</emphasis> 
-		hinzugefügt. Für das nächste Beispiel (siehe <xref linkend="fig:de.genesez.platforms.java.jpa.simplePersistentEntity2"/> 
+		besonders sch&ouml;n ist. Aus diesem Grund wird das Attribut <emphasis>sortCode</emphasis> mit Hilfe des 
+		Stereotyps <emphasis>jpaColumn</emphasis> eine Unique-Beschr&auml;nkung verpasst und f&uuml;r den 
+		Prim&auml;rschl&uuml;ssel wird das Attribut <emphasis>id</emphasis> mit dem Datentyp <emphasis>int</emphasis> 
+		hinzugef&uuml;gt. F&uuml;r das n&auml;chste Beispiel (siehe <xref linkend="fig:de.genesez.platforms.java.jpa.simplePersistentEntity2"/> 
 		und <xref linkend="listing:de.genesez.platforms.java.jpa.simplePersistentEntity2" />) wird noch 
-		ein Attribut mit dem Namen <emphasis>index</emphasis> hinzugefügt, welches den Platz der Bank 
-		in einem fiktiven Bewertungsindex repräsentiert.</para>
+		ein Attribut mit dem Namen <emphasis>index</emphasis> hinzugef&uuml;gt, welches den Platz der Bank 
+		in einem fiktiven Bewertungsindex repr&auml;sentiert.</para>
 		
 		<figure id="fig:de.genesez.platforms.java.jpa.simplePersistentEntity2">
 			<title>Persistent Entity mit den Stereotypen "jpaPersistentEntity" und "jpaPrimaryKey"</title>
@@ -240,45 +240,45 @@
 			}	
 		</programlisting>
 		
-		<para>Auch in diesem Beispiel war die automatische Quellcode-Ergänzung wieder 
+		<para>Auch in diesem Beispiel war die automatische Quellcode-Erg&auml;nzung wieder 
 		am Werke. Wir schauen uns die Punkte genauer an:</para>
 		
 		<itemizedlist>
 			<listitem>
 				<para><emphasis>@Id und @GeneratedValue(strategy = GenerationType.AUTO)</emphasis>: 
 				GeneSEZ hat diese Annotationen automatisch an das Attribut <emphasis>id</emphasis> generiert, 
-				weil ein Attribut mit diesem Namen in der Java Plattform-Erweiterung JPA für einen 
-				Primärschlüssel reserviert ist, sofern kein anderes Attribut den Stereotyp 
-				<emphasis>jpaPrimaryKey</emphasis> besitzt. Nur unter bestimmten Umstände wird diese 
-				automatische Quellcode-Ergänzung unterlassen (siehe <emphasis>jpaInheritance</emphasis>).
+				weil ein Attribut mit diesem Namen in der Java Plattform-Erweiterung JPA f&uuml;r einen 
+				Prim&auml;rschl&uuml;ssel reserviert ist, sofern kein anderes Attribut den Stereotyp 
+				<emphasis>jpaPrimaryKey</emphasis> besitzt. Nur unter bestimmten Umst&auml;nde wird diese 
+				automatische Quellcode-Erg&auml;nzung unterlassen (siehe <emphasis>jpaInheritance</emphasis>).
 				</para>
 				
 				<para>Bei diesem Beispiel hat GeneSEZ alle notwendigen Informationen durch 
 				das Modell erhalten (ein Attribut mit dem Namen <emphasis>id</emphasis> und dem Datentyp
 				<emphasis>int</emphasis> existiert und gleichzeitig besitzt kein anderes Attribut dieser 
 				PersistentEntity den Stereotyp <emphasis>jpaPrimaryKey</emphasis>). Es hat eine 
-				vollautomatische Ergänzung stattgefunden.</para>
+				vollautomatische Erg&auml;nzung stattgefunden.</para>
 			
 			</listitem>
 			
 			<listitem>
 				<para><emphasis>@Column(name = "sortCode", unique=true, nullable=false)</emphasis>: 
-				Die Beschränkung <emphasis>unique</emphasis> verlangt, dass der Wert des entsprechende 
+				Die Beschr&auml;nkung <emphasis>unique</emphasis> verlangt, dass der Wert des entsprechende 
 				Attributs ungleich <emphasis>null</emphasis> ist. Leider reicht das Setzen des 
 				Annotation-Attributs <emphasis>unique</emphasis> auf den Wert <emphasis>true</emphasis> 
-				nicht aus, um diese Folgebedingung zu erfüllen. GeneSEZ sorgt in diesem Fall 
-				vollautomatisch für das Setzen des Annotation-Attributs <emphasis>nullable</emphasis> 
-				auf den Wert <emphasis>false</emphasis> und lässt eine Kombination 
+				nicht aus, um diese Folgebedingung zu erf&uuml;llen. GeneSEZ sorgt in diesem Fall 
+				vollautomatisch f&uuml;r das Setzen des Annotation-Attributs <emphasis>nullable</emphasis> 
+				auf den Wert <emphasis>false</emphasis> und l&auml;sst eine Kombination 
 				<emphasis>unique=true, nullable=false</emphasis> bei der Generierung auch nicht zu.</para>			
 			</listitem>
 			
 			<listitem>
 				<para><emphasis>@Column(name = "bank_index")</emphasis>: 
-				Der Name dieses Attributs ist ein reserviertes Schlüsselwort in der Datenbank MySQL. Damit 
-				es nicht zu Problemen kommt, sorgt GeneSEZ dafür, dass ein anderer Spaltenname verwendet wird 
+				Der Name dieses Attributs ist ein reserviertes Schl&uuml;sselwort in der Datenbank MySQL. Damit 
+				es nicht zu Problemen kommt, sorgt GeneSEZ daf&uuml;r, dass ein anderer Spaltenname verwendet wird 
 				(Klassenname + "_" + Attribut-Name). Eine Festlegung des Spaltennamens durch den Modellierer 
-				hat natürlich eine höhere Priorität. Es wird dabei von einem mündigen Modellierer ausgegangen, 
-				der über die Problematik von Schlüsselwortkonflikten Bescheid weiß. Schließlich treten die 
+				hat nat&uuml;rlich eine h&ouml;here Priorit&auml;t. Es wird dabei von einem m&uuml;ndigen Modellierer ausgegangen, 
+				der &uuml;ber die Problematik von Schl&uuml;sselwortkonflikten Bescheid wei&szlig;. Schlie&szlig;lich treten die 
 				Konflikte nicht mit jeder verwendeten Datenbank auf.</para>
 			
 			</listitem>
