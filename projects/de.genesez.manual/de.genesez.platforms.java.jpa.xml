@@ -11,8 +11,17 @@
 	Version 1.0</ulink> zu versehen. GeneSEZ erzeugt aus diesen Informationen 
 	die entsprechenden Annotationen und f&uuml;gt sie dem Quellcode hinzu. Die 
 	Generierung von XML-Konfigurationsdateien wird nicht unterst&uuml;tzt. 
-	F&uuml;r die nachfolgende Beschreibung wird ein grundlegendes Verst&auml;ndnis 
-	der JPA-Technologie vorausgesetzt.</para>
+	Es wird ein grundlegendes Verst&auml;ndnis der JPA-Technologie 
+	vorausgesetzt.</para>
+	
+	<para>Im n&auml;chsten Abschnitt wird das UML-Profil f&uuml;r die Java 
+	Plattform-Erweiterung JPA vorgestellt. Danach wird am Beispiel 
+	einer Persistent Entity gezeigt was ausgew&auml;hlte Stereotypen bewirken und 
+	wie die automatische Quellcode-Erg&auml;nzung den Modellierer unterst&uuml;tzt. 
+	Die nachfolgenden Abschnitte beschreiben das Verhalten von Stereotypen, 
+	welche die automatische Quellcode-Erg&auml;nzung verwenden. Sie k&ouml;nnen 
+	unabh&auml;ngig voneinander gelesen werden. Als Beispiel dient durchg&auml;ngig 
+	das Bank-Projekt.</para>
 	
 	<section>
 		<title>Das UML-Profil "jpa"</title>
@@ -181,18 +190,22 @@
 			</listitem>
 		</itemizedlist>
 		
-		<para>Bei dieser Klasse gibt es bez&uuml;glich des Prim&auml;rschl&uuml;ssels zwei notwendige Anmerkungen.
-		Da mit der Bankleitzahl (sortCode) nicht gerechnet werden soll, ist die Wahl des Datentyps 
-		<emphasis>String</emphasis> hier dem <emphasis>int</emphasis> vorzuziehen. Aus Performanzgr&uuml;nden 
-		empfiehlt die JPA-Spezifikation aber auf Prim&auml;rschl&uuml;ssel mit dem Datentyp String zu verzichten.  
-		Hinzu kommt auch noch, dass die Vermischung von fachlichen und technischen Merkmalen nicht 
-		besonders sch&ouml;n ist. Aus diesem Grund wird das Attribut <emphasis>sortCode</emphasis> mit Hilfe des 
-		Stereotyps <emphasis>jpaColumn</emphasis> eine Unique-Beschr&auml;nkung verpasst und f&uuml;r den 
-		Prim&auml;rschl&uuml;ssel wird das Attribut <emphasis>id</emphasis> mit dem Datentyp <emphasis>int</emphasis> 
-		hinzugef&uuml;gt. F&uuml;r das n&auml;chste Beispiel (siehe <xref linkend="fig:de.genesez.platforms.java.jpa.simplePersistentEntity2"/> 
-		und <xref linkend="listing:de.genesez.platforms.java.jpa.simplePersistentEntity2" />) wird noch 
-		ein Attribut mit dem Namen <emphasis>index</emphasis> hinzugef&uuml;gt, welches den Platz der Bank 
-		in einem fiktiven Bewertungsindex repr&auml;sentiert.</para>
+		<para>Bei dieser Klasse gibt es bez&uuml;glich des Prim&auml;rschl&uuml;ssels zwei 
+		notwendige Anmerkungen. Da mit der Bankleitzahl (sortCode) nicht gerechnet werden 
+		soll, ist die Wahl des Datentyps <emphasis>String</emphasis> hier dem 
+		<emphasis>int</emphasis> vorzuziehen. Aus Performanzgr&uuml;nden empfiehlt die 
+		JPA-Spezifikation aber auf Prim&auml;rschl&uuml;ssel mit dem Datentyp String zu 
+		verzichten. Hinzu kommt noch, dass die Vermischung von fachlichen und technischen 
+		Merkmalen nicht besonders guter Programmierstil ist. Aus diesem Grund wird dem 
+		Attribut <emphasis>sortCode</emphasis> mit Hilfe des Stereotyps 
+		<emphasis>jpaColumn</emphasis> eine Unique-Beschr&auml;nkung verpasst 
+		(fachlicher Prim&auml;rschl&uuml;ssel) und als technischer Prim&auml;rschl&uuml;ssel wird das Attribut 
+		<emphasis>id</emphasis> mit dem Datentyp <emphasis>int</emphasis> hinzugef&uuml;gt. 
+		F&uuml;r das n&auml;chste Beispiel (siehe 
+		<xref linkend="fig:de.genesez.platforms.java.jpa.simplePersistentEntity2"/> und 
+		<xref linkend="listing:de.genesez.platforms.java.jpa.simplePersistentEntity2" />) 
+		wird noch ein Attribut mit dem Namen <emphasis>index</emphasis> hinzugef&uuml;gt, 
+		welches den Platz der Bank in einem fiktiven Bewertungsindex repr&auml;sentiert.</para>
 		
 		<figure id="fig:de.genesez.platforms.java.jpa.simplePersistentEntity2">
 			<title>Persistent Entity mit unique-Attribut und ohne jpaPrimaryKey</title>
@@ -274,15 +287,45 @@
 			
 			<listitem>
 				<para><emphasis>@Column(name = "bank_index")</emphasis>: 
-				Der Name dieses Attributs ist ein reserviertes Schl&uuml;sselwort in der Datenbank MySQL. Damit 
-				es nicht zu Problemen kommt, sorgt GeneSEZ daf&uuml;r, dass ein anderer Spaltenname verwendet wird 
-				(Klassenname + "_" + Attribut-Name). Eine Festlegung des Spaltennamens durch den Modellierer 
-				hat nat&uuml;rlich eine h&ouml;here Priorit&auml;t. Es wird dabei von einem m&uuml;ndigen Modellierer ausgegangen, 
-				der &uuml;ber die Problematik von Schl&uuml;sselwortkonflikten Bescheid wei&szlig;. Schlie&szlig;lich treten die 
-				Konflikte nicht mit jeder verwendeten Datenbank auf.</para>
+				Der Name dieses Attributs ist ein reserviertes Schl&uuml;sselwort in der Datenbank 
+				MySQL. Damit es nicht zu Problemen kommt, sorgt GeneSEZ daf&uuml;r, dass ein 
+				anderer Spaltenname verwendet wird (Klassenname + "_" + Attribut-Name). Eine Festlegung 
+				des Spaltennamens durch den Modellierer hat nat&uuml;rlich eine h&ouml;here Priorit&auml;t. 
+				Es wird dabei von einem m&uuml;ndigen Modellierer ausgegangen, der &uuml;ber die 
+				Problematik von Schl&uuml;sselwortkonflikten Bescheid wei&szlig;. Schlie&szlig;lich 
+				treten die Konflikte nicht mit jeder verwendeten Datenbank auf.</para>
 			
 			</listitem>
 		</itemizedlist>
+		
+		<figure id="fig:de.genesez.platforms.java.jpa.simplePersistentEntity3">
+			<title>Persistent Entity ohne technischen Prim&auml;rschl&uuml;ssel</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="center"
+   					fileref="images/de.genesez.platforms.java.jpa.simplePersistentEntity3.png"/>
+   				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="center" 
+					fileref="images/de.genesez.platforms.java.jpa.simplePersistentEntity3.svg" 
+					scalefit="1" width="100%"/>
+				</imageobject>
+			</mediaobject>
+		</figure>
+		
+		<para>Ein Ziel der Java Plattform-Erweiterung JPA ist das Modell m&ouml;glichst frei von 
+		technologiespezifischen Elementen zu halten. Dies wird nicht immer gelingen, aber 
+		bei der Persistent Entity l&auml;sst sich noch etwas verbessern. Der technische 
+		Prim&auml;rschl&uuml;ssel ist ein technologiespezifisches Element und h&auml;lt man sich an die 
+		Trennung von fachlichen und technischen Merkmalen, dann l&auml;uft es in den meisten 
+		Klassen auf ein zus&auml;tzliches Attribut hinaus. Um das Modell von 
+		technologiespezifischen Elementen freizuhalten und den Arbeitsaufwand des Modellierers 
+		zu verringern, sorgt die automatische Quellcode-Erg&auml;nzung daf&uuml;r, dass 
+		jede Persistent Entity einen technischer Prim&auml;rschl&uuml;ssel bekommt (Name: id, 
+		Datentyp: int), sofern der Modellierer kein anderes Attribut als Prim&auml;rschl&uuml;ssel 
+		definiert hat. <xref linkend="fig:de.genesez.platforms.java.jpa.simplePersistentEntity3"/> 
+		zeigt die Klasse Bank ohne technischen Prim&auml;rschl&uuml;ssel. Am generierten Quellcode &auml;ndert sich 
+		gegen&uuml;ber dem letzten Beispiel nichts.</para>
 		
 	</section>
 </section>
