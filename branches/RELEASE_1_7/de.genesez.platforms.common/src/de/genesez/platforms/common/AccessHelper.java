@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 
-import de.genesez.adapter.uml2.TransUtils;
 import de.genesez.metamodel.gcore.MClassifier;
 import de.genesez.metamodel.gcore.MPackage;
 
@@ -21,16 +20,6 @@ import de.genesez.metamodel.gcore.MPackage;
  * @date	2008-04-18
  */
 public class AccessHelper {
-	
-	/**
-	 * getter for the xmi id from an element
-	 * @param	pObj	a model element
-	 * @return	the xmi id
-	 * @see		TransUtils#getXmiId(EObject)
-	 */
-	public static String getXmiId(EObject pObj) {
-		return TransUtils.getXmiId(pObj);
-	}
 	
 	/**
 	 * getter for a classifier by it's full qualified name
