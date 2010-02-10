@@ -26,8 +26,9 @@ import gcore;
 // use logging
 extension de::genesez::platforms::common::log::Log;
 
-// create dynamic model
-extension de::genesez::adapter::uml2::uml2genesezdynamicmodel;
+// behavior models
+extension de::genesez::adapter::uml2::uml2activities;
+extension de::genesez::adapter::uml2::uml2statemachines;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -157,11 +158,12 @@ private MPackage transform(Package p, MPackage this) :
 /**
  * transforms a root classifier, that is a classifier which has a containment reference to the model
  * checks if root classifiers are mapped to external types or if the classifier is itself an external type
- * @param	p	an uml package to transform, contained directly in the model
+ * @param	c	an uml classifier to transform, contained directly in the model
  * @context	the model which is the container for the specified package
  * @return	the container of the transformed classifier (the model)
  */
 private MClassifier transform(Classifier c, MModel this) :
+	trace( "transform [ " + c.metaType + " ] - " + c ) ->
 	switch {
 		// check if classifier should be excluded
 		case c.isIgnoredElement() : Void
@@ -170,7 +172,10 @@ private MClassifier transform(Classifier c, MModel this) :
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
 		// else classifier
-		default : classifier.add( c.makeClassifier() )
+		default : ( let mc = c.makeClassifier() :
+				classifier.add( mc ) ->
+				c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(mc) : null
+			)
 	} ->
 	this;
 	
@@ -312,7 +317,7 @@ private create MDataType makeClassifier(DataType d) :
 	// transform classifier
 	transformClassifier(d) ->
 	this;
-	
+
 /**
  * creates a GeneSEZ usecase from an uml usecase
  * @param	u	an uml usecase
@@ -322,6 +327,9 @@ private create MUseCase makeClassifier(UseCase u) :
 	trace( "make [ " + metaType + " ] - " + u ) ->
 	// basic element properties
 	transformBasics(u) ->
+	// transform owned use cases
+	classifier.addAll( u.ownedElement.typeSelect(UseCase).makeClassifier() ) ->
+	// transform owned behavior
 	ownedBehavior.addAll( u.ownedBehavior.transformBehavior(this) ) ->
 	this;
 
@@ -352,7 +360,7 @@ private create MLiteral makeLiteral(EnumerationLiteral l) :
 	// add comment to classifier
 	ownedComment.addAll( l.ownedComment.typeSelect(Comment).makeComment() ) ->
 	this;
-	
+
 /**
  * creates a GeneSEZ attribtue from an uml property
  * @param	p	an uml property
