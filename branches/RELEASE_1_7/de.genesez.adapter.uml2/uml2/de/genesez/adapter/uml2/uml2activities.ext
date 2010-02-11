@@ -13,7 +13,9 @@ import uml;
 import gcore;
 
 // use logging
+extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
 
 // access helper functions
 extension de::genesez::adapter::uml2::uml2genesez;
@@ -132,6 +134,7 @@ private create MAction makeActivityNode(CallOperationAction a, MActivity activit
 private create MAction makeActivityNode(Action a, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + a ) ->
 	transformNode(a) ->
+	setStereotype( { createStereotype(activity.model(), a.metaType.toString(), a.metaType.toString()) } ) ->
 	this;
 
 /**
@@ -143,6 +146,7 @@ private create MAction makeActivityNode(Action a, MActivity activity) :
 private create MNode makeActivityNode(InitialNode n, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
+	setStereotype( { createStereotype(activity.model(), "InitialNode", "InitialNode") } ) ->
 	this;
 
 /**
@@ -154,6 +158,7 @@ private create MNode makeActivityNode(InitialNode n, MActivity activity) :
 private create MNode makeActivityNode(ActivityFinalNode n, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
+	setStereotype( { createStereotype(activity.model(), "ActivityFinalNode", "ActivityFinalNode") } ) ->
 	this;
 
 /**
@@ -165,6 +170,7 @@ private create MNode makeActivityNode(ActivityFinalNode n, MActivity activity) :
 private create MNode makeActivityNode(FlowFinalNode n, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
+	setStereotype( { createStereotype(activity.model(), "FlowFinalNode", "FlowFinalNode") } ) ->
 	this;
 
 /**
@@ -176,6 +182,7 @@ private create MNode makeActivityNode(FlowFinalNode n, MActivity activity) :
 private create MNode makeActivityNode(DecisionNode n, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
+	setStereotype( { createStereotype(activity.model(), "DecisionNode", "DecisionNode") } ) ->
 	this;
 
 /**
@@ -187,6 +194,7 @@ private create MNode makeActivityNode(DecisionNode n, MActivity activity) :
 private create MNode makeActivityNode(MergeNode n, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
+	setStereotype( { createStereotype(activity.model(), "MergeNode", "MergeNode") } ) ->
 	this;
 
 /**
@@ -198,6 +206,7 @@ private create MNode makeActivityNode(MergeNode n, MActivity activity) :
 private create MNode makeActivityNode(ForkNode n, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
+	setStereotype( { createStereotype(activity.model(), "ForkNode", "ForkNode") } ) ->
 	this;
 
 /**
@@ -209,6 +218,7 @@ private create MNode makeActivityNode(ForkNode n, MActivity activity) :
 private create MNode makeActivityNode(JoinNode n, MActivity activity) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
+	setStereotype( { createStereotype(activity.model(), "JoinNode", "JoinNode") } ) ->
 	this;
 
 /**
