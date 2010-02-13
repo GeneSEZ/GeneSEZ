@@ -16,8 +16,13 @@
 
 	<condition property="build.display"
 		value="${env.DISPLAY}"
-		else="localhost:10.0">
-		<isset property="env.DISPLAY" />
+		else=":1">
+		<and>
+			<isset property="env.DISPLAY" />
+			<not>
+				<isset property="env.BUILD_NUMBER" />
+			</not>
+		</and>
 	</condition>
 
 	<!-- Import project related properties -->
@@ -98,7 +103,9 @@
 		</javac>
 	</target>
 
-	<target name="metamodel.uml2ecore.startx" unless="env.DISPLAY">
+	<!-- this is a little bit tricky, env.DISPLAY seems to be set within hudson, -->
+	<!-- so we check for env.BUILD_NUMBER, fix this some day... -->
+	<target name="metamodel.uml2ecore.startx" if="env.BUILD_NUMBER">
 		<exec executable="${STARTPROC_BIN}" osfamily="unix">
 			<arg value="${XVFB_BIN}" />
 			<arg value="${build.display}" />
@@ -108,7 +115,9 @@
 		</exec>
 	</target>
 
-	<target name="metamodel.uml2ecore.endx" unless="env.DISPLAY">
+	<!-- this is a little bit tricky, env.DISPLAY seems to be set within hudson, -->
+	<!-- so we check for env.BUILD_NUMBER, fix this some day... -->
+	<target name="metamodel.uml2ecore.endx" if="env.BUILD_NUMBER">
 		<exec executable="${KILLPROC_BIN}" osfamily="unix">
 			<arg value="${XVFB_BIN}" />
 		</exec>
