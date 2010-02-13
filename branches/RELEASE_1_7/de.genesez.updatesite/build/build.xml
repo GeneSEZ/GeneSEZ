@@ -14,7 +14,12 @@
 
 	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
 
-	<property name="updatesite.destination" value="${updatesite.location}" />
+	<condition property="updatesite.destination"
+		value="${updatesite.location}/${branch}"
+		else="${updatesite.location}">
+		<isset property="branch" />
+	</condition>
+
 	<property name="feature.destination" value="${updatesite.destination}/features" />
 	<property name="plugin.destination" value="${updatesite.destination}/plugins" />
 
