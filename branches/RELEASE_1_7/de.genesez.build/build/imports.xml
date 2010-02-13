@@ -17,4 +17,16 @@
 	<import file="antcontrib.xml" />
 	<import file="release.xml" />
 
+	<!-- if imports.xml is used by a subproject directly without
+		the control of de.genesez.build the environment properties may need to be set -->
+	<if>
+		<not>
+			<isset property="env"/>
+		</not>
+		<then>
+			<echo message="WARNING: This build is not controlled via de.genesez.build!"/>
+			<property environment="env"/>
+		</then>
+	</if>
+
 </project>
