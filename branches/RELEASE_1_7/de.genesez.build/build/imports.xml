@@ -21,10 +21,17 @@
 		the control of de.genesez.build the environment properties may need to be set -->
 	<if>
 		<not>
-			<isset property="env"/>
+			<isset property="build.controlled"/>
 		</not>
 		<then>
 			<echo message="WARNING: This build is not controlled via de.genesez.build!"/>
+		</then>
+	</if>
+	<if>
+		<not>
+			<isset property="env.USER"/>
+		</not>
+		<then>
 			<property environment="env"/>
 		</then>
 	</if>
