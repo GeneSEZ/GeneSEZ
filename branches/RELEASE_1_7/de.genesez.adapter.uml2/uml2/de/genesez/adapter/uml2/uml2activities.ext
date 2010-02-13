@@ -3,6 +3,8 @@
  * Transforms UML activity models into GeneSEZ models.
  * 
  * @author	gerrit beine
+ *
+ * TODO: add support for structured activities...
  */
 
 // uses ecore metamodel
@@ -30,7 +32,7 @@ extension de::genesez::adapter::uml2::uml2genesez;
 /**
  * create a GeneSEZ Activity from UML Behavior
  * @param a UML Behavior subclass Activity
- * @context the Classifier that owns the behavior
+ * @context the Usecase that owns the behavior
  * @return newly generated MActivity
  */
 MActivity transformBehavior(Activity a, MUseCase this):
@@ -109,7 +111,8 @@ private create MActivity makeActivity(Activity a) :
 /**
  * creates a GeneSEZ call behaviour action
  * @param a UML call behavior action
- * @context the activity that owns the action node
+ * @param activity the GeneSEZ activity that owns the action
+ * @context the action to transform
  * @return newly generated MAction
  */
 private create MAction makeActivityNode(CallBehaviorAction a, MActivity activity) :
@@ -124,7 +127,8 @@ private create MAction makeActivityNode(CallBehaviorAction a, MActivity activity
 /**
  * creates a GeneSEZ call operation action
  * @param a UML call operation action
- * @context the activity that owns the action node
+ * @param activity the GeneSEZ activity that owns the action
+ * @context the action to transform
  * @return newly generated MAction
  */
 private create MAction makeActivityNode(CallOperationAction a, MActivity activity) :
@@ -139,7 +143,8 @@ private create MAction makeActivityNode(CallOperationAction a, MActivity activit
 /**
  * creates a generic GeneSEZ action
  * @param a any other UML action
- * @context the activity that owns the action node
+ * @param activity the GeneSEZ activity that owns the action
+ * @context the action to transform
  * @return newly generated MAction
  */
 private create MAction makeActivityNode(Action a, MActivity activity) :
@@ -150,11 +155,12 @@ private create MAction makeActivityNode(Action a, MActivity activity) :
 
 /**
  * creates a GeneSEZ initial node
- * @param a UML initial node
- * @context the activity that owns the node
+ * @param n UML initial node
+ * @param a the GeneSEZ activity that owns the node
+ * @context the node to transform
  * @return newly generated MNode
  */
-private create MNode makeActivityNode(InitialNode n, MActivity activity) :
+private create MNode makeActivityNode(InitialNode n, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("InitialNode", "InitialNode") } ) ->
@@ -162,11 +168,12 @@ private create MNode makeActivityNode(InitialNode n, MActivity activity) :
 
 /**
  * creates a GeneSEZ activity final node
- * @param a UML activity final node
- * @context the activity that owns the node
+ * @param n UML activity final node
+ * @param a the GeneSEZ activity that owns the node
+ * @context the node to transform
  * @return newly generated MNode
  */
-private create MNode makeActivityNode(ActivityFinalNode n, MActivity activity) :
+private create MNode makeActivityNode(ActivityFinalNode n, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("ActivityFinalNode", "ActivityFinalNode") } ) ->
@@ -174,11 +181,12 @@ private create MNode makeActivityNode(ActivityFinalNode n, MActivity activity) :
 
 /**
  * creates a GeneSEZ flow final node
- * @param a UML flow final node
- * @context the activity that owns the node
+ * @param n UML flow final node
+ * @param a the GeneSEZ activity that owns the node
+ * @context the node to transform
  * @return newly generated MNode
  */
-private create MNode makeActivityNode(FlowFinalNode n, MActivity activity) :
+private create MNode makeActivityNode(FlowFinalNode n, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("FlowFinalNode", "FlowFinalNode") } ) ->
@@ -186,11 +194,12 @@ private create MNode makeActivityNode(FlowFinalNode n, MActivity activity) :
 
 /**
  * creates a GeneSEZ decision node
- * @param a UML decision node
- * @context the activity that owns the node
+ * @param n UML decision node
+ * @param a the GeneSEZ activity that owns the node
+ * @context the node to transform
  * @return newly generated MNode
  */
-private create MNode makeActivityNode(DecisionNode n, MActivity activity) :
+private create MNode makeActivityNode(DecisionNode n, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("DecisionNode", "DecisionNode") } ) ->
@@ -198,11 +207,12 @@ private create MNode makeActivityNode(DecisionNode n, MActivity activity) :
 
 /**
  * creates a GeneSEZ merge node
- * @param a UML merge node
- * @context the activity that owns the node
+ * @param n UML merge node
+ * @param a the GeneSEZ activity that owns the node
+ * @context the node to transform
  * @return newly generated MNode
  */
-private create MNode makeActivityNode(MergeNode n, MActivity activity) :
+private create MNode makeActivityNode(MergeNode n, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("MergeNode", "MergeNode") } ) ->
@@ -210,11 +220,12 @@ private create MNode makeActivityNode(MergeNode n, MActivity activity) :
 
 /**
  * creates a GeneSEZ fork node
- * @param a UML fork node
- * @context the activity that owns the node
+ * @param n UML fork node
+ * @param a the GeneSEZ activity that owns the node
+ * @context the node to transform
  * @return newly generated MNode
  */
-private create MNode makeActivityNode(ForkNode n, MActivity activity) :
+private create MNode makeActivityNode(ForkNode n, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("ForkNode", "ForkNode") } ) ->
@@ -222,11 +233,12 @@ private create MNode makeActivityNode(ForkNode n, MActivity activity) :
 
 /**
  * creates a GeneSEZ join node
- * @param a UML join node
- * @context the activity that owns the node
+ * @param n UML join node
+ * @param a the GeneSEZ activity that owns the node
+ * @context the node to transform
  * @return newly generated MNode
  */
-private create MNode makeActivityNode(JoinNode n, MActivity activity) :
+private create MNode makeActivityNode(JoinNode n, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("JoinNode", "JoinNode") } ) ->
@@ -250,6 +262,10 @@ private create MNode makeActivityNode(ActivityNode a, MActivity activity) :
 
 /**
  * creates a GeneSEZ control flow
+ * @param f UML control flow
+ * @param a the GeneSEZ activity that owns the node
+ * @context the flow to transform
+ * @return newly generated MFlow
  */
 private create MFlow makeActivityEdge(ControlFlow f, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + f ) ->
@@ -258,6 +274,11 @@ private create MFlow makeActivityEdge(ControlFlow f, MActivity a) :
 	
 /**
  * creates a GeneSEZ data flow
+ * @param f UML object flow
+ * @param a the GeneSEZ activity that owns the node
+ * @context the flow to transform
+ * @return newly generated MFlow
+ * TODO: add object classifier to the flow
  */
 private create MFlow makeActivityEdge(ObjectFlow f, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + f ) ->
@@ -276,6 +297,10 @@ private MFlow makeActivityEdge(ActivityEdge e, MActivity a) :
 
 /**
  * creates a GeneSEZ guard
+ * @param s UML value specification
+ * @param a the GeneSEZ activity that owns the guard
+ * @context the guard to transform
+ * @return newly generated MGuard
  */
 private create MGuard makeGuard(ValueSpecification s, MActivity a) :
 	trace( "make [ " + metaType + " ] - " + s ) ->
@@ -291,6 +316,10 @@ private create MGuard makeGuard(ValueSpecification s, MActivity a) :
 */
 
 /**
+ * Common transformations for all kinds of nodes
+ * @param n UML ActivityNode
+ * @context the node to transform
+ * @return the node
  */
 private MNode transformNode(MNode this, ActivityNode n) :
 	// basic element properties
@@ -302,6 +331,10 @@ private MNode transformNode(MNode this, ActivityNode n) :
 	this;
 
 /**
+ * Common transformations for all kinds of flows
+ * @param n UML ActivityEdge
+ * @context the flow to transform
+ * @return the flow
  */
 private MFlow transformFlow(MFlow this, ActivityEdge f, MActivity a) :
 	// basic element properties
