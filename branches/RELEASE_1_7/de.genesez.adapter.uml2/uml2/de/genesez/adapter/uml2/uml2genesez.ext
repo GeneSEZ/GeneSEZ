@@ -23,6 +23,9 @@ import uml;
 // uses GeneSEZ metamodel - the target metamodel
 import gcore;
 
+// use global store
+extension de::genesez::platforms::common::GlobalStore;
+
 // use logging
 extension de::genesez::platforms::common::log::Log;
 
@@ -106,6 +109,8 @@ create MModel transform(Model m) :
 	trace( "make [" + metaType + " ] - " + m ) ->
 	// basic element properties
 	transformBasics(m) ->
+	// save model in global store
+	saveModel() ->
 	// package properties
 	transformPackage(m) ->
 	this;
