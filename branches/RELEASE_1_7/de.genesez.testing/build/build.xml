@@ -17,12 +17,7 @@
 	<condition property="build.display"
 		value="${env.DISPLAY}"
 		else=":1">
-		<and>
-			<isset property="env.DISPLAY" />
-			<not>
-				<isset property="env.BUILD_NUMBER" />
-			</not>
-		</and>
+		<isset property="env.DISPLAY" />
 	</condition>
 
 	<!-- Import project related properties -->
@@ -90,7 +85,7 @@
 
 	<!-- Private target section -->
 
-	<target name="testing.uml2ecore.startx" if="env.BUILD_NUMBER">
+	<target name="testing.uml2ecore.startx" unless="env.env.DISPLAY">
 		<exec executable="${STARTPROC_BIN}" osfamily="unix">
 			<arg value="${XVFB_BIN}" />
 			<arg value="${build.display}" />
@@ -100,7 +95,7 @@
 		</exec>
 	</target>
 
-	<target name="testing.uml2ecore.endx" if="env.BUILD_NUMBER">
+	<target name="testing.uml2ecore.endx" unless="env.env.DISPLAY">
 		<exec executable="${KILLPROC_BIN}" osfamily="unix">
 			<arg value="${XVFB_BIN}" />
 		</exec>
