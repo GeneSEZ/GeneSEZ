@@ -74,8 +74,7 @@ private create TPackage makePackage(MPackage m) :
 	trace("creating " + metaType + " for " + m.name) ->
 	transformBasics(m) ->
 	testsuites.addAll(
-		m.classifier.typeSelect(MUseCase)
-		makeTestSuite()
+		m.classifier.typeSelect(MUseCase).makeTestSuite()
 		) ->
 	this;
 
@@ -104,42 +103,6 @@ private create TTestCase makeTestCase(MActivity m) :
 	transformBasics(m) ->
 	this;
 
-/**
- * creates a GeneSEZ Input
- * @param	m	a GeneSEZ action
- * @return	the GeneSEZ Input
- */
-private create TEnter makeInput(MAction m) :
-	trace("creating " + metaType + " for " + m.name) ->
-	transformBasics(m) ->
-	this;
-
-/**
- * creates a GeneSEZ Key Event 
- * @param	m	a GeneSEZ action
- * @return	the GeneSEZ Key Event
- */
-private create TKey makeKeyEvent(MAction m) :
-	trace("creating " + metaType + " for " + m.name) ->
-	transformBasics(m) ->
-	trace( m.taggedValue.select(e|e.tag.name == "key").first().value ) ->
-	setKeycode( m.taggedValue.select(e|e.tag.name == "key").first().value.asInteger() ) ->
-	this;
-
-/**
- * creates a GeneSEZ Mouse Event 
- * @param	m	a GeneSEZ action
- * @return	the GeneSEZ Mouse Event
- */
-private create TClick makeMouseEvent(MAction m) :
-	trace("creating " + metaType + " for " + m.name) ->
-	transformBasics(m) ->
-	trace( m.taggedValue.select(e|e.tag.name == "clicks").first().value ) ->
-	setClicks( m.taggedValue.select(e|e.tag.name == "clicks").first().value.asInteger() ) ->
-	trace( m.taggedValue.select(e|e.tag.name == "button").first().value ) ->
-//	setButton( TMouseButton.getStaticProperty( m.taggedValue.select(e|e.tag.name == "button").first().value ) ) ->
-	this;
-
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -157,36 +120,3 @@ private TElement transformBasics(TElement this, MElement m) :
 	setXmiGuid( m.xmiGuid ) ->
 	setName( m.name ) ->
 	this;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	dummy functions to prevent editor errors
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * just a marker for error free templates
- * prints a 'severe' log message to report such an transformation
- * @return	void
- */
-private TEnter makeEnter(MNode m) :
-	fatal("try to construct a TEnter object from: " + m) ->
-	Void;
-
-/**
- * just a marker for error free templates
- * prints a 'severe' log message to report such an transformation
- * @return	void
- */
-private TKey makeKey(MNode m) :
-	fatal("try to construct a TKey object from: " + m) ->
-	Void;
-
-/**
- * just a marker for error free templates
- * prints a 'severe' log message to report such an transformation
- * @return	void
- */
-private TClick makeClick(MNode m) :
-	fatal("try to construct a TClick object from: " + m) ->
-	Void;
