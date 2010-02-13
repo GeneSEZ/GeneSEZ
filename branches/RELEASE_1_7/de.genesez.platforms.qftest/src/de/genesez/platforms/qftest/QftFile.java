@@ -19,9 +19,6 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 import de.genesez.testing.gtesting.TElement;
-import de.genesez.testing.gtesting.TKeyEvent;
-import de.genesez.testing.gtesting.TMouseEvent;
-import de.genesez.testing.gtesting.TMouseMove;
 import de.genesez.testing.gtesting.TTestSuite;
 
 public class QftFile {
@@ -90,22 +87,6 @@ public class QftFile {
 		activeElement = e;
 	}
 	
-	public static void qfKeyEventStep(TKeyEvent t) {
-		Element e = getElement(t, "KeyEventStep"); 
-		addElement(e);
-	}
-
-	public static void qfMouseEventStep(TMouseEvent t) {
-		Element e = getElement(t, "MouseEventStep"); 
-		e.setAttribute("clicks", String.valueOf(t.getClicks()));
-		addElement(e);
-	}
-
-	public static void qfMouseEventStep(TMouseMove t) {
-		Element e = getElement(t, "MouseEventStep"); 
-		addElement(e);
-	}
-
 	public static void qfElement(TElement t, String tagName) {
 		Element e = getElement(t, tagName); 
 		addElement(e);
