@@ -5,6 +5,17 @@ extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
+extension de::genesez::platforms::java::ejb3::scripts::Class;
+
+/**
+  * add standard constructor to entity beans 
+  *	if there is not already one
+  */	
+MClassifier addStandardConstructor(MClass this) :
+	this.hasStereotype("jpaPersistentEntity") &&
+	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
+		? createStandardConstructor()
+		: "";
 
 /**
   *	adds an accessor stereotype for generating get and set methods if
@@ -50,6 +61,7 @@ Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
 		: "" ->
 	//add "jpaPrimaryKey"-stereotype if necessary and not existing and class is not @Embedabble (pk class)«ENDREM»
 	property.exists(e|e.name == "id" && e.type.name() == "int") && 
+	generalization.isEmpty && hasStereotype("jpaPersistentEntity") && 
 	!(hasStereotype("jpaPrimaryKeyClass") && hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) && 
 	!property.selectFirst(e|e.name == "id" && e.type.name() == "int").hasStereotype("jpaPrimaryKey")
 		? property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "AUTO", "")
