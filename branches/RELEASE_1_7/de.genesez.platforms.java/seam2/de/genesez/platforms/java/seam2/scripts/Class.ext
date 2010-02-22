@@ -5,7 +5,19 @@ extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
 extension de::genesez::platforms::java::seam2::scripts::Operation;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::common::m2m::CreateOperations;
 extension de::genesez::platforms::common::m2m::CreateBasics;
+extension de::genesez::platforms::java::ejb3::scripts::Class;
+
+/**
+  * add standard constructor to seam components 
+  *	if there is not already one
+  */	
+MClassifier addStandardConstructor(MClass this) :
+	this.hasStereotype("seam2Component") &&
+	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
+		? createStandardConstructor()
+		: "";
 
 /**
   *	creates a logger attribute if there is no attribute with datatype "Log"
@@ -14,7 +26,6 @@ Void addLoggerAttribute(MClass this) :
 	!this.hasStereotype("jpaPersistentEntity") && this.hasTaggedValue("seam2Component", "logger", "true") && !this.existLoggerAttribute() 
 		? addAttribute("logger", "Log", "private")
 		: "";
-
 
 /**
  *	
@@ -28,8 +39,8 @@ Void checkAbstractClassesForComponentStereotype(MClass this) :
   *
   */
 Void addFactoryMethod(MClassifier this, String autoCreate, String scope, String value) :
-	addOperation(this, "initiate"+value.toFirstUpper()) ->
-	this.realization.typeSelect(MClassifier).addOperation("initiate"+value.toFirstUpper()) ->
+	addOperation("initiate"+value.toFirstUpper(), "void", "public") ->
+	this.realization.typeSelect(MClassifier).addOperation("initiate"+value.toFirstUpper(), "void", "public") ->
 	this.operation.selectFirst(e|e.name == "initiate"+value.toFirstUpper()).addFactoryStereotype(autoCreate, scope, value);
 
 /**
@@ -53,12 +64,12 @@ Void checkCreateMethod(MClass this) :
 			!operation.exists(e|e.hasTaggedValue("seam2Lifecycle", "create", "true")) 
 				? (
 					(!operation.exists(e|e.name == "init" && e.parameter.size == 0)
-						? addOperation(this, "init")
+						? addOperation("init", "void", "public")
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "init" && e.parameter.size == 0).addLifecycleStereotype("true", "false") ->
 					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).operation.exists(e|e.name == "init" && e.parameter.size == 0)
-						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).addOperation("init")
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).addOperation("init", "void", "public")
 						: "")
 				)
 				: ""
@@ -74,12 +85,12 @@ Void checkDestroyMethod(MClass this) :
 			!operation.exists(e|e.hasTaggedValue("seam2Lifecycle", "destroy", "true")) 
 				? (
 					(!operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
-						? addOperation(this, "destroy")
+						? addOperation("destroy", "void", "public")
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "destroy" && e.parameter.size == 0).addLifecycleStereotype("false", "true") ->
 					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
-						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).addOperation("destroy")
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).addOperation("destroy", "void", "public")
 						: "")
 				)
 				: ""
