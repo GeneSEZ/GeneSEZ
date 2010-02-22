@@ -4,49 +4,44 @@ extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::java::scripts::Naming;
-extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
+extension de::genesez::platforms::java::java5::scripts::Stereotypes;
 /* remove this import to be independent from jpa cartridge */
 extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 
 /**
-  * add standard constructor to a bean class
-  */
-MModel addStandardConstructor(MModel this) :
-	nestedPackage.addStandardConstructor();
-	
+  * add standard constructor to a session or message driven bean
+  *	in the package and subpackages
+  */	
 MPackage addStandardConstructor(MPackage this) :
 	nestedPackage.addStandardConstructor() ->
-	classifier.addStandardConstructor();
-	
-MClassifier addStandardConstructor(MClassifier this) :
-	operation.exists(e|e.name == name) && operation.select(e|e.name == name).parameter == "[]"
-	? ""
-	: operation.add(makeStandardConstructor());
+	classifier.typeSelect(MClass).addStandardConstructor();
 
 /**
-  *	checks if a class is a session bean
-  */
-boolean isSessionBean(MClassifier this, String name) :
-	/*warn("Name gleich: "+this.owningPackage.getModel().nestedPackage.classifier.typeSelect(MClass).exists(e|e.name == name)) ->
-	warn("Stereotyp vorhanden: "+this.owningPackage.getModel().nestedPackage.classifier.typeSelect(MClass).exists(e|e.name == name && e.hasStereotype("ejb3SessionBean"))) ->*/
-	//this.owningPackage.getModel().nestedPackage.classifier.typeSelect(MClass).exists(e|e.name == name && e.hasStereotype("ejb3SessionBean"))
-	this.model().allClassifiers().typeSelect(MClass).exists(e|e.name == name && e.hasStereotype("ejb3SessionBean"))
-		? true
-		: false;
+  * add standard constructor to a session or message 
+  *	driven bean if there is not already one
+  */	
+MClassifier addStandardConstructor(MClass this) :
+	(this.hasStereotype("ejb3SessionBean") || this.hasStereotype("ejb3MessageDrivenBean")) &&
+	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
+		? createStandardConstructor()
+		: "";
 
 /**
-  * helper method for "addStandardConstructor"
+  * creates a standard constructor with no arguments
+  *	this constructor does not have a protected region
+  *
+  *	the modeller has to model a constructor with no 
+  *	arguments explicitly if a protected region is desired
   */
-create MOperation makeStandardConstructor(MClassifier container) : 
-	setName(container.name) ->
-	setVisibility("public") ->
-	setXmiGuid("StandardConstructor" + container.name) ->
-	setRaisedException(createList()) ->
-	setOwnedComment(createList()) ->
-	setParameter(createList()) ->
-	setReturnType(createPrimitiveType(container.getModel(), "void", "void")) ->
-	container.operation.add(this);
+Void createStandardConstructor(MClass container) :
+	let sc = createOperation(container, container.name()+"_StandardConstructor", container.name()) :
+		sc.processOperation("public", false, false, false, 1, false, false) ->
+		sc.setRaisedException(createList()) ->
+		sc.setOwnedComment(createList()) ->
+		sc.setParameter(createList()) ->
+		sc.setReturnType(createExternal(container.model(), "void")) ->
+		sc.addInternalStereotype("http://www.genesez.de/StandardConstructor");
 	
 /**
   *	evaluates "ejb3SessionBean" stereotype and adds entityManager attribute
@@ -133,13 +128,13 @@ Void createAccessorForEntityManager(MProperty this) :
 Void addEntityManager(MClass this, String type) :
 	!existEntityManager() 
 		? (type.matches("EntityManager")
-			? addAttribute(this, "entityManager", "EntityManager", "private")
+			? addAttribute("entityManager", "EntityManager", "private", 1)
 			: (type.matches("EntityManager_Extended")
-				? addAttribute(this, "entityManager", "EntityManager", "private")
+				? addAttribute("entityManager", "EntityManager", "private", 1)
 				: (type.matches("Session")
-					? addAttribute(this, "session", "Session", "private")
+					? addAttribute("session", "Session", "private", 1)
 					: (type.matches("Session_Extended")
-						? addAttribute(this, "session", "Session", "private")
+						? addAttribute("session", "Session", "private", 1)
 						: ""
 					)	
 				)
@@ -156,67 +151,18 @@ boolean existEntityManager(MClass this) :
 		? true
 		: false;
 
-Void addAttribute(MClassifier this, String name, String type, String visibility) :
-	this.property.add(createAttribute(this, name, type, visibility)) ->
-	this;
-
-create MAttribute createAttribute(MClassifier container, String name, String type, String visibility) :
-	this.setMultiplicity(1) ->
-	this.setName(name) ->	
-	setXmiGuid(container.xmiGuid) ->
-	// set operation properties
-	setVisibility(visibility) ->
-	setStatic(false) ->
-	setFinal(false) ->	
-	this.setType(createExternal(container.getModel(), type)) ->	
-	this;
-
-//Diese Extensions werden für die Interceptorklassenerstellung benötigt
-//extension de::genesez::platforms::java::ejb3::scripts::AccessHelper;
-//extension de::genesez::platforms::java::ejb3::scripts::Conversion;
-		
 /**
-	Hier werden Methoden für die Verarbeitung der Interceptorklassen auf Xtend-Ebene definiert.
-	Diese Funktionalität bleibt zunächst auf XPand-Ebene.
-	Grund: Zu viel Aufwand bei zu wenig Ergebnis...bisher auf XPand-Ebene schöner zu lösen,
-	da dort direkt Code in die Methodenrümpfe geschrieben werden kann.
-*/ 
-/**
-Void addInterceptorClass(MClassifier this) :
-	createClassifier(this.getModel(), this.asTypeName()+"Interceptor", this.asTypeName()+"Interceptor") ->
-	this.getTaggedValue("ejb3ClassInterceptor", "methods").getElements().addInterceptorOperation(this);
-	
-Void addInterceptorOperation(String name, MClassifier this) :
-	let parameter = createParameterList() :
-		let operation = createOperation(name, name, parameter, "public", false, false, createList(), 1, false, createList(), createList(), createPrimitiveType("Object"), false, false) :
-			operation.addParameter("ctx", 1, createPrimitiveType("InvocationContext")) ->
-			this.operation.add(operation);
-
-create MOperation createOperation(String xmiGuid, String name, List[MParameter] parameter, String visibility, Boolean abstract, Boolean final, List aspect, Integer multiplicity, Boolean ordered, List ownedComment, List raisedException, MType returnType, Boolean static, Boolean unique) :
-	processOperation(this, xmiGuid, name, parameter, visibility, abstract, final, aspect, multiplicity, ordered, ownedComment, raisedException, returnType, static, unique) ->
-	this;
-
-create MPrimitiveType createPrimitiveType(MModel container, String name, String xmiGuid) :
-	processElement(xmiGuid, name) ->
-	container.primitiveTypes.add(this) ->
-	this;
-
-create List[MParameter] createParameterList() :
-	this;
-
-create List createList() :
-	this;		
-
-MParameter addParameter(MOperation op, String name, Integer multiplicity, MType type) :
-	op.parameter.add(createParameter(name, multiplicity, type));
-
-create MParameter createParameter(String name, Integer multiplicity, MType type) :
-	this.setName(name) ->
-	this.setMultiplicity(multiplicity) ->
-	this.setOrdered(false) ->
-	//achtung, eins zu n
-	this.setType(createPrimitiveType("Object")) ->
-	this.setXmiGuid(name) ->
-	this;
-*/
-
+ *	creates an attribute and adds it to the property list
+ *	
+ *	@param	container		instance of MClassifier
+ *	@param	name			name of the attribute
+ *	@param	type			type of the attribute
+ *	@param	visibility		visibility of the attribute
+ *	@param	multiplicity	multiplicity of the attribute
+ */
+Void addAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
+	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
+		a.processAttribute("", false, false) ->
+		a.setMultiplicity(multiplicity) ->
+		a.setVisibility(visibility) ->
+		a.setType(createExternal(container.model(), type));

@@ -13,14 +13,19 @@ extension de::genesez::platforms::java::ejb3::scripts::Interface;
 extension de::genesez::platforms::java::ejb3::scripts::Class;
 extension de::genesez::platforms::java::scripts::Naming;
 
+Void additions(MModel this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
 	
 Void additions(MPackage this) :
 	this.nestedPackage.additions() ->
-	this.classifier.typeSelect(MClass).addSessionBeanInterfaces() ->
-	this.classifier.typeSelect(MClass).addStandardConstructor() ->
-	this.classifier.typeSelect(MClass).checkUseOfEntityManager() ->
-	this.classifier.typeSelect(MClass).addMessageListener();
-
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MClass this) :
+	addSessionBeanInterfaces() ->
+	addStandardConstructor() ->
+	checkUseOfEntityManager() ->
+	addMessageListener();	
 
 Void modifications(MModel this) :
 	this.nestedPackage.modifications() ->
@@ -31,7 +36,6 @@ Void modifications(MPackage this) :
 	this.classifier.typeSelect(MClass).modifications();
 	
 Void modifications(MClass this) :
-	//checkInterceptorClass() ->
 	this.property.typeSelect(MAttribute).modifications() ->
 	this.operation.typeSelect(MOperation).modifications();
 	
@@ -45,26 +49,3 @@ Void modifications(MAttribute this) :
 
 Void modifications(MInterface this) :
 	Void;
-
-/**
-	Hier werden Methoden für die Verarbeitung der Interceptorklassen auf Xtend-Ebene definiert.
-	Diese Funktionalität bleibt zunächst auf XPand-Ebene.
-	Grund: Zu viel Aufwand bei zu wenig Ergebnis...bisher auf XPand-Ebene schöner zu lösen,
-	da dort direkt Code in die Methodenrümpfe geschrieben werden kann.
-*/
-/**
-Void checkInterceptorClass(MClass this) :
-	hasStereotype("ejb3ClassInterceptor") 
-		? ( hasUtilizableValue("ejb3ClassInterceptor", "interceptors")
-			? ( hasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
-				( this.operation.exists(e|e.hasTaggedValue("ejb3Callback", "external", "true")) ||
-				hasUtilizableValue("ejb3ClassInterceptor", "methods") ) 
-				? addInterceptorClass()
-				: ""
-			)				
-			: ""
-		)
-		: "";
-*/
-
-		

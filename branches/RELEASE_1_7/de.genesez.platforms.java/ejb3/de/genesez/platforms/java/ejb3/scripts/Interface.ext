@@ -26,7 +26,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 		? ( 
 			this.hasUtilizableValue("ejb3Remote", "name")
 				? (
-					!this.model().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
+					!allClassifiers(this.model()).typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
 						? (	
 							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
@@ -48,7 +48,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 		? (
 			this.hasUtilizableValue("ejb3Local", "name")
 				? (	
-					!this.model().classifier.typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Local", "name"))
+					!allClassifiers(this.model()).typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Local", "name"))
 						? (	
 							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
 								this.realization.add(interface) ->
@@ -66,26 +66,19 @@ Void addSessionBeanInterfaces(MClassifier this) :
 				)
 		)
 		: "";
-		
+
+/**
+ *	checks whether a remote session bean interface should be created
+ */		
 boolean isRemoteInterfaceNeeded(MClassifier this) :
-	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Remote") /* &&	
-	!this.realization.hasStereotype("ejb3Remote") */
+	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Remote")
 		? true
 		: false;
 
+/**
+ *	checks whether a local session bean interface should be created
+ */	
 boolean isLocalInterfaceNeeded(MClassifier this) :
-	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Local") /* &&
-	!this.realization.hasStereotype("ejb3Local") */
+	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Local")
 		? true
 		: false;
-
-boolean isSessionBeanInterface(String attributeType) :
-	(
-		(attributeType.endsWith("Remote") || attributeType.endsWith("Local")) &&
-		attributeType.startsWith("I")		
-	)
-		? true
-		: false;
-
-Void addExternalInterface(MClassifier this, String name) :
-	realization.add(createExternal(this.getModel(), name));

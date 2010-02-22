@@ -19,12 +19,24 @@ Void checkTimerServiceStereotype(MAttribute this) :
 	!this.hasStereotype("ejb3Resource") && this.type.asTypeName() == "TimerService"
 		? this.addResourceStereotype("")
 		: "";
-	
+
 /**
-  *	deprecated: use session bean datatypes instead
+  *	checks if the data type of an attribute is a session bean
+  *
+  *	@param	this	instance of MAttribute
+  *	@param	model	instance of MModel as base for the search
+  */
+boolean isSessionBean(MAttribute this, MModel model) :
+	allClassifiers(model).typeSelect(MClass).exists(e|e.name == type.asTypeName() && e.hasStereotype("ejb3SessionBean"))
+		? true
+		: false;
+
+/**
+  *	adds the stereotype "ejb3EJB" if the attribute data type
+  *	is a session bean interface and there is no such stereotype
   */
 Void checkEJBStereotype(MAttribute this) :
-	!this.hasStereotype("ejb3EJB") && isSessionBeanInterface(this.type.asTypeName())
+	!this.hasStereotype("ejb3EJB") && isSessionBeanInterface(this.model())
 		? this.addEJBStereotype("", "", "", "", "")
 		: ""; 
 
@@ -46,11 +58,11 @@ Void changeSessionBeanAttributeDatatype(MAttribute this) :
 	this.isSingleValuedType() && !this.type.isPrimitiveType()
 		? (
 			//warn("Datentyp: "+this.type.asTypeName()) ->
-			//if the datatype is a session bean
-			isSessionBean(this.classifier, this.type.asTypeName()) 
+			//if this attribute data type  is a session bean
+			isSessionBean(this.classifier.model()) 
 				? (
 					//check for realization of the session bean which are business interfaces
-					let s = this.classifier.model().allClassifiers().typeSelect(MClass).selectFirst(e|e.name == this.type.asTypeName() && e.hasStereotype("ejb3SessionBean")) :
+					let s = allClassifiers(this.classifier.model()).typeSelect(MClass).selectFirst(e|e.name == this.type.asTypeName() && e.hasStereotype("ejb3SessionBean")) :
 						//warn("SB: "+s) ->
 						//warn("SB Interfaces: "+s.realization.name()) ->
 						s.realization.typeSelect(MInterface).exists(e|e.hasStereotype("ejb3Local"))
@@ -92,3 +104,16 @@ Void changeSessionBeanAttributeDatatype(MAttribute this) :
 			""
 		) ->
 	"";	
+	
+/**
+ *	evaluates whether the data type of an attribute is 
+ *	a session bean interface
+ *
+ *	@param	attribute	instance of a MAttribute
+ *
+ *	@return				true, if the attribute data type is a session bean interface
+ */
+boolean isSessionBeanInterface(MAttribute this, MModel model):
+	allClassifiers(model).typeSelect(MInterface).exists(e|
+		(e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")) && 
+		e.name().asTypeName() == type.name().asTypeName());
