@@ -336,13 +336,14 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 			}
 		«ELSE-»
 			public «mapType()-»<«type.asTypeName()»> «asGetter()»() {
-				«IF unique == true-»
+				return this.«asAttribute()-»;
+				«REM»«IF unique == true-»
 					return java.util.Collections.unmodifiableSet(«asAttribute()»);
 				«ELSEIF unique == false && ordered == false-»
 					return java.util.Collections.unmodifiableSet(«asAttribute()»);
 				«ELSE»
 					return java.util.Collections.unmodifiableList(«asAttribute()»);
-				«ENDIF-»
+				«ENDIF-»«ENDREM»
 			}
 		«ENDIF-»
 	«ELSE-»

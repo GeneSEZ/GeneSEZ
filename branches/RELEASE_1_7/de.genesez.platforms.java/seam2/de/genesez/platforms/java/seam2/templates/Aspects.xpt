@@ -179,8 +179,8 @@
 «ENDREM»
 «DEFINE _Attributes FOR MAttribute-»
 	«EXPAND _Bijection-»
-	«EXPAND _Restrict-»
 	«EXPAND _DataTable-»
+	«EXPAND _Restrict-»
 	«IF hasStereotype("seam2Logger")»
 		@Logger
 		«IF hasUtilizableValue("seam2Logger", "value")»
@@ -487,6 +487,15 @@
 «REM»
 	evaluates the context demarcation stereotypes
 «ENDREM»
+«DEFINE _Restrict FOR MElement-»
+	«IF hasStereotype("seam2Restrict")-»
+		@Restrict(value="«hasTaggedValue("seam2Restrict", "value")-»")
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the context demarcation stereotypes
+«ENDREM»
 «DEFINE _ContextDemarcation FOR MOperation-»
 	«IF hasStereotype("seam2Begin")»
 		@Begin(nested=«getTaggedValue("seam2Begin", "nested")-»
@@ -561,15 +570,6 @@
 		«IF hasUtilizableValue("seam2ContextDemarcation", "transition")»
 			@Transition("«getTaggedValue("seam2ContextDemarcation", "transition")-»")
 		«ENDIF»
-	«ENDIF»
-«ENDDEFINE»
-
-«REM»
-	evaluates the context demarcation stereotypes
-«ENDREM»
-«DEFINE _Restrict FOR MElement-»
-	«IF hasStereotype("seam2Restrict")-»
-		@Restrict(value="«hasTaggedValue("seam2Restrict", "value")-»")
 	«ENDIF»
 «ENDDEFINE»
 
