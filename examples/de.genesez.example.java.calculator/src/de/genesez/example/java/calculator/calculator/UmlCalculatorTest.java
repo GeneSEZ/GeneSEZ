@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.genesez.platforms.java.umlsupport.statechart.EventQueue;
+import de.genesez.platforms.java.umlsupport.statemachine.EventQueue;
 
 /**
  * @author georg beier
