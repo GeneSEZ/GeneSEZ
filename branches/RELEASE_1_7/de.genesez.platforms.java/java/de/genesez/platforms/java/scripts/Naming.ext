@@ -123,6 +123,12 @@ String asTypeName(MClassifier this) : prefix() + name.toFirstUpper() + suffix();
 String asTypeName(MType this) : name();
 
 /**
+ * formats the name of an event
+ * @return	the name of the event
+ */
+String asTypeName(MEvent this) : name.startsWith("_")? name : name.toFirstUpper();
+
+/**
  * formats the name of a type after typemapping
  * don't touch the type - the name of the type is determined by typemapping
  * @return	the name of the type
@@ -231,6 +237,13 @@ String asVariable(MAttribute this) : name.toFirstLower();
  * @return	the formatted name of the getter method
  */
 String asGetter(MProperty this) : "get" + name.toFirstUpper();
+
+/**
+ * formats an arbitrary Element as a getter method
+ * @context	the element to format
+ * @return	the formatted name of the getter method
+ */
+String asGetter(MElement this) : "get" + name.toFirstUpper();
 
 /**
  * formats an property name as a setter method
@@ -398,6 +411,56 @@ String asConstructor(MOperation this) : name.toFirstUpper();
  * @return	the formatted name of the operation
  */
 String asParameter(MParameter this) : name.toFirstLower();
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asParameter(MElement this) : name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	state machine elements
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an event name
+ * @return	the formatted name of the element
+ */
+String asEvent(MElement this) : name.toFirstLower();
+
+/**
+ * formats a state name
+ * @return	the formatted name of the element
+ */
+String asState(MElement this) : name.toFirstLower();
+
+/**
+ * formats a history state name for use as field name
+ * @return	the formatted name of the element
+ */
+String asHistoryField(MElement this) : "historyOf" + name.replaceAll("_", "").toFirstUpper();
+
+/**
+ * formats an action name
+ * @return	the formatted name of the element
+ */
+String asAction(MElement this) : name.toFirstLower();
+
+/**
+ * formats an action name
+ * @return	the formatted name of the element
+ */
+String asEndDo(MElement this) : "end" + name.toFirstUpper();
+
+/**
+ * formats an action name
+ * @return	the formatted name of the element
+ */
+String asStartDo(MElement this) : "start" + name.toFirstUpper();
 
 
 /*

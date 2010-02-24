@@ -18,6 +18,7 @@
 
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::StateMachineUtil»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -44,11 +45,11 @@ package «packageDeclaration( basePackage() ) -»;
 	generates a type comment
 «ENDREM»
 «DEFINE Type FOR MClassifier -»
-/**
 «IF hasComment() -»
+/**
 «comment().format() -»
-«ENDIF -»
  * @author	«getUserName()»
+«ENDIF -»
  */
 «ENDDEFINE»
 
@@ -58,11 +59,11 @@ package «packageDeclaration( basePackage() ) -»;
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 «DEFINE EnumerationLiteral FOR MLiteral -»
-/**
 «IF hasComment() -»
+/**
 «comment().format() -»
-«ENDIF -»
  */
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -229,6 +230,18 @@ package «packageDeclaration( basePackage() ) -»;
 	«EXPAND _Params FOREACH parameter -»
 	«EXPAND _Return -»
 	«EXPAND _Exceptions FOREACH raisedException -»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the comment of a statemachine action
+«ENDREM»
+«DEFINE Action FOR MActivity -»
+	/**
+	«IF hasComment() -»
+	«comment().format() -»
+	«ENDIF -»
+	 * action method stub for further implementation
 	 */
 «ENDDEFINE»
 

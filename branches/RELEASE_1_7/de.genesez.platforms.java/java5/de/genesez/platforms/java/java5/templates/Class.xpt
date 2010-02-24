@@ -18,6 +18,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::StateMachineUtil»
 
 
 «REM»
@@ -31,6 +32,7 @@
 package «packageDeclaration( basePackage() ) -»;
 «EXPAND Import::Import -»
 «REM» generate a newline between imports + type comment «ENDREM»
+«prepareActiveClass() -»
 «EXPAND Comment::Type -»
 «EXPAND _Annotation-»
 «EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
@@ -68,6 +70,11 @@ package «packageDeclaration( basePackage() ) -»;
 	
 	// -- own code implementation -------------------------------------------
 	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
+	
+	«IF ! ownedBehavior.isEmpty -»
+	// -- generated state machine section -----------------------------------
+	«EXPAND StateMachine::StateMachine FOREACH ownedBehavior.typeSelect(MStateMachine) -»	
+	«ENDIF -»
 }
 «ENDDEFINE»
 
