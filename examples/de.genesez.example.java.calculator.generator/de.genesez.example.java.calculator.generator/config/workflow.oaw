@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		CONFIGURATION SECTION
+	 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+	
+	<!-- project + directory layout + name settings - - - - - - - - - - - - - - -->
+	
+	<!-- directory of the project, this generator project belongs to -->
+	<property name="project.dir" value="../de.genesez.example.java.calculator" />
+	<!-- property name="magicdraw.dir" value="C:/appz-copied/MD_UML_140_standard_no_install" / -->
+	<!-- directory which contains the model file -->
+	<property name="model.dir" value="model" />
+	<!-- directory in which the generated files are placed -->
+	<property name="model2text.dir" value="src-gen" />
+	<!-- directory which contains the exported uml2 model -->
+	<property name="model.export.dir" value="model-exp" />
+	<!-- directory in which the generated genesez model is serialized (just for info) -->
+	<property name="model.gen.dir" value="model-gen" />
+	<!-- name of the model file -->
+	<property name="model.name" value="calculator" />
+	<!-- name of the profile file, if you need to specify an additional uml2 profile as metamodel -->
+	<property name="profile.name" value="" />
+	
+	
+	<!-- uml to genesez transformation settings - - - - - - - - - - - - - - - - -->
+	
+	<!--
+		workflow component which is used to transform the uml model into a genesez model
+		
+		makeGenesezModel.oaw		- if you don't need to specify an additional uml2 profile
+		makeGenesezModelProfile.oaw	- if you used an uml profile in your model, which is specified 
+									  with the property ${profile.name}
+	-->
+	<property name="uml2genesez.component" value="makeGenesezModel.oaw" />
+	<!-- comma or comma blank [, ] separated list of package names to exclude from transformation -->
+	<property name="uml2genesez.exclude.packages" value="UML Standard Profile" />
+	<!-- determines if all classes directly contained in the model are transformed to external types instead of classifiers -->
+	<property name="uml2genesez.external.type.allClassesInModel" value="true" />
+	<!-- comma or comma blank [, ] separated list of package names which are used as container
+		 for external types (therefor are not transformed to genesez packages) -->
+	<property name="uml2genesez.external.type.packages" value="" />
+	<!-- comma or comma blank [, ] separated list of names of stereotypes which are applied 
+		 to packages or classes, indicating that the package is a container for external types
+		 or the classes are external types -->
+	<property name="uml2genesez.external.type.stereotypes" value="external" />
+	
+	
+	<!-- model to java transformation settings - - - - - - - - - - - - - - - - - - -->
+	
+	<!-- comma or semicola separated list with package names to exclude from code generation -->
+	<property name="model2text.exclude.packages" value="" />
+	<!-- boolean value indicates if the model name is used as base package or not -->
+	<property name="model2text.use.model.name.as.base.package" value="true" />
+	<!-- specifies the base package for all generated artefacts -->
+	<property name="model2text.base.package" value="" />
+	<!-- boolean value indicates if section comments are generated or not -->
+	<property name="model2text.generate.section.comments" value="true" />
+	<!-- comma separated list of aspect templates, used for the XPand AOP-Feature -->
+	<property name="model2text.aspect.templates" value="customization::Attrib" />
+	<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
+	<property name="model2text.aspect.scripts" value="customization::Naming" />
+	<!-- type mapping file to use, is searched within the classpath -->
+	<property name="model2text.typemapping.file" value="typemapping.xml" />
+	
+	<property name="model2text.disableAccessors" value="false" />
+	<property name="model2text.useAccessorStereotype" value="false" />
+	<property name="model2text.usePropertyVisibilityForAccessors" value="false" />
+	
+	
+	<!-- general file extension settings, usually no need to adjust - - - - - - - - - - - - -->
+	
+	<!-- file extension of the magic draw model file -->
+	<property name="magicdraw.extension" value=".mdzip" />
+	<!-- file extension of the uml2 model file -->
+	<property name="uml2.model.extension" value=".uml" />
+	<!-- file extension of the uml2 profile file -->
+	<property name="uml2.profile.extension" value=".profile.uml" />
+	<!-- file extension of the serialized genesez model -->
+	<property name="genesez.model.extension" value=".xmi" />
+	
+	
+	<!-- calculated properties, usually no need to adjust - - - - - - - - - - - - - - - - - -->
+	
+	<!-- relative filename of the magic draw model file -->
+	<property name="magicdraw.model.file" value="${project.dir}/${model.dir}/${model.name}${magicdraw.extension}" />
+	<!-- relative filename of the uml2 model file -->
+	<property name="uml2.model.file" value="${model.export.dir}/${model.name}${uml2.model.extension}" />
+	<!-- relative filename of the uml2 profile file -->
+	<property name="uml2.profile.file" value="${model.export.dir}/${profile.name}${uml2.profile.extension}" />
+	<!-- relative filename of the serialized genesez model -->
+	<property name="genesez.model.file" value="${model.gen.dir}/${model.name}${genesez.model.extension}" />
+	
+	
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GENERATION SEQUENCE SECTION - DON'T MODIFY THIS
+	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+	
+	<!-- Export uml2 files from magic draw model -->
+	<!-- component id="uml-export"
+		class="com.nomagic.magicdraw.oaw.ExportWorkflowComponent"
+		projectFile="${magicdraw.model.file}"
+		exportDirectory="${model.export.dir}"
+		skipUpToDate="false"
+		requiredVersion="2.x"
+		magicdrawHome="${magicdraw.dir}">
+	</component -->
+	
+	<!-- read the example model file and transform it into a GeneSEZ model -->
+	<cartridge id="uml2genesez"
+		file="de::genesez::adapter::uml2::${uml2genesez.component}" 
+		inputModelFile="${uml2.model.file}"
+		uml2ProfileFile="${uml2.profile.file}"
+		genesezModel="genesezModel"
+		excludePackages="${uml2genesez.exclude.packages}"
+		mapClassesInModelToExternal="${uml2genesez.external.type.allClassesInModel}"
+		externalPackages = "${uml2genesez.external.type.packages}"
+		externalStereotypes = "${uml2genesez.external.type.stereotypes}"
+		excludeStereotypes = "exclude"
+	/>
+	
+	<!-- validate the GeneSEZ model against common + java specific constraints /-->
+	<cartridge
+		file="de::genesez::platforms::common::workflow::constraintChecker.oaw"
+		modelSlot="genesezModel"
+		checkScript="de::genesez::platforms::common::Constraints"
+		abortOnError="true"
+	/>
+	<cartridge id="model.validation"
+		file="de::genesez::platforms::common::workflow::constraintChecker.oaw"
+		modelSlot="genesezModel"
+		checkScript="de::genesez::platforms::java::constraints::Syntax"
+		abortOnError="true"
+	/>
+	
+	<!-- serialize the GeneSEZ model -->
+	<cartridge id="model.dump"
+		file="de::genesez::platforms::common::workflow::xmiWriter.oaw"
+		modelSlot="genesezModel"
+		outputModelFile="${genesez.model.file}"
+	/>
+	
+	<!-- run the java code generation and transform the model into java source code /-->
+	<cartridge id="model2text"
+		file="de::genesez::platforms::java::workflow::performM2T.oaw"
+		rootTemplate="de::genesez::platforms::java::java5::templates::Root::Root FOR genesezModel"
+		aspectTemplates="${model2text.aspect.templates}"
+		aspectScripts="${model2text.aspect.scripts}"
+		excludePackages="${model2text.exclude.packages}"
+		useModelNameAsBasePackage="${model2text.use.model.name.as.base.package}"
+		basePackage="${model2text.base.package}"
+		generateSectionComments="${model2text.generate.section.comments}"
+		configFile=""
+		outputDir="${project.dir}/${model2text.dir}"
+		proRegDir="${project.dir}/${model2text.dir}"
+		typeMappingFile="${model2text.typemapping.file}"
+		disableAccessors="${model2text.disableAccessors}"
+		useAccessorStereotype="${model2text.useAccessorStereotype}"
+		usePropertyVisibilityForAccessors="${model2text.usePropertyVisibilityForAccessors}"
+	/>
+	
+	<!-- serialize the GeneSEZ model -->
+	<cartridge id="model.dump"
+		file="de::genesez::platforms::common::workflow::xmiWriter.oaw"
+		modelSlot="genesezModel"
+		outputModelFile="${genesez.model.file}_a.xmi"
+	/>
+	
+</workflow>
