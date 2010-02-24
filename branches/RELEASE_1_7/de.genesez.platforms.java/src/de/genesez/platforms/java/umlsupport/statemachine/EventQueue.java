@@ -63,7 +63,12 @@ public class EventQueue {
 	 */
 	public static Event<?> getLastErrorEvent() {
 		synchronized (theQ) {
-			return theQ.errorEvents.pollLast();
+//			return theQ.errorEvents.pollLast();
+			try {
+				return theQ.errorEvents.removeLast();
+			} catch (NoSuchElementException nsee) {
+				return null;
+			}
 		}
 	}
 
@@ -129,8 +134,20 @@ public class EventQueue {
 	protected static void queue(Event<?> ev) {
 		if (theQ.stopProcessing)
 			throw new RuntimeException("Event Queue terminated, last unexpected event was " +
-					theQ.errorEvents.peekLast());
+					lastErrorEvent());
 		theQ.put(ev);
+	}
+	
+	/**
+	 * workaround for {@link LinkedList.peekLast()}
+	 * @return	the last event in the error queue or null
+	 */
+	private static Event<?> lastErrorEvent() {
+		try {
+			return theQ.errorEvents.getLast();
+		} catch (NoSuchElementException nsee) {
+			return null;
+		}
 	}
 
 	/**
