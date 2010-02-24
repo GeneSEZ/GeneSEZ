@@ -9,9 +9,9 @@ package de.genesez.platforms.java.umlsupport.statemachine;
 import java.util.*;
 
 /**
- * Singleton Implementierung einer Queue für Events. Events werden der Reihe
- * nach abgearbeitet. Events können auch mit Verzögerung verschickt werden, um
- * Timerfunktionalität zu ermöglichen. Nach Ablauf der Verzögerungszeit werden
+ * Singleton Implementierung einer Queue fuer Events. Events werden der Reihe
+ * nach abgearbeitet. Events koennen auch mit Verzoegerung verschickt werden, um
+ * Timerfunktionalitaet zu ermoeglichen. Nach Ablauf der Verzoegerungszeit werden
  * diese Events auch in die Event-Queue eingereiht.
  * 
  * @author georg beier
@@ -38,7 +38,7 @@ public class EventQueue {
 	 */
 	private ArrayList<Event<?>> events = new ArrayList<Event<?>>();
 	/**
-	 * Timer für verzögerte Events werden in dieser Collection gespeichert
+	 * Timer fuer verzoegerte Events werden in dieser Collection gespeichert
 	 */
 	private Set<Timer> timers = new HashSet<Timer>();
 	/**
@@ -46,7 +46,7 @@ public class EventQueue {
 	 */
 	private boolean isProcessing = false;
 	/**
-	 * Abbruch-Flag für Event-Processing-Thread
+	 * Abbruch-Flag fuer Event-Processing-Thread
 	 */
 	private boolean stopProcessing = false;
 
@@ -68,7 +68,7 @@ public class EventQueue {
 	}
 
 	/**
-	 * löscht alle noch nicht in die Queue eingereihten verzögerten Events
+	 * loescht alle noch nicht in die Queue eingereihten verzoegerten Events
 	 */
 	public static void cancelTimers() {
 		synchronized (theQ) {
@@ -134,7 +134,7 @@ public class EventQueue {
 	}
 
 	/**
-	 * reiht ein zurückgestelltes Event wieder in die Event-Queue ein
+	 * reiht ein zurueckgestelltes Event wieder in die Event-Queue ein
 	 * 
 	 * @param ev
 	 *            das gesendete Event
@@ -144,13 +144,13 @@ public class EventQueue {
 	}
 
 	/**
-	 * Legt einen Timer für ein verzögertes Event an, das nach der
-	 * Verzögerungszeit gesendet wird.
+	 * Legt einen Timer fuer ein verzoegertes Event an, das nach der
+	 * Verzoegerungszeit gesendet wird.
 	 * 
 	 * @param ev
 	 *            das gesendete Event
 	 * @param delay
-	 *            Verzögerungszeit in msec
+	 *            Verzoegerungszeit in msec
 	 * @return das angelegte Timer-Objekt
 	 */
 	protected static Timer queueDelayed(Event<?> ev, long delay) {
@@ -239,7 +239,7 @@ public class EventQueue {
 	}
 
 	/**
-	 * Abstrakte Klasse, die als Basisklasse für spezifische Events in den
+	 * Abstrakte Klasse, die als Basisklasse fuer spezifische Events in den
 	 * Anwendungsklassen mit State Machine verwendet werden soll.
 	 */
 	public static abstract class Event<EV> {
@@ -250,9 +250,9 @@ public class EventQueue {
 		public abstract EventReceiver<EV> getReceiver();
 
 		/**
-		 * Eine identifizierende enum, mit der die Events in der Empfängerklasse
+		 * Eine identifizierende enum, mit der die Events in der Empfaengerklasse
 		 * einfach in einem <CODE>switch(event.getEventId())</CODE> Statement
-		 * unterschieden werden können.
+		 * unterschieden werden koennen.
 		 */
 		protected EV eventId;
 
@@ -260,7 +260,7 @@ public class EventQueue {
 		 * initialisierender Konstruktor
 		 * 
 		 * @param id
-		 *            eindeutige Event ID für den <U>Typ</U> des Events
+		 *            eindeutige Event ID fuer den <U>Typ</U> des Events
 		 */
 		protected Event(EV id) {
 			eventId = id;
@@ -275,7 +275,7 @@ public class EventQueue {
 		}
 
 		/**
-		 * Stelle das Event zurück, indem es wieder am Anfang in die Event-Queue
+		 * Stelle das Event zurueck, indem es wieder am Anfang in die Event-Queue
 		 * eingereiht wird.
 		 */
 		public void defer() {
@@ -283,14 +283,14 @@ public class EventQueue {
 		}
 
 		/**
-		 * Verschickt das Event mit der angegebenen Verzögerungszeit. Das
+		 * Verschickt das Event mit der angegebenen Verzoegerungszeit. Das
 		 * sendende Objekt kann eine Referenz auf das erzeugte Timer-Objekt
-		 * speichern, damit es ggf. mit <CODE>cancel()</CODE> gelöscht werden
+		 * speichern, damit es ggf. mit <CODE>cancel()</CODE> geloescht werden
 		 * kann. Dadurch kann das Event vor Zustellung abgefangen werden,
-		 * beispielsweise wenn eine Timeout-Bedingung nicht mehr benötigt wird.
+		 * beispielsweise wenn eine Timeout-Bedingung nicht mehr benoetigt wird.
 		 * 
 		 * @param delay
-		 *            Verzögerung in msec
+		 *            Verzoegerung in msec
 		 * @return
 		 */
 		public Timer sendDelayed(int delay) {
@@ -299,9 +299,9 @@ public class EventQueue {
 
 		/**
 		 * Stellt ein Event ohne Verwendung der Event-Queue sofort zu. Ist i.A.
-		 * nur sinnvoll, wenn Sender und Empfänger das gleiche Objekt sind, d.h.
+		 * nur sinnvoll, wenn Sender und Empfaenger das gleiche Objekt sind, d.h.
 		 * wenn ein Objekt seine State Machine als Resultat einer
-		 * Bedingungsprüfung in einen Folgezustand weiterschalten will.
+		 * Bedingungspruefung in einen Folgezustand weiterschalten will.
 		 */
 		public void sendImmediate() {
 			deliver();
@@ -317,7 +317,7 @@ public class EventQueue {
 		}
 
 		/**
-		 * stellt das Event an den Empfänger zu
+		 * stellt das Event an den Empfaenger zu
 		 */
 		protected void deliver() {
 			getReceiver().takeEvent(this);
