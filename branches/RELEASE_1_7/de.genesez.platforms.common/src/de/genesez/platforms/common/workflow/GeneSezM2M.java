@@ -36,6 +36,10 @@ public class GeneSezM2M extends CompositeComponent {
 	private List<String> aspects = new ArrayList<String>();
 	private boolean newAssociationHandling = true;
 	private boolean fieldAccess = true;
+	//added for use of internal stereotype for getter and setter
+	private String accessorsForStereotypes = "'entity'";
+	private String accessorStereotype = "'accessor'";
+	private boolean usePropertyVisibilityForAccessors = true;
 	
 	
 	public GeneSezM2M() {
@@ -74,6 +78,9 @@ public class GeneSezM2M extends CompositeComponent {
 			// register global variables
 			c.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("newAssociationHandling", newAssociationHandling));
 			c.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("fieldAccess", fieldAccess));
+			c.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("accessorsForStereotypes", accessorsForStereotypes));
+			c.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("accessorStereotype", accessorStereotype));
+			c.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("usePropertyVisibilityForAccessors", usePropertyVisibilityForAccessors));
 			logger.info("script: " + script + "(" + properties.getProperty("slot", "genesezModel") + ")");
 		}
 		setAbortOnError(new Boolean(properties.getProperty("abortOnError")));
@@ -148,6 +155,29 @@ public class GeneSezM2M extends CompositeComponent {
 			}
 		}
 	}
+	
+	/**
+	 * setter for DisableAccessors parameter, which in GlobalVarDef add.
+	 */
+	public void setAccessorsForStereotypes(String accessorsForStereotypes) {
+		this.accessorsForStereotypes = accessorsForStereotypes;
+	}
+	
+	/**
+	 * setter for UseAccessorStereotype parameter, which in GlobalVarDef add.
+	 */
+	public void setAccessorStereotype(String accessorStereotype) {
+		this.accessorStereotype = accessorStereotype;
+	}
+	
+	/**
+	 * setter for UsePropertyVisibilityForAccessors parameter, which in
+	 * GlobalVarDef add.
+	 */
+	public void setUsePropertyVisibilityForAccessors(boolean usePropertyVisibilityForAccessors) {
+		this.usePropertyVisibilityForAccessors = usePropertyVisibilityForAccessors;
+	}
+	
 	public void setNewAssociationHandling(boolean newAssociationHandling) {
 		this.newAssociationHandling = newAssociationHandling;
 	}
