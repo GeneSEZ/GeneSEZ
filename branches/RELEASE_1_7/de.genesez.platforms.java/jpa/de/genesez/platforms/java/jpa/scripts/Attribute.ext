@@ -26,8 +26,9 @@ Void checkAttributeName(MAttribute this) :
 	};
 
 /**
- *	check if there is a stereotype with a critical 
- *	column name
+ *	check if there is a stereotype with a critical column name
+  *
+  *	@param		this		instance of MAttribute
  */
 private Void checkColumnStereotype(MAttribute this) :
 	this.hasUtilizableValue("jpaColumn", "value") && 
@@ -66,7 +67,7 @@ Void checkPersistenceStereotypes(MAttribute this) :
   *	@param		this		instance of MAttribute
   */		
 Void checkOptimisticLockingStereotype(MAttribute this) :
-	 this.name.asTypeName() == "version" && this.type.asTypeName() == "int" &&
-	 !this.classifier.property.exists(e|e.hasStereotype("jpaOptimisticLocking"))
+	 (this.name.asTypeName() == "version" && this.type.asTypeName() == "int") ||
+	 this.classifier.property.exists(e|e.hasTaggedValue("jpaPersistentEntity", "optimisticLocking", "true"))
 	 	? addOptimisticLockingStereotype()
 	 	: "";
