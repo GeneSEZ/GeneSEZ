@@ -20,23 +20,26 @@ extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
  */
 Void checkAttributeName(MAttribute this) :
 	switch(name.asTypeName()) {
-		case "index" : (
-			//index is a key word in the mysql database
-			//check if there is a stereotype with a critical 
-			//column name
-			this.hasUtilizableValue("jpaColumn", "value") && 
-			(this.getTaggedValue("jpaColumn", "value") == name.asTypeName())
-				?  (
-					//replace the critical column name
-					this.setTaggedValue("jpaColumn", "value", this.classifier.name.toLowerCase()+"_"+name)
-				)
-				: (
-					//create a new stereotype with default values
-					this.addColumnStereotype("false", "false", this.classifier.name.toLowerCase()+"_"+name, "0", "0", "255", "null", "null", "true", "false")
-				)
-		)
+		case "index" : checkColumnStereotype()
+		case "position" : checkColumnStereotype()
 		default : ""
 	};
+
+/**
+ *	check if there is a stereotype with a critical 
+ *	column name
+ */
+private Void checkColumnStereotype(MAttribute this) :
+	this.hasUtilizableValue("jpaColumn", "value") && 
+	(this.getTaggedValue("jpaColumn", "value") == name.asTypeName())
+		?  (
+			//replace the critical column name
+			this.setTaggedValue("jpaColumn", "value", this.classifier.name.toLowerCase()+"_"+name)
+		)
+		: (
+			//create a new stereotype with default values
+			this.addColumnStereotype("true", "true", this.classifier.name.toLowerCase()+"_"+name, "0", "0", "255", "null", "null", "true", "false")
+		);
 
 /**
   *	adds the stereotype "jpaPersistenceContext" if attributes data type
