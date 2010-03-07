@@ -70,6 +70,23 @@
 				<include name="${schema.dir}/**"/>
 				<include name="plugin.xml"/>
 			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="${project.path}/*.ext"/>
+				<include name="${project.path}/*.chk"/>
+				<include name="${project.path}/parser/*.ext"/>
+				<include name="${project.path}/templates/**"/>
+				<include name="${project.path}/workflow/**"/>
+			</fileset>
+			<fileset dir="${src-gen.dir}">
+				<include name="${project.path}/*.ecore"/>
+				<include name="${project.path}/*.xmi"/>
+				<include name="${project.path}/*.ext"/>
+				<include name="${project.path}/*.chk"/>
+				<include name="${project.path}/parser/*.ext"/>
+				<include name="${project.path}/parser/*.oaw"/>
+				<include name="${project.path}/parser/*.g"/>
+				<include name="${project.path}/parser/*.tokens"/>
+			</fileset>
 		</jar>
 	</target>
 
@@ -102,11 +119,7 @@
 
 	<target name="core.compile">
 		<mkdir dir="${bin.dir}" />
-		<javac srcdir="${src.dir}" 
-			destdir="${bin.dir}"
-			classpathref="de.genesez.core.classpath"
-			debug="on" />
-		<javac srcdir="${src-gen.dir}" 
+		<javac srcdir="${src-gen.dir}:${src.dir}" 
 			destdir="${bin.dir}"
 			classpathref="de.genesez.core.classpath"
 			debug="on" />
