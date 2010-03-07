@@ -48,7 +48,7 @@ public class GeneratorProjectWizardPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 
 		this.projectText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		this.projectText.setText("de.genesez.newgenerator");
+		this.projectText.setText("de.genesez.myproject");
 		this.projectText.setLayoutData(gd);
 		this.projectText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {

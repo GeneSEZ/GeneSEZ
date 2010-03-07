@@ -82,22 +82,28 @@ public class GeneratorProjectWizard extends Wizard implements IExecutableExtensi
 	}
 
 	private void doFinish(String name, IProgressMonitor monitor) {
-		monitor.beginTask("Creating GeneSEZ Platform Project " + name, 2);
+		monitor.beginTask("Creating GeneSEZ Project " + name, 2);
 
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IProject project = workspace.getRoot().getProject(name);
 		String workspacePath = workspace.getRoot().getLocation().toOSString();
+
+		IProject project = workspace.getRoot().getProject(name);
 		String projectPath = workspacePath + project.getFullPath().toOSString();
 		final IProjectDescription projectDescription = workspace.newProjectDescription(name);
 
+		IProject generatorProject = workspace.getRoot().getProject(name + ".generator");
+		String generatorProjectPath = workspacePath + project.getFullPath().toOSString() + ".generator";
+		final IProjectDescription generatorProjectDescription = workspace.newProjectDescription(name + ".generator");
+
 		try {
 			project.create(projectDescription, new SubProgressMonitor(monitor, 1));
+			generatorProject.create(generatorProjectDescription, new SubProgressMonitor(monitor, 1));
 		} catch (Exception e) {
 			// TODO: Handle Exception in correct way
 			e.printStackTrace();
 		}
 		
-		if (project == null) {
+		if (project == null || generatorProject == null) {
 			return;
 		}
 
@@ -106,6 +112,7 @@ public class GeneratorProjectWizard extends Wizard implements IExecutableExtensi
 		IPlatformWizard wizard = this.page.getPlatformWizard();
 		theParams.put("modelFile", wizard.getModel());
 		theParams.put("targetDir", projectPath);
+		theParams.put("generatorDir", generatorProjectPath);
 		WorkflowRunner runner = new WorkflowRunner();
 		runner.run(workFlowFile, null, theParams, null);
 

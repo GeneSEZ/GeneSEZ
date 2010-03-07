@@ -1,13 +1,41 @@
 Project:
-	(entries+=Entry)*;
+	generator=Generator
+	target=Target;
+
+Generator:
+	'generator' '{'
+		(entries+=Entry)*
+	'}';
+
+Target:
+	'target' '{'
+		(entries+=Entry)*
+	'}';
 
 Entry:
-	Directory|File;
-	
+	Manifest|Directory|File;
+
+Manifest:
+	'manifest' '{'
+		'require:' bundle=JavaIdentifier
+	'}';
+
 Directory:
-	'directory' name=ID;
+	'directory' name=DirectoryName;
 
 File:
 	'file' name=STRING '{'
 		content=STRING
 	'}';
+
+/**
+ * Java identifiers
+ */
+String JavaIdentifier:
+	ID ("." ID)*;
+
+/**
+ * Directory names
+ */
+String DirectoryName:
+	ID (("."|"-") ID)*;
