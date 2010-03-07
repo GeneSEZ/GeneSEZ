@@ -1,0 +1,15 @@
+<workflow>
+  <bean class="org.eclipse.mwe.emf.StandaloneSetup"/>
+  <bean id='dsl' class="oaw.type.emf.EmfMetaModel">
+  	<metaModelFile value="de/genesez/core/project/project.ecore"/>
+  </bean>
+  <component id="parser" class="de.genesez.core.project.parser.ParserComponent">
+		<modelFile value="${modelFile}"/>
+		<outputSlot value="theModel"/>
+  </component>
+  <component class='oaw.xpand2.Generator'>
+     <metaModel idRef='dsl'/>
+     <expand value='de::genesez::core::project::templates::Main::main FOR theModel'/>
+     <genPath value='${targetDir}'/>
+  </component>
+</workflow>
