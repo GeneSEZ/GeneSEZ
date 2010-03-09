@@ -31,7 +31,7 @@ Void rootStep(TTestSuite this) :
 Void testSet(TTestSuite this) :
 	trace("Creating TestSet for " + name ) -> 
 	qfTestSet() ->
-	testcase.testCase();
+	testcases.testCase();
 
 /**
  * generates a TestCase
@@ -39,33 +39,7 @@ Void testSet(TTestSuite this) :
 Void testCase(TTestCase this) :
 	trace("Creating TestCase for " + name ) ->
 	qfTestCase() ->
-	testcase.testCase() ->
-	test.sequence() ->
 	qfReset();
-
-/**
- * generates a Sequence
- */
-Void sequence(TTest this) :
-	trace("Creating Sequence for " + name ) ->
-	qfSequence() ->
-	action.actionStep() ->
-	qfReset();
-
-Void actionStep(TKeyEvent this) :
-	trace("Creating KeyEventStep for " + name ) ->
-	qfKeyEventStep();
-
-Void actionStep(TMouseEvent this) :
-	trace("Creating MouseEventStep for " + name ) ->
-	qfMouseEventStep();
-
-Void actionStep(TMouseMove this) :
-	trace("Creating MouseEventStep for " + name ) ->
-	qfMouseEventStep();
-
-Void actionStep(TAction this) :
-	trace("...");
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -96,38 +70,6 @@ private Void qfTestSet(TTestSuite t) :
  */
 private Void qfTestCase(TTestCase t) :
 	qfElement(t, "TestCase");
-
-/**
- * create a sequence
- * @param	t	the Test
- * @return	void
- */
-private Void qfSequence(TTest t) :
-	qfElement(t, "BasicSequence");
-
-/**
- * create a key event
- * @param	t	the KeyEvent
- * @return	void
- */
-private Void qfKeyEventStep(TKeyEvent t) :
-	JAVA de.genesez.platforms.qftest.QftFile.qfKeyEventStep(de.genesez.testing.gtesting.TKeyEvent);
-
-/**
- * create a mouse event
- * @param	t	the MouseEvent
- * @return	void
- */
-private Void qfMouseEventStep(TMouseEvent t) :
-	JAVA de.genesez.platforms.qftest.QftFile.qfMouseEventStep(de.genesez.testing.gtesting.TMouseEvent);
-
-/**
- * create a mouse move
- * @param	t	the MouseMove
- * @return	void
- */
-private Void qfMouseEventStep(TMouseMove t) :
-	JAVA de.genesez.platforms.qftest.QftFile.qfMouseEventStep(de.genesez.testing.gtesting.TMouseMove);
 
 /**
  * creates a QF Test XML Element
