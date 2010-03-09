@@ -27,6 +27,7 @@
 
 «REM» use naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 
 «REM»
@@ -54,14 +55,20 @@
 
 «REM»
 	processes the accessors for attributes of a classifier
+	- only if api style is used, otherwise the accessors are generated from the magic methods templates
+	@see	MagicMethods::Accessors
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-	«FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS p -»
-		«EXPAND _Getter FOR p -»
-		«EXPAND _Setter FOR p -»
-		«EXPAND _InsertIn FOR p -»
-		«EXPAND _RemoveFrom FOR p -»
-	«ENDFOREACH -»
+«LET property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS attributes -»
+	«IF isApiAccessorStyle() -»
+		«EXPAND _GetterApi FOREACH attributes.select( a|a.generateGetter() ) -»
+		«EXPAND _SetterApi FOREACH attributes.select( a|a.generateSetter() || a.hasTaggedValue("di", "setter", "true") ) -»
+	«ELSE -»
+		«EXPAND _SetterApi FOREACH attributes.select( a|a.hasTaggedValue("di", "setter", "true") ) -»
+	«ENDIF -»
+	«EXPAND _InsertIn FOREACH attributes.select( a|a.generateSetter() ) -»
+	«EXPAND _RemoveFrom FOREACH attributes.select( a|a.generateSetter() ) -»
+«ENDLET -»
 «ENDDEFINE»
 
 
@@ -93,16 +100,16 @@
 «DEFINE _Derived FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor -» function «asGetter()»() {
-		$returnValue = NULL;
 		«EXPAND _OwnCodeImpl("php.derived.attribute.implementation." + xmiGuid) -»
-		return returnValue;
 	}
 «ENDDEFINE»
+
+«REM» - - accessors - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates the getter method for an attribute
 «ENDREM»
-«DEFINE _Getter FOR MAttribute -»
+«DEFINE _GetterApi FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor -» function «asGetter()»() {
 	«IF isSingleValuedType() -»
@@ -115,12 +122,17 @@
 
 «REM»
 	generates the setter method for an attribute, if the attribut has a simple type
+	note: only for single value types
 «ENDREM»
-«DEFINE _Setter FOR MAttribute -»
+«DEFINE _SetterApi FOR MAttribute -»
 «IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
-	«EXPAND _ModifierAccessor -» function «asSetter()»($«asAttribute()») {
-		$this->«asAttribute()» = $«asAttribute()»;
+	«IF type.isClassifier() || type.isExternalType() -»
+	«EXPAND _ModifierAccessor -» function «asSetter()»(«type.mapName().asTypeName().filterType()» $«name») {
+	«ELSE»
+	«EXPAND _ModifierAccessor -» function «asSetter()»($«name») {
+	«ENDIF -»
+		$this->«asAttribute()» = $«name»;
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -145,18 +157,24 @@
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»($toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
-		if ($entry !== FALSE) {
+		if ($entry !== false) {
 			unset($this->«asAttribute()»[$entry]);
 		}
 	}
 «ENDIF -»
 «ENDDEFINE»
 
+«REM» - - other - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
 «REM»
 	processes the modifiers of an attribute
 «ENDREM»
 «DEFINE _Modifier FOR MAttribute -»
+«IF usePropertyVisibilityForAccessors() -»
 	private«IF static» static«ENDIF -»
+«ELSE -»
+	«visibility»«IF static» static«ENDIF -»
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -185,5 +203,6 @@
 «DEFINE _OwnCodeImpl(String s) FOR MAttribute -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (s)»
 		// TODO: implementation of method '«classifier.asTypeName()».«asGetter()»(...)'
+		throw new Exception('The implementation of the derived attribute '«asAttribute()»' is missing!');
 		«ENDPROTECT»
 «ENDDEFINE»

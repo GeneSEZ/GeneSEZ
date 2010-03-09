@@ -25,6 +25,7 @@
 
 «REM» use php naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 
 «REM»
@@ -38,40 +39,31 @@
 «EXPAND Comment::Type -»
 «EXPAND _Modifier -»class «asTypeName()» «EXPAND _Generalization -» «EXPAND _Realization -» {
 	
-	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
-	// -- generated attribute, constant + association declarations ----------
-	«ENDIF -»
+	«EXPAND SectionComment::Member -»
 	«EXPAND Attribute::Declaration -»
 	«EXPAND Association::Declaration -»
 	
-	«IF generateSectionComments() && ( hasConstructors() || hasDestructors() ) -»
-	// -- constructors + destructors ----------------------------------------
-	«ENDIF -»
+	«EXPAND SectionComment::Constructor -»
 	«EXPAND Operation::Constructor -»
 	«EXPAND Operation::Destructor -»
 	
-	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
-	// -- method declarations -----------------------------------------------
-	«ENDIF -»
+	«EXPAND SectionComment::OperationDeclaration -»
 	«EXPAND Operation::Declaration -»
 	
-	«IF generateSectionComments() && ( hasOperations() ) -»
-	// -- method implementations --------------------------------------------
-	«ENDIF -»
+	«EXPAND SectionComment::OperationImplementation -»
 	«EXPAND Operation::Implementation -»
 	
-	«IF generateSectionComments() && ( hasDerivedAttributes() ) -»
-	// -- methods for derived attributes ------------------------------------
-	«ENDIF -»
-	«EXPAND Attribute::Derived -»
+	«EXPAND SectionComment::DerivedAttribute -»
+	«EXPAND Attribute::Derived»
 	
-	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
-	// -- association + attribute accessors ---------------------------------
-	«ENDIF -»
+	«EXPAND SectionComment::Accessor -»
 	«EXPAND Association::Accessors -»
 	«EXPAND Attribute::Accessors -»
+	«EXPAND MagicMethods::Accessors -»
 	
-	// -- own code implementation -------------------------------------------
+	«EXPAND Association::Initialization -»
+	
+	«EXPAND SectionComment::OwnCode -»
 	«EXPAND _OwnCodeImpl("php.class.own.code.implementation." + xmiGuid) -»
 }
 «ENDDEFINE»

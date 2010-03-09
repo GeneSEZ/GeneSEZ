@@ -25,6 +25,7 @@
 
 «REM» use php naming conventions «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 
 «REM»
@@ -38,23 +39,17 @@
 «EXPAND Comment::Type -»
 interface «asTypeName()» «EXPAND _Generalization -» {
 	
-	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
-	// -- attribute + associations declarations  ----------------------------
-	«ENDIF -»
+	«EXPAND SectionComment::Member -»
 	«EXPAND Attribute::Declaration -»
 	«EXPAND Association::Declaration -»
 	
-	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
-	// -- method declarations -----------------------------------------------
-	«ENDIF -»
-	«EXPAND Operation::Declaration -»
+	«EXPAND SectionComment::OperationDeclaration -»
+	«EXPAND Operation::Declaration»
 	
-	«IF generateSectionComments() && ( hasAssociationRoles() ) -»
-	// -- association accessors ---------------------------------------------
-	«ENDIF -»
+	«EXPAND SectionComment::Accessor -»
 	«EXPAND Association::Accessors -»
 	
-	// -- own code declarations ---------------------------------------------
+	«EXPAND SectionComment::OwnCode -»
 	«EXPAND _OwnCodeImpl("php.interface.own.code.declaration." + xmiGuid) -»
 }
 «ENDDEFINE»

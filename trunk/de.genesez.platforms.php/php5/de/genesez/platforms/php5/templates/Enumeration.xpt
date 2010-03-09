@@ -37,16 +37,14 @@
 «EXPAND Comment::Type -»
 final class «asTypeName()» {
 	
-	«IF generateSectionComments()»
-	// -- enumeration literals --------------------------------------------
-	«ENDIF»
+	«EXPAND SectionComment::Literals -»
 	«EXPAND _Literals FOREACH literal -»
 	
 	«EXPAND Comment::Constructor -»
 	private function __construct() {
 	}
 	
-	// -- own code declarations -------------------------------------------
+	«EXPAND SectionComment::OwnCode -»
 	«EXPAND _OwnCodeImpl("php.enumeration.own.code." + xmiGuid) -»
 }
 «ENDDEFINE»
@@ -71,6 +69,6 @@ final class «asTypeName()» {
 «ENDREM»
 «DEFINE _OwnCodeImpl(String id) FOR MEnumeration -»
 	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-	// TODO: put your further code declarations for enumeration '«asTypeName()»' here
+	// TODO: put your further code for enumeration '«asTypeName()»' here
 	«ENDPROTECT»
 «ENDDEFINE»
