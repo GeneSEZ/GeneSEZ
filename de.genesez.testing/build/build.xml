@@ -85,7 +85,7 @@
 
 	<!-- Private target section -->
 
-	<target name="testing.uml2ecore.startx" unless="env.DISPLAY">
+	<target name="testing.uml2ecore.startx" unless="env.env.DISPLAY">
 		<exec executable="${STARTPROC_BIN}" osfamily="unix">
 			<arg value="${XVFB_BIN}" />
 			<arg value="${build.display}" />
@@ -95,7 +95,7 @@
 		</exec>
 	</target>
 
-	<target name="testing.uml2ecore.endx" unless="env.DISPLAY">
+	<target name="testing.uml2ecore.endx" unless="env.env.DISPLAY">
 		<exec executable="${KILLPROC_BIN}" osfamily="unix">
 			<arg value="${XVFB_BIN}" />
 		</exec>
@@ -107,42 +107,63 @@
 			<antcall target="testing.uml2ecore.startx" />
 			<sequential>
 				<sleep seconds="5" />
+				<exec executable="${EXPORTEMFUML2}" osfamily="unix">
+					<env key="DISPLAY" value="${build.display}" />
+					<arg value="project_file=${basedir}/${magicdraw.file}" />
+					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="load_all_modules=true" />
+					<arg value="check_time=false" />
+				</exec>
+				<exec executable="${EXPORTEMFUML2}.exe" osfamily="windows">
+					<env key="DISPLAY" value="${build.display}" />
+					<arg value="project_file=${basedir}/${magicdraw.file}" />
+					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="load_all_modules=true" />
+					<arg value="check_time=false" />
+				</exec>
+				<antcall target="testing.uml2ecore.endx" />
+			</sequential>
+		</parallel>
+		<if>
+			<available file="${uml2.file}"/>
+			<then>
 				<java classname="org.openarchitectureware.workflow.WorkflowRunner"
 					classpathref="de.genesez.testing.classpath"
 					fork = "true"
 					dir="${basedir}">
 					<arg value="${oaw.workflow.file}" />
 					<arg value="-pbaseDir=${basedir}" />
-					<arg value="-pmagicdrawDir=${MAGICDRAW_DIR}" />
 					<arg value="--ant" />
 				</java>
-				<antcall target="testing.uml2ecore.endx" />
-			</sequential>
-		</parallel>
-		<!-- during a bug in the oAW ant task, this task is not used -->
-		<!-- oaw.workflow file="${oaw.workflow.file}"
-			classpathref="de.genesez.testing.classpath"
-			fork = "true"
-			dir="${basedir}">
-			<param name="baseDir" value="${basedir}/" />
-			<param name="magicdrawDir" value="${MAGICDRAW_DIR}/" />
-		</oaw.workflow -->
+			</then>
+			<else>
+				<echo message="File ${uml2.file} not available"/>
+			</else>
+		</if>
 	</target>
 
 	<target name="testing.ecore2java"
 		description=""
 		if="eclipse.running">
-		<emf.Ecore2Java model="${ecore.file}"
-			genModel="${genmodel.file}"
-			reconcileGenModel="reload"			
-			generateJavaCode="true"
-			generateModelProject="false"
-			generateEditProject="false"
-			generateEditorProject="false"
-			modelProject="${basedir}"
-			modelProjectFragmentPath="${ecore2java.path}">
-			<arg line="-package ${ecore.package}" />
-		</emf.Ecore2Java>
+		<if>
+			<available file="${ecore.file}"/>
+			<then>
+				<emf.Ecore2Java model="${ecore.file}"
+					genModel="${genmodel.file}"
+					reconcileGenModel="reload"			
+					generateJavaCode="true"
+					generateModelProject="false"
+					generateEditProject="false"
+					generateEditorProject="false"
+					modelProject="${basedir}"
+					modelProjectFragmentPath="${ecore2java.path}">
+					<arg line="-package ${ecore.package}" />
+				</emf.Ecore2Java>
+			</then>
+			<else>
+				<echo message="File ${ecore.file} not available"/>
+			</else>
+		</if>
 	</target>
 
 	<target name="testing.compile"
@@ -178,7 +199,7 @@
 			<arg value="${build.file}" />
 			<arg value="testing.ecore2java" />
 			<arg value="-Dbuild.basedir=${build.basedir}" />
-<!--			<arg value="-vmargs -Xmx768m -XX:MaxPermSize=312m" />-->
+			<arg value="-Dbuild.controlled=${build.controlled}" />
 		</exec>
 		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
 			<arg value="-noSplash" />
@@ -192,7 +213,7 @@
 			<arg value="${build.file}" />
 			<arg value="testing.ecore2java" />
 			<arg value="-Dbuild.basedir=${build.basedir}" />
-<!--			<arg value="-vmargs -Xmx768m -XX:MaxPermSize=312m" />-->
+			<arg value="-Dbuild.controlled=${build.controlled}" />
 		</exec>
 	</target> 
 
