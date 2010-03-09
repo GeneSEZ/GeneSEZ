@@ -1,28 +1,34 @@
-// import genesezMM metamodel
-import genesezMM;
+// import gcore metamodel
+import gcore;
 
-extension de::genesez::io::io;
-extension de::genesez::common::AccessHelper;
-extension de::genesez::common::GlobalStore;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::GlobalStore;
 
-////////////////////////////////////////////////////////////////////////////////
-// public extend functions
-////////////////////////////////////////////////////////////////////////////////
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
 
-
-// process all packages
+/**
+ * 	process all packages
+ */
 MModel makeAspects(MModel m): 
 	saveModel(m)->
-	m.ownedPackage.processPackage()
+	m.nestedPackage.processPackage()
 	;
 
-// process all packages recursively, only consider taged values belonging to <<mdsd>>
+/**
+ * 	process all packages recursively, only consider taged values belonging to <<mdsd>>
+ */
 private MPackage processPackage(MPackage p) :
 	p.classifier.select(sc|sc.stereotype.name.contains("mdsd")).processClassifier()->
 	p.nestedPackage.processPackage()->
 	p.classifier.aspect._mapClassAspect();
 	
-// transform tagged values of stereotype <<mdsd>> to aspects
+/**
+ * 	transform tagged values of stereotype <<mdsd>> to aspects
+ */
 private MClassifier processClassifier(MClassifier c) :
 	c.setAspect(
 		c.taggedValue.reject(
@@ -34,26 +40,38 @@ private MClassifier processClassifier(MClassifier c) :
 	;
 	
 private create MAspect makeAspect(MTaggedValue tv) :
-	setElement(tv.owningElement)->
+	tv.owningElement.setAspect({this}) ->
 	setDomain(tv._getDomain())->
 	setName(tv._getName());
 	
 private create MAspect makeAspect(MElement e, String domain, String name) :
-	setElement(e)->
+	e.setAspect({this})->
 	setDomain(domain)->
 	setName(name);
 
-// helper for tagged value processing	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helper functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+
+/**
+ * 	helper for tagged value processing
+ */	
 private _getDomain(MTaggedValue tv) :
 	tv.tag.name.split("\\.").first();
 	
-// helper for tagged value processing	
+/**
+ * 	helper for tagged value processing
+ */	
 private _getName(MTaggedValue tv) :
 	let l = tv.tag.name.split("\\.") :
 	 l.size > 1 ? l.get(1) : tv.tag.name;
 	
-// this is THE START of interesting functions because aspects define
-// pim to psm mapping in our concept
+/**
+ * 	this is THE START of interesting functions because aspects define
+ *	pim to psm mapping in our concept
+ */
 private _mapClassAspect(MAspect aspect) :
 	aspect.domain == "persistent" ?
 		aspect._mapPersistence() :
@@ -77,7 +95,7 @@ private _mapPersistence(MAspect aspect) :
 		;
 
 private _hasNoPersistentSupertype(MClass c) :
-	(c.supertype.size == 0) || (c.supertype.select(s|s.hasAspect("persistent")).isEmpty);
+	false;//(c.supertype.size == 0) || (c.supertype.select(s|s.hasAspect("persistent")).isEmpty);
 
 
 private _mapUi(MAspect aspect) :
@@ -89,13 +107,13 @@ create MOperation makeOperation() :
 create MAttribute makeAttribute(MClassifier c, String xid, String name, String comment) :
 	setXmiGuid(xid + c.xmiGuid)->
 	setName(name)->
-	setClassifier(c)->
+	c.property.add(this) -> /*setClassifier(c)->*/
 	setMultiplicity(1)->
 	setType(retrieveModel().primitiveTypes.selectFirst(ty|ty.name.startsWith("Integer")))->
 	setVisibility("private")->
 	setFinal(false)->
 	setOwnedComment(
-			{makeComment("c_" + xid + c.xmiGuid).setAnnotation(comment).setOwningElement(this)}
+			{/*makeComment("c_" + xid + c.xmiGuid).setAnnotation(comment).setOwningElement(this)*/}
 		)->
 	setAspect({makeAspect(this, "generate", "immutable")})->
 //	info(this.name + ": " + this.aspect)->
