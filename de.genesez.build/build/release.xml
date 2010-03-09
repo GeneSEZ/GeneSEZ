@@ -3,10 +3,10 @@
 
 	<property file="${project.build.dir}/release.properties" />
 
-	<!-- Append the build number when running under cruise control -->
+	<!-- Append the build number when running under hudson -->
 	<if>
 		<and>
-			<isset property="label" />
+			<isset property="env.BUILD_NUMBER" />
 			<not><isset property="build.number" /></not>
 		</and>
 		<then>
@@ -25,14 +25,30 @@
 	<property name="plugin.jar" value="${plugin.name}.jar"/>
 
 	<path id="build.plugins">
+		<path refid="build.metamodels" />
 		<dirset dir="${build.basedir}">
-			<exclude name="${prefix}.example.*" />
-			<exclude name="${prefix}.build" />
-			<exclude name="${prefix}.feature" />
-			<exclude name="${prefix}.updatesite" />
-			<exclude name=".metadata" />
-			<exclude name="workspace" />
-			<include name="*" />
+			<include name="${prefix}.core" />
+		</dirset>
+		<path refid="build.platforms" />
+		<path refid="build.adapter" />
+	</path>
+
+	<path id="build.adapter">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.adapter.*" />
+		</dirset>
+	</path>
+
+	<path id="build.platforms">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.platforms.*" />
+		</dirset>
+	</path>
+
+	<path id="build.metamodels">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.metamodel" />
+			<include name="${prefix}.testing" />
 		</dirset>
 	</path>
 
