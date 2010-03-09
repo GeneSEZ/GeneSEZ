@@ -20,13 +20,41 @@
 	<!-- Set the classpath -->
 	<path id="de.genesez.core.classpath">
 		<path refid="Plug-in Dependencies.libraryclasspath" />
+		<fileset dir="${ECLIPSE_HOME}/plugins">
+			<include name="org.eclipse.ui_*.jar" />
+			<include name="org.eclipse.swt_*.jar" />
+			<!-- just for make compile run -->
+			<include name="org.eclipse.swt.gtk.linux.x86_*.jar" />
+			<include name="org.eclipse.jface_*.jar" />
+			<include name="org.eclipse.core.commands_*.jar" />
+			<include name="org.eclipse.ui.workbench_*.jar" />
+			<include name="org.eclipse.core.runtime_*.jar" />
+			<include name="org.eclipse.osgi_*.jar" />
+			<include name="org.eclipse.equinox.common_*.jar" />
+			<include name="org.eclipse.core.jobs_*.jar" />
+			<include name="org.eclipse.runtime.comatibility.registry_*/runtime_registry_comatibility.jar" />
+			<include name="org.eclipse.equinox.registry_*.jar" />
+			<include name="org.eclipse.equinox.preferences_*.jar" />
+			<include name="org.eclipse.core.contenttype_*.jar" />
+			<include name="org.eclipse.equinox.app_*.jar" />
+			<include name="org.eclipse.ui.ide_*.jar" />
+			<include name="org.eclipse.core.resources_*.jar" />
+		</fileset>
+		<fileset dir="${OAW_PLUGIN_DIR}">
+			<include name="org.antlr_3.0.0/*.jar" />
+			<include name="org.openarchitectureware.xtext.core_4.3.*.jar" />
+			<include name="org.openarchitectureware.xtext.core.base_4.3.*.jar" />
+			<include name="org.openarchitectureware.xtext.generator_4.3.*.jar" />
+		</fileset>
+		<pathelement location="${workflow.dir}" />
+		<pathelement path="${src.dir}"/>
 	</path>
 	
 	<!-- Public target section -->
 
 	<target name="build"
 		description="Build de.genesez.core"
-		depends="core.compile" >
+		depends="core.builddsl,core.compile" >
 	</target>
 
 	<target name="createjar"
@@ -39,8 +67,25 @@
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${basedir}">
 				<include name="${icons.dir}/**"/>
-				<include name="${skeleton.dir}/**"/>
+				<include name="${schema.dir}/**"/>
 				<include name="plugin.xml"/>
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="${project.path}/*.ext"/>
+				<include name="${project.path}/*.chk"/>
+				<include name="${project.path}/parser/*.ext"/>
+				<include name="${project.path}/templates/**"/>
+				<include name="${project.path}/workflow/**"/>
+			</fileset>
+			<fileset dir="${src-gen.dir}">
+				<include name="${project.path}/*.ecore"/>
+				<include name="${project.path}/*.xmi"/>
+				<include name="${project.path}/*.ext"/>
+				<include name="${project.path}/*.chk"/>
+				<include name="${project.path}/parser/*.ext"/>
+				<include name="${project.path}/parser/*.oaw"/>
+				<include name="${project.path}/parser/*.g"/>
+				<include name="${project.path}/parser/*.tokens"/>
 			</fileset>
 		</jar>
 	</target>
@@ -50,14 +95,31 @@
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${dist.dir}" includes="*.jar" />
+			<fileset dir="${src.dir}/${project.path}">
+				<include name="*.ext"/>
+				<include name="*.chk"/>
+			</fileset>
+			<fileset dir="${parser.dir}" />
+			<fileset dir="${src-gen.dir}" includes="**/*" />
 		</delete>
 	</target>
 
 	<!-- Private target section -->
 
+	<target name="core.builddsl">
+		<java classname="org.openarchitectureware.workflow.WorkflowRunner"
+			classpathref="de.genesez.core.classpath"
+			fork = "true"
+			dir="${basedir}">
+			<arg value="${oaw.workflow.file}" />
+			<arg value="-pbaseDir=${basedir}" />
+			<arg value="--ant" />
+		</java>
+	</target>
+
 	<target name="core.compile">
 		<mkdir dir="${bin.dir}" />
-		<javac srcdir="${src.dir}" 
+		<javac srcdir="${src-gen.dir}:${src.dir}" 
 			destdir="${bin.dir}"
 			classpathref="de.genesez.core.classpath"
 			debug="on" />
