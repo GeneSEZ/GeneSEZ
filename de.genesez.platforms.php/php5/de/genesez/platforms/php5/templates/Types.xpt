@@ -29,6 +29,7 @@
 «EXTENSION de::genesez::platforms::php::scripts::Naming»
 «REM» need import helper «ENDREM»
 «EXTENSION de::genesez::platforms::php::scripts::Import»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
 
 
 «REM»
@@ -43,13 +44,13 @@
 «DEFINE Root FOR MClassifier»
 «FILE filePath( asFileName(), basePath() ) -»
 <?php
-«EXPAND Comment::File -»
-
+«REM»«EXPAND Comment::File -»«ENDREM»«EXPAND _ -»
 «EXPAND _Imports -»
 
 «EXPAND _OwnImports("php.own.imports." + xmiGuid) -»
 
 «EXPAND _TypeDef -»
+«EXPAND _Init -»
 ?>
 «ENDFILE»
 «ENDDEFINE»
@@ -60,6 +61,12 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«REM»
+	simply a placeholder for aspects to generate code after a type definition
+«ENDREM»
+«DEFINE _Init FOR MClassifier -»
+«ENDDEFINE»
 
 «REM»
 	processes the generation of a class
@@ -96,13 +103,16 @@
 // TODO: «fatal("generation of 'MClassifier's is currently not supported")»
 «ENDDEFINE»
 
+
+«REM» - - import generation - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
 «REM»
 	generate import statements for referenced classes from other php files
 «ENDREM»
 «DEFINE _Imports FOR MClassifier -»
 «IF generateIncludes() -»
 «FOREACH supplier.select(e|e.isImportNeeded(this)) AS s -»
-require_once '«EXPAND _Require(s) -»';
+	«EXPAND _Require(s) -»
 «ENDFOREACH -»
 «ENDIF -»
 «ENDDEFINE»
@@ -112,16 +122,25 @@ require_once '«EXPAND _Require(s) -»';
 	@param	used	the classifier which is required
 «ENDREM»
 «DEFINE _Require(MClassifier used) FOR MClassifier -»
-«used.includePath(this) + used.asFileName() -»
+require_once '«used.includePath(this) + used.asFileName() -»';
 «ENDDEFINE»
 
 «REM»
 	generates the require path for an type to include
-	only for external types important!
+	- only for external types important!
+	- if include is empty no require statement is generated
 	@param	used	the type which is required
 «ENDREM»
 «DEFINE _Require(MType used) FOR MClassifier -»
-«used.mapName("import") -»
+«LET used.mapName("import").toString().toString() AS inc -»
+«IF inc.length > 0 -»
+«IF used.name() == inc -»
+require_once '«inc.replaceAll("_", "/") -».php';
+«ELSE -»
+require_once '«inc -»';
+«ENDIF -»
+«ENDIF -»
+«ENDLET -»
 «ENDDEFINE»
 
 «REM»
@@ -132,4 +151,13 @@ require_once '«EXPAND _Require(s) -»';
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
 // TODO: put your further include + require statements here
 «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generates nothing but removes all whitespace within a line
+	- e.g. used after a comment suppresses the generation of an empty line
+	  (which is usually generated for a XPand comment)
+«ENDREM»
+«DEFINE _ FOR MElement -»
 «ENDDEFINE»

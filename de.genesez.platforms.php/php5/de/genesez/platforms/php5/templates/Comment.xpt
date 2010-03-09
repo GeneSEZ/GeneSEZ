@@ -1,5 +1,5 @@
 «REM»
-	Performs the generation of comments.
+	Performs the generation of source code comments.
 	Comment Tags are phpdocumentor specific. Doxygen doesn't like the type information.
 	
 	currently handled:
@@ -43,7 +43,7 @@
 «DEFINE File FOR MClassifier -»
 /**
  * @author	«getUserName()»
- * @package	«packageDeclaration( basePath() )»
+«EXPAND PackageDeclaration -»
  */
 «ENDDEFINE»
 
@@ -57,13 +57,23 @@
 «ENDIF -»
 «EXPAND _Supertypes -»
  * @author	«getUserName()»
- * @package	«packageDeclaration( basePath() )»
+«EXPAND PackageDeclaration -»
  */
 «ENDDEFINE»
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	generates the @package declaration
 «ENDREM»
+«DEFINE PackageDeclaration FOR MClassifier -»
+«LET model().name AS p -»
+«IF p.length > 0 -»
+ * @package	«p»
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«REM» - - attributes - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates the documentation for an attribute
@@ -80,16 +90,68 @@
 «ENDDEFINE»
 
 «REM»
-	generates the documentation for an association attribute
-	only a link to the getter documentation is generated
+	generates the documentation for an association attribute (where to store the linked objects)
 «ENDREM»
 «DEFINE Association FOR MAssociationRole -»
 	/**
-	«IF hasComment() -»
-	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«IF isSingleValuedType() && !isQualified() -»
+	 * @var	«type.mapName().asTypeName()»	stores the linked object of «EXPAND _DefaultAssociationCommentText» «IF hasComment()»({@link __get() documented here})«ENDIF»
+	«ELSE -»
+	 * @var	array of «type.mapName().asTypeName()»	stores the linked objects of «EXPAND _DefaultAssociationCommentText» «IF hasComment()»({@link __get() documented here})«ENDIF»
 	«ENDIF -»
-	 * @generated	attribute definition for association to {@link «opposite.classifier.asTypeName()»}
-	 * @var		«type.mapName().asTypeName()»	$«asAttribute()»
+	 */
+«ENDDEFINE»
+
+
+«REM» - - association accessors (association library) - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates the comment for the association management attribute
+	- if there is only one association, the association mangement object is commented
+	- else a comment for the multi-valued association mangement object is generated
+«ENDREM»
+«DEFINE AssociationManagementAttribute FOR List[MAssociationRole] -»
+	/**
+«IF size == 1 -»
+	 * holds the association management object for the«first().qualifier()» «first().direction()» «first().type()» association to {@link «first().type.asTypeName()»} («first().symmetry()»)
+	 * @var «first().asAssociationManagementClassName()»
+«ELSE -»
+	 * holds all association management objects
+	 * <ul>
+	«EXPAND _AssociationManagementAttribute FOREACH this -»
+	 * </ul>
+	 * @var array of Association and/or QualifiedAssociation
+«ENDIF -»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates a comment line for each association mangement object
+«ENDREM»
+«DEFINE _AssociationManagementAttribute FOR MAssociationRole -»
+	 *   <li><var>«asAssociation()»</var>: the«qualifier()» «direction()» «type()» association to {@link «type.asTypeName()»} («symmetry()»)</li>
+«ENDDEFINE»
+
+
+«REM» - - attribute accessors - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates the documentation for an attribute getter method
+	the attribute is only documented in the getter method
+«ENDREM»
+«DEFINE Getter FOR MAttribute -»
+	/**
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	 * getter method of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
+	«ENDIF -»
+	 * @generated	accessor to get the value of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
+	«IF isSingleValuedType() -»
+	 * @return	«type.mapName().asTypeName()»	the value of «EXPAND _PropertyName -»
+	«ELSE -»
+	 * @return	array	the value of «EXPAND _PropertyName -» as an array of type {@link «type.mapName().asTypeName()»}
+	«ENDIF»
 	 */
 «ENDDEFINE»
 
@@ -102,7 +164,7 @@
 	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
 	«ENDIF -»
 	 * @generated	setter method for the attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
-	 * @param	«type.mapName().asTypeName()»	$«asAttribute()»	the value to set
+	 * @param	«type.mapName().asTypeName()»	$«name»	the value to set
 	 */
 «ENDDEFINE»
 
@@ -132,21 +194,12 @@
 	 */
 «ENDDEFINE»
 
-«REM»
-	generates the documentation for a setter method of an association attribute
-«ENDREM»
-«DEFINE Setter FOR MAssociationRole -»
-	/**
-	«IF hasComment() -»
-	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
-	«ENDIF -»
-	 * @generated	setter method for the association to {@link «type.mapName().asTypeName()»}
-	 * @param	«type.mapName().asTypeName()»	$«asAttribute()»	the value to set
-	 */
-«ENDDEFINE»
+
+«REM» - - old association accessors - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
-	generates the documentation for the 'insert in' method of an association attribute with a collection type
+	generates the documentation for the 'insert in' method of an association attribute 
+	with a collection type
 «ENDREM»
 «DEFINE InsertIn FOR MAssociationRole -»
 	/**
@@ -159,7 +212,8 @@
 «ENDDEFINE»
 
 «REM»
-	generates the documentation for the 'remove from' method of an association attribute with a collection type
+	generates the documentation for the 'remove from' method of an association attribute 
+	with a collection type
 «ENDREM»
 «DEFINE RemoveFrom FOR MAssociationRole -»
 	/**
@@ -168,26 +222,6 @@
 	«ENDIF -»
 	 * @generated	method to remove values from the multi-valued association to {@link «type.mapName().asTypeName()»}
 	 * @param	«type.mapName().asTypeName()»	$toRemove	the value to remove
-	 */
-«ENDDEFINE»
-
-«REM»
-	generates the documentation for an attribute getter method
-	the attribute is only documented in the getter method
-«ENDREM»
-«DEFINE Getter FOR MAttribute -»
-	/**
-	«IF hasComment() -»
-	«comment().format() -»
-	«ELSE -»
-	 * getter method of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
-	«ENDIF -»
-	 * @generated	accessor to get the value of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
-	«IF isSingleValuedType() -»
-	 * @return	«type.mapName().asTypeName()»	the value of «EXPAND _PropertyName -»
-	«ELSE -»
-	 * @return	array	the value of «EXPAND _PropertyName -» as an array of type {@link «type.mapName().asTypeName()»}
-	«ENDIF»
 	 */
 «ENDDEFINE»
 
@@ -212,18 +246,33 @@
 «ENDDEFINE»
 
 «REM»
+	generates the documentation for a setter method of an association attribute
+«ENDREM»
+«DEFINE Setter FOR MAssociationRole -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	setter method for the association to {@link «type.mapName().asTypeName()»}
+	 * @param	«type.mapName().asTypeName()»	$«asAttribute()»	the value to set
+	 */
+«ENDDEFINE»
+
+
+«REM» - - operation - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
 	generates the documentation for an operation
 «ENDREM»
 «DEFINE Operation FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	«comment().format() -»
-	«ENDIF -»
+«comment().format("	 * ", "\n") -»
+	«ELSE -»
 	 * @generated	method stub for implementation
+	«ENDIF -»
 	«IF hasExceptions() -»
-	 * 
 	«EXPAND _ExceptionLink FOREACH raisedException -»
-	 * 
 	«ENDIF -»
 	«EXPAND _Parameter FOREACH parameter -»
 	«EXPAND _Return -»
@@ -236,15 +285,12 @@
 «DEFINE Constructor FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	«comment().format() -»
+«comment().format("	 * ", "\n") -»
 	«ELSE -»
-	 * constructs an object of class {@link «classifier.asTypeName()»}
+	 * @generated	constructs an object of class {@link «classifier.asTypeName()»}
 	«ENDIF -»
-	 * @generated	constructor stub for implementation
 	«IF hasExceptions() -»
-	 * 
 	«EXPAND _ExceptionLink FOREACH raisedException -»
-	 * 
 	«ENDIF -»
 	«EXPAND _Parameter FOREACH parameter -»
 	 */
@@ -256,15 +302,12 @@
 «DEFINE Destructor FOR MOperation -»
 	/**
 	«IF hasComment() -»
-	«comment().format() -»
+«comment().format("	 * ", "\n") -»
 	«ELSE -»
-	 * destructor for the class {@link «classifier.asTypeName()»}
+	 * @generated	destructor for the class {@link «classifier.asTypeName()»}
 	«ENDIF -»
-	 * @generated	destructor stub for implementation
 	«IF hasExceptions() -»
-	 * 
 	«EXPAND _ExceptionLink FOREACH raisedException -»
-	 * 
 	«ENDIF -»
 	«EXPAND _Parameter FOREACH parameter -»
 	 */
@@ -276,6 +319,79 @@
 «DEFINE Constructor FOR MEnumeration -»
 	/**
 	 * @generated	private constructor to prevent instantiation of enumeration objects
+	 */
+«ENDDEFINE»
+
+
+«REM» - - magic methods - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates the comment for the magic get function
+«ENDREM»
+«DEFINE MagicGet FOR List[MProperty] -»
+	/**
+	 * magic getter to obtain associations or unmodifiable values of the following members:
+	 * <ul>
+	«FOREACH typeSelect(MAttribute) AS a -»
+	 *   <li><var>«a.name»</var>: «a.comment()»</li>
+	«ENDFOREACH -»
+	«FOREACH typeSelect(MAssociationRole) AS a -»
+	 *   <li><var>«a.asAssociation()»</var>: «IF a.hasComment()»«comment()»«ELSE»«EXPAND _DefaultAssociationCommentText FOR a -»«ENDIF -»</li>
+	«ENDFOREACH -»
+	 * </ul>
+	 * @param	string	$«asMagicGetParameter()»	the name of the member
+	 * @throws	{@link Exception} if the specified member is neither accessible nor available
+	 * @return	mixed	the value of the member or an association management object
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the comment for the magic set function
+«ENDREM»
+«DEFINE MagicSet FOR List[MAttribute] -»
+	/**
+	 * magic setter to set the values of the following members:
+	 * <ul>
+	«FOREACH this AS a -»
+	 *   <li><var>«a.name»</var>: «a.comment()»</li>
+	«ENDFOREACH -»
+	 * </ul>
+	 * @param	string	$«asMagicSetParameter()»	the name of the member
+	 * @param	mixed	$«asMagicSetValueParameter()»	the value to set
+	 * @throws	{@link Exception} if the member is neither accessible nor available
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the comment for the magic isset function
+«ENDREM»
+«DEFINE MagicIsSet FOR List[MAttribute] -»
+	/**
+	 * checks if a value is assigned to one the following members:
+	 * <ul>
+	«FOREACH this AS a -»
+	 *   <li><var>«a.name»</var>: «a.comment()»</li>
+	«ENDFOREACH -»
+	 * </ul>
+	 * @param	string	$«asMagicIsSetParameter()»	the name of the member
+	 * @throws	{@link Exception} if the member is neither accessible nor available
+	 * @return	boolean	the value of the member or an exception if the member is neither accessible nor available
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the comment for the magic unset function
+«ENDREM»
+«DEFINE MagicUnSet FOR List[MAttribute] -»
+	/**
+	 * unsets (set to <var>null</var>) the value of the following members:
+	 * <ul>
+	«FOREACH this AS a -»
+	 *   <li><var>«a.name»</var>: «a.comment()»</li>
+	«ENDFOREACH -»
+	 * </ul>
+	 * @param	string	$«asMagicUnSetParameter()»	the name of the member
+	 * @throws	{@link Exception} if the member is neither accessible nor available
 	 */
 «ENDDEFINE»
 
@@ -318,9 +434,24 @@
 «ENDREM»
 «DEFINE _Parameter FOR MParameter -»
 «IF isSingleValuedType() -»
-	 * @param	«type.mapName().asTypeName()»	$«asParameter()»	«comment().format("", "")»
+	 * @param	«type.mapName().asTypeName()»	$«asParameter()»	«EXPAND _ParameterComment -»
 «ELSE -»
-	 * @param	array	$«asParameter()»	«comment().format("", "")»
+	 * @param	array	$«asParameter()»	«EXPAND _ParameterComment -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the comment text for parameters
+	- if a model documentation exist, it is used
+	- else a default text including type and default value may be generated
+«ENDREM»
+«DEFINE _ParameterComment FOR MParameter -»
+«IF hasComment() -»
+«comment().format("", "")»
+«ELSE -»
+«IF isMultiValuedType() -»array of type '«type.mapName().asTypeName() -»'«ENDIF -»
+«IF isMultiValuedType() && hasDefaultValue() -», «ENDIF -»
+«IF hasDefaultValue() -»default value is '«defaultvalue -»'«ENDIF»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -329,7 +460,11 @@
 «ENDREM»
 «DEFINE _Return FOR MOperation -»
 «IF hasReturnType() -»
-	 * @return	«returnType.mapName().asTypeName()»	«comment().format("", "")»
+«IF isMultiValuedType() -»
+	 * @return	array of «returnType.mapName().asTypeName()»
+«ELSE -»
+	 * @return	«returnType.mapName().asTypeName()»
+«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -339,3 +474,10 @@
 «DEFINE _ExceptionLink FOR MType -»
 	 * @throws		{@link «mapName().asTypeName()»}
 «ENDDEFINE»
+
+«REM»
+	generates the default association comment text
+	- don't place the ENDDEFINE on the next line, disrupts generated layout
+«ENDREM»
+«DEFINE _DefaultAssociationCommentText FOR MAssociationRole -»
+the «qualifier()» «direction()» «type()» association to {@link «type.mapName().asTypeName()»} («symmetry()»)«ENDDEFINE»

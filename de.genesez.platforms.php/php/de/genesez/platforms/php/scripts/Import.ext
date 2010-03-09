@@ -8,6 +8,7 @@
 //	based on genesez meta model
 import gcore;
 
+extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2t::Helper;
 extension de::genesez::platforms::common::log::Log;
 
@@ -53,7 +54,7 @@ String includePath(MClassifier used, MClassifier this) :
  * @return	relative path to the required (used) classifier
  */
 String relativeIncludePath(MClassifier used, MClassifier this) :
-	getPathBack(owningPackage, "") + pathBack(basePath()) + getPathForward(used.owningPackage, "");
+	getPathBack(package(), "") + pathBack(basePath()) + getPathForward(used.package(), "");
 
 /**
  * returns the include path of a required classifier based on it's package, the base package and
@@ -65,7 +66,7 @@ String absoluteIncludePath(MClassifier this) :
 		(includeBase().length == 0 ? "" : "/") + 
 	basePath() + 
 		(basePath().length == 0 ? "" : "/") + 
-	getPathForward(owningPackage, "");
+	getPathForward(package(), "");
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
