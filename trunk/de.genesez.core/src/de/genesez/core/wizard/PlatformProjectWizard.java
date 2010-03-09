@@ -4,12 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -22,7 +17,6 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
-import org.openarchitectureware.wizards.EclipseHelper;
 
 
 public class PlatformProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
@@ -80,23 +74,23 @@ public class PlatformProjectWizard extends Wizard implements INewWizard, IExecut
 	
 	private void doFinish(String name, IProgressMonitor monitor) {
 		monitor.beginTask("Creating GeneSEZ Platform Project " + name, 2);
-
-		Set<String> reqbundles = new HashSet<String>();
-		reqbundles.add("de.genesez.platforms.common;visibility:=reexport");
-
-		List<String> srcfolders = new ArrayList<String>();
-		srcfolders.add("src");
-		
-		List<IProject> projects = new ArrayList<IProject>();
-		
-		IProject p = EclipseHelper.createOAWProject(name, srcfolders, projects, reqbundles, null, monitor, getShell());
-		
-		if (p == null) {
-			return;
-		}
-		
-		EclipseHelper.createFile("build/build.xml", p, this.getContents("build/build.xml"), monitor);
-		EclipseHelper.createFile("build/build.properties", p, this.getContents("build/build.properties"), monitor);
+//
+//		Set<String> reqbundles = new HashSet<String>();
+//		reqbundles.add("de.genesez.platforms.common;visibility:=reexport");
+//
+//		List<String> srcfolders = new ArrayList<String>();
+//		srcfolders.add("src");
+//		
+//		List<IProject> projects = new ArrayList<IProject>();
+//		
+//		IProject p = EclipseHelper.createOAWProject(name, srcfolders, projects, reqbundles, null, monitor, getShell());
+//		
+//		if (p == null) {
+//			return;
+//		}
+//		
+//		EclipseHelper.createFile("build/build.xml", p, this.getContents("build/build.xml"), monitor);
+//		EclipseHelper.createFile("build/build.properties", p, this.getContents("build/build.properties"), monitor);
 		
 		monitor.worked(1);
 	}

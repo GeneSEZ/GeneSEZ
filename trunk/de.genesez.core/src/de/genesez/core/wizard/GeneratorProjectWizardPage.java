@@ -1,9 +1,5 @@
 package de.genesez.core.wizard;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -27,13 +23,12 @@ public class GeneratorProjectWizardPage extends WizardPage {
 	// Contains the name of the project to create
 	private Text projectText;
 
-	// The wizards of the platforms the generator should depend on
-	private Set<IPlatformWizard> wizards = new HashSet<IPlatformWizard>();
-
+	private IPlatformWizard wizard = null;
+	
 	public GeneratorProjectWizardPage(ISelection selection) {
 		super("wizardPage");
 		this.setTitle("GeneSEZ Generator Project");
-		this.setDescription("Generates a new Generator Project based on GeneSEZ Framework");
+		this.setDescription("Creates a new generator project based on GeneSEZ Framework");
 	}
 	
 	/**
@@ -53,7 +48,7 @@ public class GeneratorProjectWizardPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 
 		this.projectText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		this.projectText.setText("de.genesez.newgenerator");
+		this.projectText.setText("de.genesez.myproject");
 		this.projectText.setLayoutData(gd);
 		this.projectText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -71,7 +66,7 @@ public class GeneratorProjectWizardPage extends WizardPage {
 
 		// the list of supported platforms
 		for (final IPlatformWizard w : PlatformWizardRegistry.INSTANCE.getAll()) {
-			final Button wbutton = new Button(container, SWT.CHECK);
+			final Button wbutton = new Button(container, SWT.RADIO);
 			wbutton.setLayoutData( new GridData(GridData.FILL,GridData.FILL, true, false, 2, 1) );
 			wbutton.setText( w.getName() );
 			wbutton.addSelectionListener(new SelectionListener() {
@@ -80,15 +75,13 @@ public class GeneratorProjectWizardPage extends WizardPage {
 				}
 				public void widgetSelected(SelectionEvent e) {
 					if ( wbutton.getSelection() ) {
-						GeneratorProjectWizardPage.this.wizards.add(w);
-					} else {
-						GeneratorProjectWizardPage.this.wizards.remove(w);
+						GeneratorProjectWizardPage.this.wizard = w;
+						GeneratorProjectWizardPage.this.dialogChanged();
 					}
 				}
 			});
 		}
 		
-		this.dialogChanged();
 		this.setControl(container);
 	}
 
@@ -96,14 +89,18 @@ public class GeneratorProjectWizardPage extends WizardPage {
 		return this.projectText.getText();
 	}
 	
-	public Set<IPlatformWizard> getWizards() {
-		return Collections.unmodifiableSet(this.wizards);
+	public IPlatformWizard getPlatformWizard() {
+		return this.wizard;
 	}
-
+	
 	private void dialogChanged() {
 
 		if ( 0 == this.projectText.getText().length() ) {
 			this.setErrorMessage("Project name must be specified");
+			return;
+		}
+		if ( null == this.wizard ) {
+			this.setErrorMessage("Platform must be selected");
 			return;
 		}
 		setErrorMessage(null);
