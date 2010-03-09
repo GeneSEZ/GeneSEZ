@@ -201,11 +201,13 @@
 	an implementation which throws an exception that this method is not yet supported
 «ENDREM»
 «DEFINE _ConstructorBody FOR MOperation -»
+	«IF !hasStereotype("http://www.genesez.de/StandardConstructor")-»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("java.constructor." + xmiGuid)»
 		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
-		throw new UnsupportedOperationException(
-				"The implementation of this generated constructor is missing!");
+			throw new UnsupportedOperationException(
+					"The implementation of this generated constructor is missing!");
 		«ENDPROTECT»
+	«ENDIF-»		
 «ENDDEFINE»
 
 «REM»
