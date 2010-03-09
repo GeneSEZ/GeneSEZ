@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="de.genesez.platforms.cpp" basedir=".." default="build">
+<project name="de.genesez.platforms.postgresql" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -17,20 +17,21 @@
 	<!-- Public target section -->
 	
 	<target name="build"
-		description="Build de.genesez.platforms.cpp">
+		description="Build de.genesez.platforms.postgresql">
 	</target>
 
 	<target name="pluginjar"
-		description="Create the plugin jar for de.genesez.platforms.cpp">
+		description="Create the plugin jar for de.genesez.platforms.postgresql">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${postgresql.dir}" />
 		</jar>
 	</target>
 	
 	<target name="clean"
-		description="Clean de.genesez.platforms.cpp">
+		description="Clean de.genesez.platforms.postgresql">
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${dist.dir}" includes="*.jar" />
