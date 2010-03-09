@@ -59,6 +59,8 @@ EPackage handlePackage( uml::Package pack, EPackage this):
 	pack.ownedMember.typeSelect( Association ).mapAssociation() ->
 	// handle all the subpackages
 	pack.ownedElement.typeSelect(uml::Package).select(p|p.shouldBeIncluded()).handlePackage(this) ->
+	// add documentation
+	transformComments( pack ) ->
 	this;
 	
 private boolean shouldBeIncluded(uml::Package p): includedPackages().matches(".*"+p.name+".*");
@@ -151,19 +153,28 @@ create EReference this createRef( Property a ):
 	// extensions are cached and, when invoked several times with the 
 	// same arguments are executed only upon first invocation. Subsequent
 	// invocations return the cached result of the first invocation
-	a.class.mapClass().eStructuralFeatures.add(this);
+	a.class.mapClass().eStructuralFeatures.add(this) ->
+	// add documentation
+	transformComments( a ) ->
+	this;
 	
 // that one creates an EEnum from an UML Enumeration	
 create EEnum this mapEnumeration(Enumeration e):
 	e.counterReset() ->
 	// copies the name 
 	setName(e.name) ->
-	setELiterals( e.ownedLiteral.mapLiteral(e) );
+	setELiterals( e.ownedLiteral.mapLiteral(e) ) ->
+	// add documentation
+	transformComments( e ) ->
+	this;
 
 // maps the literals of an enumeration	
 create EEnumLiteral mapLiteral( EnumerationLiteral literal, Enumeration enum ):
 	setName( literal.name ) ->
-	setValue( enum.counterInc() );
+	setValue( enum.counterInc() ) ->
+	// add documentation
+	transformComments( literal ) ->
+	this;
 	
 // that one creates an EClass from an UML Class	
 create EClass this mapClass(Class c):
@@ -185,7 +196,10 @@ create EClass this mapClass(Class c):
 	( addNameAttr() && this.eSuperTypes.isEmpty && !eAttributes.collect(a|a.name).contains("name") &&!c.isAnonymous() ? 
 		 eStructuralFeatures.add(createNameAttr()) : null ) ->
 	// handle operations
-	setEOperations( c.ownedOperation.mapOperation() );
+	setEOperations( c.ownedOperation.mapOperation() ) ->
+	// add documentation
+	transformComments( c ) ->
+	this;
 
 // that one creates an EClass with interface == true from an UML Interface;
 create EClass this mapInterface(Interface c):
@@ -196,7 +210,10 @@ create EClass this mapInterface(Interface c):
 	// sets the supertype(s). Must also be interfaces!
 	setESuperTypes(c.generalization.general.typeSelect(Interface).mapInterface()) ->
 	// copy the operations
-	setEOperations( c.ownedOperation.mapOperation() );
+	setEOperations( c.ownedOperation.mapOperation() ) ->
+	// add documentation
+	transformComments( c ) ->
+	this;
 
 
 // copy Operations
@@ -204,7 +221,10 @@ private create EOperation mapOperation( Operation o ):
 	setName(o.name) ->
 	o.type == null ? setEType( o.class.mapClass() ) : setEType( handleType( o.type ) ) ->
 	setEParameters( o.ownedParameter.select(p|p.direction.toString().toLowerCase()!="return").mapParameter() ) ->
-	setEAnnotations( { o.createBodyAnnotation() } );
+	setEAnnotations( { o.createBodyAnnotation() } ) ->
+	// add documentation
+	transformComments( o ) ->
+	this;
 
 private create EAnnotation createBodyAnnotation( Operation o ):
 	setSource( "http://www.eclipse.org/emf/2002/GenModel" ) ->
@@ -218,11 +238,15 @@ private String createBody( String className, String opName, List params ):
 
 create EParameter this mapParameter( Parameter p ):
 	setName( p.name ) ->
-	setEType( handleType( p.type ) );
+	setEType( handleType( p.type ) ) ->
+	// add documentation
+	transformComments( p ) ->
+	this;
 
 // creates the additional name attribute, if necessary	
 create EAttribute this createNameAttr(EClass cls):
-	setName("name") -> setEType( "String".mapTypeName() );	
+	setName("name") -> setEType( "String".mapTypeName() ) ->
+	this;
 
 // copying attributes is easy, just copy name and type
 create EAttribute this mapAttribute( Property a ):
@@ -232,7 +256,10 @@ create EAttribute this mapAttribute( Property a ):
 	setUpperBound(a.getUpper())->
 	// note how we call the mapTypeName() operation on the
 	// name of the type
-	setEType( handleType( a.type ) );
+	setEType( handleType( a.type ) ) ->
+	// add documentation
+	transformComments( a ) ->
+	this;
 	
 private cached handleType( uml::Type t ):	
 	switch {
@@ -240,6 +267,35 @@ private cached handleType( uml::Type t ):
 		case Enumeration.isInstance( t ): ((Enumeration)t).mapEnumeration()
 		default: t.name.mapTypeName()
 	};
+	
+/**
+ * transforms uml comments into ecore model documentation
+ */
+private Void transformComments(ENamedElement ne, uml::Element e) :
+	e.comment("", "").length > 0
+		? ne.createAnnotation( "http://www.eclipse.org/emf/2002/GenModel" ).details.add( createDocumentation( e ) )
+		: Void;
+	
+private create EAnnotation createAnnotation(ENamedElement container, String uri) :
+	setSource( uri ) ->
+	container.eAnnotations.add( this ) ->
+	this;
+	
+/**
+ * just use the first comment body as documentation, don't care about others and nested comments
+ * TODO: improve :-)
+ */
+private create EStringToStringMapEntry createDocumentation(uml::Element e) :
+	setKey( "documentation" ) ->
+	setValue( e.comment("\n", ". ").format("", "") ) ->
+	this;
+	
+private String comment(Element e, String commentSeparator, String nestedCommentSeparator) :
+	JAVA org.openarchitectureware.util.uml2ecore.CommentConversion.comment( org.eclipse.uml2.uml.Element, java.lang.String, java.lang.String );
+
+private String format(String s, String linePrefix, String lineSuffix) :
+	JAVA org.openarchitectureware.util.uml2ecore.CommentConversion.format( java.lang.String, java.lang.String, java.lang.String );
+	
 	
 // finally, because of a number of EMF intricacies, we delegate the
 // actual type mapping to a Java method; take a look at the respective
