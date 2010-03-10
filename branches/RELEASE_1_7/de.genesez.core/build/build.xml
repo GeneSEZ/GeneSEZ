@@ -100,7 +100,7 @@
 				<include name="*.chk"/>
 			</fileset>
 			<fileset dir="${parser.dir}" />
-			<fileset dir="${src-gen.dir}" includes="**/*" />
+			<fileset dir="${src-gen.dir}" excludes="**/*genmodel" />
 		</delete>
 	</target>
 
@@ -117,12 +117,79 @@
 		</java>
 	</target>
 
-	<target name="core.compile">
+	<target name="core.ecore2java"
+		description=""
+		if="eclipse.running">
+		<if>
+			<available file="${ecore.file}"/>
+			<then>
+				<emf.Ecore2Java model="${ecore.file}"
+					genModel="${genmodel.file}"
+					reconcileGenModel="reload"
+					generateJavaCode="true"
+					generateModelProject="false"
+					generateEditProject="false"
+					generateEditorProject="false"
+					modelProject="${basedir}"
+					modelProjectFragmentPath="${ecore2java.path}">
+					<arg line="-package ${ecore.package}" />
+				</emf.Ecore2Java>
+			</then>
+			<else>
+				<echo message="File ${ecore.file} not available"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="core.compile"
+		depends="core.ecore2java.internal,core.ecore2java.external">
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src-gen.dir}:${src.dir}" 
 			destdir="${bin.dir}"
 			classpathref="de.genesez.core.classpath"
 			debug="on" />
+	</target>
+
+	<target name="core.ecore2java.internal"
+		description=""
+		if="eclipse.running">
+		<echo>Eclipse is running...</echo>
+		<antcall target="core.ecore2java" />
+	</target>
+
+	<target name="core.ecore2java.external"
+		description=""
+		unless="eclipse.running">
+		<echo>Eclipse is not running...</echo>
+		<mkdir dir="${workspace.location}" />
+		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="core.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+			<arg value="-Dbuild.controlled=${build.controlled}" />
+		</exec>
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="core.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+			<arg value="-Dbuild.controlled=${build.controlled}" />
+		</exec>
 	</target>
 
 </project>
