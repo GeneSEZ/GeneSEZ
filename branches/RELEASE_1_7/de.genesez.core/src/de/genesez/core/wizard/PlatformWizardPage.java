@@ -11,12 +11,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class PlatformProjectWizardPage extends WizardPage {
+import de.genesez.core.IPlatformWizard;
+
+public class PlatformWizardPage extends WizardPage {
 
 	// Contains the name of the project to create
 	private Text projectText;
 
-	public PlatformProjectWizardPage(ISelection selection) {
+	public PlatformWizardPage(ISelection selection) {
 		super("wizardPage");
 		this.setTitle("GeneSEZ Platform");
 		this.setDescription("Generates a new Platform Project for the GeneSEZ Framework");

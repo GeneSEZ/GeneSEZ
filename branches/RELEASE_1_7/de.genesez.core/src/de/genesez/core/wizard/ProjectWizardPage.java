@@ -18,14 +18,14 @@ import org.eclipse.swt.widgets.Text;
 import de.genesez.core.IPlatformWizard;
 import de.genesez.core.PlatformWizardRegistry;
 
-public class GeneratorProjectWizardPage extends WizardPage {
+public class ProjectWizardPage extends WizardPage {
 
 	// Contains the name of the project to create
 	private Text projectText;
 
 	private IPlatformWizard wizard = null;
 	
-	public GeneratorProjectWizardPage(ISelection selection) {
+	public ProjectWizardPage(ISelection selection) {
 		super("wizardPage");
 		this.setTitle("GeneSEZ Generator Project");
 		this.setDescription("Creates a new generator project based on GeneSEZ Framework");
@@ -52,7 +52,7 @@ public class GeneratorProjectWizardPage extends WizardPage {
 		this.projectText.setLayoutData(gd);
 		this.projectText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				GeneratorProjectWizardPage.this.dialogChanged();
+				ProjectWizardPage.this.dialogChanged();
 			}
 		});
 
@@ -75,8 +75,8 @@ public class GeneratorProjectWizardPage extends WizardPage {
 				}
 				public void widgetSelected(SelectionEvent e) {
 					if ( wbutton.getSelection() ) {
-						GeneratorProjectWizardPage.this.wizard = w;
-						GeneratorProjectWizardPage.this.dialogChanged();
+						ProjectWizardPage.this.wizard = w;
+						ProjectWizardPage.this.dialogChanged();
 					}
 				}
 			});

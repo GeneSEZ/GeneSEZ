@@ -4,29 +4,41 @@ Project:
 
 Generator:
 	'generator' '{'
+		( 'builder' '{' (builder+=Builder)* '}' )?
+		( 'natures' '{' (natures+=Nature)* '}' )?
+		( 'directories' '{' (directories+=Directory)* '}' )?
 		(entries+=Entry)*
 	'}';
 
 Target:
 	'target' '{'
+		( 'builder' '{' (builder+=Builder)* '}' )?
+		( 'natures' '{' (natures+=Nature)* '}' )?
+		( 'directories' '{' (directories+=Directory)* '}' )?
 		(entries+=Entry)*
 	'}';
 
 Entry:
-	Manifest|Directory|File;
+	Manifest|File;
 
 Manifest:
 	'manifest' '{'
-		'require:' bundle=JavaIdentifier
+		'require:' (bundles+=JavaIdentifier)*
 	'}';
 
 Directory:
-	'directory' name=DirectoryName;
+	(source?='SOURCE')? name=DirectoryName;
 
 File:
 	'file' name=STRING '{'
 		content=STRING
 	'}';
+
+Builder:
+	('Java'|'Manifest'|'Schema'|'oaw');
+
+Nature:
+	('Java'|'oaw'|'PDE');
 
 /**
  * Java identifiers
@@ -38,4 +50,4 @@ String JavaIdentifier:
  * Directory names
  */
 String DirectoryName:
-	ID (("."|"-") ID)*;
+	ID (("."|"-"|"/") ID)*;
