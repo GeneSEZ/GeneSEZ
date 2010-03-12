@@ -9,7 +9,6 @@ public class Java5Wizard implements IPlatformWizard {
 	}
 
 	public String getModel() {
-		// TODO Auto-generated method stub
-		return null;
+		return "de/genesez/platforms/java/wizards/java5.project";
 	}
 }

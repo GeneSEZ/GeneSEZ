@@ -9,8 +9,7 @@ public class Java4Wizard implements IPlatformWizard {
 	}
 
 	public String getModel() {
-		// TODO Auto-generated method stub
-		return null;
+		return "de/genesez/platforms/java/wizards/java4.project";
 	}
 
 }
