@@ -5,12 +5,28 @@ extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::java::java5::scripts::Stereotypes;
+extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
 /* remove this import to be independent from jpa cartridge */
 extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 
 /**
-  * add standard constructor to a session or message driven bean
+ *	adds the stereotype "ejb3Local" to a session bean
+ *	if no business interface is implemented and 
+ *	there is neither stereotype "ejb3Local" nor "ejb3Remote"
+ *	available
+ *
+ *	this		instance of MClassifier	
+ */
+addLocalBusinessInterface(MClassifier this) :
+	hasStereotype("ejb3SessionBean") &&
+	realization.isEmpty && 
+	!(hasStereotype("ejb3Local") || hasStereotype("ejb3Remote"))
+		? addLocalStereotype("")
+		: "";
+
+/**
+  * adds no argument constructor to a session or message driven bean
   *	in the package and subpackages
   */	
 MPackage addStandardConstructor(MPackage this) :
@@ -18,7 +34,7 @@ MPackage addStandardConstructor(MPackage this) :
 	classifier.typeSelect(MClass).addStandardConstructor();
 
 /**
-  * add standard constructor to a session or message 
+  * adds no argument constructor to a session or message 
   *	driven bean if there is not already one
   */	
 MClassifier addStandardConstructor(MClass this) :
