@@ -1,0 +1,13 @@
+<workflow>
+  <bean class="org.eclipse.mwe.emf.StandaloneSetup"/>
+  <bean class="de.genesez.core.project.ProjectMetaModelRegistration"/>
+  <component id="parser" class="de.genesez.core.project.parser.ParserComponent">
+    <modelFile value="${modelFile}"/>
+    <outputSlot value="theModel"/>
+  </component>
+  <component class="de.genesez.core.project.workflow.ProjectComponent">
+    <inputSlot value="theModel"/>
+     <outlet name="TARGET" path="${targetProjectDirectory}"/>
+     <outlet name="GENERATOR" path="${generatorProjectDirectory}"/>    
+  </component>
+</workflow>
