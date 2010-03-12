@@ -6,25 +6,24 @@ Generator:
 	'generator' '{'
 		( 'builder' '{' (builder+=Builder)* '}' )?
 		( 'natures' '{' (natures+=Nature)* '}' )?
+		( 'classpath' '{' (classpath+=Classpath)* '}' )?
 		( 'directories' '{' (directories+=Directory)* '}' )?
-		(entries+=Entry)*
+		( 'manifest' '{' manifest=Manifest '}' )?
+		(files+=File)*
 	'}';
 
 Target:
 	'target' '{'
 		( 'builder' '{' (builder+=Builder)* '}' )?
 		( 'natures' '{' (natures+=Nature)* '}' )?
+		( 'classpath' '{' (classpath+=Classpath)* '}' )?
 		( 'directories' '{' (directories+=Directory)* '}' )?
-		(entries+=Entry)*
+		(files+=File)*
 	'}';
-
-Entry:
-	Manifest|File;
 
 Manifest:
-	'manifest' '{'
-		'require:' (bundles+=JavaIdentifier)*
-	'}';
+		('name' name=STRING)?
+		'require:' (bundles+=JavaIdentifier)*;
 
 Directory:
 	(source?='SOURCE')? name=DirectoryName;
@@ -34,11 +33,35 @@ File:
 		content=STRING
 	'}';
 
+Classpath:
+	id=ClasspathIdentifier;
+
 Builder:
-	('Java'|'Manifest'|'Schema'|'oaw');
+	id=BuilderIdentifier;
 
 Nature:
+	id=NatureIdentifier;
+
+/**
+ * Short Identifiers for classpath entries
+ * @see WizardHelper
+ */
+String ClasspathIdentifier:
+	('Java'|'PDE');
+
+/**
+ * Short Identifiers for natures
+ * @see WizardHelper
+ */
+String NatureIdentifier:
 	('Java'|'oaw'|'PDE');
+
+/**
+ * Short Identifiers for builders
+ * @see WizardHelper
+ */
+String BuilderIdentifier:
+	('Java'|'Manifest'|'Schema'|'oaw');
 
 /**
  * Java identifiers

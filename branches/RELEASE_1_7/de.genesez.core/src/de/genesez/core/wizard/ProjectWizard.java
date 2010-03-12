@@ -21,7 +21,8 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.openarchitectureware.workflow.WorkflowRunner;
 
 import de.genesez.core.IPlatformWizard;
-
+import de.genesez.core.project.workflow.GeneratorProject;
+import de.genesez.core.project.workflow.TargetProject;
 
 public class ProjectWizard extends Wizard implements IExecutableExtension, INewWizard {
 
@@ -81,14 +82,26 @@ public class ProjectWizard extends Wizard implements IExecutableExtension, INewW
 	private void doFinish(String name, IProgressMonitor monitor) {
 		monitor.beginTask("Creating GeneSEZ Project " + name, 2);
 
-		String workFlowFile = ProjectWizard.WORKFLOW;
-		Map<String, String> theParams = new HashMap<String, String>();
+		// create the generator project first
+		GeneratorProject gp = new GeneratorProject(monitor, name);
+
+		// then create the target project
+		TargetProject tp = new TargetProject(monitor, name);
+
+		// fetch the selected wizard from page
 		IPlatformWizard wizard = this.page.getPlatformWizard();
+
+		// configure parameters for oAW workflow
+		Map<String, String> theParams = new HashMap<String, String>();
 		theParams.put("modelFile", wizard.getModel());
+		theParams.put("generatorProjectDirectory", gp.getDirectory());
+		theParams.put("targetProjectDirectory", gp.getDirectory());
+
+		// create and run the workflow
 		WorkflowRunner runner = new WorkflowRunner();
-		runner.getContext().set("name", name);
-		runner.getContext().set("monitor", monitor);
-		runner.run(workFlowFile, null, theParams, null);
+		runner.getContext().set("generatorProject", gp);
+		runner.getContext().set("targetProject", tp);
+		runner.run(ProjectWizard.WORKFLOW, null, theParams, null);
 
 		monitor.worked(1);
 	}

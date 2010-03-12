@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.EPackage;
  */
 public class ProjectMetaModelRegistration {
 	
+	public static final String nsURI = "http://www.genesez.de/dsl/project";
+	
     static {
 	    register();
 	}
@@ -17,9 +19,8 @@ public class ProjectMetaModelRegistration {
      * Register the metamodel for project dsl
      */
 	private static void register() {
-		String nsURI = "http://www.genesez.de/dsl/project";
-		if (EPackage.Registry.INSTANCE.get(nsURI) == null) {
-			EPackage.Registry.INSTANCE.put(nsURI, ProjectPackage.eINSTANCE); 
+		if (EPackage.Registry.INSTANCE.get(ProjectMetaModelRegistration.nsURI) == null) {
+			EPackage.Registry.INSTANCE.put(ProjectMetaModelRegistration.nsURI, ProjectPackage.eINSTANCE); 
 		}
 	}
    	

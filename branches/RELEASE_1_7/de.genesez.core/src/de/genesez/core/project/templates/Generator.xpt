@@ -11,27 +11,26 @@
 «EXTENSION de::genesez::core::project::scripts::ProjectHelper»
 
 «DEFINE main FOR Generator»
-«EXPAND entry FOREACH entries-»
+«EXPAND Generator::manifest FOR manifest-»
+«EXPAND Generator::file FOREACH files-»
 «ENDDEFINE»
 
-«DEFINE entry FOR Manifest»
+«DEFINE manifest FOR Manifest»
 «FILE "META-INF/MANIFEST.MF" GENERATOR-»
-Manifest-Version: 1.0
+Bundle-SymbolicName: «name»
+Bundle-Name: «name»
+Bundle-Version: 0.1
 Bundle-ManifestVersion: 2
+Manifest-Version: 1.0
 Eclipse-LazyStart: false
-Require-Bundle: «bundle»
+«IF bundles.size > 0 -»
+Require-Bundle: «bundles.toManifestString()»
+«ENDIF»
 «ENDFILE»
 «ENDDEFINE»
 
-«DEFINE entry FOR File»
+«DEFINE file FOR File»
 «FILE name GENERATOR-»
 «content»
 «ENDFILE»
-«ENDDEFINE»
-
-«DEFINE entry FOR Directory»
-«createGeneratorDirectory(name)»
-«ENDDEFINE»
-
-«DEFINE entry FOR Entry»
 «ENDDEFINE»
