@@ -7,9 +7,6 @@ import java.awt.Color;
 /* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1214477834046_276389_507) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
-/**
- * @author	dreamer
- */
 public interface IPaintable {
 	
 	/**

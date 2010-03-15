@@ -8,9 +8,6 @@ import de.genesez.example.java.car.base.parts.Screw;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class Wheel implements IChangeable, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -105,4 +102,5 @@ public class Wheel implements IChangeable, AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945943625_542159_161) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+
 }

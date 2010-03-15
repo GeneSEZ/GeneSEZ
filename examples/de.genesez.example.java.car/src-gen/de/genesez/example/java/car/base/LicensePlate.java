@@ -7,9 +7,6 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class LicensePlate implements AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -64,4 +61,5 @@ public class LicensePlate implements AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._12_5_8a7027a_1182165360608_205087_392) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+
 }

@@ -7,9 +7,6 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class Screw {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -63,4 +60,5 @@ public class Screw {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1178034133828_951385_16) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+
 }

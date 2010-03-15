@@ -6,9 +6,6 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 /* PROTECTED REGION ID(java.type.import._11_5_6340215_1179139231828_754744_209) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
-/**
- * @author	dreamer
- */
 public interface IChangeable {
 	
 	// -- generated attribute, constant + association declarations ----------

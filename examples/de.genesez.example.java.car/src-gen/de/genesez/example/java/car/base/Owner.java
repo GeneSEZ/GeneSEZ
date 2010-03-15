@@ -7,9 +7,6 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class Owner implements AssociationClass {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -42,4 +39,5 @@ public class Owner implements AssociationClass {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._12_5_6340215_1182161516984_21570_380) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+
 }

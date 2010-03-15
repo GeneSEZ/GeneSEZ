@@ -14,14 +14,8 @@ public enum VehicleStatus {
 	
 	// -- enumeration literals ----------------------------------------------
 	
-	/**
-	 */
 	FORWARD,
-	/**
-	 */
 	STOP,
-	/**
-	 */
 	BACKWARD;
 	
 	// -- own code implementation -------------------------------------------

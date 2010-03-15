@@ -22,5 +22,7 @@ public class WorkingWithAssociations {
 		
 		Assert.assertSame("the car has now a wheel", frontLeft, c.wheels().get());
 		Assert.assertSame("the inverse is set automatically", c, frontLeft.mycar().get());
+		
+		c.wheels().remove(frontLeft);
 	}
 }
