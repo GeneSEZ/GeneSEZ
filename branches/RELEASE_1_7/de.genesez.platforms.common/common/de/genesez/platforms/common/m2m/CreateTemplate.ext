@@ -125,6 +125,9 @@ create MOperation cloneOperation(MOperation op, MClassifier container) :
 	raisedException.addAll( op.raisedException ) ->
 	// containments
 	op.parameter.cloneParameter( this ) ->
+	op.return != null
+		? op.return.cloneParameter( this )
+		: this ->
 	op.returnTypeComment.cloneComment( this ) ->
 	// attributes
 	this.processElement( op.cloneXmiGuid( container ), op ) ->
@@ -135,6 +138,8 @@ create MParameter cloneParameter(MParameter param, MOperation container) :
 	trace("cloning: " + metaType + ": " + param) ->
 	// containment
 	container.parameter.add( this ) ->
+	setOperation(container) ->
+	// further properties + references
 	this.processElement( param.cloneXmiGuid( container ), param ) ->
 	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.unique, param.ordered) ->
 	setType( param.type ) ->
