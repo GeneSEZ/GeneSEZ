@@ -430,10 +430,9 @@ create MOperation makeOperation(Operation o) :
 			.ownedComment.typeSelect(Comment).makeComment() )
 		: this ->
 	// set return parameter
-	o.ownedParameter.exists(e|e.direction.toString() == "return")
-		? setReturn(
-			o.ownedParameter.selectFirst(e|e.direction.toString() == "return").makeParameter()
-		) : this ->
+	setReturn(
+		o.ownedParameter.selectFirst(e|e.direction.toString() == "return").makeParameter()
+	) ->
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
@@ -477,6 +476,17 @@ private create MParameter makeParameter(Parameter p) :
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	this;
+
+private create MParameter makeParameter(Void v) :
+	trace("make [" + metaType + "] - " + v) ->
+	setXmiGuid( "void" ) ->
+	setName( "" ) ->
+	setDirection( "return" ) ->
+	setMultiplicity(1) ->
+	setUnique( true ) ->
+	setOrdered( false ) ->
+	setType( makeType( null )) ->
 	this;
 
 /*
