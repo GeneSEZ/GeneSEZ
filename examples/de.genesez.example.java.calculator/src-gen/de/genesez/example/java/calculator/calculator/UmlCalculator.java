@@ -9,9 +9,6 @@ import java.math.BigDecimal;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculator.EventId> {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -116,214 +113,6 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	/* PROTECTED REGION END */
 
 	// -- generated state machine section -----------------------------------
-	/* PROTECTED REGION ID(debugflag._14_0_6340215_1225039245609_959527_370) ENABLED START */
-	/** switch state machine tracing on / off */
-	private static final boolean SMDEBUG = true;
-	
-	/* PROTECTED REGION END */
-
-	// all state machine actions are implemented as a method
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void clearAll(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("clearAll " + "( ... )");
-		/* PROTECTED REGION ID(action.clearAll_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'clearAll(...)'
-		if (SMDEBUG)
-			System.out.println("clearAll " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void clearOperand(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("clearOperand " + "( ... )");
-		/* PROTECTED REGION ID(action.clearOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'clearOperand(...)'
-		if (SMDEBUG)
-			System.out.println("clearOperand " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void clearX(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("clearX " + "( ... )");
-		/* PROTECTED REGION ID(action.clearX_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'clearX(...)'
-		if (SMDEBUG)
-			System.out.println("clearX " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void clearY(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("clearY " + "( ... )");
-		/* PROTECTED REGION ID(action.clearY_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'clearY(...)'
-		if (SMDEBUG)
-			System.out.println("clearY " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void evaluate(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("evaluate " + "( ... )");
-		/* PROTECTED REGION ID(action.evaluate_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'evaluate(...)'
-		if (SMDEBUG)
-			System.out.println("evaluate " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void evaluateAndSetY(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("evaluateAndSetY " + "( ... )");
-		/* PROTECTED REGION ID(action.evaluateAndSetY_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'evaluateAndSetY(...)'
-		if (SMDEBUG)
-			System.out.println("evaluateAndSetY " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void sendDigitToOperand(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("sendDigitToOperand " + "( ... )");
-		/* PROTECTED REGION ID(action.sendDigitToOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'sendDigitToOperand(...)'
-		if (SMDEBUG)
-			System.out.println("sendDigitToOperand " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void sendDotToOperand(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("sendDotToOperand " + "( ... )");
-		/* PROTECTED REGION ID(action.sendDotToOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'sendDotToOperand(...)'
-		if (SMDEBUG)
-			System.out.println("sendDotToOperand " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void setOperator(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("setOperator " + "( ... )");
-		/* PROTECTED REGION ID(action.setOperator_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'setOperator(...)'
-		if (SMDEBUG)
-			System.out.println("setOperator " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void setXfromOperand(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("setXfromOperand " + "( ... )");
-		/* PROTECTED REGION ID(action.setXfromOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'setXfromOperand(...)'
-		if (SMDEBUG)
-			System.out.println("setXfromOperand " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void setYFromResult(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("setYFromResult " + "( ... )");
-		/* PROTECTED REGION ID(action.setYFromResult_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'setYFromResult(...)'
-		if (SMDEBUG)
-			System.out.println("setYFromResult " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void setYfromOperand(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("setYfromOperand " + "( ... )");
-		/* PROTECTED REGION ID(action.setYfromOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'setYfromOperand(...)'
-		if (SMDEBUG)
-			System.out.println("setYfromOperand " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void show(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("show " + "( ... )");
-		/* PROTECTED REGION ID(action.show_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'show(...)'
-		if (SMDEBUG)
-			System.out.println("show " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void shutdown(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("shutdown " + "( ... )");
-		/* PROTECTED REGION ID(action.shutdown_14_0_6340215_1225039245609_959527_370) ENABLED START */
-		// TODO: implementation of action method 'shutdown(...)'
-		if (SMDEBUG)
-			System.out.println("shutdown " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	// do actions are called from a thread, controlled by start and stop methods
-	
-	// all state machine guards are implemented as a method
-	
-	// <editor-fold defaultstate="collapsed" desc="Event Creator Methods">
 	public void takeClear() {
 		new Clear().send();
 	}
@@ -365,8 +154,179 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 		timerForTimeout = null;
 	}
 	
-	// </editor-fold>
-	// <editor-fold defaultstate="collapsed" desc="Internal State Machine Implementation">
+	// all state machine actions are implemented as a method
+	/**
+	 * action method stub for further implementation
+	 */
+	private void clearAll(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("clearAll " + "( ... )");
+		/* PROTECTED REGION ID(action.clearAll_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'clearAll(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void clearOperand(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("clearOperand " + "( ... )");
+		/* PROTECTED REGION ID(action.clearOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'clearOperand(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void clearX(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("clearX " + "( ... )");
+		/* PROTECTED REGION ID(action.clearX_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'clearX(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void clearY(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("clearY " + "( ... )");
+		/* PROTECTED REGION ID(action.clearY_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'clearY(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void evaluate(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("evaluate " + "( ... )");
+		/* PROTECTED REGION ID(action.evaluate_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'evaluate(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void evaluateAndSetY(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("evaluateAndSetY " + "( ... )");
+		/* PROTECTED REGION ID(action.evaluateAndSetY_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'evaluateAndSetY(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void sendDigitToOperand(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("sendDigitToOperand " + "( ... )");
+		/* PROTECTED REGION ID(action.sendDigitToOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'sendDigitToOperand(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void sendDotToOperand(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("sendDotToOperand " + "( ... )");
+		/* PROTECTED REGION ID(action.sendDotToOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'sendDotToOperand(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void setOperator(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("setOperator " + "( ... )");
+		/* PROTECTED REGION ID(action.setOperator_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'setOperator(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void setXfromOperand(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("setXfromOperand " + "( ... )");
+		/* PROTECTED REGION ID(action.setXfromOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'setXfromOperand(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void setYFromResult(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("setYFromResult " + "( ... )");
+		/* PROTECTED REGION ID(action.setYFromResult_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'setYFromResult(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void setYfromOperand(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("setYfromOperand " + "( ... )");
+		/* PROTECTED REGION ID(action.setYfromOperand_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'setYfromOperand(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void show(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("show " + "( ... )");
+		/* PROTECTED REGION ID(action.show_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'show(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void shutdown(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("shutdown " + "( ... )");
+		/* PROTECTED REGION ID(action.shutdown_14_0_6340215_1225039245609_959527_370) ENABLED START */
+		// TODO: implementation of action method 'shutdown(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	// do actions are called from a thread, controlled by start and stop methods
+	
+	// all state machine guards are implemented as a method
+	
 	/** enum for all leaf states */
 	static enum StateId {
 		End,
@@ -957,5 +917,9 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 		stateMachine.addTransition(EventId.clearEntry, StateId.yOperandInput, tempTransition);
 		
 	};
-	// </editor-fold>
+	/* PROTECTED REGION ID(debugflag._14_0_6340215_1225039245609_959527_370) ENABLED START */
+	/** switch state machine tracing on / off */
+	private static final boolean SMDEBUG = true;
+	
+	/* PROTECTED REGION END */
 }

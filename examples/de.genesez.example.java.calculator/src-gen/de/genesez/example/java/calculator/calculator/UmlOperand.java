@@ -9,9 +9,6 @@ import java.math.BigDecimal;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -50,58 +47,58 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	/* PROTECTED REGION END */
 
 	// -- generated state machine section -----------------------------------
-	/* PROTECTED REGION ID(debugflag._15_5_1_6340215_1225124944062_504229_741) ENABLED START */
-	/** switch state machine tracing on / off */
-	private static final boolean SMDEBUG = true;
+	public void takeClear() {
+		new Clear().sendImmediate();
+	}
 	
-	/* PROTECTED REGION END */
-
+	public void takeDigit(Integer d) {
+		new Digit(d).sendImmediate();
+	}
+	
+	public void takeDot() {
+		new Dot().sendImmediate();
+	}
+	
 	// all state machine actions are implemented as a method
 	/**
-	 * @generated	action method stub for further implementation
+	 * action method stub for further implementation
 	 */
 	private void appendDigit(SmEvent event) {
 		if (SMDEBUG)
 			System.out.println("appendDigit " + "( ... )");
 		/* PROTECTED REGION ID(action.appendDigit_15_5_1_6340215_1225124944062_504229_741) ENABLED START */
 		// TODO: implementation of action method 'appendDigit(...)'
-		if (SMDEBUG)
-			System.out.println("appendDigit " + ": Activity noch nicht implementiert");
-		
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * @generated	action method stub for further implementation
+	 * action method stub for further implementation
 	 */
 	private void appendFractionalDigit(SmEvent event) {
 		if (SMDEBUG)
 			System.out.println("appendFractionalDigit " + "( ... )");
 		/* PROTECTED REGION ID(action.appendFractionalDigit_15_5_1_6340215_1225124944062_504229_741) ENABLED START */
 		// TODO: implementation of action method 'appendFractionalDigit(...)'
-		if (SMDEBUG)
-			System.out.println("appendFractionalDigit " + ": Activity noch nicht implementiert");
-		
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * @generated	action method stub for further implementation
+	 * action method stub for further implementation
 	 */
 	private void clear(SmEvent event) {
 		if (SMDEBUG)
 			System.out.println("clear " + "( ... )");
 		/* PROTECTED REGION ID(action.clear_15_5_1_6340215_1225124944062_504229_741) ENABLED START */
 		// TODO: implementation of action method 'clear(...)'
-		if (SMDEBUG)
-			System.out.println("clear " + ": Activity noch nicht implementiert");
-		
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
 	
 	// do actions are called from a thread, controlled by start and stop methods
 	/**
-	 * @generated	action method stub for further implementation
+	 * action method stub for further implementation
 	 */
 	private void blinkDisplay() {
 		if (SMDEBUG)
@@ -112,9 +109,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 			Thread.sleep(1); // set this to reasonable value
 		} catch (InterruptedException e) {
 		} // set this to reasonable value
-		if (SMDEBUG)
-			System.out.println("blinkDisplay " + ": Do-Activity noch nicht implementiert");
-		
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
 	
@@ -197,21 +192,6 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 		/* PROTECTED REGION END */
 	}
 	
-	// <editor-fold defaultstate="collapsed" desc="Event Creator Methods">
-	public void takeClear() {
-		new Clear().sendImmediate();
-	}
-	
-	public void takeDigit(Integer d) {
-		new Digit(d).sendImmediate();
-	}
-	
-	public void takeDot() {
-		new Dot().sendImmediate();
-	}
-	
-	// </editor-fold>
-	// <editor-fold defaultstate="collapsed" desc="Internal State Machine Implementation">
 	/** enum for all leaf states */
 	static enum StateId {
 		Start, frac, full, integ, zero
@@ -590,5 +570,9 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 		stateMachine.addTransition(EventId.dot, StateId.zero, tempTransition);
 		
 	};
-	// </editor-fold>
+	/* PROTECTED REGION ID(debugflag._15_5_1_6340215_1225124944062_504229_741) ENABLED START */
+	/** switch state machine tracing on / off */
+	private static final boolean SMDEBUG = true;
+	
+	/* PROTECTED REGION END */
 }

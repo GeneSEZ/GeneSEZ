@@ -6,30 +6,15 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 /* PROTECTED REGION ID(java.type.import._15_5_1_6340215_1232981000430_912204_1054) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
-/**
- * @author	dreamer
- */
 public enum Operation {
 	
 	// -- enumeration literals ----------------------------------------------
 	
-	/**
-	 */
 	ADD,
-	/**
-	 */
 	SUB,
-	/**
-	 */
 	MUL,
-	/**
-	 */
 	DIV,
-	/**
-	 */
 	POW,
-	/**
-	 */
 	NOP;
 	
 	// -- own code implementation -------------------------------------------

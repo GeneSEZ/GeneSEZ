@@ -8,9 +8,6 @@ import de.genesez.platforms.java.umlsupport.statemachine.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class HistoryStateExerciser implements EventReceiver<HistoryStateExerciser.EventId> {
 	
 	// -- generated constructors --------------------------------------------
@@ -33,16 +30,6 @@ public class HistoryStateExerciser implements EventReceiver<HistoryStateExercise
 	/* PROTECTED REGION END */
 
 	// -- generated state machine section -----------------------------------
-	/* PROTECTED REGION ID(debugflag._15_5_1_6340215_1233754307714_240408_1202) ENABLED START */
-	/** switch state machine tracing on / off */
-	private static final boolean SMDEBUG = true;
-	
-	/* PROTECTED REGION END */
-
-	// all state machine actions are implemented as a method
-	// do actions are called from a thread, controlled by start and stop methods
-	// all state machine guards are implemented as a method
-	// <editor-fold defaultstate="collapsed" desc="Event Creator Methods">
 	public void takeH0() {
 		new H0().send();
 	}
@@ -95,8 +82,12 @@ public class HistoryStateExerciser implements EventReceiver<HistoryStateExercise
 		new T9().send();
 	}
 	
-	// </editor-fold>
-	// <editor-fold defaultstate="collapsed" desc="Internal State Machine Implementation">
+	// all state machine actions are implemented as a method
+	
+	// do actions are called from a thread, controlled by start and stop methods
+	
+	// all state machine guards are implemented as a method
+	
 	/** enum for all leaf states */
 	static enum StateId {
 		_hLevel1b,
@@ -610,5 +601,9 @@ public class HistoryStateExerciser implements EventReceiver<HistoryStateExercise
 		stateMachine.addTransition(EventId.t11, StateId.level2b2, tempTransition);
 		
 	};
-	// </editor-fold>
+	/* PROTECTED REGION ID(debugflag._15_5_1_6340215_1233754307714_240408_1202) ENABLED START */
+	/** switch state machine tracing on / off */
+	private static final boolean SMDEBUG = true;
+	
+	/* PROTECTED REGION END */
 }

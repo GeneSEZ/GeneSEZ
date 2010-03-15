@@ -8,9 +8,6 @@ import de.genesez.platforms.java.umlsupport.statemachine.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
-/**
- * @author	dreamer
- */
 public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	
 	// -- generated constructors --------------------------------------------
@@ -33,75 +30,6 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	/* PROTECTED REGION END */
 
 	// -- generated state machine section -----------------------------------
-	/* PROTECTED REGION ID(debugflag._15_5_1_6340215_1233599281128_659741_732) ENABLED START */
-	/** switch state machine tracing on / off */
-	private static final boolean SMDEBUG = true;
-	
-	/* PROTECTED REGION END */
-
-	// all state machine actions are implemented as a method
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void dingdong(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("dingdong " + "( ... )");
-		/* PROTECTED REGION ID(action.dingdong_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
-		// TODO: implementation of action method 'dingdong(...)'
-		if (SMDEBUG)
-			System.out.println("dingdong " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void done(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("done " + "( ... )");
-		/* PROTECTED REGION ID(action.done_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
-		// TODO: implementation of action method 'done(...)'
-		if (SMDEBUG)
-			System.out.println("done " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void tack(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("tack " + "( ... )");
-		/* PROTECTED REGION ID(action.tack_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
-		// TODO: implementation of action method 'tack(...)'
-		if (SMDEBUG)
-			System.out.println("tack " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * @generated	action method stub for further implementation
-	 */
-	private void tick(SmEvent event) {
-		if (SMDEBUG)
-			System.out.println("tick " + "( ... )");
-		/* PROTECTED REGION ID(action.tick_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
-		// TODO: implementation of action method 'tick(...)'
-		if (SMDEBUG)
-			System.out.println("tick " + ": Activity noch nicht implementiert");
-		
-		/* PROTECTED REGION END */
-	}
-	
-	// do actions are called from a thread, controlled by start and stop methods
-	
-	// all state machine guards are implemented as a method
-	
-	// <editor-fold defaultstate="collapsed" desc="Event Creator Methods">
-	
 	private Timer timerForDingdong;
 	
 	private void startTimerForDingdong() {
@@ -170,8 +98,59 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 		timerForTick = null;
 	}
 	
-	// </editor-fold>
-	// <editor-fold defaultstate="collapsed" desc="Internal State Machine Implementation">
+	// all state machine actions are implemented as a method
+	/**
+	 * action method stub for further implementation
+	 */
+	private void dingdong(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("dingdong " + "( ... )");
+		/* PROTECTED REGION ID(action.dingdong_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
+		// TODO: implementation of action method 'dingdong(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void done(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("done " + "( ... )");
+		/* PROTECTED REGION ID(action.done_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
+		// TODO: implementation of action method 'done(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void tack(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("tack " + "( ... )");
+		/* PROTECTED REGION ID(action.tack_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
+		// TODO: implementation of action method 'tack(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * action method stub for further implementation
+	 */
+	private void tick(SmEvent event) {
+		if (SMDEBUG)
+			System.out.println("tick " + "( ... )");
+		/* PROTECTED REGION ID(action.tick_15_5_1_6340215_1233599281128_659741_732) ENABLED START */
+		// TODO: implementation of action method 'tick(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	// do actions are called from a thread, controlled by start and stop methods
+	
+	// all state machine guards are implemented as a method
+	
 	/** enum for all leaf states */
 	static enum StateId {
 		_fTimerTest, _iTimerTest, leaf1, leaf2, leaf3
@@ -392,5 +371,9 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 		stateMachine.addTransition(EventId.done, StateId.leaf3, tempTransition);
 		
 	};
-	// </editor-fold>
+	/* PROTECTED REGION ID(debugflag._15_5_1_6340215_1233599281128_659741_732) ENABLED START */
+	/** switch state machine tracing on / off */
+	private static final boolean SMDEBUG = true;
+	
+	/* PROTECTED REGION END */
 }
