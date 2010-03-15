@@ -429,6 +429,11 @@ create MOperation makeOperation(Operation o) :
 			o.ownedParameter.select(e|e.direction.toString() == "return").first()
 			.ownedComment.typeSelect(Comment).makeComment() )
 		: this ->
+	// set return parameter
+	o.ownedParameter.exists(e|e.direction.toString() == "return")
+		? setReturn(
+			o.ownedParameter.selectFirst(e|e.direction.toString() == "return").makeParameter()
+		) : this ->
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
