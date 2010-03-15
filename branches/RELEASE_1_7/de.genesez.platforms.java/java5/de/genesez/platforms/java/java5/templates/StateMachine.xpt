@@ -379,7 +379,7 @@
 
 «DEFINE _Events FOR MStateMachine -»
 	/** inner class as local base class for all trigger events */
-	public class SmEvent extends EventQueue.Event<EventId> {
+	private class SmEvent extends EventQueue.Event<EventId> {
 		«PROTECT CSTART '/* ' CEND ' */' ID ("SmEvent." + xmiGuid)»
 		// Usually nothing to insert here, just in case ... 
 		«ENDPROTECT»
@@ -391,7 +391,7 @@
 		}
 	}
 	«FOREACH event.sortBy(ev|ev.name) AS event -»
-	public class «event.asTypeName()» extends SmEvent {
+	private class «event.asTypeName()» extends SmEvent {
 		«EXPAND _Members FOR event -»
 		public «event.asTypeName()»(«EXPAND _Params FOR event») {
 			super(EventId.«event.name»);
