@@ -4,6 +4,7 @@ package de.genesez.platforms.java.BankTutorial.Server.data;
 /* TODO: put your own source code here */
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

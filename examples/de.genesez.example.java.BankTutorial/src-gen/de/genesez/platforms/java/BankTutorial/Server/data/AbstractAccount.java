@@ -4,6 +4,7 @@ package de.genesez.platforms.java.BankTutorial.Server.data;
 /* TODO: put your own source code here */
 import java.io.Serializable;
 import java.math.BigDecimal;
+
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;

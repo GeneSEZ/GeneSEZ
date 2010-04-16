@@ -3,7 +3,9 @@ package de.genesez.platforms.java.BankTutorial.Server.businessLogic;
 /*PROTECTED REGION ID(java.type.import.FinanceBeanLocal) ENABLED START*/
 /* TODO: put your own source code here */
 import java.math.BigDecimal;
+
 import javax.ejb.Local;
+
 import de.genesez.platforms.java.BankTutorial.Server.data.AbstractAccount;
 import de.genesez.platforms.java.BankTutorial.Server.data.Bank;
 import de.genesez.platforms.java.BankTutorial.Server.data.Customer;
