@@ -3,7 +3,6 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
 /*PROTECTED REGION ID(java.type.import.BankBeanLocal) ENABLED START*/
 /* TODO: put your own source code here */
 import javax.ejb.Local;
-
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 
 /*PROTECTED REGION END*/

@@ -10,18 +10,17 @@ import javax.ejb.TimerService;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
 
 /*PROTECTED REGION END*/
 
 /**
- * This bean is responsible for the calculation of the interest rate of the bank accounts using the timer of the Enterprise JavaBeans
+ * This bean is responsible for the calculation of the interests of the bank accounts using the timer of the Enterprise JavaBeans
  * @author	apflueger
  */
 
-@Stateless(name = "InterestRateBean")
-public class InterestRateBean implements IInterestRateBeanLocal {
+@Stateless(name = "InterestBean")
+public class InterestBean implements IInterestBeanLocal {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
@@ -33,9 +32,9 @@ public class InterestRateBean implements IInterestRateBeanLocal {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>InterestRateBean</b></em>'
+	 * constructor for class '<em><b>InterestBean</b></em>'
 	 */
-	public InterestRateBean() {
+	public InterestBean() {
 	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
@@ -48,7 +47,7 @@ public class InterestRateBean implements IInterestRateBeanLocal {
 	@Interceptors(value = {
 		StatementInterceptor.class
 	})
-	public void calculateInterestRate(Timer timer) {
+	public void calculateInterest(Timer timer) {
 		/* PROTECTED REGION ID(java.implementation._16_0_129203bc_1271100430203_54009_770) ENABLED START */
 		// TODO: implementation of method 'InterestRateBean.calculateInterestRate(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");

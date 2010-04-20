@@ -3,7 +3,6 @@ package de.genesez.example.java.BankTutorial.Server.data;
 /*PROTECTED REGION ID(java.type.import._16_0_129203bc_1271068727843_795301_1167) ENABLED START*/
 /* TODO: put your own source code here */
 import java.io.Serializable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

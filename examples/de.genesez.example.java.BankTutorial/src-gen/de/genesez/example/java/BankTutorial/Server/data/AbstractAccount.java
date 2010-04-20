@@ -4,7 +4,6 @@ package de.genesez.example.java.BankTutorial.Server.data;
 /* TODO: put your own source code here */
 import java.io.Serializable;
 import java.math.BigDecimal;
-
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -61,6 +60,12 @@ public abstract class AbstractAccount implements Serializable {
 	
 	private float interestRate;
 	
+	/**
+	 * period of time (in ms) after the bank has to deposit the interests to an account
+	 */
+	
+	private long interestPeriod;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -106,6 +111,21 @@ public abstract class AbstractAccount implements Serializable {
 	 */
 	public void setInterestRate(float interestRate) {
 		this.interestRate = interestRate;
+	}
+	
+	/**
+	 * period of time (in ms) after the bank has to deposit the interests to an account
+	 */
+	public long getInterestPeriod() {
+		return interestPeriod;
+	}
+	
+	/**
+	 * documented here {@link getInterestPeriod()}
+	 * @generated	setter method for the attribute '<em><b>interestPeriod</b></em>'
+	 */
+	public void setInterestPeriod(long interestPeriod) {
+		this.interestPeriod = interestPeriod;
 	}
 	
 	/**

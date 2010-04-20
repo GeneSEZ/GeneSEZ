@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
@@ -24,7 +23,7 @@ public class AccountBean implements IAccountBeanLocal {
 	// -- generated attribute, constant + association declarations ----------
 	
 	@EJB
-	private IInterestRateBeanLocal fb;
+	private IInterestBeanLocal fb;
 	
 	@PersistenceContext
 	private EntityManager entityManager;

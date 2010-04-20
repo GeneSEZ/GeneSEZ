@@ -3,13 +3,12 @@ package de.genesez.example.java.BankTutorial.Server.data;
 /*PROTECTED REGION ID(java.type.import._16_0_129203bc_1271071913640_952667_690) ENABLED START*/
 /* TODO: put your own source code here */
 import java.io.Serializable;
-
 import javax.persistence.Entity;
 
 /*PROTECTED REGION END*/
 
 /**
- * The savings account offers a fixed interest rate of 2.75% for a long period of time. A bank has to deposit the interest rate every 5 minutes.
+ * The savings account offers a fixed interest rate of 2.75% for a long period of time. A bank has to deposit the interests of a savings account every 5 minutes.
  * @author	apflueger
  */
 
