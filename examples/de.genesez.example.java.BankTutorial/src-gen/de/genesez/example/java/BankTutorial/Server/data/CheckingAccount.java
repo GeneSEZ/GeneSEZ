@@ -22,6 +22,7 @@ public class CheckingAccount extends AbstractAccount implements Serializable {
 	 */
 	public CheckingAccount() {
 		/* PROTECTED REGION ID(java.constructor._16_0_129203bc_1271178624843_74493_321) ENABLED START */
+		this.setInterestRate(1.0075f);
 		/* PROTECTED REGION END */
 	}
 	

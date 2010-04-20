@@ -22,6 +22,7 @@ public class SavingsAccount extends AbstractAccount implements Serializable {
 	 */
 	public SavingsAccount() {
 		/* PROTECTED REGION ID(java.constructor._16_0_129203bc_1271178598609_999826_315) ENABLED START */
+		this.setInterestRate(1.0275f);
 		/* PROTECTED REGION END */
 	}
 	

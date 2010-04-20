@@ -22,6 +22,7 @@ public class FlexibleSavingsAccount extends AbstractAccount implements Serializa
 	 */
 	public FlexibleSavingsAccount() {
 		/* PROTECTED REGION ID(java.constructor._16_0_129203bc_1271178614359_750303_318) ENABLED START */
+		this.setInterestRate(1.035f);
 		/* PROTECTED REGION END */
 	}
 	
