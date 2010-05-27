@@ -15,7 +15,6 @@ public interface Moveable {
 	/**
 	 * moves the position by the given delta values within a 2-dimensional 
 	 * coordinate system
-	 * @generated	method stub for further implementation
 	 * @param	dx	delta value to move in <i><b>x</b></i> direction
 	 * @param	dy	delta value to move in <i><b>y</b></i> direction
 	 */

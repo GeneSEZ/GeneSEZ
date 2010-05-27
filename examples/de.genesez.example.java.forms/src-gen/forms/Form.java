@@ -14,14 +14,12 @@ public interface Form extends Moveable, Rotateable, Paintable {
 	
 	/**
 	 * determines the center of area of the form
-	 * @generated	method stub for further implementation
 	 * @return	determines the center of area of the form
 	 */
 	public Point getCenterOfArea();
 	
 	/**
 	 * determines if the form is crossing another form
-	 * @generated	method stub for further implementation
 	 * @param	form	the form to check for crossing
 	 * @return	determines if the form is crossing another form
 	 */

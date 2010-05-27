@@ -1,8 +1,8 @@
 package forms;
 
-import java.awt.Color;
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import java.awt.Color;
 
 /* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
 // TODO: put your further include + require statements here
@@ -17,20 +17,20 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 public class Figure implements Form, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
+	/** defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		FORMS
 	}
 	
-	/** holds the references to the association objects */
+	/** stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
-	{
-		association.put(Associations.FORMS, new ManyAssociation<Figure, Form>(this, new LinkedHashSet<Form>()));
-	}
+	
+	/** stores associated objects of association FORMS to Form */
+	private java.util.Set<Form> forms = new java.util.HashSet<Form>();
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * determines the center of area of the form
-	 * @generated	method stub for further implementation
 	 * @return	determines the center of area of the form
 	 */
 	public Point getCenterOfArea() {
@@ -42,7 +42,6 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * determines if the form is crossing another form
-	 * @generated	method stub for further implementation
 	 * @param	form	the form to check for crossing
 	 * @return	determines if the form is crossing another form
 	 */
@@ -56,7 +55,6 @@ public class Figure implements Form, AssociationRole {
 	/**
 	 * moves the position by the given delta values within a 2-dimensional 
 	 * coordinate system
-	 * @generated	method stub for further implementation
 	 * @param	dx	delta value to move in <i><b>x</b></i> direction
 	 * @param	dy	delta value to move in <i><b>y</b></i> direction
 	 */
@@ -69,7 +67,6 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * performs a rotation by the specified angle
-	 * @generated	method stub for further implementation
 	 * @param	phi	the angle in degrees
 	 */
 	public void rotate(double phi) {
@@ -81,7 +78,6 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * performs a rotations around the specified point by the specified angle
-	 * @generated	method stub for further implementation
 	 * @param	center	the center of the rotation
 	 * @param	phi	the angle in degrees
 	 */
@@ -94,7 +90,6 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * changes the color by repainting using the specified color
-	 * @generated	method stub for further implementation
 	 * @param	color	the color to use for repainting
 	 */
 	public void repaint(Color color) {
@@ -105,8 +100,13 @@ public class Figure implements Form, AssociationRole {
 	}
 	
 	// -- generated association + attribute accessors -----------------------
+	// initialization block for association management objects
+	{
+		association.put(Associations.FORMS, new ManyAssociation<Figure, Form>(this, forms));
+	}
+	
 	/**
-	 * generic accessor for association objects used by the association handling framework
+	 * provides generic access to association objects, used by the association handling library
 	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
@@ -117,7 +117,6 @@ public class Figure implements Form, AssociationRole {
 	
 	/** 
 	 * the form objects this figure consists of
-	 * @generated	accessor of the association '<em><b>forms</b></em>' to {@link Form}
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Figure, Form> forms() {
@@ -130,4 +129,5 @@ public class Figure implements Form, AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+
 }

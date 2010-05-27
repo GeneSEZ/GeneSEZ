@@ -14,14 +14,12 @@ public interface Rotateable {
 	
 	/**
 	 * performs a rotation by the specified angle
-	 * @generated	method stub for further implementation
 	 * @param	phi	the angle in degrees
 	 */
 	public void rotate(double phi);
 	
 	/**
 	 * performs a rotations around the specified point by the specified angle
-	 * @generated	method stub for further implementation
 	 * @param	center	the center of the rotation
 	 * @param	phi	the angle in degrees
 	 */
