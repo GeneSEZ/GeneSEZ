@@ -9,6 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.uml2.uml.Behavior;
 import org.eclipse.uml2.uml.CallBehaviorAction;
+import org.eclipse.uml2.uml.Dependency;
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.StructuredClassifier;
 
 import de.genesez.adapter.ea.transform.PropertyClassifierTransformer;
@@ -33,6 +35,7 @@ public class PostProcessor {
 
 	private Map<CallBehaviorAction, Integer> calledBehaviors = new HashMap<CallBehaviorAction, Integer>();
 	private Map<StructuredClassifier, Set<org.sparx.Attribute>> properties = new HashMap<StructuredClassifier, Set<org.sparx.Attribute>>();
+	private Map<Dependency, org.sparx.Connector> dependencies = new HashMap<Dependency, org.sparx.Connector>();
 	
 	/**
 	 * Just to make constructor private
@@ -47,6 +50,7 @@ public class PostProcessor {
 	public void initialize() {
 		this.calledBehaviors = new HashMap<CallBehaviorAction, Integer>();
 		this.properties = new HashMap<StructuredClassifier, Set<org.sparx.Attribute>>();
+		this.dependencies = new HashMap<Dependency, org.sparx.Connector>();
 	}
 	
 	/**
@@ -71,12 +75,26 @@ public class PostProcessor {
 	}
 	
 	/**
+	 * Add a property adding action
+	 * @param _d	The dependency to add the dependencies
+	 * @param _c	The Enterprise Architect Connector to create the Dependency from
+	 */
+	public void setDependency(Dependency _d, org.sparx.Connector _c) {
+		if ( ! this.dependencies.containsKey(_d)) {
+			this.dependencies.put(_d, _c);
+		}
+	}
+	
+	
+	
+	/**
 	 * Runs the post processing for all elements
 	 */
 	public void startPostProcessing() {
 		log.debug("Starting post processing");
 		this.processBehaviors();
 		this.processProperties();
+		this.processDependencies();
 	}
 
 	/**
@@ -104,6 +122,19 @@ public class PostProcessor {
 				PropertyClassifierTransformer p = new PropertyClassifierTransformer();
 				p.transform(a, c);
 			}
+		}
+	}
+	
+	/**
+	 * Process dependencies
+	 */
+	private void processDependencies() {
+		log.debug("Starting post processing for dependencies");
+
+		for (Dependency d : this.dependencies.keySet()) {
+			org.sparx.Connector c = this.dependencies.get(d);
+			NamedElement elem = (NamedElement) ElementRegistry.instance.getById(c.GetSupplierID());
+			d.getSuppliers().add(elem);
 		}
 	}
 }
