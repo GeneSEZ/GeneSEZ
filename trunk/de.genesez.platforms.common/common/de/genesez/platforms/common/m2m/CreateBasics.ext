@@ -13,20 +13,31 @@ import gcore;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 
+MStereotype createAccessor(MClassifier classifier) :
+	createAccessorInternal(classifier);
+	
+MStereotype createAccessor(MClassifier classifier, String getter, String setter) :
+	createAccessorInternal(classifier, getter, setter);
+	
+MStereotype createAccessor(MProperty property) :
+	createAccessorInternal(property);
+	
+MStereotype createAccessor(MProperty property, String getter, String setter) :
+	createAccessorInternal(property, getter, setter);
 
 /**
  * creates the stereotype '«accessor»' from the genesez profile with default tagged values
  * (getter = 'true', setter = 'false')
  * @return	the stereotype '«accessor»'
  */
-MStereotype createAccessor(MProperty property) :
-	property.createAccessor("true", "false");
+private MStereotype createAccessorInternal(MElement property) :
+	property.createAccessorInternal("true", "false");
 
 /**
  * creates the stereotype '«accessor»' from the genesez profile with the given tagged values set
  * @return	the stereotype '«accessor»'
  */
-MStereotype createAccessor(MProperty property, String getter, String setter) :
+private MStereotype createAccessorInternal(MElement property, String getter, String setter) :
 	let s = property.model().createStereotype("genesez.profile.stereotype.accessor", "accessor") :
 		property.taggedValue.add( 
 			property.createTaggedValue( s.createTag("getter", "Boolean"), getter)

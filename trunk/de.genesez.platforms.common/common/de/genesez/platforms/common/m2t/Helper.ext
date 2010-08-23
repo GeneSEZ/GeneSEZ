@@ -16,6 +16,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
 extension de::genesez::platforms::common::log::Log;
 
 /*
@@ -64,13 +65,13 @@ boolean usePrimitiveType(MElement this) :
  * checks if the generation of accessor-methods is disabled or not
  * @return	true, if the generation of accessors is disabled, otherwise false
  */
-boolean disableAccessors() : GLOBALVAR disableAccessors == null ? false : GLOBALVAR disableAccessors;
+String accessorsForStereotypes() : GLOBALVAR accessorsForStereotypes == null ? "entity" : GLOBALVAR accessorsForStereotypes;
 
 /**
  * checks if the generation of accessor-methods should be distincted by the «accessor» stereotype
  * @return	true, if the stereotype «accessor» is used, otherwise false
  */
-boolean useAccessorStereotype() : GLOBALVAR useAccessorStereotype == null ? false : GLOBALVAR useAccessorStereotype;
+String accessorStereotype() : GLOBALVAR accessorStereotype == null ? "accessor" : GLOBALVAR accessorStereotype;
 
 /**
  * checks if properties should always be private and the visibility of the properties is used as the visibility of their accessor-methods
@@ -82,29 +83,58 @@ boolean usePropertyVisibilityForAccessors() : GLOBALVAR usePropertyVisibilityFor
  * checks if a getter-accessor should be generated or not
  * @return	true, if a getter-accessor should be generated, otherwise false
  */
-boolean generateGetter(MProperty this):
-	disableAccessors()
-		? false				// generation of accessor methods is disabled
-		: ( useAccessorStereotype() 
-			? ( hasStereotype("accessor") && hasTaggedValue("accessor", "getter", "true")
-				? true		// return the tagged value
-				: false		// else false
-			) : true		// accessor stereotype is not available, return the default 'true'
-		);
+boolean generateGetter(MProperty this): generateAccessor( "getter" );
 
 /**
  * checks if a setter-accessor should be generated or not
  * @return	true, if a setter-accessor should be generated, otherwise false
  */
-boolean generateSetter(MProperty this):
-	disableAccessors()
-		? false				// generation of accessor methods is disabled
-		: ( useAccessorStereotype() 
-			? ( hasStereotype("accessor") && hasTaggedValue("accessor", "setter", "true")
-				? true		// return the tagged value
-				: false		// else false
-			) : true		// accessor stereotype is not available, return the default 'true'
+boolean generateSetter(MProperty this): generateAccessor( "setter" );
+
+/**
+ * checks if an accessor should be generated or not
+ * 1) if the property has the accessor stereotype, it is evaluated
+ * 2) if the classifier has the accessor stereotype, it is evaluated and used for all properties
+ * 3) if the classifier has a stereotype for which accessors should be generated, accessors are generated
+ * 4) else no accessors are generated
+ * @return	true, if an accessor should be generated, otherwise false
+ */
+boolean generateAccessor(MProperty this, String accessor):
+	hasStereotype( accessorStereotype() )
+		? getTaggedBooleanValue( accessorStereotype(), accessor )
+		: ( classifier.hasStereotype( accessorStereotype() )
+			? classifier.getTaggedBooleanValue( accessorStereotype(), accessor )
+			: ( classifier.stereotype.exists( s|accessorsForStereotypes().toList().contains( s.name ) )
+				? true
+				: false
+			)
 		);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with the association handling
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if the old or new association handling is activated
+ * regular case is the new association handling
+ * @return	true, if the new association handling should be used (standard case)
+ */
+boolean newAssociationHandling() : GLOBALVAR newAssociationHandling == null ? true : GLOBALVAR newAssociationHandling;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with access type of annotations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if field or property access is activated
+ * default is field access
+ * @return	true, if field access should be used (default) 
+ */
+boolean fieldAccess() : GLOBALVAR fieldAccess == null ? true : GLOBALVAR fieldAccess;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -116,7 +146,7 @@ boolean generateSetter(MProperty this):
  * getter for the 'base path' based on the 'base package'
  * @return	value of the base path
  */
-String basePath(MClassifier this) : owningPackage.basePath();
+String basePath(MClassifier this) : package().basePath();
 
 /**
  * getter for the 'base path' based on the 'base package'
@@ -130,7 +160,7 @@ String basePath(MPackage this) : basePackage().replaceAll("\\.", "/");
  * which are configured in the workflow component
  * @return	the base package to use for code generation or an empty string
  */
-String basePackage(MClassifier this) : owningPackage.basePackage(); 
+String basePackage(MClassifier this) : package().basePackage(); 
 
 /**
  * getter for the 'base package' which is used for generation

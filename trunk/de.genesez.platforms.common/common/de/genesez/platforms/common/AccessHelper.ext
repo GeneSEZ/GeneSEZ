@@ -13,7 +13,8 @@
  * - classifiers
  * 
  * @author	nico herbig
- * @author	tobias haubold (last)
+ * @author	tobias haubold 
+ * @author	andre pflueger (last)
  * @date	2008-04-18
  */
 
@@ -21,6 +22,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -90,6 +92,20 @@ boolean hasFixedMultiplicity(MParameter this) :
  */
 boolean hasFixedMultiplicity(MOperation this) : 
 	multiplicity > -1;
+
+/**
+ * checks if a qualified association role has a single qualifier
+ * @return	true, if a qualified association has a single qualifier, otherwise false
+ */
+boolean isSingleQualified(MAssociationRole this) :
+	qualifierMultiplicity == 1;
+
+/**
+ * checks if a qualified association role can have more qualifier values
+ * @return	true, if a qualified association role can have more qualifier values, otherwise false
+ */
+boolean isMultiQualified(MAssociationRole this) :
+	qualifierMultiplicity != 1;
 
 /**
  * getter for the return type of an operation
@@ -234,6 +250,33 @@ boolean hasAssociationRoles(MClassifier this) :
 boolean hasOpposite(MAssociationRole this) : opposite != null;
 
 /**
+ * checks if an association role has a qualifier
+ * @return	true, if the association role has a qualifier
+ */
+boolean hasQualifier(MAssociationRole this) : qualifier != null;
+
+/**
+ * checks if an association role is qualified
+ * @return	true, if the association role has a qualifier
+ * @see		hasQualifier(MAssociationRole)
+ */
+boolean isQualified(MAssociationRole this) : hasQualifier();
+
+/**
+ * checks if the opposite of an association role is qualified
+ * @return	true, if the opposite has a qualifier, otherwise false
+ */
+boolean hasQualifiedOpposite(MAssociationRole this) :
+	hasOpposite() ? opposite.isQualified() : false;
+
+/**
+ * checks if the opposite of an association role is qualified
+ * @return	true, if the opposite has a qualifier, otherwise false
+ */
+boolean isOppositeQualified(MAssociationRole this) :
+	hasOpposite() && opposite.isQualified();
+
+/**
  * checks if an association role belongs to an association class or not
  * @return	true, if it's a plain association role and doesn't belongs to an association class and 
  * 			false, if the association role belongs to an association class
@@ -272,6 +315,21 @@ boolean isPlainAssociation(MAssociationRole aend) :
  */
 MClass assocClass(MAssociationRole aend) :
 	aend.association.associationClass;
+
+/**
+ * returns all owning association roles
+ */
+List[MAssociationRole] owningAssociationRoles(MClassifier this) :
+	property.typeSelect(MAssociationRole).reject( e|e.derived );
+
+/**
+ * returns all initializable association roles
+ */
+List[MAssociationRole] allInitializableAssociationRoles(MClassifier this) :
+	let assocs = {} :
+		assocs.addAll( owningAssociationRoles() ) ->
+		assocs.addAll( realization.typeSelect(MClassifier).owningAssociationRoles() ) ->
+	assocs.flatten();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -449,6 +507,78 @@ boolean hasTaggedValue(MElement this, String stereotype, String tag, String valu
 		.select( e| e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype)
 		.isEmpty;
 
+/**
+ * 	returns a tagged value of a stereotype if exists
+ *
+ * 	@param	stereotype		the name of a stereotype
+ *	@param	taggedValue		the name of a tagged value
+ *	
+ * 	@return		value of the tagged value
+ */
+String getTaggedValue(MElement this, String stereotype, String taggedValue) :
+	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value
+		: "";
+
+/**
+ * returns the boolean value of a tagged value of a stereotype
+ * 
+ * @param	stereotype	the name of a stereotype
+ * @param	tag			the name of the tag
+ * 
+ * @return	true, if the tagged value is true, otherwise false
+ */
+boolean getTaggedBooleanValue(MElement this, String stereotype, String tag) :
+	hasTaggedValue( stereotype, tag, "true")
+		? true
+		: false;
+
+/**
+ *	function to set any existing tagged value
+ *
+ *	@param		this	MProperty
+ *	@param		name	name of the tagged value
+ *	@param		value	new value
+ *
+ */
+Void setTaggedValue(MElement this, String name, String value) :
+	this.taggedValue.selectFirst(e|e.tag.name == name).setValue(value);
+	
+/**
+ *	function to set a tagged value of a specific stereotype
+ *	note: if a MTagggedValue already exists, it is used and it's value is changed
+ *
+ *	@param		this		MPropertye
+ *	@param		stereotype	name of the stereotype
+ *	@param		taggedValue	name of the tagged value
+ *	@param		value		new value
+ *
+ */
+Void setTaggedValue(MElement this, String stereotype, String taggedValue, String value) :
+	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).setValue(value)
+		: createTaggedValue(
+			this.stereotype.selectFirst(e|e.name == stereotype).property.selectFirst(e|e.name == taggedValue),
+			value
+		);
+	
+/**
+ * 	checks if a tagged value of a stereotype exists and has a utilizable value (not empty or null)
+ *
+ * 	@param	sterotype		the name of a stereotype
+ * 	@param	tagggedValue	the name of a tagged value
+ * 	@param	value		the value of a tagged value
+ * 	
+ *	@return		true if the value exists and is utilizable
+ */
+boolean hasUtilizableValue(MElement this, String stereotype, String taggedValue) :
+	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype) &&
+	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "" &&
+	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "null" &&
+	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "[]"
+		? true
+		: false;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	aspects
@@ -509,6 +639,12 @@ boolean isDataType(MType this) : metaType == MDataType;
 boolean isEnumeration(MType this) : metaType == MEnumeration;
 
 /**
+ * checks if the type is a classifier
+ * @return	true if the type is a classifier, otherwise false
+ */
+boolean isClassifier(MType this) : MClassifier.isInstance(this);
+
+/**
  * getter for the name of a type or the specification of a generic
  * @return	the name (or specification) of the type
  */
@@ -518,6 +654,35 @@ String name(MType this) :
 		case MExternal : ((MExternal)this).specification
 		case MPrimitiveType : ((MPrimitiveType)this).name
 		default : ((MClassifier)this).name
+	};
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	package accessors
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the package element by using a property
+ * @return	the package element
+ */
+MPackage package(MProperty this) : classifier.package();
+
+/**
+ * getter for the package element by using an operation
+ * @return	the package element
+ */
+MPackage package(MOperation this) : classifier.package();
+
+/**
+ * getter for the package element by using a classifier
+ * @return	the package element
+ */
+MPackage package(MClassifier this) :
+	switch (owningContext.metaType) {
+		case MModel : ((MPackage)owningContext)
+		case MPackage : ((MPackage)owningContext)
+		default : (fatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
 	};
 	
 /*
@@ -536,16 +701,28 @@ MModel model(MProperty this) : classifier.model();
  * getter for the model element by using an operation
  * @return	the model element
  */
-MModel model(MOperation this) : classifier.model();
+MModel model(MOperation this) :	classifier.model();
 
 /**
  * getter for the model element by using a classifier
  * @return	the model element
  */
 MModel model(MClassifier this) :
-	owningPackage.metaType == MModel
-		? owningPackage
-		: owningPackage.getModel();
+	switch (owningContext.metaType) {
+		case MModel : ((MModel)owningContext)
+		case MPackage : ((MPackage)owningContext).model()
+		default : (fatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
+	};
+
+MModel model(MElement this) :
+	switch (this.metaType) {
+		case MClassifier : ((MClassifier) this).model()
+		case MOperation :  ((MOperation) this).model()
+		case MParameter :  ((MParameter) this).operation.model()
+		case MProperty :  ((MProperty) this).model()
+		case MStereotype : ((MStereotype) this).model
+		default : (fatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
+	};
 
 /**
  * getter for the model element by using a package
@@ -556,16 +733,13 @@ MModel model(MPackage this) :
 		? this
 		: nestingPackage.getModel();
 
-
 /**
  * getter for the model element by using a classifier
  * @return	the model element
  * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MClassifier this) :
-	owningPackage.metaType == MModel
-		? owningPackage
-		: owningPackage.getModel();
+	this.model();
 
 /**
  * getter for the model element by using a package
@@ -573,15 +747,27 @@ MModel getModel(MClassifier this) :
  * @deprecated	replaced by {@link model(MClassifier)}
  */
 MModel getModel(MPackage this) :
-	metaType == MModel
-		? this
-		: nestingPackage.getModel();
+	this.model();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	classifiers
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * getter for a classifier of a MElement
+ * @param	this	instance of a MElement
+ * @return	the classififier found or null
+ */
+MClassifier getClassifier(MElement this) :
+	// switch (true) ... case metaType == MOperation
+	switch (metaType) {
+		case MOperation : ((MOperation) this).classifier
+		case MAttribute : ((MAttribute) this).classifier
+		case MAssociationRole : ((MAssociationRole) this).classifier
+		default : null
+	};
 
 /**
  * getter for a class by it's full qualified name which is separed by dot's
@@ -609,6 +795,45 @@ MClassifier getClassifier(MModel this, String fullQualifiedName) :
  */
 MPackage getPackage(MModel this, String fullQualifiedPackageName) :
 	getPackage(nestedPackage, fullQualifiedPackageName);
+	
+cached List[MClassifier] allClassifiers(MModel this) :
+	allPackages().allClassifiers();
+
+cached List[MClassifier] allClassifiers(MPackage this) :
+	addAllClassifier({});
+
+cached List[MClassifier] addAllClassifier(MPackage this, List[MClassifier] classifiers) :
+	classifiers.addAll(classifier) ->
+	nestedPackage.addAllClassifier(classifiers) ->
+	classifiers;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	packages
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+	
+cached List[MPackage] allPackages(MPackage this) :
+	addAllPackages({});
+
+cached List[MPackage] addAllPackages(MPackage this, List[MPackage] packages) :
+	packages.addAll(nestedPackage) ->
+	nestedPackage.addAllPackages(packages) ->
+	packages;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	elements
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+MClassifier getClassifier(MElement this) :
+	switch (metaType) {
+		case MOperation : ((MOperation) this).classifier
+		case MAttribute : ((MAttribute) this).classifier
+		case MAssociationRole : ((MAssociationRole) this).classifier
+		default : null
+	};
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -617,7 +842,7 @@ MPackage getPackage(MModel this, String fullQualifiedPackageName) :
 */
 
 MNode getInitialNode(MActivity this) :
-	node.reject(e|e.metaType == MSynchronisation || e.metaType == MAction)
+	node.reject(e|e.metaType == MAction)
 		.select(e|e.from.isEmpty)
 		.first();
 
