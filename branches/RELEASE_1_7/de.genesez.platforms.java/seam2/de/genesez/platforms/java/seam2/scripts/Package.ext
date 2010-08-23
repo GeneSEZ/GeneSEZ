@@ -1,0 +1,29 @@
+/**
+ * seam2 additions on package level
+ *  
+ * @author	andre pflueger
+ * @date	2010-07-06
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
+extension de::genesez::platforms::common::log::Log;
+
+/**
+  *	if the model has the stereotype "seam2Packaging", the stereotype
+  * "seam2Packaging" is added to every package of the model except the
+  *	ones which already have such a stereotype
+  *	
+  */
+Void addNamespace(MPackage this) :
+	//warn("Package: "+this.name+", seam2Packaging: "+hasStereotype("seam2Packaging")) ->
+	this.model().hasStereotype("seam2Packaging")
+		? (
+			!this.hasStereotype("seam2Packaging")
+				? this.addPackagingStereotype(this.model().getTaggedValue("seam2Packaging", "value"), this.model().getTaggedValue("seam2Packaging", "prefix")) 
+				: "" //do nothing
+		)
+		: ""; //do nothing

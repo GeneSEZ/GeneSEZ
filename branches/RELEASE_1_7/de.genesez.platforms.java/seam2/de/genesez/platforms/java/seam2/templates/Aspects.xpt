@@ -28,6 +28,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::seam2::scripts::Operation»
 «EXTENSION de::genesez::platforms::java::seam2::scripts::Interface»
+«EXTENSION de::genesez::platforms::java::seam2::scripts::Naming»
 
 
 «REM»
@@ -58,6 +59,7 @@
 	«EXPAND _ServletContainerIntegration-»
 	«EXPAND _JavaBean-»
 	«EXPAND _Restrict-»
+	«EXPAND _Permission-»
 	«targetDef.proceed()»
 «ENDAROUND» 
 
@@ -173,6 +175,14 @@
 	«ENDIF-»
 «ENDDEFINE»
 «ENDREM»
+		
+«REM»
+	evaluates the stereotypes for association roles
+«ENDREM»
+«DEFINE _Associations FOR MAssociationRole-»
+	«EXPAND _RoleSecurity-»
+	«EXPAND _UserSecurity-»
+«ENDDEFINE»
 				
 «REM»
 	evaluates the stereotypes for attributes only 
@@ -182,8 +192,7 @@
 	«EXPAND _DataTable-»
 	«EXPAND _Restrict-»
 	«IF hasStereotype("seam2Logger")»
-		@Logger
-		«IF hasUtilizableValue("seam2Logger", "value")»
+		@Logger«IF hasUtilizableValue("seam2Logger", "value")-»
 			("«getTaggedValue("seam2Logger", "value")-»")
 		«ENDIF»
 	«ENDIF»
@@ -193,6 +202,9 @@
 			("«getTaggedValue("seam2RequestParameter", "name")-»")
 		«ENDIF»
 	«ENDIF»
+	«EXPAND _EntityPermission-»
+	«EXPAND _UserSecurity-»
+	«EXPAND _RoleSecurity-»
 «ENDDEFINE»
 
 «REM»
@@ -205,6 +217,9 @@
 	«EXPAND _Remoting-»
 	«EXPAND _DataTable-»
 	«EXPAND _Restrict-»
+	«EXPAND _EntityPermission-»
+	«EXPAND _UserSecurity-»
+	«EXPAND _RoleSecurity-»
 	«IF hasStereotype("seam2AroundInvoke")»
 		@AroundInvoke
 	«ENDIF»
@@ -217,21 +232,8 @@
 	«IF hasStereotype("seam2Unwrap")»
 		@Unwrap
 	«ENDIF»
-	«IF hasStereotype("seam2Factory")»
-		@Factory(autoCreate=«getTaggedValue("seam2Factory", "autoCreate")-»
-		«IF hasUtilizableValue("seam2Factory", "scope") && !hasTaggedValue("seam2Factory", "scope", "UNSPECIFIED")-»
-			, scope(ScopeType.«getTaggedValue("seam2Factory", "scope")-»
-		«ENDIF-»
-		«IF hasUtilizableValue("seam2Factory", "value")-»
-			, value="«getTaggedValue("seam2Factory", "value")-»"
-		«ENDIF-»)
-	«ENDIF»	
-	«EXPAND _Lifecycle»
-	«REM»
-	«IF this.name == "destroy" && this.parameter.size == 0-»
-		@Destroy
-		@Remove
-	«ENDIF»«ENDREM»
+	«EXPAND _Factory-»
+	«EXPAND _Lifecycle-»
 «ENDDEFINE»
 
 «REM»
@@ -245,7 +247,7 @@
 			, required=false
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Injection", "value")-»
-			, value="«getTaggedValue("seam2In", "value")-»"
+			, value="«getTaggedValue("seam2Injection", "value")-»"
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Injection", "scope") && !hasTaggedValue("seam2Injection", "scope", "UNSPECIFIED")-»
 			, scope=ScopeType.«getTaggedValue("seam2Injection", "scope")-»
@@ -260,6 +262,21 @@
 			, value="«getTaggedValue("seam2Outjection", "value")-»"
 		«ENDIF-»)
 	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Factory
+«ENDREM»
+«DEFINE _Factory FOR MOperation-»
+	«IF hasStereotype("seam2Factory")-»
+		@Factory(autoCreate=«getTaggedValue("seam2Factory", "autoCreate")-»
+		«IF hasUtilizableValue("seam2Factory", "scope") && !hasTaggedValue("seam2Factory", "scope", "UNSPECIFIED")-»
+			, scope(ScopeType.«getTaggedValue("seam2Factory", "scope")-»
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2Factory", "value")-»
+			, value="«projectNamespace()-»«getTaggedValue("seam2Factory", "value")-»"
+		«ENDIF-»)
+	«ENDIF»	
 «ENDDEFINE»
 
 «REM»
@@ -297,7 +314,7 @@
 			«ENDIF»
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2DataModel", "value")-»
-			@DataModel(value="«getTaggedValue("seam2DataModel", "value")-»"
+			@DataModel(value="«projectNamespace()-»«getTaggedValue("seam2DataModel", "value")-»"
 			«IF hasUtilizableValue("seam2DataModel", "scope") && !hasTaggedValue("seam2DataModel", "scope", "UNSPECIFIED")-»
 				, scope=ScopeType.«getTaggedValue("seam2DataModel", "scope")-»
 			«ENDIF-»)
@@ -312,7 +329,7 @@
 	«IF hasStereotype("seam2Selection")»
 		@DataModelSelection
 		«IF hasUtilizableValue("seam2Selection", "value")-»
-			("«getTaggedValue("seam2Selection", "value")-»")
+			(value="«projectNamespace()-»«getTaggedValue("seam2Selection", "value")-»")
 		«ENDIF»	
 		«IF hasUtilizableValue("seam2DataBinding", "dataSelectorClass")»
 			@DataSelectorClass(«getTaggedValue("seam2DataBinding", "dataSelectorClass")-»
@@ -324,7 +341,7 @@
 	«IF hasStereotype("seam2SelectionIndex")-»
 		@DataModelSelectionIndex
 		«IF hasUtilizableValue("seam2SelectionIndex", "value")-»
-			(«getTaggedValue("seam2SelectionIndex", "value")-»)
+			(value="«projectNamespace()-»«getTaggedValue("seam2SelectionIndex", "value")-»")
 		«ENDIF»
 	«ENDIF-»
 «ENDDEFINE»
@@ -485,11 +502,100 @@
 «ENDDEFINE»
 
 «REM»
-	evaluates the context demarcation stereotypes
+	evaluates the restrict stereotypes
 «ENDREM»
 «DEFINE _Restrict FOR MElement-»
 	«IF hasStereotype("seam2Restrict")-»
 		@Restrict(value="«hasTaggedValue("seam2Restrict", "value")-»")
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the entity permission stereotypes
+«ENDREM»
+«DEFINE _EntityPermission FOR MElement-»
+	«IF hasTaggedValue("seam2EntityPermission", "target", "true")-»
+		@PermissionTarget
+	«ENDIF»
+	«IF hasTaggedValue("seam2EntityPermission", "action", "true")-»
+		@PermissionAction
+	«ENDIF»
+	«IF hasTaggedValue("seam2EntityPermission", "user", "true")-»
+		@PermissionUser
+	«ENDIF»
+	«IF hasTaggedValue("seam2EntityPermission", "role", "true")-»
+		@PermissionRole
+	«ENDIF»
+	«IF hasTaggedValue("seam2EntityPermission", "discriminator", "true")-»
+		@PermissionDiscriminator«IF !hasTaggedValue("seam2EntityPermission", "userDiscriminator", "user")
+				|| !hasTaggedValue("seam2EntityPermission", "roleDiscriminator", "role")-»
+				(userValue="«getTaggedValue("seam2EntityPermission", "userDiscriminator")-»",
+				roleValue="«getTaggedValue("seam2EntityPermission", "roleDiscriminator")-»")
+			«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the user security stereotypes
+«ENDREM»
+«DEFINE _UserSecurity FOR MElement-»
+	«IF hasTaggedValue("seam2UserSecurity", "userFirstName", "true")-»
+		@UserFirstName
+	«ENDIF»
+	«IF hasTaggedValue("seam2UserSecurity", "userLastName", "true")-»
+		@UserLastName
+	«ENDIF»
+	«IF hasTaggedValue("seam2UserSecurity", "userPrincipal", "true")-»
+		@UserPrincipal
+	«ENDIF»
+	«IF hasTaggedValue("seam2UserSecurity", "userEnabled", "true")-»
+		@UserEnabled
+	«ENDIF»
+	«IF hasTaggedValue("seam2UserSecurity", "userRoles", "true")-»
+		@UserRoles
+	«ENDIF»
+	«IF hasTaggedValue("seam2UserSecurity", "passwordPrincipal", "true")-»
+		@UserPassword«IF hasUtilizableValue("seam2UserSecurity", "passwordIterations")
+				&& !hasTaggedValue("seam2UserSecurity", "passwordIterations", "1000")
+				&& hasUtilizableValue("seam2UserSecurity", "passwordHash")-»
+				(hash="«getTaggedValue("seam2UserSecurity", "passwordHash")-»",
+				iterations=«getTaggedValue("seam2UserSecurity", "passwordIterations")-»)
+			«ENDIF-»
+			«IF !hasUtilizableValue("seam2UserSecurity", "passwordIterations")
+				&& hasUtilizableValue("seam2UserSecurity", "passwordHash")-»
+				(hash="«getTaggedValue("seam2UserSecurity", "passwordHash")-»")
+			«ENDIF-»
+			«IF hasUtilizableValue("seam2UserSecurity", "passwordIterations")
+				&& !hasTaggedValue("seam2UserSecurity", "passwordIterations", "1000")
+				&& !hasUtilizableValue("seam2UserSecurity", "passwordHash")-»
+				(iterations=«getTaggedValue("seam2UserSecurity", "passwordIterations")-»)
+			«ENDIF-»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the role security stereotypes
+«ENDREM»
+«DEFINE _RoleSecurity FOR MElement-»
+	«IF hasTaggedValue("seam2RoleSecurity", "name", "true")-»
+		@RoleName
+	«ENDIF»
+	«IF hasTaggedValue("seam2RoleSecurity", "groups", "true")-»
+		@RoleGroups
+	«ENDIF»
+	«IF hasTaggedValue("seam2RoleSecurity", "conditional", "true")-»
+		@RoleConditional
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the permission stereotypes
+«ENDREM»
+«DEFINE _Permission FOR MElement-»
+	«IF hasUtilizableValue("seam2Permission", "permissions")-»
+		@Permissions({«FOREACH taggedValue.select(e|e.tag.name == "permissions").value.getElements() AS values SEPARATOR ", "-»
+			@Permission(action="«values-»")
+		«ENDFOREACH-»})	
 	«ENDIF»
 «ENDDEFINE»
 
@@ -580,9 +686,9 @@
 «DEFINE _Component FOR MClass-»
 	«IF hasStereotype("seam2Component")»
 		«IF hasUtilizableValue("seam2Component", "name")»
-			@Name("«getTaggedValue("seam2Component", "name")-»")
+			@Name("«projectNamespace()-»«getTaggedValue("seam2Component", "name")-»")
 		«ELSE-»
-			@Name("«asTypeName().toFirstLower()-»")
+			@Name("«projectNamespace()-»«asTypeName().toFirstLower()-»")
 		«ENDIF»
 		«IF hasUtilizableValue("seam2Component", "scope") && !hasTaggedValue("seam2Component", "scope", "UNSPECIFIED")-»
 			@Scope(ScopeType.«getTaggedValue("seam2Component", "scope")-»)

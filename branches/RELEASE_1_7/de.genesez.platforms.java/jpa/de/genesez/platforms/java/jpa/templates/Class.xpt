@@ -21,6 +21,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::jpa::scripts::Naming»
 
 
 
@@ -108,9 +109,9 @@
 «DEFINE _Table FOR MClass-»
 	@Table(
 	«IF hasUtilizableValue("jpaPersistentEntity", "tableName")-»
-		name="tbl_«getTaggedValue("jpaPersistentEntity", "tableName")-»"
+		name="«tableNamePrefix()-»«getTaggedValue("jpaPersistentEntity", "tableName")-»"
 	«ELSE-»
-		name="tbl_«asTypeName()-»"
+		name="«tableNamePrefix()-»«asTypeName()-»"
 	«ENDIF-»
 	«IF hasUtilizableValue("jpaPersistentEntity", "tableCatalog")-»
 		, catalog = "«getTaggedValue("jpaPersistentEntity", "tableCatalog")-»"

@@ -14,6 +14,35 @@ extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 
 /**
+ *	function to add an "seam2Packaging" stereotype to a MPackage
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MPackage
+ *	@param		value		value for tagged value "value"
+ *	@param		prefix		value for tagged value "prefix"
+ *
+ */
+Void addPackagingStereotype(MPackage this, String value, String prefix) :
+	let s = makePackagingStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "value", "String"), value) ->
+		createTaggedValue(this, createTag(s, "prefix", "String"), prefix);
+
+/**
+ *	function to create an "seam2Packaging" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MPackage
+ *
+ */
+MStereotype makePackagingStereotype(MPackage container) :
+	let s = createStereotype(container.model(), "seam2Packaging", "seam2Packaging") :
+		s.property.add(createTag(s, "value", "String")) ->
+		s.property.add(createTag(s, "prefix", "String")) ->
+		s;
+
+/**
  *	function to add an "seam2Factory" stereotype to a MOperation
  *	default values are not set by this function!
  *

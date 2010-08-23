@@ -5,6 +5,7 @@ extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
 extension de::genesez::platforms::java::seam2::scripts::Class;
+extension de::genesez::platforms::java::seam2::scripts::Naming;
 extension de::genesez::platforms::java::scripts::Naming;
 
 /**
@@ -142,7 +143,29 @@ Void setupSeamManagedPersistence(MAttribute this) :
   *	"seam2Logger" will be added to this attribute
   */
 Void checkLogger(MAttribute this) :
-	this.type.asTypeName().matches("Log") && this.name.matches("logger") &&
+	(this.type.asTypeName().matches("Log") 
+	|| this.type.asTypeName().matches("org.jboss.seam.log.Log")) 
+	&& this.name.matches("logger") &&
 	!this.hasStereotype("seam2Logger")
 		? this.addLoggerStereotype("")
+		: "";
+		
+/**
+  *	if there is an attribute with name "identity" and datatype "Identity" the stereotype
+  *	"seam2Injection" will be added to this attribute
+  */
+Void checkIdentity(MAttribute this) :
+	this.type.asTypeName().matches("Identity") && this.name.matches("identity") &&
+	!this.hasStereotype("seam2Injection")
+		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
+		: "";
+		
+/**
+  *	if there is an attribute with name "facesMessages" and datatype "FacesMessages" the stereotype
+  *	"seam2Injection" will be added to this attribute
+  */
+Void checkFacesMessages(MAttribute this) :
+	this.type.asTypeName().matches("FacesMessages") && this.name.matches("facesMessages") &&
+	!this.hasStereotype("seam2Injection")
+		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
 		: "";

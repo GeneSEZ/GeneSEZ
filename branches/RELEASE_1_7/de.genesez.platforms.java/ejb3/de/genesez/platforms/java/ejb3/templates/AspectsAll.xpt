@@ -39,7 +39,9 @@
 	is in use for the ejb3 cartridge
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Import::_OtherImports FOR MClassifier-»
-	«EXPAND de::genesez::platforms::java::jpa::templates::Class::_ImportStatements»	
+	«EXPAND de::genesez::platforms::java::jpa::templates::Class::_ImportStatements»
+	«EXPAND de::genesez::platforms::java::jdi::templates::Class::ImportStatements»
+	«EXPAND de::genesez::platforms::java::weld1::templates::Class::ImportStatements»
 	«EXPAND Class::_ImportStatements»
 	«EXPAND de::genesez::platforms::java::seam2::templates::Aspects::_Import»
 	«targetDef.proceed()-»
@@ -74,10 +76,21 @@
 «ENDAROUND»	
 
 «REM»
+    annotations for annotations
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Annotation::_Annotation FOR MInterface-»
+    «EXPAND de::genesez::platforms::java::jdi::templates::Annotation::Annotation»
+    «EXPAND de::genesez::platforms::java::weld1::templates::Annotation::Annotation»
+    «targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
 	annotations for classes
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Class::_Annotation FOR MClass-»
 	«EXPAND de::genesez::platforms::java::jpa::templates::Class::_Annotation»
+	«EXPAND de::genesez::platforms::java::jdi::templates::Class::Annotation»
+	«EXPAND de::genesez::platforms::java::weld1::templates::Class::Annotation-»
 	«EXPAND de::genesez::platforms::java::jws::templates::Class::JWS-»
 	«EXPAND de::genesez::platforms::java::seam2::templates::Aspects::_Component-»
 	«EXPAND de::genesez::platforms::java::seam2::templates::Aspects::_Exceptions-»
@@ -94,6 +107,8 @@
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MOperation-»
 	«EXPAND de::genesez::platforms::java::jpa::templates::Operation::_Annotation-»
+	«EXPAND de::genesez::platforms::java::jdi::templates::Operation::Annotation»
+	«EXPAND de::genesez::platforms::java::weld1::templates::Operation::Annotation-»
 	«EXPAND de::genesez::platforms::java::jws::templates::Operation::WebMethod-»
 	«EXPAND de::genesez::platforms::java::seam2::templates::Aspects::_Asynchronity-»
 	«EXPAND de::genesez::platforms::java::seam2::templates::Aspects::_Operations-»
@@ -106,10 +121,13 @@
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
 	«EXPAND de::genesez::platforms::java::jpa::templates::Attribute::_Annotation-»
+	«EXPAND de::genesez::platforms::java::jdi::templates::Attribute::Annotation»
+	«EXPAND de::genesez::platforms::java::weld1::templates::Attribute::Annotation-»
 	«EXPAND de::genesez::platforms::java::seam2::templates::Aspects::_Attributes-»
 	«EXPAND Attribute::_Annotation-»
 	«targetDef.proceed()-» 
 «ENDAROUND»
+
 
 «REM»
 	extends the class generation of the java5-cartridge
@@ -143,14 +161,15 @@
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Association::_Annotation FOR MAssociationRole-»
 	«EXPAND de::genesez::platforms::java::jpa::templates::Association::_Annotation-»
-	«EXPAND de::genesez::platforms::java::jpa::templates::Attribute::DatatypeMapping»
+	«EXPAND de::genesez::platforms::java::jpa::templates::Attribute::DatatypeMapping-»
+	«EXPAND de::genesez::platforms::java::seam2::templates::Aspects::_Associations-»
 	«targetDef.proceed()-» 
 «ENDAROUND»
 
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	aspects for jws
+	aspects for jws and weld
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
@@ -159,6 +178,7 @@
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MParameter-»
 	«EXPAND de::genesez::platforms::java::jws::templates::Operation::WebParam-»
+	«EXPAND de::genesez::platforms::java::weld1::templates::Parameter::Annotation-»
 	«targetDef.proceed()-» 
 «ENDAROUND»
 

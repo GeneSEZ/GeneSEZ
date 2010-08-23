@@ -24,7 +24,7 @@ MClassifier addStandardConstructor(MClass this) :
   */
 Void addLoggerAttribute(MClass this) :
 	!this.hasStereotype("jpaPersistentEntity") && this.hasTaggedValue("seam2Component", "logger", "true") && !this.existLoggerAttribute() 
-		? addAttribute("logger", "Log", "private")
+		? addAttribute("logger", "org.jboss.seam.log.Log", "private")
 		: "";
 
 /**
@@ -47,7 +47,8 @@ Void addFactoryMethod(MClassifier this, String autoCreate, String scope, String 
   *	checks if there is an attribute with the datatype "Log"
   */
 Boolean existLoggerAttribute(MClass this) :
-	this.property.exists(e|e.type.name().matches("Log"))
+	this.property.exists(e|e.type.name().matches("org.jboss.seam.log.Log")) 
+	|| this.property.exists(e|e.type.name().matches("Log") && e.name.matches("logger"))
 		? true
 		: false;
 

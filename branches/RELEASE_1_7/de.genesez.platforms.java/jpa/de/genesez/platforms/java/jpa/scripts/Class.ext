@@ -64,7 +64,11 @@ Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
 	generalization.isEmpty && hasStereotype("jpaPersistentEntity") && 
 	!(hasStereotype("jpaPrimaryKeyClass") && hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) && 
 	!property.selectFirst(e|e.name == "id" && e.type.name() == "int").hasStereotype("jpaPrimaryKey")
-		? property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "AUTO", "")
+		? (
+			this.hasTaggedValue("jpaInheritance", "strategy", "TABLE_PER_CLASS")
+				? property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "TABLE", "")
+				: property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "AUTO", "")
+		)
 		: "";
 
 /**
