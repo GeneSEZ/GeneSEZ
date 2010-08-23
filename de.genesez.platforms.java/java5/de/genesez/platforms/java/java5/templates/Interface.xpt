@@ -2,7 +2,8 @@
 	Performs the generation of interfaces
 	
 	@author	nico herbig
-	@author	tobias haubold (last)
+	@author	tobias haubold
+	@author andre pflueger (last)
 	@date	2007-07-13
 «ENDREM»
 
@@ -28,8 +29,9 @@
 «ENDREM»
 «DEFINE Root FOR MInterface -»
 package «packageDeclaration( basePackage() ) -»;
-«EXPAND Import::Import -»
+«EXPAND Import::Import -»   
 «EXPAND Comment::Type -»
+«EXPAND _Annotation-»
 public interface «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» {
 	
 	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
@@ -48,7 +50,29 @@ public interface «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::G
 	«EXPAND Attribute::Derived -»
 	«EXPAND Association::Accessors -»
 	
+	// -- generated code of other cartridges --------------------------------
+	«EXPAND _Extension-»
+	
 	// -- own code implementation -------------------------------------------
 	«EXPAND Type::OwnCodeImpl("java.interface.own.code.declaration." + xmiGuid)-»
 }
 «ENDDEFINE»
+
+«REM»
+	this define block can be used by other cartridges to add some generation code
+«ENDREM»
+«DEFINE _Extension FOR MInterface-»
+«ENDDEFINE»
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MInterface-»
+«ENDDEFINE»
+
+«REM»
+    will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+«ENDDEFINE»
+

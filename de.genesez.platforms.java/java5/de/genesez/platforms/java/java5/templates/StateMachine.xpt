@@ -27,20 +27,16 @@
 	processes a state machine
 «ENDREM»
 «DEFINE StateMachine FOR MStateMachine -»
-«EXPAND _SMDebug -»
+«EXPAND _EventCreators -»
 «EXPAND _ActionMethods -»
 «EXPAND _GuardMethods -»
-// <editor-fold defaultstate="collapsed" desc="Event Creator Methods">
-«EXPAND _EventCreators -»
-// </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="Internal State Machine Implementation">
 «EXPAND _States -»
 «EXPAND _EventIds -»
 «EXPAND _HistoryStateFields -»
 «EXPAND _Events -»
 «EXPAND _TakeEvent -»
 «EXPAND _StateMachineImpl -»
-// </editor-fold>
+«EXPAND _SMDebug -»
 «ENDDEFINE»
 
 «DEFINE _States FOR MStateMachine -»
@@ -115,7 +111,8 @@
 		«EXPAND _SMDebugMsg("\"( ... )\"") -»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("action." + xmiGuid)»
 		// TODO: implementation of action method '«asAction()»(...)'
-		«EXPAND _SMDebugMsg("\": Activity noch nicht implementiert\"")»
+		throw new UnsupportedOperationException(
+				"The implementation of this generated method stub is missing!");
 		«ENDPROTECT»
 	}
 «ENDDEFINE»
@@ -130,7 +127,8 @@
 			Thread.sleep(1); // set this to reasonable value
 		} catch (InterruptedException e) {
 		} // set this to reasonable value
-		«EXPAND _SMDebugMsg("\": Do-Activity noch nicht implementiert\"")»
+		throw new UnsupportedOperationException(
+				"The implementation of this generated method stub is missing!");
 		«ENDPROTECT»
 	}
 	/** field to control thread execution */
