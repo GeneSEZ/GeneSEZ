@@ -1,0 +1,235 @@
+«REM»
+	Template for weld annotations according to elements in general
+	
+	@author	nancy doerfel
+	@date	2010-04-16
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::jpa::scripts::Stereotypes»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluates the stereotype "weld1ApplicationScoped"
+«ENDREM»
+
+«DEFINE ApplicationScoped FOR MElement-»
+	«IF hasStereotype("weld1ApplicationScoped")-»
+		@ApplicationScoped	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1ConversationScoped"
+«ENDREM»
+«DEFINE ConversationScoped FOR MElement-»
+	«IF hasStereotype("weld1ConversationScoped")-»
+		@ConversationScoped	
+	«ENDIF-»	
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1RequestScoped"
+«ENDREM»
+«DEFINE RequestScoped FOR MElement-»
+	«IF hasStereotype("weld1RequestScoped")-»
+		@RequestScoped	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1SessionScoped"
+«ENDREM»
+«DEFINE SessionScoped FOR MElement-»
+	«IF hasStereotype("weld1SessionScoped")-»
+		@SessionScoped	
+	«ENDIF-»				
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Typed"
+«ENDREM»
+«DEFINE Typed FOR MElement-»		
+	«IF hasStereotype("weld1Typed")-»
+		@Typed
+		«IF	hasUtilizableValue("weld1Typed", "value")-»
+			("«getTaggedValue("weld1Typed", "value")-»")
+		«ENDIF-»		
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Produces"
+«ENDREM»
+«DEFINE Produces FOR MElement-»		
+	«IF hasStereotype("weld1Produces")-»
+		@Produces	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1NormalScope"
+«ENDREM»
+«DEFINE NormalScope FOR MElement-»		
+	«IF hasStereotype("weld1NormalScope")-»
+		@NormalScope
+		«IF	hasUtilizableValue("weld1NormalScope", "passivating")-»
+			("«getTaggedValue("weld1NormalScope", "passivating")-»")
+		«ENDIF-»		
+	«ENDIF-»		
+«ENDDEFINE»	
+
+
+«REM» 
+	evaluates the stereotype "weld1Stereotype"
+«ENDREM»
+«DEFINE Stereotype FOR MElement-»		
+	«IF hasStereotype("weld1Stereotype")-»
+		@Stereotype	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Nonbinding"
+«ENDREM»
+«DEFINE Nonbinding FOR MElement-»		
+	«IF hasStereotype("weld1Nonbinding")-»
+		@Nonbinding	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Alternative"
+«ENDREM»
+«DEFINE Alternative FOR MElement-»		
+	«IF hasStereotype("weld1Alternative")-»
+		@Alternative	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Any"
+«ENDREM»
+«DEFINE Any FOR MElement-»		
+	«IF hasStereotype("weld1Any")-»
+		@Any	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Default"
+«ENDREM»
+«DEFINE Default FOR MElement-»		
+	«IF hasStereotype("weld1Default")-»
+		@Default	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Disposes"
+«ENDREM»
+«DEFINE Disposes FOR MElement-»		
+	«IF hasStereotype("weld1Disposes")-»
+		@Disposes	
+	«ENDIF-»		
+«ENDDEFINE»
+
+
+«REM» 
+	evaluates the stereotype "weld1Dependend"
+«ENDREM»
+«DEFINE Dependend FOR MElement-»		
+	«IF hasStereotype("weld1Dependend")-»
+		@Dependend	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "weld1Model"
+«ENDREM»
+«DEFINE Model FOR MElement-»		
+	«IF hasStereotype("weld1Model")-»
+		@Model	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "weld1Specializes"
+«ENDREM»
+«DEFINE Specializes FOR MElement-»		
+	«IF hasStereotype("weld1Specializes")-»
+		@Specializes	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "weld1New"
+«ENDREM»
+«DEFINE New FOR MElement-»		
+	«IF hasStereotype("weld1New")-»
+		@New	
+		«IF	hasUtilizableValue("weld1New", "value")-»
+			("«getTaggedValue("weld1New", "value")-»")
+		«ENDIF-»			
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "weld1DecoratorDelegate"
+«ENDREM»
+«DEFINE DecoratorDelegate FOR MElement-»		
+	«IF hasStereotype("weld1DecoratorDelegate")-»
+		@Delegate	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "weld1Decorator"
+«ENDREM»
+«DEFINE Decorator FOR MElement-»		
+	«IF hasStereotype("weld1Decorator")-»
+		@Decorator	
+	«ENDIF-»		
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "weld1Observes"
+«ENDREM»
+«DEFINE Observes FOR MElement-»		
+	«IF hasStereotype("weld1Observes")-»
+		@Observes
+		«IF	hasUtilizableValue("weld1Observes", "during")-»
+			("«getTaggedValue("weld1Observes", "notifyObserver")-»")
+		«ENDIF-»	
+	«ENDIF-»		
+«ENDDEFINE»

@@ -3,7 +3,8 @@
 	- supports the stereotype '<<primitive>>' for multi-valued attributes
 	
 	@author	nico herbig
-	@author	tobias haubold (last)
+	@author	tobias haubold
+	@author andre pflueger (last)
 	@date	2007-07-13
 «ENDREM»
 
@@ -88,12 +89,15 @@
 	for attributes, the implicit modifiers 'public', 'static' + 'final' are generated
 «ENDREM»
 «DEFINE _Declaration FOR MAttribute -»
-	«EXPAND Comment::Attribute -»
-	«IF isSingleValuedType() -»
+	«EXPAND Comment::Attribute-»
+	«IF fieldAccess()-»
+		«EXPAND _Annotation-»
+	«ENDIF-»
+	«IF isSingleValuedType()-»
 		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue -»;
-	«ELSE -»
+	«ELSE»
 		«EXPAND _Modifier -» «EXPAND Type::MultiValuedType -» «asAttribute()» «EXPAND _DefaultValue -»;
-	«ENDIF -»
+	«ENDIF»
 «ENDDEFINE»
 
 «REM»
@@ -189,28 +193,38 @@
 	the attribute is simply returned
 «ENDREM»
 «DEFINE _Getter FOR MAttribute -»
-«IF isSingleValuedType() -»
 	«EXPAND Comment::Getter -»
-	«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
-		return «asAttribute()»;
-	}
-«ELSE -»
-	«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType -» «asGetter()»() {
-		return «asAttribute()»;
-	}
-«ENDIF -»
+	«IF !fieldAccess()-»
+		«EXPAND _Annotation-»
+	«ENDIF-»
+	«IF isSingleValuedType() -»
+		«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
+			return «asAttribute()»;
+		}
+	«ELSE -»
+		«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType -» «asGetter()»() {
+			return «asAttribute()»;
+		}
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
-	generates the setter method for an single valued attribute
+	generates the setter method for an attribute
 «ENDREM»
 «DEFINE _Setter FOR MAttribute -»
-«IF isSingleValuedType() -»
 	«EXPAND Comment::Setter -»
-	«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «asAttribute()») {
-		this.«asAttribute()» = «asAttribute()»;
-	}
-«ENDIF -»
+	«IF !fieldAccess() && !this.generateGetter()-»
+		«EXPAND _Annotation-»
+	«ENDIF-»
+	«IF isSingleValuedType() -»
+		«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
+			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
+		}
+	«ELSE -»
+		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «IF static-»_«ENDIF-»«asAttribute()») {
+			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
+		}
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -226,3 +240,8 @@
 	«ENDIF -»
 «ENDDEFINE»
 
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MAttribute-»
+«ENDDEFINE»
