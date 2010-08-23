@@ -26,13 +26,17 @@ public class JavaGenerator extends Generator {
 		defaults.put("template", "de::genesez::platforms::java::java5::templates::Root::Root");
 		defaults.put("typeMappingFile", "de/genesez/platforms/java/typemapping/typemapping.xml");
 		defaults.put("formatterConfig", "de/genesez/platforms/java/workflow/eclipse.java.formatter.settings.xml");
+		defaults.put("newAssociationHandling", "true");
+		defaults.put("fieldAccess", "true");
 	}
 	
 	private Log logger = LogFactory.getLog(getClass());
 	private boolean isNotSetTemplate = true;
 	private boolean isNotAddTypeMappingFile = true;
+	private boolean newAssociationHandling = true;
+	private boolean fieldAccess = true;
 	
-	
+
 	public JavaGenerator() {
 		super();
 		properties.putAll(defaults);
@@ -50,6 +54,8 @@ public class JavaGenerator extends Generator {
 		// check parameters
 		if (isNotSetTemplate) super.setTemplate(properties.getProperty("template"));
 		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
+		if (newAssociationHandling) setNewAssociationHandling(Boolean.valueOf(properties.getProperty("newAssociationHandling")).booleanValue());
+		if (fieldAccess) setFieldAccess(Boolean.valueOf(properties.getProperty("fieldAccess")).booleanValue());
 		
 		configureBeautifiers();
 		super.checkConfigurationInternal(issues);
@@ -58,10 +64,7 @@ public class JavaGenerator extends Generator {
 	protected void configureBeautifiers() {
 		// java beautifier
 		JavaBeautifier javaBeautifier = new JavaBeautifier();
-		// convert the classpath identifier of the config file to an absolute file name
-		URL config = ClassLoader.getSystemResource(properties.getProperty("formatterConfig"));
-		logger.debug("formatter config: " + config);
-		javaBeautifier.setConfigFile(config.getFile());
+		javaBeautifier.setConfigFile(properties.getProperty("formatterConfig"));
 		
 		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier();
 		
@@ -98,5 +101,15 @@ public class JavaGenerator extends Generator {
 	
 	public void setFormatterConfig(String formatterConfigFile) {
 		properties.put("formatterConfig", formatterConfigFile);
+	}	
+	
+	public void setNewAssociationHandling(boolean newAssociationHandling) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("newAssociationHandling", "" + newAssociationHandling + ""));
+		this.newAssociationHandling = false;
+	}
+
+	public void setFieldAccess(boolean fieldAccess) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("fieldAccess", "" + fieldAccess + ""));
+		this.fieldAccess = false;
 	}
 }
