@@ -24,14 +24,14 @@ extension de::genesez::platforms::java::scripts::Naming;
  * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String)
  */
 String packageDeclaration(MClassifier this) : 
-	owningPackage.packageDeclaration();
+	package().packageDeclaration();
 
 /**
  * getter for the package declaration, adopted version for java artefacts
  * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String, String)
  */
 String packageDeclaration(MClassifier this, String base) : 
-	owningPackage.packageDeclaration( base );
+	package().packageDeclaration( base );
 
 /**
  * getter for the package declaration, adopted version for java artefacts
@@ -64,3 +64,13 @@ String fullQualifiedName(MClassifier this, String typename) :
  */
 String fullQualifiedName(MClassifier this, String typename, String base) : 
 	fullQualifiedNameSep( typename, base, fqnSeparator());
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/** 
+  *	returns the elements of an array formatted as string ("[<elem1>,<elem2>,<elem3>]") 
+  */
+List[String] getElements(String this) :
+	subString(1, length -1).split(",").trim();
