@@ -1,10 +1,8 @@
 «REM»
-	Performs the generation of interfaces
+	Performs the generation of java5 annotations
 	
-	@author	nico herbig
-	@author	tobias haubold
-	@author andre pflueger (last)
-	@date	2007-07-13
+	@author nancy doerfel (last)
+	@date	2010-05-31
 «ENDREM»
 
 «REM» based on genesez meta model «ENDREM»
@@ -18,6 +16,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «REM» use java conversions «ENDREM»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::java5::scripts::Helper»
 
 
 «REM»
@@ -25,14 +24,14 @@
 «ENDREM»
 
 «REM»
-	processes an interface
+	processes an java annotation
 «ENDREM»
 «DEFINE Root FOR MInterface -»
 package «packageDeclaration( basePackage() ) -»;
 «EXPAND Import::Import -»   
 «EXPAND Comment::Type -»
 «EXPAND _Annotation-»
-public interface «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» {
+public @interface «name() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» {
 	
 	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
 	// -- generated attribute, constant + association declarations ----------
@@ -54,7 +53,7 @@ public interface «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::G
 	«EXPAND _Extension-»
 	
 	// -- own code implementation -------------------------------------------
-	«EXPAND Type::OwnCodeImpl("java.interface.own.code.declaration." + xmiGuid)-»
+	«EXPAND Type::OwnCodeImpl("java.annotation.own.code.declaration." + xmiGuid)-»
 }
 «ENDDEFINE»
 
@@ -68,11 +67,39 @@ public interface «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::G
 	will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
 «DEFINE _Annotation FOR MInterface-»
+    «EXPAND _java5Annotation-»
 «ENDDEFINE»
+
 
 «REM»
     will be overriden by other cartridges to generate annotations by using aspects
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
+    «IF hasStereotype(java5AnnotationStereotype())-»
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "retention")-»
+            import java.lang.annotation.Retention;               
+            import static java.lang.annotation.RetentionPolicy.«getTaggedValue(java5AnnotationStereotype(), "retention")-»;                       
+        «ENDIF-»           
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
+            import java.lang.annotation.Target;           
+            «FOREACH getTaggedValue(java5AnnotationStereotype(), "target").getElements() AS name SEPARATOR ","»
+                import static java.lang.annotation.ElementType.«name-»;                       
+            «ENDFOREACH»
+        «ENDIF-»
+    «ENDIF»  
 «ENDDEFINE»
 
+«REM» 
+    evaluates the stereotype "java5Annotation"
+«ENDREM»
+
+«DEFINE _java5Annotation FOR MInterface-»
+    «IF hasStereotype(java5AnnotationStereotype())-»
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
+            @Target({«FOREACH getTaggedValue(java5AnnotationStereotype(), "target").getElements() AS name SEPARATOR ","-» «name-» «ENDFOREACH-»})
+        «ENDIF-»
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "retention")-»
+            @Retention(«getTaggedValue(java5AnnotationStereotype(), "retention")-»)
+        «ENDIF»         
+    «ENDIF»
+«ENDDEFINE»

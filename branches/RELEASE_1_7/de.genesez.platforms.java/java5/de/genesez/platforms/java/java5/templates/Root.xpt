@@ -20,6 +20,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Association»
+«EXTENSION de::genesez::platforms::java::java5::scripts::Helper»
 
 
 «REM»
@@ -60,12 +61,18 @@
 «ENDREM»
 
 «REM»
-	processes the generation of an interface
+	processes the generation of an interface and java annotation
 «ENDREM»
 «DEFINE Root FOR MInterface»
-«FILE filePath( asFileName(), basePath() )»
-	«EXPAND Interface::Root»
-«ENDFILE»
+	«IF hasStereotype(java5AnnotationStereotype())»
+	    «FILE filePath( asAnnotationFileName(), basePath() )»
+	        «EXPAND Annotation::Root»
+	    «ENDFILE»
+	«ELSE-»
+	    «FILE filePath( asFileName(), basePath() )»
+	        «EXPAND Interface::Root»                
+	    «ENDFILE»
+	«ENDIF»
 «ENDDEFINE»
 
 «REM»
