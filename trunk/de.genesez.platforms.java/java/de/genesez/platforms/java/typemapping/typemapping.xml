@@ -12,20 +12,21 @@
 	<tns:include>
 		<tns:file>de/genesez/platforms/common/typemapping/typemapping.xml</tns:file>
 	</tns:include>
+	<!-- collections for multi value type support -->
 	<tns:multiValuedTypes>
 		<tns:multiValuedType>
 			<tns:default>java.util.Set</tns:default>
 			<tns:context name="Implementation">java.util.HashSet</tns:context>
 		</tns:multiValuedType>
 		<tns:multiValuedType ordered="false" unique="false">
-			<tns:default>java.util.List</tns:default>
-			<tns:context name="Implementation">java.util.ArrayList</tns:context>
-		</tns:multiValuedType>
-		<tns:multiValuedType unique="false" ordered="true">
-			<tns:default>java.util.List</tns:default>
-			<tns:context name="Implementation">java.util.ArrayList</tns:context>
+			<tns:default>java.util.Set</tns:default>
+			<tns:context name="Implementation">java.util.HashSet</tns:context>
 		</tns:multiValuedType>
 		<tns:multiValuedType ordered="true" unique="false">
+			<tns:default>java.util.List</tns:default>
+			<tns:context name="Implementation">java.util.ArrayList</tns:context>
+		</tns:multiValuedType>
+		<tns:multiValuedType ordered="false" unique="true">
 			<tns:default>java.util.Set</tns:default>
 			<tns:context name="Implementation">java.util.HashSet</tns:context>
 		</tns:multiValuedType>
@@ -35,6 +36,7 @@
 				java.util.LinkedHashSet</tns:context>
 		</tns:multiValuedType>
 	</tns:multiValuedTypes>
+	<!-- java primitive types -->
 	<tns:primitiveTypes>
 		<tns:type from="boolean">
 			<tns:to>boolean</tns:to>
@@ -70,6 +72,23 @@
 		</tns:type>
 	</tns:primitiveTypes>
 	<tns:externalTypes>
+		<!-- java standard library -->
+		<tns:type from="Exception">
+			<tns:to>Exception</tns:to>
+			<tns:context name="Import">java.lang.Exception</tns:context>
+		</tns:type>
+		<tns:type from="Date">
+			<tns:to>Date</tns:to>
+			<tns:context name="Import">java.util.Date</tns:context>
+		</tns:type>
+		<tns:type from="HashSet">
+			<tns:to>HashSet</tns:to>
+			<tns:context name="Import">java.util.HashSet</tns:context>
+		</tns:type>
+		<tns:type from="HashMap">
+			<tns:to>HashMap</tns:to>
+			<tns:context name="Import">java.util.HashMap</tns:context>
+		</tns:type>
 		<!-- genesez umlsupport library -->
 		<tns:type from="Association">
 			<tns:to>Association</tns:to>
@@ -110,20 +129,6 @@
 			<tns:to>ManyAssociationAC</tns:to>
 			<tns:context name="Import">
 				de.genesez.platforms.java.umlsupport.associations.ManyAssociationAC</tns:context>
-		</tns:type>
-		
-		<!-- java standard library -->
-		<tns:type from="Exception">
-			<tns:to>Exception</tns:to>
-			<tns:context name="Import">java.lang.Exception</tns:context>
-		</tns:type>
-		<tns:type from="HashSet">
-			<tns:to>HashSet</tns:to>
-			<tns:context name="Import">java.util.HashSet</tns:context>
-		</tns:type>
-		<tns:type from="HashMap">
-			<tns:to>HashMap</tns:to>
-			<tns:context name="Import">java.util.HashMap</tns:context>
 		</tns:type>
 	</tns:externalTypes>
 </tns:typeMapping>
