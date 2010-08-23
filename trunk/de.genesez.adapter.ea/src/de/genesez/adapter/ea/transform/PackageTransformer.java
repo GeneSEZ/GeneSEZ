@@ -27,7 +27,7 @@ public class PackageTransformer extends AbstractPackageTransformer {
 
 	@Override
 	protected void transformElement(org.sparx.Element _e) {
-		log.debug("Transforming element " + _e.GetName());
+		log.debug("Transforming element " + _e.GetName() + ", type: "+_e.GetType());
 		
 		if ( _e.GetType().equals("Actor") ) {
 			log.debug("Element is an Actor");
@@ -40,6 +40,18 @@ public class PackageTransformer extends AbstractPackageTransformer {
 		else if ( _e.GetType().equals("Activity") ) {
 			log.debug("Element is a Activity");
 			ActivityTransformer t = new ActivityTransformer();
+			t.transform(_e, this.umlPackage);
+		}else if ( _e.GetType().equals("Component") ) {
+			log.debug("Element is a Component");
+			ComponentTransformer t = new ComponentTransformer();
+			t.transform(_e, this.umlPackage);
+		}else if ( _e.GetType().equals("Class") ) {
+			log.debug("Element is a Class");
+			ClassTransformer t = new ClassTransformer();
+			t.transform(_e, this.umlPackage);
+		}else if ( _e.GetType().equals("Interface") ) {
+			log.debug("Element is a Interface");
+			InterfaceTransformer t = new InterfaceTransformer();
 			t.transform(_e, this.umlPackage);
 		}
 	}
