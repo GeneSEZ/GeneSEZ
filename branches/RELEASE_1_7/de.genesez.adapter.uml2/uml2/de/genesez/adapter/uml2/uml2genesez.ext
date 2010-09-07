@@ -315,6 +315,8 @@ private create MEnumeration makeClassifier(Enumeration e) :
 	literal.addAll( e.ownedLiteral.typeSelect(EnumerationLiteral).makeLiteral() ) ->
 	// transform classifier
 	transformClassifier(e) ->
+	// for enums: realization of interfaces because UML does not allow an interface realization for enums
+	supertype.addAll( realization.addAll( e.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ) ->
 	this;
 	
 /**
