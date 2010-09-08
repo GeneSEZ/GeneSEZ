@@ -33,6 +33,7 @@
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && e.final && !e.derived ) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.final && !e.derived ) -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && !e.final && !e.derived ) -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| !e.static && !e.final && !e.derived ) -»
 «ENDDEFINE»
@@ -140,6 +141,8 @@
 	public static final
 «ELSEIF usePropertyVisibilityForAccessors() && !derived -»
 	private «IF static -»static«ENDIF -» «IF final -»final «ENDIF -»
+«ELSEIF (isSingleValuedType() && final && hasDefaultValue()) -»
+	«visibility-» static final
 «ELSE -»
 	«visibility» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
 «ENDIF -»
