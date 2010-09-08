@@ -38,7 +38,7 @@
 	«EXPAND Element::Alternative-»
 	«EXPAND Element::Any-»
 	«EXPAND Element::Default-»
-	«EXPAND Element::Dependend-»
+	«EXPAND Element::Dependent-»
 	«EXPAND Element::Model-»
 	«EXPAND Element::Specializes-»
 	«EXPAND Element::New-»
@@ -138,7 +138,18 @@
 		import javax.decorator.Decorator;		
 	«ENDIF»
 	«IF operation.exists(e|e.parameter.exists(p|p.hasStereotype("weld1Observes")))»
-		import javax.enterprise.event.Observes;		
+		import javax.enterprise.event.Observes;
+		«IF operation.exists(e|e.parameter.exists(p|p.hasUtilizableValue("weld1Observes", "during")))-»	
+            import static javax.enterprise.event.TransactionPhase.AFTER_COMPLETION;
+            import static javax.enterprise.event.TransactionPhase.AFTER_FAILURE;
+            import static javax.enterprise.event.TransactionPhase.AFTER_SUCCESS;
+            import static javax.enterprise.event.TransactionPhase.BEFORE_COMPLETION;
+            import static javax.enterprise.event.TransactionPhase.IN_PROGRESS;    
+        «ENDIF-»
+        «IF operation.exists(e|e.parameter.exists(p|p.hasUtilizableValue("weld1Observes", "notifyObserver")))-»
+            import static javax.enterprise.event.Reception.ALWAYS;
+            import static javax.enterprise.event.Reception.IF_EXISTS;
+        «ENDIF-»      			
 	«ENDIF»				
 «ENDDEFINE»
 

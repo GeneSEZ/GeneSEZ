@@ -74,10 +74,7 @@
 «ENDREM»
 «DEFINE Typed FOR MElement-»		
 	«IF hasStereotype("weld1Typed")-»
-		@Typed
-		«IF	hasUtilizableValue("weld1Typed", "value")-»
-			("«getTaggedValue("weld1Typed", "value")-»")
-		«ENDIF-»		
+		@Typed({«FOREACH getTaggedValue("weld1Typed", "value").getElements() AS name SEPARATOR ","-» «name-».class «ENDFOREACH-»})	
 	«ENDIF-»		
 «ENDDEFINE»
 
@@ -168,9 +165,9 @@
 «REM» 
 	evaluates the stereotype "weld1Dependend"
 «ENDREM»
-«DEFINE Dependend FOR MElement-»		
-	«IF hasStereotype("weld1Dependend")-»
-		@Dependend	
+«DEFINE Dependent FOR MElement-»		
+	«IF hasStereotype("weld1Dependent")-»
+		@Dependent	
 	«ENDIF-»		
 «ENDDEFINE»
 
@@ -227,9 +224,17 @@
 «ENDREM»
 «DEFINE Observes FOR MElement-»		
 	«IF hasStereotype("weld1Observes")-»
-		@Observes
-		«IF	hasUtilizableValue("weld1Observes", "during")-»
-			("«getTaggedValue("weld1Observes", "notifyObserver")-»")
-		«ENDIF-»	
+		@Observes(
+			«IF	hasUtilizableValue("weld1Observes", "during")-»
+				during=«getTaggedValue("weld1Observes", "during")-»
+				«IF hasUtilizableValue("weld1Observes", "notifyObserver")-»
+				    ,notifyObserver=«getTaggedValue("weld1Observes", "notifyObserver")-»
+				«ENDIF-»
+		    «ELSE-»
+		        «IF hasUtilizableValue("weld1Observes", "notifyObserver")-»
+                    notifyObserver=«getTaggedValue("weld1Observes", "notifyObserver")-»
+                «ENDIF-»  
+			«ENDIF-»		
+		)
 	«ENDIF-»		
 «ENDDEFINE»
