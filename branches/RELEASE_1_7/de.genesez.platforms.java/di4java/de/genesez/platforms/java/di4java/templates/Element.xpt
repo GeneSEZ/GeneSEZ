@@ -1,0 +1,61 @@
+«REM»
+	Template for di4java annotations according to elements in general
+	
+	@author	nancy doerfel
+	@date	2010-04-11
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::jpa::scripts::Stereotypes»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluates the stereotype "di4javaNamed"
+«ENDREM»
+
+«DEFINE Named FOR MElement-»
+	«IF hasStereotype("di4javaNamed")»
+		@Named
+		«IF	hasUtilizableValue("di4javaNamed", "value")-»
+			("«getTaggedValue("di4javaNamed", "value")-»")
+		«ENDIF»		
+	«ENDIF»	
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "di4javaInject"
+«ENDREM»
+«DEFINE Inject FOR MElement-»
+	«IF hasStereotype("di4javaInject")»
+		@Inject
+	«ENDIF»	
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype "di4javaSingleton"
+«ENDREM»
+
+«DEFINE Singleton FOR MElement-»
+	«IF hasStereotype("di4javaSingleton")»
+		@Singleton		
+	«ENDIF»	
+«ENDDEFINE»

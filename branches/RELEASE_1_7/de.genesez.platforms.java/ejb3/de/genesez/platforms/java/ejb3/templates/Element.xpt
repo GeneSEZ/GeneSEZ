@@ -1,0 +1,72 @@
+«REM»
+	Template for ejb3 elements
+	
+	@author	andre pflueger
+	@date	2010-10-13
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	container-managed transaction demarcation
+	for operations and classes
+«ENDREM»
+«DEFINE CMTransactionality FOR MElement-»
+	«IF hasStereotype("ejb3TransactionAttribute")»
+		«IF hasUtilizableValue("ejb3TransactionAttribute", "type") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
+			@TransactionAttribute(TransactionAttributeType.«getTaggedValue("ejb3TransactionAttributeType", "type")-»)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype "ejb3EJB" for classes, attributes and setter operations
+«ENDREM»
+«DEFINE EJB FOR MElement»
+	«IF hasStereotype("ejb3EJB")-»
+		«IF hasTaggedValue("ejb3EJB", "name", "") && hasTaggedValue("ejb3EJB", "beanInterface", "") &&
+			hasTaggedValue("ejb3EJB", "beanName", "") && hasTaggedValue("ejb3EJB", "description", "") &&
+			hasTaggedValue("ejb3EJB", "mappedName", "")-»
+			«REM»
+				there are no information, so just ejb3 default values from configuration by exception
+				this case occurs if stereotype was added automatically by the cartridge
+			«ENDREM»
+			@EJB
+		«ELSE-»
+			@EJB(name=
+			«IF hasUtilizableValue("ejb3EJB", "name")-»
+				"«getTaggedValue("ejb3EJB", "name")-»"
+			«ELSE-»
+				"ejb/«name.toFirstUpper()-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3EJB", "beanInterface")-»
+				, beanInterface=«getTaggedValue("ejb3EJB", "beanInterface")-».class
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3EJB", "beanName")-»
+				, beanName="«getTaggedValue("ejb3EJB", "beanName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3EJB", "description")-»
+				, description="«getTaggedValue("ejb3EJB", "description")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3EJB", "mappedName")-»
+				, mappedName="«getTaggedValue("ejb3EJB", "mappedName")-»"
+			«ENDIF-»)
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»

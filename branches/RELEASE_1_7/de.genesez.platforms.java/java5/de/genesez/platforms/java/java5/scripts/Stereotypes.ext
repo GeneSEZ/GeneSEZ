@@ -38,7 +38,8 @@ Void makeTargetStereotype(MElement this, boolean annotationType, boolean type, b
     let s = createAnnotationStereotype(this) : 
     // merge value for the tagged value from the meta association roles and the tagged value of the existing stereotyp
     let target = createTargetTaggedValue(this, annotationType, type, constructor, method, field, localVariable, parameter, package) :
-        this.taggedValue.selectFirst(e|e.tag.name == "target" && e.tag.stereotype.name == s.name).setValue(target);
+        this.taggedValue.selectFirst(e|e.tag.name == "target" && e.tag.stereotype.name == s.name).setValue(target)
+    ;
 
     
 /**
@@ -85,22 +86,17 @@ MStereotype createAnnotationStereotype(MElement this) :
 String createTargetTaggedValue(MElement this, boolean setAnnotationType, boolean setType, boolean setConstructor
         , boolean setMethod, boolean setField, boolean setLocalVariable
         , boolean setParameter, boolean setPackage) :
-    let value = (
-            // If there's already a Tagged Value, we take this
-            this.getTaggedValue(java5AnnotationStereotype(), "target").length > 0
-            ? this.getTaggedValue(java5AnnotationStereotype(), "target").subString(1, this.getTaggedValue(java5AnnotationStereotype(), "target").length - 1) // Klammern entfernen
-            : ""  
-        ) :
-        let value = value.addTargetTaggedValue(this, setAnnotationType , "ANNOTATION_TYPE") :
+    let value = "" :  
         let value = value.addTargetTaggedValue(this, setType           , "TYPE") :
+        let value = value.addTargetTaggedValue(this, setAnnotationType , "ANNOTATION_TYPE") :   
         let value = value.addTargetTaggedValue(this, setConstructor    , "CONSTRUCTOR") :
         let value = value.addTargetTaggedValue(this, setMethod         , "METHOD") :
         let value = value.addTargetTaggedValue(this, setField          , "FIELD") :
         let value = value.addTargetTaggedValue(this, setLocalVariable  , "LOCAL_VARIABLE") :
         let value = value.addTargetTaggedValue(this, setParameter      , "PARAMETER") :
         let value = value.addTargetTaggedValue(this, setPackage        , "PACKAGE") :
-            "[" + value + "]"; // we need a collection / list
-
+        "[" + value + "]" // we need a collection / list
+        ;
 /**
  * Adds new values to a tagged value separated by comma
  *
@@ -111,7 +107,7 @@ String createTargetTaggedValue(MElement this, boolean setAnnotationType, boolean
  */
 String addTargetTaggedValue(String taggedValue, MElement this, boolean setValue, String value) :
     /* if type is set and not yet incuded in tagged value string ...  */ 
-    (setValue == true && this.getTaggedValue(java5AnnotationStereotype(), "target").contains(value) == false)
+    (setValue == true)
     ? ( /*... add value to taggedValue string (add comma if needed) */
 	    let taggedValue = (taggedValue == "" ? value : taggedValue + ", " + value) : taggedValue
        )

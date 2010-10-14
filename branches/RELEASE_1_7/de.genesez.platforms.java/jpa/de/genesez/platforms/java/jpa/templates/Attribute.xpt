@@ -27,182 +27,15 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-
-«REM» 
-	evaluates the stereotype jpaOptimisticLocking
-	is used by attribute and operation
- «ENDREM»
-«DEFINE OptimisticLocking FOR MElement-»
-	«IF hasStereotype("jpaOptimisticLocking")-»
-		@Version
-	«ENDIF»
-«ENDDEFINE»
-
-«REM» 
-	evaluates the stereotype jpaPrimaryKey
-	is used by attribute and operation
- «ENDREM»
-«DEFINE PrimaryKey FOR MElement-»
-	«REM» simple primary key «ENDREM»
-	«IF hasStereotype("jpaPrimaryKey") && hasTaggedValue("jpaPrimaryKey", "embeddedId", "false")»
-		@Id
-	«ENDIF»
-	«REM» 
-		look for primary key in superclass
-		if the names are equal there must be an column annotation with insertable = false
-		and updatable = false
-		otherwise there will be a mapping error because hibernate tries to map the
-		primary key of the superclass and of the subclass in the same column
-		Per derfault there is no need for an primary key in the derived class
-	«ENDREM»	
-	«IF this.getClassifier() != null-»
-		«IF this.getClassifier().generalization.typeSelect(MClassifier).property.exists(e|e.name == name 
-			&& e.hasStereotype("jpaPrimaryKey"))-»
-			«IF !hasStereotype("jpaColumn")-»
-				«addColumnForPrimaryKeyInheritance(this.getClassifier()) -> ""-»
-			«ELSE»
-				«stereotype.selectFirst(e|e == "jpaColumn").taggedValue.selectFirst(e|e == "insertable").setValue("false")-»
-				«stereotype.selectFirst(e|e == "jpaColumn").taggedValue.selectFirst(e|e == "updatable").setValue("false")-»
-			«ENDIF»
-		«ENDIF»
-	«ENDIF-»
-	
-	«REM» composed primary key «ENDREM»
-	«IF hasTaggedValue("jpaPrimaryKey", "embeddedId", "true")»
-		@EmbeddedId
-	«ENDIF»
-	
-	«REM» automatic primary key generation 
-	«IF this.getClassifier() != null-»
-		«IF this.getClassifier().generalization.isEmpty && this.getClassifier().hasStereotype("jpaPersistentEntity") && !hasStereotype("jpaPrimaryKey") && this.name == "id" && this.type().name() == "int"-»
-			@Id
-			@GeneratedValue(strategy = GenerationType.AUTO)
-		«ENDIF»
-	«ENDIF-»
-	«ENDREM»
-	«REM» generationtype of primary keys «ENDREM»
-	«IF hasStereotype("jpaTableGenerator") && hasUtilizableValue("jpaTableGenerator", "name")-»
-		@TableGenerator(name="«getTaggedValue("jpaTableGenerator", "name")-»"
-		«IF hasUtilizableValue("jpaTableGenerator", "table")-»
-			, table="«getTaggedValue("jpaTableGenerator", "table")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jpaTableGenerator", "pkColumnName")-»
-			, pkColumnName="«getTaggedValue("jpaTableGenerator", "pkColumnName")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jpaTableGenerator", "valueColumnName")-»
-			, valueColumnName="«getTaggedValue("jpaTableGenerator", "valueColumnName")-»"
-		«ENDIF-»	
-		«IF hasUtilizableValue("jpaTableGenerator", "pkColumnValue")-»
-			, pkColumnValue="«getTaggedValue("jpaTableGenerator", "pkColumnValue")-»"
-		«ENDIF-»	
-		«IF hasUtilizableValue("jpaTableGenerator", "initialValue")-»
-			, initialValue = «getTaggedValue("jpaTableGenerator", "initialValue")-»
-		«ENDIF-»
-		«IF hasUtilizableValue("jpaTableGenerator", "allocationSize")-»
-			, allocationSize = «getTaggedValue("jpaTableGenerator", "allocationSize")-»
-		«ENDIF»
-		)	
-	«ENDIF»
-	«IF hasStereotype("jpaSequenceGenerator") && hasUtilizableValue("jpaSequenceGenerator", "name")-»
-		@SequenceGenerator(name="«getTaggedValue("jpaSequenceGenerator", "name")-»"
-		«IF hasUtilizableValue("jpaSequenceGenerator", "sequenceName")-»
-			, sequenceName="«getTaggedValue("jpaSequenceGenerator", "sequenceName")-»"
-		«ENDIF-»	
-		«IF hasUtilizableValue("jpaSequenceGenerator", "initialValue")-»
-			, initialValue = «getTaggedValue("jpaSequenceGenerator", "initialValue")-»
-		«ENDIF-»
-		«IF hasUtilizableValue("jpaSequenceGenerator", "allocationSize")-»
-			, allocationSize = «getTaggedValue("jpaSequenceGenerator", "allocationSize")-»
-		«ENDIF-»)
-	«ENDIF»
-	«IF hasTaggedValue("jpaPrimaryKey", "generatedValue", "true")-»
-		@GeneratedValue(strategy=GenerationType.«getTaggedValue("jpaPrimaryKey", "strategy")-»
-		«IF hasTaggedValue("jpaPrimaryKey", "strategy", "TABLE") || hasTaggedValue("jpaPrimaryKey", "strategy", "SEQUENCE")-»
-			«IF hasUtilizableValue("jpaPrimaryKey", "generatorName")-»
-				, generator="«getTaggedValue("jpaPrimaryKey", "generatorName")-»"
-			«ENDIF-»
-		«ENDIF-»	
-		)
-	«ENDIF»
-«ENDDEFINE»
-
-«REM» 
-	evaluates the stereotype jpaColumn
-	is used by attribute and operation
- «ENDREM»
-«DEFINE Column FOR MElement»
-	«REM» column «ENDREM»
-	«IF hasStereotype("jpaColumn")»
-		@Column(
-		«IF hasUtilizableValue("jpaColumn", "name")-»
-			name="«getTaggedValue("jpaColumn", "name")-»"
-		«ELSE-»
-			name="«name.asTypeName()-»"
-		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "unique", "true")-»
-			, unique=true, nullable=false
-		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "nullable", "false") && !hasTaggedValue("jpaColumn", "unique", "true")-»
-			, nullable=false
-		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "insertable", "false")-»
-			, insertable=false
-		«ENDIF-»
-		«IF hasTaggedValue("jpaColumn", "updatable", "false")-»
-			, updatable=false
-		«ENDIF-»
-		«IF hasUtilizableValue("jpaColumn", "columnDefinition")-»
-			, columnDefinition="«getTaggedValue("jpaColumn", "columnDefinition")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jpaColumn", "table")-»
-			, table="«getTaggedValue("jpaColumn", "table")-»"
-		«ENDIF-»
-		«IF !hasTaggedValue("jpaColumn", "length", "255")-»
-			, length=«taggedValue.selectFirst(e|e.tag.name == "length").value-»
-		«ENDIF-»
-		«IF !hasTaggedValue("jpaColumn", "precision", "0")-»
-			, precision=«taggedValue.selectFirst(e|e.tag.name == "precision").value-»
-		«ENDIF-»
-		«IF !hasTaggedValue("jpaColumn", "scale", "0")-»
-			, scale=«taggedValue.selectFirst(e|e.tag.name == "scale").value-»
-		«ENDIF-»
-		)		
-	«ENDIF»
-«ENDDEFINE»
-
-«REM» 
-	evaluates the stereotype jpaDatatypeMapping
-	is used by attribute and operation
- «ENDREM»
-«DEFINE DatatypeMapping FOR MElement»
-	«IF hasStereotype("jpaDatatypeMapping")»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Basic")»
-			@Basic(optional=«getTaggedValue("jpaDatatypeMapping", "optional")-»
-			«IF hasUtilizableValue("jpaDatatypeMapping", "fetch") && 
-				!hasTaggedValue("jpaDatatypeMapping", "fetch", "DEFAULT")-»
-				, fetch=FetchType.«getTaggedValue("jpaDatatypeMapping", "fetch")-»
-			«ENDIF-»)
-		«ENDIF»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Lob")»
-			@Lob
-		«ENDIF»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Temporal")»
-			@Temporal
-			«IF !hasTaggedValue("jpaDatatypeMapping", "temporalType", "null")-»
-				(TemporalType.«getTaggedValue("jpaDatatypeMapping", "temporalType")-»)
-			«ENDIF»
-		«ENDIF»
-		«IF hasTaggedValue("jpaDatatypeMapping", "type", "Enumerated")»
-			@Enumerated
-			«IF hasUtilizableValue("jpaDatatypeMapping", "enumType") && 
-				!hasTaggedValue("jpaDatatypeMapping", "enumType", "ORDINAL")-»
-				(«getTaggedValue("jpaDatatypeMapping", "enumType")-»)
-			«ENDIF»
-		«ENDIF»
-		«IF hasTaggedValue("jpaDatatypeMapping", "transient", "true")-»
-			@Transient
-		«ENDIF»
-	«ENDIF»
+«REM» evaluate stereotypes for attributes «ENDREM»
+«DEFINE Annotation FOR MAttribute»
+	«EXPAND Element::PrimaryKey-»
+	«EXPAND Element::Column-»	
+	«EXPAND Element::DatatypeMapping-»
+	«EXPAND _Persistence-»
+	«EXPAND Element::OptimisticLocking-»
+	«EXPAND Class::DiscriminatorValue-»	
+	«EXPAND _MultiValueAttributes-»
 «ENDDEFINE»
 
 «REM»
@@ -211,23 +44,15 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«REM» evaluate stereotypes for attributes «ENDREM»
-«DEFINE _Annotation FOR MAttribute»
-	«EXPAND PrimaryKey-»
-	«EXPAND Column-»	
-	«EXPAND DatatypeMapping-»
-	«EXPAND _Persistence-»
-	«EXPAND OptimisticLocking-»
-	«REM»«EXPAND Association::_JoinColumn»
-	«EXPAND Association::_IJoinColumn»«ENDREM»
-	«REM» stereotype "jpaDiscriminatorValue" «ENDREM»
-	«EXPAND Class::DiscriminatorValue-»	
+«REM» 
+	adds an annotation for multi value attributes
+«ENDREM»
+«DEFINE _MultiValueAttributes FOR MAttribute-»
 	«IF multiplicity != 1-»
-		«REM»wird hier wirklich die klasse auf die zustandsbehaftete SessionBean getestet?«ENDREM»
-		«IF !hasStereotype("jpaAssociation") || this.classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+		«IF this.classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
 			@org.hibernate.annotations.CollectionOfElements
 		«ENDIF-»
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» 

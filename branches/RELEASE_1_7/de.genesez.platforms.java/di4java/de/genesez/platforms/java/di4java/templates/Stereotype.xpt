@@ -1,0 +1,47 @@
+«REM»
+	template for di4java stereotype annotations
+	
+	@author		nancy doerfel
+	@date		2010-03-19
+	@version	1.0
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«REM»  «ENDREM»
+«DEFINE _Annotation FOR MStereotype-»
+	«EXPAND _Qualifier-»		
+«ENDDEFINE»
+
+
+«REM» evaluates the stereotype "di4javaQualifier"«ENDREM»
+«DEFINE _Qualifier FOR MStereotype-»
+	«IF hasStereotype("di4javaQualifier")»
+		@Qualifier
+	«ENDIF»
+«ENDDEFINE»
+
+
+«REM» 
+	generates import proReg and statements for hibernate classes
+	is used by aspects to extend import generation of java5 cartridge
+«ENDREM»
+«DEFINE _ImportStatements FOR MStereotype-»
+	«IF hasStereotype("di4javaQualifier")-»
+		import javax.inject.Qualifier;;
+	«ENDIF»
+«ENDDEFINE»

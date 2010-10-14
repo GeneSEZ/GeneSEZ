@@ -1,0 +1,80 @@
+«REM»
+	JBoss Seam Framework cartridge (version 2.1.2)
+	
+	description:
+	The template is based on the ejb cartridge and evaluates several stereotypes
+	to generate annotations of JBoss Seam. Its uses aspects around the methhods
+	of the ejb annotations in the Xpand files of the ejb3 cartridge.
+	
+	@author		andre pflueger
+	@date		2008/10/29
+	@version 	1.0
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«REM»
+	create import statements
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+	«IF hasStereotype("seam2Startup")
+		|| hasStereotype("seam2Install")
+		|| hasStereotype("seam2Component")
+		|| hasStereotype("seam2ReadOnly")
+		|| hasStereotype("seam2ContextDemarcation")
+		|| hasStereotype("seam2BeginTask")
+		|| hasStereotype("seam2EndTask")
+		|| hasStereotype("seam2StartTask")
+		|| hasStereotype("seam2Begin")
+		|| hasStereotype("seam2End")
+		|| hasStereotype("seam2Lifecycle")
+		|| hasStereotype("seam2Observer")
+		|| hasStereotype("seam2Unwrap")
+		|| hasStereotype("seam2Injection")
+		|| hasStereotype("seam2Outjection")
+		|| hasStereotype("seam2Logger")
+		|| hasStereotype("seam2Factory")
+		|| hasStereotype("seam2RequestParameter")
+		|| hasStereotype("seam2Redirect")
+		|| hasStereotype("seam2Restrict")
+		|| hasStereotype("seam2HttpError")
+		|| hasStereotype("seam2Remoting")
+		|| hasStereotype("seam2Validator")
+		|| hasStereotype("seam2Converter")
+		|| hasStereotype("seam2Asynchronity")
+		|| hasStereotype("seam2ServletContainerIntegration")
+		|| hasStereotype("seam2Packaging")
+		|| hasStereotype("seam2Transactional")
+		|| hasStereotype("seam2JavaBeanInterceptors")
+		|| hasStereotype("seam2ApplicationException")
+		|| hasStereotype("seam2Interceptors")»
+		import org.jboss.seam.annotations.*;
+		import org.jboss.seam.*;
+		import org.jboss.seam.security.*;
+		«IF hasStereotype("seam2Logger")»
+			import org.jboss.seam.log.Log;
+		«ENDIF»
+		«IF property.exists(e|e.hasStereotype("seam2DataModel") || e.hasStereotype("seam2Selection") || e.hasStereotype("seam2SelectionIndex"))-»
+			import org.jboss.seam.annotations.datamodel.*;
+		«ENDIF»
+		«IF hasStereotype("seam2ServletContainerIntegration")»
+			import javax.servlet.Filter;
+		«ENDIF»
+		«IF hasStereotype("seam2Validator")»
+			import javax.faces.validator.Validator;
+		«ENDIF»
+		«IF hasStereotype("seam2Converter")»
+			import javax.faces.converter.Converter;
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»

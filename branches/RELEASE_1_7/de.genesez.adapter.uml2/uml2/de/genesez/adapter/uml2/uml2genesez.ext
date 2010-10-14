@@ -93,6 +93,18 @@ private String externalPackages() :
 		? "" 
 		: GLOBALVAR externalPackages;
 
+
+/**
+ * getter for all names of packages, which contain classes that should
+ * be mapped to external classes (packages must containted in the model)
+ * @return  comma or semicolon separated list of names of packages
+ */
+private String includedProfiles() : 
+    GLOBALVAR includedProfiles == null 
+        ? "" 
+        : GLOBALVAR includedProfiles;
+
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public extend function to transform a uml2 model
@@ -106,7 +118,6 @@ private String externalPackages() :
  */
 create MModel transform(Model m) :
 	useLogger("de.genesez.adapter.uml2") ->
-	trace( "make [" + metaType + " ] - " + m ) ->
 	// basic element properties
 	transformBasics(m) ->
 	// save model in global store
@@ -134,7 +145,7 @@ private MPackage transform(Package p, MModel this) :
 		// reject ignored package
 		case p.isIgnoredPackage() : Void
 		// reject package by name when used as container for external classes (isContainerForExternalClasses)
-		// reject package by stereotype when used as container for external classes
+		// reject package by stereotype when used as container for external classes		
 		case p.isContainerForExternalClasses() : 
 			p.ownedElement.typeSelect( Classifier ).makeExternal()
 		// else transform the package
@@ -177,10 +188,10 @@ private MClassifier transform(Classifier c, MModel this) :
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
         // check if classifier is a stereotype
-        case c.metaType == Stereotype : ( let a = c.makeAnnotationInterface() :
-                classifier.add( a ) ->
-                c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(a) : null
-            ) 		
+        case c.metaType == Stereotype :  Void
+//         let a = c.makeAnnotationInterface() :
+//                classifier.add( a ) ->
+//                c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(a) : null            ) 		
 		// else classifier
 		default : ( let mc = c.makeClassifier() :
 				classifier.add( mc ) ->
@@ -206,10 +217,11 @@ private MClassifier transform(Classifier c, MPackage this) :
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
 		// check if classifier is a stereotype
-		case c.metaType == Stereotype : ( let a = c.makeAnnotationInterface() :
-                classifier.add( a ) ->
-                c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(a) : null
-            ) 
+        case c.metaType == Stereotype :  Void		
+//		case c.metaType == Stereotype : ( let a = c.makeAnnotationInterface() :
+//                classifier.add( a ) ->
+//                c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(a) : null
+//            ) 
 		// else classifier
 		default : ( let mc = c.makeClassifier() :				
 				classifier.add( mc ) ->
@@ -361,23 +373,23 @@ private MClassifier makeClassifier(Classifier c) :
 	fatal("try to construct a MClassifier object from: " + c) ->
 	Void;
 
-
 /**
- * creates a GeneSEZ interface from an uml interface
- * @param   i   an uml interface
+ * creates a GeneSEZ interface from an uml stereotype
+ * @param   s   an uml stereotype
  * @return  the GeneSEZ interface
  */
-private create MInterface makeAnnotationInterface(Classifier i) :
-    trace( "make a java annotation from [ " + metaType + " ] - " + i ) ->
+private create MInterface makeAnnotationInterface(Stereotype s) :
+    trace( "make a java annotation from stereotype [ " + metaType + " ] - " + s ) ->
     // basic element properties
-    transformBasics(i) ->
+    transformBasics(s) ->
     // properties
-    setVisibility( i.visibility.toString() ) ->
-    setAbstract( i.isAbstract ) ->
-    setFinal( i.isLeaf ) ->
+    setVisibility( s.visibility.toString() ) ->
+    setAbstract( s.isAbstract ) ->
+    setFinal( s.isLeaf ) ->
     // transform classifier
-    transformClassifier(i) ->
+    transformClassifier(s) ->
     this;
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -709,8 +721,22 @@ create MStereotype makeStereotype(Stereotype s) :
 	// add tagged values FAIL
 	// owned attributes returns a list of properties, reject the 'base_' property which indicates the base meta type
 	property.addAll( s.ownedAttribute.reject( t| t.name.startsWith("base_") ).makeTag() )->
+	// add stereotypes
+	stereotype.addAll( s.getAppliedStereotypes().makeStereotype() ) ->
+	info(" stereotypes: " + s.getAppliedStereotypes()) ->
+	info(" stereotypes (MStereotype): " + stereotype) ->
+	
+	// check if stereotyp needs to be generated to source code
+	(s.getProfile().name == "qualifier") 
+	?  ( let i = s.makeAnnotationInterface() : 
+	       ( let p = s.getProfile().makePackage() :
+                p.classifier.add(i) ->
+                transform( getUml2Model() ).nestedPackage.add(p)
+	       )	       
+	    )	  
+    : Void ->  	
 	this;
-    	
+    
 /**
  * creates a GeneSEZ tag from an uml property
  * @param	p	an uml property

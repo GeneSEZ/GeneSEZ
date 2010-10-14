@@ -36,15 +36,21 @@ Void modifications(MPackage this) :
 	this.classifier.typeSelect(MClass).modifications();
 	
 Void modifications(MClass this) :
-	checkInheritanceStereotype() ->
+	//checkInheritanceStereotype() -> 
+	checkInheritance()-> 
 	this.property.typeSelect(MAssociationRole).checkAssociationStereotype() ->
 	this.property.typeSelect(MAttribute).modifications() ->
+	this.operation.typeSelect(MOperation).modifications() ->	
 	addAccessorStereotype();
 	
 Void modifications(MAttribute this) :
 	checkAttributeName() ->
 	checkPersistenceStereotypes() ->
-	checkOptimisticLockingStereotype();
+	checkOptimisticLockingStereotype() ->
+	checkPrimaryKey();
+
+Void modifications(MOperation this) :
+	checkPrimaryKey();
 
 Void modifications(MInterface this) :
 	Void;
