@@ -443,7 +443,7 @@ create MOperation makeOperation(Operation o) :
 	setUnique( o.isUnique ) ->
 	setOrdered( o.isOrdered ) ->
 	// associations
-	// add stereotypes of return type parameter
+	// add stereotypes of return type parameter [TODO: @deprecated, use return parameter instead - toh]
 	o.ownedParameter.exists(e|e.direction.toString() == "return")
 		? ( stereotype.addAll( o.ownedParameter.selectFirst(e|e.direction.toString() == "return").getAppliedStereotypes().makeStereotype() ) ->
 			taggedValue.addAll( makeTaggedValues(this, o.ownedParameter.selectFirst(e|e.direction.toString() == "return")) )
@@ -451,18 +451,25 @@ create MOperation makeOperation(Operation o) :
 		: this ->
 	// set stereotype
 	stereotype.addAll( o.getAppliedStereotypes().makeStereotype() ) ->
-	// set return type
+	// set return parameter
+	o.ownedParameter.exists( e|e.direction.toString() == "return" )
+		? setReturn(
+			o.ownedParameter.select(e|e.direction.toString() == "return").first()
+			.makeParameter().setOperation(this) )
+		: this ->
+	// add parameter to operation
+	parameter.addAll(
+		o.ownedParameter.reject(e|e.direction.toString() == "return").makeParameter().setOperation(this)
+	) ->
+	// set return type  [TODO: @deprecated, use return parameter instead - toh]
 	setReturnType( o.type.makeType() ) ->
-	// set return type comment
+	// set return type comment  [TODO: @deprecated, use return parameter instead - toh]
 	o.ownedParameter.exists( e|e.direction.toString() == "return" )
 		? returnTypeComment.addAll( 
 			o.ownedParameter.select(e|e.direction.toString() == "return").first()
 			.ownedComment.typeSelect(Comment).makeComment() )
 		: this ->
-	// set return parameter
-	setReturn(
-		o.ownedParameter.selectFirst(e|e.direction.toString() == "return").makeParameter()
-	) ->
+	
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
@@ -476,10 +483,6 @@ create MOperation makeOperation(Operation o) :
 			o.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric()
 		)
 		: this ->
-	// add parameter to operation
-	parameter.addAll(
-		o.ownedParameter.reject(e|e.direction.toString() == "return").makeParameter()
-	) ->
 	this;
 
 /**
@@ -508,6 +511,7 @@ private create MParameter makeParameter(Parameter p) :
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
 	this;
 
+// do we need this? [toh]
 private create MParameter makeParameter(Void v) :
 	trace("make [" + metaType + "] - " + v) ->
 	setXmiGuid( "void" ) ->
