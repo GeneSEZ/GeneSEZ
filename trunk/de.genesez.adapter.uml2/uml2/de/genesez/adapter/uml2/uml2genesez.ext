@@ -176,6 +176,11 @@ private MClassifier transform(Classifier c, MModel this) :
 		case c.isExternalType() : c.makeExternal()
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
+        // check if classifier is a stereotype
+        case c.metaType == Stereotype : ( let a = c.makeAnnotationInterface() :
+                classifier.add( a ) ->
+                c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(a) : null
+            ) 		
 		// else classifier
 		default : ( let mc = c.makeClassifier() :
 				classifier.add( mc ) ->
@@ -200,6 +205,11 @@ private MClassifier transform(Classifier c, MPackage this) :
 		case c.isExternalType() : c.makeExternal()
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
+		// check if classifier is a stereotype
+		case c.metaType == Stereotype : ( let a = c.makeAnnotationInterface() :
+                classifier.add( a ) ->
+                c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(a) : null
+            ) 
 		// else classifier
 		default : ( let mc = c.makeClassifier() :
 				classifier.add( mc ) ->
@@ -304,6 +314,8 @@ private create MEnumeration makeClassifier(Enumeration e) :
 	literal.addAll( e.ownedLiteral.typeSelect(EnumerationLiteral).makeLiteral() ) ->
 	// transform classifier
 	transformClassifier(e) ->
+	// for enums: realization of interfaces because UML does not allow an interface realization for enums
+	supertype.addAll( realization.addAll( e.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ) ->
 	this;
 	
 /**
@@ -347,6 +359,24 @@ private create MUseCase makeClassifier(UseCase u) :
 private MClassifier makeClassifier(Classifier c) :
 	fatal("try to construct a MClassifier object from: " + c) ->
 	Void;
+
+
+/**
+ * creates a GeneSEZ interface from an uml interface
+ * @param   i   an uml interface
+ * @return  the GeneSEZ interface
+ */
+private create MInterface makeAnnotationInterface(Classifier i) :
+    trace( "make a java annotation from [ " + metaType + " ] - " + i ) ->
+    // basic element properties
+    transformBasics(i) ->
+    // properties
+    setVisibility( i.visibility.toString() ) ->
+    setAbstract( i.isAbstract ) ->
+    setFinal( i.isLeaf ) ->
+    // transform classifier
+    transformClassifier(i) ->
+    this;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -429,6 +459,10 @@ create MOperation makeOperation(Operation o) :
 			o.ownedParameter.select(e|e.direction.toString() == "return").first()
 			.ownedComment.typeSelect(Comment).makeComment() )
 		: this ->
+	// set return parameter
+	setReturn(
+		o.ownedParameter.selectFirst(e|e.direction.toString() == "return").makeParameter()
+	) ->
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
@@ -472,6 +506,17 @@ private create MParameter makeParameter(Parameter p) :
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
+	this;
+
+private create MParameter makeParameter(Void v) :
+	trace("make [" + metaType + "] - " + v) ->
+	setXmiGuid( "void" ) ->
+	setName( "" ) ->
+	setDirection( "return" ) ->
+	setMultiplicity(1) ->
+	setUnique( true ) ->
+	setOrdered( false ) ->
+	setType( makeType( null )) ->
 	this;
 
 /*
@@ -523,14 +568,15 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	setMultiplicity( aend.getUpper() ) ->
 	setDerived( aend.isDerived ) ->
 	setOppositeMultiplicity( aend.oppositeMultiplicity() ) ->
-	// unique
+	// unique makes no sense
 	// ordered
+	setOrdered(aend.isOrdered) ->
 	setAggregation( aend.aggregation.toString() == "shared" ? true : false ) ->
 	setComposition( aend.aggregation.toString() == "composite" ? true : false ) ->
 	// check for a qualified association end
 	checkQualifier( aend ) ->
 	// an asscociation couldn't have a generic as type i guess
-	setType( aend.type.makeType() ) ->
+	setType( aend.getType() ) ->
 	// containments
 	// add comment to associationrole
 	ownedComment.addAll( aend.ownedComment.typeSelect(Comment).makeComment() ) ->
@@ -538,6 +584,19 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	taggedValue.addAll( makeTaggedValues(this, aend) ) ->
 	this;
 	
+/**
+ * Checks if a type is from a base metaclass, if yes the type is generated as external class,
+ * if no, the type is generated as a new class/classifier.
+ * @param Property
+ * @return type as Class
+ */	
+private MType getType(Property aend) : 
+      ( aend.name.startsWith("base_") 
+           ? ((Class)aend.type).makeExternal()
+           : aend.type.makeType()
+     );
+     
+     	
 /**
  * find the multiplicity of the other end of an association from the uml model
  * @param	aend	uml association end property
@@ -640,10 +699,12 @@ private String assocEndName(Property a):
  * @return	the GeneSEZ stereotype
  */
 create MStereotype makeStereotype(Stereotype s) :
+	trace("make stereotype: " + s) ->
 	// basic element properties
 	transformBasics(s) ->
 	// container
 	transform( getUml2Model() ).anyStereotype.add( this ) ->
+	
 	// containments
 	// add tagged values FAIL
 	// owned attributes returns a list of properties, reject the 'base_' property which indicates the base meta type
@@ -656,6 +717,7 @@ create MStereotype makeStereotype(Stereotype s) :
  * @return	the GeneSEZ tag
  */
 private create MTag makeTag(Property p) :
+	trace("makeTag: " + p) ->
 	// set the unique xmiId and name
 	//setXmiGuid(xmiId(p))->
 	setName(p.name) ->
@@ -698,7 +760,7 @@ List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 		s | s.ownedAttribute.
 			reject( a| a.name.startsWith("base_") || null == e.getTaggedValue(s, a.name) ).
 			collect(
-				tag | makeTaggedValue( makeTag(tag), me, e.getTaggedValue(s, tag.name) )
+				property | makeTaggedValue( makeTag(property), me, e.getTaggedValue(s, property.name) )
 			)
 	).flatten().reject(e|e == null);
 
@@ -824,7 +886,7 @@ private MPackage transformPackage(MPackage this, Package p) :
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
 	p.ownedElement.typeSelect(Package).transform( this ) ->
 	p.ownedElement.typeSelect(Classifier).reject(
-		e|{Activity, Actor, Association}.contains(e.metaType) 
+		e|{Activity, Actor, Association, Extension}.contains(e.metaType) 
 		).transform( this ) ->
 	// map associations in package
 	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
@@ -847,7 +909,9 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// add attributes and association ends
 	property.addAll( c.attribute.reject( p|p.association != null ).makeAttribute() ) ->
-	property.addAll( c.attribute.select( p|p.association != null ).makeAssociationRole() ) ->
+	property.addAll( c.attribute.reject( p|p.association == null ).makeAssociationRole() ) ->
+	//property.addAll( c.attribute.reject( p|p.association == null || p.name.startsWith("base_") ).makeAssociationRole() ) ->
+	
 	// add operations
 	operation.addAll( c.getOperations().makeOperation() ) ->
 	// set generics
@@ -967,6 +1031,7 @@ String name(MType this) :
 		case MExternal: ((MExternal)this).specification
 		case MPrimitiveType : ((MPrimitiveType)this).name
 		case MClassifier : ((MClassifier)this).name
+		case MClass : ((MClass)this).name
 		default : fatal("cannot determine name of type from object: " + metaType)
 	};
 
