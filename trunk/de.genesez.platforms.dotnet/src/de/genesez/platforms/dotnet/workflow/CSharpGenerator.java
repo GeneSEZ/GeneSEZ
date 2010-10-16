@@ -40,8 +40,12 @@ public class CSharpGenerator extends Generator {
 	 */
 	@Override
 	protected void checkConfigurationInternal(Issues issues) {
-		if (isNotSetTemplate) super.setTemplate(properties.getProperty("template"));
-		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
+		if (isNotSetTemplate) {
+			super.setTemplate(this.properties.getProperty("template"));
+		}
+		if (isNotAddTypeMappingFile) {
+			super.addTypeMappingFile(this.properties.getProperty("typeMappingFile"));
+		}
 		super.checkConfigurationInternal(issues);
 	}
 	
