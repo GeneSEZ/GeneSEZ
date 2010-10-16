@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Zeilenparser die die Art der Codezeile überprüft
+ * Zeilenparser die die Art der Codezeile ueberprueft
  * 
  * @author T. Hartmann ( tomha@fh-zwickau.de )
  */
@@ -26,8 +26,8 @@ public class LineParser implements IParser {
 	}
 
 	/**
-	 * parst eine Codezeile und prüft ob die zeile Code,Leerezeile oder eine
-	 * geschützte Region ist.
+	 * parst eine Codezeile und prueft ob die zeile Code,Leerezeile oder eine
+	 * geschuetzte Region ist.
 	 * 
 	 * @param s
 	 *            Zeile die untersucht wird
@@ -38,8 +38,8 @@ public class LineParser implements IParser {
 	}
 
 	/**
-	 * parst eine Codezeile und prüft ob die zeile Code,Leerezeile oder eine
-	 * geschützte Region ist.
+	 * parst eine Codezeile und prueft ob die zeile Code,Leerezeile oder eine
+	 * geschuetzte Region ist.
 	 * 
 	 * @param s
 	 *            Zeile die untersucht wird
