@@ -22,11 +22,21 @@ public class PhpGenerator extends Generator {
 	static {
 		defaults.put("template", "de::genesez::platforms::php5::templates::Root::Root");
 		defaults.put("typeMappingFile", "de/genesez/platforms/php/typemapping/typemapping.xml");
+		defaults.put("generateIncludes", "true");
+		defaults.put("relativeIncludes", "false");
+		defaults.put("includeBase", "");
+		defaults.put("propertyAccess", "setter");
+		defaults.put("accessorStyle", "magic");
 	}
 	
 	private Log logger = LogFactory.getLog(getClass());
 	private boolean isNotSetTemplate = true;
 	private boolean isNotAddTypeMappingFile = true;
+	private boolean isNotSetGenerateIncludes = true;
+	private boolean isNotSetRelativeIncludes = true;
+	private boolean isNotSetIncludeBase = true;
+	private boolean isNotSetPropertyAccess = true;
+	private boolean isNotSetAccessorStyle = true;
 	
 	
 	/**
@@ -48,6 +58,11 @@ public class PhpGenerator extends Generator {
 	protected void checkConfigurationInternal(Issues issues) {
 		if (isNotSetTemplate) super.setTemplate(properties.getProperty("template"));
 		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
+		if (isNotSetGenerateIncludes) setGenerateIncludes(new Boolean(properties.getProperty("generateIncludes")));
+		if (isNotSetRelativeIncludes) setRelativeIncludes(new Boolean(properties.getProperty("relativeIncludes")));
+		if (isNotSetIncludeBase) setIncludeBase(properties.getProperty("includeBase"));
+		if (isNotSetPropertyAccess) setPropertyAccess(properties.getProperty("propertyAccess"));
+		if (isNotSetAccessorStyle) setAccessorStyle(properties.getProperty("accessorStyle"));
 		super.checkConfigurationInternal(issues);
 	}
 	
@@ -69,5 +84,26 @@ public class PhpGenerator extends Generator {
 	public void addTypeMappingFile(String typeMappingFile) {
 		super.addTypeMappingFile(typeMappingFile);
 		isNotAddTypeMappingFile=false;
+	}
+	
+	public void setGenerateIncludes(boolean value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("generateIncludes", value));
+		isNotSetGenerateIncludes = false;
+	}
+	public void setRelativeIncludes(boolean value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("relativeIncludes", value));
+		isNotSetRelativeIncludes = false;
+	}
+	public void setIncludeBase(String value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("includeBase", "'" + value + "'"));
+		isNotSetIncludeBase = false;
+	}
+	public void setPropertyAccess(String value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("propertyAccess", "'" + value + "'"));
+		isNotSetPropertyAccess = false;
+	}
+	public void setAccessorStyle(String value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("accessorStyle", "'" + value + "'"));
+		isNotSetAccessorStyle = false;
 	}
 }
