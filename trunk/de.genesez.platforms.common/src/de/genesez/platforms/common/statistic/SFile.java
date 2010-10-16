@@ -18,10 +18,10 @@ import org.apache.commons.logging.LogFactory;
 public class SFile extends File implements IStatistic {
 	
 	
-	/** Logger fürs Debuggen */
+	/** Logger fuers Debuggen */
 	private Log logger = LogFactory.getLog(getClass());
 
-	/** SpeicherContainr für die StatistikWerte */
+	/** SpeicherContainr fuer die StatistikWerte */
 	private StatisticSet statSet;
 	
 	/** Bool-Wert ob das File generiert ist */
@@ -105,7 +105,7 @@ public class SFile extends File implements IStatistic {
 				znrS = this.getLineNbrString(znr);
 
 				/*
-				 * Parser wertet aus um was für eine Art es sich bei der
+				 * Parser wertet aus um was fuer eine Art es sich bei der
 				 * aktuellen Zeile handelt
 				 */
 				LineParser r = LineParser.getReader();
@@ -282,27 +282,27 @@ public class SFile extends File implements IStatistic {
 
 	}
 
-	/** Rückgabe der Anzahl an Codezeilen der Datei */
+	/** Rueckgabe der Anzahl an Codezeilen der Datei */
 	public int getLinesOfCode() {
 		return (statSet.getLinesOfCode());
 	}
 
-	/** Rückgabe der Anzahl an Kommentarzeilen der Datei */
+	/** Rueckgabe der Anzahl an Kommentarzeilen der Datei */
 	public int getLinesOfComments() {
 		return statSet.getLinesOfComments();
 	}
 
-	/** Rückgabe der Anzahl an generierten Codezeilen der Datei */
+	/** Rueckgabe der Anzahl an generierten Codezeilen der Datei */
 	public int getLinesOfGenCode() {
 		return statSet.getLinesOfGenCode();
 	}
 
-	/** Rückgabe der Anzahl an selbst implementierten Codezeilen der Datei */
+	/** Rueckgabe der Anzahl an selbst implementierten Codezeilen der Datei */
 	public int getLinesOfImplCode() {
 		return statSet.getLinesOfImplCode();
 	}
 
-	/** Rückgabe der Anzahl an Dokumentarzeilen der Datei */
+	/** Rueckgabe der Anzahl an Dokumentarzeilen der Datei */
 	public int getLinesOfDocu() {
 		return statSet.getLinesOfDocu();
 	}
@@ -310,7 +310,7 @@ public class SFile extends File implements IStatistic {
 
 
 	/**
-	 * String für die aktuelle Zeilennummer
+	 * String fuer die aktuelle Zeilennummer
 	 * 
 	 * @param znr
 	 *            zeilennummer
@@ -370,7 +370,7 @@ public class SFile extends File implements IStatistic {
 	}
 	
 	/**
-	 * Rückgabe des relativen Pfades zum Ordner für den die stat. Werte ermitteln werden sollen
+	 * Rueckgabe des relativen Pfades zum Ordner fuer den die stat. Werte ermitteln werden sollen
 	 * 
 	 * @return relativer Pfad
 	 */

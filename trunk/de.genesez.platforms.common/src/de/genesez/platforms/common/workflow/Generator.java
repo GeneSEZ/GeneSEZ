@@ -32,9 +32,10 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		defaults.put("basePackage", "");
 		defaults.put("useModelNameAsBasePackage", "false");
 		defaults.put("generateSectionComments", "true");
-		defaults.put("disableAccessors", "false");
-		defaults.put("useAccessorStereotype", "false");
+		defaults.put("accessorsForStereotypes", "entity");
+		defaults.put("accessorStereotype", "accessor");
 		defaults.put("usePropertyVisibilityForAccessors", "false");
+		defaults.put("singleValuedSlot", "true");
 	}
 	
 	protected Properties properties = new Properties(defaults);
@@ -52,8 +53,8 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	private boolean isNotSetPrExcludes = true;
 	private boolean isNotSetUseModelNameAsBasePackage = true;
 	private boolean isNotSetGenerateSectionComments = true;
-	private boolean isNotSetDisableAccessors = true;
-	private boolean isNotSetUseAccessorsStreotype = true;
+	private boolean isNotSetAccessorsForStereotypes = true;
+	private boolean isNotSetAccessorStereotype = true;
 	private boolean isNotSetUsePropertyVisibilityForAccessors = true;
 	private boolean isSetTemplate = false;
 	private boolean isNotSetProRegDir = true;
@@ -82,8 +83,14 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		if (isNotSetProRegDir) {
 			setProRegDir(outputDir);
 		}
-		if (isSetTemplate) {
-			super.setExpand(template + " FOR " + properties.getProperty("slot"));
+		if (Boolean.parseBoolean(properties.getProperty("singleValuedSlot", "true"))) {
+			if (isSetTemplate) {
+				super.setExpand(template + " FOR " + properties.getProperty("slot"));
+			}
+		} else {
+			if (isSetTemplate) {
+				super.setExpand(template + " FOREACH " + properties.getProperty("slot"));
+			}
 		}
 		if (isNotSetFileEncoding) {
 			setFileEncoding(properties.getProperty("fileEncoding"));
@@ -110,11 +117,11 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		if (isNotSetGenerateSectionComments) {
 			setGenerateSectionComments(new Boolean(properties.getProperty("generateSectionComments")));
 		}
-		if (isNotSetDisableAccessors) {
-			setDisableAccessors(new Boolean(properties.getProperty("disableAccessors")));
+		if (isNotSetAccessorsForStereotypes) {
+			setAccessorsForStereotypes("'" + properties.getProperty("accessorsForStereotypes") + "'");
 		}
-		if (isNotSetUseAccessorsStreotype) {
-			setUseAccessorStereotype(new Boolean(properties.getProperty("useAccessorStereotype")));
+		if (isNotSetAccessorStereotype) {
+			setAccessorStereotype("'" + properties.getProperty("accessorStereotype") + "'");
 		}
 		if (isNotSetUsePropertyVisibilityForAccessors) {
 			setUsePropertyVisibilityForAccessors(new Boolean(properties.getProperty("usePropertyVisibilityForAccessors")));
@@ -187,6 +194,10 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 		isSetTemplate = true;
 	}
 	
+	public void setSingleValuedSlot(String value) {
+		properties.put("singleValuedSlot", value);
+	}
+	
 	/**
 	 * setter for Slot parameter.
 	 */
@@ -199,6 +210,7 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	 * @param aspectTemplate
 	 */
 	public void addAspectTemplate(String aspectTemplate) {
+		logger.trace("Generator.addAspectTemplate: " + aspectTemplate);
 		if (aspectTemplate.length() > 0) {
 			super.addAdvice(aspectTemplate);
 		}
@@ -302,17 +314,17 @@ public class Generator extends org.openarchitectureware.xpand2.Generator {
 	/**
 	 * setter for DisableAccessors parameter, which in GlobalVarDef add.
 	 */
-	public void setDisableAccessors(boolean value) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("disableAccessors", value));
-		isNotSetDisableAccessors = false;
+	public void setAccessorsForStereotypes(String value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("accessorsForStereotypes", value));
+		isNotSetAccessorsForStereotypes = false;
 	}
 	
 	/**
 	 * setter for UseAccessorStereotype parameter, which in GlobalVarDef add.
 	 */
-	public void setUseAccessorStereotype(boolean value) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("useAccessorStereotype", value));
-		isNotSetUseAccessorsStreotype = false;
+	public void setAccessorStereotype(String value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("accessorStereotype", value));
+		isNotSetAccessorStereotype = false;
 	}
 	
 	/**

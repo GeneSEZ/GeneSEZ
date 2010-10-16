@@ -1,7 +1,7 @@
 package de.genesez.platforms.common.statistic;
 
 /**
- * Interface für den Parser der generierten CodeDateien
+ * Interface fuer den Parser der generierten CodeDateien
  * 
  * @author T. Hartmann ( tomha@fh-zwickau.de )
  */
@@ -25,7 +25,7 @@ public interface IParser {
 	/** implementierter Code */
 	public static final int implCode = 8;
 
-	// --> zeichen für debugOutput
+	// --> zeichen fuer debugOutput
 	public static final char signGen = 'G';
 	public static final char signImp = 'I';
 	public static final char signProtRegS = '<';

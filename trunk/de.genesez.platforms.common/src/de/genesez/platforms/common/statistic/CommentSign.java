@@ -7,15 +7,15 @@ package de.genesez.platforms.common.statistic;
  */
 public class CommentSign {
 
-	/** zeichen für Kommentar */
+	/** zeichen fuer Kommentar */
 	private String singleLineComment;
-	/** zeichen für einleitendes eines mehrzeiligen Kommentares */
+	/** zeichen fuer einleitendes eines mehrzeiligen Kommentares */
 	private String multiLineCommentStart;
-	/** zeichen für Ende eines mehrzeiligen Kommentares */
+	/** zeichen fuer Ende eines mehrzeiligen Kommentares */
 	private String multiLineCommentEnd;
-	/** zeichen für einzelene Zeile eines mehrzeiligen Kommentares */
+	/** zeichen fuer einzelene Zeile eines mehrzeiligen Kommentares */
 	private String multiLineCommentLine;
-	/** zeichen für einleitendes eines mehrzeiligen Dokumentationskommentars */
+	/** zeichen fuer einleitendes eines mehrzeiligen Dokumentationskommentars */
 	private String multiLineDocCommentStart;
 
 	/** Java-Kommentarzeichen */
@@ -31,7 +31,7 @@ public class CommentSign {
 	}
 
 	/**
-	 * gibt das normale Kommentarzeichen zurück
+	 * gibt das normale Kommentarzeichen zurueck
 	 * 
 	 * @return Standard-Kommentarzeichen
 	 */
@@ -50,7 +50,7 @@ public class CommentSign {
 	}
 
 	/**
-	 * rückgabe des Zeichens zum einleiten eines mehrzeiligen Kommentares
+	 * rueckgabe des Zeichens zum einleiten eines mehrzeiligen Kommentares
 	 * 
 	 * @return zeichen zum einleiten eines mehrzeiligen Kommentares
 	 */
@@ -69,7 +69,7 @@ public class CommentSign {
 	}
 
 	/**
-	 * rückgabe des Zeichens zum beenden eines mehrzeiligen Kommentares
+	 * rueckgabe des Zeichens zum beenden eines mehrzeiligen Kommentares
 	 * 
 	 * @return zeichen zum beenden eines mehrzeiligen Kommentares
 	 */
@@ -88,28 +88,28 @@ public class CommentSign {
 	}
 
 	/**
-	 * rückgabe des Zeichens für mehrzeilige Kommentare
+	 * rueckgabe des Zeichens fuer mehrzeilige Kommentare
 	 * 
-	 * @return zeichen für mehrzeilige Kommentare
+	 * @return zeichen fuer mehrzeilige Kommentare
 	 */
 	public String getMultiLineCommentLine() {
 		return multiLineCommentLine;
 	}
 
 	/**
-	 * setzen des Zeichens für mehrzeilige Kommentare
+	 * setzen des Zeichens fuer mehrzeilige Kommentare
 	 * 
 	 * @param zeichen
-	 *            für mehrzeilige Kommentare
+	 *            fuer mehrzeilige Kommentare
 	 */
 	public void setMultiLineCommentLine(String com) {
 		multiLineCommentLine = com;
 	}
 
 	/**
-	 * rückgabe des Zeichens Dokumentationskommentare
+	 * rueckgabe des Zeichens Dokumentationskommentare
 	 * 
-	 * @return zeichen für Dokumentationskommentare
+	 * @return zeichen fuer Dokumentationskommentare
 	 */
 	public String getMultiLineDocCommentStart() {
 		return multiLineDocCommentStart;
@@ -119,7 +119,7 @@ public class CommentSign {
 	 * setzen des Zeichens Dokumentationskommentare
 	 * 
 	 * @param zeichen
-	 *            für Dokumentationskommentare
+	 *            fuer Dokumentationskommentare
 	 */
 	public void setMultiLineDocCommentStart(String doc) {
 		multiLineDocCommentStart = doc;
@@ -149,7 +149,7 @@ public class CommentSign {
 	}
 
 	/**
-	 * rückgabe aller Kommentarzeichen als Array
+	 * rueckgabe aller Kommentarzeichen als Array
 	 * 
 	 * @return StringArray mit Kommentarzeichen
 	 */
