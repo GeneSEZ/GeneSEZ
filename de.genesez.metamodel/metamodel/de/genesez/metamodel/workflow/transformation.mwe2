@@ -1,0 +1,46 @@
+module de.genesez.metamodel.workflow.transformation
+
+// properties from file
+var model.generate.dir = "model-gen"
+var ecore.file = "${model.generate.dir}/gcore.ecore"
+var model.export.dir = "model-exp"
+var uml2.file = "${model.export.dir}/gcore.uml"
+
+var nsUri = "platform:/plugin/de.genesez.metamodel/${ecore.file}"
+var includedPackages = "de.genesez.metamodel"
+var addNameAttribute = "false"
+var resourcePerToplevelPackage = "false"
+
+Workflow {
+	bean = org.eclipse.xtend.typesystem.uml2.Setup {
+		standardUML2Setup = true
+	}
+	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : emf {
+		metaModelPackage = "org.eclipse.emf.ecore.EcorePackage"
+	}
+	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml { }
+	component = org.eclipse.xtend.typesystem.emf.XmiReader {
+		modelFile = "${uml2.file}"
+		outputSlot = "uml2model"
+	}
+	component = org.eclipse.xtend.check.CheckComponent {
+		metaModel = emf
+		metaModel = uml
+		checkFile = "org::openarchitectureware::util::uml2ecore::uml2Constraints"
+		emfAllChildrenSlot = "uml2model"
+		abortOnError = true
+	}
+	component = org.eclipse.xtend.XtendComponent {
+		metaModel = emf
+		metaModel = uml
+		globalVarDef = { name = "nsUri" value = "'${nsUri}'" }
+		globalVarDef = { name = "includedPackages" value = "'${includedPackages}'" }
+		globalVarDef = { name = "addNameAttribute" value = "'${addNameAttribute}'" }
+		globalVarDef = { name = "resourcePerToplevelPackage" value = "'${resourcePerToplevelPackage}'" }
+		invoke = "org::openarchitectureware::util::uml2ecore::uml2ecore::top(uml2model)"
+	}
+	component = org.eclipse.xtend.typesystem.emf.XmiWriter {
+		inputSlot = "ecoreModel"
+		modelFile = "${ecore.file}"
+	}
+}
