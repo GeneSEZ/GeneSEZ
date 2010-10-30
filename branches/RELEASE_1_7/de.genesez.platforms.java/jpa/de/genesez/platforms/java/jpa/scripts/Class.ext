@@ -1,5 +1,6 @@
 import gcore;
 
+extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::common::m2m::CreateBasics;
@@ -27,7 +28,7 @@ Void checkInheritance(MClass this) :
 	this.generalization.size == 0
 		? checkTableName() //no inheritance at all or parent class
 		: (	//check inheritance strategy of parent class
-			checkParentInheritanceStrategy() 
+			checkAnnotationTableUsage() 
 				? checkTableName()
 				: this.setTaggedValue("jpaPersistentEntity", "tableName", "")
 		);
@@ -47,7 +48,7 @@ Void checkTableName(MClass this) :
   *
   *	@return	true, if annotation @Table should be generated
   */
-Boolean checkParentInheritanceStrategy(MClass this) :
+Boolean checkAnnotationTableUsage(MClass this) :
 	let parent = this.generalization.typeSelect(MClass).selectFirst(e|e.name != "") :
 	(
 		parent.hasStereotype("jpaInheritance") 
@@ -58,7 +59,11 @@ Boolean checkParentInheritanceStrategy(MClass this) :
 			)
 			: (
 				parent.generalization.size > 0
-					? parent.checkInheritanceStereotype()
+					? ( 
+						parent.checkAnnotationTableUsage()
+							? true
+							: false
+					)
 					: (	//parent class reached but no stereotype jpaInheritance available, 
 						//use jpa default inheritance strategy SINGLE_TABLE meaning no table 
 						//annotation in derived classes
@@ -66,8 +71,7 @@ Boolean checkParentInheritanceStrategy(MClass this) :
 					)
 					
 			)
-	) ->
-	false;
+	);
 
 /**
   *	adds an accessor stereotype for generating get and set methods if
