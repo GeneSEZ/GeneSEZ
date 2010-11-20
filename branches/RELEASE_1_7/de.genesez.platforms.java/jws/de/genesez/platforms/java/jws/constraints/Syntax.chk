@@ -31,6 +31,6 @@ context MClass ERROR "GeneSEZ: WebService annotations are allowed with stateless
 		
 context MAttribute ERROR "GeneSEZ: WebService annotation @WebServiceRef is allowed with stateless session or message driven beans only." + fqn() :
 	this.hasStereotype("jwsWebServiceRef") &&
-	!(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false"))
+	!(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasStereotype("ejb3SessionBean"))
 		? false
 		: true;
