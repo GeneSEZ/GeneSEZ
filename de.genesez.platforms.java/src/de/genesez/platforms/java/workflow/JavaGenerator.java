@@ -1,15 +1,14 @@
 package de.genesez.platforms.java.workflow;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.xpand2.output.JavaBeautifier;
-import org.openarchitectureware.xpand2.output.XmlBeautifier;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.xpand2.output.JavaBeautifier;
+import org.eclipse.xpand2.output.XmlBeautifier;
 
 import de.genesez.platforms.common.workflow.Generator;
 import de.genesez.platforms.common.workflow.WorkflowUtils;

@@ -2,7 +2,7 @@ package de.genesez.platforms.java.m2t;
 
 import java.util.Properties;
 
-import org.openarchitectureware.xpand2.output.FileHandle;
+import org.eclipse.xpand2.output.FileHandle;
 
 import de.genesez.platforms.common.m2t.ImportBeautifier;
 
