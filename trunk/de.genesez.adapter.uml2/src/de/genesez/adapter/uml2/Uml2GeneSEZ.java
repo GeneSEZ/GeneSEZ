@@ -6,16 +6,15 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.mwe.emf.Reader;
-import org.openarchitectureware.check.CheckComponent;
-import org.openarchitectureware.emf.XmiReader;
-import org.openarchitectureware.type.emf.EmfMetaModel;
-import org.openarchitectureware.uml2.Setup;
-import org.openarchitectureware.uml2.UML2MetaModel;
-import org.openarchitectureware.uml2.profile.ProfileMetaModel;
-import org.openarchitectureware.workflow.container.CompositeComponent;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.xtend.XtendComponent;
+import org.eclipse.emf.mwe.core.container.CompositeComponent;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.xtend.XtendComponent;
+import org.eclipse.xtend.check.CheckComponent;
+import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
+import org.eclipse.xtend.typesystem.emf.XmiReader;
+import org.eclipse.xtend.typesystem.uml2.Setup;
+import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
+import org.eclipse.xtend.typesystem.uml2.profile.ProfileMetaModel;
 
 import de.genesez.platforms.common.workflow.WorkflowUtils;
 
@@ -207,7 +206,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	
 	public void addProfile(String profile) {
 		ProfileMetaModel metaModel = new ProfileMetaModel();
-		metaModel.setProfile(profile);
+		metaModel.addProfile(profile);
 		xtendComponent.addMetaModel(metaModel);
 	}
 	
