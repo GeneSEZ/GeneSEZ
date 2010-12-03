@@ -1,7 +1,5 @@
 package de.genesez.adapter.uml2;
 
-import java.util.List;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
