@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.xpand2.output.PostProcessor;
+import org.eclipse.xpand2.output.PostProcessor;
 
 /**
  * This class provides a skeletal implementation for concrete import beautifier.

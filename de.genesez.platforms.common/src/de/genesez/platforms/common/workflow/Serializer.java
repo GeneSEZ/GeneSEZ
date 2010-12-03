@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.mwe.emf.Writer;
-import org.openarchitectureware.workflow.issues.Issues;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.utils.Writer;
 
 /**
  * Serializes a GeneSEZ model to XMI.

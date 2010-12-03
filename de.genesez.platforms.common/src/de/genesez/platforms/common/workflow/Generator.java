@@ -7,9 +7,9 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.type.emf.EmfMetaModel;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.xpand2.output.Outlet;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.xpand2.output.Outlet;
+import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
 import de.genesez.platforms.common.typemapping.TypeMapper;
 
@@ -19,7 +19,7 @@ import de.genesez.platforms.common.typemapping.TypeMapper;
  * @author Beishen
  * @author toh (last)
  */
-public class Generator extends org.openarchitectureware.xpand2.Generator {
+public class Generator extends org.eclipse.xpand2.Generator {
 	
 	private static Properties defaults = new Properties();
 	static {
