@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.openarchitectureware.workflow.issues.Issues;
+import org.eclipse.emf.mwe.core.issues.Issues;
 
 import de.genesez.platforms.common.typemapping.TypeMapper;
 
@@ -18,7 +18,7 @@ import de.genesez.platforms.common.typemapping.TypeMapper;
  * @date	2008-02-19
  */
 @Deprecated
-public class Generator extends org.openarchitectureware.xpand2.Generator {
+public class Generator extends org.eclipse.xpand2.Generator {
 	
 	private boolean isSetTypeMappingFile = false;
 	

@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.xpand2.pr.util.GenericFileFilter;
+import org.eclipse.internal.xpand2.pr.util.GenericFileFilter;
 
 /**
  * Verzeichnis eines Projektes

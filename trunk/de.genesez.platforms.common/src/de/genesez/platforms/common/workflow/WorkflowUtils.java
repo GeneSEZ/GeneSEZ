@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
+import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 
 /**
  * Helper class for other workflow components

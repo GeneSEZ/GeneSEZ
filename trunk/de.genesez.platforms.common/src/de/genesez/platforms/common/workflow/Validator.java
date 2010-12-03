@@ -5,8 +5,9 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.type.emf.EmfMetaModel;
-import org.openarchitectureware.workflow.issues.Issues;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.xtend.check.CheckComponent;
+import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
 /**
  * The validator is used to validate GeneSEZ models
@@ -14,7 +15,7 @@ import org.openarchitectureware.workflow.issues.Issues;
  * @author Aibek Isaev
  * @author Beishen
  */
-public class Validator extends org.openarchitectureware.check.CheckComponent {
+public class Validator extends CheckComponent {
 	
 	private static final Properties defaults = new Properties();
 	static {
