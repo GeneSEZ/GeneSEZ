@@ -23,7 +23,7 @@
 			<include name="dom4j*.jar" />
 			<include name="**/*.jar" />
 		</fileset>
-		<pathelement path="${build.basedir}/de.genesez.metamodel/${bin.dir}" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath"/>
 	</path>
 	
@@ -63,6 +63,8 @@
 	<!-- Private target section -->
 
 	<target name="platforms.common.compile">
+		<pathconvert property="de.genesez.platforms.common.classpath" refid="de.genesez.platforms.common.classpath" />
+		<echo level="verbose" message="classpath: ${de.genesez.platforms.common.classpath}" />
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.gen.dir}:${src.dir}"
 			destdir="${bin.dir}"
