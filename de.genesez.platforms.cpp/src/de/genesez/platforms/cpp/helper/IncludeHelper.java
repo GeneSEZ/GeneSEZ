@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.genesez.metamodel.gcore.MClassifier;
+import de.genesez.metamodel.gcore.MDefinitionContext;
 import de.genesez.metamodel.gcore.MPackage;
 
 public class IncludeHelper {
@@ -22,7 +23,7 @@ public class IncludeHelper {
 		relPath.clear();
 		visitedPkgs.clear();
 		
-		isPathElement(start.getOwningPackage(), goal.getOwningPackage(), Direction.FIRST);
+		isPathElement(AccessHelper.owningPackage(start), AccessHelper.owningPackage(goal), Direction.FIRST);
 		
 		String finalPath = "";		
 		for(String part : relPath) {

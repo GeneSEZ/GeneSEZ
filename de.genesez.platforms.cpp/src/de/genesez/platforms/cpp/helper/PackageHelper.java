@@ -11,7 +11,7 @@ public class PackageHelper {
 	
 	private static String getPackagePath(MClassifier mClassifier, String delim){
 		StringBuffer buffer = new StringBuffer();
-		for( MPackage mPackage = mClassifier.getOwningPackage(); mPackage != null; mPackage = mPackage.getNestingPackage()){
+		for( MPackage mPackage = AccessHelper.owningPackage(mClassifier); mPackage != null; mPackage = mPackage.getNestingPackage()){
 			if(!(mPackage instanceof MModel))
 				buffer.insert(0, mPackage.getName());
 			if((mPackage.getNestingPackage() != null)){
@@ -24,7 +24,7 @@ public class PackageHelper {
 	
 	private static List<String> getPackageList(MClassifier mClassifier){		
 		List<String> packageList = new LinkedList<String>();
-		for( MPackage mPackage = mClassifier.getOwningPackage(); mPackage != null; mPackage = mPackage.getNestingPackage()){
+		for( MPackage mPackage = AccessHelper.owningPackage(mClassifier); mPackage != null; mPackage = mPackage.getNestingPackage()){
 			if(!(mPackage instanceof MModel))				
 				packageList.add(0, mPackage.getName());			
 		}		
