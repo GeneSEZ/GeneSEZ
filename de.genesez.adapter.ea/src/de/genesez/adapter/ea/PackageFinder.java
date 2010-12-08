@@ -2,11 +2,11 @@ package de.genesez.adapter.ea;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.workflow.WorkflowContext;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
-import org.openarchitectureware.workflow.monitor.ProgressMonitor;
-import org.sparx.Package; 
+import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.sparx.Package;
 
 /**
  * An oAW workflow component to find a package within an Enterprise Architect model
@@ -35,7 +35,7 @@ public class PackageFinder extends AbstractWorkflowComponent {
 		}
 	}
 	
-	public void invoke(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Start searching Package " + this.packagePath);
 		log.debug("Get model from slot: " + this.inputSlot);
 		this.inputModel = (Package) ctx.get(this.inputSlot);

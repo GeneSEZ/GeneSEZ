@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openarchitectureware.workflow.WorkflowContext;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
-import org.openarchitectureware.workflow.monitor.ProgressMonitor;
+import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.sparx.Collection;
 import org.sparx.Package;
 import org.sparx.Repository;
@@ -33,7 +33,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 		// nothing to do here
 	}
 	
-	public void invoke(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		try {
 			Package model = this.readModel();
 			ctx.set(outputSlot, model);
