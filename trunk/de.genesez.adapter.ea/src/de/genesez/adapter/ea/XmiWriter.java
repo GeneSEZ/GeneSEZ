@@ -8,12 +8,12 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Package;
-import org.openarchitectureware.workflow.WorkflowContext;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
-import org.openarchitectureware.workflow.monitor.ProgressMonitor;
 
 /**
  * An oAW workflow component to write an UML XWI file
@@ -36,7 +36,7 @@ public class XmiWriter extends AbstractWorkflowComponent {
 		ResourceRegistry.instance.create(this.resourceSlot, uri);
 	}
 	
-	public void invoke(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		try {
 			log.info("Start writing XMI file...");
 			log.debug("Get model from slot: " + this.inputSlot);

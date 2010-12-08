@@ -8,12 +8,12 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.UMLPackage;
-import org.openarchitectureware.workflow.WorkflowContext;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
-import org.openarchitectureware.workflow.monitor.ProgressMonitor;
 
 /**
  * An oAW workflow component to import UML profiles
@@ -35,7 +35,7 @@ public class ProfileReader extends AbstractWorkflowComponent {
 		// nothing to do here
 	}
 	
-	public void invoke(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		for (String s: this.profileFiles.keySet()) {
 			try {
 				URI uri = URI.createFileURI(this.profileFiles.get(s));

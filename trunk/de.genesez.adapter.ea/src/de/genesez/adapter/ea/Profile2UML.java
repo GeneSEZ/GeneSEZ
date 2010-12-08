@@ -2,11 +2,11 @@ package de.genesez.adapter.ea;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.uml2.uml.Profile;
-import org.openarchitectureware.workflow.WorkflowContext;
-import org.openarchitectureware.workflow.issues.Issues;
-import org.openarchitectureware.workflow.lib.AbstractWorkflowComponent;
-import org.openarchitectureware.workflow.monitor.ProgressMonitor;
 
 import de.genesez.adapter.ea.transform.ProfileTransformer;
 
@@ -30,7 +30,7 @@ public class Profile2UML extends AbstractWorkflowComponent {
 		// nothing to do here
 	}
 	
-	public void invoke(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
+	protected void invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		PostProcessor.instance.initialize();
 		ContentRegistry.instance.initialize();
 		ElementRegistry.instance.initialize();
