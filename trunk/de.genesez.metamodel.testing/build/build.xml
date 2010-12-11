@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="de.genesez.testing" basedir=".." default="build">
+<project name="de.genesez.metamodel.testing" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -27,15 +27,17 @@
 	<path id="de.genesez.testing.classpath">
 		<pathelement location="${bin.dir}" />
 		<pathelement location="${workflow.dir}" />
-		<pathelement location="${model.generate.dir}" />
-		<pathelement location="${build.basedir}/de.genesez.metamodel/${bin.dir}" />
-		<pathelement location="${build.basedir}/de.genesez.metamodel/metamodel" />
+		<pathelement location="${model.dir}" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.core/bin" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.core/metamodel" />
+		<pathelement location="${build.basedir}/de.genesez.adapter.uml2/bin" />
+		<pathelement location="${build.basedir}/de.genesez.adapter.uml2/uml2ecore" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
 
 	<!-- Task definition section -->
 
-	<taskdef name="oaw.workflow"
+	<taskdef name="workflow"
 		classname="org.eclipse.emf.mwe.core.ant.WorkflowAntTask"
 		classpathref="de.genesez.testing.classpath" />
 
@@ -44,7 +46,6 @@
 	<target name="build"
 		description="Build de.genesez.testing"
 		depends="testing.compile">
-		<echoproperties prefix="build.basedir"></echoproperties>
 	</target>
 
 	<target name="createjar"
@@ -56,7 +57,7 @@
 		 	manifest="META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}">
 				<include name="plugin.xml"/>
-				<include name="${model.generate.dir}/*.ecore"/>
+				<include name="${model.dir}/*.ecore"/>
 			</fileset>
 			<fileset dir="${bin.dir}" includes="**/*" />
 			<fileset dir="${workflow.dir}" includes="**/*" />
@@ -74,11 +75,11 @@
 				<include name="${ecore.base}/**/*" />
 			</fileset>
 			<!-- remove ecore model -->
-			<fileset dir="${model.generate.dir}">
+			<fileset dir="${model.dir}">
 				<include name="*.ecore" />
 			</fileset>
 			<!-- remove exported magic draw models -->
-			<fileset dir="${model.export.dir}">
+			<fileset dir="${modeling.dir}">
 				<include name="*.uml" />
 			</fileset>
 		</delete>
@@ -111,14 +112,14 @@
 				<exec executable="${EXPORTEMFUML2}" osfamily="unix">
 					<env key="DISPLAY" value="${build.display}" />
 					<arg value="project_file=${basedir}/${magicdraw.file}" />
-					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="destination_dir=${basedir}/${modeling.dir}" />
 					<arg value="load_all_modules=true" />
 					<arg value="check_time=true" />
 				</exec>
 				<exec executable="${EXPORTEMFUML2}.exe" osfamily="windows">
 					<env key="DISPLAY" value="${build.display}" />
 					<arg value="project_file=${basedir}/${magicdraw.file}" />
-					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="destination_dir=${basedir}/${modeling.dir}" />
 					<arg value="load_all_modules=true" />
 					<arg value="check_time=true" />
 				</exec>
@@ -132,7 +133,7 @@
 					classpathref="de.genesez.testing.classpath"
 					fork = "true"
 					dir="${basedir}">
-					<arg value="${oaw.workflow.file}" />
+					<arg value="${workflow.file}" />
 					<arg value="-pbaseDir=${basedir}" />
 					<arg value="--ant" />
 				</java>
