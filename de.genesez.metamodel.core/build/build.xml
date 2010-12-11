@@ -90,19 +90,6 @@
 
 	<!-- Private target section -->
 
-	<target name="metamodel.precompile"
-		description="Compiles required Java classes for transforming the metamodel">
-		<mkdir dir="${bin.dir}" />
-		<javac srcdir="${src.dir}" 
-			destdir="${bin.dir}"
-			classpathref="de.genesez.metamodel.core.classpath"
-			target="${target}"
-			source="${source}"
-			debug="on">
-			<exclude name="de/genesez/metamodel/**/*"/>
-		</javac>
-	</target>
-
 	<target name="metamodel.uml2ecore.startx" unless="env.DISPLAY">
 		<exec executable="${STARTPROC_BIN}" osfamily="unix">
 			<arg value="${XVFB_BIN}" />
@@ -120,8 +107,7 @@
 	</target>
 
 	<target name="metamodel.uml2ecore"
-		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI"
-		depends="metamodel.precompile">
+		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI">
 		<parallel>
 			<antcall target="metamodel.uml2ecore.startx" />
 			<sequential>

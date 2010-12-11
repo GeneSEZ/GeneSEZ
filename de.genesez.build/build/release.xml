@@ -24,24 +24,36 @@
 	<property name="plugin.name" value="${project.name}_${plugin.version}"/>
 	<property name="plugin.jar" value="${plugin.name}.jar"/>
 
-	<path id="build.plugins">
-		<path refid="build.metamodels" />
+	<path id="build.projects">
+		<path refid="build.features" />
+		<path refid="build.plugins" />
+	</path>
+
+	<path id="build.features">
 		<dirset dir="${build.basedir}">
-			<include name="${prefix}.core" />
+			<include name="${prefix}.feature" />
 		</dirset>
-		<path refid="build.platforms" />
-		<path refid="build.adapter" />
+	</path>
+
+	<path id="build.plugins">
+		<!-- build dependencies! -->
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.adapter.uml2" />
+			<include name="${prefix}.metamodel.core" />
+			<include name="${prefix}.platforms.common" />
+			<include name="${prefix}.metamodel.testing" />
+		</dirset>
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.*" />
+			<exclude name="${prefix}.adapter.uml2" />
+			<exclude name="${prefix}.metamodel.core" />
+			<exclude name="${prefix}.platforms.common" />
+		</dirset>
 	</path>
 
 	<path id="build.adapter">
 		<dirset dir="${build.basedir}">
 			<include name="${prefix}.adapter.*" />
-		</dirset>
-	</path>
-
-	<path id="build.platforms">
-		<dirset dir="${build.basedir}">
-			<include name="${prefix}.platforms.*" />
 		</dirset>
 	</path>
 
@@ -52,9 +64,9 @@
 		</dirset>
 	</path>
 
-	<path id="build.features">
+	<path id="build.platforms">
 		<dirset dir="${build.basedir}">
-			<include name="${prefix}.feature" />
+			<include name="${prefix}.platforms.*" />
 		</dirset>
 	</path>
 
@@ -62,11 +74,6 @@
 		<dirset dir="${build.basedir}">
 			<include name="${prefix}.example.*" />
 		</dirset>
-	</path>
-
-	<path id="build.projects">
-		<path refid="build.features" />
-		<path refid="build.plugins" />
 	</path>
 
 </project>
