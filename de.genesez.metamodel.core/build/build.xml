@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="de.genesez.metamodel" basedir=".." default="build">
+<project name="de.genesez.metamodel.core" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -24,18 +24,20 @@
 	<property file="build/build.properties" />
 
 	<!-- Set the classpath -->
-	<path id="de.genesez.metamodel.classpath">
+	<path id="de.genesez.metamodel.core.classpath">
 		<pathelement location="${bin.dir}" />
 		<pathelement location="${workflow.dir}" />
-		<pathelement location="${model.generate.dir}" />
+		<pathelement location="${model.dir}" />
+		<pathelement location="${build.basedir}/de.genesez.adapter.uml2/bin" />
+		<pathelement location="${build.basedir}/de.genesez.adapter.uml2/uml2ecore" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
 
 	<!-- Task definition section -->
 
-	<taskdef name="oaw.workflow"
+	<taskdef name="workflow"
 		classname="org.eclipse.emf.mwe.core.ant.WorkflowAntTask"
-		classpathref="de.genesez.metamodel.classpath" />
+		classpathref="de.genesez.metamodel.core.classpath" />
 
 	<!-- Public target section -->
 
@@ -54,7 +56,7 @@
 		 	manifest="META-INF/MANIFEST.MF">
 			<fileset dir="${basedir}">
 				<include name="plugin.xml"/>
-				<include name="${model.generate.dir}/*.ecore"/>
+				<include name="${model.dir}/*.ecore"/>
 			</fileset>
 			<fileset dir="${workflow.dir}">
 				<include name="log4j.properties"/>
@@ -76,11 +78,11 @@
 				<include name="${ecore.base}/**/*" />
 			</fileset>
 			<!-- remove ecore model -->
-			<fileset dir="${model.generate.dir}">
+			<fileset dir="${model.dir}">
 				<include name="*.ecore" />
 			</fileset>
 			<!-- remove exported magic draw models -->
-			<fileset dir="${model.export.dir}">
+			<fileset dir="${modeling.dir}">
 				<include name="*.uml" />
 			</fileset>
 		</delete>
@@ -93,7 +95,7 @@
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.metamodel.classpath"
+			classpathref="de.genesez.metamodel.core.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on">
@@ -127,14 +129,14 @@
 				<exec executable="${EXPORTEMFUML2}" osfamily="unix">
 					<env key="DISPLAY" value="${build.display}" />
 					<arg value="project_file=${basedir}/${magicdraw.file}" />
-					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="destination_dir=${basedir}/${modeling.dir}" />
 					<arg value="load_all_modules=true" />
 					<arg value="check_time=false" />
 				</exec>
 				<exec executable="${EXPORTEMFUML2}.exe" osfamily="windows">
 					<env key="DISPLAY" value="${build.display}" />
 					<arg value="project_file=${basedir}/${magicdraw.file}" />
-					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="destination_dir=${basedir}/${modeling.dir}" />
 					<arg value="load_all_modules=true" />
 					<arg value="check_time=false" />
 				</exec>
@@ -153,10 +155,10 @@
 					<arg value="-ant" />
 				</java -->
 				<java classname = "org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher"
-						classpathref = "de.genesez.metamodel.classpath"
+						classpathref = "de.genesez.metamodel.core.classpath"
 						fork = "true"
 						dir = "${basedir}">
-					<arg value="${oaw.workflow.file}" />
+					<arg value="${workflow.file}" />
 					<arg value="-pbaseDir=${basedir}" />
 				</java>
 			</then>
@@ -196,7 +198,7 @@
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.metamodel.classpath"
+			classpathref="de.genesez.metamodel.core.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on" />
