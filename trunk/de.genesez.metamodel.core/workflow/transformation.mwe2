@@ -1,10 +1,10 @@
 module de.genesez.metamodel.workflow.transformation
 
 // properties from file (i don't know any way to reference a properties file in mwe2')
-var model.generate.dir = "model-gen"
-var ecore.file = "${model.generate.dir}/gcore.ecore"
-var model.export.dir = "model-exp"
-var uml2.file = "${model.export.dir}/gcore.uml"
+var model.dir = "model"
+var ecore.file = "${model.dir}/gcore.ecore"
+var modeling.dir = "modeling"
+var uml2.file = "${modeling.dir}/gcore.uml"
 
 // in future, should be something like that: http://genesez.de/metamodel.ecore
 var nsUri = "platform:/plugin/de.genesez.metamodel/${ecore.file}"
@@ -39,7 +39,7 @@ Workflow {
 	component = org.eclipse.xtend.check.CheckComponent {
 		metaModel = emf
 		metaModel = uml
-		checkFile = "org::openarchitectureware::util::uml2ecore::uml2Constraints"
+		checkFile = "org::eclipse::xtend::util::uml2ecore::constraints"
 		emfAllChildrenSlot = "uml2model"
 		abortOnError = true
 	}
@@ -51,7 +51,7 @@ Workflow {
 		globalVarDef = { name = "includedPackages" value = "'${includedPackages}'" }
 		globalVarDef = { name = "addNameAttribute" value = "${addNameAttribute}" }
 		globalVarDef = { name = "resourcePerToplevelPackage" value = "${resourcePerToplevelPackage}" }
-		invoke = "org::openarchitectureware::util::uml2ecore::uml2ecore::top(uml2model)"
+		invoke = "org::eclipse::xtend::util::uml2ecore::uml2ecore::top(uml2model)"
 		outputSlot = "ecoreModel"
 	}
 	// serialize the instantiated ecore model into a file
