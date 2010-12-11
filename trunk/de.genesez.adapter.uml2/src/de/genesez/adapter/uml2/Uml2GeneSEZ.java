@@ -16,7 +16,7 @@ import org.eclipse.xtend.typesystem.uml2.Setup;
 import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
 import org.eclipse.xtend.typesystem.uml2.profile.ProfileMetaModel;
 
-import de.genesez.platforms.common.workflow.WorkflowUtils;
+import de.genesez.adapter.uml2.WorkflowUtils;
 
 /**
  * Performs the UML to GeneSEZ transformation
