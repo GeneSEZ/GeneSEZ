@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+	GeneSEZ requirements meta model build file
+-->
+<project name="de.genesez.metamodel.requirements" basedir=".." default="build">
+	
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+	
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+	
+	<!-- Import project related properties -->
+	<property file="build.properties" />
+	
+	<!-- Set the classpath -->
+	<path id="de.genesez.metamodel.classpath">
+		<pathelement location="${bin.dir}" />
+		<pathelement location="${workflow.dir}" />
+		<pathelement location="${model.dir}" />
+		<pathelement location="${build.basedir}/de.genesez.adapter.uml2/bin" />
+		<pathelement location="${build.basedir}/de.genesez.adapter.uml2/uml2ecore" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+	
+	<import file="${build.basedir}/de.genesez.build/build/metamodel.xml"/>
+	<import file="${build.basedir}/de.genesez.adapter.magicdraw/build/metamodel-export.xml"/>
+	
+	<target name="uml2ecore"
+		depends="mwe2.workflow">
+	</target>
+	
+</project>
