@@ -563,6 +563,9 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	trace("link ends: " + end) ->
 	linkEnds() ->
 	associationClass(a) ->
+	// stereotypes + tagged values
+	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
+	taggedValue.addAll( makeTaggedValues(this, a) ) ->
 	this;
 	
 /**
