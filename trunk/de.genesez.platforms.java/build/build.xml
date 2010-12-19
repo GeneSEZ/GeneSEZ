@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
 <project name="de.genesez.platforms.java" basedir=".." default="build">
 
 	<condition property="build.basedir"
@@ -38,7 +37,6 @@
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
-			<fileset dir="${dist.dir}" includes="${project.name}.umlsupport.jar" />
 			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
 			<fileset dir="${basedir}">
 				<include name="plugin.xml"/>
@@ -65,15 +63,9 @@
 			source="${source}"
 			debug="on" />
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/${project.name}.umlsupport.jar"
-			compress="true">
-			<fileset dir="${bin.dir}">
-				<include name="de/genesez/platforms/java/umlsupport/**/*" />
-			</fileset>
-		</jar>
 		<jar destfile="${dist.dir}/${project.name}.jar"
 			compress="true">
-			<fileset dir="${bin.dir}" excludes="de/genesez/platforms/java/umlsupport/**/*"/>
+			<fileset dir="${bin.dir}" />
 			<fileset dir="${cldc.dir}" />
 			<fileset dir="${ejb3.dir}" />
 			<fileset dir="${java.dir}" />
