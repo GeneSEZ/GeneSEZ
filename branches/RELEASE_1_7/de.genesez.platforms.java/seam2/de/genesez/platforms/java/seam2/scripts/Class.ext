@@ -8,6 +8,7 @@ extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::common::m2m::CreateOperations;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 extension de::genesez::platforms::java::ejb3::scripts::Class;
+extension de::genesez::platforms::java::java5::scripts::Stereotypes;
 
 /**
   * add standard constructor to seam components 
@@ -65,7 +66,10 @@ Void checkCreateMethod(MClass this) :
 			!operation.exists(e|e.hasTaggedValue("seam2Lifecycle", "create", "true")) 
 				? (
 					(!operation.exists(e|e.name == "init" && e.parameter.size == 0)
-						? addOperation("init", "void", "public")
+						? (
+							let o = addOperation("init", "void", "public") :
+								o.addInternalStereotype("http://www.genesez.de/java/seam2/CreateOperation")
+						)
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "init" && e.parameter.size == 0).addLifecycleStereotype("true", "false") ->
@@ -86,7 +90,10 @@ Void checkDestroyMethod(MClass this) :
 			!operation.exists(e|e.hasTaggedValue("seam2Lifecycle", "destroy", "true")) 
 				? (
 					(!operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
-						? addOperation("destroy", "void", "public")
+						? (
+							let o = addOperation("destroy", "void", "public") :
+								o.addInternalStereotype("http://www.genesez.de/java/seam2/DestroyOperation")
+						)
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "destroy" && e.parameter.size == 0).addLifecycleStereotype("false", "true") ->
