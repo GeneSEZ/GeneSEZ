@@ -7,7 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.issues.Issues;
 
 import de.genesez.platforms.common.workflow.Generator;
-import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Performs model to text transformations for the .net platform and C#.
@@ -29,7 +28,6 @@ public class CSharpGenerator extends Generator {
 	public CSharpGenerator() {
 		super();
 		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 	}
 	
 	/**

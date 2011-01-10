@@ -2,12 +2,16 @@ package de.genesez.platforms.common.workflow;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.eclipse.emf.mwe2.runtime.workflow.IWorkflowContext;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
@@ -24,7 +28,6 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	private static Properties defaults = new Properties();
 	static {
 		defaults.putAll(WorkflowUtils.defaults);
-		defaults.put("slot", "genesezModel");
 		defaults.put("fileEncoding", "utf-8");
 		defaults.put("prDefaultExcludes", "false");
 		defaults.put("prExcludes", ".svn");
@@ -64,11 +67,17 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * create a generator object
 	 */
 	public Generator() {
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
-		
 		EmfMetaModel gcore = new EmfMetaModel();
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
 		addMetaModel(gcore);
+		
+		EmfMetaModel greq = new EmfMetaModel();
+		greq.setMetaModelPackage(properties.getProperty("greqPackage"));
+		addMetaModel(greq);
+		
+		EmfMetaModel gtrace = new EmfMetaModel();
+		gtrace.setMetaModelPackage(properties.getProperty("gtracePackage"));
+		addMetaModel(gtrace);
 	}
 	
 	/**
@@ -132,6 +141,25 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		checkAndCreateDirectory(outputDir);
 		// delete config check to super class
 		super.checkConfigurationInternal(issues);
+	}
+	
+	/**
+	 * Make available genesez models available as global variables.
+	 * @see org.eclipse.xpand2.Generator#invokeInternal2(org.eclipse.emf.mwe.core.WorkflowContext, org.eclipse.emf.mwe.core.monitor.ProgressMonitor, org.eclipse.emf.mwe.core.issues.Issues)
+	 */
+	@Override
+	protected void invokeInternal2(final WorkflowContext ctx, final ProgressMonitor monitor, final Issues issues) {
+		// add available models as global variable definitions
+		if (ctx.get(properties.getProperty("coreSlot")) != null) {
+			addGlobalVarDef(WorkflowUtils.createGlobalVarDef("coremodel", properties.getProperty("coreSlot")));
+		}
+		if (ctx.get(properties.getProperty("reqSlot")) != null) {
+			addGlobalVarDef(WorkflowUtils.createGlobalVarDef("reqmodel", properties.getProperty("reqSlot")));
+		}
+		if (ctx.get(properties.getProperty("traceSlot")) != null) {
+			addGlobalVarDef(WorkflowUtils.createGlobalVarDef("tracemodel", properties.getProperty("traceSlot")));
+		}
+		super.invokeInternal2(ctx, monitor, issues);
 	}
 	
 	/**

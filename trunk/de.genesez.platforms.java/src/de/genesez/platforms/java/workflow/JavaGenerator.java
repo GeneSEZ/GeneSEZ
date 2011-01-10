@@ -39,7 +39,6 @@ public class JavaGenerator extends Generator {
 	public JavaGenerator() {
 		super();
 		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, JavaGenerator.class);
 	}
 	
 	/**

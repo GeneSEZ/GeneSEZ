@@ -45,7 +45,6 @@ public class PhpGenerator extends Generator {
 	public PhpGenerator() {
 		super();
 		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 	}
 	
 	

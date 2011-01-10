@@ -16,8 +16,6 @@ import org.eclipse.xtend.typesystem.uml2.Setup;
 import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
 import org.eclipse.xtend.typesystem.uml2.profile.ProfileMetaModel;
 
-import de.genesez.adapter.uml2.WorkflowUtils;
-
 /**
  * Performs the UML to GeneSEZ transformation
  * TODO: currently uses the deprecated XmiReader, should use instead Reader (see commented parts)
@@ -32,7 +30,6 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		defaults.put("ignoreValidationErrors", "false");
 		defaults.put("umlCheckScript", "de::genesez::adapter::uml2::uml2constraints");
 		defaults.put("uml2GenesezScriptCall", "de::genesez::adapter::uml2::uml2genesez::transform");
-		defaults.put("slot", "genesezModel");
 		defaults.put("excludePackages", "UML Standard Profile");
 		defaults.put("mapClassesInModelToExternal", "false");
 		defaults.put("externalPackages", "");
@@ -71,7 +68,6 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	 */
 	public Uml2GeneSEZ() {
 		super(Uml2GeneSEZ.class.getSimpleName());
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 		
 		// uml standard setup
 		Setup uml2Setup = new Setup();

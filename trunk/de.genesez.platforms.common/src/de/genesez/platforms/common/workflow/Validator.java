@@ -33,7 +33,6 @@ public class Validator extends CheckComponent {
 	 * creates a validator object
 	 */
 	public Validator() {
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 		// add GeneSEZ meta model
 		EmfMetaModel gcore = new EmfMetaModel();
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
