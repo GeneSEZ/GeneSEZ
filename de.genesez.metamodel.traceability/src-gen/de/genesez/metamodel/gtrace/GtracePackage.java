@@ -42,7 +42,7 @@ public interface GtracePackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "platform:/plugin/de.genesez.metamodel.traceability/model/gtrace.ecore";
+  String eNS_URI = "http://genesez.de/metamodel/traceability";
 
   /**
    * The package namespace name.
