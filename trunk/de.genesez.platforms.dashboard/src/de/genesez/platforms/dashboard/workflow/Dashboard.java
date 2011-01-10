@@ -21,7 +21,8 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Performs the generation of the GeneSEZ Dashboard.
- * @author toh
+ * @author tobias haubold
+ * @version	2011-01-07
  */
 public class Dashboard extends CompositeComponent {
 	
@@ -86,6 +87,8 @@ public class Dashboard extends CompositeComponent {
 	
 	@Override
 	public void checkConfiguration(Issues issues) throws ConfigurationException {
+		// if the use of model extensions is preferred instead of model queries, we have
+		// to change the traceability model factory and add the respective advices to the navigation functions
 		if (useExtensions) {
 			traceFactory.enable();
 			generator.addExtensionAdvice(CROSS_MODEL_NAVIGATION_USING_EXTENSIONS_ADVICE);
@@ -125,7 +128,7 @@ public class Dashboard extends CompositeComponent {
 	
 	/**
 	 * Note: this is just a workaround till we find out, how we can obtain the /template directory uri automatically
-	 * @param uri
+	 * @param uri	the filename or uri of the dashboard template directory
 	 */
 	public void setSource(String uri) {
 		copier.setSource(uri);
