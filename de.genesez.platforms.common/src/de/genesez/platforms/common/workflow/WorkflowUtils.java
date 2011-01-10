@@ -1,15 +1,11 @@
 package de.genesez.platforms.common.workflow;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 
 /**
@@ -19,35 +15,15 @@ import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.Gl
  */
 public class WorkflowUtils {
 	
-	private static final String propertyFile = "GeneSEZ.properties";
 	public static final Properties defaults = new Properties();
 	static {
-		defaults.put("slot", "genesezModel");
+		defaults.put("slot", "coremodel");
+		defaults.put("coreSlot", "coremodel");
+		defaults.put("reqSlot", "reqmodel");
+		defaults.put("traceSlot", "tracemodel");
 		defaults.put("gcorePackage", "de.genesez.metamodel.gcore.GcorePackage");
-		try {
-			InputStream is = ClassLoader.getSystemResourceAsStream(propertyFile);
-			if (is != null) {
-				defaults.load(is);
-			}
-		} catch (IOException ioe) {
-			LogFactory.getLog(WorkflowUtils.class).warn("could not load GeneSEZ properties file");
-		}
-	}
-	
-	
-	/**
-	 * load properties from the specified file and from the default file
-	 * @param properties	the properties object to fill
-	 * @param logger		a log object
-	 * @param file			the name of the file
-	 */
-	public static void loadAllProperties(Properties properties, Log logger, Class<?> clazz) {
-		loadPropertyFile(properties, logger, propertyFile);
-		loadPropertyFile(properties, logger, getFileName(clazz));
-	}
-	
-	public static void loadDefaultProperties(Properties properties, Log logger) {
-		loadPropertyFile(properties, logger, propertyFile);
+		defaults.put("greqPackage", "de.genesez.metamodel.greq.GreqPackage");
+		defaults.put("gtracePackage", "de.genesez.metamodel.gtrace.GtracePackage");
 	}
 	
 	/**
@@ -108,31 +84,5 @@ public class WorkflowUtils {
 			s.append(it.next());
 		}
 		return s.toString();
-	}
-	
-	private static String getFilePath(Class<?> clazz) {
-		return clazz.getPackage().getName().replace('.', '/') + '/';
-	}
-	
-	private static String getFileName(Class<?> clazz) {
-		return getFilePath(clazz) + clazz.getSimpleName() + ".properties";
-	}
-	
-	private static void loadPropertyFile(Properties properties, Log logger, String file) {
-		InputStream is = ClassLoader.getSystemResourceAsStream(file);
-		if (is == null) {
-			String alternate = getFilePath(WorkflowUtils.class) + file;
-			is = ClassLoader.getSystemResourceAsStream(alternate);
-		}
-		if (is == null) {
-			logger.info("properties file '" + file + "' not found, using defaults");
-		} else {
-			try {
-				properties.load(is);
-				is.close();
-			} catch (IOException ioe) {
-				logger.warn("cannot read properties file '" + file + "'", ioe);
-			}
-		}
 	}
 }

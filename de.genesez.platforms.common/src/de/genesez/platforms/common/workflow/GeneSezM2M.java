@@ -39,7 +39,6 @@ public class GeneSezM2M extends CompositeComponent {
 	
 	public GeneSezM2M() {
 		super(GeneSezM2M.class.getSimpleName());
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 	}
 	
 	/**
@@ -59,6 +58,12 @@ public class GeneSezM2M extends CompositeComponent {
 			EmfMetaModel gcore = new EmfMetaModel();
 			gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
 			c.addMetaModel(gcore);
+			EmfMetaModel greq = new EmfMetaModel();
+			greq.setMetaModelPackage(properties.getProperty("greqPackage"));
+			c.addMetaModel(greq);
+			EmfMetaModel gtrace = new EmfMetaModel();
+			gtrace.setMetaModelPackage(properties.getProperty("gtracePackage"));
+			c.addMetaModel(gtrace);
 			c.setSkipOnErrors(!Boolean.parseBoolean(properties.getProperty("abortOnError")));
 			for (String aspect : aspects) {
 				c.addExtensionAdvice(aspect);
@@ -69,7 +74,6 @@ public class GeneSezM2M extends CompositeComponent {
 			c.setInvoke(script + "(" + properties.getProperty("slot", "genesezModel") + ")");
 			super.addComponent(c);
 		}
-		setAbortOnError(new Boolean(properties.getProperty("abortOnError")));
 		// delegate
 		super.checkConfiguration(issues);
 	}

@@ -23,13 +23,6 @@ public class Serializer extends Writer {
 	private boolean isNotSetSlot=true;
 	
 	
-	public Serializer() {
-		WorkflowUtils.loadDefaultProperties(properties, logger);
-		// note: to open the XMI in the sample reflective tree editor, this option must be disabled! (i don't know why)
-		// else: no schema location is generated and the referenced gcore.ecore file is not found!
-		super.setOPTION_SCHEMA_LOCATION_IMPLEMENTATION(false);
-	}
-	
 	/**
 	 * Overridden for checking all parameters. If parameter's value is null, then set default value.
 	 * 

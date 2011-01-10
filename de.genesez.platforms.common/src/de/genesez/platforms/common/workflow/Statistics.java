@@ -45,7 +45,6 @@ public class Statistics extends Generator {
 		// construct superclass and load all default values from property files
 		super();
 		properties.putAll(defaults);
-		WorkflowUtils.loadAllProperties(properties, logger, getClass());
 		// add java beans meta model
 		super.addMetaModel(new JavaMetaModel());
 		// default settings (overrideable by workflow settings)
