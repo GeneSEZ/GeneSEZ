@@ -259,6 +259,7 @@ create EAttribute this mapAttribute( Property a ):
 	setEType( handleType( a.type ) ) ->
 	// add documentation
 	transformComments( a ) ->
+	checkEcoreId ( a ) ->
 	this;
 	
 private cached handleType( uml::Type t ):	
@@ -275,6 +276,12 @@ private Void transformComments(ENamedElement ne, uml::Element e) :
 	e.comment("", "").length > 0
 		? ne.createAnnotation( "http://www.eclipse.org/emf/2002/GenModel" ).details.add( createDocumentation( e ) )
 		: Void;
+		
+private EAttribute checkEcoreId(EAttribute this, uml::Property p) :
+	p.getAppliedStereotypes().exists( s|s.name == "ecoreId" )
+		? setID(true)
+		: this ->
+	this;
 	
 private create EAnnotation createAnnotation(ENamedElement container, String uri) :
 	setSource( uri ) ->
