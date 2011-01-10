@@ -34,7 +34,7 @@ public class GtraceFactoryImpl extends EFactoryImpl implements GtraceFactory
   {
     try
     {
-      GtraceFactory theGtraceFactory = (GtraceFactory)EPackage.Registry.INSTANCE.getEFactory("platform:/plugin/de.genesez.metamodel.traceability/model/gtrace.ecore"); 
+      GtraceFactory theGtraceFactory = (GtraceFactory)EPackage.Registry.INSTANCE.getEFactory("http://genesez.de/metamodel/traceability"); 
       if (theGtraceFactory != null)
       {
         return theGtraceFactory;
