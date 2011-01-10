@@ -2,15 +2,13 @@
 «IMPORT gcore»
 
 «REM»
-	Performs the generation of javadoc comments
+	Performs the generation of javadoc comments.
 	
 	@author	nico herbig
 	@author	tobias haubold (last)
 «ENDREM»
 
-«REM» useful support fuctions «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
-«REM» useful helper for current user + timestamp «ENDREM»
 «EXTENSION de::genesez::platforms::common::GeneralHelper»
 «EXTENSION de::genesez::platforms::common::m2t::Helper»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
@@ -19,9 +17,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::scripts::StateMachineUtil»
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates the package documentation
@@ -30,46 +26,67 @@
 «DEFINE Package FOR MPackage -»
 «FILE filePath( basePath() ) + fileSeparator() + "package-info.java"»
 /**
-«comment().format() -»
+«EXPAND Comment -»
  */
 package «packageDeclaration( basePackage() ) -»;
 «ENDFILE»
 «ENDDEFINE»
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
+«DEFINE Comment FOR MPackage -»
+«EXPAND CommentText -»
+«ENDDEFINE»
+
+«DEFINE CommentText FOR MPackage -»
+«comment().format() -»
+«ENDDEFINE»
+
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates a type comment
 «ENDREM»
 «DEFINE Type FOR MClassifier -»
-«IF hasComment() -»
 /**
-«comment().format() -»
- * @author	«getUserName()»
+«EXPAND Comment -»
  */
+«ENDDEFINE»
+
+«DEFINE Comment FOR MClassifier -»
+«EXPAND CommentText -»
+«EXPAND Author -»
+«ENDDEFINE»
+
+«DEFINE CommentText FOR MClassifier -»
+«IF hasComment() -»
+«comment().format() -»
+«ELSE -»
+«EXPAND CommentDefaultText -»
 «ENDIF -»
 «ENDDEFINE»
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	enumeration literals
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
+«DEFINE CommentDefaultText FOR MClassifier -»
+ * Please describe the responsibility of your class in your modeling tool.
+«ENDDEFINE»
+
+«DEFINE Author FOR MClassifier -»
+ * @author «getUserName()»
+«ENDDEFINE»
+
+«REM» - - enumeration literals - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
 «DEFINE EnumerationLiteral FOR MLiteral -»
 «IF hasComment() -»
-/**
-«comment().format() -»
- */
+	/**
+	«EXPAND CommentText -»
+	 */
 «ENDIF -»
 «ENDDEFINE»
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	attributes
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
+«DEFINE CommentText FOR MLiteral -»
+	«comment().format() -»
+«ENDDEFINE»
+
+«REM» - - attributes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates the comment of an attribute definition
@@ -77,23 +94,39 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Attribute FOR MAttribute -»
 «IF hasComment() -»
-/**
-«comment().format() -»
- */
-«ENDIF -»
+	/**
+	«EXPAND CommentText -»
+	 */
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE CommentText FOR MAttribute -»
+	«comment().format() -»
 «ENDDEFINE»
 
 «REM»
 	generates the comment of the 'getter' method
 «ENDREM»
 «DEFINE Getter FOR MAttribute -»
-/**
-«IF hasComment() -»
-«comment().format() -»
-«ELSE -»
- * getter for the attribute '<em><b>«asAttribute()»</b></em>'
-«ENDIF -»
- */
+	/**
+	«EXPAND GetterComment -»
+	 */
+«ENDDEFINE»
+
+«DEFINE GetterComment FOR MAttribute -»
+	«EXPAND GetterCommentText -»
+«ENDDEFINE»
+
+«DEFINE GetterCommentText FOR MAttribute -»
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	«EXPAND GetterCommentDefaultText -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE GetterCommentDefaultText FOR MAttribute -»
+	 * Gets the value of the attribute '<em><b>«asAttribute()»</b></em>'
 «ENDDEFINE»
 
 «REM»
@@ -101,18 +134,28 @@ package «packageDeclaration( basePackage() ) -»;
 	simply delegates to the getter method comment
 «ENDREM»
 «DEFINE Setter FOR MAttribute -»
-/**
- * documented here {@link «asGetter()»()}
- * @generated	setter method for the attribute '<em><b>«asAttribute()»</b></em>'
- */
+	/**
+	«EXPAND SetterComment -»
+	 */
 «ENDDEFINE»
 
+«DEFINE SetterComment FOR MAttribute -»
+	«EXPAND SetterCommentText -»
+«ENDDEFINE»
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	associations
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
+«DEFINE SetterCommentText FOR MAttribute -»
+	«IF hasComment() -»
+	«EXPAND Comment -»
+	«ELSE -»
+	«EXPAND SetterCommentDefaultText -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE SetterCommentDefaultText FOR MAttribute -»
+	 * Sets the value of the attribute '<em><b>«asAttribute()»</b></em>'
+«ENDDEFINE»
+
+«REM» - - associations - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates the comment for an association attribute
@@ -135,14 +178,14 @@ package «packageDeclaration( basePackage() ) -»;
 	generates the comment of the enum definition
 «ENDREM»
 «DEFINE AssociationEnum FOR MClassifier -»
-/** defines an identifier for each association, used by the association handling library */
+	/** defines an identifier for each association, used by the association handling library */
 «ENDDEFINE»
 
 «REM»
 	generates the comment of the map storing the association management objects
 «ENDREM»
 «DEFINE AssociationManagement FOR MClassifier -»
-/** stores the association management objects */
+	/** stores the association management objects */
 «ENDDEFINE»
 
 «REM»
@@ -159,35 +202,55 @@ package «packageDeclaration( basePackage() ) -»;
 	generates the comment of the 'getter' method accessor
 «ENDREM»
 «DEFINE Accessor FOR MAssociationRole -»
-/** 
-«IF hasComment() -»
-«comment().format() -»
-«ELSE -»
- * provides access to the association '<em><b>«asAttribute()»</b></em>' to {@link «type.mapName().asTypeName()»}
-«ENDIF -»
- */
+	/**
+	«EXPAND Comment -»
+	 */
+«ENDDEFINE»
+
+«DEFINE Comment FOR MAssociationRole -»
+	«EXPAND CommentText -»
+«ENDDEFINE»
+
+«DEFINE CommentText FOR MAssociationRole -»
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	«EXPAND DefaultCommentText -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE DefaultCommentText FOR MAssociationRole -»
+	 * Provides access to the association '<em><b>«asAttribute()»</b></em>' to {@link «type.mapName().asTypeName()»}.
 «ENDDEFINE»
 
 
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	operations
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
+«REM» - - operations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates the comment of a constructor operation
 «ENDREM»
 «DEFINE Constructor FOR MOperation -»
 	/**
+	«EXPAND ConstructorComment -»
+	 */
+«ENDDEFINE»
+
+«DEFINE ConstructorComment FOR MOperation -»
+	«EXPAND _ConstructorCommentText -»
+	«EXPAND _Params FOREACH parameter -»
+	«EXPAND _Exceptions FOREACH raisedException -»
+«ENDDEFINE»
+
+«DEFINE _ConstructorCommentText FOR MOperation -»
 	«IF hasComment() -»
 	«comment().format() -»
 	«ELSE -»
-	 * constructor for class '<em><b>«classifier.asTypeName()»</b></em>'
+	«EXPAND DefaultConstructorComment -»
 	«ENDIF -»
-	«EXPAND _Params FOREACH parameter -»
-	«EXPAND _Exceptions FOREACH raisedException -»
-	 */
+«ENDDEFINE»
+
+«DEFINE DefaultConstructorComment FOR MOperation -»
+	 * Constructor for class '<em><b>«classifier.asTypeName()»</b></em>'.
 «ENDDEFINE»
 
 «REM»
@@ -196,11 +259,21 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE InitConstructor FOR MClassifier -»
 	/**
-	 * initializing constructor for class '<em><b>«asTypeName()»</b></em>'
-	«FOREACH allInitializableAttributes() AS a -»
-	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»()}
-	«ENDFOREACH -»
+	«EXPAND InitConstructorComment -»
 	 */
+«ENDDEFINE»
+
+«DEFINE InitConstructorComment FOR MClassifier -»
+	«EXPAND InitConstructorText -»
+	«EXPAND InitConstructorParam FOREACH allInitializableAttributes() -»
+«ENDDEFINE»
+
+«DEFINE InitConstructorText FOR MClassifier -»
+	 * Initializing constructor for class '<em><b>«asTypeName()»</b></em>'.
+«ENDDEFINE»
+
+«DEFINE InitConstructorParam FOR MAttribute -»
+	 * @param	«asAttribute()»	{@link «type.mapName().asTypeName()».«asGetter()»()}
 «ENDDEFINE»
 
 «REM»
@@ -209,11 +282,13 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE InitConstructor FOR MDataType -»
 	/**
-	 * initializing constructor for class '<em><b>«asTypeName()»</b></em>'
-	«FOREACH getAllAttributes() AS a -»
-	 * @param	«a.asAttribute()»	{@link «a.type.mapName().asTypeName()».«a.asGetter()»()}
-	«ENDFOREACH -»
+	«EXPAND InitConstructorComment -»
 	 */
+«ENDDEFINE»
+
+«DEFINE InitConstructorComment FOR MDataType -»
+	«EXPAND InitConstructorText -»
+	«EXPAND InitConstructorParam FOREACH getAllAttributes() -»
 «ENDDEFINE»
 
 «REM»
@@ -221,15 +296,27 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Operation FOR MOperation-»
 	/**
-	«IF hasComment() -»
-	«comment().format() -»
-	«ELSE -»
-	 * method stub for further implementation
-	«ENDIF -»
+	«EXPAND Comment -»
+	 */
+«ENDDEFINE»
+
+«DEFINE Comment FOR MOperation -»
+	«EXPAND CommentText -»
 	«EXPAND _Params FOREACH parameter -»
 	«EXPAND _Return -»
 	«EXPAND _Exceptions FOREACH raisedException -»
-	 */
+«ENDDEFINE»
+
+«DEFINE CommentText FOR MOperation -»
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	«EXPAND DefaultCommentText -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE DefaultCommentText FOR MOperation -»
+	 * Method stub for further implementation.
 «ENDDEFINE»
 
 «REM»
@@ -237,11 +324,20 @@ package «packageDeclaration( basePackage() ) -»;
 «ENDREM»
 «DEFINE Action FOR MActivity -»
 	/**
+	«EXPAND Comment -»
+	 */
+«ENDDEFINE»
+
+«DEFINE Comment FOR MActivity -»
 	«IF hasComment() -»
 	«comment().format() -»
+	«ELSE -»
+	«EXPAND DefaultCommentText -»
 	«ENDIF -»
-	 * action method stub for further implementation
-	 */
+«ENDDEFINE»
+
+«DEFINE DefaultCommentText FOR MActivity -»
+	 * Action method stub for further implementation.
 «ENDDEFINE»
 
 «REM»
