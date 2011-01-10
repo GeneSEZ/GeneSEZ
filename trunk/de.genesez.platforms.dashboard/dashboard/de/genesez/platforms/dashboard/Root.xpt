@@ -1,0 +1,41 @@
+«IMPORT gtrace»
+
+«EXTENSION de::genesez::metamodel::navigation::RequirementsTraceability»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«REM»
+	Generates the requirements traceability dashboard.
+	@author toh
+«ENDREM»
+
+«DEFINE Root FOR TTraceModel»
+	«EXPAND Navigation»
+	«EXPAND Traceability»
+	«EXPAND Details»
+«ENDDEFINE»
+
+«DEFINE Navigation FOR TTraceModel»
+	«EXPAND navigation::ClassifierList::Root FOR gcore()»
+	«EXPAND navigation::PackageList::Root FOR gcore()»
+	«EXPAND navigation::ScenarioList::Root FOR greq()»
+	«EXPAND navigation::RequirementList::Root FOR greq()»
+«ENDDEFINE»
+
+«DEFINE Traceability FOR TTraceModel»
+	«info("root packages: " + gcore().nestedPackage.size)»
+	«info("requirements: " + greq().requirement.size)»
+	«info("requirement traces: " + gtrace().requirementTrace.requirement)»
+	«info("requirement traces: " + gtrace().requirementTrace.requirement.definition)»
+	«info("requirement traces: " + gtrace().requirementTrace.structuralElement)»
+	«info("requirement traces: " + gtrace().requirementTrace.structuralElement.name)»
+	«EXPAND traceability::SummaryCharts::Root»
+	«EXPAND traceability::RevisedSpecification::Root FOR greq()»
+	«EXPAND traceability::UnsatisfiedSpecification::Root FOR greq()»
+	«EXPAND traceability::UnspecifiedStructure::Root FOR gcore()»
+	«EXPAND traceability::TraceableSpecification::Root FOR greq()»
+«ENDDEFINE»
+
+«DEFINE Details FOR TTraceModel»
+	«EXPAND traceability::structure::Root::Root FOR gcore()»
+	«EXPAND traceability::specification::Root::Root FOR greq()»
+«ENDDEFINE»
