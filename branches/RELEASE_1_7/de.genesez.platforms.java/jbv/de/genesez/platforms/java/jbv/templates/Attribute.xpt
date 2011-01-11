@@ -1,0 +1,48 @@
+«REM»
+	Template for jbv attributes
+	
+	@author		andre pflueger
+	@date		2011-01-13
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluate stereotypes for attributes 
+«ENDREM»
+«DEFINE Annotation FOR MAttribute-»
+	«EXPAND _Email-»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluate stereotype "jhvEmail"
+«ENDREM»
+«DEFINE _Email FOR MAttribute-»
+	«IF hasStereotype("jhvEmail")-»
+		@Email«IF hasUtilizableValue("jhvEmail", "message")-»(
+			message="«getTaggedValue("jhvEmail", "message")-»")
+		«ENDIF»		
+	«ENDIF-»
+«ENDDEFINE»
