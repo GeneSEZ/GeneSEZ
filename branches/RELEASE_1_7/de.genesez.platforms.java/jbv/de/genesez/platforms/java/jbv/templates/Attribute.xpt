@@ -28,6 +28,7 @@
 «ENDREM»
 «DEFINE Annotation FOR MAttribute-»
 	«EXPAND _Email-»
+	«EXPAND _Size-»
 «ENDDEFINE»
 
 «REM»
@@ -43,6 +44,19 @@
 	«IF hasStereotype("jhvEmail")-»
 		@Email«IF hasUtilizableValue("jhvEmail", "message")-»(
 			message="«getTaggedValue("jhvEmail", "message")-»")
+		«ENDIF»		
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate stereotype "jbvSize"
+«ENDREM»
+«DEFINE _Size FOR MAttribute-»
+	«IF hasStereotype("jbvSize")-»
+		@Size«IF (hasUtilizableValue("jbvSize", "min") || hasUtilizableValue("jbvSize", "max") || hasUtilizableValue("jbvSize", "message"))-»(
+			min=«getTaggedValue("jbvSize", "min")-»,
+			max=«getTaggedValue("jbvSize", "max")-»,
+			message="«getTaggedValue("jbvSize", "message")-»")
 		«ENDIF»		
 	«ENDIF-»
 «ENDDEFINE»
