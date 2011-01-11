@@ -1,0 +1,28 @@
+
+import gcore;
+import greq;
+
+/**
+ * Provides naming helpers to generate java types for requirements traceability annotations.
+ * @author tobias haubold
+ */
+
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+String traceabilityPackageName() : "traceability";
+String scenarioTypeName() : "Scenario";
+String scenarioStepTypeName() : "ScenarioStep";
+String requirementTypeName() : "Requirement";
+String scenarioValueTypeName() : "Value";
+String scenarioStepValueTypeName() : "Value";
+String requirementValueTypeName() : "Value";
+
+String scenarioLiteralName(RScenario this) : "S" + id;
+String scenarioStepLiteralName(RScenarioStep this) : "ST" + scenario.id + "_" + id;
+String requirementLiteralName(RRequirement this) : "R" + id;
+
+
+MPackage traceabilityPackage(MModel this) :
+	nestedPackage.exists(e|e.name == traceabilityPackageName())
+	? nestedPackage.selectFirst(e|e.name == traceabilityPackageName())
+	: createPackage(traceabilityPackageName(), traceabilityPackageName());
