@@ -29,6 +29,16 @@ create MInterface createInterface(MPackage container, String xmiGuid, String nam
 	container.classifier.add(this) ->
 	this;
 
+create MEnumeration createEnumeration(MDefinitionContext container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.classifier.add( this ) ->
+	this;
+
+create MLiteral createEnumLiteral(MEnumeration container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.literal.add( this ) ->
+	this;
+
 create MExternal createExternal(MModel container, String specification) :
 	setSpecification( specification ) ->
 	container.externalTypes.add( this ) ->
