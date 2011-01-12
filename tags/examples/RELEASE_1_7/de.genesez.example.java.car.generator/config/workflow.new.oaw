@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
+	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+		<!-- directory which contains the exported uml2 model -->
+		<model value="model-exp/example.uml" />
+		<profile value="model-exp/genesez.profile.uml" />
+	</component>
+	<!-- validate the GeneSEZ model against common + java specific constraints -->
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::java::constraints::Syntax" />
+	</component>
+	<!-- serialize the GeneSEZ model  /-->
+	<component id="serializeBeforeM2T" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="model-gen/example.xmi" />
+	</component>
+	<!-- run the java code generation and transform the model into java source code -->
+	<component id="model2java" class="de.genesez.platforms.java.workflow.JavaGenerator">
+		<!-- directory in which the generated files are placed -->
+		<outputDir value="../de.genesez.example.java.car/src-gen" />
+		<!-- comma separated list of aspect templates, used for the XPand AOP-Feature -->
+		<aspectTemplate value="customization::Attrib" />
+		<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
+		<aspectScript value="customization::Naming" />
+		<!-- now it's possible to specify more than one type mapping file -->
+		<typeMappingFile value="de/genesez/platforms/java/typemapping/typemapping.xml" />
+		<typeMappingFile value="typemapping.xml" />
+		<!-- boolean value indicates if the model name is used as base package or not -->
+		<useModelNameAsBasePackage value="true" />
+	</component>
+	<!-- serialize the GeneSEZ model  /-->
+	<component id="serializeAfterM2T" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="model-gen/example_after.xmi" />
+		<cloneSlotContents value="true" />
+	</component>
+</workflow>
