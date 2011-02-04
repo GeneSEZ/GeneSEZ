@@ -2,14 +2,21 @@ package forms;
 
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import traceability.Requirement;
+import static traceability.Requirement.Value.R5;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1214478843156_556754_163) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 /**
  * describes things which can be <i><b>moved</b></i>
- * @author	dreamer
+ * @author dreamer
  */
+@Requirement({
+	R5
+})
 public interface Moveable {
 	
 	/**
@@ -18,6 +25,9 @@ public interface Moveable {
 	 * @param	dx	delta value to move in <i><b>x</b></i> direction
 	 * @param	dy	delta value to move in <i><b>y</b></i> direction
 	 */
+	@Requirement({
+		R5
+	})
 	public void move(double dx, double dy);
 	
 	// -- generated code of other cartridges --------------------------------

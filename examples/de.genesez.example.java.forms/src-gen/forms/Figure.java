@@ -3,6 +3,10 @@ package forms;
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import java.awt.Color;
+import traceability.Requirement;
+import static traceability.Requirement.Value.R4;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
 // TODO: put your further include + require statements here
@@ -12,8 +16,11 @@ import java.awt.Color;
  * <p>
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
- * @author	dreamer
+ * @author dreamer
  */
+@Requirement({
+	R4
+})
 public class Figure implements Form, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -115,7 +122,7 @@ public class Figure implements Form, AssociationRole {
 		throw new RuntimeException("the class doesn't have the association you specified!");
 	}
 	
-	/** 
+	/**
 	 * the form objects this figure consists of
 	 */
 	@SuppressWarnings("unchecked")

@@ -3,6 +3,11 @@ package forms;
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import java.awt.Color;
+import traceability.Requirement;
+import static traceability.Requirement.Value.R1;
+import static traceability.Requirement.Value.R3;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1211871374078_396988_308) ENABLED START */
 // TODO: put your further include + require statements here
@@ -10,8 +15,11 @@ import java.awt.Color;
 
 /**
  * Describes the geometrical form of a <i><b>line</b></i>
- * @author	dreamer
+ * @author dreamer
  */
+@Requirement({
+R1, R3
+})
 public class Line implements Form {
 	
 	// -- generated attribute, constant + association declarations ----------

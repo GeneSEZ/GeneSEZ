@@ -3,6 +3,12 @@ package forms;
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import java.awt.Color;
+import traceability.Requirement;
+import static traceability.Requirement.Value.R1;
+import traceability.Scenario;
+import static traceability.Scenario.Value.S2;
+import traceability.ScenarioStep;
+import static traceability.ScenarioStep.Value.ST2_2;
 
 /* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1211871307421_631477_281) ENABLED START */
 // TODO: put your further include + require statements here
@@ -10,8 +16,10 @@ import java.awt.Color;
 
 /**
  * describes the geometrical shape of a <i><b>circle</b></i>
- * @author	dreamer
+ * @author dreamer
  */
+@Scenario({ S2 })
+@Requirement({ R1 })
 public class Circle implements Form {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -42,6 +50,7 @@ public class Circle implements Form {
 	 * @param	center	the center of the circle
 	 * @param	radius	the distance from the center to the circle line
 	 */
+	@ScenarioStep({ ST2_2 })
 	public Circle(Point center, double radius) {
 		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249463891828_217474_748) ENABLED START */
 		this.center = center;

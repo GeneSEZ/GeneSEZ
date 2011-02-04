@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<!--
+		Performs java code generation.
+	-->
+	<component class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model/forms.uml" />
+		<profile value="model/genesez.profile.uml" />
+	</component>
+	
+	<component class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::java::constraints::Syntax" />
+	</component>
+	
+	<component class="de.genesez.platforms.common.workflow.Serializer">
+		<OPTION_SCHEMA_LOCATION_IMPLEMENTATION value="true" />
+		<file value="../de.genesez.example.java.forms/model/forms.xmi" />
+	</component>
+	
+	<component class="de.genesez.platforms.common.workflow.GeneSezM2M">
+		<script value="de::genesez::platforms::common::m2m::Realization::realize" />
+	</component>
+	
+	<component class="de.genesez.platforms.java.workflow.JavaGenerator">
+		<typeMappingFile value="typemapping.xml" />
+		<outputDir value="../de.genesez.example.java.forms/src-gen" />
+	</component>
+</workflow>

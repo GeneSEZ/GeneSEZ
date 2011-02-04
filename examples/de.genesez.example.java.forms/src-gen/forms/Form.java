@@ -2,14 +2,21 @@ package forms;
 
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import traceability.Requirement;
+import static traceability.Requirement.Value.R4;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1212580097593_990285_125) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 /**
  * Describes the common behavior of a geometrical forms
- * @author	dreamer
+ * @author dreamer
  */
+@Requirement({
+	R4
+})
 public interface Form extends Moveable, Rotateable, Paintable {
 	
 	/**

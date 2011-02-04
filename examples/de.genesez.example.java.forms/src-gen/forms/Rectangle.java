@@ -2,6 +2,10 @@ package forms;
 
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import traceability.Requirement;
+import static traceability.Requirement.Value.R1;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249464012328_770017_760) ENABLED START */
 // TODO: put your further include + require statements here
@@ -9,8 +13,11 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 
 /**
  * Describes the geometrical form <b>rectangle</b> as a specic <i>polygon</i>
- * @author	dreamer
+ * @author dreamer
  */
+@Requirement({
+	R1
+})
 public class Rectangle extends Polygon {
 	
 	// -- generated constructors --------------------------------------------

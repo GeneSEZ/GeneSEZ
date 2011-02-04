@@ -3,6 +3,9 @@ package forms;
 import java.util.*;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import java.awt.Color;
+import traceability.Requirement;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */
 // TODO: put your further include + require statements here
@@ -10,7 +13,7 @@ import java.awt.Color;
 
 /**
  * Describes the geometrical form <b>polygon</b>
- * @author	dreamer
+ * @author dreamer
  */
 public class Polygon implements Form {
 	
