@@ -3,6 +3,7 @@ import gcore;
 extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateBasics;
+extension de::genesez::platforms::common::m2m::Stereotype;
 extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
 extension de::genesez::platforms::java::seam2::scripts::Class;
 extension de::genesez::platforms::java::seam2::scripts::Naming;
@@ -127,11 +128,11 @@ Void addDataModelSelectionIndexValue(MAttribute this) :
   */
 Void setupSeamManagedPersistence(MAttribute this) :
 	this.hasStereotype("jpaPersistenceContext") && 
-	this.classifier.hasTaggedValue("seam2Component", "seamPersistence", "true") &&
+	!this.classifier.hasTaggedValue("seam2Component", "seamPersistence", "false") &&
 	!this.hasStereotype("seam2Injection")
 	? (
-		//hier noch den jpaPersistenceContext Stereotyp entfernen, momentan über XPAND --> Tobi fragen
 		this.addInjectionStereotype("false", "true", "UNSPECIFIED", "") ->
+		removeStereotype(getStereotype("jpaPersistenceContext")) ->
 		!this.hasStereotype("accessor")
 			? this.createAccessor("false", "false")
 			: ""
