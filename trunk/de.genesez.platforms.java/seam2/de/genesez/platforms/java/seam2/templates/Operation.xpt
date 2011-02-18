@@ -56,7 +56,7 @@
 	evaluates the stereotype seam2Factory
 «ENDREM»
 «DEFINE _Factory FOR MOperation-»
-	«IF hasStereotype("seam2Factory")-»
+	«IF hasStereotype("seam2Factory") && this.classifier.metaType != MInterface -»
 		@Factory(autoCreate=«getTaggedValue("seam2Factory", "autoCreate")-»
 		«IF hasUtilizableValue("seam2Factory", "scope") && !hasTaggedValue("seam2Factory", "scope", "UNSPECIFIED")-»
 			, scope(ScopeType.«getTaggedValue("seam2Factory", "scope")-»
@@ -71,7 +71,7 @@
 	evaluates the stereotype seam2Lifecycle
 «ENDREM»
 «DEFINE _Lifecycle FOR MOperation-»
-	«IF hasStereotype("seam2Lifecycle")-»
+	«IF hasStereotype("seam2Lifecycle") && this.classifier.metaType != MInterface-»
 		«IF hasTaggedValue("seam2Lifecycle", "create", "true")-»
 			@Create
 		«ENDIF-»
@@ -86,7 +86,7 @@
 	evaluates the stereotype seam2Observer
 «ENDREM»
 «DEFINE _Observer FOR MOperation-»
-	«IF hasStereotype("seam2Observer")-»
+	«IF hasStereotype("seam2Observer") && this.classifier.metaType != MInterface-»
 		@Observer(create=«getTaggedValue("seam2Observer", "create")-»,
 		«IF hasUtilizableValue("seam2Observer", "value")-»
 			value={«FOREACH getTaggedValue("seam2Observer", "value").getElements() AS value SEPARATOR ","-»
@@ -100,7 +100,7 @@
 	evaluates the context demarcation stereotypes
 «ENDREM»
 «DEFINE _ContextDemarcation FOR MOperation-»
-	«IF hasStereotype("seam2Begin")-»
+	«IF hasStereotype("seam2Begin") && this.classifier.metaType != MInterface-»
 		@Begin(nested=«getTaggedValue("seam2Begin", "nested")-»
 		«IF hasUtilizableValue("seam2Begin", "flushMode") || !hasTaggedValue("seam2Begin", "flushMode", "AUTO")-»
 			, flushMode=FlushModeType.«getTaggedValue("seam2Begin", "flushMode")-»
@@ -117,7 +117,7 @@
 			«ENDFOREACH-»}
 		«ENDIF-»)		
 	«ENDIF-»	
-	«IF hasStereotype("seam2End")-»
+	«IF hasStereotype("seam2End") && this.classifier.metaType != MInterface-»
 		@End(beforeRedirect=«getTaggedValue("seam2End", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2End", "ifOutcome")-»
 			, ifOutcome={«FOREACH getTaggedValue("seam2End", "ifOutcome").getElements() AS values SEPARATOR ","-»
@@ -125,7 +125,7 @@
 			«ENDFOREACH-»}
 		«ENDIF-»)	
 	«ENDIF-»		
-	«IF hasStereotype("seam2StartTask")-»
+	«IF hasStereotype("seam2StartTask") && this.classifier.metaType != MInterface-»
 		@StartTask(flushMode=FlushModeType.«getTaggedValue("seam2StartTask", "flushMode")-»
 		«IF hasUtilizableValue("seam2StartTask", "id")-»
 			, id="«getTaggedValue("seam2StartTask", "id")-»"
@@ -137,7 +137,7 @@
 			, taskIdParameter="«getTaggedValue("seam2StartTask", "taskIdParameter")-»"
 		«ENDIF-»
 	«ENDIF-»	
-	«IF hasStereotype("seam2BeginTask")-»
+	«IF hasStereotype("seam2BeginTask") && this.classifier.metaType != MInterface-»
 		@BeginTask(flushMode=FlushModeType.«taggedValue.selectFirst(e|e.tag.name == "flushMode").value-»
 		«IF hasUtilizableValue("seam2BeginTask", "id")-»
 			, id="«getTaggedValue("seam2BeginTask", "id")-»"
@@ -149,7 +149,7 @@
 			, taskIdParameter="«getTaggedValue("seam2BeginTask", "taskIdParameter")-»"
 		«ENDIF-»
 	«ENDIF-»	
-	«IF hasStereotype("seam2EndTask")-»
+	«IF hasStereotype("seam2EndTask") && this.classifier.metaType != MInterface-»
 		@EndTask(beforeRedirect=«getTaggedValue("seam2EndTask", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2EndTask", "ifOutcome")-»
 			, ifOutcome={«FOREACH getTaggedValue("seam2EndTask", "ifOutcome").getElements() AS values SEPARATOR ","-»
@@ -160,7 +160,7 @@
 			, transition="«getTaggedValue("seam2EndTask", "transition")-»")
 		«ENDIF-»)	
 	«ENDIF-»	
-	«IF hasStereotype("seam2ContextDemarcation")-»
+	«IF hasStereotype("seam2ContextDemarcation") && this.classifier.metaType != MInterface-»
 		«IF hasUtilizableValue("seam2ContextDemarcation", "createProcessDefinition")-»
 			@CreateProcess(definition="«getTaggedValue("seam2ContextDemarcation", "createProcessDefinition")-»")
 		«ENDIF»
