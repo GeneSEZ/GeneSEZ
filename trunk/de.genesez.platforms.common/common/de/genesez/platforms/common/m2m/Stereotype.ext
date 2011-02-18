@@ -1,0 +1,20 @@
+/**
+ * helper for stereotype handling
+ * 
+ * @author	andre pflueger
+ * @date	2010-10-14
+ */
+
+// based on genesez meta model
+import gcore;
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+
+Void removeStereotype(MElement this, MStereotype s) :
+	this.taggedValue.tag.removeAll(s.taggedValue.tag) ->
+	this.taggedValue.removeAll(s.taggedValue) ->
+	this.model().stereotype.remove(s) ->
+	this.stereotype.remove(s);
+	
+Void getStereotype(MElement this, String name) :
+	this.stereotype.selectFirst(e|e.name == name);
