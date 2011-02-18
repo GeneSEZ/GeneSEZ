@@ -1,11 +1,13 @@
 import gcore;
 
+extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
 extension de::genesez::platforms::java::ejb3::scripts::Class;
+extension de::genesez::platforms::java::jpa::scripts::Naming;
 
 /**
   * add standard constructor to entity beans 
@@ -16,6 +18,60 @@ MClassifier addStandardConstructor(MClass this) :
 	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
 		? createStandardConstructor()
 		: "";
+
+/**
+  *	sets the tableName attribute of a persistent entity in dependency of the 
+  *	used inheritance strategy
+  *	strategy SINGLE_TABLE does not allow a @Table in a derived class! (Hibernate)
+  */
+Void checkInheritance(MClass this) :
+	this.generalization.size == 0
+		? checkTableName() //no inheritance at all or parent class
+		: (	//check inheritance strategy of parent class
+			checkAnnotationTableUsage() 
+				? checkTableName()
+				: this.setTaggedValue("jpaPersistentEntity", "tableName", "")
+		);
+
+/**
+  *	sets the attribute "tableName" of stereotype "jpaPersistentEntity"
+  *	if "tableName" contains a utilizable value, a prefix is added
+  */
+Void checkTableName(MClass this) :
+	hasUtilizableValue("jpaPersistentEntity", "tableName")
+		? this.setTaggedValue("jpaPersistentEntity", "tableName", tableNamePrefix() + getTaggedValue("jpaPersistentEntity", "tableName"))
+		: this.setTaggedValue("jpaPersistentEntity", "tableName", tableNamePrefix() + this.asTypeName());
+			
+/**
+  *	detects recursively which inheritance strategy is used and 
+  *	therefore if the annotation @Table can be used/generated	
+  *
+  *	@return	true, if annotation @Table should be generated
+  */
+Boolean checkAnnotationTableUsage(MClass this) :
+	let parent = this.generalization.typeSelect(MClass).selectFirst(e|e.name != "") :
+	(
+		parent.hasStereotype("jpaInheritance") 
+			? (
+				parent.hasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE") 
+					? false
+					: true 
+			)
+			: (
+				parent.generalization.size > 0
+					? ( 
+						parent.checkAnnotationTableUsage()
+							? true
+							: false
+					)
+					: (	//parent class reached but no stereotype jpaInheritance available, 
+						//use jpa default inheritance strategy SINGLE_TABLE meaning no table 
+						//annotation in derived classes
+						false 
+					)
+					
+			)
+	);
 
 /**
   *	adds an accessor stereotype for generating get and set methods if
@@ -81,7 +137,7 @@ MClassifier addSerializable(MClassifier this) :
 		: "";
 
 /**
-	add inheritance stereotype if necassary
+	add inheritance stereotype if necassary (incompleted)
 */
 Void checkInheritanceStereotype(MClass this) :
 	!hasStereotype("jpaDiscriminatorValue") && !hasStereotype("jpaPrimaryKeyJoinColumn")

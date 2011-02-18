@@ -1,12 +1,11 @@
+import gcore;
+
 /**
  * 	modificates the metamodel before generation of the source code  
  *  
  * @author	andre pflueger
  * @date	2009-03-17
  */
-
-// based on genesez meta model
-import gcore;
 
 extension de::genesez::platforms::java::jpa::scripts::Attribute;
 extension de::genesez::platforms::java::jpa::scripts::Association;
@@ -36,15 +35,21 @@ Void modifications(MPackage this) :
 	this.classifier.typeSelect(MClass).modifications();
 	
 Void modifications(MClass this) :
-	checkInheritanceStereotype() ->
+	//checkInheritanceStereotype() -> 
+	checkInheritance()-> 
 	this.property.typeSelect(MAssociationRole).checkAssociationStereotype() ->
 	this.property.typeSelect(MAttribute).modifications() ->
+	this.operation.typeSelect(MOperation).modifications() ->	
 	addAccessorStereotype();
 	
 Void modifications(MAttribute this) :
 	checkAttributeName() ->
 	checkPersistenceStereotypes() ->
-	checkOptimisticLockingStereotype();
+	checkOptimisticLockingStereotype() ->
+	checkPrimaryKey();
+
+Void modifications(MOperation this) :
+	checkPrimaryKey();
 
 Void modifications(MInterface this) :
 	Void;

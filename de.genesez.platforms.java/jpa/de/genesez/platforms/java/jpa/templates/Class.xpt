@@ -1,13 +1,12 @@
+«IMPORT gcore»
+
 «REM»
-	template for jpa-class annotations
+	template for jpa class annotations
 	
 	@author		andre pflueger
 	@date		2009-04-20
 	@version	1.0
 «ENDREM»
-
-«REM» import code gen meta model «ENDREM»
-«IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
 «EXTENSION de::genesez::platforms::common::log::Log»
@@ -23,12 +22,8 @@
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::jpa::scripts::Naming»
 
-
-
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
 «REM» 
@@ -40,21 +35,16 @@
 		«IF !hasTaggedValue("jpaDiscriminatorValue", "value", "null")-»
 			@DiscriminatorValue("«taggedValue.selectFirst(e|e.tag.name == "value").value-»")
 		«ENDIF-»
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
 «REM»  «ENDREM»
-«DEFINE _Annotation FOR MClass-»
-	«REM» PersistentEntity «ENDREM»
+«DEFINE Annotation FOR MClass-»
 	«EXPAND _PersistentEntity-»
-	
-	«REM» primary key «ENDREM»
 	«EXPAND _PrimaryKey-»
 «ENDDEFINE»
 
@@ -69,56 +59,43 @@
 «DEFINE _checkInheritanceStrategy(MClass super) FOR MClass-»
 	«IF super.hasStereotype("jpaInheritance") && !super.hasTaggedValue("jpaInheritance", "strategy", "SINGLE_TABLE")-»
 		«EXPAND _Table-»
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
-«REM» evaluates the stereotype "jpaPersistentEntity"«ENDREM»
+«REM»
+	evaluates the stereotype "jpaPersistentEntity"
+«ENDREM»
 «DEFINE _PersistentEntity FOR MClass-»
-	«IF hasStereotype("jpaPersistentEntity")»
+	«IF hasStereotype("jpaPersistentEntity")-»
 		@Entity
 		«IF	hasUtilizableValue("jpaPersistentEntity", "name")-»
 			(name="«getTaggedValue("jpaPersistentEntity", "name")-»")
-		«ENDIF»
+		«ENDIF-»
 		«REM»@Table is not allowed with SINGLE_TABLE inheritance strategy«ENDREM»
 		«IF generalization.isEmpty-»
 			«EXPAND _Table-»
 		«ELSE-»
 			«REM»@Table is needed with JOINED or TABLE_PER_CLASS inheritance strategy«ENDREM»
 			«EXPAND _superClassSearch(this)-»
-		«ENDIF»
-		«REM»
-			Causes Warnings in Hibernate configuration, no @Table in derived class
-			annotation will be ignored, no fatal error occurs
-			«ELSE-»
-				«FOREACH generalization.typeSelect(MClass) AS classes-»
-					«IF !classes.hasStereotype("jpaInheritance") && !hasTaggedValue("jpaInheritance", "discriminatorType", "SINGLE_TABLE")-»
-						«EXPAND _Table-»
-					«ENDIF»
-				«ENDFOREACH-»
-			«ENDIF»
-		«ENDREM»
-		«REM» inheritance «ENDREM»
+		«ENDIF-»
 		«EXPAND _Inheritance-»
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 
 «REM»
 	evaluates tagged values of @Table in "jpaPersistentEntity"
 «ENDREM»
-«DEFINE _Table FOR MClass-»
-	@Table(
-	«IF hasUtilizableValue("jpaPersistentEntity", "tableName")-»
-		name="«tableNamePrefix()-»«getTaggedValue("jpaPersistentEntity", "tableName")-»"
-	«ELSE-»
-		name="«tableNamePrefix()-»«asTypeName()-»"
-	«ENDIF-»
-	«IF hasUtilizableValue("jpaPersistentEntity", "tableCatalog")-»
-		, catalog = "«getTaggedValue("jpaPersistentEntity", "tableCatalog")-»"
-	«ENDIF-»
-	«IF hasUtilizableValue("jpaPersistentEntity", "tableSchema")-»
-		, schema = "«getTaggedValue("jpaPersistentEntity", "tableSchema")-»"
-	«ENDIF-»)
+«DEFINE _Table FOR MClass-»	
+	«IF hasUtilizableValue("jpaPersistentEntity", "tableName")-»		
+		@Table( name = "«getTaggedValue("jpaPersistentEntity", "tableName")-»"
+		«IF hasUtilizableValue("jpaPersistentEntity", "tableCatalog")-»
+			, catalog = "«getTaggedValue("jpaPersistentEntity", "tableCatalog")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jpaPersistentEntity", "tableSchema")-»
+			, schema = "«getTaggedValue("jpaPersistentEntity", "tableSchema")-»"
+		«ENDIF-»)
+	«ENDIF-»	
 «ENDDEFINE»	
 
 «REM» 
@@ -160,7 +137,7 @@
  					«ENDLET-») 					
 			«ENDFOREACH»)
 		«ENDIF-»
-	«ENDIF»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» evaluates the stereotype "jpaPrimaryKey"«ENDREM»
@@ -173,39 +150,18 @@
 		«ELSE-»
 			@IdClass(«asTypeName()-»PK.class)
 			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
-		«ENDIF»
+		«ENDIF-»
 	«ELSEIF hasStereotype("jpaPrimaryKeyClass") && hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")-»
 		«REM» primary key with embedded primary key class «ENDREM»
 		@Embeddable
-		«REM»«IF hasUtilizableValue("jpaPrimaryKeyClass", "name")-»
-			«EXPAND _PrimaryKeyClass(getTaggedValue("jpaPrimaryKeyClass", "name"))-»
-		«ELSE-»
-			«EXPAND _PrimaryKeyClass(asTypeName()+"PK")-»
-		«ENDIF»
-		«FOREACH property AS id-»
-			«IF id.hasStereotype("jpaPrimaryKey")-»
-				«property.remove(id)-»
-			«ENDIF-»
-		«ENDFOREACH-»
-		«IF hasUtilizableValue("jpaPrimaryKeyClass", "name")-»
-			«property.add(makeAttribute(getTaggedValue("jpaPrimaryKeyClass", "name").toFirstLower(), getTaggedValue("jpaPrimaryKeyClass", "name"), 1, false, false, false))->""-»
-			«property.selectFirst(e|e.name == getTaggedValue("jpaPrimaryKeyClass", "name").toFirstLower()).addPrimaryKeyStereotype("true", "null", "false", "AUTO")->""-»
-		«ELSE-»
-			«property.add(makeAttribute(asTypeName().toLowerCase()+"Pk", asTypeName()+"PK", 1, false, false, false))->""-»
-			«property.selectFirst(e|e.name == asTypeName().toLowerCase()+"Pk").addPrimaryKeyStereotype("true", "null", "false", "AUTO")->""-»
-		«ENDIF-»
-		//properties: «property.name»
-		//Stereotype: «property.stereotype.name»
-		//taggedValue namen: «property.taggedValue.tag.name»
-		//taggedvalue werte: «property.taggedValue.value»«ENDREM»
-	«ENDIF»	
+	«ENDIF-»	
 «ENDDEFINE»
 
 «REM» creates a primary key class for stereotype "idClass" «ENDREM»
 «DEFINE _PrimaryKeyClass(String filename) FOR MClass-»
 	«FILE filePath( filename + ".java", basePath() )-»
 		/**
-		  *	generated primary key class of the jpa cartridge
+		  *	generated primary key class of the jpa platform
 		  *
 		  * @author		andre pflueger
 		  *	@date		2008 May 18
@@ -272,42 +228,6 @@
 			}
 		}
 	«ENDFILE»
-«ENDDEFINE»
-
-«REM» 
-	generates import proReg and statements for hibernate classes
-	is used by aspects to extend´import generation of java5 cartridge
-«ENDREM»
-«DEFINE _ImportStatements FOR MClassifier-»
-	«IF hasStereotype("jpaPersistentEntity")-»
-		import javax.persistence.Entity;
-		import javax.persistence.Table;
-		import java.io.Serializable;
-		import javax.persistence.Inheritance;
-		import javax.persistence.InheritanceType;
-	«ENDIF»
-	«IF property.exists(e|e.hasStereotype("jpaPersistence")) 
-		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManager")
-		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManagerFactory")-»
-		import javax.persistence.EntityManager;
-		import javax.persistence.PersistenceUnit;
-		import javax.persistence.PersistenceContext;
-	«ENDIF»	
-	«IF operation.exists(e|e.hasStereotype("jpaAssociation")) || property.exists(e|e.hasStereotype("jpaAssociation"))-»
-		import javax.persistence.OneToMany;
-		import javax.persistence.ManyToOne;
-		import javax.persistence.OneToOne;
-		import javax.persistence.ManyToMany;
-		import javax.persistence.CascadeType;
-	«ENDIF»
-	«IF operation.exists(e|e.hasStereotype("jpaPrimaryKey")) || property.exists(e|e.hasStereotype("jpaPrimaryKey"))-»
-		import javax.persistence.Id;
-		import javax.persistence.IdClass;
-		import javax.persistence.EmbeddedId;
-		import javax.persistence.GeneratedValue;
-		import javax.persistence.GenerationType;
-	«ENDIF»
-	import javax.persistence.*;
 «ENDDEFINE»
 
 «REM» 

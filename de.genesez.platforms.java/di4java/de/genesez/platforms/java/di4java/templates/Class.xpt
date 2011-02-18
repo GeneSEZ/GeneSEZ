@@ -1,0 +1,64 @@
+«IMPORT gcore»
+
+«REM»
+	template for di4java class annotations
+	
+	@author		nancy doerfel
+	@date		2010-03-19
+	@version	1.0
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»  «ENDREM»
+«DEFINE Annotation FOR MClass-»
+	«EXPAND Element::Singleton-»
+	«EXPAND Element::Named-»				
+«ENDDEFINE»
+
+«REM» 
+	generates imports
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+	«IF hasStereotype("di4javaNamed")
+		|| property.exists(e|e.hasStereotype("di4javaNamed"))
+		|| operation.exists(e|e.hasStereotype("di4javaNamed"))»
+		import javax.inject.Named;
+	«ENDIF»
+			
+	«IF hasStereotype("di4javaSingleton")
+		|| property.exists(e|e.hasStereotype("di4javaSingleton"))
+		|| operation.exists(e|e.hasStereotype("di4javaSingleton"))»
+		import javax.inject.Singleton;
+	«ENDIF»
+	
+	«IF property.exists(e|e.hasStereotype("di4javaInject"))
+		|| operation.exists(e|e.hasStereotype("di4javaInject"))»
+		import javax.inject.Inject;
+	«ENDIF»	
+	
+    «IF hasStereotype("di4javaQualifier")-»
+        import javax.inject.Qualifier;
+    «ENDIF»         
+    
+    «IF hasStereotype("di4javaScope")-»
+        import javax.inject.Scope;
+    «ENDIF»  	
+«ENDDEFINE»
