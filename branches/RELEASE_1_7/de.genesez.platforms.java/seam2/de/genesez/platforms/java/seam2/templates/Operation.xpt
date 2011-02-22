@@ -90,7 +90,7 @@
 		@Observer(create=«getTaggedValue("seam2Observer", "create")-»,
 		«IF hasUtilizableValue("seam2Observer", "value")-»
 			value={«FOREACH getTaggedValue("seam2Observer", "value").getElements() AS value SEPARATOR ","-»
-				"«value-»"
+				"«IF !value.contains(".")-»«observerValuePrefix()-»«ENDIF-»«value-»"
 			«ENDFOREACH-»}		
 		«ENDIF-»)
 	«ENDIF-»	
