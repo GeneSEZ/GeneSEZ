@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="de.genesez.adapter.uml2" basedir=".." default="build">
+<project name="de.genesez.adapter.uml" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -34,13 +34,19 @@
 		description="Create the plugin jar for de.genesez.adapter.uml2"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
-		 	manifest="META-INF/MANIFEST.MF">
-			<fileset dir="${bin.dir}" includes="**/*" />
-			<fileset dir="${uml2.dir}" includes="**/*" />
-			<fileset dir="${ecore.dir}" includes="**/*" />
+			manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
+			<fileset dir="${basedir}">
+				<include name="${uml2.dir}/**" />
+				<include name="${profile.dir}/**" />
+			</fileset>
 		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
 	</target>
 	
 	<target name="clean"

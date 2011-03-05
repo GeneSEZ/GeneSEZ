@@ -46,12 +46,20 @@
 		description="Create the plugin jar for de.genesez.platforms.common"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
-		 	manifest="META-INF/MANIFEST.MF">
+			manifest="META-INF/MANIFEST.MF">
 			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
-			<fileset dir="${lib.dir}" includes="**/*" />
+			<fileset dir="${basedir}">
+				<include name="${common.dir}/**" />
+				<include name="${lib.dir}/**" />
+				<include name="${typemapping.dir}/**" />
+			</fileset>
 		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
 	</target>
 	
 	<target name="clean"
@@ -74,12 +82,6 @@
 			target="${target}"
 			source="${source}"
 			debug="on" />
-		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/${project.name}.jar"
-			compress="true">
-			<fileset dir="${bin.dir}" includes="**/*" />
-			<fileset dir="${common.dir}" includes="**/*" />
-		</jar>
 	</target>
 	
 	<target name="typemapping.schema2java"

@@ -37,4 +37,24 @@
 	<!-- workaround for http://www.genesez.de/issues/show/37 -->
 	<target name="ecore2java.external" />
 	
+	<target name="createjar"
+		description="Create the plugin jar for de.genesez.metamodel"
+		depends="build">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+			manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
+			<fileset dir="${basedir}">
+				<include name="${ecore.file}" />
+				<include name="${navigation.dir}/**" />
+				<include name="plugin.xml" />
+			</fileset>
+		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
+	</target>
+	
 </project>
