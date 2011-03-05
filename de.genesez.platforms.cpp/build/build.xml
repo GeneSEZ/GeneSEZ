@@ -14,14 +14,21 @@
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 	
+	<!-- Set the classpath -->
+	<path id="de.genesez.platforms.cpp.classpath">
+		<pathelement path="${build.basedir}/de.genesez.platforms.common/${bin.dir}" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+	
 	<!-- Public target section -->
 	
 	<target name="build"
-		description="Build de.genesez.platforms.cpp">
+		description="Build de.genesez.platforms.cpp"
+		depends="compile">
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.platforms.cpp">
+		description="Create the plugin jar for de.genesez.platforms.cpp" depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
 			<fileset dir="${bin.dir}" includes="**/*" />
@@ -47,4 +54,13 @@
 	
 	<!-- Private target section -->
 
+	<target name="compile">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.platforms.cpp.classpath"
+			target="${target}"
+			source="${source}"
+			debug="on" />
+	</target>
 </project>
