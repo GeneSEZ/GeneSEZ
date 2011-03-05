@@ -34,20 +34,25 @@
 		description="Create the plugin jar for de.genesez.platforms.php"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
-		 	manifest="META-INF/MANIFEST.MF">
-			<fileset dir="${bin.dir}" />
-			<fileset dir="${php.dir}" />
-			<fileset dir="${php5.dir}" />
-			<fileset dir="${php6.dir}" />
-			<fileset dir="${pear.dir}" />
-			<fileset dir="${doctrine.dir}" />
-			<fileset dir="${smarty.dir}" />
+			manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
 			<fileset dir="${basedir}">
-				<include name="plugin.xml"/>
+				<include name="${php.dir}/**" />
+				<include name="${php5.dir}/**" />
+				<include name="${doctrine.dir}/**" />
+				<include name="${pear.dir}/**" />
+				<include name="${smarty.dir}/**" />
+				<include name="${seasar.dir}/**" />
+				<include name="${ddm.dir}/**" />
+				<include name="${metaframework.dir}/**" />
 			</fileset>
 		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
 	</target>
 
 	<target name="clean"

@@ -33,14 +33,31 @@
 		description="Create the plugin jar for de.genesez.platforms.java"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
-		 	manifest="META-INF/MANIFEST.MF">
+			manifest="META-INF/MANIFEST.MF">
 			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
 			<fileset dir="${basedir}">
-				<include name="plugin.xml"/>
+				<include name="${cldc.dir}/**" />
+				<include name="${ejb3.dir}/**" />
+				<include name="${ejb3_1.dir}/**" />
+				<include name="${java.dir}/**" />
+				<include name="${java4.dir}/**" />
+				<include name="${java5.dir}/**" />
+				<include name="${jpa.dir}/**" />
+				<include name="${jws.dir}/**" />
+				<include name="${cdi.dir}/**" />
+				<include name="${di4java.dir}/**" />
+				<include name="${jbv.dir}/**" />
+				<include name="${seam2.dir}/**" />
+				<include name="${traceability.dir}/**" />
+				<include name="${hibernate.dir}/**" />
 			</fileset>
 		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
 	</target>
 
 	<target name="clean"
@@ -62,24 +79,6 @@
 			source="${source}"
 			debug="on" />
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/${project.name}.jar"
-			compress="true">
-			<fileset dir="${bin.dir}" />
-			<fileset dir="${cldc.dir}" />
-			<fileset dir="${ejb3.dir}" />
-			<fileset dir="${ejb3_1.dir}" />
-			<fileset dir="${java.dir}" />
-			<fileset dir="${java4.dir}" />
-			<fileset dir="${java5.dir}" />
-			<fileset dir="${jpa.dir}" />
-			<fileset dir="${jws.dir}" />
-			<fileset dir="${cdi.dir}" />
-			<fileset dir="${di4java.dir}" />
-			<fileset dir="${jbv.dir}" />
-			<fileset dir="${seam2.dir}" />
-			<fileset dir="${traceability.dir}" />
-			<fileset dir="${hibernate.dir}" />
-		</jar>
 	</target>
 
 	<target name="documentation"

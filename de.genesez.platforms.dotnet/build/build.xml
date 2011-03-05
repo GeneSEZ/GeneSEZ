@@ -34,16 +34,18 @@
 		description="Create the plugin jar for de.genesez.platforms.dotnet"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
-		 	manifest="META-INF/MANIFEST.MF">
-			<fileset dir="${bin.dir}" />
-			<fileset dir="${src.dir}" includes="de/genesez/platforms/dotnet/wizards/*.project"/>
-			<fileset dir="${csharp.dir}" />
+			manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
 			<fileset dir="${basedir}">
-				<include name="plugin.xml"/>
+				<include name="${csharp.dir}/**" />
 			</fileset>
 		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
 	</target>
 
 	<target name="clean"
