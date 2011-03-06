@@ -6,49 +6,29 @@
 	@date	2009-03-07 
  -->
 <workflow>
-	<component id="uml2genesez" class="de.genesez.platforms.common.workflow.Uml2GeneSEZ">
+	<!-- transform association library model -->
+	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
 		<model value="model/umlsupport.uml" />
 		<profile value="model/genesez.profile.uml" />
 		<profile value="model/genesez.php.profile.uml" />
 	</component>
-	<component id="uml2genesez.test" class="de.genesez.platforms.common.workflow.Uml2GeneSEZ">
-		<model value="model/umlsupport.test.uml" />
-		<slot value="testModel" />
-	</component>
 	<component id="modify" class="de.genesez.platforms.common.workflow.GeneSezM2M">
 		<script value="de::genesez::platforms::common::UseDependencies::addUseDependencies" />
 	</component>
-	<component id="modify" class="de.genesez.platforms.common.workflow.GeneSezM2M">
-		<script value="de::genesez::platforms::common::UseDependencies::addUseDependencies" />
-		<inputSlot value="testModel" />
-	</component>
 	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
-		<script value="de::genesez::platforms::common::Constraints" />
-		<script value="de::genesez::platforms::php::constraints::Syntax" />
-	</component>
-	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
-		<slot value="testModel" />
 		<script value="de::genesez::platforms::common::Constraints" />
 		<script value="de::genesez::platforms::php::constraints::Syntax" />
 	</component>
 	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
 		<file value="model/umlsupport.xmi" />
 	</component>
-	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
-		<slot value="testModel" />
-		<file value="model/umlsupport.test.xmi" />
-	</component>
 	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
 		<outputDir value="../de.genesez.platforms.php.umlsupport/src-gen" />
-	</component>
-	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
-		<slot value="testModel" />
-		<outputDir value="../de.genesez.platforms.php.umlsupport/test-gen" />
 		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
 	</component>
 	<component id="statistics" class="de.genesez.platforms.common.workflow.Statistics">
 		<name value="PHP association handling" />
-		<outputDir value="../de.genesez.platforms.php.umlsupport/report/statistics" />
+		<outputDir value="../de.genesez.platforms.php.umlsupport/report" />
 	 	<generatedDir value="../de.genesez.platforms.php.umlsupport/src-gen" />
 		<manualDir value="../de.genesez.platforms.php.umlsupport/src" />
 		<comments class="de.genesez.platforms.common.statistic.CommentSign">
@@ -58,6 +38,30 @@
 			<multiLineCommentLine value="\\*" />
 			<multiLineDocCommentStart value="/\\*\\*" />
 		</comments>
+		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
+	</component>
+	
+	<!-- transform test model -->
+	<component id="uml2genesez.test" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model/umlsupport.test.uml" />
+		<slot value="testModel" />
+	</component>
+	<component id="modify" class="de.genesez.platforms.common.workflow.GeneSezM2M">
+		<script value="de::genesez::platforms::common::UseDependencies::addUseDependencies" />
+		<inputSlot value="testModel" />
+	</component>
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<slot value="testModel" />
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::php::constraints::Syntax" />
+	</component>
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<slot value="testModel" />
+		<file value="model/umlsupport.test.xmi" />
+	</component>
+	<component id="model2php" class="de.genesez.platforms.php.workflow.PhpGenerator">
+		<slot value="testModel" />
+		<outputDir value="../de.genesez.platforms.php.umlsupport/test-gen" />
 		<typeMappingFile value="de/genesez/platforms/php/typemapping/association.handling.typemapping.xml" />
 	</component>
 </workflow>
