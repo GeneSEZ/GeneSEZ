@@ -8,11 +8,15 @@ import de.genesez.platforms.java.umlsupport.statemachine.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>TimerTest</b></em>'
+	 * Constructor for class '<em><b>TimerTest</b></em>'.
 	 */
 	public TimerTest() {
 		/* PROTECTED REGION ID(java.constructor._15_5_1_6340215_1233604450519_45789_1311) ENABLED START */
@@ -30,6 +34,7 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	/* PROTECTED REGION END */
 
 	// -- generated state machine section -----------------------------------
+	
 	private Timer timerForDingdong;
 	
 	private void startTimerForDingdong() {
@@ -100,7 +105,7 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	
 	// all state machine actions are implemented as a method
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void dingdong(SmEvent event) {
 		if (SMDEBUG)
@@ -112,7 +117,7 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void done(SmEvent event) {
 		if (SMDEBUG)
@@ -124,7 +129,7 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void tack(SmEvent event) {
 		if (SMDEBUG)
@@ -136,7 +141,7 @@ public class TimerTest implements EventReceiver<TimerTest.EventId> {
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void tick(SmEvent event) {
 		if (SMDEBUG)

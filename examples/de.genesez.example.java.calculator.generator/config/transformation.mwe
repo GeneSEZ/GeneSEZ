@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	
+	<!-- read the model file and transform it into a GeneSEZ model -->
+	<component class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model/calculator.uml" />
+		<profile value="model/genesez.profile.uml" />
+		<mapClassesInModelToExternal value="true" />
+	</component>
+	
+	<component class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::java::constraints::Syntax" />
+	</component>
+	
+	<component class="de.genesez.platforms.common.workflow.Serializer">
+		<OPTION_SCHEMA_LOCATION_IMPLEMENTATION value="true" />
+		<file value="model/calculator.xmi" />
+	</component>
+	
+	<component class="de.genesez.platforms.java.workflow.JavaGenerator">
+		<typeMappingFile value="typemapping.xml" />
+		<outputDir value="../de.genesez.example.java.calculator/src-gen" />
+		<useModelNameAsBasePackage value="true" />
+	</component>
+</workflow>

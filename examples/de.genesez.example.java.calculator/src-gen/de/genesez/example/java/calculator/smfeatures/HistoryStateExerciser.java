@@ -8,11 +8,15 @@ import de.genesez.platforms.java.umlsupport.statemachine.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class HistoryStateExerciser implements EventReceiver<HistoryStateExerciser.EventId> {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>HistoryStateExerciser</b></em>'
+	 * Constructor for class '<em><b>HistoryStateExerciser</b></em>'.
 	 */
 	public HistoryStateExerciser() {
 		/* PROTECTED REGION ID(java.constructor._15_5_1_6340215_1233754282541_809591_1198) ENABLED START */

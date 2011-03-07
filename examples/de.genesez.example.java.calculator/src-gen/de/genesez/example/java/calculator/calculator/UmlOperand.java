@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -27,7 +31,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>UmlOperand</b></em>'
+	 * Constructor for class '<em><b>UmlOperand</b></em>'.
 	 */
 	public UmlOperand() {
 		/* PROTECTED REGION ID(java.constructor._15_5_1_6340215_1232985390449_353979_1097) ENABLED START */
@@ -61,7 +65,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	
 	// all state machine actions are implemented as a method
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void appendDigit(SmEvent event) {
 		if (SMDEBUG)
@@ -73,7 +77,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void appendFractionalDigit(SmEvent event) {
 		if (SMDEBUG)
@@ -85,7 +89,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void clear(SmEvent event) {
 		if (SMDEBUG)
@@ -98,7 +102,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	
 	// do actions are called from a thread, controlled by start and stop methods
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void blinkDisplay() {
 		if (SMDEBUG)

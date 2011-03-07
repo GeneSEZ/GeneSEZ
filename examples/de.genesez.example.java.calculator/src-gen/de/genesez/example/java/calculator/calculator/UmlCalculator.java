@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculator.EventId> {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -35,7 +39,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>UmlCalculator</b></em>'
+	 * Constructor for class '<em><b>UmlCalculator</b></em>'.
 	 */
 	public UmlCalculator() {
 		/* PROTECTED REGION ID(java.constructor._15_5_1_6340215_1232983409888_396871_1086) ENABLED START */
@@ -48,7 +52,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	
 	// -- generated association + attribute accessors -----------------------
 	/**
-	 * getter for the attribute '<em><b>result</b></em>'
+	 * Gets the value of the attribute '<em><b>result</b></em>'
 	 */
 	public BigDecimal getResult() {
 		return result;
@@ -77,8 +81,8 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 		throw new RuntimeException("the class doesn't have the association you specified!");
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>operand</b></em>' to {@link UmlOperand}
+	/**
+	 * Provides access to the association '<em><b>operand</b></em>' to {@link UmlOperand}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<UmlCalculator, UmlOperand> operand() {
@@ -156,7 +160,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	
 	// all state machine actions are implemented as a method
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void clearAll(SmEvent event) {
 		if (SMDEBUG)
@@ -168,7 +172,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void clearOperand(SmEvent event) {
 		if (SMDEBUG)
@@ -180,7 +184,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void clearX(SmEvent event) {
 		if (SMDEBUG)
@@ -192,7 +196,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void clearY(SmEvent event) {
 		if (SMDEBUG)
@@ -204,7 +208,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void evaluate(SmEvent event) {
 		if (SMDEBUG)
@@ -216,7 +220,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void evaluateAndSetY(SmEvent event) {
 		if (SMDEBUG)
@@ -228,7 +232,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void sendDigitToOperand(SmEvent event) {
 		if (SMDEBUG)
@@ -240,7 +244,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void sendDotToOperand(SmEvent event) {
 		if (SMDEBUG)
@@ -252,7 +256,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void setOperator(SmEvent event) {
 		if (SMDEBUG)
@@ -264,7 +268,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void setXfromOperand(SmEvent event) {
 		if (SMDEBUG)
@@ -276,7 +280,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void setYFromResult(SmEvent event) {
 		if (SMDEBUG)
@@ -288,7 +292,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void setYfromOperand(SmEvent event) {
 		if (SMDEBUG)
@@ -300,7 +304,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void show(SmEvent event) {
 		if (SMDEBUG)
@@ -312,7 +316,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	}
 	
 	/**
-	 * action method stub for further implementation
+	 * Action method stub for further implementation.
 	 */
 	private void shutdown(SmEvent event) {
 		if (SMDEBUG)
