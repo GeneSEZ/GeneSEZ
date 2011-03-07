@@ -1,11 +1,11 @@
 package de.genesez.example.java.BankTutorial.Server.data;
 
-/*PROTECTED REGION ID(java.type.import._16_0_129203bc_1271071927718_941385_713) ENABLED START*/
+/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271071927718_941385_713) ENABLED START */
 /* TODO: put your own source code here */
 import java.io.Serializable;
 import javax.persistence.Entity;
 
-/*PROTECTED REGION END*/
+/* PROTECTED REGION END */
 
 /**
  * The flexible savings account offers a volatile interest rate depending on the daily interest development. For a first implementation an average interest rate of 3.5% can be chosen. A bank has to deposit the interests of a flexible savings account  every minute.

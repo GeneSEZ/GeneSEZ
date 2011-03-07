@@ -1,12 +1,12 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/*PROTECTED REGION ID(java.type.import.CustomerBeanLocal) ENABLED START*/
+/* PROTECTED REGION ID(java.type.import.CustomerBeanLocal) ENABLED START */
 /* TODO: put your own source code here */
 import javax.ejb.Local;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
 
-/*PROTECTED REGION END*/
+/* PROTECTED REGION END */
 
 @Local
 public interface ICustomerBeanLocal {

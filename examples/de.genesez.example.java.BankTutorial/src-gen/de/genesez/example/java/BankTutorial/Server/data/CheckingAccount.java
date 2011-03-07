@@ -1,11 +1,11 @@
 package de.genesez.example.java.BankTutorial.Server.data;
 
-/*PROTECTED REGION ID(java.type.import._16_0_129203bc_1271071979937_985074_736) ENABLED START*/
+/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271071979937_985074_736) ENABLED START */
 /* TODO: put your own source code here */
 import java.io.Serializable;
 import javax.persistence.Entity;
 
-/*PROTECTED REGION END*/
+/* PROTECTED REGION END */
 
 /**
  * The checking account is used for the daily cash flow with a low interest rate of 0.75%. A bank has to deposit the interests of a checking account every 3 minutes.

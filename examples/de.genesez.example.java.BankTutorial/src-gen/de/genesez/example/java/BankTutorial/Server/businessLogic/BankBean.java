@@ -1,13 +1,13 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/*PROTECTED REGION ID(java.type.import._16_0_129203bc_1271072706937_469823_827) ENABLED START*/
+/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271072706937_469823_827) ENABLED START */
 /* TODO: put your own source code here */
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 
-/*PROTECTED REGION END*/
+/* PROTECTED REGION END */
 
 /**
  * The bank bean administrates the bank entities

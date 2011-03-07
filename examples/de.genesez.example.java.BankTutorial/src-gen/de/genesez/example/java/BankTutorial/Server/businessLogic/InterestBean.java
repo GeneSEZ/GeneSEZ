@@ -1,6 +1,6 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/*PROTECTED REGION ID(java.type.import._16_0_129203bc_1271100384359_869290_741) ENABLED START*/
+/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271100384359_869290_741) ENABLED START */
 /* TODO: put your own source code here */
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
 
-/*PROTECTED REGION END*/
+/* PROTECTED REGION END */
 
 /**
  * This bean is responsible for the calculation of the interests of the bank accounts using the timer of the Enterprise JavaBeans

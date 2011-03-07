@@ -1,6 +1,6 @@
 package de.genesez.example.java.BankTutorial.Server.data;
 
-/*PROTECTED REGION ID(java.type.import._16_0_129203bc_1271068742187_845611_1236) ENABLED START*/
+/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271068742187_845611_1236) ENABLED START */
 /* TODO: put your own source code here */
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-/*PROTECTED REGION END*/
+/* PROTECTED REGION END */
 
 /**
  * abstract class for a bank account

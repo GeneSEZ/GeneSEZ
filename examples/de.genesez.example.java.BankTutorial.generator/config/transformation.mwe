@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <workflow>
-	<cartridge id="uml2genesez"
-		file="de::genesez::adapter::uml2::makeGenesezModel.oaw" 
-		inputModelFile="model-exp/BankTutorial.uml"
-		genesezModel="genesezModel"
-		excludePackages="UML Standard Profile"
-		excludeStereotypes="exclude"
-		mapClassesInModelToExternal="false"
-		externalPackages = ""
-		externalStereotypes = "external"
-	/>
+	<component class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model-exp/BankTutorial.uml" />
+	</component>
+	
 	<!-- diese Variablendefinitionen sind nur für die xTend-Cartridges !!! -->
 	<!-- disables the new association handling; its not tested for use with ejb3 -->
 	<property name="model2text.newAssociationHandling" value="false" />
 	<!-- use property access for ejb3 annotations -->
 	<property name="model2text.fieldAccess" value="true" />	
-		
+	
 	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
 		<script value="de::genesez::platforms::common::Constraints" />
 		<script value="de::genesez::platforms::java::constraints::Syntax" />
@@ -53,7 +47,7 @@
 	    <typeMappingFile value="typemapping-bankTutorial.xml" />
 	    <outputDir value="../de.genesez.example.java.BankTutorial/reports" />
 	    <generatedDir value="../de.genesez.example.java.BankTutorial/src-gen" />
-	    <manualDir value="../de.genesez.example.java.BankTutorial/src" />
+	    <!-- manualDir value="../de.genesez.example.java.BankTutorial/src" / -->
 	    <comments class="de.genesez.platforms.common.statistic.CommentSign">
 	        <singleLineComment value="//" />
 	        <multiLineCommentStart value="/\\*" />
