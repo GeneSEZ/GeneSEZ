@@ -7,41 +7,31 @@ namespace forms
 
 	/* PROTECTED REGION END */
 	#endregion
-
+	
 	public class Point : IForm
 	{
 		#region Private Fields
-		private double x;
-		private double y;
+		private    double x;
+		private    double y;
 		#endregion
-
+		
 		#region Properties
-		public double X
+		public  double X
 		{
-			get
-			{
-				return this.x;
-			}
-			set
-			{
-				this.x = value;
-			}
+
+			get { return this.x; }
+			set { this.x = value; }
 		}
-		public double Y
+		public  double Y
 		{
-			get
-			{
-				return this.y;
-			}
-			set
-			{
-				this.y = value;
-			}
+
+			get { return this.y; }
+			set { this.y = value; }
 		}
 		#endregion
-
+		
 		#region Constructors
-		public Point( double x,  double y )
+	public Point( double x,  double y)
 		{
 			/* PROTECTED REGION ID(java.moperation.implementation.operation.code._14_0_b6f02e1_1211871240109_473577_277) ENABLED START */
 			/* TODO put your own implementation code here */
@@ -49,9 +39,9 @@ namespace forms
 			this.y = y;
 			/* PROTECTED REGION END */
 		}
-
+		
 		#endregion
-
+		
 		#region Your Own Implementations
 		/* PROTECTED REGION ID(java.mclassifier.implementation.owncode.code._14_0_b6f02e1_1211871095796_723781_254) ENABLED START */
 		/* TODO put your own implementation code here */
@@ -75,6 +65,7 @@ namespace forms
 		}
 
 		/* PROTECTED REGION END */
-		#endregion        
-    }
+		#endregion
+	}
+
 }
