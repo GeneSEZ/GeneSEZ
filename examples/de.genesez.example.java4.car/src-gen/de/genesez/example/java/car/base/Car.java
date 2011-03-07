@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * A car is a vehicle with four wheels and drives on the road.
- * @author	nicher
+ * @author	dreamer
  */
 public class Car extends Vehicle {
 	
@@ -94,14 +94,6 @@ public class Car extends Vehicle {
 	 */
 	public Integer getMaxSpeed() {
 		return maxSpeed;
-	}
-	
-	/**
-	 * documented here {@link getMaxSpeed()}
-	 * @generated	setter method for the attribute '<em><b>maxSpeed</b></em>'
-	 */
-	public void setMaxSpeed(Integer maxSpeed) {
-		this.maxSpeed = maxSpeed;
 	}
 	
 	/**

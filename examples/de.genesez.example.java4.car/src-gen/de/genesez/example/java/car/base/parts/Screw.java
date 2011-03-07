@@ -7,7 +7,7 @@ import java.util.*;
 /* PROTECTED REGION END */
 
 /**
- * @author	nicher
+ * @author	dreamer
  */
 public class Screw {
 	
@@ -40,51 +40,6 @@ public class Screw {
 	}
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * describes the length of a screw
-	 * @generated	getter for the attribute '<em><b>length</b></em>'
-	 */
-	public float getLength() {
-		return length;
-	}
-	
-	/**
-	 * documented here {@link getLength()}
-	 * @generated	setter method for the attribute '<em><b>length</b></em>'
-	 */
-	public void setLength(float length) {
-		this.length = length;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>diameter</b></em>'
-	 */
-	public float getDiameter() {
-		return diameter;
-	}
-	
-	/**
-	 * documented here {@link getDiameter()}
-	 * @generated	setter method for the attribute '<em><b>diameter</b></em>'
-	 */
-	public void setDiameter(float diameter) {
-		this.diameter = diameter;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>metric</b></em>'
-	 */
-	public boolean getMetric() {
-		return metric;
-	}
-	
-	/**
-	 * documented here {@link getMetric()}
-	 * @generated	setter method for the attribute '<em><b>metric</b></em>'
-	 */
-	public void setMetric(boolean metric) {
-		this.metric = metric;
-	}
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1178034133828_951385_16) ENABLED START */

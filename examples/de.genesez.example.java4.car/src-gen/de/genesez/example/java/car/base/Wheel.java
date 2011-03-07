@@ -8,7 +8,7 @@ import de.genesez.example.java.car.base.parts.Screw;
 /* PROTECTED REGION END */
 
 /**
- * @author	nicher
+ * @author	dreamer
  */
 public class Wheel implements Changeable {
 	
@@ -62,39 +62,6 @@ public class Wheel implements Changeable {
 	}
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>diameter</b></em>'
-	 */
-	public float getDiameter() {
-		return diameter;
-	}
-	
-	/**
-	 * documented here {@link getDiameter()}
-	 * @generated	setter method for the attribute '<em><b>diameter</b></em>'
-	 */
-	public void setDiameter(float diameter) {
-		this.diameter = diameter;
-	}
-	
-	public java.util.Set getSpecification() {
-		return specification;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>durability</b></em>'
-	 */
-	public int getDurability() {
-		return durability;
-	}
-	
-	/**
-	 * documented here {@link getDurability()}
-	 * @generated	setter method for the attribute '<em><b>durability</b></em>'
-	 */
-	public void setDurability(int durability) {
-		this.durability = durability;
-	}
 	
 	/**
 	 * accessor for association to mycar

@@ -7,7 +7,7 @@ import java.util.*;
 /* PROTECTED REGION END */
 
 /**
- * @author	nicher
+ * @author	dreamer
  */
 public class Owner {
 	
@@ -28,20 +28,6 @@ public class Owner {
 	}
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>name</b></em>'
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * documented here {@link getName()}
-	 * @generated	setter method for the attribute '<em><b>name</b></em>'
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._12_5_6340215_1182161516984_21570_380) ENABLED START */

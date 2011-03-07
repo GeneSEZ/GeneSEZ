@@ -7,7 +7,7 @@ import java.util.*;
 /* PROTECTED REGION END */
 /**
  * state of a vehicle
- * @author	nicher
+ * @author	dreamer
  */
 public class VehicleStatus implements Comparable {
 	
@@ -28,9 +28,6 @@ public class VehicleStatus implements Comparable {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
-	/**
-	 * 
-	 */
 	private final String name;
 	// Assign an ordinal to this object
 	private final int ordinal = nextOrdinal++;

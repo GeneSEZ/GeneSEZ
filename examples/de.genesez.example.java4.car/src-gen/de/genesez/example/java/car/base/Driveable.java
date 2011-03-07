@@ -7,7 +7,7 @@ import java.util.*;
 /* PROTECTED REGION END */
 
 /**
- * @author	nicher
+ * @author	dreamer
  */
 public interface Driveable {
 	

@@ -9,7 +9,7 @@ import java.awt.Color;
 
 /**
  * This abstract class Vehicle is the superclass for all things that can drive (for example: car, boat, air plane, ...).
- * @author	nicher
+ * @author	dreamer
  */
 public abstract class Vehicle implements Paintable, Driveable {
 	
@@ -52,50 +52,6 @@ public abstract class Vehicle implements Paintable, Driveable {
 	}
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>make</b></em>'
-	 */
-	public String getMake() {
-		return make;
-	}
-	
-	/**
-	 * documented here {@link getMake()}
-	 * @generated	setter method for the attribute '<em><b>make</b></em>'
-	 */
-	public void setMake(String make) {
-		this.make = make;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>color</b></em>'
-	 */
-	public Color getColor() {
-		return color;
-	}
-	
-	/**
-	 * documented here {@link getColor()}
-	 * @generated	setter method for the attribute '<em><b>color</b></em>'
-	 */
-	public void setColor(Color color) {
-		this.color = color;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>state</b></em>'
-	 */
-	public VehicleStatus getState() {
-		return state;
-	}
-	
-	/**
-	 * documented here {@link getState()}
-	 * @generated	setter method for the attribute '<em><b>state</b></em>'
-	 */
-	public void setState(VehicleStatus state) {
-		this.state = state;
-	}
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1179139182234_646597_164) ENABLED START */

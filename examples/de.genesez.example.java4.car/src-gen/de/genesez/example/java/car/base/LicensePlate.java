@@ -7,7 +7,7 @@ import java.util.*;
 /* PROTECTED REGION END */
 
 /**
- * @author	nicher
+ * @author	dreamer
  */
 public class LicensePlate {
 	
@@ -24,20 +24,6 @@ public class LicensePlate {
 	private String key;
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>key</b></em>'
-	 */
-	public String getKey() {
-		return key;
-	}
-	
-	/**
-	 * documented here {@link getKey()}
-	 * @generated	setter method for the attribute '<em><b>key</b></em>'
-	 */
-	public void setKey(String key) {
-		this.key = key;
-	}
 	
 	/**
 	 * accessor for association to car

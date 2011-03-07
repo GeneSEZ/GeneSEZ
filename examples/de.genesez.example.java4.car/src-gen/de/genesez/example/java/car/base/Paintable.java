@@ -8,7 +8,7 @@ import java.awt.Color;
 /* PROTECTED REGION END */
 
 /**
- * @author	nicher
+ * @author	dreamer
  */
 public interface Paintable {
 	

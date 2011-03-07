@@ -7,7 +7,7 @@ import java.util.*;
 /* PROTECTED REGION END */
 
 /**
- * @author	nicher
+ * @author	dreamer
  */
 public class Engine {
 	
@@ -28,35 +28,6 @@ public class Engine {
 	private String name;
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>ps</b></em>'
-	 */
-	public byte getPs() {
-		return ps;
-	}
-	
-	/**
-	 * documented here {@link getPs()}
-	 * @generated	setter method for the attribute '<em><b>ps</b></em>'
-	 */
-	public void setPs(byte ps) {
-		this.ps = ps;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>name</b></em>'
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * documented here {@link getName()}
-	 * @generated	setter method for the attribute '<em><b>name</b></em>'
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	/**
 	 * accessor for association to car
