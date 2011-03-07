@@ -6,13 +6,17 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 /* PROTECTED REGION ID(java.type.import._11_5_6340215_1179139231828_754744_209) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public interface IChangeable {
 	
 	// -- generated attribute, constant + association declarations ----------
 	public static final Integer DEFAULT_PERIOD = 66;
 	
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 * @param	newInstance	
 	 * @return	
 	 */

@@ -7,6 +7,10 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class License implements AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -57,8 +61,8 @@ public class License implements AssociationRole {
 		throw new RuntimeException("the class doesn't have the association you specified!");
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>car</b></em>' to {@link Car}
+	/**
+	 * Provides access to the association '<em><b>car</b></em>' to {@link Car}.
 	 */
 	@SuppressWarnings("unchecked")
 	public AssociationAC<License, Car, Owner> car() {

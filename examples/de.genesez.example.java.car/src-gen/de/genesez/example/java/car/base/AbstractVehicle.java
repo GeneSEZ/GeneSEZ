@@ -10,7 +10,7 @@ import java.awt.Color;
 
 /**
  * This abstract class Vehicle is the superclass for all things that can drive (for example: car, boat, air plane, ...).
- * @author	dreamer
+ * @author dreamer
  */
 public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
@@ -24,7 +24,7 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
 	// -- generated method declarations -------------------------------------
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 * @param	distance	
 	 * @return	
 	 * @throws	OutOfFuelException
@@ -34,7 +34,7 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 * @param	color	
 	 * @return	
 	 */

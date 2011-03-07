@@ -7,6 +7,10 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class OutOfFuelException extends Exception {
 	
 	// -- generated code of other cartridges --------------------------------

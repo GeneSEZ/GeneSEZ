@@ -7,6 +7,10 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class Engine implements AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -27,14 +31,14 @@ public class Engine implements AssociationRole {
 	
 	// -- generated association + attribute accessors -----------------------
 	/**
-	 * getter for the attribute '<em><b>ps</b></em>'
+	 * Gets the value of the attribute '<em><b>ps</b></em>'
 	 */
 	public byte getPs() {
 		return ps;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>name</b></em>'
+	 * Gets the value of the attribute '<em><b>name</b></em>'
 	 */
 	public String getName() {
 		return name;
@@ -63,8 +67,8 @@ public class Engine implements AssociationRole {
 		throw new RuntimeException("the class doesn't have the association you specified!");
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>car</b></em>' to {@link Car}
+	/**
+	 * Provides access to the association '<em><b>car</b></em>' to {@link Car}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Engine, Car> car() {

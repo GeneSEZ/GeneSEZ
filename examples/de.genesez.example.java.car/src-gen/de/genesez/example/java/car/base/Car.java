@@ -9,7 +9,7 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 
 /**
  * A car is a vehicle with four wheels and drives on the road.
- * @author	dreamer
+ * @author dreamer
  */
 public class Car extends AbstractVehicle implements AssociationRole {
 	
@@ -153,7 +153,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 		throw new RuntimeException("the class doesn't have the association you specified!");
 	}
 	
-	/** 
+	/**
 	 * reference to the spared wheel
 	 */
 	@SuppressWarnings("unchecked")
@@ -161,31 +161,31 @@ public class Car extends AbstractVehicle implements AssociationRole {
 		return (Association<Car, Wheel>) association.get(Associations.SPARE);
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>license</b></em>' to {@link License}
+	/**
+	 * Provides access to the association '<em><b>license</b></em>' to {@link License}.
 	 */
 	@SuppressWarnings("unchecked")
 	public AssociationAC<Car, License, Owner> license() {
 		return (AssociationAC<Car, License, Owner>) association.get(Associations.LICENSE);
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>licensePlate</b></em>' to {@link LicensePlate}
+	/**
+	 * Provides access to the association '<em><b>licensePlate</b></em>' to {@link LicensePlate}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Car, LicensePlate> licensePlate() {
 		return (Association<Car, LicensePlate>) association.get(Associations.LICENSEPLATE);
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>engine</b></em>' to {@link Engine}
+	/**
+	 * Provides access to the association '<em><b>engine</b></em>' to {@link Engine}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Car, Engine> engine() {
 		return (Association<Car, Engine>) association.get(Associations.ENGINE);
 	}
 	
-	/** 
+	/**
 	 * reference to normal wheels on a car
 	 */
 	@SuppressWarnings("unchecked")

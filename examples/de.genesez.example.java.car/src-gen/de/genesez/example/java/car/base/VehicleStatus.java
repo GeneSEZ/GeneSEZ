@@ -8,7 +8,7 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 /* PROTECTED REGION END */
 /**
  * state of a vehicle
- * @author	dreamer
+ * @author dreamer
  */
 public enum VehicleStatus {
 	

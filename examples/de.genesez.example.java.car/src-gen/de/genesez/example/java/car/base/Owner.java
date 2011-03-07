@@ -7,6 +7,10 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class Owner implements AssociationClass {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -16,7 +20,7 @@ public class Owner implements AssociationClass {
 	private ACLink associationClassLink = new ACLink();
 	
 	/**
-	 * initializing constructor for class '<em><b>Owner</b></em>'
+	 * Initializing constructor for class '<em><b>Owner</b></em>'.
 	 * @param	name	{@link String.getName()}
 	 * @param	associationClassLink	{@link ACLink.getAssociationClassLink()}
 	 */
@@ -27,7 +31,7 @@ public class Owner implements AssociationClass {
 	
 	// -- generated association + attribute accessors -----------------------
 	/**
-	 * getter for the attribute '<em><b>associationClassLink</b></em>'
+	 * Gets the value of the attribute '<em><b>associationClassLink</b></em>'
 	 */
 	public ACLink getAssociationClassLink() {
 		return associationClassLink;

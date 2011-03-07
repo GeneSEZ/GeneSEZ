@@ -8,6 +8,10 @@ import de.genesez.example.java.car.base.parts.Screw;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class Wheel implements IChangeable, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -33,7 +37,7 @@ public class Wheel implements IChangeable, AssociationRole {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 * @param	newWheel	
 	 * @return	
 	 */
@@ -45,7 +49,7 @@ public class Wheel implements IChangeable, AssociationRole {
 	}
 	
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 * @throws	FlatTireException
 	 */
 	public void roll() throws FlatTireException {
@@ -80,16 +84,16 @@ public class Wheel implements IChangeable, AssociationRole {
 		throw new RuntimeException("the class doesn't have the association you specified!");
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>mycar</b></em>' to {@link Car}
+	/**
+	 * Provides access to the association '<em><b>mycar</b></em>' to {@link Car}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Wheel, Car> mycar() {
 		return (Association<Wheel, Car>) association.get(Associations.MYCAR);
 	}
 	
-	/** 
-	 * provides access to the association '<em><b>screw</b></em>' to {@link Screw}
+	/**
+	 * Provides access to the association '<em><b>screw</b></em>' to {@link Screw}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Wheel, Screw> screw() {

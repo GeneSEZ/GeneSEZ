@@ -7,6 +7,10 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author dreamer
+ */
 public class Screw {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -22,7 +26,7 @@ public class Screw {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 * @param	count	
 	 */
 	public void screwOn(int count) {
@@ -41,14 +45,14 @@ public class Screw {
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>diameter</b></em>'
+	 * Gets the value of the attribute '<em><b>diameter</b></em>'
 	 */
 	public float getDiameter() {
 		return diameter;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>metric</b></em>'
+	 * Gets the value of the attribute '<em><b>metric</b></em>'
 	 */
 	public boolean getMetric() {
 		return metric;
