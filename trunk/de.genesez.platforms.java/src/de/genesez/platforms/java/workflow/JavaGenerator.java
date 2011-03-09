@@ -8,7 +8,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xpand2.output.JavaBeautifier;
-import org.eclipse.xtend.typesystem.xsd.XMLBeautifier;
 
 import de.genesez.platforms.common.workflow.Generator;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
@@ -66,13 +65,10 @@ public class JavaGenerator extends Generator {
 		
 		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier();
 		
-		XMLBeautifier xmlBeautifier = new XMLBeautifier();
-		
 		// add all beautifiers
 		List<Object> beautifiers = new ArrayList<Object>();
 		beautifiers.add(javaBeautifier);
 		beautifiers.add(javaImportBeautifier);
-		beautifiers.add(xmlBeautifier);
 		super.setBeautifier(beautifiers);
 	}
 	
