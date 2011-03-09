@@ -109,20 +109,20 @@
 					/>
 				<if>
 					<!-- filter plug-ins for unpacking -->
-					<matches pattern="${genesez.extract}" string="${project.@{project}}" casesensitive="false" />
+					<matches pattern="${genesez.notExtract}" string="${project.@{project}}" casesensitive="false" />
 					<then>
-						<unjar dest="${temp.dir}/genesez/plugins/${project.@{project}}_${plugin.version}">
-							<fileset dir="@{project}/dist">
-								<include name="*_${plugin.version}.jar" />
-							</fileset>
-						</unjar>
-					</then>
-					<else>
 						<copy todir="${temp.dir}/genesez/plugins">
 							<fileset dir="@{project}/dist">
 								<include name="*_${plugin.version}.jar" />
 							</fileset>
 						</copy>
+					</then>
+					<else>
+						<unjar dest="${temp.dir}/genesez/plugins/${project.@{project}}_${plugin.version}">
+							<fileset dir="@{project}/dist">
+								<include name="*_${plugin.version}.jar" />
+							</fileset>
+						</unjar>
 					</else>
 				</if>
 			</sequential>
