@@ -28,12 +28,18 @@
 		depends="build"
 		description="Create the plugin jar for org.eclipse.emf.ecore.adapter.uml">
 		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
-			<fileset dir="${bin.dir}" includes="**/*" />
-			<fileset dir="${ecore.dir}" includes="**/*" />
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
+			<fileset dir="${basedir}">
+				<include name="${ecore.dir}/**" />
+			</fileset>
 		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
 	</target>
 	
 	<target name="clean"
