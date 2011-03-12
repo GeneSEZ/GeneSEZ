@@ -129,7 +129,7 @@
 		</for>
 		<zip destfile="${bundle.dir}/genesez-${plugin.version}.zip" basedir="${temp.dir}/genesez" includes="**/*"></zip>
 		
-		<!-- create genesez + oAW + eclipse all-in-one bundles -->
+		<!-- create genesez + emf + uml + xpand + mwe + mwe2 + eclipse all-in-one bundles -->
 		<!-- p1 bundles - Eclipse <= 3.3 -->
 		<for param="file">
 			<path>
@@ -189,8 +189,8 @@
 				<echo message="${file.@{file}}" />
 				<zip destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}">
 					<zipfileset src="${eclipse.p2.dir}/${file.@{file}}" />
-					<zipfileset src="${bundle.dir}/genesez-${plugin.version}.zip" prefix="eclipse/dropins/genesez" />
-					<zipfileset dir="${dropins.location}" prefix="eclipse/dropins/prerequisites"/>
+					<zipfileset src="${bundle.dir}/genesez-${plugin.version}.zip" prefix="eclipse/dropins/genesez-${plugin.version}" />
+					<zipfileset dir="${dropins.location}" prefix="eclipse/dropins"/>
 				</zip>
 			</sequential>
 		</for>
@@ -207,8 +207,8 @@
 					/>
 				<mkdir dir="${unpack.dir}" />
 				<untar src="${eclipse.p2.dir}/${file.@{file}}" dest="${unpack.dir}" compression="gzip" />
-				<unzip src="${bundle.dir}/genesez-${plugin.version}.zip" dest="${unpack.dir}/eclipse/dropins/genesez" />
-				<copy todir="${unpack.dir}/eclipse/dropins/prerequisites">
+				<unzip src="${bundle.dir}/genesez-${plugin.version}.zip" dest="${unpack.dir}/eclipse/dropins/genesez-${plugin.version}" />
+				<copy todir="${unpack.dir}/eclipse/dropins">
 					<fileset dir="${dropins.location}"/>
 				</copy>
 				<tar destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}" compression="gzip" longfile="gnu">
