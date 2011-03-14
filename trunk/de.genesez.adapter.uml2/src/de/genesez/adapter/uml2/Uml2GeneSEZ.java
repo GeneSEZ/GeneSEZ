@@ -3,6 +3,7 @@ package de.genesez.adapter.uml2;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +29,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		defaults.putAll(WorkflowUtils.defaults);
 		defaults.put("umlSlot", "uml2model");
 		defaults.put("ignoreValidationErrors", "false");
-		defaults.put("umlCheckScript", "de::genesez::adapter::uml2::uml2constraints");
+		defaults.put("umlCheckScript", "de::genesez::adapter::uml2::uml2constraints, de::genesez::adapter::uml2::UmlStateMachineValidation, de::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation");
 		defaults.put("uml2GenesezScriptCall", "de::genesez::adapter::uml2::uml2genesez::transform");
 		defaults.put("excludePackages", "UML Standard Profile");
 		defaults.put("mapClassesInModelToExternal", "false");
@@ -49,9 +50,9 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	private List<String> externalPackages = new ArrayList<String>();
 	private List<String> externalStereotypes = new ArrayList<String>();
 	private List<String> excludeStereotypes = new ArrayList<String>();
+	private boolean addDefaultCheckFiles = true;
 	private boolean isNotSetUmlSlot = true;
 	private boolean isNotSetIgnoreValidationErrors = true;
-	private boolean isNotSetAddCheckFile = true;
 	private boolean isNotSetUml2genesezScriptCall = true;
 	private boolean isNotSetOutputSlot = true;
 	private boolean isNotSetExcludePackages = true;
@@ -107,8 +108,12 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		if (isNotSetIgnoreValidationErrors) {
 			setIgnoreValidationErrors(new Boolean(properties.getProperty("ignoreValidationErrors")));
 		}
-		if (isNotSetAddCheckFile) {
-			addUmlCheckScript(properties.getProperty("umlCheckScript"));
+		if (addDefaultCheckFiles) {
+			String files = properties.getProperty("umlCheckScript");
+			List<String> filtered = WorkflowUtils.split(files);
+			for (String s : filtered) {
+				addUmlCheckScript(s);
+			}
 		}
 		if (isNotSetOutputSlot) {
 			setSlot(properties.getProperty("slot"));
@@ -189,7 +194,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	 */
 	public void addUmlCheckScript(String umlCheckScript) {
 		checkComponent.addCheckFile(umlCheckScript);
-		isNotSetAddCheckFile = false;
+		addDefaultCheckFiles = false;
 	}
 	
 	/**
