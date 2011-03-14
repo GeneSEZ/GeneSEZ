@@ -1,0 +1,65 @@
+«IMPORT gtrace»
+
+«REM»
+	Generates a requirements traceability summary page with charts.
+	@author tobias haubold
+«ENDREM»
+
+«EXTENSION de::genesez::platforms::dashboard::Dashboard»
+«EXTENSION de::genesez::platforms::dashboard::traceability::RequirementsTraceabilityChart»
+
+«DEFINE Root FOR TTraceModel»
+«FILE traceabilitySummaryFileName()»
+	«EXPAND TraceabilityConsistency -»
+	«EXPAND Traceability -»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE TraceabilityConsistency FOR TTraceModel -»
+	<p>
+		This chart illustrates the amount of changed specification elements, 
+		i.e. scenarios, scenario steps and requirements after the last verification of traceability links.
+		It further outlines the amount of structural elements affected by the changed specification.
+		To ensure requirements traceability consistency, the 
+		<a href="«linkToRevisedSpecification()»" onclick="«clickOnRevisedSpecification()»">affected traceability links</a> need verification.
+	</p>
+	<img src="http://chart.apis.google.com/chart?
+		cht=bhs&amp;
+		chxt=x,y&amp;
+		chs=«rtUpSize()»&amp;
+		chd=t:«rtUpData()»&amp;
+		chds=0,1&amp;
+		chco=«rtUpBarColor()»&amp;
+		chxl=0:|«rtUpXLabels()»|1:|«rtUpYLabels()»&amp;
+		chbh=a&amp;
+		chtt=«rtUpTitle()»&amp;
+		chm=«rtUpDataLabels()»" />
+«ENDDEFINE»
+
+«DEFINE Traceability FOR TTraceModel -»
+	<p>
+		The further evaluation of traceability links lead to:
+		<ol>
+			<li>
+				<a href="«linkToUnsatisfiedSpecification()»" onclick="«clickOnUnsatisfiedSpecification()»">specification elements with no satisfaction</a>,
+				i.e. no assigned structural elements</li>
+			<li>
+				<a href="«linkToUnspecifiedStructure()»" onclick="«clickOnUnspecifiedStructure()»">structural elements without specification</a>,
+				i.e. no assigned specification elements</li>
+		</ol>
+		The next chart shows the satisfaction rate for specification elements and the 
+		specification rate for structural elements. Strictly speaking, the existence of 
+		structural elements without specification is not evident.
+	</p>
+	<img src="http://chart.apis.google.com/chart?
+		cht=bvs&amp;
+		chxt=x,y&amp;
+		chs=«rtStateSize()»&amp;
+		chd=t:«rtStateData()»&amp;
+		chds=0,1&amp;
+		chco=«rtStateBarColor()»&amp;
+		chxl=0:|«rtStateXLabels()»|1:|«rtStateYLabels()»&amp;
+		chbh=a&amp;
+		chtt=«rtStateTitle()»&amp;
+		chm=«rtStateDataLabels()»" />
+«ENDDEFINE»

@@ -1,0 +1,63 @@
+/**
+ * QF-Test helper
+ *
+ * @author	Gerrit Beine
+ * @date	2008-08-04
+ */
+
+// uses GeneSEZ testing metamodel
+import gtesting;
+
+
+// use logging
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::qftest::scripts::Conversion;
+extension de::genesez::platforms::qftest::scripts::Naming;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	File helper functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * open the QF-Test file
+ * @context	the TestSuite
+ * @return	void
+ */
+Void openFile(TTestSuite t, String d) :
+	trace("opening file " + t.fullFileName() ) ->
+	openFile( d + dirSeparator() + t.fullFileName() );
+
+/**
+ * save the QF-Test file
+ * @context	the TestSuite
+ * @return	void
+ */
+Void saveFile(TTestSuite t, String d) :
+	trace("saving file " + t.fullFileName() ) ->
+	saveFile( d + dirSeparator() + t.fullFileName() );
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping to java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * open the QF-Test file
+ * @param	s	the file name
+ * @return	void
+ */
+private Void openFile(String s) :
+	JAVA de.genesez.platforms.qftest.QftFile.open(java.lang.String);
+
+/**
+ * save the QF-Test file
+ * @param	s	the file name
+ * @return	void
+ */
+private Void saveFile(String s) :
+	JAVA de.genesez.platforms.qftest.QftFile.save(java.lang.String);
+

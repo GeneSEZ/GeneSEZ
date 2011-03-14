@@ -1,0 +1,76 @@
+
+import gcore;
+import greq;
+
+/**
+ * Provides a mapping of names to be used for meta model elements.
+ * @author tobias haubold
+ */
+
+String asMetaTypeNamePlural(RSpecObject this) :
+	switch (metaType) {
+		case RRequirement : "Requirements"
+		case RScenario : "Scenarios"
+		case RScenarioStep : "Scenario Steps"
+		default : metaType
+	};
+
+String asMetaTypeNameSingular(RSpecObject this) :
+	switch (metaType) {
+		case RRequirement : "Requirement"
+		case RScenario : "Scenario"
+		case RScenarioStep : "Scenario Step"
+		default : metaType
+	};
+
+String asMetaTypeNamePlural(MElement this) :
+	switch (metaType) {
+		// structuring
+		case MModel : "Models"
+		case MPackage : "Packages"
+		// classifier
+		case MInterface : "Interfaces"
+		case MClass : "Classes"
+		case MEnumeration : "Enumerations"
+		case MDataType : "Datatypes"
+		// structural elements of classifiers
+		case MAssociation : "Associations"
+		case MAttribute : "Attributes"
+		case MAssociationRole : "Association Roles"
+		case MOperation : "Operations"
+		case MParameter : "Parameters"
+		default : name
+	};
+
+String asMetaTypeNameSingular(MElement this) :
+	switch (metaType) {
+		// structuring
+		case MModel : "Model"
+		case MPackage : "Package"
+		// classifier
+		case MInterface : "Interface"
+		case MClass : "Class"
+		case MEnumeration : "Enumeration"
+		case MDataType : "Datatype"
+		// structural elements of classifiers
+		case MAssociation : "Association"
+		case MAttribute : "Attribute"
+		case MAssociationRole : "Association Role"
+		case MOperation : "Operation"
+		case MParameter : "Parameter"
+		default : name
+	};
+
+String asMetaTypeNameSingular(Object this) : 
+	switch(true) {
+		case metaType.isAssignableFrom(MElement) : ((MElement)this).asMetaTypeNameSingular()
+		case metaType.isAssignableFrom(RSpecObject) : ((RSpecObject)this).asMetaTypeNameSingular()
+		default : "Object"
+	};
+	
+String asMetaTypeNamePlural(Object this) : 
+	switch(true) {
+		case metaType.isAssignableFrom(MElement) : ((MElement)this).asMetaTypeNamePlural()
+		case metaType.isAssignableFrom(RSpecObject) : ((RSpecObject)this).asMetaTypeNamePlural()
+		default : "Objects"
+	};

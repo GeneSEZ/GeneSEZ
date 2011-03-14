@@ -1,0 +1,55 @@
+
+«IMPORT gcore»
+
+«REM»
+	Performs the generation of interfaces
+	
+	@author	tobias haubold
+	@author	nico herbig (last)
+	@date	2009-05-26
+«ENDREM»
+
+«REM» useful support functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«REM» use java naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«REM» use java conversions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes an interface
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+package «packageDeclaration( basePackage() ) -»;
+«EXPAND Import::Import -»
+«REM» generate a newline between imports + type comment «ENDREM»
+«EXPAND Comment::Type -»
+public interface «asTypeName() -» «EXPAND Type::Generalization -» {
+	
+	«IF generateSectionComments() && ( hasAttributes() ) -»
+	// -- generated attribute, constant + association declarations ----------
+	«ENDIF -»
+	«EXPAND Attribute::Declaration -»
+	
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
+	// -- generated method declarations -------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Declaration -»
+	
+	«IF generateSectionComments() && ( hasDerivedAttributes() || hasAssociationRoles() ) -»
+	// -- generated association accessors -----------------------------------
+	«ENDIF -»
+	«EXPAND Attribute::Derived -»
+	«EXPAND Association::Accessors -»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.interface.own.code.declaration." + xmiGuid)-»
+}
+«ENDDEFINE»

@@ -1,0 +1,38 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::java::java5::scripts::Attribute;
+
+	
+Void addGetterAndSetterOperations(MInterface this) :
+	let c = getSessionBeanSeamComponent() :
+		c != null
+			? (
+				c.property.typeSelect(MAttribute).createGetterOperation(this) ->
+				c.property.typeSelect(MAttribute).createSetterOperation(this)
+			)
+			: "";
+		
+MClass getSessionBeanSeamComponent(MInterface this) :
+	this.hasStereotype("ejb3Local") || this.hasStereotype("ejb3Remote")
+		? allClassifiers(this.model()).typeSelect(MClass).selectFirst(e|e.hasStereotype("ejb3SessionBean") && e.hasStereotype("seam2Component") && e.realization.contains(this))
+		: null;
+
+MClassifier addConverter(MClassifier this) :
+	this.hasStereotype("seam2Converter")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Converter") 
+		? createExternal(this.model(), "Converter")
+		: "";
+		
+MClassifier addValidator(MClassifier this) :
+	this.hasStereotype("seam2Validator")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Validator") 
+		? createExternal(this.model(), "Validator")
+		: "";
+		
+MClassifier addFilter(MClassifier this) :
+	this.hasStereotype("seam2ServletContainerIntegration")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Filter") 
+		? createExternal(this.model(), "Filter")
+		: "";

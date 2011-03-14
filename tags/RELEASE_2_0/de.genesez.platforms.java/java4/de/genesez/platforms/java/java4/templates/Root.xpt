@@ -1,0 +1,102 @@
+
+«IMPORT gcore»
+
+«REM»
+	Main entry point for generating java code.
+	Iterates over the model and delegates the handling of classifiers.
+	
+	@author	tobias haubold
+	@author	nico herbig (last)
+	@date	2009-05-26
+«ENDREM»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» use dependencies to generate imports «ENDREM»
+«EXTENSION de::genesez::platforms::common::UseDependencies»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Association»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of the model, adds use dependencies to all classifiers, 
+	prepares all association classes and rejects all ignored packages
+	@context	a genesez model
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«REM» prepare model, init logger «ENDREM»
+	«addUseDependencies()»
+	«useLogger("de.genesez.platforms.java")»
+	«REM» start transformation «ENDREM»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+	«EXPAND Root FOREACH classifier»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	generates the package documentation if there is any
+	delegates the handling of all classifiers
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«IF hasComment()»
+		«EXPAND Comment::Package -»
+	«ENDIF»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the generation of an interface
+«ENDREM»
+«DEFINE Root FOR MInterface»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Interface::Root»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of a class
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Class::Root»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of an enumeration
+«ENDREM»
+«DEFINE Root FOR MEnumeration-»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Enumeration::Root»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of a data type
+«ENDREM»
+«DEFINE Root FOR MDataType»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND DataType::Root»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("generation of 'MClassifier's is currently not supported")»
+«ENDDEFINE»

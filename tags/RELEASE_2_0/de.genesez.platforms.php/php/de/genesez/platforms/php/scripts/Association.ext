@@ -1,0 +1,45 @@
+/**
+ * adds the association handling classes as external classes as suppliers to the PHP classifiers
+ * 
+ * @author	tobias haubold
+ * @date	2009-03-25
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+
+MPackage addAssociationIncludes(MPackage this) :
+	nestedPackage.addAssociationIncludes() ->
+	classifier.addAssociationIncludes() ->
+	this;
+
+MClassifier addAssociationIncludes(MClassifier this) :
+	property.typeSelect(MAssociationRole).checkMultiplicity() ->
+	this;
+
+MAssociationRole checkMultiplicity(MAssociationRole this) :
+	isQualified()
+		? ( isSingleQualified()
+			? classifier.supplier.add( makeSingleQualifiedAssociation() )
+			: classifier.supplier.add( makeMultiQualifiedAssociation() )
+		) : ( isSingleValuedType()
+			? classifier.supplier.add( makeOneAssociation() )
+			: classifier.supplier.add( makeManyAssociation() )
+		) ->
+	this;
+
+MExternal makeOneAssociation(MAssociationRole this) :
+	model().createExternal("UML_OneAssociation");
+
+MExternal makeManyAssociation(MAssociationRole this) :
+	model().createExternal("UML_ManyAssociation");
+
+MExternal makeSingleQualifiedAssociation(MAssociationRole this) :
+	model().createExternal("UML_SingleQualifiedAssociation");
+
+MExternal makeMultiQualifiedAssociation(MAssociationRole this) :
+	model().createExternal("UML_MultiQualifiedAssociation");

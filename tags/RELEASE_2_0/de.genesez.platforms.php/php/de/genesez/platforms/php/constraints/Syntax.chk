@@ -1,0 +1,154 @@
+/**
+ * validates the model syntax for php code generation
+ * 
+ * currently covered:
+ * - check for 'MDataType's
+ * - check for 'MEnumeration's
+ * - realizations of 'MInterface's, generalizations for 'MClass's
+ * - association classes
+ * - visibility, abstract + final modifiers for classes + interfaces
+ * - visibility of operations
+ * - abstract operations contained in abstract classes
+ * - constructor + destructor operations with return types
+ * - destructor operations with parameters
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-10
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use helper to access information more easily
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a classifier has only one constructor
+ * @return	false, if the classifier has more than one constructor, otherwise true
+ */
+context MClassifier WARNING "GeneSEZ: only the constructor with the most count of parameters is used - multiple constructors are NOT supported by PHP! : " + fqn() :
+	!( operation.select( e|e.isConstructor() ).size > 1 );
+
+/**
+ * checks if operations have an unique name
+ * @return	false, if the classifier has operations with the same name, otherwise true
+ */
+context MClassifier WARNING "GeneSEZ: only the operation with the most count of parameters is used - operation names have to be unique in PHP! : " + fqn() :
+	operation.select( o| operation.exists( e| e.name == o.name && e != o ) ).isEmpty;
+
+/**
+ * checks if a classifier has a visibility
+ * @return	false, if the classifier has a visibility which will be ignored, otherwise true
+ */
+context MClassifier WARNING "GeneSEZ: the visibility will be ignored, because it is NOT supported by PHP: " + fqn() :
+	visibility.trim().length > 0;
+
+/**
+ * checks if the model contains 'MDataType's
+ * @return	false, if the model contains data types
+ */
+context MDataType WARNING "GeneSEZ: generation of 'MDataType's are currently NOT suported! : " + fqn() :
+	!( metaType == MDataType );
+
+/**
+ * checks if the model contains association classes
+ * @return	false, if the model contains association classes, otherwise true
+ */
+context MClass WARNING "GeneSEZ: association classes are currently NOT supported! : " + fqn() :
+	ownedAssociation == null;
+
+/**
+ * checks if the model contains 'MEnumeration's
+ * @return	false, if the model contains enumerations
+ */
+context MEnumeration WARNING "GeneSEZ: Enumerations are NOT nativly supported by PHP; generating them as 'final' classes with constant's: " + fqn() :
+	!( metaType == MEnumeration );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if an interface has realizations
+ * @return	false, if the interface has realizations, otherwise true
+ */
+context MInterface ERROR "GeneSEZ: realizations of interfaces will be ignored; interfaces cannot have realizations! : " + fqn() :
+	realization.isEmpty;
+
+/**
+ * checks if an interface is abstract
+ * @return	false, if the abstract modifier is set to 'true' and will be ignored, otherwise true
+ */
+context MInterface WARNING "GeneSEZ: the abstract modifier of interfaces will be ignored, because it is NOT supported by PHP: " + fqn() :
+	!abstract;
+
+/**
+ * checks if an interface is final
+ * @return	false, if the final modifier is set to 'true' and will be ignored, otherwise true
+ */
+context MInterface WARNING "GeneSEZ: the final modifier of interfaces will be ignored, because NOT it is supported by PHP: " + fqn() :
+	!final;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a class is both, abstract + final
+ * @return	false, if the class is both, abstract + final, otherwise true
+ */
+context MClass WARNING "GeneSEZ: the class is both, abstract + final, which is NOT supported by PHP - only one modifier will be used! : " + fqn() :
+	!( abstract && final );
+
+/**
+ * checks if a class has more than one generalization
+ * @return	false, if the class has more than one realization, otherwise true
+ */
+context MClass WARNING "GeneSEZ: multiple inheritance is NOT supported by PHP - only the first one is used! : " + fqn() :
+	!( generalization.size > 1 );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if an operation has an illegal visibility
+ * visibility can only be: private, protected, public
+ * @return	false, if the operation has an illegal visibility
+ */
+context MOperation ERROR "GeneSEZ: the operation has illegal modifiers - PHP only supports 'private', 'protected' + 'public'! : " + fqn() :
+	visibility == "private" || visibility == "protected" || visibility == "public";
+
+/**
+ * checks if an abstract operation is contained in an abstract class
+ * @return	false, if the operation is abstract and not within an abstract class, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the abstract operation MUST be contained within an abstract class, NOT within a non-abstract class! : " + fqn() :
+	!( abstract && !classifier.abstract );
+
+/**
+ * checks if an constructor operation has a return type set
+ * @return	false, if the constructor has a return type, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the constructor operation cannot have a return type - it will be ignored! : " + fqn() :
+	!( isConstructor() && returnType != null && returnType.name().toLowerCase() != "void" );
+
+/**
+ * checks if an destructor operation has a return type set
+ * @return	false, if the destructor has a return type, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the destructor operation cannot have a return type - it will be ignored! : " + fqn() :
+	!( isDestructor() && returnType != null && returnType.name().toLowerCase() != "void" );
+
+/**
+ * checks if an destructor operation has parameters
+ * @return	false, if the destructor operation has parameters, otherwise true
+ */
+context MOperation WARNING "GeneSEZ: the destructor operation cannot have parameters - they will be ignored! : " + fqn() :
+	!( isDestructor() && parameter.size > 0 );
+

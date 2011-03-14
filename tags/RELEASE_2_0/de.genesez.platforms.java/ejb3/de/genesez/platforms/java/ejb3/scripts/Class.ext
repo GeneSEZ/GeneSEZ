@@ -1,0 +1,184 @@
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::java::java5::scripts::Stereotypes;
+extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
+/* remove this import to be independent from jpa cartridge */
+extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
+extension de::genesez::platforms::common::m2m::CreateBasics;
+
+/**
+ *	adds the stereotype "ejb3Local" to a session bean
+ *	if no business interface is implemented and 
+ *	there is neither stereotype "ejb3Local" nor "ejb3Remote"
+ *	available
+ *
+ *	this		instance of MClassifier	
+ */
+addLocalBusinessInterface(MClassifier this) :
+	hasStereotype("ejb3SessionBean") &&
+	realization.isEmpty && 
+	!(hasStereotype("ejb3Local") || hasStereotype("ejb3Remote"))
+		? addLocalStereotype("")
+		: "";
+
+/**
+  * adds no argument constructor to a session or message driven bean
+  *	in the package and subpackages
+  */	
+MPackage addStandardConstructor(MPackage this) :
+	nestedPackage.addStandardConstructor() ->
+	classifier.typeSelect(MClass).addStandardConstructor();
+
+/**
+  * adds no argument constructor to a session or message 
+  *	driven bean if there is not already one
+  */	
+MClassifier addStandardConstructor(MClass this) :
+	(this.hasStereotype("ejb3SessionBean") || this.hasStereotype("ejb3MessageDrivenBean")) &&
+	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
+		? createStandardConstructor()
+		: "";
+
+/**
+  * creates a standard constructor with no arguments
+  *	this constructor does not have a protected region
+  *
+  *	the modeller has to model a constructor with no 
+  *	arguments explicitly if a protected region is desired
+  */
+Void createStandardConstructor(MClass container) :
+	let sc = createOperation(container, container.name()+"_StandardConstructor", container.name()) :
+		sc.processOperation("public", false, false, false, 1, false, false) ->
+		sc.setRaisedException(createList()) ->
+		sc.setOwnedComment(createList()) ->
+		sc.setParameter(createList()) ->
+		sc.setReturnType(createExternal(container.model(), "void")) ->
+		sc.addInternalStereotype("http://www.genesez.de/StandardConstructor");
+	
+/**
+  *	evaluates "ejb3SessionBean" stereotype and adds entityManager attribute
+  *	for jpa uasage in the session bean.
+  *
+  *	this operation binds the ejb3 cartridge to jpa cartridge because the attributes
+  *	have to be annotated. It is preferred to have DRY code instead of no coupling and 
+  *	it is preferred because in most cases ejb3 and jpa are used together
+  *
+  **/
+Void checkUseOfEntityManager(MClass this) :
+	!hasTaggedValue("ejb3SessionBean", "entityManager", "None")
+		? (	hasTaggedValue("ejb3SessionBean", "entityManager", "EntityManager")
+			? (	addEntityManager("EntityManager") ->
+				addStereotypesForEntityManager("entityManager", "[]")
+			)
+			:(
+			hasTaggedValue("ejb3SessionBean", "entityManager", "EntityManager_Extended")
+				? (	addEntityManager("EntityManager_Extended") ->
+					this.hasTaggedValue("ejb3SessionBean", "stateful", "true")
+						? addStereotypesForEntityManager("entityManager", "[EXTENDED]")
+						: (
+							addStereotypesForEntityManager("entityManager", "[]") ->
+							error("Use of an EntityManager with extended persistence context in a stateless SessionBean "+this.name+". Context was switched from extended to normal.")
+						)
+
+				)
+				:(
+				hasTaggedValue("ejb3SessionBean", "entityManager", "Session")
+					? (	addEntityManager("Session") ->
+						addStereotypesForEntityManager("session", "[]")
+					)
+					: (
+					hasTaggedValue("ejb3SessionBean", "entityManager", "Session_Extended")
+						? (	addEntityManager("Session_Extended") ->
+							this.hasTaggedValue("ejb3SessionBean", "stateful", "true")
+								? addStereotypesForEntityManager("session", "[EXTENDED]")
+								: (
+									addStereotypesForEntityManager("session", "[]") ->
+									error("Use of an SessionManager with extended persistence context in the stateless SessionBean "+this.name+". Context was switched from extended to normal.")
+								)
+							
+						)
+						: ""
+					)
+				)
+			)
+		)
+		: "";
+	
+/**
+  *	adds "ejb3PersistenceContext" and "accessor" to the attribute with the given name
+  *
+  *	@param	attributeName	attribute name of the entity manager
+  *	@param	fetchTypes		fetch types for the persistenceContext stereotype
+  */
+Void addStereotypesForEntityManager(MClass this, String attributeName, String fetchTypes) :
+	let e = this.property.typeSelect(MAttribute).selectFirst(e|e.name == attributeName) :
+		e != null
+			? (	addPersistenceContextStereotype(e, fetchTypes, "[]", "[]") ->
+				e.createAccessorForEntityManager()
+			)
+			: "";
+	
+Void createAccessorForEntityManager(MProperty this) :
+	!this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "None")
+		? (	this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Both")
+			? createAccessor(this, "true", "true")
+			: (	this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Getter")
+				? createAccessor(this, "true", "false")
+				: (	this.classifier.hasTaggedValue("ejb3SessionBean", "entityManagerAccess", "Setter")
+					? createAccessor(this, "false", "true")
+					: ""
+				) 
+			) 
+		)
+		: createAccessor(this, "false", "false") ->
+	"";
+
+/**
+  *	adds an attribute with name "entityManager" or "session" if an attribute
+  *	with the datatype "EntityManager" or "Session" not already exists
+  */
+Void addEntityManager(MClass this, String type) :
+	!existEntityManager() 
+		? (type.matches("EntityManager")
+			? addAttribute("entityManager", "EntityManager", "private", 1)
+			: (type.matches("EntityManager_Extended")
+				? addAttribute("entityManager", "EntityManager", "private", 1)
+				: (type.matches("Session")
+					? addAttribute("session", "Session", "private", 1)
+					: (type.matches("Session_Extended")
+						? addAttribute("session", "Session", "private", 1)
+						: ""
+					)	
+				)
+			)
+		)
+		: "" ->
+	"";
+
+/**
+  *	checks if class contains an attribute with the type "EntityManager" or "Session"
+  */
+boolean existEntityManager(MClass this) : 
+	this.property.exists(e|e.type.name().matches("EntityManager")) || this.property.exists(e|e.type.name().matches("Session"))
+		? true
+		: false;		
+
+/**
+ *	creates an attribute and adds it to the property list
+ *	
+ *	@param	container		instance of MClassifier
+ *	@param	name			name of the attribute
+ *	@param	type			type of the attribute
+ *	@param	visibility		visibility of the attribute
+ *	@param	multiplicity	multiplicity of the attribute
+ */
+Void addAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
+	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
+		a.processAttribute("", false, false) ->
+		a.setMultiplicity(multiplicity) ->
+		a.setVisibility(visibility) ->
+		a.setType(createExternal(container.model(), type));

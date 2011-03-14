@@ -1,0 +1,46 @@
+
+«IMPORT gcore»
+«IMPORT de::genesez::platforms::java::java5::templates»
+«IMPORT de::genesez::platforms::java::hibernate::templates»
+
+«REM» useful metamodel extensions «ENDREM»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::java::hibernate::scripts::HibernateHelper»
+
+
+«REM»
+	aspect oriented functions
+«ENDREM»
+
+«REM»
+	override the java5 setter method for immutable attributes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::SetterImpl FOR MAttribute»
+	«IF !hasAspect("generate", "immutable")-»
+		«targetDef.proceed()»
+	«ELSE-»
+		// no setter for immutable attribute «this.name»
+	«ENDIF»
+«ENDAROUND»
+
+«REM»
+	add class mapping to persistent classes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Root::Root FOR MClass»
+	«IF hasAspect("persistent")-»
+		«name.rememberHibernateClassForMapping()»
+		«EXPAND HibernateConfig::HbMappingFile»
+	«ENDIF»
+	«targetDef.proceed()»
+«ENDAROUND»
+
+«REM»
+	write hibernate mapping file
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Root::Root FOR MModel»
+	«targetDef.proceed()»
+	«IF !classToMap().isEmpty-»
+		«EXPAND HibernateConfig::HbmConfigFile FOR null»
+	«ENDIF»
+«ENDAROUND»

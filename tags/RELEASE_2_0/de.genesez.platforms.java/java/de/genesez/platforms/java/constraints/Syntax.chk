@@ -1,0 +1,84 @@
+/**
+ * Validates a model for generation using the java platform
+ * 
+ * @author	nico herbig
+ * @author	tobias haubold (last)
+ * @date	2007-07-25
+ */
+
+//	based genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::m2t::Helper;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type related things
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks the inheritance of java types
+ * @return	false generates an error, if multiple inheritance is used on a classifier which is not an interface
+ */
+context MClassifier ERROR "GeneSEZ: multiple inheritance is only allowed for interfaces: " + fqn() : 
+	generalization.size > 1
+		? (metaType == MInterface ? true : false)
+		: true;
+
+/**
+ * checks the modifiers of an attribute of an interface
+ * @return	generates a warning if the attibute has other modifiers than 'public', 'static' and 'final'
+ */
+context MAttribute WARNING "GeneSEZ: the modifiers of the interface attribute will be ignored! only 'public', 'static + 'final' are permitted! " + fqn() :
+	classifier.metaType == MInterface
+		? (visibility == "public" && static && final ? true : false)
+		: true;
+
+/**
+ * checks the modifiers of an operations of an interface
+ * @return	generates a warning if the operation has other modifiers than 'public' and 'abstract'
+ */
+context MOperation WARNING "GeneSEZ: the modifiers of the interface operation will be ignored! only 'public' and 'abstract' are permitted! " + fqn() :
+	classifier.metaType == MInterface
+		? (visibility == "public" && abstract ? true : false)
+		: true;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	other things
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf! " + fqn() :
+	isMultiValuedType() && usePrimitiveType() && hasGenericRealization()
+		? false
+		: true;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	reserved keywords
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if all names of elements are not reserved java words
+ * 'assert' was added in java 1.4, 'enum' was added in java 5
+ * @return	 true, if the name is not a reserved java word, otherwise false
+ */
+context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word! " + fqn() :
+	{ MPrimitiveType, MStereotype, MTag, MTaggedValue }.contains( metaType )
+		? true
+		: (
+	!{"abstract", "continue", "for", "new", "switch", "assert", "default", "goto", 
+		"package", "synchronized", "boolean", "do", "if", "private", "this", "break", 
+		"double", "implements", "protected", "throw", "byte", "else", "import", "public", 
+		"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", 
+		"int", "short", "try", "char", "final", "interface", "static", "void", "class", 
+		"finally", "long", "strictfp", "volatile", "const", "float", "native", "super", "while"
+	}.contains(name)
+	);
+

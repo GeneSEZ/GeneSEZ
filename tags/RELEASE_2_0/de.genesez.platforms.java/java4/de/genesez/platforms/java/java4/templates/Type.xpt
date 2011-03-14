@@ -1,0 +1,90 @@
+
+«IMPORT gcore»
+
+«REM»
+	Helper for the generation of java type definitions and type usages.
+	
+	@author	tobias haubold
+	@author	nico herbig (last)
+	@date	2009-05-26
+«ENDREM»
+
+«REM» useful support functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the multi-valued type statement of an attribute, operation or parameter
+	distinction is as follows:
+	* feature 'usePrimitiveTyp' to use arrays instead of collections
+	* if type is a primitive type, the wrapper type must be used as generic type for collections
+«ENDREM»
+«DEFINE MultiValuedType FOR MElement -»
+	«IF usePrimitiveType() -»
+		«type().mapName().asTypeName() -»[]
+	«ELSE -»
+		«mapType() -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates modifiers
+	either 'final' or 'abstract' is permitted
+«ENDREM»
+«DEFINE Modifier FOR MClassifier -»
+«visibility» «IF final»final «ELSEIF abstract»abstract «ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the generalizations
+	only single inheritance is allowed!
+«ENDREM»
+«DEFINE Generalization FOR MClassifier -»
+«IF !generalization.isEmpty -»
+	extends «generalization.first().mapName().asTypeName()»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the generalizations for interfaces
+	multiplie inheritance is allowed!
+«ENDREM»
+«DEFINE Generalization FOR MInterface -»
+«IF !generalization.isEmpty -»
+	extends «FOREACH generalization AS g SEPARATOR ", "»«g.mapName().asTypeName()»«ENDFOREACH»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the realizations
+«ENDREM»
+«DEFINE Realization FOR MClassifier-»
+«IF !realization.isEmpty-»
+	implements «FOREACH realization AS c SEPARATOR ", " -»«c.mapName().asTypeName()»«ENDFOREACH -»
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own code implementations
+	@param	id	the globally unique protected region id
+«ENDREM»
+«DEFINE OwnCodeImpl(String id) FOR MClassifier -»
+	«PROTECT CSTART "/* " CEND " */" ID (id)»
+	// TODO: put your own implementation code here
+	«ENDPROTECT»
+«ENDDEFINE»

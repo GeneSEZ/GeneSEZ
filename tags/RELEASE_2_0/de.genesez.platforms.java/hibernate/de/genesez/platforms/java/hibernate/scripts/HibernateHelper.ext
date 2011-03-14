@@ -1,0 +1,48 @@
+//	based on gcore meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * find key column(s) for collection mapping
+ * @param	c	a class
+ * @return	list of key columns
+ */
+List[MAttribute] collectionKey(MClass c) :
+	let keys = c.property.typeSelect(MAttribute).select(a|a.hasStereotype("key")) :
+		keys.isEmpty ?
+			c.findKey()
+		: 	keys
+		;
+
+/**
+ * find hibernate key attribute in inheritance hierarchie
+ * @param	c	a class
+ * @return	list of hibernate key attributes
+ */
+List findKey(MClass c) :
+	let k = c.property.typeSelect(MAttribute).select(a|a.hasAspect("persistent", "id")) :
+		!k.isEmpty ? k :
+			(c.supertype.typeSelect(MClass).isEmpty ? null :
+				c.supertype.typeSelect(MClass).first().findKey());
+
+/**
+ * save name of persistent class for later use
+ * @param	name	name of the class to persist
+ */
+Void rememberHibernateClassForMapping(String name) :
+	{}; //JAVA de.genesez.platforms.hibernate.HibernateHelper.addHibernateClass(java.lang.String);
+
+/**
+ * retrieve list of names of persistent classes
+ * @return	list of names of persistent classes
+ */
+List[String] classToMap() :
+	{}; //JAVA de.genesez.platforms.hibernate.HibernateHelper.getHibernateClasses();
+

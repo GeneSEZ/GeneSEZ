@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+	GeneSEZ traceability (link) meta model build file
+-->
+<project name="de.genesez.metamodel.traceability" basedir=".." default="build">
+	
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+	
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+	
+	<!-- Import project related properties -->
+	<property file="build.properties" />
+	
+	<!-- Set the classpath -->
+	<path id="de.genesez.metamodel.classpath">
+		<pathelement location="${bin.dir}" />
+		<pathelement location="${model.dir}" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.core" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.core/bin" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.core/model" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.requirements" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.requirements/bin" />
+		<pathelement location="${build.basedir}/de.genesez.metamodel.requirements/model" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+	
+	<import file="${build.basedir}/de.genesez.build/build/metamodel.xml"/>
+	
+	<!-- override uml2ecore target: no uml2ecore transformation necessary -->
+	<target name="uml2ecore" />
+	<!-- workaround for http://www.genesez.de/issues/show/37 -->
+	<target name="ecore2java.external" />
+	
+	<target name="createjar"
+		description="Create the plugin jar for de.genesez.metamodel"
+		depends="build">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" includes="**/*" />
+		</jar>
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+			manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}" includes="${project.name}.jar" />
+			<fileset dir="${basedir}">
+				<include name="${ecore.file}" />
+				<include name="${navigation.dir}/**" />
+				<include name="plugin.xml" />
+			</fileset>
+		</jar>
+		<delete file="${dist.dir}/${project.name}.jar" />
+	</target>
+	
+</project>
