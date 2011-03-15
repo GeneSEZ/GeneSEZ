@@ -7,6 +7,27 @@
 import uml;
 
 /**
+ * Checks if the operation is a constructor or not.
+ * @return true if its a constructor, otherwise false
+ */
+Boolean isConstructor(Operation this) :
+	getAppliedStereotypes().exists(e|e.name == "Create" || e.name == "create");
+
+/**
+ * Checks if the operation is a destructor or not.
+ * @return true if its a destructor, otherwise false
+ */
+Boolean isDestructor(Operation this) :
+	getAppliedStereotypes().exists(e|e.name == "Destroy" || e.name == "destroy");
+
+/**
+ * Checks if the parameter is a return parameter.
+ * @return true if its a return parameter, otherwise false
+ */
+Boolean isReturnParameter(Parameter this) :
+	direction.toString() == "return";
+
+/**
  * calculates the full qualfied name of a model
  * @return	full qualified name
  */

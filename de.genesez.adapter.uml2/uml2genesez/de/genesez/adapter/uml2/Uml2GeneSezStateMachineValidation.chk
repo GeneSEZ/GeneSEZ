@@ -21,14 +21,16 @@
  * --- default outgoing Transition on HistoryState
  * --- deferrable Trigger on State
  * --- Parameters on Behavior
- *
+ * 
  * @author	ines noetzold
+ * @author	toh (some minor fixes)
  * @date 	2009-12-02
  */
 
 //uml metamodel is going to be checked
 import uml;
-//import helper functions
+
+extension de::genesez::adapter::uml2::scripts::Helper;
 extension de::genesez::adapter::uml2::scripts::StatechartValidationHelper;
 
 
@@ -166,7 +168,7 @@ ERROR "GeneSEZ Model Validation: behavior has no proper name." :
  * @return true, if the name contains only valid characters
  */
 context Operation ERROR "GeneSEZ Model Validation: operation has no proper name." :
-	name.matches("(\\w)+");
+	name.matches("(\\w)+") || isConstructor() || isDestructor();
 
 /**
  * checks if a signal has a proper name
@@ -181,7 +183,7 @@ context Signal ERROR "GeneSEZ Model Validation: signal has no proper name." :
  */
 context Parameter 
 ERROR "GeneSEZ Model Validation: parameter on "+owner.toString()+" has no proper name." :
-	name.matches("(\\w)+");
+	name.matches("(\\w)+") || isReturnParameter();
 
 /**
  * checks if a ChangeEvent has a ChangeExpression that contains only valid characters

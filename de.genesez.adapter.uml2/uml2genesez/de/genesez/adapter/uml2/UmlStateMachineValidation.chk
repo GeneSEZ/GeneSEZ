@@ -22,7 +22,8 @@
 
 //uml metamodel is going to be checked
 import uml;
-//import helper functions
+
+extension de::genesez::adapter::uml2::scripts::Helper;
 extension de::genesez::adapter::uml2::scripts::StatechartValidationHelper;
 
 
@@ -60,7 +61,7 @@ ERROR "UML2 Model Validation: behavior has no name." :
  * @return true, if it has a name
  */
 context Operation ERROR "UML2 Model Validation: operation has no name." :
-	name.doesExist();
+	name.doesExist() || isConstructor() || isDestructor();
 
 /**
  * checks if a Signal has a name
@@ -75,7 +76,7 @@ context Signal ERROR "UML2 Model Validation: signal has no name." :
  */
 context Parameter 
 ERROR "UML2 Model Validation: parameter on "+owner.toString()+" has no name." :
-	name.doesExist();
+	name.doesExist() || isReturnParameter();
 
 
 /**
@@ -180,8 +181,7 @@ context TimeEvent ERROR "UML2 Model Validation: TimeEvent needs a TimeExpression
  */
 context Operation 
 ERROR "UML2 Model Validation: operation must be owned by a StateMachine, a Class or a Classifier." :
-	owner.metaType == StateMachine || owner.metaType == Classifier 
-	|| owner.metaType == Class;
+	{StateMachine, Classifier, Class, Interface, DataType, Enumeration}.contains( owner.metaType );
 
 /**
  * checks if an operation with a return type has a return parameter of the same type
