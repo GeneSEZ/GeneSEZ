@@ -20,8 +20,9 @@ context NamedElement WARNING "GeneSEZ UML2 Adapter: name contains invalid charac
 	switch (true) {
 		case metaType == Model : name.matches("(\\w|\\.)+")
 		case metaType == Package : true
-		case {Classifier, Operation, EnumerationLiteral}.contains(metaType) :
+		case {Classifier, EnumerationLiteral}.contains(metaType) :
 			name.matches("(\\w)+")
+		case metaType == Operation : name.matches("(\\w)+") || isConstructor((Operation)this) || isDestructor((Operation)this)
 		case metaType == Parameter && ((Parameter)this).direction.toString() != "return" : name.matches("(\\w|\\.)+")
 		case metaType == Property : 
 			( 
