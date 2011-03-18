@@ -3,7 +3,7 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"   
                 version="1.0">
 
-<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl"/>
+<xsl:import href="../lib/docbook-xsl-1.76.1/fo/docbook.xsl" />
 
 <!--
 	if extensions are enabled, transformation aborts if tables are encountert:
@@ -14,7 +14,7 @@
 
 <xsl:param name="draft.mode">yes</xsl:param>
 <xsl:param name="hyphenate">false</xsl:param>
-<xsl:param name="l10n.gentext.default.language">de</xsl:param>
+<xsl:param name="l10n.gentext.default.language">en</xsl:param>
 
 <xsl:param name="paper.type">A4</xsl:param>
 <xsl:param name="page.margin.inner">0.75in</xsl:param>
@@ -33,6 +33,7 @@
 
 <xsl:param name="section.autolabel" select="1"></xsl:param>
 <xsl:param name="section.autolabel.max.depth">3</xsl:param>
+<xsl:param name="section.label.includes.component.label" select="1"></xsl:param>
 
 <xsl:param name="variablelist.as.blocks" select="1"></xsl:param>
 

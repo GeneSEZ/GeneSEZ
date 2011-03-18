@@ -1,0 +1,269 @@
+<?xml version='1.0'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN" "http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<section id="de.genesez.uml.modeling.domain">
+  <title>Map a Problem Domain to an UML Domain Model</title>
+  <para>In this section we will cover the question: <emphasis>How to 
+  create a domain model using UML?</emphasis>. First we will focus on 
+  our problem domain and then we will create a uml class model.</para>
+  <variablelist>
+    <varlistentry>
+      <term><emphasis role="bold">Goal</emphasis></term>
+      <listitem>
+        <para>Creation of an UML domain model for a problem 
+        domain.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><emphasis role="bold">Prerequisites</emphasis></term>
+      <listitem>
+        <itemizedlist>
+          <listitem>
+            <para>some basic knowledge about banking institutions</para>
+          </listitem>
+          <listitem>
+            <para>some basic understanding of UML class models</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <section>
+    <title>Example Problem Domain</title>
+    <para>We will use a simplified banking application as example. If 
+    we dive into this problem, the first entity that arises is a 
+    <emphasis>bank</emphasis>. Each <emphasis>bank</emphasis> has a 
+    name. So what next? The most important thing: 
+    <emphasis>banks</emphasis> care about our 
+    <emphasis>money</emphasis>! If a <emphasis>bank</emphasis> has your 
+    <emphasis>money</emphasis>, you&apos;re a 
+    <emphasis>customer</emphasis> of that bank. Your money is managed 
+    by so called <emphasis>accounts</emphasis>. If you are lucky the 
+    <emphasis>bank</emphasis> will pay <emphasis>interest</emphasis> 
+    for your money. Changes of the accounts 
+    <emphasis>balance</emphasis> are recorded within 
+    <emphasis>statements</emphasis>.</para>
+    <para>For the sake of simplicity we will care about three types of 
+    accounts: <emphasis>savings account</emphasis>, <emphasis>flexible 
+    savings account</emphasis> and <emphasis>checking 
+    account</emphasis>. We will not care about credits or negative 
+    balances. Last but not least, we need a way to 
+    <emphasis>contact</emphasis> the bank and the bank needs a way to 
+    <emphasis>contact</emphasis> us. This can be by <emphasis>phone 
+    call</emphasis>, <emphasis>email</emphasis> or <emphasis>snail 
+    mail</emphasis>.</para>
+    <para>This should be enougth for our little example. We already 
+    emphasized the important words.</para>
+  </section>
+  <section>
+    <title>Examine the Problem Domain</title>
+    <para>Lets consider the concepts of the problem domain in more 
+    detail and map it to object oriented concepts:</para>
+    <variablelist>
+      <varlistentry>
+        <term>Bank</term>
+        <listitem>
+          <para>A bank is an institution working with money. There 
+          exist several banks and each bank has a name. Sometimes new 
+          banks are founded and sometimes they end in liquidation. 
+          Banks have a lifecycle and are therefore entities. So a bank 
+          represents a class.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Money</term>
+        <listitem>
+          <para>Money is somethings you may have or not. It is 
+          something like a unit. Money has no lifecycle and is a domain 
+          data type.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Customer</term>
+        <listitem>
+          <para>A customer is a person who lets manage his money by the 
+          bank. At some point in time a person may be customer of a 
+          bank. At some other point in time may be not. Customer 
+          represents a class.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Account</term>
+        <listitem>
+          <para>An account is a domain concept to manage money. Each 
+          account has a balance indicating how much money is available. 
+          The balance change over time. Accounts have a lifecycle and 
+          therefore account represents a class.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Interest</term>
+        <listitem>
+          <para>Interest is something you get from your bank in return 
+          for providing your money. Interest is a value usually 
+          calculated using an interest rate. The interest rate is a 
+          domain data type like money.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Statement</term>
+        <listitem>
+          <para>Statements record all changes of the accounts balance. 
+          Statements are created regularly at a certain point in time. 
+          A statement represents a class.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Savings Account</term>
+        <term>Flexible Savings Account</term>
+        <term>Checking Account</term>
+        <listitem>
+          <para>These represents three possible kinds of accounts. They 
+          differ in the provided interest rate and in the period after 
+          the interest is payed. We will represent these accounts as 
+          separate classes.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Contact</term>
+        <listitem>
+          <para>A contact is a concept providing information how to 
+          contact a bank or a customer. It provides the phone number, 
+          the number of the mobile and email. For snail mail is must 
+          provide a valid address. A contact represents a class.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>PhoneNumber</term>
+        <listitem>
+          <para>As we know not every number is a phone number. A phone 
+          number has special format and is therefore a domain 
+          type.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Email</term>
+        <listitem>
+          <para>Email is a domain data type too.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Address</term>
+        <listitem>
+          <para>An address specifies a valid location for postal 
+          delivery. It represents a class.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section>
+    <title>Modeling with UML</title>
+    <para>Now we want to create a UML class model for our problem 
+    domain. First we create a new class <literal>Bank</literal> and add 
+    an attribute <literal>name</literal> to it. The type of the 
+    attribute is simply <literal>String</literal> so we choose the 
+    <literal>String</literal> type defined by the UML specification 
+    (and therefore contained in the UML metamodel within the package 
+    <literal>AuxiliaryConstructs::PrimitiveTypes</literal>). We 
+    don&apos;t want a bank without a name and so we create a 
+    constructor with a <literal>name</literal> parameter. Note that the 
+    UML defines a constructor as an operation with the stereotype 
+    <literal>create</literal>. We leave the name of the operation 
+    empty.</para>
+    <para>Next we create the class <literal>Account</literal>. To 
+    create the <literal>balance</literal> attribute we need our domain 
+    type <literal>Money</literal> first. So we create a new UML 
+    DataType and give it the name <literal>Money</literal>. A UML 
+    datatype differs from a class and is represented as a rectangle 
+    like a class but with the keyword <literal>«datatype»</literal>. We 
+    marked the class <literal>Account</literal> as <literal>
+    abstract</literal> to prevent the creation of instances of 
+    it.</para>
+    <para>Now you know the basics and can go on. You should end up with 
+    an UML class chart looking similar like 
+    <xref linkend="de.genesez.uml.modeling.domain.model.figure"/> 
+    .</para>
+    <figure id="de.genesez.uml.modeling.domain.model.figure">
+      <title>UML Domain Model of the simplified Bank Application</title>
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="de.genesez.uml.modeling.domain.model.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="de.genesez.uml.modeling.domain.model.svg" scalefit="1"
+       width="100%"/></imageobject></mediaobject>
+    </figure>
+    <para>Some UML tool vendors support you with a lot of datatypes and 
+    primitive types. Keep in mind that most of them are vendor specific 
+    and the UML itself defines just four primitive types:</para>
+    <variablelist>
+      <varlistentry>
+        <term><emphasis role="bold">Boolean</emphasis></term>
+        <listitem>
+          <para>Logical type for the values <literal>true</literal> and 
+          <literal>false</literal>.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Integer</emphasis></term>
+        <listitem>
+          <para>Type for positive and negative integer numbers in the 
+          infinite range.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">String</emphasis></term>
+        <listitem>
+          <para>Type for a bunch of characters used for text.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">UnlimitedNatural</emphasis></term>
+        <listitem>
+          <para>Type for natural values, i.e. positive integer values 
+          in the infinite range.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>We think its always a good decision to focus on the domain 
+    needs. Furthermore, UML tool vendors support you with a wide range 
+    of stereotypes. Keep in mind that the UML standard defines just a 
+    few, including the following two:</para>
+    <para>
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">«create»</emphasis></term>
+          <listitem>
+            <para>Can be used on operations to specify that the 
+            operation creates instances of the classifier, i.e. a 
+            constructor.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><emphasis role="bold">«destroy»</emphasis></term>
+          <listitem>
+            <para>Can be used on operations to specify that the 
+            operation destroys instances of the classifier, i.e. a 
+            destructor.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </section>
+  <section>
+    <title>Transformability of the UML Domain Model</title>
+    <para>One problem arises with such a domain model. Usually we 
+    don&apos;t want to implement all domain data types with own 
+    classes. Sometimes a library provides useful datatypes, e.g. for 
+    dates or we just use provided primitive types of our programming 
+    language, e.g. String or Integer.</para>
+    <para>Unfortunately the UML lacks a construct to specify if a class 
+    or datatype is to be defined or already exists and is therefore 
+    usable from a library. To fill this gap the 
+    <link linkend="de.genesez.uml.profile.genesez">GeneSEZ UML 
+    profile</link> contains the stereotype 
+    <link linkend="de.genesez.uml.profile.genesez.external"><literal>
+    external</literal></link> to mark already existing types in an UML 
+    model.</para>
+    <para>For code generation purpose GeneSEZ provides a 
+    <link linkend="de.genesez.typemapping">type mapping</link> facility 
+    to map domain data types to already existing types.</para>
+  </section>
+</section>

@@ -1,0 +1,372 @@
+<?xml version='1.0'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN" "http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<section id="de.genesez.uml.profile.jpa">
+  <title>GeneSEZ JPA UML Profile</title>
+  <para>This section describes the stereotypes and the tagged values of 
+  the GeneSEZ JPA profile for UML.</para>
+  <para>To initialize the property <literal>date</literal> of class 
+  <literal>Statement</literal> with a valid value we decided to use the 
+  <emphasis>JPA pre-persist callback</emphasis>. To do so, we created a 
+  method, assigned the stereotype 
+  <link linkend="de.genesez.uml.profile.jpa.jpaCallback"><literal>
+  jpaCallback</literal></link> to it and set the tagged value 
+  <link linkend="de.genesez.uml.profile.jpa.jpaCallback.prePersist">
+  <literal>prePersist</literal></link> to <literal>
+  true</literal>.</para>
+  <para>Last but not least we used the stereotype 
+  <link linkend="de.genesez.uml.profile.jpa.jpaAssociation"><literal>
+  jpaAssociation</literal></link> on various association ends to 
+  specify cascade operations:</para>
+  <itemizedlist>
+    <listitem>
+      <para>All <emphasis>statements</emphasis> are removed if the 
+      <emphasis>account</emphasis> where the statements belong to is 
+      removed. There is no reason to keep 
+      <emphasis>statements</emphasis> itself without any connection to 
+      an account.</para>
+    </listitem>
+    <listitem>
+      <para>All operations to <emphasis>customers</emphasis> are 
+      cascaded to the referenced <emphasis>accounts</emphasis> and 
+      <emphasis>contacts</emphasis>. The operations to 
+      <emphasis>contacts</emphasis> are itself cascaded to 
+      <emphasis>addresses</emphasis>.</para>
+    </listitem>
+    <listitem>
+      <para>All operations to <emphasis>banks</emphasis> are cascaded 
+      to <emphasis>customers</emphasis>. The <emphasis>merge</emphasis> 
+      and <emphasis>refresh</emphasis> operation also cascade to 
+      referenced <emphasis>contacts</emphasis>.</para>
+    </listitem>
+  </itemizedlist>
+  <figure id="de.genesez.uml.profile.jpa.figure">
+    <title>GeneSEZ UML Profile for the Java Persistence API 
+    (JPA)</title>
+    <mediaobject><imageobject role="html"><imagedata align="center"
+     fileref="jpa.profile.png"/></imageobject><imageobject role="fo">
+    <imagedata align="center" fileref="content/java/jpa.profile.svg"
+     scalefit="1" width="100%"/></imageobject></mediaobject>
+  </figure>
+  <section id="de.genesez.uml.profile.jpa.jpaPersistentEntity">
+    <title>Stereotyp <literal>jpaPersistentEntity</literal></title>
+    <para>Specifies a UML class as a persistent entity. It triggers the 
+    generation of the 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Entity.html">
+    <literal>@Entity</literal></ulink> annotation. The tagged values 
+    <literal>tableName</literal>, <literal>tableCatalog</literal> and 
+    <literal>tableSchema</literal> are properties of the 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Table.html">
+    <literal>@Table</literal></ulink>. This annotation is automatically 
+    added due to <link linkend="de.genesez.platforms.java.jpa.naming">
+    potential naming conflicts</link> between domain model and database 
+    names. Last but not least this stereotype triggers the 
+    implementation of the interface 
+    <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/io/Serializable.html">
+    <literal>java.io.Serializable</literal></ulink> for the entity 
+    class.</para>
+    <variablelist>
+      <varlistentry>
+        <term><literal>name</literal></term>
+        <term>Default: name of class</term>
+        <listitem>
+          <para>Name of the reference in the environment naming context 
+          (ENC). Defaults to the class name. You can find the reference 
+          by using a Java naming and directory interface (JNDI) 
+          lookup.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaPersistentEntity.optimisticLocking">
+        <term><literal>optimisticLocking : boolean = 
+        true</literal></term>
+        <listitem>
+          <para>Enables or disables optimistic locking support for 
+          entities. Default is enabled.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaPersistentEntity.tablename">
+        <term><literal>tableName</literal></term>
+        <listitem>
+          <para>Is a property of the annotation <literal>
+          @Table</literal> and specifies the name of the table for the 
+          persistent entity. To prevent naming conflicts with reserved 
+          names in the database (e.g. group) the prefix <literal>
+          tbl_</literal> is automatically added.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>tableCatalog</literal></term>
+        <listitem>
+          <para>Specifies the table catalog.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>tableSchema</literal></term>
+        <listitem>
+          <para>Specifies the table schema.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section id="de.genesez.uml.profile.jpa.jpaDatatypeMapping">
+    <title>Stereotype <literal>jpaDatatypeMapping</literal></title>
+    <para>Allows to adjust the persistence mapping of an 
+    attribute.</para>
+    <variablelist>
+      <varlistentry>
+        <term><literal>type : 
+        <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping">
+        jpaDatatype</link></literal></term>
+        <listitem>
+          <para>Allows to further specify the datatype, see the 
+          enumeration 
+          <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping">
+          <literal>jpaDatatype</literal></link>.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>temporalType : 
+        <link linkend="de.genesez.uml.profile.jpa.jpaTemporalType">
+        jpaTemporalType</link></literal></term>
+        <listitem>
+          <para>Is used in conjunction with the tagged value 
+          <link linkend="de.genesez.uml.profile.jpa.jpaDatatype.temporal">
+          <literal>type = jpaDatatype.TEMPORAL</literal></link> to 
+          specify how the values of temporal types (time and date) are 
+          stored in the database.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>enumType : 
+        <link linkend="de.genesez.uml.profile.jpa.jpaEnumType">
+        jpaEnumType</link> =</literal> 
+        <xref linkend="de.genesez.uml.profile.jpa.jpaEnumType.ordinal"/>
+        </term>
+        <listitem>
+          <para>Specifies how enumerations are stored in the 
+          database.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>optional : boolean = true</literal></term>
+        <listitem>
+          <para>Specifies if the property is mandatory or optional. The 
+          value <literal>false</literal> implies that each entity 
+          instance must have a value to this property assigned.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>fetch : 
+        <link linkend="de.genesez.uml.profile.jpa.jpaFetchType">
+        jpaFetchType</link></literal></term>
+        <listitem>
+          <para>Specifies how data is fetched from the database.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaDatatypeMapping.transient">
+        <term><literal>transient : boolean = false</literal></term>
+        <listitem>
+          <para>Defines a property as transient, i.e. not 
+          persistent.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section id="de.genesez.uml.profile.jpa.">
+    <title>Stereotype <literal/></title>
+  </section>
+  <section>
+    <title>Enumeration <literal>jpaInheritanceType</literal></title>
+    <para>Defines the possible inheritance mapping strategies for JPA. 
+    It is the UML counterpart of the enumeration 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/InheritanceType.html">
+    <literal>InheritanceType</literal></ulink> of the JPA 
+    specification.</para>
+    <variablelist>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaInheritanceType.singletable">
+        <term><literal>SINGLE_TABLE</literal></term>
+        <term>(the JPA default)</term>
+        <listitem>
+          <para>Indicates that a single table per class hierarchy is 
+          used to store entity objects.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>JOINED</literal></term>
+        <listitem>
+          <para>A strategy in which fields that are specific to a 
+          subclass are mapped to a separate table than the fields that 
+          are common to the parent class, and a join is performed to 
+          instantiate the subclass.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>TABLE_PER_CLASS</literal></term>
+        <listitem>
+          <para>A table per concrete entity class.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section id="de.genesez.uml.profile.jpa.jpaDatatype">
+    <title>Enumeration <literal>jpaDatatype</literal></title>
+    <para>Allows to further describes the mapping of the datatype of a 
+    property to the database. It is an aggregation of several JPA 
+    annotations.</para>
+    <variablelist>
+      <varlistentry>
+        <term><literal>BASIC</literal></term>
+        <listitem>
+          <para>This annotation is the simplest type of mapping to a 
+          database column. It can be applied to a property of vaious 
+          types, including primitives, wrapper types, temporal types 
+          and any type implementing 
+          <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/io/Serializable.html">
+          <literal>java.io.Serializable</literal></ulink>. See the 
+          annotation 
+          <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Basic.html">
+          <literal>Basic</literal></ulink> of the JPA 
+          specification.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>EMBEDDABLE</literal></term>
+        <listitem>
+          <para>Defines a class whose instances are stored as an 
+          intrinsic part of an owning entity and share the identity of 
+          the entity. Each of the persistent properties or fields of 
+          the embedded object is mapped to the database table for the 
+          entity. See the annotation 
+          <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Embeddable.html">
+          <literal>Embeddable</literal></ulink> of the JPA 
+          specification.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>ENUMERATED</literal></term>
+        <listitem>
+          <para>Specifies that a persistent property or field should be 
+          persisted as a enumerated type. See the annotation 
+          <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Enumerated.html">
+          <literal>Enumerated</literal></ulink> of the JPA 
+          specification.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>LOB</literal></term>
+        <listitem>
+          <para>Specifies that a persistent property or field should be 
+          persisted as a large object to a database-supported large 
+          object type. It can be a binary or character type. See the 
+          annotation 
+          <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Lob.html">
+          <literal>Lob</literal></ulink> of the JPA 
+          specification.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaDatatype.temporal">
+        <term><literal>TEMPORAL</literal></term>
+        <listitem>
+          <para>This annotation must be specified for persistent fields 
+          or properties of type 
+          <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Date.html">
+          <literal>java.util.Date</literal></ulink> and 
+          <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Calendar.html">
+          <literal>java.util.Calendar</literal></ulink>. See the 
+          annotation 
+          <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Temporal.html">
+          <literal>Temporal</literal></ulink> of the JPA 
+          specification.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section id="de.genesez.uml.profile.jpa.jpaTemporalType">
+    <title>Enumeration <literal>jpaTemporalType</literal></title>
+    <para>Specifies how temporal types (time and date) specifically 
+    <ulink url="&lt;http://download.oracle.com/javase/1.5.0/docs/api/java/util/Date.html">
+    <literal>java.util.Date</literal></ulink> and 
+    <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Calendar.html">
+    <literal>java.util.Calendar</literal></ulink> are stored within the 
+    database. It is the UML counterpart of the enumeration 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/TemporalType.html">
+    <literal>TemporalType</literal></ulink> of the JPA 
+    specification.</para>
+    <variablelist>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaTemporalType.date">
+        <term><literal>DATE</literal></term>
+        <listitem>
+          <para>Map as 
+          <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/sql/Date.html">
+          <literal>java.sql.Date</literal></ulink>.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaTemporalType.time">
+        <term><literal>TIME</literal></term>
+        <listitem>
+          <para>Map as 
+          <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/sql/Time.html">
+          <literal>java.sql.Time</literal></ulink>.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaTemporalType.timestamp">
+        <term><literal>TIMESTAMP</literal></term>
+        <listitem>
+          <para>Map as 
+          <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/sql/Timestamp.html">
+          <literal>java.sql.Timestamp</literal></ulink>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section id="de.genesez.uml.profile.jpa.jpaEnumType">
+    <title>Enumeration <literal>jpaEnumType</literal></title>
+    <para>Specifies how enumeration literals are stored in the 
+    database. It is the UML counterpart of the enumeration 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/EnumType.html">
+    <literal>EnumType</literal></ulink> of the JPA specification.</para>
+    <variablelist>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaEnumType.ordinal">
+        <term><literal>ORDINAL</literal></term>
+        <listitem>
+          <para>Persist enumerated type property or field as an 
+          integer, i.e. the ordinal value of the enumeration 
+          literal.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaEnumType.string">
+        <term><literal>STRING</literal></term>
+        <listitem>
+          <para>Persist enumerated type property or field as a string, 
+          i.e. the string representation of the enumeration 
+          literal.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section id="de.genesez.uml.profile.jpa.jpaFetchType">
+    <title>Enumeration <literal>jpaFetchType</literal></title>
+    <para>Specifies how data is fetched from the database. It is the 
+    UML counterpart of the enumeration 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/FetchType.html">
+    <literal>FetchType</literal></ulink> of the JPA 
+    specification.</para>
+    <variablelist>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaFetchType.eager">
+        <term><literal>EAGER</literal></term>
+        <listitem>
+          <para>Defines that data <emphasis>must</emphasis> be fetched 
+          eagerly, i.e. when an entity object is fetched from the 
+          database.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="de.genesez.uml.profile.jpa.jpaFetchType.lazy">
+        <term><literal>LAZY</literal></term>
+        <listitem>
+          <para>Defines that data <emphasis>can</emphasis> be fetched 
+          lazily, i.e. when the data is needed and not necessarily when 
+          the entity object is fetched from the database.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+</section>

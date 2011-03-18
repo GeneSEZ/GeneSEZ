@@ -1,0 +1,276 @@
+<?xml version='1.0'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN" "http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<section id="de.genesez.platforms.java.jpa">
+  <title>Java Persistence API (JPA)</title>
+  <para>This section will cover the GeneSEZ JPA Profile to model 
+  persitent domain models for Java. You will learn what you have to do, 
+  to get your Java code annotated with the JPA annotations. You will 
+  also learn, which optional steps you can do to adjust the default 
+  transformation behaviour.</para>
+  <section id="de.genesez.platforms.java.jpa.entities">
+    <title>Persistent Entities</title>
+    <para>The <emphasis role="bold">only</emphasis> necessary thing you 
+    have to do to get a persistent domain model is to assign the 
+    stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity">
+    <literal>jpaPersistentEntity</literal></link> to your classes. All 
+    other needed JPA relevant information is automatically added using 
+    the information of the uml model or JPA defaults.</para>
+    <para>A UML domain model with a minimal set of assinged stereotypes 
+    for transformation into a persistent Java domain model is shown In 
+    figure 
+    <xref linkend="de.genesez.platforms.java.jpa.example.minimal.figure"/>
+    . It just uses the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity">
+    <literal>jpaPersistentEntity</literal></link> on each class to 
+    enable persistence using JPA.</para>
+    <figure id="de.genesez.platforms.java.jpa.example.minimal.figure">
+      <title>Minimal annotated UML domain model</title>
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="de.genesez.platforms.java.jpa.example.minimal.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="de.genesez.platforms.java.jpa.example.minimal.svg"
+       scalefit="1" width="100%"/></imageobject></mediaobject>
+    </figure>
+    <section id="de.genesez.platforms.java.jpa.constructor">
+      <title>Standard Constructor</title>
+      <para>According to the JPA specification each 
+      <emphasis>entity</emphasis> needs a default constructor, i.e. a 
+      constructor with no parameters. If your entity class does not 
+      specify one, one is automatically created.</para>
+    </section>
+    <section id="de.genesez.platforms.java.jpa.attributes">
+      <title>Persistent and Transient Attributes</title>
+      <para>All non <literal>static</literal> attributes the class 
+      defines are assumed as persistent attributes unless the Java 
+      modifier <literal>transient</literal> or the annotation 
+      <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Transient.html">
+      <literal>@Transient</literal></ulink> is specified. To mark an 
+      attribute as transient you can use the stereotype 
+      <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping">
+      <literal>jpaDatatypeMapping</literal></link> and set the tagged 
+      value 
+      <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping.transient">
+      <literal>transient</literal></link> to <literal>
+      true</literal>.</para>
+      <para>You can further adjust the mapping of persistent attributes 
+      using the stereotype 
+      <link linkend="de.genesez.uml.profile.jpa.jpaColumn"><literal>
+      jpaColumn</literal></link>, e.g. if they are 
+      <emphasis>unique</emphasis> or 
+      <emphasis>nullable</emphasis>.</para>
+    </section>
+    <section id="de.genesez.platforms.java.jpa.serializable">
+      <title>Serializable</title>
+      <para>The interface 
+      <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/io/Serializable.html">
+      <literal>java.io.Serializable</literal></ulink> is, if not 
+      already present, automatically added to each 
+      <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity">
+      <literal>jpaPersistentEntity</literal></link> or embeddable 
+      <link linkend="de.genesez.uml.profile.jpa.jpaPrimaryKeyClass">
+      <literal>jpaPrimaryKeyClass</literal></link>.</para>
+    </section>
+  </section>
+  <section id="de.genesez.platforms.java.jpa.identity">
+    <title>Entity Identity with Primary Keys</title>
+    <para>All entity objects must be uniquely identifiable by a primary 
+    key. One is automatically added, if you don&apos;t specify one 
+    using the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPrimaryKey"><literal>
+    jpaPrimaryKey</literal></link>.</para>
+    <para>If your entity class is part of an inheritance hierachy it 
+    depends on the 
+    <link linkend="de.genesez.platforms.java.jpa.inheritance">
+    inheritance strategy</link> if it needs a primary key or not. The 
+    transformations will automatically take care of this.</para>
+  </section>
+  <section id="de.genesez.platforms.java.jpa.optimisticlocking">
+    <title>Optimistic Locking and Concurrent Access</title>
+    <para>Many enterprise applications have to deal with concurrent 
+    data access through users. To prevent data loss under some 
+    circumstances you can apply optimistic locking to your entity 
+    objects. Optimistic locking is <emphasis>enabled</emphasis> by 
+    default resulting in an additional attribute on each entity class 
+    storing the version number of the persistent objects to tracking 
+    changes. You can adjust this by modifying the tagged value 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity.optimisticLocking">
+    <literal>optimisticLocking</literal></link> on the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity">
+    <literal>jpaPersistentEntity</literal></link>.</para>
+    <para>If your entity class is part of an inheritance hierarchy it 
+    depends on the 
+    <link linkend="de.genesez.platforms.java.jpa.inheritance">
+    inheritance strategy</link> if it needs an additional attribute for 
+    optimistic locking or not. The transformations will automatically 
+    take care of this.</para>
+  </section>
+  <section>
+    <title>Entity Manager and Entity Manager Factory References</title>
+    <para>Sometimes you need to reference the entity manager or entity 
+    manager factory. All attributes are automatically checked if they 
+    need an 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/PersistenceContext.html">
+    <literal>@PersistenceContext</literal></ulink> or 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/PersistenceUnit.html">
+    <literal>@PersistenceUnit</literal></ulink> annotation. It is 
+    automatically added if the type of the attribute is 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/EntityManager.html">
+    <literal>EntityManager</literal></ulink> or 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/EntityManagerFactory.html">
+    <literal>EntityManagerFactory</literal></ulink> respectively. If 
+    you need to adjust the default values for these annotations you can 
+    use the stereotypes 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistenceContext">
+    <literal>jpaPersistenceContext</literal></link> and 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistenceUnit">
+    <literal>jpaPersistenceUnit</literal></link> on your attribute 
+    respectively.</para>
+  </section>
+  <section id="de.genesez.platforms.java.jpa.inheritance">
+    <title>Inheritance</title>
+    <para>If your entity class is part of an inheritance hierarchy the 
+    JPA default mapping strategy 
+    <link linkend="de.genesez.uml.profile.jpa.jpaInheritanceType.SINGLE_TABLE">
+    <literal>SINGLE_TABLE</literal></link> is used. You can adjust this 
+    default behaviour by using the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaInheritance"><literal>
+    jpaInheritance</literal></link>. The jpa transformations will 
+    ensure if 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Table.html">
+    <literal>@Table</literal></ulink> annotations on entity classes are 
+    allowed to prevent potential 
+    <link linkend="de.genesez.platforms.java.jpa.naming">table naming 
+    conflicts</link>.</para>
+    <para>Each inheritance path from a leaf class to the root class 
+    must have a primary key and version attribute if optimistic locking 
+    is enabled. The transformations take care of this automatically. If 
+    you specified more than one primary key, additional checks may 
+    result in adding a 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Column.html">
+    <literal>@Column</literal></ulink> annotation setting <literal>
+    insertable</literal> and <literal>updateable</literal> to <literal>
+    false</literal>.</para>
+  </section>
+  <section id="de.genesez.platforms.java.jpa.associations">
+    <title>Associations and References between Entities</title>
+    <para>There is a couple of meta data you can specify for mapping 
+    entity references. The transformations will take automatically care 
+    of it, if possible. The multiplicity of the reference is taken from 
+    the <literal>multiplicity</literal> property of the UML association 
+    end. Based on it one of 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/OneToOne.html">
+    <literal>@OneToOne</literal></ulink>, 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/OneToMany.html">
+    <literal>@OneToMany</literal></ulink>, 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/ManyToOne.html">
+    <literal>@ManyToOne</literal></ulink> or 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/ManyToMany.html">
+    <literal>@ManyToMany</literal></ulink> is generated. For all other 
+    things the JPA defaults are used. You can adjust the defaults by 
+    specifying the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaAssociation"><literal>
+    jpaAssociation</literal></link> to the association end. It allows 
+    you to adjust the <literal>mappedBy</literal> and <literal>
+    optional</literal> values as well as the 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/CascadeType.html">
+    <literal>CascadeType</literal></ulink> and 
+    <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/FetchType.html">
+    <literal>FetchType</literal></ulink>.</para>
+  </section>
+  <section id="de.genesez.platforms.java.jpa.naming">
+    <title>Naming of Table and Columns</title>
+    <para>The database systems usually have a set of names which are 
+    not allowed to appear as table or column names resulting in 
+    potential naming conflicts. For prevention a prefix is added to 
+    table names (see stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity.tableName">
+    <literal>jpaPersistentEntity</literal></link>) and table columns. 
+    Table columns are prefixed with the class name in lowercase.</para>
+  </section>
+  <section id="de.genesez.platforms.java.jpa.accessors">
+    <title>Get and Set Methods (Accessors)</title>
+    <para>According to the Java Beans convention a <literal>
+    get</literal> and <literal>set</literal> method is automatically 
+    added for each attribute. This is achieved by adding the stereotype 
+    <link linkend="de.genesez.uml.profile.genesez.accessor"><literal>
+    accessor</literal></link> to the entity class. Note that you can 
+    adjust this behaviour by specifying the stereotype 
+    <link linkend="de.genesez.uml.profile.genesez.accessor"><literal>
+    accessor</literal></link> on attribute level, see 
+    <link linkend="de.genesez.platforms.common.accessor.evaluation">
+    evaluation</link> of the stereotype 
+    <link linkend="de.genesez.uml.profile.genesez.accessor"><literal>
+    accessor</literal></link>.</para>
+  </section>
+  <section>
+    <title>Example domain model</title>
+    <para>We use a simple bank domain model to demonstrate the use of 
+    the JPA profile. It is shown in 
+    <xref linkend="de.genesez.platforms.java.jpa.example.figure"/> as a 
+    UML class chart. A <emphasis>Bank</emphasis> has (hopefully) many 
+    <emphasis>Customers</emphasis> which in turn can be customer from 
+    many banks. Each Customer can have many 
+    <emphasis>Accounts</emphasis> and is reachable by one 
+    <emphasis>Contact</emphasis>. A <emphasis>Bank</emphasis> provides 
+    different kinds of accounts modeled each as a separate subclass of 
+    <emphasis>Account</emphasis>. Over time each account produces 
+    several <emphasis>Statements</emphasis>.</para>
+    <figure id="de.genesez.platforms.java.jpa.example.figure">
+      <title>A simple bank domain model transformable into a persistent 
+      Java model</title>
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="de.genesez.platforms.java.jpa.example.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="de.genesez.platforms.java.jpa.example.svg" scalefit="1"
+       width="100%"/></imageobject></mediaobject>
+    </figure>
+    <para>The stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity">
+    <literal>jpaPersistentEntity</literal></link> is assigned to all 
+    classes. It is the only mandatory stereotype you have to use to get 
+    a persistent Java model. Our banks should be identifyable by its 
+    <emphasis>name</emphasis>. To specify the <emphasis>name</emphasis> 
+    as business / domain key we use the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaColumn"><literal>
+    jpaColumn</literal></link> and set the tagged value 
+    <link linkend="de.genesez.uml.profile.jpa.jpaColumn.unique">
+    <literal>unique</literal></link> to <literal>true</literal>. With 
+    the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaInheritance"><literal>
+    jpaInheritance</literal></link> on class <literal>Account</literal> 
+    we changed the inheritance mapping strategy from the JPA default 
+    <xref linkend="de.genesez.uml.profile.jpa.jpaInheritanceType.SINGLE_TABLE"/>
+     to 
+    <xref linkend="de.genesez.uml.profile.jpa.jpaInheritanceType.TABLE_PER_CLASS"/>
+     . Every instance of any subclass of <literal>Account</literal> is 
+    stored in a separate table. On the association to class <literal>
+    Statement</literal> we assigned the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaAssociation"><literal>
+    jpaAssociation</literal></link> with the tagged value 
+    <link linkend="de.genesez.uml.profile.jpa.jpaAssociation.cascade">
+    <literal>cascade</literal></link> set to <literal>
+    jpaCascadeType</literal> 
+    <xref linkend="de.genesez.uml.profile.jpa.jpaCascadeType.REMOVE"/> 
+    on the association end to class <literal>Statement</literal>. This 
+    means if an account is removed, all its statements are removed 
+    too.</para>
+    <para>On class <literal>Customer</literal> we used the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping">
+    <literal>jpaDatatypeMapping</literal></link> with its tagged value 
+    <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping.transient">
+    <literal>transient</literal></link> set to <literal>true</literal>. 
+    It marks the attribute <literal>retypedPassword</literal> as 
+    <literal>transient</literal> and is therefore not stored within the 
+    database. It is just used to validate the specified password. On 
+    both password attributes we used the stereotype 
+    <link linkend="de.genesez.uml.profile.genesez.accessor"><literal>
+    accessor</literal></link> to suppress the generation of <literal>
+    set</literal> methods. Instead we specified our own <literal>
+    set</literal> methods as operations. Doing this, we can implement 
+    the <literal>set</literal> methods so, that not the plain text 
+    password is stored as attribute value but an encoded value using a 
+    hash function on the specified password. So we prevent a long time 
+    storage of the password in plain text.</para>
+  </section>
+</section>

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
 <project name="de.genesez.manual" basedir=".." default="build">
 
-	<!-- Import project related properties -->
-	<property file="build/build.properties" />
+	<!-- determine correct environment properties -->
+	<condition property="environment.properties"
+		value="environment.properties"
+		else="environment.default.properties">
+		<available file="environment.properties" />
+	</condition>
+	
+	<property file="build/environment.properties" />
+	<property file="build/project.properties" />
+	
 
 	<condition property="build.display"
 		value="${env.DISPLAY}"
@@ -11,37 +18,150 @@
 		<isset property="env.DISPLAY" />
 	</condition>
 
+	<path id="de.genesez.manual.classpath">
+		<pathelement location="lib" />
+		<pathelement location="${xalan.dir}" />
+		<pathelement location="${xalan.dir}/xalan.jar" />
+		<pathelement location="${xalan.dir}/xml-apis.jar" />
+		<pathelement location="${xalan.dir}/xercesImpl.jar" />
+		<pathelement location="${xalan.dir}/xalan.jar" />
+		<pathelement location="${docbook.xsl.dir}/extensions/xalan27.jar" />
+		<pathelement location="${resolver.dir}/resolver.jar" />
+		<pathelement location="${fop.dir}/build/fop.jar" />
+		<pathelement location="${fop.dir}/lib/avalon-framework-4.2.0.jar" />
+		<pathelement location="${fop.dir}/lib/batik-all-1.7.jar" />
+		<pathelement location="${fop.dir}/lib/commons-io-1.3.1.jar" />
+		<pathelement location="${fop.dir}/lib/commons-logging-1.0.4.jar" />
+		<pathelement location="${fop.dir}/lib/serializer-2.7.0.jar" />
+		<pathelement location="${fop.dir}/lib/xml-apis-1.3.04.jar" />
+		<pathelement location="${fop.dir}/lib/xml-apis-ext-1.3.04.jar" />
+		<pathelement location="${fop.dir}/lib/xmlgraphics-commons-1.4.jar" />
+	</path>
+	
+	<fileset id="docbook.files" dir="${basedir}/docbook" includes="**/*.xml" />
+	
 	<!-- Public target section -->
+	
+	<target name="build" depends="javaee, genesez"
+		description="Build all GeneSEZ documentation" />
 
-	<target name="build"
-		description="Build de.genesez.manual"
-		depends="manual.db2html, manual.fop2pdf" >
+	<target name="javaee" depends="javaee2html, javaee2pdf" />
+	
+	<target name="javaee.xinclude" description="creates the single xml file for genesez javaee manual">
+		<mkdir dir="${temp.dir}" />
+		<antcall target="xinclude.processing">
+			<param name="temp.file" value="${temp.dir}/java.ee.manual.xml" />
+			<param name="src.file" value="${basedir}/docbook/assemblies/java.ee.manual.xml" />
+		</antcall>
 	</target>
-
-	<target name="distribute"
-		description="Distribute de.genesez.manual"
-		depends="build" >
+	
+	<target name="javaee2html" depends="javaee.xinclude">
+		<mkdir dir="${html.javaee.dir}" />
+		<antcall target="docbook2html">
+			<param name="src.file" value="${temp.dir}/java.ee.manual.xml" />
+			<param name="out.file" value="${html.javaee.dir}/index.html" />
+			<param name="xsl.file" value="${docbook2html}" />
+		</antcall>
+		<copy todir="${html.javaee.dir}">
+			<fileset dir="${basedir}/images/java" includes="**/*.png" />
+			<fileset dir="${basedir}/images/uml" includes="**/*.png" />
+			<fileset dir="${basedir}/images/profiles" includes="**/*.png" />
+		</copy>
+	</target>
+	
+	<target name="javaee2pdf" depends="javaee.xinclude">
+		<mkdir dir="${pdf.dir}" />
+		<antcall target="docbook2pdf">
+			<param name="base.dir" value="${basedir}/images/profiles" />
+			<param name="src.file" value="${temp.dir}/java.ee.manual.xml" />
+			<param name="fo.file" value="${temp.dir}/java.ee.manual.fo" />
+			<param name="pdf.file" value="${pdf.dir}/java.ee.manual.pdf" />
+			<param name="xsl.file" value="${docbook2fo}" />
+		</antcall>
+	</target>
+	
+	<target name="genesez" depends="manual2html, manual2pdf" />
+	
+	<target name="manual.xinclude" description="creates the single xml file for the genesez manual">
+		<mkdir dir="${temp.dir}" />
+		<antcall target="xinclude.processing">
+			<param name="src.file" value="${basedir}/manual.xml" />
+			<param name="temp.file" value="${temp.dir}/genesez.manual.xml" />
+		</antcall>
+	</target>
+	
+	<target name="manual2html" depends="manual.xinclude">
+		<mkdir dir="${html.genesez.dir}" />
+		<antcall target="docbook2html">
+			<param name="src.file" value="${temp.dir}/genesez.manual.xml" />
+			<param name="out.file" value="${html.genesez.dir}/index.html" />
+			<param name="xsl.file" value="${docbook2html}" />
+		</antcall>
+		<copy todir="${html.genesez.dir}">
+			<fileset dir="${basedir}">
+				<include name="images/*.png" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="manual2pdf">
+		<mkdir dir="${pdf.dir}" />
+		<antcall target="docbook2pdf">
+			<param name="src.file" value="${temp.dir}/genesez.manual.xml" />
+			<param name="fo.file" value="${temp.dir}/genesez.manual.fo" />
+			<param name="pdf.file" value="${pdf.dir}/genesez.manual.pdf" />
+			<param name="xsl.file" value="${docbook2fo}" />
+		</antcall>
+	</target>
+	
+	<target name="distribute" depends="build"
+		description="Distribute GeneSEZ documentation">
+		<mkdir dir="${distribution.dir}/javaee"/>
+		<copy todir="${distribution.dir}/javaee">
+			<fileset dir="${html.javaee.dir}" />
+		</copy>
+		<mkdir dir="${distribution.dir}/html"/>
+		<copy todir="${distribution.dir}/html">
+			<fileset dir="${html.genesez.dir}" includes="**" />
+		</copy>
 		<copy todir="${distribution.dir}">
-			<fileset dir="${basedir}">
-				<include name="${html.dir}/*" />
-			</fileset>
+			<fileset dir="${pdf.dir}" includes="*.pdf" />
 		</copy>
-		<copy todir="${distribution.dir}/${html.dir}">
-			<fileset dir="${basedir}">
-				<include name="${images.dir}/*" />
-			</fileset>
+		<copy todir="${distribution.dir}">
+			<fileset dir="${website.dir}" includes="**" />
 		</copy>
-		<copy todir="${distribution.dir}" file="${docbook.pdf}"/>
 	</target>
 
 	<target name="clean"
 		description="Clean de.genesez.manual">
-		<delete>
-			<fileset dir="${basedir}" includes="${docbook.fo}"/>
-			<fileset dir="${basedir}" includes="${docbook.pdf}"/>
-			<fileset dir="${basedir}" includes="${docbook.tmp}"/>
-		</delete>
-		<delete dir="${basedir}/${html.dir}" />
+		<delete dir="${temp.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+	
+	<target name="encode.xincludes" description="encode xincludes to get editable xml files for vex">
+		<replaceregexp flags="g">
+			<fileset refid="docbook.files" />
+			<regexp pattern="${regexpEncodeWxpointer}" />
+			<substitution expression="${replaceEncodeWxpointer}" />
+		</replaceregexp>
+		<replaceregexp flags="g">
+			<fileset refid="docbook.files" />
+			<regexp pattern="${regexpEncodeWoXpointer}" />
+			<substitution expression="${replaceEncodeWoXpointer}" />
+		</replaceregexp>
+	</target>
+	
+	<target name="decode.xincludes" description="decode xincludes to get transformable xml files for docbook xsl">
+		<replaceregexp flags="g">
+			<fileset refid="docbook.files" />
+			<regexp pattern="${regexpDecodeWxpointer}" />
+			<substitution expression="${replaceDecodeWxpointer}" />
+		</replaceregexp>
+		<replaceregexp flags="g">
+			<fileset refid="docbook.files" />
+			<regexp pattern="${regexpDecodeWoXpointer}" />
+			<substitution expression="${replaceDecodeWoXpointer}" />
+		</replaceregexp>
 	</target>
 	
 	<target name="replace.umlauts" description="replace umlauts in docbook files">
@@ -84,66 +204,66 @@
 
 	<!-- Private target section -->
 
-	<target name="manual">
-		<exec executable="${xmllint.bin}">
+	<target name="xinclude.processing" description="processes x-includes and creates a temporary xml files">
+		<exec executable="${xmllint.bin}" dir="${basedir}">
+			<env key="XML_CATALOG_FILES" value="${xml.catalogs}" />
+			<arg value="--nonet"/>
 			<arg value="--xinclude"/>
 			<arg value="--output"/>
-			<arg value="${docbook.tmp}"/>
-			<arg value="${docbook.src}" />
+			<arg value="${temp.file}"/>
+			<arg value="${src.file}" />
 		</exec>
 	</target>
 	
-	<target name="manual.db2html"
-		depends="manual">
-		<mkdir dir="${basedir}/${html.dir}" />
-		<exec executable="${docbook2html.bin}">
-			<arg value="--output"/>
-			<arg value="${html.dir}"/>
-			<arg value="${docbook.tmp}"/>
-		</exec>
+	<target name="docbook2html">
+		<dirname property="html.dir" file="${docbook.html}" />
+		<mkdir dir="${html.dir}" />
+		<java classname="org.apache.xalan.xslt.Process" classpathref="de.genesez.manual.classpath">
+			<arg value="-ENTITYRESOLVER" />
+			<arg value="org.apache.xml.resolver.tools.CatalogResolver" />
+			<arg value="-URIRESOLVER" />
+			<arg value="org.apache.xml.resolver.tools.CatalogResolver" />
+			<arg value="-out" />
+			<arg value="${out.file}" />
+			<arg value="-in" />
+			<arg value="${src.file}" />
+			<arg value="-xsl" />
+			<arg value="${xsl.file}" />
+		</java>
 	</target>
-
-	<target name="manual.db2fop">
-		<exec executable="${xsltproc.bin}">
-			<arg value="--output"/>
-			<arg value="${docbook.fo}"/>
-			<arg value="${docbook2fop}"/>
-			<arg value="${docbook.tmp}"/>
-		</exec>
+	
+	<target name="docbook2pdf">
+		<dirname property="fo.dir" file="${fo.file}" />
+		<mkdir dir="${fo.dir}" />
+		<java classname="org.apache.xalan.xslt.Process" classpathref="de.genesez.manual.classpath">
+			<arg value="-ENTITYRESOLVER" />
+			<arg value="org.apache.xml.resolver.tools.CatalogResolver" />
+			<arg value="-URIRESOLVER" />
+			<arg value="org.apache.xml.resolver.tools.CatalogResolver" />
+			<arg value="-out" />
+			<arg value="${fo.file}" />
+			<arg value="-in" />
+			<arg value="${src.file}" />
+			<arg value="-xsl" />
+			<arg value="${xsl.file}" />
+		</java>
+		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" classpathref="de.genesez.manual.classpath">
+		</taskdef>
+		<dirname property="pdf.dir" file="${pdf.file}" />
+		<mkdir dir="${pdf.dir}" />
+		<fop fofile="${fo.file}" outfile="${pdf.file}" format="application/pdf" basedir="${base.dir}">
+		</fop>
+		<!-- java classname="org.apache.fop.cli.Main" classpathref="de.genesez.manual.classpath">
+			<arg value="-fo" />
+			<arg value="${fo.file}" />
+			<arg value="-pdf" />
+			<arg value="${pdf.file}" />
+			<arg value="-param" />
+			<arg value="use.extension" />
+			<arg value="1" />
+			<arg value="-param" />
+			<arg value="fop1.extensions" />
+			<arg value="1" />
+		</java -->
 	</target>
-
-	<target name="manual.fop2pdf"
-		depends="manual.db2fop">
-		<parallel>
-			<antcall target="manual.startx" />
-			<sequential>
-				<sleep seconds="5" />
-				<exec executable="${fop.bin}">
-					<env key="DISPLAY" value="${build.display}" />
-					<arg value="-fo"/>
-					<arg value="${docbook.fo}"/>
-					<arg value="-pdf"/>
-					<arg value="${docbook.pdf}"/>
-				</exec>
-				<antcall target="manual.endx" />
-			</sequential>
-		</parallel>
-	</target>
-
-	<target name="manual.startx" unless="env.DISPLAY">
-		<exec executable="${STARTPROC_BIN}" osfamily="unix">
-			<arg value="${XVFB_BIN}" />
-			<arg value="${build.display}" />
-			<arg value="-screen" />
-			<arg value="0" />
-			<arg value="800x600x8" />
-		</exec>
-	</target>
-
-	<target name="manual.endx" unless="env.DISPLAY">
-		<exec executable="${KILLPROC_BIN}" osfamily="unix">
-			<arg value="${XVFB_BIN}" />
-		</exec>
-	</target>
-
 </project>

@@ -1,0 +1,480 @@
+<?xml version='1.0'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN" "http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<section id="de.genesez.howto.java.jpa">
+  <title>Transform an UML Domain Model into JPA annotated Java Source 
+  Code</title>
+  <para>This section focuses on the generation of JPA annotated Java 
+  source code from an UML domain model.</para>
+  <variablelist>
+    <varlistentry>
+      <term><emphasis role="bold">Goal</emphasis></term>
+      <listitem>
+        <para>Generate Java classes from an UML class model which 
+        instances can be persisted using a JPA compliant persistence 
+        provider.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><emphasis role="bold">Prerequisites</emphasis></term>
+      <listitem>
+        <itemizedlist>
+          <listitem>
+            <para>The ability to create an UML domain model. If you are 
+            unsure check 
+            <xref linkend="de.genesez.uml.modeling.domain"/>.</para>
+          </listitem>
+          <listitem>
+            <para>If you want to reproduce the guide, you will may want 
+            to checkout the example project from our source code 
+            repository or you should be able to create the necessary 
+            project structure, typemapping file and transformation 
+            workflow yourself. See <xref linkend="de.genesez.scm"/> for 
+            more information about our source code repository, 
+            <xref linkend="de.genesez.projectstructure"/> for more 
+            information about the recommended project structure, 
+            <xref linkend="de.genesez.typemapping"/> for more 
+            information about typemapping files or 
+            <xref linkend="de.genesez.workflow"/> for more information 
+            about transformation workflow files.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <section>
+    <title>The UML Domain Model</title>
+    <para>We start with the domain model shown in 
+    <xref linkend="de.genesez.howto.java.jpa.domainmodel.figure"/> and 
+    created in <xref linkend="de.genesez.uml.modeling.domain"/>.</para>
+    <figure id="de.genesez.howto.java.jpa.domainmodel.figure">
+    <xi:include href="../uml/modeling.domain.xml" xpointer="xpointer(id('de.genesez.uml.modeling.domain.model.figure')/*)" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</figure>
+    <para>We want to extend the domain model a bit so that a <literal>
+    Customer</literal> has the ability to obtain some information of 
+    its accounts electronically. We add a <literal>login</literal> 
+    attribute to identify the customer. Then we add a <literal>
+    password</literal> and a <literal>retypedPassword</literal> 
+    attribute for authentication. The <literal>
+    retypedPassword</literal> is just there to verify a correct entered 
+    password when changing it. We will use the type <literal>
+    String</literal> for login and a domain type <literal>
+    Password</literal> for both password attributes. (But feel free to 
+    specify a domain type <literal>Login</literal> for the 
+    login.)</para>
+  </section>
+  <section>
+    <title>Mandatory UML Stereotypes</title>
+    <para>To transform an UML class model into JPA annotated Java 
+    source code you just have to mark all persistent classes. Simply 
+    assign the stereotype 
+    <link linkend="de.genesez.uml.profile.jpa.jpaPersistentEntity">
+    <literal>jpaPersistentEntity</literal></link> to any class which 
+    instances you want to store in a database. You should end up with 
+    an UML model similar to 
+    <xref linkend="de.genesez.howto.java.jpa.jpamodel.figure"/>.</para>
+    <figure id="de.genesez.howto.java.jpa.jpamodel.figure">
+    <xi:include href="../java/java.ee.jpa.xml" xpointer="xpointer(id('de.genesez.platforms.java.jpa.example.minimal.figure')/*)" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</figure>
+  </section>
+  <section>
+    <title>GeneSEZ Typemapping</title>
+    <para>Before you transform an UML domain model you have to consider 
+    the implementation of your domain data types. In our example it is 
+    <literal>Money</literal>, <literal>InterestRate</literal>, <literal>
+    Period</literal>, <literal>Date</literal>, <literal>Email</literal> 
+    and <literal>PhoneNumber</literal>. In Java we have access to a 
+    major standard programming library. We do not need to implement the 
+    domain data types itself. Instead, we going to use already existing 
+    types of the Java library.</para>
+    <para>To advise the Generator that we don&apos;t want to implement 
+    the domain data types ourself, we assign the stereotype 
+    <link linkend="de.genesez.uml.profile.genesez.external"><literal>
+    external</literal></link> of the 
+    <link linkend="de.genesez.uml.profile.genesez">GeneSEZ UML 
+    profile</link> to our domain data types. See the 
+    <link linkend="de.genesez.metamodel.externaltypes">External Types 
+    in GeneSEZ</link> for more information. Then our UML model should 
+    look similar to 
+    <xref linkend="de.genesez.howto.java.jpa.genesezmodel.figure"/> 
+    .</para>
+    <figure id="de.genesez.howto.java.jpa.genesezmodel.figure">
+      <title>Transformable UML domain model</title>
+      <mediaobject><imageobject role="html"><imagedata align="center"
+       fileref="de.genesez.howto.java.jpa.genesezmodel.png"/></imageobject>
+      <imageobject role="fo"><imagedata align="center"
+       fileref="de.genesez.howto.java.jpa.genesezmodel.svg" scalefit="1"
+       width="100%"/></imageobject></mediaobject>
+    </figure>
+    <para>Now we advised our Generator that we don&apos;t want to 
+    implement our domain data types. But we did not specify yet which 
+    existing types we want to use for our domain data types. We do this 
+    by configuring the <link linkend="de.genesez.typemapping">GeneSEZ 
+    Type Mapping</link> in our 
+    <link linkend="de.genesez.projectstructure">application generator 
+    project</link>. For each domain data type we add a mapping to an 
+    existing java type:</para>
+    <variablelist>
+      <varlistentry>
+        <term><emphasis role="bold">Money</emphasis></term>
+        <listitem>
+          <para>We want to use the Java class 
+          <ulink url="http://download.oracle.com/javase/6/docs/api/index.html?java/math/BigDecimal.html">
+          <literal>java.math.BigDecimal</literal></ulink> for our type 
+          <literal>Money</literal>:</para>
+          <programlisting>&lt;tns:type from=&quot;Money&quot;&gt;
+    &lt;!-- the default mapping should return the type name --&gt;
+    &lt;tns:to&gt;BigDecimal&lt;/tns:to&gt;
+    &lt;!-- to use the type, we need an import statement --&gt;
+    &lt;tns:context name=&quot;Import&quot;&gt;javax.math.BigDecimal&lt;/tns:context&gt;
+&lt;/tns:type&gt;</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Date</emphasis></term>
+        <listitem>
+          <para>For our dates, we want to use the Java class 
+          <ulink url="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Date.html">
+          <literal>java.util.Date</literal></ulink>.</para>
+          <programlisting>&lt;tns:type from=&quot;Date&quot;&gt;
+    &lt;tns:to&gt;Date&lt;/tns:to&gt;
+    &lt;tns:context name=&quot;Import&quot;&gt;java.util.Date&lt;/tns:context&gt;
+&lt;/tns:type&gt;</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">InterestRate</emphasis></term>
+        <listitem>
+          <para>The rate of our interests should be the primitive type 
+          <literal>double</literal>. You can also use the wrapper type 
+          <ulink url="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Double.html">
+          <literal>java.lang.Double</literal></ulink> if you 
+          want.</para>
+          <programlisting>&lt;tns:type from=&quot;InterestRate&quot;&gt;
+    &lt;tns:to&gt;double&lt;/tns:to&gt;
+    &lt;!-- suppress the generation of the import statement because double is a primitive type --&gt;
+    &lt;tns:context name=&quot;Import&quot;&gt;&lt;/tns:context&gt;
+&lt;/tns:type&gt;</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Period</emphasis></term>
+        <term><emphasis role="bold">Email</emphasis></term>
+        <term><emphasis role="bold">PhoneNumber</emphasis></term>
+        <term><emphasis role="bold">Password</emphasis></term>
+        <listitem>
+          <para>The remaining mappings are similar to the mapping of 
+          <literal>InterestRate</literal>. For <literal>
+          Period</literal> we can use the primitive type <literal>
+          long</literal> and for <literal>Email</literal>, <literal>
+          PhoneNumber</literal> and <literal>Password</literal> simply 
+          the class 
+          <ulink url="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">
+          <literal>java.lang.String</literal></ulink>.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>Your UML domain model is now transformable into JPA annotated 
+    Java source code using GeneSEZ.</para>
+  </section>
+  <section>
+    <title>Generated JPA annotated Java Source Code</title>
+    <para>Now you can transform your UML domain model into Java source 
+    code by using a <link linkend="de.genesez.workflow">
+    workflow</link>. If you take a closer look to the generated Java 
+    source code, you will recognize that a lot of things happened 
+    automatically. We will use the class <literal>Bank</literal>.</para>
+    <variablelist>
+      <varlistentry>
+        <term><emphasis role="bold">Type Definition</emphasis></term>
+        <listitem>
+          <para>As expected our persistent class has the 
+          <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Entity.html">
+          <literal>@Entity</literal></ulink> annotation. It also 
+          implements the interface 
+          <ulink url="http://download.oracle.com/javase/1.5.0/docs/api/java/io/Serializable.html">
+          <literal>java.io.Serializable</literal></ulink>. In addition, 
+          it has the 
+          <ulink url="http://download.oracle.com/javaee/5/api/javax/persistence/Table.html">
+          <literal>@Table</literal></ulink> annotation present to 
+          prevent <link linkend="de.genesez.platforms.java.jpa.naming">
+          potential naming conflicts</link> with database names. See 
+          <link linkend="de.genesez.platforms.java.jpa.entities">
+          persistent entities</link> for more information.</para>
+          <programlisting>@Entity
+@Table(name = &quot;tbl_Bank&quot;)
+public class Bank implements Serializable {
+    // ...
+}</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Persistent 
+        Attributes</emphasis></term>
+        <listitem>
+          <para>All attributes of the class are considert as persistent 
+          attributes. References to other entities are automatically 
+          annotated using the multiplicity information of the UML 
+          domain model. The default 
+          <link linkend="de.genesez.uml.profile.jpa.jpaAssociation.cascade">
+          cascade operations</link> are added as well as a standard 
+          <link linkend="de.genesez.uml.profile.jpa.jpaAssociation.mappedBy">
+          <literal>mappedBy</literal></link> value. See 
+          <link linkend="de.genesez.platforms.java.jpa.attributes">
+          persistent and transient attributes</link> for more 
+          information.</para>
+          <programlisting>@ManyToMany(cascade = {}, mappedBy = &quot;bank&quot;)
+private java.util.List&lt;Customer&gt; customer = new java.util.LinkedList&lt;Customer&gt;();
+
+@OneToMany(cascade = {}, mappedBy = &quot;bank&quot;)
+private java.util.List&lt;AbstractAccount&gt; account = new java.util.LinkedList&lt;AbstractAccount&gt;();
+
+// ...
+
+private String name;</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Additional 
+        Attributes</emphasis></term>
+        <listitem>
+          <para>You will notice that two additional attributes are 
+          generated. One to 
+          <link linkend="de.genesez.platforms.java.jpa.identity">
+          uniquely identify</link> your objects using a primiary key 
+          and one for 
+          <link linkend="de.genesez.platforms.java.jpa.optimisticlocking">
+          optimistic locking</link>.</para>
+          <programlisting>@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+private int id;
+
+@Version
+private int version;</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Standard 
+        Constructor</emphasis></term>
+        <listitem>
+          <para>You may wonder why we have just one constructor in our 
+          UML model and the source code contains a second one. The 
+          standard constructor is 
+          <link linkend="de.genesez.platforms.java.jpa.constructor">
+          automatically</link> added due to the JPA 
+          specification.</para>
+          <programlisting>public Bank() {
+}</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Get- and Set-Methods 
+        (Accessors)</emphasis></term>
+        <listitem>
+          <para>For every attribute and single-value association 
+          (toOne) you will find a corresponding <literal>get</literal> 
+          and <literal>set</literal>-method according to the Java Beans 
+          convention. See 
+          <link linkend="de.genesez.platforms.java.jpa.accessors">JPA 
+          accessor methods</link> for more information.</para>
+          <programlisting>public String getName() {
+    return name;
+}
+
+public void setName(String name) {
+    this.name = name;
+}</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Get-, InsertIn- and 
+        RemoveFrom-Methods (Accessors)</emphasis></term>
+        <listitem>
+          <para>For every multi-value association (toMany) you will 
+          find a corresponding <literal>get</literal>- and instead of a 
+          <literal>set</literal>-method an <literal>insertIn</literal>- 
+          and <literal>removeFrom</literal>-method. The <literal>
+          insertIn</literal>- and <literal>removeFrom</literal>-method 
+          automatically take care about the inverse link of 
+          bidirectional associations to keep a valid object model. See 
+          the <link linkend="de.genesez.associations">GeneSEZ 
+          Association Handling</link> for more information.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>Your generated Java source code is JPA compliant and you are 
+    already able to persist your domain objects.</para>
+  </section>
+  <section>
+    <title>Adjusting the Persistence Mapping</title>
+    <para>In most cases there is no need to further adjust the 
+    generated JPA annotated Java source code. But sometimes you may 
+    want to adjust the persistence mapping. This is no problem and we 
+    will look at some typical cases:</para>
+    <variablelist>
+      <varlistentry>
+        <term><emphasis role="bold">Unique Bank Names</emphasis></term>
+        <listitem>
+          <para>In our example each <literal>Bank</literal> has a name. 
+          We want that each bank has a different name. We need to apply 
+          a <literal>unique</literal> constraint to the <literal>
+          name</literal> attribute. We do this by assigning the 
+          stereotype 
+          <link linkend="de.genesez.uml.profile.jpa.jpaColumn"><literal>
+          jpaColumn</literal></link> to the <literal>name</literal> 
+          attribute and set the tagged value 
+          <link linkend="de.genesez.uml.profile.jpa.jpaColumn.unique">
+          <literal>unique</literal></link> to <literal>
+          true</literal>.</para>
+          <programlisting>@Column(name = &quot;name&quot;, unique = true, nullable = false)
+private String name;</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Transient 
+        Attributes</emphasis></term>
+        <listitem>
+          <para>The attribute <literal>retypedPassword</literal> on 
+          class <literal>Customer</literal> is just to validate the 
+          entered password. We don&apos;t want to have it in our 
+          database. We achiev this by assigning the stereotype 
+          <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping">
+          <literal>jpaDatatypeMapping</literal></link> to the attribute 
+          and set the tagged value 
+          <link linkend="de.genesez.uml.profile.jpa.jpaDatatypeMapping.transient">
+          <literal>transient</literal></link> to <literal>
+          true</literal>.</para>
+          <programlisting>@Basic(optional = true)
+@Transient
+private String retypedPassword;</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Providing customized <literal>
+        set</literal> methods</emphasis></term>
+        <listitem>
+          <para>What our security awareness already detected: We 
+          don&apos;t want to store passwords in plain text in the 
+          database nor keeping them a long time in memory! To prevent 
+          this we have to override the <literal>set</literal> methods 
+          for the attributes <literal>password</literal> and <literal>
+          retypedPassword</literal> on class <literal>
+          Customer</literal>. We assign the stereotype 
+          <link linkend="de.genesez.uml.profile.genesez.accessor">
+          <literal>accessor</literal></link> to both attributes and set 
+          the tagged value 
+          <link linkend="de.genesez.uml.profile.genesez.accessor.setter">
+          <literal>setter</literal></link> on both to <literal>
+          false</literal>. Then we add two <literal>set</literal> 
+          operations for both password attributes to our class.</para>
+          <programlisting>public void setPassword(String password) {
+  /* PROTECTED REGION ID(java.implementation._17_0_1_b6f02e1_1298714296495_444774_2036) ENABLED START */
+  // TODO: implementation of method &apos;Customer.setPassword(...)&apos;
+  throw new UnsupportedOperationException(&quot;The implementation of this generated method stub is missing!&quot;);
+  /* PROTECTED REGION END */
+}
+
+public void setRetypedPassword(String password) {
+  /* PROTECTED REGION ID(java.implementation._17_0_1_b6f02e1_1298714309173_856487_2039) ENABLED START */
+  // TODO: implementation of method &apos;Customer.setRetypedPassword(...)&apos;
+  throw new UnsupportedOperationException(&quot;The implementation of this generated method stub is missing!&quot;);
+  /* PROTECTED REGION END */
+}</programlisting>
+          <para>So we get two operations in which we create a hash from 
+          the given <literal>password</literal> parameter and store the 
+          hash on the respective attribute.</para>
+          <note>
+            <para>In future releases of GeneSEZ you do not need to 
+            <literal>acessor</literal> stereotype any longer to 
+            override a <literal>set</literal> method. The 
+            transformations will notice that there are two duplicate 
+            operations to be generated and will give your operation 
+            precedence instead of the automatically added <literal>
+            set</literal> method.</para>
+            <para>Moreover there will be a special treatment for 
+            <emphasis>password</emphasis> attributes and you will get 
+            <literal>set</literal> methods using hash algorithms.</para>
+          </note>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Cascading Entity 
+        Operations</emphasis></term>
+        <listitem>
+          <para>Lets assume that if you want to remove an <literal>
+          Account</literal> you want to remove all its <literal>
+          Statement</literal>s. To achiev this, you simply assign the 
+          stereotype 
+          <link linkend="de.genesez.uml.profile.jpa.jpaAssociation">
+          <literal>jpaAssociation</literal></link> to the association 
+          end on the <literal>Statement</literal> side and set the 
+          tagged value 
+          <link linkend="de.genesez.uml.profile.jpa.jpaAssociation.cascade">
+          <literal>cascade</literal></link> to <literal>
+          jpaCascadeType</literal> 
+          <xref linkend="de.genesez.uml.profile.jpa.jpaCascadeType.REMOVE"/>
+          .</para>
+          <programlisting>@OneToMany(cascade = {CascadeType.REMOVE})
+private java.util.List&lt;Statement&gt; statement = new java.util.LinkedList&lt;Statement&gt;();</programlisting>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">Inheritance 
+        Mapping</emphasis></term>
+        <listitem>
+          <para>Lets assume you don&apos;t want the JPA default 
+          inheritance mapping 
+          <xref linkend="de.genesez.uml.profile.jpa.jpaInheritanceType.SINGLE_TABLE"/>
+           but instead the 
+          <xref linkend="de.genesez.uml.profile.jpa.jpaInheritanceType.TABLE_PER_CLASS"/>
+           mapping. All you have to do is to assign the stereotype 
+          <link linkend="de.genesez.uml.profile.jpa.jpaInheritance">
+          <literal>jpaInheritance</literal></link> to the class 
+          <literal>Account</literal> and set the tagged value 
+          <link linkend="de.genesez.uml.profile.jpa.jpaInheritance.strategy">
+          <literal>strategy</literal></link> to <literal>
+          jpaInheritanceType</literal> 
+          <xref linkend="de.genesez.uml.profile.jpa.jpaInheritanceType.TABLE_PER_CLASS"/>
+          . Then you get the inheritance stragegy and the <literal>
+          @Table</literal> annotations on all subclasses to prevent 
+          <link linkend="de.genesez.platforms.java.jpa.naming">
+          potential naming conflicts</link>.</para>
+          <programlisting>@Entity 
+@Table(name = &quot;tbl_Account&quot;) 
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) 
+public abstract class AbstractAccount implements Serializable { //... }
+
+@Entity 
+@Table(name = &quot;tbl_CheckingAccount&quot;) 
+public class CheckingAccount extends AbstractAccount implements Serializable { //... }
+
+@Entity 
+@Table(name = &quot;tbl_FlexibleSavingsAccount&quot;) 
+public class FlexibleSavingsAccount extends AbstractAccount implements Serializable { //... }
+
+@Entity 
+@Table(name = &quot;tbl_SavingsAccount&quot;) 
+public class SavingsAccount extends AbstractAccount implements Serializable { //... }
+</programlisting>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>By performing these adjustments your UML class model should 
+    now look similar to 
+    <xref linkend="de.genesez.howto.java.jpa.genesezadjusted.figure"/>
+    .</para>
+    <figure id="de.genesez.howto.java.jpa.genesezadjusted.figure">
+      <title>UML domain model with adjusted persistence mapping</title>
+      <xi:include href="../java/java.ee.jpa.xml" xpointer="xpointer(id('de.genesez.platforms.java.jpa.example.figure')/mediaobject)" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+    </figure>
+    <para>This should conclude our persistence mapping adjustment tour. 
+    Now you should have a basic idea about how to adjust the 
+    persistence mapping. For a concise description of the JPA 
+    transformation see <xref linkend="de.genesez.platforms.java.jpa"/>. 
+    See <xref linkend="de.genesez.uml.profile.jpa"/> for the reference 
+    of the GeneSEZ JPA UML profile. Overall, don&apos;t forget it is 
+    GeneSEZ and see the <link linkend="de.genesez.customization">
+    GeneSEZ Customization Guide</link> for more sophisticated 
+    adjustments.</para>
+  </section>
+</section>
