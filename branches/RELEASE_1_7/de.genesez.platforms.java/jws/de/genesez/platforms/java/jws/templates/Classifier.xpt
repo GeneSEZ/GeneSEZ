@@ -23,17 +23,20 @@
 
 «DEFINE _WebServiceClient FOR MClassifier-»
 	«IF hasStereotype("jwsWebServiceClient")-»
-		@WebServiceClient(«IF hasUtilizableValue("jwsWebServiceClient", "name")-»
-			name="«getTaggedValue("jwsWebServiceClient", "name")-»"
-		«ELSE»
-			name="«asTypeName()-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebServiceClient", "targetNamespace")-»
-			, targetNamespace="«getTaggedValue("jwsWebServiceClient", "targetNamespace")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebServiceClient", "wsdlLocation")-»
-			, wsdlLocation="«getTaggedValue("jwsWebServiceClient", "wsdlLocation")-»"
-		«ENDIF-»)	
+		@WebServiceClient«IF hasUtilizableValue("jwsWebServiceClient", "name")
+			|| hasUtilizableValue("jwsWebServiceClient", "targetNamespace") 
+			|| hasUtilizableValue("jwsWebServiceClient", "wsdlLocation")-»(
+			«IF hasUtilizableValue("jwsWebServiceClient", "name")-»
+				name="«getTaggedValue("jwsWebServiceClient", "name")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebServiceClient", "targetNamespace")-»
+				«IF hasUtilizableValue("jwsWebServiceClient", "name")-», «ENDIF-»targetNamespace="«getTaggedValue("jwsWebServiceClient", "targetNamespace")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebServiceClient", "wsdlLocation")-»
+				«IF hasUtilizableValue("jwsWebServiceClient", "name") 
+				|| hasUtilizableValue("jwsWebServiceClient", "targetNamespace")-», «ENDIF-»wsdlLocation="«getTaggedValue("jwsWebServiceClient", "wsdlLocation")-»"
+			«ENDIF-»)	
+		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
 
@@ -57,25 +60,40 @@
 
 «DEFINE _WebService FOR MClassifier-»
 	«IF hasStereotype("jwsWebService")-»
-		@WebService(name=«IF hasUtilizableValue("jwsWebService", "name")-»
-			"«getTaggedValue("jwsWebService", "name")-»"
-		«ELSE»
-			"«asTypeName()-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebService", "targetNamespace")-»
-			, targetNamespace="«getTaggedValue("jwsWebService", "targetNamespace")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebService", "serviceName")-»
-			, serviceName="«getTaggedValue("jwsWebService", "serviceName")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebService", "portName")-»
-			, portName="«getTaggedValue("jwsWebService", "portName")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebService", "endpointInterface")-»
-			, endpointInterface="«getTaggedValue("jwsWebService", "endpointInterface")-»"
-		«ENDIF-»
-		«IF hasUtilizableValue("jwsWebService", "wsdlLocation")-»
-			, wsdlLocation="«getTaggedValue("jwsWebService", "wsdlLocation")-»"
-		«ENDIF-»)
+		@WebService«IF hasUtilizableValue("jwsWebService", "name")
+			|| hasUtilizableValue("jwsWebService", "targetNamespace") 
+			|| hasUtilizableValue("jwsWebService", "serviceName")
+			|| hasUtilizableValue("jwsWebService", "portName")
+			|| hasUtilizableValue("jwsWebService", "endpointInterface")
+			|| hasUtilizableValue("jwsWebService", "wsdlLocation")-»(
+			«IF hasUtilizableValue("jwsWebService", "name")-»
+				name="«getTaggedValue("jwsWebService", "name")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "targetNamespace")-»
+				«IF hasUtilizableValue("jwsWebServiceClient", "name")-», «ENDIF-»targetNamespace="«getTaggedValue("jwsWebService", "targetNamespace")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "serviceName")-»
+				«IF hasUtilizableValue("jwsWebServiceClient", "name")
+				|| hasUtilizableValue("jwsWebServiceClient", "targetNamespace")-», «ENDIF-»serviceName="«getTaggedValue("jwsWebService", "serviceName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "portName")-»
+				«IF hasUtilizableValue("jwsWebServiceClient", "name")
+				|| hasUtilizableValue("jwsWebServiceClient", "targetNamespace")
+				|| hasUtilizableValue("jwsWebServiceClient", "serviceName")-», «ENDIF-»portName="«getTaggedValue("jwsWebService", "portName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "endpointInterface")-»
+				«IF hasUtilizableValue("jwsWebServiceClient", "name")
+				|| hasUtilizableValue("jwsWebServiceClient", "targetNamespace")
+				|| hasUtilizableValue("jwsWebServiceClient", "serviceName")
+				|| hasUtilizableValue("jwsWebServiceClient", "portName")-», «ENDIF-»endpointInterface="«getTaggedValue("jwsWebService", "endpointInterface")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebService", "wsdlLocation")-»
+				«IF hasUtilizableValue("jwsWebServiceClient", "name")
+				|| hasUtilizableValue("jwsWebServiceClient", "targetNamespace")
+				|| hasUtilizableValue("jwsWebServiceClient", "serviceName")
+				|| hasUtilizableValue("jwsWebServiceClient", "portName")
+				|| hasUtilizableValue("jwsWebServiceClient", "endpointInterface")-», «ENDIF-»wsdlLocation="«getTaggedValue("jwsWebService", "wsdlLocation")-»"
+			«ENDIF-»)
+		«ENDIF»
 	«ENDIF»
 «ENDDEFINE»
