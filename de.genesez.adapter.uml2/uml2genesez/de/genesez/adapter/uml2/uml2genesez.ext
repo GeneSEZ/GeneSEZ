@@ -3,8 +3,8 @@
  * Transforms UML class models into GeneSEZ models.
  * 
  * @author	georg beier
- * @author	nico herbig
  * @author	tobias haubold
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (last)
  * 
  * @todo	line 548 - should be fixed in uml2genesez constraints
  * @todo	returntype comment from operations export
@@ -888,6 +888,9 @@ create MComment makeComment(Comment c) :
  * @return	the GeneSEZ package
  */
 private MPackage transformPackage(MPackage this, Package p) :
+	// associations
+	// set stereotype
+	stereotype.addAll( p.getAppliedStereotypes().makeStereotype() ) ->
 	// containments
 	// add comment to package
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
@@ -897,6 +900,8 @@ private MPackage transformPackage(MPackage this, Package p) :
 		).transform( this ) ->
 	// map associations in package
 	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
+	// set tagged values
+	taggedValue.addAll( makeTaggedValues(p) ) ->
 	this;
 
 /**
