@@ -12,10 +12,10 @@
  * - type helpers
  * - classifiers
  * 
- * @author	nico herbig
  * @author	tobias haubold 
- * @author	andre pflueger (last)
- * @date	2008-04-18
+ * @author	andre pflueger
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (last)
+ * @date	2011-05-17
  */
 
 // based on genesez meta model
@@ -483,7 +483,6 @@ boolean hasGenericRealization(MProperty this) :
  * @return	true if the element has the stereotype, otherwise false
  */
 boolean hasStereotype(MElement this, String stereotype) :
-	//!e.stereotype.typeSelect(MStereotype).select(e|e.name == stereotype).isEmpty;
 	this.stereotype.name.contains(stereotype);
 
 /**
@@ -510,14 +509,14 @@ boolean hasTaggedValue(MElement this, String stereotype, String tag, String valu
 /**
  * 	returns a tagged value of a stereotype if exists
  *
- * 	@param	stereotype		the name of a stereotype
- *	@param	taggedValue		the name of a tagged value
+ * 	@param	stereotype	the name of a stereotype
+ *	@param	tag			the name of a tagged value
  *	
  * 	@return		value of the tagged value
  */
-String getTaggedValue(MElement this, String stereotype, String taggedValue) :
-	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype)
-		? this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value
+String getTaggedValue(MElement this, String stereotype, String tag) :
+	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value
 		: "";
 
 /**
@@ -782,9 +781,6 @@ MClassifier getClassifier(MModel this, String fullQualifiedName) :
 MPackage getPackage(MModel this, String fullQualifiedPackageName) :
 	getPackage(nestedPackage, fullQualifiedPackageName);
 	
-cached List[MClassifier] allClassifiers(MModel this) :
-	allPackages().allClassifiers();
-
 cached List[MClassifier] allClassifiers(MPackage this) :
 	addAllClassifier({});
 
