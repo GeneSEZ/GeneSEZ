@@ -117,7 +117,7 @@
 	<target name="distribute" depends="build"
 		description="Distribute GeneSEZ documentation">
 		<delete includeemptydirs="true">
-    		<fileset dir="${distribution.dir}" includes="**/*"/>
+			<fileset dir="${distribution.dir}" includes="**/*"/>
   		</delete>
 		<mkdir dir="${distribution.dir}/javaee"/>
 		<copy todir="${distribution.dir}/javaee">
@@ -133,14 +133,13 @@
 		<copy todir="${distribution.dir}">
 			<fileset dir="${website.dir}" includes="**" />
 		</copy>
-		<chmod perm="u=rwX,g=rwX,o=">
-			<fileset dir="${distribution.dir}" includes="**/*"/>
-		</chmod>
-		<chgrp group="wwwcln">
-			<fileset dir="${distribution.dir}" includes="**/*"/>
+		
+		<chmod perm="u=rwX,g=rwX,o=" dir="${distribution.dir}" includes="**/*" type="both" />
+		<chgrp group="wwwcln" type="both">
+			<fileset dir="${distribution.dir}" includes="**/*" />
 		</chgrp>
-		<chown owner="wwwuser">
-			<fileset dir="${distribution.dir}" includes="**/*"/>
+		<chown owner="wwwuser" type="both">
+			<fileset dir="${distribution.dir}" includes="**/*" />
 		</chown>
 	</target>
 
