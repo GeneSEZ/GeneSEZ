@@ -130,50 +130,6 @@
 		<zip destfile="${bundle.dir}/genesez-${plugin.version}.zip" basedir="${temp.dir}/genesez" includes="**/*"></zip>
 		
 		<!-- create genesez + emf + uml + xpand + mwe + mwe2 + eclipse all-in-one bundles -->
-		<!-- p1 bundles - Eclipse <= 3.3 -->
-		<for param="file">
-			<path>
-				<fileset dir="${eclipse.p1.dir}" includes="*.zip"/>
-			</path>
-			<sequential>
-				<propertyregex property="file.@{file}"
-					input="@{file}"
-					regexp=".*/(.*)"
-					select="\1"
-					casesensitive="false"
-					/>
-				<echo message="${file.@{file}}" />
-				<zip destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}">
-					<zipfileset src="${eclipse.p1.dir}/${file.@{file}}" />
-					<zipfileset src="${bundle.dir}/genesez-${plugin.version}.zip" prefix="eclipse" />
-					<zipfileset dir="${dropins.location}" prefix="eclipse"/>
-				</zip>
-			</sequential>
-		</for>
-		<for param="file">
-			<path>
-				<fileset dir="${eclipse.p1.dir}" includes="*.tar.gz"/>
-			</path>
-			<sequential>
-				<propertyregex property="file.@{file}"
-					input="@{file}"
-					regexp=".*/(.*)"
-					select="\1"
-					casesensitive="false"
-					/>
-				<mkdir dir="${unpack.dir}" />
-				<untar src="${eclipse.p1.dir}/${file.@{file}}" dest="${unpack.dir}" compression="gzip" />
-				<unzip src="${bundle.dir}/genesez-${plugin.version}.zip" dest="${unpack.dir}/eclipse" />
-				<copy todir="${unpack.dir}/eclipse">
-					<fileset dir="${dropins.location}"/>
-				</copy>
-				<tar destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}" compression="gzip" longfile="gnu">
-					<fileset dir="${unpack.dir}" includes="**/*" />
-				</tar>
-				<delete dir="${unpack.dir}" />
-			</sequential>
-		</for>
-		
 		<!-- p2 bundles - Eclipse >= 3.4 -->
 		<for param="file">
 			<path>
