@@ -381,9 +381,17 @@ boolean isDestructor(MOperation this) :
 /**
  * checks if an operation has a return type
  * @return	true if the operation has a return type, otherwise false
+ * @deprecated
  */
 boolean hasReturnType(MOperation this) :
 	returnType != null && returnType.name().toLowerCase() != "void";
+
+/**
+ * checks if an operation has a return type
+ * @return	true if the operation has a return type, otherwise false
+ */
+boolean hasReturn(MOperation this) :
+	return != null && return.type.name().toLowerCase() != "void";
 
 /**
  * checks if a parameter has a default value
@@ -531,6 +539,32 @@ boolean getTaggedBooleanValue(MElement this, String stereotype, String tag) :
 	hasTaggedValue( stereotype, tag, "true")
 		? true
 		: false;
+
+/**
+ * Returns the a list of values of a tagged value of a stereotype.
+ * 
+ * @param	stereotype	the name of a stereotype
+ * @param	tag			the name of the tag
+ * 
+ * @return	the list of tagged values
+ */
+List[MTaggedValue] owningTaggedValues(MElement this, String stereotype, String tag) :
+	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.select(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
+		: {};
+
+/**
+ * Returns the a list of values of a tagged value of a stereotype.
+ * 
+ * @param	stereotype	the name of a stereotype
+ * @param	tag			the name of the tag
+ * 
+ * @return	the list of values
+ */
+List[String] getTaggedListValue(MElement this, String stereotype, String tag) :
+	let taggedValues = {} :
+		taggedValues.addAll( owningTaggedValues(stereotype, tag).value ) ->
+		taggedValues;
 
 /**
  *	function to set any existing tagged value
@@ -816,6 +850,16 @@ MClassifier getClassifier(MElement this) :
 		case MAssociationRole : ((MAssociationRole) this).classifier
 		default : null
 	};
+
+/**
+ * Getter for an MElement by it's xmi guid.
+ * 
+ * @param model		the model where the element is placed
+ * @param xmiGuid	the xmi guid of the element
+ * @return the element where the xmi guid is equals, otherwise null
+ */
+MElement getMElement(MModel model, String uri) :
+	JAVA de.genesez.platforms.common.AccessHelper.getMElement(de.genesez.metamodel.gcore.MModel, java.lang.String);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
