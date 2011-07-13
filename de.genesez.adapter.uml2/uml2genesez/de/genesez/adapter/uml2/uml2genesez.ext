@@ -4,6 +4,7 @@
  * 
  * @author	georg beier
  * @author	tobias haubold
+ * @author	nancy doerfel
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (last)
  * 
  * @todo	line 548 - should be fixed in uml2genesez constraints
@@ -135,8 +136,7 @@ private MPackage transform(Package p, MModel this) :
 		case p.isIgnoredPackage() : Void
 		// reject package by name when used as container for external classes (isContainerForExternalClasses)
 		// reject package by stereotype when used as container for external classes
-		case p.isContainerForExternalClasses() : 
-			p.ownedElement.typeSelect( Classifier ).makeExternal()
+		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
 		// else transform the package
 		default : nestedPackage.add( p.makePackage() )
 	} ->
@@ -153,6 +153,7 @@ private MPackage transform(Package p, MPackage this) :
 	switch {
 		// exclude elements by stereotypes
 		case p.isIgnoredElement() : Void
+		// reject package by name when used as container for external classes (isContainerForExternalClasses)
 		// reject package by stereotype when used as container for external classes
 		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
 		// else transform the package
@@ -746,6 +747,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
 		case EnumerationLiteral : setValue( ((EnumerationLiteral)o).name )
+		case Operation : setValue( xmiId( o ) )
 		default : setValue( o.toString() )
 	} ->
 //	setOwningElement(owner)
@@ -767,7 +769,12 @@ List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 		s | s.ownedAttribute.
 			reject( a| a.name.startsWith("base_") || null == e.getTaggedValue(s, a.name) ).
 			collect(
-				property | makeTaggedValue( makeTag(property), me, e.getTaggedValue(s, property.name) )
+				property | e.getTaggedValue(s, property.name).metaType == List 
+					? ( 	
+						((List) e.getTaggedValue(s, property.name))
+							.collect( o | makeTaggedValue( makeTag(property), me, o ) )
+					  )
+					: makeTaggedValue( makeTag(property), me, e.getTaggedValue(s, property.name) )
 			)
 	).flatten().reject(e|e == null);
 
