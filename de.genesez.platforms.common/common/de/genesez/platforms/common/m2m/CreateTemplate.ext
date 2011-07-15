@@ -92,6 +92,12 @@ create MAspect createAspect(MElement container, String domain, String name) :
 	setName(name) ->
 	container.aspect.add( this ) ->
 	this;
+	
+create MComment createComment(MElement container, String xmiGuid, String annotation) :
+	setXmiGuid(xmiGuid) ->
+	setAnnotation(annotation) ->
+	container.ownedComment.add( this ) ->
+	this;
 
 
 /*
@@ -230,6 +236,10 @@ MTag processTag(MTag this, String name, String type) :
 
 MTaggedValue processTaggedValue(MTaggedValue this, String value) :
 	setValue( value ) ->
+	this;
+
+MComment processComment(MComment this, String annotation) :
+	setAnnotation( annotation ) ->
 	this;
 
 /**
