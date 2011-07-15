@@ -10,12 +10,14 @@ import java.util.Date;
  * @author	geobe
  * @author	toh
  * @date	2008-04-18
+ * @deprecated
  */
 public class GeneralHelper {
 	
 	/**
 	 * getter for the current timestamp
 	 * @return	nice string representation of the current timestamp
+	 * @deprecated
 	 */
 	public static String getTimeStamp() {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z").format(new Date());
@@ -24,6 +26,7 @@ public class GeneralHelper {
 	/**
 	 * getter for the user who logged in
 	 * @return	string representation of the current user
+	 * @deprecated
 	 */
 	public static String getUserName() {
 		return System.getProperty("user.name", "unknown user");
