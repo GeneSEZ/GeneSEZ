@@ -3,7 +3,6 @@ package de.genesez.adapter.uml2;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +35,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		defaults.put("externalPackages", "");
 		defaults.put("externalStereotypes", "external");
 		defaults.put("excludeStereotypes", "exclude");
+		defaults.put("includeProfiles", "");
 	}
 	
 	private Properties properties = new Properties(defaults);
@@ -50,6 +50,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	private List<String> externalPackages = new ArrayList<String>();
 	private List<String> externalStereotypes = new ArrayList<String>();
 	private List<String> excludeStereotypes = new ArrayList<String>();
+	private List<String> includeProfiles = new ArrayList<String>();
 	private boolean addDefaultCheckFiles = true;
 	private boolean isNotSetUmlSlot = true;
 	private boolean isNotSetIgnoreValidationErrors = true;
@@ -60,6 +61,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	private boolean isNotSetExternalPackages = true;
 	private boolean isNotSetExternalStereotypes = true;
 	private boolean isNotSetExcludeStereotypes = true;
+	private boolean isNotSetIncludeProfiles = true;
 	
 	
 	/**
@@ -148,6 +150,13 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		} else {
 			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
 					"excludeStereotypes", "'" + WorkflowUtils.arrayToString(excludeStereotypes) + "'"));
+		}
+		if (isNotSetIncludeProfiles) {
+			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
+					"includeProfiles", "'" + properties.getProperty("includeProfiles") + "'"));
+		} else {
+			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
+					"includeProfiles", "'" + WorkflowUtils.arrayToString(includeProfiles) + "'"));
 		}
 		super.checkConfiguration(issues);
 	}
@@ -299,6 +308,23 @@ public class Uml2GeneSEZ extends CompositeComponent {
 			List<String> filtered = WorkflowUtils.split(excludeStereotypes);
 			for (String s : filtered) {
 				addExternalStereotype(s);
+			}
+		}
+	}
+	
+	public void addIncludeProfile(String includeProfile) {
+		this.includeProfiles.add(includeProfile);
+		isNotSetIncludeProfiles = false;
+	}
+	
+	/**
+	 * adder for IncludeProfiles parameter, which in GlobalVarDef add.
+	 */
+	public void addIncludeProfiles(String includeProfiles) {
+		if (includeProfiles.length() > 0) {
+			List<String> filtered = WorkflowUtils.split(includeProfiles);
+			for (String p : filtered) {
+				addIncludeProfile(p);
 			}
 		}
 	}
