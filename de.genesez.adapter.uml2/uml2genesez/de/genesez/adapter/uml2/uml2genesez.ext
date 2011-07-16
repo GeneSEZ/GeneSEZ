@@ -413,7 +413,10 @@ private create MAttribute makeAttribute(Property p) :
 	setDerived( p.isDerived ) ->
 	setStatic( p.isStatic ) ->
 	setFinal( p.isReadOnly ) ->
+	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
 	setMultiplicity( p.getUpper() ) ->
+	setLowerBoundMultiplicity( p.getLower() ) ->
+	setUpperBoundMultiplicity( p.getUpper() ) ->
 	setUnique( p.isUnique ) ->
 	setOrdered( p.isOrdered ) ->
 	setDefaultvalue( p.getDefault() ) ->
@@ -443,6 +446,7 @@ create MOperation makeOperation(Operation o) :
 	setStatic( o.isStatic ) ->
 	setAbstract( o.isAbstract ) ->
 	setFinal( o.isLeaf ) ->
+	// @deprecated, use multiplicity information of return parameter instead
 	setMultiplicity( o.getUpper() ) ->
 	setUnique( o.isUnique ) ->
 	setOrdered( o.isOrdered ) ->
@@ -501,7 +505,10 @@ private create MParameter makeParameter(Parameter p) :
 	// properties
 	setDefaultvalue( p.getDefault() ) ->
 	setDirection( p.direction.toString() ) ->
+	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
 	setMultiplicity( p.getUpper() ) ->
+	setLowerBoundMultiplicity( p.getLower() ) ->
+	setUpperBoundMultiplicity( p.getUpper() ) ->
 	setUnique( p.isUnique ) ->
 	setOrdered( p.isOrdered ) ->
 	// associations
@@ -521,7 +528,10 @@ private create MParameter makeParameter(Void v) :
 	setXmiGuid( "void" ) ->
 	setName( "" ) ->
 	setDirection( "return" ) ->
+	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
 	setMultiplicity(1) ->
+	setLowerBoundMultiplicity( 1 ) ->
+	setUpperBoundMultiplicity( 1 ) ->
 	setUnique( true ) ->
 	setOrdered( false ) ->
 	setType( makeType( null )) ->
@@ -576,9 +586,15 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	stereotype.addAll( aend.getAppliedStereotypes().makeStereotype() ) ->
 	// properties
 	setVisibility( aend.visibility.toString() ) ->
+	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
 	setMultiplicity( aend.getUpper() ) ->
+	setLowerBoundMultiplicity( aend.getLower() ) ->
+	setUpperBoundMultiplicity( aend.getUpper() ) ->
 	setDerived( aend.isDerived ) ->
+	// @deprecated, use oppositeLowerBoundMultiplicity and oppositeUpperBoundMultiplicity instead
 	setOppositeMultiplicity( aend.oppositeMultiplicity() ) ->
+	setOppositeLowerBoundMultiplicity( aend.oppositeLowerBoundMultiplicity() ) ->
+	setOppositeUpperBoundMultiplicity( aend.oppositeUpperBoundMultiplicity() ) ->
 	// unique makes no sense
 	// ordered
 	setOrdered(aend.isOrdered) ->
@@ -611,8 +627,27 @@ private MType getType(Property aend) :
 /**
  * find the multiplicity of the other end of an association from the uml model
  * @param	aend	uml association end property
+ * @deprecated
  */
 private Integer oppositeMultiplicity(Property aend) :
+	aend.opposite != null
+		? aend.opposite.getUpper()
+		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
+		
+/**
+ * find the lower bound multiplicity of the other end of an association from the uml model
+ * @param	aend	uml association end property
+ */
+private Integer oppositeLowerBoundMultiplicity(Property aend) :
+	aend.opposite != null
+		? aend.opposite.getLower()
+		: aend.association.memberEnd.reject(e|e == aend).first().getLower();
+		
+/**
+ * find the upper bound multiplicity of the other end of an association from the uml model
+ * @param	aend	uml association end property
+ */
+private Integer oppositeUpperBoundMultiplicity(Property aend) :
 	aend.opposite != null
 		? aend.opposite.getUpper()
 		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
