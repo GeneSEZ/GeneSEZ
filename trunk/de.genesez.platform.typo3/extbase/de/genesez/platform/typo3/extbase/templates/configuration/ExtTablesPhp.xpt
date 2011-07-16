@@ -1,0 +1,158 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating "ext_tables.php".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-05-07
+«ENDREM»
+
+«REM» use TYPO3 profile + access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::profile::AccessHelper»
+«EXTENSION de::genesez::platform::typo3::extbase::profile::Profile»
+
+«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
+
+«REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
+«REM» common access helper scripts if script name is equals «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "ext_tables.php".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE "ext_tables.php" -»
+<?php
+«EXPAND AccessProtection -»
+
+«EXPAND PluginConfiguration -»
+
+«EXPAND ModuleConfiguration -»
+
+«EXPAND TypoScriptInclusion -»
+
+«EXPAND DomainObjectConfiguration FOREACH allEntitiesAndValueObjects() -»
+
+«EXPAND OwnCodeImplementation("ext_tables.php.own.code.implementation." + xmiGuid) -»
+
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	TYPO3 access control to check if this file is called from the outside of TYPO3. 
+	If so then the script dies.
+«ENDREM»
+«DEFINE AccessProtection FOR MModel -»
+if (!defined ('TYPO3_MODE')) {
+	die ('Access denied.');
+}
+«ENDDEFINE»
+
+
+«DEFINE PluginConfiguration FOR MModel -»
+t3lib_div::loadTCA('tt_content');
+
+// These dividers are a little trick to group these items in the plugin selector
+$TCA['tt_content']['columns']['list_type']['config']['items'][] = array('«extensionName() -»', '--div--', t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif');
+
+«EXPAND RegisterPlugin FOREACH allExtensionPlugins() -»
+
+$TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
+«ENDDEFINE»
+
+
+«DEFINE RegisterPlugin FOR MInterface -»
+Tx_Extbase_Utility_Extension::registerPlugin(
+	$_EXTKEY,
+	'«name -»',
+	'«getT3ExtbasePluginTitle() -»'«IF !hasT3ExtbasePluginIconPathName("") -»,
+	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconPathName() -»'«ENDIF»
+);
+«ENDDEFINE»
+
+
+«DEFINE ModuleConfiguration FOR MModel -»
+if (TYPO3_MODE === 'BE') {
+	«EXPAND RegisterModule FOREACH allExtensionModules() -»
+}
+«ENDDEFINE»
+
+
+«DEFINE RegisterModule FOR MInterface -»
+	Tx_Extbase_Utility_Extension::registerModule(
+	);
+«ENDDEFINE»
+
+
+«DEFINE TypoScriptInclusion FOR MModel -»
+t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', '«extensionName()» setup');
+«ENDDEFINE»
+
+
+«DEFINE DomainObjectConfiguration FOR MClass -»
+«EXPAND ContextSensitiveHelp -»
+«EXPAND AllowTableOnStandardPages -»
+«EXPAND TableConfigurationArray -»
+«ENDDEFINE»
+
+
+«DEFINE ContextSensitiveHelp FOR MClass -»
+t3lib_extMgm::addLLrefForTCAdescr('«name.toLowerCase()»', 'EXT:«extensionKey()»/«resourcesPrivateLanguagePath()»/locallang_csh_«name.toLowerCase()».xml');
+«ENDDEFINE»
+
+«DEFINE AllowTableOnStandardPages FOR MClass -»
+t3lib_extMgm::allowTableOnStandardPages('«name.toLowerCase()»');
+«ENDDEFINE»
+
+«DEFINE TableConfigurationArray FOR MClass -»
+$TCA['«name.toLowerCase()»'] = array (
+	'ctrl' => array (
+		'title'						=> 'LLL:EXT:«extensionKey() -»/«resourcesPrivateLanguagePath() -»/locallang_db.xml:«name.toLowerCase() -»',
+		'label'						=> 'uid',
+		'tstamp'					=> 'tstamp',
+		'crdate'					=> 'crdate',
+		'versioningWS'				=> 2,
+		'versioning_followPages'	=> TRUE,
+		'origUid'					=> 't3_origuid',
+		'languageField'				=> 'sys_language_uid',
+		'transOrigPointerField'		=> 'l18n_parent',
+		'transOrigDiffSourceField'	=> 'l18n_diffsource',
+		'delete'					=> 'deleted',
+		'enablecolumns'				=> array(
+			'disabled'				=> 'hidden',
+			'starttime'				=> 'starttime',
+			'endtime'				=> 'endtime',
+			),
+		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . '«configurationTCAPath()»/«name.split("_").last() -».php',
+		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«name.toLowerCase()».gif'
+	)
+);
+«ENDDEFINE»
+
+
+
+«REM»
+	generates a region for own code implementations
+«ENDREM»
+«DEFINE OwnCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further code implementations here
+«ENDPROTECT»
+«ENDDEFINE»

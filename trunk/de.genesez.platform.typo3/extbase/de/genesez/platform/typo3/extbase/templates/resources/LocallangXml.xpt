@@ -1,0 +1,113 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating "locallang.xml". (i.O.)
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-12
+«ENDREM»
+
+«REM» use TYPO3 profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::profile::AccessHelper»
+
+«REM» use TYPO3 Extbase convention scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+
+«REM» use TYPO3 Extbase access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
+
+«REM» use common conversion scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::Conversion»
+«EXTENSION de::genesez::platforms::common::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "locallang.xml".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE resourcesPrivateLanguagePath() + "/locallang.xml" -»
+«EXPAND TypeDefintion -»
+
+«EXPAND T3locallang -»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«DEFINE TypeDefintion FOR MModel -»
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+«ENDDEFINE»
+
+
+«DEFINE T3locallang FOR MModel -»
+<T3locallang>
+	«EXPAND MetaType -»
+	«EXPAND DataType -»
+</T3locallang>
+«ENDDEFINE»
+
+
+«DEFINE MetaType FOR MModel -»
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for the «extensionKey() -» extension in the FRONTEND</description>
+	</meta>
+«ENDDEFINE»
+
+
+«DEFINE DataType FOR MModel -»
+	<data type="array">
+	«EXPAND LanguageKey("default") -»
+	«FOREACH getT3LocalizationLanguageKeys() AS languageKey -»
+		«EXPAND LanguageKey(languageKey) -»
+	«ENDFOREACH -»
+	</data>
+«ENDDEFINE»
+
+
+«DEFINE LanguageKey(String languageKey) FOR MModel -»
+		<languageKey index="«languageKey -»" type="array">
+			«FOREACH allEntitiesAndValueObjects() AS domainElement -»
+				«EXPAND ClassLocalization(languageKey) FOR domainElement -»
+				«EXPAND PropertyLocalization(languageKey) FOREACH domainElement.property -»
+			«ENDFOREACH -»
+			«EXPAND OwnLocalization(languageKey) -»
+		</languageKey>
+«ENDDEFINE»
+
+
+«DEFINE ClassLocalization(String languageKey) FOR MClass -»
+			<label index="«asLowerTypeName() -»">«EXPAND DefaultValue(languageKey) -»</label>
+«ENDDEFINE»
+
+
+«DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
+			<label index="«classifier.asLowerTypeName() -».«asLowerPropertyName() -»">«EXPAND DefaultValue(languageKey) -»</label>
+«ENDDEFINE»
+
+
+«DEFINE DefaultValue(String languageKey) FOR MElement -»
+«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xml." + languageKey + "." + xmiGuid) -»
+«IF hasComment() -»«comment("", "") -»«ENDIF -»
+«ENDPROTECT -»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own localization
+«ENDREM»
+«DEFINE OwnLocalization(String languageKey) FOR MModel -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang.xml." + languageKey + ".own.localization." + xmiGuid)»
+			<!-- TODO: put your further localization here -->
+			«ENDPROTECT»
+«ENDDEFINE»

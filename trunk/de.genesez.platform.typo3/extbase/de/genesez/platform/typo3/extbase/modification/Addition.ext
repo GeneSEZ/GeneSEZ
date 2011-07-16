@@ -1,0 +1,322 @@
+/**
+ * Additions of the model before generation of source code.  
+ *  
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-07-14
+ */
+
+//	based on genesez meta model
+import gcore;
+
+// use TYPO3 Extbase profile + access helper scripts
+extension de::genesez::platform::typo3::extbase::profile::Profile;
+extension de::genesez::platform::typo3::extbase::profile::AccessHelper;
+
+// use TYPO3 Extbase naming scripts
+extension de::genesez::platform::typo3::extbase::convention::Naming;
+
+// use TYPO3 Extbase access helper scripts which overrides
+// common access helper scripts if script name is equal 
+extension de::genesez::platform::typo3::extbase::scripts::AccessHelper;
+extension de::genesez::platforms::common::AccessHelper;
+
+// use common create template scripts
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+extension de::genesez::platforms::common::Conversion;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	MPackage (MModel)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+Void modelAdditions(MModel this) :
+	packageAdditions();
+
+
+Void packageAdditions(MPackage this) :
+	// perform model additions for all nested packages
+	this.nestedPackage.packageAdditions() ->
+	
+	// perform model additions for all classes
+	this.classifier.typeSelect(MClass).classAdditions();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	MClass
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+Void classAdditions(MClass this) :
+	switch {
+		case isController() :
+			controllerAdditions()
+			
+		case isEntity() :
+			entityAdditions()
+			
+		case isValueObject() :
+			valueObjectAdditions()
+			
+		case isRepository() :
+			repositoryAdditions()
+			
+		case isService() : 
+			Void
+			
+		case isValidator() :
+			validatorAdditions()
+			
+		default :
+			Void
+	};	
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase Controller additions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Model additions for an TYPO3 Extbase controller.
+ */
+Void controllerAdditions(MClass this) :
+	addControllerType() ->
+	addControllerInitializeAction() ->
+	addControllerErrorAction() ->
+	addControllerGetErrorFlashMessage() ->
+	// add initialize action for all actions which have the sterotype
+	operation.select( o | o.hasT3ExtbaseControllerActionCreateInitializeAction("true") )
+		.addControllerActionInitializeAction();
+ 
+
+private Void addControllerType(MClass this) :
+	hasT3ExtbaseControllerStereotype()
+		? (	let controllerType = getT3ExtbaseControllerControllerType() :
+				switch {
+					case controllerType == prT3ExtbaseControllerTypeExtbaseControllerInterface() :
+						realization.add( createExternal( model(), controllerType ) )
+					case generalization.isEmpty :
+						generalization.add( createExternal( model(), controllerType ) )
+					default : Void
+				}
+		)
+		: (	generalization.isEmpty 
+				? generalization.add( createExternal( model(), prT3ExtbaseControllerTypeExtbaseActionController() ) )
+				: Void
+		);
+
+
+Void addControllerInitializeAction(MClass this) :
+	// checks if the initalize action should be created and doesn't already exists
+	hasT3ExtbaseControllerCreateInitializeAction("true")
+	&& operation.select(o| o.name == "initalizeAction" ).isEmpty
+		? (	let o = createOperation(this, this.xmiGuid + ".initalizeAction", "initalizeAction") :
+				o.processOperation( "protected", false, false, false, 1, false, false ) ->
+				o.ownedComment.add( createComment(this.xmiGuid + ".initalizeAction.comment", "Override initalizeAction to solve tasks which all actions have in common.") )
+		) : Void;
+
+
+Void addControllerErrorAction(MClass this) :
+	// checks if the error action should be created and doesn't already exists
+	hasT3ExtbaseControllerCreateErrorAction("true")
+	&& operation.select(o| o.name == "errorAction" ).isEmpty
+		? (	let o = createOperation(this, this.xmiGuid + ".errorAction", "errorAction") :
+				o.processOperation( "protected", false, false, false, 1, false, false ) ->
+				o.ownedComment.add( createComment(this.xmiGuid + ".errorAction.comment", "Override errorAction to show that errors happend.") )
+		) : Void;
+
+
+Void addControllerGetErrorFlashMessage(MClass this) :
+	// checks if the get error flash message method should be created and doesn't already exists
+	hasT3ExtbaseControllerCreateGetErrorFlashMessage("true")
+	&& operation.select(o| o.name == "getErrorFlashMessage" ).isEmpty
+		? (	let o = createOperation(this, this.xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
+				o.processOperation( "protected", false, false, false, 1, false, false ) ->
+				o.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.comment", "Override getErrorFlashMessage to customize the flash message.") ) ->
+				o.setReturn(
+					let return = createParameter( o, this.xmiGuid + ".getErrorFlashMessage.return", "" ) :
+						return.processParameter("", "return", 1, true, false) ->
+						return.setType( createPrimitiveTypeString( model() ) ) ->
+						return.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.return.comment", "The flash message") ) ->
+						return
+				) 
+		) :  Void;
+
+
+Void addControllerActionInitializeAction(MOperation this) :
+	// checks if the initalize action for an action should be created and doesn't already exists
+	hasT3ExtbaseControllerActionCreateInitializeAction("true") 
+	&& classifier.operation.select( o | o.name == "initalize" + name.toFirstUpper() ).isEmpty
+		? (	let o = createOperation(classifier, this.xmiGuid + ".initalize" + name.toFirstUpper(), "initalize" + name.toFirstUpper() ) :
+				o.processOperation( "protected", false, false, false, 1, false, false ) ->
+				o.ownedComment.add( createComment(this.xmiGuid + ".initalize" + name.toFirstUpper() + ".comment", "Define initialize" + name.toFirstUpper() + " to solve tasks before the action is called.") )
+		) : Void;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase Model additions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - Entitiy additions - - - - - - - - - - - - - - - - - - - - - - - - -
+
+*/
+
+/**
+ * Model additions for an TYPO3 Extbase entity.
+ */
+Void entityAdditions(MClass this) :
+	addEntityType(); 
+
+
+private Void addEntityType(MClass this) :
+	hasT3ExtbaseEntityStereotype()
+		? (	let entityType = getT3ExtbaseEntityEntityType() :
+				switch {
+					case generalization.isEmpty :
+						generalization.add( createExternal( model(), entityType ) )
+					default : Void
+				}
+		)
+		: (	generalization.isEmpty 
+				? generalization.add( createExternal( model(), prT3ExtbaseEntityTypeExtbaseAbstractEntity() ) )
+				: Void
+		);
+
+	
+/*
+- - Value Object additions  - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Model additions for an TYPO3 Extbase value object.
+ */
+Void valueObjectAdditions(MClass this) :
+	addValueObjectType();
+
+
+private Void addValueObjectType(MClass this) :
+	hasT3ExtbaseValueObjectStereotype()
+		? ( let valueObjectType = getT3ExtbaseValueObjectValueObjectType() :
+				switch {
+					case generalization.isEmpty :
+						generalization.add( createExternal( model(), valueObjectType ) )
+					default : Void
+				}
+		) 
+		: (	generalization.isEmpty 
+				? generalization.add( createExternal( model(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject() ) )
+				: Void 
+		);
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase Repository additions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - Repository additions  - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Model additions for an TYPO3 Extbase repository.
+ */
+Void repositoryAdditions(MClass this) :
+	addRepositoryType() ->
+	additionAddRepositoryInitializeObject();
+
+
+private Void addRepositoryType(MClass this) :
+	hasT3ExtbaseRepositoryStereotype()
+		? ( let repositoryType = getT3ExtbaseRepositoryRepositoryType() :
+				switch {
+					case generalization.isEmpty :
+						generalization.add( createExternal( model(), repositoryType ) )
+					default : Void
+				} 
+		) 
+		: (	generalization.isEmpty 
+				? generalization.add( createExternal( model(), prT3ExtbaseRepositoryTypeExtbaseRepository() ) )
+				: Void 
+		);
+
+
+Void additionAddRepositoryInitializeObject(MClass this) :
+	// checks if the initalize object operation should be created and doesn't already exists
+	hasT3ExtbaseRepositoryCreateInitializeObject("true")
+	&& operation.select(o| o.name == "initalizeObject" ).isEmpty
+		? (	let o = createOperation(this, this.xmiGuid + ".initalizeObject", "initalizeObject") :
+				o.processOperation( "public", false, false, false, 1, false, false ) ->
+				o.ownedComment.add( createComment(this.xmiGuid + ".initalizeObject.comment", "Life cycle method.") )
+		) : Void;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase Service additions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase Validator additions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - Validator additions - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Model additions for an TYPO3 Extbase repository.
+ */
+Void validatorAdditions(MClass this) :
+	addRepositoryType();
+
+
+private Void addValidatorType(MClass this) :
+	hasT3ExtbaseValidatorStereotype()
+		? ( let validatorType = getT3ExtbaseValidatorValidatorType() :
+				switch {
+					case validatorType == prT3ExtbaseValidatorTypeExtbaseValidatorInterface() :
+						realization.add( createExternal( model(), validatorType ) )
+					case generalization.isEmpty :
+						generalization.add( createExternal( model(), validatorType ) )
+					default : Void
+				}
+		)
+		: ( generalization.isEmpty 
+				? generalization.add( createExternal( model(), prT3ExtbaseValidatorTypeExtbaseAbstractValidator() ) )
+				: Void 
+		);
+
+/*
+Void addValidatorIsValid(MClass this) :
+	// checks if the is valid method doesn't already exists
+	operation.select(o| o.name == "isValid" ).isEmpty
+		? (	let o = createOperation(this, this.xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
+				o.processOperation( "protected", false, false, false, 1, false, false ) ->
+				o.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.comment", "Override getErrorFlashMessage to customize the flash message.") ) ->
+				o.setReturn(
+					let return = createParameter( o, this.xmiGuid + ".getErrorFlashMessage.return", "" ) :
+						return.processParameter("", "return", 1, true, false) ->
+						return.setType( createPrimitiveTypeString( model() ) ) ->
+						return.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.return.comment", "The flash message") ) ->
+						return
+				) 
+		) :  Void;
+*/
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Helper functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/

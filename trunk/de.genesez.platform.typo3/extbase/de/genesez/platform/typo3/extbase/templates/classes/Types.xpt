@@ -1,0 +1,103 @@
+«IMPORT gcore»
+«REM»
+	Handles classifiers, creates files and delegates the transformation of types to specific templates
+	
+	currently delegated:
+	- class, interface
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-04-21
+«ENDREM»
+
+«REM» use logging scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«REM» use TYPO3 Extbase naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
+
+«REM» use TYPO3 Extbase conversion scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of a type.
+	i.O.
+«ENDREM»
+«DEFINE Root FOR MClassifier -»
+«FILE filePath( asFileNamePHP() ) -»
+<?php
+
+«EXPAND OwnImports("php.own.imports." + xmiGuid) -»
+
+«EXPAND TypeDefinition -»
+?>
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of a class.
+	i.O.
+«ENDREM»
+«DEFINE TypeDefinition FOR MClass -»
+«EXPAND Class::Root -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of an interface.
+	i.O.
+«ENDREM»
+«DEFINE TypeDefinition FOR MInterface -»
+«EXPAND Interface::Root -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of an enumeration.
+	i.O.
+«ENDREM»
+«DEFINE TypeDefinition FOR MEnumeration -»
+// TODO: «logFatal("generation of 'MEnumeration's is currently not supported")»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of a data type.
+	i.O.
+«ENDREM»
+«DEFINE TypeDefinition FOR MDataType -»
+// TODO: «logFatal("generation of 'MDataType's is currently not supported")»
+«ENDDEFINE»
+
+
+«REM»
+	Because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
+	i.O.
+«ENDREM»
+«DEFINE TypeDefinition FOR MClassifier -»
+// TODO: «logFatal("generation of 'MClassifier's is currently not supported")»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own import declarations.
+	i.O.
+«ENDREM»
+«DEFINE OwnImports(String id) FOR MClassifier -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further include + require statements here
+«ENDPROTECT»
+«ENDDEFINE»
