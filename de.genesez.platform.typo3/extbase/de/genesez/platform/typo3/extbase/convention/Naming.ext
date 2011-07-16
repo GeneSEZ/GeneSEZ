@@ -1,0 +1,201 @@
+/**
+ * Naming conventions for TYPO3 Extbase
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-05-11
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 Extbase convention scripts
+extension de::genesez::platform::typo3::extbase::convention::Convention;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GLOBAL TYPO3 Extbase type name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats the name of an classifier using prefix + suffix.
+ * 
+ * @return	formatted name of the classifier
+ */
+String asTypeName(MClassifier this) :
+	typeNameBase() + typeNameSeperator() + typeNamePath() + typeNameSeperator() + typeNamePrefix() + name.toFirstUpper() + typeNameSuffix();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GLOBAL TYPO3 Extbase attribute name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an attribute name as a constant.
+ *
+ * @return	the formatted attribute name
+ */
+String asConstantName(MAttribute this) : 
+	name.toUpperCase();
+
+
+/**
+ * Formats an attribute name as a normal attribute.
+ * 
+ * @return	the formatted attribute name
+ */
+String asAttributeName(MAttribute this) : 
+	name.toFirstLower();
+
+
+/**
+ * Formats an attribute name as a getter method.
+ *
+ * @return	the formatted name of the getter method
+ */
+String asGetterName(MAttribute this) : 
+	getterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an attribute name as a setter or inject (DI) method.
+ * 
+ * @return	the formatted name of the setter method
+ */
+String asSetterName(MAttribute this) : 
+	setterNamePrefix() + name.toFirstUpper();
+
+	
+/**
+ * Formats an attribute name as a 'insert in' method.
+ * 
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertInName(MAttribute this) : 
+	insertInNamePrefix() + name.toFirstUpper();
+
+/**
+ * Formats an attribute name as a 'remove from' method.
+ * 
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFromName(MAttribute this) : 
+	removeFromNamePrefix() + name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GLOBAL TYPO3 Extbase association role name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an association role name as a constant.
+ *
+ * @return	the formatted association role name
+ */
+String asConstantName(MAssociationRole this) : 
+	name.toUpperCase();
+
+
+/**
+ * Formats an association role name as a normal attribute.
+ * 
+ * @return	the formatted association role name
+ */
+String asAttributeName(MAssociationRole this) : 
+	name.toFirstLower();
+
+
+/**
+ * Formats an association role name as a getter method.
+ *
+ * @return	the formatted name of the getter method
+ */
+String asGetterName(MAssociationRole this) : 
+	getterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an association role name as a setter method.
+ * 
+ * @return	the formatted name of the setter method
+ */
+String asSetterName(MAssociationRole this) : 
+	setterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an association role name as a 'insert in' method.
+ * 
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertInName(MAssociationRole this) : 
+	insertInNamePrefix() + name.toFirstUpper();
+
+/**
+ * Formats an association role name as a 'remove from' method.
+ * 
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFromName(MAssociationRole this) : 
+	removeFromNamePrefix() + name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GLOBAL TYPO3 Extbase operation name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats the name of an operation using prefix + suffix.
+ *
+ * @return	formatted name of the operation
+ */
+String asOperationName(MOperation this) :
+	name.toFirstLower() + operationNameSuffix();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GLOBAL TYPO3 Extbase parameter name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats the name of a parameter.
+ * 
+ * @return	the formatted name of the parameter
+ */
+String asParameterName(MParameter this) : 
+	name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GLOBAL TYPO3 Extbase file name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats the filename of a classifier as php file.
+ *
+ * @return	the filename of the class
+ */
+String asFileNamePHP(MClassifier this) :
+	// The file name depends on the last section of the full qualified type name and the file extension.
+	// There are two possibilities to create this file name:
+	// - First use the full qualified and extract the last section.
+	//   - The drawback is, that it checks what TYPO3 Extbase type is it. 
+	//     So more method calls are needed which speeds down the generation.
+	// - Second use the name, convert the first character to upper and use prefix + suffix.
+	//   - The advantage is the reduction of method calls.
+	//   - The drawback is that the last section of type name is generated once again.
+	//     By changing naming convertions this needs to be corrected also.
+	// The decission is to use the second possibility to speed up the generation.
+	name.split( typeNameSeperator() ).last() + fileExtensionPHP();
+	

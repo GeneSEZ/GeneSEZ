@@ -1,0 +1,62 @@
+«IMPORT gcore»
+«REM»
+	Main entry point for generating extbase class code.
+	Iterates over the model and delegates the handling of classifiers.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-04-26
+«ENDREM»
+
+«REM» use common model 2 text helper scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the contents of the model and rejects all ignored packages.
+	i.O.
+«ENDREM»
+«DEFINE Root FOR MModel -»
+	«EXPAND Root FOREACH nestedPackage -»
+	«EXPAND Root FOREACH classifier -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the contents of a package, delegates the handling of all classifiers.
+	i.O.
+«ENDREM»
+«DEFINE Root FOR MPackage -»
+	«EXPAND Root FOREACH nestedPackage -»
+	«EXPAND Root FOREACH classifier -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the contents of a classifier, if it is an element of:
+	- controller package
+	- model package
+	- repository package
+	- service package
+	- validator package
+	i.O.
+«ENDREM»
+«DEFINE Root FOR MClassifier -»
+«IF isControllerPackageElement() || isModelPackageElement() || isRepositoryPackageElement() || isServicePackageElement() || isValidatorPackageElement() -»
+	«EXPAND Types::Root -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»

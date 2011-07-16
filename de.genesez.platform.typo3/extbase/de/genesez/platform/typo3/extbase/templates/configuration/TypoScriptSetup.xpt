@@ -1,0 +1,78 @@
+«IMPORT gcore»
+«REM»
+	Performs the generation of TypoScript "setup.txt". (i.O.)
+	
+	currently handled:
+	- 
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-14
+«ENDREM»
+
+«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "setup.txt".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE configurationTypoScriptPath() + "/setup.txt" -»
+«LET fullQualifiedExtensionName().toLowerCase() AS extensionName -»
+«EXPAND PluginConfiguration(extensionName) -»
+
+«EXPAND ModuleConfiguration(extensionName) -»
+
+«EXPAND OwnTypoScriptDeclaration("setup.txt.own.typoscript.declaration." + xmiGuid) -»
+«ENDLET -»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«DEFINE PluginConfiguration(String extensionName) FOR MModel -»
+plugin.«extensionName -» {
+	persistence {
+		storagePid = {$plugin.«extensionName -».persistence.storagePid}
+	}
+	view {
+		templateRootPath = {$plugin.«extensionName -».view.templateRootPath}
+		partialRootPath = {$plugin.«extensionName -».view.partialRootPath}
+		layoutRootPath = {$plugin.«extensionName -».view.layoutRootPath}
+	}
+}
+«ENDDEFINE»
+
+
+«DEFINE ModuleConfiguration(String extensionName) FOR MModel -»
+module.«extensionName -» {
+	persistence < plugin.«extensionName -».persistence
+	view {
+		templateRootPath = {$module.«extensionName -».view.templateRootPath}
+		partialRootPath = {$module.«extensionName -».view.partialRootPath}
+		layoutRootPath = {$module.«extensionName -».view.layoutRootPath}
+	}
+}
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own TypoScript declarations.
+«ENDREM»
+«DEFINE OwnTypoScriptDeclaration(String id) FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID (id)»
+// TODO: put your further TypoScript declarations here
+«ENDPROTECT»
+«ENDDEFINE»

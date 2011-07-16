@@ -1,0 +1,75 @@
+«IMPORT gcore»
+«REM»
+	Performs the generation of interfaces
+	
+	currently handled:
+	- extends
+	- attributes
+	- associations
+	- operations
+	- comments
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-03-21
+«ENDREM»
+
+«REM» use type mapping scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes an interface.
+	i.O.
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+«EXPAND Comment::ClassifierDeclaration -»
+interface «name -»«EXPAND Generalization -» {
+	
+	«EXPAND de::genesez::platforms::php5::templates::SectionComment::Member -»
+	«EXPAND Attribute::Declaration -»
+	«EXPAND Association::Declaration -»
+	
+	«EXPAND de::genesez::platforms::php5::templates::SectionComment::OperationDeclaration -»
+	«EXPAND Operation::Declaration -»
+	
+	«EXPAND de::genesez::platforms::php5::templates::SectionComment::Accessor -»
+	«EXPAND Association::Accessors -»
+	
+	«EXPAND de::genesez::platforms::php5::templates::SectionComment::OwnCode -»
+	«EXPAND OwnCodeDeclaration("php.interface.own.code.declaration." + xmiGuid) -»
+}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Generates the generalization of a class.
+	Only single inheritance is allowed.
+	i.O.
+«ENDREM»
+«DEFINE Generalization FOR MInterface -»
+«IF !generalization.isEmpty -»
+ extends «FOREACH generalization AS g SEPARATOR ", " -»«g.mapName() -»«ENDFOREACH -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates a region for own code declarations.
+	i.O.
+«ENDREM»
+«DEFINE OwnCodeDeclaration(String id) FOR MInterface -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further code declarations here
+	«ENDPROTECT»
+«ENDDEFINE»

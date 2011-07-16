@@ -1,0 +1,124 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating "ext_tables.sql".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-14
+«ENDREM»
+
+«REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
+«REM» common access helper scripts if script name is equal «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+
+«REM» use common model 2 text helper scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the generation of "ext_tables.sql".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE "ext_tables.sql" -»
+
+«EXPAND CreateTableDefinition FOREACH allEntitiesAndValueObjects() -»
+
+«EXPAND OwnCodeImplementation("ext_tables.sql.own.code.implementation." + xmiGuid) -»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«DEFINE CreateTableDefinition FOR MClass -»
+#
+# Table structure for table '«name.toLowerCase()»'
+#
+CREATE TABLE «name.toLowerCase()» (
+	«EXPAND InternalManagement -»
+	
+	«EXPAND Attribute FOREACH property.typeSelect(MAttribute).select( e | !e.static && !e.final && !e.derived ) -»
+	«REM»
+	«EXPAND Association FOREACH property.typeSelect(MAssociationRole).select( e | !e.derived ) -»
+	«ENDREM»
+	«EXPAND AccessControl»
+	«EXPAND Localization»
+	«EXPAND Versioning»
+	«EXPAND Key -»
+);
+«ENDDEFINE»
+
+
+«DEFINE Attribute FOR MAttribute -»
+	«name.toLowerCase()» «type.mapName("SQL")»«EXPAND DefaultValue -» «IF lowerBoundMultiplicity > 0 -»NOT «ENDIF -»NULL,
+«ENDDEFINE»
+
+
+«DEFINE DefaultValue FOR MAttribute -»
+«IF hasDefaultValue() -» DEFAULT '«defaultvalue.replaceAll("\"", "") -»'«ENDIF -»
+«ENDDEFINE»
+
+
+
+
+«DEFINE InternalManagement FOR MClass -»
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+«DEFINE AccessControl FOR MClass -»
+	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
+	crdate int(11) unsigned DEFAULT '0' NOT NULL,
+	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
+	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+«DEFINE Localization FOR MClass -»
+	sys_language_uid int(11) DEFAULT '0' NOT NULL,
+	l18n_parent int(11) DEFAULT '0' NOT NULL,
+	l18n_diffsource mediumblob NOT NULL,
+«ENDDEFINE»
+
+
+«DEFINE Versioning FOR MClass -»
+	t3ver_oid int(11) DEFAULT '0' NOT NULL,
+	t3ver_id int(11) DEFAULT '0' NOT NULL,
+	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
+	t3ver_label varchar(30) DEFAULT '' NOT NULL,
+	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
+	t3ver_stage int(11) DEFAULT '0' NOT NULL,
+	t3ver_count int(11) DEFAULT '0' NOT NULL,
+	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
+	t3_origuid int(11) DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+«DEFINE Key FOR MClass -»
+	PRIMARY KEY (uid),
+	KEY parent (pid),
+	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own code implementations
+«ENDREM»
+«DEFINE OwnCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '# ' CEND '' ID (id)»
+# TODO: put your further code implementations here
+«ENDPROTECT»
+«ENDDEFINE»

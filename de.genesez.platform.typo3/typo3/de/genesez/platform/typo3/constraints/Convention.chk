@@ -1,0 +1,51 @@
+/**
+ * 	Validates the model for php code generation
+ *  
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-05-12
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 profile + access helper scripts
+extension de::genesez::platform::typo3::profile::Profile;
+extension de::genesez::platform::typo3::profile::AccessHelper;
+
+// use workflow global var scripts
+extension de::genesez::platform::typo3::workflow::GlobalVar;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if the model has has the stereotype which is needed for extension manager.
+ * 
+ * @return	false, if the model hasn't this sterotype, otherwise true
+ */
+context MModel ERROR "GeneSEZ: TYPO3 extension manager (stereotype: " + prT3ExtensionManager() + ") is missing!" :
+	hasT3ExtensionManagerStereotype();
+	
+
+/**
+ * Checks if the model has has a utilizable tagged value for the name of the extension which is needed for extension manager.
+ * 
+ * @return	false, if the model hasn't this utilizable tagged value, otherwise true
+ */
+context MModel ERROR "GeneSEZ: The name of the extension for TYPO3 extension manager (stereotype: " + prT3ExtensionManager() + ", tagged value: " + prT3ExtensionManagerTitle() + ") is missing or empty!" :
+	getT3ExtensionManagerTitle().length > 0
+		? true
+		: false;
+
+
+/**
+ * Checks if the model has has a utilizable tagged value for the description of the extension which is needed for extension manager.
+ * 
+ * @return	false, if the model hasn't this utilizable tagged value, otherwise true
+ */
+context MModel ERROR "GeneSEZ: The description of the extension for TYPO3 extension manager (stereotype: " + prT3ExtensionManager() + ", tagged value: " + prT3ExtensionManagerDescription() + ") is missing or empty!" : 
+	getT3ExtensionManagerDescription().length > 0
+		? true
+		: false;

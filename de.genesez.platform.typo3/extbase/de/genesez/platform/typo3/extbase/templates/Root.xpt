@@ -1,0 +1,109 @@
+«IMPORT gcore»
+«REM»
+	Main entry point for generating extbase code.
+	Iterates over the model and delegates the handling.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-05-23
+«ENDREM»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+
+«EXTENSION de::genesez::platform::typo3::extbase::modification::Addition»
+«EXTENSION de::genesez::platform::typo3::extbase::modification::Naming»
+
+«EXTENSION de::genesez::platform::typo3::workflow::GlobalVar»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::FileSystemHelper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the contents of the model.
+	i.O.
+«ENDREM»
+«DEFINE Root FOR MModel -»
+	«REM» init logger «ENDREM»
+	«useLogger("de.genesez.platform.typo3") -»
+	
+	«REM» Basic TYPO3 Extbase naming modifications for an easier model to text transfomation «ENDREM»
+	«modelNaming() -»
+	
+	«REM» TYPO3 Extbase addions and modification for an easier model to text transformation «ENDREM» 
+	«modelAdditions() -»
+					
+	«REM» Create default directory hierarchy for an TYPO3 Extbase extension «ENDREM»
+	«EXPAND DefaultDirectoryHierarchy -»
+	
+	«REM» Generate extension class code «ENDREM»
+	«EXPAND de::genesez::platform::typo3::extbase::templates::classes::Root::Root -»
+
+	«REM» Generate extension configuration code «ENDREM»
+	«EXPAND de::genesez::platform::typo3::extbase::templates::configuration::Root::Root -»
+	
+	«REM» Generate extension resources code «ENDREM»
+	«EXPAND de::genesez::platform::typo3::extbase::templates::resources::Root::Root -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of the default TYPO3 Extbase directory hierarchy.
+	It's correct that in most cases the directories are create automaticly
+	when an file is generated inside a directory. But sometimes not every TYPO3 extbase
+	aspect is or can be generated, so this directories are created for uniform looking.
+«ENDREM»
+«DEFINE DefaultDirectoryHierarchy FOR MModel -»
+«LET globalVarOutputDir() AS outputDir -»
+«REM» create "Classes/Controller" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + classesControllerPath() ) -»
+«REM» create "Classes/Domain/Model" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + classesDomainModelPath() ) -»
+«REM» create "Classes/Domain/Repository" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + classesDomainRepositoryPath() ) -»
+«REM» create "Classes/Domain/Service" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + classesDomainServicePath() ) -»
+«REM» create "Classes/Domain/Validator" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + classesDomainValidatorPath() ) -»
+ «REM» create "Classes/ViewHelpers" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + classesViewHelperPath() ) -»
+
+«REM» create "Configuration/FlexForms" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + configurationFlexFormsPath() ) -»
+«REM» create "Configuration/TCA" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + configurationTCAPath() ) -»
+«REM» create "Configuration/TypoScript" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + configurationTypoScriptPath() ) -»
+
+«REM» create "Resources/Private/Backend/Layouts" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPrivateBackendLayoutsPath() ) -»
+«REM» create "Resources/Private/Backend/Partials" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPrivateBackendPartialsPath() ) -»
+«REM» create "Resources/Private/Backend/Templates" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPrivateBackendTemplatesPath() ) -»
+«REM» create "Resources/Private/Language" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPrivateLanguagePath() ) -»
+«REM» create "Resources/Private/Layouts" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPrivateLayoutsPath() ) -»
+«REM» create "Resources/Private/Partials" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPrivatePartialsPath() ) -»
+«REM» create "Resources/Private/Templates" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPrivateTemplatesPath() ) -»
+«REM» create "Resources/Public/Icons" directory «ENDREM»
+«createDirectoryPath(outputDir + "/" + resourcesPublicIconsPath() ) -»
+«ENDLET -»
+«ENDDEFINE»
