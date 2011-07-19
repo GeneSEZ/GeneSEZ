@@ -35,42 +35,46 @@ extension de::genesez::platforms::common::m2m::CreateTemplate;
  * @return	true if the property has a simple valued type, otherwise false
  */
 boolean isSingleValuedType(MProperty this) :
-	multiplicity == 1;
+	upperBoundMultiplicity == 1;
 
 /**
- * checks if an operation has a simple valued type
- * @return	true if the operation has a simple valued type, otherwise false
+ * checks if the return type of an operation has a simple valued type
+ * @return	true if the return type of an operation has a simple valued type, otherwise false
  */
 boolean isSingleValuedType(MOperation this) :
-	multiplicity == 1;
+	return != null
+		? return.isSingleValuedType()
+		: false;
 
 /**
  * checks if a parameter has a simple valued type
  * @return	true if the parameter has a simple valued type, otherwise false
  */
 boolean isSingleValuedType(MParameter this) :
-	multiplicity == 1;
+	upperBoundMultiplicity == 1;
 
 /**
  * checks if a property is a multi-valued type
  * @return	true if the property has a multi-valued type, otherwise false
  */
 boolean isMultiValuedType(MProperty this) :
-	multiplicity != 1;
+	upperBoundMultiplicity != 1;
 
 /**
- * checks if an operation is a multi-valued type
- * @return	true if the operation has a multi-valued type, otherwise false
+ * checks if the return type of an operation is a multi-valued type
+ * @return	true if the return type of an operation has a multi-valued type, otherwise false
  */
 boolean isMultiValuedType(MOperation this) :
-	multiplicity != 1;
+	return != null
+		? return.isMultiValuedType()
+		: false;
 
 /**
  * checks if a parameter is a multi-valued type
  * @return	true if the parameter has a multi-valued type, otherwise false
  */
 boolean isMultiValuedType(MParameter this) :
-	multiplicity != 1;
+	upperBoundMultiplicity != 1;
 
 /**
  * checks if a property has a fixed count of values
