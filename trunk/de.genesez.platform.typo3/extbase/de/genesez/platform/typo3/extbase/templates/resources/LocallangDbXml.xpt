@@ -9,14 +9,14 @@
 «REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::profile::AccessHelper»
 
-«REM» use TYPO3 Extbase convention scripts «ENDREM»
+«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
 «REM» use TYPO3 Extbase access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3::extbase::scripts::Conversion»
 «EXTENSION de::genesez::platforms::common::Conversion»
 
 
@@ -78,9 +78,9 @@
 
 «DEFINE LanguageKey(String languageKey) FOR MModel -»
 		<languageKey index="«languageKey -»" type="array">
-			«FOREACH allEntitiesAndValueObjects() AS domainElement -»
+			«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainElement -»
 				«EXPAND ClassLocalization(languageKey) FOR domainElement -»
-				«EXPAND PropertyLocalization(languageKey) FOREACH domainElement.property -»
+				«EXPAND PropertyLocalization(languageKey) FOREACH domainElement.property.sortBy( e | e.name ) -»
 			«ENDFOREACH -»
 			«EXPAND OwnLocalization(languageKey) -»
 		</languageKey>
@@ -93,7 +93,7 @@
 
 
 «DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			<label index="«classifier.asLowerTypeName() -».«asLowerPropertyName() -»">«EXPAND DefaultValue(languageKey) -»</label>
+			<label index="«classifier.asLowerTypeName() -».«asLowerAttributeName() -»">«EXPAND DefaultValue(languageKey) -»</label>
 «ENDDEFINE»
 
 

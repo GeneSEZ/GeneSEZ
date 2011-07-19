@@ -2,10 +2,10 @@ package de.genesez.platform.typo3.extbase.scripts;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import de.genesez.metamodel.gcore.MElement;
 import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MOperation;
-import de.genesez.metamodel.gcore.MProperty;
 import de.genesez.platforms.common.AccessHelper;
 
 public class Conversion {
@@ -45,20 +45,6 @@ public class Conversion {
 			controllerActions.add("'" + controllers.get(i) + "' => '" + actions.get(i) + "'");
 		}
 		return controllerActions;
-	}
-	
-	public static String asLowerPropertyName(MProperty property) {
-		StringBuffer propertyName = new StringBuffer();
-		String[] propertyNameParts;
-		
-		propertyNameParts = property.getName().split("(?=[A-Z])");
-		for (int i = 0; i < propertyNameParts.length; i++) {
-			propertyName.append(propertyNameParts[i].toLowerCase());
-			if (i < propertyNameParts.length - 1) {
-				propertyName.append("_");
-			}
-		}
-		return propertyName.toString();
 	}
 
 }

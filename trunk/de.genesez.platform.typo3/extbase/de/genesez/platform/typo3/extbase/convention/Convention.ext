@@ -1,5 +1,5 @@
 /**
- * Global conventions for TYPO3 Extbase
+ * General conventions for TYPO3 Extbase
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date	2011-05-11
@@ -23,7 +23,7 @@ extension de::genesez::platform::typo3::workflow::GlobalVar;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase conventions
+	GENERAL TYPO3 Extbase conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -93,7 +93,7 @@ cached String fullQualifiedExtensionName() :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase file name conventions
+	GENERAL TYPO3 Extbase file name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -107,7 +107,7 @@ String fileSeparator() :
 
 
 /**
- * Getter of the php file extension including the beginning dot.
+ * Getter of the PHP file extension including the beginning dot.
  *
  * @return	the file extension for php artefacts ('.php')
  */
@@ -116,7 +116,7 @@ String fileExtensionPHP() :
 
 
 /**
- * Getter of the sql file extension including the beginning dot.
+ * Getter of the SQL file extension including the beginning dot.
  *
  * @return	the file extension for sql artefacts ('.sql')
  */
@@ -129,13 +129,20 @@ String fileExtensionSQL() :
  *
  * @return	the file extension for TypoScript artefacts ('.txt')
  */
-String fileExtensionTypoScript() : 
+String fileExtensionTS() : 
 	".txt";
 
+/**
+ * Getter of the XML file extension including the beginning dot.
+ *
+ * @return	the file extension for XML artefacts ('.xml')
+ */
+String fileExtensionXML() : 
+	".xml";
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase path name conventions
+	GENERAL TYPO3 Extbase folder structure conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -276,7 +283,31 @@ String testsDomainPath() :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase type name base conventions (first two sections)
+	GENERAL TYPO3 Extbase file structure conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+String extEmconfPHPFile() :
+	"ext_emconf" + fileExtensionPHP();
+
+
+String extLocalconfPhpFile() :
+	"ext_localconf" + fileExtensionPHP();
+
+
+String extTablesPHPFile() :
+	"ext_tables" + fileExtensionPHP();
+
+
+String extTablesSQLFile() :
+	"ext_tables" + fileExtensionSQL();
+*/
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase type name base conventions (first two sections)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -301,7 +332,7 @@ cached String typeNameBase() :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase type name path conventions (middle sections)
+	GENERAL TYPO3 Extbase type name path conventions (middle sections)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -336,16 +367,16 @@ String typeNamePath(MClassifier this) :
 /**
  * Converts the path name of a classifier to the type name path.
  *
- * @param	pathname	the path of the classifier
+ * @param	pathName	the path of the classifier
  * @return	the type name path of the classifier
  */
-private String convertToTypeNamePath(String pathname) :
-	pathname.replaceFirst( classesPath() + fileSeparator(), "" ).replaceAll( fileSeparator(), typeNameSeperator() );
+private String convertToTypeNamePath(String pathName) :
+	pathName.replaceFirst( classesPath() + fileSeparator(), "" ).replaceAll( fileSeparator(), typeNameSeperator() );
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase type name conventions (last section)
+	GENERAL TYPO3 Extbase type name conventions (last section)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -433,7 +464,7 @@ String typeNameSuffix(MClassifier this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase attribute name + accessor conventions
+	GENERAL TYPO3 Extbase attribute name + accessor conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -477,7 +508,7 @@ String removeFromNamePrefix(MAttribute this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase association role name + accessor conventions
+	GENERAL TYPO3 Extbase association role name + accessor conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -519,7 +550,7 @@ String removeFromNamePrefix(MAssociationRole this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase operation name conventions
+	GENERAL TYPO3 Extbase operation name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -540,7 +571,7 @@ String operationNameSuffix(MOperation this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase Plugin conventions
+	GENERAL TYPO3 Extbase Plugin conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -554,6 +585,10 @@ String pluginTypeContentElement() :
 	
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase TypoScript conventions
+	GENERAL TYPO3 Extbase TypoScript conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+
+
+

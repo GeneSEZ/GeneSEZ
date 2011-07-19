@@ -25,3 +25,181 @@
 	public functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«DEFINE Root FOR MModel -»
+«EXPAND Root FOREACH allEntitiesAndValueObjects() -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation for one domain object.
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«FILE configurationTCAPath() + "/" + asFileNamePHP() -»
+<?php
+«EXPAND AccessProtection -»
+
+«EXPAND TableConfigurationArray -»
+
+«EXPAND OwnCodeImplementation("tca.php.own.code.implementation." + xmiGuid) -»
+
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	TYPO3 access control to check if this file is called from the outside of TYPO3. 
+	If so then the script dies.
+«ENDREM»
+«DEFINE AccessProtection FOR MClass -»
+if (!defined ('TYPO3_MODE')) {
+	die ('Access denied.');
+}
+«ENDDEFINE»
+
+
+«DEFINE TableConfigurationArray FOR MClass -»
+$TCA['«asLowerTypeName() -»'] = array (
+	«EXPAND ConfigurationSection -»
+	«EXPAND InterfaceSection -»
+	«EXPAND TypesSection -»
+	«EXPAND PalettesSection -»
+	«EXPAND ColumnsSection -»
+);
+«ENDDEFINE»
+
+
+«DEFINE ConfigurationSection FOR MClass -»
+	'ctrl' => $TCA['«asLowerTypeName() -»']['ctrl'],
+«ENDDEFINE»
+
+
+«DEFINE InterfaceSection FOR MClass -»
+	'interface' => array(
+		'showRecordFieldList' => '«FOREACH property AS p SEPARATOR "," -»«p.asLowerAttributeName() -»«ENDFOREACH»',
+	),
+«ENDDEFINE»
+
+
+«DEFINE TypesSection FOR MClass -»
+	'types' => array(
+		'1' => array('showitem'	=> '«FOREACH property AS p SEPARATOR "," -»«p.asLowerAttributeName() -»«ENDFOREACH»'),
+	),
+«ENDDEFINE»
+
+
+«DEFINE PalettesSection FOR MClass -»
+	'palettes' => array(
+		'1' => array('showitem'	=> ''),
+	),
+«ENDDEFINE»
+
+
+«DEFINE ColumnsSection FOR MClass -»
+	'columns' => array(
+		«EXPAND AccessControlColumns -»
+		«EXPAND LocalizationColumns -»
+		«EXPAND VersioningColumns -»
+	)
+«ENDDEFINE»
+
+
+«DEFINE AccessControlColumns FOR MClass -»
+		'hidden' => array(
+			'exclude' => 1,
+			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config' => array(
+				'type' => 'check',
+			)
+		),
+«ENDDEFINE»
+
+
+«DEFINE LocalizationColumns FOR MClass -»
+		'sys_language_uid' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+			'config' => array(
+				'type' => 'select',
+				'foreign_table' => 'sys_language',
+				'foreign_table_where' => 'ORDER BY sys_language.title',
+				'items' => array(
+					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
+					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
+				),
+			)
+		),
+		'l18n_parent' => array(
+			'displayCond' => 'FIELD:sys_language_uid:>:0',
+			'exclude' => 1,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
+			'config' => array(
+				'type' => 'select',
+				'items'	=> array(
+					array('', 0),
+				),
+				'foreign_table' => '«asLowerTypeName() -»',
+				'foreign_table_where' => 'AND «asLowerTypeName() -».uid=###REC_FIELD_l18n_parent### AND «asLowerTypeName() -».sys_language_uid IN (-1,0)',
+			)
+		),
+		'l18n_diffsource' => array(
+			'config' =>array(
+				'type' =>'passthrough',
+			)
+		),
+«ENDDEFINE»
+
+
+«DEFINE VersioningColumns FOR MClass -»
+	't3ver_label' => array(
+		'displayCond' => 'FIELD:t3ver_label:REQ:true',
+		'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
+		'config' => array(
+			'type' =>'none',
+			'cols' => 27,
+		)
+	),
+«ENDDEFINE»
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+«REM»
+	generates a region for own code implementations
+«ENDREM»
+«DEFINE OwnCodeImplementation(String id) FOR MClass -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further code implementations here
+«ENDPROTECT»
+«ENDDEFINE»
+ 

@@ -1,4 +1,4 @@
-package de.genesez.platform.typo3.workflow;
+package de.genesez.platform.typo3.extbase.workflow;
 
 import java.util.Properties;
 
@@ -77,6 +77,7 @@ public class TYPO3ExtbaseGenerator extends Generator {
 	@Override
 	public void setBasePackage(String value) {
 		logger.info("The 'setBasePackage' setting will be ignored!");
+		
 		super.setBasePackage("");
 	}
 	
@@ -89,6 +90,7 @@ public class TYPO3ExtbaseGenerator extends Generator {
 	@Override
 	public void setUseModelNameAsBasePackage(boolean value) {
 		logger.info("The 'useModelNameAsBasePackage' setting will be ignored!");
+		
 		super.setUseModelNameAsBasePackage(false);
 	}
 	

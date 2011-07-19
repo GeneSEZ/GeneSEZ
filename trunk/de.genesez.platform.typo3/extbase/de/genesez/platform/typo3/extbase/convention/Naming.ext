@@ -1,5 +1,5 @@
 /**
- * Naming conventions for TYPO3 Extbase
+ * General naming conventions for TYPO3 Extbase
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date	2011-05-11
@@ -14,22 +14,50 @@ extension de::genesez::platform::typo3::extbase::convention::Convention;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase type name conventions
+	GENERAL TYPO3 Extbase type name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Formats the name of an classifier using prefix + suffix.
+ * Formats a classifier name using prefix + suffix.
  * 
- * @return	formatted name of the classifier
+ * @return	the formatted classifier name
  */
 String asTypeName(MClassifier this) :
 	typeNameBase() + typeNameSeperator() + typeNamePath() + typeNameSeperator() + typeNamePrefix() + name.toFirstUpper() + typeNameSuffix();
 
 
+/**
+ * Formats the name of an classifier to lower case for configuration and localization environment.
+ * Note: Before using this script it is necessary to call "asTypeName" first.
+ * Basically this is done by the basic naming modification script.
+ * 
+ * @return	the formatted classifier name
+ */
+String asLowerTypeName(MClassifier this) :
+	name.toLowerCase();
+
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase attribute name conventions
+	GENERAL TYPO3 Extbase property name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats a property name to lower case and with underscores for configuration and localization environment.
+ * Note: Before using this script it is necessary to call "asAttributeName" first.
+ * Basically this is done by the basic naming modification script.
+ * 
+ * @return	the formatted attribute name
+ */
+String asLowerAttributeName(MProperty this) :
+	JAVA de.genesez.platform.typo3.extbase.scripts.Convention.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase attribute name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -88,7 +116,7 @@ String asRemoveFromName(MAttribute this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase association role name conventions
+	GENERAL TYPO3 Extbase association role name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -147,7 +175,7 @@ String asRemoveFromName(MAssociationRole this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase operation name conventions
+	GENERAL TYPO3 Extbase operation name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -162,7 +190,7 @@ String asOperationName(MOperation this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase parameter name conventions
+	GENERAL TYPO3 Extbase parameter name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -177,25 +205,24 @@ String asParameterName(MParameter this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL TYPO3 Extbase file name conventions
+	GENERAL TYPO3 Extbase file name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Formats the filename of a classifier as php file.
+ * Formats the file name of a classifier without file extension.
  *
- * @return	the filename of the class
+ * @return	the file name of a classifier
+ */
+String asFileName(MClassifier this) :
+	name.split( typeNameSeperator() ).last();
+
+
+/**
+ * Formats the file name of a classifier as php file.
+ *
+ * @return	the file name of the classifier
  */
 String asFileNamePHP(MClassifier this) :
-	// The file name depends on the last section of the full qualified type name and the file extension.
-	// There are two possibilities to create this file name:
-	// - First use the full qualified and extract the last section.
-	//   - The drawback is, that it checks what TYPO3 Extbase type is it. 
-	//     So more method calls are needed which speeds down the generation.
-	// - Second use the name, convert the first character to upper and use prefix + suffix.
-	//   - The advantage is the reduction of method calls.
-	//   - The drawback is that the last section of type name is generated once again.
-	//     By changing naming convertions this needs to be corrected also.
-	// The decission is to use the second possibility to speed up the generation.
-	name.split( typeNameSeperator() ).last() + fileExtensionPHP();
+	asFileName() + fileExtensionPHP();
 	
