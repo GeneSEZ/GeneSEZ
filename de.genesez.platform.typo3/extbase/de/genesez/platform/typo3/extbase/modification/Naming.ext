@@ -24,95 +24,58 @@ extension de::genesez::platforms::common::typemapping::TypeMappingNew;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MPackage (MModel)
+	TYPO3 Extbase basic naming modifications 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-Void modelNaming(MModel this) :
-	packageNaming();
+/*
+- - MPackage (MModel) - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
-
-Void packageNaming(MPackage this) :
-	// perform naming modifications for all external types
-	//externalTypes.naming_changeExternal() ->
-	// perform naming modifications for all primitive types
-	//primitiveTypes.naming_changePrimitive() ->
-		
-	// perform naming modifications for all nested packages
-	nestedPackage.packageNaming() ->
+Void basicModelNaming(MModel this) :
+	basicPackageNaming();
 	
-	// perform naming modifications for all classifier; reject configuration
-	classifier.select( e | e.isControllerPackageElement() || e.isModelPackageElement() || e.isRepositoryPackageElement() || e.isServicePackageElement() || e.isValidatorPackageElement() ).classifierNaming();
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MExternal
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * Änderung des Namens nicht möglich, da dann Referenz auf Namen verloren geht, wenn man External als Import haben möchte
- */
-/*
-Void naming_changeExternal(MExternal this) :
-	logger_trace( "GeneSEZ: Map external specification: " + specification + " => " + mapName() ) ->
-	setSpecification( mapName() );
-*/
+Void basicPackageNaming(MPackage this) :
+	// perform basic naming modifications for all nested packages
+	nestedPackage.basicPackageNaming() ->
+	// perform basic naming modifications for all classifier; reject configuration
+	classifier.select( e | e.isControllerPackageElement() || e.isModelPackageElement() || e.isRepositoryPackageElement() || e.isServicePackageElement() || e.isValidatorPackageElement() ).basicClassifierNaming();
 
 
 /*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MPrimitiveType
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * Änderung des Namens nicht möglich, da dann Referenz auf Namen verloren geht, wenn man Primitive als Import haben möchte
- */
-/*
-Void naming_changePrimitive(MPrimitiveType this) :
-	logger_trace( "GeneSEZ: Map primitive type name: " + name + " => " + mapName() ) ->
-	setName( mapName() );
-*/
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MClassifier
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 	
-Void classifierNaming(MClass this) :
+Void basicClassifierNaming(MClass this) :
 	// change name to TYPO3 Extbase complaint name
 	setName( asTypeName() ) ->
 	
-	// perform naming modifications for all attributes and association roles
-	property.typeSelect(MAttribute).attributeNaming() ->
-	property.typeSelect(MAssociationRole).associationRoleNaming() ->
+	// perform basic naming modifications for all attributes and association roles
+	property.typeSelect(MAttribute).basicAttributeNaming() ->
+	property.typeSelect(MAssociationRole).basicAssociationRoleNaming() ->
 	
-	// perform naming modifications for all operations
-	operation.operationNaming();
+	// perform basic naming modifications for all operations
+	operation.basicOperationNaming();
 
 
-Void classifierNaming(MInterface this) :
+Void basicClassifierNaming(MInterface this) :
 	// change name to TYPO3 Extbase complaint name
 	setName( asTypeName() ) ->
 	
-	// perform naming modifications for all operations
-	operation.operationNaming();
+	// perform basic naming modifications for all operations
+	operation.basicOperationNaming();
 
 
-Void classifierNaming(MClassifier this) :
+Void basicClassifierNaming(MClassifier this) :
 	Void;
 
 
 /*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MAttribute
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - MAttribute  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-Void attributeNaming(MAttribute this) :
+Void basicAttributeNaming(MAttribute this) :
 	// change name to TYPO3 Extbase complaint name 
 	final && static && hasDefaultValue()
 		? setName( asConstantName() )
@@ -120,38 +83,100 @@ Void attributeNaming(MAttribute this) :
 	
 
 /*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MAssociationRole
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - MAssociationRole  - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-Void associationRoleNaming(MAssociationRole this) :
+Void basicAssociationRoleNaming(MAssociationRole this) :
 	// change name to TYPO3 Extbase complaint name
 	setName( asAttributeName() );
 	
 	
 /*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MOperation
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - MOperation  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-Void operationNaming(MOperation this) :
-	// change name to TYPO3 Extbase complaint name, if it is no constructor or destructor 
+Void basicOperationNaming(MOperation this) :
+	// change name to TYPO3 Extbase complaint name, 
+	// if it is no a constructor or destructor 
 	!isConstructor() && !isDestructor()
 		? setName( asOperationName() )
 		: Void ->
 	
-	// perform naming modifications for all parameters
-	parameter.parameterNaming();
+	// perform basic naming modifications for all parameters
+	parameter.basicParameterNaming();
 
 
 /*
+- - MParameter  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+Void basicParameterNaming(MParameter this) :
+	// change name to TYPO3 Extbase complaint name
+	setName( asParameterName() );
+	
+	
+/*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MParameter
+	TYPO3 Extbase configuration naming modifications 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-Void parameterNaming(MParameter this) :
+/*
+- - MPackage (MModel) - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+Void configurationModelNaming(MModel this) :
+	configurationPackageNaming();
+	
+
+Void configurationPackageNaming(MPackage this) :
+	// perform configuration naming modifications for all nested packages
+	nestedPackage.configurationPackageNaming() ->
+	// perform configuration naming modifications for all entities and value object
+	classifier.select( e | e.isModelPackageElement() ).configurationClassifierNaming();
+*/
+
+/*
+- - MClassifier - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*	
+Void configurationClassifierNaming(MClass this) :
 	// change name to TYPO3 Extbase complaint name
-	setName( asParameterName() );
+	//setName( asConfigurationTypeName() ) ->
+	
+	// perform configuration naming modifications for all attributes and association roles
+	property.typeSelect(MAttribute).configurationAttributeNaming() ->
+	property.typeSelect(MAssociationRole).configurationAssociationRoleNaming();
+
+
+Void configurationClassifierNaming(MInterface this) :
+	Void;
+
+
+Void configurationClassifierNaming(MClassifier this) :
+	Void;
+*/
+
+/*
+- - MAttribute  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+Void configurationAttributeNaming(MAttribute this) :
+	// change name to TYPO3 Extbase complaint name 
+	final && static && hasDefaultValue()
+		? Void
+		: setName( asConfigurationAttributeName() );
+*/	
+
+/*
+- - MAssociationRole  - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+Void configurationAssociationRoleNaming(MAssociationRole this) :
+	// change name to TYPO3 Extbase complaint name
+	setName( asConfigurationAttributeName() );
+*/

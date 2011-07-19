@@ -9,14 +9,14 @@
 «REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::profile::AccessHelper»
 
-«REM» use TYPO3 Extbase convention scripts «ENDREM»
+«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
 «REM» use TYPO3 Extbase access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3::extbase::scripts::Conversion»
 «EXTENSION de::genesez::platforms::common::Conversion»
 
 
@@ -27,7 +27,7 @@
 «ENDREM»
 
 «REM»
-	Processes the generation of "locallang_csh_<domain_element>.xml".
+	Processes the generation of "locallang_csh_<domain_object>.xml".
 	Generates context sensitive help (CSH) for all entities and value objects.
 «ENDREM»
 «DEFINE Root FOR MModel -»
@@ -98,14 +98,14 @@
 
 «DEFINE LanguageKey(String languageKey) FOR MClass -»
 		<languageKey index="«languageKey -»" type="array">
-			«EXPAND PropertyLocalization(languageKey) FOREACH property -»
+			«EXPAND PropertyLocalization(languageKey) FOREACH property.sortBy( e | e.name ) -»
 			«EXPAND OwnLocalization(languageKey) -»
 		</languageKey>
 «ENDDEFINE»
 
 
 «DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			<label index="«asLowerPropertyName() -».description">«EXPAND DefaultValue(languageKey) -»</label>
+			<label index="«asLowerAttributeName() -».description">«EXPAND DefaultValue(languageKey) -»</label>
 «ENDDEFINE»
 
 

@@ -1,0 +1,78 @@
+/**
+ * Default directory creator scripts which create the default directory layout 
+ * of an TYPO3 Extbase extension.
+ *  
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-07-19
+ */
+
+extension de::genesez::platform::typo3::extbase::convention::Convention;
+
+extension de::genesez::platform::typo3::workflow::GlobalVar;
+
+// use common file system helper scripts
+extension de::genesez::platforms::common::FileSystemHelper;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Default directory creator scripts 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Processes the generation of the default TYPO3 Extbase directory hierarchy.
+ * It's correct that in most cases the directories are create automaticly
+ * when an file is generated inside a directory. But sometimes not every TYPO3 Extbase
+ * aspect is or can be generated, so that these directories are created for uniform looking.
+ */
+Void createDefaultDirectories() :
+	let outputDir = globalVarOutputDir() :
+		// create "Classes" directories
+		createClassesDirectories( outputDir ) ->
+		// create "Configuration" directories
+		createConfigurationDirectories( outputDir ) ->
+		// create "Resources" directories
+		createResourcesDirectories( outputDir );
+
+
+Void createClassesDirectories(String outputDir) :
+	// create "Classes/Controller" directory
+	createDirectoryPath(outputDir + "/" + classesControllerPath() ) ->
+	// create "Classes/Domain/Model" directory
+	createDirectoryPath(outputDir + "/" + classesDomainModelPath() ) ->
+	// create "Classes/Domain/Repository" directory
+	createDirectoryPath(outputDir + "/" + classesDomainRepositoryPath() ) ->
+	// create "Classes/Domain/Service" directory
+	createDirectoryPath(outputDir + "/" + classesDomainServicePath() ) ->
+	// create "Classes/Domain/Validator" directory
+	createDirectoryPath(outputDir + "/" + classesDomainValidatorPath() ) ->
+	// create "Classes/ViewHelpers" directory
+	createDirectoryPath(outputDir + "/" + classesViewHelperPath() );
+
+
+Void createConfigurationDirectories(String outputDir) :
+	// create "Configuration/FlexForms" directory
+	createDirectoryPath(outputDir + "/" + configurationFlexFormsPath() ) ->
+	// create "Configuration/TCA" directory
+	createDirectoryPath(outputDir + "/" + configurationTCAPath() ) ->
+	// create "Configuration/TypoScript" directory
+	createDirectoryPath(outputDir + "/" + configurationTypoScriptPath() );
+	
+
+Void createResourcesDirectories(String outputDir) :
+	// create "Resources/Private/Backend/Layouts" directory
+	createDirectoryPath(outputDir + "/" + resourcesPrivateBackendLayoutsPath() ) ->
+	// create "Resources/Private/Backend/Partials" directory
+	createDirectoryPath(outputDir + "/" + resourcesPrivateBackendPartialsPath() ) ->
+	// create "Resources/Private/Backend/Templates" directory
+	createDirectoryPath(outputDir + "/" + resourcesPrivateBackendTemplatesPath() ) ->
+	// create "Resources/Private/Language" directory
+	createDirectoryPath(outputDir + "/" + resourcesPrivateLanguagePath() ) ->
+	// create "Resources/Private/Layouts" directory
+	createDirectoryPath(outputDir + "/" + resourcesPrivateLayoutsPath() ) ->
+	// create "Resources/Private/Partials" directory
+	createDirectoryPath(outputDir + "/" + resourcesPrivatePartialsPath() ) ->
+	// create "Resources/Private/Templates" directory
+	createDirectoryPath(outputDir + "/" + resourcesPrivateTemplatesPath() ) ->
+	// create "Resources/Public/Icons" directory
+	createDirectoryPath(outputDir + "/" + resourcesPublicIconsPath() );

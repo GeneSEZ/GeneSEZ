@@ -40,7 +40,11 @@
 
 «EXPAND TypoScriptInclusion -»
 
-«EXPAND DomainObjectConfiguration FOREACH allEntitiesAndValueObjects() -»
+«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainObject -»
+	«EXPAND ContextSensitiveHelp FOR domainObject -»
+	«EXPAND AllowTableOnStandardPages FOR domainObject -»
+	«EXPAND TableConfigurationArray FOR domainObject -»
+«ENDFOREACH»
 
 «EXPAND OwnCodeImplementation("ext_tables.php.own.code.implementation." + xmiGuid) -»
 
@@ -107,24 +111,30 @@ t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', '«extensionNa
 
 
 «DEFINE DomainObjectConfiguration FOR MClass -»
-«EXPAND ContextSensitiveHelp -»
-«EXPAND AllowTableOnStandardPages -»
-«EXPAND TableConfigurationArray -»
+
 «ENDDEFINE»
 
 
 «DEFINE ContextSensitiveHelp FOR MClass -»
-t3lib_extMgm::addLLrefForTCAdescr('«name.toLowerCase()»', 'EXT:«extensionKey()»/«resourcesPrivateLanguagePath()»/locallang_csh_«name.toLowerCase()».xml');
+t3lib_extMgm::addLLrefForTCAdescr('«asLowerTypeName() -»', 'EXT:«extensionKey()»/«resourcesPrivateLanguagePath()»/locallang_csh_«asLowerTypeName() -».xml');
 «ENDDEFINE»
+
 
 «DEFINE AllowTableOnStandardPages FOR MClass -»
-t3lib_extMgm::allowTableOnStandardPages('«name.toLowerCase()»');
+t3lib_extMgm::allowTableOnStandardPages('«asLowerTypeName() -»');
 «ENDDEFINE»
 
+
 «DEFINE TableConfigurationArray FOR MClass -»
-$TCA['«name.toLowerCase()»'] = array (
+$TCA['«asLowerTypeName() -»'] = array (
+	«EXPAND ConfigurationSection -»
+);
+«ENDDEFINE»
+
+
+«DEFINE ConfigurationSection FOR MClass -»
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:«extensionKey() -»/«resourcesPrivateLanguagePath() -»/locallang_db.xml:«name.toLowerCase() -»',
+		'title'						=> 'LLL:EXT:«extensionKey() -»/«resourcesPrivateLanguagePath() -»/locallang_db.xml:«asLowerTypeName() -»',
 		'label'						=> 'uid',
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
@@ -140,12 +150,10 @@ $TCA['«name.toLowerCase()»'] = array (
 			'starttime'				=> 'starttime',
 			'endtime'				=> 'endtime',
 			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . '«configurationTCAPath()»/«name.split("_").last() -».php',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«name.toLowerCase()».gif'
+		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . '«configurationTCAPath()»/«asFileNamePHP() -»',
+		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«asLowerTypeName() -».gif'
 	)
-);
 «ENDDEFINE»
-
 
 
 «REM»
