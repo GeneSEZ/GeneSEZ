@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<!-- define a property for the output dir -->
+	<property name="outputDir" value = "../genesez_blog_example" />
+		
+	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
+	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+		<!-- directory which contains the exported uml2 model -->
+		<model value="modelcache/genesez_blog_example.uml" />
+		<!-- <includeProfiles value="LocalProfile" /> -->
+	</component>
+	
+	<!-- validate the GeneSEZ model against common + php + typo3 + typo3 extbase specific constraints -->
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::php::constraints::Syntax" />
+		<script value="de::genesez::platform::typo3::constraints::Convention" />
+		<script value="de::genesez::platform::typo3::extbase::constraints::Convention" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="modelcache/genesez_blog_example_before.xmi" />
+	</component>
+	
+	<!-- create the default directory layout of an TYPO3 Extbase extension -->
+	<component id="defaultDirectory" class="de.genesez.platform.typo3.extbase.workflow.TYPO3ExtbaseDefaultDirectoryCreator">
+		<outputDir value="${outputDir}" />
+	</component>
+	
+	<!-- basic TYPO3 Extbase naming modifications for an easier model to text transfomation -->
+	<!--
+	<component id="basicTYPO3Naming" class="de.genesez.platforms.common.workflow.GeneSezM2M">
+		<script value="de::genesez::platform::typo3::extbase::modification::Naming::modelNaming" />
+	</component>
+	-->
+	
+	<!-- run the typo3 code generation and transform the model into typo3 source code -->
+	<component id="generate" class="de.genesez.platform.typo3.extbase.workflow.TYPO3ExtbaseGenerator">
+		<!-- directory in which the generated files are placed -->
+		<outputDir value="../genesez_blog_example" />
+		<!-- type mapping file -->
+		<typeMappingFile value="typemapping.xml" />
+		<!-- boolean value indicates if the model name is used as extension key or not -->
+		<useModelNameAsExtensionKey value="false" />
+		<!-- boolean value indicates if the model is TYPO3 Extbase complaint or not -->
+		<isT3ExtbaseCompliant value="true" />
+		<!-- name of the TYPO3 Extbase extension -->
+		<extensionKey value="genesez_blog_example" />
+		<!-- do not generate session comments -->
+		<generateSectionComments value="false" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="modelcache/genesez_blog_example_after.xmi" />
+	</component>
+	
+	
+</workflow>
