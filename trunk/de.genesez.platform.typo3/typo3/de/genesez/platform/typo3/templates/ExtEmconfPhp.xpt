@@ -9,12 +9,14 @@
 «REM» use TYPO3 profile scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::profile::Profile»
 
+«REM» use TYPO3 naming convention scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::convention::Naming»
+
 «REM» use common access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::profile::AccessHelper»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
-«REM» use TYPO3 conversion scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3::scripts::Conversion»
+
 
 
 «REM»
@@ -30,9 +32,7 @@
 «FILE "ext_emconf.php" -»
 <?php
 
-$EM_CONF[$_EXTKEY] = array(
-	«EXPAND Attributes -»
-);
+«EXPAND ExtensionManagerConfiguration -»
 
 «EXPAND OwnCodeImplementation("ext_emconf.php.own.code.implementation." + xmiGuid) -»
 
@@ -41,7 +41,20 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDDEFINE»
 
 
-«DEFINE Attributes FOR MModel»
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«DEFINE ExtensionManagerConfiguration FOR MModel -»
+$EM_CONF[$_EXTKEY] = array(
+	«EXPAND ExtensionManagerProperties -»
+);
+«ENDDEFINE»
+
+
+«DEFINE ExtensionManagerProperties FOR MModel -»
 	«EXPAND Title -»
 	«EXPAND Description -»
 	«EXPAND Category -»
@@ -62,121 +75,150 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDDEFINE»
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	i.O.
 «ENDREM»
-
 «DEFINE Title FOR MModel -»
-«EXPAND SingleValuedProperty( "title", prT3ExtensionManagerTitle() ) -»
+	'title' => '«getT3ExtensionManagerTitle() -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE Description FOR MModel -»
-«EXPAND SingleValuedProperty( "description", prT3ExtensionManagerDescription() ) -»
+	'description' => '«getT3ExtensionManagerDescription() -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE Category FOR MModel -»
-	'category' => '«getT3ExtensionManagerCategoryType().toLowerCase() -»',
+	'category' => '«getT3ExtensionManagerCategory().asT3Category() -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE Author FOR MModel -»
-«EXPAND SingleValuedProperty( "author", prT3ExtensionManagerAuthor() ) -»
+	'author' => '«getT3ExtensionManagerAuthor() -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE AuthorEMail FOR MModel -»
-«EXPAND SingleValuedProperty( "author_email", prT3ExtensionManagerAuthorEMail() ) -»
+	'author_email' => '«getT3ExtensionManagerAuthorEMail() -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE AuthorCompany FOR MModel -»
-«EXPAND SingleValuedProperty( "author_company", prT3ExtensionManagerAuthorCompany() ) -»
+	'author_company' => '«getT3ExtensionManagerAuthorCompany() -»', 
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE Shy FOR MModel -»
-«EXPAND SingleValuedBooleanProperty( "shy", prT3ExtensionManagerShy() ) -»
+	'shy' => «getT3ExtensionManagerShy().asT3Boolean() -»,
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE Priority FOR MModel -»
-	'priority' => '«getT3ExtensionManagerPriorityType().toLowerCase() -»',
+	'priority' => '«getT3ExtensionManagerPriority().asT3Priority() -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE State FOR MModel -»
-	'state' => '«getT3ExtensionManagerStateType().asT3State() -»',
+	'state' => '«getT3ExtensionManagerState().asT3State() -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE Internal FOR MModel -»
-«EXPAND SingleValuedBooleanProperty( "shy", prT3ExtensionManagerShy() ) -»
+	'internal' => «getT3ExtensionManagerInternal().asT3Boolean() -»,
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE UploadFolder FOR MModel -»
-«EXPAND SingleValuedBooleanProperty( "uploadfolder", prT3ExtensionManagerUploadFolder() ) -»
+	'uploadfolder' => «getT3ExtensionManagerUploadFolder().asT3Boolean() -»,
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE CreateDirs FOR MModel -»
-«EXPAND MultiValuedProperty( "createDirs", prT3ExtensionManagerCreateDirs() ) -»
+	'createDirs' => '« FOREACH getT3ExtensionManagerCreateDirs() AS dir SEPARATOR ","»«dir -»«ENDFOREACH -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE ModifyTables FOR MModel -»
-«EXPAND MultiValuedProperty( "modify_tables", prT3ExtensionManagerModifyTables() ) -»
+	'modify_tables' => '« FOREACH getT3ExtensionManagerModifyTables() AS table SEPARATOR ","»«table -»«ENDFOREACH -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE ClearCacheOnLoad FOR MModel -»
-«EXPAND SingleValuedBooleanProperty( "clearCacheOnLoad", prT3ExtensionManagerClearCacheOnLoad() ) -»
+	'clearCacheOnLoad' => «getT3ExtensionManagerClearCacheOnLoad().asT3Boolean() -»,
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE LockType FOR MModel -»
-	'lockType' => '«getT3ExtensionManagerLockType().subString(0, 1) -»',
+	'lockType' => '« FOREACH getT3ExtensionManagerLockType() AS lockType SEPARATOR ","»«lockType.asT3LockType() -»«ENDFOREACH -»',
 «ENDDEFINE»
 
 
+«REM»
+	i.O.
+«ENDREM»
 «DEFINE Version FOR MModel -»
-«EXPAND SingleValuedProperty( "version", prT3ExtensionManagerVersion() ) -»
+	'version' => '«getT3ExtensionManagerVersion() -»',
 «ENDDEFINE»
 
 
 «DEFINE Constraints FOR MModel -»
 	'constraints' => array(
-		«EXPAND MultiValuedKeyValueProperty( "depends", prT3ExtensionManagerDependencies() ) -»,
-		«EXPAND MultiValuedKeyValueProperty( "conflicts", prT3ExtensionManagerConflicts() ) -»,
-		«EXPAND MultiValuedKeyValueProperty( "suggests", prT3ExtensionManagerSuggests() )»
+		'depends' => array(«FOREACH getT3ExtensionManagerDependencies() AS dependency SEPARATOR ", "»
+			«EXPAND ConstraintKeyValue(dependency) -»«ENDFOREACH»
+		),
+		'conflicts' => array(«FOREACH getT3ExtensionManagerConflicts() AS conflict SEPARATOR ", "»
+			«EXPAND ConstraintKeyValue(conflict) -»«ENDFOREACH»
+		),
+		'suggests' => array(«FOREACH getT3ExtensionManagerSuggests() AS suggest SEPARATOR ", "»
+			«EXPAND ConstraintKeyValue(suggest) -»«ENDFOREACH»
+		)
 	)
 «ENDDEFINE»
 
 
-«DEFINE SingleValuedProperty(String property, String taggedValue) FOR MModel -»
-	'«property -»' => '«getTaggedValue( prT3ExtensionManager(), taggedValue ) -»',
-«ENDDEFINE»
-
-
-«DEFINE SingleValuedBooleanProperty(String property, String taggedValue) FOR MModel -»
-	'«property -»' => '«getTaggedBooleanValue( prT3ExtensionManager(), taggedValue ).asT3Boolean() -»',
-«ENDDEFINE»
-
-
-«DEFINE MultiValuedProperty(String property, String taggedValue) FOR MModel -»
-	'«property -»' => array(
-		«FOREACH getTaggedListValue( prT3ExtensionManager(), taggedValue ) AS tv SEPARATOR ", "»'«tv»'«ENDFOREACH»
-	),
-«ENDDEFINE»
-
-
-«DEFINE MultiValuedKeyValueProperty(String property, String taggedValue) FOR MModel -»
-		'«property -»' => array(
-			«FOREACH getTaggedListValue( prT3ExtensionManager(), taggedValue ) AS tv SEPARATOR ", "»«FOREACH tv.split(":") AS kv SEPARATOR " => "»'«kv.trim()»'«ENDFOREACH»«ENDFOREACH»
-		)«"" -»
+«DEFINE ConstraintKeyValue(String constraintKeyValue) FOR MModel -»
+			«FOREACH constraintKeyValue.split(":") AS kv SEPARATOR " => "»'«kv.trim() -»'«ENDFOREACH -»
 «ENDDEFINE»
 
 
