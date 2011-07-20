@@ -44,7 +44,7 @@ extension de::genesez::adapter::uml2::uml2statemachines;
  * the model is passed in as a global variable
  * @return	the uml2 model
  */
-private Model getUml2Model() : GLOBALVAR uml2model;
+private Package getUml2Model() : GLOBALVAR uml2model;
 
 /**
  * externally configure packages to ignore, e.g. UML standard profile ;-)
@@ -125,7 +125,29 @@ create MModel transform(Model m) :
 	// package properties
 	transformPackage(m) ->
 	this;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend function to transform a uml2 profile
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * transforms an uml profile to a GeneSEZ model
+ * @param	p	an uml profile to transform
+ * @return	the newly created GeneSEZ model
+ */
+create MModel transform(Profile p) :
+	useLogger( "de.genesez.adapter.uml2" ) ->
+	logTrace( "transform profile [" + metaType + " ] - " + p ) ->
+	// basic element properties
+	transformBasics( p ) ->
+	// package properties
+	transformPackage(p) ->
+	this;
 	
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private extend functions
@@ -187,8 +209,8 @@ private MClassifier transform(Classifier c, MModel this) :
 		case c.isExternalType() : c.makeExternal()
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
-		// check if classifier is a stereotype (reject needed for transforming a profile into a package) 
-        case c.metaType == Stereotype : Void
+		// ignore stereotype when transforming uml models; when transforming uml profiles transform into classifier 
+        case c.metaType == Stereotype && Model.isInstance(getUml2Model()) : Void
         // else classifier
 		default : ( let mc = c.makeClassifier() :
 				classifier.add( mc ) ->
@@ -213,8 +235,8 @@ private MClassifier transform(Classifier c, MPackage this) :
 		case c.isExternalType() : c.makeExternal()
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
-		// check if classifier is a stereotype (reject needed for transforming a profile into a package)
-        case c.metaType == Stereotype : Void
+		// ignore stereotype when transforming uml models; when transforming uml profiles transform into classifier
+        case c.metaType == Stereotype && Model.isInstance(getUml2Model()) : Void
         // else classifier
 		default : ( let mc = c.makeClassifier() :
 				classifier.add( mc ) ->
@@ -243,8 +265,8 @@ MType makeType(Type this) :
 		// primitive type
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
 		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
-		// classifier contained in profiles
-		case isContainedInProfile() && Classifier.isInstance(this) : ((Classifier)this).makeExternal()
+		// classifier contained in profiles when transforming uml models; when transforming profiles transform into classifier
+		case isContainedInProfile() && Classifier.isInstance(this) && Model.isInstance(getUml2Model()) : ((Classifier)this).makeExternal()
 		// classifier
 		default : ((Classifier)this).makeClassifier()
 	};
