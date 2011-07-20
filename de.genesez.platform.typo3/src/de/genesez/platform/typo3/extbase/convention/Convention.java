@@ -1,6 +1,4 @@
-package de.genesez.platform.typo3.extbase.scripts;
-
-import de.genesez.metamodel.gcore.MProperty;
+package de.genesez.platform.typo3.extbase.convention;
 
 /**
  * Utility class for TYPO3 Extbase extension conventions.
@@ -25,31 +23,6 @@ public class Convention {
 			extensionName.append(toUpperCamelCase(extensionKeyPart));
 		}
 		return extensionName.toString();
-	}
-	
-	/**
-	 * This method is for all attributes and association roles of a domain
-	 * object. It converts the property name to get an valid property name in
-	 * configuration and localization environment. It splits the property name
-	 * by every capital letter and transform every token to lower case and add
-	 * underscores between of them. For instance: the property name is
-	 * "relatedPosts" it converts to "related_posts".
-	 * 
-	 * @param property The property
-	 * @return The property name in lower case and with underscores
-	 */
-	public static String toLowerPropertyName(MProperty property) {
-		StringBuffer propertyName = new StringBuffer();
-		String[] propertyNameParts;
-		
-		propertyNameParts = property.getName().split("(?=[A-Z])");
-		for (int i = 0; i < propertyNameParts.length; i++) {
-			propertyName.append(propertyNameParts[i].toLowerCase());
-			if (i < propertyNameParts.length - 1) {
-				propertyName.append("_");
-			}
-		}
-		return propertyName.toString();
 	}
 	
 	/**

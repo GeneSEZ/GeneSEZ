@@ -8,6 +8,9 @@
 // based on genesez meta model
 import gcore;
 
+// use TYPO3 Extbase profile scripts	
+extension de::genesez::platform::typo3::extbase::profile::Profile;
+
 // use TYPO3 Extbase convention scripts
 extension de::genesez::platform::typo3::extbase::convention::Convention;
 
@@ -52,7 +55,7 @@ String asLowerTypeName(MClassifier this) :
  * @return	the formatted attribute name
  */
 String asLowerAttributeName(MProperty this) :
-	JAVA de.genesez.platform.typo3.extbase.scripts.Convention.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
+	JAVA de.genesez.platform.typo3.extbase.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
 
 
 /*
@@ -205,24 +208,32 @@ String asParameterName(MParameter this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 Extbase file name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/**
- * Formats the file name of a classifier without file extension.
- *
- * @return	the file name of a classifier
- */
-String asFileName(MClassifier this) :
-	name.split( typeNameSeperator() ).last();
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase controller
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+List[String] asControllerActionPairs(MModel this, List[String] listOfXmiGuids) :
+	JAVA de.genesez.platform.typo3.extbase.convention.Naming.asControllerActionPairs(de.genesez.metamodel.gcore.MModel, java.util.List);
 
 
-/**
- * Formats the file name of a classifier as php file.
- *
- * @return	the file name of the classifier
- */
-String asFileNamePHP(MClassifier this) :
-	asFileName() + fileExtensionPHP();
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase plugin
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String asT3PluginType(String value) :
+	switch (value) {
+		case prT3ExtbasePluginTypeExtbaseContentElement() :
+			pluginTypeContentElement()
+		default :
+			pluginTypePlugin()
+	};
 	

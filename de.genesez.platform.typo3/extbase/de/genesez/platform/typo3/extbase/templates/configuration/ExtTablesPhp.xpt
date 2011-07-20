@@ -3,7 +3,7 @@
 	Entry point for generating "ext_tables.php".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-05-07
+	@date	2011-07-20
 «ENDREM»
 
 «REM» use TYPO3 profile + access helper scripts «ENDREM»
@@ -12,6 +12,7 @@
 
 «REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
 «REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
@@ -30,9 +31,10 @@
 	Processes the generation of "ext_tables.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE "ext_tables.php" -»
+«FILE extTablesPHPFilePath() -»
 <?php
-«EXPAND AccessProtection -»
+
+«EXPAND AccessDenied -»
 
 «EXPAND PluginConfiguration -»
 
@@ -40,11 +42,7 @@
 
 «EXPAND TypoScriptInclusion -»
 
-«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainObject -»
-	«EXPAND ContextSensitiveHelp FOR domainObject -»
-	«EXPAND AllowTableOnStandardPages FOR domainObject -»
-	«EXPAND TableConfigurationArray FOR domainObject -»
-«ENDFOREACH»
+«EXPAND DomainObjectConfiguration -»
 
 «EXPAND OwnCodeImplementation("ext_tables.php.own.code.implementation." + xmiGuid) -»
 
@@ -63,25 +61,29 @@
 	TYPO3 access control to check if this file is called from the outside of TYPO3. 
 	If so then the script dies.
 «ENDREM»
-«DEFINE AccessProtection FOR MModel -»
+«DEFINE AccessDenied FOR MElement -»
 if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
 t3lib_div::loadTCA('tt_content');
 
 // These dividers are a little trick to group these items in the plugin selector
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('«extensionName() -»', '--div--', t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif');
 
-«EXPAND RegisterPlugin FOREACH allExtensionPlugins() -»
+«EXPAND RegisterPlugin FOREACH allExtensionPlugins().sortBy( e | e.name ) -»
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE RegisterPlugin FOR MInterface -»
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
@@ -92,31 +94,43 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE ModuleConfiguration FOR MModel -»
 if (TYPO3_MODE === 'BE') {
-	«EXPAND RegisterModule FOREACH allExtensionModules() -»
+	«EXPAND RegisterModule FOREACH allExtensionModules().sortBy( e | e.name ) -»
 }
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE RegisterModule FOR MInterface -»
 	Tx_Extbase_Utility_Extension::registerModule(
 	);
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE TypoScriptInclusion FOR MModel -»
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', '«extensionName()» setup');
+t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«extensionName() -» setup');
 «ENDDEFINE»
 
 
-«DEFINE DomainObjectConfiguration FOR MClass -»
-
+«REM»
+«ENDREM»
+«DEFINE DomainObjectConfiguration FOR MModel -»
+«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainObject -»
+	«EXPAND ContextSensitiveHelpInclusion FOR domainObject -»
+	«EXPAND AllowTableOnStandardPages FOR domainObject -»
+	«EXPAND TableConfigurationArray FOR domainObject -»
+«ENDFOREACH»
 «ENDDEFINE»
 
 
-«DEFINE ContextSensitiveHelp FOR MClass -»
-t3lib_extMgm::addLLrefForTCAdescr('«asLowerTypeName() -»', 'EXT:«extensionKey()»/«resourcesPrivateLanguagePath()»/locallang_csh_«asLowerTypeName() -».xml');
+«DEFINE ContextSensitiveHelpInclusion FOR MClass -»
+t3lib_extMgm::addLLrefForTCAdescr('«asLowerTypeName() -»', 'EXT:«extensionKey()»/«locallangCshXmlFilePath() -»');
 «ENDDEFINE»
 
 
@@ -134,12 +148,12 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «DEFINE ConfigurationSection FOR MClass -»
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:«extensionKey() -»/«resourcesPrivateLanguagePath() -»/locallang_db.xml:«asLowerTypeName() -»',
+		'title'						=> 'LLL:EXT:«extensionKey() -»/«locallangDbXmlFilePath() -»:«asLowerTypeName() -»',
 		'label'						=> 'uid',
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
 		'versioningWS'				=> 2,
-		'versioning_followPages'	=> TRUE,
+		'versioning_followPages'	=> true,
 		'origUid'					=> 't3_origuid',
 		'languageField'				=> 'sys_language_uid',
 		'transOrigPointerField'		=> 'l18n_parent',
@@ -150,7 +164,7 @@ $TCA['«asLowerTypeName() -»'] = array (
 			'starttime'				=> 'starttime',
 			'endtime'				=> 'endtime',
 			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . '«configurationTCAPath()»/«asFileNamePHP() -»',
+		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . '«tcaPhpFilePath() -»',
 		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«asLowerTypeName() -».gif'
 	)
 «ENDDEFINE»

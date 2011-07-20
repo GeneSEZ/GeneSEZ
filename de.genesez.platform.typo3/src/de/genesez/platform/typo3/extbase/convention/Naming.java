@@ -1,4 +1,4 @@
-package de.genesez.platform.typo3.extbase.scripts;
+package de.genesez.platform.typo3.extbase.convention;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,15 +6,41 @@ import java.util.List;
 import de.genesez.metamodel.gcore.MElement;
 import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MOperation;
+import de.genesez.metamodel.gcore.MProperty;
 import de.genesez.platforms.common.AccessHelper;
 
 /**
- * Utility class for TYPO3 Extbase extension conversions of model information.
+ * Utility class for TYPO3 Extbase naming conventions.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-04-13
  */
-public class Conversion {
+public class Naming {
+	
+	/**
+	 * This method is for all attributes and association roles of a domain
+	 * object. It converts the property name to get an valid property name in
+	 * configuration and localization environment. It splits the property name
+	 * by every capital letter and transform every token to lower case and add
+	 * underscores between of them. For instance: the property name is
+	 * "relatedPosts" it converts to "related_posts".
+	 * 
+	 * @param property The property
+	 * @return The property name in lower case and with underscores
+	 */
+	public static String toLowerPropertyName(MProperty property) {
+		StringBuffer propertyName = new StringBuffer();
+		String[] propertyNameParts;
+		
+		propertyNameParts = property.getName().split("(?=[A-Z])");
+		for (int i = 0; i < propertyNameParts.length; i++) {
+			propertyName.append(propertyNameParts[i].toLowerCase());
+			if (i < propertyNameParts.length - 1) {
+				propertyName.append("_");
+			}
+		}
+		return propertyName.toString();
+	}
 	
 	/**
 	 * This method convert assigned controller actions of an TYPO3 Extbase
@@ -29,9 +55,8 @@ public class Conversion {
 	 * classifier it is possible to get the name of this to create valid
 	 * controller action pair. For instance: The plugin needs the following
 	 * controller actions "BlogController" -> "indexAction, listAction" and
-	 * "PostController" -> "indexAction". This method returns a string list
-	 * with two entries: [0] : 'Blog' => 'index, list' and [1] : 'Post' =>
-	 * 'index'.
+	 * "PostController" -> "indexAction". This method returns a string list with
+	 * two entries: [0] : 'Blog' => 'index, list' and [1] : 'Post' => 'index'.
 	 * 
 	 * @param model The model for iteration over it
 	 * @param xmiGuids The list of operation xmiGuids
@@ -81,6 +106,5 @@ public class Conversion {
 		}
 		return controllerActions;
 	}
-
 	
 }

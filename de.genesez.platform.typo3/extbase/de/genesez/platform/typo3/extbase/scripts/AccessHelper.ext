@@ -16,7 +16,7 @@ extension de::genesez::platform::typo3::extbase::profile::Profile;
 extension de::genesez::platform::typo3::extbase::convention::Convention;
 
 // use TYPO3 workflow global var scripts
-extension de::genesez::platform::typo3::workflow::GlobalVar;
+extension de::genesez::platform::typo3::extbase::workflow::GlobalVar;
 
 // use common conversion scripts
 extension de::genesez::platforms::common::Conversion;
@@ -111,6 +111,38 @@ boolean isModelPackageElement(MClassifier this) :
 
 cached List[MClass] allEntitiesAndValueObjects(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
+
+
+List[MProperty] allNotStaticFinalOrDerivedProperties(MClassifier this) :
+	let p = {} :
+		p.addAll( property.typeSelect(MAttribute).select( e | !e.static && !e.final && !e.derived ) ) ->
+	  	p.addAll( property.typeSelect(MAssociationRole).select( e | !e.derived ) ) ->
+	  	p;
+	  	
+
+boolean isOneToOneUnidirectional(MAssociationRole this) :
+	isSingleValuedType() && isOppositeSingleValuedType()  && !hasOpposite();
+	
+boolean isOneToOneBidirectional(MAssociationRole this) :
+	isSingleValuedType() && isOppositeSingleValuedType()  && hasOpposite();
+	
+boolean isOneToManyUnidirectional(MAssociationRole this) :
+	isSingleValuedType() && isOppositeMultiValuedType()  && !hasOpposite();
+	
+boolean isOneToManyBidirectional(MAssociationRole this) :
+	isSingleValuedType() && isOppositeMultiValuedType()  && hasOpposite();
+
+boolean isManyToOneUnidirectional(MAssociationRole this) :
+	isMultiValuedType() && isOppositeSingleValuedType()  && !hasOpposite();
+	
+boolean isManyToOneBidirectional(MAssociationRole this) :
+	isMultiValuedType() && isOppositeSingleValuedType()  && hasOpposite();
+	
+boolean isManyToManyUnidirectional(MAssociationRole this) :
+	isMultiValuedType() && isOppositeMultiValuedType()  && !hasOpposite();
+	
+boolean isManyToManyBidirectional(MAssociationRole this) :
+	isMultiValuedType() && isOppositeMultiValuedType()  && hasOpposite();
 
 /*
 - - Entitiy settings  - - - - - - - - - - - - - - - - - - - - - - - - - 
