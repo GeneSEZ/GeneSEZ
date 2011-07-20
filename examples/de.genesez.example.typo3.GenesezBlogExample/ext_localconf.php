@@ -7,32 +7,51 @@ if (!defined ('TYPO3_MODE')) {
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'BlogAdmin',
-	array('Blog' => 'new, create, delete, deleteAll, edit, update, populate', 'Post' => 'new, create, delete, edit, update', 'Comment' => 'delete'),
-	array('Blog' => 'create, delete, deleteAll, edit, update, populate', 'Post' => 'create, delete, update', 'Comment' => 'delete'),
+	array(
+		'Blog' => 'new, create, delete, deleteAll, edit, update, populate', 
+		'Post' => 'new, create, delete, edit, update', 
+		'Comment' => 'delete'
+	),
+	array(
+		'Blog' => 'create, delete, deleteAll, edit, update, populate', 
+		'Post' => 'create, delete, update', 
+		'Comment' => 'delete'
+	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'BlogList',
-	array('Blog' => 'index'),
-	array(),
+	array(
+		'Blog' => 'index'
+	),
+	array(
+	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'PostList',
-	array('Post' => 'index'),
-	array(),
+	array(
+		'Post' => 'index'
+	),
+	array(
+	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'PostSingle',
-	array('Post' => 'show', 'Comment' => 'create'),
-	array('Comment' => 'create'),
+	array(
+		'Post' => 'show', 
+		'Comment' => 'create'
+	),
+	array(
+		'Comment' => 'create'
+	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 

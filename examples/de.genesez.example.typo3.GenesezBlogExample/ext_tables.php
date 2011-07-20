@@ -1,4 +1,5 @@
 <?php
+
 if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
@@ -8,6 +9,12 @@ t3lib_div::loadTCA('tt_content');
 // These dividers are a little trick to group these items in the plugin selector
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('GenesezBlogExample', '--div--', t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif');
 
+Tx_Extbase_Utility_Extension::registerPlugin(
+	$_EXTKEY,
+	'BlogAdmin',
+	'Admin Plugin (BlogExample)',
+	t3lib_extMgm::extRelPath($_EXTKEY) . ''
+);
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'BlogList',
@@ -24,12 +31,6 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'PostSingle',
 	'Single Post (BlogExample)',
-	t3lib_extMgm::extRelPath($_EXTKEY) . ''
-);
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,
-	'BlogAdmin',
-	'Admin Plugin (BlogExample)',
 	t3lib_extMgm::extRelPath($_EXTKEY) . ''
 );
 
@@ -49,7 +50,7 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
 		'versioningWS'				=> 2,
-		'versioning_followPages'	=> TRUE,
+		'versioning_followPages'	=> true,
 		'origUid'					=> 't3_origuid',
 		'languageField'				=> 'sys_language_uid',
 		'transOrigPointerField'		=> 'l18n_parent',
@@ -73,7 +74,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
 		'versioningWS'				=> 2,
-		'versioning_followPages'	=> TRUE,
+		'versioning_followPages'	=> true,
 		'origUid'					=> 't3_origuid',
 		'languageField'				=> 'sys_language_uid',
 		'transOrigPointerField'		=> 'l18n_parent',
@@ -97,7 +98,7 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
 		'versioningWS'				=> 2,
-		'versioning_followPages'	=> TRUE,
+		'versioning_followPages'	=> true,
 		'origUid'					=> 't3_origuid',
 		'languageField'				=> 'sys_language_uid',
 		'transOrigPointerField'		=> 'l18n_parent',
@@ -121,7 +122,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
 		'versioningWS'				=> 2,
-		'versioning_followPages'	=> TRUE,
+		'versioning_followPages'	=> true,
 		'origUid'					=> 't3_origuid',
 		'languageField'				=> 'sys_language_uid',
 		'transOrigPointerField'		=> 'l18n_parent',
@@ -145,7 +146,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
 		'versioningWS'				=> 2,
-		'versioning_followPages'	=> TRUE,
+		'versioning_followPages'	=> true,
 		'origUid'					=> 't3_origuid',
 		'languageField'				=> 'sys_language_uid',
 		'transOrigPointerField'		=> 'l18n_parent',
@@ -169,7 +170,7 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
 		'versioningWS'				=> 2,
-		'versioning_followPages'	=> TRUE,
+		'versioning_followPages'	=> true,
 		'origUid'					=> 't3_origuid',
 		'languageField'				=> 'sys_language_uid',
 		'transOrigPointerField'		=> 'l18n_parent',
