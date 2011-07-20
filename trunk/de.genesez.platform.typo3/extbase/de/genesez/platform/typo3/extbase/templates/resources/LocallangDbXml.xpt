@@ -11,6 +11,7 @@
 
 «REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
 «REM» use TYPO3 Extbase access helper scripts «ENDREM»
@@ -30,7 +31,7 @@
 	processes the generation of "locallang_db.xml".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE resourcesPrivateLanguagePath() + "/locallang_db.xml" -»
+«FILE locallangDbXmlFilePath() -»
 «EXPAND TypeDefintion -»
 
 «EXPAND T3locallang -»
@@ -76,11 +77,14 @@
 «ENDDEFINE»
 
 
+«REM»
+	Here we generate a locallang only for object properties.
+«ENDREM»
 «DEFINE LanguageKey(String languageKey) FOR MModel -»
 		<languageKey index="«languageKey -»" type="array">
-			«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainElement -»
-				«EXPAND ClassLocalization(languageKey) FOR domainElement -»
-				«EXPAND PropertyLocalization(languageKey) FOREACH domainElement.property.sortBy( e | e.name ) -»
+			«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainObject -»
+				«EXPAND ClassLocalization(languageKey) FOR domainObject -»
+				«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.allNotStaticFinalOrDerivedProperties().sortBy( e | e.name ) -»
 			«ENDFOREACH -»
 			«EXPAND OwnLocalization(languageKey) -»
 		</languageKey>

@@ -12,12 +12,15 @@
 
 «REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
 «REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equals «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
 
 
 «REM»
@@ -35,9 +38,10 @@
 	Processes the generation for one domain object.
 «ENDREM»
 «DEFINE Root FOR MClass -»
-«FILE configurationTCAPath() + "/" + asFileNamePHP() -»
+«FILE tcaPhpFilePath() -»
 <?php
-«EXPAND AccessProtection -»
+
+«EXPAND AccessDenied -»
 
 «EXPAND TableConfigurationArray -»
 
@@ -58,7 +62,7 @@
 	TYPO3 access control to check if this file is called from the outside of TYPO3. 
 	If so then the script dies.
 «ENDREM»
-«DEFINE AccessProtection FOR MClass -»
+«DEFINE AccessDenied FOR MElement -»
 if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
@@ -107,8 +111,16 @@ $TCA['«asLowerTypeName() -»'] = array (
 		«EXPAND AccessControlColumns -»
 		«EXPAND LocalizationColumns -»
 		«EXPAND VersioningColumns -»
+		«EXPAND OwnAttributeColumn FOREACH property.typeSelect(MAttribute) -»
 	)
 «ENDDEFINE»
+
+
+«DEFINE OwnAttributeColumn FOR MAttribute -»
+		'«asLowerAttributeName() -»' => array(
+		),
+«ENDDEFINE»
+
 
 
 «DEFINE AccessControlColumns FOR MClass -»

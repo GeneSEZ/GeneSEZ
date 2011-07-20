@@ -7,6 +7,7 @@
 «ENDREM»
 
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
 «REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
@@ -30,9 +31,9 @@
 	processes the generation of "ext_tables.sql".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE "ext_tables.sql" -»
+«FILE extTablesSQLFilePath() -»
 
-«EXPAND CreateTableDefinition FOREACH allEntitiesAndValueObjects() -»
+«EXPAND CreateTableDefinition FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) -»
 
 «EXPAND OwnCodeImplementation("ext_tables.sql.own.code.implementation." + xmiGuid) -»
 «ENDFILE»
@@ -69,7 +70,7 @@ CREATE TABLE «asLowerTypeName() -» (
 
 
 «DEFINE AttributeColumns FOR MAttribute -»
-	«name.toLowerCase()» «type.mapName("SQL")»«EXPAND DefaultValue -» «IF lowerBoundMultiplicity > 0 -»NOT «ENDIF -»NULL,
+	«asLowerAttributeName() -» «type.mapName("SQL") -»«EXPAND DefaultValue -» «IF lowerBoundMultiplicity > 0 -»NOT «ENDIF -»NULL,
 «ENDDEFINE»
 
 
@@ -79,19 +80,41 @@ CREATE TABLE «asLowerTypeName() -» (
 
 
 «DEFINE AssociationColumns FOR MAssociationRole -»
+«IF isOneToOneUnidirectional() -»
+	«EXPAND OneToOneUnidirectional -»
+«ELSEIF isOneToOneBidirectional() -»
+	«EXPAND OneToOneBidirectional -»
+«ELSEIF isOneToManyUnidirectional() -»
+	«EXPAND OneToManyUnidirectional -»
+«ELSEIF isOneToManyBidirectional() -»
+	«EXPAND OneToManyBidirectional -»
+«ELSEIF isManyToOneUnidirectional() -»
+	«EXPAND ManyToOneUnidirectional -»
+«ELSEIF isManyToOneBidirectional() -»
+	«EXPAND ManyToOneBidirectional -»
+«ELSEIF isManyToManyUnidirectional() -»
+	«EXPAND ManyToManyUnidirectional -»
+«ELSEIF isManyToManyBidirectional() -»
+	«EXPAND ManyToManyBidirectional -»
+«ENDIF -»
 «ENDDEFINE»
 
-
 «DEFINE OneToOneUnidirectional FOR MAssociationRole -»
+	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 «DEFINE OneToOneBidirectional FOR MAssociationRole -»
+«IF classifier.name < opposite.classifier.name -»
+	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
+«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE OneToManyUnidirectional FOR MAssociationRole -»
+	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 «DEFINE OneToManyBidirectional FOR MAssociationRole -»
+	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 «DEFINE ManyToOneUnidirectional FOR MAssociationRole -»
@@ -105,8 +128,6 @@ CREATE TABLE «asLowerTypeName() -» (
 
 «DEFINE ManyToManyBidirectional FOR MAssociationRole -»
 «ENDDEFINE»
-
-
 
 
 
