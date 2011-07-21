@@ -4,6 +4,9 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
+/**
+ * Blog admin plugin
+ */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'BlogAdmin',
@@ -20,6 +23,9 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
+/**
+ * Blog list plugin
+ */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'BlogList',
@@ -31,6 +37,9 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
+/**
+ * Post list plugin
+ */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'PostList',
@@ -42,6 +51,9 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
+/**
+ * Post single plugin
+ */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'PostSingle',

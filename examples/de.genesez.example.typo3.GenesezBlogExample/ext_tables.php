@@ -12,31 +12,44 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('Genesez
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'BlogAdmin',
-	'Admin Plugin (BlogExample)',
-	t3lib_extMgm::extRelPath($_EXTKEY) . ''
+	'Admin Plugin (GeneSEZBlogExample)'
 );
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'BlogList',
-	'List of Blogs (BlogExample)',
+	'List of Blogs (GeneSEZBlogExample)',
 	t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/blogList.gif'
 );
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'PostList',
-	'List of Posts (BlogExample)',
-	t3lib_extMgm::extRelPath($_EXTKEY) . ''
+	'List of Posts (GeneSEZBlogExample)'
 );
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'PostSingle',
-	'Single Post (BlogExample)',
-	t3lib_extMgm::extRelPath($_EXTKEY) . ''
+	'Single Post (GeneSEZBlogExample)'
 );
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
 if (TYPO3_MODE === 'BE') {
+	/**
+	 * Register a backend module
+	 */
+	Tx_Extbase_Utility_Extension::registerModule(
+		$_EXTKEY,
+		'web',
+		'tx_genesezblogexample_m1',
+		'',
+		array(
+			'Blog' => 'index, new, create, delete, deleteAll, edit, update, populate', 
+			'Post' => 'index, show, new, create, delete, edit, update', 
+			'Comment' => 'create, delete, deleteAll'
+		),
+		array(
+		)
+	);
 }
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'GenesezBlogExample setup');
