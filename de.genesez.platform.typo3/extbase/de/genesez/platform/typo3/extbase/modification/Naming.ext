@@ -8,6 +8,9 @@
 //	based on genesez meta model
 import gcore;
 
+// use TYPO3 Extbase profile access helper scripts
+extension de::genesez::platform::typo3::extbase::profile::AccessHelper;
+
 // use TYPO3 Extbase naming scripts
 extension de::genesez::platform::typo3::extbase::convention::Naming;
 
@@ -40,7 +43,10 @@ Void basicPackageNaming(MPackage this) :
 	// perform basic naming modifications for all nested packages
 	nestedPackage.basicPackageNaming() ->
 	// perform basic naming modifications for all classifier; reject configuration
-	classifier.select( e | e.isControllerPackageElement() || e.isModelPackageElement() || e.isRepositoryPackageElement() || e.isServicePackageElement() || e.isValidatorPackageElement() ).basicClassifierNaming();
+	classifier.select( e | e.isControllerPackageElement() || e.isModelPackageElement() || e.isRepositoryPackageElement() || e.isServicePackageElement() || e.isValidatorPackageElement() ).basicClassifierNaming() ->
+	// perform basic naming modifications for all plugins and modules; reject classes
+	classifier.typeSelect(MInterface).select( e | e.hasT3ExtbasePluginStereotype() ).basicPluginNaming() ->
+	classifier.typeSelect(MInterface).select( e | e.hasT3ExtbaseModuleStereotype() ).basicModuleNaming();
 
 
 /*
@@ -70,6 +76,13 @@ Void basicClassifierNaming(MInterface this) :
 Void basicClassifierNaming(MClassifier this) :
 	Void;
 
+
+Void basicPluginNaming(MInterface this) :
+	setName( asPluginName() );
+
+	
+Void basicModuleNaming(MInterface this) :
+	setName( asModuleName() );
 
 /*
 - - MAttribute  - - - - - - - - - - - - - - - - - - - - - - - - - - - -

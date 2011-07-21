@@ -18,6 +18,8 @@
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
+«REM» use common conversion scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -67,6 +69,7 @@ if (!defined ('TYPO3_MODE')) {
 	plugin is registered as plugin or as content element.
 «ENDREM»
 «DEFINE ConfigurePlugin FOR MInterface -»
+«EXPAND PluginComment -»
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'«name -»',
@@ -79,6 +82,18 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	«getT3ExtbasePluginPluginType().asT3PluginType()»
 );
 
+«ENDDEFINE»
+
+
+«REM»
+	Generates a plugin comment.
+«ENDREM»
+«DEFINE PluginComment FOR MInterface -»
+/**
+«IF hasComment() -»
+«comment().format() -»
+«ENDIF -»
+ */
 «ENDDEFINE»
 
 

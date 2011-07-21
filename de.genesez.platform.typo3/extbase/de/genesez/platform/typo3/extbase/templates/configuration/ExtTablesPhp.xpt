@@ -20,6 +20,8 @@
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
+«REM» use common conversion scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -88,7 +90,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'«name -»',
-	'«getT3ExtbasePluginTitle() -»'«IF !hasT3ExtbasePluginIconPathName("") -»,
+	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconPathName().length > 0 -»,
 	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconPathName() -»'«ENDIF»
 );
 «ENDDEFINE»
@@ -106,8 +108,30 @@ if (TYPO3_MODE === 'BE') {
 «REM»
 «ENDREM»
 «DEFINE RegisterModule FOR MInterface -»
+	«EXPAND ModuleComment -»
 	Tx_Extbase_Utility_Extension::registerModule(
+		$_EXTKEY,
+		'«getT3ExtbaseModuleMainModule().toLowerCase() -»',
+		'«name -»',
+		'«getT3ExtbaseModulePosition() -»',
+		array(«FOREACH asControllerActionPairs( model(), getT3ExtbaseModuleUncachedActions() ) AS uca SEPARATOR ", "»
+			«uca -»«ENDFOREACH»
+		),
+		array(
+		)
 	);
+«ENDDEFINE»
+
+
+«REM»
+	Generates a module comment.
+«ENDREM»
+«DEFINE ModuleComment FOR MInterface -»
+	/**
+	«IF hasComment() -»
+	«comment().format() -»
+	«ENDIF -»
+	 */
 «ENDDEFINE»
 
 
