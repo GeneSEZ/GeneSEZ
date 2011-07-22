@@ -23,6 +23,38 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 				'type' => 'check',
 			)
 		),
+		'starttime' => array(
+			'exclude' => 1,
+			'l10n_mode' => 'mergeIfNotBlank',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
+		'endtime' => array(
+			'exclude' => 1,
+			'l10n_mode' => 'mergeIfNotBlank',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
 		'sys_language_uid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
@@ -54,14 +86,14 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 				'type' =>'passthrough',
 			)
 		),
-	't3ver_label' => array(
-		'displayCond' => 'FIELD:t3ver_label:REQ:true',
-		'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
-		'config' => array(
-			'type' =>'none',
-			'cols' => 27,
-		)
-	),
+		't3ver_label' => array(
+			'displayCond' => 'FIELD:t3ver_label:REQ:true',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
+			'config' => array(
+				'type' =>'none',
+				'cols' => 27,
+			)
+		),
 	)
 );
 

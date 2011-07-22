@@ -23,6 +23,38 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'type' => 'check',
 			)
 		),
+		'starttime' => array(
+			'exclude' => 1,
+			'l10n_mode' => 'mergeIfNotBlank',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
+		'endtime' => array(
+			'exclude' => 1,
+			'l10n_mode' => 'mergeIfNotBlank',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
 		'sys_language_uid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
@@ -54,19 +86,76 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'type' =>'passthrough',
 			)
 		),
-	't3ver_label' => array(
-		'displayCond' => 'FIELD:t3ver_label:REQ:true',
-		'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
-		'config' => array(
-			'type' =>'none',
-			'cols' => 27,
-		)
-	),
+		't3ver_label' => array(
+			'displayCond' => 'FIELD:t3ver_label:REQ:true',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
+			'config' => array(
+				'type' =>'none',
+				'cols' => 27,
+			)
+		),
 		'title' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.title',
+			'config' => array(
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'trim'
+			),
 		),
 		'description' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.description',
+			'config' => array(
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'trim'
+			),
 		),
 		'logo' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.logo',
+			'config' => array(
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'trim'
+			),
+		),
+		'posts' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.posts',
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
+				'foreign_field' => 'blog',
+				'foreign_sortby' => 'sorting',
+				'minitems' => 0,
+				'maxitems' => 9999,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+			)
+		),
+		'administrator' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.administrator',
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => 'tx_genesezblogexample_domain_model_administrator',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				),
+			)
 		),
 	)
 );
