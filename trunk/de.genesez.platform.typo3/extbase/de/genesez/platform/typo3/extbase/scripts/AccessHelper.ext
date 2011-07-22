@@ -121,28 +121,29 @@ List[MProperty] allNotStaticFinalOrDerivedProperties(MClassifier this) :
 	  	
 
 boolean isOneToOneUnidirectional(MAssociationRole this) :
-	isSingleValuedType() && isOppositeSingleValuedType()  && !hasOpposite();
+	isOppositeSingleValuedType() && isSingleValuedType() && !hasOpposite();
 	
 boolean isOneToOneBidirectional(MAssociationRole this) :
-	isSingleValuedType() && isOppositeSingleValuedType()  && hasOpposite();
+	isOppositeSingleValuedType() && isSingleValuedType() && hasOpposite();
 	
 boolean isOneToManyUnidirectional(MAssociationRole this) :
-	isSingleValuedType() && isOppositeMultiValuedType()  && !hasOpposite();
+	isOppositeSingleValuedType() && isMultiValuedType() && !hasOpposite();
 	
 boolean isOneToManyBidirectional(MAssociationRole this) :
-	isSingleValuedType() && isOppositeMultiValuedType()  && hasOpposite();
+	isOppositeSingleValuedType() && isMultiValuedType() && hasOpposite();
 
 boolean isManyToOneUnidirectional(MAssociationRole this) :
-	isMultiValuedType() && isOppositeSingleValuedType()  && !hasOpposite();
+	isOppositeMultiValuedType() && isSingleValuedType() && !hasOpposite();
 	
 boolean isManyToOneBidirectional(MAssociationRole this) :
-	isMultiValuedType() && isOppositeSingleValuedType()  && hasOpposite();
+	isOppositeMultiValuedType() && isSingleValuedType() && hasOpposite();
 	
 boolean isManyToManyUnidirectional(MAssociationRole this) :
-	isMultiValuedType() && isOppositeMultiValuedType()  && !hasOpposite();
+	isOppositeMultiValuedType() && isMultiValuedType() && !hasOpposite();
 	
 boolean isManyToManyBidirectional(MAssociationRole this) :
-	isMultiValuedType() && isOppositeMultiValuedType()  && hasOpposite();
+	isOppositeMultiValuedType() && isMultiValuedType() && hasOpposite();
+
 
 /*
 - - Entitiy settings  - - - - - - - - - - - - - - - - - - - - - - - - - 
