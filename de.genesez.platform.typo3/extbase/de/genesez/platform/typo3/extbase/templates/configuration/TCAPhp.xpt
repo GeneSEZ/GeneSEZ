@@ -112,18 +112,370 @@ $TCA['«asLowerTypeName() -»'] = array (
 		«EXPAND LocalizationColumns -»
 		«EXPAND VersioningColumns -»
 		«EXPAND OwnAttributeColumn FOREACH property.typeSelect(MAttribute) -»
+		«EXPAND OwnAssociationColumn FOREACH property.typeSelect(MAssociationRole) -»
 	)
 «ENDDEFINE»
 
 
 «DEFINE OwnAttributeColumn FOR MAttribute -»
 		'«asLowerAttributeName() -»' => array(
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			«EXPAND ConfigTag -»
+		),
+«ENDDEFINE»
+
+«DEFINE ConfigTag FOR MAttribute -»
+			'config' => array(
+				«IF type.mapName("TYPO3") == "String" -»
+					«EXPAND ConfigStringType -»
+				«ELSEIF type.mapName("TYPO3") == "Text" -»
+					«EXPAND ConfigTextType -»
+				«ELSEIF type.mapName("TYPO3") == "Integer" -»
+					«EXPAND ConfigIntegerType -»
+				«ELSEIF type.mapName("TYPO3") == "Floating Point" -»
+					«EXPAND ConfigFloatingPointType -»
+				«ELSEIF type.mapName("TYPO3") == "Boolean" -»
+					«EXPAND ConfigBooleanType -»
+				«ELSEIF type.mapName("TYPO3") == "DateTime" -»
+					«EXPAND ConfigDateTimeType -»
+				«ELSEIF type.mapName("TYPO3") == "Select List" -»
+					«EXPAND ConfigSelectListType -»
+				«ELSEIF type.mapName("TYPO3") == "File" -»
+					«EXPAND ConfigFileType -»
+				«ELSEIF type.mapName("TYPO3") == "Image" -»
+					«EXPAND ConfigImageType -»
+				«ELSE -»
+					«EXPAND ConfigOtherType( type.mapName("TYPO3") ) -»
+				«ENDIF -»
+			),
+«ENDDEFINE»
+
+«DEFINE ConfigStringType FOR MAttribute -»
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'trim'
+«ENDDEFINE»
+
+«DEFINE ConfigTextType FOR MAttribute -»
+				'type' => 'text',
+				'cols' => 40,
+				'rows' => 15,
+				'eval' => 'trim'
+«ENDDEFINE»
+
+«DEFINE ConfigIntegerType FOR MAttribute -»
+				'type' => 'input',
+				'size' => 4,
+				'eval' => 'int'
+«ENDDEFINE»
+
+
+«DEFINE ConfigFloatingPointType FOR MAttribute -»
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'double2'
+«ENDDEFINE»
+
+«DEFINE ConfigBooleanType FOR MAttribute -»
+				'type' => 'check',
+				'default' => 0
+«ENDDEFINE»
+
+«DEFINE ConfigDateTimeType FOR MAttribute -»
+				'type' => 'input',
+				'size' => 12,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 1,
+				'default' => time()
+«ENDDEFINE»
+
+«DEFINE ConfigSelectListType FOR MAttribute -»
+				'type' => 'select',
+				'items' => array(
+					array('-- Label --', 0),
+				),
+				'size' => 1,
+				'maxitems' => 1,
+				'eval' => ''
+«ENDDEFINE»
+
+«DEFINE ConfigFileType FOR MAttribute -»
+				'type' => 'group',
+				'internal_type' => 'file',
+				'uploadfolder' => 'uploads/«fullQualifiedExtensionName().toLowerCase() -»',
+				'allowed' => '*',
+				'disallowed' => 'php',
+				'size' => 5
+«ENDDEFINE»
+
+«DEFINE ConfigImageType FOR MAttribute -»
+				'type' => 'group',
+				'internal_type' => 'file',
+				'uploadfolder' => 'uploads/«fullQualifiedExtensionName().toLowerCase() -»',
+				'show_thumbs' => 1,
+				'size' => 5,
+				'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai',
+				'disallowed' => ''
+«ENDDEFINE»
+
+«DEFINE ConfigOtherType(String otherPropertyType) FOR MAttribute -»
+«ENDDEFINE»
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+«DEFINE OwnAssociationColumn FOR MAssociationRole -»
+«IF isOneToOneUnidirectional() -»
+	«EXPAND OneToOneUnidirectional -»
+«ELSEIF isOneToOneBidirectional() -»
+	«EXPAND OneToOneBidirectional -»
+«ELSEIF isOneToManyUnidirectional() -»
+	«EXPAND OneToManyUnidirectional -»
+«ELSEIF isOneToManyBidirectional() -»
+	«EXPAND OneToManyBidirectional -»
+«ELSEIF isManyToOneUnidirectional() -»
+	«EXPAND ManyToOneUnidirectional -»
+«ELSEIF isManyToOneBidirectional() -»
+	«EXPAND ManyToOneBidirectional -»
+«ELSEIF isManyToManyUnidirectional() -»
+	«EXPAND ManyToManyUnidirectional -»
+«ELSEIF isManyToManyBidirectional() -»
+	«EXPAND ManyToManyBidirectional -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» Sync with Test «ENDREM»
+«DEFINE OneToOneUnidirectional FOR MAssociationRole -»
+		'«asLowerAttributeName() -»' => array(
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				),
+			)
+		),
+«ENDDEFINE»
+
+«DEFINE OneToOneBidirectional FOR MAssociationRole -»
+		'«asLowerAttributeName() -»' => array(
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				),
+			)
+		),
+«ENDDEFINE»
+
+«REM» Sync with Test «ENDREM»
+«DEFINE OneToManyUnidirectional FOR MAssociationRole -»
+		'«asLowerAttributeName() -»' => array(
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'MM' => '«asIntermediateTableName() -»',
+				'MM_match_fields' => array(
+					'ident' => '«asLowerAttributeName() -»'
+				),
+				'foreign_sortby' => 'sorting',
+				'minitems' => 0,
+				'maxitems' => 9999,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+			)
+		),
+«ENDDEFINE»
+
+«REM» Sync with Test «ENDREM»
+«DEFINE OneToManyBidirectional FOR MAssociationRole -»
+		'«asLowerAttributeName() -»' => array(
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_field' => '«opposite.asLowerAttributeName() -»',
+				'foreign_sortby' => 'sorting',
+				'minitems' => 0,
+				'maxitems' => 9999,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+			)
+		),
+«ENDDEFINE»
+
+«REM» Sync with Test «ENDREM»
+«DEFINE ManyToOneUnidirectional FOR MAssociationRole -»
+		'«asLowerAttributeName() -»' => Array (
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => Array (
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+			)
+		),
+«ENDDEFINE»
+
+«REM» Sync with Test «ENDREM»
+«DEFINE ManyToOneBidirectional FOR MAssociationRole -»
+		'«asLowerAttributeName() -»' => Array (
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => Array (
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+			)
+		),
+«ENDDEFINE»
+
+
+«DEFINE ManyToManyUnidirectional FOR MAssociationRole -»
+		'«asAttributeName() -»' => array(
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'MM' => '«asIntermediateTableName() -»',
+				'MM_match_fields' => array(
+					'ident' => '«asLowerAttributeName() -»'
+				),
+				'foreign_sortby' => 'sorting',
+				'minitems' => 0,
+				'maxitems' => 9999,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+			),
+		),
+«ENDDEFINE»
+
+
+«DEFINE ManyToManyBidirectional FOR MAssociationRole -»
+		'«asAttributeName() -»' => array(
+			«EXPAND ExcludeTag -»
+			«EXPAND LabelTag -»
+			'config' => array(
+				'type' => 'inline',
+				'foreign_table' => '«type.asLowerTypeName() -»',
+				'MM' => '«asIntermediateTableName() -»',
+				'MM_match_fields' => array(
+					'ident' => '«asLowerAttributeName() -»'
+				),
+				'foreign_sortby' => 'sorting',
+				'minitems' => 0,
+				'maxitems' => 9999,
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+			),
 		),
 «ENDDEFINE»
 
 
 
+
+
+
+
+
+
 «DEFINE AccessControlColumns FOR MClass -»
+		«EXPAND Hidden -»
+		«EXPAND Starttime -»
+		«EXPAND Endtime -»
+«ENDDEFINE»
+
+«DEFINE LocalizationColumns FOR MClass -»
+		«EXPAND SysLanguageUid -»
+		«EXPAND L18nParent -»
+		«EXPAND L18nDiffsource -»
+«ENDDEFINE»
+
+«DEFINE VersioningColumns FOR MClass -»
+		«EXPAND T3VerLabel -»
+«ENDDEFINE»
+
+«DEFINE Hidden FOR MClass -»
 		'hidden' => array(
 			'exclude' => 1,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
@@ -133,8 +485,45 @@ $TCA['«asLowerTypeName() -»'] = array (
 		),
 «ENDDEFINE»
 
+«DEFINE Starttime FOR MClass -»
+		'starttime' => array(
+			'exclude' => 1,
+			'l10n_mode' => 'mergeIfNotBlank',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
+«ENDDEFINE»
 
-«DEFINE LocalizationColumns FOR MClass -»
+«DEFINE Endtime FOR MClass -»
+		'endtime' => array(
+			'exclude' => 1,
+			'l10n_mode' => 'mergeIfNotBlank',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
+«ENDDEFINE»
+
+«DEFINE SysLanguageUid FOR MClass -»
 		'sys_language_uid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
@@ -148,6 +537,9 @@ $TCA['«asLowerTypeName() -»'] = array (
 				),
 			)
 		),
+«ENDDEFINE»
+
+«DEFINE L18nParent FOR MClass -»
 		'l18n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => 1,
@@ -161,6 +553,9 @@ $TCA['«asLowerTypeName() -»'] = array (
 				'foreign_table_where' => 'AND «asLowerTypeName() -».uid=###REC_FIELD_l18n_parent### AND «asLowerTypeName() -».sys_language_uid IN (-1,0)',
 			)
 		),
+«ENDDEFINE»
+
+«DEFINE L18nDiffsource FOR MClass -»
 		'l18n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
@@ -168,16 +563,15 @@ $TCA['«asLowerTypeName() -»'] = array (
 		),
 «ENDDEFINE»
 
-
-«DEFINE VersioningColumns FOR MClass -»
-	't3ver_label' => array(
-		'displayCond' => 'FIELD:t3ver_label:REQ:true',
-		'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
-		'config' => array(
-			'type' =>'none',
-			'cols' => 27,
-		)
-	),
+«DEFINE T3VerLabel FOR MClass -»
+		't3ver_label' => array(
+			'displayCond' => 'FIELD:t3ver_label:REQ:true',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
+			'config' => array(
+				'type' =>'none',
+				'cols' => 27,
+			)
+		),
 «ENDDEFINE»
 
 
@@ -190,13 +584,15 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 
 
+«DEFINE ExcludeTag FOR MProperty -»
+			'exclude' => 0,
+«ENDDEFINE»
 
 
 
-
-
-
-
+«DEFINE LabelTag FOR MProperty -»
+			'label' => 'LLL:EXT:«locallangDbXmlFilePath() -»:«classifier.asLowerTypeName() -».«asLowerAttributeName() -»',
+«ENDDEFINE»
 
 
 

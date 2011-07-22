@@ -14,6 +14,7 @@ extension de::genesez::platform::typo3::extbase::profile::Profile;
 // use TYPO3 Extbase convention scripts
 extension de::genesez::platform::typo3::extbase::convention::Convention;
 
+extension de::genesez::platforms::common::AccessHelper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,6 +40,10 @@ String asTypeName(MClassifier this) :
  */
 String asLowerTypeName(MClassifier this) :
 	name.toLowerCase();
+
+
+String asLowerTypeName(MType this) :
+	name().toLowerCase();
 
 
 /*
@@ -250,4 +255,22 @@ String asT3PluginType(String value) :
 		default :
 			pluginTypePlugin()
 	};
+
 	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase persistance
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String asIntermediateTableName(MAssociationRole this) :
+	fullQualifiedExtensionName().toLowerCase() + typeNameSeperator() 
+		+ ( classifier.name.compareTo( type.name() ) < 0 
+			? classifier.asIntermediateTableTypeName() + typeNameSeperator() + type.asIntermediateTableTypeName()
+			: type.asIntermediateTableTypeName()       + typeNameSeperator() + classifier.asIntermediateTableTypeName()
+		  )
+		+ typeNameSeperator() + "mm";
+
+
+private String asIntermediateTableTypeName(MType this) :
+	name().split( typeNameSeperator() ).last().toLowerCase();
