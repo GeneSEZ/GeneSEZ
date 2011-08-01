@@ -210,6 +210,8 @@ MParameter processParameter(MParameter this, String defaultValue, String directi
 	setDefaultvalue( defaultValue ) ->
 	setDirection( direction ) ->
 	setMultiplicity( multiplicity ) ->
+	setLowerBoundMultiplicity( multiplicity ) ->
+	setUpperBoundMultiplicity( multiplicity ) ->
 	setUnique( unique ) ->
 	setOrdered( ordered ) ->
 	this;
@@ -225,6 +227,8 @@ MProperty processProperty(MProperty this, String visibility, boolean derived, In
 	setVisibility(visibility) ->
 	setDerived(derived) ->
 	setMultiplicity(multiplicity) ->
+	setLowerBoundMultiplicity( multiplicity ) ->
+	setUpperBoundMultiplicity( multiplicity ) ->
 	setUnique(unique) ->
 	setOrdered(ordered) ->
 	this;
@@ -270,3 +274,9 @@ MPrimitiveType createPrimitiveTypeString(MModel container) :
 	container.primitiveTypes.exists(e|e.name == "String")
 		? container.primitiveTypes.selectFirst(e|e.name == "String")
 		: container.createPrimitiveType("String");
+
+
+MPrimitiveType createPrimitiveTypeBoolean(MModel container) :
+	container.primitiveTypes.exists(e|e.name == "Boolean")
+		? container.primitiveTypes.selectFirst(e|e.name == "Boolean")
+		: container.createPrimitiveType("Boolean");
