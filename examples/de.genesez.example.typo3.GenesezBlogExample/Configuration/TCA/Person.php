@@ -7,10 +7,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_genesezblogexample_domain_model_person'] = array (
 	'ctrl' => $TCA['tx_genesezblogexample_domain_model_person']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'firstname,lastname,email,full_name',
+		'showRecordFieldList' => 'firstname,lastname,email',
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'firstname,lastname,email,full_name'),
+		'1' => array('showitem'	=> 'firstname,lastname,email'),
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
@@ -115,15 +115,6 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		'email' => array(
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.email',
-			'config' => array(
-				'type' => 'input',
-				'size' => 30,
-				'eval' => 'trim'
-			),
-		),
-		'full_name' => array(
-			'exclude' => 0,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.full_name',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,

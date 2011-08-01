@@ -116,9 +116,13 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.logo',
 			'config' => array(
-				'type' => 'input',
-				'size' => 30,
-				'eval' => 'trim'
+				'type' => 'group',
+				'internal_type' => 'file',
+				'uploadfolder' => 'uploads/tx_genesezblogexample',
+				'show_thumbs' => 1,
+				'size' => 5,
+				'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai',
+				'disallowed' => ''
 			),
 		),
 		'posts' => array(

@@ -158,10 +158,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_tag',
-				'MM' => 'tx_genesezblogexample_post_tag_mm',
-				'MM_match_fields' => array(
-					'ident' => 'tags'
-				),
+				'MM' => 'tx_genesezblogexample_post_tag_tags_mm',
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -180,10 +177,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_comment',
-				'MM' => 'tx_genesezblogexample_comment_post_mm',
-				'MM_match_fields' => array(
-					'ident' => 'comments'
-				),
+				'MM' => 'tx_genesezblogexample_post_comment_comments_mm',
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -202,10 +196,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
-				'MM' => 'tx_genesezblogexample_post_post_mm',
-				'MM_match_fields' => array(
-					'ident' => 'related_posts'
-				),
+				'MM' => 'tx_genesezblogexample_post_post_related_posts_mm',
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
 				'maxitems' => 9999,

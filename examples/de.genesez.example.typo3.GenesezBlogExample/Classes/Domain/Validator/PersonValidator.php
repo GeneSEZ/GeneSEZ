@@ -1,6 +1,6 @@
 <?php
 
-/* PROTECTED REGION ID(php.own.imports._16_9_8a7027a_1297251368580_84265_2660) ENABLED START */
+/* PROTECTED REGION ID(php.own.imports._16_9_8a7027a_1297194783571_373089_1631.validator) ENABLED START */
 // TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
@@ -28,39 +28,33 @@
  **************************************************************/
 
 /**
- * An exemplary Blog validator
+ * Validator for a domain object.
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
+class Tx_GenesezBlogExample_Domain_Validator_PersonValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
 	
 
 
 	
 	/**
-	 * Checks whether the given blog is valid
+	 * Checks if the given value is valid according to the validator.
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog
-	 * @return boolean 
+	 * @param Tx_GenesezBlogExample_Domain_Model_Person $value The value that should be validated
+	 * @return boolean TRUE if the value is valid, FALSE if an error occured
 	 */
-	public function isValid(Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
-		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1310052749779_236836_2370) ENABLED START */
-		
-		if (strtolower($blog->getTitle()) === 'extbase') {
-			$this->addError(Tx_Extbase_Utility_Localization::translate('error.Blog.invalidTitle', 'BlogExample'), 1297418974);
-			return FALSE;
-		}
-		return TRUE;
-		
+	public function isValid(Tx_GenesezBlogExample_Domain_Model_Person $value) {
+		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297194783571_373089_1631.validator.isValid) ENABLED START */
+		return true;
 		/* PROTECTED REGION END */
 	}
 
 	
 
 	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251368580_84265_2660) ENABLED START */
+	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194783571_373089_1631.validator) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 }

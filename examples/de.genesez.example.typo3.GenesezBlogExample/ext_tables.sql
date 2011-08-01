@@ -41,8 +41,8 @@ CREATE TABLE tx_genesezblogexample_domain_model_blog (
 	pid int(11) DEFAULT '0' NOT NULL,
 	
 	title varchar(255) DEFAULT '' NOT NULL,
-	description varchar(255) DEFAULT '' NOT NULL,
-	logo varchar(255) NOT NULL,
+	description text DEFAULT '' NOT NULL,
+	logo tinyblob NOT NULL,
 	administrator int(11) unsigned DEFAULT '0' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE tx_genesezblogexample_domain_model_comment (
 	date int(11) NOT NULL,
 	author varchar(255) NOT NULL,
 	email varchar(255) NOT NULL,
-	content varchar(255) NOT NULL,
+	content text NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -155,12 +155,9 @@ CREATE TABLE tx_genesezblogexample_domain_model_post (
 	
 	title varchar(255) NOT NULL,
 	date int(11) NOT NULL,
-	content varchar(255) NOT NULL,
+	content text NOT NULL,
 	blog int(11) unsigned DEFAULT '0' NOT NULL,
 	author int(11) unsigned DEFAULT '0' NOT NULL,
-	
-	
-	
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -223,7 +220,33 @@ CREATE TABLE tx_genesezblogexample_domain_model_tag (
 	KEY parent (pid),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
-
+CREATE TABLE tx_genesezblogexample_post_tag_tags_mm (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
+);
+CREATE TABLE tx_genesezblogexample_post_comment_comments_mm (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
+);
+CREATE TABLE tx_genesezblogexample_post_post_related_posts_mm (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
+);
 
 # PROTECTED REGION ID(ext_tables.sql.own.code.implementation.eee_1045467100313_135436_1) ENABLED START
 # TODO: put your further code implementations here

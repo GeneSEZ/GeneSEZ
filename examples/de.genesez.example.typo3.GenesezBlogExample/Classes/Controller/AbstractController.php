@@ -90,7 +90,7 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	/**
 	 * Override getErrorFlashMessage to customize the flash message.
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<string> Override getErrorFlashMessage to customize the flash message.
+	 * @return string The flash message
 	 */
 	protected function getErrorFlashMessage() {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081259525_708656_2063.getErrorFlashMessage) ENABLED START */
