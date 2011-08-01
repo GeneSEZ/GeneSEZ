@@ -41,6 +41,9 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM»
+	Generates the '$EM_CONF' array to connect a TYPO3 extension to TYPO3.
+«ENDREM»
 «DEFINE ExtensionManagerConfiguration FOR MModel -»
 $EM_CONF[$_EXTKEY] = array(
 	«EXPAND ExtensionManagerProperties -»
@@ -48,6 +51,10 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDDEFINE»
 
 
+«REM»
+	Generates the single information fields which are needed to connect a 
+	TYPO3 extension to TYPO3. 
+«ENDREM»
 «DEFINE ExtensionManagerProperties FOR MModel -»
 	«EXPAND Title -»
 	«EXPAND Description -»
@@ -68,7 +75,9 @@ $EM_CONF[$_EXTKEY] = array(
 	«EXPAND Constraints -»
 «ENDDEFINE»
 
+
 «REM»
+	Performs the generation of the 'title' field.
 «ENDREM»
 «DEFINE Title FOR MModel -»
 	'title' => '«getT3ExtensionManagerTitle() -»',
@@ -76,6 +85,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'description' field.
 «ENDREM»
 «DEFINE Description FOR MModel -»
 	'description' => '«getT3ExtensionManagerDescription() -»',
@@ -83,6 +93,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'category' field.
 «ENDREM»
 «DEFINE Category FOR MModel -»
 	'category' => '«getT3ExtensionManagerCategory().asT3Category() -»',
@@ -90,6 +101,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'author' field.
 «ENDREM»
 «DEFINE Author FOR MModel -»
 	'author' => '«getT3ExtensionManagerAuthor() -»',
@@ -97,6 +109,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'author_email' field.
 «ENDREM»
 «DEFINE AuthorEMail FOR MModel -»
 	'author_email' => '«getT3ExtensionManagerAuthorEMail() -»',
@@ -104,6 +117,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'author_company' field.
 «ENDREM»
 «DEFINE AuthorCompany FOR MModel -»
 	'author_company' => '«getT3ExtensionManagerAuthorCompany() -»', 
@@ -111,6 +125,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'shy' field.
 «ENDREM»
 «DEFINE Shy FOR MModel -»
 	'shy' => «getT3ExtensionManagerShy().asT3Boolean() -»,
@@ -118,6 +133,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'priority' field.
 «ENDREM»
 «DEFINE Priority FOR MModel -»
 	'priority' => '«getT3ExtensionManagerPriority().asT3Priority() -»',
@@ -125,6 +141,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'state' field.
 «ENDREM»
 «DEFINE State FOR MModel -»
 	'state' => '«getT3ExtensionManagerState().asT3State() -»',
@@ -132,6 +149,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'internal' field.
 «ENDREM»
 «DEFINE Internal FOR MModel -»
 	'internal' => «getT3ExtensionManagerInternal().asT3Boolean() -»,
@@ -139,6 +157,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'uploadfolder' field.
 «ENDREM»
 «DEFINE UploadFolder FOR MModel -»
 	'uploadfolder' => «getT3ExtensionManagerUploadFolder().asT3Boolean() -»,
@@ -146,6 +165,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'createDirs' field.
 «ENDREM»
 «DEFINE CreateDirs FOR MModel -»
 	'createDirs' => '« FOREACH getT3ExtensionManagerCreateDirs() AS dir SEPARATOR ", " -»«dir -»«ENDFOREACH -»',
@@ -153,6 +173,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'modify_tables' field.
 «ENDREM»
 «DEFINE ModifyTables FOR MModel -»
 	'modify_tables' => '« FOREACH getT3ExtensionManagerModifyTables() AS table SEPARATOR ", " -»«table -»«ENDFOREACH -»',
@@ -160,6 +181,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'clearCacheOnLoad' field.
 «ENDREM»
 «DEFINE ClearCacheOnLoad FOR MModel -»
 	'clearCacheOnLoad' => «getT3ExtensionManagerClearCacheOnLoad().asT3Boolean() -»,
@@ -167,6 +189,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'lockType' field.
 «ENDREM»
 «DEFINE LockType FOR MModel -»
 	'lockType' => '« FOREACH getT3ExtensionManagerLockType() AS lockType SEPARATOR ", " -»«lockType.asT3LockType() -»«ENDFOREACH -»',
@@ -174,6 +197,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'version' field.
 «ENDREM»
 «DEFINE Version FOR MModel -»
 	'version' => '«getT3ExtensionManagerVersion() -»',
@@ -181,6 +205,12 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Performs the generation of the 'constraints' field,
+	which includes the fields:
+	
+	- 'depends'
+	- 'conflicts'
+	- 'suggests'
 «ENDREM»
 «DEFINE Constraints FOR MModel -»
 	'constraints' => array(
@@ -198,6 +228,7 @@ $EM_CONF[$_EXTKEY] = array(
 
 
 «REM»
+	Generates a constraint which consists of a key and a value.
 «ENDREM»
 «DEFINE ConstraintKeyValue(String constraintKeyValue) FOR MModel -»
 			«FOREACH constraintKeyValue.split(":") AS kv SEPARATOR " => "»'«kv.trim() -»'«ENDFOREACH -»
