@@ -10,6 +10,9 @@
 «EXTENSION de::genesez::platform::typo3::extbase::profile::AccessHelper»
 «EXTENSION de::genesez::platform::typo3::extbase::profile::Profile»
 
+«REM» use TYPO3 Extbase naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
+
 «REM» use php access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::php::scripts::AccessHelper»
@@ -18,7 +21,7 @@
 «EXTENSION de::genesez::platforms::common::Conversion»
 
 «REM» use type mapping scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 
 «REM»
@@ -48,9 +51,9 @@
 «ENDREM»
 «DEFINE Property FOR MProperty -»
 «IF isSingleValuedType() -»
-	 * @var «type.mapName()»
+	 * @var «type.mapName().name()»
 «ELSE -»
-	 * @var «mapType() -»<«type.mapName() -»> 
+	 * @var «mapType() -»<«type.mapName().name() -»> 
 «ENDIF -»
 «IF hasT3ExtbaseAssociationCascadeType( prT3ExtbaseCascadeTypeRemove() ) -»
 	 * @cascade remove
@@ -66,29 +69,29 @@
 
 «DEFINE Getter FOR MProperty -»
 «IF isSingleValuedType() -»
-	 * @return «type.mapName()-» «comment("; ", "")»
+	 * @return «type.mapName().name()-» «comment("; ", "")»
 «ELSE -»
-	 * @return «mapType() -»<«type.mapName() -»> «comment("; ", "")» 
+	 * @return «mapType() -»<«type.mapName().name() -»> «comment("; ", "")» 
 «ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE Setter FOR MProperty -»
 «IF isSingleValuedType() -»
-	 * @param «type.mapName() -» $«name -» «comment("; ", "")»
+	 * @param «type.mapName().name() -» $«name() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapType() -»<«type.mapName() -»> $«name -» «comment("; ", "")» 
+	 * @param «mapType() -»<«type.mapName().name() -»> $«name() -» «comment("; ", "")» 
 «ENDIF -»
 	 * @return void
 «ENDDEFINE»
 
 «DEFINE InsertIn FOR MProperty -»
-	 * @param «type.mapName() -» $toAdd «comment("; ", "")»
+	 * @param «type.mapName().name() -» $toAdd «comment("; ", "")»
 	 * @return void
 «ENDDEFINE»
 
 «DEFINE RemoveFrom FOR MProperty -»
-	 * @param «type.mapName() -» $toRemove «comment("; ", "")»
+	 * @param «type.mapName().name() -» $toRemove «comment("; ", "")»
 	 * @return void
 «ENDDEFINE»
 
@@ -129,9 +132,9 @@
 
 «DEFINE Param FOR MParameter -»
 «IF isSingleValuedType() -»
-	 * @param «type.mapName() -» $«name -» «comment("; ", "")»
+	 * @param «type.mapName().name() -» $«name() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapType() -»<«type.mapName() -»> $«name -» «comment("; ", "")»
+	 * @param «mapType() -»<«type.mapName().name() -»> $«name() -» «comment("; ", "")»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -139,12 +142,12 @@
 «DEFINE Return FOR MOperation -»
 «IF hasReturn() -»
 «IF isSingleValuedType() -»
-	 * @return «return.type.mapName() -» «return.comment("; ", "")»
+	 * @return «return.type.mapName().name() -» «return.comment("; ", "")»
 «ELSE -»
 «IF classifier.isRepositoryPackageElement() -»
-	 * @return «mapType("Repository") -»<«return.type.mapName() -»> «comment("; ", "")»
+	 * @return «mapType("Repository") -»<«return.type.mapName().name() -»> «comment("; ", "")»
 «ELSE -»
-	 * @return «mapType() -»<«return.type.mapName() -»> «comment("; ", "")»
+	 * @return «mapType() -»<«return.type.mapName().name() -»> «comment("; ", "")»
 «ENDIF -»
 «ENDIF -»	
 «ELSE -»
@@ -155,7 +158,7 @@
 
 «DEFINE DontValidate FOR MParameter -»
 «IF hasT3ExtbaseDontValidateStereotype() -»
-	 * @dontvalidate $«name»
+	 * @dontvalidate $«name()»
 «ENDIF -»
 «ENDDEFINE»
 

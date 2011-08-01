@@ -7,11 +7,11 @@
 	@date	2011-07-18
 «ENDREM»
 
-«REM» use logging «ENDREM»
+«REM» use common logging scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::log::Log»
 
+«REM» use TYPO3 Extbase addition scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::modification::Addition»
-«EXTENSION de::genesez::platform::typo3::extbase::modification::Naming»
 
 
 «REM»
@@ -22,23 +22,16 @@
 
 «REM»
 	Processes the contents of the model.
-	i.O.
 «ENDREM»
 «DEFINE Root FOR MModel -»
 	«REM» init logger «ENDREM»
 	«useLogger("de.genesez.platform.typo3") -»
-	
-	«REM» TYPO3 Extbase basic naming modifications for an easier model to text transfomation «ENDREM»
-	«basicModelNaming() -»
 	
 	«REM» TYPO3 Extbase additions and modification for an easier model to text transformation «ENDREM» 
 	«modelAdditions() -»
 					
 	«REM» Generate extension class code «ENDREM»
 	«EXPAND de::genesez::platform::typo3::extbase::templates::classes::Root::Root -»
-
-	«REM» TYPO3 Extbase configuration naming modifications for an easier model to text transfomation «ENDREM»
-	«REM»«configurationModelNaming() -»«ENDREM»
 
 	«REM» Generate extension configuration code «ENDREM»
 	«EXPAND de::genesez::platform::typo3::extbase::templates::configuration::Root::Root -»

@@ -21,7 +21,6 @@ extension de::genesez::platform::typo3::extbase::workflow::GlobalVar;
 // use common conversion scripts
 extension de::genesez::platforms::common::Conversion;
 
-extension de::genesez::platforms::common::AccessHelper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -113,7 +112,7 @@ cached List[MClass] allEntitiesAndValueObjects(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
 
 
-List[MProperty] allNotStaticFinalOrDerivedProperties(MClassifier this) :
+List[MProperty] allObjectProperties(MClassifier this) :
 	let p = {} :
 		p.addAll( property.typeSelect(MAttribute).select( e | !e.static && !e.final && !e.derived ) ) ->
 	  	p.addAll( property.typeSelect(MAssociationRole).select( e | !e.derived ) ) ->
@@ -122,25 +121,32 @@ List[MProperty] allNotStaticFinalOrDerivedProperties(MClassifier this) :
 
 boolean isOneToOneUnidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isSingleValuedType() && !hasOpposite();
-	
+
+
 boolean isOneToOneBidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isSingleValuedType() && hasOpposite();
+
 	
 boolean isOneToManyUnidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isMultiValuedType() && !hasOpposite();
+
 	
 boolean isOneToManyBidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isMultiValuedType() && hasOpposite();
 
+
 boolean isManyToOneUnidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isSingleValuedType() && !hasOpposite();
+
 	
 boolean isManyToOneBidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isSingleValuedType() && hasOpposite();
 	
+
 boolean isManyToManyUnidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isMultiValuedType() && !hasOpposite();
 	
+
 boolean isManyToManyBidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isMultiValuedType() && hasOpposite();
 

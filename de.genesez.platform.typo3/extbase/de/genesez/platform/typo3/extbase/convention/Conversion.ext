@@ -11,7 +11,7 @@ import gcore;
 
 // use TYPO3 Extbase convention and naming scripts
 extension de::genesez::platform::typo3::extbase::convention::Convention;
-
+extension de::genesez::platform::typo3::extbase::convention::Naming;
 
 
 /*
@@ -26,7 +26,7 @@ extension de::genesez::platform::typo3::extbase::convention::Convention;
  * @return	the file name of a classifier
  */
 String fileName(MClassifier this) :
-	name.split( typeNameSeperator() ).last();
+	classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();
 
 
 /**
@@ -39,7 +39,7 @@ String fileNamePHP(MClassifier this) :
 
 
 private String locallangCshXMLFileName(MClassifier this) :
-	locallangCshXmlFileNamePrefix() + name.toLowerCase() + fileExtensionXML();
+	locallangCshXmlFileNamePrefix() + name() + fileExtensionXML();
 
 
 /*
@@ -64,7 +64,7 @@ String filePath(MClassifier this, String filename) :
  * @return	the directory path for the classifier, e.g. "Classes/Domain/Model"
  */
 private String dirPath(MClassifier this) :
-	baseDirPath() + fileSeparator() + typeNamePath().replaceAll(typeNameSeperator(), fileSeparator());
+	baseDirPath() + fileSeparator() + classifierNamePath().replaceAll(classifierNameSeperator(), fileSeparator());
 
 
 /**
@@ -96,6 +96,14 @@ String extTablesSQLFilePath() :
 
 String tcaPhpFilePath(MClassifier this) :
 	configurationTCAPath() + fileSeparator() + fileNamePHP();
+
+
+String setupTxtFilePath() :
+	configurationTypoScriptPath() + fileSeparator() + setupTxtFileName();
+	
+
+String constantsTxtFilePath() :
+	configurationTypoScriptPath() + fileSeparator() + constantsTxtFileName();	
 
 
 String locallangCshXmlFilePath(MClassifier this) :

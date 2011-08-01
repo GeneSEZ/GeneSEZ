@@ -1,6 +1,6 @@
 «IMPORT gcore»
 «REM»
-	Entry point for generating "locallang_db.xml". (i.O.)
+	Entry point for generating "locallang_db.xml".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 	@date	2011-07-12
@@ -9,7 +9,7 @@
 «REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::profile::AccessHelper»
 
-«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
+«REM» use TYPO3 Extbase convention, conversion and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
@@ -20,7 +20,6 @@
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
 
-
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	public functions
@@ -28,9 +27,12 @@
 «ENDREM»
 
 «REM»
-	processes the generation of "locallang_db.xml".
+	Processes the generation of "locallang_db.xml".
 «ENDREM»
 «DEFINE Root FOR MModel -»
+«REM» Set naming context to 'Configuration' «ENDREM»
+«setNamingContext( namingContextConfiguration() ) -»
+
 «FILE locallangDbXmlFilePath() -»
 «EXPAND TypeDefintion -»
 
@@ -78,13 +80,13 @@
 
 
 «REM»
-	Here we generate a locallang only for object properties.
+	Generate a locallang only for object properties.
 «ENDREM»
 «DEFINE LanguageKey(String languageKey) FOR MModel -»
 		<languageKey index="«languageKey -»" type="array">
 			«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainObject -»
 				«EXPAND ClassLocalization(languageKey) FOR domainObject -»
-				«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.allNotStaticFinalOrDerivedProperties().sortBy( e | e.name ) -»
+				«EXPAND PropertyLocalization(languageKey) FOREACH domainObject.allObjectProperties().sortBy( e | e.name ) -»
 			«ENDFOREACH -»
 			«EXPAND OwnLocalization(languageKey) -»
 		</languageKey>
@@ -92,12 +94,12 @@
 
 
 «DEFINE ClassLocalization(String languageKey) FOR MClass -»
-			<label index="«asLowerTypeName() -»">«EXPAND DefaultValue(languageKey) -»</label>
+			<label index="«name() -»">«EXPAND DefaultValue(languageKey) -»</label>
 «ENDDEFINE»
 
 
 «DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			<label index="«classifier.asLowerTypeName() -».«asLowerAttributeName() -»">«EXPAND DefaultValue(languageKey) -»</label>
+			<label index="«classifier.name() -».«name() -»">«EXPAND DefaultValue(languageKey) -»</label>
 «ENDDEFINE»
 
 

@@ -1,17 +1,14 @@
 «IMPORT gcore»
 «REM»
 	Performs the generation of TypoScript "setup.txt". (i.O.)
-	
-	currently handled:
-	- 
-	
+
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 	@date	2011-07-14
 «ENDREM»
 
-«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
+«REM» use TYPO3 Extbase convention and conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
-«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 
 
 «REM»
@@ -24,7 +21,7 @@
 	Processes the generation of "setup.txt".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE configurationTypoScriptPath() + "/setup.txt" -»
+«FILE setupTxtFilePath() -»
 «LET fullQualifiedExtensionName().toLowerCase() AS extensionName -»
 «EXPAND PluginConfiguration(extensionName) -»
 

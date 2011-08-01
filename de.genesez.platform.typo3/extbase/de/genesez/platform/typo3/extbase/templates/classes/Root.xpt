@@ -1,11 +1,13 @@
 «IMPORT gcore»
 «REM»
 	Main entry point for generating extbase class code.
-	Iterates over the model and delegates the handling of classifiers.
+	Iterates over the model and delegates the handling of classifiers. (i.O.)
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 	@date	2011-04-26
 «ENDREM»
+
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
 «REM» use TYPO3 Extbase access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
@@ -19,21 +21,22 @@
 
 «REM»
 	Processes the contents of the model and rejects all ignored packages.
-	i.O.
 «ENDREM»
 «DEFINE Root FOR MModel -»
-	«EXPAND Root FOREACH nestedPackage -»
-	«EXPAND Root FOREACH classifier -»
+«REM» Set naming context to 'General' «ENDREM»
+«setNamingContext( namingContextGeneral() ) -»
+
+«EXPAND Root FOREACH nestedPackage -»
+«EXPAND Root FOREACH classifier -»
 «ENDDEFINE»
 
 
 «REM»
 	Processes the contents of a package, delegates the handling of all classifiers.
-	i.O.
 «ENDREM»
 «DEFINE Root FOR MPackage -»
-	«EXPAND Root FOREACH nestedPackage -»
-	«EXPAND Root FOREACH classifier -»
+«EXPAND Root FOREACH nestedPackage -»
+«EXPAND Root FOREACH classifier -»
 «ENDDEFINE»
 
 
@@ -44,7 +47,6 @@
 	- repository package
 	- service package
 	- validator package
-	i.O.
 «ENDREM»
 «DEFINE Root FOR MClassifier -»
 «IF isControllerPackageElement() || isModelPackageElement() || isRepositoryPackageElement() || isServicePackageElement() || isValidatorPackageElement() -»

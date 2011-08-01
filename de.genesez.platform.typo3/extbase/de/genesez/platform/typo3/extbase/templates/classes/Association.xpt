@@ -16,7 +16,7 @@
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
 «REM» use type mapping scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 
 «REM»
@@ -72,7 +72,7 @@
 «ENDREM»
 «DEFINE Declaration FOR MAssociationRole -»
 	«EXPAND Comment::Association -»
-	«EXPAND Modifier -» $«name -»;
+	«EXPAND Modifier -» $«name() -»;
 «ENDDEFINE»
 
 
@@ -93,7 +93,7 @@
 «DEFINE GetterImplemementation FOR MAssociationRole -»
 	«EXPAND Comment::Getter -»
 	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
-		return $this->«name -»;
+		return $this->«name() -»;
 	}
 «ENDDEFINE»
 
@@ -103,7 +103,7 @@
 	i.O.
 «ENDREM»
 «DEFINE SetterDeclaration FOR MAssociationRole -»
-	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name -»);
+	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name() -»);
 «ENDDEFINE»
 
 
@@ -113,8 +113,8 @@
 «ENDREM»
 «DEFINE SetterImplemementation FOR MAssociationRole -»
 	«EXPAND Comment::Setter -»
-	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name -») {
-		$this->«name -» = $«name -»;
+	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name() -») {
+		$this->«name() -» = $«name() -»;
 	}
 «ENDDEFINE»
 
@@ -139,7 +139,7 @@
 «IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd) {
-		$this->«name -»->attach($toAdd);
+		$this->«name() -»->attach($toAdd);
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -164,7 +164,7 @@
 «IF isMultiValuedType() -»
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove) {
-		$this->«name -»->detach($toRemove);
+		$this->«name() -»->detach($toRemove);
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -193,7 +193,7 @@
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAssociationRole -»
 «IF type.isClassifier() || type.isExternalType() -»
-«IF isSingleValuedType() -»«type.mapName() -» «ELSE -»«mapType() -» «ENDIF -»
+«IF isSingleValuedType() -»«type.mapName().name() -» «ELSE -»«mapType() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -203,5 +203,5 @@
 	i.O.
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAssociationRole -»
-«IF type.isClassifier() || type.isExternalType() -»«type.mapName() -» «ENDIF -»
+«IF type.isClassifier() || type.isExternalType() -»«type.mapName().name() -» «ENDIF -»
 «ENDDEFINE»

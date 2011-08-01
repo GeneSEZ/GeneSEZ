@@ -6,22 +6,20 @@
 	@date	2011-07-20
 «ENDREM»
 
-«REM» use TYPO3 profile + access helper scripts «ENDREM»
+«REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::profile::AccessHelper»
-«EXTENSION de::genesez::platform::typo3::extbase::profile::Profile»
 
 «REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
-«REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equals «ENDREM»
+«REM» use TYPO3 Extbase access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
-«EXTENSION de::genesez::platforms::common::AccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
+
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -33,6 +31,9 @@
 	Processes the generation of "ext_tables.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
+«REM» Set naming context to 'Configuration' «ENDREM»
+«setNamingContext( namingContextConfiguration() ) -»
+
 «FILE extTablesPHPFilePath() -»
 <?php
 
@@ -89,7 +90,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 «DEFINE RegisterPlugin FOR MInterface -»
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
-	'«name -»',
+	'«asPluginName() -»',
 	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconPathName().length > 0 -»,
 	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconPathName() -»'«ENDIF»
 );
@@ -112,7 +113,7 @@ if (TYPO3_MODE === 'BE') {
 	Tx_Extbase_Utility_Extension::registerModule(
 		$_EXTKEY,
 		'«getT3ExtbaseModuleMainModule().toLowerCase() -»',
-		'«name -»',
+		'«asModuleName() -»',
 		'«getT3ExtbaseModulePosition() -»',
 		array(«FOREACH asControllerActionPairs( model(), getT3ExtbaseModuleUncachedActions() ) AS uca SEPARATOR ", "»
 			«uca -»«ENDFOREACH»
@@ -154,17 +155,17 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 
 
 «DEFINE ContextSensitiveHelpInclusion FOR MClass -»
-t3lib_extMgm::addLLrefForTCAdescr('«asLowerTypeName() -»', 'EXT:«extensionKey()»/«locallangCshXmlFilePath() -»');
+t3lib_extMgm::addLLrefForTCAdescr('«name() -»', 'EXT:«extensionKey()»/«locallangCshXmlFilePath() -»');
 «ENDDEFINE»
 
 
 «DEFINE AllowTableOnStandardPages FOR MClass -»
-t3lib_extMgm::allowTableOnStandardPages('«asLowerTypeName() -»');
+t3lib_extMgm::allowTableOnStandardPages('«name() -»');
 «ENDDEFINE»
 
 
 «DEFINE TableConfigurationArray FOR MClass -»
-$TCA['«asLowerTypeName() -»'] = array (
+$TCA['«name() -»'] = array (
 	«EXPAND ConfigurationSection -»
 );
 «ENDDEFINE»
@@ -172,7 +173,7 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «DEFINE ConfigurationSection FOR MClass -»
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:«extensionKey() -»/«locallangDbXmlFilePath() -»:«asLowerTypeName() -»',
+		'title'						=> 'LLL:EXT:«extensionKey() -»/«locallangDbXmlFilePath() -»:«name() -»',
 		'label'						=> 'uid',
 		'tstamp'					=> 'tstamp',
 		'crdate'					=> 'crdate',
@@ -189,7 +190,7 @@ $TCA['«asLowerTypeName() -»'] = array (
 			'endtime'				=> 'endtime',
 			),
 		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . '«tcaPhpFilePath() -»',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«asLowerTypeName() -».gif'
+		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«name() -».gif'
 	)
 «ENDDEFINE»
 

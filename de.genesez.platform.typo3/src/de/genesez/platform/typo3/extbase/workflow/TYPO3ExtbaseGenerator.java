@@ -130,4 +130,9 @@ public class TYPO3ExtbaseGenerator extends Generator {
 		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("extensionKey", "'" + extensionKey + "'"));
 	}
 	
+	
+	public void put(Object name, Object value) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(String.valueOf(name), "'" + String.valueOf(value) + "'"));
+	}
+	
 }

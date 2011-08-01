@@ -13,9 +13,48 @@ import de.genesez.platforms.common.AccessHelper;
  * Utility class for TYPO3 Extbase naming conventions.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date 2011-04-13
+ * @date 2011-07-28
  */
 public class Naming {
+	
+	/**
+	 * Stores the previous naming context for naming model elements.
+	 */
+	public static String previousNamingContext;
+	
+	/**
+	 * Stores the actual naming context for naming model elements.
+	 */
+	public static String actualNamingContext;
+	
+	/**
+	 * Get the actual naming context which is stored in the static variable
+	 * 'actualNamingContext'.
+	 * 
+	 * @return The actual naming context
+	 */
+	public static String getNamingContext() {
+		return Naming.actualNamingContext;
+	}
+	
+	/**
+	 * Set the new naming context which is stored in the static variable
+	 * 'actualNamingContext'.
+	 * 
+	 * @param namingContext The new naming context
+	 */
+	public static void setNamingContext(String namingContext) {
+		Naming.previousNamingContext = Naming.actualNamingContext;
+		Naming.actualNamingContext = namingContext;
+	}
+	
+	/**
+	 * Revert the previous naming context which is stored in the static variable
+	 * 'previousNamingContext'.
+	 */
+	public static void revertNamingContext() {
+		Naming.actualNamingContext = Naming.previousNamingContext;
+	}
 	
 	/**
 	 * This method is for all attributes and association roles of a domain
@@ -23,7 +62,7 @@ public class Naming {
 	 * configuration and localization environment. It splits the property name
 	 * by every capital letter and transform every token to lower case and add
 	 * underscores between of them. For instance: the property name is
-	 * "relatedPosts" it converts to "related_posts".
+	 * 'relatedPosts' it converts to 'related_posts'.
 	 * 
 	 * @param property The property
 	 * @return The property name in lower case and with underscores
@@ -54,8 +93,8 @@ public class Naming {
 	 * the operation object. In fact that the operation has a reference to the
 	 * classifier it is possible to get the name of this to create valid
 	 * controller action pair. For instance: The plugin needs the following
-	 * controller actions "BlogController" -> "indexAction, listAction" and
-	 * "PostController" -> "indexAction". This method returns a string list with
+	 * controller actions 'BlogController' -> 'indexAction, listAction' and
+	 * 'PostController' -> 'indexAction'. This method returns a string list with
 	 * two entries: [0] : 'Blog' => 'index, list' and [1] : 'Post' => 'index'.
 	 * 
 	 * @param model The model for iteration over it
@@ -80,12 +119,15 @@ public class Naming {
 				action = ((MOperation) elem).getName();
 				
 				// Rewrite the controller name
-				controller = controller.substring(controller.lastIndexOf("_") + 1);
-				controller = controller.substring(0, controller.lastIndexOf("Controller"));
+				if (controller.endsWith("Controller")) {
+					controller = controller.substring(0, controller.lastIndexOf("Controller"));
+				}
 				
 				// Rewrite the action name
-				action = action.substring(0, action.lastIndexOf("Action"));
-				
+				if (action.endsWith("Action")) {
+					action = action.substring(0, action.lastIndexOf("Action"));	
+				}
+								
 				// Check if the controller already exists inside the controller list or not
 				if (!controllers.contains(controller)) {
 					// If not a new controller and action entry is added

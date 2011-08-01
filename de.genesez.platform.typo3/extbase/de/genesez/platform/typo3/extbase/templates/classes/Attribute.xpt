@@ -16,7 +16,7 @@
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
 «REM» use type mapping scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 
 «REM»
@@ -74,7 +74,7 @@
 «ENDREM»
 «DEFINE Const FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
-	const «name -»«EXPAND DefaultValue -»;
+	const «name() -»«EXPAND DefaultValue -»;
 «ENDDEFINE»
 
 
@@ -84,7 +84,7 @@
 «ENDREM»
 «DEFINE Declaration FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
-	«EXPAND Modifier -» $«name -»«EXPAND DefaultValue -»;
+	«EXPAND Modifier -» $«name() -»«EXPAND DefaultValue -»;
 «ENDDEFINE»
 
 
@@ -107,7 +107,7 @@
 «DEFINE Getter FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
-		return $this->«name -»;
+		return $this->«name() -»;
 	}
 «ENDDEFINE»
 
@@ -118,8 +118,8 @@
 «ENDREM»
 «DEFINE Setter FOR MAttribute -»
 	«EXPAND Comment::Setter -»
-	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name -») {
-		$this->«name -» = $«name -»;
+	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name() -») {
+		$this->«name() -» = $«name() -»;
 	}
 «ENDDEFINE»
 
@@ -132,7 +132,7 @@
 «IF isMultiValuedType() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd) {
-		$this->«name -»->attach($toAdd);
+		$this->«name() -»->attach($toAdd);
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -146,7 +146,7 @@
 «IF isMultiValuedType() -»
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove) {
-		$this->«name -»->detach($toRemove);
+		$this->«name() -»->detach($toRemove);
 	}
 «ENDIF -»
 «ENDDEFINE»
@@ -176,7 +176,7 @@
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAttribute -»
 «IF type.isClassifier() || type.isExternalType() -»
-«IF isSingleValuedType() -»«type.mapName() -» «ELSE -»«mapType() -» «ENDIF -»
+«IF isSingleValuedType() -»«type.mapName().name() -» «ELSE -»«mapType() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -186,7 +186,7 @@
 	i.O.
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAttribute -»
-«IF type.isClassifier() || type.isExternalType() -»«type.mapName() -» «ENDIF -»
+«IF type.isClassifier() || type.isExternalType() -»«type.mapName().name() -» «ENDIF -»
 «ENDDEFINE»
 
 
@@ -207,7 +207,7 @@
 «ENDREM»
 «DEFINE OwnCodeImplementation(String id) FOR MAttribute -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «asGetterName() -» for class «classifier»
-		throw new Exception('The implementation of the method «asGetterName() -» for class «classifier -» is missing !');
+		// TODO: implementation of method «asGetterName() -» for class «classifier.name()»
+		throw new Exception('The implementation of the method «asGetterName() -» for class «classifier.name() -» is missing !');
 		«ENDPROTECT»
 «ENDDEFINE»
