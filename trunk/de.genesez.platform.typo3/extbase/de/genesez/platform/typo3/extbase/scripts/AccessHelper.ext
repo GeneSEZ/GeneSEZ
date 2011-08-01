@@ -270,6 +270,10 @@ boolean isService(MClass this) :
 - - Validator settings  - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+List[MClass] allValidators(MModel this) :
+	allClassifiers().typeSelect(MClass).select( e | e.isValidator() );
+	
+
 boolean isValidatorPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isValidator()
