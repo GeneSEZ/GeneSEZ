@@ -8,9 +8,14 @@
 //	based on genesez meta model
 import gcore;
 
+// use common logging scripts
+extension de::genesez::platforms::common::log::Log;
+
 // use TYPO3 Extbase profile + access helper scripts
 extension de::genesez::platform::typo3::extbase::profile::Profile;
 extension de::genesez::platform::typo3::extbase::profile::AccessHelper;
+
+extension de::genesez::platform::typo3::extbase::convention::Naming;
 
 // use TYPO3 Extbase access helper scripts which overrides
 // common access helper scripts if script name is equal 
@@ -80,17 +85,23 @@ Void classAdditions(MClass this) :
  * Model additions for an TYPO3 Extbase controller.
  */
 Void controllerAdditions(MClass this) :
+	// add super controller type 
 	addControllerType() ->
+	// create 'initalizeAction' if it should
 	addControllerInitializeAction() ->
+	// create 'errorAction' if it should
 	addControllerErrorAction() ->
+	// create 'getErrorFlashMessage' if it should
 	addControllerGetErrorFlashMessage() ->
-	// add initialize action for all actions which have the sterotype
+	// create 'initalizeAction' for all actions which have the sterotype
 	operation.select( o | o.hasT3ExtbaseControllerActionCreateInitializeAction("true") )
 		.addControllerActionInitializeAction();
  
 
 private Void addControllerType(MClass this) :
+	// checks if the class has a stereotype 
 	hasT3ExtbaseControllerStereotype()
+		// if true, then create the super controller type which is specified
 		? (	let controllerType = getT3ExtbaseControllerControllerType() :
 				switch {
 					case controllerType == prT3ExtbaseControllerTypeExtbaseControllerInterface() :
@@ -100,29 +111,41 @@ private Void addControllerType(MClass this) :
 					default : Void
 				}
 		)
+		// else create the default one
 		: (	generalization.isEmpty 
 				? generalization.add( createExternal( model(), prT3ExtbaseControllerTypeExtbaseActionController() ) )
 				: Void
 		);
 
 
+/**
+ * Add the 'initalizeAction' to the controller class.
+ */
 Void addControllerInitializeAction(MClass this) :
 	// checks if the initalize action should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateInitializeAction("true")
-	&& operation.select(o| o.name == "initalizeAction" ).isEmpty
+	&& operation.select( o | o.name == "initalizeAction" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".initalizeAction", "initalizeAction") :
-				o.processOperation( "protected", false, false, false, 1, false, false ) ->
-				o.ownedComment.add( createComment(this.xmiGuid + ".initalizeAction.comment", "Override initalizeAction to solve tasks which all actions have in common.") )
+				// (visibility, static, abstract, final, multiplicity, unique, ordered)
+				o.processOperation("protected", false, false, false, 1, false, false) ->
+				// add comment to discribe the operation
+				o.ownedComment.add( 
+					createComment(o.xmiGuid + ".comment", "Override initalizeAction to solve tasks which all actions have in common.") 
+				)
 		) : Void;
 
 
 Void addControllerErrorAction(MClass this) :
 	// checks if the error action should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateErrorAction("true")
-	&& operation.select(o| o.name == "errorAction" ).isEmpty
+	&& operation.select( o | o.name == "errorAction" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".errorAction", "errorAction") :
-				o.processOperation( "protected", false, false, false, 1, false, false ) ->
-				o.ownedComment.add( createComment(this.xmiGuid + ".errorAction.comment", "Override errorAction to show that errors happend.") )
+				// (visibility, static, abstract, final, multiplicity, unique, ordered)
+				o.processOperation("protected", false, false, false, 1, false, false) ->
+				// add comment to discribe the operation
+				o.ownedComment.add( 
+					createComment(o.xmiGuid + ".comment", "Override errorAction to show that errors happend.") 
+				)
 		) : Void;
 
 
@@ -131,16 +154,26 @@ Void addControllerGetErrorFlashMessage(MClass this) :
 	hasT3ExtbaseControllerCreateGetErrorFlashMessage("true")
 	&& operation.select(o| o.name == "getErrorFlashMessage" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
-				o.processOperation( "protected", false, false, false, 1, false, false ) ->
-				o.stereotype.add( createStereotype( model(), this.xmiGuid + "." + prT3ExtbaseNoControllerAction(), prT3ExtbaseNoControllerAction() )  ) ->
-				o.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.comment", "Override getErrorFlashMessage to customize the flash message.") ) ->
+				// (visibility, static, abstract, final, multiplicity, unique, ordered)
+				o.processOperation("protected", false, false, false, 1, false, false) ->
+				// add comment to discribe the operation
+				o.ownedComment.add( 
+					createComment(o.xmiGuid + ".comment", "Override getErrorFlashMessage to customize the flash message.") 
+				) ->
 				o.setReturn(
-					let return = createParameter( o, this.xmiGuid + ".getErrorFlashMessage.return", "" ) :
+					let return = createParameter(o, o.xmiGuid + ".return", "") :
 						return.processParameter("", "return", 1, true, false) ->
-						return.setType( createPrimitiveTypeString( model() ) ) ->
-						return.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.return.comment", "The flash message") ) ->
+						return.ownedComment.add( 
+							createComment(o.xmiGuid + ".return.comment", "The flash message") 
+						) ->
+						return.setType( 
+							createPrimitiveTypeString( model() ) 
+						) ->
 						return
-				) 
+				) ->
+				o.stereotype.add( 
+					createStereotype( model(), o.xmiGuid + "." + prT3ExtbaseNoControllerAction(), prT3ExtbaseNoControllerAction() ) 
+				)
 		) :  Void;
 
 
@@ -148,9 +181,13 @@ Void addControllerActionInitializeAction(MOperation this) :
 	// checks if the initalize action for an action should be created and doesn't already exists
 	hasT3ExtbaseControllerActionCreateInitializeAction("true") 
 	&& classifier.operation.select( o | o.name == "initalize" + name.toFirstUpper() ).isEmpty
-		? (	let o = createOperation(classifier, this.xmiGuid + ".initalize" + name.toFirstUpper() + "Action", "initalize" + name.toFirstUpper() + "Action" ) :
-				o.processOperation( "protected", false, false, false, 1, false, false ) ->
-				o.ownedComment.add( createComment(this.xmiGuid + ".initalize" + name.toFirstUpper() + ".comment", "Define initialize" + name.toFirstUpper() + "Action" + " to solve tasks before the action is called.") )
+		? (	let o = createOperation(classifier, this.xmiGuid + ".initalize" + name.toFirstUpper() + "Action", "initalize" + name.toFirstUpper() + "Action") :
+				// (visibility, static, abstract, final, multiplicity, unique, ordered)
+				o.processOperation("protected", false, false, false, 1, false, false) ->
+				// add comment to discribe the operation
+				o.ownedComment.add( 
+					createComment(o.xmiGuid + ".comment", "Define initialize" + name.toFirstUpper() + "Action" + " to solve tasks before the action is called.") 
+				)
 		) : Void;
 
 
@@ -159,6 +196,27 @@ Void addControllerActionInitializeAction(MOperation this) :
 	TYPO3 Extbase Model additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+Void addClassValidator(MClass this) :
+	( hasT3ExtbaseEntityCreateClassValidator("true") || hasT3ExtbaseValueObjectCreateClassValidator("true") )
+	&& model().allValidators().select( e | e.name().endsWith( name + "Validator" ) ).isEmpty
+		? ( let c = createClass(model(), this.xmiGuid + ".validator", name + "Validator") :
+				// (visibility, abstract, final)
+				c.processClassifier("public", false, false) ->
+				// add comment to discribe the operation
+				c.ownedComment.add( 
+					createComment(c.xmiGuid + ".comment", "Validator for a domain object.") 
+				) ->
+				// add super validator type
+				c.addValidatorType() ->
+				// add 'isValid'
+				c.addValidatorIsValid(this) ->
+				// add stereotype to mark this class as validator
+				c.stereotype.add( 
+					createStereotype( model(), c.xmiGuid + "." + prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
+				)
+		) : Void;
+
 
 /*
 - - Entitiy additions - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -169,11 +227,15 @@ Void addControllerActionInitializeAction(MOperation this) :
  * Model additions for an TYPO3 Extbase entity.
  */
 Void entityAdditions(MClass this) :
-	addEntityType(); 
+	// add super entity type
+	addEntityType() ->
+	addClassValidator(); 
 
 
 private Void addEntityType(MClass this) :
+	// checks if the class has a stereotype 
 	hasT3ExtbaseEntityStereotype()
+		// if true, then create the super entity type which is specified
 		? (	let entityType = getT3ExtbaseEntityEntityType() :
 				switch {
 					case generalization.isEmpty :
@@ -181,10 +243,15 @@ private Void addEntityType(MClass this) :
 					default : Void
 				}
 		)
+		// else create the default one
 		: (	generalization.isEmpty 
 				? generalization.add( createExternal( model(), prT3ExtbaseEntityTypeExtbaseAbstractEntity() ) )
 				: Void
 		);
+
+
+
+
 
 	
 /*
@@ -195,11 +262,15 @@ private Void addEntityType(MClass this) :
  * Model additions for an TYPO3 Extbase value object.
  */
 Void valueObjectAdditions(MClass this) :
-	addValueObjectType();
+	// add super value object type
+	addValueObjectType() ->
+	addClassValidator();
 
 
 private Void addValueObjectType(MClass this) :
+	// checks if the class has a stereotype 
 	hasT3ExtbaseValueObjectStereotype()
+		// if true, then create the super value object type which is specified
 		? ( let valueObjectType = getT3ExtbaseValueObjectValueObjectType() :
 				switch {
 					case generalization.isEmpty :
@@ -207,6 +278,7 @@ private Void addValueObjectType(MClass this) :
 					default : Void
 				}
 		) 
+		// else create the default one
 		: (	generalization.isEmpty 
 				? generalization.add( createExternal( model(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject() ) )
 				: Void 
@@ -227,12 +299,15 @@ private Void addValueObjectType(MClass this) :
  * Model additions for an TYPO3 Extbase repository.
  */
 Void repositoryAdditions(MClass this) :
+	// add super repository type
 	addRepositoryType() ->
 	additionAddRepositoryInitializeObject();
 
 
 private Void addRepositoryType(MClass this) :
+	// checks if the class has a stereotype 
 	hasT3ExtbaseRepositoryStereotype()
+		// if true, then create the super repository type which is specified
 		? ( let repositoryType = getT3ExtbaseRepositoryRepositoryType() :
 				switch {
 					case generalization.isEmpty :
@@ -240,6 +315,7 @@ private Void addRepositoryType(MClass this) :
 					default : Void
 				} 
 		) 
+		// else create the default one
 		: (	generalization.isEmpty 
 				? generalization.add( createExternal( model(), prT3ExtbaseRepositoryTypeExtbaseRepository() ) )
 				: Void 
@@ -249,10 +325,13 @@ private Void addRepositoryType(MClass this) :
 Void additionAddRepositoryInitializeObject(MClass this) :
 	// checks if the initalize object operation should be created and doesn't already exists
 	hasT3ExtbaseRepositoryCreateInitializeObject("true")
-	&& operation.select(o| o.name == "initalizeObject" ).isEmpty
+	&& operation.select( o | o.name == "initalizeObject" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".initalizeObject", "initalizeObject") :
 				o.processOperation( "public", false, false, false, 1, false, false ) ->
-				o.ownedComment.add( createComment(this.xmiGuid + ".initalizeObject.comment", "Life cycle method.") )
+				// add comment to discribe the operation
+				o.ownedComment.add( 
+					createComment(o.xmiGuid + ".comment", "Life cycle method.") 
+				)
 		) : Void;
 
 /*
@@ -276,11 +355,14 @@ Void additionAddRepositoryInitializeObject(MClass this) :
  * Model additions for an TYPO3 Extbase repository.
  */
 Void validatorAdditions(MClass this) :
-	addRepositoryType();
+	// add super validiator type
+	addValidatorType();
 
 
 private Void addValidatorType(MClass this) :
+	// checks if the class has a stereotype
 	hasT3ExtbaseValidatorStereotype()
+		// if true, then create the super validator type which is specified
 		? ( let validatorType = getT3ExtbaseValidatorValidatorType() :
 				switch {
 					case validatorType == prT3ExtbaseValidatorTypeExtbaseValidatorInterface() :
@@ -290,27 +372,48 @@ private Void addValidatorType(MClass this) :
 					default : Void
 				}
 		)
+		// else create the default one
 		: ( generalization.isEmpty 
 				? generalization.add( createExternal( model(), prT3ExtbaseValidatorTypeExtbaseAbstractValidator() ) )
 				: Void 
 		);
 
-/*
-Void addValidatorIsValid(MClass this) :
+
+Void addValidatorIsValid(MClass this, MType valueToValidate) :
 	// checks if the is valid method doesn't already exists
 	operation.select(o| o.name == "isValid" ).isEmpty
-		? (	let o = createOperation(this, this.xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
-				o.processOperation( "protected", false, false, false, 1, false, false ) ->
-				o.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.comment", "Override getErrorFlashMessage to customize the flash message.") ) ->
+		? (	let o = createOperation(this, this.xmiGuid + ".isValid", "isValid" ) :
+				// (visibility, static, abstract, final, multiplicity, unique, ordered)
+				o.processOperation("public", false, false, false, 1, false, false) ->
+				// add comment to discribe the operation
+				o.ownedComment.add( 
+					createComment(o.xmiGuid + ".comment", "Checks if the given value is valid according to the validator.") 
+				) ->
+				o.parameter.add(
+					let value = createParameter(o, o.xmiGuid + ".value", "value") :
+						// (defaultValue, direction, multiplicity, unique, ordered)
+						value.processParameter("", "in", 1, true, false) ->
+						value.ownedComment.add( 
+							createComment(value.xmiGuid + ".comment", "The value that should be validated") 
+						) ->
+						value.setType( 
+							valueToValidate
+						) ->
+						value
+				) ->
 				o.setReturn(
-					let return = createParameter( o, this.xmiGuid + ".getErrorFlashMessage.return", "" ) :
+					let return = createParameter(o, o.xmiGuid + ".return", "") :
+						// (defaultValue, direction, multiplicity, unique, ordered)
 						return.processParameter("", "return", 1, true, false) ->
-						return.setType( createPrimitiveTypeString( model() ) ) ->
-						return.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.return.comment", "The flash message") ) ->
+						return.ownedComment.add( 
+							createComment(return.xmiGuid + ".comment", "TRUE if the value is valid, FALSE if an error occured") 
+						) ->
+						return.setType( 
+							createPrimitiveTypeBoolean( model() ) 
+						) ->
 						return
-				) 
+				)
 		) :  Void;
-*/
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
