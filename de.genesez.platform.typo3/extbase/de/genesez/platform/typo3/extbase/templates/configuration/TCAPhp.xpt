@@ -37,6 +37,12 @@
 
 
 «REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
 	Processes the generation for one domain object.
 «ENDREM»
 «DEFINE Root FOR MClass -»
@@ -53,12 +59,6 @@
 «ENDFILE»
 «ENDDEFINE»
 
-
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
 
 «REM»
 	TYPO3 access control to check if this file is called from the outside of TYPO3. 
@@ -89,14 +89,14 @@ $TCA['«name() -»'] = array (
 
 «DEFINE InterfaceSection FOR MClass -»
 	'interface' => array(
-		'showRecordFieldList' => '«FOREACH property AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
+		'showRecordFieldList' => '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
 	),
 «ENDDEFINE»
 
 
 «DEFINE TypesSection FOR MClass -»
 	'types' => array(
-		'1' => array('showitem'	=> '«FOREACH property AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
+		'1' => array('showitem'	=> '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
 	),
 «ENDDEFINE»
 
@@ -113,8 +113,8 @@ $TCA['«name() -»'] = array (
 		«EXPAND AccessControlColumns -»
 		«EXPAND LocalizationColumns -»
 		«EXPAND VersioningColumns -»
-		«EXPAND OwnAttributeColumn FOREACH property.typeSelect(MAttribute) -»
-		«EXPAND OwnAssociationColumn FOREACH property.typeSelect(MAssociationRole) -»
+		«EXPAND OwnAttributeColumn FOREACH allObjectProperties().typeSelect(MAttribute) -»
+		«EXPAND OwnAssociationColumn FOREACH allObjectProperties().typeSelect(MAssociationRole) -»
 	)
 «ENDDEFINE»
 

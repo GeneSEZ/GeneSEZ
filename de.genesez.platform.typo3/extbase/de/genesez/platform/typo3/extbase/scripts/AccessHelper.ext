@@ -112,7 +112,7 @@ cached List[MClass] allEntitiesAndValueObjects(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
 
 
-List[MProperty] allObjectProperties(MClassifier this) :
+cached List[MProperty] allObjectProperties(MClassifier this) :
 	let p = {} :
 		p.addAll( property.typeSelect(MAttribute).select( e | !e.static && !e.final && !e.derived ) ) ->
 	  	p.addAll( property.typeSelect(MAssociationRole).select( e | !e.derived ) ) ->
@@ -317,19 +317,13 @@ List[MStereotype] getAssignedValidatorStereotypes(MElement this) :
 	
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Plugin Configuration 
+	TYPO3 Extbase Plugin and Module Configuration 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 cached List[MInterface] allExtensionPlugins(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbasePluginStereotype() );
 
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Module Configuration 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
 
 cached List[MInterface] allExtensionModules(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbaseModuleStereotype() );

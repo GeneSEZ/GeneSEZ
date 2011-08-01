@@ -137,6 +137,7 @@ if (TYPO3_MODE === 'BE') {
 
 
 «REM»
+	Generates the include statement for TypoScript.
 «ENDREM»
 «DEFINE TypoScriptInclusion FOR MModel -»
 t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«extensionName() -» setup');
@@ -154,13 +155,19 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 «ENDDEFINE»
 
 
+«REM»
+	Generates a link the the context sensitive help of an entity or value 
+	object.
+«ENDREM»
 «DEFINE ContextSensitiveHelpInclusion FOR MClass -»
 t3lib_extMgm::addLLrefForTCAdescr('«name() -»', 'EXT:«extensionKey()»/«locallangCshXmlFilePath() -»');
 «ENDDEFINE»
 
 
 «DEFINE AllowTableOnStandardPages FOR MClass -»
+«IF !hasT3ExtbaseEntityAllowTableOnStandardPages("false") -»
 t3lib_extMgm::allowTableOnStandardPages('«name() -»');
+«ENDIF -»
 «ENDDEFINE»
 
 
