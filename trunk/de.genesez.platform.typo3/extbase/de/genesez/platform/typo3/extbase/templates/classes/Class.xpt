@@ -1,6 +1,6 @@
 «IMPORT gcore»
 «REM»
-	Performs the generation of classes
+	Performs the generation of classes. (i.O.)
 	
 	currently handled:
 	- comments
@@ -13,8 +13,11 @@
 	@date	2011-04-22
 «ENDREM»
 
+«REM» use TYPO3 Extbase naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
+
 «REM» use type mapping scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «REM» use TYPO3 Extbase access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
@@ -32,7 +35,7 @@
 «ENDREM»
 «DEFINE Root FOR MClass -»
 «EXPAND Comment::ClassifierDeclaration -»
-«EXPAND Modifier -»class «name -»«EXPAND Generalization -»«EXPAND Realization -» {
+«EXPAND Modifier -»class «name() -»«EXPAND Generalization -»«EXPAND Realization -» {
 	
 	«EXPAND de::genesez::platforms::php5::templates::SectionComment::Member -»
 	«EXPAND Attribute::Declaration -»
@@ -84,7 +87,7 @@
 «ENDREM»
 «DEFINE Generalization FOR MClass -»
 «IF !generalization.isEmpty -»
- extends «generalization.first().mapName() -»
+ extends «generalization.first().mapName().name() -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -95,7 +98,7 @@
 «ENDREM»
 «DEFINE Realization FOR MClass -»
 «IF !realization.isEmpty -»
- implements «FOREACH realization AS r SEPARATOR ", " -»«r.mapName() -»«ENDFOREACH -»
+ implements «FOREACH realization AS r SEPARATOR ", " -»«r.mapName().name() -»«ENDFOREACH -»
 «ENDIF -»
 «ENDDEFINE»
 

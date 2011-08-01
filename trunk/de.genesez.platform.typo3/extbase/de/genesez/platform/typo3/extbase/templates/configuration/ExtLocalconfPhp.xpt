@@ -9,17 +9,16 @@
 «REM» use TYPO3 Extbase profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::profile::AccessHelper»
 
-«REM» use TYPO3 Extbase naming scripts «ENDREM»
+«REM» use TYPO3 Extbase conversion and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
-«REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equals «ENDREM»
+«REM» use TYPO3 Extbase access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
-«EXTENSION de::genesez::platforms::common::AccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
+
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -31,6 +30,9 @@
 	Processes the generation of "ext_localconf.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
+«REM» Set naming context to 'Configuration' «ENDREM»
+«setNamingContext( namingContextConfiguration() ) -»
+
 «FILE extLocalconfPhpFilePath() -»
 <?php
 
@@ -72,7 +74,7 @@ if (!defined ('TYPO3_MODE')) {
 «EXPAND PluginComment -»
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
-	'«name -»',
+	'«asPluginName() -»',
 	array(«FOREACH asControllerActionPairs( model(), getT3ExtbasePluginCachedActions() ) AS ca SEPARATOR ", "»
 		«ca -»«ENDFOREACH»
 	),

@@ -1,6 +1,6 @@
 «IMPORT gcore»
 «REM»
-	Entry point for generating "locallang.xml". (i.O.)
+	Entry point for generating "locallang.xml".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 	@date	2011-07-12
@@ -9,7 +9,7 @@
 «REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::profile::AccessHelper»
 
-«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
+«REM» use TYPO3 Extbase convention, conversion and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
@@ -19,6 +19,7 @@
 
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
+
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -30,6 +31,9 @@
 	Processes the generation of "locallang.xml".
 «ENDREM»
 «DEFINE Root FOR MModel -»
+«REM» Set naming context to 'Configuration' «ENDREM»
+«setNamingContext( namingContextConfiguration() ) -»
+
 «FILE locallangXmlFilePath() -»
 «EXPAND TypeDefintion -»
 
@@ -77,7 +81,7 @@
 
 
 «REM»
-	Here we generate a locallang for each property. 
+	Generate a locallang for each property. 
 «ENDREM»
 «DEFINE LanguageKey(String languageKey) FOR MModel -»
 		<languageKey index="«languageKey -»" type="array">
@@ -91,12 +95,12 @@
 
 
 «DEFINE ClassLocalization(String languageKey) FOR MClass -»
-			<label index="«asLowerTypeName() -»">«EXPAND DefaultValue(languageKey) -»</label>
+			<label index="«name() -»">«EXPAND DefaultValue(languageKey) -»</label>
 «ENDDEFINE»
 
 
 «DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			<label index="«classifier.asLowerTypeName() -».«asLowerAttributeName() -»">«EXPAND DefaultValue(languageKey) -»</label>
+			<label index="«classifier.name() -».«name() -»">«EXPAND DefaultValue(languageKey) -»</label>
 «ENDDEFINE»
 
 

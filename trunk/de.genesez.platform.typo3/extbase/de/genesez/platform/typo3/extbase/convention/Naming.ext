@@ -14,36 +14,92 @@ extension de::genesez::platform::typo3::extbase::profile::Profile;
 // use TYPO3 Extbase convention scripts
 extension de::genesez::platform::typo3::extbase::convention::Convention;
 
+// use common access helper scripts
 extension de::genesez::platforms::common::AccessHelper;
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 Extbase type name conventions
+	GENERAL TYPO3 Extbase name context conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/**
- * Formats a classifier name using prefix + suffix.
- * 
- * @return	the formatted classifier name
- */
-String asTypeName(MClassifier this) :
-	typeNameBase() + typeNameSeperator() + typeNamePath() + typeNameSeperator() + typeNamePrefix() + name.toFirstUpper() + typeNameSuffix();
+String namingContextGeneral() :
+	"General";
+	
+
+String namingContextPlain() :
+	"Plain";
+	
+
+String namingContextConfiguration() :
+	"Configuration";
+
+
+String getNamingContext() :
+	JAVA de.genesez.platform.typo3.extbase.convention.Naming.getNamingContext();
+
+
+Void setNamingContext(String namingContext) :
+	JAVA de.genesez.platform.typo3.extbase.convention.Naming.setNamingContext(java.lang.String);
+
+
+Void revertNamingContext() :
+	JAVA de.genesez.platform.typo3.extbase.convention.Naming.revertNamingContext();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase classifier name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String name(MType this) :
+	switch (metaType) {
+		case MExternal : ((MExternal)this).specification
+		case MPrimitiveType : ((MPrimitiveType)this).name
+		default : ((MClassifier)this).name()
+	};
+
+
+String name(String this) : 
+	this;
+
+
+String name(MClassifier this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// checks if the naming context is 'Configuration'
+		case namingContextConfiguration() :
+			asConfigurationName()
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};
 
 
 /**
- * Formats the name of an classifier to lower case for configuration and localization environment.
- * Note: Before using this script it is necessary to call "asTypeName" first.
- * Basically this is done by the basic naming modification script.
+ * Formats a classifier name using prefix + suffix 
+ * in 'General' TYPO3 Extbase naming context.
  * 
  * @return	the formatted classifier name
  */
-String asLowerTypeName(MClassifier this) :
-	name.toLowerCase();
+private asGeneralName(MClassifier this) :
+	classifierNameBase() + classifierNameSeperator() + classifierNamePath() + classifierNameSeperator() + classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();	
 
 
-String asLowerTypeName(MType this) :
-	name().toLowerCase();
+/**
+ * Formats a classifier name using prefix + suffix 
+ * in 'Configuration' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted classifier name
+ */
+private asConfigurationName(MClassifier this) :
+	asGeneralName().toLowerCase();
 
 
 /*
@@ -52,15 +108,28 @@ String asLowerTypeName(MType this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/**
- * Formats a property name to lower case and with underscores for configuration and localization environment.
- * Note: Before using this script it is necessary to call "asAttributeName" first.
- * Basically this is done by the basic naming modification script.
- * 
- * @return	the formatted attribute name
- */
-String asLowerAttributeName(MProperty this) :
-	JAVA de.genesez.platform.typo3.extbase.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
+String name(MProperty this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// checks if the naming context is 'Configuration'
+		case namingContextConfiguration() :
+			asConfigurationName()
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};	
+
+
+String asGeneralName(MProperty this) :
+	name;
+
+
+String asConfigurationName(MProperty this) : 
+	name;
 
 
 /*
@@ -70,21 +139,25 @@ String asLowerAttributeName(MProperty this) :
 */
 
 /**
- * Formats an attribute name as a constant.
- *
- * @return	the formatted attribute name
- */
-String asConstantName(MAttribute this) : 
-	name.toUpperCase();
-
-
-/**
- * Formats an attribute name as a normal attribute.
+ * Formats an attribute name as a normal attribute or constant
+ * in 'General' TYPO3 Extbase naming context.
  * 
  * @return	the formatted attribute name
  */
-String asAttributeName(MAttribute this) : 
-	name.toFirstLower();
+private String asGeneralName(MAttribute this) :
+	final && static && hasDefaultValue()
+		? name.toUpperCase()
+		: name.toFirstLower();
+
+
+/**
+ * Formats an attribute name as a normal attribute or constant
+ * in 'Configuration' TYPO3 Extbase naming context. 
+ * 
+ * @return	the formatted attribute name
+ */
+private String asConfigurationName(MAttribute this) :
+	JAVA de.genesez.platform.typo3.extbase.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
 
 
 /**
@@ -129,21 +202,23 @@ String asRemoveFromName(MAttribute this) :
 */
 
 /**
- * Formats an association role name as a constant.
- *
- * @return	the formatted association role name
- */
-String asConstantName(MAssociationRole this) : 
-	name.toUpperCase();
-
-
-/**
- * Formats an association role name as a normal attribute.
+ * Formats an association role name as a normal attribute
+ * in 'General' TYPO3 Extbase naming context.
  * 
  * @return	the formatted association role name
  */
-String asAttributeName(MAssociationRole this) : 
+private String asGeneralName(MAssociationRole this) :
 	name.toFirstLower();
+
+
+/**
+ * Formats an association role name as a normal attribute
+ * in 'Configuration' TYPO3 Extbase naming context. 
+ * 
+ * @return	the formatted association role name
+ */
+private String asConfigurationName(MAssociationRole this) :
+	JAVA de.genesez.platform.typo3.extbase.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
 
 
 /**
@@ -187,12 +262,25 @@ String asRemoveFromName(MAssociationRole this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+String name(MOperation this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};
+
 /**
- * Formats the name of an operation using prefix + suffix.
- *
- * @return	formatted name of the operation
+ * Formats an operation name using suffix 
+ * in 'General' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted operation name
  */
-String asOperationName(MOperation this) :
+private String asGeneralName(MOperation this) :
 	name.toFirstLower() + operationNameSuffix();
 
 
@@ -202,27 +290,27 @@ String asOperationName(MOperation this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+String name(MParameter this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};
+
+
 /**
- * Formats the name of a parameter.
+ * Formats a parameter name 
+ * in 'General' TYPO3 Extbase naming context.
  * 
- * @return	the formatted name of the parameter
+ * @return	the formatted parameter name
  */
-String asParameterName(MParameter this) : 
+private String asGeneralName(MParameter this) : 
 	name.toFirstLower();
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 Extbase plugin and module name conventions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-String asPluginName(MInterface this) :
-	name.toFirstUpper();
-
-
-String asModuleName(MInterface this) :
-	fullQualifiedExtensionName().toLowerCase() + extensionNameSeperator() + name.toLowerCase();
 
 
 /*
@@ -248,6 +336,14 @@ List[String] asControllerActionPairs(MModel this, List[String] listOfXmiGuids) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+String asPluginName(MInterface this) :
+	name.toFirstUpper();
+
+
+String asModuleName(MInterface this) :
+	fullQualifiedExtensionName().toLowerCase() + extensionNameSeperator() + name.toLowerCase();
+
+
 String asT3PluginType(String value) :
 	switch (value) {
 		case prT3ExtbasePluginTypeExtbaseContentElement() :
@@ -264,13 +360,13 @@ String asT3PluginType(String value) :
 */
 
 String asIntermediateTableName(MAssociationRole this) :
-	fullQualifiedExtensionName().toLowerCase() + typeNameSeperator() 
+	fullQualifiedExtensionName().toLowerCase() + classifierNameSeperator()
 		+ ( classifier.name.compareTo( type.name() ) < 0 
-			? classifier.asIntermediateTableTypeName() + typeNameSeperator() + type.asIntermediateTableTypeName()
-			: type.asIntermediateTableTypeName()       + typeNameSeperator() + classifier.asIntermediateTableTypeName()
+			? classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" ) + type.asIntermediateTableName() + classifierNameSeperator() + name()
+			: type.asIntermediateTableName() + classifierNameSeperator() + name () + classifierNameSeperator() + classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" )
 		  )
-		+ typeNameSeperator() + "mm";
+		+ classifierNameSeperator() + "mm";
 
 
-private String asIntermediateTableTypeName(MType this) :
-	name().split( typeNameSeperator() ).last().toLowerCase();
+private String asIntermediateTableName(MType this) :
+	name().split( classifierNameSeperator() ).last().toLowerCase();

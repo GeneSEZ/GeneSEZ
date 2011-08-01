@@ -12,9 +12,6 @@ import gcore;
 extension de::genesez::platform::typo3::extbase::profile::Profile;
 extension de::genesez::platform::typo3::extbase::profile::AccessHelper;
 
-// use TYPO3 Extbase naming scripts
-extension de::genesez::platform::typo3::extbase::convention::Naming;
-
 // use TYPO3 Extbase access helper scripts which overrides
 // common access helper scripts if script name is equal 
 extension de::genesez::platform::typo3::extbase::scripts::AccessHelper;
@@ -23,7 +20,6 @@ extension de::genesez::platforms::common::AccessHelper;
 // use common create template scripts
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 
-extension de::genesez::platforms::common::Conversion;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -136,6 +132,7 @@ Void addControllerGetErrorFlashMessage(MClass this) :
 	&& operation.select(o| o.name == "getErrorFlashMessage" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
 				o.processOperation( "protected", false, false, false, 1, false, false ) ->
+				o.stereotype.add( createStereotype( model(), this.xmiGuid + "." + prT3ExtbaseNoControllerAction(), prT3ExtbaseNoControllerAction() )  ) ->
 				o.ownedComment.add( createComment(this.xmiGuid + ".getErrorFlashMessage.comment", "Override getErrorFlashMessage to customize the flash message.") ) ->
 				o.setReturn(
 					let return = createParameter( o, this.xmiGuid + ".getErrorFlashMessage.return", "" ) :
@@ -151,9 +148,9 @@ Void addControllerActionInitializeAction(MOperation this) :
 	// checks if the initalize action for an action should be created and doesn't already exists
 	hasT3ExtbaseControllerActionCreateInitializeAction("true") 
 	&& classifier.operation.select( o | o.name == "initalize" + name.toFirstUpper() ).isEmpty
-		? (	let o = createOperation(classifier, this.xmiGuid + ".initalize" + name.toFirstUpper(), "initalize" + name.toFirstUpper() ) :
+		? (	let o = createOperation(classifier, this.xmiGuid + ".initalize" + name.toFirstUpper() + "Action", "initalize" + name.toFirstUpper() + "Action" ) :
 				o.processOperation( "protected", false, false, false, 1, false, false ) ->
-				o.ownedComment.add( createComment(this.xmiGuid + ".initalize" + name.toFirstUpper() + ".comment", "Define initialize" + name.toFirstUpper() + " to solve tasks before the action is called.") )
+				o.ownedComment.add( createComment(this.xmiGuid + ".initalize" + name.toFirstUpper() + ".comment", "Define initialize" + name.toFirstUpper() + "Action" + " to solve tasks before the action is called.") )
 		) : Void;
 
 

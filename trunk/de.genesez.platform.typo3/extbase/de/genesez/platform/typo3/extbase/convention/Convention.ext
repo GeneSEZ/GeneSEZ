@@ -8,14 +8,11 @@
 // based on genesez meta model
 import gcore;
 
-// use TYPO3 Extbase + GeneSEZ profile access helper scripts
-extension de::genesez::platform::typo3::extbase::profile::AccessHelper;
+// use GeneSEZ profile access helper scripts
 extension de::genesez::platforms::common::genesez::profile::AccessHelper;
 
-// use TYPO3 Extbase access helper scripts which overrides
-// common access helper scripts if script name is equal
+// use TYPO3 Extbase access helper scripts
 extension de::genesez::platform::typo3::extbase::scripts::AccessHelper;
-extension de::genesez::platforms::common::AccessHelper;
 
 // use workflow global var scripts
 extension de::genesez::platform::typo3::extbase::workflow::GlobalVar;
@@ -132,6 +129,7 @@ String fileExtensionSQL() :
 String fileExtensionTS() : 
 	".txt";
 
+
 /**
  * Getter of the XML file extension including the beginning dot.
  *
@@ -155,7 +153,15 @@ String extTablesPHPFileName() :
 
 String extTablesSQLFileName() :
 	"ext_tables" + fileExtensionSQL();
+
+
+String setupTxtFileName() :
+	"setup" + fileExtensionTS();
 	
+
+String constantsTxtFileName() :
+	"constants" + fileExtensionTS();
+
 
 String locallangXmlFileName() :
 	"locallang" + fileExtensionXML();
@@ -163,8 +169,6 @@ String locallangXmlFileName() :
 
 String locallangDbXmlFileName() :
 	"locallang_db" + fileExtensionXML();
-
-
 
 
 String locallangCshXmlFileNamePrefix() :
@@ -313,85 +317,85 @@ String testsDomainPath() :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 Extbase type name base conventions (first two sections)
+	GENERAL TYPO3 Extbase calssifier name base conventions (first two sections)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Getter of type name seperator which is added between type name sections.
+ * Getter of name seperator which is added between classifier name sections.
  *
- * @return	the type name seperator
+ * @return	the classifier name seperator
  */
-String typeNameSeperator() : 
+String classifierNameSeperator() : 
 	"_";
 
 
 /**
- * Getter of type name base which is prepend to the type name.
+ * Getter of name base which is prepend to the classifier name.
  * This method is only a wrapper for "fullQualifiedExtensionName()" 
  * defined inside this file. Actually it is only for semantic usage.
  *
- * @return	the type name base to prepend
+ * @return	the classifier name base to prepend
  */
-cached String typeNameBase() :
+cached String classifierNameBase() :
 	fullQualifiedExtensionName();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 Extbase type name path conventions (middle sections)
+	GENERAL TYPO3 Extbase classifier name path conventions (middle sections)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Getter of type name path which is prepend to the name of a classifier.
+ * Getter of name path which is prepend to the name of a classifier.
  *
- * @return	the type name path to prepend
+ * @return	the classifier name path to prepend
  */
-String typeNamePath(MClassifier this) :
+String classifierNamePath(MClassifier this) :
 	// The path depends on the TYPO3 extbase type.
 	switch {
 		// checks if the classifier is an TYPO3 Extbase controller package element
 		case isControllerPackageElement() :
-			convertToTypeNamePath( classesControllerPath() )
+			convertToClassifierNamePath( classesControllerPath() )
 		// checks if the classifier is an TYPO3 Extbase model package element
 		case isModelPackageElement() :
-			convertToTypeNamePath( classesDomainModelPath() )
+			convertToClassifierNamePath( classesDomainModelPath() )
 		// checks if the classifier is an TYPO3 Extbase repository package element
 		case isRepositoryPackageElement() :
-			convertToTypeNamePath( classesDomainRepositoryPath() )
+			convertToClassifierNamePath( classesDomainRepositoryPath() )
 		// checks if the classifier is an TYPO3 Extbase service package element
 		case isServicePackageElement() :
-			convertToTypeNamePath( classesDomainServicePath() )
+			convertToClassifierNamePath( classesDomainServicePath() )
 		// checks if the classifier is an TYPO3 Extbase validator package element
 		case isValidatorPackageElement() :
-			convertToTypeNamePath( classesDomainValidatorPath() )
+			convertToClassifierNamePath( classesDomainValidatorPath() )
 		default :
 			""
 	};
 
 
 /**
- * Converts the path name of a classifier to the type name path.
+ * Converts the path name to the classifier name path.
  *
  * @param	pathName	the path of the classifier
- * @return	the type name path of the classifier
+ * @return	the name path of the classifier
  */
-private String convertToTypeNamePath(String pathName) :
-	pathName.replaceFirst( classesPath() + fileSeparator(), "" ).replaceAll( fileSeparator(), typeNameSeperator() );
+private String convertToClassifierNamePath(String pathName) :
+	pathName.replaceFirst( classesPath() + fileSeparator(), "" ).replaceAll( fileSeparator(), classifierNameSeperator() );
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 Extbase type name conventions (last section)
+	GENERAL TYPO3 Extbase classifier name conventions (last section)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Getter of the prefix which is added to the type name of a class.
+ * Getter of the prefix which is added to the name of a class.
  *
  * @return	the prefix to prepend
  */
-String typeNamePrefix(MClass this) : 
+String classifierNamePrefix(MClass this) : 
 	switch {
 		// checks if class is abstract and doesn't already starts with "Abstract" 
 		case abstract && !name.startsWith("Abstract") : 
@@ -401,11 +405,11 @@ String typeNamePrefix(MClass this) :
 
 
 /**
- * Getter of the suffix which is added to the type name of a class.
+ * Getter of the suffix which is added to the name of a class.
  *
  * @return	the suffix to append
  */
-String typeNameSuffix(MClass this) : 
+String classifierNameSuffix(MClass this) : 
 	switch {
 		// checks if class is an TYPO3 Extbase Controller and doesn't already ends with "Controller"
 		case isController() && !name.endsWith("Controller") :
@@ -426,20 +430,20 @@ String typeNameSuffix(MClass this) :
 
 
 /**
- * Getter of the prefix which is added to the type name of an interface.
+ * Getter of the prefix which is added to the name of an interface.
  *
  * @return	the prefix to prepend
  */
-String typeNamePrefix(MInterface this) : 
+String classifierNamePrefix(MInterface this) : 
 	"";
 
 
 /**
- * Getter of the suffix which is added to the type name of an interface.
+ * Getter of the suffix which is added to the name of an interface.
  *
  * @return	the suffix to append
  */
-String typeNameSuffix(MInterface this) : 
+String classifierNameSuffix(MInterface this) : 
 	switch {
 		// checks if interface doesn't already starts with "Interface" 
 		case !name.endsWith("Interface") : 
@@ -449,22 +453,22 @@ String typeNameSuffix(MInterface this) :
 
 
 /**
- * Getter of the prefix which is added to the type name of a classifier.
+ * Getter of the prefix which is added to the name of a classifier.
  * Just there for error free templates.
  * 
  * @return	an empty string
  */
-String typeNamePrefix(MClassifier this) : 
+String classifierNamePrefix(MClassifier this) : 
 	"";
 
 
 /**
- * Getter of the suffix which is added to the type name of an classifier.
+ * Getter of the suffix which is added to the name of an classifier.
  * Just there for error free templates.
  * 
  * @return	an empty string
  */
-String typeNameSuffix(MClassifier this) : 
+String classifierNameSuffix(MClassifier this) : 
 	"";
 
 

@@ -1,6 +1,6 @@
 «IMPORT gcore»
 «REM»
-	Entry point for generating "locallang_csh_<domain_element>.xml". (i.O.)
+	Entry point for generating "locallang_csh_<domain_element>.xml".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 	@date	2011-07-12
@@ -9,8 +9,7 @@
 «REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::profile::AccessHelper»
 
-«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
+«REM» use TYPO3 Extbase conversion and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
 
@@ -32,9 +31,18 @@
 	Generates context sensitive help (CSH) for all entities and value objects.
 «ENDREM»
 «DEFINE Root FOR MModel -»
+«REM» Set naming context to 'Configuration' «ENDREM»
+«setNamingContext( namingContextConfiguration() ) -»
+
 «EXPAND Root FOREACH allEntitiesAndValueObjects() -»
 «ENDDEFINE»
 
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
 
 «REM»
 	Processes the generation for one domain object.
@@ -47,12 +55,6 @@
 «ENDFILE»
 «ENDDEFINE»
 
-
-«REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-«ENDREM»
 
 «REM»
 	Defines the XML version and encoding settings.
@@ -79,8 +81,8 @@
 «DEFINE MetaType FOR MClass -»
 	<meta type="array">
 		<type>CSH</type>
-		<csh_table>«asLowerTypeName() -»</csh_table>
-		<description>Context Sensitive Help (CSH) for table «asLowerTypeName() -»</description>
+		<csh_table>«name() -»</csh_table>
+		<description>Context Sensitive Help (CSH) for table «name() -»</description>
 	</meta>
 «ENDDEFINE»
 
@@ -102,14 +104,14 @@
 «ENDREM»
 «DEFINE LanguageKey(String languageKey) FOR MClass -»
 		<languageKey index="«languageKey -»" type="array">
-			«EXPAND PropertyLocalization(languageKey) FOREACH allNotStaticFinalOrDerivedProperties().sortBy( e | e.name ) -»
+			«EXPAND PropertyLocalization(languageKey) FOREACH allObjectProperties().sortBy( e | e.name ) -»
 			«EXPAND OwnLocalization(languageKey) -»
 		</languageKey>
 «ENDDEFINE»
 
 
 «DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			<label index="«asLowerAttributeName() -».description">«EXPAND DefaultValue(languageKey) -»</label>
+			<label index="«name() -».description">«EXPAND DefaultValue(languageKey) -»</label>
 «ENDDEFINE»
 
 

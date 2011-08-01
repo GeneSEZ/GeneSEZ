@@ -18,9 +18,8 @@
 «REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equals «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
-«EXTENSION de::genesez::platforms::common::AccessHelper»
 
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 
 «REM»
@@ -30,6 +29,9 @@
 «ENDREM»
 
 «DEFINE Root FOR MModel -»
+«REM» Set naming context to 'Configuration' «ENDREM»
+«setNamingContext( namingContextConfiguration() ) -»
+
 «EXPAND Root FOREACH allEntitiesAndValueObjects() -»
 «ENDDEFINE»
 
@@ -70,7 +72,7 @@ if (!defined ('TYPO3_MODE')) {
 
 
 «DEFINE TableConfigurationArray FOR MClass -»
-$TCA['«asLowerTypeName() -»'] = array (
+$TCA['«name() -»'] = array (
 	«EXPAND ConfigurationSection -»
 	«EXPAND InterfaceSection -»
 	«EXPAND TypesSection -»
@@ -81,20 +83,20 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 
 «DEFINE ConfigurationSection FOR MClass -»
-	'ctrl' => $TCA['«asLowerTypeName() -»']['ctrl'],
+	'ctrl' => $TCA['«name() -»']['ctrl'],
 «ENDDEFINE»
 
 
 «DEFINE InterfaceSection FOR MClass -»
 	'interface' => array(
-		'showRecordFieldList' => '«FOREACH property AS p SEPARATOR "," -»«p.asLowerAttributeName() -»«ENDFOREACH»',
+		'showRecordFieldList' => '«FOREACH property AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
 	),
 «ENDDEFINE»
 
 
 «DEFINE TypesSection FOR MClass -»
 	'types' => array(
-		'1' => array('showitem'	=> '«FOREACH property AS p SEPARATOR "," -»«p.asLowerAttributeName() -»«ENDFOREACH»'),
+		'1' => array('showitem'	=> '«FOREACH property AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
 	),
 «ENDDEFINE»
 
@@ -118,7 +120,7 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 
 «DEFINE OwnAttributeColumn FOR MAttribute -»
-		'«asLowerAttributeName() -»' => array(
+		'«name() -»' => array(
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			«EXPAND ConfigTag -»
@@ -127,26 +129,26 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «DEFINE ConfigTag FOR MAttribute -»
 			'config' => array(
-				«IF type.mapName("TYPO3") == "String" -»
+				«IF type.mapName("TYPO3").name() == "String" -»
 					«EXPAND ConfigStringType -»
-				«ELSEIF type.mapName("TYPO3") == "Text" -»
+				«ELSEIF type.mapName("TYPO3").name() == "Text" -»
 					«EXPAND ConfigTextType -»
-				«ELSEIF type.mapName("TYPO3") == "Integer" -»
+				«ELSEIF type.mapName("TYPO3").name() == "Integer" -»
 					«EXPAND ConfigIntegerType -»
-				«ELSEIF type.mapName("TYPO3") == "Floating Point" -»
+				«ELSEIF type.mapName("TYPO3").name() == "Floating Point" -»
 					«EXPAND ConfigFloatingPointType -»
-				«ELSEIF type.mapName("TYPO3") == "Boolean" -»
+				«ELSEIF type.mapName("TYPO3").name() == "Boolean" -»
 					«EXPAND ConfigBooleanType -»
-				«ELSEIF type.mapName("TYPO3") == "DateTime" -»
+				«ELSEIF type.mapName("TYPO3").name() == "DateTime" -»
 					«EXPAND ConfigDateTimeType -»
-				«ELSEIF type.mapName("TYPO3") == "Select List" -»
+				«ELSEIF type.mapName("TYPO3").name() == "Select List" -»
 					«EXPAND ConfigSelectListType -»
-				«ELSEIF type.mapName("TYPO3") == "File" -»
+				«ELSEIF type.mapName("TYPO3").name() == "File" -»
 					«EXPAND ConfigFileType -»
-				«ELSEIF type.mapName("TYPO3") == "Image" -»
+				«ELSEIF type.mapName("TYPO3").name() == "Image" -»
 					«EXPAND ConfigImageType -»
 				«ELSE -»
-					«EXPAND ConfigOtherType( type.mapName("TYPO3") ) -»
+					«EXPAND ConfigOtherType( type.mapName("TYPO3").name() ) -»
 				«ENDIF -»
 			),
 «ENDDEFINE»
@@ -269,12 +271,12 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «REM» Sync with Test «ENDREM»
 «DEFINE OneToOneUnidirectional FOR MAssociationRole -»
-		'«asLowerAttributeName() -»' => array(
+		'«name() -»' => array(
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => array(
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_table' => '«type.name() -»',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -289,12 +291,12 @@ $TCA['«asLowerTypeName() -»'] = array (
 «ENDDEFINE»
 
 «DEFINE OneToOneBidirectional FOR MAssociationRole -»
-		'«asLowerAttributeName() -»' => array(
+		'«name() -»' => array(
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => array(
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_table' => '«type.name() -»',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -310,16 +312,13 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «REM» Sync with Test «ENDREM»
 «DEFINE OneToManyUnidirectional FOR MAssociationRole -»
-		'«asLowerAttributeName() -»' => array(
+		'«name() -»' => array(
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => array(
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_table' => '«type.name() -»',
 				'MM' => '«asIntermediateTableName() -»',
-				'MM_match_fields' => array(
-					'ident' => '«asLowerAttributeName() -»'
-				),
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -336,13 +335,13 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «REM» Sync with Test «ENDREM»
 «DEFINE OneToManyBidirectional FOR MAssociationRole -»
-		'«asLowerAttributeName() -»' => array(
+		'«name() -»' => array(
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => array(
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
-				'foreign_field' => '«opposite.asLowerAttributeName() -»',
+				'foreign_table' => '«type.name() -»',
+				'foreign_field' => '«opposite.name() -»',
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -359,12 +358,12 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «REM» Sync with Test «ENDREM»
 «DEFINE ManyToOneUnidirectional FOR MAssociationRole -»
-		'«asLowerAttributeName() -»' => Array (
+		'«name() -»' => Array (
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => Array (
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_table' => '«type.name() -»',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -380,12 +379,12 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 «REM» Sync with Test «ENDREM»
 «DEFINE ManyToOneBidirectional FOR MAssociationRole -»
-		'«asLowerAttributeName() -»' => Array (
+		'«name() -»' => Array (
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => Array (
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_table' => '«type.name() -»',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -401,16 +400,13 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 
 «DEFINE ManyToManyUnidirectional FOR MAssociationRole -»
-		'«asAttributeName() -»' => array(
+		'«name() -»' => array(
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => array(
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_table' => '«type.name() -»',
 				'MM' => '«asIntermediateTableName() -»',
-				'MM_match_fields' => array(
-					'ident' => '«asLowerAttributeName() -»'
-				),
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -427,16 +423,13 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 
 «DEFINE ManyToManyBidirectional FOR MAssociationRole -»
-		'«asAttributeName() -»' => array(
+		'«name() -»' => array(
 			«EXPAND ExcludeTag -»
 			«EXPAND LabelTag -»
 			'config' => array(
 				'type' => 'inline',
-				'foreign_table' => '«type.asLowerTypeName() -»',
+				'foreign_table' => '«type.name() -»',
 				'MM' => '«asIntermediateTableName() -»',
-				'MM_match_fields' => array(
-					'ident' => '«asLowerAttributeName() -»'
-				),
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -549,8 +542,8 @@ $TCA['«asLowerTypeName() -»'] = array (
 				'items'	=> array(
 					array('', 0),
 				),
-				'foreign_table' => '«asLowerTypeName() -»',
-				'foreign_table_where' => 'AND «asLowerTypeName() -».uid=###REC_FIELD_l18n_parent### AND «asLowerTypeName() -».sys_language_uid IN (-1,0)',
+				'foreign_table' => '«name() -»',
+				'foreign_table_where' => 'AND «name() -».uid=###REC_FIELD_l18n_parent### AND «name() -».sys_language_uid IN (-1,0)',
 			)
 		),
 «ENDDEFINE»
@@ -591,7 +584,7 @@ $TCA['«asLowerTypeName() -»'] = array (
 
 
 «DEFINE LabelTag FOR MProperty -»
-			'label' => 'LLL:EXT:«locallangDbXmlFilePath() -»:«classifier.asLowerTypeName() -».«asLowerAttributeName() -»',
+			'label' => 'LLL:EXT:«locallangDbXmlFilePath() -»:«classifier.name() -».«name() -»',
 «ENDDEFINE»
 
 

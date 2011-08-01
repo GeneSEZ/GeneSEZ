@@ -1,14 +1,14 @@
 «IMPORT gcore»
 «REM»
-	Performs the generation of TypoScript "constants.txt". (i.O.)
+	Performs the generation of TypoScript "constants.txt".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 	@date	2011-07-14
 «ENDREM»
 
-«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
+«REM» use TYPO3 Extbase convention and conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
-«EXTENSION de::genesez::platform::typo3::extbase::convention::Naming»
+«EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 
 
 «REM»
@@ -21,7 +21,7 @@
 	Processes the generation of "constants.txt".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE configurationTypoScriptPath() + "/constants.txt" -»
+«FILE constantsTxtFilePath() -»
 «LET fullQualifiedExtensionName().toLowerCase() AS extensionName -»
 «LET extensionKey() AS extensionKey -»
 «EXPAND PluginConfiguration(extensionKey, extensionName) -»
@@ -74,7 +74,7 @@ module.«extensionName -» {
 
 
 «REM»
-	generates a region for own TypoScript declarations
+	Generates a region for own TypoScript declarations.
 «ENDREM»
 «DEFINE OwnTypoScriptDeclaration(String id) FOR MModel -»
 «PROTECT CSTART '// ' CEND '' ID (id)»

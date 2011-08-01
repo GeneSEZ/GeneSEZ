@@ -17,7 +17,7 @@
 «EXTENSION de::genesez::platform::typo3::extbase::profile::AccessHelper»
 
 «REM» use type mapping scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMappingNew»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «REM» use php access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equal «ENDREM»
@@ -116,7 +116,7 @@
 «ENDREM»
 «DEFINE Declaration FOR MOperation -»
 	«EXPAND Comment::Operation -»
-	«EXPAND Modifier -» function «name -»(«EXPAND Params -»);
+	«EXPAND Modifier -» function «name() -»(«EXPAND Params -»);
 «ENDDEFINE»
 
 
@@ -126,7 +126,7 @@
 «ENDREM»
 «DEFINE Implementation FOR MOperation -»
 	«EXPAND Comment::Operation -»
-	«EXPAND Modifier -» function «name -»(«EXPAND Params -») {
+	«EXPAND Modifier -» function «name() -»(«EXPAND Params -») {
 		«EXPAND OwnCodeImplementation("php.implementation." + xmiGuid) -»
 	}
 «ENDDEFINE»
@@ -159,7 +159,7 @@
 «ENDREM»
 «DEFINE TypeHint FOR MParameter -»
 «IF type.isClassifier() || type.isExternalType() -»
-«IF isSingleValuedType() -»«type.mapName() -» «ELSE -»«mapType() -» «ENDIF -»
+«IF isSingleValuedType() -»«type.mapName().name() -» «ELSE -»«mapType() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -169,7 +169,7 @@
 	i.O.
 «ENDREM»
 «DEFINE Parameter FOR MParameter -»
-$«name -»«EXPAND DefaultValue -»
+$«name() -»«EXPAND DefaultValue -»
 «ENDDEFINE»
 
 
@@ -190,18 +190,18 @@ $«name -»«EXPAND DefaultValue -»
 «DEFINE OwnCodeImplementation(String id) FOR MOperation -»
 «IF isConstructor() -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of constructor for class «classifier.name»
-		throw new Exception('The implementation of the constructor for class «classifier.name -» is missing !');
+		// TODO: implementation of constructor for class «classifier.name()»
+		throw new Exception('The implementation of the constructor for class «classifier.name() -» is missing !');
 		«ENDPROTECT»
 «ELSEIF isDestructor() -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of destructor for class «classifier.name»
-		throw new Exception('The implementation of the destructor for class «classifier.name -» is missing !');
+		// TODO: implementation of destructor for class «classifier.name()»
+		throw new Exception('The implementation of the destructor for class «classifier.name() -» is missing !');
 		«ENDPROTECT»
 «ELSE -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method «name -» for class «classifier.name»
-		throw new Exception('The implementation of the method «name -» for class «classifier.name -» is missing !');
+		// TODO: implementation of method «name -» for class «classifier.name()»
+		throw new Exception('The implementation of the method «name() -» for class «classifier.name() -» is missing !');
 		«ENDPROTECT»
 «ENDIF -»
 «ENDDEFINE»
