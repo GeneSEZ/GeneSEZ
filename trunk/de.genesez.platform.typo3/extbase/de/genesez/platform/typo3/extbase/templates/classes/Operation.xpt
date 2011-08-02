@@ -33,7 +33,6 @@
 
 «REM»
 	Processes all constructors.
-	i.O.
 «ENDREM»
 «DEFINE Constructor FOR MClassifier -»
 	«EXPAND Constructor FOREACH uniqueOperations().select( e| e.isConstructor() ) -»
@@ -42,7 +41,6 @@
 
 «REM»
 	Processes all destructors.
-	i.O.
 «ENDREM»
 «DEFINE Destructor FOR MClassifier -»
 	«EXPAND Destructor FOREACH uniqueOperations().select( e| e.isDestructor() ) -»
@@ -51,7 +49,6 @@
 
 «REM»
 	Processes operation declarations for an interface.
-	i.O.
 «ENDREM»
 «DEFINE Declaration FOR MInterface -»
 	«EXPAND Declaration FOREACH uniqueOperations() -»
@@ -61,7 +58,6 @@
 «REM»
 	Processes all operations to declare.
 	Order: realized operations from interfaces first
-	i.O.
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
 	«EXPAND Declaration FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
@@ -72,7 +68,6 @@
 «REM»
 	Processes all operations to implement.
 	Order: realized operations from interfaces first
-	i.O.
 «ENDREM»
 «DEFINE Implementation FOR MClassifier -»
 	«EXPAND Implementation FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
@@ -88,7 +83,6 @@
 
 «REM»
 	Generates a constructor which cannot has a return value.
-	i.O.
 «ENDREM»
 «DEFINE Constructor FOR MOperation -»
 	«EXPAND Comment::Constructor -»
@@ -100,7 +94,6 @@
 
 «REM»
 	Generates a destructor which cannot have parameters or a return value.
-	i.O.
 «ENDREM»
 «DEFINE Destructor FOR MOperation -»
 	«EXPAND Comment::Destructor -»
@@ -112,7 +105,6 @@
 
 «REM»
 	Generates an operation declaration.
-	i.O.
 «ENDREM»
 «DEFINE Declaration FOR MOperation -»
 	«EXPAND Comment::Operation -»
@@ -122,7 +114,6 @@
 
 «REM»
 	Generates an operation implementation.
-	i.O.
 «ENDREM»
 «DEFINE Implementation FOR MOperation -»
 	«EXPAND Comment::Operation -»
@@ -135,7 +126,6 @@
 «REM»
 	Generates the visibility and the modifiers static, final + abstract for an operation.
 	Abstract only if the class is also abstract.
-	i.O.
 «ENDREM»
 «DEFINE Modifier FOR MOperation -»
 	«visibility -»«IF static -» static«ENDIF -»«IF final -» final«ENDIF -»«IF abstract && classifier.abstract -» abstract«ENDIF -»
@@ -144,7 +134,6 @@
 
 «REM»
 	Generates the parameters of an operation.
-	i.O.
 «ENDREM»
 «DEFINE Params FOR MOperation -»
 «FOREACH parameter AS p SEPARATOR ", " -»
@@ -155,7 +144,6 @@
 
 «REM»
 	Generates type hints for special single valued types or multi valued types.
-	i.O.
 «ENDREM»
 «DEFINE TypeHint FOR MParameter -»
 «IF type.isClassifier() || type.isExternalType() -»
@@ -166,7 +154,6 @@
 
 «REM»
 	Generates the parameter name.
-	i.O.
 «ENDREM»
 «DEFINE Parameter FOR MParameter -»
 $«name() -»«EXPAND DefaultValue -»
@@ -175,7 +162,6 @@ $«name() -»«EXPAND DefaultValue -»
 
 «REM»
 	Generates the default value.
-	i.O.
 «ENDREM»
 «DEFINE DefaultValue FOR MParameter -»
 «IF hasDefaultValue() -» = «defaultvalue -»«ENDIF -»

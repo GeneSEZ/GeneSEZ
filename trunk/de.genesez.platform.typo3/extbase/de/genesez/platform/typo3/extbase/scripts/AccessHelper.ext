@@ -12,6 +12,10 @@ import gcore;
 extension de::genesez::platform::typo3::extbase::profile::AccessHelper;
 extension de::genesez::platform::typo3::extbase::profile::Profile;
 
+// use TYPO3 Fluid profile access helper scripts
+extension de::genesez::platform::typo3::fluid::profile::AccessHelper;
+extension de::genesez::platform::typo3::fluid::profile::Profile;
+
 // use TYPO3 Extbase convention scripts
 extension de::genesez::platform::typo3::extbase::convention::Convention;
 
@@ -317,17 +321,56 @@ List[MStereotype] getAssignedValidatorStereotypes(MElement this) :
 		// third check if the name of the sterotype is equals to a validator class
 		//model().allClassifiers().typeSelect(MClass).select( c | c.isValidator() && c.name == e.name).size > 0
 		);
-		
-	
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Fluid ViewHelper 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - ViewHelper settings - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+boolean isViewHelperPackageElement(MClassifier this) :
+	switch (metaType) {
+		case MClass : ((MClass)this).isViewHelper()
+		default : false
+	};
+
+
+/**
+ * Checks if a class is a TYPO3 Fluid view helper.
+ *
+ * @return	true if the class is a TYPO3 Fluid view helper, otherwise false
+ */
+boolean isViewHelper(MClass this) :
+	(
+		// first check if this class has an stereotype
+		hasT3FluidViewHelperStereotype() ||
+		// second check if the package of this class has an stereotype
+		owningContext.hasT3FluidViewHelperPackageStereotype() ||
+		// third check if this model is TYPO3 Extbase complaint and this class is inside the correct package (dir)
+		( globalVarIsT3ExtbaseCompliant() && dirPath() == classesViewHelpersPath() ) ||
+		// fourth check if generalization is an TYPO3 Extbase controller
+		(
+			!generalization.typeSelect(MClass).isEmpty
+				? generalization.typeSelect(MClass).first().isViewHelper()
+				: false
+		)
+	) ? true : false;		
+
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	TYPO3 Extbase Plugin and Module Configuration 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-cached List[MInterface] allExtensionPlugins(MModel this) :
+cached List[MInterface] allPlugins(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbasePluginStereotype() );
 
 
-cached List[MInterface] allExtensionModules(MModel this) :
+cached List[MInterface] allModules(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbaseModuleStereotype() );
