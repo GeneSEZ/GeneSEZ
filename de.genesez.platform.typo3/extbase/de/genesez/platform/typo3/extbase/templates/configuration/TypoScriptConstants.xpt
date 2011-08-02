@@ -10,6 +10,9 @@
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Convention»
 «EXTENSION de::genesez::platform::typo3::extbase::convention::Conversion»
 
+«REM» use TYPO3 Extbase access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
+
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -22,11 +25,11 @@
 «ENDREM»
 «DEFINE Root FOR MModel -»
 «FILE constantsTxtFilePath() -»
-«LET fullQualifiedExtensionName().toLowerCase() AS extensionName -»
+«LET fullQualifiedShortExtensionKey() AS fullQualifiedShortExtensionKey -»
 «LET extensionKey() AS extensionKey -»
-«EXPAND PluginConfiguration(extensionKey, extensionName) -»
+«EXPAND PluginConfiguration(extensionKey, fullQualifiedShortExtensionKey) -»
 
-«EXPAND ModuleConfiguration(extensionKey, extensionName) -»
+«EXPAND ModuleConfiguration(extensionKey, fullQualifiedShortExtensionKey) -»
 
 «EXPAND OwnTypoScriptDeclaration("constants.txt.own.typoscript.declaration." + xmiGuid) -»
 «ENDLET -»
@@ -41,35 +44,43 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«DEFINE PluginConfiguration(String extensionKey, String extensionName) FOR MModel -»
-plugin.«extensionName -» {
+«DEFINE PluginConfiguration(String extensionKey, String fullQualifiedShortExtensionKey) FOR MModel -»
+«IF !allExtensionPlugins().isEmpty -»
+plugin.«fullQualifiedShortExtensionKey -» {
 	view {
-		# cat=plugin.«extensionName -»/file; type=string; label=Path to template root (FE)
+		# cat=plugin.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template root (FE)
 		templateRootPath = EXT:«extensionKey -»/«resourcesPrivateTemplatesPath()»/
-		# cat=plugin.«extensionName -»/file; type=string; label=Path to template partials (FE)
+		# cat=plugin.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template partials (FE)
 		partialRootPath = EXT:«extensionKey -»/«resourcesPrivatePartialsPath()»/
-		# cat=plugin.«extensionName -»/file; type=string; label=Path to template layouts (FE)
+		# cat=plugin.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template layouts (FE)
 		layoutRootPath = EXT:«extensionKey -»/«resourcesPrivateLayoutsPath()»/
 	}
 	persistence {
-		# cat=plugin.«extensionName -»//a; type=int+; label=Default storage PID
+		# cat=plugin.«fullQualifiedShortExtensionKey -»//a; type=int+; label=Default storage PID
 		storagePid = 
 	}
 }
+«ENDIF -»
 «ENDDEFINE»
 
 
-«DEFINE ModuleConfiguration(String extensionKey, String extensionName) FOR MModel -»
-module.«extensionName -» {
+«DEFINE ModuleConfiguration(String extensionKey, String fullQualifiedShortExtensionKey) FOR MModel -»
+«IF !allExtensionModules().isEmpty -»
+module.«fullQualifiedShortExtensionKey -» {
 	view {
-		# cat=module.«extensionName -»/file; type=string; label=Path to template root (BE)
+		# cat=module.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template root (BE)
 		templateRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendTemplatesPath()»/
-		# cat=module.«extensionName -»/file; type=string; label=Path to template partials (BE)
+		# cat=module.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template partials (BE)
 		partialRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendPartialsPath()»/
-		# cat=module.«extensionName -»/file; type=string; label=Path to template layouts (BE)
+		# cat=module.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template layouts (BE)
 		layoutRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendLayoutsPath()»/
 	}
+	persistence {
+		# cat=module.«fullQualifiedShortExtensionKey -»//a; type=int+; label=Default storage PID
+		storagePid = 
+	}
 }
+«ENDIF -»
 «ENDDEFINE»
 
 

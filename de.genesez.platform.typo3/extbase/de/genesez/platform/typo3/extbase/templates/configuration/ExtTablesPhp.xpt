@@ -74,6 +74,7 @@ if (!defined ('TYPO3_MODE')) {
 «REM»
 «ENDREM»
 «DEFINE PluginConfiguration FOR MModel -»
+«IF !allExtensionPlugins().isEmpty -»
 t3lib_div::loadTCA('tt_content');
 
 // These dividers are a little trick to group these items in the plugin selector
@@ -82,6 +83,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('«exten
 «EXPAND RegisterPlugin FOREACH allExtensionPlugins().sortBy( e | e.name ) -»
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -100,9 +102,11 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 «REM»
 «ENDREM»
 «DEFINE ModuleConfiguration FOR MModel -»
+«IF !allExtensionModules().isEmpty -»
 if (TYPO3_MODE === 'BE') {
 	«EXPAND RegisterModule FOREACH allExtensionModules().sortBy( e | e.name ) -»
 }
+«ENDIF -»
 «ENDDEFINE»
 
 
