@@ -43,7 +43,7 @@ class Tx_GenesezBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Va
 	 * Checks whether the given blog is valid
 	 *
 	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog
-	 * @return boolean 
+	 * @return boolean TRUE if blog could be validated, otherwise FALSE
 	 */
 	public function isValid(Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1310052749779_236836_2370) ENABLED START */
