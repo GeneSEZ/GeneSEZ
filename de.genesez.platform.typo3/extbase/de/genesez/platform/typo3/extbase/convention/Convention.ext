@@ -14,7 +14,7 @@ extension de::genesez::platforms::common::genesez::profile::AccessHelper;
 // use TYPO3 Extbase access helper scripts
 extension de::genesez::platform::typo3::extbase::scripts::AccessHelper;
 
-// use workflow global var scripts
+// use TYPO3 Extbase workflow global var scripts
 extension de::genesez::platform::typo3::extbase::workflow::GlobalVar;
 
 
@@ -234,8 +234,8 @@ String classesDomainValidatorPath() :
 	"Classes/Domain/Validator";
 
 
-String classesViewHelperPath() :
-	"Classes/ViewHelper";
+String classesViewHelpersPath() :
+	"Classes/ViewHelpers";
 
 
 /*
@@ -339,7 +339,7 @@ String testsDomainPath() :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 Extbase calssifier name base conventions (first two sections)
+	GENERAL TYPO3 Extbase classifier name base conventions (first two sections)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -391,6 +391,9 @@ String classifierNamePath(MClassifier this) :
 		// checks if the classifier is an TYPO3 Extbase validator package element
 		case isValidatorPackageElement() :
 			convertToClassifierNamePath( classesDomainValidatorPath() )
+		// checks if the classifier is an TYPO3 Fluid view helper package element
+		case isViewHelperPackageElement() :
+			convertToClassifierNamePath( classesViewHelpersPath() )
 		default :
 			""
 	};
@@ -433,19 +436,17 @@ String classifierNamePrefix(MClass this) :
  */
 String classifierNameSuffix(MClass this) : 
 	switch {
-		// checks if class is an TYPO3 Extbase Controller and doesn't already ends with "Controller"
+		// checks if class is an TYPO3 Extbase controller and doesn't already ends with "Controller"
 		case isController() && !name.endsWith("Controller") :
 			"Controller"
-		// checks if class is an TYPO3 Extbase Repository and doesn't already ends with "Repository" 
+		// checks if class is an TYPO3 Extbase repository and doesn't already ends with "Repository" 
 		case isRepository() && !name.endsWith("Repository") :
 			"Repository"
-		// checks if class is an TYPO3 Extbase Service and doesn't already ends with "Service"
-		// INFO: The next line is commented out, because in BlogExample this convention isn't needed
-		//case accessHelperIsT3ExtbaseService() && !name.endsWith("Service") :
-		//	"Service"
-		// checks if class is an TYPO3 Extbase Validator and doesn't already ends with "Validator" 
 		case isValidator() && !name.endsWith("Validator") :
 			"Validator"
+		// checks if class is an TYPO3 Fluid view helper and doesn't already ends with "ViewHelper" 
+		case isViewHelper() && !name.endsWith("ViewHelper") :
+			"ViewHelper"
 		default : 
 			""
 	};

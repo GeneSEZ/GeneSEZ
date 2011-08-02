@@ -15,6 +15,11 @@ extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platform::typo3::extbase::profile::Profile;
 extension de::genesez::platform::typo3::extbase::profile::AccessHelper;
 
+// use TYPO3 Fluid profile + access helper scripts
+extension de::genesez::platform::typo3::fluid::profile::Profile;
+extension de::genesez::platform::typo3::fluid::profile::AccessHelper;
+
+// use TYPO3 Extbase naming scripts
 extension de::genesez::platform::typo3::extbase::convention::Naming;
 
 // use TYPO3 Extbase access helper scripts which overrides
@@ -54,22 +59,18 @@ Void classAdditions(MClass this) :
 	switch {
 		case isController() :
 			controllerAdditions()
-			
 		case isEntity() :
 			entityAdditions()
-			
 		case isValueObject() :
 			valueObjectAdditions()
-			
 		case isRepository() :
 			repositoryAdditions()
-			
 		case isService() : 
 			Void
-			
 		case isValidator() :
 			validatorAdditions()
-			
+		case isViewHelper() :
+			viewHelperAdditions()
 		default :
 			Void
 	};	
@@ -291,10 +292,6 @@ private Void addValueObjectType(MClass this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/*
-- - Repository additions  - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
 /**
  * Model additions for an TYPO3 Extbase repository.
  */
@@ -345,10 +342,6 @@ Void additionAddRepositoryInitializeObject(MClass this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	TYPO3 Extbase Validator additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/*
-- - Validator additions - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
@@ -414,6 +407,38 @@ Void addValidatorIsValid(MClass this, MType valueToValidate) :
 						return
 				)
 		) :  Void;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Fluid ViewHelper additions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Model additions for an TYPO3 Fluid view helper.
+ */
+Void viewHelperAdditions(MClass this) :
+	// add super view helper type
+	addViewHelperType();
+
+
+private Void addViewHelperType(MClass this) :
+	// checks if the class has a stereotype 
+	hasT3FluidViewHelperStereotype()
+		// if true, then create the super view helper type which is specified
+		? ( let viewHelperType = getT3FluidViewHelperViewHelperType() :
+				switch {
+					case generalization.isEmpty :
+						generalization.add( createExternal( model(), viewHelperType ) )
+					default : Void
+				} 
+		) 
+		// else create the default one
+		: (	generalization.isEmpty 
+				? generalization.add( createExternal( model(), prT3FluidViewHelperTypeFluidAbstractViewHelper() ) )
+				: Void 
+		);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

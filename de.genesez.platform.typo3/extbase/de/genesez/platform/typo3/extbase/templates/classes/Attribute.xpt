@@ -15,6 +15,9 @@
 «REM» use common access helper scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
+«REM» use common model 2 text helper scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
 «REM» use type mapping scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
@@ -28,7 +31,6 @@
 «REM»
 	Processes the attributes of a classifier.
 	Order: constants (static + final), static, non static
-	i.O.
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
 	«EXPAND Const FOREACH property.typeSelect(MAttribute).select( e| e.final && e.static && e.hasDefaultValue() ) -»
@@ -40,7 +42,6 @@
 «REM»
 	Processes the derived attributes of a classifier.
 	Order: static, non static
-	i.O.
 «ENDREM»
 «DEFINE Derived FOR MClass -»
 	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( e| e.static && e.derived ) -»
@@ -50,7 +51,6 @@
 
 «REM»
 	Processes the accessors for attributes of a classifier.
-	i.O.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS attribute -»
@@ -70,7 +70,6 @@
 
 «REM»
 	Generates an attribute declaration as a class constant.
-	i.O.
 «ENDREM»
 «DEFINE Const FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
@@ -80,7 +79,6 @@
 
 «REM»
 	Generates an attribute declaration.
-	i.O.
 «ENDREM»
 «DEFINE Declaration FOR MAttribute -»
 	«EXPAND Comment::Attribute -»
@@ -90,7 +88,6 @@
 
 «REM»
 	Generates the accessor method for an derived attribute.
-	i.O.
 «ENDREM»
 «DEFINE Derived FOR MAttribute -»
 	«EXPAND Comment::Getter -»
@@ -102,7 +99,6 @@
 
 «REM»
 	Generates the getter method for an attribute.
-	i.O.
 «ENDREM»
 «DEFINE Getter FOR MAttribute -»
 	«EXPAND Comment::Getter -»
@@ -114,7 +110,6 @@
 
 «REM»
 	Generates the setter method for an attribute.
-	i.O.
 «ENDREM»
 «DEFINE Setter FOR MAttribute -»
 	«EXPAND Comment::Setter -»
@@ -126,7 +121,6 @@
 
 «REM»
 	Generates the insert in method for an attribute with a collection type.
-	i.O.
 «ENDREM»
 «DEFINE InsertIn FOR MAttribute -»
 «IF isMultiValuedType() -»
@@ -140,7 +134,6 @@
 
 «REM»
 	Generates the remove from method for an attribute with a collection type.
-	i.O.
 «ENDREM»
 «DEFINE RemoveFrom FOR MAttribute -»
 «IF isMultiValuedType() -»
@@ -154,7 +147,6 @@
 
 «REM»
 	Processes the modifiers of an attribute.
-	i.O.
 «ENDREM»
 «DEFINE Modifier FOR MAttribute -»
 	«visibility -»«IF static -» static«ENDIF -»
@@ -163,7 +155,6 @@
 
 «REM»
 	Processes the modifiers of an attribute accessor method.
-	i.O.
 «ENDREM»
 «DEFINE ModifierAccessor FOR MAttribute -»
 	public«IF static -» static«ENDIF -»
@@ -172,7 +163,6 @@
 
 «REM»
 	Generates type hints for setter methods.
-	i.O.
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAttribute -»
 «IF type.isClassifier() || type.isExternalType() -»
@@ -183,7 +173,6 @@
 
 «REM»
 	Generates type hints for insert in and remove from methods.
-	i.O.
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAttribute -»
 «IF type.isClassifier() || type.isExternalType() -»«type.mapName().name() -» «ENDIF -»
@@ -192,7 +181,6 @@
 
 «REM»
 	Processes the default value of an attribute.
-	i.O.
 «ENDREM»
 «DEFINE DefaultValue FOR MAttribute -»
 «IF hasDefaultValue() -» = «defaultvalue -»«ENDIF -»
@@ -203,7 +191,6 @@
 	Generates the protected region of an operation.
 	
 	@param	id	protected region id
-	i.O.
 «ENDREM»
 «DEFINE OwnCodeImplementation(String id) FOR MAttribute -»
 		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
