@@ -18,6 +18,7 @@
 «REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equals «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
 
 «REM» use common type mapping scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
@@ -72,445 +73,127 @@ if (!defined ('TYPO3_MODE')) {
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE TableConfigurationArray FOR MClass -»
 $TCA['«name() -»'] = array (
-	«EXPAND ControlSection -»
-	«EXPAND InterfaceSection -»
-	«EXPAND TypesSection -»
-	«EXPAND PalettesSection -»
-	«EXPAND ColumnsSection -»
+	«EXPAND TCACtrlSection -»
+	«EXPAND TCAInterfaceSection -»
+	«EXPAND TCATypesSection -»
+	«EXPAND TCAPalettesSection -»
+	«EXPAND TCAColumnsSection -»
 );
 «ENDDEFINE»
 
 
-«DEFINE ControlSection FOR MClass -»
+«REM» - - Ctrl Section  - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE TCACtrlSection FOR MClass -»
 	'ctrl' => $TCA['«name() -»']['ctrl'],
 «ENDDEFINE»
 
 
-«DEFINE InterfaceSection FOR MClass -»
+«REM» - - Interface Section - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«DEFINE TCAInterfaceSection FOR MClass -»
 	'interface' => array(
-		«EXPAND ShowRecordFieldList -»
+		«EXPAND TCAInterfaceShowRecordFieldList -»
 	),
 «ENDDEFINE»
 
 
-«DEFINE TypesSection FOR MClass -»
-	'types' => array(
-		«EXPAND TypesNumbers -»
-	),
-«ENDDEFINE»
-
-
-«DEFINE PalettesSection FOR MClass -»
-	'palettes' => array(
-		«EXPAND PalettesNumbers -»
-	),
-«ENDDEFINE»
-
-
-«DEFINE ColumnsSection FOR MClass -»
-	'columns' => array(
-		«EXPAND AccessControlColumns -»
-		«EXPAND LocalizationColumns -»
-		«EXPAND VersioningColumns -»
-		«EXPAND OwnAttributeColumn FOREACH allObjectProperties().typeSelect(MAttribute) -»
-		«EXPAND OwnAssociationColumn FOREACH allObjectProperties().typeSelect(MAssociationRole) -»
-	)
-«ENDDEFINE»
-
-
-«DEFINE AccessControlColumns FOR MClass -»
-		«EXPAND HiddenColumn -»
-		«EXPAND StarttimeColumn -»
-		«EXPAND EndtimeColumn -»
-«ENDDEFINE»
-
-
-«DEFINE LocalizationColumns FOR MClass -»
-		«EXPAND SysLanguageUidColumn -»
-		«EXPAND L18nParentColumn -»
-		«EXPAND L18nDiffsourceColumn -»
-«ENDDEFINE»
-
-
-«DEFINE VersioningColumns FOR MClass -»
-		«EXPAND T3VerLabelColumn -»
-«ENDDEFINE»
-
-
-«DEFINE OwnAttributeColumn FOR MAttribute -»
-		'«name() -»' => array(
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			«EXPAND ConfigKey -»
-		),
-«ENDDEFINE»
-
-
-«DEFINE OwnAssociationColumn FOR MAssociationRole -»
-«IF isOneToOneUnidirectional() -»
-	«EXPAND OneToOneUnidirectional -»
-«ELSEIF isOneToOneBidirectional() -»
-	«EXPAND OneToOneBidirectional -»
-«ELSEIF isOneToManyUnidirectional() -»
-	«EXPAND OneToManyUnidirectional -»
-«ELSEIF isOneToManyBidirectional() -»
-	«EXPAND OneToManyBidirectional -»
-«ELSEIF isManyToOneUnidirectional() -»
-	«EXPAND ManyToOneUnidirectional -»
-«ELSEIF isManyToOneBidirectional() -»
-	«EXPAND ManyToOneBidirectional -»
-«ELSEIF isManyToManyUnidirectional() -»
-	«EXPAND ManyToManyUnidirectional -»
-«ELSEIF isManyToManyBidirectional() -»
-	«EXPAND ManyToManyBidirectional -»
-«ENDIF -»
-«ENDDEFINE»
-
-
-«DEFINE ShowRecordFieldList FOR MClass -»
+«REM» 
+«ENDREM»
+«DEFINE TCAInterfaceShowRecordFieldList FOR MClass -»
 		'showRecordFieldList' => '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
 «ENDDEFINE»
 
 
-«DEFINE TypesNumbers FOR MClass -»
+«REM» - - Types Section - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«DEFINE TCATypesSection FOR MClass -»
+	'types' => array(
+		«EXPAND TCATypesNumbers -»
+	),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCATypesNumbers FOR MClass -»
 		'1' => array('showitem'	=> '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
 «ENDDEFINE»
 
-«DEFINE PalettesNumbers FOR MClass -»
+
+«REM» - - Palettes Section  - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«DEFINE TCAPalettesSection FOR MClass -»
+	'palettes' => array(
+		«EXPAND TCAPalettesNumbers -»
+	),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAPalettesNumbers FOR MClass -»
 		'1' => array('showitem'	=> ''),
 «ENDDEFINE»
 
 
+«REM» - - Columns Section - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-«DEFINE ConfigKey FOR MAttribute -»
-			'config' => array(
-				«IF type.mapName("TYPO3").name() == "String" -»
-					«EXPAND ConfigStringType -»
-				«ELSEIF type.mapName("TYPO3").name() == "Text" -»
-					«EXPAND ConfigTextType -»
-				«ELSEIF type.mapName("TYPO3").name() == "Integer" -»
-					«EXPAND ConfigIntegerType -»
-				«ELSEIF type.mapName("TYPO3").name() == "Floating Point" -»
-					«EXPAND ConfigFloatingPointType -»
-				«ELSEIF type.mapName("TYPO3").name() == "Boolean" -»
-					«EXPAND ConfigBooleanType -»
-				«ELSEIF type.mapName("TYPO3").name() == "DateTime" -»
-					«EXPAND ConfigDateTimeType -»
-				«ELSEIF type.mapName("TYPO3").name() == "Select List" -»
-					«EXPAND ConfigSelectListType -»
-				«ELSEIF type.mapName("TYPO3").name() == "File" -»
-					«EXPAND ConfigFileType -»
-				«ELSEIF type.mapName("TYPO3").name() == "Image" -»
-					«EXPAND ConfigImageType -»
-				«ELSE -»
-					«EXPAND ConfigOtherType( type.mapName("TYPO3").name() ) -»
-				«ENDIF -»
-			),
-«ENDDEFINE»
-
-«DEFINE ConfigStringType FOR MAttribute -»
-				'type' => 'input',
-				'size' => 30,
-				'eval' => 'trim'
-«ENDDEFINE»
-
-«DEFINE ConfigTextType FOR MAttribute -»
-				'type' => 'text',
-				'cols' => 40,
-				'rows' => 15,
-				'eval' => 'trim'
-«ENDDEFINE»
-
-«DEFINE ConfigIntegerType FOR MAttribute -»
-				'type' => 'input',
-				'size' => 4,
-				'eval' => 'int'
+«DEFINE TCAColumnsSection FOR MClass -»
+	'columns' => array(
+		«EXPAND TCAColumnsAccessControlColumns -»
+		«EXPAND TCAColumnsLocalizationColumns -»
+		«EXPAND TCAColumnsVersioningColumns -»
+		«EXPAND TCAColumnsAttributeColumn FOREACH allObjectProperties().typeSelect(MAttribute) -»
+		«EXPAND TCAColumnsAssociationColumn FOREACH allObjectProperties().typeSelect(MAssociationRole) -»
+	)
 «ENDDEFINE»
 
 
-«DEFINE ConfigFloatingPointType FOR MAttribute -»
-				'type' => 'input',
-				'size' => 30,
-				'eval' => 'double2'
-«ENDDEFINE»
-
-«DEFINE ConfigBooleanType FOR MAttribute -»
-				'type' => 'check',
-				'default' => 0
-«ENDDEFINE»
-
-«DEFINE ConfigDateTimeType FOR MAttribute -»
-				'type' => 'input',
-				'size' => 12,
-				'max' => 20,
-				'eval' => 'datetime',
-				'checkbox' => 1,
-				'default' => time()
-«ENDDEFINE»
-
-«DEFINE ConfigSelectListType FOR MAttribute -»
-				'type' => 'select',
-				'items' => array(
-					array('-- Label --', 0),
-				),
-				'size' => 1,
-				'maxitems' => 1,
-				'eval' => ''
-«ENDDEFINE»
-
-«DEFINE ConfigFileType FOR MAttribute -»
-				'type' => 'group',
-				'internal_type' => 'file',
-				'uploadfolder' => 'uploads/«fullQualifiedExtensionName().toLowerCase() -»',
-				'allowed' => '*',
-				'disallowed' => 'php',
-				'size' => 5
-«ENDDEFINE»
-
-«DEFINE ConfigImageType FOR MAttribute -»
-				'type' => 'group',
-				'internal_type' => 'file',
-				'uploadfolder' => 'uploads/«fullQualifiedExtensionName().toLowerCase() -»',
-				'show_thumbs' => 1,
-				'size' => 5,
-				'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai',
-				'disallowed' => ''
-«ENDDEFINE»
-
-«DEFINE ConfigOtherType(String otherPropertyType) FOR MAttribute -»
+«DEFINE TCAColumnsAccessControlColumns FOR MClass -»
+		«EXPAND TCAColumnsHiddenColumn -»
+		«EXPAND TCAColumnsStarttimeColumn -»
+		«EXPAND TCAColumnsEndtimeColumn -»
 «ENDDEFINE»
 
 
+«DEFINE TCAColumnsLocalizationColumns FOR MClass -»
+		«EXPAND TCAColumnsSysLanguageUidColumn -»
+		«EXPAND TCAColumnsL18nParentColumn -»
+		«EXPAND TCAColumnsL18nDiffsourceColumn -»
+«ENDDEFINE»
 
 
+«DEFINE TCAColumnsVersioningColumns FOR MClass -»
+		«EXPAND TCAColumnsT3VerLabelColumn -»
+«ENDDEFINE»
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-«REM» Sync with Test «ENDREM»
-«DEFINE OneToOneUnidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsAttributeColumn FOR MAttribute -»
 		'«name() -»' => array(
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => array(
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'minitems' => 0,
-				'maxitems' => 1,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				),
-			)
+			«EXPAND TCAColumnsExclude -»
+			«EXPAND TCAColumnsLabel -»
+			«EXPAND TCAColumnsConfig -»
 		),
 «ENDDEFINE»
 
-«DEFINE OneToOneBidirectional FOR MAssociationRole -»
+
+«DEFINE TCAColumnsAssociationColumn FOR MAssociationRole -»
 		'«name() -»' => array(
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => array(
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'minitems' => 0,
-				'maxitems' => 1,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				),
-			)
-		),
-«ENDDEFINE»
-
-«REM» Sync with Test «ENDREM»
-«DEFINE OneToManyUnidirectional FOR MAssociationRole -»
-		'«name() -»' => array(
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => array(
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'MM' => '«asIntermediateTableName() -»',
-				'foreign_sortby' => 'sorting',
-				'minitems' => 0,
-				'maxitems' => 9999,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				)
-			)
-		),
-«ENDDEFINE»
-
-«REM» Sync with Test «ENDREM»
-«DEFINE OneToManyBidirectional FOR MAssociationRole -»
-		'«name() -»' => array(
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => array(
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'foreign_field' => '«opposite.name() -»',
-				'foreign_sortby' => 'sorting',
-				'minitems' => 0,
-				'maxitems' => 9999,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				)
-			)
-		),
-«ENDDEFINE»
-
-«REM» Sync with Test «ENDREM»
-«DEFINE ManyToOneUnidirectional FOR MAssociationRole -»
-		'«name() -»' => Array (
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => Array (
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'minitems' => 0,
-				'maxitems' => 1,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				)
-			)
-		),
-«ENDDEFINE»
-
-«REM» Sync with Test «ENDREM»
-«DEFINE ManyToOneBidirectional FOR MAssociationRole -»
-		'«name() -»' => Array (
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => Array (
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'minitems' => 0,
-				'maxitems' => 1,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				)
-			)
+			«EXPAND TCAColumnsExclude -»
+			«EXPAND TCAColumnsLabel -»
+			«EXPAND TCAColumnsConfig -»
 		),
 «ENDDEFINE»
 
 
-«DEFINE ManyToManyUnidirectional FOR MAssociationRole -»
-		'«name() -»' => array(
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => array(
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'MM' => '«asIntermediateTableName() -»',
-				'foreign_sortby' => 'sorting',
-				'minitems' => 0,
-				'maxitems' => 9999,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				)
-			),
-		),
-«ENDDEFINE»
-
-
-«DEFINE ManyToManyBidirectional FOR MAssociationRole -»
-		'«name() -»' => array(
-			«EXPAND ExcludeKey -»
-			«EXPAND LabelKey -»
-			'config' => array(
-				'type' => 'inline',
-				'foreign_table' => '«type.name() -»',
-				'MM' => '«asIntermediateTableName() -»',
-				'foreign_sortby' => 'sorting',
-				'minitems' => 0,
-				'maxitems' => 9999,
-				'appearance' => array(
-					'collapse' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				)
-			),
-		),
-«ENDDEFINE»
-
-
-
-
-
-
-
-
-
-
-
-«DEFINE HiddenColumn FOR MClass -»
+«DEFINE TCAColumnsHiddenColumn FOR MClass -»
 		'hidden' => array(
 			'exclude' => 1,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
@@ -520,7 +203,8 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE StarttimeColumn FOR MClass -»
+
+«DEFINE TCAColumnsStarttimeColumn FOR MClass -»
 		'starttime' => array(
 			'exclude' => 1,
 			'l10n_mode' => 'mergeIfNotBlank',
@@ -539,7 +223,8 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE EndtimeColumn FOR MClass -»
+
+«DEFINE TCAColumnsEndtimeColumn FOR MClass -»
 		'endtime' => array(
 			'exclude' => 1,
 			'l10n_mode' => 'mergeIfNotBlank',
@@ -558,7 +243,8 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE SysLanguageUidColumn FOR MClass -»
+
+«DEFINE TCAColumnsSysLanguageUidColumn FOR MClass -»
 		'sys_language_uid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
@@ -574,7 +260,8 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE L18nParentColumn FOR MClass -»
+
+«DEFINE TCAColumnsL18nParentColumn FOR MClass -»
 		'l18n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => 1,
@@ -590,7 +277,8 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE L18nDiffsourceColumn FOR MClass -»
+
+«DEFINE TCAColumnsL18nDiffsourceColumn FOR MClass -»
 		'l18n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
@@ -598,7 +286,8 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE T3VerLabelColumn FOR MClass -»
+
+«DEFINE TCAColumnsT3VerLabelColumn FOR MClass -»
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
@@ -610,24 +299,326 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
-
-
-
-
-
-
-
-
-
-«DEFINE ExcludeKey FOR MProperty -»
+«DEFINE TCAColumnsExclude FOR MProperty -»
 			'exclude' => 0,
 «ENDDEFINE»
 
 
-
-«DEFINE LabelKey FOR MProperty -»
+«DEFINE TCAColumnsLabel FOR MProperty -»
 			'label' => 'LLL:EXT:«locallangDbXmlFilePath() -»:«classifier.name() -».«name() -»',
 «ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfig FOR MAttribute -»
+			'config' => array(
+				«IF type.mapName("TYPO3").name() == "String" -»
+					«EXPAND TCAColumnsConfigString -»
+				«ELSEIF type.mapName("TYPO3").name() == "Text" -»
+					«EXPAND TCAColumnsConfigText -»
+				«ELSEIF type.mapName("TYPO3").name() == "Integer" -»
+					«EXPAND TCAColumnsConfigInteger -»
+				«ELSEIF type.mapName("TYPO3").name() == "Floating Point" -»
+					«EXPAND TCAColumnsConfigFloatingPoint -»
+				«ELSEIF type.mapName("TYPO3").name() == "Boolean" -»
+					«EXPAND TCAColumnsConfigBoolean -»
+				«ELSEIF type.mapName("TYPO3").name() == "DateTime" -»
+					«EXPAND TCAColumnsConfigDateTime -»
+				«ELSEIF type.mapName("TYPO3").name() == "Select List" -»
+					«EXPAND TCAColumnsConfigSelectList -»
+				«ELSEIF type.mapName("TYPO3").name() == "File" -»
+					«EXPAND TCAColumnsConfigFile -»
+				«ELSEIF type.mapName("TYPO3").name() == "Image" -»
+					«EXPAND TCAColumnsConfigImage -»
+				«ELSE -»
+					«EXPAND TCAColumnsConfigOther( type.mapName("TYPO3").name() ) -»
+				«ENDIF -»
+			)
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigString FOR MAttribute -»
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'trim'
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigText FOR MAttribute -»
+				'type' => 'text',
+				'cols' => 40,
+				'rows' => 15,
+				'eval' => 'trim'
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigInteger FOR MAttribute -»
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'int'
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigFloatingPoint FOR MAttribute -»
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'double2'
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigBoolean FOR MAttribute -»
+				'type' => 'check',
+				'default' => 0
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigDateTime FOR MAttribute -»
+				'type' => 'input',
+				'size' => 12,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 1,
+				'default' => time()
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigSelectList FOR MAttribute -»
+				'type' => 'select',
+				'items' => array(
+					array('-- Label --', 0),
+				),
+				'size' => 1,
+				'maxitems' => 1,
+				'eval' => ''
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigFile FOR MAttribute -»
+				'type' => 'group',
+				'internal_type' => 'file',
+				'uploadfolder' => 'uploads/«fullQualifiedExtensionName().toLowerCase() -»',
+				'allowed' => '*',
+				'disallowed' => 'php',
+				'size' => 5
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigImage FOR MAttribute -»
+				'type' => 'group',
+				'internal_type' => 'file',
+				'uploadfolder' => 'uploads/«fullQualifiedExtensionName().toLowerCase() -»',
+				'show_thumbs' => 1,
+				'size' => 5,
+				'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai',
+				'disallowed' => ''
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigOther(String otherPropertyType) FOR MAttribute -»
+«ENDDEFINE»
+
+
+
+
+
+
+
+
+
+
+
+«DEFINE TCAColumnsConfig FOR MAssociationRole -»
+			'config' => array(
+				«IF isOneToOneUnidirectional() -»			
+					«EXPAND TCAColumnsConfigOneToOneUnidirectional -»
+				«ELSEIF isOneToOneBidirectional() -»
+					«EXPAND TCAColumnsConfigOneToOneBidirectional -»
+				«ELSEIF isOneToManyUnidirectional() -»
+					«EXPAND TCAColumnsConfigOneToManyUnidirectional -»
+				«ELSEIF isOneToManyBidirectional() -»		
+					«EXPAND TCAColumnsConfigOneToManyBidirectional -»
+				«ELSEIF isManyToOneUnidirectional() -»
+					«EXPAND TCAColumnsConfigManyToOneUnidirectional -»
+				«ELSEIF isManyToOneBidirectional() -»
+					«EXPAND TCAColumnsConfigManyToOneBidirectional -»
+				«ELSEIF isManyToManyUnidirectional() -»
+					«EXPAND TCAColumnsConfigManyToManyUnidirectional -»
+				«ELSEIF isManyToManyBidirectional() -»
+					«EXPAND TCAColumnsConfigManyToManyBidirectional -»
+				«ENDIF -»
+			)
+«ENDDEFINE»
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigOneToOneUnidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigOneToOneBidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigOneToManyUnidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsForeignSortBy -»
+				«EXPAND TCAColumnsMM -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigOneToManyBidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsForeignField -»
+				«EXPAND TCAColumnsForeignSortBy -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigManyToOneUnidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigManyToOneBidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigManyToManyUnidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsForeignSortBy -»
+				«EXPAND TCAColumnsMM -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigManyToManyBidirectional FOR MAssociationRole -»
+				«EXPAND TCAColumnsType -»
+				«EXPAND TCAColumnsForeignTable -»
+				«EXPAND TCAColumnsForeignSortBy -»
+				«EXPAND TCAColumnsMM -»
+				«EXPAND TCAColumnsMinItems -»
+				«EXPAND TCAColumnsMaxItems -»
+				«EXPAND TCAColumnsAppearance -»
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsType FOR MAssociationRole -»
+				'type' => '«IF aggregation || composition -»inline«ELSE -»select«ENDIF -»',
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsForeignTable FOR MAssociationRole -»
+				'foreign_table' => '«type.name() -»',
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsForeignField FOR MAssociationRole -»
+				'foreign_field' => '«opposite.name() -»',
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsForeignSortBy FOR MAssociationRole -»
+				'foreign_sortby' => 'sorting',
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsMM FOR MAssociationRole -»
+				'MM' => '«asIntermediateTableName() -»',
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsMinItems FOR MAssociationRole -»
+				'minitems' => «IF hasFixedLowerBoundMultiplicity() -»«lowerBoundMultiplicity -»«ELSE -»0«ENDIF -»,
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsMaxItems FOR MAssociationRole -»
+				'maxitems' => «IF hasFixedUpperBoundMultiplicity() -»«upperBoundMultiplicity -»«ELSE -»99999«ENDIF -»,
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsAppearance FOR MAssociationRole -»
+				'appearance' => array(
+					'collapse' => 0,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showAllLocalizationLink' => 1
+				)
+«ENDDEFINE»
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
