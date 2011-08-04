@@ -58,144 +58,150 @@ t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_administra
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezblogexample_domain_model_administrator');
 $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_administrator',
-		'label'						=> 'uid',
-		'tstamp'					=> 'tstamp',
-		'crdate'					=> 'crdate',
-		'versioningWS'				=> 2,
-		'versioning_followPages'	=> true,
-		'origUid'					=> 't3_origuid',
-		'languageField'				=> 'sys_language_uid',
-		'transOrigPointerField'		=> 'l18n_parent',
-		'transOrigDiffSourceField'	=> 'l18n_diffsource',
-		'delete'					=> 'deleted',
-		'enablecolumns'				=> array(
-			'disabled'				=> 'hidden',
-			'starttime'				=> 'starttime',
-			'endtime'				=> 'endtime',
-			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Administrator.php',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_administrator.gif'
+		'title' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_administrator',
+		'label'	=> 'uid',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => true,
+		'origUid' => 't3_origuid',
+		'languageField'	=> 'sys_language_uid',
+		'transOrigPointerField' => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Administrator.php',
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_administrator.gif'
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_blog', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_blog.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezblogexample_domain_model_blog');
 $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog',
-		'label'						=> 'uid',
-		'tstamp'					=> 'tstamp',
-		'crdate'					=> 'crdate',
-		'versioningWS'				=> 2,
-		'versioning_followPages'	=> true,
-		'origUid'					=> 't3_origuid',
-		'languageField'				=> 'sys_language_uid',
-		'transOrigPointerField'		=> 'l18n_parent',
-		'transOrigDiffSourceField'	=> 'l18n_diffsource',
-		'delete'					=> 'deleted',
-		'enablecolumns'				=> array(
-			'disabled'				=> 'hidden',
-			'starttime'				=> 'starttime',
-			'endtime'				=> 'endtime',
-			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Blog.php',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_blog.gif'
+		'title' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog',
+		'label'	=> 'title',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => true,
+		'origUid' => 't3_origuid',
+		'languageField'	=> 'sys_language_uid',
+		'transOrigPointerField' => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Blog.php',
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_blog.gif'
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_comment', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_comment.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezblogexample_domain_model_comment');
 $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_comment',
-		'label'						=> 'uid',
-		'tstamp'					=> 'tstamp',
-		'crdate'					=> 'crdate',
-		'versioningWS'				=> 2,
-		'versioning_followPages'	=> true,
-		'origUid'					=> 't3_origuid',
-		'languageField'				=> 'sys_language_uid',
-		'transOrigPointerField'		=> 'l18n_parent',
-		'transOrigDiffSourceField'	=> 'l18n_diffsource',
-		'delete'					=> 'deleted',
-		'enablecolumns'				=> array(
-			'disabled'				=> 'hidden',
-			'starttime'				=> 'starttime',
-			'endtime'				=> 'endtime',
-			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Comment.php',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_comment.gif'
+		'title' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_comment',
+		'label'	=> 'date',
+		'label_alt' => 'author',
+		'label_alt_force' => true,
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => true,
+		'origUid' => 't3_origuid',
+		'languageField'	=> 'sys_language_uid',
+		'transOrigPointerField' => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Comment.php',
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_comment.gif'
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_person', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_person.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezblogexample_domain_model_person');
 $TCA['tx_genesezblogexample_domain_model_person'] = array (
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person',
-		'label'						=> 'uid',
-		'tstamp'					=> 'tstamp',
-		'crdate'					=> 'crdate',
-		'versioningWS'				=> 2,
-		'versioning_followPages'	=> true,
-		'origUid'					=> 't3_origuid',
-		'languageField'				=> 'sys_language_uid',
-		'transOrigPointerField'		=> 'l18n_parent',
-		'transOrigDiffSourceField'	=> 'l18n_diffsource',
-		'delete'					=> 'deleted',
-		'enablecolumns'				=> array(
-			'disabled'				=> 'hidden',
-			'starttime'				=> 'starttime',
-			'endtime'				=> 'endtime',
-			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Person.php',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_person.gif'
+		'title' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person',
+		'label'	=> 'lastname',
+		'label_alt' => 'firstname',
+		'label_alt_force' => true,
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => true,
+		'origUid' => 't3_origuid',
+		'languageField'	=> 'sys_language_uid',
+		'transOrigPointerField' => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Person.php',
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_person.gif'
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_post', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_post.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezblogexample_domain_model_post');
 $TCA['tx_genesezblogexample_domain_model_post'] = array (
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post',
-		'label'						=> 'uid',
-		'tstamp'					=> 'tstamp',
-		'crdate'					=> 'crdate',
-		'versioningWS'				=> 2,
-		'versioning_followPages'	=> true,
-		'origUid'					=> 't3_origuid',
-		'languageField'				=> 'sys_language_uid',
-		'transOrigPointerField'		=> 'l18n_parent',
-		'transOrigDiffSourceField'	=> 'l18n_diffsource',
-		'delete'					=> 'deleted',
-		'enablecolumns'				=> array(
-			'disabled'				=> 'hidden',
-			'starttime'				=> 'starttime',
-			'endtime'				=> 'endtime',
-			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Post.php',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_post.gif'
+		'title' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post',
+		'label'	=> 'title',
+		'label_alt' => 'author',
+		'label_alt_force' => true,
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => true,
+		'origUid' => 't3_origuid',
+		'languageField'	=> 'sys_language_uid',
+		'transOrigPointerField' => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Post.php',
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_post.gif'
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_tag', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_tag.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezblogexample_domain_model_tag');
 $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 	'ctrl' => array (
-		'title'						=> 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_tag',
-		'label'						=> 'uid',
-		'tstamp'					=> 'tstamp',
-		'crdate'					=> 'crdate',
-		'versioningWS'				=> 2,
-		'versioning_followPages'	=> true,
-		'origUid'					=> 't3_origuid',
-		'languageField'				=> 'sys_language_uid',
-		'transOrigPointerField'		=> 'l18n_parent',
-		'transOrigDiffSourceField'	=> 'l18n_diffsource',
-		'delete'					=> 'deleted',
-		'enablecolumns'				=> array(
-			'disabled'				=> 'hidden',
-			'starttime'				=> 'starttime',
-			'endtime'				=> 'endtime',
-			),
-		'dynamicConfigFile' 		=> t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Tag.php',
-		'iconfile' 					=> t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_tag.gif'
+		'title' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_tag',
+		'label'	=> 'name',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => true,
+		'origUid' => 't3_origuid',
+		'languageField'	=> 'sys_language_uid',
+		'transOrigPointerField' => 'l18n_parent',
+		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Tag.php',
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_tag.gif'
 	)
 );
 
