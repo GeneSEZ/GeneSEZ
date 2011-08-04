@@ -98,7 +98,7 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_comment.date',
 			'config' => array(
-			),
+			)
 		),
 		'author' => array(
 			'exclude' => 0,
@@ -107,7 +107,7 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 		'email' => array(
 			'exclude' => 0,
@@ -116,7 +116,7 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 		'content' => array(
 			'exclude' => 0,
@@ -125,7 +125,7 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 	)
 );

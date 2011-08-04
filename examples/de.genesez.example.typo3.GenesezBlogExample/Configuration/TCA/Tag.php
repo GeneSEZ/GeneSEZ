@@ -101,7 +101,7 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 	)
 );

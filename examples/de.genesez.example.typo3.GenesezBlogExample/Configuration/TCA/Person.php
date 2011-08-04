@@ -101,7 +101,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 		'lastname' => array(
 			'exclude' => 0,
@@ -110,7 +110,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 		'email' => array(
 			'exclude' => 0,
@@ -119,7 +119,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 	)
 );

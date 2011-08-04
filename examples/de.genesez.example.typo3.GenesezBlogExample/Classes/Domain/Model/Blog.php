@@ -40,7 +40,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	 * The blog's title.
 	 * 
 	 * @var string
-	 * @validate BlogTitle(minimum = 111, maximum = 222), StringLength(minimum = 1, maximum = 80)
+	 * @validate StringLength(minimum = 1, maximum = 80), BlogTitle(minimum = 111, maximum = 222)
 	 */
 	protected $title = "";
 	/**

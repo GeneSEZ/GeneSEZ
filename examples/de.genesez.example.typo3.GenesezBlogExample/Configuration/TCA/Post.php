@@ -101,13 +101,13 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 		'date' => array(
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.date',
 			'config' => array(
-			),
+			)
 		),
 		'content' => array(
 			'exclude' => 0,
@@ -116,15 +116,15 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
-		'blog' => Array (
+		'blog' => array(
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.blog',
-			'config' => Array (
-				'type' => 'inline',
+			'config' => array(
+				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_blog',
-				'minitems' => 0,
+				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
 					'collapse' => 0,
@@ -139,9 +139,9 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.author',
 			'config' => array(
-				'type' => 'inline',
+				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_person',
-				'minitems' => 0,
+				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
 					'collapse' => 0,
@@ -149,19 +149,19 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 					'showSynchronizationLink' => 1,
 					'showPossibleLocalizationRecords' => 1,
 					'showAllLocalizationLink' => 1
-				),
+				)
 			)
 		),
 		'tags' => array(
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.tags',
 			'config' => array(
-				'type' => 'inline',
+				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_tag',
-				'MM' => 'tx_genesezblogexample_post_tag_tags_mm',
 				'foreign_sortby' => 'sorting',
+				'MM' => 'tx_genesezblogexample_post_tag_tags_mm',
 				'minitems' => 0,
-				'maxitems' => 9999,
+				'maxitems' => 99999,
 				'appearance' => array(
 					'collapse' => 0,
 					'levelLinksPosition' => 'top',
@@ -175,12 +175,12 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.comments',
 			'config' => array(
-				'type' => 'inline',
+				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_comment',
-				'MM' => 'tx_genesezblogexample_post_comment_comments_mm',
 				'foreign_sortby' => 'sorting',
+				'MM' => 'tx_genesezblogexample_post_comment_comments_mm',
 				'minitems' => 0,
-				'maxitems' => 9999,
+				'maxitems' => 99999,
 				'appearance' => array(
 					'collapse' => 0,
 					'levelLinksPosition' => 'top',
@@ -194,12 +194,12 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.related_posts',
 			'config' => array(
-				'type' => 'inline',
+				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
-				'MM' => 'tx_genesezblogexample_post_post_related_posts_mm',
 				'foreign_sortby' => 'sorting',
+				'MM' => 'tx_genesezblogexample_post_post_related_posts_mm',
 				'minitems' => 0,
-				'maxitems' => 9999,
+				'maxitems' => 99999,
 				'appearance' => array(
 					'collapse' => 0,
 					'levelLinksPosition' => 'top',

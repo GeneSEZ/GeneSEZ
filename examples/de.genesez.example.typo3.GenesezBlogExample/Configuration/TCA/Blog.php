@@ -101,7 +101,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 		'description' => array(
 			'exclude' => 0,
@@ -110,7 +110,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
+			)
 		),
 		'logo' => array(
 			'exclude' => 0,
@@ -123,7 +123,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'size' => 5,
 				'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai',
 				'disallowed' => ''
-			),
+			)
 		),
 		'posts' => array(
 			'exclude' => 0,
@@ -134,7 +134,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'foreign_field' => 'blog',
 				'foreign_sortby' => 'sorting',
 				'minitems' => 0,
-				'maxitems' => 9999,
+				'maxitems' => 99999,
 				'appearance' => array(
 					'collapse' => 0,
 					'levelLinksPosition' => 'top',
@@ -148,9 +148,9 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.administrator',
 			'config' => array(
-				'type' => 'inline',
+				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_administrator',
-				'minitems' => 0,
+				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
 					'collapse' => 0,
@@ -158,7 +158,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 					'showSynchronizationLink' => 1,
 					'showPossibleLocalizationRecords' => 1,
 					'showAllLocalizationLink' => 1
-				),
+				)
 			)
 		),
 	)
