@@ -19,6 +19,7 @@
 «REM» common access helper scripts if script name is equals «ENDREM»
 «EXTENSION de::genesez::platform::typo3::extbase::scripts::AccessHelper»
 
+«REM» use common type mapping scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 
@@ -73,7 +74,7 @@ if (!defined ('TYPO3_MODE')) {
 
 «DEFINE TableConfigurationArray FOR MClass -»
 $TCA['«name() -»'] = array (
-	«EXPAND ConfigurationSection -»
+	«EXPAND ControlSection -»
 	«EXPAND InterfaceSection -»
 	«EXPAND TypesSection -»
 	«EXPAND PalettesSection -»
@@ -82,28 +83,28 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
-«DEFINE ConfigurationSection FOR MClass -»
+«DEFINE ControlSection FOR MClass -»
 	'ctrl' => $TCA['«name() -»']['ctrl'],
 «ENDDEFINE»
 
 
 «DEFINE InterfaceSection FOR MClass -»
 	'interface' => array(
-		'showRecordFieldList' => '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
+		«EXPAND ShowRecordFieldList -»
 	),
 «ENDDEFINE»
 
 
 «DEFINE TypesSection FOR MClass -»
 	'types' => array(
-		'1' => array('showitem'	=> '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
+		«EXPAND TypesNumbers -»
 	),
 «ENDDEFINE»
 
 
 «DEFINE PalettesSection FOR MClass -»
 	'palettes' => array(
-		'1' => array('showitem'	=> ''),
+		«EXPAND PalettesNumbers -»
 	),
 «ENDDEFINE»
 
@@ -119,15 +120,88 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
+«DEFINE AccessControlColumns FOR MClass -»
+		«EXPAND HiddenColumn -»
+		«EXPAND StarttimeColumn -»
+		«EXPAND EndtimeColumn -»
+«ENDDEFINE»
+
+
+«DEFINE LocalizationColumns FOR MClass -»
+		«EXPAND SysLanguageUidColumn -»
+		«EXPAND L18nParentColumn -»
+		«EXPAND L18nDiffsourceColumn -»
+«ENDDEFINE»
+
+
+«DEFINE VersioningColumns FOR MClass -»
+		«EXPAND T3VerLabelColumn -»
+«ENDDEFINE»
+
+
 «DEFINE OwnAttributeColumn FOR MAttribute -»
 		'«name() -»' => array(
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
-			«EXPAND ConfigTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
+			«EXPAND ConfigKey -»
 		),
 «ENDDEFINE»
 
-«DEFINE ConfigTag FOR MAttribute -»
+
+«DEFINE OwnAssociationColumn FOR MAssociationRole -»
+«IF isOneToOneUnidirectional() -»
+	«EXPAND OneToOneUnidirectional -»
+«ELSEIF isOneToOneBidirectional() -»
+	«EXPAND OneToOneBidirectional -»
+«ELSEIF isOneToManyUnidirectional() -»
+	«EXPAND OneToManyUnidirectional -»
+«ELSEIF isOneToManyBidirectional() -»
+	«EXPAND OneToManyBidirectional -»
+«ELSEIF isManyToOneUnidirectional() -»
+	«EXPAND ManyToOneUnidirectional -»
+«ELSEIF isManyToOneBidirectional() -»
+	«EXPAND ManyToOneBidirectional -»
+«ELSEIF isManyToManyUnidirectional() -»
+	«EXPAND ManyToManyUnidirectional -»
+«ELSEIF isManyToManyBidirectional() -»
+	«EXPAND ManyToManyBidirectional -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ShowRecordFieldList FOR MClass -»
+		'showRecordFieldList' => '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
+«ENDDEFINE»
+
+
+«DEFINE TypesNumbers FOR MClass -»
+		'1' => array('showitem'	=> '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
+«ENDDEFINE»
+
+«DEFINE PalettesNumbers FOR MClass -»
+		'1' => array('showitem'	=> ''),
+«ENDDEFINE»
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+«DEFINE ConfigKey FOR MAttribute -»
 			'config' => array(
 				«IF type.mapName("TYPO3").name() == "String" -»
 					«EXPAND ConfigStringType -»
@@ -248,32 +322,14 @@ $TCA['«name() -»'] = array (
 
 
 
-«DEFINE OwnAssociationColumn FOR MAssociationRole -»
-«IF isOneToOneUnidirectional() -»
-	«EXPAND OneToOneUnidirectional -»
-«ELSEIF isOneToOneBidirectional() -»
-	«EXPAND OneToOneBidirectional -»
-«ELSEIF isOneToManyUnidirectional() -»
-	«EXPAND OneToManyUnidirectional -»
-«ELSEIF isOneToManyBidirectional() -»
-	«EXPAND OneToManyBidirectional -»
-«ELSEIF isManyToOneUnidirectional() -»
-	«EXPAND ManyToOneUnidirectional -»
-«ELSEIF isManyToOneBidirectional() -»
-	«EXPAND ManyToOneBidirectional -»
-«ELSEIF isManyToManyUnidirectional() -»
-	«EXPAND ManyToManyUnidirectional -»
-«ELSEIF isManyToManyBidirectional() -»
-	«EXPAND ManyToManyBidirectional -»
-«ENDIF -»
-«ENDDEFINE»
+
 
 
 «REM» Sync with Test «ENDREM»
 «DEFINE OneToOneUnidirectional FOR MAssociationRole -»
 		'«name() -»' => array(
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -292,8 +348,8 @@ $TCA['«name() -»'] = array (
 
 «DEFINE OneToOneBidirectional FOR MAssociationRole -»
 		'«name() -»' => array(
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -313,8 +369,8 @@ $TCA['«name() -»'] = array (
 «REM» Sync with Test «ENDREM»
 «DEFINE OneToManyUnidirectional FOR MAssociationRole -»
 		'«name() -»' => array(
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -336,8 +392,8 @@ $TCA['«name() -»'] = array (
 «REM» Sync with Test «ENDREM»
 «DEFINE OneToManyBidirectional FOR MAssociationRole -»
 		'«name() -»' => array(
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -359,8 +415,8 @@ $TCA['«name() -»'] = array (
 «REM» Sync with Test «ENDREM»
 «DEFINE ManyToOneUnidirectional FOR MAssociationRole -»
 		'«name() -»' => Array (
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => Array (
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -380,8 +436,8 @@ $TCA['«name() -»'] = array (
 «REM» Sync with Test «ENDREM»
 «DEFINE ManyToOneBidirectional FOR MAssociationRole -»
 		'«name() -»' => Array (
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => Array (
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -401,8 +457,8 @@ $TCA['«name() -»'] = array (
 
 «DEFINE ManyToManyUnidirectional FOR MAssociationRole -»
 		'«name() -»' => array(
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -424,8 +480,8 @@ $TCA['«name() -»'] = array (
 
 «DEFINE ManyToManyBidirectional FOR MAssociationRole -»
 		'«name() -»' => array(
-			«EXPAND ExcludeTag -»
-			«EXPAND LabelTag -»
+			«EXPAND ExcludeKey -»
+			«EXPAND LabelKey -»
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => '«type.name() -»',
@@ -452,23 +508,9 @@ $TCA['«name() -»'] = array (
 
 
 
-«DEFINE AccessControlColumns FOR MClass -»
-		«EXPAND Hidden -»
-		«EXPAND Starttime -»
-		«EXPAND Endtime -»
-«ENDDEFINE»
 
-«DEFINE LocalizationColumns FOR MClass -»
-		«EXPAND SysLanguageUid -»
-		«EXPAND L18nParent -»
-		«EXPAND L18nDiffsource -»
-«ENDDEFINE»
 
-«DEFINE VersioningColumns FOR MClass -»
-		«EXPAND T3VerLabel -»
-«ENDDEFINE»
-
-«DEFINE Hidden FOR MClass -»
+«DEFINE HiddenColumn FOR MClass -»
 		'hidden' => array(
 			'exclude' => 1,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
@@ -478,7 +520,7 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE Starttime FOR MClass -»
+«DEFINE StarttimeColumn FOR MClass -»
 		'starttime' => array(
 			'exclude' => 1,
 			'l10n_mode' => 'mergeIfNotBlank',
@@ -497,7 +539,7 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE Endtime FOR MClass -»
+«DEFINE EndtimeColumn FOR MClass -»
 		'endtime' => array(
 			'exclude' => 1,
 			'l10n_mode' => 'mergeIfNotBlank',
@@ -516,7 +558,7 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE SysLanguageUid FOR MClass -»
+«DEFINE SysLanguageUidColumn FOR MClass -»
 		'sys_language_uid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
@@ -532,7 +574,7 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE L18nParent FOR MClass -»
+«DEFINE L18nParentColumn FOR MClass -»
 		'l18n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => 1,
@@ -548,7 +590,7 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE L18nDiffsource FOR MClass -»
+«DEFINE L18nDiffsourceColumn FOR MClass -»
 		'l18n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
@@ -556,7 +598,7 @@ $TCA['«name() -»'] = array (
 		),
 «ENDDEFINE»
 
-«DEFINE T3VerLabel FOR MClass -»
+«DEFINE T3VerLabelColumn FOR MClass -»
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
@@ -577,13 +619,13 @@ $TCA['«name() -»'] = array (
 
 
 
-«DEFINE ExcludeTag FOR MProperty -»
+«DEFINE ExcludeKey FOR MProperty -»
 			'exclude' => 0,
 «ENDDEFINE»
 
 
 
-«DEFINE LabelTag FOR MProperty -»
+«DEFINE LabelKey FOR MProperty -»
 			'label' => 'LLL:EXT:«locallangDbXmlFilePath() -»:«classifier.name() -».«name() -»',
 «ENDDEFINE»
 
