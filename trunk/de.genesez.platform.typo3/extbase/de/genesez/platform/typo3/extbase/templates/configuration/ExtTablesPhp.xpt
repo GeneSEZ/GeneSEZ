@@ -186,53 +186,53 @@ t3lib_extMgm::allowTableOnStandardPages('«name() -»');
 «ENDREM»
 «DEFINE TableConfigurationArray FOR MClass -»
 $TCA['«name() -»'] = array (
-	«EXPAND ControlSection -»
+	«EXPAND TCACtrlSection -»
 );
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE ControlSection FOR MClass -»
+«DEFINE TCACtrlSection FOR MClass -»
 	'ctrl' => array (
-		«EXPAND Title -»
-		«EXPAND Label -»
-		«EXPAND LabelAlt -»
-		«EXPAND LabelAltForce -»
-		«EXPAND Tstamp -»
-		«EXPAND Crdate -»
-		«EXPAND VersioningWS -»
-		«EXPAND VersioningFollowPages -»
-		«EXPAND OrigUid -»
-		«EXPAND LanguageField -»
-		«EXPAND TransOrigPointerField -»
-		«EXPAND TransOrigDiffSourceField -»
-		«EXPAND Delete -»
-		«EXPAND Enablecolumns -»
-		«EXPAND Additions -»
-		«EXPAND DynamicConfigFile -»
-		«EXPAND IconFile -»
+		«EXPAND TCACtrlTitle -»
+		«EXPAND TCACtrlLabel -»
+		«EXPAND TCACtrlLabelAlt -»
+		«EXPAND TCACtrlLabelAltForce -»
+		«EXPAND TCACtrlTstamp -»
+		«EXPAND TCACtrlCrdate -»
+		«EXPAND TCACtrlVersioningWS -»
+		«EXPAND TCACtrlVersioningFollowPages -»
+		«EXPAND TCACtrlOrigUid -»
+		«EXPAND TCACtrlLanguageField -»
+		«EXPAND TCACtrlTransOrigPointerField -»
+		«EXPAND TCACtrlTransOrigDiffSourceField -»
+		«EXPAND TCACtrlDelete -»
+		«EXPAND TCACtrlEnablecolumns -»
+		«EXPAND TCACtrlAdditions -»
+		«EXPAND TCACtrlDynamicConfigFile -»
+		«EXPAND TCACtrlIconFile -»
 	)
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE Title FOR MClass-»
+«DEFINE TCACtrlTitle FOR MClass-»
 		'title' => 'LLL:EXT:«extensionKey() -»/«locallangDbXmlFilePath() -»:«name() -»',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE Label FOR MClass -»
+«DEFINE TCACtrlLabel FOR MClass -»
 		'label'	=> '«IF getT3TCAClassLabel().length > 0 -»«getAttributeByXmiGuid( model(), getT3TCAClassLabel() ).name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE LabelAlt FOR MClass -»
+«DEFINE TCACtrlLabelAlt FOR MClass -»
 «IF !getT3TCAClassLabelAlt().isEmpty -»
 		'label_alt' => '«FOREACH getT3TCAClassLabelAlt() AS labelAlt SEPARATOR ", " -»«getAttributeByXmiGuid( model(), labelAlt ).name() -»«ENDFOREACH -»',
 «ENDIF -»
@@ -241,7 +241,7 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE LabelAltForce FOR MClass -»
+«DEFINE TCACtrlLabelAltForce FOR MClass -»
 «IF hasT3TCAClassStereotype() && !getT3TCAClassLabelAlt().isEmpty -»
 		'label_alt_force' => «getT3TCAClassLabelAltForce() -»,
 «ENDIF -»
@@ -250,70 +250,70 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE Tstamp FOR MClass -»
+«DEFINE TCACtrlTstamp FOR MClass -»
 		'tstamp' => 'tstamp',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE Crdate FOR MClass -»
+«DEFINE TCACtrlCrdate FOR MClass -»
 		'crdate' => 'crdate',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE VersioningWS FOR MClass -»
+«DEFINE TCACtrlVersioningWS FOR MClass -»
 		'versioningWS' => 2,
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE VersioningFollowPages FOR MClass -»
+«DEFINE TCACtrlVersioningFollowPages FOR MClass -»
 		'versioning_followPages' => true,
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE OrigUid FOR MClass -»
+«DEFINE TCACtrlOrigUid FOR MClass -»
 		'origUid' => 't3_origuid',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE LanguageField FOR MClass -»
+«DEFINE TCACtrlLanguageField FOR MClass -»
 		'languageField'	=> 'sys_language_uid',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TransOrigPointerField FOR MClass -»
+«DEFINE TCACtrlTransOrigPointerField FOR MClass -»
 		'transOrigPointerField' => 'l18n_parent',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TransOrigDiffSourceField FOR MClass -»
+«DEFINE TCACtrlTransOrigDiffSourceField FOR MClass -»
 		'transOrigDiffSourceField' => 'l18n_diffsource',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE Delete FOR MClass -»
+«DEFINE TCACtrlDelete FOR MClass -»
 		'delete' => 'deleted',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE Enablecolumns FOR MClass -»
+«DEFINE TCACtrlEnablecolumns FOR MClass -»
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 			'starttime' => 'starttime',
@@ -324,28 +324,30 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE Disabled FOR MClass -»
+«DEFINE TCACtrlDisabled FOR MClass -»
 			'disabled' => 'hidden',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE Starttime FOR MClass -»
+«DEFINE TCACtrlStarttime FOR MClass -»
 			'starttime' => 'starttime',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE Endtime FOR MClass -»
+«DEFINE TCACtrlEndtime FOR MClass -»
 			'endtime' => 'endtime',
 «ENDDEFINE»
 
 
-«DEFINE Additions FOR MClass -»
-«IF !getT3TCAClassAdditions().isEmpty -»
-«FOREACH getT3TCAClassAdditions() AS tcaAddition -»
+«REM»
+«ENDREM»
+«DEFINE TCACtrlAdditions FOR MClass -»
+«IF !getT3TCAClassCtrlSectionAdditions().isEmpty -»
+«FOREACH getT3TCAClassCtrlSectionAdditions() AS tcaAddition -»
 			«tcaAddition -»,
 «ENDFOREACH -»
 «ENDIF -»
@@ -354,17 +356,16 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE DynamicConfigFile FOR MClass -»
+«DEFINE TCACtrlDynamicConfigFile FOR MClass -»
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . '«tcaPhpFilePath() -»',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE IconFile FOR MClass -»
+«DEFINE TCACtrlIconFile FOR MClass -»
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«name() -».gif'
 «ENDDEFINE»
-
 
 
 «REM»
