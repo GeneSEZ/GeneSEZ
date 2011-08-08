@@ -358,19 +358,22 @@ boolean isPlainAssociation(MAssociationRole aend) :
 MClass assocClass(MAssociationRole aend) :
 	aend.association.associationClass;
 
+ 
 /**
- * returns all owning association roles
+ * getter for a list of all owning initializable association roles
+ * @return	a list of initializable association roles or an empty list
  */
-List[MAssociationRole] owningAssociationRoles(MClassifier this) :
-	property.typeSelect(MAssociationRole).reject( e|e.derived );
+List[MAssociationRole] owningInitializableAssociationRoles(MClassifier this) :
+	property.typeSelect(MAssociationRole).select( e | !e.derived );
+
 
 /**
  * returns all initializable association roles
  */
 List[MAssociationRole] allInitializableAssociationRoles(MClassifier this) :
 	let assocs = {} :
-		assocs.addAll( owningAssociationRoles() ) ->
-		assocs.addAll( realization.typeSelect(MClassifier).owningAssociationRoles() ) ->
+		assocs.addAll( owningInitializableAssociationRoles() ) ->
+		assocs.addAll( realization.typeSelect(MClassifier).owningInitializableAssociationRoles() ) ->
 	assocs.flatten();
 
 /*
