@@ -22,6 +22,8 @@ extension de::genesez::platform::typo3::extbase::convention::Convention;
 // use TYPO3 workflow global var scripts
 extension de::genesez::platform::typo3::extbase::workflow::GlobalVar;
 
+extension de::genesez::platforms::common::AccessHelper;
+
 // use common conversion scripts
 extension de::genesez::platforms::common::Conversion;
 
@@ -31,6 +33,9 @@ extension de::genesez::platforms::common::Conversion;
 	TYPO3 Extbase Controller 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+cached List[MClass] allControllers(MModel this) :
+	allClassifiers().typeSelect(MClass).select( e | e.isController() );
 
 /*
 - - Controller settings - - - - - - - - - - - - - - - - - - - - - - - -
@@ -105,6 +110,10 @@ boolean isNoControllerAction(MOperation this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+cached List[MClass] allEntitiesAndValueObjects(MModel this) :
+	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
+
+
 boolean isModelPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ( ((MClass)this).isEntity() || ((MClass)this).isValueObject() ) 
@@ -112,16 +121,12 @@ boolean isModelPackageElement(MClassifier this) :
 	};
 
 
-cached List[MClass] allEntitiesAndValueObjects(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
-
-
-cached List[MProperty] allObjectProperties(MClassifier this) :
+cached List[MProperty] owningInitializableProperties(MClassifier this) :
 	let p = {} :
-		p.addAll( property.typeSelect(MAttribute).select( e | !e.static && !e.final && !e.derived ) ) ->
-	  	p.addAll( property.typeSelect(MAssociationRole).select( e | !e.derived ) ) ->
+		p.addAll( owningInitializableAttributes() ) ->
+	  	p.addAll( owningInitializableAssociationRoles() ) ->
 	  	p;
-	  	
+
 
 boolean isOneToOneUnidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isSingleValuedType() && !hasOpposite();
@@ -206,6 +211,10 @@ boolean isValueObject(MClass this) :
 /*
 - - Repository settings - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+List[MClass] allRepositories(MModel this) :
+	allClassifiers().typeSelect(MClass).select( e | e.isRepository() );
+
 
 boolean isRepositoryPackageElement(MClassifier this) :
 	switch (metaType) {

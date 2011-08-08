@@ -107,7 +107,7 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCAInterfaceShowRecordFieldList FOR MClass -»
-		'showRecordFieldList' => '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
+		'showRecordFieldList' => '«FOREACH owningInitializableProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
 «ENDDEFINE»
 
 
@@ -123,7 +123,7 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCATypesNumbers FOR MClass -»
-		'1' => array('showitem'	=> '«FOREACH allObjectProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
+		'1' => array('showitem'	=> '«FOREACH owningInitializableProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
 «ENDDEFINE»
 
 
@@ -150,8 +150,8 @@ $TCA['«name() -»'] = array (
 		«EXPAND TCAColumnsAccessControlColumns -»
 		«EXPAND TCAColumnsLocalizationColumns -»
 		«EXPAND TCAColumnsVersioningColumns -»
-		«EXPAND TCAColumnsAttributeColumn FOREACH allObjectProperties().typeSelect(MAttribute) -»
-		«EXPAND TCAColumnsAssociationColumn FOREACH allObjectProperties().typeSelect(MAssociationRole) -»
+		«EXPAND TCAColumnsAttributeColumn FOREACH owningInitializableAttributes() -»
+		«EXPAND TCAColumnsAssociationColumn FOREACH owningInitializableAssociationRoles() -»
 	)
 «ENDDEFINE»
 

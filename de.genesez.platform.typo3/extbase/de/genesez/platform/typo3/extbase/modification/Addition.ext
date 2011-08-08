@@ -65,8 +65,6 @@ Void classAdditions(MClass this) :
 			valueObjectAdditions()
 		case isRepository() :
 			repositoryAdditions()
-		case isService() : 
-			Void
 		case isValidator() :
 			validatorAdditions()
 		case isViewHelper() :
@@ -99,7 +97,7 @@ Void controllerAdditions(MClass this) :
 		.addControllerActionInitializeAction();
  
 
-private Void addControllerType(MClass this) :
+Void addControllerType(MClass this) :
 	// checks if the class has a stereotype 
 	hasT3ExtbaseControllerStereotype()
 		// if true, then create the super controller type which is specified
@@ -125,7 +123,7 @@ private Void addControllerType(MClass this) :
 Void addControllerInitializeAction(MClass this) :
 	// checks if the initalize action should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateInitializeAction("true")
-	&& operation.select( o | o.name == "initalizeAction" ).isEmpty
+	&& operation.select( o | o.name() == "initalizeAction" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".initalizeAction", "initalizeAction") :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
@@ -139,7 +137,7 @@ Void addControllerInitializeAction(MClass this) :
 Void addControllerErrorAction(MClass this) :
 	// checks if the error action should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateErrorAction("true")
-	&& operation.select( o | o.name == "errorAction" ).isEmpty
+	&& operation.select( o | o.name() == "errorAction" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".errorAction", "errorAction") :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
@@ -153,7 +151,7 @@ Void addControllerErrorAction(MClass this) :
 Void addControllerGetErrorFlashMessage(MClass this) :
 	// checks if the get error flash message method should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateGetErrorFlashMessage("true")
-	&& operation.select(o| o.name == "getErrorFlashMessage" ).isEmpty
+	&& operation.select(o| o.name() == "getErrorFlashMessage" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
@@ -181,7 +179,7 @@ Void addControllerGetErrorFlashMessage(MClass this) :
 Void addControllerActionInitializeAction(MOperation this) :
 	// checks if the initalize action for an action should be created and doesn't already exists
 	hasT3ExtbaseControllerActionCreateInitializeAction("true") 
-	&& classifier.operation.select( o | o.name == "initalize" + name.toFirstUpper() ).isEmpty
+	&& classifier.operation.select( o | o.name() == "initalize" + name.toFirstUpper() ).isEmpty
 		? (	let o = createOperation(classifier, this.xmiGuid + ".initalize" + name.toFirstUpper() + "Action", "initalize" + name.toFirstUpper() + "Action") :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
@@ -198,27 +196,6 @@ Void addControllerActionInitializeAction(MOperation this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-Void addClassValidator(MClass this) :
-	( hasT3ExtbaseEntityCreateClassValidator("true") || hasT3ExtbaseValueObjectCreateClassValidator("true") )
-	&& model().allValidators().select( e | e.name().endsWith( name + "Validator" ) ).isEmpty
-		? ( let c = createClass(model(), this.xmiGuid + ".validator", name + "Validator") :
-				// (visibility, abstract, final)
-				c.processClassifier("public", false, false) ->
-				// add comment to discribe the operation
-				c.ownedComment.add( 
-					createComment(c.xmiGuid + ".comment", "Validator for a domain object.") 
-				) ->
-				// add super validator type
-				c.addValidatorType() ->
-				// add 'isValid'
-				c.addValidatorIsValid(this) ->
-				// add stereotype to mark this class as validator
-				c.stereotype.add( 
-					createStereotype( model(), c.xmiGuid + "." + prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
-				)
-		) : Void;
-
-
 /*
 - - Entitiy additions - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -233,7 +210,7 @@ Void entityAdditions(MClass this) :
 	addClassValidator(); 
 
 
-private Void addEntityType(MClass this) :
+Void addEntityType(MClass this) :
 	// checks if the class has a stereotype 
 	hasT3ExtbaseEntityStereotype()
 		// if true, then create the super entity type which is specified
@@ -250,10 +227,6 @@ private Void addEntityType(MClass this) :
 				: Void
 		);
 
-
-
-
-
 	
 /*
 - - Value Object additions  - - - - - - - - - - - - - - - - - - - - - -
@@ -268,7 +241,7 @@ Void valueObjectAdditions(MClass this) :
 	addClassValidator();
 
 
-private Void addValueObjectType(MClass this) :
+Void addValueObjectType(MClass this) :
 	// checks if the class has a stereotype 
 	hasT3ExtbaseValueObjectStereotype()
 		// if true, then create the super value object type which is specified
@@ -301,7 +274,7 @@ Void repositoryAdditions(MClass this) :
 	additionAddRepositoryInitializeObject();
 
 
-private Void addRepositoryType(MClass this) :
+Void addRepositoryType(MClass this) :
 	// checks if the class has a stereotype 
 	hasT3ExtbaseRepositoryStereotype()
 		// if true, then create the super repository type which is specified
@@ -322,7 +295,7 @@ private Void addRepositoryType(MClass this) :
 Void additionAddRepositoryInitializeObject(MClass this) :
 	// checks if the initalize object operation should be created and doesn't already exists
 	hasT3ExtbaseRepositoryCreateInitializeObject("true")
-	&& operation.select( o | o.name == "initalizeObject" ).isEmpty
+	&& operation.select( o | o.name() == "initalizeObject" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".initalizeObject", "initalizeObject") :
 				o.processOperation( "public", false, false, false, 1, false, false ) ->
 				// add comment to discribe the operation
@@ -352,7 +325,7 @@ Void validatorAdditions(MClass this) :
 	addValidatorType();
 
 
-private Void addValidatorType(MClass this) :
+Void addValidatorType(MClass this) :
 	// checks if the class has a stereotype
 	hasT3ExtbaseValidatorStereotype()
 		// if true, then create the super validator type which is specified
@@ -372,9 +345,31 @@ private Void addValidatorType(MClass this) :
 		);
 
 
-Void addValidatorIsValid(MClass this, MType valueToValidate) :
+Void addClassValidator(MClass this) :
+	( hasT3ExtbaseEntityCreateClassValidator("true") || hasT3ExtbaseValueObjectCreateClassValidator("true") )
+	// maybe better to split at '_' and after that check the name
+	&& model().allValidators().select( e | e.name().endsWith( name + "Validator" ) ).isEmpty
+		? ( let c = createClass(model(), this.xmiGuid + ".validator", name + "Validator") :
+				// (visibility, abstract, final)
+				c.processClassifier("public", false, false) ->
+				// add comment to discribe the operation
+				c.ownedComment.add( 
+					createComment(c.xmiGuid + ".comment", "Validator for a domain object.") 
+				) ->
+				// add super validator type
+				c.addValidatorType() ->
+				// add 'isValid'
+				c.addClassValidatorIsValid(this) ->
+				// add stereotype to mark this class as validator
+				c.stereotype.add( 
+					createStereotype( model(), c.xmiGuid + "." + prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
+				)
+		) : Void;
+
+
+Void addClassValidatorIsValid(MClass this, MType valueToValidate) :
 	// checks if the is valid method doesn't already exists
-	operation.select(o| o.name == "isValid" ).isEmpty
+	operation.select(o| o.name() == "isValid" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".isValid", "isValid" ) :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("public", false, false, false, 1, false, false) ->
@@ -423,7 +418,7 @@ Void viewHelperAdditions(MClass this) :
 	addViewHelperType();
 
 
-private Void addViewHelperType(MClass this) :
+Void addViewHelperType(MClass this) :
 	// checks if the class has a stereotype 
 	hasT3FluidViewHelperStereotype()
 		// if true, then create the super view helper type which is specified
