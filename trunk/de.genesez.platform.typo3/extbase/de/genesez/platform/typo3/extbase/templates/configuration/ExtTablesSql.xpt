@@ -52,7 +52,7 @@
 «REM»
 «ENDREM»
 «DEFINE IntermediateTables FOR MClass -»
-	«EXPAND IntermediateTables FOREACH allObjectProperties().typeSelect(MAssociationRole) -»
+	«EXPAND IntermediateTables FOREACH owningInitializableAssociationRoles() -»
 «ENDDEFINE»
 
 
@@ -97,8 +97,8 @@ CREATE TABLE «asIntermediateTableName() -» (
 «DEFINE CreateTableColumns FOR MClass -»
 	«EXPAND InternalManagementColumns -»
 	
-	«EXPAND AttributeColumns FOREACH allObjectProperties().typeSelect(MAttribute) -»
-	«EXPAND AssociationColumns FOREACH allObjectProperties().typeSelect(MAssociationRole) -»
+	«EXPAND AttributeColumns FOREACH owningInitializableAttributes() -»
+	«EXPAND AssociationColumns FOREACH owningInitializableAssociationRoles() -»
 	
 	«EXPAND AccessControlColumns»
 	«EXPAND LocalizationColumns»

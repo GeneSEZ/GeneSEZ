@@ -24,35 +24,35 @@
 «ENDREM»
 
 «REM»
-	Processes the declaration of association attributes.
+	Processes the declaration of association role.
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAssociationRole).select( e | !e.derived ) -»
+	«EXPAND Declaration FOREACH owningInitializableAssociationRoles() -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the implementation of accessor methods for an association attribute.
+	Processes the implementation of accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-	«FOREACH property.typeSelect(MAssociationRole).select( e | !e.derived ) AS assocation -»
-		«EXPAND GetterImplemementation FOR assocation -»
-		«EXPAND SetterImplemementation FOR assocation -»
-		«EXPAND InsertInImplemementation FOR assocation -»
-		«EXPAND RemoveFromImplemementation FOR assocation -»
+	«FOREACH owningInitializableAssociationRoles() AS assocationRole -»
+		«EXPAND GetterImplemementation FOR assocationRole -»
+		«EXPAND SetterImplemementation FOR assocationRole -»
+		«EXPAND InsertInImplemementation FOR assocationRole -»
+		«EXPAND RemoveFromImplemementation FOR assocationRole -»
 	«ENDFOREACH -»
 «ENDDEFINE»
 
 
 «REM»
-	Processes the declaration of accessor methods for an association attribute.
+	Processes the declaration of accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MInterface -»
-	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS assocation -»
-		«EXPAND GetterDeclaration FOR assocation -»
-		«EXPAND SetterDeclaration FOR assocation -»
-		«EXPAND InsertInDeclaration FOR assocation -»
-		«EXPAND RemoveFromDeclaration FOR assocation -»
+	«FOREACH owningInitializableAssociationRoles() AS assocationRole -»
+		«EXPAND GetterDeclaration FOR assocationRole -»
+		«EXPAND SetterDeclaration FOR assocationRole -»
+		«EXPAND InsertInDeclaration FOR assocationRole -»
+		«EXPAND RemoveFromDeclaration FOR assocationRole -»
 	«ENDFOREACH -»
 «ENDDEFINE»
 
