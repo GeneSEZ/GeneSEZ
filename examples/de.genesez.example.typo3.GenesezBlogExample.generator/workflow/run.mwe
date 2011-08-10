@@ -14,8 +14,8 @@
 	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
 		<script value="de::genesez::platforms::common::Constraints" />
 		<script value="de::genesez::platforms::php::constraints::Syntax" />
-		<script value="de::genesez::platform::typo3::constraints::Convention" />
-		<script value="de::genesez::platform::typo3::extbase::constraints::Convention" />
+		<script value="de::genesez::platform::typo3v4::constraints::Convention" />
+		<script value="de::genesez::platform::typo3v4::mvc::constraints::Convention" />
 	</component>
 	
 	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
@@ -24,27 +24,22 @@
 	</component>
 	
 	<!-- create the default directory layout of an TYPO3 Extbase extension -->
-	<component id="defaultDirectory" class="de.genesez.platform.typo3.extbase.workflow.TYPO3ExtbaseDefaultDirectoryCreator">
+	<component id="defaultDirectory" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3v4MVCDefaultDirectoryCreator">
 		<outputDir value="${outputDir}" />
 	</component>
 	
-	<!-- basic TYPO3 Extbase naming modifications for an easier model to text transfomation -->
-	<!--
-	<component id="basicTYPO3Naming" class="de.genesez.platforms.common.workflow.GeneSezM2M">
-		<script value="de::genesez::platform::typo3::extbase::modification::Naming::modelNaming" />
-	</component>
-	-->
-	
 	<!-- run the typo3 code generation and transform the model into typo3 source code -->
-	<component id="generate" class="de.genesez.platform.typo3.extbase.workflow.TYPO3ExtbaseGenerator">
+	<component id="generate" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3v4MVCGenerator">
 		<!-- directory in which the generated files are placed -->
-		<outputDir value="../genesez_blog_example" />
+		<outputDir value="${outputDir}" />
 		<!-- type mapping file -->
 		<typeMappingFile value="typemapping.xml" />
 		<!-- boolean value indicates if the model name is used as extension key or not -->
 		<useModelNameAsExtensionKey value="false" />
 		<!-- boolean value indicates if the model is TYPO3 Extbase complaint or not -->
 		<isT3ExtbaseCompliant value="true" />
+		<!-- boolean value indicates if scaffolding is enabled or not -->
+		<scaffolding value="false" />
 		<!-- name of the TYPO3 Extbase extension -->
 		<extensionKey value="genesez_blog_example" />
 		<!-- do not generate session comments -->
