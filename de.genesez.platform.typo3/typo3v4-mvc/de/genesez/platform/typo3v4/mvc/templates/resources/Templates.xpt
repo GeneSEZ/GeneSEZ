@@ -1,0 +1,141 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating "locallang_csh_<domain_element>.xml".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-12
+«ENDREM»
+
+«REM» use TYPO3 profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
+
+«REM» use TYPO3 Extbase conversion and naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
+
+«REM» use TYPO3 Extbase access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
+
+«REM» use common conversion scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "locallang_csh_<domain_object>.xml".
+	Generates context sensitive help (CSH) for all entities and value objects.
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«REM» Set naming context to 'Configuration' «ENDREM»
+«setNamingContext( namingContextConfiguration() ) -»
+
+«FOREACH allEntitiesAndValueObjects().select(e|e.hasT3ExtbaseEntityIsAggregateRoot("true")) AS domainObject -»
+	«EXPAND EditRoot FOR domainObject -»
+	«EXPAND ListRoot FOR domainObject -»
+	«EXPAND NewRoot FOR domainObject -»
+	«EXPAND ShowRoot FOR domainObject -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«DEFINE EditRoot FOR MClass -»
+«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/Edit.html" -»
+<f:layout name="Default" />
+
+<f:section name="main">
+	<h1>Edit «name -»</h1>
+
+	<f:flashMessages />
+
+	<f:render partial="FormErrors" />
+
+	<f:form method="post" action="update" name="«name -»" object="{«name -»}" >
+		<f:render partial="«name -»/FormFields" arguments="{«name -»:«name -»}" />
+		<f:form.submit value="Save" />
+	</f:form>
+</f:section>
+«ENDFILE -»
+«ENDDEFINE»
+
+«DEFINE ListRoot FOR MClass -»
+«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/List.html" -»
+<f:layout name="Default" />
+
+<f:section name="main">
+	<h1>Listing for «name -»</h1>
+
+	<f:flashMessages />
+
+	<table class="«fullQualifiedExtensionName() -»" >
+		<tr>
+			«FOREACH allInitializableAttributes() AS attribute -»
+			<th><f:translate key="«name() -».«attribute.name() -»" /></th>
+			«ENDFOREACH -»
+			<th></th>
+			<th></th>
+		</tr>
+		<f:for each="{blogs}" as="blog">
+		<tr>
+			«FOREACH allInitializableAttributes() AS attribute -»
+			<th><f:translate key="«classifier.name() -».«name() -»" /></th>
+			<td><f:link.action action="show" arguments="{«name -» -» : «name -»}"> {«name -».«attribute.name -»}</f:link.action></td>
+			«ENDFOREACH -»
+			<td><f:link.action action="edit" arguments="{blog : blog}">Edit</f:link.action></td>
+			<td><f:link.action action="delete" arguments="{blog : blog}">Delete</f:link.action></td>
+		</tr>
+		</f:for>
+	</table>
+
+	<f:link.action action="new">New «name -»</f:link.action>
+</f:section>
+«ENDFILE -»
+«ENDDEFINE»
+
+«DEFINE NewRoot FOR MClass -»
+«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/New.html" -»
+<f:layout name="Default" />
+
+<f:section name="main">
+	<h1>New «name -»</h1>
+
+	<f:flashMessages />
+
+	<f:render partial="FormErrors" />
+
+	<f:form method="post" action="create" name="new«name -»" object="{new«name -»}">
+		<f:render partial="«name -»/FormFields" />
+		<f:form.submit value="Create new" />
+	</f:form>
+</f:section>
+«ENDFILE -»
+«ENDDEFINE»
+
+«DEFINE ShowRoot FOR MClass -»
+«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/Show.html" -»
+<f:layout name="Default" />
+
+<f:section name="main">
+	<h1>Single View for «name -»</h1>
+
+	<f:flashMessages />
+
+	<f:render partial="«name -»/Properties" arguments="{«name -»:«name -»}" />
+	
+	<f:link.action action="list">Back to list</f:link.action><br />
+	<f:link.action action="new">New «name -»</f:link.action>
+</f:section>
+«ENDFILE -»
+«ENDDEFINE»
