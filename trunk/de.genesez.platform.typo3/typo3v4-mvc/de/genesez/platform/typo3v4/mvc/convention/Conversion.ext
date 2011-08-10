@@ -1,0 +1,118 @@
+/**
+ * Helper functions for conversions for easier code generation.
+ * Everything in relation to files and directories!!!
+ *
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-07-20
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 Extbase convention and naming scripts
+extension de::genesez::platform::typo3v4::mvc::convention::Convention;
+extension de::genesez::platform::typo3v4::mvc::convention::Naming;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase file name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats the file name of a classifier without file extension.
+ *
+ * @return	the file name of a classifier
+ */
+String fileName(MClassifier this) :
+	classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();
+
+
+/**
+ * Formats the file name of a classifier as php file.
+ *
+ * @return	the file name of the classifier
+ */
+String fileNamePHP(MClassifier this) :
+	fileName() + fileExtensionPHP();
+
+
+private String locallangCshXMLFileName(MClassifier this) :
+	locallangCshXmlFileNamePrefix() + name() + fileExtensionXML();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase file path conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Getter for the full filename of a classifier based on the given basename and including path.
+ *
+ * @param	filename	the filename of the classifier, usually the name according to naming conventions
+ * @return	the full file name of the classifier including the path, e.g. "Classes/Domain/Model/Blog.php"
+ */
+String filePath(MClassifier this, String filename) :
+	dirPath() + fileSeparator() + filename;
+
+
+/**
+ * Getter for the directory path of a classifier based on it's namespace
+ * 
+ * @return	the directory path for the classifier, e.g. "Classes/Domain/Model"
+ */
+private String dirPath(MClassifier this) :
+	baseDirPath() + fileSeparator() + classifierNamePath().replaceAll(classifierNameSeperator(), fileSeparator());
+
+
+/**
+ * Getter for the base path of a classifier based on it's namespace.
+ * 
+ * @return	 the base directory path for the classifier, e.g. "Classes"
+ */
+private String baseDirPath(MClassifier this) :
+	switch {
+		default : classesPath()
+	};
+
+
+String extEmconfPHPFilePath() :
+	extEmconfPHPFileName();
+
+
+String extLocalconfPhpFilePath() :
+	extLocalconfPhpFileName();
+
+
+String extTablesPHPFilePath() :
+	extTablesPHPFileName();
+	
+
+String extTablesSQLFilePath() :
+	extTablesSQLFileName();
+
+
+String tcaPhpFilePath(MClassifier this) :
+	configurationTCAPath() + fileSeparator() + fileNamePHP();
+
+
+String setupTxtFilePath() :
+	configurationTypoScriptPath() + fileSeparator() + setupTxtFileName();
+	
+
+String constantsTxtFilePath() :
+	configurationTypoScriptPath() + fileSeparator() + constantsTxtFileName();	
+
+
+String locallangCshXmlFilePath(MClassifier this) :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangCshXMLFileName();
+
+
+String locallangDbXmlFilePath() :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangDbXmlFileName();	
+
+
+String locallangXmlFilePath() :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangXmlFileName();

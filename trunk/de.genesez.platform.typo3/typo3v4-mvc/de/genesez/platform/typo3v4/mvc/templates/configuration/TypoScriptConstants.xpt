@@ -1,0 +1,94 @@
+«IMPORT gcore»
+«REM»
+	Performs the generation of TypoScript "constants.txt".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-14
+«ENDREM»
+
+«REM» use TYPO3 Extbase convention and conversion scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
+
+«REM» use TYPO3 Extbase access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "constants.txt".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE constantsTxtFilePath() -»
+«LET fullQualifiedShortExtensionKey() AS fullQualifiedShortExtensionKey -»
+«LET extensionKey() AS extensionKey -»
+«EXPAND PluginConfiguration(extensionKey, fullQualifiedShortExtensionKey) -»
+
+«EXPAND ModuleConfiguration(extensionKey, fullQualifiedShortExtensionKey) -»
+
+«EXPAND OwnTypoScriptDeclaration("constants.txt.own.typoscript.declaration." + xmiGuid) -»
+«ENDLET -»
+«ENDLET -»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«DEFINE PluginConfiguration(String extensionKey, String fullQualifiedShortExtensionKey) FOR MModel -»
+«IF !allPlugins().isEmpty -»
+plugin.«fullQualifiedShortExtensionKey -» {
+	view {
+		# cat=plugin.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:«extensionKey -»/«resourcesPrivateTemplatesPath()»/
+		# cat=plugin.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:«extensionKey -»/«resourcesPrivatePartialsPath()»/
+		# cat=plugin.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:«extensionKey -»/«resourcesPrivateLayoutsPath()»/
+	}
+	persistence {
+		# cat=plugin.«fullQualifiedShortExtensionKey -»//a; type=int+; label=Default storage PID
+		storagePid = 
+	}
+}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE ModuleConfiguration(String extensionKey, String fullQualifiedShortExtensionKey) FOR MModel -»
+«IF !allModules().isEmpty -»
+module.«fullQualifiedShortExtensionKey -» {
+	view {
+		# cat=module.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template root (BE)
+		templateRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendTemplatesPath()»/
+		# cat=module.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template partials (BE)
+		partialRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendPartialsPath()»/
+		# cat=module.«fullQualifiedShortExtensionKey -»/file; type=string; label=Path to template layouts (BE)
+		layoutRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendLayoutsPath()»/
+	}
+	persistence {
+		# cat=module.«fullQualifiedShortExtensionKey -»//a; type=int+; label=Default storage PID
+		storagePid = 
+	}
+}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own TypoScript declarations.
+«ENDREM»
+«DEFINE OwnTypoScriptDeclaration(String id) FOR MModel -»
+«PROTECT CSTART '// ' CEND '' ID (id)»
+// TODO: put your further TypoScript declarations here
+«ENDPROTECT»
+«ENDDEFINE»

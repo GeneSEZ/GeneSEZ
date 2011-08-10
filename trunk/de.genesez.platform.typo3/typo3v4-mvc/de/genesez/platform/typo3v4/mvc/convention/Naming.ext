@@ -1,0 +1,385 @@
+/**
+ * General naming conventions for TYPO3 Extbase
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-05-11
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 Extbase profile scripts	
+extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
+
+// use TYPO3 Extbase convention scripts
+extension de::genesez::platform::typo3v4::mvc::convention::Convention;
+
+// use common access helper scripts
+extension de::genesez::platforms::common::AccessHelper;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase name context conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String namingContextGeneral() :
+	"General";
+	
+
+String namingContextPlain() :
+	"Plain";
+	
+
+String namingContextConfiguration() :
+	"Configuration";
+
+
+/**
+ * Get the actual naming context.
+ * 
+ * @return The actual naming context
+ */
+String getNamingContext() :
+	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.getNamingContext();
+
+
+/**
+ * Set the new naming context.
+ * 
+ * @param namingContext The new naming context
+ */
+Void setNamingContext(String namingContext) :
+	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.setNamingContext(java.lang.String);
+
+
+/**
+ * Revert the previous naming context.
+ */
+Void revertNamingContext() :
+	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.revertNamingContext();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase classifier name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String name(MType this) :
+	switch (metaType) {
+		case MExternal : ((MExternal)this).specification
+		case MPrimitiveType : ((MPrimitiveType)this).name
+		default : ((MClassifier)this).name()
+	};
+
+
+String name(String this) : 
+	this;
+
+
+String name(MClassifier this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// checks if the naming context is 'Configuration'
+		case namingContextConfiguration() :
+			asConfigurationName()
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};
+
+
+/**
+ * Formats a classifier name using prefix + suffix 
+ * in 'General' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted classifier name
+ */
+private asGeneralName(MClassifier this) :
+	classifierNameBase() + classifierNameSeperator() + classifierNamePath() + classifierNameSeperator() + classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();	
+
+
+/**
+ * Formats a classifier name using prefix + suffix 
+ * in 'Configuration' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted classifier name
+ */
+private asConfigurationName(MClassifier this) :
+	asGeneralName().toLowerCase();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase property name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String name(MProperty this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// checks if the naming context is 'Configuration'
+		case namingContextConfiguration() :
+			asConfigurationName()
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};	
+
+
+private String asGeneralName(MProperty this) :
+	name;
+
+
+private String asConfigurationName(MProperty this) : 
+	name;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase attribute name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an attribute name as a normal attribute or constant
+ * in 'General' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted attribute name
+ */
+private String asGeneralName(MAttribute this) :
+	final && static && hasDefaultValue()
+		? name.toUpperCase()
+		: name.toFirstLower();
+
+
+/**
+ * Formats an attribute name as a normal attribute or constant
+ * in 'Configuration' TYPO3 Extbase naming context. 
+ * 
+ * @return	the formatted attribute name
+ */
+private String asConfigurationName(MAttribute this) :
+	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
+
+
+/**
+ * Formats an attribute name as a getter method.
+ *
+ * @return	the formatted name of the getter method
+ */
+String asGetterName(MAttribute this) : 
+	getterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an attribute name as a setter or inject (DI) method.
+ * 
+ * @return	the formatted name of the setter method
+ */
+String asSetterName(MAttribute this) : 
+	setterNamePrefix() + name.toFirstUpper();
+
+	
+/**
+ * Formats an attribute name as a 'insert in' method.
+ * 
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertInName(MAttribute this) : 
+	insertInNamePrefix() + name.toFirstUpper();
+
+/**
+ * Formats an attribute name as a 'remove from' method.
+ * 
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFromName(MAttribute this) : 
+	removeFromNamePrefix() + name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase association role name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Formats an association role name as a normal attribute
+ * in 'General' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted association role name
+ */
+private String asGeneralName(MAssociationRole this) :
+	name.toFirstLower();
+
+
+/**
+ * Formats an association role name as a normal attribute
+ * in 'Configuration' TYPO3 Extbase naming context. 
+ * 
+ * @return	the formatted association role name
+ */
+private String asConfigurationName(MAssociationRole this) :
+	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
+
+
+/**
+ * Formats an association role name as a getter method.
+ *
+ * @return	the formatted name of the getter method
+ */
+String asGetterName(MAssociationRole this) : 
+	getterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an association role name as a setter method.
+ * 
+ * @return	the formatted name of the setter method
+ */
+String asSetterName(MAssociationRole this) : 
+	setterNamePrefix() + name.toFirstUpper();
+
+
+/**
+ * Formats an association role name as a 'insert in' method.
+ * 
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertInName(MAssociationRole this) : 
+	insertInNamePrefix() + name.toFirstUpper();
+
+/**
+ * Formats an association role name as a 'remove from' method.
+ * 
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFromName(MAssociationRole this) : 
+	removeFromNamePrefix() + name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase operation name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String name(MOperation this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};
+
+/**
+ * Formats an operation name using suffix 
+ * in 'General' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted operation name
+ */
+private String asGeneralName(MOperation this) :
+	name.toFirstLower() + operationNameSuffix();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 Extbase parameter name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String name(MParameter this) :
+	// The name depends on the actual TYPO3 Extbase naming context.
+	switch ( getNamingContext() ) {
+		// checks if the naming context is 'Plain'
+		// then return the name specified inside the model 
+		case namingContextPlain() :
+			name
+		// otherwise return the general TYPO3 Extbase name	
+		default :
+			asGeneralName()
+	};
+
+
+/**
+ * Formats a parameter name 
+ * in 'General' TYPO3 Extbase naming context.
+ * 
+ * @return	the formatted parameter name
+ */
+private String asGeneralName(MParameter this) : 
+	name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase controller
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+List[String] asControllerActionPairs(MModel this, List[String] listOfXmiGuids) :
+	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.asControllerActionPairs(de.genesez.metamodel.gcore.MModel, java.util.List);
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase plugins and modules
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String asPluginName(MInterface this) :
+	name.toFirstUpper();
+
+
+String asModuleName(MInterface this) :
+	fullQualifiedExtensionName().toLowerCase() + extensionNameSeperator() + name.toLowerCase();
+
+
+String asT3PluginType(String value) :
+	switch (value) {
+		case prT3ExtbasePluginTypeExtbaseContentElement() :
+			pluginTypeContentElement()
+		default :
+			pluginTypePlugin()
+	};
+
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Extbase persistance
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String asIntermediateTableName(MAssociationRole this) :
+	fullQualifiedExtensionName().toLowerCase() + classifierNameSeperator()
+		+ ( classifier.name.compareTo( type.name() ) < 0 
+			? classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" ) + type.asIntermediateTableName() + classifierNameSeperator() + name()
+			: type.asIntermediateTableName() + classifierNameSeperator() + name () + classifierNameSeperator() + classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" )
+		  )
+		+ classifierNameSeperator() + "mm";
+
+
+private String asIntermediateTableName(MType this) :
+	name().split( classifierNameSeperator() ).last().toLowerCase();
