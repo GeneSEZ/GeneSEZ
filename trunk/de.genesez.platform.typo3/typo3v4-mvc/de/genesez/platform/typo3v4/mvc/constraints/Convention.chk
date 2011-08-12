@@ -8,6 +8,12 @@
 // based on genesez meta model
 import gcore;
 
+// use TYPO3 MVC access helper scripts which overrides
+// common access helper scripts if script name is equal 
+extension de::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
+extension de::genesez::platforms::common::AccessHelper;
+
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
@@ -15,3 +21,13 @@ import gcore;
 // properties in entities und value objects protected
 
 // attributes only single values 
+
+/**
+ * Checks if the visibility of attributes and association roles is 'protected' of TYPO3 MVC Extbase entities or value objects.
+ * 
+ * @return	false, if the visibility is 'protected', otherwise true
+ */
+context MProperty WARNING "GeneSEZ: TYPO3!" :
+	classifier.metaType == MClass && ( ((MClass)classifier).isEntity() || ((MClass)classifier).isValueObject() )
+		? visibility == "protected"
+		: true;

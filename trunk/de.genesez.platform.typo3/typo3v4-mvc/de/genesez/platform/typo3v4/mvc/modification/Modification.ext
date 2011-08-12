@@ -8,6 +8,14 @@
 //	based on genesez meta model
 import gcore;
 
+// use TYPO3 MVC naming scripts
+extension de::genesez::platform::typo3v4::mvc::convention::Naming;
+
+// use TYPO3 MVC access helper scripts which overrides
+// common access helper scripts if script name is equal 
+extension de::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
+extension de::genesez::platforms::common::AccessHelper;
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -15,4 +23,47 @@ import gcore;
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+Void modelModifications(MModel this) :
+	setNamingContext( namingContextGeneral() ) ->
+	packageModifications();
 
+
+Void packageModifications(MPackage this) :
+	// perform model modifications for all nested packages
+	nestedPackage.packageModifications() ->
+	
+	// perform model modifications for all classes
+	classifier.typeSelect(MClass).classModifications();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	MClass
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+Void classModifications(MClass this) :
+	switch {
+		case isEntity() || isValueObject() :
+			modelAdditions()
+		default :
+			Void
+	};	
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Model modifications
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - Model modifications - - - - - - - - - - - - - - - - - - - - - - - -
+
+*/
+
+/**
+ * Model modifications for an TYPO3 MVC Extbase entity or value object.
+ */
+Void modelAdditions(MClass this) :
+	property.collect( e | e.setVisibility("protected") ); 

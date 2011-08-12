@@ -8,41 +8,48 @@
 // based on genesez meta model
 import gcore;
 
-// use TYPO3 Extbase profile access helper scripts
+// use TYPO3 MVC Extbase profile + access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
 
-// use TYPO3 Fluid profile access helper scripts
+// use TYPO3 MVC Fluid profile + access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::FluidAccessHelper;
 extension de::genesez::platform::typo3v4::mvc::profile::FluidProfile;
 
-// use TYPO3 Extbase convention scripts
+// use TYPO3 MVC convention scripts
 extension de::genesez::platform::typo3v4::mvc::convention::Convention;
 
-// use TYPO3 workflow global var scripts
+// use TYPO3 MVC workflow global var scripts
 extension de::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
-
-extension de::genesez::platforms::common::AccessHelper;
 
 // use common conversion scripts
 extension de::genesez::platforms::common::Conversion;
 
-extension de::genesez::platforms::common::log::Log;
-
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Controller 
+	TYPO3 MVC Extbase Controller 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
-
-List[MClass] allControllers(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isController() );
 
 /*
 - - Controller settings - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Returns the a list of TYPO3 MVC Extbase controllers.
+ * 
+ * @return	the list of TYPO3 MVC Extbase controllers or an empty list
+ */
+List[MClass] allControllers(MModel this) :
+	allClassifiers().typeSelect(MClass).select( e | e.isController() );
+
+
+/**
+ * Checks if a classifier is part of the TYPO3 MVC Extbase controller package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 Extbase controller package, otherwise false
+ */
 boolean isControllerPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isController()
@@ -51,25 +58,23 @@ boolean isControllerPackageElement(MClassifier this) :
 
 
 /**
- * Checks if a class is a TYPO3 Extbase controller.
+ * Checks if a class is a TYPO3 MVC Extbase controller.
  *
- * @return	true if the class is a TYPO3 Extbase controller, otherwise false
+ * @return	true if the class is a TYPO3 MVC Extbase controller, otherwise false
  */
 boolean isController(MClass this) :
+	// first check if this class has an stereotype
+	hasT3ExtbaseControllerStereotype() ||
+	// second check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseControllerPackageStereotype() ||
+	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesControllerPath() ) ||
+	// fourth check if generalization is an TYPO3 MVC Extbase controller
 	(
-		// first check if this class has an stereotype
-		hasT3ExtbaseControllerStereotype() ||
-		// second check if the package of this class has an stereotype
-		owningContext.hasT3ExtbaseControllerPackageStereotype() ||
-		// third check if this model is TYPO3 Exbase complaint and this class is inside the correct package (dir)
-		( globalVarIsT3ExtbaseCompliant() && dirPath() == classesControllerPath() ) ||
-		// fourth check if generalization is an TYPO3 Extbase controller
-		(
-			!generalization.typeSelect(MClass).isEmpty
-				? generalization.typeSelect(MClass).first().isController()
-				: false
-		)
-	) ? true : false;
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isController()
+			: false
+	);
 
 
 /*
@@ -77,17 +82,15 @@ boolean isController(MClass this) :
 */
 
 /**
- * Checks if a operation is a TYPO3 Extbase controller action.
+ * Checks if a operation is a TYPO3 MVC Extbase controller action.
  * 
- * @return	true if the operation is a TYPO3 Extbase controller action, otherwise false
+ * @return	true if the operation is a TYPO3 MVC Extbase controller action, otherwise false
  */
 boolean isControllerAction(MOperation this) :
-	(
-		// first check if the operation has an stereotype
-		hasT3ExtbaseControllerActionStereotype() ||
-		// second check if the class is a controller AND the operation is not a non controller action
-		((MClass)classifier).isController() && !hasT3ExtbaseNoControllerActionStereotype()
-	) ? true : false;
+	// first check if the operation has an stereotype
+	hasT3ExtbaseControllerActionStereotype() ||
+	// second check if the class is a controller AND the operation is not a non controller action
+	((MClass)classifier).isController() && !hasT3ExtbaseNoControllerActionStereotype();
 
 
 /*
@@ -95,27 +98,35 @@ boolean isControllerAction(MOperation this) :
 */
 
 /**
- * Checks if a operation isn't a TYPO3 Extbase controller action.
+ * Checks if a operation isn't a TYPO3 MVC Extbase controller action.
  *
- * @return	true if the operation isn't a TYPO3 Extbase controller action, otherwise false
+ * @return	true if the operation isn't a TYPO3 MVC Extbase controller action, otherwise false
  */
 boolean isNoControllerAction(MOperation this) :
-	(
-		// first check if the operation has an stereotype
-		hasT3ExtbaseNoControllerActionStereotype()
-	) ? true : false;
+	// first check if the operation has an stereotype
+	hasT3ExtbaseNoControllerActionStereotype();
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Domain 
+	TYPO3 MVC Extbase Domain 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Returns the a list of TYPO3 MVC Extbase entities and value objects.
+ * 
+ * @return	the list of TYPO3 MVC Extbase entities and value objects or an empty list
+ */
 List[MClass] allEntitiesAndValueObjects(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
 
 
+/**
+ * Checks if a classifier is part of the TYPO3 MVC Extbase model package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 Extbase model package, otherwise false
+ */
 boolean isModelPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ( ((MClass)this).isEntity() || ((MClass)this).isValueObject() ) 
@@ -123,6 +134,11 @@ boolean isModelPackageElement(MClassifier this) :
 	};
 
 
+/**
+ * Returns the a list of all owning initializable properties.
+ * 
+ * @return	the list of of initializable properties or an empty list
+ */
 List[MProperty] owningInitializableProperties(MClassifier this) :
 	let p = {} :
 		p.addAll( owningInitializableAttributes() ) ->
@@ -130,34 +146,74 @@ List[MProperty] owningInitializableProperties(MClassifier this) :
 	  	p;
 
 
+/**
+ * Checks if an association role is one to one (1:1) unidirectornal.
+ * 
+ * @return	true if an association role is one to one unidirectornal, otherwise false
+ */
 boolean isOneToOneUnidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isSingleValuedType() && !hasOpposite();
 
 
+/**
+ * Checks if an association role is one to one (1:1) bidirectornal.
+ * 
+ * @return	true if an association role is one to one bidirectornal, otherwise false
+ */
 boolean isOneToOneBidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isSingleValuedType() && hasOpposite();
 
-	
+
+/**
+ * Checks if an association role is one to many (1:n) unidirectornal.
+ * 
+ * @return	true if an association role is one to many unidirectornal, otherwise false
+ */
 boolean isOneToManyUnidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isMultiValuedType() && !hasOpposite();
 
 	
+/**
+ * Checks if an association role is one to many (1:n) bidirectornal.
+ * 
+ * @return	true if an association role is one to many bidirectornal, otherwise false
+ */
 boolean isOneToManyBidirectional(MAssociationRole this) :
 	isOppositeSingleValuedType() && isMultiValuedType() && hasOpposite();
 
 
+/**
+ * Checks if an association role is many to one (n:1) unidirectornal.
+ * 
+ * @return	true if an association role is many to one unidirectornal, otherwise false
+ */
 boolean isManyToOneUnidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isSingleValuedType() && !hasOpposite();
 
-	
+
+/**
+ * Checks if an association role is many to one (n:1) bidirectornal.
+ * 
+ * @return	true if an association role is many to one bidirectornal, otherwise false
+ */
 boolean isManyToOneBidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isSingleValuedType() && hasOpposite();
 	
 
+/**
+ * Checks if an association role is many to many (m:n) unidirectornal.
+ * 
+ * @return	true if an association role is many to many unidirectornal, otherwise false
+ */
 boolean isManyToManyUnidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isMultiValuedType() && !hasOpposite();
 	
 
+/**
+ * Checks if an association role is many to many (m:n) bidirectornal.
+ * 
+ * @return	true if an association role is many to many bidirectornal, otherwise false
+ */
 boolean isManyToManyBidirectional(MAssociationRole this) :
 	isOppositeMultiValuedType() && isMultiValuedType() && hasOpposite();
 
@@ -167,23 +223,21 @@ boolean isManyToManyBidirectional(MAssociationRole this) :
 */
 
 /**
- * Checks if a class is a TYPO3 Extbase entity.
+ * Checks if a class is a TYPO3 MVC Extbase entity.
  *
- * @return	true if the class is a TYPO3 Extbase entity, otherwise false
+ * @return	true if the class is a TYPO3 MVC Extbase entity, otherwise false
  */
 boolean isEntity(MClass this) :
+	// first check if this class has an stereotype
+	hasT3ExtbaseEntityStereotype() ||
+	// second check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseEntityPackageStereotype() ||
+	// third check if generalization is an TYPO3 MVC Extbase entitry
 	(
-		// first check if this class has an stereotype
-		hasT3ExtbaseEntityStereotype() ||
-		// second check if the package of this class has an stereotype
-		owningContext.hasT3ExtbaseEntityPackageStereotype() ||
-		// third check if generalization is an TYPO3 Extbase entitry
-		(
-			!generalization.typeSelect(MClass).isEmpty
-				? generalization.typeSelect(MClass).first().isEntity()
-				: false
-		) 
-	) ? true : false;
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isEntity()
+			: false
+	);
 
 
 /*
@@ -191,33 +245,41 @@ boolean isEntity(MClass this) :
 */
 
 /**
- * Checks if a class is a TYPO3 Extbase value object.
+ * Checks if a class is a TYPO3 MVC Extbase value object.
  *
- * @return	true if the class is a TYPO3 Extbase value object, otherwise false
+ * @return	true if the class is a TYPO3 MVC Extbase value object, otherwise false
  */
 boolean isValueObject(MClass this) :
+	// first check if this class has an stereotype
+	hasT3ExtbaseValueObjectStereotype() ||
+	// second check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseValueObjectPackageStereotype() ||
+	// third check if generalization is an TYPO3 MVC Extbase value object
 	(
-		// first check if this class has an stereotype
-		hasT3ExtbaseValueObjectStereotype() ||
-		// second check if the package of this class has an stereotype
-		owningContext.hasT3ExtbaseValueObjectPackageStereotype() ||
-		// third check if generalization is an TYPO3 Extbase value object
-		(
-			!generalization.typeSelect(MClass).isEmpty
-				? generalization.typeSelect(MClass).first().isValueObject()
-				: false
-		)
-	) ? true : false;
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isValueObject()
+			: false
+	);
 
 
 /*
 - - Repository settings - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Returns the a list of TYPO3 MVC Extbase repositories.
+ * 
+ * @return	the list of TYPO3 MVC Extbase repositories or an empty list
+ */
 List[MClass] allRepositories(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isRepository() );
 
 
+/**
+ * Checks if a classifier is part of the TYPO3 MVC Extbase repository package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 Extbase repository package, otherwise false
+ */
 boolean isRepositoryPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isRepository() 
@@ -226,31 +288,34 @@ boolean isRepositoryPackageElement(MClassifier this) :
 
 
 /**
- * Checks if a class is a TYPO3 Extbase repository.
+ * Checks if a class is a TYPO3 MVC Extbase repository.
  *
- * @return	true if the class is a TYPO3 Extbase repository, otherwise false
+ * @return	true if the class is a TYPO3 MVC Extbase repository, otherwise false
  */
 boolean isRepository(MClass this) :
-	(
-		// first check if this class has an stereotype
-		hasT3ExtbaseRepositoryStereotype() ||
-		// second check if the package of this class has an stereotype
-		owningContext.hasT3ExtbaseRepositoryPackageStereotype() ||
-		// third check if this model is TYPO3 Exbase complaint and this class is inside the correct package (dir)
-		( globalVarIsT3ExtbaseCompliant() && dirPath() == classesDomainRepositoryPath() ) ||
-		// fourth check if generalization is an TYPO3 Extbase repository
-		(
-			!generalization.typeSelect(MClass).isEmpty
-				? generalization.typeSelect(MClass).first().isRepository()
-				: false
-		)
-	) ? true : false;
+	// first check if this class has an stereotype
+	hasT3ExtbaseRepositoryStereotype() ||
+	// second check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseRepositoryPackageStereotype() ||
+	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainRepositoryPath() ) ||
+	// fourth check if generalization is an TYPO3 MVC Extbase repository
+	(	
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isRepository()
+			: false
+	);
 	
 
 /*
 - - Service settings  - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Checks if a classifier is part of the TYPO3 MVC Extbase service package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 Extbase service package, otherwise false
+ */
 boolean isServicePackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isService()
@@ -260,35 +325,43 @@ boolean isServicePackageElement(MClassifier this) :
 
 /**
  *
- * Checks if a class is a TYPO3 Extbase service.
+ * Checks if a class is a TYPO3 MVC Extbase service.
  * 
- * @return	true if the class is a TYPO3 Extbase service, otherwise false
+ * @return	true if the class is a TYPO3 MVC Extbase service, otherwise false
  */
 boolean isService(MClass this) :
+	// first check if this class has an stereotype
+	hasT3ExtbaseServiceStereotype() ||
+	// second check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseServicePackageStereotype() ||
+	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	( globalVarIsT3MVCCompliant() &&  dirPath() == classesDomainServicePath() ) ||
+	// fourth check if generalization is an TYPO3 MVC Extbase service
 	(
-		// first check if this class has an stereotype
-		hasT3ExtbaseServiceStereotype() ||
-		// second check if the package of this class has an stereotype
-		owningContext.hasT3ExtbaseServicePackageStereotype() ||
-		// third check if this model is TYPO3 Exbase complaint and this class is inside the correct package (dir)
-		( globalVarIsT3ExtbaseCompliant() &&  dirPath() == classesDomainServicePath() ) ||
-		// fourth check if generalization is an TYPO3 Extbase service
-		(
-			!generalization.typeSelect(MClass).isEmpty
-				? generalization.typeSelect(MClass).first().isService()
-				: false
-		)
-	) ? true : false;
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isService()
+			: false
+	);
 
 
 /*
 - - Validator settings  - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Returns the a list of TYPO3 MVC Extbase validators.
+ * 
+ * @return	the list of TYPO3 MVC Extbase validators or an empty list
+ */
 List[MClass] allValidators(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isValidator() );
 	
 
+/**
+ * Checks if a classifier is part of the TYPO3 MVC Extbase validator package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 Extbase validator package, otherwise false
+ */
 boolean isValidatorPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isValidator()
@@ -297,25 +370,23 @@ boolean isValidatorPackageElement(MClassifier this) :
 
 
 /**
- * Checks if a class is a TYPO3 Extbase validator.
+ * Checks if a class is a TYPO3 MVC Extbase validator.
  *
- * @return	true if the class is a TYPO3 Extbase validator, otherwise false
+ * @return	true if the class is a TYPO3 MVC Extbase validator, otherwise false
  */
 boolean isValidator(MClass this) :
+	// first check if this class has an stereotype
+	hasT3ExtbaseValidatorStereotype() ||
+	// second check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseValidatorPackageStereotype() ||
+	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainValidatorPath() ) ||
+	// fourth check if generalization is an TYPO3 MVC Extbase validator
 	(
-		// first check if this class has an stereotype
-		hasT3ExtbaseValidatorStereotype() ||
-		// second check if the package of this class has an stereotype
-		owningContext.hasT3ExtbaseValidatorPackageStereotype() ||
-		// third check if this model is TYPO3 Exbase complaint and this class is inside the correct package (dir)
-		( globalVarIsT3ExtbaseCompliant() && dirPath() == classesDomainValidatorPath() ) ||
-		// fourth check if generalization is an TYPO3 Extbase validator
-		(
-			!generalization.typeSelect(MClass).isEmpty
-				? generalization.typeSelect(MClass).first().isValidator()
-				: false
-		)
-	) ? true : false;
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isValidator()
+			: false
+	);
 
 
 boolean hasValidatorStereotypes(MElement this) :
@@ -325,7 +396,7 @@ boolean hasValidatorStereotypes(MElement this) :
 List[MStereotype] getAssignedValidatorStereotypes(MElement this) :
 	stereotype.select( e |
 		// first check is if the stereotype starts with the prefix "T3Extbase" 
-		// and ends with the suffix "Validator". So all TYPO3 Extbase validators are added. 
+		// and ends with the suffix "Validator". So all TYPO3 MVC Extbase validators are added. 
 		( e.name.startsWith("T3Extbase") && e.name.endsWith("Validator") ) ||
 		// second check is if the sterotype has a sterotype
 		e.hasT3ExtbaseValidatorStereotype() 
@@ -336,7 +407,7 @@ List[MStereotype] getAssignedValidatorStereotypes(MElement this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Fluid ViewHelper 
+	TYPO3 MVC Fluid ViewHelper 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -344,6 +415,11 @@ List[MStereotype] getAssignedValidatorStereotypes(MElement this) :
 - - ViewHelper settings - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Checks if a classifier is part of the TYPO3 MVC Fluid view helper package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 Fluid view helper package, otherwise false
+ */
 boolean isViewHelperPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isViewHelper()
@@ -352,36 +428,44 @@ boolean isViewHelperPackageElement(MClassifier this) :
 
 
 /**
- * Checks if a class is a TYPO3 Fluid view helper.
+ * Checks if a class is a TYPO3 MVC Fluid view helper.
  *
- * @return	true if the class is a TYPO3 Fluid view helper, otherwise false
+ * @return	true if the class is a TYPO3 MVC Fluid view helper, otherwise false
  */
 boolean isViewHelper(MClass this) :
+	// first check if this class has an stereotype
+	hasT3FluidViewHelperStereotype() ||
+	// second check if the package of this class has an stereotype
+	owningContext.hasT3FluidViewHelperPackageStereotype() ||
+	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesViewHelpersPath() ) ||
+	// fourth check if generalization is an TYPO3 MVC Fluid view helper
 	(
-		// first check if this class has an stereotype
-		hasT3FluidViewHelperStereotype() ||
-		// second check if the package of this class has an stereotype
-		owningContext.hasT3FluidViewHelperPackageStereotype() ||
-		// third check if this model is TYPO3 Extbase complaint and this class is inside the correct package (dir)
-		( globalVarIsT3ExtbaseCompliant() && dirPath() == classesViewHelpersPath() ) ||
-		// fourth check if generalization is an TYPO3 Extbase controller
-		(
-			!generalization.typeSelect(MClass).isEmpty
-				? generalization.typeSelect(MClass).first().isViewHelper()
-				: false
-		)
-	) ? true : false;		
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isViewHelper()
+			: false
+	);		
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Plugin and Module Configuration 
+	TYPO3 MVC Extbase Plugin and Module Configuration 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Returns the a list of TYPO3 MVC Extbase plugins.
+ * 
+ * @return	the list of TYPO3 MVC Extbase plugins or an empty list
+ */
 List[MInterface] allPlugins(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbasePluginStereotype() );
 
 
+/**
+ * Returns the a list of TYPO3 MVC Extbase modules.
+ * 
+ * @return	the list of TYPO3 MVC Extbase modules or an empty list
+ */
 List[MInterface] allModules(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbaseModuleStereotype() );

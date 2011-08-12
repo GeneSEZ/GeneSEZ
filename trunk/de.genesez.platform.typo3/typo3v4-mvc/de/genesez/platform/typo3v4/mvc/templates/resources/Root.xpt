@@ -6,6 +6,7 @@
 	@date	2011-07-14
 «ENDREM»
 
+«EXTENSION de::genesez::platform::typo3v4::mvc::workflow::GlobalVar»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -19,9 +20,16 @@
 «DEFINE Root FOR MModel»
 
 	«REM» Generate Localization code «ENDREM»
-	«EXPAND LocallangXml::Root»
-	«EXPAND LocallangDbXml::Root»
-	«EXPAND LocallangCshXml::Root»
+	«EXPAND LocallangXml::Root -»
+	«EXPAND LocallangDbXml::Root -»
+	«EXPAND LocallangCshXml::Root -»
+	
+	«REM» Generate Fluid code «ENDREM»
+	«IF globalVarScaffolding() -»
+		«EXPAND FluidLayoutsHtml::Root -»
+		«EXPAND FluidPartialsHtml::Root -»
+		«REM»«EXPAND FluidTemplatesHtml::Root -»«ENDREM»
+	«ENDIF -»
 «ENDDEFINE»
 
 

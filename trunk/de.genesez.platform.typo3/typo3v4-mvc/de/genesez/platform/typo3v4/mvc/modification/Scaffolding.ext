@@ -2,7 +2,7 @@
  * Additions of the model before generation of source code.  
  *  
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-07-14
+ * @date	2011-08-11
  */
 
 //	based on genesez meta model
@@ -14,14 +14,17 @@ extension de::genesez::platforms::common::log::Log;
 // use GeneSEZ profile scripts
 extension de::genesez::platforms::common::genesez::profile::Profile;
 
-// use TYPO3 Extbase profile + access helper scripts
+// use TYPO3 MVC Extbase profile + access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
 
-// use TYPO3 Extbase addition scripts
+// use TYPO3 MVC naming scripts
+extension de::genesez::platform::typo3v4::mvc::convention::Naming;
+
+// use TYPO3 MVC addition scripts
 extension de::genesez::platform::typo3v4::mvc::modification::Addition;
 
-// use TYPO3 Extbase access helper scripts which overrides
+// use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equal 
 extension de::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
 extension de::genesez::platforms::common::AccessHelper;
@@ -29,8 +32,9 @@ extension de::genesez::platforms::common::AccessHelper;
 // use common create template scripts
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 
-// use workflow global var scripts
+// use workflow globalvar scripts
 extension de::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -40,6 +44,7 @@ extension de::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
 
 Void modelScaffolding(MModel this) :
 	logInfo( "Start Scaffolding?: " + globalVarScaffolding() ) ->
+	setNamingContext( namingContextPHPComplaint() ) ->
 	globalVarScaffolding()
 		? packageScaffolding()
 		: Void;
@@ -49,8 +54,8 @@ Void packageScaffolding(MPackage this) :
 	// perform package additions for all nested packages
 	nestedPackage.packageScaffolding() ->
 	
-	// perform package additions for all classes
-	classifier.typeSelect(MClass).select( e | e.isEntity() && e.hasT3ExtbaseEntityIsAggregateRoot("true") ).classScaffolding();
+	// perform package additions for all aggreagate roots
+	classifier.typeSelect(MClass).select( e | e.hasT3ExtbaseEntityIsAggregateRoot("true") ).classScaffolding();
 
 
 /*
@@ -65,18 +70,18 @@ Void classScaffolding(MClass this) :
 	controllerScaffolding() ->
 	logTrace( "Create repository for domain object?: " + !existsRepository() ) ->
 	repositoryScaffolding() ->
-	
+	logTrace( "Create plugin for domain object?: " + !existsPlugin() ) ->
 	pluginScaffolding();	
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Controller additions
+	TYPO3 MVC Extbase Controller additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Model additions for an TYPO3 Extbase controller.
+ * Model additions for an TYPO3 MVC Extbase controller.
  */
 Void controllerScaffolding(MClass this) :
 	createController();
@@ -115,7 +120,7 @@ MClass processController(MClass this, MClass domainObject) :
 
 
 Void addControllerRepositoryAttribute(MClass this, MClass domainObject) :
-	let a = createAttribute(this.xmiGuid + "." + domainObject.name.toFirstLower() + "Repository", domainObject.name.toFirstLower() + "Repository") :
+	let a = createAttribute(xmiGuid + "." + domainObject.name().toFirstLower() + "Repository", domainObject.name().toFirstLower() + "Repository") :
 		// (visibility, derived, multiplicity, unique, ordered)
 		a.processProperty("protected", false, 1, false, false) ->
 		// (defaultvalue, static, final)
@@ -142,14 +147,14 @@ Void addControllerListAction(MClass this, MClass domainObject) :
 Void addControllerShowAction(MClass this, MClass domainObject) :
 	let o = createControllerAction("show", "Displays one single domain object.") :
 		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name.toFirstLower(), domainObject, "")
+			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "")
 		);
 		
 
 Void addControllerNewAction(MClass this, MClass domainObject) :
 	let o = createControllerAction("new", "Displays a form for creating a new domain object.") :
 		o.parameter.add(
-			let p = createControllerActionDomainObjectParameter(o, "new" + domainObject.name.toFirstUpper(), domainObject, "A fresh domain object to display.") :
+			let p = createControllerActionDomainObjectParameter(o, "new" + domainObject.name(), domainObject, "A fresh domain object to display.") :
 				p.setDefaultvalue("NULL") ->
 				p
 		);
@@ -158,28 +163,28 @@ Void addControllerNewAction(MClass this, MClass domainObject) :
 Void addControllerCreateAction(MClass this, MClass domainObject) :
 	let o = createControllerAction("create", "Creates a new domain object.") :
 		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, "new" + domainObject.name.toFirstUpper(), domainObject, "The new domain object to create.")
+			createControllerActionDomainObjectParameter(o, "new" + domainObject.name(), domainObject, "The new domain object to create.")
 		);
 
 
 Void addControllerEditAction(MClass this, MClass domainObject) :
 	let o = createControllerAction("edit", "Displays a form for editing an existing domain object.") :
 		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name.toFirstLower(), domainObject, "The existing domain object to display.")
+			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "The existing domain object to display.")
 		);
 
 
 Void addControllerUpdateAction(MClass this, MClass domainObject) :
 	let o = createControllerAction("update", "Updates an existing domain object.") :
 		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name.toFirstLower(), domainObject, "The existing domain object to update")
+			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "The existing domain object to update")
 		);
 
 
 Void addControllerDeleteAction(MClass this, MClass domainObject) :
 	let o = createControllerAction("delete", "Deletes an existing domain object.") :
 		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name.toFirstLower(), domainObject, "The existing domain object to update")
+			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "The existing domain object to update")
 		);
 
 
@@ -218,12 +223,12 @@ MParameter createControllerActionDomainObjectParameter(MOperation container, Str
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Repository additions
+	TYPO3 MVC Extbase Repository additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Model additions for an TYPO3 Extbase repository.
+ * Model additions for an TYPO3 MVC Extbase repository.
  */
 Void repositoryScaffolding(MClass this) :
 	createRepository();
@@ -253,12 +258,12 @@ MClass processRepository(MClass this, MClass domainObject) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Plugin additions
+	TYPO3 MVC Extbase Plugin additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Model additions for an TYPO3 Extbase plugin.
+ * Model additions for an TYPO3 MVC Extbase plugin.
  */
 Void pluginScaffolding(MClass this) :
 	createPlugin();
@@ -269,7 +274,7 @@ MClass createPlugin(MClass this) :
 	!existsPlugin()
 		? (	let i = createInterface(model(), xmiGuid + ".plugin", name()) :
 				i.processPlugin(this)
-		) : model().allPlugins().select( e | e.shortName() == name() ).first();
+		) : model().allPlugins().select( e | e.name() == name() ).first();
 
 
 MInterface processPlugin(MInterface this, MClass domainObject) :
@@ -308,18 +313,18 @@ Void addPluginControllerAction(MOperation controllerAction, MTag controllerActio
 
 boolean existsController(MClass this) :
 	// checks if the controller doesn't already exists
-	!model().allControllers().select( e | e.shortName() == name + "Controller" ).isEmpty;
+	!model().allControllers().select( e | e.shortName() == name() + "Controller" ).isEmpty;
 	
 
 boolean existsRepository(MClass this) :
 	// checks if the respository doesn't already exists
-	!model().allRepositories().select( e | e.shortName() == name + "Repository" ).isEmpty;
+	!model().allRepositories().select( e | e.shortName() == name() + "Repository" ).isEmpty;
 
 
 boolean existsPlugin(MClass this) :
 	// checks if the plugin doesn't already exists
-	!model().allPlugins().select( e | e.shortName() == name ).isEmpty;
+	!model().allPlugins().select( e | e.name() == name() ).isEmpty;
 
 
 private String shortName(MClassifier this) :
-	name().split("_").last();
+	name( this, namingContextGeneral() ).split("_").last();

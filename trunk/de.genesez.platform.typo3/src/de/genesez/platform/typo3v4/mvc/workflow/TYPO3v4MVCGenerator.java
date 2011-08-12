@@ -30,7 +30,7 @@ public class TYPO3v4MVCGenerator extends Generator {
 		defaults.put("template", "de::genesez::platform::typo3v4::mvc::templates::Root::Root");
 		defaults.put("typeMappingFile", "de/genesez/platform/typo3v4/mvc/typemapping/typemapping.xml");
 		defaults.put("useModelNameAsExtensionKey", "false");
-		defaults.put("isT3ExtbaseCompliant", "false");
+		defaults.put("isT3MVCCompliant", "false");
 		defaults.put("scaffolding", "false");
 	}
 	
@@ -97,11 +97,11 @@ public class TYPO3v4MVCGenerator extends Generator {
 	/**
 	 * Setter for the workflow parameter <em><b>isT3ExtbaseCompliant</b></em>.
 	 * 
-	 * @param isT3ExtbaseCompliant true if the model package structure is equal
-	 *            TYPO3 Extbase Extension structure, otherwise false
+	 * @param isT3MVCCompliant true if the model package structure is equal
+	 *            TYPO3 MVC Extension structure, otherwise false
 	 */
-	public void setIsT3ExtbaseCompliant(String isT3ExtbaseCompliant) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("isT3ExtbaseCompliant", isT3ExtbaseCompliant));
+	public void setIsT3MVCCompliant(String isT3MVCCompliant) {
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("isT3MVCCompliant", isT3MVCCompliant));
 	}
 	
 	/**

@@ -24,10 +24,10 @@
 «ENDREM»
 «DEFINE Root FOR MModel -»
 «FILE setupTxtFilePath() -»
-«LET fullQualifiedShortExtensionKey() AS fullQualifiedShortExtensionKey -»
-«EXPAND PluginConfiguration(fullQualifiedShortExtensionKey) -»
+«LET fullQualifiedExtensionNameToLowerCase() AS extensionName -»
+«EXPAND PluginConfiguration(extensionName) -»
 
-«EXPAND ModuleConfiguration(fullQualifiedShortExtensionKey) -»
+«EXPAND ModuleConfiguration(extensionName) -»
 
 «EXPAND OwnTypoScriptDeclaration("setup.txt.own.typoscript.declaration." + xmiGuid) -»
 «ENDLET -»
@@ -41,30 +41,30 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«DEFINE PluginConfiguration(String fullQualifiedShortExtensionKey) FOR MModel -»
+«DEFINE PluginConfiguration(String extensionName) FOR MModel -»
 «IF !allPlugins().isEmpty -»
-plugin.«fullQualifiedShortExtensionKey -» {
+plugin.«extensionName -» {
 	persistence {
-		storagePid = {$plugin.«fullQualifiedShortExtensionKey -».persistence.storagePid}
+		storagePid = {$plugin.«extensionName -».persistence.storagePid}
 	}
 	view {
-		templateRootPath = {$plugin.«fullQualifiedShortExtensionKey -».view.templateRootPath}
-		partialRootPath = {$plugin.«fullQualifiedShortExtensionKey -».view.partialRootPath}
-		layoutRootPath = {$plugin.«fullQualifiedShortExtensionKey -».view.layoutRootPath}
+		templateRootPath = {$plugin.«extensionName -».view.templateRootPath}
+		partialRootPath = {$plugin.«extensionName -».view.partialRootPath}
+		layoutRootPath = {$plugin.«extensionName -».view.layoutRootPath}
 	}
 }
 «ENDIF -»
 «ENDDEFINE»
 
 
-«DEFINE ModuleConfiguration(String fullQualifiedShortExtensionKey) FOR MModel -»
+«DEFINE ModuleConfiguration(String extensionName) FOR MModel -»
 «IF !allModules().isEmpty -»
-module.«fullQualifiedShortExtensionKey -» {
-	persistence = {$module.«fullQualifiedShortExtensionKey -».persistence.storagePid}
+module.«extensionName -» {
+	persistence = {$module.«extensionName -».persistence.storagePid}
 	view {
-		templateRootPath = {$module.«fullQualifiedShortExtensionKey -».view.templateRootPath}
-		partialRootPath = {$module.«fullQualifiedShortExtensionKey -».view.partialRootPath}
-		layoutRootPath = {$module.«fullQualifiedShortExtensionKey -».view.layoutRootPath}
+		templateRootPath = {$module.«extensionName -».view.templateRootPath}
+		partialRootPath = {$module.«extensionName -».view.partialRootPath}
+		layoutRootPath = {$module.«extensionName -».view.layoutRootPath}
 	}
 }
 «ENDIF -»
