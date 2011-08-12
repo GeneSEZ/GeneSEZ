@@ -36,7 +36,6 @@
 	Processes the generation of "ext_tables.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«REM» Set naming context to 'Configuration' «ENDREM»
 «setNamingContext( namingContextConfiguration() ) -»
 
 «FILE extTablesPHPFilePath() -»
@@ -98,7 +97,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'«asPluginName() -»',
-	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconPathName().length > 0 -»,
+	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconPathName() != "" -»,
 	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconPathName() -»'«ENDIF»
 );
 «ENDDEFINE»
@@ -121,7 +120,7 @@ if (TYPO3_MODE === 'BE') {
 	«EXPAND ModuleComment -»
 	Tx_Extbase_Utility_Extension::registerModule(
 		$_EXTKEY,
-		'«getT3ExtbaseModuleMainModule().toLowerCase() -»',
+		'«getT3ExtbaseModuleMainModule().asMainModulName() -»',
 		'«asModuleName() -»',
 		'«getT3ExtbaseModulePosition() -»',
 		array(«FOREACH asControllerActionPairs( model(), getT3ExtbaseModuleUncachedActions() ) AS uca SEPARATOR ", "»
@@ -169,7 +168,7 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 	object.
 «ENDREM»
 «DEFINE ContextSensitiveHelpInclusion FOR MClass -»
-t3lib_extMgm::addLLrefForTCAdescr('«name() -»', 'EXT:«extensionKey()»/«locallangCshXmlFilePath() -»');
+t3lib_extMgm::addLLrefForTCAdescr('«name( this, namingContextLocalizationCSH() ) -»', 'EXT:«extensionKey()»/«locallangCshXmlFilePath() -»');
 «ENDDEFINE»
 
 
@@ -226,7 +225,7 @@ $TCA['«name() -»'] = array (
 «REM»
 «ENDREM»
 «DEFINE TCACtrlLabel FOR MClass -»
-		'label'	=> '«IF getT3TCAClassLabel().length > 0 -»«getAttributeByXmiGuid( model(), getT3TCAClassLabel() ).name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
+		'label'	=> '«IF getT3TCAClassLabel() != "" -»«getAttributeByXmiGuid( model(), getT3TCAClassLabel() ).name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
 «ENDDEFINE»
 
 
@@ -242,7 +241,7 @@ $TCA['«name() -»'] = array (
 «REM»
 «ENDREM»
 «DEFINE TCACtrlLabelAltForce FOR MClass -»
-«IF hasT3TCAClassStereotype() && !getT3TCAClassLabelAlt().isEmpty -»
+«IF !getT3TCAClassLabelAlt().isEmpty -»
 		'label_alt_force' => «getT3TCAClassLabelAltForce() -»,
 «ENDIF -»
 «ENDDEFINE»
@@ -315,9 +314,9 @@ $TCA['«name() -»'] = array (
 «ENDREM»
 «DEFINE TCACtrlEnablecolumns FOR MClass -»
 		'enablecolumns' => array(
-			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
+			«EXPAND TCACtrlDisabled -»
+			«EXPAND TCACtrlStarttime -»
+			«EXPAND TCACtrlEndtime -»
 		),
 «ENDDEFINE»
 

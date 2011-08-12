@@ -1,0 +1,153 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating "locallang_csh_<domain_element>.xml".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-12
+«ENDREM»
+
+«REM» use TYPO3 Extbase profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
+
+«REM» use TYPO3 Extbase conversion and naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
+
+«REM» use TYPO3 Extbase access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
+
+«REM» use common conversion scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«setNamingContext( namingContextConfiguration() ) -»
+
+«EXPAND BackendFormErrorPartial -»
+«EXPAND FrontendFormErrorPartial -»
+
+«FOREACH allEntitiesAndValueObjects().select( e | e.hasT3ExtbaseEntityIsAggregateRoot("true") ) AS domainObject -»
+	«EXPAND BackendFormFieldsPartial FOR domainObject -»
+	«EXPAND BackendFormPropertiesPartial FOR domainObject -»
+	«EXPAND FrontendFormFieldsPartial FOR domainObject -»
+	«EXPAND FrontendFormPropertiesPartial FOR domainObject -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«DEFINE BackendFormErrorPartial FOR MModel -»
+«FILE resourcesPrivateBackendPartialsPath() + "/FormErrors.html" -»
+«EXPAND FormErrorContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE FrontendFormErrorPartial FOR MModel -»
+«FILE resourcesPrivatePartialsPath() + "/FormErrors.html" -»
+«EXPAND FormErrorContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE BackendFormFieldsPartial FOR MClass -»
+«FILE resourcesPrivateBackendPartialsPath() + "/" + name + "/FormFields.html" -»
+«EXPAND FormFieldsContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE BackendFormPropertiesPartial FOR MClass -»
+«FILE resourcesPrivateBackendPartialsPath() + "/" + name + "/Properties.html" -»
+«EXPAND PropertiesContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE FrontendFormFieldsPartial FOR MClass -»
+«FILE resourcesPrivatePartialsPath() + "/" + name + "/FormFields.html" -»
+«EXPAND FormFieldsContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE FrontendFormPropertiesPartial FOR MClass -»
+«FILE resourcesPrivatePartialsPath() + "/" + name + "/Properties.html" -»
+«EXPAND PropertiesContent -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«DEFINE FormErrorContent FOR MModel -»
+<f:form.errors>
+	<div class="error">
+		{error.message}
+		<f:if condition="{error.propertyName}">
+			<p>
+				<strong>{error.propertyName}</strong>:
+				<f:for each="{error.errors}" as="errorDetail">
+					{errorDetail.message}
+				</f:for>
+			</p>
+		</f:if>
+	</div>
+</f:form.errors>
+«ENDDEFINE»
+
+
+«DEFINE FormFieldsContent FOR MClass -»
+«FOREACH owningInitializableAttributes() AS p -»
+«EXPAND FormFieldsLabel FOR p -»
+«EXPAND FormFieldsInput FOR p -»
+«ENDFOREACH»
+«ENDDEFINE»
+
+
+«DEFINE FormFieldsLabel FOR MProperty -»
+<label for="«name() -»">
+	«EXPAND FTranslateKey -» «IF 1 == 2 -»<span class="required">(required)</span>«ENDIF -»
+</label><br />
+«ENDDEFINE»
+
+
+«DEFINE FormFieldsInput FOR MProperty -»
+<f:form.textbox property="«name( this, namingContextGeneral() ) -»" /><br />
+«ENDDEFINE»
+
+
+«DEFINE PropertiesContent FOR MClass -»
+<table class="«fullQualifiedExtensionKey() -»" >
+	«EXPAND PropertiesTable FOREACH owningInitializableAttributes() -»
+</table>
+«ENDDEFINE»
+
+
+«DEFINE PropertiesTable FOR MProperty -»
+	<tr>
+		<td>
+			«EXPAND FTranslateKey -»
+		</td>
+		<td>
+			{«classifier.name.toFirstLower() -».«name.toFirstLower() -»}
+		</td>
+	</tr>
+«ENDDEFINE»
+
+
+«DEFINE FTranslateKey FOR MProperty -»
+<f:translate key="«name( this, namingContextLocalization() ) -»" />
+«ENDDEFINE»

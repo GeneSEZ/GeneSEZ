@@ -2,27 +2,24 @@
  * Additions of the model before generation of source code.  
  *  
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-07-14
+ * @date	2011-08-11
  */
 
 //	based on genesez meta model
 import gcore;
 
-// use common logging scripts
-extension de::genesez::platforms::common::log::Log;
-
-// use TYPO3 Extbase profile + access helper scripts
+// use TYPO3 MVC Extbase profile + access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
 
-// use TYPO3 Fluid profile + access helper scripts
+// use TYPO3 MVC Fluid profile + access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::FluidProfile;
 extension de::genesez::platform::typo3v4::mvc::profile::FluidAccessHelper;
 
-// use TYPO3 Extbase naming scripts
+// use TYPO3 MVC naming scripts
 extension de::genesez::platform::typo3v4::mvc::convention::Naming;
 
-// use TYPO3 Extbase access helper scripts which overrides
+// use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equal 
 extension de::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
 extension de::genesez::platforms::common::AccessHelper;
@@ -38,15 +35,16 @@ extension de::genesez::platforms::common::m2m::CreateTemplate;
 */
 
 Void modelAdditions(MModel this) :
+	setNamingContext( namingContextGeneral() ) ->
 	packageAdditions();
 
 
 Void packageAdditions(MPackage this) :
 	// perform model additions for all nested packages
-	this.nestedPackage.packageAdditions() ->
+	nestedPackage.packageAdditions() ->
 	
 	// perform model additions for all classes
-	this.classifier.typeSelect(MClass).classAdditions();
+	classifier.typeSelect(MClass).classAdditions();
 
 
 /*
@@ -76,12 +74,12 @@ Void classAdditions(MClass this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Controller additions
+	TYPO3 MVC Extbase Controller additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Model additions for an TYPO3 Extbase controller.
+ * Model additions for an TYPO3 MVC Extbase controller.
  */
 Void controllerAdditions(MClass this) :
 	// add super controller type 
@@ -124,13 +122,11 @@ Void addControllerInitializeAction(MClass this) :
 	// checks if the initalize action should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateInitializeAction("true")
 	&& operation.select( o | o.name() == "initalizeAction" ).isEmpty
-		? (	let o = createOperation(this, this.xmiGuid + ".initalizeAction", "initalizeAction") :
+		? (	let o = createOperation(xmiGuid + ".initalizeAction", "initalizeAction") :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
 				// add comment to discribe the operation
-				o.ownedComment.add( 
-					createComment(o.xmiGuid + ".comment", "Override initalizeAction to solve tasks which all actions have in common.") 
-				)
+				o.createComment(o.xmiGuid + ".comment", "Override initalizeAction to solve tasks which all actions have in common.")
 		) : Void;
 
 
@@ -138,13 +134,11 @@ Void addControllerErrorAction(MClass this) :
 	// checks if the error action should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateErrorAction("true")
 	&& operation.select( o | o.name() == "errorAction" ).isEmpty
-		? (	let o = createOperation(this, this.xmiGuid + ".errorAction", "errorAction") :
+		? (	let o = createOperation(xmiGuid + ".errorAction", "errorAction") :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
 				// add comment to discribe the operation
-				o.ownedComment.add( 
-					createComment(o.xmiGuid + ".comment", "Override errorAction to show that errors happend.") 
-				)
+				o.createComment(o.xmiGuid + ".comment", "Override errorAction to show that errors happend.")
 		) : Void;
 
 
@@ -152,24 +146,23 @@ Void addControllerGetErrorFlashMessage(MClass this) :
 	// checks if the get error flash message method should be created and doesn't already exists
 	hasT3ExtbaseControllerCreateGetErrorFlashMessage("true")
 	&& operation.select(o| o.name() == "getErrorFlashMessage" ).isEmpty
-		? (	let o = createOperation(this, this.xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
+		? (	let o = createOperation(xmiGuid + ".getErrorFlashMessage", "getErrorFlashMessage") :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
 				// add comment to discribe the operation
-				o.ownedComment.add( 
-					createComment(o.xmiGuid + ".comment", "Override getErrorFlashMessage to customize the flash message.") 
-				) ->
+				o.createComment(o.xmiGuid + ".comment", "Override getErrorFlashMessage to customize the flash message.") ->
 				o.setReturn(
 					let return = createParameter(o, o.xmiGuid + ".return", "") :
+						// (defaultValue, direction, multiplicity, unique, ordered)
 						return.processParameter("", "return", 1, true, false) ->
-						return.ownedComment.add( 
-							createComment(o.xmiGuid + ".return.comment", "The flash message") 
-						) ->
+						// add comment to discribe the parameter
+						return.createComment(return.xmiGuid + ".comment", "The flash message") -> 
 						return.setType( 
 							createPrimitiveTypeString( model() ) 
 						) ->
 						return
 				) ->
+				// add stereotype to mark this operation as no controller action
 				o.stereotype.add( 
 					createStereotype( model(), o.xmiGuid + "." + prT3ExtbaseNoControllerAction(), prT3ExtbaseNoControllerAction() ) 
 				)
@@ -179,20 +172,18 @@ Void addControllerGetErrorFlashMessage(MClass this) :
 Void addControllerActionInitializeAction(MOperation this) :
 	// checks if the initalize action for an action should be created and doesn't already exists
 	hasT3ExtbaseControllerActionCreateInitializeAction("true") 
-	&& classifier.operation.select( o | o.name() == "initalize" + name.toFirstUpper() ).isEmpty
-		? (	let o = createOperation(classifier, this.xmiGuid + ".initalize" + name.toFirstUpper() + "Action", "initalize" + name.toFirstUpper() + "Action") :
+	&& classifier.operation.select( o | o.name() == "initalize" + name().toFirstUpper() ).isEmpty
+		? (	let o = createOperation(classifier, xmiGuid + ".initalize" + name().toFirstUpper(), "initalize" + name().toFirstUpper()) :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("protected", false, false, false, 1, false, false) ->
 				// add comment to discribe the operation
-				o.ownedComment.add( 
-					createComment(o.xmiGuid + ".comment", "Define initialize" + name.toFirstUpper() + "Action" + " to solve tasks before the action is called.") 
-				)
+				o.createComment(o.xmiGuid + ".comment", "Define initialize" + name().toFirstUpper() + " to solve tasks before the action is called.")
 		) : Void;
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Model additions
+	TYPO3 MVC Extbase Model additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -202,7 +193,7 @@ Void addControllerActionInitializeAction(MOperation this) :
 */
 
 /**
- * Model additions for an TYPO3 Extbase entity.
+ * Model additions for an TYPO3 MVC Extbase entity.
  */
 Void entityAdditions(MClass this) :
 	// add super entity type
@@ -233,7 +224,7 @@ Void addEntityType(MClass this) :
 */
 
 /**
- * Model additions for an TYPO3 Extbase value object.
+ * Model additions for an TYPO3 MVC Extbase value object.
  */
 Void valueObjectAdditions(MClass this) :
 	// add super value object type
@@ -261,12 +252,12 @@ Void addValueObjectType(MClass this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Repository additions
+	TYPO3 MVC Extbase Repository additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Model additions for an TYPO3 Extbase repository.
+ * Model additions for an TYPO3 MVC Extbase repository.
  */
 Void repositoryAdditions(MClass this) :
 	// add super repository type
@@ -297,28 +288,27 @@ Void additionAddRepositoryInitializeObject(MClass this) :
 	hasT3ExtbaseRepositoryCreateInitializeObject("true")
 	&& operation.select( o | o.name() == "initalizeObject" ).isEmpty
 		? (	let o = createOperation(this, this.xmiGuid + ".initalizeObject", "initalizeObject") :
+				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation( "public", false, false, false, 1, false, false ) ->
 				// add comment to discribe the operation
-				o.ownedComment.add( 
-					createComment(o.xmiGuid + ".comment", "Life cycle method.") 
-				)
+				o.createComment(o.xmiGuid + ".comment", "Life cycle method.")
 		) : Void;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Service additions
+	TYPO3 MVC Extbase Service additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Extbase Validator additions
+	TYPO3 MVC Extbase Validator additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Model additions for an TYPO3 Extbase repository.
+ * Model additions for an TYPO3 MVC Extbase repository.
  */
 Void validatorAdditions(MClass this) :
 	// add super validiator type
@@ -347,15 +337,12 @@ Void addValidatorType(MClass this) :
 
 Void addClassValidator(MClass this) :
 	( hasT3ExtbaseEntityCreateClassValidator("true") || hasT3ExtbaseValueObjectCreateClassValidator("true") )
-	// maybe better to split at '_' and after that check the name
-	&& model().allValidators().select( e | e.name().endsWith( name + "Validator" ) ).isEmpty
-		? ( let c = createClass(model(), this.xmiGuid + ".validator", name + "Validator") :
+	&& model().allValidators().select( e | e.shortName() == shortName() + "Validator" ).isEmpty
+		? ( let c = createClass(model(), xmiGuid + ".validator", shortName() + "Validator") :
 				// (visibility, abstract, final)
 				c.processClassifier("public", false, false) ->
 				// add comment to discribe the operation
-				c.ownedComment.add( 
-					createComment(c.xmiGuid + ".comment", "Validator for a domain object.") 
-				) ->
+				c.createComment(c.xmiGuid + ".comment", "Validator for a domain object.") ->
 				// add super validator type
 				c.addValidatorType() ->
 				// add 'isValid'
@@ -367,25 +354,22 @@ Void addClassValidator(MClass this) :
 		) : Void;
 
 
-Void addClassValidatorIsValid(MClass this, MType valueToValidate) :
+Void addClassValidatorIsValid(MClass this, MClass domainObject) :
 	// checks if the is valid method doesn't already exists
 	operation.select(o| o.name() == "isValid" ).isEmpty
-		? (	let o = createOperation(this, this.xmiGuid + ".isValid", "isValid" ) :
+		? (	let o = createOperation(xmiGuid + ".isValid", "isValid" ) :
 				// (visibility, static, abstract, final, multiplicity, unique, ordered)
 				o.processOperation("public", false, false, false, 1, false, false) ->
 				// add comment to discribe the operation
-				o.ownedComment.add( 
-					createComment(o.xmiGuid + ".comment", "Checks if the given value is valid according to the validator.") 
-				) ->
+				o.createComment(o.xmiGuid + ".comment", "Checks if the given value is valid according to the validator.") ->
 				o.parameter.add(
 					let value = createParameter(o, o.xmiGuid + ".value", "value") :
 						// (defaultValue, direction, multiplicity, unique, ordered)
 						value.processParameter("", "in", 1, true, false) ->
-						value.ownedComment.add( 
-							createComment(value.xmiGuid + ".comment", "The value that should be validated") 
-						) ->
+						// add comment to discribe the parameter
+						value.createComment(value.xmiGuid + ".comment", "The value that should be validated") ->
 						value.setType( 
-							valueToValidate
+							domainObject
 						) ->
 						value
 				) ->
@@ -393,9 +377,8 @@ Void addClassValidatorIsValid(MClass this, MType valueToValidate) :
 					let return = createParameter(o, o.xmiGuid + ".return", "") :
 						// (defaultValue, direction, multiplicity, unique, ordered)
 						return.processParameter("", "return", 1, true, false) ->
-						return.ownedComment.add( 
-							createComment(return.xmiGuid + ".comment", "TRUE if the value is valid, FALSE if an error occured") 
-						) ->
+						// add comment to discribe the parameter
+						return.createComment(return.xmiGuid + ".comment", "TRUE if the value is valid, FALSE if an error occured") ->
 						return.setType( 
 							createPrimitiveTypeBoolean( model() ) 
 						) ->
@@ -406,12 +389,12 @@ Void addClassValidatorIsValid(MClass this, MType valueToValidate) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Fluid ViewHelper additions
+	TYPO3 MVC Fluid ViewHelper additions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
- * Model additions for an TYPO3 Fluid view helper.
+ * Model additions for an TYPO3 MVC Fluid view helper.
  */
 Void viewHelperAdditions(MClass this) :
 	// add super view helper type
@@ -435,8 +418,12 @@ Void addViewHelperType(MClass this) :
 				: Void 
 		);
 
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	Helper functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+private String shortName(MClassifier this) :
+	name().split("_").last();
