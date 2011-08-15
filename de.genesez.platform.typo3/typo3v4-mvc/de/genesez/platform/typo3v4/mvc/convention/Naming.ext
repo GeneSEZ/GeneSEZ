@@ -20,6 +20,9 @@ extension de::genesez::platform::typo3v4::mvc::convention::Convention;
 // use common access helper scripts
 extension de::genesez::platforms::common::AccessHelper;
 
+// use common type mapping scripts
+extension de::genesez::platforms::common::typemapping::TypeMapping;
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -51,6 +54,10 @@ String namingContextLocalizationCSH() :
 	"LocalizationCSH";
 
 
+String namingContextObject() :
+	"Object";
+
+
 /**
  * Get the actual naming context.
  * 
@@ -75,6 +82,7 @@ Void setNamingContext(String namingContext) :
 Void revertNamingContext() :
 	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.revertNamingContext();
 
+
 /**
  * The name depends on the actual naming context.
  */
@@ -83,6 +91,8 @@ String name(MElement this) :
 
 /**
  * The name depends on the naming context parameter.
+ *
+ * @param namingContext The naming context
  */
 String name(MElement this, String namingContext) :
 	switch ( namingContext ) {
@@ -100,56 +110,15 @@ String name(MElement this, String namingContext) :
 			asLocalizationName()
 		// checks if the naming context is 'LocalizationCSH'
 		case namingContextLocalizationCSH() :
-			asLocalizationNameCSH()
+			asLocalizationCSHName()
+		// checks if the naming context is 'Object'
+		case namingContextObject() :
+			asObjectName()
 		// otherwise return the default name	
 		default :
 			asDefaultName()
 	};
 
-
-/**
- * The name depends on the actual naming context.
- */
-String name(MClassifier this) :
-	name( this, getNamingContext() );
-
-
-/**
- * The name depends on the naming context parameter.
- */
-String name(MClassifier this, String namingContext) :
-	switch ( namingContext ) {
-		// checks if the naming context is 'General' 
-		case namingContextGeneral() :
-			asGeneralName()
-		// checks if the naming context is 'PHPComplaint'
-		case namingContextPHPComplaint() :
-			asPHPComplaintName() 
-		// checks if the naming context is 'Configuration'
-		case namingContextConfiguration() :
-			asConfigurationName()
-		// checks if the naming context is 'Localization'
-		case namingContextLocalization() :
-			asLocalizationName()
-		// checks if the naming context is 'LocalizationCSH'
-		case namingContextLocalizationCSH() :
-			asLocalizationNameCSH()
-		// otherwise return the default name	
-		default :
-			asDefaultName()
-	};
-
-
-String name(MType this) :
-	switch (metaType) {
-		case MExternal : ((MExternal)this).specification
-		case MPrimitiveType : ((MPrimitiveType)this).name
-		default : ((MClassifier)this).name()
-	};
-	
-
-String name(String this) : 
-	this;
 
 /**
  * Formats the element name 
@@ -168,7 +137,7 @@ private String asDefaultName(MElement this) :
  * @return	the formatted element name
  */
 private String asGeneralName(MElement this) :
-	logWarn("There exists no 'General' context for " + name + " (" + metaType + ") so that the default name is returned.") ->
+	logWarn("There exists no 'General' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
 	name;
 
 
@@ -179,7 +148,7 @@ private String asGeneralName(MElement this) :
  * @return	the formatted element name
  */
 private String asPHPComplaintName(MElement this) :
-	logWarn("There exists no 'PHPComplaint' context for " + name + " (" + metaType + ") so that the default name is returned.") ->
+	logWarn("There exists no 'PHPComplaint' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
 	name;
 
 
@@ -190,7 +159,7 @@ private String asPHPComplaintName(MElement this) :
  * @return	the formatted element name
  */
 private String asConfigurationName(MElement this) :
-	logWarn("There exists no 'Configuration' context for " + name + " (" + metaType + ") so that the default name is returned.") ->
+	logWarn("There exists no 'Configuration' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
 	name;
 
 
@@ -201,7 +170,7 @@ private String asConfigurationName(MElement this) :
  * @return	the formatted element name
  */
 private String asLocalizationName(MElement this) :
-	logWarn("There exists no 'Localization' context for " + name + " (" + metaType + ") so that the default name is returned.") ->
+	logWarn("There exists no 'Localization' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
 	name;
 	
 	
@@ -211,8 +180,19 @@ private String asLocalizationName(MElement this) :
  * 
  * @return	the formatted element name
  */
-private String asLocalizationNameCSH(MElement this) :
-	logWarn("There exists no 'LocalizationCSH' context for " + name + " (" + metaType + ") so that the default name is returned.") ->
+private String asLocalizationCSHName(MElement this) :
+	logWarn("There exists no 'LocalizationCSH' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
+	name;
+
+
+/**
+ * Formats the element name 
+ * in 'Object' TYPO3 MVC naming context.
+ * 
+ * @return	the formatted element name
+ */
+private String asObjectName(MElement this) :
+	logWarn("There exists no 'Object' context for " + name + " (" + metaType + ") so that the for fallback default name is returned.") ->
 	name;
 
 
@@ -221,6 +201,108 @@ private String asLocalizationNameCSH(MElement this) :
 	GENERAL TYPO3 MVC classifier name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * The name depends on the actual naming context.
+ */
+String name(MClassifier this) :
+	name( this, getNamingContext() );
+
+
+/**
+ * The name depends on the actual naming context.
+ */
+String name(MPrimitiveType this) :
+	mapName();
+
+	
+/**
+ * The name depends on the actual naming context.
+ */
+String name(MExternal this) :
+	mapName();
+
+
+/**
+ * The name depends on the actual naming context.
+ */
+String name(MType this) :
+	"";
+
+
+/**
+ * The name depends on the naming context parameter.
+ *
+ * @param namingContext The naming context
+ */
+String name(MClassifier this, String namingContext) :
+	switch ( namingContext ) {
+		// checks if the naming context is 'General' 
+		case namingContextGeneral() :
+			asGeneralName()
+		// checks if the naming context is 'PHPComplaint'
+		case namingContextPHPComplaint() :
+			asPHPComplaintName() 
+		// checks if the naming context is 'Configuration'
+		case namingContextConfiguration() :
+			asConfigurationName()
+		// checks if the naming context is 'Localization'
+		case namingContextLocalization() :
+			asLocalizationName()
+		// checks if the naming context is 'LocalizationCSH'
+		case namingContextLocalizationCSH() :
+			asLocalizationCSHName()
+		// checks if the naming context is 'Object'
+		case namingContextObject() :
+			asObjectName()
+		// otherwise return the default name	
+		default :
+			asDefaultName()
+	};
+
+
+/**
+ * The name depends on the naming context parameter.
+ *
+ * @param namingContext The naming context
+ */
+String name(MPrimitiveType this, String namingContext) :
+	name();
+
+
+/**
+ * The name depends on the naming context parameter.
+ *
+ * @param namingContext The naming context
+ */
+String name(MExternal this, String namingContext) :
+	name();
+
+
+/**
+ * The name depends on the naming context parameter.
+ *
+ * @param namingContext The naming context
+ */
+String name(MType this, String namingContext) :
+	"";
+
+
+/**
+ * The name depends on the type mapping context parameter.
+ *
+ * @param typeMappingContext The type mapping context
+ */
+String nameTM(MType this, String typeMappingContext) :
+	switch (metaType) {
+		case MExternal : 
+			((MExternal)this).mapName(typeMappingContext)
+		case MPrimitiveType : 
+			((MPrimitiveType)this).mapName(typeMappingContext)
+		default : 
+			((MClassifier)this).name()
+	};
+
 
 /**
  * Formats a classifier name 
@@ -268,8 +350,18 @@ private String asLocalizationName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-private String asLocalizationNameCSH(MClassifier this) :
-	asLocalizationName();
+private String asLocalizationCSHName(MClassifier this) :
+	asConfigurationName();
+
+
+/**
+ * Formats a classifier name 
+ * in 'Object' TYPO3 MVC naming context.
+ * 
+ * @return	the formatted classifier name
+ */
+private String asObjectName(MClassifier this) :
+	name.toFirstLower();
 
 
 /*
@@ -314,7 +406,7 @@ private String asLocalizationName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-private String asLocalizationNameCSH(MProperty this) :
+private String asLocalizationCSHName(MProperty this) :
 	asConfigurationName();
 
 

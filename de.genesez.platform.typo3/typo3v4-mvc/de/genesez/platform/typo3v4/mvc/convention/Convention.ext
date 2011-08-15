@@ -499,7 +499,7 @@ String classifierNameSuffix(MInterface this) :
 	switch {
 		// checks if interface doesn't already starts with "Interface" 
 		case !name.endsWith("Interface") : 
-			"Interface"
+			interfaceSuffix()
 		default : ""
 	};
 
@@ -616,6 +616,9 @@ String removeFromNamePrefix(MAssociationRole this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+String controllerActionNameSuffix() :
+	"Action";
+
 /**
  * Getter of the suffix which is added to the name of an operation.
  *
@@ -625,7 +628,7 @@ String operationNameSuffix(MOperation this) :
 	switch {
 		// checks if operation is an TYPO3 MVC Controller Action and doesn't already ends with "Action"
 		case isControllerAction() && !name.endsWith("Action") :
-			"Action"
+			controllerActionNameSuffix()
 		default : 
 			""
 	};
