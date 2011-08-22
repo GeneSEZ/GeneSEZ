@@ -773,6 +773,9 @@ create MStereotype makeStereotype(Stereotype s) :
 	transformBasics(s) ->
 	// container
 	transform( getUml2Model() ).anyStereotype.add( this ) ->
+	// (associations)
+	// make stereotypes for all generalizations
+	s.general.typeSelect(Stereotype).makeStereotype() ->
 	// containments
 	// add tagged values FAIL
 	// owned attributes returns a list of properties, reject the 'base_' property which indicates the base meta type
@@ -836,21 +839,27 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @param	e	the uml element
  * @return	a list of GeneSEZ tagged values
  */
+
 List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	trace("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
-		// collect all attributes, but rejects the attributes which specify the base uml metatype of the stereotype
-		s | s.ownedAttribute.
-			reject( a| a.name.startsWith("base_") || null == e.getTaggedValue(s, a.name) ).
-			collect(
-				property | e.getTaggedValue(s, property.name).metaType == List 
-					? ( 	
-						((List) e.getTaggedValue(s, property.name))
-							.collect( o | makeTaggedValue( makeTag(property), me, o ) )
-					  )
-					: makeTaggedValue( makeTag(property), me, e.getTaggedValue(s, property.name) )
-			)
+		s | s.allAttributes(). 
+				reject( p | p.name.startsWith("base_") || null == e.getTaggedValue(s, p.name) ).
+				collect(
+					property | e.getTaggedValue(s, property.name).metaType == List 
+						? ((List) e.getTaggedValue(s, property.name)).collect( o | makeTaggedValue( makeTag(property), me, o ) )
+						: makeTaggedValue( makeTag(property), me, e.getTaggedValue(s, property.name) )
+				)
 	).flatten().reject(e|e == null);
+
+List[Property] allAttributes(Stereotype this) :
+	addAllAttributes({});
+
+List[Property] addAllAttributes(Stereotype this, List[Property] attributes) :
+	attributes.addAll(ownedAttribute) ->
+	general.typeSelect(Stereotype).addAllAttributes(attributes) ->
+	attributes;
+	
 
 /**
  * returns the tagged value of the uml model element
