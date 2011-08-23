@@ -29,7 +29,7 @@ import gcore;
 // use common access helper scripts
 extension de::genesez::platforms::common::AccessHelper;
 
-«EXPAND StereotypeElement FOREACH allClassifiers().typeSelect(MClass) -»
+«EXPAND StereotypeElement FOREACH allClassifiers().typeSelect(MClass).sortBy(e | e.name) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -39,7 +39,7 @@ extension de::genesez::platforms::common::AccessHelper;
 
 «EXPAND HasStereotype -»
 «EXPAND HasTaggedValue -»
-«FOREACH property.typeSelect(MAttribute) AS a -»
+«FOREACH property.typeSelect(MAttribute).sortBy(e | e.name) AS a -»
 	«EXPAND Comment::TaggedValueSection FOR a -»
 	
 	«EXPAND HasTaggedValue FOR a -»

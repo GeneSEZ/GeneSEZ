@@ -22,7 +22,7 @@
 «FILE globalVarProfileFileName() -»
 «EXPAND Comment::ProfileFile -»
 
-«EXPAND ProfileElement FOREACH allClassifiers().select( e | e.metaType == MClass || e.metaType == MEnumeration ) -»
+«EXPAND ProfileElement FOREACH allClassifiers().select( e | e.metaType == MClass || e.metaType == MEnumeration ).sortBy(e | e.name) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -31,7 +31,7 @@
 «EXPAND Comment::StereotypeSection -»
 
 «EXPAND Stereotype -»
-«EXPAND TaggedValue FOREACH property.typeSelect(MAttribute) -»
+«EXPAND TaggedValue FOREACH property.typeSelect(MAttribute).sortBy(e | e.name) -»
 «ENDDEFINE»
 
 
