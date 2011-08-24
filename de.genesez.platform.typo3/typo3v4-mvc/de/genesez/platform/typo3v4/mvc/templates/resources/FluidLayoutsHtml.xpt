@@ -7,9 +7,8 @@
 «ENDREM»
 
 «REM» use TYPO3 MVC convention, conversion and naming scripts «ENDREM»
-
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
-
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -21,8 +20,8 @@
 	Processes the generation of "default.html".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«EXPAND BackendLayout -»
-«EXPAND FrontendLayout -»
+«EXPAND BackendRoot -»
+«EXPAND FrontendRoot -»
 «ENDDEFINE»
 
 
@@ -32,13 +31,14 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«DEFINE BackendLayout FOR MModel -»
-«FILE resourcesPrivateBackendLayoutsPath() + "/Default.html" -»
+«DEFINE BackendRoot FOR MModel -»
+«FILE fluidBackendLayoutsDefaultHTMLFilePath() -»
 «ENDFILE»
 «ENDDEFINE»
 
-«DEFINE FrontendLayout FOR MModel -»
-«FILE resourcesPrivateLayoutsPath() + "/Default.html" -»
+
+«DEFINE FrontendRoot FOR MModel -»
+«FILE fluidLayoutsDefaultHTMLFilePath() -»
 <div class="«fullQualifiedExtensionKey() -»">
 	<f:render section="main" />
 </div>

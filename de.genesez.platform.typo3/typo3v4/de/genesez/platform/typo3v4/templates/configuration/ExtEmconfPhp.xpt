@@ -9,7 +9,8 @@
 «REM» use TYPO3 profile access scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::profile::AccessHelper»
 
-«REM» use TYPO3 naming scripts «ENDREM»
+«REM» use TYPO3 conversion and naming scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3v4::convention::Naming»
 
 
@@ -23,7 +24,7 @@
 	Processes the generation of "ext_emconf.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«FILE "ext_emconf.php" -»
+«FILE extEmconfPHPFileNamePath() -»
 <?php
 
 «EXPAND ExtensionManagerConfiguration -»
@@ -214,16 +215,40 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDREM»
 «DEFINE Constraints FOR MModel -»
 	'constraints' => array(
+		«EXPAND Depends -»
+		«EXPAND Conflicts -»
+		«EXPAND Suggests -»
+	)
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'depends' field.
+«ENDREM»
+«DEFINE Depends FOR MModel -»
 		'depends' => array(«FOREACH getT3ExtensionManagerDependencies() AS dependency SEPARATOR ", "»
 			«EXPAND ConstraintKeyValue(dependency) -»«ENDFOREACH»
 		),
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'conflicts' field.
+«ENDREM»
+«DEFINE Conflicts FOR MModel -»
 		'conflicts' => array(«FOREACH getT3ExtensionManagerConflicts() AS conflict SEPARATOR ", "»
 			«EXPAND ConstraintKeyValue(conflict) -»«ENDFOREACH»
 		),
+«ENDDEFINE»
+
+
+«REM»
+	Performs the generation of the 'suggests' field.
+«ENDREM»
+«DEFINE Suggests FOR MModel -»
 		'suggests' => array(«FOREACH getT3ExtensionManagerSuggests() AS suggest SEPARATOR ", "»
 			«EXPAND ConstraintKeyValue(suggest) -»«ENDFOREACH»
 		)
-	)
 «ENDDEFINE»
 
 
@@ -231,7 +256,7 @@ $EM_CONF[$_EXTKEY] = array(
 	Generates a constraint which consists of a key and a value.
 «ENDREM»
 «DEFINE ConstraintKeyValue(String constraintKeyValue) FOR MModel -»
-			«FOREACH constraintKeyValue.split(":") AS kv SEPARATOR " => "»'«kv.trim() -»'«ENDFOREACH -»
+			«FOREACH constraintKeyValue.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
 «ENDDEFINE»
 
 
@@ -240,7 +265,7 @@ $EM_CONF[$_EXTKEY] = array(
 «ENDREM»
 «DEFINE OwnCodeImplementation(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further code implementations here
+// TODO: put your further extension configuration here
 
 «ENDPROTECT»
 «ENDDEFINE»

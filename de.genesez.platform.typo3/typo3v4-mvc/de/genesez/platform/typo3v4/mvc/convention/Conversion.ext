@@ -9,9 +9,12 @@
 // based on genesez meta model
 import gcore;
 
-// use TYPO3 MVC convention and naming scripts
+// use TYPO3 naming context and common naming scripts
+extension de::genesez::platforms::common::naming::Naming;
+extension de::genesez::platform::typo3v4::mvc::convention::NamingContext;
+
+// use TYPO3 MVC convention scripts
 extension de::genesez::platform::typo3v4::mvc::convention::Convention;
-extension de::genesez::platform::typo3v4::mvc::convention::Naming;
 
 
 /*
@@ -38,7 +41,7 @@ String fileNamePHP(MClassifier this) :
 	fileName() + fileExtensionPHP();
 
 
-private String locallangCshXMLFileName(MClassifier this) :
+String locallangCshXMLFileName(MClassifier this) :
 	locallangCshXmlFileNamePrefix() + name() + fileExtensionXML();
 
 
@@ -98,12 +101,12 @@ String tcaPhpFilePath(MClassifier this) :
 	configurationTCAPath() + fileSeparator() + fileNamePHP();
 
 
-String setupTxtFilePath() :
-	configurationTypoScriptPath() + fileSeparator() + setupTxtFileName();
+String setupTSFilePath() :
+	configurationTypoScriptPath() + fileSeparator() + setupTSFileName();
 	
 
-String constantsTxtFilePath() :
-	configurationTypoScriptPath() + fileSeparator() + constantsTxtFileName();	
+String constantsTSFilePath() :
+	configurationTypoScriptPath() + fileSeparator() + constantsTSFileName();	
 
 
 String locallangCshXmlFilePath(MClassifier this) :
@@ -116,3 +119,71 @@ String locallangDbXmlFilePath() :
 
 String locallangXmlFilePath() :
 	resourcesPrivateLanguagePath() + fileSeparator() + locallangXmlFileName();
+	
+
+
+
+
+String fluidBackendLayoutsDefaultHTMLFilePath() :
+	  resourcesPrivateBackendLayoutsPath() + fileSeparator() + "Default" + fileExtensionHTML();
+
+
+String fluidBackendPartialsFormFieldsHTMLFilePath(MClassifier this) :
+	resourcesPrivateBackendPartialsPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "FormFields" + fileExtensionHTML();
+
+
+String fluidBackendPartialsPropertiesHTMLFilePath(MClassifier this) :
+	resourcesPrivateBackendPartialsPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "Properties" + fileExtensionHTML();
+
+
+String fluidBackendPartialsFormErrorsHTMLFilePath() :
+	resourcesPrivateBackendPartialsPath() + fileSeparator() + "FormErrors" + fileExtensionHTML();
+
+
+String fluidBackendTemplatesEditHTMLFilePath(MClassifier this) :
+	resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "Edit" + fileExtensionHTML();
+
+
+String fluidBackendTemplatesListHTMLFilePath(MClassifier this) :
+	resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "List" + fileExtensionHTML();
+
+
+String fluidBackendTemplatesNewHTMLFilePath(MClassifier this) :
+	resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "New" + fileExtensionHTML();
+
+
+String fluidBackendTemplatesShowHTMLFilePath(MClassifier this) :
+	resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "Show" + fileExtensionHTML();
+
+
+
+String fluidLayoutsDefaultHTMLFilePath() :
+	  resourcesPrivateLayoutsPath() + fileSeparator() + "Default" + fileExtensionHTML();
+
+
+String fluidPartialsFormFieldsHTMLFilePath(MClassifier this) :
+	resourcesPrivatePartialsPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "FormFields" + fileExtensionHTML();
+
+
+String fluidPartialsPropertiesHTMLFilePath(MClassifier this) :
+	resourcesPrivatePartialsPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "Properties" + fileExtensionHTML();
+
+
+String fluidPartialsFormErrorsHTMLFilePath() :
+	resourcesPrivatePartialsPath() + fileSeparator() + "FormErrors" + fileExtensionHTML();
+
+
+String fluidTemplatesEditHTMLFilePath(MClassifier this) :
+	resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "Edit" + fileExtensionHTML();
+
+
+String fluidTemplatesListHTMLFilePath(MClassifier this) :
+	resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "List" + fileExtensionHTML();
+
+
+String fluidTemplatesNewHTMLFilePath(MClassifier this) :
+	resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "New" + fileExtensionHTML();
+
+
+String fluidTemplatesShowHTMLFilePath(MClassifier this) :
+	resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPComplaint() ) + fileSeparator() + "Show" + fileExtensionHTML();

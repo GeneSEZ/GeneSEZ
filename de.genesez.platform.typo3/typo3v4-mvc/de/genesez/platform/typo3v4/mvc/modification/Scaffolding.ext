@@ -1,8 +1,8 @@
 /**
- * Additions of the model before generation of source code.  
+ * Scaffolding of the model before generation of source code.  
  *  
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-08-11
+ * @date	2011-08-17
  */
 
 //	based on genesez meta model
@@ -11,29 +11,17 @@ import gcore;
 // use common logging scripts
 extension de::genesez::platforms::common::log::Log;
 
-// use GeneSEZ profile scripts
-extension de::genesez::platforms::common::genesez::profile::Profile;
-
 // use TYPO3 MVC Extbase profile + access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
-
-// use TYPO3 MVC naming scripts
-extension de::genesez::platform::typo3v4::mvc::convention::Naming;
-
-// use TYPO3 MVC addition scripts
-extension de::genesez::platform::typo3v4::mvc::modification::Addition;
 
 // use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equal 
 extension de::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
 extension de::genesez::platforms::common::AccessHelper;
 
-// use common create template scripts
-extension de::genesez::platforms::common::m2m::CreateTemplate;
-
-// use workflow globalvar scripts
-extension de::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
+// use common make element scripts
+extension de::genesez::platforms::common::m2m::MakeElement;
 
 
 /*
@@ -43,288 +31,26 @@ extension de::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
 */
 
 Void modelScaffolding(MModel this) :
-	logInfo( "Start Scaffolding?: " + globalVarScaffolding() ) ->
-	setNamingContext( namingContextPHPComplaint() ) ->
-	globalVarScaffolding()
-		? packageScaffolding()
-		: Void;
-
-
-Void packageScaffolding(MPackage this) :
-	// perform package additions for all nested packages
-	nestedPackage.packageScaffolding() ->
-	
-	// perform package additions for all aggreagate roots
-	classifier.typeSelect(MClass).select( e | e.hasT3ExtbaseEntityIsAggregateRoot("true") ).classScaffolding();
+	logTrace( "Start dynamic scaffolding." ) ->
+	// perform scaffolding for all aggreagate roots
+	allEntities().entityScaffolding();
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	MClass
+	TYPO3 MVC Extbase Model entity scaffolding
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-Void classScaffolding(MClass this) :
-	logTrace( "Scaffolding for domain object: " + name() ) ->
-	logTrace( "Create controller for domain object?: " + !existsController() ) ->
-	controllerScaffolding() ->
-	logTrace( "Create repository for domain object?: " + !existsRepository() ) ->
-	repositoryScaffolding() ->
-	logTrace( "Create plugin for domain object?: " + !existsPlugin() ) ->
-	pluginScaffolding();	
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Extbase Controller additions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * Model additions for an TYPO3 MVC Extbase controller.
- */
-Void controllerScaffolding(MClass this) :
-	createController();
-
-
-MClass createController(MClass this) :
-	// checks if the controller doesn't already exists
-	!existsController()
-		? (	let c = createClass(model(), xmiGuid + ".controller", name() + "Controller") :
-				c.processController(this)
-		) : model().allControllers().select( e | e.shortName() == name() + "Controller" ).first();
-
-
-MClass processController(MClass this, MClass domainObject) :
-	// (visibility, abstract, final)
-	processClassifier("public", false, false) ->
-	// add comment to discribe the controller
-	createComment(xmiGuid + ".comment", "Controller for a domain object.") ->
-	// add super controller type
-	addControllerType() ->
-	// add stereotype to mark this class as controller
-	stereotype.add( 
-		createStereotype( domainObject.model(), xmiGuid + "." + prT3ExtbaseController(), prT3ExtbaseController() ) 
-	) ->
-	// add property to inject the repository
-	addControllerRepositoryAttribute(domainObject) ->
-	// add controller actions
-	addControllerListAction(domainObject) ->
-	addControllerShowAction(domainObject) ->
-	addControllerNewAction(domainObject) ->
-	addControllerCreateAction(domainObject) ->
-	addControllerEditAction(domainObject) ->
-	addControllerUpdateAction(domainObject) ->
-	addControllerDeleteAction(domainObject) ->
-	this;
-
-
-Void addControllerRepositoryAttribute(MClass this, MClass domainObject) :
-	let a = createAttribute(xmiGuid + "." + domainObject.name().toFirstLower() + "Repository", domainObject.name().toFirstLower() + "Repository") :
-		// (visibility, derived, multiplicity, unique, ordered)
-		a.processProperty("protected", false, 1, false, false) ->
-		// (defaultvalue, static, final)
-		a.processAttribute("", false, false) ->
-		// add comment to discribe the attribute
-		a.createComment(a.xmiGuid + ".comment", "Repository for a domain objects") ->
-		// add repository type
-		a.setType(
-			createRepository(domainObject) 
-		) ->
-		// add stereotype to mark this attribute as dependency injection
-		a.stereotype.add( 
-			let s = createStereotype( model(), a.xmiGuid + "." + prDi(), prDi() ) :
-				a.createTaggedValue( createTag( s, prDiSetter(), "Boolean" ), "true" ) ->
-				s
-		) ->
-		a;
-
-
-Void addControllerListAction(MClass this, MClass domainObject) :
-	createControllerAction("list", "Displays a list of domain objects");
-
-
-Void addControllerShowAction(MClass this, MClass domainObject) :
-	let o = createControllerAction("show", "Displays one single domain object.") :
-		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "")
-		);
-		
-
-Void addControllerNewAction(MClass this, MClass domainObject) :
-	let o = createControllerAction("new", "Displays a form for creating a new domain object.") :
-		o.parameter.add(
-			let p = createControllerActionDomainObjectParameter(o, "new" + domainObject.name(), domainObject, "A fresh domain object to display.") :
-				p.setDefaultvalue("NULL") ->
-				p
-		);
-
-
-Void addControllerCreateAction(MClass this, MClass domainObject) :
-	let o = createControllerAction("create", "Creates a new domain object.") :
-		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, "new" + domainObject.name(), domainObject, "The new domain object to create.")
-		);
-
-
-Void addControllerEditAction(MClass this, MClass domainObject) :
-	let o = createControllerAction("edit", "Displays a form for editing an existing domain object.") :
-		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "The existing domain object to display.")
-		);
-
-
-Void addControllerUpdateAction(MClass this, MClass domainObject) :
-	let o = createControllerAction("update", "Updates an existing domain object.") :
-		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "The existing domain object to update")
-		);
-
-
-Void addControllerDeleteAction(MClass this, MClass domainObject) :
-	let o = createControllerAction("delete", "Deletes an existing domain object.") :
-		o.parameter.add(
-			createControllerActionDomainObjectParameter(o, domainObject.name().toFirstLower(), domainObject, "The existing domain object to update")
-		);
-
-
-MOperation createControllerAction(MClass container, String operationName, String comment) :
-	let o = createOperation(container, container.xmiGuid + "." + operationName + "Action", operationName + "Action") :
-		// (visibility, static, abstract, final, multiplicity, unique, ordered)
-		o.processOperation("protected", false, false, false, 1, false, false) ->
-		// add comment to discribe the operation
-		o.createComment(o.xmiGuid + ".comment", comment) -> 
-		o.setReturn(
-			let return = createParameter(o, o.xmiGuid + ".return", "") :
-				// (defaultValue, direction, multiplicity, unique, ordered)
-				return.processParameter("", "return", 1, true, false) ->
-				// add comment to discribe the return parameter
-				return.createComment(return.xmiGuid + ".comment", "The rendered view for this action.") ->
-				return.setType( 
-					createPrimitiveTypeString( container.model() ) 
-				) ->
-				return
-		) ->
-		o.stereotype.add( 
-			createStereotype( container.model(), o.xmiGuid + ".http://www.genesez.org/TYPO3/TYPO3v4/controller/" + operationName + "Action", "http://www.genesez.org/TYPO3/TYPO3v4/controller/" + operationName + "Action" ) 
-		) ->
-		o;
-
-
-MParameter createControllerActionDomainObjectParameter(MOperation container, String parameterName, MClass domainObject, String comment) :
-	let p = createParameter(container, container.xmiGuid + "." + parameterName, parameterName ) :
-			// (defaultValue, direction, multiplicity, unique, ordered)
-			p.processParameter("", "in", 1, true, false) ->
-			// add comment to discribe the parameter
-			p.createComment(p.xmiGuid + ".comment", comment) ->
-			p.setType( domainObject ) ->
-			p;
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Extbase Repository additions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * Model additions for an TYPO3 MVC Extbase repository.
- */
-Void repositoryScaffolding(MClass this) :
-	createRepository();
-
-
-MClass createRepository(MClass this) :
-	// checks if the respository doesn't already exists
-	!existsRepository()
-		? (	let c = createClass(model(), xmiGuid + ".repository", name() + "Repository") :
-				c.processRepository(this)
-		) : model().allRepositories().select( e | e.shortName() == name() + "Repository" ).first();
-
-
-MClass processRepository(MClass this, MClass domainObject) :
-	// (visibility, abstract, final)
-	processClassifier("public", false, false) ->
-	// add comment to discribe the controller
-	createComment(xmiGuid + ".comment", "Respository for a domain object.") ->
-	// add super repository type
-	addRepositoryType() ->
-	// add stereotype to mark this class as repository
-	stereotype.add( 
-		createStereotype( model(), xmiGuid + "." + prT3ExtbaseRepository(), prT3ExtbaseRepository() ) 
-	) ->
-	this;
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Extbase Plugin additions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * Model additions for an TYPO3 MVC Extbase plugin.
- */
-Void pluginScaffolding(MClass this) :
-	createPlugin();
-
-
-MClass createPlugin(MClass this) :
-	// checks if the plugin doesn't already exists
-	!existsPlugin()
-		? (	let i = createInterface(model(), xmiGuid + ".plugin", name()) :
-				i.processPlugin(this)
-		) : model().allPlugins().select( e | e.name() == name() ).first();
-
-
-MInterface processPlugin(MInterface this, MClass domainObject) :
-	// (visibility, abstract, final)
-	processClassifier("public", false, false) ->
-	// add comment to discribe the controller
-	createComment(xmiGuid + ".comment", "Plugin for a domain object.") ->
-	// add stereotype to mark this interface as plugin
-	stereotype.add( 
-		let s = createStereotype( model(), xmiGuid + "." + prT3ExtbasePlugin(), prT3ExtbasePlugin() ) :
-			createTaggedValue( createTag( s, prT3ExtbasePluginTitle(), "String" ), "Plugin" ) ->
-			(	let controller = createController(domainObject) :
-				( 	let ca = createTag(s, prT3ExtbasePluginCachedActions(), "Operation") :
-						controller.operation.select( e | e.isControllerAction() )
-							.addPluginControllerAction(ca, this)
-				) ->
-				( 	let uca = createTag(s, prT3ExtbasePluginUncachedActions(), "Operation") :
-						controller.operation.select( e | e.isControllerAction() && {"createAction", "updateAction", "deleteAction"}.contains(e.name) )
-							.addPluginControllerAction(uca, this)
-				)
+Void entityScaffolding(MClass this) :
+	hasT3ExtbaseEntityIsAggregateRoot("true")
+		? (	logTrace( "Scaffolding for domain object: " + name() ) ->
+			stereotype.add(
+				makeStereotype( model(), this.xmiGuid + "." + prT3ExtbaseEntity(), prT3ExtbaseEntity() )
 			) ->
-			s 
-	) ->
-	this;
-
-
-Void addPluginControllerAction(MOperation controllerAction, MTag controllerActionType, MInterface this) :
-	createTaggedValue(controllerActionType, controllerAction.xmiGuid);
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	Helper functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-boolean existsController(MClass this) :
-	// checks if the controller doesn't already exists
-	!model().allControllers().select( e | e.shortName() == name() + "Controller" ).isEmpty;
-	
-
-boolean existsRepository(MClass this) :
-	// checks if the respository doesn't already exists
-	!model().allRepositories().select( e | e.shortName() == name() + "Repository" ).isEmpty;
-
-
-boolean existsPlugin(MClass this) :
-	// checks if the plugin doesn't already exists
-	!model().allPlugins().select( e | e.name() == name() ).isEmpty;
-
-
-private String shortName(MClassifier this) :
-	name( this, namingContextGeneral() ).split("_").last();
+			( let s = makeStereotype( model(), this.xmiGuid + "." + prT3ExtbaseDomainObject(), prT3ExtbaseDomainObject() ) :
+				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreateController(), "Boolean" ), "true" ) ->
+				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreateRepository(), "Boolean" ), "true" ) ->
+				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreatePlugin(), "Boolean" ), "true" )
+			)
+		) : Void;

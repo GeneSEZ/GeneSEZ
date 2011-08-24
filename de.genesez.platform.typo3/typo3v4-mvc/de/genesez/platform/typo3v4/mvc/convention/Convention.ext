@@ -1,5 +1,5 @@
 /**
- * General conventions for TYPO3 Extbase
+ * General conventions for TYPO3 MVC
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date	2011-05-11
@@ -52,7 +52,7 @@ String extensionPrefix() :
  *
  * @return	the extension key
  */
-cached String extensionKey() :
+String extensionKey() :
 	globalVarExtensionKey();
 
 
@@ -63,7 +63,7 @@ cached String extensionKey() :
  *
  * @return	the full qualified extension key
  */
-cached String fullQualifiedExtensionKey() :
+String fullQualifiedExtensionKey() :
 	extensionPrefix().toLowerCase() + extensionNameSeperator() + extensionKey();
 
 
@@ -77,7 +77,7 @@ cached String fullQualifiedExtensionKey() :
  *
  * @return	the extension name
  */
-cached String extensionName() :
+String extensionName() :
 	extensionName( extensionKey() );
 
 
@@ -89,7 +89,7 @@ cached String extensionName() :
  * @param	extensionKey	the extension key
  * @return	the extension name
  */
-private String extensionName(String extensionKey) :
+private cached String extensionName(String extensionKey) :
 		JAVA de.genesez.platform.typo3v4.mvc.convention.Convention.extensionName(java.lang.String);
 
 
@@ -100,7 +100,7 @@ private String extensionName(String extensionKey) :
  *
  * @return	the full qualified extension name
  */
-cached String fullQualifiedExtensionName() :
+String fullQualifiedExtensionName() :
 	extensionPrefix() + extensionNameSeperator() + extensionName();
 
 
@@ -111,7 +111,7 @@ cached String fullQualifiedExtensionName() :
  *
  * @return	the full qualified extension name in short notation
  */
-cached String fullQualifiedExtensionNameToLowerCase() :
+String fullQualifiedExtensionNameToLowerCase() :
 	fullQualifiedExtensionName().toLowerCase();
 
 
@@ -133,7 +133,7 @@ String fileSeparator() :
 /**
  * Getter of the PHP file extension including the beginning dot.
  *
- * @return	the file extension for php artefacts ('.php')
+ * @return	the file extension for PHP artefacts ('.php')
  */
 String fileExtensionPHP() : 
 	".php";
@@ -142,7 +142,7 @@ String fileExtensionPHP() :
 /**
  * Getter of the SQL file extension including the beginning dot.
  *
- * @return	the file extension for sql artefacts ('.sql')
+ * @return	the file extension for SQL artefacts ('.sql')
  */
 String fileExtensionSQL() : 
 	".sql";
@@ -155,6 +155,15 @@ String fileExtensionSQL() :
  */
 String fileExtensionTS() : 
 	".txt";
+
+
+/**
+ * Getter of the HTML file extension including the beginning dot.
+ *
+ * @return	the file extension for HTML artefacts ('.html')
+ */
+String fileExtensionHTML() : 
+	".html";
 
 
 /**
@@ -182,11 +191,11 @@ String extTablesSQLFileName() :
 	"ext_tables" + fileExtensionSQL();
 
 
-String setupTxtFileName() :
+String setupTSFileName() :
 	"setup" + fileExtensionTS();
 	
 
-String constantsTxtFileName() :
+String constantsTSFileName() :
 	"constants" + fileExtensionTS();
 
 
@@ -199,7 +208,39 @@ String locallangDbXmlFileName() :
 
 
 String locallangCshXmlFileNamePrefix() :
-	"locallang_csh_"; 
+	"locallang_csh_";
+
+
+String fluidLayoutsDefaultHTMLFileName() :
+	"Default" + fileExtensionHTML();
+
+
+String fluidPartialsFormFieldsHTMLFileName() :
+	"FormFields" + fileExtensionHTML();
+
+
+String fluidPartialsPropertiesHTMLFileName() :
+	"Properties" + fileExtensionHTML();
+
+
+String fluidPartialsFormErrorsHTMLFileName() :
+	"FormErrors" + fileExtensionHTML();
+
+
+String fluidTemplatesEditHTMLFileName() :
+	"Edit" + fileExtensionHTML();
+
+
+String fluidTemplatesListHTMLFileName() :
+	"List" + fileExtensionHTML();
+
+
+String fluidTemplatesNewHTMLFileName() :
+	"New" + fileExtensionHTML();
+
+
+String fluidTemplatesShowHTMLFileName() :
+	"Show" + fileExtensionHTML();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -364,7 +405,7 @@ String classifierNameSeperator() :
  *
  * @return	the classifier name base to prepend
  */
-cached String classifierNameBase() :
+String classifierNameBase() :
 	fullQualifiedExtensionName();
 
 /*
@@ -378,22 +419,22 @@ cached String classifierNameBase() :
  *
  * @return	the classifier name path to prepend
  */
-String classifierNamePath(MClassifier this) :
+cached String classifierNamePath(MClassifier this) :
 	// The path depends on the TYPO3 MVC type.
 	switch {
-		// checks if the classifier is an TYPO3 MVC controller package element
+		// checks if the classifier is an TYPO3 MVC Extbase controller package element
 		case isControllerPackageElement() :
 			convertToClassifierNamePath( classesControllerPath() )
-		// checks if the classifier is an TYPO3 MVC model package element
+		// checks if the classifier is an TYPO3 MVC Extbase model package element
 		case isModelPackageElement() :
 			convertToClassifierNamePath( classesDomainModelPath() )
-		// checks if the classifier is an TYPO3 MVC repository package element
+		// checks if the classifier is an TYPO3 MVC Extbase repository package element
 		case isRepositoryPackageElement() :
 			convertToClassifierNamePath( classesDomainRepositoryPath() )
-		// checks if the classifier is an TYPO3 MVC service package element
+		// checks if the classifier is an TYPO3 MVC Extbase service package element
 		case isServicePackageElement() :
 			convertToClassifierNamePath( classesDomainServicePath() )
-		// checks if the classifier is an TYPO3 MVC validator package element
+		// checks if the classifier is an TYPO3 MVC Extbase validator package element
 		case isValidatorPackageElement() :
 			convertToClassifierNamePath( classesDomainValidatorPath() )
 		// checks if the classifier is an TYPO3 Fluid view helper package element
@@ -410,7 +451,7 @@ String classifierNamePath(MClassifier this) :
  * @param	pathName	the path of the classifier
  * @return	the name path of the classifier
  */
-private String convertToClassifierNamePath(String pathName) :
+private cached String convertToClassifierNamePath(String pathName) :
 	pathName.replaceFirst( classesPath() + fileSeparator(), "" ).replaceAll( fileSeparator(), classifierNameSeperator() );
 
 
@@ -449,7 +490,7 @@ String viewHelperNameSuffix() :
  *
  * @return	the prefix to prepend
  */
-String classifierNamePrefix(MClass this) : 
+cached String classifierNamePrefix(MClass this) : 
 	switch {
 		// checks if class is abstract and doesn't already starts with "Abstract" 
 		case abstract && !name.startsWith( abstractClassPrefix() ) : 
@@ -463,7 +504,7 @@ String classifierNamePrefix(MClass this) :
  *
  * @return	the suffix to append
  */
-String classifierNameSuffix(MClass this) : 
+cached String classifierNameSuffix(MClass this) : 
 	switch {
 		// checks if class is an TYPO3 MVC controller and doesn't already ends with "Controller"
 		case isController() && !name.endsWith( controllerNameSuffix() ) :
@@ -486,7 +527,7 @@ String classifierNameSuffix(MClass this) :
  *
  * @return	the prefix to prepend
  */
-String classifierNamePrefix(MInterface this) : 
+cached String classifierNamePrefix(MInterface this) : 
 	"";
 
 
@@ -495,10 +536,10 @@ String classifierNamePrefix(MInterface this) :
  *
  * @return	the suffix to append
  */
-String classifierNameSuffix(MInterface this) : 
+cached String classifierNameSuffix(MInterface this) : 
 	switch {
 		// checks if interface doesn't already starts with "Interface" 
-		case !name.endsWith("Interface") : 
+		case !name.endsWith( interfaceSuffix() ) : 
 			interfaceSuffix()
 		default : ""
 	};
@@ -510,7 +551,7 @@ String classifierNameSuffix(MInterface this) :
  * 
  * @return	an empty string
  */
-String classifierNamePrefix(MClassifier this) : 
+cached String classifierNamePrefix(MClassifier this) : 
 	"";
 
 
@@ -520,7 +561,7 @@ String classifierNamePrefix(MClassifier this) :
  * 
  * @return	an empty string
  */
-String classifierNameSuffix(MClassifier this) : 
+cached String classifierNameSuffix(MClassifier this) : 
 	"";
 
 
@@ -535,7 +576,7 @@ String classifierNameSuffix(MClassifier this) :
  *
  * @return	the prefix to prepend
  */
-String getterNamePrefix(MAttribute this) : 
+cached String getterNamePrefix(MAttribute this) : 
 	"get";
 
 
@@ -544,7 +585,7 @@ String getterNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-String setterNamePrefix(MAttribute this) :
+cached String setterNamePrefix(MAttribute this) :
 	hasDiSetter("true")
 		? "inject"
 		: "set";
@@ -555,7 +596,7 @@ String setterNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-String insertInNamePrefix(MAttribute this) : 
+cached String insertInNamePrefix(MAttribute this) : 
 	"add";
 
 
@@ -564,7 +605,7 @@ String insertInNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-String removeFromNamePrefix(MAttribute this) : 
+cached String removeFromNamePrefix(MAttribute this) : 
 	"remove";
 
 
@@ -579,7 +620,7 @@ String removeFromNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-String getterNamePrefix(MAssociationRole this) : 
+cached String getterNamePrefix(MAssociationRole this) : 
 	"get";
 
 
@@ -588,7 +629,7 @@ String getterNamePrefix(MAssociationRole this) :
  *
  * @return	the prefix to prepend
  */
-String setterNamePrefix(MAssociationRole this) : 
+cached String setterNamePrefix(MAssociationRole this) : 
 	"set";
 
 
@@ -597,7 +638,7 @@ String setterNamePrefix(MAssociationRole this) :
  *
  * @return	the prefix to prepend
  */
-String insertInNamePrefix(MAssociationRole this) : 
+cached String insertInNamePrefix(MAssociationRole this) : 
 	"add";
 
 
@@ -606,7 +647,7 @@ String insertInNamePrefix(MAssociationRole this) :
  *
  * @return	the prefix to prepend
  */
-String removeFromNamePrefix(MAssociationRole this) : 
+cached String removeFromNamePrefix(MAssociationRole this) : 
 	"remove";
 
 
@@ -624,10 +665,10 @@ String controllerActionNameSuffix() :
  *
  * @return	the suffix to append
  */
-String operationNameSuffix(MOperation this) : 
+cached String operationNameSuffix(MOperation this) : 
 	switch {
 		// checks if operation is an TYPO3 MVC Controller Action and doesn't already ends with "Action"
-		case isControllerAction() && !name.endsWith("Action") :
+		case isControllerAction() && !name.endsWith( controllerActionNameSuffix() ) :
 			controllerActionNameSuffix()
 		default : 
 			""
