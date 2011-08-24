@@ -9,8 +9,9 @@
 	@date	2011-03-21
 «ENDREM»
 
-«REM» use common naming scripts «ENDREM»
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
 «REM» use TYPO3 MVC naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
@@ -162,9 +163,9 @@
 	Generates type hints for setter methods.
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAttribute -»
-«IF type.isClassifier() || type.isExternalType() -»
-«IF isSingleValuedType() -»«type.name() -» «ELSE -»«mapType() -» «ENDIF -»
-«ENDIF -»
+«IF isSingleValuedType() -»
+«IF type.name(getNamingContext(), typeMappingContextPHPTypeHint()) != "" -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«ELSE -»«mapType() -» «ENDIF -»
 «ENDDEFINE»
 
 
@@ -172,7 +173,7 @@
 	Generates type hints for insert in and remove from methods.
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAttribute -»
-«IF type.isClassifier() || type.isExternalType() -»«type.name() -» «ENDIF -»
+«IF type.name(getNamingContext(), typeMappingContextPHPTypeHint()) != "" -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ENDDEFINE»
 
 

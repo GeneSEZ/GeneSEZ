@@ -1,5 +1,5 @@
 /**
- * General naming conventions for TYPO3 Extbase
+ * General naming conventions for TYPO3 MVC.
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date	2011-08-20
@@ -406,7 +406,7 @@ String asAssignedValidatorName(MStereotype this) :
 	// and ends with the suffix "Validator". So it is a TYPO3 MVC Extbase validator. 
 	name.startsWith("T3Extbase") && name.endsWith("Validator")
 		? name.replaceFirst("T3Extbase", "").replaceFirst("Validator", "")
-		: model.allValidators().select( v | name == v.name ).first().name( namingContextGeneral() );
+		: model.allValidators().selectFirst( v | name == v.name ).name( namingContextGeneral() );
 
 
 /*
@@ -416,18 +416,18 @@ String asAssignedValidatorName(MStereotype this) :
 */
 
 String asPluginName(MInterface this) :
-	name.toFirstUpper();
+	asPHPCompliantName();
 
 
 String asModuleName(MInterface this) :
-	fullQualifiedExtensionName().toLowerCase() + extensionNameSeperator() + name.toLowerCase();
+	fullQualifiedExtensionNameToLowerCase() + extensionNameSeperator() + name.toLowerCase();
 
 
 String asMainModulName(String mainModule) :
 	mainModule.toLowerCase();
 	
 
-String asT3PluginType(String value) :
+String asT3MVCPluginType(String value) :
 	switch (value) {
 		case prT3ExtbasePluginTypeExtbaseContentElement() :
 			"Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT"
