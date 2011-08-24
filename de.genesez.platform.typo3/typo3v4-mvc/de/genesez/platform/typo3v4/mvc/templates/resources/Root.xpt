@@ -6,6 +6,9 @@
 	@date	2011-07-14
 «ENDREM»
 
+«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
+
 «REM» use TYPO3 MVC access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 
@@ -21,19 +24,17 @@
 	Processes the generation of resources code. 
 «ENDREM»
 «DEFINE Root FOR MModel»
+«REM» Generate "locallang.xml" «ENDREM»
+«EXPAND LocallangXml::Root -»
 
-	«REM» Generate "locallang.xml" «ENDREM»
-	«EXPAND LocallangXml::Root -»
-	
-	«REM» Generate "locallang_db.xml" «ENDREM»
-	«EXPAND LocallangDbXml::Root -»
-	
-	«REM» Generate Fluid code «ENDREM»
-	«IF globalVarScaffolding() -»
-		«REM»«EXPAND FluidLayoutsHtml::Root -»«ENDREM»
-		«REM»«EXPAND FluidPartialsHtml::Root -»«ENDREM»
-		«REM»«EXPAND FluidTemplatesHtml::Root -»«ENDREM»
-	«ENDIF -»
+«REM» Generate "locallang_db.xml" «ENDREM»
+«EXPAND LocallangDbXml::Root -»
+
+«REM» Generate Fluid code «ENDREM»
+«IF globalVarScaffolding() -»
+	«EXPAND FluidLayoutDefaultHtml::Root -»
+	«EXPAND FluidPartialFormErrorsHtml::Root -»
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -41,7 +42,21 @@
 	Processes the generation of resources code. 
 «ENDREM»
 «DEFINE Root FOR MClass -»
-«IF isEntity() || isValueObject() -»
+«IF isEntity() -»
+	«REM» Generate Localization code «ENDREM»
+	«EXPAND LocallangCshXml::Root -»
+	
+	«REM» Generate Fluid code «ENDREM»
+	«IF globalVarScaffolding() && hasT3ExtbaseEntityIsAggregateRoot("true") -»
+		«EXPAND FluidPartialFormFieldsHtml::Root -»
+		«EXPAND FluidPartialPropertiesHtml::Root -»
+		
+		«EXPAND FluidTemplateEditHtml::Root -»
+		«EXPAND FluidTemplateListHtml::Root -»
+		«EXPAND FluidTemplateNewHtml::Root -»
+		«EXPAND FluidTemplateShowHtml::Root -»		
+	«ENDIF -»
+«ELSEIF isValueObject() -»
 	«REM» Generate Localization code «ENDREM»
 	«EXPAND LocallangCshXml::Root -»
 «ENDIF -»
