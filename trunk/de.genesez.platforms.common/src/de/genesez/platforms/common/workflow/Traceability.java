@@ -23,12 +23,13 @@ import de.genesez.metamodel.gtrace.GtracePackage;
  * The requirements and traceability model are instantiated. If checked, the necessary information for cross model
  * references is stored using model extensions. Else model queries must be used.
  * @author tobias haubold
+ * @todo rework to fit the actual configuration guide lines.
  */
 public class Traceability extends CompositeComponent {
 	
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.putAll(WorkflowUtils.defaults);
+		defaults.putAll(WorkflowProperties.defaults);
 	}
 	
 	private Log logger = LogFactory.getLog(getClass());

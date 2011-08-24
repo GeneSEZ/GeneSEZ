@@ -1,4 +1,3 @@
-
 package de.genesez.platforms.common.workflow;
 
 import java.util.LinkedHashSet;
@@ -14,19 +13,21 @@ import org.eclipse.xtend.XtendComponent;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
 /**
- * Provides a workflow component for model modifications and a model to model transformation. To perform just model modifications
- * just leave the output slot empty.
- * 
- * The workflow component allows to execute multiple model modification scripts for a particular model. 
- * If a model to model transformation should be executed, it can be only one and it must be the last script.
+ * Provides a workflow component for model modifications and a model to model
+ * transformation. To perform just model modifications just leave the output
+ * slot empty. The workflow component allows to execute multiple model
+ * modification scripts for a particular model. If a model to model
+ * transformation should be executed, it can be only one and it must be the last
+ * script.
  * 
  * @author tobias haubold
+ * @deprecated use Model2Model instead
  */
 public class GeneSezM2M extends CompositeComponent {
 	
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.putAll(WorkflowUtils.defaults);
+		defaults.putAll(WorkflowProperties.defaults);
 		defaults.put("abortOnError", "true");
 	}
 	private Log logger = LogFactory.getLog(getClass());
@@ -36,14 +37,15 @@ public class GeneSezM2M extends CompositeComponent {
 	private boolean isSetOutputSlot = false;
 	private Set<String> aspects = new LinkedHashSet<String>();
 	
-	
 	public GeneSezM2M() {
 		super(GeneSezM2M.class.getSimpleName());
 	}
 	
 	/**
-	 * Checks parameter values and set parameters to values specified in workflow file or to default values.
-	 * @see org.openarchitectureware.check.CheckComponent#checkConfigurationInternal(org.openarchitectureware.workflow.issues.Issues)
+	 * Called by the container after configuration so the component can validate
+	 * the configuration before invocation.
+	 * 
+	 * @see org.eclipse.emf.mwe.core.container.CompositeComponent#checkConfiguration(org.eclipse.emf.mwe.core.issues.Issues)
 	 */
 	@Override
 	public void checkConfiguration(Issues issues) {
@@ -80,6 +82,7 @@ public class GeneSezM2M extends CompositeComponent {
 	
 	/**
 	 * Allows to set if the workflow should be aborted if an error occurs.
+	 * 
 	 * @see org.openarchitectureware.check.CheckComponent#setAbortOnError(boolean)
 	 */
 	public void setAbortOnError(boolean abortOnError) {
@@ -87,16 +90,20 @@ public class GeneSezM2M extends CompositeComponent {
 	}
 	
 	/**
-	 * @param inputSlot	the name of the model slot where the input model is stored
+	 * @param inputSlot the name of the model slot where the input model is
+	 *        stored
 	 */
 	public void setInputSlot(String inputSlot) {
 		properties.put("slot", inputSlot);
 	}
 	
 	/**
-	 * Sets the name of the model slot where the output model should be stored. If you
-	 * want to perform model modifications, just leave the output slot empty.
-	 * @param outputSlot	the name of the model slot where the output model should be stored
+	 * Sets the name of the model slot where the output model should be stored.
+	 * If you want to perform model modifications, just leave the output slot
+	 * empty.
+	 * 
+	 * @param outputSlot the name of the model slot where the output model
+	 *        should be stored
 	 */
 	public void setOutputSlot(String outputSlot) {
 		properties.put("outputSlot", outputSlot);
@@ -104,8 +111,10 @@ public class GeneSezM2M extends CompositeComponent {
 	}
 	
 	/**
-	 * Adds a script to be executed during the model modification or the model to model transformation.
-	 * @param script	a script to execute
+	 * Adds a script to be executed during the model modification or the model
+	 * to model transformation.
+	 * 
+	 * @param script a script to execute
 	 */
 	public void addScript(String script) {
 		if (script.length() > 0) {
@@ -114,8 +123,10 @@ public class GeneSezM2M extends CompositeComponent {
 	}
 	
 	/**
-	 * Adds several scripts to be executed on transformation. The scripts should be comma separated.
-	 * @param scripts	several scripts to execute
+	 * Adds several scripts to be executed on transformation. The scripts should
+	 * be comma separated.
+	 * 
+	 * @param scripts several scripts to execute
 	 */
 	public void addScrips(String scripts) {
 		if (scripts.length() > 0) {
@@ -127,7 +138,7 @@ public class GeneSezM2M extends CompositeComponent {
 	}
 	
 	/**
-	 * @param aspectScript	an script with advices for AOP
+	 * @param aspectScript an script with advices for AOP
 	 */
 	public void addAspectScript(String aspectScript) {
 		if (aspectScript.length() > 0) {
@@ -136,7 +147,7 @@ public class GeneSezM2M extends CompositeComponent {
 	}
 	
 	/**
-	 * @param aspectScripts	several aspect scripts with advices for AOP
+	 * @param aspectScripts several aspect scripts with advices for AOP
 	 */
 	public void addAspectScripts(String aspectScripts) {
 		if (aspectScripts.length() > 0) {

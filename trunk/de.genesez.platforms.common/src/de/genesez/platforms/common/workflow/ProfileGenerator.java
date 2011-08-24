@@ -2,69 +2,83 @@ package de.genesez.platforms.common.workflow;
 
 import java.util.Properties;
 
-import de.genesez.platforms.common.workflow.Generator;
-import de.genesez.platforms.common.workflow.WorkflowUtils;
-
 /**
- * Performs source code generation for the EMP platform.
+ * Workflow component class to generate code (model to text transformation) for
+ * a profile.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date 2011-07-20
+ * @date 2011-08-23
  */
 public class ProfileGenerator extends Generator {
-	
+
 	/**
 	 * Default values in case the property file is not found.
 	 */
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.put("template", "de::genesez::platforms::common::profile::templates::Root::Root");
-		defaults.put("typeMappingFile", "de/genesez/platforms/common/typemapping/typemapping.xml");
-		defaults.put("profileFileName", "Profile.ext");
-		defaults.put("accessHelperFileName", "AccessHelper.ext");
-		defaults.put("dependStereotypeNamePrefix", "");
-		defaults.put("dependEnumerationNamePrefix", "");
+		defaults.setProperty("template", "de::genesez::platforms::common::profile::templates::Root::Root");
+		defaults.setProperty("typeMappingFile", "de/genesez/platforms/common/typemapping/typemapping.xml");
+
+		defaults.setProperty("profileFileName", "Profile.ext");
+		defaults.setProperty("accessHelperFileName", "AccessHelper.ext");
+		defaults.setProperty("stereotypeNamePrefix", "");
+		defaults.setProperty("enumerationNamePrefix", "");
 	}
-	
+
 	/**
-	 * Constructs the workflow component and initializes the default values for
-	 * the parameter.
+	 * Constructs the workflow component and initializes the default values.
 	 */
 	public ProfileGenerator() {
 		super();
-		WorkflowUtils.setDefaultProperties(this, defaults);
+
+		WorkflowUtils.callPropertyAccessors(this, defaults);
 	}
-	
+
 	/**
-	 * Setter for the workflow parameter
-	 * <em><b>profileFileName</b></em>.
+	 * Setter for the workflow parameter <em><b>profileFileName</b></em>.
+	 * 
+	 * Sets the file name and path where the profile file will be generated.
+	 * 
+	 * @param profileFileName The name and path of the profile file.
 	 */
-	public void setProfileFileName(String value) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("profileFileName", "'" + value + "'"));
+	public void setProfileFileName(String profileFileName) {
+		addGlobalVarDef("profileFileName", profileFileName);
 	}
-	
+
 	/**
-	 * Setter for the workflow parameter
-	 * <em><b>accessHelperFileName</b></em>.
+	 * Setter for the workflow parameter <em><b>accessHelperFileName</b></em>.
+	 * 
+	 * Sets the file name and path where the profile access helper file will be
+	 * generated.
+	 * 
+	 * @param accessHelperFileName The name and path of the profile access
+	 *            helper file.
 	 */
-	public void setAccessHelperFileName(String value) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("accessHelperFileName", "'" + value + "'"));
+	public void setAccessHelperFileName(String accessHelperFileName) {
+		addGlobalVarDef("accessHelperFileName", accessHelperFileName);
 	}
-	
+
 	/**
-	 * Setter for the workflow parameter
-	 * <em><b>dependStereotypeNamePrefix</b></em>.
+	 * Setter for the workflow parameter <em><b>stereotypeNamePrefix</b></em>.
+	 * 
+	 * Sets the name prefix which is added to all Xtend scripts for stereotypes.
+	 * 
+	 * @param stereotypeNamePrefix The name prefix.
 	 */
-	public void setDependStereotypeNamePrefix(String value) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("dependStereotypeNamePrefix", "'" + value + "'"));
+	public void setStereotypeNamePrefix(String stereotypeNamePrefix) {
+		addGlobalVarDef("stereotypeNamePrefix", stereotypeNamePrefix);
 	}
-	
+
 	/**
-	 * Setter for the workflow parameter
-	 * <em><b>dependEnumerationNamePrefix</b></em>.
+	 * Setter for the workflow parameter <em><b>enumerationNamePrefix</b></em>.
+	 * 
+	 * Sets the name prefix which is added to all Xtend scripts for
+	 * enumerations.
+	 * 
+	 * @param enumerationNamePrefix The name prefix.
 	 */
-	public void setDependEnumerationNamePrefix(String value) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("dependEnumerationNamePrefix", "'" + value + "'"));
+	public void setEnumerationNamePrefix(String enumerationNamePrefix) {
+		addGlobalVarDef("enumerationNamePrefix", enumerationNamePrefix);
 	}
-	
+
 }

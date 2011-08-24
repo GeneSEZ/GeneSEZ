@@ -1,28 +1,27 @@
 package de.genesez.platforms.common.workflow;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.eclipse.xtend.check.CheckComponent;
+import org.eclipse.xtend.XtendComponent;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
 /**
- * Workflow component class to check models for consistency.
+ * Workflow component class for model to model (M2M) modifications or
+ * transformations.
  * 
- * @author Aibek Isaev
- * @author Beishen
+ * To perform just model modifications just leave the output slot empty.
+ * 
  * @author Tobias Haubold
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date 2011-08-20
+ * @date 2011-08-23
  */
-public class Validator extends CheckComponent {
+public class Model2Model extends XtendComponent {
 
 	/**
 	 * Logger instance to output important messages.
@@ -43,14 +42,9 @@ public class Validator extends CheckComponent {
 	protected Properties properties = new Properties();
 
 	/**
-	 * Variable to stores all check scripts.
-	 */
-	private Set<String> scripts = new LinkedHashSet<String>();
-
-	/**
 	 * Constructs the workflow component and initializes the default values.
 	 */
-	public Validator() {
+	public Model2Model() {
 		super();
 
 		WorkflowUtils.callPropertyAccessors(this, defaults);
@@ -60,6 +54,16 @@ public class Validator extends CheckComponent {
 		EmfMetaModel gcore = new EmfMetaModel();
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
 		addMetaModel(gcore);
+
+		// add GeneSEZ requirements meta model
+		EmfMetaModel greq = new EmfMetaModel();
+		greq.setMetaModelPackage(properties.getProperty("greqPackage"));
+		addMetaModel(greq);
+
+		// add GeneSEZ traceability meta model
+		EmfMetaModel gtrace = new EmfMetaModel();
+		gtrace.setMetaModelPackage(properties.getProperty("gtracePackage"));
+		addMetaModel(gtrace);
 	}
 
 	/**
@@ -70,16 +74,13 @@ public class Validator extends CheckComponent {
 	 */
 	@Override
 	public void checkConfigurationInternal(Issues issues) {
-		// check if scripts are set.
-		if (scripts.size() == 0) {
-			issues.addError(this, "Missing property 'script' or 'scripts'!", scripts);
+		// check if script is set.
+		String script = properties.getProperty("script", "");
+		if (script.length() == 0) {
+			issues.addError(this, "Missing property 'script'!", script);
+		} else {
+			super.setInvoke(script + "(" + properties.getProperty("slot") + ")");
 		}
-
-		// add scripts
-		for (String script : scripts) {
-			super.addCheckFile(script);
-		}
-		super.setEmfAllChildrenSlot(properties.getProperty("slot"));
 
 		super.checkConfigurationInternal(issues);
 	}
@@ -153,33 +154,15 @@ public class Validator extends CheckComponent {
 	// END OF DEFAULTS
 
 	/**
-	 * Adder for the workflow parameter <em><b>script</b></em>.
+	 * Setter for the workflow parameter <em><b>script</b></em>.
 	 * 
-	 * Adds a script to be executed during the model check.
+	 * Sets a script to be executed for model to model modification or
+	 * transformation.
 	 * 
 	 * @param script A script to execute.
 	 */
-	public void addScript(String script) {
-		if (script.length() > 0) {
-			this.scripts.add(script);
-		}
-	}
-
-	/**
-	 * Adder for the workflow parameter <em><b>scripts</b></em>.
-	 * 
-	 * Adds several scripts to be executed during the model check. The scripts
-	 * should be comma or semicolon separated.
-	 * 
-	 * @param scripts Several scripts to execute.
-	 */
-	public void addScrips(String scripts) {
-		if (scripts.length() > 0) {
-			List<String> filtered = WorkflowUtils.split(scripts);
-			for (String s : filtered) {
-				addScript(s);
-			}
-		}
+	public void setScript(String script) {
+		properties.setProperty("script", script);
 	}
 
 	/**
@@ -216,12 +199,25 @@ public class Validator extends CheckComponent {
 	/**
 	 * Setter for the workflow parameter <em><b>slot</b></em>.
 	 * 
-	 * Sets the slot where the model is stored.
+	 * Sets the slot where the input model is stored.
 	 * 
-	 * @param slot The name of the model slot.
+	 * @param slot The name of the input model slot.
 	 */
 	public void setSlot(String slot) {
 		properties.setProperty("slot", slot);
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>outputSlot</b></em>.
+	 * 
+	 * Sets the slot where the output model should be stored.
+	 * If you want to perform model modifications, just leave the output slot
+	 * empty.
+	 * 
+	 * @param outputSlot The name of the output model slot.
+	 */
+	public void setOutputSlot(String outputSlot) {
+		super.setOutputSlot(outputSlot);
 	}
 
 }
