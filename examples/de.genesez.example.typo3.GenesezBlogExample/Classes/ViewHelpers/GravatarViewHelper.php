@@ -45,13 +45,13 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
-	
+class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_ViewHelper_TagBasedViewHelper {
+
 	/**
 	 * 
 	 * @var string
 	 */
-	private $tagName = 'img';
+	protected $tagName = 'img';
 
 
 	
@@ -72,11 +72,11 @@ class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core
 	 * Render the gravatar image
 	 *
 	 * @param string $emailAddress Gravataer email address
-	 * @param int $size Size of the gravatar image
+	 * @param integer $size Size of the gravatar image
 	 * @param string $defaultImageUri absolute URI of the image to be shown if no gravatar was found
 	 * @return string The rendered image tag
 	 */
-	public function render(string $emailAddress, $size = null, string $defaultImageUri = null) {
+	public function render($emailAddress, $size = null, $defaultImageUri = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252704043_6615_3384) ENABLED START */
 		
 		$gravatarUri = 'http://www.gravatar.com/avatar/' . md5($emailAddress);
@@ -112,7 +112,7 @@ class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core
 	 * @param string $tagName 
 	 * @return void
 	 */
-	public function setTagName(string $tagName) {
+	public function setTagName($tagName) {
 		$this->tagName = $tagName;
 	}
 
@@ -120,5 +120,6 @@ class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297252449390_374572_3319) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

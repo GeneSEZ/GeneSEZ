@@ -34,13 +34,13 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezBlogExample_Domain_Service_BlogFactory {
-	
+class Tx_GenesezBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
+
 	/**
 	 * 
-	 * @var null
+	 * @var Tx_Extbase_Object_ObjectManagerInterface
 	 */
-	private $objectManager;
+	protected $objectManager;
 
 
 	
@@ -51,7 +51,7 @@ class Tx_GenesezBlogExample_Domain_Service_BlogFactory {
 	 * @param integer $blogNumber 
 	 * @return Tx_GenesezBlogExample_Domain_Model_Blog 
 	 */
-	public function createBlog(integer $blogNumber = 1) {
+	public function createBlog($blogNumber = 1) {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302085392366_403888_3725) ENABLED START */
 		
 		$blog = $this->objectManager->create('Tx_BlogExample_Domain_Model_Blog');
@@ -119,18 +119,18 @@ class Tx_GenesezBlogExample_Domain_Service_BlogFactory {
 	/**
 	 * Getter for objectManager
 	 *
-	 * @return null 
+	 * @return Tx_Extbase_Object_ObjectManagerInterface 
 	 */
 	public function getObjectManager() {
 		return $this->objectManager;
 	}
 	/**
-	 * Setter for objectManager
+	 * Dependency injection for objectManager
 	 *
-	 * @param null $objectManager 
+	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager 
 	 * @return void
 	 */
-	public function setObjectManager($objectManager) {
+	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $objectManager) {
 		$this->objectManager = $objectManager;
 	}
 
@@ -138,5 +138,6 @@ class Tx_GenesezBlogExample_Domain_Service_BlogFactory {
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1302085246638_931875_3629) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

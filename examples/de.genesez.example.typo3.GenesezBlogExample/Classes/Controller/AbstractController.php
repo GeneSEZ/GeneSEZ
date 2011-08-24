@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Extbase_MVC_Controller_ActionController {
-	
+
 
 
 	
@@ -46,7 +46,7 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	 * @param integer $severity optional severity code. One of the t3lib_FlashMessage constants
 	 * @return void
 	 */
-	protected function addFlashMessage(string $action, integer $severity = t3lib_FlashMessage::OK) {
+	protected function addFlashMessage($action, $severity = t3lib_FlashMessage::OK) {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081575397_839592_2100) ENABLED START */
 		
 		$messageLocallangKey = sprintf('flashmessage.%s.%s', $this->request->getControllerName(), $action);
@@ -64,7 +64,7 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	 * @param string $defaultMessage the default message to show if key was not found
 	 * @return string 
 	 */
-	protected function translate(string $key, string $defaultMessage = '') {
+	protected function translate($key, $defaultMessage = '') {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081746177_170309_2158) ENABLED START */
 		
 		$message = Tx_Extbase_Utility_Localization::translate($key, 'BlogExample');
@@ -72,18 +72,6 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 			$message = $defaultMessage;
 		}
 		return $message;
-		
-		/* PROTECTED REGION END */
-	}
-	/**
-	 * Override initalizeAction to solve tasks which all actions have in common.
-	 *
-	 * @return void
-	 */
-	protected function initalizeAction() {
-		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081259525_708656_2063.initalizeAction) ENABLED START */
-		
-		// Only for demonstration aspects. :-)
 		
 		/* PROTECTED REGION END */
 	}
@@ -108,5 +96,6 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1302081259525_708656_2063) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

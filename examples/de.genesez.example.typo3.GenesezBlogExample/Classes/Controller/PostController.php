@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExample_Controller_AbstractController {
-	
+
 	/**
 	 * 
 	 * @var Tx_GenesezBlogExample_Domain_Repository_PostRepository
@@ -56,7 +56,7 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 * @param string $tag The name of the tag to show the posts for
 	 * @return void
 	 */
-	public function indexAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, string $tag = null) {
+	public function indexAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, $tag = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251570422_202575_2822) ENABLED START */
 		
 		if (empty($tag)) {
@@ -213,5 +213,6 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251441697_732082_2744) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

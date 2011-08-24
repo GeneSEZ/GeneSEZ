@@ -17,14 +17,14 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 	),
 	'columns' => array(
 		'hidden' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
 			)
 		),
 		'starttime' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
 			'config' => array(
@@ -32,7 +32,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => 0,
+				'checkbox' => false,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -40,7 +40,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 			),
 		),
 		'endtime' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
 			'config' => array(
@@ -48,7 +48,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => 0,
+				'checkbox' => false,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -56,7 +56,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 			),
 		),
 		'sys_language_uid' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
 			'config' => array(
 				'type' => 'select',
@@ -70,7 +70,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'l18n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => 1,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
 			'config' => array(
 				'type' => 'select',
@@ -95,38 +95,38 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 			)
 		),
 		'title' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.title',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'description' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.description',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'logo' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.logo',
 			'config' => array(
 				'type' => 'group',
 				'internal_type' => 'file',
 				'uploadfolder' => 'uploads/tx_genesezblogexample',
-				'show_thumbs' => 1,
+				'show_thumbs' => true,
 				'size' => 5,
 				'allowed' => 'gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai',
 				'disallowed' => ''
 			)
 		),
 		'posts' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.posts',
 			'config' => array(
 				'type' => 'inline',
@@ -136,16 +136,16 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'minitems' => 0,
 				'maxitems' => 99999,
 				'appearance' => array(
-					'collapse' => 0,
+					'collapse' => false,
 					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
 				)
 			)
 		),
 		'administrator' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.administrator',
 			'config' => array(
 				'type' => 'select',
@@ -153,11 +153,11 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
-					'collapse' => 0,
+					'collapse' => false,
 					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
 				)
 			)
 		),

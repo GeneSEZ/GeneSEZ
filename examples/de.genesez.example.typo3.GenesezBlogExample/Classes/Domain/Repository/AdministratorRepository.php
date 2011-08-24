@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Repository_AdministratorRepository extends Tx_Extbase_Domain_Repository_FrontendUserRepository {
-	
+
 
 
 	
@@ -46,5 +46,6 @@ class Tx_GenesezBlogExample_Domain_Repository_AdministratorRepository extends Tx
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297250801885_413708_2286) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

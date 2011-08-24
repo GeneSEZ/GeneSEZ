@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_AbstractValueObject {
-	
+
 	/**
 	 * 
 	 * @var string
@@ -47,7 +47,7 @@ class Tx_GenesezBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_Abs
 	 *
 	 * @param string $name 
 	 */
-	public function __construct(string $name) {
+	public function __construct($name) {
 		/* PROTECTED REGION ID(php.constructor._16_9_8a7027a_1297195903251_537901_2772) ENABLED START */
 		
 		$this->name = $name;
@@ -84,7 +84,7 @@ class Tx_GenesezBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_Abs
 	 * @param string $name 
 	 * @return void
 	 */
-	public function setName(string $name) {
+	public function setName($name) {
 		$this->name = $name;
 	}
 
@@ -92,5 +92,6 @@ class Tx_GenesezBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_Abs
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

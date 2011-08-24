@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_AbstractEntity {
-	
+
 	/**
 	 * 
 	 * @var string
@@ -114,6 +114,45 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 		
 		/* PROTECTED REGION END */
 	}
+	/**
+	 *
+	 * @return void
+	 */
+	public function removeAllTags() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314213504516_360568_2445) ENABLED START */
+		
+		$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
+		
+		/* PROTECTED REGION END */
+	}
+	/**
+	 *
+	 * @return void
+	 */
+	public function removeAllComments() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314213547677_788291_2458) ENABLED START */
+		
+		$comments = clone $this->comments;
+		foreach($comments as $comment) {
+			$this->comments->detach($comment);
+		}
+		
+		/* PROTECTED REGION END */
+	}
+	/**
+	 *
+	 * @return void
+	 */
+	public function removeAllRelatedPosts() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314213620686_588633_2471) ENABLED START */
+		
+		$relatedPosts = clone $this->relatedPosts;
+		foreach($relatedPosts as $relatedPost) {
+			$this->relatedPosts->detach($relatedPost);
+		}
+		
+		/* PROTECTED REGION END */
+	}
 
 	
 	/**
@@ -130,7 +169,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	 * @param string $title 
 	 * @return void
 	 */
-	public function setTitle(string $title) {
+	public function setTitle($title) {
 		$this->title = $title;
 	}
 	/**
@@ -164,7 +203,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	 * @param string $content 
 	 * @return void
 	 */
-	public function setContent(string $content) {
+	public function setContent($content) {
 		$this->content = $content;
 	}
 	/**
@@ -311,5 +350,6 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194790786_915555_1655) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

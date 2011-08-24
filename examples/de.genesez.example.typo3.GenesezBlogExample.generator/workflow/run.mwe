@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <workflow>
+	<!-- define a property for the file path and name of the uml2 model -->
+	<property name="uml2model" value="modelcache/genesez_blog_example.uml" />
+	
 	<!-- define a property for the output dir -->
-	<property name="outputDir" value = "../genesez_blog_example" />
+	<property name="outputDir" value="../genesez_blog_example" />
+	<!-- define a property that indicates if the model name is used as extension key or not -->
+	<property name="useModelNameAsExtensionKey" value="false" />
+	<!-- define a property for the extension key -->
+	<property name="extensionKey" value="genesez_blog_example" />
+	<!-- define a property that indicates if the model is TYPO3 Extbase complaint or not -->
+	<property name="isT3MVCCompliant" value="true" />
+	<!-- define a property that indicates if scaffolding is enabled or not -->
+	<property name="scaffolding" value="false" />
+
 		
 	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
 	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
-		<!-- directory which contains the exported uml2 model -->
-		<model value="modelcache/genesez_blog_example.uml" />
-		<!-- <includeProfiles value="LocalProfile" /> -->
+		<model value="${uml2model}" />
 	</component>
 	
-	<!-- validate the GeneSEZ model against common + php + typo3 + typo3 extbase specific constraints -->
+	<!-- validate the GeneSEZ model against common + php + typo3 + typo3 mvc specific constraints -->
 	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
 		<script value="de::genesez::platforms::common::Constraints" />
 		<script value="de::genesez::platforms::php::constraints::Syntax" />
@@ -23,26 +33,35 @@
 		<file value="modelcache/genesez_blog_example_before.xmi" />
 	</component>
 	
-	<!-- create the default directory layout of an TYPO3 Extbase extension -->
-	<component id="defaultDirectory" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3v4MVCDefaultDirectoryCreator">
+	<!-- create the default directory layout of an TYPO3 MVC extension -->
+	<component id="defaultDirectory" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3DefaultDirectoryCreator">
 		<outputDir value="${outputDir}" />
 	</component>
 	
+	<!-- execute model modifications for this TYPO3 MVC extension -->
+	<component id="modifications" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Model2Model">
+		<script value="de::genesez::platform::typo3v4::mvc::modification::Modification::modelModifications" />
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<extensionKey value="${extensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+	</component>
+	
+	<!-- execute model additions for this TYPO3 MVC extension -->
+	<component id="additions" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Model2Model">
+		<script value="de::genesez::platform::typo3v4::mvc::modification::Addition::modelAdditions" />
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<extensionKey value="${extensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+	</component>
+	
 	<!-- run the typo3 code generation and transform the model into typo3 source code -->
-	<component id="generate" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3v4MVCGenerator">
-		<!-- directory in which the generated files are placed -->
+	<component id="generate" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Generator">
 		<outputDir value="${outputDir}" />
-		<!-- type mapping file -->
 		<typeMappingFile value="typemapping.xml" />
-		<!-- boolean value indicates if the model name is used as extension key or not -->
-		<useModelNameAsExtensionKey value="false" />
-		<!-- boolean value indicates if the model is TYPO3 Extbase complaint or not -->
-		<isT3ExtbaseCompliant value="true" />
-		<!-- boolean value indicates if scaffolding is enabled or not -->
-		<scaffolding value="false" />
-		<!-- name of the TYPO3 Extbase extension -->
-		<extensionKey value="genesez_blog_example" />
-		<!-- do not generate session comments -->
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<extensionKey value="${extensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+		<scaffolding value="${scaffolding}" />
 		<generateSectionComments value="false" />
 	</component>
 	

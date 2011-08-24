@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Controller_BlogController extends Tx_GenesezBlogExample_Controller_AbstractController {
-	
+
 	/**
 	 * 
 	 * @var Tx_GenesezBlogExample_Domain_Repository_BlogRepository
@@ -168,18 +168,6 @@ class Tx_GenesezBlogExample_Controller_BlogController extends Tx_GenesezBlogExam
 		
 		/* PROTECTED REGION END */
 	}
-	/**
-	 * Define initializeIndexAction to solve tasks before the action is called.
-	 *
-	 * @return void
-	 */
-	protected function initalizeIndexAction() {
-		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252176013_209023_3136.initalizeIndexAction) ENABLED START */
-		
-		// Only for demonstration aspects. :-)
-		
-		/* PROTECTED REGION END */
-	}
 
 	
 	/**
@@ -221,5 +209,6 @@ class Tx_GenesezBlogExample_Controller_BlogController extends Tx_GenesezBlogExam
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251427732_349974_2692) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

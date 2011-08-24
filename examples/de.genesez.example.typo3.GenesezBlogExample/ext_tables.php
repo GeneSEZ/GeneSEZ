@@ -207,7 +207,16 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 
 
 /* PROTECTED REGION ID(ext_tables.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
-// TODO: put your further code implementations here
+
+$extensionName = t3lib_div::underscoredToUpperCamelCase($_EXTKEY);
+$pluginSignature = strtolower($extensionName) . '_postlist';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform,recursive';
+t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_list.xml');
+
+
+t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'BlogExample CSS Styles (optional)');
+
 /* PROTECTED REGION END */
 
 ?>

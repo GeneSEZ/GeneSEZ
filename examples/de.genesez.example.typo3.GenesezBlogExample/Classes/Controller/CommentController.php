@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Controller_CommentController extends Tx_GenesezBlogExample_Controller_AbstractController {
-	
+
 
 
 	
@@ -93,5 +93,6 @@ class Tx_GenesezBlogExample_Controller_CommentController extends Tx_GenesezBlogE
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251433473_555088_2718) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

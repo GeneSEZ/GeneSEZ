@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_AbstractEntity {
-	
+
 	/**
 	 * 
 	 * @var string
@@ -60,7 +60,7 @@ class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_
 	 * @param string $lastname 
 	 * @param string $email 
 	 */
-	public function __construct(string $firstname, string $lastname, string $email) {
+	public function __construct($firstname, $lastname, $email) {
 		/* PROTECTED REGION ID(php.constructor._16_9_8a7027a_1297195987831_804563_2831) ENABLED START */
 		
 		$this->setFirstname($firstname);
@@ -99,7 +99,7 @@ class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_
 	 * @param string $firstname 
 	 * @return void
 	 */
-	public function setFirstname(string $firstname) {
+	public function setFirstname($firstname) {
 		$this->firstname = $firstname;
 	}
 	/**
@@ -116,7 +116,7 @@ class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_
 	 * @param string $lastname 
 	 * @return void
 	 */
-	public function setLastname(string $lastname) {
+	public function setLastname($lastname) {
 		$this->lastname = $lastname;
 	}
 	/**
@@ -133,7 +133,7 @@ class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_
 	 * @param string $email 
 	 * @return void
 	 */
-	public function setEmail(string $email) {
+	public function setEmail($email) {
 		$this->email = $email;
 	}
 
@@ -141,5 +141,6 @@ class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

@@ -34,7 +34,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Repository_PersonRepository extends Tx_Extbase_Persistence_Repository {
-	
+
 
 
 	
@@ -45,5 +45,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PersonRepository extends Tx_Extbas
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1303895019460_600697_1735) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

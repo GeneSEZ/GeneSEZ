@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_AbstractEntity {
-	
+
 	/**
 	 * 
 	 * @var DateTime
@@ -118,7 +118,7 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 	 * @param string $author 
 	 * @return void
 	 */
-	public function setAuthor(string $author) {
+	public function setAuthor($author) {
 		$this->author = $author;
 	}
 	/**
@@ -135,7 +135,7 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 	 * @param string $email 
 	 * @return void
 	 */
-	public function setEmail(string $email) {
+	public function setEmail($email) {
 		$this->email = $email;
 	}
 	/**
@@ -152,7 +152,7 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 	 * @param string $content 
 	 * @return void
 	 */
-	public function setContent(string $content) {
+	public function setContent($content) {
 		$this->content = $content;
 	}
 
@@ -160,5 +160,6 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194777757_325505_1605) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

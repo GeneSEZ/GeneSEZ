@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Persistence_Repository {
-	
+
 
 
 	
@@ -64,7 +64,7 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog the post must refer to
 	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> Finds posts by the specified tag and blog
 	 */
-	public function findByTagAndBlog(string $tag, Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
+	public function findByTagAndBlog($tag, Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297250952847_309532_2458) ENABLED START */
 		
 		$query = $this->createQuery();
@@ -148,7 +148,7 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 * @param integer $limit The number of posts to return at max
 	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> Finds most recent posts by the specified blog
 	 */
-	public function findRecentByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog, integer $limit = 5) {
+	public function findRecentByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog, $limit = 5) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251180788_324969_2565) ENABLED START */
 		
 		$query = $this->createQuery();
@@ -166,7 +166,12 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297250863949_852308_2394) ENABLED START */
-	// TODO: put your further code implementations here
+	
+	protected $defaultOrderings = array(
+		'date' => Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING
+	);
+	
 	/* PROTECTED REGION END */
+
 }
 ?>

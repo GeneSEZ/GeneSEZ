@@ -35,21 +35,21 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_AbstractEntity {
-	
+
 	/**
 	 * The blog's title.
 	 * 
 	 * @var string
-	 * @validate StringLength(minimum = 1, maximum = 80), BlogTitle(minimum = 111, maximum = 222)
+	 * @validate StringLength(minimum = 1, maximum = 80)
 	 */
-	protected $title = "";
+	protected $title = '';
 	/**
 	 * A short description of the blog
 	 * 
 	 * @var string
 	 * @validate StringLength(minimum = 0, maximum = 150)
 	 */
-	protected $description = "";
+	protected $description = '';
 	/**
 	 * A relative path to a logo image
 	 * 
@@ -85,6 +85,18 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	}
 
 	
+	/**
+	 * Remove all posts from this blog
+	 *
+	 * @return void
+	 */
+	public function removeAllPosts() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314212429824_842410_2427) ENABLED START */
+		
+		$this->posts = new Tx_Extbase_Persistence_ObjectStorage();
+		
+		/* PROTECTED REGION END */
+	}
 
 	
 	/**
@@ -101,7 +113,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	 * @param string $title The blog's title.
 	 * @return void
 	 */
-	public function setTitle(string $title) {
+	public function setTitle($title) {
 		$this->title = $title;
 	}
 	/**
@@ -118,7 +130,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	 * @param string $description A short description of the blog
 	 * @return void
 	 */
-	public function setDescription(string $description) {
+	public function setDescription($description) {
 		$this->description = $description;
 	}
 	/**
@@ -135,7 +147,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	 * @param string $logo A relative path to a logo image
 	 * @return void
 	 */
-	public function setLogo(string $logo) {
+	public function setLogo($logo) {
 		$this->logo = $logo;
 	}
 	/**
@@ -195,5 +207,6 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

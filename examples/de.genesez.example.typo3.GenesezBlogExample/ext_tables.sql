@@ -40,8 +40,8 @@ CREATE TABLE tx_genesezblogexample_domain_model_blog (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
-	title varchar(255) DEFAULT '' NOT NULL,
-	description text DEFAULT '' NOT NULL,
+	title varchar(255) DEFAULT '''' NOT NULL,
+	description text DEFAULT '''' NOT NULL,
 	logo tinyblob NOT NULL,
 	administrator int(11) unsigned DEFAULT '0' NOT NULL,
 	
@@ -229,7 +229,7 @@ CREATE TABLE tx_genesezblogexample_post_tag_tags_mm (
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign)
 );
-CREATE TABLE tx_genesezblogexample_post_comment_comments_mm (
+CREATE TABLE tx_genesezblogexample_comment_comments_post__mm (
 	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
@@ -238,7 +238,7 @@ CREATE TABLE tx_genesezblogexample_post_comment_comments_mm (
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign)
 );
-CREATE TABLE tx_genesezblogexample_post_post_related_posts_mm (
+CREATE TABLE tx_genesezblogexample_post_related_posts_post__mm (
 	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,

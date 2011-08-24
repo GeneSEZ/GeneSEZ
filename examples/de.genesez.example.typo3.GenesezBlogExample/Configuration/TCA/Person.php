@@ -17,14 +17,14 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 	),
 	'columns' => array(
 		'hidden' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
 			)
 		),
 		'starttime' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
 			'config' => array(
@@ -32,7 +32,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => 0,
+				'checkbox' => false,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -40,7 +40,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 			),
 		),
 		'endtime' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
 			'config' => array(
@@ -48,7 +48,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => 0,
+				'checkbox' => false,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -56,7 +56,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 			),
 		),
 		'sys_language_uid' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
 			'config' => array(
 				'type' => 'select',
@@ -70,7 +70,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		),
 		'l18n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => 1,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
 			'config' => array(
 				'type' => 'select',
@@ -95,30 +95,30 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 			)
 		),
 		'firstname' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.firstname',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'lastname' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.lastname',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'email' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.email',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 	)
