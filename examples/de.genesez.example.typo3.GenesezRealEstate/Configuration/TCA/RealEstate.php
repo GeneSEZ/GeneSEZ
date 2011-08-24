@@ -17,14 +17,14 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 	),
 	'columns' => array(
 		'hidden' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
 			)
 		),
 		'starttime' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
 			'config' => array(
@@ -32,7 +32,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => 0,
+				'checkbox' => false,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -40,7 +40,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			),
 		),
 		'endtime' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
 			'config' => array(
@@ -48,7 +48,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'size' => 13,
 				'max' => 20,
 				'eval' => 'datetime',
-				'checkbox' => 0,
+				'checkbox' => false,
 				'default' => 0,
 				'range' => array(
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
@@ -56,7 +56,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			),
 		),
 		'sys_language_uid' => array(
-			'exclude' => 1,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
 			'config' => array(
 				'type' => 'select',
@@ -70,7 +70,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 		),
 		'l18n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => 1,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
 			'config' => array(
 				'type' => 'select',
@@ -95,94 +95,94 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			)
 		),
 		'id' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.id',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'title' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.title',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'description' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.description',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'facility' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.facility',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'state' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.state',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'miscellaneous' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.miscellaneous',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'street' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.street',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'post_code' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.post_code',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'town' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.town',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'size' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.size',
 			'config' => array(
 			)
 		),
 		'cellar' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.cellar',
 			'config' => array(
 				'type' => 'check',
@@ -190,7 +190,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			)
 		),
 		'attic' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.attic',
 			'config' => array(
 				'type' => 'check',
@@ -198,7 +198,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			)
 		),
 		'balcony' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.balcony',
 			'config' => array(
 				'type' => 'check',
@@ -206,61 +206,61 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			)
 		),
 		'free_from' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.free_from',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'rent_exclusive_of_heating' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.rent_exclusive_of_heating',
 			'config' => array(
 			)
 		),
 		'extra_charges' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.extra_charges',
 			'config' => array(
 			)
 		),
 		'cooperative_share' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.cooperative_share',
 			'config' => array(
 			)
 		),
 		'image_files' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.image_files',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'image_descriptions' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.image_descriptions',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'plot_file' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.plot_file',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim'
+				'eval' => 'trim',
 			)
 		),
 		'heating' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.heating',
 			'config' => array(
 				'type' => 'select',
@@ -268,16 +268,16 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
-					'collapse' => 0,
+					'collapse' => false,
 					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
 				)
 			)
 		),
 		'real_estate_size' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.real_estate_size',
 			'config' => array(
 				'type' => 'select',
@@ -285,16 +285,16 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
-					'collapse' => 0,
+					'collapse' => false,
 					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
 				)
 			)
 		),
 		'floor' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.floor',
 			'config' => array(
 				'type' => 'select',
@@ -302,16 +302,16 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
-					'collapse' => 0,
+					'collapse' => false,
 					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
 				)
 			)
 		),
 		'quarter' => array(
-			'exclude' => 0,
+			'exclude' => false,
 			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.quarter',
 			'config' => array(
 				'type' => 'select',
@@ -319,11 +319,11 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
-					'collapse' => 0,
+					'collapse' => false,
 					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
 				)
 			)
 		),

@@ -34,7 +34,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezRealEstate_Domain_Model_FloorType extends Tx_Extbase_DomainObject_AbstractValueObject {
-	
+
 	/**
 	 * 
 	 * @var string
@@ -59,7 +59,7 @@ class Tx_GenesezRealEstate_Domain_Model_FloorType extends Tx_Extbase_DomainObjec
 	 * @param string $specification 
 	 * @return void
 	 */
-	public function setSpecification(string $specification) {
+	public function setSpecification($specification) {
 		$this->specification = $specification;
 	}
 
@@ -67,5 +67,6 @@ class Tx_GenesezRealEstate_Domain_Model_FloorType extends Tx_Extbase_DomainObjec
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344122287_504979_2362) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

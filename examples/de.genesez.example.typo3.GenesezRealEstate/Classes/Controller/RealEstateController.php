@@ -35,7 +35,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Controller_ActionController {
-	
+
 	/**
 	 * Repository for a domain objects
 	 * 
@@ -57,7 +57,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Displays one single domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate 
+	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The existing domain object to display.
 	 * @return string The rendered view for this action.
 	 */
 	protected function showAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
@@ -66,20 +66,20 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Displays a form for creating a new domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $newRealEstate A fresh domain object to display.
+	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate A fresh domain object to display.
 	 * @return string The rendered view for this action.
 	 */
-	protected function newAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $newRealEstate = NULL) {
-		$this->view->assign('newRealEstate', $newRealEstate);
+	protected function newAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate = NULL) {
+		$this->view->assign('realEstate', $realEstate);
 	}
 	/**
 	 * Creates a new domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $newRealEstate The new domain object to create.
+	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The new domain object to create.
 	 * @return string The rendered view for this action.
 	 */
-	protected function createAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $newRealEstate) {
-		$this->realEstateRepository->add($newRealEstate);
+	protected function createAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
+		$this->realEstateRepository->add($realEstate);
 		$this->flashMessageContainer->add('Your new domain object was created.');
 		$this->redirect('list');
 	}
@@ -106,7 +106,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Deletes an existing domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The existing domain object to update
+	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The existing domain object to delete
 	 * @return string The rendered view for this action.
 	 */
 	protected function deleteAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
@@ -138,5 +138,6 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466.controller) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

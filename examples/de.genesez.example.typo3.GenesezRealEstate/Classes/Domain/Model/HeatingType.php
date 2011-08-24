@@ -34,7 +34,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObject_AbstractValueObject {
-	
+
 	/**
 	 * 
 	 * @var string
@@ -59,7 +59,7 @@ class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObj
 	 * @param string $specification 
 	 * @return void
 	 */
-	public function setSpecification(string $specification) {
+	public function setSpecification($specification) {
 		$this->specification = $specification;
 	}
 
@@ -67,5 +67,6 @@ class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObj
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

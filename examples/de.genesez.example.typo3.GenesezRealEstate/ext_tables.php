@@ -12,7 +12,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('Genesez
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'RealEstate',
-	'Plugin'
+	'RealEstate'
 );
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
@@ -93,7 +93,6 @@ $TCA['tx_genesezrealestate_domain_model_quarter'] = array (
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezrealestate_domain_model_realestate', 'EXT:genesez_real_estate/Resources/Private/Language/locallang_csh_tx_genesezrealestate_domain_model_realestate.xml');
-t3lib_extMgm::allowTableOnStandardPages('tx_genesezrealestate_domain_model_realestate');
 $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 	'ctrl' => array (
 		'title' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate',

@@ -34,7 +34,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_AbstractEntity {
-	
+
 	/**
 	 * 
 	 * @var string
@@ -174,7 +174,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $id 
 	 * @return void
 	 */
-	public function setId(string $id) {
+	public function setId($id) {
 		$this->id = $id;
 	}
 	/**
@@ -191,7 +191,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $title 
 	 * @return void
 	 */
-	public function setTitle(string $title) {
+	public function setTitle($title) {
 		$this->title = $title;
 	}
 	/**
@@ -208,7 +208,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $description 
 	 * @return void
 	 */
-	public function setDescription(string $description) {
+	public function setDescription($description) {
 		$this->description = $description;
 	}
 	/**
@@ -225,7 +225,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $facility 
 	 * @return void
 	 */
-	public function setFacility(string $facility) {
+	public function setFacility($facility) {
 		$this->facility = $facility;
 	}
 	/**
@@ -242,7 +242,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $state 
 	 * @return void
 	 */
-	public function setState(string $state) {
+	public function setState($state) {
 		$this->state = $state;
 	}
 	/**
@@ -259,7 +259,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $miscellaneous 
 	 * @return void
 	 */
-	public function setMiscellaneous(string $miscellaneous) {
+	public function setMiscellaneous($miscellaneous) {
 		$this->miscellaneous = $miscellaneous;
 	}
 	/**
@@ -276,7 +276,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $street 
 	 * @return void
 	 */
-	public function setStreet(string $street) {
+	public function setStreet($street) {
 		$this->street = $street;
 	}
 	/**
@@ -293,7 +293,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $postCode 
 	 * @return void
 	 */
-	public function setPostCode(string $postCode) {
+	public function setPostCode($postCode) {
 		$this->postCode = $postCode;
 	}
 	/**
@@ -310,7 +310,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $town 
 	 * @return void
 	 */
-	public function setTown(string $town) {
+	public function setTown($town) {
 		$this->town = $town;
 	}
 	/**
@@ -327,7 +327,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param float $size 
 	 * @return void
 	 */
-	public function setSize(float $size) {
+	public function setSize($size) {
 		$this->size = $size;
 	}
 	/**
@@ -344,7 +344,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param boolean $cellar 
 	 * @return void
 	 */
-	public function setCellar(boolean $cellar) {
+	public function setCellar($cellar) {
 		$this->cellar = $cellar;
 	}
 	/**
@@ -361,7 +361,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param boolean $attic 
 	 * @return void
 	 */
-	public function setAttic(boolean $attic) {
+	public function setAttic($attic) {
 		$this->attic = $attic;
 	}
 	/**
@@ -378,7 +378,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param boolean $balcony 
 	 * @return void
 	 */
-	public function setBalcony(boolean $balcony) {
+	public function setBalcony($balcony) {
 		$this->balcony = $balcony;
 	}
 	/**
@@ -395,7 +395,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $freeFrom 
 	 * @return void
 	 */
-	public function setFreeFrom(string $freeFrom) {
+	public function setFreeFrom($freeFrom) {
 		$this->freeFrom = $freeFrom;
 	}
 	/**
@@ -412,7 +412,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param float $rentExclusiveOfHeating 
 	 * @return void
 	 */
-	public function setRentExclusiveOfHeating(float $rentExclusiveOfHeating) {
+	public function setRentExclusiveOfHeating($rentExclusiveOfHeating) {
 		$this->rentExclusiveOfHeating = $rentExclusiveOfHeating;
 	}
 	/**
@@ -429,7 +429,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param float $extraCharges 
 	 * @return void
 	 */
-	public function setExtraCharges(float $extraCharges) {
+	public function setExtraCharges($extraCharges) {
 		$this->extraCharges = $extraCharges;
 	}
 	/**
@@ -446,7 +446,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param float $cooperativeShare 
 	 * @return void
 	 */
-	public function setCooperativeShare(float $cooperativeShare) {
+	public function setCooperativeShare($cooperativeShare) {
 		$this->cooperativeShare = $cooperativeShare;
 	}
 	/**
@@ -463,7 +463,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $imageFiles 
 	 * @return void
 	 */
-	public function setImageFiles(string $imageFiles) {
+	public function setImageFiles($imageFiles) {
 		$this->imageFiles = $imageFiles;
 	}
 	/**
@@ -480,7 +480,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $imageDescriptions 
 	 * @return void
 	 */
-	public function setImageDescriptions(string $imageDescriptions) {
+	public function setImageDescriptions($imageDescriptions) {
 		$this->imageDescriptions = $imageDescriptions;
 	}
 	/**
@@ -497,7 +497,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 * @param string $plotFile 
 	 * @return void
 	 */
-	public function setPlotFile(string $plotFile) {
+	public function setPlotFile($plotFile) {
 		$this->plotFile = $plotFile;
 	}
 	/**
@@ -573,5 +573,6 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>

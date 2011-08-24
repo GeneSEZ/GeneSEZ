@@ -133,7 +133,7 @@ CREATE TABLE tx_genesezrealestate_domain_model_realestate (
 	image_descriptions varchar(255) NOT NULL,
 	plot_file varchar(255) NOT NULL,
 	heating int(11) unsigned DEFAULT '0' NOT NULL,
-	realEstateSize int(11) unsigned DEFAULT '0' NOT NULL,
+	real_estate_size int(11) unsigned DEFAULT '0' NOT NULL,
 	floor int(11) unsigned DEFAULT '0' NOT NULL,
 	quarter int(11) unsigned DEFAULT '0' NOT NULL,
 	

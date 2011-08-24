@@ -34,7 +34,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_AbstractValueObject {
-	
+
 	/**
 	 * 
 	 * @var string
@@ -64,7 +64,7 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 	 * @param string $name 
 	 * @return void
 	 */
-	public function setName(string $name) {
+	public function setName($name) {
 		$this->name = $name;
 	}
 	/**
@@ -81,7 +81,7 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 	 * @param string $description 
 	 * @return void
 	 */
-	public function setDescription(string $description) {
+	public function setDescription($description) {
 		$this->description = $description;
 	}
 
@@ -89,5 +89,6 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
+
 }
 ?>
