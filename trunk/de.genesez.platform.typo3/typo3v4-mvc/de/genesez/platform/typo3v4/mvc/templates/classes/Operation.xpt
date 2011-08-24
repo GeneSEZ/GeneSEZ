@@ -10,14 +10,9 @@
 	@date	2011-03-21
 «ENDREM»
 
-«REM» use TYPO3 Extbase naming scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
-
-«REM» use TYPO3 Extbase profile access helper scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
-
-«REM» use type mapping scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::naming::Naming»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
 «REM» use php access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equal «ENDREM»
@@ -147,7 +142,7 @@
 «ENDREM»
 «DEFINE TypeHint FOR MParameter -»
 «IF type.isClassifier() || type.isExternalType() -»
-«IF isSingleValuedType() -»«type.name() -» «ELSE -»«mapType() -» «ENDIF -»
+«IF isSingleValuedType() -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ELSE -»«mapType() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 

@@ -8,13 +8,11 @@
 // based on genesez meta model
 import gcore;
 
-// use TYPO3 MVC Extbase profile + access helper scripts
+// use TYPO3 MVC Extbase access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
-extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
 
-// use TYPO3 MVC Fluid profile + access helper scripts
+// use TYPO3 MVC Fluid access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::FluidAccessHelper;
-extension de::genesez::platform::typo3v4::mvc::profile::FluidProfile;
 
 // use TYPO3 MVC convention scripts
 extension de::genesez::platform::typo3v4::mvc::convention::Convention;
@@ -32,10 +30,6 @@ extension de::genesez::platforms::common::Conversion;
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/*
-- - Controller settings - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
 /**
  * Returns the a list of TYPO3 MVC Extbase controllers.
  * 
@@ -51,10 +45,12 @@ List[MClass] allControllers(MModel this) :
  * @return	true if the classifier is part of the TYPO3 Extbase controller package, otherwise false
  */
 boolean isControllerPackageElement(MClassifier this) :
-	switch (metaType) {
-		case MClass : ((MClass)this).isController()
-		default : false
-	};
+	// first check if this classifier is a class and is a controller
+	( MClass.isInstance(this) && ((MClass)this).isController() ) ||
+	// second check if this classifier is a controller package element
+	hasT3ExtbaseControllerPackageElementStereotype() ||
+	// third check if the package of this classifier has an stereotype
+	owningContext.hasT3ExtbaseControllerPackageStereotype();
 
 
 /**
@@ -90,7 +86,7 @@ boolean isControllerAction(MOperation this) :
 	// first check if the operation has an stereotype
 	hasT3ExtbaseControllerActionStereotype() ||
 	// second check if the class is a controller AND the operation is not a non controller action
-	((MClass)classifier).isController() && !hasT3ExtbaseNoControllerActionStereotype();
+	( ((MClass)classifier).isController() && !isControllerNoAction() );
 
 
 /*
@@ -98,18 +94,18 @@ boolean isControllerAction(MOperation this) :
 */
 
 /**
- * Checks if a operation isn't a TYPO3 MVC Extbase controller action.
+ * Checks if a operation is not a TYPO3 MVC Extbase controller action.
  *
- * @return	true if the operation isn't a TYPO3 MVC Extbase controller action, otherwise false
+ * @return	true if the operation is not a TYPO3 MVC Extbase controller action, otherwise false
  */
-boolean isNoControllerAction(MOperation this) :
+boolean isControllerNoAction(MOperation this) :
 	// first check if the operation has an stereotype
-	hasT3ExtbaseNoControllerActionStereotype();
+	hasT3ExtbaseControllerNoActionStereotype();
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Extbase Domain 
+	TYPO3 MVC Extbase Domain Objects 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -219,8 +215,19 @@ boolean isManyToManyBidirectional(MAssociationRole this) :
 
 
 /*
-- - Entitiy settings  - - - - - - - - - - - - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Entity 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * Returns the a list of TYPO3 MVC Extbase entities.
+ * 
+ * @return	the list of TYPO3 MVC Extbase entities or an empty list
+ */
+List[MClass] allEntities(MModel this) :
+	allClassifiers().typeSelect(MClass).select( e | e.isEntity() );
+
 
 /**
  * Checks if a class is a TYPO3 MVC Extbase entity.
@@ -241,8 +248,19 @@ boolean isEntity(MClass this) :
 
 
 /*
-- - Value Object settings - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Value Object 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * Returns the a list of TYPO3 MVC Extbase value objects.
+ * 
+ * @return	the list of TYPO3 MVC Extbase value objects or an empty list
+ */
+List[MClass] allValueObjects(MModel this) :
+	allClassifiers().typeSelect(MClass).select( e | e.isValueObject() );
+	
 
 /**
  * Checks if a class is a TYPO3 MVC Extbase value object.
@@ -263,7 +281,9 @@ boolean isValueObject(MClass this) :
 
 
 /*
-- - Repository settings - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Repository 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
@@ -308,7 +328,9 @@ boolean isRepository(MClass this) :
 	
 
 /*
-- - Service settings  - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Service 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
@@ -345,7 +367,9 @@ boolean isService(MClass this) :
 
 
 /*
-- - Validator settings  - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Validator 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
@@ -389,30 +413,22 @@ boolean isValidator(MClass this) :
 	);
 
 
-boolean hasValidatorStereotypes(MElement this) :
-	getAssignedValidatorStereotypes().size > 0;
-
-
-List[MStereotype] getAssignedValidatorStereotypes(MElement this) :
-	stereotype.select( e |
+List[MStereotype] getAssignedValidators(MElement this) :
+	stereotype.select( s |
 		// first check is if the stereotype starts with the prefix "T3Extbase" 
 		// and ends with the suffix "Validator". So all TYPO3 MVC Extbase validators are added. 
-		( e.name.startsWith("T3Extbase") && e.name.endsWith("Validator") ) ||
-		// second check is if the sterotype has a sterotype
-		e.hasT3ExtbaseValidatorStereotype() 
-		// third check if the name of the sterotype is equals to a validator class
-		//model().allClassifiers().typeSelect(MClass).select( c | c.isValidator() && c.name == e.name).size > 0
-		);
+		( s.name.startsWith("T3Extbase") && s.name.endsWith("Validator") ) ||
+		// second check if the name of the stereotype is equals to a validator class
+		!model().allValidators().select( v | s.name == v.name ).isEmpty ||
+		// third check is if the sterotype has a sterotype
+		s.hasT3ExtbaseValidatorStereotype() 
+	);
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	TYPO3 MVC Fluid ViewHelper 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/*
-- - ViewHelper settings - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
 /**
@@ -449,7 +465,7 @@ boolean isViewHelper(MClass this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC Extbase Plugin and Module Configuration 
+	TYPO3 MVC Extbase Plugin and Module 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 

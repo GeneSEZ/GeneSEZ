@@ -4,16 +4,12 @@
 	Iterates over the model and delegates the handling.
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-07-18
+	@date	2011-08-20
 «ENDREM»
 
 «REM» use common logging scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::log::Log»
 
-«REM» use TYPO3 Extbase addition scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::modification::Addition»
-«EXTENSION de::genesez::platform::typo3v4::mvc::modification::Modification»
-«EXTENSION de::genesez::platform::typo3v4::mvc::modification::Scaffolding»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -25,25 +21,18 @@
 	Processes the contents of the model.
 «ENDREM»
 «DEFINE Root FOR MModel -»
-	«REM» init logger «ENDREM»
-	«useLogger("de.genesez.platform.typo3") -»
-	
-	«REM» TYPO3 Extbase additions and modification for an easier model to text transformation «ENDREM» 
-	«modelAdditions() -»
-	«modelModifications() -»
-	
-	«REM» TYPO3 Extbase scaffolding «ENDREM»
-	«modelScaffolding() -»
-					
-	«REM» Generate extension class code «ENDREM»
-	«EXPAND de::genesez::platform::typo3v4::mvc::templates::classes::Root::Root -»
+«REM» init logger «ENDREM»
+«useLogger("de.genesez.platform.typo3") -» 
 
-	«REM» Generate extension configuration code «ENDREM»
-	«EXPAND de::genesez::platform::typo3v4::mvc::templates::configuration::Root::Root -»
-	
-	«REM» Generate extension resources code «ENDREM»
-	«EXPAND de::genesez::platform::typo3v4::mvc::templates::resources::Root::Root -»
-	
+«REM» Iterate over all nested packages and classifiers «ENDREM»	
+«EXPAND Root FOREACH nestedPackage -»
+«EXPAND Root FOREACH classifier -»
+
+«REM» Generate extension configuration code «ENDREM»
+«EXPAND de::genesez::platform::typo3v4::mvc::templates::configuration::Root::Root -»
+
+«REM» Generate extension resources code «ENDREM»
+«EXPAND de::genesez::platform::typo3v4::mvc::templates::resources::Root::Root -»
 «ENDDEFINE»
 
 
@@ -53,3 +42,26 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM»
+	Processes the contents of a package, delegates the handling of all classifiers.
+«ENDREM»
+«DEFINE Root FOR MPackage -»
+«REM» Iterate over all nested packages and classifiers «ENDREM»	
+«EXPAND Root FOREACH nestedPackage -»
+«EXPAND Root FOREACH classifier -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the contents of a classifier
+«ENDREM»
+«DEFINE Root FOR MClassifier -»
+«REM» Generate extension classes code «ENDREM»
+«EXPAND de::genesez::platform::typo3v4::mvc::templates::classes::Root::Root -»
+
+«REM» Generate extension configuration code «ENDREM»
+«EXPAND de::genesez::platform::typo3v4::mvc::templates::configuration::Root::Root -»
+
+«REM» Generate extension resources code «ENDREM»
+«EXPAND de::genesez::platform::typo3v4::mvc::templates::resources::Root::Root -»
+«ENDDEFINE»

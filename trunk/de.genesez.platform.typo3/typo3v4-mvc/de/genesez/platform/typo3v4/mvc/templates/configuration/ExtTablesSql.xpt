@@ -6,7 +6,11 @@
 	@date	2011-07-14
 «ENDREM»
 
-«REM» use TYPO3 Extbase conversion and naming scripts «ENDREM»
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::naming::Naming»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC conversion and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
 
@@ -14,9 +18,6 @@
 «REM» common access helper scripts if script name is equal «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
-
-«REM» use common type mapping scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 
 «REM»
@@ -29,7 +30,7 @@
 	Processes the generation of "ext_tables.sql".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«setNamingContext( namingContextConfiguration() ) -»
+«EXPAND ContextSettings -»
 
 «FILE extTablesSQLFilePath() -»
 
@@ -47,6 +48,14 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
+«REM»
+	Sets the naming and type mapping context for this part of generation. 
+«ENDREM»
+«DEFINE ContextSettings FOR MModel -»
+«setNamingContext( namingContextConfiguration() ) -»
+«setTypeMappingContext( typeMappingContextSQL() ) -»
+«ENDDEFINE»
+
 
 «REM»
 «ENDREM»
@@ -58,7 +67,7 @@
 «REM»
 «ENDREM»
 «DEFINE IntermediateTables FOR MAssociationRole -»
-	«IF isOneToManyUnidirectional() || isManyToManyUnidirectional() || ( isManyToManyBidirectional() && classifier.name.compareTo( type.name() ) < 0 ) -»
+	«IF isOneToManyUnidirectional() || isManyToManyUnidirectional() || ( isManyToManyBidirectional() && classifier.name().compareTo( type.name() ) < 0 ) -»
 		«EXPAND CreateIntermediateTableDefinition -»
 	«ENDIF -»
 «ENDDEFINE»
@@ -110,7 +119,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generate a column for an attribute.
 «ENDREM»
 «DEFINE AttributeColumns FOR MAttribute -»
-	«name() -» «type.nameTM("SQL") -»«EXPAND DefaultValue -» «EXPAND NullOrNotNull -»,
+	«name() -» «type.name() -»«EXPAND DefaultValue -» «EXPAND NullOrNotNull -»,
 «ENDDEFINE»
 
 
@@ -159,7 +168,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generate the necessary columns if the association is 1:1 unidirectional.
 «ENDREM»
 «DEFINE OneToOneUnidirectional FOR MAssociationRole -»
-	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -168,7 +177,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 «ENDREM»
 «DEFINE OneToOneBidirectional FOR MAssociationRole -»
 «IF classifier.name.compareTo( type.name() ) < 0 -»
-	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -191,7 +200,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generate the necessary columns if the association is n:1 unidirectional.
 «ENDREM»
 «DEFINE ManyToOneUnidirectional FOR MAssociationRole -»
-	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -199,7 +208,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generate the necessary columns if the association is n:1 bidirectional.
 «ENDREM»
 «DEFINE ManyToOneBidirectional FOR MAssociationRole -»
-	«name -» int(11) unsigned DEFAULT '0' NOT NULL,
+	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 

@@ -6,6 +6,9 @@
 	@date	2011-07-14
 «ENDREM»
 
+«REM» use TYPO3 MVC access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
+
 «EXTENSION de::genesez::platform::typo3v4::mvc::workflow::GlobalVar»
 
 «REM»
@@ -19,17 +22,36 @@
 «ENDREM»
 «DEFINE Root FOR MModel»
 
-	«REM» Generate Localization code «ENDREM»
+	«REM» Generate "locallang.xml" «ENDREM»
 	«EXPAND LocallangXml::Root -»
+	
+	«REM» Generate "locallang_db.xml" «ENDREM»
 	«EXPAND LocallangDbXml::Root -»
-	«EXPAND LocallangCshXml::Root -»
 	
 	«REM» Generate Fluid code «ENDREM»
 	«IF globalVarScaffolding() -»
-		«EXPAND FluidLayoutsHtml::Root -»
-		«EXPAND FluidPartialsHtml::Root -»
+		«REM»«EXPAND FluidLayoutsHtml::Root -»«ENDREM»
+		«REM»«EXPAND FluidPartialsHtml::Root -»«ENDREM»
 		«REM»«EXPAND FluidTemplatesHtml::Root -»«ENDREM»
 	«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of resources code. 
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«IF isEntity() || isValueObject() -»
+	«REM» Generate Localization code «ENDREM»
+	«EXPAND LocallangCshXml::Root -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the generation of resources code. 
+«ENDREM»
+«DEFINE Root FOR MClassifier -»
 «ENDDEFINE»
 
 

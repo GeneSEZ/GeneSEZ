@@ -9,12 +9,15 @@
 «REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
 
-«REM» use TYPO3 Extbase conversion and naming scripts «ENDREM»
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::naming::Naming»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC convention and conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
-«EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
 
-«REM» use TYPO3 Extbase access helper scripts «ENDREM»
+«REM» use TYPO3 MVC access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
@@ -34,7 +37,7 @@
 «DEFINE Root FOR MModel -»
 «setNamingContext( namingContextConfiguration() ) -»
 
-«FOREACH allEntitiesAndValueObjects().select(e|e.hasT3ExtbaseEntityIsAggregateRoot("true")) AS domainObject -»
+«FOREACH allEntitiesAndValueObjects().select( e | e.hasT3ExtbaseEntityIsAggregateRoot("true") ) AS domainObject -»
 	«EXPAND EditRoot FOR domainObject -»
 	«EXPAND ListRoot FOR domainObject -»
 	«EXPAND NewRoot FOR domainObject -»
@@ -51,7 +54,7 @@
 
 
 «DEFINE EditRoot FOR MClass -»
-«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/Edit.html" -»
+«FILE fluidTemplatesEditHTMLFilePath() -»
 <f:layout name="Default" />
 
 <f:section name="main">
@@ -69,8 +72,9 @@
 «ENDFILE -»
 «ENDDEFINE»
 
+
 «DEFINE ListRoot FOR MClass -»
-«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/List.html" -»
+«FILE fluidTemplatesListHTMLFilePath() -»
 <f:layout name="Default" />
 
 <f:section name="main">
@@ -103,8 +107,9 @@
 «ENDFILE -»
 «ENDDEFINE»
 
+
 «DEFINE NewRoot FOR MClass -»
-«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/New.html" -»
+«FILE fluidTemplatesNewHTMLFilePath() -»
 <f:layout name="Default" />
 
 <f:section name="main">
@@ -122,8 +127,9 @@
 «ENDFILE -»
 «ENDDEFINE»
 
+
 «DEFINE ShowRoot FOR MClass -»
-«FILE resourcesPrivateBackendTemplatesPath() + "/" + name + "/Show.html" -»
+«FILE fluidTemplatesShowHTMLFilePath() -»
 <f:layout name="Default" />
 
 <f:section name="main">

@@ -2,123 +2,33 @@
  * General naming conventions for TYPO3 Extbase
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-05-11
+ * @date	2011-08-20
  */
 
 // based on genesez meta model
 import gcore;
 
-// use common logging scripts
-extension de::genesez::platforms::common::log::Log;
-
 // use TYPO3 MVC profile scripts	
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
+
+// use TYPO3 naming context and common naming scripts
+extension de::genesez::platforms::common::naming::Naming;
+extension de::genesez::platform::typo3v4::mvc::convention::NamingContext;
 
 // use TYPO3 MVC convention scripts
 extension de::genesez::platform::typo3v4::mvc::convention::Convention;
 
-// use common access helper scripts
+// use TYPO3 MVC access helper scripts which overrides
+// common access helper scripts if script name is equals
+extension de::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
 extension de::genesez::platforms::common::AccessHelper;
-
-// use common type mapping scripts
-extension de::genesez::platforms::common::typemapping::TypeMapping;
 
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GENERAL TYPO3 MVC name context conventions
+	GENERAL TYPO3 MVC element name conventions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
-
-String namingContextDefault() :
-	"Default";
-
-
-String namingContextGeneral() :
-	"General";
-	
-
-String namingContextPHPComplaint() :
-	"PHPCompliant";
-	
-
-String namingContextConfiguration() :
-	"Configuration";
-
-
-String namingContextLocalization() :
-	"Localization";
-
-
-String namingContextLocalizationCSH() :
-	"LocalizationCSH";
-
-
-String namingContextObject() :
-	"Object";
-
-
-/**
- * Get the actual naming context.
- * 
- * @return The actual naming context
- */
-String getNamingContext() :
-	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.getNamingContext();
-
-
-/**
- * Set the new naming context.
- * 
- * @param namingContext The new naming context
- */
-Void setNamingContext(String namingContext) :
-	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.setNamingContext(java.lang.String);
-
-
-/**
- * Revert the previous naming context.
- */
-Void revertNamingContext() :
-	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.revertNamingContext();
-
-
-/**
- * The name depends on the actual naming context.
- */
-String name(MElement this) :
-	name( this, getNamingContext() );
-
-/**
- * The name depends on the naming context parameter.
- *
- * @param namingContext The naming context
- */
-String name(MElement this, String namingContext) :
-	switch ( namingContext ) {
-		// checks if the naming context is 'General' 
-		case namingContextGeneral() :
-			asGeneralName()
-		// checks if the naming context is 'PHPComplaint'
-		case namingContextPHPComplaint() :
-			asPHPComplaintName() 
-		// checks if the naming context is 'Configuration'
-		case namingContextConfiguration() :
-			asConfigurationName()
-		// checks if the naming context is 'Localization'
-		case namingContextLocalization() :
-			asLocalizationName()
-		// checks if the naming context is 'LocalizationCSH'
-		case namingContextLocalizationCSH() :
-			asLocalizationCSHName()
-		// checks if the naming context is 'Object'
-		case namingContextObject() :
-			asObjectName()
-		// otherwise return the default name	
-		default :
-			asDefaultName()
-	};
-
 
 /**
  * Formats the element name 
@@ -126,7 +36,7 @@ String name(MElement this, String namingContext) :
  * 
  * @return	the formatted element name
  */
-private String asDefaultName(MElement this) :
+String asDefaultName(MElement this) :
 	name;
 
 
@@ -136,8 +46,7 @@ private String asDefaultName(MElement this) :
  * 
  * @return	the formatted element name
  */
-private String asGeneralName(MElement this) :
-	logWarn("There exists no 'General' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
+String asGeneralName(MElement this) :
 	name;
 
 
@@ -147,8 +56,7 @@ private String asGeneralName(MElement this) :
  * 
  * @return	the formatted element name
  */
-private String asPHPComplaintName(MElement this) :
-	logWarn("There exists no 'PHPComplaint' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
+String asPHPComplaintName(MElement this) :
 	name;
 
 
@@ -158,8 +66,7 @@ private String asPHPComplaintName(MElement this) :
  * 
  * @return	the formatted element name
  */
-private String asConfigurationName(MElement this) :
-	logWarn("There exists no 'Configuration' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
+String asConfigurationName(MElement this) :
 	name;
 
 
@@ -169,8 +76,7 @@ private String asConfigurationName(MElement this) :
  * 
  * @return	the formatted element name
  */
-private String asLocalizationName(MElement this) :
-	logWarn("There exists no 'Localization' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
+String asLocalizationName(MElement this) :
 	name;
 	
 	
@@ -180,8 +86,7 @@ private String asLocalizationName(MElement this) :
  * 
  * @return	the formatted element name
  */
-private String asLocalizationCSHName(MElement this) :
-	logWarn("There exists no 'LocalizationCSH' context for " + name + " (" + metaType + ") so that for fallback the default name is returned.") ->
+String asLocalizationCSHName(MElement this) :
 	name;
 
 
@@ -191,8 +96,7 @@ private String asLocalizationCSHName(MElement this) :
  * 
  * @return	the formatted element name
  */
-private String asObjectName(MElement this) :
-	logWarn("There exists no 'Object' context for " + name + " (" + metaType + ") so that the for fallback default name is returned.") ->
+String asObjectName(MElement this) :
 	name;
 
 
@@ -203,114 +107,12 @@ private String asObjectName(MElement this) :
 */
 
 /**
- * The name depends on the actual naming context.
- */
-String name(MClassifier this) :
-	name( this, getNamingContext() );
-
-
-/**
- * The name depends on the actual naming context.
- */
-String name(MPrimitiveType this) :
-	mapName();
-
-	
-/**
- * The name depends on the actual naming context.
- */
-String name(MExternal this) :
-	mapName();
-
-
-/**
- * The name depends on the actual naming context.
- */
-String name(MType this) :
-	"";
-
-
-/**
- * The name depends on the naming context parameter.
- *
- * @param namingContext The naming context
- */
-String name(MClassifier this, String namingContext) :
-	switch ( namingContext ) {
-		// checks if the naming context is 'General' 
-		case namingContextGeneral() :
-			asGeneralName()
-		// checks if the naming context is 'PHPComplaint'
-		case namingContextPHPComplaint() :
-			asPHPComplaintName() 
-		// checks if the naming context is 'Configuration'
-		case namingContextConfiguration() :
-			asConfigurationName()
-		// checks if the naming context is 'Localization'
-		case namingContextLocalization() :
-			asLocalizationName()
-		// checks if the naming context is 'LocalizationCSH'
-		case namingContextLocalizationCSH() :
-			asLocalizationCSHName()
-		// checks if the naming context is 'Object'
-		case namingContextObject() :
-			asObjectName()
-		// otherwise return the default name	
-		default :
-			asDefaultName()
-	};
-
-
-/**
- * The name depends on the naming context parameter.
- *
- * @param namingContext The naming context
- */
-String name(MPrimitiveType this, String namingContext) :
-	name();
-
-
-/**
- * The name depends on the naming context parameter.
- *
- * @param namingContext The naming context
- */
-String name(MExternal this, String namingContext) :
-	name();
-
-
-/**
- * The name depends on the naming context parameter.
- *
- * @param namingContext The naming context
- */
-String name(MType this, String namingContext) :
-	"";
-
-
-/**
- * The name depends on the type mapping context parameter.
- *
- * @param typeMappingContext The type mapping context
- */
-String nameTM(MType this, String typeMappingContext) :
-	switch (metaType) {
-		case MExternal : 
-			((MExternal)this).mapName(typeMappingContext)
-		case MPrimitiveType : 
-			((MPrimitiveType)this).mapName(typeMappingContext)
-		default : 
-			((MClassifier)this).name()
-	};
-
-
-/**
  * Formats a classifier name 
  * in 'General' TYPO3 MVC naming context.
  * 
  * @return	the formatted classifier name
  */
-private String asGeneralName(MClassifier this) :
+String asGeneralName(MClassifier this) :
 	classifierNameBase() + classifierNameSeperator() + classifierNamePath() + classifierNameSeperator() + classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();	
 
 
@@ -320,7 +122,7 @@ private String asGeneralName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-private String asPHPComplaintName(MClassifier this) :
+String asPHPComplaintName(MClassifier this) :
 	name.toFirstUpper();
 
 
@@ -330,7 +132,7 @@ private String asPHPComplaintName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-private String asConfigurationName(MClassifier this) :
+String asConfigurationName(MClassifier this) :
 	asGeneralName().toLowerCase();
 	
 
@@ -340,7 +142,7 @@ private String asConfigurationName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-private String asLocalizationName(MClassifier this) :
+String asLocalizationName(MClassifier this) :
 	asConfigurationName();
 
 
@@ -350,7 +152,7 @@ private String asLocalizationName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-private String asLocalizationCSHName(MClassifier this) :
+String asLocalizationCSHName(MClassifier this) :
 	asConfigurationName();
 
 
@@ -360,7 +162,7 @@ private String asLocalizationCSHName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-private String asObjectName(MClassifier this) :
+String asObjectName(MClassifier this) :
 	name.toFirstLower();
 
 
@@ -372,11 +174,21 @@ private String asObjectName(MClassifier this) :
 
 /**
  * Formats an attribute or association role name as a normal attribute
+ * in 'General' naming context.
+ * 
+ * @return	the formatted attribute or association role name
+ */
+String asGeneralName(MProperty this) :
+	name.toFirstLower();
+	
+
+/**
+ * Formats an attribute or association role name as a normal attribute
  * in 'PHPComplaint' naming context.
  * 
  * @return	the formatted attribute or association role name
  */
-private String asPHPComplaintName(MProperty this) :
+String asPHPComplaintName(MProperty this) :
 	asGeneralName();
 
 
@@ -386,7 +198,7 @@ private String asPHPComplaintName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-private String asConfigurationName(MProperty this) :
+String asConfigurationName(MProperty this) :
 	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
 
 
@@ -396,7 +208,7 @@ private String asConfigurationName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-private String asLocalizationName(MProperty this) :
+String asLocalizationName(MProperty this) :
 	classifier.asLocalizationName() + "." + asConfigurationName();
 	
 
@@ -406,7 +218,7 @@ private String asLocalizationName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-private String asLocalizationCSHName(MProperty this) :
+String asLocalizationCSHName(MProperty this) :
 	asConfigurationName();
 
 
@@ -422,7 +234,7 @@ private String asLocalizationCSHName(MProperty this) :
  * 
  * @return	the formatted attribute name
  */
-private String asGeneralName(MAttribute this) :
+String asGeneralName(MAttribute this) :
 	final && static && hasDefaultValue()
 		? name.toUpperCase()
 		: name.toFirstLower();
@@ -475,7 +287,7 @@ String asRemoveFromName(MAttribute this) :
  * 
  * @return	the formatted association role name
  */
-private String asGeneralName(MAssociationRole this) :
+String asGeneralName(MAssociationRole this) :
 	name.toFirstLower();
 	
 
@@ -526,7 +338,7 @@ String asRemoveFromName(MAssociationRole this) :
  * 
  * @return	the formatted operation name
  */
-private String asGeneralName(MOperation this) :
+String asGeneralName(MOperation this) :
 	name.toFirstLower() + operationNameSuffix();
 
 
@@ -536,7 +348,7 @@ private String asGeneralName(MOperation this) :
  * 
  * @return	the formatted operation name
  */
-private String asPHPComplaintName(MOperation this) :
+String asPHPComplaintName(MOperation this) :
 	name.toFirstLower();
 
 
@@ -552,7 +364,7 @@ private String asPHPComplaintName(MOperation this) :
  * 
  * @return	the formatted parameter name
  */
-private String asGeneralName(MParameter this) : 
+String asGeneralName(MParameter this) : 
 	name.toFirstLower();
 	
 
@@ -562,7 +374,7 @@ private String asGeneralName(MParameter this) :
  * 
  * @return	the formatted parameter name
  */
-private String asPHPComplaintName(MParameter this) : 
+String asPHPComplaintName(MParameter this) : 
 	asGeneralName();
 
 
@@ -581,6 +393,20 @@ private String asPHPComplaintName(MParameter this) :
 
 List[String] asControllerActionPairs(MModel this, List[String] listOfXmiGuids) :
 	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.asControllerActionPairs(de.genesez.metamodel.gcore.MModel, java.util.List);
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC validators
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String asAssignedValidatorName(MStereotype this) :
+	// first check is if the stereotype starts with the prefix "T3Extbase" 
+	// and ends with the suffix "Validator". So it is a TYPO3 MVC Extbase validator. 
+	name.startsWith("T3Extbase") && name.endsWith("Validator")
+		? name.replaceFirst("T3Extbase", "").replaceFirst("Validator", "")
+		: model.allValidators().select( v | name == v.name ).first().name( namingContextGeneral() );
 
 
 /*
@@ -616,11 +442,14 @@ String asT3PluginType(String value) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * This method needs to be called in SQL context.
+ */
 String asIntermediateTableName(MAssociationRole this) :
 	fullQualifiedExtensionName().toLowerCase() + classifierNameSeperator()
-		+ ( classifier.name.compareTo( type.name() ) < 0 
+		+ ( classifier.name().compareTo( type.name() ) < 0 
 			? classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" ) + type.asIntermediateTableName() + classifierNameSeperator() + name()
-			: type.asIntermediateTableName() + classifierNameSeperator() + name () + classifierNameSeperator() + classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" )
+			: type.asIntermediateTableName() + classifierNameSeperator() + name() + classifierNameSeperator() + classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" )
 		  )
 		+ classifierNameSeperator() + "mm";
 

@@ -9,18 +9,20 @@
 «REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::profile::AccessHelper»
 
-«REM» use TYPO3 Extbase profile access helper scripts «ENDREM»
+«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
 
-«REM» use TYPO3 Extbase convention and naming scripts «ENDREM»
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::naming::Naming»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC convention and naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
 
-«REM» use TYPO3 Extbase access helper scripts which overrides «ENDREM»
-«REM» common access helper scripts if script name is equal «ENDREM» 
+«REM» use TYPO3 MVC access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
-«EXTENSION de::genesez::platforms::common::AccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
@@ -36,7 +38,7 @@
 	Processes the generation of "ext_tables.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
-«setNamingContext( namingContextConfiguration() ) -»
+«EXPAND ContextSettings -»
 
 «FILE extTablesPHPFilePath() -»
 <?php
@@ -63,6 +65,15 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«REM»
+	Sets the naming context for this part of generation.
+	The type mapping context is not needed for this part. 
+«ENDREM»
+«DEFINE ContextSettings FOR MModel -»
+«setNamingContext( namingContextConfiguration() ) -»
+«ENDDEFINE»
+
 
 «REM»
 	TYPO3 access control to check if this file is called from the outside of TYPO3. 
@@ -92,6 +103,8 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 
 
 «REM»
+	Registers all TYPO3 Extbase plugins by using "registerPlugin" from class 
+	"Tx_Extbase_Utility_Extension".
 «ENDREM»
 «DEFINE RegisterPlugin FOR MInterface -»
 Tx_Extbase_Utility_Extension::registerPlugin(
@@ -175,7 +188,7 @@ t3lib_extMgm::addLLrefForTCAdescr('«name( this, namingContextLocalizationCSH() 
 «REM»
 «ENDREM»
 «DEFINE AllowTableOnStandardPages FOR MClass -»
-«IF !hasT3ExtbaseEntityAllowTableOnStandardPages("false") -»
+«IF !hasT3ExtbaseDomainObjectAllowTableOnStandardPages("false") -»
 t3lib_extMgm::allowTableOnStandardPages('«name() -»');
 «ENDIF -»
 «ENDDEFINE»
@@ -208,14 +221,15 @@ $TCA['«name() -»'] = array (
 		«EXPAND TCACtrlTransOrigDiffSourceField -»
 		«EXPAND TCACtrlDelete -»
 		«EXPAND TCACtrlEnablecolumns -»
-		«EXPAND TCACtrlAdditions -»
 		«EXPAND TCACtrlDynamicConfigFile -»
 		«EXPAND TCACtrlIconFile -»
+		«EXPAND TCACtrlAdditions -»
 	)
 «ENDDEFINE»
 
 
 «REM»
+	Contains the system name of the table. Is used for display in the backend.
 «ENDREM»
 «DEFINE TCACtrlTitle FOR MClass-»
 		'title' => 'LLL:EXT:«extensionKey() -»/«locallangDbXmlFilePath() -»:«name() -»',
@@ -223,6 +237,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Points to the fieldname of the table which should be used as the 'title' when the record is displayed in the system.
 «ENDREM»
 «DEFINE TCACtrlLabel FOR MClass -»
 		'label'	=> '«IF getT3TCAClassLabel() != "" -»«getAttributeByXmiGuid( model(), getT3TCAClassLabel() ).name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
@@ -230,6 +245,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Comma-separated list of fieldnames, which are holding alternative values to the value from the field pointed to by 'label'.
 «ENDREM»
 «DEFINE TCACtrlLabelAlt FOR MClass -»
 «IF !getT3TCAClassLabelAlt().isEmpty -»
@@ -239,6 +255,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	If set, then the 'label_alt' fields are always shown in the title separated by comma.
 «ENDREM»
 «DEFINE TCACtrlLabelAltForce FOR MClass -»
 «IF !getT3TCAClassLabelAlt().isEmpty -»
@@ -248,6 +265,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Fieldname, which is automatically updated to the current timestamp (UNIX-time in seconds) each time the record is updated / saved in the system.
 «ENDREM»
 «DEFINE TCACtrlTstamp FOR MClass -»
 		'tstamp' => 'tstamp',
@@ -255,6 +273,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Fieldname, which is automatically set to the current timestamp when the record is created. Is never modified again.
 «ENDREM»
 «DEFINE TCACtrlCrdate FOR MClass -»
 		'crdate' => 'crdate',
@@ -262,6 +281,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	If set, versioning is enabled for this table.
 «ENDREM»
 «DEFINE TCACtrlVersioningWS FOR MClass -»
 		'versioningWS' => 2,
@@ -269,6 +289,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	If set, content from this table will get copied along when a new version of a page is created.
 «ENDREM»
 «DEFINE TCACtrlVersioningFollowPages FOR MClass -»
 		'versioning_followPages' => true,
@@ -276,6 +297,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Fieldname, which will contain the UID of the original record in case a record is created as a copy or new version of another record.
 «ENDREM»
 «DEFINE TCACtrlOrigUid FOR MClass -»
 		'origUid' => 't3_origuid',
@@ -283,6 +305,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Localization access control.
 «ENDREM»
 «DEFINE TCACtrlLanguageField FOR MClass -»
 		'languageField'	=> 'sys_language_uid',
@@ -290,6 +313,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Fieldname, which contains the uid of the record which this record is a translation of.
 «ENDREM»
 «DEFINE TCACtrlTransOrigPointerField FOR MClass -»
 		'transOrigPointerField' => 'l18n_parent',
@@ -297,6 +321,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Fieldname which will be updated with the value of the original language record whenever the translation record is updated.
 «ENDREM»
 «DEFINE TCACtrlTransOrigDiffSourceField FOR MClass -»
 		'transOrigDiffSourceField' => 'l18n_diffsource',
@@ -304,6 +329,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Fieldname, which indicates if a record is considered deleted or not. 
 «ENDREM»
 «DEFINE TCACtrlDelete FOR MClass -»
 		'delete' => 'deleted',
@@ -311,6 +337,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Specifies which publishing control features are automatically implemented for the table.
 «ENDREM»
 «DEFINE TCACtrlEnablecolumns FOR MClass -»
 		'enablecolumns' => array(
@@ -343,17 +370,7 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
-«ENDREM»
-«DEFINE TCACtrlAdditions FOR MClass -»
-«IF !getT3TCAClassCtrlSectionAdditions().isEmpty -»
-«FOREACH getT3TCAClassCtrlSectionAdditions() AS tcaAddition -»
-			«tcaAddition -»,
-«ENDFOREACH -»
-«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
+	Reference to the complete $TCA entry content.
 «ENDREM»
 «DEFINE TCACtrlDynamicConfigFile FOR MClass -»
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . '«tcaPhpFilePath() -»',
@@ -361,9 +378,21 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
+	Pointing to the icon file to use for the table.
 «ENDREM»
 «DEFINE TCACtrlIconFile FOR MClass -»
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . '«resourcesPublicIconsPath() -»/«name() -».gif'
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE TCACtrlAdditions FOR MClass -»
+«IF !getT3TCAClassCtrlSectionAdditions().isEmpty -»
+«FOREACH getT3TCAClassCtrlSectionAdditions() AS tcaAddition SEPARATOR "," -»
+		«FOREACH tcaAddition.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
+«ENDFOREACH -»
+«ENDIF -»
 «ENDDEFINE»
 
 
