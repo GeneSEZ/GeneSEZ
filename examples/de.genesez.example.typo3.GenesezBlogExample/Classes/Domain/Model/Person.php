@@ -62,11 +62,9 @@ class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_
 	 */
 	public function __construct($firstname, $lastname, $email) {
 		/* PROTECTED REGION ID(php.constructor._16_9_8a7027a_1297195987831_804563_2831) ENABLED START */
-		
 		$this->setFirstname($firstname);
 		$this->setLastname($lastname);
 		$this->setEmail($email);
-		
 		/* PROTECTED REGION END */
 	}
 
@@ -79,9 +77,7 @@ class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_
 	 */
 	public function getFullName() {
 		/* PROTECTED REGION ID(php.derived.attribute.implementation._17_0_1_8a7027a_1303834035630_196217_2127) ENABLED START */
-		
 		return $this->firstname . ' ' . $this->lastname;
-		
 		/* PROTECTED REGION END */
 	}
 	

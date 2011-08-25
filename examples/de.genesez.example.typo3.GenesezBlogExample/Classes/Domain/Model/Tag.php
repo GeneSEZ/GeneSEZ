@@ -49,9 +49,7 @@ class Tx_GenesezBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_Abs
 	 */
 	public function __construct($name) {
 		/* PROTECTED REGION ID(php.constructor._16_9_8a7027a_1297195903251_537901_2772) ENABLED START */
-		
 		$this->name = $name;
-		
 		/* PROTECTED REGION END */
 	}
 
@@ -63,9 +61,7 @@ class Tx_GenesezBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_Abs
 	 */
 	public function __toString() {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297195931919_746658_2792) ENABLED START */
-		
 		return $this->getName();
-		
 		/* PROTECTED REGION END */
 	}
 

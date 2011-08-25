@@ -46,13 +46,11 @@ class Tx_GenesezBlogExample_Domain_Repository_BlogRepository extends Tx_Extbase_
 	 */
 	public function initalizeObject() {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302020870850_802851_3552.initalizeObject) ENABLED START */
-		
 		/*
 		$querySettings = $this->objectManager->create('Tx_Extbase_Persistence_Typo3QuerySettings');
 		$querySettings->setRespectStoragePage(FALSE);
 		$this->setDefaultQuerySettings($querySettings);
 		 */
-		
 		/* PROTECTED REGION END */
 	}
 
@@ -60,12 +58,10 @@ class Tx_GenesezBlogExample_Domain_Repository_BlogRepository extends Tx_Extbase_
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1302020870850_802851_3552) ENABLED START */
-	
 	protected $defaultOrderings = array(
 			'crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING,
 			'uid' => Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING
 	);
-	
 	/* PROTECTED REGION END */
 
 }

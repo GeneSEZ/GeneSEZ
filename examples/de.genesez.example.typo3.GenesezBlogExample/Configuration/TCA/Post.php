@@ -23,38 +23,6 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				'type' => 'check',
 			)
 		),
-		'starttime' => array(
-			'exclude' => true,
-			'l10n_mode' => 'mergeIfNotBlank',
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
-			'config' => array(
-				'type' => 'input',
-				'size' => 13,
-				'max' => 20,
-				'eval' => 'datetime',
-				'checkbox' => false,
-				'default' => 0,
-				'range' => array(
-					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-				),
-			),
-		),
-		'endtime' => array(
-			'exclude' => true,
-			'l10n_mode' => 'mergeIfNotBlank',
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
-			'config' => array(
-				'type' => 'input',
-				'size' => 13,
-				'max' => 20,
-				'eval' => 'datetime',
-				'checkbox' => false,
-				'default' => 0,
-				'range' => array(
-					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-				),
-			),
-		),
 		'sys_language_uid' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
@@ -178,7 +146,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_comment',
 				'foreign_sortby' => 'sorting',
-				'MM' => 'tx_genesezblogexample_comment_comments_post__mm',
+				'MM' => 'tx_genesezblogexample_comment_comments_post_mm',
 				'minitems' => 0,
 				'maxitems' => 99999,
 				'appearance' => array(
@@ -197,7 +165,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
 				'foreign_sortby' => 'sorting',
-				'MM' => 'tx_genesezblogexample_post_related_posts_post__mm',
+				'MM' => 'tx_genesezblogexample_post_related_posts_post_mm',
 				'minitems' => 0,
 				'maxitems' => 99999,
 				'appearance' => array(

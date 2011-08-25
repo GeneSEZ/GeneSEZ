@@ -47,13 +47,11 @@ class Tx_GenesezBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Va
 	 */
 	public function isValid(Tx_GenesezBlogExample_Domain_Model_Blog $value) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297194671553_69571_1516.validator.isValid) ENABLED START */
-		
 		if (strtolower($value->getTitle()) === 'extbase') {
 			$this->addError(Tx_Extbase_Utility_Localization::translate('error.Blog.invalidTitle', 'BlogExample'), 1297418974);
 			return FALSE;
 		}
 		return TRUE;
-		
 		/* PROTECTED REGION END */
 	}
 

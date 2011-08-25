@@ -50,7 +50,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * 
 	 * @var string
-	 * @validate StringLength(minimum = 3, maximum = -1)
+	 * @validate StringLength(minimum = 3)
 	 */
 	protected $content;
 	/**
@@ -88,12 +88,10 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	 */
 	public function __construct() {
 		/* PROTECTED REGION ID(php.constructor._16_9_8a7027a_1297195698522_381397_2648) ENABLED START */
-		
 		$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
 		$this->comments = new Tx_Extbase_Persistence_ObjectStorage();
 		$this->relatedPosts = new Tx_Extbase_Persistence_ObjectStorage();
 		$this->date = new DateTime();
-		
 		/* PROTECTED REGION END */
 	}
 
@@ -105,13 +103,11 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	 */
 	public function __toString() {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297195845978_528794_2747) ENABLED START */
-		
 		return $this->title . chr(10) .
 			' written on ' . $this->date->format('Y-m-d') . chr(10) .
 			' by ' . $this->author->getFullName() . chr(10) .
 			wordwrap($this->content, 70, chr(10)) . chr(10) .
 			implode(', ', $this->tags->toArray());
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -120,9 +116,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	 */
 	public function removeAllTags() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314213504516_360568_2445) ENABLED START */
-		
 		$this->tags = new Tx_Extbase_Persistence_ObjectStorage();
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -131,12 +125,10 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	 */
 	public function removeAllComments() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314213547677_788291_2458) ENABLED START */
-		
 		$comments = clone $this->comments;
 		foreach($comments as $comment) {
 			$this->comments->detach($comment);
 		}
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -145,12 +137,10 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	 */
 	public function removeAllRelatedPosts() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314213620686_588633_2471) ENABLED START */
-		
 		$relatedPosts = clone $this->relatedPosts;
 		foreach($relatedPosts as $relatedPost) {
 			$this->relatedPosts->detach($relatedPost);
 		}
-		
 		/* PROTECTED REGION END */
 	}
 

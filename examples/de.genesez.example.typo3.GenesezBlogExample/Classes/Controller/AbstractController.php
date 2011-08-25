@@ -48,13 +48,11 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	 */
 	protected function addFlashMessage($action, $severity = t3lib_FlashMessage::OK) {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081575397_839592_2100) ENABLED START */
-		
 		$messageLocallangKey = sprintf('flashmessage.%s.%s', $this->request->getControllerName(), $action);
 		$localizedMessage = $this->translate($messageLocallangKey, '[' . $messageLocallangKey . ']');
 		$titleLocallangKey = sprintf('%s.title', $messageLocallangKey);
 		$localizedTitle = $this->translate($titleLocallangKey, '[' . $titleLocallangKey . ']');
 		$this->flashMessageContainer->add($localizedMessage, $localizedTitle, $severity);
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -66,13 +64,11 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	 */
 	protected function translate($key, $defaultMessage = '') {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081746177_170309_2158) ENABLED START */
-		
 		$message = Tx_Extbase_Utility_Localization::translate($key, 'BlogExample');
 		if ($message === NULL) {
 			$message = $defaultMessage;
 		}
 		return $message;
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -82,11 +78,9 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	 */
 	protected function getErrorFlashMessage() {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081259525_708656_2063.getErrorFlashMessage) ENABLED START */
-		
 		$defaultFlashMessage = parent::getErrorFlashMessage();
 		$locallangKey = sprintf('error.%s.%s', $this->request->getControllerName(), $this->actionMethodName);
 		return $this->translate($locallangKey, $defaultFlashMessage);
-		
 		/* PROTECTED REGION END */
 	}
 

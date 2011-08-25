@@ -33,6 +33,14 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
+/* PROTECTED REGION ID(ext_tables.php.own.plugin.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+$extensionName = t3lib_div::underscoredToUpperCamelCase($_EXTKEY);
+$pluginSignature = strtolower($extensionName) . '_postlist';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform,recursive';
+t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_list.xml');
+/* PROTECTED REGION END */
+
 if (TYPO3_MODE === 'BE') {
 	/**
 	 * Register a backend module
@@ -52,7 +60,15 @@ if (TYPO3_MODE === 'BE') {
 	);
 }
 
+/* PROTECTED REGION ID(ext_tables.php.own.module.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+// TODO: put your further code implementations here
+/* PROTECTED REGION END */
+
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'GenesezBlogExample setup');
+
+/* PROTECTED REGION ID(ext_tables.php.own.typoscript.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'GeneSEZBlogExample CSS Styles (optional)');
+/* PROTECTED REGION END */
 
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_administrator', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_administrator.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezblogexample_domain_model_administrator');
@@ -75,7 +91,7 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Administrator.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_administrator.gif'
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_administrator.gif',
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_blog', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_blog.xml');
@@ -95,11 +111,9 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Blog.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_blog.gif'
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_blog.gif',
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_comment', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_comment.xml');
@@ -112,20 +126,12 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 		'label_alt_force' => true,
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
-		'versioningWS' => 2,
-		'versioning_followPages' => true,
-		'origUid' => 't3_origuid',
-		'languageField'	=> 'sys_language_uid',
-		'transOrigPointerField' => 'l18n_parent',
-		'transOrigDiffSourceField' => 'l18n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Comment.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_comment.gif'
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_comment.gif',
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_person', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_person.xml');
@@ -141,17 +147,13 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		'versioningWS' => 2,
 		'versioning_followPages' => true,
 		'origUid' => 't3_origuid',
-		'languageField'	=> 'sys_language_uid',
-		'transOrigPointerField' => 'l18n_parent',
-		'transOrigDiffSourceField' => 'l18n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Person.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_person.gif'
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_person.gif',
+		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.xml:LGL.prependAtCopy',
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_post', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_post.xml');
@@ -173,11 +175,9 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Post.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_post.gif'
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_post.gif',
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_tag', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_tag.xml');
@@ -188,35 +188,22 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 		'label'	=> 'name',
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
-		'versioningWS' => 2,
-		'versioning_followPages' => true,
-		'origUid' => 't3_origuid',
-		'languageField'	=> 'sys_language_uid',
-		'transOrigPointerField' => 'l18n_parent',
-		'transOrigDiffSourceField' => 'l18n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Tag.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_tag.gif'
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_tag.gif',
 	)
 );
 
 
 /* PROTECTED REGION ID(ext_tables.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
-
-$extensionName = t3lib_div::underscoredToUpperCamelCase($_EXTKEY);
-$pluginSignature = strtolower($extensionName) . '_postlist';
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key';
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform,recursive';
-t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_list.xml');
-
-
-t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'BlogExample CSS Styles (optional)');
-
+t3lib_div::loadTCA('fe_users');
+if (is_array($TCA['fe_users']['columns']['tx_extbase_type'])) {
+	$TCA['fe_users']['types']['Tx_BlogExample_Domain_Model_Administrator'] = $TCA['fe_users']['types']['0'];
+	array_push($TCA['fe_users']['columns']['tx_extbase_type']['config']['items'], array('LLL:EXT:blog_example/Resources/Private/Language/locallang_db.xml:fe_users.tx_extbase_type.Tx_BlogExample_Domain_Model_Administrator', 'Tx_BlogExample_Domain_Model_Administrator'));
+}
 /* PROTECTED REGION END */
 
 ?>

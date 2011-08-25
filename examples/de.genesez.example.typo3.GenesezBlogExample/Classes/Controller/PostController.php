@@ -58,7 +58,6 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 */
 	public function indexAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, $tag = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251570422_202575_2822) ENABLED START */
-		
 		if (empty($tag)) {
 			$posts = $this->postRepository->findByBlog($blog);
 		} else {
@@ -68,7 +67,6 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 		}
 		$this->view->assign('blog', $blog);
 		$this->view->assign('posts', $posts);
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -81,10 +79,8 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 */
 	public function showAction(Tx_GenesezBlogExample_Domain_Model_Post $post, Tx_GenesezBlogExample_Domain_Model_Comment $newComment = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251652061_144721_2838) ENABLED START */
-		
 		$this->view->assign('post', $post);
 		$this->view->assign('newComment', $newComment);
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -97,12 +93,10 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 */
 	public function newAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, Tx_GenesezBlogExample_Domain_Model_Post $newPost = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251722638_898873_2867) ENABLED START */
-		
 		$this->view->assign('authors', $this->personRepository->findAll());
 		$this->view->assign('blog', $blog);
 		$this->view->assign('newPost', $newPost);
 		$this->view->assign('remainingPosts', $this->postRepository->findByBlog($blog));
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -114,12 +108,10 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 */
 	public function createAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, Tx_GenesezBlogExample_Domain_Model_Post $newPost) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251748387_416366_2881) ENABLED START */
-		
 		$blog->addPost($newPost);
 		$newPost->setBlog($blog);
 		$this->addFlashMessage('created');
 		$this->redirect('index', NULL, NULL, array('blog' => $blog));
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -132,12 +124,10 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 */
 	public function editAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251769032_48598_2895) ENABLED START */
-		
 		$this->view->assign('authors', $this->personRepository->findAll());
 		$this->view->assign('blog', $blog);
 		$this->view->assign('post', $post);
 		$this->view->assign('remainingPosts', $this->postRepository->findRemaining($post));
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -149,11 +139,9 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 */
 	public function updateAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251791676_169143_2909) ENABLED START */
-		
 		$this->postRepository->update($post);
 		$this->addFlashMessage('updated');
 		$this->redirect('show', NULL, NULL, array('post' => $post, 'blog' => $blog));
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -165,11 +153,9 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 	 */
 	public function deleteAction(Tx_GenesezBlogExample_Domain_Model_Blog $blog, Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251812164_716082_2923) ENABLED START */
-		
 		$this->postRepository->remove($post);
 		$this->addFlashMessage('deleted', t3lib_FlashMessage::INFO);
 		$this->redirect('index', NULL, NULL, array('blog' => $blog));
-		
 		/* PROTECTED REGION END */
 	}
 

@@ -47,14 +47,12 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 */
 	public function findAllByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297250908862_209782_2440) ENABLED START */
-		
 		$query = $this->createQuery();
 		return $query
 			->matching(
 				$query->equals('blog', $blog)
 			)
 			->execute();
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -66,7 +64,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 */
 	public function findByTagAndBlog($tag, Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297250952847_309532_2458) ENABLED START */
-		
 		$query = $this->createQuery();
 		return $query
 			->matching(
@@ -76,7 +73,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 				)
 			)
 			->execute();
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -87,7 +83,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 */
 	public function findByRemaining(Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251045982_475934_2503) ENABLED START */
-		
 		$blog = $post->getBlog();
 		$query = $this->createQuery();
 		return $query
@@ -100,7 +95,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 				)
 			)
 			->execute();
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -111,7 +105,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 */
 	public function findPrevious(Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251131408_430169_2532) ENABLED START */
-		
 		$query = $this->createQuery();
 		return $query
 			->matching(
@@ -119,7 +112,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 			)
 			->execute()
 			->getFirst();
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -130,7 +122,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 */
 	public function findNext(Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251164032_279760_2551) ENABLED START */
-		
 		$query = $this->createQuery();
 		return $query
 			->matching(
@@ -138,7 +129,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 			)
 			->execute()
 			->getFirst();
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -150,7 +140,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 */
 	public function findRecentByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog, $limit = 5) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251180788_324969_2565) ENABLED START */
-		
 		$query = $this->createQuery();
 		return $query
 			->matching(
@@ -158,7 +147,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 			)
 			->setLimit((integer)$limit)
 			->execute();
-		
 		/* PROTECTED REGION END */
 	}
 
@@ -166,11 +154,9 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297250863949_852308_2394) ENABLED START */
-	
 	protected $defaultOrderings = array(
 		'date' => Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING
 	);
-	
 	/* PROTECTED REGION END */
 
 }

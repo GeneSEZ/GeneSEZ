@@ -56,7 +56,7 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 	/**
 	 * 
 	 * @var string
-	 * @validate StringLength(minimum = 0, maximum = 500)
+	 * @validate StringLength(maximum = 500)
 	 */
 	protected $content;
 
@@ -66,9 +66,7 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 	 */
 	public function __construct() {
 		/* PROTECTED REGION ID(php.constructor._16_9_8a7027a_1297195950535_896855_2808) ENABLED START */
-		
 		$this->date = new DateTime();
-		
 		/* PROTECTED REGION END */
 	}
 
@@ -80,9 +78,7 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 	 */
 	public function __toString() {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297195977073_836868_2825) ENABLED START */
-		
 		return $this->author . ' (' . $this->email . ') said on ' . $this->date->format('Y-m-d') . ':' . chr(10) . $this->content . chr(10);
-		
 		/* PROTECTED REGION END */
 	}
 

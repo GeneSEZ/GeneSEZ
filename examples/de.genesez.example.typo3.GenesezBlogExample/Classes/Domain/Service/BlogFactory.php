@@ -45,15 +45,13 @@ class Tx_GenesezBlogExample_Domain_Service_BlogFactory implements t3lib_Singleto
 
 	
 	/**
-	 * Returns a sample blog populated with generic data
- * It is also an example how to handle objects and repositories in general
+	 * Returns a sample blog populated with generic data. It is also an example how to handle objects and repositories in general
 	 *
 	 * @param integer $blogNumber 
 	 * @return Tx_GenesezBlogExample_Domain_Model_Blog 
 	 */
 	public function createBlog($blogNumber = 1) {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302085392366_403888_3725) ENABLED START */
-		
 		$blog = $this->objectManager->create('Tx_BlogExample_Domain_Model_Blog');
 		$blog->setTitle('Blog #' . $blogNumber);
 		$blog->setDescription('A blog about TYPO3 extension development.');
@@ -111,7 +109,6 @@ class Tx_GenesezBlogExample_Domain_Service_BlogFactory implements t3lib_Singleto
 		}
 		
 		return $blog;
-		
 		/* PROTECTED REGION END */
 	}
 

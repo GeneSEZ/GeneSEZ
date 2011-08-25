@@ -62,10 +62,8 @@ class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core
 	 */
 	public function initializeArguments() {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252698260_127341_3371) ENABLED START */
-		
 		parent::initializeArguments();
 		$this->registerUniversalTagAttributes();
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -78,7 +76,6 @@ class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core
 	 */
 	public function render($emailAddress, $size = null, $defaultImageUri = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252704043_6615_3384) ENABLED START */
-		
 		$gravatarUri = 'http://www.gravatar.com/avatar/' . md5($emailAddress);
 		$uriParts = array();
 		if ($defaultImageUri !== NULL) {
@@ -93,7 +90,6 @@ class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core
 		
 		$this->tag->addAttribute('src', $gravatarUri);
 		return $this->tag->render();
-		
 		/* PROTECTED REGION END */
 	}
 

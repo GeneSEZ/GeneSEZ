@@ -47,7 +47,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	 * A short description of the blog
 	 * 
 	 * @var string
-	 * @validate StringLength(minimum = 0, maximum = 150)
+	 * @validate StringLength(maximum = 150)
 	 */
 	protected $description = '';
 	/**
@@ -78,9 +78,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	 */
 	public function __construct() {
 		/* PROTECTED REGION ID(php.constructor._16_9_8a7027a_1297195581704_789426_2608) ENABLED START */
-		
 		$this->posts = new Tx_Extbase_Persistence_ObjectStorage();
-		
 		/* PROTECTED REGION END */
 	}
 
@@ -92,9 +90,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	 */
 	public function removeAllPosts() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314212429824_842410_2427) ENABLED START */
-		
 		$this->posts = new Tx_Extbase_Persistence_ObjectStorage();
-		
 		/* PROTECTED REGION END */
 	}
 

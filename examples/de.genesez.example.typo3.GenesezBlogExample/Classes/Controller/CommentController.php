@@ -48,11 +48,9 @@ class Tx_GenesezBlogExample_Controller_CommentController extends Tx_GenesezBlogE
 	 */
 	public function createAction(Tx_GenesezBlogExample_Domain_Model_Post $post, Tx_GenesezBlogExample_Domain_Model_Comment $newComment) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251980107_45183_2985) ENABLED START */
-		
 		$post->addComment($newComment);
 		$this->addFlashMessage('created');
 		$this->redirect('show', 'Post', NULL, array('post' => $post));
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -64,11 +62,9 @@ class Tx_GenesezBlogExample_Controller_CommentController extends Tx_GenesezBlogE
 	 */
 	public function deleteAction(Tx_GenesezBlogExample_Domain_Model_Post $post, Tx_GenesezBlogExample_Domain_Model_Comment $comment) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252002140_334308_2995) ENABLED START */
-		
 		$post->removeComment($comment);
 		$this->addFlashMessage('deleted', t3lib_FlashMessage::INFO);
 		$this->redirect('show', 'Post', NULL, array('post' => $post));
-		
 		/* PROTECTED REGION END */
 	}
 	/**
@@ -79,11 +75,9 @@ class Tx_GenesezBlogExample_Controller_CommentController extends Tx_GenesezBlogE
 	 */
 	public function deleteAllAction(Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252021351_287202_3009) ENABLED START */
-		
 		$post->removeAllComments();
 		$this->addFlashMessage('deletedAll', t3lib_FlashMessage::INFO);
 		$this->redirect('edit', 'Post', NULL, array('post' => $post, 'blog' => $post->getBlog()));
-		
 		/* PROTECTED REGION END */
 	}
 
