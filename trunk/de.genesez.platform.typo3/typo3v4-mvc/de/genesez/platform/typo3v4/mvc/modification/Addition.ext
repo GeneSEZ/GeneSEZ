@@ -11,6 +11,10 @@ import gcore;
 // use common logging scripts
 extension de::genesez::platforms::common::log::Log;
 
+// use TYPO3 profile + access helper scripts
+extension de::genesez::platform::typo3v4::profile::Profile;
+extension de::genesez::platform::typo3v4::profile::AccessHelper;
+
 // use TYPO3 MVC Extbase profile + access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
@@ -68,6 +72,8 @@ Void packageAdditions(MPackage this) :
 Void classAdditions(MClass this) :
 	logTrace("--------------------------------------------------------------------------------") ->
 	logTrace("call classAdditions for class: " + name) ->
+	addSingletonInterface() ->
+	addDependencyInjection() ->
 	switch {
 		case isController() :
 			controllerAdditions()
@@ -84,6 +90,88 @@ Void classAdditions(MClass this) :
 		default :
 			Void
 	};	
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase additions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+addSingletonInterface(MClass this) :
+	logTrace("call addSingletonInterface for class: " + name) ->
+	// checks if the class has a stereotype 
+	hasT3SingletonStereotype()
+		// if true, then create the singleton interface
+		? realization.add( createExternal( model(), "T3_LIB_SINGLETON" ) )
+		: Void;
+
+
+addDependencyInjection(MClass this) :
+	logTrace("call addDependencyInjection for class: " + name) ->
+	// checks if the class has a stereotype 
+	hasT3ExtbaseDependencyInjectionStereotype()
+		? (	
+			// inject configuration manager if it should
+			injectConfigurationManagerType() ->
+			// inject object manager if it should
+			injectObjectManagerType() ->
+			// inject persistence manager if it should
+			injectPersistenceManagerType()
+		) : Void;
+
+
+Void injectConfigurationManagerType(MClass this) :
+	logTrace("call addDependencyInjectConfigurationManagerType for class: " + name) ->
+	// checks if the configuration manager should be generated
+	getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() != prT3ExtbaseConfigurationManagerTypeNone()
+		// if true, then create the super controller type which is specified
+		? (	let a = makeInjectAttribute( "configurationManager", createExternal( model(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() ) ) :
+				// add comment to discribe the attribute
+				a.makeComment("TYPO3 Extbase configuration manager") 
+		) : Void;
+
+
+Void injectObjectManagerType(MClass this) :
+	logTrace("call addDependenyInjectionObjectManagerType for class: " + name) ->
+	// checks if the object manager should be generated
+	getT3ExtbaseDependencyInjectionInjectObjectManagerType() != prT3ExtbaseObjectManagerTypeNone()
+		// if true, then create the super controller type which is specified
+		? (	let a = makeInjectAttribute( "objectManager", createExternal( model(), getT3ExtbaseDependencyInjectionInjectObjectManagerType() ) ) :
+				// add comment to discribe the attribute
+				a.makeComment("TYPO3 Extbase object manager") 
+		) : Void;
+
+
+Void injectPersistenceManagerType(MClass this) :
+	logTrace("call addDependenyInjectionPersistenceManagerType for class: " + name) ->
+	// checks if the persistence manager should be generated
+	getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() != prT3ExtbasePersistenceManagerTypeNone()
+		// if true, then create the super controller type which is specified
+		? (	let a = makeInjectAttribute( "persistenceManager", createExternal( model(), getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() ) ) :
+				// add comment to discribe the attribute
+				a.makeComment("TYPO3 Extbase persistence manager") 
+		) : Void;
+
+
+private MOperation makeInjectAttribute(MClass this, String name, MType dependencyInjectionType) :
+	let a = createAttribute( xmiGuid + "." + name, name ) :
+		// (visibility, derived, multiplicity, unique, ordered)
+		a.processProperty("protected", false, 1, false, false) ->
+		// (defaultvalue, static, final)
+		a.processAttribute("", false, false) ->
+		// add dependency injection type
+		a.setType(
+			dependencyInjectionType
+		) ->
+		// add stereotype to mark this attribute as dependency injection
+		a.stereotype.add( 
+			let s = makeStereotype( model(), a.xmiGuid + "." + prDi(), prDi() ) :
+				a.makeTaggedValue( makeTag( s, prDiSetter(), "Boolean" ), "true" ) ->
+				s
+		) ->
+		a;
 
 
 /*
@@ -134,7 +222,7 @@ MClass processController(MClass this, MClass domainObject) :
 		makeStereotype( model(), prT3ExtbaseController(), prT3ExtbaseController() ) 
 	) ->
 	// add property to inject the repository
-	addControllerRepositoryAttribute(domainObject) ->
+	addControllerRepository(domainObject) ->
 	// add controller actions
 	addControllerListAction(domainObject) ->
 	addControllerShowAction(domainObject) ->
@@ -170,7 +258,7 @@ Void addControllerType(MClass this) :
 		);
 
 
-Void addControllerRepositoryAttribute(MClass this, MClass domainObject) :
+Void addControllerRepository(MClass this, MClass domainObject) :
 	let a = createAttribute( xmiGuid + "." + domainObject.asRepositoryName().toFirstLower(), domainObject.asRepositoryName().toFirstLower() ) :
 		// (visibility, derived, multiplicity, unique, ordered)
 		a.processProperty("protected", false, 1, false, false) ->
@@ -519,7 +607,9 @@ Void addRepositoryInitializeObject(MClass this) :
 Void validatorAdditions(MClass validator) :
 	logTrace("call validatorAdditions for validator: " + validator.name) ->
 	// add super validiator type
-	validator.addValidatorType();
+	validator.addValidatorType() ->
+	// add 'isValid' if not exists
+	addValidatorIsValid( validator, createPrimitiveType( validator.model(), "mixed" ) );
 
 
 cached MClass makeValidator(MClass domainObject) :
@@ -538,7 +628,7 @@ cached MClass makeValidator(MStereotype stereotype) :
 	!stereotype.existsValidator() 
 		? (	let c = createClass(stereotype.model(), stereotype.xmiGuid + ".validator", stereotype.asValidatorName() ) :
 				logTrace("create new validator class for stereotype: " + stereotype.name) ->
-				c.processValidator(createExternal( stereotype.model(), "Object" ))
+				c.processValidator(createPrimitiveType( stereotype.model(), "mixed" ))
 		) : stereotype.model().allValidators().select( v | v.nameS() == stereotype.asValidatorName() ).first();
 
 
@@ -587,21 +677,25 @@ Void addValidatorType(MClass this) :
  * Add the 'isValid' to the validator class.
  */
 Void addValidatorIsValid(MClass this, MType validationType) :
-	let o = makeOperation("isValid", "public", false, false, false) :
-		// add comment to discribe the operation
-		o.makeComment("Checks if the given value is valid according to the validator.") ->
-		o.parameter.add(
-			let p = makeParameter(o, "value", "", "in", validationType) :
-				// add comment to discribe the parameter
-				p.makeComment("The value that should be validated") ->
-				p
-		) ->
-		o.setReturn(
-			let return = makeParameter(o, o.xmiGuid + "." + "return", "", "", "return", createPrimitiveTypeBoolean( model() ) ) :
-				// add comment to discribe the parameter
-				return.makeComment("TRUE if the value is valid, FALSE if an error occured") ->
-				return
-		);
+	logTrace("call addValidatorIsValid for validator: " + name) ->
+	// checks if the isValid method should be created and doesn't already exists
+	operation.select( o | o.name() == "isValid" ).isEmpty
+		? (	let o = makeOperation("isValid", "public", false, false, false) :
+				// add comment to discribe the operation
+				o.makeComment("Checks if the given value is valid according to the validator.") ->
+				o.parameter.add(
+					let p = makeParameter(o, "value", "", "in", validationType) :
+						// add comment to discribe the parameter
+						p.makeComment("The value that should be validated") ->
+						p
+				) ->
+				o.setReturn(
+					let return = makeParameter(o, o.xmiGuid + "." + "return", "", "", "return", createPrimitiveTypeBoolean( model() ) ) :
+						// add comment to discribe the parameter
+						return.makeComment("TRUE if the value is valid, FALSE if an error occured") ->
+						return
+				)
+		) : Void;
 		
 
 /*
