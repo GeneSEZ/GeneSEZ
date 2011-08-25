@@ -16,7 +16,9 @@
 «REM» use TYPO3 MVC naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
 
-«REM» use common access helper scripts «ENDREM»
+«REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
+«REM» common access helper scripts if script name is equal «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
 
@@ -181,7 +183,7 @@
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAssociationRole -»
 «IF isSingleValuedType() -»
-«IF type.name(getNamingContext(), typeMappingContextPHPTypeHint()) != "" -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint( type ) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ELSE -»«mapType() -» «ENDIF -»
 «ENDDEFINE»
 
@@ -190,5 +192,5 @@
 	Generates type hints for insert in and remove from methods.
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAssociationRole -»
-«IF type.name(getNamingContext(), typeMappingContextPHPTypeHint()) != "" -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint( type ) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ENDDEFINE»

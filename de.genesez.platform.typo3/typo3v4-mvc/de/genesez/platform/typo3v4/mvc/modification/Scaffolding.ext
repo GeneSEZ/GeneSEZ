@@ -31,6 +31,7 @@ extension de::genesez::platforms::common::m2m::MakeElement;
 */
 
 Void modelScaffolding(MModel this) :
+	useLogger("de.genesez.platform.typo3") ->
 	logTrace( "Start dynamic scaffolding." ) ->
 	// perform scaffolding for all aggreagate roots
 	allEntities().entityScaffolding();
@@ -44,13 +45,10 @@ Void modelScaffolding(MModel this) :
 
 Void entityScaffolding(MClass this) :
 	hasT3ExtbaseEntityIsAggregateRoot("true")
-		? (	logTrace( "Scaffolding for domain object: " + name() ) ->
-			stereotype.add(
-				makeStereotype( model(), this.xmiGuid + "." + prT3ExtbaseEntity(), prT3ExtbaseEntity() )
-			) ->
-			( let s = makeStereotype( model(), this.xmiGuid + "." + prT3ExtbaseDomainObject(), prT3ExtbaseDomainObject() ) :
-				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreateController(), "Boolean" ), "true" ) ->
-				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreateRepository(), "Boolean" ), "true" ) ->
-				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreatePlugin(), "Boolean" ), "true" )
+		? (	logTrace( "Scaffolding for entity: " + name() ) ->
+			( let s = makeStereotype( model(), this.xmiGuid + "." + prT3ExtbaseEntity(), prT3ExtbaseEntity() ) :
+				  makeTaggedValue( makeTag( s, prT3ExtbaseEntityCreateController(), "Boolean" ), "true" ) ->
+				  makeTaggedValue( makeTag( s, prT3ExtbaseEntityCreateRepository(), "Boolean" ), "true" ) ->
+				  makeTaggedValue( makeTag( s, prT3ExtbaseEntityCreatePlugin(), "Boolean" ), "true" )
 			)
 		) : Void;
