@@ -14,6 +14,10 @@ extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
 // use TYPO3 MVC Fluid access helper scripts
 extension de::genesez::platform::typo3v4::mvc::profile::FluidAccessHelper;
 
+// use TYPO3 naming context and common naming scripts
+extension de::genesez::platforms::common::naming::Naming;
+extension de::genesez::platform::typo3v4::mvc::convention::NamingContext;
+
 // use TYPO3 MVC conversion scripts
 extension de::genesez::platform::typo3v4::mvc::convention::Conversion;
 
@@ -35,7 +39,7 @@ extension de::genesez::platforms::common::Conversion;
  * 
  * @return	the list of TYPO3 MVC Extbase controllers or an empty list
  */
-List[MClass] allControllers(MModel this) :
+cached List[MClass] allControllers(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isController() );
 
 
@@ -44,7 +48,7 @@ List[MClass] allControllers(MModel this) :
  * 
  * @return	true if the classifier is part of the TYPO3 Extbase controller package, otherwise false
  */
-boolean isControllerPackageElement(MClassifier this) :
+cached boolean isControllerPackageElement(MClassifier this) :
 	// first check if this classifier is a class and is a controller
 	( MClass.isInstance(this) && ((MClass)this).isController() ) ||
 	// second check if this classifier is a controller package element
@@ -58,7 +62,7 @@ boolean isControllerPackageElement(MClassifier this) :
  *
  * @return	true if the class is a TYPO3 MVC Extbase controller, otherwise false
  */
-boolean isController(MClass this) :
+cached boolean isController(MClass this) :
 	// first check if this class has an stereotype
 	hasT3ExtbaseControllerStereotype() ||
 	// second check if the package of this class has an stereotype
@@ -82,7 +86,7 @@ boolean isController(MClass this) :
  * 
  * @return	true if the operation is a TYPO3 MVC Extbase controller action, otherwise false
  */
-boolean isControllerAction(MOperation this) :
+cached boolean isControllerAction(MOperation this) :
 	// first check if the operation has an stereotype
 	hasT3ExtbaseControllerActionStereotype() ||
 	// second check if the class is a controller AND the operation is not a non controller action
@@ -98,7 +102,7 @@ boolean isControllerAction(MOperation this) :
  *
  * @return	true if the operation is not a TYPO3 MVC Extbase controller action, otherwise false
  */
-boolean isControllerNoAction(MOperation this) :
+cached boolean isControllerNoAction(MOperation this) :
 	// first check if the operation has an stereotype
 	hasT3ExtbaseControllerNoActionStereotype();
 
@@ -114,7 +118,7 @@ boolean isControllerNoAction(MOperation this) :
  * 
  * @return	the list of TYPO3 MVC Extbase entities and value objects or an empty list
  */
-List[MClass] allEntitiesAndValueObjects(MModel this) :
+cached List[MClass] allEntitiesAndValueObjects(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
 
 
@@ -123,7 +127,7 @@ List[MClass] allEntitiesAndValueObjects(MModel this) :
  * 
  * @return	true if the classifier is part of the TYPO3 Extbase model package, otherwise false
  */
-boolean isModelPackageElement(MClassifier this) :
+cached boolean isModelPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ( ((MClass)this).isEntity() || ((MClass)this).isValueObject() ) 
 		default : false
@@ -135,7 +139,7 @@ boolean isModelPackageElement(MClassifier this) :
  * 
  * @return	the list of of initializable properties or an empty list
  */
-List[MProperty] owningInitializableProperties(MClassifier this) :
+cached List[MProperty] owningInitializableProperties(MClassifier this) :
 	let p = {} :
 		p.addAll( owningInitializableAttributes() ) ->
 	  	p.addAll( owningInitializableAssociationRoles() ) ->
@@ -225,7 +229,7 @@ boolean isManyToManyBidirectional(MAssociationRole this) :
  * 
  * @return	the list of TYPO3 MVC Extbase entities or an empty list
  */
-List[MClass] allEntities(MModel this) :
+cached List[MClass] allEntities(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isEntity() );
 
 
@@ -234,7 +238,7 @@ List[MClass] allEntities(MModel this) :
  *
  * @return	true if the class is a TYPO3 MVC Extbase entity, otherwise false
  */
-boolean isEntity(MClass this) :
+cached boolean isEntity(MClass this) :
 	// first check if this class has an stereotype
 	hasT3ExtbaseEntityStereotype() ||
 	// second check if the package of this class has an stereotype
@@ -258,7 +262,7 @@ boolean isEntity(MClass this) :
  * 
  * @return	the list of TYPO3 MVC Extbase value objects or an empty list
  */
-List[MClass] allValueObjects(MModel this) :
+cached List[MClass] allValueObjects(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isValueObject() );
 	
 
@@ -267,7 +271,7 @@ List[MClass] allValueObjects(MModel this) :
  *
  * @return	true if the class is a TYPO3 MVC Extbase value object, otherwise false
  */
-boolean isValueObject(MClass this) :
+cached boolean isValueObject(MClass this) :
 	// first check if this class has an stereotype
 	hasT3ExtbaseValueObjectStereotype() ||
 	// second check if the package of this class has an stereotype
@@ -291,7 +295,7 @@ boolean isValueObject(MClass this) :
  * 
  * @return	the list of TYPO3 MVC Extbase repositories or an empty list
  */
-List[MClass] allRepositories(MModel this) :
+cached List[MClass] allRepositories(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isRepository() );
 
 
@@ -300,7 +304,7 @@ List[MClass] allRepositories(MModel this) :
  * 
  * @return	true if the classifier is part of the TYPO3 Extbase repository package, otherwise false
  */
-boolean isRepositoryPackageElement(MClassifier this) :
+cached boolean isRepositoryPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isRepository() 
 		default : false
@@ -312,7 +316,7 @@ boolean isRepositoryPackageElement(MClassifier this) :
  *
  * @return	true if the class is a TYPO3 MVC Extbase repository, otherwise false
  */
-boolean isRepository(MClass this) :
+cached boolean isRepository(MClass this) :
 	// first check if this class has an stereotype
 	hasT3ExtbaseRepositoryStereotype() ||
 	// second check if the package of this class has an stereotype
@@ -338,7 +342,7 @@ boolean isRepository(MClass this) :
  * 
  * @return	true if the classifier is part of the TYPO3 Extbase service package, otherwise false
  */
-boolean isServicePackageElement(MClassifier this) :
+cached boolean isServicePackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isService()
 		default : false
@@ -351,7 +355,7 @@ boolean isServicePackageElement(MClassifier this) :
  * 
  * @return	true if the class is a TYPO3 MVC Extbase service, otherwise false
  */
-boolean isService(MClass this) :
+cached boolean isService(MClass this) :
 	// first check if this class has an stereotype
 	hasT3ExtbaseServiceStereotype() ||
 	// second check if the package of this class has an stereotype
@@ -377,7 +381,7 @@ boolean isService(MClass this) :
  * 
  * @return	the list of TYPO3 MVC Extbase validators or an empty list
  */
-List[MClass] allValidators(MModel this) :
+cached List[MClass] allValidators(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isValidator() );
 	
 
@@ -386,7 +390,7 @@ List[MClass] allValidators(MModel this) :
  * 
  * @return	true if the classifier is part of the TYPO3 Extbase validator package, otherwise false
  */
-boolean isValidatorPackageElement(MClassifier this) :
+cached boolean isValidatorPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isValidator()
 		default : false
@@ -398,7 +402,7 @@ boolean isValidatorPackageElement(MClassifier this) :
  *
  * @return	true if the class is a TYPO3 MVC Extbase validator, otherwise false
  */
-boolean isValidator(MClass this) :
+cached boolean isValidator(MClass this) :
 	// first check if this class has an stereotype
 	hasT3ExtbaseValidatorStereotype() ||
 	// second check if the package of this class has an stereotype
@@ -436,7 +440,7 @@ List[MStereotype] getAssignedValidators(MElement this) :
  * 
  * @return	true if the classifier is part of the TYPO3 Fluid view helper package, otherwise false
  */
-boolean isViewHelperPackageElement(MClassifier this) :
+cached boolean isViewHelperPackageElement(MClassifier this) :
 	switch (metaType) {
 		case MClass : ((MClass)this).isViewHelper()
 		default : false
@@ -448,7 +452,7 @@ boolean isViewHelperPackageElement(MClassifier this) :
  *
  * @return	true if the class is a TYPO3 MVC Fluid view helper, otherwise false
  */
-boolean isViewHelper(MClass this) :
+cached boolean isViewHelper(MClass this) :
 	// first check if this class has an stereotype
 	hasT3FluidViewHelperStereotype() ||
 	// second check if the package of this class has an stereotype
@@ -474,7 +478,7 @@ boolean isViewHelper(MClass this) :
  * 
  * @return	the list of TYPO3 MVC Extbase plugins or an empty list
  */
-List[MInterface] allPlugins(MModel this) :
+cached List[MInterface] allPlugins(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbasePluginStereotype() );
 
 
@@ -483,5 +487,17 @@ List[MInterface] allPlugins(MModel this) :
  * 
  * @return	the list of TYPO3 MVC Extbase modules or an empty list
  */
-List[MInterface] allModules(MModel this) :
+cached List[MInterface] allModules(MModel this) :
 	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbaseModuleStereotype() );
+	
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Misc 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+boolean generatePHPTypeHint(MType this) :
+	name( getNamingContext(), typeMappingContextPHPTypeHint() ) != ""
+		? true
+		: false;

@@ -59,7 +59,7 @@
 	 * @lazy
 «ENDIF -»
 «IF !getAssignedValidators().isEmpty -»
-	 * @validate «FOREACH getAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF v.property.size > 0 -»(«FOREACH v.property AS p SEPARATOR ", "-»«p.name -» = «this.getTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»
+	 * @validate «FOREACH getAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF v.property.size > 0 -»(«FOREACH v.property.select( p | getTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «getTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»
 «ENDIF -»
 «ENDDEFINE»
 

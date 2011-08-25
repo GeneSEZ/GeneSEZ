@@ -36,7 +36,7 @@ extension de::genesez::platforms::common::AccessHelper;
  * 
  * @return	the formatted element name
  */
-String asDefaultName(MElement this) :
+cached String asDefaultName(MElement this) :
 	name;
 
 
@@ -46,7 +46,7 @@ String asDefaultName(MElement this) :
  * 
  * @return	the formatted element name
  */
-String asGeneralName(MElement this) :
+cached String asGeneralName(MElement this) :
 	name;
 
 
@@ -56,7 +56,7 @@ String asGeneralName(MElement this) :
  * 
  * @return	the formatted element name
  */
-String asPHPCompliantName(MElement this) :
+cached String asPHPCompliantName(MElement this) :
 	name;
 
 
@@ -66,7 +66,7 @@ String asPHPCompliantName(MElement this) :
  * 
  * @return	the formatted element name
  */
-String asConfigurationName(MElement this) :
+cached String asConfigurationName(MElement this) :
 	name;
 
 
@@ -76,7 +76,7 @@ String asConfigurationName(MElement this) :
  * 
  * @return	the formatted element name
  */
-String asLocalizationName(MElement this) :
+cached String asLocalizationName(MElement this) :
 	name;
 	
 	
@@ -86,7 +86,7 @@ String asLocalizationName(MElement this) :
  * 
  * @return	the formatted element name
  */
-String asLocalizationCSHName(MElement this) :
+cached String asLocalizationCSHName(MElement this) :
 	name;
 
 
@@ -96,7 +96,7 @@ String asLocalizationCSHName(MElement this) :
  * 
  * @return	the formatted element name
  */
-String asObjectName(MElement this) :
+cached String asObjectName(MElement this) :
 	name;
 
 
@@ -112,7 +112,7 @@ String asObjectName(MElement this) :
  * 
  * @return	the formatted classifier name
  */
-String asGeneralName(MClassifier this) :
+cached String asGeneralName(MClassifier this) :
 	classifierNameBase() + classifierNameSeperator() + classifierNamePath() + classifierNameSeperator() + classifierNamePrefix() + name.toFirstUpper() + classifierNameSuffix();	
 
 
@@ -122,7 +122,7 @@ String asGeneralName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-String asPHPCompliantName(MClassifier this) :
+cached String asPHPCompliantName(MClassifier this) :
 	name.toFirstUpper();
 
 
@@ -132,7 +132,7 @@ String asPHPCompliantName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-String asConfigurationName(MClassifier this) :
+cached String asConfigurationName(MClassifier this) :
 	asGeneralName().toLowerCase();
 	
 
@@ -142,7 +142,7 @@ String asConfigurationName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-String asLocalizationName(MClassifier this) :
+cached String asLocalizationName(MClassifier this) :
 	asConfigurationName();
 
 
@@ -152,7 +152,7 @@ String asLocalizationName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-String asLocalizationCSHName(MClassifier this) :
+cached String asLocalizationCSHName(MClassifier this) :
 	asConfigurationName();
 
 
@@ -162,7 +162,7 @@ String asLocalizationCSHName(MClassifier this) :
  * 
  * @return	the formatted classifier name
  */
-String asObjectName(MClassifier this) :
+cached String asObjectName(MClassifier this) :
 	name.toFirstLower();
 
 
@@ -178,7 +178,7 @@ String asObjectName(MClassifier this) :
  * 
  * @return	the formatted attribute or association role name
  */
-String asGeneralName(MProperty this) :
+cached String asGeneralName(MProperty this) :
 	name.toFirstLower();
 	
 
@@ -188,7 +188,7 @@ String asGeneralName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-String asPHPCompliantName(MProperty this) :
+cached String asPHPCompliantName(MProperty this) :
 	asGeneralName();
 
 
@@ -198,7 +198,7 @@ String asPHPCompliantName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-String asConfigurationName(MProperty this) :
+cached String asConfigurationName(MProperty this) :
 	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
 
 
@@ -208,7 +208,7 @@ String asConfigurationName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-String asLocalizationName(MProperty this) :
+cached String asLocalizationName(MProperty this) :
 	classifier.asLocalizationName() + "." + asConfigurationName();
 	
 
@@ -218,7 +218,7 @@ String asLocalizationName(MProperty this) :
  * 
  * @return	the formatted attribute or association role name
  */
-String asLocalizationCSHName(MProperty this) :
+cached String asLocalizationCSHName(MProperty this) :
 	asConfigurationName();
 
 
@@ -234,7 +234,7 @@ String asLocalizationCSHName(MProperty this) :
  * 
  * @return	the formatted attribute name
  */
-String asGeneralName(MAttribute this) :
+cached String asGeneralName(MAttribute this) :
 	final && static && hasDefaultValue()
 		? name.toUpperCase()
 		: name.toFirstLower();
@@ -245,7 +245,7 @@ String asGeneralName(MAttribute this) :
  *
  * @return	the formatted name of the getter method
  */
-String asGetterName(MAttribute this) : 
+cached String asGetterName(MAttribute this) : 
 	getterNamePrefix() + name.toFirstUpper();
 
 
@@ -254,7 +254,7 @@ String asGetterName(MAttribute this) :
  * 
  * @return	the formatted name of the setter method
  */
-String asSetterName(MAttribute this) : 
+cached String asSetterName(MAttribute this) : 
 	setterNamePrefix() + name.toFirstUpper();
 
 	
@@ -263,7 +263,7 @@ String asSetterName(MAttribute this) :
  * 
  * @return	the formatted name of the 'insert in' method
  */
-String asInsertInName(MAttribute this) : 
+cached String asInsertInName(MAttribute this) : 
 	insertInNamePrefix() + name.toFirstUpper();
 
 /**
@@ -271,7 +271,7 @@ String asInsertInName(MAttribute this) :
  * 
  * @return	the formatted name of the 'remove from' method
  */
-String asRemoveFromName(MAttribute this) : 
+cached String asRemoveFromName(MAttribute this) : 
 	removeFromNamePrefix() + name.toFirstUpper();
 
 
@@ -287,7 +287,7 @@ String asRemoveFromName(MAttribute this) :
  * 
  * @return	the formatted association role name
  */
-String asGeneralName(MAssociationRole this) :
+cached String asGeneralName(MAssociationRole this) :
 	name.toFirstLower();
 	
 
@@ -296,7 +296,7 @@ String asGeneralName(MAssociationRole this) :
  *
  * @return	the formatted name of the getter method
  */
-String asGetterName(MAssociationRole this) : 
+cached String asGetterName(MAssociationRole this) : 
 	getterNamePrefix() + name.toFirstUpper();
 
 
@@ -305,7 +305,7 @@ String asGetterName(MAssociationRole this) :
  * 
  * @return	the formatted name of the setter method
  */
-String asSetterName(MAssociationRole this) : 
+cached String asSetterName(MAssociationRole this) : 
 	setterNamePrefix() + name.toFirstUpper();
 
 
@@ -314,7 +314,7 @@ String asSetterName(MAssociationRole this) :
  * 
  * @return	the formatted name of the 'insert in' method
  */
-String asInsertInName(MAssociationRole this) : 
+cached String asInsertInName(MAssociationRole this) : 
 	insertInNamePrefix() + name.toFirstUpper();
 
 /**
@@ -322,7 +322,7 @@ String asInsertInName(MAssociationRole this) :
  * 
  * @return	the formatted name of the 'remove from' method
  */
-String asRemoveFromName(MAssociationRole this) : 
+cached String asRemoveFromName(MAssociationRole this) : 
 	removeFromNamePrefix() + name.toFirstUpper();
 
 
@@ -338,7 +338,7 @@ String asRemoveFromName(MAssociationRole this) :
  * 
  * @return	the formatted operation name
  */
-String asGeneralName(MOperation this) :
+cached String asGeneralName(MOperation this) :
 	name.toFirstLower() + operationNameSuffix();
 
 
@@ -348,7 +348,7 @@ String asGeneralName(MOperation this) :
  * 
  * @return	the formatted operation name
  */
-String asPHPCompliantName(MOperation this) :
+cached String asPHPCompliantName(MOperation this) :
 	name.toFirstLower();
 
 
@@ -364,7 +364,7 @@ String asPHPCompliantName(MOperation this) :
  * 
  * @return	the formatted parameter name
  */
-String asGeneralName(MParameter this) : 
+cached String asGeneralName(MParameter this) : 
 	name.toFirstLower();
 	
 
@@ -374,7 +374,7 @@ String asGeneralName(MParameter this) :
  * 
  * @return	the formatted parameter name
  */
-String asPHPCompliantName(MParameter this) : 
+cached String asPHPCompliantName(MParameter this) : 
 	asGeneralName();
 
 

@@ -14,8 +14,10 @@
 «EXTENSION de::genesez::platforms::common::naming::Naming»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
-«REM» use php access helper scripts which overrides «ENDREM»
+«REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
+«REM» php access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equal «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::php::scripts::AccessHelper»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 
@@ -142,7 +144,7 @@
 «ENDREM»
 «DEFINE TypeHint FOR MParameter -»
 «IF isSingleValuedType() -»
-«IF type.name(getNamingContext(), typeMappingContextPHPTypeHint()) != "" -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint( type ) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ELSE -»«mapType() -» «ENDIF -»
 «ENDDEFINE»
 

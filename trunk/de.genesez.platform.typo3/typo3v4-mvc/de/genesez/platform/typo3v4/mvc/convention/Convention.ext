@@ -154,7 +154,7 @@ String classifierNameBase() :
  *
  * @return	the classifier name path to prepend
  */
-cached String classifierNamePath(MClassifier this) :
+String classifierNamePath(MClassifier this) :
 	// The path depends on the TYPO3 MVC type.
 	switch {
 		// checks if the classifier is an TYPO3 MVC Extbase controller package element
@@ -186,7 +186,7 @@ cached String classifierNamePath(MClassifier this) :
  * @param	pathName	the path of the classifier
  * @return	the name path of the classifier
  */
-private cached String convertToClassifierNamePath(String pathName) :
+private String convertToClassifierNamePath(String pathName) :
 	pathName.replaceFirst( classesPath() + fileSeparator(), "" ).replaceAll( fileSeparator(), classifierNameSeperator() );
 
 
@@ -225,7 +225,7 @@ String viewHelperNameSuffix() :
  *
  * @return	the prefix to prepend
  */
-cached String classifierNamePrefix(MClass this) : 
+String classifierNamePrefix(MClass this) : 
 	switch {
 		// checks if class is abstract and doesn't already starts with "Abstract" 
 		case abstract && !name.startsWith( abstractClassPrefix() ) : 
@@ -240,7 +240,7 @@ cached String classifierNamePrefix(MClass this) :
  *
  * @return	the suffix to append
  */
-cached String classifierNameSuffix(MClass this) : 
+String classifierNameSuffix(MClass this) : 
 	switch {
 		// checks if class is an TYPO3 MVC controller and doesn't already ends with "Controller"
 		case isController() && !name.endsWith( controllerNameSuffix() ) :
@@ -263,7 +263,7 @@ cached String classifierNameSuffix(MClass this) :
  *
  * @return	the prefix to prepend
  */
-cached String classifierNamePrefix(MInterface this) : 
+String classifierNamePrefix(MInterface this) : 
 	"";
 
 
@@ -272,7 +272,7 @@ cached String classifierNamePrefix(MInterface this) :
  *
  * @return	the suffix to append
  */
-cached String classifierNameSuffix(MInterface this) : 
+String classifierNameSuffix(MInterface this) : 
 	switch {
 		// checks if interface doesn't already starts with "Interface" 
 		case !name.endsWith( interfaceSuffix() ) : 
@@ -288,7 +288,7 @@ cached String classifierNameSuffix(MInterface this) :
  * 
  * @return	an empty string
  */
-cached String classifierNamePrefix(MClassifier this) : 
+String classifierNamePrefix(MClassifier this) : 
 	"";
 
 
@@ -298,7 +298,7 @@ cached String classifierNamePrefix(MClassifier this) :
  * 
  * @return	an empty string
  */
-cached String classifierNameSuffix(MClassifier this) : 
+String classifierNameSuffix(MClassifier this) : 
 	"";
 
 
@@ -313,7 +313,7 @@ cached String classifierNameSuffix(MClassifier this) :
  *
  * @return	the prefix to prepend
  */
-cached String getterNamePrefix(MAttribute this) : 
+String getterNamePrefix(MAttribute this) : 
 	"get";
 
 
@@ -322,7 +322,7 @@ cached String getterNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-cached String setterNamePrefix(MAttribute this) :
+String setterNamePrefix(MAttribute this) :
 	hasDiSetter("true")
 		? "inject"
 		: "set";
@@ -333,7 +333,7 @@ cached String setterNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-cached String insertInNamePrefix(MAttribute this) : 
+String insertInNamePrefix(MAttribute this) : 
 	"add";
 
 
@@ -342,7 +342,7 @@ cached String insertInNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-cached String removeFromNamePrefix(MAttribute this) : 
+String removeFromNamePrefix(MAttribute this) : 
 	"remove";
 
 
@@ -357,7 +357,7 @@ cached String removeFromNamePrefix(MAttribute this) :
  *
  * @return	the prefix to prepend
  */
-cached String getterNamePrefix(MAssociationRole this) : 
+String getterNamePrefix(MAssociationRole this) : 
 	"get";
 
 
@@ -366,7 +366,7 @@ cached String getterNamePrefix(MAssociationRole this) :
  *
  * @return	the prefix to prepend
  */
-cached String setterNamePrefix(MAssociationRole this) : 
+String setterNamePrefix(MAssociationRole this) : 
 	"set";
 
 
@@ -375,7 +375,7 @@ cached String setterNamePrefix(MAssociationRole this) :
  *
  * @return	the prefix to prepend
  */
-cached String insertInNamePrefix(MAssociationRole this) : 
+String insertInNamePrefix(MAssociationRole this) : 
 	"add";
 
 
@@ -384,7 +384,7 @@ cached String insertInNamePrefix(MAssociationRole this) :
  *
  * @return	the prefix to prepend
  */
-cached String removeFromNamePrefix(MAssociationRole this) : 
+String removeFromNamePrefix(MAssociationRole this) : 
 	"remove";
 
 
@@ -402,7 +402,7 @@ String controllerActionNameSuffix() :
  *
  * @return	the suffix to append
  */
-cached String operationNameSuffix(MOperation this) : 
+String operationNameSuffix(MOperation this) : 
 	switch {
 		// checks if operation is an TYPO3 MVC Controller Action and doesn't already ends with "Action"
 		case isControllerAction() && !name.endsWith( controllerActionNameSuffix() ) :
