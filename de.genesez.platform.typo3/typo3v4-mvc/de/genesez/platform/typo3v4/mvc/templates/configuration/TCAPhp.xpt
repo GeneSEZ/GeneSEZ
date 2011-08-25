@@ -126,7 +126,7 @@ $TCA['«name() -»'] = array (
 «IF !getT3TCAClassInterfaceSectionAdditions().isEmpty -»
 «FOREACH getT3TCAClassInterfaceSectionAdditions() AS tcaAddition SEPARATOR "," -»
 		«FOREACH tcaAddition.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
-«ENDFOREACH -»
+«ENDFOREACH -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -154,7 +154,7 @@ $TCA['«name() -»'] = array (
 «IF !getT3TCAClassTypesSectionAdditions().isEmpty -»
 «FOREACH getT3TCAClassTypesSectionAdditions() AS tcaAddition SEPARATOR "," -»
 		«FOREACH tcaAddition.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
-«ENDFOREACH -»
+«ENDFOREACH -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -182,7 +182,7 @@ $TCA['«name() -»'] = array (
 «IF !getT3TCAClassPalettesSectionAdditions().isEmpty -»
 «FOREACH getT3TCAClassPalettesSectionAdditions() AS tcaAddition SEPARATOR "," -»
 		«FOREACH tcaAddition.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
-«ENDFOREACH -»
+«ENDFOREACH -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -208,14 +208,18 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCAColumnsLocalizationColumns FOR MClass -»
+«IF !hasT3ExtbaseDomainObjectCreateLocalizationFields("false") -»
 		«EXPAND TCAColumnsSysLanguageUidColumn -»
 		«EXPAND TCAColumnsL18nParentColumn -»
 		«EXPAND TCAColumnsL18nDiffsourceColumn -»
+«ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE TCAColumnsVersioningColumns FOR MClass -»
+«IF !hasT3ExtbaseDomainObjectCreateVersioningFields("false") -»
 		«EXPAND TCAColumnsT3VerLabelColumn -»
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -253,6 +257,7 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCAColumnsStarttimeColumn FOR MClass -»
+«IF !hasT3ExtbaseDomainObjectCreateStarttimeField("false") -»
 		'starttime' => array(
 			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
@@ -269,10 +274,12 @@ $TCA['«name() -»'] = array (
 				),
 			),
 		),
+«ENDIF -»
 «ENDDEFINE»
 
 
 «DEFINE TCAColumnsEndtimeColumn FOR MClass -»
+«IF !hasT3ExtbaseDomainObjectCreateEndtimeField("false") -»
 		'endtime' => array(
 			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
@@ -289,6 +296,7 @@ $TCA['«name() -»'] = array (
 				),
 			),
 		),
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -370,7 +378,7 @@ $TCA['«name() -»'] = array (
 «IF !getT3TCAPropertyColumnsSectionAdditions().isEmpty -»
 «FOREACH getT3TCAPropertyColumnsSectionAdditions() AS tcaAddition SEPARATOR "," -»
 		«FOREACH tcaAddition.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
-«ENDFOREACH -»
+«ENDFOREACH -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -381,7 +389,7 @@ $TCA['«name() -»'] = array (
 «IF !getT3TCAPropertyColumnsConfigAdditions().isEmpty -»
 «FOREACH getT3TCAPropertyColumnsConfigAdditions() AS tcaAddition SEPARATOR "," -»
 		«FOREACH tcaAddition.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
-«ENDFOREACH -»
+«ENDFOREACH -»,
 «ENDIF -»
 «ENDDEFINE»
 
