@@ -805,29 +805,29 @@ private String asValidatorName(MStereotype validator) :
 	validator.name.endsWith("Validator") ? validator.name : validator.name + "Validator";
 	
 
-private String asPluginName(MClassifier this) :
-	name.toFirstUpper();
+private String asPluginName(MClassifier domainElement) :
+	domainElement.name.toFirstUpper();
 
 	
 
-boolean existsController(MClass this) :
+private boolean existsController(MClass this) :
 	// checks if the controller doesn't already exists
 	!model().allControllers().select( c | c.nameS() == asControllerName() ).isEmpty;
 	
 
-boolean existsRepository(MClass this) :
+private boolean existsRepository(MClass this) :
 	// checks if the respository doesn't already exists
 	!model().allRepositories().select( r | r.nameS() == asRepositoryName() ).isEmpty;
 
 
-boolean existsValidator(MClass this) :
+private boolean existsValidator(MClass this) :
 	// checks if the validator doesn't already exists
 	!model().allValidators().select( v | v.nameS() == asValidatorName() ).isEmpty;
 
-boolean existsValidator(MStereotype this) :
+private boolean existsValidator(MStereotype this) :
 	// checks if the validator doesn't already exists
 	!model().allValidators().select( v | v.nameS() == asValidatorName() ).isEmpty;
 
-boolean existsPlugin(MClass this) :
+private boolean existsPlugin(MClass this) :
 	// checks if the plugin doesn't already exists
 	!model().allPlugins().select( p | p.asPluginName() == asPluginName() ).isEmpty;
