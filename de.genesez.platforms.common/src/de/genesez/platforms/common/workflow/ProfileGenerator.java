@@ -9,7 +9,7 @@ import java.util.Properties;
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-23
  */
-public class ProfileGenerator extends Generator {
+public class ProfileGenerator extends AbstractGenerator {
 
 	/**
 	 * Default values in case the property file is not found.
