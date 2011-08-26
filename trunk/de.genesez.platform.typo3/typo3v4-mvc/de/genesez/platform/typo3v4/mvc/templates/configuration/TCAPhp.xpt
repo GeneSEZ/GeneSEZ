@@ -7,13 +7,8 @@
 «ENDREM»
 
 
-«REM» use TYPO3 profile + access helper scripts «ENDREM»
+«REM» use TYPO3 access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::profile::AccessHelper»
-«EXTENSION de::genesez::platform::typo3v4::profile::Profile»
-
-«REM» use TYPO3 MVC Extbase profile + access helper scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
-«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile»
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
@@ -208,7 +203,7 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCAColumnsLocalizationColumns FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateLocalizationFields("false") -»
+«IF createLocalizationFields() -»
 		«EXPAND TCAColumnsSysLanguageUidColumn -»
 		«EXPAND TCAColumnsL18nParentColumn -»
 		«EXPAND TCAColumnsL18nDiffsourceColumn -»
@@ -217,7 +212,7 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCAColumnsVersioningColumns FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateVersioningFields("false") -»
+«IF createVersioningFields() -»
 		«EXPAND TCAColumnsT3VerLabelColumn -»
 «ENDIF -»
 «ENDDEFINE»
@@ -257,7 +252,7 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCAColumnsStarttimeColumn FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateStarttimeField("false") -»
+«IF createStarttimeField() -»
 		'starttime' => array(
 			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
@@ -279,7 +274,7 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCAColumnsEndtimeColumn FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateEndtimeField("false") -»
+«IF createEndtimeField() -»
 		'endtime' => array(
 			'exclude' => true,
 			'l10n_mode' => 'mergeIfNotBlank',
