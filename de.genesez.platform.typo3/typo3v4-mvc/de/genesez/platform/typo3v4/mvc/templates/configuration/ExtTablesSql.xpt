@@ -6,9 +6,6 @@
 	@date	2011-07-14
 «ENDREM»
 
-«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
-
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
@@ -246,10 +243,10 @@ CREATE TABLE «asIntermediateTableName() -» (
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-«IF !hasT3ExtbaseDomainObjectCreateStarttimeField("false") -»
+«IF createStarttimeField() -»
 	starttime int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
-«IF !hasT3ExtbaseDomainObjectCreateEndtimeField("false") -»
+«IF createEndtimeField() -»
 	endtime int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
 «ENDDEFINE»
@@ -259,7 +256,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generates TYPO3 specific columns for localization.
 «ENDREM»
 «DEFINE LocalizationColumns FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateLocalizationFields("false") -»
+«IF createLocalizationFields() -»
 	sys_language_uid int(11) DEFAULT '0' NOT NULL,
 	l10n_parent int(11) DEFAULT '0' NOT NULL,
 	l10n_diffsource mediumblob NOT NULL,
@@ -271,7 +268,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generates TYPO3 specific columns for versioning.
 «ENDREM»
 «DEFINE VersioningColumns FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateVersioningFields("false") -»
+«IF createVersioningFields() -»
 	t3ver_oid int(11) DEFAULT '0' NOT NULL,
 	t3ver_id int(11) DEFAULT '0' NOT NULL,
 	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
@@ -292,7 +289,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 «DEFINE KeyManagement FOR MClass -»
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-«IF !hasT3ExtbaseDomainObjectCreateVersioningFields("false") -»
+«IF createVersioningFields() -»
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 «ENDIF -»
 «ENDDEFINE»

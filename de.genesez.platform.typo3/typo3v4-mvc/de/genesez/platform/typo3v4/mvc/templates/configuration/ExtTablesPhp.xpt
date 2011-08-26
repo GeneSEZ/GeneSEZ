@@ -155,7 +155,7 @@ if (TYPO3_MODE === 'BE') {
 «DEFINE ModuleComment FOR MInterface -»
 	/**
 	«IF hasComment() -»
-	«comment().format() -»
+	«formatComment(" * ", "\n	") -»
 	«ENDIF -»
 	 */
 «ENDDEFINE»
@@ -283,7 +283,7 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCACtrlVersioning FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateVersioningFields("false") -»
+«IF createVersioningFields() -»
 		«EXPAND TCACtrlVersioningWS -»
 		«EXPAND TCACtrlVersioningFollowPages -»
 		«EXPAND TCACtrlOrigUid -»
@@ -316,7 +316,7 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCACtrlLocalization FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateLocalizationFields("false") -»
+«IF createLocalizationFields() -»
 		«EXPAND TCACtrlLanguageField -»
 		«EXPAND TCACtrlTransOrigPointerField -»
 		«EXPAND TCACtrlTransOrigDiffSourceField -»
@@ -378,7 +378,7 @@ $TCA['«name() -»'] = array (
 «REM»
 «ENDREM»
 «DEFINE TCACtrlStarttime FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateStarttimeField("false") -»
+«IF createStarttimeField() -»
 			'starttime' => 'starttime',
 «ENDIF -»
 «ENDDEFINE»
@@ -387,7 +387,7 @@ $TCA['«name() -»'] = array (
 «REM»
 «ENDREM»
 «DEFINE TCACtrlEndtime FOR MClass -»
-«IF !hasT3ExtbaseDomainObjectCreateEndtimeField("false") -»
+«IF createEndtimeField() -»
 			'endtime' => 'endtime',
 «ENDIF -»
 «ENDDEFINE»
