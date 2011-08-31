@@ -1,49 +1,46 @@
 package de.genesez.platforms.common.workflow;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-
-import de.genesez.platforms.common.typemapping.TypeMapper;
+import org.eclipse.xpand2.output.Outlet;
+import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
 /**
  * Workflow component class to generate code (model to text transformation).
  * 
- * @author Aibek Isaev
- * @author Beishen
  * @author Tobias Haubold
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-23
  */
-public class Generator extends AbstractGenerator {
+public class Generator extends org.eclipse.xpand2.Generator {
+
+	/**
+	 * Logger instance to output important messages.
+	 */
+	protected Log logger = LogFactory.getLog(getClass());
 
 	/**
 	 * Default values in case the property file is not found.
 	 */
 	private static Properties defaults = new Properties();
 	static {
-		defaults.setProperty("excludePackages", "");
-		defaults.setProperty("basePackage", "");
-		defaults.setProperty("useModelNameAsBasePackage", "false");
-		defaults.setProperty("generateSectionComments", "true");
-		defaults.setProperty("accessorForStereotypes", "entity");
-		defaults.setProperty("accessorStereotype", "accessor");
-		defaults.setProperty("usePropertyVisibilityForAccessors", "false");
+		defaults.setProperty("fileEncoding", "utf-8");
+		defaults.setProperty("prDefaultExcludes", "false");
+		defaults.setProperty("prExcludes", ".svn");
+		defaults.setProperty("singleValuedSlot", "true");
 	}
 
 	/**
-	 * Variable to store all exclude packages.
+	 * Variable to store all properties.
 	 */
-	protected List<String> excludePackages = new ArrayList<String>();
-
-	/**
-	 * Variable to store all type mapping files.
-	 */
-	protected List<String> typeMappingFiles = new ArrayList<String>();
+	protected Properties properties = new Properties();
 
 	/**
 	 * Constructs the workflow component and initializes the default values.
@@ -52,182 +49,294 @@ public class Generator extends AbstractGenerator {
 		super();
 
 		WorkflowUtils.callPropertyAccessors(this, defaults);
+		properties.putAll(WorkflowProperties.defaults);
+
+		// add GeneSEZ core meta model
+		EmfMetaModel gcore = new EmfMetaModel();
+		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
+		addMetaModel(gcore);
+
+		// add GeneSEZ requirements meta model
+		EmfMetaModel greq = new EmfMetaModel();
+		greq.setMetaModelPackage(properties.getProperty("greqPackage"));
+		addMetaModel(greq);
+
+		// add GeneSEZ traceability meta model
+		EmfMetaModel gtrace = new EmfMetaModel();
+		gtrace.setMetaModelPackage(properties.getProperty("gtracePackage"));
+		addMetaModel(gtrace);
 	}
 
 	/**
 	 * Called by the container after configuration so the component can validate
 	 * the configuration before invocation.
 	 * 
-	 * @see org.eclipse.xtend.XtendComponent#checkConfigurationInternal(org.eclipse.emf.mwe.core.issues.Issues)
+	 * @see org.eclipse.xpand2.Generator#checkConfigurationInternal(org.eclipse.emf.mwe.core.issues.Issues)
 	 */
-	@Override
 	protected void checkConfigurationInternal(Issues issues) {
+		// check if template is set.
+		String template = properties.getProperty("template", "");
+		if (template.length() == 0) {
+			issues.addError(this, "Missing property 'template'!", template);
+		} else {
+			if (Boolean.valueOf(properties.getProperty("singleValuedSlot"))) {
+				super.setExpand(template + " FOR " + properties.getProperty("slot"));
+			} else {
+				super.setExpand(template + " FOREACH " + properties.getProperty("slot"));
+			}
+		}
+
+		// check if an output directory is set.
+		String outputDir = properties.getProperty("outputDir", "");
+		if (outputDir.length() == 0) {
+			issues.addError(this, "Missing property 'outputDir'!", outputDir);
+		} else {
+			// check output dir, create if it not exists
+			checkAndCreateOutputDirectory(outputDir);
+
+			// check if an protected region directory is set.
+			String proRegDir = properties.getProperty("proRegDir", "");
+			if (proRegDir.length() == 0) {
+				issues.addInfo(this, "Output directory is set to default for the protected region directory.",
+						outputDir);
+				setProRegDir(outputDir);
+			}
+		}
+
 		super.checkConfigurationInternal(issues);
 	}
 
 	/**
 	 * Called by the container at invocation.
 	 * 
-	 * @see org.eclipse.xtend.XtendComponent#invokeInternal2(org.eclipse.emf.mwe.core.WorkflowContext,
+	 * @see org.eclipse.xpand2.Generator#invokeInternal2(org.eclipse.emf.mwe.core.WorkflowContext,
 	 *      org.eclipse.emf.mwe.core.monitor.ProgressMonitor,
 	 *      org.eclipse.emf.mwe.core.issues.Issues)
 	 */
 	@Override
-	protected void invokeInternal2(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
-		// add exclude packages as global variables
-		String packages = WorkflowUtils.arrayToString(excludePackages);
-		addGlobalVarDef("excludePackages", packages);
-
-		// init type mapper
-		TypeMapper.initTypeMapper(typeMappingFiles.toArray(new String[0]));
+	protected void invokeInternal2(final WorkflowContext ctx, final ProgressMonitor monitor, final Issues issues) {
+		// add available models as global variable definitions
+		if (ctx.get(properties.getProperty("coreSlot")) != null) {
+			addGlobalVarDef("coremodel", properties.get("coreSlot"));
+		}
+		if (ctx.get(properties.getProperty("reqSlot")) != null) {
+			addGlobalVarDef("reqmodel", properties.get("reqSlot"));
+		}
+		if (ctx.get(properties.getProperty("traceSlot")) != null) {
+			addGlobalVarDef("tracemodel", properties.get("traceSlot"));
+		}
 
 		super.invokeInternal2(ctx, monitor, issues);
+	}
+
+	/**
+	 * This method add a property as GlobalVarDef if no setter or adder accessor
+	 * method was found. It checks if the value of the property is a boolean or
+	 * number value. If not it will be registered as string. This means, that
+	 * the value is surrounded with two single quotation marks.
+	 * 
+	 * @param key The name of the property.
+	 * @param value The value of the property.
+	 */
+	public void put(Object key, Object value) {
+		String keyStr = String.valueOf(key);
+		String valueStr = String.valueOf(value);
+
+		if (!WorkflowUtils.isBoolean(valueStr) && !WorkflowUtils.isNumber(valueStr)) {
+			addGlobalVarDef(keyStr, valueStr);
+		} else {
+			addGlobalVarDef(keyStr, value);
+		}
+	}
+
+	/**
+	 * Add a property as string GlobalVarDef. This means, that the value is
+	 * surrounded with two single quotation marks.
+	 * 
+	 * @param key The name of the property.
+	 * @param value The value of the property.
+	 */
+	protected void addGlobalVarDef(String key, String value) {
+		logger.trace("Register property (" + key + ") with value ('" + value + "') as global variable definition.");
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(key, "'" + value + "'"));
+	}
+
+	/**
+	 * Add a property as GlobalVarDef.
+	 * 
+	 * @param key The name of the property.
+	 * @param value The value of the property.
+	 */
+	protected void addGlobalVarDef(String key, Object value) {
+		logger.trace("Register property (" + key + ") with value (" + value + ") as global variable definition.");
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(key, String.valueOf(value)));
 	}
 
 	// BEGIN OF DEFAULTS
 
 	/**
-	 * Adder for the workflow parameter <em><b>excludePackage</b></em>.
+	 * Setter for the workflow parameter <em><b>fileEncoding</b></em>.
 	 * 
-	 * Adds a package which will be excluded during code generation.
-	 * 
-	 * @param excludePackage A package to exclude.
+	 * @see org.eclipse.xpand2.Generator#setFileEncoding(java.lang.String)
 	 */
-	public void addExcludePackage(String excludePackage) {
-		if (excludePackage.length() > 0) {
-			excludePackages.add(excludePackage);
-		}
+	@Override
+	public void setFileEncoding(String fileEncoding) {
+		super.setFileEncoding(fileEncoding);
 	}
 
 	/**
-	 * Adder for the workflow parameter <em><b>excludePackages</b></em>.
+	 * Setter for the workflow parameter <em><b>prDefaultExcludes</b></em>.
 	 * 
-	 * Adds several packages which will be excluded during code generation. The
-	 * packages should be comma or semicolon separated.
-	 * 
-	 * @param excludePackages Several packages to exclude.
+	 * @see org.eclipse.xpand2.Generator#setPrDefaultExcludes(java.lang.Boolean)
 	 */
-	public void addExcludePackages(String excludePackages) {
-		if (excludePackages.length() > 0) {
-			List<String> filtered = WorkflowUtils.split(excludePackages);
-			for (String s : filtered) {
-				addExcludePackage(s);
-			}
-		}
+	public void setPrDefaultExcludes(String prDefaultExcludes) {
+		super.setPrDefaultExcludes(Boolean.valueOf(prDefaultExcludes));
 	}
 
 	/**
-	 * Setter for the workflow parameter <em><b>basePackage</b></em>.
+	 * Setter for the workflow parameter <em><b>prExcludes</b></em>.
 	 * 
-	 * Sets the name of the package which is added as base for all packages
-	 * inside the model.
-	 * 
-	 * @param basePackage The name of the base package.
+	 * @see org.eclipse.xpand2.Generator#setPrExcludes(java.lang.String)
 	 */
-	public void setBasePackage(String basePackage) {
-		addGlobalVarDef("basePackage", basePackage);
+	@Override
+	public void setPrExcludes(String prExcludes) {
+		super.setPrExcludes(prExcludes);
 	}
 
 	/**
-	 * Setter for the workflow parameter
-	 * <em><b>useModelNameAsBasePackage</b></em>.
+	 * Setter for the workflow parameter <em><b>singleValuedSlot</b></em>.
 	 * 
-	 * Sets if the name of the model should be used as package name which is
-	 * added as base for all packages inside the model.
+	 * Sets if the slot has only one root element for which the template is
+	 * executed or more.
 	 * 
-	 * @param useModelNameAsBasePackage True if the package name should be used,
+	 * @param singleValuedSlot True if the slot has only one root element,
 	 *            otherwise false.
 	 */
-	public void setUseModelNameAsBasePackage(String useModelNameAsBasePackage) {
-		addGlobalVarDef("useModelNameAsBasePackage", Boolean.valueOf(useModelNameAsBasePackage));
+	public void setSingleValuedSlot(String singleValuedSlot) {
+		properties.setProperty("singleValuedSlot", Boolean.valueOf(singleValuedSlot).toString());
 	}
 
 	/**
-	 * setter for GenerateSectionComments parameter, which in GlobalVarDef add.
-	 */
-
-	/**
-	 * Setter for the workflow parameter <em><b>generateSectionComments</b></em>
-	 * .
+	 * Setter for the workflow parameter <em><b>proRegDir</b></em>.
 	 * 
-	 * Sets if section comments should be generated.
+	 * Sets the source path for the protected regions.
 	 * 
-	 * @param generateSectionComments True if section comments should be
-	 *            generated, otherwise false.
+	 * @param proRegDir The source path for the protected regions.
 	 */
-	public void setGenerateSectionComments(String generateSectionComments) {
-		addGlobalVarDef("generateSectionComments", Boolean.valueOf(generateSectionComments));
+	public void setProRegDir(String proRegDir) {
+		super.setPrSrcPaths(proRegDir);
+		properties.setProperty("proRegDir", proRegDir);
 	}
 
 	/**
-	 * Setter for the workflow parameter <em><b>accessorForSterotypes</b></em> .
+	 * Setter for the workflow parameter <em><b>outputDir</b></em>.
 	 * 
-	 * Sets the name of the accessor for sterotypes.
+	 * Sets the base path where the output will be generated.
 	 * 
-	 * @param accessorForSterotypes The name of the accessor.
+	 * @param outputDir The base path for the output.
 	 */
-	public void setAccessorForStereotypes(String accessorForSterotypes) {
-		addGlobalVarDef("accessorsForStereotypes", accessorForSterotypes);
-	}
-
-	/**
-	 * Setter for the workflow parameter <em><b>accessorStereotype</b></em> .
-	 * 
-	 * Sets the name of the accessor stereotype.
-	 * 
-	 * @param accessorStereotype The name of the accessor.
-	 */
-	public void setAccessorStereotype(String accessorStereotype) {
-		addGlobalVarDef("accessorStereotype", accessorStereotype);
-	}
-
-	/**
-	 * setter for UsePropertyVisibilityForAccessors parameter, which in
-	 * GlobalVarDef add.
-	 */
-
-	/**
-	 * Setter for the workflow parameter
-	 * <em><b>usePropertyVisibilityForAccessors</b></em> .
-	 * 
-	 * Sets if the visibility of the properties inside the model should be used
-	 * for the visibility of the property accessors.
-	 * 
-	 * @param usePropertyVisibilityForAccessors True if the visibility should be
-	 *            used, otherwise false.
-	 */
-	public void setUsePropertyVisibilityForAccessors(String usePropertyVisibilityForAccessors) {
-		addGlobalVarDef("usePropertyVisibilityForAccessors", Boolean.valueOf(usePropertyVisibilityForAccessors));
+	public void setOutputDir(String outputDir) {
+		super.addOutlet(new Outlet(outputDir));
+		properties.setProperty("outputDir", outputDir);
 	}
 
 	// END OF DEFAULTS
 
 	/**
-	 * Adder for the workflow parameter <em><b>typeMappingFile</b></em>.
+	 * Setter for the workflow parameter <em><b>template</b></em>.
 	 * 
-	 * Adds a type mapping file to map multi-valued, primitive and external
-	 * types.
+	 * Sets the template to be executed for model to code generation.
 	 * 
-	 * @param typeMappingFile A type mapping file to use.
+	 * @param template The template to execute.
 	 */
-	public void addTypeMappingFile(final String typeMappingFile) {
-		typeMappingFiles.add(typeMappingFile);
+	public void setTemplate(String template) {
+		properties.setProperty("template", template);
 	}
 
 	/**
-	 * Adder for the workflow parameter <em><b>typeMappingFiles</b></em>.
+	 * Adder for the workflow parameter <em><b>aspectScript</b></em>.
 	 * 
-	 * Adds several type mapping files to map multi-valued, primitive and
-	 * external types. The type mapping files should be comma or semicolon
-	 * separated.
+	 * Adds a aspect script with advices.
 	 * 
-	 * @param typeMappingFiles Several type mapping files to use.
+	 * @param aspectScript A aspect script with advices.
 	 */
-	public void addTypeMappingFiles(final String typeMappingFiles) {
-		if (typeMappingFiles.length() > 0) {
-			List<String> filtered = WorkflowUtils.split(typeMappingFiles);
+	public void addAspectScript(String aspectScript) {
+		logger.trace("add Aspect script: " + aspectScript);
+		if (aspectScript.length() > 0) {
+			super.addExtensionAdvice(aspectScript);
+		}
+	}
+
+	/**
+	 * Adder for the workflow parameter <em><b>aspectScripts</b></em>.
+	 * 
+	 * Adds several aspect scripts with advices. The aspect scripts should be
+	 * comma or semicolon separated.
+	 * 
+	 * @param aspectScripts Several aspect scripts with advices.
+	 */
+	public void addAspectScripts(String aspectScripts) {
+		if (aspectScripts.length() > 0) {
+			List<String> filtered = WorkflowUtils.split(aspectScripts);
 			for (String s : filtered) {
-				addTypeMappingFile(s);
+				addAspectScript(s);
+			}
+		}
+	}
+
+	/**
+	 * Adder for the workflow parameter <em><b>aspectTemplate</b></em>.
+	 * 
+	 * Adds a aspect template with advices.
+	 * 
+	 * @param aspectTemplate A aspect template with advices.
+	 */
+	public void addAspectTemplate(String aspectTemplate) {
+		logger.trace("Add aspect template: " + aspectTemplate);
+		if (aspectTemplate.length() > 0) {
+			super.addAdvice(aspectTemplate);
+		}
+	}
+
+	/**
+	 * Adder for the workflow parameter <em><b>aspectTemplates</b></em>.
+	 * 
+	 * Adds several aspect templates with advices. The aspect templates should
+	 * be comma or semicolon separated.
+	 * 
+	 * @param aspectTemplates Several aspect templates with advices.
+	 */
+	public void addAspectTemplates(String aspectTemplates) {
+		if (aspectTemplates.length() > 0) {
+			List<String> filtered = WorkflowUtils.split(aspectTemplates);
+			for (String s : filtered) {
+				addAspectTemplate(s);
+			}
+		}
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>slot</b></em>.
+	 * 
+	 * Sets the slot where the model is stored.
+	 * 
+	 * @param slot The name of the model slot.
+	 */
+	public void setSlot(String slot) {
+		properties.setProperty("slot", slot);
+	}
+
+	/**
+	 * Checks if the output directory does not exists. If true the output
+	 * directory will be created.
+	 * 
+	 * @param uri The base path for the output.
+	 */
+	private void checkAndCreateOutputDirectory(String uri) {
+		File f = new File(uri);
+		if (!f.exists()) {
+			if (!f.mkdir()) {
+				logger.warn("Cannot create output directory!");
 			}
 		}
 	}
