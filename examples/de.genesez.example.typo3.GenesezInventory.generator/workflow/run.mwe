@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+
+	<!-- define a property for the file path and name of the uml2 model -->
+	<property name="uml2model" value="modelcache/genesez_inventory.uml" />
+	
+	<!-- define a property for the output dir -->
+	<property name="outputDir" value="../genesez_inventory" />
+	<!-- define a property that indicates if the model name is used as extension key or not -->
+	<property name="useModelNameAsExtensionKey" value="true" />
+	<!-- define a property that indicates if the model is TYPO3 Extbase complaint or not -->
+	<property name="isT3MVCCompliant" value="false" />
+	<!-- define a property that indicates if scaffolding is enabled or not -->
+	<property name="scaffolding" value="false" />
+	
+	
+	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
+	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="${uml2model}" />
+	</component>
+	
+	<!-- validate the GeneSEZ model against Common + PHP + TYPO3 + TYPO3 MVC specific constraints -->
+	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
+		<script value="de::genesez::platforms::common::Constraints" />
+		<script value="de::genesez::platforms::php::constraints::Syntax" />
+		<script value="de::genesez::platform::typo3v4::constraints::Convention" />
+		<script value="de::genesez::platform::typo3v4::mvc::constraints::Convention" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="modelcache/genesez_inventory_before.xmi" />
+	</component>
+	
+	<!-- execute model modifications for this TYPO3 MVC extension -->
+	<component id="modifications" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Model2Model">
+		<script value="de::genesez::platform::typo3v4::mvc::modification::Modification::modelModifications" />
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+	</component>
+	
+	<!-- execute model additions for this TYPO3 MVC extension -->
+	<component id="additions" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Model2Model">
+		<script value="de::genesez::platform::typo3v4::mvc::modification::Addition::modelAdditions" />
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+	</component>
+	
+	<!-- run code generation to transform the model into TYPO3 MVC source code -->
+	<component id="generate" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Generator">
+		<outputDir value="${outputDir}" />
+		<typeMappingFile value="typemapping.xml" />
+		<useModelNameAsExtensionKey value="${useModelNameAsExtensionKey}" />
+		<isT3MVCCompliant value="${isT3MVCCompliant}" />
+		<scaffolding value="${scaffolding}" />
+		<generateSectionComments value="false" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="modelcache/genesez_inventory_after.xmi" />
+	</component>
+	
+</workflow>
