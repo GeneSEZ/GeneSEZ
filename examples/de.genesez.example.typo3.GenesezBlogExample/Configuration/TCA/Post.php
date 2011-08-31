@@ -7,10 +7,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_genesezblogexample_domain_model_post'] = array (
 	'ctrl' => $TCA['tx_genesezblogexample_domain_model_post']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'title,date,content,blog,author,tags,comments,related_posts',
+		'showRecordFieldList' => 'title, date, content, blog, author, tags, comments, related_posts',
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'title,date,content,blog,author,tags,comments,related_posts'),
+		'1' => array('showitem'	=> 'sys_language_uid, hidden, title, date, content, blog, author, tags, comments, related_posts'),
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
@@ -36,7 +36,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				),
 			)
 		),
-		'l18n_parent' => array(
+		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
@@ -46,10 +46,10 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 					array('', 0),
 				),
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
-				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_post.uid=###REC_FIELD_l18n_parent### AND tx_genesezblogexample_domain_model_post.sys_language_uid IN (-1,0)',
+				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_post.uid=###REC_FIELD_l10n_parent### AND tx_genesezblogexample_domain_model_post.sys_language_uid IN (-1,0)',
 			)
 		),
-		'l18n_diffsource' => array(
+		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
 			)
@@ -64,7 +64,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'title' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.title',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.title',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -73,13 +73,13 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'date' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.date',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.date',
 			'config' => array(
 			)
 		),
 		'content' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.content',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.content',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -88,7 +88,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'blog' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.blog',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.blog',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_blog',
@@ -105,7 +105,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'author' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.author',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.author',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_person',
@@ -122,7 +122,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'tags' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.tags',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.tags',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_tag',
@@ -141,7 +141,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'comments' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.comments',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.comments',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_comment',
@@ -160,7 +160,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'related_posts' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.related_posts',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.related_posts',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
@@ -181,7 +181,6 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194790786_915555_1655) ENABLED START */
-// TODO: put your further code implementations here
 /* PROTECTED REGION END */
 
 ?>

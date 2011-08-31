@@ -7,10 +7,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_genesezblogexample_domain_model_person'] = array (
 	'ctrl' => $TCA['tx_genesezblogexample_domain_model_person']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'firstname,lastname,email',
+		'showRecordFieldList' => 'firstname, lastname, email',
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'firstname,lastname,email'),
+		'1' => array('showitem'	=> 'hidden, firstname, lastname, email'),
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
@@ -33,7 +33,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		),
 		'firstname' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.firstname',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.firstname',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -42,7 +42,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		),
 		'lastname' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.lastname',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.lastname',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -51,7 +51,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		),
 		'email' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.email',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.email',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -62,7 +62,6 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */
-// TODO: put your further code implementations here
 /* PROTECTED REGION END */
 
 ?>

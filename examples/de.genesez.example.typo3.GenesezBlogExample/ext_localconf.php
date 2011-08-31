@@ -69,7 +69,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 
 
 /* PROTECTED REGION ID(ext_localconf.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
-// TODO: put your further code implementations here
 /* PROTECTED REGION END */
 
 ?>

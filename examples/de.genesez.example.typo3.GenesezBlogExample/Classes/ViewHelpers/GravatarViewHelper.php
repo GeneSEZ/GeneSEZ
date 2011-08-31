@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._16_9_8a7027a_1297252449390_374572_3319) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -45,7 +44,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_ViewHelper_TagBasedViewHelper {
+class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractTagBasedViewHelper {
 
 	/**
 	 * 
@@ -112,9 +111,7 @@ class Tx_GenesezBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core
 		$this->tagName = $tagName;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297252449390_374572_3319) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

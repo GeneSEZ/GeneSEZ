@@ -10,7 +10,7 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 		'showRecordFieldList' => '',
 	),
 	'types' => array(
-		'1' => array('showitem'	=> ''),
+		'1' => array('showitem'	=> 'sys_language_uid, hidden, starttime, endtime, '),
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
@@ -68,7 +68,7 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 				),
 			)
 		),
-		'l18n_parent' => array(
+		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
@@ -78,10 +78,10 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 					array('', 0),
 				),
 				'foreign_table' => 'tx_genesezblogexample_domain_model_administrator',
-				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_administrator.uid=###REC_FIELD_l18n_parent### AND tx_genesezblogexample_domain_model_administrator.sys_language_uid IN (-1,0)',
+				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_administrator.uid=###REC_FIELD_l10n_parent### AND tx_genesezblogexample_domain_model_administrator.sys_language_uid IN (-1,0)',
 			)
 		),
-		'l18n_diffsource' => array(
+		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
 			)
@@ -98,7 +98,6 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
-// TODO: put your further code implementations here
 /* PROTECTED REGION END */
 
 ?>

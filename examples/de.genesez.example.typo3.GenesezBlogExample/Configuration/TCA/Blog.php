@@ -7,10 +7,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 	'ctrl' => $TCA['tx_genesezblogexample_domain_model_blog']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'title,description,logo,posts,administrator',
+		'showRecordFieldList' => 'title, description, logo, posts, administrator',
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'title,description,logo,posts,administrator'),
+		'1' => array('showitem'	=> 'sys_language_uid, hidden, title, description, logo, posts, administrator'),
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
@@ -36,7 +36,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				),
 			)
 		),
-		'l18n_parent' => array(
+		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
@@ -46,10 +46,10 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 					array('', 0),
 				),
 				'foreign_table' => 'tx_genesezblogexample_domain_model_blog',
-				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_blog.uid=###REC_FIELD_l18n_parent### AND tx_genesezblogexample_domain_model_blog.sys_language_uid IN (-1,0)',
+				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_blog.uid=###REC_FIELD_l10n_parent### AND tx_genesezblogexample_domain_model_blog.sys_language_uid IN (-1,0)',
 			)
 		),
-		'l18n_diffsource' => array(
+		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
 			)
@@ -64,7 +64,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'title' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.title',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.title',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -73,7 +73,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'description' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.description',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.description',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -82,7 +82,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'logo' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.logo',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.logo',
 			'config' => array(
 				'type' => 'group',
 				'internal_type' => 'file',
@@ -95,7 +95,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'posts' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.posts',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.posts',
 			'config' => array(
 				'type' => 'inline',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
@@ -114,7 +114,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'administrator' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.administrator',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.administrator',
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_administrator',
@@ -133,7 +133,6 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */
-// TODO: put your further code implementations here
 /* PROTECTED REGION END */
 
 ?>

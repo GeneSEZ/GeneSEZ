@@ -14,13 +14,13 @@
 	<!-- define a property that indicates if scaffolding is enabled or not -->
 	<property name="scaffolding" value="false" />
 
-		
+
 	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
 	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
 		<model value="${uml2model}" />
 	</component>
 	
-	<!-- validate the GeneSEZ model against common + php + typo3 + typo3 mvc specific constraints -->
+	<!-- validate the GeneSEZ model against Common + PHP + TYPO3 + TYPO3 MVC specific constraints -->
 	<component id="validate" class="de.genesez.platforms.common.workflow.Validator">
 		<script value="de::genesez::platforms::common::Constraints" />
 		<script value="de::genesez::platforms::php::constraints::Syntax" />
@@ -31,11 +31,6 @@
 	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
 	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
 		<file value="modelcache/genesez_blog_example_before.xmi" />
-	</component>
-	
-	<!-- create the default directory layout of an TYPO3 MVC extension -->
-	<component id="defaultDirectory" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3DefaultDirectoryCreator">
-		<outputDir value="${outputDir}" />
 	</component>
 	
 	<!-- execute model modifications for this TYPO3 MVC extension -->
@@ -54,7 +49,7 @@
 		<isT3MVCCompliant value="${isT3MVCCompliant}" />
 	</component>
 	
-	<!-- run the typo3 code generation and transform the model into typo3 source code -->
+	<!-- run code generation to transform the model into TYPO3 MVC source code -->
 	<component id="generate" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Generator">
 		<outputDir value="${outputDir}" />
 		<typeMappingFile value="typemapping.xml" />
@@ -63,6 +58,8 @@
 		<isT3MVCCompliant value="${isT3MVCCompliant}" />
 		<scaffolding value="${scaffolding}" />
 		<generateSectionComments value="false" />
+		<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
+		<aspectScript value="customization::Customization" />
 	</component>
 	
 	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
@@ -70,5 +67,11 @@
 		<file value="modelcache/genesez_blog_example_after.xmi" />
 	</component>
 	
+	<!--
+	<component id="statistic" class="de.genesez.platforms.common.workflow.Statistics">
+		<outputDir value="${outputDir}" />
+		<generatedDir value="../genesez_blog_example/Classes" />
+	</component>
+	-->
 	
 </workflow>

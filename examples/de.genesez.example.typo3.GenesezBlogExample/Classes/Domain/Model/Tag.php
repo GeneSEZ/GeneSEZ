@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -84,9 +83,7 @@ class Tx_GenesezBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_Abs
 		$this->name = $name;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

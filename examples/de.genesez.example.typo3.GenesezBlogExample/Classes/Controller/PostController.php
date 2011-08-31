@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._16_9_8a7027a_1297251441697_732082_2744) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -195,9 +194,7 @@ class Tx_GenesezBlogExample_Controller_PostController extends Tx_GenesezBlogExam
 		$this->personRepository = $personRepository;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251441697_732082_2744) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

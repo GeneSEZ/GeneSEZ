@@ -10,7 +10,7 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 		'showRecordFieldList' => 'name',
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'name'),
+		'1' => array('showitem'	=> 'hidden, name'),
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
@@ -25,7 +25,7 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 		),
 		'name' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_tag.name',
+			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_tag.name',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
@@ -36,7 +36,6 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
-// TODO: put your further code implementations here
 /* PROTECTED REGION END */
 
 ?>

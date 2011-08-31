@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1302085246638_931875_3629) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -45,7 +44,8 @@ class Tx_GenesezBlogExample_Domain_Service_BlogFactory implements t3lib_Singleto
 
 	
 	/**
-	 * Returns a sample blog populated with generic data. It is also an example how to handle objects and repositories in general
+	 * Returns a sample blog populated with generic data. 
+	 * It is also an example how to handle objects and repositories in general
 	 *
 	 * @param integer $blogNumber 
 	 * @return Tx_GenesezBlogExample_Domain_Model_Blog 
@@ -131,9 +131,7 @@ class Tx_GenesezBlogExample_Domain_Service_BlogFactory implements t3lib_Singleto
 		$this->objectManager = $objectManager;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1302085246638_931875_3629) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

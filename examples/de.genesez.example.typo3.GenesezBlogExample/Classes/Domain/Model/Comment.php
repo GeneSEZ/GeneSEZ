@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._16_9_8a7027a_1297194777757_325505_1605) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -152,9 +151,7 @@ class Tx_GenesezBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject
 		$this->content = $content;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194777757_325505_1605) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._16_9_8a7027a_1297250863949_852308_2394) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -152,7 +151,6 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 
 	
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297250863949_852308_2394) ENABLED START */
 	protected $defaultOrderings = array(
 		'date' => Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING

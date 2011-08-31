@@ -58,11 +58,10 @@ if (TYPO3_MODE === 'BE') {
 		array(
 		)
 	);
+	
+	/* PROTECTED REGION ID(ext_tables.php.own.module.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+	/* PROTECTED REGION END */
 }
-
-/* PROTECTED REGION ID(ext_tables.php.own.module.code.implementation.eee_1045467100313_135436_1) ENABLED START */
-// TODO: put your further code implementations here
-/* PROTECTED REGION END */
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'GenesezBlogExample setup');
 
@@ -82,8 +81,8 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 		'versioning_followPages' => true,
 		'origUid' => 't3_origuid',
 		'languageField'	=> 'sys_language_uid',
-		'transOrigPointerField' => 'l18n_parent',
-		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'transOrigPointerField' => 'l10n_parent',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
@@ -106,8 +105,8 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		'versioning_followPages' => true,
 		'origUid' => 't3_origuid',
 		'languageField'	=> 'sys_language_uid',
-		'transOrigPointerField' => 'l18n_parent',
-		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'transOrigPointerField' => 'l10n_parent',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
@@ -170,8 +169,8 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'versioning_followPages' => true,
 		'origUid' => 't3_origuid',
 		'languageField'	=> 'sys_language_uid',
-		'transOrigPointerField' => 'l18n_parent',
-		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'transOrigPointerField' => 'l10n_parent',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
@@ -202,7 +201,7 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 t3lib_div::loadTCA('fe_users');
 if (is_array($TCA['fe_users']['columns']['tx_extbase_type'])) {
 	$TCA['fe_users']['types']['Tx_BlogExample_Domain_Model_Administrator'] = $TCA['fe_users']['types']['0'];
-	array_push($TCA['fe_users']['columns']['tx_extbase_type']['config']['items'], array('LLL:EXT:blog_example/Resources/Private/Language/locallang_db.xml:fe_users.tx_extbase_type.Tx_BlogExample_Domain_Model_Administrator', 'Tx_BlogExample_Domain_Model_Administrator'));
+	array_push($TCA['fe_users']['columns']['tx_extbase_type']['config']['items'], array('LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:fe_users.tx_extbase_type.Tx_GenesezBlogExample_Domain_Model_Administrator', 'Tx_GenesezBlogExample_Domain_Model_Administrator'));
 }
 /* PROTECTED REGION END */
 

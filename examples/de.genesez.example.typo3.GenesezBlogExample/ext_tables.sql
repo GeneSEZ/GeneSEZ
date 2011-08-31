@@ -41,7 +41,7 @@ CREATE TABLE tx_genesezblogexample_domain_model_blog (
 	pid int(11) DEFAULT '0' NOT NULL,
 	
 	title varchar(255) DEFAULT '' NOT NULL,
-	description text DEFAULT '' NOT NULL,
+	description text NOT NULL,
 	logo tinyblob NOT NULL,
 	administrator int(11) unsigned DEFAULT '0' NOT NULL,
 	
@@ -208,5 +208,4 @@ CREATE TABLE tx_genesezblogexample_post_related_posts_post_mm (
 );
 
 # PROTECTED REGION ID(ext_tables.sql.own.sql.declaration.eee_1045467100313_135436_1) ENABLED START
-# TODO: put your further code implementations here
 # PROTECTED REGION END
