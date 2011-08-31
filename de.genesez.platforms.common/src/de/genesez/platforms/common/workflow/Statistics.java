@@ -23,7 +23,7 @@ import de.genesez.platforms.common.statistic.SProject;
  * @author toh
  * @todo rework to fit the actual configuration guide lines.
  */
-public class Statistics extends Generator {
+public class Statistics extends TypeMappingGenerator {
 
 	private static final Properties defaults = new Properties();
 	static {
