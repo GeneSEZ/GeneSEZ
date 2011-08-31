@@ -111,7 +111,7 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCAInterfaceShowRecordFieldList FOR MClass -»
-		'showRecordFieldList' => '«FOREACH owningInitializableProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»',
+		'showRecordFieldList' => '«FOREACH owningInitializableProperties() AS p SEPARATOR ", " -»«p.name() -»«ENDFOREACH»',
 «ENDDEFINE»
 
 
@@ -139,7 +139,7 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCATypesNumbers FOR MClass -»
-		'1' => array('showitem'	=> '«FOREACH owningInitializableProperties() AS p SEPARATOR "," -»«p.name() -»«ENDFOREACH»'),
+		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«FOREACH owningInitializableProperties() AS p SEPARATOR ", " -»«p.name() -»«ENDFOREACH»'),
 «ENDDEFINE»
 
 
@@ -205,8 +205,8 @@ $TCA['«name() -»'] = array (
 «DEFINE TCAColumnsLocalizationColumns FOR MClass -»
 «IF createLocalizationFields() -»
 		«EXPAND TCAColumnsSysLanguageUidColumn -»
-		«EXPAND TCAColumnsL18nParentColumn -»
-		«EXPAND TCAColumnsL18nDiffsourceColumn -»
+		«EXPAND TCAColumnsl10nParentColumn -»
+		«EXPAND TCAColumnsl10nDiffsourceColumn -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -312,8 +312,8 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsL18nParentColumn FOR MClass -»
-		'l18n_parent' => array(
+«DEFINE TCAColumnsl10nParentColumn FOR MClass -»
+		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
@@ -323,14 +323,14 @@ $TCA['«name() -»'] = array (
 					array('', 0),
 				),
 				'foreign_table' => '«name() -»',
-				'foreign_table_where' => 'AND «name() -».uid=###REC_FIELD_l18n_parent### AND «name() -».sys_language_uid IN (-1,0)',
+				'foreign_table_where' => 'AND «name() -».uid=###REC_FIELD_l10n_parent### AND «name() -».sys_language_uid IN (-1,0)',
 			)
 		),
 «ENDDEFINE»
 
 
-«DEFINE TCAColumnsL18nDiffsourceColumn FOR MClass -»
-		'l18n_diffsource' => array(
+«DEFINE TCAColumnsl10nDiffsourceColumn FOR MClass -»
+		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
 			)

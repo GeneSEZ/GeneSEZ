@@ -8,7 +8,7 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
 import de.genesez.metamodel.gcore.impl.MModelImpl;
 import de.genesez.platforms.common.naming.NamingMapper;
-import de.genesez.platforms.common.workflow.Generator;
+import de.genesez.platforms.common.workflow.TypeMappingGenerator;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
@@ -17,7 +17,7 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-20
  */
-public class TYPO3Generator extends Generator {
+public class TYPO3Generator extends TypeMappingGenerator {
 
 	/**
 	 * Default values in case the property file is not found.
@@ -79,7 +79,7 @@ public class TYPO3Generator extends Generator {
 	 * Because the fact that for TYPO3 MVC the model package hierarchy is not
 	 * relevant, this setting will be ignored.
 	 * 
-	 * @see de.genesez.platforms.common.workflow.Generator#setBasePackage(java.lang.String)
+	 * @see de.genesez.platforms.common.workflow.TypeMappingGenerator#setBasePackage(java.lang.String)
 	 */
 	public void setBasePackage(String basePackage) {
 		logger.info("The 'setBasePackage' setting will be ignored!");

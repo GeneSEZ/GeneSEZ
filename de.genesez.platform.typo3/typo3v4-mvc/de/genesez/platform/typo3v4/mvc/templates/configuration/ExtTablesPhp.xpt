@@ -53,7 +53,7 @@
 
 «EXPAND DomainObjectConfiguration -»
 
-«EXPAND OwnCodeImplementation("ext_tables.php.own.code.implementation." + xmiGuid, "// TODO: put your further code implementations here") -»
+«EXPAND OwnCodeImplementation("ext_tables.php.own.code.implementation." + xmiGuid) -»
 
 ?>
 «ENDFILE»
@@ -99,7 +99,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('«exten
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
-«EXPAND OwnCodeImplementation("ext_tables.php.own.plugin.code.implementation." + xmiGuid, "// TODO: put your further plugin code implementations here") -»
+«EXPAND OwnPluginCodeImplementation("ext_tables.php.own.plugin.code.implementation." + xmiGuid) -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -124,9 +124,9 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 «IF !allModules().isEmpty -»
 if (TYPO3_MODE === 'BE') {
 	«EXPAND RegisterModule FOREACH allModules().sortBy( e | e.name ) -»
+	
+	«EXPAND OwnModuleCodeImplementation("ext_tables.php.own.module.code.implementation." + xmiGuid) -»
 }
-
-«EXPAND OwnCodeImplementation("ext_tables.php.own.module.code.implementation." + xmiGuid, "// TODO: put your further module code implementations here") -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -167,7 +167,7 @@ if (TYPO3_MODE === 'BE') {
 «DEFINE TypoScriptInclusion FOR MModel -»
 t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«extensionName() -» setup');
 
-«EXPAND OwnCodeImplementation("ext_tables.php.own.typoscript.code.implementation." + xmiGuid, "// TODO: put your further typoscript code implementations here") -»
+«EXPAND OwnTypoScriptCodeImplementation("ext_tables.php.own.typoscript.code.implementation." + xmiGuid) -»
 «ENDDEFINE»
 
 
@@ -336,7 +336,7 @@ $TCA['«name() -»'] = array (
 	Fieldname, which contains the uid of the record which this record is a translation of.
 «ENDREM»
 «DEFINE TCACtrlTransOrigPointerField FOR MClass -»
-		'transOrigPointerField' => 'l18n_parent',
+		'transOrigPointerField' => 'l10n_parent',
 «ENDDEFINE»
 
 
@@ -344,7 +344,7 @@ $TCA['«name() -»'] = array (
 	Fieldname which will be updated with the value of the original language record whenever the translation record is updated.
 «ENDREM»
 «DEFINE TCACtrlTransOrigDiffSourceField FOR MClass -»
-		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
 «ENDDEFINE»
 
 
@@ -417,11 +417,42 @@ $TCA['«name() -»'] = array (
 «ENDIF -»
 «ENDDEFINE»
 
+
+«REM»
+	generates a region for own plugin code implementations
+«ENDREM»
+«DEFINE OwnPluginCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further plugin code implementations here
+«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own module code implementations
+«ENDREM»
+«DEFINE OwnModuleCodeImplementation(String id) FOR MModel -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further module code implementations here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own TypoScript code implementations
+«ENDREM»
+«DEFINE OwnTypoScriptCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further TypoScript code implementations here
+«ENDPROTECT»
+«ENDDEFINE»
+
+
 «REM»
 	generates a region for own code implementations
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id, String comment) FOR MModel -»
+«DEFINE OwnCodeImplementation(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
-«comment»
+// TODO: put your further code implementations here
 «ENDPROTECT»
 «ENDDEFINE»
