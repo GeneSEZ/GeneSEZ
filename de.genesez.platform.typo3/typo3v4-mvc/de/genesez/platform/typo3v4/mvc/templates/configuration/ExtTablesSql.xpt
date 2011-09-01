@@ -122,23 +122,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generate a column for an attribute.
 «ENDREM»
 «DEFINE AttributeColumns FOR MAttribute -»
-	«name() -» «type.name() -»«EXPAND DefaultValue -» «EXPAND NullOrNotNull -»,
-«ENDDEFINE»
-
-
-«REM»
-	Generate the 'DEFAULT' statement.
-«ENDREM»
-«DEFINE DefaultValue FOR MAttribute -»
-«IF hasDefaultValue() && type.generateSQLDefaultValue() -» DEFAULT '«defaultvalue.replaceAll("\"", "").replaceAll("'", "") -»'«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-	Generate the NULL or 'NOT NULL' statement if a lower bound multiplicity is '0' or '*'.
-«ENDREM»
-«DEFINE NullOrNotNull FOR MAttribute -»
-«IF lowerBoundMultiplicity > 0 -»NOT «ENDIF -»NULL«"" -»
+	«name() -» «type.name() -»,
 «ENDDEFINE»
 
 
