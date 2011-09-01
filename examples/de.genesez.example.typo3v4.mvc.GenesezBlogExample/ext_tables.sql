@@ -76,9 +76,9 @@ CREATE TABLE tx_genesezblogexample_domain_model_comment (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
-	date int(11) NOT NULL,
-	author varchar(255) NOT NULL,
-	email varchar(255) NOT NULL,
+	date int(11) DEFAULT '0' NOT NULL,
+	author varchar(255) DEFAULT '' NOT NULL,
+	email varchar(255) DEFAULT '' NOT NULL,
 	content text NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
@@ -98,9 +98,9 @@ CREATE TABLE tx_genesezblogexample_domain_model_person (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
-	firstname varchar(255) NOT NULL,
-	lastname varchar(255) NOT NULL,
-	email varchar(255) NOT NULL,
+	firstname varchar(255) DEFAULT '' NOT NULL,
+	lastname varchar(255) DEFAULT '' NOT NULL,
+	email varchar(255) DEFAULT '' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -130,9 +130,9 @@ CREATE TABLE tx_genesezblogexample_domain_model_post (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
-	title varchar(255) NOT NULL,
-	date int(11) NOT NULL,
-	content text NULL,
+	title varchar(255) DEFAULT '' NOT NULL,
+	date int(11) DEFAULT '0' NOT NULL,
+	content text NOT NULL,
 	blog int(11) unsigned DEFAULT '0' NOT NULL,
 	author int(11) unsigned DEFAULT '0' NOT NULL,
 	
@@ -167,7 +167,7 @@ CREATE TABLE tx_genesezblogexample_domain_model_tag (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
-	name varchar(255) NOT NULL,
+	name varchar(255) DEFAULT '' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
