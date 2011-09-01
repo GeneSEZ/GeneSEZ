@@ -17,7 +17,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
-/* PROTECTED REGION ID(ext_tables.php.own.plugin.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+/* PROTECTED REGION ID(ext_tables.php.own.plugins.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 /* PROTECTED REGION END */
 
 
@@ -40,6 +40,8 @@ $TCA['tx_genesezinventory_domain_model_product'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Product.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezinventory_domain_model_product.gif',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 
