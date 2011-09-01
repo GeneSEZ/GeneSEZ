@@ -484,7 +484,17 @@ cached boolean isViewHelper(MClass this) :
  * @return	the list of TYPO3 MVC Extbase plugins or an empty list
  */
 cached List[MInterface] allPlugins(MModel this) :
-	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbasePluginStereotype() );
+	allClassifiers().typeSelect(MInterface).select( e | e.isPlugin() );
+
+
+/**
+ * Checks if an interface is a TYPO3 MVC Plugin.
+ *
+ * @return	true if the interface is a TYPO3 MVC Plugin, otherwise false
+ */
+cached boolean isPlugin(MInterface this) :
+	// first check if this interface has an stereotype
+	hasT3ExtbasePluginStereotype();
 
 
 /**
@@ -493,7 +503,17 @@ cached List[MInterface] allPlugins(MModel this) :
  * @return	the list of TYPO3 MVC Extbase modules or an empty list
  */
 cached List[MInterface] allModules(MModel this) :
-	allClassifiers().typeSelect(MInterface).select( e | e.hasT3ExtbaseModuleStereotype() );
+	allClassifiers().typeSelect(MInterface).select( e | e.isModule() );
+
+
+/**
+ * Checks if an interface is a TYPO3 MVC Module.
+ *
+ * @return	true if the interface is a TYPO3 MVC Module, otherwise false
+ */
+cached boolean isModule(MInterface this) :
+	// first check if this interface has an stereotype
+	hasT3ExtbaseModuleStereotype();	
 	
 
 /*
@@ -512,41 +532,5 @@ boolean generateSQLDefaultValue(MType this) :
 	switch ( name( getNamingContext(), typeMappingContextSQL() ).toLowerCase() ) {
 		case "blob" : false
 		case "text" : false
-		
 		default : true
-	}; 
-		
-
-/**
- * Checks if the versioning fields should be generated for a domain object.
- *
- * @return	true if the versioning fields should be generated, otherwise false
- */
-boolean createVersioningFields(MClass this) : 
-	!hasT3ExtbaseDomainObjectCreateVersioningFields("false");
-
-
-/**
- * Checks if the localization fields should be generated for a domain object.
- *
- * @return	true if the localization fields should be generated, otherwise false
- */
-boolean createLocalizationFields(MClass this) : 
-	!hasT3ExtbaseDomainObjectCreateLocalizationFields("false");
-
-/**
- * Checks if the starttime field should be generated for a domain object.
- *
- * @return	true if the starttime field should be generated, otherwise false
- */
-boolean createStarttimeField(MClass this) : 
-	!hasT3ExtbaseDomainObjectCreateStarttimeField("false");
-
-
-/**
- * Checks if the endtime field should be generated for a domain object.
- *
- * @return	true if the endtime field should be generated, otherwise false
- */
-boolean createEndtimeField(MClass this) : 
-	!hasT3ExtbaseDomainObjectCreateEndtimeField("false");
+	};
