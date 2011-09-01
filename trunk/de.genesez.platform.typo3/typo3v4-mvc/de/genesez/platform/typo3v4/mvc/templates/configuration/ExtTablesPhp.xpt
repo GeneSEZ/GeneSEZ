@@ -24,6 +24,9 @@
 «REM» use TYPO3 MVC access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 
+«REM» use TYPO3 MVC table configuration array access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::TableConfigurationArrayAccessHelper»
+
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
 
@@ -99,7 +102,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('«exten
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
-«EXPAND OwnPluginCodeImplementation("ext_tables.php.own.plugin.code.implementation." + xmiGuid) -»
+«EXPAND OwnPluginsCodeImplementation("ext_tables.php.own.plugins.code.implementation." + xmiGuid) -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -125,7 +128,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 if (TYPO3_MODE === 'BE') {
 	«EXPAND RegisterModule FOREACH allModules().sortBy( e | e.name ) -»
 	
-	«EXPAND OwnModuleCodeImplementation("ext_tables.php.own.module.code.implementation." + xmiGuid) -»
+	«EXPAND OwnModulesCodeImplementation("ext_tables.php.own.modules.code.implementation." + xmiGuid) -»
 }
 «ENDIF -»
 «ENDDEFINE»
@@ -144,6 +147,9 @@ if (TYPO3_MODE === 'BE') {
 			«uca -»«ENDFOREACH»
 		),
 		array(
+			'access' => '«FOREACH getT3ExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asAccessRole() -»«ENDFOREACH -»',
+			'icon' => 'EXT:«extensionKey() -»/ext_icon.gif',
+			'labels' => 'LLL:EXT:«extensionKey() -»/«locallangModXMLFileNamePath() -»',
 		)
 	);
 «ENDDEFINE»
@@ -187,7 +193,7 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 	object.
 «ENDREM»
 «DEFINE ContextSensitiveHelpInclusion FOR MClass -»
-t3lib_extMgm::addLLrefForTCAdescr('«name( this, namingContextLocalizationCSH() ) -»', 'EXT:«extensionKey()»/«locallangCshXMLFileNamePath() -»');
+t3lib_extMgm::addLLrefForTCAdescr('«name( namingContextLocalizationCSH() ) -»', 'EXT:«extensionKey()»/«locallangCshXMLFileNamePath() -»');
 «ENDDEFINE»
 
 
@@ -226,6 +232,7 @@ $TCA['«name() -»'] = array (
 		«EXPAND TCACtrlDynamicConfigFile -»
 		«EXPAND TCACtrlIconFile -»
 		«EXPAND TCACtrlAdditions -»
+		«EXPAND OwnTCACtrlSectionCodeImplementation("ext_tables.php.own.tca.ctrl.section.code.implementation." + xmiGuid) -»
 	)
 «ENDDEFINE»
 
@@ -242,7 +249,7 @@ $TCA['«name() -»'] = array (
 	Points to the fieldname of the table which should be used as the 'title' when the record is displayed in the system.
 «ENDREM»
 «DEFINE TCACtrlLabel FOR MClass -»
-		'label'	=> '«IF getT3TCAClassLabel() != "" -»«getAttributeByXmiGuid( model(), getT3TCAClassLabel() ).name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
+		'label'	=> '«IF getT3TCAClassCtrlLabel() != "" -»«getAttributeByXmiGuid( model(), getT3TCAClassCtrlLabel() ).name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
 «ENDDEFINE»
 
 
@@ -250,8 +257,8 @@ $TCA['«name() -»'] = array (
 	Comma-separated list of fieldnames, which are holding alternative values to the value from the field pointed to by 'label'.
 «ENDREM»
 «DEFINE TCACtrlLabelAlt FOR MClass -»
-«IF !getT3TCAClassLabelAlt().isEmpty -»
-		'label_alt' => '«FOREACH getT3TCAClassLabelAlt() AS labelAlt SEPARATOR ", " -»«getAttributeByXmiGuid( model(), labelAlt ).name() -»«ENDFOREACH -»',
+«IF !getT3TCAClassCtrlLabelAlt().isEmpty -»
+		'label_alt' => '«FOREACH getT3TCAClassCtrlLabelAlt() AS labelAlt SEPARATOR ", " -»«getAttributeByXmiGuid( model(), labelAlt ).name() -»«ENDFOREACH -»',
 «ENDIF -»
 «ENDDEFINE»
 
@@ -260,8 +267,8 @@ $TCA['«name() -»'] = array (
 	If set, then the 'label_alt' fields are always shown in the title separated by comma.
 «ENDREM»
 «DEFINE TCACtrlLabelAltForce FOR MClass -»
-«IF !getT3TCAClassLabelAlt().isEmpty -»
-		'label_alt_force' => «getT3TCAClassLabelAltForce() -»,
+«IF !getT3TCAClassCtrlLabelAlt().isEmpty -»
+		'label_alt_force' => «getT3TCAClassCtrlLabelAltForce() -»,
 «ENDIF -»
 «ENDDEFINE»
 
@@ -418,10 +425,12 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
+«REM» - - Own Code  - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
 «REM»
 	generates a region for own plugin code implementations
 «ENDREM»
-«DEFINE OwnPluginCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnPluginsCodeImplementation(String id) FOR MModel -»
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
 // TODO: put your further plugin code implementations here
 «ENDPROTECT»
@@ -429,9 +438,9 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
-	generates a region for own module code implementations
+	generates a region for own modules code implementations
 «ENDREM»
-«DEFINE OwnModuleCodeImplementation(String id) FOR MModel -»
+«DEFINE OwnModulesCodeImplementation(String id) FOR MModel -»
 	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 	// TODO: put your further module code implementations here
 	«ENDPROTECT»
@@ -445,6 +454,16 @@ $TCA['«name() -»'] = array (
 «PROTECT CSTART '/* ' CEND ' */' ID (id)»
 // TODO: put your further TypoScript code implementations here
 «ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own TCA Ctrl Section code implementations
+«ENDREM»
+«DEFINE OwnTCACtrlSectionCodeImplementation(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further TCA Ctrl Section code implementations here
+		«ENDPROTECT»
 «ENDDEFINE»
 
 

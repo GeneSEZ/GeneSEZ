@@ -1,6 +1,6 @@
 «IMPORT gcore»
 «REM»
-	Entry point for generating "locallang_csh_<domain_element>.xml".
+	Entry point for generating "locallang_mod_<module>.xml".
 	
 	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
 	@date	2011-07-12
@@ -16,9 +16,6 @@
 «REM» use TYPO3 MVC conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
 
-«REM» use TYPO3 MVC access helper scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
-
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
 
@@ -30,13 +27,12 @@
 «ENDREM»
 
 «REM»
-	Processes the generation of "locallang_csh_<domain_object>.xml".
-	Generates context sensitive help (CSH) for eintity and value object.
+	Processes the generation of "locallang_mod_<module>.xml".
 «ENDREM»
-«DEFINE Root FOR MClass -»
+«DEFINE Root FOR MInterface -»
 «EXPAND ContextSettings -»
 
-«FILE locallangCshXMLFileNamePath() -»
+«FILE locallangModXMLFileNamePath() -»
 «EXPAND TypeDefintion -»
 
 «EXPAND T3locallang -»
@@ -54,15 +50,15 @@
 	Sets the naming context for this part of generation.
 	The type mapping context is not needed for this part. 
 «ENDREM»
-«DEFINE ContextSettings FOR MClass -»
-«setNamingContext( namingContextLocalizationCSH() ) -»
+«DEFINE ContextSettings FOR MInterface -»
+«setNamingContext( namingContextPHPCompliant() ) -»
 «ENDDEFINE»
 
 
 «REM»
 	Defines the XML version and encoding settings.
 «ENDREM»
-«DEFINE TypeDefintion FOR MClass -»
+«DEFINE TypeDefintion FOR MInterface -»
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 «ENDDEFINE»
 
@@ -70,7 +66,7 @@
 «REM»
 	In TYPO3 all localizations are defined inside <T3locallang></T3locallang>. 
 «ENDREM»
-«DEFINE T3locallang FOR MClass -»
+«DEFINE T3locallang FOR MInterface -»
 <T3locallang>
 	«EXPAND MetaType -»
 	«EXPAND DataType -»
@@ -79,13 +75,12 @@
 
 
 «REM»
-	Defines that this file is for context sensitive help.
+	Defines that this file is for modules.
 «ENDREM»
-«DEFINE MetaType FOR MClass -»
+«DEFINE MetaType FOR MInterface -»
 	<meta type="array">
-		<type>CSH</type>
-		<csh_table>«name() -»</csh_table>
-		<description>Context Sensitive Help (CSH) for table «name() -»</description>
+		<type>module</type>
+		<description>Language labels for the module «name().toLowerCase() -» in the BACKEND</description>
 	</meta>
 «ENDDEFINE»
 
@@ -93,7 +88,7 @@
 «REM»
 	Inside <data></data> all localizations are defined for a language key.
 «ENDREM»
-«DEFINE DataType FOR MClass -»
+«DEFINE DataType FOR MInterface -»
 	<data type="array">
 	«EXPAND LanguageKey("default") -»
 	«FOREACH model().getT3LocalizationLanguageKeys() AS languageKey -»
@@ -106,31 +101,31 @@
 «REM»
 	Here we generate a locallang only for object properties.
 «ENDREM»
-«DEFINE LanguageKey(String languageKey) FOR MClass -»
+«DEFINE LanguageKey(String languageKey) FOR MInterface -»
 		<languageKey index="«languageKey -»" type="array">
-			«EXPAND PropertyLocalization(languageKey) FOREACH owningInitializableProperties().sortBy( e | e.name ) -»
+			«EXPAND ModuleLocalization(languageKey) -»
 			«EXPAND OwnLocalization(languageKey) -»
 		</languageKey>
 «ENDDEFINE»
 
 
-«DEFINE PropertyLocalization(String languageKey) FOR MProperty -»
-			<label index="«name() -».description">«EXPAND DefaultValue(languageKey) -»</label>
+«DEFINE ModuleLocalization(String languageKey) FOR MInterface -»
+			<label index="mlang_tabs_tab">«EXPAND Value(languageKey, "mlang_tabs_tab") -»</label>
+			<label index="mlang_labels_tabdescr">«EXPAND Value(languageKey, "mlang_labels_tabdescr") -»</label>
+			<label index="mlang_labels_tablabel">«EXPAND Value(languageKey, "mlang_labels_tablabel") -»</label>
 «ENDDEFINE»
 
 
-«DEFINE DefaultValue(String languageKey) FOR MProperty -»
-«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xml." + languageKey + "." + xmiGuid) -»
-«IF hasComment() -»«comment("", "") -»«ENDIF -»
-«ENDPROTECT -»
+«DEFINE Value(String languageKey, String index) FOR MInterface -»
+«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_mod.xml." + languageKey + "." + index) -»«ENDPROTECT -»
 «ENDDEFINE»
 
 
 «REM»
 	generates a region for own localization
 «ENDREM»
-«DEFINE OwnLocalization(String languageKey) FOR MClass -»
-			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_csh.xml." + languageKey + ".own.localization." + xmiGuid)»
+«DEFINE OwnLocalization(String languageKey) FOR MInterface -»
+			«PROTECT CSTART '<!-- ' CEND ' -->' ID ("locallang_mod.xml." + languageKey + ".own.localization." + xmiGuid)»
 			<!-- TODO: put your further localization information here -->
 			«ENDPROTECT»
 «ENDDEFINE»

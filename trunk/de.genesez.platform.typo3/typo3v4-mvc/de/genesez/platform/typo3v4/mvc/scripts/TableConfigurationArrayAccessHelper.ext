@@ -1,0 +1,81 @@
+/**
+ * Simplifies access to genesez models + makes working with the genesez metamodel more easier.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-09-01
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 access helper scripts
+extension de::genesez::platform::typo3v4::profile::AccessHelper;
+
+// use TYPO3 MVC Extbase access helper scripts
+extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
+
+// use TYPO3 naming context and common naming scripts
+extension de::genesez::platforms::common::naming::Naming;
+extension de::genesez::platform::typo3v4::mvc::convention::NamingContext;
+
+// use TYPO3 MVC conversion scripts
+extension de::genesez::platform::typo3v4::mvc::convention::Conversion;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Table Configuration Array 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if the versioning fields should be generated for a domain object.
+ *
+ * @return	true if the versioning fields should be generated, otherwise false
+ */
+boolean createVersioningFields(MClass this) : 
+	!hasT3ExtbaseDomainObjectCreateVersioningFields("false");
+
+
+/**
+ * Checks if the localization fields should be generated for a domain object.
+ *
+ * @return	true if the localization fields should be generated, otherwise false
+ */
+boolean createLocalizationFields(MClass this) : 
+	!hasT3ExtbaseDomainObjectCreateLocalizationFields("false");
+
+/**
+ * Checks if the starttime field should be generated for a domain object.
+ *
+ * @return	true if the starttime field should be generated, otherwise false
+ */
+boolean createStarttimeField(MClass this) : 
+	!hasT3ExtbaseDomainObjectCreateStarttimeField("false");
+
+
+/**
+ * Checks if the endtime field should be generated for a domain object.
+ *
+ * @return	true if the endtime field should be generated, otherwise false
+ */
+boolean createEndtimeField(MClass this) : 
+	!hasT3ExtbaseDomainObjectCreateEndtimeField("false");
+	
+	
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Table Configuration Array - Columns Config 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+List[String] tcaColumnsConfigEvals(MProperty this, List[String] defaultEvals) :
+	let evals = {} :
+		lowerBoundMultiplicity > 0 
+			? evals.add("required") 
+			: Void ->
+		!getT3TCAPropertyColumnsConfigEval().isEmpty
+		 	? evals.addAll( getT3TCAPropertyColumnsConfigEval() )
+		 	: evals.addAll( defaultEvals ) ->
+		 evals.toSet();
