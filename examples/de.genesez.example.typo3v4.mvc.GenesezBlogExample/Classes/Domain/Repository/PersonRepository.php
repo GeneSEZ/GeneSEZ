@@ -27,6 +27,7 @@
  **************************************************************/
 
 /**
+ * A repository for persons
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors

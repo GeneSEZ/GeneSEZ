@@ -132,7 +132,7 @@ CREATE TABLE tx_genesezblogexample_domain_model_post (
 	
 	title varchar(255) NOT NULL,
 	date int(11) NOT NULL,
-	content text NOT NULL,
+	content text NULL,
 	blog int(11) unsigned DEFAULT '0' NOT NULL,
 	author int(11) unsigned DEFAULT '0' NOT NULL,
 	

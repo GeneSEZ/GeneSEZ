@@ -8,12 +8,18 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 	'ctrl' => $TCA['tx_genesezblogexample_domain_model_administrator']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => '',
+		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'types' => array(
 		'1' => array('showitem'	=> 'sys_language_uid, hidden, starttime, endtime, '),
+		/* PROTECTED REGION ID(tca.php.own.tca.types.section.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
+		/* PROTECTED REGION ID(tca.php.own.tca.palettes.section.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'columns' => array(
 		'hidden' => array(
@@ -94,6 +100,8 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 				'cols' => 27,
 			)
 		),
+		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 

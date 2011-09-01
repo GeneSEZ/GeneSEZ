@@ -33,7 +33,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
-/* PROTECTED REGION ID(ext_tables.php.own.plugin.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+/* PROTECTED REGION ID(ext_tables.php.own.plugins.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 $extensionName = t3lib_div::underscoredToUpperCamelCase($_EXTKEY);
 $pluginSignature = strtolower($extensionName) . '_postlist';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key';
@@ -56,10 +56,13 @@ if (TYPO3_MODE === 'BE') {
 			'Comment' => 'create, delete, deleteAll'
 		),
 		array(
+			'access' => 'user, group',
+			'icon' => 'EXT:genesez_blog_example/ext_icon.gif',
+			'labels' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_mod_m1.xml',
 		)
 	);
 	
-	/* PROTECTED REGION ID(ext_tables.php.own.module.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+	/* PROTECTED REGION ID(ext_tables.php.own.modules.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 	/* PROTECTED REGION END */
 }
 
@@ -91,6 +94,8 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Administrator.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_administrator.gif',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_blog', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_blog.xml');
@@ -113,6 +118,8 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Blog.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_blog.gif',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_comment', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_comment.xml');
@@ -131,6 +138,8 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Comment.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_comment.gif',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._16_9_8a7027a_1297194777757_325505_1605) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_person', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_person.xml');
@@ -153,6 +162,9 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Person.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_person.gif',
 		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.xml:LGL.prependAtCopy',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */
+		// You can define the 'prependAtCopy' setting as alternative here, if you do not like to define it inside the model.
+		/* PROTECTED REGION END */
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_post', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_post.xml');
@@ -177,6 +189,8 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Post.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_post.gif',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._16_9_8a7027a_1297194790786_915555_1655) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezblogexample_domain_model_tag', 'EXT:genesez_blog_example/Resources/Private/Language/locallang_csh_tx_genesezblogexample_domain_model_tag.xml');
@@ -193,6 +207,8 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Tag.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezblogexample_domain_model_tag.gif',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 
@@ -200,7 +216,7 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 /* PROTECTED REGION ID(ext_tables.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 t3lib_div::loadTCA('fe_users');
 if (is_array($TCA['fe_users']['columns']['tx_extbase_type'])) {
-	$TCA['fe_users']['types']['Tx_BlogExample_Domain_Model_Administrator'] = $TCA['fe_users']['types']['0'];
+	$TCA['fe_users']['types']['Tx_GenesezBlogExample_Domain_Model_Administrator'] = $TCA['fe_users']['types']['0'];
 	array_push($TCA['fe_users']['columns']['tx_extbase_type']['config']['items'], array('LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:fe_users.tx_extbase_type.Tx_GenesezBlogExample_Domain_Model_Administrator', 'Tx_GenesezBlogExample_Domain_Model_Administrator'));
 }
 /* PROTECTED REGION END */

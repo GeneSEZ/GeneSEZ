@@ -8,12 +8,18 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 	'ctrl' => $TCA['tx_genesezblogexample_domain_model_tag']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'name',
+		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'types' => array(
 		'1' => array('showitem'	=> 'hidden, name'),
+		/* PROTECTED REGION ID(tca.php.own.tca.types.section.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
+		/* PROTECTED REGION ID(tca.php.own.tca.palettes.section.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'columns' => array(
 		'hidden' => array(
@@ -26,12 +32,19 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 		'name' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_tag.name',
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194910826_608649_1757) ENABLED START */
+			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
+				'eval' => 'required, trim',
+				'max' => 255,
 				'size' => 30,
-				'eval' => 'trim',
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194910826_608649_1757) ENABLED START */
+				/* PROTECTED REGION END */
 			)
 		),
+		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 
