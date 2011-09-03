@@ -644,16 +644,15 @@ Void setTaggedValue(MElement this, String stereotype, String taggedValue, String
  * 	checks if a tagged value of a stereotype exists and has a utilizable value (not empty or null)
  *
  * 	@param	sterotype		the name of a stereotype
- * 	@param	tagggedValue	the name of a tagged value
- * 	@param	value		the value of a tagged value
+ * 	@param	tag				the name of a tag
  * 	
  *	@return		true if the value exists and is utilizable
  */
-boolean hasUtilizableValue(MElement this, String stereotype, String taggedValue) :
-	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype) &&
-	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "" &&
-	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "null" &&
-	this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).value != "[]"
+boolean hasUtilizableValue(MElement this, String stereotype, String tag) :
+	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype) &&
+	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "" &&
+	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "null" &&
+	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "[]"
 		? true
 		: false;
 
