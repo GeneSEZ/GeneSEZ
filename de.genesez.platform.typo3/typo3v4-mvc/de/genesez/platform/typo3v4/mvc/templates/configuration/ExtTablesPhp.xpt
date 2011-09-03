@@ -24,8 +24,8 @@
 «REM» use TYPO3 MVC access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 
-«REM» use TYPO3 MVC table configuration array access helper scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::TableConfigurationArrayAccessHelper»
+«REM» use TYPO3 MVC TCx access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::TCxAccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
@@ -118,6 +118,11 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconFileNamePath() != "" -»,
 	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconFileNamePath() -»'«ENDIF»
 );
+«IF !property.typeSelect(MAttribute).isEmpty -»
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['«asPluginFlexformName() -»'] = 'select_key';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFlexformName() -»'] = 'pi_flexform,recursive';
+t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«extensionKey() -»/«flexformXMLFileNamePath() -»');
+«ENDIF -»
 «ENDDEFINE»
 
 
