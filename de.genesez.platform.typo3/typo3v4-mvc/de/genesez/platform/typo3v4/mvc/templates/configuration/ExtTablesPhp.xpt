@@ -16,10 +16,14 @@
 «EXTENSION de::genesez::platforms::common::naming::Naming»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
-«REM» use TYPO3 MVC convention and naming scripts «ENDREM»
+«REM» use TYPO3 MVC convention and conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
+
+«REM» use TYPO3 MVC naming scripts which overrides «ENDREM»
+«REM» TYPO3 naming scripts if script name is equals «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
+«EXTENSION de::genesez::platform::typo3v4::convention::Naming»
 
 «REM» use TYPO3 MVC access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
@@ -145,14 +149,14 @@ if (TYPO3_MODE === 'BE') {
 	«EXPAND ModuleComment -»
 	Tx_Extbase_Utility_Extension::registerModule(
 		$_EXTKEY,
-		'«getT3ExtbaseModuleMainModule().asMainModulName() -»',
+		'«getT3ExtbaseModuleMainModule().asT3MainModulName() -»',
 		'«asModuleName() -»',
 		'«getT3ExtbaseModulePosition() -»',
 		array(«FOREACH asControllerActionPairs( model(), getT3ExtbaseModuleUncachedActions() ) AS uca SEPARATOR ", "»
 			«uca -»«ENDFOREACH»
 		),
 		array(
-			'access' => '«FOREACH getT3ExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asAccessRole() -»«ENDFOREACH -»',
+			'access' => '«FOREACH getT3ExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asT3AccessRole() -»«ENDFOREACH -»',
 			'icon' => 'EXT:«extensionKey() -»/ext_icon.gif',
 			'labels' => 'LLL:EXT:«extensionKey() -»/«locallangModXMLFileNamePath() -»',
 		)
@@ -423,9 +427,9 @@ $TCA['«name() -»'] = array (
 «ENDREM»
 «DEFINE TCACtrlAdditions FOR MClass -»
 «IF !getT3TCAClassCtrlSectionAdditions().isEmpty -»
-«FOREACH getT3TCAClassCtrlSectionAdditions() AS tcaAddition SEPARATOR "," -»
-		«FOREACH tcaAddition.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
-«ENDFOREACH -»,
+«FOREACH getT3TCAClassCtrlSectionAdditions() AS tcaAddition -»
+		«asT3AssociativeArrayItem(tcaAddition)»
+«ENDFOREACH -»
 «ENDIF -»
 «ENDDEFINE»
 
