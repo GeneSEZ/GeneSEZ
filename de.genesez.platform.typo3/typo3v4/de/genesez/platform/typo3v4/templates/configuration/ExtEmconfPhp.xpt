@@ -218,7 +218,7 @@ $EM_CONF[$_EXTKEY] = array(
 		«EXPAND Depends -»
 		«EXPAND Conflicts -»
 		«EXPAND Suggests -»
-	)
+	),
 «ENDDEFINE»
 
 
@@ -226,8 +226,10 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'depends' field.
 «ENDREM»
 «DEFINE Depends FOR MModel -»
-		'depends' => array(«FOREACH getT3ExtensionManagerDependencies() AS dependency SEPARATOR ", "»
-			«EXPAND ConstraintKeyValue(dependency) -»«ENDFOREACH»
+		'depends' => array(
+		«FOREACH getT3ExtensionManagerDependencies() AS dependency -»
+			«asT3AssociativeArrayItem(dependency)»
+		«ENDFOREACH -»
 		),
 «ENDDEFINE»
 
@@ -236,8 +238,10 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'conflicts' field.
 «ENDREM»
 «DEFINE Conflicts FOR MModel -»
-		'conflicts' => array(«FOREACH getT3ExtensionManagerConflicts() AS conflict SEPARATOR ", "»
-			«EXPAND ConstraintKeyValue(conflict) -»«ENDFOREACH»
+		'conflicts' => array(
+		«FOREACH getT3ExtensionManagerConflicts() AS conflict -»
+			«asT3AssociativeArrayItem(conflict)»
+		«ENDFOREACH -»
 		),
 «ENDDEFINE»
 
@@ -246,17 +250,11 @@ $EM_CONF[$_EXTKEY] = array(
 	Performs the generation of the 'suggests' field.
 «ENDREM»
 «DEFINE Suggests FOR MModel -»
-		'suggests' => array(«FOREACH getT3ExtensionManagerSuggests() AS suggest SEPARATOR ", "»
-			«EXPAND ConstraintKeyValue(suggest) -»«ENDFOREACH»
-		)
-«ENDDEFINE»
-
-
-«REM»
-	Generates a constraint which consists of a key and a value.
-«ENDREM»
-«DEFINE ConstraintKeyValue(String constraintKeyValue) FOR MModel -»
-			«FOREACH constraintKeyValue.split("=") AS kv SEPARATOR " => "»«kv.trim() -»«ENDFOREACH -»
+		'suggests' => array(
+		«FOREACH getT3ExtensionManagerSuggests() AS suggest -»
+			«asT3AssociativeArrayItem(suggest)»
+		«ENDFOREACH -»
+		),
 «ENDDEFINE»
 
 

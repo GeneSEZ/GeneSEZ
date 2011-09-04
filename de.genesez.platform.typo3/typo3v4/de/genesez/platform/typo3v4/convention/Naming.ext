@@ -68,3 +68,26 @@ String asT3State(String state) :
 		default :
 			state.toLowerCase()
 	};
+	
+
+/**
+ * Formats a string value into a TYPO3 associative array item.
+ * 
+ * Having a trailing comma after the last defined array entry, while unusual, 
+ * is a valid syntax. 
+ * See http://php.net/manual/en/function.array.php
+ *
+ * When using this latter declaration, we encourage using a trailing comma for 
+ * the last item in the array; this minimizes the impact of adding new items 
+ * on successive lines, and helps to ensure no parse errors occur due to a 
+ * missing comma. 
+ * See http://framework.zend.com/manual/en/coding-standard.coding-style.html
+ *
+ * @param	item	The item to format.
+ * @return	The TYPO3 associative array item.
+ */
+List[String] asT3AssociativeArrayItem(String item) :
+	item.contains("=")
+		? (	let kv = item.replaceFirst("=", "=>").split("=>") :
+				"'" + kv.get(0).trim() + "' => " + kv.get(1).trim() + ","
+		) : "";
