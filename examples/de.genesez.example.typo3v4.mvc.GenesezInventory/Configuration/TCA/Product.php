@@ -36,10 +36,9 @@ $TCA['tx_genesezinventory_domain_model_product'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
-				'default' => '',
+				'size' => 30,
 				'eval' => 'required, trim',
-				'max' => 255,
-				'size' => 20,
+				'default' => '',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1314363700126_91538_2293) ENABLED START */
 				/* PROTECTED REGION END */
 			)
@@ -52,9 +51,9 @@ $TCA['tx_genesezinventory_domain_model_product'] = array (
 			'config' => array(
 				'type' => 'text',
 				'cols' => 40,
-				'default' => '',
-				'eval' => 'trim',
 				'rows' => 15,
+				'eval' => 'trim',
+				'default' => '',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1314363708261_140463_2300) ENABLED START */
 				/* PROTECTED REGION END */
 			)
@@ -66,9 +65,9 @@ $TCA['tx_genesezinventory_domain_model_product'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
-				'default' => 0,
-				'eval' => 'int',
 				'size' => 30,
+				'eval' => 'int',
+				'default' => 0,
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1314363722856_936956_2307) ENABLED START */
 				/* PROTECTED REGION END */
 			)
