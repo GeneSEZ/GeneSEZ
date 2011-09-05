@@ -33,9 +33,9 @@
 	Order: constants (static + final), static, non static
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Const FOREACH property.typeSelect(MAttribute).select( e| e.final && e.static && e.hasDefaultValue() ) -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && !e.final && !e.derived ) -»
-	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( e| !e.static && !e.final && !e.derived ) -»
+	«EXPAND Const FOREACH property.typeSelect(MAttribute).select( e | e.final && e.static && e.hasDefaultValue() ) -»
+	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( e | e.static && !e.final && !e.derived ) -»
+	«EXPAND Declaration FOREACH property.typeSelect(MAttribute).select( e | !e.static && !e.final && !e.derived ) -»
 «ENDDEFINE»
 
 
@@ -44,8 +44,8 @@
 	Order: static, non static
 «ENDREM»
 «DEFINE Derived FOR MClass -»
-	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( e| e.static && e.derived ) -»
-	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.derived ) -»
+	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( e | e.static && e.derived ) -»
+	«EXPAND Derived FOREACH property.typeSelect(MAttribute).select( e | !e.static && e.derived ) -»
 «ENDDEFINE»
 
 
@@ -53,7 +53,7 @@
 	Processes the accessors for attributes of a classifier.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-«FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS attribute -»
+«FOREACH property.typeSelect(MAttribute).select( e | !e.final && !e.derived ) AS attribute -»
 	«EXPAND Getter FOR attribute -»
 	«EXPAND Setter FOR attribute -»
 	«EXPAND InsertIn FOR attribute -»
@@ -166,7 +166,7 @@
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAttribute -»
 «IF isSingleValuedType() -»
-«IF generatePHPTypeHint( type ) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ELSE -»«mapType() -» «ENDIF -»
 «ENDDEFINE»
 
@@ -175,7 +175,7 @@
 	Generates type hints for insert in and remove from methods.
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAttribute -»
-«IF generatePHPTypeHint( type ) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ENDDEFINE»
 
 
