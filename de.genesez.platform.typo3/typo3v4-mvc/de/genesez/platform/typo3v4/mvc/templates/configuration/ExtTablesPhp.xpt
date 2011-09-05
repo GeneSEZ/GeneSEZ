@@ -159,6 +159,8 @@ if (TYPO3_MODE === 'BE') {
 			'access' => '«FOREACH getT3ExtbaseModuleAccess() AS accessRole SEPARATOR ", " -»«accessRole.asT3AccessRole() -»«ENDFOREACH -»',
 			'icon' => 'EXT:«extensionKey() -»/ext_icon.gif',
 			'labels' => 'LLL:EXT:«extensionKey() -»/«locallangModXMLFileNamePath() -»',
+			«EXPAND ModuleConfigurationAdditions -»
+			«EXPAND OwnModuleConfigurationCodeImplementation("ext_tables.php.own.module.configuration.code.implementation." + xmiGuid) -»
 		)
 	);
 «ENDDEFINE»
@@ -173,6 +175,17 @@ if (TYPO3_MODE === 'BE') {
 	«formatComment(" * ", "\n	") -»
 	«ENDIF -»
 	 */
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleConfigurationAdditions FOR MInterface -»
+«IF !getT3ExtbaseModuleConfigurationAdditions().isEmpty -»
+«FOREACH getT3ExtbaseModuleConfigurationAdditions() AS configurationAddition -»
+			«asT3AssociativeArrayItem(configurationAddition)»
+«ENDFOREACH -»
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -453,6 +466,16 @@ $TCA['«name() -»'] = array (
 	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 	// TODO: put your further module code implementations here
 	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own module configuration code implementations
+«ENDREM»
+«DEFINE OwnModuleConfigurationCodeImplementation(String id) FOR MInterface -»
+			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+			// TODO: put your further module configuration code implementations here
+			«ENDPROTECT»
 «ENDDEFINE»
 
 
