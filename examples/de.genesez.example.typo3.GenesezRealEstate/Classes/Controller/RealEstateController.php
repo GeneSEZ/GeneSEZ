@@ -1,7 +1,6 @@
 <?php
 
-/* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1306344238376_116675_2466.controller) ENABLED START */
-// TODO: put your further include + require statements here
+/* PROTECTED REGION ID(php.own.imports._17_0_2_8a7027a_1314919357827_141495_2375) ENABLED START */
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -28,7 +27,6 @@
  **************************************************************/
 
 /**
- * Controller for a domain object.
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
@@ -37,89 +35,113 @@
 class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Controller_ActionController {
 
 	/**
-	 * Repository for a domain objects
 	 * 
 	 * @var Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository
 	 */
-	protected $realEstateRepository;
+	private $realEstateRepository;
 
 
 	
 	/**
-	 * Displays a list of domain objects
 	 *
-	 * @return string The rendered view for this action.
+	 * @return string 
 	 */
-	protected function listAction() {
-		$list = $this->realEstateRepository->findAll();
-		$this->view->assign('list', $list);
+	public function showSearchboxAction() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919842588_568660_2521) ENABLED START */
+		/* PROTECTED REGION END */
 	}
 	/**
-	 * Displays one single domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The existing domain object to display.
-	 * @return string The rendered view for this action.
+	 * @return string 
 	 */
-	protected function showAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
+	public function showSearchformAction() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919858358_221947_2529) ENABLED START */
+		return "Searchform called";
+		/* PROTECTED REGION END */
+	}
+	/**
+	 *
+	 * @return string 
+	 */
+	public function showByUidAction() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314920948577_433681_2860) ENABLED START */
+		$realEstateUid = $this->getFlexformUid($this->settings['realEstate']);
+		$realEstate = $this->realEstateRepository->findByUid($realEstateUid);
+		
 		$this->view->assign('realEstate', $realEstate);
+		/* PROTECTED REGION END */
 	}
 	/**
-	 * Displays a form for creating a new domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate A fresh domain object to display.
-	 * @return string The rendered view for this action.
+	 * @return string 
 	 */
-	protected function newAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate = NULL) {
-		$this->view->assign('realEstate', $realEstate);
+	public function showByQuarterAction() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919652753_836062_2466) ENABLED START */
+		$quarterUid = $this->getFlexformUid($this->settings['quarter']);
+		$realEstates = $this->realEstateRepository->findAllByQuarter($quarterUid);
+		print_r($realEstates->getFirst());
+		$this->view->assign('realEstates', $realEstates);
+		/* PROTECTED REGION END */
 	}
 	/**
-	 * Creates a new domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The new domain object to create.
-	 * @return string The rendered view for this action.
+	 * @param string $search 
+	 * @return string 
 	 */
-	protected function createAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
-		$this->realEstateRepository->add($realEstate);
-		$this->flashMessageContainer->add('Your new domain object was created.');
-		$this->redirect('list');
+	public function searchSearchboxAction($search) {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315231403518_321166_1973) ENABLED START */
+		// TODO: implementation of method searchSearchbox for class Tx_GenesezRealEstate_Controller_RealEstateController
+		throw new Exception('The implementation of the method searchSearchboxAction for class Tx_GenesezRealEstate_Controller_RealEstateController is missing !');
+		/* PROTECTED REGION END */
 	}
 	/**
-	 * Displays a form for editing an existing domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The existing domain object to display.
-	 * @return string The rendered view for this action.
+	 * @return string 
 	 */
-	protected function editAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
-		$this->view->assign('realEstate', $realEstate);
+	public function previousAction() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919749209_572446_2503) ENABLED START */
+		// TODO: implementation of method previous for class Tx_GenesezRealEstate_Controller_RealEstateController
+		throw new Exception('The implementation of the method previousAction for class Tx_GenesezRealEstate_Controller_RealEstateController is missing !');
+		/* PROTECTED REGION END */
 	}
 	/**
-	 * Updates an existing domain object.
+	 * Shows a single real estate with all details.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The existing domain object to update
+	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The real estate to show.
 	 * @return string The rendered view for this action.
 	 */
-	protected function updateAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
-		$this->realEstateRepository->update($realEstate);
-		$this->flashMessageContainer->add('Your existing domain object was updated.');
-		$this->redirect('list');
+	public function showAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919481995_230589_2439) ENABLED START */
+		// TODO: implementation of method show for class Tx_GenesezRealEstate_Controller_RealEstateController
+		throw new Exception('The implementation of the method showAction for class Tx_GenesezRealEstate_Controller_RealEstateController is missing !');
+		/* PROTECTED REGION END */
 	}
 	/**
-	 * Deletes an existing domain object.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The existing domain object to delete
-	 * @return string The rendered view for this action.
+	 * @return string 
 	 */
-	protected function deleteAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
-		$this->realEstateRepository->remove($realEstate);
-		$this->flashMessageContainer->add('Your existing domain object was removed.');
-		$this->redirect('list');
+	public function nextAction() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919740231_303253_2495) ENABLED START */
+		// TODO: implementation of method next for class Tx_GenesezRealEstate_Controller_RealEstateController
+		throw new Exception('The implementation of the method nextAction for class Tx_GenesezRealEstate_Controller_RealEstateController is missing !');
+		/* PROTECTED REGION END */
+	}
+	/**
+	 *
+	 * @param string $item 
+	 * @return int 
+	 */
+	private function getFlexformUid($item) {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315211896999_497886_1973) ENABLED START */
+		return preg_replace( '/\D/', '', $item);
+		/* PROTECTED REGION END */
 	}
 
 	
 	/**
 	 * Getter for realEstateRepository
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository Repository for a domain objects
+	 * @return Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository 
 	 */
 	public function getRealEstateRepository() {
 		return $this->realEstateRepository;
@@ -127,15 +149,14 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Dependency injection for realEstateRepository
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository Repository for a domain objects
+	 * @param Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository 
 	 * @return void
 	 */
 	public function injectRealEstateRepository(Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository) {
 		$this->realEstateRepository = $realEstateRepository;
 	}
 
-	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466.controller) ENABLED START */
+	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1314919357827_141495_2375) ENABLED START */
 	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 

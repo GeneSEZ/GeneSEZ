@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1306343834717_151292_2268) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -33,7 +32,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Model_RealEstateSizeType extends Tx_Extbase_DomainObject_AbstractValueObject {
+class Tx_GenesezRealEstate_Domain_Model_RoomType extends Tx_Extbase_DomainObject_AbstractValueObject {
 
 	/**
 	 * 
@@ -63,9 +62,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstateSizeType extends Tx_Extbase_Do
 		$this->specification = $specification;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306343834717_151292_2268) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

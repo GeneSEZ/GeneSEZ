@@ -8,53 +8,20 @@ $TCA['tx_genesezrealestate_domain_model_heatingtype'] = array (
 	'ctrl' => $TCA['tx_genesezrealestate_domain_model_heatingtype']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'specification',
+		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'specification'),
+		'1' => array('showitem'	=> 'sys_language_uid, hidden, specification'),
+		/* PROTECTED REGION ID(tca.php.own.tca.types.section.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
+		/* PROTECTED REGION ID(tca.php.own.tca.palettes.section.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
+		/* PROTECTED REGION END */
 	),
 	'columns' => array(
-		'hidden' => array(
-			'exclude' => true,
-			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config' => array(
-				'type' => 'check',
-			)
-		),
-		'starttime' => array(
-			'exclude' => true,
-			'l10n_mode' => 'mergeIfNotBlank',
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
-			'config' => array(
-				'type' => 'input',
-				'size' => 13,
-				'max' => 20,
-				'eval' => 'datetime',
-				'checkbox' => false,
-				'default' => 0,
-				'range' => array(
-					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-				),
-			),
-		),
-		'endtime' => array(
-			'exclude' => true,
-			'l10n_mode' => 'mergeIfNotBlank',
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
-			'config' => array(
-				'type' => 'input',
-				'size' => 13,
-				'max' => 20,
-				'eval' => 'datetime',
-				'checkbox' => false,
-				'default' => 0,
-				'range' => array(
-					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-				),
-			),
-		),
 		'sys_language_uid' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
@@ -68,7 +35,7 @@ $TCA['tx_genesezrealestate_domain_model_heatingtype'] = array (
 				),
 			)
 		),
-		'l18n_parent' => array(
+		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
@@ -78,12 +45,19 @@ $TCA['tx_genesezrealestate_domain_model_heatingtype'] = array (
 					array('', 0),
 				),
 				'foreign_table' => 'tx_genesezrealestate_domain_model_heatingtype',
-				'foreign_table_where' => 'AND tx_genesezrealestate_domain_model_heatingtype.uid=###REC_FIELD_l18n_parent### AND tx_genesezrealestate_domain_model_heatingtype.sys_language_uid IN (-1,0)',
+				'foreign_table_where' => 'AND tx_genesezrealestate_domain_model_heatingtype.uid=###REC_FIELD_l10n_parent### AND tx_genesezrealestate_domain_model_heatingtype.sys_language_uid IN (-1,0)',
 			)
 		),
-		'l18n_diffsource' => array(
+		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
+			)
+		),
+		'hidden' => array(
+			'exclude' => true,
+			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config' => array(
+				'type' => 'check',
 			)
 		),
 		't3ver_label' => array(
@@ -96,18 +70,23 @@ $TCA['tx_genesezrealestate_domain_model_heatingtype'] = array (
 		),
 		'specification' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_heatingtype.specification',
+			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_heatingtype.specification',
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344212818_743573_2450) ENABLED START */
+			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim',
+				'eval' => 'required, trim',
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344212818_743573_2450) ENABLED START */
+				/* PROTECTED REGION END */
 			)
 		),
+		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
+		/* PROTECTED REGION END */
 	)
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
-// TODO: put your further code implementations here
 /* PROTECTED REGION END */
 
 ?>

@@ -1,12 +1,113 @@
+{namespace re=Tx_SystemmacherRealEstate_ViewHelpers}
+
 <f:layout name="Default" />
 
 <f:section name="main">
-	<h1>Show RealEstate</h1>
 
-	<f:flashMessages />
+<div class="tx-systemmacher-real-estate-single-real-estate">
 
-	<f:render partial="RealEstate/Properties" arguments="{realEstate:realEstate}" />
+	<div class="csc-default">
+		<div class="csc-header csc-header-n1">
+			<h1 class="csc-firstHeader">{realEstate.title}</h1>
+		</div>
+	</div>
 	
-	<f:link.action action="list">Back to list</f:link.action><br />
-	<f:link.action action="new">New RealEstate</f:link.action>
+	<div class="csc-default">
+		<p>Wohnungs-ID: {realEstate.id}</p>
+	</div>
+	
+	<div class="csc-default">
+		<div class="csc-textpic csc-textpic-intext-right">
+			<div class="csc-textpic-imagewrap">
+				<div class="csc-textpic-imagecolumn" style="width: 175px;">
+					<re:image realEstate="{realEstate}" />
+				</div>
+			</div>
+			<div class="csc-textpic-text">
+				<h2>Hauptkriterien</h2>
+				<table class="contenttable">
+					<tbody>
+						<tr>
+							<td><p>Zimmer:</p></td>
+							<td><p>{realEstate.realEstateSize.specification}</p></td>
+						</tr>
+						<tr>
+							<td><p>Wohnfläche ca.:</p></td>
+							<td><p><f:format.number>{realEstate.size}</f:format.number> m²</p></td>
+						</tr>
+						<tr>
+							<td><p>Etage:</p></td>
+							<td><p>{realEstate.floor.specification}</p></td>
+						</tr>
+						<tr>
+							<td><p>Bezugsfrei ab:</p></td>
+							<td><p>{realEstate.freeFrom}</p></td>
+						</tr>
+						<tr>
+							<td><p>Keller:</p></td>
+							<td><p><f:if condition="{realEstate.cellar} == 1"><f:then>ja</f:then><f:else>nein</f:else></f:if></p></td>
+						</tr>
+						<tr>
+							<td><p>Dachboden:</p></td>
+							<td><p><f:if condition="{realEstate.attic} == 1"><f:then>ja</f:then><f:else>nein</f:else></f:if></p></td>
+						</tr>
+						<tr>
+							<td><p>Balkon:</p></td>
+							<td><p><f:if condition="{realEstate.balcony} == 1"><f:then>ja</f:then><f:else>nein</f:else></f:if></p></td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Finanzielle Aufwendungen</h2>
+				<table class="contenttable">
+					<tbody>
+						<tr>
+							<td><p>Grundnutzungsgebühr:</p></td>
+							<td><p><f:format.currency currencySign="EUR">{realEstate.rentExclusiveOfHeating}</f:format.currency></p></td>
+						</tr>
+						<tr>
+							<td><p>Nebenkosten:</p></td>
+							<td><p><f:format.currency currencySign="EUR">{realEstate.extraCharges}</f:format.currency></p></td>
+						</tr>
+						<tr>
+							<td><p>Genossenschaftsanteile:</p></td>
+							<td><p><f:format.currency currencySign="EUR">{realEstate.cooperativeShare}</f:format.currency></p></td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Bausubstanz</h2>
+				<table class="contenttable">
+					<tbody>
+						<tr>
+							<td><p>Objektzustand:</p></td>
+							<td><p>{realEstate.state}</p></td>
+						</tr>
+						<tr>
+							<td><p>Heizung:</p></td>
+							<td><p>{realEstate.heating.specification}</p></td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Beschreibung</h2>
+				<f:format.html>{realEstate.description}</f:format.html>
+				<h2>Ausstattung</h2>
+				<f:format.html>{realEstate.facility}</f:format.html>
+				<h2>Sonstiges</h2>
+				<f:format.html>{realEstate.miscellaneous}</f:format.html>
+				<h2>Anschrift</h2>
+				<p>{realEstate.street}, {realEstate.postCode} {realEstate.town}</p>
+				<h2>Lage</h2>
+				<f:format.html>{realEstate.quarter.description}</f:format.html>
+			</div>
+		</div>
+		<div class="csc-textpic-clear">
+			<!-- -->
+		</div>
+	</div>
+	
+	<div class="csc-default">
+		<p><a href="#" onclick="history.go(-1);return false;">zurück zur vorherigen Seite</a></p>
+	</div>
+	
+</div>
+
 </f:section>

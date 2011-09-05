@@ -1,7 +1,6 @@
 <?php
 
-/* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1306344238376_116675_2466.repository) ENABLED START */
-// TODO: put your further include + require statements here
+/* PROTECTED REGION ID(php.own.imports._17_0_2_8a7027a_1314918939457_992931_2302) ENABLED START */
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -28,7 +27,6 @@
  **************************************************************/
 
 /**
- * Respository for a domain object.
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
@@ -39,12 +37,26 @@ class Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository extends Tx_Ext
 
 
 	
+	/**
+	 * Find real estates matching the given quarter.
+	 *
+	 * @param int $quarterUid 
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezRealEstate_Domain_Model_RealEstate> Find real estates matching the given quarter.
+	 */
+	public function findAllByQuarter($quarterUid) {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314918955883_553083_2329) ENABLED START */
+		$query = $this->createQuery();
+		return $query
+			->matching(
+				$query->equals('quarter.uid', $quarterUid)
+			)
+			->execute();
+		/* PROTECTED REGION END */
+	}
 
 	
 
-	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466.repository) ENABLED START */
-	// TODO: put your further code implementations here
+	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1314918939457_992931_2302) ENABLED START */
 	/* PROTECTED REGION END */
 
 }

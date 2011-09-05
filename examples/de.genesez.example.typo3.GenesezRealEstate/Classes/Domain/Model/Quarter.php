@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -85,9 +84,7 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 		$this->description = $description;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

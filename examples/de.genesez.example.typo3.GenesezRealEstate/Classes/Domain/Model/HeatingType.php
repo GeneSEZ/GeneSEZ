@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -63,9 +62,7 @@ class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObj
 		$this->specification = $specification;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -142,9 +141,9 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	protected $heating;
 	/**
 	 * 
-	 * @var Tx_GenesezRealEstate_Domain_Model_RealEstateSizeType
+	 * @var Tx_GenesezRealEstate_Domain_Model_RoomType
 	 */
-	protected $realEstateSize;
+	protected $rooms;
 	/**
 	 * 
 	 * @var Tx_GenesezRealEstate_Domain_Model_FloorType
@@ -518,21 +517,21 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 		$this->heating = $heating;
 	}
 	/**
-	 * Getter for realEstateSize
+	 * Getter for rooms
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_RealEstateSizeType 
+	 * @return Tx_GenesezRealEstate_Domain_Model_RoomType 
 	 */
-	public function getRealEstateSize() {
-		return $this->realEstateSize;
+	public function getRooms() {
+		return $this->rooms;
 	}
 	/**
-	 * Setter for realEstateSize
+	 * Setter for rooms
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstateSizeType $realEstateSize 
+	 * @param Tx_GenesezRealEstate_Domain_Model_RoomType $rooms 
 	 * @return void
 	 */
-	public function setRealEstateSize(Tx_GenesezRealEstate_Domain_Model_RealEstateSizeType $realEstateSize) {
-		$this->realEstateSize = $realEstateSize;
+	public function setRooms(Tx_GenesezRealEstate_Domain_Model_RoomType $rooms) {
+		$this->rooms = $rooms;
 	}
 	/**
 	 * Getter for floor
@@ -569,9 +568,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 		$this->quarter = $quarter;
 	}
 
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

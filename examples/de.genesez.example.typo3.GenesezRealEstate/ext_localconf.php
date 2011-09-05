@@ -5,16 +5,54 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 /**
- * Plugin for a domain object.
  */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
-	'RealEstate',
+	'Searchbox',
 	array(
-		'RealEstate' => 'list, show, new, create, edit, update, delete'
+		'RealEstate' => 'showSearchbox, searchSearchbox'
 	),
 	array(
-		'RealEstate' => 'create, update, delete'
+		'RealEstate' => 'searchSearchbox'
+	),
+	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
+);
+
+/**
+ */
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'Searchform',
+	array(
+		'RealEstate' => 'showSearchform'
+	),
+	array(
+	),
+	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
+);
+
+/**
+ */
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'ShowByQuarter',
+	array(
+		'RealEstate' => 'showByQuarter'
+	),
+	array(
+	),
+	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
+);
+
+/**
+ */
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'ShowByUid',
+	array(
+		'RealEstate' => 'showByUid'
+	),
+	array(
 	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
