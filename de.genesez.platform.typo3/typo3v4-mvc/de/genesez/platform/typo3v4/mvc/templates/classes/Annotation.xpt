@@ -156,7 +156,7 @@
 
 «DEFINE Validate FOR MProperty -»
 «IF !allAssignedValidators().isEmpty -»
-	 * @validate «FOREACH allAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF v.property.select( p | getTaggedValue( v.name, p.name ) != "" ).size > 0 -»(«FOREACH v.property.select( p | getTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «getTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»
+	 * @validate «FOREACH allAssignedValidators() AS v SEPARATOR ", " -»«v.asAssignedValidatorName() -»«IF !v.property.select( p | getTaggedValue( v.name, p.name ) != "" ).isEmpty -»(«FOREACH v.property.select( p | getTaggedValue( v.name, p.name ) != "" ) AS p SEPARATOR ", "-»«p.name -» = «getTaggedValue(v.name, p.name) -»«ENDFOREACH -»)«ENDIF -»«ENDFOREACH»
 «ENDIF -»
 «ENDDEFINE»
 

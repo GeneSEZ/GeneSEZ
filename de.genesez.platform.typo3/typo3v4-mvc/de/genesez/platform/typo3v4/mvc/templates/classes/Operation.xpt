@@ -57,8 +57,8 @@
 	Order: realized operations from interfaces first
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND Declaration FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
-	«EXPAND Declaration FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND Declaration FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND Declaration FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
 «ENDDEFINE»
 
 
@@ -67,8 +67,8 @@
 	Order: realized operations from interfaces first
 «ENDREM»
 «DEFINE Implementation FOR MClassifier -»
-	«EXPAND Implementation FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
-	«EXPAND Implementation FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND Implementation FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND Implementation FOREACH uniqueOperations().select( e | !e.isConstructor() && !e.isDestructor() && !e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
 «ENDDEFINE»
 
 
@@ -144,7 +144,7 @@
 «ENDREM»
 «DEFINE TypeHint FOR MParameter -»
 «IF isSingleValuedType() -»
-«IF generatePHPTypeHint( type ) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ELSE -»«mapType() -» «ENDIF -»
 «ENDDEFINE»
 
@@ -193,7 +193,6 @@ $«name() -»«EXPAND DefaultValue -»
 		«EXPAND OwnCodeImplementationOperation(id) -»
 «ENDIF -»
 «ENDDEFINE»
-
 
 
 «DEFINE OwnCodeImplementationConstructor(String id) FOR MOperation -»
