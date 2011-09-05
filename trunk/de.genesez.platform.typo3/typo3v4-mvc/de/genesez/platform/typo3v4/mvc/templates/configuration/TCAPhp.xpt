@@ -114,7 +114,7 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
-«REM» 
+«REM»
 «ENDREM»
 «DEFINE TCAInterfaceShowRecordFieldList FOR MClass -»
 		'showRecordFieldList' => '«FOREACH owningInitializableProperties() AS p SEPARATOR ", " -»«p.name() -»«ENDFOREACH»',
@@ -146,7 +146,12 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCATypesNumbers FOR MClass -»
-		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«FOREACH owningInitializableProperties() AS p SEPARATOR ", " -»«p.name() -»«ENDFOREACH»'),
+		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbers FOREACH owningInitializableProperties() SEPARATOR ", " -»'),
+«ENDDEFINE»
+
+
+«DEFINE TCATypesNumbers FOR MProperty -»
+«name() -»«IF generateAdvancedTCATypesNumbers() -»;«getT3TCAPropertyTypesAltLabel() -»;«getT3TCAPropertyTypesPaletteNumber() -»;«getT3TCAPropertyTypesSpecialConfiguration() -»;«getT3TCAPropertyTypesFormStyleCodes() -»«ENDIF -»
 «ENDDEFINE»
 
 
