@@ -42,9 +42,10 @@
 	
 	<!-- Public target section -->
 	
-	<target name="build" depends="javaee, genesez"
+	<target name="build" depends="javaee, genesez-de, genesez-en"
 		description="Build all GeneSEZ documentation" />
 
+	<!-- java ee manual -->
 	<target name="javaee" depends="javaee2html, javaee2pdf" />
 	
 	<target name="javaee.xinclude" description="creates the single xml file for genesez javaee manual">
@@ -80,7 +81,39 @@
 		</antcall>
 	</target>
 	
-	<target name="genesez" depends="manual2html, manual2pdf" />
+	<!-- english genesez manual -->
+	<target name="genesez-en" depends="genesez2html, genesez2pdf" />
+	
+	<target name="genesez.xinclude" description="creates the single xml file for genesez javaee manual">
+		<mkdir dir="${temp.dir}" />
+		<antcall target="xinclude.processing">
+			<param name="temp.file" value="${temp.dir}/genesez.en.xml" />
+			<param name="src.file" value="${basedir}/docbook/assemblies/genesez.manual.xml" />
+		</antcall>
+	</target>
+	
+	<target name="genesez2html" depends="genesez.xinclude">
+		<mkdir dir="${html.genesez.en.dir}" />
+		<antcall target="docbook2html">
+			<param name="src.file" value="${temp.dir}/genesez.en.xml" />
+			<param name="out.file" value="${html.genesez.en.dir}/index.html" />
+			<param name="xsl.file" value="${docbook2html}" />
+		</antcall>
+	</target>
+	
+	<target name="genesez2pdf" depends="genesez.xinclude">
+		<mkdir dir="${pdf.dir}" />
+		<antcall target="docbook2pdf">
+			<param name="base.dir" value="${basedir}/images/profiles" />
+			<param name="src.file" value="${temp.dir}/genesez.en.xml" />
+			<param name="fo.file" value="${temp.dir}/genesez.en.fo" />
+			<param name="pdf.file" value="${pdf.dir}/genesez_en.pdf" />
+			<param name="xsl.file" value="${docbook2fo}" />
+		</antcall>
+	</target>
+	
+	<!-- german genesez manual -->
+	<target name="genesez-de" depends="manual2html, manual2pdf" />
 	
 	<target name="manual.xinclude" description="creates the single xml file for the genesez manual">
 		<mkdir dir="${temp.dir}" />
@@ -104,7 +137,7 @@
 		</copy>
 	</target>
 	
-	<target name="manual2pdf">
+	<target name="manual2pdf" depends="manual.xinclude">
 		<mkdir dir="${pdf.dir}" />
 		<antcall target="docbook2pdf">
 			<param name="src.file" value="${temp.dir}/genesez.manual.xml" />
