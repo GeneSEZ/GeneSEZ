@@ -137,6 +137,23 @@ cached String asConfigurationName(MClassifier this) :
 	
 
 /**
+ * Formats an interface name 
+ * in 'Configuration' TYPO3 MVC naming context.
+ * 
+ * @return	the formatted interface name
+ */
+cached String asConfigurationName(MInterface this) :
+	switch {
+		case isPlugin() : 
+			asPHPCompliantName()
+		case isModule() : 
+			fullQualifiedExtensionNameToLowerCase() + extensionNameSeperator() + asPHPCompliantName().toLowerCase()
+		default :
+			asGeneralName().toLowerCase()
+	};
+	
+
+/**
  * Formats a classifier name 
  * in 'Localization' TYPO3 MVC naming context.
  * 
@@ -144,6 +161,18 @@ cached String asConfigurationName(MClassifier this) :
  */
 cached String asLocalizationName(MClassifier this) :
 	asConfigurationName();
+
+
+/**
+ * Formats an interface name 
+ * in 'Localization' TYPO3 MVC naming context.
+ * 
+ * @return	the formatted interface name
+ */
+cached String asLocalizationName(MInterface this) :
+	isPlugin() || isModule()
+		? asPHPCompliantName().toLowerCase()
+		: asConfigurationName();
 
 
 /**
@@ -209,7 +238,9 @@ cached String asConfigurationName(MProperty this) :
  * @return	the formatted attribute or association role name
  */
 cached String asLocalizationName(MProperty this) :
-	classifier.asLocalizationName() + "." + asConfigurationName();
+	classifier.metaType == MInterface && ( ((MInterface)classifier).isPlugin() || ((MInterface)classifier).isModule() )
+		? asConfigurationName()
+		: classifier.asLocalizationName() + "." + asConfigurationName();
 	
 
 /**
@@ -415,16 +446,8 @@ String asAssignedValidatorName(MStereotype this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-String asPluginName(MInterface this) :
-	asPHPCompliantName();
-	
-	
 String asPluginFlexformName(MInterface this) :
 	extensionNameToLowerCase() + "_" + asPHPCompliantName().toLowerCase();
-
-
-String asModuleName(MInterface this) :
-	fullQualifiedExtensionNameToLowerCase() + extensionNameSeperator() + name.toLowerCase();
 
 
 String asT3MainModulName(String mainModule) :
