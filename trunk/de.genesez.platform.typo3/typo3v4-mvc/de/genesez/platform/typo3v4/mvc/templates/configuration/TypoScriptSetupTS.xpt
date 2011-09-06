@@ -6,7 +6,7 @@
 	@date	2011-07-14
 «ENDREM»
 
-«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
+«REM» use TYPO3 MVC Extbase access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
@@ -38,7 +38,7 @@
 
 «EXPAND ModuleConfiguration(extensionName) -»
 
-«EXPAND GlobalPersistenceClassesMapping -»
+«EXPAND PersistenceClassesMapping -»
 
 «EXPAND OwnTypoScriptDeclaration("setup.txt.own.typoscript.declaration." + xmiGuid) -»
 «ENDLET -»
@@ -123,38 +123,55 @@ module.«extensionName -» {
 «ENDDEFINE»
 
 
-«DEFINE GlobalPersistenceClassesMapping FOR MModel -»
+«DEFINE PersistenceClassesMapping FOR MModel -»
 «setNamingContext( namingContextGeneral() ) -»
-«IF !allEntitiesAndValueObjects().select( e | e.hasT3ExtbaseTableMappingStereotype() ).isEmpty -»
+«setTypeMappingContext("") -»
+«IF !allPersistenceClassMappings().isEmpty -»
 config.tx_extbase {
 	persistence {
 		classes {
-			«EXPAND PersistenceClassMapping FOREACH allEntitiesAndValueObjects().select( e | e.hasT3ExtbaseTableMappingStereotype() ) -»
+			«EXPAND PersistenceClassMapping FOREACH allPersistenceClassMappings() -»
 		}
 	}
 }
 «ENDIF -»
 «revertNamingContext() -»
+«revertTypeMappingContext() -»
 «ENDDEFINE»
 
 
-«DEFINE PersistenceClassMapping FOR MClass -»
+«DEFINE PersistenceClassMapping FOR MType -»
 			«name() -» {
 				mapping {
-					tableName = «getT3ExtbaseTableMappingTableName()»
-					recordType = «name()»
+					«EXPAND PersistenceClassMappingTableName -»
+					«EXPAND PersistenceClassMappingRecordType -»
 					«EXPAND PersistenceColumnsMapping -»
 				}
+				«EXPAND PersistenceSubclasses -»
 			}
 «ENDDEFINE»
 
 
+«DEFINE PersistenceClassMappingTableName FOR MType -»
+					tableName = «getPersistenceClassMappingTableName()»
+«ENDDEFINE»
+
+
+«DEFINE PersistenceClassMappingRecordType FOR MType -»
+					recordType = «name()»
+«ENDDEFINE»
+
+
 «DEFINE PersistenceColumnsMapping FOR MClass -»
-«IF !property.select( e | e.hasT3ExtbaseColumnMappingStereotype() ).isEmpty -»
+«IF !allPersistencePropertyMappings().isEmpty -»
 					columns {
-						«EXPAND PersistenceColumnMapping FOREACH property.select( e | e.hasT3ExtbaseColumnMappingStereotype() ) -»
+						«EXPAND PersistenceColumnMapping FOREACH allPersistencePropertyMappings() -»
 					}
 «ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE PersistenceColumnsMapping FOR MType -»
 «ENDDEFINE»
 
 
@@ -162,6 +179,19 @@ config.tx_extbase {
 						«getT3ExtbaseColumnMappingMapOnProperty() -».mapOnProperty = «name()»
 «ENDDEFINE»
 
+
+«DEFINE PersistenceSubclasses FOR MType -»
+«IF !allPersistenceSubclasses().isEmpty -»
+				subclasses {
+					«EXPAND PersistenceSubclass FOREACH allPersistenceSubclasses() -»						
+				}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE PersistenceSubclass FOR MClass -»
+					«name() -» = «name()»
+«ENDDEFINE»
 
 
 «REM»
