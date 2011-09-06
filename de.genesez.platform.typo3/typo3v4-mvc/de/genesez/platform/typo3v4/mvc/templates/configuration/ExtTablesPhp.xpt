@@ -118,7 +118,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 «DEFINE RegisterPlugin FOR MInterface -»
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
-	'«asPluginName() -»',
+	'«name() -»',
 	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconFileNamePath() != "" -»,
 	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconFileNamePath() -»'«ENDIF»
 );
@@ -150,7 +150,7 @@ if (TYPO3_MODE === 'BE') {
 	Tx_Extbase_Utility_Extension::registerModule(
 		$_EXTKEY,
 		'«getT3ExtbaseModuleMainModule().asT3MainModulName() -»',
-		'«asModuleName() -»',
+		'«name() -»',
 		'«getT3ExtbaseModulePosition() -»',
 		array(«FOREACH asControllerActionPairs( model(), getT3ExtbaseModuleUncachedActions() ) AS uca SEPARATOR ", "»
 			«uca -»«ENDFOREACH»
@@ -215,7 +215,19 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 	object.
 «ENDREM»
 «DEFINE ContextSensitiveHelpInclusion FOR MClass -»
-t3lib_extMgm::addLLrefForTCAdescr('«name( namingContextLocalizationCSH() ) -»', 'EXT:«extensionKey()»/«locallangCshXMLFileNamePath() -»');
+«FOREACH allGeneralizations().typeSelect(MClass) AS g -»
+	«EXPAND ContextSensitiveHelpInclusion(this) FOR g -»
+«ENDFOREACH -»
+«EXPAND ContextSensitiveHelpInclusion(this) -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a link the the context sensitive help of an entity or value 
+	object.
+«ENDREM»
+«DEFINE ContextSensitiveHelpInclusion(MClass cshClass) FOR MClass -»
+t3lib_extMgm::addLLrefForTCAdescr('«cshClass.name( namingContextLocalizationCSH() ) -»', 'EXT:«extensionKey()»/«locallangCshXMLFileNamePath() -»');
 «ENDDEFINE»
 
 
