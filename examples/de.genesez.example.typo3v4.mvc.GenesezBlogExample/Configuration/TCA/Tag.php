@@ -36,9 +36,8 @@ $TCA['tx_genesezblogexample_domain_model_tag'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
-				'eval' => 'required, trim',
-				'max' => 255,
 				'size' => 30,
+				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194910826_608649_1757) ENABLED START */
 				/* PROTECTED REGION END */
 			)

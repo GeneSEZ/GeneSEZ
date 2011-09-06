@@ -19,16 +19,16 @@ $EM_CONF[$_EXTKEY] = array(
 	'version' => '1.4.0-devel',
 	'constraints' => array(
 		'depends' => array(
-			'php' => '5.2.0-0.0.0', 
-			'typo3' => '4.5.0-0.0.0', 
-			'extbase' => '1.3.0-0.0.0', 
-			'fluid' => '1.3.0-0.0.0'
+			'php' => '5.2.0-0.0.0',
+			'typo3' => '4.5.0-0.0.0',
+			'extbase' => '1.3.0-0.0.0',
+			'fluid' => '1.3.0-0.0.0',
 		),
 		'conflicts' => array(
 		),
 		'suggests' => array(
-		)
-	)
+		),
+	),
 );
 
 /* PROTECTED REGION ID(ext_emconf.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */

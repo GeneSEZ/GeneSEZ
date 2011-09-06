@@ -22,6 +22,37 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 		/* PROTECTED REGION END */
 	),
 	'columns' => array(
+		'sys_language_uid' => array(
+			'exclude' => true,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+			'config' => array(
+				'type' => 'select',
+				'foreign_table' => 'sys_language',
+				'foreign_table_where' => 'ORDER BY sys_language.title',
+				'items' => array(
+					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
+					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
+				),
+			)
+		),
+		'l10n_parent' => array(
+			'displayCond' => 'FIELD:sys_language_uid:>:0',
+			'exclude' => true,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
+			'config' => array(
+				'type' => 'select',
+				'items'	=> array(
+					array('', 0),
+				),
+				'foreign_table' => 'tx_genesezblogexample_domain_model_administrator',
+				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_administrator.uid=###REC_FIELD_l10n_parent### AND tx_genesezblogexample_domain_model_administrator.sys_language_uid IN (-1,0)',
+			)
+		),
+		'l10n_diffsource' => array(
+			'config' =>array(
+				'type' =>'passthrough',
+			)
+		),
 		'hidden' => array(
 			'exclude' => true,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
@@ -60,37 +91,6 @@ $TCA['tx_genesezblogexample_domain_model_administrator'] = array (
 					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
 				),
 			),
-		),
-		'sys_language_uid' => array(
-			'exclude' => true,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
-			'config' => array(
-				'type' => 'select',
-				'foreign_table' => 'sys_language',
-				'foreign_table_where' => 'ORDER BY sys_language.title',
-				'items' => array(
-					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
-					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
-				),
-			)
-		),
-		'l10n_parent' => array(
-			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => true,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
-			'config' => array(
-				'type' => 'select',
-				'items'	=> array(
-					array('', 0),
-				),
-				'foreign_table' => 'tx_genesezblogexample_domain_model_administrator',
-				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_administrator.uid=###REC_FIELD_l10n_parent### AND tx_genesezblogexample_domain_model_administrator.sys_language_uid IN (-1,0)',
-			)
-		),
-		'l10n_diffsource' => array(
-			'config' =>array(
-				'type' =>'passthrough',
-			)
 		),
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',

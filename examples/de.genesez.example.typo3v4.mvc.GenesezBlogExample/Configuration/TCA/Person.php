@@ -44,9 +44,8 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
-				'eval' => 'required, trim',
-				'max' => 255,
 				'size' => 30,
+				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297195018250_223483_1822) ENABLED START */
 				/* PROTECTED REGION END */
 			)
@@ -58,9 +57,8 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
-				'eval' => 'required, trim',
-				'max' => 255,
 				'size' => 30,
+				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297195022106_236274_1828) ENABLED START */
 				/* PROTECTED REGION END */
 			)
@@ -72,9 +70,8 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
-				'eval' => 'required, trim',
-				'max' => 255,
 				'size' => 30,
+				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297195023966_726243_1834) ENABLED START */
 				/* PROTECTED REGION END */
 			)

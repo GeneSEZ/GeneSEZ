@@ -20,6 +20,9 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'List of Blogs (GeneSEZBlogExample)',
 	t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/blogList.gif'
 );
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['genesezblogexample_bloglist'] = 'select_key';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['genesezblogexample_bloglist'] = 'pi_flexform,recursive';
+t3lib_extMgm::addPiFlexFormValue('genesezblogexample_bloglist', 'FILE:EXT:genesez_blog_example/Configuration/FlexForms/flexform_bloglist.xml');
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'PostList',
@@ -34,11 +37,6 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
 /* PROTECTED REGION ID(ext_tables.php.own.plugins.code.implementation.eee_1045467100313_135436_1) ENABLED START */
-$extensionName = t3lib_div::underscoredToUpperCamelCase($_EXTKEY);
-$pluginSignature = strtolower($extensionName) . '_postlist';
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key';
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform,recursive';
-t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_list.xml');
 /* PROTECTED REGION END */
 
 if (TYPO3_MODE === 'BE') {
@@ -59,6 +57,8 @@ if (TYPO3_MODE === 'BE') {
 			'access' => 'user, group',
 			'icon' => 'EXT:genesez_blog_example/ext_icon.gif',
 			'labels' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_mod_m1.xml',
+			/* PROTECTED REGION ID(ext_tables.php.own.module.configuration.code.implementation._17_0_1_8a7027a_1311230284135_564264_2275) ENABLED START */
+			/* PROTECTED REGION END */
 		)
 	);
 	
