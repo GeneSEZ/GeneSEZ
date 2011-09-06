@@ -230,15 +230,19 @@ List[MAttribute] owningInitializableAttributes(MClassifier this) :
 	);
 
 /**
- * getter for a list of all initializable attributes
+ * Getter for a list of all initializable attributes.
+ * Generalized initializable attributes first.
+ *
  * @return 	a list of initializable attributes or an empty list
  */
 List[MAttribute] allInitializableAttributes(MClassifier this):
-	owningInitializableAttributes().addAll(
+	{}.addAll(
 		generalization.isEmpty
 			? {}
 			: generalization.allInitializableAttributes()
-	);
+	).addAll( owningInitializableAttributes() );
+	
+
 
 /**
  * just there for error free templates
