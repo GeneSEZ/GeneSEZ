@@ -38,6 +38,8 @@
 
 «EXPAND ModuleConfiguration(extensionName) -»
 
+«EXPAND GlobalPersistenceClassesMapping -»
+
 «EXPAND OwnTypoScriptDeclaration("setup.txt.own.typoscript.declaration." + xmiGuid) -»
 «ENDLET -»
 «ENDFILE»
@@ -86,7 +88,6 @@ module.«extensionName -» {
 «DEFINE PluginPersistence(String extensionName) FOR MModel -»
 	persistence {
 		storagePid = {$plugin.«extensionName -».persistence.storagePid}
-		«EXPAND PersistenceClassesMapping -»
 	}
 «ENDDEFINE»
 
@@ -96,7 +97,6 @@ module.«extensionName -» {
 «DEFINE ModulePersistence(String extensionName) FOR MModel -»
 	persistence {
 		storagePid = {$module.«extensionName -».persistence.storagePid}
-		«EXPAND PersistenceClassesMapping -»
 	}
 «ENDDEFINE»
 
@@ -123,12 +123,16 @@ module.«extensionName -» {
 «ENDDEFINE»
 
 
-«DEFINE PersistenceClassesMapping FOR MModel -»
+«DEFINE GlobalPersistenceClassesMapping FOR MModel -»
 «setNamingContext( namingContextGeneral() ) -»
 «IF !allEntitiesAndValueObjects().select( e | e.hasT3ExtbaseTableMappingStereotype() ).isEmpty -»
+config.tx_extbase {
+	persistence {
 		classes {
 			«EXPAND PersistenceClassMapping FOREACH allEntitiesAndValueObjects().select( e | e.hasT3ExtbaseTableMappingStereotype() ) -»
 		}
+	}
+}
 «ENDIF -»
 «revertNamingContext() -»
 «ENDDEFINE»
