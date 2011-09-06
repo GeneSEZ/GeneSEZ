@@ -8,7 +8,8 @@
 // based on genesez meta model
 import gcore;
 
-// use TYPO3 access helper scripts
+// use TYPO3 profile + access helper scripts
+extension de::genesez::platform::typo3v4::profile::Profile;
 extension de::genesez::platform::typo3v4::profile::AccessHelper;
 
 // use TYPO3 MVC Extbase access helper scripts
@@ -77,6 +78,21 @@ boolean generateAdvancedTCATypesNumbers(MProperty this) :
 		? true
 		: false;
 
+
+List[String] allTCESheetsWithoutDefault(MInterface this) :
+	let sheets = {} :
+		property.typeSelect(MAttribute).select(a|a.getT3TCEOptionSheet() != "").
+			collect(a| sheets.add( a.getT3TCEOptionSheet() ) ) ->
+		sheets.toSet() ->
+		sheets.remove( prT3TCESheetDefault() ) ->
+		sheets.sortBy( s | s );
+
+
+List[MAttribute] allTCESheetProperties(MInterface this, String sheet) :
+	sheet == "sDEF"
+		? property.typeSelect(MAttribute).select(e| e.getT3TCEOptionSheet() == "" || e.getT3TCEOptionSheet() == prT3TCESheetDefault() )
+		: property.typeSelect(MAttribute).select(e|e.getT3TCEOptionSheet() == sheet);
+	
 
 List[String] allTCxEvals(MProperty this, List[String] defaultEvals) :
 	let evals = {} :

@@ -54,11 +54,10 @@
 «ENDREM»
 
 «REM»
-	Sets the naming context for this part of generation.
-	The type mapping context is not needed for this part. 
+	Sets the naming and type mapping context for this part of generation. 
 «ENDREM»
 «DEFINE ContextSettings FOR MInterface -»
-«setNamingContext( namingContextGeneral() ) -»
+«setNamingContext( namingContextConfiguration() ) -»
 «setTypeMappingContext( typeMappingContextTYPO3() ) -»
 «ENDDEFINE»
 
@@ -68,30 +67,31 @@
 «DEFINE T3DataStructure FOR MInterface -»
 <T3DataStructure>
 	<sheets>
-		«EXPAND SDEF -»
+		«EXPAND Sheet("sDEF") -»
+		«FOREACH allTCESheetsWithoutDefault() AS sheet -»
+			«EXPAND Sheet(sheet) -»
+		«ENDFOREACH -»
 	</sheets>
 </T3DataStructure>
 «ENDDEFINE»
 
 
-«REM» 
-«ENDREM»
-«DEFINE SDEF FOR MInterface -»
-		<sDEF>
+«DEFINE Sheet(String sheet) FOR MInterface -»
+		<«sheet -»>
 			<ROOT>
-				«EXPAND TCEforms -»
+				«EXPAND TCEforms(sheet) -»
 				«EXPAND Type -»
-				«EXPAND El -»
+				«EXPAND El(sheet) -»
 			</ROOT>
-		</sDEF>
+		</«sheet -»>
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCEforms FOR MInterface -»
+«DEFINE TCEforms(String sheet) FOR MInterface -»
 				<TCEforms>
-					<sheetTitle>Options</sheetTitle>
+					<sheetTitle>LLL:EXT:«extensionKey() -»/«locallangFFXMLFileNamePath() -»:«sheet -»</sheetTitle>
 				</TCEforms>
 «ENDDEFINE»
 
@@ -105,9 +105,9 @@
 
 «REM» 
 «ENDREM»
-«DEFINE El FOR MInterface -»
+«DEFINE El(String sheet) FOR MInterface -»
 				<el>
-					«EXPAND Option FOREACH property.typeSelect(MAttribute) -»
+					«EXPAND Option FOREACH allTCESheetProperties(sheet) -»
 				</el>
 «ENDDEFINE»
 
@@ -134,7 +134,7 @@
 «REM» 
 «ENDREM»
 «DEFINE Label FOR MAttribute -»
-							<label>«name -»</label>
+							<label>LLL:EXT:«extensionKey() -»/«((MInterface)classifier).locallangFFXMLFileNamePath() -»:«name( namingContextLocalization() ) -»</label>
 «ENDDEFINE»
 
 
