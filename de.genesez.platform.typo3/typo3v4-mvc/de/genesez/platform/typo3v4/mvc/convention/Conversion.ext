@@ -187,9 +187,18 @@ String locallangCshXMLFileName(MClass this) :
 
 
 /**
- * Gets the file name of "locallang_mod.xml".
+ * Gets the file name of "locallang_ff_<plugin>.xml".
  *
- * @return	The file name of "locallang_mod.xml". 
+ * @return	The file name of "locallang_ff_<plugin>.xml". 
+ */
+String locallangFFXMLFileName(MInterface this) :
+	"locallang_ff_" + name( namingContextPHPCompliant() ).toLowerCase() + fileExtensionXML();
+
+
+/**
+ * Gets the file name of "locallang_mod_<module>.xml".
+ *
+ * @return	The file name of "locallang_mod_<module>.xml". 
  */
 String locallangModXMLFileName(MInterface this) :
 	"locallang_mod_" + name( namingContextPHPCompliant() ).toLowerCase() + fileExtensionXML();
@@ -532,6 +541,15 @@ String locallangDbXMLFileNamePath() :
  */
 String locallangCshXMLFileNamePath(MClass this) :
 	resourcesPrivateLanguagePath() + fileSeparator() + locallangCshXMLFileName();	
+
+
+/**
+ * Gets the file path and name of "locallang_ff_<plugin>.xml".
+ *
+ * @return	The file path and name of "locallang_ff_<plugin>.xml". 
+ */
+String locallangFFXMLFileNamePath(MInterface this) :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangFFXMLFileName();	
 
 
 /**
