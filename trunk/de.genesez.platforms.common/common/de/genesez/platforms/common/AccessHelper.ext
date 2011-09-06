@@ -866,6 +866,75 @@ List[MClassifier] addAllClassifier(MPackage this, List[MClassifier] classifiers)
 	classifiers.addAll(classifier) ->
 	nestedPackage.addAllClassifier(classifiers) ->
 	classifiers;
+	
+	
+/**
+ * Getter for a list of all generalized types.
+ * Generalized types first.
+ *
+ * @return 	a list of generalized types or an empty list
+ */
+List[MType] allGeneralizations(MClassifier this) :
+	let generalizations = {} :
+		!generalization.isEmpty
+			? (	generalizations.addAll( generalization ) ->
+				generalizations.addAll( generalization.allGeneralizations() )
+			) : Void ->
+		generalizations;
+
+
+/**
+ * just there for error free templates
+ *
+ * @see		allGeneralizations(MClassifier)
+ * @return	an empty list
+ */
+List[MType] allGeneralizations(MType this) :
+	{};
+
+
+/**
+ * Getter for a list of all owning specialized types
+ *
+ * @return	a list of specialized types or an empty list
+ */
+List[MClassifier] owningSpecializations(MClassifier this) :
+	model().allClassifiers().select( e | e.generalization.contains(this) );
+
+
+/**
+ * Getter for a list of all owning specialized types
+ *
+ * @see		owningSpecializations(MClassifier)
+ * @return	a list of specialized types or an empty list
+ */
+List[MClassifier] owningSpecializations(MExternal this) :
+	model.allClassifiers().select( e | e.generalization.contains(this) );
+
+
+/**
+ * just there for error free templates
+ *
+ * @see		owningSpecializations(MClassifier)
+ * @return	an empty list
+ */
+List[MClassifier] owningSpecializations(MType this) :
+	{};
+
+
+/**
+ * Getter for a list of all specialized types.
+ * Specialized types first.
+ *
+ * @return 	a list of specialized types or an empty list
+ */
+List[MClassifier] allSpecializations(MType this):
+	{}.addAll(
+		owningSpecializations().isEmpty
+			? {}
+			: owningSpecializations().allSpecializations()
+	).addAll( allSpecializations() );
+	
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
