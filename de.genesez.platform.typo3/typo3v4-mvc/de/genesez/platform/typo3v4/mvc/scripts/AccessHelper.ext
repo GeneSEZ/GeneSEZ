@@ -8,7 +8,8 @@
 // based on genesez meta model
 import gcore;
 
-// use TYPO3 MVC Extbase access helper scripts
+// use TYPO3 MVC Extbase profile + access helper scripts
+extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
 
 // use TYPO3 MVC Fluid access helper scripts
@@ -134,16 +135,54 @@ cached boolean isModelPackageElement(MClassifier this) :
 	};
 
 
-/**
- * Returns the a list of all owning initializable properties.
- * 
- * @return	the list of of initializable properties or an empty list
- */
-cached List[MProperty] owningInitializableProperties(MClassifier this) :
-	let p = {} :
-		p.addAll( owningInitializableAttributes() ) ->
-	  	p.addAll( owningInitializableAssociationRoles() ) ->
-	  	p;
+cached List[MType] allPersistenceClassMappings(MModel this) :
+	let classMappings = {} :
+		classMappings.addAll(
+			allEntitiesAndValueObjects().
+				select( e | e.hasT3ExtbaseTableMappingStereotype() )
+		) ->
+		classMappings.addAll(
+			allEntitiesAndValueObjects().
+				select( e | e.hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() ) )
+		) ->
+		allEntitiesAndValueObjects().
+			select( e | e.hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() ) ).
+			collect( e | classMappings.add( e.generalization.first() ) ) ->
+		classMappings.toSet();
+
+
+cached List[MProperty] allPersistencePropertyMappings(MClass this) :
+	property.select( e | e.hasT3ExtbaseColumnMappingStereotype() );
+	
+	
+cached List[MClass] allPersistenceSubclasses(MType this) :
+	let subclasses = {} :
+		!allSingleTableInheritanceSpecializations().isEmpty
+		? (	subclasses.addAll( allSingleTableInheritanceSpecializations() ) ->
+			subclasses.addAll( allSingleTableInheritanceSpecializations().allPersistenceSubclasses() )		
+		) : Void ->
+		subclasses;
+		
+
+private cached allSingleTableInheritanceSpecializations(MType this) :
+	owningSpecializations().select( e | e.hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() ) );
+
+
+String getPersistenceClassMappingTableName(MClass this) :
+	hasT3ExtbaseTableMappingStereotype()
+		? getT3ExtbaseTableMappingTableName()
+		: (	hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() )
+				? generalization.first().getPersistenceClassMappingTableName()
+				: name( namingContextConfiguration() ) );
+
+
+String getPersistenceClassMappingTableName(MExternal this) :
+	name();
+	
+
+String getPersistenceClassMappingTableName(MType this) :
+	"";
+
 
 
 /**
