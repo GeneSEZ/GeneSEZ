@@ -94,7 +94,7 @@ class Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository extends Tx_Ext
 	 * Gets all real estates by the given uids.
 	 *
 	 * @param array $uids The given uids.
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezRealEstate_Domain_Model_RealEstate> A list of real estates or an empty list.
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezRealEstate_Domain_Model_RealEstate> 
 	 */
 	public function getAllByUids(array $uids) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315405542958_541761_2595) ENABLED START */

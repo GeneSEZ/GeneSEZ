@@ -186,31 +186,48 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 *
 	 * @return boolean 
 	 */
-	public function hasImages() {
+	public function hasImgs() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315409366581_636072_1991) ENABLED START */
 		return strlen($this->imageFiles) > 0;
 		/* PROTECTED REGION END */
 	}
 	/**
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<string> 
+	 * @return boolean 
 	 */
-	public function getImages() {
-		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315409382233_871005_1997) ENABLED START */
-		
-		$images = new Tx_Extbase_Persistence_ObjectStorage();
-		
-		
+	public function hasImgDescs() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315419450861_188134_2555) ENABLED START */
+		return strlen($this->imageDescriptions) > 0;
 		/* PROTECTED REGION END */
 	}
 	/**
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<string> 
+	 * @return array 
 	 */
-	public function getDescriptions() {
+	public function getImgs() {
+		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315409382233_871005_1997) ENABLED START */
+		$images = array();
+		
+		if ($this->hasImgs()) {
+			// split images by ',' delemiter to get an array of files
+			$images = explode(',', $this->imageFiles);
+		}
+		return $images;
+		/* PROTECTED REGION END */
+	}
+	/**
+	 *
+	 * @return array 
+	 */
+	public function getImgDescs() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315409478099_835507_2019) ENABLED START */
-		// TODO: implementation of method getDescriptions for class Tx_GenesezRealEstate_Domain_Model_RealEstate
-		throw new Exception('The implementation of the method getDescriptions for class Tx_GenesezRealEstate_Domain_Model_RealEstate is missing !');
+		$descriptions = array();
+		
+		if ($this->hasImgDescs()) {
+			// split images descriptions by the new line delemiter to get an array of descriptions
+			$descriptions = explode(chr(10), $realEstate->getImageDescriptions());
+		}
+		return $descriptions;
 		/* PROTECTED REGION END */
 	}
 
