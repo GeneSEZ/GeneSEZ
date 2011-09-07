@@ -9,6 +9,9 @@
 	@date	2011-03-21
 «ENDREM»
 
+«REM» use GeneSEZ profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::genesez::profile::AccessHelper»
+
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
@@ -185,7 +188,9 @@
 «DEFINE TypeHintSetter FOR MAssociationRole -»
 «IF isSingleValuedType() -»
 «IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
-«ELSE -»«mapType() -» «ENDIF -»
+«ELSE -»
+«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»«mapType( typeMappingContextModel() ) -» «ELSE -»«mapType() -» «ENDIF -»
+«ENDIF -»
 «ENDDEFINE»
 
 

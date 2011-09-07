@@ -6,12 +6,16 @@
 	@date	2011-08-26
 «ENDREM»
 
+«REM» use GeneSEZ profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::genesez::profile::AccessHelper»
+
 «REM» use TYPO3 MVC Extbase profile + access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
 «EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile»
 
-«REM» use common naming scripts «ENDREM»
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
 «REM» use TYPO3 MVC naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
@@ -50,7 +54,11 @@
 «IF isSingleValuedType() -»
 	 * @var «type.name()»
 «ELSE -»
-	 * @var «mapType() -»<«type.name() -»> 
+«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
+	 * @var «mapType( typeMappingContextModel() ) -»<«type.name() -»>
+«ELSE -»
+	 * @var «mapType() -»
+«ENDIF -» 
 «ENDIF -»
 	«EXPAND Cascade -»
 	«EXPAND Fetch -»
@@ -62,7 +70,11 @@
 «IF isSingleValuedType() -»
 	 * @return «type.name()-» «comment("; ", "")»
 «ELSE -»
-	 * @return «mapType() -»<«type.name() -»> «comment("; ", "")» 
+«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
+	 * @return «mapType( typeMappingContextModel() ) -»<«type.name() -»> «comment("; ", "")»
+«ELSE -»
+	 * @return «mapType() -» «comment("; ", "")»
+«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -71,7 +83,11 @@
 «IF isSingleValuedType() -»
 	 * @param «type.name() -» $«name() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapType() -»<«type.name() -»> $«name() -» «comment("; ", "")» 
+«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
+	 * @param «mapType( typeMappingContextModel() ) -»<«type.name() -»> $«name() -» «comment("; ", "")»
+«ELSE -»
+	 * @param «mapType() -» $«name() -» «comment("; ", "")»
+«ENDIF -» 
 «ENDIF -»
 	 * @return void
 «ENDDEFINE»
@@ -177,10 +193,10 @@
 «IF isSingleValuedType() -»
 	 * @return «return.type.name() -» «return.comment("; ", "")»
 «ELSE -»
-«IF classifier.isRepositoryPackageElement() -»
-	 * @return «mapType("Repository") -»<«return.type.name() -»> «return.comment("; ", "")»
+«IF classifier.isRepositoryPackageElement() && !hasPrimitiveStereotype() -»
+	 * @return «mapType( typeMappingContextRepository() ) -»<«return.type.name() -»> «return.comment("; ", "")»
 «ELSE -»
-	 * @return «mapType() -»<«return.type.name() -»> «return.comment("; ", "")»
+	 * @return «mapType() -» «return.comment("; ", "")»
 «ENDIF -»
 «ENDIF -»	
 «ELSE -»
