@@ -71,13 +71,13 @@ $TCA['tx_genesezrealestate_domain_model_quarter'] = array (
 		'name' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_quarter.name',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344154315_192526_2406) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1306344154315_192526_2406) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344154315_192526_2406) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1306344154315_192526_2406) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
@@ -85,14 +85,14 @@ $TCA['tx_genesezrealestate_domain_model_quarter'] = array (
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_quarter.description',
 			'defaultExtras' => 'richtext',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1307093582120_276183_1703) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1307093582120_276183_1703) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'text',
 				'cols' => 40,
 				'rows' => 15,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1307093582120_276183_1703) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1307093582120_276183_1703) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),

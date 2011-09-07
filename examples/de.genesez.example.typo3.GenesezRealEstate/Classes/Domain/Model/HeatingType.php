@@ -27,14 +27,16 @@
  **************************************************************/
 
 /**
+ * A class which represents a real heating type.
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObject_AbstractValueObject {
+class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
+	 * The specification of the heating type.
 	 * 
 	 * @var string
 	 */
@@ -47,7 +49,7 @@ class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObj
 	/**
 	 * Getter for specification
 	 *
-	 * @return string 
+	 * @return string The specification of the heating type.
 	 */
 	public function getSpecification() {
 		return $this->specification;
@@ -55,7 +57,7 @@ class Tx_GenesezRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObj
 	/**
 	 * Setter for specification
 	 *
-	 * @param string $specification 
+	 * @param string $specification The specification of the heating type.
 	 * @return void
 	 */
 	public function setSpecification($specification) {

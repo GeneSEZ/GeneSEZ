@@ -71,13 +71,13 @@ $TCA['tx_genesezrealestate_domain_model_heatingtype'] = array (
 		'specification' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_heatingtype.specification',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344212818_743573_2450) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422._17_0_1_8a7027a_1306344212818_743573_2450) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344212818_743573_2450) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422._17_0_1_8a7027a_1306344212818_743573_2450) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),

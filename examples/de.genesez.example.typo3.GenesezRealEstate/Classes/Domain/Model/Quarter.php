@@ -27,19 +27,22 @@
  **************************************************************/
 
 /**
+ * A class which represents a real quarter.
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_AbstractValueObject {
+class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
+	 * The name of the quarter.
 	 * 
 	 * @var string
 	 */
 	protected $name;
 	/**
+	 * The description of the quarter.
 	 * 
 	 * @var string
 	 */
@@ -52,7 +55,7 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 	/**
 	 * Getter for name
 	 *
-	 * @return string 
+	 * @return string The name of the quarter.
 	 */
 	public function getName() {
 		return $this->name;
@@ -60,7 +63,7 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 	/**
 	 * Setter for name
 	 *
-	 * @param string $name 
+	 * @param string $name The name of the quarter.
 	 * @return void
 	 */
 	public function setName($name) {
@@ -69,7 +72,7 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 	/**
 	 * Getter for description
 	 *
-	 * @return string 
+	 * @return string The description of the quarter.
 	 */
 	public function getDescription() {
 		return $this->description;
@@ -77,7 +80,7 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 	/**
 	 * Setter for description
 	 *
-	 * @param string $description 
+	 * @param string $description The description of the quarter.
 	 * @return void
 	 */
 	public function setDescription($description) {

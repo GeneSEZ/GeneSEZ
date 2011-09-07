@@ -103,26 +103,26 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 		'id' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.id',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344311023_125369_2516) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344311023_125369_2516) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344311023_125369_2516) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344311023_125369_2516) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'title' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.title',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344329234_724244_2528) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344329234_724244_2528) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344329234_724244_2528) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344329234_724244_2528) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
@@ -130,14 +130,14 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.description',
 			'defaultExtras' => 'richtext',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344338260_54760_2540) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344338260_54760_2540) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'text',
 				'cols' => 40,
 				'rows' => 15,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344338260_54760_2540) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344338260_54760_2540) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
@@ -145,27 +145,27 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.facility',
 			'defaultExtras' => 'richtext',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344346620_23744_2546) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344346620_23744_2546) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'text',
 				'cols' => 40,
 				'rows' => 15,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344346620_23744_2546) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344346620_23744_2546) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'state' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.state',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344853713_942081_2662) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344853713_942081_2662) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344853713_942081_2662) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344853713_942081_2662) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
@@ -173,158 +173,158 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.miscellaneous',
 			'defaultExtras' => 'richtext',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344537579_307823_2572) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344537579_307823_2572) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'text',
 				'cols' => 40,
 				'rows' => 15,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344537579_307823_2572) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344537579_307823_2572) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'street' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.street',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345662515_198376_2780) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345662515_198376_2780) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345662515_198376_2780) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345662515_198376_2780) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'post_code' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.post_code',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345679126_180874_2794) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345679126_180874_2794) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345679126_180874_2794) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345679126_180874_2794) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'town' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.town',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345685255_706531_2800) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345685255_706531_2800) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345685255_706531_2800) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345685255_706531_2800) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'size' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.size',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344573020_305929_2584) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344573020_305929_2584) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'double2',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344573020_305929_2584) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344573020_305929_2584) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'cellar' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.cellar',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344705425_251719_2648) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344705425_251719_2648) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'check',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344705425_251719_2648) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344705425_251719_2648) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'attic' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.attic',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1307459446558_564136_1703) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1307459446558_564136_1703) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'check',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1307459446558_564136_1703) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1307459446558_564136_1703) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'balcony' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.balcony',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344718799_502755_2654) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344718799_502755_2654) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'check',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344718799_502755_2654) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306344718799_502755_2654) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'free_from' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.free_from',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345020231_382102_2675) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345020231_382102_2675) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345020231_382102_2675) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345020231_382102_2675) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'rent_exclusive_of_heating' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.rent_exclusive_of_heating',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345383803_875220_2687) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345383803_875220_2687) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'double2',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345383803_875220_2687) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345383803_875220_2687) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'extra_charges' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.extra_charges',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345447811_920827_2701) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345447811_920827_2701) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'double2',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345447811_920827_2701) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345447811_920827_2701) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'cooperative_share' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.cooperative_share',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345512395_979506_2711) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345512395_979506_2711) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'double2',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345512395_979506_2711) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345512395_979506_2711) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'image_files' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.image_files',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345601685_339237_2746) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345601685_339237_2746) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'group',
@@ -336,28 +336,28 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'disallowed' => '',
 				'show_thumbs' => true,
 				'uploadfolder' => 'uploads/tx_genesezrealestate',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345601685_339237_2746) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345601685_339237_2746) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'image_descriptions' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.image_descriptions',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345609242_759487_2752) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345609242_759487_2752) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'text',
 				'cols' => 40,
 				'rows' => 5,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345609242_759487_2752) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345609242_759487_2752) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'plot_file' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.plot_file',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345642374_803727_2769) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345642374_803727_2769) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'group',
@@ -369,14 +369,14 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 				'disallowed' => 'php',
 				'show_thumbs' => true,
 				'uploadfolder' => 'uploads/tx_genesezrealestate',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345642374_803727_2769) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345642374_803727_2769) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'heating' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.heating',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345826752_371396_2877) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345826752_371396_2877) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -390,7 +390,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 					'showPossibleLocalizationRecords' => true,
 					'showAllLocalizationLink' => true
 				),
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345826752_371396_2877) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345826752_371396_2877) ENABLED START */
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 0,
@@ -401,7 +401,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 						'icon' => 'edit2.gif',
 						'popup_onlyOpenIfSelected' => 1,
 						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-						),
+					),
 					'add' => Array(
 						'type' => 'script',
 						'title' => 'Create new',
@@ -410,7 +410,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 							'table'=>'tx_genesezrealestate_domain_model_heatingtype',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
-							),
+						),
 						'script' => 'wizard_add.php',
 					),
 				),
@@ -420,7 +420,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 		'rooms' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.rooms',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345842089_722125_2908) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345842089_722125_2908) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -434,7 +434,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 					'showPossibleLocalizationRecords' => true,
 					'showAllLocalizationLink' => true
 				),
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345842089_722125_2908) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345842089_722125_2908) ENABLED START */
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 0,
@@ -445,7 +445,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 						'icon' => 'edit2.gif',
 						'popup_onlyOpenIfSelected' => 1,
 						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-						),
+					),
 					'add' => Array(
 						'type' => 'script',
 						'title' => 'Create new',
@@ -454,7 +454,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 							'table'=>'tx_genesezrealestate_domain_model_roomtype',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
-							),
+						),
 						'script' => 'wizard_add.php',
 					),
 				),
@@ -464,7 +464,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 		'floor' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.floor',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345950694_650006_2989) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345950694_650006_2989) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -478,7 +478,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 					'showPossibleLocalizationRecords' => true,
 					'showAllLocalizationLink' => true
 				),
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345950694_650006_2989) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345950694_650006_2989) ENABLED START */
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 0,
@@ -489,7 +489,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 						'icon' => 'edit2.gif',
 						'popup_onlyOpenIfSelected' => 1,
 						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-						),
+					),
 					'add' => Array(
 						'type' => 'script',
 						'title' => 'Create new',
@@ -498,7 +498,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 							'table'=>'tx_genesezrealestate_domain_model_floortype',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
-							),
+						),
 						'script' => 'wizard_add.php',
 					),
 				),
@@ -508,7 +508,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 		'quarter' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_realestate.quarter',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306345972681_339929_3020) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345972681_339929_3020) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -522,7 +522,7 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 					'showPossibleLocalizationRecords' => true,
 					'showAllLocalizationLink' => true
 				),
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306345972681_339929_3020) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345972681_339929_3020) ENABLED START */
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 0,
@@ -533,16 +533,16 @@ $TCA['tx_genesezrealestate_domain_model_realestate'] = array (
 						'icon' => 'edit2.gif',
 						'popup_onlyOpenIfSelected' => 1,
 						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-						),
+					),
 					'add' => Array(
 						'type' => 'script',
 						'title' => 'Create new',
 						'icon' => 'add.gif',
 						'params' => array(
-							'table'=>'tx_genesezrealestate_domain_model_quarter',
+							'table'=>'tx_genesezrealestate_domain_model_floortype',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
-							),
+						),
 						'script' => 'wizard_add.php',
 					),
 				),

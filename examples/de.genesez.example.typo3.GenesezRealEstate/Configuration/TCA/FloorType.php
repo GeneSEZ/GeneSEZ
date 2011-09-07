@@ -71,13 +71,13 @@ $TCA['tx_genesezrealestate_domain_model_floortype'] = array (
 		'specification' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_floortype.specification',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344127418_734768_2390) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344122287_504979_2362._17_0_1_8a7027a_1306344127418_734768_2390) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344127418_734768_2390) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344122287_504979_2362._17_0_1_8a7027a_1306344127418_734768_2390) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),

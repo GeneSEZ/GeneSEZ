@@ -11,6 +11,11 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('Genesez
 
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
+	'List',
+	'Show List of Search'
+);
+Tx_Extbase_Utility_Extension::registerPlugin(
+	$_EXTKEY,
 	'Searchbox',
 	'Show Searchbox'
 );
@@ -18,6 +23,11 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'Searchform',
 	'Show Searchform'
+);
+Tx_Extbase_Utility_Extension::registerPlugin(
+	$_EXTKEY,
+	'Show',
+	'Show Single'
 );
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
@@ -48,6 +58,33 @@ t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'GenesezRealEs
 /* PROTECTED REGION ID(ext_tables.php.own.typoscript.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 /* PROTECTED REGION END */
 
+t3lib_extMgm::addLLrefForTCAdescr('tx_genesezrealestate_domain_model_demand', 'EXT:genesez_real_estate/Resources/Private/Language/locallang_csh_tx_genesezrealestate_domain_model_demand.xml');
+t3lib_extMgm::allowTableOnStandardPages('tx_genesezrealestate_domain_model_demand');
+$TCA['tx_genesezrealestate_domain_model_demand'] = array (
+	'ctrl' => array (
+		'title' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand',
+		'label'	=> 'max_rent_exclusive_of_heating',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'versioningWS' => 2,
+		'versioning_followPages' => true,
+		'origUid' => 't3_origuid',
+		'languageField'	=> 'sys_language_uid',
+		'transOrigPointerField' => 'l10n_parent',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Demand.php',
+		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezrealestate_domain_model_demand.gif',
+		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
+		// TODO: put your further TCA Ctrl Section code implementations here
+		/* PROTECTED REGION END */
+	)
+);
 t3lib_extMgm::addLLrefForTCAdescr('tx_genesezrealestate_domain_model_floortype', 'EXT:genesez_real_estate/Resources/Private/Language/locallang_csh_tx_genesezrealestate_domain_model_floortype.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_genesezrealestate_domain_model_floortype');
 $TCA['tx_genesezrealestate_domain_model_floortype'] = array (

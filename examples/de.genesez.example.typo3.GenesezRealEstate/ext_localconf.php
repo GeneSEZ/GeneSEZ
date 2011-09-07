@@ -8,12 +8,26 @@ if (!defined ('TYPO3_MODE')) {
  */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
-	'Searchbox',
+	'List',
 	array(
-		'RealEstate' => 'showSearchbox, searchSearchbox'
+		'RealEstate' => 'list'
 	),
 	array(
-		'RealEstate' => 'searchSearchbox'
+		'RealEstate' => 'list'
+	),
+	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
+);
+
+/**
+ */
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'Searchbox',
+	array(
+		'RealEstate' => 'showSearchbox, search'
+	),
+	array(
+		'RealEstate' => 'showSearchbox, search'
 	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
@@ -24,9 +38,24 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Searchform',
 	array(
-		'RealEstate' => 'showSearchform'
+		'RealEstate' => 'showSearchform, search'
 	),
 	array(
+		'RealEstate' => 'showSearchform, search'
+	),
+	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
+);
+
+/**
+ */
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'Show',
+	array(
+		'RealEstate' => 'show'
+	),
+	array(
+		'RealEstate' => 'show'
 	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
@@ -40,6 +69,7 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 		'RealEstate' => 'showByQuarter'
 	),
 	array(
+		'RealEstate' => 'showByQuarter'
 	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
@@ -53,6 +83,7 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 		'RealEstate' => 'showByUid'
 	),
 	array(
+		'RealEstate' => 'showByUid'
 	),
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );

@@ -1,6 +1,7 @@
 <?php
 
-/* PROTECTED REGION ID(php.own.imports._17_0_1_8a7027a_1306344122287_504979_2362) ENABLED START */
+/* PROTECTED REGION ID(php.own.imports._17_0_2_8a7027a_1315354914153_579080_2591) ENABLED START */
+// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -27,44 +28,22 @@
  **************************************************************/
 
 /**
- * A class which represents a real floor type.
+ * A repository for room types.
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Model_FloorType extends Tx_Extbase_DomainObject_AbstractEntity {
+class Tx_GenesezRealEstate_Domain_Repository_RoomTypeRepository extends Tx_Extbase_Persistence_Repository {
 
-	/**
-	 * The specification of the floor type.
-	 * 
-	 * @var string
-	 */
-	protected $specification;
 
 
 	
 
 	
-	/**
-	 * Getter for specification
-	 *
-	 * @return string The specification of the floor type.
-	 */
-	public function getSpecification() {
-		return $this->specification;
-	}
-	/**
-	 * Setter for specification
-	 *
-	 * @param string $specification The specification of the floor type.
-	 * @return void
-	 */
-	public function setSpecification($specification) {
-		$this->specification = $specification;
-	}
 
-	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344122287_504979_2362) ENABLED START */
+	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315354914153_579080_2591) ENABLED START */
+	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }
