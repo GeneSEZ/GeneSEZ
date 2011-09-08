@@ -225,7 +225,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 		
 		if ($this->hasImgDescs()) {
 			// split images descriptions by the new line delemiter to get an array of descriptions
-			$descriptions = explode(chr(10), $realEstate->getImageDescriptions());
+			$descriptions = explode(chr(10), $this->imageDescriptions);
 		}
 		return $descriptions;
 		/* PROTECTED REGION END */
