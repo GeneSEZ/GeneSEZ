@@ -6,11 +6,11 @@ CREATE TABLE tx_genesezrealestate_domain_model_demand (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
-	max_rent_exclusive_of_heating double(11,2) DEFAULT '0.00' NOT NULL,
-	min_size double(11,2) DEFAULT '0.00' NOT NULL,
+	max_rent_exclusive_of_heating varchar(255) DEFAULT '' NOT NULL,
+	min_size varchar(255) DEFAULT '' NOT NULL,
 	town varchar(255) DEFAULT '' NOT NULL,
+	balcony varchar(255) DEFAULT '' NOT NULL,
 	quarter tx_genesezrealestate_domain_model_quarter,
-	balcony tinyint(1) unsigned DEFAULT '0' NOT NULL,
 	min_rooms tx_genesezrealestate_domain_model_roomtype,
 	floor tx_genesezrealestate_domain_model_floortype,
 	

@@ -38,33 +38,33 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Stores the maximal rent eclusive of heating for the real estate.
 	 * 
-	 * @var float
+	 * @var string
 	 */
-	protected $maxRentExclusiveOfHeating = null;
+	protected $maxRentExclusiveOfHeating;
 	/**
 	 * Stores the minimal size of the real estate.
 	 * 
-	 * @var float
+	 * @var string
 	 */
-	protected $minSize = null;
+	protected $minSize;
 	/**
 	 * Stores the town of the real estate.
 	 * 
 	 * @var string
 	 */
-	protected $town = null;
+	protected $town;
+	/**
+	 * Stores if a balcony is needed for the real estate.
+	 * 
+	 * @var string
+	 */
+	protected $balcony;
 	/**
 	 * Stores the quarter of the real estate.
 	 * 
 	 * @var Tx_GenesezRealEstate_Domain_Model_Quarter
 	 */
 	protected $quarter = null;
-	/**
-	 * Stores if a balcony is needed for the real estate.
-	 * 
-	 * @var boolean
-	 */
-	protected $balcony = null;
 	/**
 	 * Stores the minimal count of rooms for the real estate.
 	 * 
@@ -85,7 +85,7 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Getter for maxRentExclusiveOfHeating
 	 *
-	 * @return float Stores the maximal rent eclusive of heating for the real estate.
+	 * @return string Stores the maximal rent eclusive of heating for the real estate.
 	 */
 	public function getMaxRentExclusiveOfHeating() {
 		return $this->maxRentExclusiveOfHeating;
@@ -93,7 +93,7 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Setter for maxRentExclusiveOfHeating
 	 *
-	 * @param float $maxRentExclusiveOfHeating Stores the maximal rent eclusive of heating for the real estate.
+	 * @param string $maxRentExclusiveOfHeating Stores the maximal rent eclusive of heating for the real estate.
 	 * @return void
 	 */
 	public function setMaxRentExclusiveOfHeating($maxRentExclusiveOfHeating) {
@@ -102,7 +102,7 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Getter for minSize
 	 *
-	 * @return float Stores the minimal size of the real estate.
+	 * @return string Stores the minimal size of the real estate.
 	 */
 	public function getMinSize() {
 		return $this->minSize;
@@ -110,7 +110,7 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Setter for minSize
 	 *
-	 * @param float $minSize Stores the minimal size of the real estate.
+	 * @param string $minSize Stores the minimal size of the real estate.
 	 * @return void
 	 */
 	public function setMinSize($minSize) {
@@ -134,6 +134,23 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 		$this->town = $town;
 	}
 	/**
+	 * Getter for balcony
+	 *
+	 * @return string Stores if a balcony is needed for the real estate.
+	 */
+	public function getBalcony() {
+		return $this->balcony;
+	}
+	/**
+	 * Setter for balcony
+	 *
+	 * @param string $balcony Stores if a balcony is needed for the real estate.
+	 * @return void
+	 */
+	public function setBalcony($balcony) {
+		$this->balcony = $balcony;
+	}
+	/**
 	 * Getter for quarter
 	 *
 	 * @return Tx_GenesezRealEstate_Domain_Model_Quarter Stores the quarter of the real estate.
@@ -149,23 +166,6 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	 */
 	public function setQuarter(Tx_GenesezRealEstate_Domain_Model_Quarter $quarter) {
 		$this->quarter = $quarter;
-	}
-	/**
-	 * Getter for balcony
-	 *
-	 * @return boolean Stores if a balcony is needed for the real estate.
-	 */
-	public function getBalcony() {
-		return $this->balcony;
-	}
-	/**
-	 * Setter for balcony
-	 *
-	 * @param boolean $balcony Stores if a balcony is needed for the real estate.
-	 * @return void
-	 */
-	public function setBalcony($balcony) {
-		$this->balcony = $balcony;
 	}
 	/**
 	 * Getter for minRooms

@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._17_0_2_8a7027a_1315420126069_595943_2606) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -41,46 +40,57 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 	/**
 	 *
 	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate 
-	 * @param boolean $singleImage 
+	 * @param boolean $showSingleImage 
+	 * @param boolean $showDescriptions 
+	 * @param string $width 
+	 * @param string $height 
 	 * @return string 
 	 */
-	public function render(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate, $singleImage = true) {
+	public function render(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate, $showSingleImage = true, $showDescriptions = true, $width = null, $height = null) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315420271916_725303_2728) ENABLED START */
-		$renderedImages = "";
+		$renderImages = "";
 		
 		if ($realEstate->hasImgs()) {
 			$images = $realEstate->getImgs();
-			//$descriptions = $realEstate->getImgDescs();
+			$descriptions = $realEstate->getImgDescs();
+
+			// if only one image should be shown,
+			// then slice to image array to get only the first image
+			if ($showSingleImage) 
+				$images = array_slice($images, 0, 1);
 			
-			if ($singleImage) {
-				$renderedImages .= $this->renderSingleImage($images[0], "");
-			} else {
-				foreach ($images as $image) {
-					$renderedImages.= $this->renderSingleImage($image, "");
-				}
+			// render images
+			foreach ($images as $i => $image) {
+				$description = $descriptions[$i];
+				$renderImages .= $this->renderSingleImage($realEstate->getUid(), $image, $description, $showDescriptions, $width, $height);
 			}
 		}
-		return $renderedImages;
+		return $renderImages;
 		/* PROTECTED REGION END */
 	}
 	/**
 	 *
+	 * @param int $realEstateId 
 	 * @param string $imageFile 
 	 * @param string $imageDescription 
+	 * @param boolean $showDescriptions 
+	 * @param string $width 
+	 * @param string $height 
 	 * @return string 
 	 */
-	protected function renderSingleImage($imageFile, $imageDescription) {
+	protected function renderSingleImage($realEstateId, $imageFile, $imageDescription, $showDescriptions = true, $width = null, $height = null) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424095066_757130_2008) ENABLED START */
 		$this->tag->addAttribute('alt', $imageDescription);
 		
 		$renderImage = "";
 		$renderImage .=	'<dl class="csc-textpic-image csc-textpic-firstcol csc-textpic-lastcol" style="width: 175px;">';
 		$renderImage .=		'<dt>';
-		$renderImage .=			'<a href="' . $this->getUploadfolder() . $imageFile .'" title="'. $imageDescription .'" ' . $this->getColorBoxInclusion() .' >';
-		$renderImage .=				parent::render($this->getUploadfolder() . $imageFile, $this->getImageWidth(), $this->getImageHeight());
+		$renderImage .=			'<a href="' . $this->getUploadfolder() . $imageFile .'" title="'. $imageDescription .'" ' . $this->getColorBoxInclusion($realEstateId) .' >';
+		$renderImage .=				parent::render($this->getUploadfolder() . $imageFile, $width, $height);
 		$renderImage .=			'</a>';
 		$renderImage .=		'</dt>';
-		$renderImage .=		'<dd class="csc-textpic-caption">' . $imageDescription . '</dd>';
+		if ($showDescriptions)
+			$renderImage .=		'<dd class="csc-textpic-caption">' . $imageDescription . '</dd>';
 		$renderImage .=	'</dl>';
 		
 		return $renderImage;
@@ -88,29 +98,12 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 	}
 	/**
 	 *
+	 * @param int $realEstateId 
 	 * @return string 
 	 */
-	protected function getColorBoxInclusion() {
+	protected function getColorBoxInclusion($realEstateId) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424182004_903409_2395) ENABLED START */
-		return 'class="rzcolorbox" rel="rzcolorbox[cb453]"';
-		/* PROTECTED REGION END */
-	}
-	/**
-	 *
-	 * @return string 
-	 */
-	protected function getImageWidth() {
-		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424253320_170868_2431) ENABLED START */
-		return '175c';
-		/* PROTECTED REGION END */
-	}
-	/**
-	 *
-	 * @return string 
-	 */
-	protected function getImageHeight() {
-		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424266358_465790_2439) ENABLED START */
-		return '175c';
+		return 'class="rzcolorbox" rel="rzcolorbox[cbre' . $realEstateId . ']"';
 		/* PROTECTED REGION END */
 	}
 	/**

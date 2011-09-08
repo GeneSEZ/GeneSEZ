@@ -54,30 +54,31 @@ class Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository extends Tx_Ext
 		
 		if ($demand !== null) {
 			// check if maximum of rent is set
-			if ($demand->getMaxRentExclusiveOfHeating() !== null && $demand->getMaxRentExclusiveOfHeating() !== "") {
+			if ($demand->getMaxRentExclusiveOfHeating() !== null && $demand->getMaxRentExclusiveOfHeating() !== '') {
 				$contraints[] = $query->lessThanOrEqual('rentExclusiveOfHeating', $demand->getMaxRentExclusiveOfHeating());
 			}
 			// check if minimal size is set
-			if ($demand->getMinSize() !== null && $demand->getMinSize() !== "") {
+			if ($demand->getMinSize() !== null && $demand->getMinSize() !== '') {
 				$contraints[] = $query->greaterThanOrEqual('size', $demand->getMinSize());
 			}
 			// check if town is set
-			if ($demand->getTown() !== null && $demand->getTown() !== "") {
+			if ($demand->getTown() !== null && $demand->getTown() !== '') {
 				$contraints[] = $query->like('town', '%' . $demand->getTown() . '%');
+			}
+			// check if balcony is set
+			if ($demand->getBalcony() !== null && $demand->getBalcony() !== '') {
+				$contraints[] = $query->equals('balcony', $demand->getBalcony());
 			}
 			// check if minimal rooms is set
 			if ($demand->getMinRooms() !== null) {
-				print_r("MinRooms '" . $demand->getMinRooms() . "'");
 				$contraints[] = $query->greaterThanOrEqual('rooms.specification', $demand->getMinRooms()->getSpecification());
 			}
 			// check if floor is set
 			if ($demand->getFloor() !== null) {
-				print_r("Floor '" . $demand->getFloor() . "'");
 				$contraints[] = $query->equals('floor.specification', $demand->getFloor()->getSpecification());
 			}
 			// check if quarter is set
 			if ($demand->getQuarter() !== null) {
-				print_r("Quarter'" . $demand->getQuarter() . "'");
 				$contraints[] = $query->equals('quarter.name', $demand->getQuarter()->getName());
 			}
 			// check if any constraint is set

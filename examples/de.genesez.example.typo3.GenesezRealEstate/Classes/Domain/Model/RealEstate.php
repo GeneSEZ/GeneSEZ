@@ -183,8 +183,9 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 
 	
 	/**
+	 * Checks if the real estate has image files.
 	 *
-	 * @return boolean 
+	 * @return boolean Return true if the real estate has images otherwise false.
 	 */
 	public function hasImgs() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315409366581_636072_1991) ENABLED START */
@@ -192,8 +193,9 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 		/* PROTECTED REGION END */
 	}
 	/**
+	 * Checks if the real estate has image file descriptions.
 	 *
-	 * @return boolean 
+	 * @return boolean Return true if the real estate has image file descriptions otherwise false.
 	 */
 	public function hasImgDescs() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315419450861_188134_2555) ENABLED START */
@@ -201,8 +203,9 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 		/* PROTECTED REGION END */
 	}
 	/**
+	 * Get the real estate image files as array.
 	 *
-	 * @return array 
+	 * @return array An array of real estate image files or an empty array.
 	 */
 	public function getImgs() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315409382233_871005_1997) ENABLED START */
@@ -216,8 +219,9 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 		/* PROTECTED REGION END */
 	}
 	/**
+	 * Get the real estate image file descriptions as array.
 	 *
-	 * @return array 
+	 * @return array An array of real estate image file descriptions or an empty array.
 	 */
 	public function getImgDescs() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315409478099_835507_2019) ENABLED START */

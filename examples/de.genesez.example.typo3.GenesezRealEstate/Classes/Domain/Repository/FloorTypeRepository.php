@@ -1,7 +1,6 @@
 <?php
 
 /* PROTECTED REGION ID(php.own.imports._17_0_2_8a7027a_1315354863876_803143_2543) ENABLED START */
-// TODO: put your further include + require statements here
 /* PROTECTED REGION END */
 
 /***************************************************************
@@ -43,7 +42,6 @@ class Tx_GenesezRealEstate_Domain_Repository_FloorTypeRepository extends Tx_Extb
 	
 
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315354863876_803143_2543) ENABLED START */
-	// TODO: put your further code implementations here
 	/* PROTECTED REGION END */
 
 }

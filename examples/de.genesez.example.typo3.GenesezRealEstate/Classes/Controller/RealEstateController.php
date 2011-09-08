@@ -103,14 +103,14 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 		
 		$this->view->assign('roomTypes',
 			array_merge(
-				array(0 => 'Keine Angaben'),
+				array(0 => '---'),
 				$this->roomTypeRepository->findAll()->toArray()
 			)
 		);
 		
 		$this->view->assign('floorTypes',
 			array_merge(
-				array(0 => 'Keine Angaben'),
+				array(0 => '---'),
 				$this->floorTypeRepository->findAll()->toArray()
 			)
 		);
@@ -129,20 +129,24 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 		
 		$this->view->assign('quarters',
 			array_merge(
-				array(0 => 'Keine Angaben'),
+				array(0 => '---'),
 				$this->quaterRepository->findAll()->toArray()
 			)
 		);
+		
+		$optionYes = Tx_Extbase_Utility_Localization::translate('tx_genesezrealestate.yes', 'GenesezRealEstate');
+		$optionNo = Tx_Extbase_Utility_Localization::translate('tx_genesezrealestate.no', 'GenesezRealEstate');
+		$this->view->assign('balcony', array('' => '---', '1' => $optionYes, '0' => $optionNo));
 	
 		$this->view->assign('floorTypes',
 			array_merge(
-				array(0 => 'Keine Angaben'),
+				array(0 => '---'),
 				$this->floorTypeRepository->findAll()->toArray()
 			)
 		);
 		$this->view->assign('roomTypes',
 			array_merge(
-				array(0 => 'Keine Angaben'),
+				array(0 => '---'),
 				$this->roomTypeRepository->findAll()->toArray()
 			)
 		);
@@ -175,7 +179,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315373671137_940448_1987) ENABLED START */
 		if (!is_null($realEstateUids)) {
 			$realEstates = $this->realEstateRepository->getAllByUids($realEstateUids);
-		}		
+		}
 		$this->view->assign('realEstates', $realEstates);
 		/* PROTECTED REGION END */
 	}
