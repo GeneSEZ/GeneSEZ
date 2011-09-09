@@ -135,6 +135,44 @@ cached boolean isModelPackageElement(MClassifier this) :
 	};
 
 
+/**
+ * Getter for a list of all instance properties. 
+ * Excluding final and derived for MAttribute and derived for MAssociationRole.
+ * 
+ * @return	a list of instance properties or an empty list
+ */
+List[MProperty] allInstanceProperties(MClassifier this) :
+	{}.addAll(
+		allInstanceAttributes()
+	).addAll(
+		allInstanceAssociationRoles()
+	);
+
+
+/**
+ * Getter for a list of all instance attributes. 
+ * Excluding final and derived.
+ * 
+ * @return	a list of instance attributes or an empty list
+ */
+List[MAttribute] allInstanceAttributes(MClassifier this) :
+	allAttributes().select( e |
+		!e.static && !e.derived && !( e.final && e.hasDefaultValue())
+	); 
+
+
+/**
+ * Getter for a list of all instance association roles. 
+ * Excluding derived.
+ * 
+ * @return	a list of instance association roles or an empty list
+ */
+List[MAssociationRole] allInstanceAssociationRoles(MClassifier this) :
+	allAssociationRoles().select( e |
+		!e.derived
+	);
+
+
 cached List[MType] allPersistenceClassMappings(MModel this) :
 	let classMappings = {} :
 		classMappings.addAll(
