@@ -49,7 +49,6 @@ t3lib_extMgm::addPiFlexFormValue('genesezrealestate_showbyuid', 'FILE:EXT:genese
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
 /* PROTECTED REGION ID(ext_tables.php.own.plugins.code.implementation.eee_1045467100313_135436_1) ENABLED START */
-// TODO: put your further plugin code implementations here
 /* PROTECTED REGION END */
 
 
@@ -81,7 +80,6 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Demand.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_genesezrealestate_domain_model_demand.gif',
 		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
-		// TODO: put your further TCA Ctrl Section code implementations here
 		/* PROTECTED REGION END */
 	)
 );
