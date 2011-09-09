@@ -117,7 +117,7 @@ $TCA['«name() -»'] = array (
 «REM»
 «ENDREM»
 «DEFINE TCAInterfaceShowRecordFieldList FOR MClass -»
-		'showRecordFieldList' => '«FOREACH owningInitializableProperties() AS p SEPARATOR ", " -»«p.name() -»«ENDFOREACH»',
+		'showRecordFieldList' => '«FOREACH allInstanceProperties() AS p SEPARATOR ", " -»«p.name() -»«ENDFOREACH»',
 «ENDDEFINE»
 
 
@@ -146,7 +146,7 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCATypesNumbers FOR MClass -»
-		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbers FOREACH owningInitializableProperties() SEPARATOR ", " -»'),
+		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbers FOREACH allInstanceProperties() SEPARATOR ", " -»'),
 «ENDDEFINE»
 
 
@@ -202,8 +202,8 @@ $TCA['«name() -»'] = array (
 		«EXPAND TCAColumnsLocalizationColumns -»
 		«EXPAND TCAColumnsAccessControlColumns -»
 		«EXPAND TCAColumnsVersioningColumns -»
-		«EXPAND TCAColumnsAttributeColumn FOREACH owningInitializableAttributes() -»
-		«EXPAND TCAColumnsAssociationColumn FOREACH owningInitializableAssociationRoles() -»
+		«EXPAND TCAColumnsAttributeColumn(xmiGuid) FOREACH allInstanceAttributes() -»
+		«EXPAND TCAColumnsAssociationColumn(xmiGuid) FOREACH allInstanceAssociationRoles() -»
 		«EXPAND OwnTCAColumnsSectionCodeImplementation("tca.php.own.tca.columns.section.code.implementation." + xmiGuid) -»
 	)
 «ENDDEFINE»
@@ -364,28 +364,28 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAttributeColumn FOR MAttribute -»
+«DEFINE TCAColumnsAttributeColumn(String classXmiGuid) FOR MAttribute -»
 		'«name() -»' => array(
 			«EXPAND TCAColumnsExclude -»
 			«EXPAND TCAColumnsLabel -»
 			«EXPAND TCAColumnsDefaultExtras -»
 			«EXPAND TCAColumnsAdditions -»
-			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + xmiGuid) -»
-			«EXPAND TCAColumnsConfig -»
+			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + classXmiGuid + "." + xmiGuid) -»
+			«EXPAND TCAColumnsConfig(classXmiGuid) -»
 		),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAssociationColumn FOR MAssociationRole -»
+«DEFINE TCAColumnsAssociationColumn(String classXmiGuid) FOR MAssociationRole -»
 		'«name() -»' => array(
 			«EXPAND TCAColumnsExclude -»
 			«EXPAND TCAColumnsLabel -»
 			«EXPAND TCAColumnsDefaultExtras -»
 			«EXPAND TCAColumnsAdditions -»
-			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + xmiGuid) -»
-			«EXPAND TCAColumnsConfig -»
+			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + classXmiGuid + "." + xmiGuid) -»
+			«EXPAND TCAColumnsConfig(classXmiGuid) -»
 		),
 «ENDDEFINE»
 
@@ -426,7 +426,7 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfig FOR MAttribute -»
+«DEFINE TCAColumnsConfig(String classXmiGuid) FOR MAttribute -»
 			'config' => array(
 			«IF type.name() == "Input" -»
 				«EXPAND TCAColumnsConfigTypeInput -»
@@ -466,14 +466,14 @@ $TCA['«name() -»'] = array (
 				«EXPAND TCAColumnsConfigTypeOther( type.name() ) -»
 			«ENDIF -»
 			«EXPAND TCAColumnsConfigAdditions -»
-			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + xmiGuid) -»
+			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + classXmiGuid + "." + xmiGuid) -»
 			)
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfig FOR MAssociationRole -»
+«DEFINE TCAColumnsConfig(String classXmiGuid) FOR MAssociationRole -»
 			'config' => array(
 			«IF isOneToOneUnidirectional() -»			
 				«EXPAND TCAColumnsConfigOneToOneUnidirectional -»
@@ -493,7 +493,7 @@ $TCA['«name() -»'] = array (
 				«EXPAND TCAColumnsConfigManyToManyBidirectional -»
 			«ENDIF -»
 			«EXPAND TCAColumnsConfigAdditions -»
-			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + xmiGuid) -»
+			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + classXmiGuid + "." + xmiGuid) -»
 			)
 «ENDDEFINE»
 
