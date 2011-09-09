@@ -159,17 +159,30 @@ MType type(MElement this) :
 */
 
 /**
- * Returns the a list of all owning initializable properties.
+ * Getter for a list of all initializable properties. 
+ * Excluding final and derived for MAttribute and derived for MAssociationRole.
  * 
- * @return	the list of of initializable properties or an empty list
+ * @return	a list of initializable properties or an empty list
  */
 List[MProperty] owningInitializableProperties(MClassifier this) :
 	{}.addAll(
-		owningInitializableAttributes() 
+		owningInitializableAttributes()
 	).addAll(
 		owningInitializableAssociationRoles() 
 	);
-	  	
+
+/**
+ * Returns the a list of all initializable properties.
+ * Excluding final and derived for MAttribute and derived for MAssociationRole.
+ * 
+ * @return	the list of of initializable properties or an empty list
+ */
+List[MProperty] allInitializableProperties(MClassifier this) :
+	{}.addAll(
+		allInitializableAttributes()
+	).addAll(
+		allInitializableAssociationRoles()
+	);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -197,6 +210,7 @@ boolean hasDerivedAttributes(MClassifier this) :
  */
 boolean hasDefaultValue(MAttribute this) :
 	defaultvalue.length > 0;
+
 
 /**
  * getter for a list of all attributes including inherited
@@ -233,24 +247,55 @@ List[MAttribute] getParentAttributes(MClassifier this) :
 		? {}
 		: supertype.first().getAllAttributes();
 
-/**
- * checks if a classifier has initializable attributes or not
- * @return	true, if a classifier has initializable attributes, otherwise false
- */
-boolean hasInitializableAttributes(MClassifier this) : !allInitializableAttributes().isEmpty;
 
 /**
- * getter for a list of all owning initializable attributes
+ * Getter for a list of all attributes including inherited.
+ * Inherited attributes first.
+ *
+ * @return 	a list of attributes or an empty list
+ */
+List[MAttribute] allAttributes(MClassifier this):
+	{}.addAll(
+		generalization.isEmpty
+			? {}
+			: generalization.allAttributes()
+	).addAll( property.typeSelect(MAttribute) );
+
+
+/**
+ * Just there for error free templates.
+ *
+ * @see		allAttributes(MClassifier)
+ * @return	an empty list
+ */
+List[MAttribute] allAttributes(MType this) : {};
+
+
+/**
+ * Checks if a classifier has initializable attributes or not.
+ *
+ * @return	true, if a classifier has initializable attributes, otherwise false
+ */
+boolean hasInitializableAttributes(MClassifier this) : 
+	!allInitializableAttributes().isEmpty;
+
+
+/**
+ * Getter for a list of all owning initializable attributes.
+ * Excluding final and derived.
+ * 
  * @return	a list of initializable attributes or an empty list
  */
 List[MAttribute] owningInitializableAttributes(MClassifier this) :
-	property.typeSelect(MAttribute).select( e| 
+	property.typeSelect(MAttribute).select( e | 
 		!e.static && !e.derived && !( e.final && e.hasDefaultValue() )
 	);
 
+
 /**
  * Getter for a list of all initializable attributes.
- * Generalized initializable attributes first.
+ * Excluding final and derived.
+ * Inherited initializable attributes first.
  *
  * @return 	a list of initializable attributes or an empty list
  */
@@ -260,7 +305,6 @@ List[MAttribute] allInitializableAttributes(MClassifier this):
 			? {}
 			: generalization.allInitializableAttributes()
 	).addAll( owningInitializableAttributes() );
-	
 
 
 /**
@@ -381,23 +425,73 @@ boolean isPlainAssociation(MAssociationRole aend) :
 MClass assocClass(MAssociationRole aend) :
 	aend.association.associationClass;
 
- 
+
 /**
- * getter for a list of all owning initializable association roles
+ * Getter for a list of all association roles including inherited.
+ * Inherited association roles first.
+ *
+ * @return 	a list of association roles or an empty list
+ */
+List[MAssociationRole] allAssociationRoles(MClassifier this):
+	{}.addAll(
+		generalization.isEmpty
+			? {}
+			: generalization.allAssociationRoles()
+	).addAll( property.typeSelect(MAssociationRole) );
+
+
+/**
+ * Just there for error free templates.
+ *
+ * @see		allAssociationRoles(MClassifier)
+ * @return	an empty list
+ */
+List[MAssociationRole] allAssociationRoles(MType this) : {};
+
+
+/**
+ * Checks if a classifier has initializable association roles or not.
+ *
+ * @return	true, if a classifier has initializable association roles, otherwise false
+ */
+boolean hasInitializableAssociationRoles(MClassifier this) : 
+	!allInitializableAssociationRoles().isEmpty;
+
+
+/**
+ * Getter for a list of all owning initializable association roles.
+ * Excluding derived.
+ * 
  * @return	a list of initializable association roles or an empty list
  */
 List[MAssociationRole] owningInitializableAssociationRoles(MClassifier this) :
-	property.typeSelect(MAssociationRole).select( e | !e.derived );
+	property.typeSelect(MAssociationRole).select( e | 
+		!e.derived
+	);
 
 
 /**
- * returns all initializable association roles
+ * Getter for a list of all initializable association roles.
+ * Excluding derived.
+ * Inherited initializable association roles first.
+ *
+ * @return 	a list of initializable association roles or an empty list
  */
-List[MAssociationRole] allInitializableAssociationRoles(MClassifier this) :
-	let assocs = {} :
-		assocs.addAll( owningInitializableAssociationRoles() ) ->
-		assocs.addAll( realization.typeSelect(MClassifier).owningInitializableAssociationRoles() ) ->
-	assocs.flatten();
+List[MAssociationRole] allInitializableAssociationRoles(MClassifier this):
+	{}.addAll(
+		realization.isEmpty
+			? {}
+			: realization.allInitializableAssociationRoles()
+	).addAll( owningInitializableAssociationRoles() );
+
+
+/**
+ * just there for error free templates
+ * @see		allInitializableAssociationRoles(MClassifier)
+ * @return	an empty list
+ */
+List[MAssociationRole] allInitializableAssociationRoles(MType this) : {};
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
