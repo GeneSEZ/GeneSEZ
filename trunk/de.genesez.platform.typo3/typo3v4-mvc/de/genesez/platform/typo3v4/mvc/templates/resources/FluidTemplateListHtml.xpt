@@ -13,8 +13,8 @@
 «REM» use TYPO3 MVC conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
 
-«REM» use common conversion scripts «ENDREM»
-«EXTENSION de::genesez::platforms::common::Conversion»
+«REM» use TYPO3 MVC access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 
 
 «REM»
@@ -79,7 +79,7 @@
 
 	<table>
 		<tr>
-			«FOREACH allInitializableAttributes() AS attribute -»
+			«FOREACH allInstanceAttributes() AS attribute -»
 			<th><f:translate key="«name( namingContextLocalization() ) -»" /></th>
 			«ENDFOREACH -»
 			<th></th>
@@ -87,7 +87,7 @@
 		</tr>
 		<f:for each="{list}" as="«name() -»">
 		<tr>
-			«FOREACH allInitializableAttributes() AS attribute -»
+			«FOREACH allInstanceAttributes() AS attribute -»
 			<td><f:link.action action="show" arguments="{«name() -» : «name() -»}"> {«name() -».«attribute.name( namingContextGeneral() ) -»}</f:link.action></td>
 			«ENDFOREACH -»
 			<td><f:link.action action="edit" arguments="{«name() -» : «name() -»}">Edit</f:link.action></td>
