@@ -46,7 +46,7 @@ class Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository extends Tx_Ext
 	 */
 	public function findAllByDemand(Tx_GenesezRealEstate_Domain_Model_Demand $demand) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315237292891_470931_1984) ENABLED START */
-		// create a new query object.
+		// create a new query object
 		$query = $this->createQuery();
 
 		// define an array to store all the constraints

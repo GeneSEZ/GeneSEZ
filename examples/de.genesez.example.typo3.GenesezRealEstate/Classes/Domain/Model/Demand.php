@@ -53,7 +53,7 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	 * Stores the town of the real estate.
 	 * 
 	 * @var string
-	 * @validate Alphanumeric
+	 * @validate Text
 	 */
 	protected $town;
 	/**

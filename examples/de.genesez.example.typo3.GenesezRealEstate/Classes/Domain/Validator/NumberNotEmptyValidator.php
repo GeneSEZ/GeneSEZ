@@ -36,6 +36,7 @@
 class Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
 
 
+
 	
 	/**
 	 * Checks if the given value is valid according to the validator.
@@ -46,7 +47,7 @@ class Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator extends Tx_E
 	public function isValid($value) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315599838256_391488_2072.validator.isValid) ENABLED START */
 		if ($value != "") {
-			$this->addError("bla", "0815");
+			$this->addError(Tx_Extbase_Utility_Localization::translate('tx_genesezrealestate_error.number_not_empty', 'GenesezRealEstate'), 1315648431);
 			return is_numeric($value);
 		}
 		return true;

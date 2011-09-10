@@ -27,6 +27,7 @@
  **************************************************************/
 
 /**
+ * Renders the given real estate images.
  * 
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
@@ -38,13 +39,14 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 
 	
 	/**
+	 * Renders the given real estate images.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate 
-	 * @param boolean $showSingleImage 
-	 * @param boolean $showDescriptions 
-	 * @param string $width 
-	 * @param string $height 
-	 * @return string 
+	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The real estate from which the images are shown.
+	 * @param boolean $showSingleImage True if only the first image should be shown, otherwise false.
+	 * @param boolean $showDescriptions True if the image descriptions should be shown, otherwise false.
+	 * @param string $width The width of the image. This can be a numeric value representing the fixed width of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.
+	 * @param string $height The height of the image. This can be a numeric value representing the fixed height of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.height for possible options.
+	 * @return string The rendered image or images for the real estate.
 	 */
 	public function render(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate, $showSingleImage = true, $showDescriptions = true, $width = null, $height = null) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315420271916_725303_2728) ENABLED START */
@@ -69,14 +71,15 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 		/* PROTECTED REGION END */
 	}
 	/**
+	 * Renders one real estate image.
 	 *
-	 * @param int $realEstateId 
-	 * @param string $imageFile 
-	 * @param string $imageDescription 
-	 * @param boolean $showDescriptions 
-	 * @param string $width 
-	 * @param string $height 
-	 * @return string 
+	 * @param int $realEstateId The real estate id. This is needed for the colorbox.
+	 * @param string $imageFile The image file.
+	 * @param string $imageDescription The image description.
+	 * @param boolean $showDescriptions True if the image descriptions should be shown, otherwise false.
+	 * @param string $width The width of the image. This can be a numeric value representing the fixed width of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.
+	 * @param string $height The height of the image. This can be a numeric value representing the fixed height of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.height for possible options.
+	 * @return string The rendered image for the real estate.
 	 */
 	protected function renderSingleImage($realEstateId, $imageFile, $imageDescription, $showDescriptions = true, $width = null, $height = null) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424095066_757130_2008) ENABLED START */
@@ -97,9 +100,10 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 		/* PROTECTED REGION END */
 	}
 	/**
+	 * Gets the image tag attributes for the colorbox.
 	 *
-	 * @param int $realEstateId 
-	 * @return string 
+	 * @param int $realEstateId The real estate id.
+	 * @return string The image tag attributes for the colorbox.
 	 */
 	protected function getColorBoxInclusion($realEstateId) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424182004_903409_2395) ENABLED START */
@@ -107,8 +111,9 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 		/* PROTECTED REGION END */
 	}
 	/**
+	 * Gets the upload folder for the images.
 	 *
-	 * @return string 
+	 * @return string The upload folder for the images.
 	 */
 	protected function getUploadfolder() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424657504_832779_2011) ENABLED START */

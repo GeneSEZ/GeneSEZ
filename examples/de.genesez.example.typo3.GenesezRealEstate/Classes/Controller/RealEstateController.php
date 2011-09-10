@@ -65,7 +65,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Shows a summary for a single real estate. The real estate is set inside the flexform of the plugin.
 	 *
-	 * @return string 
+	 * @return string The rendered view for this action.
 	 */
 	public function showByUidAction() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314920948577_433681_2860) ENABLED START */
@@ -78,7 +78,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Shows all real estates for a given quarter. The quarter is set inside the flexform of the plugin.
 	 *
-	 * @return string 
+	 * @return string The rendered view for this action.
 	 */
 	public function showByQuarterAction() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919652753_836062_2466) ENABLED START */
@@ -94,7 +94,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	 * Displays a search box which can be add to a sidebar.
 	 *
 	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand A fresh demand object taken as a basis for the rendering.
-	 * @return string 
+	 * @return string The rendered view for this action.
 	 * @dontvalidate $demand
 	 */
 	public function showSearchboxAction(Tx_GenesezRealEstate_Domain_Model_Demand $demand = null) {
@@ -120,7 +120,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	 * Shows a search form with more configuration options as the search box.
 	 *
 	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand A fresh demand object taken as a basis for the rendering.
-	 * @return string 
+	 * @return string The rendered view for this action.
 	 * @dontvalidate $demand
 	 */
 	public function showSearchformAction(Tx_GenesezRealEstate_Domain_Model_Demand $demand = null) {
@@ -157,7 +157,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	 * 
 	 * This method is only needed because I can not call the list action from searchbox or searchform directly.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand 
+	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand The rendered view for this action.
 	 * @return string 
 	 */
 	public function searchAction(Tx_GenesezRealEstate_Domain_Model_Demand $demand) {
@@ -187,7 +187,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	 * Shows a single real estate with all details.
 	 *
 	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate 
-	 * @return string 
+	 * @return string The rendered view for this action.
 	 */
 	public function showAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919481995_230589_2439) ENABLED START */

@@ -66,7 +66,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	 */
 	protected $state;
 	/**
-	 * The misc stuff for the real estate.
+	 * The miscellaneous stuff for the real estate.
 	 * 
 	 * @var string
 	 */
@@ -324,7 +324,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Getter for miscellaneous
 	 *
-	 * @return string The misc stuff for the real estate.
+	 * @return string The miscellaneous stuff for the real estate.
 	 */
 	public function getMiscellaneous() {
 		return $this->miscellaneous;
@@ -332,7 +332,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Setter for miscellaneous
 	 *
-	 * @param string $miscellaneous The misc stuff for the real estate.
+	 * @param string $miscellaneous The miscellaneous stuff for the real estate.
 	 * @return void
 	 */
 	public function setMiscellaneous($miscellaneous) {
