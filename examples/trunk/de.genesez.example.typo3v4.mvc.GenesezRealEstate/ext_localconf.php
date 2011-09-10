@@ -4,8 +4,6 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-/**
- */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'List',
@@ -18,8 +16,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
-/**
- */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Searchbox',
@@ -32,8 +28,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
-/**
- */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Searchform',
@@ -46,8 +40,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
-/**
- */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'Show',
@@ -60,8 +52,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
-/**
- */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'ShowByQuarter',
@@ -74,8 +64,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_PLUGIN
 );
 
-/**
- */
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
 	'ShowByUid',
