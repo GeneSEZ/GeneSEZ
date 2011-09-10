@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,46 +37,46 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 
 	/**
 	 * Stores the maximal rent eclusive of heating for the real estate.
-	 * 
+	 *
 	 * @var string
 	 * @validate Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator
 	 */
 	protected $maxRentExclusiveOfHeating;
 	/**
 	 * Stores the minimal size of the real estate.
-	 * 
+	 *
 	 * @var string
 	 * @validate Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator
 	 */
 	protected $minSize;
 	/**
 	 * Stores the town of the real estate.
-	 * 
+	 *
 	 * @var string
 	 * @validate Text
 	 */
 	protected $town;
 	/**
 	 * Stores if a balcony is needed for the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $balcony;
 	/**
 	 * Stores the quarter of the real estate.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Model_Quarter
 	 */
 	protected $quarter = null;
 	/**
 	 * Stores the minimal count of rooms for the real estate.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Model_RoomType
 	 */
 	protected $minRooms = null;
 	/**
 	 * Stores the floor of the real estate.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Model_FloorType
 	 */
 	protected $floor = null;

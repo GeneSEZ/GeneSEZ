@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,145 +37,145 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 
 	/**
 	 * The internal id of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $id;
 	/**
 	 * The title of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $title;
 	/**
 	 * The description of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $description;
 	/**
 	 * The facilities of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $facility;
 	/**
 	 * The state of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $state;
 	/**
 	 * The miscellaneous stuff for the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $miscellaneous;
 	/**
 	 * The street of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $street;
 	/**
 	 * The post code of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $postCode;
 	/**
 	 * The town of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $town;
 	/**
 	 * The size in qm of the real estate.
-	 * 
+	 *
 	 * @var float
 	 */
 	protected $size;
 	/**
 	 * Sets if the real estate has a cellar.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $cellar;
 	/**
 	 * Sets if the real estate has a attic.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $attic;
 	/**
 	 * Sets if the real estate has a balcony.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $balcony;
 	/**
 	 * Sets when the real estate is free.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $freeFrom;
 	/**
 	 * The rent exclusive of heating for the real estate.
-	 * 
+	 *
 	 * @var float
 	 */
 	protected $rentExclusiveOfHeating;
 	/**
 	 * The extra charges for the real estate.
-	 * 
+	 *
 	 * @var float
 	 */
 	protected $extraCharges;
 	/**
 	 * The cooperative share for the real estate.
-	 * 
+	 *
 	 * @var float
 	 */
 	protected $cooperativeShare;
 	/**
 	 * The image files of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $imageFiles;
 	/**
 	 * The image descriptions of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $imageDescriptions;
 	/**
 	 * The plot file of the real estate.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $plotFile;
 	/**
 	 * Association for the heating type of the real estate.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Model_HeatingType
 	 */
 	protected $heating;
 	/**
 	 * Association for the room type of the real estate.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Model_RoomType
 	 */
 	protected $rooms;
 	/**
 	 * Association for the floor type of the real estate.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Model_FloorType
 	 */
 	protected $floor;
 	/**
 	 * Association for the quarter of the real estate.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Model_Quarter
 	 */
 	protected $quarter;

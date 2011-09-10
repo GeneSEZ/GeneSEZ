@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,13 +37,13 @@ class Tx_GenesezRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_
 
 	/**
 	 * The name of the quarter.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $name;
 	/**
 	 * The description of the quarter.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $description;

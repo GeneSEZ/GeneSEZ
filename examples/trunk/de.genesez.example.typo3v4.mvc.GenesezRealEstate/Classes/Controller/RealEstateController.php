@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,25 +37,25 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 
 	/**
 	 * A reference of the real estate repository.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository
 	 */
 	private $realEstateRepository;
 	/**
 	 * A reference of the quarter repository.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Repository_QuarterRepository
 	 */
 	private $quaterRepository;
 	/**
 	 * A reference of the floor type repository.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Repository_FloorTypeRepository
 	 */
 	private $floorTypeRepository;
 	/**
 	 * A reference of the room type repository.
-	 * 
+	 *
 	 * @var Tx_GenesezRealEstate_Domain_Repository_RoomTypeRepository
 	 */
 	private $roomTypeRepository;
