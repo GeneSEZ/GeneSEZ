@@ -9,6 +9,9 @@
 «REM» use GeneSEZ profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::genesez::profile::AccessHelper»
 
+«REM» use TYPO3 profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::profile::AccessHelper»
+
 «REM» use common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
 
@@ -55,8 +58,8 @@
 	/**
 	«IF hasComment() -»
 	«formatComment(" * ", "\n	") -»
-	«ENDIF -»
-	 * 
+	 *
+	«ENDIF -» 
 	«EXPAND Annotation::Property -»
 	 */
 «ENDDEFINE»
@@ -123,8 +126,8 @@
 	/**
 	«IF hasComment() -»
 	«formatComment(" * ", "\n	") -»
-	«ENDIF -»
-	 * 
+	 *
+	«ENDIF -» 
 	«EXPAND Annotation::Property -»
 	 */
 «ENDDEFINE»
@@ -187,8 +190,8 @@
 	/**
 	«IF hasComment() -»
 	«formatComment(" * ", "\n	") -»
-	«ENDIF -»
 	 *
+	«ENDIF -»
 	«EXPAND Annotation::Constructor -»
 	 */
 «ENDDEFINE»
@@ -201,8 +204,8 @@
 	/**
 	«IF hasComment() -»
 	«formatComment(" * ", "\n	") -»
-	«ENDIF -»
 	 *
+	«ENDIF -»
 	«EXPAND Annotation::Destructor -»
 	 */
 «ENDDEFINE»
@@ -215,8 +218,8 @@
 	/**
 	«IF hasComment() -»
 	«formatComment(" * ", "\n	") -»
-	«ENDIF -»
 	 *
+	«ENDIF -»
 	«EXPAND Annotation::Operation -»
 	 */
 «ENDDEFINE»
@@ -237,7 +240,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) «getTimeStamp("yyyy") -» «getUserName()»
+ *  (c) «getTimeStamp("yyyy") -» «IF model().getT3ExtensionManagerAuthor() != "" -»«model().getT3ExtensionManagerAuthor() -»«ELSE -»«getUserName() -»«ENDIF»
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
