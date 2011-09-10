@@ -39,18 +39,21 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	 * Stores the maximal rent eclusive of heating for the real estate.
 	 * 
 	 * @var string
+	 * @validate Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator
 	 */
 	protected $maxRentExclusiveOfHeating;
 	/**
 	 * Stores the minimal size of the real estate.
 	 * 
 	 * @var string
+	 * @validate Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator
 	 */
 	protected $minSize;
 	/**
 	 * Stores the town of the real estate.
 	 * 
 	 * @var string
+	 * @validate Alphanumeric
 	 */
 	protected $town;
 	/**
