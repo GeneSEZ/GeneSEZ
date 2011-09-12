@@ -30,9 +30,6 @@
 «REM» use TYPO3 MVC access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
 
-«REM» use TYPO3 TCx access helper scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::scripts::TCxAccessHelper»
-
 «REM» use common conversion scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::Conversion»
 
@@ -125,11 +122,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconFileNamePath() != "" -»,
 	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconFileNamePath() -»'«ENDIF»
 );
-«IF !property.typeSelect(MAttribute).isEmpty -»
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['«asPluginFlexformName() -»'] = 'select_key';
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFlexformName() -»'] = 'pi_flexform,recursive';
-t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«extensionKey() -»/«flexformXMLFileNamePath() -»');
-«ENDIF -»
+«EXPAND PluginFlexform -»
 «ENDDEFINE»
 
 
@@ -141,6 +134,18 @@ t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«ext
 /**
 «formatComment() -»
  */
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a plugin flexform is needed.
+«ENDREM»
+«DEFINE PluginFlexform FOR MInterface -»
+«IF !property.typeSelect(MAttribute).isEmpty -»
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['«asPluginFlexformName() -»'] = 'select_key';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFlexformName() -»'] = 'pi_flexform,recursive';
+t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«extensionKey() -»/«flexformXMLFileNamePath() -»');
 «ENDIF -»
 «ENDDEFINE»
 
@@ -485,22 +490,22 @@ $TCA['«name() -»'] = array (
 
 
 «REM»
-	generates a region for own modules code implementations
-«ENDREM»
-«DEFINE OwnModulesCodeImplementation(String id) FOR MModel -»
-	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-	// TODO: put your further module code implementations here
-	«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
 	generates a region for own module configuration code implementations
 «ENDREM»
 «DEFINE OwnModuleConfigurationCodeImplementation(String id) FOR MInterface -»
 			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
 			// TODO: put your further module configuration code implementations here
 			«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own modules code implementations
+«ENDREM»
+«DEFINE OwnModulesCodeImplementation(String id) FOR MModel -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further module code implementations here
+	«ENDPROTECT»
 «ENDDEFINE»
 
 
