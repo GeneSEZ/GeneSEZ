@@ -170,6 +170,17 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
+				'type' => 'select',
+				'foreign_table' => 'tx_genesezrealestate_domain_model_quarter',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => false,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
+				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356591775_883174_2870) ENABLED START */
 				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
@@ -182,6 +193,17 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
+				'type' => 'select',
+				'foreign_table' => 'tx_genesezrealestate_domain_model_roomtype',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => false,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
+				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356493767_742745_2820) ENABLED START */
 				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
@@ -194,6 +216,17 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
+				'type' => 'select',
+				'foreign_table' => 'tx_genesezrealestate_domain_model_floortype',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'appearance' => array(
+					'collapse' => false,
+					'levelLinksPosition' => 'top',
+					'showSynchronizationLink' => true,
+					'showPossibleLocalizationRecords' => true,
+					'showAllLocalizationLink' => true
+				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356517000_852132_2833) ENABLED START */
 				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */

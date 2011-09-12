@@ -10,9 +10,9 @@ CREATE TABLE tx_genesezrealestate_domain_model_demand (
 	min_size varchar(255) DEFAULT '' NOT NULL,
 	town varchar(255) DEFAULT '' NOT NULL,
 	balcony varchar(255) DEFAULT '' NOT NULL,
-	quarter tx_genesezrealestate_domain_model_quarter,
-	min_rooms tx_genesezrealestate_domain_model_roomtype,
-	floor tx_genesezrealestate_domain_model_floortype,
+	quarter int(11) unsigned DEFAULT '0' NOT NULL,
+	min_rooms int(11) unsigned DEFAULT '0' NOT NULL,
+	floor int(11) unsigned DEFAULT '0' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
