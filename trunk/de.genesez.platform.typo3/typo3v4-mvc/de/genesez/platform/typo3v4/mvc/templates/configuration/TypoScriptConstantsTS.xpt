@@ -61,32 +61,9 @@ plugin.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModuleConfiguration(String extensionKey, String extensionName) FOR MModel -»
-«IF !allModules().isEmpty -»
-module.«extensionName -» {
-	«EXPAND ModulePersistence(extensionName) -»
-	«EXPAND ModuleView(extensionKey, extensionName) -»
-	«EXPAND OwnPluginTypoScriptDeclaration("constants.txt.own.module.typoscript.declaration." + xmiGuid) -»
-}
-«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
 «DEFINE PluginPersistence(String extensionName) FOR MModel -»
 	persistence {
 		# cat=plugin.«extensionName -»//a; type=int+; label=Default storage PID
-		storagePid = 
-	}
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE ModulePersistence(String extensionName) FOR MModel -»
-	persistence {
-		# cat=module.«extensionName -»//a; type=int+; label=Default storage PID
 		storagePid = 
 	}
 «ENDDEFINE»
@@ -107,6 +84,39 @@ module.«extensionName -» {
 
 
 «REM»
+	Generates a region for own plugin TypoScript declarations.
+«ENDREM»
+«DEFINE OwnPluginTypoScriptDeclaration(String id) FOR MModel -»
+	«PROTECT CSTART '// ' CEND '' ID (id)»
+	// TODO: put your further plugin TypoScript declarations here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleConfiguration(String extensionKey, String extensionName) FOR MModel -»
+«IF !allModules().isEmpty -»
+module.«extensionName -» {
+	«EXPAND ModulePersistence(extensionName) -»
+	«EXPAND ModuleView(extensionKey, extensionName) -»
+	«EXPAND OwnPluginTypoScriptDeclaration("constants.txt.own.module.typoscript.declaration." + xmiGuid) -»
+}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModulePersistence(String extensionName) FOR MModel -»
+	persistence {
+		# cat=module.«extensionName -»//a; type=int+; label=Default storage PID
+		storagePid = 
+	}
+«ENDDEFINE»
+
+
+«REM»
 «ENDREM»
 «DEFINE ModuleView(String extensionKey, String extensionName) FOR MModel -»
 	view {
@@ -117,16 +127,6 @@ module.«extensionName -» {
 		# cat=module.«extensionName -»/file; type=string; label=Path to template layouts (BE)
 		layoutRootPath = EXT:«extensionKey -»/«resourcesPrivateBackendLayoutsPath()»/
 	}
-«ENDDEFINE»
-
-
-«REM»
-	Generates a region for own plugin TypoScript declarations.
-«ENDREM»
-«DEFINE OwnPluginTypoScriptDeclaration(String id) FOR MModel -»
-	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further plugin TypoScript declarations here
-	«ENDPROTECT»
 «ENDDEFINE»
 
 

@@ -63,23 +63,14 @@
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PluginConfiguration(String extensionName) FOR MModel -»
 «IF !allPlugins().isEmpty -»
 plugin.«extensionName -» {
 	«EXPAND PluginPersistence(extensionName) -»
 	«EXPAND PluginView(extensionName) -»
 	«EXPAND OwnPluginTypoScriptDeclaration("setup.txt.own.plugin.typoscript.declaration." + xmiGuid) -»
-}
-«ENDIF -»
-«ENDDEFINE»
-
-
-«DEFINE ModuleConfiguration(String extensionName) FOR MModel -»
-«IF !allModules().isEmpty -»
-module.«extensionName -» {
-	«EXPAND ModulePersistence(extensionName) -»
-	«EXPAND ModuleView(extensionName) -»
-	«EXPAND OwnModuleTypoScriptDeclaration("setup.txt.own.module.typoscript.declaration." + xmiGuid) -»
 }
 «ENDIF -»
 «ENDDEFINE»
@@ -96,20 +87,43 @@ module.«extensionName -» {
 
 «REM»
 «ENDREM»
-«DEFINE ModulePersistence(String extensionName) FOR MModel -»
-	persistence {
-		storagePid = {$module.«extensionName -».persistence.storagePid}
-	}
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
 «DEFINE PluginView(String extensionName) FOR MModel -»
 	view {
 		templateRootPath = {$plugin.«extensionName -».view.templateRootPath}
 		partialRootPath = {$plugin.«extensionName -».view.partialRootPath}
 		layoutRootPath = {$plugin.«extensionName -».view.layoutRootPath}
+	}
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own plugin TypoScript declarations.
+«ENDREM»
+«DEFINE OwnPluginTypoScriptDeclaration(String id) FOR MModel -»
+	«PROTECT CSTART '// ' CEND '' ID (id)»
+	// TODO: put your further plugin TypoScript declarations here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModuleConfiguration(String extensionName) FOR MModel -»
+«IF !allModules().isEmpty -»
+module.«extensionName -» {
+	«EXPAND ModulePersistence(extensionName) -»
+	«EXPAND ModuleView(extensionName) -»
+	«EXPAND OwnModuleTypoScriptDeclaration("setup.txt.own.module.typoscript.declaration." + xmiGuid) -»
+}
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ModulePersistence(String extensionName) FOR MModel -»
+	persistence {
+		storagePid = {$module.«extensionName -».persistence.storagePid}
 	}
 «ENDDEFINE»
 
@@ -125,6 +139,18 @@ module.«extensionName -» {
 «ENDDEFINE»
 
 
+«REM»
+	Generates a region for own module TypoScript declarations.
+«ENDREM»
+«DEFINE OwnModuleTypoScriptDeclaration(String id) FOR MModel -»
+	«PROTECT CSTART '// ' CEND '' ID (id)»
+	// TODO: put your further module TypoScript declarations here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
 «DEFINE PersistenceClassesMapping FOR MModel -»
 «setNamingContext( namingContextGeneral() ) -»
 «setTypeMappingContext("") -»
@@ -142,6 +168,8 @@ config.tx_extbase {
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceClassMapping FOR MType -»
 			«name() -» {
 				mapping {
@@ -154,16 +182,22 @@ config.tx_extbase {
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceClassMappingTableName FOR MType -»
 					tableName = «getPersistenceClassMappingTableName()»
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceClassMappingRecordType FOR MType -»
 					recordType = «name()»
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceColumnsMapping FOR MClass -»
 «IF !allPersistencePropertyMappings().isEmpty -»
 					columns {
@@ -173,15 +207,21 @@ config.tx_extbase {
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceColumnsMapping FOR MType -»
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceColumnMapping FOR MProperty -»
 						«getT3ExtbaseColumnMappingMapOnProperty() -».mapOnProperty = «name()»
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceSubclasses FOR MType -»
 «IF !allPersistenceSubclasses().isEmpty -»
 				subclasses {
@@ -191,28 +231,10 @@ config.tx_extbase {
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE PersistenceSubclass FOR MClass -»
 					«name() -» = «name()»
-«ENDDEFINE»
-
-
-«REM»
-	Generates a region for own plugin TypoScript declarations.
-«ENDREM»
-«DEFINE OwnPluginTypoScriptDeclaration(String id) FOR MModel -»
-	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further plugin TypoScript declarations here
-	«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	Generates a region for own module TypoScript declarations.
-«ENDREM»
-«DEFINE OwnModuleTypoScriptDeclaration(String id) FOR MModel -»
-	«PROTECT CSTART '// ' CEND '' ID (id)»
-	// TODO: put your further module TypoScript declarations here
-	«ENDPROTECT»
 «ENDDEFINE»
 
 
