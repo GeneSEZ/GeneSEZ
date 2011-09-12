@@ -81,27 +81,27 @@
 	all initializable attributes of the type and supertypes are set within the constructor
 «ENDREM»
 «DEFINE _InitializingConstructor FOR MClassifier-»
-«IF hasInitializableAttributes()-»
-	«EXPAND Comment::InitConstructor-»
-	public «asTypeName()-»(«EXPAND _Params FOREACH allInitializableAttributes() SEPARATOR ", "-») {
-		«EXPAND _SuperInit FOREACH generalization-»
-		«FOREACH owningInitializableAttributes() AS attr-»
-			this.«attr.asAttribute()-» = «attr.asAttribute()-»;
-		«ENDFOREACH-»
-	}
-«ENDIF»
+	«IF hasInitializableAttributes()-»
+		«EXPAND Comment::InitConstructor-»
+		public «asTypeName()-»(«EXPAND _Params FOREACH allInitializableAttributes() SEPARATOR ", "-») {
+			«EXPAND _SuperInit FOREACH generalization-»
+			«FOREACH owningInitializableAttributes() AS attr-»
+				this.«attr.asAttribute()-» = «attr.asAttribute()-»;
+			«ENDFOREACH-»
+		}
+	«ENDIF»
 «ENDDEFINE»
 
 «REM»
 	generates the parameter list for the initializing constructor
 «ENDREM»
 «DEFINE _Params FOR MAttribute-»
-«EXPAND _Annotation-»
-«IF isSingleValuedType()-»
-	«type.mapName().asTypeName()-»«EXPAND Type::Generics FOR type-» «asAttribute()-»
-«ELSE-»
-	«EXPAND Type::MultiValuedType-» «asAttribute()-»
-«ENDIF-»
+	«EXPAND _Annotation-»
+	«IF isSingleValuedType()-»
+		«type.mapName().asTypeName()-»«EXPAND Type::Generics FOR type-» «asAttribute()-»
+	«ELSE-»
+		«EXPAND Type::MultiValuedType-» «asAttribute()-»
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM»
@@ -143,9 +143,11 @@
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
 	«IF isSingleValuedType()-»
-	«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR returnType» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
-	«ELSE-»
-	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
+		«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR return.type» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
+	«ELSEIF isMultiValuedType()-»
+		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-»;
+	«ELSE»
+		«EXPAND _Modifier-» void «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-»;
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -157,9 +159,11 @@
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
 	«IF isSingleValuedType()-»
-		«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR returnType-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
-	«ELSE-»
+		«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR return.type-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+	«ELSEIF isMultiValuedType()-»
 		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+	«ELSE»
+		«EXPAND _Modifier-» void «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
 	«ENDIF-»
 	«EXPAND _ImplementationBody-»
 	}
@@ -181,7 +185,7 @@
 	generates the return type of the operation
 «ENDREM»
 «DEFINE _SingleValueReturn FOR MOperation -»
-	«returnType.mapName().asTypeName()»
+	«return.type.mapName().asTypeName()»
 «ENDDEFINE»
 
 «REM»
@@ -244,12 +248,12 @@
 «ENDREM»
 «DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation -»
 	«IF isSingleValuedType() -»
-		«getReturnTypeDeclaration(returnType.mapName().asTypeName())»
+		«getReturnTypeDeclaration(return.type.mapName().asTypeName())»
 	«ELSE -»
 		«EXPAND Type::MultiValuedType -» returnValue = null;
 	«ENDIF -»
 	«EXPAND _OwnCodeImpl("java.implementation." + xmiGuid) -»
-	«getReturnTypeReturn(returnType.mapName().asTypeName())»
+	«getReturnTypeReturn(return.type.mapName().asTypeName())»
 «ENDDEFINE»
 
 «REM»
