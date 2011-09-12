@@ -202,8 +202,8 @@ $TCA['«name() -»'] = array (
 		«EXPAND TCAColumnsLocalizationColumns -»
 		«EXPAND TCAColumnsAccessControlColumns -»
 		«EXPAND TCAColumnsVersioningColumns -»
-		«EXPAND TCAColumnsAttributeColumn(xmiGuid) FOREACH allInstanceAttributes() -»
-		«EXPAND TCAColumnsAssociationColumn(xmiGuid) FOREACH allInstanceAssociationRoles() -»
+		«EXPAND TCAColumnsAttributeColumn(this) FOREACH allInstanceAttributes() -»
+		«EXPAND TCAColumnsAssociationColumn(this) FOREACH allInstanceAssociationRoles() -»
 		«EXPAND OwnTCAColumnsSectionCodeImplementation("tca.php.own.tca.columns.section.code.implementation." + xmiGuid) -»
 	)
 «ENDDEFINE»
@@ -364,28 +364,28 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAttributeColumn(String classXmiGuid) FOR MAttribute -»
+«DEFINE TCAColumnsAttributeColumn(MClass class) FOR MAttribute -»
 		'«name() -»' => array(
 			«EXPAND TCAColumnsExclude -»
 			«EXPAND TCAColumnsLabel -»
 			«EXPAND TCAColumnsDefaultExtras -»
 			«EXPAND TCAColumnsAdditions -»
-			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + classXmiGuid + "." + xmiGuid) -»
-			«EXPAND TCAColumnsConfig(classXmiGuid) -»
+			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
+			«EXPAND TCAColumnsConfig(class) -»
 		),
 «ENDDEFINE»
 
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAssociationColumn(String classXmiGuid) FOR MAssociationRole -»
+«DEFINE TCAColumnsAssociationColumn(MClass class) FOR MAssociationRole -»
 		'«name() -»' => array(
 			«EXPAND TCAColumnsExclude -»
 			«EXPAND TCAColumnsLabel -»
 			«EXPAND TCAColumnsDefaultExtras -»
 			«EXPAND TCAColumnsAdditions -»
-			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + classXmiGuid + "." + xmiGuid) -»
-			«EXPAND TCAColumnsConfig(classXmiGuid) -»
+			«EXPAND OwnTCAColumnCodeImplementation("tca.php.own.tca.column.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
+			«EXPAND TCAColumnsConfig(class) -»
 		),
 «ENDDEFINE»
 
@@ -426,8 +426,9 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfig(String classXmiGuid) FOR MAttribute -»
+«DEFINE TCAColumnsConfig(MClass class) FOR MAttribute -»
 			'config' => array(
+«IF !type.isClassifier() -»
 			«IF type.name() == "Input" -»
 				«EXPAND TCAColumnsConfigTypeInput -»
 			«ELSEIF type.name() == "String" -»
@@ -465,35 +466,15 @@ $TCA['«name() -»'] = array (
 			«ELSE -»
 				«EXPAND TCAColumnsConfigTypeOther( type.name() ) -»
 			«ENDIF -»
-			«EXPAND TCAColumnsConfigAdditions -»
-			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + classXmiGuid + "." + xmiGuid) -»
-			)
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsConfig(String classXmiGuid) FOR MAssociationRole -»
-			'config' => array(
-			«IF isOneToOneUnidirectional() -»			
-				«EXPAND TCAColumnsConfigOneToOneUnidirectional -»
-			«ELSEIF isOneToOneBidirectional() -»
-				«EXPAND TCAColumnsConfigOneToOneBidirectional -»
-			«ELSEIF isOneToManyUnidirectional() -»
-				«EXPAND TCAColumnsConfigOneToManyUnidirectional -»
-			«ELSEIF isOneToManyBidirectional() -»		
-				«EXPAND TCAColumnsConfigOneToManyBidirectional -»
-			«ELSEIF isManyToOneUnidirectional() -»
-				«EXPAND TCAColumnsConfigManyToOneUnidirectional -»
-			«ELSEIF isManyToOneBidirectional() -»
-				«EXPAND TCAColumnsConfigManyToOneBidirectional -»
-			«ELSEIF isManyToManyUnidirectional() -»
-				«EXPAND TCAColumnsConfigManyToManyUnidirectional -»
-			«ELSEIF isManyToManyBidirectional() -»
-				«EXPAND TCAColumnsConfigManyToManyBidirectional -»
+«ELSE -»
+			«IF isOneToOneUnidirectional() -»
+				«EXPAND TCAColumnsConfigOneToOneUnidirectionalClassifier(class) -»
+			«ELSE -»
+				«EXPAND TCAColumnsConfigOneToManyUnidirectionalClassifier(class) -»
 			«ENDIF -»
+«ENDIF-»
 			«EXPAND TCAColumnsConfigAdditions -»
-			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + classXmiGuid + "." + xmiGuid) -»
+			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
 			)
 «ENDDEFINE»
 
@@ -712,9 +693,62 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
+
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigOneToOneUnidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigOneToOneUnidirectionalClassifier(MClass class) FOR MAttribute -»
+«EXPAND TCAColumnsConfigType("select") -»
+«EXPAND TCAColumnsConfigForeignTable -»
+«EXPAND TCAColumnsConfigMinitems -»
+«EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigAppearance -»
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigOneToManyUnidirectionalClassifier(MClass class) FOR MAttribute -»
+«EXPAND TCAColumnsConfigType("select") -»
+«EXPAND TCAColumnsConfigForeignTable -»
+«EXPAND TCAColumnsConfigForeignSortBy -»
+«EXPAND TCAColumnsConfigMM(class) -»
+«EXPAND TCAColumnsConfigMinitems -»
+«EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigAppearance -»
+«ENDDEFINE»
+
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfig(MClass class) FOR MAssociationRole -»
+			'config' => array(
+			«IF isOneToOneUnidirectional() -»			
+				«EXPAND TCAColumnsConfigOneToOneUnidirectional(class) -»
+			«ELSEIF isOneToOneBidirectional() -»
+				«EXPAND TCAColumnsConfigOneToOneBidirectional(class) -»
+			«ELSEIF isOneToManyUnidirectional() -»
+				«EXPAND TCAColumnsConfigOneToManyUnidirectional(class) -»
+			«ELSEIF isOneToManyBidirectional() -»		
+				«EXPAND TCAColumnsConfigOneToManyBidirectional(class) -»
+			«ELSEIF isManyToOneUnidirectional() -»
+				«EXPAND TCAColumnsConfigManyToOneUnidirectional(class) -»
+			«ELSEIF isManyToOneBidirectional() -»
+				«EXPAND TCAColumnsConfigManyToOneBidirectional(class) -»
+			«ELSEIF isManyToManyUnidirectional() -»
+				«EXPAND TCAColumnsConfigManyToManyUnidirectional(class) -»
+			«ELSEIF isManyToManyBidirectional() -»
+				«EXPAND TCAColumnsConfigManyToManyBidirectional(class) -»
+			«ENDIF -»
+			«EXPAND TCAColumnsConfigAdditions -»
+			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
+			)
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsConfigOneToOneUnidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigMinitems -»
@@ -725,7 +759,7 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigOneToOneBidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigOneToOneBidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigMinitems -»
@@ -736,11 +770,11 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigOneToManyUnidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigOneToManyUnidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigForeignSortBy -»
-«EXPAND TCAColumnsConfigMM -»
+«EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
@@ -749,7 +783,7 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigOneToManyBidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigOneToManyBidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigForeignField -»
@@ -762,7 +796,7 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigManyToOneUnidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigManyToOneUnidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigMinitems -»
@@ -773,7 +807,7 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigManyToOneBidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigManyToOneBidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigMinitems -»
@@ -784,11 +818,11 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigManyToManyUnidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigManyToManyUnidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigForeignSortBy -»
-«EXPAND TCAColumnsConfigMM -»
+«EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
@@ -797,11 +831,11 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigManyToManyBidirectional FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigManyToManyBidirectional(MClass class) FOR MAssociationRole -»
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigForeignSortBy -»
-«EXPAND TCAColumnsConfigMM -»
+«EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
@@ -821,7 +855,7 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigAppearance FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigAppearance FOR MProperty -»
 				'appearance' => array(
 					'collapse' => false,
 					'levelLinksPosition' => 'top',
@@ -834,7 +868,7 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigAutoMaxSize(Integer defaultAutoMaxSize) FOR MProperty -»
+«DEFINE TCAColumnsConfigAutoMaxSize(Integer defaultAutoMaxSize) FOR MAttribute -»
 «LET getT3TCxAutoMaxSizeAutoMaxSize() AS autoMaxSize -» 
 «IF autoMaxSize != "" || defaultAutoMaxSize != null -»
 				'autoMaxSize' => «IF autoMaxSize != "" -»«autoMaxSize -»«ELSE -»«defaultAutoMaxSize -»«ENDIF -»,
@@ -892,14 +926,14 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignSortBy FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigForeignSortBy FOR MProperty -»
 				'foreign_sortby' => 'sorting',
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignTable FOR MAssociationRole -»
+«DEFINE TCAColumnsConfigForeignTable FOR MProperty -»
 				'foreign_table' => '«type.name() -»',
 «ENDDEFINE»
 
@@ -936,12 +970,17 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigMaxitems(Integer defaultMaxitems) FOR MProperty -»
+«DEFINE TCAColumnsConfigMaxitems(Integer defaultMaxitems) FOR MAttribute -»
 «LET getT3TCxMaxitemsMaxitems() AS maxitems -» 
 «IF maxitems != "" || defaultMaxitems != null -»
 				'maxitems' => «IF maxitems != "" -»«maxitems -»«ELSE -»«defaultMaxitems -»«ENDIF -»,
 «ENDIF -»
 «ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigMaxitems FOR MAttribute -»
+				'maxitems' => «IF hasFixedUpperBoundMultiplicity() -»«upperBoundMultiplicity -»«ELSE -»99999«ENDIF -»,
 «ENDDEFINE»
 
 
@@ -972,6 +1011,11 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDDEFINE»
 
 
+«DEFINE TCAColumnsConfigMinitems FOR MAttribute -»
+				'minitems' => «IF hasFixedLowerBoundMultiplicity() -»«lowerBoundMultiplicity -»«ELSE -»0«ENDIF -»,
+«ENDDEFINE»
+
+
 «DEFINE TCAColumnsConfigMinitems FOR MAssociationRole -»
 				'minitems' => «IF hasFixedLowerBoundMultiplicity() -»«lowerBoundMultiplicity -»«ELSE -»0«ENDIF -»,
 «ENDDEFINE»
@@ -979,8 +1023,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigMM FOR MAssociationRole -»
-				'MM' => '«asIntermediateTableName() -»',
+«DEFINE TCAColumnsConfigMM(MClass class) FOR MProperty -»
+				'MM' => '«asIntermediateTableName(class) -»',
 «ENDDEFINE»
 
 
