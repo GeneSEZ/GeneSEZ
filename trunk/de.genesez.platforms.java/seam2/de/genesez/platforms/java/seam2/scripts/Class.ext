@@ -5,7 +5,7 @@ extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
 extension de::genesez::platforms::java::seam2::scripts::Operation;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
-extension de::genesez::platforms::common::m2m::CreateOperations;
+extension de::genesez::platforms::common::m2m::MakeElement;
 extension de::genesez::platforms::common::m2m::CreateBasics;
 extension de::genesez::platforms::java::ejb3::scripts::Class;
 extension de::genesez::platforms::java::java5::scripts::Stereotypes;
@@ -40,8 +40,8 @@ Void checkAbstractClassesForComponentStereotype(MClass this) :
   *
   */
 Void addFactoryMethod(MClassifier this, String autoCreate, String scope, String value) :
-	addOperation("initiate"+value.toFirstUpper(), "void", "public") ->
-	this.realization.typeSelect(MClassifier).addOperation("initiate"+value.toFirstUpper(), "void", "public") ->
+	makeOperation("initiate"+value.toFirstUpper(), "public") ->
+	this.realization.typeSelect(MClassifier).makeOperation("initiate"+value.toFirstUpper(), "public") ->
 	this.operation.selectFirst(e|e.name == "initiate"+value.toFirstUpper()).addFactoryStereotype(autoCreate, scope, value);
 
 /**
@@ -67,14 +67,14 @@ Void checkCreateMethod(MClass this) :
 				? (
 					(!operation.exists(e|e.name == "init" && e.parameter.size == 0)
 						? (
-							let o = addOperation("init", "void", "public") :
+							let o = makeOperation("init", "public") :
 								o.addInternalStereotype("http://www.genesez.de/java/seam2/CreateOperation")
 						)
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "init" && e.parameter.size == 0).addLifecycleStereotype("true", "false") ->
 					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).operation.exists(e|e.name == "init" && e.parameter.size == 0)
-						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).addOperation("init", "void", "public")
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).makeOperation("init", "public")
 						: "")
 				)
 				: ""
@@ -91,14 +91,14 @@ Void checkDestroyMethod(MClass this) :
 				? (
 					(!operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
 						? (
-							let o = addOperation("destroy", "void", "public") :
+							let o = makeOperation("destroy", "public") :
 								o.addInternalStereotype("http://www.genesez.de/java/seam2/DestroyOperation")
 						)
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "destroy" && e.parameter.size == 0).addLifecycleStereotype("false", "true") ->
 					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
-						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).addOperation("destroy", "void", "public")
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).makeOperation("destroy", "public")
 						: "")
 				)
 				: ""
