@@ -124,15 +124,15 @@
 		«EXPAND DiscriminatorValue-»
 		«IF hasStereotype("jpaPrimaryKeyJoinColumn")-»
 			@PrimaryKeyJoinColumns(
-			«FOREACH getTaggedValue("jpaPrimaryKeyJoinColumn", "name").getElements() AS value-»
+			«FOREACH getTaggedValue("jpaPrimaryKeyJoinColumn", "name").toList() AS value-»
 				@PrimaryKeyJoinColumn(
 					name="«value-»"
-					«LET getTaggedValue("jpaPrimaryKeyJoinColumn", "name").getElements().indexOf(value) AS index-»		
+					«LET getTaggedValue("jpaPrimaryKeyJoinColumn", "name").toList().indexOf(value) AS index-»		
 						«IF hasUtilizableValue("jpaPrimaryKeyJoinColumn", "referencedName")-»
- 							, referencedColumnName="«getTaggedValue("jpaPrimaryKeyJoinColumn", "referencedName").getElements().get(index)-»"
+ 							, referencedColumnName="«getTaggedValue("jpaPrimaryKeyJoinColumn", "referencedName").toList().get(index)-»"
 	 					«ENDIF-»
 						«IF hasUtilizableValue("jpaPrimaryKeyJoinColumn", "columnDefinition")-»
- 							, columnDefinition="«getTaggedValue("jpaPrimaryKeyJoinColumn", "columnDefinition").getElements().get(index)-»"
+ 							, columnDefinition="«getTaggedValue("jpaPrimaryKeyJoinColumn", "columnDefinition").toList().get(index)-»"
  						«ENDIF-»
  					«ENDLET-») 					
 			«ENDFOREACH»)

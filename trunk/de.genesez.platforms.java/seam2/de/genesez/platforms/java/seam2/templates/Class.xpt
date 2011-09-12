@@ -58,12 +58,12 @@
 			, type=InterceptorType.«taggedValue.selectFirst(e|e.tag.name == "type").value-»	
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Interceptor", "around")-»
-			, around={«FOREACH taggedValue.select(e|e.tag.name == "around").value.getElements() AS values SEPARATOR ", "-»
+			, around={«FOREACH taggedValue.select(e|e.tag.name == "around").value.toList() AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»}	
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Interceptor", "within")-»
-			, within={«FOREACH taggedValue.select(e|e.tag.name == "within").value.getElements() AS values SEPARATOR ", "-»
+			, within={«FOREACH taggedValue.select(e|e.tag.name == "within").value.toList() AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»}	
 		«ENDIF-»)
@@ -78,7 +78,7 @@
 	«IF hasStereotype("seam2JavaBeanInterceptors")»
 		«IF hasUtilizableValue("seam2JavaBeanInterceptors", "value")-»
 			@Interceptors(
-			{«FOREACH getTaggedValue("seam2JavaBeanInterceptor", "value").getElements() AS values SEPARATOR ", "-»
+			{«FOREACH getTaggedValue("seam2JavaBeanInterceptor", "value").toList() AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»})
 		«ENDIF»
@@ -129,12 +129,12 @@
 			hasUtilizableValue("seam2ServletContainerIntegration", "around")»
 			@Filter
 			«IF hasUtilizableValue("seam2ServletContainerIntegration", "around")-»
-				({«FOREACH taggedValue.select(e|e.tag.name == "around").value.getElements() AS values SEPARATOR ", "-»
+				({«FOREACH taggedValue.select(e|e.tag.name == "around").value.toList() AS values SEPARATOR ", "-»
 					"«values-»"
 				«ENDFOREACH-»})	
 			«ENDIF-»
 			«IF hasUtilizableValue("seam2ServletContainerIntegration", "within")»
-				({«FOREACH taggedValue.select(e|e.tag.name == "within").value.getElements() AS values SEPARATOR ", "-»
+				({«FOREACH taggedValue.select(e|e.tag.name == "within").value.toList() AS values SEPARATOR ", "-»
 					"«values-»"
 				«ENDFOREACH-»})	
 			«ENDIF-»
@@ -210,11 +210,11 @@
 	«IF hasStereotype("seam2Role") && 
 		(hasUtilizableValue("seam2Role", "name") || hasUtilizableValue("seam2Role", "scope"))-»
 		@Roles({
-		«FOREACH getTaggedValue("seam2Role", "name").getElements() AS names SEPARATOR ","-»
+		«FOREACH getTaggedValue("seam2Role", "name").toList() AS names SEPARATOR ","-»
 			@Role(name="«names-»"
-			«LET getTaggedValue("seam2Role", "scope").getElements().indexOf(names) AS index-»
+			«LET getTaggedValue("seam2Role", "scope").toList().indexOf(names) AS index-»
 				«IF !hasTaggedValue("seam2Role", "scope", "UNSPECIFIED") && hasUtilizableValue("seam2Role", "scope")-»
-					, scope=ScopeType.«getTaggedValue("seam2Role", "scope").getElements().get(index)-»
+					, scope=ScopeType.«getTaggedValue("seam2Role", "scope").toList().get(index)-»
 				«ENDIF-»
 			«ENDLET-»)
 		«ENDFOREACH-»	
@@ -244,19 +244,19 @@
 			@Install(debug="«getTaggedValue("seam2Install", "debug")-»"
 			«IF hasUtilizableValue("seam2Install", "dependencies")-»
 				, dependencies={
-				«FOREACH getTaggedValue("seam2Install", "dependencies").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Install", "dependencies").toList() AS value SEPARATOR ", "-»
 					"«value-»"
 				«ENDFOREACH-»}				
 			«ENDIF-»
 			«IF hasUtilizableValue("seam2Install", "genericDependencies")-»
 				, genericDependencies={
-				«FOREACH getTaggedValue("seam2Install", "genericDependencies").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Install", "genericDependencies").toList() AS value SEPARATOR ", "-»
 					«value-»
 				«ENDFOREACH-»}	
 			«ENDIF-»
 			«IF hasUtilizableValue("seam2Install", "classDependencies")-»
 				, classDependencies={
-				«FOREACH getTaggedValue("seam2Install", "classDependencies").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Install", "classDependencies").toList() AS value SEPARATOR ", "-»
 					"«value-»"
 				«ENDFOREACH-»}	
 			«ENDIF-»
@@ -277,7 +277,7 @@
 			@Startup
 			«IF hasUtilizableValue("seam2Startup", "depends")-»
 				(depends={
-				«FOREACH getTaggedValue("seam2Startup", "depends").getElements() AS value SEPARATOR ", "-»
+				«FOREACH getTaggedValue("seam2Startup", "depends").toList() AS value SEPARATOR ", "-»
 					"«value-»"
 				«ENDFOREACH-»})
 			«ENDIF-»
