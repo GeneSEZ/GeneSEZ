@@ -469,11 +469,11 @@ String asT3MVCPluginType(String value) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC TCx 
+	TYPO3 TCx 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-String asTCxEvalName(String this) :
+String asT3TCxEvalName(String this) :
 	toLowerCase();
 
 
@@ -483,16 +483,77 @@ String asTCxEvalName(String this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+
 /**
+ * Returns the intermediate table name for an attribute.
  * This method needs to be called in SQL context.
+ * 
+ * For instance: The extension key is "blog_example" and we have a
+ * class "Post" which has a 1:n attribute called "tags" to the class "Tag".
+ * Because this is like a 1:n unidirectional association we need a
+ * intermediate table. This method returns "tx_blogexample_post_tag_tags_mm".
  */
-String asIntermediateTableName(MAssociationRole this) :
-	fullQualifiedExtensionName().toLowerCase() + classifierNameSeperator()
-		+ ( classifier.name().compareTo( type.name() ) < 0 
-			? classifier.asIntermediateTableName() + classifierNameSeperator() + ( hasOpposite() ? opposite.name() + classifierNameSeperator() : "" ) + type.asIntermediateTableName() + classifierNameSeperator() + name()
-			: type.asIntermediateTableName() + classifierNameSeperator() + name() + classifierNameSeperator() + classifier.asIntermediateTableName() + ( hasOpposite() ? classifierNameSeperator() + opposite.name() : "" )
-		  )
-		+ classifierNameSeperator() + "mm";
+String asIntermediateTableName(MAttribute this, MClass class) :
+	// tx_blogexample_
+	fullQualifiedExtensionNameToLowerCase() + classifierNameSeperator()
+		// post_
+		+ class.asIntermediateTableName() + classifierNameSeperator()
+			// tag_
+			+ type.asIntermediateTableName() + classifierNameSeperator()
+				// tags
+	 			+ name()
+					// _mm  
+					+ classifierNameSeperator() + "mm";
+
+
+/**
+ * Returns the intermediate table name for a association role.
+ * This method needs to be called in SQL context.
+ * 
+ * For instance: The extension key is "blog_example" and we have a
+ * class "Post" which has a 1:n association role called "tags" to the class "Tag".
+ * Because this is a 1:n association we need a intermediate table. 
+ * This method returns "tx_blogexample_post_tag_tags_mm".
+ */
+String asIntermediateTableName(MAssociationRole this, MClass class) :
+	// tx_blogexample_
+	fullQualifiedExtensionNameToLowerCase() + classifierNameSeperator()
+	+	( !hasOpposite()
+			?	(	// post_
+					class.asIntermediateTableName() + classifierNameSeperator()
+						// tag_
+						+ type.asIntermediateTableName() + classifierNameSeperator()
+							// tags 
+							+ name()
+				)
+			: 	(	// compare the class name and the type name
+					class.name().compareTo( type.name() ) < 0 || !type.isClassifier()
+						?	(	// 
+								class.asIntermediateTableName() + classifierNameSeperator()
+									// 
+									+ opposite.name() + classifierNameSeperator()
+										// 
+										+ type.asIntermediateTableName() + classifierNameSeperator()
+											// 
+											+ name()
+							)
+						: 	(	// 
+								type.asIntermediateTableName() + classifierNameSeperator()
+									// 
+									+ name() + classifierNameSeperator()
+										// 
+										+ class.asIntermediateTableName() + classifierNameSeperator()
+											// 
+											+ opposite.name()
+							)
+				)
+		)
+	// _mm  
+	+ classifierNameSeperator() + "mm";
+
+
+String asIntermediateTableName(MProperty this, MClass class) :
+	"";
 
 
 private String asIntermediateTableName(MType this) :
