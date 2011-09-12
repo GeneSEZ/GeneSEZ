@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, TYPO3 core team
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,35 +37,35 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 
 	/**
 	 * The blog's title.
-	 * 
+	 *
 	 * @var string
 	 * @validate StringLength(minimum = 1, maximum = 80)
 	 */
 	protected $title = '';
 	/**
 	 * A short description of the blog
-	 * 
+	 *
 	 * @var string
 	 * @validate StringLength(maximum = 150)
 	 */
 	protected $description = '';
 	/**
 	 * A relative path to a logo image
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $logo;
 	/**
 	 * The posts of this blog
-	 * 
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> 
+	 *
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post>
 	 * @cascade remove
 	 * @lazy
 	 */
 	protected $posts;
 	/**
 	 * The blog's administrator
-	 * 
+	 *
 	 * @var Tx_GenesezBlogExample_Domain_Model_Administrator
 	 * @lazy
 	 */
@@ -148,7 +148,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Getter for posts
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> The posts of this blog 
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> The posts of this blog
 	 */
 	public function getPosts() {
 		return $this->posts;
@@ -156,7 +156,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Setter for posts
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> $posts The posts of this blog 
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> $posts The posts of this blog
 	 * @return void
 	 */
 	public function setPosts(Tx_Extbase_Persistence_ObjectStorage $posts) {

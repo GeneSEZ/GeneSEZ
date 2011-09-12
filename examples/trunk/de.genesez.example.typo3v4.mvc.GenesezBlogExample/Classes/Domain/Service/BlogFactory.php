@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, TYPO3 core team
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,7 +36,6 @@
 class Tx_GenesezBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
 
 	/**
-	 * 
 	 * @var Tx_Extbase_Object_ObjectManagerInterface
 	 */
 	protected $objectManager;

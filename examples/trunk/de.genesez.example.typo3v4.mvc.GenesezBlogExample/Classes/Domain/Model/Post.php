@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, TYPO3 core team
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,47 +36,39 @@
 class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
-	 * 
 	 * @var string
 	 * @validate StringLength(minimum = 3, maximum = 50)
 	 */
 	protected $title;
 	/**
-	 * 
 	 * @var DateTime
 	 */
 	protected $date;
 	/**
-	 * 
 	 * @var string
 	 * @validate StringLength(minimum = 3)
 	 */
 	protected $content;
 	/**
-	 * 
 	 * @var Tx_GenesezBlogExample_Domain_Model_Blog
 	 */
 	protected $blog;
 	/**
-	 * 
 	 * @var Tx_GenesezBlogExample_Domain_Model_Person
 	 */
 	protected $author;
 	/**
-	 * 
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Tag> 
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Tag>
 	 */
 	protected $tags;
 	/**
-	 * 
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Comment> 
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Comment>
 	 * @cascade remove
 	 * @lazy
 	 */
 	protected $comments;
 	/**
-	 * 
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> 
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post>
 	 * @lazy
 	 */
 	protected $relatedPosts;
@@ -110,7 +102,6 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 		/* PROTECTED REGION END */
 	}
 	/**
-	 *
 	 * @return void
 	 */
 	public function removeAllTags() {
@@ -119,7 +110,6 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 		/* PROTECTED REGION END */
 	}
 	/**
-	 *
 	 * @return void
 	 */
 	public function removeAllComments() {
@@ -131,7 +121,6 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 		/* PROTECTED REGION END */
 	}
 	/**
-	 *
 	 * @return void
 	 */
 	public function removeAllRelatedPosts() {
@@ -232,7 +221,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Getter for tags
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Tag>  
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Tag> 
 	 */
 	public function getTags() {
 		return $this->tags;
@@ -240,7 +229,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Setter for tags
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Tag> $tags  
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Tag> $tags 
 	 * @return void
 	 */
 	public function setTags(Tx_Extbase_Persistence_ObjectStorage $tags) {
@@ -267,7 +256,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Getter for comments
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Comment>  
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Comment> 
 	 */
 	public function getComments() {
 		return $this->comments;
@@ -275,7 +264,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Setter for comments
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Comment> $comments  
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Comment> $comments 
 	 * @return void
 	 */
 	public function setComments(Tx_Extbase_Persistence_ObjectStorage $comments) {
@@ -302,7 +291,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Getter for relatedPosts
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post>  
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> 
 	 */
 	public function getRelatedPosts() {
 		return $this->relatedPosts;
@@ -310,7 +299,7 @@ class Tx_GenesezBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Setter for relatedPosts
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> $relatedPosts  
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> $relatedPosts 
 	 * @return void
 	 */
 	public function setRelatedPosts(Tx_Extbase_Persistence_ObjectStorage $relatedPosts) {

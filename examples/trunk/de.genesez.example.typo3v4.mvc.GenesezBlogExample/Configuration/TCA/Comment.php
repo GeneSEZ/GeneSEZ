@@ -32,7 +32,7 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 		'date' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_comment.date',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194923795_300153_1767) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194777757_325505_1605._16_9_8a7027a_1297194923795_300153_1767) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
@@ -40,47 +40,47 @@ $TCA['tx_genesezblogexample_domain_model_comment'] = array (
 				'eval' => 'required, datetime',
 				'default' => time(),
 				'checkbox' => 1,
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194923795_300153_1767) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194777757_325505_1605._16_9_8a7027a_1297194923795_300153_1767) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'author' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_comment.author',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1302084243420_785018_3332) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194777757_325505_1605._17_0_1_8a7027a_1302084243420_785018_3332) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1302084243420_785018_3332) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194777757_325505_1605._17_0_1_8a7027a_1302084243420_785018_3332) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'email' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_comment.email',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1302084262597_392423_3338) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194777757_325505_1605._17_0_1_8a7027a_1302084262597_392423_3338) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1302084262597_392423_3338) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194777757_325505_1605._17_0_1_8a7027a_1302084262597_392423_3338) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'content' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_comment.content',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194945347_857717_1785) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194777757_325505_1605._16_9_8a7027a_1297194945347_857717_1785) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'text',
 				'cols' => 80,
 				'rows' => 30,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194945347_857717_1785) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194777757_325505_1605._16_9_8a7027a_1297194945347_857717_1785) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),

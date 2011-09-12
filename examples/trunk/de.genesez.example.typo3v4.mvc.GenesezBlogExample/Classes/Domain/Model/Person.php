@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, TYPO3 core team
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,17 +36,14 @@
 class Tx_GenesezBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
-	 * 
 	 * @var string
 	 */
 	protected $firstname;
 	/**
-	 * 
 	 * @var string
 	 */
 	protected $lastname;
 	/**
-	 * 
 	 * @var string
 	 * @validate EmailAddress
 	 */

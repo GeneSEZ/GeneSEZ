@@ -73,20 +73,20 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'title' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.title',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194882955_681374_1735) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194882955_681374_1735) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'required, trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194882955_681374_1735) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194882955_681374_1735) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'date' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.date',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194886910_832299_1741) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194886910_832299_1741) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
@@ -94,28 +94,28 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				'eval' => 'required, datetime',
 				'default' => time(),
 				'checkbox' => 1,
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194886910_832299_1741) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194886910_832299_1741) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'content' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.content',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194888091_417284_1747) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194888091_417284_1747) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'text',
 				'cols' => 80,
 				'rows' => 30,
 				'eval' => 'trim',
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194888091_417284_1747) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194888091_417284_1747) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),
 		'blog' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.blog',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297195059082_239030_1887) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195059082_239030_1887) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -138,7 +138,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'author' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.author',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297195253147_828265_2388) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195253147_828265_2388) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -184,7 +184,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'tags' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.tags',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297195352189_179879_2445) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195352189_179879_2445) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -213,13 +213,13 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'comments' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.comments',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297195402378_449726_2482) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195402378_449726_2482) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_comment',
 				'foreign_sortby' => 'sorting',
-				'MM' => 'tx_genesezblogexample_comment_comments_post_mm',
+				'MM' => 'tx_genesezblogexample_post_comment_comments_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
 				'appearance' => array(
@@ -243,13 +243,13 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		'related_posts' => array(
 			'exclude' => true,
 			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.related_posts',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297195445317_889803_2527) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195445317_889803_2527) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
 				'foreign_sortby' => 'sorting',
-				'MM' => 'tx_genesezblogexample_post_related_posts_post_mm',
+				'MM' => 'tx_genesezblogexample_post_post_related_posts_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
 				'appearance' => array(

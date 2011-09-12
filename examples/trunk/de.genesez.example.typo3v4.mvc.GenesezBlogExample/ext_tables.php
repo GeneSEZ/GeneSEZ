@@ -9,11 +9,17 @@ t3lib_div::loadTCA('tt_content');
 // These dividers are a little trick to group these items in the plugin selector
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('GenesezBlogExample', '--div--', t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif');
 
+/**
+ * Blog admin plugin
+ */
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'BlogAdmin',
 	'Admin Plugin (GeneSEZBlogExample)'
 );
+/**
+ * Blog list plugin
+ */
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'BlogList',
@@ -23,11 +29,17 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['genesezblogexample_bloglist'] = 'select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['genesezblogexample_bloglist'] = 'pi_flexform,recursive';
 t3lib_extMgm::addPiFlexFormValue('genesezblogexample_bloglist', 'FILE:EXT:genesez_blog_example/Configuration/FlexForms/flexform_bloglist.xml');
+/**
+ * Post list plugin
+ */
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'PostList',
 	'List of Posts (GeneSEZBlogExample)'
 );
+/**
+ * Post single plugin
+ */
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'PostSingle',

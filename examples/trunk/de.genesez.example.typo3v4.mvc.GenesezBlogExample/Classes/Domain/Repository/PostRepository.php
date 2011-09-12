@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, TYPO3 core team
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -42,7 +42,7 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 * Finds all posts by the specified blog
 	 *
 	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog the post must refer to
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> Finds all posts by the specified blog
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
 	 */
 	public function findAllByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297250908862_209782_2440) ENABLED START */
@@ -59,7 +59,7 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 *
 	 * @param string $tag 
 	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog the post must refer to
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> Finds posts by the specified tag and blog
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
 	 */
 	public function findByTagAndBlog($tag, Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297250952847_309532_2458) ENABLED START */
@@ -78,7 +78,7 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 * Finds all remaining posts of the blog
 	 *
 	 * @param Tx_GenesezBlogExample_Domain_Model_Post $post The reference post
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> Finds all remaining posts of the blog
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
 	 */
 	public function findByRemaining(Tx_GenesezBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251045982_475934_2503) ENABLED START */
@@ -135,7 +135,7 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 *
 	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog the post must refer to
 	 * @param integer $limit The number of posts to return at max
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> Finds most recent posts by the specified blog
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
 	 */
 	public function findRecentByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog, $limit = 5) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251180788_324969_2565) ENABLED START */

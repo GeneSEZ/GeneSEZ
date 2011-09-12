@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, TYPO3 core team
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,12 +36,10 @@
 class Tx_GenesezBlogExample_Controller_BlogController extends Tx_GenesezBlogExample_Controller_AbstractController {
 
 	/**
-	 * 
 	 * @var Tx_GenesezBlogExample_Domain_Repository_BlogRepository
 	 */
 	protected $blogRepository;
 	/**
-	 * 
 	 * @var Tx_GenesezBlogExample_Domain_Repository_AdministratorRepository
 	 */
 	protected $administratorRepository;
