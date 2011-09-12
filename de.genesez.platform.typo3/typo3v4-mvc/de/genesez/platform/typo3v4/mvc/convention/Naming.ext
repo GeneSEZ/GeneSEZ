@@ -448,17 +448,9 @@ String asAssignedValidatorName(MStereotype this) :
 
 String asPluginFlexformName(MInterface this) :
 	extensionNameToLowerCase() + "_" + asPHPCompliantName().toLowerCase();
-
-
-String asT3MainModulName(String mainModule) :
-	mainModule.toLowerCase();
-	
-	
-String asT3AccessRole(String accessRole) :
-	accessRole.toLowerCase();
 	
 
-String asT3MVCPluginType(String value) :
+String asPluginType(String value) :
 	switch (value) {
 		case prT3ExtbasePluginTypeExtbaseContentElement() :
 			"Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT"
@@ -469,17 +461,7 @@ String asT3MVCPluginType(String value) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 TCx 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-String asT3TCxEvalName(String this) :
-	toLowerCase();
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 MVC persistance
+	TYPO3 MVC persistence
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -528,22 +510,22 @@ String asIntermediateTableName(MAssociationRole this, MClass class) :
 				)
 			: 	(	// compare the class name and the type name
 					class.name().compareTo( type.name() ) < 0 || !type.isClassifier()
-						?	(	// 
+						?	(	// post
 								class.asIntermediateTableName() + classifierNameSeperator()
-									// 
+									// posts
 									+ opposite.name() + classifierNameSeperator()
-										// 
+										// tag
 										+ type.asIntermediateTableName() + classifierNameSeperator()
-											// 
+											// tags 
 											+ name()
 							)
-						: 	(	// 
+						: 	(	// comment
 								type.asIntermediateTableName() + classifierNameSeperator()
-									// 
+									// comments
 									+ name() + classifierNameSeperator()
-										// 
+										// post
 										+ class.asIntermediateTableName() + classifierNameSeperator()
-											// 
+											// post
 											+ opposite.name()
 							)
 				)
