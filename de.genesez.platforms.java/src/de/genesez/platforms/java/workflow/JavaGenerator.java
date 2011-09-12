@@ -10,6 +10,7 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xpand2.output.JavaBeautifier;
 
 import de.genesez.platforms.common.workflow.Generator;
+import de.genesez.platforms.common.workflow.TypeMappingGenerator;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
 import de.genesez.platforms.java.m2t.JavaImportBeautifier;
 
@@ -17,7 +18,7 @@ import de.genesez.platforms.java.m2t.JavaImportBeautifier;
  * Performs model to text transformations for the Java platform
  * @author Aibek Isaev
  */
-public class JavaGenerator extends Generator {
+public class JavaGenerator extends TypeMappingGenerator {
 	
 	private static final Properties defaults = new Properties();
 	static {
