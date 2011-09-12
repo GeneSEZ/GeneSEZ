@@ -19,6 +19,7 @@
 // based on genesez meta model
 import gcore;
 
+extension de::genesez::platforms::common::AccessHelper;
 
 /**
  * collects the use dependencies of a classifier
@@ -62,8 +63,8 @@ private Collection[MType] collectUseDependencies(MClassifier this) :
 	let deps = {} :
 		// add types of properties
 		deps.addAll( property.type.filter() ) ->
-		// add return types of operations
-		deps.addAll( operation.returnType.filter() ) ->
+		// add return types of operations		
+		deps.addAll( operation.reject(e|!e.hasReturn()).return.type.filter()) ->
 		// add raised exceptions
 		deps.addAll( operation.raisedException.filter() ) ->
 		// add parameter types of operation parameters
