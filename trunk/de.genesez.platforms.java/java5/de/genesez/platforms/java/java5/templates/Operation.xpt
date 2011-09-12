@@ -18,7 +18,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
-
+«EXTENSION de::genesez::platforms::common::log::Log»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -142,7 +142,7 @@
 «DEFINE _Declaration FOR MOperation-»
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
-	«IF isSingleValuedType()-»
+	«IF isSingleValuedType() && return.type.mapName() != null-»
 		«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR return.type» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
 	«ELSEIF isMultiValuedType()-»
 		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-»;
@@ -158,7 +158,7 @@
 «DEFINE _Implementation FOR MOperation-»
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
-	«IF isSingleValuedType()-»
+	«IF isSingleValuedType() && return.type.mapName() != null-»
 		«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR return.type-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
 	«ELSEIF isMultiValuedType()-»
 		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
