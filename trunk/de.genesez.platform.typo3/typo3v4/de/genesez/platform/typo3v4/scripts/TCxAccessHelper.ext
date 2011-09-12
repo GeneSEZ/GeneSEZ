@@ -15,7 +15,7 @@ extension de::genesez::platform::typo3v4::profile::AccessHelper;
 	
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Table Configuration Array (TCA) or TYPO3 Core Engine (TCE) 
+	TYPO3 Table Configuration Array (TCA) 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
@@ -28,10 +28,17 @@ boolean generateAdvancedTCATypesNumbers(MProperty this) :
 		: false;
 
 
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Core Engine (TCE) 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
 List[String] allTCESheetsWithoutDefault(MInterface this) :
 	let sheets = {} :
-		property.typeSelect(MAttribute).select(a|a.getT3TCEOptionSheet() != "").
-			collect(a| sheets.add( a.getT3TCEOptionSheet() ) ) ->
+		property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() != "" ).
+			collect( e | sheets.add( e.getT3TCEOptionSheet() ) ) ->
 		sheets.toSet() ->
 		sheets.remove( prT3TCESheetDefault() ) ->
 		sheets.sortBy( s | s );
@@ -39,9 +46,15 @@ List[String] allTCESheetsWithoutDefault(MInterface this) :
 
 List[MAttribute] allTCESheetProperties(MInterface this, String sheet) :
 	sheet == "sDEF"
-		? property.typeSelect(MAttribute).select(e| e.getT3TCEOptionSheet() == "" || e.getT3TCEOptionSheet() == prT3TCESheetDefault() )
-		: property.typeSelect(MAttribute).select(e|e.getT3TCEOptionSheet() == sheet);
-	
+		? property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() == "" || e.getT3TCEOptionSheet() == prT3TCESheetDefault() )
+		: property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() == sheet );
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 Table Configuration Array (TCA) or TYPO3 Core Engine (TCE) 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
 
 List[String] allTCxEvals(MProperty this, List[String] defaultEvals) :
 	let evals = {} :
