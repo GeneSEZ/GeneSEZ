@@ -134,6 +134,16 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
+«REM»
+	generates a region for own TCA Interface Section code implementations
+«ENDREM»
+«DEFINE OwnTCAInterfaceSectionCodeImplementation(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further TCA Interface Section code implementations here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
 «REM» 
 «ENDREM»
 «DEFINE TCATypesSection FOR MClass -»
@@ -168,6 +178,16 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
+«REM»
+	generates a region for own TCA Types Section code implementations
+«ENDREM»
+«DEFINE OwnTCATypesSectionCodeImplementation(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further TCA Types Section code implementations here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
 «REM» 
 «ENDREM»
 «DEFINE TCAPalettesSection FOR MClass -»
@@ -197,6 +217,16 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
+«REM»
+	generates a region for own TCA Palettes Section code implementations
+«ENDREM»
+«DEFINE OwnTCAPalettesSectionCodeImplementation(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further TCA Palettes Section code implementations here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
 «REM» 
 «ENDREM»
 «DEFINE TCAColumnsSection FOR MClass -»
@@ -213,15 +243,6 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsAccessControlColumns FOR MClass -»
-«EXPAND TCAColumnsHiddenColumn -»
-«EXPAND TCAColumnsStarttimeColumn -»
-«EXPAND TCAColumnsEndtimeColumn -»
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
 «DEFINE TCAColumnsLocalizationColumns FOR MClass -»
 «IF createLocalizationFields() -»
 	«EXPAND TCAColumnsSysLanguageUidColumn -»
@@ -233,10 +254,59 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsVersioningColumns FOR MClass -»
-«IF createVersioningFields() -»
-	«EXPAND TCAColumnsT3VerLabelColumn -»
-«ENDIF -»
+«DEFINE TCAColumnsSysLanguageUidColumn FOR MClass -»
+		'sys_language_uid' => array(
+			'exclude' => true,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+			'config' => array(
+				'type' => 'select',
+				'foreign_table' => 'sys_language',
+				'foreign_table_where' => 'ORDER BY sys_language.title',
+				'items' => array(
+					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
+					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
+				),
+			)
+		),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsl10nParentColumn FOR MClass -»
+		'l10n_parent' => array(
+			'displayCond' => 'FIELD:sys_language_uid:>:0',
+			'exclude' => true,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
+			'config' => array(
+				'type' => 'select',
+				'items'	=> array(
+					array('', 0),
+				),
+				'foreign_table' => '«name() -»',
+				'foreign_table_where' => 'AND «name() -».uid=###REC_FIELD_l10n_parent### AND «name() -».sys_language_uid IN (-1,0)',
+			)
+		),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsl10nDiffsourceColumn FOR MClass -»
+		'l10n_diffsource' => array(
+			'config' =>array(
+				'type' =>'passthrough',
+			)
+		),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsAccessControlColumns FOR MClass -»
+«EXPAND TCAColumnsHiddenColumn -»
+«EXPAND TCAColumnsStarttimeColumn -»
+«EXPAND TCAColumnsEndtimeColumn -»
 «ENDDEFINE»
 
 
@@ -303,50 +373,10 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsSysLanguageUidColumn FOR MClass -»
-		'sys_language_uid' => array(
-			'exclude' => true,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
-			'config' => array(
-				'type' => 'select',
-				'foreign_table' => 'sys_language',
-				'foreign_table_where' => 'ORDER BY sys_language.title',
-				'items' => array(
-					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
-					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
-				),
-			)
-		),
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsl10nParentColumn FOR MClass -»
-		'l10n_parent' => array(
-			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => true,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
-			'config' => array(
-				'type' => 'select',
-				'items'	=> array(
-					array('', 0),
-				),
-				'foreign_table' => '«name() -»',
-				'foreign_table_where' => 'AND «name() -».uid=###REC_FIELD_l10n_parent### AND «name() -».sys_language_uid IN (-1,0)',
-			)
-		),
-«ENDDEFINE»
-
-
-«REM» 
-«ENDREM»
-«DEFINE TCAColumnsl10nDiffsourceColumn FOR MClass -»
-		'l10n_diffsource' => array(
-			'config' =>array(
-				'type' =>'passthrough',
-			)
-		),
+«DEFINE TCAColumnsVersioningColumns FOR MClass -»
+«IF createVersioningFields() -»
+	«EXPAND TCAColumnsT3VerLabelColumn -»
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -392,6 +422,16 @@ $TCA['«name() -»'] = array (
 «ENDDEFINE»
 
 
+«REM»
+	generates a region for own TCA Columns Section code implementations
+«ENDREM»
+«DEFINE OwnTCAColumnsSectionCodeImplementation(String id) FOR MClass -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: put your further TCA Columns Section code implementations here
+		«ENDPROTECT»
+«ENDDEFINE»
+
+
 «REM» 
 «ENDREM»
 «DEFINE TCAColumnsExclude FOR MProperty -»
@@ -423,6 +463,16 @@ $TCA['«name() -»'] = array (
 			«asT3AssociativeArrayItem(tcaAddition)»
 «ENDFOREACH -»
 «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own TCA Column code implementations
+«ENDREM»
+«DEFINE OwnTCAColumnCodeImplementation(String id) FOR MProperty -»
+			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+			// TODO: put your further TCA Column code implementations here
+			«ENDPROTECT»
 «ENDDEFINE»
 
 
@@ -470,9 +520,9 @@ $TCA['«name() -»'] = array (
 			«ENDIF -»
 «ELSE -»
 			«IF isOneToOneUnidirectional() -»
-				«EXPAND TCAColumnsConfigOneToOneUnidirectionalClassifier(class) -»
+				«EXPAND TCAColumnsConfigOneToOneUnidirectional(class) -»
 			«ELSE -»
-				«EXPAND TCAColumnsConfigOneToManyUnidirectionalClassifier(class) -»
+				«EXPAND TCAColumnsConfigOneToManyUnidirectional(class) -»
 			«ENDIF -»
 «ENDIF-»
 			«EXPAND TCAColumnsConfigAdditions -»
@@ -698,8 +748,8 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigOneToOneUnidirectionalClassifier(MClass class) FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("select") -»
+«DEFINE TCAColumnsConfigOneToOneUnidirectional(MClass class) FOR MAttribute -»
+«EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
@@ -709,8 +759,8 @@ $TCA['«name() -»'] = array (
 
 «REM» 
 «ENDREM»
-«DEFINE TCAColumnsConfigOneToManyUnidirectionalClassifier(MClass class) FOR MAttribute -»
-«EXPAND TCAColumnsConfigType("select") -»
+«DEFINE TCAColumnsConfigOneToManyUnidirectional(MClass class) FOR MAttribute -»
+«EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigForeignSortBy -»
 «EXPAND TCAColumnsConfigMM(class) -»
@@ -718,7 +768,6 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
 «ENDDEFINE»
-
 
 
 «REM» 
@@ -846,7 +895,7 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigAllowed(String defaultAllowed) FOR MAttribute -»
+«DEFINE TCAColumnsConfigAllowed(String defaultAllowed) FOR MProperty -»
 «LET getT3TCxAllowedAllowed() AS allowed -» 
 «IF allowed != "" || defaultAllowed != null -»
 				'allowed' => '«IF allowed != "" -»«allowed -»«ELSE -»«defaultAllowed -»«ENDIF -»',
@@ -870,7 +919,7 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigAutoMaxSize(Integer defaultAutoMaxSize) FOR MAttribute -»
+«DEFINE TCAColumnsConfigAutoMaxSize(Integer defaultAutoMaxSize) FOR MProperty -»
 «LET getT3TCxAutoMaxSizeAutoMaxSize() AS autoMaxSize -» 
 «IF autoMaxSize != "" || defaultAutoMaxSize != null -»
 				'autoMaxSize' => «IF autoMaxSize != "" -»«autoMaxSize -»«ELSE -»«defaultAutoMaxSize -»«ENDIF -»,
@@ -942,7 +991,7 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigInternalType(String internalType) FOR MAttribute -»
+«DEFINE TCAColumnsConfigInternalType(String internalType) FOR MProperty -»
 				'internal_type' => '«internalType -»',
 «ENDDEFINE»
 
@@ -972,7 +1021,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigMaxitems(Integer defaultMaxitems) FOR MAttribute -»
+«DEFINE TCAColumnsConfigMaxitems(Integer defaultMaxitems) FOR MProperty -»
 «LET getT3TCxMaxitemsMaxitems() AS maxitems -» 
 «IF maxitems != "" || defaultMaxitems != null -»
 				'maxitems' => «IF maxitems != "" -»«maxitems -»«ELSE -»«defaultMaxitems -»«ENDIF -»,
@@ -1079,6 +1128,14 @@ hier evtl. versuch über sql type maximum herauszufinden
 				'type' => '«type -»',
 «ENDDEFINE»
 
+
+«REM»
+«ENDREM»
+«DEFINE TCAColumnsConfigType FOR MAttribute -»
+				'type' => 'select',
+«ENDDEFINE»
+
+
 «REM»
 «ENDREM»
 «DEFINE TCAColumnsConfigType FOR MAssociationRole -»
@@ -1105,56 +1162,6 @@ hier evtl. versuch über sql type maximum herauszufinden
 				«asT3AssociativeArrayItem(tcaAddition)»
 «ENDFOREACH -»
 «ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TCA Interface Section code implementations
-«ENDREM»
-«DEFINE OwnTCAInterfaceSectionCodeImplementation(String id) FOR MClass -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Interface Section code implementations here
-		«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TCA Types Section code implementations
-«ENDREM»
-«DEFINE OwnTCATypesSectionCodeImplementation(String id) FOR MClass -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Types Section code implementations here
-		«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TCA Palettes Section code implementations
-«ENDREM»
-«DEFINE OwnTCAPalettesSectionCodeImplementation(String id) FOR MClass -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Palettes Section code implementations here
-		«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TCA Columns Section code implementations
-«ENDREM»
-«DEFINE OwnTCAColumnsSectionCodeImplementation(String id) FOR MClass -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: put your further TCA Columns Section code implementations here
-		«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TCA Column code implementations
-«ENDREM»
-«DEFINE OwnTCAColumnCodeImplementation(String id) FOR MProperty -»
-			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-			// TODO: put your further TCA Column code implementations here
-			«ENDPROTECT»
 «ENDDEFINE»
 
 
