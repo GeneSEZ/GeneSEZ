@@ -38,7 +38,7 @@
 «FILE extTablesSQLFileNamePath() -»
 
 «EXPAND CreateTableDefinition FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) -»
-«EXPAND IntermediateTables FOREACH allEntitiesAndValueObjects().sortBy (e | e.name ) -»
+«EXPAND IntermediateTables FOREACH allEntitiesAndValueObjects().sortBy ( e | e.name ) -»
 
 «EXPAND OwnSQLDeclaration("ext_tables.sql.own.sql.declaration." + xmiGuid) -»
 «ENDFILE»
@@ -63,15 +63,29 @@
 «REM»
 «ENDREM»
 «DEFINE IntermediateTables FOR MClass -»
-	«EXPAND IntermediateTables FOREACH owningInitializableAssociationRoles() -»
+	«EXPAND IntermediateTable(this) FOREACH allInstanceAttributes() -»
+	«EXPAND IntermediateTable(this) FOREACH allInstanceAssociationRoles() -»
+«ENDDEFINE»
+
+
+«REM»
+	Checks if a intermediate table needs to be created.
+	If the attribute type is a classifier and the attribute is a multi valued type.   
+«ENDREM»
+«DEFINE IntermediateTable(MClass class) FOR MAttribute -»
+	«IF type.isClassifier() &&  isOneToManyUnidirectional()-»
+		«EXPAND CreateIntermediateTableDefinitionUnidirectional(class) -»
+	«ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE IntermediateTables FOR MAssociationRole -»
-	«IF isOneToManyUnidirectional() || isManyToManyUnidirectional() || ( isManyToManyBidirectional() && classifier.name().compareTo( type.name() ) < 0 ) -»
-		«EXPAND CreateIntermediateTableDefinition -»
+«DEFINE IntermediateTable(MClass class) FOR MAssociationRole -»
+	«IF isOneToManyUnidirectional() || isManyToManyUnidirectional() -»
+		«EXPAND CreateIntermediateTableDefinitionUnidirectional(class) -»
+	«ELSEIF isManyToManyBidirectional() && ( classifier.name().compareTo( type.name() ) < 0 || !type.isClassifier() ) -»
+		«EXPAND CreateIntermediateTableDefinitionBidirectional(class) -»
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -90,8 +104,28 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE CreateIntermediateTableDefinition FOR MAssociationRole -»
-CREATE TABLE «asIntermediateTableName() -» (
+«DEFINE CreateIntermediateTableDefinitionUnidirectional(MClass class) FOR MProperty -»
+#
+# Intermediate table structure for table '«asIntermediateTableName(class) -»'
+#
+CREATE TABLE «asIntermediateTableName(class) -» (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
+);
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CreateIntermediateTableDefinitionBidirectional(MClass class) FOR MProperty -»
+#
+# Intermediate table structure for table '«asIntermediateTableName(class) -»'
+#
+CREATE TABLE «asIntermediateTableName(class) -» (
 	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
@@ -108,8 +142,8 @@ CREATE TABLE «asIntermediateTableName() -» (
 «DEFINE CreateTableColumns FOR MClass -»
 	«EXPAND InternalManagementColumns -»
 	
-	«EXPAND AttributeColumns FOREACH allInstanceAttributes() -»
-	«EXPAND AssociationColumns FOREACH allInstanceAssociationRoles() -»
+	«EXPAND AttributeColumn FOREACH allInstanceAttributes() -»
+	«EXPAND AssociationColumn FOREACH allInstanceAssociationRoles() -»
 	
 	«EXPAND AccessControlColumns»
 	«EXPAND LocalizationColumns»
@@ -119,10 +153,50 @@ CREATE TABLE «asIntermediateTableName() -» (
 
 
 «REM»
+	Generates TYPO3 specific columns for internal management.
+«ENDREM»
+«DEFINE InternalManagementColumns FOR MClass -»
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+«REM»
 	Generate a column for an attribute.
 «ENDREM»
-«DEFINE AttributeColumns FOR MAttribute -»
+«DEFINE AttributeColumn FOR MAttribute -»
+«IF !type.isClassifier() -»
+	«EXPAND ColumnDefault -»
+«ELSE -»
+«IF isOneToOneUnidirectional() -»
+	«EXPAND ColumnOneToOneUnidirectionalClassifier -»
+«ELSE -»
+	«EXPAND ColumnOneToManyUnidirectionalClassifier -»
+«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE ColumnDefault FOR MAttribute -»
 	«name() -» «type.name() -»,
+«ENDDEFINE»
+
+
+«REM»
+	Generate the necessary columns if the attribute is 1:1 unidirectional.
+«ENDREM»
+«DEFINE ColumnOneToOneUnidirectionalClassifier FOR MAttribute -»
+	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+«REM»
+	Generate the necessary columns if the attribute is 1:n unidirectional.
+«ENDREM»
+«DEFINE ColumnOneToManyUnidirectionalClassifier FOR MAttribute -»
+	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
@@ -130,23 +204,23 @@ CREATE TABLE «asIntermediateTableName() -» (
 	Generate a column for an association role.
 	It depends on the association type, if a column is generated or not.
 «ENDREM»
-«DEFINE AssociationColumns FOR MAssociationRole -»
+«DEFINE AssociationColumn FOR MAssociationRole -»
 «IF isOneToOneUnidirectional() -»
-	«EXPAND OneToOneUnidirectional -»
+	«EXPAND ColumnOneToOneUnidirectional -»
 «ELSEIF isOneToOneBidirectional() -»
-	«EXPAND OneToOneBidirectional -»
+	«EXPAND ColumnOneToOneBidirectional -»
 «ELSEIF isOneToManyUnidirectional() -»
-	«EXPAND OneToManyUnidirectional -»
+	«EXPAND ColumnOneToManyUnidirectional -»
 «ELSEIF isOneToManyBidirectional() -»
-	«EXPAND OneToManyBidirectional -»
+	«EXPAND ColumnOneToManyBidirectional -»
 «ELSEIF isManyToOneUnidirectional() -»
-	«EXPAND ManyToOneUnidirectional -»
+	«EXPAND ColumnManyToOneUnidirectional -»
 «ELSEIF isManyToOneBidirectional() -»
-	«EXPAND ManyToOneBidirectional -»
+	«EXPAND ColumnManyToOneBidirectional -»
 «ELSEIF isManyToManyUnidirectional() -»
-	«EXPAND ManyToManyUnidirectional -»
+	«EXPAND ColumnManyToManyUnidirectional -»
 «ELSEIF isManyToManyBidirectional() -»
-	«EXPAND ManyToManyBidirectional -»
+	«EXPAND ColumnManyToManyBidirectional -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -154,7 +228,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 «REM»
 	Generate the necessary columns if the association is 1:1 unidirectional.
 «ENDREM»
-«DEFINE OneToOneUnidirectional FOR MAssociationRole -»
+«DEFINE ColumnOneToOneUnidirectional FOR MAssociationRole -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
@@ -162,7 +236,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 «REM»
 	Generate the necessary columns if the association is 1:1 bidirectional.
 «ENDREM»
-«DEFINE OneToOneBidirectional FOR MAssociationRole -»
+«DEFINE ColumnOneToOneBidirectional FOR MAssociationRole -»
 «IF classifier.name.compareTo( type.name() ) < 0 -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
@@ -172,21 +246,22 @@ CREATE TABLE «asIntermediateTableName() -» (
 «REM»
 	Generate the necessary columns if the association is 1:n unidirectional.
 «ENDREM»
-«DEFINE OneToManyUnidirectional FOR MAssociationRole -»
+«DEFINE ColumnOneToManyUnidirectional FOR MAssociationRole -»
+	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
 «REM»
 	Generate the necessary columns if the association is 1:n bidirectional.
 «ENDREM»
-«DEFINE OneToManyBidirectional FOR MAssociationRole -»
+«DEFINE ColumnOneToManyBidirectional FOR MAssociationRole -»
 «ENDDEFINE»
 
 
 «REM»
 	Generate the necessary columns if the association is n:1 unidirectional.
 «ENDREM»
-«DEFINE ManyToOneUnidirectional FOR MAssociationRole -»
+«DEFINE ColumnManyToOneUnidirectional FOR MAssociationRole -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
@@ -194,7 +269,7 @@ CREATE TABLE «asIntermediateTableName() -» (
 «REM»
 	Generate the necessary columns if the association is n:1 bidirectional.
 «ENDREM»
-«DEFINE ManyToOneBidirectional FOR MAssociationRole -»
+«DEFINE ColumnManyToOneBidirectional FOR MAssociationRole -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
@@ -202,23 +277,14 @@ CREATE TABLE «asIntermediateTableName() -» (
 «REM»
 	Generate the necessary columns if the association is m:n unidirectional.
 «ENDREM»
-«DEFINE ManyToManyUnidirectional FOR MAssociationRole -»
+«DEFINE ColumnManyToManyUnidirectional FOR MAssociationRole -»
 «ENDDEFINE»
 
 
 «REM»
 	Generate the necessary columns if the association is m:n bidirectional.
 «ENDREM»
-«DEFINE ManyToManyBidirectional FOR MAssociationRole -»
-«ENDDEFINE»
-
-
-«REM»
-	Generates TYPO3 specific columns for internal management.
-«ENDREM»
-«DEFINE InternalManagementColumns FOR MClass -»
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
+«DEFINE ColumnManyToManyBidirectional FOR MAssociationRole -»
 «ENDDEFINE»
 
 
