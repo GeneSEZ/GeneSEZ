@@ -116,6 +116,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 	"Tx_Extbase_Utility_Extension".
 «ENDREM»
 «DEFINE RegisterPlugin FOR MInterface -»
+«EXPAND PluginComment -»
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'«name() -»',
@@ -126,6 +127,18 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['«asPluginFlexformName() -»'] = 'select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFlexformName() -»'] = 'pi_flexform,recursive';
 t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«extensionKey() -»/«flexformXMLFileNamePath() -»');
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a plugin comment.
+«ENDREM»
+«DEFINE PluginComment FOR MInterface -»
+«IF hasComment() -»
+/**
+«formatComment() -»
+ */
 «ENDIF -»
 «ENDDEFINE»
 
@@ -226,8 +239,8 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 	Generates a link the the context sensitive help of an entity or value 
 	object.
 «ENDREM»
-«DEFINE ContextSensitiveHelpInclusion(MClass cshClass) FOR MClass -»
-t3lib_extMgm::addLLrefForTCAdescr('«cshClass.name( namingContextLocalizationCSH() ) -»', 'EXT:«extensionKey()»/«locallangCshXMLFileNamePath() -»');
+«DEFINE ContextSensitiveHelpInclusion(MClass class) FOR MClass -»
+t3lib_extMgm::addLLrefForTCAdescr('«class.name( namingContextLocalizationCSH() ) -»', 'EXT:«extensionKey()»/«locallangCshXMLFileNamePath() -»');
 «ENDDEFINE»
 
 
@@ -458,8 +471,6 @@ $TCA['«name() -»'] = array (
 «ENDIF -»
 «ENDDEFINE»
 
-
-«REM» - - Own Code  - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»
 	generates a region for own plugin code implementations
