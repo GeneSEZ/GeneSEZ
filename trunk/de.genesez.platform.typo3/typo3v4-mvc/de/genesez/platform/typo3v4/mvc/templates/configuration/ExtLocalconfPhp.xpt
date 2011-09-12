@@ -9,8 +9,14 @@
 «REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
 
-«REM» use TYPO3 MVC conversion and naming scripts «ENDREM»
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION de::genesez::platforms::common::naming::Naming»
+«EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
+
+«REM» use TYPO3 MVC naming scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
 
 «REM» use TYPO3 MVC access helper scripts «ENDREM»
@@ -30,6 +36,8 @@
 	Processes the generation of "ext_localconf.php".
 «ENDREM»
 «DEFINE Root FOR MModel -»
+«EXPAND ContextSettings -»
+
 «FILE extLocalconfPHPFileNamePath() -»
 <?php
 
@@ -49,6 +57,15 @@
 	private functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«REM»
+	Sets the naming context for this part of generation.
+	The type mapping context is not needed for this part. 
+«ENDREM»
+«DEFINE ContextSettings FOR MModel -»
+«setNamingContext( namingContextConfiguration() ) -»
+«ENDDEFINE»
+
 
 «REM»
 	TYPO3 access control to check if this file is called from the outside of TYPO3. 
@@ -77,7 +94,7 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	array(«FOREACH asControllerActionPairs( model(), getT3ExtbasePluginUncachedActions() ) AS uca SEPARATOR ", "»
 		«uca -»«ENDFOREACH»
 	),
-	«getT3ExtbasePluginPluginType().asT3MVCPluginType()»
+	«getT3ExtbasePluginPluginType().asPluginType()»
 );
 
 «ENDDEFINE»

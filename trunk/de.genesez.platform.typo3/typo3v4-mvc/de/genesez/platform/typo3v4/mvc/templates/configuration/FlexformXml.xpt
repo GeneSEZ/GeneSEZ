@@ -6,23 +6,29 @@
 	@date	2011-07-12
 «ENDREM»
 
-«REM» use TYPO3 access helper scripts «ENDREM»
+«REM» use TYPO3 profile access helper scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::profile::AccessHelper»
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
-«REM» use TYPO3 MVC convention, conversion and naming scripts «ENDREM»
+«REM» use TYPO3 MVC convention scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Convention»
+
+«REM» use TYPO3 MVC conversion scripts «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Conversion»
+
+«REM» use TYPO3 MVC naming scripts which overrides «ENDREM»
+«REM» TYPO3 naming scripts if script name is equals «ENDREM»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::Naming»
+«EXTENSION de::genesez::platform::typo3v4::convention::Naming»
+
+«REM» use TYPO3 TCx access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::scripts::TCxAccessHelper»
 
 «REM» use common access helper scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
-
-«REM» use TYPO3 MVC TCx access helper scripts «ENDREM»
-«EXTENSION de::genesez::platform::typo3v4::mvc::scripts::TCxAccessHelper»
 
 
 «REM»
@@ -453,7 +459,7 @@
 «ENDREM»
 «DEFINE ConfigEval(List[String] defaultEvals) FOR MAttribute -»
 «IF !getT3TCxEvalEvals().isEmpty || !defaultEvals.isEmpty -»
-								<eval>«FOREACH allTCxEvals(defaultEvals) AS eval SEPARATOR ", "»«eval.asT3TCxEvalName() -»«ENDFOREACH -»</eval>
+								<eval>«FOREACH allTCxEvals(defaultEvals) AS eval SEPARATOR ", "»«eval.asT3TCxEvalType() -»«ENDFOREACH -»</eval>
 «ENDIF -»
 «ENDDEFINE»
 
