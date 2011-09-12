@@ -140,6 +140,19 @@ MOperation makeOperation(MClassifier container, String xmiGuid, String name, Str
 MOperation makeOperation(MClassifier container, String name, String visibility, boolean static, boolean abstract, boolean final, List[MParameter] parameter, MParameter return) :
 	makeOperation(container, container.xmiGuid + "." + name, name, visibility, static, abstract, final, parameter, return);	
 
+/**
+ * creates an operation and adds it to the container
+ * xmiGuid is created by container xmiGuid and operation name
+ *
+ * @param container		instance of a MClassifier
+ * @param name 			name of the operation
+ * @param visibility	visibility of the operation 
+ * @param unique		unique status of the operation
+ * @param ordered		ordered status of the operation
+ * @return				instance of the operation
+ */
+MOperation makeOperation(MClassifier container, String name, String visibility, boolean unique, boolean ordered) :
+	makeOperation(container, container.xmiGuid + "." + name, name, visibility, false, false, false, unique, ordered, {}, null);	
 		
 /**
  * creates an operation and adds it to the container
@@ -156,9 +169,28 @@ MOperation makeOperation(MClassifier container, String name, String visibility, 
  * @return				instance of the operation
  */
 MOperation makeOperation(MClassifier container, String xmiGuid, String name, String visibility, boolean static, boolean abstract, boolean final, List[MParameter] parameter, MParameter return) :
+	makeOperation(container, xmiGuid, name, visibility, static, abstract, final, false, false, parameter, return);
+
+/**
+ * creates an operation and adds it to the container
+ *
+ * @param container		instance of a MClassifier
+ * @param xmiGuid		unique identifier
+ * @param name 			name of the operation
+ * @param visibility	visibility of the operation 
+ * @param static		static status of the operation
+ * @param abstract		abstract status of the operation
+ * @param final			final status of the operation
+ * @param unique		unique status of the operation
+ * @param ordered		ordered status of the operation
+ * @param parameter		list of parameter
+ * @param return		return parameter
+ * @return				instance of the operation
+ */
+MOperation makeOperation(MClassifier container, String xmiGuid, String name, String visibility, boolean static, boolean abstract, boolean final, boolean unique, boolean ordered, List[MParameter] parameter, MParameter return) :
 	let o = createOperation(container, xmiGuid, name) :
 		// (visibility, static, abstract, final, multiplicity, unique, ordered)
-		o.processOperation(visibility, static, abstract, final, 1, false, false) ->
+		o.processOperation(visibility, static, abstract, final, 1, unique, ordered) ->
 		parameter != null && !parameter.isEmpty 
 			? o.setParameter(parameter) 
 			: Void ->
