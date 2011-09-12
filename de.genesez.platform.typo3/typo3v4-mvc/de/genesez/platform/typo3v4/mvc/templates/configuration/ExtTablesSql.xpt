@@ -36,8 +36,8 @@
 
 «FILE extTablesSQLFileNamePath() -»
 
-«EXPAND CreateTableDefinition FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) -»
-«EXPAND IntermediateTables FOREACH allEntitiesAndValueObjects().sortBy ( e | e.name ) -»
+«EXPAND CreateTableDefinition FOREACH allEntitiesAndValueObjects().select( e | !e.abstract ).sortBy( e | e.name ) -»
+«EXPAND IntermediateTables FOREACH allEntitiesAndValueObjects().select( e | !e.abstract ).sortBy ( e | e.name ) -»
 
 «EXPAND OwnSQLDeclaration("ext_tables.sql.own.sql.declaration." + xmiGuid) -»
 «ENDFILE»
@@ -61,36 +61,6 @@
 
 «REM»
 «ENDREM»
-«DEFINE IntermediateTables FOR MClass -»
-	«EXPAND IntermediateTable(this) FOREACH allInstanceAttributes() -»
-	«EXPAND IntermediateTable(this) FOREACH allInstanceAssociationRoles() -»
-«ENDDEFINE»
-
-
-«REM»
-	Checks if a intermediate table needs to be created.
-	If the attribute type is a classifier and the attribute is a multi valued type.   
-«ENDREM»
-«DEFINE IntermediateTable(MClass class) FOR MAttribute -»
-	«IF type.isClassifier() &&  isOneToManyUnidirectional()-»
-		«EXPAND CreateIntermediateTableDefinitionUnidirectional(class) -»
-	«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE IntermediateTable(MClass class) FOR MAssociationRole -»
-	«IF isOneToManyUnidirectional() || isManyToManyUnidirectional() -»
-		«EXPAND CreateIntermediateTableDefinitionUnidirectional(class) -»
-	«ELSEIF isManyToManyBidirectional() && ( classifier.name().compareTo( type.name() ) < 0 || !type.isClassifier() ) -»
-		«EXPAND CreateIntermediateTableDefinitionBidirectional(class) -»
-	«ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
 «DEFINE CreateTableDefinition FOR MClass -»
 #
 # Table structure for table '«name() -»'
@@ -103,50 +73,18 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE CreateIntermediateTableDefinitionUnidirectional(MClass class) FOR MProperty -»
-#
-# Intermediate table structure for table '«asIntermediateTableName(class) -»'
-#
-CREATE TABLE «asIntermediateTableName(class) -» (
-	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
-	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting int(11) unsigned DEFAULT '0' NOT NULL,
-	
-	KEY uid_local (uid_local),
-	KEY uid_foreign (uid_foreign)
-);
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
-«DEFINE CreateIntermediateTableDefinitionBidirectional(MClass class) FOR MProperty -»
-#
-# Intermediate table structure for table '«asIntermediateTableName(class) -»'
-#
-CREATE TABLE «asIntermediateTableName(class) -» (
-	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
-	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-	
-	KEY uid_local (uid_local),
-	KEY uid_foreign (uid_foreign)
-);
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
 «DEFINE CreateTableColumns FOR MClass -»
 	«EXPAND InternalManagementColumns -»
 	
 	«EXPAND AttributeColumn FOREACH allInstanceAttributes() -»
 	«EXPAND AssociationColumn FOREACH allInstanceAssociationRoles() -»
 	
-	«EXPAND AccessControlColumns»
-	«EXPAND LocalizationColumns»
-	«EXPAND VersioningColumns»
+	«EXPAND AccessControlColumns -»
+	
+	«EXPAND LocalizationColumns -»
+	
+	«EXPAND VersioningColumns -»
+	
 	«EXPAND KeyManagement -»
 «ENDDEFINE»
 
@@ -162,15 +100,16 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 
 «REM»
 	Generate a column for an attribute.
+	It depends on the attribute type.
 «ENDREM»
 «DEFINE AttributeColumn FOR MAttribute -»
 «IF !type.isClassifier() -»
 	«EXPAND ColumnDefault -»
 «ELSE -»
 «IF isOneToOneUnidirectional() -»
-	«EXPAND ColumnOneToOneUnidirectionalClassifier -»
+	«EXPAND ColumnOneToOneUnidirectional -»
 «ELSE -»
-	«EXPAND ColumnOneToManyUnidirectionalClassifier -»
+	«EXPAND ColumnOneToManyUnidirectional -»
 «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
@@ -186,22 +125,24 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 «REM»
 	Generate the necessary columns if the attribute is 1:1 unidirectional.
 «ENDREM»
-«DEFINE ColumnOneToOneUnidirectionalClassifier FOR MAttribute -»
+«DEFINE ColumnOneToOneUnidirectional FOR MAttribute -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
 «REM»
 	Generate the necessary columns if the attribute is 1:n unidirectional.
+	
+	An intermediate table will be generated and inside this column a counter is set.
 «ENDREM»
-«DEFINE ColumnOneToManyUnidirectionalClassifier FOR MAttribute -»
+«DEFINE ColumnOneToManyUnidirectional FOR MAttribute -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDDEFINE»
 
 
 «REM»
 	Generate a column for an association role.
-	It depends on the association type, if a column is generated or not.
+	It depends on the association type.
 «ENDREM»
 «DEFINE AssociationColumn FOR MAssociationRole -»
 «IF isOneToOneUnidirectional() -»
@@ -244,6 +185,8 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 
 «REM»
 	Generate the necessary columns if the association is 1:n unidirectional.
+	
+	An intermediate table will be generated and inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnOneToManyUnidirectional FOR MAssociationRole -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
@@ -252,6 +195,8 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 
 «REM»
 	Generate the necessary columns if the association is 1:n bidirectional.
+	
+	Inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnOneToManyBidirectional FOR MAssociationRole -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
@@ -276,6 +221,8 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 
 «REM»
 	Generate the necessary columns if the association is m:n unidirectional.
+	
+	An intermediate table will be generated and inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnManyToManyUnidirectional FOR MAssociationRole -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
@@ -284,6 +231,8 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 
 «REM»
 	Generate the necessary columns if the association is m:n bidirectional.
+	
+	An intermediate table will be generated and inside this column a counter is set.
 «ENDREM»
 «DEFINE ColumnManyToManyBidirectional FOR MAssociationRole -»
 	«name() -» int(11) unsigned DEFAULT '0' NOT NULL,
@@ -347,6 +296,71 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 «IF createVersioningFields() -»
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE IntermediateTables FOR MClass -»
+	«EXPAND IntermediateTable(this) FOREACH allInstanceAttributes() -»
+	«EXPAND IntermediateTable(this) FOREACH allInstanceAssociationRoles() -»
+«ENDDEFINE»
+
+
+«REM»
+	Checks if a intermediate table needs to be created.
+	If the attribute type is a classifier and the attribute is a multi valued type.   
+«ENDREM»
+«DEFINE IntermediateTable(MClass class) FOR MAttribute -»
+	«IF type.isClassifier() &&  isOneToManyUnidirectional()-»
+		«EXPAND CreateIntermediateTableDefinitionUnidirectional(class) -»
+	«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE IntermediateTable(MClass class) FOR MAssociationRole -»
+	«IF isOneToManyUnidirectional() || isManyToManyUnidirectional() -»
+		«EXPAND CreateIntermediateTableDefinitionUnidirectional(class) -»
+	«ELSEIF isManyToManyBidirectional() && ( classifier.name().compareTo( type.name() ) < 0 || !type.isClassifier() ) -»
+		«EXPAND CreateIntermediateTableDefinitionBidirectional(class) -»
+	«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CreateIntermediateTableDefinitionUnidirectional(MClass class) FOR MProperty -»
+#
+# Intermediate table structure for table '«asIntermediateTableName(class) -»'
+#
+CREATE TABLE «asIntermediateTableName(class) -» (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
+);
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CreateIntermediateTableDefinitionBidirectional(MClass class) FOR MProperty -»
+#
+# Intermediate table structure for table '«asIntermediateTableName(class) -»'
+#
+CREATE TABLE «asIntermediateTableName(class) -» (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
+);
 «ENDDEFINE»
 
 
