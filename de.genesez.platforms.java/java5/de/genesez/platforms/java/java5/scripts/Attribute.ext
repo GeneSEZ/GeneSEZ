@@ -12,7 +12,7 @@ extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::common::m2t::Helper;
 extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
-extension de::genesez::platforms::common::m2m::CreateOperations;
+extension de::genesez::platforms::common::m2m::MakeElement;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::java::java5::scripts::Operation;
 extension de::genesez::platforms::java::java5::scripts::Stereotypes;
@@ -36,7 +36,7 @@ extension de::genesez::platforms::java::java5::scripts::Stereotypes;
 Void createGetterOperation(MProperty this, MClassifier container) :
 	this.generateGetter()
 		? (
-			let o = container.addOperation(this.asGetter(), this.cloneType(), "public", false, false, false, this.multiplicity, this.unique, this.ordered) :
+			let o = container.makeOperation(this.asGetter(), "public", this.unique, this.ordered) :
 				o.addInternalStereotype("http://www.genesez.de/GetterOperation") //->
 			//this.setTaggedValue("accessor", "getter", "false")
 		)
@@ -61,7 +61,7 @@ Void createGetterOperation(MProperty this, MClassifier container) :
 Void createSetterOperation(MAttribute this, MClassifier container) :
 	this.generateSetter()
 		? (
-			let o = addOperation(container, this.asSetter(), "void", "public", this.static, false, this.final, 1, this.unique, this.ordered) :
+			let o = container.makeOperation(this.asSetter(), "public", this.unique, this.ordered) :
 				(let p = o.createParameter(o.xmiGuid+"_parameter_"+this.name.asTypeName(), this.name.asTypeName()) :
 					p.setType(this.cloneType()) ->
 					p.setMultiplicity(this.multiplicity) ->
