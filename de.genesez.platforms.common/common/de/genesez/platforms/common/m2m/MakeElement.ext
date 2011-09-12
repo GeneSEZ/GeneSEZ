@@ -12,6 +12,7 @@
 import gcore;
 
 extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::common::AccessHelper;
 
 
 /*
@@ -62,6 +63,19 @@ MComment makeComment(MElement container, String xmiGuid, String annotation) :
  */
 MOperation makeOperation(MClassifier container, String name, String visibility) :
 	makeOperation(container, container.xmiGuid + "." + name, name, visibility, false, false, false, false, false, {}, null);	
+
+/**
+ * creates an operation and adds it to the container
+ * xmiGuid is created by container xmiGuid and operation name
+ *
+ * @param container		instance of a MClassifier
+ * @param name 			name of the operation
+ * @param xmiGuid		unique identifier
+ * @param visibility	visibility of the operation 
+ * @return				instance of the operation
+ */
+MOperation makeOperation(MClassifier container, String name, String xmiGuid, String visibility) :
+	makeOperation(container, xmiGuid, name, visibility, false, false, false, false, false, {}, null);	
 
 /**
  * creates an operation and adds it to the container
@@ -400,3 +414,50 @@ MTag makeTaggedValue(MElement container, MTag tag, String value) :
 MTag makeTaggedValueNoChecks(MElement container, MTag tag, String value) :
 	let tv = createTaggedValue(container, tag, value) :
 		tv;
+		
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	makeAttribute
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/	
+
+/**
+ *	creates an attribute and adds it to the property list
+ *	for lower and upper bound multiplicity the value of 
+ *	multiplicity is taken 
+ *	
+ *	@param	container		instance of MClassifier
+ *	@param	name			name of the attribute
+ *	@param	type			type of the attribute
+ *	@param	visibility		visibility of the attribute
+ *	@param	multiplicity	multiplicity of the attribute
+ */
+Void addAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
+	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
+		a.processAttribute("", false, false) ->
+		a.setUpperBoundMultiplicity(multiplicity) ->
+		a.setLowerBoundMultiplicity(multiplicity) ->
+		a.setMultiplicity(multiplicity) ->
+		a.setVisibility(visibility) ->
+		a.setType(createExternal(container.model(), type));
+
+/**
+ *	creates an attribute and adds it to the property list
+ *	
+ *	@param	container		instance of MClassifier
+ *	@param	name			name of the attribute
+ *	@param	type			type of the attribute
+ *	@param	visibility		visibility of the attribute
+ *	@param	lowerBound		lower bound multiplicity of the attribute
+ *	@param	upperBound		upper bound multiplicity of the attribute
+ *	@param	multiplicity	multiplicity of the attribute
+ */
+Void addAttribute(MClassifier container, String name, String type, String visibility, int lowerBound, int upperBound, int multiplicity) :
+	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
+		a.processAttribute("", false, false) ->
+		a.setUpperBoundMultiplicity(upperBound) ->
+		a.setLowerBoundMultiplicity(lowerBound) ->
+		a.setMultiplicity(multiplicity) ->
+		a.setVisibility(visibility) ->
+		a.setType(createExternal(container.model(), type));
