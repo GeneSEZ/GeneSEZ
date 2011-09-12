@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, Jochen Rau
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,7 +38,6 @@ class Tx_GenesezInventory_Controller_InventoryController extends Tx_Extbase_MVC_
 
 	
 	/**
-	 *
 	 * @return void
 	 */
 	public function listAction() {

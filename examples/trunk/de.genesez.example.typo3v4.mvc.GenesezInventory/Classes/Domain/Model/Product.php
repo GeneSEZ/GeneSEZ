@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 nicher
+ *  (c) 2011 Nico Herbig, Jochen Rau
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,23 +35,19 @@
 class Tx_GenesezInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
-	 * 
 	 * @var string
 	 */
 	protected $name = '';
 	/**
-	 * 
 	 * @var string
 	 */
 	protected $description = '';
 	/**
-	 * 
 	 * @var int
 	 */
 	protected $quantity = 0;
 
 	/**
-	 *
 	 * @param string $name 
 	 * @param string $description 
 	 * @param int $quantity 
