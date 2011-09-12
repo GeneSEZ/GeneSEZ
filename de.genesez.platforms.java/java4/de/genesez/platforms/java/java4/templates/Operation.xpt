@@ -96,11 +96,11 @@
 	generates the parameter list for the initializing constructor
 «ENDREM»
 «DEFINE _Params FOR MAttribute -»
-«IF isSingleValuedType() -»
-	«type.mapName().asTypeName()» «asAttribute() -»
-«ELSE -»
-	«EXPAND Type::MultiValuedType -» «asAttribute() -»
-«ENDIF -»
+	«IF isSingleValuedType() -»
+		«type.mapName().asTypeName()» «asAttribute() -»
+	«ELSE -»
+		«EXPAND Type::MultiValuedType -» «asAttribute() -»
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -139,7 +139,7 @@
 «ENDREM»
 «DEFINE _Declaration FOR MOperation -»
 	«EXPAND Comment::Operation -»
-	«IF isSingleValuedType() -»
+	«IF isSingleValuedType() && return.type.mapName() != null-»
 		«EXPAND _Modifier» «return.type.mapName().asTypeName()-» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
 	«ELSEIF isMultiValuedType()-»
 		«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception»;
@@ -154,7 +154,7 @@
 «ENDREM»
 «DEFINE _Implementation FOR MOperation -»
 	«EXPAND Comment::Operation -»
-	«IF isSingleValuedType() -»
+	«IF isSingleValuedType() && return.type.mapName() != null-»
 		«EXPAND _Modifier» «return.type.mapName().asTypeName()» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
 	«ELSEIF isMultiValuedType() -»
 		«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asOperation()»(«EXPAND _Params») «EXPAND _Exception» {
