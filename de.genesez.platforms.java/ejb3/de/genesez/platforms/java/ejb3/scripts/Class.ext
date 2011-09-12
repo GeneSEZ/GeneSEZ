@@ -2,10 +2,10 @@ import gcore;
 
 extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
-extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::java::java5::scripts::Stereotypes;
 extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
+extension de::genesez::platforms::common::m2m::MakeElement;
 /* remove this import to be independent from jpa cartridge */
 extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
 extension de::genesez::platforms::common::m2m::CreateBasics;
@@ -51,12 +51,7 @@ MClassifier addStandardConstructor(MClass this) :
   *	arguments explicitly if a protected region is desired
   */
 Void createStandardConstructor(MClass container) :
-	let sc = createOperation(container, container.name()+"_StandardConstructor", container.name()) :
-		sc.processOperation("public", false, false, false, 1, false, false) ->
-		sc.setRaisedException(createList()) ->
-		sc.setOwnedComment(createList()) ->
-		sc.setParameter(createList()) ->
-		sc.setReturnType(createExternal(container.model(), "void")) ->
+	let sc = container.makeOperation(container.name(), container.name()+"_StandardConstructor", "public") :
 		sc.addInternalStereotype("http://www.genesez.de/StandardConstructor");
 	
 /**
@@ -166,19 +161,3 @@ boolean existEntityManager(MClass this) :
 	this.property.exists(e|e.type.name().matches("EntityManager")) || this.property.exists(e|e.type.name().matches("Session"))
 		? true
 		: false;		
-
-/**
- *	creates an attribute and adds it to the property list
- *	
- *	@param	container		instance of MClassifier
- *	@param	name			name of the attribute
- *	@param	type			type of the attribute
- *	@param	visibility		visibility of the attribute
- *	@param	multiplicity	multiplicity of the attribute
- */
-Void addAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
-	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
-		a.processAttribute("", false, false) ->
-		a.setMultiplicity(multiplicity) ->
-		a.setVisibility(visibility) ->
-		a.setType(createExternal(container.model(), type));

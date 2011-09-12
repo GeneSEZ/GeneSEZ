@@ -89,7 +89,7 @@
 	«IF hasStereotype("seam2Observer") && this.classifier.metaType != MInterface-»
 		@Observer(create=«getTaggedValue("seam2Observer", "create")-»,
 		«IF hasUtilizableValue("seam2Observer", "value")-»
-			value={«FOREACH getTaggedValue("seam2Observer", "value").getElements() AS value SEPARATOR ","-»
+			value={«FOREACH getTaggedValue("seam2Observer", "value").toList() AS value SEPARATOR ","-»
 				"«IF !value.contains(".")-»«observerValuePrefix()-»«ENDIF-»«value-»"
 			«ENDFOREACH-»}		
 		«ENDIF-»)
@@ -112,7 +112,7 @@
 			, pageflow="«getTaggedValue("seam2Begin", "pageflow")-»"
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Begin", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2Begin", "ifOutcome").getElements() AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedValue("seam2Begin", "ifOutcome").toList() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)		
@@ -120,7 +120,7 @@
 	«IF hasStereotype("seam2End") && this.classifier.metaType != MInterface-»
 		@End(beforeRedirect=«getTaggedValue("seam2End", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2End", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2End", "ifOutcome").getElements() AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedValue("seam2End", "ifOutcome").toList() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)	
@@ -152,7 +152,7 @@
 	«IF hasStereotype("seam2EndTask") && this.classifier.metaType != MInterface-»
 		@EndTask(beforeRedirect=«getTaggedValue("seam2EndTask", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2EndTask", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2EndTask", "ifOutcome").getElements() AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedValue("seam2EndTask", "ifOutcome").toList() AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»

@@ -173,7 +173,7 @@
 «DEFINE _Interceptor FOR MOperation-»
 	«IF hasStereotype("ejb3OperationInterceptor")-»
 		«IF hasUtilizableValue("ejb3OperationInterceptor", "interceptors")-»
-			@Interceptors(value={«FOREACH getTaggedValue("ejb3OperationInterceptor", "interceptors").getElements() AS interceptor SEPARATOR ", "-»
+			@Interceptors(value={«FOREACH getTaggedValue("ejb3OperationInterceptor", "interceptors").toList() AS interceptor SEPARATOR ", "-»
 					«interceptor-».class
 			«ENDFOREACH-»})
 		«ENDIF»

@@ -81,7 +81,7 @@ public @interface «name() -» «EXPAND Type::Generics -» «EXPAND Type::Genera
         «ENDIF-»           
         «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
             import java.lang.annotation.Target;           
-            «FOREACH getTaggedValue(java5AnnotationStereotype(), "target").getElements() AS name SEPARATOR ","»
+            «FOREACH getTaggedValue(java5AnnotationStereotype(), "target").toList() AS name SEPARATOR ","»
                 import static java.lang.annotation.ElementType.«name-»;                       
             «ENDFOREACH»
         «ENDIF-»
@@ -95,7 +95,7 @@ public @interface «name() -» «EXPAND Type::Generics -» «EXPAND Type::Genera
 «DEFINE _java5Annotation FOR MInterface-»
     «IF hasStereotype(java5AnnotationStereotype())-»
         «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
-            @Target({«FOREACH getTaggedValue(java5AnnotationStereotype(), "target").getElements() AS name SEPARATOR ","-» «name-» «ENDFOREACH-»})
+            @Target({«FOREACH getTaggedValue(java5AnnotationStereotype(), "target").toList() AS name SEPARATOR ","-» «name-» «ENDFOREACH-»})
         «ENDIF-»
         «IF hasUtilizableValue(java5AnnotationStereotype(), "retention")-»
             @Retention(«getTaggedValue(java5AnnotationStereotype(), "retention")-»)
