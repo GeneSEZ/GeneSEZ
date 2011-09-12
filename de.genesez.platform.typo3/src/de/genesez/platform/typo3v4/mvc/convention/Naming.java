@@ -21,12 +21,12 @@ public class Naming {
 	 * This method is for all attributes and association roles of a domain
 	 * object. It converts the property name to get an valid property name in
 	 * configuration and localization environment. It splits the property name
-	 * by every capital letter and transform every token to lower case and add
+	 * by every capital letter, transform every token to lower case and add
 	 * underscores between of them. For instance: the property name is
 	 * 'relatedPosts' it converts to 'related_posts'.
 	 * 
-	 * @param property The property
-	 * @return The property name in lower case and with underscores
+	 * @param property The property.
+	 * @return The property name in lower case and with underscores.
 	 */
 	public static String toLowerPropertyName(MProperty property) {
 		StringBuffer propertyName = new StringBuffer();
@@ -43,24 +43,24 @@ public class Naming {
 	}
 
 	/**
-	 * This method convert assigned controller actions of an TYPO3 Extbase
-	 * plugin or module. In every plugin or module stereotype it is possible to
-	 * store a list of methods for cached and uncached controller actions. This
-	 * action names are transformed into xmiGuids that are only strings. For a
-	 * correct controller action combination it is necessary to get a reference
-	 * to the domain object where the action is owned. So this method gets a
-	 * list of xmiGuids of cached or uncached actions. With this information it
-	 * is possible to iterate over the model tree and get a reference back to
-	 * the operation object. In fact that the operation has a reference to the
+	 * This method convert assigned controller actions of an TYPO3 MVC plugin or
+	 * module. In every plugin or module stereotype it is possible to store a
+	 * list of methods for cached and uncached controller actions. This action
+	 * names are transformed into xmiGuids that are only strings. For a correct
+	 * controller action combination it is necessary to get a reference to the
+	 * controller object where the action is owned. So this method gets a list
+	 * of xmiGuids of cached or uncached actions. With this information it is
+	 * possible to iterate over the model tree and get a reference back to the
+	 * operation object. In fact that the operation has a reference to the
 	 * classifier it is possible to get the name of this to create valid
 	 * controller action pair. For instance: The plugin needs the following
 	 * controller actions 'BlogController' -> 'indexAction, listAction' and
 	 * 'PostController' -> 'indexAction'. This method returns a string list with
 	 * two entries: [0] : 'Blog' => 'index, list' and [1] : 'Post' => 'index'.
 	 * 
-	 * @param model The model for iteration over it
-	 * @param xmiGuids The list of operation xmiGuids
-	 * @return The list of valid controller actions
+	 * @param model The model for iteration over it.
+	 * @param xmiGuids The list of operation xmiGuids.
+	 * @return The list of valid controller actions.
 	 */
 	public static List<String> asControllerActionPairs(MModel model, List<String> xmiGuids) {
 		List<String> controllerActions = new ArrayList<String>();
