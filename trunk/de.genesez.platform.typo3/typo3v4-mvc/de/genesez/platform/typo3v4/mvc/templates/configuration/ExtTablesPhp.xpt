@@ -151,6 +151,16 @@ t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«ext
 
 
 «REM»
+	generates a region for own plugin code implementations
+«ENDREM»
+«DEFINE OwnPluginsCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further plugin code implementations here
+«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
 «ENDREM»
 «DEFINE ModuleConfiguration FOR MModel -»
 «IF !allModules().isEmpty -»
@@ -210,6 +220,26 @@ if (TYPO3_MODE === 'BE') {
 
 
 «REM»
+	generates a region for own module configuration code implementations
+«ENDREM»
+«DEFINE OwnModuleConfigurationCodeImplementation(String id) FOR MInterface -»
+			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+			// TODO: put your further module configuration code implementations here
+			«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own modules code implementations
+«ENDREM»
+«DEFINE OwnModulesCodeImplementation(String id) FOR MModel -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further module code implementations here
+	«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
 	Generates the include statement for TypoScript.
 «ENDREM»
 «DEFINE TypoScriptInclusion FOR MModel -»
@@ -220,9 +250,19 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 
 
 «REM»
+	generates a region for own TypoScript code implementations
+«ENDREM»
+«DEFINE OwnTypoScriptCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further TypoScript code implementations here
+«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
 «ENDREM»
 «DEFINE DomainObjectConfiguration FOR MModel -»
-«FOREACH allEntitiesAndValueObjects().sortBy( e | e.name ) AS domainObject -»
+«FOREACH allEntitiesAndValueObjects().select( e | !e.abstract ).sortBy( e | e.name ) AS domainObject -»
 	«EXPAND ContextSensitiveHelpInclusion FOR domainObject -»
 	«EXPAND AllowTableOnStandardPages FOR domainObject -»
 	«EXPAND TableConfigurationArray FOR domainObject -»
@@ -476,46 +516,6 @@ $TCA['«name() -»'] = array (
 		«asT3AssociativeArrayItem(tcaAddition)»
 «ENDFOREACH -»
 «ENDIF -»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own plugin code implementations
-«ENDREM»
-«DEFINE OwnPluginsCodeImplementation(String id) FOR MModel -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further plugin code implementations here
-«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own module configuration code implementations
-«ENDREM»
-«DEFINE OwnModuleConfigurationCodeImplementation(String id) FOR MInterface -»
-			«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-			// TODO: put your further module configuration code implementations here
-			«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own modules code implementations
-«ENDREM»
-«DEFINE OwnModulesCodeImplementation(String id) FOR MModel -»
-	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-	// TODO: put your further module code implementations here
-	«ENDPROTECT»
-«ENDDEFINE»
-
-
-«REM»
-	generates a region for own TypoScript code implementations
-«ENDREM»
-«DEFINE OwnTypoScriptCodeImplementation(String id) FOR MModel -»
-«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-// TODO: put your further TypoScript code implementations here
-«ENDPROTECT»
 «ENDDEFINE»
 
 
