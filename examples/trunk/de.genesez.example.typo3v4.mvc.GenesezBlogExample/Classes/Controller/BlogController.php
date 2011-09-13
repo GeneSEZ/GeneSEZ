@@ -140,7 +140,7 @@ class Tx_GenesezBlogExample_Controller_BlogController extends Tx_GenesezBlogExam
 	public function populateAction() {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252298300_76853_3229) ENABLED START */
 		$numberOfExistingBlogs = $this->blogRepository->countAll();
-		$blogFactory = $this->objectManager->get('Tx_BlogExample_Domain_Service_BlogFactory');
+		$blogFactory = $this->objectManager->get('Tx_GenesezBlogExample_Domain_Service_BlogFactory');
 		for ($blogNumber = $numberOfExistingBlogs + 1; $blogNumber < ($numberOfExistingBlogs + 5); $blogNumber++) {
 			$blog = $blogFactory->createBlog($blogNumber);
 			$this->blogRepository->add($blog);

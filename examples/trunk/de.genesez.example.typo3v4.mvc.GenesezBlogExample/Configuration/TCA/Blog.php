@@ -126,7 +126,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'type' => 'inline',
 				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
 				'foreign_field' => 'blog',
-				'foreign_sortby' => 'sorting',
+
 				'minitems' => 0,
 				'maxitems' => 999999,
 				'appearance' => array(
@@ -162,6 +162,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 					'showAllLocalizationLink' => true
 				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297195121733_203336_1960) ENABLED START */
+				'foreign_table' => 'fe_users',
 				'foreign_table_where' => "AND fe_users.tx_extbase_type='Tx_GenesezBlogExample_Domain_Model_Administrator'",
 				'items' => array(
 					array('--none--', 0),

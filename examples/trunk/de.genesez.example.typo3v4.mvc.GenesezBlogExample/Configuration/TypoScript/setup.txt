@@ -8,12 +8,15 @@ plugin.tx_genesezblogexample {
 		layoutRootPath = {$plugin.tx_genesezblogexample.view.layoutRootPath}
 	}
 	// PROTECTED REGION ID(setup.txt.own.plugin.typoscript.declaration.eee_1045467100313_135436_1) ENABLED START
+	view {
+		defaultPid = auto
+	}
 	settings {
-		 # maximum number of posts to display per page
+		# maximum number of posts to display per page
 		postsPerPage = 3
-		 # Editor FE Usergroup uid
+		# Editor FE Usergroup uid
 		editorUsergroupUid = {$plugin.tx_genesezblogexample.settings.editorUsergroupUid}
-		 # Plaintext page type number
+		# Plaintext page type number
 		plaintextPageType = {$plugin.tx_genesezblogexample.settings.plaintextPageType}
 	}
 	# This is an example how to modify the translation
@@ -35,10 +38,36 @@ module.tx_genesezblogexample {
 		layoutRootPath = {$module.tx_genesezblogexample.view.layoutRootPath}
 	}
 	// PROTECTED REGION ID(setup.txt.own.module.typoscript.declaration.eee_1045467100313_135436_1) ENABLED START
+	view {
+		defaultPid = auto
+	}
 	settings < plugin.tx_genesezblogexample.settings
 	// PROTECTED REGION END
 }
 
+config.tx_extbase {
+	persistence {
+		classes {
+			Tx_GenesezBlogExample_Domain_Model_Administrator {
+				mapping {
+					tableName = fe_users
+					recordType = Tx_GenesezBlogExample_Domain_Model_Administrator
+				}
+			}
+		}
+	}
+}
 
 // PROTECTED REGION ID(setup.txt.own.typoscript.declaration.eee_1045467100313_135436_1) ENABLED START
+config.tx_extbase {
+	persistence{
+		classes {
+			Tx_Extbase_Domain_Model_FrontendUser {
+				subclasses {
+					Tx_GenesezBlogExample_Domain_Model_Administrator = Tx_GenesezBlogExample_Domain_Model_Administrator
+				}
+			}
+		}
+	}
+}
 // PROTECTED REGION END
