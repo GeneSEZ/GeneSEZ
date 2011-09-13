@@ -84,12 +84,13 @@
 
 «REM»
 	evaluates the stereotype seam2Observer
+	TODO: adding of observerValuePrefix should be done in model2model
 «ENDREM»
 «DEFINE _Observer FOR MOperation-»
 	«IF hasStereotype("seam2Observer") && this.classifier.metaType != MInterface-»
 		@Observer(create=«getTaggedValue("seam2Observer", "create")-»,
 		«IF hasUtilizableValue("seam2Observer", "value")-»
-			value={«FOREACH getTaggedValue("seam2Observer", "value").toList() AS value SEPARATOR ","-»
+			value={«FOREACH getTaggedListValue("seam2Observer", "value") AS value SEPARATOR ","-»
 				"«IF !value.contains(".")-»«observerValuePrefix()-»«ENDIF-»«value-»"
 			«ENDFOREACH-»}		
 		«ENDIF-»)
@@ -112,7 +113,7 @@
 			, pageflow="«getTaggedValue("seam2Begin", "pageflow")-»"
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Begin", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2Begin", "ifOutcome").toList() AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedListValue("seam2Begin", "ifOutcome") AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)		
@@ -120,7 +121,7 @@
 	«IF hasStereotype("seam2End") && this.classifier.metaType != MInterface-»
 		@End(beforeRedirect=«getTaggedValue("seam2End", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2End", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2End", "ifOutcome").toList() AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedListValue("seam2End", "ifOutcome") AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)	
@@ -152,7 +153,7 @@
 	«IF hasStereotype("seam2EndTask") && this.classifier.metaType != MInterface-»
 		@EndTask(beforeRedirect=«getTaggedValue("seam2EndTask", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2EndTask", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedValue("seam2EndTask", "ifOutcome").toList() AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedListValue("seam2EndTask", "ifOutcome") AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»

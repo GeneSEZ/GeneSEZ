@@ -1,0 +1,24 @@
+/**
+ * 	functions for adding elements to class elements 
+ * 
+ * @author	andre pflueger
+ * @date	2011-09-13
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::m2m::MakeElement;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::java5::scripts::Stereotypes;
+
+/**
+  * creates a standard constructor with no arguments
+  *	this constructor does not have a protected region
+  *
+  *	the modeller has to model a constructor with no 
+  *	arguments explicitly if a protected region is desired
+  */
+Void makeStandardConstructor(MClass container) :
+	let sc = container.makeOperation(container.name(), container.name()+"_StandardConstructor", "public") :
+		sc.addInternalStereotype("http://www.genesez.org/StandardConstructor");

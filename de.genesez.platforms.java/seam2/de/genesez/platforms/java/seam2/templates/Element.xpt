@@ -119,7 +119,7 @@
 	«IF hasStereotype("seam2Remoting")-»
 		@WebRemote
 		«IF hasUtilizableValue("seam2Remoting", "exclude")-»
-			{«FOREACH taggedValue.select(e|e.tag.name == "exclude").value.toList() AS values SEPARATOR ", "-»
+			{«FOREACH getTaggedListValue("seam2Remoting", "exclude") AS values SEPARATOR ", "-»
 				"«values-»"
 			«ENDFOREACH-»}	
 		«ENDIF-»
@@ -262,7 +262,7 @@
 «ENDREM»
 «DEFINE _Permission FOR MElement-»
 	«IF hasUtilizableValue("seam2Permission", "permissions")-»
-		@Permissions({«FOREACH taggedValue.select(e|e.tag.name == "permissions").value.toList() AS values SEPARATOR ", "-»
+		@Permissions({«FOREACH getTaggedListValue("seam2Permission", "permissions") AS values SEPARATOR ", "-»
 			@Permission(action="«values-»")
 		«ENDFOREACH-»})	
 	«ENDIF-»

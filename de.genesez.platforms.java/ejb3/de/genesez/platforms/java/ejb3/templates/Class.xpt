@@ -131,11 +131,11 @@
  			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "name") && 
  				hasUtilizableValue("ejb3ActivationConfigProperty", "value")-»
  				, activationConfig = {
- 				«FOREACH getTaggedValue("ejb3ActivationConfigProperty", "name").toList() AS name SEPARATOR ","»
+ 				«FOREACH getTaggedListValue("ejb3ActivationConfigProperty", "name") AS name SEPARATOR ","»
  					@ActivationConfigProperty(
  						propertyName = "«name-»",  						
- 						«LET getTaggedValue("ejb3ActivationConfigProperty", "name").toList().indexOf(name) AS index-»
- 							propertyValue = "«getTaggedValue("ejb3ActivationConfigProperty", "value").toList().get(index)-»")
+ 						«LET getTaggedListValue("ejb3ActivationConfigProperty", "name").indexOf(name) AS index-»
+ 							propertyValue = "«getTaggedListValue("ejb3ActivationConfigProperty", "value").get(index)-»")
  						«ENDLET»
  				«ENDFOREACH»
  				}
@@ -152,7 +152,7 @@
 «DEFINE _EntityListener FOR MClass-»
 	«IF hasStereotype("ejb3EntityListener")»
 		«IF hasUtilizableValue("ejb3EntityListener", "listeners")-»
-			@EntityListeners(«FOREACH getTaggedValue("ejb3EntityListener", "listeners").toList() AS listeners SEPARATOR ", "»
+			@EntityListeners(«FOREACH getTaggedListValue("ejb3EntityListener", "listeners") AS listeners SEPARATOR ", "»
 				«listeners-».class
 			«ENDFOREACH-»
 			«IF hasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
@@ -213,7 +213,7 @@
 «DEFINE _Interceptor FOR MClass-»
 	«IF hasStereotype("ejb3ClassInterceptor")-»
 		«IF hasUtilizableValue("ejb3ClassInterceptor", "interceptors")-»
-			@Interceptors(value={«FOREACH getTaggedValue("ejb3ClassInterceptor", "interceptors").toList() AS interceptor SEPARATOR ", "-»
+			@Interceptors(value={«FOREACH getTaggedListValue("ejb3ClassInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
 				«interceptor-».class
 			«ENDFOREACH-»
 			«IF hasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
@@ -361,7 +361,7 @@
 «ENDREM»
 «DEFINE _BusinessMethods FOR MClass-»
 	«IF hasUtilizableValue("ejb3ClassInterceptor", "methods")-»
-		«FOREACH getTaggedValue("ejb3ClassInterceptor", "methods").toList() AS methods SEPARATOR ", "-»
+		«FOREACH getTaggedListValue("ejb3ClassInterceptor", "methods") AS methods SEPARATOR ", "-»
 			/**
 			  *	generated business method for class "«asTypeName()»"
 			  * method has been mentioned in "ejb3Interceptor"-annotation 
