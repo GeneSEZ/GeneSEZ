@@ -41,7 +41,7 @@ class Tx_GzBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Validat
 	/**
 	 * Checks if the given value is valid according to the validator.
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $value The value that should be validated
+	 * @param mixed $value The value that should be validated
 	 * @return boolean TRUE if the value is valid, FALSE if an error occured
 	 */
 	public function isValid($value) {
@@ -53,6 +53,7 @@ class Tx_GzBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Validat
 		return TRUE;
 		/* PROTECTED REGION END */
 	}
+
 	
 
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194671553_69571_1516.validator) ENABLED START */
