@@ -50,12 +50,12 @@ cached List[MClass] allControllers(MModel this) :
  * @return	true if the classifier is part of the TYPO3 Extbase controller package, otherwise false
  */
 cached boolean isControllerPackageElement(MClassifier this) :
-	// first check if this classifier is a class and is a controller
-	( MClass.isInstance(this) && ((MClass)this).isController() ) ||
-	// second check if this classifier is a controller package element
-	hasT3ExtbaseControllerPackageElementStereotype() ||
-	// third check if the package of this classifier has an stereotype
-	owningContext.hasT3ExtbaseControllerPackageStereotype();
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesControllerPath() ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.hasT3ExtbaseControllerPackageStereotype() ||
+	// third check if this classifier is a class and is a controller
+	( MClass.isInstance(this) && ((MClass)this).isController() );
 
 
 /**
@@ -64,12 +64,12 @@ cached boolean isControllerPackageElement(MClassifier this) :
  * @return	true if the class is a TYPO3 MVC Extbase controller, otherwise false
  */
 cached boolean isController(MClass this) :
-	// first check if this class has an stereotype
-	hasT3ExtbaseControllerStereotype() ||
-	// second check if the package of this class has an stereotype
-	owningContext.hasT3ExtbaseControllerPackageStereotype() ||
-	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
 	( globalVarIsT3MVCCompliant() && dirPath() == classesControllerPath() ) ||
+	// second check if this class has an stereotype
+	hasT3ExtbaseControllerStereotype() ||
+	// third check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseControllerPackageStereotype() ||
 	// fourth check if generalization is an TYPO3 MVC Extbase controller
 	(
 		!generalization.typeSelect(MClass).isEmpty
@@ -91,7 +91,7 @@ cached boolean isControllerAction(MOperation this) :
 	// first check if the operation has an stereotype
 	hasT3ExtbaseControllerActionStereotype() ||
 	// second check if the class is a controller AND the operation is not a non controller action
-	( ((MClass)classifier).isController() && !isControllerNoAction() );
+	( MClass.isInstance(classifier) && ((MClass)classifier).isController() && !isControllerNoAction() );
 
 
 /*
@@ -129,10 +129,12 @@ cached List[MClass] allEntitiesAndValueObjects(MModel this) :
  * @return	true if the classifier is part of the TYPO3 Extbase model package, otherwise false
  */
 cached boolean isModelPackageElement(MClassifier this) :
-	switch (metaType) {
-		case MClass : ( ((MClass)this).isEntity() || ((MClass)this).isValueObject() ) 
-		default : false
-	};
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainModelPath() ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.hasT3ExtbaseModelPackageStereotype() || owningContext.hasT3ExtbaseEntityPackageStereotype() || owningContext.hasT3ExtbaseValueObjectPackageStereotype() ||
+	// third check if this classifier is a class and is a entity or value object
+	( MClass.isInstance(this) && ( ((MClass)this).isEntity() || ((MClass)this).isValueObject() ) );
 
 
 /**
@@ -435,10 +437,12 @@ cached List[MClass] allRepositories(MModel this) :
  * @return	true if the classifier is part of the TYPO3 Extbase repository package, otherwise false
  */
 cached boolean isRepositoryPackageElement(MClassifier this) :
-	switch (metaType) {
-		case MClass : ((MClass)this).isRepository() 
-		default : false
-	};
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainRepositoryPath() ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.hasT3ExtbaseRepositoryPackageStereotype() ||
+	// third check if this classifier is a class and is a repository
+	( MClass.isInstance(this) && ((MClass)this).isRepository() );
 
 
 /**
@@ -447,12 +451,12 @@ cached boolean isRepositoryPackageElement(MClassifier this) :
  * @return	true if the class is a TYPO3 MVC Extbase repository, otherwise false
  */
 cached boolean isRepository(MClass this) :
-	// first check if this class has an stereotype
-	hasT3ExtbaseRepositoryStereotype() ||
-	// second check if the package of this class has an stereotype
-	owningContext.hasT3ExtbaseRepositoryPackageStereotype() ||
-	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
 	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainRepositoryPath() ) ||
+	// second check if this class has an stereotype
+	hasT3ExtbaseRepositoryStereotype() ||
+	// third check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseRepositoryPackageStereotype() ||
 	// fourth check if generalization is an TYPO3 MVC Extbase repository
 	(	
 		!generalization.typeSelect(MClass).isEmpty
@@ -473,10 +477,12 @@ cached boolean isRepository(MClass this) :
  * @return	true if the classifier is part of the TYPO3 Extbase service package, otherwise false
  */
 cached boolean isServicePackageElement(MClassifier this) :
-	switch (metaType) {
-		case MClass : ((MClass)this).isService()
-		default : false
-	};
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainServicePath() ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.hasT3ExtbaseServicePackageStereotype() ||
+	// third check if this classifier is a class and is a service
+	( MClass.isInstance(this) && ((MClass)this).isService() );
 
 
 /**
@@ -486,12 +492,12 @@ cached boolean isServicePackageElement(MClassifier this) :
  * @return	true if the class is a TYPO3 MVC Extbase service, otherwise false
  */
 cached boolean isService(MClass this) :
-	// first check if this class has an stereotype
-	hasT3ExtbaseServiceStereotype() ||
-	// second check if the package of this class has an stereotype
-	owningContext.hasT3ExtbaseServicePackageStereotype() ||
-	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
 	( globalVarIsT3MVCCompliant() &&  dirPath() == classesDomainServicePath() ) ||
+	// second check if this class has an stereotype
+	hasT3ExtbaseServiceStereotype() ||
+	// third check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseServicePackageStereotype() ||
 	// fourth check if generalization is an TYPO3 MVC Extbase service
 	(
 		!generalization.typeSelect(MClass).isEmpty
@@ -521,10 +527,12 @@ cached List[MClass] allValidators(MModel this) :
  * @return	true if the classifier is part of the TYPO3 Extbase validator package, otherwise false
  */
 cached boolean isValidatorPackageElement(MClassifier this) :
-	switch (metaType) {
-		case MClass : ((MClass)this).isValidator()
-		default : false
-	};
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainValidatorPath() ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.hasT3ExtbaseValidatorPackageStereotype() ||
+	// third check if this classifier is a class and is a validator
+	( MClass.isInstance(this) && ((MClass)this).isValidator() );
 
 
 /**
@@ -533,12 +541,12 @@ cached boolean isValidatorPackageElement(MClassifier this) :
  * @return	true if the class is a TYPO3 MVC Extbase validator, otherwise false
  */
 cached boolean isValidator(MClass this) :
-	// first check if this class has an stereotype
-	hasT3ExtbaseValidatorStereotype() ||
-	// second check if the package of this class has an stereotype
-	owningContext.hasT3ExtbaseValidatorPackageStereotype() ||
-	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
 	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainValidatorPath() ) ||
+	// second check if this class has an stereotype
+	hasT3ExtbaseValidatorStereotype() ||
+	// third check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseValidatorPackageStereotype() ||
 	// fourth check if generalization is an TYPO3 MVC Extbase validator
 	(
 		!generalization.typeSelect(MClass).isEmpty
@@ -576,10 +584,12 @@ List[MStereotype] allAssignedValidators(MElement this) :
  * @return	true if the classifier is part of the TYPO3 Fluid view helper package, otherwise false
  */
 cached boolean isViewHelperPackageElement(MClassifier this) :
-	switch (metaType) {
-		case MClass : ((MClass)this).isViewHelper()
-		default : false
-	};
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesViewHelpersPath() ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.hasT3FluidViewHelperPackageStereotype() ||
+	// third check if this classifier is a class and is a view helper
+	( MClass.isInstance(this) && ((MClass)this).isViewHelper() );
 
 
 /**
@@ -588,12 +598,12 @@ cached boolean isViewHelperPackageElement(MClassifier this) :
  * @return	true if the class is a TYPO3 MVC Fluid view helper, otherwise false
  */
 cached boolean isViewHelper(MClass this) :
-	// first check if this class has an stereotype
-	hasT3FluidViewHelperStereotype() ||
-	// second check if the package of this class has an stereotype
-	owningContext.hasT3FluidViewHelperPackageStereotype() ||
-	// third check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
 	( globalVarIsT3MVCCompliant() && dirPath() == classesViewHelpersPath() ) ||
+	// second check if this class has an stereotype
+	hasT3FluidViewHelperStereotype() ||
+	// third check if the package of this class has an stereotype
+	owningContext.hasT3FluidViewHelperPackageStereotype() ||
 	// fourth check if generalization is an TYPO3 MVC Fluid view helper
 	(
 		!generalization.typeSelect(MClass).isEmpty
