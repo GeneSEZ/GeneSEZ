@@ -2,10 +2,10 @@
 <workflow>
 
 	<!-- define a property for the file path and name of the uml2 model -->
-	<property name="uml2model" value="modelcache/genesez_inventory.uml" />
+	<property name="uml2model" value="modelcache/gsz_inventory.uml" />
 	
 	<!-- define a property for the output dir -->
-	<property name="outputDir" value="../genesez_inventory" />
+	<property name="outputDir" value="../gsz_inventory" />
 	<!-- define a property that indicates if the model name is used as extension key or not -->
 	<property name="useModelNameAsExtensionKey" value="true" />
 	<!-- define a property that indicates if the model is TYPO3 Extbase complaint or not -->
@@ -29,7 +29,7 @@
 	
 	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
 	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
-		<file value="modelcache/genesez_inventory_before.xmi" />
+		<file value="modelcache/gsz_inventory_before.xmi" />
 	</component>
 	
 	<!-- execute model modifications for this TYPO3 MVC extension -->
@@ -46,6 +46,11 @@
 		<isT3MVCCompliant value="${isT3MVCCompliant}" />
 	</component>
 	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
+		<file value="modelcache/gsz_inventory_after.xmi" />
+	</component>
+	
 	<!-- run code generation to transform the model into TYPO3 MVC source code -->
 	<component id="generate" class="de.genesez.platform.typo3v4.mvc.workflow.TYPO3Generator">
 		<outputDir value="${outputDir}" />
@@ -54,11 +59,6 @@
 		<isT3MVCCompliant value="${isT3MVCCompliant}" />
 		<scaffolding value="${scaffolding}" />
 		<generateSectionComments value="false" />
-	</component>
-	
-	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
-	<component id="serialize" class="de.genesez.platforms.common.workflow.Serializer">
-		<file value="modelcache/genesez_inventory_after.xmi" />
 	</component>
 	
 </workflow>

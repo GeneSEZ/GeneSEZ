@@ -1,8 +1,8 @@
 
 #
-# Table structure for table 'tx_genesezinventory_domain_model_product'
+# Table structure for table 'tx_gszinventory_domain_model_product'
 #
-CREATE TABLE tx_genesezinventory_domain_model_product (
+CREATE TABLE tx_gszinventory_domain_model_product (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	

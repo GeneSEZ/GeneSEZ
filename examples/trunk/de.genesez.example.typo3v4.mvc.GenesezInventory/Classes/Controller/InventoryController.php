@@ -32,7 +32,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezInventory_Controller_InventoryController extends Tx_Extbase_MVC_Controller_ActionController {
+class Tx_GszInventory_Controller_InventoryController extends Tx_Extbase_MVC_Controller_ActionController {
 
 
 
@@ -42,7 +42,7 @@ class Tx_GenesezInventory_Controller_InventoryController extends Tx_Extbase_MVC_
 	 */
 	public function listAction() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314624316079_160741_2229) ENABLED START */
-		$productRepository = t3lib_div::makeInstance('Tx_GenesezInventory_Domain_Repository_ProductRepository');
+		$productRepository = t3lib_div::makeInstance('Tx_GszInventory_Domain_Repository_ProductRepository');
 		$products = $productRepository->findAll();
 		$this->view->assign('products', $products);
 		/* PROTECTED REGION END */
