@@ -18,16 +18,20 @@
 «ENDREM»
 
 «REM»
-	Processes the contents of a classifier, if it is an element of:
-	- controller package
-	- model package
-	- repository package
-	- service package
-	- validator package
-	- view helper package
+	Processes the contents of a classifier
 «ENDREM»
 «DEFINE Root FOR MClassifier -»
-«IF isControllerPackageElement() || isModelPackageElement() || isRepositoryPackageElement() || isServicePackageElement() || isValidatorPackageElement() || isViewHelperPackageElement() -»
+«EXPAND Types::Root -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the contents of an interface, if it is not an element of:
+	- plugin
+	- module
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+«IF !isPlugin() && !isModule() -»
 	«EXPAND Types::Root -»
 «ENDIF -»
 «ENDDEFINE»
