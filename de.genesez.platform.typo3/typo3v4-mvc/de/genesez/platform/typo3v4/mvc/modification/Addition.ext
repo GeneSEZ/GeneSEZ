@@ -608,7 +608,7 @@ Void validatorAdditions(MClass validator) :
 	// add super validiator type
 	validator.addValidatorType() ->
 	// add 'isValid' if not exists
-	addValidatorIsValid( validator, createPrimitiveType( validator.model(), "mixed" ) );
+	validator.addValidatorIsValid();
 
 
 cached MClass makeValidator(MClass domainObject) :
@@ -617,7 +617,7 @@ cached MClass makeValidator(MClass domainObject) :
 	!domainObject.existsValidator()
 		? (	let c = createClass( domainObject.model(), domainObject.xmiGuid + ".validator", domainObject.asValidatorName() ) :
 				logTrace("create new validator class for domain object: " + domainObject.name) ->
-				c.processValidator(domainObject)
+				c.processValidator()
 		) : domainObject.model().allValidators().selectFirst( e | e.nameS() == domainObject.asValidatorName() ); 	
 
 
@@ -627,11 +627,11 @@ cached MClass makeValidator(MStereotype stereotype) :
 	!stereotype.existsValidator() 
 		? (	let c = createClass(stereotype.model(), stereotype.xmiGuid + ".validator", stereotype.asValidatorName() ) :
 				logTrace("create new validator class for stereotype: " + stereotype.name) ->
-				c.processValidator(createPrimitiveType( stereotype.model(), "mixed" ))
+				c.processValidator()
 		) : stereotype.model().allValidators().select( v | v.nameS() == stereotype.asValidatorName() ).first();
 
 
-MClass processValidator(MClass this, MType validationType) :
+MClass processValidator(MClass this) :
 	logTrace("call processValidator for class: " + name) ->
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
@@ -640,7 +640,7 @@ MClass processValidator(MClass this, MType validationType) :
 	// add super validator type
 	addValidatorType() ->
 	// add 'isValid'
-	addValidatorIsValid(validationType) ->
+	addValidatorIsValid() ->
 	// add stereotype to mark this class as validator
 	stereotype.add( 
 		makeStereotype( model(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
@@ -675,7 +675,7 @@ Void addValidatorType(MClass this) :
 /**
  * Add the 'isValid' to the validator class.
  */
-Void addValidatorIsValid(MClass this, MType validationType) :
+Void addValidatorIsValid(MClass this) :
 	logTrace("call addValidatorIsValid for validator: " + name) ->
 	// checks if the isValid method should be created and doesn't already exists
 	operation.select( o | o.name() == "isValid" ).isEmpty
@@ -683,7 +683,7 @@ Void addValidatorIsValid(MClass this, MType validationType) :
 				// add comment to discribe the operation
 				o.makeComment("Checks if the given value is valid according to the validator.") ->
 				o.parameter.add(
-					let p = makeParameter(o, "value", "", "in", validationType) :
+					let p = makeParameter(o, "value", "", "in", createPrimitiveType( model(), "mixed" )) :
 						// add comment to discribe the parameter
 						p.makeComment("The value that should be validated") ->
 						p
