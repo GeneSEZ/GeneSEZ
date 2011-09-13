@@ -1,8 +1,8 @@
 
 #
-# Table structure for table 'tx_gzblogexample_domain_model_administrator'
+# Table structure for table 'tx_gszblogexample_domain_model_administrator'
 #
-CREATE TABLE tx_gzblogexample_domain_model_administrator (
+CREATE TABLE tx_gszblogexample_domain_model_administrator (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -34,9 +34,9 @@ CREATE TABLE tx_gzblogexample_domain_model_administrator (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_gzblogexample_domain_model_blog'
+# Table structure for table 'tx_gszblogexample_domain_model_blog'
 #
-CREATE TABLE tx_gzblogexample_domain_model_blog (
+CREATE TABLE tx_gszblogexample_domain_model_blog (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -71,9 +71,9 @@ CREATE TABLE tx_gzblogexample_domain_model_blog (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_gzblogexample_domain_model_comment'
+# Table structure for table 'tx_gszblogexample_domain_model_comment'
 #
-CREATE TABLE tx_gzblogexample_domain_model_comment (
+CREATE TABLE tx_gszblogexample_domain_model_comment (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -93,9 +93,9 @@ CREATE TABLE tx_gzblogexample_domain_model_comment (
 	KEY parent (pid),
 );
 #
-# Table structure for table 'tx_gzblogexample_domain_model_person'
+# Table structure for table 'tx_gszblogexample_domain_model_person'
 #
-CREATE TABLE tx_gzblogexample_domain_model_person (
+CREATE TABLE tx_gszblogexample_domain_model_person (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -125,9 +125,9 @@ CREATE TABLE tx_gzblogexample_domain_model_person (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_gzblogexample_domain_model_post'
+# Table structure for table 'tx_gszblogexample_domain_model_post'
 #
-CREATE TABLE tx_gzblogexample_domain_model_post (
+CREATE TABLE tx_gszblogexample_domain_model_post (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -165,9 +165,9 @@ CREATE TABLE tx_gzblogexample_domain_model_post (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_gzblogexample_domain_model_tag'
+# Table structure for table 'tx_gszblogexample_domain_model_tag'
 #
-CREATE TABLE tx_gzblogexample_domain_model_tag (
+CREATE TABLE tx_gszblogexample_domain_model_tag (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -184,9 +184,9 @@ CREATE TABLE tx_gzblogexample_domain_model_tag (
 	KEY parent (pid),
 );
 #
-# Intermediate table structure for table 'tx_gzblogexample_post_tag_tags_mm'
+# Intermediate table structure for table 'tx_gszblogexample_post_tag_tags_mm'
 #
-CREATE TABLE tx_gzblogexample_post_tag_tags_mm (
+CREATE TABLE tx_gszblogexample_post_tag_tags_mm (
 	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
@@ -195,9 +195,9 @@ CREATE TABLE tx_gzblogexample_post_tag_tags_mm (
 	KEY uid_foreign (uid_foreign)
 );
 #
-# Intermediate table structure for table 'tx_gzblogexample_post_comment_comments_mm'
+# Intermediate table structure for table 'tx_gszblogexample_post_comment_comments_mm'
 #
-CREATE TABLE tx_gzblogexample_post_comment_comments_mm (
+CREATE TABLE tx_gszblogexample_post_comment_comments_mm (
 	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
@@ -206,9 +206,9 @@ CREATE TABLE tx_gzblogexample_post_comment_comments_mm (
 	KEY uid_foreign (uid_foreign)
 );
 #
-# Intermediate table structure for table 'tx_gzblogexample_post_post_related_posts_mm'
+# Intermediate table structure for table 'tx_gszblogexample_post_post_related_posts_mm'
 #
-CREATE TABLE tx_gzblogexample_post_post_related_posts_mm (
+CREATE TABLE tx_gszblogexample_post_post_related_posts_mm (
 	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,

@@ -4,8 +4,8 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$TCA['tx_gzblogexample_domain_model_administrator'] = array (
-	'ctrl' => $TCA['tx_gzblogexample_domain_model_administrator']['ctrl'],
+$TCA['tx_gszblogexample_domain_model_administrator'] = array (
+	'ctrl' => $TCA['tx_gszblogexample_domain_model_administrator']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => '',
 		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
@@ -44,8 +44,8 @@ $TCA['tx_gzblogexample_domain_model_administrator'] = array (
 				'items'	=> array(
 					array('', 0),
 				),
-				'foreign_table' => 'tx_gzblogexample_domain_model_administrator',
-				'foreign_table_where' => 'AND tx_gzblogexample_domain_model_administrator.uid=###REC_FIELD_l10n_parent### AND tx_gzblogexample_domain_model_administrator.sys_language_uid IN (-1,0)',
+				'foreign_table' => 'tx_gszblogexample_domain_model_administrator',
+				'foreign_table_where' => 'AND tx_gszblogexample_domain_model_administrator.uid=###REC_FIELD_l10n_parent### AND tx_gszblogexample_domain_model_administrator.sys_language_uid IN (-1,0)',
 			)
 		),
 		'l10n_diffsource' => array(

@@ -33,14 +33,14 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Controller_AbstractController {
+class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Controller_AbstractController {
 
 	/**
-	 * @var Tx_GzBlogExample_Domain_Repository_BlogRepository
+	 * @var Tx_GszBlogExample_Domain_Repository_BlogRepository
 	 */
 	protected $blogRepository;
 	/**
-	 * @var Tx_GzBlogExample_Domain_Repository_AdministratorRepository
+	 * @var Tx_GszBlogExample_Domain_Repository_AdministratorRepository
 	 */
 	protected $administratorRepository;
 
@@ -59,11 +59,11 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Displays a form for creating a new blog
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $newBlog A fresh blog object taken as a basis for the rendering
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $newBlog A fresh blog object taken as a basis for the rendering
 	 * @return void
 	 * @dontvalidate $newBlog
 	 */
-	public function newAction(Tx_GzBlogExample_Domain_Model_Blog $newBlog = null) {
+	public function newAction(Tx_GszBlogExample_Domain_Model_Blog $newBlog = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252181185_462277_3144) ENABLED START */
 		$this->view->assign('newBlog', $newBlog);
 		$this->view->assign('administrators', $this->administratorRepository->findAll());
@@ -72,10 +72,10 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Creates a new blog
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $newBlog A fresh Blog object which has not yet been added to the repository
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $newBlog A fresh Blog object which has not yet been added to the repository
 	 * @return void
 	 */
-	public function createAction(Tx_GzBlogExample_Domain_Model_Blog $newBlog) {
+	public function createAction(Tx_GszBlogExample_Domain_Model_Blog $newBlog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252206393_658245_3158) ENABLED START */
 		$this->blogRepository->add($newBlog);
 		$this->addFlashMessage('created');
@@ -85,11 +85,11 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Displays a form for editing an existing blog
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog to be edited. This might also be a clone of the original blog already containing modifications if the edit form has been submitted, contained errors and therefore ended up in this action again.
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog to be edited. This might also be a clone of the original blog already containing modifications if the edit form has been submitted, contained errors and therefore ended up in this action again.
 	 * @return void
 	 * @dontvalidate $blog
 	 */
-	public function editAction(Tx_GzBlogExample_Domain_Model_Blog $blog) {
+	public function editAction(Tx_GszBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252235402_679130_3171) ENABLED START */
 		$this->view->assign('blog', $blog);
 		$this->view->assign('administrators', $this->administratorRepository->findAll());
@@ -98,10 +98,10 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Updates an existing blog
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog A not yet persisted clone of the original blog containing the modifications
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog A not yet persisted clone of the original blog containing the modifications
 	 * @return void
 	 */
-	public function updateAction(Tx_GzBlogExample_Domain_Model_Blog $blog) {
+	public function updateAction(Tx_GszBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252258980_463056_3185) ENABLED START */
 		$this->blogRepository->update($blog);
 		$this->addFlashMessage('updated');
@@ -111,10 +111,10 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Deletes an existing blog
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog to delete
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog to delete
 	 * @return void
 	 */
-	public function deleteAction(Tx_GzBlogExample_Domain_Model_Blog $blog) {
+	public function deleteAction(Tx_GszBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252273193_659963_3203) ENABLED START */
 		$this->blogRepository->remove($blog);
 		$this->addFlashMessage('deleted', t3lib_FlashMessage::INFO);
@@ -140,7 +140,7 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	public function populateAction() {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252298300_76853_3229) ENABLED START */
 		$numberOfExistingBlogs = $this->blogRepository->countAll();
-		$blogFactory = $this->objectManager->get('Tx_GzBlogExample_Domain_Service_BlogFactory');
+		$blogFactory = $this->objectManager->get('Tx_GszBlogExample_Domain_Service_BlogFactory');
 		for ($blogNumber = $numberOfExistingBlogs + 1; $blogNumber < ($numberOfExistingBlogs + 5); $blogNumber++) {
 			$blog = $blogFactory->createBlog($blogNumber);
 			$this->blogRepository->add($blog);
@@ -154,7 +154,7 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Getter for blogRepository
 	 *
-	 * @return Tx_GzBlogExample_Domain_Repository_BlogRepository 
+	 * @return Tx_GszBlogExample_Domain_Repository_BlogRepository 
 	 */
 	public function getBlogRepository() {
 		return $this->blogRepository;
@@ -162,16 +162,16 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Dependency injection for blogRepository
 	 *
-	 * @param Tx_GzBlogExample_Domain_Repository_BlogRepository $blogRepository 
+	 * @param Tx_GszBlogExample_Domain_Repository_BlogRepository $blogRepository 
 	 * @return void
 	 */
-	public function injectBlogRepository(Tx_GzBlogExample_Domain_Repository_BlogRepository $blogRepository) {
+	public function injectBlogRepository(Tx_GszBlogExample_Domain_Repository_BlogRepository $blogRepository) {
 		$this->blogRepository = $blogRepository;
 	}
 	/**
 	 * Getter for administratorRepository
 	 *
-	 * @return Tx_GzBlogExample_Domain_Repository_AdministratorRepository 
+	 * @return Tx_GszBlogExample_Domain_Repository_AdministratorRepository 
 	 */
 	public function getAdministratorRepository() {
 		return $this->administratorRepository;
@@ -179,10 +179,10 @@ class Tx_GzBlogExample_Controller_BlogController extends Tx_GzBlogExample_Contro
 	/**
 	 * Dependency injection for administratorRepository
 	 *
-	 * @param Tx_GzBlogExample_Domain_Repository_AdministratorRepository $administratorRepository 
+	 * @param Tx_GszBlogExample_Domain_Repository_AdministratorRepository $administratorRepository 
 	 * @return void
 	 */
-	public function injectAdministratorRepository(Tx_GzBlogExample_Domain_Repository_AdministratorRepository $administratorRepository) {
+	public function injectAdministratorRepository(Tx_GszBlogExample_Domain_Repository_AdministratorRepository $administratorRepository) {
 		$this->administratorRepository = $administratorRepository;
 	}
 

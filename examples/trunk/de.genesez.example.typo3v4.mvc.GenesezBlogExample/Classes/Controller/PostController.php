@@ -33,14 +33,14 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Controller_AbstractController {
+class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Controller_AbstractController {
 
 	/**
-	 * @var Tx_GzBlogExample_Domain_Repository_PostRepository
+	 * @var Tx_GszBlogExample_Domain_Repository_PostRepository
 	 */
 	protected $postRepository;
 	/**
-	 * @var Tx_GzBlogExample_Domain_Repository_PersonRepository
+	 * @var Tx_GszBlogExample_Domain_Repository_PersonRepository
 	 */
 	protected $personRepository;
 
@@ -49,11 +49,11 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Displays a list of posts. If $tag is set only posts matching this tag are shown
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog to show the posts of
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog to show the posts of
 	 * @param string $tag The name of the tag to show the posts for
 	 * @return void
 	 */
-	public function indexAction(Tx_GzBlogExample_Domain_Model_Blog $blog, $tag = null) {
+	public function indexAction(Tx_GszBlogExample_Domain_Model_Blog $blog, $tag = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251570422_202575_2822) ENABLED START */
 		if (empty($tag)) {
 			$posts = $this->postRepository->findByBlog($blog);
@@ -69,12 +69,12 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Displays one single post
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Post $post The post to display
-	 * @param Tx_GzBlogExample_Domain_Model_Comment $newComment A new comment
+	 * @param Tx_GszBlogExample_Domain_Model_Post $post The post to display
+	 * @param Tx_GszBlogExample_Domain_Model_Comment $newComment A new comment
 	 * @return void
 	 * @dontvalidate $newComment
 	 */
-	public function showAction(Tx_GzBlogExample_Domain_Model_Post $post, Tx_GzBlogExample_Domain_Model_Comment $newComment = null) {
+	public function showAction(Tx_GszBlogExample_Domain_Model_Post $post, Tx_GszBlogExample_Domain_Model_Comment $newComment = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251652061_144721_2838) ENABLED START */
 		$this->view->assign('post', $post);
 		$this->view->assign('newComment', $newComment);
@@ -83,12 +83,12 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Displays a form for creating a new post
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post belogs to
-	 * @param Tx_GzBlogExample_Domain_Model_Post $newPost A fresh post object taken as a basis for the rendering
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog the post belogs to
+	 * @param Tx_GszBlogExample_Domain_Model_Post $newPost A fresh post object taken as a basis for the rendering
 	 * @return void
 	 * @dontvalidate $newPost
 	 */
-	public function newAction(Tx_GzBlogExample_Domain_Model_Blog $blog, Tx_GzBlogExample_Domain_Model_Post $newPost = null) {
+	public function newAction(Tx_GszBlogExample_Domain_Model_Blog $blog, Tx_GszBlogExample_Domain_Model_Post $newPost = null) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251722638_898873_2867) ENABLED START */
 		$this->view->assign('authors', $this->personRepository->findAll());
 		$this->view->assign('blog', $blog);
@@ -99,11 +99,11 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Creates a new post
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post belogns to
-	 * @param Tx_GzBlogExample_Domain_Model_Post $newPost A fresh Blog object which has not yet been added to the repository
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog the post belogns to
+	 * @param Tx_GszBlogExample_Domain_Model_Post $newPost A fresh Blog object which has not yet been added to the repository
 	 * @return void
 	 */
-	public function createAction(Tx_GzBlogExample_Domain_Model_Blog $blog, Tx_GzBlogExample_Domain_Model_Post $newPost) {
+	public function createAction(Tx_GszBlogExample_Domain_Model_Blog $blog, Tx_GszBlogExample_Domain_Model_Post $newPost) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251748387_416366_2881) ENABLED START */
 		$blog->addPost($newPost);
 		$newPost->setBlog($blog);
@@ -114,12 +114,12 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Displays a form to edit an existing post
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post belogs to
-	 * @param Tx_GzBlogExample_Domain_Model_Post $post The original post
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog the post belogs to
+	 * @param Tx_GszBlogExample_Domain_Model_Post $post The original post
 	 * @return void
 	 * @dontvalidate $post
 	 */
-	public function editAction(Tx_GzBlogExample_Domain_Model_Blog $blog, Tx_GzBlogExample_Domain_Model_Post $post) {
+	public function editAction(Tx_GszBlogExample_Domain_Model_Blog $blog, Tx_GszBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251769032_48598_2895) ENABLED START */
 		$this->view->assign('authors', $this->personRepository->findAll());
 		$this->view->assign('blog', $blog);
@@ -130,11 +130,11 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Updates an existing post
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post belongs to
-	 * @param Tx_GzBlogExample_Domain_Model_Post $post A clone of the original post with the updated values already applied
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog the post belongs to
+	 * @param Tx_GszBlogExample_Domain_Model_Post $post A clone of the original post with the updated values already applied
 	 * @return void
 	 */
-	public function updateAction(Tx_GzBlogExample_Domain_Model_Blog $blog, Tx_GzBlogExample_Domain_Model_Post $post) {
+	public function updateAction(Tx_GszBlogExample_Domain_Model_Blog $blog, Tx_GszBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251791676_169143_2909) ENABLED START */
 		$this->postRepository->update($post);
 		$this->addFlashMessage('updated');
@@ -144,11 +144,11 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Deletes an existing post
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post belongs to
-	 * @param Tx_GzBlogExample_Domain_Model_Post $post The post to be deleted
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog The blog the post belongs to
+	 * @param Tx_GszBlogExample_Domain_Model_Post $post The post to be deleted
 	 * @return void
 	 */
-	public function deleteAction(Tx_GzBlogExample_Domain_Model_Blog $blog, Tx_GzBlogExample_Domain_Model_Post $post) {
+	public function deleteAction(Tx_GszBlogExample_Domain_Model_Blog $blog, Tx_GszBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251812164_716082_2923) ENABLED START */
 		$this->postRepository->remove($post);
 		$this->addFlashMessage('deleted', t3lib_FlashMessage::INFO);
@@ -160,7 +160,7 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Getter for postRepository
 	 *
-	 * @return Tx_GzBlogExample_Domain_Repository_PostRepository 
+	 * @return Tx_GszBlogExample_Domain_Repository_PostRepository 
 	 */
 	public function getPostRepository() {
 		return $this->postRepository;
@@ -168,16 +168,16 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Dependency injection for postRepository
 	 *
-	 * @param Tx_GzBlogExample_Domain_Repository_PostRepository $postRepository 
+	 * @param Tx_GszBlogExample_Domain_Repository_PostRepository $postRepository 
 	 * @return void
 	 */
-	public function injectPostRepository(Tx_GzBlogExample_Domain_Repository_PostRepository $postRepository) {
+	public function injectPostRepository(Tx_GszBlogExample_Domain_Repository_PostRepository $postRepository) {
 		$this->postRepository = $postRepository;
 	}
 	/**
 	 * Getter for personRepository
 	 *
-	 * @return Tx_GzBlogExample_Domain_Repository_PersonRepository 
+	 * @return Tx_GszBlogExample_Domain_Repository_PersonRepository 
 	 */
 	public function getPersonRepository() {
 		return $this->personRepository;
@@ -185,10 +185,10 @@ class Tx_GzBlogExample_Controller_PostController extends Tx_GzBlogExample_Contro
 	/**
 	 * Dependency injection for personRepository
 	 *
-	 * @param Tx_GzBlogExample_Domain_Repository_PersonRepository $personRepository 
+	 * @param Tx_GszBlogExample_Domain_Repository_PersonRepository $personRepository 
 	 * @return void
 	 */
-	public function injectPersonRepository(Tx_GzBlogExample_Domain_Repository_PersonRepository $personRepository) {
+	public function injectPersonRepository(Tx_GszBlogExample_Domain_Repository_PersonRepository $personRepository) {
 		$this->personRepository = $personRepository;
 	}
 

@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_AbstractEntity {
+class Tx_GszBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
 	 * @var string
@@ -50,25 +50,25 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	 */
 	protected $content;
 	/**
-	 * @var Tx_GzBlogExample_Domain_Model_Blog
+	 * @var Tx_GszBlogExample_Domain_Model_Blog
 	 */
 	protected $blog;
 	/**
-	 * @var Tx_GzBlogExample_Domain_Model_Person
+	 * @var Tx_GszBlogExample_Domain_Model_Person
 	 */
 	protected $author;
 	/**
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Tag>
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Tag>
 	 */
 	protected $tags;
 	/**
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Comment>
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Comment>
 	 * @cascade remove
 	 * @lazy
 	 */
 	protected $comments;
 	/**
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Post>
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Post>
 	 * @lazy
 	 */
 	protected $relatedPosts;
@@ -187,7 +187,7 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Getter for blog
 	 *
-	 * @return Tx_GzBlogExample_Domain_Model_Blog 
+	 * @return Tx_GszBlogExample_Domain_Model_Blog 
 	 */
 	public function getBlog() {
 		return $this->blog;
@@ -195,16 +195,16 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Setter for blog
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog 
+	 * @param Tx_GszBlogExample_Domain_Model_Blog $blog 
 	 * @return void
 	 */
-	public function setBlog(Tx_GzBlogExample_Domain_Model_Blog $blog) {
+	public function setBlog(Tx_GszBlogExample_Domain_Model_Blog $blog) {
 		$this->blog = $blog;
 	}
 	/**
 	 * Getter for author
 	 *
-	 * @return Tx_GzBlogExample_Domain_Model_Person 
+	 * @return Tx_GszBlogExample_Domain_Model_Person 
 	 */
 	public function getAuthor() {
 		return $this->author;
@@ -212,16 +212,16 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Setter for author
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Person $author 
+	 * @param Tx_GszBlogExample_Domain_Model_Person $author 
 	 * @return void
 	 */
-	public function setAuthor(Tx_GzBlogExample_Domain_Model_Person $author) {
+	public function setAuthor(Tx_GszBlogExample_Domain_Model_Person $author) {
 		$this->author = $author;
 	}
 	/**
 	 * Getter for tags
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Tag> 
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Tag> 
 	 */
 	public function getTags() {
 		return $this->tags;
@@ -229,7 +229,7 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Setter for tags
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Tag> $tags 
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Tag> $tags 
 	 * @return void
 	 */
 	public function setTags(Tx_Extbase_Persistence_ObjectStorage $tags) {
@@ -238,25 +238,25 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * InsertIn for tags
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Tag $toAdd 
+	 * @param Tx_GszBlogExample_Domain_Model_Tag $toAdd 
 	 * @return void
 	 */
-	public function addTags(Tx_GzBlogExample_Domain_Model_Tag $toAdd) {
+	public function addTags(Tx_GszBlogExample_Domain_Model_Tag $toAdd) {
 		$this->tags->attach($toAdd);
 	}
 	/**
 	 * RemoveFrom for tags
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Tag $toRemove 
+	 * @param Tx_GszBlogExample_Domain_Model_Tag $toRemove 
 	 * @return void
 	 */
-	public function removeTags(Tx_GzBlogExample_Domain_Model_Tag $toRemove) {
+	public function removeTags(Tx_GszBlogExample_Domain_Model_Tag $toRemove) {
 		$this->tags->detach($toRemove);
 	}
 	/**
 	 * Getter for comments
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Comment> 
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Comment> 
 	 */
 	public function getComments() {
 		return $this->comments;
@@ -264,7 +264,7 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Setter for comments
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Comment> $comments 
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Comment> $comments 
 	 * @return void
 	 */
 	public function setComments(Tx_Extbase_Persistence_ObjectStorage $comments) {
@@ -273,25 +273,25 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * InsertIn for comments
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Comment $toAdd 
+	 * @param Tx_GszBlogExample_Domain_Model_Comment $toAdd 
 	 * @return void
 	 */
-	public function addComments(Tx_GzBlogExample_Domain_Model_Comment $toAdd) {
+	public function addComments(Tx_GszBlogExample_Domain_Model_Comment $toAdd) {
 		$this->comments->attach($toAdd);
 	}
 	/**
 	 * RemoveFrom for comments
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Comment $toRemove 
+	 * @param Tx_GszBlogExample_Domain_Model_Comment $toRemove 
 	 * @return void
 	 */
-	public function removeComments(Tx_GzBlogExample_Domain_Model_Comment $toRemove) {
+	public function removeComments(Tx_GszBlogExample_Domain_Model_Comment $toRemove) {
 		$this->comments->detach($toRemove);
 	}
 	/**
 	 * Getter for relatedPosts
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Post> 
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Post> 
 	 */
 	public function getRelatedPosts() {
 		return $this->relatedPosts;
@@ -299,7 +299,7 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * Setter for relatedPosts
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Post> $relatedPosts 
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GszBlogExample_Domain_Model_Post> $relatedPosts 
 	 * @return void
 	 */
 	public function setRelatedPosts(Tx_Extbase_Persistence_ObjectStorage $relatedPosts) {
@@ -308,19 +308,19 @@ class Tx_GzBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstrac
 	/**
 	 * InsertIn for relatedPosts
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Post $toAdd 
+	 * @param Tx_GszBlogExample_Domain_Model_Post $toAdd 
 	 * @return void
 	 */
-	public function addRelatedPosts(Tx_GzBlogExample_Domain_Model_Post $toAdd) {
+	public function addRelatedPosts(Tx_GszBlogExample_Domain_Model_Post $toAdd) {
 		$this->relatedPosts->attach($toAdd);
 	}
 	/**
 	 * RemoveFrom for relatedPosts
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Post $toRemove 
+	 * @param Tx_GszBlogExample_Domain_Model_Post $toRemove 
 	 * @return void
 	 */
-	public function removeRelatedPosts(Tx_GzBlogExample_Domain_Model_Post $toRemove) {
+	public function removeRelatedPosts(Tx_GszBlogExample_Domain_Model_Post $toRemove) {
 		$this->relatedPosts->detach($toRemove);
 	}
 

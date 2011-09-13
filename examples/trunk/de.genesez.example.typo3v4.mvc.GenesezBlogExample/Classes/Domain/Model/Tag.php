@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GzBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_AbstractValueObject {
+class Tx_GszBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_AbstractValueObject {
 
 	/**
 	 * @var string

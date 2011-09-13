@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GzBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
+class Tx_GszBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
 
 
 

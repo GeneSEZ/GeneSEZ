@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GzBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
+class Tx_GszBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
 
 	/**
 	 * @var Tx_Extbase_Object_ObjectManagerInterface
@@ -47,19 +47,19 @@ class Tx_GzBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
 	 * It is also an example how to handle objects and repositories in general
 	 *
 	 * @param integer $blogNumber 
-	 * @return Tx_GzBlogExample_Domain_Model_Blog 
+	 * @return Tx_GszBlogExample_Domain_Model_Blog 
 	 */
 	public function createBlog($blogNumber = 1) {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302085392366_403888_3725) ENABLED START */
-		$blog = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Blog');
+		$blog = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Blog');
 		$blog->setTitle('Blog #' . $blogNumber);
 		$blog->setDescription('A blog about TYPO3 extension development.');
 		
 		// create author
-		$author = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Person', 'Stephen', 'Smith', 'foo.bar@example.com');
+		$author = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Person', 'Stephen', 'Smith', 'foo.bar@example.com');
 		
 		// create administrator
-		$administrator = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Administrator');
+		$administrator = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Administrator');
 		$administrator->setName('John Doe');
 		$administrator->setEmail('john.doe@example.com');
 		$blog->setAdministrator($administrator);
@@ -68,20 +68,20 @@ class Tx_GzBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
 		for ($postNumber = 1; $postNumber < 6; $postNumber++) {
 		
 			// create post
-			$post = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Post');
+			$post = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Post');
 			$post->setTitle('The ' . $postNumber . '. post of blog #' . $blogNumber);
 			$post->setAuthor($author);
 			$post->setContent('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
 			
 			// create comments
-			$comment = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Comment');
+			$comment = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Comment');
 			$comment->setDate(new DateTime());
 			$comment->setAuthor('Peter Pan');
 			$comment->setEmail('peter.pan@example.com');
 			$comment->setContent('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.');
 			$post->addComments($comment);
 		
-			$comment = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Comment');
+			$comment = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Comment');
 			$comment->setDate(new DateTime('2009-03-19 23:44'));
 			$comment->setAuthor('John Smith');
 			$comment->setEmail('john@matrix.org');
@@ -90,15 +90,15 @@ class Tx_GzBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
 		
 			// create some random tags
 			if (rand(0, 1) > 0) {
-				$tag = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Tag', 'MVC');
+				$tag = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Tag', 'MVC');
 				$post->addTags($tag);
 			}
 			if (rand(0, 1) > 0) {
-				$tag = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Tag', 'Domain Driven Design');
+				$tag = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Tag', 'Domain Driven Design');
 				$post->addTags($tag);
 			}
 			if (rand(0, 1) > 0) {
-				$tag = $this->objectManager->create('Tx_GzBlogExample_Domain_Model_Tag', 'TYPO3');
+				$tag = $this->objectManager->create('Tx_GszBlogExample_Domain_Model_Tag', 'TYPO3');
 				$post->addTags($tag);
 			}
 			

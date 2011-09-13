@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GzBlogExample_Controller_CommentController extends Tx_GzBlogExample_Controller_AbstractController {
+class Tx_GszBlogExample_Controller_CommentController extends Tx_GszBlogExample_Controller_AbstractController {
 
 
 
@@ -41,11 +41,11 @@ class Tx_GzBlogExample_Controller_CommentController extends Tx_GzBlogExample_Con
 	/**
 	 * Adds a comment to a blog post and redirects to single view
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Post $post The post the comment is related to
-	 * @param Tx_GzBlogExample_Domain_Model_Comment $newComment The comment to create
+	 * @param Tx_GszBlogExample_Domain_Model_Post $post The post the comment is related to
+	 * @param Tx_GszBlogExample_Domain_Model_Comment $newComment The comment to create
 	 * @return void
 	 */
-	public function createAction(Tx_GzBlogExample_Domain_Model_Post $post, Tx_GzBlogExample_Domain_Model_Comment $newComment) {
+	public function createAction(Tx_GszBlogExample_Domain_Model_Post $post, Tx_GszBlogExample_Domain_Model_Comment $newComment) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251980107_45183_2985) ENABLED START */
 		$post->addComments($newComment);
 		$this->addFlashMessage('created');
@@ -55,11 +55,11 @@ class Tx_GzBlogExample_Controller_CommentController extends Tx_GzBlogExample_Con
 	/**
 	 * Deletes an existing comment
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Post $post The post the comment is related to
-	 * @param Tx_GzBlogExample_Domain_Model_Comment $comment The comment to be deleted
+	 * @param Tx_GszBlogExample_Domain_Model_Post $post The post the comment is related to
+	 * @param Tx_GszBlogExample_Domain_Model_Comment $comment The comment to be deleted
 	 * @return void
 	 */
-	public function deleteAction(Tx_GzBlogExample_Domain_Model_Post $post, Tx_GzBlogExample_Domain_Model_Comment $comment) {
+	public function deleteAction(Tx_GszBlogExample_Domain_Model_Post $post, Tx_GszBlogExample_Domain_Model_Comment $comment) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252002140_334308_2995) ENABLED START */
 		$post->removeComment($comment);
 		$this->addFlashMessage('deleted', t3lib_FlashMessage::INFO);
@@ -69,10 +69,10 @@ class Tx_GzBlogExample_Controller_CommentController extends Tx_GzBlogExample_Con
 	/**
 	 * Deletes all comments of the given post
 	 *
-	 * @param Tx_GzBlogExample_Domain_Model_Post $post The post the comment is related to
+	 * @param Tx_GszBlogExample_Domain_Model_Post $post The post the comment is related to
 	 * @return void
 	 */
-	public function deleteAllAction(Tx_GzBlogExample_Domain_Model_Post $post) {
+	public function deleteAllAction(Tx_GszBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297252021351_287202_3009) ENABLED START */
 		$post->removeAllComments();
 		$this->addFlashMessage('deletedAll', t3lib_FlashMessage::INFO);
