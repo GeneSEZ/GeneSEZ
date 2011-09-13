@@ -424,6 +424,25 @@ MTag makeTaggedValueNoChecks(MElement container, MTag tag, String value) :
 
 /**
  *	creates an attribute and adds it to the property list
+ *	multiplicity, lower and upper bound multiplicity are 
+ * 	set to 1
+ *	
+ *	@param	container		instance of MClassifier
+ *	@param	name			name of the attribute
+ *	@param	type			type of the attribute
+ *	@param	visibility		visibility of the attribute
+ */
+Void makeAttribute(MClassifier container, String name, String type, String visibility) :
+	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
+		a.processAttribute("", false, false) ->
+		a.setUpperBoundMultiplicity(1) ->
+		a.setLowerBoundMultiplicity(1) ->
+		a.setMultiplicity(1) ->
+		a.setVisibility(visibility) ->
+		a.setType(createExternal(container.model(), type));
+
+/**
+ *	creates an attribute and adds it to the property list
  *	for lower and upper bound multiplicity the value of 
  *	multiplicity is taken 
  *	
@@ -433,7 +452,7 @@ MTag makeTaggedValueNoChecks(MElement container, MTag tag, String value) :
  *	@param	visibility		visibility of the attribute
  *	@param	multiplicity	multiplicity of the attribute
  */
-Void addAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
+Void makeAttribute(MClassifier container, String name, String type, String visibility, int multiplicity) :
 	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
 		a.processAttribute("", false, false) ->
 		a.setUpperBoundMultiplicity(multiplicity) ->
@@ -453,7 +472,7 @@ Void addAttribute(MClassifier container, String name, String type, String visibi
  *	@param	upperBound		upper bound multiplicity of the attribute
  *	@param	multiplicity	multiplicity of the attribute
  */
-Void addAttribute(MClassifier container, String name, String type, String visibility, int lowerBound, int upperBound, int multiplicity) :
+Void makeAttribute(MClassifier container, String name, String type, String visibility, int lowerBound, int upperBound, int multiplicity) :
 	let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
 		a.processAttribute("", false, false) ->
 		a.setUpperBoundMultiplicity(upperBound) ->
