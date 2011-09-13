@@ -68,6 +68,9 @@ public class CompositeModel2Model extends CompositeComponent {
 	 */
 	public CompositeModel2Model() {
 		super(CompositeModel2Model.class.getSimpleName());
+		
+		WorkflowUtils.callPropertyAccessors(this, defaults);
+		properties.putAll(WorkflowProperties.defaults);
 	}
 
 	/**
@@ -96,9 +99,9 @@ public class CompositeModel2Model extends CompositeComponent {
 			for (Object key : globalVars.keySet()) {
 				m2m.put(key, globalVars.get(key));
 			}
-
+			
 			m2m.setSlot(properties.getProperty("slot"));
-			m2m.setOutputSlot(properties.getProperty("outputSlot", ""));
+			m2m.setOutputSlot(properties.getProperty("outputSlot", "default"));
 
 			super.addComponent(m2m);
 		}
