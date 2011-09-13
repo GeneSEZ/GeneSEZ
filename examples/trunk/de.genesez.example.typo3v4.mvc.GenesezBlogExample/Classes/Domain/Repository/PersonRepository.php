@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezBlogExample_Domain_Repository_PersonRepository extends Tx_Extbase_Persistence_Repository {
+class Tx_GzBlogExample_Domain_Repository_PersonRepository extends Tx_Extbase_Persistence_Repository {
 
 
 

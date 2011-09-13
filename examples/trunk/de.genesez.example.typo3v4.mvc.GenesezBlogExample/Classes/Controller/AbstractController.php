@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Extbase_MVC_Controller_ActionController {
+abstract class Tx_GzBlogExample_Controller_AbstractController extends Tx_Extbase_MVC_Controller_ActionController {
 
 
 
@@ -63,7 +63,7 @@ abstract class Tx_GenesezBlogExample_Controller_AbstractController extends Tx_Ex
 	 */
 	protected function translate($key, $defaultMessage = '') {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302081746177_170309_2158) ENABLED START */
-		$message = Tx_Extbase_Utility_Localization::translate($key, 'BlogExample');
+		$message = Tx_Extbase_Utility_Localization::translate($key, 'GzBlogExample');
 		if ($message === NULL) {
 			$message = $defaultMessage;
 		}

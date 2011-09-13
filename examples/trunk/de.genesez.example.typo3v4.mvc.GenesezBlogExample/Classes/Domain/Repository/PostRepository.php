@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Persistence_Repository {
+class Tx_GzBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Persistence_Repository {
 
 
 
@@ -41,10 +41,10 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	/**
 	 * Finds all posts by the specified blog
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog the post must refer to
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
+	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post must refer to
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GzBlogExample_Domain_Model_Post> The posts
 	 */
-	public function findAllByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
+	public function findAllByBlog(Tx_GzBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297250908862_209782_2440) ENABLED START */
 		$query = $this->createQuery();
 		return $query
@@ -58,10 +58,10 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	 * Finds posts by the specified tag and blog
 	 *
 	 * @param string $tag 
-	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog the post must refer to
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
+	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post must refer to
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GzBlogExample_Domain_Model_Post> The posts
 	 */
-	public function findByTagAndBlog($tag, Tx_GenesezBlogExample_Domain_Model_Blog $blog) {
+	public function findByTagAndBlog($tag, Tx_GzBlogExample_Domain_Model_Blog $blog) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297250952847_309532_2458) ENABLED START */
 		$query = $this->createQuery();
 		return $query
@@ -77,10 +77,10 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	/**
 	 * Finds all remaining posts of the blog
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Post $post The reference post
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
+	 * @param Tx_GzBlogExample_Domain_Model_Post $post The reference post
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GzBlogExample_Domain_Model_Post> The posts
 	 */
-	public function findByRemaining(Tx_GenesezBlogExample_Domain_Model_Post $post) {
+	public function findByRemaining(Tx_GzBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251045982_475934_2503) ENABLED START */
 		$blog = $post->getBlog();
 		$query = $this->createQuery();
@@ -99,10 +99,10 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	/**
 	 * Finds the previous of the given post
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Post $post The reference post
-	 * @return Tx_GenesezBlogExample_Domain_Model_Post 
+	 * @param Tx_GzBlogExample_Domain_Model_Post $post The reference post
+	 * @return Tx_GzBlogExample_Domain_Model_Post 
 	 */
-	public function findPrevious(Tx_GenesezBlogExample_Domain_Model_Post $post) {
+	public function findPrevious(Tx_GzBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251131408_430169_2532) ENABLED START */
 		$query = $this->createQuery();
 		return $query
@@ -116,10 +116,10 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	/**
 	 * Finds the post next to the given post
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Post $post The reference post
-	 * @return Tx_GenesezBlogExample_Domain_Model_Post 
+	 * @param Tx_GzBlogExample_Domain_Model_Post $post The reference post
+	 * @return Tx_GzBlogExample_Domain_Model_Post 
 	 */
-	public function findNext(Tx_GenesezBlogExample_Domain_Model_Post $post) {
+	public function findNext(Tx_GzBlogExample_Domain_Model_Post $post) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251164032_279760_2551) ENABLED START */
 		$query = $this->createQuery();
 		return $query
@@ -133,11 +133,11 @@ class Tx_GenesezBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_
 	/**
 	 * Finds most recent posts by the specified blog
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Blog $blog The blog the post must refer to
+	 * @param Tx_GzBlogExample_Domain_Model_Blog $blog The blog the post must refer to
 	 * @param integer $limit The number of posts to return at max
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezBlogExample_Domain_Model_Post> The posts
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GzBlogExample_Domain_Model_Post> The posts
 	 */
-	public function findRecentByBlog(Tx_GenesezBlogExample_Domain_Model_Blog $blog, $limit = 5) {
+	public function findRecentByBlog(Tx_GzBlogExample_Domain_Model_Blog $blog, $limit = 5) {
 		/* PROTECTED REGION ID(php.implementation._16_9_8a7027a_1297251180788_324969_2565) ENABLED START */
 		$query = $this->createQuery();
 		return $query

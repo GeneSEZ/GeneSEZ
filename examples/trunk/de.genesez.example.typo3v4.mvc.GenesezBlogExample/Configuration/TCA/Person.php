@@ -4,8 +4,8 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$TCA['tx_genesezblogexample_domain_model_person'] = array (
-	'ctrl' => $TCA['tx_genesezblogexample_domain_model_person']['ctrl'],
+$TCA['tx_gzblogexample_domain_model_person'] = array (
+	'ctrl' => $TCA['tx_gzblogexample_domain_model_person']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'firstname, lastname, email',
 		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */
@@ -39,7 +39,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		),
 		'firstname' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.firstname',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_person.firstname',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194783571_373089_1631._16_9_8a7027a_1297195018250_223483_1822) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -52,7 +52,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		),
 		'lastname' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.lastname',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_person.lastname',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194783571_373089_1631._16_9_8a7027a_1297195022106_236274_1828) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -65,7 +65,7 @@ $TCA['tx_genesezblogexample_domain_model_person'] = array (
 		),
 		'email' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_person.email',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_person.email',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194783571_373089_1631._16_9_8a7027a_1297195023966_726243_1834) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(

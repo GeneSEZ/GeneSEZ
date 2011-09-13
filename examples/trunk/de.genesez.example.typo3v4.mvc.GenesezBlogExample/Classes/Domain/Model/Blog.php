@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_AbstractEntity {
+class Tx_GzBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
 	 * The blog's title.
@@ -58,7 +58,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * The posts of this blog
 	 *
-	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post>
+	 * @var Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Post>
 	 * @cascade remove
 	 * @lazy
 	 */
@@ -66,7 +66,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * The blog's administrator
 	 *
-	 * @var Tx_GenesezBlogExample_Domain_Model_Administrator
+	 * @var Tx_GzBlogExample_Domain_Model_Administrator
 	 * @lazy
 	 */
 	protected $administrator;
@@ -148,7 +148,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Getter for posts
 	 *
-	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> The posts of this blog
+	 * @return Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Post> The posts of this blog
 	 */
 	public function getPosts() {
 		return $this->posts;
@@ -156,7 +156,7 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Setter for posts
 	 *
-	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GenesezBlogExample_Domain_Model_Post> $posts The posts of this blog
+	 * @param Tx_Extbase_Persistence_ObjectStorage<Tx_GzBlogExample_Domain_Model_Post> $posts The posts of this blog
 	 * @return void
 	 */
 	public function setPosts(Tx_Extbase_Persistence_ObjectStorage $posts) {
@@ -165,25 +165,25 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * InsertIn for posts
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Post $toAdd The posts of this blog
+	 * @param Tx_GzBlogExample_Domain_Model_Post $toAdd The posts of this blog
 	 * @return void
 	 */
-	public function addPosts(Tx_GenesezBlogExample_Domain_Model_Post $toAdd) {
+	public function addPosts(Tx_GzBlogExample_Domain_Model_Post $toAdd) {
 		$this->posts->attach($toAdd);
 	}
 	/**
 	 * RemoveFrom for posts
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Post $toRemove The posts of this blog
+	 * @param Tx_GzBlogExample_Domain_Model_Post $toRemove The posts of this blog
 	 * @return void
 	 */
-	public function removePosts(Tx_GenesezBlogExample_Domain_Model_Post $toRemove) {
+	public function removePosts(Tx_GzBlogExample_Domain_Model_Post $toRemove) {
 		$this->posts->detach($toRemove);
 	}
 	/**
 	 * Getter for administrator
 	 *
-	 * @return Tx_GenesezBlogExample_Domain_Model_Administrator The blog's administrator
+	 * @return Tx_GzBlogExample_Domain_Model_Administrator The blog's administrator
 	 */
 	public function getAdministrator() {
 		return $this->administrator;
@@ -191,10 +191,10 @@ class Tx_GenesezBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Ab
 	/**
 	 * Setter for administrator
 	 *
-	 * @param Tx_GenesezBlogExample_Domain_Model_Administrator $administrator The blog's administrator
+	 * @param Tx_GzBlogExample_Domain_Model_Administrator $administrator The blog's administrator
 	 * @return void
 	 */
-	public function setAdministrator(Tx_GenesezBlogExample_Domain_Model_Administrator $administrator) {
+	public function setAdministrator(Tx_GzBlogExample_Domain_Model_Administrator $administrator) {
 		$this->administrator = $administrator;
 	}
 

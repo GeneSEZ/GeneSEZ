@@ -4,8 +4,8 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$TCA['tx_genesezblogexample_domain_model_post'] = array (
-	'ctrl' => $TCA['tx_genesezblogexample_domain_model_post']['ctrl'],
+$TCA['tx_gzblogexample_domain_model_post'] = array (
+	'ctrl' => $TCA['tx_gzblogexample_domain_model_post']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'title, date, content, blog, author, tags, comments, related_posts',
 		'maxDBListItems' => 100,
@@ -46,8 +46,8 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				'items'	=> array(
 					array('', 0),
 				),
-				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
-				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_post.uid=###REC_FIELD_l10n_parent### AND tx_genesezblogexample_domain_model_post.sys_language_uid IN (-1,0)',
+				'foreign_table' => 'tx_gzblogexample_domain_model_post',
+				'foreign_table_where' => 'AND tx_gzblogexample_domain_model_post.uid=###REC_FIELD_l10n_parent### AND tx_gzblogexample_domain_model_post.sys_language_uid IN (-1,0)',
 			)
 		),
 		'l10n_diffsource' => array(
@@ -72,7 +72,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'title' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.title',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.title',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194882955_681374_1735) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -85,7 +85,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'date' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.date',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.date',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194886910_832299_1741) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -100,7 +100,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'content' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.content',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.content',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194888091_417284_1747) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -114,12 +114,12 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'blog' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.blog',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.blog',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195059082_239030_1887) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezblogexample_domain_model_blog',
+				'foreign_table' => 'tx_gzblogexample_domain_model_blog',
 				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -137,12 +137,12 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'author' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.author',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.author',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195253147_828265_2388) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezblogexample_domain_model_person',
+				'foreign_table' => 'tx_gzblogexample_domain_model_person',
 				'minitems' => 1,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -171,7 +171,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 						'title' => 'Create new',
 						'icon' => 'add.gif',
 						'params' => array(
-							'table'=>'tx_genesezblogexample_domain_model_person',
+							'table'=>'tx_gzblogexample_domain_model_person',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
 						),
@@ -183,14 +183,14 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'tags' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.tags',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.tags',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195352189_179879_2445) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezblogexample_domain_model_tag',
+				'foreign_table' => 'tx_gzblogexample_domain_model_tag',
 				'foreign_sortby' => 'sorting',
-				'MM' => 'tx_genesezblogexample_post_tag_tags_mm',
+				'MM' => 'tx_gzblogexample_post_tag_tags_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
 				'appearance' => array(
@@ -212,14 +212,14 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'comments' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.comments',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.comments',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195402378_449726_2482) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezblogexample_domain_model_comment',
+				'foreign_table' => 'tx_gzblogexample_domain_model_comment',
 				'foreign_sortby' => 'sorting',
-				'MM' => 'tx_genesezblogexample_post_comment_comments_mm',
+				'MM' => 'tx_gzblogexample_post_comment_comments_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
 				'appearance' => array(
@@ -242,14 +242,14 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 		),
 		'related_posts' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_post.related_posts',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_post.related_posts',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195445317_889803_2527) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
+				'foreign_table' => 'tx_gzblogexample_domain_model_post',
 				'foreign_sortby' => 'sorting',
-				'MM' => 'tx_genesezblogexample_post_post_related_posts_mm',
+				'MM' => 'tx_gzblogexample_post_post_related_posts_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
 				'appearance' => array(
@@ -262,7 +262,7 @@ $TCA['tx_genesezblogexample_domain_model_post'] = array (
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195445317_889803_2527) ENABLED START */
 				'appearance' => array(
 				),
-				'foreign_table_where' => 'AND ###THIS_UID### != tx_genesezblogexample_domain_model_post.uid',
+				'foreign_table_where' => 'AND ###THIS_UID### != tx_gzblogexample_domain_model_post.uid',
 				'size' => 10,
 				'autoSizeMax' => 30,
 				'multiple' => 0,

@@ -22,19 +22,19 @@
 				</f:else>
 			</f:if>
 			<f:widget.paginate objects="{posts}" as="paginatedPosts" configuration="{itemsPerPage: settings.postsPerPage}">
-				<ol class="tx-genesezblogexample-post-list">
+				<ol class="tx-gzblogexample-post-list">
 					<f:for each="{paginatedPosts}" as="post">
 						<li>
 							<h3>
 								<f:link.action action="show" controller="Post" arguments="{post: post, blog: post.blog}">{post.title}</f:link.action>
 							</h3>
 							<f:security.ifHasRole role="{settings.editorUsergroupUid}">
-								<div class="tx-genesezblogexample-options">
+								<div class="tx-gzblogexample-options">
 									<f:link.action action="edit" class="icon edit" arguments="{post: post, blog: post.blog}" title="{f:translate(key: 'post.edit')}"><f:translate key="post.edit" /></f:link.action>
 									<f:link.action action="delete" class="icon delete" arguments="{post: post, blog: post.blog}" title="{f:translate(key: 'post.delete')}"><f:translate key="post.delete" /></f:link.action>
 								</div>
 							</f:security.ifHasRole>
-							<p class="tx-genesezblogexample-content">
+							<p class="tx-gzblogexample-content">
 								<f:format.crop maxCharacters="100">{post.content}</f:format.crop>
 								<f:link.action action="show" arguments="{post: post}"><f:translate key="post.readMore">[read more]</f:translate></f:link.action>
 							</p>
@@ -45,7 +45,7 @@
 				</ol>
 			</f:widget.paginate>
 			<f:security.ifHasRole role="{settings.editorUsergroupUid}">
-				<ul class="tx-genesezblogexample-linksection">
+				<ul class="tx-gzblogexample-linksection">
 					<li><f:link.action action="new" class="icon new" arguments="{blog: blog}" title="{f:translate(key: 'post.createAnother')}"><f:translate key="post.createAnother">[create another post]</f:translate></f:link.action></li>
 					<li><f:link.action arguments="{blog: blog}" class="icon plaintext" pageType="{settings.plaintextPageType}" format="txt" onclick="this.target='blank'" title="{f:translate(key: 'post.listPlaintext')}"><f:translate key="post.listPlaintext">[list posts as plaintext]</f:translate></f:link.action></li>
 				</ul>
@@ -54,7 +54,7 @@
 		<f:else>
 			<p><f:translate key="post.noEntries">[no entries]</f:translate></p>
 			<f:security.ifHasRole role="{settings.editorUsergroupUid}">
-				<ul class="tx-genesezblogexample-linksection">
+				<ul class="tx-gzblogexample-linksection">
 					<li><f:link.action action="new" class="icon new" arguments="{blog: blog}" title="{f:translate(key: 'post.createFirst')}"><f:translate key="blog.createFirst">[create first post]</f:translate></f:link.action></li>
 				</ul>
 			</f:security.ifHasRole>

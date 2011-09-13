@@ -4,8 +4,8 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$TCA['tx_genesezblogexample_domain_model_blog'] = array (
-	'ctrl' => $TCA['tx_genesezblogexample_domain_model_blog']['ctrl'],
+$TCA['tx_gzblogexample_domain_model_blog'] = array (
+	'ctrl' => $TCA['tx_gzblogexample_domain_model_blog']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'title, description, logo, posts, administrator',
 		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */
@@ -44,8 +44,8 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				'items'	=> array(
 					array('', 0),
 				),
-				'foreign_table' => 'tx_genesezblogexample_domain_model_blog',
-				'foreign_table_where' => 'AND tx_genesezblogexample_domain_model_blog.uid=###REC_FIELD_l10n_parent### AND tx_genesezblogexample_domain_model_blog.sys_language_uid IN (-1,0)',
+				'foreign_table' => 'tx_gzblogexample_domain_model_blog',
+				'foreign_table_where' => 'AND tx_gzblogexample_domain_model_blog.uid=###REC_FIELD_l10n_parent### AND tx_gzblogexample_domain_model_blog.sys_language_uid IN (-1,0)',
 			)
 		),
 		'l10n_diffsource' => array(
@@ -70,7 +70,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'title' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.title',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_blog.title',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297194834410_672839_1711) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -84,7 +84,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'description' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.description',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_blog.description',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297194839128_593558_1717) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -99,7 +99,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'logo' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.logo',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_blog.logo',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194671553_69571_1516._17_0_1_8a7027a_1302084578939_580833_3407) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -119,12 +119,12 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'posts' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.posts',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_blog.posts',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297195059081_183628_1886) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'inline',
-				'foreign_table' => 'tx_genesezblogexample_domain_model_post',
+				'foreign_table' => 'tx_gzblogexample_domain_model_post',
 				'foreign_field' => 'blog',
 
 				'minitems' => 0,
@@ -146,12 +146,12 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 		),
 		'administrator' => array(
 			'exclude' => true,
-			'label' => 'LLL:EXT:genesez_blog_example/Resources/Private/Language/locallang_db.xml:tx_genesezblogexample_domain_model_blog.administrator',
+			'label' => 'LLL:EXT:gz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gzblogexample_domain_model_blog.administrator',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297195121733_203336_1960) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezblogexample_domain_model_administrator',
+				'foreign_table' => 'tx_gzblogexample_domain_model_administrator',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -163,7 +163,7 @@ $TCA['tx_genesezblogexample_domain_model_blog'] = array (
 				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297195121733_203336_1960) ENABLED START */
 				'foreign_table' => 'fe_users',
-				'foreign_table_where' => "AND fe_users.tx_extbase_type='Tx_GenesezBlogExample_Domain_Model_Administrator'",
+				'foreign_table_where' => "AND fe_users.tx_extbase_type='Tx_GzBlogExample_Domain_Model_Administrator'",
 				'items' => array(
 					array('--none--', 0),
 				),
