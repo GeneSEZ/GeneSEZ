@@ -60,40 +60,40 @@
 «DEFINE _Persistence FOR MAttribute-»
 	«IF !this.hasStereotype("seam2Injection")-»
 		«IF hasStereotype("jpaPersistenceContext") && hasUtilizableValue("jpaPersistenceContext", "type")-»
-			«IF getTaggedValue("jpaPersistenceContext", "type").toList().size > 1-»
+			«IF getTaggedListValue("jpaPersistenceContext", "type").size > 1-»
 				@PersistenceContexts(
 			«ENDIF-»
-			«FOREACH getTaggedValue("jpaPersistenceContext", "type").toList() AS types SEPARATOR ","-»
+			«FOREACH getTaggedListValue("jpaPersistenceContext", "type") AS types SEPARATOR ","-»
 	 			@PersistenceContext (
 	 				type = PersistenceContextType.«types-»
 	 				«IF hasUtilizableValue("jpaPerssistenceContext", "unitName")-»  						
-		 				«LET getTaggedValue("jpaPersistenceContext", "unitName").toList().indexOf(types) AS index-»
-		 					, unitName = "«getTaggedValue("jpaPersistenceContext", "unitName").toList().get(index)-»"
+		 				«LET getTaggedListValue("jpaPersistenceContext", "unitName").indexOf(types) AS index-»
+		 					, unitName = "«getTaggedListValue("jpaPersistenceContext", "unitName").get(index)-»"
 		 				«ENDLET»
 		 			«ENDIF»
 	 				«IF hasUtilizableValue("jpaPerssistenceContext", "name")-»  						
-		 				«LET getTaggedValue("jpaPersistenceContext", "name").toList().indexOf(types) AS index-»
-		 					, name = "«getTaggedValue("jpaPersistenceContext", "name").toList().get(index)-»"
+		 				«LET getTaggedListValue("jpaPersistenceContext", "name").indexOf(types) AS index-»
+		 					, name = "«getTaggedListValue("jpaPersistenceContext", "name").get(index)-»"
 		 				«ENDLET-»
 		 			«ENDIF-»)	 			
 	 		«ENDFOREACH-»
-	 		«IF getTaggedValue("jpaPersistenceContext", "type").toList().size > 1-»
+	 		«IF getTaggedListValue("jpaPersistenceContext", "type").size > 1-»
 	 			)
 	 		«ENDIF-»		
 		«ELSEIF hasStereotype("jpaPersistenceContext")-»
 			@PersistenceContext
 		«ELSEIF hasStereotype("jpaPersistenceUnit") && hasUtilizableValue("jpaPersistenceUnit", "name") && hasUtilizableValue("jpaPersistenceUnit", "unitName")-»
-			«IF getTaggedValue("jpaPersistenceUnit", "name").toList().size > 1-»
+			«IF getTaggedListValue("jpaPersistenceUnit", "name").size > 1-»
 				@PersistenceUnits {
 			«ENDIF-»
-			 «FOREACH getTaggedValue("jpaPersistenceUnit", "name").toList() AS names SEPARATOR ","-»
+			 «FOREACH getTaggedListValue("jpaPersistenceUnit", "name") AS names SEPARATOR ","-»
 	 			@PersistenceUnit(
 	 				name = "«names-»",  						
-	 				«LET getTaggedValue("jpaPersistenceUnit", "unitName").toList().indexOf(names) AS index-»
-	 					unitName = "«getTaggedValue("jpaPersistenceUnit", "unitName").toList().get(index)-»")
+	 				«LET getTaggedListValue("jpaPersistenceUnit", "unitName").indexOf(names) AS index-»
+	 					unitName = "«getTaggedListValue("jpaPersistenceUnit", "unitName").get(index)-»")
 	 				«ENDLET»
 	 		«ENDFOREACH-»)
-	 		«IF getTaggedValue("jpaPersistenceUnit", "name").toList().size > 1-»
+	 		«IF getTaggedListValue("jpaPersistenceUnit", "name").size > 1-»
 				}
 			«ENDIF-»
 	 	«ELSEIF hasStereotype("jpaPersistenceUnit")-»

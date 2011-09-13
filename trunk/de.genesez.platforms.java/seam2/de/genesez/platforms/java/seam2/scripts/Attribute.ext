@@ -170,3 +170,23 @@ Void checkFacesMessages(MAttribute this) :
 	!this.hasStereotype("seam2Injection")
 		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
 		: "";
+		
+/**
+  *	if there is an attribute with name "events" and datatype "Events" the stereotype
+  *	"seam2Injection" will be added to this attribute
+  */
+Void checkEvents(MAttribute this) :
+	this.type.asTypeName().matches("Events") && this.name.matches("events") &&
+	!this.hasStereotype("seam2Injection")
+		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
+		: "";
+		
+/**
+  *	if there is an attribute with name "credentials" and datatype "Credentials" the stereotype
+  *	"seam2Injection" will be added to this attribute
+  */
+Void checkCredentials(MAttribute this) :
+	this.type.asTypeName().matches("Credentials") && this.name.matches("credentials") &&
+	!this.hasStereotype("seam2Injection")
+		? this.addInjectionStereotype("false", "true", "UNSPECIFIED", "")
+		: "";

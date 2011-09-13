@@ -172,6 +172,22 @@
 «ENDREM»
 
 «REM»
+	do not generate TODO marker and UnsupportedOperationException
+	inside of protected regions of create and destroy operations
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_ImplementationBody FOR MOperation -»
+	«IF hasStereotype("http://www.genesez.org/java/seam2/CreateOperation")-»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
+		«ENDPROTECT»
+	«ELSEIF hasStereotype("http://www.genesez.org/java/seam2/DestroyOperation")-»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
+		«ENDPROTECT»
+	«ELSE-»
+		«targetDef.proceed()-»
+	«ENDIF-»
+«ENDAROUND»
+
+«REM»
 	generate getter- and setter-operations in session beans with "seam2Component"-stereotype
 «ENDREM»
 «AROUND de::genesez::platforms::java::java5::templates::Interface::_Extension FOR MInterface-»

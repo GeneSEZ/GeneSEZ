@@ -3,7 +3,7 @@ import gcore;
 extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
 extension de::genesez::platforms::java::scripts::Naming;
-extension de::genesez::platforms::java::java5::scripts::Stereotypes;
+extension de::genesez::platforms::java::java5::scripts::Class;
 extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
 extension de::genesez::platforms::common::m2m::MakeElement;
 /* remove this import to be independent from jpa cartridge */
@@ -26,33 +26,14 @@ addLocalBusinessInterface(MClassifier this) :
 		: "";
 
 /**
-  * adds no argument constructor to a session or message driven bean
-  *	in the package and subpackages
-  */	
-MPackage addStandardConstructor(MPackage this) :
-	nestedPackage.addStandardConstructor() ->
-	classifier.typeSelect(MClass).addStandardConstructor();
-
-/**
   * adds no argument constructor to a session or message 
   *	driven bean if there is not already one
   */	
 MClassifier addStandardConstructor(MClass this) :
 	(this.hasStereotype("ejb3SessionBean") || this.hasStereotype("ejb3MessageDrivenBean")) &&
 	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
-		? createStandardConstructor()
+		? makeStandardConstructor()
 		: "";
-
-/**
-  * creates a standard constructor with no arguments
-  *	this constructor does not have a protected region
-  *
-  *	the modeller has to model a constructor with no 
-  *	arguments explicitly if a protected region is desired
-  */
-Void createStandardConstructor(MClass container) :
-	let sc = container.makeOperation(container.name(), container.name()+"_StandardConstructor", "public") :
-		sc.addInternalStereotype("http://www.genesez.de/StandardConstructor");
 	
 /**
   *	evaluates "ejb3SessionBean" stereotype and adds entityManager attribute
@@ -139,13 +120,13 @@ Void createAccessorForEntityManager(MProperty this) :
 Void addEntityManager(MClass this, String type) :
 	!existEntityManager() 
 		? (type.matches("EntityManager")
-			? addAttribute("entityManager", "EntityManager", "private", 1)
+			? makeAttribute("entityManager", "EntityManager", "private")
 			: (type.matches("EntityManager_Extended")
-				? addAttribute("entityManager", "EntityManager", "private", 1)
+				? makeAttribute("entityManager", "EntityManager", "private")
 				: (type.matches("Session")
-					? addAttribute("session", "Session", "private", 1)
+					? makeAttribute("session", "Session", "private")
 					: (type.matches("Session_Extended")
-						? addAttribute("session", "Session", "private", 1)
+						? makeAttribute("session", "Session", "private")
 						: ""
 					)	
 				)

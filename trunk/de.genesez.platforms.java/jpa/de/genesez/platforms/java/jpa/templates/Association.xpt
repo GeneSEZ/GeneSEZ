@@ -9,6 +9,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
 «EXTENSION de::genesez::platforms::common::AccessHelper»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
 «EXTENSION de::genesez::platforms::java::jpa::scripts::Stereotypes»
@@ -52,7 +53,7 @@
 «DEFINE _EvaluateAssociationTaggedValues FOR MAssociationRole-»	
 	(cascade={
 	«IF hasUtilizableValue("jpaAssociation", "cascade")-»
-		«FOREACH getTaggedValue("jpaAssociation", "cascade").toList() AS cascades SEPARATOR ", "-»
+		«FOREACH getTaggedListValue("jpaAssociation", "cascade") AS cascades SEPARATOR ", "-»
 			CascadeType.«cascades-»
 		«ENDFOREACH-»
 	«ENDIF-»}

@@ -2,13 +2,13 @@ import gcore;
 
 extension de::genesez::platforms::common::log::Log;
 extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::java5::scripts::Class;
+extension de::genesez::platforms::java::java5::scripts::Stereotypes;
 extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
 extension de::genesez::platforms::java::seam2::scripts::Operation;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::common::m2m::MakeElement;
 extension de::genesez::platforms::common::m2m::CreateBasics;
-extension de::genesez::platforms::java::ejb3::scripts::Class;
-extension de::genesez::platforms::java::java5::scripts::Stereotypes;
 
 /**
   * add standard constructor to seam components 
@@ -17,7 +17,7 @@ extension de::genesez::platforms::java::java5::scripts::Stereotypes;
 MClassifier addStandardConstructor(MClass this) :
 	this.hasStereotype("seam2Component") &&
 	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
-		? createStandardConstructor()
+		? makeStandardConstructor()
 		: "";
 
 /**
@@ -25,7 +25,7 @@ MClassifier addStandardConstructor(MClass this) :
   */
 Void addLoggerAttribute(MClass this) :
 	!this.hasStereotype("jpaPersistentEntity") && this.hasTaggedValue("seam2Component", "logger", "true") && !this.existLoggerAttribute() 
-		? addAttribute("logger", "org.jboss.seam.log.Log", "private")
+		? makeAttribute("logger", "org.jboss.seam.log.Log", "private")
 		: "";
 
 /**
@@ -54,21 +54,20 @@ Boolean existLoggerAttribute(MClass this) :
 		: false;
 
 /**
-  *	adds method named "init" with annotation "@Create" if there is no such method (name or annotation) and
-  *	taggedvalue "logger" of stereotype "seam2Component" is true
+  *	adds method named "init" with annotation "@Create" for
+  * seam components with stateful session bean annotation 
+  * if there is no such annotation or method 
   */
 Void checkCreateMethod(MClass this) :
-	!this.hasStereotype("jpaPersistentEntity") && 
-	!this.hasTaggedValue("ejb3SessionBean", "stateful", "false") && 
-	(this.hasTaggedValue("seam2Component", "logger", "true") || 
-	existLoggerAttribute()) 
+	this.hasTaggedValue("ejb3SessionBean", "stateful", "true") &&
+	this.hasStereotype("seam2Component")
 		? (
 			!operation.exists(e|e.hasTaggedValue("seam2Lifecycle", "create", "true")) 
 				? (
 					(!operation.exists(e|e.name == "init" && e.parameter.size == 0)
 						? (
 							let o = makeOperation("init", "public") :
-								o.addInternalStereotype("http://www.genesez.de/java/seam2/CreateOperation")
+								o.addInternalStereotype("http://www.genesez.org/java/seam2/CreateOperation")
 						)
 						: ""
 					) ->
@@ -82,7 +81,9 @@ Void checkCreateMethod(MClass this) :
 		: "";
 
 /**
-  *
+  *	adds method named "destroy" with annotation "@Destroy" and @Remove 
+  * for seam components with stateful session bean annotation 
+  * if there is no such annotation or method 
   */
 Void checkDestroyMethod(MClass this) :
 	hasStereotype("seam2Component") && hasTaggedValue("ejb3SessionBean", "stateful", "true")
@@ -92,7 +93,7 @@ Void checkDestroyMethod(MClass this) :
 					(!operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
 						? (
 							let o = makeOperation("destroy", "public") :
-								o.addInternalStereotype("http://www.genesez.de/java/seam2/DestroyOperation")
+								o.addInternalStereotype("http://www.genesez.org/java/seam2/DestroyOperation")
 						)
 						: ""
 					) ->
@@ -150,20 +151,3 @@ Void addQueryHome(MClass this) :
 			)
 		)
 		: "";
-		
-		
-//dieser Code steht auch in EJB3::Class; sollte ausgelagert werden um DRY zu verhindern
-Void addAttribute(MClassifier this, String name, String type, String visibility) :
-	this.property.add(createAttribute(this, name, type, visibility)) ->
-	this;
-
-create MAttribute createAttribute(MClassifier container, String name, String type, String visibility) :
-	this.setMultiplicity(1) ->
-	this.setName(name) ->	
-	setXmiGuid(container.xmiGuid) ->
-	// set operation properties
-	setVisibility(visibility) ->
-	setStatic(false) ->
-	setFinal(false) ->	
-	this.setType(createExternal(container.getModel(), type)) ->	
-	this;
