@@ -838,7 +838,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigType -»
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigForeignField -»
-«EXPAND TCAColumnsConfigForeignSortBy -»
+«REM»«EXPAND TCAColumnsConfigForeignSortBy -»«ENDREM»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
@@ -977,8 +977,19 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigForeignSortBy FOR MProperty -»
+«DEFINE TCAColumnsConfigForeignSortBy FOR MAttribute -»
 				'foreign_sortby' => 'sorting',
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE TCAColumnsConfigForeignSortBy FOR MAssociationRole -»
+«IF !hasOpposite() -»
+				'foreign_sortby' => 'sorting',
+«ELSE -»
+				'foreign_sortby' => '«IF ( classifier.name().compareTo( type.name() ) < 0 || !type.isClassifier() ) -»sorting«ELSE -»sorting_foreign«ENDIF -»',
+«ENDIF -»
 «ENDDEFINE»
 
 
