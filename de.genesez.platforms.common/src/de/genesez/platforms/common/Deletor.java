@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
+import de.genesez.platforms.common.revisioncontrol.SubversionSystem;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
@@ -47,6 +49,7 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	private boolean runtimeVersionBelow7;
 	private boolean prepared = false;
 	private Object outputPath;
+	private RevisionControlSystem svn = new SubversionSystem();
 
 	private Map<String, Long> fileMap = new LinkedHashMap<String, Long>();
 
@@ -206,9 +209,14 @@ public class Deletor extends SimpleFileVisitor<Path> {
 													.endsWith(repositoryFolderName)
 											&& Files.isDirectory(subfolder)) {
 										// deletes the repository folder
-										deleteRepFolder(subfolder);
-										log.add(subfolder.toString());
+//										deleteRepFolder(subfolder);
+//										log.add(subfolder.toString());
+										svn.delete(dir.toString());
+										log.add(dir.toString());
 									}
+								} else {
+									Files.delete(dir);
+									log.add(dir.toString());
 								}
 								// } catch (DirectoryIteratorException ex){
 								// ex.printStackTrace();
@@ -216,23 +224,23 @@ public class Deletor extends SimpleFileVisitor<Path> {
 								if (stream != null) {
 									stream.close();
 								}
-								// try(DirectoryStream<Path> stream2 = Files
-								// .newDirectoryStream(dir)){
-								DirectoryStream<Path> stream2 = Files
-										.newDirectoryStream(dir);
-								if (!stream2.iterator().hasNext()
-										&& Files.isDirectory(dir)) {
-									// the deleted File is logged
-									Files.delete(dir);
-									log.add(dir.toString());
-								}
-								// } catch (DirectoryIteratorException ex) {
-								// ex.printStackTrace();
-								// }
-
-								if (stream2 != null) {
-									stream2.close();
-								}
+//								// try(DirectoryStream<Path> stream2 = Files
+//								// .newDirectoryStream(dir)){
+//								DirectoryStream<Path> stream2 = Files
+//										.newDirectoryStream(dir);
+//								if (!stream2.iterator().hasNext()
+//										&& Files.isDirectory(dir)) {
+//									// the deleted File is logged
+//									Files.delete(dir);
+//									log.add(dir.toString());
+//								}
+//								// } catch (DirectoryIteratorException ex) {
+//								// ex.printStackTrace();
+//								// }
+//
+//								if (stream2 != null) {
+//									stream2.close();
+//								}
 								return FileVisitResult.CONTINUE;
 							}
 
@@ -498,14 +506,15 @@ public class Deletor extends SimpleFileVisitor<Path> {
 		Set<String> check = fileMap.keySet();
 		for (String s : check) {
 			if (oldFiles.containsKey(s)) {
-				try {
+//				try {
 					if (fileMap.get(s).equals(oldFiles.get(s))) {
 						logged.add(s.toString());
-						Files.delete(Paths.get(s));
+						svn.delete(s);
+						// Files.delete(Paths.get(s));
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 		fileMap.clear();
