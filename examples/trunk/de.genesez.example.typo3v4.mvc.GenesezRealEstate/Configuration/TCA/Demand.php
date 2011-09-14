@@ -4,24 +4,21 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$TCA['tx_genesezrealestate_domain_model_demand'] = array (
-	'ctrl' => $TCA['tx_genesezrealestate_domain_model_demand']['ctrl'],
+$TCA['tx_gszrealestate_domain_model_demand'] = array (
+	'ctrl' => $TCA['tx_gszrealestate_domain_model_demand']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'max_rent_exclusive_of_heating, min_size, town, balcony, quarter, min_rooms, floor',
 		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
-		// TODO: put your further TCA Interface Section code implementations here
 		/* PROTECTED REGION END */
 	),
 	'types' => array(
 		'1' => array('showitem'	=> 'sys_language_uid, hidden, starttime, endtime, max_rent_exclusive_of_heating, min_size, town, balcony, quarter, min_rooms, floor'),
 		/* PROTECTED REGION ID(tca.php.own.tca.types.section.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
-		// TODO: put your further TCA Types Section code implementations here
 		/* PROTECTED REGION END */
 	),
 	'palettes' => array(
 		'1' => array('showitem'	=> ''),
 		/* PROTECTED REGION ID(tca.php.own.tca.palettes.section.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
-		// TODO: put your further TCA Palettes Section code implementations here
 		/* PROTECTED REGION END */
 	),
 	'columns' => array(
@@ -47,8 +44,8 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 				'items'	=> array(
 					array('', 0),
 				),
-				'foreign_table' => 'tx_genesezrealestate_domain_model_demand',
-				'foreign_table_where' => 'AND tx_genesezrealestate_domain_model_demand.uid=###REC_FIELD_l10n_parent### AND tx_genesezrealestate_domain_model_demand.sys_language_uid IN (-1,0)',
+				'foreign_table' => 'tx_gszrealestate_domain_model_demand',
+				'foreign_table_where' => 'AND tx_gszrealestate_domain_model_demand.uid=###REC_FIELD_l10n_parent### AND tx_gszrealestate_domain_model_demand.sys_language_uid IN (-1,0)',
 			)
 		),
 		'l10n_diffsource' => array(
@@ -105,73 +102,64 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 		),
 		'max_rent_exclusive_of_heating' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand.max_rent_exclusive_of_heating',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_demand.max_rent_exclusive_of_heating',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315357061736_368482_2991) ENABLED START */
-			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315357061736_368482_2991) ENABLED START */
-				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
 			)
 		),
 		'min_size' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand.min_size',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_demand.min_size',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356472952_664173_2812) ENABLED START */
-			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356472952_664173_2812) ENABLED START */
-				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
 			)
 		),
 		'town' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand.town',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_demand.town',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356528388_493787_2841) ENABLED START */
-			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356528388_493787_2841) ENABLED START */
-				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
 			)
 		),
 		'balcony' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand.balcony',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_demand.balcony',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356564684_645364_2863) ENABLED START */
-			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356564684_645364_2863) ENABLED START */
-				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
 			)
 		),
 		'quarter' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand.quarter',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_demand.quarter',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356591775_883174_2870) ENABLED START */
-			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezrealestate_domain_model_quarter',
+				'foreign_table' => 'tx_gszrealestate_domain_model_quarter',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -182,19 +170,17 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 					'showAllLocalizationLink' => true
 				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356591775_883174_2870) ENABLED START */
-				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
 			)
 		),
 		'min_rooms' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand.min_rooms',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_demand.min_rooms',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356493767_742745_2820) ENABLED START */
-			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezrealestate_domain_model_roomtype',
+				'foreign_table' => 'tx_gszrealestate_domain_model_roomtype',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -205,19 +191,17 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 					'showAllLocalizationLink' => true
 				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356493767_742745_2820) ENABLED START */
-				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
 			)
 		),
 		'floor' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_demand.floor',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_demand.floor',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356517000_852132_2833) ENABLED START */
-			// TODO: put your further TCA Column code implementations here
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_genesezrealestate_domain_model_floortype',
+				'foreign_table' => 'tx_gszrealestate_domain_model_floortype',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'appearance' => array(
@@ -228,18 +212,15 @@ $TCA['tx_genesezrealestate_domain_model_demand'] = array (
 					'showAllLocalizationLink' => true
 				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356517000_852132_2833) ENABLED START */
-				// TODO: put your further TCA Column Config code implementations here
 				/* PROTECTED REGION END */
 			)
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
-		// TODO: put your further TCA Columns Section code implementations here
 		/* PROTECTED REGION END */
 	)
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
-// TODO: put your further TCA code implementations here
 /* PROTECTED REGION END */
 
 ?>

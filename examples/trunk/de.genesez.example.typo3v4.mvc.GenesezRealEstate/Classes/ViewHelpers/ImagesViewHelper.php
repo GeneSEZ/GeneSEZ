@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHelpers_ImageViewHelper {
+class Tx_GszRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHelpers_ImageViewHelper {
 
 
 
@@ -41,14 +41,14 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 	/**
 	 * Renders the given real estate images.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate The real estate from which the images are shown.
+	 * @param Tx_GszRealEstate_Domain_Model_RealEstate $realEstate The real estate from which the images are shown.
 	 * @param boolean $showSingleImage True if only the first image should be shown, otherwise false.
 	 * @param boolean $showDescriptions True if the image descriptions should be shown, otherwise false.
 	 * @param string $width The width of the image. This can be a numeric value representing the fixed width of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.
 	 * @param string $height The height of the image. This can be a numeric value representing the fixed height of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.height for possible options.
 	 * @return string The rendered image or images for the real estate.
 	 */
-	public function render(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate, $showSingleImage = true, $showDescriptions = true, $width = null, $height = null) {
+	public function render(Tx_GszRealEstate_Domain_Model_RealEstate $realEstate, $showSingleImage = true, $showDescriptions = true, $width = null, $height = null) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315420271916_725303_2728) ENABLED START */
 		$renderImages = "";
 		
@@ -117,7 +117,7 @@ class Tx_GenesezRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHel
 	 */
 	protected function getUploadfolder() {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315424657504_832779_2011) ENABLED START */
-		return 'uploads/tx_genesezrealestate/'; 
+		return 'uploads/tx_gszrealestate/'; 
 		/* PROTECTED REGION END */
 	}
 

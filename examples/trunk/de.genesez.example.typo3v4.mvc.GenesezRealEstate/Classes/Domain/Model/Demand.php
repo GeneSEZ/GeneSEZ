@@ -33,20 +33,20 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_AbstractEntity {
+class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
 	 * Stores the maximal rent eclusive of heating for the real estate.
 	 *
 	 * @var string
-	 * @validate Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator
+	 * @validate Tx_GszRealEstate_Domain_Validator_NumberNotEmptyValidator
 	 */
 	protected $maxRentExclusiveOfHeating;
 	/**
 	 * Stores the minimal size of the real estate.
 	 *
 	 * @var string
-	 * @validate Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator
+	 * @validate Tx_GszRealEstate_Domain_Validator_NumberNotEmptyValidator
 	 */
 	protected $minSize;
 	/**
@@ -65,19 +65,19 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Stores the quarter of the real estate.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Model_Quarter
+	 * @var Tx_GszRealEstate_Domain_Model_Quarter
 	 */
 	protected $quarter = null;
 	/**
 	 * Stores the minimal count of rooms for the real estate.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Model_RoomType
+	 * @var Tx_GszRealEstate_Domain_Model_RoomType
 	 */
 	protected $minRooms = null;
 	/**
 	 * Stores the floor of the real estate.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Model_FloorType
+	 * @var Tx_GszRealEstate_Domain_Model_FloorType
 	 */
 	protected $floor = null;
 
@@ -156,7 +156,7 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Getter for quarter
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_Quarter Stores the quarter of the real estate.
+	 * @return Tx_GszRealEstate_Domain_Model_Quarter Stores the quarter of the real estate.
 	 */
 	public function getQuarter() {
 		return $this->quarter;
@@ -164,16 +164,16 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Setter for quarter
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_Quarter $quarter Stores the quarter of the real estate.
+	 * @param Tx_GszRealEstate_Domain_Model_Quarter $quarter Stores the quarter of the real estate.
 	 * @return void
 	 */
-	public function setQuarter(Tx_GenesezRealEstate_Domain_Model_Quarter $quarter) {
+	public function setQuarter(Tx_GszRealEstate_Domain_Model_Quarter $quarter) {
 		$this->quarter = $quarter;
 	}
 	/**
 	 * Getter for minRooms
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_RoomType Stores the minimal count of rooms for the real estate.
+	 * @return Tx_GszRealEstate_Domain_Model_RoomType Stores the minimal count of rooms for the real estate.
 	 */
 	public function getMinRooms() {
 		return $this->minRooms;
@@ -181,16 +181,16 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Setter for minRooms
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RoomType $minRooms Stores the minimal count of rooms for the real estate.
+	 * @param Tx_GszRealEstate_Domain_Model_RoomType $minRooms Stores the minimal count of rooms for the real estate.
 	 * @return void
 	 */
-	public function setMinRooms(Tx_GenesezRealEstate_Domain_Model_RoomType $minRooms) {
+	public function setMinRooms(Tx_GszRealEstate_Domain_Model_RoomType $minRooms) {
 		$this->minRooms = $minRooms;
 	}
 	/**
 	 * Getter for floor
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_FloorType Stores the floor of the real estate.
+	 * @return Tx_GszRealEstate_Domain_Model_FloorType Stores the floor of the real estate.
 	 */
 	public function getFloor() {
 		return $this->floor;
@@ -198,10 +198,10 @@ class Tx_GenesezRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_A
 	/**
 	 * Setter for floor
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_FloorType $floor Stores the floor of the real estate.
+	 * @param Tx_GszRealEstate_Domain_Model_FloorType $floor Stores the floor of the real estate.
 	 * @return void
 	 */
-	public function setFloor(Tx_GenesezRealEstate_Domain_Model_FloorType $floor) {
+	public function setFloor(Tx_GszRealEstate_Domain_Model_FloorType $floor) {
 		$this->floor = $floor;
 	}
 

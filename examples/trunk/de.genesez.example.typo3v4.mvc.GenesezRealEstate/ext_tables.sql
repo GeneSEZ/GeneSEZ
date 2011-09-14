@@ -1,8 +1,8 @@
 
 #
-# Table structure for table 'tx_genesezrealestate_domain_model_demand'
+# Table structure for table 'tx_gszrealestate_domain_model_demand'
 #
-CREATE TABLE tx_genesezrealestate_domain_model_demand (
+CREATE TABLE tx_gszrealestate_domain_model_demand (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -41,9 +41,9 @@ CREATE TABLE tx_genesezrealestate_domain_model_demand (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_genesezrealestate_domain_model_floortype'
+# Table structure for table 'tx_gszrealestate_domain_model_floortype'
 #
-CREATE TABLE tx_genesezrealestate_domain_model_floortype (
+CREATE TABLE tx_gszrealestate_domain_model_floortype (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -74,9 +74,9 @@ CREATE TABLE tx_genesezrealestate_domain_model_floortype (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_genesezrealestate_domain_model_heatingtype'
+# Table structure for table 'tx_gszrealestate_domain_model_heatingtype'
 #
-CREATE TABLE tx_genesezrealestate_domain_model_heatingtype (
+CREATE TABLE tx_gszrealestate_domain_model_heatingtype (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -107,9 +107,9 @@ CREATE TABLE tx_genesezrealestate_domain_model_heatingtype (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_genesezrealestate_domain_model_quarter'
+# Table structure for table 'tx_gszrealestate_domain_model_quarter'
 #
-CREATE TABLE tx_genesezrealestate_domain_model_quarter (
+CREATE TABLE tx_gszrealestate_domain_model_quarter (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -141,9 +141,9 @@ CREATE TABLE tx_genesezrealestate_domain_model_quarter (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_genesezrealestate_domain_model_realestate'
+# Table structure for table 'tx_gszrealestate_domain_model_realestate'
 #
-CREATE TABLE tx_genesezrealestate_domain_model_realestate (
+CREATE TABLE tx_gszrealestate_domain_model_realestate (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	
@@ -199,9 +199,9 @@ CREATE TABLE tx_genesezrealestate_domain_model_realestate (
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
 #
-# Table structure for table 'tx_genesezrealestate_domain_model_roomtype'
+# Table structure for table 'tx_gszrealestate_domain_model_roomtype'
 #
-CREATE TABLE tx_genesezrealestate_domain_model_roomtype (
+CREATE TABLE tx_gszrealestate_domain_model_roomtype (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	

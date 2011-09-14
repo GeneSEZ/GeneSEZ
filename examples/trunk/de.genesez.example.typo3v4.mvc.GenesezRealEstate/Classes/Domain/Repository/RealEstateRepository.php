@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository extends Tx_Extbase_Persistence_Repository {
+class Tx_GszRealEstate_Domain_Repository_RealEstateRepository extends Tx_Extbase_Persistence_Repository {
 
 
 
@@ -41,10 +41,10 @@ class Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository extends Tx_Ext
 	/**
 	 * Finds all real estates which matches the given demand.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand The given demand.
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezRealEstate_Domain_Model_RealEstate> A list of real estates or an empty list.
+	 * @param Tx_GszRealEstate_Domain_Model_Demand $demand The given demand.
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GszRealEstate_Domain_Model_RealEstate> A list of real estates or an empty list.
 	 */
-	public function findAllByDemand(Tx_GenesezRealEstate_Domain_Model_Demand $demand) {
+	public function findAllByDemand(Tx_GszRealEstate_Domain_Model_Demand $demand) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315237292891_470931_1984) ENABLED START */
 		// create a new query object
 		$query = $this->createQuery();
@@ -95,7 +95,7 @@ class Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository extends Tx_Ext
 	 * Gets all real estates by the given uids.
 	 *
 	 * @param array $uids The given uids.
-	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GenesezRealEstate_Domain_Model_RealEstate> 
+	 * @return Tx_Extbase_Persistence_QueryResultInterface<Tx_GszRealEstate_Domain_Model_RealEstate> 
 	 */
 	public function getAllByUids(array $uids) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315405542958_541761_2595) ENABLED START */

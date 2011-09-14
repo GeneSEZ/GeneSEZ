@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
+class Tx_GszRealEstate_Domain_Validator_NumberNotEmptyValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
 
 
 
@@ -47,7 +47,7 @@ class Tx_GenesezRealEstate_Domain_Validator_NumberNotEmptyValidator extends Tx_E
 	public function isValid($value) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315599838256_391488_2072.validator.isValid) ENABLED START */
 		if ($value != "") {
-			$this->addError(Tx_Extbase_Utility_Localization::translate('tx_genesezrealestate_error.number_not_empty', 'GenesezRealEstate'), 1315648431);
+			$this->addError(Tx_Extbase_Utility_Localization::translate('tx_gszrealestate_error.number_not_empty', 'GszRealEstate'), 1315648431);
 			return is_numeric($value);
 		}
 		return true;

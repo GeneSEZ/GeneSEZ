@@ -33,30 +33,30 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Controller_ActionController {
+class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Controller_ActionController {
 
 	/**
 	 * A reference of the real estate repository.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository
+	 * @var Tx_GszRealEstate_Domain_Repository_RealEstateRepository
 	 */
 	private $realEstateRepository;
 	/**
 	 * A reference of the quarter repository.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Repository_QuarterRepository
+	 * @var Tx_GszRealEstate_Domain_Repository_QuarterRepository
 	 */
 	private $quaterRepository;
 	/**
 	 * A reference of the floor type repository.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Repository_FloorTypeRepository
+	 * @var Tx_GszRealEstate_Domain_Repository_FloorTypeRepository
 	 */
 	private $floorTypeRepository;
 	/**
 	 * A reference of the room type repository.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Repository_RoomTypeRepository
+	 * @var Tx_GszRealEstate_Domain_Repository_RoomTypeRepository
 	 */
 	private $roomTypeRepository;
 
@@ -93,11 +93,11 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Displays a search box which can be add to a sidebar.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand A fresh demand object taken as a basis for the rendering.
+	 * @param Tx_GszRealEstate_Domain_Model_Demand $demand A fresh demand object taken as a basis for the rendering.
 	 * @return string The rendered view for this action.
 	 * @dontvalidate $demand
 	 */
-	public function showSearchboxAction(Tx_GenesezRealEstate_Domain_Model_Demand $demand = null) {
+	public function showSearchboxAction(Tx_GszRealEstate_Domain_Model_Demand $demand = null) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919842588_568660_2521) ENABLED START */
 		$this->view->assign('demand', $demand);
 		
@@ -119,11 +119,11 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Shows a search form with more configuration options as the search box.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand A fresh demand object taken as a basis for the rendering.
+	 * @param Tx_GszRealEstate_Domain_Model_Demand $demand A fresh demand object taken as a basis for the rendering.
 	 * @return string The rendered view for this action.
 	 * @dontvalidate $demand
 	 */
-	public function showSearchformAction(Tx_GenesezRealEstate_Domain_Model_Demand $demand = null) {
+	public function showSearchformAction(Tx_GszRealEstate_Domain_Model_Demand $demand = null) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919858358_221947_2529) ENABLED START */
 		$this->view->assign('demand', $demand);
 		
@@ -134,8 +134,8 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 			)
 		);
 		
-		$optionYes = Tx_Extbase_Utility_Localization::translate('tx_genesezrealestate.yes', 'GenesezRealEstate');
-		$optionNo = Tx_Extbase_Utility_Localization::translate('tx_genesezrealestate.no', 'GenesezRealEstate');
+		$optionYes = Tx_Extbase_Utility_Localization::translate('tx_gszrealestate.yes', 'GszRealEstate');
+		$optionNo = Tx_Extbase_Utility_Localization::translate('tx_gszrealestate.no', 'GszRealEstate');
 		$this->view->assign('balcony', array('' => '---', '1' => $optionYes, '0' => $optionNo));
 	
 		$this->view->assign('floorTypes',
@@ -157,10 +157,10 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	 * 
 	 * This method is only needed because I can not call the list action from searchbox or searchform directly.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_Demand $demand The rendered view for this action.
+	 * @param Tx_GszRealEstate_Domain_Model_Demand $demand The rendered view for this action.
 	 * @return string 
 	 */
-	public function searchAction(Tx_GenesezRealEstate_Domain_Model_Demand $demand) {
+	public function searchAction(Tx_GszRealEstate_Domain_Model_Demand $demand) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1315231403518_321166_1973) ENABLED START */
 		$realEstates = $this->realEstateRepository->findAllByDemand($demand);
 		$realEstateUids = $realEstates->toArray();
@@ -186,10 +186,10 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Shows a single real estate with all details.
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate 
+	 * @param Tx_GszRealEstate_Domain_Model_RealEstate $realEstate 
 	 * @return string The rendered view for this action.
 	 */
-	public function showAction(Tx_GenesezRealEstate_Domain_Model_RealEstate $realEstate) {
+	public function showAction(Tx_GszRealEstate_Domain_Model_RealEstate $realEstate) {
 		/* PROTECTED REGION ID(php.implementation._17_0_2_8a7027a_1314919481995_230589_2439) ENABLED START */
 		$this->view->assign('realEstate', $realEstate);
 		$this->view->assign('realEstates', $realEstates);
@@ -211,7 +211,7 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Getter for realEstateRepository
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository A reference of the real estate repository.
+	 * @return Tx_GszRealEstate_Domain_Repository_RealEstateRepository A reference of the real estate repository.
 	 */
 	public function getRealEstateRepository() {
 		return $this->realEstateRepository;
@@ -219,16 +219,16 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Dependency injection for realEstateRepository
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository A reference of the real estate repository.
+	 * @param Tx_GszRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository A reference of the real estate repository.
 	 * @return void
 	 */
-	public function injectRealEstateRepository(Tx_GenesezRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository) {
+	public function injectRealEstateRepository(Tx_GszRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository) {
 		$this->realEstateRepository = $realEstateRepository;
 	}
 	/**
 	 * Getter for quaterRepository
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Repository_QuarterRepository A reference of the quarter repository.
+	 * @return Tx_GszRealEstate_Domain_Repository_QuarterRepository A reference of the quarter repository.
 	 */
 	public function getQuaterRepository() {
 		return $this->quaterRepository;
@@ -236,16 +236,16 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Dependency injection for quaterRepository
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Repository_QuarterRepository $quaterRepository A reference of the quarter repository.
+	 * @param Tx_GszRealEstate_Domain_Repository_QuarterRepository $quaterRepository A reference of the quarter repository.
 	 * @return void
 	 */
-	public function injectQuaterRepository(Tx_GenesezRealEstate_Domain_Repository_QuarterRepository $quaterRepository) {
+	public function injectQuaterRepository(Tx_GszRealEstate_Domain_Repository_QuarterRepository $quaterRepository) {
 		$this->quaterRepository = $quaterRepository;
 	}
 	/**
 	 * Getter for floorTypeRepository
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Repository_FloorTypeRepository A reference of the floor type repository.
+	 * @return Tx_GszRealEstate_Domain_Repository_FloorTypeRepository A reference of the floor type repository.
 	 */
 	public function getFloorTypeRepository() {
 		return $this->floorTypeRepository;
@@ -253,16 +253,16 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Dependency injection for floorTypeRepository
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository A reference of the floor type repository.
+	 * @param Tx_GszRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository A reference of the floor type repository.
 	 * @return void
 	 */
-	public function injectFloorTypeRepository(Tx_GenesezRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository) {
+	public function injectFloorTypeRepository(Tx_GszRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository) {
 		$this->floorTypeRepository = $floorTypeRepository;
 	}
 	/**
 	 * Getter for roomTypeRepository
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Repository_RoomTypeRepository A reference of the room type repository.
+	 * @return Tx_GszRealEstate_Domain_Repository_RoomTypeRepository A reference of the room type repository.
 	 */
 	public function getRoomTypeRepository() {
 		return $this->roomTypeRepository;
@@ -270,10 +270,10 @@ class Tx_GenesezRealEstate_Controller_RealEstateController extends Tx_Extbase_MV
 	/**
 	 * Dependency injection for roomTypeRepository
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository A reference of the room type repository.
+	 * @param Tx_GszRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository A reference of the room type repository.
 	 * @return void
 	 */
-	public function injectRoomTypeRepository(Tx_GenesezRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository) {
+	public function injectRoomTypeRepository(Tx_GszRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository) {
 		$this->roomTypeRepository = $roomTypeRepository;
 	}
 

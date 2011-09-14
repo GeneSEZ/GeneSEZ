@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_AbstractEntity {
+class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_AbstractEntity {
 
 	/**
 	 * The internal id of the real estate.
@@ -158,25 +158,25 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Association for the heating type of the real estate.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Model_HeatingType
+	 * @var Tx_GszRealEstate_Domain_Model_HeatingType
 	 */
 	protected $heating;
 	/**
 	 * Association for the room type of the real estate.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Model_RoomType
+	 * @var Tx_GszRealEstate_Domain_Model_RoomType
 	 */
 	protected $rooms;
 	/**
 	 * Association for the floor type of the real estate.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Model_FloorType
+	 * @var Tx_GszRealEstate_Domain_Model_FloorType
 	 */
 	protected $floor;
 	/**
 	 * Association for the quarter of the real estate.
 	 *
-	 * @var Tx_GenesezRealEstate_Domain_Model_Quarter
+	 * @var Tx_GszRealEstate_Domain_Model_Quarter
 	 */
 	protected $quarter;
 
@@ -579,7 +579,7 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Getter for heating
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_HeatingType Association for the heating type of the real estate.
+	 * @return Tx_GszRealEstate_Domain_Model_HeatingType Association for the heating type of the real estate.
 	 */
 	public function getHeating() {
 		return $this->heating;
@@ -587,16 +587,16 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Setter for heating
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_HeatingType $heating Association for the heating type of the real estate.
+	 * @param Tx_GszRealEstate_Domain_Model_HeatingType $heating Association for the heating type of the real estate.
 	 * @return void
 	 */
-	public function setHeating(Tx_GenesezRealEstate_Domain_Model_HeatingType $heating) {
+	public function setHeating(Tx_GszRealEstate_Domain_Model_HeatingType $heating) {
 		$this->heating = $heating;
 	}
 	/**
 	 * Getter for rooms
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_RoomType Association for the room type of the real estate.
+	 * @return Tx_GszRealEstate_Domain_Model_RoomType Association for the room type of the real estate.
 	 */
 	public function getRooms() {
 		return $this->rooms;
@@ -604,16 +604,16 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Setter for rooms
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_RoomType $rooms Association for the room type of the real estate.
+	 * @param Tx_GszRealEstate_Domain_Model_RoomType $rooms Association for the room type of the real estate.
 	 * @return void
 	 */
-	public function setRooms(Tx_GenesezRealEstate_Domain_Model_RoomType $rooms) {
+	public function setRooms(Tx_GszRealEstate_Domain_Model_RoomType $rooms) {
 		$this->rooms = $rooms;
 	}
 	/**
 	 * Getter for floor
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_FloorType Association for the floor type of the real estate.
+	 * @return Tx_GszRealEstate_Domain_Model_FloorType Association for the floor type of the real estate.
 	 */
 	public function getFloor() {
 		return $this->floor;
@@ -621,16 +621,16 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Setter for floor
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_FloorType $floor Association for the floor type of the real estate.
+	 * @param Tx_GszRealEstate_Domain_Model_FloorType $floor Association for the floor type of the real estate.
 	 * @return void
 	 */
-	public function setFloor(Tx_GenesezRealEstate_Domain_Model_FloorType $floor) {
+	public function setFloor(Tx_GszRealEstate_Domain_Model_FloorType $floor) {
 		$this->floor = $floor;
 	}
 	/**
 	 * Getter for quarter
 	 *
-	 * @return Tx_GenesezRealEstate_Domain_Model_Quarter Association for the quarter of the real estate.
+	 * @return Tx_GszRealEstate_Domain_Model_Quarter Association for the quarter of the real estate.
 	 */
 	public function getQuarter() {
 		return $this->quarter;
@@ -638,10 +638,10 @@ class Tx_GenesezRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObje
 	/**
 	 * Setter for quarter
 	 *
-	 * @param Tx_GenesezRealEstate_Domain_Model_Quarter $quarter Association for the quarter of the real estate.
+	 * @param Tx_GszRealEstate_Domain_Model_Quarter $quarter Association for the quarter of the real estate.
 	 * @return void
 	 */
-	public function setQuarter(Tx_GenesezRealEstate_Domain_Model_Quarter $quarter) {
+	public function setQuarter(Tx_GszRealEstate_Domain_Model_Quarter $quarter) {
 		$this->quarter = $quarter;
 	}
 

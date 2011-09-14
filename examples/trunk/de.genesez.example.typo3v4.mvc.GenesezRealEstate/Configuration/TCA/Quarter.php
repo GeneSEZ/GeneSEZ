@@ -4,8 +4,8 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$TCA['tx_genesezrealestate_domain_model_quarter'] = array (
-	'ctrl' => $TCA['tx_genesezrealestate_domain_model_quarter']['ctrl'],
+$TCA['tx_gszrealestate_domain_model_quarter'] = array (
+	'ctrl' => $TCA['tx_gszrealestate_domain_model_quarter']['ctrl'],
 	'interface' => array(
 		'showRecordFieldList' => 'name, description',
 		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */
@@ -44,8 +44,8 @@ $TCA['tx_genesezrealestate_domain_model_quarter'] = array (
 				'items'	=> array(
 					array('', 0),
 				),
-				'foreign_table' => 'tx_genesezrealestate_domain_model_quarter',
-				'foreign_table_where' => 'AND tx_genesezrealestate_domain_model_quarter.uid=###REC_FIELD_l10n_parent### AND tx_genesezrealestate_domain_model_quarter.sys_language_uid IN (-1,0)',
+				'foreign_table' => 'tx_gszrealestate_domain_model_quarter',
+				'foreign_table_where' => 'AND tx_gszrealestate_domain_model_quarter.uid=###REC_FIELD_l10n_parent### AND tx_gszrealestate_domain_model_quarter.sys_language_uid IN (-1,0)',
 			)
 		),
 		'l10n_diffsource' => array(
@@ -70,7 +70,7 @@ $TCA['tx_genesezrealestate_domain_model_quarter'] = array (
 		),
 		'name' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_quarter.name',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_quarter.name',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1306344154315_192526_2406) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
@@ -83,7 +83,7 @@ $TCA['tx_genesezrealestate_domain_model_quarter'] = array (
 		),
 		'description' => array(
 			'exclude' => false,
-			'label' => 'LLL:EXT:genesez_real_estate/Resources/Private/Language/locallang_db.xml:tx_genesezrealestate_domain_model_quarter.description',
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_quarter.description',
 			'defaultExtras' => 'richtext',
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1307093582120_276183_1703) ENABLED START */
 			/* PROTECTED REGION END */
