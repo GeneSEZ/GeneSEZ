@@ -73,6 +73,7 @@
 		«FOREACH allTCESheetsWithoutDefault() AS sheet -»
 			«EXPAND Sheet(sheet) -»
 		«ENDFOREACH -»
+		«EXPAND OwnCodeImplementation("flexform.xml.own.code.implementation." + xmiGuid) -» 
 	</sheets>
 </T3DataStructure>
 «ENDDEFINE»
@@ -110,6 +111,7 @@
 «DEFINE El(String sheet) FOR MInterface -»
 				<el>
 					«EXPAND Option FOREACH allTCESheetProperties(sheet) -»
+					«EXPAND OwnOptionCodeImplementation("flexform.xml.own.option.code.implementation." + sheet + "." + xmiGuid) -»
 				</el>
 «ENDDEFINE»
 
@@ -120,6 +122,16 @@
 					<settings.«name() -»>
 						«EXPAND TCEforms -»
 					</settings.«name() -»>
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own TCE Option Config code implementations
+«ENDREM»
+«DEFINE OwnOptionCodeImplementation(String id) FOR MInterface -»
+					«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+					<!-- TODO: put your further TCE Flexform Option code implementations here -->
+					«ENDPROTECT»
 «ENDDEFINE»
 
 
@@ -181,7 +193,7 @@
 							«ELSE -»
 								«EXPAND ConfigTypeOther( type.name() ) -»
 							«ENDIF -»
-							«EXPAND OwnConfigCodeImplementation("flexform.xml.own.config.code.implementation." + xmiGuid) -»
+							«EXPAND OwnOptionConfigCodeImplementation("flexform.xml.own.option.config.code.implementation." + xmiGuid) -»
 							</config>
 «ENDDEFINE»
 
@@ -591,9 +603,9 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 	generates a region for own TCA Column Config code implementations
 «ENDREM»
-«DEFINE OwnConfigCodeImplementation(String id) FOR MAttribute -»
+«DEFINE OwnOptionConfigCodeImplementation(String id) FOR MAttribute -»
 								«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-								<!-- TODO: put your further Flexform Config code implementations here -->
+								<!-- TODO: put your further TCE Flexform Option Config code implementations here -->
 								«ENDPROTECT»
 «ENDDEFINE»
 
@@ -601,9 +613,8 @@ hier evtl. versuch über sql type maximum herauszufinden
 «REM»
 	generates a region for own code implementations
 «ENDREM»
-«DEFINE OwnCodeImplementation(String id) FOR MClass -»
-«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
-<!-- TODO: put your further code implementations here -->
-«ENDPROTECT»
+«DEFINE OwnCodeImplementation(String id) FOR MInterface -»
+		«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+		<!-- TODO: put your further code implementations here -->
+		«ENDPROTECT»
 «ENDDEFINE»
-
