@@ -12,12 +12,15 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
+import de.genesez.platforms.common.Deletor;
+
 /**
  * Workflow component class to generate code (model to text transformation).
  * 
  * @author Tobias Haubold
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date 2011-08-23
+ * @author Dominik Wetzel
+ * @date 2011-09-14
  */
 public class Generator extends org.eclipse.xpand2.Generator {
 
@@ -35,12 +38,22 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		defaults.setProperty("prDefaultExcludes", "false");
 		defaults.setProperty("prExcludes", ".svn");
 		defaults.setProperty("singleValuedSlot", "true");
+		defaults.setProperty("deleteOld", "false");
+		defaults.setProperty("deleteEmptyFolders", "false");
+		defaults.setProperty("excludedDirectoryNames",
+				defaults.getProperty("prExcludes", ".svn"));
 	}
 
 	/**
 	 * Variable to store all properties.
 	 */
 	protected Properties properties = new Properties();
+
+	// variables for the file and package deletion
+	private boolean deleteOld = false;
+	private boolean deleteEmptyFolders = false;
+	private Deletor deletor = new Deletor(System.getProperty("java.version")
+			.charAt(2) < 7);
 
 	/**
 	 * Constructs the workflow component and initializes the default values.
@@ -80,9 +93,11 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			issues.addError(this, "Missing property 'template'!", template);
 		} else {
 			if (Boolean.valueOf(properties.getProperty("singleValuedSlot"))) {
-				super.setExpand(template + " FOR " + properties.getProperty("slot"));
+				super.setExpand(template + " FOR "
+						+ properties.getProperty("slot"));
 			} else {
-				super.setExpand(template + " FOREACH " + properties.getProperty("slot"));
+				super.setExpand(template + " FOREACH "
+						+ properties.getProperty("slot"));
 			}
 		}
 
@@ -97,12 +112,38 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			// check if an protected region directory is set.
 			String proRegDir = properties.getProperty("proRegDir", "");
 			if (proRegDir.length() == 0) {
-				issues.addInfo(this, "Output directory is set to default for the protected region directory.",
+				issues.addInfo(
+						this,
+						"Output directory is set to default for the protected region directory.",
 						outputDir);
 				setProRegDir(outputDir);
 			}
 		}
+		if (!deleteOld) {
+			issues.addWarning(
+					this,
+					"Old classfiles won't be deleted, there may occur problems after second generation.");
+		} else {
+			String includedFiles = properties.getProperty("includedFiles", "");
+			String excludedDirNames = properties.getProperty(
+					"excludedDirectoryNames",
+					properties.getProperty("prExcludes", ".svn"));
+			String excludedFiles = properties.getProperty("excludedFiles", "");
+			String excludedPaths = properties.getProperty(
+					"excludedRelativePaths", "");
 
+			if (includedFiles.equals("") && excludedFiles.equals("")
+					&& excludedPaths.equals("") && excludedDirNames.equals("")) {
+				issues.addWarning(
+						this,
+						"Nothing included and excluded, every file will be searched and unchanged files will be deleted.");
+			}
+		}
+		if (!deleteEmptyFolders){
+			issues.addInfo(this, "Empty Folders will not be deleted after generation.");
+		} else if(properties.getProperty("repositoryFolderName", "") == ""){
+			issues.addInfo(this, "No repository folder name given, maybe not all empty packages can be delted.");
+		}
 		super.checkConfigurationInternal(issues);
 	}
 
@@ -114,7 +155,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *      org.eclipse.emf.mwe.core.issues.Issues)
 	 */
 	@Override
-	protected void invokeInternal2(final WorkflowContext ctx, final ProgressMonitor monitor, final Issues issues) {
+	protected void invokeInternal2(final WorkflowContext ctx,
+			final ProgressMonitor monitor, final Issues issues) {
 		// add available models as global variable definitions
 		if (ctx.get(properties.getProperty("coreSlot")) != null) {
 			addGlobalVarDef("coremodel", properties.get("coreSlot"));
@@ -126,7 +168,36 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			addGlobalVarDef("tracemodel", properties.get("traceSlot"));
 		}
 
+		// prepares the deletion of not generated files
+		if (deleteOld) {
+			logger.info(deletor.prepare(properties.getProperty("outputDir"))
+					+ " file(s) found");
+		}
+		// the generation process
 		super.invokeInternal2(ctx, monitor, issues);
+
+		// deletes not generated files
+		if (deleteOld) {
+			List<String> deleteLog = deletor.delete();
+			if (!deleteLog.isEmpty()) {
+				logger.info(deleteLog.size() + " file(s) deleted");
+				logger.debug("deleted file(s): " + deleteLog);
+			}
+		}
+
+		// deletes empty folders
+		if (deleteEmptyFolders) {
+			try {
+				List<String> logInfo = deletor.deleteEmptyPackages(properties
+						.getProperty("outputDir"));
+				if (!logInfo.isEmpty()) {
+					logger.info(logInfo.size() + " folder(s) deleted");
+					logger.debug("deleted folder(s): " + logInfo);
+				}
+			} catch (UnsupportedOperationException e) {
+				logger.error(e.getMessage());
+			}
+		}
 	}
 
 	/**
@@ -135,14 +206,17 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * number value. If not it will be registered as string. This means, that
 	 * the value is surrounded with two single quotation marks.
 	 * 
-	 * @param key The name of the property.
-	 * @param value The value of the property.
+	 * @param key
+	 *            The name of the property.
+	 * @param value
+	 *            The value of the property.
 	 */
 	public void put(Object key, Object value) {
 		String keyStr = String.valueOf(key);
 		String valueStr = String.valueOf(value);
 
-		if (!WorkflowUtils.isBoolean(valueStr) && !WorkflowUtils.isNumber(valueStr)) {
+		if (!WorkflowUtils.isBoolean(valueStr)
+				&& !WorkflowUtils.isNumber(valueStr)) {
 			addGlobalVarDef(keyStr, valueStr);
 		} else {
 			addGlobalVarDef(keyStr, value);
@@ -153,23 +227,31 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * Add a property as string GlobalVarDef. This means, that the value is
 	 * surrounded with two single quotation marks.
 	 * 
-	 * @param key The name of the property.
-	 * @param value The value of the property.
+	 * @param key
+	 *            The name of the property.
+	 * @param value
+	 *            The value of the property.
 	 */
 	protected void addGlobalVarDef(String key, String value) {
-		logger.trace("Register property (" + key + ") with value ('" + value + "') as global variable definition.");
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(key, "'" + value + "'"));
+		logger.trace("Register property (" + key + ") with value ('" + value
+				+ "') as global variable definition.");
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(key, "'" + value
+				+ "'"));
 	}
 
 	/**
 	 * Add a property as GlobalVarDef.
 	 * 
-	 * @param key The name of the property.
-	 * @param value The value of the property.
+	 * @param key
+	 *            The name of the property.
+	 * @param value
+	 *            The value of the property.
 	 */
 	protected void addGlobalVarDef(String key, Object value) {
-		logger.trace("Register property (" + key + ") with value (" + value + ") as global variable definition.");
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(key, String.valueOf(value)));
+		logger.trace("Register property (" + key + ") with value (" + value
+				+ ") as global variable definition.");
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(key,
+				String.valueOf(value)));
 	}
 
 	// BEGIN OF DEFAULTS
@@ -209,11 +291,12 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * Sets if the slot has only one root element for which the template is
 	 * executed or more.
 	 * 
-	 * @param singleValuedSlot True if the slot has only one root element,
-	 *            otherwise false.
+	 * @param singleValuedSlot
+	 *            True if the slot has only one root element, otherwise false.
 	 */
 	public void setSingleValuedSlot(String singleValuedSlot) {
-		properties.setProperty("singleValuedSlot", Boolean.valueOf(singleValuedSlot).toString());
+		properties.setProperty("singleValuedSlot",
+				Boolean.valueOf(singleValuedSlot).toString());
 	}
 
 	/**
@@ -221,7 +304,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * 
 	 * Sets the source path for the protected regions.
 	 * 
-	 * @param proRegDir The source path for the protected regions.
+	 * @param proRegDir
+	 *            The source path for the protected regions.
 	 */
 	public void setProRegDir(String proRegDir) {
 		super.setPrSrcPaths(proRegDir);
@@ -233,11 +317,37 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * 
 	 * Sets the base path where the output will be generated.
 	 * 
-	 * @param outputDir The base path for the output.
+	 * @param outputDir
+	 *            The base path for the output.
 	 */
 	public void setOutputDir(String outputDir) {
 		super.addOutlet(new Outlet(outputDir));
 		properties.setProperty("outputDir", outputDir);
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>deleteOld</b></em>.
+	 * 
+	 * Sets if old files should be deleted or not
+	 * 
+	 * @param deleteOld
+	 *            Value of deleteOld True if it should be deleted.
+	 */
+	public void setDeleteOld(String deleteOld) {
+		this.deleteOld = Boolean.parseBoolean(deleteOld);
+		properties.setProperty("deleteOld", deleteOld);
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>deleteEmptyFolders</b></em>.
+	 * 
+	 * if this is true, empty folders will be deleted after generation process
+	 * 
+	 * @param deleteEmpty
+	 */
+	public void setDeleteEmptyFolders(String deleteEmpty) {
+		this.deleteEmptyFolders = Boolean.parseBoolean(deleteEmpty);
+		properties.setProperty("deleteOld", deleteEmpty);
 	}
 
 	// END OF DEFAULTS
@@ -247,7 +357,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * 
 	 * Sets the template to be executed for model to code generation.
 	 * 
-	 * @param template The template to execute.
+	 * @param template
+	 *            The template to execute.
 	 */
 	public void setTemplate(String template) {
 		properties.setProperty("template", template);
@@ -258,7 +369,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * 
 	 * Adds a aspect script with advices.
 	 * 
-	 * @param aspectScript A aspect script with advices.
+	 * @param aspectScript
+	 *            A aspect script with advices.
 	 */
 	public void addAspectScript(String aspectScript) {
 		logger.trace("add Aspect script: " + aspectScript);
@@ -273,7 +385,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * Adds several aspect scripts with advices. The aspect scripts should be
 	 * comma or semicolon separated.
 	 * 
-	 * @param aspectScripts Several aspect scripts with advices.
+	 * @param aspectScripts
+	 *            Several aspect scripts with advices.
 	 */
 	public void addAspectScripts(String aspectScripts) {
 		if (aspectScripts.length() > 0) {
@@ -289,7 +402,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * 
 	 * Adds a aspect template with advices.
 	 * 
-	 * @param aspectTemplate A aspect template with advices.
+	 * @param aspectTemplate
+	 *            A aspect template with advices.
 	 */
 	public void addAspectTemplate(String aspectTemplate) {
 		logger.trace("Add aspect template: " + aspectTemplate);
@@ -304,7 +418,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * Adds several aspect templates with advices. The aspect templates should
 	 * be comma or semicolon separated.
 	 * 
-	 * @param aspectTemplates Several aspect templates with advices.
+	 * @param aspectTemplates
+	 *            Several aspect templates with advices.
 	 */
 	public void addAspectTemplates(String aspectTemplates) {
 		if (aspectTemplates.length() > 0) {
@@ -320,17 +435,85 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * 
 	 * Sets the slot where the model is stored.
 	 * 
-	 * @param slot The name of the model slot.
+	 * @param slot
+	 *            The name of the model slot.
 	 */
 	public void setSlot(String slot) {
 		properties.setProperty("slot", slot);
 	}
 
 	/**
+	 * Setter for the workflow parameter <em><b>includedFiles</b></em>.
+	 * 
+	 * Sets extensions, that are included in the recursive file search.
+	 * 
+	 * @param fileExtensions
+	 *            String that contains all the included extensions (seperated by
+	 *            "," or ";")
+	 */
+	public void setIncludedFiles(String fileExtensions) {
+		deletor.setIncludedFiles(fileExtensions);
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>excludedRelativePaths</b></em>.
+	 * 
+	 * these Paths are not searched for files
+	 * 
+	 * @param paths
+	 *            String that contains all excluded paths (seperated by "," or
+	 *            ";")
+	 */
+	public void setExcludedRelativePaths(String paths) {
+		deletor.setExcludedRelativePaths(paths);
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>excludedFiles</b></em>.
+	 * 
+	 * Sets file extensions, that are excluded in the recursive file search
+	 * 
+	 * @param fileExtensions
+	 *            String that contains all the excluded file extensions
+	 *            (seperated by "," or ";")
+	 */
+	public void setExcludedFiles(String fileExtensions) {
+		deletor.setExcludedFiles(fileExtensions);
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>excludedDirectoryNames</b></em>.
+	 * 
+	 * Directories with these names were not searched
+	 * 
+	 * @param names
+	 *            String that contains all excluded directory names (seperated
+	 *            by "," or ";")
+	 */
+	public void setExcludedDirectoryNames(String names) {
+		deletor.setExcludedDirectoryNames(names);
+	}
+	
+	/**
+	 * Setter for the workflow parameter <em><b>setRepositoryFolderName</b></em>.
+	 * 
+	 * repository name that will be deleted if its the only one left in a folder.
+	 * 
+	 * NOTE: This is not safe.
+	 * 
+	 * @param repName name of the repository folder.
+	 */
+	public void setRepositoryFolderName(String repName){
+		deletor.setRepositoryFolderName(repName);
+		properties.put("repositoryFolderName", repName);
+	}
+
+	/**
 	 * Checks if the output directory does not exists. If true the output
 	 * directory will be created.
 	 * 
-	 * @param uri The base path for the output.
+	 * @param uri
+	 *            The base path for the output.
 	 */
 	private void checkAndCreateOutputDirectory(String uri) {
 		File f = new File(uri);
@@ -340,5 +523,4 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			}
 		}
 	}
-
 }
