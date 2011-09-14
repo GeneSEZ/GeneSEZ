@@ -243,6 +243,9 @@ Void addControllerType(MClass this) :
 		// if true, then create the super controller type which is specified
 		? (	let controllerType = getT3ExtbaseControllerControllerType() :
 				switch {
+					// check, if no super controller type should be generated 
+					case controllerType == prT3ExtbaseControllerTypeNone() :
+						Void
 					case controllerType == prT3ExtbaseControllerTypeExtbaseControllerInterface() :
 						realization.add( createExternal( model(), controllerType ) )
 					case generalization.isEmpty :
@@ -458,6 +461,9 @@ Void addEntityType(MClass this) :
 		// if true, then create the super entity type which is specified
 		? (	let entityType = getT3ExtbaseEntityEntityType() :
 				switch {
+					// check, if no super entity type should be generated 
+					case entityType == prT3ExtbaseEntityTypeNone() :
+						Void
 					case generalization.isEmpty :
 						generalization.add( createExternal( model(), entityType ) )
 					default : Void
@@ -498,11 +504,14 @@ Void addValueObjectType(MClass this) :
 		// if true, then create the super value object type which is specified
 		? ( let valueObjectType = getT3ExtbaseValueObjectValueObjectType() :
 				switch {
+					// check, if no super value object type should be generated 
+					case valueObjectType == prT3ExtbaseValueObjectTypeNone() :
+						Void
 					case generalization.isEmpty :
 						generalization.add( createExternal( model(), valueObjectType ) )
 					default : Void
 				}
-		) 
+		)
 		// else create the default one
 		: (	generalization.isEmpty 
 				? generalization.add( createExternal( model(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject() ) )
@@ -563,6 +572,9 @@ Void addRepositoryType(MClass this) :
 		// if true, then create the super repository type which is specified
 		? ( let repositoryType = getT3ExtbaseRepositoryRepositoryType() :
 				switch {
+					// check, if no super repository type should be generated 
+					case repositoryType == prT3ExtbaseRepositoryTypeNone() :
+						Void
 					case generalization.isEmpty :
 						generalization.add( createExternal( model(), repositoryType ) )
 					default : Void
@@ -658,6 +670,9 @@ Void addValidatorType(MClass this) :
 		// if true, then create the super validator type which is specified
 		? ( let validatorType = getT3ExtbaseValidatorValidatorType() :
 				switch {
+					// check, if no super validator type should be generated 
+					case validatorType == prT3ExtbaseValidatorTypeNone() :
+						Void
 					case validatorType == prT3ExtbaseValidatorTypeExtbaseValidatorInterface() :
 						realization.add( createExternal( model(), validatorType ) )
 					case generalization.isEmpty :
@@ -766,6 +781,9 @@ Void addViewHelperType(MClass this) :
 		// if true, then create the super view helper type which is specified
 		? ( let viewHelperType = getT3FluidViewHelperViewHelperType() :
 				switch {
+					// check, if no super view helper type should be generated 
+					case viewHelperType == prT3FluidViewHelperTypeNone() :
+						Void
 					case generalization.isEmpty :
 						generalization.add( createExternal( model(), viewHelperType ) )
 					default : Void
