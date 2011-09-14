@@ -45,6 +45,7 @@ public class DeletorTest {
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
 				throws IOException {
+			alterPermission(file);
 			Files.delete(file);
 			return FileVisitResult.CONTINUE;
 		}
@@ -52,15 +53,39 @@ public class DeletorTest {
 		@Override
 		public FileVisitResult postVisitDirectory(Path dir, IOException exc)
 				throws IOException {
+			alterPermission(dir);
 			Files.delete(dir);
 			return FileVisitResult.CONTINUE;
 		}
+
+		private boolean alterPermission(Path file) throws IOException,
+				UnsupportedOperationException {
+			PosixFileAttributeView POSIXattr = Files.getFileAttributeView(file,
+					PosixFileAttributeView.class);
+			// checks if its a POSIX System
+			if (POSIXattr != null) {
+				Set<PosixFilePermission> perms = PosixFilePermissions
+						.fromString("rwxrwxrwx");
+				// sets file permissions
+				Files.setPosixFilePermissions(file, perms);
+				return true;
+			} else {
+				// try if its a DOS-like
+				// System
+				DosFileAttributeView DOSattr = Files.getFileAttributeView(file,
+						DosFileAttributeView.class);
+				// sets file permission
+				DOSattr.setReadOnly(false);
+				return true;
+			}
+		}
 	}
-	
+
 	@BeforeClass
-	public static void checkBeforeClass(){
-		if(System.getProperty("java.version").charAt(2) < 7){
-			throw new UnsupportedOperationException("Java Version below 7, Tests should fail");
+	public static void checkBeforeClass() {
+		if (System.getProperty("java.version").charAt(2) < 7) {
+			throw new UnsupportedOperationException(
+					"Java Version below 7, Tests should fail");
 		}
 	}
 
@@ -393,36 +418,47 @@ public class DeletorTest {
 	public void testDeletePackagesWithExclusion() throws IOException {
 		Files.createDirectories(startPath.resolve(".svn/props/polerte/"));
 		Files.createFile(startPath.resolve(".svn/props/testing"));
-		Files.createDirectories(startPath.resolve("en/genesez/workflow/common/deletor/"));
-		Files.createDirectories(startPath.resolve("en/genesez/workflow/java/generator/"));
+		Files.createDirectories(startPath
+				.resolve("en/genesez/workflow/common/deletor/"));
+		Files.createDirectories(startPath
+				.resolve("en/genesez/workflow/java/generator/"));
 		Deletor deletor = new Deletor(false);
 		deletor.setExcludedRelativePaths("/common");
 		deletor.setExcludedDirectoryNames("deletor");
-		try{
-		assertEquals(3, deletor.deleteEmptyPackages(startPath.toString()).size());
-		} catch (UnsupportedOperationException e){
+		try {
+			assertEquals(3, deletor.deleteEmptyPackages(startPath.toString())
+					.size());
+		} catch (UnsupportedOperationException e) {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	@Test
-	public void testDeletePackages() throws IOException, UnsupportedOperationException {
+	public void testDeletePackages() throws IOException,
+			UnsupportedOperationException {
 		// create testenvironment
-		Files.createDirectories(startPath.resolve("en/genesez/java/.svn/props/polerte/"));
-		Path test = Files.createFile(startPath.resolve("en/genesez/java/.svn/props/testing"));
-		Files.createDirectories(startPath.resolve("en/genesez/workflow/common/deletor/"));
-		Files.createDirectories(startPath.resolve("en/genesez/workflow/java/generator/"));
-		
+		Files.createDirectories(startPath
+				.resolve("en/genesez/java/.svn/props/polerte/"));
+		Path test = Files.createFile(startPath
+				.resolve("en/genesez/java/.svn/props/testing"));
+		Files.createDirectories(startPath
+				.resolve("en/genesez/workflow/common/deletor/"));
+		Files.createDirectories(startPath
+				.resolve("en/genesez/workflow/java/generator/"));
+
 		// prepares a file
-		PosixFileAttributeView check = Files.getFileAttributeView(test, PosixFileAttributeView.class);
-		if(check != null){
-			Set<PosixFilePermission> perm = PosixFilePermissions.fromString("r--r--r--");
+		PosixFileAttributeView check = Files.getFileAttributeView(test,
+				PosixFileAttributeView.class);
+		if (check != null) {
+			Set<PosixFilePermission> perm = PosixFilePermissions
+					.fromString("r--r--r--");
 			Files.setPosixFilePermissions(test, perm);
 		} else {
-			DosFileAttributeView attr = Files.getFileAttributeView(test, DosFileAttributeView.class);
+			DosFileAttributeView attr = Files.getFileAttributeView(test,
+					DosFileAttributeView.class);
 			attr.setReadOnly(true);
 		}
-		
+
 		// prepare Deletor
 		Deletor deletor = new Deletor(false);
 		deletor.setRepositoryFolderName(".svn");
@@ -430,9 +466,10 @@ public class DeletorTest {
 		deletor.prepare(startPath.toString());
 		test4.toFile().setLastModified(1);
 		deletor.delete();
-		
+
 		// the Test
-		assertEquals(10,deletor.deleteEmptyPackages(startPath.toString()).size());
+		assertEquals(10, deletor.deleteEmptyPackages(startPath.toString())
+				.size());
 		assertTrue(Files.exists(test4));
 		assertFalse(Files.exists(firstPath));
 		assertTrue(Files.exists(secondPath.getParent()));
