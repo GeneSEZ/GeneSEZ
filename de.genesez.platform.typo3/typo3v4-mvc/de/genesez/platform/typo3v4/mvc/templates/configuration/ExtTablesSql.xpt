@@ -6,6 +6,9 @@
 	@date	2011-07-14
 «ENDREM»
 
+«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
+«EXTENSION de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
+
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION de::genesez::platforms::common::naming::Naming»
 «EXTENSION de::genesez::platform::typo3v4::mvc::convention::NamingContext»
@@ -36,8 +39,10 @@
 
 «FILE extTablesSQLFileNamePath() -»
 
-«EXPAND CreateTableDefinition FOREACH allEntitiesAndValueObjects().select( e | !e.abstract ).sortBy( e | e.name ) -»
-«EXPAND IntermediateTables FOREACH allEntitiesAndValueObjects().select( e | !e.abstract ).sortBy ( e | e.name ) -»
+«EXPAND CreateConcreateTableDefinition FOREACH allConreteTableInheritances().sortBy( e | e.name ) -»
+«EXPAND AlterSingleTableDefinition FOREACH allSingleTableInheritances().sortBy( e | e.name ) -»
+«EXPAND AlterMappingTableDefinition FOREACH allMappingTables().sortBy( e | e.name ) -»
+«EXPAND IntermediateTables FOREACH allEntitiesAndValueObjects().sortBy ( e | e.name ) -»
 
 «EXPAND OwnSQLDeclaration("ext_tables.sql.own.sql.declaration." + xmiGuid) -»
 «ENDFILE»
@@ -54,26 +59,51 @@
 	Sets the naming and type mapping context for this part of generation. 
 «ENDREM»
 «DEFINE ContextSettings FOR MModel -»
-«setNamingContext( namingContextConfiguration() ) -»
+«setNamingContext( namingContextPersistence() ) -»
 «setTypeMappingContext( typeMappingContextSQLColumnDefinition() ) -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE CreateTableDefinition FOR MClass -»
-#
-# Table structure for table '«name() -»'
-#
+«DEFINE CreateConcreateTableDefinition FOR MClass -»
+«EXPAND CreateTableComment -»
 CREATE TABLE «name() -» (
-	«EXPAND CreateTableColumns -»
+	«EXPAND CreateConcreteTableColumns -»
 );
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE CreateTableColumns FOR MClass -»
+«DEFINE AlterSingleTableDefinition FOR MClass -»
+«EXPAND CreateTableComment -»
+ALTER TABLE «name() -» (
+	«EXPAND CreateSingleTableColumns -»
+);
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE AlterMappingTableDefinition FOR MClass -»
+«EXPAND CreateTableComment -»
+ALTER TABLE «name() -» (
+	«EXPAND CreateMappingTableColumns -»
+);
+«ENDDEFINE»
+
+
+«DEFINE CreateTableComment FOR MClass -»
+#
+# Table structure for table '«name( namingContextConfiguration() ) -»'
+#
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CreateConcreteTableColumns FOR MClass -»
 	«EXPAND InternalManagementColumns -»
 	
 	«EXPAND AttributeColumn FOREACH allInstanceAttributes() -»
@@ -90,11 +120,39 @@ CREATE TABLE «name() -» (
 
 
 «REM»
+«ENDREM»
+«DEFINE CreateSingleTableColumns FOR MClass -»
+	«EXPAND RecordTypeColumn -»
+	
+	«EXPAND AttributeColumn FOREACH  owningInitializableAttributes().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
+	«EXPAND AssociationColumn FOREACH owningInitializableAssociationRoles().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE CreateMappingTableColumns FOR MClass -»
+	«EXPAND RecordTypeColumn -»
+	
+	«EXPAND AttributeColumn FOREACH  owningInitializableAttributes().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
+	«EXPAND AssociationColumn FOREACH owningInitializableAssociationRoles().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
+«ENDDEFINE»
+
+
+«REM»
 	Generates TYPO3 specific columns for internal management.
 «ENDREM»
 «DEFINE InternalManagementColumns FOR MClass -»
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
+«ENDDEFINE»
+
+
+«REM»
+	Generates TYPO3 specific record type column for single table inheritance or table mapping.
+«ENDREM»
+«DEFINE RecordTypeColumn FOR MClass -»
+	«getPersistenceRecordTypeColumnName() -» varchar(255) DEFAULT '' NOT NULL,
 «ENDDEFINE»
 
 
