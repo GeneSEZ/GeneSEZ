@@ -39,10 +39,12 @@
 
 «FILE extTablesSQLFileNamePath() -»
 
-«EXPAND CreateConcreateTableDefinition FOREACH allConreteTableInheritances().sortBy( e | e.name ) -»
+«EXPAND CreateConcreteTableDefinition FOREACH allConreteTableInheritances().sortBy( e | e.name ) -»
 «EXPAND AlterSingleTableDefinition FOREACH allSingleTableInheritances().sortBy( e | e.name ) -»
 «EXPAND AlterMappingTableDefinition FOREACH allMappingTables().sortBy( e | e.name ) -»
-«EXPAND IntermediateTables FOREACH allEntitiesAndValueObjects().sortBy ( e | e.name ) -»
+«EXPAND ConcreteIntermediateTables FOREACH allConreteTableInheritances().sortBy ( e | e.name ) -»
+«EXPAND SingleIntermediateTables FOREACH allSingleTableInheritances().sortBy ( e | e.name ) -»
+«EXPAND MappingIntermediateTables FOREACH allMappingTables().sortBy ( e | e.name ) -»
 
 «EXPAND OwnSQLDeclaration("ext_tables.sql.own.sql.declaration." + xmiGuid) -»
 «ENDFILE»
@@ -66,7 +68,7 @@
 
 «REM»
 «ENDREM»
-«DEFINE CreateConcreateTableDefinition FOR MClass -»
+«DEFINE CreateConcreteTableDefinition FOR MClass -»
 «EXPAND CreateTableComment -»
 CREATE TABLE «name() -» (
 	«EXPAND CreateConcreteTableColumns -»
@@ -359,9 +361,23 @@ ALTER TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE IntermediateTables FOR MClass -»
+«DEFINE ConcreteIntermediateTables FOR MClass -»
 	«EXPAND IntermediateTable(this) FOREACH allInstanceAttributes() -»
 	«EXPAND IntermediateTable(this) FOREACH allInstanceAssociationRoles() -»
+«ENDDEFINE»
+
+«REM»
+«ENDREM»
+«DEFINE SingleIntermediateTables FOR MClass -»
+	«EXPAND IntermediateTable(this) FOREACH owningInitializableAttributes() -»
+	«EXPAND IntermediateTable(this) FOREACH owningInitializableAssociationRoles() -»
+«ENDDEFINE»
+
+«REM»
+«ENDREM»
+«DEFINE MappingIntermediateTables FOR MClass -»
+	«EXPAND IntermediateTable(this) FOREACH owningInitializableAttributes() -»
+	«EXPAND IntermediateTable(this) FOREACH owningInitializableAssociationRoles() -»
 «ENDDEFINE»
 
 
