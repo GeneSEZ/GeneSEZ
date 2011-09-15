@@ -40,8 +40,8 @@
 «FILE extTablesSQLFileNamePath() -»
 
 «EXPAND CreateConcreteTableDefinition FOREACH allConreteTableInheritances().sortBy( e | e.name ) -»
-«EXPAND AlterSingleTableDefinition FOREACH allSingleTableInheritances().sortBy( e | e.name ) -»
-«EXPAND AlterMappingTableDefinition FOREACH allMappingTables().sortBy( e | e.name ) -»
+«EXPAND CreateSingleTableDefinition FOREACH allSingleTableInheritances().sortBy( e | e.name ) -»
+«EXPAND CreateMappingTableDefinition FOREACH allMappingTables().sortBy( e | e.name ) -»
 «EXPAND ConcreteIntermediateTables FOREACH allConreteTableInheritances().sortBy ( e | e.name ) -»
 «EXPAND SingleIntermediateTables FOREACH allSingleTableInheritances().sortBy ( e | e.name ) -»
 «EXPAND MappingIntermediateTables FOREACH allMappingTables().sortBy ( e | e.name ) -»
@@ -78,9 +78,9 @@ CREATE TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE AlterSingleTableDefinition FOR MClass -»
+«DEFINE CreateSingleTableDefinition FOR MClass -»
 «EXPAND CreateTableComment -»
-ALTER TABLE «name() -» (
+CREATE TABLE «name() -» (
 	«EXPAND CreateSingleTableColumns -»
 );
 «ENDDEFINE»
@@ -88,9 +88,9 @@ ALTER TABLE «name() -» (
 
 «REM»
 «ENDREM»
-«DEFINE AlterMappingTableDefinition FOR MClass -»
+«DEFINE CreateMappingTableDefinition FOR MClass -»
 «EXPAND CreateTableComment -»
-ALTER TABLE «name() -» (
+CREATE TABLE «name() -» (
 	«EXPAND CreateMappingTableColumns -»
 );
 «ENDDEFINE»
