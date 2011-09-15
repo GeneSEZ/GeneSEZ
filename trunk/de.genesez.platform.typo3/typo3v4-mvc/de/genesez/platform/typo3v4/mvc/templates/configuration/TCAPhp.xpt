@@ -801,6 +801,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -813,6 +814,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -851,6 +853,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -862,6 +865,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -875,6 +879,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -888,6 +893,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -899,6 +905,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -910,6 +917,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -923,6 +931,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -936,6 +945,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
 «EXPAND TCAColumnsConfigAppearance -»
+«EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
 
@@ -1210,6 +1220,59 @@ hier evtl. versuch über sql type maximum herauszufinden
 				'uploadfolder' => '«IF uploadfolder != "" -»«uploadfolder.replaceFirst("EXT", fullQualifiedExtensionNameToLowerCase()) -»«ELSE -»«defaultUploadfolder -»«ENDIF -»',
 «ENDIF -»
 «ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigWizards FOR MProperty -»
+«IF hasT3TCAAssociationTypeColumnsConfigWizardAdd("true") || hasT3TCAAssociationTypeColumnsConfigWizardEdit("true")  || hasT3TCAAssociationTypeColumnsConfigWizardSuggest("true") -»
+				'wizards' => array(
+					'_PADDING' => 1,
+					'_VERTICAL' => 1,
+					«EXPAND TCAColumnsConfigWizardsAdd -»
+					«EXPAND TCAColumnsConfigWizardsEdit -»
+					«EXPAND TCAColumnsConfigWizardsSuggest -»
+				),
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigWizardsAdd FOR MProperty -»
+«IF hasT3TCAAssociationTypeColumnsConfigWizardAdd("true") -»
+					'add' => array(
+						'type' => 'script',
+						'title' => 'Create new',
+						'icon' => 'add.gif',
+						'script' => 'wizard_add.php',
+						'params' => array(
+							'table'=>'«type.name( namingContextPersistence(), typeMappingContextSQLTableName() ) -»',
+							'pid' => '###CURRENT_PID###',
+							'setValue' => 'prepend'
+						),
+					),
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigWizardsEdit FOR MProperty -»
+«IF hasT3TCAAssociationTypeColumnsConfigWizardEdit("true") -»
+					'edit' => array(
+						'type' => 'popup',
+						'title' => 'Edit',
+						'icon' => 'edit2.gif',
+						'script' => 'wizard_edit.php',
+						'popup_onlyOpenIfSelected' => 1,
+						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+					),
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigWizardsSuggest FOR MProperty -»
+«IF hasT3TCAAssociationTypeColumnsConfigWizardSuggest("true") -»
+					'suggest' => array(
+						'type' => 'suggest',
+					),
+«ENDIF -»
 «ENDDEFINE»
 
 
