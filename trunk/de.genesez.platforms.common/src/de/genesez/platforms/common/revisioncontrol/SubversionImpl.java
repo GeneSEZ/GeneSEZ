@@ -12,10 +12,10 @@ import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
 /**
- * Implementation for RevisionControlSystem interface for deletion of files with SVN
+ * Implementation of the delete algorithm for SVN.
+ * 
  * @author Dominik Wetzel
- * @date 2011-09-14
- *
+ * @date 2011-09-15
  */
 public class SubversionImpl implements RevisionControlSystem {
 	private List<String> metadataFolderName = new ArrayList<String>(1);;
@@ -46,10 +46,21 @@ public class SubversionImpl implements RevisionControlSystem {
 		}	
 	}
 	
+	/**
+	 * gives a list with the repository metadata-folder-name usually this should
+	 * contain only 1 entry.
+	 * 
+	 * @return a List with the metadata-folder-name
+	 */
 	public List<String> getMetadataFolderNames(){
 		return metadataFolderName;
 	}
 	
+	/**
+	 * The name that will be printed on the log
+	 * 
+	 * @return "Subversion"
+	 */
 	public String getName(){
 		return "Subversion";
 	}

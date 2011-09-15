@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Helper class, that provides all available RCS implementations
+ * Helper class, that keeps all available RCS implementations in a list.
+ * 
  * @author Dominik Wetzel
  * @date 2011-09-15
- *
  */
 public class RegisterHelper {
 	
@@ -16,10 +16,11 @@ public class RegisterHelper {
 	static{
 		availableImpls.add(new SubversionImpl());
 		availableImpls.add(new DefaultImpl());
+		availableImpls.add(new GitImpl());
 	}
 	
 	/**
-	 * 
+	 * gets available Implementations of RevisionControlSystem
 	 * @return a List with available Implementations
 	 */
 	public static List<RevisionControlSystem> getAvailableRepositoryImpls(){
