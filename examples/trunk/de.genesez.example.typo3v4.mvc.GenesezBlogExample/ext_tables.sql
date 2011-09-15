@@ -152,7 +152,7 @@ CREATE TABLE tx_gszblogexample_domain_model_tag (
 #
 # Table structure for table 'tx_gszblogexample_domain_model_administrator'
 #
-ALTER TABLE fe_users (
+CREATE TABLE fe_users (
 	tx_extbase_type varchar(255) DEFAULT '' NOT NULL,
 	
 );

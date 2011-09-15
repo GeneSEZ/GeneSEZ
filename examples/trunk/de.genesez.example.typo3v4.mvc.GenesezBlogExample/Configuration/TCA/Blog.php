@@ -151,23 +151,13 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
-				'foreign_table' => 'tx_gszblogexample_domain_model_administrator',
+				'foreign_table' => 'fe_users',
 				'minitems' => 0,
 				'maxitems' => 1,
-				'appearance' => array(
-					'collapse' => false,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => true,
-					'showPossibleLocalizationRecords' => true,
-					'showAllLocalizationLink' => true
-				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297195121733_203336_1960) ENABLED START */
-				'foreign_table' => 'fe_users',
 				'foreign_table_where' => "AND fe_users.tx_extbase_type='Tx_GszBlogExample_Domain_Model_Administrator'",
 				'items' => array(
 					array('--none--', 0),
-				),
-				'appearance' => array(
 				),
 				'wizards' => array(
 					'_PADDING' => 1,

@@ -45,11 +45,6 @@ class Tx_GszBlogExample_Domain_Repository_BlogRepository extends Tx_Extbase_Pers
 	 */
 	public function initalizeObject() {
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302020870850_802851_3552.initalizeObject) ENABLED START */
-		/*
-		$querySettings = $this->objectManager->create('Tx_Extbase_Persistence_Typo3QuerySettings');
-		$querySettings->setRespectStoragePage(FALSE);
-		$this->setDefaultQuerySettings($querySettings);
-		 */
 		/* PROTECTED REGION END */
 	}
 

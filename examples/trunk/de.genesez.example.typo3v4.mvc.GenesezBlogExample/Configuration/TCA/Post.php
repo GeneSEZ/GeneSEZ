@@ -122,16 +122,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'foreign_table' => 'tx_gszblogexample_domain_model_blog',
 				'minitems' => 1,
 				'maxitems' => 1,
-				'appearance' => array(
-					'collapse' => false,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => true,
-					'showPossibleLocalizationRecords' => true,
-					'showAllLocalizationLink' => true
-				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195059082_239030_1887) ENABLED START */
-				'appearance' => array(
-				),
 				/* PROTECTED REGION END */
 			)
 		),
@@ -145,16 +136,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'foreign_table' => 'tx_gszblogexample_domain_model_person',
 				'minitems' => 1,
 				'maxitems' => 1,
-				'appearance' => array(
-					'collapse' => false,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => true,
-					'showPossibleLocalizationRecords' => true,
-					'showAllLocalizationLink' => true
-				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195253147_828265_2388) ENABLED START */
-				'appearance' => array(
-				),
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 1,
@@ -187,7 +169,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195352189_179879_2445) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
-				'type' => 'select',
+				'type' => 'inline',
 				'foreign_table' => 'tx_gszblogexample_domain_model_tag',
 				'foreign_sortby' => 'sorting',
 				'MM' => 'tx_gszblogexample_post_tag_tags_mm',
@@ -216,7 +198,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195402378_449726_2482) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
-				'type' => 'select',
+				'type' => 'inline',
 				'foreign_table' => 'tx_gszblogexample_domain_model_comment',
 				'foreign_sortby' => 'sorting',
 				'MM' => 'tx_gszblogexample_post_comment_comments_mm',
@@ -252,16 +234,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'MM' => 'tx_gszblogexample_post_post_related_posts_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
-				'appearance' => array(
-					'collapse' => false,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => true,
-					'showPossibleLocalizationRecords' => true,
-					'showAllLocalizationLink' => true
-				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195445317_889803_2527) ENABLED START */
-				'appearance' => array(
-				),
 				'foreign_table_where' => 'AND ###THIS_UID### != tx_gszblogexample_domain_model_post.uid',
 				'size' => 10,
 				'autoSizeMax' => 30,
