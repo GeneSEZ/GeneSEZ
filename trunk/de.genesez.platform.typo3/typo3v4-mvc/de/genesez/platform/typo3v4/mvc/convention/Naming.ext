@@ -8,8 +8,9 @@
 // based on genesez meta model
 import gcore;
 
-// use TYPO3 MVC profile scripts	
+// use TYPO3 MVC Extbase profile + access helper scripts	
 extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
+extension de::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
 
 // use TYPO3 naming context and common naming scripts
 extension de::genesez::platforms::common::naming::Naming;
@@ -67,6 +68,16 @@ cached String asPHPCompliantName(MElement this) :
  * @return	the formatted element name
  */
 cached String asConfigurationName(MElement this) :
+	name;
+
+
+/**
+ * Formats the element name 
+ * in 'Persistence' TYPO3 MVC naming context.
+ * 
+ * @return	the formatted element name
+ */
+cached String asPersistenceName(MElement this) :
 	name;
 
 
@@ -151,7 +162,21 @@ cached String asConfigurationName(MInterface this) :
 		default :
 			asGeneralName().toLowerCase()
 	};
-	
+
+
+/**
+ * Formats the classifier name 
+ * in 'Persistence' TYPO3 MVC naming context.
+ * 
+ * @return	the formatted element name
+ */
+cached String asPersistenceName(MClassifier this) :
+	hasT3ExtbaseInheritanceStereotype() && getT3ExtbaseInheritanceInheritanceType() == prT3ExtbaseInheritanceTypeSingleTable()
+		? generalization.first().name( namingContextPersistence(), typeMappingContextSQLTableName() )
+		: (	hasT3ExtbaseTableMappingStereotype()
+				? getT3ExtbaseTableMappingTableName()
+				: asConfigurationName()	);
+
 
 /**
  * Formats a classifier name 
@@ -229,6 +254,18 @@ cached String asPHPCompliantName(MProperty this) :
  */
 cached String asConfigurationName(MProperty this) :
 	JAVA de.genesez.platform.typo3v4.mvc.convention.Naming.toLowerPropertyName(de.genesez.metamodel.gcore.MProperty);
+
+
+/**
+ * Formats an attribute or association role name as a normal attribute
+ * in 'Persistence' TYPO3 MVC naming context. 
+ * 
+ * @return	the formatted attribute or association role name
+ */
+cached String asPersistenceName(MProperty this) :
+	hasT3ExtbaseColumnMappingStereotype()
+				? getT3ExtbaseColumnMappingMapOnProperty()
+				: asConfigurationName();
 
 
 /**
