@@ -205,8 +205,29 @@ boolean isSingleTableInheritance(MClass this) :
  * 
  * @return	true if the class should be mapped, otherwise false
  */
-boolean isTableMapping(MClass this) :
+boolean isMappingTable(MClass this) :
 	hasT3ExtbaseTableMappingStereotype();
+
+
+
+cached List[MClass] allConreteTableInheritances(MModel this) :
+	allEntitiesAndValueObjects().select( e | e.isConcreteTableInheritance() && !e.isMappingTable() );
+
+
+cached List[MClass] allSingleTableInheritances(MModel this) :
+	allEntitiesAndValueObjects().select( e | e.isSingleTableInheritance() && !e.isMappingTable() );
+	
+
+cached List[MClass] allMappingTables(MModel this) :
+	allEntitiesAndValueObjects().select( e | e.isMappingTable() );
+
+
+getPersistenceRecordTypeColumnName(MClass this) :
+	isSingleTableInheritance() 
+		? getT3ExtbaseInheritanceTypeColumn()
+		: (	isMappingTable()
+				? getT3ExtbaseTableMappingTypeColumn()
+				: "record_type" );
 
 
 /**
@@ -218,13 +239,11 @@ cached List[MType] allPersistenceClassMappings(MModel this) :
 	let classMappings = {} :
 		classMappings.addAll(
 			// first add all domain objects which should be mapped
-			allEntitiesAndValueObjects().
-				select( e | e.isTableMapping() )
+			allMappingTables()
 		) ->
 		classMappings.addAll(
 			// second add all domain objects which should be stored as single table inheritance
-			allEntitiesAndValueObjects().
-				select( e | e.isSingleTableInheritance() )
+			allSingleTableInheritances()
 		) ->
 		allEntitiesAndValueObjects().
 			// add all generalizations for "subclasses" from domain objects which should be stored as single table inheritance
