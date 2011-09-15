@@ -138,7 +138,8 @@ cached boolean isModelPackageElement(MClassifier this) :
 
 
 /**
- * Getter for a list of all instance properties. 
+ * Getter for a list of all instance properties.
+ * Inherited instance properties first.
  * Excluding final and derived for MAttribute and derived for MAssociationRole.
  * 
  * @return	a list of instance properties or an empty list
@@ -152,7 +153,8 @@ List[MProperty] allInstanceProperties(MClassifier this) :
 
 
 /**
- * Getter for a list of all instance attributes. 
+ * Getter for a list of all instance attributes.
+ * Inherited instance attributes first.
  * Excluding final and derived.
  * 
  * @return	a list of instance attributes or an empty list
@@ -164,7 +166,8 @@ List[MAttribute] allInstanceAttributes(MClassifier this) :
 
 
 /**
- * Getter for a list of all instance association roles. 
+ * Getter for a list of all instance association roles.
+ * Inherited instance association roles first.
  * Excluding derived.
  * 
  * @return	a list of instance association roles or an empty list
@@ -175,53 +178,124 @@ List[MAssociationRole] allInstanceAssociationRoles(MClassifier this) :
 	);
 
 
+
+
+
+
+/**
+ * Checks if a class should be generated as concrete table.
+ * 
+ * @return	true if the class should be generated as concrete table, otherwise false
+ */
+boolean isConcreteTableInheritance(MClass this) :
+	!isSingleTableInheritance();
+
+
+/**
+ * Checks if a class should be generated as single table.
+ * 
+ * @return	true if the class should be generated as single table, otherwise false
+ */
+boolean isSingleTableInheritance(MClass this) :
+	hasT3ExtbaseInheritanceStereotype() && getT3ExtbaseInheritanceInheritanceType() == prT3ExtbaseInheritanceTypeSingleTable();
+
+
+/**
+ * Checks if a class should be mapped.
+ * 
+ * @return	true if the class should be mapped, otherwise false
+ */
+boolean isTableMapping(MClass this) :
+	hasT3ExtbaseTableMappingStereotype();
+
+
+/**
+ * Getter for a list of types which should be mapped or stored as single table inheritance.
+ * 
+ * @return	a list of types or an empty list
+ */
 cached List[MType] allPersistenceClassMappings(MModel this) :
 	let classMappings = {} :
 		classMappings.addAll(
+			// first add all domain objects which should be mapped
 			allEntitiesAndValueObjects().
-				select( e | e.hasT3ExtbaseTableMappingStereotype() )
+				select( e | e.isTableMapping() )
 		) ->
 		classMappings.addAll(
+			// second add all domain objects which should be stored as single table inheritance
 			allEntitiesAndValueObjects().
-				select( e | e.hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() ) )
+				select( e | e.isSingleTableInheritance() )
 		) ->
 		allEntitiesAndValueObjects().
-			select( e | e.hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() ) ).
-			collect( e | classMappings.add( e.generalization.first() ) ) ->
+			// add all generalizations for "subclasses" from domain objects which should be stored as single table inheritance
+			// maybe this is not needed (see other example implementations) but it is documented in "Zukunfssichere Extensionentwicklung mit Extbase und Fluid"
+			select( e | e.isSingleTableInheritance() ).
+				collect( e | classMappings.add( e.generalization.first() ) ) ->
 		classMappings.toSet();
 
 
+/**
+ * Getter for a list of properties which should be mapped.
+ * 
+ * @return	a list of properties or an empty list
+ */
 cached List[MProperty] allPersistencePropertyMappings(MClass this) :
+	// add all properties which should be mapped
 	property.select( e | e.hasT3ExtbaseColumnMappingStereotype() );
-	
-	
+
+
+/**
+ * Getter for a list of classes which are subclasses of single table inheritance.
+ * 
+ * @return	a list of classes or an empty list
+ */
 cached List[MClass] allPersistenceSubclasses(MType this) :
 	let subclasses = {} :
+		// checks if at least one specialization exists which should be stored as single table inheritance 
 		!allSingleTableInheritanceSpecializations().isEmpty
+		// add all specializations which should be stored as single table inheritance
 		? (	subclasses.addAll( allSingleTableInheritanceSpecializations() ) ->
+			// add subclasses from this subclasses to the list
 			subclasses.addAll( allSingleTableInheritanceSpecializations().allPersistenceSubclasses() )		
 		) : Void ->
 		subclasses;
-	
 
+
+/**
+ * Getter for a list of specialization classes which should be stored as single table inheritance.
+ * 
+ * @return	a list of classes or an empty list
+ */
 private cached allSingleTableInheritanceSpecializations(MType this) :
-	owningSpecializations().select( e | e.hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() ) );
+	owningSpecializations().typeSelect(MClass).
+		select( e | e.isSingleTableInheritance() );
 
 
-String getPersistenceClassMappingTableName(MClass this) :
-	hasT3ExtbaseTableMappingStereotype()
-		? getT3ExtbaseTableMappingTableName()
-		: (	hasT3ExtbaseInheritanceInheritanceType( prT3ExtbaseInheritanceTypeSingleTable() )
-				? generalization.first().getPersistenceClassMappingTableName()
-				: name( namingContextConfiguration() ) );
 
 
-String getPersistenceClassMappingTableName(MExternal this) :
-	name();
-	
 
-String getPersistenceClassMappingTableName(MType this) :
-	"";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
