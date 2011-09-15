@@ -42,7 +42,7 @@
 	Processes the generation of configuration code. 
 «ENDREM»
 «DEFINE Root FOR MClass»
-«IF isEntity() || isValueObject() -»
+«IF ( isEntity() || isValueObject() ) && isConcreteTableInheritance() && !isMappingTable() -»
 	«REM» Generate tca.php «ENDREM»
 	«EXPAND de::genesez::platform::typo3v4::mvc::templates::configuration::TCAPhp::Root -»
 «ENDIF -»
@@ -53,7 +53,7 @@
 	Processes the generation of configuration code. 
 «ENDREM»
 «DEFINE Root FOR MInterface -»
-«IF isPlugin() -»
+«IF isPlugin() && !property.typeSelect(MAttribute).isEmpty -»
 	«REM» Generate Flexform code «ENDREM»
 	«EXPAND FlexformXml::Root -»
 «ENDIF -»
