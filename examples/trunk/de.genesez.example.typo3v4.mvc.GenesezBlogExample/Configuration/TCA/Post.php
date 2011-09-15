@@ -136,30 +136,30 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'foreign_table' => 'tx_gszblogexample_domain_model_person',
 				'minitems' => 1,
 				'maxitems' => 1,
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195253147_828265_2388) ENABLED START */
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 1,
-					'edit' => array(
-						'type' => 'popup',
-						'title' => 'Edit',
-						'script' => 'wizard_edit.php',
-						'icon' => 'edit2.gif',
-						'popup_onlyOpenIfSelected' => 1,
-						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-					),
 					'add' => array(
 						'type' => 'script',
 						'title' => 'Create new',
 						'icon' => 'add.gif',
+						'script' => 'wizard_add.php',
 						'params' => array(
 							'table'=>'tx_gszblogexample_domain_model_person',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
 						),
-						'script' => 'wizard_add.php',
 					),
-				)
+					'edit' => array(
+						'type' => 'popup',
+						'title' => 'Edit',
+						'icon' => 'edit2.gif',
+						'script' => 'wizard_edit.php',
+						'popup_onlyOpenIfSelected' => 1,
+						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+					),
+				),
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195253147_828265_2388) ENABLED START */
 				/* PROTECTED REGION END */
 			)
 		),

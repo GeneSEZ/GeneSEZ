@@ -154,34 +154,34 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 				'foreign_table' => 'fe_users',
 				'minitems' => 0,
 				'maxitems' => 1,
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297195121733_203336_1960) ENABLED START */
-				'foreign_table_where' => "AND fe_users.tx_extbase_type='Tx_GszBlogExample_Domain_Model_Administrator'",
-				'items' => array(
-					array('--none--', 0),
-				),
 				'wizards' => array(
 					'_PADDING' => 1,
 					'_VERTICAL' => 1,
-					'edit' => array(
-						'type' => 'popup',
-						'title' => 'Edit',
-						'script' => 'wizard_edit.php',
-						'icon' => 'edit2.gif',
-						'popup_onlyOpenIfSelected' => 1,
-						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-					),
 					'add' => array(
 						'type' => 'script',
 						'title' => 'Create new',
 						'icon' => 'add.gif',
+						'script' => 'wizard_add.php',
 						'params' => array(
 							'table'=>'fe_users',
 							'pid' => '###CURRENT_PID###',
 							'setValue' => 'prepend'
 						),
-						'script' => 'wizard_add.php',
 					),
-				)
+					'edit' => array(
+						'type' => 'popup',
+						'title' => 'Edit',
+						'icon' => 'edit2.gif',
+						'script' => 'wizard_edit.php',
+						'popup_onlyOpenIfSelected' => 1,
+						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+					),
+				),
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297195121733_203336_1960) ENABLED START */
+				'foreign_table_where' => "AND fe_users.tx_extbase_type='Tx_GszBlogExample_Domain_Model_Administrator'",
+				'items' => array(
+					array('--none--', 0),
+				),
 				/* PROTECTED REGION END */
 			)
 		),
