@@ -987,15 +987,15 @@ List[MClassifier] addAllClassifier(MPackage this, List[MClassifier] classifiers)
 	
 /**
  * Getter for a list of all generalized types.
- * Generalized types first.
+ * Indirect generalized types first.
  *
  * @return 	a list of generalized types or an empty list
  */
 List[MType] allGeneralizations(MClassifier this) :
 	let generalizations = {} :
 		!generalization.isEmpty
-			? (	generalizations.addAll( generalization ) ->
-				generalizations.addAll( generalization.allGeneralizations() )
+			? (	generalizations.addAll( generalization.allGeneralizations() ) ->	
+				generalizations.addAll( generalization )
 			) : Void ->
 		generalizations;
 
@@ -1041,16 +1041,17 @@ List[MClassifier] owningSpecializations(MType this) :
 
 /**
  * Getter for a list of all specialized types.
- * Specialized types first.
+ * Direct specialized types first.
  *
  * @return 	a list of specialized types or an empty list
  */
 List[MClassifier] allSpecializations(MType this):
-	{}.addAll(
-		owningSpecializations().isEmpty
-			? {}
-			: owningSpecializations().allSpecializations()
-	).addAll( allSpecializations() );
+	let specializations = {} :
+		!owningSpecializations().isEmpty
+			? (	specializations.addAll( owningSpecializations() ) ->
+				specializations.addAll( owningSpecializations().allSpecializations() )
+			) : Void ->
+		specializations;
 	
 
 /*
