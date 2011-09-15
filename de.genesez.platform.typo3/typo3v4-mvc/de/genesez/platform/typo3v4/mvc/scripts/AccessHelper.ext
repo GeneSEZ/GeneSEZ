@@ -245,11 +245,10 @@ cached List[MType] allPersistenceClassMappings(MModel this) :
 			// second add all domain objects which should be stored as single table inheritance
 			allSingleTableInheritances()
 		) ->
-		allEntitiesAndValueObjects().
+		allSingleTableInheritances().
 			// add all generalizations for "subclasses" from domain objects which should be stored as single table inheritance
 			// maybe this is not needed (see other example implementations) but it is documented in "Zukunfssichere Extensionentwicklung mit Extbase und Fluid"
-			select( e | e.isSingleTableInheritance() ).
-				collect( e | classMappings.add( e.generalization.first() ) ) ->
+			collect( e | classMappings.add( e.generalization.first() ) ) ->
 		classMappings.toSet();
 
 
@@ -274,22 +273,13 @@ cached List[MClass] owningSingleTableInheritanceSpecializations(MType this) :
 
 
 /**
- * 
+ * Getter for a list of specialization classes which are direct or indirect subclasses of single table inheritance.
+ 
  * @return	a list of classes or an empty list
  */
 cached List[MClass] allSingleTableInheritanceSpecializations(MType this) :
-	{}.addAll(
-		owningSingleTableInheritanceSpecializations().isEmpty
-			? {}
-			: owningSingleTableInheritanceSpecializations().allSingleTableInheritanceSpecializations()
-	).addAll( owningSingleTableInheritanceSpecializations() );
-
-
-
-
-
-
-
+	allSpecializations().typeSelect(MClass).
+		select( e | e.isSingleTableInheritance() );
 
 
 /**
