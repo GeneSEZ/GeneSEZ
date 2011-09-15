@@ -262,7 +262,7 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 «REM»
 «ENDREM»
 «DEFINE DomainObjectConfiguration FOR MModel -»
-«FOREACH allEntitiesAndValueObjects().select( e | !e.abstract ).sortBy( e | e.name ) AS domainObject -»
+«FOREACH allConreteTableInheritances().sortBy( e | e.name ) AS domainObject -»
 	«EXPAND ContextSensitiveHelpInclusion FOR domainObject -»
 	«EXPAND AllowTableOnStandardPages FOR domainObject -»
 	«EXPAND TableConfigurationArray FOR domainObject -»
@@ -279,6 +279,9 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 	«EXPAND ContextSensitiveHelpInclusion(this) FOR g -»
 «ENDFOREACH -»
 «EXPAND ContextSensitiveHelpInclusion(this) -»
+«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+	«EXPAND ContextSensitiveHelpInclusion(this) FOR s -»
+«ENDFOREACH -»
 «ENDDEFINE»
 
 
@@ -317,6 +320,7 @@ $TCA['«name() -»'] = array (
 		«EXPAND TCACtrlLabel -»
 		«EXPAND TCACtrlLabelAlt -»
 		«EXPAND TCACtrlLabelAltForce -»
+		«EXPAND TCACtrlType -»
 		«EXPAND TCACtrlTstamp -»
 		«EXPAND TCACtrlCrdate -»
 		«EXPAND TCACtrlVersioning -»
@@ -363,6 +367,16 @@ $TCA['«name() -»'] = array (
 «DEFINE TCACtrlLabelAltForce FOR MClass -»
 «IF !getT3TCAClassCtrlLabelAlt().isEmpty -»
 		'label_alt_force' => «getT3TCAClassCtrlLabelAltForce() -»,
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Fieldname, which defines the "record type".
+«ENDREM»
+«DEFINE TCACtrlType FOR MClass -»
+«IF !owningSingleTableInheritanceSpecializations().isEmpty -»
+		'type' => '«getPersistenceRecordTypeColumnName() -»',
 «ENDIF -»
 «ENDDEFINE»
 

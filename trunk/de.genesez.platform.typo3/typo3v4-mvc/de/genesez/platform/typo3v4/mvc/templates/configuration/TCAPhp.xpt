@@ -158,11 +158,30 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCATypesNumbers FOR MClass -»
-		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbers FOREACH allInstanceProperties() SEPARATOR ", " -»'),
+«IF allSingleTableInheritanceSpecializations().isEmpty -»
+	«EXPAND TCATypesNumbersConcrete -»
+«ELSE -»
+	«EXPAND TCATypesNumbersSingle -»
+«ENDIF -»
 «ENDDEFINE»
 
 
-«DEFINE TCATypesNumbers FOR MProperty -»
+«DEFINE TCATypesNumbersConcrete FOR MClass -»
+		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
+«ENDDEFINE»
+
+
+«DEFINE TCATypesNumbersSingle FOR MClass -»
+		'0' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -»'),
+		'«name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
+		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+		'«s.name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF s.createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF s.createStarttimeField() -»starttime, «ENDIF -»«IF s.createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH s.allInstanceProperties() SEPARATOR ", " -»'),
+		«ENDFOREACH -»
+«ENDDEFINE»
+
+
+
+«DEFINE TCATypesNumbersShowitem FOR MProperty -»
 «name() -»«IF generateAdvancedTCATypesNumbers() -»;«getT3TCAPropertyTypesAltLabel() -»;«getT3TCAPropertyTypesPaletteNumber() -»;«getT3TCAPropertyTypesSpecialConfiguration() -»;«getT3TCAPropertyTypesFormStyleCodes() -»«ENDIF -»
 «ENDDEFINE»
 
@@ -232,10 +251,17 @@ $TCA['«name() -»'] = array (
 «DEFINE TCAColumnsSection FOR MClass -»
 	'columns' => array(
 		«EXPAND TCAColumnsLocalizationColumns -»
+		«EXPAND TCAColumnsRecordTypeColumn -»
 		«EXPAND TCAColumnsAccessControlColumns -»
 		«EXPAND TCAColumnsVersioningColumns -»
 		«EXPAND TCAColumnsAttributeColumn(this) FOREACH allInstanceAttributes() -»
+		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+			«EXPAND TCAColumnsAttributeColumn(s) FOREACH s.owningInitializableAttributes() -»
+		«ENDFOREACH -»
 		«EXPAND TCAColumnsAssociationColumn(this) FOREACH allInstanceAssociationRoles() -»
+		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+			«EXPAND TCAColumnsAssociationColumn(s) FOREACH s.owningInitializableAssociationRoles() -»
+		«ENDFOREACH -»
 		«EXPAND OwnTCAColumnsSectionCodeImplementation("tca.php.own.tca.columns.section.code.implementation." + xmiGuid) -»
 	)
 «ENDDEFINE»
@@ -298,6 +324,28 @@ $TCA['«name() -»'] = array (
 				'type' =>'passthrough',
 			)
 		),
+«ENDDEFINE»
+
+
+«REM» 
+«ENDREM»
+«DEFINE TCAColumnsRecordTypeColumn FOR MClass -»
+«IF !allSingleTableInheritanceSpecializations().isEmpty -»
+		'«getPersistenceRecordTypeColumnName() -»' => array(
+			'label' => 'Type',
+			'config' =>array(
+				'type' =>'select',
+				'items' => array(
+					array('undefined', '0'),
+					array('«name( namingContextPHPCompliant() ) -»', '«name( namingContextGeneral() ) -»'),
+					«FOREACH allSingleTableInheritanceSpecializations() AS s -»
+					array('«s.name( namingContextPHPCompliant() ) -»', '«s.name( namingContextGeneral() ) -»'),
+					«ENDFOREACH -»
+				),
+				'default' => '0',
+			)
+		),
+«ENDIF -»
 «ENDDEFINE»
 
 
