@@ -801,7 +801,6 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigForeignTable -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigAppearance -»
 «ENDDEFINE»
 
 
@@ -814,7 +813,6 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
-«EXPAND TCAColumnsConfigAppearance -»
 «ENDDEFINE»
 
 
@@ -954,7 +952,8 @@ $TCA['«name() -»'] = array (
 
 «REM»
 «ENDREM»
-«DEFINE TCAColumnsConfigAppearance FOR MProperty -»
+«DEFINE TCAColumnsConfigAppearance FOR MAssociationRole -»
+«IF (aggregation || composition) -»
 				'appearance' => array(
 					'collapse' => false,
 					'levelLinksPosition' => 'top',
@@ -962,6 +961,7 @@ $TCA['«name() -»'] = array (
 					'showPossibleLocalizationRecords' => true,
 					'showAllLocalizationLink' => true
 				),
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -1044,7 +1044,7 @@ $TCA['«name() -»'] = array (
 «REM»
 «ENDREM»
 «DEFINE TCAColumnsConfigForeignTable FOR MProperty -»
-				'foreign_table' => '«type.name() -»',
+				'foreign_table' => '«type.name( namingContextPersistence(), typeMappingContextSQLTableName() ) -»',
 «ENDDEFINE»
 
 
