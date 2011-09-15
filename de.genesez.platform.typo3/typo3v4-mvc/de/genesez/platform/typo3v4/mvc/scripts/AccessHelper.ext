@@ -222,12 +222,15 @@ cached List[MClass] allMappingTables(MModel this) :
 	allEntitiesAndValueObjects().select( e | e.isMappingTable() );
 
 
-getPersistenceRecordTypeColumnName(MClass this) :
+
+String getPersistenceRecordTypeColumnName(MClass this) :
 	isSingleTableInheritance() 
 		? getT3ExtbaseInheritanceTypeColumn()
 		: (	isMappingTable()
 				? getT3ExtbaseTableMappingTypeColumn()
-				: "record_type" );
+				 : ( !allSingleTableInheritanceSpecializations().isEmpty
+						? allSingleTableInheritanceSpecializations().first().getPersistenceRecordTypeColumnName()
+						: "record_type" ) );
 
 
 /**
