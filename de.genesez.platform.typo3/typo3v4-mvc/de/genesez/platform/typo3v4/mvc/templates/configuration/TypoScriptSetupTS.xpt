@@ -153,7 +153,7 @@ module.«extensionName -» {
 «ENDREM»
 «DEFINE PersistenceClassesMapping FOR MModel -»
 «setNamingContext( namingContextGeneral() ) -»
-«setTypeMappingContext("") -»
+«setTypeMappingContext( typeMappingContextGeneral() ) -»
 «IF !allPersistenceClassMappings().isEmpty -»
 config.tx_extbase {
 	persistence {
@@ -170,7 +170,7 @@ config.tx_extbase {
 
 «REM»
 «ENDREM»
-«DEFINE PersistenceClassMapping FOR MType -»
+«DEFINE PersistenceClassMapping FOR MClass -»
 			«name() -» {
 				mapping {
 					«EXPAND PersistenceClassMappingTableName -»
@@ -184,14 +184,23 @@ config.tx_extbase {
 
 «REM»
 «ENDREM»
-«DEFINE PersistenceClassMappingTableName FOR MType -»
-					tableName = «getPersistenceClassMappingTableName()»
+«DEFINE PersistenceClassMapping FOR MType -»
+			«name() -» {
+				«EXPAND PersistenceSubclasses -»
+			}
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
-«DEFINE PersistenceClassMappingRecordType FOR MType -»
+«DEFINE PersistenceClassMappingTableName FOR MClass -»
+					tableName = «name( namingContextPersistence() )»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PersistenceClassMappingRecordType FOR MClass -»
 					recordType = «name()»
 «ENDDEFINE»
 
@@ -209,14 +218,8 @@ config.tx_extbase {
 
 «REM»
 «ENDREM»
-«DEFINE PersistenceColumnsMapping FOR MType -»
-«ENDDEFINE»
-
-
-«REM»
-«ENDREM»
 «DEFINE PersistenceColumnMapping FOR MProperty -»
-						«getT3ExtbaseColumnMappingMapOnProperty() -».mapOnProperty = «name()»
+						«name( namingContextPersistence() ) -».mapOnProperty = «name()»
 «ENDDEFINE»
 
 
