@@ -357,4 +357,10 @@ public class DeletorTest {
 		Files.createDirectory(startPath.resolve("de/genesez/testclasses/.cvs"));
 		assertEquals("Default", deletor.checkRepository(startPath.toString()));
 	}
+	
+	@Test
+	public void testCheckRepositoryGit() throws IOException{
+		Files.createDirectory(startPath.resolve("de/genesez/testclasses/.git"));
+		assertEquals("Git", deletor.checkRepository(startPath.toString()));
+	}
 }
