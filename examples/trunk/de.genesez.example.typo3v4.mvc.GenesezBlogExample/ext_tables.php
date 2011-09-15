@@ -84,32 +84,6 @@ t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'GszBlogExampl
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/DefaultStyles', 'GszBlogExample CSS Styles (optional)');
 /* PROTECTED REGION END */
 
-t3lib_extMgm::addLLrefForTCAdescr('tx_gszblogexample_domain_model_administrator', 'EXT:gsz_blog_example/Resources/Private/Language/locallang_csh_tx_gszblogexample_domain_model_administrator.xml');
-t3lib_extMgm::allowTableOnStandardPages('tx_gszblogexample_domain_model_administrator');
-$TCA['tx_gszblogexample_domain_model_administrator'] = array (
-	'ctrl' => array (
-		'title' => 'LLL:EXT:gsz_blog_example/Resources/Private/Language/locallang_db.xml:tx_gszblogexample_domain_model_administrator',
-		'label'	=> 'uid',
-		'tstamp' => 'tstamp',
-		'crdate' => 'crdate',
-		'versioningWS' => 2,
-		'versioning_followPages' => true,
-		'origUid' => 't3_origuid',
-		'languageField'	=> 'sys_language_uid',
-		'transOrigPointerField' => 'l10n_parent',
-		'transOrigDiffSourceField' => 'l10n_diffsource',
-		'delete' => 'deleted',
-		'enablecolumns' => array(
-			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
-		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Administrator.php',
-		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_gszblogexample_domain_model_administrator.gif',
-		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._16_9_8a7027a_1297194766758_10455_1575) ENABLED START */
-		/* PROTECTED REGION END */
-	)
-);
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszblogexample_domain_model_blog', 'EXT:gsz_blog_example/Resources/Private/Language/locallang_csh_tx_gszblogexample_domain_model_blog.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszblogexample_domain_model_blog');
 $TCA['tx_gszblogexample_domain_model_blog'] = array (
