@@ -38,7 +38,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		defaults.setProperty("prDefaultExcludes", "false");
 		defaults.setProperty("prExcludes", ".svn");
 		defaults.setProperty("singleValuedSlot", "true");
-		defaults.setProperty("deleteOld", "false");
+		defaults.setProperty("deleteOldFiles", "false");
 		defaults.setProperty("deleteEmptyFolders", "false");
 		defaults.setProperty("excludedDirectoryNames",
 				defaults.getProperty("prExcludes", ".svn"));
@@ -50,10 +50,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	protected Properties properties = new Properties();
 
 	// variables for the file and package deletion
-	private boolean deleteOld = false;
+	private boolean deleteOldFiles = false;
 	private boolean deleteEmptyFolders = false;
-	private Deletor deletor = new Deletor(System.getProperty("java.version")
-			.charAt(2) < 7);
+	private Deletor deletor = new Deletor();
 
 	/**
 	 * Constructs the workflow component and initializes the default values.
@@ -119,11 +118,34 @@ public class Generator extends org.eclipse.xpand2.Generator {
 				setProRegDir(outputDir);
 			}
 		}
-		if (!deleteOld) {
-			issues.addWarning(
-					this,
-					"Old classfiles won't be deleted, there may occur problems after second generation.");
-		} else {
+		
+		if (deleteOldFiles || deleteEmptyFolders) {
+			String info = "File deletion is active.";
+			if(deleteOldFiles && deleteEmptyFolders){
+				info = info.concat(" Not generated files and empty folders");
+			} else if(deleteOldFiles){
+				info = info.concat(" Not generated files");
+			}else{
+				info = info.concat(" Empty folders");
+			}
+			info = info.concat(" will be deleted. ");
+			issues.addInfo(this, info);
+			
+			String repo = deletor.checkRepository(outputDir);
+			if(repo == null){
+				deleteOldFiles = false;
+				deleteEmptyFolders = false;
+				issues.addWarning(this,"2 different revision control systems found. File deletion deactivated");
+			} else if(repo.equals("Not supported")){
+				deleteOldFiles = false;
+				deleteEmptyFolders = false;
+				issues.addWarning(this,repo + " revision control system found. File deletion deactivated");
+			} else if(repo.equals("")){
+				issues.addInfo(this, "No revision control system found.");
+			} else {
+				issues.addInfo(this, "Revision control system found: " + repo + " ");
+			}
+			
 			String includedFiles = properties.getProperty("includedFiles", "");
 			String excludedDirNames = properties.getProperty(
 					"excludedDirectoryNames",
@@ -131,18 +153,12 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			String excludedFiles = properties.getProperty("excludedFiles", "");
 			String excludedPaths = properties.getProperty(
 					"excludedRelativePaths", "");
-
 			if (includedFiles.equals("") && excludedFiles.equals("")
 					&& excludedPaths.equals("") && excludedDirNames.equals("")) {
 				issues.addWarning(
 						this,
 						"Nothing included and excluded, every file will be searched and unchanged files will be deleted.");
 			}
-		}
-		if (!deleteEmptyFolders){
-			issues.addInfo(this, "Empty Folders will not be deleted after generation.");
-		} else if(properties.getProperty("repositoryFolderName", "") == ""){
-			issues.addInfo(this, "No repository folder name given, maybe not all empty packages can be delted.");
 		}
 		super.checkConfigurationInternal(issues);
 	}
@@ -169,15 +185,15 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		}
 
 		// prepares the deletion of not generated files
-		if (deleteOld) {
-			logger.info(deletor.prepare(properties.getProperty("outputDir"))
+		if (deleteOldFiles) {
+			logger.debug(deletor.prepare()
 					+ " file(s) found");
 		}
 		// the generation process
 		super.invokeInternal2(ctx, monitor, issues);
 
 		// deletes not generated files
-		if (deleteOld) {
+		if (deleteOldFiles) {
 			List<String> deleteLog = deletor.delete();
 			if (!deleteLog.isEmpty()) {
 				logger.info(deleteLog.size() + " file(s) deleted");
@@ -333,8 +349,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * @param deleteOld
 	 *            Value of deleteOld True if it should be deleted.
 	 */
-	public void setDeleteOld(String deleteOld) {
-		this.deleteOld = Boolean.parseBoolean(deleteOld);
+	public void setDeleteOldFiles(String deleteOld) {
+		this.deleteOldFiles = Boolean.parseBoolean(deleteOld);
 		properties.setProperty("deleteOld", deleteOld);
 	}
 
@@ -347,7 +363,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 */
 	public void setDeleteEmptyFolders(String deleteEmpty) {
 		this.deleteEmptyFolders = Boolean.parseBoolean(deleteEmpty);
-		properties.setProperty("deleteOld", deleteEmpty);
+		properties.setProperty("deleteEmptyFiles", deleteEmpty);
 	}
 
 	// END OF DEFAULTS
@@ -494,20 +510,6 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		deletor.setExcludedDirectoryNames(names);
 	}
 	
-	/**
-	 * Setter for the workflow parameter <em><b>setRepositoryFolderName</b></em>.
-	 * 
-	 * repository name that will be deleted if its the only one left in a folder.
-	 * 
-	 * NOTE: This is not safe.
-	 * 
-	 * @param repName name of the repository folder.
-	 */
-	public void setRepositoryFolderName(String repName){
-		deletor.setRepositoryFolderName(repName);
-		properties.put("repositoryFolderName", repName);
-	}
-
 	/**
 	 * Checks if the output directory does not exists. If true the output
 	 * directory will be created.

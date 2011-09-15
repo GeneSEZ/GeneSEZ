@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
-
 
 /**
  * Implementation for RevisionControlSystem interface for deletion of files with SVN
@@ -16,14 +17,16 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
  * @date 2011-09-14
  *
  */
-public class SubversionSystem implements RevisionControlSystem {
+public class SubversionImpl implements RevisionControlSystem {
+	private List<String> metadataFolderName = new ArrayList<String>(1);;
 	private SVNClientManager manager = SVNClientManager.newInstance();
 	private SVNWCClient wcClient = manager.getWCClient();
-	
+
 	/**
 	 * Creates a SubversionSystem
 	 */
-	public SubversionSystem(){		
+	public SubversionImpl(){	
+		metadataFolderName.add(".svn");
 	}
 	
 	/**
@@ -38,10 +41,17 @@ public class SubversionSystem implements RevisionControlSystem {
 			try {
 				Files.delete(Paths.get(file));
 			} catch (IOException e1) {
-				System.out.println(file.toString());
-				e.printStackTrace();
-				e1.printStackTrace();
+				System.err.println(file.toString() + " couldn't be deleted. Maybe access denied.");
 			}
 		}	
 	}
+	
+	public List<String> getMetadataFolderNames(){
+		return metadataFolderName;
+	}
+	
+	public String getName(){
+		return "Subversion";
+	}
+	
 }
