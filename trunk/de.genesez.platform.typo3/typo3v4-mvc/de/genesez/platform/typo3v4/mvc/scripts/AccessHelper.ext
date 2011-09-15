@@ -258,56 +258,31 @@ cached List[MType] allPersistenceClassMappings(MModel this) :
  * 
  * @return	a list of properties or an empty list
  */
-cached List[MProperty] allPersistencePropertyMappings(MClass this) :
+cached List[MProperty] owningPersistencePropertyMappings(MClass this) :
 	// add all properties which should be mapped
 	property.select( e | e.hasT3ExtbaseColumnMappingStereotype() );
 
 
 /**
- * Getter for a list of classes which are subclasses of single table inheritance.
+ * Getter for a list of specialization classes which are direct subclasses of single table inheritance.
  * 
  * @return	a list of classes or an empty list
  */
-cached List[MClass] allPersistenceSubclasses(MType this) :
-	let subclasses = {} :
-		// checks if at least one specialization exists which should be stored as single table inheritance 
-		!allSingleTableInheritanceSpecializations().isEmpty
-		// add all specializations which should be stored as single table inheritance
-		? (	subclasses.addAll( allSingleTableInheritanceSpecializations() ) ->
-			// add subclasses from this subclasses to the list
-			subclasses.addAll( allSingleTableInheritanceSpecializations().allPersistenceSubclasses() )		
-		) : Void ->
-		subclasses;
-
-
-/**
- * Getter for a list of specialization classes which should be stored as single table inheritance.
- * 
- * @return	a list of classes or an empty list
- */
-private cached allSingleTableInheritanceSpecializations(MType this) :
+cached List[MClass] owningSingleTableInheritanceSpecializations(MType this) :
 	owningSpecializations().typeSelect(MClass).
 		select( e | e.isSingleTableInheritance() );
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * 
+ * @return	a list of classes or an empty list
+ */
+cached List[MClass] allSingleTableInheritanceSpecializations(MType this) :
+	{}.addAll(
+		owningSingleTableInheritanceSpecializations().isEmpty
+			? {}
+			: owningSingleTableInheritanceSpecializations().allSingleTableInheritanceSpecializations()
+	).addAll( owningSingleTableInheritanceSpecializations() );
 
 
 
