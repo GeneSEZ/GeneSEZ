@@ -263,7 +263,7 @@ $TCA['«name() -»'] = array (
 			«EXPAND TCAColumnsAssociationColumn(s) FOREACH s.owningInitializableAssociationRoles() -»
 		«ENDFOREACH -»
 		«EXPAND OwnTCAColumnsSectionCodeImplementation("tca.php.own.tca.columns.section.code.implementation." + xmiGuid) -»
-	)
+	),
 «ENDDEFINE»
 
 
@@ -292,7 +292,7 @@ $TCA['«name() -»'] = array (
 					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
 					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
 				),
-			)
+			),
 		),
 «ENDDEFINE»
 
@@ -311,7 +311,7 @@ $TCA['«name() -»'] = array (
 				),
 				'foreign_table' => '«name() -»',
 				'foreign_table_where' => 'AND «name() -».uid=###REC_FIELD_l10n_parent### AND «name() -».sys_language_uid IN (-1,0)',
-			)
+			),
 		),
 «ENDDEFINE»
 
@@ -322,7 +322,7 @@ $TCA['«name() -»'] = array (
 		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
-			)
+			),
 		),
 «ENDDEFINE»
 
@@ -343,7 +343,7 @@ $TCA['«name() -»'] = array (
 					«ENDFOREACH -»
 				),
 				'default' => '0',
-			)
+			),
 		),
 «ENDIF -»
 «ENDDEFINE»
@@ -366,7 +366,7 @@ $TCA['«name() -»'] = array (
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
-			)
+			),
 		),
 «ENDDEFINE»
 
@@ -437,7 +437,7 @@ $TCA['«name() -»'] = array (
 			'config' => array(
 				'type' =>'none',
 				'cols' => 27,
-			)
+			),
 		),
 «ENDDEFINE»
 
@@ -814,6 +814,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigMultiple -»
 «EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
 
@@ -878,6 +879,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigMultiple -»
 «EXPAND TCAColumnsConfigAppearance -»
 «EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
@@ -892,6 +894,7 @@ $TCA['«name() -»'] = array (
 «REM»«EXPAND TCAColumnsConfigForeignSortBy -»«ENDREM»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigMultiple -»
 «EXPAND TCAColumnsConfigAppearance -»
 «EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
@@ -930,6 +933,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigMultiple -»
 «EXPAND TCAColumnsConfigAppearance -»
 «EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
@@ -944,6 +948,7 @@ $TCA['«name() -»'] = array (
 «EXPAND TCAColumnsConfigMM(class) -»
 «EXPAND TCAColumnsConfigMinitems -»
 «EXPAND TCAColumnsConfigMaxitems -»
+«EXPAND TCAColumnsConfigMultiple -»
 «EXPAND TCAColumnsConfigAppearance -»
 «EXPAND TCAColumnsConfigWizards -»
 «ENDDEFINE»
@@ -1145,6 +1150,11 @@ hier evtl. versuch über sql type maximum herauszufinden
 «ENDREM»
 «DEFINE TCAColumnsConfigMM(MClass class) FOR MProperty -»
 				'MM' => '«asIntermediateTableName(class) -»',
+«ENDDEFINE»
+
+
+«DEFINE TCAColumnsConfigMultiple FOR MProperty -»
+				'multiple' => «!unique -»,
 «ENDDEFINE»
 
 
