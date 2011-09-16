@@ -27,7 +27,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
-			)
+			),
 		),
 		'name' => array(
 			'exclude' => false,
@@ -36,7 +36,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'input',
-				'size' => 30,
+				'size' => 20,
 				'eval' => 'required, trim',
 				'default' => '',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_2_8a7027a_1314363700126_91538_2293) ENABLED START */
@@ -74,7 +74,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 		/* PROTECTED REGION END */
-	)
+	),
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
