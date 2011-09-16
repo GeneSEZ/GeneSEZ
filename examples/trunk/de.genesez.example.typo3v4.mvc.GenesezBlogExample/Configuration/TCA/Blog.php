@@ -33,7 +33,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
 					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
 				),
-			)
+			),
 		),
 		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -46,19 +46,19 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 				),
 				'foreign_table' => 'tx_gszblogexample_domain_model_blog',
 				'foreign_table_where' => 'AND tx_gszblogexample_domain_model_blog.uid=###REC_FIELD_l10n_parent### AND tx_gszblogexample_domain_model_blog.sys_language_uid IN (-1,0)',
-			)
+			),
 		),
 		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
-			)
+			),
 		),
 		'hidden' => array(
 			'exclude' => true,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
-			)
+			),
 		),
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
@@ -66,7 +66,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 			'config' => array(
 				'type' =>'none',
 				'cols' => 27,
-			)
+			),
 		),
 		'title' => array(
 			'exclude' => false,
@@ -129,6 +129,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 
 				'minitems' => 0,
 				'maxitems' => 999999,
+				'multiple' => false,
 				'appearance' => array(
 					'collapse' => false,
 					'levelLinksPosition' => 'top',
@@ -187,7 +188,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */
 		/* PROTECTED REGION END */
-	)
+	),
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */

@@ -27,7 +27,7 @@ $TCA['tx_gszblogexample_domain_model_comment'] = array (
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
-			)
+			),
 		),
 		'date' => array(
 			'exclude' => true,
@@ -86,7 +86,7 @@ $TCA['tx_gszblogexample_domain_model_comment'] = array (
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194777757_325505_1605) ENABLED START */
 		/* PROTECTED REGION END */
-	)
+	),
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194777757_325505_1605) ENABLED START */

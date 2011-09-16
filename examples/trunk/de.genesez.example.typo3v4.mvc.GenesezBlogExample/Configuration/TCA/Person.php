@@ -27,7 +27,7 @@ $TCA['tx_gszblogexample_domain_model_person'] = array (
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
-			)
+			),
 		),
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
@@ -35,7 +35,7 @@ $TCA['tx_gszblogexample_domain_model_person'] = array (
 			'config' => array(
 				'type' =>'none',
 				'cols' => 27,
-			)
+			),
 		),
 		'firstname' => array(
 			'exclude' => false,
@@ -78,7 +78,7 @@ $TCA['tx_gszblogexample_domain_model_person'] = array (
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */
 		/* PROTECTED REGION END */
-	)
+	),
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */

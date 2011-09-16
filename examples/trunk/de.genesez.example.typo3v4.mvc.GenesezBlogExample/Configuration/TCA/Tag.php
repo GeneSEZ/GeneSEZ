@@ -27,7 +27,7 @@ $TCA['tx_gszblogexample_domain_model_tag'] = array (
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
-			)
+			),
 		),
 		'name' => array(
 			'exclude' => false,
@@ -44,7 +44,7 @@ $TCA['tx_gszblogexample_domain_model_tag'] = array (
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
 		/* PROTECTED REGION END */
-	)
+	),
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
