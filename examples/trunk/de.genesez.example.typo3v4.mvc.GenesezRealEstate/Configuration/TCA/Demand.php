@@ -160,6 +160,7 @@ $TCA['tx_gszrealestate_domain_model_demand'] = array (
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_gszrealestate_domain_model_quarter',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'minitems' => 0,
 				'maxitems' => 1,
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356591775_883174_2870) ENABLED START */
@@ -174,6 +175,7 @@ $TCA['tx_gszrealestate_domain_model_demand'] = array (
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_gszrealestate_domain_model_roomtype',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'minitems' => 0,
 				'maxitems' => 1,
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356493767_742745_2820) ENABLED START */
@@ -188,6 +190,7 @@ $TCA['tx_gszrealestate_domain_model_demand'] = array (
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_gszrealestate_domain_model_floortype',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'minitems' => 0,
 				'maxitems' => 1,
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760._17_0_2_8a7027a_1315356517000_852132_2833) ENABLED START */
