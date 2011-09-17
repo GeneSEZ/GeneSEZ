@@ -42,6 +42,9 @@ class Tx_GszRealEstate_Domain_Repository_QuarterRepository extends Tx_Extbase_Pe
 	
 
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315354841328_472245_2505) ENABLED START */
+	protected $defaultOrderings = array(
+		'name' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING,
+	);
 	/* PROTECTED REGION END */
 
 }

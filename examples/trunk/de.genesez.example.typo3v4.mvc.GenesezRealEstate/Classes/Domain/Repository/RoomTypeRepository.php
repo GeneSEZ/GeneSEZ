@@ -42,6 +42,9 @@ class Tx_GszRealEstate_Domain_Repository_RoomTypeRepository extends Tx_Extbase_P
 	
 
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315354914153_579080_2591) ENABLED START */
+	protected $defaultOrderings = array(
+		'specification' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING,
+	);
 	/* PROTECTED REGION END */
 
 }
