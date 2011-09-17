@@ -321,6 +321,7 @@ $TCA['«name() -»'] = array (
 		«EXPAND TCACtrlLabelAlt -»
 		«EXPAND TCACtrlLabelAltForce -»
 		«EXPAND TCACtrlType -»
+		«EXPAND TCACtrlSortBy -»
 		«EXPAND TCACtrlTstamp -»
 		«EXPAND TCACtrlCrdate -»
 		«EXPAND TCACtrlVersioning -»
@@ -377,6 +378,16 @@ $TCA['«name() -»'] = array (
 «DEFINE TCACtrlType FOR MClass -»
 «IF !owningSingleTableInheritanceSpecializations().isEmpty -»
 		'type' => '«getPersistenceRecordTypeColumnName() -»',
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Fieldname, which is used to manage the order the records. 
+«ENDREM»
+«DEFINE TCACtrlSortBy FOR MClass -»
+«IF createSortingField() -»
+		'sortby' => 'sorting',
 «ENDIF -»
 «ENDDEFINE»
 
@@ -475,18 +486,22 @@ $TCA['«name() -»'] = array (
 	Specifies which publishing control features are automatically implemented for the table.
 «ENDREM»
 «DEFINE TCACtrlEnablecolumns FOR MClass -»
+«IF createHiddenField() || createStarttimeField() || createEndtimeField() -»
 		'enablecolumns' => array(
 			«EXPAND TCACtrlDisabled -»
 			«EXPAND TCACtrlStarttime -»
 			«EXPAND TCACtrlEndtime -»
 		),
+«ENDIF -»
 «ENDDEFINE»
 
 
 «REM»
 «ENDREM»
 «DEFINE TCACtrlDisabled FOR MClass -»
+«IF createHiddenField() -»
 			'disabled' => 'hidden',
+«ENDIF -»
 «ENDDEFINE»
 
 

@@ -111,6 +111,8 @@ CREATE TABLE «name() -» (
 	«EXPAND AttributeColumn FOREACH allInstanceAttributes() -»
 	«EXPAND AssociationColumn FOREACH allInstanceAssociationRoles() -»
 	
+	«EXPAND SortingColumn -»
+	
 	«EXPAND AccessControlColumns -»
 	
 	«EXPAND LocalizationColumns -»
@@ -300,13 +302,25 @@ CREATE TABLE «name() -» (
 
 
 «REM»
+	Generates TYPO3 specific columns for sorting control.
+«ENDREM»
+«DEFINE SortingColumn FOR MClass -»
+«IF createSortingField() -»
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
 	Generates TYPO3 specific columns for access control.
 «ENDREM»
 «DEFINE AccessControlColumns FOR MClass -»
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
+«IF createHiddenField() -»
 	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
+«ENDIF -»
 «IF createStarttimeField() -»
 	starttime int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
