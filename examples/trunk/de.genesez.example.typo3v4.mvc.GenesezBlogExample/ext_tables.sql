@@ -12,6 +12,7 @@ CREATE TABLE tx_gszblogexample_domain_model_blog (
 	posts int(11) unsigned DEFAULT '0' NOT NULL,
 	administrator int(11) unsigned DEFAULT '0' NOT NULL,
 	
+	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -48,6 +49,7 @@ CREATE TABLE tx_gszblogexample_domain_model_comment (
 	email varchar(255) DEFAULT '' NOT NULL,
 	content text NOT NULL,
 	
+	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -68,6 +70,7 @@ CREATE TABLE tx_gszblogexample_domain_model_person (
 	firstname varchar(255) DEFAULT '' NOT NULL,
 	lastname varchar(255) DEFAULT '' NOT NULL,
 	email varchar(255) DEFAULT '' NOT NULL,
+	
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -106,6 +109,7 @@ CREATE TABLE tx_gszblogexample_domain_model_post (
 	comments int(11) unsigned DEFAULT '0' NOT NULL,
 	related_posts int(11) unsigned DEFAULT '0' NOT NULL,
 	
+	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -138,6 +142,7 @@ CREATE TABLE tx_gszblogexample_domain_model_tag (
 	pid int(11) DEFAULT '0' NOT NULL,
 	
 	name varchar(255) DEFAULT '' NOT NULL,
+	
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

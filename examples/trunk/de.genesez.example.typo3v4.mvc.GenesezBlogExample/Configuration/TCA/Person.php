@@ -48,7 +48,7 @@ $TCA['tx_gszblogexample_domain_model_person'] = array (
 				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194783571_373089_1631._16_9_8a7027a_1297195018250_223483_1822) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'lastname' => array(
 			'exclude' => false,
@@ -61,7 +61,7 @@ $TCA['tx_gszblogexample_domain_model_person'] = array (
 				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194783571_373089_1631._16_9_8a7027a_1297195022106_236274_1828) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'email' => array(
 			'exclude' => false,
@@ -74,7 +74,7 @@ $TCA['tx_gszblogexample_domain_model_person'] = array (
 				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194783571_373089_1631._16_9_8a7027a_1297195023966_726243_1834) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */
 		/* PROTECTED REGION END */

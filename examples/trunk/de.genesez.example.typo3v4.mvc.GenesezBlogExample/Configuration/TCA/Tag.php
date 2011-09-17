@@ -40,7 +40,7 @@ $TCA['tx_gszblogexample_domain_model_tag'] = array (
 				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194795235_681189_1679._16_9_8a7027a_1297194910826_608649_1757) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
 		/* PROTECTED REGION END */

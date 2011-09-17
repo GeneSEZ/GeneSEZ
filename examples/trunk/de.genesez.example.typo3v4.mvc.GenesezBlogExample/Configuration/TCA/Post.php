@@ -81,7 +81,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194882955_681374_1735) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'date' => array(
 			'exclude' => true,
@@ -96,7 +96,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'checkbox' => 1,
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194886910_832299_1741) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'content' => array(
 			'exclude' => true,
@@ -110,7 +110,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'eval' => 'trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297194888091_417284_1747) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'blog' => array(
 			'exclude' => true,
@@ -120,11 +120,12 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_gszblogexample_domain_model_blog',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'minitems' => 1,
 				'maxitems' => 1,
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195059082_239030_1887) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'author' => array(
 			'exclude' => true,
@@ -134,6 +135,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_gszblogexample_domain_model_person',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'minitems' => 1,
 				'maxitems' => 1,
 				'wizards' => array(
@@ -161,7 +163,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				),
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194790786_915555_1655._16_9_8a7027a_1297195253147_828265_2388) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'tags' => array(
 			'exclude' => true,
@@ -172,6 +174,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'type' => 'inline',
 				'foreign_table' => 'tx_gszblogexample_domain_model_tag',
 				'foreign_sortby' => 'sorting',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'MM' => 'tx_gszblogexample_post_tag_tags_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -191,7 +194,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 					'expandSingle' => 1,
 				)
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'comments' => array(
 			'exclude' => true,
@@ -202,6 +205,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'type' => 'inline',
 				'foreign_table' => 'tx_gszblogexample_domain_model_comment',
 				'foreign_sortby' => 'sorting',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'MM' => 'tx_gszblogexample_post_comment_comments_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -221,7 +225,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'size' => 10,
 				'autoSizeMax' => 30,
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'related_posts' => array(
 			'exclude' => true,
@@ -232,6 +236,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'type' => 'select',
 				'foreign_table' => 'tx_gszblogexample_domain_model_post',
 				'foreign_sortby' => 'sorting',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'MM' => 'tx_gszblogexample_post_post_related_posts_mm',
 				'minitems' => 0,
 				'maxitems' => 9999,
@@ -242,7 +247,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 				'autoSizeMax' => 30,
 				'multiple' => 0,
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194790786_915555_1655) ENABLED START */
 		/* PROTECTED REGION END */

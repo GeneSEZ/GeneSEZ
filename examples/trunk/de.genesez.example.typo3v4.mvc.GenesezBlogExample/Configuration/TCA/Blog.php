@@ -80,7 +80,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 				'default' => '',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297194834410_672839_1711) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'description' => array(
 			'exclude' => true,
@@ -95,7 +95,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 				'default' => '',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._16_9_8a7027a_1297194839128_593558_1717) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'logo' => array(
 			'exclude' => true,
@@ -115,7 +115,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 				'uploadfolder' => 'uploads/pics',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._16_9_8a7027a_1297194671553_69571_1516._17_0_1_8a7027a_1302084578939_580833_3407) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'posts' => array(
 			'exclude' => true,
@@ -127,6 +127,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 				'foreign_table' => 'tx_gszblogexample_domain_model_post',
 				'foreign_field' => 'blog',
 
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'minitems' => 0,
 				'maxitems' => 999999,
 				'multiple' => false,
@@ -143,7 +144,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 					'expandSingle' => 1,
 				),
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'administrator' => array(
 			'exclude' => true,
@@ -153,6 +154,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'fe_users',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
 				'minitems' => 0,
 				'maxitems' => 1,
 				'wizards' => array(
@@ -184,7 +186,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 					array('--none--', 0),
 				),
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */
 		/* PROTECTED REGION END */
