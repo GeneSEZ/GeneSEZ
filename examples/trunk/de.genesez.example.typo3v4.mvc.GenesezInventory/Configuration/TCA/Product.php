@@ -12,7 +12,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 		/* PROTECTED REGION END */
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'hidden, name, description, quantity'),
+		'1' => array('showitem'	=> 'name, description, quantity'),
 		/* PROTECTED REGION ID(tca.php.own.tca.types.section.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 		/* PROTECTED REGION END */
 	),
@@ -22,13 +22,6 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 		/* PROTECTED REGION END */
 	),
 	'columns' => array(
-		'hidden' => array(
-			'exclude' => true,
-			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config' => array(
-				'type' => 'check',
-			),
-		),
 		'name' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:gsz_inventory/Resources/Private/Language/locallang_db.xml:tx_gszinventory_domain_model_product.name',
@@ -41,7 +34,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 				'default' => '',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_2_8a7027a_1314363700126_91538_2293) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'description' => array(
 			'exclude' => false,
@@ -56,7 +49,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 				'default' => '',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_2_8a7027a_1314363708261_140463_2300) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'quantity' => array(
 			'exclude' => false,
@@ -70,7 +63,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 				'default' => 0,
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_2_8a7027a_1314363722856_936956_2307) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 		/* PROTECTED REGION END */
