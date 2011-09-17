@@ -23,8 +23,9 @@ public class SProject {
 	private String name;
 	private boolean withDate;
 	private String excludes;
-	
-	
+	boolean codeDetails;
+	String projectName;
+
 	/**
 	 * Constructs a new statistic project
 	 * @param name		the name of the application project
@@ -101,6 +102,22 @@ public class SProject {
 	}
 	
 	/**
+	 * Sets the project name for which the statistic is generated
+	 * @param codeDetails	project name
+	 */
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	
+	/**
+	 * Sets the code details flag 
+	 * @param codeDetails	status of code details flag	
+	 */
+	public void setCodeDetails(boolean codeDetails) {
+		this.codeDetails = codeDetails;
+	}
+	
+	/**
 	 * Returns all source folders
 	 * @return	all source folders
 	 */
@@ -156,5 +173,21 @@ public class SProject {
 	 */
 	public String getName() {
 		return name;
+	}
+	
+	/**
+	 * Returns the code details flag 
+	 * @return	status of the code detail flag
+	 */
+	public boolean getCodeDetails() {
+		return this.codeDetails;
+	}
+		
+	/**
+	 * Returns the project name for which the statistic is generated
+	 * @return project name for which the statistic is generated
+	 */
+	public String getProjectName() {
+		return projectName;
 	}
 }

@@ -32,6 +32,8 @@ public class Statistics extends TypeMappingGenerator {
 		defaults.put("name", "Statistic");
 		defaults.put("withDate", "false");
 		defaults.put("excludes", ".svn, .cvs");
+		defaults.put("codeDetails", "true");
+		defaults.put("projectName", "Statistic");
 	}
 
 	private Log logger = LogFactory.getLog(getClass());
@@ -59,6 +61,8 @@ public class Statistics extends TypeMappingGenerator {
 		SProject project = new SProject(properties.getProperty("name"), Boolean.parseBoolean(properties
 				.getProperty("withDate")));
 		project.setExcludes(properties.getProperty("excludes"));
+		project.setCodeDetails(Boolean.parseBoolean(properties.getProperty("codeDetails")));
+		project.setProjectName(properties.getProperty("projectName"));
 		project.calculate(generatedDirs, manualDirs);
 
 		// add statistic model to slot
@@ -153,5 +157,23 @@ public class Statistics extends TypeMappingGenerator {
 	 */
 	public void setComments(CommentSign comments) {
 		properties.put("comments", comments);
+	}
+
+	/**
+	 * Sets the code detail flag to show code details in web sites
+	 * 
+	 * @param comments the comment signs to use
+	 */
+	public void setCodeDetails(boolean codeDetails) {
+		properties.put("codeDetails", codeDetails);
+	}
+
+	/**
+	 * Sets the project name for which the statistic is generated
+	 * 
+	 * @param projectName	project name for which the statistic is generated
+	 */
+	public void setProjectName(String projectName) {
+		properties.put("projectName", projectName);
 	}
 }
