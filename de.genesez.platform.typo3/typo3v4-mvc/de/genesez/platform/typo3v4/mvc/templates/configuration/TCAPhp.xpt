@@ -167,15 +167,15 @@ $TCA['«name() -»'] = array (
 
 
 «DEFINE TCATypesNumbersConcrete FOR MClass -»
-		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
+		'1' => array('showitem'	=> '«IF createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
 «ENDDEFINE»
 
 
 «DEFINE TCATypesNumbersSingle FOR MClass -»
 		'0' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -»'),
-		'«name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
+		'«name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF createStarttimeField() -»starttime, «ENDIF -»«IF createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH allInstanceProperties() SEPARATOR ", " -»'),
 		«FOREACH allSingleTableInheritanceSpecializations() AS s -»
-		'«s.name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF s.createLocalizationFields() -»sys_language_uid, «ENDIF -»hidden, «IF s.createStarttimeField() -»starttime, «ENDIF -»«IF s.createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH s.allInstanceProperties() SEPARATOR ", " -»'),
+		'«s.name( namingContextGeneral() ) -»' => array('showitem'	=> '«getPersistenceRecordTypeColumnName() -», «IF s.createLocalizationFields() -»sys_language_uid, «ENDIF -»«IF createHiddenField() -»hidden, «ENDIF -»«IF s.createStarttimeField() -»starttime, «ENDIF -»«IF s.createEndtimeField() -»endtime, «ENDIF -»«EXPAND TCATypesNumbersShowitem FOREACH s.allInstanceProperties() SEPARATOR ", " -»'),
 		«ENDFOREACH -»
 «ENDDEFINE»
 
@@ -361,6 +361,7 @@ $TCA['«name() -»'] = array (
 «REM» 
 «ENDREM»
 «DEFINE TCAColumnsHiddenColumn FOR MClass -»
+«IF createHiddenField() -»
 		'hidden' => array(
 			'exclude' => true,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
@@ -368,6 +369,7 @@ $TCA['«name() -»'] = array (
 				'type' => 'check',
 			),
 		),
+«ENDIF -»
 «ENDDEFINE»
 
 
@@ -575,7 +577,7 @@ $TCA['«name() -»'] = array (
 «ENDIF-»
 			«EXPAND TCAColumnsConfigAdditions -»
 			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
-			)
+			),
 «ENDDEFINE»
 
 
@@ -842,7 +844,7 @@ $TCA['«name() -»'] = array (
 			«ENDIF -»
 			«EXPAND TCAColumnsConfigAdditions -»
 			«EXPAND OwnTCAColumnConfigCodeImplementation("tca.php.own.tca.column.config.code.implementation." + class.xmiGuid + "." + xmiGuid) -»
-			)
+			),
 «ENDDEFINE»
 
 
