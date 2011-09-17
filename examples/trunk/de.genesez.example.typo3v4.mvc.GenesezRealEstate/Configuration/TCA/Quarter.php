@@ -33,7 +33,7 @@ $TCA['tx_gszrealestate_domain_model_quarter'] = array (
 					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
 					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
 				),
-			)
+			),
 		),
 		'l10n_parent' => array(
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -46,19 +46,19 @@ $TCA['tx_gszrealestate_domain_model_quarter'] = array (
 				),
 				'foreign_table' => 'tx_gszrealestate_domain_model_quarter',
 				'foreign_table_where' => 'AND tx_gszrealestate_domain_model_quarter.uid=###REC_FIELD_l10n_parent### AND tx_gszrealestate_domain_model_quarter.sys_language_uid IN (-1,0)',
-			)
+			),
 		),
 		'l10n_diffsource' => array(
 			'config' =>array(
 				'type' =>'passthrough',
-			)
+			),
 		),
 		'hidden' => array(
 			'exclude' => true,
 			'label'	=> 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => array(
 				'type' => 'check',
-			)
+			),
 		),
 		't3ver_label' => array(
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
@@ -66,7 +66,7 @@ $TCA['tx_gszrealestate_domain_model_quarter'] = array (
 			'config' => array(
 				'type' =>'none',
 				'cols' => 27,
-			)
+			),
 		),
 		'name' => array(
 			'exclude' => false,
@@ -79,7 +79,7 @@ $TCA['tx_gszrealestate_domain_model_quarter'] = array (
 				'eval' => 'required, trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1306344154315_192526_2406) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		'description' => array(
 			'exclude' => false,
@@ -94,11 +94,11 @@ $TCA['tx_gszrealestate_domain_model_quarter'] = array (
 				'eval' => 'trim',
 				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319._17_0_1_8a7027a_1307093582120_276183_1703) ENABLED START */
 				/* PROTECTED REGION END */
-			)
+			),
 		),
 		/* PROTECTED REGION ID(tca.php.own.tca.columns.section.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */
 		/* PROTECTED REGION END */
-	)
+	),
 );
 
 /* PROTECTED REGION ID(tca.php.own.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */

@@ -14,6 +14,7 @@ CREATE TABLE tx_gszrealestate_domain_model_demand (
 	min_rooms int(11) unsigned DEFAULT '0' NOT NULL,
 	floor int(11) unsigned DEFAULT '0' NOT NULL,
 	
+	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -49,6 +50,8 @@ CREATE TABLE tx_gszrealestate_domain_model_floortype (
 	
 	specification varchar(255) DEFAULT '' NOT NULL,
 	
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -81,6 +84,8 @@ CREATE TABLE tx_gszrealestate_domain_model_heatingtype (
 	pid int(11) DEFAULT '0' NOT NULL,
 	
 	specification varchar(255) DEFAULT '' NOT NULL,
+	
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -115,6 +120,8 @@ CREATE TABLE tx_gszrealestate_domain_model_quarter (
 	
 	name varchar(255) DEFAULT '' NOT NULL,
 	description text NOT NULL,
+	
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -172,6 +179,7 @@ CREATE TABLE tx_gszrealestate_domain_model_realestate (
 	floor int(11) unsigned DEFAULT '0' NOT NULL,
 	quarter int(11) unsigned DEFAULT '0' NOT NULL,
 	
+	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -206,6 +214,8 @@ CREATE TABLE tx_gszrealestate_domain_model_roomtype (
 	pid int(11) DEFAULT '0' NOT NULL,
 	
 	specification varchar(255) DEFAULT '' NOT NULL,
+	
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
