@@ -35,9 +35,6 @@
  */
 class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Persistence_Repository {
 
-
-
-	
 	/**
 	 * Finds all posts by the specified blog
 	 *
@@ -54,6 +51,7 @@ class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Pers
 			->execute();
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Finds posts by the specified tag and blog
 	 *
@@ -74,6 +72,7 @@ class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Pers
 			->execute();
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Finds all remaining posts of the blog
 	 *
@@ -96,6 +95,7 @@ class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Pers
 			->execute();
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Finds the previous of the given post
 	 *
@@ -113,6 +113,7 @@ class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Pers
 			->getFirst();
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Finds the post next to the given post
 	 *
@@ -130,6 +131,7 @@ class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Pers
 			->getFirst();
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Finds most recent posts by the specified blog
 	 *
@@ -148,9 +150,7 @@ class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Pers
 			->execute();
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297250863949_852308_2394) ENABLED START */
 	protected $defaultOrderings = array(
 		'date' => Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING
@@ -158,4 +158,5 @@ class Tx_GszBlogExample_Domain_Repository_PostRepository extends Tx_Extbase_Pers
 	/* PROTECTED REGION END */
 
 }
+
 ?>

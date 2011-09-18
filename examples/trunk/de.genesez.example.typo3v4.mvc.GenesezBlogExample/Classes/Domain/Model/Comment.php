@@ -39,22 +39,25 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	 * @var DateTime
 	 */
 	protected $date;
+	
 	/**
 	 * @var string
 	 * @validate NotEmpty
 	 */
 	protected $author;
+	
 	/**
 	 * @var string
 	 * @validate EmailAddress
 	 */
 	protected $email;
+	
 	/**
 	 * @var string
 	 * @validate StringLength(maximum = 500)
 	 */
 	protected $content;
-
+	
 	/**
 	 * Constructs this comment
 	 *
@@ -64,7 +67,6 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 		$this->date = new DateTime();
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Returns this comment as a formatted string
@@ -76,7 +78,6 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 		return $this->author . ' (' . $this->email . ') said on ' . $this->date->format('Y-m-d') . ':' . chr(10) . $this->content . chr(10);
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Getter for date
@@ -86,6 +87,7 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function getDate() {
 		return $this->date;
 	}
+	
 	/**
 	 * Setter for date
 	 *
@@ -95,6 +97,7 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function setDate(DateTime $date) {
 		$this->date = $date;
 	}
+	
 	/**
 	 * Getter for author
 	 *
@@ -103,6 +106,7 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function getAuthor() {
 		return $this->author;
 	}
+	
 	/**
 	 * Setter for author
 	 *
@@ -112,6 +116,7 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function setAuthor($author) {
 		$this->author = $author;
 	}
+	
 	/**
 	 * Getter for email
 	 *
@@ -120,6 +125,7 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function getEmail() {
 		return $this->email;
 	}
+	
 	/**
 	 * Setter for email
 	 *
@@ -129,6 +135,7 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function setEmail($email) {
 		$this->email = $email;
 	}
+	
 	/**
 	 * Getter for content
 	 *
@@ -137,6 +144,7 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function getContent() {
 		return $this->content;
 	}
+	
 	/**
 	 * Setter for content
 	 *
@@ -146,9 +154,10 @@ class Tx_GszBlogExample_Domain_Model_Comment extends Tx_Extbase_DomainObject_Abs
 	public function setContent($content) {
 		$this->content = $content;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194777757_325505_1605) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

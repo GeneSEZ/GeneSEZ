@@ -35,9 +35,6 @@
  */
 class Tx_GszRealEstate_Domain_Validator_NumberNotEmptyValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
 
-
-
-	
 	/**
 	 * Checks if the given value is valid according to the validator.
 	 *
@@ -53,11 +50,10 @@ class Tx_GszRealEstate_Domain_Validator_NumberNotEmptyValidator extends Tx_Extba
 		return true;
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315599838256_391488_2072.validator) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

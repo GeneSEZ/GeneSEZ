@@ -35,14 +35,9 @@
  */
 class Tx_GszBlogExample_Domain_Repository_AdministratorRepository extends Tx_Extbase_Domain_Repository_FrontendUserRepository {
 
-
-
-	
-
-	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297250801885_413708_2286) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

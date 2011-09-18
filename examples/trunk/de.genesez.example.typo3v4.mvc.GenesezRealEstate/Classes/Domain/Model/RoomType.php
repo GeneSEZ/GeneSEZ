@@ -41,10 +41,6 @@ class Tx_GszRealEstate_Domain_Model_RoomType extends Tx_Extbase_DomainObject_Abs
 	 * @var string
 	 */
 	protected $specification;
-
-
-	
-
 	
 	/**
 	 * Getter for specification
@@ -54,6 +50,7 @@ class Tx_GszRealEstate_Domain_Model_RoomType extends Tx_Extbase_DomainObject_Abs
 	public function getSpecification() {
 		return $this->specification;
 	}
+	
 	/**
 	 * Setter for specification
 	 *
@@ -63,9 +60,10 @@ class Tx_GszRealEstate_Domain_Model_RoomType extends Tx_Extbase_DomainObject_Abs
 	public function setSpecification($specification) {
 		$this->specification = $specification;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306343834717_151292_2268) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

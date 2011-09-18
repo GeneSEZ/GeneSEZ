@@ -34,9 +34,6 @@
  */
 class Tx_GszInventory_Controller_InventoryController extends Tx_Extbase_MVC_Controller_ActionController {
 
-
-
-	
 	/**
 	 * @return void
 	 */
@@ -47,11 +44,10 @@ class Tx_GszInventory_Controller_InventoryController extends Tx_Extbase_MVC_Cont
 		$this->view->assign('products', $products);
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1314624300500_289907_2202) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

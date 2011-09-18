@@ -42,6 +42,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	 * @validate StringLength(minimum = 1, maximum = 80)
 	 */
 	protected $title = '';
+	
 	/**
 	 * A short description of the blog
 	 *
@@ -49,12 +50,14 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	 * @validate StringLength(maximum = 150)
 	 */
 	protected $description = '';
+	
 	/**
 	 * A relative path to a logo image
 	 *
 	 * @var string
 	 */
 	protected $logo;
+	
 	/**
 	 * The posts of this blog
 	 *
@@ -63,6 +66,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	 * @lazy
 	 */
 	protected $posts;
+	
 	/**
 	 * The blog's administrator
 	 *
@@ -70,7 +74,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	 * @lazy
 	 */
 	protected $administrator;
-
+	
 	/**
 	 * Constructs a new Blog
 	 *
@@ -80,7 +84,6 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 		$this->posts = new Tx_Extbase_Persistence_ObjectStorage();
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Remove all posts from this blog
@@ -92,7 +95,6 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 		$this->posts = new Tx_Extbase_Persistence_ObjectStorage();
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Getter for title
@@ -102,6 +104,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function getTitle() {
 		return $this->title;
 	}
+	
 	/**
 	 * Setter for title
 	 *
@@ -111,6 +114,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setTitle($title) {
 		$this->title = $title;
 	}
+	
 	/**
 	 * Getter for description
 	 *
@@ -119,6 +123,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function getDescription() {
 		return $this->description;
 	}
+	
 	/**
 	 * Setter for description
 	 *
@@ -128,6 +133,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setDescription($description) {
 		$this->description = $description;
 	}
+	
 	/**
 	 * Getter for logo
 	 *
@@ -136,6 +142,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function getLogo() {
 		return $this->logo;
 	}
+	
 	/**
 	 * Setter for logo
 	 *
@@ -145,6 +152,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setLogo($logo) {
 		$this->logo = $logo;
 	}
+	
 	/**
 	 * Getter for posts
 	 *
@@ -153,6 +161,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function getPosts() {
 		return $this->posts;
 	}
+	
 	/**
 	 * Setter for posts
 	 *
@@ -162,6 +171,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setPosts(Tx_Extbase_Persistence_ObjectStorage $posts) {
 		$this->posts = $posts;
 	}
+	
 	/**
 	 * InsertIn for posts
 	 *
@@ -171,6 +181,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function addPosts(Tx_GszBlogExample_Domain_Model_Post $toAdd) {
 		$this->posts->attach($toAdd);
 	}
+	
 	/**
 	 * RemoveFrom for posts
 	 *
@@ -180,6 +191,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function removePosts(Tx_GszBlogExample_Domain_Model_Post $toRemove) {
 		$this->posts->detach($toRemove);
 	}
+	
 	/**
 	 * Getter for administrator
 	 *
@@ -188,6 +200,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function getAdministrator() {
 		return $this->administrator;
 	}
+	
 	/**
 	 * Setter for administrator
 	 *
@@ -197,9 +210,10 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setAdministrator(Tx_GszBlogExample_Domain_Model_Administrator $administrator) {
 		$this->administrator = $administrator;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194671553_69571_1516) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

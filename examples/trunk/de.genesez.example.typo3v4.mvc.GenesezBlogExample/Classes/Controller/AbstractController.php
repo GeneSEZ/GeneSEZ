@@ -35,9 +35,6 @@
  */
 abstract class Tx_GszBlogExample_Controller_AbstractController extends Tx_Extbase_MVC_Controller_ActionController {
 
-
-
-	
 	/**
 	 * helper function to render localized flashmessages
 	 *
@@ -54,6 +51,7 @@ abstract class Tx_GszBlogExample_Controller_AbstractController extends Tx_Extbas
 		$this->flashMessageContainer->add($localizedMessage, $localizedTitle, $severity);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * helper function to use localized strings in BlogExample controllers
 	 *
@@ -70,6 +68,7 @@ abstract class Tx_GszBlogExample_Controller_AbstractController extends Tx_Extbas
 		return $message;
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Override getErrorFlashMessage to customize the flash message.
 	 *
@@ -82,11 +81,10 @@ abstract class Tx_GszBlogExample_Controller_AbstractController extends Tx_Extbas
 		return $this->translate($locallangKey, $defaultFlashMessage);
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1302081259525_708656_2063) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

@@ -39,12 +39,11 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 	 * @var Tx_GszBlogExample_Domain_Repository_PostRepository
 	 */
 	protected $postRepository;
+	
 	/**
 	 * @var Tx_GszBlogExample_Domain_Repository_PersonRepository
 	 */
 	protected $personRepository;
-
-
 	
 	/**
 	 * Displays a list of posts. If $tag is set only posts matching this tag are shown
@@ -66,6 +65,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 		$this->view->assign('posts', $posts);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Displays one single post
 	 *
@@ -80,6 +80,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 		$this->view->assign('newComment', $newComment);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Displays a form for creating a new post
 	 *
@@ -96,6 +97,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 		$this->view->assign('remainingPosts', $this->postRepository->findByBlog($blog));
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Creates a new post
 	 *
@@ -111,6 +113,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 		$this->redirect('index', NULL, NULL, array('blog' => $blog));
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Displays a form to edit an existing post
 	 *
@@ -127,6 +130,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 		$this->view->assign('remainingPosts', $this->postRepository->findRemaining($post));
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Updates an existing post
 	 *
@@ -141,6 +145,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 		$this->redirect('show', NULL, NULL, array('post' => $post, 'blog' => $blog));
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Deletes an existing post
 	 *
@@ -155,7 +160,6 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 		$this->redirect('index', NULL, NULL, array('blog' => $blog));
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Getter for postRepository
@@ -165,6 +169,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 	public function getPostRepository() {
 		return $this->postRepository;
 	}
+	
 	/**
 	 * Dependency injection for postRepository
 	 *
@@ -174,6 +179,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 	public function injectPostRepository(Tx_GszBlogExample_Domain_Repository_PostRepository $postRepository) {
 		$this->postRepository = $postRepository;
 	}
+	
 	/**
 	 * Getter for personRepository
 	 *
@@ -182,6 +188,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 	public function getPersonRepository() {
 		return $this->personRepository;
 	}
+	
 	/**
 	 * Dependency injection for personRepository
 	 *
@@ -191,9 +198,10 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 	public function injectPersonRepository(Tx_GszBlogExample_Domain_Repository_PersonRepository $personRepository) {
 		$this->personRepository = $personRepository;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251441697_732082_2744) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

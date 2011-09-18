@@ -35,14 +35,9 @@
  */
 class Tx_GszBlogExample_Domain_Repository_PersonRepository extends Tx_Extbase_Persistence_Repository {
 
-
-
-	
-
-	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1303895019460_600697_1735) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

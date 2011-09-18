@@ -20,6 +20,10 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 /* PROTECTED REGION ID(ext_tables.php.own.plugins.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 /* PROTECTED REGION END */
 
+if (TYPO3_MODE === 'BE') {
+	/* PROTECTED REGION ID(ext_tables.php.own.modules.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+	/* PROTECTED REGION END */
+}
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'GszInventory setup');
 
@@ -41,8 +45,7 @@ $TCA['tx_gszinventory_domain_model_product'] = array (
 		/* PROTECTED REGION END */
 	)
 );
-
-
+	
 /* PROTECTED REGION ID(ext_tables.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 /* PROTECTED REGION END */
 

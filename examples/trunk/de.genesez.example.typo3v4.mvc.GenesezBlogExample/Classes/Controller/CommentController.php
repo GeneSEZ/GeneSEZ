@@ -35,9 +35,6 @@
  */
 class Tx_GszBlogExample_Controller_CommentController extends Tx_GszBlogExample_Controller_AbstractController {
 
-
-
-	
 	/**
 	 * Adds a comment to a blog post and redirects to single view
 	 *
@@ -52,6 +49,7 @@ class Tx_GszBlogExample_Controller_CommentController extends Tx_GszBlogExample_C
 		$this->redirect('show', 'Post', NULL, array('post' => $post));
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Deletes an existing comment
 	 *
@@ -66,6 +64,7 @@ class Tx_GszBlogExample_Controller_CommentController extends Tx_GszBlogExample_C
 		$this->redirect('show', 'Post', NULL, array('post' => $post));
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Deletes all comments of the given post
 	 *
@@ -79,11 +78,10 @@ class Tx_GszBlogExample_Controller_CommentController extends Tx_GszBlogExample_C
 		$this->redirect('edit', 'Post', NULL, array('post' => $post, 'blog' => $post->getBlog()));
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251433473_555088_2718) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

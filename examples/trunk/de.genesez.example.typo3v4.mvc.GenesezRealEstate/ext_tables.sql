@@ -1,4 +1,3 @@
-
 #
 # Table structure for table 'tx_gszrealestate_domain_model_demand'
 #
@@ -13,7 +12,6 @@ CREATE TABLE tx_gszrealestate_domain_model_demand (
 	quarter int(11) unsigned DEFAULT '0' NOT NULL,
 	min_rooms int(11) unsigned DEFAULT '0' NOT NULL,
 	floor int(11) unsigned DEFAULT '0' NOT NULL,
-	
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -41,6 +39,7 @@ CREATE TABLE tx_gszrealestate_domain_model_demand (
 	KEY parent (pid),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
+
 #
 # Table structure for table 'tx_gszrealestate_domain_model_floortype'
 #
@@ -76,6 +75,7 @@ CREATE TABLE tx_gszrealestate_domain_model_floortype (
 	KEY parent (pid),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
+
 #
 # Table structure for table 'tx_gszrealestate_domain_model_heatingtype'
 #
@@ -84,7 +84,6 @@ CREATE TABLE tx_gszrealestate_domain_model_heatingtype (
 	pid int(11) DEFAULT '0' NOT NULL,
 	
 	specification varchar(255) DEFAULT '' NOT NULL,
-	
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -110,6 +109,7 @@ CREATE TABLE tx_gszrealestate_domain_model_heatingtype (
 	KEY parent (pid),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
+
 #
 # Table structure for table 'tx_gszrealestate_domain_model_quarter'
 #
@@ -120,7 +120,6 @@ CREATE TABLE tx_gszrealestate_domain_model_quarter (
 	name varchar(255) DEFAULT '' NOT NULL,
 	description text NOT NULL,
 	
-	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -145,6 +144,7 @@ CREATE TABLE tx_gszrealestate_domain_model_quarter (
 	KEY parent (pid),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
+
 #
 # Table structure for table 'tx_gszrealestate_domain_model_realestate'
 #
@@ -177,7 +177,6 @@ CREATE TABLE tx_gszrealestate_domain_model_realestate (
 	floor int(11) unsigned DEFAULT '0' NOT NULL,
 	quarter int(11) unsigned DEFAULT '0' NOT NULL,
 	
-	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -204,6 +203,7 @@ CREATE TABLE tx_gszrealestate_domain_model_realestate (
 	KEY parent (pid),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 );
+
 #
 # Table structure for table 'tx_gszrealestate_domain_model_roomtype'
 #
@@ -212,7 +212,6 @@ CREATE TABLE tx_gszrealestate_domain_model_roomtype (
 	pid int(11) DEFAULT '0' NOT NULL,
 	
 	specification varchar(255) DEFAULT '' NOT NULL,
-	
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

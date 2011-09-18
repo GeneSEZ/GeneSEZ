@@ -41,16 +41,13 @@ class Tx_GszRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_Abst
 	 * @var string
 	 */
 	protected $name;
+	
 	/**
 	 * The description of the quarter.
 	 *
 	 * @var string
 	 */
 	protected $description;
-
-
-	
-
 	
 	/**
 	 * Getter for name
@@ -60,6 +57,7 @@ class Tx_GszRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_Abst
 	public function getName() {
 		return $this->name;
 	}
+	
 	/**
 	 * Setter for name
 	 *
@@ -69,6 +67,7 @@ class Tx_GszRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_Abst
 	public function setName($name) {
 		$this->name = $name;
 	}
+	
 	/**
 	 * Getter for description
 	 *
@@ -77,6 +76,7 @@ class Tx_GszRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_Abst
 	public function getDescription() {
 		return $this->description;
 	}
+	
 	/**
 	 * Setter for description
 	 *
@@ -86,9 +86,10 @@ class Tx_GszRealEstate_Domain_Model_Quarter extends Tx_Extbase_DomainObject_Abst
 	public function setDescription($description) {
 		$this->description = $description;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

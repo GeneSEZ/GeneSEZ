@@ -35,9 +35,6 @@
  */
 class Tx_GszRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHelpers_ImageViewHelper {
 
-
-
-	
 	/**
 	 * Renders the given real estate images.
 	 *
@@ -70,6 +67,7 @@ class Tx_GszRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHelpers
 		return $renderImages;
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Renders one real estate image.
 	 *
@@ -99,6 +97,7 @@ class Tx_GszRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHelpers
 		return $renderImage;
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Gets the image tag attributes for the colorbox.
 	 *
@@ -110,6 +109,7 @@ class Tx_GszRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHelpers
 		return 'class="rzcolorbox" rel="rzcolorbox[cbre' . $realEstateId . ']"';
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Gets the upload folder for the images.
 	 *
@@ -120,11 +120,10 @@ class Tx_GszRealEstate_ViewHelpers_ImagesViewHelper extends Tx_Fluid_ViewHelpers
 		return 'uploads/tx_gszrealestate/'; 
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315420126069_595943_2606) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

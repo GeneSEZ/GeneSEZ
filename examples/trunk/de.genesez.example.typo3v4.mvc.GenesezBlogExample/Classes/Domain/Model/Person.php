@@ -39,16 +39,18 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 	 * @var string
 	 */
 	protected $firstname;
+	
 	/**
 	 * @var string
 	 */
 	protected $lastname;
+	
 	/**
 	 * @var string
 	 * @validate EmailAddress
 	 */
 	protected $email;
-
+	
 	/**
 	 * Constructs a new Person
 	 *
@@ -63,9 +65,7 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 		$this->setEmail($email);
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/**
 	 * Getter for fullName
 	 *
@@ -85,6 +85,7 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 	public function getFirstname() {
 		return $this->firstname;
 	}
+	
 	/**
 	 * Setter for firstname
 	 *
@@ -94,6 +95,7 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 	public function setFirstname($firstname) {
 		$this->firstname = $firstname;
 	}
+	
 	/**
 	 * Getter for lastname
 	 *
@@ -102,6 +104,7 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 	public function getLastname() {
 		return $this->lastname;
 	}
+	
 	/**
 	 * Setter for lastname
 	 *
@@ -111,6 +114,7 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 	public function setLastname($lastname) {
 		$this->lastname = $lastname;
 	}
+	
 	/**
 	 * Getter for email
 	 *
@@ -119,6 +123,7 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 	public function getEmail() {
 		return $this->email;
 	}
+	
 	/**
 	 * Setter for email
 	 *
@@ -128,9 +133,10 @@ class Tx_GszBlogExample_Domain_Model_Person extends Tx_Extbase_DomainObject_Abst
 	public function setEmail($email) {
 		$this->email = $email;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194783571_373089_1631) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

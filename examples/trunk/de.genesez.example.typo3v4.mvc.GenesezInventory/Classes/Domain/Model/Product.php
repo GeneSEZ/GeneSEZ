@@ -38,15 +38,17 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	 * @var string
 	 */
 	protected $name = '';
+	
 	/**
 	 * @var string
 	 */
 	protected $description = '';
+	
 	/**
 	 * @var int
 	 */
 	protected $quantity = 0;
-
+	
 	/**
 	 * @param string $name 
 	 * @param string $description 
@@ -59,9 +61,6 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 		$this->setQuantity($quantity);
 		/* PROTECTED REGION END */
 	}
-
-	
-
 	
 	/**
 	 * Getter for name
@@ -71,6 +70,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function getName() {
 		return $this->name;
 	}
+	
 	/**
 	 * Setter for name
 	 *
@@ -80,6 +80,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function setName($name) {
 		$this->name = $name;
 	}
+	
 	/**
 	 * Getter for description
 	 *
@@ -88,6 +89,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function getDescription() {
 		return $this->description;
 	}
+	
 	/**
 	 * Setter for description
 	 *
@@ -97,6 +99,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function setDescription($description) {
 		$this->description = $description;
 	}
+	
 	/**
 	 * Getter for quantity
 	 *
@@ -105,6 +108,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function getQuantity() {
 		return $this->quantity;
 	}
+	
 	/**
 	 * Setter for quantity
 	 *
@@ -114,9 +118,10 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function setQuantity($quantity) {
 		$this->quantity = $quantity;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

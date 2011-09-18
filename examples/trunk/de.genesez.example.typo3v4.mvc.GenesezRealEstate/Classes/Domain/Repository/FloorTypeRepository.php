@@ -35,12 +35,6 @@
  */
 class Tx_GszRealEstate_Domain_Repository_FloorTypeRepository extends Tx_Extbase_Persistence_Repository {
 
-
-
-	
-
-	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315354863876_803143_2543) ENABLED START */
 	protected $defaultOrderings = array(
 		'sorting' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING,
@@ -48,4 +42,5 @@ class Tx_GszRealEstate_Domain_Repository_FloorTypeRepository extends Tx_Extbase_
 	/* PROTECTED REGION END */
 
 }
+
 ?>

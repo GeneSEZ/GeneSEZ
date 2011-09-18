@@ -35,14 +35,9 @@
  */
 class Tx_GszInventory_Domain_Repository_ProductRepository extends Tx_Extbase_Persistence_Repository {
 
-
-
-	
-
-	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466.repository) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

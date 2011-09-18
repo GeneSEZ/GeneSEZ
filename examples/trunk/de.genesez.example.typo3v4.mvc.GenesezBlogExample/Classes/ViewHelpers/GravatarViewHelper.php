@@ -50,8 +50,6 @@ class Tx_GszBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_Vie
 	 * @var string
 	 */
 	protected $tagName = 'img';
-
-
 	
 	/**
 	 * Initialize arguments
@@ -64,6 +62,7 @@ class Tx_GszBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_Vie
 		$this->registerUniversalTagAttributes();
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Render the gravatar image
 	 *
@@ -90,7 +89,6 @@ class Tx_GszBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_Vie
 		return $this->tag->render();
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Getter for tagName
@@ -100,6 +98,7 @@ class Tx_GszBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_Vie
 	public function getTagName() {
 		return $this->tagName;
 	}
+	
 	/**
 	 * Setter for tagName
 	 *
@@ -109,9 +108,10 @@ class Tx_GszBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_Vie
 	public function setTagName($tagName) {
 		$this->tagName = $tagName;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297252449390_374572_3319) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

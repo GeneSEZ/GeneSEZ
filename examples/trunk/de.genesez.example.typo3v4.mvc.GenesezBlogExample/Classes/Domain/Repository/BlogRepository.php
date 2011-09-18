@@ -35,9 +35,6 @@
  */
 class Tx_GszBlogExample_Domain_Repository_BlogRepository extends Tx_Extbase_Persistence_Repository {
 
-
-
-	
 	/**
 	 * Life cycle method.
 	 *
@@ -47,9 +44,7 @@ class Tx_GszBlogExample_Domain_Repository_BlogRepository extends Tx_Extbase_Pers
 		/* PROTECTED REGION ID(php.implementation._17_0_1_8a7027a_1302020870850_802851_3552.initalizeObject) ENABLED START */
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1302020870850_802851_3552) ENABLED START */
 	protected $defaultOrderings = array(
 			'crdate' => Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING,
@@ -58,4 +53,5 @@ class Tx_GszBlogExample_Domain_Repository_BlogRepository extends Tx_Extbase_Pers
 	/* PROTECTED REGION END */
 
 }
+
 ?>

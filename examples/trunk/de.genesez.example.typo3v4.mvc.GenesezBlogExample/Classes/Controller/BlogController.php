@@ -39,12 +39,11 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	 * @var Tx_GszBlogExample_Domain_Repository_BlogRepository
 	 */
 	protected $blogRepository;
+	
 	/**
 	 * @var Tx_GszBlogExample_Domain_Repository_AdministratorRepository
 	 */
 	protected $administratorRepository;
-
-
 	
 	/**
 	 * Index action for this controller. Displays a list of blogs.
@@ -56,6 +55,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->view->assign('blogs', $this->blogRepository->findAll());
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Displays a form for creating a new blog
 	 *
@@ -69,6 +69,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->view->assign('administrators', $this->administratorRepository->findAll());
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Creates a new blog
 	 *
@@ -82,6 +83,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->redirect('index');
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Displays a form for editing an existing blog
 	 *
@@ -95,6 +97,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->view->assign('administrators', $this->administratorRepository->findAll());
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Updates an existing blog
 	 *
@@ -108,6 +111,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->redirect('index');
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Deletes an existing blog
 	 *
@@ -121,6 +125,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->redirect('index');
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Deletes all existing blogs
 	 *
@@ -132,6 +137,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->redirect('index');
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Creates a several new blogs
 	 *
@@ -149,7 +155,6 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		$this->redirect('index');
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Getter for blogRepository
@@ -159,6 +164,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	public function getBlogRepository() {
 		return $this->blogRepository;
 	}
+	
 	/**
 	 * Dependency injection for blogRepository
 	 *
@@ -168,6 +174,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	public function injectBlogRepository(Tx_GszBlogExample_Domain_Repository_BlogRepository $blogRepository) {
 		$this->blogRepository = $blogRepository;
 	}
+	
 	/**
 	 * Getter for administratorRepository
 	 *
@@ -176,6 +183,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	public function getAdministratorRepository() {
 		return $this->administratorRepository;
 	}
+	
 	/**
 	 * Dependency injection for administratorRepository
 	 *
@@ -185,9 +193,10 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	public function injectAdministratorRepository(Tx_GszBlogExample_Domain_Repository_AdministratorRepository $administratorRepository) {
 		$this->administratorRepository = $administratorRepository;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251427732_349974_2692) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

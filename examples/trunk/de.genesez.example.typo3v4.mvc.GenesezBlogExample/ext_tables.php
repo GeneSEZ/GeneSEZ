@@ -17,6 +17,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'BlogAdmin',
 	'Admin Plugin (GeneSEZ Blog Example)'
 );
+
 /**
  * Blog list plugin
  */
@@ -26,9 +27,11 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'List of Blogs (GeneSEZ Blog Example)',
 	t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/blogList.gif'
 );
+
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gszblogexample_bloglist'] = 'select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['gszblogexample_bloglist'] = 'pi_flexform,recursive';
 t3lib_extMgm::addPiFlexFormValue('gszblogexample_bloglist', 'FILE:EXT:gsz_blog_example/Configuration/FlexForms/flexform_bloglist.xml');
+
 /**
  * Post list plugin
  */
@@ -37,6 +40,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'PostList',
 	'List of Posts (GeneSEZ Blog Example)'
 );
+
 /**
  * Post single plugin
  */
@@ -52,6 +56,7 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 /* PROTECTED REGION END */
 
 if (TYPO3_MODE === 'BE') {
+	
 	/**
 	 * Register a backend module
 	 */
@@ -108,6 +113,7 @@ $TCA['tx_gszblogexample_domain_model_blog'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszblogexample_domain_model_comment', 'EXT:gsz_blog_example/Resources/Private/Language/locallang_csh_tx_gszblogexample_domain_model_comment.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszblogexample_domain_model_comment');
 $TCA['tx_gszblogexample_domain_model_comment'] = array (
@@ -128,6 +134,7 @@ $TCA['tx_gszblogexample_domain_model_comment'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszblogexample_domain_model_person', 'EXT:gsz_blog_example/Resources/Private/Language/locallang_csh_tx_gszblogexample_domain_model_person.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszblogexample_domain_model_person');
 $TCA['tx_gszblogexample_domain_model_person'] = array (
@@ -153,6 +160,7 @@ $TCA['tx_gszblogexample_domain_model_person'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszblogexample_domain_model_post', 'EXT:gsz_blog_example/Resources/Private/Language/locallang_csh_tx_gszblogexample_domain_model_post.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszblogexample_domain_model_post');
 $TCA['tx_gszblogexample_domain_model_post'] = array (
@@ -179,6 +187,7 @@ $TCA['tx_gszblogexample_domain_model_post'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszblogexample_domain_model_tag', 'EXT:gsz_blog_example/Resources/Private/Language/locallang_csh_tx_gszblogexample_domain_model_tag.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszblogexample_domain_model_tag');
 $TCA['tx_gszblogexample_domain_model_tag'] = array (
@@ -197,8 +206,7 @@ $TCA['tx_gszblogexample_domain_model_tag'] = array (
 		/* PROTECTED REGION END */
 	)
 );
-
-
+	
 /* PROTECTED REGION ID(ext_tables.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 t3lib_div::loadTCA('fe_users');
 if (is_array($TCA['fe_users']['columns']['tx_extbase_type'])) {

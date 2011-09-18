@@ -14,34 +14,41 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'List',
 	'Show List of Search'
 );
+
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'Searchbox',
 	'Show Searchbox'
 );
+
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'Searchform',
 	'Show Searchform'
 );
+
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'Show',
 	'Show Single'
 );
+
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'ShowByQuarter',
 	'Show by Quarter'
 );
+
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gszrealestate_showbyquarter'] = 'select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['gszrealestate_showbyquarter'] = 'pi_flexform,recursive';
 t3lib_extMgm::addPiFlexFormValue('gszrealestate_showbyquarter', 'FILE:EXT:gsz_real_estate/Configuration/FlexForms/flexform_showbyquarter.xml');
+
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'ShowByUid',
 	'Show by Uid'
 );
+
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['gszrealestate_showbyuid'] = 'select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['gszrealestate_showbyuid'] = 'pi_flexform,recursive';
 t3lib_extMgm::addPiFlexFormValue('gszrealestate_showbyuid', 'FILE:EXT:gsz_real_estate/Configuration/FlexForms/flexform_showbyuid.xml');
@@ -51,6 +58,10 @@ $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--d
 /* PROTECTED REGION ID(ext_tables.php.own.plugins.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 /* PROTECTED REGION END */
 
+if (TYPO3_MODE === 'BE') {
+	/* PROTECTED REGION ID(ext_tables.php.own.modules.code.implementation.eee_1045467100313_135436_1) ENABLED START */
+	/* PROTECTED REGION END */
+}
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'GszRealEstate setup');
 
@@ -83,6 +94,7 @@ $TCA['tx_gszrealestate_domain_model_demand'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszrealestate_domain_model_floortype', 'EXT:gsz_real_estate/Resources/Private/Language/locallang_csh_tx_gszrealestate_domain_model_floortype.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszrealestate_domain_model_floortype');
 $TCA['tx_gszrealestate_domain_model_floortype'] = array (
@@ -108,6 +120,7 @@ $TCA['tx_gszrealestate_domain_model_floortype'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszrealestate_domain_model_heatingtype', 'EXT:gsz_real_estate/Resources/Private/Language/locallang_csh_tx_gszrealestate_domain_model_heatingtype.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszrealestate_domain_model_heatingtype');
 $TCA['tx_gszrealestate_domain_model_heatingtype'] = array (
@@ -133,6 +146,7 @@ $TCA['tx_gszrealestate_domain_model_heatingtype'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszrealestate_domain_model_quarter', 'EXT:gsz_real_estate/Resources/Private/Language/locallang_csh_tx_gszrealestate_domain_model_quarter.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszrealestate_domain_model_quarter');
 $TCA['tx_gszrealestate_domain_model_quarter'] = array (
@@ -158,6 +172,7 @@ $TCA['tx_gszrealestate_domain_model_quarter'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszrealestate_domain_model_realestate', 'EXT:gsz_real_estate/Resources/Private/Language/locallang_csh_tx_gszrealestate_domain_model_realestate.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszrealestate_domain_model_realestate');
 $TCA['tx_gszrealestate_domain_model_realestate'] = array (
@@ -187,6 +202,7 @@ $TCA['tx_gszrealestate_domain_model_realestate'] = array (
 		/* PROTECTED REGION END */
 	)
 );
+	
 t3lib_extMgm::addLLrefForTCAdescr('tx_gszrealestate_domain_model_roomtype', 'EXT:gsz_real_estate/Resources/Private/Language/locallang_csh_tx_gszrealestate_domain_model_roomtype.xml');
 t3lib_extMgm::allowTableOnStandardPages('tx_gszrealestate_domain_model_roomtype');
 $TCA['tx_gszrealestate_domain_model_roomtype'] = array (
@@ -212,8 +228,7 @@ $TCA['tx_gszrealestate_domain_model_roomtype'] = array (
 		/* PROTECTED REGION END */
 	)
 );
-
-
+	
 /* PROTECTED REGION ID(ext_tables.php.own.code.implementation.eee_1045467100313_135436_1) ENABLED START */
 /* PROTECTED REGION END */
 

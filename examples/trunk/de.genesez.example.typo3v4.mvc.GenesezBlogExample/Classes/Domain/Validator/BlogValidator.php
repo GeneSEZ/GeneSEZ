@@ -35,9 +35,6 @@
  */
 class Tx_GszBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Validation_Validator_AbstractValidator {
 
-
-
-	
 	/**
 	 * Checks if the given value is valid according to the validator.
 	 *
@@ -53,11 +50,10 @@ class Tx_GszBlogExample_Domain_Validator_BlogValidator extends Tx_Extbase_Valida
 		return TRUE;
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194671553_69571_1516.validator) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

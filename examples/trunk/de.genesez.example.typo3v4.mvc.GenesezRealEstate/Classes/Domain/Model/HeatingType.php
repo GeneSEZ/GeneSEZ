@@ -41,10 +41,6 @@ class Tx_GszRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObject_
 	 * @var string
 	 */
 	protected $specification;
-
-
-	
-
 	
 	/**
 	 * Getter for specification
@@ -54,6 +50,7 @@ class Tx_GszRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObject_
 	public function getSpecification() {
 		return $this->specification;
 	}
+	
 	/**
 	 * Setter for specification
 	 *
@@ -63,9 +60,10 @@ class Tx_GszRealEstate_Domain_Model_HeatingType extends Tx_Extbase_DomainObject_
 	public function setSpecification($specification) {
 		$this->specification = $specification;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344206865_332239_2422) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

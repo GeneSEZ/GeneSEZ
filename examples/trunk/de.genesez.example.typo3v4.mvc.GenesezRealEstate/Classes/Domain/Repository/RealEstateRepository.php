@@ -35,9 +35,6 @@
  */
 class Tx_GszRealEstate_Domain_Repository_RealEstateRepository extends Tx_Extbase_Persistence_Repository {
 
-
-
-	
 	/**
 	 * Finds all real estates which matches the given demand.
 	 *
@@ -91,6 +88,7 @@ class Tx_GszRealEstate_Domain_Repository_RealEstateRepository extends Tx_Extbase
 		return $this->findAll();
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Gets all real estates by the given uids.
 	 *
@@ -107,11 +105,10 @@ class Tx_GszRealEstate_Domain_Repository_RealEstateRepository extends Tx_Extbase
 			->execute();
 		/* PROTECTED REGION END */
 	}
-
 	
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1314918939457_992931_2302) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>

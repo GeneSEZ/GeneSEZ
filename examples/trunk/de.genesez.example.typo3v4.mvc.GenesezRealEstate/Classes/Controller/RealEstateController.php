@@ -41,26 +41,27 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	 * @var Tx_GszRealEstate_Domain_Repository_RealEstateRepository
 	 */
 	private $realEstateRepository;
+	
 	/**
 	 * A reference of the quarter repository.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Repository_QuarterRepository
 	 */
 	private $quaterRepository;
+	
 	/**
 	 * A reference of the floor type repository.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Repository_FloorTypeRepository
 	 */
 	private $floorTypeRepository;
+	
 	/**
 	 * A reference of the room type repository.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Repository_RoomTypeRepository
 	 */
 	private $roomTypeRepository;
-
-
 	
 	/**
 	 * Shows a summary for a single real estate. The real estate is set inside the flexform of the plugin.
@@ -75,6 +76,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		$this->view->assign('realEstate', $realEstate);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Shows all real estates for a given quarter. The quarter is set inside the flexform of the plugin.
 	 *
@@ -90,6 +92,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		$this->view->assign('realEstates', $realEstates);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Displays a search box which can be add to a sidebar.
 	 *
@@ -116,6 +119,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Shows a search form with more configuration options as the search box.
 	 *
@@ -152,6 +156,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Search action which gets a demand object where all search informations are stores and redirect to the list action.
 	 * 
@@ -169,6 +174,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		$this->redirect('list', null, null, array('realEstateUids' => $realEstateUids), $this->settings['listViewPid']);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Lists the real estates which matches the demand.
 	 *
@@ -183,6 +189,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		$this->view->assign('realEstates', $realEstates);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Shows a single real estate with all details.
 	 *
@@ -195,6 +202,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		$this->view->assign('realEstates', $realEstates);
 		/* PROTECTED REGION END */
 	}
+	
 	/**
 	 * Converts the reference stored inside the flexform of the plugin to a uid.
 	 *
@@ -206,7 +214,6 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		return preg_replace( '/\D/', '', $item);
 		/* PROTECTED REGION END */
 	}
-
 	
 	/**
 	 * Getter for realEstateRepository
@@ -216,6 +223,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function getRealEstateRepository() {
 		return $this->realEstateRepository;
 	}
+	
 	/**
 	 * Dependency injection for realEstateRepository
 	 *
@@ -225,6 +233,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectRealEstateRepository(Tx_GszRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository) {
 		$this->realEstateRepository = $realEstateRepository;
 	}
+	
 	/**
 	 * Getter for quaterRepository
 	 *
@@ -233,6 +242,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function getQuaterRepository() {
 		return $this->quaterRepository;
 	}
+	
 	/**
 	 * Dependency injection for quaterRepository
 	 *
@@ -242,6 +252,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectQuaterRepository(Tx_GszRealEstate_Domain_Repository_QuarterRepository $quaterRepository) {
 		$this->quaterRepository = $quaterRepository;
 	}
+	
 	/**
 	 * Getter for floorTypeRepository
 	 *
@@ -250,6 +261,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function getFloorTypeRepository() {
 		return $this->floorTypeRepository;
 	}
+	
 	/**
 	 * Dependency injection for floorTypeRepository
 	 *
@@ -259,6 +271,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectFloorTypeRepository(Tx_GszRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository) {
 		$this->floorTypeRepository = $floorTypeRepository;
 	}
+	
 	/**
 	 * Getter for roomTypeRepository
 	 *
@@ -267,6 +280,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function getRoomTypeRepository() {
 		return $this->roomTypeRepository;
 	}
+	
 	/**
 	 * Dependency injection for roomTypeRepository
 	 *
@@ -276,9 +290,10 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectRoomTypeRepository(Tx_GszRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository) {
 		$this->roomTypeRepository = $roomTypeRepository;
 	}
-
+	
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1314919357827_141495_2375) ENABLED START */
 	/* PROTECTED REGION END */
 
 }
+
 ?>
