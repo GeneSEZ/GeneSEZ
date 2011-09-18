@@ -50,19 +50,14 @@
 <?php
 
 «EXPAND AccessDenied -»
-
 «EXPAND PluginConfiguration -»
-
 «EXPAND ModuleConfiguration -»
-
 «EXPAND TypoScriptInclusion -»
-
 «EXPAND DomainObjectConfiguration -»
-
 «EXPAND OwnCodeImplementation("ext_tables.php.own.code.implementation." + xmiGuid) -»
 
 ?>
-«ENDFILE»
+«ENDFILE -»
 «ENDDEFINE»
 
 
@@ -89,6 +84,7 @@
 if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
+
 «ENDDEFINE»
 
 
@@ -102,11 +98,11 @@ t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('«extensionName() -»', '--div--', t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif');
 
 «EXPAND RegisterPlugin FOREACH allPlugins().sortBy( e | e.name ) -»
-
 $TCA['tt_content']['columns']['list_type']['config']['items'][] = array('', '--div--');
 
-«EXPAND OwnPluginsCodeImplementation("ext_tables.php.own.plugins.code.implementation." + xmiGuid) -»
 «ENDIF -»
+«EXPAND OwnPluginsCodeImplementation("ext_tables.php.own.plugins.code.implementation." + xmiGuid) -»
+
 «ENDDEFINE»
 
 
@@ -122,6 +118,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'«getT3ExtbasePluginTitle() -»'«IF getT3ExtbasePluginIconFileNamePath() != "" -»,
 	t3lib_extMgm::extRelPath($_EXTKEY) . '«getT3ExtbasePluginIconFileNamePath() -»'«ENDIF»
 );
+
 «EXPAND PluginFlexform -»
 «ENDDEFINE»
 
@@ -146,6 +143,7 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['«asPluginFlexformName() -»'] = 'select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['«asPluginFlexformName() -»'] = 'pi_flexform,recursive';
 t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«extensionKey() -»/«flexformXMLFileNamePath() -»');
+
 «ENDIF -»
 «ENDDEFINE»
 
@@ -163,13 +161,13 @@ t3lib_extMgm::addPiFlexFormValue('«asPluginFlexformName() -»', 'FILE:EXT:«ext
 «REM»
 «ENDREM»
 «DEFINE ModuleConfiguration FOR MModel -»
-«IF !allModules().isEmpty -»
 if (TYPO3_MODE === 'BE') {
+«IF !allModules().isEmpty -»
 	«EXPAND RegisterModule FOREACH allModules().sortBy( e | e.name ) -»
-	
+«ENDIF -»
 	«EXPAND OwnModulesCodeImplementation("ext_tables.php.own.modules.code.implementation." + xmiGuid) -»
 }
-«ENDIF -»
+
 «ENDDEFINE»
 
 
@@ -193,6 +191,7 @@ if (TYPO3_MODE === 'BE') {
 			«EXPAND OwnModuleConfigurationCodeImplementation("ext_tables.php.own.module.configuration.code.implementation." + xmiGuid) -»
 		)
 	);
+	
 «ENDDEFINE»
 
 
@@ -246,6 +245,7 @@ if (TYPO3_MODE === 'BE') {
 t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«extensionName() -» setup');
 
 «EXPAND OwnTypoScriptCodeImplementation("ext_tables.php.own.typoscript.code.implementation." + xmiGuid) -»
+
 «ENDDEFINE»
 
 
@@ -266,7 +266,8 @@ t3lib_extMgm::addStaticFile($_EXTKEY, '«configurationTypoScriptPath() -»', '«
 	«EXPAND ContextSensitiveHelpInclusion FOR domainObject -»
 	«EXPAND AllowTableOnStandardPages FOR domainObject -»
 	«EXPAND TableConfigurationArray FOR domainObject -»
-«ENDFOREACH»
+	
+«ENDFOREACH -»
 «ENDDEFINE»
 
 

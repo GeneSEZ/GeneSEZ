@@ -38,16 +38,14 @@
 «EXPAND ContextSettings -»
 
 «FILE extTablesSQLFileNamePath() -»
-
 «EXPAND CreateConcreteTableDefinition FOREACH allConreteTableInheritances().sortBy( e | e.name ) -»
 «EXPAND CreateSingleTableDefinition FOREACH allSingleTableInheritances().sortBy( e | e.name ) -»
 «EXPAND CreateMappingTableDefinition FOREACH allMappingTables().sortBy( e | e.name ) -»
 «EXPAND ConcreteIntermediateTables FOREACH allConreteTableInheritances().sortBy ( e | e.name ) -»
 «EXPAND SingleIntermediateTables FOREACH allSingleTableInheritances().sortBy ( e | e.name ) -»
 «EXPAND MappingIntermediateTables FOREACH allMappingTables().sortBy ( e | e.name ) -»
-
 «EXPAND OwnSQLDeclaration("ext_tables.sql.own.sql.declaration." + xmiGuid) -»
-«ENDFILE»
+«ENDFILE -»
 «ENDDEFINE»
 
 
@@ -73,6 +71,7 @@
 CREATE TABLE «name() -» (
 	«EXPAND CreateConcreteTableColumns -»
 );
+
 «ENDDEFINE»
 
 
@@ -83,6 +82,7 @@ CREATE TABLE «name() -» (
 CREATE TABLE «name() -» (
 	«EXPAND CreateSingleTableColumns -»
 );
+
 «ENDDEFINE»
 
 
@@ -93,6 +93,7 @@ CREATE TABLE «name() -» (
 CREATE TABLE «name() -» (
 	«EXPAND CreateMappingTableColumns -»
 );
+
 «ENDDEFINE»
 
 
@@ -107,18 +108,13 @@ CREATE TABLE «name() -» (
 «ENDREM»
 «DEFINE CreateConcreteTableColumns FOR MClass -»
 	«EXPAND InternalManagementColumns -»
-	
 	«EXPAND AttributeColumn FOREACH allInstanceAttributes() -»
 	«EXPAND AssociationColumn FOREACH allInstanceAssociationRoles() -»
 	
 	«EXPAND SortingColumn -»
-	
 	«EXPAND AccessControlColumns -»
-	
 	«EXPAND LocalizationColumns -»
-	
 	«EXPAND VersioningColumns -»
-	
 	«EXPAND KeyManagement -»
 «ENDDEFINE»
 
@@ -127,7 +123,6 @@ CREATE TABLE «name() -» (
 «ENDREM»
 «DEFINE CreateSingleTableColumns FOR MClass -»
 	«EXPAND RecordTypeColumn -»
-	
 	«EXPAND AttributeColumn FOREACH  owningInitializableAttributes().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
 	«EXPAND AssociationColumn FOREACH owningInitializableAssociationRoles().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
 	
@@ -139,7 +134,6 @@ CREATE TABLE «name() -» (
 «ENDREM»
 «DEFINE CreateMappingTableColumns FOR MClass -»
 	«EXPAND RecordTypeColumn -»
-	
 	«EXPAND AttributeColumn FOREACH  owningInitializableAttributes().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
 	«EXPAND AssociationColumn FOREACH owningInitializableAssociationRoles().select( e | !e.hasT3ExtbaseColumnMappingStereotype() ) -»
 	
@@ -153,6 +147,7 @@ CREATE TABLE «name() -» (
 «DEFINE InternalManagementColumns FOR MClass -»
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
+	
 «ENDDEFINE»
 
 
@@ -161,6 +156,7 @@ CREATE TABLE «name() -» (
 «ENDREM»
 «DEFINE RecordTypeColumn FOR MClass -»
 	«getPersistenceRecordTypeColumnName() -» varchar(255) DEFAULT '' NOT NULL,
+	
 «ENDDEFINE»
 
 
@@ -311,6 +307,7 @@ CREATE TABLE «name() -» (
 «DEFINE SortingColumn FOR MClass -»
 «IF createSortingField() -»
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	
 «ENDIF -»
 «ENDDEFINE»
 
@@ -331,6 +328,7 @@ CREATE TABLE «name() -» (
 «IF createEndtimeField() -»
 	endtime int(11) unsigned DEFAULT '0' NOT NULL,
 «ENDIF -»
+	
 «ENDDEFINE»
 
 
@@ -342,6 +340,7 @@ CREATE TABLE «name() -» (
 	sys_language_uid int(11) DEFAULT '0' NOT NULL,
 	l10n_parent int(11) DEFAULT '0' NOT NULL,
 	l10n_diffsource mediumblob NOT NULL,
+	
 «ENDIF -»
 «ENDDEFINE»
 
@@ -361,6 +360,7 @@ CREATE TABLE «name() -» (
 	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
 	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
 	t3_origuid int(11) DEFAULT '0' NOT NULL,
+	
 «ENDIF -»
 «ENDDEFINE»
 
@@ -435,6 +435,7 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign)
 );
+
 «ENDDEFINE»
 
 
@@ -453,6 +454,7 @@ CREATE TABLE «asIntermediateTableName(class) -» (
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign)
 );
+
 «ENDDEFINE»
 
 
