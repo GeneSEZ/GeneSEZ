@@ -1,11 +1,12 @@
 package de.genesez.platforms.common.revisioncontrol;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jgit.util.FileUtils;
+import org.eclipse.jgit.dircache.DirCache;
+import org.eclipse.jgit.dircache.DirCacheEditor;
+import org.eclipse.jgit.util.FS;
 
 /**
  * Implementation of the delete algorithm for Git.
@@ -14,24 +15,25 @@ import org.eclipse.jgit.util.FileUtils;
  * @date 2011-09-15
  */
 public class GitImpl implements RevisionControlSystem {
-	List<String> metadataFolderName = new ArrayList<String>(1);
+	String metadataFolderName = ".git";
+	List<String> rootDir = new LinkedList<String>();
 
 	/**
 	 * creates a new Git implementation
 	 */
 	public GitImpl() {
-		metadataFolderName.add(".git");
 	}
 
 	/**
 	 * deletes a file with the given path String under Git
 	 * @param file the file, that should be deleted
 	 */
-	public void delete(String file) {
-		try {
-			FileUtils.delete(new File(file), FileUtils.RETRY);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void markForDelete(String file) {
+		for(String dir : rootDir){
+			DirCache cache = new DirCache(new File(dir), FS.DETECTED);
+			DirCacheEditor e = cache.editor();
+			e.add(new DirCacheEditor.DeletePath(file));
+			e.finish();
 		}
 	}
 
@@ -41,17 +43,21 @@ public class GitImpl implements RevisionControlSystem {
 	 * 
 	 * @return a List with metadata-folder-name
 	 */
-	public List<String> getMetadataFolderNames() {
+	public String getMetadataFolderName() {
 		return metadataFolderName;
 	}
-
+	
+	public void setRepositoryRoot(String root) {
+		rootDir.add(root);
+	}
+	
 	/**
 	 * The name that will be printed on the log
 	 * 
 	 * @return "Git"
 	 */
-	public String getName() {
+	@Override
+	public String toString() {
 		return "Git";
 	}
-
 }

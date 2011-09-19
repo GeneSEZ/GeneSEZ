@@ -1,6 +1,9 @@
 package de.genesez.platforms.common;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -8,7 +11,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,22 +42,19 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  */
 public class Deletor extends SimpleFileVisitor<Path> {
 
-	private List<String> includedFiles = new LinkedList<String>();
-	private List<String> excludedFiles = new LinkedList<String>();
-	private List<String> excludedRelativePaths = new LinkedList<String>();
-	private List<String> excludedDirectoryNames = new LinkedList<String>();
+	private Set<String> includedFiles = new LinkedHashSet<String>();
+	private Set<String> excludedFiles = new LinkedHashSet<String>();
+	private Set<String> excludedRelativePaths = new LinkedHashSet<String>();
+	private Set<String> excludedDirectoryNames = new LinkedHashSet<String>();
 
 	private Map<String, Long> oldFiles = new LinkedHashMap<String, Long>();
 	private boolean prepared = false;
 	private Path outputPath;
 	private List<RevisionControlSystem> repos = RegisterHelper
 			.getAvailableRepositoryImpls();
-	private RevisionControlSystem revisionSystem = null;
+	private Set<RevisionControlSystem> revisionSystems = new HashSet<RevisionControlSystem>();
 
 	private Map<String, Long> fileMap = new LinkedHashMap<String, Long>();
-
-	// private static final Deletor deletor = new Deletor();
-	private String repositoryFolderName = "";
 
 	/**
 	 * Constructs the singleton
@@ -54,74 +62,89 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	public Deletor() {
 	}
 
-	// public static Deletor getInstance() {
-	// return deletor;
-	// }
-
 	/**
 	 * checks which revision control system is used. Therefore it checks if a
-	 * folder starts with a dot and than checks if its one of the registered
-	 * control systems.
+	 * folder is one of the registered metadata folders
 	 * 
-	 * @param path the startPath where the search begins (usually the outputDir)
-	 * @return the name of the found revision control system.
-	 * @return "" (empty String) if no System was found
-	 * @return "Not supported" if a System was found but its not supported
-	 * @return null if 2 different systems where found.
+	 * @param path
+	 *            the startPath where the search begins (usually the outputDir)
+	 * @return the name of the found revision control systems or "Default" if
+	 *         nothing was found
 	 */
 	public String checkRepository(String path) {
 		outputPath = Paths.get(path);
 		try {
 			Files.walkFileTree(outputPath, new SimpleFileVisitor<Path>() {
-				
+
 				/**
-				 * looks if the directory is a metadata folder. (if its starts with a dot)
-				 * @param dir the directory that will be checked
-				 * @param attr the basic attributes of the directory.
-				 * @return CONTINUE if it does not start with a dot.
-				 * @return SKIP_SUBTREE if one metadata folder was found.
-				 * @return SKIP_SIBLINGS if an other metadata folder was found.
+				 * looks if the directory is a known metadata folder.
+				 * 
+				 * @param dir
+				 *            the directory that will be checked
+				 * @param attr
+				 *            the basic attributes of the directory.
+				 * @return CONTINUE if no metadate Folder was found.
+				 * @return SKIP_SUBTREE if a metadata folder was found.
 				 */
 				@Override
 				public FileVisitResult preVisitDirectory(Path dir,
 						BasicFileAttributes attr) throws IOException {
-					if (dir.getFileName().toString().startsWith(".")) {
-						if (repositoryFolderName.length() > 0
-								&& !(dir.getFileName().toString()
-										.equals(repositoryFolderName))) {
-							repos = null;
-							return FileVisitResult.SKIP_SIBLINGS;
+					for (RevisionControlSystem rep : repos) {
+						String name = rep.getMetadataFolderName();
+						if (dir.endsWith(name)) {
+							excludedDirectoryNames.add(name);
+							revisionSystems.add(rep);
+							rep.setRepositoryRoot(dir.toString());
+							return FileVisitResult.SKIP_SUBTREE;
 						}
-						repositoryFolderName = dir.getFileName().toString();
-						return FileVisitResult.SKIP_SUBTREE;
 					}
 					return FileVisitResult.CONTINUE;
 				}
 			});
+			checksAbove(outputPath.toRealPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		// Case 1: found 2 different repositories --> fail
-		if (repos == null) {
+		if (revisionSystems.isEmpty()) {
 			return null;
 		}
-		if (repositoryFolderName.length() > 0) {
-			for (RevisionControlSystem rep : repos) {
-				for (String metadataFolderName : rep.getMetadataFolderNames()) {
-					if (metadataFolderName.equals(repositoryFolderName)) {
-						revisionSystem = rep;
-						// Case 2: revisionSystem found
-						excludedDirectoryNames.add(repositoryFolderName);
-						return revisionSystem.getName();
+		return revisionSystems.toString();
+	}
+
+	/**
+	 * Checks if there is another repository metadata folder above the given
+	 * path.
+	 * 
+	 * @param absolutePath
+	 *            the absolute path where the search begins
+	 */
+	private void checksAbove(Path absolutePath) {
+		Path parent = absolutePath.getParent();
+		if (parent != null) {
+			DirectoryStream<Path> stream = null;
+			try {
+				stream = Files.newDirectoryStream(parent, "*.*");
+				for (Path dir : stream) {
+					for (RevisionControlSystem rep : repos) {
+						String name = rep.getMetadataFolderName();
+						if (dir.endsWith(name)) {
+							revisionSystems.add(rep);
+						}
+					}
+				}
+			} catch (IOException e) {
+			} finally {
+				if (stream != null) {
+					try {
+						stream.close();
+					} catch (IOException e) {
+						System.err.println("Directory Stream on " + parent
+								+ " couldn't be closed.");
 					}
 				}
 			}
-			// Case 3: revisionSystem found but not supported
-			return "Not supported";
+			checksAbove(parent);
 		}
-		// Case 4: no revision System found
-		return "";
 	}
 
 	/**
@@ -212,6 +235,11 @@ public class Deletor extends SimpleFileVisitor<Path> {
 				@Override
 				public FileVisitResult preVisitDirectory(Path dir,
 						BasicFileAttributes attrs) throws IOException {
+					UserDefinedFileAttributeView view = Files
+							.getFileAttributeView(dir,
+									UserDefinedFileAttributeView.class);
+					view.write("user.empty",
+							Charset.defaultCharset().encode("false"));
 					for (String s : excludedRelativePaths) {
 						if (dir.startsWith(Paths.get(s))) {
 							return FileVisitResult.SKIP_SUBTREE;
@@ -227,8 +255,8 @@ public class Deletor extends SimpleFileVisitor<Path> {
 
 				/**
 				 * After it visits the directory the method checks, whether its
-				 * empty or not and deletes it if its empty. Also repository
-				 * folder will be delete if it is the only one left
+				 * and its subfolders are empty or not and deletes it if they
+				 * are empty.
 				 * 
 				 * @param dir
 				 *            directory that is checked
@@ -244,35 +272,62 @@ public class Deletor extends SimpleFileVisitor<Path> {
 				public FileVisitResult postVisitDirectory(Path dir,
 						IOException exc) throws IOException {
 
-					// try(DirectoryStream<Path> stream = Files
-					// .newDirectoryStream(dir)){
-					DirectoryStream<Path> stream = Files
-							.newDirectoryStream(dir);
+					List<File> files = Arrays.asList(dir.toFile().listFiles());
+					// number of not empty files in the directory
+					int notEmptyFolders = files.size();
 
-					java.util.Iterator<Path> streamIter = stream.iterator();
+					for (int i = 0; i < files.size(); i++) {
+						Path subfolder = files.get(i).toPath();
+						if (Files.isDirectory(subfolder)) {
+							boolean toBreak = false;
+							// if metadata folder "number of not empty files" -1
+							for (RevisionControlSystem rep : revisionSystems) {
+								if (subfolder.endsWith(rep
+										.getMetadataFolderName())) {
+									notEmptyFolders--;
+									toBreak = true;
+									break;
+								}
+							}
+							if (toBreak) {
+								continue;
+							}
+							UserDefinedFileAttributeView view = Files
+									.getFileAttributeView(subfolder,
+											UserDefinedFileAttributeView.class);
+							ByteBuffer buffer = ByteBuffer.allocate(view
+									.size("user.empty"));
+							// reads user attribute "user.empty"
+							view.read("user.empty", buffer);
+							buffer.flip();
+							// checks if subfolders are empty or not, if empty
+							// "number of not empty files" -1
+							if (Charset.defaultCharset().decode(buffer)
+									.toString().equals("true")) {
+								notEmptyFolders--;
+							}
+						} else {
+							break;
+						}
+					}
 
-					if (streamIter.hasNext()) {
-						Path subfolder = streamIter.next();
-						// looks if the repository folder is the
-						// only folder in this directory
-						if (repositoryFolderName.length() > 0) {
-							if (!streamIter.hasNext()
-									&& subfolder.endsWith(repositoryFolderName)
-									&& Files.isDirectory(subfolder)) {
-								// deletes the folder
-								revisionSystem.delete(dir.toString());
-								log.add(dir.toString());
+					if (notEmptyFolders == 0) {
+						UserDefinedFileAttributeView view = Files
+								.getFileAttributeView(dir,
+										UserDefinedFileAttributeView.class);
+						view.write("user.empty", Charset.defaultCharset()
+								.encode("true"));
+						// delete all folders with revisionSystem
+						if (revisionSystems != null) {
+							for (RevisionControlSystem rep : revisionSystems) {
+								rep.markForDelete(dir.toString());
 							}
 						}
-					} else {
-						Files.delete(dir);
+						if(Files.exists(dir) && files.size() == 0){
+							alterPermission(dir);
+							Files.delete(dir);
+						}
 						log.add(dir.toString());
-					}
-					// } catch (DirectoryIteratorException ex){
-					// ex.printStackTrace();
-					// }
-					if (stream != null) {
-						stream.close();
 					}
 					return FileVisitResult.CONTINUE;
 				}
@@ -292,8 +347,8 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 *            in a single String (separated by "," or ";")
 	 */
 	public void setIncludedFiles(String extensions) {
-
-		includedFiles = WorkflowUtils.split(extensions);
+		includedFiles.clear();
+		includedFiles.addAll(WorkflowUtils.split(extensions));
 
 	}
 
@@ -305,8 +360,8 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 *            in a single String (separated by "," or ";")
 	 */
 	public void setExcludedFiles(String extensions) {
-
-		excludedFiles = WorkflowUtils.split(extensions);
+		excludedFiles.clear();
+		excludedFiles.addAll(WorkflowUtils.split(extensions));
 
 	}
 
@@ -319,21 +374,10 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 *            "," or ";")
 	 */
 	public void setExcludedRelativePaths(String paths) {
-		excludedRelativePaths = WorkflowUtils.split(paths);
-		for (int i = 0; i < excludedRelativePaths.size(); i++) {
-			String s = excludedRelativePaths.get(i);
-			if (!s.startsWith(".")) {
-				s = ".".concat(s);
-			} else if (!s.startsWith("./")) {
-				s = "./".concat(s);
-			}
-			if (!s.startsWith(".\\")) {
-				if (!s.startsWith("./")) {
-					s = s.replaceFirst(".", "./");
-				}
-			}
-			excludedRelativePaths.set(i, Paths.get(s).toString());
-
+		excludedRelativePaths.clear();
+		List<String> list = WorkflowUtils.split(paths);
+		for (String s : list) {
+			excludedRelativePaths.add(Paths.get(s).toString());
 		}
 	}
 
@@ -345,7 +389,45 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 *            contains all Names that are excluded (separated by "," or ";")
 	 */
 	public void setExcludedDirectoryNames(String names) {
-		excludedDirectoryNames = WorkflowUtils.split(names);
+		excludedDirectoryNames.clear();
+		excludedDirectoryNames.addAll(WorkflowUtils.split(names));
+	}
+
+	/**
+	 * Changes the file permissions for POSIX or DOS Systems to rwx------ or
+	 * !readOnly
+	 * 
+	 * @param file
+	 *            the file, were permissions should be checked.
+	 * @return true if its could change permission, false if FileSystem is not
+	 *         supported.
+	 * @throws IOException
+	 *             if IO-Error occurs.
+	 */
+	private boolean alterPermission(Path file) throws IOException {
+		PosixFileAttributeView POSIXattr = Files.getFileAttributeView(file,
+				PosixFileAttributeView.class);
+		// checks if its a POSIX System
+		if (POSIXattr != null) {
+			Set<PosixFilePermission> perms = PosixFilePermissions
+					.fromString("rwx------");
+			// sets file permissions
+			Files.setPosixFilePermissions(file, perms);
+			return true;
+
+		} else {
+			// try if its a DOS-like System
+			try {
+				DosFileAttributeView DOSattr = Files.getFileAttributeView(file,
+						DosFileAttributeView.class);
+				// sets file permission
+				DOSattr.setReadOnly(false);
+				return true;
+			} catch (UnsupportedOperationException e) {
+				e.getMessage();
+				return false;
+			}
+		}
 	}
 
 	/**
@@ -362,17 +444,19 @@ public class Deletor extends SimpleFileVisitor<Path> {
 		Set<String> check = fileMap.keySet();
 		for (String s : check) {
 			if (oldFiles.containsKey(s)) {
-
 				if (fileMap.get(s).equals(oldFiles.get(s))) {
 					logged.add(s.toString());
-					if (revisionSystem != null) {
-						revisionSystem.delete(s);
-					} else {
-						try {
-							Files.delete(Paths.get(s));
-						} catch (IOException e) {
-							e.printStackTrace();
+					for (RevisionControlSystem rep : revisionSystems) {
+						rep.markForDelete(s);
+					}
+					try {
+						Path path = Paths.get(s);
+						if (Files.exists(path)) {
+							alterPermission(path);
+							Files.delete(path);
 						}
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -396,7 +480,7 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	@Override
 	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
 			throws IOException {
-		if (!(excludedFiles.size() == 1 && excludedFiles.get(0).equals(""))) {
+		if (!(excludedFiles.size() == 1 && excludedFiles.contains(""))) {
 			for (String s : excludedFiles) {
 				if (file.toString().endsWith(s)) {
 					return FileVisitResult.CONTINUE;
@@ -430,16 +514,16 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 */
 	@Override
 	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-		if (!(excludedRelativePaths.size() == 1 && excludedRelativePaths.get(0)
-				.equals(""))) {
+		if (!(excludedRelativePaths.size() == 1 && excludedRelativePaths
+				.contains(""))) {
 			for (String s : excludedRelativePaths) {
 				if (dir.startsWith(Paths.get(s))) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 			}
 		}
-		if (!(excludedDirectoryNames.size() == 1 && excludedDirectoryNames.get(
-				0).equals(""))) {
+		if (!(excludedDirectoryNames.size() == 1 && excludedDirectoryNames
+				.contains(""))) {
 			for (String s : excludedDirectoryNames) {
 				if (dir.endsWith(s)) {
 					return FileVisitResult.SKIP_SUBTREE;
