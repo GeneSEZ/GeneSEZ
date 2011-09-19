@@ -131,19 +131,11 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			info = info.concat(" will be deleted. ");
 			issues.addInfo(this, info);
 			
-			String repo = deletor.checkRepository(outputDir);
-			if(repo == null){
-				deleteOldFiles = false;
-				deleteEmptyFolders = false;
-				issues.addWarning(this,"2 different revision control systems found. File deletion deactivated");
-			} else if(repo.equals("Not supported")){
-				deleteOldFiles = false;
-				deleteEmptyFolders = false;
-				issues.addWarning(this,repo + " revision control system found. File deletion deactivated");
-			} else if(repo.equals("")){
-				issues.addInfo(this, "No revision control system found.");
+			String repos = deletor.checkRepository(outputDir);
+			if(repos == null){
+				issues.addInfo(this,"No supported revision control system found. Default will be used.");
 			} else {
-				issues.addInfo(this, "Revision control system found: " + repo + " ");
+				issues.addInfo(this, "Revision control system(s) found: " + repos.toString());
 			}
 			
 			String includedFiles = properties.getProperty("includedFiles", "");

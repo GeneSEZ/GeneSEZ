@@ -1,7 +1,5 @@
 package de.genesez.platforms.common.revisioncontrol;
 
-import java.util.List;
-
 /**
  * Interface that provides different delete algorithms for different revision
  * control systems (RCS).
@@ -17,7 +15,7 @@ public interface RevisionControlSystem {
 	 * @param file
 	 *            the file, that should be deleted
 	 */
-	public abstract void delete(String file);
+	public abstract void markForDelete(String file);
 
 	/**
 	 * gives a list of repository metadata-folder-names usually this should
@@ -25,12 +23,19 @@ public interface RevisionControlSystem {
 	 * 
 	 * @return a List with metadata-folder-names
 	 */
-	public abstract List<String> getMetadataFolderNames();
+	public abstract String getMetadataFolderName();
 
+	/**
+	 * a callback from the Deletor Module to set the Path of the metadataFolder 
+	 * @param root the directory where the metadata folder was found
+	 */
+	public abstract void setRepositoryRoot(String root);
+	
 	/**
 	 * The name that will be printed on the log
 	 * 
 	 * @return name of the RCS
 	 */
-	public abstract String getName();
+	@Override
+	public abstract String toString();
 }

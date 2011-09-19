@@ -15,7 +15,6 @@ public class RegisterHelper {
 
 	static{
 		availableImpls.add(new SubversionImpl());
-		availableImpls.add(new DefaultImpl());
 		availableImpls.add(new GitImpl());
 	}
 	
