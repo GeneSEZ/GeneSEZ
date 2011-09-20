@@ -1,4 +1,4 @@
-package de.genesez.platforms.common;
+package de.genesez.platforms.common.workflow.feature;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +13,7 @@ import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Properties;
 import java.util.Set;
 
 import org.junit.After;
@@ -28,15 +29,16 @@ import org.junit.Test;
  * @author Dominik Wetzel
  * @date 2011-09-14
  */
-public class DeletorTest {
+public class FileDeletionFeatureTest {
 	private static Path startPath;
 	private static Path firstPath;
 	private static Path secondPath;
-	private static Deletor deletor;
+	private static FileDeletionFeature deletor;
 	private static Path test1;
 	private static Path test2;
 	private static Path test3;
 	private static Path test4;
+	private static Properties prop = new Properties();
 
 	private static class Delete extends SimpleFileVisitor<Path> {
 
@@ -92,8 +94,10 @@ public class DeletorTest {
 		startPath = Files.createTempDirectory("testDir");
 		firstPath = startPath.resolve("de/genesez/testclasses/");
 		secondPath = startPath.resolve("de/genesez/output/");
+		prop.setProperty("outputDir", startPath.toString());
 
-		deletor = new Deletor();
+		deletor = new FileDeletionFeature();
+		deletor.setProperties(prop);
 		try {
 			Files.createDirectories(firstPath);
 		} catch (FileAlreadyExistsException e) {
@@ -116,17 +120,11 @@ public class DeletorTest {
 	@After
 	public void tearDown() throws IOException {
 		Files.walkFileTree(startPath, new Delete());
-		deletor.setExcludedDirectoryNames("");
-		deletor.setExcludedFiles("");
-		deletor.setExcludedRelativePaths("");
-		deletor.setIncludedFiles("");
-		deletor = null;
-		System.gc();
 	}
 
 	// // BEGIN OF TESTS
 
-	@Test(expected = (Deletor.NotPreparedException.class))
+	@Test(expected = (NotPreparedException.class))
 	public void testNotPreparedException() {
 		deletor.delete();
 		assertTrue(Files.exists(test1));
@@ -138,19 +136,19 @@ public class DeletorTest {
 	@Test
 	public void testPrepare() {
 		assertEquals("Right amount of files read", 4,
-				deletor.prepare(startPath.toString()));
+				deletor.prepare());
 	}
 
 	@Test
 	public void testDeleteEverything() {
-		deletor.prepare(startPath.toString());
+		deletor.prepare();
 		assertEquals("checks if every file was deleted", 4, deletor.delete()
 				.size());
 	}
 
 	@Test
 	public void testDelete2Files() {
-		deletor.prepare(startPath.toString());
+		deletor.prepare();
 		test1.toFile().setLastModified(1);
 		test2.toFile().setLastModified(1);
 		assertEquals("checks if 2 files were deleted", 2, deletor.delete()
@@ -159,7 +157,7 @@ public class DeletorTest {
 
 	@Test
 	public void testDeleteNothing() {
-		deletor.checkRepository(startPath.toString());
+		deletor.checkRepository();
 		deletor.prepare();
 		test1.toFile().setLastModified(1);
 		test2.toFile().setLastModified(1);
@@ -172,36 +170,34 @@ public class DeletorTest {
 	public void testSetOneIncludedFileExtension() {
 		// deletor.checkRepository(startPath.toString());
 		deletor.setIncludedFiles("4");
-		deletor.prepare(startPath.toString());
-		assertEquals(1, deletor.prepare(startPath.toString()));
+		assertEquals(1, deletor.prepare());
 		assertEquals(1, deletor.delete().size());
 	}
 
 	@Test
 	public void testSetMoreIncludedFileExtensions() {
 		deletor.setIncludedFiles("est4;test3,2");
-		deletor.prepare(startPath.toString());
-		assertEquals(3, deletor.prepare(startPath.toString()));
+		assertEquals(3, deletor.prepare());
 		assertEquals(3, deletor.delete().size());
 	}
 
 	@Test
 	public void testSetOneExcludedFileExtension() {
 		deletor.setExcludedFiles("test2");
-		assertEquals(3, deletor.prepare(startPath.toString()));
+		assertEquals(3, deletor.prepare());
 		assertEquals(3, deletor.delete().size());
 	}
 
 	@Test
 	public void testSetMoreExcludedFileExtensions() {
 		deletor.setExcludedFiles("test2,4;est1");
-		assertEquals(1, deletor.prepare(startPath.toString()));
+		assertEquals(1, deletor.prepare());
 		assertEquals(1, deletor.delete().size());
 	}
 
 	@Test
 	public void testSetOneExcludedPath() {
-		deletor.checkRepository(startPath.toString());
+		deletor.checkRepository();
 		deletor.setExcludedRelativePaths(startPath.resolve("de/genesez/output")
 				.toString());
 		assertEquals(3, deletor.prepare());
@@ -209,7 +205,7 @@ public class DeletorTest {
 
 	@Test
 	public void testSetMoreExcludedPaths() throws IOException {
-		deletor.checkRepository(startPath.toString());
+		deletor.checkRepository();
 		Path test = Files.createFile(startPath.resolve("test.test"));
 		deletor.setExcludedRelativePaths(startPath.resolve("de/genesez/output")
 				.toString() + ";" + startPath.resolve("de/genesez/testclasses"));
@@ -222,7 +218,7 @@ public class DeletorTest {
 		Path test = Files.createFile(Files.createDirectory(
 				startPath.resolve(".svn")).resolve("tester"));
 
-		deletor.checkRepository(startPath.toString());
+		deletor.checkRepository();
 		deletor.setExcludedDirectoryNames(".svn");
 		assertEquals(4, deletor.prepare());
 		test.toFile().setLastModified(1);
@@ -238,7 +234,7 @@ public class DeletorTest {
 		Files.createFile(startPath.resolve("de").resolve("tester"));
 
 		deletor.setExcludedDirectoryNames(".svn; tester;en");
-		assertEquals(5, deletor.prepare(startPath.toString()));
+		assertEquals(5, deletor.prepare());
 		test.toFile().setLastModified(1);
 		assertEquals(5, deletor.delete().size());
 	}
@@ -255,7 +251,7 @@ public class DeletorTest {
 		deletor.setIncludedFiles("2;3");
 		deletor.setExcludedRelativePaths("/testDir/de/genesez/output");
 		deletor.setExcludedDirectoryNames(".svn; en");
-		assertEquals(1, deletor.prepare(startPath.toString()));
+		assertEquals(1, deletor.prepare());
 		assertTrue(test3.endsWith(deletor.delete().get(0)));
 	}
 
@@ -270,7 +266,7 @@ public class DeletorTest {
 		deletor.setExcludedRelativePaths("/common");
 		deletor.setExcludedDirectoryNames("deletor");
 		try {
-			assertEquals(3, deletor.deleteEmptyPackages(startPath.toString())
+			assertEquals(3, deletor.deleteEmptyPackages()
 					.size());
 		} catch (UnsupportedOperationException e) {
 			System.err.println(e.getMessage());
@@ -280,7 +276,7 @@ public class DeletorTest {
 	@Test
 	public void testDeletePackages() throws IOException,
 			UnsupportedOperationException {
-		// create testenvironment
+		// create testEnvironment
 		Files.createDirectories(startPath
 				.resolve("en/genesez/java/.svn/props/polerte/"));
 		Path test = Files.createFile(startPath
@@ -303,15 +299,13 @@ public class DeletorTest {
 			attr.setReadOnly(true);
 		}
 
-		// prepare Deletor
-		// deletor.setExcludedDirectoryNames(".svn");
-		deletor.checkRepository(startPath.toString());
-		deletor.prepare(startPath.toString());
+		deletor.checkRepository();
+		deletor.prepare();
 		test4.toFile().setLastModified(1);
 		deletor.delete();
 
 		// the Test
-		assertEquals(9, deletor.deleteEmptyPackages(startPath.toString())
+		assertEquals(9, deletor.deleteEmptyPackages()
 				.size());
 		assertTrue(Files.exists(test4));
 		assertFalse(Files.exists(firstPath));
@@ -320,28 +314,70 @@ public class DeletorTest {
 
 	@Test
 	public void testCheckRepositoryNoRepository() {
-		assertEquals("Default", deletor.checkRepository(startPath.toString()));
+		assertNull(deletor.checkRepository());
 	}
 
 	@Test
 	public void testCheckRepositorySVN() throws IOException {
 		Files.createDirectory(startPath.resolve("de/genesez/.svn/"));
 		assertEquals("[Subversion]",
-				deletor.checkRepository(startPath.toString()));
+				deletor.checkRepository());
 	}
 
 	@Test
 	public void testCheckRepositoryDefault() throws IOException {
 		Files.createDirectory(startPath.resolve("de/genesez/testclasses/.cvs"));
-		assertEquals("Default", deletor.checkRepository(startPath.toString()));
+		assertNull(deletor.checkRepository());
 	}
 
 	@Test
 	public void testCheckRepositoryGit() throws IOException {
 		Path git = Files.createDirectory(startPath.toRealPath().getParent()
 				.getParent().resolve(".git"));
-		String check = deletor.checkRepository(startPath.toString());
+		String check = deletor.checkRepository();
 		Files.deleteIfExists(git);
 		assertEquals("[Git]", check);
+	}
+	
+	@Test
+	public void testComplete() throws IOException {
+		Path dir1 = Files.createDirectories(startPath
+				.resolve("de/genesez/java/.svn/props/polerte/"));
+		Path test = Files.createFile(startPath
+				.resolve("de/genesez/java/.svn/props/testing"));
+		Path dir2 = Files.createDirectories(startPath
+				.resolve("en/genesez/workflow/common/deletor/"));
+		Path dir3 = Files.createDirectories(startPath
+				.resolve("de/genesez/en/java/generator/"));
+		Path dir4 = Files.createDirectories(startPath.resolve("de/genesez/la/li/lu/"));
+		
+		Properties properties = new Properties();
+		properties.setProperty("excludedRelativePaths", secondPath.toString());
+		properties.setProperty("excludedFiles", "test2");
+		properties.setProperty("includedFiles", "est1, testing, 2, 3");
+		properties.setProperty("excludedDirectoryNames", "en" );
+		properties.setProperty("deleteOldFiles", "true");
+		properties.setProperty("deleteEmptyFolders", "true");
+		properties.setProperty("outputDir", startPath.toString());
+		
+		deletor.setProperties(properties);
+		deletor.checkConfiguration();
+		deletor.preProcessing();
+		test1.toFile().setLastModified(1);
+		test2.toFile().setLastModified(1);
+		deletor.postProcessing();
+		
+		assertTrue(Files.exists(test1));
+		assertTrue(Files.exists(test2));
+		
+		assertFalse(Files.exists(test3));
+		
+		assertTrue(Files.exists(test4));
+		assertTrue(Files.exists(dir1));
+		assertTrue(Files.exists(test));
+		assertTrue(Files.exists(dir2));
+		assertTrue(Files.exists(dir3));
+		
+		assertFalse(Files.exists(dir4.getParent().getParent()));
 	}
 }
