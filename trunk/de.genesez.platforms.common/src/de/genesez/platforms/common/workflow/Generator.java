@@ -1,6 +1,7 @@
 package de.genesez.platforms.common.workflow;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -12,7 +13,8 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
-import de.genesez.platforms.common.Deletor;
+import de.genesez.platforms.common.workflow.feature.FileDeletionFeature;
+import de.genesez.platforms.common.workflow.feature.GeneratorFeature;
 
 /**
  * Workflow component class to generate code (model to text transformation).
@@ -20,7 +22,7 @@ import de.genesez.platforms.common.Deletor;
  * @author Tobias Haubold
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @author Dominik Wetzel
- * @date 2011-09-14
+ * @date 2011-09-20
  */
 public class Generator extends org.eclipse.xpand2.Generator {
 
@@ -40,19 +42,14 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		defaults.setProperty("singleValuedSlot", "true");
 		defaults.setProperty("deleteOldFiles", "false");
 		defaults.setProperty("deleteEmptyFolders", "false");
-		defaults.setProperty("excludedDirectoryNames",
-				defaults.getProperty("prExcludes", ".svn"));
 	}
 
 	/**
 	 * Variable to store all properties.
 	 */
 	protected Properties properties = new Properties();
-
-	// variables for the file and package deletion
-	private boolean deleteOldFiles = false;
-	private boolean deleteEmptyFolders = false;
-	private Deletor deletor = new Deletor();
+	
+	protected List<GeneratorFeature> features = new LinkedList<GeneratorFeature>(); 
 
 	/**
 	 * Constructs the workflow component and initializes the default values.
@@ -77,6 +74,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		EmfMetaModel gtrace = new EmfMetaModel();
 		gtrace.setMetaModelPackage(properties.getProperty("gtracePackage"));
 		addMetaModel(gtrace);
+		
+		// add GeneratorFeatures
+		features.add(new FileDeletionFeature());
 	}
 
 	/**
@@ -118,39 +118,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 				setProRegDir(outputDir);
 			}
 		}
-		
-		if (deleteOldFiles || deleteEmptyFolders) {
-			String info = "File deletion is active.";
-			if(deleteOldFiles && deleteEmptyFolders){
-				info = info.concat(" Not generated files and empty folders");
-			} else if(deleteOldFiles){
-				info = info.concat(" Not generated files");
-			}else{
-				info = info.concat(" Empty folders");
-			}
-			info = info.concat(" will be deleted. ");
-			issues.addInfo(this, info);
-			
-			String repos = deletor.checkRepository(outputDir);
-			if(repos == null){
-				issues.addInfo(this,"No supported revision control system found. Default will be used.");
-			} else {
-				issues.addInfo(this, "Revision control system(s) found: " + repos.toString());
-			}
-			
-			String includedFiles = properties.getProperty("includedFiles", "");
-			String excludedDirNames = properties.getProperty(
-					"excludedDirectoryNames",
-					properties.getProperty("prExcludes", ".svn"));
-			String excludedFiles = properties.getProperty("excludedFiles", "");
-			String excludedPaths = properties.getProperty(
-					"excludedRelativePaths", "");
-			if (includedFiles.equals("") && excludedFiles.equals("")
-					&& excludedPaths.equals("") && excludedDirNames.equals("")) {
-				issues.addWarning(
-						this,
-						"Nothing included and excluded, every file will be searched and unchanged files will be deleted.");
-			}
+		for(GeneratorFeature feature : features){
+			feature.setProperties(properties);
+			feature.checkConfiguration();
 		}
 		super.checkConfigurationInternal(issues);
 	}
@@ -176,35 +146,14 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			addGlobalVarDef("tracemodel", properties.get("traceSlot"));
 		}
 
-		// prepares the deletion of not generated files
-		if (deleteOldFiles) {
-			logger.debug(deletor.prepare()
-					+ " file(s) found");
+		for(GeneratorFeature feature : features){
+			feature.preProcessing();
 		}
-		// the generation process
+		
 		super.invokeInternal2(ctx, monitor, issues);
-
-		// deletes not generated files
-		if (deleteOldFiles) {
-			List<String> deleteLog = deletor.delete();
-			if (!deleteLog.isEmpty()) {
-				logger.info(deleteLog.size() + " file(s) deleted");
-				logger.debug("deleted file(s): " + deleteLog);
-			}
-		}
-
-		// deletes empty folders
-		if (deleteEmptyFolders) {
-			try {
-				List<String> logInfo = deletor.deleteEmptyPackages(properties
-						.getProperty("outputDir"));
-				if (!logInfo.isEmpty()) {
-					logger.info(logInfo.size() + " folder(s) deleted");
-					logger.debug("deleted folder(s): " + logInfo);
-				}
-			} catch (UnsupportedOperationException e) {
-				logger.error(e.getMessage());
-			}
+		
+		for(GeneratorFeature feature : features){
+			feature.postProcessing();
 		}
 	}
 
@@ -342,8 +291,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            Value of deleteOld True if it should be deleted.
 	 */
 	public void setDeleteOldFiles(String deleteOld) {
-		this.deleteOldFiles = Boolean.parseBoolean(deleteOld);
-		properties.setProperty("deleteOld", deleteOld);
+		properties.setProperty("deleteOldFiles", deleteOld);
 	}
 
 	/**
@@ -354,8 +302,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * @param deleteEmpty
 	 */
 	public void setDeleteEmptyFolders(String deleteEmpty) {
-		this.deleteEmptyFolders = Boolean.parseBoolean(deleteEmpty);
-		properties.setProperty("deleteEmptyFiles", deleteEmpty);
+		properties.setProperty("deleteEmptyFolders", deleteEmpty);
 	}
 
 	// END OF DEFAULTS
@@ -460,7 +407,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            "," or ";")
 	 */
 	public void setIncludedFiles(String fileExtensions) {
-		deletor.setIncludedFiles(fileExtensions);
+		properties.put("includedFiles", fileExtensions);
 	}
 
 	/**
@@ -473,7 +420,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            ";")
 	 */
 	public void setExcludedRelativePaths(String paths) {
-		deletor.setExcludedRelativePaths(paths);
+		properties.put("excludedRelativePaths", paths);
 	}
 
 	/**
@@ -486,7 +433,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            (seperated by "," or ";")
 	 */
 	public void setExcludedFiles(String fileExtensions) {
-		deletor.setExcludedFiles(fileExtensions);
+		properties.put("excludedFiles", fileExtensions);
 	}
 
 	/**
@@ -499,7 +446,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            by "," or ";")
 	 */
 	public void setExcludedDirectoryNames(String names) {
-		deletor.setExcludedDirectoryNames(names);
+		properties.put("excludedDirectoryNames", names);
 	}
 	
 	/**

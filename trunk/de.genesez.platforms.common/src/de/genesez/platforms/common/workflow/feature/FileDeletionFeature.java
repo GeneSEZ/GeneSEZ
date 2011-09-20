@@ -1,4 +1,4 @@
-package de.genesez.platforms.common;
+package de.genesez.platforms.common.workflow.feature;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,45 +23,155 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import de.genesez.platforms.common.revisioncontrol.RegisterHelper;
 import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
- * The Deletor handles the deletion of unchanged files during the generation
- * process. With the filter-options the search can be specified. It's also
- * possible to delete empty packages.
+ * The FileDeletionFeature handles the deletion of unchanged files during the
+ * generation process. With the filter-options the search can be specified. It's
+ * also possible to delete empty packages.
  * 
  * NOTE: Works only with Java 7.
  * 
  * @author Dominik Wetzel
- * @date 2011-09-15
- * 
+ * @date 2011-09-20
  */
-public class Deletor extends SimpleFileVisitor<Path> {
+public class FileDeletionFeature extends SimpleFileVisitor<Path> implements
+		GeneratorFeature {
 
+	/**
+	 * Logger instance to output important messages.
+	 */
+	protected Log logger = LogFactory.getLog(getClass());
+
+	// The includes
 	private Set<String> includedFiles = new LinkedHashSet<String>();
+
+	// The excludes
 	private Set<String> excludedFiles = new LinkedHashSet<String>();
 	private Set<String> excludedRelativePaths = new LinkedHashSet<String>();
 	private Set<String> excludedDirectoryNames = new LinkedHashSet<String>();
 
-	private Map<String, Long> oldFiles = new LinkedHashMap<String, Long>();
-	private boolean prepared = false;
-	private Path outputPath;
+	// The switches for deletion
+	private boolean deleteOldFiles = false;
+	private boolean deleteEmptyFolders = false;
+
+	// The available revision system implementations
 	private List<RevisionControlSystem> repos = RegisterHelper
 			.getAvailableRepositoryImpls();
+
+	// The found revision system implementations
 	private Set<RevisionControlSystem> revisionSystems = new HashSet<RevisionControlSystem>();
 
+	// The trigger for the NotPreparedException
+	private boolean prepared = false;
+
+	// the maps for comparison between last modification dates
+	private Map<String, Long> oldFiles = new LinkedHashMap<String, Long>();
 	private Map<String, Long> fileMap = new LinkedHashMap<String, Long>();
 
+	// the Path to the outputDirectory
+	private Path outputPath;
+
+	// Methods from the Interface //
+	
 	/**
-	 * Constructs the singleton
+	 * Sets the properties:
+	 * <p>
+	 * includedFiles<br>
+	 * excludedFiles<br>
+	 * excludedRelativePaths<br>
+	 * excludedDirectoryNames<br>
+	 * deleteOldFiles<br>
+	 * deleteEmptyFolders<br>
+	 * outputPath
+	 * </p>
+	 * 
+	 * @param properties the Properties-Map with the properties
 	 */
-	public Deletor() {
+	public void setProperties(Properties properties) {
+		setIncludedFiles(properties.getProperty("includedFiles", ""));
+		setExcludedFiles(properties.getProperty("excludedFiles", ""));
+		setExcludedRelativePaths(properties.getProperty(
+				"excludedRelativePaths", ""));
+		setExcludedDirectoryNames(properties.getProperty(
+				"excludedDirectoryNames", ""));
+		setDeleteOldFiles(properties.getProperty("deleteOldFiles", "false"));
+		setDeleteEmptyFolders(properties.getProperty("deleteEmptyFolders",
+				"false"));
+		outputPath = Paths.get(properties.getProperty("outputDir", ""));
 	}
 
+	/**
+	 * Checks the Configuration and the revision system
+	 */
+	public void checkConfiguration() {
+		if (outputPath.toString().equals("")) {
+			deleteOldFiles = false;
+			deleteEmptyFolders = false;
+		}
+		if (deleteOldFiles || deleteEmptyFolders) {
+			String info = "File deletion is active.";
+			if (deleteOldFiles && deleteEmptyFolders) {
+				info = info.concat(" Not generated files and empty folders");
+			} else if (deleteOldFiles) {
+				info = info.concat(" Not generated files");
+			} else {
+				info = info.concat(" Empty folders");
+			}
+			info = info.concat(" will be deleted.");
+			logger.info(info);
+
+			String repos = checkRepository();
+			if (repos == null) {
+				logger.info("No supported revision control system found. Default will be used.");
+			} else {
+				logger.info("Revision control system(s) found: "
+						+ repos.toString());
+			}
+			if (includedFiles.isEmpty() && excludedFiles.isEmpty()
+					&& excludedRelativePaths.isEmpty()
+					&& excludedDirectoryNames.isEmpty()) {
+				logger.warn("Nothing included and excluded, every file will be searched and unchanged files will be deleted.");
+			}
+		}
+	}
+
+	/**
+	 * Processes before generation. Prepares the file deletion.
+	 */
+	public void preProcessing() {
+		if (deleteOldFiles) {
+			logger.debug(prepare() + " file(s) found.");
+		}
+	}
+
+	/**
+	 * Processes after generation. Deletes old files and empty folders if switches set.
+	 * @throws NotPreparedException if called before preProcessing()
+	 */
+	public void postProcessing() throws NotPreparedException {
+		if (deleteOldFiles) {
+			List<String> log = delete();
+			logger.info(log.size() + " file(s) deleted.");
+			logger.debug("Deleted file(s): " + log.toString());
+		}
+		if (deleteEmptyFolders) {
+			List<String> log = deleteEmptyPackages();
+			logger.info(log.size() + " folder(s) deleted.");
+			logger.debug("Deleted folder(s): " + log.toString());
+		}
+	}
+
+	// Methods that are internally used //
+	
 	/**
 	 * checks which revision control system is used. Therefore it checks if a
 	 * folder is one of the registered metadata folders
@@ -71,8 +181,7 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 * @return the name of the found revision control systems or "Default" if
 	 *         nothing was found
 	 */
-	public String checkRepository(String path) {
-		outputPath = Paths.get(path);
+	protected String checkRepository() {
 		try {
 			Files.walkFileTree(outputPath, new SimpleFileVisitor<Path>() {
 
@@ -152,24 +261,9 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 * Searches for files in the directories under path and stores the last
 	 * modification dates in a map. The search uses the given filters.
 	 * 
-	 * @param path
-	 *            The startPath, where the search begins
-	 * 
 	 * @return number of elements in the map
 	 */
-	public int prepare(String path) {
-		outputPath = Paths.get(path);
-		return prepare();
-	}
-
-	/**
-	 * Prepares the deletion of Files. Needs to be called before delete.
-	 * Searches for files in the directories under path and stores the last
-	 * modification dates in a map. The search uses the given filters.
-	 * 
-	 * @return number of elements in the map
-	 */
-	public int prepare() {
+	protected int prepare() {
 		try {
 			Files.walkFileTree(outputPath, this);
 		} catch (IOException e) {
@@ -177,8 +271,8 @@ public class Deletor extends SimpleFileVisitor<Path> {
 		}
 		oldFiles.clear();
 		oldFiles.putAll(fileMap);
-		fileMap.clear();
 		prepared = true;
+		fileMap.clear();
 		return oldFiles.size();
 	}
 
@@ -190,7 +284,7 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 * @throws NotPreparedException
 	 *             if prepare wasn't called before
 	 */
-	public List<String> delete() throws NotPreparedException {
+	protected List<String> delete() throws NotPreparedException {
 		if (prepared) {
 			try {
 				Files.walkFileTree(outputPath, this);
@@ -204,6 +298,41 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	}
 
 	/**
+	 * Compares the last modification date of the files found in path with the
+	 * files in the given map. If the last modification date didn't change the
+	 * file will be deleted (runs only with Java7)
+	 * 
+	 * @param oldFiles
+	 *            map with the oldFiles to compare with
+	 * @return list with deleted paths
+	 */
+	private List<String> deleteOldFiles(Map<String, Long> oldFiles) {
+		List<String> logged = new LinkedList<String>();
+		Set<String> check = fileMap.keySet();
+		for (String s : check) {
+			if (oldFiles.containsKey(s)) {
+				if (fileMap.get(s).equals(oldFiles.get(s))) {
+					logged.add(s.toString());
+					for (RevisionControlSystem rep : revisionSystems) {
+						rep.markForDelete(s);
+					}
+					try {
+						Path path = Paths.get(s);
+						if (Files.exists(path)) {
+							alterPermission(path);
+							Files.delete(path);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		fileMap.clear();
+		return logged;
+	}
+
+	/**
 	 * deletes empty packages (folders) in the given directory, uses the
 	 * specified filters: excludedRelativePaths and excludedDirectoryNames.<br>
 	 * 
@@ -214,11 +343,11 @@ public class Deletor extends SimpleFileVisitor<Path> {
 	 * @throws UnsupportedOperationException
 	 *             is thrown when the JRE version is below 7
 	 */
-	public List<String> deleteEmptyPackages(String path) {
+	protected List<String> deleteEmptyPackages() {
 		final List<String> log = new LinkedList<String>();
 
 		try {
-			Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
+			Files.walkFileTree(outputPath, new SimpleFileVisitor<Path>() {
 
 				/**
 				 * checks if the current directory is excluded using
@@ -272,11 +401,19 @@ public class Deletor extends SimpleFileVisitor<Path> {
 				public FileVisitResult postVisitDirectory(Path dir,
 						IOException exc) throws IOException {
 
-					List<File> files = Arrays.asList(dir.toFile().listFiles());
+					int size = 0;
+					List<File> files = new LinkedList<File>();
+					if (Files.exists(dir) && Files.isDirectory(dir)) {
+						files = Arrays.asList(dir.toFile().listFiles());
+						size = files.size();
+					} else {
+						System.err.println("WTF... Whats wrong with this dir: "
+								+ dir.toString());
+					}
 					// number of not empty files in the directory
-					int notEmptyFolders = files.size();
+					int notEmptyFolders = size;
 
-					for (int i = 0; i < files.size(); i++) {
+					for (int i = 0; i < size; i++) {
 						Path subfolder = files.get(i).toPath();
 						if (Files.isDirectory(subfolder)) {
 							boolean toBreak = false;
@@ -323,7 +460,7 @@ public class Deletor extends SimpleFileVisitor<Path> {
 								rep.markForDelete(dir.toString());
 							}
 						}
-						if(Files.exists(dir) && files.size() == 0){
+						if (Files.exists(dir) && files.size() == 0) {
 							alterPermission(dir);
 							Files.delete(dir);
 						}
@@ -336,61 +473,6 @@ public class Deletor extends SimpleFileVisitor<Path> {
 			ex.printStackTrace();
 		}
 		return log;
-	}
-
-	/**
-	 * Sets files that will be included in the search. <br>
-	 * NOTE: Only files with these extensions will be included.
-	 * 
-	 * @param extensions
-	 *            the IncludedFileExtension String contains all included Files
-	 *            in a single String (separated by "," or ";")
-	 */
-	public void setIncludedFiles(String extensions) {
-		includedFiles.clear();
-		includedFiles.addAll(WorkflowUtils.split(extensions));
-
-	}
-
-	/**
-	 * Sets files that will be excluded in the search.
-	 * 
-	 * @param extensions
-	 *            the ExcludedFileExtension String contains all excluded Files
-	 *            in a single String (separated by "," or ";")
-	 */
-	public void setExcludedFiles(String extensions) {
-		excludedFiles.clear();
-		excludedFiles.addAll(WorkflowUtils.split(extensions));
-
-	}
-
-	/**
-	 * Sets RelativPaths (to the OutputDirectory) which will be excluded in the
-	 * search.
-	 * 
-	 * @param paths
-	 *            contains all excluded Paths in a single String (separated by
-	 *            "," or ";")
-	 */
-	public void setExcludedRelativePaths(String paths) {
-		excludedRelativePaths.clear();
-		List<String> list = WorkflowUtils.split(paths);
-		for (String s : list) {
-			excludedRelativePaths.add(Paths.get(s).toString());
-		}
-	}
-
-	/**
-	 * Sets directory names that are excluded in the search. <br>
-	 * NOTE: Every directory with the same spelling will be excluded.
-	 * 
-	 * @param names
-	 *            contains all Names that are excluded (separated by "," or ";")
-	 */
-	public void setExcludedDirectoryNames(String names) {
-		excludedDirectoryNames.clear();
-		excludedDirectoryNames.addAll(WorkflowUtils.split(names));
 	}
 
 	/**
@@ -430,40 +512,87 @@ public class Deletor extends SimpleFileVisitor<Path> {
 		}
 	}
 
+	// Setter Methods //
+
 	/**
-	 * Compares the last modification date of the files found in path with the
-	 * files in the given map. If the last modification date didn't change the
-	 * file will be deleted (runs only with Java7)
+	 * Sets files that will be included in the search. <br>
+	 * NOTE: Only files with these extensions will be included.
 	 * 
-	 * @param oldFiles
-	 *            map with the oldFiles to compare with
-	 * @return list with deleted paths
+	 * @param extensions
+	 *            the IncludedFileExtension String contains all included Files
+	 *            in a single String (separated by "," or ";")
 	 */
-	private List<String> deleteOldFiles(Map<String, Long> oldFiles) {
-		List<String> logged = new LinkedList<String>();
-		Set<String> check = fileMap.keySet();
-		for (String s : check) {
-			if (oldFiles.containsKey(s)) {
-				if (fileMap.get(s).equals(oldFiles.get(s))) {
-					logged.add(s.toString());
-					for (RevisionControlSystem rep : revisionSystems) {
-						rep.markForDelete(s);
-					}
-					try {
-						Path path = Paths.get(s);
-						if (Files.exists(path)) {
-							alterPermission(path);
-							Files.delete(path);
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		fileMap.clear();
-		return logged;
+	protected void setIncludedFiles(String extensions) {
+		includedFiles.clear();
+		includedFiles.addAll(WorkflowUtils.split(extensions));
+
 	}
+
+	/**
+	 * Sets files that will be excluded in the search.
+	 * 
+	 * @param extensions
+	 *            the ExcludedFileExtension String contains all excluded Files
+	 *            in a single String (separated by "," or ";")
+	 */
+	protected void setExcludedFiles(String extensions) {
+		excludedFiles.clear();
+		excludedFiles.addAll(WorkflowUtils.split(extensions));
+
+	}
+
+	/**
+	 * Sets RelativPaths (to the OutputDirectory) which will be excluded in the
+	 * search.
+	 * 
+	 * @param paths
+	 *            contains all excluded Paths in a single String (separated by
+	 *            "," or ";")
+	 */
+	protected void setExcludedRelativePaths(String paths) {
+		excludedRelativePaths.clear();
+		List<String> list = WorkflowUtils.split(paths);
+		for (String s : list) {
+			excludedRelativePaths.add(Paths.get(s).toString());
+		}
+	}
+
+	/**
+	 * Sets directory names that are excluded in the search. <br>
+	 * NOTE: Every directory with the same spelling will be excluded.
+	 * 
+	 * @param names
+	 *            contains all Names that are excluded (separated by "," or ";")
+	 */
+	protected void setExcludedDirectoryNames(String names) {
+		excludedDirectoryNames.clear();
+		excludedDirectoryNames.addAll(WorkflowUtils.split(names));
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>deleteOld</b></em>.
+	 * 
+	 * Sets if old files should be deleted or not
+	 * 
+	 * @param deleteOld
+	 *            Value of deleteOld True if it should be deleted.
+	 */
+	protected void setDeleteOldFiles(String deleteOld) {
+		this.deleteOldFiles = Boolean.parseBoolean(deleteOld);
+	}
+
+	/**
+	 * Setter for the workflow parameter <em><b>deleteEmptyFolders</b></em>.
+	 * 
+	 * if this is true, empty folders will be deleted after generation process
+	 * 
+	 * @param deleteEmpty
+	 */
+	protected void setDeleteEmptyFolders(String deleteEmpty) {
+		this.deleteEmptyFolders = Boolean.parseBoolean(deleteEmpty);
+	}
+
+	// Methods from Superclass //
 
 	/**
 	 * Is invoked by walkFileTree. Checks if the file is excluded or included in
@@ -532,21 +661,4 @@ public class Deletor extends SimpleFileVisitor<Path> {
 		}
 		return FileVisitResult.CONTINUE;
 	}
-
-	/**
-	 * The NotPreparedException is thrown, if prepare() wasn't called before
-	 * delete()
-	 * 
-	 * @author Dominik Wetzel
-	 * 
-	 */
-	protected class NotPreparedException extends RuntimeException {
-		private static final long serialVersionUID = -1871632509826762886L;
-
-		public NotPreparedException(String message) {
-			super(message);
-		}
-
-	}
-
 }
