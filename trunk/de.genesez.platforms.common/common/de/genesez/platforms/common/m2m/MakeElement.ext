@@ -235,6 +235,23 @@ MOperation makeOperation(MClassifier container, String xmiGuid, String name, Str
 /**
  * creates a parameter
  * xmiGuid is created by container xmiGuid and parameter name
+ * default value is empty
+ * multiplicity is set to 1
+ * unique is set to true
+ * ordered is set to false
+ *
+ * @param container		instance of MOperation
+ * @param name 			name of the parameter
+ * @param direction 	the direction of the parameter (in, out, inout)
+ * @param type			data type of the parameter
+ * @return				instance of the parameter
+ */
+MParameter makeParameter(MOperation container, String name, String direction, MType type) :
+	makeParameter(container, container.xmiGuid + "." + name, name, "", direction, 1, true, false, type);
+
+/**
+ * creates a parameter
+ * xmiGuid is created by container xmiGuid and parameter name
  * multiplicity is set to 1
  * unique is set to true
  * ordered is set to false
@@ -303,10 +320,73 @@ MParameter makeParameter(MOperation container, String name, String defaultValue,
 MParameter makeParameter(MOperation container, String xmiGuid, String name, String defaultValue, String direction, int multiplicity, boolean unique, boolean ordered, MType type) :
 	let p = createParameter(container, xmiGuid, name) :
 		// (defaultValue, direction, multiplicity, unique, ordered)
-		p.processParameter(defaultValue, direction, multiplicity, unique, ordered) ->
+		p.processParameter(defaultValue, direction, multiplicity, multiplicity, unique, ordered) ->
 		p.setType(type) ->
 		p;
 
+/**
+ * 	creates a return parameter
+ * 	xmiGuid is created by container xmiGuid and the value 'return'
+ *	name is empty
+ *	default value is empty
+ *	direction is 'return'
+ *	lower and upper bound is 1
+ *	unique is false
+ *	ordered is false
+ *
+ * @param container		instance of MOperation
+ * @param type			data type of the parameter
+ * @return				instance of the parameter
+ */
+MParameter makeReturnParameter(MOperation container, MType type) :
+	let p = createParameter(container, container.xmiGuid+".return", "") :
+		// (defaultValue, direction, multiplicity, unique, ordered)
+		p.processParameter("", "return", 1, 1, false, false) ->
+		p.setType(type) ->
+		p;
+
+/**
+ * 	creates a return parameter
+ * 	xmiGuid is created by container xmiGuid and the value 'return'
+ *	name is empty
+ *	default value is empty
+ *	direction is 'return'
+ *	lower and upper bound is 1
+ *
+ * @param container		instance of MOperation
+ * @param unique 		unique status of the data type
+ * @param orderd 		ordered status of the data type
+ * @param type			data type of the parameter
+ * @return				instance of the parameter
+ */
+MParameter makeReturnParameter(MOperation container, boolean unique, boolean ordered, MType type) :
+	let p = createParameter(container, container.xmiGuid+".return", "") :
+		// (defaultValue, direction, multiplicity, unique, ordered)
+		p.processParameter("", "return", 1, 1, unique, ordered) ->
+		p.setType(type) ->
+		p;
+
+/**
+ * 	creates a return parameter
+ * 	xmiGuid is created by container xmiGuid and the value 'return'
+ *	name is empty
+ *	default value is empty
+ *	direction is 'return'
+ *
+ * @param container		instance of MOperation
+ * @param lowerBound 	lower bound multiplicity of the data type
+ * @param upperBound 	upper bound multiplicity of the data type
+ * @param unique 		unique status of the data type
+ * @param orderd 		ordered status of the data type
+ * @param type			data type of the parameter
+ * @return				instance of the parameter
+ */
+MParameter makeReturnParameter(MOperation container, int lowerBound, int upperBound, boolean unique, boolean ordered, MType type) :
+	let p = createParameter(container, container.xmiGuid+".return", "") :
+		// (defaultValue, direction, multiplicity, unique, ordered)
+		p.processParameter("", "return", lowerBound, upperBound, unique, ordered) ->
+		p.setType(type) ->
+		p;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
