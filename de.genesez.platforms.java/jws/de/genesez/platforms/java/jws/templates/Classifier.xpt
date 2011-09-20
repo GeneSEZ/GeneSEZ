@@ -18,7 +18,24 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 
+«DEFINE _SOAPHandler FOR MClassifier-»
+	«IF hasStereotype("jwsSOAPHandler")-»
+		«FILE filePath( asTypeName() + ".xml", basePath() )-»
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
+	<handler-chain>
+		<handler>
+			<handler-class>
+				«packageDeclaration( basePackage() ) -».«asTypeName()-»
+			</handler-class>
+		</handler>
+	</handler-chain>
+</handler-chains>
+	    «ENDFILE»
+	«ENDIF»
+«ENDDEFINE»
 
 «DEFINE _WebServiceClient FOR MClassifier-»
 	«IF hasStereotype("jwsWebServiceClient")-»
