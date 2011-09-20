@@ -158,7 +158,7 @@ create MParameter cloneParameter(MParameter param, MOperation container) :
 	setOperation(container) ->
 	// further properties + references
 	this.processElement( param.cloneXmiGuid( container ), param ) ->
-	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.unique, param.ordered) ->
+	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.multiplicity, param.unique, param.ordered) ->
 	setType( param.type ) ->
 	this;
 	
@@ -207,6 +207,16 @@ MOperation processOperation(MOperation this, String visibility, boolean static, 
 	setOrdered(ordered) ->
 	this;
 
+MParameter processParameter(MParameter this, String defaultValue, String direction, int lowerBound, int upperBound, boolean unique, boolean ordered) :
+	setDefaultvalue( defaultValue ) ->
+	setDirection( direction ) ->
+	setMultiplicity( upperBound ) ->
+	setLowerBoundMultiplicity( lowerBound ) ->
+	setUpperBoundMultiplicity( upperBound ) ->
+	setUnique( unique ) ->
+	setOrdered( ordered ) ->
+	this;
+/*
 MParameter processParameter(MParameter this, String defaultValue, String direction, int multiplicity, boolean unique, boolean ordered) :
 	setDefaultvalue( defaultValue ) ->
 	setDirection( direction ) ->
@@ -215,7 +225,7 @@ MParameter processParameter(MParameter this, String defaultValue, String directi
 	setUpperBoundMultiplicity( multiplicity ) ->
 	setUnique( unique ) ->
 	setOrdered( ordered ) ->
-	this;
+	this;*/
 
 MAttribute processAttribute(MAttribute this, String defaultvalue, boolean static, boolean final) :
 	// set attribute values
