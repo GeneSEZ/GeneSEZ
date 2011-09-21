@@ -1,0 +1,241 @@
+<?xml version='1.0'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.core.features.fileDeletionFeature">
+	<title>FileDeletionFeature</title>
+	<para>The feature that does the file deletion of old files or/and empty
+		folders.
+	</para>
+	<para> You may need an understanding of Java 7 nio
+		Files.walkFileTree()
+		to understand what the feature does. See
+		http://download.oracle.com/javase/tutorial/essential/io/walk.html
+		(Oracle Java 7 Tutorial).
+		Maybe this could also be of help:
+		http://download.oracle.com/javase/7/docs/api/java/nio/file/FileVisitor.html
+		(Java 7 API - FileVisitor)
+	</para>
+	<para>
+		The algorithm works like follows:
+	</para>
+	<section id="en.genesez.core.features.fileDeletionFeature.check">
+		<title>
+			<emphasis role="bold">Set properties and check configuration
+			</emphasis>
+		</title>
+		<figure id="fig:en.genesez.core.features.fileDeletionFeature.checkRepos">
+			<title>Algorithm to check for the Revision Control System</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="left" format="PNG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.checkRepository.png"
+						scale="50" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="left" format="SVG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.checkRepository.svg"
+						scale="50" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			First the generator gives the needed properties to it's
+			registered
+			GeneratorFeatures, that means also to the
+			FileDeletionFeature (FDF).
+			Then the FDF checks its configuration.
+			During this it also checks
+			which revision control system is used.
+			Therefore it goes to the
+			outputDirectory and checks if it can find
+			any
+			<link linkend="en.genesez.core.features.fileDeletionFeature.reposImpl">
+			known metadata folders
+			</link>
+			below and above the outputDirectory, if
+			something was found then the
+			appropriate delete algorithm will be
+			registered in the FDF. See
+			<xref linkend="fig:en.genesez.core.features.fileDeletionFeature.checkRepos" />
+		</para>
+	</section>
+
+	<section id="en.genesez.core.features.fileDeletionFeature.prepare">
+		<title>
+			<emphasis role="bold">Prepare deletion
+			</emphasis>
+		</title>
+		<para>
+			Before the generation process the Generator calls the preProcessing
+			method on all registered Features. If deleteOldFiles set the FDF
+			will
+			now search recursively for files with the
+			given excludes and
+			includes
+			in the output directory. The found filepaths will be
+			stored with it's
+			last modification dates (LMDs) in a map. See
+			<xref linkend="fig:en.genesez.core.features.fileDeletionFeature.deletion" />
+			to see the whole deletion process.
+		</para>
+	</section>
+
+	<section id="en.genesez.core.features.fileDeletionFeature.delete">
+		<title>
+			<emphasis role="bold">Execute deletion
+			</emphasis>
+		</title>
+		<figure id="fig:en.genesez.core.features.fileDeletionFeature.deletion">
+			<title>Complete delete algorithm with prepare and delete</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="center" format="PNG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.deletion.png"
+						scalefit="1" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="center" format="SVG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.deletion.svg"
+						scalefit="1" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			After the generation Process the generator calls the
+			postProcessing
+			method. If deleteOldFiles is set the file deletion
+			begins.
+			First it
+			goes again through the outputDirectory and compares
+			the
+			previously
+			stored LMDs with the currently gotten LMDs and if
+			they are same the
+			corresponding
+			file will first be deleted in all
+			<link linkend="en.genesez.core.features.fileDeletionFeature.check">
+			found repositories
+			</link>
+			and after that deleted from the file
+			system. See
+			<xref linkend="fig:en.genesez.core.features.fileDeletionFeature.deletion" />
+		</para>
+	</section>
+
+	<section id="en.genesez.core.features.fileDeletionFeature.deletePackage">
+		<title>
+			<emphasis role="bold">Delete empty folders
+			</emphasis>
+		</title>
+		<figure
+			id="fig:en.genesez.core.features.fileDeletionFeature.deleteEmptyFolders">
+			<title>Algorithm for deletion of empty packages</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="left" format="PNG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.deleteEmptyFolders.png"
+						scale="50" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="left" format="SVG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.deleteEmptyFolders.svg"
+						scale="50" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			If deleteEmptyPackages is true the empty folders will be
+			deleted
+			now. Therefore it will again go through the
+			outputDirectory
+			and
+			provides all found directories
+			before visiting (preVisit) with
+			an
+			attribute that says
+			"Directory is not empty" (user.empty =
+			false), it
+			also checks if they are excluded.
+		</para>
+		<para> After visiting (postVisit) a
+			directory the algorithm gets all
+			subfiles (means folders and files) and stores the amount of
+			them
+			twice
+			(size and
+			notEmptyFolders). Then the algorithm checks if the
+			subfile is
+			a directory, if true
+			it checks if its an
+			repository-metadata-folder, if
+			thats also true
+			notEmptyFolders will
+			be decremented, if its false the
+			algorithm checks if the folder is
+			empty (checks if the
+			attribute
+			user.empty == true), if thats true
+			notEmptyFolders will be
+			decremented.
+			If its not a folder nothing
+			happens.
+		</para>
+		<para>
+			Now it checks if notEmptyFolders is
+			zero, if so the folder will
+			be
+			marked
+			for deletion in all found repositories and if
+			possible
+			deleted
+			from the file system,
+			also user.empty will be set to true.
+		</para>
+		<para>
+			See
+			<xref
+				linkend="fig:en.genesez.core.features.fileDeletionFeature.deleteEmptyPackages" />
+			for more details
+		</para>
+	</section>
+
+	<section id="en.genesez.core.features.fileDeletionFeature.reposImpl">
+		<title>
+			<emphasis role="bold">Delete with different revision control
+				systems
+			</emphasis>
+		</title>
+		<para>
+			Because deletion can cause problems with revision control systems
+			we
+			had to implement delete algorithms for different revision
+			control
+			systems. Therefore we used a strategy-pattern. We created
+			an Interface
+			that ensures the functionality and makes the different
+			classes usable
+			in the file deletion process. See
+			<xref linkend="fig:en.genesez.core.features.fileDeletionFeature.RCS_impls" />
+			.
+		</para>
+		<para>
+			Currently there are implementations for Subversion and Git.
+			CVS
+			should also work properly with the standard deletion.
+		</para>
+		<figure id="fig:en.genesez.core.features.fileDeletionFeature.RCS_impls">
+			<title>Complete delete algorithm with prepare and delete</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="center" format="PNG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.RCS_impl_UML.png"
+						scalefit="1" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="center" format="SVG"
+						fileref="../../images/core/en.genesez.core.features.FileDeletionFeature.RCS_impl_UML.svg"
+						scalefit="1" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+</section>
