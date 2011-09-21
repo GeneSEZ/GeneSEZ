@@ -58,8 +58,8 @@
 			"«getTaggedValue("jwsHandlerChain", "file")-».xml"
 			«EXPAND _HandlerChainXMLFile(getTaggedValue("jwsHandlerChain", "file"))-»
 		«ELSE-»
-			«this.asTypeName()-»
-			"«EXPAND _HandlerChainXMLFile(asTypeName())-».xml"
+			"«this.asTypeName()-».xml"
+			«EXPAND _HandlerChainXMLFile(asTypeName())-»
 		«ENDIF-»)
 	«ELSE-»
 		«IF hasUtilizableValue("jwsHandlerChain", "file")-»
@@ -112,12 +112,10 @@
 	«FILE filePath( filename + ".xml", basePath() )-»
 <handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
 		«FOREACH getTaggedListValue("jwsHandlerChain", "handlers") AS handler-»
-		«info("xmiGuid: "+handler)-»
-		«info("classifier: "+getClassifierByXmiGuid(this.model(), handler))-»
 	<handler-chain>
 		<handler>
 			<handler-class>
-				«getClassifierByXmiGuid(this.model(), handler).packageDeclaration( getClassifierByXmiGuid(this.model(), handler).basePackage() ) -».«getClassifierByXmiGuid(this.model(), handler).asTypeName()-»
+				«getClassifierByXmiGuid(this.model(), handler).packageDeclaration( getClassifierByXmiGuid(this.model(), handler).basePackage() ) -».«getClassifierByXmiGuid(this.model(), handler).asTypeName()»
 			</handler-class>
 		</handler>
 	</handler-chain>
