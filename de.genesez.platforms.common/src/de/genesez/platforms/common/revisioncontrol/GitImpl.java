@@ -47,6 +47,10 @@ public class GitImpl implements RevisionControlSystem {
 		return metadataFolderName;
 	}
 	
+	/**
+	 * Sets the path of the found .git directory. Needed for deletion.
+	 * @param String representation of the path to the directory.
+	 */
 	public void setRepositoryRoot(String root) {
 		rootDir.add(root);
 	}
