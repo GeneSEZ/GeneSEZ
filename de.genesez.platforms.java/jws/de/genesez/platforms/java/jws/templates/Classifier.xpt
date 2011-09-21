@@ -21,22 +21,6 @@
 «REM» neat m2t helper functions «ENDREM»
 «EXTENSION de::genesez::platforms::common::m2t::Helper»
 
-«DEFINE _SOAPHandler FOR MClassifier-»
-	«IF hasStereotype("jwsSOAPHandler")-»
-		«FILE filePath( asTypeName() + ".xml", basePath() )-»
-<handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
-	<handler-chain>
-		<handler>
-			<handler-class>
-				«packageDeclaration( basePackage() ) -».«asTypeName()-»
-			</handler-class>
-		</handler>
-	</handler-chain>
-</handler-chains>
-	    «ENDFILE»
-	«ENDIF»
-«ENDDEFINE»
-
 «DEFINE _WebServiceClient FOR MClassifier-»
 	«IF hasStereotype("jwsWebServiceClient")-»
 		@WebServiceClient«IF hasUtilizableValue("jwsWebServiceClient", "name")
@@ -69,8 +53,18 @@
 «ENDDEFINE»
 
 «DEFINE _HandlerChain FOR MClassifier-»
-	«IF hasUtilizableValue("jwsHandlerChain", "file")-»
-		@HandlerChain(file="«getTaggedValue("jwsHandlerChain", "file")-»")
+	«IF hasStereotype("jwsHandlerChain") && getTaggedListValue("jwsHandlerChain", "handlers").size > 0-»
+		@HandlerChain(file=«IF hasUtilizableValue("jwsHandlerChain", "file")-»
+			"«getTaggedValue("jwsHandlerChain", "file")-».xml"
+			«EXPAND _HandlerChainXMLFile(getTaggedValue("jwsHandlerChain", "file"))-»
+		«ELSE-»
+			«this.asTypeName()-»
+			"«EXPAND _HandlerChainXMLFile(asTypeName())-».xml"
+		«ENDIF-»)
+	«ELSE-»
+		«IF hasUtilizableValue("jwsHandlerChain", "file")-»
+			@HandlerChain(file="«getTaggedValue("jwsHandlerChain", "file")-».xml")
+		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -112,4 +106,22 @@
 			«ENDIF-»)
 		«ENDIF»
 	«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _HandlerChainXMLFile(String filename) FOR MClassifier-»
+	«FILE filePath( filename + ".xml", basePath() )-»
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
+		«FOREACH getTaggedListValue("jwsHandlerChain", "handlers") AS handler-»
+		«info("xmiGuid: "+handler)-»
+		«info("classifier: "+getClassifierByXmiGuid(this.model(), handler))-»
+	<handler-chain>
+		<handler>
+			<handler-class>
+				«getClassifierByXmiGuid(this.model(), handler).packageDeclaration( getClassifierByXmiGuid(this.model(), handler).basePackage() ) -».«getClassifierByXmiGuid(this.model(), handler).asTypeName()-»
+			</handler-class>
+		</handler>
+	</handler-chain>
+		«ENDFOREACH-»
+</handler-chains>
+    «ENDFILE-»
 «ENDDEFINE»
