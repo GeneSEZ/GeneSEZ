@@ -20,44 +20,55 @@ public class SubversionImpl implements RevisionControlSystem {
 	/**
 	 * Creates a SubversionSystem
 	 */
-	public SubversionImpl(){	
+	public SubversionImpl() {
 	}
-	
+
 	/**
-	 * deletes a file with subversion, if its not in repository and a directory it will be deleted normal
-	 * @param file path to file that should be deleted.
+	 * deletes a file with subversion, files will be marked for deletion and
+	 * folders will be deleted
+	 * 
+	 * @param file
+	 *            path to file that should be deleted.
 	 */
 	public void markForDelete(String file) {
 		try {
-			// doDelete(the file, force deletion, delete also on filesystem, only to test);
-			wcClient.doDelete(new File(file), true, false, false);
+			File path = new File(file);
+			if (path.isDirectory()) {
+				// doDelete(the file, force deletion, delete also on filesystem,
+				// only to test);
+				wcClient.doDelete(path, true, true, false);
+			} else {
+				// doDelete(the file, force deletion, delete also on filesystem,
+				// only to test);
+				wcClient.doDelete(path, true, false, false);
+			}
 		} catch (SVNException e) {
-		}	
+		}
 	}
-	
+
 	/**
 	 * gives a list with the repository metadata-folder-name usually this should
 	 * contain only 1 entry.
 	 * 
 	 * @return a List with the metadata-folder-name
 	 */
-	public String getMetadataFolderName(){
+	public String getMetadataFolderName() {
 		return metadataFolderName;
 	}
-	
+
 	/**
 	 * A callback from Deletor Module. Currently not needed.
 	 */
 	public void setRepositoryRoot(String root) {
 	}
-	
+
 	/**
 	 * The name that will be printed on the log
 	 * 
 	 * @return "Subversion"
 	 */
 	@Override
-	public String toString(){
+	public String toString() {
 		return "Subversion";
 	}
 }

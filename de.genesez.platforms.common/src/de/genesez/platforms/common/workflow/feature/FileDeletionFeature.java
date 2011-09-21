@@ -81,7 +81,7 @@ public class FileDeletionFeature extends SimpleFileVisitor<Path> implements
 	private Path outputPath;
 
 	// Methods from the Interface //
-	
+
 	/**
 	 * Sets the properties:
 	 * <p>
@@ -94,7 +94,8 @@ public class FileDeletionFeature extends SimpleFileVisitor<Path> implements
 	 * outputPath
 	 * </p>
 	 * 
-	 * @param properties the Properties-Map with the properties
+	 * @param properties
+	 *            the Properties-Map with the properties
 	 */
 	public void setProperties(Properties properties) {
 		setIncludedFiles(properties.getProperty("includedFiles", ""));
@@ -154,8 +155,11 @@ public class FileDeletionFeature extends SimpleFileVisitor<Path> implements
 	}
 
 	/**
-	 * Processes after generation. Deletes old files and empty folders if switches set.
-	 * @throws NotPreparedException if called before preProcessing()
+	 * Processes after generation. Deletes old files and empty folders if
+	 * switches set.
+	 * 
+	 * @throws NotPreparedException
+	 *             if called before preProcessing()
 	 */
 	public void postProcessing() throws NotPreparedException {
 		if (deleteOldFiles) {
@@ -171,7 +175,7 @@ public class FileDeletionFeature extends SimpleFileVisitor<Path> implements
 	}
 
 	// Methods that are internally used //
-	
+
 	/**
 	 * checks which revision control system is used. Therefore it checks if a
 	 * folder is one of the registered metadata folders
@@ -406,9 +410,6 @@ public class FileDeletionFeature extends SimpleFileVisitor<Path> implements
 					if (Files.exists(dir) && Files.isDirectory(dir)) {
 						files = Arrays.asList(dir.toFile().listFiles());
 						size = files.size();
-					} else {
-						System.err.println("WTF... Whats wrong with this dir: "
-								+ dir.toString());
 					}
 					// number of not empty files in the directory
 					int notEmptyFolders = size;
@@ -455,12 +456,11 @@ public class FileDeletionFeature extends SimpleFileVisitor<Path> implements
 						view.write("user.empty", Charset.defaultCharset()
 								.encode("true"));
 						// delete all folders with revisionSystem
-						if (revisionSystems != null) {
-							for (RevisionControlSystem rep : revisionSystems) {
-								rep.markForDelete(dir.toString());
-							}
+						for (RevisionControlSystem rep : revisionSystems) {
+							rep.markForDelete(dir.toString());
 						}
-						if (Files.exists(dir) && files.size() == 0) {
+						// delete all folders normal if possible
+						if (Files.exists(dir) && size == 0) {
 							alterPermission(dir);
 							Files.delete(dir);
 						}
