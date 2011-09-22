@@ -137,7 +137,7 @@ public class ImportFormatter {
 						this.firstImportStatement = i;
 					if (this.lastImportStatement < i)
 						this.lastImportStatement = i;
-					this.importStatements.add(actLine);
+					this.importStatements.add(actLine.trim());
 				}
 			} else {
 				log.error("Error in regular expression: " + regex);
