@@ -29,6 +29,7 @@ public class JavaGenerator extends TypeMappingGenerator {
 		defaults.put("fieldAccess", "true");
 	}
 	
+	@SuppressWarnings("unused")
 	private Log logger = LogFactory.getLog(getClass());
 	private boolean isNotSetTemplate = true;
 	private boolean isNotAddTypeMappingFile = true;
@@ -64,7 +65,8 @@ public class JavaGenerator extends TypeMappingGenerator {
 		JavaBeautifier javaBeautifier = new JavaBeautifier();
 		javaBeautifier.setConfigFile(properties.getProperty("formatterConfig"));
 		
-		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier();
+		// import beautifier
+		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier(properties.getProperty("outputDir",""));
 		
 		// add all beautifiers
 		List<Object> beautifiers = new ArrayList<Object>();
