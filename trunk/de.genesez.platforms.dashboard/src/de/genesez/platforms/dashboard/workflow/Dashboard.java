@@ -17,6 +17,7 @@ import de.genesez.metamodel.gcore.GcorePackage;
 import de.genesez.metamodel.greq.GreqPackage;
 import de.genesez.metamodel.gtrace.GtracePackage;
 import de.genesez.platforms.common.workflow.Copier;
+import de.genesez.platforms.common.workflow.WorkflowProperties;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
@@ -27,7 +28,7 @@ public class Dashboard extends CompositeComponent {
 	
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.putAll(WorkflowUtils.defaults);
+		defaults.putAll(WorkflowProperties.defaults);
 		defaults.put("template", "de::genesez::platforms::dashboard::Root::Root");
 		defaults.put("crossModelNavigationAdvice", "de::genesez::metamodel::navigation::RequirementsTraceabilityExtensionAdvice");
 	}
