@@ -3,12 +3,8 @@ package de.genesez.platforms.common.m2t;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +16,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.xpand2.output.FileHandle;
 import org.eclipse.xpand2.output.PostProcessor;
+
+import de.genesez.platforms.common.FileTreeObserver;
+import de.genesez.platforms.common.FileTreeWalker.FileEvent;
+import de.genesez.platforms.common.workflow.feature.NotPreparedException;
 
 /**
  * This class provides a skeletal implementation for concrete import beautifier.
@@ -33,12 +33,13 @@ import org.eclipse.xpand2.output.PostProcessor;
  * @author Dominik Wetzel
  * @date 2011-09-22
  */
-public abstract class ImportBeautifier implements PostProcessor {
+public abstract class ImportBeautifier implements PostProcessor,
+		FileTreeObserver {
 
 	/**
 	 * Using log4j-mechanism for error logging.
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Log logger = LogFactory.getLog(getClass());
 
 	/**
 	 * Singleton import formatter instance.
@@ -51,13 +52,21 @@ public abstract class ImportBeautifier implements PostProcessor {
 	private Properties options = null;
 
 	private Map<String, List<String>> importMap = new LinkedHashMap<String, List<String>>();
-	private List<String> preProRegStrings;
-	private String importString;
+	private final static String FileIDString = "@FILE-ID : (";
+	private String importRegex;
+	private String extensionsRegex;
+
+	private boolean prepared = false;
 
 	/**
 	 * Sole constructor which does nothing.
+	 * 
+	 * @param importString
+	 *            String that declares imports.
 	 */
-	public ImportBeautifier() {
+	public ImportBeautifier(String importRegex, List<String> extensions) {
+		this.importRegex = importRegex;
+		extensionsRegex = extensions.toString().replaceAll(", ", "|");
 	}
 
 	/**
@@ -92,113 +101,126 @@ public abstract class ImportBeautifier implements PostProcessor {
 	}
 
 	/**
-	 * Searches all Files for ProRegIDs and associated imports. and stores them
-	 * in a map.
-	 * 
-	 * @param preProRegStrs
-	 *            strings with ProRegID prefixes that should be searched.
-	 * @param importRegx
-	 *            the used String for imports.
-	 * @return true, after file search is finished
-	 * 
-	 */
-	protected boolean getImports(List<String> preProRegStrs, String importStr,
-			String outputDir) {
-		this.preProRegStrings = preProRegStrs;
-		this.importString = importStr;
-		try {
-			Files.walkFileTree(Paths.get(outputDir),
-					new SimpleFileVisitor<Path>() {
-						/**
-						 * Searches for the PreProRegID in the given file and if
-						 * found it searches the file again for imports. After
-						 * that it stores both in a map.
-						 * 
-						 * @param file
-						 *            file to be searched
-						 * @param attrs
-						 *            the file's basic attributes.
-						 */
-						@Override
-						public FileVisitResult visitFile(Path file,
-								BasicFileAttributes attrs) throws IOException {
-							List<String> imports = new LinkedList<String>();
-							String guiID = null;
-							BufferedReader br = Files.newBufferedReader(file,
-									Charset.defaultCharset());
-							String line = null;
-							while ((line = br.readLine()) != null) {
-								for (String s : preProRegStrings) {
-									if (line.contains("PROTECTED REGION ID("
-											+ s)) {
-										guiID = line.trim();
-									}
-								}
-							}
-							br.close();
-							if (guiID != null) {
-								br = Files.newBufferedReader(file,
-										Charset.defaultCharset());
-								while ((line = br.readLine()) != null) {
-									if (line.trim().startsWith(importString)) {
-										imports.add(line.trim());
-									}
-								}
-								if (!imports.isEmpty()) {
-									importMap.put(guiID, imports);
-								}
-								br.close();
-							}
-							return FileVisitResult.CONTINUE;
-						}
-					});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
-
-	/**
 	 * Puts the before found imports onto the right place in the currently
 	 * opened file.
 	 * 
 	 * @param file
 	 *            opened filehandle
 	 * @return file as String with included imports
+	 * @throws NotPreparedException
+	 *             thrown if beautifier is not added as observer (file tree not
+	 *             walked properly)
 	 */
-	protected String putImports(FileHandle file) {
-		// initialize
-		String fileString = file.getBuffer().toString();
-		String delim = options.getProperty("de.genesez.importformatter.delim");
-		StringTokenizer st = new StringTokenizer(fileString, delim);
-		List<String> lines = new LinkedList<String>();
-		String guiID = null;
-		int firstImport = 0;
+	protected String putImports(FileHandle file) throws NotPreparedException {
+		if (prepared) {
+			// initialize
+			String fileString = file.getBuffer().toString();
+			String delim = options
+					.getProperty("de.genesez.importformatter.delim");
+			StringTokenizer st = new StringTokenizer(fileString, delim);
+			List<String> lines = new LinkedList<String>();
+			String guID = null;
+			int putImports = -1;
 
-		// make a line List
-		while (st.hasMoreTokens()) {
-			String token = st.nextToken();
-			lines.add(token);
-			for (String s : preProRegStrings) {
-				if (firstImport == 0 && token.trim().startsWith(importString)) {
-					firstImport = lines.size();
-				} else if (token.contains("PROTECTED REGION ID(" + s)) {
-					guiID = token.trim();
+			// make a line List
+			while (st.hasMoreTokens()) {
+				String token = st.nextToken();
+				lines.add(token);
+				// look for guID
+				if (token.contains(FileIDString)) {
+					guID = token.substring(token.indexOf("(") + 1,
+							token.indexOf(")"));	
+				} else if (guID != null && putImports == -1 && token.trim().isEmpty()){
+					// search for next free line to put imports into
+					putImports = lines.size();
 				}
 			}
-		}
 
-		// put imports into map
-		if (guiID != null && importMap.containsKey(guiID)) {
-			List<String> imports = importMap.get(guiID);
-			lines.addAll(firstImport - 1, imports);
-		}
+			// put imports into file
+			if (guID != null && importMap.containsKey(guID)) {
+				List<String> imports = importMap.get(guID);
+				if (putImports > -1) {
+					lines.addAll(putImports - 1, imports);
+				}
+			}
 
-		// creates a String from tokens.
-		fileString = "";
-		for (String line : lines) {
-			fileString = fileString.concat(line + delim);
+			// creates a String from tokens.
+			fileString = "";
+			for (String line : lines) {
+				fileString = fileString.concat(line + delim);
+			}
+			return fileString;
+		} else {
+			throw new NotPreparedException(
+					"Beautifier is not prepared properly");
 		}
-		return fileString;
+	}
+
+	/**
+	 * Searches for the PreProRegID in the given file and if found it searches
+	 * the file again for imports. After that it stores both in a map.
+	 * 
+	 * @param event
+	 *            the event for the file
+	 * @param file
+	 *            file to be searched
+	 */
+	public void update(FileEvent event, Path file) {
+		if (event.equals(FileEvent.FILE_VISIT)
+				&& file.toString().matches(".*" + extensionsRegex + "$")) {
+			// initialize
+			List<String> imports = new LinkedList<String>();
+			String guID = null;
+			String line = null;
+			try (BufferedReader br = Files.newBufferedReader(file,
+					Charset.defaultCharset())) {
+				// check line for FileIDString
+				while ((line = br.readLine()) != null) {
+					if (line.contains(FileIDString)) {
+						guID = line.substring(line.indexOf("(") + 1,
+								line.indexOf(")"));
+					}
+					// add imports to guID
+					if (guID != null && line.matches(importRegex)) {
+						imports.add(line.trim());
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			// add to importMap
+			if (!imports.isEmpty()) {
+				importMap.put(guID, imports);
+			}
+		} else if (event.equals(FileEvent.COMPLETED)) {
+			prepared = true;
+		}
+	}
+
+	/**
+	 * Says whether the observer needs a file tree walk before generation. It
+	 * will be registered as observer if true
+	 * 
+	 * @return true
+	 */
+	public boolean getNeedsPrepare() {
+		return true;
+	}
+
+	/**
+	 * Says whether the observer needs file tree walk after generation. It will
+	 * be again registered as observer if true
+	 * 
+	 * @return false
+	 */
+	public boolean getNeedsSecondWalk() {
+		return false;
+	}
+
+	/**
+	 * called after the secondWalk, not used for imports.
+	 */
+	public void afterSecondFileWalk() {
+		return;
 	}
 }

@@ -4,7 +4,7 @@ import java.util.Properties;
 
 /**
  * Implementations of this interface can be added to the Generator.
- * It does something before and after the generation.
+ * It does something after the generation and the files are all written.
  * 
  * @author Dominik Wetzel
  * @date 2011-09-20
@@ -23,13 +23,8 @@ public interface GeneratorFeature {
 	public abstract void checkConfiguration();
 	
 	/**
-	 * Is called before generation process
-	 */
-	public abstract void preProcessing();
-	
-	/**
 	 * Is called after generation and after preProcessing()
 	 * @throws NotPreparedException if preProcessing() was not called before.
 	 */
-	public abstract void postProcessing() throws NotPreparedException;
+	public abstract void afterGeneration() throws NotPreparedException;
 }

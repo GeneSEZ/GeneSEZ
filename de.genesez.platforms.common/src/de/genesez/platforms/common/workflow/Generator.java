@@ -1,9 +1,10 @@
 package de.genesez.platforms.common.workflow;
 
 import java.io.File;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,6 +14,8 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
+import de.genesez.platforms.common.FileTreeObserver;
+import de.genesez.platforms.common.FileTreeWalker;
 import de.genesez.platforms.common.workflow.feature.FileDeletionFeature;
 import de.genesez.platforms.common.workflow.feature.GeneratorFeature;
 
@@ -48,8 +51,10 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * Variable to store all properties.
 	 */
 	protected Properties properties = new Properties();
-	
-	protected List<GeneratorFeature> features = new LinkedList<GeneratorFeature>(); 
+
+	private Set<GeneratorFeature> features = new LinkedHashSet<GeneratorFeature>();
+	private Set<FileTreeObserver> fileWalkObserver = new LinkedHashSet<FileTreeObserver>();
+	private FileTreeWalker fileTreeWalker = new FileTreeWalker();
 
 	/**
 	 * Constructs the workflow component and initializes the default values.
@@ -74,9 +79,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		EmfMetaModel gtrace = new EmfMetaModel();
 		gtrace.setMetaModelPackage(properties.getProperty("gtracePackage"));
 		addMetaModel(gtrace);
-		
+
 		// add GeneratorFeatures
-		features.add(new FileDeletionFeature());
+		addFeature(new FileDeletionFeature());
 	}
 
 	/**
@@ -118,7 +123,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 				setProRegDir(outputDir);
 			}
 		}
-		for(GeneratorFeature feature : features){
+		for (GeneratorFeature feature : features) {
 			feature.setProperties(properties);
 			feature.checkConfiguration();
 		}
@@ -146,14 +151,47 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			addGlobalVarDef("tracemodel", properties.get("traceSlot"));
 		}
 
-		for(GeneratorFeature feature : features){
-			feature.preProcessing();
+		for (FileTreeObserver ob : fileWalkObserver) {
+			if (ob.getNeedsPrepare()) {
+				fileTreeWalker.registerObserver(ob);
+			}
 		}
 		
+		// prepare the observers
+		if (fileTreeWalker.countObservers() > 0) {
+			fileTreeWalker.walkTree(properties.getProperty("outputDir"));
+		}
+		fileTreeWalker.unregisterAllObserver();
+		// do generation
 		super.invokeInternal2(ctx, monitor, issues);
+
+		// do things after generation
+		afterGeneration();
+	}
+
+	/**
+	 * All features do their after generation, and file tree is walked again if
+	 * needed for at least one observer.
+	 */
+	private void afterGeneration() {
+		// feature's afterGeneration().
+		for (GeneratorFeature feature : features) {
+			feature.afterGeneration();
+		}
 		
-		for(GeneratorFeature feature : features){
-			feature.postProcessing();
+		// check for observers if second walk is needed.
+		for (FileTreeObserver ob : fileWalkObserver) {
+			if (ob.getNeedsSecondWalk()) {
+				fileTreeWalker.registerObserver(ob);
+			}
+		}
+		
+		// walks file tree second time and calls afterSecondFileWalk for observers.
+		if (fileTreeWalker.countObservers() > 0) {
+			fileTreeWalker.walkTree(properties.getProperty("outputDir"));
+			for (FileTreeObserver ob : fileWalkObserver) {
+				ob.afterSecondFileWalk();
+			}
 		}
 	}
 
@@ -448,7 +486,33 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	public void setExcludedDirectoryNames(String names) {
 		properties.put("excludedDirectoryNames", names);
 	}
-	
+
+	/**
+	 * adds an observer for the file tree walker
+	 * 
+	 * @param observer
+	 *            the observer to be added
+	 */
+	public void addFileTreeWalkObserver(FileTreeObserver observer) {
+		this.fileWalkObserver.add(observer);
+		if(observer instanceof GeneratorFeature){
+			this.features.add((GeneratorFeature) observer);
+		}
+	}
+
+	/**
+	 * adds a new generator feature to the generator
+	 * 
+	 * @param feature
+	 *            the feature to be added
+	 */
+	public void addFeature(GeneratorFeature feature) {
+		this.features.add(feature);
+		if(feature instanceof FileTreeObserver){
+			this.fileWalkObserver.add((FileTreeObserver) feature);
+		}
+	}
+
 	/**
 	 * Checks if the output directory does not exists. If true the output
 	 * directory will be created.

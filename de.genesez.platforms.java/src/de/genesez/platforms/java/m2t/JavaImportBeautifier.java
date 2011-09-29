@@ -19,20 +19,15 @@ import de.genesez.platforms.common.m2t.ImportBeautifier;
  */
 public class JavaImportBeautifier extends ImportBeautifier {
 	// constants for import resolving
-	private final static List<String> preProRegIDStrings = Arrays.asList(new String[]{"java.class.own.code.implementation."}); 
-	private final static String importString = "import ";
-	
-	// variables for import resolving
-	private boolean importsChecked = false;
-	private String outputDir;
+	private final static String importRegex = ".*import .*;$";
+	private final static List<String> extensions = Arrays.asList(new String[]{"\\.java"});
 	
 	/**
 	 * Sole constructor which sets the properties.
 	 */
-	public JavaImportBeautifier(String outputDir) {
-		super();
+	public JavaImportBeautifier() {
+		super(importRegex, extensions);
 		Properties options = new Properties();
-		this.outputDir = outputDir;
 		options.setProperty("de.genesez.importformatter.delim", "\n");
 		options.setProperty("de.genesez.importformatter.regex", "(import)( )");
 		setOptions(options);
@@ -56,11 +51,9 @@ public class JavaImportBeautifier extends ImportBeautifier {
 	 */
 	@SuppressWarnings("deprecation")
 	public void beforeWriteAndClose(FileHandle file) {
-		if(!importsChecked){
-			importsChecked = getImports(preProRegIDStrings, importString, outputDir);
-		}
 		if (file.getTargetFile() != null && file.getAbsolutePath().endsWith(".java")) {
 			String edit = putImports(file);
+			// String edit = file.getBuffer().toString();
 			// detect and delete double import statements
 			edit = getImportFormatter().format(edit);
 			// write string to file
