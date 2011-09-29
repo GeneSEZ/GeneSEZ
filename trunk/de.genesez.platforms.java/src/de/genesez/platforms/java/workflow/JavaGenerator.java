@@ -66,7 +66,8 @@ public class JavaGenerator extends TypeMappingGenerator {
 		javaBeautifier.setConfigFile(properties.getProperty("formatterConfig"));
 		
 		// import beautifier
-		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier(properties.getProperty("outputDir",""));
+		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier();
+		addFileTreeWalkObserver(javaImportBeautifier);
 		
 		// add all beautifiers
 		List<Object> beautifiers = new ArrayList<Object>();

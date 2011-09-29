@@ -1,8 +1,13 @@
 package de.genesez.platforms.common.workflow.feature;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -15,11 +20,15 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import de.genesez.platforms.common.FileTreeWalker;
 
 /**
  * Testclass for the FileDeletor
@@ -39,6 +48,10 @@ public class FileDeletionFeatureTest {
 	private static Path test3;
 	private static Path test4;
 	private static Properties prop = new Properties();
+	private static FileTreeWalker walker;
+//	private static PrintStream oldOut = System.out;
+	private static PrintStream oldErr = System.err;
+	private static ByteArrayOutputStream testOut = new ByteArrayOutputStream();
 
 	private static class Delete extends SimpleFileVisitor<Path> {
 
@@ -83,10 +96,18 @@ public class FileDeletionFeatureTest {
 
 	@BeforeClass
 	public static void checkBeforeClass() {
+//		System.setOut(new PrintStream(testOut));
+		System.setErr(new PrintStream(testOut));
 		if (System.getProperty("java.version").charAt(2) < 7) {
 			throw new UnsupportedOperationException(
 					"Java Version below 7, Tests should fail");
 		}
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() {
+//		System.setOut(oldOut);
+		System.setErr(oldErr);
 	}
 
 	@Before
@@ -95,9 +116,12 @@ public class FileDeletionFeatureTest {
 		firstPath = startPath.resolve("de/genesez/testclasses/");
 		secondPath = startPath.resolve("de/genesez/output/");
 		prop.setProperty("outputDir", startPath.toString());
+		prop.setProperty("deleteOldFiles", "true");
 
+		walker = new FileTreeWalker();
 		deletor = new FileDeletionFeature();
 		deletor.setProperties(prop);
+		walker.registerObserver(deletor);
 		try {
 			Files.createDirectories(firstPath);
 		} catch (FileAlreadyExistsException e) {
@@ -134,21 +158,21 @@ public class FileDeletionFeatureTest {
 	}
 
 	@Test
-	public void testPrepare() {
-		assertEquals("Right amount of files read", 4,
-				deletor.prepare());
+	public void testPrepare() throws IOException{
+		Files.walkFileTree(startPath, walker);
+		assertEquals(4, deletor.getOldFileCount());
 	}
 
 	@Test
-	public void testDeleteEverything() {
-		deletor.prepare();
+	public void testDeleteEverything() throws IOException {
+		Files.walkFileTree(startPath, walker);
 		assertEquals("checks if every file was deleted", 4, deletor.delete()
 				.size());
 	}
 
 	@Test
-	public void testDelete2Files() {
-		deletor.prepare();
+	public void testDelete2Files() throws IOException {
+		Files.walkFileTree(startPath, walker);
 		test1.toFile().setLastModified(1);
 		test2.toFile().setLastModified(1);
 		assertEquals("checks if 2 files were deleted", 2, deletor.delete()
@@ -156,9 +180,8 @@ public class FileDeletionFeatureTest {
 	}
 
 	@Test
-	public void testDeleteNothing() {
-		deletor.checkRepository();
-		deletor.prepare();
+	public void testDeleteNothing() throws IOException {
+		Files.walkFileTree(startPath, walker);
 		test1.toFile().setLastModified(1);
 		test2.toFile().setLastModified(1);
 		test3.toFile().setLastModified(5);
@@ -167,49 +190,53 @@ public class FileDeletionFeatureTest {
 	}
 
 	@Test
-	public void testSetOneIncludedFileExtension() {
+	public void testSetOneIncludedFileExtension() throws IOException {
 		// deletor.checkRepository(startPath.toString());
 		deletor.setIncludedFiles("4");
-		assertEquals(1, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(1, deletor.getOldFileCount());
 		assertEquals(1, deletor.delete().size());
 	}
 
 	@Test
-	public void testSetMoreIncludedFileExtensions() {
+	public void testSetMoreIncludedFileExtensions() throws IOException {
 		deletor.setIncludedFiles("est4;test3,2");
-		assertEquals(3, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(3, deletor.getOldFileCount());
 		assertEquals(3, deletor.delete().size());
 	}
 
 	@Test
-	public void testSetOneExcludedFileExtension() {
+	public void testSetOneExcludedFileExtension() throws IOException {
 		deletor.setExcludedFiles("test2");
-		assertEquals(3, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(3, deletor.getOldFileCount());
 		assertEquals(3, deletor.delete().size());
 	}
 
 	@Test
-	public void testSetMoreExcludedFileExtensions() {
+	public void testSetMoreExcludedFileExtensions() throws IOException {
 		deletor.setExcludedFiles("test2,4;est1");
-		assertEquals(1, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(1, deletor.getOldFileCount());
 		assertEquals(1, deletor.delete().size());
 	}
 
 	@Test
-	public void testSetOneExcludedPath() {
-		deletor.checkRepository();
+	public void testSetOneExcludedPath() throws IOException {
 		deletor.setExcludedRelativePaths(startPath.resolve("de/genesez/output")
 				.toString());
-		assertEquals(3, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(3, deletor.getOldFileCount());
 	}
 
 	@Test
 	public void testSetMoreExcludedPaths() throws IOException {
-		deletor.checkRepository();
 		Path test = Files.createFile(startPath.resolve("test.test"));
 		deletor.setExcludedRelativePaths(startPath.resolve("de/genesez/output")
 				.toString() + ";" + startPath.resolve("de/genesez/testclasses"));
-		assertEquals(1, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(1, deletor.getOldFileCount());
 		assertTrue(test.endsWith(deletor.delete().get(0)));
 	}
 
@@ -218,9 +245,9 @@ public class FileDeletionFeatureTest {
 		Path test = Files.createFile(Files.createDirectory(
 				startPath.resolve(".svn")).resolve("tester"));
 
-		deletor.checkRepository();
 		deletor.setExcludedDirectoryNames(".svn");
-		assertEquals(4, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(4, deletor.getOldFileCount());
 		test.toFile().setLastModified(1);
 		assertEquals(4, deletor.delete().size());
 	}
@@ -234,7 +261,8 @@ public class FileDeletionFeatureTest {
 		Files.createFile(startPath.resolve("de").resolve("tester"));
 
 		deletor.setExcludedDirectoryNames(".svn; tester;en");
-		assertEquals(5, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(5, deletor.getOldFileCount());
 		test.toFile().setLastModified(1);
 		assertEquals(5, deletor.delete().size());
 	}
@@ -251,7 +279,8 @@ public class FileDeletionFeatureTest {
 		deletor.setIncludedFiles("2;3");
 		deletor.setExcludedRelativePaths("/testDir/de/genesez/output");
 		deletor.setExcludedDirectoryNames(".svn; en");
-		assertEquals(1, deletor.prepare());
+		Files.walkFileTree(startPath, walker);
+		assertEquals(1, deletor.getOldFileCount());
 		assertTrue(test3.endsWith(deletor.delete().get(0)));
 	}
 
@@ -263,14 +292,14 @@ public class FileDeletionFeatureTest {
 				.resolve("en/genesez/workflow/common/deletor/"));
 		Files.createDirectories(startPath
 				.resolve("en/genesez/workflow/java/generator/"));
+		prop.setProperty("deleteEmptyFolders", "true");
+		deletor.setProperties(prop);
 		deletor.setExcludedRelativePaths("/common");
 		deletor.setExcludedDirectoryNames("deletor");
-		try {
-			assertEquals(3, deletor.deleteEmptyPackages()
+		Files.walkFileTree(startPath, walker);
+		Files.walkFileTree(startPath, walker);
+		assertEquals(2, deletor.deleteEmptyPackages()
 					.size());
-		} catch (UnsupportedOperationException e) {
-			System.err.println(e.getMessage());
-		}
 	}
 
 	@Test
@@ -299,44 +328,89 @@ public class FileDeletionFeatureTest {
 			attr.setReadOnly(true);
 		}
 
-		deletor.checkRepository();
-		deletor.prepare();
+		prop.setProperty("deleteEmptyFolders", "true");
+		deletor.setProperties(prop);
+		Files.walkFileTree(startPath, walker);
 		test4.toFile().setLastModified(1);
 		deletor.delete();
+		Files.walkFileTree(startPath, walker);
 
 		// the Test
 		assertEquals(9, deletor.deleteEmptyPackages()
-				.size());
+			.size());
+		
 		assertTrue(Files.exists(test4));
 		assertFalse(Files.exists(firstPath));
 		assertTrue(Files.exists(secondPath.getParent()));
 	}
 
 	@Test
-	public void testCheckRepositoryNoRepository() {
-		assertNull(deletor.checkRepository());
+	public void testCheckRepositoryNoRepository() throws IOException {
+		Files.walkFileTree(startPath, walker);
+		System.out.println(testOut.toString());
+		StringTokenizer st = new StringTokenizer(testOut.toString(), System.lineSeparator());
+		String s = null;
+		while(st.hasMoreTokens()){
+			s = st.nextToken();
+		}
+		if(s != null){
+			assertEquals("Information: No supported revision control system found. Default will be used.", s);
+		} else {
+			fail("no Token found");
+		}
 	}
 
 	@Test
 	public void testCheckRepositorySVN() throws IOException {
 		Files.createDirectory(startPath.resolve("de/genesez/.svn/"));
-		assertEquals("[Subversion]",
-				deletor.checkRepository());
+		Files.walkFileTree(startPath, walker);
+		System.out.println(testOut.toString());
+		StringTokenizer st = new StringTokenizer(testOut.toString(), System.lineSeparator());
+		String s = null;
+		while(st.hasMoreTokens()){
+			s = st.nextToken();
+			System.out.println(s);
+		}
+		if(s != null){
+			assertEquals("Information: Revision control system(s) found: [Subversion]", s);
+		}
 	}
 
 	@Test
 	public void testCheckRepositoryDefault() throws IOException {
 		Files.createDirectory(startPath.resolve("de/genesez/testclasses/.cvs"));
-		assertNull(deletor.checkRepository());
+		Files.walkFileTree(startPath, walker);
+		System.out.println(testOut.toString());
+		StringTokenizer st = new StringTokenizer(testOut.toString(), System.lineSeparator());
+		String s = null;
+		while(st.hasMoreTokens()){
+			s = st.nextToken();
+		}
+		if(s != null){
+			assertEquals("Information: No supported revision control system found. Default will be used.", s);
+		} else {
+			fail("no Token found");
+		}
 	}
 
 	@Test
 	public void testCheckRepositoryGit() throws IOException {
 		Path git = Files.createDirectory(startPath.toRealPath().getParent()
 				.getParent().resolve(".git"));
-		String check = deletor.checkRepository();
+		deletor.checkConfiguration();
 		Files.deleteIfExists(git);
-		assertEquals("[Git]", check);
+		Files.walkFileTree(startPath, walker);
+		System.out.println(testOut.toString());
+		StringTokenizer st = new StringTokenizer(testOut.toString(), System.lineSeparator());
+		String s = null;
+		while(st.hasMoreTokens()){
+			s = st.nextToken();
+		}
+		if(s != null){
+			assertEquals("Information: Revision control system(s) found: [Git]", s);
+		} else {
+			fail("no Token found");
+		}
 	}
 	
 	@Test
@@ -362,10 +436,13 @@ public class FileDeletionFeatureTest {
 		
 		deletor.setProperties(properties);
 		deletor.checkConfiguration();
-		deletor.preProcessing();
+		Files.walkFileTree(startPath, walker);
 		test1.toFile().setLastModified(1);
 		test2.toFile().setLastModified(1);
-		deletor.postProcessing();
+		
+		deletor.afterGeneration();
+		Files.walkFileTree(startPath, walker);
+		deletor.afterSecondFileWalk();
 		
 		assertTrue(Files.exists(test1));
 		assertTrue(Files.exists(test2));
@@ -377,6 +454,7 @@ public class FileDeletionFeatureTest {
 		assertTrue(Files.exists(test));
 		assertTrue(Files.exists(dir2));
 		assertTrue(Files.exists(dir3));
+		assertFalse(Files.exists(dir4));
 		
 		assertFalse(Files.exists(dir4.getParent().getParent()));
 	}
