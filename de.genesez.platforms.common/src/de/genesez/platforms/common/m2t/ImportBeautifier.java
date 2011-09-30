@@ -129,8 +129,9 @@ public abstract class ImportBeautifier implements PostProcessor,
 				// look for guID
 				if (token.contains(FileIDString)) {
 					guID = token.substring(token.indexOf("(") + 1,
-							token.indexOf(")"));	
-				} else if (guID != null && putImports == -1 && token.trim().isEmpty()){
+							token.indexOf(")"));
+				} else if (guID != null && putImports == -1
+						&& token.trim().isEmpty()) {
 					// search for next free line to put imports into
 					putImports = lines.size();
 				}
@@ -172,8 +173,9 @@ public abstract class ImportBeautifier implements PostProcessor,
 			List<String> imports = new LinkedList<String>();
 			String guID = null;
 			String line = null;
-			try (BufferedReader br = Files.newBufferedReader(file,
-					Charset.defaultCharset())) {
+			BufferedReader br = null;
+			try {
+				br = Files.newBufferedReader(file, Charset.defaultCharset());
 				// check line for FileIDString
 				while ((line = br.readLine()) != null) {
 					if (line.contains(FileIDString)) {
@@ -187,6 +189,14 @@ public abstract class ImportBeautifier implements PostProcessor,
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				try {
+					if (br != null) {
+						br.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			// add to importMap
 			if (!imports.isEmpty()) {
