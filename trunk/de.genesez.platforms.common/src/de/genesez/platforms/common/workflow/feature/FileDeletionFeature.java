@@ -40,7 +40,7 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  * @author Dominik Wetzel
  * @date 2011-09-20
  */
-public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
+public class FileDeletionFeature implements FileTreeObserver, GeneratorFeature {
 
 	/**
 	 * Logger instance to output important messages.
@@ -77,8 +77,8 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 
 	private boolean treeWalked = false;
 
-	private List<Path> emptyFolders = new ArrayList<>();
-	
+	private List<Path> emptyFolders = new ArrayList<Path>();
+
 	private long time;
 
 	// Methods from the Interface //
@@ -120,7 +120,7 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 			deleteOldFiles = false;
 			deleteEmptyFolders = false;
 		}
-		
+
 		if (deleteOldFiles || deleteEmptyFolders) {
 			String info = "File deletion is active.";
 			if (deleteOldFiles && deleteEmptyFolders) {
@@ -138,17 +138,16 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-//			if (includedFiles.isEmpty() && excludedFiles.isEmpty()
-//					&& excludedRelativePaths.isEmpty()
-//					&& excludedDirectoryNames.isEmpty()) {
-//				logger.warn("Nothing included and excluded, every file will be searched and unchanged files will be deleted.");
-//			}
+			// if (includedFiles.isEmpty() && excludedFiles.isEmpty()
+			// && excludedRelativePaths.isEmpty()
+			// && excludedDirectoryNames.isEmpty()) {
+			// logger.warn("Nothing included and excluded, every file will be searched and unchanged files will be deleted.");
+			// }
 		}
 	}
 
 	/**
-	 * Processes after generation. Deletes old files if
-	 * switch is set.
+	 * Processes after generation. Deletes old files if switch is set.
 	 */
 	public void afterGeneration() {
 		time = System.currentTimeMillis();
@@ -158,10 +157,10 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 			logger.debug("Deleted file(s): " + log.toString());
 		}
 	}
-	
+
 	/**
-	 * Processes after second file tree walk. Deletes empty folders if
-	 * switch is set.
+	 * Processes after second file tree walk. Deletes empty folders if switch is
+	 * set.
 	 */
 	public void afterSecondFileWalk() {
 		if (deleteEmptyFolders) {
@@ -170,7 +169,7 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 			logger.debug("Deleted folder(s): " + log.toString());
 		}
 		time = System.currentTimeMillis() - time;
-		logger.debug("File deletion took: " + (time/1000.0) + "s");
+		logger.debug("File deletion took: " + (time / 1000.0) + "s");
 	}
 
 	// Methods that are internally used //
@@ -186,8 +185,11 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 		// get parent dir of absolute path
 		Path parent = absolutePath.getParent();
 		if (parent != null) {
+
+			DirectoryStream<Path> stream = null;
 			// checks if parent contains a repository metadata folder
-			try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent, "*.*")){
+			try {
+				stream = Files.newDirectoryStream(parent, "*.*");
 				for (Path dir : stream) {
 					for (RevisionControlSystem rep : repos) {
 						String name = rep.getMetadataFolderName();
@@ -200,6 +202,14 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.err.println("Something went wrong");
+			} finally {
+				if (stream != null) {
+					try {
+						stream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			checksAbove(parent);
 		}
@@ -216,7 +226,7 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 	protected List<String> delete() throws NotPreparedException {
 		if (prepared) {
 			Set<String> keys = oldFiles.keySet();
-			List<String> toDelete = new LinkedList<>();
+			List<String> toDelete = new LinkedList<String>();
 			// search for files to delete
 			for (String key : keys) {
 				Path path = Paths.get(key);
@@ -246,8 +256,8 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 	}
 
 	/**
-	 * Prepares deletion of empty packages (folders). It checks whether the subfolders are
-	 * empty or not and stores the folder paths if its empty.
+	 * Prepares deletion of empty packages (folders). It checks whether the
+	 * subfolders are empty or not and stores the folder paths if its empty.
 	 * 
 	 * @param dir
 	 *            the current directory that will be checked
@@ -256,7 +266,9 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 	protected void prepareDeleteEmptyPackages(Path dir) {
 		// is directory excluded?
 		for (String exclDirName : excludedDirectoryNames) {
-			if (dir.endsWith(exclDirName) || dir.toString().matches(".*[\\\\|/]" + exclDirName + "[\\\\|/].*")) {
+			if (dir.endsWith(exclDirName)
+					|| dir.toString().matches(
+							".*[\\\\|/]" + exclDirName + "[\\\\|/].*")) {
 				return;
 			}
 		}
@@ -305,6 +317,7 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 
 	/**
 	 * deletes previously found empty folders
+	 * 
 	 * @return list with deleted folders
 	 */
 	protected List<String> deleteEmptyPackages() {
@@ -507,35 +520,38 @@ public class FileDeletionFeature implements	FileTreeObserver, GeneratorFeature {
 		} else if (event.equals(FileEvent.AFTER_DIR) && deleteEmptyFolders) {
 			// prepare package deletion
 			prepareDeleteEmptyPackages(file);
-		} else if (event.equals(FileEvent.COMPLETED)){
+		} else if (event.equals(FileEvent.COMPLETED)) {
 			// switch treeWalked switch
 			treeWalked = false;
 		}
 	}
-	
+
 	/**
 	 * Only for testing, gives the count of oldFiles found.
+	 * 
 	 * @return size of oldFiles set
 	 */
-	protected int getOldFileCount(){
+	protected int getOldFileCount() {
 		return oldFiles.size();
 	}
-	
+
 	/**
-	 * Says whether the observer needs a file tree walk before generation.
-	 * It will be registered as observer if true.
+	 * Says whether the observer needs a file tree walk before generation. It
+	 * will be registered as observer if true.
+	 * 
 	 * @return value of deleteOldFiles
 	 */
-	public boolean getNeedsPrepare(){
+	public boolean getNeedsPrepare() {
 		return deleteOldFiles;
 	}
-	
+
 	/**
-	 * Says whether the observer needs file tree walk after generation.
-	 * It will be again registered as observer if true
+	 * Says whether the observer needs file tree walk after generation. It will
+	 * be again registered as observer if true
+	 * 
 	 * @return value of deleteEmptyFolders
 	 */
-	public boolean getNeedsSecondWalk(){
+	public boolean getNeedsSecondWalk() {
 		return deleteEmptyFolders;
 	}
 }
