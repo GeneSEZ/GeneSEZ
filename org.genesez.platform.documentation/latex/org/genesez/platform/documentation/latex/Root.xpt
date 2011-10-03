@@ -1,0 +1,52 @@
+
+«IMPORT gcore»
+
+«REM»
+	Generates a simple model documentation.
+	@author tobias haubold <toh@fh-zwickau.de>
+«ENDREM»
+
+«EXTENSION org::genesez::platform::documentation::latex::Formatting»
+«EXTENSION de::genesez::platforms::common::Conversion»
+
+
+«DEFINE Root FOR MModel -»
+	«FILE name + ".tex"»
+	«EXPAND Root FOREACH classifier -»
+	«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClass -»
+\subsection{Class {\tt «name»}}
+«comment().format()»
+
+«EXPAND Attributes»
+«EXPAND References»
+«ENDDEFINE»
+
+«DEFINE Root FOR MClassifier -»
+«ENDDEFINE»
+
+«DEFINE Attributes FOR MClass -»
+«IF !property.typeSelect(MAttribute).isEmpty -»
+\subsubsection{Attributes}
+The class \verb|«name()»| defines the following attributes:
+\begin{description}
+	«EXPAND _Item FOREACH property.typeSelect(MAttribute) -»
+\end{description}
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE References FOR MClass -»
+«IF !property.typeSelect(MAssociationRole).isEmpty -»
+\subsubsection{References}
+The class \verb|«name()»| defines the following references:
+\begin{description}
+	«EXPAND _Item FOREACH property.typeSelect(MAssociationRole) -»
+\end{description}
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _Item FOR MProperty -»
+	\item[«name» : «type.name()»] «comment().format()»
+«ENDDEFINE»
