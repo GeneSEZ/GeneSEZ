@@ -39,11 +39,10 @@ public class CollectionMappingManager<T extends MultiValuedType> implements
 	 */
 	public void appendMappingMap(List<T> mappingContainer) {
 		for (T element : mappingContainer) {
-			Boolean ordered = element.isOrdered();
-			Boolean unique = element.isUnique();
+			Boolean ordered = element.getOrdered();
+			Boolean unique = element.getUnique();
 			typeMappings.put(unique.toString() + ordered.toString(), element);
 		}
-
 	}
 
 	/**
