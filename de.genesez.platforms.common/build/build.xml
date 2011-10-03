@@ -8,7 +8,7 @@
 			<isset property="build.basedir" />
 		</not>
 	</condition>
-
+	
 	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
 	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
 
@@ -76,12 +76,14 @@
 		<pathconvert property="de.genesez.platforms.common.classpath" refid="de.genesez.platforms.common.classpath" />
 		<echo level="verbose" message="classpath: ${de.genesez.platforms.common.classpath}" />
 		<mkdir dir="${bin.dir}" />
-		<javac srcdir="${src.gen.dir}:${src.dir}"
-			destdir="${bin.dir}"
+		<javac destdir="${bin.dir}"
 			classpathref="de.genesez.platforms.common.classpath"
 			target="${target}"
 			source="${source}"
-			debug="on" />
+			debug="on">
+				<src path="${src.gen.dir}" />
+				<src path="${src.dir}" />
+		</javac>
 	</target>
 	
 	<target name="typemapping.schema2java"
