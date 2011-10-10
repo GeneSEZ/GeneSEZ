@@ -18,7 +18,7 @@ import org.eclipse.xpand2.output.FileHandle;
 import org.eclipse.xpand2.output.PostProcessor;
 
 import de.genesez.platforms.common.FileTreeObserver;
-import de.genesez.platforms.common.FileTreeWalker.FileEvent;
+import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature.FileEvent;
 import de.genesez.platforms.common.workflow.feature.NotPreparedException;
 
 /**
@@ -36,6 +36,9 @@ import de.genesez.platforms.common.workflow.feature.NotPreparedException;
 public abstract class ImportBeautifier implements PostProcessor,
 		FileTreeObserver {
 
+	private int prePriority = 10;
+	private int postPriority = 0;
+	
 	/**
 	 * Using log4j-mechanism for error logging.
 	 */
@@ -206,31 +209,20 @@ public abstract class ImportBeautifier implements PostProcessor,
 			prepared = true;
 		}
 	}
-
-	/**
-	 * Says whether the observer needs a file tree walk before generation. It
-	 * will be registered as observer if true
-	 * 
-	 * @return true
-	 */
-	public boolean getNeedsPrepare() {
-		return true;
+	
+	public int getPrePriority(){
+		return prePriority;
 	}
-
-	/**
-	 * Says whether the observer needs file tree walk after generation. It will
-	 * be again registered as observer if true
-	 * 
-	 * @return false
-	 */
-	public boolean getNeedsSecondWalk() {
-		return false;
+	
+	public int getPostPriority(){
+		return postPriority;
 	}
-
-	/**
-	 * called after the secondWalk, not used for imports.
-	 */
-	public void afterSecondFileWalk() {
-		return;
+	
+	public void setPrePriority(int prior){
+		this.prePriority = prior;
+	}
+	
+	public void setPostPriority(int prior){
+		this.postPriority = prior;
 	}
 }

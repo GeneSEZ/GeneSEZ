@@ -67,7 +67,7 @@ public class JavaGenerator extends TypeMappingGenerator {
 		
 		// import beautifier
 		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier();
-		addFileTreeWalkObserver(javaImportBeautifier);
+		setFeature(javaImportBeautifier);
 		
 		// add all beautifiers
 		List<Object> beautifiers = new ArrayList<Object>();
