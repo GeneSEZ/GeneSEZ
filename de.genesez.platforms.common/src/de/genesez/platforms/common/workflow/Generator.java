@@ -1,10 +1,10 @@
 package de.genesez.platforms.common.workflow;
 
 import java.io.File;
-import java.util.LinkedHashSet;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,9 +14,9 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
-import de.genesez.platforms.common.FileTreeObserver;
-import de.genesez.platforms.common.FileTreeWalker;
-import de.genesez.platforms.common.workflow.feature.FileDeletionFeature;
+import de.genesez.platforms.common.FileTreeWalkerHelper;
+import de.genesez.platforms.common.Prioritizable;
+import de.genesez.platforms.common.workflow.feature.PriorityComparator;
 import de.genesez.platforms.common.workflow.feature.GeneratorFeature;
 
 /**
@@ -43,8 +43,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		defaults.setProperty("prDefaultExcludes", "false");
 		defaults.setProperty("prExcludes", ".svn");
 		defaults.setProperty("singleValuedSlot", "true");
-		defaults.setProperty("deleteOldFiles", "false");
-		defaults.setProperty("deleteEmptyFolders", "false");
+		// defaults.setProperty("deleteOldFiles", "false");
+		// defaults.setProperty("deleteEmptyFolders", "false");
 	}
 
 	/**
@@ -52,9 +52,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 */
 	protected Properties properties = new Properties();
 
-	private Set<GeneratorFeature> features = new LinkedHashSet<GeneratorFeature>();
-	private Set<FileTreeObserver> fileWalkObserver = new LinkedHashSet<FileTreeObserver>();
-	private FileTreeWalker fileTreeWalker = new FileTreeWalker();
+	private List<Prioritizable> features = new LinkedList<Prioritizable>();
+	private List<Prioritizable> preFeatures = new LinkedList<Prioritizable>();
+	private List<Prioritizable> postFeatures = new LinkedList<Prioritizable>();
 
 	/**
 	 * Constructs the workflow component and initializes the default values.
@@ -79,9 +79,6 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		EmfMetaModel gtrace = new EmfMetaModel();
 		gtrace.setMetaModelPackage(properties.getProperty("gtracePackage"));
 		addMetaModel(gtrace);
-
-		// add GeneratorFeatures
-		addFeature(new FileDeletionFeature());
 	}
 
 	/**
@@ -123,9 +120,11 @@ public class Generator extends org.eclipse.xpand2.Generator {
 				setProRegDir(outputDir);
 			}
 		}
-		for (GeneratorFeature feature : features) {
-			feature.setProperties(properties);
-			feature.checkConfiguration();
+		for (Prioritizable feature : features) {
+			if (feature instanceof GeneratorFeature) {
+				((GeneratorFeature) feature).setProperties(properties);
+				((GeneratorFeature) feature).checkConfiguration();
+			}
 		}
 		super.checkConfigurationInternal(issues);
 	}
@@ -151,46 +150,41 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			addGlobalVarDef("tracemodel", properties.get("traceSlot"));
 		}
 
-		for (FileTreeObserver ob : fileWalkObserver) {
-			if (ob.getNeedsPrepare()) {
-				fileTreeWalker.registerObserver(ob);
-			}
-		}
-		
-		// prepare the observers
-		if (fileTreeWalker.countObservers() > 0) {
-			fileTreeWalker.walkTree(properties.getProperty("outputDir"));
-		}
-		fileTreeWalker.unregisterAllObserver();
-		// do generation
+		pre();
+
 		super.invokeInternal2(ctx, monitor, issues);
 
-		// do things after generation
-		afterGeneration();
+		post();
 	}
 
 	/**
-	 * All features do their after generation, and file tree is walked again if
-	 * needed for at least one observer.
+	 * sorts preFeatures and registers Observer on their respective
+	 * FileTreeWalker. Runs pre on GeneratorFeatures in List.
 	 */
-	private void afterGeneration() {
-		// feature's afterGeneration().
-		for (GeneratorFeature feature : features) {
-			feature.afterGeneration();
+	private void pre() {
+		Collections.sort(preFeatures, new PriorityComparator(true));
+		for (Prioritizable feature : preFeatures) {
+			FileTreeWalkerHelper.preRegister(feature);
 		}
-		
-		// check for observers if second walk is needed.
-		for (FileTreeObserver ob : fileWalkObserver) {
-			if (ob.getNeedsSecondWalk()) {
-				fileTreeWalker.registerObserver(ob);
+		for (Prioritizable feature : preFeatures) {
+			if (feature instanceof GeneratorFeature) {
+				((GeneratorFeature) feature).pre();
 			}
 		}
-		
-		// walks file tree second time and calls afterSecondFileWalk for observers.
-		if (fileTreeWalker.countObservers() > 0) {
-			fileTreeWalker.walkTree(properties.getProperty("outputDir"));
-			for (FileTreeObserver ob : fileWalkObserver) {
-				ob.afterSecondFileWalk();
+	}
+
+	/**
+	 * sorts postFeatures and registers Observer on their respective
+	 * FileTreeWalker. Runs post on GeneratorFeatures in List.
+	 */
+	private void post() {
+		Collections.sort(postFeatures, new PriorityComparator(false));
+		for (Prioritizable feature : postFeatures) {
+			FileTreeWalkerHelper.postRegister(feature);
+		}
+		for (Prioritizable feature : postFeatures) {
+			if (feature instanceof GeneratorFeature) {
+				((GeneratorFeature) feature).post();
 			}
 		}
 	}
@@ -320,28 +314,28 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		properties.setProperty("outputDir", outputDir);
 	}
 
-	/**
-	 * Setter for the workflow parameter <em><b>deleteOld</b></em>.
-	 * 
-	 * Sets if old files should be deleted or not
-	 * 
-	 * @param deleteOld
-	 *            Value of deleteOld True if it should be deleted.
-	 */
-	public void setDeleteOldFiles(String deleteOld) {
-		properties.setProperty("deleteOldFiles", deleteOld);
-	}
-
-	/**
-	 * Setter for the workflow parameter <em><b>deleteEmptyFolders</b></em>.
-	 * 
-	 * if this is true, empty folders will be deleted after generation process
-	 * 
-	 * @param deleteEmpty
-	 */
-	public void setDeleteEmptyFolders(String deleteEmpty) {
-		properties.setProperty("deleteEmptyFolders", deleteEmpty);
-	}
+	// /**
+	// * Setter for the workflow parameter <em><b>deleteOld</b></em>.
+	// *
+	// * Sets if old files should be deleted or not
+	// *
+	// * @param deleteOld
+	// * Value of deleteOld True if it should be deleted.
+	// */
+	// public void setDeleteOldFiles(String deleteOld) {
+	// properties.setProperty("deleteOldFiles", deleteOld);
+	// }
+	//
+	// /**
+	// * Setter for the workflow parameter <em><b>deleteEmptyFolders</b></em>.
+	// *
+	// * if this is true, empty folders will be deleted after generation process
+	// *
+	// * @param deleteEmpty
+	// */
+	// public void setDeleteEmptyFolders(String deleteEmpty) {
+	// properties.setProperty("deleteEmptyFolders", deleteEmpty);
+	// }
 
 	// END OF DEFAULTS
 
@@ -488,28 +482,19 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	}
 
 	/**
-	 * adds an observer for the file tree walker
-	 * 
-	 * @param observer
-	 *            the observer to be added
-	 */
-	public void addFileTreeWalkObserver(FileTreeObserver observer) {
-		this.fileWalkObserver.add(observer);
-		if(observer instanceof GeneratorFeature){
-			this.features.add((GeneratorFeature) observer);
-		}
-	}
-
-	/**
-	 * adds a new generator feature to the generator
+	 * Adds a Feature to features list, and if Priorities not 0 also pre- or
+	 * post-list.
 	 * 
 	 * @param feature
-	 *            the feature to be added
+	 *            the feature that should be added.
 	 */
-	public void addFeature(GeneratorFeature feature) {
+	public void setFeature(Prioritizable feature) {
 		this.features.add(feature);
-		if(feature instanceof FileTreeObserver){
-			this.fileWalkObserver.add((FileTreeObserver) feature);
+		if (feature.getPrePriority() > 0) {
+			preFeatures.add(feature);
+		}
+		if (feature.getPostPriority() > 0) {
+			postFeatures.add(feature);
 		}
 	}
 
