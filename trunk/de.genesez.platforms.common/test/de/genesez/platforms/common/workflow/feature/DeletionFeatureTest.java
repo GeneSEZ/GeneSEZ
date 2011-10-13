@@ -15,9 +15,6 @@ import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -25,8 +22,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import de.genesez.platforms.common.Prioritizable;
 
 public class DeletionFeatureTest {
 
@@ -104,7 +99,8 @@ public class DeletionFeatureTest {
 		folderDeletor.setProperties(prop);
 		fileDeletor.setProperties(prop);
 		walker.setProperties(prop);
-		walker.registerObserver(fileDeletor);
+		walker.addObserver(fileDeletor);
+		walker.checkConfiguration();
 		try {
 			Files.createDirectories(firstPath);
 		} catch (FileAlreadyExistsException e) {
@@ -152,13 +148,12 @@ public class DeletionFeatureTest {
 		folderDeletor.setProperties(properties);
 		fileDeletor.checkConfiguration();
 
-		walker.pre();
+		walker.invokePre();
 		test1.toFile().setLastModified(1);
-		fileDeletor.post();
-		walker.post();
-		walker.registerObserver(folderDeletor);
-		walker.post();
-		folderDeletor.post();
+		fileDeletor.invokePost();
+		walker.addObserver(folderDeletor);
+		walker.invokePost();
+		folderDeletor.invokePost();
 		
 		assertTrue(Files.exists(test1));
 		assertTrue(Files.exists(test2));
@@ -177,48 +172,32 @@ public class DeletionFeatureTest {
 
 	@Test
 	public void testCheckRepositoryNoRepository() throws IOException {
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertTrue(fileDeletor.getRevisionSystems().isEmpty());
 	}
 
 	@Test
 	public void testCheckRepositorySVN() throws IOException {
 		Files.createDirectory(startPath.resolve("de/genesez/.svn/"));
-		Files.walkFileTree(startPath, walker);
-		assertEquals(fileDeletor.getRevisionSystems().toString(), "[Subversion]");
+		walker.invokePre();
+		assertEquals("[Subversion]", fileDeletor.getRevisionSystems().toString());
 	}
 
 	@Test
 	public void testCheckRepositoryDefault() throws IOException {
 		Files.createDirectory(startPath.resolve("de/genesez/testclasses/.cvs"));
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertTrue(fileDeletor.getRevisionSystems().isEmpty());
 	}
 
 	@Test
 	public void testCheckRepositoryGit() throws IOException {
-		Path git = Files.createDirectory(startPath.toRealPath().getParent()
-				.getParent().resolve(".git"));
-		Files.walkFileTree(startPath, walker);
+		Path git = startPath.toRealPath().getParent().getParent().resolve(".git");
+		if(!Files.exists(git)){
+			Files.createDirectory(git);
+		}
+		walker.invokePre();
 		Files.deleteIfExists(git);
-		assertEquals(fileDeletor.getRevisionSystems().toString(), "[Git]");
-	}
-	
-	@Test
-	public void checkConfigurationTest(){
-		List<Prioritizable> list = new ArrayList<Prioritizable>();
-		// list.add(walker);
-		// list.add(new FileTreeWalkerFeature());
-		list.add(fileDeletor);
-		list.add(walker);
-		list.add(folderDeletor);
-		list.add(new FileTreeWalkerFeature());
-		Collections.sort(list, new PriorityComparator(false));
-
-		// Collections.sort(list, new PriorityComparator(false));
-		assertEquals(list.get(0).getClass(),fileDeletor.getClass());
-		assertEquals(list.get(1).getClass(),walker.getClass());
-		assertEquals(list.get(2).getClass(),folderDeletor.getClass());
-		assertEquals(list.get(3).getClass(),FileTreeWalkerFeature.class);
+		assertEquals("[Git]", fileDeletor.getRevisionSystems().toString());
 	}
 }

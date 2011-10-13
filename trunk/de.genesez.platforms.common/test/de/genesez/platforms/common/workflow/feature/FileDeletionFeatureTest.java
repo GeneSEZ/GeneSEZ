@@ -103,7 +103,9 @@ public class FileDeletionFeatureTest {
 		walker = new FileTreeWalkerFeature();
 		deletor = new FileDeletionFeature();
 		deletor.setProperties(prop);
-		walker.registerObserver(deletor);
+		walker.setProperties(prop);
+		walker.addObserver(deletor);
+		walker.checkConfiguration();
 		try {
 			Files.createDirectories(firstPath);
 		} catch (FileAlreadyExistsException e) {
@@ -141,20 +143,20 @@ public class FileDeletionFeatureTest {
 
 	@Test
 	public void testPrepare() throws IOException{
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(4, deletor.getOldFileCount());
 	}
 
 	@Test
 	public void testDeleteEverything() throws IOException {
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals("checks if every file was deleted", 4, deletor.delete()
 				.size());
 	}
 
 	@Test
 	public void testDelete2Files() throws IOException {
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		test1.toFile().setLastModified(1);
 		test2.toFile().setLastModified(1);
 		assertEquals("checks if 2 files were deleted", 2, deletor.delete()
@@ -163,7 +165,7 @@ public class FileDeletionFeatureTest {
 
 	@Test
 	public void testDeleteNothing() throws IOException {
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		test1.toFile().setLastModified(1);
 		test2.toFile().setLastModified(1);
 		test3.toFile().setLastModified(5);
@@ -173,9 +175,9 @@ public class FileDeletionFeatureTest {
 
 	@Test
 	public void testSetOneIncludedFileExtension() throws IOException {
-		// deletor.checkRepository(startPath.toString());
+//		deletor.checkRepository(startPath.toString());
 		deletor.setIncludedFiles("4");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(1, deletor.getOldFileCount());
 		assertEquals(1, deletor.delete().size());
 	}
@@ -183,7 +185,7 @@ public class FileDeletionFeatureTest {
 	@Test
 	public void testSetMoreIncludedFileExtensions() throws IOException {
 		deletor.setIncludedFiles("est4;test3,2");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(3, deletor.getOldFileCount());
 		assertEquals(3, deletor.delete().size());
 	}
@@ -191,7 +193,7 @@ public class FileDeletionFeatureTest {
 	@Test
 	public void testSetOneExcludedFileExtension() throws IOException {
 		deletor.setExcludedFiles("test2");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(3, deletor.getOldFileCount());
 		assertEquals(3, deletor.delete().size());
 	}
@@ -199,7 +201,7 @@ public class FileDeletionFeatureTest {
 	@Test
 	public void testSetMoreExcludedFileExtensions() throws IOException {
 		deletor.setExcludedFiles("test2,4;est1");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(1, deletor.getOldFileCount());
 		assertEquals(1, deletor.delete().size());
 	}
@@ -217,7 +219,7 @@ public class FileDeletionFeatureTest {
 		Path test = Files.createFile(startPath.resolve("test.test"));
 		deletor.setExcludedRelativePaths(startPath.resolve("de/genesez/output")
 				.toString() + ";" + startPath.resolve("de/genesez/testclasses"));
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(1, deletor.getOldFileCount());
 		assertTrue(test.endsWith(deletor.delete().get(0)));
 	}
@@ -228,7 +230,7 @@ public class FileDeletionFeatureTest {
 				startPath.resolve(".svn")).resolve("tester"));
 
 		deletor.setExcludedDirectoryNames(".svn");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(4, deletor.getOldFileCount());
 		test.toFile().setLastModified(1);
 		assertEquals(4, deletor.delete().size());
@@ -243,7 +245,7 @@ public class FileDeletionFeatureTest {
 		Files.createFile(startPath.resolve("de").resolve("tester"));
 
 		deletor.setExcludedDirectoryNames(".svn; tester;en");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(5, deletor.getOldFileCount());
 		test.toFile().setLastModified(1);
 		assertEquals(5, deletor.delete().size());
@@ -261,7 +263,7 @@ public class FileDeletionFeatureTest {
 		deletor.setIncludedFiles("2;3");
 		deletor.setExcludedRelativePaths("/testDir/de/genesez/output");
 		deletor.setExcludedDirectoryNames(".svn; en");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(1, deletor.getOldFileCount());
 		assertTrue(test3.endsWith(deletor.delete().get(0)));
 	}

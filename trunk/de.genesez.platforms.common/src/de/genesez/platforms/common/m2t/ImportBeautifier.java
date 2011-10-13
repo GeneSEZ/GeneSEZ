@@ -5,44 +5,46 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.xpand2.output.FileHandle;
 import org.eclipse.xpand2.output.PostProcessor;
 
-import de.genesez.platforms.common.FileTreeObserver;
-import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature.FileEvent;
+import de.genesez.platforms.common.FileTreeObserverAdapter;
+import de.genesez.platforms.common.workflow.WorkflowUtils;
 import de.genesez.platforms.common.workflow.feature.NotPreparedException;
 
 /**
- * This class provides a skeletal implementation for concrete import beautifier.
  * The task of an import beautifier is the detection and reduction of double
  * import statements. It also stores and adds previously added imports.
  * Furthermore, this class implements the PostProcessor interface which allows
- * to define a concrete import beautifier as a beautifier attribute in the Xpand
+ * to define an import beautifier as a beautifier attribute in the Xpand
  * workflow component.
  * 
  * @author nihe
  * @author Dominik Wetzel
- * @date 2011-09-22
+ * @date 2011-10-12
  */
-public abstract class ImportBeautifier implements PostProcessor,
-		FileTreeObserver {
+public class ImportBeautifier extends FileTreeObserverAdapter implements
+		PostProcessor {
 
-	private int prePriority = 10;
-	private int postPriority = 0;
-	
 	/**
 	 * Using log4j-mechanism for error logging.
 	 */
 	protected final Log logger = LogFactory.getLog(getClass());
+
+	private final static String FileIDString = "@FILE-ID : (";
 
 	/**
 	 * Singleton import formatter instance.
@@ -54,10 +56,14 @@ public abstract class ImportBeautifier implements PostProcessor,
 	 */
 	private Properties options = null;
 
-	private Map<String, List<String>> importMap = new LinkedHashMap<String, List<String>>();
-	private final static String FileIDString = "@FILE-ID : (";
-	private String importRegex;
-	private String extensionsRegex;
+	/**
+	 * Map with File-IDs and corresponding Imports
+	 */
+	protected Map<String, Set<String>> importMap = new LinkedHashMap<String, Set<String>>();
+
+	private Pattern extensionsRegex = null;
+
+	private Pattern importRegex = null;
 
 	private boolean prepared = false;
 
@@ -67,9 +73,9 @@ public abstract class ImportBeautifier implements PostProcessor,
 	 * @param importString
 	 *            String that declares imports.
 	 */
-	public ImportBeautifier(String importRegex, List<String> extensions) {
-		this.importRegex = importRegex;
-		extensionsRegex = extensions.toString().replaceAll(", ", "|");
+	public ImportBeautifier() {
+		options = new Properties();
+		options.setProperty("de.genesez.importformatter.delim", "\n");
 	}
 
 	/**
@@ -92,6 +98,79 @@ public abstract class ImportBeautifier implements PostProcessor,
 	}
 
 	/**
+	 * Sets file extensions for files that should be scanned.
+	 * It creates a regular expression, which looks like:
+	 * ".*(\\.extension|\\.extension|...)$"
+	 * 
+	 * @param extensions
+	 *            the file extensions separated by ("," or ";")
+	 */
+	public void setFileExtensions(String extensions) {
+		String regex = WorkflowUtils.split(extensions).toString()
+				.replaceAll(", ", "|").replaceAll("\\.", "\\\\.");
+		regex = regex.substring(1, regex.length() - 1);
+		try {
+			extensionsRegex = Pattern.compile(".*(" + regex + ")$");
+		} catch (PatternSyntaxException e) {
+			logger.error("Given file extensions are defective: " + extensions);
+		}
+		if (extensionsRegex != null) {
+			this.getOptions().setProperty(
+					"de.genesez.importbeautifier.fileextensions", ".*(" + regex + ")$");
+		}
+
+	}
+
+	/**
+	 * Compiles the given string into a regular expression pattern to indicate
+	 * imports. NOTE: Be sure to use appropriate regular expression syntax.
+	 * 
+	 * @see java.util.regex.Pattern for more information.
+	 * 
+	 * @param regex
+	 *            the import regular expressions.
+	 * @throws PatternSyntaxException
+	 *             if regular expression is not right.
+	 */
+	public void setImportRegex(String regex) {
+		try {
+			this.importRegex = Pattern.compile(regex);
+		} catch (PatternSyntaxException e) {
+			logger.error("Error in import regular expression: " + regex
+					+ " - Imports can not be carried over.");
+		}
+		if (importRegex != null) {
+			this.getOptions().setProperty("de.genesez.importformatter.regex",
+					regex);
+		}
+
+	}
+
+	/**
+	 * Only for convenience. Makes an import regular expression.
+	 * 
+	 * @see de.genesez.platforms.common.m2t.ImportBeautifier#setImportRegex(java.lang.String)
+	 * @param importStrings
+	 *            import strings (separated by "," or ";")
+	 */
+	public void setImportStrings(String importStrings) {
+		String regex = WorkflowUtils.split(importStrings).toString()
+				.replaceAll(", ", "|");
+		regex = "(" + regex.substring(1, regex.length() - 1) + ") .*$";
+		this.setImportRegex(regex);
+	}
+
+	/**
+	 * Sets a new line delimiter, to check the line endings.
+	 * 
+	 * @param delim
+	 *            the new delimiter.
+	 */
+	public void setLineDelimiter(String delim) {
+		options.setProperty("de.genesez.importformatter.delim", delim);
+	}
+
+	/**
 	 * Sole method to get the preconfigured import formatter.
 	 * 
 	 * @return singleton import formatter instance
@@ -101,6 +180,64 @@ public abstract class ImportBeautifier implements PostProcessor,
 			this.importFormatter = new ImportFormatter(this.options);
 		}
 		return this.importFormatter;
+	}
+
+	/**
+	 * Searches for the File-ID in the given file and if found it searches the
+	 * file for imports using the importRegex. After that it stores both in a map.
+	 * 
+	 * @param file
+	 *            file to be searched
+	 */
+	@Override
+	public void updateFileVisit(Path file) {
+		if (importRegex != null) {
+			if (extensionsRegex.matcher(file.toString()).matches()) {
+				// initialize
+				Set<String> imports = new HashSet<String>();
+				String guID = null;
+				String line = null;
+				BufferedReader br = null;
+				try {
+					br = Files
+							.newBufferedReader(file, Charset.defaultCharset());
+					// check line for FileIDString
+					while ((line = br.readLine()) != null) {
+						if (line.contains(FileIDString)) {
+							guID = line.substring(line.indexOf("(") + 1,
+									line.indexOf(")"));
+						}
+						// add imports to guID
+						line = line.trim();
+						if (guID != null && importRegex.matcher(line).matches()) {
+							imports.add(line);
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						if (br != null) {
+							br.close();
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				// add to importMap
+				if (!imports.isEmpty()) {
+					importMap.put(guID, imports);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sets prepared to true after file tree walked completely
+	 */
+	@Override
+	public void updateComplete() {
+		prepared = true;
 	}
 
 	/**
@@ -115,9 +252,12 @@ public abstract class ImportBeautifier implements PostProcessor,
 	 *             walked properly)
 	 */
 	protected String putImports(FileHandle file) throws NotPreparedException {
+		String fileString = file.getBuffer().toString();
+		if (importRegex == null) {
+			return fileString;
+		}
 		if (prepared) {
 			// initialize
-			String fileString = file.getBuffer().toString();
 			String delim = options
 					.getProperty("de.genesez.importformatter.delim");
 			StringTokenizer st = new StringTokenizer(fileString, delim);
@@ -142,12 +282,11 @@ public abstract class ImportBeautifier implements PostProcessor,
 
 			// put imports into file
 			if (guID != null && importMap.containsKey(guID)) {
-				List<String> imports = importMap.get(guID);
+				Set<String> imports = importMap.get(guID);
 				if (putImports > -1) {
 					lines.addAll(putImports - 1, imports);
 				}
 			}
-
 			// creates a String from tokens.
 			fileString = "";
 			for (String line : lines) {
@@ -161,68 +300,34 @@ public abstract class ImportBeautifier implements PostProcessor,
 	}
 
 	/**
-	 * Searches for the PreProRegID in the given file and if found it searches
-	 * the file again for imports. After that it stores both in a map.
+	 * This method is implemented from the oAW PostProcessor interface. It is
+	 * called before the file will be written and closed.
 	 * 
-	 * @param event
-	 *            the event for the file
 	 * @param file
-	 *            file to be searched
+	 *            the file which shall be modified.
 	 */
-	public void update(FileEvent event, Path file) {
-		if (event.equals(FileEvent.FILE_VISIT)
-				&& file.toString().matches(".*" + extensionsRegex + "$")) {
-			// initialize
-			List<String> imports = new LinkedList<String>();
-			String guID = null;
-			String line = null;
-			BufferedReader br = null;
-			try {
-				br = Files.newBufferedReader(file, Charset.defaultCharset());
-				// check line for FileIDString
-				while ((line = br.readLine()) != null) {
-					if (line.contains(FileIDString)) {
-						guID = line.substring(line.indexOf("(") + 1,
-								line.indexOf(")"));
-					}
-					// add imports to guID
-					if (guID != null && line.matches(importRegex)) {
-						imports.add(line.trim());
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if (br != null) {
-						br.close();
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			// add to importMap
-			if (!imports.isEmpty()) {
-				importMap.put(guID, imports);
-			}
-		} else if (event.equals(FileEvent.COMPLETED)) {
-			prepared = true;
+	@SuppressWarnings("deprecation")
+	public void beforeWriteAndClose(FileHandle file) {
+		if (file.getTargetFile() != null
+				&& (extensionsRegex == null || extensionsRegex.matcher(
+						file.getAbsolutePath()).matches())) {
+			String edit = putImports(file);
+			// String edit = file.getBuffer().toString();
+			// detect and delete double import statements
+			edit = getImportFormatter().format(edit);
+			// write string to file
+			file.setBuffer(new StringBuffer(edit));
 		}
 	}
-	
-	public int getPrePriority(){
-		return prePriority;
-	}
-	
-	public int getPostPriority(){
-		return postPriority;
-	}
-	
-	public void setPrePriority(int prior){
-		this.prePriority = prior;
-	}
-	
-	public void setPostPriority(int prior){
-		this.postPriority = prior;
+
+	/**
+	 * This method is implemented from the oAW PostProcessor interface. It is
+	 * called after the file is closed.
+	 * 
+	 * @param file
+	 *            the file which shall be modified.
+	 */
+	public void afterClose(FileHandle file) {
+		// nothing to do
 	}
 }

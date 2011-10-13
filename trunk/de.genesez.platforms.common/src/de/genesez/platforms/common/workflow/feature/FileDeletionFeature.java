@@ -17,14 +17,10 @@ import org.apache.commons.logging.LogFactory;
 
 import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
-import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature.FileEvent;
 
 /**
  * The FileDeletionFeature handles the deletion of unchanged files during the
  * generation process. With the filter-options the search can be specified.
- * 
- * @prePrior 10
- * @postPrior 20
  * 
  * NOTE: Works only with Java 7.
  * 
@@ -53,17 +49,8 @@ public class FileDeletionFeature extends DeletionFeature {
 	// the maps for comparison between last modification dates
 	private Map<String, Long> oldFiles = new LinkedHashMap<String, Long>();
 
-	/**
-	 * Constructor, sets postPriority to 20 and prePriority to 10
-	 */
-	public FileDeletionFeature(){
-		super();
-		prePriority = 10;
-		postPriority = 20;
-	}
-	
 	// Methods from the Interface //
-	
+
 	/**
 	 * Sets the properties:
 	 * <p>
@@ -98,14 +85,14 @@ public class FileDeletionFeature extends DeletionFeature {
 	/**
 	 * Processes after generation. Deletes old files if switch is set.
 	 */
-	public void post() {
+	public void invokePost() {
 		if (deleteOldFiles) {
 			long time = System.currentTimeMillis();
 			List<String> log = delete();
 			time = System.currentTimeMillis() - time;
 			logger.info(log.size() + " file(s) deleted.");
 			logger.debug("Deleted file(s): " + log.toString());
-			logger.debug("File deletion took: " + (time/1000.0) + "s");
+			logger.debug("File deletion took: " + (time / 1000.0) + "s");
 		}
 	}
 
@@ -149,7 +136,8 @@ public class FileDeletionFeature extends DeletionFeature {
 			}
 			return toDelete;
 		} else {
-			throw new NotPreparedException("File deletion was not prepared properly");
+			throw new NotPreparedException(
+					"File deletion was not prepared properly");
 		}
 	}
 
@@ -180,75 +168,56 @@ public class FileDeletionFeature extends DeletionFeature {
 
 	}
 
-//	/**
-//	 * Setter for the workflow parameter <em><b>deleteOld</b></em>.
-//	 * 
-//	 * Sets if old files should be deleted or not
-//	 * 
-//	 * @param deleteOld
-//	 *            Value of deleteOld True if it should be deleted.
-//	 */
-//	protected void setDeleteOldFiles(String deleteOld) {
-//		this.deleteOldFiles = Boolean.parseBoolean(deleteOld);
-//	}
-
 	/**
-	 * checks if the file is a not excluded directory. If so it looks if its
-	 * a known metadata folder. If its a not excluded or an included file, it
+	 * checks if the file is not excluded somehow or if its included. If so, it
 	 * will be stored with its last modification date in Map.
 	 * 
-	 * @param event
-	 *            the event from FileTreeWalker
 	 * @param file
-	 *            the directory that will be checked
+	 *            the file that will be checked
 	 */
 	@Override
-	public void update(FileEvent event, Path file) {
+	public void updateFileVisit(Path file) {
 		if (deleteOldFiles) {
-			if (event.equals(FileEvent.BEFORE_DIR)) {
-				// checks for revision System
-				super.checkRepository(file);
-			} else if (event.equals(FileEvent.FILE_VISIT)) {
-				// looks if file is in or excluded
-				for (String exclDirName : super.excludedDirectoryNames) {
-					if (file.toString().matches(
-							".*[\\\\|/]" + exclDirName + "[\\\\|/].*")) {
-						return;
-					}
-				}
-				for (String exclRelPath : super.excludedRelativePaths) {
-					if (file.startsWith(exclRelPath)) {
-						return;
-					}
-				}
-				for (String exclFile : excludedFiles) {
-					if (file.toString().endsWith(exclFile)) {
-						return;
-					}
-				}
-				if (!includedFiles.isEmpty()) {
-					for (String inclFile : includedFiles) {
-						if (file.toString().endsWith(inclFile)) {
-							oldFiles.put(file.toString(), file.toFile()
-									.lastModified());
-						}
-					}
+			// looks if file is in or excluded
+			for (String exclDirName : super.excludedDirectoryNames) {
+				if (file.toString().matches(
+						".*[\\\\|/]" + exclDirName + "[\\\\|/].*")) {
 					return;
 				}
-				// add to oldFiles map (with LMD)
-				oldFiles.put(file.toString(), file.toFile().lastModified());
-			} else if (event.equals(FileEvent.COMPLETED)) {
-				// log revision Systems, switch switches
-				try {
-					super.checksAbove(file.toRealPath());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				super.update(event, file);
-				logger.debug(oldFiles.size() + " File(s) found.");
-				prepared = true;
 			}
-		} 
+			for (String exclRelPath : super.excludedRelativePaths) {
+				if (file.startsWith(exclRelPath)) {
+					return;
+				}
+			}
+			for (String exclFile : excludedFiles) {
+				if (file.toString().endsWith(exclFile)) {
+					return;
+				}
+			}
+			if (!includedFiles.isEmpty()) {
+				for (String inclFile : includedFiles) {
+					if (file.toString().endsWith(inclFile)) {
+						oldFiles.put(file.toString(), file.toFile()
+								.lastModified());
+					}
+				}
+				return;
+			}
+			// add to oldFiles map (with LMD)
+			oldFiles.put(file.toString(), file.toFile().lastModified());
+		}
+	}
+
+	/**
+	 * Logs revision Systems and found files, also sets prepared to true. Called
+	 * if file tree completely walked.
+	 */
+	@Override
+	public void updateComplete() {
+		super.logRevisionSystems();
+		logger.debug(oldFiles.size() + " File(s) found.");
+		prepared = true;
 	}
 
 	/**
@@ -259,22 +228,4 @@ public class FileDeletionFeature extends DeletionFeature {
 	protected int getOldFileCount() {
 		return oldFiles.size();
 	}
-
-	/**
-	 * Called if in pre-list, does nothing
-	 */
-	@Override
-	public void pre() {	
-		// nothing to do
-	}
-	
-//	@Override
-//	public boolean needsPreWalk(){
-//		return true;
-//	}
-//	
-//	@Override
-//	public boolean needsPostWalk(){
-//		return false;
-//	}
 }

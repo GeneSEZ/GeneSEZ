@@ -92,7 +92,9 @@ public class FolderDeletionFeatureTest {
 		walker = new FileTreeWalkerFeature();
 		deletor = new FolderDeletionFeature();
 		deletor.setProperties(prop);
-		walker.registerObserver(deletor);
+		walker.setProperties(prop);
+		walker.addObserver(deletor);
+		walker.checkConfiguration();
 		try {
 			Files.createDirectories(firstPath);
 		} catch (FileAlreadyExistsException e) {
@@ -125,7 +127,7 @@ public class FolderDeletionFeatureTest {
 				.resolve("en/genesez/workflow/java/generator/"));
 		deletor.setExcludedRelativePaths("/common");
 		deletor.setExcludedDirectoryNames("deletor");
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 		assertEquals(2, deletor.deleteEmptyPackages()
 					.size());
 	}
@@ -155,7 +157,7 @@ public class FolderDeletionFeatureTest {
 					DosFileAttributeView.class);
 			attr.setReadOnly(true);
 		}
-		Files.walkFileTree(startPath, walker);
+		walker.invokePre();
 
 		// the Test
 		assertEquals(8, deletor.deleteEmptyPackages()

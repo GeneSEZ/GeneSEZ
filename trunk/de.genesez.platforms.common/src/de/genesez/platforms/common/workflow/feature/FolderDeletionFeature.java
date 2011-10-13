@@ -12,20 +12,17 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.genesez.platforms.common.FileTreeObserver;
 import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
-import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature.FileEvent;
 
 /**
- * Does the deletion of empty packages, it should run after generation and deletion
- * @prePrior 0
- * @postPrior 40
+ * Does the deletion of empty packages, it runs after generation and should run
+ * after deletion.
  * 
  * @author Dominik Wetzel
- *
+ * @date 2011-10-11
  */
 public class FolderDeletionFeature extends DeletionFeature implements
-		GeneratorFeature, FileTreeObserver {
+		PostFeature {
 
 	/**
 	 * Logger instance to output important messages.
@@ -40,43 +37,26 @@ public class FolderDeletionFeature extends DeletionFeature implements
 
 	private List<Path> emptyFolders = new ArrayList<Path>();
 
-	/**
-	 * Constructor, sets postPriority to 40
-	 */
-	public FolderDeletionFeature() {
-		postPriority = 40;
-	}
-
 	// Methods from the Interface //
 
 	/**
-	 * checks if file is a Repository folder, or an Empty folder.
-	 * Prepares the deletion of empty packages
+	 * Prepares the deletion of empty packages. Called after a directory was
+	 * completely visited.
 	 * 
-	 * @param event
-	 *            the event from FileTreeWalker
 	 * @param file
 	 *            the directory that will be checked
 	 */
 	@Override
-	public void update(FileEvent event, Path file) {
+	public void updateAfterDir(Path file) {
 		if (deleteEmptyFolders) {
-			if (event.equals(FileEvent.BEFORE_DIR)) {
-				super.checkRepository(file);
-			} else if (event.equals(FileEvent.AFTER_DIR) && deleteEmptyFolders) {
-				// prepare package deletion
-				prepareDeleteEmptyPackages(file);
-			} else if (event.equals(FileEvent.COMPLETED)) {
-				// log revision Systems
-				try {
-					super.checksAbove(file.toRealPath());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				super.update(event, file);
-				prepared = true;
-			}
+			// prepare package deletion
+			prepareDeleteEmptyPackages(file);
 		}
+	}
+
+	public void updateComplete() {
+		super.logRevisionSystems();
+		prepared = true;
 	}
 
 	/**
@@ -95,19 +75,11 @@ public class FolderDeletionFeature extends DeletionFeature implements
 	}
 
 	/**
-	 * Called before generation. Does nothing
-	 */
-	@Override
-	public void pre() {
-		// nothing to do
-	}
-
-	/**
 	 * Deletes empty Folders from found revision control system and if possible
 	 * from the file system.
 	 */
 	@Override
-	public void post() throws NotPreparedException {
+	public void invokePost() throws NotPreparedException {
 		if (deleteEmptyFolders) {
 			if (prepared) {
 				long time = System.currentTimeMillis();
@@ -122,19 +94,6 @@ public class FolderDeletionFeature extends DeletionFeature implements
 			}
 		}
 	}
-
-	// Setter Methods //
-
-	// /**
-	// * Setter for the workflow parameter <em><b>deleteEmptyFolders</b></em>.
-	// *
-	// * if this is true, empty folders will be deleted after generation process
-	// *
-	// * @param deleteEmpty
-	// */
-	// protected void setDeleteEmptyFolders(String deleteEmpty) {
-	// this.deleteEmptyFolders = Boolean.parseBoolean(deleteEmpty);
-	// }
 
 	/**
 	 * Prepares deletion of empty packages (folders). It checks whether the
@@ -221,14 +180,4 @@ public class FolderDeletionFeature extends DeletionFeature implements
 		emptyFolders.clear();
 		return list;
 	}
-	
-//	@Override
-//	public boolean needsPreWalk(){
-//		return false;
-//	}
-//	
-//	@Override
-//	public boolean needsPostWalk(){
-//		return true;
-//	}
 }

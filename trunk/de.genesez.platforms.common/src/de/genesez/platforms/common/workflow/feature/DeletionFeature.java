@@ -20,23 +20,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.genesez.platforms.common.FileTreeObserver;
+import de.genesez.platforms.common.FileTreeObserverAdapter;
 import de.genesez.platforms.common.revisioncontrol.RegisterHelper;
 import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
-import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature.FileEvent;
 
-public abstract class DeletionFeature implements GeneratorFeature,
-		FileTreeObserver {
-
-	/**
-	 * prePosition: 0
-	 */
-	protected int prePriority = 0;
-
-	/**
-	 * postPosition: 0
-	 */
-	protected int postPriority = 0;
+/**
+ * Superclass for the FileDeletion. Contains methods to check which repository
+ * is in use and logs them.
+ * 
+ * @author Dominik Wetzel
+ * @date 2011-10-11
+ */
+public abstract class DeletionFeature extends FileTreeObserverAdapter implements
+		PostFeature, FileTreeObserver {
 
 	/**
 	 * Logger instance to output important messages.
@@ -239,9 +236,13 @@ public abstract class DeletionFeature implements GeneratorFeature,
 	 * @param file
 	 *            the directory that will be checked
 	 */
-	@Override
-	public void update(FileEvent event, Path file) {
-		if (event.equals(FileEvent.COMPLETED) && !printedRevisionSystemsOnce) {
+	protected void logRevisionSystems() {
+		try {
+			checksAbove(outputPath.toRealPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (!printedRevisionSystemsOnce) {
 			if (getRevisionSystems().isEmpty()) {
 				logger.info("No supported revision control system found. Default will be used.");
 			} else {
@@ -252,59 +253,14 @@ public abstract class DeletionFeature implements GeneratorFeature,
 		}
 	}
 
-	// public boolean changeFileTree() {
-	// return changesFileTree;
-	// }
-
 	/**
-	 * gets priority in pre-list
+	 * Checks if the directory is a repository metadata folder
 	 * 
-	 * @return prePriority
+	 * @see #checkRepository(Path)
+	 * @param dir
+	 *            the directory that will be checked
 	 */
-	@Override
-	public int getPrePriority() {
-		return prePriority;
+	public void updateBeforeDir(Path dir) {
+		checkRepository(dir);
 	}
-
-	/**
-	 * gets priority in post-list
-	 * 
-	 * @return postPriority
-	 */
-	@Override
-	public int getPostPriority() {
-		return postPriority;
-	}
-
-	/**
-	 * Sets priority in pre-list
-	 * 
-	 * @param priority
-	 *            prePriority
-	 */
-	@Override
-	public void setPrePriority(int priority) {
-		this.prePriority = priority;
-	}
-
-	/**
-	 * Sets priority in post-list
-	 * 
-	 * @param priority
-	 *            postPriority
-	 */
-	@Override
-	public void setPostPriority(int priority) {
-		this.postPriority = priority;
-	}
-
-	// @Override
-	// public boolean changesPreFileTree(){
-	// return false;
-	// }
-	//
-	// @Override
-	// public boolean changesPostFileTree(){
-	// return true;
-	// }
 }
