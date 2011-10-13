@@ -1,7 +1,6 @@
 package de.genesez.platforms.common.workflow;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -12,12 +11,12 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.output.Outlet;
+import org.eclipse.xpand2.output.PostProcessor;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 
-import de.genesez.platforms.common.FileTreeWalkerHelper;
-import de.genesez.platforms.common.Prioritizable;
-import de.genesez.platforms.common.workflow.feature.PriorityComparator;
-import de.genesez.platforms.common.workflow.feature.GeneratorFeature;
+import de.genesez.platforms.common.workflow.feature.PostFeature;
+import de.genesez.platforms.common.workflow.feature.PreFeature;
+import de.genesez.platforms.common.workflow.feature.TransformationFeature;
 
 /**
  * Workflow component class to generate code (model to text transformation).
@@ -25,7 +24,7 @@ import de.genesez.platforms.common.workflow.feature.GeneratorFeature;
  * @author Tobias Haubold
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @author Dominik Wetzel
- * @date 2011-09-20
+ * @date 2011-10-11
  */
 public class Generator extends org.eclipse.xpand2.Generator {
 
@@ -43,8 +42,6 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		defaults.setProperty("prDefaultExcludes", "false");
 		defaults.setProperty("prExcludes", ".svn");
 		defaults.setProperty("singleValuedSlot", "true");
-		// defaults.setProperty("deleteOldFiles", "false");
-		// defaults.setProperty("deleteEmptyFolders", "false");
 	}
 
 	/**
@@ -52,9 +49,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 */
 	protected Properties properties = new Properties();
 
-	private List<Prioritizable> features = new LinkedList<Prioritizable>();
-	private List<Prioritizable> preFeatures = new LinkedList<Prioritizable>();
-	private List<Prioritizable> postFeatures = new LinkedList<Prioritizable>();
+//	private List<TransformationFeature> features = new LinkedList<TransformationFeature>();
+	private List<PreFeature> preFeatures = new LinkedList<PreFeature>();
+	private List<PostFeature> postFeatures = new LinkedList<PostFeature>();
 
 	/**
 	 * Constructs the workflow component and initializes the default values.
@@ -120,11 +117,13 @@ public class Generator extends org.eclipse.xpand2.Generator {
 				setProRegDir(outputDir);
 			}
 		}
-		for (Prioritizable feature : features) {
-			if (feature instanceof GeneratorFeature) {
-				((GeneratorFeature) feature).setProperties(properties);
-				((GeneratorFeature) feature).checkConfiguration();
-			}
+		for (TransformationFeature feature : preFeatures) {
+			feature.setProperties(properties);
+			feature.checkConfiguration();
+		}
+		for (TransformationFeature feature : postFeatures){
+			feature.setProperties(properties);
+			feature.checkConfiguration();
 		}
 		super.checkConfigurationInternal(issues);
 	}
@@ -158,34 +157,20 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	}
 
 	/**
-	 * sorts preFeatures and registers Observer on their respective
-	 * FileTreeWalker. Runs pre on GeneratorFeatures in List.
+	 * Runs invokePre() on PreFeatures in preFeatures-list.
 	 */
 	private void pre() {
-		Collections.sort(preFeatures, new PriorityComparator(true));
-		for (Prioritizable feature : preFeatures) {
-			FileTreeWalkerHelper.preRegister(feature);
-		}
-		for (Prioritizable feature : preFeatures) {
-			if (feature instanceof GeneratorFeature) {
-				((GeneratorFeature) feature).pre();
-			}
+		for (PreFeature feature : preFeatures) {
+			feature.invokePre();
 		}
 	}
 
 	/**
-	 * sorts postFeatures and registers Observer on their respective
-	 * FileTreeWalker. Runs post on GeneratorFeatures in List.
+	 * Runs invokePost() on PostFeatures in postFeatures-list.
 	 */
 	private void post() {
-		Collections.sort(postFeatures, new PriorityComparator(false));
-		for (Prioritizable feature : postFeatures) {
-			FileTreeWalkerHelper.postRegister(feature);
-		}
-		for (Prioritizable feature : postFeatures) {
-			if (feature instanceof GeneratorFeature) {
-				((GeneratorFeature) feature).post();
-			}
+		for (PostFeature feature : postFeatures) {
+			feature.invokePost();
 		}
 	}
 
@@ -313,29 +298,6 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		super.addOutlet(new Outlet(outputDir));
 		properties.setProperty("outputDir", outputDir);
 	}
-
-	// /**
-	// * Setter for the workflow parameter <em><b>deleteOld</b></em>.
-	// *
-	// * Sets if old files should be deleted or not
-	// *
-	// * @param deleteOld
-	// * Value of deleteOld True if it should be deleted.
-	// */
-	// public void setDeleteOldFiles(String deleteOld) {
-	// properties.setProperty("deleteOldFiles", deleteOld);
-	// }
-	//
-	// /**
-	// * Setter for the workflow parameter <em><b>deleteEmptyFolders</b></em>.
-	// *
-	// * if this is true, empty folders will be deleted after generation process
-	// *
-	// * @param deleteEmpty
-	// */
-	// public void setDeleteEmptyFolders(String deleteEmpty) {
-	// properties.setProperty("deleteEmptyFolders", deleteEmpty);
-	// }
 
 	// END OF DEFAULTS
 
@@ -482,20 +444,34 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	}
 
 	/**
-	 * Adds a Feature to features list, and if Priorities not 0 also pre- or
-	 * post-list.
+	 * Adds a PreFeature to preFeatures list
 	 * 
 	 * @param feature
 	 *            the feature that should be added.
 	 */
-	public void setFeature(Prioritizable feature) {
-		this.features.add(feature);
-		if (feature.getPrePriority() > 0) {
+	public void addPreFeature(PreFeature feature) {
 			preFeatures.add(feature);
-		}
-		if (feature.getPostPriority() > 0) {
+	}
+	
+	/**
+	 * Adds a PostFeature to postFeatures list
+	 * 
+	 * @param feature
+	 *            the feature that should be added.
+	 */
+	public void addPostFeature(PostFeature feature) {
 			postFeatures.add(feature);
-		}
+	}
+	
+	/**
+	 * Adds a PostProcesser (e. g. beautifier) to the postProcessor list
+	 * @param postprocessor the PostProcessor to add
+	 */
+	public void addPostProcessor(PostProcessor postprocessor){
+			@SuppressWarnings("unchecked")
+			List<Object> toSet = (List<Object>) super.getBeautifier();
+			toSet.add(postprocessor);
+			super.setBeautifier(toSet);
 	}
 
 	/**

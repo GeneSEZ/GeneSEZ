@@ -1,7 +1,5 @@
 package de.genesez.platforms.java.workflow;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -9,16 +7,27 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xpand2.output.JavaBeautifier;
 
+import de.genesez.platforms.common.workflow.DefaultGenerator;
 import de.genesez.platforms.common.workflow.Generator;
-import de.genesez.platforms.common.workflow.TypeMappingGenerator;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
-import de.genesez.platforms.java.m2t.JavaImportBeautifier;
 
 /**
  * Performs model to text transformations for the Java platform
  * @author Aibek Isaev
+ * @author Dominik Wetzel
+ * @date 2011-10-12
  */
-public class JavaGenerator extends TypeMappingGenerator {
+public class JavaGenerator extends DefaultGenerator {
+	
+	/**
+	 * The regular expression for the import statements
+	 */
+	private static final String importRegex = "import .*;$";
+	
+	/**
+	 * The constant for the fileExtensions 
+	 */
+	private static final String fileExtensions = ".java";
 	
 	private static final Properties defaults = new Properties();
 	static {
@@ -60,20 +69,18 @@ public class JavaGenerator extends TypeMappingGenerator {
 		super.checkConfigurationInternal(issues);
 	}
 	
+	/**
+	 * Configures the JavaBeautifier and the ImportBeautifier
+	 */
 	protected void configureBeautifiers() {
 		// java beautifier
 		JavaBeautifier javaBeautifier = new JavaBeautifier();
 		javaBeautifier.setConfigFile(properties.getProperty("formatterConfig"));
+		super.addPostProcessor(javaBeautifier);
 		
-		// import beautifier
-		JavaImportBeautifier javaImportBeautifier = new JavaImportBeautifier();
-		setFeature(javaImportBeautifier);
-		
-		// add all beautifiers
-		List<Object> beautifiers = new ArrayList<Object>();
-		beautifiers.add(javaBeautifier);
-		beautifiers.add(javaImportBeautifier);
-		super.setBeautifier(beautifiers);
+		// configure ImportBeautifier
+		super.setFileExtensions(fileExtensions);
+		super.setImportRegex(importRegex);
 	}
 	
 	/**

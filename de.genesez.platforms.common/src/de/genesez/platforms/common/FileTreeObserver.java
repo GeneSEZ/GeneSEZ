@@ -2,8 +2,6 @@ package de.genesez.platforms.common;
 
 import java.nio.file.Path;
 
-import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature.FileEvent;
-
 /**
  * The observer interface for observing the FileTreeWalker.
  * If a class needs information from the file tree it should implement this.
@@ -11,12 +9,34 @@ import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature.FileEv
  * @author Dominik Wetzel
  * @date 2011-09-27
  */
-public interface FileTreeObserver extends Prioritizable {
+public interface FileTreeObserver {
 	
 	/**
-	 * called from the class that's observed. Updates the status
-	 * @param event the event thats was given for the file
-	 * @param file the file that the event was given for
+	 * Updates the status. Called if file tree walked completely.
 	 */
-	public abstract void update(FileEvent event, Path file);
+	public abstract void updateComplete();
+	
+	/**
+	 * Updates the status. Called if a file is visited.
+	 * @param file the file that's visited.
+	 */
+	public abstract void updateFileVisit(Path file);
+	
+	/**
+	 * Updates the status. Called if file visit failed.
+	 * @param file the file thats visitation failed.
+	 */
+	public abstract void updateFileVisitFailed(Path file);
+	
+	/**
+	 * Updates the status. Called before FileTreeWalker opens a directory.
+	 * @param dir the directory which will be opened in the next step.
+	 */
+	public abstract void updateBeforeDir(Path dir);
+	
+	/**
+	 * Updates the status. Called after FileTreeWalker leaves a directory.
+	 * @param dir the directory which will be left.
+	 */
+	public abstract void updateAfterDir(Path file);
 }
