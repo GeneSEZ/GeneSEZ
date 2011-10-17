@@ -30,29 +30,51 @@
 		import javax.persistence.Entity;
 		import javax.persistence.Table;
 		import java.io.Serializable;
+	«ENDIF-»
+	«IF property.exists(e|e.hasStereotype("jpaOptimisticLocking")) || operation.exists(e|e.hasStereotype("jpaOptimisticLocking"))-»
+		import javax.persistence.Version;
+	«ENDIF-»
+	«IF hasStereotype("jpaInheritance")-»
 		import javax.persistence.Inheritance;
 		import javax.persistence.InheritanceType;
 	«ENDIF»
-	«IF property.exists(e|e.hasStereotype("jpaPersistence")) 
-		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManager")
-		|| property.exists(e|e.type.mapName().asTypeName() == "EntityManagerFactory")-»
-		import javax.persistence.EntityManager;
+	«IF property.exists(e|e.hasStereotype("jpaPersistenceUnit")) || operation.exists(e|e.hasStereotype("jpaPersistenceUnit"))-»		 
 		import javax.persistence.PersistenceUnit;
+	«ENDIF-»
+	«IF property.exists(e|e.hasStereotype("jpaPersistenceContext")) || operation.exists(e|e.hasStereotype("jpaPersistenceContext"))-»	
 		import javax.persistence.PersistenceContext;
-	«ENDIF»	
-	«IF operation.exists(e|e.hasStereotype("jpaAssociation")) || property.exists(e|e.hasStereotype("jpaAssociation"))-»
-		import javax.persistence.OneToMany;
-		import javax.persistence.ManyToOne;
+	«ENDIF-»
+	«IF operation.exists(e|e.hasTaggedValue("jpaAssociation", "type", "OneToOne")) || property.exists(e|e.hasTaggedValue("jpaAssociation", "type", "OneToOne"))-»
 		import javax.persistence.OneToOne;
+	«ENDIF-»
+	«IF operation.exists(e|e.hasTaggedValue("jpaAssociation", "type", "ManyToOne")) || property.exists(e|e.hasTaggedValue("jpaAssociation", "type", "ManyToOne"))-»
+		import javax.persistence.ManyToOne;
+	«ENDIF-»
+	«IF operation.exists(e|e.hasTaggedValue("jpaAssociation", "type", "OneToMany")) || property.exists(e|e.hasTaggedValue("jpaAssociation", "type", "OneToMany"))-»
+		import javax.persistence.OneToMany;
+	«ENDIF-»
+	«IF operation.exists(e|e.hasTaggedValue("jpaAssociation", "type", "ManyToMany")) || property.exists(e|e.hasTaggedValue("jpaAssociation", "type", "ManyToMany"))-»
 		import javax.persistence.ManyToMany;
+	«ENDIF-»
+	«IF operation.exists(e|e.hasUtilizableValue("jpaAssociation", "cascade")) || property.exists(e|e.hasUtilizableValue("jpaAssociation", "cascade"))-»
 		import javax.persistence.CascadeType;
-	«ENDIF»
+	«ENDIF-»
 	«IF operation.exists(e|e.hasStereotype("jpaPrimaryKey")) || property.exists(e|e.hasStereotype("jpaPrimaryKey"))-»
 		import javax.persistence.Id;
-		import javax.persistence.IdClass;
-		import javax.persistence.EmbeddedId;
 		import javax.persistence.GeneratedValue;
 		import javax.persistence.GenerationType;
 	«ENDIF»
-	import javax.persistence.*;
+	«IF hasTaggedValue("jpaPrimaryKey", "embeddedId", "true")-»
+		import javax.persistence.EmbeddedId;
+	«ENDIF-»
+	«IF hasStereotype("jpaPrimaryKeyClass")-»
+		import javax.persistence.IdClass;
+	«ENDIF-»
+	«REM» realize as JPA specific type mapping file ?!? «ENDREM»
+	«IF property.exists(e|e.type.mapName().asTypeName() == "EntityManager")-»
+		import javax.persistence.EntityManager;
+	«ENDIF-»
+	«IF property.exists(e|e.type.mapName().asTypeName() == "EntityManagerFactory")-»
+		import javax.persistence.EntityManagerFactory;
+	«ENDIF-»	
 «ENDDEFINE»

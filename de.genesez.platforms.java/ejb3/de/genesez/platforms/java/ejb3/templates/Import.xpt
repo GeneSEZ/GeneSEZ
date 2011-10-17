@@ -19,6 +19,7 @@
 «EXTENSION de::genesez::platforms::java::scripts::Type»
 «EXTENSION de::genesez::platforms::java::scripts::Naming»
 «EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
 
 «REM» 
 	generates import proReg and statements for ejb classes
@@ -28,40 +29,36 @@
 	«EXPAND CallbackImport»
 	«IF operation.exists(e|e.hasStereotype("ejb3Timer"))-»
 		import javax.ejb.Timer;
+		import javax.ejb.Timeout;
 	«ENDIF»
+	«IF property.exists(e|e.hasStereotype("ejb3Ressource")) || operation.exists(e|e.hasStereotype("ejb3Ressource"))-»
+		import javax.annotation.Resource;
+	«ENDIF-»
+	«IF property.exists(e|e.hasStereotype("ejb3EJB")) || operation.exists(e|e.hasStereotype("ejb3EJB"))-»
+		import javax.ejb.EJB;
+	«ENDIF-»
 	«IF hasStereotype("ejb3SessionBean")-»
-		import javax.persistence.PersistenceContext;
 		«IF hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
 			import javax.ejb.Stateless;
 		«ELSEIF hasTaggedValue("ejb3SessionBean", "stateful", "true")»
 			import javax.ejb.Stateful;
 		«ENDIF-»
-		«IF hasStereotype("ejb3Remote")-»
-			import javax.ejb.Remote;
-		«ENDIF-»
-		«IF hasStereotype("ejb3Local")-»
-			import javax.ejb.Local;
-		«ENDIF-»
-		«IF hasStereotype("ejb3WebService")-»
-			import javax.jws.WebService;
-			import javax.jws.soap.SOAPBinding;
-			import javax.jws.WebMethod;
-			import javax.jws.Oneway;
-			import javax.jws.WebParam;
-			import javax.jws.WebResult;
-			import javax.jws.HandlerChain;
-		«ENDIF-»
 	«ENDIF»
+	«IF hasStereotype("ejb3Remote")-»
+		import javax.ejb.Remote;
+	«ENDIF-»
+	«IF hasStereotype("ejb3Local")-»
+		import javax.ejb.Local;
+	«ENDIF-»
 	«IF hasStereotype("ejb3MessageDrivenBean")-»
 		import javax.ejb.MessageDriven;	
 		import javax.jms.MessageListener;
 		import javax.ejb.ActivationConfigProperty;		
 	«ENDIF»
-	import javax.annotation.*;
-	import javax.ejb.*;
-	«FOREACH this.getModel().nestedPackage AS p-»
-			import «IF this.basePackage() != ""-»«this.basePackage()-».«ENDIF-»«p.name-».*;
-	«ENDFOREACH»	
+	«REM» realize as EJB3 specific type mapping file ?!? «ENDREM»
+	«IF property.exists(e|e.type.mapName().asTypeName() == "TimerService")-»
+		import javax.ejb.TimerService;
+	«ENDIF-»
 «ENDDEFINE»
 
 
