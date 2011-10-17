@@ -33,7 +33,6 @@
 «EXPAND _FixedImports -»
 «EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this))»
 «EXPAND _OtherImports»
-«REM»«EXPAND _OwnImports -»«ENDREM»
 «ENDDEFINE»
 
 «REM»
@@ -65,15 +64,6 @@ import «fullQualifiedName( asTypeName(), basePackage() )»;
 «IF mapName("Import").toString().toString().trim().length > 0 -»
 import «mapName("Import")»;
 «ENDIF»
-«ENDDEFINE»
-
-«REM»
-	generates a region for own imports
-«ENDREM»
-«DEFINE _OwnImports FOR MClassifier -»
-«PROTECT CSTART "/* " CEND " */" ID ("java.type.import." + xmiGuid)»
-// TODO: put your further include + require statements here
-«ENDPROTECT»
 «ENDDEFINE»
 
 «REM»
