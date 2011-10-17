@@ -5,6 +5,7 @@ extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
 extension de::genesez::platforms::java::scripts::Naming;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::m2m::Stereotype;
 
 MClassifier addMessageListener(MClassifier this) :
 	stereotype.name.exists(e|e == "ejb3MessageDrivenBean")
@@ -30,7 +31,8 @@ Void addSessionBeanInterfaces(MClassifier this) :
 							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
 								interface.addRemoteStereotype("") ->
-								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+								this.removeStereotype(this.getStereotype("ejb3Remote"))
 						)
 						: ""
 				)
@@ -39,7 +41,8 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
 						interface.model().externalTypes.remove("I"+asTypeName()+"Remote") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+						this.removeStereotype(this.getStereotype("ejb3Remote"))
 				)
 		) 
 		: "" ->
@@ -52,7 +55,8 @@ Void addSessionBeanInterfaces(MClassifier this) :
 							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
 								this.realization.add(interface) ->
 								interface.addLocalStereotype("") ->
-								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+								this.removeStereotype(this.getStereotype("ejb3Local"))
 						)
 						: ""
 				)
@@ -61,7 +65,8 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						this.realization.add(interface) ->
 						interface.addLocalStereotype("") ->
 						interface.model().externalTypes.remove("I"+asTypeName()+"Local") ->
-						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+						this.removeStereotype(this.getStereotype("ejb3Local"))
 				)
 		)
 		: "";
