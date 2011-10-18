@@ -46,6 +46,7 @@
 	«EXPAND Element::_Permission-»
 	«EXPAND Element::ReadOnly-»
 	«EXPAND Element::Transactional-»
+	«EXPAND _EJB3ApplicationException-»
 «ENDDEFINE»
 
 «REM»
@@ -75,22 +76,30 @@
 	Warning: Not for usage in ejb3 environment!!!
 «ENDREM»
 «DEFINE _JavaBean FOR MClass-»
-	«IF hasStereotype("seam2JavaBeanInterceptors")»
+	«IF hasStereotype("seam2JavaBeanInterceptors")-»
 		«IF hasUtilizableValue("seam2JavaBeanInterceptors", "value")-»
 			@Interceptors(
 			{«FOREACH getTaggedListValue("seam2JavaBeanInterceptor", "value") AS values SEPARATOR ", "-»
 				«values-»
 			«ENDFOREACH-»})
 		«ENDIF»
-		«IF hasStereotype("seam2ApplicationException")»
-			@ApplicationException(rollback=«getTaggedValue("seam2ApplicationException", "rollback")-»
-			«IF hasTaggedValue("seam2ApplicationException", "end", "true")-»
-				, end=true
-			«ENDIF-»)
-		«ENDIF»
-	«ENDIF»		
+	«ENDIF-»		
+	«IF hasStereotype("seam2ApplicationException")-»
+		@ApplicationException(rollback=«getTaggedValue("seam2ApplicationException", "rollback")-»
+		«IF hasTaggedValue("seam2ApplicationException", "end", "true")-»
+			, end=true
+		«ENDIF-»)
+	«ENDIF-»
 «ENDDEFINE»
 
+«REM»
+	add stereotype to ejb3 profile and evaluate in ejb3 cartridge
+«ENDREM»
+«DEFINE _EJB3ApplicationException FOR MClass-»
+	«IF hasStereotype("seam2ApplicationException")-»
+		@ApplicationException(rollback=«getTaggedValue("seam2ApplicationException", "rollback")-»)
+	«ENDIF-»
+«ENDDEFINE»
 «REM»
 	evaluates the stereotype seam2Validator
 «ENDREM»
