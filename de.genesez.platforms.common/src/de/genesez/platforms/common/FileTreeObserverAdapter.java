@@ -10,7 +10,7 @@ import java.nio.file.Path;
  * @author Dominik Wetzel
  * @date 2011-10-12
  */
-public class FileTreeObserverAdapter implements FileTreeObserver {
+public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 
 	@Override
 	public void updateComplete() {

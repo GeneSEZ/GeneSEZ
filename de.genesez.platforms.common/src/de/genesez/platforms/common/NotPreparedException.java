@@ -1,8 +1,8 @@
-package de.genesez.platforms.common.workflow.feature;
+package de.genesez.platforms.common;
 
 /**
  * The NotPreparedException is thrown, if preProcessing() wasn't called before
- * postProcessing()
+ * postProcessing() (only if preparation needed)
  * 
  * @author Dominik Wetzel
  * 

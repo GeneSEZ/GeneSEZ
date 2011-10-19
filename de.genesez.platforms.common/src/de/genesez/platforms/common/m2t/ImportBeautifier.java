@@ -22,8 +22,8 @@ import org.eclipse.xpand2.output.FileHandle;
 import org.eclipse.xpand2.output.PostProcessor;
 
 import de.genesez.platforms.common.FileTreeObserverAdapter;
+import de.genesez.platforms.common.NotPreparedException;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
-import de.genesez.platforms.common.workflow.feature.NotPreparedException;
 
 /**
  * The task of an import beautifier is the detection and reduction of double
@@ -67,11 +67,11 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 
 	private boolean prepared = false;
 
+	private boolean importTakeOver = true;
+
 	/**
-	 * Sole constructor which does nothing.
-	 * 
-	 * @param importString
-	 *            String that declares imports.
+	 * Constructor which sets some creates options and set
+	 * de.genesez.importformatter.delim to "\n".
 	 */
 	public ImportBeautifier() {
 		options = new Properties();
@@ -79,7 +79,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	}
 
 	/**
-	 * Getter for the settings of the import formatter.
+	 * Getter for the options.
 	 * 
 	 * @return the settings as Properties class
 	 */
@@ -88,7 +88,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	}
 
 	/**
-	 * Setter for the settings of the import formatter.
+	 * Setter for the options.
 	 * 
 	 * @param options
 	 *            the settings as Properties class
@@ -98,8 +98,8 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	}
 
 	/**
-	 * Sets file extensions for files that should be scanned.
-	 * It creates a regular expression, which looks like:
+	 * Sets file extensions for files that should be scanned. It creates a
+	 * regular expression, which looks like:
 	 * ".*(\\.extension|\\.extension|...)$"
 	 * 
 	 * @param extensions
@@ -116,9 +116,9 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 		}
 		if (extensionsRegex != null) {
 			this.getOptions().setProperty(
-					"de.genesez.importbeautifier.fileextensions", ".*(" + regex + ")$");
+					"de.genesez.importbeautifier.fileextensions",
+					".*(" + regex + ")$");
 		}
-
 	}
 
 	/**
@@ -129,8 +129,6 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	 * 
 	 * @param regex
 	 *            the import regular expressions.
-	 * @throws PatternSyntaxException
-	 *             if regular expression is not right.
 	 */
 	public void setImportRegex(String regex) {
 		try {
@@ -143,13 +141,12 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 			this.getOptions().setProperty("de.genesez.importformatter.regex",
 					regex);
 		}
-
 	}
 
 	/**
 	 * Only for convenience. Makes an import regular expression.
 	 * 
-	 * @see de.genesez.platforms.common.m2t.ImportBeautifier#setImportRegex(java.lang.String)
+	 * @see #setImportRegex(java.lang.String)
 	 * @param importStrings
 	 *            import strings (separated by "," or ";")
 	 */
@@ -171,6 +168,17 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	}
 
 	/**
+	 * Sets if imports should be carried over from old to new generated files or
+	 * not.
+	 * 
+	 * @param importTakeOver
+	 *            if false imports won't be carried over.
+	 */
+	public void setImportTakeOver(String importTakeOver) {
+		this.importTakeOver = Boolean.parseBoolean(importTakeOver);
+	}
+
+	/**
 	 * Sole method to get the preconfigured import formatter.
 	 * 
 	 * @return singleton import formatter instance
@@ -184,14 +192,15 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 
 	/**
 	 * Searches for the File-ID in the given file and if found it searches the
-	 * file for imports using the importRegex. After that it stores both in a map.
+	 * file for imports using the importRegex. After that it stores both in a
+	 * map.
 	 * 
 	 * @param file
 	 *            file to be searched
 	 */
 	@Override
 	public void updateFileVisit(Path file) {
-		if (importRegex != null) {
+		if (importRegex != null && importTakeOver) {
 			if (extensionsRegex.matcher(file.toString()).matches()) {
 				// initialize
 				Set<String> imports = new HashSet<String>();
@@ -203,7 +212,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 							.newBufferedReader(file, Charset.defaultCharset());
 					// check line for FileIDString
 					while ((line = br.readLine()) != null) {
-						if (line.contains(FileIDString)) {
+						if (line.contains(FileIDString) && guID == null) {
 							guID = line.substring(line.indexOf("(") + 1,
 									line.indexOf(")"));
 						}
@@ -253,7 +262,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	 */
 	protected String putImports(FileHandle file) throws NotPreparedException {
 		String fileString = file.getBuffer().toString();
-		if (importRegex == null) {
+		if (importRegex == null || !importTakeOver) {
 			return fileString;
 		}
 		if (prepared) {
@@ -270,7 +279,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 				String token = st.nextToken();
 				lines.add(token);
 				// look for guID
-				if (token.contains(FileIDString)) {
+				if (token.contains(FileIDString) && guID == null) {
 					guID = token.substring(token.indexOf("(") + 1,
 							token.indexOf(")"));
 				} else if (guID != null && putImports == -1

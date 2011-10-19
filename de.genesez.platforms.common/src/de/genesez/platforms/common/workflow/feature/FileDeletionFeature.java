@@ -15,14 +15,13 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.genesez.platforms.common.NotPreparedException;
 import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
 import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * The FileDeletionFeature handles the deletion of unchanged files during the
  * generation process. With the filter-options the search can be specified.
- * 
- * NOTE: Works only with Java 7.
  * 
  * @author Dominik Wetzel
  * @date 2011-09-20
@@ -63,8 +62,8 @@ public class FileDeletionFeature extends DeletionFeature {
 	 *            the Properties-Map with the properties
 	 */
 	public void setProperties(Properties properties) {
-		setIncludedFiles(properties.getProperty("includedFiles", ""));
-		setExcludedFiles(properties.getProperty("excludedFiles", ""));
+		setIncludedFileExtensions(properties.getProperty("includedFiles", ""));
+		setExcludedFileExtensions(properties.getProperty("excludedFiles", ""));
 		super.setProperties(properties);
 	}
 
@@ -151,7 +150,7 @@ public class FileDeletionFeature extends DeletionFeature {
 	 *            the IncludedFileExtension String contains all included Files
 	 *            in a single String (separated by "," or ";")
 	 */
-	public void setIncludedFiles(String extensions) {
+	public void setIncludedFileExtensions(String extensions) {
 		includedFiles.addAll(WorkflowUtils.split(extensions));
 
 	}
@@ -163,7 +162,7 @@ public class FileDeletionFeature extends DeletionFeature {
 	 *            the ExcludedFileExtension String contains all excluded Files
 	 *            in a single String (separated by "," or ";")
 	 */
-	public void setExcludedFiles(String extensions) {
+	public void setExcludedFileExtensions(String extensions) {
 		excludedFiles.addAll(WorkflowUtils.split(extensions));
 
 	}

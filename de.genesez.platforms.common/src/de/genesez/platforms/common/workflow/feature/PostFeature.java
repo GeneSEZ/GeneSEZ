@@ -1,5 +1,6 @@
 package de.genesez.platforms.common.workflow.feature;
 
+import de.genesez.platforms.common.NotPreparedException;
 
 /**
  * Implementations of this interface can be added to the Generator. It does

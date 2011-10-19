@@ -49,7 +49,8 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 */
 	protected Properties properties = new Properties();
 
-//	private List<TransformationFeature> features = new LinkedList<TransformationFeature>();
+	// private List<TransformationFeature> features = new
+	// LinkedList<TransformationFeature>();
 	private List<PreFeature> preFeatures = new LinkedList<PreFeature>();
 	private List<PostFeature> postFeatures = new LinkedList<PostFeature>();
 
@@ -121,7 +122,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 			feature.setProperties(properties);
 			feature.checkConfiguration();
 		}
-		for (TransformationFeature feature : postFeatures){
+		for (TransformationFeature feature : postFeatures) {
 			feature.setProperties(properties);
 			feature.checkConfiguration();
 		}
@@ -400,7 +401,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            String that contains all the included extensions (seperated by
 	 *            "," or ";")
 	 */
-	public void setIncludedFiles(String fileExtensions) {
+	public void setIncludedFileExtensions(String fileExtensions) {
 		properties.put("includedFiles", fileExtensions);
 	}
 
@@ -410,7 +411,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * these Paths are not searched for files
 	 * 
 	 * @param paths
-	 *            String that contains all excluded paths (seperated by "," or
+	 *            String that contains all excluded paths (separated by "," or
 	 *            ";")
 	 */
 	public void setExcludedRelativePaths(String paths) {
@@ -424,9 +425,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * 
 	 * @param fileExtensions
 	 *            String that contains all the excluded file extensions
-	 *            (seperated by "," or ";")
+	 *            (separated by "," or ";")
 	 */
-	public void setExcludedFiles(String fileExtensions) {
+	public void setExcludedFileExtensions(String fileExtensions) {
 		properties.put("excludedFiles", fileExtensions);
 	}
 
@@ -436,7 +437,7 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 * Directories with these names were not searched
 	 * 
 	 * @param names
-	 *            String that contains all excluded directory names (seperated
+	 *            String that contains all excluded directory names (separated
 	 *            by "," or ";")
 	 */
 	public void setExcludedDirectoryNames(String names) {
@@ -450,9 +451,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            the feature that should be added.
 	 */
 	public void addPreFeature(PreFeature feature) {
-			preFeatures.add(feature);
+		preFeatures.add(feature);
 	}
-	
+
 	/**
 	 * Adds a PostFeature to postFeatures list
 	 * 
@@ -460,18 +461,20 @@ public class Generator extends org.eclipse.xpand2.Generator {
 	 *            the feature that should be added.
 	 */
 	public void addPostFeature(PostFeature feature) {
-			postFeatures.add(feature);
+		postFeatures.add(feature);
 	}
-	
+
 	/**
 	 * Adds a PostProcesser (e. g. beautifier) to the postProcessor list
-	 * @param postprocessor the PostProcessor to add
+	 * 
+	 * @param postprocessor
+	 *            the PostProcessor to add
 	 */
-	public void addPostProcessor(PostProcessor postprocessor){
-			@SuppressWarnings("unchecked")
-			List<Object> toSet = (List<Object>) super.getBeautifier();
-			toSet.add(postprocessor);
-			super.setBeautifier(toSet);
+	public void addPostProcessor(PostProcessor postprocessor) {
+		@SuppressWarnings("unchecked")
+		List<Object> toSet = (List<Object>) super.getBeautifier();
+		toSet.add(postprocessor);
+		super.setBeautifier(toSet);
 	}
 
 	/**

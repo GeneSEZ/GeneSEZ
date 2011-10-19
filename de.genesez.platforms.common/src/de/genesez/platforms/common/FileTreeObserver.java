@@ -35,8 +35,8 @@ public interface FileTreeObserver {
 	public abstract void updateBeforeDir(Path dir);
 	
 	/**
-	 * Updates the status. Called after FileTreeWalker leaves a directory.
-	 * @param dir the directory which will be left.
+	 * Updates the status. Called after FileTreeWalker left a directory.
+	 * @param dir the directory which was left.
 	 */
 	public abstract void updateAfterDir(Path file);
 }

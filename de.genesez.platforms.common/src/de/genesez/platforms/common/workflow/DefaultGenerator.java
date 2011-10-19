@@ -15,7 +15,8 @@ import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature;
 import de.genesez.platforms.common.workflow.feature.FolderDeletionFeature;
 
 /**
- * Workflow component class to generate code (model to text transformation), with default properties.
+ * Workflow component class to generate code (model to text transformation),
+ * with default properties.
  * 
  * @author Aibek Isaev
  * @author Beishen
@@ -40,6 +41,7 @@ public class DefaultGenerator extends Generator {
 		defaults.setProperty("usePropertyVisibilityForAccessors", "false");
 		defaults.setProperty("deleteOldFiles", "true");
 		defaults.setProperty("deleteEmptyFolders", "true");
+		defaults.setProperty("importTakeOver", "true");
 	}
 
 	/**
@@ -53,14 +55,19 @@ public class DefaultGenerator extends Generator {
 	protected List<String> typeMappingFiles = new ArrayList<String>();
 
 	/**
-	 * Variable for FileDeletionFeature
+	 * Variable for de-/activation of FileDeletionFeature
 	 */
 	protected boolean deleteOldFiles = true;
 
 	/**
-	 * Variable for FolderDeletionFeature
+	 * Variable for de-/activation of FolderDeletionFeature
 	 */
 	protected boolean deleteEmptyFolders = true;
+
+	/**
+	 * Variable for de-/activation of ImportTakeOver
+	 */
+	protected boolean importTakeOver = true;
 
 	/**
 	 * the used importBeautifier
@@ -68,7 +75,8 @@ public class DefaultGenerator extends Generator {
 	protected ImportBeautifier importBeautifier;
 
 	/**
-	 * Constructs the workflow component and initializes the default values.
+	 * Constructs the workflow component, initializes the default values and
+	 * creates an ImportBeautifier.
 	 */
 	public DefaultGenerator() {
 		super();
@@ -84,14 +92,20 @@ public class DefaultGenerator extends Generator {
 	 */
 	@Override
 	protected void checkConfigurationInternal(Issues issues) {
-		if (this.importBeautifier.getOptions()
-				.getProperty("de.genesez.importformatter.regex", "").isEmpty()) {
-			logger.error("No import string given, imports cannot be carried over.");
-		}
-		if (this.importBeautifier.getOptions()
-				.getProperty("de.genesez.importbeautifier.fileextensions", "")
-				.isEmpty()) {
-			logger.warn("No file extensions given, every file will be checked for imports. Maybe imports will not be carried over.");
+		if (importTakeOver) {
+			if (this.importBeautifier.getOptions()
+					.getProperty("de.genesez.importformatter.regex", "")
+					.isEmpty()) {
+				logger.error("No import string given, imports cannot be carried over.");
+			}
+			if (this.importBeautifier
+					.getOptions()
+					.getProperty("de.genesez.importbeautifier.fileextensions",
+							"").isEmpty()) {
+				logger.warn("No file extensions given, every file will be checked for imports. Maybe imports will not be carried over correctly.");
+			}
+		} else {
+			logger.info("Import take over deactivated.");
 		}
 		setupWorkflow();
 		super.checkConfigurationInternal(issues);
@@ -295,6 +309,7 @@ public class DefaultGenerator extends Generator {
 	 * if this is true, empty folders will be deleted after generation process
 	 * 
 	 * @param deleteEmpty
+	 *            true if empty folders should be deleted
 	 */
 	public void setDeleteEmptyFolders(String deleteEmpty) {
 		properties.setProperty("deleteEmptyFolders", deleteEmpty);
@@ -318,7 +333,7 @@ public class DefaultGenerator extends Generator {
 	 * @see java.util.regex.Pattern for more information.
 	 * @see de.genesez.platforms.common.m2t.ImportBeautifier#setImportRegex(String)
 	 * @param regex
-	 *            the import regular expressions.
+	 *            the import regular expression.
 	 */
 	public void setImportRegex(String regex) {
 		this.importBeautifier.setImportRegex(regex);
@@ -337,7 +352,21 @@ public class DefaultGenerator extends Generator {
 	}
 
 	/**
-	 * Sets up the pre- and post-lists with file and folder deletion.
+	 * Setter for the workflow parameter <em><b>importTakeOver</b></em>.
+	 * 
+	 * @param importTakeOver
+	 *            if false imports will not be taken over from old to new
+	 *            generated files.
+	 */
+	public void setImportTakeOver(String importTakeOver) {
+		properties.setProperty("importTakeOver", importTakeOver);
+		this.importTakeOver = Boolean.parseBoolean(importTakeOver);
+		importBeautifier.setImportTakeOver(importTakeOver);
+	}
+
+	/**
+	 * Sets up the pre-, post- and postprocessor-lists with file and folder
+	 * deletion.
 	 */
 	protected void setupWorkflow() {
 		FileTreeWalkerFeature preftw = new FileTreeWalkerFeature();
@@ -346,7 +375,9 @@ public class DefaultGenerator extends Generator {
 			fd = new FileDeletionFeature();
 			preftw.addObserver(fd);
 		}
-		preftw.addObserver(importBeautifier);
+		if(importTakeOver){
+			preftw.addObserver(importBeautifier);
+		}
 		super.addPreFeature(preftw);
 		if (deleteOldFiles) {
 			super.addPostFeature(fd);

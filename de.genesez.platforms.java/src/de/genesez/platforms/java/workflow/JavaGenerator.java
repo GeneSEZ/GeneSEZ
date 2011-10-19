@@ -13,44 +13,47 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Performs model to text transformations for the Java platform
+ * 
  * @author Aibek Isaev
  * @author Dominik Wetzel
  * @date 2011-10-12
  */
 public class JavaGenerator extends DefaultGenerator {
-	
+
 	/**
 	 * The regular expression for the import statements
 	 */
 	private static final String importRegex = "import .*;$";
-	
+
 	/**
-	 * The constant for the fileExtensions 
+	 * The constant for the fileExtensions
 	 */
 	private static final String fileExtensions = ".java";
-	
+
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.put("template", "de::genesez::platforms::java::java5::templates::Root::Root");
-		defaults.put("typeMappingFile", "de/genesez/platforms/java/typemapping/typemapping.xml");
-		defaults.put("formatterConfig", "de/genesez/platforms/java/workflow/eclipse.java.formatter.settings.xml");
+		defaults.put("template",
+				"de::genesez::platforms::java::java5::templates::Root::Root");
+		defaults.put("typeMappingFile",
+				"de/genesez/platforms/java/typemapping/typemapping.xml");
+		defaults.put("formatterConfig",
+				"de/genesez/platforms/java/workflow/eclipse.java.formatter.settings.xml");
 		defaults.put("newAssociationHandling", "true");
 		defaults.put("fieldAccess", "true");
 	}
-	
+
 	@SuppressWarnings("unused")
 	private Log logger = LogFactory.getLog(getClass());
 	private boolean isNotSetTemplate = true;
 	private boolean isNotAddTypeMappingFile = true;
 	private boolean newAssociationHandling = true;
 	private boolean fieldAccess = true;
-	
 
 	public JavaGenerator() {
 		super();
 		properties.putAll(defaults);
 	}
-	
+
 	/**
 	 * Overridden for checking all parameters. If parameter's value is null,
 	 * then set default value.
@@ -64,11 +67,11 @@ public class JavaGenerator extends DefaultGenerator {
 		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
 		if (newAssociationHandling) setNewAssociationHandling(Boolean.valueOf(properties.getProperty("newAssociationHandling")).booleanValue());
 		if (fieldAccess) setFieldAccess(Boolean.valueOf(properties.getProperty("fieldAccess")).booleanValue());
-		
+
 		configureBeautifiers();
 		super.checkConfigurationInternal(issues);
 	}
-	
+
 	/**
 	 * Configures the JavaBeautifier and the ImportBeautifier
 	 */
@@ -77,12 +80,12 @@ public class JavaGenerator extends DefaultGenerator {
 		JavaBeautifier javaBeautifier = new JavaBeautifier();
 		javaBeautifier.setConfigFile(properties.getProperty("formatterConfig"));
 		super.addPostProcessor(javaBeautifier);
-		
+
 		// configure ImportBeautifier
 		super.setFileExtensions(fileExtensions);
 		super.setImportRegex(importRegex);
 	}
-	
+
 	/**
 	 * setter for Template parameter in super class
 	 * 
@@ -92,7 +95,7 @@ public class JavaGenerator extends DefaultGenerator {
 		super.setTemplate(template);
 		isNotSetTemplate = false;
 	}
-	
+
 	/**
 	 * setter for the type mapping file
 	 * 
@@ -103,18 +106,20 @@ public class JavaGenerator extends DefaultGenerator {
 		super.addTypeMappingFile(typeMappingFile);
 		isNotAddTypeMappingFile = false;
 	}
-	
+
 	public void setFormatterConfig(String formatterConfigFile) {
 		properties.put("formatterConfig", formatterConfigFile);
-	}	
-	
+	}
+
 	public void setNewAssociationHandling(boolean newAssociationHandling) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("newAssociationHandling", "" + newAssociationHandling + ""));
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
+				"newAssociationHandling", "" + newAssociationHandling + ""));
 		this.newAssociationHandling = false;
 	}
 
 	public void setFieldAccess(boolean fieldAccess) {
-		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("fieldAccess", "" + fieldAccess + ""));
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("fieldAccess",
+				"" + fieldAccess + ""));
 		this.fieldAccess = false;
 	}
 }
