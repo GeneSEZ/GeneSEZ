@@ -61,8 +61,6 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter implements
 			.getAvailableRepositoryImpls();
 	private static boolean printedRevisionSystemsOnce = false;
 
-	// private static final boolean changesFileTree = true;
-
 	/**
 	 * Sets the properties:
 	 * <p>
@@ -98,16 +96,16 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter implements
 	/**
 	 * Checks if the given directory is a known repository metadata folder
 	 * 
-	 * @param file
+	 * @param dir
 	 *            the folder that should be checked
 	 */
-	protected void checkRepository(Path file) {
+	protected void checkRepository(Path dir) {
 		for (RevisionControlSystem rep : repos) {
 			String name = rep.getMetadataFolderName();
-			if (file.endsWith(name)) {
+			if (dir.endsWith(name)) {
 				excludedDirectoryNames.add(name);
 				revisionSystems.add(rep);
-				rep.setRepositoryRoot(file.toString());
+				rep.setRepositoryRoot(dir.toString());
 				return;
 			}
 		}
@@ -155,7 +153,7 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter implements
 	}
 
 	/**
-	 * Getter for revisionSystems
+	 * Getter for found revisionSystems
 	 * 
 	 * @return copy of revisionSystems Set.
 	 */
@@ -230,11 +228,6 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter implements
 
 	/**
 	 * logs the found revision systems once.
-	 * 
-	 * @param event
-	 *            the event from FileTreeWalker
-	 * @param file
-	 *            the directory that will be checked
 	 */
 	protected void logRevisionSystems() {
 		try {

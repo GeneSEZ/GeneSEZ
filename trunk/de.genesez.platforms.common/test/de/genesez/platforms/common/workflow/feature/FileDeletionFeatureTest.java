@@ -22,6 +22,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.genesez.platforms.common.NotPreparedException;
+
 
 /**
  * Testclass for the FileDeletor
@@ -176,7 +178,7 @@ public class FileDeletionFeatureTest {
 	@Test
 	public void testSetOneIncludedFileExtension() throws IOException {
 //		deletor.checkRepository(startPath.toString());
-		deletor.setIncludedFiles("4");
+		deletor.setIncludedFileExtensions("4");
 		walker.invokePre();
 		assertEquals(1, deletor.getOldFileCount());
 		assertEquals(1, deletor.delete().size());
@@ -184,7 +186,7 @@ public class FileDeletionFeatureTest {
 
 	@Test
 	public void testSetMoreIncludedFileExtensions() throws IOException {
-		deletor.setIncludedFiles("est4;test3,2");
+		deletor.setIncludedFileExtensions("est4;test3,2");
 		walker.invokePre();
 		assertEquals(3, deletor.getOldFileCount());
 		assertEquals(3, deletor.delete().size());
@@ -192,7 +194,7 @@ public class FileDeletionFeatureTest {
 
 	@Test
 	public void testSetOneExcludedFileExtension() throws IOException {
-		deletor.setExcludedFiles("test2");
+		deletor.setExcludedFileExtensions("test2");
 		walker.invokePre();
 		assertEquals(3, deletor.getOldFileCount());
 		assertEquals(3, deletor.delete().size());
@@ -200,7 +202,7 @@ public class FileDeletionFeatureTest {
 
 	@Test
 	public void testSetMoreExcludedFileExtensions() throws IOException {
-		deletor.setExcludedFiles("test2,4;est1");
+		deletor.setExcludedFileExtensions("test2,4;est1");
 		walker.invokePre();
 		assertEquals(1, deletor.getOldFileCount());
 		assertEquals(1, deletor.delete().size());
@@ -259,8 +261,8 @@ public class FileDeletionFeatureTest {
 				.resolve("est2"));
 		Files.createFile(startPath.resolve("de").resolve("tester"));
 
-		deletor.setExcludedFiles("test2");
-		deletor.setIncludedFiles("2;3");
+		deletor.setExcludedFileExtensions("test2");
+		deletor.setIncludedFileExtensions("2;3");
 		deletor.setExcludedRelativePaths("/testDir/de/genesez/output");
 		deletor.setExcludedDirectoryNames(".svn; en");
 		walker.invokePre();

@@ -15,13 +15,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.genesez.platforms.common.FileTreeObserver;
+import de.genesez.platforms.common.NotPreparedException;
 
 /**
  * A FileVisitor that walks the given FileTree and calls the update methods on
  * its Observers.
  * 
  * @author Dominik Wetzel
- * @data 2011-10-11
+ * @date 2011-10-11
  */
 public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 		PreFeature {
@@ -133,6 +134,7 @@ public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 	 * @param exc
 	 *            the I/O exception that prevented the file from being visited
 	 * @return CONTINUE
+	 * @throws IOException if an I/O-Error occurs
 	 */
 	@Override
 	public FileVisitResult visitFileFailed(Path file, IOException exc)
@@ -227,32 +229,29 @@ public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 	/**
 	 * Notifies all observers with BeforeDir.
 	 * 
-	 * @param file
-	 *            the file, were the event was called from
+	 * @param dir
+	 *            the directory were the event was called from
 	 */
-	private void notifyObserverBeforeDir(Path file) {
+	private void notifyObserverBeforeDir(Path dir) {
 		for (FileTreeObserver ob : observer) {
-			ob.updateBeforeDir(file);
+			ob.updateBeforeDir(dir);
 		}
 	}
 
 	/**
 	 * Notifies all observers with AfterDir
 	 * 
-	 * @param file
-	 *            the file, were the event was called from
+	 * @param dir
+	 *            the directory were the event was called from
 	 */
-	private void notifyObserverAfterDir(Path file) {
+	private void notifyObserverAfterDir(Path dir) {
 		for (FileTreeObserver ob : observer) {
-			ob.updateAfterDir(file);
+			ob.updateAfterDir(dir);
 		}
 	}
 
 	/**
 	 * Notifies all observers with Complete
-	 * 
-	 * @param file
-	 *            the file, were the event was called from
 	 */
 	private void notifyObserverComplete() {
 		for (FileTreeObserver ob : observer) {

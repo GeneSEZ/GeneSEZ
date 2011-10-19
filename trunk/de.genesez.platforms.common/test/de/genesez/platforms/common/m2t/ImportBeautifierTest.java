@@ -51,6 +51,10 @@ public class ImportBeautifierTest {
 
 	@Test
 	public void testJavaImports() throws IOException {
+		assertEquals(prepareJavaTest(),ib.importMap);
+	}
+	
+	private Map<String, Set<String>> prepareJavaTest() throws IOException{
 		Map<String, Set<String>> testmap = new HashMap<String, Set<String>>();
 		Set<String> set = new HashSet<String>();
 		set.add("import java.util.Imports;");
@@ -64,7 +68,14 @@ public class ImportBeautifierTest {
 		}
 		ib.updateFileVisit(test);
 		Files.deleteIfExists(test);
-		assertEquals(testmap,ib.importMap);
+		return testmap;
+	}
+	
+	@Test
+	public void testImportDisabled() throws IOException {
+		ib.setImportTakeOver("false");
+		prepareJavaTest();
+		assertTrue(ib.importMap.isEmpty());
 	}
 
 	@Test

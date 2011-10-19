@@ -19,8 +19,7 @@ import org.apache.commons.logging.LogFactory;
  * regular expressions.
  * 
  * @author nihe
- * @date 2009-02-24
- * @todo support more than one import section
+ * @date 2011-10-17
  */
 public class ImportFormatter {
 
@@ -113,7 +112,7 @@ public class ImportFormatter {
 	 *            the file content
 	 * @param delim
 	 *            the delimiter to split lines
-	 * @return
+	 * @return list with all lines
 	 */
 	private List<String> splitStringInLines(String edit, String delim) {
 		this.fileLines = new LinkedList<String>();
@@ -159,6 +158,7 @@ public class ImportFormatter {
 	/**
 	 * This method create the new file content without double import statement.
 	 * 
+	 * @param delim the delimiter which separates the lines
 	 * @return the modified context
 	 */
 	private String generateModifiedFileContent(String delim) {

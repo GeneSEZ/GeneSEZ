@@ -19,7 +19,7 @@ public interface TransformationFeature {
 	public abstract void setProperties(Properties properties);
 
 	/**
-	 * Checks the Configuration of the feature
+	 * Checks the configuration of the feature
 	 */
 	public abstract void checkConfiguration();
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.genesez.platforms.common.NotPreparedException;
 import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
 
 /**
@@ -21,8 +22,7 @@ import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
  * @author Dominik Wetzel
  * @date 2011-10-11
  */
-public class FolderDeletionFeature extends DeletionFeature implements
-		PostFeature {
+public class FolderDeletionFeature extends DeletionFeature {
 
 	/**
 	 * Logger instance to output important messages.
@@ -54,6 +54,10 @@ public class FolderDeletionFeature extends DeletionFeature implements
 		}
 	}
 
+	/**
+	 * Sets prepared to true. Called if file tree walked completely
+	 */
+	@Override
 	public void updateComplete() {
 		super.logRevisionSystems();
 		prepared = true;
@@ -101,7 +105,6 @@ public class FolderDeletionFeature extends DeletionFeature implements
 	 * 
 	 * @param dir
 	 *            the current directory that will be checked
-	 * @return a list with all deleted folders
 	 */
 	protected void prepareDeleteEmptyPackages(Path dir) {
 		// is directory excluded?
