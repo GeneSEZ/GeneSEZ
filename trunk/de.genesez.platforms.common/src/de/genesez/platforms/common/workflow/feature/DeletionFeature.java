@@ -19,7 +19,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.genesez.platforms.common.FileTreeObserver;
 import de.genesez.platforms.common.FileTreeObserverAdapter;
 import de.genesez.platforms.common.revisioncontrol.RegisterHelper;
 import de.genesez.platforms.common.revisioncontrol.RevisionControlSystem;
@@ -33,7 +32,7 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  * @date 2011-10-11
  */
 public abstract class DeletionFeature extends FileTreeObserverAdapter implements
-		PostFeature, FileTreeObserver {
+		PostFeature {
 
 	/**
 	 * Logger instance to output important messages.
