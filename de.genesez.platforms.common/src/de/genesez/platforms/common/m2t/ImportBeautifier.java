@@ -201,7 +201,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	@Override
 	public void updateFileVisit(Path file) {
 		if (importRegex != null && importTakeOver) {
-			if (extensionsRegex.matcher(file.toString()).matches()) {
+			if (extensionsRegex == null || extensionsRegex.matcher(file.toString()).matches()) {
 				// initialize
 				Set<String> imports = new HashSet<String>();
 				String guID = null;
