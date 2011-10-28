@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section>
+	<title>DeletionFeature</title>
+	<para>
+		The DeletionFeature is parted into two features. The
+		FileDeletionFeature handles the deletion of not generated files and
+		the FolderDeletionFeature handles the deletion of empty folders.
+		The
+		DeletionFeature cannot be configured, but it provides 2
+		parameters that
+		both File- and FolderDeletionFeature use.
+	</para>
+	<section>
+		<title>Configuration for File- and FolderDeletionFeature</title>
+		<variablelist>
+			<varlistentry>
+				<term>excludedRelativePaths</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<listitem>
+					<para>
+						Excludes given paths (separated by "," or ";") relative to the
+						output directory from the search for files and folders. Useful if
+						you want only some specific directories not in the search.
+						Overrides the global value, given in the Generator,
+						<link
+							linkend="en.genesez.platforms.common.workflow.components.generator.excludedRelPaths">
+							<literal>excludedRelativePaths</literal>
+						</link>
+						for this feature.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>excludedDirectoryNames</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>metadata folder(s)</literal>
+					of found and supported revision control system(s)
+				</term>
+				<listitem>
+					<para>
+						Excludes all
+						directories under the output directory with
+						the given names (separated by "," or ";")
+						from the search for files and folders.
+						Useful if you want folders with special names not searched.
+						Overrides the global value, given in the Generator,
+						<link
+							linkend="en.genesez.platforms.common.workflow.components.generator.excludedDirNames">
+							<literal>excludedDirectoryNames</literal>
+						</link>
+						for this feature.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</section>
+	<section>
+		<title>Additional configuration only for FileDeletionFeature</title>
+		<variablelist>
+			<varlistentry
+				id="en.genesez.core.configuration.features.DeletionFeature.excludedFiles">
+				<term>excludedFileExtensions</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<listitem>
+					<para>
+						Excludes files (not directories) with given suffixes
+						(separated by
+						"," or ";") from
+						the search for files. You can even exclude
+						complete files.
+						Overrides the global value, given in the Generator,
+						<link
+							linkend="en.genesez.platforms.common.workflow.components.generator.excludedFiles">
+							<literal>excludedFileExtensions</literal>
+						</link>
+						for this feature.
+						<informalexample>
+							<para>
+								Example value=&quot;.svn, class&quot; will exclude every
+								file with the suffix &quot;.svn&quot; or &quot;class&quot;.
+							</para>
+						</informalexample>
+						Binds stronger than
+						<link
+							linkend="en.genesez.core.configuration.features.DeletionFeature.includedFiles">
+							<literal>includedFileExtensions</literal>
+						</link>
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.features.DeletionFeature.includedFiles">
+				<term>includedFileExtensions</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<listitem>
+					<para>
+						Only files with these extensions will be put into the search for
+						files. You can also include only special files.
+						Overrides the
+						global value, given in the Generator,
+						<link
+							linkend="en.genesez.platforms.common.workflow.components.generator.includedFiles">
+							<literal>includedFileExtensions</literal>
+						</link>
+						for this feature.
+						Its weaker than the exclusion, especially weaker
+						than
+						<link
+							linkend="en.genesez.core.configuration.features.DeletionFeature.excludedFiles">
+							<literal>excludedFileExtensions</literal>
+						</link>
+					</para>
+					<informalexample>
+						<para>For Example &lt;excludedFiles value=&quot;a&quot;
+							/&gt;
+							&lt;includedFiles value=&quot;java, .php&quot;
+							/&gt; will exclude
+							every file with the suffix &quot;a&quot;,
+							which means also all
+							files
+							with the suffix &quot;java&quot;.
+							Therefore only files with
+							the
+							suffix &quot;.php&quot; will be
+							evaluated.
+						</para>
+					</informalexample>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</section>
+</section>

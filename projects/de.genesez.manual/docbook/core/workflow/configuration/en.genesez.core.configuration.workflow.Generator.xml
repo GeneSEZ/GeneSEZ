@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.platforms.common.workflow.components.generator">
+	<title>Generator</title>
+	<para>
+		The generator executes the model-to-text transformation.
+		Therefore
+		following parameters are available, but it depends on the
+		value of
+		<link
+			linkend="en.genesez.platforms.common.workflow.components.generator.template">
+			<literal>template</literal>
+		</link>
+		which parameters are used for the
+		transformation. Usually the
+		generator
+		should be the basic class for
+		model-to-text transformations.
+	</para>
+	<variablelist>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.template">
+			<term>
+				<emphasis role="bold">template</emphasis>
+			</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>is used to indicate the XPand Template and the name of
+					the
+					define-block, which is called at the model-to-text
+					transformation.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.outputDir">
+			<term>
+				<emphasis role="bold">outputDir</emphasis>
+			</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>is used to indicate the directory, where the generated
+					source
+					code is stored or should be stored. If the directory
+					does not exist
+					it will be created.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>
+				<emphasis role="bold">proRegDir</emphasis>
+			</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default: value of
+				<link
+					linkend="en.genesez.platforms.common.workflow.components.generator.outputDir">
+					<literal>outputDir</literal>
+				</link>
+			</term>
+			<listitem>
+				<para>is used to indicate the directory, where source code with
+					protected regions, which should be saved during the
+					transformation,
+					will be stored.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.aspectTemplate">
+			<term>aspectTemplate</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					use to indicate XPand templates with
+					<emphasis>Around</emphasis>
+					statements. With this Advices for
+					template-
+					<emphasis>define</emphasis>
+					-statements could be
+					defined.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>aspectTemplates</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					same as
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.aspectTemplate">
+						<emphasis>aspectTemplate</emphasis>
+					</link>
+					with the difference,
+					that one can give a comma or semicolon
+					separated list of
+					XPand-templates.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.aspectScript">
+			<term>aspectScript</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					use to indicate XTend scripts with
+					<emphasis>around</emphasis>
+					statements. With this Advices for
+					XTend functions could be defined.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>aspectScripts</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					same as
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.aspectScript">
+						<emphasis>aspectScript</emphasis>
+					</link>
+					with the difference,
+					that one can give a comma or semicolon
+					separated list of
+					XTend-scripts.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.singleValuedSlot">
+			<term>singleValuedSlot</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>true</literal>
+			</term>
+			<listitem>
+				<para>
+					Sets if the slot has only one root element for which the
+					template is
+					executed or more.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.slot">
+			<term>slot</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>genesezModel</literal>
+			</term>
+			<listitem>
+				<para>indicates the name of the slot, which contains the
+					GeneSEZ
+					model that is used for the model-to-text
+					transformation.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.prExcludes">
+			<term>prExcludes</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>.svn</literal>
+			</term>
+			<listitem>
+				<para>indicates files and directories, that are excluded in the
+					search for protected regions.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.prDefaultExcludes">
+			<term>prDefaultExcludes</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>false</literal>
+			</term>
+			<listitem>
+				<para>indicates whether the default file-exclusions should be
+					used.
+					These are named in the openArchitectureWare
+					documentation. All
+					files
+					with these extensions won&apos;t be
+					checked for protected
+					regions.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.fileEncoding">
+			<term>fileEncoding</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>utf-8</literal>
+			</term>
+			<listitem>
+				<para>use to indicate the coding of the templates</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.excludedDirNames">
+			<term>excludedDirectoryNames</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					Only useful when a
+					<link linkend="en.genesez.core.features.FileTreeObserver">
+						<literal>FileTreeObserver</literal>
+					</link>
+					is added.
+					Excludes all directories under the output directory with
+					the given
+					names (separated by &quot;,&quot; or &quot;;&quot;)
+					from
+					the
+					evaluation in the added features. Used as global value for every
+					feature. Useful if you want folders with special names not
+					evaluated.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.excludedRelPaths">
+			<term>excludedRelativePaths</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					Only useful when a
+					<link linkend="en.genesez.core.features.FileTreeObserver">
+						<literal>FileTreeObserver</literal>
+					</link>
+					is added.
+					Excludes given paths (separated by &quot;,&quot; or
+					&quot;;&quot;) relative to the output directory
+					from the evaluation
+					in the added features.
+					Used as global value for every feature.
+					Useful if you want only some specific directories
+					not evaluated.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.excludedFiles">
+			<term>excludedFileExtensions</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					Only useful when a
+					<link linkend="en.genesez.core.features.FileTreeObserver">
+						<literal>FileTreeObserver</literal>
+					</link>
+					is added.
+					Excludes files (not directories) with given suffixes
+					(separated by &quot;,&quot; or &quot;;&quot;) from
+					the evaluation in
+					the added features. You can even exclude complete
+					files.
+					Used as
+					global value for every feature.
+					<informalexample>
+						<para>
+							Example value=&quot;.svn, class&quot; will exclude every
+							file with the suffix &quot;.svn&quot; or &quot;class&quot;.
+						</para>
+					</informalexample>
+					Binds stronger than
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.includedFiles">
+						<literal>includedFileExtensions</literal>
+					</link>
+					.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.includedFiles">
+			<term>includedFileExtensions</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					Only useful when a
+					<link linkend="en.genesez.core.features.FileTreeObserver">
+						<literal>FileTreeObserver</literal>
+					</link>
+					is added.
+					Includes files (not directories) with the given
+					suffixes
+					(seperated by &quot;,&quot; or
+					&quot;;&quot;) into the evaluation
+					in
+					the added features. Only this files are included.
+					It is weaker than
+					exclusions, especially its
+					weaker than
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.excludedFiles">
+						<literal>excludedFiles</literal>
+					</link>.
+					If it&apos;s not
+					set everything will be included.
+					Used as global
+					value for every feature.
+				</para>
+				<informalexample>
+					<para>For Example &lt;excludedFiles value=&quot;a&quot;
+						/&gt;
+						&lt;includedFiles value=&quot;java, .php&quot;
+						/&gt; will exclude
+						every file with the suffix &quot;a&quot;,
+						which means also all
+						files
+						with the suffix &quot;java&quot;.
+						Therefore only files with
+						the
+						suffix &quot;.php&quot; will be
+						evaluated.
+					</para>
+				</informalexample>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>
+		Furthermore the generator contains all parameters from the
+		XPand-generator component of openArchitectureWare.
+	</para>
+</section>

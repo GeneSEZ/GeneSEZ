@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.core.implementation.features.ImportBeautifier">
+	<title>ImportBeautifier</title>
+	<para>
+		The ImportBeautifier is a FileTreeObserver and a PostProcessor (see
+		<xref linkend="en.genesez.core.description.features.ImportBeautifier" />
+		). As
+		the observer it prepares the import take over. Therefore it
+		implements
+		<link linkend="en.genesez.core.implementation.features.FTW.updateFileVisit">
+			<literal>updateFileVisit</literal>
+		</link>
+		and
+		<link linkend="en.genesez.core.implementation.features.FTW.updateComplete">
+			<literal>updateComplete</literal>
+		</link>
+		(see
+		<link
+			linkend="en.genesez.core.implementation.features.ImportBeautifier.update">
+			<literal>update ImportBeautifier</literal>
+		</link>
+		)
+		and as PostProcessor it does the import take over (see
+		<link
+			linkend="en.genesez.core.implementation.features.ImportBeautifier.importTakeOver">
+			<literal>import take over</literal>
+		</link>
+		) and the
+		<link
+			linkend="en.genesez.core.implementation.features.ImportBeautifier.removeDouble">
+			<literal>removal of double imports</literal>
+		</link>
+		.
+	</para>
+	<para>
+		In detail it does following tasks:
+	</para>
+	<itemizedlist>
+		<listitem
+			id="en.genesez.core.implementation.features.ImportBeautifier.update">
+			<para>
+				<literallayout><emphasis role="bold">Update ImportBeautifier</emphasis></literallayout>
+				<figure
+					id="fig:en.genesez.core.implementation.features.ImportBeautifier.update">
+					<title>Activity diagram for ImportBeautifier update methods
+					</title>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.ImportBeautifier.updateImportBeautifier.png" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.ImportBeautifier.updateImportBeautifier.svg"
+								scalefit="1" width="60%" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</para>
+			<para>
+				In
+				<xref
+					linkend="fig:en.genesez.core.implementation.features.ImportBeautifier.update" />
+				you can see the update methods of the importBeautifier. On
+				<emphasis role="italic">updateFileVisit</emphasis>
+				it checks if
+				<emphasis role="italic">importTakeOver</emphasis>
+				is activated and an import String was
+				given. It also checks if no
+				<emphasis role="italic">file extensions</emphasis>
+				were given or the given
+				extensions matches with the file's extension. If so it
+				<link
+					linkend="en.genesez.core.implementation.features.ImportBeautifier.prepare">
+					<literal>saves imports</literal>
+				</link>
+				.
+			</para>
+		</listitem>
+		<listitem
+			id="en.genesez.core.implementation.features.ImportBeautifier.prepare">
+			<para>
+				<literallayout><emphasis role="bold">Save imports</emphasis></literallayout>
+				It opens the file and checks line by line for the File-ID String
+				(this looks like
+				<literal>"FILE-ID : ("</literal>
+				) and stands usually at the top of
+				the file in an commentary. After
+				that it reads the ID and searches
+				line by line for import strings
+				(with the
+				<emphasis role="italic">importRegex</emphasis>
+				). After the file is read completely the File-ID will be stored
+				with its found imports in a map. See
+				<xref
+					linkend="fig:en.genesez.core.implementation.features.ImportBeautifier.saveImports" />
+				.
+			</para>
+			<figure
+				id="fig:en.genesez.core.implementation.features.ImportBeautifier.saveImports">
+				<title>Activity diagram for saving imports
+				</title>
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.ImportBeautifier.saveImports.png" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.ImportBeautifier.saveImports.svg"
+							scalefit="1" width="50%" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</listitem>
+		<listitem
+			id="en.genesez.core.implementation.features.ImportBeautifier.importTakeOver">
+			<para>
+				<literallayout><emphasis role="bold">Import take over</emphasis></literallayout>
+				<note>
+					<para>
+						This runs as a PostProcessor, that means that a
+						opened file
+						is available for this algorithm.
+					</para>
+				</note>
+			</para>
+			<para>
+				First the algorithm checks if
+				<emphasis role="italic">importRegex</emphasis>
+				is not null and
+				<emphasis role="italic">importTakeOver</emphasis>
+				is true. If so it will check
+				if the import take over is prepared
+				properly this is
+				done by the prepared
+				variable, which was set after
+				the file tree
+				was walked completely.
+				If its not prepared it will
+				throw a
+				<emphasis role="italic">NotPreparedException</emphasis>
+				.
+			</para>
+			<para>
+				After that it checks if the currently opened file contains a
+				File-ID and if so this ID will be parsed. Thereafter it searches
+				for the next free line in the file and stores the position. That
+				found it looks if the File-ID is in the map that was filled during
+				<link
+					linkend="en.genesez.core.implementation.features.ImportBeautifier.prepare">
+					<literal>save imports</literal>
+				</link>
+				. If found the corresponding imports will be placed after the
+				found free line
+				in the file. See
+				<xref
+					linkend="fig:en.genesez.core.implementation.features.ImportBeautifier.importTakeOver" />
+				.
+			</para>
+			<figure
+				id="fig:en.genesez.core.implementation.features.ImportBeautifier.importTakeOver">
+				<title>Activity diagram for carry over imports
+				</title>
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.ImportBeautifier.importTakeOver.png" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.ImportBeautifier.importTakeOver.svg"
+							scalefit="1" width="50%" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</listitem>
+		<listitem
+			id="en.genesez.core.implementation.features.ImportBeautifier.removeDouble">
+			<para>
+				<literallayout><emphasis role="bold">Remove double imports</emphasis></literallayout>
+				To remove double imports the found import strings will be put in a
+				set and after that placed again on the right place in the still
+				opened file. After that the file will be written and closed.
+			</para>
+		</listitem>
+	</itemizedlist>
+</section>

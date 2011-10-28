@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.platforms.common.workflow.components.DefaultGenerator">
+	<title>DefaultGenerator</title>
+	<para>
+		The DefaultGenerator is a pre-configured Generator, that sets
+		some values already and also provides some more configuration details
+		for easier use.
+		Currently the DefaultGenerator provides Typemapping,
+		File- and FolderDeletion and ImportTakeOver, which are all activated by default. 
+		Following parameters are available.
+	</para>
+	<variablelist>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.typeMappingFile">
+			<term>typeMappingFile</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>is used to indicate the type-mapping files, which should
+					be
+					used during the model-to-text transformation.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>typeMappingFiles</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					same as
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.typeMappingFile">
+						<emphasis>typeMappingFile</emphasis>
+					</link>
+					with the difference,
+					that one can give a comma or semicolon
+					separated list of type-mapping
+					files.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.basePackage">
+			<term>basePackage</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>is used to indicate a package, which should be used as
+					basis
+					for the model-to-text transformation. Everything will be
+					generated
+					in this package.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.useModelName">
+			<term>useModelNameAsBasePackage</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>false</literal>
+			</term>
+			<listitem>
+				<para>
+					this indicates whether the name of the model-element
+					(root-element
+					of the GeneSEZ model) should be used as
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.basePackage">
+						base package
+					</link>
+					.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.sectionComments">
+			<term>generateSectionComments</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>true</literal>
+			</term>
+			<listitem>
+				<para>indicates if single lined commentaries should be created,
+					which will subdivide the source code.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.accessorsForStereotypes">
+			<term>accessorForStereotypes</term>
+			<term>optional</term>
+			<term>single-value</term>
+			<term>
+				default:
+				<literal>entity</literal>
+			</term>
+			<listitem>
+				<para>
+					specificates a through commata seperated list with names
+					of
+					stereotypes which implicates the generation of
+					<literal>
+						get
+					</literal>
+					- and
+					<literal>set</literal>
+					-methods.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.accessorStereotype">
+			<term>accessorStereotype</term>
+			<term>optional</term>
+			<term>single-value</term>
+			<term>
+				default:
+				<literal>accessor</literal>
+			</term>
+			<listitem>
+				<para>
+					indicates the name of the stereotype
+					<literal>
+						accessor
+					</literal>
+					. Default is the name of the stereotype in
+					the GeneSEZ UML profile.
+					If another name is used it must have
+					at least the the same tags, as
+					the stereotype
+					<literal>
+						accessor
+					</literal>
+					from the GeneSEZ UML profile (if the
+					interpratetion logic for
+					accessors is not replaced or
+					extended).
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.usePropertyVisibilityForAccessors">
+			<term>usePropertyVisibilityForAccessors</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>false</literal>
+			</term>
+			<listitem>
+				<para>
+					this indicates if the visibility of the attributes are
+					generated
+					always
+					<literal>private</literal>
+					and the given
+					visibilities to the attributes are used for the
+					accessors
+					(getter and setter).
+				</para>
+				<para>For example there is a protected attribute in your model,
+					then
+					if this parameter is set to true the attribute will be
+					private and
+					the accessors will be protected in the generated
+					code.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.excludePackage">
+			<term>excludePackage</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>use to indicate GeneSEZ packages via the qualified name,
+					to be
+					excluded during the model-to-text transformation.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>excludePackages</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>UML Standard Profile</literal>
+			</term>
+			<listitem>
+				<para>
+					same as
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.excludePackage">
+						<emphasis>exclude package</emphasis>
+					</link>
+					with the
+					difference, that one can give a commata seperated list with
+					qualified names of GeneSEZ packages.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.deleteOldFiles">
+			<term>deleteOldFiles</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>true</literal>
+			</term>
+			<listitem>
+				<para>
+					If true old files will be deleted. This is useful if you renamed
+					something in your model.
+					Therefore the files in the output directory
+					will be read recursively and
+					saved with their
+					last modification date
+					(LMD). After the code generation the LMDs will
+					be compared with the
+					new LMDs and if they are the same the file will be deleted. If the
+					files are under a known revision control system, the files will be
+					marked as deleted in the repository and after that deleted from
+					the
+					file system (if possible). You can configure more with
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.excludedDirNames">
+						<literal>excludedDirectoryNames</literal>
+					</link>
+					,
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.excludedRelPaths">
+						<literal>excludedRelativePaths</literal>
+					</link>
+					,
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.excludedFiles">
+						<literal>excludedFiles</literal>
+					</link>
+					and
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.includedFiles">
+						<literal>includedFiles</literal>
+					</link>
+					.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.components.generator.deleteEmptyFolders">
+			<term>deleteEmptyFolders</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>true</literal>
+			</term>
+			<listitem>
+				<para>
+					If true empty folders will be deleted. Therefore it searchs again
+					through the output directory. If the empty folders are under a
+					known revision control system, they will be first marked as
+					deleted
+					in the repository and after that, if possible, deleted in the file
+					system. You can configure more with
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.excludedDirNames">
+						<literal>excludedDirectoryNames</literal>
+					</link>
+					and
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.excludedRelPaths">
+						<literal>excludedRelativePaths</literal>
+					</link>
+					.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.generator.importTakeOver">
+			<term>
+				importTakeOver
+			</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>true</literal>
+			</term>
+			<listitem>
+				<para>
+					If true and
+					<link linkend="en.genesez.platforms.common.workflow.generator.importStrings">
+						<literal>importStrings</literal>
+					</link>
+					or
+					<link linkend="en.genesez.platforms.common.workflow.generator.importRegex">
+						<literal>importRegex</literal>
+					</link>
+					is set, then imports will be carried over from the old to the new
+					file. You can configure files that should be checked for imports
+					with
+					<link
+						linkend="en.genesez.platforms.common.workflow.generator.fileExtensions">
+						<literal>fileExtensions</literal>
+					</link>
+					. Passes the value to the
+					<link linkend="en.genesez.core.configuration.features.ImportBeautifier.importTakeOver">
+						<literal>ImportBeautifier</literal>
+					</link>
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.generator.importRegex">
+			<term>
+				<emphasis role="bold">importRegex</emphasis>
+			</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					Needed for the configuration of the ImportBeautifier, only useful
+					when
+					<link
+						linkend="en.genesez.platforms.common.workflow.generator.importTakeOver">
+						<literal>importTakeOver</literal>
+					</link>
+					is true.
+					Must be a regular expression which expresses every import
+					statement in the
+					files to check. For java this looks like:
+					<literal>"import .*;$"</literal>
+					If not set or expression is defective, imports will not be carried
+					over. Passes the value to the
+					<link linkend="en.genesez.core.configuration.features.ImportBeautifier.importRegex">
+						<literal>ImportBeautifier</literal>
+					</link>
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.generator.importStrings">
+			<term>
+				<emphasis role="bold">importStrings</emphasis>
+			</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					Needed for easy configuration of the ImportBeautifier, only useful
+					when
+					<link
+						linkend="en.genesez.platforms.common.workflow.generator.importTakeOver">
+						<literal>importTakeOver</literal>
+					</link>
+					is true.
+					Creates a regular expression of the given import strings
+					separated by comma or semicolon. The
+					regular expression looks like
+					<literal>"(importExpression1|ImportExpression2|...) .*$"</literal>
+					. Passes the value to the
+					<link linkend="en.genesez.core.configuration.features.ImportBeautifier.importStrings">
+						<literal>ImportBeautifier</literal>
+					</link>
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.platforms.common.workflow.generator.fileExtensions">
+			<term>
+				fileExtensions
+			</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					Needed to configure the ImportBeautifier, only files with this
+					extensions will be checked for imports. Only useful when
+					<link
+						linkend="en.genesez.platforms.common.workflow.generator.importTakeOver">
+						<literal>importTakeOver</literal>
+					</link>
+					is true. Creates a regular expression from the comma or semicolon
+					separated list, which looks like
+					<literal>".*(\\.extension1|\\.extension2|...)$"</literal>
+					. Passes the value to
+					<link linkend="en.genesez.core.configuration.features.ImportBeautifier.fileExtensions">
+						<literal>ImportBeautifier</literal>
+					</link>
+				</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>
+		Furthermore the DefaultGenerator contains all parameters from the
+		Generator and the XPand-generator component of openArchitectureWare.
+	</para>
+</section>

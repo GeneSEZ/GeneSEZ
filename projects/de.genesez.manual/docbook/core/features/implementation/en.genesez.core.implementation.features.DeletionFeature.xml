@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.core.implementation.features.DeletionFeature">
+	<title>DeletionFeature</title>
+	<para>
+		The DeletionFeature is separated into 2 different features (see
+		<xref linkend="en.genesez.core.description.features.DeletionFeature" />
+		) There are some tasks that both of them do. Thats why we
+		implemented the DeletionFeature as superclass.
+		This superclass is especially for
+		revision system support.
+		The class
+		checks for revision systems and
+		logs the found ones.
+		In detail there
+		are following tasks:
+	</para>
+	<itemizedlist>
+		<listitem>
+			<para
+				id="en.genesez.core.implementation.features.DeletionFeature.checkForRepository">
+				<literallayout><emphasis role="bold">Check for repository</emphasis></literallayout>
+				Checks if the given folder is a known repository metadata
+				folder.
+				If so it gets the corresponding revision system and
+				stores this in
+				a list. See
+				<xref
+					linkend="fig:en.genesez.core.implementation.features.DeletionFeature.checkForRepository" />
+			</para>
+			<figure
+				id="fig:en.genesez.core.implementation.features.DeletionFeature.checkForRepository">
+				<title>Activity diagram for check for repository</title>
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.DeletionFeature.checkForRepository.png" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.DeletionFeature.checkForRepository.svg"
+							scalefit="1" width="50%" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</listitem>
+		<listitem>
+			<para
+				id="en.genesez.core.implementation.features.DeletionFeature.logRevisionSystems">
+				<literallayout><emphasis role="bold">Log revision systems</emphasis></literallayout>
+				First this checks for repositories above the output directory
+				(see
+				<link
+					linkend="en.genesez.core.implementation.features.DeletionFeature.checkAbove">
+					check repository above
+				</link>
+				).
+				After that it looks if the revision systems were logged already
+				by checking the
+				<emphasis role="italic">loggedRevisionSystemOnce</emphasis>
+				class variable. If they were not logged already the algorithm
+				logs
+				the
+				revision systems and sets the class variable
+				<emphasis role="italic">loggedRevisionSystemOnce</emphasis>
+				to true, to prevent that revision systems will be logged again.
+				See
+				<xref
+					linkend="fig:en.genesez.core.implementation.features.DeletionFeature.logRevisionSystems" />
+			</para>
+			<para>
+				The testing of
+				<emphasis role="italic">loggedRevisionSystemOnce</emphasis>
+				is used because usually both File- and
+				FolderDeletionFeature are
+				activated. Without testing these
+				variable the revision systems
+				would be logged twice.
+			</para>
+			<figure
+				id="fig:en.genesez.core.implementation.features.DeletionFeature.logRevisionSystems">
+				<title>Activity diagram for log revision sytems</title>
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.DeletionFeature.logRevisionSystems.png" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.DeletionFeature.logRevisionSystems.svg"
+							scalefit="1" width="50%" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</listitem>
+		<listitem>
+			<para
+				id="en.genesez.core.implementation.features.DeletionFeature.checkAbove">
+				<literallayout><emphasis role="bold">Check repository above</emphasis></literallayout>
+				Checks if there is a repository metadata folder above the
+				output
+				directory. Therefore it checks if the given directory has
+				a parent
+				directory. If so it gets the parent directory and checks
+				if it
+				contains a known metadata folder name. If so the
+				corresponding
+				revision system will be stored in the list. After
+				that it starts
+				over with the parent directory.
+				See
+				<xref
+					linkend="fig:en.genesez.core.implementation.features.DeletionFeature.checkAbove" />
+			</para>
+			<para>
+				In fact this goes the file tree recursively up until no
+				parent
+				directory is found anymore.
+			</para>
+			<figure
+				id="fig:en.genesez.core.implementation.features.DeletionFeature.checkAbove">
+				<title>Activity diagram for check for repository above</title>
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.DeletionFeature.checkRepositoryUp.png" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata align="center"
+							fileref="../../../../images/core/activities/implementation.features.DeletionFeature.checkRepositoryUp.svg"
+							scalefit="1" width="50%" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</listitem>
+	</itemizedlist>
+
+	<section id="en.genesez.core.implementation.features.FileDeletionFeature">
+		<title>FileDeletionFeature</title>
+		<para>
+			The FileDeletionFeature (FiDF) is a FileTreeObserver and a
+			PostFeature (see
+			<xref linkend="en.genesez.core.description.features.FileDeletionFeature" />
+			). As
+			a FileTreeObserver the feature prepares itself for
+			deletion.
+			Therefore the feature implements
+			<link linkend="en.genesez.core.implementation.features.FTW.updateBeforeDir">
+				<literal>updateBeforeDir</literal>
+			</link>
+			,
+			<link linkend="en.genesez.core.implementation.features.FTW.updateFileVisit">
+				<literal>updateFileVisit</literal>
+			</link>
+			and
+			<link linkend="en.genesez.core.implementation.features.FTW.updateComplete">
+				<literal>updateComplete</literal>
+			</link>
+			(See
+			<link
+				linkend="en.genesez.core.implementation.features.FileDeletionFeature.update">
+				<literal>Update FileDeletionFeature</literal>
+			</link>
+			).
+			As a PostFeature it checks the previously found files again and
+			does the deletion of them (See
+			<link
+				linkend="en.genesez.core.implementation.features.FileDeletionFeature.delete">
+				<literal>Delete not generated files</literal>
+			</link>
+			).
+		</para>
+		<para>
+			In fact the FileDeletionFeature does following things:
+		</para>
+		<itemizedlist>
+			<listitem
+				id="en.genesez.core.implementation.features.FileDeletionFeature.update">
+				<para>
+					<literallayout><emphasis role="bold">Update FileDeletionFeature</emphasis></literallayout>
+					<figure
+						id="fig:en.genesez.core.implementation.features.FileDeletionFeature.update">
+						<title>Activity diagram for FileDeletionFeature update methods
+						</title>
+						<mediaobject>
+							<imageobject role="html">
+								<imagedata align="center"
+									fileref="../../../../images/core/activities/implementation.features.FileDeletionFeature.updateFileDeletion.png" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata align="center"
+									fileref="../../../../images/core/activities/implementation.features.FileDeletionFeature.updateFileDeletion.svg"
+									scalefit="1" width="75%" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</para>
+				<para>
+					As you can see in
+					<xref
+						linkend="fig:en.genesez.core.implementation.features.FileDeletionFeature.update" />
+					the FiDF calls
+					<link
+						linkend="en.genesez.core.implementation.features.DeletionFeature.checkForRepository">
+						<literal>check for repository</literal>
+					</link>
+					during
+					<emphasis role="italic">updateBeforeDir()</emphasis>
+					and
+					<link
+						linkend="en.genesez.core.implementation.features.DeletionFeature.logRevisionSystems">
+						<literal>log revision systems</literal>
+					</link>
+					during
+					<emphasis role="italic">updateComplete()</emphasis>
+					on its superclass. During
+					<emphasis role="italic">updateFileVisit()</emphasis>
+					the file deletion
+					prepares itself. See
+					<link
+						linkend="en.genesez.core.implementation.features.FileDeletionFeature.prepare">
+						<literal>Prepare file deletion</literal>
+					</link>
+					.
+				</para>
+			</listitem>
+			<listitem
+				id="en.genesez.core.implementation.features.FileDeletionFeature.prepare">
+				<para>
+					<literallayout><emphasis role="bold">Prepare file deletion</emphasis></literallayout>
+					The preparation
+					works as follows:
+					First the algorithm checks if the
+					file is excluded
+					with the
+					given excludes (excludedRelativePaths,
+					excludedDirectoryNames,
+					excludedFileExtensions) and after that it
+					looks if
+					includedFileExtensions is empty, if not it looks if the
+					file is
+					included. If it is included or includedFileExtensions is
+					empty the
+					file's path will be stored with its last modification
+					date. See
+					<xref
+						linkend="fig:en.genesez.core.implementation.features.FileDeletionFeature.prepare" />
+				</para>
+				<figure
+					id="fig:en.genesez.core.implementation.features.FileDeletionFeature.prepare">
+					<title>Activity diagram for the preparation of the file deletion
+					</title>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FileDeletionFeature.prepareFileDeletion.png" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FileDeletionFeature.prepareFileDeletion.svg"
+								scalefit="1" width="50%" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</listitem>
+			<listitem>
+				<para
+					id="en.genesez.core.implementation.features.FileDeletionFeature.delete">
+					<literallayout><emphasis role="bold">Delete not generated files</emphasis></literallayout>
+					This is the actual file deletion. First it will be checked if the
+					file deletion is prepared properly, this is done by the prepared
+					variable, which was set after the
+					file tree was walked completely.
+					If its not prepared it throws a
+					<emphasis role="italic">NotPreparedException</emphasis>
+					.
+				</para>
+				<para>
+					After that it looks if the
+					previously stored files hava the same
+					last modification date, if
+					so the files will be shedueled for
+					deletion. If every file was
+					checked the shedueled files will first
+					be deletetd in the found
+					repository and after that on the file
+					system. See
+					<xref
+						linkend="fig:en.genesez.core.implementation.features.FileDeletionFeature.delete" />
+					.
+				</para>
+				<para
+					id="en.genesez.core.implementation.features.FileDeletionFeature.alterPermission">
+					You maybe have noticed the
+					<emphasis role="italic">alter permission</emphasis>
+					activity. This alters the permissions of the files in POSIX
+					systems (e. g. Linux) to rwx------ and on DOS-like systems (e. g.
+					Windows) to readOnly = false. With this the deletion of the files
+					can be assured, especially for unknown repository files that were
+					not excluded.
+				</para>
+				<figure
+					id="fig:en.genesez.core.implementation.features.FileDeletionFeature.delete">
+					<title>Activity diagram for the file deletion</title>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FileDeletionFeature.fileDeletion.png" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FileDeletionFeature.fileDeletion.svg"
+								scalefit="1" width="50%" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</listitem>
+		</itemizedlist>
+	</section>
+
+	<section
+		id="en.genesez.core.implementation.features.FolderDeletionFeature">
+		<title>FolderDeletionFeature</title>
+		<para>
+			The FolderDeletionFeature (FoDF) is a FileTreeObserver and a
+			PostFeature (see
+			<xref linkend="en.genesez.core.description.features.FolderDeletionFeature" />
+			). As
+			a FileTreeObserver the feature prepares itself for
+			deletion.
+			Therefore the feature implements
+			<link linkend="en.genesez.core.implementation.features.FTW.updateBeforeDir">
+				<literal>updateBeforeDir</literal>
+			</link>
+			,
+			<link linkend="en.genesez.core.implementation.features.FTW.updateAfterDir">
+				<literal>updateAfterDir</literal>
+			</link>
+			and
+			<link linkend="en.genesez.core.implementation.features.FTW.updateComplete">
+				<literal>updateComplete</literal>
+			</link>
+			(See
+			<link
+				linkend="en.genesez.core.implementation.features.FolderDeletionFeature.update">
+				<literal>Update FolderDeletionFeature</literal>
+			</link>
+			).
+			As a PostFeature it does the deletion of the previously found
+			empty folders (See
+			<link
+				linkend="en.genesez.core.implementation.features.FolderDeletionFeature.delete">
+				<literal>Delete empty folders</literal>
+			</link>
+			).
+		</para>
+		<para>
+			In fact the FolderDeletionFeature does following things:
+		</para>
+		<itemizedlist>
+			<listitem
+				id="en.genesez.core.implementation.features.FolderDeletionFeature.update">
+				<para>
+					<literallayout><emphasis role="bold">Update FolderDeletionFeature</emphasis></literallayout>
+					<figure
+						id="fig:en.genesez.core.implementation.features.FolderDeletionFeature.update">
+						<title>Activity diagram for FolderDeletionFeature update
+							methods
+						</title>
+						<mediaobject>
+							<imageobject role="html">
+								<imagedata align="center"
+									fileref="../../../../images/core/activities/implementation.features.FolderDeletionFeature.updateFolderDeletion.png" />
+							</imageobject>
+							<imageobject role="fo">
+								<imagedata align="center"
+									fileref="../../../../images/core/activities/implementation.features.FolderDeletionFeature.updateFolderDeletion.svg"
+									scalefit="1" width="75%" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</para>
+				<para>
+					As you can see in
+					<xref
+						linkend="fig:en.genesez.core.implementation.features.FolderDeletionFeature.update" />
+					the FoDF calls
+					<link
+						linkend="en.genesez.core.implementation.features.DeletionFeature.checkForRepository">
+						<literal>check for repository</literal>
+					</link>
+					during
+					<emphasis role="italic">updateBeforeDir()</emphasis>
+					and
+					<link
+						linkend="en.genesez.core.implementation.features.DeletionFeature.logRevisionSystems">
+						<literal>log revision systems</literal>
+					</link>
+					during
+					<emphasis role="italic">updateComplete()</emphasis>
+					on its superclass. During
+					<emphasis role="italic">updateAfterDir()</emphasis>
+					the folder deletion
+					prepares itself. See
+					<link
+						linkend="en.genesez.core.implementation.features.FolderDeletionFeature.prepare">
+						<literal>Prepare folder deletion</literal>
+					</link>
+					.
+				</para>
+			</listitem>
+			<listitem
+				id="en.genesez.core.implementation.features.FolderDeletionFeature.prepare">
+				<para>
+					<literallayout><emphasis role="bold">Prepare folder deletion</emphasis></literallayout>
+					The preparation works as follows: First the algorithm checks
+					if
+					the folder is excluded with the given excludes
+					(excludedRelativePaths and excludedDirectoryNames). After that it
+					gets a list of all subfiles from the folder and stores also the
+					count of these subfiles.
+				</para>
+				<para>
+					Thereafter it gets the first element of
+					the list. If this element
+					is a directory the
+					algorithm checks if
+					its a known metadata folder
+					name (from a
+					known repository). If so
+					it decrements the count of
+					subfiles. If
+					not it checks if the
+					folder is marked as empty by
+					checking it in
+					the
+					<emphasis role="italic">emptyFolders</emphasis>
+					store. If so
+					it also decrements the count of subfiles. Now the
+					next subfile will be checked.
+				</para>
+				<para>
+					If all subfiles were checked or one
+					file wasn't a
+					folder the
+					algorithm checks if the count of subfiles
+					is zero.
+					If its zero the
+					folder will be marked as empty by putting
+					it into
+					the
+					<emphasis role="italic">emptyFolders</emphasis>
+					store. See
+					<xref
+						linkend="fig:en.genesez.core.implementation.features.FolderDeletionFeature.prepare" />
+					.
+				</para>
+				<para>
+					This algorithm is needed for support of revision control
+					systems that lay their metadata folders into each directory thats
+					under this revision control system (e. g. Subversion).
+				</para>
+				<figure
+					id="fig:en.genesez.core.implementation.features.FolderDeletionFeature.prepare">
+					<title>Activity diagram for the preparation of the folder
+						deletion
+					</title>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FolderDeletionFeature.prepareFolderDeletion.png" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FolderDeletionFeature.prepareFolderDeletion.svg"
+								scalefit="1" width="50%" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</listitem>
+			<listitem>
+				<para
+					id="en.genesez.core.implementation.features.FolderDeletionFeature.delete">
+					<literallayout><emphasis role="bold">Delete empty folders</emphasis></literallayout>
+					This is the actual folder deletion. First it will be checked if
+					the
+					folder deletion is prepared properly, this is done by the
+					prepared
+					variable, which was set after the file tree was walked
+					completely.
+					If its not prepared it throws a
+					<emphasis role="italic">NotPreparedException</emphasis>
+					.
+				</para>
+				<para>
+					After that it deletes the empty folders found during update in
+					the repository and if possible on the file system. See
+					<xref
+						linkend="fig:en.genesez.core.implementation.features.FolderDeletionFeature.delete" />
+					.
+				</para>
+				<para>
+					You maybe have noticed the
+					<emphasis role="italic">alter permission</emphasis>
+					activity. This does the same as
+					<link
+						linkend="en.genesez.core.implementation.features.FileDeletionFeature.alterPermission">
+						<literal>alter permission</literal>
+					</link>
+					in
+					<literal>FileDeletionFeature</literal>
+					only for folders.
+				</para>
+				<figure
+					id="fig:en.genesez.core.implementation.features.FolderDeletionFeature.delete">
+					<title>Activity diagram for the folder deletion</title>
+					<mediaobject>
+						<imageobject role="html">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FolderDeletionFeature.deleteEmptyFolders.png" />
+						</imageobject>
+						<imageobject role="fo">
+							<imagedata align="center"
+								fileref="../../../../images/core/activities/implementation.features.FolderDeletionFeature.deleteEmptyFolders.svg"
+								scalefit="1" width="50%" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</listitem>
+		</itemizedlist>
+	</section>
+</section>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section>
+	<title>How to use features</title>
+	<para>
+		To use different features we have implemented following
+		structure: see
+		<xref linkend="fig:en.genesez.core.features.uml" />
+		.
+	</para>
+	<figure id="fig:en.genesez.core.features.uml">
+		<title>Model of the feature structure</title>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata align="center"
+					fileref="../../../../images/core/en.genesez.core.features.uml.png" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata align="center"
+					fileref="../../../../images/core/en.genesez.core.features.uml.svg"
+					scalefit="1" width="100%" />
+			</imageobject>
+		</mediaobject>
+	</figure>
+	<para>
+		In fact features are divided into 2
+		to 3 groups. The main groups
+		are
+		<emphasis role="bold">
+			<literal>PreFeature</literal>
+		</emphasis>
+		and
+		<emphasis role="bold">
+			<literal>PostFeature</literal>
+		</emphasis>
+		.
+		PreFeatures do something before the
+		generation, so for example they
+		prepare the PostFeatures. PostFeatures
+		do something after the
+		generation, but maybe they need
+		preparation
+		before they can do
+		something.
+	</para>
+	<para>
+		The 3rd group is the
+		<emphasis role="bold">
+			<literal id="en.genesez.core.description.features.PostProcessor">PostProcessor</literal>
+		</emphasis>
+		. PostProcessors are
+		doing
+		stuff after generation of one file and before
+		the file is
+		written and
+		closed (they can also do stuff with the file
+		after the
+		file is
+		written). Maybe they also need preparation.
+		The
+		difference between PostFeatures and PostProcessors is that
+		PostFeatures are used after all
+		files
+		are written
+		and PostProcessors are
+		used after one file is
+		generated
+		instead.
+	</para>
+	<para>
+		In
+		<xref linkend="fig:en.genesez.core.generation" />
+		you can see how the features are invoked during the generation
+		process.
+	</para>
+	<figure id="fig:en.genesez.core.generation">
+		<title>Activity diagram of the generation process in correlation with
+			the features
+		</title>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata align="center"
+					fileref="../../../../images/core/activities/en.genesez.core.generate.png" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata align="center"
+					fileref="../../../../images/core/activities/en.genesez.core.generate.svg"
+					scalefit="1" width="50%" />
+			</imageobject>
+		</mediaobject>
+	</figure>
+	<para>
+		All features from the 3 groups can be added to the generator
+		through
+		the workflow file. The order of the groups is indifferent,
+		but the
+		order in the groups is important in the workflow file.
+		<note>
+			<simplelist>
+				<member>
+					- PreFeatures can be added with the beginning phrase
+					<literal>preFeature</literal>
+					.
+				</member>
+				<member>
+					- PostFeatures can be added with the beginning phrase
+					<literal>postFeature</literal>
+					.
+				</member>
+				<member>
+					- PostProcessors can be added with the beginning phrase
+					<literal>postProcessor</literal>
+					.
+				</member>
+			</simplelist>
+		</note>
+	</para>
+	<para>
+		Every feature can be added with one of the following 3
+		structures:
+	</para>
+	<itemizedlist>
+		<listitem>
+			<para>
+				Complete with feature specific properties [and an optional ID
+				(to identify the same instance in another statement)].
+				<programlisting><![CDATA[<preFeature class="QualifiedClassName" id="optionalID" >]]>
+	<![CDATA[<aProperty value="propertyValue" />]]>
+<![CDATA[</preFeature>]]>
+			</programlisting>
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Without properties (standard values will be used) [and an
+				optional
+				ID].
+				<programlisting><![CDATA[<postFeature class="QualifiedClassName" id="optionalID" />]]>
+					</programlisting>
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Only with a reference of a previously used feature, so
+				the previously
+				used instance is used again.
+				Please note that, when using references,
+				it's not possible to set properties for
+				the feature in this section.
+				<programlisting><![CDATA[<postProcessor idRef="optionalID" />]]>
+			</programlisting>
+			</para>
+		</listitem>
+	</itemizedlist>
+</section>

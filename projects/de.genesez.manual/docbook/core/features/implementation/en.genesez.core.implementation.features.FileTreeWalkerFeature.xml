@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.core.implementation.features.FileTreeWalker">
+	<title>FileTreeWalkerFeature</title>
+	<para>
+		The FileTreeWalkerFeature (see
+		<xref linkend="en.genesez.core.description.features.FileTreeWalker" />
+		) implements the FileVisitor Interface
+		from the java.nio.* package and
+		therefore it works like one. To make
+		long things short, it goes
+		recursively through the file tree
+		and calls
+		the methods on its observer
+		on each position in the tree:
+		<simplelist>
+			<member>
+				- It calls
+				<literal
+					id="en.genesez.core.implementation.features.FTW.updateBeforeDir">updateBeforeDir()</literal>
+				before visiting a directory.
+			</member>
+			<member>
+				- It calls
+				<literal
+					id="en.genesez.core.implementation.features.FTW.updateFileVisit">updateFileVisit()</literal>
+				when a File is visited.
+			</member>
+			<member>
+				- It calls
+				<literal
+					id="en.genesez.core.implementation.features.FTW.updateFileVisitFailed">updateFileVisitFailed()</literal>
+				if the file visitation failed.
+			</member>
+			<member>
+				- It calls
+				<literal
+					id="en.genesez.core.implementation.features.FTW.updateAfterDir">updateAfterDir()</literal>
+				if every subdirectory and file
+				were visit in a directory.
+			</member>
+			<member>
+				- It calls
+				<literal
+					id="en.genesez.core.implementation.features.FTW.updateComplete">updateComplete()</literal>
+				if file tree completely walked.
+			</member>
+		</simplelist>
+	</para>
+	<para>
+		All observers will be unregistered after a file tree walk is completed.
+	</para>
+	<para>
+		For more Information how the FileVisitor works see:
+		<simplelist>
+			<member>
+				<ulink
+					url="http://download.oracle.com/javase/7/docs/api/java/nio/file/FileVisitor.html">
+					Java7 API: FileVisitor
+				</ulink>
+			</member>
+			<member>
+				<ulink
+					url="http://download.oracle.com/javase/tutorial/essential/io/walk.html">
+					Java7 Tutorial: Walking the File Tree
+				</ulink>
+			</member>
+		</simplelist>
+	</para>
+</section>

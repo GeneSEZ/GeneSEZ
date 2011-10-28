@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section>
+	<title>Explanation of already implemented and used Features</title>
+	<section id="en.genesez.core.description.features.FileTreeWalker">
+		<title>FileTreeWalkerFeature (short: FTW)</title>
+		<figure id="fig:en.genesez.core.features.FileTreeWalker.uml">
+			<title>Model of the FileTreeWalkerFeature</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="center"
+						fileref="../../../../images/core/en.genesez.core.features.FileTreeWalker.uml.png" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="center"
+						fileref="../../../../images/core/en.genesez.core.features.FileTreeWalker.uml.svg"
+						scalefit="1" width="75%" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			The FTW (see
+			<xref linkend="fig:en.genesez.core.features.FileTreeWalker.uml" />
+			) is a Pre- and a PostFeature, so it can run before and
+			after the
+			generation. It is useful to prepare other features that
+			implement the
+			<emphasis role="bold">
+				<literal id="en.genesez.core.features.FileTreeObserver">FileTreeObserver</literal>
+			</emphasis>
+			(short: FTO) interface. FTOs can be
+			registered on an
+			FTW as observers.
+			An FTW walks through the file
+			tree and calls
+			different update methods
+			(depending on the status)
+			on its observers.
+			Observers can be added in
+			the workflow file as
+			follows:
+			<programlisting>
+<![CDATA[<preFeature class="de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature">]]>
+	<![CDATA[<observer class="de.genesez.platforms.common.workflow.feature.aObserver" />]]>
+<![CDATA[</preFeature>]]>	
+			</programlisting>
+			<note>
+				<para>
+					After one file tree walk all observers will be unregistered.
+				</para>
+			</note>
+		</para>
+		<para>
+			For implementation details see
+			<xref linkend="en.genesez.core.implementation.features.FileTreeWalker" />
+			.
+		</para>
+	</section>
+
+	<section id="en.genesez.core.description.features.DeletionFeature">
+		<title>DeletionFeature</title>
+		<figure id="fig:en.genesez.core.features.DeletionFeature.uml">
+			<title>Model of the DeletionFeature</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="center"
+						fileref="../../../../images/core/en.genesez.core.feature.DeletionFeature.uml.png" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="center"
+						fileref="../../../../images/core/en.genesez.core.feature.DeletionFeature.uml.svg"
+						scalefit="1" width="75%" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			The DeletionFeature manages the deletion of old files or empty
+			packages, also in different revision systems (see
+			<xref linkend="en.genesez.core.description.features.RevisionControl" />
+			for more information about revision systems). It is divided into two
+			separate features the
+			<link linkend="en.genesez.core.description.features.FileDeletionFeature">
+				<literal>File-</literal>
+			</link>
+			and
+			<link linkend="en.genesez.core.description.features.FolderDeletionFeature">
+				<literal>FolderDeletionFeature</literal>
+			</link>
+			to allow different configurations. See
+			<xref linkend="fig:en.genesez.core.features.DeletionFeature.uml" />
+		</para>
+		<para>
+			It provides the two subfeatures with some basic functionality see
+			<xref linkend="en.genesez.core.implementation.features.DeletionFeature" />
+			for implementation details.
+		</para>
+		<xi:include
+				href="en.genesez.core.description.features.RevisionControl.xml"
+				xmlns:xi="http://www.w3.org/2001/XInclude" />
+		<section id="en.genesez.core.description.features.FileDeletionFeature">
+			<title>FileDeletionFeature</title>
+			<para>
+				The FileDeletionFeature is used to delete old files. It is a
+				PostFeature and an FTO and needs to be an observer of an FTW in the
+				PRE section. Because as observer it checks all files for their last
+				modification dates. As feature it looks after the generation if the
+				last modification dates have changed. The files were the dates
+				didn't change will be deleted. For more information and further
+				configuration see FileDeletionFeature
+			</para>
+			<para>
+				<caution>
+					<para>
+						Use this feature ONLY with the right configuration
+						order to
+						prevent loss of information:
+					</para>
+				</caution>
+				<simplelist>
+					<member>1st: Register an FTW as a PreFeature</member>
+					<member>2nd: Register the FileDeletionFeature as an observer to
+						the
+						FTW
+					</member>
+					<member>before 1st or 3rd: Register the same FileDeletionFeature
+						as
+						PostFeature
+					</member>
+				</simplelist>
+			</para>
+			<para>
+				In the workflow file this looks like this:
+				<programlisting>	
+<![CDATA[<preFeature class="de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature">]]>
+	<![CDATA[<observer class="de.genesez.platforms.common.workflow.feature.FileDeletionFeature" id="fileDeletion" />]]>
+<![CDATA[</preFeature>]]>
+
+<![CDATA[<postFeature idRef="fileDeletion" />]]>
+					</programlisting>
+			</para>
+			<para>
+				For implementation details see
+				<xref linkend="en.genesez.core.implementation.features.FileDeletionFeature" />
+				.
+			</para>
+		</section>
+
+		<section id="en.genesez.core.description.features.FolderDeletionFeature">
+			<title>FolderDeletionFeature</title>
+			<para>
+				The FolderDeletionFeature is used to delete empty folders. It
+				is a
+				PostFeature and an FTO and needs to be an observer of an FTW in
+				the
+				POST section. While its an observer it checks which folders are
+				empty and as feature it deletes the empty folders if possible. For
+				more information and further configuration see
+				FolderDeletionFeature
+			</para>
+			<para>
+				The configuration order of this feature is not so vital but the
+				feature
+				makes only sense if configured right. Therefore following
+				steps make
+				sense:
+				<simplelist>
+					<member>1st: Register an FTW as a PostFeature</member>
+					<member>2nd: Register the FolderDeletionFeature as an observer to
+						the FTW
+					</member>
+					<member>3rd: Register the same FolderDeletionFeature as
+						PostFeature
+					</member>
+				</simplelist>
+			</para>
+			<para>
+				In the workflow file this looks like this:
+				<programlisting>
+<![CDATA[<postFeature class="de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature">]]>
+	<![CDATA[<observer class="de.genesez.platforms.common.workflow.feature.FolderDeletionFeature" id="folderDeletion" />]]>
+<![CDATA[</postFeature>]]>
+
+<![CDATA[<postFeature idRef="folderDeletion" />]]>
+					</programlisting>
+			</para>
+			<para>
+				For implementation details see
+				<xref
+					linkend="en.genesez.core.implementation.features.FolderDeletionFeature" />
+				.
+			</para>
+		</section>
+	</section>
+	<section id="en.genesez.core.description.features.ImportBeautifier">
+		<title>ImportBeautifier</title>
+		<figure id="fig:en.genesez.core.features.ImportBeautifier.uml">
+			<title>Model of the ImportBeautifier</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="center"
+						fileref="../../../../images/core/en.genesez.core.features.ImportBeautifier.uml.png" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="center"
+						fileref="../../../../images/core/en.genesez.core.features.ImportBeautifier.uml.svg"
+						scalefit="1" width="75%" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			The ImportBeautifier (see
+			<xref linkend="fig:en.genesez.core.features.ImportBeautifier.uml" />
+			) is used to carry over own imports from the
+			old
+			files to the new
+			generated files and to remove double imports. It
+			is
+			a PostProcessor
+			and
+			an FTO and needs to be an observer of an FTW
+			in
+			the PRE section.
+			While
+			its an observer it checks the File-ID for
+			each file and stores
+			them,
+			together with the imports in that file,
+			in a map. During
+			postprocessing of a file, the File-ID will be
+			searched and the
+			corresponding imports will be placed into the next
+			free space of the
+			file. After that double imports will be removed.
+		</para>
+		<para>
+			The ImportBeautifier needs a little extra configuration to
+			work
+			properly, so you must give them the used file extensions and the
+			used
+			import strings or a import regular expression, for more
+			information
+			see ImportBeautifier.
+		</para>
+		<para>
+			The configuration order is not vital, but it will only work if
+			its
+			configured right. Therefore following steps make sense:
+			<simplelist>
+				<member>1st: Register FTW as a PreFeature</member>
+				<member>2nd: Register ImportBeautifier as observer to the FTW
+				</member>
+				<member>3rd: set file extensions and import strings or import
+					regular expression.
+				</member>
+				<member>before 1st or 4th: Register same ImportBeautifier as
+					postprocessor.
+				</member>
+			</simplelist>
+		</para>
+		<para>
+			in the workflow file this looks like this:
+			<programlisting>
+<![CDATA[<preFeature class="de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature">]]>
+	<![CDATA[<observer class="de.genesez.platforms.common.m2t.ImportBeautifier" id="import" />]]>
+		<![CDATA[<fileExtensions value=".extension1, .extension2, ..." />]]>
+		<![CDATA[<importStrings value="importString1, importString2, ..." />]]>
+<![CDATA[</preFeature>]]>
+
+<![CDATA[<postProcessor idRef="import" />]]>
+			</programlisting>
+		</para>
+		<para>
+			For implementation details see
+			<xref linkend="en.genesez.core.implementation.features.ImportBeautifier" />
+			.
+		</para>
+	</section>
+</section>

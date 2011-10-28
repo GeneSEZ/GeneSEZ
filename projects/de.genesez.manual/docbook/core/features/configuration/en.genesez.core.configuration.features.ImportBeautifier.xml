@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.core.configuration.features.ImportBeautifier">
+	<title>ImportBeautifier</title>
+	<para>
+		The ImportBeautifier handles the take over of imports from old to
+		newly generated files and the removal of double imports.
+		To configure the ImportBeautifier there are only some operations
+		needed.
+	</para>
+	<variablelist>
+		<varlistentry
+			id="en.genesez.core.configuration.features.ImportBeautifier.fileExtensions">
+			<term>fileExtensions</term>
+			<term>
+				<emphasis>multi-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					The extensions of the files separated by "," or ";" that
+					should be
+					scanned for imports.
+					If not set every file will be scanned.
+					Therefore imports may not be
+					carried over correct.
+					It's not
+					recommended to not set these property but its not forbidden
+					and not
+					especially needed to work.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.core.configuration.features.ImportBeautifier.importRegex">
+			<term>
+				<emphasis role="bold">importRegex</emphasis>
+			</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<listitem>
+				<para>
+					If
+					<link
+						linkend="en.genesez.core.configuration.features.ImportBeautifier.importTakeOver">
+						<literal>importTakeOver</literal>
+					</link>
+					is true,
+					either this or
+					<link
+						linkend="en.genesez.core.configuration.features.ImportBeautifier.importStrings">
+						<literal>importStrings</literal>
+					</link>
+					must be set for ImportBeautifier
+					to work, if
+					both set only the last
+					in the workflow file will be used.
+					The
+					import regular expression is
+					used to
+					indicate if a line contains an
+					import.
+					E. g. for Java the
+					regular expression looks like
+					<literal>"import .*;$"</literal>
+					.
+					<note>
+						<para>This should follow
+							regular expression syntax in Java.
+						</para>
+					</note>
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.core.configuration.features.ImportBeautifier.importStrings">
+			<term>
+				<emphasis role="bold">importStrings</emphasis>
+			</term>
+			<term>
+				<emphasis>singleValue</emphasis>
+			</term>
+			<listitem>
+				<para>
+					If
+					<link
+						linkend="en.genesez.core.configuration.features.ImportBeautifier.importTakeOver">
+						<literal>importTakeOver</literal>
+					</link>
+					is true,
+					either this or
+					<link
+						linkend="en.genesez.core.configuration.features.ImportBeautifier.importRegex">
+						<literal>importRegex</literal>
+					</link>
+					must be set for ImportBeautifier to
+					work, if
+					both set only the last
+					in the workflow file will be used.
+					Needed to indicate lines with
+					import. If there are more
+					importStrings needed separate them
+					with ","
+					or ";". It creates a
+					regular expression which looks like:
+					<literal>"(importString1|importString2|...) .*$"</literal>
+					and passes them to
+					<link
+						linkend="en.genesez.core.configuration.features.ImportBeautifier.importRegex">
+						<literal>importRegex</literal>
+					</link>
+					.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.core.configuration.features.ImportBeautifier.lineDelimiter">
+			<term>lineDelimiter</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>"\n"</literal>
+			</term>
+			<listitem>
+				<para>
+					The line separator for the files that will be scanned.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry
+			id="en.genesez.core.configuration.features.ImportBeautifier.importTakeOver">
+			<term>importTakeOver</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default:
+				<literal>true</literal>
+			</term>
+			<listitem>
+				<para>
+					If false the imports won't be taken over, but double imports
+					will be removed properly.
+				</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+</section>

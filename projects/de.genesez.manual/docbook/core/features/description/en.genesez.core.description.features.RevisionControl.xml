@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.core.description.features.RevisionControl">
+	<title>Support of different revision control systems (RCS)</title>
+	<figure id="en.genesez.core.features.DeletionFeature.RevisionControl">
+		<title>Model of the implemented structure for revision control systems
+		</title>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata align="center"
+					fileref="../../../../images/core/en.genesez.core.features.DeletionFeature.RevisionControl.png" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata align="center"
+					fileref="../../../../images/core/en.genesez.core.features.DeletionFeature.RevisionControl.svg"
+					scalefit="1" width="75%" />
+			</imageobject>
+		</mediaobject>
+	</figure>
+	<para>
+		To prevent missing files in repositories a structure that allows
+		deletion of files in different RCS was needed, therefore we
+		implemented the structure seen in
+		<xref linkend="en.genesez.core.features.DeletionFeature.RevisionControl" />
+	</para>
+	<para>
+		Some short description of used methods is given below:
+		<variablelist>
+			<varlistentry>
+				<term>
+					<emphasis role="bold">getMetadataFolderName</emphasis>
+				</term>
+				<listitem>
+					<para>
+						gets the name of the directory where the repository dependent
+						metadata
+						is stored (e. g. for Subversion these are ".svn" folders)
+					</para>
+					<para>
+						This is used to check what revision control system(s) is/are
+						used.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					<emphasis role="bold">setRepositoryRoot</emphasis>
+				</term>
+				<listitem>
+					<para>
+						Sets the place where the metadata folder was found. For some
+						revision systems (e. g. Git) this must be known to do deletion or
+						other stuff.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					<emphasis role="bold">toString</emphasis>
+				</term>
+				<listitem>
+					<para>
+						This returns just the String representation of the RCS for
+						the Log.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>
+					<emphasis role="bold">markForDelete</emphasis>
+				</term>
+				<listitem>
+					<para>
+						This is the main method, the given file will be marked for
+						deletion in the concrete repository. Therefore the repositoryRoot
+						maybe needed.
+						<note>
+							<para>
+								The file is only marked for deletion in the repository and
+								will not be deleted from the file system during this operation.
+							</para>
+						</note>
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</para>
+	<para>
+		Currently there are implementations for following RCS:
+		<simplelist>
+			<member>
+				-
+				<literal>Subversion</literal>
+				, metadataFolderName=.svn
+			</member>
+			<member>
+				-
+				<literal>Git</literal>
+				, metadataFolderName=.git,
+				<emphasis>needs repositoryRoot</emphasis>
+			</member>
+			<member>- also all RCS where its no problem to delete the
+				metadataFolders (like CVS)
+			</member>
+		</simplelist>
+	</para>
+	<para>
+		All available RCS will be placed in the
+		<literal>RegisterHelper</literal>
+		and can be gotten from there. If you want support for your own
+		revisionSystem you can do so by implementing the interface
+		RevisionControlSystem and add this to the RegisterHelper.
+	</para>
+</section>
