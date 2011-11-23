@@ -110,6 +110,47 @@ cached boolean isControllerNoAction(MOperation this) :
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Factory 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Checks if a classifier is part of the TYPO3 MVC Extbase factory package.
+ * 
+ * @return	true if the classifier is part of the TYPO3 Extbase factory package, otherwise false
+ */
+cached boolean isFactoryPackageElement(MClassifier this) :
+	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
+	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainFactoryPath() ) ||
+	// second check if the package of this classifier has an stereotype
+	owningContext.hasT3ExtbaseFactoryPackageStereotype() ||
+	// third check if this classifier is a class and is a factory
+	( MClass.isInstance(this) && ((MClass)this).isFactory() );
+
+
+/**
+ *
+ * Checks if a class is a TYPO3 MVC Extbase factory.
+ * 
+ * @return	true if the class is a TYPO3 MVC Extbase factory, otherwise false
+ */
+cached boolean isFactory(MClass this) :
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package
+	( globalVarIsT3MVCCompliant() &&  dirPath() == classesDomainFactoryPath() ) ||
+	// second check if this class has an stereotype
+	hasT3ExtbaseFactoryStereotype() ||
+	// third check if the package of this class has an stereotype
+	owningContext.hasT3ExtbaseFactoryPackageStereotype() ||
+	// fourth check if generalization is an TYPO3 MVC Extbase factory
+	(
+		!generalization.typeSelect(MClass).isEmpty
+			? generalization.typeSelect(MClass).first().isFactory()
+			: false
+	);
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	TYPO3 MVC Extbase Domain Objects 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
@@ -132,7 +173,7 @@ cached boolean isModelPackageElement(MClassifier this) :
 	// first check if this model is TYPO3 MVC complaint and this classifier is inside the correct package
 	( globalVarIsT3MVCCompliant() && dirPath() == classesDomainModelPath() ) ||
 	// second check if the package of this classifier has an stereotype
-	owningContext.hasT3ExtbaseModelPackageStereotype() || owningContext.hasT3ExtbaseEntityPackageStereotype() || owningContext.hasT3ExtbaseValueObjectPackageStereotype() ||
+	( owningContext.hasT3ExtbaseModelPackageStereotype() || owningContext.hasT3ExtbaseEntityPackageStereotype() || owningContext.hasT3ExtbaseValueObjectPackageStereotype() ) ||
 	// third check if this classifier is a class and is a entity or value object
 	( MClass.isInstance(this) && ( ((MClass)this).isEntity() || ((MClass)this).isValueObject() ) );
 
@@ -446,11 +487,13 @@ cached List[MClass] allEntities(MModel this) :
  * @return	true if the class is a TYPO3 MVC Extbase entity, otherwise false
  */
 cached boolean isEntity(MClass this) :
-	// first check if this class has an stereotype
+	// first check if this model is TYPO3 MVC complaint and this class is inside the correct package and is not a TYPO3 MVC Extbase Value Object
+	( globalVarIsT3MVCCompliant() &&  dirPath() == classesDomainModelPath() && !isValueObject() ) ||
+	// second check if this class has an stereotype
 	hasT3ExtbaseEntityStereotype() ||
-	// second check if the package of this class has an stereotype
+	// third check if the package of this class has an stereotype
 	owningContext.hasT3ExtbaseEntityPackageStereotype() ||
-	// third check if generalization is an TYPO3 MVC Extbase entitry
+	// fourth check if generalization is an TYPO3 MVC Extbase entitry
 	(
 		!generalization.typeSelect(MClass).isEmpty
 			? generalization.typeSelect(MClass).first().isEntity()
@@ -538,7 +581,7 @@ cached boolean isRepository(MClass this) :
 			? generalization.typeSelect(MClass).first().isRepository()
 			: false
 	);
-	
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
