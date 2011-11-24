@@ -2,7 +2,8 @@
  * php specific access helper
  * 
  * @author	tobias haubold
- * @date	2008-05-05
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-11-24
  */
 
 //	based on genesez meta model
@@ -13,11 +14,12 @@ extension de::genesez::platforms::common::log::Log;
 
 
 /**
- * getter for the operations
- * if operations have the same name, the one with the most parameter count is choosen
+ * Getter for the operations.
+ * If operations have the same name, the one with the most parameter count is choosen.
+ *
  * @return	list of operations with unique names
  */
-Collection[MOperation] operations(MClassifier this) :
+Collection[MOperation] uniqueOperations(MClassifier this) :
 	{}.addAll(
 		// add all operations with unique names
 		operation.select( o| !operation.exists( e| e.name == o.name && e != o) )

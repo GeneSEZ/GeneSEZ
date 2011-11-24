@@ -9,13 +9,14 @@
 
 
 «EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
 
 
 «REM»
 	generates the section comment for attributes, constants and association attributes
 «ENDREM»
 «DEFINE Member FOR MClassifier -»
-	«IF hasAttributes() || hasAssociationRoles() -»
+	«IF generateSectionComments() && (hasAttributes() || hasAssociationRoles() ) -»
 	// -- attribute, constant + association declarations --------------------
 	«ENDIF -»
 «ENDDEFINE»
@@ -24,7 +25,7 @@
 	generates the section comment for constructors and destructors
 «ENDREM»
 «DEFINE Constructor FOR MClass -»
-	«IF hasConstructors() || hasDestructors() -»
+	«IF generateSectionComments() && ( hasConstructors() || hasDestructors() ) -»
 	// -- constructors + destructors ----------------------------------------
 	«ENDIF -»
 «ENDDEFINE»
@@ -33,7 +34,7 @@
 	generates the section comment for operation declarations
 «ENDREM»
 «DEFINE OperationDeclaration FOR MClassifier -»
-	«IF hasOperationDeclarations() -»
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
 	// -- method declarations -----------------------------------------------
 	«ENDIF -»
 «ENDDEFINE»
@@ -42,7 +43,7 @@
 	generates the section comment for operation implementations
 «ENDREM»
 «DEFINE OperationImplementation FOR MClass -»
-	«IF hasOperations() -»
+	«IF generateSectionComments() && ( hasOperations() ) -»
 	// -- method implementations --------------------------------------------
 	«ENDIF -»
 «ENDDEFINE»
@@ -51,7 +52,7 @@
 	generates the section comment for the implementation of derived attributes
 «ENDREM»
 «DEFINE DerivedAttribute FOR MClass -»
-	«IF hasDerivedAttributes() -»
+	«IF generateSectionComments() && ( hasDerivedAttributes() ) -»
 	// -- methods for derived attributes ------------------------------------
 	«ENDIF -»
 «ENDDEFINE»
@@ -60,7 +61,7 @@
 	generates the section comment for accessor operations of attributes and associations
 «ENDREM»
 «DEFINE Accessor FOR MClass -»
-	«IF hasAssociationRoles() || hasAttributes() -»
+	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
 	// -- association + attribute accessors ---------------------------------
 	«ENDIF -»
 «ENDDEFINE»
@@ -69,7 +70,7 @@
 	generates the section comment for association accessor operations
 «ENDREM»
 «DEFINE Accessor FOR MInterface -»
-	«IF hasAssociationRoles() -»
+	«IF generateSectionComments() && ( hasAssociationRoles() ) -»
 	// -- association accessors ---------------------------------------------
 	«ENDIF -»
 «ENDDEFINE»
@@ -78,19 +79,25 @@
 	generates the section comment for the own impl section
 «ENDREM»
 «DEFINE OwnCode FOR MClassifier -»
+	«IF generateSectionComments() -»
 	// -- own code implementation -------------------------------------------
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	generates the section comment for the own declaration section
 «ENDREM»
 «DEFINE OwnCode FOR MInterface -»
+	«IF generateSectionComments() -»
 	// -- own code declarations ---------------------------------------------
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	generates the section comment for enumeration literals
 «ENDREM»
 «DEFINE Literals FOR MEnumeration -»
+	«IF generateSectionComments() -»
 	// -- enumeration literals --------------------------------------------
+	«ENDIF -»
 «ENDDEFINE»
