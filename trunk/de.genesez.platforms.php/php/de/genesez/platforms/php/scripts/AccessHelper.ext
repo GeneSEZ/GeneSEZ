@@ -32,16 +32,22 @@ Collection[MOperation] uniqueOperations(MClassifier this) :
 	);
 
 /**
- * checks if an operation is a constructor method of a classifier or not
+ * Checks if an operation is a constructor of a classifier.
  * - check UML, PHP4 and PHP5 notation of a constructor method
- * @return	true, if the operation is a constructor method, otherwise false
+ *
+ * @return	true if the operation is a constructor, otherwise false
+ * @override
  */
 boolean isConstructor(MOperation this) :
-	hasStereotype("create") || classifier.name == name || name == "__construct";
+	hasStereotype("Create") || hasStereotype("create") || classifier.name == name || name == "__construct";
+
 
 /**
- * checks if an operation is a destructor method of a classifier or not
- * @return	true, if the operation is a destructor method, otherwise false
+ * Checks if an operation is a destructor of a classifier.
+ * - check UML, PHP4 and PHP5 notation of a constructor method
+ *
+ * @return	true if the operation is a destructor, otherwise false
+ * @override
  */
 boolean isDestructor(MOperation this) :
-	name.startsWith("~") || name == "__destruct";
+	hasStereotype("Destroy") || hasStereotype("destroy") || name.startsWith("~") || name == "__destruct";
