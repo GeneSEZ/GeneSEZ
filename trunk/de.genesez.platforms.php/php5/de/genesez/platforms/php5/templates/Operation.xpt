@@ -49,21 +49,21 @@
 	processes all constructors
 «ENDREM»
 «DEFINE Constructor FOR MClassifier -»
-	«EXPAND _Constructor FOREACH operations().select( e| e.isConstructor() ) -»
+	«EXPAND _Constructor FOREACH uniqueOperations().select( e| e.isConstructor() ) -»
 «ENDDEFINE»
 
 «REM»
 	processes all destructors
 «ENDREM»
 «DEFINE Destructor FOR MClassifier -»
-	«EXPAND _Destructor FOREACH operations().select( e| e.isDestructor() ) -»
+	«EXPAND _Destructor FOREACH uniqueOperations().select( e| e.isDestructor() ) -»
 «ENDDEFINE»
 
 «REM»
 	processes operation declarations
 «ENDREM»
 «DEFINE Declaration FOR MInterface -»
-	«EXPAND _Declaration FOREACH operations() -»
+	«EXPAND _Declaration FOREACH uniqueOperations() -»
 «ENDDEFINE»
 
 «REM»
@@ -71,8 +71,8 @@
 	- realized operations from interfaces first
 «ENDREM»
 «DEFINE Declaration FOR MClassifier -»
-	«EXPAND _Declaration FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
-	«EXPAND _Declaration FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Declaration FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Declaration FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
 «ENDDEFINE»
 
 «REM»
@@ -80,8 +80,8 @@
 	- realized operations from interfaces first
 «ENDREM»
 «DEFINE Implementation FOR MClassifier -»
-	«EXPAND _Implementation FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
-	«EXPAND _Implementation FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Implementation FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Implementation FOREACH uniqueOperations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
 «ENDDEFINE»
 
 
