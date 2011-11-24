@@ -775,9 +775,9 @@ create MStereotype makeStereotype(Stereotype s) :
 	transformBasics(s) ->
 	// container
 	transform( getUml2Model() ).anyStereotype.add( this ) ->
-	// (associations)
-	// make stereotypes for all generalizations
-	s.general.typeSelect(Stereotype).makeStereotype() ->
+	// associations
+	// add generalizations
+	generalization.addAll( s.general.typeSelect(Stereotype).makeStereotype() ) ->
 	// containments
 	// add tagged values FAIL
 	// owned attributes returns a list of properties, reject the 'base_' property which indicates the base meta type
@@ -842,7 +842,6 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @param	e	the uml element
  * @return	a list of GeneSEZ tagged values
  */
-
 List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
 	trace("make tagged values: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
