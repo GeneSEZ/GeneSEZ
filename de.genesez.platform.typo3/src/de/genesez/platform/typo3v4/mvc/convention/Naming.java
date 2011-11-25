@@ -3,7 +3,8 @@ package de.genesez.platform.typo3v4.mvc.convention;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.genesez.metamodel.gcore.MElement;
+import org.eclipse.emf.ecore.EObject;
+
 import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MOperation;
 import de.genesez.metamodel.gcore.MProperty;
@@ -62,7 +63,7 @@ public class Naming {
 	 * @param xmiGuids The list of operation xmiGuids.
 	 * @return The list of valid controller actions.
 	 */
-	public static List<String> asControllerActionPairs(MModel model, List<String> xmiGuids) {
+	public static List<String> asControllerActionPairs(MModel model, List<String> xmiGuids) throws Exception {
 		List<String> controllerActions = new ArrayList<String>();
 		List<String> controllers = new ArrayList<String>();
 		List<String> actions = new ArrayList<String>();
@@ -73,14 +74,14 @@ public class Naming {
 		for (String xmiGuid : xmiGuids) {
 			// Get the reference of an element and check of this element is an
 			// operation
-			MElement elem = AccessHelper.getMElement(model, xmiGuid);
-			if (elem instanceof MOperation) {
+			EObject eObj = AccessHelper.getEObjectByUri(model, xmiGuid);
+			if (eObj instanceof MOperation) {
 
 				// Get the controller name where the controller action is owned
-				controller = getControllerName((MOperation) elem);
+				controller = getControllerName((MOperation) eObj);
 
 				// Get the controller action name
-				action = getControllerActionName((MOperation) elem);
+				action = getControllerActionName((MOperation) eObj);
 
 				// Check if the controller already exists inside the controller
 				// list or not
