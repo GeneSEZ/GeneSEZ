@@ -19,6 +19,11 @@ extension de::genesez::platform::typo3v4::profile::AccessHelper;
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Checks if the advanced configuration of a property should be generated for the 'showitem' field.
+ * 
+ * @return	true if the advanced configuration of a property should be generated for the 'showitem' field, otherwise false
+ */
 boolean generateAdvancedTCATypesNumbers(MProperty this) :
 	getT3TCAPropertyTypesAltLabel() != "" 
 	|| getT3TCAPropertyTypesPaletteNumber() != ""	
@@ -34,7 +39,11 @@ boolean generateAdvancedTCATypesNumbers(MProperty this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-
+/**
+ * Returns the a list of FlexForm sheets for a plugin without the 'DEFAULT' sheet.
+ * 
+ * @return	the list of FlexForm sheets or an empty list
+ */
 List[String] allTCESheetsWithoutDefault(MInterface this) :
 	let sheets = {} :
 		property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() != "" ).
@@ -44,6 +53,12 @@ List[String] allTCESheetsWithoutDefault(MInterface this) :
 		sheets.sortBy( s | s );
 
 
+/**
+ * Returns the a list of attributes for a FlexForm sheet for a plugin.
+ * 
+ * @param	sheet	the name of the FlexForm sheet
+ * @return	the list of attributes for a FlexForm sheet or an empty list
+ */
 List[MAttribute] allTCESheetProperties(MInterface this, String sheet) :
 	sheet == "sDEF"
 		? property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() == "" || e.getT3TCEOptionSheet() == prT3TCESheetDefault() )
@@ -56,6 +71,12 @@ List[MAttribute] allTCESheetProperties(MInterface this, String sheet) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+/**
+ * Returns the a list of evaluation functions for a property.
+ * 
+ * @param	sheet	the name of the FlexForm sheet
+ * @return	the list of evaluation functions for a property or an empty list
+ */
 List[String] allTCxEvals(MProperty this, List[String] defaultEvals) :
 	let evals = {} :
 		lowerBoundMultiplicity > 0 

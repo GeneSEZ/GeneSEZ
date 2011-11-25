@@ -200,7 +200,7 @@ Void controllerAdditions(MClass controller) :
 cached MClass makeController(MClass domainObject) :
 	logTrace("call makeController for domain object: " + domainObject.name) ->
 	// checks if the controller doesn't already exists
-	( domainObject.hasT3ExtbaseEntityCreateController("true") || domainObject.hasT3ExtbaseEntityCreatePlugin("true") ) &&
+	( domainObject.hasT3ExtbaseDomainObjectCreateController("true") || domainObject.hasT3ExtbaseDomainObjectCreatePlugin("true") ) &&
 	!domainObject.existsController()
 		? (	let c = createClass( domainObject.model(), domainObject.xmiGuid + ".controller", domainObject.asControllerName() ) :
 				logTrace("create new controller class for domain object: " + domainObject.name) ->
@@ -497,8 +497,14 @@ Void valueObjectAdditions(MClass valueObject) :
 	logTrace("call valueObjectAdditions for value object: " + valueObject.name) ->
 	// add super value object type
 	valueObject.addValueObjectType() ->
+	// make controller if it should
+	valueObject.makeController() ->
+	// make repository if it should
+	valueObject.makeRepository() ->
+	// make plugin if it should
+	valueObject.makePlugin() ->
 	// make validator if it should
-	valueObject.makeValidator();
+	valueObject.makeValidator(); 
 
 
 /**
@@ -546,7 +552,7 @@ Void repositoryAdditions(MClass repository) :
 cached MClass makeRepository(MClass domainObject) :
 	logTrace("call makeRepository for domain object: " + domainObject.name) ->
 	// checks if the respository doesn't already exists
-	( domainObject.hasT3ExtbaseEntityCreateRepository("true") || domainObject.hasT3ExtbaseEntityCreateController("true") ) &&
+	( domainObject.hasT3ExtbaseDomainObjectCreateRepository("true") || domainObject.hasT3ExtbaseDomainObjectCreateController("true") ) &&
 	!domainObject.existsRepository()
 		? (	let c = createClass( domainObject.model(), domainObject.xmiGuid + ".repository", domainObject.asRepositoryName() ) :
 				logTrace("create new repository class for domain object: " + domainObject.name) ->
@@ -728,7 +734,7 @@ Void addValidatorIsValid(MClass this) :
 cached MClass makePlugin(MClass domainObject) :
 	logTrace("call makePlugin for domain object: " + domainObject.name) ->
 	// checks if the plugin doesn't already exists
-	domainObject.hasT3ExtbaseEntityCreatePlugin("true") &&
+	domainObject.hasT3ExtbaseDomainObjectCreatePlugin("true") &&
 	!domainObject.existsPlugin()
 		? (	let i = createInterface( domainObject.model(), domainObject.xmiGuid + ".plugin", domainObject.asPluginName() ) :
 				logTrace("create new plugin interface for domain object: " + domainObject.name) ->
