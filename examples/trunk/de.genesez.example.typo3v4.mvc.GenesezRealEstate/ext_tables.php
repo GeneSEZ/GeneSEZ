@@ -167,7 +167,7 @@ $TCA['tx_gszrealestate_domain_model_quarter'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Quarter.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_gszrealestate_domain_model_quarter.gif',
-		'default_sortby' => 'name',
+		'default_sortby' => 'ORDER BY name',
 		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._17_0_1_8a7027a_1306344032809_231995_2319) ENABLED START */
 		/* PROTECTED REGION END */
 	)
@@ -197,7 +197,7 @@ $TCA['tx_gszrealestate_domain_model_realestate'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/RealEstate.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_gszrealestate_domain_model_realestate.gif',
-		'default_sortby' => 'id',
+		'default_sortby' => 'ORDER BY id',
 		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 		/* PROTECTED REGION END */
 	)
@@ -223,7 +223,7 @@ $TCA['tx_gszrealestate_domain_model_roomtype'] = array (
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/RoomType.php',
 		'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_gszrealestate_domain_model_roomtype.gif',
-		'default_sortby' => 'specification',
+		'default_sortby' => 'ORDER BY specification',
 		/* PROTECTED REGION ID(ext_tables.php.own.tca.ctrl.section.code.implementation._17_0_1_8a7027a_1306343834717_151292_2268) ENABLED START */
 		/* PROTECTED REGION END */
 	)

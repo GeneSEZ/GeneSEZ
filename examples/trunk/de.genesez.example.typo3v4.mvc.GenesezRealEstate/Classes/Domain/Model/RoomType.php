@@ -33,7 +33,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_GszRealEstate_Domain_Model_RoomType extends Tx_Extbase_DomainObject_AbstractEntity {
+class Tx_GszRealEstate_Domain_Model_RoomType extends Tx_Extbase_DomainObject_AbstractValueObject {
 
 	/**
 	 * The specification of the room type.
