@@ -326,7 +326,7 @@ List[MAttribute] allInitializableAttributes(MType this) : {};
  * @return the attribute where the xmi guid is equals, otherwise null
  */
 MAttribute getAttributeByXmiGuid(MModel model, String xmiGuid) :
-	getMElement(model, xmiGuid);
+	getMElementByXmiGuid(model, xmiGuid);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1061,7 +1061,7 @@ List[MClassifier] allSpecializations(MType this):
  *	@return	instance of MClassifier identified by xmiGuid or null
  */
 MClassifier getClassifierByXmiGuid(MModel model, String xmiGuid) :
-	((MClassifier) getMElement(model, xmiGuid));
+	((MClassifier) getMElementByXmiGuid(model, xmiGuid));
 
 
 /*
@@ -1099,8 +1099,8 @@ MClassifier getClassifier(MElement this) :
  * @param xmiGuid	the xmi guid of the element
  * @return the element where the xmi guid is equals, otherwise null
  */
-MElement getMElement(MModel model, String xmiGuid) :
-	JAVA de.genesez.platforms.common.AccessHelper.getMElement(de.genesez.metamodel.gcore.MModel, java.lang.String);
+MElement getMElementByXmiGuid(MModel model, String xmiGuid) :
+	getEObject(model, xmiGuid);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1127,6 +1127,18 @@ private String getComment(MComment this) :
 	annotation != "null"
 		? annotation
 		: "";
+
+/**
+ * Getter for an EObject by it's URI. 
+ * In case of an MElement the URI is normally the xmiGuid.
+ * 
+ * @param 	model 	The model where the object is placed.
+ * @param 	uri 	The URI of the object.
+ * @return 	The object where the URI is equals, otherwise null.
+ */
+private Object getEObject(MModel model, String uri) :
+	JAVA de.genesez.platforms.common.AccessHelper.getEObjectByUri(de.genesez.metamodel.gcore.MModel, java.lang.String);
+
 
 /**
  * getter for a class by it's full qualified name from a list of classes
