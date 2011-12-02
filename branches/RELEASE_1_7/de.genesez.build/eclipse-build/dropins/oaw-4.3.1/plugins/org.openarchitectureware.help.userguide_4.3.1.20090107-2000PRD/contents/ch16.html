@@ -1,0 +1,72 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Xweave</title><link rel="stylesheet" href="../book.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="openArchitectureWare User Guide"><link rel="up" href="reference.html" title="Part&nbsp;II.&nbsp;Reference"><link rel="prev" href="visualization.html" title="Visualization"><link rel="next" href="classic_reference.html" title="oAW Classic Reference"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e14639"></a>Xweave</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch16.html#d0e14649">Examples and Tests</a></span></dt><dt><span class="section"><a href="ch16.html#d0e14653">Workflow</a></span></dt><dt><span class="section"><a href="ch16.html#d0e14670">Simple Aspects</a></span></dt><dt><span class="section"><a href="ch16.html#d0e14709">Expression Aspects</a></span></dt><dt><span class="section"><a href="ch16.html#d0e14764">Weaving Metamodels</a></span></dt></dl></div><p>This chapter describes how to use the XWeave model weaver. Please read
+  the following paper to get an understanding of what a model weaver is, at
+  least in our opinion :-)</p><p><a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.voelter.de/data/workshops/AOM2007.pdf" target="_top">http://www.voelter.de/data/workshops/AOM2007.pdf</a></p><p>XWeave is still in its early days, so there might be problems and
+  shortcomings. Please report them to the team.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14649"></a>Examples and Tests</h2></div></div></div><p></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14653"></a>Workflow</h2></div></div></div><p>XWeave comes with a pre-built workflow that can weave the contents
+    of an aspect model into a model that is already stored in a workflow slot.
+    You can of course look at this workflow and construct your own
+    alternative, that, for example, weaves two models that are both already in
+    workflow slots.</p><p>So here's how it works, this should be quite obvious:</p><p></p><pre class="programlisting">&lt;workflow&gt;
+
+  &lt;bean class="org.eclipse.mwe.emf.StandaloneSetup" &gt;
+    &lt;platformUri value=".."/&gt;
+    &lt;registerEcoreFile 
+       value="platform:/resource/prj/metamodel.ecore"/&gt;
+  &lt;/bean&gt;
+
+  &lt;component class="org.eclipse.mwe.emf.Reader"&gt;
+     &lt;useSingleGlobalResourceSet value="true"/&gt;
+     &lt;uri value="platform:/resource/project/modelfile.xmi" /&gt;
+     &lt;modelSlot value="base" /&gt;
+  &lt;/component&gt;
+
+  &lt;cartridge 
+     file="org/openarchitectureware/util/xweave/wf-weave"
+     baseModelSlot="base"
+     aspectFile="platform:/resource/prj/aspect.xmi"/&gt;
+
+&lt;/workflow&gt;</pre><p>There is a second version of that file that allows you to specify an
+    expression file (I will explain below why you would want to do this). It
+    is called <code class="filename">wf-weave-expr.oaw</code> and takes an additional
+    parameter, the expression file. Like so:</p><pre class="programlisting">&lt;workflow&gt;
+
+  ...
+
+  &lt;cartridge 
+     file="org/openarchitectureware/util/xweave/wf-weave"
+     baseModelSlot="base"
+     aspectFile="platform:/resource/prj/aspect.xmi"
+     expressionFile=&#8220;myexpressionfileLoadedFromClassPath&#8220;/&gt;
+
+&lt;/workflow&gt;
+</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14670"></a>Simple Aspects</h2></div></div></div><p>Simple aspects do not use pointcut expressions. The weaving happens
+    purely based on name equivalence. Here is a simple example. The Entity
+    called <code class="classname">Auto</code> in the aspect is woven below the
+    <code class="classname">System</code> root. System is present in both the base and
+    the aspect. The matching happens based on that name equivalence.</p><div class="figure"><a name="d0e14681"></a><p class="title"><b>Figure&nbsp;37.&nbsp;Weaving models (1)</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xweaveReference/xweave1.png" width="243" alt="Weaving models (1)"></div></div></div><br class="figure-break"><p>Here we weave a number of elements:</p><div class="figure"><a name="d0e14691"></a><p class="title"><b>Figure&nbsp;38.&nbsp;Weaving models (2)</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xweaveReference/xweave2.png" width="243" alt="Weaving models (2)"></div></div></div><br class="figure-break"><p>You don't have to use the same root element. You can do a
+    &#8222;submatch&#8220;, like this:</p><div class="figure"><a name="d0e14701"></a><p class="title"><b>Figure&nbsp;39.&nbsp;Weaving models (3)</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xweaveReference/xweave3.png" width="243" alt="Weaving models (3)"></div></div></div><br class="figure-break"></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14709"></a>Expression Aspects</h2></div></div></div><p>Here we're merging this Blob thing onto the
+    <code class="classname">Person</code> entity. Note, however, that in the aspect
+    the name of the Entity is called <span class="property">$target</span>. The
+    <span class="property">$</span> sign introduces an expression that returns a single
+    element. In order for this to work, you have to create a
+    <code class="filename">.ext</code> file that contains an expression of the same
+    name (of course, without the <span class="property">$</span> sign). Note that the
+    expression must be parametrized with the type that serves as the root for
+    the base model. Finally, whatever that expression returns will be used as
+    the target for the matching.</p><div class="figure"><a name="d0e14729"></a><p class="title"><b>Figure&nbsp;40.&nbsp;Expression aspects (1)</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xweaveReference/xweave4.png" width="243" alt="Expression aspects (1)"></div></div></div><br class="figure-break"><p>Here is another example that makes use of expressions, it actually
+    uses two kinds of expressions. The <span class="property">%entities</span> one is a
+    multi-expression. I.e., since it is introduced by the percent sign, it has
+    to return a collection of elements. You can also see the
+    <span class="property">?name</span> thing as the name of the attribute that is
+    added to each of the entities. It is a <span class="emphasis"><em>String
+    expression</em></span>; i.e. it has to return a String. It can be used to
+    add any kind of names to the elements. Note that when String expressions
+    are evaluated, <span class="emphasis"><em>the model is already woven</em></span>! So, as you
+    can see in the example below, you can actually access the Attr's
+    <span class="property">eContainer</span>.</p><div class="figure"><a name="d0e14754"></a><p class="title"><b>Figure&nbsp;41.&nbsp;Expression aspects (2)</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xweaveReference/xweave5.png" width="243" alt="Expression aspects (2)"></div></div></div><br class="figure-break"><p>Note that you can also use * (the asterisk) as the name of an
+    element. This then matches all instances of that particular type.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14764"></a>Weaving Metamodels</h2></div></div></div><p>The above examples all weave models (i.e. instances of some kind of
+    meta model). XWeave can also weave meta models (i.e.
+    <code class="filename">.ecore</code> files). There's nothing special about that
+    from a user's perspective, so I don't provide examples here (there are
+    some in the tests, however).</p></div></div></body></html>

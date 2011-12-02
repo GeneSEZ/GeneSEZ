@@ -1,0 +1,210 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>XSD Tutorial</title><link rel="stylesheet" href="../book.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="openArchitectureWare User Guide"><link rel="up" href="samples.html" title="Part&nbsp;III.&nbsp;Samples"><link rel="prev" href="uml2example.html" title="UML2 Example"><link rel="next" href="using_the_emfatic_ecore_editor.html" title="Using the Emfatic Ecore Editor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xsd_tutorial"></a>XSD Tutorial</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_setup">Setup</a></span></dt><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_overview">Overview</a></span></dt><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_create_project">Step 1: Create a Project</a></span></dt><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_metamodel">Step 2: Define a Meta Model using XML Schema</a></span></dt><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_model">Step 3: Create a Model using XML</a></span></dt><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_template">Step 4: Create a Template using Xpand</a></span></dt><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_create_workflow">Step 5: Create a Workflow</a></span></dt><dt><span class="section"><a href="xsd_tutorial.html#xsd_tutorial_execute_workflow">Step 6: Execute Workflow aka Generate Code</a></span></dt></dl></div><p>This tutorial shows how XML and XML Schemas Definitions (XSD) can be
+  used to generate software. It illustrates how XML files are treated as
+  models, XSDs <a class="indexterm" name="d0e15459"></a>as meta models
+  and how this integrates with oAW. This tutorial
+  is an introduction, for in-depth details see <a href="xsd_reference.html" title="XSD Adapter"><i xmlns:xlink="http://www.w3.org/1999/xlink">XSD Adapter</i></a>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_setup"></a>Setup</h2></div></div></div><p>XSD support for oAW comes with oAW 4.3.1 or later. Make sure the
+    following plugins are installed as well:</p><div class="itemizedlist"><ul type="disc"><li><p>XSD - XML Schema Definition Runtime ( <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.eclipse.org/xsd/" target="_top">http://www.eclipse.org/xsd/</a>,
+        available via Ganymede Update Site)</p></li><li><p>Web Tools Platform (WTP) (WTP is not required
+        <a class="indexterm" name="d0e15483"></a> to use oAW XSD
+        support, but helpful, as its provides a nice XML Schema editor and a
+        schema-aware XML editor. (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.eclipse.org/webtools/" target="_top">http://www.eclipse.org/webtools/</a>
+        , available via Ganymede Update Site)</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_overview"></a>Overview</h2></div></div></div><p>This tutorial explains how you can do code generation with
+    openArchitectureWare, using XML Schema Definitions as meta models and XML
+    files as models. To keep things easy, the introduced example is a
+    minimalistic one. A text file is generated from contents specified in XML.
+    The general concept of models, meta models and why and when code
+    generation is useful, is not explained. At the end, a deeper view under
+    the hood is taken to understand how XML Schemas are transformed to EMF
+    Ecore models, and which flexibilities/restrictions this approach
+    provides.</p><p>All source files listed within this tutorial are also available as
+    an example project wich can be imported into the Eclipse workspace by
+    running <span class="emphasis"><em>"File" / "New" / "Example..." / "openArchitectureWare
+    Examples using an XSD Meta Model" / "M2T custom XML to Text via Xpand
+    (minimal Example)"</em></span>. This will create the project
+    <code class="classname">org.openarchitectureware.xsd.demo.m2t.minimal</code>
+    project in your workspace. This minimal example is based on "<span class="emphasis"><em>M2T
+    custom XML to Java via Xpand</em></span>"
+    (<code class="classname">org.openarchitectureware.xsd.demo.m2t.xml2javawizard</code>)
+    which is more comprehensive and recommended for further reading.</p><p>To generate code from XML files with oAW, at least files of the
+    following four types are needed:</p><div class="itemizedlist"><ul type="disc"><li><p>Meta Model ( <code class="filename">metamodel.xsd</code> )</p></li><li><p>Model ( <code class="filename">model.xml</code> )</p></li><li><p>oAW Xpand Template ( <code class="filename">template.xpt</code> )</p></li><li><p>oAW Workflow ( <code class="filename">workflow.oaw</code> )</p></li></ul></div><div class="figure"><a name="xsd_tutorial_xsd_project"></a><p class="title"><b>Figure&nbsp;63.&nbsp;Minimalistic oAW XSD Project</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xsd_tutorial/workspace-minidemo.png" alt="Minimalistic oAW XSD Project"></div></div></div><br class="figure-break"></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_create_project"></a>Step 1: Create a Project</h2></div></div></div><p>To create a Project, create an ordinary
+    openArchitectureWare-Project. This is done in Eclipse by changing to the
+    openArchitectureWare perspective and clicking on <span class="emphasis"><em>"File" / "New"
+    / "openArchitectureWare Project"</em></span>. After entering a name for the
+    project it is created.</p><p>After the project is created, support for XSD meta models needs to
+    be activated. Click with your right mouse button on the project and open
+    the properties window. Then go to the "openArchitectureWare" page,
+    "<span class="emphasis"><em>enable project specific settings</em></span>" and activate the
+    "<span class="emphasis"><em>XSD Metamodels</em></span>" checkbox. There is no need to leave
+    support for any other meta models activated, except you are sure that you
+    want to use one of them, too. <a href="xsd_tutorial.html#xsd_tutorial_project_properties_mm" title="Figure&nbsp;64.&nbsp;Activate XSD Meta Model Support for Project">Figure&nbsp;64, &#8220;Activate XSD Meta Model Support for Project&#8221;</a> shows how the
+    configuration is supposed to look like.</p><div class="figure"><a name="xsd_tutorial_project_properties_mm"></a><p class="title"><b>Figure&nbsp;64.&nbsp;Activate XSD Meta Model Support for Project</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xsd_tutorial/project-properties-mm.png" alt="Activate XSD Meta Model Support for Project"></div></div></div><br class="figure-break"><p>Then, <code class="classname">org.openarchitectureware.xsd</code> needs to
+    be added to the project's dependencies. To do so open the file
+    <code class="filename">META-INF/MANIFEST.MF</code> from your project and navigate
+    to the "Dependencies"-tab.
+    <code class="classname">org.openarchitectureware.xsd</code> needs to be added to
+    the list of "Required Plug-ins", as it is shown in <a href="xsd_tutorial.html#xsd_tutorial_project_dependencies" title="Figure&nbsp;65.&nbsp;Required Dependencies for Project">Figure&nbsp;65, &#8220;Required Dependencies for Project&#8221;</a> .</p><div class="figure"><a name="xsd_tutorial_project_dependencies"></a><p class="title"><b>Figure&nbsp;65.&nbsp;Required Dependencies for Project</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xsd_tutorial/project-dependencies.png" alt="Required Dependencies for Project"></div></div></div><br class="figure-break"></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_metamodel"></a>Step 2: Define a Meta Model using XML Schema</h2></div></div></div><p>In case you are not going to use an existing XML Schema Definition,
+    you can create a new a new one like described below. These steps make use
+    of the Eclipse Web Tools Platform (WTP) to have fancy editors.</p><p>In Eclipse, click on <span class="emphasis"><em>"File", "New", "Other..."</em></span>
+    and choose <span class="emphasis"><em>"XML Schema"</em></span> from category "XML". Select
+    the project's "src" folder and specify a filename. Clicking on "finish"
+    creates an empty XSD file. It is important that the XSD file is located
+    somewhere within the project's classpath.</p><p>This XML Schema consists of two complex data types, which contain
+    some elements and attributes. "complex" in the XSD terminology means that
+    as opposed to simple data types that they can actually have sub-elements
+    and/or attributes. This example is too minimalistic to do anything
+    useful.</p><p>The complex Type <code class="classname">Wizard</code> contains the elements
+    <code class="classname">startpage</code> , <code class="classname">name</code> ,
+    <code class="classname">welcometext</code> , and <code class="classname">choicepage</code>
+    . Except for <code class="classname">choicepage</code> all elements have to
+    contain strings, whereas the string of <code class="classname">startpage</code>
+    must be a valid id of any <code class="classname">ChoicePage</code> . The complex
+    type <code class="classname">ChoicePage</code> just contains an
+    <code class="classname">id</code> and a <code class="classname">name</code> . For oAW it
+    does not make any difference if something is modeled as an XML-attribute
+    or XML-element. Just the datafield's type defines how oAW treats the
+    value.</p><p>To get an overview how schemas can be used by the oAW XSD Adapter,
+    see <a href="xsd_reference.html#xsd_reference_declare_xsd" title="How to declare XML Schemas">the section called &#8220;How to declare XML Schemas&#8221;</a></p><p>Internally, the oAW XSD Adapter transforms the XSD model to an Ecore
+    model which oAW can use like any other Ecore model. For more information
+    about that, see <a href="xsd_reference.html#xsd_reference_xsd2ecore" title="Behind the scenes: Transforming XSD to Ecore">the section called &#8220;Behind the scenes: Transforming XSD to Ecore&#8221;</a></p><div class="figure"><a name="xsd_tutorial_xsd_editor"></a><p class="title"><b>Figure&nbsp;66.&nbsp;WTP Schema Editor</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xsd_tutorial/xsd-editor.png" alt="WTP Schema Editor"></div></div></div><br class="figure-break"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.example.org/wizard" 
+  xmlns:tns="http://www.example.org/wizard"
+  elementFormDefault="qualified"&gt;
+
+  &lt;complexType name="Wizard"&gt;
+    &lt;sequence&gt;
+      &lt;element name="startpage" type="IDREF" /&gt;
+      &lt;element name="name" type="string" /&gt;
+      &lt;element name="welcometext" type="string" /&gt;
+      &lt;element name="choicepage" type="tns:ChoicePage" /&gt;
+    &lt;/sequence&gt;
+  &lt;/complexType&gt;
+
+  &lt;complexType name="ChoicePage"&gt;
+    &lt;sequence&gt;
+      &lt;element name="title" type="string" /&gt;
+    &lt;/sequence&gt;
+    &lt;attribute name="id" type="ID" /&gt;
+  &lt;/complexType&gt;
+
+  &lt;element name="wizard" type="tns:Wizard" /&gt;
+&lt;/schema&gt;</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_model"></a>Step 3: Create a Model using XML</h2></div></div></div><p>As the title says, data in XML-Format will be the model. And as a
+    model has to be valid according to a meta model, the XML files must be
+    valid according to the XSD.</p><p>In case you are not going to use an existing XML file, you can
+    create a new one like described below. These steps require the Eclipse Web
+    Tools Platform (WTP)<a class="indexterm" name="d0e15676"></a> to be installed.</p><p>In Eclipse, click on <span class="emphasis"><em>"File", "New", "Other..."</em></span>
+    and choose <span class="emphasis"><em>"XML"</em></span> from category
+    <span class="emphasis"><em>"XML"</em></span>. After specifying a filename within folder
+    "src" choose <span class="emphasis"><em>"create XML file from an XML Schema"</em></span> and
+    select you XML Schema Definition file. Telling Eclipse which schema to use
+    has three advantages: Eclipse validates XML files, there is meta model
+    aware code completion while editing and Eclipse creates a
+    <span class="property">xsi:schemaLocation</span>-attribute which tells anyone who
+    reads the XML file where the schema file is located. This tutorial does
+    not use the <span class="property">xsi:schemaLocation</span>-attribute and
+    introduces the schema file in the oAW workflow instead. For all possible
+    ways see <a href="xsd_reference.html#xsd_reference_declare_xsd" title="How to declare XML Schemas">the section called &#8220;How to declare XML Schemas&#8221;</a> . It is important
+    that the XML file is located somewhere within the project's
+    classpath.</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;wizard xmlns="http://www.example.org/wizard"&gt;
+  &lt;startpage&gt;start&lt;/startpage&gt;
+  &lt;name&gt;My Example Setup&lt;/name&gt;
+  &lt;welcometext&gt;Welcome to this little demo application.&lt;/welcometext&gt;
+  &lt;choicepage id="start"&gt;
+    &lt;title&gt;Wizard Page One&lt;/title&gt;
+  &lt;/choicepage&gt;
+&lt;/wizard&gt;</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_template"></a>Step 4: Create a Template using Xpand</h2></div></div></div><p>Create an ordinary oAW Xpand file: Being in the openArchitectureWare
+    perspective, go to <span class="emphasis"><em>"File", "New", "xPand template"</em></span>.
+    The Xpand language itself is explained by several other oAW documents.
+    Having XSD meta model support activated like described in <a href="xsd_tutorial.html#xsd_tutorial_create_project" title="Step 1: Create a Project">the section called &#8220;Step 1: Create a Project&#8221;</a> , oAW scans and watches all it's
+    projects for suitable meta models. Based on what is found, the Xpand
+    editor provides meta model aware code completion.</p><p>This example imports "<code class="classname">metamodel</code>" at the
+    beginning, which refers to a file called
+    <code class="filename">metamodel.xsd</code> that you have created within the
+    project's classpath in <a href="xsd_tutorial.html#xsd_tutorial_metamodel" title="Step 2: Define a Meta Model using XML Schema">the section called &#8220;Step 2: Define a Meta Model using XML Schema&#8221;</a> . The
+    define-block can be understood as a function named
+    "<code class="methodname">Root</code>" which takes one object of type
+    <code class="classname">metamodel::Wizard</code> as a parameter. This is the meta
+    model's type for the XML's root object. The file-block creates a file
+    named <code class="filename">wizard.txt</code> and writes the text that is
+    surrounded by the file-block into the file. <code class="classname">name</code> ,
+    <code class="classname">welcometext</code> and
+    <code class="classname">choicepage.title</code> are elements or attributes defined
+    in the XSD meta model. Their values are stored within the XML file and
+    this templates inserts them into the generated (
+    <code class="filename">wizard.txt</code> ) file.</p><pre class="programlisting">&laquo;IMPORT metamodel&raquo;
+
+&laquo;DEFINE Root FOR metamodel::Wizard&raquo;
+&laquo;FILE "wizard.txt"&raquo;
+Name: &laquo;name&raquo;
+Welcometext: &laquo;welcometext&raquo;
+First Page Title: &laquo;choicepage.title&raquo;
+&laquo;ENDFILE&raquo;
+&laquo;ENDDEFINE&raquo;</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_create_workflow"></a>Step 5: Create a Workflow</h2></div></div></div><p>The workflow ties together model, meta model and templates and
+    defines the process of how to generate code.</p><p>To create a new workflow file, switch to the openArchitectureWare
+    perspective, click on <span class="emphasis"><em>"File", "New" and "Workflow
+    file"</em></span>. After specifying a folder and a filename an empty
+    workflow is created.</p><p>The minimalistic approach consists of two steps:</p><div class="orderedlist"><ol type="1"><li><p>Read the Model: This is done by <code class="classname">
+        org.openarchitectureware.xsd.XMLReader </code> . It needs exactly
+        one <code class="classname">uri</code> element which defines the XML file. A
+        further nested element of type <code class="classname">
+        org.openarchitectureware.xsd.XSDMetaModel </code> tells the
+        <code class="classname">XMLReader</code> which metamodel to use.
+        <code class="classname">XSDMetaModel</code> can contain multiple
+        <code class="classname">schemaFile</code> elements. How the schemas are used
+        for the XML file is determined based on the declared namespaces.
+        <code class="classname">modelSlot</code> defines a location where the model is
+        stored internally, this is like a variable name which becomes
+        important if you want to handle multiple models within the same
+        workflow.</p></li><li><p>Generate Code: This part just does the regular code generation
+        using Xpand and is not specific to the oAW XSD Adapter at all. The
+        generator <code class="classname"> org.openarchitectureware.xpand2.Generator
+        </code> needs to know which meta model to use. This example
+        references the previously declared one. The
+        <code class="classname">expand</code> element tells the generator to call the
+        definition named <code class="methodname">Root</code> within file
+        <code class="filename">template.xpt</code> using the contents of slot
+        <code class="varname">model</code> as parameter. Element
+        <code class="classname">outlet</code> defines where to store the generates
+        files.</p></li></ol></div><pre class="programlisting">&lt;workflow&gt;
+  &lt;component class="org.openarchitectureware.xsd.XMLReader"&gt;
+    &lt;modelSlot value="model" /&gt;
+    &lt;uri value="model.xml" /&gt;
+    &lt;metaModel id="mm"
+      class="org.openarchitectureware.xsd.XSDMetaModel"&gt;
+      &lt;schemaFile value="metamodel.xsd" /&gt;
+    &lt;/metaModel&gt;
+  &lt;/component&gt;
+  &lt;component class="org.openarchitectureware.xpand2.Generator"&gt;
+    &lt;metaModel idRef="mm" /&gt;
+    &lt;expand value="template::Root FOR model" /&gt;
+    &lt;outlet path="src-gen" /&gt;
+  &lt;/component&gt;
+&lt;/workflow&gt;</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_tutorial_execute_workflow"></a>Step 6: Execute Workflow aka Generate Code</h2></div></div></div><p>Before you actually execute the workflow, or in case of errors, you
+    can use <a href="xsd_tutorial.html#xsd_tutorial_minidemo_all" title="Figure&nbsp;67.&nbsp;Files of this Tutorial">Figure&nbsp;67, &#8220;Files of this Tutorial&#8221;</a> to double check your
+    files.</p><div class="figure"><a name="xsd_tutorial_minidemo_all"></a><p class="title"><b>Figure&nbsp;67.&nbsp;Files of this Tutorial</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xsd_tutorial/minidemo-all.png" alt="Files of this Tutorial"></div></div></div><br class="figure-break"><p>To execute the workflow, click with your right mouse button on the
+    workflow file and choose <span class="emphasis"><em>"Run As", "oAW Workflow"</em></span>, as
+    it is shown in <a href="xsd_tutorial.html#xsd_tutorial_execute_workflow" title="Step 6: Execute Workflow aka Generate Code">the section called &#8220;Step 6: Execute Workflow aka Generate Code&#8221;</a> .</p><div class="figure"><a name="xsd_tutorial_launch_workflow"></a><p class="title"><b>Figure&nbsp;68.&nbsp;Execute Workflow</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/xsd_tutorial/execute-workflow.png" alt="Execute Workflow"></div></div></div><br class="figure-break"><p>When executing the workflow, this output is supposed to appear in
+    Eclipse's Console View. If that View does not pop up automatically, you
+    can reach it via <span class="emphasis"><em>"Window", "Show View",
+    "Console"</em></span>.</p><pre class="programlisting">0    INFO  WorkflowRunner     - ----------------------------------------------------------------
+10   INFO  WorkflowRunner     - openArchitectureWare 4.x Development
+10   INFO  WorkflowRunner     - (c) 2005-2008 openarchitectureware.org and contributors
+10   INFO  WorkflowRunner     - ----------------------------------------------------------------
+10   INFO  WorkflowRunner     - running workflow: workflow.oaw
+11   INFO  WorkflowRunner     - 
+601  INFO  XSDMetaModel       - Loading XSDSchema from 'metamodel.xsd'
+1531 INFO  OawXSDEcoreBuilder - Creating EPackage 'metamodel' from XSDSchema
+                                'file:/.../bin/metamodel.xsd' (http://www.example.org/wizard)
+1617 INFO  CompositeComponent - XMLReader: Loading XML file model.xml
+1711 INFO  CompositeComponent - Generator: generating 'template::Root FOR model' =&gt; src-gen
+1847 INFO  Generator          - Written 1 files to outlet [default](src-gen)
+1847 INFO  WorkflowRunner     - workflow completed in 231ms!</pre><p>After code generation, there is a file called
+    <code class="filename">wizard.txt</code> within the <code class="filename">src-gen</code>
+    folder. Its contents is supposed to look like shown below. You should be
+    able to recognize the structure you've defined within the template file
+    and the contents from your XML model.</p><pre class="programlisting">Name: My Example Setup
+Welcometext: Welcome to this little demo application.
+First Page Title: Wizard Page One</pre></div></div></body></html>
