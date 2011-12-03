@@ -17,8 +17,6 @@
  * @todo	support qualified association ends with more than one qualifier attributes (e.g. create a class with these attributes)
  */
 
-// uses ecore metamodel
-import ecore;
 // uses uml metamodel - the source metamodel
 import uml;
 // uses GeneSEZ metamodel - the target metamodel
@@ -39,12 +37,6 @@ extension de::genesez::adapter::uml2::uml2statemachines;
 	parameters passed to the transformation
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
-
-/**
- * the model is passed in as a global variable
- * @return	the uml2 model
- */
-private Package getUml2Model() : GLOBALVAR uml2model;
 
 /**
  * externally configure packages to ignore, e.g. UML standard profile ;-)
@@ -117,15 +109,13 @@ private String includeProfiles() :
  */
 create MModel transform(Model m) :
 	useLogger("de.genesez.adapter.uml2") ->
-	trace( "make [" + metaType + " ] - " + m ) ->
-	// basic element properties
+	uml2model(m) ->
+	coremodel(this) ->
+	trace( "transform model [ " + metaType + " ] - " + m ) ->
 	transformBasics(m) ->
-	// save model in global store
-	saveModel() ->
-	// package properties
 	transformPackage(m) ->
 	this;
-
+	
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -140,39 +130,19 @@ create MModel transform(Model m) :
  */
 create MModel transform(Profile p) :
 	useLogger( "de.genesez.adapter.uml2" ) ->
-	logTrace( "transform profile [" + metaType + " ] - " + p ) ->
-	// basic element properties
-	transformBasics( p ) ->
+	coremodel(this) ->
+	logTrace( "transform profile [ " + metaType + " ] - " + p ) ->
 	// package properties
 	transformPackage(p) ->
 	this;
 	
-
+	
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private extend functions
 	» filter + distinction functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
-
-/**
- * transforms a root package, that is a package which has a containment reference with the model
- * checks if the specified package is an 'ignored' package or a container for external types
- * @param	p	an uml package to transform, contained directly in the model
- * @context	the model which is the container for the specified package
- * @return	the container of the transformed package (the model)
- */
-private MPackage transform(Package p, MModel this) :
-	switch {
-		// reject ignored package
-		case p.isIgnoredPackage() : Void
-		// reject package by name when used as container for external classes (isContainerForExternalClasses)
-		// reject package by stereotype when used as container for external classes
-		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
-		// else transform the package
-		default : nestedPackage.add( p.makePackage() )
-	} ->
-	this;
 
 /**
  * transforms a package, that has a containement reference with another package
@@ -183,39 +153,13 @@ private MPackage transform(Package p, MModel this) :
  */
 private MPackage transform(Package p, MPackage this) :
 	switch {
-		// exclude elements by stereotypes
+		// reject ignored package
 		case p.isIgnoredElement() : Void
 		// reject package by name when used as container for external classes (isContainerForExternalClasses)
 		// reject package by stereotype when used as container for external classes
 		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
-		// else transform the package
-		default : nestedPackage.add( p.makePackage() )
-	} ->
-	this;
-	
-/**
- * transforms a root classifier, that is a classifier which has a containment reference to the model
- * checks if root classifiers are mapped to external types or if the classifier is itself an external type
- * @param	c	an uml classifier to transform, contained directly in the model
- * @context	the model which is the container for the specified package
- * @return	the container of the transformed classifier (the model)
- */
-private MClassifier transform(Classifier c, MModel this) :
-	trace( "transform [ " + c.metaType + " ] - " + c ) ->
-	switch {
-		// check if classifier should be excluded
-		case c.isIgnoredElement() : Void
-		// check if classifier is an external type
-		case c.isExternalType() : c.makeExternal()
-		// check if classifier is an primitive type
-		case c.metaType == PrimitiveType : c.makePrimitiveType()
-		// ignore stereotype when transforming uml models; when transforming uml profiles transform into classifier 
-        case c.metaType == Stereotype && Model.isInstance(getUml2Model()) : Void
-        // else classifier
-		default : ( let mc = c.makeClassifier() :
-				classifier.add( mc ) ->
-				c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(mc) : null
-			)
+		// else transform the package + set containment
+		default : nestedPackage.add( p.makePackage().transformPackage(p) )
 	} ->
 	this;
 	
@@ -236,9 +180,9 @@ private MClassifier transform(Classifier c, MPackage this) :
 		// check if classifier is an primitive type
 		case c.metaType == PrimitiveType : c.makePrimitiveType()
 		// ignore stereotype when transforming uml models; when transforming uml profiles transform into classifier
-        case c.metaType == Stereotype && Model.isInstance(getUml2Model()) : Void
-        // else classifier
-		default : ( let mc = c.makeClassifier() :
+        case c.metaType == Stereotype && Model.isInstance(uml2model()) : Void
+        // else make + transform classifier
+		default : ( let mc = c.makeClassifier().transform(c) :
 				classifier.add( mc ) ->
 				c.metaType.isAssignableFrom(Class) ? ((Class)c).ownedBehavior.transformBehavior(mc) : null
 			)
@@ -266,10 +210,11 @@ MType makeType(Type this) :
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
 		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
 		// classifier contained in profiles when transforming uml models; when transforming profiles transform into classifier
-		case isContainedInProfile() && Classifier.isInstance(this) && Model.isInstance(getUml2Model()) : ((Classifier)this).makeExternal()
-		// classifier
+		case isContainedInProfile() && Classifier.isInstance(this) && Model.isInstance(uml2model()) : ((Classifier)this).makeExternal()
+		// classifier, just make it, no transformation yet
 		default : ((Classifier)this).makeClassifier()
 	};
+	
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -284,11 +229,7 @@ MType makeType(Type this) :
  */
 private create MPackage makePackage(Package p) :
 	trace( "make [" + metaType + " ] - " + p ) ->
-	// basic element properties
 	transformBasics(p) ->
-	transformPackage(p) ->
-	// create behaviours in package
-	p.ownedElement.typeSelect(Behavior).transform( this ) ->
 	this;
 	
 /**
@@ -298,14 +239,9 @@ private create MPackage makePackage(Package p) :
  */
 private create MClass makeClassifier(Class c) :
 	trace( "make [ " + metaType + " ] - " + c ) ->
-	// basic element properties
 	transformBasics(c) ->
-	// properties
-	setVisibility( c.visibility.toString() ) ->
-	setAbstract( c.isAbstract ) ->
-	setFinal( c.isLeaf ) ->
-	// transform classifier
-	transformClassifier(c) ->
+	// containment
+	c.package.makePackage().classifier.add( this ) ->
 	this;
 	
 /**
@@ -315,14 +251,9 @@ private create MClass makeClassifier(Class c) :
  */
 private create MInterface makeClassifier(Interface i) :
 	trace( "make [ " + metaType + " ] - " + i ) ->
-	// basic element properties
 	transformBasics(i) ->
-	// properties
-	setVisibility( i.visibility.toString() ) ->
-	setAbstract( i.isAbstract ) ->
-	setFinal( i.isLeaf ) ->
-	// transform classifier
-	transformClassifier(i) ->
+	// containment
+	i.package.makePackage().classifier.add( this ) ->
 	this;
 
 /**
@@ -332,17 +263,9 @@ private create MInterface makeClassifier(Interface i) :
  */
 private create MEnumeration makeClassifier(Enumeration e) :
 	trace( "make [ " + metaType + " ] - " + e ) ->
-	// basic element properties
 	transformBasics(e) ->
-	// properties
-	setVisibility( e.visibility.toString() ) ->
-	// ignoring: abstract, final
-	// containments
-	literal.addAll( e.ownedLiteral.typeSelect(EnumerationLiteral).makeLiteral() ) ->
-	// transform classifier
-	transformClassifier(e) ->
-	// for enums: realization of interfaces because UML does not allow an interface realization for enums
-	supertype.addAll( realization.addAll( e.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ) ->
+	// containment
+	e.package.makePackage().classifier.add( this ) ->
 	this;
 	
 /**
@@ -352,14 +275,9 @@ private create MEnumeration makeClassifier(Enumeration e) :
  */
 private create MDataType makeClassifier(DataType d) :
 	trace( "make [ " + metaType + " ] - " + d ) ->
-	// basic element properties
 	transformBasics(d) ->
-	// properties
-	// TODO: should be done by uml2genesez constraints
-	setVisibility( d.visibility == null ? "public" : d.visibility.toString() ) ->
-	// ignore abstract + final
-	// transform classifier
-	transformClassifier(d) ->
+	// containment
+	d.package.makePackage().classifier.add( this ) ->
 	this;
 
 /**
@@ -384,7 +302,7 @@ private create MUseCase makeClassifier(UseCase u) :
  * @return	void
  */
 private MClassifier makeClassifier(Classifier c) :
-	fatal("try to construct a MClassifier object from: " + c) ->
+	fatal("try to construct an MClassifier object from: " + c) ->
 	Void;
 
 /**
@@ -774,7 +692,7 @@ create MStereotype makeStereotype(Stereotype s) :
 	// basic element properties
 	transformBasics(s) ->
 	// container
-	transform( getUml2Model() ).anyStereotype.add( this ) ->
+	coremodel().anyStereotype.add( this ) ->
 	// associations
 	// add generalizations
 	generalization.addAll( s.general.typeSelect(Stereotype).makeStereotype() ) ->
@@ -788,13 +706,13 @@ create MStereotype makeStereotype(Stereotype s) :
 	taggedValue.addAll( makeTaggedValues(s) ) ->
 	// check if stereotyp needs to be generated to source code
 	s.isIncludedProfile() 
-		?	( let c = s.makeAnnotationInterface() : 
-	       	( let p = s.getProfile().makePackage() :
-                p.classifier.add(c) ->
-                transform( getUml2Model() ).nestedPackage.add(p)
-			)	       
-	    	)	  
-    	: Void ->
+		? ( let c = s.makeAnnotationInterface()	:
+			( let p = s.getProfile().makePackage() :
+				p.classifier.add(c) ->
+				coremodel().nestedPackage.add(p)
+			)
+		)
+		: Void ->
 	this;
 	
 /**
@@ -820,7 +738,7 @@ private create MTag makeTag(Property p) :
  * @return	the GeneSEZ tagged value
  */
 private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
-	trace("make tagged value: " + o + ", tag: " + t.name) ->
+	trace("make tagged value: " + o + " for tag: " + t.name) ->
 	setTag(t) ->
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
@@ -843,7 +761,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @return	a list of GeneSEZ tagged values
  */
 List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	trace("make tagged values: " + me.name + ", elem: " + e.toString()) ->
+	trace("check for tagged values on: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		s | s.allAttributes(). 
 				reject( p | p.name.startsWith("base_") || null == e.getTaggedValue(s, p.name) ).
@@ -898,7 +816,7 @@ private create MExternal makeExternal(Classifier c) :
 	// properties
 	setSpecification( c.name ) ->
 	// container
-	transform( getUml2Model() ).externalTypes.add( this ) ->
+	coremodel().externalTypes.add( this ) ->
 	// set generics
 	c.ownedTemplateSignature != null
 		? genericParameter.addAll( 
@@ -915,7 +833,7 @@ private create MPrimitiveType makePrimitiveType(PrimitiveType p) :
 	// basic element properties
 	transformBasics(p) ->
 	// container
-	transform( getUml2Model() ).primitiveTypes.add( this ) ->
+	coremodel().primitiveTypes.add( this ) ->
 	this;
 
 /**
@@ -936,7 +854,7 @@ private create MPrimitiveType makePrimitiveType(Void v) :
 //	info("fixme: make primitive type from void") ->
 	setXmiGuid("void") ->
 	setName("void") ->
-	transform( getUml2Model() ).primitiveTypes.add( this ) ->
+	coremodel().primitiveTypes.add( this ) ->
 	this;
 	
 /**
@@ -983,17 +901,92 @@ private MPackage transformPackage(MPackage this, Package p) :
 	// associations
 	// set stereotype
 	stereotype.addAll( p.getAppliedStereotypes().makeStereotype() ) ->
-	// containments
 	// add comment to package
 	ownedComment.addAll( p.ownedComment.typeSelect(Comment).makeComment() ) ->
+	// containments
 	p.ownedElement.typeSelect(Package).transform( this ) ->
 	p.ownedElement.typeSelect(Classifier).reject(
 		e|{Activity, Actor, Association, Extension}.contains(e.metaType) 
 		).transform( this ) ->
+	// create behaviours in package
+	p.ownedElement.typeSelect(Behavior).transform( this ) ->
 	// map associations in package
 	association.addAll( p.ownedElement.typeSelect(Association).makeAssociation( this ) ) ->
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(p) ) ->
+	this;
+
+/**
+ * processes the transformation of an uml classifier to a GeneSEZ classifier
+ * @param	c	an uml classifier
+ * @return	the GeneSEZ classifier
+ */
+private MClassifier transform(MClassifier this, Classifier c) :
+	switch (metaType) {
+		case MClass : transformClass((MClass)this, (Class)c)
+		case MInterface : transformInterface((MInterface)this, (Interface)c)
+		case MDataType : transformDataType((MDataType)this, (DataType)c)
+		case MEnumeration : transformEnumeration((MEnumeration)this, (Enumeration)c)
+		default : ( fatal("try to construct an MClassifier object from: " + c) -> Void )
+	};
+
+/**
+ * processes the transformation of an uml class to a GeneSEZ class
+ * @param	c	an uml class
+ * @return	the GeneSEZ class
+ */
+private MClass transformClass(MClass this, Class c) :
+	// properties
+	setVisibility( c.visibility.toString() ) ->
+	setAbstract( c.isAbstract ) ->
+	setFinal( c.isLeaf ) ->
+	// transform classifier
+	transformClassifier(c) ->
+	this;
+	
+/**
+ * processes the transformation of an uml interface to a GeneSEZ interface
+ * @param	i	an uml interface
+ * @return	the GeneSEZ interface
+ */
+private MInterface transformInterface(MInterface this, Interface i) :
+	// properties
+	setVisibility( i.visibility.toString() ) ->
+	setAbstract( i.isAbstract ) ->
+	setFinal( i.isLeaf ) ->
+	// transform classifier
+	transformClassifier(i) ->
+	this;
+	
+/**
+ * processes the transformation of an uml datatype to a GeneSEZ datatype
+ * @param	d	an uml datatype
+ * @return	the GeneSEZ datatype
+ */
+private MDataType transformDataType(MDataType this, DataType d) : 
+	// properties
+	// TODO: should be done by uml2genesez constraints
+	setVisibility( d.visibility == null ? "public" : d.visibility.toString() ) ->
+	// ignore abstract + final
+	// transform classifier
+	transformClassifier(d) ->
+	this;
+	
+/**
+ * processes the transformation of an uml enumeration to a GeneSEZ enumeration
+ * @param	e	an uml enumeration
+ * @return	the GeneSEZ enumeration
+ */
+private MEnumeration transformEnumeration(MEnumeration this, Enumeration e) : 
+	// properties
+	setVisibility( e.visibility.toString() ) ->
+	// ignoring: abstract, final
+	// containments
+	literal.addAll( e.ownedLiteral.typeSelect(EnumerationLiteral).makeLiteral() ) ->
+	// transform classifier
+	transformClassifier(e) ->
+	// for enums: realization of interfaces because UML does not allow an interface realization for enums
+	supertype.addAll( realization.addAll( e.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ) ->
 	this;
 
 /**
@@ -1145,6 +1138,31 @@ String name(MType this) :
 		case MClass : ((MClass)this).name
 		default : fatal("cannot determine name of type from object: " + metaType)
 	};
+
+/**
+ * Saves the uml model in the global store.
+ * @return	the saved uml model
+ */
+private Model uml2model(Model this) : save("uml2model", this);
+
+/**
+ * Retrieves the uml model from the global store.
+ * @return	the saved uml model
+ */
+private Model uml2model() : get("uml2model");
+
+/**
+ * Saves the GeneSEZ model in the global store.
+ * @return	the saved GeneSEZ model
+ */
+private MModel coremodel(MModel this) : save("coremodel", this);
+
+/**
+ * Retrieves the GeneSEZ model from the global store.
+ * @return	the saved GeneSEZ model
+ */
+private MModel coremodel() : get("coremodel");
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
