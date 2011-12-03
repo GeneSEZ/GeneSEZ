@@ -1,28 +1,49 @@
 /**
- * Frontend for storing models
+ * Frontend for storing model elements and objects.
  * 
  * @author	georg beier
- * @todo	it's needed by the hibernate templates + should be revised when revise hibernate templates
+ * @author	tobias haubold (last)
  */
-
-//	based on genesez meta model
 import gcore;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/**
- * saves a model reference in a global store
- * @param	model	a model to save
- */
-Void saveModel(MModel model) :
-	JAVA de.genesez.platforms.common.GlobalStore.setModel(de.genesez.metamodel.gcore.MModel);
+// @deprecated	use save(key, value) instead
+Void saveModel(MModel this) : save("coremodel", this);
+
+// @deprecated	use get(key) instead
+MModel retrieveModel() : get("coremodel");
+
 
 /**
- * retrieves a model reference from a global store
- * @return	a model reference
+ * Saves a model reference or an object.
+ * @param key	the key to access the object
+ * @param value	the object to save
+ * @return	the saved model reference or object
  */
-MModel retrieveModel() :
-	JAVA de.genesez.platforms.common.GlobalStore.getModel();
+Object save(String key, Object this) :
+	JAVA de.genesez.platforms.common.GlobalStore.save(java.lang.String, java.lang.Object);
 
+/**
+ * Retrieves a model reference or an object.
+ * @param key	the key to access the object
+ * @return	a model reference or the object
+ */
+Object get(String this) :
+	JAVA de.genesez.platforms.common.GlobalStore.get(java.lang.String);
+
+/**
+ * Removes a model reference or an object.
+ * @param key	the key to access the object
+ * @return	the removed model reference or object
+ */
+Object remove(String this) :
+	JAVA de.genesez.platforms.common.GlobalStore.remove(java.lang.String);
+
+/**
+ * Clears the whole storage backend.
+ */
+Void clear() :
+	JAVA de.genesez.platforms.common.GlobalStore.clear();
