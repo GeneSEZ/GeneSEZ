@@ -2,6 +2,7 @@ package de.genesez.platforms.common.m2t;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -47,14 +47,9 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	private final static String FileIDString = "@FILE-ID : (";
 
 	/**
-	 * Singleton import formatter instance.
-	 */
-	private ImportFormatter importFormatter = null;
-
-	/**
 	 * Stores the settings for the import formatter.
 	 */
-	private Properties options = null;
+	private Properties options = new Properties();
 
 	/**
 	 * Map with File-IDs and corresponding Imports
@@ -68,15 +63,6 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	private boolean prepared = false;
 
 	private boolean importTakeOver = true;
-
-	/**
-	 * Constructor which sets some creates options and set
-	 * de.genesez.importformatter.delim to "\n".
-	 */
-	public ImportBeautifier() {
-		options = new Properties();
-		options.setProperty("de.genesez.importformatter.delim", "\n");
-	}
 
 	/**
 	 * Getter for the options.
@@ -158,16 +144,6 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	}
 
 	/**
-	 * Sets a new line delimiter, to check the line endings.
-	 * 
-	 * @param delim
-	 *            the new delimiter.
-	 */
-	public void setLineDelimiter(String delim) {
-		options.setProperty("de.genesez.importformatter.delim", delim);
-	}
-
-	/**
 	 * Sets if imports should be carried over from old to new generated files or
 	 * not.
 	 * 
@@ -176,18 +152,6 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	 */
 	public void setImportTakeOver(String importTakeOver) {
 		this.importTakeOver = Boolean.parseBoolean(importTakeOver);
-	}
-
-	/**
-	 * Sole method to get the preconfigured import formatter.
-	 * 
-	 * @return singleton import formatter instance
-	 */
-	protected ImportFormatter getImportFormatter() {
-		if (this.importFormatter == null) {
-			this.importFormatter = new ImportFormatter(this.options);
-		}
-		return this.importFormatter;
 	}
 
 	/**
@@ -201,7 +165,8 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	@Override
 	public void updateFileVisit(Path file) {
 		if (importRegex != null && importTakeOver) {
-			if (extensionsRegex == null || extensionsRegex.matcher(file.toString()).matches()) {
+			if (extensionsRegex == null
+					|| extensionsRegex.matcher(file.toString()).matches()) {
 				// initialize
 				Set<String> imports = new HashSet<String>();
 				String guID = null;
@@ -212,7 +177,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 							.newBufferedReader(file, Charset.defaultCharset());
 					// check line for FileIDString
 					while ((line = br.readLine()) != null) {
-						if (line.contains(FileIDString) && guID == null) {
+						if (guID == null && line.contains(FileIDString)) {
 							guID = line.substring(line.indexOf("(") + 1,
 									line.indexOf(")"));
 						}
@@ -260,57 +225,68 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 	 *             thrown if beautifier is not added as observer (file tree not
 	 *             walked properly)
 	 */
-	protected String putImports(FileHandle file) throws NotPreparedException {
+	protected StringBuffer putImports(FileHandle file)
+			throws NotPreparedException {
 		String fileString = file.getBuffer().toString();
 		if (importRegex == null || !importTakeOver) {
-			return fileString;
+			return new StringBuffer(fileString);
 		}
-		if (prepared) {
-			// initialize
-			String delim = options
-					.getProperty("de.genesez.importformatter.delim");
-			StringTokenizer st = new StringTokenizer(fileString, delim);
-			List<String> lines = new LinkedList<String>();
-			String guID = null;
-			int putImports = -1;
-
-			// make a line List
-			while (st.hasMoreTokens()) {
-				String token = st.nextToken();
-				lines.add(token);
-				// look for guID
-				if (token.contains(FileIDString) && guID == null) {
-					guID = token.substring(token.indexOf("(") + 1,
-							token.indexOf(")"));
-				} else if (guID != null && putImports == -1
-						&& token.trim().isEmpty()) {
-					// search for next free line to put imports into
-					putImports = lines.size();
-				}
-			}
-
-			// put imports into file
-			if (guID != null && importMap.containsKey(guID)) {
-				Set<String> imports = importMap.get(guID);
-				if (putImports > -1) {
-					lines.addAll(putImports - 1, imports);
-				}
-			}
-			// creates a String from tokens.
-			fileString = "";
-			for (String line : lines) {
-				fileString = fileString.concat(line + delim);
-			}
-			return fileString;
-		} else {
+		BufferedReader br = new BufferedReader(new StringReader(fileString));
+		if (!prepared) {
 			throw new NotPreparedException(
 					"Beautifier is not prepared properly");
 		}
+		// initialize
+		List<String> lines = new LinkedList<String>();
+		String guID = null;
+		int putImports = -1;
+
+		Set<String> imports = new HashSet<String>();
+		String line = null;
+		// makes a line~ and an import list
+		try {
+			while ((line = br.readLine()) != null) {
+				if (guID != null && importRegex.matcher(line).matches()) {
+					// checks if line is an import line
+					imports.add(line);
+				} else {
+					lines.add(line);
+
+					if (guID == null && line.contains(FileIDString)) {
+						// checks for guID
+						guID = line.substring(line.indexOf("(") + 1,
+								line.indexOf(")"));
+						if (importMap.containsKey(guID)) {
+							imports.addAll(importMap.get(guID));
+						}
+					} else if (guID != null && putImports == -1
+							&& line.trim().isEmpty()) {
+						// search for next free line to put imports into
+						putImports = lines.size();
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// put imports into file
+		if (guID != null && putImports > -1) {
+			lines.addAll(putImports, imports);
+		}
+
+		// creates a String from tokens.
+		StringBuffer sb = new StringBuffer(lines.size() * 80);
+		for (String aLine : lines) {
+			sb.append(aLine + System.getProperty("line.separator"));
+		}
+		return sb;
 	}
 
 	/**
 	 * This method is implemented from the oAW PostProcessor interface. It is
-	 * called before the file will be written and closed.
+	 * called before the file will be written and closed. Thereby imports will
+	 * be beautified
 	 * 
 	 * @param file
 	 *            the file which shall be modified.
@@ -320,12 +296,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements
 		if (file.getTargetFile() != null
 				&& (extensionsRegex == null || extensionsRegex.matcher(
 						file.getAbsolutePath()).matches())) {
-			String edit = putImports(file);
-			// String edit = file.getBuffer().toString();
-			// detect and delete double import statements
-			edit = getImportFormatter().format(edit);
-			// write string to file
-			file.setBuffer(new StringBuffer(edit));
+			file.setBuffer(putImports(file));
 		}
 	}
 
