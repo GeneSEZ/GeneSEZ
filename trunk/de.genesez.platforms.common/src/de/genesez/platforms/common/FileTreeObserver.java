@@ -1,6 +1,7 @@
 package de.genesez.platforms.common;
 
 import java.nio.file.Path;
+import java.util.Properties;
 
 /**
  * The observer interface for observing the FileTreeWalker.
@@ -39,4 +40,10 @@ public interface FileTreeObserver {
 	 * @param dir the directory which was left.
 	 */
 	public abstract void updateAfterDir(Path file);
+	
+	/**
+	 * Gives the properties from the FileTreeWalkerFeature to the observer
+	 * @param properties the properties from FileTreeWalkerFeature
+	 */
+	public abstract void setFileTreeProperties(Properties properties);
 }

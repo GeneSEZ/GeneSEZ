@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="en.genesez.platforms.common.workflow.components.statistics">
+	<title>StatisiticComponent</title>
+	<para>
+		The StatisticComponent can give an overview of the
+		source-code's
+		structure. These information can be used to decide
+		whether the usage of
+		MDSD pays off or not.
+		If you want to add the component into the
+		workflow this could
+		look like:
+		<programlisting><![CDATA[<component id="stats" class="de.genesez.platforms.common.workflow.StatisticComponent" >]]></programlisting>
+	</para>
+	<section>
+		<title>Results</title>
+		<para>
+			The component copies the
+			<link
+				linkend="en.genesez.core.configuration.workflow.statistics.htmlTemplateDir">
+				<literal>htmlTemplateDirectory</literal>
+			</link>
+			to the
+			<link linkend="en.genesez.core.configuration.workflow.statistics.outputDir">
+				<literal>outputDir</literal>
+			</link>
+			and generates the files:
+			<itemizedlist>
+				<listitem
+					id="en.genesez.core.configuration.workflow.statistic.overview">
+					<para>
+						<literal>overview.html</literal>
+						for the overview
+					</para>
+				</listitem>
+				<listitem id="en.genesez.core.configuration.workflow.statistic.details">
+					<para>
+						[optional]
+						<literal>details.html</literal>
+						for the details
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+		<para>
+			into
+			<emphasis>outputDir/html</emphasis>
+			. You can look at the statistics through
+			<emphasis>outputDir/index.html</emphasis>
+			.
+		</para>
+		<para>
+			The component shows the lines of all files in the given
+			<link linkend="en.genesez.core.configuration.workflow.statistics.outputDir">
+				<literal>outputDir</literal>
+			</link>
+			in the following categories:
+			<itemizedlist
+				id="en.genesez.core.configuration.workflow.statistics.categories">
+				<listitem>
+					<para>
+						generated code lines
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						manual implemented code lines
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						comment lines (consists of generated and not generated lines.
+						Also protected region lines count to this)
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						documentation lines (consists of generated and not generated
+						documentation lines)
+					</para>
+				</listitem>
+			</itemizedlist>
+			Blank lines stay neglected. In the
+			<link linkend="en.genesez.core.configuration.workflow.statistic.overview">
+				<literal>overview</literal>
+			</link>
+			page the information are given for the whole project. There are also
+			2 pie charts, that visualizes the composition of the whole source
+			code. In the
+			<link linkend="en.genesez.core.configuration.workflow.statistic.details">
+				<literal>details</literal>
+			</link>
+			page the information are given for every file and folder in a table.
+		</para>
+	</section>
+	<section>
+		<title>Configuration of the StatisticComponent</title>
+		<para>
+			The configuration of the StatisticComponent can be done by following
+			parameters.
+			<!-- <note> <para> Due to the fact that the StatisticComponent contains 
+				a <link linkend="en.genesez.platforms.common.workflow.components.generator"> 
+				<literal>Generator</literal> </link> component there are some parameters 
+				the same as in the Generator. </para> </note> -->
+		</para>
+		<variablelist>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.outputDir">
+				<term>
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.outputDir">
+						<emphasis role="bold">outputDir</emphasis>
+					</link>
+				</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<listitem>
+					<para>
+						passes the value to its contained generator. It
+						is used to
+						indicate
+						the directory, where the
+						generated files are stored or
+						should be
+						stored. If the directory
+						does not exist it will be
+						created.
+						<caution>
+							<para>
+								Before generation the given directory will be cleaned, that
+								means that all files and folders will first be deleted.
+								Therefore this should be at least a separate subfolder or a
+								complete separate folder to
+								<link
+									linkend="en.genesez.core.configuration.workflow.statistics.dirToCheck">
+									<literal>dirToCheck</literal>
+								</link>
+								.
+							</para>
+						</caution>
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.htmlTemplateDir">
+				<term>
+					<emphasis role="bold">htmlTemplateDirectory</emphasis>
+				</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>(location of StatisticComponent.class)/../html_template
+					</literal>
+				</term>
+				<listitem>
+					<para>
+						The directory which contains the used YAML-css files, the
+						javaScript and the
+						index.html, which will
+						be copied to the
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.outputDir">
+							<literal>outputDir</literal>
+						</link>
+						.
+					</para>
+					<para>
+						Even there is a default value this should better be set because
+						the default depends on the path were the StatisticComponent.class
+						file lay. The needed folder is called
+						<emphasis>html_template</emphasis>
+						and is stored in
+						<emphasis>de.genesez.platforms.common</emphasis>
+						, you may also copy the folder into your generator project.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.template">
+				<term>
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.template">
+						template
+					</link>
+				</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>de::genesez::platforms::common::statistic::Evaluation::Root
+					</literal>
+				</term>
+				<listitem>
+					<para>
+						value is passed to the contained generator. It
+						is used to
+						indicate the XPand Template and the name of
+						the
+						define-block, which
+						is called at the model-to-text
+						transformation.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.statObserverParam">
+				<term>statisticObserver</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default: if not set a standard observer with default values will be
+					used. See
+					<xref linkend="en.genesez.core.configuration.workflow.statistics.Defaults" />
+					.
+				</term>
+				<listitem>
+					<para>
+						The
+						<link linkend="en.genesez.core.features.FileTreeObserver">
+							<literal>FileTreeObserver</literal>
+						</link>
+						that counts the lines in the different
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.categories">
+							<emphasis>categories</emphasis>
+						</link>
+						. It holds the model for the transformation.
+						For configuration see
+						<xref
+							linkend="en.genesez.core.configuration.workflow.statistics.StatisticObserver" />
+						.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.dirToCheck">
+				<term>dirToCheck</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default: parent of the
+					<link linkend="en.genesez.core.configuration.workflow.statistics.outputDir">
+						<literal>outputDir</literal>
+					</link>
+				</term>
+				<listitem>
+					<para>
+						passes the value to
+						<link linkend="en.genesez.core.configuration.feature.FTW.searchedDir">
+							<literal>searchedDir</literal>
+						</link>
+						of the contained
+						<link linkend="en.genesez.core.description.features.FileTreeWalker">
+							<literal>FileTreeWalkerFeature</literal>
+						</link>
+						. Sets the directory where the lines of the files should be
+						counted.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.withDetails">
+				<term>withDetails</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>false</literal>
+				</term>
+				<listitem>
+					<para>
+						Indicates whether the details page should be generated or
+						not.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+		<para>
+			Furthermore the statistic component contains every parameter of
+			the CompositeComponent from openArchitectureWare.
+		</para>
+	</section>
+	<section
+		id="en.genesez.core.configuration.workflow.statistics.StatisticObserver">
+		<title>Configuration of the StatisticObserver</title>
+		<para>
+			To add the observer to
+			your StatisticComponent you must place
+			<programlisting><![CDATA[<statisticObserver class="de.genesez.platforms.common.statistic.StatisticObserver">]]></programlisting>
+			into the Component's configuration part. You can also give
+			it an ID if
+			you want to.
+			As mentioned in parameter
+			<link
+				linkend="en.genesez.core.configuration.workflow.statistics.statObserverParam">
+				<literal>statisticObserver</literal>
+			</link>
+			this has also some configuration parameters.
+		</para>
+		<variablelist>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.commentStrings">
+				<term>commentStrings</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>//, /*, */, /**</literal>
+				</term>
+				<listitem>
+					<para>
+						Sets the comment strings to indicate comments in the following
+						order (separated by "," or ";")
+						<simplelist>
+							<member>
+								-
+								<link
+									linkend="en.genesez.core.configuration.workflow.statistics.singleLineComment">
+									<literal>singleLineCommentString</literal>
+								</link>
+							</member>
+							<member>
+								-
+								<link
+									linkend="en.genesez.core.configuration.workflow.statistics.multiLineStart">
+									<literal>multiLineCommentStartString</literal>
+								</link>
+							</member>
+							<member>
+								-
+								<link
+									linkend="en.genesez.core.configuration.workflow.statistics.multiLineEnd">
+									<literal>multiLineCommentEndString</literal>
+								</link>
+							</member>
+							<member>
+								-
+								<link
+									linkend="en.genesez.core.configuration.workflow.statistics.docuCommStart">
+									<literal>docuCommentStartString</literal>
+								</link>
+								[optional]
+							</member>
+						</simplelist>
+					</para>
+					<para>
+						If only 3 strings are given it won't check for documentation
+						lines,
+						due
+						to not all programming languages support documentation
+						comments.
+						<note>
+							<para>
+								If a comment starts with comma or semicolon you have to
+								specify it one by one with the corresponding parameters.
+							</para>
+						</note>
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.singleLineComment">
+				<term>singleLineCommentString</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>//</literal>
+				</term>
+				<listitem>
+					<para>
+						is used to indicate whether a checked line is a single-line
+						comment,
+						can be set with others together in
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.commentStrings">
+							<literal>commentStrings</literal>
+						</link>
+						on position 1.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.multiLineStart">
+				<term>multiLineCommentStartString</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>/*</literal>
+				</term>
+				<listitem>
+					<para>
+						is used to indicate whether a checked line is a multi-line
+						comment, if found the lines until
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.multiLineEnd">
+							<literal>multiLineCommentEnd</literal>
+						</link>
+						will be counted to the comments.
+						Can be set with others together
+						in
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.commentStrings">
+							<literal>commentStrings</literal>
+						</link>
+						on position 2.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.multiLineEnd">
+				<term>multiLineCommentEndString</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>*/</literal>
+				</term>
+				<listitem>
+					<para>
+						is used to indicate whether a checked line is a multi-line
+						comment
+						end. Can be set with others together in
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.commentStrings">
+							<literal>commentStrings</literal>
+						</link>
+						on position 3.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.docuCommStart">
+				<term>docuCommentStartString</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>/**</literal>
+				</term>
+				<listitem>
+					<para>
+						is used to indicate whether a checked line is a documentation
+						comment, if found the lines until
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.multiLineEnd">
+							<literal>multiLineCommentEnd</literal>
+						</link>
+						will be counted to the documentation.
+						Can be set with others
+						together
+						in
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.commentStrings">
+							<literal>commentStrings</literal>
+						</link>
+						on position 4.
+					</para>
+					<para>
+						If this is empty the observer will not check for
+						documentation lines
+						due
+						to programming languages that don't support
+						documentation
+						comments.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.genDir">
+				<term>generate</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>
+						(
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.dirToCheck">
+							dirToCheck
+						</link>
+						or
+						<link linkend="en.genesez.core.configuration.feature.FTW.searchedDir">
+							searchedDir
+						</link>
+						)/src-gen
+					</literal>
+				</term>
+				<listitem>
+					<para>
+						<emphasis>Overrides default</emphasis>
+						and adds the given directory or file to generated
+						and resolves it
+						to
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.dirToCheck">
+							<literal>dirToCheck</literal>
+						</link>
+						. In the given folder(s) or file(s) the observer counts the
+						lines,
+						that are not in protected regions, as generated.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>generates</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<term>
+					default: See
+					<link linkend="en.genesez.core.configuration.workflow.statistics.genDir">generate</link>
+				</term>
+				<listitem>
+					<para>
+						same as
+						<link linkend="en.genesez.core.configuration.workflow.statistics.genDir">
+							<literal>generate</literal>
+						</link>
+						with the difference, that one can give a comma or semicolon
+						separated list of generated directories or files.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.mans">
+				<term>manual</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<listitem>
+					<para>
+						<!-- <emphasis>Overrides default</emphasis> and -->
+						Adds the given directory or file to manual
+						and resolves it
+						to
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.dirToCheck">
+							<literal>dirToCheck</literal>
+						</link>
+						. In the given folder(s) or file(s) the observer does not count
+						lines as generated.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>manuals</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<listitem>
+					<para>
+						same as
+						<link linkend="en.genesez.core.configuration.workflow.statistics.mans">
+							<literal>manual</literal>
+						</link>
+						with the difference, that one can give a comma or semicolon
+						separated list of manual directories or files.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.exclude">
+				<term>exclude</term>
+				<term>
+					<emphasis>multi-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>.svn, .cvs, .hg, .git</literal>
+					and
+					<link linkend="en.genesez.core.configuration.workflow.statistics.outputDir">
+						<literal>outputDir</literal>
+					</link>
+					from StatisticComponent
+				</term>
+				<listitem>
+					<para>
+						<emphasis>Overrides defaults</emphasis>
+						and adds the given file or directory to excludes.
+						These
+						directories
+						or files won't be
+						evaluated.
+						<note>
+							<para>
+								If the exclude is not given as absolute path, every file
+								or
+								folder that contains the exclude in its path will be
+								excluded.
+							</para>
+						</note>
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>excludes</term>
+				<term>multi-value</term>
+				<term>
+					default: See
+					<link linkend="en.genesez.core.configuration.workflow.statistics.exclude">
+						<literal>exclude</literal>
+					</link>
+				</term>
+				<listitem>
+					<para>
+						same as
+						<link linkend="en.genesez.core.configuration.workflow.statistics.exclude">
+							<literal>exclude</literal>
+						</link>
+						with the difference, that one can give a comma or semicolon
+						separated list of excludes.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry
+				id="en.genesez.core.configuration.workflow.statistics.statName">
+				<term>statisticName</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default: last element of
+					<link
+						linkend="en.genesez.core.configuration.workflow.statistics.dirToCheck">
+						<literal>dirToCheck</literal>
+					</link>
+					path from StatisticComponent.
+				</term>
+				<listitem>
+					<para>
+						The name that is given for the statistics. This is placed in
+						the headline of the generated files.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</section>
+	<section id="en.genesez.core.configuration.workflow.statistics.Defaults">
+		<title>Overview of the Defaults</title>
+		<para>
+			If you don't want to configure anything but the
+			<link
+				linkend="en.genesez.platforms.common.workflow.components.generator.outputDir">
+				<literal>outputDir</literal>
+			</link>
+			by yourself, you can just use the StatisticComponent as is.
+			Therefore
+			following defaults are set:
+			<itemizedlist>
+				<listitem>
+					<para>
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.dirToCheck">
+							<literal>dirToCheck</literal>
+						</link>
+						= the parent directory of the
+						<link
+							linkend="en.genesez.platforms.common.workflow.components.generator.outputDir">
+							<literal>outputDir</literal>
+						</link>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<link linkend="en.genesez.core.configuration.workflow.statistics.template">
+							<literal>template</literal>
+						</link>
+						=
+						<literal>de::genesez::platforms::common::statistic::Evaluation::Root
+						</literal>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.htmlTemplateDir">
+							<literal>htmlTemplateDirecotory</literal>
+						</link>
+						= (location of StatisticComponent.class)\..\html_template
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<link
+							linkend="en.genesez.core.configuration.workflow.statistics.withDetails">
+							<literal>withDetails</literal>
+						</link>
+						=
+						<literal>false</literal>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						The default StatisticObserver with:
+						<itemizedlist>
+							<listitem>
+								<para>
+									<link
+										linkend="en.genesez.core.configuration.workflow.statistics.commentStrings">
+										<literal>commentStrings</literal>
+									</link>
+									=
+									<literal>//, /*, */, /**</literal>
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<link
+										linkend="en.genesez.core.configuration.workflow.statistics.statName">
+										<literal>statisticName</literal>
+									</link>
+									= the last part of the
+									<link
+										linkend="en.genesez.core.configuration.workflow.statistics.outputDir">
+										<literal>outputDir</literal>
+									</link>
+									path
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<link
+										linkend="en.genesez.core.configuration.workflow.statistics.genDir">
+										<literal>generates</literal>
+									</link>
+									=
+									<literal>src-gen</literal>
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<link
+										linkend="en.genesez.core.configuration.workflow.statistics.exclude">
+										<literal>excludes</literal>
+									</link>
+									=
+									<literal>.svn, .cvs, .hg, .git</literal>
+									and the
+									<link
+										linkend="en.genesez.core.configuration.workflow.statistics.outputDir">
+										<literal>outputDir</literal>
+									</link>
+									of the StatisticComponent
+								</para>
+							</listitem>
+						</itemizedlist>
+					</para>
+					<para>
+						If you add your own StatisticObserver, all defaults will be
+						set and can be overwritten.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+	</section>
+	<section>
+		<title>Information for the graphical visualization</title>
+		<para>
+			The diagrams are generated by
+			<ulink url="http://www.jfree.org/jfreechart/">JFreeChart</ulink>
+			. This is a powerful API for chart creation. With this two png files
+			will be generated and stored into
+			<literal>
+				<link linkend="en.genesez.core.configuration.workflow.statistics.outputDir">outputDir</link>
+				/charts
+			</literal>
+			. These charts can be seen in the
+			<link linkend="en.genesez.core.configuration.workflow.statistic.overview">
+				<emphasis>overview</emphasis>
+			</link>
+			page.
+		</para>
+	</section>
+</section>

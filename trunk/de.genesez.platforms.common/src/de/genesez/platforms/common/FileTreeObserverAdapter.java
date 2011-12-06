@@ -1,6 +1,7 @@
 package de.genesez.platforms.common;
 
 import java.nio.file.Path;
+import java.util.Properties;
 
 /**
  * An adapter with default implementation of the FileTreeObserver, this is used
@@ -36,5 +37,9 @@ public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 	public void updateAfterDir(Path file) {
 		// does nothing
 	}
-
+	
+	@Override
+	public void setFileTreeProperties(Properties properties){
+		// does nothing
+	}
 }

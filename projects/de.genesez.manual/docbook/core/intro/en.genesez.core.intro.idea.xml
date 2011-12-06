@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE section 
+	PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN" "http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd"
+>
+<section>
+	<title>Idea of the GeneSEZ approach</title>
+
+
+	<para>
+		In the MDA/MDSD approach for software engineering, created
+		application
+		models will be automatically transformed into source code
+		through
+		model-transformations. Therefore an MDSD platform supports
+		following model-transformations:
+	</para>
+
+	<variablelist>
+
+		<varlistentry>
+
+			<term>
+				<emphasis role="bold">Model-to-model
+					transformations
+				</emphasis>
+			</term>
+
+			<listitem>
+
+				<para>
+					Used to create new models with the opportunity to use
+					different modeling languages as source and as destination.
+				</para>
+
+			</listitem>
+
+		</varlistentry>
+
+		<varlistentry>
+
+			<term>
+				<emphasis role="bold">Model modifications</emphasis>
+			</term>
+
+			<listitem>
+
+				<para>
+					Changes a model mostly to change or append information.
+				</para>
+
+			</listitem>
+
+		</varlistentry>
+
+		<varlistentry>
+
+			<term>
+				<emphasis role="bold">Model-to-text
+					transformations
+				</emphasis>
+			</term>
+
+			<listitem>
+
+				<para>
+					Used to generate source code and other used files for a
+					software.
+				</para>
+
+			</listitem>
+
+		</varlistentry>
+
+	</variablelist>
+
+	<para>
+		Model-to-model transformations and model modifications ensure the
+		preparation of models, while model-to-text transformations do the
+		source code generation of a software. The transformation target is
+		mostly an
+		object-oriented programming language.
+	</para>
+
+	<para>
+		The similar the concepts of the programming language and the
+		modeling language are, the easier the creation of
+		model
+		transformations, that maps both concepts. Furthermore the
+		model
+		transformations become more intuitive and maintainable in this
+		way.
+	</para>
+
+	<para>
+		In the field of modeling languages for MDSD-platforms
+		UML and DSLs
+		are widely-used. The UML provides object-oriented modeling
+		concepts and
+		has the right level of abstraction for the source code
+		generation.
+		Unfortunately, due to the increasing amount of modeling
+		concepts, the
+		UML became inapplicable as modeling language for
+		model transformations:
+	</para>
+
+	<itemizedlist>
+
+		<listitem>
+
+			<para>it became very complex</para>
+
+		</listitem>
+
+		<listitem>
+
+			<para>
+				it contains information that are not needed for source code
+				generation.
+			</para>
+
+		</listitem>
+
+		<listitem>
+
+			<para>
+				there is no overview of the UML meta-model in which you can see
+				how the information can be accessed.
+			</para>
+
+		</listitem>
+
+		<listitem>
+
+			<para>
+				it contains information of graphical representation of model
+				elements, e. g. pictures of stereotypes.
+			</para>
+
+		</listitem>
+
+		<listitem>
+
+			<para>
+				many approaches show that only parts of the UML are useful for
+				MDA/MDSD platforms (e. g. Stephen J.
+				Mellor and
+				Marc Balcer.
+				Executable UML: A Foundation for Model-Driven
+				Architectures.
+				Addison-Wesley Longman Publishing Co., Inc.,
+				Boston,
+				MA, USA, 2002.
+				Foreword by Ivar Jacoboson. und Paul
+				Baker, Zhen Ru
+				Dai, Jens
+				Grabowski, Øystein Haugen, Ina
+				Schieferdecker, and Clay
+				Williams.
+				Model-Driven Testing: Using
+				the UML Testing Profile.
+				Springer-Verlag
+				New York, Inc.,
+				Secaucus, NJ, USA, 2007.)
+			</para>
+
+		</listitem>
+
+	</itemizedlist>
+
+	<para>
+		Due to the complexity and normalized structure of the meta-model,
+		the UML is relatively inapplicable for model transformations.
+		Also the
+		fact, that the UML specification does not provide an overview over the
+		meta-model, makes things even worse.
+	</para>
+
+	<para>
+		Besides the UML there are DSLs. DSLs use concepts of an
+		application area or
+		technical aspects for description of models.
+		Thereby the functional
+		DSLs are more interesting, because the models
+		can be discussed with
+		experts of the scope.
+		However such modeling
+		languages increase the mismatch between modeling concept and concept
+		of the programming language. With this it comes to more
+		complex and
+		application specific model transformations.
+		In the perspective of
+		transformation this leads to ongoing creation of model transformations
+		for the same programming language with different modeling languages.
+	</para>
+
+	<para>
+		Based on the consequences that comes with the usage of UML or
+		DSLs, the idea of GeneSEZ was not to directly evaluate the
+		meta-models,
+		with which the models were created, but instead to create
+		a separate meta-model for an MDSD-platform and evaluate it.
+		Its
+		structure should be suitable for evaluation with model transformations
+		and should only contain information that are useful for the source
+		code generation.
+		This leads to a meta-model, that is especially
+		suitable for the last model transformation steps in source code
+		generation.
+		For the MDSD-platform this means a stable, reusable and
+		investment save base for source code generation.
+	</para>
+
+	<para>
+		With the terms of MDA the GeneSEZ meta-model can be classified as an
+		<emphasis>abstracting mapping</emphasis>
+		, because many information from the UML are unnecessary for the source
+		code generation.
+		With the concepts of DSLs it can be called a DSL for
+		model transformations, especially for model-to-text transformations.
+		Relating to UML it indicates a simplier and scarcer meta-model for
+		model transformations.
+		Relating to functional DSLs an intermediate step
+		is introduced in the model transformations, which transforms the
+		application specific meta-model into the GeneSEZ meta-model and
+		in the
+		next step the GeneSEZ meta-model will be transformed into
+		source code.
+		Complex transformations into source code can be avoided and the model
+		transformations from the GeneSEZ meta-model into source code can be
+		reused in different areas of application.
+	</para>
+
+</section>

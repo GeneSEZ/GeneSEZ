@@ -4,8 +4,11 @@
 	<title>FileTreeWalkerFeature</title>
 	<para>
 		The FileTreeWalkerFeature is needed to walk the file tree on the
-		given output directory. You can only set observers for a file tree
-		walk.
+		given
+		<link linkend="en.genesez.core.configuration.feature.FTW.searchedDir">
+			<literal>searchedDir</literal>
+		</link>
+		.
 	</para>
 	<variablelist>
 		<varlistentry>
@@ -15,10 +18,54 @@
 			</term>
 			<listitem>
 				<para>
-					Sets an observer for one file tree walk. This must be a class
-					that implements the FileTreeObserver interface. The observers will
-					be unregistered after the file tree walk is completed.
+					Sets an
+					<link linkend="en.genesez.core.features.FileTreeObserver">
+						<literal>FileTreeObserver</literal>
+					</link>
+					for one file tree walk. This must be a class
+					that implements the
+					FileTreeObserver interface. The observers will
+					be unregistered after
+					the file tree walk is completed.
 				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry id="en.genesez.core.configuration.feature.FTW.searchedDir">
+			<term>searchedDir</term>
+			<term>
+				<emphasis>single-value</emphasis>
+			</term>
+			<term>
+				default: the
+				<link
+					linkend="en.genesez.platforms.common.workflow.components.generator.outputDir">
+					<literal>outputDir</literal>
+				</link>
+				from the generator to which its added.
+			</term>
+			<listitem>
+				<para>
+					Sets the entry point of the file tree walk. The file tree walk
+					starts at the given directory. E. g. it is used if you want to use
+					a
+					<link linkend="">
+						<literal>StatisticObserver</literal>
+					</link>
+					within a generator and want the statistics of the whole project.
+				</para>
+				<caution>
+					<para>
+						For most cases the default value should be good enough. If you use
+						the
+						<link linkend="en.genesez.core.description.features.FileDeletionFeature">
+							<literal>FileDeletionFeature</literal>
+						</link>
+						as an observer of this particular FileTreeWalkerFeature you should
+						be extra careful with this parameter. Because the
+						FileDeletionFeature deletes all files that are not changed after
+						the generation.
+					</para>
+				</caution>
 			</listitem>
 		</varlistentry>
 	</variablelist>

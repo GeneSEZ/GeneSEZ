@@ -27,16 +27,19 @@ import de.genesez.platforms.common.NotPreparedException;
 public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 		PreFeature {
 
-	// The observers
-	private Set<FileTreeObserver> observer = new LinkedHashSet<FileTreeObserver>();
-	private boolean runAborted = false;
-
 	/**
 	 * The Log instance for this object
 	 */
 	protected Log logger = LogFactory.getLog(getClass());
+	
+	// The observers
+	private Set<FileTreeObserver> observer = new LinkedHashSet<FileTreeObserver>();
 
-	private Path outputDir = null;
+	private Path searchedDir = null;
+	
+	private Properties properties = new Properties();
+	
+	private boolean runAborted = false;
 
 	/**
 	 * starts the fileTree walk. Calls updateComplete() on the observers after
@@ -152,7 +155,12 @@ public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 	 */
 	@Override
 	public void setProperties(Properties properties) {
-		outputDir = Paths.get(properties.getProperty("outputDir"));
+		if(searchedDir == null){
+			setSearchedDir(properties.getProperty("outputDir"));
+		}
+		for(FileTreeObserver ob : observer){
+			ob.setFileTreeProperties(this.properties);
+		}
 	}
 
 	/**
@@ -163,7 +171,7 @@ public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 	 */
 	@Override
 	public void checkConfiguration() throws IllegalArgumentException {
-		if (outputDir == null || outputDir.toString().isEmpty()) {
+		if (searchedDir == null || searchedDir.toString().isEmpty()) {
 			runAborted = true;
 			throw new IllegalArgumentException("No output directory given.");
 		}
@@ -176,7 +184,7 @@ public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 	@Override
 	public void invokePre() {
 		if (countObservers() > 0) {
-			walkTree(outputDir);
+			walkTree(searchedDir);
 			this.unregisterAllObserver();
 		}
 	}
@@ -188,6 +196,15 @@ public class FileTreeWalkerFeature implements FileVisitor<Path>, PostFeature,
 	@Override
 	public void invokePost() throws NotPreparedException {
 		this.invokePre();
+	}
+	
+	/**
+	 * Sets the directory which should be walked
+	 * @param dir the directory
+	 */
+	public void setSearchedDir(String dir) {
+		this.searchedDir = Paths.get(dir);
+		properties.setProperty("searchedDir", dir);
 	}
 
 	/**

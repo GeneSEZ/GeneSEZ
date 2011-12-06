@@ -123,27 +123,4 @@ public class ImportBeautifierTest {
 		ib.setImportStrings(imports);
 		assertEquals("(import|#include|xs:import) .*$", ib.getOptions().getProperty("de.genesez.importformatter.regex",""));
 	}
-
-//	@Test
-//	public void testSetLineDelimiter() throws IOException {
-//		String content = new String(Files.readAllBytes(testfile)).replaceAll("\n", "€");
-//		Files.write(testfile, content.getBytes());
-//		Map<String, Set<String>> testmap = new HashMap<String, Set<String>>();
-//		Set<String> set = new HashSet<String>();
-//		set.add("import java.util.Imports;");
-//		set.add("import fjg.skdja.lala;");
-//		testmap.put("123", set);
-//		
-//		ib.setLineDelimiter("€");
-//		ib.setImportStrings("import");
-//		ib.setFileExtensions(".java");
-//		
-//		Path test = Paths.get("").resolve("test/de/genesez/platforms/common/m2t/testfile.java");
-//		if(!Files.exists(test)){
-//			test = Files.createLink(Paths.get(testfile.toString().concat(".java")), testfile);
-//		}
-//		ib.updateFileVisit(test);
-//		Files.deleteIfExists(test);
-//		assertEquals(testmap, ib.importMap);
-//	}
 }

@@ -377,6 +377,7 @@ public class DefaultGenerator extends Generator {
 		}
 		if(importTakeOver){
 			preftw.addObserver(importBeautifier);
+			super.addPostProcessor(importBeautifier);
 		}
 		super.addPreFeature(preftw);
 		if (deleteOldFiles) {
@@ -389,6 +390,5 @@ public class DefaultGenerator extends Generator {
 			super.addPostFeature(postftw);
 			super.addPostFeature(fod);
 		}
-		super.addPostProcessor(importBeautifier);
 	}
 }
