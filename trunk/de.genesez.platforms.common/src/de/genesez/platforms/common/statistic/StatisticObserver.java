@@ -34,7 +34,7 @@ import de.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature;
  * - implemented documentation lines<br>
  * - implemented comment lines
  * </p>
- * on the {@link StatisticsSet} of a {@link StatFile} (or {@link StatDir}). 
+ * on the {@link StatisticsSet} of a {@link StatFile} (or {@link StatDir}).
  * 
  * @author Dominik Wetzel
  * @date 2011-11-21
@@ -357,6 +357,7 @@ public class StatisticObserver extends FileTreeObserverAdapter {
 		if (line.isEmpty()) {
 			return;
 		}
+
 		allLines++;
 
 		if (line.startsWith(singleLineCommentString)) {
@@ -365,12 +366,14 @@ public class StatisticObserver extends FileTreeObserverAdapter {
 		}
 
 		if (docuCommentStartString != null) {
-			if (line.startsWith(docuCommentStartString)) {
+			if (line.startsWith(docuCommentStartString)
+					&& !line.endsWith(multiLineCommentEndString)) {
 				int lines = countMultiCommentLines(bf);
 				allLines += lines;
-				stats.incDocu(lines + 1, generated);
+				stats.incDocu(lines, generated);
 				return;
 			}
+			stats.incDocu(generated);
 		}
 
 		if (line.startsWith(multiLineCommentStartString)) {
