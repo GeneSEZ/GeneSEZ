@@ -55,7 +55,8 @@ public class ElementRegistry {
 	 */
 	public void addElement(org.sparx.Attribute _a, Element _e) {
 		this.addElementGuid(_a.GetAttributeGUID(), _e);
-		this.addElementIdGuid(_a.GetAttributeID(), _a.GetAttributeGUID());
+		// TODO is this needed
+		//this.addElementIdGuid(_a.GetAttributeID(), _a.GetAttributeGUID());
 	}
 	
 	/**
@@ -65,7 +66,9 @@ public class ElementRegistry {
 	 */
 	public void addElement(org.sparx.Connector _c, Element _e) {
 		this.addElementGuid(_c.GetConnectorGUID(), _e);
-		this.addElementIdGuid(_c.GetConnectorID(), _c.GetConnectorGUID());
+		// now processed by postprocessor
+		// otherwise error in simulation
+		//this.addElementIdGuid(_c.GetConnectorID(), _c.GetConnectorGUID());
 	}
 	
 	/**
@@ -85,7 +88,8 @@ public class ElementRegistry {
 	 */
 	public void addElement(org.sparx.Package _p, Element _e) {
 		this.addElementGuid(_p.GetPackageGUID(), _e);
-		this.addElementIdGuid(_p.GetPackageID(), _p.GetPackageGUID());
+		// TODO is this needed?		
+//		this.addElementIdGuid(_p.GetPackageID(), _p.GetPackageGUID());
 	}
 	
 	/**
