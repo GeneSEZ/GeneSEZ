@@ -7,13 +7,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.uml2.uml.resource.XMI2UMLResource;
 
 /**
  * A singleton class to handle Resources for the model transformation
  * 
  * @author gerbe
+ * @author christian
  *
  * The ResourceRegistry create and load resources for transforming the model.
  * It also provides access to the resources via their names.
@@ -21,7 +26,7 @@ import org.eclipse.emf.ecore.xmi.XMIResource;
 public class ResourceRegistry {
 
 	private static final Log log = LogFactory.getLog(ResourceRegistry.class);
-	private static final ResourceSetImpl RESOURCE_SET = new ResourceSetImpl();
+	private static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
 
 	public static final ResourceRegistry instance = new ResourceRegistry();
 	
@@ -41,7 +46,7 @@ public class ResourceRegistry {
 	 * @return	The loaded resource
 	 */
 	public Resource load(String _name, URI _uri) {
-		log.debug("Loading resource " + _name + " from "+ _uri.toString());
+		log.debug("Loading resource " + _name + " from "+ _uri);
 		Resource resource = RESOURCE_SET.getResource(_uri, true);
 		this.resources.put(_name, resource);
 		return resource;
@@ -53,8 +58,8 @@ public class ResourceRegistry {
 	 * @param _uri	The URI where to create the resource
 	 * @return	The created resource
 	 */
-	public XMIResource create(String _name, URI _uri) {
-		log.debug("Create resource " + _name + " on " + _uri.toString());
+	public XMIResource create(String _name, URI _uri) {		
+		log.debug("Create resource " + _name + " on " + _uri);
 		XMIResource resource = (XMIResource) RESOURCE_SET.createResource(_uri);
 		resource.setEncoding("UTF-8");
 		this.resources.put(_name, resource);

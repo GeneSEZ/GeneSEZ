@@ -9,6 +9,15 @@ import org.eclipse.uml2.uml.Stereotype;
 import de.genesez.adapter.ea.ElementRegistry;
 import de.genesez.adapter.ea.PostProcessor;
 
+/**
+ * applies stereotypes that have been read from profile-files to the elements 
+ * 
+ * @author gerbe
+ * @author christian
+ * @version 2
+ *
+ */
+
 public class StereotypeTransformer extends AbstractElementTransformer {
 
 	private static final Log log = LogFactory.getLog(StereotypeTransformer.class);

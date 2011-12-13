@@ -13,12 +13,13 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Model;
 
 /**
  * An oAW workflow component to write an UML XWI file
  * 
  * @author gerbe
+ * @author christian
  *
  * The XmiWriter creates an XMI output file from a UML model.
  * The model needs to be placed in the input slot.
@@ -32,7 +33,8 @@ public class XmiWriter extends AbstractWorkflowComponent {
 	private String resourceSlot = null;
 
 	public void checkConfiguration(Issues issues) {
-		URI uri = URI.createFileURI(this.xmiFile);
+		URI uri = URI.createURI(this.xmiFile);
+		log.debug("Creating URI: " + uri);
 		ResourceRegistry.instance.create(this.resourceSlot, uri);
 	}
 	
@@ -40,7 +42,7 @@ public class XmiWriter extends AbstractWorkflowComponent {
 		try {
 			log.info("Start writing XMI file...");
 			log.debug("Get model from slot: " + this.inputSlot);
-			Package output = (Package) ctx.get(this.inputSlot);
+			Model output = (Model) ctx.get(this.inputSlot);
 			log.debug("Get resource from slot: " + this.resourceSlot);
 			XMIResource resource = (XMIResource) ResourceRegistry.instance.get(this.resourceSlot);
 			resource.getContents().add(output);

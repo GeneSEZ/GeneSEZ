@@ -14,6 +14,14 @@ import org.eclipse.uml2.uml.UMLFactory;
 
 import de.genesez.adapter.ea.ElementRegistry;
 
+/**
+ * transforms the profile
+ * 
+ * @author christian
+ * 
+ * TODO doesn't work yet
+ *
+ */
 public class ProfileTransformer extends AbstractPackageTransformer {
 
 	private static final Log log = LogFactory.getLog(ProfileTransformer.class);
