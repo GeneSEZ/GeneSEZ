@@ -45,7 +45,6 @@ public class ProfileRegistry {
 	public void register(String name, Profile p) {
 		log.debug("Register Profile " + name);
 		this.profiles.put(name, p);
-		
 		for (Element e: p.allOwnedElements()) {
 			if (e instanceof Stereotype) {
 				Stereotype s = (Stereotype) e;
@@ -64,7 +63,7 @@ public class ProfileRegistry {
 		for (String s: this.profiles.keySet()) {
 			log.debug("Found profile " + s);
 			_profiles.add(this.profiles.get(s));
-		}
+		}		
 		return _profiles;
 	}
 	

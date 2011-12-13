@@ -104,7 +104,7 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 			}
 		}
 		
-		if ( null == model ) {
+		if ( model == null ) {
 			throw new Exception("Model " + this.modelName + " not found in repository");
 		}
 		

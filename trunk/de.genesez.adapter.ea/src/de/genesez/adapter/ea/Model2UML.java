@@ -22,7 +22,7 @@ public class Model2UML extends AbstractWorkflowComponent {
 
 	private String inputSlot = null;
 	private String outputSlot = null;
-
+	
 	public void checkConfiguration(Issues issues) {
 		// nothing to do here
 	}
@@ -34,12 +34,13 @@ public class Model2UML extends AbstractWorkflowComponent {
 
 		log.debug("Get package from slot: " + this.inputSlot);
 		org.sparx.Package inputModel = (org.sparx.Package)ctx.get(this.inputSlot);
-		
+				
 		log.info("Start transforming the model...");
 		ModelTransformer t = new ModelTransformer();
 		Model outputModel = t.transform(inputModel);
-		PostProcessor.instance.startPostProcessing();
 		
+		PostProcessor.instance.startPostProcessing();
+
 		log.debug("Set model to slot: " + this.outputSlot);
 		ctx.set(this.outputSlot, outputModel);
 

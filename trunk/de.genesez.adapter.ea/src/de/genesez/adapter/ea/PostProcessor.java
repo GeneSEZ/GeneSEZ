@@ -13,12 +13,15 @@ import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.StructuredClassifier;
 
+import de.genesez.adapter.ea.transform.ConnectorFactory;
+import de.genesez.adapter.ea.transform.InterfaceFactory;
 import de.genesez.adapter.ea.transform.PropertyClassifierTransformer;
 
 /**
  * Process action after the main model transformation
  * 
  * @author gerbe
+ * @author christian
  * 
  * Some model transformation actions cannot be done during the main transformation.
  * Such actions are e.g. setting the called behavior of CallBehaviorActions or
@@ -95,6 +98,13 @@ public class PostProcessor {
 		this.processBehaviors();
 		this.processProperties();
 		this.processDependencies();
+		// Interfaces
+		this.processInterfaces();
+		// Connections
+		this.processConnections();
+		
+		// TODO DEBUG
+		ElementRegistry.instance.print();
 	}
 
 	/**
@@ -126,15 +136,43 @@ public class PostProcessor {
 	}
 	
 	/**
-	 * Process dependencies
+	 * Process dependencies which could not be resolved
 	 */
 	private void processDependencies() {
 		log.debug("Starting post processing for dependencies");
-
+		log.debug("\n\tDependencies found: " + this.dependencies.size() +"\n");
+		
 		for (Dependency d : this.dependencies.keySet()) {
 			org.sparx.Connector c = this.dependencies.get(d);
+			
 			NamedElement elem = (NamedElement) ElementRegistry.instance.getById(c.GetSupplierID());
-			d.getSuppliers().add(elem);
+			if(elem != null){
+				d.getSuppliers().add(elem);	
+			}else{
+				String guid = c.GetConnectorGUID();
+				ConnectorFactory.instance.addDependency(guid, c.GetClientID());
+				ConnectorFactory.instance.addDependency(guid, c.GetSupplierID());
+				log.fatal("FUCK element does not exist yet.");
+				log.fatal("Name="+d.getName() );
+			}
 		}
 	}
+	
+	/**
+	 * Process interfaces 
+	 */
+	private void processInterfaces(){
+		log.debug("Starting post processing interface realization");
+		InterfaceFactory.instance.processInterfaces();	
+	}
+
+	/**
+	 * Process all connections
+	 */
+	private void processConnections(){
+//		ConnectorFactory.instance.printDependencies();
+		log.debug("Starting post processing all Connections");
+		ConnectorFactory.instance.startPostprocssingConnectors();
+	}
+	
 }

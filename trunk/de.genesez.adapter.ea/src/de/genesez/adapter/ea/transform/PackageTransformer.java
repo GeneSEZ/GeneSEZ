@@ -50,7 +50,7 @@ public class PackageTransformer extends AbstractPackageTransformer {
 			ClassTransformer t = new ClassTransformer();
 			t.transform(_e, this.umlPackage);
 		}else if ( _e.GetType().equals("Interface") ) {
-			log.debug("Element is a Interface");
+			log.debug("Element is a Interface");			
 			InterfaceTransformer t = new InterfaceTransformer();
 			t.transform(_e, this.umlPackage);
 		}
