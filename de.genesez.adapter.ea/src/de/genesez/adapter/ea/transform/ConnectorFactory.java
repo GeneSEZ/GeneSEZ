@@ -261,8 +261,12 @@ public class ConnectorFactory {
 			// set name
 			association.setName(eaElement.GetName());
 			
-			if(ElementRegistry.instance.getById(eaElement.GetSupplierID()) instanceof Class){
+			Element sup = ElementRegistry.instance.getById(eaElement.GetSupplierID());
+			Element cli = ElementRegistry.instance.getById(eaElement.GetClientID());
+			
+			if( !(sup instanceof Port) || !(cli instanceof Port) ){
 				// TODO add class associations again
+				log.error("Association for this is not implemented yet: " + sup.getClass());
 				continue;
 			}
 			
