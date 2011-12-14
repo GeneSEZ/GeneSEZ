@@ -33,7 +33,7 @@ import de.genesez.adapter.ea.ElementRegistry;
  * It's run by the post processor.
  * 
  * 
- * @author christian possoegel
+ * @author christian 
  * @version 3
  * 
  */
@@ -45,8 +45,12 @@ public class ConnectorFactory {
 	public static ConnectorFactory instance = new ConnectorFactory();
 
 	private Map<String, List<Integer>> informationFlowMap = new HashMap<String, List<Integer>>();
+	private Map<String, org.sparx.Connector> informationFlowGUIDMap = new HashMap<String, org.sparx.Connector>();
+	
 	private Map<String, List<Integer>> dependencyMap = new HashMap<String, List<Integer>>();
 	private Map<String, List<Integer>> delegateMap = new HashMap<String, List<Integer>>();
+	
+//	private Map<String, org.sparx.Connector> informationFlowMap = new HashMap<String, org.sparx.Connector>();	
 	
 	private Map<String, org.sparx.Connector> associationMap = new HashMap<String, org.sparx.Connector>();
 	private Map<String, org.sparx.Connector> associationComponentMap = new HashMap<String, org.sparx.Connector>();
@@ -97,7 +101,9 @@ public class ConnectorFactory {
 	 * @param guid
 	 * @param parent_id
 	 */
-	public void addInformationFlow(String guid, int parent_id) {
+	public void addInformationFlow(org.sparx.Connector _c, int parent_id) {
+		final String guid = _c.GetConnectorGUID();
+		informationFlowGUIDMap.put(guid, _c);
 		if (informationFlowMap.containsKey(guid)) {
 			informationFlowMap.get(guid).add(parent_id);
 		} else {
@@ -106,7 +112,7 @@ public class ConnectorFactory {
 			informationFlowMap.put(guid, list);
 		}
 	}
-
+	
 	public void addDependency(String guid, int parent_id) {
 		if (dependencyMap.containsKey(guid)) {
 			dependencyMap.get(guid).add(parent_id);
@@ -545,8 +551,13 @@ public class ConnectorFactory {
 
 			org.eclipse.uml2.uml.Package nearestPackage = source
 					.getNearestPackage();
+			
+			// get the original connector
+			org.sparx.Connector con = informationFlowGUIDMap.get(guid);
+			
+			// create information flow and set name
 			InformationFlow flow = (InformationFlow) nearestPackage
-					.createPackagedElement("flow", UMLFactory.eINSTANCE
+					.createPackagedElement(con.GetName(), UMLFactory.eINSTANCE
 							.createInformationFlow().eClass());
 
 			flow.getInformationSources().add(sourceClazz);

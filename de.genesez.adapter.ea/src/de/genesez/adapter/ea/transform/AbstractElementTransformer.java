@@ -64,6 +64,7 @@ public abstract class AbstractElementTransformer {
 		}else if(connecterType.equals("Delegate")){			
 			log.debug("Connector is Delegate");
 			
+			// if port, parent is other
 			if(umlElement instanceof Port){
 				ConnectorFactory.instance.addDelegate(_c.GetConnectorGUID(), eaElement.GetElementID());
 			}else{
@@ -71,7 +72,7 @@ public abstract class AbstractElementTransformer {
 			}
 		}else if(connecterType.equals("InformationFlow")){
 			log.debug("Connector is InformationFlow");
-			ConnectorFactory.instance.addInformationFlow(_c.GetConnectorGUID(), eaElement.GetParentID());
+			ConnectorFactory.instance.addInformationFlow(_c, eaElement.GetParentID());
 		}else if(connecterType.equals("Association")){
 			log.debug("Connector is Association");
 //			ConnectorFactory.instance.addAssociation(_c.GetConnectorGUID(), eaElement.GetElementID());
