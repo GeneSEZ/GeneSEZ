@@ -135,7 +135,7 @@ public class TYPO3Generator extends TypeMappingGenerator {
 	/**
 	 * Setter for the workflow parameter <em><b>scaffolding</b></em>
 	 * 
-	 * Sets if dynamic scaffolding should be enabled.
+	 * Sets if static scaffolding should be enabled.
 	 * 
 	 * @param scaffolding True if scaffolding should be enabled, otherwise
 	 *            false.
