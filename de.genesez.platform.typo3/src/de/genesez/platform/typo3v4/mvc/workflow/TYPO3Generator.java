@@ -26,11 +26,12 @@ public class TYPO3Generator extends TypeMappingGenerator {
 	static {
 		defaults.setProperty("template", "de::genesez::platform::typo3v4::mvc::templates::Root::Root");
 		defaults.setProperty("typeMappingFile", "de/genesez/platform/typo3v4/mvc/typemapping/typemapping.xml");
+		defaults.setProperty("xtendNamingFile", "de::genesez::platform::typo3v4::mvc::convention::Naming");
 
 		defaults.setProperty("useModelNameAsExtensionKey", "false");
 		defaults.setProperty("isT3MVCCompliant", "false");
 		defaults.setProperty("scaffolding", "false");
-		defaults.setProperty("xtendNamingFile", "de::genesez::platform::typo3v4::mvc::convention::Naming");
+		
 	}
 
 	/**
