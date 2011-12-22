@@ -15,18 +15,19 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  * Workflow component class for TYPO3 MVC model to model (M2M) modifications.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date 2011-08-20
+ * @date 2011-12-22
  */
-public class TYPO3Model2Model extends Model2Model {
+public abstract class TYPO3Model2Model extends Model2Model {
 
 	/**
 	 * Default values in case the property file is not found.
 	 */
 	private static final Properties defaults = new Properties();
 	static {
+		defaults.setProperty("xtendNamingFile", "de::genesez::platform::typo3v4::mvc::convention::Naming");
+		
 		defaults.setProperty("useModelNameAsExtensionKey", "false");
 		defaults.setProperty("isT3MVCCompliant", "false");
-		defaults.setProperty("xtendNamingFile", "de::genesez::platform::typo3v4::mvc::convention::Naming");
 	}
 
 	/**
@@ -36,17 +37,6 @@ public class TYPO3Model2Model extends Model2Model {
 		super();
 
 		WorkflowUtils.callPropertyAccessors(this, defaults);
-	}
-
-	/**
-	 * Called by the container after configuration so the component can validate
-	 * the configuration before invocation.
-	 * 
-	 * @see org.eclipse.xtend.XtendComponent#checkConfigurationInternal(org.eclipse.emf.mwe.core.issues.Issues)
-	 */
-	@Override
-	public void checkConfigurationInternal(Issues issues) {
-		super.checkConfigurationInternal(issues);
 	}
 
 	/**
