@@ -50,6 +50,8 @@ public class Traceability extends CompositeComponent {
 	public Traceability() {
 		super(Traceability.class.getSimpleName());
 		
+		properties.putAll(defaults);
+		
 		gcore.setMetaModelPackage(GcorePackage.class.getName());
 		greq.setMetaModelPackage(GreqPackage.class.getName());
 		gtrace.setMetaModelPackage(GtracePackage.class.getName());

@@ -102,6 +102,9 @@ public final class WorkflowUtils {
 		Iterator<String> it = list.iterator();
 		while (it.hasNext()) {
 			s.append(it.next());
+			if(it.hasNext()){
+				s.append(",");
+			}
 		}
 		return s.toString();
 	}
