@@ -48,6 +48,7 @@ public class JavaGenerator extends DefaultGenerator {
 	private boolean isNotAddTypeMappingFile = true;
 	private boolean newAssociationHandling = true;
 	private boolean fieldAccess = true;
+	private boolean isNotSetFormatterConfig = true;
 	
 	private JavaBeautifier javaBeautifier;
 
@@ -70,7 +71,7 @@ public class JavaGenerator extends DefaultGenerator {
 		if (isNotAddTypeMappingFile) super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
 		if (newAssociationHandling) setNewAssociationHandling(Boolean.valueOf(properties.getProperty("newAssociationHandling")).booleanValue());
 		if (fieldAccess) setFieldAccess(Boolean.valueOf(properties.getProperty("fieldAccess")).booleanValue());
-
+		if (isNotSetFormatterConfig) setFormatterConfig(properties.getProperty("formatterConfig"));
 		super.checkConfigurationInternal(issues);
 	}
 
@@ -109,8 +110,8 @@ public class JavaGenerator extends DefaultGenerator {
 	}
 
 	public void setFormatterConfig(String formatterConfigFile) {
-		//properties.put("formatterConfig", formatterConfigFile);
 		javaBeautifier.setConfigFile(formatterConfigFile);
+		isNotSetFormatterConfig = false;
 	}
 
 	public void setNewAssociationHandling(boolean newAssociationHandling) {
