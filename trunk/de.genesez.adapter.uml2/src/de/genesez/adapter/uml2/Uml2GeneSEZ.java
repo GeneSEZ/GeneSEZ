@@ -36,6 +36,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		defaults.put("externalStereotypes", "external");
 		defaults.put("excludeStereotypes", "exclude");
 		defaults.put("includeProfiles", "");
+		defaults.put("allowGeneratedXmiGuID", "false");
 	}
 	
 	private Properties properties = new Properties(defaults);
@@ -62,6 +63,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	private boolean isNotSetExternalStereotypes = true;
 	private boolean isNotSetExcludeStereotypes = true;
 	private boolean isNotSetIncludeProfiles = true;
+	private boolean isNotSetAllowGeneratedXmiGuID = true;
 	
 	
 	/**
@@ -157,6 +159,10 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		} else {
 			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
 					"includeProfiles", "'" + WorkflowUtils.arrayToString(includeProfiles) + "'"));
+		}
+		if (isNotSetAllowGeneratedXmiGuID) {
+			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
+					"allowGeneratedXmiGuID", Boolean.parseBoolean(properties.getProperty("allowGeneratedXmiGuID"))));
 		}
 		super.checkConfiguration(issues);
 	}
@@ -327,5 +333,10 @@ public class Uml2GeneSEZ extends CompositeComponent {
 				addIncludeProfile(p);
 			}
 		}
+	}
+	
+	public void setAllowGeneratedXmiGuID(boolean allowed){
+		xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("allowGeneratedXmiGuID", allowed));
+		isNotSetAllowGeneratedXmiGuID = false;
 	}
 }

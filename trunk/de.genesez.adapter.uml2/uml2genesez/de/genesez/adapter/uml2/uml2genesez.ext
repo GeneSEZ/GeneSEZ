@@ -23,10 +23,10 @@ import uml;
 import gcore;
 
 // use global store
-extension de::genesez::platforms::common::GlobalStore;
+extension org::genesez::platforms::common::GlobalStore;
 
 // use logging
-extension de::genesez::platforms::common::log::Log;
+extension org::genesez::platforms::common::log::Log;
 
 // behavior models
 extension de::genesez::adapter::uml2::uml2activities;
@@ -95,6 +95,11 @@ private String includeProfiles() :
     GLOBALVAR includeProfiles == null 
         ? "" 
         : GLOBALVAR includeProfiles;
+
+private boolean allowGeneratedXmiGuID() :
+	GLOBALVAR allowGeneratedXmiGuID == null
+		? false
+		: GLOBALVAR allowGeneratedXmiGuID;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -504,7 +509,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	// add comment to association
 	ownedComment.addAll( a.ownedComment.typeSelect(Comment).makeComment() ) ->
 	// associations
-	end.addAll( a.memberEnd.select( e|e.class != null ).makeAssociationRole() ) ->
+	end.addAll( a.memberEnd.select( e|e.class != null && e.association == null ).makeAssociationRole() ) ->
 	// double set, isn't it ?
 	trace("link ends: " + end) ->
 	linkEnds() ->
@@ -1027,7 +1032,12 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
  */
 MElement transformBasics(MElement this, NamedElement n) :
 	// set the unique xmiId and name
-	setXmiGuid( xmiId(n) ) ->
+	let id = xmiId(n) :
+	allowGeneratedXmiGuID() == true ?
+	(id == null ?
+		(debug("Generate XmiId for: " + n.qualifiedName) ->
+		setXmiGuid( generateID(n) )) :
+		setXmiGuid( id )) : setXmiGuid( id ) ->
 	setName(n.name) ->
 	this;
 
@@ -1177,6 +1187,9 @@ private MModel coremodel() : get("coremodel");
  */
 String xmiId (Element obj) : 
 	JAVA de.genesez.adapter.uml2.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
+
+cached String generateID (Element obj) :
+	JAVA de.genesez.adapter.uml2.TransUtils.generateXmiId(org.eclipse.emf.ecore.EObject);
 
 /**
  * process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)

@@ -40,8 +40,16 @@ public class TransUtils {
 		try {
 			return ((XMLResource)pObj.eResource()).getID(pObj);
 		} catch (NullPointerException npe) {
-			return pObj.toString();
+			return null;//pObj.toString();
 		}
+	}
+	
+	/**
+	 * Generates an unique id
+	 * @return the unique id String
+	 */
+	public static String generateXmiId(EObject obj){
+		return java.util.UUID.randomUUID().toString();
 	}
 	
 	/**
