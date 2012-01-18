@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="org.genesez.extra.Starter">
+	<title>Starter</title>
+	<para>
+		The Starter workflow component can be used for profiling. It
+		simply
+		halts the workflow after initialization and during configuration
+		and logs the time for initialization and configuration checking.
+		While
+		the workflow is stopped the profiling tool (e. g. VisualVM) can be
+		configured.
+	</para>
+	<para>
+		You can also use this class as a workflow starter or for
+		debugging. It
+		contains a
+		main method and can run a workflow file. In
+		debug mode the
+		workflow halts on breakpoints because it runs as a java
+		application,
+		which supports debugging.
+	</para>
+	<para>
+		To run in this mode you can either copy the Starter into your project
+		folder or prepare your
+		workflow file properly:
+		<itemizedlist>
+			<listitem>
+				<para>
+					add following properties to the top of your workflow file
+					<simplelist>
+						<member>- <literal><![CDATA[<property name='baseDir' value='.' />]]></literal></member>
+						<member>- <literal><![CDATA[<property name='typeMappingDir' value='.' />]]></literal></member>
+					</simplelist>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					add <literal><![CDATA[${baseDir}/]]></literal>
+					in front of every relative path (do not forget the Slash) except
+					before
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.typeMappingFile">
+						<literal>typeMappingFile</literal>
+					</link>
+					.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					add <literal><![CDATA[${typeMappingDir}/]]></literal>
+					before the value of
+					<literal>typeMappingFile</literal>
+					. Do not use
+					<link
+						linkend="en.genesez.platforms.common.workflow.components.generator.typeMappingFiles">
+						<literal>typeMappingFiles</literal>
+					</link>
+					or put <literal><![CDATA[${typeMappingDir}/]]></literal>
+					before every file.
+				</para>
+			</listitem>
+		</itemizedlist>
+		In the end there should be something like this:
+		<programlisting><![CDATA[<workflow>]]>
+	<![CDATA[<property name='baseDir' value='.' />]]>
+	<![CDATA[<property name='typeMappingDir' value='.' />]]>
+	...
+	<![CDATA[<file value="${baseDir}/org/genesez/afile.xml />]]>
+	...
+	<![CDATA[<typeMappingFile value="${typeMappingDir}/typemapping.xml />]]>
+	...
+<![CDATA[</workflow>]]></programlisting>
+	</para>
+	<para>
+		To run a prepared file just
+		put the
+		file as an argument into the
+		Starter or write it into the
+		console after
+		running.
+	</para>
+	<para>
+		It can be added to the workflow with
+		<programlisting><![CDATA[<component class="org.genesez.tools.profiling.Starter />]]></programlisting>
+	</para>
+</section>

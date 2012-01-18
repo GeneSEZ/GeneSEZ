@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="org.genesez.extra.Profiling">
+	<title>How to profile GeneSEZ</title>
+	<para>
+		Profiling of the GeneSEZ generator framework is mainly useful for
+		developers to
+		check if the implemented code is fast, and doesn't
+		produce to much
+		overhead.
+	</para>
+	<para>
+		<variablelist>
+			<varlistentry>
+				<term>
+					<emphasis role="bold">Prerequisites</emphasis>
+				</term>
+				<listitem>
+					<para>
+						First you need a profiling tool. Therefore you can use VisualVM
+						which is supplied with the JDK since version 6 update 7. But you
+						can also download the latest Version
+						<ulink url="http://visualvm.java.net/">here</ulink>
+						.
+						It is recommended to install all available add-ons for VisualVM.
+
+						<note>
+							<para>
+								There are some other free profiling
+								tools available too, most of them use the
+								JVM Tool
+								Interface. These tools can be added as
+								an
+								agent into the run
+								configurations. There are also some tools that
+								only run with java
+								applications and do not support mwe workflow
+								files. Therefore you
+								can use the
+								<link linkend="org.genesez.extra.Starter">
+									<literal>Starter</literal>
+								</link>
+								and start profiling with this. But currently they do not work
+								properly because of a <literal>VerifyError</literal>.
+							</para>
+						</note>
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+		<orderedlist>
+			<title>Profiling with VisualVM</title>
+			<listitem>
+				<para>
+					Start VisualVM
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Put the
+					<link linkend="org.genesez.extra.Starter">
+						<literal>Starter</literal>
+					</link>
+					component on the beginning of your workflow file.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Start the workflow
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Search the running process (should have the postfix WorkflowRunner)
+					in VisualVM, double-click and configure it:
+					<itemizedlist>
+						<listitem>
+							<para>
+								In the
+								<emphasis role="bold">Tracer</emphasis>
+								panel you can chose probes.
+								Interesting maybe CPU + GC, Heap and
+								vmOperationTime under
+								"Jvmstat counters 'sun.threads'". Press
+								start to start the tracer.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								In the
+								<emphasis role="bold">Profiler</emphasis>
+								panel you can chose whether to profile memory or CPU time.
+								The
+								<emphasis role="bold">Sampler</emphasis>
+								panel could be also of some interest.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								In the
+								<emphasis role="bold">Monitor</emphasis>
+								panel you can monitor some statistics during runtime, but more
+								important there is the
+								<emphasis role="bold">Heap Dump</emphasis>
+								button, that gives you the full heap dump of the very time you
+								click it.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								There are much more possibilities available. Feel free to
+								try different things.
+							</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					After configuration press enter in your workflow console to
+					start the rest of the workflow. Now the data will be collected and
+					can also be viewed during the runtime.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Wait for the end of your workflow and save all the collected
+					data if you want to, but do not forget it. Therefore there are save
+					buttons in nearly every panel.
+				</para>
+			</listitem>
+		</orderedlist>
+	</para>
+</section>

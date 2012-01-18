@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="org.genesez.extra.description.ModelCreator.algorithm">
+	<title>Description of the default algorithms</title>
+	<para>
+		This chapter will describe the default algorithms you can chose for
+		the
+		<link linkend="org.genesez.extra.configuration.ModelCreator">
+			<literal>ModelCreator</literal>
+		</link>
+	</para>
+	<section id="org.genesez.extra.ModelCreator.algorithms.assoInPackage">
+		<title>AssociationAlgorithmInPackages</title>
+		<para>
+			This algorithm does only create associations along the package trees
+			and not between. In
+			<xref linkend="org.genesez.extra.algorithms.associationsInPackage" />
+			you can see how the associations look like.
+			<figure id="org.genesez.extra.algorithms.associationsInPackage">
+				<title>Linking of the model</title>
+				<mediaobject>
+					<imageobject role="html">
+						<imagedata align="center"
+							fileref="../../images/core/extra/org.genesez.extra.ModelCreator.associations.png" />
+					</imageobject>
+					<imageobject role="fo">
+						<imagedata align="center"
+							fileref="../../images/core/extra/org.genesez.extra.ModelCreator.associations.svg"
+							scalefit="1" width="100%" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</para>
+		<para>
+			To do this the algorithm
+			first saves the package to each class and
+			interface. During the
+			creation of the associations the association
+			ending can only be a
+			class that match one of following conditions:
+			<simplelist>
+				<member>- the end class is in the same package as the begin
+					classifier
+				</member>
+				<member>- the end class is in a superpackage of the begin classifier
+				</member>
+				<member>- the end class is in a subpackage of the begin classifier's
+					package
+				</member>
+			</simplelist>
+		</para>
+		<para>
+			<itemizedlist>
+				<title>Additional information</title>
+				<listitem>
+					<para>The algorithm produces only binary and also no
+						undirected
+						associations.
+					</para>
+				</listitem>
+				<listitem>
+					<para>All parameters
+						are calculated, but
+						unfortunately this
+						depends on
+						HashCode so the
+						algorithm can not be
+						assured to be 100 %
+						deterministic.
+					</para>
+				</listitem>
+				<listitem>
+					<para>The algorithm is used for
+						associations and association
+						classes.
+					</para>
+				</listitem>
+				<listitem>
+					<para>Associations between interfaces and classes are only
+						navigable from the class and can not be association classes.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						There are no associations from an interface to another
+						interface
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Associations to itself are also possible
+					</para>
+				</listitem>
+			<listitem>
+				<para>
+					To write your own algorithm you can implement the
+					<literal>AssociationAlgorithm</literal>
+					interface
+				</para>
+			</listitem>
+			</itemizedlist>
+		</para>
+	</section>
+	<section id="org.genesez.extra.ModelCreator.algorithms.defaultGen">
+		<title>GeneralizationAlgorithmImpl</title>
+		<para>
+			This algorithm is needed to create generalizations for classifiers.
+			First some classifiers will be chosen by an offset, which is
+			calculated with the given parameters. After that generalizations will
+			be created from to lowest level to the highest in one tree and after
+			that the next tree will be created. In
+			<xref linkend="fig:org.genesez.extra.algorithms.generalizationImpl" />
+			you see how the generalization work.
+		</para>
+		<figure id="fig:org.genesez.extra.algorithms.generalizationImpl">
+			<title>Creation of the generalizations</title>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata align="center"
+						fileref="../../images/core/extra/org.genesez.extra.ModelCreator.generalizations.hierarchy.png" />
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata align="center"
+						fileref="../../images/core/extra/org.genesez.extra.ModelCreator.generalizations.hierarchy.svg"
+						scalefit="1" width="80%" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<itemizedlist>
+			<title>Additional information</title>
+			<listitem>
+				<para>
+					The algorithm works for interfaces and classes, but only from
+					interfaces to interfaces and classes to classes.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Before creating generalizations it will be checked if enough
+					classifiers are available. If not, every classifier is in the list
+					for generalizations.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Before creating a tree, the complete lowest level will first
+					be chosen.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					The amount of classes/interfaces needed for the generalizations is
+					the
+					<link linkend="org.genesez.extra.ModelCreator.generatlizations">
+						<literal>Amount of Generalizations</literal>
+					</link>
+					plus one.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					The algorithm does not create multiple inheritance.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					The algorithm has nothing to do with interface realizations.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					To write your own algorithm you can implement the
+					<literal>GeneralizationAlgorithm</literal>
+					interface
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+</section>

@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<section id="org.genesez.extra.configuration.ModelCreator">
+	<title>ModelCreator</title>
+	<para>
+		The ModelCreator is a WorkflowComponent, that creates a model for
+		Profiling and Testing. It supports creation of a random Model or a
+		defined one. You can specify different parameters to create the model.
+		To calculate the amount of the model elements see
+		<xref linkend="org.genesez.extra.ModelCreator.calculation" />
+	</para>
+	<para>
+		To add the ModelCreator to your workflow put
+		<programlisting><![CDATA[<component class="org.genesez.platforms.common.profiling.ModelCreator />]]></programlisting>
+		to your workflow file.
+	</para>
+	<para>
+		Besides the parameters given below it contains all parameters
+		from the CompositeComponent of openArchitectureWare.
+	</para>
+	<section>
+		<title>Configuration</title>
+		<variablelist>
+			<varlistentry>
+				<term>
+					<emphasis role="bold">outputFile</emphasis>
+				</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>model/uml2model.xmi</literal>
+				</term>
+				<listitem>
+					<para>
+						The file in which the created model will be stored after
+						serialization.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>slot</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>model</literal>
+				</term>
+				<listitem>
+					<para>
+						The slot where the model will be stored and loaded for the
+						serialization.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>invokeScript</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>CreateModel::start()</literal>
+				</term>
+				<listitem>
+					<para>
+						Sets the script, that should be invoked by the
+						xtendComponent.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>associationAlgorithm</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>org.genesez.platforms.common.profiling.algorithms.AssociationAlgorithmInPackage
+					</literal>
+				</term>
+				<listitem>
+					<para>
+						The algorithm, how the associations should be created.
+						Default
+						will
+						place associations only between one package hierarchy
+						tree. See
+						<xref linkend="org.genesez.extra.ModelCreator.algorithms.assoInPackage" />
+						for more information
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>classGeneralizationAlgorithm</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>org.genesez.platforms.common.profiling.algorithms.GeneralizationAlgorithmImpl
+					</literal>
+				</term>
+				<listitem>
+					<para>
+						The algorithm, how the generalizations between classes will be
+						created. See
+						<xref linkend="org.genesez.extra.ModelCreator.algorithms.defaultGen" />
+						for information about the default algorithm.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>interfaceGeneralizationAlgorithm</term>
+				<term>
+					<emphasis>single-value</emphasis>
+				</term>
+				<term>
+					default:
+					<literal>org.genesez.platforms.common.profiling.algorithms.GeneralizationAlgorithmImpl
+					</literal>
+				</term>
+				<listitem>
+					<para>
+						The algorithm, how the generalizations between interfaces will be
+						created. See
+						<xref linkend="org.genesez.extra.ModelCreator.algorithms.defaultGen" />
+						for information about the default algorithm.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+		<section>
+			<title>Configuration of the model structure</title>
+			<variablelist>
+				<varlistentry id="org.genesez.extra.ModelCreator.structure">
+					<term>structure</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>3, 3, 3, 5, 1, 3, 4, 2</literal>
+					</term>
+					<listitem>
+						<para>
+							Specifies the structure of the model by giving a
+							comma or
+							semicolon
+							separated list of 8 numbers.
+							The numbers set the
+							parameters in the
+							following order.
+							<simplelist>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.headPackages">
+										<literal>headPackages</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.packagesPerPackage">
+										<literal>packagesPerPackage</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.packageHierarchyDepth">
+										<literal>packageHierarchyDepth</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.classesPerPackage">
+										<literal>classesPerPackage</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.interfacesPerPackage">
+										<literal>interfacesPerPackage</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.attributesPerClass">
+										<literal>attributesPerClass</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.operationsPerClass">
+										<literal>operationsPerClass</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.parametersPerOperation">
+										<literal>parametersPerOperation</literal>
+									</link>
+								</member>
+							</simplelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.associations">
+					<term>associations</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>200, 2, 10</literal>
+					</term>
+					<listitem>
+						<para>
+							Specifies the amount of associations by giving a comma or
+							semicolon
+							separated list with 3 numbers.
+							The numbers set parameters
+							in the
+							following order:
+							<simplelist>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.amountOfAssociations">
+										<literal>amountOfAssociations</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.associationsPerClass">
+										<literal>associationsPerClass</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.associationClasses">
+										<literal>associationClasses</literal>
+									</link>
+								</member>
+							</simplelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.generalizations">
+					<term>generalizations</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>5, 3, 3, 1, 2, 2, 2</literal>
+					</term>
+					<listitem>
+						<para>
+							Specifies the amount of generalizations between classes and
+							interfaces by giving a comma or semicolon separated list with 7
+							numbers.
+							The numbers set parameters in the following order:
+							<simplelist>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.classHierarchyTrees">
+										<literal>classHierarchyTrees</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.specializationsPerClass">
+										<literal>specializationsPerClass</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.classHierarchyDepth">
+										<literal>classHierarchyDepth</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.realizationsPerInterface">
+										<literal>realizationsPerInterface</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.interfaceHierarchyTrees">
+										<literal>interfaceHierarchyTrees</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link
+										linkend="org.genesez.extra.ModelCreator.specializationsPerInterface">
+										<literal>specializationsPerInterface</literal>
+									</link>
+								</member>
+								<member>
+									-
+									<link linkend="org.genesez.extra.ModelCreator.interfaceHierarchyDepth">
+										<literal>interfaceHierarchyDepth</literal>
+									</link>
+								</member>
+							</simplelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.headPackages">
+					<term>headPackages</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>3</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of head packages that means in the first level of the
+							model.
+							Can be set with others together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 1.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.packagesPerPackage">
+					<term>packagesPerPackage</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>3</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of packages per package that should be created.
+							Can be
+							set with others together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 2.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.packageHierarchyDepth">
+					<term>packageHierarchyDepth</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>3</literal>
+					</term>
+					<listitem>
+						<para>
+							The depth of the package hierarchy (depth of the tree).
+							Can be set
+							with others together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 3.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.classesPerPackage">
+					<term>classesPerPackage</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>5</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of classes per package that should be created.
+							Can be
+							set
+							with others together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 4.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.interfacesPerPackage">
+					<term>interfacesPerPackage</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>1</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of interfaces per package that should be created.
+							Can
+							be
+							set with others together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 5.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.attributesPerClass">
+					<term>attributesPerClass</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>3</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of attributes per class that should be created.
+							Used
+							also
+							for AssociationClasses.
+							Can be set with others together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 6.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.operationsPerClass">
+					<term>operationsPerClass</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>4</literal>
+					</term>
+					<listitem>
+						<para>
+							Amount of operations per class that should be generated.
+							Also used
+							for interfaces and association classes.
+							Can be set with others
+							together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 7.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry
+					id="org.genesez.extra.ModelCreator.parametersPerOperation">
+					<term>parametersPerOperation</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>2</literal>
+					</term>
+					<listitem>
+						<para>
+							Amount of parameters per operation that should be generated.
+							Can
+							be
+							set with others together in
+							<link linkend="org.genesez.extra.ModelCreator.structure">
+								<literal>
+									structure
+								</literal>
+							</link>
+							on position 8.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.amountOfAssociations">
+					<term>amountOfAssociations</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>200</literal>
+					</term>
+					<listitem>
+						<para>
+							The absolute amount of all associations between classes and
+							interfaces (except association classes).
+							Can be set with others
+							together in
+							<link linkend="org.genesez.extra.ModelCreator.associations">
+								<literal>
+									associations
+								</literal>
+							</link>
+							on position 1.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.associationsPerClass">
+					<term>associationsPerClass</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>2</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of associations per chosen class. Associations will be
+							set only for several classes.
+							Can be set with others together in
+							<link linkend="org.genesez.extra.ModelCreator.associations">
+								<literal>
+									associations
+								</literal>
+							</link>
+							on position 2.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.associationClasses">
+					<term>associationClasses</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>10</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of association classes that should be created. This
+							will
+							increase the number of associations by this value.
+							Can be set
+							with
+							others together in
+							<link linkend="org.genesez.extra.ModelCreator.associations">
+								<literal>
+									associations
+								</literal>
+							</link>
+							on position 3.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.classHierarchyTrees">
+					<term>classHierarchyTrees</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>5</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of class hierarchy trees that should be created or the
+							amount of classes
+							on the highest hierarchical level.
+							Can be set
+							with
+							others together
+							in
+							<link linkend="org.genesez.extra.ModelCreator.generalizations">
+								<literal>
+									generalizations
+								</literal>
+							</link>
+							on position 1.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry
+					id="org.genesez.extra.ModelCreator.specializationsPerClass">
+					<term>specializationsPerClass</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>3</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of specialization classes per chosen class that should
+							be used
+							or the amount of classes that extend another class.
+							Can be
+							set with
+							others together in
+							<link linkend="org.genesez.extra.ModelCreator.generalizations">
+								<literal>
+									generalizations
+								</literal>
+							</link>
+							on position 2.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="org.genesez.extra.ModelCreator.classHierarchyDepth">
+					<term>classHierarchyDepth</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>3</literal>
+					</term>
+					<listitem>
+						<para>
+							The depth of the class hierarchy or the amount of hierarchical
+							levels in the class hierarchy.
+							Can be set with others together in
+							<link linkend="org.genesez.extra.ModelCreator.generalizations">
+								<literal>
+									generalizations
+								</literal>
+							</link>
+							on position 3.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry
+					id="org.genesez.extra.ModelCreator.realizationsPerInterface">
+					<term>realizationsPerInterface</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>1</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of realizations per interface that should be used or
+							the
+							amount of classes that implement one interface.
+							Can be set with
+							others together in
+							<link linkend="org.genesez.extra.ModelCreator.generalizations">
+								<literal>
+									generalizations
+								</literal>
+							</link>
+							on position 4.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry
+					id="org.genesez.extra.ModelCreator.interfaceHierarchyTrees">
+					<term>interfaceHierarchyTrees</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>2</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of interface hierarchy trees or the amount of
+							interfaces
+							in the highest hierarchical level.
+							Can be set with
+							others
+							together
+							in
+							<link linkend="org.genesez.extra.ModelCreator.generalizations">
+								<literal>
+									generalizations
+								</literal>
+							</link>
+							on position 5.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry
+					id="org.genesez.extra.ModelCreator.specializationsPerInterface">
+					<term>specializationsPerInterface</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>2</literal>
+					</term>
+					<listitem>
+						<para>
+							The amount of specialization interfaces per interface or the
+							amount
+							of interfaces that extend another interface.
+							Can be set with
+							others
+							together in
+							<link linkend="org.genesez.extra.ModelCreator.generalizations">
+								<literal>
+									generalizations
+								</literal>
+							</link>
+							on position 6.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry
+					id="org.genesez.extra.ModelCreator.interfaceHierarchyDepth">
+					<term>interfaceHierarchyDepth</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>2</literal>
+					</term>
+					<listitem>
+						<para>
+							The depth of the interface hierarchy or the amount of
+							hierarchical
+							levels in the interface hierarchy.
+							Can be set with
+							others together
+							in
+							<link linkend="org.genesez.extra.ModelCreator.generalizations">
+								<literal>
+									generalizations
+								</literal>
+							</link>
+							on position 7.
+						</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</section>
+		<section>
+			<title>Configuration of the adjustments</title>
+			<variablelist>
+				<varlistentry>
+					<term>random</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>0</literal>
+					</term>
+					<listitem>
+						<para>
+							This value specifies the grade of randomization of the
+							model.
+							During
+							creation every number will be randomized by this
+							value in
+							percent.
+							E. g. that means if the random value is 50 the
+							value of a
+							parameter can differ between -50 % and + 50 % of the
+							value.
+							(The
+							sign of this value doesn't matter)
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="offset">
+					<term>offset</term>
+					<term>
+						<emphasis>single-value</emphasis>
+					</term>
+					<term>
+						default:
+						<literal>0</literal>
+					</term>
+					<listitem>
+						<para>
+							This indicates the absolute or relative (depending on
+							<link linkend="offsetInPercent">
+								<literal>offsetInPercent</literal>
+							</link>
+							) offset of the parameter's values. E. g. with an offset of -2
+							(and offsetInPercent=false) every parameter value will be
+							decremented by 2.
+							(The sign of this value does matter)
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry id="offsetInPercent">
+					<term>offsetInPercent</term>
+					<term>single-value</term>
+					<term>
+						default:
+						<literal>false</literal>
+					</term>
+					<listitem>
+						<para>
+							Set this to true, if the
+							<link linkend="offset">
+								<literal>offset</literal>
+							</link>
+							given in percent. E. g. if offset is 20 and offsetInPercent is
+							true, than every parameter value will be increased by 20%.
+						</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</section>
+	</section>
+	<section id="org.genesez.extra.ModelCreator.calculation">
+		<title>Calculation of the model elements</title>
+		<para>
+			This section will show how the model elements can be
+			calculated.
+			Please note that this only works if no randomization is
+			activated.
+		</para>
+		<itemizedlist>
+			<listitem>
+				<formalpara id="org.genesez.extra.ModelCreator.calculation.packages">
+					<title>Packages</title>
+					<para>
+						The amount of packages can be calculated with
+						<link linkend="org.genesez.extra.ModelCreator.headPackages">
+							<literal>headPackages</literal>
+						</link>
+						multiplied by sum (from i = 0 to
+						<link linkend="org.genesez.extra.ModelCreator.packageHierarchyDepth">
+							<literal>packageHierarchyDepth</literal>
+						</link>
+						)
+						<link linkend="org.genesez.extra.ModelCreator.packagesPerPackage">
+							<literal>packagesPerPackage</literal>
+						</link>
+						to the power of i. See
+						<xref linkend="fig:org.genesez.extra.ModelCreator.packages.formula" />
+					</para>
+				</formalpara>
+				<figure id="fig:org.genesez.extra.ModelCreator.packages.formula">
+					<title>Formula to calculate amount of packages</title>
+					<mediaobject>
+						<!-- <imageobject role="html"> -->
+						<!-- <imagedata align="center" -->
+						<!-- fileref="../../../../images/core/activities/implementation.features.DeletionFeature.checkForRepository.png" 
+							/> -->
+						<!-- </imageobject> -->
+						<imageobject> <!-- role="fo"> -->
+							<imagedata align="center"
+								fileref="../../images/core/extra/org.genesez.extra.ModelCreator.packages.formula.png"
+								scalefit="1" width="60%" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</listitem>
+			<listitem>
+				<formalpara id="org.genesez.extra.ModelCreator.calculation.classes">
+					<title>Classes</title>
+					<para>
+						The amount of classes can be calculated with:
+						<link linkend="org.genesez.extra.ModelCreator.calculation.packages">
+							<literal>Packages</literal>
+						</link>
+						multiplied by
+						<link linkend="org.genesez.extra.ModelCreator.classesPerPackage">
+							<literal>classesPerPackage</literal>
+						</link>
+						plus
+						<link linkend="org.genesez.extra.ModelCreator.associationClasses">
+							<literal>associationClasses</literal>
+						</link>
+						.
+					</para>
+				</formalpara>
+			</listitem>
+			<listitem>
+				<formalpara id="org.genesez.extra.ModelCreator.calculation.interfaces">
+					<title>Interfaces</title>
+					<para>
+						The amount of interface can be calculated with:
+						<link linkend="org.genesez.extra.ModelCreator.calculation.packages">
+							<literal>Packages</literal>
+						</link>
+						multiplied by
+						<link linkend="org.genesez.extra.ModelCreator.interfacesPerPackage">
+							<literal>interfacesPerPackage</literal>
+						</link>
+						.
+					</para>
+				</formalpara>
+			</listitem>
+			<listitem>
+				<formalpara>
+					<title>Attributes</title>
+					<para>
+						The amount of attributes can be calculated with:
+						<link linkend="org.genesez.extra.ModelCreator.calculation.classes">
+							<literal>Classes</literal>
+						</link>
+						multiplied by
+						<link linkend="org.genesez.extra.ModelCreator.attributesPerClass">
+							<literal>attributesPerClass</literal>
+						</link>
+						.
+					</para>
+				</formalpara>
+			</listitem>
+			<listitem>
+				<formalpara id="org.genesez.extra.ModelCreator.calculation.operations">
+					<title>Operations</title>
+					<para>
+						The amount of operations can be calculated with:
+						(
+						<link linkend="org.genesez.extra.ModelCreator.calculation.classes">
+							<literal>Classes</literal>
+						</link>
+						plus
+						<link linkend="org.genesez.extra.ModelCreator.calculation.interfaces">
+							<literal>Interfaces</literal>
+						</link>
+						)
+						multiplied by
+						<link linkend="org.genesez.extra.ModelCreator.operationsPerClass">
+							<literal>operationsPerClass</literal>
+						</link>
+						.
+					</para>
+				</formalpara>
+			</listitem>
+			<listitem>
+				<formalpara>
+					<title>Parameters</title>
+					<para>
+						The amount of parameters can be calculated with:
+						<link linkend="org.genesez.extra.ModelCreator.calculation.operations">
+							<literal>Operations</literal>
+						</link>
+						multiplied by
+						<link linkend="org.genesez.extra.ModelCreator.parametersPerOperation">
+							<literal>paramtersPerOperation</literal>
+						</link>
+						.
+					</para>
+				</formalpara>
+			</listitem>
+			<listitem>
+				<formalpara>
+					<title>Associations</title>
+					<para>
+						Associations are as much as given in
+						<link linkend="org.genesez.extra.ModelCreator.amountOfAssociations">
+							<literal>amountOfAssociations</literal>
+						</link>
+						plus
+						<link linkend="org.genesez.extra.ModelCreator.associationClasses">
+							<literal>associationClasses</literal>
+						</link>
+						.
+					</para>
+				</formalpara>
+			</listitem>
+			<listitem>
+				<formalpara>
+					<title>Interface realizations</title>
+					<para>
+						The amount of interface realizations can be calculated with:
+						<link linkend="org.genesez.extra.ModelCreator.calculation.interfaces">
+							<literal>Interfaces</literal>
+						</link>
+						multiplied by
+						<link linkend="org.genesez.extra.ModelCreator.realizationsPerInterface">
+							<literal>realizationsPerInterface</literal>
+						</link>
+						.
+					</para>
+				</formalpara>
+			</listitem>
+			<listitem id="org.genesez.extra.ModelCreator.generatlizations">
+				<formalpara>
+					<title>Generalizations</title>
+					<para>
+						The amount of all generalizations is the sum of interface
+						generalizations and class generalizations.
+						These generalizations
+						can be calculated with:
+						<literal>hierarchyTrees</literal>
+						[
+						<link linkend="org.genesez.extra.ModelCreator.classHierarchyTrees">class</link>
+						/
+						<link linkend="org.genesez.extra.ModelCreator.interfaceHierarchyTrees">interface</link>
+						] multiplied with the sum (from i = 1 to
+						<literal>hierarchyDepth</literal>
+						[
+						<link linkend="org.genesez.extra.ModelCreator.classHierarchyDepth">class</link>
+						/
+						<link linkend="org.genesez.extra.ModelCreator.interfaceHierarchyDepth">interface</link>
+						])
+						<literal>specializations</literal>
+						[
+						<link linkend="org.genesez.extra.ModelCreator.specializationsPerClass">class</link>
+						/
+						<link linkend="org.genesez.extra.ModelCreator.specializationsPerInterface">interface</link>
+						] to the power of i. See
+						<xref linkend="fig:org.genesez.extra.ModelCreator.generalizations.formula" />
+					</para>
+				</formalpara>
+				<figure id="fig:org.genesez.extra.ModelCreator.generalizations.formula">
+					<title>Formula to calculate amount of generalizations</title>
+					<mediaobject>
+						<!-- <imageobject role="html"> -->
+						<!-- <imagedata align="center" -->
+						<!-- fileref="../../../../images/core/activities/implementation.features.DeletionFeature.checkForRepository.png" 
+							/> -->
+						<!-- </imageobject> -->
+						<imageobject> <!-- role="fo"> -->
+							<imagedata align="center"
+								fileref="../../images/core/extra/org.genesez.extra.ModelCreator.generalizations.formula.png"
+								scalefit="1" width="60%" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</listitem>
+		</itemizedlist>
+	</section>
+</section>
