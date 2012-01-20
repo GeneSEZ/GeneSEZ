@@ -18,7 +18,7 @@ import org.junit.Test;
 public class BindingDelegatorTest {
 
 	BindingDelegator bd = null;
-	static final String contextPath = "de.genesez.platforms.common.typemapping.types";
+	static final String contextPath = "org.genesez.platforms.common.typemapping.types";
 
 	/**
 	 * @throws java.lang.Exception

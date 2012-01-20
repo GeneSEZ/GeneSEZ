@@ -39,8 +39,8 @@ public class ImportBeautifierTest {
 	@Before
 	public void setUp() throws Exception {
 		ib = new ImportBeautifier();
-		testfile = Paths.get("").resolve("test/de/genesez/platforms/common/m2t/testfile");
-		testfile_copy = Paths.get("").resolve("test/de/genesez/platforms/common/m2t/testfile_copy");
+		testfile = Paths.get("").resolve("test/org/genesez/platforms/common/m2t/testfile");
+		testfile_copy = Paths.get("").resolve("test/org/genesez/platforms/common/m2t/testfile_copy");
 		Files.copy(testfile, testfile_copy, StandardCopyOption.REPLACE_EXISTING);
 	}
 
@@ -63,7 +63,7 @@ public class ImportBeautifierTest {
 		testmap.put("123", set);
 		ib.setFileExtensions(".java");
 		ib.setImportStrings("import");
-		Path test = Paths.get("").resolve("test/de/genesez/platforms/common/m2t/testfile.java");
+		Path test = Paths.get("").resolve("test/org/genesez/platforms/common/m2t/testfile.java");
 		if(!Files.exists(test)){
 			test = Files.createLink(Paths.get(testfile.toString().concat(".java")), testfile);
 		}

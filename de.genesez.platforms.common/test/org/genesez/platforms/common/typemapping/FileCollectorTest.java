@@ -21,7 +21,7 @@ public class FileCollectorTest {
 	 * @throws java.lang.Exception
 	 */
 	BindingDelegator bd = null;
-	static final String contextPath = "de.genesez.platforms.common.typemapping.types";
+	static final String contextPath = "org.genesez.platforms.common.typemapping.types";
 	MappingFileCollector mfc = null;
 
 	@Before
@@ -43,33 +43,33 @@ public class FileCollectorTest {
 	@Test
 	public void NonInclude() {
 		LinkedHashSet<String> set = new LinkedHashSet<String>();
-		set.add("de/genesez/platforms/common/typemapping/testmappings/externalTest.xml");
+		set.add("org/genesez/platforms/common/typemapping/testmappings/externalTest.xml");
 		assertEquals(
 				set,
 				mfc
-						.getMappingFiles("de/genesez/platforms/common/typemapping/testmappings/externalTest.xml"));
+						.getMappingFiles("org/genesez/platforms/common/typemapping/testmappings/externalTest.xml"));
 	}
 
 	@Test
 	public void SingleInclude() {
 		LinkedHashSet<String> set = new LinkedHashSet<String>();
-		set.add("de/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml");
+		set.add("org/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml");
 		assertEquals(
 				set,
 				mfc
-						.getMappingFiles("de/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml"));
+						.getMappingFiles("org/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml"));
 	}
 
 	@Test
 	public void MultiInclude() {
 		LinkedHashSet<String> set = new LinkedHashSet<String>();
-		set.add("de/genesez/platforms/common/typemapping/testmappings/TestMapping.xml");
-		set.add("de/genesez/platforms/common/typemapping/testmappings/multivaluedTest.xml");
-		set.add("de/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml");
-		set.add("de/genesez/platforms/common/typemapping/testmappings/externalTest.xml");
+		set.add("org/genesez/platforms/common/typemapping/testmappings/TestMapping.xml");
+		set.add("org/genesez/platforms/common/typemapping/testmappings/multivaluedTest.xml");
+		set.add("org/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml");
+		set.add("org/genesez/platforms/common/typemapping/testmappings/externalTest.xml");
 		assertEquals(
 				set,
 				mfc
-						.getMappingFiles("de/genesez/platforms/common/typemapping/testmappings/TestMapping.xml"));
+						.getMappingFiles("org/genesez/platforms/common/typemapping/testmappings/TestMapping.xml"));
 	}
 }

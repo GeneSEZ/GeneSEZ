@@ -87,11 +87,11 @@ public class DeletionFeatureTest {
 			throw new UnsupportedOperationException(
 					"Java Version below 7, Tests should fail");
 		}
-		walker = new FileTreeWalkerFeature();
 	}
 
 	@Before
 	public void setUp() throws IOException {
+		walker = new FileTreeWalkerFeature();
 		startPath = Files.createTempDirectory("testDir");
 		firstPath = startPath.resolve("de/genesez/testclasses/");
 		secondPath = startPath.resolve("de/genesez/output/");
