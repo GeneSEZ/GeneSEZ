@@ -7,6 +7,8 @@ package org.genesez.platforms.java.workflow;
 
 import org.genesez.platforms.common.workflow.DefaultGenerator;
 import org.eclipse.xpand2.output.JavaBeautifier;
+import org.apache.commons.logging.LogFactory;
+import org.genesez.platforms.common.workflow.WorkflowUtils;
 import org.apache.commons.logging.Log;
 import java.util.Properties;
 import org.eclipse.emf.mwe.core.issues.Issues;
@@ -45,8 +47,9 @@ public class JavaGenerator extends DefaultGenerator {
 	 */
 	public JavaGenerator() {
 		/* PROTECTED REGION ID(java.constructor._17_0_1_8e00291_1326709010970_194991_2722) ENABLED START */
-		// TODO: implementation of constructor for class 'JavaGenerator'
-		throw new UnsupportedOperationException("The implementation of this generated constructor is missing!");
+		super();
+		configureBeautifiers();
+		properties.putAll(defaults);
 		/* PROTECTED REGION END */
 	}
 	
@@ -59,8 +62,17 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	protected void checkConfigurationInternal(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010973_2130_2723) ENABLED START */
-		// TODO: implementation of method 'JavaGenerator.checkConfigurationInternal(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		// check typemappingfile
+		if (isNotAddTypeMappingFile)
+			super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
+		
+		// set fieldAccess
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("fieldAccess", properties.getProperty("fieldAccess")));
+		// set newAssociationHandling
+		super.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("newAssociationHandling", properties.getProperty("newAssociationHandling")));
+		
+		javaBeautifier.setConfigFile(properties.getProperty("formatterConfig"));
+		super.checkConfigurationInternal(issues);
 		/* PROTECTED REGION END */
 	}
 	
@@ -70,8 +82,13 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	protected void configureBeautifiers() {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010976_407934_2724) ENABLED START */
-		// TODO: implementation of method 'JavaGenerator.configureBeautifiers(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		// java beautifier
+		javaBeautifier = new JavaBeautifier();
+		super.addPostProcessor(javaBeautifier);
+		
+		// configure ImportBeautifier
+		super.setFileExtensions(FILE_EXTENSIONS);
+		super.setImportRegex(IMPORT_REGEX);
 		/* PROTECTED REGION END */
 	}
 	
@@ -82,8 +99,8 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	public void addTypeMappingFile(String typeMappingFile) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010982_274549_2726) ENABLED START */
-		// TODO: implementation of method 'JavaGenerator.addTypeMappingFile(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		super.addTypeMappingFile(typeMappingFile);
+		isNotAddTypeMappingFile = false;
 		/* PROTECTED REGION END */
 	}
 	
@@ -94,8 +111,7 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	public void setFormatterConfig(String formatterConfig) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010984_612104_2727) ENABLED START */
-		// TODO: implementation of method 'JavaGenerator.setFormatterConfig(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		properties.setProperty("formatterConfig", formatterConfig);
 		/* PROTECTED REGION END */
 	}
 	
@@ -106,8 +122,7 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	public void setNewAssociationHandling(boolean newAssociationHandling) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010985_759928_2728) ENABLED START */
-		// TODO: implementation of method 'JavaGenerator.setNewAssociationHandling(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		properties.setProperty("newAssociationHandling", String.valueOf(newAssociationHandling));
 		/* PROTECTED REGION END */
 	}
 	
@@ -118,8 +133,7 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	public void setFieldAccess(boolean fieldAccess) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010987_391859_2729) ENABLED START */
-		// TODO: implementation of method 'JavaGenerator.setFieldAccess(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		properties.setProperty("fieldAccess", String.valueOf(fieldAccess));
 		/* PROTECTED REGION END */
 	}
 	
@@ -129,7 +143,13 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1326709010962_484208_2721) ENABLED START */
-	// TODO: put your own implementation code here
+	static {
+		defaults.put("template", "org::genesez::platforms::java::java5::templates::Root::Root");
+		defaults.put("typeMappingFile", "org/genesez/platforms/java/typemapping/typemapping.xml");
+		defaults.put("formatterConfig", "org/genesez/platforms/java/workflow/eclipse.java.formatter.settings.xml");
+		defaults.put("newAssociationHandling", "true");
+		defaults.put("fieldAccess", "true");
+	}
 	/* PROTECTED REGION END */
 	
 }
