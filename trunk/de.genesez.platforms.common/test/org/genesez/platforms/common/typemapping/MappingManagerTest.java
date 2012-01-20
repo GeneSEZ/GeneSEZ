@@ -26,7 +26,7 @@ public class MappingManagerTest {
 	ITypeMappingManager<SingleValuedType> tmm = null;
 	ITypeMappingManager<MultiValuedType> cmm = null;
 	BindingDelegator bd = null;
-	static final String contextPath = "de.genesez.platforms.common.typemapping.types";
+	static final String contextPath = "org.genesez.platforms.common.typemapping.types";
 
 	@Before
 	public void setUp() throws Exception {
@@ -38,7 +38,7 @@ public class MappingManagerTest {
 	@Test
 	public void getCollectionMapping() {
 		cmm.appendMappingMap(bd.getMappingBody(
-				"de/genesez/platforms/common/typemapping/testmappings/multivaluedTest.xml")
+				"org/genesez/platforms/common/typemapping/testmappings/multivaluedTest.xml")
 				.getMultiValuedTypes().getMappingList());
 		Assert.assertEquals("Set", cmm.getTypeMapping(Boolean.TRUE.toString()
 				+ Boolean.TRUE.toString(), null));
@@ -47,7 +47,7 @@ public class MappingManagerTest {
 	@Test
 	public void getSingleValuedMapping() {
 		tmm.appendMappingMap(bd.getMappingBody(
-				"de/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml")
+				"org/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml")
 				.getPrimitiveTypes().getMappingList());
 		Assert.assertEquals("Integer", tmm.getTypeMapping("int", "Wrapper"));
 	}

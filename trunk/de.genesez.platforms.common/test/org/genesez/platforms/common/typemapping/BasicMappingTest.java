@@ -28,7 +28,7 @@ public class BasicMappingTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		TypeMapper.initTypeMapper("de/genesez/platforms/common/typemapping/testmappings/TestMapping.xml");
+		TypeMapper.initTypeMapper("org/genesez/platforms/common/typemapping/testmappings/TestMapping.xml");
 		externalMock = EasyMock.createMock(MExternal.class);
 		// externalMock=GcoreFactory.eINSTANCE.createMExternal();
 		primitiveMock = EasyMock.createMock(MPrimitiveType.class);

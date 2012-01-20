@@ -38,7 +38,7 @@ public class FileReferencingTest {
 	@Test
 	public void singleInput() {
 		utm = new UnitTypeMapper(
-				"de/genesez/platforms/common/typemapping/testmappings/TestMapping.xml");
+				"org/genesez/platforms/common/typemapping/testmappings/TestMapping.xml");
 		assertEquals("LinkedHashSet", utm.getMappingType(true, true,
 				"Implementation"));
 	}
@@ -46,9 +46,9 @@ public class FileReferencingTest {
 	@Test
 	public void multipleInput() {
 		utm = new UnitTypeMapper(
-				"de/genesez/platforms/common/typemapping/testmappings/multivaluedTest.xml",
-				"de/genesez/platforms/common/typemapping/testmappings/externalTest.xml",
-				"de/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml");
+				"org/genesez/platforms/common/typemapping/testmappings/multivaluedTest.xml",
+				"org/genesez/platforms/common/typemapping/testmappings/externalTest.xml",
+				"org/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml");
 		assertEquals("LinkedHashSet", utm.getMappingType(true, true,
 				"Implementation"));
 	}
@@ -58,8 +58,8 @@ public class FileReferencingTest {
 		EasyMock.expect(primitiveMock.getName()).andReturn("umlType");
 		EasyMock.replay(primitiveMock);
 		utm = new UnitTypeMapper(
-				"de/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml",
-				"de/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml");
+				"org/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml",
+				"org/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml");
 		assertEquals("javaType", utm.getMappingName(primitiveMock));
 	}
 
@@ -68,8 +68,8 @@ public class FileReferencingTest {
 		EasyMock.expect(primitiveMock.getName()).andReturn("boolean");
 		EasyMock.replay(primitiveMock);
 		utm = new UnitTypeMapper(
-				"de/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml",
-				"de/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml");
+				"org/genesez/platforms/common/typemapping/testmappings/AdditionalMappings.xml",
+				"org/genesez/platforms/common/typemapping/testmappings/primitiveTest.xml");
 		assertEquals("BOOL", utm.getMappingName(primitiveMock));
 	}
 
@@ -80,7 +80,7 @@ public class FileReferencingTest {
 		EasyMock.expect(primitiveMock2.getName()).andReturn("cube");
 		EasyMock.replay(primitiveMock2);
 		utm = new UnitTypeMapper(
-				"de/genesez/platforms/common/typemapping/testmappings/circularReference1.xml");
+				"org/genesez/platforms/common/typemapping/testmappings/circularReference1.xml");
 		assertEquals("ellipse", utm.getMappingName(primitiveMock));
 		assertEquals("hypercube", utm.getMappingName(primitiveMock2));
 	}
