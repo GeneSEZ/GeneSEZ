@@ -1,11 +1,17 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/* PROTECTED REGION ID(java.type.import.BankBeanLocal) ENABLED START */
-/* TODO: put your own source code here */
-import javax.ejb.Local;
-import de.genesez.example.java.BankTutorial.Server.data.Bank;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (BankBeanLocal) 
+ */
 
-/* PROTECTED REGION END */
+import de.genesez.example.java.BankTutorial.Server.data.Bank;
+import javax.ejb.Local;
+
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author domwet
+ */
 
 @Local
 public interface IBankBeanLocal {
@@ -14,22 +20,25 @@ public interface IBankBeanLocal {
 	 * creates a bank and returns the persisted bank
 	 * If there is problem with the bank instance or the database the method returns null
 	 * @param	bank	
-	 * @return	creates a bank and returns the persisted bankIf there is problem with the bank instance or the database the method returns null
+	 * @return	
 	 */
+	
 	public Bank createBank(Bank bank);
 	
 	/**
 	 * This method updates the bank in the database
 	 * If there is problem with the bank instance or the database the method returns null
 	 * @param	changedBank	
-	 * @return	This method updates the bank in the databaseIf there is problem with the bank instance or the database the method returns null
+	 * @return	
 	 */
+	
 	public Bank changeBank(Bank changedBank);
 	
 	/**
 	 * This method removes a bank from the database
 	 * @param	toBeDeleted	
 	 */
+	
 	public void removeBank(Bank toBeDeleted);
 	
 	// -- generated code of other cartridges --------------------------------

@@ -1,19 +1,24 @@
 package de.genesez.example.java.BankTutorial.Server.data;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271068723343_566691_1144) ENABLED START */
-/* TODO: put your own source code here */
-import java.io.Serializable;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Version;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271068723343_566691_1144) 
+ */
 
-/* PROTECTED REGION END */
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.CascadeType;
+import java.io.Serializable;
+import javax.persistence.Table;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
+import javax.persistence.GeneratedValue;
+
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author domwet
+ */
 
 @Entity
 @Table(name = "tbl_Bank")
@@ -21,16 +26,16 @@ public class Bank implements Serializable {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
-	/** stores associated objects of association CONTACT to Contact */
+	/** Stores associated objects of association CONTACT to Contact */
 	@ManyToMany(cascade = {
 	CascadeType.MERGE, CascadeType.REFRESH
 	})
 	private java.util.Set<Contact> contact = new java.util.HashSet<Contact>();
 	
-	/** stores associated objects of association CUSTOMERS to Customer */
+	/** Stores associated objects of association CUSTOMERS to Customer */
 	@ManyToMany(cascade = {
 		CascadeType.ALL
-	}, mappedBy = "banks")
+	})
 	private java.util.Set<Customer> customers = new java.util.HashSet<Customer>();
 	
 	@Column(name = "name", unique = true, nullable = false)
@@ -43,13 +48,13 @@ public class Bank implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>Bank</b></em>'
+	 * Constructor for class '<em><b>Bank</b></em>'.
 	 */
+	
 	public Bank() {
 	}
 	
@@ -57,60 +62,56 @@ public class Bank implements Serializable {
 	
 	// -- generated association + attribute accessors -----------------------
 	/**
-	 * getter for the attribute '<em><b>name</b></em>'
+	 * Returns the value of attribute '<em><b>name</b></em>'
 	 */
 	public String getName() {
 		return name;
 	}
 	
 	/**
-	 * documented here {@link getName()}
-	 * @generated	setter method for the attribute '<em><b>name</b></em>'
+	 * Sets the value of attribute '<em><b>name</b></em>'
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>sortCode</b></em>'
+	 * Returns the value of attribute '<em><b>sortCode</b></em>'
 	 */
 	public int getSortCode() {
 		return sortCode;
 	}
 	
 	/**
-	 * documented here {@link getSortCode()}
-	 * @generated	setter method for the attribute '<em><b>sortCode</b></em>'
+	 * Sets the value of attribute '<em><b>sortCode</b></em>'
 	 */
 	public void setSortCode(int sortCode) {
 		this.sortCode = sortCode;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>id</b></em>'
+	 * Returns the value of attribute '<em><b>id</b></em>'
 	 */
 	public int getId() {
 		return id;
 	}
 	
 	/**
-	 * documented here {@link getId()}
-	 * @generated	setter method for the attribute '<em><b>id</b></em>'
+	 * Sets the value of attribute '<em><b>id</b></em>'
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>version</b></em>'
+	 * Returns the value of attribute '<em><b>version</b></em>'
 	 */
 	public int getVersion() {
 		return version;
 	}
 	
 	/**
-	 * documented here {@link getVersion()}
-	 * @generated	setter method for the attribute '<em><b>version</b></em>'
+	 * Sets the value of attribute '<em><b>version</b></em>'
 	 */
 	public void setVersion(int version) {
 		this.version = version;
@@ -160,9 +161,6 @@ public class Bank implements Serializable {
 			return;
 		}
 		this.customers.add(customers);
-		if (!customers.getBanks().contains(this)) {
-			customers.insertInBanks(this);
-		}
 	}
 	
 	/**
@@ -173,9 +171,6 @@ public class Bank implements Serializable {
 			return;
 		}
 		this.customers.remove(customers);
-		if (customers.getBanks().contains(this)) {
-			customers.removeFromBanks(this);
-		}
 	}
 	
 	// -- generated code of other cartridges --------------------------------
@@ -184,5 +179,5 @@ public class Bank implements Serializable {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271068723343_566691_1144) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

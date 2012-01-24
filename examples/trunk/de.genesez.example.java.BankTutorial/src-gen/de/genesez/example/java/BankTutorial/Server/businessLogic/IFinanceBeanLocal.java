@@ -1,14 +1,21 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/* PROTECTED REGION ID(java.type.import.FinanceBeanLocal) ENABLED START */
-/* TODO: put your own source code here */
-import java.math.BigDecimal;
-import javax.ejb.Local;
-import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
-import de.genesez.example.java.BankTutorial.Server.data.Bank;
-import de.genesez.example.java.BankTutorial.Server.data.Customer;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (FinanceBeanLocal) 
+ */
 
-/* PROTECTED REGION END */
+import javax.interceptor.Interceptors;
+import javax.math.BigDecimal;
+import de.genesez.example.java.BankTutorial.Server.data.Bank;
+import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
+import de.genesez.example.java.BankTutorial.Server.data.Customer;
+import javax.ejb.Local;
+
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author domwet
+ */
 
 @Local
 public interface IFinanceBeanLocal {
@@ -19,6 +26,7 @@ public interface IFinanceBeanLocal {
 	 * @param	bank	
 	 * @throws	BankSelectionException
 	 */
+	
 	public void selectBank(Bank bank) throws BankSelectionException;
 	
 	/**
@@ -27,6 +35,7 @@ public interface IFinanceBeanLocal {
 	 * @param	customer	
 	 * @throws	CustomerSelectionException
 	 */
+	
 	public void selectCustomer(Customer customer) throws CustomerSelectionException;
 	
 	/**
@@ -35,6 +44,7 @@ public interface IFinanceBeanLocal {
 	 * @param	account	
 	 * @throws	AccountSelectionException
 	 */
+	
 	public void selectAccount(AbstractAccount account) throws AccountSelectionException;
 	
 	/**
@@ -43,12 +53,14 @@ public interface IFinanceBeanLocal {
 	 * @param	amount	
 	 * @throws	FinanceException
 	 */
+	
 	public void withdraw(BigDecimal amount) throws FinanceException;
 	
 	/**
 	 * deposits the amount to the selected account
 	 * @param	amount	
 	 */
+	
 	public void deposit(BigDecimal amount);
 	
 	/**
@@ -58,6 +70,7 @@ public interface IFinanceBeanLocal {
 	 * @param	amount	
 	 * @throws	FinanceException
 	 */
+	
 	public void bankTransfer(AbstractAccount target, BigDecimal amount) throws FinanceException;
 	
 	// -- generated code of other cartridges --------------------------------

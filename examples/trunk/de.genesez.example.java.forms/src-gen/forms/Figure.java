@@ -1,22 +1,28 @@
 package forms;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1249543362015_69354_283) 
+ */
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import traceability.ScenarioStep;
+import de.genesez.platforms.java.umlsupport.associations.Association;
 import de.genesez.platforms.java.umlsupport.associations.*;
-import java.awt.Color;
 import traceability.Requirement;
+import java.awt.Color;
+import de.genesez.platforms.java.umlsupport.associations.ManyAssociation;
+import de.genesez.platforms.java.umlsupport.associations.AssociationRole;
+import de.genesez.platforms.java.umlsupport.associations.RelatedAssociationRole;
 import static traceability.Requirement.Value.R4;
 import traceability.Scenario;
-import traceability.ScenarioStep;
-
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
 
 /**
  * <p>
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
- * @author dreamer
+ * @author domwet
  */
 @Requirement({
 	R4
@@ -24,21 +30,21 @@ import traceability.ScenarioStep;
 public class Figure implements Form, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
-	/** defines an identifier for each association, used by the association handling library */
+	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		FORMS
 	}
 	
-	/** stores the association management objects */
+	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** stores associated objects of association FORMS to Form */
+	/** Stores associated objects of association FORMS to Form */
 	private java.util.Set<Form> forms = new java.util.HashSet<Form>();
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * determines the center of area of the form
-	 * @return	determines the center of area of the form
+	 * @return	the location of the center of area
 	 */
 	public Point getCenterOfArea() {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
@@ -50,7 +56,7 @@ public class Figure implements Form, AssociationRole {
 	/**
 	 * determines if the form is crossing another form
 	 * @param	form	the form to check for crossing
-	 * @return	determines if the form is crossing another form
+	 * @return	true, if the specified form crosses this form, otherwise false
 	 */
 	public boolean isCrossing(Form form) {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
@@ -113,7 +119,7 @@ public class Figure implements Form, AssociationRole {
 	}
 	
 	/**
-	 * provides generic access to association objects, used by the association handling library
+	 * Provides generic access to association objects, used by the association handling library
 	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
@@ -136,5 +142,5 @@ public class Figure implements Form, AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

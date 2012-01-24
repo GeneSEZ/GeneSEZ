@@ -1,15 +1,15 @@
 package de.genesez.example.java.car.base;
 
-import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_12_5_6340215_1182161516984_21570_380) 
+ */
 
-/* PROTECTED REGION ID(java.type.import._12_5_6340215_1182161516984_21570_380) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+import de.genesez.platforms.java.umlsupport.associations.*;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
+ * @author domwet
  */
 public class Owner implements AssociationClass {
 	
@@ -31,7 +31,7 @@ public class Owner implements AssociationClass {
 	
 	// -- generated association + attribute accessors -----------------------
 	/**
-	 * Gets the value of the attribute '<em><b>associationClassLink</b></em>'
+	 * Returns the value of attribute '<em><b>associationClassLink</b></em>'
 	 */
 	public ACLink getAssociationClassLink() {
 		return associationClassLink;
@@ -43,5 +43,5 @@ public class Owner implements AssociationClass {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._12_5_6340215_1182161516984_21570_380) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

@@ -1,18 +1,19 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271072817703_182530_863) ENABLED START */
-/* TODO: put your own source code here */
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271072817703_182530_863) 
+ */
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
 
-/* PROTECTED REGION END */
-
 /**
  * The customer bean administrates the customer entities
- * @author	apflueger
+ * @author domwet
  */
 
 @Stateless(name = "CustomerBean")
@@ -25,8 +26,9 @@ public class CustomerBean implements ICustomerBeanLocal {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>CustomerBean</b></em>'
+	 * Constructor for class '<em><b>CustomerBean</b></em>'.
 	 */
+	
 	public CustomerBean() {
 	}
 	
@@ -36,7 +38,7 @@ public class CustomerBean implements ICustomerBeanLocal {
 	 * If a problem occurs with the customer and/or bank instance, the bank already knows this customer or a database problem occurs the method returns null
 	 * @param	bank	
 	 * @param	customer	
-	 * @return	adds a customer to a bank and returns the persisted customerIf a problem occurs with the customer and/or bank instance, the bank already knows this customer or a database problem occurs the method returns null
+	 * @return	
 	 */
 	
 	public Customer addCustomer(Bank bank, Customer customer) {
@@ -50,7 +52,7 @@ public class CustomerBean implements ICustomerBeanLocal {
 	 * changes the customer of the bank and returns the customer
 	 * If a problem occurs with the database the method returns null
 	 * @param	changedCustomer	
-	 * @return	changes the customer of the bank and returns the customerIf a problem occurs with the database the method returns null
+	 * @return	
 	 */
 	
 	public Customer changeCustomer(Customer changedCustomer) {
@@ -80,5 +82,5 @@ public class CustomerBean implements ICustomerBeanLocal {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271072817703_182530_863) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

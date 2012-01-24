@@ -1,18 +1,19 @@
 package forms;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1214478880187_510458_215) 
+ */
+
+import traceability.ScenarioStep;
+import static traceability.Requirement.Value.R6;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import traceability.Requirement;
-import static traceability.Requirement.Value.R6;
 import traceability.Scenario;
-import traceability.ScenarioStep;
 
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1214478880187_510458_215) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
 /**
  * describes things which can be <i><b>rotated</b></i>
- * @author dreamer
+ * @author domwet
  */
 @Requirement({
 	R6

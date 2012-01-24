@@ -1,18 +1,19 @@
 package forms;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1214478843156_556754_163) 
+ */
+
+import traceability.ScenarioStep;
+import static traceability.Requirement.Value.R5;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import traceability.Requirement;
-import static traceability.Requirement.Value.R5;
 import traceability.Scenario;
-import traceability.ScenarioStep;
 
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1214478843156_556754_163) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
 /**
  * describes things which can be <i><b>moved</b></i>
- * @author dreamer
+ * @author domwet
  */
 @Requirement({
 	R5

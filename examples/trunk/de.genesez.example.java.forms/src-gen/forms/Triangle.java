@@ -1,19 +1,19 @@
 package forms;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1249464030468_592473_783) 
+ */
+
+import traceability.ScenarioStep;
+import static traceability.Requirement.Value.R1;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import traceability.Requirement;
-import static traceability.Requirement.Value.R1;
 import traceability.Scenario;
-import traceability.ScenarioStep;
-
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249464030468_592473_783) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
 
 /**
  * Describes the geometrical form <b>triangle</b> as a special <i>polygon</i>
- * @author dreamer
+ * @author domwet
  */
 @Requirement({
 	R1
@@ -43,5 +43,5 @@ public class Triangle extends Polygon {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249464030468_592473_783) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

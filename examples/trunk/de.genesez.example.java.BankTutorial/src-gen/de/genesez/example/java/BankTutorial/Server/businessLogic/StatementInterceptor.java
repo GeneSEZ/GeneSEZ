@@ -1,16 +1,17 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271099412921_623828_661) ENABLED START */
-/* TODO: put your own source code here */
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271099412921_623828_661) 
+ */
+
 import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-/* PROTECTED REGION END */
-
 /**
  * The statement interceptor is responsible for logging every access to an account
- * @author	apflueger
+ * @author domwet
  */
 
 public class StatementInterceptor {
@@ -22,7 +23,7 @@ public class StatementInterceptor {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * method stub for further implementation
+	 * Method stub for further implementation.
 	 * @param	ctx	
 	 * @return	
 	 * @throws	Exception
@@ -43,5 +44,5 @@ public class StatementInterceptor {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271099412921_623828_661) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

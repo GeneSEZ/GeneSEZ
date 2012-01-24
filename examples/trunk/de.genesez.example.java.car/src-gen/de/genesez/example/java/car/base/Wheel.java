@@ -1,32 +1,35 @@
 package de.genesez.example.java.car.base;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_11_5_6340215_1177945943625_542159_161) 
+ */
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import de.genesez.platforms.java.umlsupport.associations.*;
 import de.genesez.example.java.car.base.parts.Screw;
 
-/* PROTECTED REGION ID(java.type.import._11_5_6340215_1177945943625_542159_161) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
-
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
+ * @author domwet
  */
 public class Wheel implements IChangeable, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
-	/** defines an identifier for each association, used by the association handling library */
+	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		MYCAR, SCREW
 	}
 	
-	/** stores the association management objects */
+	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** stores the associated object of association MYCAR to Car */
+	/** Stores the associated object of association MYCAR to Car */
 	private Car mycar;
 	
-	/** stores associated objects of association SCREW to Screw */
+	/** Stores associated objects of association SCREW to Screw */
 	private java.util.Set<Screw> screw = new java.util.HashSet<Screw>();
 	
 	private float diameter;
@@ -52,6 +55,7 @@ public class Wheel implements IChangeable, AssociationRole {
 	 * Method stub for further implementation.
 	 * @throws	FlatTireException
 	 */
+	
 	public void roll() throws FlatTireException {
 		/* PROTECTED REGION ID(java.implementation._11_5_6340215_1179238960437_25222_122) ENABLED START */
 		// TODO: implementation of method 'Wheel.roll(...)'
@@ -70,12 +74,12 @@ public class Wheel implements IChangeable, AssociationRole {
 			public void set(Car referenced) {
 				mycar = referenced;
 			}
-		}, Car.Associations.WHEELS));
+		}));
 		association.put(Associations.SCREW, new ManyAssociation<Wheel, Screw>(this, screw));
 	}
 	
 	/**
-	 * provides generic access to association objects, used by the association handling library
+	 * Provides generic access to association objects, used by the association handling library
 	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
@@ -106,5 +110,5 @@ public class Wheel implements IChangeable, AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945943625_542159_161) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

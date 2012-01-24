@@ -1,17 +1,18 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271072706937_469823_827) ENABLED START */
-/* TODO: put your own source code here */
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271072706937_469823_827) 
+ */
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 
-/* PROTECTED REGION END */
-
 /**
  * The bank bean administrates the bank entities
- * @author	apflueger
+ * @author domwet
  */
 
 @Stateless(name = "BankBean")
@@ -24,8 +25,9 @@ public class BankBean implements IBankBeanLocal {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>BankBean</b></em>'
+	 * Constructor for class '<em><b>BankBean</b></em>'.
 	 */
+	
 	public BankBean() {
 	}
 	
@@ -34,7 +36,7 @@ public class BankBean implements IBankBeanLocal {
 	 * creates a bank and returns the persisted bank
 	 * If there is problem with the bank instance or the database the method returns null
 	 * @param	bank	
-	 * @return	creates a bank and returns the persisted bankIf there is problem with the bank instance or the database the method returns null
+	 * @return	
 	 */
 	
 	public Bank createBank(Bank bank) {
@@ -48,7 +50,7 @@ public class BankBean implements IBankBeanLocal {
 	 * This method updates the bank in the database
 	 * If there is problem with the bank instance or the database the method returns null
 	 * @param	changedBank	
-	 * @return	This method updates the bank in the databaseIf there is problem with the bank instance or the database the method returns null
+	 * @return	
 	 */
 	
 	public Bank changeBank(Bank changedBank) {
@@ -78,5 +80,5 @@ public class BankBean implements IBankBeanLocal {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271072706937_469823_827) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

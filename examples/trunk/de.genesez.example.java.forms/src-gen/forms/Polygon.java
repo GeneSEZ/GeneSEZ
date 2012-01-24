@@ -1,19 +1,19 @@
 package forms;
 
-import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
-import java.awt.Color;
-import traceability.Requirement;
-import traceability.Scenario;
-import traceability.ScenarioStep;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1249463754375_944273_708) 
+ */
 
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+import traceability.ScenarioStep;
+import de.genesez.platforms.java.umlsupport.associations.*;
+import traceability.Requirement;
+import java.awt.Color;
+import traceability.Scenario;
 
 /**
  * Describes the geometrical form <b>polygon</b>
- * @author dreamer
+ * @author domwet
  */
 public class Polygon implements Form {
 	
@@ -42,7 +42,7 @@ public class Polygon implements Form {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * determines the center of area of the form
-	 * @return	determines the center of area of the form
+	 * @return	the location of the center of area
 	 */
 	public Point getCenterOfArea() {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
@@ -54,7 +54,7 @@ public class Polygon implements Form {
 	/**
 	 * determines if the form is crossing another form
 	 * @param	form	the form to check for crossing
-	 * @return	determines if the form is crossing another form
+	 * @return	true, if the specified form crosses this form, otherwise false
 	 */
 	public boolean isCrossing(Form form) {
 		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249463754375_944273_708__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
@@ -118,5 +118,5 @@ public class Polygon implements Form {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

@@ -1,16 +1,16 @@
 package de.genesez.example.java.car.base;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_11_5_6340215_1179139182234_646597_164) 
+ */
+
 import de.genesez.platforms.java.umlsupport.associations.*;
 import java.awt.Color;
 
-/* PROTECTED REGION ID(java.type.import._11_5_6340215_1179139182234_646597_164) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
-
 /**
  * This abstract class Vehicle is the superclass for all things that can drive (for example: car, boat, air plane, ...).
- * @author dreamer
+ * @author domwet
  */
 public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
@@ -53,5 +53,5 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1179139182234_646597_164) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

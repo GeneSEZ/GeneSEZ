@@ -1,20 +1,25 @@
 package de.genesez.example.java.BankTutorial.Server.data;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271068737906_801239_1213) ENABLED START */
-/* TODO: put your own source code here */
-import java.io.Serializable;
-import javax.persistence.CascadeType;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271068737906_801239_1213) 
+ */
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Id;
+import javax.persistence.CascadeType;
+import java.io.Serializable;
 import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
+import javax.persistence.GeneratedValue;
 
-/* PROTECTED REGION END */
+/**
+ * Please describe the responsibility of your class in your modeling tool.
+ * @author domwet
+ */
 
 @Entity
 @Table(name = "tbl_Customer")
@@ -22,19 +27,19 @@ public class Customer implements Serializable {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
-	/** stores the associated object of association CONTACT to Contact */
+	/** Stores the associated object of association CONTACT to Contact */
 	@OneToOne(cascade = {
 		CascadeType.ALL
 	})
 	private Contact contact;
 	
-	/** stores associated objects of association ACCOUNTS to AbstractAccount */
+	/** Stores associated objects of association ACCOUNTS to AbstractAccount */
 	@OneToMany(cascade = {
 		CascadeType.ALL
-	}, mappedBy = "owner")
+	})
 	private java.util.Set<AbstractAccount> accounts = new java.util.HashSet<AbstractAccount>();
 	
-	/** stores associated objects of association BANKS to Bank */
+	/** Stores associated objects of association BANKS to Bank */
 	@ManyToMany(cascade = {})
 	private java.util.Set<Bank> banks = new java.util.HashSet<Bank>();
 	
@@ -46,13 +51,13 @@ public class Customer implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>Customer</b></em>'
+	 * Constructor for class '<em><b>Customer</b></em>'.
 	 */
+	
 	public Customer() {
 	}
 	
@@ -60,60 +65,56 @@ public class Customer implements Serializable {
 	
 	// -- generated association + attribute accessors -----------------------
 	/**
-	 * getter for the attribute '<em><b>firstname</b></em>'
+	 * Returns the value of attribute '<em><b>firstname</b></em>'
 	 */
 	public String getFirstname() {
 		return firstname;
 	}
 	
 	/**
-	 * documented here {@link getFirstname()}
-	 * @generated	setter method for the attribute '<em><b>firstname</b></em>'
+	 * Sets the value of attribute '<em><b>firstname</b></em>'
 	 */
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>surname</b></em>'
+	 * Returns the value of attribute '<em><b>surname</b></em>'
 	 */
 	public String getSurname() {
 		return surname;
 	}
 	
 	/**
-	 * documented here {@link getSurname()}
-	 * @generated	setter method for the attribute '<em><b>surname</b></em>'
+	 * Sets the value of attribute '<em><b>surname</b></em>'
 	 */
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>id</b></em>'
+	 * Returns the value of attribute '<em><b>id</b></em>'
 	 */
 	public int getId() {
 		return id;
 	}
 	
 	/**
-	 * documented here {@link getId()}
-	 * @generated	setter method for the attribute '<em><b>id</b></em>'
+	 * Sets the value of attribute '<em><b>id</b></em>'
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>version</b></em>'
+	 * Returns the value of attribute '<em><b>version</b></em>'
 	 */
 	public int getVersion() {
 		return version;
 	}
 	
 	/**
-	 * documented here {@link getVersion()}
-	 * @generated	setter method for the attribute '<em><b>version</b></em>'
+	 * Sets the value of attribute '<em><b>version</b></em>'
 	 */
 	public void setVersion(int version) {
 		this.version = version;
@@ -149,7 +150,6 @@ public class Customer implements Serializable {
 			return;
 		}
 		this.accounts.add(accounts);
-		accounts.setOwner(this);
 	}
 	
 	/**
@@ -178,9 +178,6 @@ public class Customer implements Serializable {
 			return;
 		}
 		this.banks.add(banks);
-		if (!banks.getCustomers().contains(this)) {
-			banks.insertInCustomers(this);
-		}
 	}
 	
 	/**
@@ -191,9 +188,6 @@ public class Customer implements Serializable {
 			return;
 		}
 		this.banks.remove(banks);
-		if (banks.getCustomers().contains(this)) {
-			banks.removeFromCustomers(this);
-		}
 	}
 	
 	// -- generated code of other cartridges --------------------------------
@@ -202,5 +196,5 @@ public class Customer implements Serializable {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271068737906_801239_1213) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

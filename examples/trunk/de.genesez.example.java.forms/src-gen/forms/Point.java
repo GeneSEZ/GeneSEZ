@@ -1,21 +1,21 @@
 package forms;
 
-import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
-import java.awt.Color;
-import traceability.Requirement;
-import static traceability.Requirement.Value.R1;
-import traceability.Scenario;
-import traceability.ScenarioStep;
-import static traceability.ScenarioStep.Value.ST2_1;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1211871095796_723781_254) 
+ */
 
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1211871095796_723781_254) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+import traceability.ScenarioStep;
+import static traceability.Requirement.Value.R1;
+import de.genesez.platforms.java.umlsupport.associations.*;
+import traceability.Requirement;
+import java.awt.Color;
+import static traceability.ScenarioStep.Value.ST2_1;
+import traceability.Scenario;
 
 /**
  * Describes a <i><b>point</b></i> in a 2-dimensional coordinate system
- * @author dreamer
+ * @author domwet
  */
 @Requirement({
 	R1
@@ -66,7 +66,7 @@ public class Point implements Form {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * determines the center of area of the form
-	 * @return	determines the center of area of the form
+	 * @return	the location of the center of area
 	 */
 	public Point getCenterOfArea() {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
@@ -77,7 +77,7 @@ public class Point implements Form {
 	/**
 	 * determines if the form is crossing another form
 	 * @param	form	the form to check for crossing
-	 * @return	determines if the form is crossing another form
+	 * @return	true, if the specified form crosses this form, otherwise false
 	 */
 	public boolean isCrossing(Form form) {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
@@ -154,5 +154,5 @@ public class Point implements Form {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871095796_723781_254) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

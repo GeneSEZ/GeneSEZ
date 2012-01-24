@@ -8,21 +8,21 @@
 		<profile value="model/genesez.profile.uml" />
 	</component>
 	
-	<component class="de.genesez.platforms.common.workflow.Validator">
-		<script value="de::genesez::platforms::common::Constraints" />
-		<script value="de::genesez::platforms::java::constraints::Syntax" />
+	<component class="org.genesez.platforms.common.workflow.Validator">
+		<script value="org::genesez::platforms::common::Constraints" />
+		<script value="org::genesez::platforms::java::constraints::Syntax" />
 	</component>
 	
-	<component class="de.genesez.platforms.common.workflow.Serializer">
+	<component class="org.genesez.platforms.common.workflow.Serializer">
 		<OPTION_SCHEMA_LOCATION_IMPLEMENTATION value="true" />
-		<file value="../de.genesez.example.java.forms/model/forms.xmi" />
+		<file value="../org.genesez.example.java.forms/model/forms.xmi" />
 	</component>
 	
-	<component class="de.genesez.platforms.common.workflow.GeneSezM2M">
-		<script value="de::genesez::platforms::common::m2m::Realization::realize" />
+	<component class="org.genesez.platforms.common.workflow.Model2Model">
+		<script value="org::genesez::platforms::common::m2m::Realization::realize" />
 	</component>
 	
-	<component class="de.genesez.platforms.java.workflow.JavaGenerator">
+	<component class="org.genesez.platforms.java.workflow.JavaGenerator">
 		<!-- there are several possibilities to specify your type mapping file(s):
 			1. You can list all files seperately here; if there are redundant rules 
 			the rule in the last specified typemapping file is active (recommended)
@@ -40,6 +40,10 @@
 			uses the typemapping files specified in the last workflow component of 
 			the whole workflow file. -->
 		<typeMappingFile value="typemapping.xml" />
+		<!-- This prevents the traceability folder from deletion -->
+		<excludedDirectoryNames value="traceability" />
+		<excludePackage value="UML Standard Profile" />
+		<!--<excludedDirectoryNames value="traceability" />-->
 		<outputDir value="../de.genesez.example.java.forms/src-gen" />
 	</component>
 </workflow>

@@ -1,22 +1,23 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271100384359_869290_741) ENABLED START */
-/* TODO: put your own source code here */
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271100384359_869290_741) 
+ */
+
+import javax.ejb.TimerService;
+import javax.ejb.Timer;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.ejb.Timeout;
-import javax.ejb.Timer;
-import javax.ejb.TimerService;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
+import javax.ejb.Timeout;
 import javax.persistence.PersistenceContext;
+import javax.interceptor.Interceptors;
 import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
-
-/* PROTECTED REGION END */
 
 /**
  * This bean is responsible for the calculation of the interests of the bank accounts using the timer of the Enterprise JavaBeans
- * @author	apflueger
+ * @author domwet
  */
 
 @Stateless(name = "InterestBean")
@@ -32,8 +33,9 @@ public class InterestBean implements IInterestBeanLocal {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>InterestBean</b></em>'
+	 * Constructor for class '<em><b>InterestBean</b></em>'.
 	 */
+	
 	public InterestBean() {
 	}
 	
@@ -74,5 +76,5 @@ public class InterestBean implements IInterestBeanLocal {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271100384359_869290_741) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

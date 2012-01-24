@@ -1,15 +1,17 @@
 package de.genesez.example.java.BankTutorial.Server.data;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271071979937_985074_736) ENABLED START */
-/* TODO: put your own source code here */
-import java.io.Serializable;
-import javax.persistence.Entity;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271071979937_985074_736) 
+ */
 
-/* PROTECTED REGION END */
+import javax.persistence.Entity;
+import java.io.Serializable;
+import javax.persistence.Table;
 
 /**
  * The checking account is used for the daily cash flow with a low interest rate of 0.75%. A bank has to deposit the interests of a checking account every 3 minutes.
- * @author	apflueger
+ * @author domwet
  */
 
 @Entity
@@ -17,8 +19,9 @@ public class CheckingAccount extends AbstractAccount implements Serializable {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>CheckingAccount</b></em>'
+	 * Constructor for class '<em><b>CheckingAccount</b></em>'.
 	 */
+	
 	public CheckingAccount() {
 		/* PROTECTED REGION ID(java.constructor._16_0_129203bc_1271178624843_74493_321) ENABLED START */
 		this.setInterestRate(1.0075f);
@@ -33,5 +36,5 @@ public class CheckingAccount extends AbstractAccount implements Serializable {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271071979937_985074_736) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

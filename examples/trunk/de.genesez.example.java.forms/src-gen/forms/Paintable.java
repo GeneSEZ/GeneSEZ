@@ -1,18 +1,19 @@
 package forms;
 
-import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
-import java.awt.Color;
-import traceability.Requirement;
-import traceability.Scenario;
-import traceability.ScenarioStep;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1249464729937_936506_1005) 
+ */
 
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249464729937_936506_1005) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+import traceability.ScenarioStep;
+import de.genesez.platforms.java.umlsupport.associations.*;
+import traceability.Requirement;
+import java.awt.Color;
+import traceability.Scenario;
+
 /**
  * describes <b>paintable</b> things
- * @author dreamer
+ * @author domwet
  */
 public interface Paintable {
 	

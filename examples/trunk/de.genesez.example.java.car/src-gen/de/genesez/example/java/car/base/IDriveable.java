@@ -1,14 +1,15 @@
 package de.genesez.example.java.car.base;
 
-import java.util.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1214477826296_879096_488) 
+ */
+
 import de.genesez.platforms.java.umlsupport.associations.*;
 
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1214477826296_879096_488) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
+ * @author domwet
  */
 public interface IDriveable {
 	

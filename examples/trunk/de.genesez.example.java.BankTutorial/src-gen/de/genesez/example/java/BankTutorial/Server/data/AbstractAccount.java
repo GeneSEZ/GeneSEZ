@@ -1,48 +1,42 @@
 package de.genesez.example.java.BankTutorial.Server.data;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271068742187_845611_1236) ENABLED START */
-/* TODO: put your own source code here */
-import java.io.Serializable;
-import java.math.BigDecimal;
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Version;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271068742187_845611_1236) 
+ */
 
-/* PROTECTED REGION END */
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Id;
+import javax.persistence.CascadeType;
+import java.io.Serializable;
+import javax.persistence.Table;
+import javax.persistence.GenerationType;
+import javax.math.BigDecimal;
+import javax.persistence.GeneratedValue;
+import javax.persistence.ManyToOne;
 
 /**
  * abstract class for a bank account
  * No account allows a negative balance.
- * @author	apflueger
+ * @author domwet
  */
 
 @Entity
-@Table(name = "tbl_AbstractAccount")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
+@Table(name = "tbl_Account")
 public abstract class AbstractAccount implements Serializable {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
-	/** stores the associated object of association BANK to Bank */
+	/** Stores the associated object of association BANK to Bank */
 	@ManyToOne(cascade = {})
 	private Bank bank;
 	
-	/** stores the associated object of association OWNER to Customer */
+	/** Stores the associated object of association OWNER to Customer */
 	@ManyToOne(cascade = {})
 	private Customer owner;
 	
-	/** stores associated objects of association STATEMENTS to Statement */
+	/** Stores associated objects of association STATEMENTS to Statement */
 	@OneToMany(cascade = {
 		CascadeType.REMOVE
 	})
@@ -70,13 +64,13 @@ public abstract class AbstractAccount implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>AbstractAccount</b></em>'
+	 * Constructor for class '<em><b>AbstractAccount</b></em>'.
 	 */
+	
 	public AbstractAccount() {
 	}
 	
@@ -91,8 +85,7 @@ public abstract class AbstractAccount implements Serializable {
 	}
 	
 	/**
-	 * documented here {@link getBalance()}
-	 * @generated	setter method for the attribute '<em><b>balance</b></em>'
+	 * balance of the account
 	 */
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
@@ -106,8 +99,7 @@ public abstract class AbstractAccount implements Serializable {
 	}
 	
 	/**
-	 * documented here {@link getInterestRate()}
-	 * @generated	setter method for the attribute '<em><b>interestRate</b></em>'
+	 * interest rate in percent
 	 */
 	public void setInterestRate(float interestRate) {
 		this.interestRate = interestRate;
@@ -121,38 +113,35 @@ public abstract class AbstractAccount implements Serializable {
 	}
 	
 	/**
-	 * documented here {@link getInterestPeriod()}
-	 * @generated	setter method for the attribute '<em><b>interestPeriod</b></em>'
+	 * period of time (in ms) after the bank has to deposit the interests to an account
 	 */
 	public void setInterestPeriod(long interestPeriod) {
 		this.interestPeriod = interestPeriod;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>id</b></em>'
+	 * Returns the value of attribute '<em><b>id</b></em>'
 	 */
 	public int getId() {
 		return id;
 	}
 	
 	/**
-	 * documented here {@link getId()}
-	 * @generated	setter method for the attribute '<em><b>id</b></em>'
+	 * Sets the value of attribute '<em><b>id</b></em>'
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 	
 	/**
-	 * getter for the attribute '<em><b>version</b></em>'
+	 * Returns the value of attribute '<em><b>version</b></em>'
 	 */
 	public int getVersion() {
 		return version;
 	}
 	
 	/**
-	 * documented here {@link getVersion()}
-	 * @generated	setter method for the attribute '<em><b>version</b></em>'
+	 * Sets the value of attribute '<em><b>version</b></em>'
 	 */
 	public void setVersion(int version) {
 		this.version = version;
@@ -220,5 +209,5 @@ public abstract class AbstractAccount implements Serializable {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271068742187_845611_1236) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

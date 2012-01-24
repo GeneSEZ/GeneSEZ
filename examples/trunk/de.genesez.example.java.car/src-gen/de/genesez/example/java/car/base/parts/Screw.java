@@ -1,15 +1,15 @@
 package de.genesez.example.java.car.base.parts;
 
-import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_11_5_6340215_1178034133828_951385_16) 
+ */
 
-/* PROTECTED REGION ID(java.type.import._11_5_6340215_1178034133828_951385_16) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+import de.genesez.platforms.java.umlsupport.associations.*;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
+ * @author domwet
  */
 public class Screw {
 	
@@ -45,14 +45,14 @@ public class Screw {
 	}
 	
 	/**
-	 * Gets the value of the attribute '<em><b>diameter</b></em>'
+	 * Returns the value of attribute '<em><b>diameter</b></em>'
 	 */
 	public float getDiameter() {
 		return diameter;
 	}
 	
 	/**
-	 * Gets the value of the attribute '<em><b>metric</b></em>'
+	 * Returns the value of attribute '<em><b>metric</b></em>'
 	 */
 	public boolean getMetric() {
 		return metric;
@@ -64,5 +64,5 @@ public class Screw {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1178034133828_951385_16) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

@@ -1,42 +1,43 @@
 package de.genesez.example.java.car.base;
 
-import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_11_5_6340215_1177945913718_872802_139) 
+ */
 
-/* PROTECTED REGION ID(java.type.import._11_5_6340215_1177945913718_872802_139) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import de.genesez.platforms.java.umlsupport.associations.*;
 
 /**
  * A car is a vehicle with four wheels and drives on the road.
- * @author dreamer
+ * @author domwet
  */
 public class Car extends AbstractVehicle implements AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
-	/** defines an identifier for each association, used by the association handling library */
+	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		SPARE, LICENSE, LICENSEPLATE, ENGINE, WHEELS
 	}
 	
-	/** stores the association management objects */
+	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
 	
-	/** stores the associated object of association SPARE to Wheel */
+	/** Stores the associated object of association SPARE to Wheel */
 	private Wheel spare;
 	
-	/** stores the associated object of association LICENSE to License */
+	/** Stores the associated object of association LICENSE to License */
 	private License license;
-	/** stores the association class object of association LICENSE to License */
-	private Owner owner;
 	
-	/** stores the associated object of association LICENSEPLATE to LicensePlate */
+	/** Stores the associated object of association LICENSEPLATE to LicensePlate */
 	private LicensePlate licensePlate;
 	
-	/** stores the associated object of association ENGINE to Engine */
+	/** Stores the associated object of association ENGINE to Engine */
 	private Engine engine;
 	
-	/** stores associated objects of association WHEELS to Wheel */
+	/** Stores associated objects of association WHEELS to Wheel */
 	private java.util.Set<Wheel> wheels = new java.util.HashSet<Wheel>();
 	
 	/**
@@ -63,7 +64,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	/**
 	 * starts the engine of the car and moves it to another place
 	 * @param	distance	
-	 * @return	starts the engine of the car and moves it to another place
+	 * @return	true, if the car arrived successfully, otherwise false
 	 * @throws	OutOfFuelException
 	 * @throws	FlatTireException
 	 */
@@ -105,7 +106,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 				spare = referenced;
 			}
 		}));
-		association.put(Associations.LICENSE, new OneAssociationAC<Car, License, Owner>(this, new Accessor<License>() {
+		association.put(Associations.LICENSE, new OneAssociation<Car, License>(this, new Accessor<License>() {
 			public License get() {
 				return license;
 			}
@@ -113,15 +114,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 			public void set(License referenced) {
 				license = referenced;
 			}
-		}, new Accessor<Owner>() {
-			public Owner get() {
-				return owner;
-			}
-			
-			public void set(Owner referenced) {
-				owner = referenced;
-			}
-		}, License.Associations.CAR));
+		}));
 		association.put(Associations.LICENSEPLATE, new OneAssociation<Car, LicensePlate>(this, new Accessor<LicensePlate>() {
 			public LicensePlate get() {
 				return licensePlate;
@@ -130,7 +123,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 			public void set(LicensePlate referenced) {
 				licensePlate = referenced;
 			}
-		}, LicensePlate.Associations.CAR));
+		}));
 		association.put(Associations.ENGINE, new OneAssociation<Car, Engine>(this, new Accessor<Engine>() {
 			public Engine get() {
 				return engine;
@@ -139,12 +132,12 @@ public class Car extends AbstractVehicle implements AssociationRole {
 			public void set(Engine referenced) {
 				engine = referenced;
 			}
-		}, Engine.Associations.CAR));
-		association.put(Associations.WHEELS, new ManyAssociation<Car, Wheel>(this, wheels, Wheel.Associations.MYCAR));
+		}));
+		association.put(Associations.WHEELS, new ManyAssociation<Car, Wheel>(this, wheels));
 	}
 	
 	/**
-	 * provides generic access to association objects, used by the association handling library
+	 * Provides generic access to association objects, used by the association handling library
 	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
@@ -165,8 +158,8 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	 * Provides access to the association '<em><b>license</b></em>' to {@link License}.
 	 */
 	@SuppressWarnings("unchecked")
-	public AssociationAC<Car, License, Owner> license() {
-		return (AssociationAC<Car, License, Owner>) association.get(Associations.LICENSE);
+	public Association<Car, License> license() {
+		return (Association<Car, License>) association.get(Associations.LICENSE);
 	}
 	
 	/**
@@ -199,5 +192,5 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945913718_872802_139) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }

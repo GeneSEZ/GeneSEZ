@@ -1,21 +1,22 @@
 package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
-/* PROTECTED REGION ID(java.type.import._16_0_129203bc_1271101053859_90038_924) ENABLED START */
-/* TODO: put your own source code here */
-import java.math.BigDecimal;
-import javax.ejb.Stateful;
-import javax.interceptor.Interceptors;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_129203bc_1271101053859_90038_924) 
+ */
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
+import javax.ejb.Stateful;
+import javax.interceptor.Interceptors;
+import javax.math.BigDecimal;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
+import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
-
-/* PROTECTED REGION END */
 
 /**
  * The finance bean provides the possible account operations. Before an account operation can be called a bank, customer and account have to be selected
- * @author	apflueger
+ * @author domwet
  */
 
 @Stateful(name = "FinanceBean")
@@ -34,8 +35,9 @@ public class FinanceBean implements IFinanceBeanLocal {
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * constructor for class '<em><b>FinanceBean</b></em>'
+	 * Constructor for class '<em><b>FinanceBean</b></em>'.
 	 */
+	
 	public FinanceBean() {
 	}
 	
@@ -140,5 +142,5 @@ public class FinanceBean implements IFinanceBeanLocal {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_129203bc_1271101053859_90038_924) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-
+	
 }
