@@ -753,13 +753,13 @@ MInterface processPlugin(MInterface this, MClass domainObject) :
 		let s = makeStereotype( model(), prT3ExtbasePlugin(), prT3ExtbasePlugin() ) :
 			makeTaggedValue( makeTag( s, prT3ExtbasePluginTitle(), "String" ), domainObject.asPluginName() ) ->
 			(	let controller = makeController(domainObject) :
-				( 	let ca = makeTag(s, prT3ExtbasePluginCachedActions(), "Operation") :
+				( 	let controllerAction = makeTag(s, prT3ExtbasePluginControllerActions(), "Operation") :
 						controller.operation.select( e | e.isControllerAction() )
-							.addPluginControllerAction(ca, this)
+							.addPluginControllerAction(controllerAction, this)
 				) ->
-				( 	let uca = makeTag(s, prT3ExtbasePluginUncachedActions(), "Operation") :
+				( 	let uncachedControllerAction = makeTag(s, prT3ExtbasePluginUncachedControllerActions(), "Operation") :
 						controller.operation.select( e | e.isControllerAction() && {"createAction", "updateAction", "deleteAction"}.contains(e.name) )
-							.addPluginControllerAction(uca, this)
+							.addPluginControllerAction(uncachedControllerAction, this)
 				)
 			) ->
 			s 
