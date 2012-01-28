@@ -5,19 +5,21 @@ package org.genesez.platforms.common.workflow;
  * 	@FILE-ID : (_17_0_1_8e00291_1324564423951_527900_6334) 
  */
 
-import org.apache.commons.logging.LogFactory;
-import de.genesez.metamodel.gtrace.AdaptedFactoryActivator;
-import org.apache.commons.logging.Log;
 import java.util.Properties;
-import org.eclipse.emf.mwe.utils.StandaloneSetup;
-import de.genesez.metamodel.greq.GreqPackage;
-import de.genesez.metamodel.gcore.GcorePackage;
-import de.genesez.metamodel.gtrace.GtracePackage;
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.eclipse.emf.mwe.utils.Reader;
-import org.eclipse.emf.mwe.utils.Mapping;
-import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.container.CompositeComponent;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.utils.Mapping;
+import org.eclipse.emf.mwe.utils.Reader;
+import org.eclipse.emf.mwe.utils.StandaloneSetup;
+import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
+import org.genesez.metamodel.greq.GreqPackage;
+import org.genesez.metamodel.gtrace.AdaptedFactoryActivator;
+import org.genesez.metamodel.gtrace.GtracePackage;
+
+import de.genesez.metamodel.gcore.GcorePackage;
 
 /**
  * Performs the instantiation process of genesez models for traceability purpose. The instantiated core model is serialized to reflect possibile changes for further generation steps. The requirements and traceability model are instantiated. If checked, the necessary information for cross model references is stored using model extensions. Else model queries must be used.

@@ -34,8 +34,8 @@ public class WorkflowProperties {
 		defaults.setProperty("reqSlot", "reqmodel");
 		defaults.setProperty("traceSlot", "tracemodel");
 		defaults.setProperty("gcorePackage", "de.genesez.metamodel.gcore.GcorePackage");
-		defaults.setProperty("greqPackage", "de.genesez.metamodel.greq.GreqPackage");
-		defaults.setProperty("gtracePackage", "de.genesez.metamodel.gtrace.GtracePackage");
+		defaults.setProperty("greqPackage", "org.genesez.metamodel.greq.GreqPackage");
+		defaults.setProperty("gtracePackage", "org.genesez.metamodel.gtrace.GtracePackage");
 	}
 	/* PROTECTED REGION END */
 	
