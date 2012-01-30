@@ -5,14 +5,13 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.issues.Issues;
-
-import de.genesez.platforms.common.workflow.TypeMappingGenerator;
+import org.genesez.platforms.common.workflow.DefaultGenerator;
 
 /**
  * Performs model to text transformations for the .net platform and C#.
  * @author Aibek Isaev
  */
-public class CSharpGenerator extends TypeMappingGenerator {
+public class CSharpGenerator extends DefaultGenerator {
 	
 	private static final Properties defaults = new Properties();
 	static {

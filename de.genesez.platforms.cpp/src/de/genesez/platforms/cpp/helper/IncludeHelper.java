@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import de.genesez.metamodel.gcore.MClassifier;
-import de.genesez.metamodel.gcore.MDefinitionContext;
 import de.genesez.metamodel.gcore.MPackage;
 
 public class IncludeHelper {
