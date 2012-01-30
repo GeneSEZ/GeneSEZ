@@ -5,33 +5,36 @@ package org.genesez.platforms.common.workflow;
  * 	@FILE-ID : (_17_0_1_8e00291_1321346476896_817371_2401) 
  */
 
-import org.jfree.chart.ChartFactory;
-import org.genesez.platforms.common.statistic.StatisticsSet;
+import java.awt.Color;
+import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-import org.jfree.chart.JFreeChart;
-import java.awt.Color;
-import org.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature;
-import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import java.nio.file.Path;
-import org.eclipse.emf.mwe.core.WorkflowContext;
-import java.nio.file.Files;
-import java.net.URISyntaxException;
-import org.eclipse.xtend.type.impl.java.JavaMetaModel;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.ui.RectangleInsets;
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.chart.plot.PiePlot3D;
-import java.io.IOException;
-import org.apache.commons.logging.LogFactory;
-import org.genesez.platforms.common.statistic.StatisticObserver;
+
 import org.apache.commons.logging.Log;
-import java.awt.Font;
-import org.jfree.data.general.PieDataset;
-import org.eclipse.emf.mwe.utils.DirectoryCleaner;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.container.CompositeComponent;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.eclipse.emf.mwe.utils.DirectoryCleaner;
+import org.eclipse.xtend.type.impl.java.JavaMetaModel;
+import org.genesez.platforms.common.statistic.StatisticObserver;
+import org.genesez.platforms.common.statistic.StatisticsSet;
+import org.genesez.platforms.common.workflow.feature.FileTreeWalkerFeature;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+import org.jfree.ui.RectangleInsets;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -91,9 +94,15 @@ public class StatisticComponent extends CompositeComponent {
 		cleaner.setUseDefaultExcludes(false);
 		
 		try {
-			defaultSource = Paths.get(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			// obtain location of class file; note: could be a directory or a jar file!
+			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
+			logger.debug("location: " + url );
+			// either the directory or the jar file are in the same folder which contains the default template
+			URI dir = new File(url.getPath()).getParentFile().toURI();
+			defaultSource = Paths.get(dir);
+			logger.debug("path: " + defaultSource);
+		} catch (Exception e) {
+			logger.error("could not obtain default source for statistic html template", e);
 		}
 		
 		generator.addMetaModel(new JavaMetaModel());
@@ -300,7 +309,7 @@ public class StatisticComponent extends CompositeComponent {
 	static {
 		defaults.put("template", "org::genesez::platforms::common::statistic::Evaluation::Root");
 		defaults.put("slot", "statisticModel");
-		defaults.put("source", "../html_template");
+		defaults.put("source", "html_template");
 		defaults.put("withDetails", "false");
 	}
 	/* PROTECTED REGION END */
