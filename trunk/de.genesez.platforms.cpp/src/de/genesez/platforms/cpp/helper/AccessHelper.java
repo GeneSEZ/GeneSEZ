@@ -4,6 +4,7 @@ import de.genesez.metamodel.gcore.MClassifier;
 import de.genesez.metamodel.gcore.MDefinitionContext;
 import de.genesez.metamodel.gcore.MPackage;
 
+
 /**
  * Provides helper methods for navigation within genesez models
  * @author dreamer

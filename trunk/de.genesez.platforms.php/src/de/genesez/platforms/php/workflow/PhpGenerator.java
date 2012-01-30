@@ -5,15 +5,14 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.issues.Issues;
-
-import de.genesez.platforms.common.workflow.TypeMappingGenerator;
-import de.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platforms.common.workflow.DefaultGenerator;
+import org.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Performs source code generation for the PHP platform
  * @author Aibek Isaev
  */
-public class PhpGenerator extends TypeMappingGenerator {
+public class PhpGenerator extends DefaultGenerator {
 	
 	/**
 	 * default values in case the property file is not found

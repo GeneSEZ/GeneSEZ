@@ -12,13 +12,13 @@ import org.eclipse.emf.mwe.utils.DirectoryCleaner;
 import org.eclipse.xpand2.Generator;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
+import org.genesez.metamodel.greq.GreqPackage;
+import org.genesez.metamodel.gtrace.GtracePackage;
+import org.genesez.platforms.common.workflow.Copier;
+import org.genesez.platforms.common.workflow.WorkflowProperties;
+import org.genesez.platforms.common.workflow.WorkflowUtils;
 
 import de.genesez.metamodel.gcore.GcorePackage;
-import de.genesez.metamodel.greq.GreqPackage;
-import de.genesez.metamodel.gtrace.GtracePackage;
-import de.genesez.platforms.common.workflow.Copier;
-import de.genesez.platforms.common.workflow.WorkflowProperties;
-import de.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Performs the generation of the GeneSEZ Dashboard.
