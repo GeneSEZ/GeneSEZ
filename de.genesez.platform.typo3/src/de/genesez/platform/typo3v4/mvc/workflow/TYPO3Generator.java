@@ -39,6 +39,10 @@ public class TYPO3Generator extends DefaultGenerator {
 	 */
 	public TYPO3Generator() {
 		super();
+		
+		deleteOldFiles = false;
+		deleteEmptyFolders = false;
+		importTakeOver = false;
 
 		WorkflowUtils.callPropertyAccessors(this, defaults);
 	}
