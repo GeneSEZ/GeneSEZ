@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import org.eclipse.emf.mwe.core.issues.Issues;
 
-import de.genesez.platforms.common.workflow.Model2Model;
-import de.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platforms.common.workflow.Model2Model;
+import org.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Workflow component class to create the default directory layout for an TYPO3

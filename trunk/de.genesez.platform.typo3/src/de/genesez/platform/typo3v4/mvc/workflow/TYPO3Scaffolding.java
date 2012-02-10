@@ -2,7 +2,7 @@ package de.genesez.platform.typo3v4.mvc.workflow;
 
 import java.util.Properties;
 
-import de.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Workflow component class for TYPO3 MVC static scaffolding.

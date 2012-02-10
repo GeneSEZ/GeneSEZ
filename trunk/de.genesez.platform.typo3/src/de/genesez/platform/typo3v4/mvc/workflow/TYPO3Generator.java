@@ -7,9 +7,9 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
 import de.genesez.metamodel.gcore.impl.MModelImpl;
-import de.genesez.platforms.common.naming.NamingMapper;
-import de.genesez.platforms.common.workflow.TypeMappingGenerator;
-import de.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platforms.common.naming.NamingMapper;
+import org.genesez.platforms.common.workflow.DefaultGenerator;
+import org.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Workflow component class for TYPO3 MVC model to text (M2T) generation.
@@ -17,7 +17,7 @@ import de.genesez.platforms.common.workflow.WorkflowUtils;
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-20
  */
-public class TYPO3Generator extends TypeMappingGenerator {
+public class TYPO3Generator extends DefaultGenerator {
 
 	/**
 	 * Default values in case the property file is not found.
