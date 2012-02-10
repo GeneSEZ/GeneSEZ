@@ -6,7 +6,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 Nico Herbig, Jochen Rau
+ *  (c) 2012 Nico Herbig, Jochen Rau
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
