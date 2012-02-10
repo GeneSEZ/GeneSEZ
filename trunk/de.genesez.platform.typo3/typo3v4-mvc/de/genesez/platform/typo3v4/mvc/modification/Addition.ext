@@ -35,6 +35,7 @@ extension de::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
 extension de::genesez::platforms::common::AccessHelper;
 
 // use common create template scripts
+extension de::genesez::platforms::common::m2m::CopyElement;
 extension de::genesez::platforms::common::m2m::MakeElement;
 extension de::genesez::platforms::common::m2m::CreateTemplate;
 
@@ -652,7 +653,7 @@ cached MClass makeValidator(MStereotype stereotype) :
 	!stereotype.existsValidator() 
 		? (	let c = createClass(stereotype.model(), stereotype.xmiGuid + ".validator", stereotype.asValidatorName() ) :
 				logTrace("create new validator class for stereotype: " + stereotype.name) ->
-				c.processValidator()
+				c.processValidator(stereotype)
 		) : stereotype.model().allValidators().select( v | v.nameS() == stereotype.asValidatorName() ).first();
 
 
@@ -660,16 +661,33 @@ MClass processValidator(MClass this) :
 	logTrace("call processValidator for class: " + name) ->
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
+	// add stereotype to mark this class as validator
+	stereotype.add( 
+		makeStereotype( model(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
+	) ->
+	processValidator2();
+
+
+MClass processValidator(MClass this, MStereotype validatorStereotype) :
+	logTrace("call processValidator for class from stereotype: " + name) ->
+	// (visibility, abstract, final)
+	processClassifier("public", false, false) ->
+	// copy all stereotype information
+	copyStereotypes(validatorStereotype, this) ->
+	// copy all tagged value information
+	copyTaggedValues(validatorStereotype, this) ->
+	processValidator2()->
+	this;
+
+
+MClass processValidator2(MClass this) :
+	logTrace("call processValidator2 for class: " + name) ->
 	// add comment to discribe the validator
 	makeComment("Validator for object, property or parameter.") ->
 	// add super validator type
 	addValidatorType() ->
 	// add 'isValid'
 	addValidatorIsValid() ->
-	// add stereotype to mark this class as validator
-	stereotype.add( 
-		makeStereotype( model(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
-	) ->
 	this;
 
 
