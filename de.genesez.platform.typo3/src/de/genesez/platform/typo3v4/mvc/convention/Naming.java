@@ -8,7 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MOperation;
 import de.genesez.metamodel.gcore.MProperty;
-import de.genesez.platforms.common.AccessHelper;
+import org.genesez.platforms.common.AccessHelper;
 
 /**
  * Utility class for TYPO3 MVC naming conventions.

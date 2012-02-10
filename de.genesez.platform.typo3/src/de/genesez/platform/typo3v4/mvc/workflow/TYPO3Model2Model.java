@@ -7,9 +7,9 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
 import de.genesez.metamodel.gcore.impl.MModelImpl;
-import de.genesez.platforms.common.naming.NamingMapper;
-import de.genesez.platforms.common.workflow.Model2Model;
-import de.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platforms.common.naming.NamingMapper;
+import org.genesez.platforms.common.workflow.Model2Model;
+import org.genesez.platforms.common.workflow.WorkflowUtils;
 
 /**
  * Workflow component class for TYPO3 MVC model to model (M2M) modifications.
