@@ -475,7 +475,7 @@ MTag makeTagNoChecks(MStereotype container, String name, String type) :
  * @param value			value of the tagged value 
  * @return				instance of the tagged value
  */
-MTag makeTaggedValue(MElement container, MTag tag, String value) :
+MTaggedValue makeTaggedValue(MElement container, MTag tag, String value) :
 	container.taggedValue.select(tv|tv.tag.name == tag.name && tv.tag.stereotype.name == tag.stereotype.name).isEmpty
 		? makeTaggedValueNoChecks(container, tag, value)
 		: ( let tv = container.taggedValue.selectFirst(tv|tv.tag.name == tag.name && tv.tag.stereotype.name == tag.stereotype.name) :
@@ -491,7 +491,7 @@ MTag makeTaggedValue(MElement container, MTag tag, String value) :
  * @param value			value of the tagged value 
  * @return				instance of the tagged value
  */
-MTag makeTaggedValueNoChecks(MElement container, MTag tag, String value) :
+MTaggedValue makeTaggedValueNoChecks(MElement container, MTag tag, String value) :
 	let tv = createTaggedValue(container, tag, value) :
 		tv;
 		
