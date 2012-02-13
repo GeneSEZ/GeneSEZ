@@ -217,10 +217,6 @@ MClass processController(MClass this, MClass domainObject) :
 	makeComment("Controller for a domain object.") ->
 	// add super controller type
 	addControllerType() ->
-	// add stereotype to mark this class as controller
-	stereotype.add( 
-		makeStereotype( model(), prT3ExtbaseController(), prT3ExtbaseController() ) 
-	) ->
 	// add property to inject the repository
 	addControllerRepository(domainObject) ->
 	// add controller actions
@@ -231,6 +227,10 @@ MClass processController(MClass this, MClass domainObject) :
 	addControllerEditAction(domainObject) ->
 	addControllerUpdateAction(domainObject) ->
 	addControllerDeleteAction(domainObject) ->
+	// add stereotype to mark this class as controller
+	stereotype.add( 
+		makeStereotype( model(), prT3ExtbaseController(), prT3ExtbaseController() ) 
+	) ->
 	this;
 
 
@@ -661,11 +661,12 @@ MClass processValidator(MClass this) :
 	logTrace("call processValidator for class: " + name) ->
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
+	processValidator2() ->
 	// add stereotype to mark this class as validator
 	stereotype.add( 
 		makeStereotype( model(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
 	) ->
-	processValidator2();
+	this;
 
 
 MClass processValidator(MClass this, MStereotype validatorStereotype) :
@@ -676,7 +677,7 @@ MClass processValidator(MClass this, MStereotype validatorStereotype) :
 	copyStereotypes(validatorStereotype, this) ->
 	// copy all tagged value information
 	copyTaggedValues(validatorStereotype, this) ->
-	processValidator2()->
+	processValidator2() ->
 	this;
 
 
