@@ -29,6 +29,9 @@ import gcore;
 // use common access helper scripts
 extension org::genesez::platforms::common::AccessHelper;
 
+// use profile scripts
+extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFirst(".ext", "") -»;
+
 «EXPAND StereotypeElement FOREACH allClassifiers().typeSelect(MClass).sortBy(e | e.name) -»
 «ENDFILE -»
 «ENDDEFINE»
@@ -60,7 +63,7 @@ extension org::genesez::platforms::common::AccessHelper;
 «DEFINE HasStereotype FOR MClass -»
 «EXPAND Comment::HasStereotype -»
 boolean «asAccessHelperHasStereotype() -»(MElement this) :
-	hasStereotype("«name -»");
+	hasStereotype( «asProfileScriptName() -»() );
 
 «ENDDEFINE»
 
@@ -69,7 +72,7 @@ boolean «asAccessHelperHasStereotype() -»(MElement this) :
 «IF hasAttributes() -»
 «EXPAND Comment::HasTaggedValue -»
 boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String value) :
-	hasTaggedValue("«name -»", tag, value);
+	hasTaggedValue( «asProfileScriptName() -»(), tag, value );
 	
 «ENDIF -»
 «ENDDEFINE»
@@ -78,7 +81,7 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String v
 «DEFINE HasTaggedValue FOR MAttribute -»
 «EXPAND Comment::HasTaggedValue -»
 boolean «asAccessHelperHasTaggedValue() -»(MElement this, String value) :
-	hasTaggedValue("«classifier.name -»", "«name -»", value);
+	hasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), value );
 
 «ENDDEFINE»
 
@@ -86,7 +89,7 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, String value) :
 «DEFINE HasUtilizableTaggedValue FOR MAttribute -»
 «EXPAND Comment::HasUtilizableTaggedValue -»
 boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
-	hasUtilizableValue("«classifier.name -»", "«name -»");
+	hasUtilizableValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ENDDEFINE»
 
 
@@ -94,10 +97,10 @@ boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
 «EXPAND Comment::GetTaggedValue -»
 «IF isSingleValuedType() -»
 String «asAccessHelperGetTaggedValue() -»(MElement this) :
-	getTaggedValue("«classifier.name -»", "«name -»");
+	getTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ELSE -»
 List[String] «asAccessHelperGetTaggedValue() -»(MElement this) : 
-	getTaggedListValue("«classifier.name -»", "«name -»");
+	getTaggedListValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ENDIF -»
 
 «ENDDEFINE»
@@ -106,7 +109,7 @@ List[String] «asAccessHelperGetTaggedValue() -»(MElement this) :
 «DEFINE SetTaggedValue FOR MAttribute -»
 «EXPAND Comment::SetTaggedValue -»
 Void «asAccessHelperSetTaggedValue() -»(MElement this, String value) :
-	setTaggedValue("«classifier.name -»", "«name -»", value);
+	setTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), value );
 
 «ENDDEFINE»
 
@@ -116,7 +119,7 @@ Void «asAccessHelperSetTaggedValue() -»(MElement this, String value) :
 «FOREACH ((MEnumeration)type).literal AS l -»
 «EXPAND Comment::IsTaggedValue(l) -»
 boolean «asAccessHelperIsTaggedValue(l) -»(MElement this) :
-	hasTaggedValue("«classifier.name -»", "«name -»", "«l.name»");
+	hasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), «l.asProfileScriptName() -»() );
 
 «ENDFOREACH -»
 «ENDIF -»
