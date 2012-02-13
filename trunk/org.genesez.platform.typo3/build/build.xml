@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="de.genesez.platform.typo3" basedir=".." default="build">
+<project name="org.genesez.platform.typo3" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -18,7 +18,7 @@
 	<property file="build/build.properties" />
 
 	<!-- Set the classpath -->
-	<path id="de.genesez.platform.typo3.classpath">
+	<path id="org.genesez.platform.typo3.classpath">
 		<pathelement path="${build.basedir}/de.genesez.platforms.common/${bin.dir}" />
 		<pathelement path="${build.basedir}/de.genesez.metamodel.core/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
@@ -27,18 +27,18 @@
 	<!-- Public target section -->
 
 	<target name="build"
-		description="Build de.genesez.platform.typo3">
+		description="Build org.genesez.platform.typo3">
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.platform.typo3.classpath"
+			classpathref="org.genesez.platform.typo3.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on" />
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.platform.typo3"
+		description="Create the plugin jar for org.genesez.platform.typo3"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
@@ -58,7 +58,7 @@
 	</target>
 
 	<target name="clean"
-		description="Clean de.genesez.platform.typo3">
+		description="Clean org.genesez.platform.typo3">
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${dist.dir}" includes="*.jar" />
