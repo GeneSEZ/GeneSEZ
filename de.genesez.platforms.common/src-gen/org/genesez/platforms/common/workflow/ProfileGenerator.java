@@ -89,8 +89,8 @@ public class ProfileGenerator extends Generator {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1324563419229_231019_5871) ENABLED START */
 	static {
-		defaults.setProperty("template", "de::genesez::platforms::common::profile::templates::Root::Root");
-		defaults.setProperty("typeMappingFile", "de/genesez/platforms/common/typemapping/typemapping.xml");
+		defaults.setProperty("template", "org::genesez::platforms::common::profile::templates::Root::Root");
+		defaults.setProperty("typeMappingFile", "org/genesez/platforms/common/typemapping/typemapping.xml");
 		
 		defaults.setProperty("profileFileName", "Profile.ext");
 		defaults.setProperty("accessHelperFileName", "AccessHelper.ext");
