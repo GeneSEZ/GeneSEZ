@@ -52,7 +52,7 @@ public class ProfileGenerator extends Generator {
 			addGlobalVarDef("xtendFilePath", xtendFilePath);
 		}
 				
-		super.checkConfiguration(issues);
+		super.checkConfigurationInternal(issues);
 		/* PROTECTED REGION END */
 	}
 	
