@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 
+import de.genesez.metamodel.gcore.MElement;
 import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MOperation;
 import de.genesez.metamodel.gcore.MProperty;
@@ -14,7 +15,7 @@ import org.genesez.platforms.common.AccessHelper;
  * Utility class for TYPO3 MVC naming conventions.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date 2011-07-28
+ * @date 2012-02-15
  */
 public class Naming {
 
@@ -44,26 +45,19 @@ public class Naming {
 	}
 
 	/**
-	 * This method convert assigned controller actions of an TYPO3 MVC plugin or
+	 * This method convert assigned controller actions of a TYPO3 MVC plugin or
 	 * module. In every plugin or module stereotype it is possible to store a
-	 * list of methods for cached and uncached controller actions. This action
-	 * names are transformed into xmiGuids that are only strings. For a correct
-	 * controller action combination it is necessary to get a reference to the
-	 * controller object where the action is owned. So this method gets a list
-	 * of xmiGuids of cached or uncached actions. With this information it is
-	 * possible to iterate over the model tree and get a reference back to the
-	 * operation object. In fact that the operation has a reference to the
-	 * classifier it is possible to get the name of this to create valid
-	 * controller action pair. For instance: The plugin needs the following
-	 * controller actions 'BlogController' -> 'indexAction, listAction' and
-	 * 'PostController' -> 'indexAction'. This method returns a string list with
-	 * two entries: [0] : 'Blog' => 'index, list' and [1] : 'Post' => 'index'.
+	 * list of methods for controller actions. For instance: The plugin needs
+	 * the following controller actions 'BlogController' -> 'indexAction,
+	 * listAction' and 'PostController' -> 'indexAction'. This method returns a
+	 * string list with two entries: [0] : 'Blog' => 'index, list' and [1] :
+	 * 'Post' => 'index'.
 	 * 
 	 * @param model The model for iteration over it.
-	 * @param xmiGuids The list of operation xmiGuids.
+	 * @param operations The list of operations (controller actions).
 	 * @return The list of valid controller actions.
 	 */
-	public static List<String> asControllerActionPairs(MModel model, List<String> xmiGuids) throws Exception {
+	public static List<String> asControllerActionPairs(MModel model, List<MOperation> operations) throws Exception {
 		List<String> controllerActions = new ArrayList<String>();
 		List<String> controllers = new ArrayList<String>();
 		List<String> actions = new ArrayList<String>();
@@ -71,31 +65,25 @@ public class Naming {
 		Integer controllerIndex;
 		String action;
 
-		for (String xmiGuid : xmiGuids) {
-			// Get the reference of an element and check of this element is an
-			// operation
-			EObject eObj = AccessHelper.getEObjectByUri(model, xmiGuid);
-			if (eObj instanceof MOperation) {
+		for (MOperation operation : operations) {
+			// Get the controller name where the controller action is owned
+			controller = getControllerName(operation);
 
-				// Get the controller name where the controller action is owned
-				controller = getControllerName((MOperation) eObj);
+			// Get the controller action name
+			action = getControllerActionName(operation);
 
-				// Get the controller action name
-				action = getControllerActionName((MOperation) eObj);
-
-				// Check if the controller already exists inside the controller
-				// list or not
-				if (!controllers.contains(controller)) {
-					// If not a new controller and action entry is added
-					controllers.add(controller);
-					actions.add(action);
-				} else {
-					// Otherwise the index of the existing controller is
-					// searched
-					controllerIndex = controllers.indexOf(controller);
-					// At the same index the new action is added
-					actions.set(controllerIndex, actions.get(controllerIndex) + ", " + action);
-				}
+			// Check if the controller already exists inside the controller
+			// list or not
+			if (!controllers.contains(controller)) {
+				// If not a new controller and action entry is added
+				controllers.add(controller);
+				actions.add(action);
+			} else {
+				// Otherwise the index of the existing controller is
+				// searched
+				controllerIndex = controllers.indexOf(controller);
+				// At the same index the new action is added
+				actions.set(controllerIndex, actions.get(controllerIndex) + ", " + action);
 			}
 		}
 
