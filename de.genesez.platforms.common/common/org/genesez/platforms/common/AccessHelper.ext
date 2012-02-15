@@ -15,7 +15,7 @@
  * @author	tobias haubold 
  * @author	andre pflueger
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (last)
- * @date	2011-05-17
+ * @date	2012-02-15
  */
 
 // based on genesez meta model
@@ -317,16 +317,6 @@ List[MAttribute] allInitializableAttributes(MClassifier this):
  */
 List[MAttribute] allInitializableAttributes(MType this) : {};
 
-
-/**
- * Getter for an MAttribute by it's xmi guid.
- * 
- * @param model		the model where the attribute is placed
- * @param xmiGuid	the xmi guid of the attribute
- * @return the attribute where the xmi guid is equals, otherwise null
- */
-MAttribute getAttributeByXmiGuid(MModel model, String xmiGuid) :
-	getMElementByXmiGuid(model, xmiGuid);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -662,6 +652,15 @@ boolean hasStereotype(MElement this, String stereotype) :
  */
 boolean hasTaggedValue(MElement this, String tag, String value) :
 	taggedValue.exists( e| e.tag.name == tag && e.value == value );
+	
+/**
+ * checks if an element has a tagged value reference by ignoring the stereotype
+ * @param	tag				the name of a tagged value
+ * @param	valueReference	the value reference of a tagged value
+ * @return	true if the element has a tag with the given value reference, otherwise false
+ */
+boolean hasTaggedValue(MElement this, String tag, MElement valueReference) :
+	taggedValue.exists( e| e.tag.name == tag && e.valueReference == valueReference );
 
 /**
  * checks if an element has a tagged value of a specific stereotype
@@ -673,6 +672,18 @@ boolean hasTaggedValue(MElement this, String tag, String value) :
 boolean hasTaggedValue(MElement this, String stereotype, String tag, String value) :
 	!taggedValue.typeSelect(MTaggedValue)
 		.select( e| e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype)
+		.isEmpty;
+		
+/**
+ * checks if an element has a tagged value reference of a specific stereotype
+ * @param	sterotype		the name of a stereotype
+ * @param	tag				the name of a tagged value
+ * @param	valueReference	the value reference of a tagged value
+ * @return	true if the element has a tag with the given value reference, otherwise false
+ */
+boolean hasTaggedValue(MElement this, String stereotype, String tag, MElement valueReference) :
+	!taggedValue.typeSelect(MTaggedValue)
+		.select( e| e.valueReference == valueReference && e.tag.name == tag && e.tag.stereotype.name == stereotype)
 		.isEmpty;
 
 /**
@@ -687,12 +698,25 @@ String getTaggedValue(MElement this, String stereotype, String tag) :
 	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
 		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value
 		: "";
+		
+/**
+ * 	returns a tagged value reference of a stereotype if exists
+ *
+ * 	@param	stereotype	the name of a stereotype
+ *	@param	tag			the name of a tagged value
+ *	
+ * 	@return		value reference of the tagged value
+ */
+MElement getTaggedValueReference(MElement this, String stereotype, String tag) :
+	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).valueReference
+		: "";
 
 /**
  * returns the boolean value of a tagged value of a stereotype
  * 
  * @param	stereotype	the name of a stereotype
- * @param	tag			the name of the tag
+ * @param	tag			the name of a tagged value
  * 
  * @return	true, if the tagged value is true, otherwise false
  */
@@ -705,7 +729,7 @@ boolean getTaggedBooleanValue(MElement this, String stereotype, String tag) :
  * Returns a list of values of a tagged value of a stereotype.
  * 
  * @param	stereotype	the name of a stereotype
- * @param	tag			the name of the tag
+ * @param	tag			the name of the tagged value
  * 
  * @return	the list of tagged values
  */
@@ -718,25 +742,49 @@ List[MTaggedValue] owningTaggedValues(MElement this, String stereotype, String t
  * Returns a list of values of a tagged value of a stereotype.
  * 
  * @param	stereotype	the name of a stereotype
- * @param	tag			the name of the tag
+ * @param	tag			the name of the tagged value
  * 
  * @return	the list of values
  */
-List[String] getTaggedListValue(MElement this, String stereotype, String tag) :
+List[String] getTaggedValueList(MElement this, String stereotype, String tag) :
 	let taggedValues = {} :
 		taggedValues.addAll( owningTaggedValues(stereotype, tag).value ) ->
 		taggedValues;
+		
+/**
+ * Returns a list of value references of a tagged value of a stereotype.
+ * 
+ * @param	stereotype	the name of a stereotype
+ * @param	tag			the name of the tagged value
+ * 
+ * @return	the list of value references
+ */
+List[MElement] getTaggedValueReferenceList(MElement this, String stereotype, String tag) :
+	let taggedValueReferences = {} :
+		taggedValueReferences.addAll( owningTaggedValues(stereotype, tag).valueReference ) ->
+		taggedValueReferences;
 
 /**
  *	function to set any existing tagged value
  *
  *	@param		this	MProperty
- *	@param		name	name of the tagged value
- *	@param		value	new value
+ *	@param		tag		name of the tagged value
+ *	@param		value	the new value of the tagged value
  *
  */
-Void setTaggedValue(MElement this, String name, String value) :
-	this.taggedValue.selectFirst(e|e.tag.name == name).setValue(value);
+Void setTaggedValue(MElement this, String tag, String value) :
+	this.taggedValue.selectFirst(e|e.tag.name == tag).setValue(value);
+	
+/**
+ *	function to set any existing tagged value reference
+ *
+ *	@param		this			MProperty
+ *	@param		tag				name of the tagged value
+ *	@param		valueReference	the new value of the tagged value
+ *
+ */
+Void setTaggedValue(MElement this, String tag, MElement valueReference) :
+	this.taggedValue.selectFirst(e|e.tag.name == tag).setValueReference(valueReference);
 	
 /**
  *	function to set a tagged value of a specific stereotype
@@ -744,16 +792,34 @@ Void setTaggedValue(MElement this, String name, String value) :
  *
  *	@param		this		MPropertye
  *	@param		stereotype	name of the stereotype
- *	@param		taggedValue	name of the tagged value
- *	@param		value		new value
+ *	@param		tag			name of the tagged value
+ *	@param		value		the new value of tagged value
  *
  */
-Void setTaggedValue(MElement this, String stereotype, String taggedValue, String value) :
+Void setTaggedValue(MElement this, String stereotype, String tag, String value) :
 	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype)
-		? this.taggedValue.selectFirst(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype).setValue(value)
+		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).setValue(value)
+		: createTaggedValue(
+			this.stereotype.selectFirst(e|e.name == stereotype).property.selectFirst(e|e.name == tag),
+			value
+		);
+		
+/**
+ *	function to set a tagged value reference of a specific stereotype
+ *	note: if a MTagggedValue already exists, it is used and it's value is changed
+ *
+ *	@param		this			MPropertye
+ *	@param		stereotype		name of the stereotype
+ *	@param		tag				name of the tagged value
+ *	@param		valueReference	new value reference of tagged value
+ *
+ */
+Void setTaggedValue(MElement this, String stereotype, String tag, MElement valueReference) :
+	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
+		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).setValueReference(valueReference)
 		: createTaggedValue(
 			this.stereotype.selectFirst(e|e.name == stereotype).property.selectFirst(e|e.name == taggedValue),
-			value
+			valueReference
 		);
 	
 /**
@@ -768,7 +834,23 @@ boolean hasUtilizableValue(MElement this, String stereotype, String tag) :
 	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype) &&
 	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "" &&
 	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "null" &&
+	// (nihe) I think this check is not needed anymore, because multi valued tagged values are splited into separate tagged values 
 	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "[]"
+		? true
+		: false;
+		
+/**
+ * 	checks if a tagged value of a stereotype exists and has a utilizable value reference (not empty or null)
+ *
+ * 	@param	sterotype		the name of a stereotype
+ * 	@param	tag				the name of a tag
+ * 	
+ *	@return		true if the value reference exists and is utilizable
+ */
+boolean hasUtilizableValueReference(MElement this, String stereotype, String tag) :
+	logError("ST " + stereotype + " tag " + tag + " -> " + this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).valueReference ) ->
+	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype) &&
+	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).valueReference != null
 		? true
 		: false;
 
@@ -1051,18 +1133,6 @@ List[MClassifier] allSpecializations(MType this):
 				specializations.addAll( owningSpecializations().allSpecializations() )
 			) : Void ->
 		specializations;
-	
-/**
- *	Getter for a MClassifier identified by its xmiGuid
- *
- *	@param	model	instance of MModel
- *	@param	xmiGuid	xmi guid of the MClassifier
- *
- *	@return	instance of MClassifier identified by xmiGuid or null
- */
-MClassifier getClassifierByXmiGuid(MModel model, String xmiGuid) :
-	((MClassifier) getMElementByXmiGuid(model, xmiGuid));
-
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1092,16 +1162,6 @@ MClassifier getClassifier(MElement this) :
 		default : null
 	};
 
-/**
- * Getter for an MElement by it's xmi guid.
- * 
- * @param model		the model where the element is placed
- * @param xmiGuid	the xmi guid of the element
- * @return the element where the xmi guid is equals, otherwise null
- */
-MElement getMElementByXmiGuid(MModel model, String xmiGuid) :
-	getEObject(model, xmiGuid);
-
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	activities
@@ -1127,18 +1187,6 @@ private String getComment(MComment this) :
 	annotation != "null"
 		? annotation
 		: "";
-
-/**
- * Getter for an EObject by it's URI. 
- * In case of an MElement the URI is normally the xmiGuid.
- * 
- * @param 	model 	The model where the object is placed.
- * @param 	uri 	The URI of the object.
- * @return 	The object where the URI is equals, otherwise null.
- */
-private Object getEObject(MModel model, String uri) :
-	JAVA org.genesez.platforms.common.AccessHelper.getEObjectByUri(de.genesez.metamodel.gcore.MModel, java.lang.String);
-
 
 /**
  * getter for a class by it's full qualified name from a list of classes
