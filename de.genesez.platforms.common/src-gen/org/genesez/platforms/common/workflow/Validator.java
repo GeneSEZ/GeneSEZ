@@ -48,7 +48,7 @@ public class Validator extends CheckComponent {
 	 * Variable to stores all check scripts.
 	 */
 	
-	private java.util.Set<String> scripts = new LinkedHashSet<String>();
+	private java.util.Set<String> scripts = new java.util.LinkedHashSet<String>();
 	
 	// -- generated constructors --------------------------------------------
 	/**

@@ -48,13 +48,13 @@ public class CompositeModel2Model extends CompositeComponent {
 	 * Variable to stores all scripts.
 	 */
 	
-	private java.util.Set<String> scripts = new java.util.HashSet<String>();
+	private java.util.Set<String> scripts = new java.util.LinkedHashSet<String>();
 	
 	/**
 	 * Variable to stores all aspect scripts.
 	 */
 	
-	private java.util.Set<String> aspectScripts = new java.util.HashSet<String>();
+	private java.util.Set<String> aspectScripts = new java.util.LinkedHashSet<String>();
 	
 	/**
 	 * Variable to stores all gobal variables which will be set as GlobalVarDefs.

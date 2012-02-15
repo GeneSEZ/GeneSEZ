@@ -7,10 +7,7 @@ package org.genesez.platforms.common;
 
 import de.genesez.metamodel.gcore.MClassifier;
 import java.util.List;
-import org.eclipse.emf.common.util.WrappedException;
-import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MPackage;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * Utility class with some helper functions for accessing GeneSEZ models
