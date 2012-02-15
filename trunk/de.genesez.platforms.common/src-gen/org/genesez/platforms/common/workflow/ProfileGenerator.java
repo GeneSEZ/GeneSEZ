@@ -6,6 +6,7 @@ package org.genesez.platforms.common.workflow;
  */
 
 import java.util.Properties;
+import org.eclipse.emf.mwe.core.issues.Issues;
 
 /**
  * Workflow component class to generate code (model to text transformation) for a profile.
@@ -34,6 +35,38 @@ public class ProfileGenerator extends Generator {
 	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
+	/**
+	 * Called by the container after configuration so the component can validate the configuration before invocation.
+	 * 
+	 * @see org.eclipse.xtend.XtendComponent#checkConfigurationInternal(org.eclipse.emf.mwe.core.issues.Issues)
+	 * @param	issues	
+	 */
+	
+	public void checkConfigurationInternal(Issues issues) {
+		/* PROTECTED REGION ID(java.implementation._17_0_3_8a7027a_1329317584490_626761_1635) ENABLED START */
+		// check if xtendFilePath is set.
+		String xtendFilePath = properties.getProperty("xtendFilePath", "");
+		if (xtendFilePath.length() == 0) {
+			issues.addError(this, "Missing property 'xtendFilePath'!", xtendFilePath);
+		} else {
+			addGlobalVarDef("xtendFilePath", xtendFilePath);
+		}
+				
+		super.checkConfiguration(issues);
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 * @param	xtendFilePath	
+	 */
+	
+	public void setXtendFilePath(String xtendFilePath) {
+		/* PROTECTED REGION ID(java.implementation._17_0_3_8a7027a_1329317527772_539244_1632) ENABLED START */
+		properties.setProperty("xtendFilePath", xtendFilePath);
+		/* PROTECTED REGION END */
+	}
+	
 	/**
 	 * Setter for the workflow parameter <em><b>profileFileName</b></em>.
 	 * Sets the file name and path where the profile file will be generated.

@@ -7,9 +7,9 @@
 «ENDREM»
 
 «EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::m2t::Helper»
 
 «EXTENSION org::genesez::platforms::common::profile::convention::Naming»
+«EXTENSION org::genesez::platforms::common::profile::scripts::AccessHelper»
 «EXTENSION org::genesez::platforms::common::profile::workflow::GlobalVar»
 
 
@@ -42,6 +42,7 @@ extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFi
 
 «EXPAND HasStereotype -»
 «EXPAND HasTaggedValue -»
+«EXPAND HasTaggedValueReference -»
 «FOREACH property.typeSelect(MAttribute).sortBy(e | e.name) AS a -»
 	«EXPAND Comment::TaggedValueSection FOR a -»
 	
@@ -78,29 +79,60 @@ boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String v
 «ENDDEFINE»
 
 
+«DEFINE HasTaggedValueReference FOR MClass -»
+«IF hasAttributes() -»
+«EXPAND Comment::HasTaggedValueReference -»
+boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, MElement valueReference) :
+	hasTaggedValue( «asProfileScriptName() -»(), tag, valueReference );
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
 «DEFINE HasTaggedValue FOR MAttribute -»
 «EXPAND Comment::HasTaggedValue -»
+«IF !isTaggedValueReference() -»
 boolean «asAccessHelperHasTaggedValue() -»(MElement this, String value) :
 	hasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), value );
+«ELSE -»
+boolean «asAccessHelperHasTaggedValue() -»(MElement this, MElement valueReference) :
+	hasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), valueReference );
+«ENDIF -»
 
 «ENDDEFINE»
 
 
 «DEFINE HasUtilizableTaggedValue FOR MAttribute -»
 «EXPAND Comment::HasUtilizableTaggedValue -»
+«IF !isTaggedValueReference() -»
 boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
 	hasUtilizableValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ELSE -»
+boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
+	hasUtilizableValueReference( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ENDIF -»
+
 «ENDDEFINE»
 
 
 «DEFINE GetTaggedValue FOR MAttribute -»
 «EXPAND Comment::GetTaggedValue -»
 «IF isSingleValuedType() -»
+«IF !isTaggedValueReference() -»
 String «asAccessHelperGetTaggedValue() -»(MElement this) :
 	getTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
 «ELSE -»
+MElement «asAccessHelperGetTaggedValue() -»(MElement this) :
+	getTaggedValueReference( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ENDIF -»
+«ELSE -»
+«IF !isTaggedValueReference() -»
 List[String] «asAccessHelperGetTaggedValue() -»(MElement this) : 
-	getTaggedListValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+	getTaggedValueList( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ELSE -»
+List[MElement] «asAccessHelperGetTaggedValue() -»(MElement this) : 
+	getTaggedValueReferenceList( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ENDIF -»
 «ENDIF -»
 
 «ENDDEFINE»
@@ -108,8 +140,13 @@ List[String] «asAccessHelperGetTaggedValue() -»(MElement this) :
 
 «DEFINE SetTaggedValue FOR MAttribute -»
 «EXPAND Comment::SetTaggedValue -»
+«IF !isTaggedValueReference() -»
 Void «asAccessHelperSetTaggedValue() -»(MElement this, String value) :
 	setTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), value );
+«ELSE -»
+Void «asAccessHelperSetTaggedValue() -»(MElement this, MElement valueReference) :
+	setTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), valueReference );
+«ENDIF -»
 
 «ENDDEFINE»
 
