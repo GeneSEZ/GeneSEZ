@@ -45,7 +45,7 @@ public class DefaultGenerator extends Generator {
 	 * Variable to store all type mapping files.
 	 */
 	
-	protected java.util.Set<String> typeMappingFiles = new java.util.HashSet<String>();
+	protected java.util.Set<String> typeMappingFiles = new java.util.LinkedHashSet<String>();
 	
 	/**
 	 * the used ImportBeautifier

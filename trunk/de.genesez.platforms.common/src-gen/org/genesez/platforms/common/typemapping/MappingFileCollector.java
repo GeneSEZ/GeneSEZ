@@ -28,7 +28,7 @@ public class MappingFileCollector {
 	 * collects all files referenced or included by the user/typemapping file
 	 */
 	
-	private java.util.Set<String> fileSet = new java.util.HashSet<String>();
+	private java.util.Set<String> fileSet = new java.util.LinkedHashSet<String>();
 	
 	/**
 	 * to ensure the proper processing (ordered) of every typemapping file
