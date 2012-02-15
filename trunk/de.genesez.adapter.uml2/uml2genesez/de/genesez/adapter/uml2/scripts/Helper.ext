@@ -34,11 +34,11 @@ Boolean isReturnParameter(Parameter this) :
 String fqn(Model this) : name;
 
 /**
- * calculates the full qualfied name of a package
+ * calculates the full qualfied name of a package, i.e. all package names concatenated by :: without the name of the model element
  * @return	full qualified name
  */
+String fqn(Package this) : nestingPackage != null && nestingPackage.metaType != Model ? nestingPackage.fqn() + "::" + name : name;
 
-String fqn(Package this) : nestingPackage != null ? nestingPackage.fqn() + "::" + name : name;
 /**
  * calculates the full qualfied name of a classifier
  * @return	full qualified name
