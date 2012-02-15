@@ -22,6 +22,9 @@ import uml;
 // uses GeneSEZ metamodel - the target metamodel
 import gcore;
 
+// use qualifed naming functions
+extension de::genesez::adapter::uml2::scripts::Helper;
+
 // use global store
 extension org::genesez::platforms::common::GlobalStore;
 
@@ -159,7 +162,8 @@ create MModel transform(Profile p) :
 private MPackage transform(Package p, MPackage this) :
 	switch {
 		// reject ignored package
-		case p.isIgnoredPackage() : Void
+		case p.nestingPackage != null && p.nestingPackage.metaType == Model && p.isIgnoredPackage() : Void
+		case p.isIgnoredElement() : Void
 		// reject package by name when used as container for external classes (isContainerForExternalClasses)
 		// reject package by stereotype when used as container for external classes
 		case p.isContainerForExternalClasses() : p.ownedElement.typeSelect( Classifier ).makeExternal()
@@ -1049,12 +1053,12 @@ MElement transformBasics(MElement this, NamedElement n) :
 */
 
 /**
- * checks if a package should be excluded from transformation
+ * checks if a package should be excluded from transformation by transformation settings
  * @return	true if the package should be excluded from transformation, otherwise false
  */
 private boolean isIgnoredPackage(Package this) :
-	ignoredPackages().toList().contains( name )
-	|| isIgnoredElement();
+	let result = ignoredPackages().toList().contains( fqn() ) :
+	logDebug("exclude packge: [" + result + "] " + fqn()) -> result;
 
 /**
  * checks if an element should be excluded from transformation
