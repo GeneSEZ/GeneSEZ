@@ -6,12 +6,9 @@
 	@date	2011-05-12
 «ENDREM»
 
-«REM» use common conversion scripts «ENDREM»
-«EXTENSION org::genesez::platforms::common::AccessHelper»
 «EXTENSION org::genesez::platforms::common::Conversion»
 
-«EXTENSION org::genesez::platforms::common::DateHelper»
-«EXTENSION org::genesez::platforms::common::UserInfoHelper»
+«EXTENSION org::genesez::platforms::common::profile::scripts::AccessHelper»
 
 
 «REM»
@@ -88,7 +85,7 @@
 /**
  * Returns the name of the stereotype "«name -»".
  * 
- * @return	the name of the stereotype
+ * @return the name of the stereotype
  */
 «ENDDEFINE»
 
@@ -98,7 +95,7 @@
  * Returns the name of the tagged value "«name -»"
  * for the stereotype "«classifier.name -»".
  * 
- * @return	the name of the tagged value
+ * @return the name of the tagged value
  */
 «ENDDEFINE»
 
@@ -107,7 +104,7 @@
 /**
  * Returns the name of the enumeration "«name -»".
  * 
- * @return	the name of the enumeration
+ * @return the name of the enumeration
  */
 «ENDDEFINE»
 
@@ -117,7 +114,7 @@
  * Returns the name of the literal "«name -»"
  * for the enumeration "«owningEnumeration.name -»".
  * 
- * @return	the name of the literal
+ * @return the name of the literal
  */
 «ENDDEFINE»
 
@@ -130,51 +127,75 @@
 /**
  * Checks if an element is annotated with stereotype "«name -»".
  * 
- * @return	true if the element has the stereotype, otherwise false
+ * @return true if the element has the stereotype, otherwise false
  */
 «ENDDEFINE»
 
 
 «DEFINE HasTaggedValue FOR MClass -»
 /**
- * Checks if an element has a tagged value of a tag 
- * for the stereotype "«name -»".
+ * Checks if an element has a value of a specific tagged value 
+ * of the stereotype "«name -»".
  *
- * @param	tag			the name of a tagged value
- * @param	value		the value of a tagged value
- * @return	true if the element has a tag with the given value, otherwise false
+ * @param tag  the name of a tagged value
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+ */
+«ENDDEFINE»
+
+
+«DEFINE HasTaggedValueReference FOR MClass -»
+/**
+ * Checks if an element has a value reference of a specific tagged value 
+ * of the stereotype "«name -»".
+ *
+ * @param tag  the name of a tagged value
+ * @param valueReference  the value reference of a tagged value
+ * @return true if the element has a tagged value with the given value reference, otherwise false
  */
 «ENDDEFINE»
 
 
 «DEFINE HasTaggedValue FOR MAttribute -»
 /**
- * Checks if an element has a tagged value of the tag "«name -»" 
- * for the stereotype "«classifier.name -»".
+ * Checks if an element has a value of the tagged value "«name -»" 
+ * of the stereotype "«classifier.name -»".
  *
- * @param	value		the value of a tagged value
- * @return	true if the element has a tag with the given value, otherwise false
+«IF !isTaggedValueReference() -»
+ * @param value  the value of a tagged value
+ * @return true if the element has a tagged value with the given value, otherwise false
+«ELSE -»
+ * @param valueReference  the value reference of a tagged value
+ * @return true if the element has a tagged value with the given value reference, otherwise false
+«ENDIF -»
  */
 «ENDDEFINE»
 
 
 «DEFINE HasUtilizableTaggedValue FOR MAttribute -»
 /**
- * Checks if an element has a tagged value of the tag "«name -»" 
- * for the stereotype "«classifier.name -»" and 
- * the value is utilizable (not empty or null).
+«IF !isTaggedValueReference() -»
+ * Checks if an element has a value of the tagged value "«name -»" 
+ * of the stereotype "«classifier.name -»" and the value is utilizable (not empty or null).
  *
- * @return	true if the element has a tag and is utilizable, otherwise false
+ * @return true if the element has a tagged value with a utilizable value, otherwise false
+«ELSE -»
+ * Checks if an element has a value reference of the tagged value "«name -»" 
+ * of the stereotype "«classifier.name -»" and the value reference is utilizable (not null).
+ *
+ * @return true if the element has a tagged value with a utilizable value reference, otherwise false
+«ENDIF -»
  */
 «ENDDEFINE»
 
 
 «DEFINE IsTaggedValue(MLiteral l) FOR MAttribute -»
 /**
- * Checks if an element has the tagged value "«l.name -»" 
- * of the tag "«name -»" for the stereotype "«classifier.name -»".
+ * Checks if an element has the value "«l.name -»" 
+ * of the tagged value "«name -»" 
+ * of the stereotype "«classifier.name -»".
  *
- * @return	true if the element has a tag with the value, otherwise false
+ * @return true if the element has a tagged value with this value, otherwise false
  */
 «ENDDEFINE»
 
@@ -182,23 +203,51 @@
 «DEFINE GetTaggedValue FOR MAttribute -»
 /**
 «IF isSingleValuedType() -»
- * Returns the tagged value of the tag "«name -»"
-«ELSE -» 
- * Returns a list of the tagged values of the tag "«name -»"
+«IF !isTaggedValueReference() -»
+ * Returns the value of the tagged value "«name -»"
+«ELSE -»
+ * Returns the value reference of the tagged value "«name -»"
 «ENDIF -»
- * for the stereotype "«classifier.name -»".
+«ELSE -» 
+«IF !isTaggedValueReference() -»
+ * Returns a list of values of the tagged value "«name -»"
+«ELSE -»
+ * Returns a list of value references of the tagged value "«name -»"
+«ENDIF -»
+«ENDIF -»
+ * of the stereotype "«classifier.name -»".
  *
- * @return	value of the tagged value
+«IF isSingleValuedType() -»
+«IF !isTaggedValueReference() -»
+ * @return the value of the tagged value
+«ELSE -»
+ * @return the value reference of the tagged value
+«ENDIF -»
+«ELSE -»
+«IF !isTaggedValueReference() -»
+* @return the values of the tagged value
+«ELSE -»
+* @return the value references of the tagged value
+«ENDIF -»
+«ENDIF -»
  */
 «ENDDEFINE»
 
 
 «DEFINE SetTaggedValue FOR MAttribute -»
 /**
- * Sets the tagged value of an existing the tag "«name -»"
- * for the stereotype "«classifier.name -»".
+«IF !isTaggedValueReference() -»
+ * Sets the value of an existing the tagged value "«name -»"
+«ELSE -»
+ * Sets the value reference of an existing the tagged value "«name -»"
+«ENDIF -»
+ * of the stereotype "«classifier.name -»".
  *
- * @param	value	the new value of a tagged value
+«IF !isTaggedValueReference() -»
+ * @param value the new value of a tagged value
+«ELSE -»
+ * @param valueReference the new value reference of a tagged value
+«ENDIF -»
  */
 «ENDDEFINE»
 
