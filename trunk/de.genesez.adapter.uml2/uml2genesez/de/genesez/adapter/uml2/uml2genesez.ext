@@ -748,9 +748,10 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
 		case EnumerationLiteral : setValue( ((EnumerationLiteral)o).name )
-		case Class : setValue( xmiId( o ) )
-		case Operation : setValue( xmiId( o ) )
-		case Property : setValue( xmiId( o ) )
+		case Class : setValueReference( ((Class)o).makeClassifier() )
+		case Operation : setValueReference( ((Operation)o).makeOperation() )
+		case Property : setValueReference( ((Property)o).association == null ? ((Property)o).makeAttribute() : ((Property)o).makeAssociationRole() )
+		
 		default : setValue( o.toString() )
 	} ->
 //	setOwningElement(owner)
