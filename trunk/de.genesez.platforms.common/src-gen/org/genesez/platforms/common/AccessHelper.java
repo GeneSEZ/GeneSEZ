@@ -27,26 +27,6 @@ public class AccessHelper {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * Getter for an EObject by it's URI. 
-	 * In case of an MElement the URI is normally the xmiGuid.
-	 * @param	model	the model where the object is placed
-	 * @param	uri	the URI of the object
-	 * @return	the object where the URI is equals, otherwise null
-	 */
-	public static EObject getEObjectByUri(MModel model, String uri) {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324545887148_480628_2158) ENABLED START */
-		EObject eObj;
-		try {
-			eObj = model.eResource().getEObject(uri);
-			if (eObj instanceof EObject)
-				return eObj;
-		} catch (WrappedException e) {
-		}
-		return null;
-		/* PROTECTED REGION END */
-	}
-	
-	/**
 	 * getter for a classifier by it's full qualified name the full qualified name must start with a package in the specified list.
 	 * 
 	 * @throws Exception if the classifier is not found
