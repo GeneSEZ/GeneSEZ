@@ -350,7 +350,7 @@ $TCA['«name() -»'] = array (
 	Points to the fieldname of the table which should be used as the 'title' when the record is displayed in the system.
 «ENDREM»
 «DEFINE TCACtrlLabel FOR MClass -»
-		'label'	=> '«IF getT3TCAClassCtrlLabel() != "" -»«getAttributeByXmiGuid( model(), getT3TCAClassCtrlLabel() ).name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
+		'label'	=> '«IF hasT3TCAClassUtilizableCtrlLabel() != "" -»«getT3TCAClassCtrlLabel().name() -»«ELSEIF !property.isEmpty -»«property.first().name() -»«ELSE -»uid«ENDIF -»',
 «ENDDEFINE»
 
 
@@ -359,7 +359,7 @@ $TCA['«name() -»'] = array (
 «ENDREM»
 «DEFINE TCACtrlLabelAlt FOR MClass -»
 «IF !getT3TCAClassCtrlLabelAlt().isEmpty -»
-		'label_alt' => '«FOREACH getT3TCAClassCtrlLabelAlt() AS labelAlt SEPARATOR ", " -»«getAttributeByXmiGuid( model(), labelAlt ).name() -»«ENDFOREACH -»',
+		'label_alt' => '«FOREACH getT3TCAClassCtrlLabelAlt() AS labelAlt SEPARATOR ", " -»«labelAlt.name() -»«ENDFOREACH -»',
 «ENDIF -»
 «ENDDEFINE»
 
