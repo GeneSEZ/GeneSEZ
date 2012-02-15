@@ -4,7 +4,7 @@
  * from 'CreateTemplate.ext'.
  * 
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-08-17
+ * @date	2012-02-15
  * 
  */
 
@@ -482,6 +482,24 @@ MTaggedValue makeTaggedValue(MElement container, MTag tag, String value) :
 				tv.setValue(value) ->
 				tv);
 
+				
+/**
+ * creates a tagged value
+ * when the name of tag and stereotype is equals to an existing tag and stereotype name 
+ * the existing one will be returned otherwise the tagged value will be created
+ *
+ * @param container			instance of MElement
+ * @param tag 				instance of MTag
+ * @param valueReference	value reference of the tagged value 
+ * @return					instance of the tagged value
+ */
+MTaggedValue makeTaggedValue(MElement container, MTag tag, MElement valueReference) :
+	container.taggedValue.select(tv|tv.tag.name == tag.name && tv.tag.stereotype.name == tag.stereotype.name).isEmpty
+		? makeTaggedValueNoChecks(container, tag, valueReference)
+		: ( let tv = container.taggedValue.selectFirst(tv|tv.tag.name == tag.name && tv.tag.stereotype.name == tag.stereotype.name) :
+				tv.setValueReference(valueReference) ->
+				tv);
+
 
 /**
  * creates a tagged value
@@ -493,6 +511,18 @@ MTaggedValue makeTaggedValue(MElement container, MTag tag, String value) :
  */
 MTaggedValue makeTaggedValueNoChecks(MElement container, MTag tag, String value) :
 	let tv = createTaggedValue(container, tag, value) :
+		tv;
+		
+/**
+ * creates a tagged value
+ *
+ * @param container			instance of MElement
+ * @param tag 				instance of MTag
+ * @param valueReference	value reference of the tagged value 
+ * @return					instance of the tagged value
+ */
+MTaggedValue makeTaggedValueNoChecks(MElement container, MTag tag, MElement valueReference) :
+	let tv = createTaggedValue(container, tag, valueReference) :
 		tv;
 		
 	

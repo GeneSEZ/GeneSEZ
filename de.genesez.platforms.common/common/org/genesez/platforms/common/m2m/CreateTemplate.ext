@@ -4,7 +4,7 @@
  * 
  * @author	tobias haubold
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2008-08-23
+ * @date	2012-02-15
  */
 
 // based on genesez meta model
@@ -87,6 +87,12 @@ create MTaggedValue createTaggedValue(MElement container, MTag tag, String value
 	setTag( tag ) ->
 	container.taggedValue.add( this ) ->
 	this;
+	
+create MTaggedValue createTaggedValue(MElement container, MTag tag, MElement valueReference) :
+	setValueReference( valueReference ) ->
+	setTag( tag ) ->
+	container.taggedValue.add( this ) ->
+	this;
 
 create MAspect createAspect(MElement container, String domain, String name) :
 	setDomain(domain) ->
@@ -130,7 +136,7 @@ create MTaggedValue cloneTaggedValue(MTaggedValue tv, MElement container) :
 	// containments
 	container.taggedValue.add( this ) ->
 	// attributes
-	this.processTaggedValue( tv.value ) ->
+	this.processTaggedValue( tv.value, tv.valueReference ) ->
 	// references
 	setTag( tv.tag.cloneTag( tv.tag.stereotype.cloneStereotype( container.model() ) )) ->
 	this;
@@ -249,8 +255,9 @@ MTag processTag(MTag this, String name, String type) :
 	setType( type ) ->
 	this;
 
-MTaggedValue processTaggedValue(MTaggedValue this, String value) :
+MTaggedValue processTaggedValue(MTaggedValue this, String value, MElement valueReference) :
 	setValue( value ) ->
+	setValueReference( valueReference ) ->
 	this;
 
 MComment processComment(MComment this, String annotation) :
