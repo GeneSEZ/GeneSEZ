@@ -3,13 +3,9 @@ package org.genesez.platform.typo3v4.mvc.convention;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
-
-import de.genesez.metamodel.gcore.MElement;
 import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MOperation;
 import de.genesez.metamodel.gcore.MProperty;
-import org.genesez.platforms.common.AccessHelper;
 
 /**
  * Utility class for TYPO3 MVC naming conventions.
@@ -53,11 +49,10 @@ public class Naming {
 	 * string list with two entries: [0] : 'Blog' => 'index, list' and [1] :
 	 * 'Post' => 'index'.
 	 * 
-	 * @param model The model for iteration over it.
 	 * @param operations The list of operations (controller actions).
 	 * @return The list of valid controller actions.
 	 */
-	public static List<String> asControllerActionPairs(MModel model, List<MOperation> operations) throws Exception {
+	public static List<String> asControllerActionPairs(List<MOperation> operations) throws Exception {
 		List<String> controllerActions = new ArrayList<String>();
 		List<String> controllers = new ArrayList<String>();
 		List<String> actions = new ArrayList<String>();
