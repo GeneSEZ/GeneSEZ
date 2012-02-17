@@ -21,8 +21,7 @@ public class TYPO3DefaultDirectoryCreator extends Model2Model {
 	 */
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.setProperty("script",
-				"org::genesez::platform::typo3v4::mvc::scripts::DefaultDirectoryCreation::createDefaultDirectories");
+		defaults.setProperty("script", "org::genesez::platform::typo3v4::mvc::scripts::DefaultDirectoryCreation::createDefaultDirectories");
 		defaults.setProperty("slot", "");
 	}
 
