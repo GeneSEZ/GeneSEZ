@@ -3,7 +3,6 @@ package org.genesez.platform.typo3v4.mvc.convention;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.genesez.metamodel.gcore.MModel;
 import de.genesez.metamodel.gcore.MOperation;
 import de.genesez.metamodel.gcore.MProperty;
 
@@ -11,7 +10,7 @@ import de.genesez.metamodel.gcore.MProperty;
  * Utility class for TYPO3 MVC naming conventions.
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date 2012-02-15
+ * @date 2012-02-17
  */
 public class Naming {
 
@@ -127,9 +126,7 @@ public class Naming {
 		if (action.endsWith("Action")) {
 			action = action.substring(0, action.lastIndexOf("Action"));
 		}
-
 		return action;
-
 	}
 
 }
