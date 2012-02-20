@@ -281,30 +281,39 @@ public class ConnectorFactory {
 			
 			log.debug("Creating association between: " + supplier.getName() + " - " + client.getName() );
 			
-			Property supplierProperty = supplier.createQualifier(supplier.getName(), null);	
-			createLowerUpperCardinality(supplierProperty, supplierEnd);
+			Property property = null;
 			
-			Property clientProperty = client.createQualifier(client.getName(), null);
-			createLowerUpperCardinality(clientProperty, clientEnd);
-						
 //			Component component = (Component) supplier.getOwner();
 			
 			org.eclipse.uml2.uml.Package _p = supplier.getNearestPackage();
 			 
 			// create the navigation			
 			if(supplierEnd.GetNavigable().equals("Navigable")){
+//				association.getNavigableOwnedEnds().add(supplierProperty);	
 				log.debug("Supplier is Navigable!");
-				association.getNavigableOwnedEnds().add(supplierProperty);				
+				property = supplier.createQualifier(supplier.getName(), supplier.getType());		
+				association.getMemberEnds().add(property);	
 			}else{
-				association.getMemberEnds().add(supplierProperty);
+//				association.getMemberEnds().add(supplierProperty);
+				property = association.createOwnedEnd(supplier.getName(), supplier.getType());
+//				createLowerUpperCardinality(supplierProperty, clientEnd);
 			}
+			
+			// multiplicity
+			createLowerUpperCardinality(property, supplierEnd);
 			
 			if(clientEnd.GetNavigable().equals("Navigable")){
 				log.debug("Client is Navigable!");
-				association.getNavigableOwnedEnds().add(clientProperty);
-			}else{				
-				association.getMemberEnds().add(clientProperty);
+				property = client.createQualifier(client.getName(), client.getType());
+				association.getMemberEnds().add(property);
+			}else{
+//				association.getMemberEnds().add(clientProperty);
+				property = association.createOwnedEnd(client.getName(), client.getType());
+//				createLowerUpperCardinality(clientProperty, clientEnd);
 			}
+			// multiplicity
+			createLowerUpperCardinality(property, clientEnd);
+			
 			
 			log.debug("Package = " + _p.getName() + "\tComponent= " + _p.getName());
 			_p.getPackagedElements().add(association);
