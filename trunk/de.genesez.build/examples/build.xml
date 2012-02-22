@@ -144,6 +144,10 @@
 		<tstamp>
 			<format property="id" pattern="yyyyMMddHHmmssSSS" />
 		</tstamp>
+		<!-- replace < and > by their entity representations -->
+		<propertyregex property="output" override="true" input="${output}" regexp="&lt;" replace="&amp;lt;" />
+		<propertyregex property="output" override="true" input="${output}" regexp="&gt;" replace="&amp;gt;" />
+		
 		<!-- write output to file using html template -->
 		<loadfile property="transform.output" srcfile="${output.template}">
 			<filterchain>
