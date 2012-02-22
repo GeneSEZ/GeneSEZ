@@ -3,8 +3,8 @@ package org.genesez.platform.typo3v4.mvc.convention;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.genesez.metamodel.gcore.MOperation;
-import de.genesez.metamodel.gcore.MProperty;
+import org.genesez.metamodel.gcore.MOperation;
+import org.genesez.metamodel.gcore.MProperty;
 
 /**
  * Utility class for TYPO3 MVC naming conventions.

@@ -6,10 +6,11 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
-import de.genesez.metamodel.gcore.impl.MModelImpl;
-import org.genesez.platforms.common.naming.NamingMapper;
-import org.genesez.platforms.common.workflow.Model2Model;
-import org.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.metamodel.gcore.impl.MModelImpl;
+
+import org.genesez.platform.common.naming.NamingMapper;
+import org.genesez.platform.common.workflow.Model2Model;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 
 /**
  * Workflow component class for TYPO3 MVC model to model (M2M) modifications.
@@ -42,7 +43,7 @@ public abstract class TYPO3Model2Model extends Model2Model {
 	/**
 	 * Called by the container at invocation.
 	 * 
-	 * @see de.genesez.platforms.common.workflow.Model2Model#invokeInternal2(org.eclipse.emf.mwe.core.WorkflowContext,
+	 * @see org.genesez.platform.common.workflow.Model2Model#invokeInternal2(org.eclipse.emf.mwe.core.WorkflowContext,
 	 *      org.eclipse.emf.mwe.core.monitor.ProgressMonitor,
 	 *      org.eclipse.emf.mwe.core.issues.Issues)
 	 */

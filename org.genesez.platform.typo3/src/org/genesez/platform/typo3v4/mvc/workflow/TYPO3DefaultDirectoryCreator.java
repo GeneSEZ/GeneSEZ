@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import org.eclipse.emf.mwe.core.issues.Issues;
 
-import org.genesez.platforms.common.workflow.Model2Model;
-import org.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platform.common.workflow.Model2Model;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 
 /**
  * Workflow component class to create the default directory layout for an TYPO3
@@ -38,7 +38,7 @@ public class TYPO3DefaultDirectoryCreator extends Model2Model {
 	 * Called by the container after configuration so the component can validate
 	 * the configuration before invocation.
 	 * 
-	 * @see de.genesez.platforms.common.workflow.Model2Model#checkConfigurationInternal(org.eclipse.emf.mwe.core.issues.Issues)
+	 * @see org.genesez.platform.common.workflow.Model2Model#checkConfigurationInternal(org.eclipse.emf.mwe.core.issues.Issues)
 	 */
 	@Override
 	public void checkConfigurationInternal(Issues issues) {

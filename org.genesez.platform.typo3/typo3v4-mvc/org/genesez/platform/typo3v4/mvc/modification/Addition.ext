@@ -9,10 +9,10 @@
 import gcore;
 
 // use common logging scripts
-extension org::genesez::platforms::common::log::Log;
+extension org::genesez::platform::common::log::Log;
 
 // use GeneSEZ profile scripts
-extension de::genesez::platforms::common::genesez::profile::Profile;
+extension org::genesez::platform::common::genesez::profile::Profile;
 
 // use TYPO3 profile access helper scripts
 extension org::genesez::platform::typo3v4::profile::AccessHelper;
@@ -26,18 +26,18 @@ extension org::genesez::platform::typo3v4::mvc::profile::FluidProfile;
 extension org::genesez::platform::typo3v4::mvc::profile::FluidAccessHelper;
 
 // use TYPO3 naming context and common naming scripts
-extension org::genesez::platforms::common::naming::Naming;
+extension org::genesez::platform::common::naming::Naming;
 extension org::genesez::platform::typo3v4::mvc::convention::NamingContext;
 
 // use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equal 
 extension org::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
-extension org::genesez::platforms::common::AccessHelper;
+extension org::genesez::platform::common::AccessHelper;
 
 // use common create template scripts
-extension org::genesez::platforms::common::m2m::CopyElement;
-extension org::genesez::platforms::common::m2m::MakeElement;
-extension org::genesez::platforms::common::m2m::CreateTemplate;
+extension org::genesez::platform::common::m2m::CopyElement;
+extension org::genesez::platform::common::m2m::MakeElement;
+extension org::genesez::platform::common::m2m::CreateTemplate;
 
 
 /*
@@ -50,7 +50,7 @@ Void modelAdditions(MModel this) :
 	useLogger("org.genesez.platform.typo3") ->
 	setNamingContext( namingContextGeneral() ) ->
 	// perform model additions for all stereotypes which are validators
-	anyStereotype.makeValidator() ->
+	anyStereotype.select( e | e.isLocalValidator() ).makeValidator() ->
 	// perform model additions for model
 	packageAdditions();
 
@@ -649,46 +649,35 @@ cached MClass makeValidator(MClass domainObject) :
 
 cached MClass makeValidator(MStereotype stereotype) :
 	logTrace("call makeValidator for stereotype: " + stereotype.name) ->
-	stereotype.hasT3ExtbaseValidatorStereotype() &&
+	stereotype.isLocalValidator() &&
 	!stereotype.existsValidator() 
 		? (	let c = createClass(stereotype.model(), stereotype.xmiGuid + ".validator", stereotype.asValidatorName() ) :
 				logTrace("create new validator class for stereotype: " + stereotype.name) ->
-				c.processValidator(stereotype)
+				c.generalization.add(
+					createExternal( stereotype.model(), stereotype.generalization.first().name )
+				) ->
+				c.processValidator()
 		) : stereotype.model().allValidators().select( v | v.nameS() == stereotype.asValidatorName() ).first();
+
+
+boolean isLocalValidator(MStereotype this) :
+	isValidator() && !name.startsWith("T3Extbase");
 
 
 MClass processValidator(MClass this) :
 	logTrace("call processValidator for class: " + name) ->
 	// (visibility, abstract, final)
 	processClassifier("public", false, false) ->
-	processValidator2() ->
-	// add stereotype to mark this class as validator
-	stereotype.add( 
-		makeStereotype( model(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
-	) ->
-	this;
-
-
-MClass processValidator(MClass this, MStereotype validatorStereotype) :
-	logTrace("call processValidator for class from stereotype: " + name) ->
-	// (visibility, abstract, final)
-	processClassifier("public", false, false) ->
-	// copy all stereotype information
-	copyStereotypes(validatorStereotype, this) ->
-	// copy all tagged value information
-	copyTaggedValues(validatorStereotype, this) ->
-	processValidator2() ->
-	this;
-
-
-MClass processValidator2(MClass this) :
-	logTrace("call processValidator2 for class: " + name) ->
 	// add comment to discribe the validator
 	makeComment("Validator for object, property or parameter.") ->
 	// add super validator type
 	addValidatorType() ->
 	// add 'isValid'
 	addValidatorIsValid() ->
+	// add stereotype to mark this class as validator
+	stereotype.add( 
+		makeStereotype( model(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
+	) ->
 	this;
 
 
