@@ -1,14 +1,14 @@
-package de.genesez.metamodel.gcore.extension;
+package org.genesez.metamodel.gcore.extension;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.genesez.metamodel.gcore.GcoreFactory;
-import de.genesez.metamodel.gcore.MElement;
-import de.genesez.metamodel.gcore.MModel;
-import de.genesez.metamodel.gcore.MStereotype;
-import de.genesez.metamodel.gcore.MTag;
-import de.genesez.metamodel.gcore.MTaggedValue;
+import org.genesez.metamodel.gcore.GcoreFactory;
+import org.genesez.metamodel.gcore.MElement;
+import org.genesez.metamodel.gcore.MModel;
+import org.genesez.metamodel.gcore.MStereotype;
+import org.genesez.metamodel.gcore.MTag;
+import org.genesez.metamodel.gcore.MTaggedValue;
 
 public class MExtensionImpl<S extends MExtension.Stereotype, T extends MExtension.Tag> implements MExtension<S, T> {
 

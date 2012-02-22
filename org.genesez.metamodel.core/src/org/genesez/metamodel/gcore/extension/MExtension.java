@@ -1,7 +1,7 @@
-package de.genesez.metamodel.gcore.extension;
+package org.genesez.metamodel.gcore.extension;
 
-import de.genesez.metamodel.gcore.MElement;
-import de.genesez.metamodel.gcore.MModel;
+import org.genesez.metamodel.gcore.MElement;
+import org.genesez.metamodel.gcore.MModel;
 
 public interface MExtension<S extends MExtension.Stereotype, T extends MExtension.Tag> {
 	
