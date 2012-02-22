@@ -1,0 +1,96 @@
+/**
+ * Helper file for metaframework plug-in generation. It features:
+ * - a model transformation to transform packages contained by the model to model elements, 
+ *   supporting more than one metaframework plug-in within one uml model
+ * - a model transformation to check for the getId() method of an plug-in and if not existing,
+ *   creating it
+ * 
+ * @author	tobias haubold
+ * @date	2009-06-02
+ */
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::common::Conversion;
+extension org::genesez::platform::common::log::Log;
+extension org::genesez::platform::common::m2m::CreateTemplate;
+
+// -- m2m transformation - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * Transforms all packages contained by a model into model elements
+ * @return	list of model elements
+ */
+List[MModel] packagesToModels(MModel this) :
+	let models = nestedPackage.makeModel() :
+		info("models: " + models) ->
+		models
+	;
+
+/**
+ * transforms a package into a model element
+ * @return	the model created from a package
+ */
+create MModel makeModel(MPackage p) :
+	info("make model: " + p) ->
+	processElement(p.name(), p.name()) ->
+	nestedPackage.addAll( p.nestedPackage ) ->
+	classifier.addAll( p.classifier ) ->
+	association.addAll( p.association ) ->
+	this;
+
+/**
+ * @return	the name of model the package is transformed to
+ */
+String name(MPackage this) : nestingPackage.name + "." + name;
+
+
+// - - model checks + fixes - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+/**
+ * checks if a plug-in class has the getId() method, if not, one is added
+ * plug-in classes can be direclty contained in the model or in packages which are contained in the model
+ */
+MModel checkPlugInIdGetter(MModel this) :
+	classifier.exists(e|e.isPlugIn())
+		? (classifier.selectFirst( e|e.isPlugIn() ).operation.exists( e|e.isPlugInIdGetter() )
+			? this
+			: classifier.selectFirst( e|e.isPlugIn() ).createPlugInIdGetter()
+		) : nestedPackage.classifier.select( e|e.isPlugIn() )
+				.select( e|!e.operation.exists( e|e.isPlugInIdGetter() ) )
+				.createPlugInIdGetter();
+
+/**
+ * @return	the newly constructed getId() operation of a plug-in class
+ */
+MOperation createPlugInIdGetter(MClassifier this) :
+	let op = createOperation("getId", "getId") :
+		op.processOperation("public", false, false, false, 1, true, false) ->
+		op.setReturnType( model().createPrimitiveTypeString() ) ->
+	op;
+
+// - - apspects to determine the file name - - - - - - - - - - - - - - - - - -
+
+/**
+ * prepends the model name as a src folder to the filename
+ * @return	the filename of classifiers of a plug-in
+ */
+String filename(MClassifier this, String filename) : model().name + fileSeparator() + filename;
+
+
+// - - plug-in + plug-in id getter check - - - - - - - - - - - - - - - - - - -
+
+/**
+ * @return	true, if the operation is the getId() method of a metaframework plug-in, otherwise false
+ */
+boolean isPlugInIdGetter(MOperation this) :
+	name == "getId" && classifier.isPlugIn()
+		? true
+		: false;
+
+/**
+ * @return	true, if the classifier is a metaframework plug-in, otherwise false
+ */
+boolean isPlugIn(MClassifier this) :
+	generalization.exists( e|e.metaType == MExternal && e.name() == "PlugInBase" )
+	|| realization.exists( e|e.metaType == MExternal && ( e.name() == "PlugIn" || e.name() == "CorePlugIn") );
