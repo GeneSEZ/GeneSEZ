@@ -1,0 +1,27 @@
+/**
+ * validates plug-in models for the metaframework
+ * 
+ * @author	tobias haubold
+ * @date	2009-06-21
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::platform::php::metaframework::scripts::PlugIn;
+
+
+/**
+ * @return	false, if a model or each of its nested packages does not contain a plug-in class
+ */
+context MModel WARNING "The plug-ins does not have a plug-in class: " + ({}.addAll(classifier).addAll(nestedPackage.classifier).exists(e|!((MClassifier)e).isPlugIn())) :
+	classifier.exists( e|e.isPlugIn() )
+	|| nestedPackage.classifier.forAll( e|e.isPlugIn() );
+
+/**
+ * @return	false, if a plug-in class does not define a getId() method
+ */
+context MClass WARNING "The metaframework plug-in '" + name + "' does not define a getId() method, one will be generated!" :
+	isPlugIn()
+		? operation.exists( e|e.isPlugInIdGetter() )
+		: true;

@@ -1,0 +1,184 @@
+«IMPORT gcore»
+«REM»
+	Handles the implementation of associations. This template covers an naive approach to implement
+	associations directly with attributes and methods. This templates is just there for compatibility
+	reasons and for people who don't like our association handling library.
+	
+	currently implemented:
+	- assoc attributes
+	- getters, setter for simple types, insert in, remove from, declaration + implementation
+	
+	@author	tobias haubold
+	@date	2008-04-07
+	@see	Association
+	@todo	add the support of association classes
+	@todo	comment support
+	@todo	revise initialization with default values when contained in typemapping xml
+«ENDREM»
+
+
+
+«REM» use helper to access information «ENDREM»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«REM» use naming conventions «ENDREM»
+«EXTENSION org::genesez::platform::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the declaration of association attributes
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	processes the implementation of accessor methods for an association attribute
+«ENDREM»
+«DEFINE Accessors FOR MClass -»
+	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
+		«EXPAND _GetterImpl FOR p -»
+		«REM»«EXPAND _SetterImpl FOR p -»«ENDREM»
+		«EXPAND _InsertInImpl FOR p -»
+		«EXPAND _RemoveFromImpl FOR p -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	processes the declaration of accessor methods for an association attribute
+«ENDREM»
+«DEFINE Accessors FOR MInterface -»
+	«FOREACH property.typeSelect(MAssociationRole).select( e| !e.derived ) AS p -»
+		«EXPAND _GetterDecl FOR p -»
+		«REM»«EXPAND _SetterDecl FOR p -»«ENDREM»
+		«EXPAND _InsertInDecl FOR p -»
+		«EXPAND _RemoveFromDecl FOR p -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the declaration of an association attribute
+«ENDREM»
+«DEFINE _Declaration FOR MAssociationRole -»
+	«EXPAND Comment::Association -»
+	private $«asAttribute()»«EXPAND _Init -»;
+«ENDDEFINE»
+
+«REM»
+	generates the initialization of an association attribute
+	@param	this	an association role
+«ENDREM»
+«DEFINE _Init FOR MAssociationRole -»
+«IF isMultiValuedType()» = array()«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of a getter method for an association attribute
+«ENDREM»
+«DEFINE _GetterDecl FOR MAssociationRole -»
+	«EXPAND Comment::Getter -»
+	public function «asGetter()»();
+«ENDDEFINE»
+
+«REM»
+	generates the implementation of a getter method for an association attribute
+«ENDREM»
+«DEFINE _GetterImpl FOR MAssociationRole -»
+	«EXPAND Comment::Getter -»
+	«visibility» function «asGetter()»() {
+	«IF isSingleValuedType() -»
+		return $this->«asAttribute()»;
+	«ELSE -»
+		return array_values($this->«asAttribute()»);
+	«ENDIF -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of a setter method for an association attribute
+	only if it has a simple type
+«ENDREM»
+«DEFINE _SetterDecl FOR MAssociationRole -»
+«IF isSingleValuedType() -»
+	«EXPAND Comment::Setter -»
+	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()»);
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the implementation of a setter method for an association attribute
+	only if it has a simple type
+«ENDREM»
+«DEFINE _SetterImpl FOR MAssociationRole -»
+«IF isSingleValuedType() -»
+	«EXPAND Comment::Setter -»
+	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()») {
+		$this->«asAttribute()» = $«asAttribute()»;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of the 'insert in' method for an association attribute
+	only if it has a collection type
+«ENDREM»
+«DEFINE _InsertInDecl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::InsertIn -»
+	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd);
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the 'insert in' method for an association attribute with a collection type
+	only if it has a collection type
+«ENDREM»
+«DEFINE _InsertInImpl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::InsertIn -»
+	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd) {
+		$this->«asAttribute()»[] = $toAdd;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the declaration of the 'remove from' method for an association attribute
+	only if it has a collection type
+«ENDREM»
+«DEFINE _RemoveFromDecl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::RemoveFrom -»
+	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove);
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the 'remove from' method for an association attribute with a collection type
+	only if it has a collection type
+«ENDREM»
+«DEFINE _RemoveFromImpl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	«EXPAND Comment::RemoveFrom -»
+	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove) {
+		$entry = array_search($toRemove, $«asAttribute()»);
+		if ($entry !== FALSE) {
+			unset($this->«asAttribute()»[$entry]);
+		}
+	}
+«ENDIF -»
+«ENDDEFINE»
+
