@@ -1,6 +1,6 @@
-package de.genesez.metamodel.gcore.extension;
+package org.genesez.metamodel.gcore.extension;
 
-import de.genesez.metamodel.gcore.MModel;
+import org.genesez.metamodel.gcore.MModel;
 
 /**
  * @author dreamer
