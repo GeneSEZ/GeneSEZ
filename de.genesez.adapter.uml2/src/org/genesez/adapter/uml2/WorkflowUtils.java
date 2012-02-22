@@ -1,4 +1,4 @@
-package de.genesez.adapter.uml2;
+package org.genesez.adapter.uml2;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,9 +21,9 @@ public class WorkflowUtils {
 		defaults.put("coreSlot", "coremodel");
 		defaults.put("reqSlot", "reqmodel");
 		defaults.put("traceSlot", "tracemodel");
-		defaults.put("gcorePackage", "de.genesez.metamodel.gcore.GcorePackage");
-		defaults.put("greqPackage", "de.genesez.metamodel.greq.GreqPackage");
-		defaults.put("gtracePackage", "de.genesez.metamodel.gtrace.GtracePackage");
+		defaults.put("gcorePackage", "org.genesez.metamodel.gcore.GcorePackage");
+		defaults.put("greqPackage", "org.genesez.metamodel.greq.GreqPackage");
+		defaults.put("gtracePackage", "org.genesez.metamodel.gtrace.GtracePackage");
 	}
 	
 	/**
