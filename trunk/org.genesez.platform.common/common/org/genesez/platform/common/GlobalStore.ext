@@ -1,0 +1,49 @@
+/**
+ * Frontend for storing model elements and objects.
+ * 
+ * @author	georg beier
+ * @author	tobias haubold (last)
+ */
+import gcore;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+// @deprecated	use save(key, value) instead
+Void saveModel(MModel this) : save("coremodel", this);
+
+// @deprecated	use get(key) instead
+MModel retrieveModel() : get("coremodel");
+
+
+/**
+ * Saves a model reference or an object.
+ * @param key	the key to access the object
+ * @param value	the object to save
+ * @return	the saved model reference or object
+ */
+Object save(String key, Object this) :
+	JAVA org.genesez.platform.common.GlobalStore.save(java.lang.String, java.lang.Object);
+
+/**
+ * Retrieves a model reference or an object.
+ * @param key	the key to access the object
+ * @return	a model reference or the object
+ */
+Object get(String this) :
+	JAVA org.genesez.platform.common.GlobalStore.get(java.lang.String);
+
+/**
+ * Removes a model reference or an object.
+ * @param key	the key to access the object
+ * @return	the removed model reference or object
+ */
+Object remove(String this) :
+	JAVA org.genesez.platform.common.GlobalStore.remove(java.lang.String);
+
+/**
+ * Clears the whole storage backend.
+ */
+Void clear() :
+	JAVA org.genesez.platform.common.GlobalStore.clear();
