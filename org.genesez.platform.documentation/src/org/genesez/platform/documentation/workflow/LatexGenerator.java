@@ -2,8 +2,8 @@ package org.genesez.platform.documentation.workflow;
 
 import java.util.Properties;
 
-import org.genesez.platforms.common.workflow.DefaultGenerator;
-import org.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platform.common.workflow.DefaultGenerator;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 
 /**
  * Provides a generator component for latex artifacts by setting the default latex template.
