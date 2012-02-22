@@ -6,10 +6,11 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
-import de.genesez.metamodel.gcore.impl.MModelImpl;
-import org.genesez.platforms.common.naming.NamingMapper;
-import org.genesez.platforms.common.workflow.DefaultGenerator;
-import org.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.metamodel.gcore.impl.MModelImpl;
+
+import org.genesez.platform.common.naming.NamingMapper;
+import org.genesez.platform.common.workflow.DefaultGenerator;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 
 /**
  * Workflow component class for TYPO3 MVC model to text (M2T) generation.
@@ -50,7 +51,7 @@ public class TYPO3Generator extends DefaultGenerator {
 	/**
 	 * Called by the container at invocation.
 	 * 
-	 * @see de.genesez.platforms.common.workflow.Generator2#invokeInternal2(org.eclipse.emf.mwe.core.WorkflowContext,
+	 * @see org.genesez.platform.common.workflow.Generator2#invokeInternal2(org.eclipse.emf.mwe.core.WorkflowContext,
 	 *      org.eclipse.emf.mwe.core.monitor.ProgressMonitor,
 	 *      org.eclipse.emf.mwe.core.issues.Issues)
 	 */
@@ -84,7 +85,7 @@ public class TYPO3Generator extends DefaultGenerator {
 	 * Because the fact that for TYPO3 MVC the model package hierarchy is not
 	 * relevant, this setting will be ignored.
 	 * 
-	 * @see de.genesez.platforms.common.workflow.TypeMappingGenerator#setBasePackage(java.lang.String)
+	 * @see org.genesez.platform.common.workflow.TypeMappingGenerator#setBasePackage(java.lang.String)
 	 */
 	public void setBasePackage(String basePackage) {
 		logger.info("The 'setBasePackage' setting will be ignored!");
@@ -94,7 +95,7 @@ public class TYPO3Generator extends DefaultGenerator {
 	 * Because the fact that for TYPO3 MVC the model package hierarchy is not
 	 * relevant, this setting will be ignored.
 	 * 
-	 * @see de.genesez.platforms.common.workflow.Generator2#setUseModelNameAsBasePackage(java.lang.String)
+	 * @see org.genesez.platform.common.workflow.Generator2#setUseModelNameAsBasePackage(java.lang.String)
 	 */
 	public void setUseModelNameAsBasePackage(String useModelNameAsBasePackage) {
 		logger.info("The 'useModelNameAsBasePackage' setting will be ignored!");

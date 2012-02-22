@@ -16,7 +16,7 @@ extension org::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
 extension org::genesez::platform::typo3v4::mvc::profile::FluidAccessHelper;
 
 // use TYPO3 naming context and common naming scripts
-extension org::genesez::platforms::common::naming::Naming;
+extension org::genesez::platform::common::naming::Naming;
 extension org::genesez::platform::typo3v4::mvc::convention::NamingContext;
 
 // use TYPO3 MVC conversion scripts
@@ -26,7 +26,7 @@ extension org::genesez::platform::typo3v4::mvc::convention::Conversion;
 extension org::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
 
 // use common conversion scripts
-extension org::genesez::platforms::common::Conversion;
+extension org::genesez::platform::common::Conversion;
 
 
 /*
@@ -679,14 +679,27 @@ cached boolean isValidator(MClass this) :
  * @return	the list of assigned validators or an empty list
  */
 List[MStereotype] allAssignedValidators(MElement this) :
-	stereotype.select( s |
-		// first check is if the stereotype starts with the prefix "T3Extbase" 
-		// and ends with the suffix "Validator". So all TYPO3 MVC Extbase validators are added. 
-		( s.name.startsWith("T3Extbase") && s.name.endsWith("Validator") ) ||
-		// second check if the name of the stereotype is equals to a validator class
-		!model().allValidators().select( v | s.name == v.name ).isEmpty ||
-		// third check is if the sterotype has a sterotype
-		s.hasT3ExtbaseValidatorStereotype() 
+	stereotype.select( s | s.isValidator() );
+	
+
+/**
+ * Checks if a stereotype is a TYPO3 MVC Extbase validator.
+ *
+ * @return	true if the stereotype is a TYPO3 MVC Extbase validator, otherwise false
+ */
+cached boolean isValidator(MStereotype this) :
+	// first check is if the stereotype starts with the prefix "T3Extbase" 
+	// and ends with the suffix "Validator". So all TYPO3 MVC Extbase validators are added. 
+	( name.startsWith("T3Extbase") && name.endsWith("Validator") ) ||
+	// second check if the name of the stereotype is equals to a validator class
+	!model.allValidators().select( v | name == v.name ).isEmpty ||
+	// third check is if the sterotype has a sterotype
+	//hasT3ExtbaseValidatorStereotype() ||
+	// fourth check if generalization is an TYPO3 MVC Extbase validator
+	(
+		!generalization.isEmpty
+			? generalization.first().isValidator()
+			: false
 	);
 
 
