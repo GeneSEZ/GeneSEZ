@@ -1,0 +1,41 @@
+/**
+ * Helper to copy information from one meta model element to another.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2012-02-15
+ */
+ 
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::common::m2m::MakeElement;
+
+
+/**
+ * copy stereotypes from one meta model element to another.
+ *
+ * @param source		the source
+ * @param destination	the destination
+ */
+Void copyStereotypes(MElement source, MElement destination) :
+	source.stereotype.collect( s |
+		destination.stereotype.add(
+			makeStereotype( destination.model(), s.xmiGuid, s.name )
+		)
+	);
+
+/**
+ * copy tagged values from one meta model element to another.
+ *
+ * @param source		the source
+ * @param destination	the destination
+ */
+Void copyTaggedValues(MElement source, MElement destination) :
+	source.taggedValue.collect( tv |
+		destination.taggedValue.add(
+			tv.valueReference == null
+				? makeTaggedValue(destination, tv.tag, tv.value )
+				: makeTaggedValue(destination, tv.tag, tv.valueReference )
+		)
+	);

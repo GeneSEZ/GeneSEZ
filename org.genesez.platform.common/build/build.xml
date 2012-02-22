@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="org.genesez.platforms.common" basedir=".." default="build">
+<project name="org.genesez.platform.common" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -9,21 +9,21 @@
 		</not>
 	</condition>
 	
-	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
-	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
+	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
 
-	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
 	<!-- Set the classpath -->
-	<path id="org.genesez.platforms.common.classpath">
+	<path id="org.genesez.platform.common.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="dom4j*.jar" />
 			<include name="**/*.jar" />
 		</fileset>
-		<pathelement location="${build.basedir}/de.genesez.metamodel.core/bin" />
+		<pathelement location="${build.basedir}/org.genesez.metamodel.core/bin" />
 		<pathelement location="${build.basedir}/org.genesez.metamodel.requirements/bin" />
 		<pathelement location="${build.basedir}/org.genesez.metamodel.traceability/bin" />
 		<path refid="Plug-in Dependencies.libraryclasspath"/>
@@ -32,18 +32,18 @@
 	<!-- ant task definitions -->
 	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask"
 		description="xml schema to java compiler task">
-    	<classpath refid="org.genesez.platforms.common.classpath" />
+    	<classpath refid="org.genesez.platform.common.classpath" />
   	</taskdef>
 
 	<!-- Public target section -->
 
 	<target name="build"
-		description="Build org.genesez.platforms.common"
-		depends="typemapping.schema2java, platforms.common.compile">
+		description="Build org.genesez.platform.common"
+		depends="typemapping.schema2java, platform.common.compile">
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for org.genesez.platforms.common"
+		description="Create the plugin jar for org.genesez.platform.common"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
@@ -64,7 +64,7 @@
 	</target>
 	
 	<target name="clean"
-		description="Clean org.genesez.platforms.common">
+		description="Clean org.genesez.platform.common">
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${dist.dir}" includes="*.jar" />
@@ -73,12 +73,12 @@
 
 	<!-- Private target section -->
 
-	<target name="platforms.common.compile">
-		<pathconvert property="org.genesez.platforms.common.classpath" refid="org.genesez.platforms.common.classpath" />
-		<echo level="verbose" message="classpath: ${org.genesez.platforms.common.classpath}" />
+	<target name="platform.common.compile">
+		<pathconvert property="org.genesez.platform.common.classpath" refid="org.genesez.platform.common.classpath" />
+		<echo level="verbose" message="classpath: ${org.genesez.platform.common.classpath}" />
 		<mkdir dir="${bin.dir}" />
 		<javac destdir="${bin.dir}"
-			classpathref="org.genesez.platforms.common.classpath"
+			classpathref="org.genesez.platform.common.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on">
@@ -90,11 +90,11 @@
 		description="generates the java type mapping types from xml schema">
 		<echo message="Compiling the schema..." />
 		<xjc destdir="${src.gen.dir}"
-				binding="${common.dir}/org/genesez/platforms/common/typemapping/typemapping.xjb"
+				binding="${common.dir}/org/genesez/platform/common/typemapping/typemapping.xjb"
 				removeOldOutput="yes" extension="true"
-				package="org.genesez.platforms.common.typemapping.types">
-			<produces dir="${src.gen.dir}/org/genesez/platforms/common/typemapping/types" includes="**/*" />
-			<schema dir="${common.dir}/org/genesez/platforms/common/typemapping/">
+				package="org.genesez.platform.common.typemapping.types">
+			<produces dir="${src.gen.dir}/org/genesez/platform/common/typemapping/types" includes="**/*" />
+			<schema dir="${common.dir}/org/genesez/platform/common/typemapping/">
 				<include name="typemapping.xsd" />
 			</schema>
 			<arg value="-mark-generated" />
