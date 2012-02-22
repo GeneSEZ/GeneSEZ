@@ -1,4 +1,4 @@
-package de.genesez.adapter.uml2;
+package org.genesez.adapter.uml2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,8 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		defaults.putAll(WorkflowUtils.defaults);
 		defaults.put("umlSlot", "uml2model");
 		defaults.put("ignoreValidationErrors", "false");
-		defaults.put("umlCheckScript", "de::genesez::adapter::uml2::uml2constraints, de::genesez::adapter::uml2::UmlStateMachineValidation, de::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation");
-		defaults.put("uml2GenesezScriptCall", "de::genesez::adapter::uml2::uml2genesez::transform");
+		defaults.put("umlCheckScript", "org::genesez::adapter::uml2::uml2constraints, org::genesez::adapter::uml2::UmlStateMachineValidation, org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation");
+		defaults.put("uml2GenesezScriptCall", "org::genesez::adapter::uml2::uml2genesez::transform");
 		defaults.put("excludePackages", "UML Standard Profile");
 		defaults.put("mapClassesInModelToExternal", "false");
 		defaults.put("externalPackages", "");

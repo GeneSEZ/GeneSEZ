@@ -1,4 +1,4 @@
-package de.genesez.adapter.uml2;
+package org.genesez.adapter.uml2;
 
 import java.util.ArrayList;
 import java.util.List;
