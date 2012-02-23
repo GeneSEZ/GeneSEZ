@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="de.genesez.metamodel.testing" basedir=".." default="build">
+<project name="org.genesez.metamodel.testing" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -8,32 +8,32 @@
 		</not>
 	</condition>
 
-	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
-	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
+	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
 
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
 	<!-- Set the classpath -->
-	<path id="de.genesez.metamodel.classpath">
+	<path id="org.genesez.metamodel.classpath">
 		<pathelement location="${bin.dir}" />
 		<pathelement location="${workflow.dir}" />
 		<pathelement location="${model.dir}" />
-		<pathelement location="${build.basedir}/de.genesez.metamodel.core/bin" />
-		<pathelement location="${build.basedir}/de.genesez.metamodel.core/metamodel" />
+		<pathelement location="${build.basedir}/org.genesez.metamodel.core/bin" />
+		<pathelement location="${build.basedir}/org.genesez.metamodel.core/metamodel" />
 		<pathelement location="${build.basedir}/org.eclipse.emf.ecore.adapter.uml/bin" />
 		<pathelement location="${build.basedir}/org.eclipse.emf.ecore.adapter.uml/uml2ecore" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
 	
-	<import file="${build.basedir}/de.genesez.build/build/metamodel.xml"/>
-	<import file="${build.basedir}/de.genesez.adapter.magicdraw/build/metamodel-export.xml"/>
+	<import file="${build.basedir}/org.genesez.build/build/metamodel.xml"/>
+	<import file="${build.basedir}/org.genesez.adapter.magicdraw/build/metamodel-export.xml"/>
 	
-	<target name="clean" depends="magicdraw.clean, de.genesez.metamodel.clean, clean.ecore" />
+	<target name="clean" depends="magicdraw.clean, org.genesez.metamodel.clean, clean.ecore" />
 	<target name="uml2ecore" depends="magicdraw.metamodel.export, mwe.workflow" />
 	
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.metamodel"
+		description="Create the plugin jar for org.genesez.metamodel"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
