@@ -6,7 +6,7 @@
  */
 package org.genesez.metamodel.gtrace;
 
-import de.genesez.metamodel.gcore.MElement;
+import org.genesez.metamodel.gcore.MElement;
 
 import org.genesez.metamodel.greq.RRequirement;
 

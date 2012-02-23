@@ -6,8 +6,6 @@
  */
 package org.genesez.metamodel.gtrace.impl;
 
-import de.genesez.metamodel.gcore.GcorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -15,6 +13,7 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.greq.GreqPackage;
 
 import org.genesez.metamodel.gtrace.GtraceFactory;

@@ -6,8 +6,8 @@
  */
 package org.genesez.metamodel.gtrace;
 
-import de.genesez.metamodel.gcore.MOperation;
-import de.genesez.metamodel.gcore.MState;
+import org.genesez.metamodel.gcore.MOperation;
+import org.genesez.metamodel.gcore.MState;
 
 import org.genesez.metamodel.greq.RScenarioStep;
 
