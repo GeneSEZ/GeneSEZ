@@ -5,7 +5,7 @@ import org.genesez.metamodel.greq.RModel;
 public class RTraceability extends RExtensionImpl<RTraceability.TAnnotation, RTraceability.TTag> {
 	
 	public enum TAnnotation implements RExtension.Annotation {
-		TRACEABILITY("http://genesez.de/metamodel/traceability");
+		TRACEABILITY("http://genesez.org/metamodel/traceability");
 		
 		private String uri;
 		
