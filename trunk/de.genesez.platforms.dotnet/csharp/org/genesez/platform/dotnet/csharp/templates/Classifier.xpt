@@ -1,5 +1,5 @@
 «REM»
-	Root Template for C#
+	Classifier Template for C#
 	
 	@author	Gerrit Beine
 	@date	2008/01/08
@@ -9,8 +9,7 @@
 «IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::m2t::Helper»
-«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Conversion»
+«EXTENSION org::genesez::platform::dotnet::csharp::scripts::Conversion»
 
 
 «REM»
@@ -21,30 +20,17 @@
 
 
 «REM»
-	starting generation for a model
-«ENDREM»
-«DEFINE Root FOR MModel-»
-«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
-«ENDDEFINE»
-
-
-«REM»
-	process packages
-«ENDREM»
-«DEFINE Root FOR MPackage-»
-«EXPAND Root FOREACH nestedPackage-»
-«EXPAND Root FOREACH classifier-»
-«ENDDEFINE»
-
-
-«REM»
-	process classifiers
-	create file for each classifier 
+	generate namespace and imports for all classifiers
 «ENDREM»
 «DEFINE Root FOR MClassifier-»
-«FILE fullFileName()-»
-«EXPAND Classifier::Root-»
-«ENDFILE-»
+namespace «packageDeclaration()»
+{
+	«EXPAND Import::Import-»
+	
+	«EXPAND Interface::Root-»
+	«EXPAND Class::Root-»
+«REM»	«EXPAND Enumeration::Root-»«ENDREM»
+}
 «ENDDEFINE»
 
 

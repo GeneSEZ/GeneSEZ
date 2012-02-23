@@ -1,11 +1,11 @@
-package de.genesez.platforms.dotnet.workflow;
+package org.genesez.platform.dotnet.workflow;
 
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.platforms.common.workflow.DefaultGenerator;
+import org.genesez.platform.common.workflow.DefaultGenerator;
 
 /**
  * Performs model to text transformations for the .net platform and C#.
@@ -15,8 +15,8 @@ public class CSharpGenerator extends DefaultGenerator {
 	
 	private static final Properties defaults = new Properties();
 	static {
-		defaults.put("template", "de::genesez::platforms::dotnet::csharp::templates::Root::Root");
-		defaults.put("typeMappingFile", "de/genesez/platforms/dotnet/csharp/typemapping/typemapping.xml");
+		defaults.put("template", "org::genesez::platform::dotnet::csharp::templates::Root::Root");
+		defaults.put("typeMappingFile", "org/genesez/platform/dotnet/csharp/typemapping/typemapping.xml");
 	}
 	
 	private Log logger = LogFactory.getLog(getClass());
