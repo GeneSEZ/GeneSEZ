@@ -1,7 +1,7 @@
-package de.genesez.platforms.qftest;
+package org.genesez.platform.qftest;
 
-import de.genesez.testing.gtesting.TModel;
-import de.genesez.testing.gtesting.TPackage;
+import org.genesez.testing.gtesting.TModel;
+import org.genesez.testing.gtesting.TPackage;
 
 public class Conversion {
 
