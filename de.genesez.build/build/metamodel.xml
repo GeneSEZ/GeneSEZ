@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<project name="de.genesez.metamodel" basedir=".." default="">
+<project name="org.genesez.metamodel" basedir=".." default="">
 	
-	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 	
 	<!-- override this target in local build file if you have to do other things (e.g. export magic draw model) -->
 	<target name="uml2ecore" depends="mwe2.workflow" />
@@ -9,17 +9,17 @@
 	<!-- Task definition section -->
 	<taskdef name="workflow"
 		classname="org.eclipse.emf.mwe.core.ant.WorkflowAntTask"
-		classpathref="de.genesez.metamodel.classpath" />
+		classpathref="org.genesez.metamodel.classpath" />
 	
 	<!-- Public target section -->
 	
 	<target name="build"
-		description="Build de.genesez.metamodel"
+		description="Build org.genesez.metamodel"
 		depends="compile">
 	</target>
 	
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.metamodel"
+		description="Create the plugin jar for org.genesez.metamodel"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<copy file="${ecore.file}" todir="${bin.dir}/${ecore.base}"/>
@@ -36,7 +36,7 @@
 	</target>
 	
 	<target name="clean"
-		description="Clean de.genesez.metamodel">
+		description="Clean org.genesez.metamodel">
 		<delete includeemptydirs="true" failonerror="false">
 			<!-- remove all binary files -->
 			<fileset dir="${bin.dir}" />
@@ -63,7 +63,7 @@
 			<available file="${uml2.file}"/>
 			<then>
 				<java classname="org.eclipse.emf.mwe.core.WorkflowRunner"
-					classpathref="de.genesez.metamodel.classpath"
+					classpathref="org.genesez.metamodel.classpath"
 					fork = "true"
 					dir="${basedir}">
 					<arg value="${workflow.file}" />
@@ -83,7 +83,7 @@
 			<available file="${uml2.file}"/>
 			<then>
 				<java classname = "org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher"
-						classpathref = "de.genesez.metamodel.classpath"
+						classpathref = "org.genesez.metamodel.classpath"
 						fork = "true"
 						dir = "${basedir}">
 					<arg value="${workflow.file}" />
@@ -104,7 +104,7 @@
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.metamodel.classpath"
+			classpathref="org.genesez.metamodel.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on" />
