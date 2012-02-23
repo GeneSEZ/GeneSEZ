@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="de.genesez.example.csharp.forms" basedir="." default="build">
+<project name="org.genesez.example.csharp.forms" basedir="." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -9,15 +9,15 @@
 		</not>
 	</condition>
 	
-	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 
 	<property name="workflow.dir" value="${basedir}/workflow" />
 	
 	<!-- Set the classpath -->
-	<path id="de.genesez.example.csharp.forms.classpath">
+	<path id="org.genesez.example.csharp.forms.classpath">
 		<fileset dir="${OAW_PLUGIN_DIR}">
-			<include name="de.genesez*_*.jar" />
-			<include name="de.genesez.platforms.common_*/*.jar" />
+			<include name="org.genesez*_*.jar" />
+			<include name="org.genesez.platforms.common_*/*.jar" />
 		</fileset>
 		<pathelement location="${workflow.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
@@ -33,7 +33,7 @@
 	<!-- Public target section -->
 	
 	<target name="build"
-		description="Build de.genesez.metamodel"
+		description="Build org.genesez.metamodel"
 		depends="application.generate,application.beautify">
 	</target>
 	
@@ -44,7 +44,7 @@
 	<target name="application.generate"
 		description="Runs generator for the application" >
 		<oaw.workflow file="workflow/codegenRun.oaw"
-			classpathref="de.genesez.example.csharp.forms.classpath"
+			classpathref="org.genesez.example.csharp.forms.classpath"
 			fork = "true"
 			dir="${basedir}" />
 	</target>	
@@ -52,13 +52,13 @@
 	<target name="application.beautify"
 		description="Runs beautifier for the application" >
 		<foreach target="application.beautify.execute" param="file">
-			<fileset dir="${build.basedir}/de.genesez.example.csharp.forms/src-gen">
+			<fileset dir="${build.basedir}/org.genesez.example.csharp.forms/src-gen">
 			    <include name="**/*.cs"/>
 			</fileset>
 		</foreach>
-		<move todir="${build.basedir}/de.genesez.example.csharp.forms/src-gen"
+		<move todir="${build.basedir}/org.genesez.example.csharp.forms/src-gen"
 			overwrite="true">
-			<fileset dir="${build.basedir}/de.genesez.example.csharp.forms/src-gen">
+			<fileset dir="${build.basedir}/org.genesez.example.csharp.forms/src-gen">
 			    <include name="**/*.cs.uncrustify"/>
 			</fileset>
 			<mapper type="glob" from="*.cs.uncrustify" to="*.cs"/>
