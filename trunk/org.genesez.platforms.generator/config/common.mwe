@@ -3,25 +3,25 @@
 	<property name='baseDir' value='.' />
 	<property name='typeMappingDir' value='.' />
 	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
-	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
 		<!-- directory which contains the exported uml2 model -->
 		<model value="${baseDir}/model/org.genesez.platforms.uml" />
 		<!--<profile value="model/GeneSEZ_Profile.profile.uml" />-->
 	</component>
 	<!-- validate the GeneSEZ model against common + java specific constraints -->
-	<component id="validate" class="org.genesez.platforms.common.workflow.Validator">
-		<script value="org::genesez::platforms::common::Constraints" />
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
 		<script value="org::genesez::platforms::java::constraints::Syntax" />
 	</component>
 	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  /-->
-	<component id="serialize" class="org.genesez.platforms.common.workflow.Serializer">
-		<file value="${baseDir}/model/org.genesez.platforms.xmi" />
+	<component id="serialize" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="${baseDir}/model/org.genesez.platform.xmi" />
 	</component>
 	<!-- run the java code generation and transform the model into java source code -->
-	<!-- Generates org.genesez.platforms.common -->
+	<!-- Generates org.genesez.platform.common -->
 	<component id="generateCommon" class="org.genesez.platforms.java.workflow.JavaGenerator">
 		<!-- directory in which the generated files are placed -->
-		<outputDir value="${baseDir}/../org.genesez.platforms.common/src-gen" />
+		<outputDir value="${baseDir}/../org.genesez.platform.common/src-gen" />
 		<!-- there are several possibilities to specify your type mapping file(s):
 			1. You can list all files seperately here; if there are redundant rules 
 			the rule in the last specified typemapping file is active (recommended)
