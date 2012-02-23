@@ -1,0 +1,148 @@
+«IMPORT gcore»
+
+«REM»
+	Generates an overview of structure model elements without connection to specification model elements.
+	@author tobias haubold
+«ENDREM»
+
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::dashboard::AccessHelper»
+«EXTENSION org::genesez::platform::dashboard::Conversion»
+«EXTENSION org::genesez::platform::dashboard::Dashboard»
+«EXTENSION org::genesez::platform::dashboard::Naming»
+
+
+«DEFINE Root FOR MModel»
+«FILE unspecifiedStructureFileName()»
+	«EXPAND _UnspecifiedStructure -»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE _UnspecifiedStructure FOR MModel -»
+<h2>Structural Elements without Specification</h2>
+«IF structuralElementsWithoutSpecification().isEmpty -»
+	«EXPAND _NoStructuralElementWithoutSpecification -»
+«ELSE -»
+	«EXPAND _StructuralElementsWithoutSpecificationOverview -»
+	«EXPAND _StructuralElementsWithoutSpecificationInformation -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _NoStructuralElementWithoutSpecification FOR MModel -»
+<div>The need of every structural element is guranteed by at least one specification element.</div>
+«ENDDEFINE»
+
+«DEFINE _StructuralElementsWithoutSpecificationOverview FOR MModel -»
+<div>
+	<table class="centerCellsStarting2nd">
+		<tr>
+			<th></th>
+			<th>Total</th>
+			<th>Without Specification</th>
+			<th>Specification Rate</th>
+		</tr>
+		«EXPAND _Specification( classifierWithoutSpecification() ) FOR allClassifiers() -»
+		«EXPAND _Specification( associationRolesWithoutRequirements() ) FOR allAssociationRoles() -»
+		«EXPAND _Specification( operationsWithoutSpecification() ) FOR allOperations() -»
+		«EXPAND _Specification( parametersWithoutRequirements() ) FOR allParameters() -»
+		«EXPAND _Specification( attributesWithoutRequirements() ) FOR allAttributes() -»
+	</table>
+</div>
+«ENDDEFINE»
+
+«DEFINE _Specification(List[MElement] unspecified) FOR List[MElement] -»
+		<tr>
+			<td>«first().asMetaTypeNamePlural() -»</td>
+			<td>«size»</td>
+			<td>«unspecified.size»</td>
+			<td>«percentage(size, unspecified.size).inverse()»% specified</td>
+		</tr>
+«ENDDEFINE»
+
+«DEFINE _StructuralElementsWithoutSpecificationInformation FOR MModel -»
+	«EXPAND _UnspecifiedClassifier -»
+	«EXPAND _UnspecifiedAssociationRoles -»
+	«EXPAND _UnspecifiedOperations -»
+	«EXPAND _UnspecifiedParameters -»
+	«EXPAND _UnspecifiedAttributes -»
+«ENDDEFINE»
+
+«DEFINE _UnspecifiedClassifier FOR MModel -»
+«LET classifierWithoutSpecification() AS classifier -»
+«IF !classifier.isEmpty -»
+<h3>Classifier without Specification</h3>
+<div>
+	<dl>
+		«FOREACH classifier AS c -»
+		<dt>«EXPAND structure::GcoreCommon::QualifiedName FOR c -»</dt>
+		<dd>«c.comment()»</dd>
+		«ENDFOREACH -»
+	</dl>
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+«DEFINE _UnspecifiedAssociationRoles FOR MModel -»
+«LET associationRolesWithoutRequirements() AS ends -»
+«IF !ends.isEmpty -»
+<h3>Navigable Associations without Specification</h3>
+<div>
+	<dl>
+		«FOREACH ends AS e -»
+		<dt>«EXPAND structure::GcoreCommon::QualifiedName FOR e -»</dt>
+		<dd>«e.comment()»</dd>
+		«ENDFOREACH»
+	</dl>
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+«DEFINE _UnspecifiedOperations FOR MModel -»
+«LET operationsWithoutSpecification() AS ops -»
+«IF !ops.isEmpty -»
+<h3>Operations without Specification</h3>
+<div>
+	<dl>
+		«FOREACH ops AS o -»
+		<dt>«EXPAND structure::GcoreCommon::QualifiedName FOR o -»</dt>
+		<dd>«o.comment()»</dd>
+		«ENDFOREACH»
+	</dl>
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+«DEFINE _UnspecifiedParameters FOR MModel -»
+«LET parametersWithoutRequirements() AS params -»
+«IF !params.isEmpty -»
+<h3>Parameters without Specification</h3>
+<div>
+	<dl>
+		«FOREACH params AS p -»
+		<dt>«EXPAND structure::GcoreCommon::QualifiedName FOR p -»</dt>
+		<dd>«p.comment()»</dd>
+		«ENDFOREACH»
+	</dl>
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+«DEFINE _UnspecifiedAttributes FOR MModel -»
+«LET attributesWithoutRequirements() AS attribs -»
+«IF !attribs.isEmpty -»
+<h3>Attributes without Specification</h3>
+<div>
+	<dl>
+		«FOREACH attribs AS a -»
+		<dt>«EXPAND structure::GcoreCommon::QualifiedName FOR a -»</dt>
+		<dd>«a.comment()»</dd>
+		«ENDFOREACH»
+	</dl>
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»

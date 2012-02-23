@@ -1,0 +1,32 @@
+«IMPORT gcore»
+
+«REM»
+	Generates an html chunk with a list of all packages.
+	@author tobias haubold
+«ENDREM»
+
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::dashboard::AccessHelper»
+«EXTENSION org::genesez::platform::dashboard::Dashboard»
+
+«DEFINE Root FOR MModel»
+«FILE packageListFileName()»
+	«EXPAND PackageList -»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE PackageList FOR MModel -»
+<div class="list">
+	«EXPAND Entry FOREACH allPackages()»
+</div>
+«ENDDEFINE»
+
+«DEFINE Entry FOR MPackage -»
+	<div class="entry">
+		<div class="content">
+			<a href="#" onclick="«clickOn()»" title="«name»">
+				<div class="truncating">«name»</div>
+			</a>
+		</div>
+	</div>
+«ENDDEFINE»
