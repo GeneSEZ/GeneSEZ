@@ -6,8 +6,6 @@
  */
 package org.genesez.metamodel.gtrace.impl;
 
-import de.genesez.metamodel.gcore.MElement;
-
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -15,6 +13,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.genesez.metamodel.gcore.MElement;
 import org.genesez.metamodel.greq.RRequirement;
 
 import org.genesez.metamodel.gtrace.GtracePackage;

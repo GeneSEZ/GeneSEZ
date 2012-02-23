@@ -6,8 +6,8 @@
  */
 package org.genesez.metamodel.gtrace;
 
-import de.genesez.metamodel.gcore.MClassifier;
-import de.genesez.metamodel.gcore.MStateMachine;
+import org.genesez.metamodel.gcore.MClassifier;
+import org.genesez.metamodel.gcore.MStateMachine;
 
 import org.genesez.metamodel.greq.RScenario;
 

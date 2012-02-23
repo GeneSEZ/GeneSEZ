@@ -19,11 +19,11 @@ import org.genesez.metamodel.gtrace.TRequirementTrace;
 import org.genesez.metamodel.gtrace.TScenarioStepTrace;
 import org.genesez.metamodel.gtrace.TScenarioTrace;
 
-import de.genesez.metamodel.gcore.MClassifier;
-import de.genesez.metamodel.gcore.MElement;
-import de.genesez.metamodel.gcore.MModel;
-import de.genesez.metamodel.gcore.MOperation;
-import de.genesez.metamodel.gcore.extension.MTraceability;
+import org.genesez.metamodel.gcore.MClassifier;
+import org.genesez.metamodel.gcore.MElement;
+import org.genesez.metamodel.gcore.MModel;
+import org.genesez.metamodel.gcore.MOperation;
+import org.genesez.metamodel.gcore.extension.MTraceability;
 
 /**
  * @author dreamer
