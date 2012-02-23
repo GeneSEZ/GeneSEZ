@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="de.genesez.platforms.cpp" basedir=".." default="build">
+<project name="org.genesez.platform.cpp" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -9,27 +9,27 @@
 		</not>
 	</condition>
 	
-	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 	
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 	
 	<!-- Set the classpath -->
-	<path id="de.genesez.platforms.cpp.classpath">
-		<pathelement location="${build.basedir}/de.genesez.metamodel.core/bin" />
-		<pathelement location="${build.basedir}/de.genesez.platforms.common/${bin.dir}" />
+	<path id="org.genesez.platform.cpp.classpath">
+		<pathelement location="${build.basedir}/org.genesez.metamodel.core/bin" />
+		<pathelement location="${build.basedir}/org.genesez.platform.common/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
 	
 	<!-- Public target section -->
 	
 	<target name="build"
-		description="Build de.genesez.platforms.cpp"
+		description="Build org.genesez.platform.cpp"
 		depends="compile">
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.platforms.cpp" depends="build">
+		description="Create the plugin jar for org.genesez.platform.cpp" depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
 			<fileset dir="${bin.dir}" includes="**/*" />
@@ -46,7 +46,7 @@
 	</target>
 	
 	<target name="clean"
-		description="Clean de.genesez.platforms.cpp">
+		description="Clean org.genesez.platform.cpp">
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${dist.dir}" includes="*.jar" />
@@ -59,7 +59,7 @@
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.platforms.cpp.classpath"
+			classpathref="org.genesez.platform.cpp.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on" />
