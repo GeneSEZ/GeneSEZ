@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="de.genesez.adapter.ea" basedir=".." default="build">
+<project name="org.genesez.adapter.ea" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -9,16 +9,16 @@
 		</not>
 	</condition>
 
-	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
-	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
+	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
 
-	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
 	<!-- Set the classpath -->
-	<path id="de.genesez.adapter.ea.classpath">
+	<path id="org.genesez.adapter.ea.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="eaapi*.jar" />
 		</fileset>
@@ -28,24 +28,24 @@
 	<!-- Public target section -->
 
 	<target name="build"
-		description="Build de.genesez.adapter.ea"
+		description="Build org.genesez.adapter.ea"
 		depends="adapter.ea.compile">
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.adapter.ea"
+		description="Create the plugin jar for org.genesez.adapter.ea"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${plugin.jar}"
 			compress="true"
 		 	manifest="META-INF/MANIFEST.MF">
-			<fileset dir="${dist.dir}" includes="de.genesez.adapter.ea.jar" />
+			<fileset dir="${dist.dir}" includes="org.genesez.adapter.ea.jar" />
 			<fileset dir="${lib.dir}" includes="**/*" />
 		</jar>
 	</target>
 
 	<target name="clean"
-		description="Clean de.genesez.adapter.ea">
+		description="Clean org.genesez.adapter.ea">
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${dist.dir}" includes="*.jar" />
@@ -58,12 +58,12 @@
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.adapter.ea.classpath"
+			classpathref="org.genesez.adapter.ea.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on" />
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/de.genesez.adapter.ea.jar"
+		<jar destfile="${dist.dir}/org.genesez.adapter.ea.jar"
 			compress="true">
 			<fileset dir="${bin.dir}" includes="**/*" />
 			<fileset dir="${ea.dir}" includes="**/*" />
