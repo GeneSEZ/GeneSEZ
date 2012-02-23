@@ -7,7 +7,7 @@ require_once 'Form/Point.php';
 
 /**
  * describes things which can be <i><b>rotated</b></i>
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 interface Form_Rotateable  {

@@ -6,7 +6,7 @@
 
 /**
  * describes things which can be <i><b>moved</b></i>
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 interface Form_Moveable  {

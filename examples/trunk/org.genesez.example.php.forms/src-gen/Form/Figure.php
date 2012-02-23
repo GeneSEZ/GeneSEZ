@@ -13,7 +13,7 @@ require_once 'UML/ManyAssociation.php';
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
  * @see		Form_Form
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 class Form_Figure  implements Form_Form {

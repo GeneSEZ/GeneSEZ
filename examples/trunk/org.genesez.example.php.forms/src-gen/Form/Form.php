@@ -13,7 +13,7 @@ require_once 'Form/Paintable.php';
  * @see		Form_Moveable
  * @see		Form_Rotateable
  * @see		Form_Paintable
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 interface Form_Form extends Form_Moveable, Form_Rotateable, Form_Paintable {

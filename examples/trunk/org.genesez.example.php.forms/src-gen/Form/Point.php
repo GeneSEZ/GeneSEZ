@@ -9,7 +9,7 @@ require_once 'Color.php';
 /**
  * Describes a <i><b>point</b></i> in a 2-dimensional coordinate system
  * @see		Form_Form
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 class Form_Point  implements Form_Form {
@@ -108,23 +108,6 @@ class Form_Point  implements Form_Form {
 
 	
 	// -- association + attribute accessors ---------------------------------
-	/**
-	 * magic getter to obtain associations or unmodifiable values of the following members:
-	 * <ul>
-	 *   <li><var>x</var>: the x coordinate value</li>
-	 *   <li><var>y</var>: the y coordinate value</li>
-	 * </ul>
-	 * @param	string	$name	the name of the member
-	 * @throws	{@link Exception} if the specified member is neither accessible nor available
-	 * @return	mixed	the value of the member or an association management object
-	 */
-	public function __get($name) {
-		switch ($name) {
-			case 'x': return $this->_x;
-			case 'y': return $this->_y;
-			default: throw new Exception('cannot get the value of an inaccessible or unavailable property: ' . $name); break;
-		}
-	}
 	
 	
 	// -- own code implementation -------------------------------------------

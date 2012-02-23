@@ -10,7 +10,7 @@ require_once 'Color.php';
 /**
  * Describes the geometrical form of a <i><b>line</b></i>
  * @see		Form_Form
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 class Form_Line  implements Form_Form {

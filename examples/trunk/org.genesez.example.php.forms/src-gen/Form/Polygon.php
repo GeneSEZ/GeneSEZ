@@ -10,7 +10,7 @@ require_once 'Color.php';
 /**
  * Describes the geometrical form <b>polygon</b>
  * @see		Form_Form
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 class Form_Polygon  implements Form_Form {

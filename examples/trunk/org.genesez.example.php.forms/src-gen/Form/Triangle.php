@@ -9,7 +9,7 @@ require_once 'Form/Polygon.php';
 /**
  * Describes the geometrical form <b>triangle</b> as a special <i>polygon</i>
  * @see		Form_Polygon
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 class Form_Triangle extends Form_Polygon  {

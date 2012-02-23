@@ -7,7 +7,7 @@ require_once 'Color.php';
 
 /**
  * describes <b>paintable</b> things
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 interface Form_Paintable  {

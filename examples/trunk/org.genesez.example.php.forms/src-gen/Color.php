@@ -5,7 +5,7 @@
 /* PROTECTED REGION END */
 
 /**
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 class Color   {

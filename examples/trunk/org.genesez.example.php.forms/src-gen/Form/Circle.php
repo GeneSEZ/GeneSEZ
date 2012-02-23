@@ -10,7 +10,7 @@ require_once 'Color.php';
 /**
  * describes the geometrical shape of a <i><b>circle</b></i>
  * @see		Form_Form
- * @author	dreamer
+ * @author	nicher
  * @package	de.genesez.example.java.forms
  */
 class Form_Circle  implements Form_Form {
