@@ -8,7 +8,7 @@ import org.genesez.metamodel.gcore.MModel;
 public class MTraceability extends MExtensionImpl<MTraceability.TStereotype, MTraceability.TTag> {
 	
 	public enum TStereotype implements MExtension.Stereotype {
-		TRACEABILITY("http://genesez.de/metamodel/traceability");
+		TRACEABILITY("http://genesez.org/metamodel/traceability");
 		
 		private String name;
 		
