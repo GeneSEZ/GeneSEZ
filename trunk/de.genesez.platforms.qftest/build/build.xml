@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="de.genesez.platforms.qftest" basedir=".." default="build">
+<project name="org.genesez.platform.qftest" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -9,29 +9,29 @@
 		</not>
 	</condition>
 
-	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
-	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
+	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
 
-	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
 	<!-- Set the classpath -->
-	<path id="de.genesez.platforms.qftest.classpath">
-		<pathelement path="${build.basedir}/de.genesez.metamodel.testing/${bin.dir}" />
+	<path id="org.genesez.platform.qftest.classpath">
+		<pathelement path="${build.basedir}/org.genesez.metamodel.testing/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath"/>
 	</path>
 	
 	<!-- Public target section -->
 
 	<target name="build"
-		description="Build de.genesez.platforms.qftest"
-		depends="platforms.qftest.compile">
+		description="Build org.genesez.platform.qftest"
+		depends="platform.qftest.compile">
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.platforms.qftest"
+		description="Create the plugin jar for org.genesez.platform.qftest"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
@@ -49,7 +49,7 @@
 	</target>
 
 	<target name="clean"
-		description="Clean de.genesez.platforms.qftest">
+		description="Clean org.genesez.platform.qftest">
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
 			<fileset dir="${dist.dir}" includes="*.jar" />
@@ -58,11 +58,11 @@
 
 	<!-- Private target section -->
 
-	<target name="platforms.qftest.compile">
+	<target name="platform.qftest.compile">
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.platforms.qftest.classpath"
+			classpathref="org.genesez.platform.qftest.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on" />

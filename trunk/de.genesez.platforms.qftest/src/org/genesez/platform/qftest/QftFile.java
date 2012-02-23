@@ -1,4 +1,4 @@
-package de.genesez.platforms.qftest;
+package org.genesez.platform.qftest;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,8 +18,8 @@ import org.xml.sax.SAXException;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
-import de.genesez.testing.gtesting.TElement;
-import de.genesez.testing.gtesting.TTestSuite;
+import org.genesez.testing.gtesting.TElement;
+import org.genesez.testing.gtesting.TTestSuite;
 
 public class QftFile {
 
