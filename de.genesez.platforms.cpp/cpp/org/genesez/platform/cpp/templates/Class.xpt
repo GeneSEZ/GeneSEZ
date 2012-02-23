@@ -1,0 +1,145 @@
+«REM»
+ Handling of MClass elements.
+ 
+ author: Robert Meichsner
+ date: 12/08/08
+«ENDREM»
+
+«IMPORT gcore»
+
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+«EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
+
+«EXTENSION org::genesez::platform::cpp::helper::IncludeHelper»
+«EXTENSION org::genesez::platform::cpp::helper::PackageHelper»
+
+«REM»
+ ------------------------------------------------------------------------
+ public functions
+ ------------------------------------------------------------------------
+«ENDREM»
+
+«REM»
+ ------------------------------------------------------------------------
+ Handle MClass elements.
+ ------------------------------------------------------------------------
+«ENDREM»
+«DEFINE Root FOR MClass -»		
+	«EXPAND Declaration -»	
+	«EXPAND Implementation -»
+«ENDDEFINE»
+
+«DEFINE Declaration FOR MClass -»	
+	«FILE getFQPackagePath() + asHeaderFileName()-»
+«EXPAND Include::GuardBegin-»
+«IF hasGenericParameter()-»
+«EXPAND Include::TemplateInclude -»
+«EXPAND Namespace::openNS -»
+«EXPAND Type::TypeDef FOREACH property -»
+«EXPAND Namespace::closeNS -»
+«ELSE»
+«EXPAND Include::Includes-»
+«EXPAND Include::LocalIncludes-»
+«PROTECT CSTART '/* ' CEND ' */' ID ("cpp.header.include" + xmiGuid)»
+// TODO: put your own includes here'
+
+«ENDPROTECT»
+
+«EXPAND Namespace::openNS -»
+
+«EXPAND _Declaration -»
+
+«EXPAND Operation::ClassOperatorDeclaration-»
+«EXPAND Type::TypeDef FOREACH property -»
+«EXPAND Namespace::closeNS -»
+«ENDIF-»	
+«EXPAND Include::GuardEnd -»
+«ENDFILE-»
+«ENDDEFINE»
+
+«DEFINE Implementation FOR MClass -»
+«FILE getFQPackagePath() + asSourceFileName()-»	
+«IF !hasGenericParameter() -»
+#include "«asTypeName() + headerExtension() -»"
+«PROTECT CSTART '/* ' CEND ' */' ID ("cpp.implementation.include" + xmiGuid)»
+// TODO: put your own includes here'
+
+«ENDPROTECT»
+«ELSE»
+«EXPAND Include::Includes-»
+«EXPAND Include::LocalIncludes-»		
+«ENDIF -»
+	
+«EXPAND Namespace::openNS -»
+
+«IF hasGenericParameter()-»
+	«EXPAND _Declaration -»
+«ENDIF-»
+«EXPAND _Implementation -»	
+«EXPAND Namespace::closeNS -»
+«EXPAND Operation::ClassOperatorImplementation-»
+«ENDFILE -»
+«ENDDEFINE»
+
+«REM»
+ *******************************
+ private stuff
+ *******************************
+«ENDREM»
+
+«DEFINE _Declaration FOR MClass -»	
+«IF hasGenericParameter() -»«EXPAND Generic::Declaration -»«ENDIF-»class «asTypeName()» «EXPAND Type::SuperTypes -» {
+«EXPAND _public -»
+«EXPAND _protected -»
+«EXPAND _private -»
+};
+«ENDDEFINE»
+
+«DEFINE _public FOR MClass -»
+public:
+«EXPAND Operation::Declaration("public") -»
+«EXPAND Association::AccessorDecl -»
+«EXPAND Attribute::AccessorDecl -»
+«EXPAND Attribute::DerivedDecl("public") -»
+«EXPAND Association::Declaration("public") -»
+«EXPAND Attribute::Declaration("public") -»
+«ENDDEFINE»
+
+«DEFINE _protected FOR MClass -»
+
+protected:
+«EXPAND Operation::Declaration("protected") -»
+«EXPAND Attribute::DerivedDecl("protected") -»
+«EXPAND Association::Declaration("protected") -»
+«EXPAND Attribute::Declaration("protected") -»	
+«ENDDEFINE»
+
+«DEFINE _private FOR MClass -»
+
+private:
+«EXPAND Operation::Declaration("private") -»
+«EXPAND Attribute::DerivedDecl("private") -»
+«EXPAND Association::Declaration("private") -»
+«EXPAND Attribute::Declaration("private") -»
+«ENDDEFINE»
+
+«DEFINE _Implementation FOR MClass -»
+«EXPAND Attribute::DefaultValue -»
+«EXPAND Operation::Implementation -»
+«EXPAND Association::AccessorImpl -»
+«EXPAND Attribute::AccessorImpl -»
+«EXPAND Attribute::DerivedImpl -»
+«ENDDEFINE»
+
+«REM»
+ **************************************
+ Placeholder for compatibility
+ **************************************
+«ENDREM»
+
+«DEFINE Root FOR MClassifier -»
+«ENDDEFINE»

@@ -1,0 +1,29 @@
+«IMPORT gcore»
+
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+«EXTENSION org::genesez::platform::cpp::helper::PackageHelper»
+
+«DEFINE Root FOR MEnumeration -»
+	«FILE getFQPackagePath() + asFileName()-»
+		«EXPAND Include::GuardBegin-»
+		
+		«EXPAND Namespace::openNS -»
+		«EXPAND Comment::Comment -»
+		enum «name-»
+		{
+			«FOREACH literal AS _literal SEPARATOR ", "-»
+				«_literal.name.toUpperCase()-» «EXPAND Comment::Comment FOR _literal-»
+			«ENDFOREACH»
+		};
+		«EXPAND Namespace::closeNS -»
+		
+		«EXPAND Include::GuardEnd-»
+	«ENDFILE-»
+«ENDDEFINE»
+
+
+	
+	
