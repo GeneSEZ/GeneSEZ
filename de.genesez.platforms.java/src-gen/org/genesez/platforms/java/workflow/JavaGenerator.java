@@ -5,10 +5,10 @@ package org.genesez.platforms.java.workflow;
  * 	@FILE-ID : (_17_0_1_8e00291_1326709010962_484208_2721) 
  */
 
-import org.genesez.platforms.common.workflow.DefaultGenerator;
+import org.genesez.platform.common.workflow.DefaultGenerator;
 import org.eclipse.xpand2.output.JavaBeautifier;
 import org.apache.commons.logging.LogFactory;
-import org.genesez.platforms.common.workflow.WorkflowUtils;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 import org.apache.commons.logging.Log;
 import java.util.Properties;
 import org.eclipse.emf.mwe.core.issues.Issues;
