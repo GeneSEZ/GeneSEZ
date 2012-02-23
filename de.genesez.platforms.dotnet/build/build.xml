@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="de.genesez.platforms.dotnet" basedir=".." default="build">
+<project name="org.genesez.platform.dotnet" basedir=".." default="build">
 
 	<condition property="build.basedir"
 		value="${basedir}/..">
@@ -9,29 +9,29 @@
 		</not>
 	</condition>
 
-	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
-	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
+	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
 
-	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 
 	<!-- Set the classpath -->
-	<path id="de.genesez.platforms.dotnet.classpath">
-		<pathelement path="${build.basedir}/de.genesez.platforms.common/${bin.dir}" />
+	<path id="org.genesez.platform.dotnet.classpath">
+		<pathelement path="${build.basedir}/org.genesez.platform.common/${bin.dir}" />
 		<path refid="Plug-in Dependencies.libraryclasspath" />
 	</path>
 
 	<!-- Public target section -->
 
 	<target name="build"
-		description="Build de.genesez.platforms.dotnet"
-		depends="platforms.dotnet.compile">
+		description="Build org.genesez.platform.dotnet"
+		depends="platform.dotnet.compile">
 	</target>
 
 	<target name="createjar"
-		description="Create the plugin jar for de.genesez.platforms.dotnet"
+		description="Create the plugin jar for org.genesez.platform.dotnet"
 		depends="build">
 		<mkdir dir="${dist.dir}" />
 		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
@@ -49,7 +49,7 @@
 	</target>
 
 	<target name="clean"
-		description="Clean de.genesez.platforms.dotnet">
+		description="Clean org.genesez.platform.dotnet">
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${dist.dir}" includes="*.jar" />
 		</delete>
@@ -57,11 +57,11 @@
 
 	<!-- Private target section -->
 
-	<target name="platforms.dotnet.compile">
+	<target name="platform.dotnet.compile">
 		<mkdir dir="${bin.dir}" />
 		<javac srcdir="${src.dir}" 
 			destdir="${bin.dir}"
-			classpathref="de.genesez.platforms.dotnet.classpath"
+			classpathref="org.genesez.platform.dotnet.classpath"
 			target="${target}"
 			source="${source}"
 			debug="on" />
