@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <workflow>
 	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
-	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
 		<!-- directory which contains the exported uml2 model -->
 		<model value="model/de.genesez.example.java.tbp.uml" />
 	</component>
 	<!-- validate the GeneSEZ model against common + java specific constraints -->
-	<component id="validate" class="org.genesez.platforms.common.workflow.Validator">
-		<script value="org::genesez::platforms::common::Constraints" />
-		<script value="org::genesez::platforms::java::constraints::Syntax" />
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
 	</component>
 	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  /-->
-	<component id="serialize" class="org.genesez.platforms.common.workflow.Serializer">
+	<component id="serialize" class="org.genesez.platform.common.workflow.Serializer">
 		<file value="model/example.xmi" />
 	</component>
 	<!-- run the java code generation and transform the model into java source code -->
-	<component id="model2java" class="org.genesez.platforms.java.workflow.JavaGenerator">
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
 		<!-- directory in which the generated files are placed -->
-		<outputDir value="../de.genesez.example.java.tbp/src-gen" />
+		<outputDir value="../org.genesez.example.java.tbp/src-gen" />
 	</component>
-	<!--activate this to activate creation of the statistic-->
-	<!--<component file="statistics.mwe" />-->
 </workflow>
