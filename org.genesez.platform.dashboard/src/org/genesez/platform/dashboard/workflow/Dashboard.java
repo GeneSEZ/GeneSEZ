@@ -1,6 +1,11 @@
 
 package org.genesez.platform.dashboard.workflow;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -30,6 +35,7 @@ public class Dashboard extends CompositeComponent {
 		defaults.putAll(WorkflowProperties.defaults);
 		defaults.put("template", "org::genesez::platform::dashboard::Root::Root");
 		defaults.put("crossModelNavigationAdvice", "org::genesez::metamodel::navigation::RequirementsTraceabilityExtensionAdvice");
+		defaults.put("source", "template");
 	}
 	
 	private Log logger = LogFactory.getLog(getClass());
@@ -62,6 +68,23 @@ public class Dashboard extends CompositeComponent {
 		generator.addGlobalVarDef(WorkflowUtils.createGlobalVarDef("tracemodel", properties.getProperty("traceSlot")));
 		generator.setFileEncoding("utf-8");
 		generator.setExpand(properties.getProperty("template") + " FOR " + properties.getProperty("traceSlot"));
+		
+		// try to obtain location of dashboard template and set it as default source
+		Path location = null;
+		try {
+			// obtain location of class file; note: could be a directory or a jar file!
+			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
+			logger.debug("location: " + url);
+			// either the directory or the jar file are in the same folder which contains the default template
+			URI dir = new File(url.getPath()).getParentFile().toURI();
+			location = Paths.get(dir);
+			logger.debug("path: " + location);
+		} catch (Exception e) {
+			logger.error("could not obtain default source for statistic html template", e);
+		}
+		if (location != null) {
+			copier.setSource(location.resolve(properties.getProperty("source")).toString());
+		}
 		
 		super.addComponent(cleaner);
 		super.addComponent(copier);
