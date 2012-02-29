@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <workflow>
-	<component class="de.genesez.adapter.uml2.Uml2GeneSEZ">
-		<model value="model-exp/BankTutorial.uml" />
+	<component class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model/BankTutorial.uml" />
 	</component>
 	
 	<!-- diese Variablendefinitionen sind nur für die xTend-Cartridges !!! -->
@@ -10,25 +10,25 @@
 	<!-- use property access for ejb3 annotations -->
 	<property name="model2text.fieldAccess" value="true" />	
 	
-	<component id="validate" class="org.genesez.platforms.common.workflow.Validator">
-		<script value="org::genesez::platforms::common::Constraints" />
-		<script value="org::genesez::platforms::java::constraints::Syntax" />
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
 	</component>
-	<component id="serializeBeforeM2T" class="org.genesez.platforms.common.workflow.Serializer">
-		<file value="model-gen/BankTutorial.xmi" />
+	<component id="serializeBeforeM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/BankTutorial.xmi" />
 	</component>
 	<!-- add functionality of the jpa, ejb3, seam2 and java5 cartridge; changes on model level -->
-	<component id="modify" class="org.genesez.platforms.common.workflow.CompositeModel2Model">
-		<script value="org::genesez::platforms::java::jpa::scripts::Functionality::additions" />
-		<script value="org::genesez::platforms::java::jpa::scripts::Functionality::modifications" />
-		<script value="org::genesez::platforms::java::ejb3::scripts::Functionality::additions" />
-		<script value="org::genesez::platforms::java::ejb3::scripts::Functionality::modifications" />
-		<script value="org::genesez::platforms::java::java5::scripts::Functionality::modifications" />
+	<component id="modify" class="org.genesez.platform.common.workflow.CompositeModel2Model">
+		<script value="org::genesez::platform::java::jpa::scripts::Functionality::additions" />
+		<script value="org::genesez::platform::java::jpa::scripts::Functionality::modifications" />
+		<script value="org::genesez::platform::java::ejb3::scripts::Functionality::additions" />
+		<script value="org::genesez::platform::java::ejb3::scripts::Functionality::modifications" />
+		<script value="org::genesez::platform::java::java5::scripts::Functionality::modifications" />
 	</component>
-	<component id="model2java" class="org.genesez.platforms.java.workflow.JavaGenerator">
-		<outputDir value="../de.genesez.example.java.BankTutorial/src-gen" />
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
+		<outputDir value="../org.genesez.example.java.BankTutorial/src-gen" />
 		<aspectTemplate value="customization::Attrib" />
-		<aspectTemplate value="org::genesez::platforms::java::ejb3::templates::AspectsAll" />
+		<aspectTemplate value="org::genesez::platform::java::ejb3::templates::AspectsAll" />
 		<aspectScript value="customization::Naming" />
 		<newAssociationHandling value="false" />
 		<!-- there are several possibilities to specify your type mapping file(s):
@@ -47,23 +47,22 @@
 			Explanation: The typemapping component is realized as singleton and 
 			uses the typemapping files specified in the last workflow component of 
 			the whole workflow file. -->
-		<typeMappingFile value="org/genesez/platforms/java/typemapping/typemapping.xml" />
+		<typeMappingFile value="org/genesez/platform/java/typemapping/typemapping.xml" />
 		<typeMappingFile value="typemapping-bankTutorial.xml" />
-		<excludePackage value="UML Standard Profile" />
 		<excludedDirectoryNames value="META-INF" />
 		<useModelNameAsBasePackage value="true" />
 		<usePropertyVisibilityForAccessors value="false" />
 	</component>
-	<component id="serializeAfterM2T" class="org.genesez.platforms.common.workflow.Serializer">
-		<file value="model-gen/BankTutorial_after.xmi" />
+	<component id="serializeAfterM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/BankTutorial_after.xmi" />
 		<cloneSlotContents value="true" />
 	</component>
-	<component id="statistics" class="org.genesez.platforms.common.workflow.StatisticComponent">
-	    <outputDir value="../de.genesez.example.java.BankTutorial/reports" />
-	    <dirToCheck value="../de.genesez.example.java.BankTutorial" />
-	    <statisticObserver class="org.genesez.platforms.common.statistic.StatisticObserver">
+	<component id="statistics" class="org.genesez.platform.common.workflow.StatisticComponent">
+	    <outputDir value="../org.genesez.example.java.BankTutorial/reports" />
+	    <dirToCheck value="../org.genesez.example.java.BankTutorial" />
+	    <statisticObserver class="org.genesez.platform.common.statistic.StatisticObserver">
 	    	<generate value="src-gen" />
-	    	<!-- manualDir value="../de.genesez.example.java.BankTutorial/src" / -->
+	    	<!-- manualDir value="../org.genesez.example.java.BankTutorial/src" / -->
 	    	<statisticName value="BankTutorial Statistic" />
 	    </statisticObserver>
 	    <withDetails value="true" />
