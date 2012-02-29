@@ -512,9 +512,9 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	// containments
 	// add comment to association
 	ownedComment.addAll( a.ownedComment.typeSelect(Comment).makeComment() ) ->
-	// associations
-	end.addAll( a.memberEnd.select( e|e.class != null ).makeAssociationRole() ) ->
-	// double set, isn't it ?
+	// associations ends: filter non navigable association ends 
+	// non navigable association ends do not have the class refernce set, except the association object is an association class, then the association class is itself set as class
+	end.addAll( a.memberEnd.select( e|e.class != null && e.class != a ).makeAssociationRole() ) ->
 	trace("link ends: " + end) ->
 	linkEnds() ->
 	associationClass(a) ->

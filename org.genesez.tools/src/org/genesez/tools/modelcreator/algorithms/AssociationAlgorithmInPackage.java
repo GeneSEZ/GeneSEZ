@@ -30,7 +30,6 @@ public class AssociationAlgorithmInPackage<E extends StructuredClassifier>
 	 * Creates associations
 	 * @see AssociationAlgorithm#createReferences(List, List, int, int)
 	 */
-	@Override
 	public void createReferences(List<? extends E> types,
 			List<Interface> interfaces, int amount, int perClass) {
 		for (E type : types) {
@@ -117,7 +116,6 @@ public class AssociationAlgorithmInPackage<E extends StructuredClassifier>
 	 * @param used
 	 *            already associated types
 	 */
-	@Override
 	public void setupAssociation(Association a, E type, Set<E> used) {
 		a.setPackage(type.getPackage());
 		int j = Math.abs(type.hashCode() * a.hashCode());
@@ -254,7 +252,6 @@ public class AssociationAlgorithmInPackage<E extends StructuredClassifier>
 	 * 
 	 * @see AssociationAlgorithm#getClassesForAssociationClasses(List, int)
 	 */
-	@Override
 	public List<E> getClassesForAssociationClasses(List<? extends E> types,
 			int amount) {
 		int size = types.size();
