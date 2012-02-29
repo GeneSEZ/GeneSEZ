@@ -77,7 +77,6 @@ public class Starter extends AbstractWorkflowComponent {
 	/**
 	 * Logs the initialization time
 	 */
-	@Override
 	public void checkConfiguration(Issues issues) {
 		time = System.currentTimeMillis() - time;
 		logger.debug("Initialization took: " + (time / 1000.0) + "s");

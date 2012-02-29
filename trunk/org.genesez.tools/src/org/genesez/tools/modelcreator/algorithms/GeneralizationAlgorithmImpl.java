@@ -24,7 +24,6 @@ public class GeneralizationAlgorithmImpl<E extends Classifier> implements
 	 *            Amount of all used classes is calculated by: amountOfClasses *
 	 *            (Sum[from i = 0 till depth] subclassesPerClass^i)
 	 */
-	@Override
 	public void createHierarchy(List<? extends E> classes, int subclassesPerClass,
 			int amountOfClasses, int depth) {
 		if (amountOfClasses > 0 && subclassesPerClass > 0 && depth > 0) {
