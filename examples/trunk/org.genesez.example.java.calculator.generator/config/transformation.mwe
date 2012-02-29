@@ -2,23 +2,23 @@
 <workflow>
 	
 	<!-- read the model file and transform it into a GeneSEZ model -->
-	<component class="de.genesez.adapter.uml2.Uml2GeneSEZ">
+	<component class="org.genesez.adapter.uml2.Uml2GeneSEZ">
 		<model value="model/calculator.uml" />
 		<profile value="model/genesez.profile.uml" />
 		<mapClassesInModelToExternal value="true" />
 	</component>
 	
-	<component class="org.genesez.platforms.common.workflow.Validator">
-		<script value="org::genesez::platforms::common::Constraints" />
-		<script value="org::genesez::platforms::java::constraints::Syntax" />
+	<component class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
 	</component>
 	
-	<component class="org.genesez.platforms.common.workflow.Serializer">
+	<component class="org.genesez.platform.common.workflow.Serializer">
 		<OPTION_SCHEMA_LOCATION_IMPLEMENTATION value="true" />
 		<file value="model/calculator.xmi" />
 	</component>
 	
-	<component class="org.genesez.platforms.java.workflow.JavaGenerator">
+	<component class="org.genesez.platform.java.workflow.JavaGenerator">
 		<!-- there are several possibilities to specify your type mapping file(s):
 			1. You can list all files seperately here; if there are redundant rules 
 			the rule in the last specified typemapping file is active (recommended)
@@ -36,7 +36,7 @@
 			uses the typemapping files specified in the last workflow component of 
 			the whole workflow file. -->
 		<typeMappingFile value="typemapping.xml" />
-		<outputDir value="../de.genesez.example.java.calculator/src-gen" />
+		<outputDir value="../org.genesez.example.java.calculator/src-gen" />
 		<useModelNameAsBasePackage value="true" />
 	</component>
 </workflow>
