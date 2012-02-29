@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <workflow>
-	<component id="uml2genesez" class="de.genesez.adapter.uml2.Uml2GeneSEZ">
-		<model value="model-exp/example.uml" />
-		<profile value="model-exp/genesez.profile.uml" />
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="model/example.uml" />
+		<profile value="model/genesez.profile.uml" />
 	</component>
-	<component id="validate" class="org.genesez.platforms.common.workflow.Validator">
-		<script value="org::genesez::platforms::common::Constraints" />
-		<script value="org::genesez::platforms::java::constraints::Syntax" />
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
 	</component>
-	<component id="serializeBeforeM2T" class="org.genesez.platforms.common.workflow.Serializer">
-		<file value="model-gen/example.xmi" />
+	<component id="serializeBeforeM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/example.xmi" />
 	</component>
-	<component id="model2java" class="org.genesez.platforms.java.workflow.JavaGenerator">
-		<outputDir value="../de.genesez.example.java4.car/src-gen" />
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
+		<outputDir value="../org.genesez.example.java4.car/src-gen" />
 		<!-- specify that we use the java 4 templates -->
-		<template value="org::genesez::platforms::java::java4::templates::Root::Root" />
+		<template value="org::genesez::platform::java::java4::templates::Root::Root" />
 		<!-- there are several possibilities to specify your type mapping file(s):
 			1. You can list all files seperately here; if there are redundant rules 
 			the rule in the last specified typemapping file is active (recommended)
@@ -31,12 +31,12 @@
 			Explanation: The typemapping component is realized as singleton and 
 			uses the typemapping files specified in the last workflow component of 
 			the whole workflow file. -->
-		<typeMappingFile value="org/genesez/platforms/java/typemapping/typemapping.xml" />
+		<typeMappingFile value="org/genesez/platform/java/typemapping/typemapping.xml" />
 		<typeMappingFile value="typemapping.xml" />
 		<useModelNameAsBasePackage value="true" />
 	</component>
-	<component id="serializeAfterM2T" class="org.genesez.platforms.common.workflow.Serializer">
-		<file value="model-gen/example_after.xmi" />
+	<component id="serializeAfterM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/example_after.xmi" />
 		<cloneSlotContents value="true" />
 	</component>
 </workflow>
