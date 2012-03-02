@@ -14,6 +14,17 @@ extension org::genesez::platforms::java::java5::scripts::Attribute;
 extension org::genesez::platforms::java::java5::scripts::Annotation;
 
 
+Void additions(MModel this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MPackage this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MClass this) :
+	this.addEqualsOperation();
+
 Void modifications(MModel this) :
 	this.nestedPackage.modifications() ->
 	this.classifier.typeSelect(MClass).modifications() -> 
@@ -41,5 +52,3 @@ Void modifications(MAssociationRole this) :
 Void modifications(MInterface this) :
     addTargetStereotype() ->
     addRetentionStereotype();
-
-	
