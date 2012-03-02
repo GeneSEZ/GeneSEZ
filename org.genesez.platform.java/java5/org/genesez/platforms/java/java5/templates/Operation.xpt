@@ -69,6 +69,51 @@
 	«EXPAND _Implementation FOREACH operation.select( e| !e.isConstructor() && !e.abstract && !e.final && e.static) -»
 «ENDDEFINE»
 
+«REM»
+	generate an equals and hashCode operation
+	if stereotype "java5EqualsOperation" is available
+	and at least one property has the stereotype "java5EqualsProperty"
+«ENDREM»
+«DEFINE Equals FOR MClass -»
+	«IF hasStereotype("java5EqualsOperation") && 
+		this.property.exists(e|e.hasStereotype("java5EqualsProperty")) -»
+		/**
+		  *	checks if instance and parameter other are equal according to specified properties
+		  *
+		  *	@param	other	to be compared instance of type Object
+		  *
+		  *	@return	true, if instances are equal
+		  */
+		public boolean equals(Object other) {
+			if (this == other) {
+				return true;
+			}
+			if (other == null || this.getClass() != other.getClass()) {
+				return false;
+			}
+			«this.asTypeName()-» o = («this.asTypeName()-») other;
+			if («FOREACH this.property.select(e|e.hasStereotype("java5EqualsProperty")) AS value SEPARATOR " && "-»
+				«IF value.isJavaPrimitiveType()-»this.«value.asGetter()-»() == o.«value.asGetter()-»()«ELSE-»this.«value.asGetter()-»().equals(o.«value.asGetter()-»())«ENDIF-»
+			«ENDFOREACH-») {
+				return true;
+			}
+			return false;
+		}
+		
+		/**
+		  *	calculates the hash code using specified properties
+		  *
+		  *	@return	calculated hash code
+		  */
+		public int hashCode() {
+			int result = 23;
+			«FOREACH this.property.select(e|e.hasStereotype("java5EqualsProperty")) AS value -»
+				«IF value.isJavaPrimitiveType()-»result = 37 * result + this.«value.asGetter()-»();«ELSE-»result = 37 * result + this.«value.asGetter()-»().hashCode();«ENDIF-»
+			«ENDFOREACH-»
+			return result;
+		}
+	«ENDIF-»
+«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
