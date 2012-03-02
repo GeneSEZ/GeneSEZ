@@ -8,6 +8,7 @@ extension org::genesez::platforms::common::m2m::CreateBasics;
 extension org::genesez::platforms::java::scripts::Naming;
 extension org::genesez::platforms::java::java5::scripts::Class;
 extension org::genesez::platforms::java::jpa::scripts::Stereotypes;
+extension org::genesez::platforms::java::java5::scripts::Stereotypes;
 extension org::genesez::platforms::java::jpa::scripts::Naming;
 
 /**
@@ -235,3 +236,22 @@ Void addDefaultPrimaryKeyAttribute(MClassifier this) :
   */
 Void addVersionAttribute(MClass this) :
 	this.makeAttribute("version", "int", "private");
+	
+/**
+  *	add stereotype "java5EqualsProperty" as Internal stereotype
+  *	if class is a persistent entity and owns the stereotype 
+  *	"java5EqualsOperation"
+  */
+Void checkEqualsProperties(MClass this) :
+	hasStereotype("java5EqualsOperation") && 
+	hasStereotype("jpaPersistentEntity") &&
+	!this.property.exists(e|e.hasStereotype("java5EqualsProperty"))
+		? (
+			this.property.exists(e|e.hasStereotype("jpaPrimaryKey"))
+				? this.property.selectFirst(e|e.hasStereotype("jpaPrimaryKey")).addInternalStereotype("java5EqualsProperty")
+				: "" ->
+			this.property.exists(e|e.hasStereotype("jpaOptimisticLocking"))
+				? this.property.selectFirst(e|e.hasStereotype("jpaOptimisticLocking")).addInternalStereotype("java5EqualsProperty")
+				: ""
+		)
+		: "";
