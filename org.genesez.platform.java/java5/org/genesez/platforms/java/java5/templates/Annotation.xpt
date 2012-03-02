@@ -8,8 +8,8 @@
 «ENDREM»
 
 «REM» useful support functions «ENDREM»
-«EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
 
 «REM» use java naming conventions «ENDREM»
 «EXTENSION org::genesez::platforms::java::scripts::Naming»
@@ -81,7 +81,7 @@ public @interface «name() -» «EXPAND Type::Generics -» «EXPAND Type::Genera
         «ENDIF-»           
         «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
             import java.lang.annotation.Target;           
-            «FOREACH getTaggedListValue(java5AnnotationStereotype(), "target") AS name SEPARATOR ","»
+            «FOREACH getTaggedValueList(java5AnnotationStereotype(), "target") AS name SEPARATOR ","»
                 import static java.lang.annotation.ElementType.«name-»;                       
             «ENDFOREACH»
         «ENDIF-»
@@ -95,7 +95,7 @@ public @interface «name() -» «EXPAND Type::Generics -» «EXPAND Type::Genera
 «DEFINE _java5Annotation FOR MInterface-»
     «IF hasStereotype(java5AnnotationStereotype())-»
         «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
-            @Target({«FOREACH getTaggedListValue(java5AnnotationStereotype(), "target") AS name SEPARATOR ","-» «name-» «ENDFOREACH-»})
+            @Target({«FOREACH getTaggedValueList(java5AnnotationStereotype(), "target") AS name SEPARATOR ","-» «name-» «ENDFOREACH-»})
         «ENDIF-»
         «IF hasUtilizableValue(java5AnnotationStereotype(), "retention")-»
             @Retention(«getTaggedValue(java5AnnotationStereotype(), "retention")-»)
