@@ -9,12 +9,12 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::log::Log»
+«EXTENSION org::genesez::platform::common::log::Log»
 
-«EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::Conversion»
-«EXTENSION org::genesez::platforms::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platforms::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
 
 «EXTENSION org::genesez::platforms::java::scripts::Type»
 «EXTENSION org::genesez::platforms::java::scripts::Naming»
@@ -151,15 +151,15 @@
 		«EXPAND DiscriminatorValue-»
 		«IF hasStereotype("jpaPrimaryKeyJoinColumn")-»
 			@PrimaryKeyJoinColumns(
-			«FOREACH getTaggedListValue("jpaPrimaryKeyJoinColumn", "name") AS value-»
+			«FOREACH getTaggedValueList("jpaPrimaryKeyJoinColumn", "name") AS value-»
 				@PrimaryKeyJoinColumn(
 					name="«value-»"
-					«LET getTaggedListValue("jpaPrimaryKeyJoinColumn", "name").indexOf(value) AS index-»		
+					«LET getTaggedValueList("jpaPrimaryKeyJoinColumn", "name").indexOf(value) AS index-»		
 						«IF hasUtilizableValue("jpaPrimaryKeyJoinColumn", "referencedName")-»
- 							, referencedColumnName="«getTaggedListValue("jpaPrimaryKeyJoinColumn", "referencedName").get(index)-»"
+ 							, referencedColumnName="«getTaggedValueList("jpaPrimaryKeyJoinColumn", "referencedName").get(index)-»"
 	 					«ENDIF-»
 						«IF hasUtilizableValue("jpaPrimaryKeyJoinColumn", "columnDefinition")-»
- 							, columnDefinition="«getTaggedListValue("jpaPrimaryKeyJoinColumn", "columnDefinition").get(index)-»"
+ 							, columnDefinition="«getTaggedValueList("jpaPrimaryKeyJoinColumn", "columnDefinition").get(index)-»"
  						«ENDIF-»
  					«ENDLET-») 					
 			«ENDFOREACH»)

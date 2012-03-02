@@ -15,12 +15,12 @@
 «IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::log::Log»
+«EXTENSION org::genesez::platform::common::log::Log»
 
-«EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::Conversion»
-«EXTENSION org::genesez::platforms::common::typemapping::TypeMapping»
-«EXTENSION org::genesez::platforms::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
 
 «EXTENSION org::genesez::platforms::java::scripts::Conversion»
 «EXTENSION org::genesez::platforms::java::seam2::scripts::Operation»
@@ -89,7 +89,7 @@
 	«IF hasStereotype("seam2Observer") && this.classifier.metaType != MInterface-»
 		@Observer(create=«getTaggedValue("seam2Observer", "create")-»,
 		«IF hasUtilizableValue("seam2Observer", "value")-»
-			value={«FOREACH getTaggedListValue("seam2Observer", "value") AS value SEPARATOR ","-»
+			value={«FOREACH getTaggedValueList("seam2Observer", "value") AS value SEPARATOR ","-»
 				"«IF !value.contains(".")-»«observerValuePrefix()-»«ENDIF-»«value-»"
 			«ENDFOREACH-»}		
 		«ENDIF-»)
@@ -112,7 +112,7 @@
 			, pageflow="«getTaggedValue("seam2Begin", "pageflow")-»"
 		«ENDIF-»
 		«IF hasUtilizableValue("seam2Begin", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedListValue("seam2Begin", "ifOutcome") AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedValueList("seam2Begin", "ifOutcome") AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)		
@@ -120,7 +120,7 @@
 	«IF hasStereotype("seam2End") && this.classifier.metaType != MInterface-»
 		@End(beforeRedirect=«getTaggedValue("seam2End", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2End", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedListValue("seam2End", "ifOutcome") AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedValueList("seam2End", "ifOutcome") AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»)	
@@ -152,7 +152,7 @@
 	«IF hasStereotype("seam2EndTask") && this.classifier.metaType != MInterface-»
 		@EndTask(beforeRedirect=«getTaggedValue("seam2EndTask", "beforeRedirect")-»
 		«IF hasUtilizableValue("seam2EndTask", "ifOutcome")-»
-			, ifOutcome={«FOREACH getTaggedListValue("seam2EndTask", "ifOutcome") AS values SEPARATOR ","-»
+			, ifOutcome={«FOREACH getTaggedValueList("seam2EndTask", "ifOutcome") AS values SEPARATOR ","-»
 				"«values-»"
 			«ENDFOREACH-»}
 		«ENDIF-»

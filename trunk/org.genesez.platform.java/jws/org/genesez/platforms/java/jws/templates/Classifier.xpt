@@ -8,17 +8,17 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::log::Log»
+«EXTENSION org::genesez::platform::common::log::Log»
 
-«EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::Conversion»
-«EXTENSION org::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
 
 «EXTENSION org::genesez::platforms::java::scripts::Type»
 «EXTENSION org::genesez::platforms::java::scripts::Naming»
 «EXTENSION org::genesez::platforms::java::scripts::Conversion»
 «REM» neat m2t helper functions «ENDREM»
-«EXTENSION org::genesez::platforms::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
 
 «DEFINE _WebServiceClient FOR MClassifier-»
 	«IF hasStereotype("jwsWebServiceClient")-»
@@ -52,7 +52,7 @@
 «ENDDEFINE»
 
 «DEFINE _HandlerChain FOR MClassifier-»
-	«IF hasStereotype("jwsHandlerChain") && getTaggedListValue("jwsHandlerChain", "handlers").size > 0-»
+	«IF hasStereotype("jwsHandlerChain") && getTaggedValueList("jwsHandlerChain", "handlers").size > 0-»
 		@HandlerChain(file=«IF hasUtilizableValue("jwsHandlerChain", "file")-»
 			"«getTaggedValue("jwsHandlerChain", "file")-».xml"
 			«EXPAND _HandlerChainXMLFile(getTaggedValue("jwsHandlerChain", "file"))-»
@@ -110,11 +110,11 @@
 «DEFINE _HandlerChainXMLFile(String filename) FOR MClassifier-»
 	«FILE filePath( filename + ".xml", basePath() )-»
 <handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
-		«FOREACH getTaggedListValue("jwsHandlerChain", "handlers") AS handler-»
+		«FOREACH getTaggedValueReferenceList("jwsHandlerChain", "handlers").typeSelect(MClassifier) AS handler-»
 	<handler-chain>
 		<handler>
 			<handler-class>
-				«getClassifierByXmiGuid(this.model(), handler).packageDeclaration( getClassifierByXmiGuid(this.model(), handler).basePackage() ) -».«getClassifierByXmiGuid(this.model(), handler).asTypeName()»
+				«handler.packageDeclaration( handler.basePackage() ) -».«handler.asTypeName()»
 			</handler-class>
 		</handler>
 	</handler-chain>

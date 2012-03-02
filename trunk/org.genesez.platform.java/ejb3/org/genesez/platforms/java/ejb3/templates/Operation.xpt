@@ -8,10 +8,10 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::log::Log»
+«EXTENSION org::genesez::platform::common::log::Log»
 
-«EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
 «EXTENSION org::genesez::platforms::java::scripts::Type»
 «EXTENSION org::genesez::platforms::java::scripts::Naming»
 «EXTENSION org::genesez::platforms::java::scripts::Conversion»
@@ -173,7 +173,7 @@
 «DEFINE _Interceptor FOR MOperation-»
 	«IF hasStereotype("ejb3OperationInterceptor")-»
 		«IF hasUtilizableValue("ejb3OperationInterceptor", "interceptors")-»
-			@Interceptors(value={«FOREACH getTaggedListValue("ejb3OperationInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
+			@Interceptors(value={«FOREACH getTaggedValueList("ejb3OperationInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
 					«interceptor-».class
 			«ENDFOREACH-»})
 		«ENDIF»

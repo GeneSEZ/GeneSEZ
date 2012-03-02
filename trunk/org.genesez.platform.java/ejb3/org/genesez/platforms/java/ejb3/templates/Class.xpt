@@ -9,11 +9,11 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::log::Log»
+«EXTENSION org::genesez::platform::common::log::Log»
 
-«EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::Conversion»
-«EXTENSION org::genesez::platforms::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
 
 «EXTENSION org::genesez::platforms::java::scripts::Type»
 «EXTENSION org::genesez::platforms::java::scripts::Naming»
@@ -130,11 +130,11 @@
  			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "name") && 
  				hasUtilizableValue("ejb3ActivationConfigProperty", "value")-»
  				, activationConfig = {
- 				«FOREACH getTaggedListValue("ejb3ActivationConfigProperty", "name") AS name SEPARATOR ","»
+ 				«FOREACH getTaggedValueList("ejb3ActivationConfigProperty", "name") AS name SEPARATOR ","»
  					@ActivationConfigProperty(
  						propertyName = "«name-»",  						
- 						«LET getTaggedListValue("ejb3ActivationConfigProperty", "name").indexOf(name) AS index-»
- 							propertyValue = "«getTaggedListValue("ejb3ActivationConfigProperty", "value").get(index)-»")
+ 						«LET getTaggedValueList("ejb3ActivationConfigProperty", "name").indexOf(name) AS index-»
+ 							propertyValue = "«getTaggedValueList("ejb3ActivationConfigProperty", "value").get(index)-»")
  						«ENDLET»
  				«ENDFOREACH»
  				}
@@ -151,7 +151,7 @@
 «DEFINE _EntityListener FOR MClass-»
 	«IF hasStereotype("ejb3EntityListener")»
 		«IF hasUtilizableValue("ejb3EntityListener", "listeners")-»
-			@EntityListeners(«FOREACH getTaggedListValue("ejb3EntityListener", "listeners") AS listeners SEPARATOR ", "»
+			@EntityListeners(«FOREACH getTaggedValueList("ejb3EntityListener", "listeners") AS listeners SEPARATOR ", "»
 				«listeners-».class
 			«ENDFOREACH-»
 			«IF hasTaggedValue("ejb3EntityListener", "generateDefault", "true") && 
@@ -212,7 +212,7 @@
 «DEFINE _Interceptor FOR MClass-»
 	«IF hasStereotype("ejb3ClassInterceptor")-»
 		«IF hasUtilizableValue("ejb3ClassInterceptor", "interceptors")-»
-			@Interceptors(value={«FOREACH getTaggedListValue("ejb3ClassInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
+			@Interceptors(value={«FOREACH getTaggedValueList("ejb3ClassInterceptor", "interceptors") AS interceptor SEPARATOR ", "-»
 				«interceptor-».class
 			«ENDFOREACH-»
 			«IF hasTaggedValue("ejb3ClassInterceptor", "generateDefault", "true") &&
@@ -360,7 +360,7 @@
 «ENDREM»
 «DEFINE _BusinessMethods FOR MClass-»
 	«IF hasUtilizableValue("ejb3ClassInterceptor", "methods")-»
-		«FOREACH getTaggedListValue("ejb3ClassInterceptor", "methods") AS methods SEPARATOR ", "-»
+		«FOREACH getTaggedValueList("ejb3ClassInterceptor", "methods") AS methods SEPARATOR ", "-»
 			/**
 			  *	generated business method for class "«asTypeName()»"
 			  * method has been mentioned in "ejb3Interceptor"-annotation 
