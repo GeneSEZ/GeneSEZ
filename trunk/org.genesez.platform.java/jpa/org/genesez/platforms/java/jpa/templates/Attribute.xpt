@@ -8,11 +8,11 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::log::Log»
+«EXTENSION org::genesez::platform::common::log::Log»
 
-«EXTENSION org::genesez::platforms::common::AccessHelper»
-«EXTENSION org::genesez::platforms::common::Conversion»
-«EXTENSION org::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
 
 «EXTENSION org::genesez::platforms::java::scripts::Type»
 «EXTENSION org::genesez::platforms::java::scripts::Naming»
@@ -33,7 +33,6 @@
 	«EXPAND _Persistence-»
 	«EXPAND Element::OptimisticLocking-»
 	«EXPAND Class::DiscriminatorValue-»	
-	«EXPAND _MultiValueAttributes-»
 «ENDDEFINE»
 
 «REM»
@@ -43,56 +42,45 @@
 «ENDREM»
 
 «REM» 
-	adds an annotation for multi value attributes
-«ENDREM»
-«DEFINE _MultiValueAttributes FOR MAttribute-»
-	«IF multiplicity != 1-»
-		«IF this.classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
-			@org.hibernate.annotations.CollectionOfElements
-		«ENDIF-»
-	«ENDIF-»
-«ENDDEFINE»
-
-«REM» 
 	evaluate the stereotype jpaPersistenceContext and jpaPersistenceUnit 
 «ENDREM»
 «DEFINE _Persistence FOR MAttribute-»
 	«IF !this.hasStereotype("seam2Injection")-»
 		«IF hasStereotype("jpaPersistenceContext") && hasUtilizableValue("jpaPersistenceContext", "type")-»
-			«IF getTaggedListValue("jpaPersistenceContext", "type").size > 1-»
+			«IF getTaggedValueList("jpaPersistenceContext", "type").size > 1-»
 				@PersistenceContexts(
 			«ENDIF-»
-			«FOREACH getTaggedListValue("jpaPersistenceContext", "type") AS types SEPARATOR ","-»
+			«FOREACH getTaggedValueList("jpaPersistenceContext", "type") AS types SEPARATOR ","-»
 	 			@PersistenceContext (
 	 				type = PersistenceContextType.«types-»
 	 				«IF hasUtilizableValue("jpaPerssistenceContext", "unitName")-»  						
-		 				«LET getTaggedListValue("jpaPersistenceContext", "unitName").indexOf(types) AS index-»
-		 					, unitName = "«getTaggedListValue("jpaPersistenceContext", "unitName").get(index)-»"
+		 				«LET getTaggedValueList("jpaPersistenceContext", "unitName").indexOf(types) AS index-»
+		 					, unitName = "«getTaggedValueList("jpaPersistenceContext", "unitName").get(index)-»"
 		 				«ENDLET»
 		 			«ENDIF»
 	 				«IF hasUtilizableValue("jpaPerssistenceContext", "name")-»  						
-		 				«LET getTaggedListValue("jpaPersistenceContext", "name").indexOf(types) AS index-»
-		 					, name = "«getTaggedListValue("jpaPersistenceContext", "name").get(index)-»"
+		 				«LET getTaggedValueList("jpaPersistenceContext", "name").indexOf(types) AS index-»
+		 					, name = "«getTaggedValueList("jpaPersistenceContext", "name").get(index)-»"
 		 				«ENDLET-»
 		 			«ENDIF-»)	 			
 	 		«ENDFOREACH-»
-	 		«IF getTaggedListValue("jpaPersistenceContext", "type").size > 1-»
+	 		«IF getTaggedValueList("jpaPersistenceContext", "type").size > 1-»
 	 			)
 	 		«ENDIF-»		
 		«ELSEIF hasStereotype("jpaPersistenceContext")-»
 			@PersistenceContext
 		«ELSEIF hasStereotype("jpaPersistenceUnit") && hasUtilizableValue("jpaPersistenceUnit", "name") && hasUtilizableValue("jpaPersistenceUnit", "unitName")-»
-			«IF getTaggedListValue("jpaPersistenceUnit", "name").size > 1-»
+			«IF getTaggedValueList("jpaPersistenceUnit", "name").size > 1-»
 				@PersistenceUnits {
 			«ENDIF-»
-			 «FOREACH getTaggedListValue("jpaPersistenceUnit", "name") AS names SEPARATOR ","-»
+			 «FOREACH getTaggedValueList("jpaPersistenceUnit", "name") AS names SEPARATOR ","-»
 	 			@PersistenceUnit(
 	 				name = "«names-»",  						
-	 				«LET getTaggedListValue("jpaPersistenceUnit", "unitName").indexOf(names) AS index-»
-	 					unitName = "«getTaggedListValue("jpaPersistenceUnit", "unitName").get(index)-»")
+	 				«LET getTaggedValueList("jpaPersistenceUnit", "unitName").indexOf(names) AS index-»
+	 					unitName = "«getTaggedValueList("jpaPersistenceUnit", "unitName").get(index)-»")
 	 				«ENDLET»
 	 		«ENDFOREACH-»)
-	 		«IF getTaggedListValue("jpaPersistenceUnit", "name").size > 1-»
+	 		«IF getTaggedValueList("jpaPersistenceUnit", "name").size > 1-»
 				}
 			«ENDIF-»
 	 	«ELSEIF hasStereotype("jpaPersistenceUnit")-»

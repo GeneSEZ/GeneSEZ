@@ -9,8 +9,8 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platforms::common::log::Log»
-«EXTENSION org::genesez::platforms::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platforms::java::scripts::Conversion»
 «EXTENSION org::genesez::platforms::java::jpa::scripts::Stereotypes»
 «EXTENSION org::genesez::platforms::java::jpa::scripts::Naming»
@@ -40,10 +40,6 @@
 		«IF !hasTaggedValue("jpaAssociation", "type", "OneToOne")-»
 			«EXPAND _JoinTable-»
 		«ENDIF-»
-	«ELSEIF !hasStereotype("jpaAssociation") || !hasUtilizableValue("jpaAssociation", "type")-»
-		«IF multiplicity != 1-»
-			@org.hibernate.annotations.CollectionOfElements
-		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -53,7 +49,7 @@
 «DEFINE _EvaluateAssociationTaggedValues FOR MAssociationRole-»	
 	(cascade={
 	«IF hasUtilizableValue("jpaAssociation", "cascade")-»
-		«FOREACH getTaggedListValue("jpaAssociation", "cascade") AS cascades SEPARATOR ", "-»
+		«FOREACH getTaggedValueList("jpaAssociation", "cascade") AS cascades SEPARATOR ", "-»
 			CascadeType.«cascades-»
 		«ENDFOREACH-»
 	«ENDIF-»}
