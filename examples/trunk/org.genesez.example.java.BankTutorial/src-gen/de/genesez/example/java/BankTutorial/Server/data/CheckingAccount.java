@@ -5,9 +5,9 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271071979937_985074_736) 
  */
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
+import java.io.Serializable;
+import javax.persistence.Table;
 
 /**
  * The checking account is used for the daily cash flow with a low interest rate of 0.75%. A bank has to deposit the interests of a checking account every 3 minutes.

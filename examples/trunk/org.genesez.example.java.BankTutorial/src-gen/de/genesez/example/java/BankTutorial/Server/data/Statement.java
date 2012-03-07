@@ -5,16 +5,15 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271068974750_25486_1380) 
  */
 
-import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import java.io.Serializable;
 import javax.persistence.Table;
+import javax.persistence.GenerationType;
 import javax.persistence.Version;
+import javax.persistence.GeneratedValue;
+import javax.persistence.PrePersist;
 
 /**
  * A statement logs all operations of an account.

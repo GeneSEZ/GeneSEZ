@@ -5,16 +5,15 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271068727843_795301_1167) 
  */
 
-import java.io.Serializable;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.CascadeType;
+import javax.persistence.Id;
+import java.io.Serializable;
 import javax.persistence.Table;
+import javax.persistence.GenerationType;
 import javax.persistence.Version;
+import javax.persistence.GeneratedValue;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

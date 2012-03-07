@@ -5,9 +5,9 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271071913640_952667_690) 
  */
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
+import java.io.Serializable;
+import javax.persistence.Table;
 
 /**
  * The savings account offers a fixed interest rate of 2.75% for a long period of time. A bank has to deposit the interests of a savings account every 5 minutes.
