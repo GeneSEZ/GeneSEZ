@@ -1,4 +1,4 @@
-package org.genesez.platforms.java.workflow;
+package org.genesez.platform.java.workflow;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
@@ -144,9 +144,9 @@ public class JavaGenerator extends DefaultGenerator {
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1326709010962_484208_2721) ENABLED START */
 	static {
-		defaults.put("template", "org::genesez::platforms::java::java5::templates::Root::Root");
-		defaults.put("typeMappingFile", "org/genesez/platforms/java/typemapping/typemapping.xml");
-		defaults.put("formatterConfig", "org/genesez/platforms/java/workflow/eclipse.java.formatter.settings.xml");
+		defaults.put("template", "org::genesez::platform::java::java5::templates::Root::Root");
+		defaults.put("typeMappingFile", "org/genesez/platform/java/typemapping/typemapping.xml");
+		defaults.put("formatterConfig", "org/genesez/platform/java/workflow/eclipse.java.formatter.settings.xml");
 		defaults.put("newAssociationHandling", "true");
 		defaults.put("fieldAccess", "true");
 	}
