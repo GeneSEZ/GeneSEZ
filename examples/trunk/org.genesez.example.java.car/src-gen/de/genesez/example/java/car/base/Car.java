@@ -7,12 +7,19 @@ package de.genesez.example.java.car.base;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
+import de.genesez.platforms.java.umlsupport.associations.Association;
+import de.genesez.platforms.java.umlsupport.associations.OneAssociation;
+import de.genesez.platforms.java.umlsupport.associations.Accessor;
+import de.genesez.platforms.java.umlsupport.associations.OneAssociationAC;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import de.genesez.platforms.java.umlsupport.associations.AssociationAC;
+import de.genesez.platforms.java.umlsupport.associations.ManyAssociation;
+import de.genesez.platforms.java.umlsupport.associations.AssociationRole;
+import de.genesez.platforms.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * A car is a vehicle with four wheels and drives on the road.
- * @author domwet
+ * @author apflueger
  */
 public class Car extends AbstractVehicle implements AssociationRole {
 	
@@ -30,6 +37,8 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	
 	/** Stores the associated object of association LICENSE to License */
 	private License license;
+	/** Stores the association class object of association LICENSE to License */
+	private Owner owner;
 	
 	/** Stores the associated object of association LICENSEPLATE to LicensePlate */
 	private LicensePlate licensePlate;
@@ -106,7 +115,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 				spare = referenced;
 			}
 		}));
-		association.put(Associations.LICENSE, new OneAssociation<Car, License>(this, new Accessor<License>() {
+		association.put(Associations.LICENSE, new OneAssociationAC<Car, License, Owner>(this, new Accessor<License>() {
 			public License get() {
 				return license;
 			}
@@ -114,7 +123,15 @@ public class Car extends AbstractVehicle implements AssociationRole {
 			public void set(License referenced) {
 				license = referenced;
 			}
-		}));
+		}, new Accessor<Owner>() {
+			public Owner get() {
+				return owner;
+			}
+			
+			public void set(Owner referenced) {
+				owner = referenced;
+			}
+		}, License.Associations.CAR));
 		association.put(Associations.LICENSEPLATE, new OneAssociation<Car, LicensePlate>(this, new Accessor<LicensePlate>() {
 			public LicensePlate get() {
 				return licensePlate;
@@ -123,7 +140,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 			public void set(LicensePlate referenced) {
 				licensePlate = referenced;
 			}
-		}));
+		}, LicensePlate.Associations.CAR));
 		association.put(Associations.ENGINE, new OneAssociation<Car, Engine>(this, new Accessor<Engine>() {
 			public Engine get() {
 				return engine;
@@ -132,13 +149,13 @@ public class Car extends AbstractVehicle implements AssociationRole {
 			public void set(Engine referenced) {
 				engine = referenced;
 			}
-		}));
-		association.put(Associations.WHEELS, new ManyAssociation<Car, Wheel>(this, wheels));
+		}, Engine.Associations.CAR));
+		association.put(Associations.WHEELS, new ManyAssociation<Car, Wheel>(this, wheels, Wheel.Associations.MYCAR));
 	}
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
@@ -158,8 +175,8 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	 * Provides access to the association '<em><b>license</b></em>' to {@link License}.
 	 */
 	@SuppressWarnings("unchecked")
-	public Association<Car, License> license() {
-		return (Association<Car, License>) association.get(Associations.LICENSE);
+	public AssociationAC<Car, License, Owner> license() {
+		return (AssociationAC<Car, License, Owner>) association.get(Associations.LICENSE);
 	}
 	
 	/**

@@ -7,13 +7,18 @@ package de.genesez.example.java.car.base;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
+import de.genesez.platforms.java.umlsupport.associations.Association;
+import de.genesez.platforms.java.umlsupport.associations.OneAssociation;
+import de.genesez.platforms.java.umlsupport.associations.Accessor;
 import de.genesez.platforms.java.umlsupport.associations.*;
 import de.genesez.example.java.car.base.parts.Screw;
+import de.genesez.platforms.java.umlsupport.associations.ManyAssociation;
+import de.genesez.platforms.java.umlsupport.associations.AssociationRole;
+import de.genesez.platforms.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 public class Wheel implements IChangeable, AssociationRole {
 	
@@ -74,13 +79,13 @@ public class Wheel implements IChangeable, AssociationRole {
 			public void set(Car referenced) {
 				mycar = referenced;
 			}
-		}));
+		}, Car.Associations.WHEELS));
 		association.put(Associations.SCREW, new ManyAssociation<Wheel, Screw>(this, screw));
 	}
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))

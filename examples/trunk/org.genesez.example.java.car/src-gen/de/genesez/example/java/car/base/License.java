@@ -7,12 +7,17 @@ package de.genesez.example.java.car.base;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
+import de.genesez.platforms.java.umlsupport.associations.Association;
+import de.genesez.platforms.java.umlsupport.associations.Accessor;
+import de.genesez.platforms.java.umlsupport.associations.OneAssociationAC;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import de.genesez.platforms.java.umlsupport.associations.AssociationAC;
+import de.genesez.platforms.java.umlsupport.associations.AssociationRole;
+import de.genesez.platforms.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 public class License implements AssociationRole {
 	
@@ -27,13 +32,15 @@ public class License implements AssociationRole {
 	
 	/** Stores the associated object of association CAR to Car */
 	private Car car;
+	/** Stores the association class object of association CAR to Car */
+	private Owner owner;
 	
 	private String registration;
 	
 	// -- generated association + attribute accessors -----------------------
 	// initialization block for association management objects
 	{
-		association.put(Associations.CAR, new OneAssociation<License, Car>(this, new Accessor<Car>() {
+		association.put(Associations.CAR, new OneAssociationAC<License, Car, Owner>(this, new Accessor<Car>() {
 			public Car get() {
 				return car;
 			}
@@ -41,12 +48,20 @@ public class License implements AssociationRole {
 			public void set(Car referenced) {
 				car = referenced;
 			}
-		}));
+		}, new Accessor<Owner>() {
+			public Owner get() {
+				return owner;
+			}
+			
+			public void set(Owner referenced) {
+				owner = referenced;
+			}
+		}, Car.Associations.LICENSE));
 	}
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
@@ -58,8 +73,8 @@ public class License implements AssociationRole {
 	 * Provides access to the association '<em><b>car</b></em>' to {@link Car}.
 	 */
 	@SuppressWarnings("unchecked")
-	public Association<License, Car> car() {
-		return (Association<License, Car>) association.get(Associations.CAR);
+	public AssociationAC<License, Car, Owner> car() {
+		return (AssociationAC<License, Car, Owner>) association.get(Associations.CAR);
 	}
 	
 	// -- generated code of other cartridges --------------------------------

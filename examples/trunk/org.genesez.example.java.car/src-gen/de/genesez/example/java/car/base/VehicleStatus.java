@@ -9,7 +9,7 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 
 /**
  * state of a vehicle
- * @author domwet
+ * @author apflueger
  */
 public enum VehicleStatus {
 	

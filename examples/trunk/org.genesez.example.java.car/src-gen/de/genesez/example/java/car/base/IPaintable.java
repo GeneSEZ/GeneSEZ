@@ -10,7 +10,7 @@ import java.awt.Color;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 public interface IPaintable {
 	

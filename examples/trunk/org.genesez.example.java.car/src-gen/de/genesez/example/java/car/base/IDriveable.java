@@ -9,7 +9,7 @@ import de.genesez.platforms.java.umlsupport.associations.*;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 public interface IDriveable {
 	

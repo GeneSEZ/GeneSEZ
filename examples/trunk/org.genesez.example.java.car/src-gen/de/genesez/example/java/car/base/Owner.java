@@ -5,11 +5,13 @@ package de.genesez.example.java.car.base;
  * 	@FILE-ID : (_12_5_6340215_1182161516984_21570_380) 
  */
 
+import de.genesez.platforms.java.umlsupport.associations.ACLink;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import de.genesez.platforms.java.umlsupport.associations.AssociationClass;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 public class Owner implements AssociationClass {
 	

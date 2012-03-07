@@ -7,12 +7,16 @@ package de.genesez.example.java.car.base;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
+import de.genesez.platforms.java.umlsupport.associations.Association;
+import de.genesez.platforms.java.umlsupport.associations.OneAssociation;
+import de.genesez.platforms.java.umlsupport.associations.Accessor;
 import de.genesez.platforms.java.umlsupport.associations.*;
+import de.genesez.platforms.java.umlsupport.associations.AssociationRole;
+import de.genesez.platforms.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 public class LicensePlate implements AssociationRole {
 	
@@ -41,12 +45,12 @@ public class LicensePlate implements AssociationRole {
 			public void set(Car referenced) {
 				car = referenced;
 			}
-		}));
+		}, Car.Associations.LICENSEPLATE));
 	}
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
