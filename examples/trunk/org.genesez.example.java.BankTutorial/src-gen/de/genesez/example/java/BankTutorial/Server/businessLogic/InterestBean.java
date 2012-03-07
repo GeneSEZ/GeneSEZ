@@ -5,19 +5,20 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (_16_0_129203bc_1271100384359_869290_741) 
  */
 
-import javax.ejb.TimerService;
-import javax.ejb.Timer;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.ejb.Timeout;
-import javax.persistence.PersistenceContext;
+import javax.ejb.Timer;
+import javax.ejb.TimerService;
 import javax.interceptor.Interceptors;
-import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import de.genesez.example.java.BankTutorial.Server.data.Account;
 
 /**
  * This bean is responsible for the calculation of the interests of the bank accounts using the timer of the Enterprise JavaBeans
- * @author domwet
+ * @author apflueger
  */
 
 @Stateless(name = "InterestBean")
@@ -61,7 +62,7 @@ public class InterestBean implements IInterestBeanLocal {
 	 * @param	account	
 	 */
 	
-	public void startInterestPayment(AbstractAccount account) {
+	public void startInterestPayment(Account account) {
 		/* PROTECTED REGION ID(java.implementation._16_0_129203bc_1271100501687_533547_784) ENABLED START */
 		// TODO: implementation of method 'InterestRateBean.startInterestPayment(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");

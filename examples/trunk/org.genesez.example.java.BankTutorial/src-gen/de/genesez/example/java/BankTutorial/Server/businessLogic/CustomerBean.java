@@ -8,12 +8,13 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
 
 /**
  * The customer bean administrates the customer entities
- * @author domwet
+ * @author apflueger
  */
 
 @Stateless(name = "CustomerBean")

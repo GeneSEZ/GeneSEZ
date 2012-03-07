@@ -5,15 +5,14 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (InterestBeanLocal) 
  */
 
-import javax.ejb.Timer;
-import javax.ejb.Timeout;
-import javax.interceptor.Interceptors;
-import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
 import javax.ejb.Local;
+import javax.ejb.Timer;
+
+import de.genesez.example.java.BankTutorial.Server.data.Account;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 
 @Local
@@ -31,7 +30,7 @@ public interface IInterestBeanLocal {
 	 * @param	account	
 	 */
 	
-	public void startInterestPayment(AbstractAccount account);
+	public void startInterestPayment(Account account);
 	
 	// -- generated code of other cartridges --------------------------------
 	

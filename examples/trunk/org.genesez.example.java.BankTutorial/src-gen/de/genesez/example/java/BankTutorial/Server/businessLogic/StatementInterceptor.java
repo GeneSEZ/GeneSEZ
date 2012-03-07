@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  * The statement interceptor is responsible for logging every access to an account
- * @author domwet
+ * @author apflueger
  */
 
 public class StatementInterceptor {

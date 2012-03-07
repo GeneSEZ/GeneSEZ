@@ -5,17 +5,17 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271071927718_941385_713) 
  */
 
-import javax.persistence.Entity;
 import java.io.Serializable;
-import javax.persistence.Table;
+
+import javax.persistence.Entity;
 
 /**
  * The flexible savings account offers a volatile interest rate depending on the daily interest development. For a first implementation an average interest rate of 3.5% can be chosen. A bank has to deposit the interests of a flexible savings account  every minute.
- * @author domwet
+ * @author apflueger
  */
 
 @Entity
-public class FlexibleSavingsAccount extends AbstractAccount implements Serializable {
+public class FlexibleSavingsAccount extends Account implements Serializable {
 	
 	// -- generated constructors --------------------------------------------
 	/**

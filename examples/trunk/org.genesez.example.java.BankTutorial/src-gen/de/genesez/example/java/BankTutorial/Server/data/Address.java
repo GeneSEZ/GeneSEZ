@@ -5,17 +5,19 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271068733796_737386_1190) 
  */
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Id;
 import java.io.Serializable;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
+
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 
 @Entity
@@ -40,6 +42,7 @@ public class Address implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
+	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------

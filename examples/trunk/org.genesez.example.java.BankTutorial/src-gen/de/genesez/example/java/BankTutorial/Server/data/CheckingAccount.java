@@ -5,17 +5,17 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271071979937_985074_736) 
  */
 
-import javax.persistence.Entity;
 import java.io.Serializable;
-import javax.persistence.Table;
+
+import javax.persistence.Entity;
 
 /**
  * The checking account is used for the daily cash flow with a low interest rate of 0.75%. A bank has to deposit the interests of a checking account every 3 minutes.
- * @author domwet
+ * @author apflueger
  */
 
 @Entity
-public class CheckingAccount extends AbstractAccount implements Serializable {
+public class CheckingAccount extends Account implements Serializable {
 	
 	// -- generated constructors --------------------------------------------
 	/**

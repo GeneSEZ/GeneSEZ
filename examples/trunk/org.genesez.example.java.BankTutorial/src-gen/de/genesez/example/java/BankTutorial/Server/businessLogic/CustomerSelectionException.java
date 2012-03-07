@@ -7,7 +7,7 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
 /**
  * A CustomerSelectionException is thrown if a problem occurs with the selection of a customer
- * @author domwet
+ * @author apflueger
  */
 
 public class CustomerSelectionException extends RuntimeException {

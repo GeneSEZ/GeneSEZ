@@ -5,19 +5,19 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271068723343_566691_1144) 
  */
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.CascadeType;
 import java.io.Serializable;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToMany;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 
 @Entity
@@ -27,15 +27,11 @@ public class Bank implements Serializable {
 	// -- generated attribute, constant + association declarations ----------
 	
 	/** Stores associated objects of association CONTACT to Contact */
-	@ManyToMany(cascade = {
-	CascadeType.MERGE, CascadeType.REFRESH
-	})
+	
 	private java.util.Set<Contact> contact = new java.util.HashSet<Contact>();
 	
 	/** Stores associated objects of association CUSTOMERS to Customer */
-	@ManyToMany(cascade = {
-		CascadeType.ALL
-	})
+	
 	private java.util.Set<Customer> customers = new java.util.HashSet<Customer>();
 	
 	@Column(name = "name", unique = true, nullable = false)
@@ -48,6 +44,7 @@ public class Bank implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
+	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------
@@ -161,6 +158,9 @@ public class Bank implements Serializable {
 			return;
 		}
 		this.customers.add(customers);
+		if (!customers.getBanks().contains(this)) {
+			customers.insertInBanks(this);
+		}
 	}
 	
 	/**
@@ -171,6 +171,9 @@ public class Bank implements Serializable {
 			return;
 		}
 		this.customers.remove(customers);
+		if (customers.getBanks().contains(this)) {
+			customers.removeFromBanks(this);
+		}
 	}
 	
 	// -- generated code of other cartridges --------------------------------

@@ -7,7 +7,7 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
 /**
  * A FinanceException is thrown if a problem occurs during an account operation
- * @author domwet
+ * @author apflueger
  */
 
 public class FinanceException extends RuntimeException {

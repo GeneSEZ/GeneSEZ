@@ -5,16 +5,17 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (FinanceBeanLocal) 
  */
 
-import javax.interceptor.Interceptors;
-import javax.math.BigDecimal;
-import de.genesez.example.java.BankTutorial.Server.data.Bank;
-import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
-import de.genesez.example.java.BankTutorial.Server.data.Customer;
+import java.math.BigDecimal;
+
 import javax.ejb.Local;
+
+import de.genesez.example.java.BankTutorial.Server.data.Account;
+import de.genesez.example.java.BankTutorial.Server.data.Bank;
+import de.genesez.example.java.BankTutorial.Server.data.Customer;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 
 @Local
@@ -45,7 +46,7 @@ public interface IFinanceBeanLocal {
 	 * @throws	AccountSelectionException
 	 */
 	
-	public void selectAccount(AbstractAccount account) throws AccountSelectionException;
+	public void selectAccount(Account account) throws AccountSelectionException;
 	
 	/**
 	 * withdraws the amount from the selected account if possible
@@ -71,7 +72,7 @@ public interface IFinanceBeanLocal {
 	 * @throws	FinanceException
 	 */
 	
-	public void bankTransfer(AbstractAccount target, BigDecimal amount) throws FinanceException;
+	public void bankTransfer(Account target, BigDecimal amount) throws FinanceException;
 	
 	// -- generated code of other cartridges --------------------------------
 	

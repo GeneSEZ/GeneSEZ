@@ -5,12 +5,13 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (BankBeanLocal) 
  */
 
-import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import javax.ejb.Local;
+
+import de.genesez.example.java.BankTutorial.Server.data.Bank;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 
 @Local

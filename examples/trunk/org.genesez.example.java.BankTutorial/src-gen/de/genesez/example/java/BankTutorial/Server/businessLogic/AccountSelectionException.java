@@ -7,7 +7,7 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
 /**
  * An AccountSelectionException is thrown if a problem occurs with the selection of an account
- * @author domwet
+ * @author apflueger
  */
 
 public class AccountSelectionException extends RuntimeException {

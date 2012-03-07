@@ -7,7 +7,7 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
 
 /**
  * A BankSelectionException is thrown if a problem occurs with the selection of a bank
- * @author domwet
+ * @author apflueger
  */
 
 public class BankSelectionException extends RuntimeException {

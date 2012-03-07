@@ -5,20 +5,19 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271068737906_801239_1213) 
  */
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Id;
-import javax.persistence.CascadeType;
 import java.io.Serializable;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToMany;
+
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 
 @Entity
@@ -28,16 +27,12 @@ public class Customer implements Serializable {
 	// -- generated attribute, constant + association declarations ----------
 	
 	/** Stores the associated object of association CONTACT to Contact */
-	@OneToOne(cascade = {
-		CascadeType.ALL
-	})
+	
 	private Contact contact;
 	
-	/** Stores associated objects of association ACCOUNTS to AbstractAccount */
-	@OneToMany(cascade = {
-		CascadeType.ALL
-	})
-	private java.util.Set<AbstractAccount> accounts = new java.util.HashSet<AbstractAccount>();
+	/** Stores associated objects of association ACCOUNTS to Account */
+	
+	private java.util.Set<Account> accounts = new java.util.HashSet<Account>();
 	
 	/** Stores associated objects of association BANKS to Bank */
 	@ManyToMany(cascade = {})
@@ -51,6 +46,7 @@ public class Customer implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
+	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------
@@ -137,7 +133,7 @@ public class Customer implements Serializable {
 	/**
 	 * accessor for association to accounts
 	 */
-	public java.util.Set<AbstractAccount> getAccounts() {
+	public java.util.Set<Account> getAccounts() {
 		return this.accounts;
 		
 	}
@@ -145,17 +141,18 @@ public class Customer implements Serializable {
 	/**
 	 * accessor for association to accounts
 	 */
-	public void insertInAccounts(AbstractAccount accounts) {
+	public void insertInAccounts(Account accounts) {
 		if (this.accounts.contains(accounts)) {
 			return;
 		}
 		this.accounts.add(accounts);
+		accounts.setOwner(this);
 	}
 	
 	/**
 	 * accessor for association to accounts
 	 */
-	public void removeFromAccounts(AbstractAccount accounts) {
+	public void removeFromAccounts(Account accounts) {
 		if (!this.accounts.contains(accounts)) {
 			return;
 		}
@@ -178,6 +175,9 @@ public class Customer implements Serializable {
 			return;
 		}
 		this.banks.add(banks);
+		if (!banks.getCustomers().contains(this)) {
+			banks.insertInCustomers(this);
+		}
 	}
 	
 	/**
@@ -188,6 +188,9 @@ public class Customer implements Serializable {
 			return;
 		}
 		this.banks.remove(banks);
+		if (banks.getCustomers().contains(this)) {
+			banks.removeFromCustomers(this);
+		}
 	}
 	
 	// -- generated code of other cartridges --------------------------------

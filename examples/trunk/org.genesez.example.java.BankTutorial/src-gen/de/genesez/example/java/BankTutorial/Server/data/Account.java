@@ -5,26 +5,26 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271068742187_845611_1236) 
  */
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Id;
-import javax.persistence.CascadeType;
 import java.io.Serializable;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.math.BigDecimal;
+import java.math.BigDecimal;
+
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 /**
  * abstract class for a bank account
  * No account allows a negative balance.
- * @author domwet
+ * @author apflueger
  */
 
 @Entity
 @Table(name = "tbl_Account")
-public abstract class AbstractAccount implements Serializable {
+public abstract class Account implements Serializable {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
@@ -37,9 +37,7 @@ public abstract class AbstractAccount implements Serializable {
 	private Customer owner;
 	
 	/** Stores associated objects of association STATEMENTS to Statement */
-	@OneToMany(cascade = {
-		CascadeType.REMOVE
-	})
+	
 	private java.util.Set<Statement> statements = new java.util.HashSet<Statement>();
 	
 	/**
@@ -64,14 +62,15 @@ public abstract class AbstractAccount implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
+	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------
 	/**
-	 * Constructor for class '<em><b>AbstractAccount</b></em>'.
+	 * Constructor for class '<em><b>Account</b></em>'.
 	 */
 	
-	public AbstractAccount() {
+	public Account() {
 	}
 	
 	// -- generated method stubs for implementations + derived attributes ---

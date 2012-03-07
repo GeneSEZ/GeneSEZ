@@ -5,14 +5,15 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (AccountBeanLocal) 
  */
 
-import de.genesez.example.java.BankTutorial.Server.data.Bank;
-import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
-import de.genesez.example.java.BankTutorial.Server.data.Customer;
 import javax.ejb.Local;
+
+import de.genesez.example.java.BankTutorial.Server.data.Account;
+import de.genesez.example.java.BankTutorial.Server.data.Bank;
+import de.genesez.example.java.BankTutorial.Server.data.Customer;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author domwet
+ * @author apflueger
  */
 
 @Local
@@ -27,14 +28,14 @@ public interface IAccountBeanLocal {
 	 * @return	
 	 */
 	
-	public AbstractAccount openAccount(AbstractAccount account, Customer customer, Bank bank);
+	public Account openAccount(Account account, Customer customer, Bank bank);
 	
 	/**
 	 * This method removes an account from the database
 	 * @param	toBeDeleted	
 	 */
 	
-	public void removeAccount(AbstractAccount toBeDeleted);
+	public void removeAccount(Account toBeDeleted);
 	
 	// -- generated code of other cartridges --------------------------------
 	

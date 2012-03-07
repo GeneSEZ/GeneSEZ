@@ -5,17 +5,20 @@ package de.genesez.example.java.BankTutorial.Server.data;
  * 	@FILE-ID : (_16_0_129203bc_1271068974750_25486_1380) 
  */
 
-import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
+import java.util.Date;
+
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 /**
  * A statement logs all operations of an account.
- * @author domwet
+ * @author apflueger
  */
 
 @Entity
@@ -32,6 +35,7 @@ public class Statement implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
+	@Version
 	private int version;
 	
 	// -- generated constructors --------------------------------------------

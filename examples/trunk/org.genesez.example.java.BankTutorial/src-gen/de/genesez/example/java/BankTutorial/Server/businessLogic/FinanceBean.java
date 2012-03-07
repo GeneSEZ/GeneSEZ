@@ -5,18 +5,20 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (_16_0_129203bc_1271101053859_90038_924) 
  */
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
+
 import javax.ejb.Stateful;
 import javax.interceptor.Interceptors;
-import javax.math.BigDecimal;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import de.genesez.example.java.BankTutorial.Server.data.Account;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
-import de.genesez.example.java.BankTutorial.Server.data.AbstractAccount;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
 
 /**
  * The finance bean provides the possible account operations. Before an account operation can be called a bank, customer and account have to be selected
- * @author domwet
+ * @author apflueger
  */
 
 @Stateful(name = "FinanceBean")
@@ -28,7 +30,7 @@ public class FinanceBean implements IFinanceBeanLocal {
 	
 	private Customer selectedCustomer;
 	
-	private AbstractAccount selectedAccount;
+	private Account selectedAccount;
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -77,7 +79,7 @@ public class FinanceBean implements IFinanceBeanLocal {
 	 * @throws	AccountSelectionException
 	 */
 	
-	public void selectAccount(AbstractAccount account) throws AccountSelectionException {
+	public void selectAccount(Account account) throws AccountSelectionException {
 		/* PROTECTED REGION ID(java.implementation._16_0_129203bc_1271100052515_829366_713) ENABLED START */
 		// TODO: implementation of method 'FinanceBean.selectAccount(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
@@ -127,7 +129,7 @@ public class FinanceBean implements IFinanceBeanLocal {
 	@Interceptors(value = {
 		StatementInterceptor.class
 	})
-	public void bankTransfer(AbstractAccount target, BigDecimal amount) throws FinanceException {
+	public void bankTransfer(Account target, BigDecimal amount) throws FinanceException {
 		/* PROTECTED REGION ID(java.implementation._16_0_129203bc_1271099207406_509649_655) ENABLED START */
 		// TODO: implementation of method 'FinanceBean.bankTransfer(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
