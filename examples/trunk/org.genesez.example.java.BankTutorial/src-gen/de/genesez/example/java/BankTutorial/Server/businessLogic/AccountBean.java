@@ -5,11 +5,10 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (_16_0_129203bc_1271098518953_628755_306) 
  */
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
+import javax.ejb.EJB;
 import de.genesez.example.java.BankTutorial.Server.data.Account;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;

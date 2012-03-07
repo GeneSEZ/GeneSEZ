@@ -5,10 +5,10 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (InterestBeanLocal) 
  */
 
-import javax.ejb.Local;
 import javax.ejb.Timer;
-
+import javax.interceptor.Interceptors;
 import de.genesez.example.java.BankTutorial.Server.data.Account;
+import javax.ejb.Local;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

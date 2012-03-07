@@ -6,12 +6,11 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  */
 
 import java.math.BigDecimal;
-
-import javax.ejb.Local;
-
+import javax.interceptor.Interceptors;
 import de.genesez.example.java.BankTutorial.Server.data.Account;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
+import javax.ejb.Local;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

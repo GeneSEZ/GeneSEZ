@@ -5,15 +5,14 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (_16_0_129203bc_1271100384359_869290_741) 
  */
 
-import javax.annotation.Resource;
-import javax.ejb.Stateless;
-import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerService;
-import javax.interceptor.Interceptors;
+import javax.annotation.Resource;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.ejb.Timeout;
 import javax.persistence.PersistenceContext;
-
+import javax.interceptor.Interceptors;
 import de.genesez.example.java.BankTutorial.Server.data.Account;
 
 /**

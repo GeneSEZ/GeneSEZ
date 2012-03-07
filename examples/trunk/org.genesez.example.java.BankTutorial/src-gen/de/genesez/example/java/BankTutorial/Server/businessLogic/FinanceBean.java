@@ -5,13 +5,11 @@ package de.genesez.example.java.BankTutorial.Server.businessLogic;
  * 	@FILE-ID : (_16_0_129203bc_1271101053859_90038_924) 
  */
 
+import javax.persistence.EntityManager;
 import java.math.BigDecimal;
-
+import javax.persistence.PersistenceContext;
 import javax.ejb.Stateful;
 import javax.interceptor.Interceptors;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import de.genesez.example.java.BankTutorial.Server.data.Account;
 import de.genesez.example.java.BankTutorial.Server.data.Bank;
 import de.genesez.example.java.BankTutorial.Server.data.Customer;
