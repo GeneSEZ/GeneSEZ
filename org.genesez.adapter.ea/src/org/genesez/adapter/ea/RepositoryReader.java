@@ -108,6 +108,9 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 			throw new Exception("Model " + this.modelName + " not found in repository");
 		}
 		
+		repository.CloseFile();
+		repository.Exit();
+		
 		return model;
 	}
 }
