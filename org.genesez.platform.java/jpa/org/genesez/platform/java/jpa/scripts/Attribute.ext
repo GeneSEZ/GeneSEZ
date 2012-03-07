@@ -19,12 +19,16 @@ extension org::genesez::platform::java::jpa::scripts::Stereotypes;
  *	toDo:	make name prefix customizable 
  */
 Void checkAttributeName(MAttribute this) :
-	switch(name.asTypeName()) {
-		case "index" : checkColumnStereotype()
-		case "position" : checkColumnStereotype()
-		case "end" : checkColumnStereotype()
-		default : ""
-	};
+	this.classifier.hasStereotype("jpaPersistentEntity")
+		? (
+			switch(name.asTypeName()) {
+				case "index" : checkColumnStereotype()
+				case "position" : checkColumnStereotype()
+				case "end" : checkColumnStereotype()
+				default : ""
+			}
+		)
+		: "";
 
 /**
   *	look for primary key in superclass
