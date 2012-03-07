@@ -1,15 +1,14 @@
 package forms;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1249464729937_936506_1005) 
+ */
+
 import java.awt.Color;
-import java.util.*;
-
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249464729937_936506_1005) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
-
 /**
  * describes <b>paintable</b> things
- * @author	dreamer
+ * @author	apflueger
  */
 public interface Paintable {
 	
@@ -18,6 +17,7 @@ public interface Paintable {
 	 * @generated	method stub for further implementation
 	 * @param	color	the color to use for repainting
 	 */
+	
 	public void repaint(Color color);
 	
 	// -- own code implementation -------------------------------------------

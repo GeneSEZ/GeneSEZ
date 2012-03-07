@@ -1,14 +1,13 @@
 package forms;
 
-import java.util.*;
-
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1214478880187_510458_215) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1214478880187_510458_215) 
+ */
 
 /**
  * describes things which can be <i><b>rotated</b></i>
- * @author	dreamer
+ * @author	apflueger
  */
 public interface Rotateable {
 	
@@ -17,6 +16,7 @@ public interface Rotateable {
 	 * @generated	method stub for further implementation
 	 * @param	phi	the angle in degrees
 	 */
+	
 	public void rotate(double phi);
 	
 	/**
@@ -25,6 +25,7 @@ public interface Rotateable {
 	 * @param	center	the center of the rotation
 	 * @param	phi	the angle in degrees
 	 */
+	
 	public void rotate(Point center, double phi);
 	
 	// -- own code implementation -------------------------------------------

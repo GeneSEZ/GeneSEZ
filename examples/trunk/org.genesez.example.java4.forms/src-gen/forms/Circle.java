@@ -1,15 +1,14 @@
 package forms;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1211871307421_631477_281) 
+ */
+
 import java.awt.Color;
-import java.util.*;
-
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1211871307421_631477_281) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
-
 /**
  * describes the geometrical shape of a <i><b>circle</b></i>
- * @author	dreamer
+ * @author	apflueger
  */
 public class Circle implements Form {
 	

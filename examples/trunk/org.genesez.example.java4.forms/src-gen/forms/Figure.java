@@ -1,17 +1,16 @@
 package forms;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1249543362015_69354_283) 
+ */
+
 import java.awt.Color;
-import java.util.*;
-
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
-
 /**
  * <p>
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
- * @author	dreamer
+ * @author	apflueger
  */
 public class Figure implements Form {
 	

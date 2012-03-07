@@ -1,15 +1,14 @@
 package forms;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1249463754375_944273_708) 
+ */
+
 import java.awt.Color;
-import java.util.*;
-
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
-
 /**
  * Describes the geometrical form <b>polygon</b>
- * @author	dreamer
+ * @author	apflueger
  */
 public class Polygon implements Form {
 	

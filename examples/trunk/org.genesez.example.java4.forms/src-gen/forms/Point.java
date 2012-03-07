@@ -1,15 +1,14 @@
 package forms;
 
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1211871095796_723781_254) 
+ */
+
 import java.awt.Color;
-import java.util.*;
-
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1211871095796_723781_254) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
-
 /**
  * Describes a <i><b>point</b></i> in a 2-dimensional coordinate system
- * @author	dreamer
+ * @author	apflueger
  */
 public class Point implements Form {
 	

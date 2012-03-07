@@ -1,14 +1,13 @@
 package forms;
 
-import java.util.*;
-
-/* PROTECTED REGION ID(java.type.import._14_0_b6f02e1_1212580097593_990285_125) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_14_0_b6f02e1_1212580097593_990285_125) 
+ */
 
 /**
  * Describes the common behavior of a geometrical forms
- * @author	dreamer
+ * @author	apflueger
  */
 public interface Form extends Moveable, Rotateable, Paintable {
 	
