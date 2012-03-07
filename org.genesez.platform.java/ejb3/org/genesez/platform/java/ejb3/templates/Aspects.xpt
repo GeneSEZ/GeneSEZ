@@ -14,16 +14,16 @@
 «EXTENSION org::genesez::platform::common::Conversion»
 «EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
 
-«EXTENSION org::genesez::platforms::java::scripts::Type»
-«EXTENSION org::genesez::platforms::java::scripts::Naming»
-«EXTENSION org::genesez::platforms::java::scripts::Conversion»
-«EXTENSION org::genesez::platforms::java::scripts::Imports»
+«EXTENSION org::genesez::platform::java::scripts::Type»
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::scripts::Imports»
 «EXTENSION org::genesez::platform::common::m2t::Helper»
 
-«EXTENSION org::genesez::platforms::java::ejb3::scripts::Class»
-«EXTENSION org::genesez::platforms::java::ejb3::scripts::Attribute»
-«EXTENSION org::genesez::platforms::java::ejb3::scripts::Stereotypes»
-«EXTENSION org::genesez::platforms::java::ejb3::scripts::Interface»
+«EXTENSION org::genesez::platform::java::ejb3::scripts::Class»
+«EXTENSION org::genesez::platform::java::ejb3::scripts::Attribute»
+«EXTENSION org::genesez::platform::java::ejb3::scripts::Stereotypes»
+«EXTENSION org::genesez::platform::java::ejb3::scripts::Interface»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -35,7 +35,7 @@
 	override fixed imports because a different association handling 
 	is in use for the ejb3 cartridge
 «ENDREM»
-«AROUND org::genesez::platforms::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+«AROUND org::genesez::platform::java::java5::templates::Import::_OtherImports FOR MClassifier-»
 	«EXPAND Import::ImportStatements»
 	«targetDef.proceed()-»
 «ENDAROUND»
@@ -49,16 +49,16 @@
 	
 	this is not a good handling of the problem because there is generated code in a proreg
 	which is reserved for customized code 
-«AROUND org::genesez::platforms::java::java5::templates::Import::Import FOR MClassifier-»
+«AROUND org::genesez::platform::java::java5::templates::Import::Import FOR MClassifier-»
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : («this.xmiGuid-») 
  */
 «PROTECT CSTART "/*" CEND "*/" ID ("java.type.import." + xmiGuid)» 
 
-	«EXPAND org::genesez::platforms::java::java5::templates::Import::_FixedImports -»
-	«EXPAND org::genesez::platforms::java::java5::templates::Import::_Import FOREACH supplier.select( s| s.isImportNeeded(this) && s.metaType.name != "gcore::MExternal")»
-	«EXPAND org::genesez::platforms::java::java5::templates::Import::_OtherImports»
+	«EXPAND org::genesez::platform::java::java5::templates::Import::_FixedImports -»
+	«EXPAND org::genesez::platform::java::java5::templates::Import::_Import FOREACH supplier.select( s| s.isImportNeeded(this) && s.metaType.name != "gcore::MExternal")»
+	«EXPAND org::genesez::platform::java::java5::templates::Import::_OtherImports»
 
 «ENDPROTECT»
 «ENDAROUND»
@@ -67,7 +67,7 @@
 «REM»
 	annotations for interfaces
 «ENDREM»
-«AROUND org::genesez::platforms::java::java5::templates::Interface::_Annotation FOR MInterface-»
+«AROUND org::genesez::platform::java::java5::templates::Interface::_Annotation FOR MInterface-»
 	«EXPAND Class::RemoteLocal-»
 	«targetDef.proceed()-» 
 «ENDAROUND»	
@@ -75,7 +75,7 @@
 «REM»
 	annotations for classes
 «ENDREM»
-«AROUND org::genesez::platforms::java::java5::templates::Class::_Annotation FOR MClass-»
+«AROUND org::genesez::platform::java::java5::templates::Class::_Annotation FOR MClass-»
 	«EXPAND Class::Annotation-»
 	«targetDef.proceed()-» 
 «ENDAROUND»
@@ -84,7 +84,7 @@
 	annotations for operations (used for return type, parameters and operations)
 	there is a conflict by using jws and ejb in one cartridge --> write own jws cartridge
 «ENDREM»
-«AROUND org::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MOperation-»
+«AROUND org::genesez::platform::java::java5::templates::Operation::_Annotation FOR MOperation-»
 	«EXPAND Operation::Annotation-»
 	«targetDef.proceed()-» 
 «ENDAROUND»
@@ -92,7 +92,7 @@
 «REM»
 	annotations for attributes
 «ENDREM»
-«AROUND org::genesez::platforms::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+«AROUND org::genesez::platform::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
 	«EXPAND Attribute::Annotation-»
 	«targetDef.proceed()-» 
 «ENDAROUND»
@@ -100,7 +100,7 @@
 «REM»
 	add code to the extension area in the java5 class template
 «ENDREM»
-«AROUND org::genesez::platforms::java::java5::templates::Class::Root::_Extension FOR MClass-»
+«AROUND org::genesez::platform::java::java5::templates::Class::Root::_Extension FOR MClass-»
 	«EXPAND Class::AddPublicOperations-»
 	«targetDef.proceed()-»
 «ENDAROUND»
