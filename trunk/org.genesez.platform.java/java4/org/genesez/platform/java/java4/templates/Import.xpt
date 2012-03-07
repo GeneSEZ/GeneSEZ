@@ -26,16 +26,18 @@
 	checks if a import of a type is really needed
 «ENDREM»
 «DEFINE Import FOR MClassifier -»
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : («this.xmiGuid-») 
+ */
 «EXPAND _FixedImports -»
 «EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this) )»
-«EXPAND _OwnImports -»
 «ENDDEFINE»
 
 «REM»
 	generates fixed import statements
 «ENDREM»
 «DEFINE _FixedImports FOR MClassifier -»
-import java.util.*;
 «ENDDEFINE»
 
 «REM»
@@ -50,13 +52,4 @@ import «fullQualifiedName( asTypeName(), basePackage() )»;
 «ENDREM»
 «DEFINE _Import FOR MType -»
 import «mapName("Import")»;
-«ENDDEFINE»
-
-«REM»
-	generates a region for own imports
-«ENDREM»
-«DEFINE _OwnImports FOR MClassifier -»
-«PROTECT CSTART "/* " CEND " */" ID ("java.type.import." + xmiGuid)»
-// TODO: put your further include + require statements here
-«ENDPROTECT»
 «ENDDEFINE»
