@@ -29,6 +29,8 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 	private String modelName = null;
 	private String outputSlot = null;
 	
+	private static Repository repository = null;
+	
 	public void checkConfiguration(Issues issues) {
 		// nothing to do here
 	}
@@ -85,7 +87,8 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 
 		log.info("Reading Model: " + this.repositoryFile);
 
-		Repository repository = new Repository();
+		// new repository
+		repository = new Repository();
 		if ( ! repository.OpenFile(file.getAbsolutePath()) ) {
 			throw new Exception("Cannot read Enterprise Architect repository: " + file.getAbsolutePath());
 		}
@@ -107,7 +110,17 @@ public class RepositoryReader extends AbstractWorkflowComponent {
 		if ( model == null ) {
 			throw new Exception("Model " + this.modelName + " not found in repository");
 		}
-		
+			
 		return model;
+	}
+	
+	/**
+	 * closes the repository 
+	 */
+	public static void closeRepository(){
+		if(repository != null){
+			repository.CloseFile();
+			repository.Exit();
+		}
 	}
 }
