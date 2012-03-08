@@ -797,13 +797,13 @@ Void setTaggedValue(MElement this, String tag, MElement valueReference) :
  *
  */
 Void setTaggedValue(MElement this, String stereotype, String tag, String value) :
-	this.taggedValue.exists(e|e.tag.name == taggedValue && e.tag.stereotype.name == stereotype)
+	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
 		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).setValue(value)
 		: createTaggedValue(
 			this.stereotype.selectFirst(e|e.name == stereotype).property.selectFirst(e|e.name == tag),
 			value
 		);
-		
+	
 /**
  *	function to set a tagged value reference of a specific stereotype
  *	note: if a MTagggedValue already exists, it is used and it's value is changed
