@@ -45,6 +45,8 @@ public class Model2UML extends AbstractWorkflowComponent {
 		ctx.set(this.outputSlot, outputModel);
 
 		log.info("Model transformation finished!");
+		// close the repository
+		RepositoryReader.closeRepository();
 	}
 
 	/**
