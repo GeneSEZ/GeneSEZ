@@ -42,7 +42,7 @@
 	
 	<!-- Public target section -->
 	
-	<target name="build" depends="javaee, genesez-de, genesez-en"
+	<target name="build" depends="javaee, genesez-en, genesez-de, php"
 		description="Build all GeneSEZ documentation" />
 
 	<!-- java ee manual -->
@@ -63,7 +63,8 @@
 			<param name="out.file" value="${html.javaee.dir}/index.html" />
 			<param name="xsl.file" value="${docbook2html}" />
 		</antcall>
-		<copy todir="${html.javaee.dir}">
+		<copy todir="${html.javaee.dir}" flatten="true">
+			<fileset dir="${basedir}/images/core" includes="**/*.png" />
 			<fileset dir="${basedir}/images/java" includes="**/*.png" />
 			<fileset dir="${basedir}/images/uml" includes="**/*.png" />
 			<fileset dir="${basedir}/images/profiles" includes="**/*.png" />
@@ -73,7 +74,7 @@
 	<target name="javaee2pdf" depends="javaee.xinclude">
 		<mkdir dir="${pdf.dir}" />
 		<antcall target="docbook2pdf">
-			<param name="base.dir" value="${basedir}/images/profiles" />
+			<param name="base.dir" value="${basedir}/images" />
 			<param name="src.file" value="${temp.dir}/java.ee.manual.xml" />
 			<param name="fo.file" value="${temp.dir}/java.ee.manual.fo" />
 			<param name="pdf.file" value="${pdf.dir}/java.ee.manual.pdf" />
@@ -99,12 +100,19 @@
 			<param name="out.file" value="${html.genesez.en.dir}/index.html" />
 			<param name="xsl.file" value="${docbook2html}" />
 		</antcall>
+		<copy todir="${html.genesez.en.dir}" flatten="true">
+			<fileset dir="${basedir}/images/core" includes="**/*.png" />
+			<fileset dir="${basedir}/images/java" includes="**/*.png" />
+			<fileset dir="${basedir}/images/developer" includes="**/*.png" />
+			<fileset dir="${basedir}/images/uml" includes="**/*.png" />
+			<fileset dir="${basedir}/images/profiles" includes="**/*.png" />
+		</copy>
 	</target>
 	
 	<target name="genesez2pdf" depends="genesez.xinclude">
 		<mkdir dir="${pdf.dir}" />
 		<antcall target="docbook2pdf">
-			<param name="base.dir" value="${basedir}/images/profiles" />
+			<param name="base.dir" value="${basedir}/images" />
 			<param name="src.file" value="${temp.dir}/genesez.en.xml" />
 			<param name="fo.file" value="${temp.dir}/genesez.en.fo" />
 			<param name="pdf.file" value="${pdf.dir}/genesez_en.pdf" />
@@ -118,37 +126,81 @@
 	<target name="manual.xinclude" description="creates the single xml file for the genesez manual">
 		<mkdir dir="${temp.dir}" />
 		<antcall target="xinclude.processing">
-			<param name="src.file" value="${basedir}/manual.xml" />
-			<param name="temp.file" value="${temp.dir}/genesez.manual.xml" />
+			<param name="src.file" value="${basedir}/docbook/assemblies/genesez.manual_de.xml" />
+			<param name="temp.file" value="${temp.dir}/genesez.manual_de.xml" />
 		</antcall>
 	</target>
 	
 	<target name="manual2html" depends="manual.xinclude">
 		<mkdir dir="${html.genesez.dir}" />
 		<antcall target="docbook2html">
-			<param name="src.file" value="${temp.dir}/genesez.manual.xml" />
+			<param name="src.file" value="${temp.dir}/genesez.manual_de.xml" />
 			<param name="out.file" value="${html.genesez.dir}/index.html" />
 			<param name="xsl.file" value="${docbook2html}" />
 		</antcall>
-		<copy todir="${html.genesez.dir}">
-			<fileset dir="${basedir}">
-				<include name="images/*.png" />
-			</fileset>
+		<copy todir="${html.genesez.dir}" flatten="true">
+			<fileset dir="${basedir}/images" includes="*.png" />
+			<fileset dir="${basedir}/images/core" includes="**/*.png" />
+			<fileset dir="${basedir}/images/java" includes="**/*.png" />
+			<fileset dir="${basedir}/images/php" includes="**/*.png" />
+			<fileset dir="${basedir}/images/uml" includes="**/*.png" />
+			<fileset dir="${basedir}/images/profiles" includes="**/*.png" />
 		</copy>
 	</target>
 	
 	<target name="manual2pdf" depends="manual.xinclude">
 		<mkdir dir="${pdf.dir}" />
 		<antcall target="docbook2pdf">
-			<param name="src.file" value="${temp.dir}/genesez.manual.xml" />
-			<param name="fo.file" value="${temp.dir}/genesez.manual.fo" />
-			<param name="pdf.file" value="${pdf.dir}/genesez.manual.pdf" />
+			<param name="base.dir" value="${basedir}/images" />
+			<param name="src.file" value="${temp.dir}/genesez.manual_de.xml" />
+			<param name="fo.file" value="${temp.dir}/genesez.manual_de.fo" />
+			<param name="pdf.file" value="${pdf.dir}/genesez_de.pdf" />
 			<param name="xsl.file" value="${docbook2fo}" />
 		</antcall>
 	</target>
 	
-	<target name="distribute" depends="build"
-		description="Distribute GeneSEZ documentation">
+	
+	<!-- php manual -->
+	<target name="php" depends="php2html, php2pdf" />
+	
+	<target name="php.xinclude" description="creates the single xml file for genesez javaee manual">
+		<mkdir dir="${temp.dir}" />
+		<antcall target="xinclude.processing">
+			<param name="temp.file" value="${temp.dir}/php.manual_de.xml" />
+			<param name="src.file" value="${basedir}/docbook/assemblies/php.manual_de.xml" />
+		</antcall>
+	</target>
+	
+	<target name="php2html" depends="php.xinclude">
+		<mkdir dir="${html.php.dir}" />
+		<antcall target="docbook2html">
+			<param name="src.file" value="${temp.dir}/php.manual_de.xml" />
+			<param name="out.file" value="${html.php.dir}/index.html" />
+			<param name="xsl.file" value="${docbook2html}" />
+		</antcall>
+		<copy todir="${html.php.dir}" flatten="true">
+			<fileset dir="${basedir}/images/core" includes="**/*.png" />
+			<fileset dir="${basedir}/images/php" includes="**/*.png" />
+			<fileset dir="${basedir}/images/uml" includes="**/*.png" />
+			<fileset dir="${basedir}/images/profiles" includes="**/*.png" />
+		</copy>
+	</target>
+	
+	<target name="php2pdf" depends="php.xinclude">
+		<mkdir dir="${pdf.dir}" />
+		<antcall target="docbook2pdf">
+			<param name="base.dir" value="${basedir}/images" />
+			<param name="src.file" value="${temp.dir}/php.manual_de.xml" />
+			<param name="fo.file" value="${temp.dir}/php.manual_de.fo" />
+			<param name="pdf.file" value="${pdf.dir}/php.manual_de.pdf" />
+			<param name="xsl.file" value="${docbook2fo}" />
+		</antcall>
+	</target>
+	
+	
+	<!-- other targets -->
+	
+	<target name="distribute" description="Distribute GeneSEZ documentation">
 		<delete includeemptydirs="true">
 			<fileset dir="${distribution.dir}" includes="**/*"/>
   		</delete>
@@ -156,13 +208,23 @@
 		<copy todir="${distribution.dir}/javaee">
 			<fileset dir="${html.javaee.dir}" />
 		</copy>
+		<mkdir dir="${distribution.dir}/genesez"/>
+		<copy todir="${distribution.dir}/genesez">
+			<fileset dir="${html.genesez.en.dir}" includes="**" />
+		</copy>
 		<mkdir dir="${distribution.dir}/manual"/>
 		<copy todir="${distribution.dir}/manual">
 			<fileset dir="${html.genesez.dir}" includes="**" />
 		</copy>
+		<mkdir dir="${distribution.dir}/php"/>
+		<copy todir="${distribution.dir}/php">
+			<fileset dir="${html.php.dir}" />
+		</copy>
+		<!-- pdf's -->
 		<copy todir="${distribution.dir}">
 			<fileset dir="${pdf.dir}" includes="*.pdf" />
 		</copy>
+		<!-- website -->
 		<copy todir="${distribution.dir}">
 			<fileset dir="${website.dir}" includes="**" />
 		</copy>

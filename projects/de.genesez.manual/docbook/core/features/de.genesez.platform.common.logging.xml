@@ -1,0 +1,86 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+    <chapter id="de.genesez.platform.common.logging">
+
+      <title>Das GeneSEZ-Logging-Konzept</title>
+
+      <para>In diesem Artikel soll in aller K&uuml;rze das 
+      GeneSEZ-Logging-Konzept-beschrieben werden. Dabei wird auf das 
+      Logging in Java-Code, in Skripten und in Templates sowie auf die 
+      Konfiguration eingegangen.</para>
+
+      <para />
+
+      <para>GeneSEZ basiert auf dem Framework openArchitectureWare, 
+      welches die Logging-API des Apache Commons Logging Frameworks 
+      nutzt und als Implementierung log4j verwendet. Das 
+      GeneSEZ-Framework nutzt ebenfalls das Apache Commons Logging 
+      Framework.</para>
+
+      <sect1>
+
+        <title>Java</title>
+
+        <para>Das Logging von Java-Code aus unterscheidet sich nicht 
+        von der gew&ouml;hnlichen Nutzung der Logging-API. Zuerst wird eine 
+        Referenz auf ein Log-Objekt ben&ouml;tigt: Dann kann dieses 
+        Log-Objekt genutzt werden, um Log-Ausgaben zu 
+        realisieren:Weitere Informationen befinden sich im Manual zu 
+        log4j: log4j 1.2 Manual</para>
+
+      </sect1>
+
+      <sect1>
+
+        <title>Skripten + Templates</title>
+
+        <para>F&uuml;r Log-Ausgaben aus den openArchitectureWare-Artefakten 
+        steht als Frontend im Common-Projekt unter dem Namespace 
+        de.genesez.platforms.common.log das eXtend-Skript Log.ext zur 
+        Verf&uuml;gung. Die Funktionen dieses Skriptes rufen Methoden der 
+        Java Klasse GenesezLogger auf, welche die Apache Commons 
+        Logging-API nutzen.</para>
+
+        <para />
+
+        <para>Sollen Log-Ausgaben erfolgen, so sollte zuerst ein 
+        benannter Logger ausgew&auml;hlt werden, damit die Ausgaben sp&auml;ter 
+        im Log einem Artefakt zugeordnet werden k&ouml;nnen:</para>
+
+        <para>Die weiteren Funktionen des Skripts dienen zum Logging 
+        von Nachrichten mit dem jeweiligen Log-Level:</para>
+
+      </sect1>
+
+      <sect1>
+
+        <title>Konfiguration</title>
+
+        <para>Zur Konfiguration der verwendeten Implementierung log4j 
+        hat openArchitectureWare bereits standardm&auml;&szlig;ig die Datei 
+        log4j.properties im Classpath, die dementsprechend auch 
+        standardm&auml;&szlig;ig genutzt wird. Das GeneSEZ-Framework stellt 
+        ebenfalls eine log4j.properties im Namespace 
+        de.genesez.platforms.common.log bereit. log4j sucht den 
+        kompletten Classpath nach dieser Datei ab und nutzt die erste 
+        Datei dieses Namens, die gefunden wird. Daher wird i.d.R. die 
+        von openArchitectureWare genutzt, da diese im Classpath eher 
+        gefunden wird.</para>
+
+        <para />
+
+        <para>Soll die Log-Konfiguration angepasst werden, so kann die 
+        vom GeneSEZ-Framework bereitgestellte als Vorlage genutzt 
+        werden. Dazu wird diese in das Konfigurationsverzeichnis des 
+        aktuellen Generator-Projekts kopiert (siehe GeneSEZ 
+        Projektstruktur).</para>
+
+        <para />
+
+        <para>Zur detaillierten Erkl&auml;rung der Inhalte der 
+        Konfigurationsdatei sei auf das log4j Manual verwiesen: log4j 
+        1.2 Manual</para>
+
+      </sect1>
+
+    </chapter>

@@ -12,6 +12,8 @@
 <xsl:param name="use.extensions">0</xsl:param>
 <xsl:param name="fop1.extensions">1</xsl:param>
 
+<xsl:param name="keep.relative.image.uris">1</xsl:param>
+
 <xsl:param name="draft.mode">yes</xsl:param>
 <xsl:param name="hyphenate">false</xsl:param>
 <xsl:param name="l10n.gentext.default.language">en</xsl:param>

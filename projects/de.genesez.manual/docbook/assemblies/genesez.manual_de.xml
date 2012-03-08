@@ -1,46 +1,17 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!--DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"-->
-<!DOCTYPE book
+<?xml version='1.0'?>
+<!DOCTYPE book 
 	PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 	[
-		<!ENTITY % isolat1 PUBLIC "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML" "lib/docbook-xml-4.5/ent/isolat1.ent">
+		<!ENTITY % isolat1 PUBLIC "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML" "../../lib/docbook-xml-4.5/ent/isolat1.ent">
 		%isolat1;
 	]
 >
 <book>
-
   <bookinfo>
-
     <title>Das GeneSEZ Generator Framework</title>
-
-    <!-- authorgroup>
-
-      <author><firstname>Oliver</firstname><surname>Arnold</surname></author>
-
-      <author><firstname>Georg</firstname><surname>Beier</surname></author>
-
-      <author><firstname>Gerrit</firstname><surname>Beine</surname></author>
-
-      <author><firstname>Wolfgang</firstname><surname>Golubski</surname></author>
-
-      <author><firstname>Frank</firstname><surname>Grimm</surname></author>
-
-      <author><firstname>Tobias</firstname><surname>Haubold</surname></author>
-
-      <author><firstname>Nico</firstname><surname>Herbig</surname></author>
-
-      <author><firstname>Robert</firstname><surname>Meichsner</surname></author>
-
-      <author><firstname>Andr&eacute;</firstname><surname>Pfl&uuml;ger</surname></author>
-
-    </authorgroup>  -->
-
-    <!-- edition>Handbuch Version 1.6</edition>
-    <pubdate>2009</pubdate> -->
-
-    <copyright><year>2006 - 2011</year><holder>GeneSEZ Research Group</holder></copyright>
+    <copyright><year>2006 - 2012</year><holder>GeneSEZ Research 
+    Group</holder></copyright>
   </bookinfo>
-
   <part>
 
     <title>Getting Started</title>
@@ -63,12 +34,12 @@
       wird die Idee des GeneSEZ Ansatzes beschrieben, gefolgt von einem 
       kleinen &Uuml;berblick von GeneSEZ.</para>
 
-      <xi:include href="de.genesez.intro.mdsd.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-      <xi:include href="de.genesez.intro.idea.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-      <xi:include href="de.genesez.intro.overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="../core/intro/de.genesez.intro.mdsd.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="../core/intro/de.genesez.intro.idea.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      <xi:include href="../core/intro/de.genesez.intro.overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     </chapter>
 
-    <xi:include href="de.genesez.install.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="../core/intro/de.genesez.install.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
     <chapter>
 
@@ -275,7 +246,7 @@
           erscheinen:</para>
 
           <mediaobject><imageobject>
-          <imagedata fileref="images/workflow.finish.png"/></imageobject></mediaobject>
+          <imagedata fileref="workflow.finish.png"/></imageobject></mediaobject>
           <para>Im Verzeichnis src-gen des Anwendungsprojektes sollte 
           nun der aktuelle generierte Quellcode vorhanden sein.</para>
 
@@ -360,240 +331,12 @@
 
     <title>Benutzer-Referenz</title>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.accessors.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.workflow.components.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.type.mapping.xml" />
-
-    <chapter>
-
-      <title>Externe Typen im Metamodell</title>
-
-      <para>Mit dem Metamodellelement MExternal ist ein Konzept im 
-      GeneSEZ-Metamodell vorhanden, welches in dieser Form nicht zur 
-      UML geh&ouml;rt. Als externe Typen werden in diesem Zusammenhang im 
-      Modell verwendete Typen (Klassen, Interfaces, Enumerations) 
-      bezeichnet, die selbst nicht im Modell vorhanden sind. Sie 
-      befinden sich stattdessen z.B. in Standard-Bibliotheken der 
-      Programmiersprache oder in anderen Bibliotheken, die verwendet 
-      werden sollen.</para>
-
-      <sect1>
-
-        <title>Definition im UML-Modell</title>
-
-        <para>Im zugrunde liegenden UML-Modell werden externe Typen als 
-        Klassen (bzw. Interfaces oder Enumerations) definiert und 
-        speziell gekennzeichnet. Dazu gibt es mehrere 
-        M&ouml;glichkeiten:</para>
-
-        <para />
-
-        <para>* Verwendung eines Stereotypes</para>
-
-        <para>* Verwendung eines separaten Packages</para>
-
-        <para>* Ablage des Typs direkt im Modell (der Typ hat eine 
-        Containment-Beziehung zum Modell-Element und befindet sich 
-        nicht in einem Package)</para>
-
-        <para />
-
-        <para>Die verschiedenen M&ouml;glichkeiten haben spezifische Vor- 
-        und Nachteile. Die Annotation der einzelnen Klassen mit einem 
-        Stereotyp ist jedoch allgemein zu bevorzugen, da hier in den 
-        Modellen und verschiedenen Diagrammen die Semantik einer 
-        externen Klasse am deutlichsten zum Ausdruck kommt. Beispiele 
-        dazu sind weiter unten zu finden.</para>
-
-      </sect1>
-
-      <sect1>
-
-        <title>Definition im Workflow</title>
-
-        <para>Je nachdem, wie externe Typen im UML-Modell definiert 
-        wurden, muss dies auch im Workflow angegeben werden. Dazu 
-        werden die folgenden drei Parameter der Workflow-Komponenten 
-        makeGenesezModel bzw. makeGenesezModelProfile genutzt:</para>
-
-        <para />
-
-        <para>* mapClassesInModelToExternal &#x00BB; Der Parameter kann als 
-        Wert true oder false annehmen und gibt an, ob Typen, die direkt 
-        im Modell abgelegt sind und somit zu keinem Package geh&ouml;ren, zu 
-        externen Typen transformiert werden (true) oder normal 
-        behandelt werden (false). Standardm&auml;&szlig;ig ist der Wert 
-        false.</para>
-
-        <para>* externalPackages &#x00BB; Als Wert f&uuml;r den Parameter kann eine 
-        mit Komma (oder f&uuml;r eine bessere Lesbarkeit eine mit Komma und 
-        Leerzeichen) separierte Liste mit Namen von Packages angegeben 
-        werden, welche Container f&uuml;r externe Typen darstellen. Die 
-        angegebenen Packages selbst werden ebenfalls nicht in ein 
-        GeneSEZ-Package transformiert. Standardm&auml;&szlig;ig ist der Wert ein 
-        leerer String.</para>
-
-        <para>* externalStereotypes &#x00BB; Als Wert kann eine mit Komma 
-        (oder f&uuml;r eine bessere Lesbarkeit eine mit Komma und 
-        Leerzeichen) separierte Liste mit Namen von Stereotypen 
-        angegeben werden. Diese Stereotypen k&ouml;nnen im UML-Modell sowohl 
-        Typen als auch Packages zugewiesen werden. Ist einer dieser 
-        Stereotypen einem Typ zugewiesen, so wird dieser in einen 
-        externen Typ transformiert. Ist ein Stereotyp einem Package 
-        zugewiesen, so wird dieses als Container f&uuml;r externe Typen 
-        betrachtet und wird selbst nicht transformiert. Alle in dem 
-        betreffenden Package enthaltenen Typen werden zu externen 
-        Typen. Standardm&auml;&szlig;ig ist der Wert ein leerer String.</para>
-
-      </sect1>
-
-      <sect1>
-
-        <title>Umgang in xPand-Templates</title>
-
-        <para>Innerhalb von Templates ist es unwesentlich, ob ein Typ 
-        ein externer Typ ist oder nicht. Diese Zuordnung wird durch das 
-        GeneSEZ Type-Mapping realisiert.</para>
-
-      </sect1>
-
-      <sect1>
-
-        <title>Beispiel</title>
-
-        <para>Es folgen einige Beispiele, die den Einsatz der 
-        vorgestellten M&ouml;glichkeiten zur Definition von externen Typen 
-        zeigen. Wie in den Modellen deutlich wird, ist die Verwendung 
-        eines Stereotypes zur Annotation von Klassen am 
-        ausdrucksst&auml;rksten.</para>
-
-        <sect2>
-
-          <title>Verwendung eines Stereotypes zur Annotation einer 
-          Klasse</title>
-
-          <para>Zugeh&ouml;rige Parameter in der Workflow 
-          Konfiguration:</para>
-
-        </sect2>
-
-        <sect2>
-
-          <title>Verwendung eines Stereotypes zur Annotation eines 
-          Packages</title>
-
-          <para>Zugeh&ouml;rige Parameter in der Workflow Konfiguration 
-          (identisch mit dem ersten Beispiel):</para>
-
-        </sect2>
-
-        <sect2>
-
-          <title>Verwendung der Namen von Packages</title>
-
-          <para>Zugeh&ouml;rige Parameter in der Workflow 
-          Konfiguration:</para>
-
-        </sect2>
-
-        <sect2>
-
-          <title>Mapping aller Klassen, die direkt im Modell enthalten 
-          sind</title>
-
-          <para>Zugeh&ouml;rige Parameter in der Workflow 
-          Konfiguration:</para>
-
-        </sect2>
-
-      </sect1>
-
-    </chapter>
-
-    <chapter id="de.genesez.platforms.common.logging">
-
-      <title>Das GeneSEZ-Logging-Konzept</title>
-
-      <para>In diesem Artikel soll in aller K&uuml;rze das 
-      GeneSEZ-Logging-Konzept-beschrieben werden. Dabei wird auf das 
-      Logging in Java-Code, in Skripten und in Templates sowie auf die 
-      Konfiguration eingegangen.</para>
-
-      <para />
-
-      <para>GeneSEZ basiert auf dem Framework openArchitectureWare, 
-      welches die Logging-API des Apache Commons Logging Frameworks 
-      nutzt und als Implementierung log4j verwendet. Das 
-      GeneSEZ-Framework nutzt ebenfalls das Apache Commons Logging 
-      Framework.</para>
-
-      <sect1>
-
-        <title>Java</title>
-
-        <para>Das Logging von Java-Code aus unterscheidet sich nicht 
-        von der gew&ouml;hnlichen Nutzung der Logging-API. Zuerst wird eine 
-        Referenz auf ein Log-Objekt ben&ouml;tigt: Dann kann dieses 
-        Log-Objekt genutzt werden, um Log-Ausgaben zu 
-        realisieren:Weitere Informationen befinden sich im Manual zu 
-        log4j: log4j 1.2 Manual</para>
-
-      </sect1>
-
-      <sect1>
-
-        <title>Skripten + Templates</title>
-
-        <para>F&uuml;r Log-Ausgaben aus den openArchitectureWare-Artefakten 
-        steht als Frontend im Common-Projekt unter dem Namespace 
-        de.genesez.platforms.common.log das eXtend-Skript Log.ext zur 
-        Verf&uuml;gung. Die Funktionen dieses Skriptes rufen Methoden der 
-        Java Klasse GenesezLogger auf, welche die Apache Commons 
-        Logging-API nutzen.</para>
-
-        <para />
-
-        <para>Sollen Log-Ausgaben erfolgen, so sollte zuerst ein 
-        benannter Logger ausgew&auml;hlt werden, damit die Ausgaben sp&auml;ter 
-        im Log einem Artefakt zugeordnet werden k&ouml;nnen:</para>
-
-        <para>Die weiteren Funktionen des Skripts dienen zum Logging 
-        von Nachrichten mit dem jeweiligen Log-Level:</para>
-
-      </sect1>
-
-      <sect1>
-
-        <title>Konfiguration</title>
-
-        <para>Zur Konfiguration der verwendeten Implementierung log4j 
-        hat openArchitectureWare bereits standardm&auml;&szlig;ig die Datei 
-        log4j.properties im Classpath, die dementsprechend auch 
-        standardm&auml;&szlig;ig genutzt wird. Das GeneSEZ-Framework stellt 
-        ebenfalls eine log4j.properties im Namespace 
-        de.genesez.platforms.common.log bereit. log4j sucht den 
-        kompletten Classpath nach dieser Datei ab und nutzt die erste 
-        Datei dieses Namens, die gefunden wird. Daher wird i.d.R. die 
-        von openArchitectureWare genutzt, da diese im Classpath eher 
-        gefunden wird.</para>
-
-        <para />
-
-        <para>Soll die Log-Konfiguration angepasst werden, so kann die 
-        vom GeneSEZ-Framework bereitgestellte als Vorlage genutzt 
-        werden. Dazu wird diese in das Konfigurationsverzeichnis des 
-        aktuellen Generator-Projekts kopiert (siehe GeneSEZ 
-        Projektstruktur).</para>
-
-        <para />
-
-        <para>Zur detaillierten Erkl&auml;rung der Inhalte der 
-        Konfigurationsdatei sei auf das log4j Manual verwiesen: log4j 
-        1.2 Manual</para>
-
-      </sect1>
-
-    </chapter>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../core/features/de.genesez.platform.common.logging.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../core/features/de.genesez.platform.common.workflow.components.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../core/features/de.genesez.platform.common.accessors.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../core/features/de.genesez.platform.common.external.types.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../core/features/de.genesez.platform.common.type.mapping.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../core/features/de.genesez.platform.common.statistic.xml" />
 
     <chapter>
 
@@ -621,8 +364,6 @@
       n&auml;her erl&auml;utert.</para>
 
     </chapter>
-
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.common.statistic.xml" />
 
   </part>
   
@@ -701,17 +442,17 @@
         <title>&Uuml;bersicht zur aktuellen Plattformunterst&uuml;tzung</title>
 
         <mediaobject><imageobject role="html"><imagedata align="center"
-         fileref="images/de.genesez.platforms.support.png"/></imageobject>
+         fileref="de.genesez.platforms.support.png"/></imageobject>
         <imageobject role="fo"><imagedata align="center"
-         fileref="images/de.genesez.platforms.support.png" scalefit="1"
+         fileref="de.genesez.platforms.support.png" scalefit="1"
          width="100%"/></imageobject></mediaobject>
       </figure>
 
     </partintro>
     
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.php.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../php/de.genesez.platform.php_content.xml" />
 	
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.platforms.java.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../java/de.genesez.platform.java.xml" />
     
 	<!--chapter>
       <title>C# Plattform</title>
@@ -722,8 +463,7 @@
   <part>
     <title>Weitere GeneSEZ Projekte</title>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="de.genesez.php.metaframework.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../php/de.genesez.platform.php_metaframework.xml" />
 	
   </part>
-
 </book>

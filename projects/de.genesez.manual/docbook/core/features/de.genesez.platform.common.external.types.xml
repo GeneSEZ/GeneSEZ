@@ -1,0 +1,147 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+    <chapter>
+
+      <title>Externe Typen im Metamodell</title>
+
+      <para>Mit dem Metamodellelement MExternal ist ein Konzept im 
+      GeneSEZ-Metamodell vorhanden, welches in dieser Form nicht zur 
+      UML geh&ouml;rt. Als externe Typen werden in diesem Zusammenhang im 
+      Modell verwendete Typen (Klassen, Interfaces, Enumerations) 
+      bezeichnet, die selbst nicht im Modell vorhanden sind. Sie 
+      befinden sich stattdessen z.B. in Standard-Bibliotheken der 
+      Programmiersprache oder in anderen Bibliotheken, die verwendet 
+      werden sollen.</para>
+
+      <sect1>
+
+        <title>Definition im UML-Modell</title>
+
+        <para>Im zugrunde liegenden UML-Modell werden externe Typen als 
+        Klassen (bzw. Interfaces oder Enumerations) definiert und 
+        speziell gekennzeichnet. Dazu gibt es mehrere 
+        M&ouml;glichkeiten:</para>
+
+        <para />
+
+        <para>* Verwendung eines Stereotypes</para>
+
+        <para>* Verwendung eines separaten Packages</para>
+
+        <para>* Ablage des Typs direkt im Modell (der Typ hat eine 
+        Containment-Beziehung zum Modell-Element und befindet sich 
+        nicht in einem Package)</para>
+
+        <para />
+
+        <para>Die verschiedenen M&ouml;glichkeiten haben spezifische Vor- 
+        und Nachteile. Die Annotation der einzelnen Klassen mit einem 
+        Stereotyp ist jedoch allgemein zu bevorzugen, da hier in den 
+        Modellen und verschiedenen Diagrammen die Semantik einer 
+        externen Klasse am deutlichsten zum Ausdruck kommt. Beispiele 
+        dazu sind weiter unten zu finden.</para>
+
+      </sect1>
+
+      <sect1>
+
+        <title>Definition im Workflow</title>
+
+        <para>Je nachdem, wie externe Typen im UML-Modell definiert 
+        wurden, muss dies auch im Workflow angegeben werden. Dazu 
+        werden die folgenden drei Parameter der Workflow-Komponenten 
+        makeGenesezModel bzw. makeGenesezModelProfile genutzt:</para>
+
+        <para />
+
+        <para>* mapClassesInModelToExternal &#x00BB; Der Parameter kann als 
+        Wert true oder false annehmen und gibt an, ob Typen, die direkt 
+        im Modell abgelegt sind und somit zu keinem Package geh&ouml;ren, zu 
+        externen Typen transformiert werden (true) oder normal 
+        behandelt werden (false). Standardm&auml;&szlig;ig ist der Wert 
+        false.</para>
+
+        <para>* externalPackages &#x00BB; Als Wert f&uuml;r den Parameter kann eine 
+        mit Komma (oder f&uuml;r eine bessere Lesbarkeit eine mit Komma und 
+        Leerzeichen) separierte Liste mit Namen von Packages angegeben 
+        werden, welche Container f&uuml;r externe Typen darstellen. Die 
+        angegebenen Packages selbst werden ebenfalls nicht in ein 
+        GeneSEZ-Package transformiert. Standardm&auml;&szlig;ig ist der Wert ein 
+        leerer String.</para>
+
+        <para>* externalStereotypes &#x00BB; Als Wert kann eine mit Komma 
+        (oder f&uuml;r eine bessere Lesbarkeit eine mit Komma und 
+        Leerzeichen) separierte Liste mit Namen von Stereotypen 
+        angegeben werden. Diese Stereotypen k&ouml;nnen im UML-Modell sowohl 
+        Typen als auch Packages zugewiesen werden. Ist einer dieser 
+        Stereotypen einem Typ zugewiesen, so wird dieser in einen 
+        externen Typ transformiert. Ist ein Stereotyp einem Package 
+        zugewiesen, so wird dieses als Container f&uuml;r externe Typen 
+        betrachtet und wird selbst nicht transformiert. Alle in dem 
+        betreffenden Package enthaltenen Typen werden zu externen 
+        Typen. Standardm&auml;&szlig;ig ist der Wert ein leerer String.</para>
+
+      </sect1>
+
+      <sect1>
+
+        <title>Umgang in xPand-Templates</title>
+
+        <para>Innerhalb von Templates ist es unwesentlich, ob ein Typ 
+        ein externer Typ ist oder nicht. Diese Zuordnung wird durch das 
+        GeneSEZ Type-Mapping realisiert.</para>
+
+      </sect1>
+
+      <sect1>
+
+        <title>Beispiel</title>
+
+        <para>Es folgen einige Beispiele, die den Einsatz der 
+        vorgestellten M&ouml;glichkeiten zur Definition von externen Typen 
+        zeigen. Wie in den Modellen deutlich wird, ist die Verwendung 
+        eines Stereotypes zur Annotation von Klassen am 
+        ausdrucksst&auml;rksten.</para>
+
+        <sect2>
+
+          <title>Verwendung eines Stereotypes zur Annotation einer 
+          Klasse</title>
+
+          <para>Zugeh&ouml;rige Parameter in der Workflow 
+          Konfiguration:</para>
+
+        </sect2>
+
+        <sect2>
+
+          <title>Verwendung eines Stereotypes zur Annotation eines 
+          Packages</title>
+
+          <para>Zugeh&ouml;rige Parameter in der Workflow Konfiguration 
+          (identisch mit dem ersten Beispiel):</para>
+
+        </sect2>
+
+        <sect2>
+
+          <title>Verwendung der Namen von Packages</title>
+
+          <para>Zugeh&ouml;rige Parameter in der Workflow 
+          Konfiguration:</para>
+
+        </sect2>
+
+        <sect2>
+
+          <title>Mapping aller Klassen, die direkt im Modell enthalten 
+          sind</title>
+
+          <para>Zugeh&ouml;rige Parameter in der Workflow 
+          Konfiguration:</para>
+
+        </sect2>
+
+      </sect1>
+
+    </chapter>
