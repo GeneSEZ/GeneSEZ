@@ -7,10 +7,10 @@
 -->
 <project name="org.genesez.headless.ant" basedir="." default="run">
 	
-	<!-- classpath -->
+	<!-- classpath definitions -->
 	<property file="config.properties" />
+	<import file="customization.xml" />
 	<import file="classpath.xml" />
-	
 	
 	<target name="run" description="Runs the specified transformation for the specified project">
 		<!-- set path and load the ant contrib library tasks -->
@@ -37,6 +37,7 @@
 	<target name="execute.transformation" description="Executes all transformations of an example project">
 		<path id="classpath">
 			<path path="${project.classpath}" />
+			<path refid="additional.classpath" />
 			<path refid="genesez.bundle.classpath" />
 		</path>
 		<pathconvert property="classpath" refid="classpath" />
@@ -68,6 +69,8 @@
 				failonerror="true"
 				resultproperty="returncode"
 				dir="${project.dir}">
+			<syspropertyset refid="jvm.sys.args" />
+			<sysproperty key="java.library.path" value="${custom.java.library.path}" />
 			<arg value="${workflow.relative}" />
 			<arg value="-pbaseDir=${project.dir}" />
 			<arg value="--ant" />
@@ -96,6 +99,8 @@
 				failonerror="true"
 				resultproperty="returncode"
 				dir="${project.dir}">
+			<syspropertyset refid="jvm.sys.args" />
+			<sysproperty key="java.library.path" value="${custom.java.library.path}" />
 			<arg value="${workflow.executable}" />
 			<!--arg value="config/transformation.mwe2" /-->
 			<arg value="-pbaseDir=${project.dir}" />
