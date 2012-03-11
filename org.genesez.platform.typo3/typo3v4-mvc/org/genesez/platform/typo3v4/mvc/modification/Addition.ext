@@ -654,10 +654,16 @@ cached MClass makeValidator(MStereotype stereotype) :
 		? (	let c = createClass(stereotype.model(), stereotype.xmiGuid + ".validator", stereotype.asValidatorName() ) :
 				logTrace("create new validator class for stereotype: " + stereotype.name) ->
 				c.generalization.add(
-					createExternal( stereotype.model(), stereotype.generalization.first().name )
+					makeValidatorGeneralization( stereotype.generalization.first() )
 				) ->
 				c.processValidator()
 		) : stereotype.model().allValidators().select( v | v.nameS() == stereotype.asValidatorName() ).first();
+
+
+MType makeValidatorGeneralization(MStereotype this) :
+	isLocalValidator()
+	? makeValidator()
+	: createExternal( model(), name );
 
 
 boolean isLocalValidator(MStereotype this) :
