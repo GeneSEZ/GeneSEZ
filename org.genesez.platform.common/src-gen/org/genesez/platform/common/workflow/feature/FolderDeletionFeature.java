@@ -6,17 +6,17 @@ package org.genesez.platform.common.workflow.feature;
  */
 
 import java.util.List;
+import org.genesez.platform.common.FileSystemHelper;
 import java.io.IOException;
 import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import org.apache.commons.logging.Log;
 import org.genesez.platform.common.NotPreparedException;
-import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
-
 import java.util.Set;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.File;
+import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
 import java.util.LinkedList;
 import java.util.HashSet;
 
@@ -183,7 +183,7 @@ public class FolderDeletionFeature extends DeletionFeature {
 			// delete all folders normal if possible
 			if (Files.exists(dir) && dir.toFile().listFiles().length == 0) {
 				try {
-					super.alterPermission(dir);
+					FileSystemHelper.alterPermission(dir);
 					Files.delete(dir);
 				} catch (IOException e) {
 					e.printStackTrace();

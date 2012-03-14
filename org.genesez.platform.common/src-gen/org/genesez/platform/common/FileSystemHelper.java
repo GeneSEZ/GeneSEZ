@@ -5,7 +5,16 @@ package org.genesez.platform.common;
  * 	@FILE-ID : (_17_0_1_8e00291_1324544960704_472801_1972) 
  */
 
+import java.util.Set;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.io.IOException;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.io.File;
+import java.nio.file.attribute.PosixFilePermission;
+
 /**
  * Helper class to create file system elements 
  * 
@@ -53,6 +62,39 @@ public class FileSystemHelper {
 				retVal = true;
 		}
 		return retVal;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Changes the file permissions for POSIX or DOS Systems to rwx------ or !readOnly
+	 * 
+	 * @throws IOException if IO-Error occurs.
+	 * @param	file	the path, where permissions will be changed.
+	 * @return	true if successful false if FileSystem is not supported.
+	 * @throws	IOException
+	 */
+	public static boolean alterPermission(Path file) throws IOException {
+		/* PROTECTED REGION ID(java.implementation._17_0_1_2200121_1331731263199_738182_1751) ENABLED START */
+		PosixFileAttributeView POSIXattr = Files.getFileAttributeView(file, PosixFileAttributeView.class);
+		// checks if its a POSIX System
+		if (POSIXattr != null) {
+			Set<PosixFilePermission> perms = PosixFilePermissions.fromString("rwx------");
+			// sets file permissions
+			Files.setPosixFilePermissions(file, perms);
+			return true;
+			
+		} else {
+			// try if its a DOS-like System
+			try {
+				DosFileAttributeView DOSattr = Files.getFileAttributeView(file, DosFileAttributeView.class);
+				// sets file permission
+				DOSattr.setReadOnly(false);
+				return true;
+			} catch (UnsupportedOperationException e) {
+				e.getMessage();
+				return false;
+			}
+		}
 		/* PROTECTED REGION END */
 	}
 	

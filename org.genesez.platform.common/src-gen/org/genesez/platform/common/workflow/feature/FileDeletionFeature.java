@@ -6,18 +6,19 @@ package org.genesez.platform.common.workflow.feature;
  */
 
 import java.util.Map;
+import org.genesez.platform.common.FileSystemHelper;
 import java.io.IOException;
 import java.nio.file.Paths;
 import org.apache.commons.logging.LogFactory;
-import org.genesez.platform.common.NotPreparedException;
-import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
-import org.genesez.platform.common.workflow.WorkflowUtils;
 import org.apache.commons.logging.Log;
+import org.genesez.platform.common.NotPreparedException;
 import java.util.Properties;
 import java.util.HashMap;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 import java.util.Set;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
 import java.util.HashSet;
 
 /**
@@ -226,7 +227,7 @@ public class FileDeletionFeature extends DeletionFeature {
 				}
 				try {
 					Path del = Paths.get(delete);
-					super.alterPermission(del);
+					FileSystemHelper.alterPermission(del);
 					Files.deleteIfExists(del);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
