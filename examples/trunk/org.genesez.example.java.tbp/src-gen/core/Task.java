@@ -1,112 +1,82 @@
 package core;
 
-import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
+/* 
+ *	Do not place import/include statements above this comment, just below. 
+ * 	@FILE-ID : (_16_0_b6f02e1_1231922905218_820951_467) 
+ */
 
-/* PROTECTED REGION ID(java.type.import._16_0_b6f02e1_1231922905218_820951_467) ENABLED START */
-// TODO: put your further include + require statements here
-/* PROTECTED REGION END */
+import java.util.LinkedHashMap;
+import java.util.Map;
+import org.genesez.platform.java.umlsupport.associations.*;
 
 /**
  * A task represents an enclosed task with a defined outcome, which has to be 
  * completed within a planned amount of time.
- * @author	dreamer
+ * @author nicher
  */
 public abstract class Task implements AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
+	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		PROJECT, MILESTONE, MAINTASK
 	}
 	
-	/** holds the references to the association objects */
+	/** Stores the association management objects */
 	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object, ? extends Object>>();
-	{
-		association.put(Associations.PROJECT, new OneAssociation<Task, Project>(this, Project.Associations.TASK));
-		association.put(Associations.MILESTONE, new OneAssociation<Task, Milestone>(this, Milestone.Associations.TASK));
-		association.put(Associations.MAINTASK, new OneAssociation<Task, MainTask>(this, MainTask.Associations.TASK));
-	}
-	/**
-	 * @generated	attribute definition
-	 */
+	
+	/** Stores the associated object of association PROJECT to Project */
+	private Project project;
+	
+	/** Stores the associated object of association MILESTONE to Milestone */
+	private Milestone milestone;
+	
+	/** Stores the associated object of association MAINTASK to MainTask */
+	private MainTask mainTask;
+	
 	private String name;
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private String description;
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private State state;
-	/**
-	 * @generated	attribute definition
-	 */
+	
 	private Duration timeBudgetPlanned;
 	
 	// -- generated association + attribute accessors -----------------------
-	/**
-	 * @generated	getter for the attribute '<em><b>name</b></em>'
-	 */
-	public String getName() {
-		return name;
+	// initialization block for association management objects
+	{
+		association.put(Associations.PROJECT, new OneAssociation<Task, Project>(this, new Accessor<Project>() {
+			public Project get() {
+				return project;
+			}
+			
+			public void set(Project referenced) {
+				project = referenced;
+			}
+		}, Project.Associations.TASK));
+		association.put(Associations.MILESTONE, new OneAssociation<Task, Milestone>(this, new Accessor<Milestone>() {
+			public Milestone get() {
+				return milestone;
+			}
+			
+			public void set(Milestone referenced) {
+				milestone = referenced;
+			}
+		}, Milestone.Associations.TASK));
+		association.put(Associations.MAINTASK, new OneAssociation<Task, MainTask>(this, new Accessor<MainTask>() {
+			public MainTask get() {
+				return mainTask;
+			}
+			
+			public void set(MainTask referenced) {
+				mainTask = referenced;
+			}
+		}, MainTask.Associations.TASK));
 	}
 	
 	/**
-	 * documented here {@link getName()}
-	 * @generated	setter method for the attribute '<em><b>name</b></em>'
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>description</b></em>'
-	 */
-	public String getDescription() {
-		return description;
-	}
-	
-	/**
-	 * documented here {@link getDescription()}
-	 * @generated	setter method for the attribute '<em><b>description</b></em>'
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>state</b></em>'
-	 */
-	public State getState() {
-		return state;
-	}
-	
-	/**
-	 * documented here {@link getState()}
-	 * @generated	setter method for the attribute '<em><b>state</b></em>'
-	 */
-	public void setState(State state) {
-		this.state = state;
-	}
-	
-	/**
-	 * @generated	getter for the attribute '<em><b>timeBudgetPlanned</b></em>'
-	 */
-	public Duration getTimeBudgetPlanned() {
-		return timeBudgetPlanned;
-	}
-	
-	/**
-	 * documented here {@link getTimeBudgetPlanned()}
-	 * @generated	setter method for the attribute '<em><b>timeBudgetPlanned</b></em>'
-	 */
-	public void setTimeBudgetPlanned(Duration timeBudgetPlanned) {
-		this.timeBudgetPlanned = timeBudgetPlanned;
-	}
-	
-	/**
-	 * generic accessor for association objects used by the association handling framework
-	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * Provides generic access to association objects, used by the association handling library
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
@@ -114,32 +84,35 @@ public abstract class Task implements AssociationRole {
 		throw new RuntimeException("the class doesn't have the association you specified!");
 	}
 	
-	/** 
-	 * @generated	accessor of the association '<em><b>project</b></em>' to {@link Project}
+	/**
+	 * Provides access to the association '<em><b>project</b></em>' to {@link Project}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Task, Project> project() {
 		return (Association<Task, Project>) association.get(Associations.PROJECT);
 	}
 	
-	/** 
-	 * @generated	accessor of the association '<em><b>milestone</b></em>' to {@link Milestone}
+	/**
+	 * Provides access to the association '<em><b>milestone</b></em>' to {@link Milestone}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Task, Milestone> milestone() {
 		return (Association<Task, Milestone>) association.get(Associations.MILESTONE);
 	}
 	
-	/** 
-	 * @generated	accessor of the association '<em><b>mainTask</b></em>' to {@link MainTask}
+	/**
+	 * Provides access to the association '<em><b>mainTask</b></em>' to {@link MainTask}.
 	 */
 	@SuppressWarnings("unchecked")
 	public Association<Task, MainTask> mainTask() {
 		return (Association<Task, MainTask>) association.get(Associations.MAINTASK);
 	}
 	
+	// -- generated code of other cartridges --------------------------------
+	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1231922905218_820951_467) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+	
 }
