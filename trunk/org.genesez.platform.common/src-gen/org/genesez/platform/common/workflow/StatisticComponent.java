@@ -5,19 +5,18 @@ package org.genesez.platform.common.workflow;
  * 	@FILE-ID : (_17_0_1_8e00291_1321346476896_817371_2401) 
  */
 
-import org.jfree.chart.ChartFactory;
-import org.genesez.platform.common.statistic.StatisticObserver;
 import org.genesez.platform.common.statistic.StatisticsSet;
-import org.genesez.platform.common.workflow.feature.FileTreeWalkerFeature;
-
+import org.genesez.platform.common.statistic.StatisticObserver;
+import org.jfree.chart.ChartFactory;
 import java.nio.file.Paths;
+import org.genesez.platform.common.FileTreeObserverAdapter;
 import java.util.Properties;
-import org.jfree.chart.JFreeChart;
 import java.awt.Color;
+import org.jfree.chart.JFreeChart;
 import java.net.URL;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import java.nio.file.Path;
 import org.eclipse.emf.mwe.core.WorkflowContext;
+import java.nio.file.Path;
 import java.nio.file.Files;
 import org.eclipse.xtend.type.impl.java.JavaMetaModel;
 import org.jfree.chart.ChartUtilities;
@@ -25,13 +24,18 @@ import org.jfree.ui.RectangleInsets;
 import java.io.File;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.jfree.data.general.DefaultPieDataset;
+import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
 import org.jfree.chart.plot.PiePlot3D;
+import org.genesez.platform.common.FileSystemHelper;
 import java.io.IOException;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import org.genesez.platform.common.revisioncontrol.RegisterHelper;
 import java.awt.Font;
 import org.jfree.data.general.PieDataset;
+import java.util.Set;
 import org.eclipse.emf.mwe.utils.DirectoryCleaner;
+import org.genesez.platform.common.workflow.feature.FileTreeWalkerFeature;
 import java.net.URI;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.eclipse.emf.mwe.core.container.CompositeComponent;
@@ -140,6 +144,75 @@ public class StatisticComponent extends CompositeComponent {
 			}
 			ftw.setSearchedDir(dirToCheck);
 			ftw.addObserver(statisticObserver);
+			
+			// workaround for statistic SVN Problem, it deletes all .svn folders
+			// after copying
+			// It alternates also all permission of the .svn folders for
+			// deletion
+			FileTreeWalkerFeature workaround = new FileTreeWalkerFeature();
+			workaround.setSearchedDir(properties.getProperty("outputDir"));
+			workaround.addObserver(new FileTreeObserverAdapter() {
+				
+				private boolean toDelete = false;
+				private Set<RevisionControlSystem> rcs = RegisterHelper.getAvailableImpls();
+				
+				/**
+				 * deletes the file if in a metadatafolder
+				 */
+				@Override
+				public void updateFileVisit(Path file) {
+					if (toDelete) {
+						try {
+							FileSystemHelper.alterPermission(file);
+							Files.delete(file);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				
+				/**
+				 * checks if directory is a metadatafolder
+				 */
+				@Override
+				public void updateBeforeDir(Path dir) {
+					for (RevisionControlSystem system : rcs) {
+						if (dir.endsWith(system.getMetadataFolderName())) {
+							toDelete = true;
+							return;
+						}
+					}
+					if (dir.endsWith(".cvs")) {
+						toDelete = true;
+					}
+				}
+				
+				/**
+				 * Deletes a directory if its (in) a metadatafolder
+				 */
+				@Override
+				public void updateAfterDir(Path dir) {
+					if (toDelete) {
+						try {
+							FileSystemHelper.alterPermission(dir);
+							Files.delete(dir);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					for (RevisionControlSystem system : rcs) {
+						if (dir.endsWith(system.getMetadataFolderName())) {
+							toDelete = false;
+							return;
+						}
+					}
+					if (dir.endsWith(".cvs")) {
+						toDelete = false;
+					}
+				}
+			});
+			generator.addPreFeature(workaround);
+			
 			generator.addPreFeature(ftw);
 			super.checkConfiguration(issues);
 		}
@@ -253,7 +326,7 @@ public class StatisticComponent extends CompositeComponent {
 	
 	/**
 	 * Sets the template for the generator.
-	 * @See org.genesez.platform.common.workflow.Generator#setTemplate(String)
+	 * @See de.genesez.platform.common.workflow.Generator#setTemplate(String)
 	 * @param	template	the template for the generation
 	 */
 	

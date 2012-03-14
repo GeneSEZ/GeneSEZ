@@ -7,24 +7,18 @@ package org.genesez.platform.common.workflow.feature;
 
 import java.util.List;
 import java.io.IOException;
-import java.nio.file.attribute.DosFileAttributeView;
 import org.apache.commons.logging.LogFactory;
 import java.nio.file.Paths;
-
 import org.genesez.platform.common.FileTreeObserverAdapter;
-import org.genesez.platform.common.revisioncontrol.RegisterHelper;
-import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
-import org.genesez.platform.common.workflow.WorkflowUtils;
 import org.apache.commons.logging.Log;
 import java.util.Properties;
+import org.genesez.platform.common.revisioncontrol.RegisterHelper;
 import java.nio.file.DirectoryStream;
-import java.util.Set;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 import java.nio.file.Path;
 import java.nio.file.Files;
-import java.nio.file.attribute.PosixFileAttributeView;
-import java.nio.file.attribute.PosixFilePermissions;
+import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
 import java.util.LinkedList;
-import java.nio.file.attribute.PosixFilePermission;
 
 /**
  * Superclass for the FileDeletion. Contains methods to check which repository is in use and logs them.
@@ -164,39 +158,6 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter implements
 		// checks if excludedDirectoryNames set before.
 		if (excludedDirectoryNames.isEmpty()) {
 			setExcludedDirectoryNames(properties.getProperty("excludedDirectoryNames", ""));
-		}
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Changes the file permissions for POSIX or DOS Systems to rwx------ or !readOnly
-	 * 
-	 * @throws IOException if IO-Error occurs.
-	 * @param	file	the file, were permissions should be checked.
-	 * @return	true if its could change permission, false if FileSystem is not supported.
-	 * @throws	IOException
-	 */
-	protected boolean alterPermission(Path file) throws IOException {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1318592086516_348752_3397) ENABLED START */
-		PosixFileAttributeView POSIXattr = Files.getFileAttributeView(file, PosixFileAttributeView.class);
-		// checks if its a POSIX System
-		if (POSIXattr != null) {
-			Set<PosixFilePermission> perms = PosixFilePermissions.fromString("rwx------");
-			// sets file permissions
-			Files.setPosixFilePermissions(file, perms);
-			return true;
-			
-		} else {
-			// try if its a DOS-like System
-			try {
-				DosFileAttributeView DOSattr = Files.getFileAttributeView(file, DosFileAttributeView.class);
-				// sets file permission
-				DOSattr.setReadOnly(false);
-				return true;
-			} catch (UnsupportedOperationException e) {
-				e.getMessage();
-				return false;
-			}
 		}
 		/* PROTECTED REGION END */
 	}
