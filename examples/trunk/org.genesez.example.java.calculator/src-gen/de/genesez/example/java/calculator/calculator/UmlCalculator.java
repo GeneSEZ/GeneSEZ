@@ -1,8 +1,8 @@
 package de.genesez.example.java.calculator.calculator;
 
 import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
-import de.genesez.platforms.java.umlsupport.statemachine.*;
+import org.genesez.platform.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.statemachine.*;
 import java.math.BigDecimal;
 
 /* PROTECTED REGION ID(java.type.import._14_0_6340215_1225038875421_848650_119) ENABLED START */
@@ -73,7 +73,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	
 	/**
 	 * provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))

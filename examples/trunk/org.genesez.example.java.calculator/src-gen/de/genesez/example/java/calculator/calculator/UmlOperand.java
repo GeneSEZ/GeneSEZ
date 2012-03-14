@@ -1,8 +1,8 @@
 package de.genesez.example.java.calculator.calculator;
 
 import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
-import de.genesez.platforms.java.umlsupport.statemachine.*;
+import org.genesez.platform.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.statemachine.*;
 import java.math.BigDecimal;
 
 /* PROTECTED REGION ID(java.type.import._14_0_6340215_1225038888453_246116_139) ENABLED START */

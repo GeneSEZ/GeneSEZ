@@ -1,8 +1,8 @@
 package de.genesez.example.java.calculator.smfeatures;
 
 import java.util.*;
-import de.genesez.platforms.java.umlsupport.associations.*;
-import de.genesez.platforms.java.umlsupport.statemachine.*;
+import org.genesez.platform.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.statemachine.*;
 
 /* PROTECTED REGION ID(java.type.import._15_5_1_6340215_1233599236768_683189_710) ENABLED START */
 // TODO: put your further include + require statements here

@@ -8,8 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.genesez.platforms.java.umlsupport.statemachine.EventQueue;
-import de.genesez.platforms.java.umlsupport.statemachine.EventQueue.Event;
+import org.genesez.platform.java.umlsupport.statemachine.EventQueue;
+import org.genesez.platform.java.umlsupport.statemachine.EventQueue.Event;
 import static org.junit.Assert.*;
 
 /**
