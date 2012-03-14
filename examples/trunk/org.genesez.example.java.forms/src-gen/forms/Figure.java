@@ -8,13 +8,13 @@ package forms;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import traceability.ScenarioStep;
-import de.genesez.platforms.java.umlsupport.associations.Association;
-import de.genesez.platforms.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.associations.Association;
+import org.genesez.platform.java.umlsupport.associations.*;
 import traceability.Requirement;
 import java.awt.Color;
-import de.genesez.platforms.java.umlsupport.associations.ManyAssociation;
-import de.genesez.platforms.java.umlsupport.associations.AssociationRole;
-import de.genesez.platforms.java.umlsupport.associations.RelatedAssociationRole;
+import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
+import org.genesez.platform.java.umlsupport.associations.AssociationRole;
+import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
 import static traceability.Requirement.Value.R4;
 import traceability.Scenario;
 
@@ -120,7 +120,7 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platforms.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platforms.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))

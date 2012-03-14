@@ -8,7 +8,7 @@ package forms;
 import traceability.ScenarioStep;
 import static traceability.Requirement.Value.R3;
 import static traceability.Requirement.Value.R1;
-import de.genesez.platforms.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.associations.*;
 import traceability.Requirement;
 import java.awt.Color;
 import traceability.Scenario;
