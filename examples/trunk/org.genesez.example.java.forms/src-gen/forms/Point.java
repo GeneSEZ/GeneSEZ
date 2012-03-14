@@ -5,21 +5,12 @@ package forms;
  * 	@FILE-ID : (_14_0_b6f02e1_1211871095796_723781_254) 
  */
 
-import traceability.ScenarioStep;
-import static traceability.Requirement.Value.R1;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
 import java.awt.Color;
-import static traceability.ScenarioStep.Value.ST2_1;
-import traceability.Scenario;
 
 /**
  * Describes a <i><b>point</b></i> in a 2-dimensional coordinate system
- * @author domwet
+ * @author dreamer
  */
-@Requirement({
-	R1
-})
 public class Point implements Form {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -38,9 +29,6 @@ public class Point implements Form {
 	/**
 	 * constructs a point in the center of the coordinate system
 	 */
-	@ScenarioStep({
-		ST2_1
-	})
 	public Point() {
 		/* PROTECTED REGION ID(java.constructor._14_0_b6f02e1_1211871240109_473577_277) ENABLED START */
 		this.x = 0.0;
@@ -53,9 +41,6 @@ public class Point implements Form {
 	 * @param	x	the x-coordinate value of the point
 	 * @param	y	the y-coordinate value of the point
 	 */
-	@ScenarioStep({
-		ST2_1
-	})
 	public Point(double x, double y) {
 		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249463853031_881157_741) ENABLED START */
 		this.x = x;

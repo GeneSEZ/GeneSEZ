@@ -5,19 +5,11 @@ package forms;
  * 	@FILE-ID : (_16_0_b6f02e1_1249464012328_770017_760) 
  */
 
-import traceability.ScenarioStep;
-import static traceability.Requirement.Value.R1;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
-import traceability.Scenario;
 
 /**
  * Describes the geometrical form <b>rectangle</b> as a specic <i>polygon</i>
- * @author domwet
+ * @author dreamer
  */
-@Requirement({
-	R1
-})
 public class Rectangle extends Polygon {
 	
 	// -- generated constructors --------------------------------------------

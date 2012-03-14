@@ -5,28 +5,21 @@ package forms;
  * 	@FILE-ID : (_16_0_b6f02e1_1249543362015_69354_283) 
  */
 
+import java.awt.Color;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import traceability.ScenarioStep;
+
 import org.genesez.platform.java.umlsupport.associations.Association;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
-import java.awt.Color;
-import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
 import org.genesez.platform.java.umlsupport.associations.AssociationRole;
+import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
 import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
-import static traceability.Requirement.Value.R4;
-import traceability.Scenario;
 
 /**
  * <p>
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
- * @author domwet
+ * @author dreamer
  */
-@Requirement({
-	R4
-})
 public class Figure implements Form, AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
@@ -120,7 +113,7 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))

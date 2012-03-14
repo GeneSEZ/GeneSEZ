@@ -5,19 +5,11 @@ package forms;
  * 	@FILE-ID : (_14_0_b6f02e1_1212580097593_990285_125) 
  */
 
-import traceability.ScenarioStep;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
-import static traceability.Requirement.Value.R4;
-import traceability.Scenario;
 
 /**
  * Describes the common behavior of a geometrical forms
- * @author domwet
+ * @author dreamer
  */
-@Requirement({
-	R4
-})
 public interface Form extends Moveable, Rotateable, Paintable {
 	
 	/**

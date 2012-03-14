@@ -5,15 +5,11 @@ package forms;
  * 	@FILE-ID : (_16_0_b6f02e1_1249463754375_944273_708) 
  */
 
-import traceability.ScenarioStep;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
 import java.awt.Color;
-import traceability.Scenario;
 
 /**
  * Describes the geometrical form <b>polygon</b>
- * @author domwet
+ * @author dreamer
  */
 public class Polygon implements Form {
 	

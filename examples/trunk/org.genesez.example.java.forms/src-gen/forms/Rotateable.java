@@ -5,19 +5,11 @@ package forms;
  * 	@FILE-ID : (_14_0_b6f02e1_1214478880187_510458_215) 
  */
 
-import traceability.ScenarioStep;
-import static traceability.Requirement.Value.R6;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
-import traceability.Scenario;
 
 /**
  * describes things which can be <i><b>rotated</b></i>
- * @author domwet
+ * @author dreamer
  */
-@Requirement({
-	R6
-})
 public interface Rotateable {
 	
 	/**

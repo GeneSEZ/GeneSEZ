@@ -5,21 +5,12 @@ package forms;
  * 	@FILE-ID : (_14_0_b6f02e1_1211871374078_396988_308) 
  */
 
-import traceability.ScenarioStep;
-import static traceability.Requirement.Value.R3;
-import static traceability.Requirement.Value.R1;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
 import java.awt.Color;
-import traceability.Scenario;
 
 /**
  * Describes the geometrical form of a <i><b>line</b></i>
- * @author domwet
+ * @author dreamer
  */
-@Requirement({
-R1, R3
-})
 public class Line implements Form {
 	
 	// -- generated attribute, constant + association declarations ----------

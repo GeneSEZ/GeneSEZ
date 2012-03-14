@@ -5,15 +5,11 @@ package forms;
  * 	@FILE-ID : (_16_0_b6f02e1_1249464729937_936506_1005) 
  */
 
-import traceability.ScenarioStep;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
 import java.awt.Color;
-import traceability.Scenario;
 
 /**
  * describes <b>paintable</b> things
- * @author domwet
+ * @author dreamer
  */
 public interface Paintable {
 	

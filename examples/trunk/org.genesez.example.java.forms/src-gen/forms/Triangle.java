@@ -5,19 +5,11 @@ package forms;
  * 	@FILE-ID : (_16_0_b6f02e1_1249464030468_592473_783) 
  */
 
-import traceability.ScenarioStep;
-import static traceability.Requirement.Value.R1;
-import org.genesez.platform.java.umlsupport.associations.*;
-import traceability.Requirement;
-import traceability.Scenario;
 
 /**
  * Describes the geometrical form <b>triangle</b> as a special <i>polygon</i>
- * @author domwet
+ * @author dreamer
  */
-@Requirement({
-	R1
-})
 public class Triangle extends Polygon {
 	
 	// -- generated constructors --------------------------------------------
