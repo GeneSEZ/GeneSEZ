@@ -5,7 +5,7 @@ package de.genesez.example.java.car.base;
  * 	@FILE-ID : (_14_0_b6f02e1_1214477834046_276389_507) 
  */
 
-import de.genesez.platforms.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.associations.*;
 import java.awt.Color;
 
 /**

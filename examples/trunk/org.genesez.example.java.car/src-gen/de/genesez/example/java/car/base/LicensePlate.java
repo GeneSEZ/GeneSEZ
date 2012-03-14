@@ -7,12 +7,12 @@ package de.genesez.example.java.car.base;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import de.genesez.platforms.java.umlsupport.associations.Association;
-import de.genesez.platforms.java.umlsupport.associations.OneAssociation;
-import de.genesez.platforms.java.umlsupport.associations.Accessor;
-import de.genesez.platforms.java.umlsupport.associations.*;
-import de.genesez.platforms.java.umlsupport.associations.AssociationRole;
-import de.genesez.platforms.java.umlsupport.associations.RelatedAssociationRole;
+import org.genesez.platform.java.umlsupport.associations.Association;
+import org.genesez.platform.java.umlsupport.associations.OneAssociation;
+import org.genesez.platform.java.umlsupport.associations.Accessor;
+import org.genesez.platform.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.associations.AssociationRole;
+import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

@@ -5,7 +5,7 @@ package de.genesez.example.java.car.base;
  * 	@FILE-ID : (_12_5_8a7027a_1181722156333_15747_346) 
  */
 
-import de.genesez.platforms.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.associations.*;
 
 /**
  * state of a vehicle

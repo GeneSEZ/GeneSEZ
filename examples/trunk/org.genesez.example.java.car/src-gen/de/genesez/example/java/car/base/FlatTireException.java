@@ -5,7 +5,7 @@ package de.genesez.example.java.car.base;
  * 	@FILE-ID : (_12_5_b6f02e1_1204100267031_575890_564) 
  */
 
-import de.genesez.platforms.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.associations.*;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
