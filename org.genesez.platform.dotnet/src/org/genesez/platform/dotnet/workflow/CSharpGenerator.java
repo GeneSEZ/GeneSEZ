@@ -18,6 +18,12 @@ public class CSharpGenerator extends DefaultGenerator {
 		defaults.put("template", "org::genesez::platform::dotnet::csharp::templates::Root::Root");
 		defaults.put("typeMappingFile", "org/genesez/platform/dotnet/csharp/typemapping/typemapping.xml");
 	}
+	private static final String IMPORT_REGEX = "using .*;$";
+	
+	/**
+	 * The constant for the fileExtensions.
+	 */
+	private static final String FILE_EXTENSIONS = ".cs";
 	
 	private Log logger = LogFactory.getLog(getClass());
 	private boolean isNotSetTemplate = true;
@@ -26,6 +32,8 @@ public class CSharpGenerator extends DefaultGenerator {
 	
 	public CSharpGenerator() {
 		super();
+		super.setFileExtensions(FILE_EXTENSIONS);
+		super.setImportRegex(IMPORT_REGEX);
 		properties.putAll(defaults);
 	}
 	
