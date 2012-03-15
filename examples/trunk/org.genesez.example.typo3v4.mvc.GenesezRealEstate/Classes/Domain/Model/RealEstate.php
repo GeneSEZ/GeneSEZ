@@ -183,18 +183,18 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	protected $heating;
 	
 	/**
-	 * Association for the room type of the real estate.
-	 *
-	 * @var Tx_GszRealEstate_Domain_Model_RoomType
-	 */
-	protected $rooms;
-	
-	/**
 	 * Association for the floor type of the real estate.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Model_FloorType
 	 */
 	protected $floor;
+	
+	/**
+	 * Association for the room type of the real estate.
+	 *
+	 * @var Tx_GszRealEstate_Domain_Model_RoomType
+	 */
+	protected $rooms;
 	
 	/**
 	 * Association for the quarter of the real estate.
@@ -659,25 +659,6 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	}
 	
 	/**
-	 * Getter for rooms
-	 *
-	 * @return Tx_GszRealEstate_Domain_Model_RoomType Association for the room type of the real estate.
-	 */
-	public function getRooms() {
-		return $this->rooms;
-	}
-	
-	/**
-	 * Setter for rooms
-	 *
-	 * @param Tx_GszRealEstate_Domain_Model_RoomType $rooms Association for the room type of the real estate.
-	 * @return void
-	 */
-	public function setRooms(Tx_GszRealEstate_Domain_Model_RoomType $rooms) {
-		$this->rooms = $rooms;
-	}
-	
-	/**
 	 * Getter for floor
 	 *
 	 * @return Tx_GszRealEstate_Domain_Model_FloorType Association for the floor type of the real estate.
@@ -694,6 +675,25 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	 */
 	public function setFloor(Tx_GszRealEstate_Domain_Model_FloorType $floor) {
 		$this->floor = $floor;
+	}
+	
+	/**
+	 * Getter for rooms
+	 *
+	 * @return Tx_GszRealEstate_Domain_Model_RoomType Association for the room type of the real estate.
+	 */
+	public function getRooms() {
+		return $this->rooms;
+	}
+	
+	/**
+	 * Setter for rooms
+	 *
+	 * @param Tx_GszRealEstate_Domain_Model_RoomType $rooms Association for the room type of the real estate.
+	 * @return void
+	 */
+	public function setRooms(Tx_GszRealEstate_Domain_Model_RoomType $rooms) {
+		$this->rooms = $rooms;
 	}
 	
 	/**

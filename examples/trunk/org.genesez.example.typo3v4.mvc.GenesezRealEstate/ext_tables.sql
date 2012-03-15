@@ -173,8 +173,8 @@ CREATE TABLE tx_gszrealestate_domain_model_realestate (
 	image_descriptions text NOT NULL,
 	plot_file text NOT NULL,
 	heating int(11) unsigned DEFAULT '0' NOT NULL,
-	rooms int(11) unsigned DEFAULT '0' NOT NULL,
 	floor int(11) unsigned DEFAULT '0' NOT NULL,
+	rooms int(11) unsigned DEFAULT '0' NOT NULL,
 	quarter int(11) unsigned DEFAULT '0' NOT NULL,
 	
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,

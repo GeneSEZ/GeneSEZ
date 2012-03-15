@@ -7,12 +7,12 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_gszrealestate_domain_model_realestate'] = array (
 	'ctrl' => $TCA['tx_gszrealestate_domain_model_realestate']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'id, title, description, facility, state, miscellaneous, street, post_code, town, size, cellar, attic, balcony, free_from, rent_exclusive_of_heating, extra_charges, cooperative_share, image_files, image_descriptions, plot_file, heating, rooms, floor, quarter',
+		'showRecordFieldList' => 'id, title, description, facility, state, miscellaneous, street, post_code, town, size, cellar, attic, balcony, free_from, rent_exclusive_of_heating, extra_charges, cooperative_share, image_files, image_descriptions, plot_file, heating, floor, rooms, quarter',
 		/* PROTECTED REGION ID(tca.php.own.tca.interface.section.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 		/* PROTECTED REGION END */
 	),
 	'types' => array(
-		'1' => array('showitem'	=> 'sys_language_uid, hidden, starttime, endtime, id, title, description, facility, state, miscellaneous, street, post_code, town, size, cellar, attic, balcony, free_from, rent_exclusive_of_heating, extra_charges, cooperative_share, image_files, image_descriptions, plot_file, heating, rooms, floor, quarter'),
+		'1' => array('showitem'	=> 'sys_language_uid, hidden, starttime, endtime, id, title, description, facility, state, miscellaneous, street, post_code, town, size, cellar, attic, balcony, free_from, rent_exclusive_of_heating, extra_charges, cooperative_share, image_files, image_descriptions, plot_file, heating, floor, rooms, quarter'),
 		/* PROTECTED REGION ID(tca.php.own.tca.types.section.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 		/* PROTECTED REGION END */
 	),
@@ -376,7 +376,7 @@ $TCA['tx_gszrealestate_domain_model_realestate'] = array (
 		'heating' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_realestate.heating',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345826752_371396_2877) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_3_8a7027a_1331812558337_418332_2175) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -407,52 +407,14 @@ $TCA['tx_gszrealestate_domain_model_realestate'] = array (
 						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
 					),
 				),
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345826752_371396_2877) ENABLED START */
-				/* PROTECTED REGION END */
-			),
-		),
-		'rooms' => array(
-			'exclude' => false,
-			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_realestate.rooms',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345842089_722125_2908) ENABLED START */
-			/* PROTECTED REGION END */
-			'config' => array(
-				'type' => 'select',
-				'foreign_table' => 'tx_gszrealestate_domain_model_roomtype',
-				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
-				'minitems' => 1,
-				'maxitems' => 1,
-				'wizards' => array(
-					'_PADDING' => 1,
-					'_VERTICAL' => 1,
-					'add' => array(
-						'type' => 'script',
-						'title' => 'Create new',
-						'icon' => 'add.gif',
-						'script' => 'wizard_add.php',
-						'params' => array(
-							'table'=>'tx_gszrealestate_domain_model_roomtype',
-							'pid' => '###CURRENT_PID###',
-							'setValue' => 'prepend'
-						),
-					),
-					'edit' => array(
-						'type' => 'popup',
-						'title' => 'Edit',
-						'icon' => 'edit2.gif',
-						'script' => 'wizard_edit.php',
-						'popup_onlyOpenIfSelected' => 1,
-						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-					),
-				),
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345842089_722125_2908) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_3_8a7027a_1331812558337_418332_2175) ENABLED START */
 				/* PROTECTED REGION END */
 			),
 		),
 		'floor' => array(
 			'exclude' => false,
 			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_realestate.floor',
-			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345950694_650006_2989) ENABLED START */
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_3_8a7027a_1331812570157_801267_2183) ENABLED START */
 			/* PROTECTED REGION END */
 			'config' => array(
 				'type' => 'select',
@@ -483,7 +445,45 @@ $TCA['tx_gszrealestate_domain_model_realestate'] = array (
 						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
 					),
 				),
-				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_1_8a7027a_1306345950694_650006_2989) ENABLED START */
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_3_8a7027a_1331812570157_801267_2183) ENABLED START */
+				/* PROTECTED REGION END */
+			),
+		),
+		'rooms' => array(
+			'exclude' => false,
+			'label' => 'LLL:EXT:gsz_real_estate/Resources/Private/Language/locallang_db.xml:tx_gszrealestate_domain_model_realestate.rooms',
+			/* PROTECTED REGION ID(tca.php.own.tca.column.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_3_8a7027a_1331812581356_61946_2191) ENABLED START */
+			/* PROTECTED REGION END */
+			'config' => array(
+				'type' => 'select',
+				'foreign_table' => 'tx_gszrealestate_domain_model_roomtype',
+				'foreign_table_where' => 'AND sys_language_uid IN (-1,0)',
+				'minitems' => 1,
+				'maxitems' => 1,
+				'wizards' => array(
+					'_PADDING' => 1,
+					'_VERTICAL' => 1,
+					'add' => array(
+						'type' => 'script',
+						'title' => 'Create new',
+						'icon' => 'add.gif',
+						'script' => 'wizard_add.php',
+						'params' => array(
+							'table'=>'tx_gszrealestate_domain_model_roomtype',
+							'pid' => '###CURRENT_PID###',
+							'setValue' => 'prepend'
+						),
+					),
+					'edit' => array(
+						'type' => 'popup',
+						'title' => 'Edit',
+						'icon' => 'edit2.gif',
+						'script' => 'wizard_edit.php',
+						'popup_onlyOpenIfSelected' => 1,
+						'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+					),
+				),
+				/* PROTECTED REGION ID(tca.php.own.tca.column.config.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466._17_0_3_8a7027a_1331812581356_61946_2191) ENABLED START */
 				/* PROTECTED REGION END */
 			),
 		),
