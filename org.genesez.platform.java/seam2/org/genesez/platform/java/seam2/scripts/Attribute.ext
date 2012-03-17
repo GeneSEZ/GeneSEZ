@@ -5,9 +5,25 @@ extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::m2m::CreateBasics;
 extension org::genesez::platform::common::m2m::Stereotype;
 extension org::genesez::platform::java::seam2::scripts::Stereotypes;
+extension org::genesez::platform::java::jbv::scripts::Stereotypes;
 extension org::genesez::platform::java::seam2::scripts::Class;
 extension org::genesez::platform::java::seam2::scripts::Naming;
 extension org::genesez::platform::java::scripts::Naming;
+
+/**
+  *	if there is a stereotype seam2JasyptEncryption add stereotype
+  *	jhvType to the attribute and remove stereotype seam2JasyptEncryption
+  * (it is no longer needed, adding jhvTypeDef stereotype to class should 
+  * be done before calling this method)
+  */
+Void checkJasyptEncryptionStereotype(MAttribute this) :
+	this.hasStereotype("seam2JasyptEncryption") &&
+	!this.hasStereotype("jhvType")
+		? (
+			this.addTypeStereotype("encryptedString", {}, {}) ->
+			this.removeStereotype(this.getStereotype("seam2JasyptEncryption"))
+		)
+		: "";
 
 /**
   *	adds an accessor stereotype for generating get and set methods if
