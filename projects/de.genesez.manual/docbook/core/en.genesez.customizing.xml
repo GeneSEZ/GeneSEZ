@@ -1,0 +1,373 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter>
+  <title>Customizing and Adjustments</title>
+  <para>The behaviour of GeneSEZ can be customized in various way and 
+  some customizations need a special setup.</para>
+  <variablelist>
+    <varlistentry>
+      <term><emphasis role="bold">Project specific</emphasis></term>
+      <listitem>
+        <para>Use an eclipse <emphasis>class folder</emphasis> (i.e. 
+        the folders content is accessible by java class path lookup) in 
+        your generator project, name it something like 
+        <literal>customization</literal> and place all your advice 
+        scripts and templates (Xtend and Xpand AOP) there. For java 
+        based adjustments use an additional <emphasis>source 
+        folder</emphasis>. Ensure the correct 
+        <link linkend="org.genesez.encoding">file 
+        encoding</link>!</para>
+        <para>You can even put scripts and templates provided by 
+        GeneSEZ there and adjust it to your needs in case you 
+        don&apos;t like AOP or AOP is not sufficient. Doing so ensure 
+        your <emphasis>class folder</emphasis> (and maybe 
+        <emphasis>source folder</emphasis>) appears before the 
+        <emphasis>Plug-In dependencies</emphasis> in the class path 
+        order (right click on your project, select <literal>Build Path 
+        » Configure Build Path...</literal>, go to the tab 
+        <literal>Order and Export</literal>).</para>
+        <para>You can place the GeneSEZ plug-ins containing the 
+        behaviour you want to adjust into your workspace even if you 
+        have installed GeneSEZ. The plug-ins in your workspace are then 
+        used instead of the installed ones. Note that you do 
+        <emphasis>not</emphasis> have to put all plug-in projects in 
+        your workspace.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><emphasis role="bold">Plug-In projects</emphasis></term>
+      <listitem>
+        <para>You place the GeneSEZ plug-ins into your workspace and 
+        adjust them as you need. Note to keep track of your changes to 
+        avoid a merge nightmare when you update the GeneSEZ plug-ins of 
+        a future version.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <para>Consider the plug-ins to be placed in the workspace carefully. 
+  Platform and adapter projects can be usually simply placed there 
+  without any further doing. In case of meta model projects you clearly 
+  have to build the meta model by yourself. For eclipse integration 
+  projects you need to start a runtime eclipse to reflect the 
+  changes.</para>
+  <variablelist>
+    <varlistentry>
+      <term><emphasis role="bold">Placing some Plug-In Projects into 
+      the Workspace</emphasis></term>
+      <listitem>
+        <para>You need to have GeneSEZ 
+        <link linkend="org.genesez.installation">installed</link>. Use 
+        our repository to <link linkend="org.genesez.link.scm">
+        checkout</link> the projects you need (
+        <xref linkend="org.genesez.repository.layout"/> and 
+        <xref linkend="org.genesez.plugins"/> may help identifying it). 
+        Ensure to choose versions compatible to your installed GeneSEZ 
+        version!</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><emphasis role="bold">Build GeneSEZ (Meta Model) 
+      Projects</emphasis></term>
+      <listitem>
+        <para>You need to build the meta model projects if you place 
+        them in the workspace. To build them you need the 
+        <xref linkend="org.genesez.build"/> project within your 
+        workspace.</para>
+        <orderedlist>
+          <listitem>
+            <para>Configure the build project by creating the file 
+            <literal>build/environment.properties</literal>. You can 
+            use 
+            <literal>build/environment.properties.template</literal> as 
+            basis. You need to care about the following 
+            properties:</para>
+            <variablelist>
+              <varlistentry>
+                <term>
+                <emphasis role="bold">ECLIPSE_HOME</emphasis></term>
+                <listitem>
+                  <para>Specifies the eclipse <emphasis>home 
+                  directory</emphasis>, i.e. the directory where 
+                  <literal>eclipse.exe</literal> or 
+                  <literal>eclipse</literal> is located.</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>
+                <emphasis role="bold">MAGICDRAW_DIR</emphasis></term>
+                <listitem>
+                  <para>Specifies the <emphasis>home 
+                  directory</emphasis> of magic draw, i.e. the 
+                  directory where magic draw is installed or unpacked 
+                  to.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+            <para>All other properties you can leave at their default 
+            value.</para>
+          </listitem>
+          <listitem>
+            <para>After configuration you can build any (meta model) 
+            project in your workspace. Go to the 
+            <literal>build</literal> directory of your project, right 
+            click on the file <literal>build.xml</literal> and select 
+            <literal>Run As » Ant Build...</literal>. Go to the 
+            <literal>JRE</literal> tab and choose the entry 
+            <literal>Run in same JRE as the workspace</literal> and 
+            click <literal>Run</literal> to start execution.</para>
+            <para>Note the build script calls the java compiler to 
+            compile source files. If your <literal>JAVA_HOME</literal> 
+            is pointing to an <literal>JRE</literal> you will get an 
+            error result. In this case make sure eclipse compiles the 
+            newly source files before you proceed.</para>
+          </listitem>
+        </orderedlist>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <section id="org.genesez.repository.layout">
+    <title>Source Code Repository Layout</title>
+    <para>GeneSEZ currently uses a <link linkend="org.genesez.link.scm">
+    subversion repository</link> with the following layout:</para>
+    <variablelist>
+      <varlistentry>
+        <term><emphasis role="bold">trunk</emphasis></term>
+        <listitem>
+          <para>The main development of GeneSEZ occurs here. Do not 
+          expect that this version is always runnable.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">tags</emphasis></term>
+        <listitem>
+          <para>All releases are available as tag.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">branches</emphasis></term>
+        <listitem>
+          <para>For some development efforts we decide to use branches 
+          but usually we get along without one.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">projects</emphasis></term>
+        <listitem>
+          <para>Currently the place for projects supporting GeneSEZ 
+          where the sources aren&apos;t part of the GeneSEZ 
+          plugins.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">examples</emphasis></term>
+        <listitem>
+          <para>The place for all GeneSEZ example projects.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">@deprecated</emphasis></term>
+        <listitem>
+          <para>The place for all outdated and discontinued 
+          stuff.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section id="org.genesez.plugins">
+    <title>List of GeneSEZ Plug-In Projects</title>
+    <para>To get an impression of the the source code of GeneSEZ is 
+    structured, here is a list of the plug-ins and their 
+    responsibility:</para>
+    <variablelist>
+      <varlistentry>
+        <term><emphasis role="bold">GeneSEZ Plug-In 
+        Projects</emphasis></term>
+        <listitem>
+          <variablelist>
+            <varlistentry>
+              <term><emphasis>org.eclipse.emf.ecore.adapter.uml</emphasis></term>
+              <listitem>
+                <para>Provides the uml to ecore transformation for 
+                GeneSEZ meta model development using UML.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.adapter.ea</emphasis></term>
+              <listitem>
+                <para>Provides an EMF UML adapter for SparxSystems 
+                Enterprise Architect.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.adapter.magicdraw</emphasis></term>
+              <listitem>
+                <para>Provides uml profiles and helpers for using Magic 
+                Draw with GeneSEZ.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.adapter.uml2</emphasis></term>
+              <listitem>
+                <para>Provides the uml to gcore transformation, i.e. 
+                the transformation of uml models into GeneSEZ 
+                models.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.eclipse</emphasis></term>
+              <listitem>
+                <para>Provides the integration of GeneSEZ into the 
+                eclipse ide.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.headless</emphasis></term>
+              <listitem>
+                <para>Provides an ant script to execute transformations 
+                without running eclipse.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.metamodel.core</emphasis></term>
+              <listitem>
+                <para>Provides the gcore meta model.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.metamodel.requirements</emphasis></term>
+              <listitem>
+                <para>Provides the requirements meta model.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.metamodel.testing</emphasis></term>
+              <listitem>
+                <para>Provides the testing meta model.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.metamodel.traceability</emphasis></term>
+              <listitem>
+                <para>Provides a meta model for requirements 
+                traceability.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.common</emphasis></term>
+              <listitem>
+                <para>Provides common components and helpers, e.g. 
+                workflow components and typemapping.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.cpp</emphasis></term>
+              <listitem>
+                <para>Provides support for the c++ programming 
+                language.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.dashboard</emphasis></term>
+              <listitem>
+                <para>Provides an html based dashboard representing 
+                requirements traceability information.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.documentation</emphasis></term>
+              <listitem>
+                <para>Provides support for documentation generation 
+                such as <emphasis>latex</emphasis> and 
+                <emphasis>docbook</emphasis>.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.dotnet</emphasis></term>
+              <listitem>
+                <para>Provides support for the c# programming 
+                language.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.java</emphasis></term>
+              <listitem>
+                <para>Provides support for the java programming 
+                language.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.php</emphasis></term>
+              <listitem>
+                <para>Provides support for the php programming 
+                language.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.qftest</emphasis></term>
+              <listitem>
+                <para>Provides support for the testing framework 
+                qftest.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platform.typo3</emphasis></term>
+              <listitem>
+                <para>Provides support for typo3 extension 
+                development.</para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">GeneSEZ Infrastructure 
+        Projects</emphasis></term>
+        <listitem>
+          <variablelist>
+            <varlistentry id="org.genesez.build">
+              <term><emphasis>org.genesez.build</emphasis></term>
+              <listitem>
+                <para>Provides ant build scripts to build GeneSEZ and 
+                all its plug-in projects.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.feature</emphasis></term>
+              <listitem>
+                <para>Provides the GeneSEZ feature description.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.featuregroup</emphasis></term>
+              <listitem>
+                <para>Provides the GeneSEZ feature group and 
+                buckminster properties.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.platforms.generator</emphasis></term>
+              <listitem>
+                <para>Provides an uml model for GeneSEZ and 
+                transformations.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.tools</emphasis></term>
+              <listitem>
+                <para>Provides useful tools for developers including 
+                helpers to profile GeneSEZ and an uml model 
+                creator.</para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><emphasis>org.genesez.updatesite</emphasis></term>
+              <listitem>
+                <para>Provides the GeneSEZ updatesite project.</para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+</chapter>
