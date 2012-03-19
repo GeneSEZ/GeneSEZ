@@ -25,6 +25,9 @@ public class LatexGenerator extends DefaultGenerator {
 	
 	public LatexGenerator() {
 		super();
+		deleteOldFiles = false;
+		deleteEmptyFolders = false;
+		importTakeOver = false;
 		WorkflowUtils.callPropertyAccessors(this, defaults);
 	}
 }
