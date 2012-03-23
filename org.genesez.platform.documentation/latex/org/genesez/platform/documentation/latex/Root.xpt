@@ -11,42 +11,58 @@
 
 
 «DEFINE Root FOR MModel -»
-	«FILE name + ".tex"»
+«FILE name + ".tex"»
 	«EXPAND Root FOREACH classifier -»
-	«ENDFILE»
+	«EXPAND Root FOREACH nestedPackage -»
+«ENDFILE»
 «ENDDEFINE»
 
-«DEFINE Root FOR MClass -»
-\subsection{Class {\tt «name»}}
-«comment().format()»
 
-«EXPAND Attributes»
-«EXPAND References»
+«DEFINE Root FOR MPackage -»
+\section{Package {\tt «name.format()»}}
+
+	«EXPAND Root FOREACH classifier -»
+	«EXPAND Root FOREACH nestedPackage -»
 «ENDDEFINE»
+
 
 «DEFINE Root FOR MClassifier -»
+\subsection{«metaTypeName()» {\tt «name.format()»}}
+
+«comment().format()»
+
+«EXPAND Attributes -»
+«EXPAND References -»
+
 «ENDDEFINE»
 
-«DEFINE Attributes FOR MClass -»
+
+«DEFINE Attributes FOR MClassifier -»
 «IF !property.typeSelect(MAttribute).isEmpty -»
 \subsubsection{Attributes}
-The class \verb|«name()»| defines the following attributes:
+
+The «metaTypeName()» \verb|«name»| defines the following attributes:
+
 \begin{description}
-	«EXPAND _Item FOREACH property.typeSelect(MAttribute) -»
+	«EXPAND Item FOREACH property.typeSelect(MAttribute) -»
 \end{description}
 «ENDIF -»
 «ENDDEFINE»
 
-«DEFINE References FOR MClass -»
+
+«DEFINE References FOR MClassifier -»
 «IF !property.typeSelect(MAssociationRole).isEmpty -»
 \subsubsection{References}
-The class \verb|«name()»| defines the following references:
+
+The «metaTypeName()» \verb|«name.format()»| defines the following references:
+
 \begin{description}
-	«EXPAND _Item FOREACH property.typeSelect(MAssociationRole) -»
+	«EXPAND Item FOREACH property.typeSelect(MAssociationRole) -»
 \end{description}
 «ENDIF -»
 «ENDDEFINE»
 
-«DEFINE _Item FOR MProperty -»
-	\item[«name» : «type.name()»] «comment().format()»
+
+«DEFINE Item FOR MProperty -»
+	\item[«name.format()» : «type.name().format()»] «comment().format()»
 «ENDDEFINE»
