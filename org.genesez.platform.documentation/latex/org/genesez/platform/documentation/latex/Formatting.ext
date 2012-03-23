@@ -1,4 +1,3 @@
-
 import gcore;
 
 extension org::genesez::platform::common::log::Log;
@@ -6,4 +5,18 @@ extension org::genesez::platform::common::log::Log;
 String format(String this) :
 	replaceAll("<b><i>([\\w\\s\\d]+)</i></b>", "\\\\emph{$1}")
 	.replaceAll("<pre>([\\w\\s\\d]+)</pre>", "\\\\verb|$1|")
-	.replaceAll("\\s'([\\w\\s\\d]+)'", " \\\\emph{$1} ");
+	.replaceAll("\\s'([\\w\\s\\d]+)'", " \\\\emph{$1} ")
+	.replaceAll("_", "\\\\_");
+
+
+String metaTypeName(MClass this) :
+	"Class";
+	
+String metaTypeName(MInterface this) :
+	"Interface";
+
+String metaTypeName(MEnumeration this) :
+	"Enumeration";
+
+String metaTypeName(MClassifier this) :
+	"Classifier";
