@@ -60,14 +60,15 @@ public class PDFLatexGenerator extends LatexGenerator {
 			Process p = Runtime.getRuntime()
 					.exec(pdflatex + " -output-directory=" + pdfOutputDir + " " + latexRootFile);
 
-			if (showPDFLatexOutput) {
-				String line;
-				BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-				while ((line = input.readLine()) != null) {
+			String line;
+			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			while ((line = input.readLine()) != null) {
+				if (showPDFLatexOutput) {
 					logger.info(line);
 				}
-				input.close();
 			}
+			input.close();
+
 		} catch (IOException e) {
 			logger.error(e.toString());
 		}
