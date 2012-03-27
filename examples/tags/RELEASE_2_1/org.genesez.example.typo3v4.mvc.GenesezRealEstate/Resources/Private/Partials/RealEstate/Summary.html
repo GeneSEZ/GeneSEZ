@@ -1,0 +1,41 @@
+{namespace gre=Tx_GszRealEstate_ViewHelpers}
+
+<div class="tx-gszrealestate-show-realestate-summary">
+
+	<div class="csc-default">
+		<div class="csc-textpic csc-textpic-intext-right">
+			<div class="csc-textpic-imagewrap">
+				<div class="csc-textpic-imagecolumn" style="width: 175px;">
+					<gre:images realEstate="{realEstate}" alt="" showDescriptions="false" width="175c" height="100c" />
+				</div>
+			</div>
+			<div class="csc-textpic-text">
+				<h3><f:link.action action="show" arguments="{realEstate: realEstate}" pageUid="{settings.singleViewPid}">{realEstate.title}</f:link.action></h3>
+				<f:if condition="{realEstate.description}">
+				<f:format.html>{realEstate.description}</f:format.html>
+				</f:if>
+				<table class="contenttable">
+					<tbody>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.rent_exclusive_of_heating' )}</p></td>
+							<td><p><f:format.currency currencySign="EUR">{realEstate.rentExclusiveOfHeating}</f:format.currency></p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.size' )}</p></td>
+							<td><p><f:format.number>{realEstate.size}</f:format.number> m²</p></td>
+						</tr>
+						<tr>
+							<td><p>{f:translate(key : 'tx_gszrealestate_domain_model_realestate.address' )}</p></td>
+							<td><p>{realEstate.street}, {realEstate.postCode} {realEstate.town}</p></td>
+						</tr>
+					</tbody>
+				</table>
+				<p><f:link.action action="show" arguments="{realEstate: realEstate}" pageUid="{settings.singleViewPid}">{f:translate(key : 'tx_gszrealestate.more' )}</f:link.action></p>
+			</div>
+		</div>
+		<div class="csc-textpic-clear">
+			<!-- -->
+		</div>
+	</div>
+	
+</div>

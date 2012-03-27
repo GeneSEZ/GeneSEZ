@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<!-- transform the uml model into a GeneSEZ model -->
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<!-- our uml model -->
+		<model value="model/forms.uml" />
+		<!-- we used the just the genesez profile no other profile -->
+		<profile value="model/genesez.profile.uml" />
+	</component>
+	<!-- validate our GeneSEZ model with some common constraints and java syntax constraints -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
+	</component>
+	<!-- automatically implement the operations of interfaces in classes -->
+	<component id="modification" class="org.genesez.platform.common.workflow.Model2Model">
+		<script value="org::genesez::platform::common::m2m::Realization::realize" />
+	</component>
+	<!-- just to get an idea of how a GeneSEZ model looks like we serialize it -->
+	<component id="serialize" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/forms.xmi" />
+	</component>
+	<!-- generate java version 4 source code from our GeneSEZ model -->
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
+		<outputDir value="../org.genesez.example.java4.forms/src-gen" />
+		<template value="org::genesez::platform::java::java4::templates::Root::Root" />
+		<!-- there are several possibilities to specify your type mapping file(s):
+			1. You can list all files seperately here; if there are redundant rules 
+			the rule in the last specified typemapping file is active (recommended)
+			2. You can also include a typemapping file, e.g. the default java typemapping 
+			file, into your project specific file. In this case just list your project 
+			specific file here; with this solution redundant rules are not overriden by
+			the latest specified rule, e.g. in the project specific typemapping file 
+			after including another typemapping file. This is an opposing behaviour 
+			to the one described in possibility 1.
+			
+			Attention: If you use the statistic workflow component at the end of your 
+			workflow file it is necessary to add the same typemapping files to the 
+			statistic workflow component as you add to the generator workflow component. 
+			Explanation: The typemapping component is realized as singleton and 
+			uses the typemapping files specified in the last workflow component of 
+			the whole workflow file. -->
+		<typeMappingFile value="typemapping.xml" />
+	</component>
+</workflow>

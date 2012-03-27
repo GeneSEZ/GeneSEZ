@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<!--
+	phing build file
+	
+	@author	tobias haubold
+	@date	2009-08-10
+-->
+<project name="org.genesez.example.php.forms" basedir="." default="deploy">
+	
+	<property name="deploy.dir" value="bin/deploy" />
+	<property name="src-gen.dir" value="src-gen" />
+	<property name="test.dir" value="tests" />
+	<property name="api-doc.dir" value="bin/api-doc" />
+	
+	<fileset id="documentables" dir=".">
+		<include name="${src-gen.dir}/**/*.php" />
+		<include name="${test.dir}/**/*.php" />
+	</fileset>
+	
+	<includepath classpath="${src-gen.dir};${test.dir}" />
+	
+	<!-- syntax check -->
+	<target name="check" description="performs a syntax check on all php files">
+		<phplint haltonfailure="true">
+			<fileset refid="documentables" />
+		</phplint>
+	</target>
+	
+	<!-- tests -->
+	<target name="test" description="executes the test cases">
+		<phpunit2 printsummary="true">
+			<formatter type="plain" usefile="false" />
+			<batchtest>
+				<fileset dir=".">
+					<include name="${test.dir}/**/*.php" />
+				</fileset>
+			</batchtest>
+		</phpunit2>
+	</target>
+	
+	<!--
+		generates the api doc using phpdocumentor
+	-->
+	<target name="doc"
+			depends="check"
+			description="generate the API-Documentation">
+		
+		<!-- definition for phing -->
+		<phpdoc title="API Documentation for PHP-Example Project"
+			destdir="${api-doc.dir}"
+			output="HTML:frames:phphtmllib"
+			sourcecode="true">
+			
+			<fileset refid="documentables" />
+		</phpdoc>
+	</target>
+	
+	<!--
+		deploys the source directories to a directory of a web server
+	-->
+	<target name="deploy"
+			depends="check"
+			description="copies the webapp to a web server">
+		<copy todir="${deploy.dir}">
+			<fileset dir="${src-gen.dir}" />
+		</copy>
+	</target>
+	
+	<!--
+		deletes all contents from the deploy directory
+	-->
+	<target name="undeploy" description="removes the webapp from a web server">
+		<delete dir="${deploy.dir}" />
+	</target>
+	
+	<!--
+		removes the generated api doc and all source folders from the web server directory
+	-->
+	<target name="clean" depends="undeploy" description="removes all temporary stuff">
+		<delete dir="${api-doc.dir}" />
+	</target>
+</project>

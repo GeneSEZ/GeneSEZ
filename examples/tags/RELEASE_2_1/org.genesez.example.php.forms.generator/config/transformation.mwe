@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<!-- transform the uml model into a GeneSEZ model -->
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<!-- our uml model -->
+		<model value="model/forms.uml" />
+		<!-- we used the just the genesez profile no other profile -->
+		<profile value="model/genesez.profile.uml" />
+	</component>
+	<!-- validate our GeneSEZ model with some common constraints and php syntax constraints -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::php::constraints::Syntax" />
+	</component>
+	<!-- automatically implement the operations of interfaces in classes -->
+	<component id="modification" class="org.genesez.platform.common.workflow.CompositeModel2Model">
+		<script value="org::genesez::platform::common::m2m::Realization::realize" />
+		<script value="org::genesez::platform::common::UseDependencies::addUseDependencies" />
+	</component>
+	<!-- just to get an idea of how a GeneSEZ model looks like we serialize it -->
+	<component id="serialize" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/forms.xmi" />
+	</component>
+	<!-- generate php source code from our GeneSEZ model -->
+	<component id="model2php" class="org.genesez.platform.php.workflow.PhpGenerator">
+		<outputDir value="../org.genesez.example.php.forms/src-gen" />
+		<typeMappingFile value="typemapping.xml" />
+	</component>
+</workflow>

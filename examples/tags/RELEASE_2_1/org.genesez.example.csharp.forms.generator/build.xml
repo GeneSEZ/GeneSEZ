@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+
+<project name="org.genesez.example.csharp.forms" basedir="." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+	
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
+
+	<property name="workflow.dir" value="${basedir}/workflow" />
+	
+	<!-- Set the classpath -->
+	<path id="org.genesez.example.csharp.forms.classpath">
+		<fileset dir="${OAW_PLUGIN_DIR}">
+			<include name="org.genesez*_*.jar" />
+			<include name="org.genesez.platforms.common_*/*.jar" />
+		</fileset>
+		<pathelement location="${workflow.dir}" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+
+	<!-- Task definition section -->
+
+	<taskdef name="oaw.workflow"
+		classname="org.openarchitectureware.workflow.ant.WorkflowAntTask"
+		classpathref="Plug-in Dependencies.libraryclasspath" />
+
+
+	<!-- Public target section -->
+	
+	<target name="build"
+		description="Build org.genesez.metamodel"
+		depends="application.generate,application.beautify">
+	</target>
+	
+
+	
+	<!-- Private target section -->
+	
+	<target name="application.generate"
+		description="Runs generator for the application" >
+		<oaw.workflow file="workflow/codegenRun.oaw"
+			classpathref="org.genesez.example.csharp.forms.classpath"
+			fork = "true"
+			dir="${basedir}" />
+	</target>	
+
+	<target name="application.beautify"
+		description="Runs beautifier for the application" >
+		<foreach target="application.beautify.execute" param="file">
+			<fileset dir="${build.basedir}/org.genesez.example.csharp.forms/src-gen">
+			    <include name="**/*.cs"/>
+			</fileset>
+		</foreach>
+		<move todir="${build.basedir}/org.genesez.example.csharp.forms/src-gen"
+			overwrite="true">
+			<fileset dir="${build.basedir}/org.genesez.example.csharp.forms/src-gen">
+			    <include name="**/*.cs.uncrustify"/>
+			</fileset>
+			<mapper type="glob" from="*.cs.uncrustify" to="*.cs"/>
+		</move>
+	</target>
+
+	<target name="application.beautify.execute"
+		description="Runs beautifier for the application" >
+		<exec executable="uncrustify.exe" osfamily="windows">
+			<arg value="-c" />
+			<arg value="${basedir}/uncrustify.cfg" />
+			<arg value="${file}" />
+		</exec>
+		<exec executable="uncrustify" osfamily="unix">
+			<arg value="-c" />
+			<arg value="${basedir}/uncrustify.cfg" />
+			<arg value="${file}" />
+		</exec>
+	</target>
+	
+</project>

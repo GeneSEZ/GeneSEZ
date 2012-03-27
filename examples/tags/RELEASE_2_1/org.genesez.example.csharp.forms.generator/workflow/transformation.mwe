@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+
+	<!-- example project where the generated artifacts are stored -->
+	<property name="org.genesez.applicationproject.dir" value="../org.genesez.example.csharp.forms" />
+	
+	<component class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="${org.genesez.applicationproject.dir}/model-exp/Forms_Example.uml" />
+		<profile value="${org.genesez.applicationproject.dir}/model-exp/genesez.profile.uml" />
+	</component>
+	
+	<component class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::dotnet::csharp::constraints::Naming" />
+	</component>
+	
+	<component class="org.genesez.platform.common.workflow.Serializer">
+		<OPTION_SCHEMA_LOCATION_IMPLEMENTATION value="true" />
+		<file value="${org.genesez.applicationproject.dir}/model-gen/application.xmi" />
+	</component>
+	
+	<component class="org.genesez.platform.dotnet.workflow.CSharpGenerator">
+		<typeMappingFile value="org/genesez/platform/dotnet/csharp/typemapping/typemapping4csharp.xml" />
+		<outputDir value="${org.genesez.applicationproject.dir}/src-gen" />
+		<excludePackage value="java" />
+		<excludePackage value="java.util" />
+	</component>
+</workflow>
