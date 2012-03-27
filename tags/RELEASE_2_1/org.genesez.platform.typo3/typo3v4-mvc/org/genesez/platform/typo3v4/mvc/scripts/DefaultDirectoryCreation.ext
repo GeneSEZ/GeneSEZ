@@ -1,0 +1,91 @@
+/**
+ * Default directory creator scripts which create the default directory layout 
+ * of an TYPO3 MVC extension.
+ *  
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-08-11
+ */
+
+// use TYPO3 MVC conversion scripts
+extension org::genesez::platform::typo3v4::mvc::convention::Conversion;
+
+// use TYPO3 MVC workflow global var scripts
+extension org::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
+
+// use common file system helper scripts
+extension org::genesez::platform::common::FileSystemHelper;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	Default directory creator scripts 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Processes the generation of the default TYPO3 MVC directory hierarchy.
+ * It's correct that in most cases the directories are create automaticly
+ * when an file is generated inside a directory. But sometimes not every TYPO3 MVC
+ * aspect is or can be generated, so that these directories are created for uniform looking.
+ */
+Void createDefaultDirectories() :
+	// create "Classes" directories
+	createClassesDirectories() ->
+	// create "Configuration" directories
+	createConfigurationDirectories() ->
+	// create "Resources" directories
+	createResourcesDirectories();
+
+
+Void createClassesDirectories() :
+	// create "Classes/Controller" directory
+	createOutputDirectoryPath( classesControllerPath() ) ->
+	// create "Classes/Domain/Factory" directory
+	createOutputDirectoryPath( classesDomainFactoryPath() ) ->
+	// create "Classes/Domain/Model" directory
+	createOutputDirectoryPath( classesDomainModelPath() ) ->
+	// create "Classes/Domain/Repository" directory
+	createOutputDirectoryPath( classesDomainRepositoryPath() ) ->
+	// create "Classes/Domain/Service" directory
+	createOutputDirectoryPath( classesDomainServicePath() ) ->
+	// create "Classes/Domain/Validator" directory
+	createOutputDirectoryPath( classesDomainValidatorPath() ) ->
+	// create "Classes/ViewHelpers" directory
+	createOutputDirectoryPath( classesViewHelpersPath() );
+
+
+Void createConfigurationDirectories() :
+	// create "Configuration/FlexForms" directory
+	createOutputDirectoryPath( configurationFlexFormsPath() ) ->
+	// create "Configuration/TCA" directory
+	createOutputDirectoryPath( configurationTCAPath() ) ->
+	// create "Configuration/TypoScript" directory
+	createOutputDirectoryPath( configurationTypoScriptPath() );
+	
+
+Void createResourcesDirectories() :
+	// create "Resources/Private/Backend/Layouts" directory
+	createOutputDirectoryPath( resourcesPrivateBackendLayoutsPath() ) ->
+	// create "Resources/Private/Backend/Partials" directory
+	createOutputDirectoryPath( resourcesPrivateBackendPartialsPath() ) ->
+	// create "Resources/Private/Backend/Templates" directory
+	createOutputDirectoryPath( resourcesPrivateBackendTemplatesPath() ) ->
+	// create "Resources/Private/Language" directory
+	createOutputDirectoryPath( resourcesPrivateLanguagePath() ) ->
+	// create "Resources/Private/Layouts" directory
+	createOutputDirectoryPath( resourcesPrivateLayoutsPath() ) ->
+	// create "Resources/Private/Partials" directory
+	createOutputDirectoryPath( resourcesPrivatePartialsPath() ) ->
+	// create "Resources/Private/Templates" directory
+	createOutputDirectoryPath( resourcesPrivateTemplatesPath() ) ->
+	// create "Resources/Public/Icons" directory
+	createOutputDirectoryPath( resourcesPublicIconsPath() );
+
+
+/**
+ * Creates a directory inside the output dir of a TYPO3 MVC extension.
+ *
+ * @param	pathName	the path name
+ */
+private Void createOutputDirectoryPath(String pathName) :
+	 createDirectoryPath(globalVarOutputDir() + fileSeparator() + pathName );

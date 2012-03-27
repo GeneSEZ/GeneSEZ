@@ -1,0 +1,109 @@
+«IMPORT gcore»
+«REM»
+	Entry point for generating "ext_localconf.php".
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-07-20
+«ENDREM»
+
+«REM» use TYPO3 MVC Extbase profile access helper scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
+
+«REM» use TYPO3 naming context and common naming scripts «ENDREM»
+«EXTENSION org::genesez::platform::common::naming::Naming»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
+
+«REM» use TYPO3 MVC conversion scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::Conversion»
+
+«REM» use TYPO3 MVC naming scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::convention::Naming»
+
+«REM» use TYPO3 MVC access helper scripts «ENDREM»
+«EXTENSION org::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
+
+«REM» use common conversion scripts «ENDREM»
+«EXTENSION org::genesez::platform::common::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the generation of "ext_localconf.php".
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«EXPAND ContextSettings -»
+
+«FILE extLocalconfPHPFileNamePath() -»
+<?php
+
+«EXPAND AccessDenied -»
+«EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( e | e.name ) -»
+«EXPAND OwnCodeImplementation("ext_localconf.php.own.code.implementation." + xmiGuid) -»
+
+?>
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Sets the naming context for this part of generation.
+	The type mapping context is not needed for this part. 
+«ENDREM»
+«DEFINE ContextSettings FOR MModel -»
+«setNamingContext( namingContextConfiguration() ) -»
+«ENDDEFINE»
+
+
+«REM»
+	TYPO3 access control to check if this file is called from the outside of TYPO3. 
+	If so then the script dies.
+«ENDREM»
+«DEFINE AccessDenied FOR MElement -»
+if (!defined ('TYPO3_MODE')) {
+	die ('Access denied.');
+}
+
+«ENDDEFINE»
+
+
+«REM»
+	Configure all TYPO3 Extbase plugins by using "configurePlugin" from class 
+	"Tx_Extbase_Utility_Extension".	First the name of the plugin is set. After 
+	that the cached and uncached controller actions are generated. Finally the 
+	plugin is registered as plugin or as content element.
+«ENDREM»
+«DEFINE ConfigurePlugin FOR MInterface -»
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'«name() -»',
+	array(«FOREACH asControllerActionPairs( getT3ExtbasePluginControllerActions() ) AS controllerAction SEPARATOR ", "»
+		«controllerAction -»«ENDFOREACH»
+	),
+	array(«FOREACH asControllerActionPairs( getT3ExtbasePluginUncachedControllerActions() ) AS uncachedControllerAction SEPARATOR ", "»
+		«uncachedControllerAction -»«ENDFOREACH»
+	),
+	«getT3ExtbasePluginPluginType().asPluginType()»
+);
+
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own code implementations.
+«ENDREM»
+«DEFINE OwnCodeImplementation(String id) FOR MModel -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further code implementations here
+«ENDPROTECT»
+«ENDDEFINE»

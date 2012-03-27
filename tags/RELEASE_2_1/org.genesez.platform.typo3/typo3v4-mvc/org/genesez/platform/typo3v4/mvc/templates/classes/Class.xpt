@@ -1,0 +1,98 @@
+«IMPORT gcore»
+«REM»
+	Performs the generation of classes.
+	
+	currently handled:
+	- comments
+	- extends, implements
+	- attributes
+	- associations
+	- operations
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2011-04-22
+«ENDREM»
+
+«REM» use common naming scripts «ENDREM»
+«EXTENSION org::genesez::platform::common::naming::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes a class.
+«ENDREM»
+«DEFINE Root FOR MClass -»
+«EXPAND Comment::ClassifierDeclaration -»
+«EXPAND Modifier -»class «name() -»«EXPAND Generalization -»«EXPAND Realization -» {
+
+	«EXPAND org::genesez::platform::php5::templates::SectionComment::Member -»
+	«EXPAND Attribute::Declaration -»
+	«EXPAND Association::Declaration -»
+	«EXPAND org::genesez::platform::php5::templates::SectionComment::Constructor -»
+	«EXPAND Operation::Constructor -»
+	«EXPAND Operation::Destructor -»
+	«EXPAND org::genesez::platform::php5::templates::SectionComment::OperationDeclaration -»
+	«EXPAND Operation::Declaration -»
+	«EXPAND org::genesez::platform::php5::templates::SectionComment::OperationImplementation -»
+	«EXPAND Operation::Implementation -»
+	«EXPAND org::genesez::platform::php5::templates::SectionComment::DerivedAttribute -»
+	«EXPAND Attribute::Derived -»
+	«EXPAND org::genesez::platform::php5::templates::SectionComment::Accessor -»
+	«EXPAND Attribute::Accessors -»
+	«EXPAND Association::Accessors -»
+	«EXPAND org::genesez::platform::php5::templates::SectionComment::OwnCode -»
+	«EXPAND OwnCodeImplementation("php.class.own.code.implementation." + xmiGuid) -»
+
+}
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the modifiers of a class.
+	A class can be either abstract or final, not both!
+«ENDREM»
+«DEFINE Modifier FOR MClass -»
+«IF abstract -»abstract «ELSEIF final -»final «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the generalization of a class.
+	Only single inheritance is allowed.
+«ENDREM»
+«DEFINE Generalization FOR MClass -»
+«IF !generalization.isEmpty -»
+ extends «generalization.first().name() -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the realizations of a class.
+«ENDREM»
+«DEFINE Realization FOR MClass -»
+«IF !realization.isEmpty -»
+ implements «FOREACH realization AS r SEPARATOR ", " -»«r.name() -»«ENDFOREACH -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates a region for own code implementations.
+«ENDREM»
+«DEFINE OwnCodeImplementation(String id) FOR MClass -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further code implementations here
+	«ENDPROTECT»
+«ENDDEFINE»

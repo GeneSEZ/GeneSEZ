@@ -1,0 +1,59 @@
+/**
+ * Scaffolding of the model before generation of source code.  
+ *  
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-08-17
+ */
+
+//	based on genesez meta model
+import gcore;
+
+// use common logging scripts
+extension org::genesez::platform::common::log::Log;
+
+// use TYPO3 MVC Extbase profile + access helper scripts
+extension org::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
+extension org::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper;
+
+// use TYPO3 MVC access helper scripts which overrides
+// common access helper scripts if script name is equal 
+extension org::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
+extension org::genesez::platform::common::AccessHelper;
+
+// use TYPO3 MVC workflow globalvar scripts
+extension org::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
+
+// use common make element scripts
+extension org::genesez::platform::common::m2m::MakeElement;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	MPackage (MModel)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+Void modelScaffolding(MModel this) :
+	useLogger("org.genesez.platform.typo3") ->
+	// check if scaffoldig is activated
+	globalVarScaffolding()
+		? allEntities().entityScaffolding()
+		: Void;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	TYPO3 MVC Extbase Model entity scaffolding
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+Void entityScaffolding(MClass this) :
+	// perform scaffolding for all aggreagate roots
+	hasT3ExtbaseEntityIsAggregateRoot("true")
+		? (	logTrace( "Scaffolding for entity: " + name() ) ->
+			( let s = makeStereotype( model(), prT3ExtbaseDomainObject(), prT3ExtbaseDomainObject() ) :
+				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreateController(), "Boolean" ), "true" ) ->
+				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreateRepository(), "Boolean" ), "true" ) ->
+				  makeTaggedValue( makeTag( s, prT3ExtbaseDomainObjectCreatePlugin(), "Boolean" ), "true" )
+			)
+		) : Void;
