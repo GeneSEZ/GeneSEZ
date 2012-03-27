@@ -1,0 +1,27 @@
+/**
+ * Helper to remove meta model elements.
+ * 
+ * @author	andre pflueger
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2012-02-15
+ * 
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use common access helper scripts
+extension org::genesez::platform::common::AccessHelper;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	removeStereotype
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/ 
+
+Void removeStereotype(MElement this, MStereotype s) :
+	this.taggedValue.tag.removeAll(s.taggedValue.tag) ->
+	this.taggedValue.removeAll(s.taggedValue) ->
+	this.model().stereotype.remove(s) ->
+	this.stereotype.remove(s);
