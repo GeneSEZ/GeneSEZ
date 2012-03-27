@@ -1,0 +1,65 @@
+«IMPORT gcore»
+
+«REM»
+	Template for jpa-Aspects
+	
+	@author	andre pflueger
+	@date	2009-04-20
+«ENDREM»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for Hibernate
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	
+«REM»
+	include import statements in import-proReg of java5 cartridge
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+	«EXPAND Import::ImportStatements-»	
+	«targetDef.proceed()»
+«ENDAROUND»
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Class::_Annotation FOR MClass-»
+	«EXPAND Class::Annotation»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	extensions for class code generation
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Class::_Extension FOR MClass-»
+	«EXPAND Class::Equals-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for operations (used for return type, parameters and operations)
+	there is a conflict by using jws and ejb in one cartridge --> write own jws cartridge
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Operation::_Annotation FOR MOperation-»
+	«EXPAND Operation::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+	«EXPAND Attribute::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for associations
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Association::_Annotation FOR MAssociationRole-»
+	«EXPAND Association::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»

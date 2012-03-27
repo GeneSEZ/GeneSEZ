@@ -1,0 +1,64 @@
+«IMPORT gcore»
+
+«REM»
+	Template for aspects of the jws platform
+	
+	@author	andre pflueger
+	@date	2009-04-10
+«ENDREM»
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Class::_Annotation FOR MClass-»
+	«EXPAND Class::JWS-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+	
+«REM»
+	include import statements in import-proReg of java5 cartridge
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+	«EXPAND Import::ImportStatements-»	
+	«targetDef.proceed()»
+«ENDAROUND»
+
+«REM»
+	annotations for operations
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Operation::_Annotation FOR MOperation-»
+	«EXPAND Operation::WebMethod-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for operation parameters
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Operation::_Annotation FOR MParameter-»
+	«EXPAND Operation::WebParam-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for operation parameters
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Operation::_SingleValueReturn FOR MOperation-»
+	«EXPAND Operation::WebResult-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+	«EXPAND Attribute::Attribute-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for interfaces
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Interface::_Annotation FOR MInterface-»
+	«EXPAND Interface::JWS-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
