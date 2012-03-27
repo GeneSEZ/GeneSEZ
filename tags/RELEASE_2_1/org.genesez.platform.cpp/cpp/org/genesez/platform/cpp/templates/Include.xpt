@@ -1,0 +1,72 @@
+«IMPORT gcore»
+
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::UseDependencies»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+
+«EXTENSION org::genesez::platform::cpp::helper::IncludeHelper»
+«EXTENSION org::genesez::platform::cpp::helper::PackageHelper»
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+
+«DEFINE GuardBegin FOR MEnumeration -»
+#ifndef «name.toUpperCase()-»_H_
+#define «name.toUpperCase()-»_H_
+«ENDDEFINE»
+
+«DEFINE GuardEnd FOR MEnumeration -»
+#endif /*«name.toUpperCase()-»_H_*/
+«ENDDEFINE»
+
+«DEFINE GuardBegin FOR MClassifier -»
+#ifndef «name.toUpperCase()-»_H_
+#define «name.toUpperCase()-»_H_
+«ENDDEFINE»
+
+«DEFINE GuardEnd FOR MClassifier -»
+#endif /*«name.toUpperCase() -»_H_*/
+«ENDDEFINE»
+
+«DEFINE IncludeDeclaration FOR MClassifier -»
+#include "«asFileName()-»"
+«ENDDEFINE»
+
+«DEFINE LocalIncludes FOR MClassifier -»
+«EXPAND _include FOREACH getIncludes().typeSelect(MPrimitiveType) -»
+«EXPAND _include FOREACH getIncludes().typeSelect(MExternal) -»	
+«FOREACH getIncludes().typeSelect(MClassifier) AS itype -»
+#include "«getRelativePath(this, itype) -»«itype.asFileName() -»"
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«DEFINE Includes FOR MClassifier -»
+«IF hasOperations() -»
+#include <exception>
+«ENDIF -»
+«EXPAND _collections FOREACH getCollectionIncludes() -»
+«ENDDEFINE»
+
+«DEFINE TemplateInclude FOR MClass -»
+#include "«asSourceFileName() -»"
+«ENDDEFINE»
+
+«DEFINE _collections FOR String -»
+#include <«this -»>
+«ENDDEFINE»
+
+«DEFINE _include FOR MPrimitiveType-»
+«IF name.matches("String")-»
+#include <string>
+«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _include FOR MExternal-»
+#include <«mapName("Include")-»>
+«ENDDEFINE»
+
+«DEFINE _include FOR MType-»
+«warn("Include unsupported ==> nothing to do for MType: " + this)-» 
+«ENDDEFINE»
+
+«DEFINE _ FOR MType-»
+«ENDDEFINE»
