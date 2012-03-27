@@ -17,6 +17,11 @@
 					match="Bundle-Version:.*"
 					replace="Bundle-Version: ${plugin.version}">
 				</replaceregexp>
+				<replaceregexp byline="true"
+					file="@{project}/META-INF/MANIFEST.MF"
+					match='org.genesez([\w\.]*);bundle-version=\"(\d|\.)*\"(.*)'
+					replace='org.genesez\1;bundle-version="${plugin.version}"\3'>
+				</replaceregexp>
 			</sequential>
 		</for>
 		<for param="project">
