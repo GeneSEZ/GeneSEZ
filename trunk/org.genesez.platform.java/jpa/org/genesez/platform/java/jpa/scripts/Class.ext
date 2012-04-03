@@ -17,7 +17,7 @@ extension org::genesez::platform::java::jpa::scripts::Naming;
   */	
 MClassifier addStandardConstructor(MClass this) :
 	this.hasStereotype("jpaPersistentEntity") &&
-	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
+	!operation.exists(e|e.isConstructor() && e.parameter.isEmpty)
 		? makeStandardConstructor()
 		: "";
 
