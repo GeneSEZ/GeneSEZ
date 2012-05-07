@@ -10,15 +10,15 @@ import java.util.Map;
 import java.io.IOException;
 import org.apache.commons.logging.LogFactory;
 import org.genesez.platform.common.FileTreeObserverAdapter;
-import org.genesez.platform.common.NotPreparedException;
-import org.genesez.platform.common.workflow.WorkflowUtils;
 import org.apache.commons.logging.Log;
+import org.genesez.platform.common.NotPreparedException;
 import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.regex.PatternSyntaxException;
 import org.eclipse.xpand2.output.FileHandle;
 import java.util.regex.Pattern;
 import java.util.HashMap;
+import org.genesez.platform.common.workflow.WorkflowUtils;
 import java.util.Set;
 import java.nio.file.Path;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ import java.io.BufferedReader;
 import org.eclipse.xpand2.output.PostProcessor;
 import java.io.File;
 import java.util.LinkedList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * The task of an import beautifier is the detection and reduction of double
@@ -83,7 +83,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements PostPro
 		if (importRegex != null && importTakeOver) {
 			if (extensionsRegex == null || extensionsRegex.matcher(file.toString()).matches()) {
 				// initialize
-				Set<String> imports = new HashSet<String>();
+				Set<String> imports = new LinkedHashSet<String>();
 				String guID = null;
 				String line = null;
 				BufferedReader br = null;
@@ -207,7 +207,7 @@ public class ImportBeautifier extends FileTreeObserverAdapter implements PostPro
 		String guID = null;
 		int putImports = -1;
 		
-		Set<String> imports = new HashSet<String>();
+		Set<String> imports = new LinkedHashSet<String>();
 		String line = null;
 		boolean importFound = false;
 		int nextLine = -1;

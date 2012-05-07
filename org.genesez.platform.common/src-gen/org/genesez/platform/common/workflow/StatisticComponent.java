@@ -18,6 +18,8 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 import org.eclipse.xtend.type.impl.java.JavaMetaModel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.ui.RectangleInsets;
@@ -26,7 +28,6 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.jfree.data.general.DefaultPieDataset;
 import org.genesez.platform.common.revisioncontrol.RevisionControlSystem;
 import org.jfree.chart.plot.PiePlot3D;
-import org.genesez.platform.common.FileSystemHelper;
 import java.io.IOException;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
@@ -34,7 +35,6 @@ import org.genesez.platform.common.revisioncontrol.RegisterHelper;
 import java.awt.Font;
 import org.jfree.data.general.PieDataset;
 import java.util.Set;
-import org.eclipse.emf.mwe.utils.DirectoryCleaner;
 import org.genesez.platform.common.workflow.feature.FileTreeWalkerFeature;
 import java.net.URI;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
@@ -64,11 +64,7 @@ public class StatisticComponent extends CompositeComponent {
 	 * The Log instance of this class.
 	 */
 	protected Log logger = LogFactory.getLog(getClass());
-	
-	private DirectoryCleaner cleaner;
-	
-	private Copier copier;
-	
+			
 	private Generator generator;
 	
 	private Path defaultSource;
@@ -88,15 +84,11 @@ public class StatisticComponent extends CompositeComponent {
 		super(StatisticComponent.class.getSimpleName());
 		
 		// initialization
-		copier = new Copier();
 		generator = new Generator();
-		cleaner = new DirectoryCleaner();
 		ftw = new FileTreeWalkerFeature();
 		
 		properties.putAll(defaults);
-		
-		cleaner.setUseDefaultExcludes(false);
-		
+				
 		try {
 			// obtain location of class file; note: could be a directory or a jar file!
 			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
@@ -113,12 +105,7 @@ public class StatisticComponent extends CompositeComponent {
 		generator.setTemplate(properties.getProperty("template"));
 		generator.setSlot(properties.getProperty("slot"));
 		
-		if (defaultSource != null) {
-			copier.setSource(defaultSource.resolve(properties.getProperty("source")).toString());
-		}
-		
-		super.addComponent(cleaner);
-		super.addComponent(copier);
+		//super.addComponent(cleaner);
 		super.addComponent(generator);
 		/* PROTECTED REGION END */
 	}
@@ -150,21 +137,29 @@ public class StatisticComponent extends CompositeComponent {
 			// It alternates also all permission of the .svn folders for
 			// deletion
 			FileTreeWalkerFeature workaround = new FileTreeWalkerFeature();
-			workaround.setSearchedDir(properties.getProperty("outputDir"));
+			if(defaultSource != null){
+				workaround.setSearchedDir(defaultSource.resolve(properties.getProperty("source")).toString());
+			} else {
+				workaround.setSearchedDir(properties.getProperty("source"));
+			}
+			
+			final Path output = Paths.get(properties.getProperty("outputDir"));
 			workaround.addObserver(new FileTreeObserverAdapter() {
 				
-				private boolean toDelete = false;
+				private boolean excluded = false;
 				private Set<RevisionControlSystem> rcs = RegisterHelper.getAvailableImpls();
+				private Path startPath;
 				
 				/**
 				 * deletes the file if in a metadatafolder
 				 */
 				@Override
 				public void updateFileVisit(Path file) {
-					if (toDelete) {
+					if (!excluded) {
 						try {
-							FileSystemHelper.alterPermission(file);
-							Files.delete(file);
+							Path target = startPath.relativize(file);
+							target = output.resolve(target);
+							Files.copy(file, target, StandardCopyOption.REPLACE_EXISTING);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -172,18 +167,41 @@ public class StatisticComponent extends CompositeComponent {
 				}
 				
 				/**
-				 * checks if directory is a metadatafolder
+				 * checks if directory is a metadatafolder and creates the
+				 * needed directories if necessary
 				 */
 				@Override
 				public void updateBeforeDir(Path dir) {
-					for (RevisionControlSystem system : rcs) {
-						if (dir.endsWith(system.getMetadataFolderName())) {
-							toDelete = true;
+					if (startPath == null) {
+						startPath = dir;
+					} else if(!excluded){
+						for (RevisionControlSystem system : rcs) {
+							if (dir.endsWith(system.getMetadataFolderName())) {
+								excluded = true;
+								return;
+							}
+						}
+						if (dir.endsWith(".cvs")) {
+							excluded = true;
 							return;
 						}
-					}
-					if (dir.endsWith(".cvs")) {
-						toDelete = true;
+						
+						if (!Files.exists(output)) {
+							try {
+								Files.createDirectory(output);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+						Path target = startPath.relativize(dir);
+						target = output.resolve(target);
+						if (!Files.exists(target)) {
+							try {
+								Files.createDirectory(target);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
 					}
 				}
 				
@@ -192,25 +210,27 @@ public class StatisticComponent extends CompositeComponent {
 				 */
 				@Override
 				public void updateAfterDir(Path dir) {
-					if (toDelete) {
-						try {
-							FileSystemHelper.alterPermission(dir);
-							Files.delete(dir);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
 					for (RevisionControlSystem system : rcs) {
 						if (dir.endsWith(system.getMetadataFolderName())) {
-							toDelete = false;
+							excluded = false;
 							return;
 						}
 					}
 					if (dir.endsWith(".cvs")) {
-						toDelete = false;
+						excluded = false;
 					}
 				}
 			});
+			
+			if(properties.getProperty("withDetails") != "true"){
+				try {
+					Files.deleteIfExists(output.resolve("html").resolve("details.html"));
+				}
+				catch (IOException e) {
+					issues.addWarning(this, "details.html couldn't be removed");
+					e.printStackTrace();
+				}
+			}
 			generator.addPreFeature(workaround);
 			
 			generator.addPreFeature(ftw);
@@ -319,8 +339,6 @@ public class StatisticComponent extends CompositeComponent {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1321347485545_459542_2501) ENABLED START */
 		properties.setProperty("outputDir", dir);
 		generator.setOutputDir(dir);
-		cleaner.setDirectory(dir);
-		copier.setDestination(dir);
 		/* PROTECTED REGION END */
 	}
 	
@@ -345,7 +363,7 @@ public class StatisticComponent extends CompositeComponent {
 	public void setHtmlTemplateDirectory(String templateDir) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1321347772118_819220_2511) ENABLED START */
 		properties.setProperty("source", templateDir);
-		copier.setSource(templateDir);
+		defaultSource = null;
 		/* PROTECTED REGION END */
 	}
 	
