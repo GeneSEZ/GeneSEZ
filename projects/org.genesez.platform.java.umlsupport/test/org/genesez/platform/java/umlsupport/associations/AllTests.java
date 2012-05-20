@@ -7,7 +7,7 @@ import junit.framework.TestSuite;
 public class AllTests {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for de.genesez.assoctest");
+		TestSuite suite = new TestSuite("Tests for GeneSEZ association handling");
 		//$JUnit-BEGIN$
 		JUnit4TestAdapter adapter = new JUnit4TestAdapter(AssocOneTest.class);
 		suite.addTest(adapter);
