@@ -1,29 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <project name="org.genesez.platform.java.umlsupport" basedir=".." default="build">
-
-	<condition property="build.basedir"
-		value="${basedir}/..">
-		<not>
-			<isset property="build.basedir" />
-		</not>
-	</condition>
-
-	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
-	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
-
-	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
 
 	<!-- Import project related properties -->
 	<property file="build/build.properties" />
 	
 	
-	<!-- public targets -->
-	<target name="build" depends="compile" description="Build org.genesez.platform.java.umlsupport" />
+	<target name="build" description="Build org.genesez.platform.java.umlsupport">
+		<mkdir dir="${bin.dir}" />
+		<javac destdir="${bin.dir}" debug="on">
+			<src path="${src.dir}" />
+		</javac>
+	</target>
 	
 	<target name="createjar" depends="build"
 			description="create jar file for org.genesez.platform.java.umlsupport">
 		<mkdir dir="${dist.dir}" />
-		<jar destfile="${dist.dir}/${project.name}.jar" compress="true">
+		<jar destfile="${dist.dir}/${ant.project.name}.jar" compress="true">
 			<fileset dir="${bin.dir}">
 				<include name="org/genesez/platform/java/umlsupport/**/*" />
 			</fileset>
@@ -36,16 +28,4 @@
 			<fileset dir="${dist.dir}" includes="*.jar" />
 		</delete>
 	</target>
-	
-	<!-- private targets -->
-	<target name="compile" depends="clean">
-		<mkdir dir="${bin.dir}" />
-		<javac srcdir="${src.dir}" 
-			destdir="${bin.dir}"
-			classpathref="Plug-in Dependencies.libraryclasspath"
-			target="${target}"
-			source="${source}"
-			debug="on" />
-	</target>
-	
 </project>
