@@ -10,6 +10,10 @@ import org.eclipse.xpand2.output.JavaBeautifier;
 import org.apache.commons.logging.LogFactory;
 import org.genesez.platform.common.workflow.WorkflowUtils;
 import org.apache.commons.logging.Log;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import org.eclipse.emf.mwe.core.issues.Issues;
 
@@ -64,6 +68,7 @@ public class JavaGenerator extends DefaultGenerator {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010973_2130_2723) ENABLED START */
 		// check typemappingfile
 		if (isNotAddTypeMappingFile)
+			issues.addWarning(this, "No typemapping file given/found. Default will be used.");
 			super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
 		
 		// set fieldAccess
@@ -99,8 +104,20 @@ public class JavaGenerator extends DefaultGenerator {
 	
 	public void addTypeMappingFile(String typeMappingFile) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010982_274549_2726) ENABLED START */
-		super.addTypeMappingFile(typeMappingFile);
-		isNotAddTypeMappingFile = false;
+		Path path = Paths.get(typeMappingFile);
+		if ((ClassLoader.getSystemResourceAsStream(typeMappingFile) != null) ||
+				(path.isAbsolute() && Files.exists(path))) {
+			super.addTypeMappingFile(typeMappingFile);
+			isNotAddTypeMappingFile = false;
+			return;
+		}
+		else {
+			if(path.isAbsolute()){
+				logger.warn(typeMappingFile + " does not exist!");
+			} else {
+				logger.warn(typeMappingFile + " could not be found in classpath!");
+			}
+		}
 		/* PROTECTED REGION END */
 	}
 	
