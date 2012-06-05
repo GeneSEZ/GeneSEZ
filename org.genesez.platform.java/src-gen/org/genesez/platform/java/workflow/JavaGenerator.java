@@ -102,22 +102,13 @@ public class JavaGenerator extends DefaultGenerator {
 	 * @param	typeMappingFile	name of the file used by the generator for type mapping.
 	 */
 	
-	public void addTypeMappingFile(String typeMappingFile) {
+	public boolean addTypeMappingFile(String typeMappingFile) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010982_274549_2726) ENABLED START */
-		Path path = Paths.get(typeMappingFile);
-		if ((ClassLoader.getSystemResourceAsStream(typeMappingFile) != null) ||
-				(path.isAbsolute() && Files.exists(path))) {
-			super.addTypeMappingFile(typeMappingFile);
+		if(super.addTypeMappingFile(typeMappingFile)){
 			isNotAddTypeMappingFile = false;
-			return;
+			return true;
 		}
-		else {
-			if(path.isAbsolute()){
-				logger.warn(typeMappingFile + " does not exist!");
-			} else {
-				logger.warn(typeMappingFile + " could not be found in classpath!");
-			}
-		}
+		return false;
 		/* PROTECTED REGION END */
 	}
 	

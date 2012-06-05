@@ -5,6 +5,9 @@ package org.genesez.platform.common.workflow;
  * 	@FILE-ID : (_17_0_1_8e00291_1317994867406_376688_2793) 
  */
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.genesez.platform.common.m2t.ImportBeautifier;
@@ -276,9 +279,21 @@ public class DefaultGenerator extends Generator {
 	 * @param	typeMappingFile	A type mapping file to use.
 	 */
 	
-	public void addTypeMappingFile(String typeMappingFile) {
+	public boolean addTypeMappingFile(String typeMappingFile) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1317994891773_230537_2811) ENABLED START */
-		typeMappingFiles.add(typeMappingFile);
+		Path path = Paths.get(typeMappingFile);
+		if ((ClassLoader.getSystemResourceAsStream(typeMappingFile) != null) ||
+				(path.isAbsolute() && Files.exists(path))) {
+				typeMappingFiles.add(typeMappingFile);
+				return true;
+		} else {
+			if(path.isAbsolute()){
+				logger.warn(typeMappingFile + " does not exist!");
+			} else {
+				logger.warn(typeMappingFile + " could not be found in classpath!");
+			}
+		}
+		return false;
 		/* PROTECTED REGION END */
 	}
 	
