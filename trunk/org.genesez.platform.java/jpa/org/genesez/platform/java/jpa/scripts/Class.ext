@@ -134,7 +134,7 @@ Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
   */
 MClassifier addSerializable(MClassifier this) :
 	this.hasStereotype("jpaPersistentEntity") || this.hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true") 
-	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Serializable") 
+	&& !generalization.typeSelect(MClassifier).exists(e | e.hasStereotype("jpaPersistentEntity")) 
 		? realization.add(createExternal(this.getModel(), "Serializable"))
 		: "";
 

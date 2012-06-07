@@ -30,7 +30,7 @@
 	«IF hasStereotype("jwsSOAPBinding")-»
 		import javax.jws.soap.SOAPBinding;
 	«ENDIF-»
-	«IF hasStereotype("jwsSOAPHandler")-»
+	«IF (hasStereotype("jwsSOAPHandler") && getTaggedValueList("jwsHandlerChain", "handlers").size > 0) || hasUtilizableValue("jwsHandlerChain", "file")-»
 		import javax.jws.HandlerChain;
 	«ENDIF-»
 	«IF operation.exists(e|e.return.hasStereotype("jwsWebResult"))-»
