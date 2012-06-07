@@ -26,7 +26,7 @@
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
 	«EXPAND CallbackImport»
-	«IF operation.exists(e|e.hasStereotype("ejb3OperationInterceptor")) || hasStereotype("ejb3ClassInterceptor")-»
+	«IF isClass() && (operation.exists(e|e.hasStereotype("ejb3OperationInterceptor")) || hasStereotype("ejb3ClassInterceptor"))-»
 		import javax.interceptor.Interceptors;
 	«ENDIF-»
 	«IF operation.exists(e|e.hasStereotype("ejb3Timer"))-»

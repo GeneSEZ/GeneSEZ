@@ -19,6 +19,7 @@
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
 «EXTENSION org::genesez::platform::java::jpa::scripts::Naming»
+«EXTENSION org::genesez::platform::java::jpa::scripts::Class»
 
 «REM» 
 	generates import proReg and statements for hibernate classes
@@ -27,8 +28,12 @@
 «DEFINE ImportStatements FOR MClassifier-»
 	«IF hasStereotype("jpaPersistentEntity")-»
 		import javax.persistence.Entity;
-		import javax.persistence.Table;
-		import java.io.Serializable;
+		«IF isClass() && checkAnnotationTableUsage((MClass) this) -»
+			import javax.persistence.Table;
+		«ENDIF-»
+		«IF !generalization.typeSelect(MClassifier).exists(e | e.hasStereotype("jpaPersistentEntity")) -»
+			import java.io.Serializable;
+		«ENDIF-»
 	«ENDIF-»
 	«IF property.exists(e|e.hasStereotype("jpaOptimisticLocking")) || operation.exists(e|e.hasStereotype("jpaOptimisticLocking"))-»
 		import javax.persistence.Version;
