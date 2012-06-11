@@ -79,9 +79,10 @@ public class PhpGenerator extends DefaultGenerator {
 	 * 
 	 * @param typeMappingFile	location of the type mapping file in the classpath
 	 */
-	public void addTypeMappingFile(String typeMappingFile) {
-		super.addTypeMappingFile(typeMappingFile);
-		isNotAddTypeMappingFile=false;
+	public boolean addTypeMappingFile(String typeMappingFile) {
+		boolean result = super.addTypeMappingFile(typeMappingFile);
+		isNotAddTypeMappingFile = !result;
+		return result;
 	}
 	
 	public void setGenerateIncludes(boolean value) {
