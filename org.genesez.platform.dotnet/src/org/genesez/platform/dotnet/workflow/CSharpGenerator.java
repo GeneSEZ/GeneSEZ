@@ -70,8 +70,9 @@ public class CSharpGenerator extends DefaultGenerator {
 	 * @param typeMappingFile
 	 *            name of the file used by the generator for type mapping
 	 */
-	public void addTypeMappingFile(String typeMappingFile) {
-		super.addTypeMappingFile(typeMappingFile);
-		isNotAddTypeMappingFile = false;
+	public boolean addTypeMappingFile(String typeMappingFile) {
+		boolean result = super.addTypeMappingFile(typeMappingFile);
+		isNotAddTypeMappingFile = !result;
+		return result;
 	}
 }
