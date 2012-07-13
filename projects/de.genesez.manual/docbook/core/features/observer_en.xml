@@ -1,0 +1,102 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter>
+  <chapterinfo>
+    <releaseinfo>Since <emphasis>GeneSEZ 2.2</emphasis></releaseinfo>
+  </chapterinfo>
+  <title>Observer Pattern and Change Notification</title>
+  <para>Using the observer profile you can apply the 
+  <ulink url="http://en.wikipedia.org/wiki/Observer_pattern">observer 
+  pattern</ulink> to your domain model to add a simple change 
+  notification. The model transformations currently support:</para>
+  <itemizedlist>
+    <listitem>
+      <para>classifiers as well as interfaces as observable and 
+      observer</para>
+    </listitem>
+    <listitem>
+      <para>multiple observer types for one observable</para>
+    </listitem>
+    <listitem>
+      <para>add an <emphasis>attribute</emphasis> to the observable to 
+      store observers</para>
+    </listitem>
+    <listitem>
+      <para>add an <emphasis>attach</emphasis>, 
+      <emphasis>detach</emphasis> and <emphasis>notify 
+      observers</emphasis> method to the observable to register, 
+      unregister and notify observers</para>
+    </listitem>
+    <listitem>
+      <para>a <emphasis>notify changed</emphasis> method to the 
+      observer, which is called from the <emphasis>notify 
+      observer</emphasis> method of the observable</para>
+    </listitem>
+  </itemizedlist>
+  <section>
+    <title>Specification in UML Models</title>
+    <para>Assign the stereotype 
+    <link linkend="genesez.uml.profile.observer.observable"><literal>
+    observable</literal></link> to your observables, i.e. in 
+    <ulink url="http://en.wikipedia.org/wiki/Observer_pattern">gof 
+    pattern</ulink> terminology the <emphasis>subjects</emphasis>. Use 
+    the tagged value 
+    <link linkend="genesez.uml.profile.observer.observable.observer">
+    <literal>observer</literal></link> to specify your observers.</para>
+    <figure>
+      <title>Example UML model with observers and observables</title>
+      <mediaobject><imageobject role="html">
+      <imagedata align="center" fileref="genesez.platforms.common.observer.uml.example.png"/></imageobject>
+      <imageobject role="fo">
+      <imagedata align="center" fileref="core/features/genesez.platforms.common.observer.uml.example.svg" scalefit="1" width="100%"/></imageobject></mediaobject>
+    </figure>
+    <para>With the stereotype 
+    <link linkend="genesez.uml.profile.observer.notify"><literal>
+    notify</literal></link> you can specify properties and operations 
+    changing the state of the observable. By doing so source code 
+    generating transformations can call the <emphasis>notify 
+    observers</emphasis> method.</para>
+  </section>
+  <section>
+    <title>Configuration of Model Transformations in Workflow</title>
+    <para>You need to add the script <literal>
+    org::genesez::platform::common::m2m::Observer::transform</literal> 
+    to a model to model transformation workflow component (either 
+    <link linkend="genesez.platforms.common.workflow.components.model2model">
+    Model2Model</link> or 
+    <link linkend="genesez.platforms.common.workflow.components.compositemodel2model">
+    CompositeModel2Model</link>) before the 
+    <link linkend="genesez.platforms.common.workflow.components.generator">
+    Generator</link> workflow component in your workflow file.</para>
+    <example>
+      <title>Model to model transformation workflow component for 
+      observer pattern</title>
+      <programlisting>// ...
+component = org.genesez.platform.common.workflow.CompositeModel2Model {
+    script = &quot;org::genesez::platform::common::m2m::Observer::transform&quot;
+    script = &quot;org::genesez::platform::common::m2m::Realization::realize&quot;
+}
+// ...</programlisting>
+    </example>
+    <para>Ensure it is executed before the interface realization 
+    script!</para>
+  </section>
+  <section>
+    <title>Current Limitations</title>
+    <itemizedlist>
+      <listitem>
+        <para>source code generating transformations exist only for 
+        Java programming language</para>
+      </listitem>
+      <listitem>
+        <para>external types as observers are not supported</para>
+      </listitem>
+      <listitem>
+        <para>the code generating transformations for stereotype 
+        <link linkend="genesez.uml.profile.observer.notify"><literal>
+        notify</literal></link> doesn&apos;t support the association 
+        handling or operations</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</chapter>
