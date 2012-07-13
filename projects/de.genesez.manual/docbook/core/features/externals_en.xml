@@ -1,0 +1,218 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter id="genesez.externals">
+  <title>Reuse of existing library types</title>
+  <para>During elaboration of UML domain models you will encounter the 
+  need of to reference data types you are not going to implement 
+  yourself but using them from a programming language library. The UML 
+  standard profile doesn&apos;t support you that much as it provides 
+  only four data types:</para>
+  <variablelist>
+    <varlistentry>
+      <term><literal>String</literal></term>
+      <listitem>
+        <para>Type for a sequence of characters.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>Boolean</literal></term>
+      <listitem>
+        <para>Type for logical expressions consisting of the predefined 
+        values <literal>true</literal> or <literal>
+        false</literal>.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>Integer</literal></term>
+      <listitem>
+        <para>Type for integral positive and negative numbers.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>UnlimitedNatural</literal></term>
+      <listitem>
+        <para>Type for unlimited natural numbers including zero ( 
+        <literal>0</literal>) and infinity ( <literal>
+        *</literal>).</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <para>For any other type you can use 
+  <link linkend="genesez.uml.profile.genesez">GeneSEZ external 
+  types</link> and the <link linkend="genesez.typemapping">GeneSEZ 
+  typemapping</link>.</para>
+  <section>
+    <title>Specification in UML Models</title>
+    <para>To model an existing library type for reuse create a usual 
+    UML type such as class, data type, interface or enumeration. Then 
+    you have to flag it using one of the following possibilities:</para>
+    <itemizedlist>
+      <listitem>
+        <para>use stereotypes on UML types or packages</para>
+      </listitem>
+      <listitem>
+        <para>use separate packages</para>
+      </listitem>
+      <listitem>
+        <para>create these UML types directly within the UML 
+        <emphasis>Model</emphasis> element, i.e. these UML types have a 
+        containment relationship to the UML <emphasis>Model</emphasis> 
+        element</para>
+      </listitem>
+    </itemizedlist>
+    <para>The choice is up to you. By using a stereotype the semantical 
+    meaning of a reused library type is usually more obvious. If you 
+    like you can use the stereotype 
+    <link linkend="genesez.uml.profile.genesez.external"><literal>
+    external</literal></link> of the 
+    <link linkend="genesez.uml.profile.genesez">GeneSEZ 
+    profile</link>.</para>
+  </section>
+  <section>
+    <title>Configuration of UML to GeneSEZ Model Transformations in 
+    Workflow</title>
+    <para>Depending on your modeling approach you may have to configure 
+    the <link linkend="genesez.platforms.common.workflow.uml2genesez">
+    <literal>Uml2GeneSEZ</literal></link> workflow component to 
+    transform external types correctly. The relevant parameters 
+    are:</para>
+    <variablelist>
+      <varlistentry>
+        <term><literal>mapClassesInModelToExternal</literal>, Standard: 
+        <literal>false</literal></term>
+        <listitem>
+          <para>Specifies if all classifier (i.e. classes, interfaces, 
+          enumerations, data types and so on) with a containment 
+          reference to the UML <emphasis>Model</emphasis> element are 
+          transformed into GeneSEZ external types.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="genesez.externals.externalPackage">
+        <term><literal>externalPackage</literal>, 
+        <emphasis>multi-value</emphasis></term>
+        <listitem>
+          <para>Specifies an UML package by its qualified name 
+          containing classifier to be transformed into GeneSEZ external 
+          types. The UML package just acts as a container for external 
+          types and is <emphasis>not</emphasis> transformed itself into 
+          a GeneSEZ package.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>externalPackages</literal>, 
+        <emphasis>multi-value</emphasis></term>
+        <listitem>
+          <para>The same as 
+          <link linkend="genesez.externals.externalPackage"><literal>
+          externalPackage</literal></link> but you can specify a comma 
+          separated list with qualified names of UML packages.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="genesez.externals.externalStereotype">
+        <term><literal>externalStereotype</literal>, 
+        <emphasis>multi-value</emphasis>, Standard: <literal>
+        external</literal></term>
+        <listitem>
+          <para>Specifies the name of an UML stereotype used to 
+          annotate UML classifiers as external types or UML packages as 
+          container for external types.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>externalStereotypes</literal>, 
+        <emphasis>multi-value</emphasis></term>
+        <listitem>
+          <para>The same as 
+          <link linkend="genesez.externals.externalStereotype"><literal>
+          externalStereotype</literal></link> but you can specify a 
+          comma separated list with names of UML stereotypes.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section>
+    <title>Modeling and Configuration Examples for External 
+    Types</title>
+    <para>Based on the Java forms example and the type 
+    <emphasis>Color</emphasis> we illustrate the different 
+    possibilities.</para>
+    <variablelist>
+      <varlistentry>
+        <term><emphasis role="bold">External Types by annotation of UML 
+        classifiers or UML packages with a stereotype</emphasis></term>
+        <listitem>
+          <para>Just assign the stereotype <literal>external</literal> 
+          of the <link>GeneSEZ profile</link> to your classifier.</para>
+          <figure>
+            <title>External Types by annotation of UML classifiers with 
+            a stereotype</title>
+            <mediaobject><imageobject role="html">
+            <imagedata align="center" fileref="genesez.external.types.stereotype.on.type.png"/></imageobject>
+            <imageobject role="fo">
+            <imagedata align="center" fileref="core/features/genesez.external.types.stereotype.on.type.svg" scalefit="1" width="100%"/></imageobject></mediaobject>
+          </figure>
+          <para>You can also assign the stereotype to UML packages 
+          which act as a container for external types.</para>
+          <figure>
+            <title>External Types by annotation of UML packages with a 
+            stereotype</title>
+            <mediaobject><imageobject role="html">
+            <imagedata align="center" fileref="genesez.external.types.stereotype.on.package.png"/></imageobject>
+            <imageobject role="fo">
+            <imagedata align="center" fileref="core/features/genesez.external.types.stereotype.on.package.svg" scalefit="1" width="100%"/></imageobject></mediaobject>
+          </figure>
+          <para>If you use another stereotype with a different name you 
+          need to specify the name of the stereotype as value of the 
+          parameter 
+          <link linkend="genesez.workflow.uml2genesez.externalStereotype">
+          <literal>externalStereotype</literal></link> of the UML to 
+          GeneSEZ transformation.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">External Types by qualified UML 
+        package names</emphasis></term>
+        <listitem>
+          <figure>
+            <title>External Types by qualified UML package name</title>
+            <mediaobject><imageobject role="html">
+            <imagedata align="center" fileref="genesez.external.types.package.by.name.png"/></imageobject>
+            <imageobject role="fo">
+            <imagedata align="center" fileref="core/features/genesez.external.types.package.by.name.svg" scalefit="1" width="100%"/></imageobject></mediaobject>
+          </figure>
+          <example>
+            <title>External Types by qualified UML package name</title>
+            <programlisting>component = org.genesez.adapter.uml2.Uml2GeneSEZ {
+  // ...
+  excludePackage = &quot;ReusedLibraryTypes&quot;
+}</programlisting>
+          </example>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><emphasis role="bold">External Types by Containment 
+        Relationship to the UML <emphasis>Model</emphasis> 
+        Element</emphasis></term>
+        <listitem>
+          <figure>
+            <title>External Types by Containment Relationship to the 
+            UML <emphasis>Model</emphasis> Element</title>
+            <mediaobject><imageobject>
+            <imagedata align="center" fileref="genesez.external.types.containment.png"/></imageobject></mediaobject>
+          </figure>
+          <example>
+            <title>External Types by Transformation of Classifiers wih 
+            an UML <emphasis>Model</emphasis> Containment</title>
+            <programlisting>component = org.genesez.adapter.uml2.Uml2GeneSEZ {
+  // ...
+  mapClassesInModelToExternal = true
+}</programlisting>
+          </example>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>Please refer to the <link linkend="genesez.typemapping">
+    GeneSEZ typemapping</link> on how to define the name of the type 
+    being reused.</para>
+  </section>
+</chapter>
