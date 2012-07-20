@@ -82,13 +82,18 @@ public class Uml2GeneSEZ extends CompositeComponent {
 		// uml2 meta model
 		UML2MetaModel uml2MetaModel = new UML2MetaModel();
 		
-		// GeneSEZ meta model
+		// GeneSEZ core meta model
 		EmfMetaModel gcore = new EmfMetaModel();
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
+		
+		// GeneSEZ presentation meta model
+		EmfMetaModel gpresentation = new EmfMetaModel();
+		gpresentation.setMetaModelPackage(properties.getProperty("gpresentationPackage"));
 		
 		checkComponent.addMetaModel(uml2MetaModel);
 		xtendComponent.addMetaModel(uml2MetaModel);
 		xtendComponent.addMetaModel(gcore);
+		xtendComponent.addMetaModel(gpresentation);
 		
 		super.addComponent(xmiReader);
 		super.addComponent(checkComponent);
