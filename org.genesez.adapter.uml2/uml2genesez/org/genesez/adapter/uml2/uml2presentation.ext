@@ -1,0 +1,65 @@
+
+import uml;
+import gpresentation;
+
+// use qualifed naming functions
+extension org::genesez::adapter::uml2::scripts::Helper;
+
+// use logging
+extension org::genesez::platform::common::log::Log;
+
+
+
+create PPackage transform(Model m) :
+	useLogger("org.genesez.adapter.uml2") ->
+	logDebug("transform: " + m.name) ->
+	setName( m.name ) ->
+	// walk containment
+	m.nestedPackage.transform( this ) ->
+	this;
+
+Void transform(Package this, PPackage model) :
+	logDebug("process uml package: " + name) ->
+	logDebug( ownedElement.typeSelect( InstanceSpecification ).toString() ) ->
+	logDebug( ownedElement.typeSelect( InstanceSpecification ).first().classifier.toString() ) ->
+	logDebug( ownedElement.typeSelect( InstanceSpecification ).classifier.name.toString() ) ->
+	//logDebug( "" + ownedElement.typeSelect( InstanceSpecification ).first().classifier.first().name.l ) ->
+	ownedElement.typeSelect( InstanceSpecification ).select( e|e.classifier.exists( e|e.name == "PPackage" ) ).transformPackage( model ) ->
+	ownedElement.typeSelect( InstanceSpecification ).select( e|e.classifier.exists( e|e.name == "PRoot" ) ).transformRoot( model ) ->
+	null;
+
+create PPackage transformPackage(InstanceSpecification is, PPackage model) :
+	logDebug("transform package: " + is.name) ->
+	setName( is.name ) ->
+	// containment
+	
+	//logDebug( is.slot.definingFeature.toString() ) ->
+	//logDebug( is.slot.value.toString() ) ->
+	
+	//logDebug( "->" + is.slot.select( e|e.definingFeature.name == "nestedPackage" ).value.toString() ) ->
+	//logDebug( "->" + is.slot.select( e|e.definingFeature.name == "nestedPackage" ).value.clientDependency.toString() ) ->
+	//logDebug( "->" + is.slot.select( e|e.definingFeature.name == "nestedPackage" ).value.typeSelect(InstanceValue).instance.toString() ) ->
+	//logDebug( "<-" + is.slot.select( e|e.definingFeature.name == "nestingPackage" ).toString() ) ->
+	
+	// transform nested packages
+	is.slot.select( e|e.definingFeature.name == "nestedPackage" ).value.typeSelect(InstanceValue).instance.transformPackage( this ) ->
+	
+	// set containment, either in nesting package or in specified container
+	is.slot.exists( e|e.definingFeature.name == "nestingPackage" )
+		? is.slot.select( e|e.definingFeature.name == "nestingPackage" ).value.typeSelect(InstanceValue).instance.transformPackage( model ).nestedPackage.add( this )
+		: model.nestedPackage.add( this ) ->
+	this;
+
+create PRoot transformRoot(InstanceSpecification is, PPackage container) :
+	logDebug("transform root: " + is.name) ->
+	setName( is.name ) ->
+	// containment
+	container.root.add( this ) ->
+	this;
+
+/*
+create PPackage makePackage(InstanceSpecification is, PPackage container) :
+	setName( is.name ) ->
+	is.slot.forAll( e| logDebug( e.definingFeature + " = " + e.value ) -> true ) ->
+	this;
+*/
