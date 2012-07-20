@@ -19,9 +19,11 @@ public class WorkflowUtils {
 	static {
 		defaults.put("slot", "coremodel");
 		defaults.put("coreSlot", "coremodel");
+		defaults.put("presentationSlot", "presentationmodel");
 		defaults.put("reqSlot", "reqmodel");
 		defaults.put("traceSlot", "tracemodel");
 		defaults.put("gcorePackage", "org.genesez.metamodel.gcore.GcorePackage");
+		defaults.put("gpresentationPackage", "org.genesez.metamodel.gpresentation.GpresentationPackage");
 		defaults.put("greqPackage", "org.genesez.metamodel.greq.GreqPackage");
 		defaults.put("gtracePackage", "org.genesez.metamodel.gtrace.GtracePackage");
 	}
