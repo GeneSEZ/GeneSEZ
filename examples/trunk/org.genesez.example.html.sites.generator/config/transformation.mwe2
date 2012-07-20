@@ -1,0 +1,39 @@
+module org.genesez.metamodel.workflow.transformation
+
+// properties
+var uml2.file = "../org.genesez.metamodel.presentation/modeling/gpresentation.uml"
+var gpres.file = "model/gpresentation.xmi"
+
+Workflow {
+	// initialize uml2 support
+	bean = org.eclipse.xtend.typesystem.uml2.Setup {
+		standardUML2Setup = true
+	}
+	
+	// reference to the uml meta model
+	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml { 
+	}
+	
+	// reference to the gpresentation meta model
+	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : gpres {
+		metaModelPackage = "org.genesez.metamodel.gpresentation.GpresentationPackage"
+	}
+
+	// instantiate the uml model from file
+	component = org.eclipse.xtend.typesystem.emf.XmiReader {
+		modelFile = "${uml2.file}"
+		outputSlot = "uml2model"
+	}
+	// transform the uml model into an gpresenation model
+	component = org.eclipse.xtend.XtendComponent {
+		metaModel = gpres
+		metaModel = uml
+		invoke = "org::genesez::adapter::uml2::uml2presentation::transform(uml2model)"
+		outputSlot = "gpresModel"
+	}
+	// serialize the instantiated ecore model into a file
+	component = org.eclipse.xtend.typesystem.emf.XmiWriter {
+		inputSlot = "gpresModel"
+		modelFile = "${gpres.file}"
+	}
+}
