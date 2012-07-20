@@ -197,7 +197,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 	 * setter for UmlGenesezScript parameter in xtendComponent.
 	 */
 	public void setUml2GenesezScriptCall(String scriptCall) {
-		xtendComponent.setInvoke(scriptCall);
+		xtendComponent.setInvoke(scriptCall + "(" + properties.getProperty("umlSlot") + ")");
 		isNotSetUml2genesezScriptCall = false;
 	}
 	
