@@ -1,3 +1,9 @@
+/**
+ * Transforms an uml2 presentation model into a GeneSEZ presentation model
+ * 
+ * @author	tobias haubold
+ * @date	2012-07-30
+ */
 
 import uml;
 import gpresentation;
@@ -26,18 +32,20 @@ create PPackage transform(Model m) :
 Void transform(Package this) :
 	logDebug("process uml package: " + name) ->
 	( let is = ownedElement.typeSelect( InstanceSpecification ) :
-		is.select( e|e.isPackage() ).transformPackage() ->
-		is.select( e|e.isRoot() ).transformRoot() ->
-		is.select( e|e.isCompositeArea() ).transformCompositeArea() ->
-		is.select( e|e.isElementArea() ).transformElementArea() ->
-		is.select( e|e.isReferenceArea() ).transformReferenceArea() ->
-		is.select( e|e.isUserDefinedArea() ).transformUserDefinedArea() ->
-		is.select( e|e.isAutomaticallyGeneratedArea() ).transformAutomaticallyGeneratedArea() ->
+		is.select( e|e.isPackage() )
+			.transformPackage()
+			.roots().transformRoot()
+		//is.select( e|e.isRoot() ).transformRoot() ->
+		//is.select( e|e.isCompositeArea() ).transformCompositeArea() ->
+		//is.select( e|e.isElementArea() ).transformElementArea() ->
+		//is.select( e|e.isReferenceArea() ).transformReferenceArea() ->
+		//is.select( e|e.isUserDefinedArea() ).transformUserDefinedArea() ->
+		//is.select( e|e.isAutomaticallyGeneratedArea() ).transformAutomaticallyGeneratedArea() ->
 		// elements
-		is.select( e|e.isInput() ).transformInput() ->
-		is.select( e|e.isOutput() ).transformOutput() ->
-		is.select( e|e.isAction() ).transformAction() ->
-		is.select( e|e.isCompositeElement() ).transformCompositeElement()
+		//is.select( e|e.isInput() ).transformInput() ->
+		//is.select( e|e.isOutput() ).transformOutput() ->
+		//is.select( e|e.isAction() ).transformAction() ->
+		//is.select( e|e.isCompositeElement() ).transformCompositeElement()
 	) ->
 	// walk containment
 	nestedPackage.transform() ->
@@ -46,42 +54,75 @@ Void transform(Package this) :
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformPackage(InstanceSpecification is) :
-	logDebug("transform package: " + is.name) -> (
-		let this = makePackage(is) :
+cached InstanceSpecification transformPackage(InstanceSpecification this) :
+	logDebug("transform package: " + name) -> (
+		let p = makePackage() :
+			// model subtree
+			roots().transformRoot()
 			// no model references to transform
-		this
-	);
-
-/**
- * Transforms the specified instance specification with references to other model elements.
- */
-cached Void transformRoot(InstanceSpecification is) :
-	logDebug("transform root: " + is.name) -> (
-		let this = makeRoot( is ) :
-			// no model references to transform
-		this
-	);
+	) ->
+	this;
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformCompositeArea(InstanceSpecification is) :
-	logDebug("transform composite area: " + is.name) -> (
-		let this = makeCompositeArea( is ) :
+cached InstanceSpecification transformRoot(InstanceSpecification this) :
+	logDebug("transform root: " + name) -> (
+		let r = makeRoot() :
+			// model subtree
+			nestedContents().transformContentArea()
 			// no model references to transform
-		this
-	);
+	) ->
+	this;
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformElementArea(InstanceSpecification is) :
-	logDebug("transform element area: " + is.name) -> (
-		let this = makeElementArea( is ) :
+cached InstanceSpecification transformCompositeArea(InstanceSpecification this) :
+	logDebug("transform composite area: " + name) -> (
+		let ca = makeCompositeArea() :
+			// model subtree
+			nestedContents().transformContentArea()
 			// no model references to transform
-		this
-	);
+	) ->
+	this;
+	
+/**
+ * Dispatches the transformation.
+ */
+InstanceSpecification transformContentArea(InstanceSpecification this) :
+	switch {
+		case isCompositeArea() : transformCompositeArea()
+		case isElementArea() : transformElementArea()
+		case isReferenceArea() : transformReferenceArea()
+		case isUserDefinedArea() : transformUserDefinedArea()
+		case isAutomaticallyGeneratedArea() : transformAutomaticallyGeneratedArea()
+		default : this
+	};
+	
+/**
+ * Dispatches the transformation.
+ */
+InstanceSpecification transformElement(InstanceSpecification this) :
+	switch {
+		case isInput() : transformInput()
+		case isOutput() : transformOutput()
+		case isAction() : transformAction()
+		case isCompositeElement() : transformCompositeElement()
+		default : this
+	};
+	
+/**
+ * Transforms the specified instance specification with references to other model elements.
+ */
+cached InstanceSpecification transformElementArea(InstanceSpecification this) :
+	logDebug("transform element area: " + name) -> (
+		let ea = makeElementArea() :
+			// model subtree
+			nestedElements().transformElement()
+			// no model references to transform
+	) ->
+	this;
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
@@ -90,7 +131,7 @@ cached Void transformReferenceArea(InstanceSpecification is) :
 	logDebug("transform reference area: " + is.name) -> (
 		let this = makeReferenceArea( is ) :
 			// model references
-			setTarget( is.target().transformRoot() ) ->
+			setTarget( is.target().makeRoot() ) ->
 		this
 	);
 	
@@ -147,12 +188,14 @@ cached Void transformAction(InstanceSpecification is) :
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformCompositeElement(InstanceSpecification is) :
-	logDebug("transform composite element: " + is.name) -> (
-		let this = makeCompositeElement( is ) :
+cached InstanceSpecification transformCompositeElement(InstanceSpecification this) :
+	logDebug("transform composite element: " + name) -> (
+		let ce = makeCompositeElement() :
+			// model subtree
+			nestedElements().transformElement()
 			// no model references to transform
-		this
-	);
+	) ->
+	this;
 	
 /**
  * Transforms the specified instance specification without references to other model elements.
@@ -397,6 +440,7 @@ InstanceSpecification owningPackage(InstanceSpecification this) : one("owningPac
 List[InstanceSpecification] nestedPackages(InstanceSpecification this) : many("nestedPackages");
 boolean hasPackage(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningPackage" );
 InstanceSpecification package(InstanceSpecification this) : one("owningPackage");
+List[InstanceSpecification] roots(InstanceSpecification this) : many("roots");
 boolean hasArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningArea" );
 InstanceSpecification area(InstanceSpecification this) : one("owningArea");
 List[InstanceSpecification] nestedContents(InstanceSpecification this) : many("nestedContents");
@@ -404,6 +448,7 @@ boolean hasTarget(InstanceSpecification this) : slot.exists( e|e.definingFeature
 InstanceSpecification target(InstanceSpecification this) : one("target");
 boolean hasElementArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningArea" );
 InstanceSpecification elementArea(InstanceSpecification this) : one("owningArea");
+List[InstanceSpecification] nestedElements(InstanceSpecification this) : many("nestedElements");
 boolean hasCompositeElement(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningElement" );
 InstanceSpecification compositeElement(InstanceSpecification this) : one("owningElement");
 boolean hasNestedElements(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestedElements" );
