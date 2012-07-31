@@ -1,0 +1,133 @@
+«IMPORT gpresentation»
+«REM»
+	Main entry point for generating html code.
+	Iterates over the model and delegates the handling.
+	
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
+	@date	2012-07-31
+«ENDREM»
+
+«REM» use common logging scripts «ENDREM»
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION PresentationHelper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the contents of a model, delegates the handling of all PRoots.
+«ENDREM»
+«DEFINE ModelRoot FOR PPackage -»
+«REM» init logger «ENDREM»
+«useLogger("org.genesez.platform.html") -» 
+
+«REM» Iterate over all nested packages «ENDREM»	
+«EXPAND Root FOREACH nestedPackages -»
+
+«REM» Delegates the handling of all PRoots «ENDREM»
+«EXPAND Root FOREACH roots -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Processes the contents of a package, delegates the handling of all PRoots.
+«ENDREM»
+«DEFINE Root FOR PPackage -»
+«REM» Iterate over all nested packages «ENDREM»	
+«EXPAND Root FOREACH nestedPackages -»
+
+«REM» Delegates the handling of all PRoots «ENDREM»
+«EXPAND Root FOREACH roots -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the content of a PRoot
+«ENDREM»
+«DEFINE Root FOR PRoot -»
+«FILE filePath( asFileName() )»
+«EXPAND Content FOREACH nestedContents -»
+
+«EXPAND OwnContent(name) -»
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the content of a PCompositeArea
+«ENDREM»
+«DEFINE Content FOR PCompositeArea -»
+«EXPAND Content FOREACH nestedContents -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the content of a PElementArea
+«ENDREM»
+«DEFINE Content FOR PElementArea -»
+«EXPAND Element FOREACH nestedElements -»
+«ENDDEFINE»
+
+
+«REM»
+	Only there for error free templates
+«ENDREM»
+«DEFINE Content FOR PContentArea»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the content of a PCompositeElement
+«ENDREM»
+«DEFINE Element FOR PCompositeElement -»
+«EXPAND Element FOREACH nestedElements -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the content of a PInput
+«ENDREM»
+«DEFINE Element FOR PInput -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the content of a POutout
+«ENDREM»
+«DEFINE Element FOR POutput -»
+«ENDDEFINE»
+
+
+«REM»
+	Processes the content of a PAction
+«ENDREM»
+«DEFINE Element FOR PAction -»
+«ENDDEFINE»
+
+
+«REM»
+	Only there for error free templates
+«ENDREM»
+«DEFINE Element FOR PElement»
+«ENDDEFINE»
+
+
+
+«REM»
+	Generates a region for own code declarations.
+«ENDREM»
+«DEFINE OwnContent(String id) FOR PRoot -»
+«PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+<!-- TODO: put your further content here -->
+«ENDPROTECT»
+«ENDDEFINE»
