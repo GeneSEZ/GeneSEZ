@@ -180,17 +180,17 @@ PContentArea makeContentArea(InstanceSpecification this) :
 /**
  * Transforms the specified instance specification with properties and containment but without references to other model elements.
  * It ensures the containment:
- * - if the PPackage has a nesting package, it is used as containment
+ * - if the PPackage has a owning package, it is used as containment
  * - else the root PPackage (top level) will be used
  */
 create PPackage makePackage(InstanceSpecification is) :
 	logDebug("make package: " + is.name) ->
 	// properties
 	setName( is.name ) ->
-	// containment: either in nesting package or root package
-	is.hasNestingPackage()
-		? is.nestingPackage().makePackage().nestedPackage.add( this )
-		: model().nestedPackage.add( this ) ->
+	// containment: either in owning package or root package
+	is.hasOwningPackage()
+		? is.owningPackage().makePackage().nestedPackages.add( this )
+		: model().nestedPackages.add( this ) ->
 	this;
 	
 /**
@@ -201,7 +201,7 @@ create PRoot makeRoot(InstanceSpecification is) :
 	// inheritance
 	copyAA( is ) ->
 	// containment
-	is.package().makePackage().root.add( this ) ->
+	is.package().makePackage().roots.add( this ) ->
 	this;
 	
 /**
@@ -302,7 +302,7 @@ PAbstractArea copyAA(PAbstractArea this, InstanceSpecification is) :
  */
 PAbstractArea copyCA(PContentArea this, InstanceSpecification is) :
 	// containment
-	is.area().makeAbstractArea().content.add( this ) ->
+	is.area().makeAbstractArea().nestedContents.add( this ) ->
 	this;
 
 /**
@@ -313,8 +313,8 @@ PElement copy(PElement this, InstanceSpecification is) :
 	setName( is.name ) ->
 	// containment, either in element area or in composite element
 	is.hasElementArea()
-		? is.elementArea().makeElementArea().element.add( this )
-		: is.compositeElement().makeCompositeElement().nestedElement.add( this ) ->
+		? is.elementArea().makeElementArea().nestedElements.add( this )
+		: is.compositeElement().makeCompositeElement().nestedElements.add( this ) ->
 	this;
 
 // - - helper functions - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -392,18 +392,18 @@ boolean isCompositeElement(InstanceSpecification this) : classifier.exists( e|e.
  */
 boolean isElement(InstanceSpecification this) : classifier.exists( e|e.name == "PElement" );
 
-boolean hasNestingPackage(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestingPackage" );
-InstanceSpecification nestingPackage(InstanceSpecification this) : one("nestingPackage");
-List[InstanceSpecification] nestedPackage(InstanceSpecification this) : many("nestedPackage");
-boolean hasPackage(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "package" );
-InstanceSpecification package(InstanceSpecification this) : one("package");
-boolean hasArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "area" );
-InstanceSpecification area(InstanceSpecification this) : one("area");
-List[InstanceSpecification] content(InstanceSpecification this) : many("content");
+boolean hasOwningPackage(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningPackage" );
+InstanceSpecification owningPackage(InstanceSpecification this) : one("owningPackage");
+List[InstanceSpecification] nestedPackages(InstanceSpecification this) : many("nestedPackages");
+boolean hasPackage(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningPackage" );
+InstanceSpecification package(InstanceSpecification this) : one("owningPackage");
+boolean hasArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningArea" );
+InstanceSpecification area(InstanceSpecification this) : one("owningArea");
+List[InstanceSpecification] nestedContents(InstanceSpecification this) : many("nestedContents");
 boolean hasTarget(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "target" );
 InstanceSpecification target(InstanceSpecification this) : one("target");
-boolean hasElementArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "area" );
-InstanceSpecification elementArea(InstanceSpecification this) : one("area");
-boolean hasCompositeElement(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestingElement" );
-InstanceSpecification compositeElement(InstanceSpecification this) : one("nestingElement");
-boolean hasNestedElement(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestedElement" );
+boolean hasElementArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningArea" );
+InstanceSpecification elementArea(InstanceSpecification this) : one("owningArea");
+boolean hasCompositeElement(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "owningElement" );
+InstanceSpecification compositeElement(InstanceSpecification this) : one("owningElement");
+boolean hasNestedElements(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestedElements" );
