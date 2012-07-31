@@ -20,15 +20,11 @@ create PPackage transform(Model m) :
 	logDebug("transform: " + m.name) ->
 	setName( m.name ) ->
 	// walk containment
-	m.nestedPackage.transform( this ) ->
+	m.nestedPackage.transform() ->
 	this;
 
-Void transform(Package this, PPackage model) :
+Void transform(Package this) :
 	logDebug("process uml package: " + name) ->
-	logDebug( ownedElement.typeSelect( InstanceSpecification ).toString() ) ->
-	logDebug( ownedElement.typeSelect( InstanceSpecification ).first().classifier.toString() ) ->
-	logDebug( ownedElement.typeSelect( InstanceSpecification ).classifier.name.toString() ) ->
-	//logDebug( "" + ownedElement.typeSelect( InstanceSpecification ).first().classifier.first().name.l ) ->
 	( let is = ownedElement.typeSelect( InstanceSpecification ) :
 		is.select( e|e.isPackage() ).transformPackage() ->
 		is.select( e|e.isRoot() ).transformRoot() ->
@@ -36,8 +32,15 @@ Void transform(Package this, PPackage model) :
 		is.select( e|e.isElementArea() ).transformElementArea() ->
 		is.select( e|e.isReferenceArea() ).transformReferenceArea() ->
 		is.select( e|e.isUserDefinedArea() ).transformUserDefinedArea() ->
-		is.select( e|e.isAutomaticallyGeneratedArea() ).transformAutomaticallyGeneratedArea()
+		is.select( e|e.isAutomaticallyGeneratedArea() ).transformAutomaticallyGeneratedArea() ->
+		// elements
+		is.select( e|e.isInput() ).transformInput() ->
+		is.select( e|e.isOutput() ).transformOutput() ->
+		is.select( e|e.isAction() ).transformAction() ->
+		is.select( e|e.isCompositeElement() ).transformCompositeElement()
 	) ->
+	// walk containment
+	nestedPackage.transform() ->
 	null;
 
 /**
@@ -112,6 +115,46 @@ cached Void transformAutomaticallyGeneratedArea(InstanceSpecification is) :
 	);
 	
 /**
+ * Transforms the specified instance specification with references to other model elements.
+ */
+cached Void transformInput(InstanceSpecification is) :
+	logDebug("transform input: " + is.name) -> (
+		let this = makeInput( is ) :
+			// no model references to transform
+		this
+	);
+	
+/**
+ * Transforms the specified instance specification with references to other model elements.
+ */
+cached Void transformOutput(InstanceSpecification is) :
+	logDebug("transform output: " + is.name) -> (
+		let this = makeOutput( is ) :
+			// no model references to transform
+		this
+	);
+	
+/**
+ * Transforms the specified instance specification with references to other model elements.
+ */
+cached Void transformAction(InstanceSpecification is) :
+	logDebug("transform action: " + is.name) -> (
+		let this = makeAction( is ) :
+			// no model references to transform
+		this
+	);
+	
+/**
+ * Transforms the specified instance specification with references to other model elements.
+ */
+cached Void transformCompositeElement(InstanceSpecification is) :
+	logDebug("transform composite element: " + is.name) -> (
+		let this = makeCompositeElement( is ) :
+			// no model references to transform
+		this
+	);
+	
+/**
  * Transforms the specified instance specification without references to other model elements.
  */
 PAbstractArea makeAbstractArea(InstanceSpecification this) :
@@ -169,9 +212,9 @@ create PCompositeArea makeCompositeArea(InstanceSpecification is) :
 	// inheritance
 	copyAA( is ) ->
 	// inheritance + containment
-	copyCA( is.area().makeAbstractArea(), is ) ->
+	copyCA( is ) ->
 	this;
-
+	
 /**
  * Transforms the specified instance specification with properties and containment but without references to other model elements.
  */
@@ -180,34 +223,70 @@ create PElementArea makeElementArea(InstanceSpecification is) :
 	// properties
 	setName( is.name ) ->
 	// inheritance + containment
-	copyCA( is.area().makeAbstractArea(), is ) ->
+	copyCA( is ) ->
 	this;
-
+	
 /**
  * Transforms the specified instance specification with properties and containment but without references to other model elements.
  */
 create PReferenceArea makeReferenceArea(InstanceSpecification is) :
 	logDebug("make reference area: " + is.name) ->
 	// inheritance + containment
-	copyCA( is.area().makeAbstractArea(), is ) ->
+	copyCA( is ) ->
 	this;
-
+	
 /**
  * Transforms the specified instance specification with properties and containment but without references to other model elements.
  */
 create PUserDefinedArea makeUserDefinedArea(InstanceSpecification is) :
 	logDebug("make user defined area: " + is.name) ->
 	// inheritance + containment
-	copyCA( is.area().makeAbstractArea(), is ) ->
+	copyCA( is ) ->
 	this;
-
+	
 /**
  * Transforms the specified instance specification with properties and containment but without references to other model elements.
  */
 create PAutomaticallyGeneratedArea makeAutomaticallyGeneratedArea(InstanceSpecification is) :
 	logDebug("make automatically generated area: " + is.name) ->
 	// inheritance + containment
-	copyCA( is.area().makeAbstractArea(), is ) ->
+	copyCA( is ) ->
+	this;
+	
+/**
+ * Transforms the specified instance specification with properties and containment but without references to other model elements.
+ */
+create PInput makeInput(InstanceSpecification is) :
+	logDebug("make input: " + is.name) ->
+	// inheritance + containment
+	copy( is ) ->
+	this;
+	
+/**
+ * Transforms the specified instance specification with properties and containment but without references to other model elements.
+ */
+create POutput makeOutput(InstanceSpecification is) :
+	logDebug("make output: " + is.name) ->
+	// inheritance + containment
+	copy( is ) ->
+	this;
+	
+/**
+ * Transforms the specified instance specification with properties and containment but without references to other model elements.
+ */
+create PAction makeAction(InstanceSpecification is) :
+	logDebug("make action: " + is.name) ->
+	// inheritance + containment
+	copy( is ) ->
+	this;
+	
+/**
+ * Transforms the specified instance specification with properties and containment but without references to other model elements.
+ */
+create PCompositeElement makeCompositeElement(InstanceSpecification is) :
+	logDebug("make composite element: " + is.name) ->
+	// inheritance + containment
+	copy( is ) ->
 	this;
 
 /**
@@ -219,13 +298,24 @@ PAbstractArea copyAA(PAbstractArea this, InstanceSpecification is) :
 	this;
 
 /**
- * Copies properties of abstract area.
+ * Copies properties of abstract area + sets containment.
  */
-PAbstractArea copyCA(PContentArea this, PAbstractArea container, InstanceSpecification is) :
+PAbstractArea copyCA(PContentArea this, InstanceSpecification is) :
 	// containment
-	container.content.add( this ) ->
+	is.area().makeAbstractArea().content.add( this ) ->
 	this;
 
+/**
+ * Copies properties of elements + sets containment.
+ */
+PElement copy(PElement this, InstanceSpecification is) :
+	// properties
+	setName( is.name ) ->
+	// containment, either in element area or in composite element
+	is.hasElementArea()
+		? is.elementArea().makeElementArea().element.add( this )
+		: is.compositeElement().makeCompositeElement().nestedElement.add( this ) ->
+	this;
 
 // - - helper functions - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -281,6 +371,26 @@ boolean isUserDefinedArea(InstanceSpecification this) : classifier.exists( e|e.n
  * Returns true if it's a PAutomaticallyGeneratedArea, otherwise else.
  */
 boolean isAutomaticallyGeneratedArea(InstanceSpecification this) : classifier.exists( e|e.name == "PAutomaticallyGeneratedArea" );
+/**
+ * Returns true if it's a PAutomaticallyGeneratedArea, otherwise else.
+ */
+boolean isInput(InstanceSpecification this) : classifier.exists( e|e.name == "PInput" );
+/**
+ * Returns true if it's a PAutomaticallyGeneratedArea, otherwise else.
+ */
+boolean isOutput(InstanceSpecification this) : classifier.exists( e|e.name == "POutput" );
+/**
+ * Returns true if it's a PAutomaticallyGeneratedArea, otherwise else.
+ */
+boolean isAction(InstanceSpecification this) : classifier.exists( e|e.name == "PAction" );
+/**
+ * Returns true if it's a PAutomaticallyGeneratedArea, otherwise else.
+ */
+boolean isCompositeElement(InstanceSpecification this) : classifier.exists( e|e.name == "PCompositeElement" );
+/**
+ * Returns true if it's a PElement, otherwise else.
+ */
+boolean isElement(InstanceSpecification this) : classifier.exists( e|e.name == "PElement" );
 
 boolean hasNestingPackage(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestingPackage" );
 InstanceSpecification nestingPackage(InstanceSpecification this) : one("nestingPackage");
@@ -289,6 +399,11 @@ boolean hasPackage(InstanceSpecification this) : slot.exists( e|e.definingFeatur
 InstanceSpecification package(InstanceSpecification this) : one("package");
 boolean hasArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "area" );
 InstanceSpecification area(InstanceSpecification this) : one("area");
-InstanceSpecification content(InstanceSpecification this) : many("content");
+List[InstanceSpecification] content(InstanceSpecification this) : many("content");
 boolean hasTarget(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "target" );
 InstanceSpecification target(InstanceSpecification this) : one("target");
+boolean hasElementArea(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "area" );
+InstanceSpecification elementArea(InstanceSpecification this) : one("area");
+boolean hasCompositeElement(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestingElement" );
+InstanceSpecification compositeElement(InstanceSpecification this) : one("nestingElement");
+boolean hasNestedElement(InstanceSpecification this) : slot.exists( e|e.definingFeature.name == "nestedElement" );
