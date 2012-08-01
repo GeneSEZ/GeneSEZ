@@ -1,8 +1,8 @@
-module org.genesez.metamodel.workflow.transformation
+module org.genesez.example.html.sites.generator
 
 // properties
 var uml2.file = "modelcache/website.uml"
-var gpres.file = "modelcache/website.gpresentation.xmi"
+var gpres.file = "modelcache/website.presentation.xmi"
 
 Workflow {
 	// initialize uml2 support
@@ -40,5 +40,12 @@ Workflow {
 	component = org.eclipse.xtend.typesystem.emf.XmiWriter {
 		inputSlot = "gpresModel"
 		modelFile = "${gpres.file}"
+	}
+	// generate html code
+	component = org.genesez.platform.common.workflow.Generator {
+		metaModel = gpres
+		slot = "gpresModel"
+		template = "Root::ModelRoot"
+		outputDir = "../org.genesez.example.html.sites/layout"
 	}
 }
