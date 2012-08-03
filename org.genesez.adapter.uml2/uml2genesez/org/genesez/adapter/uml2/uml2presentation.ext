@@ -10,6 +10,7 @@ import gpresentation;
 
 // use qualifed naming functions
 extension org::genesez::adapter::uml2::scripts::Helper;
+extension org::genesez::adapter::uml2::scripts::StereotypeHelper;
 
 // use logging
 extension org::genesez::platform::common::log::Log;
@@ -20,6 +21,9 @@ extension org::genesez::platform::common::GlobalStore;
  */
 PPackage model() : get("presentationmodel");
 
+/**
+ * Creates a root package for the model and walk the given model tree.
+ */
 create PPackage transform(Model m) :
 	useLogger("org.genesez.adapter.uml2") ->
 	save("presentationmodel", this) ->
@@ -70,132 +74,135 @@ cached InstanceSpecification transformRoot(InstanceSpecification this) :
 	logDebug("transform root: " + name) -> (
 		let r = makeRoot() :
 			// model subtree
-			nestedContents().transformContentArea()
-			// no model references to transform
+			nestedContents().transformContentArea() ->
+			// meta data
+			r.transformMetaDataAware( this )
 	) ->
 	this;
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached InstanceSpecification transformCompositeArea(InstanceSpecification this) :
+cached PCompositeArea transformCompositeArea(InstanceSpecification this) :
 	logDebug("transform composite area: " + name) -> (
 		let ca = makeCompositeArea() :
 			// model subtree
-			nestedContents().transformContentArea()
-			// no model references to transform
-	) ->
-	this;
+			nestedContents().transformContentArea() ->
+			// meta data
+			ca.transformMetaDataAware( this ) ->
+			ca
+	);
 	
 /**
- * Dispatches the transformation.
+ * Dispatches the transformation and transforms meta data if appropriate.
  */
 InstanceSpecification transformContentArea(InstanceSpecification this) :
 	switch {
 		case isCompositeArea() : transformCompositeArea()
-		case isElementArea() : transformElementArea()
-		case isReferenceArea() : transformReferenceArea()
-		case isUserDefinedArea() : transformUserDefinedArea()
-		case isAutomaticallyGeneratedArea() : transformAutomaticallyGeneratedArea()
+		case isElementArea() : transformElementArea().transformMetaDataAware( this )
+		case isReferenceArea() : transformReferenceArea().transformMetaDataAware( this )
+		case isUserDefinedArea() : transformUserDefinedArea().transformMetaDataAware( this )
+		case isAutomaticallyGeneratedArea() : transformAutomaticallyGeneratedArea().transformMetaDataAware( this )
 		default : this
 	};
 	
 /**
- * Dispatches the transformation.
+ * Dispatches the transformation and transforms meta data.
  */
 InstanceSpecification transformElement(InstanceSpecification this) :
 	switch {
-		case isInput() : transformInput()
-		case isOutput() : transformOutput()
-		case isAction() : transformAction()
-		case isCompositeElement() : transformCompositeElement()
+		case isInput() : transformInput().transformMetaDataAware( this )
+		case isOutput() : transformOutput().transformMetaDataAware( this )
+		case isAction() : transformAction().transformMetaDataAware( this )
+		case isCompositeElement() : transformCompositeElement().transformMetaDataAware( this )
 		default : this
 	};
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached InstanceSpecification transformElementArea(InstanceSpecification this) :
+cached PElementArea transformElementArea(InstanceSpecification this) :
 	logDebug("transform element area: " + name) -> (
 		let ea = makeElementArea() :
 			// model subtree
-			nestedElements().transformElement()
-			// no model references to transform
-	) ->
-	this;
+			nestedElements().transformElement() ->
+			ea
+	);
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformReferenceArea(InstanceSpecification is) :
+cached PReferenceArea transformReferenceArea(InstanceSpecification is) :
 	logDebug("transform reference area: " + is.name) -> (
 		let this = makeReferenceArea( is ) :
 			// model references
 			setTarget( is.target().makeRoot() ) ->
-		this
+			this
 	);
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformUserDefinedArea(InstanceSpecification is) :
-	logDebug("transform user defined area: " + is.name) -> (
-		let this = makeUserDefinedArea( is ) :
-			// no model references to transform
-		this
-	);
+cached PUserDefinedArea transformUserDefinedArea(InstanceSpecification is) :
+	logDebug("transform user defined area: " + is.name) ->
+	makeUserDefinedArea( is );
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformAutomaticallyGeneratedArea(InstanceSpecification is) :
-	logDebug("transform automatically generated area: " + is.name) -> (
-		let this = makeAutomaticallyGeneratedArea( is ) :
-			// no model references to transform
-		this
-	);
+cached PAutomaticallyGeneratedArea transformAutomaticallyGeneratedArea(InstanceSpecification is) :
+	logDebug("transform automatically generated area: " + is.name) ->
+	makeAutomaticallyGeneratedArea( is );
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformInput(InstanceSpecification is) :
-	logDebug("transform input: " + is.name) -> (
-		let this = makeInput( is ) :
-			// no model references to transform
-		this
-	);
+cached PInput transformInput(InstanceSpecification is) :
+	logDebug("transform input: " + is.name) ->
+	makeInput( is );
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformOutput(InstanceSpecification is) :
-	logDebug("transform output: " + is.name) -> (
-		let this = makeOutput( is ) :
-			// no model references to transform
-		this
-	);
+cached POutput transformOutput(InstanceSpecification is) :
+	logDebug("transform output: " + is.name) ->
+	makeOutput( is );
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached Void transformAction(InstanceSpecification is) :
-	logDebug("transform action: " + is.name) -> (
-		let this = makeAction( is ) :
-			// no model references to transform
-		this
-	);
+cached PAction transformAction(InstanceSpecification is) :
+	logDebug("transform action: " + is.name) ->
+	makeAction( is );
 	
 /**
  * Transforms the specified instance specification with references to other model elements.
  */
-cached InstanceSpecification transformCompositeElement(InstanceSpecification this) :
+cached PCompositeElement transformCompositeElement(InstanceSpecification this) :
 	logDebug("transform composite element: " + name) -> (
 		let ce = makeCompositeElement() :
 			// model subtree
-			nestedElements().transformElement()
+			nestedElements().transformElement() ->
+			ce
+	);
+	
+cached PMetaData transformStereotype(Stereotype this) :
+	logDebug("transform stereotype: " + name) -> (
+		let ce = makeMetaData() :
+			// model subtree
+			ownedAttribute.tags().makeKey() ->
 			// no model references to transform
-	) ->
-	this;
+			ce
+	);
+	
+cached List[PValue] transformTaggedValues(InstanceSpecification this) :
+	logDebug("transform tagged values for: " + name) ->
+	getAppliedStereotypes()
+		.collect( s|s.allAttributes().tags()
+			.collect( t| taggedValue(s, t.name).makeValue( t.makeKey() ) )
+			.reject( v|v == null )
+		)
+	.flatten();
 	
 /**
  * Transforms the specified instance specification without references to other model elements.
@@ -219,6 +226,15 @@ PContentArea makeContentArea(InstanceSpecification this) :
 		case isAutomaticallyGeneratedArea() : makeAutomaticallyGeneratedArea()
 		default : null
 	};
+	
+/**
+ * Transforms the meta data specified by stereotypes.
+ */
+cached PMetaDataAware transformMetaDataAware(PMetaDataAware this, InstanceSpecification is) :
+	metaData.addAll( is.getAppliedStereotypes().transformStereotype() ) ->
+	value.addAll( is.transformTaggedValues() ) ->
+	this;
+	
 	
 /**
  * Transforms the specified instance specification with properties and containment but without references to other model elements.
@@ -331,7 +347,50 @@ create PCompositeElement makeCompositeElement(InstanceSpecification is) :
 	// inheritance + containment
 	copy( is ) ->
 	this;
-
+	
+create PMetaData makeMetaData(Stereotype s) :
+	logDebug("make meta data: " + s.name) ->
+	// properties
+	setUri( s.fqn() ) ->
+	// containment
+	model().metaData.add( this ) ->
+	this;
+	
+create PKey makeKey(Property p) :
+	logDebug("make key: " + p.name) ->
+	// properties
+	setKey( p.name ) ->
+	// containment
+	((Stereotype)p.class).makeMetaData().key.add( this ) ->
+	this;
+	
+create List[PValue] makeValue(List[Object] os, PKey key) :
+	os.makeValue( key );
+	
+create PValue makeValue(EnumerationLiteral el, PKey key) :
+	// properties
+	setValue( el.name ) ->
+	// reference to key
+	key.value.add( this ) ->
+	this;
+	
+create PValue makeValue(NamedElement ne, PKey key) :
+	// properties
+	setValue( ne.name ) ->
+	// reference to key
+	key.value.add( this ) ->
+	this;
+	
+create PValue makeValue(Object o, PKey key) :
+	// properties
+	setValue( o.toString() ) ->
+	// reference to key
+	key.value.add( this ) ->
+	this;
+	
+Void makeValue(Void this, PKey key) :
+	null;
+	
 /**
  * Copies properties of abstract area.
  */
@@ -359,6 +418,7 @@ PElement copy(PElement this, InstanceSpecification is) :
 		? is.elementArea().makeElementArea().nestedElements.add( this )
 		: is.compositeElement().makeCompositeElement().nestedElements.add( this ) ->
 	this;
+
 
 // - - helper functions - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
