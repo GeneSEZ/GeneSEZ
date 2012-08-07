@@ -94,7 +94,12 @@
 			}
 			«this.asTypeName()-» o = («this.asTypeName()-») other;
 			if («FOREACH this.property.select(e|e.hasStereotype("java5EqualsProperty")) AS value SEPARATOR " && "-»
-				«IF value.isJavaPrimitiveType()-»this.«value.asGetter()-»() == o.«value.asGetter()-»()«ELSE-»this.«value.asGetter()-»().equals(o.«value.asGetter()-»())«ENDIF-»
+				«IF value.isJavaPrimitiveType()-»
+					this.«value.asGetter()-»() == o.«value.asGetter()-»()
+				«ELSE-»
+					( (this.«value.asGetter()-»() == null && o.«value.asGetter()-»() == null) ||
+					( this.«value.asGetter()-»() != null && this.«value.asGetter()-»().equals(o.«value.asGetter()-»()) ) )
+				«ENDIF-»
 			«ENDFOREACH-») {
 				return true;
 			}
@@ -109,7 +114,10 @@
 		public int hashCode() {
 			int result = 23;
 			«FOREACH this.property.select(e|e.hasStereotype("java5EqualsProperty")) AS value -»
-				«IF value.isJavaPrimitiveType()-»result = 37 * result + this.«value.asGetter()-»();«ELSE-»result = 37 * result + this.«value.asGetter()-»().hashCode();«ENDIF-»
+				«IF !value.isJavaPrimitiveType()-»if (this.«value.asGetter()-»() != null) {
+				«ENDIF-»result = 37 * result + this.«value.asGetter()-»()«IF !value.isJavaPrimitiveType()-».hashCode()«ENDIF-»;
+				«IF !value.isJavaPrimitiveType()-»}
+				«ENDIF-»
 			«ENDFOREACH-»
 			return result;
 		}
