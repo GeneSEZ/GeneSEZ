@@ -31,7 +31,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
 								interface.addRemoteStereotype("") ->
-								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
 								this.removeStereotype(this.getStereotype("ejb3Remote"))
 						)
 						: ""
@@ -41,7 +41,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
 						interface.model().externalTypes.remove("I"+asTypeName()+"Remote") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
 						this.removeStereotype(this.getStereotype("ejb3Remote"))
 				)
 		) 
