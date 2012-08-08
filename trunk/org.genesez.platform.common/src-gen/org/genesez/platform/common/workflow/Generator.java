@@ -70,6 +70,11 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
 		addMetaModel(gcore);
 		
+		// add GeneSEZ presentation meta model
+		EmfMetaModel gpres = new EmfMetaModel();
+		gpres.setMetaModelPackage(properties.getProperty("gpresentationPackage"));
+		addMetaModel(gpres);
+		
 		// add GeneSEZ requirements meta model
 		EmfMetaModel greq = new EmfMetaModel();
 		greq.setMetaModelPackage(properties.getProperty("greqPackage"));
@@ -145,6 +150,9 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		// add available models as global variable definitions
 		if (ctx.get(properties.getProperty("coreSlot")) != null) {
 			addGlobalVarDef("coremodel", properties.get("coreSlot"));
+		}
+		if (ctx.get(properties.getProperty("presentationSlot")) != null) {
+			addGlobalVarDef("presentationmodel", properties.get("presentationSlot"));
 		}
 		if (ctx.get(properties.getProperty("reqSlot")) != null) {
 			addGlobalVarDef("reqmodel", properties.get("reqSlot"));
