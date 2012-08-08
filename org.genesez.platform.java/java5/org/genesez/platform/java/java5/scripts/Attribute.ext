@@ -12,10 +12,46 @@ extension org::genesez::platform::java::scripts::Naming;
 extension org::genesez::platform::common::m2t::Helper;
 extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::common::m2m::CreateBasics;
 extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::java::java5::scripts::Operation;
 extension org::genesez::platform::java::java5::scripts::Stereotypes;
+
+/**
+ *	this method assignes true to the atribute property static if it is
+ *	final, single value typed and has a default value
+ *	this is a kind of memory optimization
+ 
+ *	@param	this		instance of MAttribute
+ */
+Void optimizeFinalAttributesWithDefaultValue(MAttribute this) :
+	this.isSingleValuedType() && this.final && this.hasDefaultValue() 
+		? this.setStatic(true)
+		: "";	
+
+/**
+ *	this method adds an accessor stereotype for static final attributes
+ *	with setter=false
+ *	if there is a accessor available for the getter value, it will be adopted
+ *	if there is a accessor available with setter=true, a warning is created
+ *
+ *	optimizeFinalAttributesWithDefaultValue should be called prior to this method
+ *
+ *	@param	this		instance of MAttribute
+ */
+Void addAccessorForStaticFinalAccessor(MAttribute this) :
+	this.final && this.static
+		? (
+			this.hasStereotype("accessor")
+				? (
+					this.hasTaggedValue("accessor", "setter", "true")
+						? logWarn("generation of a setter for the static final attribute '" + this.name + "' in class '" + this.classifier.name + "' makes no sense!")
+						: ""
+				)
+				: createAccessor(this.generateGetter().toString(), "false")
+		)
+		: "";	
 
 /**
  *	this method creates a getter operation with an internal stereotype 

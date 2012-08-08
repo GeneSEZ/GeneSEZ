@@ -134,16 +134,12 @@
 	* if the attribute belongs to an interface
 	* the feature 'usePropertyModifiersForAccessors'
 	* if the attribute is 'derived'
-	
-	final attributes which are not static but have a default value, are generated as static final attributes (a kind of memory optimization)
 «ENDREM»
 «DEFINE _Modifier FOR MAttribute -»
 «IF classifier.metaType == MInterface -»
 	public static final
 «ELSEIF usePropertyVisibilityForAccessors() && !derived -»
 	private «IF static -»static«ENDIF -» «IF final -»final «ENDIF -»
-«ELSEIF (isSingleValuedType() && final && hasDefaultValue()) -»
-	«visibility-» static final
 «ELSE -»
 	«visibility» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
 «ENDIF -»
