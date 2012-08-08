@@ -39,7 +39,7 @@ boolean isSessionBean(MAttribute this, MModel model) :
   *	is a session bean interface and there is no such stereotype
   */
 Void checkEJBStereotype(MAttribute this) :
-	this.multiplicity == 1 &&
+	this.isSingleValuedType() &&
 	(this.classifier.hasStereotype("ejb3SessionBean") || this.classifier.hasStereotype("ejb3MessageDrivenBean")) && 
 	!this.hasStereotype("ejb3EJB") && isSessionBeanInterface(this.model())
 		? this.addEJBStereotype("", "", "", "", "")
