@@ -1,0 +1,124 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter>
+  <title>Property Access Methods (<literal>get</literal> and <literal>
+  set</literal> Methods)</title>
+  <para>Sometimes you may want to have access operations for some 
+  properties of classes. GeneSEZ provides support of the generation of 
+  property access operations.</para>
+  <section>
+    <title>Specification in UML Models</title>
+    <para>You have the following possibilities to issue the generation 
+    of property access operations:</para>
+    <orderedlist>
+      <listitem>
+        <para>use of any stereotype on UML classes or data types to add 
+        a <literal>get</literal> and <literal>set</literal> operation 
+        for each attribute</para>
+      </listitem>
+      <listitem>
+        <para>use the stereotype 
+        <link linkend="genesez.uml.profile.genesez.accessor"><literal>
+        accessor</literal></link> of the 
+        <link linkend="genesez.uml.profile.genesez">GeneSEZ 
+        profile</link> to issue and control the generation of <literal>
+        get</literal> and <literal>set</literal> methods in 
+        detail</para>
+      </listitem>
+    </orderedlist>
+    <para>Using the first approach you can easily use your own already 
+    assigned stereotypes. With the second approach you can adjust the 
+    generation to suit your needs.</para>
+  </section>
+  <section>
+    <title>Configuration of the Model to Text Transformation in 
+    Workflow</title>
+    <para>All <link linkend="genesez.workflow.components.generator">
+    <emphasis>Generator</emphasis></link> workflow components provide 
+    the same parameters to configure the generation of property access 
+    operations:</para>
+    <variablelist>
+      <varlistentry id="genesez.accessor.config.stereotypes">
+        <term><literal>accessorsForStereotypes</literal></term>
+        <term>optional</term>
+        <term>single-valued</term>
+        <term>Standard: <literal>entity</literal></term>
+        <listitem>
+          <para>Allows to specify a comma separated list with names of 
+          stereotypes. For all UML classifiers annotated with one of 
+          these stereotypes the generation of <literal>get</literal> 
+          and <literal>set</literal> operations for <emphasis>all 
+          attributes</emphasis> is issued.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry id="genesez.accessor.config.accessor">
+        <term><literal>accessorStereotype</literal></term>
+        <term>optional</term>
+        <term>single-valued</term>
+        <term>Standard: <literal>accessor</literal></term>
+        <listitem>
+          <para>Specifies the name of the accessor stereotype.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+        <literal>usePropertyVisibilityForAccessors</literal></term>
+        <term>optional</term>
+        <term>single-value</term>
+        <term>Standard: <literal>false</literal></term>
+        <listitem>
+          <para>Specifies that the visibility of attributes should be 
+          always <literal>private</literal> and the visibility of the 
+          attribute is used as the visibility of property access 
+          operations.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section>
+    <title>Evaluation Process</title>
+    <para>The evaluation process wheter a property access operation is 
+    eventually generated or not is illustrated in figure 
+    <xref linkend="genesez.accessor.evaluation"/> using an UML activity 
+    diagram. It is executed for each attribute.</para>
+    <figure id="genesez.accessor.evaluation">
+      <title>Evaluation process of the different modeling 
+      possibilities</title>
+      <mediaobject><imageobject role="html">
+      <imagedata align="center" fileref="genesez.accessor.evaluation.png"/></imageobject>
+      <imageobject role="fo">
+      <imagedata align="center" fileref="core/features/genesez.accessor.evaluation.svg" scalefit="1" width="100%"/></imageobject></mediaobject>
+    </figure>
+    <para>First it checks if the 
+    <link linkend="genesez.accessor.config.accessor">configured 
+    stereotype</link> is assigned to the attribute and if it&apos;s 
+    <link linkend="genesez.accessor.stereotype.evaluation">tagged 
+    values are used to determine</link> the generation. If not the 
+    class is checked if the 
+    <link linkend="genesez.accessor.config.accessor">configured 
+    stereotype</link> is assigned to it and if it&apos;s 
+    <link linkend="genesez.accessor.stereotype.evaluation">tagged 
+    values are evaluated</link>. Then it is checked if the class has 
+    one of the <link linkend="genesez.accessor.config.stereotypes">
+    specified stereotypes</link> assigned. If not the default is used 
+    to suppress the generation of property access operations.</para>
+    <para>If you wish you can combine the modeling possibilities as 
+    there is a fallback: 
+    <link linkend="genesez.accessor.config.accessor">local 
+    configuration</link>, 
+    <link linkend="genesez.accessor.config.accessor">class wide 
+    configuration</link>, 
+    <link linkend="genesez.accessor.config.stereotypes">model wide 
+    configuration</link>.</para>
+    <figure id="genesez.accessor.stereotype.evaluation">
+      <title>Evaluation of the stereotype <literal>
+      accessor</literal></title>
+    </figure>
+    <mediaobject><imageobject role="html">
+    <imagedata align="center" fileref="genesez.accessor.stereotype.evaluation.png"/></imageobject>
+    <imageobject role="fo">
+    <imagedata align="center" fileref="core/features/genesez.accessor.stereotype.evaluation.svg" scalefit="1" width="100%"/></imageobject></mediaobject>
+    <para>The boolean values of the stereotype tags indicate the 
+    generation of property access operations.</para>
+  </section>
+</chapter>
