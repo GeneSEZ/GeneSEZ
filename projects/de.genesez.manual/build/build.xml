@@ -100,13 +100,27 @@
 			<param name="out.file" value="${html.genesez.en.dir}/index.html" />
 			<param name="xsl.file" value="${docbook2html}" />
 		</antcall>
-		<copy todir="${html.genesez.en.dir}" flatten="true">
-			<fileset dir="${basedir}/images/core" includes="**/*.png" />
-			<fileset dir="${basedir}/images/java" includes="**/*.png" />
-			<fileset dir="${basedir}/images/developer" includes="**/*.png" />
-			<fileset dir="${basedir}/images/uml" includes="**/*.png" />
-			<fileset dir="${basedir}/images/profiles" includes="**/*.png" />
-		</copy>
+		<antcall target="copy.css">
+			<param name="dest.dir" value="${html.genesez.en.dir}" />
+		</antcall>
+		<antcall target="copy.images">
+			<param name="dest.dir" value="${html.genesez.en.dir}" />
+		</antcall>
+	</target>
+	
+	<target name="genesez2singlehtml" depends="genesez.xinclude">
+		<mkdir dir="${html.single.dir}" />
+		<antcall target="docbook2html">
+			<param name="src.file" value="${temp.dir}/genesez.en.xml" />
+			<param name="out.file" value="${html.single.dir}/index.html" />
+			<param name="xsl.file" value="${docbook2singlehtml}" />
+		</antcall>
+		<antcall target="copy.css">
+			<param name="dest.dir" value="${html.single.dir}" />
+		</antcall>
+		<antcall target="copy.images">
+			<param name="dest.dir" value="${html.single.dir}" />
+		</antcall>
 	</target>
 	
 	<target name="genesez2pdf" depends="genesez.xinclude">
@@ -200,6 +214,22 @@
 	
 	<!-- other targets -->
 	
+	<target name="copy.css" description="Copies all css stylesheets to the specified dest.dir">
+		<copy todir="${dest.dir}" flatten="true">
+			<fileset dir="${basedir}/build" includes="*.css" />
+		</copy>
+	</target>
+	
+	<target name="copy.images" description="Copies all images to the specified dest.dir">
+		<copy todir="${dest.dir}" flatten="true">
+			<fileset dir="${basedir}/images/core" includes="**/*.png" />
+			<fileset dir="${basedir}/images/java" includes="**/*.png" />
+			<fileset dir="${basedir}/images/developer" includes="**/*.png" />
+			<fileset dir="${basedir}/images/uml" includes="**/*.png" />
+			<fileset dir="${basedir}/images/profiles" includes="**/*.png" />
+		</copy>
+	</target>
+	
 	<target name="distribute" description="Distribute GeneSEZ documentation">
 		<delete includeemptydirs="true">
 			<fileset dir="${distribution.dir}" includes="**/*"/>
@@ -211,6 +241,10 @@
 		<mkdir dir="${distribution.dir}/genesez"/>
 		<copy todir="${distribution.dir}/genesez">
 			<fileset dir="${html.genesez.en.dir}" includes="**" />
+		</copy>
+		<mkdir dir="${distribution.dir}/all"/>
+		<copy todir="${distribution.dir}/all">
+			<fileset dir="${html.single.dir}" includes="**" />
 		</copy>
 		<mkdir dir="${distribution.dir}/manual"/>
 		<copy todir="${distribution.dir}/manual">
