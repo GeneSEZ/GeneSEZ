@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="de.genesez.manual" basedir=".." default="all">
+<project name="org.genesez.documentation" basedir=".." default="all">
 
 	<!-- determine correct environment properties -->
 	<condition property="environment.properties"
@@ -18,7 +18,7 @@
 		<isset property="env.DISPLAY" />
 	</condition>
 
-	<path id="de.genesez.manual.classpath">
+	<path id="org.genesez.documentation.classpath">
 		<pathelement location="lib" />
 		<pathelement location="${xalan.dir}" />
 		<pathelement location="${xalan.dir}/xalan.jar" />
@@ -270,7 +270,7 @@
 	</target>
 
 	<target name="clean"
-		description="Clean de.genesez.manual">
+		description="Clean org.genesez.documentation">
 		<delete dir="${temp.dir}" />
 		<delete dir="${dist.dir}" />
 	</target>
@@ -355,7 +355,7 @@
 	<target name="docbook2html">
 		<dirname property="html.dir" file="${docbook.html}" />
 		<mkdir dir="${html.dir}" />
-		<java classname="org.apache.xalan.xslt.Process" classpathref="de.genesez.manual.classpath">
+		<java classname="org.apache.xalan.xslt.Process" classpathref="org.genesez.documentation.classpath">
 			<arg value="-ENTITYRESOLVER" />
 			<arg value="org.apache.xml.resolver.tools.CatalogResolver" />
 			<arg value="-URIRESOLVER" />
@@ -372,7 +372,7 @@
 	<target name="docbook2pdf">
 		<dirname property="fo.dir" file="${fo.file}" />
 		<mkdir dir="${fo.dir}" />
-		<java classname="org.apache.xalan.xslt.Process" classpathref="de.genesez.manual.classpath">
+		<java classname="org.apache.xalan.xslt.Process" classpathref="org.genesez.documentation.classpath">
 			<arg value="-ENTITYRESOLVER" />
 			<arg value="org.apache.xml.resolver.tools.CatalogResolver" />
 			<arg value="-URIRESOLVER" />
@@ -384,13 +384,13 @@
 			<arg value="-xsl" />
 			<arg value="${xsl.file}" />
 		</java>
-		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" classpathref="de.genesez.manual.classpath">
+		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" classpathref="org.genesez.documentation.classpath">
 		</taskdef>
 		<dirname property="pdf.dir" file="${pdf.file}" />
 		<mkdir dir="${pdf.dir}" />
 		<fop fofile="${fo.file}" outfile="${pdf.file}" format="application/pdf" basedir="${base.dir}">
 		</fop>
-		<!-- java classname="org.apache.fop.cli.Main" classpathref="de.genesez.manual.classpath">
+		<!-- java classname="org.apache.fop.cli.Main" classpathref="org.genesez.documentation.classpath">
 			<arg value="-fo" />
 			<arg value="${fo.file}" />
 			<arg value="-pdf" />
