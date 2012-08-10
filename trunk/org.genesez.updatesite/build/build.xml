@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project basedir="." name="GeneSEZ Update-Site">
+<project basedir=".." name="GeneSEZ Update-Site">
 
-	<condition property="build.basedir"
-		value="${basedir}/..">
+	<condition property="build.basedir" value="${basedir}/..">
 		<not>
 			<isset property="build.basedir" />
 		</not>
 	</condition>
-
+	
 	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
 	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
 
@@ -27,6 +26,7 @@
 <!-- UpdateSite Export target -->
 <!-- ==================================================== -->
 	<target name="distribute">
+		<!-- collect plugins + features in update site project -->
 		<for param="project">
 			<path refid="build.plugins" />
 			<sequential>
@@ -47,14 +47,49 @@
 				</copy>
 			</sequential>
 		</for>
+		
+		<!-- copy plugins + features from update site project to update site location -->
 		<copy includeemptydirs="false" todir="${feature.destination}">
 			<fileset dir="features" includes="**/*.jar" />
 		</copy>
 		<copy includeemptydirs="false" todir="${plugin.destination}">
 			<fileset dir="plugins" includes="**/*.jar" />
 		</copy>
+		
+		<!-- fill update site site.xml contents with available versions -->
+		<xmltask source="site.xml" dest="site.xml">
+			<copy path="/site/category-def/@name" property="category" />
+		</xmltask>
+		<for param="feature">
+			<path>
+				<fileset dir="${feature.destination}" includes="*.jar" />
+			</path>
+			<sequential>
+				<antcall target="addFeatureToSiteXml">
+					<param name="feature" value="@{feature}" />
+					<param name="category" value="${category}" />
+				</antcall>
+			</sequential>
+		</for>
+		
+		<!-- copy site.xml + dependencies -->
 		<copy file="site.xml" todir="${updatesite.destination}" />
 		<copy file="dependencies.xml" todir="${updatesite.destination}" />
  	</target>
-
+	
+	<target name="addFeatureToSiteXml">
+		<basename property="file" file="${feature}" />
+		<propertyregex property="id" input="${file}" regexp="(.+?)(?=_)" select="\1" casesensitive="false" />
+		<propertyregex property="version" input="${file}" regexp="(?&lt;=_)(.+?)(?=\.jar)" select="\1" casesensitive="false" />
+		<echo message="add feature id '${id}' with version '${version}' in category '${category}' to site.xml" />
+		<xmltask source="site.xml" dest="site.xml">
+			<insert path="/site/category-def[last()]" position="before">
+				<![CDATA[
+	<feature url="features/${file}" id="${id}" version="${version}">
+		<category name="${category}"/>
+	</feature>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
 </project>
