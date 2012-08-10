@@ -4,6 +4,8 @@
 <!-- xsl:import href="../lib/docbook-xsl-1.76.1/html/docbook.xsl" / -->
 <xsl:import href="../lib/docbook-xsl-1.76.1/html/chunk.xsl" />
 
+<xsl:param name="html.stylesheet" select="'style.css'" />
+
 <xsl:param name="use.id.as.filename" select="1" />
 <xsl:param name="chunk.first.sections" select="1" />
 <xsl:param name="chunker.output.encoding" select="utf-8" />
