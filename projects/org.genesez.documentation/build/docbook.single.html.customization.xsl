@@ -5,6 +5,7 @@
 <xsl:import href="../lib/docbook-xsl-1.76.1/html/onechunk.xsl" />
 
 <xsl:param name="html.stylesheet" select="'style.css'" />
+<xsl:param name="root.filename" select="'all'" />
 
 <xsl:param name="toc.max.depth" select="2" />
 <xsl:param name="chunk.separate.lots" select="1" />
