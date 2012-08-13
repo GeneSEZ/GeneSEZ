@@ -65,12 +65,22 @@
 «DEFINE PluginConfiguration(String extensionName) FOR MModel -»
 «IF !allPlugins().isEmpty -»
 plugin.«extensionName -» {
+	«EXPAND PluginFeature(extensionName) -»
 	«EXPAND PluginPersistence(extensionName) -»
 	«EXPAND PluginView(extensionName) -»
 	«EXPAND OwnPluginCodeDeclaration("setup.txt.own.plugin.code.declaration." + xmiGuid) -»
 }
 
 «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE PluginFeature(String extensionName) FOR MModel -»
+	features {
+		rewrittenPropertyMapper = {$plugin.«extensionName -».features.rewrittenPropertyMapper}
+	}
 «ENDDEFINE»
 
 
