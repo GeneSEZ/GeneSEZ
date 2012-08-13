@@ -179,7 +179,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 	public function injectPostRepository(Tx_GszBlogExample_Domain_Repository_PostRepository $postRepository) {
 		$this->postRepository = $postRepository;
 	}
-	
+
 	/**
 	 * Getter for personRepository
 	 *
@@ -198,7 +198,7 @@ class Tx_GszBlogExample_Controller_PostController extends Tx_GszBlogExample_Cont
 	public function injectPersonRepository(Tx_GszBlogExample_Domain_Repository_PersonRepository $personRepository) {
 		$this->personRepository = $personRepository;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251441697_732082_2744) ENABLED START */
 	/* PROTECTED REGION END */
 

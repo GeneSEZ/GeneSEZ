@@ -80,7 +80,7 @@ class Tx_GszBlogExample_Domain_Model_Tag extends Tx_Extbase_DomainObject_Abstrac
 	public function setName($name) {
 		$this->name = $name;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297194795235_681189_1679) ENABLED START */
 	/* PROTECTED REGION END */
 

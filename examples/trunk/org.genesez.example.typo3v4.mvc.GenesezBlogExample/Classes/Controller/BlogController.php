@@ -174,7 +174,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	public function injectBlogRepository(Tx_GszBlogExample_Domain_Repository_BlogRepository $blogRepository) {
 		$this->blogRepository = $blogRepository;
 	}
-	
+
 	/**
 	 * Getter for administratorRepository
 	 *
@@ -193,7 +193,7 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	public function injectAdministratorRepository(Tx_GszBlogExample_Domain_Repository_AdministratorRepository $administratorRepository) {
 		$this->administratorRepository = $administratorRepository;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251427732_349974_2692) ENABLED START */
 	/* PROTECTED REGION END */
 

@@ -108,7 +108,7 @@ class Tx_GszBlogExample_ViewHelpers_GravatarViewHelper extends Tx_Fluid_Core_Vie
 	public function setTagName($tagName) {
 		$this->tagName = $tagName;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297252449390_374572_3319) ENABLED START */
 	/* PROTECTED REGION END */
 

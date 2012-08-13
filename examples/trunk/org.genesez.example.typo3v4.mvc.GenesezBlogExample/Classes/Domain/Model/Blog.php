@@ -114,7 +114,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setTitle($title) {
 		$this->title = $title;
 	}
-	
+
 	/**
 	 * Getter for description
 	 *
@@ -133,7 +133,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setDescription($description) {
 		$this->description = $description;
 	}
-	
+
 	/**
 	 * Getter for logo
 	 *
@@ -152,7 +152,7 @@ class Tx_GszBlogExample_Domain_Model_Blog extends Tx_Extbase_DomainObject_Abstra
 	public function setLogo($logo) {
 		$this->logo = $logo;
 	}
-	
+
 	/**
 	 * Getter for posts
 	 *

@@ -159,7 +159,7 @@ class Tx_GszBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstra
 	public function setTitle($title) {
 		$this->title = $title;
 	}
-	
+
 	/**
 	 * Getter for date
 	 *
@@ -178,7 +178,7 @@ class Tx_GszBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstra
 	public function setDate(DateTime $date) {
 		$this->date = $date;
 	}
-	
+
 	/**
 	 * Getter for content
 	 *
@@ -197,7 +197,7 @@ class Tx_GszBlogExample_Domain_Model_Post extends Tx_Extbase_DomainObject_Abstra
 	public function setContent($content) {
 		$this->content = $content;
 	}
-	
+
 	/**
 	 * Getter for blog
 	 *
