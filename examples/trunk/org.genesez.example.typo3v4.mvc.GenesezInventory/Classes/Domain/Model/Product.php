@@ -80,7 +80,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function setName($name) {
 		$this->name = $name;
 	}
-	
+
 	/**
 	 * Getter for description
 	 *
@@ -99,7 +99,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function setDescription($description) {
 		$this->description = $description;
 	}
-	
+
 	/**
 	 * Getter for quantity
 	 *
@@ -118,7 +118,7 @@ class Tx_GszInventory_Domain_Model_Product extends Tx_Extbase_DomainObject_Abstr
 	public function setQuantity($quantity) {
 		$this->quantity = $quantity;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344238376_116675_2466) ENABLED START */
 	/* PROTECTED REGION END */
 
