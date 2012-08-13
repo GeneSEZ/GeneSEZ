@@ -105,7 +105,7 @@ class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_Abstr
 	public function setMaxRentExclusiveOfHeating($maxRentExclusiveOfHeating) {
 		$this->maxRentExclusiveOfHeating = $maxRentExclusiveOfHeating;
 	}
-	
+
 	/**
 	 * Getter for minSize
 	 *
@@ -124,7 +124,7 @@ class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_Abstr
 	public function setMinSize($minSize) {
 		$this->minSize = $minSize;
 	}
-	
+
 	/**
 	 * Getter for town
 	 *
@@ -143,7 +143,7 @@ class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_Abstr
 	public function setTown($town) {
 		$this->town = $town;
 	}
-	
+
 	/**
 	 * Getter for balcony
 	 *
@@ -162,7 +162,7 @@ class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_Abstr
 	public function setBalcony($balcony) {
 		$this->balcony = $balcony;
 	}
-	
+
 	/**
 	 * Getter for quarter
 	 *
@@ -181,7 +181,7 @@ class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_Abstr
 	public function setQuarter(Tx_GszRealEstate_Domain_Model_Quarter $quarter) {
 		$this->quarter = $quarter;
 	}
-	
+
 	/**
 	 * Getter for minRooms
 	 *
@@ -200,7 +200,7 @@ class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_Abstr
 	public function setMinRooms(Tx_GszRealEstate_Domain_Model_RoomType $minRooms) {
 		$this->minRooms = $minRooms;
 	}
-	
+
 	/**
 	 * Getter for floor
 	 *
@@ -219,7 +219,7 @@ class Tx_GszRealEstate_Domain_Model_Demand extends Tx_Extbase_DomainObject_Abstr
 	public function setFloor(Tx_GszRealEstate_Domain_Model_FloorType $floor) {
 		$this->floor = $floor;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1315356442660_474299_2760) ENABLED START */
 	/* PROTECTED REGION END */
 

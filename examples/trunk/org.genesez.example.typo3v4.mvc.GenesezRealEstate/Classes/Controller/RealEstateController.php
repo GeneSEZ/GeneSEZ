@@ -233,7 +233,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectRealEstateRepository(Tx_GszRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository) {
 		$this->realEstateRepository = $realEstateRepository;
 	}
-	
+
 	/**
 	 * Getter for quaterRepository
 	 *
@@ -252,7 +252,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectQuaterRepository(Tx_GszRealEstate_Domain_Repository_QuarterRepository $quaterRepository) {
 		$this->quaterRepository = $quaterRepository;
 	}
-	
+
 	/**
 	 * Getter for floorTypeRepository
 	 *
@@ -271,7 +271,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectFloorTypeRepository(Tx_GszRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository) {
 		$this->floorTypeRepository = $floorTypeRepository;
 	}
-	
+
 	/**
 	 * Getter for roomTypeRepository
 	 *
@@ -290,7 +290,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	public function injectRoomTypeRepository(Tx_GszRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository) {
 		$this->roomTypeRepository = $roomTypeRepository;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1314919357827_141495_2375) ENABLED START */
 	/* PROTECTED REGION END */
 

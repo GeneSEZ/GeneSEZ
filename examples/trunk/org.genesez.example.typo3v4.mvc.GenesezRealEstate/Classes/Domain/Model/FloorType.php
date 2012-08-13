@@ -60,7 +60,7 @@ class Tx_GszRealEstate_Domain_Model_FloorType extends Tx_Extbase_DomainObject_Ab
 	public function setSpecification($specification) {
 		$this->specification = $specification;
 	}
-	
+
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1306344122287_504979_2362) ENABLED START */
 	/* PROTECTED REGION END */
 

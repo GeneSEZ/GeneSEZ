@@ -277,7 +277,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setId($id) {
 		$this->id = $id;
 	}
-	
+
 	/**
 	 * Getter for title
 	 *
@@ -296,7 +296,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setTitle($title) {
 		$this->title = $title;
 	}
-	
+
 	/**
 	 * Getter for description
 	 *
@@ -315,7 +315,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setDescription($description) {
 		$this->description = $description;
 	}
-	
+
 	/**
 	 * Getter for facility
 	 *
@@ -334,7 +334,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setFacility($facility) {
 		$this->facility = $facility;
 	}
-	
+
 	/**
 	 * Getter for state
 	 *
@@ -353,7 +353,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setState($state) {
 		$this->state = $state;
 	}
-	
+
 	/**
 	 * Getter for miscellaneous
 	 *
@@ -372,7 +372,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setMiscellaneous($miscellaneous) {
 		$this->miscellaneous = $miscellaneous;
 	}
-	
+
 	/**
 	 * Getter for street
 	 *
@@ -391,7 +391,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setStreet($street) {
 		$this->street = $street;
 	}
-	
+
 	/**
 	 * Getter for postCode
 	 *
@@ -410,7 +410,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setPostCode($postCode) {
 		$this->postCode = $postCode;
 	}
-	
+
 	/**
 	 * Getter for town
 	 *
@@ -429,7 +429,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setTown($town) {
 		$this->town = $town;
 	}
-	
+
 	/**
 	 * Getter for size
 	 *
@@ -448,7 +448,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setSize($size) {
 		$this->size = $size;
 	}
-	
+
 	/**
 	 * Getter for cellar
 	 *
@@ -467,7 +467,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setCellar($cellar) {
 		$this->cellar = $cellar;
 	}
-	
+
 	/**
 	 * Getter for attic
 	 *
@@ -486,7 +486,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setAttic($attic) {
 		$this->attic = $attic;
 	}
-	
+
 	/**
 	 * Getter for balcony
 	 *
@@ -505,7 +505,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setBalcony($balcony) {
 		$this->balcony = $balcony;
 	}
-	
+
 	/**
 	 * Getter for freeFrom
 	 *
@@ -524,7 +524,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setFreeFrom($freeFrom) {
 		$this->freeFrom = $freeFrom;
 	}
-	
+
 	/**
 	 * Getter for rentExclusiveOfHeating
 	 *
@@ -543,7 +543,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setRentExclusiveOfHeating($rentExclusiveOfHeating) {
 		$this->rentExclusiveOfHeating = $rentExclusiveOfHeating;
 	}
-	
+
 	/**
 	 * Getter for extraCharges
 	 *
@@ -562,7 +562,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setExtraCharges($extraCharges) {
 		$this->extraCharges = $extraCharges;
 	}
-	
+
 	/**
 	 * Getter for cooperativeShare
 	 *
@@ -581,7 +581,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setCooperativeShare($cooperativeShare) {
 		$this->cooperativeShare = $cooperativeShare;
 	}
-	
+
 	/**
 	 * Getter for imageFiles
 	 *
@@ -600,7 +600,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setImageFiles($imageFiles) {
 		$this->imageFiles = $imageFiles;
 	}
-	
+
 	/**
 	 * Getter for imageDescriptions
 	 *
@@ -619,7 +619,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setImageDescriptions($imageDescriptions) {
 		$this->imageDescriptions = $imageDescriptions;
 	}
-	
+
 	/**
 	 * Getter for plotFile
 	 *
@@ -638,7 +638,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setPlotFile($plotFile) {
 		$this->plotFile = $plotFile;
 	}
-	
+
 	/**
 	 * Getter for heating
 	 *
@@ -657,7 +657,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setHeating(Tx_GszRealEstate_Domain_Model_HeatingType $heating) {
 		$this->heating = $heating;
 	}
-	
+
 	/**
 	 * Getter for floor
 	 *
@@ -676,7 +676,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setFloor(Tx_GszRealEstate_Domain_Model_FloorType $floor) {
 		$this->floor = $floor;
 	}
-	
+
 	/**
 	 * Getter for rooms
 	 *
@@ -695,7 +695,7 @@ class Tx_GszRealEstate_Domain_Model_RealEstate extends Tx_Extbase_DomainObject_A
 	public function setRooms(Tx_GszRealEstate_Domain_Model_RoomType $rooms) {
 		$this->rooms = $rooms;
 	}
-	
+
 	/**
 	 * Getter for quarter
 	 *
