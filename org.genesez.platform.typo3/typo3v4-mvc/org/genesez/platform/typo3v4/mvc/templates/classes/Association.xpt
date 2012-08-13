@@ -38,6 +38,15 @@
 
 
 «REM»
+	Processes the derived attributes of a class.
+	Order: static, non static
+«ENDREM»
+«DEFINE Derived FOR MClass -»
+	«EXPAND Derived FOREACH property.typeSelect(MAssociationRole).select( e | e.derived ) -»
+«ENDDEFINE»
+
+
+«REM»
 	Processes the implementation of accessor methods for an association role.
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
@@ -75,6 +84,18 @@
 «DEFINE Declaration FOR MAssociationRole -»
 	«EXPAND Comment::Association -»
 	«EXPAND Modifier -» $«name() -»;
+	
+«ENDDEFINE»
+
+
+«REM»
+	Generates the accessor method for an derived association attribute.
+«ENDREM»
+«DEFINE Derived FOR MAssociationRole -»
+	«EXPAND Comment::Getter -»
+	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
+		«EXPAND OwnCodeImplementation("php.derived.association.implementation." + xmiGuid) -»
+	}
 	
 «ENDDEFINE»
 
@@ -208,4 +229,17 @@
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAssociationRole -»
 «IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the protected region of an operation.
+	
+	@param	id	protected region id
+«ENDREM»
+«DEFINE OwnCodeImplementation(String id) FOR MAssociationRole -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of method «asGetterName() -» for class «classifier.name()»
+		throw new Exception('The implementation of the method «asGetterName() -» for class «classifier.name() -» is missing !');
+		«ENDPROTECT»
 «ENDDEFINE»
