@@ -28,7 +28,7 @@
 «DEFINE ImportStatements FOR MClassifier-»
 	«IF hasStereotype("jpaPersistentEntity")-»
 		import javax.persistence.Entity;
-		«IF isClass() && checkAnnotationTableUsage((MClass) this) -»
+		«IF isClass() && (this.generalization.size == 0 || checkAnnotationTableUsage((MClass) this)) -»
 			import javax.persistence.Table;
 		«ENDIF-»
 		«IF !generalization.typeSelect(MClass).exists(e | e.hasStereotype("jpaPersistentEntity")) -»
