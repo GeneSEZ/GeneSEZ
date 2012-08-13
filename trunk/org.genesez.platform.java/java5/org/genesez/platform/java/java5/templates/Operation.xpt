@@ -77,9 +77,7 @@
 «ENDREM»
 «DEFINE Equals FOR MClass -»
 	«IF hasStereotype("java5EqualsOperation") && 
-		(this.property.exists(e|e.hasStereotype("java5EqualsProperty")) ||
-		(this.generalization.typeSelect(MClass).size > 0 && 
-		this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation")) ) -»
+		this.property.exists(e|e.hasStereotype("java5EqualsProperty")) -»
 		/**
 		  *	checks if instance and parameter other are equal according to specified properties
 		  *
@@ -90,19 +88,18 @@
 		public boolean equals(Object other) {
 			if ( this == other ) {
 				return true;
-			}
-			if ( other instanceof «this.asTypeName()-» ) {
-				«IF this.generalization.typeSelect(MClass).size > 0 && 
-					this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation") &&
-					!this.property.exists(e|e.hasStereotype("java5EqualsProperty"))-»
-						return super.equals(other);
-				«ELSE-»
-					«this.asTypeName()-» o = («this.asTypeName()-») other;
-					return ( «EXPAND _SuperEquals-» «EXPAND _EqualsProperties-»);
-				«ENDIF-»
-			} else {
-				return false;
-			}
+			}			
+			«IF this.owningSpecializations().size > 0-»
+				if ( other == null || this.getClass() != other.getClass() ) {
+					return false;
+				}
+			«ELSE-»
+				if (!(other instanceof «this.asTypeName()-»)) {
+					return false;
+				}
+			«ENDIF-»
+			«this.asTypeName()-» o = («this.asTypeName()-») other;
+			return ( «EXPAND _SuperEquals-» «EXPAND _EqualsProperties-» );
 		}
 		
 		/**
@@ -111,22 +108,16 @@
 		  *	@return	calculated hash code
 		  */
 		public int hashCode() {
-			«IF this.generalization.typeSelect(MClass).size > 0 && 
-				this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation") &&
-				!this.property.exists(e|e.hasStereotype("java5EqualsProperty"))-»
-				return super.hashCode();
-			«ELSE-»
-				int result = 23;
-				«EXPAND _SuperHashCode-»
-				«FOREACH this.property.select(e|e.hasStereotype("java5EqualsProperty")).sortBy(e|e.name) AS value -»
-					«IF !value.isJavaPrimitiveType()-»if (this.«value.asGetter()-»() != null) {
-					«ENDIF-»result = 37 * result + this.«value.asGetter()-»()«IF !value.isJavaPrimitiveType()-».hashCode()«ENDIF-»;
-					«IF !value.isJavaPrimitiveType()-»}
-					«ENDIF-»
-				«ENDFOREACH-»
-				«IF this.generalization.typeSelect(MClass).size == 0-»result = 37 * result + this.getClass().hashCode();«ENDIF-»
-				return result;
-			«ENDIF-»
+			int result = 23;
+			«EXPAND _SuperHashCode-»
+			«FOREACH this.property.select(e|e.hasStereotype("java5EqualsProperty")).sortBy(e|e.name) AS value -»
+				«IF !value.isJavaPrimitiveType()-»if (this.«value.asGetter()-»() != null) {
+				«ENDIF-»result = 37 * result + this.«value.asGetter()-»()«IF !value.isJavaPrimitiveType()-».hashCode()«ENDIF-»;
+				«IF !value.isJavaPrimitiveType()-»}
+				«ENDIF-»
+			«ENDFOREACH-»
+			«IF this.owningSpecializations().size > 0-»result = 37 * result + this.getClass().hashCode();«ENDIF-»
+			return result;
 		}
 	«ENDIF-»
 «ENDDEFINE»
@@ -144,15 +135,15 @@
 
 «DEFINE _SuperEquals FOR MClass-»
 	«IF this.generalization.typeSelect(MClass).size > 0 && 
-		this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation") &&
-		this.property.exists(e|e.hasStereotype("java5EqualsProperty"))-»super.equals(o) &&
+		this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation")
+		-»super.equals(o) &&
 	«ENDIF-»
 «ENDDEFINE»
 
 «DEFINE _SuperHashCode FOR MClass-»
 	«IF this.generalization.typeSelect(MClass).size > 0 && 
-		this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation") &&
-		this.property.exists(e|e.hasStereotype("java5EqualsProperty"))-»result = 37 * result + super.hashCode();
+		this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation")
+		-»result = 37 * result + super.hashCode();
 	«ENDIF-»
 «ENDDEFINE»
 
