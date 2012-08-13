@@ -31,7 +31,9 @@ Void makeStandardConstructor(MClass container) :
   */
 Void addEqualsOperation(MClass this) :
 	this.hasStereotype("java5EqualsOperation") && 
-	!this.property.exists(e|e.hasStereotype("java5EqualsProperty")) 
+	(this.generalization.typeSelect(MClass).size > 0 &&
+	!this.generalization.typeSelect(MClass).first().hasStereotype("java5EqualsOperation")) &&	
+	!this.property.exists(e|e.hasStereotype("java5EqualsProperty"))	 
 		? (
 			!this.operation.exists(e|e.name == "equals")
 				? (
