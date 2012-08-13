@@ -410,6 +410,9 @@ String removeFromNamePrefix(MAssociationRole this) :
 
 String controllerActionNameSuffix() :
 	"Action";
+	
+String controllerCommandNameSuffix() :
+	"Command";
 
 /**
  * Getter of the suffix which is added to the name of an operation.
@@ -421,6 +424,9 @@ String operationNameSuffix(MOperation this) :
 		// checks if operation is an TYPO3 MVC Controller Action and doesn't already ends with "Action"
 		case isControllerAction() && !name.endsWith( controllerActionNameSuffix() ) :
 			controllerActionNameSuffix()
+		// checks if operation is an TYPO3 MVC Controller Command and doesn't already ends with "Command"
+		case isControllerCommand() && !name.endsWith( controllerCommandNameSuffix() ) :
+			controllerCommandNameSuffix()
 		default : 
 			""
 	};
