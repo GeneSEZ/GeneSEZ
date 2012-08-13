@@ -350,3 +350,45 @@ MStereotype makePersistenceContextStereotype(MAttribute container) :
 		s.property.add(createTag(s, "unitName", "String")) ->
 		s.property.add(createTag(s, "name", "String")) ->
 		s;
+
+/**
+ *	function to add an "jpaPersistenceEntity" stereotype to a MClass
+ *	default values are not set by this function!
+ *
+ *	@param		this					instance of MClass 
+ *	@param		name					name of the persistent entity	
+ *	@param		optimisticLocking		define if persistent entity uses optimistic locking
+ *	@param		tableName				table name for the persistent entity
+ *	@param		tableCatalog			table catalog for the persistent entity
+ *	@param		tableSchema				table schema for the persistent entity	
+ *	@param		usePKAsEqualsProperty	define if primary key should be used in generated equals/hashCode operations
+ *
+ */
+Void addPersistentEntityStereotype(MClass this, String name, Boolean optimisticLocking, String tableName, String tableCatalog, String tableSchema, Boolean usePKAsEqualsProperty) :
+	let s = makePersistentEntityStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "name", "String"), name) ->
+		createTaggedValue(this, createTag(s, "optimisticLocking", "boolean"), optimisticLocking.toString()) ->
+		createTaggedValue(this, createTag(s, "tableName", "String"), tableName) ->
+		createTaggedValue(this, createTag(s, "tableCatalog", "String"), tableCatalog) ->
+		createTaggedValue(this, createTag(s, "tableSchema", "String"), tableSchema) ->
+		createTaggedValue(this, createTag(s, "usePKAsEqualsProperty", "String"), usePKAsEqualsProperty.toString());
+
+/**
+ *	function to create an "jpaPersistentEntity" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to the anyStereotype list of MModel, not to the list
+ *	of the container (MClass) 
+ *
+ *	@param		container		container of the new MStereotype
+ *
+ */
+MStereotype makePersistentEntityStereotype(MClass container) :
+	let s = createStereotype(container.package().getModel(), "jpaPersistentEntity", "jpaPersistentEntity") :
+		s.property.add(createTag(s, "name", "String")) ->
+		s.property.add(createTag(s, "optimisticLocking", "boolean")) ->
+		s.property.add(createTag(s, "tableName", "String")) ->
+		s.property.add(createTag(s, "tableCatalog", "String")) ->
+		s.property.add(createTag(s, "tableSchema", "String")) ->
+		s.property.add(createTag(s, "usePKAsEqualsProperty", "boolean")) ->
+		s;
