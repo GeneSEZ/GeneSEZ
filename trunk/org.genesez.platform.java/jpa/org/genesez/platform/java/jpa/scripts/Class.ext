@@ -12,6 +12,22 @@ extension org::genesez::platform::java::java5::scripts::Stereotypes;
 extension org::genesez::platform::java::jpa::scripts::Naming;
 
 /**
+ *	transforms the Jacobson stereotype "entity" to "jpaPersistentEntity"
+ */
+Void transformJacobsonStereotypes(MClass this) :
+	this.hasStereotype("entity")
+		? this.addPersistentEntityStereotype("", true, "", "", "", true)
+		: "";
+		
+/**
+ *	transforms the WAM stereotype "material" to "jpaPersistentEntity"
+ */
+Void transformWAMStereotypes(MClass this) :
+	this.hasStereotype("material")
+		? this.addPersistentEntityStereotype("", true, "", "", "", true)
+		: "";
+
+/**
   * add standard constructor to entity beans 
   *	if there is not already one
   */	
