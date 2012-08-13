@@ -238,14 +238,13 @@ Void addVersionAttribute(MClass this) :
 	this.makeAttribute("version", "int", "private");
 	
 /**
-  *	add stereotype "java5EqualsProperty" as Internal stereotype
+  *	add stereotype "java5EqualsProperty" as Internal stereotype for primary key
   *	if class is a persistent entity and owns the stereotype 
   *	"java5EqualsOperation"
   */
 Void checkEqualsProperties(MClass this) :
 	hasStereotype("java5EqualsOperation") && 
-	hasStereotype("jpaPersistentEntity") &&
-	!this.property.exists(e|e.hasStereotype("java5EqualsProperty"))
+	this.hasTaggedValue("jpaPersistentEntity", "usePKAsEqualsProperty", "true")
 		? (
 			this.property.exists(e|e.hasStereotype("jpaPrimaryKey"))
 				? this.property.selectFirst(e|e.hasStereotype("jpaPrimaryKey")).addInternalStereotype("java5EqualsProperty")
