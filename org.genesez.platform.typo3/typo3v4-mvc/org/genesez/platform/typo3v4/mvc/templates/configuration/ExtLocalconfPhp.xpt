@@ -43,6 +43,7 @@
 
 «EXPAND AccessDenied -»
 «EXPAND ConfigurePlugin FOREACH allPlugins().sortBy( e | e.name ) -»
+«EXPAND CommandControllerConfiguration -»
 «EXPAND OwnCodeImplementation("ext_localconf.php.own.code.implementation." + xmiGuid) -»
 
 ?>
@@ -96,6 +97,37 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	«getT3ExtbasePluginPluginType().asPluginType()»
 );
 
+«ENDDEFINE»
+
+«REM»
+«ENDREM»
+«DEFINE CommandControllerConfiguration FOR MModel -»
+if (TYPO3_MODE === 'BE') {
+«IF !allCommandControllers().isEmpty -»
+
+	«EXPAND RegisterCommandController FOREACH allCommandControllers().sortBy( e | e.name ) -»
+«ENDIF -»
+	«EXPAND OwnCommandControllerCodeImplementation("ext_localconf.php.own.command.controller.code.implementation." + xmiGuid) -»
+}
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE RegisterCommandController FOR MClass -»
+	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = '«name( namingContextGeneral() ) -»';
+	
+«ENDDEFINE»
+
+
+«REM»
+	generates a region for own command controller code implementations
+«ENDREM»
+«DEFINE OwnCommandControllerCodeImplementation(String id) FOR MModel -»
+	«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+	// TODO: put your further command controller code implementations here
+	«ENDPROTECT»
 «ENDDEFINE»
 
 
