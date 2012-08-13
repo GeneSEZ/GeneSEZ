@@ -42,6 +42,15 @@ extension org::genesez::platform::common::Conversion;
  */
 cached List[MClass] allControllers(MModel this) :
 	allClassifiers().typeSelect(MClass).select( e | e.isController() );
+	
+
+/**
+ * Returns the a list of TYPO3 MVC Extbase command controllers.
+ * 
+ * @return	the list of TYPO3 MVC Extbase command controllers or an empty list
+ */
+cached List[MClass] allCommandControllers(MModel this) :
+	allControllers().select( e | e.operation.select( o | o.hasT3ExtbaseControllerCommandStereotype() ).size != 0 );
 
 
 /**
@@ -90,8 +99,23 @@ cached boolean isController(MClass this) :
 cached boolean isControllerAction(MOperation this) :
 	// first check if the operation has an stereotype
 	hasT3ExtbaseControllerActionStereotype() ||
-	// second check if the class is a controller AND the operation is not a non controller action
-	( MClass.isInstance(classifier) && ((MClass)classifier).isController() && !isControllerNoAction() );
+	// second check if the class is a controller AND the operation is not a controller command nor a non controller action
+	( MClass.isInstance(classifier) && ((MClass)classifier).isController() && !isControllerCommand() && !isControllerNoAction() );
+
+
+/*
+- - Controller Command settings  - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+/**
+ * Checks if a operation is a TYPO3 MVC Extbase controller command.
+ * 
+ * @return	true if the operation is a TYPO3 MVC Extbase controller command, otherwise false
+ */
+cached boolean isControllerCommand(MOperation this) :
+	// first check if the operation has an stereotype
+	hasT3ExtbaseControllerCommandStereotype();
 
 
 /*
