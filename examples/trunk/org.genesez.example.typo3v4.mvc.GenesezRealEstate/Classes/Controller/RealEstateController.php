@@ -39,6 +39,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	 * A reference of the real estate repository.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Repository_RealEstateRepository
+	 * @inject
 	 */
 	private $realEstateRepository;
 	
@@ -46,6 +47,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	 * A reference of the quarter repository.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Repository_QuarterRepository
+	 * @inject
 	 */
 	private $quaterRepository;
 	
@@ -53,6 +55,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	 * A reference of the floor type repository.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Repository_FloorTypeRepository
+	 * @inject
 	 */
 	private $floorTypeRepository;
 	
@@ -60,6 +63,7 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	 * A reference of the room type repository.
 	 *
 	 * @var Tx_GszRealEstate_Domain_Repository_RoomTypeRepository
+	 * @inject
 	 */
 	private $roomTypeRepository;
 	
@@ -225,16 +229,6 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	}
 	
 	/**
-	 * Dependency injection for realEstateRepository
-	 *
-	 * @param Tx_GszRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository A reference of the real estate repository.
-	 * @return void
-	 */
-	public function injectRealEstateRepository(Tx_GszRealEstate_Domain_Repository_RealEstateRepository $realEstateRepository) {
-		$this->realEstateRepository = $realEstateRepository;
-	}
-
-	/**
 	 * Getter for quaterRepository
 	 *
 	 * @return Tx_GszRealEstate_Domain_Repository_QuarterRepository A reference of the quarter repository.
@@ -243,16 +237,6 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		return $this->quaterRepository;
 	}
 	
-	/**
-	 * Dependency injection for quaterRepository
-	 *
-	 * @param Tx_GszRealEstate_Domain_Repository_QuarterRepository $quaterRepository A reference of the quarter repository.
-	 * @return void
-	 */
-	public function injectQuaterRepository(Tx_GszRealEstate_Domain_Repository_QuarterRepository $quaterRepository) {
-		$this->quaterRepository = $quaterRepository;
-	}
-
 	/**
 	 * Getter for floorTypeRepository
 	 *
@@ -263,16 +247,6 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 	}
 	
 	/**
-	 * Dependency injection for floorTypeRepository
-	 *
-	 * @param Tx_GszRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository A reference of the floor type repository.
-	 * @return void
-	 */
-	public function injectFloorTypeRepository(Tx_GszRealEstate_Domain_Repository_FloorTypeRepository $floorTypeRepository) {
-		$this->floorTypeRepository = $floorTypeRepository;
-	}
-
-	/**
 	 * Getter for roomTypeRepository
 	 *
 	 * @return Tx_GszRealEstate_Domain_Repository_RoomTypeRepository A reference of the room type repository.
@@ -281,16 +255,6 @@ class Tx_GszRealEstate_Controller_RealEstateController extends Tx_Extbase_MVC_Co
 		return $this->roomTypeRepository;
 	}
 	
-	/**
-	 * Dependency injection for roomTypeRepository
-	 *
-	 * @param Tx_GszRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository A reference of the room type repository.
-	 * @return void
-	 */
-	public function injectRoomTypeRepository(Tx_GszRealEstate_Domain_Repository_RoomTypeRepository $roomTypeRepository) {
-		$this->roomTypeRepository = $roomTypeRepository;
-	}
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_2_8a7027a_1314919357827_141495_2375) ENABLED START */
 	/* PROTECTED REGION END */
 
