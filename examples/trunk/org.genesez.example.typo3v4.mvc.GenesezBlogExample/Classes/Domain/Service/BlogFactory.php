@@ -37,6 +37,7 @@ class Tx_GszBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
 
 	/**
 	 * @var Tx_Extbase_Object_ObjectManagerInterface
+	 * @inject
 	 */
 	protected $objectManager;
 	
@@ -118,16 +119,6 @@ class Tx_GszBlogExample_Domain_Service_BlogFactory implements t3lib_Singleton {
 		return $this->objectManager;
 	}
 	
-	/**
-	 * Dependency injection for objectManager
-	 *
-	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager 
-	 * @return void
-	 */
-	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $objectManager) {
-		$this->objectManager = $objectManager;
-	}
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._17_0_1_8a7027a_1302085246638_931875_3629) ENABLED START */
 	/* PROTECTED REGION END */
 

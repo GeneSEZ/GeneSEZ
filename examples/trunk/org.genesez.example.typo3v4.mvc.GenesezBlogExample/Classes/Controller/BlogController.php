@@ -37,11 +37,13 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 
 	/**
 	 * @var Tx_GszBlogExample_Domain_Repository_BlogRepository
+	 * @inject
 	 */
 	protected $blogRepository;
 	
 	/**
 	 * @var Tx_GszBlogExample_Domain_Repository_AdministratorRepository
+	 * @inject
 	 */
 	protected $administratorRepository;
 	
@@ -166,16 +168,6 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 	}
 	
 	/**
-	 * Dependency injection for blogRepository
-	 *
-	 * @param Tx_GszBlogExample_Domain_Repository_BlogRepository $blogRepository 
-	 * @return void
-	 */
-	public function injectBlogRepository(Tx_GszBlogExample_Domain_Repository_BlogRepository $blogRepository) {
-		$this->blogRepository = $blogRepository;
-	}
-
-	/**
 	 * Getter for administratorRepository
 	 *
 	 * @return Tx_GszBlogExample_Domain_Repository_AdministratorRepository 
@@ -184,16 +176,6 @@ class Tx_GszBlogExample_Controller_BlogController extends Tx_GszBlogExample_Cont
 		return $this->administratorRepository;
 	}
 	
-	/**
-	 * Dependency injection for administratorRepository
-	 *
-	 * @param Tx_GszBlogExample_Domain_Repository_AdministratorRepository $administratorRepository 
-	 * @return void
-	 */
-	public function injectAdministratorRepository(Tx_GszBlogExample_Domain_Repository_AdministratorRepository $administratorRepository) {
-		$this->administratorRepository = $administratorRepository;
-	}
-
 	/* PROTECTED REGION ID(php.class.own.code.implementation._16_9_8a7027a_1297251427732_349974_2692) ENABLED START */
 	/* PROTECTED REGION END */
 
