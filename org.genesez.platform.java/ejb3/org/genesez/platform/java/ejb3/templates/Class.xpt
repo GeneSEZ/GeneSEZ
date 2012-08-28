@@ -27,14 +27,6 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
 
-«REM» generates a class «ENDREM»
-«DEFINE Root FOR MClass-»
-	«REM»
-		generates the rest of the class 
-	«ENDREM»
-	«EXPAND org::genesez::platform::java::java5::templates::Class::Root-»
-«ENDDEFINE»
-
 «REM»
 	evaluates the stereotypes "ejb3Remote" and "ejb3Local"
 «ENDREM»
@@ -79,6 +71,7 @@
 «DEFINE Annotation FOR MClass-»	
 	«EXPAND _SessionBean-»
 	«EXPAND _MessageDriven-»
+	«EXPAND _Interceptor»
 	«EXPAND Element::CMTransactionality-»
 	«EXPAND Element::EJB-»
 «ENDDEFINE»
@@ -127,21 +120,20 @@
  			, description = "«getTaggedValue("ejb3MessageDrivenBean", "description")-»"
  		«ENDIF-»
  		«IF hasStereotype("ejb3ActivationConfigProperty")-»
- 			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "name") && 
- 				hasUtilizableValue("ejb3ActivationConfigProperty", "value")-»
+ 			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "propertyName") && 
+ 				hasUtilizableValue("ejb3ActivationConfigProperty", "propertyValue")-»
  				, activationConfig = {
- 				«FOREACH getTaggedValueList("ejb3ActivationConfigProperty", "name") AS name SEPARATOR ","»
+ 				«FOREACH getTaggedValueList("ejb3ActivationConfigProperty", "propertyName") AS name SEPARATOR ","»
  					@ActivationConfigProperty(
  						propertyName = "«name-»",  						
- 						«LET getTaggedValueList("ejb3ActivationConfigProperty", "name").indexOf(name) AS index-»
- 							propertyValue = "«getTaggedValueList("ejb3ActivationConfigProperty", "value").get(index)-»")
+ 						«LET getTaggedValueList("ejb3ActivationConfigProperty", "propertyName").indexOf(name) AS index-»
+ 							propertyValue = "«getTaggedValueList("ejb3ActivationConfigProperty", "propertyValue").get(index)-»")
  						«ENDLET»
  				«ENDFOREACH»
  				}
  			«ENDIF-»
  		«ENDIF»
- 		)			
-		«EXPAND _Interceptor»
+ 		)
 	«ENDIF»
 «ENDDEFINE»
 

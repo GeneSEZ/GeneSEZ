@@ -136,30 +136,66 @@ create MStereotype makeTimerStereotype(MOperation operation) :
 	operation.stereotype.add(this);
 
 /**
+ *	function to add an "ejb3ActivationConfigProperty" stereotype to a MClass
+ *	default values are not set by this function!
+ *
+ *	@param		this			instance of MClass
+ *	@param		names			names of the properties
+ *	@param		values			values of the properties
+ *
+ */
+Void addActivationConfigPropertyStereotype(MClass this, List[String] names, List[String] values) :
+	let s = makeActivationConfigPropertyStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "propertyName", "String"), names.toString()) ->
+		createTaggedValue(this, createTag(s, "propertyValue", "String"), values.toString());
+
+/**
+ *	function to create an "ejb3ActivationConfigProperty" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MClass
+ *
+ */
+create MStereotype makeActivationConfigPropertyStereotype(MClass container) :
+	let s = createStereotype(container.package().getModel(), "ejb3ActivationConfigProperty", "ejb3ActivationConfigProperty") :
+		s.property.add(createTag(s, "propertyName", "String")) ->
+		s.property.add(createTag(s, "propertyValue", "String"));
+
+/**
  *	function to add an "ejb3Resource" stereotype to a MAttribute
  *	default values are not set by this function!
  *
- *	@param		this		instance of MAttribute
- *	@param		value		value of "ejb3Resource" 
+ *	@param		this			instance of MAttribute
+ *	@param		name			JNDI name of the resource
+ *	@param		mappedName		product specific name that this resource should be mapped to.
+ *	@param		description		description for resource
+ *	@param		shareable		Indicates whether this resource can be shared between this component and other components
  *
  */
-Void addResourceStereotype(MAttribute this, String value) :
-	this.classifier.package().getModel().anyStereotype.add(makeResourceStereotype(this, value));
+Void addResourceStereotype(MAttribute this, String name, String mappedName, String description, boolean shareable) :
+	let s = makeResourceStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "name", "String"), name) ->
+		createTaggedValue(this, createTag(s, "mappedName", "String"), mappedName) ->
+		createTaggedValue(this, createTag(s, "description", "String"), description) ->
+		createTaggedValue(this, createTag(s, "shareable", "boolean"), shareable.toString());
 
 /**
  *	function to create an "ejb3Resource" stereotype
  *	default values are not set by this function!
- *	function adds MStereotype only to the stereotype list of the MClass, not to 
- *	anyStereotype list of MModel
+ *	function adds MStereotype only to anyStereotype list of MModel
  *
- *	@param		strategy		value of "ejb3InheritanceType" (standard: "SINGLE_TABLE")
+ *	@param		container		instance of MAttribute
  *
  */
-create MStereotype makeResourceStereotype(MAttribute attri, String value) :
-	setName("ejb3Resource") ->
-	property.add(makeTag("value", "String")) ->
-	attri.taggedValue.add(makeTaggedValue(value, makeTag("value", "String"))) ->
-	attri.stereotype.add(this);
+create MStereotype makeResourceStereotype(MAttribute container) :
+	let s = createStereotype(container.package().getModel(), "ejb3Resource", "ejb3Resource") :
+		s.property.add(createTag(s, "name", "String")) ->
+		s.property.add(createTag(s, "description", "String")) ->
+		s.property.add(createTag(s, "mappedName", "String")) ->
+		s.property.add(createTag(s, "shareable", "boolean"));
 
 /**
  *	function to add an "ejb3EJB" stereotype to a MAttribute

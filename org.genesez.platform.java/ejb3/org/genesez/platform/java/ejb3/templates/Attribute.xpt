@@ -42,8 +42,25 @@
 «ENDREM»
 «DEFINE _Resource FOR MAttribute-»
 	«IF hasStereotype("ejb3Resource")-»
-		@Resource«IF hasUtilizableValue("ejb3Resource", "value")-»
-			(«getTaggedValue("ejb3Resource", "value")-»)
+		@Resource«IF hasUtilizableValue("ejb3Resource", "name") || 
+			hasUtilizableValue("ejb3Resource", "description") || 
+			hasUtilizableValue("ejb3Resource", "mappedName") || 
+			hasUtilizableValue("ejb3Resource", "shareable")-»(
+			«IF hasUtilizableValue("ejb3Resource", "name")-»
+				name="«getTaggedValue("ejb3Resource", "name")-»"«IF hasUtilizableValue("ejb3Resource", "description") || 
+					hasUtilizableValue("ejb3Resource", "mappedName") || 
+					hasUtilizableValue("ejb3Resource", "shareable")-», «ENDIF-»
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3Resource", "description")-»
+				description="«getTaggedValue("ejb3EJB", "description")-»"«IF hasUtilizableValue("ejb3Resource", "mappedName") || 
+					hasUtilizableValue("ejb3Resource", "shareable")-», «ENDIF-»
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3Resource", "mappedName")-»
+				mappedName="«getTaggedValue("ejb3EJB", "mappedName")-»"«IF hasUtilizableValue("ejb3Resource", "shareable")-», «ENDIF-»
+			«ENDIF-»
+			«IF hasUtilizableValue("ejb3Resource", "shareable")-»
+				shareable="«getTaggedValue("ejb3EJB", "shareable")-»"
+			«ENDIF-»)
 		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»
