@@ -198,27 +198,6 @@ Void addEntityManager(MClass this, String type) :
 	"";
 
 /**
-  *
-  */
-Void checkMessageDrivenBeanConfig(MClass this) :
-	this.hasStereotype("ejb3MessageDrivenBean") && 
-	this.hasUtilizableValue("ejb3MessageDrivenBean", "mappedName") &&
-	!this.hasStereotype("ejb3ActivationConfigProperty")
-		? (
-			let queueName = this.getTaggedValue("ejb3MessageDrivenBean", "mappedName").split("/").get(1) :
-				let names = {} :
-					names.add("destination") ->
-					names.add("destinationType") ->
-					(
-						let values = {} :
-							values.add("queue/" + queueName) ->
-							values.add("javax.jms.Queue") ->
-							addActivationConfigPropertyStereotype(names, values)
-					)
-		)
-		: "";
-
-/**
   *	checks if class contains an attribute with the type "EntityManager" or "Session"
   */
 boolean existEntityManager(MClass this) : 
