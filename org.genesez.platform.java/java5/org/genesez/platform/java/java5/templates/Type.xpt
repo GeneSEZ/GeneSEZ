@@ -14,6 +14,7 @@
 
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::scripts::Helper»
 «EXTENSION org::genesez::platform::common::log::Log»
 
 
@@ -46,7 +47,7 @@
 	either 'final' or 'abstract' is permitted
 «ENDREM»
 «DEFINE Modifier FOR MClassifier -»
-«visibility» «IF final»final «ELSEIF abstract»abstract «ENDIF -»
+	«modifier()» «IF final»final «ELSEIF abstract»abstract «ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -55,7 +56,7 @@
 «ENDREM»
 «DEFINE Generalization FOR MClassifier -»
 «IF !generalization.isEmpty -»
-	extends «generalization.first().mapName().asTypeName()»«EXPAND Generics FOR generalization.first()»
+	extends «generalization.first().mapName().asTypeName()-»«EXPAND Generics FOR generalization.first()-»
 «ENDIF -»
 «ENDDEFINE»
 
