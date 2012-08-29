@@ -45,21 +45,23 @@
 		@Resource«IF hasUtilizableValue("ejb3Resource", "name") || 
 			hasUtilizableValue("ejb3Resource", "description") || 
 			hasUtilizableValue("ejb3Resource", "mappedName") || 
-			hasUtilizableValue("ejb3Resource", "shareable")-»(
+			(hasUtilizableValue("ejb3Resource", "shareable") &&
+			!this.getTaggedBooleanValue("ejbResource", "shareable"))-»(
 			«IF hasUtilizableValue("ejb3Resource", "name")-»
 				name="«getTaggedValue("ejb3Resource", "name")-»"«IF hasUtilizableValue("ejb3Resource", "description") || 
 					hasUtilizableValue("ejb3Resource", "mappedName") || 
-					hasUtilizableValue("ejb3Resource", "shareable")-», «ENDIF-»
+					(hasUtilizableValue("ejb3Resource", "shareable") && 
+					!this.getTaggedBooleanValue("ejbResource", "shareable"))-», «ENDIF-»
 			«ENDIF-»
 			«IF hasUtilizableValue("ejb3Resource", "description")-»
 				description="«getTaggedValue("ejb3Resource", "description")-»"«IF hasUtilizableValue("ejb3Resource", "mappedName") || 
-					hasUtilizableValue("ejb3Resource", "shareable")-», «ENDIF-»
+					(hasUtilizableValue("ejb3Resource", "shareable") && !this.getTaggedBooleanValue("ejbResource", "shareable"))-», «ENDIF-»
 			«ENDIF-»
 			«IF hasUtilizableValue("ejb3Resource", "mappedName")-»
-				mappedName="«getTaggedValue("ejb3Resource", "mappedName")-»"«IF hasUtilizableValue("ejb3Resource", "shareable")-», «ENDIF-»
+				mappedName="«getTaggedValue("ejb3Resource", "mappedName")-»"«IF hasUtilizableValue("ejb3Resource", "shareable") && !this.getTaggedBooleanValue("ejbResource", "shareable")-», «ENDIF-»
 			«ENDIF-»
-			«IF hasUtilizableValue("ejb3Resource", "shareable")-»
-				shareable="«getTaggedValue("ejb3Resource", "shareable")-»"
+			«IF hasUtilizableValue("ejb3Resource", "shareable") && !this.getTaggedBooleanValue("ejbResource", "shareable")-»
+				shareable=«getTaggedValue("ejb3Resource", "shareable")-»
 			«ENDIF-»)
 		«ENDIF-»
 	«ENDIF-»

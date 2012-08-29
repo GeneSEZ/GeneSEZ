@@ -11,6 +11,7 @@ import gcore;
 
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::common::m2m::MakeElement;
 
 /**
  *	function to add an "ejb3SessionBean" stereotype to a MClassifier
@@ -66,8 +67,6 @@ Void addRemoteStereotype(MClassifier this, String name) :
 		this.stereotype.add(s) ->
 		createTaggedValue(this, createTag(s, "name", "String"), name);
 
-
-
 /**
  *	function to create an "ejb3Remote" stereotype
  *	default values are not set by this function!
@@ -94,8 +93,6 @@ Void addLocalStereotype(MClassifier this, String name) :
 		this.stereotype.add(s) ->
 		createTaggedValue(this, createTag(s, "name", "String"), name);
 
-
-
 /**
  *	function to create an "ejb3Local" stereotype
  *	default values are not set by this function!
@@ -117,7 +114,8 @@ MStereotype makeLocalStereotype(MClassifier container) :
  *
  */
 Void addTimerStereotype(MOperation this) :
-	this.classifier.package().getModel().anyStereotype.add(makeTimerStereotype(this));
+	let s = makeTimerStereotype(this) :
+		this.stereotype.add(s);
 
 /**
  *	function to create an "ejb3Timer" stereotype
@@ -125,12 +123,11 @@ Void addTimerStereotype(MOperation this) :
  *	function adds MStereotype only to the stereotype list of the MOperation, not to 
  *	anyStereotype list of MModel
  *
- *	@param		operation		instance of MOperation
+ *	@param		container		instance of MOperation
  *
  */
-create MStereotype makeTimerStereotype(MOperation operation) :
-	setName("ejb3Timer") ->
-	operation.stereotype.add(this);
+MStereotype makeTimerStereotype(MOperation container) :
+	makeStereotype(container.classifier.package().getModel(), "ejb3Timer", "ejb3Timer");
 
 /**
  *	function to add an "ejb3ActivationConfigProperty" stereotype to a MClass
@@ -144,8 +141,8 @@ create MStereotype makeTimerStereotype(MOperation operation) :
 Void addActivationConfigPropertyStereotype(MClass this, List[String] names, List[String] values) :
 	let s = makeActivationConfigPropertyStereotype(this) :
 		this.stereotype.add(s) ->
-		createTaggedValue(this, createTag(s, "propertyName", "String"), names.toString()) ->
-		createTaggedValue(this, createTag(s, "propertyValue", "String"), values.toString());
+		names.collect(e | createTaggedValue(this, createTag(s, "propertyName", "String"), e)) ->
+		values.collect(e | createTaggedValue(this, createTag(s, "propertyValue", "String"), e));
 
 /**
  *	function to create an "ejb3ActivationConfigProperty" stereotype
@@ -155,7 +152,7 @@ Void addActivationConfigPropertyStereotype(MClass this, List[String] names, List
  *	@param		container		instance of MClass
  *
  */
-create MStereotype makeActivationConfigPropertyStereotype(MClass container) :
+MStereotype makeActivationConfigPropertyStereotype(MClass container) :
 	let s = createStereotype(container.package().getModel(), "ejb3ActivationConfigProperty", "ejb3ActivationConfigProperty") :
 		s.property.add(createTag(s, "propertyName", "String")) ->
 		s.property.add(createTag(s, "propertyValue", "String"))->
@@ -188,7 +185,7 @@ Void addResourceStereotype(MAttribute this, String name, String mappedName, Stri
  *	@param		container		instance of MAttribute
  *
  */
-create MStereotype makeResourceStereotype(MAttribute container) :
+MStereotype makeResourceStereotype(MAttribute container) :
 	let s = createStereotype(container.classifier.package().getModel(), "ejb3Resource", "ejb3Resource") :
 		s.property.add(createTag(s, "name", "String")) ->
 		s.property.add(createTag(s, "description", "String")) ->
