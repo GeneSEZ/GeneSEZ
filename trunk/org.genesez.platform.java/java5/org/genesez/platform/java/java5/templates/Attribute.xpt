@@ -18,6 +18,7 @@
 
 «EXTENSION org::genesez::platform::java::scripts::Type»
 «EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::scripts::Helper»
 
 
 «REM»
@@ -141,7 +142,7 @@
 «ELSEIF usePropertyVisibilityForAccessors() && !derived -»
 	private «IF static -»static«ENDIF -» «IF final -»final «ENDIF -»
 «ELSE -»
-	«visibility» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
+	«modifier()» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -234,7 +235,7 @@
 «ENDREM»
 «DEFINE _ModifierAccessor FOR MAttribute -»
 	«IF usePropertyVisibilityForAccessors() -»
-	«visibility» «IF static»static«ENDIF -» «IF final»final«ENDIF -»
+	«modifier()» «IF static»static«ENDIF -» «IF final»final«ENDIF -»
 	«ELSE -»
 	public «IF static»static«ENDIF -» «IF final»final«ENDIF -»
 	«ENDIF -»
