@@ -73,6 +73,29 @@ Void addRemoteBusinessInterface(MClassifier this) :
 		: "";
 
 /**
+ *	adds the interface "MessageListener" to a message driven bean
+ *	if there is no such realization
+ *	adds the operation "onMessage(Message)" to a message driven bean
+ *	if there is no such operation
+ *
+ *	@param		this		instance of MClass
+ */
+MClassifier addMessageListener(MClass this) :
+	hasStereotype("ejb3MessageDrivenBean")
+		? ( 
+			!realization.exists(e|e.name().matches("MessageListener") || e.name().matches("javax.jms.MessageListener"))
+				? realization.add(createExternal(this.model(), "javax.jms.MessageListener"))
+				: "" ->
+			!this.operation.exists(e|e.name.matches("onMessage"))
+				? (
+					let o = makeOperation("onMessage", "public") :
+						o.parameter.add(o.makeParameter("message", "in", this.model().createExternal("javax.jms.Message")))
+				)
+				: ""
+		)
+		: "";
+
+/**
  *	adds the stereotype "ejb3Local" to a session bean
  *	if no business interface is implemented and 
  *	there is neither stereotype "ejb3Local" nor "ejb3Remote"

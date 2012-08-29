@@ -18,8 +18,7 @@ Void checkTimerStereotype(MOperation this) :
 Void checkTimerServiceStereotype(MAttribute this) :
 	!this.hasStereotype("ejb3Resource") && this.type.asTypeName() == "TimerService"
 		? (
-			this.addResourceStereotype("", "", "", true) ->
-			createAccessor("false", "false")
+			this.addResourceStereotype("", "", "", true)
 		)
 		: "";
 
@@ -93,10 +92,6 @@ Void changeSessionBeanAttributeDatatype(MAttribute this) :
 					//datatype has been changed, annotate this attribute with stereotype "ejb3EJB"
 					!this.hasStereotype("ejb3EJB")
 						? this.addEJBStereotype("", "", "", "", "")
-						: "" ->
-					//add an accessor for no get and set methods
-					!this.hasStereotype("accessor")
-						? createAccessor("false", "false")
 						: ""
 				)
 				: (
@@ -109,6 +104,22 @@ Void changeSessionBeanAttributeDatatype(MAttribute this) :
 			""
 		) ->
 	"";	
+	
+/**
+  *	adds the stereotype "accessor" to an attribute with stereotype
+  *	"ejb3Resource" or "ejb3EJB" to suppress generating getter and setter 
+  *	accessor stereotype is added only if there is no accessor 
+  *	stereotype available
+  *
+  *	@param		this		instance of MAttribute
+  *
+  */
+Void checkAccessorForEJBStereotypes(MAttribute this) :
+	!this.hasStereotype("accessor") && 
+	(this.hasStereotype("ejb3Resource") ||
+	this.hasStereotype("ejb3EJB"))
+		? createAccessor("false", "false")
+		: "";
 	
 /**
  *	evaluates whether the data type of an attribute is 
