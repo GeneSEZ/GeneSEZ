@@ -996,7 +996,7 @@ private MEnumeration transformEnumeration(MEnumeration this, Enumeration e) :
 	// transform classifier
 	transformClassifier(e) ->
 	// for enums: realization of interfaces because UML does not allow an interface realization for enums
-	supertype.addAll( realization.addAll( e.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ) ->
+	realization.addAll( e.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ->
 	this;
 
 /**
@@ -1008,9 +1008,9 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// associations
 	// set stereotype
 	stereotype.addAll( c.getAppliedStereotypes().makeStereotype() ) ->
-	// add superclasses (generalizations and realizations)
-	supertype.addAll( generalization.addAll( c.general.makeType() ) ) ->
-	supertype.addAll( realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ) ->
+	// add generalizations and realizations
+	generalization.addAll( c.general.makeType() ) ->
+	realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
 	// containments
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).makeComment() ) ->
