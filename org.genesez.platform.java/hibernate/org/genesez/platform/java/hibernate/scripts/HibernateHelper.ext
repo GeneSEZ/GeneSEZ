@@ -29,8 +29,8 @@ List[MAttribute] collectionKey(MClass c) :
 List findKey(MClass c) :
 	let k = c.property.typeSelect(MAttribute).select(a|a.hasAspect("persistent", "id")) :
 		!k.isEmpty ? k :
-			(c.supertype.typeSelect(MClass).isEmpty ? null :
-				c.supertype.typeSelect(MClass).first().findKey());
+			(c.generalization.typeSelect(MClass).isEmpty ? null :
+				c.generalization.typeSelect(MClass).first().findKey());
 
 /**
  * save name of persistent class for later use
