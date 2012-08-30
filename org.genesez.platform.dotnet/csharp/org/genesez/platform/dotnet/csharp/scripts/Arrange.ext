@@ -22,7 +22,7 @@ extension org::genesez::platform::dotnet::csharp::scripts::Uml;
  * @return	true, if supertypes exist
  */
 boolean hasSupertypes(MInterface interface) :
-	0 != interface.supertype.size;
+	0 != interface.generalization.size;
 
 /**
  * return if an interface has public fields
@@ -62,7 +62,7 @@ boolean hasPublicMethods(MInterface interface) :
  * @return	a list of interfaces
  */
 List[MInterface] supertypes(MInterface interface) :
-	interface.supertype.typeSelect(MInterface);
+	interface.generalization;
 
 /**
  * returns the public fields of an interface
@@ -117,7 +117,7 @@ List[MOperation] publicMethods(MInterface interface) :
  * @return	true, if supertypes exist
  */
 boolean hasSupertypes(MClass class) :
-	0 != class.supertype.size;
+	0 != (class.generalization.size + class.realization.size);
 
 /**
  * return if a class has static fields
@@ -205,10 +205,10 @@ boolean hasPrivateMethods(MClass class) :
  * @return	the supertype list
  */
 List[MClassifier] supertypes(MClass class) :
-	class.supertype.typeSelect(MClass).size == 0
-	? class.supertype.typeSelect(MInterface)
-	: {class.supertype.typeSelect(MClass).first()}
-		.addAll(class.supertype.typeSelect(MInterface));
+	class.generalization.typeSelect(MClass).size == 0
+	? class.realization.typeSelect(MInterface)
+	: {class.generalization.typeSelect(MClass).first()}
+		.addAll(class.realization.typeSelect(MInterface));
 
 /**
  * returns the static fields of a class
