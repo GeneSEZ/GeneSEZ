@@ -2,6 +2,7 @@ function showPackages() {
 	$.ajax({
 		async: false,
 		url: "html/navigation/packages.html",
+		dataType: "html",
 		success: function(html) {
 			$('#packages').html(html);
 			$('#classifier').empty();
@@ -17,6 +18,7 @@ function showPackage(name) {
 	$.ajax({
 		async: false,
 		url: "html/traceability/structure/" + name + "/package-summary.html",
+		dataType: "html",
 		success: function(html) {
 			$('#col3_content').html(html);
 			showNavigation(-1);
@@ -28,6 +30,7 @@ function showClassifierList() {
 	$.ajax({
 		async: false,
 		url: "html/navigation/classifier.html",
+		dataType: "html",
 		success: function(html) {
 			$('#classifier').html(html);
 			$('#packages').empty();
@@ -43,6 +46,7 @@ function showClassifier(path, name) {
 	$.ajax({
 		async: false,
 		url: "html/traceability/structure/" + path + "/" + name + ".html",
+		dataType: "html",
 		success: function(html) {
 			$('#col3_content').html(html);
 			showNavigation(-1);
@@ -54,6 +58,7 @@ function showScenarios() {
 	$.ajax({
 		async: false,
 		url: "html/navigation/scenarios.html",
+		dataType: "html",
 		success: function(html) {
 			$('#scenarios').html(html);
 			$('#requirements').empty();
@@ -67,6 +72,7 @@ function showScenario(id) {
 	$.ajax({
 		async: false,
 		url: "html/traceability/specification/scenarios/" + id + ".html",
+		dataType: "html",
 		success: function(html) {
 			$('#col3_content').html(html);
 			showNavigation(-1);
@@ -78,6 +84,7 @@ function showRequirements() {
 	$.ajax({
 		async: false,
 		url: "html/navigation/requirements.html",
+		dataType: "html",
 		success: function(html) {
 			$('#requirements').html(html);
 			$('#scenarios').empty();
@@ -91,6 +98,7 @@ function showRequirement(id) {
 	$.ajax({
 		async: false,
 		url: "html/traceability/specification/requirements/" + id + ".html",
+		dataType: "html",
 		success: function(html) {
 			$('#col3_content').html(html);
 			showNavigation(-1);
@@ -106,6 +114,7 @@ function openNavigation(index) {
 	$.ajax({
 		async: true,
 		url: "html/traceability/" + navigation[index].toLowerCase() + ".html",
+		dataType: "html",
 		success: function(html) {
 			$('#col3_content').html(html);
 			showNavigation(index);
