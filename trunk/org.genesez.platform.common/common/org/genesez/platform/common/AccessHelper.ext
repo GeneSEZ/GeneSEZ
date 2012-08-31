@@ -210,16 +210,6 @@ boolean hasDerivedAttributes(MClassifier this) :
 boolean hasDefaultValue(MAttribute this) :
 	defaultvalue.length > 0;
 
-
-/**
- * getter for a list of all attributes including inherited
- * @return	a list with attributes or an empty list
- * @deprecated	replaced by {@link allInitializableAttributes(MClassifier)}
- */
-List[MAttribute] getAllAttributes(MClassifier this) :
-	{}.add( getOwnAttributes() )
-		.add( getParentAttributes() ).flatten();
-
 /**
  * it's just there for error free templates
  * @return	an empty list
@@ -235,16 +225,6 @@ List[MAttribute] getAllAttributes(MType this) : {};
  */
 List[MAttribute] getOwnAttributes(MClassifier this) :
 	property.typeSelect(MAttribute).select( a| !a.final && !a.derived );
-
-/**
- * getter for a list of all inherited attributes of the first supertype
- * @return	a list with attributes or an empty list
- * @deprecated	replaced by {@link allInitializableAttributes(MClassifier)}
- */
-List[MAttribute] getParentAttributes(MClassifier this) :
-	supertype.isEmpty
-		? {}
-		: supertype.first().getAllAttributes();
 
 
 /**
