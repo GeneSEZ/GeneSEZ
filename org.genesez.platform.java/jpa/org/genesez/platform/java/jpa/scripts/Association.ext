@@ -4,6 +4,7 @@ extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
 extension org::genesez::platform::common::AccessHelper; 
 extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::java::jpa::scripts::Naming;
 
 Void checkAssociationStereotype(MAssociationRole this) :
 	this.classifier.hasStereotype("jpaPersistentEntity")
@@ -310,3 +311,17 @@ Void evaluateUnidirectionalAssociation(MAssociationRole this) :
 						: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "false")
 				) 
 		);
+		
+
+		
+/**
+  *	check whether the name of stereotype "jpaJoinTable" has an utilizable value
+  *	if not a name is created by using the table name of the class and the association role name
+  *
+  *	@param		this		instance of MAssociationRole
+  */
+Void checkJoinTableName(MAssociationRole this) :
+	this.hasStereotype("jpaJoinTable") &&
+	!this.hasUtilizableValue("jpaJoinTable", "name")
+		? this.setTaggedValue("jpaJoinTable", "name", tableNamePrefix() + this.classifier.name.toFirstUpper() + "_" + tableNamePrefix() + this.name)
+		: "";
