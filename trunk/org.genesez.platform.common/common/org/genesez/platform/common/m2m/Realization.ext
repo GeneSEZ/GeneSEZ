@@ -1,17 +1,16 @@
 /**
- * Adds the method definition of implemented interfaces to non abstract classes
+ * Adds the method definition of interface realizations and abstract methods of base classes to non abstract classes.
  * 
+ * - if class has generalizations with abstract methods, these are added as non abstract
  * - if class has generalizations, only the direct realizations are added
  * - if class has no generalizations, the realizations are added recursivly, i.e. the
  *   interfaces and recursively all generalizations of the interfaces
  * 
  * No further searches in the inheritance hierarchy is done
  * 
- * @author	toh
+ * @author	tobias haubold
  * @date	2009-05-27
  */
-
-// based on genesez meta model
 import gcore;
 
 extension org::genesez::platform::common::log::Log;
@@ -19,7 +18,7 @@ extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::m2m::CreateTemplate;
 
 /**
- * performs the model transformation to add operations of interfaces to classes
+ * Performs the model transformation to add operations of interfaces to classes.
  */
 MPackage realize(MPackage this) :
 	useLogger("org.genesez.platform.common.m2m.Realization") ->
@@ -28,25 +27,35 @@ MPackage realize(MPackage this) :
 	this;
 
 /**
- * processes the realization of operations of a classifier
+ * Processes the realization of operations of a classifier.
  */
 MClassifier check(MClassifier this) :
 	metaType == MClass && !abstract
 		? ( generalization.isEmpty
 			? realization.typeSelect(MInterface).recursiveRealize( (MClass)this )
-			: realization.typeSelect(MInterface).realize( ((MClass)this) )
+			: (
+				generalization.realize( this ) ->
+				realization.typeSelect(MInterface).realize( ((MClass)this) )
+			)
 		) : this ->
 	this;
 
 /**
- * adds the operations of the interface to the list of operations of the class
+ * Adds abstract operations of the base class as non abstract operations.
+ */
+MClass realize(MClass base, MClass this) :
+	base.operation.select(e|e.abstract).cloneOperation( this ).setAbstract(false) ->
+	this;
+
+/**
+ * Adds the operations of the interface to the list of operations of the class.
  */
 MClass realize(MInterface realize, MClass this) :
 	realize.operation.cloneOperation( this ) ->
 	this;
 
 /**
- * adds the operations of the interface to the list of operations of the class
+ * Adds the operations of the interface to the list of operations of the class
  * and additionally performs a recursive call with all generalizations of the interface
  */
 MClass recursiveRealize(MInterface realize, MClass this) :
