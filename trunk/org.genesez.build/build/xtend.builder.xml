@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<project name="org.genesez.xtend.builder" basedir=".." default="">
+	
+	<description>
+	Deactivates and activates the xtend builder for plugin projects with xtend nature.
+	
+	Note: The used xml task handles the whitespace differently, so unfortunately the .project
+	file differ if you execute deactivate and activate again. Ensure you don't check in such .project
+	file with different whitespace!
+	</description>
+	
+	<import file="imports.xml" />
+	
+	<target name="deactivate" description="removes the xtend builder from all plugin projects">
+		<antcall target="execute.target.for.each.project">
+			<param name="target" value="deactivate.xtend.builder" />
+		</antcall>
+	</target>
+	
+	<target name="activate" depends="deactivate"
+			description="adds the xtend builder to all plugin projects with xtend nature">
+		<antcall target="execute.target.for.each.project">
+			<param name="target" value="activate.xtend.builder" />
+		</antcall>
+	</target>
+	
+	<target name="execute.target.for.each.project">
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<antcall target="${target}">
+					<param name="project" value="@{project}" />
+				</antcall>
+			</sequential>
+		</for>
+		<!--antcall target="${target}">
+			<param name="project" value="D:/settings/examples.git/org.genesez.example.html.sites.generator" />
+		</antcall-->
+	</target>
+	
+	<target name="deactivate.xtend.builder">
+		<echo message="deactivate xtend builder for project: ${project}" />
+		<xmltask source="${project}/.project" dest="${project}/.project">
+			<remove path="/projectDescription/buildSpec/buildCommand[child::name = 'org.eclipse.xtend.shared.ui.xtendBuilder']" />
+		</xmltask>
+	</target>
+	
+	<target name="activate.xtend.builder">
+		<xmltask source="${project}/.project">
+			<call path="/projectDescription/natures[child::nature = 'org.eclipse.xtend.shared.ui.xtendXPandNature']" target="insert.xtend.builder" />
+		</xmltask>
+	</target>
+	
+	<target name="insert.xtend.builder">
+		<echo message="activate xtend builder for project: ${project}" />
+		<xmltask source="${project}/.project" dest="${project}/.project">
+			<insert path="/projectDescription/buildSpec/buildCommand[last()]" position="after">
+				<![CDATA[
+					<buildCommand>
+						<name>org.eclipse.xtend.shared.ui.xtendBuilder</name>
+						<arguments>
+						</arguments>
+					</buildCommand>
+				]]>
+			</insert>
+		</xmltask>
+	</target>
+	
+	<!--
+			<call path="/projectDescription/natures[child::nature = 'org.eclipse.xtend.shared.ui.xtendXPandNature']" target="do.it" />
+			<print path="/projectDescription/buildSpec/buildCommand[child::name = 'org.eclipse.xtend.shared.ui.xtendBuilder']">
+			</print>
+			<print path="/projectDescription/buildSpec/buildCommand[contains(arguments/dictionary/value/text(), 'org.eclipse.xtend.shared.ui.xtendBuilder')]">
+			</print>
+	-->
+</project>
