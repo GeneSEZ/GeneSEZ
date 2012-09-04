@@ -34,7 +34,7 @@ Void transformWAMStereotypes(MClass this) :
 MClassifier addStandardConstructor(MClass this) :
 	this.hasStereotype("jpaPersistentEntity") &&
 	!operation.exists(e|e.isConstructor() && e.parameter.isEmpty)
-		? makeStandardConstructor()
+		? makeStandardConstructor("public")
 		: "";
 
 /**
@@ -267,3 +267,13 @@ Void checkEqualsProperties(MClass this) :
 				: ""
 		)
 		: "";
+		
+/**
+  *	if there is more than one association role referencing the same class, 
+  *	add the stereotype "jpaJoinTable" to ensure that several join tables are used
+  * (this is a bug in hibernate 3.3.x)
+  *	
+  *	@param		this		instance of MClass
+  */
+Void checkClassesOfAssociationRoles(MClass this) :
+	this.property.typeSelect(MAssociationRole).select(e|e.classifier == null);

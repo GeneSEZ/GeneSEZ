@@ -71,6 +71,27 @@
 «ENDDEFINE»
 
 «REM»
+	generates a getInstance operation for singleton pattern
+	if stereotype "singleton" is available and there is no
+	such operation
+«ENDREM»
+«DEFINE Singleton FOR MClass -»
+	«IF this.hasStereotype("singleton") &&
+	!this.operation.exists(e|e.name.matches("getInstance"))	-»
+		public static «this.name.asTypeName() -» getInstance() {
+			if (instance == null) {
+				synchronized («this.name.asTypeName() -».class) {
+					if (instance == null) {
+						instance = new «this.name.asTypeName() -»();
+					}
+				}
+			}
+			return instance;
+		}
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
 	generate an equals and hashCode operation
 	if stereotype "java5EqualsOperation" is available
 	and at least one property has the stereotype "java5EqualsProperty"
