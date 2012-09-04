@@ -254,7 +254,7 @@
 	«IF classifier.metaType == MInterface -»
 	public
 	«ELSE -»
-	«modifier()» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+	«modifier()» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF» «EXPAND _Concurrent-» 
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -350,7 +350,12 @@
 	«ENDIF -»
 «ENDDEFINE»
 
-
+«REM»
+	generates synchronized key word using UML CallConcurrencyKind
+«ENDREM»
+«DEFINE _Concurrent FOR MOperation -»
+	«IF hasStereotype("http://www.genesez.org/CallConcurrencyKind/Guarded")-»synchronized «ENDIF -»
+«ENDDEFINE»
 
 «REM»
 	will be overriden by other cartridges to generate annotations by using aspects
