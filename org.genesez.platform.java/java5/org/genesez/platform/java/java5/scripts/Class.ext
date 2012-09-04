@@ -29,11 +29,15 @@ Void addSingletonElements(MClass this) :
 		? (
 			!this.property.exists(e|e.name.matches("instance"))
 				? (
-					//add static volatile attribute, 
-					 let a = createAttribute("instance", this.xmiGuid + ".instanceAttributeForSingleton") :
+					//add static volatile attribute with no accessors 
+					let a = createAttribute(this.xmiGuid + ".instanceAttributeForSingleton", "instance") :
 					 	a.setVisibility("private") ->
-					 	a.setStatic(true) ->
-						a.addInternalStereotype("volatile")
+					 	a.setStatic(true) -> 
+					 	a.setType(this) ->
+					 	a.setUpperBoundMultiplicity(1) ->
+					 	a.setLowerBoundMultiplicity(1) ->
+						a.addInternalStereotype("volatile") -> 
+						a.createAccessor("false", "false")
 				)
 				: "" ->
 			//change visibility of all constructors to private
