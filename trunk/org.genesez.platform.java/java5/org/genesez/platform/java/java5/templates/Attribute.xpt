@@ -205,9 +205,13 @@
 	«IF !fieldAccess()-»
 		«EXPAND _Annotation-»
 	«ENDIF-»
-	«IF isSingleValuedType() -»
+	«IF isSingleValuedType() -»		
 		«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
-			return «asAttribute()»;
+			«IF this.type().mapName().asTypeName().matches("Date") -»
+				return new Date(«asAttribute() -».getTime());
+			«ELSE -»
+				return «asAttribute()»;
+			«ENDIF»
 		}
 	«ELSE -»
 		«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType -» «asGetter()»() {
@@ -230,7 +234,14 @@
 		}
 	«ELSE -»
 		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «IF static-»_«ENDIF-»«asAttribute()») {
-			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
+			«IF hasStereotype("primitive") -»
+				«IF !static-»this.«ENDIF-»«asAttribute()» = new «type().mapName().asTypeName() -»[«IF static-»_«ENDIF-»«asAttribute()».length];
+				for (int counter = 0; counter < «IF static-»_«ENDIF-»«asAttribute()».length; counter++) {
+					«IF !static-»this.«ENDIF-»«asAttribute()»[counter] = «IF static-»_«ENDIF-»«asAttribute()»[counter];
+				}
+			«ELSE -»
+				«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
+			«ENDIF-»
 		}
 	«ENDIF -»
 «ENDDEFINE»
