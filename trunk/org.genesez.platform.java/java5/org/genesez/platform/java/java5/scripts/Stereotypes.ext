@@ -37,8 +37,8 @@ Void makeTargetStereotype(MElement this, boolean annotationType, boolean type, b
 	, boolean parameter, boolean package) :	
     let s = createAnnotationStereotype(this) : 
     // merge value for the tagged value from the meta association roles and the tagged value of the existing stereotyp
-    let target = createTargetTaggedValue(this, annotationType, type, constructor, method, field, localVariable, parameter, package) :
-        this.taggedValue.selectFirst(e|e.tag.name == "target" && e.tag.stereotype.name == s.name).setValue(target);
+    	createTargetTaggedValue(this, s.property.selectFirst( t | t.name == "target"), annotationType, type, constructor, method, field, localVariable, parameter, package);// :
+        //this.taggedValue.selectFirst(e|e.tag.name == "target" && e.tag.stereotype.name == s.name).setValue(target);
 
     
 /**
@@ -52,20 +52,22 @@ MStereotype createAnnotationStereotype(MElement this) :
     ? (       
         let s = this.stereotype.selectFirst(e|e.name == java5AnnotationStereotype()) :
             /* If target is missing, add target*/
-            this.hasTaggedValue(java5AnnotationStereotype(), "target") == false
-	            ? this.createTaggedValue(createTag(s, "target", "String"),"[]") 
+            s.property.exists(t|t.name == "target") == false
+            //(nihe) this.hasTaggedValue(java5AnnotationStereotype(), "target") == false
+	            ? s.createTag("target", "String")// this.createTaggedValue(createTag(s, "target", "String"),"[]") 
 	            : Void ->
 	        /* If retention is missing, add retention*/
-            this.hasTaggedValue(java5AnnotationStereotype(), "retention") == false
-                ? this.createTaggedValue(createTag(s, "retention", "String"),"")
+	        s.property.exists(t|t.name == "retention") == false
+            // (nihe) this.hasTaggedValue(java5AnnotationStereotype(), "retention") == false
+                ? s.createTag("retention", "String")
                 : Void ->
         s
       )
     : (
         let s = createStereotype(this.model(), java5AnnotationStereotype(), java5AnnotationStereotype()) :
             this.stereotype.add(s) ->
-            this.createTaggedValue(createTag(s, "target", "String"),"[]") ->
-            this.createTaggedValue(createTag(s, "retention", "String"),"") ->
+            s.createTag("target", "String") ->
+            s.createTag("retention", "String") ->
             s
     );  
     
@@ -82,9 +84,22 @@ MStereotype createAnnotationStereotype(MElement this) :
  *  @param  setParameter
  *  @param  setPackage
  */
-String createTargetTaggedValue(MElement this, boolean setAnnotationType, boolean setType, boolean setConstructor
+Void createTargetTaggedValue(MElement this, MTag t, boolean setAnnotationType, boolean setType, boolean setConstructor
         , boolean setMethod, boolean setField, boolean setLocalVariable
         , boolean setParameter, boolean setPackage) :
+        logDebug("createTargetTaggedValue: " + name + " :" + setAnnotationType + ", " + setType + ", " + setConstructor + ", " + setMethod + ", " + setField + ", " + setLocalVariable + ", " + setParameter + ", " + setPackage) ->
+       	setAnnotationType && !hasTaggedValue(t.stereotype.name, t.name, "ANNOTATION_TYPE")	? this.createTaggedValue(t, "ANNOTATION_TYPE") : Void -> 
+       	setType           && !hasTaggedValue(t.stereotype.name, t.name, "TYPE") 			? this.createTaggedValue(t, "TYPE") : Void ->
+        setConstructor    && !hasTaggedValue(t.stereotype.name, t.name, "CONSTRUCTOR") 		? this.createTaggedValue(t, "CONSTRUCTOR") : Void ->
+        setMethod         && !hasTaggedValue(t.stereotype.name, t.name, "METHOD") 			? this.createTaggedValue(t, "METHOD") : Void ->
+        setField          && !hasTaggedValue(t.stereotype.name, t.name, "FIELD") 			? this.createTaggedValue(t, "FIELD") : Void ->
+        setLocalVariable  && !hasTaggedValue(t.stereotype.name, t.name, "LOCAL_VARIABLE")	? this.createTaggedValue(t, "LOCAL_VARIABLE") : Void ->
+        setParameter      && !hasTaggedValue(t.stereotype.name, t.name, "PARAMETER")		? this.createTaggedValue(t, "PARAMETER") : Void ->
+        setPackage        && !hasTaggedValue(t.stereotype.name, t.name, "PACKAGE")			? this.createTaggedValue(t, "PACKAGE") : Void ->
+        logDebug("createTargetTaggedValue: " + taggedValue.value);
+        /*
+        
+        
     let value = (
             // If there's already a Tagged Value, we take this
             this.getTaggedValue(java5AnnotationStereotype(), "target").length > 0
@@ -99,7 +114,7 @@ String createTargetTaggedValue(MElement this, boolean setAnnotationType, boolean
         let value = value.addTargetTaggedValue(this, setLocalVariable  , "LOCAL_VARIABLE") :
         let value = value.addTargetTaggedValue(this, setParameter      , "PARAMETER") :
         let value = value.addTargetTaggedValue(this, setPackage        , "PACKAGE") :
-            "[" + value + "]"; // we need a collection / list
+            "[" + value + "]"; // we need a collection / list*/
 
 /**
  * Adds new values to a tagged value separated by comma
