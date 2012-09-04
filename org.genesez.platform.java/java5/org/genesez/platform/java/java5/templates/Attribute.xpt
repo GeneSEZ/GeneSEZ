@@ -140,10 +140,17 @@
 «IF classifier.metaType == MInterface -»
 	public static final
 «ELSEIF usePropertyVisibilityForAccessors() && !derived -»
-	private «IF static -»static«ENDIF -» «IF final -»final «ENDIF -»
+	private «IF static -»static«ENDIF -» «IF final -»final «ENDIF -» «EXPAND _Volatile -»
 «ELSE -»
-	«modifier()» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -»
+	«modifier()» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -» «EXPAND _Volatile -»
 «ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype "volatile" of the GeneSEZ UML profile
+«ENDREM»
+«DEFINE _Volatile FOR MAttribute -»
+	«IF hasStereotype("volatile")-»volatile«ENDIF-»
 «ENDDEFINE»
 
 «REM»
