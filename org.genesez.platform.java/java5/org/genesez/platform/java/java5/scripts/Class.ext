@@ -20,6 +20,8 @@ extension org::genesez::platform::java::scripts::Naming;
   *	evaluates the stereotype "singleton"
   *	adds an attribute "instance" and a private constructor
   *	if constructors are available, the visibility is changed to "private"
+  *	singleton class is marked as final because all constructors are private
+  *
   *	getInstance operation is added in Xpand if not available	
   *
   *	@param	this	instance of MClass
@@ -45,7 +47,8 @@ Void addSingletonElements(MClass this) :
 			//if no constructor exists
 			this.operation.exists(e|e.isConstructor()) 
 				? this.operation.select(e|e.isConstructor()).setVisibility("private")
-				:  makeStandardConstructor("private")
+				:  makeStandardConstructor("private") ->
+			this.setFinal(true)
 		)
 		: "";
 
