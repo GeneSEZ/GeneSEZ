@@ -173,10 +173,10 @@ Void addEntityManager(MClassifier this, MClassifier entityClass):
  *  @param  entityClass  instance of MClassifier
  */    
 Void addListOperations(MClassifier this, MClassifier entityClass):
-	( let 	o = entityClass.makeOperation("get"+entityClass.name+"List", entityClass.name+".get"+entityClass.name+"List", "public") :
-        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createExternal( o.model(), "EntityManager" ) ) )
+	( let 	o = makeOperation("get"+entityClass.name+"List", entityClass.name+".get"+entityClass.name+"List", "public") :
+        		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createExternal( o.model(), "List<" + entityClass.name + ">" ) ) )
 	) -> 
-	( let 	o = entityClass.makeOperation("get"+entityClass.name+"ListCount", entityClass.name + ".get"+entityClass.name+"ListCount", "public") :
+	( let 	o = makeOperation("get"+entityClass.name+"ListCount", entityClass.name + ".get"+entityClass.name+"ListCount", "public") :
         		o.setReturn( makeParameter( o, o.xmiGuid + ".return", "", "", "return", createPrimitiveType( o.model(), "long" ) ) )
 	);    
 
@@ -221,6 +221,8 @@ MAttribute addAttribute(MClassifier container, String name, String type, String 
     let a = createAttribute(container, container.xmiGuid+"_"+name, name) :
         a.processAttribute("", false, false) ->
         a.setMultiplicity(multiplicity) ->
+        a.setLowerBoundMultiplicity(0) ->
+        a.setUpperBoundMultiplicity(multiplicity) ->
         a.setVisibility(visibility) ->
         a.setType(createExternal(container.model(), type)) ->        
         a;
