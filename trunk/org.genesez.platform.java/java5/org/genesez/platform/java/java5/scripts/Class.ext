@@ -10,8 +10,40 @@ import gcore;
 
 extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::common::m2m::CreateBasics;
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::java::java5::scripts::Stereotypes;
+extension org::genesez::platform::java::scripts::Naming;
+
+
+/**
+  *	evaluates the stereotype "singleton"
+  *	adds an attribute "instance" and a private constructor
+  *	if constructors are available, the visibility is changed to "private"
+  *	getInstance operation is added in Xpand if not available	
+  *
+  *	@param	this	instance of MClass
+  */
+Void addSingletonElements(MClass this) :
+	this.hasStereotype("singleton")
+		? (
+			!this.property.exists(e|e.name.matches("instance"))
+				? (
+					//add static volatile attribute, 
+					 let a = createAttribute("instance", this.xmiGuid + ".instanceAttributeForSingleton") :
+					 	a.setVisibility("private") ->
+					 	a.setStatic(true) ->
+						a.addInternalStereotype("volatile")
+				)
+				: "" ->
+			//change visibility of all constructors to private
+			//add a private constructor with no protected region
+			//if no constructor exists
+			this.operation.exists(e|e.isConstructor()) 
+				? this.operation.select(e|e.isConstructor()).setVisibility("private")
+				:  makeStandardConstructor("private")
+		)
+		: "";
 
 /**
   * creates a standard constructor with no arguments
@@ -20,8 +52,8 @@ extension org::genesez::platform::java::java5::scripts::Stereotypes;
   *	the modeller has to model a constructor with no 
   *	arguments explicitly if a protected region is desired
   */
-Void makeStandardConstructor(MClass container) :
-	let sc = container.makeOperation(container.name(), container.name()+"_StandardConstructor", "public") :
+Void makeStandardConstructor(MClass container, String visibility) :
+	let sc = container.makeOperation(container.name(), container.name()+"_StandardConstructor", visibility) :
 		sc.addInternalStereotype("http://www.genesez.org/StandardConstructor");
 
 /**
