@@ -132,7 +132,7 @@ public class Uml2GeneSEZ extends CompositeComponent {
 					"excludePackages", "'" + properties.getProperty("excludePackages") + "'"));
 		} else {
 			xtendComponent.addGlobalVarDef(WorkflowUtils.createGlobalVarDef(
-					"excludePackages", WorkflowUtils.arrayToString(excludePackages)));
+					"excludePackages", "'" + WorkflowUtils.arrayToString(excludePackages) + "'"));
 		}
 		if (isNotSetMapClassesInModelToExternal) {
 			setMapClassesInModelToExternal(new Boolean(properties.getProperty("mapClassesInModelToExternal")));

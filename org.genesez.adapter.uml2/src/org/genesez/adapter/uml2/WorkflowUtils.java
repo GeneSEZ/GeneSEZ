@@ -74,7 +74,7 @@ public class WorkflowUtils {
 	}
 	
 	/**
-	 * Convert from Array to String
+	 * Converts list of strings into a string separated by ","
 	 * 
 	 * @param name	of List<String>
 	 * @return String
@@ -83,7 +83,14 @@ public class WorkflowUtils {
 		StringBuffer s = new StringBuffer();
 		Iterator<String> it = name.iterator();
 		while (it.hasNext()) {
-			s.append(it.next());
+			String item = it.next();
+			if (item.startsWith("'")) {
+				item = item.substring(1, item.length() -1);
+			}
+			s.append(item);
+			if (it.hasNext()) {
+				s.append(",");
+			}
 		}
 		return s.toString();
 	}
