@@ -72,6 +72,7 @@
 	«EXPAND _SessionBean-»
 	«EXPAND _MessageDriven-»
 	«EXPAND _Interceptor»
+	«EXPAND _Startup-»
 	«EXPAND Element::CMTransactionality-»
 	«EXPAND Element::EJB-»
 «ENDDEFINE»
@@ -398,4 +399,21 @@
 		  	«ENDIF»
 		«ENDFOREACH»
 	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+    evaluates the stereotype ejb3Startup
+«ENDREM»
+«DEFINE _Startup FOR MClass-»
+    «IF hasStereotype("ejb3Startup")-»
+        @Startup 
+        «IF hasTaggedValue("ejb3Startup", "depends", "true")-»
+            «IF hasUtilizableValue("ejb3Startup", "depends")-»
+                (depends={
+                «FOREACH getTaggedValueList("ejb3Startup", "depends") AS value SEPARATOR ", "-»
+                    "«value-»"
+                «ENDFOREACH-»})
+            «ENDIF-»
+        «ENDIF-»
+    «ENDIF-»
 «ENDDEFINE»
