@@ -122,6 +122,8 @@ create MModel transform(Model m) :
 	trace( "transform model [ " + metaType + " ] - " + m ) ->
 	transformBasics(m) ->
 	transformPackage(m) ->
+	// ensure types in included profiles are transformed completely, not just as stubs
+	m.getAllProfileApplications().appliedProfile.select( ap|ap.isContainedInIncludedProfile() ).transform( this ) ->
 	this;
 	
 
@@ -218,8 +220,9 @@ MType makeType(Type this) :
 		// primitive type
 		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
 		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
-		// classifier contained in profiles when transforming uml models; when transforming profiles transform into classifier
-		case isContainedInProfile() && Classifier.isInstance(this) && Model.isInstance(uml2model()) : ((Classifier)this).makeExternal()
+		// classifier contained in profiles but not included profiles are transformed to external types when transforming uml models
+		// else as classifier
+		case isContainedInProfile() && Classifier.isInstance(this) && Model.isInstance(uml2model()) && !isContainedInIncludedProfile() : ((Classifier)this).makeExternal()
 		// classifier, just make it, no transformation yet
 		default : ((Classifier)this).makeClassifier()
 	};
@@ -1012,8 +1015,6 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// add attributes and association ends
 	property.addAll( c.attribute.reject( p|p.association != null ).makeAttribute() ) ->
 	property.addAll( c.attribute.reject( p|p.association == null ).makeAssociationRole() ) ->
-	//property.addAll( c.attribute.reject( p|p.association == null || p.name.startsWith("base_") ).makeAssociationRole() ) ->
-	
 	// add operations
 	operation.addAll( c.getOperations().makeOperation() ) ->
 	// set generics
@@ -1077,6 +1078,32 @@ private boolean isIncludedProfile(Stereotype this) :
 private boolean isContainerForExternalClasses(Package this) :
 	externalPackages().toList().contains( name )
 		|| getAppliedStereotypes().exists( s|externalStereotypes().toList().contains( s.name ) );
+
+/**
+ * Returns true if the specified type is contained within an included profile, otherwise false.
+ */
+private boolean isContainedInIncludedProfile(Type this) :
+	package == null
+		? true // unable to determine, should not get here!
+		: package.isContainedInIncludedProfile();
+
+/**
+ * Returns true if the specified package is contained within an included profile, otherwise false.
+ */
+private boolean isContainedInIncludedProfile(Package this) :
+	nestingPackage == null
+		? true // unable to determine, should not get here!
+		: nestingPackage.isContainedInIncludedProfile();
+
+/**
+ * Returns true, if the specified profile is included, otherwise false.
+ */
+private boolean isContainedInIncludedProfile(Profile this) : includeProfiles().toList().contains( name );
+
+/**
+ * Returns false, we assume model + profile elements as the root of the model tree.
+ */
+private boolean isContainedInIncludedProfile(Model this) : false;
 
 /**
  * checks if a type is contained within a profile (deep recursive check)
