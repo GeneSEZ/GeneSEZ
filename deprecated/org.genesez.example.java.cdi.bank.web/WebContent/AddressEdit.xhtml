@@ -1,0 +1,57 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="AddressEdit.xhtml" />
+        <f:viewParam name="id" value="#{addressHome.id}"/>
+        <f:event type="preRenderView" listener="#{addressHome.initConversation}" />   
+    </f:metadata>
+
+    <h:form id="addressFormId" styleClass="edit">		
+		<h:panelGrid columns="2" border="0" rules="rows" >
+        	<f:facet name="header"><h:outputText value="#{addressHome.managed ? 'Edit' : 'Add'} Address"/></f:facet>            
+            <h:outputText value="Address Id #{addressHome.instance.id}"/>
+            <br />
+            <h:outputText value="Street*" />
+            <h:inputText  value="#{addressHome.instance.street}"
+                          required="true"/>
+            <h:outputText value="House number*" />
+            <h:inputText  value="#{addressHome.instance.houseNumber}"
+                          required="true"/>
+            <h:outputText value="Post code*" />
+            <h:inputText  value="#{addressHome.instance.postCode}"
+                          required="true"/>
+            <h:outputText value="City*" />
+            <h:inputText  value="#{addressHome.instance.city}"
+                          required="true"/>
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>              
+		</h:panelGrid>
+        <div class="actionButtons">
+            <h:commandButton id="save"
+                    value="Save"   
+                    action="AddressList.xhtml" 
+                    actionListener="#{addressHome.save}" />
+            <h:commandButton id="delete" 
+                    value="Delete" 
+                    action="AddressList.xhtml" 
+                    actionListener="#{addressHome.delete}"  
+                    rendered="#{addressHome.managed}"/>
+            <h:commandButton id="cancel" 
+                    value="Cancel" 
+                    action="AddressList.xhtml" 
+                    actionListener="#{addressHome.cancel}"/>
+        </div>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

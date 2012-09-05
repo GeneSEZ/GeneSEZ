@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+
+	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<!-- directory which contains the exported uml2 model -->
+		<model value="modelcache/BankServer.uml" />
+		<includeProfiles value="qualifier" />
+	</component>
+	
+	<!-- validate the GeneSEZ model against common + java specific constraints -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serializeBeforeM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="modelcache/BankServer_before.xmi" />
+	</component>
+	
+	<!-- add functionality of the jpa, ejb3, seam2 and java5 cartridge; changes on model level -->
+	<component id="modify" class="org.genesez.platform.common.workflow.CompositeModel2Model">
+		<script value="org::genesez::platform::java::jpa::scripts::Functionality::additions" />
+		<script value="org::genesez::platform::java::jpa::scripts::Functionality::modifications" />
+		<script value="org::genesez::platform::java::ejb3::scripts::Functionality::additions" />
+		<script value="org::genesez::platform::java::ejb3::scripts::Functionality::modifications" />
+		<script value="org::genesez::platform::java::java5::scripts::Functionality::modifications" />
+		<script value="org::genesez::platform::java::cdi::scripts::Functionality::modifications" />
+		<fieldAccess value="true" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component id="serializeBeforeM2T" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="modelcache/BankServer_after.xmi" />
+	</component>
+	
+	<!-- run the java code generation and transform the model into java source code -->
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
+		<!-- directory in which the generated files are placed -->
+		<outputDir value="../org.genesez.example.java.cdi.bank.server/src-gen" />
+		<!-- comma separated list of aspect templates, used for the XPand AOP-Feature -->
+		<aspectTemplate value="customization::NoAuthorComment" />
+		<aspectTemplate value="customization::NoExternal" />
+		<aspectTemplate value="org::genesez::platform::java::ejb3::templates::AspectsAll" />
+		<!-- comma separated list of aspect scripts, used for the Xtend AOP-Feature -->
+		<aspectScript value="customization::Naming" />
+		<!-- now it's possible to specify more than one type mapping file -->
+		<typeMappingFile value="typemapping.xml" />
+		<!-- boolean value indicates if the model name is used as base package or not -->
+		<useModelNameAsBasePackage value="true" />
+		<newAssociationHandling value="false" />
+		<usePropertyVisibilityForAccessors value="false" />
+		<accessorForStereotypes value="" />
+	</component>
+	
+</workflow>

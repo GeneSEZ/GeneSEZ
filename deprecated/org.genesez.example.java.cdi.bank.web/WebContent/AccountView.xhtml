@@ -1,0 +1,107 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">    
+    <f:metadata>
+        <f:viewParam name="fromPage" value="AccountView.xhtml"/>
+        <f:viewParam name="id" value="#{accountHome.id}"/>
+    </f:metadata>
+    
+    <h:panelGrid columns="2">		
+        <f:facet name="header"><h:outputText value="Account Details"/></f:facet>
+		<h:outputText value="Account Number"/>
+        <h:outputText value="#{accountHome.instance.accountNumber}"/>        
+        <h:outputText value="State"/>
+        <h:outputText value="#{accountHome.instance.state}"/>          
+        <h:outputText value="Amount"/>
+        <h:outputText value="#{accountHome.instance.amount}"/>
+        <div style="clear:both"/>
+    </h:panelGrid>
+
+	<h:form id="accountViewFormId" styleClass="view">	
+	    <div class="actionButtons">
+   		    <h:button outcome="AccountEdit.xhtml" 
+   		              includeViewParams="true"
+                      value="Edit" 
+                      style="margin-right : 24px" />
+	        <h:button outcome="#{fromPage}"
+	                  value="Done"
+	                  includeViewParams="false"/>
+	    </div>
+	</h:form>
+
+
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Bank" /></f:facet>            
+    </h:panelGrid> 
+    <div class="association" id="bankParent">
+        <h:outputText value="There is no bank associated with this account." rendered="#{accountHome.instance.bank == null}"/>
+        <h:dataTable id="bankTable" var="_bank" value="#{accountHome.instance.bank}" rendered="#{accountHome.instance.bank != null}">
+            <h:column>
+                <f:facet name="header">Sort code</f:facet>
+                <h:outputText value="#{_bank.sortCode}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Address id</f:facet>
+                <h:outputText value="#{_bank.address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Bankgroup id</f:facet>
+                <h:outputText value="#{_bank.bankgroup.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                <h:outputText value="#{_bank.name}"/>
+            </h:column>
+            <h:column styleClass="action">
+            	<h:form>
+                	<f:facet name="header">Action</f:facet>
+	                <h:link outcome="BankView.xhtml?id=#{_bank.id}"
+	                        value="View"
+	                        includeViewParams="true" 
+	                />                	
+                </h:form>
+            </h:column>
+        </h:dataTable>
+    </div>
+
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Customer" /></f:facet>            
+    </h:panelGrid>
+    <div class="association" id="customerParent">
+        <h:outputText value="There are no customers associated with this account." rendered="#{accountHome.customerList == null}"/>
+        <h:dataTable var="_customer" value="#{accountHome.customerList}" rendered="#{accountHome.customerList != null}"
+              rowClasses="rvgRowOne,rvgRowTwo" id="customerTable">
+            <h:column>
+                <f:facet name="header">Customer number</f:facet>
+                <h:outputText value="#{_customer.customerNumber}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Address id</f:facet>
+                <h:outputText value="#{_customer.address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Firstname</f:facet>
+                <h:outputText value="#{_customer.firstName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sirname</f:facet>
+                <h:outputText value="#{_customer.sirName}"/>
+            </h:column>
+            <h:column>
+                <h:link outcome="CustomerView.xhtml?id=#{_customer.id}" value="View" />            
+            </h:column>             
+        </h:dataTable>
+   </div>
+        
+        
+</ui:define>
+
+</ui:composition>

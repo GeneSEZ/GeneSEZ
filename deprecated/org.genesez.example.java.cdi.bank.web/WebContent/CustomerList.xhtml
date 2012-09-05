@@ -1,0 +1,73 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="CustomerList.xhtml"/>
+        <f:viewParam name="doSelect"/>
+    </f:metadata>
+    <h:panelGrid columns="2">
+    <f:facet name="header">Customer Search Results (#{(empty customerHome.customerList) ? 0 : customerHome.customerListCount})</f:facet>    
+   		<div class="results" id="customerList">
+		    <h:outputText value="The customer search returned no results." rendered="#{empty customerHome.customerList}"/>
+			<h:form>	                        
+			    <h:dataTable id="customerList"
+			                var="_customer"
+			              value="#{customerHome.customerList}"
+			           rendered="#{not empty customerHome.customerList}">
+			           
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Customer Number"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_customer.customerNumber}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="First name"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_customer.firstName}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Sir name"/>
+	                    </f:facet> 
+			            <h:outputText value="#{_customer.sirName}"/>
+			        </h:column>
+	        		<h:column styleClass="action">
+	            		<f:facet name="header">Action</f:facet>      
+	            		<h:link outcome="#{fromPage}?customerId=#{_customer.id}"
+                                value="Select"
+                                rendered="#{isConversationRunning}"
+                        />     
+                        #{' '}		
+            			<h:link outcome="CustomerView.xhtml?id=#{_customer.id}"
+                                value="View" 
+                                rendered="#{!isConversationRunning}"
+                                includeViewParams="true"
+                        />        
+            			#{' '}
+            			<h:link outcome="CustomerEdit.xhtml?id=#{_customer.id}"
+                                value="Edit"
+                                rendered="#{!isConversationRunning}"
+                        />
+                     </h:column>
+			    </h:dataTable>
+			</h:form>
+    	</div>
+    </h:panelGrid>
+
+    <div style="actionButtons">
+	    <h:form>
+	        <h:commandButton action="CustomerEdit.xhtml" id="createId" value="Create customer" rendered="#{doSelect != 1}"/>
+	    </h:form>
+    </div>
+
+</ui:define>
+
+</ui:composition>

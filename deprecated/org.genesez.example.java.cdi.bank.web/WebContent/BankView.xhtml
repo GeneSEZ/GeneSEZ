@@ -1,0 +1,146 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="BankView.xhtml"/>
+        <f:viewParam name="id" value="#{bankHome.id}"/>
+    </f:metadata>
+    <h:panelGrid columns="2">    
+        <f:facet name="header"><h:outputText value="Bank Details"/></f:facet>
+		<h:outputText value="Sort Code:"/>
+        <h:outputText value="#{bankHome.instance.sortCode}"/>        
+        <h:outputText value="Name:"/>
+        <h:outputText value="#{bankHome.instance.name}"/>
+        <div style="clear:both"/>
+   	</h:panelGrid>
+   	
+	<h:form id="bankViewFormId" styleClass="view">			
+	    <div class="actionButtons">
+            <h:button outcome="BankEdit.xhtml" 
+                      includeViewParams="true"
+                      value="Edit" 
+                      style="margin-right : 24px" />
+            <h:button outcome="#{fromPage}"
+                      value="Done"
+                      includeViewParams="false"/>	    
+	    </div>
+	</h:form>
+	
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Address" /></f:facet>            
+    </h:panelGrid>
+    <div class="association" id="addressParent">
+        <h:outputText value="There is no address associated with this bank." rendered="#{bankHome.instance.address == null}"/>
+        <h:dataTable id="bankTable" var="_address" value="#{bankHome.instance.address}" rendered="#{bankHome.instance.address != null}">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">City</f:facet>
+                <h:outputText value="#{_address.city}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">House number</f:facet>
+                <h:outputText value="#{_address.houseNumber}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Post code</f:facet>
+                <h:outputText value="#{_address.postCode}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Street</f:facet>
+                <h:outputText value="#{_address.street}"/>
+            </h:column>
+            <h:column styleClass="action">
+            	<h:form>
+                	<f:facet name="header">Action</f:facet>
+                	<h:link outcome="AddressView.xhtml?id=#{_address.id}"
+                            value="View"
+                            includeViewParams="true" 
+                    />
+                </h:form>
+            </h:column>
+        </h:dataTable>
+    </div>
+
+
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Bankgroup" /></f:facet>            
+    </h:panelGrid>
+    <div class="association" id="bankgroupParent">
+        <h:outputText value="There is no Bankgroup associated with this bank." rendered="#{bankHome.instance.bankgroup == null}"/>
+        <h:dataTable id="bankgroupTable" var="_bankgroup" value="#{bankHome.instance.bankgroup}" rendered="#{bankHome.instance.bankgroup != null}">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_bankgroup.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Address id</f:facet>
+                <h:outputText value="#{_bankgroup.address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                <h:outputText value="#{_bankgroup.name}"/>
+            </h:column>
+            <h:column>
+            	<h:form >
+                	<f:facet name="header">Action</f:facet>
+                	<h:link outcome="BankgroupView.xhtml?id=#{_bankgroup.id}"
+                            value="View"
+                            includeViewParams="true" 
+                    />
+                </h:form>
+            </h:column>
+        </h:dataTable>
+    </div>
+
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Customers" /></f:facet>            
+    </h:panelGrid>
+    <div class="association" id="customerParent">
+        <h:outputText value="There are no customers associated with this bank" rendered="#{bankHome.customerList == null}"/>
+        <h:dataTable var="_customer" value="#{bankHome.customerList}" rendered="#{bankHome.customerList != null}"
+              rowClasses="rvgRowOne,rvgRowTwo" id="customerTable">
+            <h:column>
+                <f:facet name="header">Customer number</f:facet>
+                <h:outputText value="#{_customer.customerNumber}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Address id</f:facet>
+                <h:outputText value="#{_customer.address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Firstname</f:facet>
+                <h:outputText value="#{_customer.firstName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sirname</f:facet>
+                <h:outputText value="#{_customer.sirName}"/>
+            </h:column>
+            <h:column>
+                <h:form >
+                    <f:facet name="header">Action</f:facet>
+                    <h:link outcome="CustomerView.xhtml?id=#{_customer.id}"
+                            value="View"
+                            includeViewParams="true" 
+                    />
+                </h:form>            
+            </h:column> 
+        </h:dataTable>
+    </div>
+    
+    
+</ui:define>
+
+</ui:composition>

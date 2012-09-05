@@ -1,0 +1,102 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="BankgroupView.xhtml"/>
+        <f:viewParam name="id" value="#{bankgroupHome.id}"/>
+    </f:metadata>
+    
+    <h:panelGrid columns="2"> 
+        <f:facet name="header"><h:outputText value="Bankgroup Details" /></f:facet>          
+		<h:outputText value="Id:"/>
+        <h:outputText value="#{bankgroupHome.instance.id}"/>        
+        <h:outputText value="Name:"/>
+        <h:outputText value="#{bankgroupHome.instance.name}"/>
+        <div style="clear:both"/>   
+   	</h:panelGrid>       
+	
+	<h:form id="bankgroupViewFormId" styleClass="view">			
+	    <div class="actionButtons">
+            <h:button outcome="BankgroupEdit.xhtml" 
+                      includeViewParams="true"
+                      value="Edit" 
+                      style="margin-right : 24px" />
+            <h:button outcome="#{fromPage}"
+                      value="Done"
+                      includeViewParams="false"/>	    
+	    </div>
+	</h:form>
+	
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Address" /></f:facet>            
+    </h:panelGrid>    
+    <div class="association" id="addressParent">
+        <h:outputText value="There is no address associated with this bankgroup." rendered="#{bankgroupHome.instance.address == null}"/>
+        <h:dataTable id="bankgroupTable" var="_address" value="#{bankgroupHome.instance.address}" rendered="#{bankgroupHome.instance.address != null}">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Street</f:facet>
+                <h:outputText value="#{_address.street}"/>
+            </h:column>            
+            <h:column>
+                <f:facet name="header">House number</f:facet>
+                <h:outputText value="#{_address.houseNumber}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Post code</f:facet>
+                <h:outputText value="#{_address.postCode}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">City</f:facet>
+                <h:outputText value="#{_address.city}"/>
+            </h:column>            
+            <h:column styleClass="action">
+            	<h:form>
+                	<f:facet name="header">Action</f:facet>
+                	<h:link outcome="AddressView.xhtml?id=#{_address.id}"
+                            value="View"
+                            includeViewParams="true" 
+                    />
+                </h:form>
+            </h:column>
+        </h:dataTable>
+    </div>
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Bank" /></f:facet>            
+    </h:panelGrid>
+    <div class="association" id="bankParent">
+        <h:outputText value="There are no Banks associated with this bankgroup." rendered="#{bankgroupHome.bankList == null}"/>
+        <h:dataTable id="bankTable" var="_bank" value="#{bankgroupHome.bankList}" rendered="#{bankgroupHome.bankList != null}">
+            <h:column>
+                <f:facet name="header">Sortcode</f:facet>
+                <h:outputText value="#{_bank.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                <h:outputText value="#{_bank.name}"/>
+            </h:column>
+            <h:column>
+            	<h:form >
+                	<f:facet name="header">Action</f:facet>
+                    <h:link outcome="BankView.xhtml?id=#{_bank.id}"
+                            value="View"
+                            includeViewParams="true" 
+                    />
+                </h:form>
+            </h:column>
+        </h:dataTable>
+    </div>
+    
+</ui:define>
+</ui:composition>

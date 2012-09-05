@@ -1,0 +1,44 @@
+ <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">    
+    <f:metadata>
+        <f:viewParam name="fromPage" value="AddressView.xhtml"/>
+        <f:viewParam name="id" value="#{addressHome.id}"/>
+    </f:metadata>
+    
+    <h:panelGrid columns="2">		
+        <f:facet name="header"><h:outputText value="Address Details"/></f:facet>
+            <h:outputText value="Address Id"/>
+            <h:outputText value="#{addressHome.instance.id}"/>
+            <h:outputText value="Street" />
+            <h:outputText value="#{addressHome.instance.street}"/>
+            <h:outputText value="House number" />
+            <h:outputText value="#{addressHome.instance.houseNumber}"/>
+            <h:outputText value="Post code" />
+            <h:outputText value="#{addressHome.instance.postCode}"/>
+            <h:outputText value="City" />
+            <h:outputText value="#{addressHome.instance.city}"/>        
+        <div style="clear:both"/>
+    </h:panelGrid>
+
+	<h:form id="addressViewFormId" styleClass="view">	
+	    <div class="actionButtons">
+   		    <h:button outcome="AddressEdit.xhtml" 
+   		              includeViewParams="true"
+                      value="Edit" 
+                      style="margin-right : 24px" />
+	        <h:button outcome="#{fromPage}"
+	                  value="Done"
+	                  includeViewParams="false"/>
+	    </div>
+	</h:form>
+
+</ui:define>
+
+</ui:composition>

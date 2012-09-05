@@ -1,0 +1,79 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="AccountList.xhtml"/>
+        <f:viewParam name="doSelect"/>
+    </f:metadata>
+    <h:panelGrid columns="2">
+    <f:facet name="header">Account Search Results (#{(empty accountHome.accountList) ? 0 : accountHome.accountListCount})</f:facet>    
+   		<div class="results" id="accountList">
+		    <h:outputText value="The account search returned no results." rendered="#{empty accountHome.accountList}"/>
+			<h:form>	                        
+			    <h:dataTable id="accountList"
+			                var="_account"
+			              value="#{accountHome.accountList}"
+			           rendered="#{not empty accountHome.accountList}">
+			           
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Account Number"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_account.accountNumber}"/>
+			        </h:column>
+                    <h:column>
+                        <f:facet name="header" >
+                              <h:outputText value="State"/>
+                         </f:facet> 
+                        <h:outputText value="#{_account.state}" styleClass="#{ (_account.state == 'LOCKED') ? 'errorText' : ''}"/>
+                    </h:column>			        
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Amount"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_account.amount}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Bank Sort Code"/>
+	                    </f:facet> 
+			            <h:outputText value="#{_account.bank.sortCode}"/>
+			        </h:column>
+	        		<h:column styleClass="action">
+	            		<f:facet name="header">Action</f:facet>  
+                        <h:link outcome="#{fromPage}?accountId=#{_account.id}"
+                                value="Select"
+                                rendered="#{isConversationRunning}"
+                        />	
+                        #{' '}            		         		
+            			<h:link outcome="AccountView.xhtml?id=#{_account.id}"
+                                value="View" 
+                                rendered="#{!isConversationRunning}"
+                                includeViewParams="true"
+                        />        
+            			#{' '}
+            			<h:link outcome="AccountEdit.xhtml?id=#{_account.id}"
+            			        value="Edit"
+            			        rendered="#{!isConversationRunning}"
+            			/>
+	        		</h:column>		        
+			    </h:dataTable>
+			</h:form>
+    	</div>
+    </h:panelGrid>
+
+    <div style="actionButtons">
+	    <h:form>
+	        <h:commandButton action="AccountEdit.xhtml" id="createId" value="Create account" rendered="#{doSelect != 1}"/>
+	    </h:form>
+    </div>
+
+</ui:define>
+
+</ui:composition>

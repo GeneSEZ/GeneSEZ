@@ -1,0 +1,75 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="BankList.xhtml"/>
+        <f:viewParam name="doSelect"/>
+    </f:metadata>
+    <h:panelGrid columns="2">
+    <f:facet name="header">Bank Search Results (#{(empty bankHome.bankList) ? 0 : bankHome.bankListCount})</f:facet>    
+   		<div class="results" id="bankList">
+		    <h:outputText value="The bank search returned no results." rendered="#{empty bankHome.bankList}"/>
+		    <h:form >                    
+			    <h:dataTable id="bankList" var="_bank" value="#{bankHome.bankList}" rendered="#{not empty bankHome.bankList}">
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Sortcode"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_bank.sortCode}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Address Id"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_bank.address.id}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Bankgroup Id"/>
+	                    </f:facet> 
+			            <h:outputText value="#{_bank.bankgroup.id}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Name"/>
+	                    </f:facet> 
+			            <h:outputText value="#{_bank.name}"/>
+			        </h:column>
+		        	<h:column styleClass="action">
+	            		<f:facet name="header">Action</f:facet>                         
+                        <h:link outcome="#{fromPage}?bankId=#{_bank.id}"
+                                value="Select"
+                                rendered="#{isConversationRunning}"
+                        />
+                        #{' '}                               
+                        <h:link outcome="BankView.xhtml?id=#{_bank.id}"
+                                value="View" 
+                                rendered="#{!isConversationRunning}"           
+                                includeViewParams="true"                   
+                        />        
+                        #{' '}
+                        <h:link outcome="BankEdit.xhtml?id=#{_bank.id}"
+                                value="Edit"
+                                rendered="#{!isConversationRunning}"
+                        />
+		        	</h:column>		        
+			    </h:dataTable>
+            </h:form>			  
+    	</div>
+    </h:panelGrid>
+
+    <div style="actionButtons">
+	    <h:form>
+            <h:commandButton action="BankEdit.xhtml" id="createId" value="Create bank" rendered="#{doSelect != 1}" />
+  	    </h:form>
+    </div>
+
+</ui:define>
+
+</ui:composition>

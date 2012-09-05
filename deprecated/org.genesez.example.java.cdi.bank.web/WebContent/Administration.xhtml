@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="template.xhtml">
+    
+    <ui:define name="content">
+	   <f:metadata>
+	       <f:viewParam name="doSelect" value="1" />
+	       <f:viewParam name="fromPage" value="Administration.xhtml" />
+	       <f:viewParam name="amount" />
+	       <f:viewParam name="accountId" value="#{accountHome.id}"/>
+	       <f:viewParam name="bankId" value="#{bankHome.id}"/>
+	       <f:viewParam name="customerId" value="#{customerHome.id}"/>
+	       <f:viewParam name="bankgroupId" value="#{bankgroupHome.id}"/>
+	       <f:viewParam name="addressId" value="#{addressHome.id}"/>
+	   </f:metadata>
+    
+      <h:messages/>
+              
+    <div id="divCashTerminal">
+        <h:form> 
+            <h:panelGrid columns="1">
+                <f:facet name="header"><h:outputText value="Cash Terminal" /></f:facet>            
+            </h:panelGrid>    
+            <br />
+            <h:panelGrid columns="2" style="width:100%;">
+                <f:facet name="header" ><h:outputText value="Account" style="padding-top:3px;padding-bottom:3px"/></f:facet>
+                <h:outputText value="Account Number:" style="width:100px;"/>
+                <h:outputText value="#{accountHome.managed ? accountHome.instance.accountNumber : ''}"/>
+                <h:outputText value="State:"/>
+                <h:outputText value="#{accountHome.managed ? accountHome.instance.state : ''}" styleClass="#{ (accountHome.managed &amp;&amp; accountHome.instance.state == 'LOCKED') ? 'errorText' : ''}"/>                
+                <h:outputText value="Balance:"/>
+                <h:outputText value="#{accountHome.managed ? accountHome.instance.amount : ''}"/>                          
+                <h:outputText value="Bank:"/>
+                <h:outputText value="#{accountHome.managed ? accountHome.instance.bank.name : ''}"/>
+                <h:outputText value="Sort code:"/>
+                <h:outputText value="#{accountHome.managed ? accountHome.instance.bank.sortCode : ''}"/>        
+            <div style="clear:both"/>
+            </h:panelGrid>
+                        
+            <div class="actionButtons" >
+                  <h:commandButton action="#{accountAction.selectAccount}"
+                                   value="Select Account"
+                                   rendered="#{!accountHome.managed}" />
+                  <h:commandButton action="#{accountAction.lockAccount}"
+                                   value="Lock Account"
+                                   rendered="#{accountHome.managed}" />
+                  <h:commandButton action="#{accountAction.unlockAccount}"
+                                   value="Unlock Account"
+                                   rendered="#{accountHome.managed}" />
+                  <h:commandButton action="#{accountAction.closeAccount}"
+                                   value="Close Account"
+                                   rendered="#{accountHome.managed}" />                                                                                                         
+            </div>
+            <br />    
+            <h:panelGrid columns="2" rendered="#{accountHome.managed}" style=" width : 100%;">
+                <h:outputText value="Amount:"/>
+                <h:inputText label="amount" title="amount" value="#{amount}" />
+            </h:panelGrid> 
+            
+            <div class="actionButtons" >
+			      <h:commandButton action="#{accountAction.withdraw(amount)}" 
+			                       value="Withdraw" 
+			                       rendered="#{accountHome.managed}"/>
+			      <h:commandButton action="#{accountAction.deposit(amount)}"
+			                       value="Deposit" 
+			                       rendered="#{accountHome.managed}"/>
+            </div>   
+            <br />
+            <div class="actionButtons" align="right">
+                  <h:commandButton action="#{accountAction.cancel}" 
+                                   value="Cancel" 
+                                   rendered="#{accountHome.managed}"/>            
+                  <h:commandButton action="#{accountAction.saveAccount}" 
+                                   value="Save Changes" 
+                                   rendered="#{accountHome.managed}"/>
+            </div>               
+        </h:form>     
+    </div>
+    
+    <div id="divCreateCredit">
+        <h:form>        
+            <h:panelGrid columns="1">
+                <f:facet name="header"><h:outputText value="Credit" /></f:facet>            
+            </h:panelGrid>    
+                   
+            <br />
+            <h:panelGrid columns="2" style="width:100%;">
+                <f:facet name="header" ><h:outputText value="Customer" style="padding-top:3px;padding-bottom:3px"/></f:facet>
+                <h:outputText value="Customer Number:" style="width:100px;"/>
+                <h:outputText value="#{customerHome.managed ? customerHome.instance.id : ''}"/>
+                <h:outputText value="Name"/>
+                <h:outputText value="#{customerHome.managed ? customerHome.instance.fullName : ''}"/>                                     
+                <h:outputText value="Bank:"/>
+                <h:outputText value="#{customerHome.managed ? customerHome.instance.bank.name : ''}"/>
+                <h:outputText value="Sort code:"/>
+                <h:outputText value="#{customerHome.managed ? customerHome.instance.bank.sortCode : ''}"/>        
+            <div style="clear:both"/>
+            </h:panelGrid>
+            
+            <div class="actionButtons" >
+                  <h:commandButton action="#{customerAction.selectCustomer}"
+                                   value="Select Customer"
+                                   rendered="#{!customerHome.managed}" />
+            </div>
+                        
+            <h:panelGrid columns="2" rendered="#{customerHome.managed}" style=" width : 100%;">
+                <h:outputText value="Credit Amount:"/>
+                <h:inputText label="amount" title="amount" value="#{amount}" />
+            </h:panelGrid>     
+            
+            <div class="actionButtons" align="right">
+                  <h:commandButton action="#{customerAction.createCredit(amount)}" 
+                                   value="Commit Credit" 
+                                   rendered="#{customerHome.managed}"/>
+                  <h:commandButton action="#{customerAction.cancel}"
+                                   value="Refuse Credit" 
+                                   rendered="#{customerHome.managed}"/>
+            </div>                                
+        </h:form>
+    </div>     
+    </ui:define>
+</ui:composition>

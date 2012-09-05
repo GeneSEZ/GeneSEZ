@@ -1,0 +1,87 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="AddressList.xhtml"/>
+        <f:viewParam name="doSelect"/>
+    </f:metadata>
+    <h:panelGrid columns="2">
+    <f:facet name="header">Address Search Results (#{(empty addressHome.addressList) ? 0 : addressHome.addressListCount})</f:facet>    
+   		<div class="results" id="addressList">
+		    <h:outputText value="The address search returned no results." 
+		                  rendered="#{empty addressHome.addressList}"/>
+			<h:form>	                        
+			    <h:dataTable id="addressList"
+			                var="_address"
+			              value="#{addressHome.addressList}"
+			           rendered="#{not empty addressHome.addressList}">
+			           
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Address Id"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_address.id}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="Street"/>
+	                     </f:facet> 
+			            <h:outputText value="#{_address.street}"/>
+			        </h:column>
+			        <h:column>
+			        	<f:facet name="header" >
+	                          <h:outputText value="House Number"/>
+	                    </f:facet> 
+			            <h:outputText value="#{_address.houseNumber}"/>
+			        </h:column>
+			        <h:column>
+                        <f:facet name="header" >
+                              <h:outputText value="Post Code"/>
+                        </f:facet> 
+                        <h:outputText value="#{_address.postCode}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header" >
+                              <h:outputText value="City"/>
+                        </f:facet> 
+                        <h:outputText value="#{_address.city}"/>
+                    </h:column>                    
+	        		<h:column styleClass="action">
+	            		<f:facet name="header">Action</f:facet>           		
+            			<h:link outcome="#{fromPage}?addressId=#{_address.id}"
+            			        value="Select" 
+            			        rendered="#{isConversationRunning}"
+            			/>
+            			#{' '}
+            			<h:link outcome="AddressView.xhtml?id=#{_address.id}"
+                                value="View" 
+                                rendered="#{!isConversationRunning}"
+                                includeViewParams="true"
+                        />        
+            			#{' '}
+            			<h:link outcome="AddressEdit.xhtml?id=#{_address.id}"
+            			        value="Edit"
+            			        rendered="#{!isConversationRunning}"
+            			/>
+	        		</h:column>		        
+			    </h:dataTable>
+			</h:form>
+    	</div>
+    </h:panelGrid>
+
+    <div style="actionButtons">
+	    <h:form>
+	        <h:commandButton action="AddressEdit.xhtml" id="createId" value="Create address" rendered="#{doSelect != 1}"/>
+	    </h:form>
+    </div>
+
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,31 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form>
+	    <h:panelGroup id="menuId1" layout="block" style="float: left;">
+		    <h:panelGrid columns="5" rendered="#{!conversationAdmin.conversationRunning &amp;&amp; login.loggedIn}">    
+		        <h:commandLink id="menuBankGroupId" value="BankGroup" action="BankgroupList.xhml"/>
+		        <h:commandLink id="menuBankId" value="Bank" action="BankList.xhtml"/>
+		        <h:commandLink id="menuAccountId" value="Account" action="AccountList.xhtml"/>
+		        <h:commandLink id="menuAddressId" value="Address" action="AddressList.xhtml"/>
+		        <h:commandLink id="menuCustomerId" value="Customer" action="CustomerList.xhtml"/>
+		        <h:commandLink id="menuAdministrationId" value="Back Office" action="Administration.xhtml"/>             
+		    </h:panelGrid>
+	    </h:panelGroup>
+    </h:form>
+
+	<h:form>
+		<h:panelGroup id="menuId2" layout="block" style="float: right;">
+		    <h:panelGrid columns="3">    
+		        <h:outputText id="menuWelcomeId" value="signed in as: #{currentUser.username}" rendered="#{login.loggedIn}"/>
+		        <h:outputLink id="menuLoginId"  rendered="#{!login.loggedIn}">Login</h:outputLink>
+		        <h:commandLink id="menuLogoutId" value="Logout" action="#{login.logout}" rendered="#{login.loggedIn}"/>                           
+		    </h:panelGrid>	
+		</h:panelGroup>
+    </h:form>
+    
+    <div style="clear: both;"></div>
+</ui:composition>

@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="template.xhtml">
+
+<ui:define name="content">
+    <f:metadata>
+        <f:viewParam name="fromPage" value="AccountEdit.xhtml" />
+        <f:viewParam name="id" value="#{accountHome.id}"/>
+        <f:viewParam name="bankId" value="#{bankHome.id}"/>
+        <f:viewParam name="customerId" value="#{customerHome.id}"/>
+        <f:event type="preRenderView" listener="#{accountHome.initConversation}" />   
+        <f:event type="preRenderView" listener="#{accountHome.wire}" />
+    </f:metadata>
+
+    <h:form id="accountFormId" styleClass="edit">		
+		<h:panelGrid columns="2" border="0" rules="rows" >
+        	<f:facet name="header"><h:outputText value="#{accountHome.managed ? 'Edit' : 'Add'} Account"/></f:facet>            
+            <h:outputText value="Account Number:"/>
+            <h:outputText value="#{accountHome.instance.accountNumber}"/>
+            <h:outputText value="State:"/>
+            <h:outputText value="#{accountHome.instance.state}"/>
+        	<h:outputText value="Amount:"/>
+        	<h:inputText id="amountId" required="true" value="#{accountHome.instance.amount}" />                
+		</h:panelGrid>
+        <div class="actionButtons">
+            <h:commandButton id="save"
+                    value="Save"   
+                    action="AccountList.xhtml" 
+                    actionListener="#{accountHome.save}" />
+            <h:commandButton id="delete" 
+                    value="Delete" 
+                    action="AccountList.xhtml" 
+                    actionListener="#{accountHome.delete}"  
+                    rendered="#{accountHome.managed}"/>
+            <h:commandButton id="cancel" 
+                    value="Cancel" 
+                    action="AccountList.xhtml" 
+                    actionListener="#{accountHome.cancel}"/>
+        </div>
+    </h:form>
+
+
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Bank" /></f:facet>            
+    </h:panelGrid>
+    <div class="association" id="bankParent">
+        <h:outputText value="There is no bank associated with this account." rendered="#{accountHome.instance.bank == null}"/>
+        <h:dataTable var="_bank" value="#{accountHome.instance.bank}" rendered="#{accountHome.instance.bank != null}" id="bankTable">
+            <h:column>
+                <f:facet name="header">Sort code</f:facet>
+                <h:outputText value="#{_bank.sortCode}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Address id</f:facet>
+                <h:outputText value="#{_bank.address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Bankgroup id</f:facet>
+                <h:outputText value="#{_bank.bankgroup.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                <h:outputText value="#{_bank.name}"/>
+            </h:column>
+        </h:dataTable>
+
+        <div class="actionButtons">
+	        <h:form>	         
+                <h:button outcome="BankList.xhtml?doSelect=1"
+                        value="#{accountHome.instance.bank != null ? 'Change' : 'Select'} bank"
+                        includeViewParams="true" 
+                />	            
+	        </h:form>
+        </div>
+
+    </div>
+
+
+    <br />
+    <h:panelGrid columns="1">
+        <f:facet name="header"><h:outputText value="Customer" /></f:facet>            
+    </h:panelGrid>
+    <div class="association" id="customerParent">
+        <h:outputText value="There are no customers associated with this account." rendered="#{accountHome.customerList == null}"/>
+        <h:dataTable var="_customers" value="#{accountHome.customerList}" rendered="#{accountHome.customerList != null}"
+              rowClasses="rvgRowOne,rvgRowTwo" id="customerTable">
+            <h:column>
+                <f:facet name="header">Customer number</f:facet>
+                <h:outputText value="#{_customers.customerNumber}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Address id</f:facet>
+                <h:outputText value="#{_customers.address.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Firstname</f:facet>
+                <h:outputText value="#{_customers.firstName}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sirname</f:facet>
+                <h:outputText value="#{_customers.sirName}"/>
+            </h:column>
+        </h:dataTable>
+
+        <div class="actionButtons">
+           <h:form>
+                <h:button outcome="CustomerList.xhtml?doSelect=1"
+                          value="Add customer"
+                          includeViewParams="true" 
+                />              
+            </h:form>
+        </div>                
+    </div>
+
+</ui:define>
+
+</ui:composition>
