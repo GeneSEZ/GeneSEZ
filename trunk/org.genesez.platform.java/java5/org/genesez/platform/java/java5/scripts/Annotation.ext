@@ -11,28 +11,30 @@ extension org::genesez::platform::common::log::Log;
 
 /**
  * Adds the stereotype for the @Target annotation
- * checks all association roles for each possible meta classe and combines the results with existing tagged values
- * results into a new stereotype
- *
+ * Checks all association roles for each possible meta class and combines the results with existing tagged values
+ * results into a new stereotype.
+ * It then removes these association roles.
+ * 
  * @param this the MInterface which later represents an annotation (@interface)
- *
  */
 Void addTargetStereotype(MInterface this) :
-    /* only if ether an association role or a java5Target stereotype is present, there's something to do*/
-    (this.hasAssociationRoles() || this.hasStereotype(java5AnnotationStereotype()))
-        ? (     
-             let annotationType = ( checkTaggedValues("ANNOTATION_TYPE") || checkAssociationRole(this, "Stereotype")|| checkAssociationRole(this, "Element")):
-             let type           = ( checkTaggedValues("TYPE")            || checkAssociationRole(this, "Type")      || checkAssociationRole(this, "Element") || checkAssociationRole(this, "Class") || checkAssociationRole(this, "Interface") || checkAssociationRole(this, "Enumeration")) :
-             let constr         = ( checkTaggedValues("CONSTRUCTOR")                                                || checkAssociationRole(this, "Element")) :
-             let method         = ( checkTaggedValues("METHOD")          || checkAssociationRole(this, "Operation") || checkAssociationRole(this, "Element")) :
-             let field          = ( checkTaggedValues("FIELD")           || checkAssociationRole(this, "Property")  || checkAssociationRole(this, "Element")) :
-             let localVar       = ( checkTaggedValues("LOCAL_VARIABLE")                                             || checkAssociationRole(this, "Element")) :
-             let parameter      = ( checkTaggedValues("PARAMETER")       || checkAssociationRole(this, "Parameter") || checkAssociationRole(this, "Element")) :
-             let package        = ( checkTaggedValues("PACKAGE")         || checkAssociationRole(this, "Package")   || checkAssociationRole(this, "Element")) :             
-                makeTargetStereotype((MElement)this, annotationType, type, constr, method, field, localVar, parameter, package) 
-        ) 
-        : Void;
-        
+	// only if ether an association role or a java5Target stereotype is present, there's something to do
+	(this.hasAssociationRoles() || this.hasStereotype(java5AnnotationStereotype()))
+		? (
+			let annotationType = ( checkTaggedValues("ANNOTATION_TYPE") || checkAssociationRole(this, "Stereotype")|| checkAssociationRole(this, "Element")):
+			let type           = ( checkTaggedValues("TYPE")            || checkAssociationRole(this, "Type")      || checkAssociationRole(this, "Element") || checkAssociationRole(this, "Class") || checkAssociationRole(this, "Interface") || checkAssociationRole(this, "Enumeration")) :
+			let constr         = ( checkTaggedValues("CONSTRUCTOR")                                                || checkAssociationRole(this, "Element")) :
+			let method         = ( checkTaggedValues("METHOD")          || checkAssociationRole(this, "Operation") || checkAssociationRole(this, "Element")) :
+			let field          = ( checkTaggedValues("FIELD")           || checkAssociationRole(this, "Property")  || checkAssociationRole(this, "Element")) :
+			let localVar       = ( checkTaggedValues("LOCAL_VARIABLE")                                             || checkAssociationRole(this, "Element")) :
+			let parameter      = ( checkTaggedValues("PARAMETER")       || checkAssociationRole(this, "Parameter") || checkAssociationRole(this, "Element")) :
+			let package        = ( checkTaggedValues("PACKAGE")         || checkAssociationRole(this, "Package")   || checkAssociationRole(this, "Element")) :             
+			makeTargetStereotype((MElement)this, annotationType, type, constr, method, field, localVar, parameter, package) 
+		)
+		: Void ->
+	// all association roles with 'base_*' are mode from uml::Extension and only there for the above reason, so remove them now
+	property.removeAll( property.typeSelect(MAssociationRole).select(e|e.name.startsWith("base_")) );
+	
 /**
  * Adds the stereotype for the @Retention annotation
  * Default value is RUNTIME
