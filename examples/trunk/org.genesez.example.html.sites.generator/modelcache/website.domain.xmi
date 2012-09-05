@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ASCII"?>
+<gcore:MModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gcore="http://genesez.org/metamodel/core" xsi:schemaLocation="http://genesez.org/metamodel/core java://org.genesez.metamodel.gcore.GcorePackage" name="org.genesez.example.html.site" xmiGuid="eee_1045467100313_135436_1">
+  <ownedComment xmiGuid="_17_0_1_8a7027a_1342788938923_125352_1503" annotation="Author:nicher.&#xA;Created:7/12/12 1:38 PM.&#xA;Title:.&#xA;Comment:.&#xA;"/>
+  <nestedPackage name="UML Standard Profile" xmiGuid="magicdraw_uml_standard_profile_v_0001" stereotype="_12_1_8f90291_1173963323875_662612_98">
+    <ownedComment xmiGuid="_be00301_1078843546940_242228_131" annotation="UML Standard Profile contains UML metamodel (metaclasses without properties and associations), StandardProfileL2 and StandardProfileL3 from UML specification, Standard UML stereotypes defined in annex C of UML specification.&#xA;Profile also includes validation suites for UML model correctness and completeness checking, and stereotypes used by MagicDraw internally."/>
+  </nestedPackage>
+  <nestedPackage name="domain" xmiGuid="_17_0_1_8a7027a_1346831146003_450128_1625">
+    <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146065_59133_1663" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    The &lt;b>&lt;i>core&lt;/i>&lt;/b> package contains all domain classes and the domain &#xA;    types.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+    <classifier xsi:type="gcore:MEnumeration" name="State" xmiGuid="_17_0_1_8a7027a_1346831146057_51398_1650" visibility="public">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146080_763564_1730" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Represents the &lt;b>&lt;i>progress&lt;/i>&lt;/b> of a unit of work and indicates if &#xA;    it needs further attention. The usual life cycle of a unit of work is &#xA;    usually: todo -&amp;gt; in progress -&amp;gt; done.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <literal name="TODO" xmiGuid="_17_0_1_8a7027a_1346831146079_203446_1727">
+        <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146098_845077_1770" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Indicates that the work has &lt;b>&lt;i>not&lt;/i>&lt;/b> started yet and the unit of &#xA;    work has to be completed in the future.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      </literal>
+      <literal name="IN_PROGRESS" xmiGuid="_17_0_1_8a7027a_1346831146080_120736_1728">
+        <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146098_137617_1771" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Indicates that the work of a unit has already &lt;b>&lt;i>started&lt;/i>&lt;/b> and &#xA;    needs &lt;b>&lt;i>further&lt;/i>&lt;/b> attention too.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      </literal>
+      <literal name="DONE" xmiGuid="_17_0_1_8a7027a_1346831146080_355220_1729">
+        <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146098_207622_1772" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Indicates that the unit of work is &lt;b>&lt;i>finished&lt;/i>&lt;/b> and do &lt;b>&lt;i>not&lt;/i>&lt;/b> &#xA;    need further attention.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      </literal>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="SubTask" xmiGuid="_17_0_1_8a7027a_1346831146058_786426_1651" visibility="public" generalization="_17_0_1_8a7027a_1346831146060_676258_1654">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146081_281385_1732" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Represents an enclosed unit of work to work on.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <property xsi:type="gcore:MAssociationRole" name="person" xmiGuid="_17_0_1_8a7027a_1346831146081_419789_1733" visibility="private" multiplicity="-1" lowerBoundMultiplicity="1" upperBoundMultiplicity="-1" unique="true" type="_17_0_1_8a7027a_1346831146061_327596_1655" oppositeMultiplicity="-1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="-1" association="_17_0_1_8a7027a_1346831146064_898873_1660" opposite="_17_0_1_8a7027a_1346831146088_710133_1753"/>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="Task" xmiGuid="_17_0_1_8a7027a_1346831146060_676258_1654" visibility="public" abstract="true">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146085_959419_1744" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    A task represents an enclosed task with a defined outcome, which has to be &#xA;    completed within a planned amount of time.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <property xsi:type="gcore:MAttribute" name="name" xmiGuid="_17_0_1_8a7027a_1346831146085_545616_1745" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAttribute" name="description" xmiGuid="_17_0_1_8a7027a_1346831146085_593794_1746" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAttribute" name="state" xmiGuid="_17_0_1_8a7027a_1346831146086_799966_1747" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146057_51398_1650"/>
+      <property xsi:type="gcore:MAttribute" name="timeBudgetPlanned" xmiGuid="_17_0_1_8a7027a_1346831146086_672945_1748" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146059_466149_1652"/>
+      <property xsi:type="gcore:MAssociationRole" name="project" xmiGuid="_17_0_1_8a7027a_1346831146087_423592_1749" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146059_993022_1653" oppositeMultiplicity="-1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="-1" association="_17_0_1_8a7027a_1346831146063_496126_1658" opposite="_17_0_1_8a7027a_1346831146084_29668_1741"/>
+      <property xsi:type="gcore:MAssociationRole" name="milestone" xmiGuid="_17_0_1_8a7027a_1346831146087_970312_1750" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146061_604031_1656" oppositeMultiplicity="-1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="-1" association="_17_0_1_8a7027a_1346831146064_355757_1661" opposite="_17_0_1_8a7027a_1346831146090_258708_1759"/>
+      <property xsi:type="gcore:MAssociationRole" name="mainTask" xmiGuid="_17_0_1_8a7027a_1346831146088_287628_1751" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146062_677258_1657" oppositeMultiplicity="-1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="-1" association="_17_0_1_8a7027a_1346831146065_203284_1662" opposite="_17_0_1_8a7027a_1346831146092_348883_1764"/>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="Person" xmiGuid="_17_0_1_8a7027a_1346831146061_327596_1655" visibility="public">
+      <property xsi:type="gcore:MAttribute" name="name" xmiGuid="_17_0_1_8a7027a_1346831146088_451478_1752" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAttribute" name="password" xmiGuid="_17_0_1_8a7027a_1346831604668_355675_2532" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAssociationRole" name="subTask" xmiGuid="_17_0_1_8a7027a_1346831146088_710133_1753" visibility="private" multiplicity="-1" lowerBoundMultiplicity="1" upperBoundMultiplicity="-1" unique="true" type="_17_0_1_8a7027a_1346831146058_786426_1651" oppositeMultiplicity="-1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="-1" association="_17_0_1_8a7027a_1346831146064_898873_1660" opposite="_17_0_1_8a7027a_1346831146081_419789_1733"/>
+    </classifier>
+    <classifier xsi:type="gcore:MDataType" name="Duration" xmiGuid="_17_0_1_8a7027a_1346831146059_466149_1652" visibility="public">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146082_720599_1734" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Represents the &lt;b>&lt;i>amount&lt;/i>&lt;/b> of time spent for something. This &#xA;    amount is defined as the &lt;u>&lt;i>time difference&lt;/i>&lt;/u> of the start to the &#xA;    end.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <property xsi:type="gcore:MAttribute" name="time" xmiGuid="_17_0_1_8a7027a_1346831146082_8746_1735" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="double"/>
+      <property xsi:type="gcore:MAttribute" name="unit" xmiGuid="_17_0_1_8a7027a_1346831146082_927652_1736" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="Project" xmiGuid="_17_0_1_8a7027a_1346831146059_993022_1653" stereotype="_14_0_b6f02e1_1212567706968_503410_178" visibility="public">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146083_201184_1737" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Represents an enclosed huge task which can be divided into several tasks &#xA;    and has a clear outcome.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <taggedValue value="true" tag="//@anyStereotype.2/@property.0"/>
+      <taggedValue value="true" tag="//@anyStereotype.2/@property.1"/>
+      <property xsi:type="gcore:MAttribute" name="name" xmiGuid="_17_0_1_8a7027a_1346831146083_770765_1738" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAttribute" name="description" xmiGuid="_17_0_1_8a7027a_1346831146083_399258_1739" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAssociationRole" name="milestone" xmiGuid="_17_0_1_8a7027a_1346831146084_581018_1740" visibility="private" multiplicity="-1" lowerBoundMultiplicity="1" upperBoundMultiplicity="-1" unique="true" type="_17_0_1_8a7027a_1346831146061_604031_1656" oppositeMultiplicity="1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="1" association="_17_0_1_8a7027a_1346831146063_647497_1659" opposite="_17_0_1_8a7027a_1346831146089_857222_1755"/>
+      <property xsi:type="gcore:MAssociationRole" name="task" xmiGuid="_17_0_1_8a7027a_1346831146084_29668_1741" visibility="private" multiplicity="-1" lowerBoundMultiplicity="1" upperBoundMultiplicity="-1" unique="true" type="_17_0_1_8a7027a_1346831146060_676258_1654" oppositeMultiplicity="1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="1" association="_17_0_1_8a7027a_1346831146063_496126_1658" opposite="_17_0_1_8a7027a_1346831146087_423592_1749"/>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="Milestone" xmiGuid="_17_0_1_8a7027a_1346831146061_604031_1656" stereotype="_14_0_b6f02e1_1212567706968_503410_178" visibility="public">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146089_889720_1754" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Represents a step within a project that has to be completet.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <taggedValue value="true" tag="//@anyStereotype.2/@property.0"/>
+      <taggedValue value="true" tag="//@anyStereotype.2/@property.1"/>
+      <property xsi:type="gcore:MAttribute" name="name" xmiGuid="_17_0_1_8a7027a_1346831146089_226803_1756" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAttribute" name="description" xmiGuid="_17_0_1_8a7027a_1346831146090_345092_1757" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String"/>
+      <property xsi:type="gcore:MAttribute" name="state" xmiGuid="_17_0_1_8a7027a_1346831146090_146101_1758" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146057_51398_1650" defaultvalue="TODO"/>
+      <property xsi:type="gcore:MAttribute" name="deadline" xmiGuid="_17_0_1_8a7027a_1346831146091_392719_1760" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.0"/>
+      <property xsi:type="gcore:MAssociationRole" name="project" xmiGuid="_17_0_1_8a7027a_1346831146089_857222_1755" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146059_993022_1653" oppositeMultiplicity="-1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="-1" association="_17_0_1_8a7027a_1346831146063_647497_1659" opposite="_17_0_1_8a7027a_1346831146084_581018_1740"/>
+      <property xsi:type="gcore:MAssociationRole" name="task" xmiGuid="_17_0_1_8a7027a_1346831146090_258708_1759" visibility="private" multiplicity="-1" lowerBoundMultiplicity="1" upperBoundMultiplicity="-1" unique="true" type="_17_0_1_8a7027a_1346831146060_676258_1654" oppositeMultiplicity="1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="1" association="_17_0_1_8a7027a_1346831146064_355757_1661" opposite="_17_0_1_8a7027a_1346831146087_970312_1750"/>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="MainTask" xmiGuid="_17_0_1_8a7027a_1346831146062_677258_1657" visibility="public" generalization="_17_0_1_8a7027a_1346831146060_676258_1654">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146091_305313_1762" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    A main task is a container to further divide the work into smaller pieces.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+      <property xsi:type="gcore:MAttribute" name="timeBudgetActual" xmiGuid="_17_0_1_8a7027a_1346831146092_130431_1763" visibility="private" derived="true" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146059_466149_1652"/>
+      <property xsi:type="gcore:MAssociationRole" name="task" xmiGuid="_17_0_1_8a7027a_1346831146092_348883_1764" visibility="private" multiplicity="-1" lowerBoundMultiplicity="1" upperBoundMultiplicity="-1" unique="true" type="_17_0_1_8a7027a_1346831146060_676258_1654" oppositeMultiplicity="1" oppositeLowerBoundMultiplicity="1" oppositeUpperBoundMultiplicity="1" association="_17_0_1_8a7027a_1346831146065_203284_1662" opposite="_17_0_1_8a7027a_1346831146088_287628_1751"/>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="TimeBudget" xmiGuid="_17_0_1_8a7027a_1346831146064_898873_1660" visibility="public" ownedAssociation="_17_0_1_8a7027a_1346831146064_898873_1660">
+      <property xsi:type="gcore:MAttribute" name="bookedTime" xmiGuid="_17_0_1_8a7027a_1346831146093_954838_1766" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_17_0_1_8a7027a_1346831146059_466149_1652"/>
+    </classifier>
+    <association name="" xmiGuid="_17_0_1_8a7027a_1346831146063_496126_1658" end="_17_0_1_8a7027a_1346831146084_29668_1741 _17_0_1_8a7027a_1346831146087_423592_1749"/>
+    <association name="" xmiGuid="_17_0_1_8a7027a_1346831146063_647497_1659" end="_17_0_1_8a7027a_1346831146084_581018_1740 _17_0_1_8a7027a_1346831146089_857222_1755"/>
+    <association name="TimeBudget" xmiGuid="_17_0_1_8a7027a_1346831146064_898873_1660" end="_17_0_1_8a7027a_1346831146081_419789_1733 _17_0_1_8a7027a_1346831146088_710133_1753" associationClass="_17_0_1_8a7027a_1346831146064_898873_1660">
+      <ownedComment xmiGuid="_17_0_1_8a7027a_1346831146092_312101_1765" annotation="&lt;html>&#xA;  &lt;head>&#xA;    &#xA;  &lt;/head>&#xA;  &lt;body>&#xA;    Represents a work slot spent on something.&#xA;  &lt;/body>&#xA;&lt;/html>&#xA;"/>
+    </association>
+    <association name="" xmiGuid="_17_0_1_8a7027a_1346831146064_355757_1661" end="_17_0_1_8a7027a_1346831146090_258708_1759 _17_0_1_8a7027a_1346831146087_970312_1750"/>
+    <association name="" xmiGuid="_17_0_1_8a7027a_1346831146065_203284_1662" end="_17_0_1_8a7027a_1346831146092_348883_1764 _17_0_1_8a7027a_1346831146088_287628_1751"/>
+  </nestedPackage>
+  <nestedPackage name="domainwebsite" xmiGuid="_17_0_1_8a7027a_1346831223560_202415_1972">
+    <nestedPackage name="base" xmiGuid="_17_0_1_8a7027a_1343663225910_632888_2389">
+      <nestedPackage name="header" xmiGuid="_17_0_1_8a7027a_1343663247623_397404_2393"/>
+      <nestedPackage name="footer" xmiGuid="_17_0_1_8a7027a_1343665600325_464181_2580"/>
+    </nestedPackage>
+    <nestedPackage name="userManagement" xmiGuid="_17_0_1_8a7027a_1343656365156_594916_1540">
+      <nestedPackage name="login" xmiGuid="_17_0_1_8a7027a_1343662326906_620886_1935"/>
+      <nestedPackage name="registration" xmiGuid="_17_0_1_8a7027a_1343666699925_921729_3394"/>
+    </nestedPackage>
+  </nestedPackage>
+  <primitiveTypes name="double" xmiGuid="double"/>
+  <primitiveTypes name="String" xmiGuid="String"/>
+  <anyStereotype name="auxiliaryResource" xmiGuid="_12_1_8f90291_1173963323875_662612_98" generalization="_9_0_be00301_1108044721245_236588_411"/>
+  <anyStereotype name="InvisibleStereotype" xmiGuid="_9_0_be00301_1108044721245_236588_411"/>
+  <anyStereotype name="accessor" xmiGuid="_14_0_b6f02e1_1212567706968_503410_178">
+    <property name="getter" type="Boolean"/>
+    <property name="setter" type="Boolean"/>
+  </anyStereotype>
+  <externalTypes specification="Date"/>
+</gcore:MModel>
