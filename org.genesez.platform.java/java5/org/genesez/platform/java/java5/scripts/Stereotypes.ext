@@ -87,7 +87,6 @@ MStereotype createAnnotationStereotype(MElement this) :
 Void createTargetTaggedValue(MElement this, MTag t, boolean setAnnotationType, boolean setType, boolean setConstructor
         , boolean setMethod, boolean setField, boolean setLocalVariable
         , boolean setParameter, boolean setPackage) :
-        logDebug("createTargetTaggedValue: " + name + " :" + setAnnotationType + ", " + setType + ", " + setConstructor + ", " + setMethod + ", " + setField + ", " + setLocalVariable + ", " + setParameter + ", " + setPackage) ->
        	setAnnotationType && !hasTaggedValue(t.stereotype.name, t.name, "ANNOTATION_TYPE")	? this.createTaggedValue(t, "ANNOTATION_TYPE") : Void -> 
        	setType           && !hasTaggedValue(t.stereotype.name, t.name, "TYPE") 			? this.createTaggedValue(t, "TYPE") : Void ->
         setConstructor    && !hasTaggedValue(t.stereotype.name, t.name, "CONSTRUCTOR") 		? this.createTaggedValue(t, "CONSTRUCTOR") : Void ->
@@ -95,26 +94,8 @@ Void createTargetTaggedValue(MElement this, MTag t, boolean setAnnotationType, b
         setField          && !hasTaggedValue(t.stereotype.name, t.name, "FIELD") 			? this.createTaggedValue(t, "FIELD") : Void ->
         setLocalVariable  && !hasTaggedValue(t.stereotype.name, t.name, "LOCAL_VARIABLE")	? this.createTaggedValue(t, "LOCAL_VARIABLE") : Void ->
         setParameter      && !hasTaggedValue(t.stereotype.name, t.name, "PARAMETER")		? this.createTaggedValue(t, "PARAMETER") : Void ->
-        setPackage        && !hasTaggedValue(t.stereotype.name, t.name, "PACKAGE")			? this.createTaggedValue(t, "PACKAGE") : Void ->
-        logDebug("createTargetTaggedValue: " + taggedValue.value);
-        /*
-        
-        
-    let value = (
-            // If there's already a Tagged Value, we take this
-            this.getTaggedValue(java5AnnotationStereotype(), "target").length > 0
-            ? this.getTaggedValue(java5AnnotationStereotype(), "target").subString(1, this.getTaggedValue(java5AnnotationStereotype(), "target").length - 1) // Klammern entfernen
-            : ""  
-        ) :
-        let value = value.addTargetTaggedValue(this, setAnnotationType , "ANNOTATION_TYPE") :
-        let value = value.addTargetTaggedValue(this, setType           , "TYPE") :
-        let value = value.addTargetTaggedValue(this, setConstructor    , "CONSTRUCTOR") :
-        let value = value.addTargetTaggedValue(this, setMethod         , "METHOD") :
-        let value = value.addTargetTaggedValue(this, setField          , "FIELD") :
-        let value = value.addTargetTaggedValue(this, setLocalVariable  , "LOCAL_VARIABLE") :
-        let value = value.addTargetTaggedValue(this, setParameter      , "PARAMETER") :
-        let value = value.addTargetTaggedValue(this, setPackage        , "PACKAGE") :
-            "[" + value + "]"; // we need a collection / list*/
+        setPackage        && !hasTaggedValue(t.stereotype.name, t.name, "PACKAGE")			? this.createTaggedValue(t, "PACKAGE") : Void;
+
 
 /**
  * Adds new values to a tagged value separated by comma
