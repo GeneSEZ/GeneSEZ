@@ -10,7 +10,7 @@ import gcore;
 
 extension org::genesez::platform::java::scripts::Naming;
 extension org::genesez::platform::common::m2t::Helper;
-extension org::genesez::platform::common::log::Log;
+extension org::genesez::util::logging::Logging;
 extension org::genesez::platform::common::m2m::CreateTemplate;
 extension org::genesez::platform::common::m2m::CreateBasics;
 extension org::genesez::platform::common::m2m::MakeElement;
@@ -137,7 +137,7 @@ Void checkFieldAccess(MProperty this) :
 			!this.generateGetter() && !this.generateSetter() && getGetter() == null && getSetter() == null
 				? (
 					this.taggedValue.selectFirst(e|e.tag.stereotype.name == "accessor" && e.tag.name == "getter").setValue("true") ->
-					info("property access type is selected but attribute "+this.name+" in class "+this.classifier.name+" has no getter/setter method. A getter method will be generated automatically.")
+					logInfo("property access type is selected but attribute "+this.name+" in class "+this.classifier.name+" has no getter/setter method. A getter method will be generated automatically.")
 				)
 				: "" ->
 			this.generateGetter() || this.generateSetter()
@@ -163,7 +163,7 @@ Void checkFieldAccess(MProperty this) :
 										? (
 											copyStereotypesToOperation(this, p)
 										)
-										: error("no method for attribute +"+this.name+" in class "+this.classifier.name+" for annotation with property access found")
+										: logError("no method for attribute +"+this.name+" in class "+this.classifier.name+" for annotation with property access found")
 							)
 				)
 			
@@ -220,6 +220,6 @@ MType cloneType(MProperty this) :
 				: (
 					this.type.isClassifier() || this.type.isEnumeration()
 						? allClassifiers(this.model()).selectFirst(e|e.name == this.type.asTypeName()) 
-						: error("clone of return type has reached a not implemented MType: "+this.type)
+						: logError("clone of return type has reached a not implemented MType: "+this.type)
 				)
 		);

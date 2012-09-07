@@ -1,6 +1,6 @@
 import gcore;
 
-extension org::genesez::platform::common::log::Log;
+extension org::genesez::util::logging::Logging;
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::m2m::CreateBasics;
 extension org::genesez::platform::common::m2m::RemoveElement;
@@ -87,7 +87,7 @@ Void addFactoryMethodForDataModelAttributes(MAttribute this) :
 		? (
 			!this.hasFactoryMethodForAttribute()
 				? this.classifier.addFactoryMethod(this.getTaggedValue("seam2Factory", "autoCreate"), this.getTaggedValue("seam2Factory", "scope"), !this.hasUtilizableValue("seam2Factory", "value") ? this.name : this.getTaggedValue("seam2Factory", "value"))
-				: info("There is already a factory method for the attribute "+this.name.asTypeName()+" in class "+this.classifier.name.asTypeName()+". Stereotype 'seam2Factory' will be ignored.")
+				: logInfo("There is already a factory method for the attribute "+this.name.asTypeName()+" in class "+this.classifier.name.asTypeName()+". Stereotype 'seam2Factory' will be ignored.")
 		)
 		: "";
 		
