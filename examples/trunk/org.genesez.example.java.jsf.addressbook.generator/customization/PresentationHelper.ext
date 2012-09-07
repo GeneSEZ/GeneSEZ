@@ -1,0 +1,53 @@
+/**
+ * Helper functions for easier code generation
+ * 
+ * @author	Nico Herbig
+ * @date	2012-07-31
+ */
+
+// based on genesez presentation meta model
+import gpresentation;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	file names, file paths + directory paths
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+/**
+ * 
+ */
+String dirPath(PRoot this) :
+	dirPath( owningPackage );
+
+
+/**
+ * 
+ */
+String dirPath(PPackage this) :
+	owningPackage != null && owningPackage.owningPackage != null
+		? dirPath( owningPackage ) + fileSeparator() + name
+		: name;
+
+
+/**
+ * 
+ */
+String filePath(PRoot this, String filename) :
+	dirPath() + fileSeparator() + filename;
+
+/**
+ *
+ */
+String asFileName(PRoot this) :
+	name;
+
+
+/**
+ * getter for the separator within a file name
+ * @return	the separator for directories in file names
+ */
+String fileSeparator() : 
+	"/";
