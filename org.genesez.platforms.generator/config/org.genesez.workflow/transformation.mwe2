@@ -1,0 +1,60 @@
+module org.genesez.workflow
+
+var name = "org.genesez.workflow"
+
+Workflow {
+	component = adapter.uml2.Uml2GeneSEZ {
+		model = "../${name}/model/genesez.workflow.uml"
+		includeProfile = "org.genesez.workflow.profile"
+	}
+	component = platform.common.workflow.Serializer {
+		file = "model/${name}/uml2gcore.gcore.xmi"
+	}
+	component = platform.common.workflow.CompositeModel2Model {
+		script = "org::genesez::platform::java::scripts::m2m::PackageExtend::extend"
+		script = "org::genesez::platform::common::m2m::Realization::realize"
+		script = "org.genesez.workflow::AnnotationDefaultValue::prepare"
+		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
+		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
+	}
+	component = platform.common.workflow.Serializer {
+		cloneSlotContents = true
+		file = "model/${name}/uml2gcore.modified.gcore.xmi"
+	}
+	component = platform.java.workflow.JavaGenerator {
+		outputDir = "../${name}/src-gen"
+		aspectTemplate = "${name}/NoFixedImports"
+		typeMappingFile = "${name}/typemapping.xml"
+	}
+	/*
+	bean = org.eclipse.xtend.typesystem.uml2.Setup {
+		standardUML2Setup = true
+	}
+	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : emf {
+		metaModelPackage = "org.eclipse.emf.ecore.EcorePackage"
+	}
+	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml {
+	}
+	component = org.eclipse.emf.mwe.utils.Reader {
+		uri = "genesez.workflow.uml"
+		modelSlot = "uml2model"
+	}
+	component = org.eclipse.xtend.check.CheckComponent {
+		metaModel = emf
+		metaModel = uml
+		checkFile = "org::genesez::adapter::uml2::uml2constraints.chk"
+		emfAllChildrenSlot = "uml2model"
+		abortOnError = true
+	}
+	component = org.eclipse.xtend.XtendComponent {
+		metaModel = emf
+		metaModel = uml
+		globalVarDef = { name = "nsUri" value = "'${nsUri}'" }
+		globalVarDef = { name = "includedPackages" value = "'${includedPackages}'" }
+		globalVarDef = { name = "addNameAttribute" value = "${addNameAttribute}" }
+		globalVarDef = { name = "resourcePerToplevelPackage" value = "${resourcePerToplevelPackage}" }
+		invoke = "org::eclipse::xtend::util::uml2ecore::uml2ecore::top(uml2model)"
+		outputSlot = "ecoreModel"
+	}
+	*/
+}
