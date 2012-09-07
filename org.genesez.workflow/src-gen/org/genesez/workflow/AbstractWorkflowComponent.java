@@ -42,8 +42,7 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	 */
 	protected Mwe2Bridge getBridge() {
 		/* PROTECTED REGION ID(java.implementation._135mEPVBEeGsV8fV-DCYeA) ENABLED START */
-		// TODO: implementation of method 'AbstractWorkflowComponent.getBridge(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		return super.getBridge();
 		/* PROTECTED REGION END */
 	}
 	
