@@ -73,6 +73,9 @@ public @interface «name.toFirstUpper() -» {
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier -»
 	«IF hasStereotype(java5AnnotationStereotype()) -»
+		«IF hasTaggedValue(java5AnnotationStereotype(), "documented", "true") -»
+import java.lang.annotation.Documented;
+		«ENDIF -»
 		«IF hasUtilizableValue(java5AnnotationStereotype(), "retention") -»
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.«getTaggedValue(java5AnnotationStereotype(), "retention") -»;
