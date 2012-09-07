@@ -1,6 +1,6 @@
 «IMPORT gcore»
 
-«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::util::logging::Logging»
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
 
@@ -14,10 +14,10 @@
 
 «DEFINE _Declaration FOR MAssociationRole -»
 	«IF composition-»
-		«debug("Komposition: " + name)-»
+		«logDebug("Komposition: " + name)-»
 	«ENDIF-»
 	«IF aggregation-»
-		«debug("Aggregation: " + name)-»
+		«logDebug("Aggregation: " + name)-»
 	«ENDIF-»
 	«IF isSingleValuedType() -»
 		«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -» «asAttribute()»;
