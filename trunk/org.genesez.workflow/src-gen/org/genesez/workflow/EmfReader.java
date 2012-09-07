@@ -108,14 +108,14 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._vaiVYPRiEeGG-J2DIYyoXg) ENABLED START */
 	private void prepareDelegate() {
 		reader = new Reader();
-		reader.setUri( getUri() );
-		reader.setModelSlot( getSlot() );
+		reader.setUri(getUri());
+		reader.setModelSlot(getSlot());
 		reader.setFirstElementOnly(firstElementOnly);
 		reader.setIgnoreMissingModel(ignoreMissingModel);
 		reader.setMakeEPackagesGlobal(makeEPackagesGlobal);
 		//reader.setResourceSet( getResourceSet() );
-		reader.setSkipOnErrors( getAbortOnError() );
-		reader.setUseSingleGlobalResourceSet( getUseSingleGlobalResourceSet() );
+		reader.setSkipOnErrors(getAbortOnError());
+		reader.setUseSingleGlobalResourceSet(getUseSingleGlobalResourceSet());
 	}
 	/* PROTECTED REGION END */
 	
