@@ -94,6 +94,9 @@ import static java.lang.annotation.ElementType.«name -»;
 «ENDREM»
 «DEFINE _java5Annotation FOR MInterface -»
 	«IF hasStereotype(java5AnnotationStereotype()) -»
+		«IF hasTaggedValue(java5AnnotationStereotype(), "documented", "true") -»
+			@Documented
+		«ENDIF -»
 		«IF hasUtilizableValue(java5AnnotationStereotype(), "target") -»
 			@Target({«FOREACH getTaggedValueList(java5AnnotationStereotype(), "target") AS name SEPARATOR "," -» «name -» «ENDFOREACH -»})
 		«ENDIF -»
