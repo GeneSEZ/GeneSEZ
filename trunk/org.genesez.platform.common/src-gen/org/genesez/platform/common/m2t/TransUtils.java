@@ -7,8 +7,9 @@ package org.genesez.platform.common.m2t;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.genesez.platform.common.Conversion;
-import org.genesez.platform.common.log.GenesezLogger;
 
 import org.genesez.metamodel.gcore.MPackage;
 import java.util.StringTokenizer;
@@ -31,18 +32,16 @@ public class TransUtils {
 	 */
 	public static java.util.List<MPackage> rejectIgnoredPackages(java.util.List<MPackage> packages, String ignoredPackages) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324550520759_732092_2902) ENABLED START */
-		// init logging
-		GenesezLogger.selectLogger("org.genesez.platform.common.m2t");
 		// perform actions
 		List<MPackage> toReturn = new ArrayList<MPackage>(packages);
 		List<String> pkgs = getPackages(ignoredPackages);
 		for (String s : pkgs) {
-			GenesezLogger.debug("to reject: " + s);
+			logger.debug("to reject: " + s);
 			for (MPackage p : packages) {
 				String fqn = Conversion.getFullQualifiedName(p, ".");
-				GenesezLogger.debug("test to reject: " + fqn);
+				logger.debug("test to reject: " + fqn);
 				if (s.equals(fqn)) {
-					GenesezLogger.debug("reject: '" + s + "' == '" + fqn + "'");
+					logger.debug("reject: '" + s + "' == '" + fqn + "'");
 					toReturn.remove(p);
 				}
 			}
@@ -72,6 +71,7 @@ public class TransUtils {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1324550476875_530945_2868) ENABLED START */
+	private static Log logger = LogFactory.getLog(TransUtils.class);
 	/* PROTECTED REGION END */
 	
 }
