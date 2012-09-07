@@ -7,8 +7,8 @@ package org.genesez.platform.common;
 
 import java.util.List;
 
-import org.genesez.platform.common.log.GenesezLogger;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.genesez.metamodel.gcore.MModel;
 import java.util.regex.Matcher;
 import org.genesez.metamodel.gcore.MPackage;
@@ -129,7 +129,7 @@ public class Conversion {
 				return content;
 			} else {
 				// it seams to be an HTML comment, but there is no body ???
-				GenesezLogger.fatal("can't get content of html comment!");
+				logger.fatal("can't get content of html comment!");
 			}
 		}
 		// default return, no HTML comment
@@ -158,7 +158,7 @@ public class Conversion {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1324547014257_541733_2294) ENABLED START */
-	// TODO: put your own implementation code here
+	private static Log logger = LogFactory.getLog(Conversion.class);
 	/* PROTECTED REGION END */
 	
 }
