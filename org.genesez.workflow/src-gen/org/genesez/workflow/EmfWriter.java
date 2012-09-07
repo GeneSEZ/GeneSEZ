@@ -6,7 +6,6 @@ package org.genesez.workflow;
  */
 
 import java.io.File;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.mwe.utils.Writer;
 import org.genesez.workflow.profile.Parameter;
@@ -147,16 +146,16 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._UMGTcPLIEeGYwYEQM4LYvw) ENABLED START */
 	private void prepareDelegate() {
 		writer = new Writer();
-		writer.setUri( getUri() );
-		writer.setModelSlot( getSlot() );
+		writer.setUri(getUri());
+		writer.setModelSlot(getSlot());
 		writer.setCloneSlotContents(cloneSlotContents);
 		writer.setIgnoreEmptySlot(ignoreEmptySlot);
 		writer.setMultipleResourcesInCaseOfList(multipleResourcesInCaseOfList);
-		writer.setOPTION_SCHEMA_LOCATION( schemaLocation );
-		writer.setOPTION_SCHEMA_LOCATION_IMPLEMENTATION( schemaLocationImplementation );
+		writer.setOPTION_SCHEMA_LOCATION(schemaLocation);
+		writer.setOPTION_SCHEMA_LOCATION_IMPLEMENTATION(schemaLocationImplementation);
 		//writer.setResourceSet( getResourceSet() );
-		writer.setSkipOnErrors( getAbortOnError() );
-		writer.setUseSingleGlobalResourceSet( getUseSingleGlobalResourceSet() );
+		writer.setSkipOnErrors(getAbortOnError());
+		writer.setUseSingleGlobalResourceSet(getUseSingleGlobalResourceSet());
 	}
 	/* PROTECTED REGION END */
 	

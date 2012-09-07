@@ -6,7 +6,6 @@ package org.genesez.workflow;
  */
 
 import java.io.File;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.genesez.workflow.profile.Parameter;
@@ -47,7 +46,7 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 				issues.addInfo(this, "Use workflow parameter 'uri' instead of 'file'", uri);
 			}
 		} else {
-			uri = URI.createFileURI( new File(file).getAbsolutePath() ).toString();
+			uri = URI.createFileURI(new File(file).getAbsolutePath()).toString();
 		}
 		/* PROTECTED REGION END */
 	}
