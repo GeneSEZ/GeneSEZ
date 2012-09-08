@@ -5,7 +5,6 @@
   <ownedComment xmiGuid="_SS7hgPRsEeGG-J2DIYyoXg" annotation="MWE workflow components do not provide get methods. Inheritance would make no sense because we then have to cache the value either. Delegation seams to be more appropriate."/>
   <ownedComment xmiGuid="_ZCtgQPU9EeGsV8fV-DCYeA" annotation="MWE integration"/>
   <ownedComment xmiGuid="_brSFAPU9EeGsV8fV-DCYeA" annotation="MWE2 integration"/>
-  <classifier xsi:type="gcore:MClass" name="Validator" xmiGuid="_NEnv4PLHEeGYwYEQM4LYvw" visibility="public"/>
   <classifier xsi:type="gcore:MClass" name="Model2Model" xmiGuid="_IInokPLKEeGYwYEQM4LYvw" visibility="public"/>
   <classifier xsi:type="gcore:MClass" name="CompositeModel2Model" xmiGuid="_5JL_YPLKEeGYwYEQM4LYvw" visibility="public"/>
   <classifier xsi:type="gcore:MClass" name="Traceability" xmiGuid="_m3jwMPLMEeGYwYEQM4LYvw" visibility="public"/>
@@ -175,7 +174,7 @@
           </property>
           <property xsi:type="gcore:MAttribute" name="writer" xmiGuid="_5yZDkPRuEeGG-J2DIYyoXg" stereotype="_RE7V8PRvEeGG-J2DIYyoXg" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.5"/>
         </classifier>
-        <classifier xsi:type="gcore:MClass" name="AbstractSlotWorkflowComponent" xmiGuid="_nY_VQPRsEeGG-J2DIYyoXg" specialization="_y0pgQPRsEeGG-J2DIYyoXg" visibility="public" abstract="true" realization="_AU05APRzEeGG-J2DIYyoXg" generalization="_paljEPU8EeGsV8fV-DCYeA">
+        <classifier xsi:type="gcore:MClass" name="AbstractSlotWorkflowComponent" xmiGuid="_nY_VQPRsEeGG-J2DIYyoXg" specialization="_y0pgQPRsEeGG-J2DIYyoXg _NEnv4PLHEeGYwYEQM4LYvw" visibility="public" abstract="true" realization="_AU05APRzEeGG-J2DIYyoXg" generalization="_paljEPU8EeGsV8fV-DCYeA">
           <operation name="checkConfiguration" xmiGuid="_llkAgPjlEeGhK_C0J8Xzwg" visibility="public" multiplicity="1" unique="true" returnType="void">
             <ownedComment xmiGuid="_llkAgfjlEeGhK_C0J8Xzwg" annotation="Validates the configuration of the component before invocation."/>
             <parameter name="issues" xmiGuid="_llkAgvjlEeGhK_C0J8Xzwg" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.4" operation="_llkAgPjlEeGhK_C0J8Xzwg">
@@ -267,6 +266,48 @@
             <ownedComment xmiGuid="_5AdM0PXNEeGt_pQB8d500A" annotation="A file instance representing the destination."/>
           </property>
         </classifier>
+      </nestedPackage>
+    </nestedPackage>
+  </nestedPackage>
+  <nestedPackage name="org" xmiGuid="_pOWEcPk6EeG9kdm-OL78lQ_org">
+    <nestedPackage name="genesez" xmiGuid="_pOWEcPk6EeG9kdm-OL78lQ_genesez">
+      <nestedPackage name="workflow" xmiGuid="_pOWEcPk6EeG9kdm-OL78lQ_workflow">
+        <nestedPackage name="xpand" xmiGuid="_pOWEcPk6EeG9kdm-OL78lQ">
+          <classifier xsi:type="gcore:MClass" name="Validator" xmiGuid="_NEnv4PLHEeGYwYEQM4LYvw" visibility="public" generalization="_nY_VQPRsEeGG-J2DIYyoXg">
+            <operation name="checkConfiguration" xmiGuid="_Q-Z5MPk7EeG9kdm-OL78lQ" visibility="public" multiplicity="1" unique="true" returnType="void">
+              <ownedComment xmiGuid="_Q-Z5Mfk7EeG9kdm-OL78lQ" annotation="Validates the configuration of the component before invocation."/>
+              <parameter name="issues" xmiGuid="_Q-Z5Mvk7EeG9kdm-OL78lQ" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.4" operation="_Q-Z5MPk7EeG9kdm-OL78lQ">
+                <ownedComment xmiGuid="_Q-Z5M_k7EeG9kdm-OL78lQ" annotation="Instance to collect all problems during configuration check."/>
+              </parameter>
+            </operation>
+            <operation name="invokeInternal" xmiGuid="_U869MPk7EeG9kdm-OL78lQ" visibility="protected" multiplicity="1" unique="true" returnType="void">
+              <ownedComment xmiGuid="_U869Mfk7EeG9kdm-OL78lQ" annotation="Invokes the execution of the component."/>
+              <parameter name="context" xmiGuid="_U869Mvk7EeG9kdm-OL78lQ" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.2" operation="_U869MPk7EeG9kdm-OL78lQ">
+                <ownedComment xmiGuid="_U869M_k7EeG9kdm-OL78lQ" annotation="The context of workflow execution."/>
+              </parameter>
+              <parameter name="monitor" xmiGuid="_U869NPk7EeG9kdm-OL78lQ" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.3" operation="_U869MPk7EeG9kdm-OL78lQ">
+                <ownedComment xmiGuid="_U869Nfk7EeG9kdm-OL78lQ" annotation="Instance to report any activity to."/>
+              </parameter>
+              <parameter name="issues" xmiGuid="_U869Nvk7EeG9kdm-OL78lQ" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.4" operation="_U869MPk7EeG9kdm-OL78lQ">
+                <ownedComment xmiGuid="_U869N_k7EeG9kdm-OL78lQ" annotation="Instance to collect all problems during execution."/>
+              </parameter>
+            </operation>
+            <property xsi:type="gcore:MAttribute" name="script" xmiGuid="_1mLj0Pk6EeG9kdm-OL78lQ" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String">
+              <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+              <taggedValue value="true" tag="//@anyStereotype.0/@property.1"/>
+              <taggedValue value="true" tag="//@anyStereotype.1/@property.0"/>
+              <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
+              <taggedValue value="ALWAYS" tag="//@anyStereotype.1/@property.2"/>
+            </property>
+            <property xsi:type="gcore:MAttribute" name="aopScript" xmiGuid="_69m7gPk6EeG9kdm-OL78lQ" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String">
+              <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+              <taggedValue value="true" tag="//@anyStereotype.0/@property.1"/>
+              <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+              <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
+              <taggedValue value="ALWAYS" tag="//@anyStereotype.1/@property.2"/>
+            </property>
+          </classifier>
+        </nestedPackage>
       </nestedPackage>
     </nestedPackage>
   </nestedPackage>
