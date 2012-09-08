@@ -38,6 +38,17 @@ Workflow {
 		outputDir = "../${name}/src-gen"
 		aspectTemplate = "${name}/NoFixedImports"
 		typeMappingFile = "${name}/typemapping.xml"
+		excludePackage = "org::genesez::workflow::xpand"
+		// we exclude direct model contents only by specifying e.g. the separator
+		excludeContentPackage = ","
+	}
+	component = platform.java.workflow.JavaGenerator {
+		outputDir = "../${name}.xpand/src-gen"
+		aspectTemplate = "${name}/NoFixedImports"
+		typeMappingFile = "${name}/typemapping.xml"
+		excludeContentPackage = ""
+		excludeContentPackage = "org::genesez::workflow"
+		excludeContentPackage = "org::genesez::workflow::profile"
 	}
 	/*
 	bean = org.eclipse.xtend.typesystem.uml2.Setup {
