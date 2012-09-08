@@ -57,7 +57,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 */
 	public boolean getUseSingleGlobalResourceSet() {
 		return useSingleGlobalResourceSet;
-		
 	}
 	
 	/**
@@ -72,7 +71,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 */
 	public ResourceSet getResourceSet() {
 		return resourceSet;
-		
 	}
 	
 	/**
@@ -87,7 +85,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 */
 	public String getUri() {
 		return uri;
-		
 	}
 	
 	/**
@@ -102,7 +99,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	 */
 	public String getFile() {
 		return file;
-		
 	}
 	
 	/**

@@ -97,7 +97,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	 */
 	public String getSource() {
 		return source;
-		
 	}
 	
 	/**
@@ -112,7 +111,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	 */
 	public String getDestination() {
 		return destination;
-		
 	}
 	
 	/**
