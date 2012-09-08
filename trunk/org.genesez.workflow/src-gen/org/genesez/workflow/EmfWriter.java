@@ -70,7 +70,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getSchemaLocation() {
 		return schemaLocation;
-		
 	}
 	
 	/**
@@ -85,7 +84,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getSchemaLocationImplementation() {
 		return schemaLocationImplementation;
-		
 	}
 	
 	/**
@@ -100,7 +98,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getIgnoreEmptySlot() {
 		return ignoreEmptySlot;
-		
 	}
 	
 	/**
@@ -115,7 +112,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getCloneSlotContents() {
 		return cloneSlotContents;
-		
 	}
 	
 	/**
@@ -130,7 +126,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getMultipleResourcesInCaseOfList() {
 		return multipleResourcesInCaseOfList;
-		
 	}
 	
 	/**

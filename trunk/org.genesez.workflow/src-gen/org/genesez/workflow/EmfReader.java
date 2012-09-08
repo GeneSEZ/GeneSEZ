@@ -62,7 +62,6 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getMakeEPackagesGlobal() {
 		return makeEPackagesGlobal;
-		
 	}
 	
 	/**
@@ -77,7 +76,6 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getFirstElementOnly() {
 		return firstElementOnly;
-		
 	}
 	
 	/**
@@ -92,7 +90,6 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public boolean getIgnoreMissingModel() {
 		return ignoreMissingModel;
-		
 	}
 	
 	/**

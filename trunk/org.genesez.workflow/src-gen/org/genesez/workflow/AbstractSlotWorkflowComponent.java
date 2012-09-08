@@ -39,7 +39,6 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	 */
 	public String getSlot() {
 		return slot;
-		
 	}
 	
 	/**
