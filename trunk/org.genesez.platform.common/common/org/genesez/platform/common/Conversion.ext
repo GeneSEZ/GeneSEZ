@@ -15,6 +15,7 @@
 // based on genesez meta model
 import gcore;
 
+extension org::genesez::util::logging::Logging;
 extension org::genesez::platform::common::AccessHelper reexport;
 
 /*
@@ -46,13 +47,18 @@ String getGenericList(List[MGeneric] l) :
 			: "");
 
 /**
- * splits a comma separated list of values into a list of strings and 
- * removing all unnessesary whitespace
+ * Splits a comma separated list of values into a list of strings and removs all unnessesary whitespace.
+ * If the specified string only contains the separator a list with an empty string is returned.
+ * 
  * @param	s	comma separated list of values
  * @return	the list of strings
  */
 List[String] toList(String s) :
-	s.split(",").trim();
+	s.trim().length == 0
+		? {}
+		: ( s.trim() == ","
+			? {""}
+			: s.split(",").trim() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
