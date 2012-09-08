@@ -17,7 +17,7 @@ import gcore;
 
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::Conversion;
-extension org::genesez::platform::common::log::Log;
+extension org::genesez::util::logging::Logging;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -205,15 +205,31 @@ boolean generateSectionComments() :
  * @return	value of the global variable 'excludePackages'
  */
 String ignoredPackages() : (String) GLOBALVAR excludePackages;
+String ignoredContentPackages() : (String) GLOBALVAR excludeContentPackages;
 
 /**
- * rejects all packages contained in the 'excludePackages' variable from the specified list of packages
+ * Rejects all packages contained in the 'excludePackages' variable from the specified list of packages.
+ * 
  * @context	list of packages to filter
  * @return	list of packages without the packages to ignore
  */
-List[MPackage] rejectIgnoredPackages(List[MPackage] this) :
-	rejectIgnoredPackages( ignoredPackages() );
-	
+List[MPackage] rejectIgnoredPackages(List[MPackage] this) : this.select( p|!p.isRejected() );
+
+/**
+ * Returns true if the specified package should be ignored/excluded, otherwise false.
+ */
+boolean isRejected(MPackage this) :
+	ignoredPackages().toList().exists( ip|ip == qn() )
+		? (logDebug("Reject '" + qn() + "'") -> true)
+		: false;
+
+/**
+ * Returns true if the contents of the specified package should be ignored, otherwise false.
+ */
+boolean isIgnoredContentPackage(MPackage this) : 
+	ignoredContentPackages().toList().exists( p|p == qn() )
+		? (logDebug("Reject content of '" + qn() + "'") -> true)
+		: false;
 
 /**
  * rejects all packages from the given list, specified in the given string as a comma 
@@ -221,6 +237,8 @@ List[MPackage] rejectIgnoredPackages(List[MPackage] this) :
  * @param	packages		list of packages to filter
  * @param	ignoredPackages	comma or semicola separated list with full qualified package names
  * @return	list of packages without the packages to ignore
+ * 
+ * @deprecated
  */
 private List[MPackage] rejectIgnoredPackages(List[MPackage] packages, String ignoredPackages) :
 	JAVA org.genesez.platform.common.m2t.TransUtils.rejectIgnoredPackages(java.util.List, java.lang.String);

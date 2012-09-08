@@ -122,6 +122,8 @@ public class DefaultGenerator extends Generator {
 		// add exclude packages as global variables
 		String packages = WorkflowUtils.arrayToString(excludedPackages);
 		addGlobalVarDef("excludePackages", packages);
+		String classifierPackages = WorkflowUtils.arrayToString(excludedContentPackages);
+		addGlobalVarDef("excludeContentPackages", classifierPackages);
 		// init type mapper
 		TypeMapper.initTypeMapper(typeMappingFiles.toArray(new String[0]));
 		
@@ -378,6 +380,11 @@ public class DefaultGenerator extends Generator {
 		defaults.setProperty("deleteOldFiles", "true");
 		defaults.setProperty("deleteEmptyFolders", "true");
 		defaults.setProperty("importTakeOver", "true");
+	}
+	
+	protected java.util.Set<String> excludedContentPackages = new java.util.HashSet<String>();
+	public void addExcludeContentPackage(String excludeContentPackage) {
+		excludedContentPackages.add(excludeContentPackage);
 	}
 	/* PROTECTED REGION END */
 	
