@@ -291,6 +291,24 @@ String fqn(MProperty this) :
 String fqn(MElement this) :
 	name;
 
+/**
+ * Returns the qualified name of the specified root model element, i.e. an empty string.
+ */
+String qn(MModel this) : "";
+
+/**
+ * Returns the qualified name of the specified package.
+ */
+String qn(MPackage this) :
+	nestingPackage == null || nestingPackage.metaType == MModel
+		? name
+		: nestingPackage.qn() + "::" + name;
+		
+/**
+ * Returns the qualified name of the specified classifier.
+ */
+String qn(MClassifier this) : package().qn() + "::" + name;
+
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	mapping to java functions
