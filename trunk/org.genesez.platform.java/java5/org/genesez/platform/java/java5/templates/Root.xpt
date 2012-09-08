@@ -38,7 +38,9 @@
 	«useLogger("org.genesez.platform.java")»
 	«REM» start transformation «ENDREM»
 	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
-	«EXPAND Root FOREACH classifier»
+	«IF !isIgnoredContentPackage()»
+		«EXPAND Root FOREACH classifier»
+	«ENDIF»
 «ENDDEFINE»
 
 «REM»
@@ -47,11 +49,13 @@
 	delegates the handling of all classifiers
 «ENDREM»
 «DEFINE Root FOR MPackage»
-	«IF hasComment()»
-		«EXPAND Comment::Package -»
+	«IF !isIgnoredContentPackage()»
+		«IF hasComment()»
+			«EXPAND Comment::Package -»
+		«ENDIF»
+		«EXPAND Root FOREACH classifier»
 	«ENDIF»
-	«EXPAND Root FOREACH nestedPackage»
-	«EXPAND Root FOREACH classifier»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
 «ENDDEFINE»
 
 
