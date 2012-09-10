@@ -40,12 +40,21 @@ private MStereotype createAccessorInternal(MElement property) :
  * @return	the stereotype '«accessor»'
  */
 private MStereotype createAccessorInternal(MElement property, String getter, String setter) :
+	createAccessorInternal(property, getter, setter, "false", "false");
+
+private MStereotype createAccessorInternal(MElement property, String getter, String setter, String add, String remove) :
 	let s = property.model().createStereotype("genesez.profile.stereotype.accessor", "accessor") :
 		property.taggedValue.add( 
 			property.createTaggedValue( s.createTag("getter", "Boolean"), getter)
 		) ->
 		property.taggedValue.add( 
 			property.createTaggedValue( s.createTag("setter", "Boolean"), setter)
+		) ->
+		property.taggedValue.add( 
+			property.createTaggedValue( s.createTag("add", "Boolean"), add)
+		) ->
+		property.taggedValue.add( 
+			property.createTaggedValue( s.createTag("remove", "Boolean"), remove)
 		) ->
 		property.stereotype.add( s ) ->
 	s;
