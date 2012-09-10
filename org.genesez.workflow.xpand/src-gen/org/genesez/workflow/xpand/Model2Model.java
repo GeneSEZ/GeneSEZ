@@ -2,30 +2,35 @@ package org.genesez.workflow.xpand;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
- * 	@FILE-ID : (_NEnv4PLHEeGYwYEQM4LYvw) 
+ * 	@FILE-ID : (_IInokPLKEeGYwYEQM4LYvw) 
  */
 
 import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.container.CompositeComponent;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.genesez.workflow.profile.Parameter;
-import org.eclipse.xtend.check.CheckComponent;
+import org.eclipse.xtend.XtendComponent;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
+import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  * @author dreamer
  */
-public class Validator extends AbstractXpandWorkflowComponent {
+public class Model2Model extends AbstractXpandWorkflowComponent {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = true, workflowInclusion = ALWAYS)
 	private java.util.Set<String> script = new java.util.HashSet<String>();
 	
-	private CheckComponent checkComponent;
+	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	private String outputSlot;
+	
+	private CompositeComponent compositeXtend;
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -35,8 +40,8 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	 * @param	issues	Instance to collect all problems during execution.
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._U869MPk7EeG9kdm-OL78lQ) ENABLED START */
-		checkComponent.invoke(context, monitor, issues);
+		/* PROTECTED REGION ID(java.implementation._QITJ0Pn6EeG2esQ-bp2d2A) ENABLED START */
+		compositeXtend.invoke(context, monitor, issues);
 		/* PROTECTED REGION END */
 	}
 	
@@ -45,13 +50,13 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	 * @param	issues	Instance to collect all problems during configuration check.
 	 */
 	public void checkConfiguration(Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._Q-Z5MPk7EeG9kdm-OL78lQ) ENABLED START */
+		/* PROTECTED REGION ID(java.implementation._M-BmMPn6EeG2esQ-bp2d2A) ENABLED START */
 		if (script.isEmpty()) {
 			issues.addError(this, "Workflow parameter 'script' is missing!", script);
 		}
 		super.checkConfiguration(issues);
 		prepareDelegate();
-		checkComponent.checkConfiguration(issues);
+		compositeXtend.checkConfiguration(issues);
 		/* PROTECTED REGION END */
 	}
 	
@@ -79,25 +84,41 @@ public class Validator extends AbstractXpandWorkflowComponent {
 		this.script.remove(script);
 	}
 	
+	/**
+	 * Returns the value of attribute '<em><b>outputSlot</b></em>'
+	 */
+	public String getOutputSlot() {
+		return outputSlot;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>outputSlot</b></em>'
+	 */
+	public void setOutputSlot(String outputSlot) {
+		this.outputSlot = outputSlot;
+	}
+	
 	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(java.class.own.code.implementation._NEnv4PLHEeGYwYEQM4LYvw) ENABLED START */
+	/* PROTECTED REGION ID(java.class.own.code.implementation._IInokPLKEeGYwYEQM4LYvw) ENABLED START */
 	private void prepareDelegate() {
-		checkComponent = new CheckComponent();
-		checkComponent.setAbortOnError(getAbortOnError());
-		checkComponent.setEmfAllChildrenSlot(getSlot());
+		compositeXtend = new CompositeComponent(getClass().getName());
 		for (String s : script) {
-			checkComponent.addCheckFile(s);
-		}
-		for (MetaModel mm : getMetaModel()) {
-			checkComponent.addMetaModel(mm);
-		}
-		for (String s : getAdvice()) {
-			checkComponent.addExtensionAdvice(s);
-		}
-		for (GlobalVarDef def : getGlobalVarDef()) {
-			checkComponent.addGlobalVarDef(def);
+			XtendComponent xc = new XtendComponent();
+			xc.setSkipOnErrors(getAbortOnError());
+			for (MetaModel mm : getMetaModel()) {
+				xc.addMetaModel(mm);
+			}
+			for (String a : getAdvice()) {
+				xc.addExtensionAdvice(a);
+			}
+			for (GlobalVarDef def : getGlobalVarDef()) {
+				xc.addGlobalVarDef(def);
+			}
+			xc.setOutputSlot(outputSlot);
+			xc.setInvoke(s + "(" + getSlot() + ")");
+			compositeXtend.addComponent(xc);
 		}
 	}
 	/* PROTECTED REGION END */
