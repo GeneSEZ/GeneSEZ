@@ -155,6 +155,58 @@ package «packageDeclaration( basePackage() ) -»;
 	 * Sets the value of attribute '<em><b>«asAttribute()»</b></em>'
 «ENDDEFINE»
 
+«REM»
+	Generates the comment of the 'add' property access method.
+«ENDREM»
+«DEFINE Add FOR MAttribute -»
+	/**
+	«EXPAND AddComment -»
+	 */
+«ENDDEFINE»
+
+«DEFINE AddComment FOR MAttribute -»
+	«EXPAND AddCommentText -»
+«ENDDEFINE»
+
+«DEFINE AddCommentText FOR MAttribute -»
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	«EXPAND AddCommentDefaultText -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE AddCommentDefaultText FOR MAttribute -»
+	 * Adds the specified value to the attribute '<em><b>«asAttribute()»</b></em>'.
+	 * @param	«asAttribute()»	the value to add
+«ENDDEFINE»
+
+«REM»
+	Generates the comment of the 'remove' property access method.
+«ENDREM»
+«DEFINE Remove FOR MAttribute -»
+	/**
+	«EXPAND RemoveComment -»
+	 */
+«ENDDEFINE»
+
+«DEFINE RemoveComment FOR MAttribute -»
+	«EXPAND RemoveCommentText -»
+«ENDDEFINE»
+
+«DEFINE RemoveCommentText FOR MAttribute -»
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	«EXPAND RemoveCommentDefaultText -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE RemoveCommentDefaultText FOR MAttribute -»
+	 * Removes the specified value from the attribute '<em><b>«asAttribute()»</b></em>'.
+	 * @param	«asAttribute()»	the value to remove
+«ENDDEFINE»
+
 «REM» - - associations - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «REM»

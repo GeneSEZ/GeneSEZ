@@ -66,6 +66,8 @@
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
 	«IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -»
 	«IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -»
+	«IF a.isMultiValuedType() && a.generateAdd() -»«EXPAND _Add FOR a -»«ENDIF -»
+	«IF a.isMultiValuedType() && a.generateRemove() -»«EXPAND _Remove FOR a -»«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -244,6 +246,42 @@
 			«ENDIF-»
 		}
 	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the add property access method for an multi valued attribute
+«ENDREM»
+«DEFINE _Add FOR MAttribute -»
+	«EXPAND Comment::Add -»
+	«EXPAND _ModifierAccessor» void «asAddPropertyAccessOperation()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
+		«IF hasStereotype("primitive") -»
+			«PROTECT CSTART "/* " CEND " */" ID ("add.property.access_" + xmiGuid)»
+			// TODO: sorry the template for add operations on arrays is missing, please file a feature request at forge.genesez.org
+			throw new UnsupportedOperationException(
+					"The implementation of the property access operation add for multi valued attribute '«asAttribute()»' is missing!");
+			«ENDPROTECT»
+		«ELSE -»
+			«IF !static-»this.«ENDIF-»«asAttribute()».add(«IF static-»_«ENDIF-»«asAttribute()»);
+		«ENDIF -»
+	}
+«ENDDEFINE»
+
+«REM»
+	Generates the remove property access method for an multi valued attribute
+«ENDREM»
+«DEFINE _Remove FOR MAttribute -»
+	«EXPAND Comment::Remove -»
+	«EXPAND _ModifierAccessor» void «asRemovePropertyAccessOperation()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
+		«IF hasStereotype("primitive") -»
+			«PROTECT CSTART "/* " CEND " */" ID ("remove.property.access_" + xmiGuid)»
+			// TODO: sorry the template for remove operations on arrays is missing, please file a feature request at forge.genesez.org
+			throw new UnsupportedOperationException(
+					"The implementation of the property access operation remove for multi valued attribute '«asAttribute()»' is missing!");
+			«ENDPROTECT»
+		«ELSE -»
+			«IF !static-»this.«ENDIF-»«asAttribute()».remove(«IF static-»_«ENDIF-»«asAttribute()»);
+		«ENDIF -»
+	}
 «ENDDEFINE»
 
 «REM»
