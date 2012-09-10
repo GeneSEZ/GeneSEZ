@@ -3,19 +3,80 @@ module org.genesez.workflow
 var name = "org.genesez.workflow"
 
 Workflow {
-	component = adapter.uml2.Uml2GeneSEZ {
-		model = "../${name}/model/genesez.workflow.uml"
-		includeProfile = "org.genesez.workflow.profile"
+	bean = org.eclipse.xtend.typesystem.uml2.Setup {
+		standardUML2Setup = true
 	}
+	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : emf {
+		metaModelPackage = "org.eclipse.emf.ecore.EcorePackage"
+	}
+	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : gcore {
+		metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+	}
+	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml {
+	}
+//	component = adapter.uml2.Uml2GeneSEZ {
+//		model = "../${name}/model/genesez.workflow.uml"
+//		includeProfile = "org.genesez.workflow.profile"
+//	}
+//	component = org.eclipse.xtend.typesystem.emf.XmiReader {
+//		modelFile = "../${name}/model/genesez.workflow.uml"
+//		outputSlot = "uml2model"
+//	}
+	component = workflow.EmfReader {
+		file = "../${name}/model/genesez.workflow.uml"
+		slot = "uml2model"
+	}
+//	component = org.eclipse.xtend.check.CheckComponent {
+//		metaModel = uml
+//		checkFile = "org::genesez::adapter::uml2::uml2constraints"
+//		checkFile = "org::genesez::adapter::uml2::UmlStateMachineValidation"
+//		checkFile = "org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation"
+//		emfAllChildrenSlot = "uml2model"
+//		abortOnError = true
+//	}
+	component = workflow.xpand.Validator {
+		slot = "uml2model"
+		metaModel = uml
+		script = "org::genesez::adapter::uml2::uml2constraints"
+		script = "org::genesez::adapter::uml2::UmlStateMachineValidation"
+		script = "org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation"
+	}
+//	component = org.eclipse.xtend.XtendComponent {
+//		metaModel = gcore
+//		metaModel = uml
+//		globalVarDef = { name = "excludePackages" value = "'UML Standard Profile'" }
+//		globalVarDef = { name = "mapClassesInModelToExternal" value = "false" }
+//		globalVarDef = { name = "externalPackages" value = "''" }
+//		globalVarDef = { name = "externalStereotypes" value = "'external'" }
+//		globalVarDef = { name = "externalStereotypes" value = "'external'" }
+//		globalVarDef = { name = "excludeStereotypes" value = "'exclude'" }
+//		globalVarDef = { name = "includeProfiles" value = "'org.genesez.workflow.profile'" }
+//		globalVarDef = { name = "allowGeneratedXmiGuID" value = "false" }
+//		invoke = "org::genesez::adapter::uml2::uml2genesez::transform(uml2model)"
+//		outputSlot = "coremodel"
+//	}
+	component = workflow.xpand.Model2Model {
+		metaModel = gcore
+		metaModel = uml
+		globalVarDef = { name = "excludePackages" value = "'UML Standard Profile'" }
+		globalVarDef = { name = "mapClassesInModelToExternal" value = "false" }
+		globalVarDef = { name = "externalPackages" value = "''" }
+		globalVarDef = { name = "externalStereotypes" value = "'external'" }
+		globalVarDef = { name = "externalStereotypes" value = "'external'" }
+		globalVarDef = { name = "excludeStereotypes" value = "'exclude'" }
+		globalVarDef = { name = "includeProfiles" value = "'org.genesez.workflow.profile'" }
+		globalVarDef = { name = "allowGeneratedXmiGuID" value = "false" }
+		slot = "uml2model"
+		script = "org::genesez::adapter::uml2::uml2genesez::transform"
+		outputSlot = "coremodel"
+	}
+//	component = platform.common.workflow.Serializer {
+//		file = "model/${name}/uml2gcore.gcore.xmi"
+//	}
 	component = org.genesez.workflow.EmfWriter {
 		slot = "coremodel" // this should be set using defaults
 		file = "model/${name}/uml2gcore.gcore.xmi"
 	}
-	/*
-	component = platform.common.workflow.Serializer {
-		file = "model/${name}/uml2gcore.gcore.xmi"
-	}
-	*/
 	component = platform.common.workflow.CompositeModel2Model {
 		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
 		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
@@ -23,17 +84,15 @@ Workflow {
 		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
 		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
 	}
+//	component = platform.common.workflow.Serializer {
+//		cloneSlotContents = true
+//		file = "model/${name}/uml2gcore.modified.gcore.xmi"
+//	}
 	component = org.genesez.workflow.EmfWriter {
 		slot = "coremodel" // this should be set using defaults
 		cloneSlotContents = true
 		file = "model/${name}/uml2gcore.modified.gcore.xmi"
 	}
-	/*
-	component = platform.common.workflow.Serializer {
-		cloneSlotContents = true
-		file = "model/${name}/uml2gcore.modified.gcore.xmi"
-	}
-	*/
 	component = platform.java.workflow.JavaGenerator {
 		outputDir = "../${name}/src-gen"
 		aspectTemplate = "${name}/NoFixedImports"
@@ -46,10 +105,12 @@ Workflow {
 		outputDir = "../${name}.xpand/src-gen"
 		aspectTemplate = "${name}/NoFixedImports"
 		typeMappingFile = "${name}/typemapping.xml"
+		typeMappingFile = "${name}/typemapping.xpand.xml"
 		excludeContentPackage = ""
 		excludeContentPackage = "org::genesez::workflow"
 		excludeContentPackage = "org::genesez::workflow::profile"
 	}
+	
 	/*
 	bean = org.eclipse.xtend.typesystem.uml2.Setup {
 		standardUML2Setup = true
