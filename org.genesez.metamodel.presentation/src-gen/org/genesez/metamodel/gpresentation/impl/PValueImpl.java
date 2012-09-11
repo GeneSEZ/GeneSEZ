@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.genesez.metamodel.gpresentation.GpresentationPackage;
+import org.genesez.metamodel.gpresentation.PKey;
 import org.genesez.metamodel.gpresentation.PMetaDataAware;
 import org.genesez.metamodel.gpresentation.PValue;
 
@@ -27,6 +28,7 @@ import org.genesez.metamodel.gpresentation.PValue;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PValueImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gpresentation.impl.PValueImpl#getKey <em>Key</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PValueImpl#getOwner <em>Owner</em>}</li>
  * </ul>
  * </p>
@@ -54,6 +56,16 @@ public class PValueImpl extends EObjectImpl implements PValue
    * @ordered
    */
   protected String value = VALUE_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getKey() <em>Key</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getKey()
+   * @generated
+   * @ordered
+   */
+  protected PKey key;
 
   /**
    * <!-- begin-user-doc -->
@@ -97,6 +109,49 @@ public class PValueImpl extends EObjectImpl implements PValue
     value = newValue;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PVALUE__VALUE, oldValue, value));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PKey getKey()
+  {
+    if (key != null && key.eIsProxy())
+    {
+      InternalEObject oldKey = (InternalEObject)key;
+      key = (PKey)eResolveProxy(oldKey);
+      if (key != oldKey)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, GpresentationPackage.PVALUE__KEY, oldKey, key));
+      }
+    }
+    return key;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PKey basicGetKey()
+  {
+    return key;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setKey(PKey newKey)
+  {
+    PKey oldKey = key;
+    key = newKey;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PVALUE__KEY, oldKey, key));
   }
 
   /**
@@ -172,6 +227,9 @@ public class PValueImpl extends EObjectImpl implements PValue
     {
       case GpresentationPackage.PVALUE__VALUE:
         return getValue();
+      case GpresentationPackage.PVALUE__KEY:
+        if (resolve) return getKey();
+        return basicGetKey();
       case GpresentationPackage.PVALUE__OWNER:
         return getOwner();
     }
@@ -191,6 +249,9 @@ public class PValueImpl extends EObjectImpl implements PValue
       case GpresentationPackage.PVALUE__VALUE:
         setValue((String)newValue);
         return;
+      case GpresentationPackage.PVALUE__KEY:
+        setKey((PKey)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -208,6 +269,9 @@ public class PValueImpl extends EObjectImpl implements PValue
       case GpresentationPackage.PVALUE__VALUE:
         setValue(VALUE_EDEFAULT);
         return;
+      case GpresentationPackage.PVALUE__KEY:
+        setKey((PKey)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -224,6 +288,8 @@ public class PValueImpl extends EObjectImpl implements PValue
     {
       case GpresentationPackage.PVALUE__VALUE:
         return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+      case GpresentationPackage.PVALUE__KEY:
+        return key != null;
       case GpresentationPackage.PVALUE__OWNER:
         return getOwner() != null;
     }
