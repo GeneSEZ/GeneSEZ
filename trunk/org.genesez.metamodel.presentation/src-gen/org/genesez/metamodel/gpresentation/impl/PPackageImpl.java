@@ -36,8 +36,8 @@ import org.genesez.metamodel.gpresentation.PRoot;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getRoots <em>Roots</em>}</li>
- *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getNestedPackages <em>Nested Packages</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getMetaData <em>Meta Data</em>}</li>
  * </ul>
  * </p>
@@ -206,12 +206,12 @@ public class PPackageImpl extends EObjectImpl implements PPackage
     {
       case GpresentationPackage.PPACKAGE__ROOTS:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getRoots()).basicAdd(otherEnd, msgs);
+      case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackages()).basicAdd(otherEnd, msgs);
       case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
         return eBasicSetContainer(otherEnd, GpresentationPackage.PPACKAGE__OWNING_PACKAGE, msgs);
-      case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackages()).basicAdd(otherEnd, msgs);
       case GpresentationPackage.PPACKAGE__META_DATA:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getMetaData()).basicAdd(otherEnd, msgs);
     }
@@ -230,10 +230,10 @@ public class PPackageImpl extends EObjectImpl implements PPackage
     {
       case GpresentationPackage.PPACKAGE__ROOTS:
         return ((InternalEList<?>)getRoots()).basicRemove(otherEnd, msgs);
-      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
-        return eBasicSetContainer(null, GpresentationPackage.PPACKAGE__OWNING_PACKAGE, msgs);
       case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
         return ((InternalEList<?>)getNestedPackages()).basicRemove(otherEnd, msgs);
+      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
+        return eBasicSetContainer(null, GpresentationPackage.PPACKAGE__OWNING_PACKAGE, msgs);
       case GpresentationPackage.PPACKAGE__META_DATA:
         return ((InternalEList<?>)getMetaData()).basicRemove(otherEnd, msgs);
     }
@@ -270,10 +270,10 @@ public class PPackageImpl extends EObjectImpl implements PPackage
         return getName();
       case GpresentationPackage.PPACKAGE__ROOTS:
         return getRoots();
-      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
-        return getOwningPackage();
       case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
         return getNestedPackages();
+      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
+        return getOwningPackage();
       case GpresentationPackage.PPACKAGE__META_DATA:
         return getMetaData();
     }
@@ -350,10 +350,10 @@ public class PPackageImpl extends EObjectImpl implements PPackage
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case GpresentationPackage.PPACKAGE__ROOTS:
         return roots != null && !roots.isEmpty();
-      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
-        return getOwningPackage() != null;
       case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
         return nestedPackages != null && !nestedPackages.isEmpty();
+      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
+        return getOwningPackage() != null;
       case GpresentationPackage.PPACKAGE__META_DATA:
         return metaData != null && !metaData.isEmpty();
     }

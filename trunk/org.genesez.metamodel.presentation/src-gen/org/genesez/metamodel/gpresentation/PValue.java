@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.genesez.metamodel.gpresentation.PValue#getValue <em>Value</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gpresentation.PValue#getKey <em>Key</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PValue#getOwner <em>Owner</em>}</li>
  * </ul>
  * </p>
@@ -52,6 +53,32 @@ public interface PValue extends EObject
    * @generated
    */
   void setValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>Key</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Key</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Key</em>' reference.
+   * @see #setKey(PKey)
+   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPValue_Key()
+   * @model required="true"
+   * @generated
+   */
+  PKey getKey();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gpresentation.PValue#getKey <em>Key</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Key</em>' reference.
+   * @see #getKey()
+   * @generated
+   */
+  void setKey(PKey value);
 
   /**
    * Returns the value of the '<em><b>Owner</b></em>' container reference.

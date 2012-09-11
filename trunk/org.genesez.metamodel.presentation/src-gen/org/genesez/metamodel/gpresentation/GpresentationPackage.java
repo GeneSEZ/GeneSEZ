@@ -871,22 +871,22 @@ public interface GpresentationPackage extends EPackage
   int PPACKAGE__ROOTS = 1;
 
   /**
-   * The feature id for the '<em><b>Owning Package</b></em>' container reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PPACKAGE__OWNING_PACKAGE = 2;
-
-  /**
    * The feature id for the '<em><b>Nested Packages</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PPACKAGE__NESTED_PACKAGES = 3;
+  int PPACKAGE__NESTED_PACKAGES = 2;
+
+  /**
+   * The feature id for the '<em><b>Owning Package</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PPACKAGE__OWNING_PACKAGE = 3;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' containment reference list.
@@ -926,22 +926,13 @@ public interface GpresentationPackage extends EPackage
   int PKEY__KEY = 0;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PKEY__VALUE = 1;
-
-  /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PKEY__OWNER = 2;
+  int PKEY__OWNER = 1;
 
   /**
    * The number of structural features of the '<em>PKey</em>' class.
@@ -950,7 +941,7 @@ public interface GpresentationPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PKEY_FEATURE_COUNT = 3;
+  int PKEY_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gpresentation.impl.PValueImpl <em>PValue</em>}' class.
@@ -972,13 +963,22 @@ public interface GpresentationPackage extends EPackage
   int PVALUE__VALUE = 0;
 
   /**
+   * The feature id for the '<em><b>Key</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PVALUE__KEY = 1;
+
+  /**
    * The feature id for the '<em><b>Owner</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PVALUE__OWNER = 1;
+  int PVALUE__OWNER = 2;
 
   /**
    * The number of structural features of the '<em>PValue</em>' class.
@@ -987,7 +987,7 @@ public interface GpresentationPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PVALUE_FEATURE_COUNT = 2;
+  int PVALUE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gpresentation.impl.PCompositeElementImpl <em>PComposite Element</em>}' class.
@@ -1423,17 +1423,6 @@ public interface GpresentationPackage extends EPackage
   EAttribute getPKey_Key();
 
   /**
-   * Returns the meta object for the reference list '{@link org.genesez.metamodel.gpresentation.PKey#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference list '<em>Value</em>'.
-   * @see org.genesez.metamodel.gpresentation.PKey#getValue()
-   * @see #getPKey()
-   * @generated
-   */
-  EReference getPKey_Value();
-
-  /**
    * Returns the meta object for the container reference '{@link org.genesez.metamodel.gpresentation.PKey#getOwner <em>Owner</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1464,6 +1453,17 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   EAttribute getPValue_Value();
+
+  /**
+   * Returns the meta object for the reference '{@link org.genesez.metamodel.gpresentation.PValue#getKey <em>Key</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Key</em>'.
+   * @see org.genesez.metamodel.gpresentation.PValue#getKey()
+   * @see #getPValue()
+   * @generated
+   */
+  EReference getPValue_Key();
 
   /**
    * Returns the meta object for the container reference '{@link org.genesez.metamodel.gpresentation.PValue#getOwner <em>Owner</em>}'.
@@ -1855,14 +1855,6 @@ public interface GpresentationPackage extends EPackage
     EAttribute PKEY__KEY = eINSTANCE.getPKey_Key();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference PKEY__VALUE = eINSTANCE.getPKey_Value();
-
-    /**
      * The meta object literal for the '<em><b>Owner</b></em>' container reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1887,6 +1879,14 @@ public interface GpresentationPackage extends EPackage
      * @generated
      */
     EAttribute PVALUE__VALUE = eINSTANCE.getPValue_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Key</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PVALUE__KEY = eINSTANCE.getPValue_Key();
 
     /**
      * The meta object literal for the '<em><b>Owner</b></em>' container reference feature.

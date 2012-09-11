@@ -34,7 +34,6 @@ import org.genesez.metamodel.gpresentation.PValue;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PKeyImpl#getKey <em>Key</em>}</li>
- *   <li>{@link org.genesez.metamodel.gpresentation.impl.PKeyImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PKeyImpl#getOwner <em>Owner</em>}</li>
  * </ul>
  * </p>
@@ -62,16 +61,6 @@ public class PKeyImpl extends EObjectImpl implements PKey
    * @ordered
    */
   protected String key = KEY_EDEFAULT;
-
-  /**
-   * The cached value of the '{@link #getValue() <em>Value</em>}' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getValue()
-   * @generated
-   * @ordered
-   */
-  protected EList<PValue> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -115,20 +104,6 @@ public class PKeyImpl extends EObjectImpl implements PKey
     key = newKey;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PKEY__KEY, oldKey, key));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<PValue> getValue()
-  {
-    if (value == null)
-    {
-      value = new EObjectResolvingEList<PValue>(PValue.class, this, GpresentationPackage.PKEY__VALUE);
-    }
-    return value;
   }
 
   /**
@@ -204,8 +179,6 @@ public class PKeyImpl extends EObjectImpl implements PKey
     {
       case GpresentationPackage.PKEY__KEY:
         return getKey();
-      case GpresentationPackage.PKEY__VALUE:
-        return getValue();
       case GpresentationPackage.PKEY__OWNER:
         return getOwner();
     }
@@ -226,10 +199,6 @@ public class PKeyImpl extends EObjectImpl implements PKey
       case GpresentationPackage.PKEY__KEY:
         setKey((String)newValue);
         return;
-      case GpresentationPackage.PKEY__VALUE:
-        getValue().clear();
-        getValue().addAll((Collection<? extends PValue>)newValue);
-        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -247,9 +216,6 @@ public class PKeyImpl extends EObjectImpl implements PKey
       case GpresentationPackage.PKEY__KEY:
         setKey(KEY_EDEFAULT);
         return;
-      case GpresentationPackage.PKEY__VALUE:
-        getValue().clear();
-        return;
     }
     super.eUnset(featureID);
   }
@@ -266,8 +232,6 @@ public class PKeyImpl extends EObjectImpl implements PKey
     {
       case GpresentationPackage.PKEY__KEY:
         return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-      case GpresentationPackage.PKEY__VALUE:
-        return value != null && !value.isEmpty();
       case GpresentationPackage.PKEY__OWNER:
         return getOwner() != null;
     }

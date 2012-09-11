@@ -528,7 +528,7 @@ public class GpresentationPackageImpl extends EPackageImpl implements Gpresentat
    */
   public EReference getPPackage_OwningPackage()
   {
-    return (EReference)pPackageEClass.getEStructuralFeatures().get(2);
+    return (EReference)pPackageEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -538,7 +538,7 @@ public class GpresentationPackageImpl extends EPackageImpl implements Gpresentat
    */
   public EReference getPPackage_NestedPackages()
   {
-    return (EReference)pPackageEClass.getEStructuralFeatures().get(3);
+    return (EReference)pPackageEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -576,19 +576,9 @@ public class GpresentationPackageImpl extends EPackageImpl implements Gpresentat
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getPKey_Value()
-  {
-    return (EReference)pKeyEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getPKey_Owner()
   {
-    return (EReference)pKeyEClass.getEStructuralFeatures().get(2);
+    return (EReference)pKeyEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -616,9 +606,19 @@ public class GpresentationPackageImpl extends EPackageImpl implements Gpresentat
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getPValue_Owner()
+  public EReference getPValue_Key()
   {
     return (EReference)pValueEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getPValue_Owner()
+  {
+    return (EReference)pValueEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -743,17 +743,17 @@ public class GpresentationPackageImpl extends EPackageImpl implements Gpresentat
     pPackageEClass = createEClass(PPACKAGE);
     createEAttribute(pPackageEClass, PPACKAGE__NAME);
     createEReference(pPackageEClass, PPACKAGE__ROOTS);
-    createEReference(pPackageEClass, PPACKAGE__OWNING_PACKAGE);
     createEReference(pPackageEClass, PPACKAGE__NESTED_PACKAGES);
+    createEReference(pPackageEClass, PPACKAGE__OWNING_PACKAGE);
     createEReference(pPackageEClass, PPACKAGE__META_DATA);
 
     pKeyEClass = createEClass(PKEY);
     createEAttribute(pKeyEClass, PKEY__KEY);
-    createEReference(pKeyEClass, PKEY__VALUE);
     createEReference(pKeyEClass, PKEY__OWNER);
 
     pValueEClass = createEClass(PVALUE);
     createEAttribute(pValueEClass, PVALUE__VALUE);
+    createEReference(pValueEClass, PVALUE__KEY);
     createEReference(pValueEClass, PVALUE__OWNER);
 
     pMetaDataAwareEClass = createEClass(PMETA_DATA_AWARE);
@@ -851,17 +851,17 @@ public class GpresentationPackageImpl extends EPackageImpl implements Gpresentat
     initEClass(pPackageEClass, PPackage.class, "PPackage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getPPackage_Name(), ecorePackage.getEString(), "name", null, 1, 1, PPackage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPPackage_Roots(), this.getPRoot(), this.getPRoot_OwningPackage(), "roots", null, 0, -1, PPackage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPPackage_OwningPackage(), this.getPPackage(), this.getPPackage_NestedPackages(), "owningPackage", null, 1, 1, PPackage.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPPackage_NestedPackages(), this.getPPackage(), this.getPPackage_OwningPackage(), "nestedPackages", null, 0, -1, PPackage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPPackage_OwningPackage(), this.getPPackage(), this.getPPackage_NestedPackages(), "owningPackage", null, 1, 1, PPackage.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPPackage_MetaData(), this.getPMetaData(), this.getPMetaData_Container(), "metaData", null, 0, -1, PPackage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(pKeyEClass, PKey.class, "PKey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getPKey_Key(), ecorePackage.getEString(), "key", null, 1, 1, PKey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPKey_Value(), this.getPValue(), null, "value", null, 1, -1, PKey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPKey_Owner(), this.getPMetaData(), this.getPMetaData_Key(), "owner", null, 1, 1, PKey.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(pValueEClass, PValue.class, "PValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getPValue_Value(), ecorePackage.getEString(), "value", null, 1, 1, PValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPValue_Key(), this.getPKey(), null, "key", null, 1, 1, PValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPValue_Owner(), this.getPMetaDataAware(), this.getPMetaDataAware_Value(), "owner", null, 1, 1, PValue.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(pMetaDataAwareEClass, PMetaDataAware.class, "PMetaDataAware", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

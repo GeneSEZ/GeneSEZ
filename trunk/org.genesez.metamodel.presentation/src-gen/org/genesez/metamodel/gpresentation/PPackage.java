@@ -24,8 +24,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getName <em>Name</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getRoots <em>Roots</em>}</li>
- *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getNestedPackages <em>Nested Packages</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getMetaData <em>Meta Data</em>}</li>
  * </ul>
  * </p>
