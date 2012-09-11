@@ -1,0 +1,13 @@
+import gpresentation;
+
+
+
+
+boolean hasPMetaData(PMetaDataAware this, String uri) :
+	this.metaData.exists( e | e.uri == uri);
+	
+
+String getTaggedValue(PMetaDataAware this, String uri, String key) :
+	this.value.exists( e | e.key.key == key && e.key.owner.uri == uri )
+		? this.value.selectFirst( e | e.key.key == key && e.key.owner.uri == uri ).value
+		: "";
