@@ -25,7 +25,7 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = true, workflowInclusion = ALWAYS)
-	private java.util.Set<String> script = new java.util.HashSet<String>();
+	private java.util.Set<String> script = new java.util.LinkedHashSet<String>();
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String outputSlot;
@@ -110,7 +110,7 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 			for (MetaModel mm : getMetaModel()) {
 				xc.addMetaModel(mm);
 			}
-			for (String a : getAdvice()) {
+			for (String a : getAopScript()) {
 				xc.addExtensionAdvice(a);
 			}
 			for (GlobalVarDef def : getGlobalVarDef()) {

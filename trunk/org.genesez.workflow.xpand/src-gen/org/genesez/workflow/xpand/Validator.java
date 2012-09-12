@@ -23,7 +23,7 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = true, workflowInclusion = ALWAYS)
-	private java.util.Set<String> script = new java.util.HashSet<String>();
+	private java.util.Set<String> script = new java.util.LinkedHashSet<String>();
 	
 	private CheckComponent checkComponent;
 	
@@ -93,7 +93,7 @@ public class Validator extends AbstractXpandWorkflowComponent {
 		for (MetaModel mm : getMetaModel()) {
 			checkComponent.addMetaModel(mm);
 		}
-		for (String s : getAdvice()) {
+		for (String s : getAopScript()) {
 			checkComponent.addExtensionAdvice(s);
 		}
 		for (GlobalVarDef def : getGlobalVarDef()) {
