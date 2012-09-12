@@ -5,14 +5,12 @@ package org.genesez.workflow;
  * 	@FILE-ID : (_UMGTcPLIEeGYwYEQM4LYvw) 
  */
 
-import java.io.File;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.mwe.utils.Writer;
-import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.WorkflowContext;
-import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.eclipse.emf.mwe.utils.Writer;
+import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
