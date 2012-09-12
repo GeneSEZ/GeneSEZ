@@ -5,6 +5,8 @@ package org.genesez.workflow;
  * 	@FILE-ID : (_paljEPU8EeGsV8fV-DCYeA) 
  */
 
+import java.util.Collection;
+import java.util.Iterator;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.core.issues.Issues;
@@ -65,7 +67,21 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._paljEPU8EeGsV8fV-DCYeA) ENABLED START */
-	// TODO: put your own implementation code here
+	protected String listToString(Collection<String> list) {
+		StringBuilder sb = new StringBuilder();
+		Iterator<String> it = list.iterator();
+		while (it.hasNext()) {
+			String item = it.next();
+			if (item.startsWith("'")) {
+				item = item.substring(1, item.length() - 1);
+			}
+			sb.append(item);
+			if (it.hasNext()) {
+				sb.append(",");
+			}
+		}
+		return sb.toString();
+	}
 	/* PROTECTED REGION END */
 	
 }
