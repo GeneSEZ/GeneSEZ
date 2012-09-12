@@ -54,6 +54,10 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 		if (script.isEmpty()) {
 			issues.addError(this, "Workflow parameter 'script' is missing!", script);
 		}
+		if (outputSlot == null || outputSlot.isEmpty()) {
+			outputSlot = WorkflowContext.DEFAULT_SLOT;
+			issues.addInfo(this, "Using default model slot for workflow parameter 'outputSlot'.", outputSlot);
+		}
 		super.checkConfiguration(issues);
 		prepareDelegate();
 		compositeXtend.checkConfiguration(issues);
