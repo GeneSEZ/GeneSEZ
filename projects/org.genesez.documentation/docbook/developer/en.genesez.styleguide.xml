@@ -1,0 +1,189 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter>
+  <title>Styleguide</title>
+  <variablelist>
+    <varlistentry>
+      <term><emphasis role="bold">Indent</emphasis></term>
+      <listitem>
+        <para>Tabs are used for indents.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><emphasis role="bold">Line Length</emphasis></term>
+      <listitem>
+        <para>Lines should be splitted for readability. Each line 
+        should not exceed 130 characters in length.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <section>
+    <title>Project and Folder Structure</title>
+    <variablelist>
+      <varlistentry>
+        <term>Project Name</term>
+        <listitem>
+          <para>Projects should be named according the namespace of 
+          their contents.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Folders under the project</term>
+        <listitem>
+          <para>All source and class folders under a project should be 
+          the named according the namespace entry following the project 
+          name.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Folder structure under source and class folders</term>
+        <listitem>
+          <para>The folder structure under source and class folders 
+          build the namespace of the folders contents.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <example>
+      <title>Project and Folder Structure</title>
+      <programlisting>org.genesez.metamodel.core.util    the project name
+- m2m                              folder to group some functionality
+  - org                            namespace folder
+    - genesez
+      - metamodel
+        - core
+          - util
+            - m2m
+                Realization.ext    source file within the namespace &apos;org.genesez.metamodel.core.util.m2m&apos;
+</programlisting>
+    </example>
+  </section>
+  <section>
+    <title>File Structure</title>
+    <variablelist>
+      <varlistentry>
+        <term>Copyright</term>
+      </varlistentry>
+      <varlistentry>
+        <term>Metamodel imports</term>
+        <term>Java imports</term>
+      </varlistentry>
+      <varlistentry>
+        <term>File or type Information</term>
+        <listitem>
+          <para>for XTend and Check, type information for java</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>included extension files</term>
+        <listitem>
+          <para>for XTend, Check, XPand</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Function and Method</term>
+      </varlistentry>
+    </variablelist>
+  </section>
+  <section>
+    <title>Copyright</title>
+    <para>All artefacts should contain the following copyright notice 
+    at the beginning of the file.</para>
+    <example>
+      <title>Copyright Notice for Java, XTend and Check</title>
+      <programlisting>/*
+ * (c) GeneSEZ Research Group &lt;genesez@fh-zwickau.de&gt;
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms &lt;http://www.genesez.org/en/license&gt;
+ */</programlisting>
+    </example>
+    <example>
+      <title>Copyright Notice for XPand</title>
+      <programlisting>«REM»
+    (c) GeneSEZ Research Group &lt;genesez@fh-zwickau.de&gt;
+    All rights reserved.
+    
+    Licensed according to GeneSEZ License Terms &lt;http://www.genesez.org/en/license&gt;
+«ENDREM»</programlisting>
+    </example>
+  </section>
+  <section>
+    <title>File and Type Information</title>
+    <para>The file and type information block contains basic 
+    information about the file and the maintainers and contributors. 
+    The author is separated by a tab from <literal>@author</literal>. 
+    Maintainers are listed first and then all other contributors.</para>
+    <example>
+      <title>File Information in Java, XTend, Check</title>
+      <programlisting>/**
+ * Basic information about the file, what it does and for what it is good for.
+ * 
+ * @author  Firstname Lastname &lt;emailaddress in lower case@yourprovider&gt; (maintainer)
+ * @author  Firstname Lastname &lt;emailaddress in lower case@yourprovider&gt;
+ */</programlisting>
+    </example>
+    <example>
+      <title>File Information in XPand</title>
+      <programlisting>«REM»
+    Basic information about the file, what it does and for what it is good for.
+    
+    @author  Firstname Lastname &lt;emailaddress in lower case@yourprovider&gt; (maintainer)
+    @author  Firstname Lastname &lt;emailaddress in lower case@yourprovider&gt;
+«ENDREM»</programlisting>
+    </example>
+  </section>
+  <section>
+    <title>Function and Method Information</title>
+    <para>The function comment has the same indend as the function 
+    definition, i.e. both start on the same column. Parameters are 
+    documented using <literal>@param</literal> and the return type 
+    using <literal>@return</literal>. Tabs are used to separate the 
+    entries according the layout given in example 
+    <xref endterm="genesez.styleguide.function"/>.</para>
+    <example id="genesez.styleguide.function">
+      <title>Function and Method Information</title>
+      <programlisting>/** 
+ * Checks if an element has a tagged value of a specific stereotype.
+ * 
+ * @param   sterotype   The name of a stereotype.
+ * @param   tag         The name of a tag.
+ * @param   value       The value of a tagged value.
+ * @return  True, if the element has a tag with the given value, otherwise false.
+ */ 
+boolean hasTaggedValue(MElement this, String stereotype, String tag, String value) : 
+    !taggedValue.typeSelect(MTaggedValue)
+        .select( e | e.value == value &amp;&amp; e.tag.name == tag &amp;&amp; e.tag.stereotype.name == stereotype )
+        .isEmpty;</programlisting>
+    </example>
+    <para>Usually there is a new line after the colon (
+    <literal>:</literal>). The function expression is formatted for 
+    readability, i.e. longer concatenated expressions are splitted into 
+    several lines starting with the dot (<literal>.</literal>).</para>
+    <para>If the function has only one parameter and if the meaning of 
+    the parameter and return value are clearly stated within the 
+    comment description, <literal>@param</literal> and <literal>
+    @return</literal> can be omitted.</para>
+    <example>
+      <title>Function Information without parameter and return 
+      description</title>
+      <programlisting>/** 
+ * Returns the qualified name of the specified classifier. 
+ */ 
+String qn(MClassifier this) :
+    package().qn() + &quot;::&quot; + name;
+</programlisting>
+    </example>
+    <example>
+      <title>Define Information in XPand</title>
+      <programlisting>«REM» 
+    Generates the declaration of operations.
+«ENDREM» 
+«DEFINE Declaration FOR MClassifier -» 
+    «EXPAND _Declaration FOREACH operation.select( e| !e.isConstructor() &amp;&amp; e.abstract ) -» 
+«ENDDEFINE»</programlisting>
+    </example>
+    <para>The indents in <emphasis>XPand</emphasis> files should placed 
+    according the generated output, i.e. the output should be usable 
+    and readable without any additional formatter or beautifier.</para>
+  </section>
+</chapter>
