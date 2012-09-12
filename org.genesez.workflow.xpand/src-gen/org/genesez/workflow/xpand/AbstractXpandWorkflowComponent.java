@@ -22,13 +22,13 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = ALWAYS)
-	private java.util.Set<String> advice = new java.util.HashSet<String>();
+	private java.util.Set<String> aopScript = new java.util.LinkedHashSet<String>();
 	
 	@Parameter(isRequired = true, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
-	private java.util.Set<MetaModel> metaModel = new java.util.HashSet<MetaModel>();
+	private java.util.Set<MetaModel> metaModel = new java.util.LinkedHashSet<MetaModel>();
 	
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
-	private java.util.Set<GlobalVarDef> globalVarDef = new java.util.HashSet<GlobalVarDef>();
+	private java.util.Set<GlobalVarDef> globalVarDef = new java.util.LinkedHashSet<GlobalVarDef>();
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -46,26 +46,26 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	// -- generated association + attribute accessors -----------------------
 	/**
-	 * Returns the value of attribute '<em><b>advice</b></em>'
+	 * Returns the value of attribute '<em><b>aopScript</b></em>'
 	 */
-	public java.util.Set<String> getAdvice() {
-		return advice;
+	public java.util.Set<String> getAopScript() {
+		return aopScript;
 	}
 	
 	/**
-	 * Adds the specified value to the attribute '<em><b>advice</b></em>'.
-	 * @param	advice	the value to add
+	 * Adds the specified value to the attribute '<em><b>aopScript</b></em>'.
+	 * @param	aopScript	the value to add
 	 */
-	public void addAdvice(String advice) {
-		this.advice.add(advice);
+	public void addAopScript(String aopScript) {
+		this.aopScript.add(aopScript);
 	}
 	
 	/**
-	 * Removes the specified value from the attribute '<em><b>advice</b></em>'.
-	 * @param	advice	the value to remove
+	 * Removes the specified value from the attribute '<em><b>aopScript</b></em>'.
+	 * @param	aopScript	the value to remove
 	 */
-	public void removeAdvice(String advice) {
-		this.advice.remove(advice);
+	public void removeAopScript(String aopScript) {
+		this.aopScript.remove(aopScript);
 	}
 	
 	/**
