@@ -3055,6 +3055,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     mLiteralEClass.getESuperTypes().add(this.getMElement());
     mGenericEClass.getESuperTypes().add(this.getMType());
     mExternalEClass.getESuperTypes().add(this.getMType());
+    mExternalEClass.getESuperTypes().add(this.getMElement());
     mActivityEClass.getESuperTypes().add(this.getMBehavior());
     mActionEClass.getESuperTypes().add(this.getMNode());
     mBehaviorEClass.getESuperTypes().add(this.getMElement());

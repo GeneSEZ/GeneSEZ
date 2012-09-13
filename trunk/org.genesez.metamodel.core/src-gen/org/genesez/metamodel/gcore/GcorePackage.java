@@ -3404,13 +3404,67 @@ public interface GcorePackage extends EPackage
   int MEXTERNAL__SPECIALIZATION = MTYPE__SPECIALIZATION;
 
   /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEXTERNAL__NAME = MTYPE_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEXTERNAL__XMI_GUID = MTYPE_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEXTERNAL__OWNED_COMMENT = MTYPE_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Tagged Value</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEXTERNAL__TAGGED_VALUE = MTYPE_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Stereotype</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEXTERNAL__STEREOTYPE = MTYPE_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>Aspect</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MEXTERNAL__ASPECT = MTYPE_FEATURE_COUNT + 5;
+
+  /**
    * The feature id for the '<em><b>Specification</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MEXTERNAL__SPECIFICATION = MTYPE_FEATURE_COUNT + 0;
+  int MEXTERNAL__SPECIFICATION = MTYPE_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Model</b></em>' container reference.
@@ -3419,7 +3473,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MEXTERNAL__MODEL = MTYPE_FEATURE_COUNT + 1;
+  int MEXTERNAL__MODEL = MTYPE_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Generic Parameter</b></em>' containment reference list.
@@ -3428,7 +3482,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MEXTERNAL__GENERIC_PARAMETER = MTYPE_FEATURE_COUNT + 2;
+  int MEXTERNAL__GENERIC_PARAMETER = MTYPE_FEATURE_COUNT + 8;
 
   /**
    * The number of structural features of the '<em>MExternal</em>' class.
@@ -3437,7 +3491,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MEXTERNAL_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 3;
+  int MEXTERNAL_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 9;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MBehaviorImpl <em>MBehavior</em>}' class.

@@ -26,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface MExternal extends MType
+public interface MExternal extends MType, MElement
 {
   /**
    * Returns the value of the '<em><b>Specification</b></em>' attribute.
