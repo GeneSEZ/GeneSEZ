@@ -1,11 +1,8 @@
 /**
- * 	modificates the metamodel before generation of the source code  
- *  
+ * Modificates the metamodel before generation of the source code.
+ * 
  * @author	andre pflueger
- * @date	2009-04-14
  */
-
-// based on genesez meta model
 import gcore;
 
 extension org::genesez::util::logging::Logging;
@@ -24,6 +21,7 @@ Void additions(MPackage this) :
 	this.classifier.typeSelect(MClass).additions();
 	
 Void additions(MClass this) :
+	this.classifier.typeSelect(MClass).additions() ->
 	this.addEqualsOperation() ->
 	addSingletonElements();
 
@@ -38,6 +36,9 @@ Void modifications(MPackage this) :
 	this.classifier.typeSelect(MInterface).modifications();
 	
 Void modifications(MClass this) :
+	// process inner classifier
+	this.classifier.typeSelect(MClass).modifications() ->
+	this.classifier.typeSelect(MInterface).modifications() ->
 	this.property.typeSelect(MAttribute).modifications() ->
 	this.property.typeSelect(MAssociationRole).modifications();
 	
