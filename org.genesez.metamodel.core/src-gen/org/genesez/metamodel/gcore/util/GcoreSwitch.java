@@ -294,6 +294,7 @@ public class GcoreSwitch<T> extends Switch<T>
         MExternal mExternal = (MExternal)theEObject;
         T result = caseMExternal(mExternal);
         if (result == null) result = caseMType(mExternal);
+        if (result == null) result = caseMElement(mExternal);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
