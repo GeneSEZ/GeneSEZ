@@ -20,12 +20,12 @@ create MPackage createPackage(MPackage container, String xmiGuid, String name) :
 	container.nestedPackage.add(this) ->
 	this;
 
-create MClass createClass(MPackage container, String xmiGuid, String name) :
+create MClass createClass(MDefinitionContext container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.classifier.add(this) ->
 	this;
 
-create MInterface createInterface(MPackage container, String xmiGuid, String name) :
+create MInterface createInterface(MDefinitionContext container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.classifier.add(this) ->
 	this;
@@ -240,11 +240,14 @@ MAttribute processAttribute(MAttribute this, String defaultvalue, boolean static
 	this;
 
 MProperty processProperty(MProperty this, String visibility, boolean derived, Integer multiplicity, boolean unique, boolean ordered) :
+	processProperty(visibility, derived, 0, multiplicity, unique, ordered);
+	
+MProperty processProperty(MProperty this, String visibility, boolean derived, Integer lowerBoundMultiplicity, Integer upperBoundMultiplicity, boolean unique, boolean ordered) :
 	setVisibility(visibility) ->
 	setDerived(derived) ->
 	setMultiplicity(multiplicity) ->
-	setLowerBoundMultiplicity( multiplicity ) ->
-	setUpperBoundMultiplicity( multiplicity ) ->
+	setLowerBoundMultiplicity( lowerBoundMultiplicity ) ->
+	setUpperBoundMultiplicity( upperBoundMultiplicity ) ->
 	setUnique(unique) ->
 	setOrdered(ordered) ->
 	this;

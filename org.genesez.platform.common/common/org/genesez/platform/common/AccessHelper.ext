@@ -972,10 +972,11 @@ MModel model(MOperation this) :	classifier.model();
  * @return	the model element
  */
 MModel model(MClassifier this) :
-	switch (owningContext.metaType) {
-		case MModel : ((MModel)owningContext)
-		case MPackage : ((MPackage)owningContext).model()
-		default : (fatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
+	switch {
+		case MModel.isInstance(this) : ((MModel)owningContext)
+		case MPackage.isInstance(this) : ((MPackage)owningContext).model()
+		case MClassifier.isInstance(this) : ((MClassifier)owningContext).model()
+		default : (fatal("MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen.") -> Void)
 	};
 
 MModel model(MElement this) :
