@@ -32,6 +32,10 @@ package «packageDeclaration( basePackage() ) -»;
 «EXPAND Import::Import -»
 «REM» generate a newline between imports + type comment «ENDREM»
 «prepareActiveClass() -»
+«EXPAND Inner -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MClass -»
 «EXPAND Comment::Type -»
 «EXPAND _Annotation-»
 «EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
@@ -71,6 +75,11 @@ package «packageDeclaration( basePackage() ) -»;
 	
 	// -- own code implementation -------------------------------------------
 	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
+	
+	«IF !classifier.isEmpty -»
+	// -- nested classifier -------------------------------------------------
+	«EXPAND Type::Inner FOREACH classifier -»
+	«ENDIF -»
 	
 	«IF ! ownedBehavior.isEmpty -»
 	// -- generated state machine section -----------------------------------
