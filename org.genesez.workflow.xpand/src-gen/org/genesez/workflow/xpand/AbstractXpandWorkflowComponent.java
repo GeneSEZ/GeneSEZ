@@ -12,6 +12,11 @@ import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.Gl
 import org.eclipse.xtend.typesystem.MetaModel;
 import org.genesez.workflow.AbstractSlotWorkflowComponent;
 import org.genesez.workflow.profile.Parameter;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -118,7 +123,66 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Aes3IPqcEeGS1KtqERYUjQ) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+	
+	// -- nested classifier -------------------------------------------------
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdAopScript {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._69m7gPk6EeG9kdm-OL78lQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdMetaModel {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._rcLqIPqcEeGS1KtqERYUjQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdGlobalVarDef {
+		
+		// -- generated elements ------------------------------------------------
+		String[] name();
+		
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._t_Z00PqcEeGS1KtqERYUjQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
 	
 }

@@ -11,6 +11,11 @@ import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.utils.Writer;
 import org.genesez.workflow.profile.Parameter;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -150,6 +155,108 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 		writer.setSkipOnErrors(getAbortOnError());
 		writer.setUseSingleGlobalResourceSet(getUseSingleGlobalResourceSet());
 	}
+	
 	/* PROTECTED REGION END */
+	
+	// -- nested classifier -------------------------------------------------
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdSchemaLocation {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default true;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._tcXXgPRtEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdSchemaLocationImplementation {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default true;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._xl3jgPRtEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdIgnoreEmptySlot {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default false;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._4ovwYPRtEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdCloneSlotContents {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default false;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._76q0IPRtEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdMultipleResourcesInCaseOfList {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default false;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._9HQjEPRtEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
 	
 }

@@ -11,6 +11,11 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.core.issues.Issues;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * .WHEN_NEEDED
@@ -114,6 +119,68 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 		reader.setSkipOnErrors(getAbortOnError());
 		reader.setUseSingleGlobalResourceSet(getUseSingleGlobalResourceSet());
 	}
+	
 	/* PROTECTED REGION END */
+	
+	// -- nested classifier -------------------------------------------------
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdMakeEPackagesGlobal {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default true;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._dg3IoPRjEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdFirstElementOnly {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default true;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._gnzEYPRjEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdIgnoreMissingModel {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default false;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._iA6MYPRjEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
 	
 }
