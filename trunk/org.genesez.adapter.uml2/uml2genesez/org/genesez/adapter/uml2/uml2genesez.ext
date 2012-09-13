@@ -29,7 +29,7 @@ extension org::genesez::adapter::uml2::scripts::Helper;
 extension org::genesez::platform::common::GlobalStore;
 
 // use logging
-extension org::genesez::platform::common::log::Log;
+extension org::genesez::util::logging::Logging;
 
 // behavior models
 extension org::genesez::adapter::uml2::uml2activities;
@@ -119,7 +119,7 @@ create MModel transform(Model m) :
 	useLogger("org.genesez.adapter.uml2") ->
 	uml2model(m) ->
 	coremodel(this) ->
-	trace( "transform model [ " + metaType + " ] - " + m ) ->
+	logTrace( "transform model [ " + metaType + " ] - " + m ) ->
 	transformBasics(m) ->
 	transformPackage(m) ->
 	// ensure types in included profiles are transformed completely, not just as stubs
@@ -182,7 +182,7 @@ private MPackage transform(Package p, MPackage this) :
  * @return	the transformed classifier
  */
 private MClassifier transform(Classifier c, MPackage this) :
-	trace( "transform [ " + c.metaType + " ] - " + c ) ->
+	logTrace( "transform [ " + c.metaType + " ] - " + c ) ->
 	switch {
 		// check if classifier should be excluded
 		case c.isIgnoredElement() : Void
@@ -207,9 +207,9 @@ private MClassifier transform(Classifier c, MPackage this) :
  * @return	the transformed GeneSEZ type
  */
 MType makeType(Type this) :
-	debug("transform [ " + metaType + " ] " + this) ->
-	trace("    isTemplateParameter: " + isTemplateParameter()) ->
-	trace("    isExternalType:      " + isExternalType()) ->
+	logDebug("transform [ " + metaType + " ] " + this) ->
+	logTrace("    isTemplateParameter: " + isTemplateParameter()) ->
+	logTrace("    isExternalType:      " + isExternalType()) ->
 	switch {
 		//  check if type is null (e.g. constructors usually don't have a return type)
 		case metaType == Void : ((PrimitiveType)this).makePrimitiveType()
@@ -240,7 +240,7 @@ MType makeType(Type this) :
  * @return	the GeneSEZ package
  */
 private create MPackage makePackage(Package p) :
-	trace( "make [" + metaType + " ] - " + p ) ->
+	logTrace( "make [" + metaType + " ] - " + p ) ->
 	transformBasics(p) ->
 	this;
 	
@@ -250,7 +250,7 @@ private create MPackage makePackage(Package p) :
  * @return	the GeneSEZ class
  */
 private create MClass makeClassifier(Class c) :
-	trace( "make [ " + metaType + " ] - " + c ) ->
+	logTrace( "make [ " + metaType + " ] - " + c ) ->
 	transformBasics(c) ->
 	// containment
 	c.package.makePackage().classifier.add( this ) ->
@@ -262,7 +262,7 @@ private create MClass makeClassifier(Class c) :
  * @return	the GeneSEZ interface
  */
 private create MInterface makeClassifier(Interface i) :
-	trace( "make [ " + metaType + " ] - " + i ) ->
+	logTrace( "make [ " + metaType + " ] - " + i ) ->
 	transformBasics(i) ->
 	// containment
 	i.package.makePackage().classifier.add( this ) ->
@@ -274,7 +274,7 @@ private create MInterface makeClassifier(Interface i) :
  * @return	the GeneSEZ enumeration
  */
 private create MEnumeration makeClassifier(Enumeration e) :
-	trace( "make [ " + metaType + " ] - " + e ) ->
+	logTrace( "make [ " + metaType + " ] - " + e ) ->
 	transformBasics(e) ->
 	// containment
 	e.package.makePackage().classifier.add( this ) ->
@@ -286,7 +286,7 @@ private create MEnumeration makeClassifier(Enumeration e) :
  * @return	the GeneSEZ datatype
  */
 private create MDataType makeClassifier(DataType d) :
-	trace( "make [ " + metaType + " ] - " + d ) ->
+	logTrace( "make [ " + metaType + " ] - " + d ) ->
 	transformBasics(d) ->
 	// containment
 	d.package.makePackage().classifier.add( this ) ->
@@ -298,7 +298,7 @@ private create MDataType makeClassifier(DataType d) :
  * @return	the GeneSEZ usecase
  */
 private create MUseCase makeClassifier(UseCase u) :
-	trace( "make [ " + metaType + " ] - " + u ) ->
+	logTrace( "make [ " + metaType + " ] - " + u ) ->
 	// basic element properties
 	transformBasics(u) ->
 	// transform owned use cases
@@ -314,7 +314,7 @@ private create MUseCase makeClassifier(UseCase u) :
  * @return	void
  */
 private MClassifier makeClassifier(Classifier c) :
-	fatal("try to construct an MClassifier object from: " + c) ->
+	logFatal("try to construct an MClassifier object from: " + c) ->
 	Void;
 
 /**
@@ -323,7 +323,7 @@ private MClassifier makeClassifier(Classifier c) :
  * @return  the GeneSEZ interface
  */
 private create MInterface makeAnnotationInterface(Stereotype s) :
-    trace( "make a java annotation from [ " + metaType + " ] - " + s ) ->
+    logTrace( "make a java annotation from [ " + metaType + " ] - " + s ) ->
     // basic element properties
     transformBasics(s) ->
     setXmiGuid(xmiGuid + ".JavaAnnotationInterface") ->
@@ -391,7 +391,7 @@ private create MAttribute makeAttribute(Property p) :
  * @return	the GeneSEZ operation
  */
 create MOperation makeOperation(Operation o) :
-	trace( "make [ " + metaType + " ] - " + o ) ->
+	logTrace( "make [ " + metaType + " ] - " + o ) ->
 	// set the unique xmiId and name
 	transformBasics(o) ->
 	// properties
@@ -445,7 +445,7 @@ create MOperation makeOperation(Operation o) :
  * @return	the GeneSEZ parameter
  */
 private create MParameter makeParameter(Parameter p) :
-	trace("make [" + metaType + "] - " + p) ->
+	logTrace("make [" + metaType + "] - " + p) ->
 	// set the unique xmiId and name
 	transformBasics(p) ->
 	// properties
@@ -470,7 +470,7 @@ private create MParameter makeParameter(Parameter p) :
 
 // do we need this? [toh]
 private create MParameter makeParameter(Void v) :
-	trace("make [" + metaType + "] - " + v) ->
+	logTrace("make [" + metaType + "] - " + v) ->
 	setXmiGuid( "void" ) ->
 	setName( "" ) ->
 	setDirection( "return" ) ->
@@ -497,7 +497,7 @@ private create MParameter makeParameter(Void v) :
  * @return	the GeneSEZ association
  */
 private create MAssociation makeAssociation(Association a, MPackage container) :
-	trace("make [" + metaType + "] - " + a) ->
+	logTrace("make [" + metaType + "] - " + a) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(a) ) ->
 	setName( assocName(a) ) ->
@@ -511,7 +511,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
 	// associations ends: filter non navigable association ends 
 	// non navigable association ends do not have the class refernce set, except the association object is an association class, then the association class is itself set as class
 	end.addAll( a.memberEnd.select( e|e.class != null && e.class != a ).makeAssociationRole() ) ->
-	trace("link ends: " + end) ->
+	logTrace("link ends: " + end) ->
 	linkEnds() ->
 	associationClass(a) ->
 	// stereotypes + tagged values
@@ -525,7 +525,7 @@ private create MAssociation makeAssociation(Association a, MPackage container) :
  * @return	the GeneSEZ association role
  */
 private create MAssociationRole makeAssociationRole(Property aend) :
-	trace("make [" + metaType + "] - " + aend) ->
+	logTrace("make [" + metaType + "] - " + aend) ->
 	// set the unique xmiId and name
 	setXmiGuid( xmiId(aend) ) ->
 	setName( assocEndName(aend) ) ->
@@ -616,7 +616,7 @@ private Void checkQualifier(MAssociationRole this, Property aend) :
  * @param	aend	uml association end property
  */
 private MAssociationRole transformSimpleQualifier(MAssociationRole this, Property aend) :
-	trace("    qualifier multiplicity: " + aend.lower + ".." + aend.upper) ->
+	logTrace("    qualifier multiplicity: " + aend.lower + ".." + aend.upper) ->
 	setQualifierMultiplicity( aend.qualifier.first().upper ) ->
 	setQualifier( aend.qualifier.first().type.makeType() ) ->
 	this;
@@ -626,7 +626,7 @@ private MAssociationRole transformSimpleQualifier(MAssociationRole this, Propert
  * TODO: create a class (maybe named role name + qualifier) with all qualifier attributes
  */
 private MAssociationRole transformQualifier(MAssociationRole this, Property aend) :
-	fatal("qualified associations with more than one qualifier attribute are currently not supported") ->
+	logFatal("qualified associations with more than one qualifier attribute are currently not supported") ->
 	this;
 
 /**
@@ -634,7 +634,7 @@ private MAssociationRole transformQualifier(MAssociationRole this, Property aend
  * @param	ma	a GeneSEZ association
  */
 private MAssociation linkEnds(MAssociation ma) :
-	trace("link association roles: " + ma) -> (
+	logTrace("link association roles: " + ma) -> (
 	let mend = ma.end :
 		mend.size == 2
 			? (mend.get(0).setOpposite( mend.get(1) ) ->
@@ -657,7 +657,7 @@ private MAssociation associationClass(MAssociation ma, Association a):
  * @return	the GeneSEZ association
  */
 private MAssociation associationClass(MAssociation ma, AssociationClass a):
-//	info("association class: " + ma.name + ", " + a.name) -> 
+//	logInfo("association class: " + ma.name + ", " + a.name) -> 
 	ma.setAssociationClass( a.makeClassifier().setOwnedAssociation(ma) );
 
 /**
@@ -693,7 +693,7 @@ private String assocEndName(Property a):
  * @return	the GeneSEZ stereotype
  */
 create MStereotype makeStereotype(Stereotype s) :
-	trace("make stereotype: " + s) ->
+	logTrace("make stereotype: " + s) ->
 	// basic element properties
 	transformBasics(s) ->
 	// container
@@ -726,7 +726,7 @@ create MStereotype makeStereotype(Stereotype s) :
  * @return	the GeneSEZ tag
  */
 private create MTag makeTag(Property p) :
-	trace("makeTag: " + p) ->
+	logTrace("makeTag: " + p) ->
 	// set the unique xmiId and name
 	//setXmiGuid(xmiId(p))->
 	setName(p.name) ->
@@ -743,7 +743,7 @@ private create MTag makeTag(Property p) :
  * @return	the GeneSEZ tagged value
  */
 private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
-	trace("make tagged value: " + o + " for tag: " + t.name) ->
+	logTrace("make tagged value: " + o + " for tag: " + t.name) ->
 	setTag(t) ->
 	switch (o.metaType) {
 		case NamedElement : setValue( ((NamedElement)o).name )
@@ -767,7 +767,7 @@ private create MTaggedValue makeTaggedValue(MTag t, MElement owner, Object o) :
  * @return	a list of GeneSEZ tagged values
  */
 List[MTaggedValue] makeTaggedValues(MElement me, Element e) :
-	trace("check for tagged values on: " + me.name + ", elem: " + e.toString()) ->
+	logTrace("check for tagged values on: " + me.name + ", elem: " + e.toString()) ->
 	e.getAppliedStereotypes().collect(
 		s | s.allAttributes(). 
 				reject( p | p.name.startsWith("base_") || null == e.getTaggedValue(s, p.name) ).
@@ -857,7 +857,7 @@ private MPrimitiveType makePrimitiveType(DataType d) :
  * @return	the GeneSEZ primitive type 'void'
  */
 private create MPrimitiveType makePrimitiveType(Void v) :
-//	info("fixme: make primitive type from void") ->
+//	logInfo("fixme: make primitive type from void") ->
 	setXmiGuid("void") ->
 	setName("void") ->
 	coremodel().primitiveTypes.add( this ) ->
@@ -870,7 +870,7 @@ private create MPrimitiveType makePrimitiveType(Void v) :
  * @return	void
  */
 private MPrimitiveType makePrimitiveType(Classifier c) :
-	fatal("try to construct a MPrimitiveType object from: " + c) ->
+	logFatal("try to construct a MPrimitiveType object from: " + c) ->
 	Void;
 
 /*
@@ -933,7 +933,7 @@ private MClassifier transform(MClassifier this, Classifier c) :
 		case MInterface : transformInterface((MInterface)this, (Interface)c)
 		case MDataType : transformDataType((MDataType)this, (DataType)c)
 		case MEnumeration : transformEnumeration((MEnumeration)this, (Enumeration)c)
-		default : ( fatal("try to construct an MClassifier object from: " + c) -> Void )
+		default : ( logFatal("try to construct an MClassifier object from: " + c) -> Void )
 	};
 
 /**
@@ -1036,7 +1036,7 @@ MElement transformBasics(MElement this, NamedElement n) :
 	let id = xmiId(n) :
 	allowGeneratedXmiGuID() == true ?
 	(id == null ?
-		(debug("Generate XmiId for: " + n.qualifiedName) ->
+		(logDebug("Generate XmiId for: " + n.qualifiedName) ->
 		setXmiGuid( generateID(n) )) :
 		setXmiGuid( id )) : setXmiGuid( id ) ->
 	setName(n.name) ->
@@ -1173,7 +1173,7 @@ String name(MType this) :
 		case MPrimitiveType : ((MPrimitiveType)this).name
 		case MClassifier : ((MClassifier)this).name
 		case MClass : ((MClass)this).name
-		default : fatal("cannot determine name of type from object: " + metaType)
+		default : logFatal("cannot determine name of type from object: " + metaType)
 	};
 
 /**
