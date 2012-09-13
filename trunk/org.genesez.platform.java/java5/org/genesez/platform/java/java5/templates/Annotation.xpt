@@ -28,7 +28,10 @@
 «DEFINE Root FOR MInterface -»
 package «packageDeclaration( basePackage() ) -»;
 «EXPAND Import::Import -»
-«EXPAND ImportStatements -»
+«EXPAND Inner -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MInterface -»
 «EXPAND Comment::Type -»
 «EXPAND _Annotation -»
 public @interface «name.toFirstUpper() -» {
@@ -50,7 +53,7 @@ public @interface «name.toFirstUpper() -» {
 	Generates a meta data field for the annotation.
 «ENDREM»
 «DEFINE _Element FOR MAttribute -»
-	«type.mapName().asTypeName()» «name»()«IF hasDefaultValue() -» default «IF type.metaType == MEnumeration -»«type.mapName().asTypeName()».«ENDIF -»«defaultvalue»«ENDIF -»;
+	«type.mapName().asTypeName()»«IF isMultiValuedType()»[]«ENDIF» «name»()«IF hasDefaultValue() -» default «IF type.metaType == MEnumeration -»«type.mapName().asTypeName()».«ENDIF -»«defaultvalue»«ENDIF -»;
 «ENDDEFINE»
 
 «REM»

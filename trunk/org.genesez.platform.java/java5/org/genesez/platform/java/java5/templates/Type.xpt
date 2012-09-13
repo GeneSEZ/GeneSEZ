@@ -15,8 +15,33 @@
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
 «EXTENSION org::genesez::platform::java::scripts::Helper»
+«EXTENSION org::genesez::platform::java::java5::scripts::Helper»
 «EXTENSION org::genesez::util::logging::Logging»
 
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«DEFINE Inner FOR MClass -»
+	«EXPAND Class::Inner -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MInterface -»
+	«IF hasStereotype(java5AnnotationStereotype()) -»
+		«EXPAND Annotation::Inner -»
+	«ELSE -»
+		«EXPAND Interface::Inner -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MEnumeration -»
+	«EXPAND Enumeration::Inner -»
+«ENDDEFINE»
+
+«DEFINE Inner FOR MClassifier -»
+	«logFatal("MDataType instances are not allowed for inner type!") -»
+«ENDDEFINE»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
