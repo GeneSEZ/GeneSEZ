@@ -8,6 +8,11 @@ package org.genesez.workflow;
 import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.issues.Issues;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -52,7 +57,26 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._nY_VQPRsEeGG-J2DIYyoXg) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+	
+	// -- nested classifier -------------------------------------------------
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdSlot {
+		
+		// -- generated elements ------------------------------------------------
+		String value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._5wrNUPRjEeGG-J2DIYyoXg_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
 	
 }

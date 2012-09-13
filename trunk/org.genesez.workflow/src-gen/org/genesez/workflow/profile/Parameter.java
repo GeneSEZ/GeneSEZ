@@ -16,7 +16,6 @@ import static java.lang.annotation.ElementType.FIELD;
  * @author dreamer
  */
 @Documented
-@Target({ FIELD })
 @Retention(RUNTIME)
 public @interface Parameter {
 	

@@ -13,6 +13,11 @@ import org.genesez.workflow.profile.Parameter;
 import org.eclipse.xtend.check.CheckComponent;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -100,6 +105,27 @@ public class Validator extends AbstractXpandWorkflowComponent {
 			checkComponent.addGlobalVarDef(def);
 		}
 	}
+	
 	/* PROTECTED REGION END */
+	
+	// -- nested classifier -------------------------------------------------
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdScript {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._1mLj0Pk6EeG9kdm-OL78lQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
 	
 }

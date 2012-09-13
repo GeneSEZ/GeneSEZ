@@ -17,6 +17,11 @@ import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xpand2.output.PostProcessor;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -41,7 +46,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
 	private java.util.Set<String> prSourceDir = new java.util.LinkedHashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
 	private java.util.Set<Outlet> outlet = new java.util.LinkedHashSet<Outlet>();
 	
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
@@ -57,6 +61,15 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	private String outputDir;
 	
 	private Generator generator;
+	
+	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	private java.util.Set<String> excludePackages = new java.util.LinkedHashSet<String>();
+	
+	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	private java.util.Set<String> excludeContentPackages = new java.util.LinkedHashSet<String>();
+	
+	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	private java.util.Set<String> typeMappingFile = new java.util.LinkedHashSet<String>();
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -286,6 +299,75 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 		this.outputDir = outputDir;
 	}
 	
+	/**
+	 * Returns the value of attribute '<em><b>excludePackages</b></em>'
+	 */
+	public java.util.Set<String> getExcludePackages() {
+		return excludePackages;
+	}
+	
+	/**
+	 * Adds the specified value to the attribute '<em><b>excludePackages</b></em>'.
+	 * @param	excludePackages	the value to add
+	 */
+	public void addExcludePackages(String excludePackages) {
+		this.excludePackages.add(excludePackages);
+	}
+	
+	/**
+	 * Removes the specified value from the attribute '<em><b>excludePackages</b></em>'.
+	 * @param	excludePackages	the value to remove
+	 */
+	public void removeExcludePackages(String excludePackages) {
+		this.excludePackages.remove(excludePackages);
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>excludeContentPackages</b></em>'
+	 */
+	public java.util.Set<String> getExcludeContentPackages() {
+		return excludeContentPackages;
+	}
+	
+	/**
+	 * Adds the specified value to the attribute '<em><b>excludeContentPackages</b></em>'.
+	 * @param	excludeContentPackages	the value to add
+	 */
+	public void addExcludeContentPackages(String excludeContentPackages) {
+		this.excludeContentPackages.add(excludeContentPackages);
+	}
+	
+	/**
+	 * Removes the specified value from the attribute '<em><b>excludeContentPackages</b></em>'.
+	 * @param	excludeContentPackages	the value to remove
+	 */
+	public void removeExcludeContentPackages(String excludeContentPackages) {
+		this.excludeContentPackages.remove(excludeContentPackages);
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>typeMappingFile</b></em>'
+	 */
+	public java.util.Set<String> getTypeMappingFile() {
+		return typeMappingFile;
+	}
+	
+	/**
+	 * Adds the specified value to the attribute '<em><b>typeMappingFile</b></em>'.
+	 * @param	typeMappingFile	the value to add
+	 */
+	public void addTypeMappingFile(String typeMappingFile) {
+		this.typeMappingFile.add(typeMappingFile);
+	}
+	
+	/**
+	 * Removes the specified value from the attribute '<em><b>typeMappingFile</b></em>'.
+	 * @param	typeMappingFile	the value to remove
+	 */
+	public void removeTypeMappingFile(String typeMappingFile) {
+		this.typeMappingFile.remove(typeMappingFile);
+	}
+	
 	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
@@ -332,6 +414,236 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 			generator.setExpand(template + " FOREACH " + getSlot());
 		}
 	}
+	
 	/* PROTECTED REGION END */
+	
+	// -- nested classifier -------------------------------------------------
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdFileEncoding {
+		
+		// -- generated elements ------------------------------------------------
+		String value() default "utf-8";
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._7f1i0Pt_EeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdIsMultiValueSlot {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default false;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._uTr_sPuBEeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdPrDefaultExcludes {
+		
+		// -- generated elements ------------------------------------------------
+		boolean value() default true;
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._PvEcQPuAEeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdPrExcludes {
+		
+		// -- generated elements ------------------------------------------------
+		String value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._RAJpoPuAEeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdPrSourceDir {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._TaZegPuAEeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdPostProcessor {
+		
+		// -- generated elements ------------------------------------------------
+		Class[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._XBJGQPuBEeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdAopTemplate {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._gqs6IPuEEeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdTemplate {
+		
+		// -- generated elements ------------------------------------------------
+		String value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration.__y4sYPt_EeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdOutputDir {
+		
+		// -- generated elements ------------------------------------------------
+		String value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._0mVpgPuBEeGRytmSxmtqcQ_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdExcludePackages {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._vkJQwPzbEeGWUNk3clLlXg_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdExcludeContentPackages {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._wvUDYPzbEeGWUNk3clLlXg_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdTypeMappingFile {
+		
+		// -- generated elements ------------------------------------------------
+		String[] value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._dRK9wPzdEeGWUNk3clLlXg_annotation) ENABLED START */
+		/* PROTECTED REGION END */
+	}
 	
 }

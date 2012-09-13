@@ -14,6 +14,11 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Provides copying services for files and directories (recursively) based on apache commons io.
@@ -126,5 +131,46 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	/* PROTECTED REGION ID(java.class.own.code.implementation._PXWqsPLLEeGYwYEQM4LYvw) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
+	
+	// -- nested classifier -------------------------------------------------
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdSource {
+		
+		// -- generated elements ------------------------------------------------
+		String value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._1amAEPRyEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Please describe the responsibility of your class in your modeling tool.
+	 * @author dreamer
+	 */
+	@Documented
+	@Target({ TYPE })
+	@Retention(RUNTIME)
+	public @interface WpdDestination {
+		
+		// -- generated elements ------------------------------------------------
+		String value();
+		
+		// -- generated code of other cartridges --------------------------------
+		
+		// -- own code implementation -------------------------------------------
+		/* PROTECTED REGION ID(java.annotation.own.code.declaration._2MohAPRyEeGG-J2DIYyoXg_annotation) ENABLED START */
+		// TODO: put your own implementation code here
+		/* PROTECTED REGION END */
+	}
 	
 }
