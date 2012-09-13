@@ -1,0 +1,94 @@
+
+/**
+ * Adds the default values of all workflow parameter attributes as annotation to the classifier.
+ * 
+ * @author tobias haubold
+ */
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::common::Conversion;
+extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::java::java5::scripts::Annotation;
+extension org::genesez::platform::java::java5::scripts::Stereotypes;
+
+
+MPackage prepare(MPackage this) :
+	useLogger("org.genesez.workflow.DefaultValueAnnotation") ->
+	classifier.prepare() ->
+	nestedPackage.prepare() ->
+	this;
+	
+MClassifier prepare(MClassifier this) :
+	property.typeSelect(MAttribute).prepare() ->
+	this;
+	
+MAttribute prepare(MAttribute this) : 
+	hasStereotype("parameter")
+		? makeAnnotation()
+		: this;
+	
+MAttribute makeAnnotation(MAttribute this) :
+	classifier
+		// add annotation interface
+		.createInterface( xmiGuid + "_annotation", "Wpd" + name.toFirstUpper() )
+		.processClassifier("public", false, false)
+		// add value elements
+		.makeAnnotationElements( this )
+		// add java5 annotation tagged values
+		.createDocumentedTaggedValue(true)
+		.createRetentionTaggedValue("runtime")
+		.createTargetTaggedValue( false, true, false, false, false, false, false, false )
+		// add java5 annotation stereotype to annotation interface
+		.stereotype.add( model().annotationStereotype() ) ->
+	this;
+	
+MClassifier makeAnnotationElements(MClassifier this, MAttribute base) :
+	switch {
+		case base.type.name() == "GlobalVarDef" : 
+			createAttribute( base.xmiGuid + "_name", "name" ).processProperty( "public", false, 0, -1, true, true )
+			.mapToAnnotationType( base.type )
+			.classifier
+			.createAttribute( base.xmiGuid + "_value", "value" ).processProperty( "public", false, 0, -1, true, true )
+			.mapToAnnotationType( base.type )
+			
+		default : 
+			createAttribute( base.xmiGuid + "_value", "value" )
+			.processAttribute( base.defaultvalue, false, false )
+			.processProperty( "public", false, base.lowerBoundMultiplicity, base.upperBoundMultiplicity, base.unique, base.ordered )
+			.mapToAnnotationType( base.type )
+	} -> this;
+	
+MProperty mapToAnnotationType(MProperty this, MType type) :
+	switch {
+		case type.name() == "GlobalVarDef" : setType( model().createPrimitiveTypeString() )
+		case type.name() == "MetaModel" : setType( model().createPrimitiveTypeString() )
+		case type.name() == "PostProcessor" : setType( model().createExternal( "Class" ) )
+		case MEnumeration.isInstance(type) : setType(type)
+		case MPrimitiveType.isInstance(type) : setType(type)
+		case MExternal.isInstance(type) : setType(type)
+		default : setType( model().createPrimitiveTypeString() )
+	} -> this;
+
+/*
+// find attribute with default value and annotated with parameter
+MAttribute prepare(MAttribute this) :
+	hasDefaultValue() && hasStereotype("parameter")
+		? this //addDefaultAnnotation()
+		: this;
+	
+// assign stereotype with default value to class
+MAttribute addDefaultAnnotation(MAttribute this) :
+	logDebug( "Add default value annotation @" + name + " with value '" + defaultvalue + "' to " + classifier.fqn() ) ->
+	( let s = model().createStereotype( xmiGuid + "_default.annotation", name ) :
+		classifier.stereotype.add( s ) ->
+		classifier.createTaggedValue(
+			s.createTag( "value", type.name() ), 
+			defaultvalue
+		) ->
+		// add java5annotation stereotype to generate annotation
+		s.createAnnotationStereotype()
+	) ->
+	this;
+*/
