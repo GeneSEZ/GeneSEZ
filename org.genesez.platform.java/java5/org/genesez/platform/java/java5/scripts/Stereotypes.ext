@@ -1,12 +1,9 @@
 /**
- * 	functions for creating and removing stereotypes
- * 
+ * Functions for creating and removing java5 specific stereotypes.
  * 
  * @author	andre pflueger
- * @date	2010-01-12
+ * @author	tobias haubold <toh@fh-zwickau.de>
  */
-
-// based on genesez meta model
 import gcore;
 
 extension org::genesez::platform::common::AccessHelper;
@@ -40,37 +37,85 @@ Void makeTargetStereotype(MElement this, boolean annotationType, boolean type, b
     	createTargetTaggedValue(this, s.property.selectFirst( t | t.name == "target"), annotationType, type, constructor, method, field, localVariable, parameter, package);// :
         //this.taggedValue.selectFirst(e|e.tag.name == "target" && e.tag.stereotype.name == s.name).setValue(target);
 
-    
+
 /**
- *  method to create stereotype for the annotation @Target
- *  including tagged values
- *
- *  @param  this    instance of MElement
+ * Returns the stereotype for the annotation @Target, @Retention and @Documented.
+ * The assingment ot the specified model element is ensured.
  */
 MStereotype createAnnotationStereotype(MElement this) :
-    this.hasStereotype(java5AnnotationStereotype())
-    ? (       
-        let s = this.stereotype.selectFirst(e|e.name == java5AnnotationStereotype()) :
-            /* If target is missing, add target*/
-            s.property.exists(t|t.name == "target") == false
-            //(nihe) this.hasTaggedValue(java5AnnotationStereotype(), "target") == false
-	            ? s.createTag("target", "String")// this.createTaggedValue(createTag(s, "target", "String"),"[]") 
-	            : Void ->
-	        /* If retention is missing, add retention*/
-	        s.property.exists(t|t.name == "retention") == false
-            // (nihe) this.hasTaggedValue(java5AnnotationStereotype(), "retention") == false
-                ? s.createTag("retention", "String")
-                : Void ->
-        s
-      )
-    : (
-        let s = createStereotype(this.model(), java5AnnotationStereotype(), java5AnnotationStereotype()) :
-            this.stereotype.add(s) ->
-            s.createTag("target", "String") ->
-            s.createTag("retention", "String") ->
-            s
-    );  
-    
+	ensureStereotypeAssignment( model().annotationStereotype() );
+
+/**
+ * Returns the java5 annotation stereotype.
+ * The specified model is checked if it already exists and if it is returned.
+ * Else it is created and returned.
+ */
+cached MStereotype annotationStereotype(MModel this) :
+	ensureStereotype( java5AnnotationStereotype(), java5AnnotationStereotype() )
+	// ensure that all tags are present
+	.targetTag().stereotype
+	.retentionTag().stereotype
+	.documentedTag().stereotype;
+
+/**
+ * Returns the 'target' tag of the java5 annotation stereotype.
+ * It checks existence of the stereotype and the tag within the model and creates them as needed.
+ */
+cached MTag targetTag(MElement this) : model().annotationStereotype().targetTag();
+private MTag targetTag(MStereotype this) : ensureTag( "target", "String" );
+
+/**
+ * Returns the 'retention' tag of the java5 annotation stereotype.
+ * It checks existence of the stereotype and the tag within the model and creates them as needed.
+ */
+cached MTag retentionTag(MElement this) : model().annotationStereotype().retentionTag();
+private MTag retentionTag(MStereotype this) : ensureTag( "retention", "String" );
+
+/**
+ * Returns the 'documented' tag of the java5 annotation stereotype.
+ * It checks existence of the stereotype and the tag within the model and creates them as needed.
+ */
+cached MTag documentedTag(MElement this) : model().annotationStereotype().documentedTag();
+private MTag documentedTag(MStereotype this) : ensureTag( "documented", "Boolean" );
+
+
+/**
+ * Creates the specified value for the tag 'documented' of the java5 annotation stereotype.
+ * The assignment of the stereotype to the model element is ensured.
+ */
+MElement createDocumentedTaggedValue(MElement this, boolean documented) :
+	documented
+		? ensureTaggedValue( model().documentedTag(), "true" )
+		: this ->
+	this;
+
+/**
+ * Creates the specified value for the tag 'retention' of the java5 annotation stereotype.
+ * Possible values are: "source", "class", "runtime", default is "class".
+ * The assignment of the stereotype to the model element is ensured.
+ */
+MElement createRetentionTaggedValue(MElement this, String retentionPolicy) :
+	ensureTaggedValue(
+		model().retentionTag(),
+		switch {
+			case retentionPolicy.toUpperCase() == "SOURCE" : "SOURCE"
+			case retentionPolicy.toUpperCase() == "RUNTIME" : "RUNTIME"
+			default : "CLASS"
+		}
+	) -> this;
+
+/**
+ * Creates the specified value for the tag 'target' of the java5 annotation stereotype.
+ * The assignment of the stereotype to the model element is ensured.
+ */
+MElement createTargetTaggedValue(MElement this, boolean setAnnotationType, boolean setType, boolean setConstructor, 
+		boolean setMethod, boolean setField, boolean setLocalVariable, boolean setParameter, boolean setPackage) :
+		
+	createTargetTaggedValue(
+		model().targetTag(), 
+		setAnnotationType, setType, setConstructor, setMethod, setField, setLocalVariable, setParameter, setPackage ) ->
+	this;
+
 /**
  *  Method to create the values of the tagged value for the "@Target" annotation 
  *
@@ -95,7 +140,6 @@ Void createTargetTaggedValue(MElement this, MTag t, boolean setAnnotationType, b
         setLocalVariable  && !hasTaggedValue(t.stereotype.name, t.name, "LOCAL_VARIABLE")	? this.createTaggedValue(t, "LOCAL_VARIABLE") : Void ->
         setParameter      && !hasTaggedValue(t.stereotype.name, t.name, "PARAMETER")		? this.createTaggedValue(t, "PARAMETER") : Void ->
         setPackage        && !hasTaggedValue(t.stereotype.name, t.name, "PACKAGE")			? this.createTaggedValue(t, "PACKAGE") : Void;
-
 
 /**
  * Adds new values to a tagged value separated by comma
