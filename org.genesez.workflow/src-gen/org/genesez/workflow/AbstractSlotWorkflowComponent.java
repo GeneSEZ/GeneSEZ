@@ -23,7 +23,7 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
-	private String slot;
+	private String slot = "coremodel";
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -70,7 +70,7 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	public @interface WpdSlot {
 		
 		// -- generated elements ------------------------------------------------
-		String value();
+		String value() default "coremodel";
 		
 		// -- generated code of other cartridges --------------------------------
 		
