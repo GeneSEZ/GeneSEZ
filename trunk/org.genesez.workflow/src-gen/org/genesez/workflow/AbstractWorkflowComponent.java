@@ -72,11 +72,11 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._paljEPU8EeGsV8fV-DCYeA) ENABLED START */
-	protected String listToString(Collection<String> list) {
+	protected String listToString(Collection<? extends Object> list) {
 		StringBuilder sb = new StringBuilder();
-		Iterator<String> it = list.iterator();
+		Iterator<? extends Object> it = list.iterator();
 		while (it.hasNext()) {
-			String item = it.next();
+			String item = it.next().toString();
 			if (item.startsWith("'")) {
 				item = item.substring(1, item.length() - 1);
 			}
