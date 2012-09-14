@@ -5,13 +5,9 @@ package org.genesez.workflow.xpand;
  * 	@FILE-ID : (_F6MosP3MEeGcKvbUXThvRw) 
  */
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
 import org.genesez.workflow.profile.DefaultOverride;
 import org.genesez.workflow.profile.Parameter;
 
@@ -79,6 +75,8 @@ public class Uml2Gcore extends Model2Model {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._1xGzgP3yEeGA35ujkRyC6w) ENABLED START */
+		// register uml meta model
+		addMetaModel(new UML2MetaModel());
 		// add workflow parameter for transformation variables as global variables
 		addGlobalVarDef("mapClassesInModelToExternal", mapClassesInModelToExternal);
 		addGlobalVarDef("allowGeneratedXmiGuid", allowGeneratedXmiGuid);

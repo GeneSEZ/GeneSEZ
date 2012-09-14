@@ -6,6 +6,7 @@ package org.genesez.workflow.xpand;
  */
 
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
 import org.genesez.workflow.profile.DefaultOverride;
 
 /**
@@ -42,6 +43,8 @@ public class Uml2Validator extends Validator {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._rkJFQP5rEeGxKLDeGggo8w) ENABLED START */
+		// register uml meta model
+		addMetaModel(new UML2MetaModel());
 		// delegate to base class
 		super.checkConfiguration(issues);
 		/* PROTECTED REGION END */
