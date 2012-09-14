@@ -43,7 +43,7 @@ Workflow {
 //		script = "org::genesez::adapter::uml2::UmlStateMachineValidation"
 //		script = "org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation"
 //	}
-	component = workflow.xpand.Uml2Validator {}
+	component = workflow.xpand.uml2.Uml2Validator {}
 //	component = org.eclipse.xtend.XtendComponent {
 //		metaModel = gcore
 //		metaModel = uml
@@ -72,19 +72,17 @@ Workflow {
 //		script = "org::genesez::adapter::uml2::uml2genesez::transform"
 //		outputSlot = "coremodel"
 //	}
-	component = workflow.xpand.Uml2Gcore {
+	component = workflow.xpand.uml2.Uml2Gcore {
 		includeProfiles = "org.genesez.workflow.profile"
 	}
 //	component = platform.common.workflow.Serializer {
 //		file = "model/${name}/uml2gcore.gcore.xmi"
 //	}
 	component = org.genesez.workflow.EmfWriter {
-		slot = "coremodel" // this should be set using defaults
 		file = "model/${name}/uml2gcore.gcore.xmi"
 	}
 	component = workflow.xpand.Model2Model {
 		metaModel = gcore
-		slot = "coremodel"
 		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
 		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
 //		script = "org.genesez.workflow::DefaultValueAnnotation::prepare"
@@ -103,7 +101,6 @@ Workflow {
 //		file = "model/${name}/uml2gcore.modified.gcore.xmi"
 //	}
 	component = org.genesez.workflow.EmfWriter {
-		slot = "coremodel" // this should be set using defaults
 		cloneSlotContents = true
 		file = "model/${name}/uml2gcore.modified.gcore.xmi"
 	}
@@ -125,6 +122,19 @@ Workflow {
 		typeMappingFile = "${classpath}/typemapping.xpand.xml"
 		excludeContentPackage = ""
 		excludeContentPackage = "org::genesez::workflow"
+		excludeContentPackage = "org::genesez::workflow::profile"
+		excludePackage = "org::genesez::workflow::xpand::uml2"
+	}
+	component = platform.java.workflow.JavaGenerator {
+		outputDir = "../org.genesez.adapter.uml2/src-gen"
+		aspectTemplate = "${namespace}::NoFixedImports"
+		aspectTemplate = "${namespace}::AnnotationImports"
+		aspectTemplate = "${namespace}::CheckConfiguration"
+		typeMappingFile = "${classpath}/typemapping.xml"
+		typeMappingFile = "${classpath}/typemapping.xpand.xml"
+		excludeContentPackage = ""
+		excludeContentPackage = "org::genesez::workflow"
+		excludeContentPackage = "org::genesez::workflow::xpand"
 		excludeContentPackage = "org::genesez::workflow::profile"
 	}
 	
