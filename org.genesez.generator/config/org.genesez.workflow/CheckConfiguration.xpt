@@ -1,0 +1,64 @@
+
+«IMPORT gcore»
+
+«EXTENSION workflow::Utility»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::util::logging::Logging»
+
+«AROUND org::genesez::platform::java::java5::templates::Attribute::_InitializationBlock FOR MClassifier -»
+	«EXPAND DefaultOverride -»
+«ENDAROUND»
+
+«DEFINE DefaultOverride FOR MClassifier -»
+		«IF property.exists( p|p.isDefaultOverride() ) -»
+		
+		// override default values of workflow parameters
+		«FOREACH property.select( p|p.isDefaultOverride() ) AS p -»
+			«EXPAND DefaultOverride( parameterForDefault( this, p ) ) FOR p -»
+		«ENDFOREACH -»
+		«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE DefaultOverride(MProperty base) FOR MProperty -»
+	«IF base.isSingleValuedType() -»
+		«base.asSetter()»(«asAttribute()»);
+	«ELSE -»
+		«IF isSingleValuedType() -»
+		«base.asAddPropertyAccessOperation()»(«asAttribute()»);
+		«ELSE -»
+		for («type.mapName().asTypeName()» it : «asAttribute()») {
+			«base.asAddPropertyAccessOperation()»(it);
+		}
+		«ENDIF -»
+	«ENDIF -»
+«ENDDEFINE»
+
+
+«AROUND org::genesez::platform::java::java5::templates::Operation::_ImplementationBody FOR MOperation -»
+«IF (name == "checkConfiguration") && ( classifier.property.exists( p|p.isDefaultOverride() || p.isVariable() ) ) -»
+	«EXPAND CheckConfiguration -»
+«ELSE -»
+	«targetDef.proceed() -»
+«ENDIF -»
+«ENDAROUND»
+
+«DEFINE CheckConfiguration FOR MOperation -»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
+		«IF classifier.property.exists( p|p.isVariable() ) -»
+		// add workflow parameter for transformation variables as global variables
+		«EXPAND Variable FOREACH classifier.property.select( p|p.isVariable() ) -»
+		«ENDIF -»
+		// delegate to base class
+		super.checkConfiguration(issues);
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«DEFINE Variable FOR MProperty -»
+	«IF isSingleValuedType() -»
+		addGlobalVarDef("«name»", «asAttribute()»);
+	«ELSE -»
+		addGlobalVarDef("«name»", listToString(«asAttribute()»));
+	«ENDIF -»
+«ENDDEFINE»
