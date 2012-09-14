@@ -34,12 +34,15 @@ Workflow {
 //		emfAllChildrenSlot = "uml2model"
 //		abortOnError = true
 //	}
-	component = workflow.xpand.Validator {
-		slot = "uml2model"
+//	component = workflow.xpand.Validator {
+//		slot = "uml2model"
+//		metaModel = uml
+//		script = "org::genesez::adapter::uml2::uml2constraints"
+//		script = "org::genesez::adapter::uml2::UmlStateMachineValidation"
+//		script = "org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation"
+//	}
+	component = workflow.xpand.Uml2Validator {
 		metaModel = uml
-		script = "org::genesez::adapter::uml2::uml2constraints"
-		script = "org::genesez::adapter::uml2::UmlStateMachineValidation"
-		script = "org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation"
 	}
 //	component = org.eclipse.xtend.XtendComponent {
 //		metaModel = gcore
@@ -55,20 +58,23 @@ Workflow {
 //		invoke = "org::genesez::adapter::uml2::uml2genesez::transform(uml2model)"
 //		outputSlot = "coremodel"
 //	}
-	component = workflow.xpand.Model2Model {
-		metaModel = gcore
+//	component = workflow.xpand.Model2Model {
+//		metaModel = gcore
+//		metaModel = uml
+//		globalVarDef = { name = "excludePackages" value = "'UML Standard Profile'" }
+//		globalVarDef = { name = "mapClassesInModelToExternal" value = "false" }
+//		globalVarDef = { name = "externalPackages" value = "''" }
+//		globalVarDef = { name = "externalStereotypes" value = "'external'" }
+//		globalVarDef = { name = "excludeStereotypes" value = "'exclude'" }
+//		globalVarDef = { name = "includeProfiles" value = "'org.genesez.workflow.profile'" }
+//		globalVarDef = { name = "allowGeneratedXmiGuID" value = "false" }
+//		slot = "uml2model"
+//		script = "org::genesez::adapter::uml2::uml2genesez::transform"
+//		outputSlot = "coremodel"
+//	}
+	component = workflow.xpand.Uml2Gcore {
 		metaModel = uml
-		globalVarDef = { name = "excludePackages" value = "'UML Standard Profile'" }
-		globalVarDef = { name = "mapClassesInModelToExternal" value = "false" }
-		globalVarDef = { name = "externalPackages" value = "''" }
-		globalVarDef = { name = "externalStereotypes" value = "'external'" }
-		globalVarDef = { name = "externalStereotypes" value = "'external'" }
-		globalVarDef = { name = "excludeStereotypes" value = "'exclude'" }
-		globalVarDef = { name = "includeProfiles" value = "'org.genesez.workflow.profile'" }
-		globalVarDef = { name = "allowGeneratedXmiGuID" value = "false" }
-		slot = "uml2model"
-		script = "org::genesez::adapter::uml2::uml2genesez::transform"
-		outputSlot = "coremodel"
+		includeProfiles = "org.genesez.workflow.profile"
 	}
 //	component = platform.common.workflow.Serializer {
 //		file = "model/${name}/uml2gcore.gcore.xmi"
@@ -82,7 +88,7 @@ Workflow {
 		slot = "coremodel"
 		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
 		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
-		script = "org.genesez.workflow::DefaultValueAnnotation::prepare"
+//		script = "org.genesez.workflow::DefaultValueAnnotation::prepare"
 		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
 		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
 	}
@@ -105,6 +111,7 @@ Workflow {
 	component = platform.java.workflow.JavaGenerator {
 		outputDir = "../${name}/src-gen"
 		aspectTemplate = "${name}/NoFixedImports"
+		aspectTemplate = "${name}/AnnotationImports"
 		typeMappingFile = "${name}/typemapping.xml"
 		excludePackage = "org::genesez::workflow::xpand"
 		// we exclude direct model contents only by specifying e.g. the separator
@@ -113,6 +120,8 @@ Workflow {
 	component = platform.java.workflow.JavaGenerator {
 		outputDir = "../${name}.xpand/src-gen"
 		aspectTemplate = "${name}/NoFixedImports"
+		aspectTemplate = "${name}/AnnotationImports"
+		aspectTemplate = "${name}/CheckConfiguration"
 		typeMappingFile = "${name}/typemapping.xml"
 		typeMappingFile = "${name}/typemapping.xpand.xml"
 		excludeContentPackage = ""

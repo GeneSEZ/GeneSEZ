@@ -6,6 +6,8 @@
   <ownedComment xmiGuid="_ZCtgQPU9EeGsV8fV-DCYeA" annotation="MWE integration"/>
   <ownedComment xmiGuid="_brSFAPU9EeGsV8fV-DCYeA" annotation="MWE2 integration"/>
   <ownedComment xmiGuid="_gn_WwPn3EeG2esQ-bp2d2A" annotation="each script/template need it's specific:&#xD;&#xA;- meta models&#xD;&#xA;- global variables"/>
+  <ownedComment xmiGuid="_0MAy4P3PEeGcKvbUXThvRw" annotation="variable indicates all values should be registered as global variables!"/>
+  <ownedComment xmiGuid="_4f7fIP3PEeGcKvbUXThvRw" annotation="slot is a default value provided for an existing parameter&#xD;&#xA;-> should we provide a stereotype default ?"/>
   <classifier xsi:type="gcore:MClass" name="CompositeModel2Model" xmiGuid="_5JL_YPLKEeGYwYEQM4LYvw" visibility="public"/>
   <classifier xsi:type="gcore:MClass" name="Traceability" xmiGuid="_m3jwMPLMEeGYwYEQM4LYvw" visibility="public"/>
   <classifier xsi:type="gcore:MClass" name="Generator" xmiGuid="_3PiEMPLMEeGYwYEQM4LYvw" specialization="_To5GcPLNEeGYwYEQM4LYvw _loffkPLNEeGYwYEQM4LYvw" visibility="public"/>
@@ -28,10 +30,20 @@
       <property xsi:type="gcore:MAttribute" name="workflowInclusion" xmiGuid="_EJiB0Pd1EeGhUpgqSX_5tA" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="_6oBPUPd0EeGhUpgqSX_5tA" defaultvalue="WHEN_NEEDED"/>
       <property xsi:type="gcore:MAssociationRole" name="base_Property" xmiGuid="_c1qmgPXXEeGt_pQB8d500A" visibility="public" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.0" oppositeMultiplicity="1" oppositeUpperBoundMultiplicity="1" association="_c1qmgfXXEeGt_pQB8d500A"/>
     </classifier>
+    <classifier xsi:type="gcore:MInterface" name="variable" xmiGuid="_d9kawP3PEeGcKvbUXThvRw.JavaAnnotationInterface" visibility="public">
+      <property xsi:type="gcore:MAssociationRole" name="base_Property" xmiGuid="_ig9GYP3PEeGcKvbUXThvRw" visibility="public" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.0" oppositeMultiplicity="1" oppositeUpperBoundMultiplicity="1" association="_ig9GYf3PEeGcKvbUXThvRw"/>
+    </classifier>
+    <classifier xsi:type="gcore:MInterface" name="defaultOverride" xmiGuid="_GV9OQP3lEeGA35ujkRyC6w.JavaAnnotationInterface" stereotype="_16_0_1_41601a3_1273836535925_823072_385" visibility="public">
+      <taggedValue value="RUNTIME" tag="//@anyStereotype.2/@property.1"/>
+      <taggedValue value="true" tag="//@anyStereotype.2/@property.2"/>
+      <property xsi:type="gcore:MAssociationRole" name="base_Property" xmiGuid="_PWVCkP3lEeGA35ujkRyC6w" visibility="public" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.0" oppositeMultiplicity="1" oppositeUpperBoundMultiplicity="1" association="_PWVCkf3lEeGA35ujkRyC6w"/>
+    </classifier>
     <association name="E_parameter_Property1" xmiGuid="_c1qmgfXXEeGt_pQB8d500A" end="_c1qmgPXXEeGt_pQB8d500A"/>
     <association name="E_slot_Class1" xmiGuid="_X92EYfd2EeGhUpgqSX_5tA" end="_X92EYPd2EeGhUpgqSX_5tA"/>
     <association name="E_template_Class1" xmiGuid="_25SMYfd3EeGhUpgqSX_5tA" end="_25SMYPd3EeGhUpgqSX_5tA"/>
     <association name="E_typemapping_Class1" xmiGuid="_3OGl0fd3EeGhUpgqSX_5tA" end="_3OGl0Pd3EeGhUpgqSX_5tA"/>
+    <association name="E_variable_Property1" xmiGuid="_ig9GYf3PEeGcKvbUXThvRw" end="_ig9GYP3PEeGcKvbUXThvRw"/>
+    <association name="E_defaultOverride_Property1" xmiGuid="_PWVCkf3lEeGA35ujkRyC6w" end="_PWVCkP3lEeGA35ujkRyC6w"/>
   </nestedPackage>
   <nestedPackage name="org.genesez.workflow" xmiGuid="_EhKywPNkEeG7CosHXc0ZAQ">
     <classifier xsi:type="gcore:MClass" name="EmfReader" xmiGuid="_vaiVYPRiEeGG-J2DIYyoXg" visibility="public" generalization="_y0pgQPRsEeGG-J2DIYyoXg">
@@ -194,7 +206,7 @@
           <ownedComment xmiGuid="_llkAg_jlEeGhK_C0J8Xzwg" annotation="Instance to collect all problems during configuration check."/>
         </parameter>
       </operation>
-      <property xsi:type="gcore:MAttribute" name="slot" xmiGuid="_5wrNUPRjEeGG-J2DIYyoXg" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String">
+      <property xsi:type="gcore:MAttribute" name="slot" xmiGuid="_5wrNUPRjEeGG-J2DIYyoXg" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" defaultvalue="&quot;coremodel&quot;">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.1"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
@@ -278,6 +290,14 @@
           <ownedComment xmiGuid="_jVgog_qdEeGS1KtqERYUjQ" annotation="Instance to collect all problems during configuration check."/>
         </parameter>
       </operation>
+      <operation name="addGlobalVarDef" xmiGuid="_uiyqUP4AEeGA35ujkRyC6w" visibility="public" multiplicity="1" unique="true" returnType="void">
+        <parameter name="name" xmiGuid="_1cZmcP4AEeGA35ujkRyC6w" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" operation="_uiyqUP4AEeGA35ujkRyC6w"/>
+        <parameter name="value" xmiGuid="_3m-noP4AEeGA35ujkRyC6w" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" operation="_uiyqUP4AEeGA35ujkRyC6w"/>
+      </operation>
+      <operation name="addGlobalVarDef" xmiGuid="_v14C0P4AEeGA35ujkRyC6w" visibility="public" multiplicity="1" unique="true" returnType="void">
+        <parameter name="name" xmiGuid="_6J0X0P4AEeGA35ujkRyC6w" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" operation="_v14C0P4AEeGA35ujkRyC6w"/>
+        <parameter name="value" xmiGuid="_AkTH8P4BEeGA35ujkRyC6w" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.14" operation="_v14C0P4AEeGA35ujkRyC6w"/>
+      </operation>
       <property xsi:type="gcore:MAttribute" name="aopScript" xmiGuid="_69m7gPk6EeG9kdm-OL78lQ" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" ordered="true" type="String">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
@@ -292,7 +312,7 @@
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
-        <taggedValue value="true" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
         <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
         <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
       </property>
@@ -305,8 +325,17 @@
         <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
         <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
       </property>
+      <property xsi:type="gcore:MAttribute" name="emfMetaModelPackage" xmiGuid="_8F2lgP3mEeGA35ujkRyC6w" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
     </classifier>
-    <classifier xsi:type="gcore:MClass" name="Validator" xmiGuid="_NEnv4PLHEeGYwYEQM4LYvw" visibility="public" generalization="_Aes3IPqcEeGS1KtqERYUjQ">
+    <classifier xsi:type="gcore:MClass" name="Validator" xmiGuid="_NEnv4PLHEeGYwYEQM4LYvw" specialization="_x77jMP5qEeGxKLDeGggo8w" visibility="public" generalization="_Aes3IPqcEeGS1KtqERYUjQ">
       <operation name="invokeInternal" xmiGuid="_U869MPk7EeG9kdm-OL78lQ" visibility="protected" multiplicity="1" unique="true" returnType="void">
         <ownedComment xmiGuid="_U869Mfk7EeG9kdm-OL78lQ" annotation="Invokes the execution of the component."/>
         <parameter name="context" xmiGuid="_U869Mvk7EeG9kdm-OL78lQ" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.2" operation="_U869MPk7EeG9kdm-OL78lQ">
@@ -334,9 +363,9 @@
         <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
         <taggedValue value="ALWAYS" tag="//@anyStereotype.1/@property.2"/>
       </property>
-      <property xsi:type="gcore:MAttribute" name="checkComponent" xmiGuid="_NVqJQPndEeG2esQ-bp2d2A" stereotype="_RE7V8PRvEeGG-J2DIYyoXg" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.14"/>
+      <property xsi:type="gcore:MAttribute" name="checkComponent" xmiGuid="_NVqJQPndEeG2esQ-bp2d2A" stereotype="_RE7V8PRvEeGG-J2DIYyoXg" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.15"/>
     </classifier>
-    <classifier xsi:type="gcore:MClass" name="Model2Model" xmiGuid="_IInokPLKEeGYwYEQM4LYvw" visibility="public" generalization="_Aes3IPqcEeGS1KtqERYUjQ">
+    <classifier xsi:type="gcore:MClass" name="Model2Model" xmiGuid="_IInokPLKEeGYwYEQM4LYvw" specialization="_F6MosP3MEeGcKvbUXThvRw" visibility="public" generalization="_Aes3IPqcEeGS1KtqERYUjQ">
       <operation name="invokeInternal" xmiGuid="_QITJ0Pn6EeG2esQ-bp2d2A" visibility="protected" multiplicity="1" unique="true" returnType="void">
         <ownedComment xmiGuid="_QITJ0fn6EeG2esQ-bp2d2A" annotation="Invokes the execution of the component."/>
         <parameter name="context" xmiGuid="_QITJ0vn6EeG2esQ-bp2d2A" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.2" operation="_QITJ0Pn6EeG2esQ-bp2d2A">
@@ -373,7 +402,7 @@
         <taggedValue value="false" tag="//@anyStereotype.1/@property.1"/>
         <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
       </property>
-      <property xsi:type="gcore:MAttribute" name="compositeXtend" xmiGuid="_yqdy0Pn5EeG2esQ-bp2d2A" stereotype="_RE7V8PRvEeGG-J2DIYyoXg" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.15"/>
+      <property xsi:type="gcore:MAttribute" name="compositeXtend" xmiGuid="_yqdy0Pn5EeG2esQ-bp2d2A" stereotype="_RE7V8PRvEeGG-J2DIYyoXg" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.16"/>
     </classifier>
     <classifier xsi:type="gcore:MClass" name="Model2Text" xmiGuid="_wWx1oPt9EeGRytmSxmtqcQ" visibility="public" generalization="_Aes3IPqcEeGS1KtqERYUjQ">
       <operation name="checkConfiguration" xmiGuid="_gLI4APt-EeGRytmSxmtqcQ" visibility="public" multiplicity="1" unique="true" returnType="void">
@@ -439,13 +468,13 @@
         <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
         <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
       </property>
-      <property xsi:type="gcore:MAttribute" name="outlet" xmiGuid="_WKUzAPuBEeGRytmSxmtqcQ" stereotype="_14_0_b6f02e1_1212567706968_503410_178" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" ordered="true" type="//@externalTypes.16">
+      <property xsi:type="gcore:MAttribute" name="outlet" xmiGuid="_WKUzAPuBEeGRytmSxmtqcQ" stereotype="_14_0_b6f02e1_1212567706968_503410_178" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" ordered="true" type="//@externalTypes.17">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
       </property>
-      <property xsi:type="gcore:MAttribute" name="postProcessor" xmiGuid="_XBJGQPuBEeGRytmSxmtqcQ" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" ordered="true" type="//@externalTypes.17">
+      <property xsi:type="gcore:MAttribute" name="postProcessor" xmiGuid="_XBJGQPuBEeGRytmSxmtqcQ" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" ordered="true" type="//@externalTypes.18">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
         <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
@@ -481,7 +510,7 @@
         <taggedValue value="false" tag="//@anyStereotype.1/@property.1"/>
         <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
       </property>
-      <property xsi:type="gcore:MAttribute" name="generator" xmiGuid="_5fkJoPt-EeGRytmSxmtqcQ" stereotype="_RE7V8PRvEeGG-J2DIYyoXg" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.18"/>
+      <property xsi:type="gcore:MAttribute" name="generator" xmiGuid="_5fkJoPt-EeGRytmSxmtqcQ" stereotype="_RE7V8PRvEeGG-J2DIYyoXg" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.19"/>
       <property xsi:type="gcore:MAttribute" name="excludePackages" xmiGuid="_vkJQwPzbEeGWUNk3clLlXg" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" ordered="true" type="String">
         <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
         <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
@@ -510,6 +539,91 @@
         <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
       </property>
     </classifier>
+    <classifier xsi:type="gcore:MClass" name="Uml2Gcore" xmiGuid="_F6MosP3MEeGcKvbUXThvRw" visibility="public" generalization="_IInokPLKEeGYwYEQM4LYvw">
+      <operation name="checkConfiguration" xmiGuid="_1xGzgP3yEeGA35ujkRyC6w" visibility="public" multiplicity="1" unique="true" returnType="void">
+        <ownedComment xmiGuid="_1xGzgf3yEeGA35ujkRyC6w" annotation="Validates the configuration of the component before invocation."/>
+        <parameter name="issues" xmiGuid="_1xGzgv3yEeGA35ujkRyC6w" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.4" operation="_1xGzgP3yEeGA35ujkRyC6w">
+          <ownedComment xmiGuid="_1xGzg_3yEeGA35ujkRyC6w" annotation="Instance to collect all problems during configuration check."/>
+        </parameter>
+      </operation>
+      <property xsi:type="gcore:MAttribute" name="mapClassesInModelToExternal" xmiGuid="_zJlDgP3lEeGA35ujkRyC6w" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A _d9kawP3PEeGcKvbUXThvRw" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="Boolean" defaultvalue="false">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="allowGeneratedXmiGuid" xmiGuid="__hy9YP3lEeGA35ujkRyC6w" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A _d9kawP3PEeGcKvbUXThvRw" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="Boolean" defaultvalue="false">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="externalStereotypes" xmiGuid="_4WIA4P3lEeGA35ujkRyC6w" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A _d9kawP3PEeGcKvbUXThvRw" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String" defaultvalue="&quot;external&quot;">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="externalPackages" xmiGuid="_5oEw8P3lEeGA35ujkRyC6w" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A _d9kawP3PEeGcKvbUXThvRw" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="excludeStereotypes" xmiGuid="_28c4MP3lEeGA35ujkRyC6w" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A _d9kawP3PEeGcKvbUXThvRw" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String" defaultvalue="&quot;exclude&quot;">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="excludePackages" xmiGuid="_v14ngP3MEeGcKvbUXThvRw" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A _d9kawP3PEeGcKvbUXThvRw" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String" defaultvalue="&quot;UML Standard Profile&quot;">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="includeProfiles" xmiGuid="_A45TMP3mEeGA35ujkRyC6w" stereotype="_14_0_b6f02e1_1212567706968_503410_178 _SS618PXWEeGt_pQB8d500A _d9kawP3PEeGcKvbUXThvRw" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String">
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.0"/>
+        <taggedValue value="false" tag="//@anyStereotype.0/@property.1"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.2"/>
+        <taggedValue value="true" tag="//@anyStereotype.0/@property.3"/>
+        <taggedValue value="false" tag="//@anyStereotype.1/@property.0"/>
+        <taggedValue value="true" tag="//@anyStereotype.1/@property.1"/>
+        <taggedValue value="WHEN_NEEDED" tag="//@anyStereotype.1/@property.2"/>
+      </property>
+      <property xsi:type="gcore:MAttribute" name="slot" xmiGuid="_8CKhsP3NEeGcKvbUXThvRw" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" defaultvalue="&quot;uml2model&quot;"/>
+      <property xsi:type="gcore:MAttribute" name="script" xmiGuid="_Wxwc4P3mEeGA35ujkRyC6w" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" defaultvalue="&quot;org::genesez::adapter::uml2::uml2genesez::transform&quot;"/>
+      <property xsi:type="gcore:MAttribute" name="outputSlot" xmiGuid="_gwG8YP3mEeGA35ujkRyC6w" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" defaultvalue="&quot;coremodel&quot;"/>
+      <property xsi:type="gcore:MAttribute" name="emfMetaModelPackage" xmiGuid="_PaEBIP3nEeGA35ujkRyC6w" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String" defaultvalue="&quot;org.genesez.metamodel.gcore.GcorePackage&quot;"/>
+    </classifier>
+    <classifier xsi:type="gcore:MClass" name="Uml2Validator" xmiGuid="_x77jMP5qEeGxKLDeGggo8w" visibility="public" generalization="_NEnv4PLHEeGYwYEQM4LYvw">
+      <operation name="checkConfiguration" xmiGuid="_rkJFQP5rEeGxKLDeGggo8w" visibility="public" multiplicity="1" unique="true" returnType="void">
+        <ownedComment xmiGuid="_rkJFQf5rEeGxKLDeGggo8w" annotation="Validates the configuration of the component before invocation."/>
+        <parameter name="issues" xmiGuid="_rkJFQv5rEeGxKLDeGggo8w" direction="in" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="//@externalTypes.4" operation="_rkJFQP5rEeGxKLDeGggo8w">
+          <ownedComment xmiGuid="_rkJFQ_5rEeGxKLDeGggo8w" annotation="Instance to collect all problems during configuration check."/>
+        </parameter>
+      </operation>
+      <property xsi:type="gcore:MAttribute" name="slot" xmiGuid="_VgSzkP5rEeGxKLDeGggo8w" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" multiplicity="1" lowerBoundMultiplicity="1" upperBoundMultiplicity="1" unique="true" type="String" defaultvalue="&quot;uml2model&quot;"/>
+      <property xsi:type="gcore:MAttribute" name="script" xmiGuid="_dixcQP5rEeGxKLDeGggo8w" stereotype="_GV9OQP3lEeGA35ujkRyC6w" visibility="private" multiplicity="-1" upperBoundMultiplicity="-1" unique="true" type="String" defaultvalue="&quot;org::genesez::adapter::uml2::uml2constraints&quot;,&quot;org::genesez::adapter::uml2::UmlStateMachineValidation&quot;,&quot;org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation&quot;"/>
+    </classifier>
   </nestedPackage>
   <nestedPackage name="externals" xmiGuid="_cHg90PRoEeGG-J2DIYyoXg"/>
   <nestedPackage name="externals.xpand" xmiGuid="_AxFIMPn6EeG2esQ-bp2d2A"/>
@@ -535,6 +649,11 @@
     <property name="documented" type="Boolean"/>
   </anyStereotype>
   <anyStereotype name="delegate" xmiGuid="_RE7V8PRvEeGG-J2DIYyoXg"/>
+  <anyStereotype name="variable" xmiGuid="_d9kawP3PEeGcKvbUXThvRw"/>
+  <anyStereotype name="defaultOverride" xmiGuid="_GV9OQP3lEeGA35ujkRyC6w" stereotype="_16_0_1_41601a3_1273836535925_823072_385">
+    <taggedValue value="RUNTIME" tag="//@anyStereotype.2/@property.1"/>
+    <taggedValue value="true" tag="//@anyStereotype.2/@property.2"/>
+  </anyStereotype>
   <externalTypes specification="Property"/>
   <externalTypes specification="Reader"/>
   <externalTypes specification="WorkflowContext"/>
@@ -549,6 +668,7 @@
   <externalTypes specification="Mwe2Bridge"/>
   <externalTypes specification="MetaModel"/>
   <externalTypes specification="GlobalVarDef"/>
+  <externalTypes specification="Object"/>
   <externalTypes specification="CheckComponent"/>
   <externalTypes specification="CompositeComponent"/>
   <externalTypes specification="Outlet"/>
