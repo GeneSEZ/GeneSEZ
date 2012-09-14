@@ -59,24 +59,4 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	/* PROTECTED REGION ID(java.class.own.code.implementation._nY_VQPRsEeGG-J2DIYyoXg) ENABLED START */
 	/* PROTECTED REGION END */
 	
-	// -- nested classifier -------------------------------------------------
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdSlot {
-		
-		// -- generated elements ------------------------------------------------
-		String value() default "coremodel";
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._5wrNUPRjEeGG-J2DIYyoXg_annotation) ENABLED START */
-		/* PROTECTED REGION END */
-	}
-	
 }

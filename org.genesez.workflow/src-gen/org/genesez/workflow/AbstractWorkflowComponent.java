@@ -90,24 +90,4 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	/* PROTECTED REGION END */
 	
-	// -- nested classifier -------------------------------------------------
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdAbortOnError {
-		
-		// -- generated elements ------------------------------------------------
-		boolean value() default true;
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._IwmJQPRkEeGG-J2DIYyoXg_annotation) ENABLED START */
-		/* PROTECTED REGION END */
-	}
-	
 }
