@@ -6,13 +6,13 @@
 	- supports the stereotype '<<primitive>>' for multi-valued attributes
 	
 	@author	nico herbig
-	@author	tobias haubold
+	@author	tobias haubold <toh@fh-zwickau.de>
 	@author andre pflueger (last)
 «ENDREM»
 
-«REM» useful helper functions «ENDREM»
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::Conversion»
 «EXTENSION org::genesez::platform::common::m2t::Helper»
 «EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
 
@@ -36,6 +36,28 @@
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| e.static && !e.final && !e.derived ) -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.final && !e.derived ) -»
 	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select( e| !e.static && !e.final && !e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+	Generates an initialization block to initialize all multi-valued attributes with default values if any.
+«ENDREM»
+«DEFINE InitializationBlock FOR MClassifier -»
+«IF property.typeSelect(MAttribute).exists( p | !p.static && !p.derived && p.isMultiValuedType() && p.hasDefaultValue() ) -»
+	// initialize all multi valued fields with their default values
+	{
+	«EXPAND _MultiValuedInitialization FOREACH property.typeSelect(MAttribute).select( p | !p.static && !p.derived && p.isMultiValuedType() && p.hasDefaultValue() ) -»
+	«EXPAND _InitializationBlock -»
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _MultiValuedInitialization FOR MAttribute -»
+	«FOREACH defaultvalue.toList() AS v -»
+		«asAttribute()».add(«v»);
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«DEFINE _InitializationBlock FOR MClassifier -»
 «ENDDEFINE»
 
 «REM»
@@ -156,14 +178,14 @@
 «ENDDEFINE»
 
 «REM»
-	processes the default value of an attribute
-	for non-final, multi-valued attributes, a default is always generated (for type safety)
-	final multi-valued attributes should be initialized within the constructor
+	Processes the default value of an attribute.
+	For non-final multi-valued attributes, a default is always generated (for type safety).
+	Final multi-valued attributes should be initialized within the constructor.
 	
-	note: this is not valid java code: ' = new ArrayList<String>[3];'
+	Note: this is not valid java code: ' = new ArrayList<String>[3];'
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
-«IF hasDefaultValue() -»
+«IF isSingleValuedType() && hasDefaultValue() -»
 	«IF type.isEnumeration() -»
 	 = «type.mapName().asTypeName()».«defaultvalue.asEnumLiteral() -»
 	«ELSE -»
@@ -173,7 +195,7 @@
 	«IF usePrimitiveType() && !hasFixedMultiplicity() -»
 	 = null
 	«ELSEIF usePrimitiveType() && hasFixedMultiplicity() -»
-	 = new «type.mapName().asTypeName()»[«multiplicity»];
+	 = new «type.mapName().asTypeName()»[«upperBoundMultiplicity»]
 	«ELSEIF type.isPrimitiveType() -»
 	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::Generics FOR type»>()
 	«ELSE -»
