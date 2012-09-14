@@ -1,14 +1,15 @@
-package org.genesez.workflow.xpand;
+package org.genesez.workflow.xpand.uml2;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_F6MosP3MEeGcKvbUXThvRw) 
  */
 
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
+import org.genesez.workflow.xpand.Model2Model;
 import org.genesez.workflow.profile.DefaultOverride;
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.genesez.workflow.profile.Parameter;
 
 /**
@@ -75,8 +76,9 @@ public class Uml2Gcore extends Model2Model {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._1xGzgP3yEeGA35ujkRyC6w) ENABLED START */
-		// register uml meta model
+		// add uml meta model (note: not generated if disabling the protected region)
 		addMetaModel(new UML2MetaModel());
+		
 		// add workflow parameter for transformation variables as global variables
 		addGlobalVarDef("mapClassesInModelToExternal", mapClassesInModelToExternal);
 		addGlobalVarDef("allowGeneratedXmiGuid", allowGeneratedXmiGuid);
