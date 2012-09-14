@@ -60,6 +60,14 @@ public class Validator extends AbstractXpandWorkflowComponent {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 * @return	
+	 */
+	public String getLogMessage() {
+		return checkComponent.getLogMessage();
+	}
+	
 	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>script</b></em>'

@@ -122,6 +122,14 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 * @return	
+	 */
+	public String getLogMessage() {
+		return generator.getLogMessage();
+	}
+	
 	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>fileEncoding</b></em>'

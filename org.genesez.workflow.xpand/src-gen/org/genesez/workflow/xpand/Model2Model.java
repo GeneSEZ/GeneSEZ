@@ -69,6 +69,14 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 * @return	
+	 */
+	public String getLogMessage() {
+		return compositeXtend.getLogMessage();
+	}
+	
 	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>script</b></em>'

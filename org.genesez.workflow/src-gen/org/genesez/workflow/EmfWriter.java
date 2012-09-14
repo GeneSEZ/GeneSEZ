@@ -67,6 +67,14 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 * @return	
+	 */
+	public String getLogMessage() {
+		return writer.getLogMessage();
+	}
+	
 	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>schemaLocation</b></em>'
