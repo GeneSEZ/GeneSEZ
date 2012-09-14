@@ -14,10 +14,10 @@ String enumLiteralAlways() : "ALWAYS";
 String enumLiteralWhenNeeded() : "WHEN_NEEDED";
 
 
-MProperty parameterForDefault(MClassifier classifier, MProperty this) :
+MAttribute parameterForDefault(MClassifier classifier, MAttribute this) :
 	// check classifier
 	classifier.property.exists( p|p.name == name && p.stereotype.exists( s|s.name == stereotypeParameter() ) )
-		? classifier.property.selectFirst( p|p.name == name && p.stereotype.exists( s|s.name == stereotypeParameter() ) )
+		? classifier.property.typeSelect(MAttribute).selectFirst( p|p.name == name && p.stereotype.exists( s|s.name == stereotypeParameter() ) )
 		// go inheritance hierarchy upwards
 		: (
 			classifier.generalization.typeSelect(MClass).isEmpty
