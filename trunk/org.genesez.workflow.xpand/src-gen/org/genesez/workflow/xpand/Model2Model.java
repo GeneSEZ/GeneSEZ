@@ -133,43 +133,4 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 	
 	/* PROTECTED REGION END */
 	
-	// -- nested classifier -------------------------------------------------
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdScript {
-		
-		// -- generated elements ------------------------------------------------
-		String[] value();
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._wNc90Pn5EeG2esQ-bp2d2A_annotation) ENABLED START */
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdOutputSlot {
-		
-		// -- generated elements ------------------------------------------------
-		String value();
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._0WAHkPn5EeG2esQ-bp2d2A_annotation) ENABLED START */
-		/* PROTECTED REGION END */
-	}
-	
 }

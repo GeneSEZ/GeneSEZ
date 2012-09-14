@@ -118,43 +118,4 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	/* PROTECTED REGION ID(java.class.own.code.implementation._y0pgQPRsEeGG-J2DIYyoXg) ENABLED START */
 	/* PROTECTED REGION END */
 	
-	// -- nested classifier -------------------------------------------------
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdUseSingleGlobalResourceSet {
-		
-		// -- generated elements ------------------------------------------------
-		boolean value() default false;
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._yAPW4PRjEeGG-J2DIYyoXg_annotation) ENABLED START */
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdFile {
-		
-		// -- generated elements ------------------------------------------------
-		String value();
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._XSUiwPRjEeGG-J2DIYyoXg_annotation) ENABLED START */
-		/* PROTECTED REGION END */
-	}
-	
 }

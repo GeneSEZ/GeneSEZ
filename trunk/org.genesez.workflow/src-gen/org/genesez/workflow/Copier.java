@@ -132,45 +132,4 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 	
-	// -- nested classifier -------------------------------------------------
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdSource {
-		
-		// -- generated elements ------------------------------------------------
-		String value();
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._1amAEPRyEeGG-J2DIYyoXg_annotation) ENABLED START */
-		// TODO: put your own implementation code here
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdDestination {
-		
-		// -- generated elements ------------------------------------------------
-		String value();
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._2MohAPRyEeGG-J2DIYyoXg_annotation) ENABLED START */
-		// TODO: put your own implementation code here
-		/* PROTECTED REGION END */
-	}
-	
 }

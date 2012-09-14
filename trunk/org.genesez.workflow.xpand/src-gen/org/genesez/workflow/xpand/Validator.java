@@ -108,24 +108,4 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	
 	/* PROTECTED REGION END */
 	
-	// -- nested classifier -------------------------------------------------
-	/**
-	 * Please describe the responsibility of your class in your modeling tool.
-	 * @author dreamer
-	 */
-	@Documented
-	@Target({ TYPE })
-	@Retention(RUNTIME)
-	public @interface WpdScript {
-		
-		// -- generated elements ------------------------------------------------
-		String[] value();
-		
-		// -- generated code of other cartridges --------------------------------
-		
-		// -- own code implementation -------------------------------------------
-		/* PROTECTED REGION ID(java.annotation.own.code.declaration._1mLj0Pk6EeG9kdm-OL78lQ_annotation) ENABLED START */
-		/* PROTECTED REGION END */
-	}
-	
 }
