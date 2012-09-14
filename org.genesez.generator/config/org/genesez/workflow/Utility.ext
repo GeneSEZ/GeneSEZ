@@ -1,0 +1,32 @@
+
+import gcore;
+
+boolean isParameter(MProperty this) : metaType == MAttribute && stereotype.exists( s|s.name == stereotypeParameter() );
+boolean isDefaultOverride(MProperty this) : metaType == MAttribute && stereotype.exists( s|s.name == stereotypeDefaultOverride() );
+boolean isVariable(MProperty this) : metaType == MAttribute && stereotype.exists( s|s.name == stereotypeVariable() );
+
+String stereotypeParameter() : "parameter";
+String stereotypeDefaultOverride() : "defaultOverride";
+String stereotypeVariable() : "variable";
+
+String tagWorkflowInclusion() : "workflowInclusion";
+String enumLiteralAlways() : "ALWAYS";
+String enumLiteralWhenNeeded() : "WHEN_NEEDED";
+
+
+MProperty parameterForDefault(MClassifier classifier, MProperty this) :
+	// check classifier
+	classifier.property.exists( p|p.name == name && p.stereotype.exists( s|s.name == stereotypeParameter() ) )
+		? classifier.property.selectFirst( p|p.name == name && p.stereotype.exists( s|s.name == stereotypeParameter() ) )
+		// go inheritance hierarchy upwards
+		: (
+			classifier.generalization.typeSelect(MClass).isEmpty
+				// in case none is found, return the specified attribute
+				? this
+				// check generalizations and returns the first attribute that differs from this
+				: ( let r = classifier.generalization.typeSelect(MClass).parameterForDefault( this ).reject( a|a == this ) :
+					r.isEmpty
+						? this
+						: r.first()
+				)
+		);
