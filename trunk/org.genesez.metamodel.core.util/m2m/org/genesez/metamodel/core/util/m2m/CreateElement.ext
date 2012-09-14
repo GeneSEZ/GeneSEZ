@@ -8,7 +8,6 @@
 import gcore;
 
 
-
 /**
  * Helper scripts to create GeneSEZ Core meta model elements.
  * 
@@ -57,6 +56,35 @@ MClassifier processClassifier(MClassifier this, String visibility, boolean abstr
 	setVisibility( visibility ) ->
 	setAbstract( abstract ) ->
 	setFinal( final ) ->
+	this;
+	
+/**
+ * Assigns the specified generalization to the specified classifier.
+ * 
+ * @return	The specified classifier.
+ */
+MClassifier wireGeneralization(MClassifier this, MType generalization) :
+	this.generalization.add( generalization ) ->
+	this;
+
+
+/**
+ * Assigns the specified realization to the specified classifier.
+ * 
+ * @return	The specified classifier.
+ */
+MClassifier wireRealization(MClassifier this, MType realization) :
+	this.realization.add( realization ) ->
+	this;
+
+
+/**
+ * Assigns the specified supplier to the specified classifier.
+ * 
+ * @return	The specified classifier.
+ */
+MClassifier wireSupplier(MClassifier this, MType supplier) :
+	this.supplier.add( supplier ) ->
 	this;
 
 
@@ -210,6 +238,15 @@ MProperty processProperty(MProperty this, String visibility, boolean derived, In
 	setOrdered(ordered) ->
 	this;
 
+/**
+ * Assigns the specified type to the specified property.
+ * 
+ * @return	The specified property.
+ */
+MProperty wireType(MProperty this, MType type) :
+	this.setType( type ) ->
+	this;
+
 
 /**
  * Returns the attribute instance with the specified properties.
@@ -282,6 +319,14 @@ MOperation processOperation(MOperation this, String visibility, boolean static, 
 	setFinal( final ) ->
 	this;
 
+/**
+ * Assigns the specified raised exception to the specified operation.
+ * 
+ * @return	The specified stereotype.
+ */
+MOperation wireRaisedException(MOperation this, MType raisedException) :
+	this.raisedException.add( raisedException ) ->
+	this;
 
 
 /**
@@ -341,6 +386,15 @@ MParameter processParameter(MParameter this, String defaultValue, String directi
 	setOrdered( ordered ) ->
 	this;
 
+/**
+ * Assigns the specified type to the specified parameter.
+ * 
+ * @return	The specified parameter.
+ */
+MParameter wireType(MParameter this, MType type) :
+	this.setType( type ) ->
+	this;
+
 
 // -- Comment -----------------------------------------------------------------------------------------------
 
@@ -391,7 +445,16 @@ create MStereotype createStereotype(MModel container, String xmiGuid, String nam
 	// set containment
 	container.anyStereotype.add( this ) ->
 	this;
-	
+
+/**
+ * Assigns the specified generalization to the specified stereotype.
+ * 
+ * @return	The specified stereotype.
+ */
+MStereotype wireGeneralization(MStereotype this, MStereotype generalization) :
+	this.generalization.add( generalization ) ->
+	this;
+
 
 /**
  * Returns the tag instance with the specified properties.
