@@ -3,9 +3,21 @@
 
 «EXTENSION org::genesez::workflow::Utility»
 «EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::Conversion»
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::util::logging::Logging»
+
+«AROUND org::genesez::platform::java::java5::templates::Attribute::_Declaration FOR MAttribute -»
+	«IF !isDefaultOverride() -»
+		«targetDef.proceed() -»
+	«ENDIF -»
+«ENDAROUND»
+
+«AROUND org::genesez::platform::java::java5::templates::Attribute::_MultiValuedInitialization FOR MAttribute -»
+	«IF !isDefaultOverride() -»
+		«targetDef.proceed() -»
+	«ENDIF -»
+«ENDAROUND»
 
 «AROUND org::genesez::platform::java::java5::templates::Attribute::_InitializationBlock FOR MClassifier -»
 	«EXPAND DefaultOverride -»
@@ -15,22 +27,22 @@
 		«IF property.exists( p|p.isDefaultOverride() ) -»
 		
 		// override default values of workflow parameters
-		«FOREACH property.select( p|p.isDefaultOverride() ) AS p -»
+		«FOREACH property.typeSelect(MAttribute).select( p|p.isDefaultOverride() ) AS p -»
 			«EXPAND DefaultOverride( parameterForDefault( this, p ) ) FOR p -»
 		«ENDFOREACH -»
 		«ENDIF -»
 «ENDDEFINE»
 
-«DEFINE DefaultOverride(MProperty base) FOR MProperty -»
+«DEFINE DefaultOverride(MAttribute base) FOR MAttribute -»
 	«IF base.isSingleValuedType() -»
-		«base.asSetter()»(«asAttribute()»);
+		«base.asSetter()»(«defaultvalue»);
 	«ELSE -»
 		«IF isSingleValuedType() -»
-		«base.asAddPropertyAccessOperation()»(«asAttribute()»);
+		«base.asAddPropertyAccessOperation()»(«defaultvalue»);
 		«ELSE -»
-		for («type.mapName().asTypeName()» it : «asAttribute()») {
-			«base.asAddPropertyAccessOperation()»(it);
-		}
+		«FOREACH defaultvalue.toList() AS v -»
+		«base.asAddPropertyAccessOperation()»(«v»);
+		«ENDFOREACH -»
 		«ENDIF -»
 	«ENDIF -»
 «ENDDEFINE»

@@ -18,23 +18,14 @@ public class Uml2Validator extends Validator {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
-	@DefaultOverride
-	private String slot = "uml2model";
-	
-	@DefaultOverride
-	private java.util.Set<String> script = new java.util.HashSet<String>();
-	
 	// initialize all multi valued fields with their default values
 	{
-		script.add("org::genesez::adapter::uml2::uml2constraints");
-		script.add("org::genesez::adapter::uml2::UmlStateMachineValidation");
-		script.add("org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation");
 		
 		// override default values of workflow parameters
-		setSlot(slot);
-		for (String it : script) {
-			addScript(it);
-		}
+		setSlot("uml2model");
+		addScript("org::genesez::adapter::uml2::uml2constraints");
+		addScript("org::genesez::adapter::uml2::UmlStateMachineValidation");
+		addScript("org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation");
 	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
@@ -44,7 +35,7 @@ public class Uml2Validator extends Validator {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._rkJFQP5rEeGxKLDeGggo8w) ENABLED START */
-		// add uml meta model (note: not generated if disabling the protected region)
+		// add uml meta model (note: not generated if protected region is disabled)
 		addMetaModel(new UML2MetaModel());
 		
 		// delegate to base class

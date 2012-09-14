@@ -41,32 +41,17 @@ public class Uml2Gcore extends Model2Model {
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
 	private java.util.Set<String> includeProfiles = new java.util.HashSet<String>();
 	
-	@DefaultOverride
-	private String slot = "uml2model";
-	
-	@DefaultOverride
-	private String script = "org::genesez::adapter::uml2::uml2genesez::transform";
-	
-	@DefaultOverride
-	private String outputSlot = "coremodel";
-	
-	@DefaultOverride
-	private java.util.Set<String> emfMetaModelPackage = new java.util.HashSet<String>();
-	
 	// initialize all multi valued fields with their default values
 	{
 		externalStereotypes.add("external");
 		excludeStereotypes.add("exclude");
 		excludePackages.add("UML Standard Profile");
-		emfMetaModelPackage.add("org.genesez.metamodel.gcore.GcorePackage");
 		
 		// override default values of workflow parameters
-		setSlot(slot);
-		addScript(script);
-		setOutputSlot(outputSlot);
-		for (String it : emfMetaModelPackage) {
-			addEmfMetaModelPackage(it);
-		}
+		setSlot("uml2model");
+		addScript("org::genesez::adapter::uml2::uml2genesez::transform");
+		setOutputSlot("coremodel");
+		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
 	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
@@ -76,7 +61,7 @@ public class Uml2Gcore extends Model2Model {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._1xGzgP3yEeGA35ujkRyC6w) ENABLED START */
-		// add uml meta model (note: not generated if disabling the protected region)
+		// add uml meta model (note: not generated if protected region is disabled)
 		addMetaModel(new UML2MetaModel());
 		
 		// add workflow parameter for transformation variables as global variables
