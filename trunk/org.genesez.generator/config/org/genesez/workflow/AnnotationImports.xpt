@@ -13,13 +13,16 @@
 	«IF property.exists( p|p.isDefaultOverride() ) -»
 import org.genesez.workflow.profile.DefaultOverride;
 	«ENDIF -»
-	«LET property.select( p|p.isParameter() )
-			.taggedValue.select( tv|tv.tag.name == tagWorkflowInclusion() && tv.tag.stereotype.name == stereotypeParameter() ) AS tv -»
-		«IF tv.exists( v|v.value == enumLiteralAlways() ) -»
+	«IF property.exists( p|p.isParameter() ) -»
+import org.genesez.workflow.profile.Parameter;
+		«LET property.select( p|p.isParameter() )
+				.taggedValue.select( tv|tv.tag.name == tagWorkflowInclusion() && tv.tag.stereotype.name == stereotypeParameter() ) AS tv -»
+			«IF tv.exists( v|v.value == enumLiteralAlways() ) -»
 import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
-		«ENDIF -»
-		«IF tv.exists( v|v.value == enumLiteralWhenNeeded() ) -»
+			«ENDIF -»
+			«IF tv.exists( v|v.value == enumLiteralWhenNeeded() ) -»
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
-		«ENDIF -»
-	«ENDLET -»
+			«ENDIF -»
+		«ENDLET -»
+	«ENDIF -»
 «ENDDEFINE»
