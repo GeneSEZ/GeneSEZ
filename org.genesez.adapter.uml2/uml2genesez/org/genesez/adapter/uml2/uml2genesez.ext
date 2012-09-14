@@ -372,7 +372,7 @@ private create MAttribute makeAttribute(Property p) :
 	setUpperBoundMultiplicity( p.getUpper() ) ->
 	setUnique( p.isUnique ) ->
 	setOrdered( p.isOrdered ) ->
-	setDefaultvalue( p.getDefault() ) ->
+	setDefaultvalue( p.defaultValue() ) ->
 	// associations
 	// set stereotype
 	stereotype.addAll( p.getAppliedStereotypes().makeStereotype() ) ->
@@ -384,6 +384,20 @@ private create MAttribute makeAttribute(Property p) :
 	// set tagged values
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
 	this;
+	
+/**
+ * Returns the default value of the specified property.
+ */
+String defaultValue(Property this) :
+	switch {
+		case StringExpression.isInstance( defaultValue ) : value( defaultValue )
+		default : getDefault()
+	};
+	
+/**
+ * Returns the value of the specified string expression.
+ */
+String value(StringExpression this) : operand.stringValue().toString( symbol ).logTrace("default value string expression: ");
 
 /**
  * creates a GeneSEZ operation from an uml operation
