@@ -52,6 +52,17 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
+	 * Method stub for further implementation.
+	 * @return	
+	 */
+	public String getLogMessage() {
+		/* PROTECTED REGION ID(java.implementation._2zHZIP6tEeGciM7nbRm1bw) ENABLED START */
+		// TODO: implementation of method 'Copier.getLogMessage(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
 	 * @param	monitor	Instance to report any activity to.
