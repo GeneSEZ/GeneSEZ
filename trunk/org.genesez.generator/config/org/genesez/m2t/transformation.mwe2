@@ -1,0 +1,60 @@
+module org.genesez.m2t
+
+var name = "org.genesez.m2t"
+var namespace = "org::genesez::m2t"
+var classpath = "org/genesez/m2t"
+
+Workflow {
+	bean = org.eclipse.xtend.typesystem.uml2.Setup {
+		standardUML2Setup = true
+	}
+	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : gcore {
+		metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+	}
+	component = workflow.CompositeComponent {
+		component = workflow.EmfReader {
+			file = "modeling/${name}/genesez.m2t.uml"
+			slot = "uml2model"
+		}
+		component = workflow.xpand.uml2.Uml2Validator {}
+		component = workflow.xpand.uml2.Uml2Gcore {}
+	}
+	component = workflow.EmfWriter {
+		file = "model/${name}/uml2gcore.gcore.xmi"
+	}
+	component = workflow.xpand.Model2Model {
+		metaModel = gcore
+		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
+		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		script = "${namespace}::ApacheCommonsLogging::modify"
+		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
+		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
+		aopScript = "${namespace}::DoNotOptimizeFinalAttribsWithDefaultValue"
+	}
+	component = org.genesez.workflow.EmfWriter {
+		cloneSlotContents = true
+		file = "model/${name}/uml2gcore.modified.gcore.xmi"
+	}
+	component = platform.java.workflow.JavaGenerator {
+		outputDir = "../${name}/src-gen"
+		aspectTemplate = "org::genesez::workflow::NoFixedImports"
+		typeMappingFile = "${classpath}/typemapping.xml"
+		typeMappingFile = "${classpath}/typemapping.rcs.xml"
+		typeMappingFile = "typemapping.acl.xml"
+		typeMappingFile = "typemapping.java.xml"
+		typeMappingFile = "typemapping.xpand.xml"
+		excludeContentPackage = ","
+		excludePackage = "org::genesez::m2t::xpand"
+	}
+	component = platform.java.workflow.JavaGenerator {
+		outputDir = "../org.genesez.workflow.xpand/m2t"
+		aspectTemplate = "org::genesez::workflow::NoFixedImports"
+		typeMappingFile = "${classpath}/typemapping.xml"
+		typeMappingFile = "typemapping.acl.xml"
+		typeMappingFile = "typemapping.java.xml"
+		typeMappingFile = "typemapping.xpand.xml"
+		excludeContentPackage = ""
+		excludeContentPackage = "org::genesez::m2t"
+		excludePackage = "org::genesez::m2t::deletion"
+	}
+}

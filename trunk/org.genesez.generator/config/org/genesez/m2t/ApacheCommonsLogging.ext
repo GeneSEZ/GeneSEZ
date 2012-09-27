@@ -1,0 +1,30 @@
+
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::util::logging::Logging;
+
+MPackage modify(MPackage this) :
+	nestedPackage.modify() ->
+	classifier.modify() ->
+	this;
+	
+MClassifier modify(MClassifier this) :
+	classifier.modify() ->
+	check() ->
+	this;
+	
+MClassifier check(MClassifier this) :
+	stereotype.exists( s|s.name == "log" )
+		? logger()
+		: this;
+
+MClassifier logger(MClassifier this) :
+	createAttribute( xmiGuid + "_logger", "logger" )
+		.processAttribute( "LogFactory.getLog(getClass())", false, true )
+		.processProperty( "public", false, 0, 1, true, false )
+		.wireType( model().ensureExternalTypeExistence( "Log", "Log") )
+		.classifier
+		.supplier.add( model().ensureExternalTypeExistence( "LogFactory", "LogFactory" ) ) ->
+	this;
