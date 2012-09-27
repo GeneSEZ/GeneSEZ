@@ -124,23 +124,28 @@
 «ENDREM»
 
 «REM»
-	generates the type parameters / generics
+	Generates the type parameters / generics if any.
 «ENDREM»
 «DEFINE Generics FOR MClassifier -»
-«IF hasGenericParameter() -»
-	<«getGenericList(genericParameter) -»>
-«ELSE-»
-«ENDIF-»
+«IF !genericParameter.isEmpty -»
+<«EXPAND Generic FOREACH genericParameter SEPARATOR ", " -»>
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
-	generates the type parameters / generics
+	Generates the type parameters / generics if any.
 «ENDREM»
-«DEFINE Generics FOR MExternal-»
-«IF hasGenericParameter()-»
-	<«getGenericList(genericParameter)»>
-«ELSE-»
-«ENDIF-»
+«DEFINE Generics FOR MExternal -»
+«IF !genericParameter.isEmpty -»
+<«EXPAND Generic FOREACH genericParameter SEPARATOR ", " -»>
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the specified type parameter / generic optionally with the 'extends' restriction of the first constraining type if any.
+«ENDREM»
+«DEFINE Generic FOR MGeneric -»
+«specification»«IF !constraint.isEmpty» extends «constraint.first().name()»«ENDIF -»
 «ENDDEFINE»
 
 «REM»
