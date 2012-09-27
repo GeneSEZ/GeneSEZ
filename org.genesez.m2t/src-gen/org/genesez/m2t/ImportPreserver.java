@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * @date 2011-10-12
  * @author dreamer
  */
-public class ImportBeautifier extends FileTreeObserverAdapter {
+public class ImportPreserver extends FileTreeObserverAdapter {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
