@@ -148,11 +148,18 @@ public class TypeMapper {
 			returnValue = ((MClassifier) type).getName();
 		else if (type instanceof MGeneric)
 			returnValue = ((MGeneric) type).getSpecification();
-		else if (type instanceof MExternal)
-			returnValue = externalTypeManager.getTypeMapping(((MExternal) type).getSpecification(), context);
+		else if (type instanceof MExternal) {
+			MExternal t = ((MExternal) type);
+			String spec;
+			if (t.getSpecification() == null) {
+				spec = t.getName();
+			} else {
+				spec = t.getSpecification();
+			}
+			returnValue = externalTypeManager.getTypeMapping(spec, context);
 		// returnValue = getExternalTypeMapping(((MExternal)
 		// type).getSpecification(), context);
-		else {
+		} else {
 			returnValue = "";
 			log.error("Unsupported type");
 		}
