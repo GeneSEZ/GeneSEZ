@@ -1,4 +1,4 @@
-package org.genesez.util;
+package org.genesez.util.filesystem;
 
 
 /* 
