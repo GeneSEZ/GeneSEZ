@@ -38,10 +38,10 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	private boolean isMultiValueSlot = false;
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
-	private boolean prDefaultExcludes = true;
+	private boolean prDefaultExcludes = false;
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
-	private String prExcludes;
+	private String prExcludes = ".svn";
 	
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
 	private java.util.Set<String> prSourceDir = new java.util.LinkedHashSet<String>();
