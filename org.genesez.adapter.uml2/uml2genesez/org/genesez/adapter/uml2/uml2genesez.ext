@@ -819,12 +819,47 @@ private Object getTaggedValue(Element this, Stereotype s, String tag) :
 */
 
 /**
- * creates a GeneSEZ generic from an uml template parameter
- * @param	c	an uml template parameter of an uml classifier
+ * Creates a GeneSEZ generic from an uml template parameter.
+ * @param	c	the uml template parameter to transform
  * @return	the GeneSEZ generic
  */
 private create MGeneric makeGeneric(ClassifierTemplateParameter c) :
 	setSpecification( ((Class)c.ownedParameteredElement).name ) ->
+	constraint.addAll( c.constrainingClassifier.makeClassifier() ) ->
+	c.ownedDefault != null
+		? c.ownedDefault.transformDefault( this )
+		: this ->
+	c.^default != null
+		? c.^default.transformDefault( this )
+		: this ->
+	this;
+	
+/**
+ * Returns the specified generic and logs that the specified instance cannot be transformed to the default of the specified generic.
+ */
+private MGeneric transformDefault(ParameterableElement pe, MGeneric this) :
+	logFatal("Unable to set the 'default' of an _MGeneric_ from a _ParameterableElement_!" + pe.fqn()) ->
+	this;
+	
+/**
+ * Returns the specified generic with its default set to an external with the string representation of the specified value specification.
+ */
+private MGeneric transformDefault(ValueSpecification vs, MGeneric this) :
+	setDefault( vs.makeExternal() ) ->
+	this;
+	
+/**
+ * Returns the specified generic with its default set to the transformed classifier.
+ */
+private MGeneric transformDefault(Classifier c, MGeneric this) :
+	setDefault( c.makeClassifier() ) ->
+	this;
+	
+/**
+ * Returns an external with its specification set to the string representation of the specified instance.
+ */
+private create MExternal makeExternal(ValueSpecification v) :
+	setSpecification( v.stringValue() ) ->
 	this;
 	
 /**
