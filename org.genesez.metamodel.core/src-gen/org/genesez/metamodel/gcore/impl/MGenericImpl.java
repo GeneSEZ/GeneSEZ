@@ -6,14 +6,17 @@
  */
 package org.genesez.metamodel.gcore.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.gcore.MClassifier;
 import org.genesez.metamodel.gcore.MExternal;
@@ -21,6 +24,7 @@ import org.genesez.metamodel.gcore.MGeneric;
 import org.genesez.metamodel.gcore.MOperation;
 import org.genesez.metamodel.gcore.MParameter;
 import org.genesez.metamodel.gcore.MProperty;
+import org.genesez.metamodel.gcore.MType;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +39,8 @@ import org.genesez.metamodel.gcore.MProperty;
  *   <li>{@link org.genesez.metamodel.gcore.impl.MGenericImpl#getOwningProperty <em>Owning Property</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MGenericImpl#getOwningParameter <em>Owning Parameter</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MGenericImpl#getOwningExternal <em>Owning External</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MGenericImpl#getDefault <em>Default</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MGenericImpl#getConstraint <em>Constraint</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,6 +67,26 @@ public class MGenericImpl extends MTypeImpl implements MGeneric
    * @ordered
    */
   protected String specification = SPECIFICATION_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getDefault() <em>Default</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDefault()
+   * @generated
+   * @ordered
+   */
+  protected MType default_;
+
+  /**
+   * The cached value of the '{@link #getConstraint() <em>Constraint</em>}' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getConstraint()
+   * @generated
+   * @ordered
+   */
+  protected EList<MType> constraint;
 
   /**
    * <!-- begin-user-doc -->
@@ -159,6 +185,63 @@ public class MGenericImpl extends MTypeImpl implements MGeneric
   {
     if (eContainerFeatureID() != GcorePackage.MGENERIC__OWNING_EXTERNAL) return null;
     return (MExternal)eContainer();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MType getDefault()
+  {
+    if (default_ != null && default_.eIsProxy())
+    {
+      InternalEObject oldDefault = (InternalEObject)default_;
+      default_ = (MType)eResolveProxy(oldDefault);
+      if (default_ != oldDefault)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, GcorePackage.MGENERIC__DEFAULT, oldDefault, default_));
+      }
+    }
+    return default_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MType basicGetDefault()
+  {
+    return default_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDefault(MType newDefault)
+  {
+    MType oldDefault = default_;
+    default_ = newDefault;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MGENERIC__DEFAULT, oldDefault, default_));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<MType> getConstraint()
+  {
+    if (constraint == null)
+    {
+      constraint = new EObjectResolvingEList<MType>(MType.class, this, GcorePackage.MGENERIC__CONSTRAINT);
+    }
+    return constraint;
   }
 
   /**
@@ -265,6 +348,11 @@ public class MGenericImpl extends MTypeImpl implements MGeneric
         return getOwningParameter();
       case GcorePackage.MGENERIC__OWNING_EXTERNAL:
         return getOwningExternal();
+      case GcorePackage.MGENERIC__DEFAULT:
+        if (resolve) return getDefault();
+        return basicGetDefault();
+      case GcorePackage.MGENERIC__CONSTRAINT:
+        return getConstraint();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -274,6 +362,7 @@ public class MGenericImpl extends MTypeImpl implements MGeneric
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -281,6 +370,13 @@ public class MGenericImpl extends MTypeImpl implements MGeneric
     {
       case GcorePackage.MGENERIC__SPECIFICATION:
         setSpecification((String)newValue);
+        return;
+      case GcorePackage.MGENERIC__DEFAULT:
+        setDefault((MType)newValue);
+        return;
+      case GcorePackage.MGENERIC__CONSTRAINT:
+        getConstraint().clear();
+        getConstraint().addAll((Collection<? extends MType>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -298,6 +394,12 @@ public class MGenericImpl extends MTypeImpl implements MGeneric
     {
       case GcorePackage.MGENERIC__SPECIFICATION:
         setSpecification(SPECIFICATION_EDEFAULT);
+        return;
+      case GcorePackage.MGENERIC__DEFAULT:
+        setDefault((MType)null);
+        return;
+      case GcorePackage.MGENERIC__CONSTRAINT:
+        getConstraint().clear();
         return;
     }
     super.eUnset(featureID);
@@ -325,6 +427,10 @@ public class MGenericImpl extends MTypeImpl implements MGeneric
         return getOwningParameter() != null;
       case GcorePackage.MGENERIC__OWNING_EXTERNAL:
         return getOwningExternal() != null;
+      case GcorePackage.MGENERIC__DEFAULT:
+        return default_ != null;
+      case GcorePackage.MGENERIC__CONSTRAINT:
+        return constraint != null && !constraint.isEmpty();
     }
     return super.eIsSet(featureID);
   }
