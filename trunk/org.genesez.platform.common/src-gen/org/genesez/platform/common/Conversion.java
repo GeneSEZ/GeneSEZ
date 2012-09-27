@@ -37,10 +37,10 @@ public class Conversion {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324547062596_652786_2326) ENABLED START */
 		StringBuffer fqn = new StringBuffer();
 		MPackage p = pkg;
-		while (!(p instanceof MModel)) {
+		while (!(p instanceof MModel) && p != null) {
 			fqn.insert(0, p.getName());
 			p = p.getNestingPackage();
-			if (!(p instanceof MModel)) {
+			if (!(p instanceof MModel) && p != null) {
 				fqn.insert(0, separator);
 			}
 		}
