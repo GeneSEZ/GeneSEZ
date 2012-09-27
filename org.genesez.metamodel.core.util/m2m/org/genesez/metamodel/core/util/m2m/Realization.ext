@@ -33,7 +33,7 @@ MClassifier check(MClassifier this) :
 		? ( generalization.isEmpty
 			? realization.typeSelect(MInterface).recursiveRealize( (MClass)this )
 			: (
-				generalization.realize( this ) ->
+				generalization.typeSelect(MClassifier).realize( this ) ->
 				realization.typeSelect(MInterface).realize( ((MClass)this) )
 			)
 		) : this ->
@@ -42,7 +42,7 @@ MClassifier check(MClassifier this) :
 /**
  * Adds abstract operations of the base class as non abstract operations.
  */
-MClass realize(MClass base, MClass this) :
+MClass realize(MClassifier base, MClassifier this) :
 	base.operation.select(e|e.abstract).cloneOperation( this ).setAbstract(false) ->
 	this;
 
@@ -50,7 +50,7 @@ MClass realize(MClass base, MClass this) :
  * Adds the operations of the interface to the list of operations of the class.
  */
 MClass realize(MInterface realize, MClass this) :
-	realize.operation.cloneOperation( this ) ->
+	realize.operation.cloneOperation( this ).setAbstract(false) ->
 	this;
 
 /**
