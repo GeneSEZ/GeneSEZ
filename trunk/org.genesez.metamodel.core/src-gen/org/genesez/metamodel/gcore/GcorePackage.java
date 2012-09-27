@@ -3376,13 +3376,31 @@ public interface GcorePackage extends EPackage
   int MGENERIC__OWNING_EXTERNAL = MTYPE_FEATURE_COUNT + 5;
 
   /**
+   * The feature id for the '<em><b>Default</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MGENERIC__DEFAULT = MTYPE_FEATURE_COUNT + 6;
+
+  /**
+   * The feature id for the '<em><b>Constraint</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MGENERIC__CONSTRAINT = MTYPE_FEATURE_COUNT + 7;
+
+  /**
    * The number of structural features of the '<em>MGeneric</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MGENERIC_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 6;
+  int MGENERIC_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 8;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MExternalImpl <em>MExternal</em>}' class.
@@ -7664,6 +7682,28 @@ public interface GcorePackage extends EPackage
   EReference getMGeneric_OwningExternal();
 
   /**
+   * Returns the meta object for the reference '{@link org.genesez.metamodel.gcore.MGeneric#getDefault <em>Default</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Default</em>'.
+   * @see org.genesez.metamodel.gcore.MGeneric#getDefault()
+   * @see #getMGeneric()
+   * @generated
+   */
+  EReference getMGeneric_Default();
+
+  /**
+   * Returns the meta object for the reference list '{@link org.genesez.metamodel.gcore.MGeneric#getConstraint <em>Constraint</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Constraint</em>'.
+   * @see org.genesez.metamodel.gcore.MGeneric#getConstraint()
+   * @see #getMGeneric()
+   * @generated
+   */
+  EReference getMGeneric_Constraint();
+
+  /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MType <em>MType</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -9763,6 +9803,22 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EReference MGENERIC__OWNING_EXTERNAL = eINSTANCE.getMGeneric_OwningExternal();
+
+    /**
+     * The meta object literal for the '<em><b>Default</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MGENERIC__DEFAULT = eINSTANCE.getMGeneric_Default();
+
+    /**
+     * The meta object literal for the '<em><b>Constraint</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MGENERIC__CONSTRAINT = eINSTANCE.getMGeneric_Constraint();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MTypeImpl <em>MType</em>}' class.

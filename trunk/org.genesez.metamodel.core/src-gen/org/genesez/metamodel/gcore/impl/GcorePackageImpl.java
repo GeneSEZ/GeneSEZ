@@ -1807,6 +1807,26 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getMGeneric_Default()
+  {
+    return (EReference)mGenericEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMGeneric_Constraint()
+  {
+    return (EReference)mGenericEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getMType()
   {
     return mTypeEClass;
@@ -2888,6 +2908,8 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEReference(mGenericEClass, MGENERIC__OWNING_PROPERTY);
     createEReference(mGenericEClass, MGENERIC__OWNING_PARAMETER);
     createEReference(mGenericEClass, MGENERIC__OWNING_EXTERNAL);
+    createEReference(mGenericEClass, MGENERIC__DEFAULT);
+    createEReference(mGenericEClass, MGENERIC__CONSTRAINT);
 
     mTypeEClass = createEClass(MTYPE);
     createEReference(mTypeEClass, MTYPE__SPECIALIZATION);
@@ -3236,6 +3258,8 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEReference(getMGeneric_OwningProperty(), this.getMProperty(), this.getMProperty_GenericRealization(), "owningProperty", null, 0, 1, MGeneric.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMGeneric_OwningParameter(), this.getMParameter(), this.getMParameter_GenericRealization(), "owningParameter", null, 0, 1, MGeneric.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMGeneric_OwningExternal(), this.getMExternal(), this.getMExternal_GenericParameter(), "owningExternal", null, 0, 1, MGeneric.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMGeneric_Default(), this.getMType(), null, "default", null, 0, 1, MGeneric.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMGeneric_Constraint(), this.getMType(), null, "constraint", null, 0, -1, MGeneric.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mTypeEClass, MType.class, "MType", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMType_Specialization(), this.getMClassifier(), this.getMClassifier_Generalization(), "specialization", null, 0, -1, MType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

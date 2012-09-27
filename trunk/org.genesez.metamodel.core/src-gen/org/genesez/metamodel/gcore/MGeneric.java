@@ -6,6 +6,8 @@
  */
 package org.genesez.metamodel.gcore;
 
+import org.eclipse.emf.common.util.EList;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +23,8 @@ package org.genesez.metamodel.gcore;
  *   <li>{@link org.genesez.metamodel.gcore.MGeneric#getOwningProperty <em>Owning Property</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MGeneric#getOwningParameter <em>Owning Parameter</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MGeneric#getOwningExternal <em>Owning External</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MGeneric#getDefault <em>Default</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MGeneric#getConstraint <em>Constraint</em>}</li>
  * </ul>
  * </p>
  *
@@ -140,5 +144,47 @@ public interface MGeneric extends MType
    * @generated
    */
   MExternal getOwningExternal();
+
+  /**
+   * Returns the value of the '<em><b>Default</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Default</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Default</em>' reference.
+   * @see #setDefault(MType)
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMGeneric_Default()
+   * @model
+   * @generated
+   */
+  MType getDefault();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gcore.MGeneric#getDefault <em>Default</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Default</em>' reference.
+   * @see #getDefault()
+   * @generated
+   */
+  void setDefault(MType value);
+
+  /**
+   * Returns the value of the '<em><b>Constraint</b></em>' reference list.
+   * The list contents are of type {@link org.genesez.metamodel.gcore.MType}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Constraint</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Constraint</em>' reference list.
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMGeneric_Constraint()
+   * @model
+   * @generated
+   */
+  EList<MType> getConstraint();
 
 } // MGeneric
