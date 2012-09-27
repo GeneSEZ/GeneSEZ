@@ -6,14 +6,14 @@ package org.genesez.m2t.xpand;
  */
 
 import org.eclipse.xpand2.output.FileHandle;
-import org.genesez.m2t.ImportBeautifier;
 import org.eclipse.xpand2.output.PostProcessor;
+import org.genesez.m2t.ImportPreserver;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  * @author dreamer
  */
-public class XpandImportBeautifier extends ImportBeautifier implements PostProcessor {
+public class XpandImportPreserver extends ImportPreserver implements PostProcessor {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**

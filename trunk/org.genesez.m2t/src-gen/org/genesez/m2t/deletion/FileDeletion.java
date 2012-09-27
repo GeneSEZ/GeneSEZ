@@ -23,7 +23,7 @@ import org.apache.commons.logging.Log;
  * @date 2011-09-20
  * @author dreamer
  */
-public class FileDeletionFeature extends DeletionFeature {
+public class FileDeletion extends DeletionFeature {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
