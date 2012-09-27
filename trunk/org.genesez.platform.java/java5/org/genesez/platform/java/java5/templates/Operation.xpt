@@ -196,7 +196,7 @@
 «DEFINE _Params FOR MAttribute-»
 	«EXPAND _Annotation-»
 	«IF isSingleValuedType()-»
-		«type.mapName().asTypeName()-»«EXPAND Type::Generics FOR type-» «asAttribute()-»
+		«type.mapName().asTypeName()-»«EXPAND Type::GenericUse» «asAttribute()-»
 	«ELSE-»
 		«EXPAND Type::MultiValuedType-» «asAttribute()-»
 	«ENDIF-»
@@ -241,7 +241,7 @@
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
 	«IF isSingleValuedType() && return.type.mapName() != null-»
-		«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR return.type» «asOperation()»(«EXPAND _Params») «EXPAND _Exception -»;
+		«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()»(«EXPAND _Params») «EXPAND _Exception -»;
 	«ELSEIF isMultiValuedType()-»
 		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType FOR return-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-»;
 	«ELSE -»
@@ -257,7 +257,7 @@
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
 	«IF isSingleValuedType() && return.type.mapName() != null-»
-		«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::Generics FOR return.type-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+		«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
 	«ELSEIF isMultiValuedType()-»
 		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType FOR return-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
 	«ELSE -»

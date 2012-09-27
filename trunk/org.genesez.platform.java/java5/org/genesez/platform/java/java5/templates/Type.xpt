@@ -55,11 +55,11 @@
 «ENDREM»
 «DEFINE MultiValuedType FOR MElement -»
 	«IF usePrimitiveType() -»
-		«type().mapName().asTypeName() -»«EXPAND Generics FOR type()»[]
+		«type().mapName().asTypeName() -»«EXPAND GenericUse»[]
 	«ELSEIF type().isPrimitiveType() -»
-		«mapType() -»<«type().mapName("Wrapper").asTypeName()»«EXPAND Generics FOR type()»>
+		«mapType() -»<«type().mapName("Wrapper").asTypeName()»«EXPAND GenericUse»>
 	«ELSE -»
-		«mapType() -»<«type().mapName().asTypeName()»«EXPAND Generics FOR type()»>
+		«mapType() -»<«type().mapName().asTypeName()»«EXPAND GenericUse»>
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -81,7 +81,7 @@
 «ENDREM»
 «DEFINE Generalization FOR MClassifier -»
 «IF !generalization.isEmpty -»
-	extends «generalization.first().mapName().asTypeName()-»«EXPAND Generics FOR generalization.first()-»
+	extends «generalization.first().mapName().asTypeName()-»«EXPAND GenericUse(genericParameter) FOR generalization.first()-»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -91,7 +91,7 @@
 «ENDREM»
 «DEFINE Generalization FOR MInterface -»
 «IF !generalization.isEmpty -»
-	extends «FOREACH generalization AS g SEPARATOR ", "»«g.mapName().asTypeName()»«EXPAND Generics FOR g»«ENDFOREACH»
+	extends «FOREACH generalization AS g SEPARATOR ", "»«g.mapName().asTypeName()»«EXPAND GenericUse(genericParameter) FOR g»«ENDFOREACH»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -100,7 +100,7 @@
 «ENDREM»
 «DEFINE Realization FOR MClassifier-»
 «IF !realization.isEmpty-»
-	implements «FOREACH realization AS c SEPARATOR ", " -»«c.mapName().asTypeName()»«EXPAND Generics FOR c»«ENDFOREACH -»
+	implements «FOREACH realization AS c SEPARATOR ", " -»«c.mapName().asTypeName()»«EXPAND GenericUse(genericParameter) FOR c»«ENDFOREACH -»
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»
@@ -126,41 +126,84 @@
 «REM»
 	Generates the type parameters / generics if any.
 «ENDREM»
-«DEFINE Generics FOR MClassifier -»
+«DEFINE GenericDefinition FOR MClassifier -»
 «IF !genericParameter.isEmpty -»
-<«EXPAND Generic FOREACH genericParameter SEPARATOR ", " -»>
+<«EXPAND GenericDefinition FOREACH genericParameter SEPARATOR ", " -»>
 «ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	Generates the type parameters / generics if any.
 «ENDREM»
-«DEFINE Generics FOR MExternal -»
+«DEFINE GenericDefinition FOR MExternal -»
 «IF !genericParameter.isEmpty -»
-<«EXPAND Generic FOREACH genericParameter SEPARATOR ", " -»>
+<«EXPAND GenericDefinition FOREACH genericParameter SEPARATOR ", " -»>
 «ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	Generates the specified type parameter / generic optionally with the 'extends' restriction of the first constraining type if any.
 «ENDREM»
-«DEFINE Generic FOR MGeneric -»
+«DEFINE GenericDefinition FOR MGeneric -»
 «specification»«IF !constraint.isEmpty» extends «constraint.first().name()»«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	does nothing, just there for error free templates ;-)
 «ENDREM»
-«DEFINE Generics FOR MType-»
+«DEFINE GenericDefinition FOR MType-»
 «ENDDEFINE»
 
 «REM»
-	generates the type parameters / generics
+	Generates the use of generics within generalizations and realizations.
+	@param	generics	the generic parameters of the classifier
+	@param	this		the classifier on which generic parameters may be used
 «ENDREM»
-«DEFINE Generics FOR MAttribute -»
-«IF hasGenericRealization() -»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MClassifier -»
+«IF !genericParameter.isEmpty -»
+<«EXPAND GenericUse(generics) FOREACH genericParameter SEPARATOR ", "»>
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the use of generics within generalizations + realizations.
+«ENDREM»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MExternal -»
+«IF !genericParameter.isEmpty -»
+<«EXPAND GenericUse(generics) FOREACH genericParameter SEPARATOR ", "»>
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the generic parameter specifications.
+	Note [toh]: here we need to evaluate uml template bindings which are not available in gcore models
+«ENDREM»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MGeneric -»
+«specification -»
+«ENDDEFINE»
+
+«REM»
+	Generates the type parameters / generics used by an attribute.
+«ENDREM»
+«DEFINE GenericUse FOR MAttribute -»
+«IF !genericRealization.isEmpty -»
 	<«getGenericList(genericRealization) -»>
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»
 
+«REM»
+	Generates the type parameters / generics used by a parameter.
+«ENDREM»
+«DEFINE GenericUse FOR MParameter -»
+«IF !genericRealization.isEmpty -»
+	<«getGenericList(genericRealization) -»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	Does nothing, just here for error free templates.
+«ENDREM»
+«DEFINE GenericUse FOR MElement -»
+«ENDDEFINE»
