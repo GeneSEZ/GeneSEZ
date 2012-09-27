@@ -19,6 +19,7 @@ import java.nio.file.attribute.PosixFilePermission;
  * Helper class to create file system elements 
  * 
  * @author nicher
+ * @deprecated
  */
 public class FileSystemHelper {
 	
