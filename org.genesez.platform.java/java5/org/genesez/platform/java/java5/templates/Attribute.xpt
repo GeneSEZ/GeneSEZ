@@ -119,7 +119,7 @@
 		«EXPAND _Annotation-»
 	«ENDIF-»
 	«IF isSingleValuedType()-»
-		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::Generics» «asAttribute()» «EXPAND _DefaultValue -»;
+		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::GenericUse» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ELSE -»
 		«EXPAND _Modifier -» «EXPAND Type::MultiValuedType -» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ENDIF»
@@ -197,9 +197,9 @@
 	«ELSEIF usePrimitiveType() && hasFixedMultiplicity() -»
 	 = new «type.mapName().asTypeName()»[«upperBoundMultiplicity»]
 	«ELSEIF type.isPrimitiveType() -»
-	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::Generics FOR type»>()
+	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
 	«ELSE -»
-	 = new «mapType("Implementation") -»<«type.mapName().asTypeName() -»«EXPAND Type::Generics FOR type»>()
+	 = new «mapType("Implementation") -»<«type.mapName().asTypeName() -»«EXPAND Type::GenericUse»>()
 	«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
