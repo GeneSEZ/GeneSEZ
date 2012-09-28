@@ -56,18 +56,16 @@
 	Processes the content of a PRoot
 «ENDREM»
 «DEFINE Root FOR PRoot -»
-«REM» TODO handle extern PRoots «ENDREM»
 «FILE filePath( asFileName() )»
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE «getTaggedValue("GeneSEZ HTML Profile::htmlHeadMetaData", "doctype") -»>
 <html>
 <head>
   <title>«getTaggedValue("GeneSEZ HTML Profile::htmlHeadMetaData", "title") -»</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="../static/style.css" />
+  <meta «getTaggedValue("GeneSEZ HTML Profile::htmlHeadMetaData", "meta") -» />
+  <link rel="stylesheet" type="text/css" href="«getTaggedValue("GeneSEZ HTML Profile::htmlHeadMetaData", "cssPath") -»" />
 </head>
 <body>
 «EXPAND Content FOREACH nestedContents -»
-
 «EXPAND OwnContent(name) -»
 </body>
 </html>
@@ -83,6 +81,10 @@
 «ENDDEFINE»
 
 
+«DEFINE Content FOR PReferenceArea -»
+«ENDDEFINE»
+
+
 «REM»
 	Processes the content of a PElementArea
 «ENDREM»
@@ -91,10 +93,19 @@
 «ENDDEFINE»
 
 
+«DEFINE Content FOR PUserDefinedArea -»
+«ENDDEFINE»
+
+
+«DEFINE Content FOR PAutomaticallyGeneratedArea -»
+«ENDDEFINE»
+
+
 «REM»
 	Only there for error free templates
 «ENDREM»
 «DEFINE Content FOR PContentArea»
+«ERROR "shouldn't happen"»
 «ENDDEFINE»
 
 
@@ -131,6 +142,7 @@
 	Only there for error free templates
 «ENDREM»
 «DEFINE Element FOR PElement»
+«ERROR "shouldn't happen"»
 «ENDDEFINE»
 
 
@@ -142,3 +154,5 @@
 <!-- TODO: put your further content here -->
 «ENDPROTECT»
 «ENDDEFINE»
+
+
