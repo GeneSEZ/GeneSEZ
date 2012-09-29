@@ -73,10 +73,10 @@ cached InstanceSpecification transformPackage(InstanceSpecification this) :
 cached InstanceSpecification transformRoot(InstanceSpecification this) :
 	logDebug("transform root: " + name) -> (
 		let r = makeRoot() :
-			// model subtree
-			nestedContents().transformContentArea() ->
 			// meta data
-			r.transformMetaDataAware( this )
+			r.transformMetaDataAware( this ) ->
+			// model subtree
+			nestedContents().transformContentArea()
 	) ->
 	this;
 	
@@ -86,10 +86,10 @@ cached InstanceSpecification transformRoot(InstanceSpecification this) :
 cached PCompositeArea transformCompositeArea(InstanceSpecification this) :
 	logDebug("transform composite area: " + name) -> (
 		let ca = makeCompositeArea() :
-			// model subtree
-			nestedContents().transformContentArea() ->
 			// meta data
 			ca.transformMetaDataAware( this ) ->
+			// model subtree
+			nestedContents().transformContentArea() ->
 			ca
 	);
 	
@@ -199,7 +199,7 @@ cached List[PValue] transformTaggedValues(InstanceSpecification this) :
 	logDebug("transform tagged values for: " + name) ->
 	getAppliedStereotypes()
 		.collect( s|s.allAttributes().tags()
-			.collect( t| taggedValue(s, t.name).makeValue( t.makeKey() ) )
+			.collect( t| taggedValue(s, t.name).makeValue( t.makeKey(), this ) )
 			.reject( v|v == null )
 		)
 	.flatten();
@@ -355,7 +355,7 @@ create PMetaData makeMetaData(Stereotype s) :
 	// containment
 	model().metaData.add( this ) ->
 	this;
-	
+
 create PKey makeKey(Property p) :
 	logDebug("make key: " + p.name) ->
 	// properties
@@ -364,10 +364,13 @@ create PKey makeKey(Property p) :
 	((Stereotype)p.class).makeMetaData().key.add( this ) ->
 	this;
 	
-create List[PValue] makeValue(List[Object] os, PKey key) :
-	os.makeValue( key );
-	
-create PValue makeValue(EnumerationLiteral el, PKey key) :
+List[PValue] makeValue(List[Object] os, PKey key, InstanceSpecification is) :
+	logDebug("make values from list: " + os.toString() + " key: " + key.key) ->
+	os.collect( o | o.makeValue( key, is ));
+	//os.makeValue( key, is );
+
+create PValue makeValue(EnumerationLiteral el, PKey key, InstanceSpecification is) :
+	logDebug("make value from enumeration literal: " + el.name + " key: " + key.key) ->
 	// properties
 	setValue( el.name ) ->
 	// reference to key
@@ -375,7 +378,8 @@ create PValue makeValue(EnumerationLiteral el, PKey key) :
 	//key.value.add( this ) ->
 	this;
 	
-create PValue makeValue(NamedElement ne, PKey key) :
+create PValue makeValue(NamedElement ne, PKey key, InstanceSpecification is) :
+	logDebug("make value from named element: " + ne.name + " key: " + key.key) ->
 	// properties
 	setValue( ne.name ) ->
 	// reference to key
@@ -383,7 +387,8 @@ create PValue makeValue(NamedElement ne, PKey key) :
 	//key.value.add( this ) ->
 	this;
 	
-create PValue makeValue(Object o, PKey key) :
+create PValue makeValue(Object o, PKey key, InstanceSpecification is) :
+	logDebug("make value from object: " + o.toString() + " key: " + key.key) ->
 	// properties
 	setValue( o.toString() ) ->
 	// reference to key
@@ -391,7 +396,8 @@ create PValue makeValue(Object o, PKey key) :
 	//key.value.add( this ) ->
 	this;
 	
-Void makeValue(Void this, PKey key) :
+Void makeValue(Void this, PKey key, InstanceSpecification is) :
+	logDebug("make value from void: void" + " key: " + key.key) ->
 	null;
 	
 /**
