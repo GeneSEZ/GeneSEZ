@@ -1,0 +1,81 @@
+
+import gcore;
+
+// discontinued!
+
+extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::common::Conversion;
+extension org::genesez::platform::common::m2m::CreateTemplate;
+
+MPackage process(MPackage this) :
+	classifier.process() ->
+	nestedPackage.process() ->
+	this;
+	
+MClassifier process(MClassifier this) :
+	property.typeSelect(MAttribute).process() ->
+	this;
+	
+MProperty process(MProperty this) :
+	this;
+	
+/**
+ * Returns true if a property access operation of the specified kind should be generated for the specified property, otherwise false.
+ * 
+ * 1) if the property has the accessor stereotype, it is evaluated
+ * 2) if the classifier has the accessor stereotype, it is evaluated and used for all properties
+ * 3) if the classifier has a stereotype for which accessors should be generated, accessors are generated
+ * 4) else no accessors are generated
+ * 
+ * @return	true, if an the access operation should be generated, otherwise false
+ */
+boolean generatePropertyAccess(MAttribute this, String accessKind) :
+	hasStereotype( accessorStereotype() )
+		? getTaggedBooleanValue( accessorStereotype(), accessKind )
+		: ( classifier.hasStereotype( accessorStereotype() )
+			? classifier.getTaggedBooleanValue( accessorStereotype(), accessKind )
+			: ( classifier.stereotype.exists( s|accessorsForStereotypes().toList().contains( s.name ) )
+				? true
+				: false
+			)
+		);
+
+boolean hasGetAccess(MAttribute this) : classifier.operation.exists( op|op.name == "get" + name.toFirstUpper() && op.return.type == type );
+boolean hasSetAccess(MAttribute this) :
+	classifier.operation.exists(
+		op|op.name == "set" + name.toFirstUpper() && op.return.type == null && op.parameter.size == 1 && op.parameter.first().type == type
+	);
+boolean hasAddAccess(MAttribute this) :
+	classifier.operation.exists(
+		op|op.name == "add" + name.toFirstUpper() && op.return.type == null && op.parameter.size == 1 && op.parameter.first().type == type
+	);
+boolean hasRemoveAccess(MAttribute this) :
+	classifier.operation.exists(
+		op|op.name == "remove" + name.toFirstUpper() && op.return.type == null && op.parameter.size == 1 && op.parameter.first().type == type
+	);
+
+MOperation addGetAccess(MAttribute this) :
+	classifier.createOperation( xmiGuid + "_getAccess", "get" + name.toFirstUpper() );
+
+// -- constants --
+
+/**
+ * Returns the name of the stereotype used to determine the generation of property access operations, default to «accessor».
+ */
+String accessorStereotype() : GLOBALVAR accessorStereotype == null ? "accessor" : GLOBALVAR accessorStereotype;
+
+/**
+ * Returns a comma separated list of sterotype names for which access operations should be generated, defaults to 'entity'.
+ */
+String accessorsForStereotypes() : GLOBALVAR accessorsForStereotypes == null ? "entity" : GLOBALVAR accessorsForStereotypes;
+
+String accessKindGet() : "getter";
+String accessKindSet() : "setter";
+String accessKindAdd() : "add";
+String accessKindRemove() : "remove";
+
+String tagGenerateGetAccessOperation() : "org.genesez.profile.property.access.get";
+String tagGenerateSetAccessOperation() : "org.genesez.profile.property.access.set";
+String tagGenerateAddAccessOperation() : "org.genesez.profile.property.access.add";
+String tagGenerateRemoveAccessOperation() : "org.genesez.profile.property.access.remove";
