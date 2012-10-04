@@ -5,17 +5,19 @@ package org.genesez.workflow;
  * 	@FILE-ID : (_vaiVYPRiEeGG-J2DIYyoXg) 
  */
 
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
+import java.util.Map.Entry;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.utils.Reader;
 import org.genesez.workflow.profile.Parameter;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
-import org.eclipse.emf.mwe.core.WorkflowContext;
-import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.eclipse.emf.mwe.core.issues.Issues;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * .WHEN_NEEDED
@@ -24,6 +26,8 @@ import static java.lang.annotation.ElementType.TYPE;
 public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	
 	// -- generated attribute, constant + association declarations ----------
+	
+	public final Log logger = LogFactory.getLog(getClass());
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean makeEPackagesGlobal = true;
@@ -45,6 +49,10 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._qcViMPjlEeGhK_C0J8Xzwg) ENABLED START */
+		logger.trace("EMF uri map:");
+		for (Entry<URI, URI> entry : URIConverter.URI_MAP.entrySet()) {
+			logger.trace(entry.toString());
+		}
 		reader.invokeInternal(context, monitor, issues);
 		/* PROTECTED REGION END */
 	}
