@@ -55,6 +55,12 @@ public class Gcore2Java extends Model2Text {
 		addTypeMappingFile("org/genesez/platform/java/typemapping/typemapping.xml");
 		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
 	}
+	// override default values of workflow parameters
+	{
+		setTemplate("org::genesez::platform::java::java5::templates::Root::Root");
+		addTypeMappingFile("org/genesez/platform/java/typemapping/typemapping.xml");
+		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
+	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**

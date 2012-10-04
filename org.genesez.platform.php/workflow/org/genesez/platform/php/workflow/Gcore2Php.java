@@ -41,6 +41,11 @@ public class Gcore2Php extends Model2Text {
 		setTemplate("org::genesez::platform::php5::templates::Root::Root");
 		addTypeMappingFile("org/genesez/platform/php/typemapping/typemapping.xml");
 	}
+	// override default values of workflow parameters
+	{
+		setTemplate("org::genesez::platform::php5::templates::Root::Root");
+		addTypeMappingFile("org/genesez/platform/php/typemapping/typemapping.xml");
+	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**

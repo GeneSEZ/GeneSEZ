@@ -24,6 +24,11 @@ public class Gcore2Csharp extends Model2Text {
 		setTemplate("org::genesez::platform::dotnet::csharp::templates::Root::Root");
 		addTypeMappingFile("org/genesez/platform/dotnet/csharp/typemapping/typemapping.xml");
 	}
+	// override default values of workflow parameters
+	{
+		setTemplate("org::genesez::platform::dotnet::csharp::templates::Root::Root");
+		addTypeMappingFile("org/genesez/platform/dotnet/csharp/typemapping/typemapping.xml");
+	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**

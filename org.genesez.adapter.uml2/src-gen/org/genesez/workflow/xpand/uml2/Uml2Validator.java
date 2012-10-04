@@ -27,6 +27,13 @@ public class Uml2Validator extends Validator {
 		addScript("org::genesez::adapter::uml2::UmlStateMachineValidation");
 		addScript("org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation");
 	}
+	// override default values of workflow parameters
+	{
+		setSlot("uml2model");
+		addScript("org::genesez::adapter::uml2::uml2constraints");
+		addScript("org::genesez::adapter::uml2::UmlStateMachineValidation");
+		addScript("org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation");
+	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
