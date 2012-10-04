@@ -249,6 +249,17 @@ public class ImportPreserver extends FileTreeObserverAdapter {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 * @param	config	
+	 */
+	public void setConfig(ImportPreserverConfig config) {
+		/* PROTECTED REGION ID(java.implementation._VhbiQAm_EeK7rvpt4qDtAg) ENABLED START */
+		setFileExtensionRegex(config.getFileExtensionRegExp());
+		setImportRegex(config.getImportRegExp());
+		/* PROTECTED REGION END */
+	}
+	
 	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Sets the value of attribute '<em><b>enabled</b></em>'

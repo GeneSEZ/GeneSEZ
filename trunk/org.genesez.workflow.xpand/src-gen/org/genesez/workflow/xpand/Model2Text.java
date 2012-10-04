@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
+import org.genesez.m2t.ImportPreserverConfig;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -65,6 +66,8 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
 	private java.util.Set<String> typeMappingFile = new java.util.LinkedHashSet<String>();
+	
+	private ImportPreserverConfig importPreserverConfig;
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -326,6 +329,20 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	 */
 	public void removeTypeMappingFile(String typeMappingFile) {
 		this.typeMappingFile.remove(typeMappingFile);
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>importPreserverConfig</b></em>'
+	 */
+	public ImportPreserverConfig getImportPreserverConfig() {
+		return importPreserverConfig;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>importPreserverConfig</b></em>'
+	 */
+	public void setImportPreserverConfig(ImportPreserverConfig importPreserverConfig) {
+		this.importPreserverConfig = importPreserverConfig;
 	}
 	
 	// -- generated code  ---------------------------------------------------

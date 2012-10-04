@@ -67,7 +67,14 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 		// the default output directory from the first model2text component
 		String defaultOutputDir = null;
 		if (!getComponent().isEmpty()) {
-			defaultOutputDir = getComponent().iterator().next().getOutputDir();
+			Model2Text m2t = getComponent().iterator().next();
+			defaultOutputDir = m2t.getOutputDir();
+			
+			// create import preserver if config available
+			if (m2t.getImportPreserverConfig() != null && importPreserver == null) {
+				importPreserver = new XpandImportPreserver();
+				importPreserver.setConfig(m2t.getImportPreserverConfig());
+			}
 		}
 		
 		// check configuration

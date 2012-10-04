@@ -10,6 +10,7 @@ import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xpand2.output.JavaBeautifier;
+import org.genesez.m2t.ImportPreserverConfig;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -231,6 +232,10 @@ public class Gcore2Java extends Model2Text {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._tPrfIAjhEeKn2-J_iePC7Q) ENABLED START */
+	{
+		// init import preserve
+		setImportPreserverConfig(new ImportPreserverConfig(".*(\\.java$)", "import .*;$"));
+	}
 	/* PROTECTED REGION END */
 	
 }
