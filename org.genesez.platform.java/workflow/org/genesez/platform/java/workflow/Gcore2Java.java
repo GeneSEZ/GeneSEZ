@@ -234,7 +234,7 @@ public class Gcore2Java extends Model2Text {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._tPrfIAjhEeKn2-J_iePC7Q) ENABLED START */
 	{
 		// init import preserve
-		setImportPreserverConfig(new ImportPreserverConfig(".*(\\.java$)", "import .*;$"));
+		setImportPreserverConfig(new ImportPreserverConfig(".*(\\.java)$", "(import)\\s+.*;$"));
 	}
 	/* PROTECTED REGION END */
 	
