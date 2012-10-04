@@ -18,12 +18,10 @@ import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xpand2.output.PostProcessor;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
+import java.io.File;
 import org.genesez.m2t.ImportPreserverConfig;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -32,6 +30,8 @@ import org.genesez.m2t.ImportPreserverConfig;
 public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	// -- generated attribute, constant + association declarations ----------
+	
+	public final Log logger = LogFactory.getLog(getClass());
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String fileEncoding = "utf-8";
@@ -102,6 +102,10 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 				outlet.add(o);
 			}
 			prSourceDir.add(outputDir);
+		}
+		// ensure all output directories exist
+		for (Outlet o : outlet) {
+			ensureDirectoryExists(o.getPath());
 		}
 		super.checkConfiguration(issues);
 		prepareDelegate();
@@ -356,6 +360,15 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 			}
 		}
 		return null;
+	}
+	
+	private void ensureDirectoryExists(String uri) {
+		File f = new File(uri);
+		if (!f.exists()) {
+			if (!f.mkdir()) {
+				logger.error("Unable to create output directory: " + uri);
+			}
+		}
 	}
 	
 	// the generator delegate deals with beautifiers in a way of List<?>
