@@ -85,9 +85,11 @@ Workflow {
 		metaModel = gcore
 		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
 		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		script = "org::genesez::m2t::ApacheCommonsLogging::modify"
 //		script = "org.genesez.workflow::DefaultValueAnnotation::prepare"
 		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
 		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
+		aopScript = "org::genesez::m2t::DoNotOptimizeFinalAttribsWithDefaultValue"
 	}
 //	component = platform.common.workflow.CompositeModel2Model {
 //		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
@@ -104,6 +106,7 @@ Workflow {
 		cloneSlotContents = true
 		file = "model/${name}/uml2gcore.modified.gcore.xmi"
 	}
+	// -- mwe + mwe2 integration
 	component = platform.java.workflow.JavaGenerator {
 		outputDir = "../${name}/src-gen"
 		aspectTemplate = "${namespace}::NoFixedImports"
@@ -112,15 +115,18 @@ Workflow {
 		typeMappingFile = "typemapping.java.xml"
 		typeMappingFile = "typemapping.mwe.xml"
 		excludePackage = "org::genesez::workflow::xpand"
+		excludePackage = "org::genesez::platform::java::workflow"
 		// we exclude direct model contents only by specifying e.g. the separator
 		excludeContentPackage = ","
 	}
+	// -- xpand workflow integration
 	component = platform.java.workflow.JavaGenerator {
 		outputDir = "../${name}.xpand/src-gen"
 		aspectTemplate = "${namespace}::NoFixedImports"
 		aspectTemplate = "${namespace}::AnnotationImports"
 		aspectTemplate = "${namespace}::Delegate"
 		aspectTemplate = "${namespace}::CheckConfiguration"
+		typeMappingFile = "typemapping.acl.xml"
 		typeMappingFile = "typemapping.java.xml"
 		typeMappingFile = "typemapping.mwe.xml"
 		typeMappingFile = "typemapping.xpand.xml"
@@ -128,7 +134,9 @@ Workflow {
 		excludeContentPackage = "org::genesez::workflow"
 		excludeContentPackage = "org::genesez::workflow::profile"
 		excludePackage = "org::genesez::workflow::xpand::uml2"
+		excludePackage = "org::genesez::platform::java::workflow"
 	}
+	// -- uml2 adapter
 	component = platform.java.workflow.JavaGenerator {
 		outputDir = "../org.genesez.adapter.uml2/src-gen"
 		aspectTemplate = "${namespace}::NoFixedImports"
@@ -142,8 +150,22 @@ Workflow {
 		excludeContentPackage = "org::genesez::workflow"
 		excludeContentPackage = "org::genesez::workflow::xpand"
 		excludeContentPackage = "org::genesez::workflow::profile"
+		excludePackage = "org::genesez::platform::java::workflow"
 	}
-	
+	// -- java platform
+	component = platform.java.workflow.JavaGenerator {
+		outputDir = "../org.genesez.platform.java/workflow"
+		aspectTemplate = "${namespace}::NoFixedImports"
+		aspectTemplate = "${namespace}::AnnotationImports"
+		aspectTemplate = "${namespace}::Delegate"
+		aspectTemplate = "${namespace}::CheckConfiguration"
+		typeMappingFile = "typemapping.java.xml"
+		typeMappingFile = "typemapping.mwe.xml"
+		typeMappingFile = "typemapping.xpand.xml"
+		// we exclude direct model contents only by specifying e.g. the separator
+		excludeContentPackage = ","
+		excludePackage = "org::genesez::workflow"
+	}
 	/*
 	bean = org.eclipse.xtend.typesystem.uml2.Setup {
 		standardUML2Setup = true
