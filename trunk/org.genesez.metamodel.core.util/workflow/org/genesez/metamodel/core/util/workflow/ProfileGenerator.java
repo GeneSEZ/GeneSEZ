@@ -33,13 +33,6 @@ public class ProfileGenerator extends Model2Text {
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String enumerationNamePrefix = "";
 	
-	// initialize all multi valued fields with their default values
-	{
-		
-		// override default values of workflow parameters
-		setTemplate("org::genesez::platform::common::profile::templates::Root::Root");
-		addTypeMappingFile("org/genesez/platform/common/typemapping/typemapping.xml");
-	}
 	// override default values of workflow parameters
 	{
 		setTemplate("org::genesez::platform::common::profile::templates::Root::Root");

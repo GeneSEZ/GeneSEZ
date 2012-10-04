@@ -46,12 +46,6 @@ public class Uml2Gcore extends Model2Model {
 		externalStereotypes.add("external");
 		excludeStereotypes.add("exclude");
 		excludePackages.add("UML Standard Profile");
-		
-		// override default values of workflow parameters
-		setSlot("uml2model");
-		addScript("org::genesez::adapter::uml2::uml2genesez::transform");
-		setOutputSlot("coremodel");
-		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
 	}
 	// override default values of workflow parameters
 	{

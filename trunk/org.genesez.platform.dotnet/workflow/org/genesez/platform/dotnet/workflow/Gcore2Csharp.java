@@ -17,13 +17,6 @@ public class Gcore2Csharp extends Model2Text {
 	
 	// -- generated attribute, constant + association declarations ----------
 	
-	// initialize all multi valued fields with their default values
-	{
-		
-		// override default values of workflow parameters
-		setTemplate("org::genesez::platform::dotnet::csharp::templates::Root::Root");
-		addTypeMappingFile("org/genesez/platform/dotnet/csharp/typemapping/typemapping.xml");
-	}
 	// override default values of workflow parameters
 	{
 		setTemplate("org::genesez::platform::dotnet::csharp::templates::Root::Root");
