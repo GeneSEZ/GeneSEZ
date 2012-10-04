@@ -6,6 +6,7 @@ package org.genesez.platform.dotnet.workflow;
  */
 
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.genesez.m2t.ImportPreserverConfig;
 import org.genesez.workflow.xpand.Model2Text;
 
 /**
@@ -42,6 +43,10 @@ public class Gcore2Csharp extends Model2Text {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._4vH5QAomEeKxusbn3Pe47g) ENABLED START */
+	{
+		// initialize import preserve config
+		setImportPreserverConfig(new ImportPreserverConfig(".*(\\.cs)$", "(using)\\s+.*;$"));
+	}
 	/* PROTECTED REGION END */
 	
 }
