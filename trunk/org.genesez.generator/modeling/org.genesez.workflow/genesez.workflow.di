@@ -5,9 +5,6 @@
       <emfPageIdentifier href="genesez.workflow.notation#_DQZcwPLHEeGYwYEQM4LYvw"/>
     </availablePage>
     <availablePage>
-      <emfPageIdentifier href="genesez.workflow.notation#_nycosfNcEeG7CosHXc0ZAQ"/>
-    </availablePage>
-    <availablePage>
       <emfPageIdentifier href="genesez.workflow.notation#_JD-NsPRjEeGG-J2DIYyoXg"/>
     </availablePage>
     <availablePage>
@@ -17,23 +14,20 @@
       <emfPageIdentifier href="genesez.workflow.notation#_7fZr4Pk4EeG9kdm-OL78lQ"/>
     </availablePage>
     <availablePage>
-      <emfPageIdentifier href="genesez.workflow.notation#__tz7oPzeEeGWUNk3clLlXg"/>
+      <emfPageIdentifier href="genesez.workflow.notation#_9EDHYP3LEeGcKvbUXThvRw"/>
     </availablePage>
     <availablePage>
-      <emfPageIdentifier href="genesez.workflow.notation#_9EDHYP3LEeGcKvbUXThvRw"/>
+      <emfPageIdentifier href="genesez.workflow.notation#_ThdNUAWHEeKiOsNmFSLL5Q"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="genesez.workflow.notation#_j22ukAjhEeKn2-J_iePC7Q"/>
     </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
       <children xsi:type="di:TabFolder">
         <children>
-          <emfPageIdentifier href="genesez.workflow.notation#_nycosfNcEeG7CosHXc0ZAQ"/>
-        </children>
-        <children>
           <emfPageIdentifier href="genesez.workflow.notation#_DQZcwPLHEeGYwYEQM4LYvw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="genesez.workflow.notation#__tz7oPzeEeGWUNk3clLlXg"/>
         </children>
         <children>
           <emfPageIdentifier href="genesez.workflow.notation#_zMtkcPU8EeGsV8fV-DCYeA"/>
@@ -42,10 +36,16 @@
           <emfPageIdentifier href="genesez.workflow.notation#_JD-NsPRjEeGG-J2DIYyoXg"/>
         </children>
         <children>
+          <emfPageIdentifier href="genesez.workflow.notation#_ThdNUAWHEeKiOsNmFSLL5Q"/>
+        </children>
+        <children>
           <emfPageIdentifier href="genesez.workflow.notation#_7fZr4Pk4EeG9kdm-OL78lQ"/>
         </children>
         <children>
           <emfPageIdentifier href="genesez.workflow.notation#_9EDHYP3LEeGcKvbUXThvRw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="genesez.workflow.notation#_j22ukAjhEeKn2-J_iePC7Q"/>
         </children>
       </children>
     </windows>
