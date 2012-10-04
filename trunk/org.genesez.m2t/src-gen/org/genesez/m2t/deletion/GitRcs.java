@@ -9,6 +9,7 @@ import java.io.File;
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheEditor;
 import org.eclipse.jgit.util.FS;
+
 /**
  * Implementation of the delete algorithm for Git.
  * 
