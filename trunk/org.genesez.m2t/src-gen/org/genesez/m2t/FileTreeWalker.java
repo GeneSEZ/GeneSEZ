@@ -218,6 +218,13 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	/**
 	 * the observers
 	 */
+	public java.util.Set<FileTreeObserver> getObserver() {
+		return observer;
+	}
+	
+	/**
+	 * the observers
+	 */
 	public void addObserver(FileTreeObserver observer) {
 		this.observer.add(observer);
 	}
