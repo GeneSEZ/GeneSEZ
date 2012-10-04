@@ -40,6 +40,11 @@ public class ProfileGenerator extends Model2Text {
 		setTemplate("org::genesez::platform::common::profile::templates::Root::Root");
 		addTypeMappingFile("org/genesez/platform/common/typemapping/typemapping.xml");
 	}
+	// override default values of workflow parameters
+	{
+		setTemplate("org::genesez::platform::common::profile::templates::Root::Root");
+		addTypeMappingFile("org/genesez/platform/common/typemapping/typemapping.xml");
+	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
