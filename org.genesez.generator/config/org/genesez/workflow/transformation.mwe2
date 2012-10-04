@@ -116,6 +116,7 @@ Workflow {
 		typeMappingFile = "typemapping.mwe.xml"
 		excludePackage = "org::genesez::workflow::xpand"
 		excludePackage = "org::genesez::platform::java::workflow"
+		excludePackage = "org::genesez::platform::dotnet::workflow"
 		excludePackage = "org::genesez::metamodel::core::util::workflow"
 		// we exclude direct model contents only by specifying e.g. the separator
 		excludeContentPackage = ","
@@ -136,6 +137,7 @@ Workflow {
 		excludeContentPackage = "org::genesez::workflow::profile"
 		excludePackage = "org::genesez::workflow::xpand::uml2"
 		excludePackage = "org::genesez::platform::java::workflow"
+		excludePackage = "org::genesez::platform::dotnet::workflow"
 		excludePackage = "org::genesez::metamodel::core::util::workflow"
 	}
 	// -- uml2 adapter
@@ -153,6 +155,7 @@ Workflow {
 		excludeContentPackage = "org::genesez::workflow::xpand"
 		excludeContentPackage = "org::genesez::workflow::profile"
 		excludePackage = "org::genesez::platform::java::workflow"
+		excludePackage = "org::genesez::platform::dotnet::workflow"
 		excludePackage = "org::genesez::metamodel::core::util::workflow"
 	}
 	// -- java platform
@@ -168,8 +171,31 @@ Workflow {
 		// we exclude direct model contents only by specifying e.g. the separator
 		excludeContentPackage = ","
 		excludePackage = "org::genesez::workflow"
+		excludePackage = "org::genesez::platform::dotnet::workflow"
 		excludePackage = "org::genesez::metamodel::core::util::workflow"
 	}
+	// -- c# platform
+	component = workflow.xpand.Model2TextComposite {
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../org.genesez.platform.dotnet/workflow"
+			aopTemplate = "${namespace}::NoFixedImports"
+			aopTemplate = "${namespace}::AnnotationImports"
+			aopTemplate = "${namespace}::Delegate"
+			aopTemplate = "${namespace}::CheckConfiguration"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.mwe.xml"
+			typeMappingFile = "typemapping.xpand.xml"
+			
+			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::platform::java::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
+			excludeContentPackage = ","
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
+	}
+	// -- profile generator
 	component = workflow.xpand.Model2TextComposite {
 		component = platform.java.workflow.Gcore2Java {
 			outputDir = "../org.genesez.metamodel.core.util/workflow"
@@ -183,6 +209,7 @@ Workflow {
 			
 			excludePackage = "org::genesez::workflow"
 			excludePackage = "org::genesez::platform::java::workflow"
+			excludePackage = "org::genesez::platform::dotnet::workflow"
 			excludeContentPackage = ","
 			
 			globalVarDef = { name = "newAssociationHandling" value = "true"}
