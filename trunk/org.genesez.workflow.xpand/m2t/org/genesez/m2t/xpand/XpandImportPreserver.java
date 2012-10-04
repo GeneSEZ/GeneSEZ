@@ -6,8 +6,8 @@ package org.genesez.m2t.xpand;
  */
 
 import org.eclipse.xpand2.output.FileHandle;
-import org.eclipse.xpand2.output.PostProcessor;
 import org.genesez.m2t.ImportPreserver;
+import org.eclipse.xpand2.output.PostProcessor;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

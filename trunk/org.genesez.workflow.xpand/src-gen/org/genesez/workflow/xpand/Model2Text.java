@@ -10,6 +10,7 @@ import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.Generator;
+import org.genesez.platform.common.typemapping.TypeMapper;
 import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
@@ -63,12 +64,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	private Generator generator;
 	
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
-	private java.util.Set<String> excludePackages = new java.util.LinkedHashSet<String>();
-	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
-	private java.util.Set<String> excludeContentPackages = new java.util.LinkedHashSet<String>();
-	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
 	private java.util.Set<String> typeMappingFile = new java.util.LinkedHashSet<String>();
 	
 	// -- generated method stubs for implementations + derived attributes ---
@@ -96,10 +91,11 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 			Outlet d = getDefaultOutlet();
 			if (d == null) {
 				Outlet o = new Outlet();
-				o.setAppend(true);
+				o.setAppend(false);
 				o.setFileEncoding(fileEncoding);
 				o.setOverwrite(true);
 				o.setPath(outputDir);
+				o.postprocessors.addAll(postProcessor);
 				outlet.add(o);
 			}
 			prSourceDir.add(outputDir);
@@ -118,6 +114,8 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._iXJckPt-EeGRytmSxmtqcQ) ENABLED START */
+		// init type mapper
+		TypeMapper.initTypeMapper(typeMappingFile.toArray(new String[0]));
 		generator.invoke(context, monitor, issues);
 		/* PROTECTED REGION END */
 	}
@@ -308,52 +306,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>excludePackages</b></em>'
-	 */
-	public java.util.Set<String> getExcludePackages() {
-		return excludePackages;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>excludePackages</b></em>'.
-	 * @param	excludePackages	the value to add
-	 */
-	public void addExcludePackages(String excludePackages) {
-		this.excludePackages.add(excludePackages);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>excludePackages</b></em>'.
-	 * @param	excludePackages	the value to remove
-	 */
-	public void removeExcludePackages(String excludePackages) {
-		this.excludePackages.remove(excludePackages);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>excludeContentPackages</b></em>'
-	 */
-	public java.util.Set<String> getExcludeContentPackages() {
-		return excludeContentPackages;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>excludeContentPackages</b></em>'.
-	 * @param	excludeContentPackages	the value to add
-	 */
-	public void addExcludeContentPackages(String excludeContentPackages) {
-		this.excludeContentPackages.add(excludeContentPackages);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>excludeContentPackages</b></em>'.
-	 * @param	excludeContentPackages	the value to remove
-	 */
-	public void removeExcludeContentPackages(String excludeContentPackages) {
-		this.excludeContentPackages.remove(excludeContentPackages);
-	}
-	
-	/**
 	 * Returns the value of attribute '<em><b>typeMappingFile</b></em>'
 	 */
 	public java.util.Set<String> getTypeMappingFile() {
@@ -417,9 +369,9 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 			((List<Object>) generator.getBeautifier()).add(p);
 		}
 		if (isMultiValueSlot) {
-			generator.setExpand(template + " FOR " + getSlot());
-		} else {
 			generator.setExpand(template + " FOREACH " + getSlot());
+		} else {
+			generator.setExpand(template + " FOR " + getSlot());
 		}
 	}
 	
