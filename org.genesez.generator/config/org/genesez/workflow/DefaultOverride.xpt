@@ -20,7 +20,9 @@
 «ENDAROUND»
 
 «AROUND org::genesez::platform::java::java5::templates::Attribute::InitializationBlock FOR MClassifier -»
-	«targetDef.proceed() -»
+	«IF property.typeSelect(MAttribute).exists( p | !p.isDefaultOverride() && !p.static && !p.derived && p.isMultiValuedType() && p.hasDefaultValue() ) -»
+		«targetDef.proceed() -»
+	«ENDIF -»
 	«EXPAND DefaultOverride -»
 «ENDAROUND»
 

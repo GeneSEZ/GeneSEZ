@@ -34,13 +34,6 @@ public class Gcore2Php extends Model2Text {
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String accessorStyle = "magic";
 	
-	// initialize all multi valued fields with their default values
-	{
-		
-		// override default values of workflow parameters
-		setTemplate("org::genesez::platform::php5::templates::Root::Root");
-		addTypeMappingFile("org/genesez/platform/php/typemapping/typemapping.xml");
-	}
 	// override default values of workflow parameters
 	{
 		setTemplate("org::genesez::platform::php5::templates::Root::Root");

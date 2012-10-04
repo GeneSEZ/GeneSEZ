@@ -47,14 +47,6 @@ public class Gcore2Java extends Model2Text {
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean usePropertyVisibilityForAccessors = false;
 	
-	// initialize all multi valued fields with their default values
-	{
-		
-		// override default values of workflow parameters
-		setTemplate("org::genesez::platform::java::java5::templates::Root::Root");
-		addTypeMappingFile("org/genesez/platform/java/typemapping/typemapping.xml");
-		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
-	}
 	// override default values of workflow parameters
 	{
 		setTemplate("org::genesez::platform::java::java5::templates::Root::Root");
