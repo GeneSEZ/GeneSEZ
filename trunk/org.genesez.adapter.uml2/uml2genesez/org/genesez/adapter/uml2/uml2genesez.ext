@@ -119,6 +119,7 @@ create MModel transform(Model m) :
 	useLogger("org.genesez.adapter.uml2") ->
 	uml2model(m) ->
 	coremodel(this) ->
+	logWarn( "Unresolved UML profiles: " + m.getAllAppliedProfiles().select( p| p.isProxy() ) ) ->
 	logTrace( "transform model [ " + metaType + " ] - " + m ) ->
 	transformBasics(m) ->
 	transformPackage(m) ->
@@ -141,6 +142,7 @@ create MModel transform(Model m) :
 create MModel transform(Profile p) :
 	useLogger( "org.genesez.adapter.uml2" ) ->
 	coremodel(this) ->
+	logWarn( "Unresolved UML profiles: " + m.getAllAppliedProfiles().select( p| p.isProxy() ) ) ->
 	logTrace( "transform profile [ " + metaType + " ] - " + p ) ->
 	transformBasics(p) ->
 	transformPackage(p) ->
@@ -1266,6 +1268,11 @@ String xmiId (Element obj) :
 
 cached String generateID (Element obj) :
 	JAVA org.genesez.adapter.uml2.TransUtils.generateXmiId(org.eclipse.emf.ecore.EObject);
+
+/**
+ * Returns true if the specified instance is a proxy object, i.e. an unresolved object, otherwise false.
+ */
+boolean isProxy(Element this) : JAVA org.genesez.adapter.uml2.TransUtils.isProxy(org.eclipse.uml2.uml.Element);
 
 /**
  * process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)

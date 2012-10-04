@@ -3,7 +3,10 @@ package org.genesez.adapter.uml2;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.uml2.uml.Element;
@@ -18,6 +21,13 @@ import org.eclipse.uml2.uml.Stereotype;
  * @date	2007-06-11
  */
 public class TransUtils {
+	
+	/**
+	 * Returns true if the specified instance is a proxy object, i.e. an unresolved object, otherwise false.
+	 */
+	public static boolean isProxy(Element e) {
+		return e.eIsProxy();
+	}
 	
 	/**
 	 * Returns the tagged value of an uml model element
