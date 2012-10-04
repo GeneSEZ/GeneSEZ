@@ -121,9 +121,9 @@ public class DefaultGenerator extends Generator {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1318595813162_223951_3757) ENABLED START */
 		// add exclude packages as global variables
 		String packages = WorkflowUtils.arrayToString(excludedPackages);
-		addGlobalVarDef("excludePackages", packages);
+		addGlobalVarDef("excludePackage", packages);
 		String classifierPackages = WorkflowUtils.arrayToString(excludedContentPackages);
-		addGlobalVarDef("excludeContentPackages", classifierPackages);
+		addGlobalVarDef("excludeContentPackage", classifierPackages);
 		// init type mapper
 		TypeMapper.initTypeMapper(typeMappingFiles.toArray(new String[0]));
 		
