@@ -30,6 +30,8 @@ Workflow {
 		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
 		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
 		aopScript = "${namespace}::DoNotOptimizeFinalAttribsWithDefaultValue"
+		
+		globalVarDef = { name = "fieldAccess" value = "true" }
 	}
 	component = org.genesez.workflow.EmfWriter {
 		cloneSlotContents = true
@@ -47,10 +49,6 @@ Workflow {
 //		excludePackage = "org::genesez::m2t::xpand"
 //	}
 	component = workflow.xpand.Model2TextComposite {
-		importPreserver = m2t.xpand.XpandImportPreserver {
-			importRegex = "import .*;$"
-			fileExtensionRegex = ".*(\\.java$)"
-		}
 		component = platform.java.workflow.Gcore2Java {
 			outputDir = "../${name}/src-gen"
 			aopTemplate = "org::genesez::workflow::NoFixedImports"
@@ -68,10 +66,6 @@ Workflow {
 		}
 	}
 	component = workflow.xpand.Model2TextComposite {
-		importPreserver = m2t.xpand.XpandImportPreserver {
-			importRegex = "import .*;$"
-			fileExtensionRegex = ".*(\\.java$)"
-		}
 		component = platform.java.workflow.Gcore2Java {
 			outputDir = "../org.genesez.workflow.xpand/m2t"
 			aopTemplate = "org::genesez::workflow::NoFixedImports"
