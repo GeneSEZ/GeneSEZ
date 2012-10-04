@@ -35,26 +35,96 @@ Workflow {
 		cloneSlotContents = true
 		file = "model/${name}/uml2gcore.modified.gcore.xmi"
 	}
-	component = platform.java.workflow.JavaGenerator {
-		outputDir = "../${name}/src-gen"
-		aspectTemplate = "org::genesez::workflow::NoFixedImports"
-		typeMappingFile = "${classpath}/typemapping.xml"
-		typeMappingFile = "${classpath}/typemapping.rcs.xml"
-		typeMappingFile = "typemapping.acl.xml"
-		typeMappingFile = "typemapping.java.xml"
-		typeMappingFile = "typemapping.xpand.xml"
-		excludeContentPackage = ","
-		excludePackage = "org::genesez::m2t::xpand"
+//	component = platform.java.workflow.JavaGenerator {
+//		outputDir = "../${name}/src-gen"
+//		aspectTemplate = "org::genesez::workflow::NoFixedImports"
+//		typeMappingFile = "${classpath}/typemapping.xml"
+//		typeMappingFile = "${classpath}/typemapping.rcs.xml"
+//		typeMappingFile = "typemapping.acl.xml"
+//		typeMappingFile = "typemapping.java.xml"
+//		typeMappingFile = "typemapping.xpand.xml"
+//		excludeContentPackage = ","
+//		excludePackage = "org::genesez::m2t::xpand"
+//	}
+	component = workflow.xpand.Model2TextComposite {
+		importPreserver = m2t.xpand.XpandImportPreserver {
+			importRegex = "import .*;$"
+			fileExtensionRegex = ".*(\\.java$)"
+		}
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../${name}/src-gen"
+			aopTemplate = "org::genesez::workflow::NoFixedImports"
+			typeMappingFile = "${classpath}/typemapping.xml"
+			typeMappingFile = "${classpath}/typemapping.rcs.xml"
+			typeMappingFile = "typemapping.acl.xml"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.xpand.xml"
+			
+			excludePackage = "org::genesez::m2t::xpand"
+			excludeContentPackage = ","
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
 	}
-	component = platform.java.workflow.JavaGenerator {
-		outputDir = "../org.genesez.workflow.xpand/m2t"
-		aspectTemplate = "org::genesez::workflow::NoFixedImports"
-		typeMappingFile = "${classpath}/typemapping.xml"
-		typeMappingFile = "typemapping.acl.xml"
-		typeMappingFile = "typemapping.java.xml"
-		typeMappingFile = "typemapping.xpand.xml"
-		excludeContentPackage = ""
-		excludeContentPackage = "org::genesez::m2t"
-		excludePackage = "org::genesez::m2t::deletion"
+	component = workflow.xpand.Model2TextComposite {
+		importPreserver = m2t.xpand.XpandImportPreserver {
+			importRegex = "import .*;$"
+			fileExtensionRegex = ".*(\\.java$)"
+		}
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../org.genesez.workflow.xpand/m2t"
+			aopTemplate = "org::genesez::workflow::NoFixedImports"
+			typeMappingFile = "${classpath}/typemapping.xml"
+			typeMappingFile = "typemapping.acl.xml"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.xpand.xml"
+			
+			excludePackage = "org::genesez::m2t::deletion"
+			excludeContentPackage = ""
+			excludeContentPackage = "org::genesez::m2t"
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
+//		component = workflow.xpand.Model2Text {
+//			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+//			
+//			outputDir = "../org.genesez.workflow.xpand/m2t"
+//			aopTemplate = "org::genesez::workflow::NoFixedImports"
+//			typeMappingFile = "${classpath}/typemapping.xml"
+//			typeMappingFile = "typemapping.acl.xml"
+//			typeMappingFile = "typemapping.java.xml"
+//			typeMappingFile = "typemapping.xpand.xml"
+//			
+//			globalVarDef = { name = "excludeContentPackages" value = "',org::genesez::m2t'" }
+//			globalVarDef = { name = "excludePackages" value = "'org::genesez::m2t::deletion'"}
+//			globalVarDef = { name = "fieldAccess" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			
+//			globalVarDef = { name = "useModelNameAsBasePackage" value = "false"}
+//			globalVarDef = { name = "basePackage" value = "''"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "accessorForStereotypes" value = "'entity'"}
+//			globalVarDef = { name = "accessorStereotype" value = "'accessor'"}
+//			globalVarDef = { name = "usePropertyVisibilityForAccessors" value = "false"}
+//			
+//			template = "org::genesez::platform::java::java5::templates::Root::Root"
+//			
+//			postProcessor = org.eclipse.xpand2.output.JavaBeautifier {
+//				configFile = "org/genesez/platform/java/workflow/eclipse.java.formatter.settings.xml"
+//			}
+//		}
 	}
+//	component = platform.java.workflow.JavaGenerator {
+//		outputDir = "../org.genesez.workflow.xpand/m2t"
+//		aspectTemplate = "org::genesez::workflow::NoFixedImports"
+//		typeMappingFile = "${classpath}/typemapping.xml"
+//		typeMappingFile = "typemapping.acl.xml"
+//		typeMappingFile = "typemapping.java.xml"
+//		typeMappingFile = "typemapping.xpand.xml"
+//		excludeContentPackage = ""
+//		excludeContentPackage = "org::genesez::m2t"
+//		excludePackage = "org::genesez::m2t::deletion"
+//	}
 }
