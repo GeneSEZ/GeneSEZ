@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import org.genesez.util.FileSystemHelper;
@@ -201,6 +202,9 @@ public class FileDeletion extends DeletionFeature {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZACkBgD0EeK7ac-mrkJBDw) ENABLED START */
+	{
+		files = new LinkedHashMap<>();
+	}
 	/* PROTECTED REGION END */
 	
 }
