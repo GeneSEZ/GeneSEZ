@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,16 +61,17 @@ public class ImportPreserver extends FileTreeObserverAdapter {
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Sets file extensions for files that should be scanned. It creates a regular expression, which looks like: ".*(\\.extension|\\.extension|...)$"
-	 * @param	extension	the file extensions separated by ("," or ";")
+	 * @param	regex	the file extensions separated by ("," or ";")
 	 */
-	public void setFileExtensions(String extension) {
+	public void setFileExtensionRegex(String regex) {
 		/* PROTECTED REGION ID(java.implementation._Y_qJnAD0EeK7ac-mrkJBDw) ENABLED START */
-		String regex = extension.replaceAll(",", "|").replaceAll("\\.", "\\\\.");
-		regex = regex.substring(1, regex.length() - 1);
 		try {
 			extensionsRegex = Pattern.compile(".*(" + regex + ")$");
+			if (logger.isDebugEnabled()) {
+				logger.debug("File extension pattern: " + extensionsRegex.toString());
+			}
 		} catch (PatternSyntaxException e) {
-			logger.warn("File extensions are incorrectly specified: " + extension + ". All files will be processed!");
+			logger.warn("File extensions regex is incorrectly specified: " + regex + ". All files will be processed!");
 		}
 		//		if (extensionsRegex != null) {
 		//			this.getOptions().setProperty("org.genesez.importbeautifier.fileextensions", ".*(" + regex + ")$");
@@ -86,6 +88,9 @@ public class ImportPreserver extends FileTreeObserverAdapter {
 		/* PROTECTED REGION ID(java.implementation._Y_qJoAD0EeK7ac-mrkJBDw) ENABLED START */
 		try {
 			importRegex = Pattern.compile(regex);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Import regexp pattern: " + importRegex.toString());
+			}
 		} catch (PatternSyntaxException e) {
 			logger.fatal("Incorrect import regular expression: " + regex + " - Imports can not be carried over.");
 		}
@@ -256,7 +261,9 @@ public class ImportPreserver extends FileTreeObserverAdapter {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Y_qJgAD0EeK7ac-mrkJBDw) ENABLED START */
-	// TODO: put your own implementation code here
+	{
+		importMap = new LinkedHashMap<>();
+	}
 	/* PROTECTED REGION END */
 	
 }
