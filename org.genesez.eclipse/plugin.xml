@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
    <extension
-         point="org.eclipse.ui.newWizards">
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="GeneSEZ-Wizard">
+         <property
+               name="appName"
+               value="GeneSEZ-Wizard">
+         </property>
+      </product>
+   </extension>
+   <extension
+  		 point="org.eclipse.ui.newWizards">
       <category
-            id="org.genesez.eclipse"
+            id="org.genesez.eclipse4.wizard"
             name="GeneSEZ">
       </category>
       <wizard
-            category="org.genesez.eclipse"
-            class="org.genesez.eclipse.wizards.NewProjectWizard"
+            category="org.genesez.eclipse4.wizard"
+            class="org.genesez.eclipse4.wizard.ui.NewGeneSEZWizard"
             icon="icons/butterfly.gif"
-            id="org.genesez.eclipse.newprojectwizard"
+            id="org.genesez.eclipse4.wizard.genesezwizard"
             name="GeneSEZ Project"
             project="true">
       </wizard>
    </extension>
+ <!-- <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
+  <renameParticipant class="org.genesez.eclipse4.wizard.util.ProjectRenameParticipant" id="eclipse4.wizard.util.projectrenameparticipant" name="%Refactoring.ProjectRenameParitcipant">
+    <enablement>
+      <with variable="element">
+        <instanceof value="org.eclipse.core.resources.IProject"/>
+      </with>
+    </enablement>
+  </renameParticipant>
+</extension>-->
 
 </plugin>
