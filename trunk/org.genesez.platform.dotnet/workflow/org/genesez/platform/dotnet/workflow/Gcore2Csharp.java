@@ -6,7 +6,7 @@ package org.genesez.platform.dotnet.workflow;
  */
 
 import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.m2t.ImportPreserverConfig;
+import org.genesez.m2t.cp.ImportPreserverConfig;
 import org.genesez.workflow.xpand.Model2Text;
 
 /**

@@ -15,7 +15,6 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.genesez.m2t.ImportPreserverConfig;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -80,17 +79,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	protected boolean isComment(String line) {
 		/* PROTECTED REGION ID(java.implementation._Xc7swA89EeK6yuw9r03UDQ) ENABLED START */
 		return line.trim().startsWith("*");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Returns true if content is present to include in the specified file.
-	 * @param	fileId	
-	 * @return	
-	 */
-	public boolean hasIncludableContent(String fileId) {
-		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__b-7nAA7qEeKn_eQP-uNBOQ) ENABLED START */
-		return allImports.containsKey(fileId);
 		/* PROTECTED REGION END */
 	}
 	

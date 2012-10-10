@@ -16,13 +16,13 @@ import org.eclipse.xpand2.output.FileHandle;
 import org.eclipse.xpand2.output.PostProcessor;
 import org.genesez.m2t.cp.ContentIncluder;
 import org.genesez.m2t.cp.LineContentPreservable;
-import org.genesez.m2t.cp.LineContentPreserve;
+import org.genesez.m2t.cp.LineContentPreserving;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  * @author dreamer
  */
-public class XPandLineContentPreserve extends LineContentPreserve implements PostProcessor {
+public class XPandLineContentPreserving extends LineContentPreserving implements PostProcessor {
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**

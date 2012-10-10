@@ -15,7 +15,7 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.genesez.m2t.FileTreeObserver;
 import org.genesez.m2t.FileTreeWalker;
 import org.genesez.m2t.cp.ImportPreserver;
-import org.genesez.m2t.cp.xpand.XPandLineContentPreserve;
+import org.genesez.m2t.cp.xpand.XPandLineContentPreserving;
 import org.genesez.m2t.deletion.FileDeletion;
 import org.genesez.m2t.deletion.FolderDeletion;
 import org.genesez.m2t.deletion.RevisionControlSystemFinder;
@@ -41,7 +41,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	private FolderDeletion folderDeletion;
 	
-	private XPandLineContentPreserve contentPreserve;
+	private XPandLineContentPreserving contentPreserve;
 	
 	private ImportPreserver importPreserver;
 	
@@ -105,7 +105,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 			if (logger.isDebugEnabled()) {
 				logger.debug("Use default content preserve.");
 			}
-			contentPreserve = new XPandLineContentPreserve();
+			contentPreserve = new XPandLineContentPreserving();
 			contentPreserve.preservable().insert(importPreserver);
 		}
 		if (preFileTreeWalker == null) {
@@ -225,14 +225,14 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	/**
 	 * Returns the value of attribute '<em><b>contentPreserve</b></em>'
 	 */
-	public XPandLineContentPreserve getContentPreserve() {
+	public XPandLineContentPreserving getContentPreserve() {
 		return contentPreserve;
 	}
 	
 	/**
 	 * Sets the value of attribute '<em><b>contentPreserve</b></em>'
 	 */
-	public void setContentPreserve(XPandLineContentPreserve contentPreserve) {
+	public void setContentPreserve(XPandLineContentPreserving contentPreserve) {
 		this.contentPreserve = contentPreserve;
 	}
 	

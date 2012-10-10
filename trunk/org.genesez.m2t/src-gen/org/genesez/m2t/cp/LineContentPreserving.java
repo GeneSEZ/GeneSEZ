@@ -30,7 +30,7 @@ import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
  * Please describe the responsibility of your class in your modeling tool.
  * @author dreamer
  */
-public class LineContentPreserve extends FileTreeObserverAdapter implements AssociationRole {
+public class LineContentPreserving extends FileTreeObserverAdapter implements AssociationRole {
 	
 	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
@@ -250,7 +250,7 @@ public class LineContentPreserve extends FileTreeObserverAdapter implements Asso
 	
 	// initialization block for association management objects
 	{
-		association.put(Associations.PRESERVABLE, new ManyAssociation<LineContentPreserve, LineContentPreservable>(this, preservable));
+		association.put(Associations.PRESERVABLE, new ManyAssociation<LineContentPreserving, LineContentPreservable>(this, preservable));
 	}
 	
 	/**
@@ -267,8 +267,8 @@ public class LineContentPreserve extends FileTreeObserverAdapter implements Asso
 	 * Provides access to the association '<em><b>preservable</b></em>' to {@link LineContentPreservable}.
 	 */
 	@SuppressWarnings("unchecked")
-	public Association<LineContentPreserve, LineContentPreservable> preservable() {
-		return (Association<LineContentPreserve, LineContentPreservable>) association.get(Associations.PRESERVABLE);
+	public Association<LineContentPreserving, LineContentPreservable> preservable() {
+		return (Association<LineContentPreserving, LineContentPreservable>) association.get(Associations.PRESERVABLE);
 	}
 	
 	// -- generated code  ---------------------------------------------------
