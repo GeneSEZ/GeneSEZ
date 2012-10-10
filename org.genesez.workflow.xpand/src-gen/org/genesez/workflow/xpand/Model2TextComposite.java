@@ -6,21 +6,20 @@ package org.genesez.workflow.xpand;
  */
 
 import java.util.Set;
-import org.genesez.m2t.deletion.RevisionControlSystemFinder;
-import org.genesez.m2t.deletion.FileDeletion;
-import org.genesez.m2t.deletion.FolderDeletion;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.WorkflowContext;
-import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.workflow.CompositeComponent;
-import org.genesez.m2t.xpand.XpandImportPreserver;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.genesez.m2t.FileTreeObserver;
 import org.genesez.m2t.FileTreeWalker;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-import org.genesez.m2t.cp.LineContentPreserve;
 import org.genesez.m2t.cp.ImportPreserver;
 import org.genesez.m2t.cp.xpand.XPandLineContentPreserve;
+import org.genesez.m2t.deletion.FileDeletion;
+import org.genesez.m2t.deletion.FolderDeletion;
+import org.genesez.m2t.deletion.RevisionControlSystemFinder;
+import org.genesez.workflow.CompositeComponent;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -42,7 +41,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	private FolderDeletion folderDeletion;
 	
-	private LineContentPreserve contentPreserve;
+	private XPandLineContentPreserve contentPreserve;
 	
 	private ImportPreserver importPreserver;
 	
@@ -144,7 +143,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 		// add import preserver as post processor
 		if (contentPreserve != null) {
 			for (Model2Text m2t : getComponent()) {
-				m2t.addPostProcessor((XPandLineContentPreserve)contentPreserve);
+				m2t.addPostProcessor(contentPreserve);
 			}
 		}
 		
@@ -226,14 +225,14 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	/**
 	 * Returns the value of attribute '<em><b>contentPreserve</b></em>'
 	 */
-	public LineContentPreserve getContentPreserve() {
+	public XPandLineContentPreserve getContentPreserve() {
 		return contentPreserve;
 	}
 	
 	/**
 	 * Sets the value of attribute '<em><b>contentPreserve</b></em>'
 	 */
-	public void setContentPreserve(LineContentPreserve contentPreserve) {
+	public void setContentPreserve(XPandLineContentPreserve contentPreserve) {
 		this.contentPreserve = contentPreserve;
 	}
 	
