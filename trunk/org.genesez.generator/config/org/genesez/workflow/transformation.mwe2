@@ -107,88 +107,193 @@ Workflow {
 		file = "model/${name}/uml2gcore.modified.gcore.xmi"
 	}
 	// -- mwe + mwe2 integration
-	component = platform.java.workflow.JavaGenerator {
-		outputDir = "../${name}/src-gen"
-		aspectTemplate = "${namespace}::NoFixedImports"
-		aspectTemplate = "${namespace}::AnnotationImports"
-		aspectTemplate = "${namespace}::Delegate"
-		typeMappingFile = "typemapping.acl.xml"
-		typeMappingFile = "typemapping.java.xml"
-		typeMappingFile = "typemapping.mwe.xml"
-		excludePackage = "org::genesez::workflow::xpand"
-		excludePackage = "org::genesez::platform::java::workflow"
-		excludePackage = "org::genesez::platform::typo3::workflow"
-		excludePackage = "org::genesez::platform::documentation::workflow"
-		excludePackage = "org::genesez::platform::dotnet::workflow"
-		excludePackage = "org::genesez::platform::php::workflow"
-		excludePackage = "org::genesez::metamodel::core::util::workflow"
-		// we exclude direct model contents only by specifying e.g. the separator
-		excludeContentPackage = ","
+//	component = platform.java.workflow.JavaGenerator {
+//		outputDir = "../${name}/src-gen"
+//		aspectTemplate = "${namespace}::NoFixedImports"
+//		aspectTemplate = "${namespace}::AnnotationImports"
+//		aspectTemplate = "${namespace}::Delegate"
+//		typeMappingFile = "typemapping.acl.xml"
+//		typeMappingFile = "typemapping.java.xml"
+//		typeMappingFile = "typemapping.mwe.xml"
+//		excludePackage = "org::genesez::workflow::xpand"
+//		excludePackage = "org::genesez::adapter::uml2::workflow"
+//		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//		excludePackage = "org::genesez::platform::java::workflow"
+//		excludePackage = "org::genesez::platform::typo3::workflow"
+//		excludePackage = "org::genesez::platform::documentation::workflow"
+//		excludePackage = "org::genesez::platform::dotnet::workflow"
+//		excludePackage = "org::genesez::platform::php::workflow"
+//		// we exclude direct model contents only by specifying e.g. the separator
+//		excludeContentPackage = ","
+//	}
+	component = workflow.xpand.Model2TextComposite {
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../${name}/src-gen"
+			aopTemplate = "${namespace}::NoFixedImports"
+			aopTemplate = "${namespace}::AnnotationImports"
+			aopTemplate = "${namespace}::Delegate"
+			typeMappingFile = "typemapping.acl.xml"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.mwe.xml"
+			
+			excludePackage = "org::genesez::workflow::xpand"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
+			excludePackage = "org::genesez::platform::java::workflow"
+			excludePackage = "org::genesez::platform::typo3::workflow"
+			excludePackage = "org::genesez::platform::documentation::workflow"
+			excludePackage = "org::genesez::platform::dotnet::workflow"
+			excludePackage = "org::genesez::platform::php::workflow"
+			// we exclude direct model contents only by specifying e.g. the separator
+			excludeContentPackage = ","
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
 	}
 	// -- xpand workflow integration
-	component = platform.java.workflow.JavaGenerator {
-		outputDir = "../${name}.xpand/src-gen"
-		aspectTemplate = "${namespace}::NoFixedImports"
-		aspectTemplate = "${namespace}::AnnotationImports"
-		aspectTemplate = "${namespace}::Delegate"
-		aspectTemplate = "${namespace}::DefaultOverride"
-		aspectTemplate = "${namespace}::CheckConfiguration"
-		typeMappingFile = "typemapping.acl.xml"
-		typeMappingFile = "typemapping.java.xml"
-		typeMappingFile = "typemapping.mwe.xml"
-		typeMappingFile = "typemapping.xpand.xml"
-		excludeContentPackage = ""
-		excludeContentPackage = "org::genesez::workflow"
-		excludeContentPackage = "org::genesez::workflow::profile"
-		excludePackage = "org::genesez::workflow::xpand::uml2"
-		excludePackage = "org::genesez::platform::java::workflow"
-		excludePackage = "org::genesez::platform::typo3::workflow"
-		excludePackage = "org::genesez::platform::documentation::workflow"
-		excludePackage = "org::genesez::platform::dotnet::workflow"
-		excludePackage = "org::genesez::platform::php::workflow"
-		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//	component = platform.java.workflow.JavaGenerator {
+//		outputDir = "../${name}.xpand/src-gen"
+//		aspectTemplate = "${namespace}::NoFixedImports"
+//		aspectTemplate = "${namespace}::AnnotationImports"
+//		aspectTemplate = "${namespace}::Delegate"
+//		aspectTemplate = "${namespace}::DefaultOverride"
+//		aspectTemplate = "${namespace}::CheckConfiguration"
+//		typeMappingFile = "typemapping.acl.xml"
+//		typeMappingFile = "typemapping.java.xml"
+//		typeMappingFile = "typemapping.mwe.xml"
+//		typeMappingFile = "typemapping.xpand.xml"
+//		excludeContentPackage = ""
+//		excludeContentPackage = "org::genesez::workflow"
+//		excludeContentPackage = "org::genesez::workflow::profile"
+//		excludePackage = "org::genesez::adapter::uml2::workflow"
+//		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//		excludePackage = "org::genesez::platform::java::workflow"
+//		excludePackage = "org::genesez::platform::typo3::workflow"
+//		excludePackage = "org::genesez::platform::documentation::workflow"
+//		excludePackage = "org::genesez::platform::dotnet::workflow"
+//		excludePackage = "org::genesez::platform::php::workflow"
+//	}
+	component = workflow.xpand.Model2TextComposite {
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../${name}.xpand/src-gen"
+			aopTemplate = "${namespace}::NoFixedImports"
+			aopTemplate = "${namespace}::AnnotationImports"
+			aopTemplate = "${namespace}::Delegate"
+			aopTemplate = "${namespace}::DefaultOverride"
+			aopTemplate = "${namespace}::CheckConfiguration"
+			typeMappingFile = "typemapping.acl.xml"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.mwe.xml"
+			typeMappingFile = "typemapping.xpand.xml"
+			
+			excludeContentPackage = ""
+			excludeContentPackage = "org::genesez::workflow"
+			excludeContentPackage = "org::genesez::workflow::profile"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
+			excludePackage = "org::genesez::platform::java::workflow"
+			excludePackage = "org::genesez::platform::typo3::workflow"
+			excludePackage = "org::genesez::platform::documentation::workflow"
+			excludePackage = "org::genesez::platform::dotnet::workflow"
+			excludePackage = "org::genesez::platform::php::workflow"
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
 	}
 	// -- uml2 adapter
-	component = platform.java.workflow.JavaGenerator {
-		outputDir = "../org.genesez.adapter.uml2/src-gen"
-		aspectTemplate = "${namespace}::NoFixedImports"
-		aspectTemplate = "${namespace}::AnnotationImports"
-		aspectTemplate = "${namespace}::Delegate"
-		aspectTemplate = "${namespace}::DefaultOverride"
-		aspectTemplate = "${namespace}::CheckConfiguration"
-		typeMappingFile = "typemapping.java.xml"
-		typeMappingFile = "typemapping.mwe.xml"
-		typeMappingFile = "typemapping.xpand.xml"
-		excludeContentPackage = ""
-		excludeContentPackage = "org::genesez::workflow"
-		excludeContentPackage = "org::genesez::workflow::xpand"
-		excludeContentPackage = "org::genesez::workflow::profile"
-		excludePackage = "org::genesez::platform::java::workflow"
-		excludePackage = "org::genesez::platform::typo3::workflow"
-		excludePackage = "org::genesez::platform::documentation::workflow"
-		excludePackage = "org::genesez::platform::dotnet::workflow"
-		excludePackage = "org::genesez::platform::php::workflow"
-		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//	component = platform.java.workflow.JavaGenerator {
+//		outputDir = "../org.genesez.adapter.uml2/src-gen"
+//		aspectTemplate = "${namespace}::NoFixedImports"
+//		aspectTemplate = "${namespace}::AnnotationImports"
+//		aspectTemplate = "${namespace}::Delegate"
+//		aspectTemplate = "${namespace}::DefaultOverride"
+//		aspectTemplate = "${namespace}::CheckConfiguration"
+//		typeMappingFile = "typemapping.java.xml"
+//		typeMappingFile = "typemapping.mwe.xml"
+//		typeMappingFile = "typemapping.xpand.xml"
+//		excludeContentPackage = ""
+//		excludeContentPackage = "org::genesez::workflow"
+//		excludeContentPackage = "org::genesez::workflow::xpand"
+//		excludeContentPackage = "org::genesez::workflow::profile"
+//		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//		excludePackage = "org::genesez::platform::java::workflow"
+//		excludePackage = "org::genesez::platform::typo3::workflow"
+//		excludePackage = "org::genesez::platform::documentation::workflow"
+//		excludePackage = "org::genesez::platform::dotnet::workflow"
+//		excludePackage = "org::genesez::platform::php::workflow"
+//	}
+	component = workflow.xpand.Model2TextComposite {
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../org.genesez.adapter.uml2/src-gen"
+			aopTemplate = "${namespace}::NoFixedImports"
+			aopTemplate = "${namespace}::AnnotationImports"
+			aopTemplate = "${namespace}::Delegate"
+			aopTemplate = "${namespace}::DefaultOverride"
+			aopTemplate = "${namespace}::CheckConfiguration"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.mwe.xml"
+			typeMappingFile = "typemapping.xpand.xml"
+			
+			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
+			excludePackage = "org::genesez::platform::typo3::workflow"
+			excludePackage = "org::genesez::platform::java::workflow"
+			excludePackage = "org::genesez::platform::documentation::workflow"
+			excludePackage = "org::genesez::platform::dotnet::workflow"
+			excludePackage = "org::genesez::platform::php::workflow"
+			excludeContentPackage = ","
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
 	}
 	// -- java platform
-	component = platform.java.workflow.JavaGenerator {
-		outputDir = "../org.genesez.platform.java/workflow"
-		aspectTemplate = "${namespace}::NoFixedImports"
-		aspectTemplate = "${namespace}::AnnotationImports"
-		aspectTemplate = "${namespace}::Delegate"
-		aspectTemplate = "${namespace}::CheckConfiguration"
-		aspectTemplate = "${namespace}::DefaultOverride"
-		typeMappingFile = "typemapping.java.xml"
-		typeMappingFile = "typemapping.mwe.xml"
-		typeMappingFile = "typemapping.xpand.xml"
-		// we exclude direct model contents only by specifying e.g. the separator
-		excludeContentPackage = ","
-		excludePackage = "org::genesez::workflow"
-		excludePackage = "org::genesez::platform::typo3::workflow"
-		excludePackage = "org::genesez::platform::documentation::workflow"
-		excludePackage = "org::genesez::platform::dotnet::workflow"
-		excludePackage = "org::genesez::platform::php::workflow"
-		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//	component = platform.java.workflow.JavaGenerator {
+//		outputDir = "../org.genesez.platform.java/workflow"
+//		aspectTemplate = "${namespace}::NoFixedImports"
+//		aspectTemplate = "${namespace}::AnnotationImports"
+//		aspectTemplate = "${namespace}::Delegate"
+//		aspectTemplate = "${namespace}::CheckConfiguration"
+//		aspectTemplate = "${namespace}::DefaultOverride"
+//		typeMappingFile = "typemapping.java.xml"
+//		typeMappingFile = "typemapping.mwe.xml"
+//		typeMappingFile = "typemapping.xpand.xml"
+//		// we exclude direct model contents only by specifying e.g. the separator
+//		excludeContentPackage = ","
+//		excludePackage = "org::genesez::workflow"
+//		excludePackage = "org::genesez::adapter::uml2::workflow"
+//		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//		excludePackage = "org::genesez::platform::typo3::workflow"
+//		excludePackage = "org::genesez::platform::documentation::workflow"
+//		excludePackage = "org::genesez::platform::dotnet::workflow"
+//		excludePackage = "org::genesez::platform::php::workflow"
+//	}
+	component = workflow.xpand.Model2TextComposite {
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../org.genesez.platform.java/workflow"
+			aopTemplate = "${namespace}::NoFixedImports"
+			aopTemplate = "${namespace}::AnnotationImports"
+			aopTemplate = "${namespace}::Delegate"
+			aopTemplate = "${namespace}::DefaultOverride"
+			aopTemplate = "${namespace}::CheckConfiguration"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.mwe.xml"
+			typeMappingFile = "typemapping.xpand.xml"
+			
+			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
+			excludePackage = "org::genesez::platform::typo3::workflow"
+			excludePackage = "org::genesez::platform::documentation::workflow"
+			excludePackage = "org::genesez::platform::dotnet::workflow"
+			excludePackage = "org::genesez::platform::php::workflow"
+			excludeContentPackage = ","
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
 	}
 	// -- typo3 platform
 	component = workflow.xpand.Model2TextComposite {
@@ -204,11 +309,12 @@ Workflow {
 			typeMappingFile = "typemapping.xpand.xml"
 			
 			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
 			excludePackage = "org::genesez::platform::java::workflow"
 			excludePackage = "org::genesez::platform::documentation::workflow"
 			excludePackage = "org::genesez::platform::dotnet::workflow"
 			excludePackage = "org::genesez::platform::php::workflow"
-			excludePackage = "org::genesez::metamodel::core::util::workflow"
 			excludeContentPackage = ","
 			
 			globalVarDef = { name = "newAssociationHandling" value = "true"}
@@ -216,25 +322,52 @@ Workflow {
 		}
 	}
 	// -- documentation platform
-	component = platform.java.workflow.JavaGenerator {
-		outputDir = "../org.genesez.platform.documentation/workflow"
-		aspectTemplate = "${namespace}::NoFixedImports"
-		aspectTemplate = "${namespace}::AnnotationImports"
-		aspectTemplate = "${namespace}::Delegate"
-		aspectTemplate = "${namespace}::CheckConfiguration"
-		aspectTemplate = "${namespace}::DefaultOverride"
-		typeMappingFile = "typemapping.java.xml"
-		typeMappingFile = "typemapping.mwe.xml"
-		typeMappingFile = "typemapping.xpand.xml"
-		// we exclude direct model contents only by specifying e.g. the separator
-		excludeContentPackage = ","
-		excludePackage = "org::genesez::workflow"
-		excludePackage = "org::genesez::platform::java::workflow"
-		excludePackage = "org::genesez::platform::typo3::workflow"
-		excludePackage = "org::genesez::platform::dotnet::workflow"
-		excludePackage = "org::genesez::platform::php::workflow"
-		excludePackage = "org::genesez::metamodel::core::util::workflow"
+	component = workflow.xpand.Model2TextComposite {
+		component = platform.java.workflow.Gcore2Java {
+			outputDir = "../org.genesez.platform.documentation/workflow"
+			aopTemplate = "${namespace}::NoFixedImports"
+			aopTemplate = "${namespace}::AnnotationImports"
+			aopTemplate = "${namespace}::Delegate"
+			aopTemplate = "${namespace}::DefaultOverride"
+			aopTemplate = "${namespace}::CheckConfiguration"
+			typeMappingFile = "typemapping.java.xml"
+			typeMappingFile = "typemapping.mwe.xml"
+			typeMappingFile = "typemapping.xpand.xml"
+			
+			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
+			excludePackage = "org::genesez::platform::java::workflow"
+			excludePackage = "org::genesez::platform::typo3::workflow"
+			excludePackage = "org::genesez::platform::dotnet::workflow"
+			excludePackage = "org::genesez::platform::php::workflow"
+			
+			excludeContentPackage = ","
+			
+			globalVarDef = { name = "newAssociationHandling" value = "true"}
+			globalVarDef = { name = "generateSectionComments" value = "true"}
+		}
 	}
+//	component = platform.java.workflow.JavaGenerator {
+//		outputDir = "../org.genesez.platform.documentation/workflow"
+//		aspectTemplate = "${namespace}::NoFixedImports"
+//		aspectTemplate = "${namespace}::AnnotationImports"
+//		aspectTemplate = "${namespace}::Delegate"
+//		aspectTemplate = "${namespace}::CheckConfiguration"
+//		aspectTemplate = "${namespace}::DefaultOverride"
+//		typeMappingFile = "typemapping.java.xml"
+//		typeMappingFile = "typemapping.mwe.xml"
+//		typeMappingFile = "typemapping.xpand.xml"
+//		// we exclude direct model contents only by specifying e.g. the separator
+//		excludeContentPackage = ","
+//		excludePackage = "org::genesez::workflow"
+//		excludePackage = "org::genesez::adapter::uml2::workflow"
+//		excludePackage = "org::genesez::metamodel::core::util::workflow"
+//		excludePackage = "org::genesez::platform::java::workflow"
+//		excludePackage = "org::genesez::platform::typo3::workflow"
+//		excludePackage = "org::genesez::platform::dotnet::workflow"
+//		excludePackage = "org::genesez::platform::php::workflow"
+//	}
 	// -- c# platform
 	component = workflow.xpand.Model2TextComposite {
 		component = platform.java.workflow.Gcore2Java {
@@ -249,11 +382,12 @@ Workflow {
 			typeMappingFile = "typemapping.xpand.xml"
 			
 			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
 			excludePackage = "org::genesez::platform::java::workflow"
 			excludePackage = "org::genesez::platform::typo3::workflow"
 			excludePackage = "org::genesez::platform::documentation::workflow"
 			excludePackage = "org::genesez::platform::php::workflow"
-			excludePackage = "org::genesez::metamodel::core::util::workflow"
 			excludeContentPackage = ","
 			
 			globalVarDef = { name = "newAssociationHandling" value = "true"}
@@ -274,11 +408,12 @@ Workflow {
 			typeMappingFile = "typemapping.xpand.xml"
 			
 			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
+			excludePackage = "org::genesez::metamodel::core::util::workflow"
 			excludePackage = "org::genesez::platform::java::workflow"
 			excludePackage = "org::genesez::platform::typo3::workflow"
 			excludePackage = "org::genesez::platform::documentation::workflow"
 			excludePackage = "org::genesez::platform::dotnet::workflow"
-			excludePackage = "org::genesez::metamodel::core::util::workflow"
 			excludeContentPackage = ","
 			
 			globalVarDef = { name = "newAssociationHandling" value = "true"}
@@ -299,6 +434,7 @@ Workflow {
 			typeMappingFile = "typemapping.xpand.xml"
 			
 			excludePackage = "org::genesez::workflow"
+			excludePackage = "org::genesez::adapter::uml2::workflow"
 			excludePackage = "org::genesez::platform::java::workflow"
 			excludePackage = "org::genesez::platform::typo3::workflow"
 			excludePackage = "org::genesez::platform::documentation::workflow"
