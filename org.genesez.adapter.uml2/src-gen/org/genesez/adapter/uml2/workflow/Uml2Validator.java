@@ -8,7 +8,6 @@ package org.genesez.adapter.uml2.workflow;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
 import org.genesez.workflow.xpand.Validator;
-import org.genesez.workflow.profile.DefaultOverride;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

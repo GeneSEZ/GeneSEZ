@@ -5,12 +5,12 @@ package org.genesez.adapter.uml2.workflow;
  * 	@FILE-ID : (_F6MosP3MEeGcKvbUXThvRw) 
  */
 
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
-import org.genesez.workflow.xpand.Model2Model;
-import org.genesez.workflow.profile.DefaultOverride;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.xpand.Model2Model;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
