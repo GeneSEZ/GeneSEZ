@@ -12,13 +12,6 @@ package org.genesez.m2t.cp;
 public interface ContentIncluder {
 	
 	/**
-	 * Returns true if content is present to include in the specified file.
-	 * @param	fileId	
-	 * @return	
-	 */
-	public boolean hasIncludableContent(String fileId);
-	
-	/**
 	 * Includes the preserved content into the specified content and returns all content.
 	 * @param	input	
 	 * @return	
