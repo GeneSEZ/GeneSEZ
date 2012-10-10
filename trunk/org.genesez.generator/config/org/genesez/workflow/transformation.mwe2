@@ -24,10 +24,10 @@ Workflow {
 //		modelFile = "../${name}/model/genesez.workflow.uml"
 //		outputSlot = "uml2model"
 //	}
-	component = workflow.EmfReader {
-		file = "modeling/${name}/genesez.workflow.uml"
-		slot = "uml2model"
-	}
+//	component = workflow.EmfReader {
+//		file = "modeling/${name}/genesez.workflow.uml"
+//		slot = "uml2model"
+//	}
 //	component = org.eclipse.xtend.check.CheckComponent {
 //		metaModel = uml
 //		checkFile = "org::genesez::adapter::uml2::uml2constraints"
@@ -43,7 +43,7 @@ Workflow {
 //		script = "org::genesez::adapter::uml2::UmlStateMachineValidation"
 //		script = "org::genesez::adapter::uml2::Uml2GeneSezStateMachineValidation"
 //	}
-	component = workflow.xpand.uml2.Uml2Validator {}
+//	component = workflow.xpand.uml2.Uml2Validator {}
 //	component = org.eclipse.xtend.XtendComponent {
 //		metaModel = gcore
 //		metaModel = uml
@@ -72,8 +72,18 @@ Workflow {
 //		script = "org::genesez::adapter::uml2::uml2genesez::transform"
 //		outputSlot = "coremodel"
 //	}
-	component = workflow.xpand.uml2.Uml2Gcore {
-		includeProfiles = "org.genesez.workflow.profile"
+//	component = workflow.xpand.uml2.Uml2Gcore {
+//		includeProfiles = "org.genesez.workflow.profile"
+//	}
+	component = workflow.CompositeComponent {
+		component = workflow.EmfReader {
+			file = "modeling/${name}/genesez.workflow.uml"
+			slot = "uml2model"
+		}
+		component = adapter.uml2.workflow.Uml2Validator {}
+		component = adapter.uml2.workflow.Uml2Gcore {
+			includeProfiles = "org.genesez.workflow.profile"
+		}
 	}
 //	component = platform.common.workflow.Serializer {
 //		file = "model/${name}/uml2gcore.gcore.xmi"
