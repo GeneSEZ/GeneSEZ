@@ -5,20 +5,17 @@ package org.genesez.workflow;
  * 	@FILE-ID : (_PXWqsPLLEeGYwYEQM4LYvw) 
  */
 
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+
 import org.apache.commons.io.FileUtils;
-import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.genesez.workflow.profile.Parameter;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Provides copying services for files and directories (recursively) based on apache commons io.

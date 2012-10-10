@@ -4,8 +4,8 @@ package org.genesez.m2t.deletion;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_bPxLoAS9EeKUpcpqfZ9tsA) 
  */
-
 import java.io.File;
+
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheEditor;
 import org.eclipse.jgit.util.FS;

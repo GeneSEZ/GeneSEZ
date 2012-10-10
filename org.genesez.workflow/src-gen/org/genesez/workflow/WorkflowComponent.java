@@ -5,8 +5,8 @@ package org.genesez.workflow;
  * 	@FILE-ID : (_AU05APRzEeGG-J2DIYyoXg) 
  */
 
-import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.WorkflowComponentWithID;
+import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe2.runtime.workflow.IWorkflowComponent;
 
 /**

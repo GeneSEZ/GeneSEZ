@@ -10,9 +10,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.genesez.m2t.FileTreeObserverAdapter;
-import org.apache.commons.logging.LogFactory;
+
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.genesez.m2t.FileTreeObserverAdapter;
 
 /**
  * org.eclipse.jgit-1.0.0.201106090707-r.jar

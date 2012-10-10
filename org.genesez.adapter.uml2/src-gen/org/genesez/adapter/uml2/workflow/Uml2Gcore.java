@@ -1,4 +1,4 @@
-package org.genesez.workflow.xpand.uml2;
+package org.genesez.adapter.uml2.workflow;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 

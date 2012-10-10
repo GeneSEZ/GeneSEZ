@@ -7,17 +7,13 @@ package org.genesez.workflow.xpand;
 
 import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 import org.genesez.workflow.AbstractSlotWorkflowComponent;
 import org.genesez.workflow.profile.Parameter;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
