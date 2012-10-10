@@ -18,6 +18,9 @@ import org.genesez.m2t.FileTreeObserver;
 import org.genesez.m2t.FileTreeWalker;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import org.genesez.m2t.cp.LineContentPreserve;
+import org.genesez.m2t.cp.ImportPreserver;
+import org.genesez.m2t.cp.xpand.XPandLineContentPreserve;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -29,17 +32,19 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
+	private FileTreeWalker preFileTreeWalker;
+	
+	private FileTreeWalker postFileTreeWalker;
+	
 	private RevisionControlSystemFinder revisionControlSystemFinder;
 	
 	private FileDeletion fileDeletion;
 	
 	private FolderDeletion folderDeletion;
 	
-	private XpandImportPreserver importPreserver;
+	private LineContentPreserve contentPreserve;
 	
-	private FileTreeWalker preFileTreeWalker;
-	
-	private FileTreeWalker postFileTreeWalker;
+	private ImportPreserver importPreserver;
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**
@@ -72,7 +77,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 			
 			// create import preserver if config available
 			if (m2t.getImportPreserverConfig() != null && importPreserver == null) {
-				importPreserver = new XpandImportPreserver();
+				importPreserver = new ImportPreserver();
 				importPreserver.setConfig(m2t.getImportPreserverConfig());
 			}
 		}
@@ -97,6 +102,13 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 			revisionControlSystemFinder = new RevisionControlSystemFinder();
 			revisionControlSystemFinder.setBaseDir(defaultOutputDir);
 		}
+		if (contentPreserve == null && importPreserver != null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Use default content preserve.");
+			}
+			contentPreserve = new XPandLineContentPreserve();
+			contentPreserve.preservable().insert(importPreserver);
+		}
 		if (preFileTreeWalker == null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Use default pre file tree walker configuration.");
@@ -105,16 +117,16 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 			preFileTreeWalker.setBaseDir(defaultOutputDir);
 			preFileTreeWalker.addObserver(revisionControlSystemFinder);
 			preFileTreeWalker.addObserver(fileDeletion);
-			if (importPreserver != null)
-				preFileTreeWalker.addObserver(importPreserver);
+			if (contentPreserve != null)
+				preFileTreeWalker.addObserver(contentPreserve);
 		} else {
 			Set<FileTreeObserver> obs = preFileTreeWalker.getObserver();
 			if (!obs.contains(revisionControlSystemFinder))
 				obs.add(revisionControlSystemFinder);
 			if (!obs.contains(folderDeletion))
 				obs.add(folderDeletion);
-			if (importPreserver != null && !obs.contains(importPreserver))
-				obs.add(importPreserver);
+			if (contentPreserve != null && !obs.contains(contentPreserve))
+				obs.add(contentPreserve);
 		}
 		if (postFileTreeWalker == null) {
 			if (logger.isDebugEnabled()) {
@@ -130,9 +142,9 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 		}
 		
 		// add import preserver as post processor
-		if (importPreserver != null) {
+		if (contentPreserve != null) {
 			for (Model2Text m2t : getComponent()) {
-				m2t.addPostProcessor(importPreserver);
+				m2t.addPostProcessor((XPandLineContentPreserve)contentPreserve);
 			}
 		}
 		
@@ -141,6 +153,34 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	}
 	
 	// -- generated association + attribute accessors -----------------------
+	/**
+	 * Returns the value of attribute '<em><b>preFileTreeWalker</b></em>'
+	 */
+	public FileTreeWalker getPreFileTreeWalker() {
+		return preFileTreeWalker;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>preFileTreeWalker</b></em>'
+	 */
+	public void setPreFileTreeWalker(FileTreeWalker preFileTreeWalker) {
+		this.preFileTreeWalker = preFileTreeWalker;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>postFileTreeWalker</b></em>'
+	 */
+	public FileTreeWalker getPostFileTreeWalker() {
+		return postFileTreeWalker;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>postFileTreeWalker</b></em>'
+	 */
+	public void setPostFileTreeWalker(FileTreeWalker postFileTreeWalker) {
+		this.postFileTreeWalker = postFileTreeWalker;
+	}
+	
 	/**
 	 * Returns the value of attribute '<em><b>revisionControlSystemFinder</b></em>'
 	 */
@@ -184,45 +224,31 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	}
 	
 	/**
+	 * Returns the value of attribute '<em><b>contentPreserve</b></em>'
+	 */
+	public LineContentPreserve getContentPreserve() {
+		return contentPreserve;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>contentPreserve</b></em>'
+	 */
+	public void setContentPreserve(LineContentPreserve contentPreserve) {
+		this.contentPreserve = contentPreserve;
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>importPreserver</b></em>'
 	 */
-	public XpandImportPreserver getImportPreserver() {
+	public ImportPreserver getImportPreserver() {
 		return importPreserver;
 	}
 	
 	/**
 	 * Sets the value of attribute '<em><b>importPreserver</b></em>'
 	 */
-	public void setImportPreserver(XpandImportPreserver importPreserver) {
+	public void setImportPreserver(ImportPreserver importPreserver) {
 		this.importPreserver = importPreserver;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>preFileTreeWalker</b></em>'
-	 */
-	public FileTreeWalker getPreFileTreeWalker() {
-		return preFileTreeWalker;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>preFileTreeWalker</b></em>'
-	 */
-	public void setPreFileTreeWalker(FileTreeWalker preFileTreeWalker) {
-		this.preFileTreeWalker = preFileTreeWalker;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>postFileTreeWalker</b></em>'
-	 */
-	public FileTreeWalker getPostFileTreeWalker() {
-		return postFileTreeWalker;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>postFileTreeWalker</b></em>'
-	 */
-	public void setPostFileTreeWalker(FileTreeWalker postFileTreeWalker) {
-		this.postFileTreeWalker = postFileTreeWalker;
 	}
 	
 	// -- generated code  ---------------------------------------------------
