@@ -16,6 +16,9 @@
     <availablePage>
       <emfPageIdentifier href="genesez.m2t.notation#_tUz84ASmEeKUpcpqfZ9tsA"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="genesez.m2t.notation#_hv8swA7REeKC8ofJS44_Yg"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -34,6 +37,9 @@
         </children>
         <children>
           <emfPageIdentifier href="genesez.m2t.notation#_KGtNsADzEeK7ac-mrkJBDw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="genesez.m2t.notation#_hv8swA7REeKC8ofJS44_Yg"/>
         </children>
       </children>
     </windows>
