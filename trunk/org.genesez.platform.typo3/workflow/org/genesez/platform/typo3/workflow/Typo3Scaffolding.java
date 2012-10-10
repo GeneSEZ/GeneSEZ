@@ -5,9 +5,10 @@ package org.genesez.platform.typo3.workflow;
  * 	@FILE-ID : (_Dz4oYApBEeKxusbn3Pe47g) 
  */
 
-import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

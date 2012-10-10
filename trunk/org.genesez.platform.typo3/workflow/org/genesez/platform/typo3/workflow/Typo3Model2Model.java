@@ -5,16 +5,17 @@ package org.genesez.platform.typo3.workflow;
  * 	@FILE-ID : (_esLdUAo9EeKxusbn3Pe47g) 
  */
 
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import java.util.Arrays;
-import org.eclipse.emf.mwe.core.issues.Issues;
+
 import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.eclipse.xtend.XtendComponent;
 import org.genesez.metamodel.gcore.MModel;
 import org.genesez.platform.common.naming.NamingMapper;
-import org.genesez.workflow.xpand.Model2Model;
 import org.genesez.workflow.profile.Parameter;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+import org.genesez.workflow.xpand.Model2Model;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
