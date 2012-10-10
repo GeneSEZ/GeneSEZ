@@ -5,23 +5,25 @@ package org.genesez.workflow.xpand;
  * 	@FILE-ID : (_wWx1oPt9EeGRytmSxmtqcQ) 
  */
 
+import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
+import java.io.File;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.Generator;
-import org.genesez.platform.common.typemapping.TypeMapper;
-import org.genesez.workflow.profile.Parameter;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xpand2.output.PostProcessor;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
-import java.io.File;
 import org.genesez.m2t.ImportPreserverConfig;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import org.genesez.platform.common.typemapping.TypeMapper;
+import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

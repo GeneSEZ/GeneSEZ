@@ -5,14 +5,16 @@ package org.genesez.platform.documentation.workflow;
  * 	@FILE-ID : (_AmnOYAoxEeKxusbn3Pe47g) 
  */
 
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import org.eclipse.emf.mwe.core.WorkflowContext;
-import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.genesez.workflow.profile.Parameter;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

@@ -5,12 +5,13 @@ package org.genesez.platform.java.workflow;
  * 	@FILE-ID : (_tPrfIAjhEeKn2-J_iePC7Q) 
  */
 
-import org.genesez.workflow.xpand.Model2Text;
-import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.xpand2.output.JavaBeautifier;
 import org.genesez.m2t.ImportPreserverConfig;
+import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.xpand.Model2Text;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

@@ -5,17 +5,14 @@ package org.genesez.workflow;
  * 	@FILE-ID : (_y0pgQPRsEeGG-J2DIYyoXg) 
  */
 
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import java.io.File;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.genesez.workflow.profile.Parameter;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import org.eclipse.emf.mwe.core.issues.Issues;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
+import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

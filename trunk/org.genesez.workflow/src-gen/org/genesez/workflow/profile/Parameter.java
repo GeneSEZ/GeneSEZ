@@ -5,11 +5,10 @@ package org.genesez.workflow.profile;
  * 	@FILE-ID : (_SS618PXWEeGt_pQB8d500A.JavaAnnotationInterface) 
  */
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

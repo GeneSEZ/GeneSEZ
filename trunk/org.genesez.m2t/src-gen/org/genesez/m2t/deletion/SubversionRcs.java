@@ -6,6 +6,7 @@ package org.genesez.m2t.deletion;
  */
 
 import java.io.File;
+
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNWCClient;

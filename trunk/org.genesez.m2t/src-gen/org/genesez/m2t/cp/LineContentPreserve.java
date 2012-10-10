@@ -10,7 +10,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -18,13 +17,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.genesez.m2t.FileTreeObserverAdapter;
 import org.genesez.platform.java.umlsupport.associations.Association;
 import org.genesez.platform.java.umlsupport.associations.AssociationRole;
 import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
 import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -56,7 +56,7 @@ public class LineContentPreserve extends FileTreeObserverAdapter implements Asso
 	 */
 	private java.util.Set<String> excludedDirectoryNames = new java.util.HashSet<String>();
 	
-	private boolean prepared = false;
+	protected boolean prepared = false;
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	/**

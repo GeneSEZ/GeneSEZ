@@ -5,16 +5,17 @@ package org.genesez.m2t.cp;
  * 	@FILE-ID : (_Pos7EA7zEeKn_eQP-uNBOQ) 
  */
 
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.genesez.m2t.ImportPreserverConfig;
-import java.nio.file.Path;
-import org.apache.commons.logging.LogFactory;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.genesez.m2t.ImportPreserverConfig;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
