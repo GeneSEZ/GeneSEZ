@@ -13,7 +13,6 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.genesez.m2t.FileTreeWalker;
-import org.genesez.m2t.ImportPreserverConfig;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +28,7 @@ import org.junit.Test;
 public class ImportPreserverTest {
 	
 	private FileTreeWalker ftw;
-	private LineContentPreserve lcp;
+	private LineContentPreserving lcp;
 	private ImportPreserverAccess ip;
 	
 	private List<String> filecontents;
@@ -60,7 +59,7 @@ public class ImportPreserverTest {
 	public void setUp() throws Exception {
 		ftw = new FileTreeWalker();
 		
-		lcp = new LineContentPreserve();
+		lcp = new LineContentPreserving();
 		ftw.addObserver(lcp);
 		
 		ip = new ImportPreserverAccess();

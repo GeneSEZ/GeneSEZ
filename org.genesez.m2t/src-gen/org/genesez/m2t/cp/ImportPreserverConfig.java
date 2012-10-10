@@ -1,4 +1,4 @@
-package org.genesez.m2t;
+package org.genesez.m2t.cp;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 

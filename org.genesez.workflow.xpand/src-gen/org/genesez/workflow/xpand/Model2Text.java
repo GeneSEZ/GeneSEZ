@@ -21,7 +21,7 @@ import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xpand2.output.PostProcessor;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
-import org.genesez.m2t.ImportPreserverConfig;
+import org.genesez.m2t.cp.ImportPreserverConfig;
 import org.genesez.platform.common.typemapping.TypeMapper;
 import org.genesez.workflow.profile.Parameter;
 

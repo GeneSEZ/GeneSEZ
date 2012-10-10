@@ -104,11 +104,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 			public List<String> includeContent(List<String> input) {
 				return input;
 			}
-			
-			@Override
-			public boolean hasIncludableContent(String fileId) {
-				return false;
-			}
 		};
 		/* PROTECTED REGION END */
 	}

@@ -19,7 +19,7 @@ import org.junit.Test;
 public class FileIdProviderTest {
 	
 	private FileTreeWalker ftw;
-	private LineContentPreserve lcp;
+	private LineContentPreserving lcp;
 	private FileIdListProvider fip;
 	
 	private class FileIdListProvider extends FileIdProvider {
@@ -40,7 +40,7 @@ public class FileIdProviderTest {
 	public void setUp() throws Exception {
 		ftw = new FileTreeWalker();
 		
-		lcp = new LineContentPreserve();
+		lcp = new LineContentPreserving();
 		ftw.addObserver(lcp);
 		
 		fip = new FileIdListProvider();
