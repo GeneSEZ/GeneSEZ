@@ -1,4 +1,4 @@
-package org.genesez.eclipse4.wizard.ui.part;
+package org.genesez.eclipse4.wizard.ui;
 
 import java.awt.Font;
 import java.awt.Frame;

@@ -1,4 +1,4 @@
-package org.genesez.eclipse4.wizard.ui.part;
+package org.genesez.eclipse4.wizard.ui;
 
 import javax.inject.Inject;
 import javax.inject.Named;

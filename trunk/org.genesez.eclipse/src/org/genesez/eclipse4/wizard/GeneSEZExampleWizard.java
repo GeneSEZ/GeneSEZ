@@ -1,4 +1,4 @@
-package org.genesez.eclipse4.wizard.ui;
+package org.genesez.eclipse4.wizard;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -15,9 +15,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.genesez.eclipse4.wizard.handler.CreateProjectHandler;
+import org.genesez.eclipse4.wizard.page.GenSEZProjectWizardSelectionPage;
+import org.genesez.eclipse4.wizard.page.GeneSEZExampleWizardPage;
 
 @SuppressWarnings("restriction")
-public class NewGeneSEZWizard extends Wizard implements INewWizard {
+public class GeneSEZExampleWizard extends Wizard implements INewWizard {
 
 	private MWindow hostWin;
 	private ParameterizedCommand executeCommand;
@@ -27,10 +29,7 @@ public class NewGeneSEZWizard extends Wizard implements INewWizard {
 	@Inject
 	private EHandlerService handlerService;
 
-	public NewGeneSEZWizard() throws SecurityException, NoSuchMethodException {
-		// This is not really necessary but it demonstrates how DI works
-		// once the code below runs the '@Inject' fields defined above will
-		// contain their correct values.
+	public GeneSEZExampleWizard() throws SecurityException, NoSuchMethodException {
 		IWorkbenchWindow wbw = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
 		hostWin = (MWindow) wbw.getService(MWindow.class);
@@ -47,7 +46,7 @@ public class NewGeneSEZWizard extends Wizard implements INewWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		addPage(new NewGenSEZWizardPage("Create Projects", hostWin));
+		addPage(new GeneSEZExampleWizardPage("Create example Projects", hostWin));
 	}
 
 	@Override
