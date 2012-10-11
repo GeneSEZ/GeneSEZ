@@ -1,4 +1,4 @@
-package org.genesez.eclipse4.wizard.ui.part;
+package org.genesez.eclipse4.wizard.ui;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -16,6 +14,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 @SuppressWarnings("restriction")
 @Creatable
@@ -24,35 +23,38 @@ public class ProjectNamePart {
 	@Inject
 	private IEclipseContext context;
 	
+	private Text text_disabled;
+
 	@PostConstruct
 	public void createControls(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(5, false));
 
 		Label label = new Label(composite, SWT.LEFT);
 		label.setText("Project Name:");
-		label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, true));
+		label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 
 		final Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
-		text.addModifyListener(new ModifyListener() { public void modifyText(ModifyEvent e) {
-				context.modify("projectname", text.getText().trim());
-		}});
-		text.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.character == SWT.SPACE)
-					e.doit = false;
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,4,1));
+		text.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				String name = text.getText().trim();
+				context.modify(WizardConstants.APP_PROJ_NAME, name);
+				if(name.equals(""))
+					text_disabled.setText("");
+				else
+					text_disabled.setText(name + ".generator");
+
 			}
 		});
+		Label label_hidden = new Label(composite, SWT.LEFT);
+		label_hidden.setText("Generator Project:");
+		label_hidden.setEnabled(false);
+		text_disabled = new Text(composite, SWT.SINGLE);
+		text_disabled.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 4,1));
+		text_disabled.setEnabled(false);
 	}
-	
 	@PreDestroy
-	public void dispose(){
+	public void dispose() {
 	}
 }

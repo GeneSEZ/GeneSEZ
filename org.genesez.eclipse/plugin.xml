@@ -1,34 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
-   <extension
-         id="product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            name="GeneSEZ-Wizard">
-         <property
-               name="appName"
-               value="GeneSEZ-Wizard">
-         </property>
-      </product>
-   </extension>
    <extension
   		 point="org.eclipse.ui.newWizards">
       <category
             id="org.genesez.eclipse4.wizard"
             name="GeneSEZ">
       </category>
-      <wizard
+      <wizard 
             category="org.genesez.eclipse4.wizard"
-            class="org.genesez.eclipse4.wizard.ui.NewGeneSEZWizard"
+            class="org.genesez.eclipse4.wizard.GeneSEZProjectWizard"
             icon="icons/butterfly.gif"
             id="org.genesez.eclipse4.wizard.genesezwizard"
             name="GeneSEZ Project"
             project="true">
+            <description>
+				Create GeneSEZ Project mostly from templates
+			</description>
+      </wizard>
+      <wizard
+      		category="org.genesez.eclipse4.wizard"
+            class="org.genesez.eclipse4.wizard.GeneSEZExampleWizard"
+            icon="icons/butterfly.gif"
+            id="org.genesez.eclipse4.wizard.genesezexample"
+            name="GeneSEZ Example"
+            project="true">
+            <description>
+				Creates Example GeneSEZ Projects
+			</description>
       </wizard>
    </extension>
+   
+   	<extension point="org.eclipse.ui.newWizards">
+		<category
+			name="GeneSEZ"
+			parentCategory="org.eclipse.ui.Examples"
+			id="org.genesez.eclipse4.examples">
+		</category>
+		<wizard
+			name="GeneSEZ Example"
+			class="org.genesez.eclipse4.wizard.GeneSEZExampleWizard"
+			category="org.eclipse.ui.Examples/org.genesez.eclipse4.examples"
+			id="org.genesez.eclipse4.wizard.genesezexample"
+			project="true"
+			icon="icons/butterfly.gif">
+			<description>
+				Creates Example GeneSEZ Projects
+			</description>
+		</wizard>
+	</extension>
+
  <!-- <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
   <renameParticipant class="org.genesez.eclipse4.wizard.util.ProjectRenameParticipant" id="eclipse4.wizard.util.projectrenameparticipant" name="%Refactoring.ProjectRenameParitcipant">
     <enablement>
