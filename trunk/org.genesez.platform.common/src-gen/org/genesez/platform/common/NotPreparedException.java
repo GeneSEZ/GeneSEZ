@@ -9,6 +9,7 @@ package org.genesez.platform.common;
  * The NotPreparedException is thrown, if preProcessing() wasn't called before postProcessing() (only if preparation needed)
  * 
  * @author Dominik Wetzel
+ * @deprecated
  */
 public class NotPreparedException extends RuntimeException {
 	
