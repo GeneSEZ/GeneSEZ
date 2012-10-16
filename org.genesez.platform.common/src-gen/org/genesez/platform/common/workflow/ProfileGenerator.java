@@ -13,6 +13,7 @@ import org.eclipse.emf.mwe.core.issues.Issues;
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-23
+ * @deprecated
  */
 public class ProfileGenerator extends Generator {
 	

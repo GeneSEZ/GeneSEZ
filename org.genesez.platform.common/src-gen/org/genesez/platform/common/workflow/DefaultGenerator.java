@@ -29,6 +29,7 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @author Dominik Wetzel
  * @date 2011-10-12
+ * @deprecated
  */
 public class DefaultGenerator extends Generator {
 	

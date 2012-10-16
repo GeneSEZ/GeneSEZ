@@ -25,6 +25,7 @@ import java.util.LinkedList;
  * 
  * @author Dominik Wetzel
  * @date 2011-10-11
+ * @deprecated
  */
 public abstract class DeletionFeature extends FileTreeObserverAdapter implements PostFeature {
 	

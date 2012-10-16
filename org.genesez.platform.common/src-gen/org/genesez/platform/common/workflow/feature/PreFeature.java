@@ -10,6 +10,7 @@ package org.genesez.platform.common.workflow.feature;
  *   
  *  @author Dominik Wetzel
  *  @date 2011-10-11
+ *  @deprecated
  */
 public interface PreFeature extends TransformationFeature {
 	

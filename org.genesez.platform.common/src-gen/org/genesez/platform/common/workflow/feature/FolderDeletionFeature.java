@@ -25,6 +25,7 @@ import java.util.HashSet;
  * 
  * @author Dominik Wetzel
  * @date 2011-10-11
+ * @deprecated
  */
 public class FolderDeletionFeature extends DeletionFeature {
 	
