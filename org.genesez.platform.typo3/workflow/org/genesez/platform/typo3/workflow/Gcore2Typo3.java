@@ -8,12 +8,20 @@ package org.genesez.platform.typo3.workflow;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVar;
+import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
+import org.eclipse.xtend.expression.ExecutionContext;
+import org.eclipse.xtend.expression.ExecutionContextImpl;
+import org.eclipse.xtend.expression.TypeSystemImpl;
+import org.eclipse.xtend.expression.Variable;
+import org.genesez.mapping.name.NameMapper;
 import org.genesez.metamodel.gcore.MModel;
-import org.genesez.platform.common.naming.NamingMapper;
 import org.genesez.workflow.profile.Parameter;
 import org.genesez.workflow.xpand.Model2Text;
 
@@ -83,8 +91,12 @@ public class Gcore2Typo3 extends Model2Text {
 		addGlobalVarDef("extensionKey", extensionKey);
 		
 		// init naming mapper
-		// error: here we are unable to access the protected method of XtendComponent/AbstractExpressionsUsingWorkflow
-		NamingMapper.initNamingMapper(xtendNamingFile, getExecutionContext(context));
+		Map<String, Variable> globalVars = new HashMap<String, Variable>();
+		for (GlobalVarDef globalVarDef : getGlobalVarDef()) {
+			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
+		}
+		ExecutionContext namingCtx = new ExecutionContextImpl(new TypeSystemImpl(), globalVars);
+		NameMapper.initNameMapper(xtendNamingFile, namingCtx, getMetaModel());
 		
 		// start execution
 		super.invokeInternal(context, monitor, issues);
