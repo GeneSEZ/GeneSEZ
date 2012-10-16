@@ -1,9 +1,16 @@
-«IMPORT gcore»
 «REM»
-	Performs the generation of a profile file.
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
 
-	@author	Nico Herbig <nico.herbig@fh-zwickau.de>
-	@date	2011-07-20
+«IMPORT gcore»
+
+«REM»
+	Generation of a profile file.
+		
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
 «ENDREM»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
@@ -11,29 +18,40 @@
 «EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::Naming»
 «EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::GlobalVar»
 
+
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Public templates (THE FOLLOWING TEMPLATES CAN BE CALLED FROM OUTSIDE OF THIS FILE) -------------------
 «ENDREM»
 
+«REM»
+«ENDREM»
 «DEFINE Root FOR MModel -»
 «FILE globalVarProfileFileName() -»
 «EXPAND Comment::ProfileFile -»
 
+
+«REM»
+«ENDREM»
 «EXPAND ProfileElement FOREACH allClassifiers().select( e | e.metaType == MClass || e.metaType == MEnumeration ).sortBy(e | e.name) -»
 «ENDFILE -»
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE ProfileElement FOR MClass -»
 «EXPAND Comment::StereotypeSection -»
 
+
+«REM»
+«ENDREM»
 «EXPAND Stereotype -»
 «EXPAND TaggedValue FOREACH property.typeSelect(MAttribute).sortBy(e | e.name) -»
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE ProfileElement FOR MEnumeration -»
 «EXPAND Comment::EnumerationSection -»
 
@@ -42,16 +60,18 @@
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE ProfileElement FOR MClassifier -»
 «ENDDEFINE»
 
 
 «REM»
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	-- Private templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
 «ENDREM»
 
+«REM»
+«ENDREM»
 «DEFINE Stereotype FOR MClass -»
 «EXPAND Comment::Stereotype -»
 String «asProfileScriptName() -»() :
@@ -60,6 +80,8 @@ String «asProfileScriptName() -»() :
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE Enumeration FOR MEnumeration -»
 «EXPAND Comment::Enumeration -»
 String «asProfileScriptName() -»() :
@@ -68,6 +90,8 @@ String «asProfileScriptName() -»() :
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE TaggedValue FOR MAttribute -»
 «EXPAND Comment::TaggedValue -»
 String «asProfileScriptName() -»() :
@@ -76,6 +100,8 @@ String «asProfileScriptName() -»() :
 «ENDDEFINE»
 
 
+«REM»
+«ENDREM»
 «DEFINE Literal FOR MLiteral -»
 «EXPAND Comment::Literal -»
 String «asProfileScriptName() -»() :
