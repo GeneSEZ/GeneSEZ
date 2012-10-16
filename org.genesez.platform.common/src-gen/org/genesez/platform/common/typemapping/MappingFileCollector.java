@@ -18,6 +18,7 @@ import java.util.LinkedList;
  * 
  * @author pethu
  * @date 2009-01-24
+ * @deprecated
  */
 public class MappingFileCollector {
 	

@@ -7,6 +7,7 @@ package org.genesez.platform.common.naming;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
+ * @deprecated
  */
 public interface ContextManager {
 	

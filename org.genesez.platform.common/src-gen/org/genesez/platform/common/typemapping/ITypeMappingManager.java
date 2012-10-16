@@ -10,6 +10,7 @@ package org.genesez.platform.common.typemapping;
  * 
  * @author pethu
  * @date 2009-01-24
+ * @deprecated
  */
 public interface ITypeMappingManager<T> {
 	

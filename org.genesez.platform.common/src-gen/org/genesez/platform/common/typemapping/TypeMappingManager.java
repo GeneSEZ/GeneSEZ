@@ -15,6 +15,7 @@ import java.util.HashMap;
 /**
  * @author pethu
  * @date 2009-01-24
+ * @deprecated
  */
 public class TypeMappingManager<T extends SingleValuedType> implements ITypeMappingManager<T> {
 	

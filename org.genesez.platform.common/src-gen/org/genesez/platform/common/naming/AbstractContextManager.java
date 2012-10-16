@@ -12,6 +12,7 @@ import java.util.EmptyStackException;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
+ * @deprecated
  */
 public abstract class AbstractContextManager implements ContextManager {
 	
