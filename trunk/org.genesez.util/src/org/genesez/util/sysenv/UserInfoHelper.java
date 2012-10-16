@@ -19,7 +19,7 @@ public class UserInfoHelper {
 	 * 
 	 * @return	The user account name.
 	 */
-	public static String getUserName() {
+	public static String getUserAccountName() {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324548328730_464787_2439) ENABLED START */
 		return System.getProperty("user.name", "unknown user");
 		/* PROTECTED REGION END */
