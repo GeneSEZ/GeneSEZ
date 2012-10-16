@@ -35,6 +35,7 @@ import java.io.InputStream;
 
 /**
  * This class initiates all Binding preconditions and delegates all binding components to the consumers
+ * @deprecated
  */
 public class BindingDelegator {
 	

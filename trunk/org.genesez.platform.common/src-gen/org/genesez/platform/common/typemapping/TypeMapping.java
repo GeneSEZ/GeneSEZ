@@ -13,6 +13,7 @@ import org.genesez.metamodel.gcore.MType;
  * @author nihe
  * @author pethu
  * @date 2008-01-24
+ * @deprecated
  */
 public class TypeMapping {
 	

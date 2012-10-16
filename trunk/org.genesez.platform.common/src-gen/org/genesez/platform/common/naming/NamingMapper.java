@@ -14,6 +14,7 @@ import org.genesez.metamodel.gcore.MElement;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
+ * @deprecated
  */
 public class NamingMapper {
 	

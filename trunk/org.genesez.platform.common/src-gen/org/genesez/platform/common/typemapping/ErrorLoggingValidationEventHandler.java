@@ -15,6 +15,7 @@ import javax.xml.bind.ValidationEvent;
  * 
  * @author pethu
  * @date 2009-01-24
+ * @deprecated
  */
 public class ErrorLoggingValidationEventHandler implements ValidationEventHandler {
 	

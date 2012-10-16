@@ -26,6 +26,7 @@ import org.genesez.metamodel.gcore.MPrimitiveType;
  * @author pethu
  * @author toh (last)
  * @date 2009-01-24
+ * @deprecated
  */
 public class TypeMapper {
 	

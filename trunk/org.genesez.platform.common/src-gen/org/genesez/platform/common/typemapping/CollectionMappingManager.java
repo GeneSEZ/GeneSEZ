@@ -17,6 +17,7 @@ import java.util.HashMap;
  * 
  * @author pethu
  * @date 2009-01-24
+ * @deprecated
  */
 public class CollectionMappingManager<T extends MultiValuedType> implements ITypeMappingManager<T> {
 	
