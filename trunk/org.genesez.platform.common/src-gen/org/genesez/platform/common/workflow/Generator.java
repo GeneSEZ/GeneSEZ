@@ -28,6 +28,7 @@ import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @author Dominik Wetzel
  * @date 2011-10-11
+ * @deprecated
  */
 public class Generator extends org.eclipse.xpand2.Generator {
 	

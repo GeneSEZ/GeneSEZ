@@ -24,6 +24,7 @@ import org.eclipse.emf.mwe.core.container.CompositeComponent;
  * 
  * @author tobias haubold
  * @todo rework to fit the actual configuration guide lines.
+ * @deprecated
  */
 public class Traceability extends CompositeComponent {
 	

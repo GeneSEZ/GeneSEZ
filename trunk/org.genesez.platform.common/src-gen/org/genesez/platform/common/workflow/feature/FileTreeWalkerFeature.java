@@ -25,6 +25,7 @@ import java.nio.file.FileVisitor;
  * 
  * @author Dominik Wetzel
  * @date 2011-10-11
+ * @deprecated
  */
 public class FileTreeWalkerFeature implements PreFeature, PostFeature, FileVisitor<Path> {
 	

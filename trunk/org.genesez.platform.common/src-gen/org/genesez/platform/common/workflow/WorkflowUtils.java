@@ -23,6 +23,7 @@ import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.Gl
  * @author Beishen
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-19
+ * @deprecated
  */
 public class WorkflowUtils {
 	

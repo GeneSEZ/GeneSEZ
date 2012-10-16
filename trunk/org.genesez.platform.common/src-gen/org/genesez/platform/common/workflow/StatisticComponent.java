@@ -42,6 +42,7 @@ import org.eclipse.emf.mwe.core.container.CompositeComponent;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
+ * @deprecated
  */
 public class StatisticComponent extends CompositeComponent {
 	

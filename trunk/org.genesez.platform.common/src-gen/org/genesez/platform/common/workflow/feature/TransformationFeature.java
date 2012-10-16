@@ -12,6 +12,7 @@ import java.util.Properties;
  *  
  *  @author Dominik Wetzel
  *  @date 2011-10-11
+ *  @deprecated
  */
 public interface TransformationFeature {
 	
