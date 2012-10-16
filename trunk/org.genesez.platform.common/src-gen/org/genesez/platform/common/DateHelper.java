@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
  * @author toh
  * @author Nico Herbig <nico.herbig@fh-zwickau.de> (last)
  * @date 2011-04-20
+ * @deprecated
  */
 public class DateHelper {
 	

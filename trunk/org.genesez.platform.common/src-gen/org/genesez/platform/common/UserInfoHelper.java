@@ -12,6 +12,7 @@ package org.genesez.platform.common;
  * @author toh
  * @author Nico Herbig <nico.herbig@fh-zwickau.de> (last)
  * @date 2011-04-13
+ * @deprecated
  */
 public class UserInfoHelper {
 	
