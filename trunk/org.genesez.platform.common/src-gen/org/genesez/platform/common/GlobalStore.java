@@ -15,6 +15,7 @@ import java.util.Map;
  * @author geobe
  * @author tobias haubold (last)
  * @date 2008-04-18
+ * @deprecated
  */
 public class GlobalStore {
 	
