@@ -13,6 +13,7 @@ import java.util.Properties;
  *   
  *  @author Dominik Wetzel
  *  @date 2011-09-27
+ *  @deprecated
  */
 public interface FileTreeObserver {
 	

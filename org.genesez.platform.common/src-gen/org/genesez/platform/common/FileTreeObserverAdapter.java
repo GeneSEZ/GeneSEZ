@@ -10,6 +10,7 @@ import java.util.Properties;
 
 /**
  * An empty implementation for the FileTreeObserver interface.
+ * @deprecated
  */
 public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 	
