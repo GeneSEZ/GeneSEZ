@@ -1,21 +1,22 @@
-/**
- * Naming conventions for Profile generation.
- * 
- * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2012-02-15
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
  */
 
-// based on genesez meta model
 import gcore;
 
-extension org::genesez::metamodel::core::util::profile::workflow::GlobalVar;
+/**
+ * Naming conventions for profile generation.
+ * 
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+extension org::genesez::metamodel::core::util::profile::m2t::util::GlobalVar;
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL script name conventions for classifiers
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Script name conventions for classifiers ---------------------------------------------------------------
 
 private String asScriptName(MClass this) :
 	name.replaceFirst(globalVarStereotypeNamePrefix(), "").toFirstUpper();
@@ -29,36 +30,17 @@ private String asScriptName(MClassifier this) :
 	name.toFirstUpper();
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	GLOBAL script name conventions for attributes and literals
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Script name conventions for attributes and literals ---------------------------------------------------
 
-
-/**
- * Formats an attribute name as a normal attribute.
- * 
- * @return	the formatted attribute name
- */
 private String asScriptName(MAttribute this) : 
 	name.toFirstUpper();
 
 
-/**
- * Formats an literal name as a normal literal.
- * 
- * @return	the formatted literal name
- */
 private String asScriptName(MLiteral this) :
 	name.toLowerCase().split("_").collect( e | e.toFirstUpper() ).toString("");
 	
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	script name conventions for profile
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Script name conventions for profile -------------------------------------------------------------------
 
 String asProfileScriptName(MClassifier this) :
 	"pr" + asScriptName();
@@ -72,11 +54,7 @@ String asProfileScriptName(MLiteral this) :
 	owningEnumeration.asProfileScriptName() + asScriptName();
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	script name conventions for access helper
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Script name conventions for access helper -------------------------------------------------------------
 
 String asAccessHelperHasStereotype(MClassifier this) :
 	"has" + asScriptName() + "Stereotype";
