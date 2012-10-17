@@ -13,7 +13,7 @@ import uml;
 import gcore;
 
 // use logging
-extension org::genesez::platform::common::log::Log;
+extension org::genesez::util::logging::Logging;
 
 // access helper functions
 extension org::genesez::adapter::uml2::uml2genesez;
@@ -67,7 +67,7 @@ private MState makeState(State s, MStateMachine sm) :
 		case s.isSimple:
 			makeLeafState(s, sm)
 		default:
-			error("unsupported State " + s)
+			logError("unsupported State " + s)
 	};
 
 /**
@@ -83,7 +83,7 @@ private MState makeState(Pseudostate ps, MStateMachine sm) :
 		case ps.kind.toString().endsWith("History"):
 			makeHistoryState(ps, sm)
 		default:
-			error("unsupported Pseudostate " + ps)
+			logError("unsupported Pseudostate " + ps)
 	};
 	
 /**
@@ -93,7 +93,7 @@ private MState makeState(Pseudostate ps, MStateMachine sm) :
  * @return right kind of new MState 
  */
 private MState makeState(Vertex v, MStateMachine sm) :
-	error("should never be called: " + v);
+	logError("should never be called: " + v);
 
 /**
  * propagate to the referenced state
@@ -209,7 +209,7 @@ private String psName(Pseudostate ps, String prefix) :
  				case ps.container.state != null:
  					ps.container.state.name
  				default:
- 					error("free floating state " + ps)
+ 					logError("free floating state " + ps)
  			}).toFirstUpper()
  		: ps.name; 
 
@@ -228,7 +228,7 @@ private String stateName(State s, String prefix) :
  				case s.container.state != null:
  					s.container.state.name
  				default:
- 					error("free floating state " + s)
+ 					logError("free floating state " + s)
  			}).toFirstUpper()
  		: s.name; 
  
@@ -419,7 +419,7 @@ private create MEvent makeAnonymousEvent(MStateMachine sm) :
  * @return new MEvent
  */
 private MEvent makeEvent(Event s, MStateMachine sm) :
-	error("not supported kind of event: " + s.metaType + " for event " + s.name) ->
+	logError("not supported kind of event: " + s.metaType + " for event " + s.name) ->
 	null;
 
 /**
@@ -520,7 +520,7 @@ private create MAtomicTransition makeAtomicTransition(MLeafState src, MLeafState
 	setDefiningTransition(def) ->
 	action.addAll(def.chainActions()) ->
 	switch {
-		case def.kind == "int" : error("only external transitions should be processed here")
+		case def.kind == "int" : logError("only external transitions should be processed here")
 		case src == trg :
 		(
 			(src.exit != null ? exit.add(src.exit) : null) ->
@@ -690,7 +690,7 @@ private cached List[MLeafState] sourceStates(MLeafState this) :
  * should never been called
  */
 private cached List[MLeafState] sourceStates(MState this) :
-	error("sourceStates should never been called on abstract class MState") ->
+	logError("sourceStates should never been called on abstract class MState") ->
 	{};
 
 /**
@@ -711,7 +711,7 @@ private List[MState] superStates(MState state) :
 private cached MState entryState(MCompositeState this) :
 	substate.typeSelect(MInitialState).isEmpty ? 
 		(substate.typeSelect(MHistoryState).isEmpty ?
-			error("Encountered Compound state without Initial or History State") :
+			logError("Encountered Compound state without Initial or History State") :
 			substate.typeSelect(MHistoryState).first()
 		) :
 		substate.typeSelect(MInitialState).first()
@@ -731,7 +731,7 @@ private cached MLeafState targetState(MCompositeState this) :
  * target state of an Initial State is found on its outgoing transition
  */
 private cached MLeafState targetState(MInitialState this) :
-	outgoing.isEmpty ? (error("Initial State has no outgoing transition: " + name) -> null) :
+	outgoing.isEmpty ? (logError("Initial State has no outgoing transition: " + name) -> null) :
 	outgoing.first().target.targetState()
 	;
 
@@ -742,7 +742,7 @@ private cached MLeafState targetState(MInitialState this) :
 private cached MLeafState targetState(MHistoryState this) :
 	switch {
 		case outgoing.isEmpty : 
-			error("Initializing History State has no outgoing transition: " + name)
+			logError("Initializing History State has no outgoing transition: " + name)
 		default : (
 			null
 		) 
@@ -760,7 +760,7 @@ private MLeafState targetState(MLeafState this) :
  * should never been called
  */
 private cached MLeafState targetState(MState this) :
-	error("targetlist should never been called on abstract class MState") ->
+	logError("targetlist should never been called on abstract class MState") ->
 	{};
 
 /*
@@ -773,10 +773,10 @@ private cached MLeafState targetState(MState this) :
  * for debugging: trace this state machine element
  */
 private display(MStateMachine msm) :
-	trace("StateMachine of " + msm.owningContext.name + " (" + msm.owningContext.metaType.toString() + ")") ->
-	trace("	Actions ") ->
+	logTrace("StateMachine of " + msm.owningContext.name + " (" + msm.owningContext.metaType.toString() + ")") ->
+	logTrace("	Actions ") ->
 	msm.ownedBehavior.typeSelect(MActivity).sortBy(e|e.name).display("		") ->
-	trace("	Atomic Transitions") ->
+	logTrace("	Atomic Transitions") ->
 	msm.atomicTransition.
 	sortBy(t|t.source.name).
 	sortBy(t|t.definingTransition.kind).
@@ -787,7 +787,7 @@ private display(MStateMachine msm) :
  * for debugging: trace this state machine element
  */
 private displayState(MState mst) :
-	trace("	" + mst.name + " [" + 
+	logTrace("	" + mst.name + " [" + 
 		(switch (mst.metaType) {
 			case gcore::MLeafState: 'L'
 			case MCompositeState: 'C'
@@ -797,9 +797,9 @@ private displayState(MState mst) :
 			default: mst.metaType.toString()
 		}) + "]"
 	) ->
-	mst.entry != null ? trace("		entry/" + mst.entry.name) : null -> 
-	mst.exit != null ? trace("		exit/" + mst.exit.name) : null -> 
-	mst.do != null ? trace("		do/" + mst.do.name) : null -> 
+	mst.entry != null ? logTrace("		entry/" + mst.entry.name) : null -> 
+	mst.exit != null ? logTrace("		exit/" + mst.exit.name) : null -> 
+	mst.do != null ? logTrace("		do/" + mst.do.name) : null -> 
 	mst.outgoing.select(tr|tr.kind != 'ext').displayTransition("		")
 	;
 
@@ -807,7 +807,7 @@ private displayState(MState mst) :
  * for debugging: trace this state machine element
  */
 private displayTransition(MTransition mtr, String ind) :
-	trace(ind + "[" + mtr.source.name + "]-- " +
+	logTrace(ind + "[" + mtr.source.name + "]-- " +
 		(mtr.trigger.first() != null ? mtr.trigger.first().displayEvent() : '***') +
 		(mtr.guard != null ? mtr.guard.name : '') + (mtr.action != null ? "/" + mtr.action.name : '') +
 		" -->[" + mtr.target.name + "]")
@@ -831,13 +831,13 @@ private displayEvent(MTimeEvent mev) :
  * for debugging: trace this state machine element
  */
 private display(MActivity act, String ind) :
-	trace(ind + "Action " + act.name);
+	logTrace(ind + "Action " + act.name);
 
 /**
  * for debugging: trace this state machine element
  */
 private display(MAtomicTransition mtr, String ind) :
-	trace(ind + (mtr.definingTransition.kind == "int" ? "I " : "E ") + "(" + mtr.source.name + ")--- " +
+	logTrace(ind + (mtr.definingTransition.kind == "int" ? "I " : "E ") + "(" + mtr.source.name + ")--- " +
 		(mtr.definingTransition.trigger.first() != null ? mtr.definingTransition.trigger.first().displayEvent() : '_anonymous_') +
 		(mtr.definingTransition.guard != null ? mtr.definingTransition.guard.name : '') +
 		" exit: " + mtr.exit.name + " endDo: " + mtr.endDo.name + " " +

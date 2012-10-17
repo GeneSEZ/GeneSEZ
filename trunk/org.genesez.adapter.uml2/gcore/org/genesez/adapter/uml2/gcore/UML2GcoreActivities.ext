@@ -18,7 +18,7 @@ import gcore;
 // Helper functions from platform::common
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::GlobalStore;
-extension org::genesez::platform::common::log::Log;
+extension org::genesez::util::logging::Logging;
 extension org::genesez::platform::common::m2m::CreateTemplate;
 
 // core transformation
@@ -37,7 +37,7 @@ extension org::genesez::adapter::uml2::uml2genesez;
  * @return newly generated MActivity
  */
 MActivity transformBehavior(Activity a, MUseCase this):
-	trace("transforming UML Activity for usecase " + name) ->
+	logTrace("transforming UML Activity for usecase " + name) ->
 	makeActivity(a);
 
 /**
@@ -47,7 +47,7 @@ MActivity transformBehavior(Activity a, MUseCase this):
  * @return newly generated MActivity
  */
 MActivity transformBehavior(Activity a, MClassifier this):
-	trace("transforming UML Activity for class " + name) ->
+	logTrace("transforming UML Activity for class " + name) ->
 	makeActivity(a);
 
 /**
@@ -57,7 +57,7 @@ MActivity transformBehavior(Activity a, MClassifier this):
  * @return newly generated MActivity
  */
 MActivity transformBehavior(Activity a, MPackage this):
-	trace("transforming UML unbound activity") ->
+	logTrace("transforming UML unbound activity") ->
 	makeActivity(a);
 
 /**
@@ -67,7 +67,7 @@ MActivity transformBehavior(Activity a, MPackage this):
  * @return newly generated MActivity
  */
 MActivity transformBehavior(Activity a, MActivity this):
-	trace("transforming UML unbound activity") ->
+	logTrace("transforming UML unbound activity") ->
 	makeActivity(a);
 
 /**
@@ -79,7 +79,7 @@ MActivity transformBehavior(Activity a, MActivity this):
  * @return	void
  */
 MActivity transformBehavior(Behavior b, MDefinitionContext this):
-	fatal("try to construct a MBehavior object from: " + b) ->
+	logFatal("try to construct a MBehavior object from: " + b) ->
 	Void;
 
 /**
@@ -89,7 +89,7 @@ MActivity transformBehavior(Behavior b, MDefinitionContext this):
  * @return newly generated MActivity
  */
 private create MActivity makeActivity(Activity a) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
+	logTrace( "make [ " + metaType + " ] - " + a ) ->
 	// basic element properties
 	transformBasics(a) ->
 	stereotype.addAll( a.getAppliedStereotypes().makeStereotype() ) ->
@@ -117,12 +117,12 @@ private create MActivity makeActivity(Activity a) :
  * @return newly generated MAction
  */
 private create MAction makeActivityNode(CallBehaviorAction a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
+	logTrace( "make [ " + metaType + " ] - " + a ) ->
 	transformNode(a) ->
 	// set the called behavior
 	a.behavior != null ?
 		setBehavior( transformBehavior(a.behavior, activity) ) :
-		warn( "No behavior referenced by call behavior action " + name) ->
+		logWarn( "No behavior referenced by call behavior action " + name) ->
 	this;
 
 /**
@@ -133,12 +133,12 @@ private create MAction makeActivityNode(CallBehaviorAction a, MActivity activity
  * @return newly generated MAction
  */
 private create MAction makeActivityNode(CallOperationAction a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
+	logTrace( "make [ " + metaType + " ] - " + a ) ->
 	transformNode(a) ->
 	// todo: set the called operation
 	a.operation != null ?
 		setOperation( makeOperation(a.operation) ) :
-		warn( "No operation referenced by call operation action " + name) ->
+		logWarn( "No operation referenced by call operation action " + name) ->
 	this;
 
 /**
@@ -149,7 +149,7 @@ private create MAction makeActivityNode(CallOperationAction a, MActivity activit
  * @return newly generated MAction
  */
 private create MAction makeActivityNode(Action a, MActivity activity) :
-	trace( "make [ " + metaType + " ] - " + a ) ->
+	logTrace( "make [ " + metaType + " ] - " + a ) ->
 	transformNode(a) ->
 	setStereotype( { retrieveModel().createStereotype(a.metaType.toString(), a.metaType.toString()) } ) ->
 	this;
@@ -162,7 +162,7 @@ private create MAction makeActivityNode(Action a, MActivity activity) :
  * @return newly generated MNode
  */
 private create MNode makeActivityNode(InitialNode n, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + n ) ->
+	logTrace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("InitialNode", "InitialNode") } ) ->
 	this;
@@ -175,7 +175,7 @@ private create MNode makeActivityNode(InitialNode n, MActivity a) :
  * @return newly generated MNode
  */
 private create MNode makeActivityNode(ActivityFinalNode n, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + n ) ->
+	logTrace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("ActivityFinalNode", "ActivityFinalNode") } ) ->
 	this;
@@ -188,7 +188,7 @@ private create MNode makeActivityNode(ActivityFinalNode n, MActivity a) :
  * @return newly generated MNode
  */
 private create MNode makeActivityNode(FlowFinalNode n, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + n ) ->
+	logTrace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("FlowFinalNode", "FlowFinalNode") } ) ->
 	this;
@@ -201,7 +201,7 @@ private create MNode makeActivityNode(FlowFinalNode n, MActivity a) :
  * @return newly generated MNode
  */
 private create MNode makeActivityNode(DecisionNode n, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + n ) ->
+	logTrace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("DecisionNode", "DecisionNode") } ) ->
 	this;
@@ -214,7 +214,7 @@ private create MNode makeActivityNode(DecisionNode n, MActivity a) :
  * @return newly generated MNode
  */
 private create MNode makeActivityNode(MergeNode n, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + n ) ->
+	logTrace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("MergeNode", "MergeNode") } ) ->
 	this;
@@ -227,7 +227,7 @@ private create MNode makeActivityNode(MergeNode n, MActivity a) :
  * @return newly generated MNode
  */
 private create MNode makeActivityNode(ForkNode n, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + n ) ->
+	logTrace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("ForkNode", "ForkNode") } ) ->
 	this;
@@ -240,7 +240,7 @@ private create MNode makeActivityNode(ForkNode n, MActivity a) :
  * @return newly generated MNode
  */
 private create MNode makeActivityNode(JoinNode n, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + n ) ->
+	logTrace( "make [ " + metaType + " ] - " + n ) ->
 	transformNode(n) ->
 	setStereotype( { retrieveModel().createStereotype("JoinNode", "JoinNode") } ) ->
 	this;
@@ -252,7 +252,7 @@ private create MNode makeActivityNode(JoinNode n, MActivity a) :
  * @return	void
  */
 private create MNode makeActivityNode(ActivityNode a, MActivity activity) :
-	fatal("try to construct a MNode object from: " + a) ->
+	logFatal("try to construct a MNode object from: " + a) ->
 	Void;
 
 /*
@@ -269,7 +269,7 @@ private create MNode makeActivityNode(ActivityNode a, MActivity activity) :
  * @return newly generated MFlow
  */
 private create MFlow makeActivityEdge(ControlFlow f, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + f ) ->
+	logTrace( "make [ " + metaType + " ] - " + f ) ->
 	transformFlow(f,a) ->
 	this;
 	
@@ -282,7 +282,7 @@ private create MFlow makeActivityEdge(ControlFlow f, MActivity a) :
  * TODO: add object classifier to the flow
  */
 private create MFlow makeActivityEdge(ObjectFlow f, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + f ) ->
+	logTrace( "make [ " + metaType + " ] - " + f ) ->
 	transformFlow(f,a) ->
 	this;
 	
@@ -293,7 +293,7 @@ private create MFlow makeActivityEdge(ObjectFlow f, MActivity a) :
  * @return	void
  */
 private MFlow makeActivityEdge(ActivityEdge e, MActivity a) : 
-	fatal("try to construct a MFlow object from: " + e) ->
+	logFatal("try to construct a MFlow object from: " + e) ->
 	Void;
 
 /**
@@ -304,7 +304,7 @@ private MFlow makeActivityEdge(ActivityEdge e, MActivity a) :
  * @return newly generated MGuard
  */
 private create MGuard makeGuard(ValueSpecification s, MActivity a) :
-	trace( "make [ " + metaType + " ] - " + s ) ->
+	logTrace( "make [ " + metaType + " ] - " + s ) ->
 	transformBasics(s) ->
 	setName( getSpecification(s) ) ->
 	a.guard.add(this) ->
@@ -343,9 +343,9 @@ private MFlow transformFlow(MFlow this, ActivityEdge f, MActivity a) :
 	// set the guard of a flow
 	f.guard == null ? null : makeGuard(f.guard, a) ->
 	// set source and target of the object flow
-	trace( "source is: " + a.node.select( e|e.xmiGuid == xmiId(f.source) ).first().name ) ->
+	logTrace( "source is: " + a.node.select( e|e.xmiGuid == xmiId(f.source) ).first().name ) ->
 	a.node.select( e|e.xmiGuid == xmiId(f.source) ).first().to.add(this) ->
-	trace( "target is: " + a.node.select( e|e.xmiGuid == xmiId(f.target) ).first().name ) ->
+	logTrace( "target is: " + a.node.select( e|e.xmiGuid == xmiId(f.target) ).first().name ) ->
 	a.node.select( e|e.xmiGuid == xmiId(f.target) ).first().from.add(this) ->
 	this;
 
@@ -363,5 +363,5 @@ private String getSpecification(OpaqueExpression ox) :
  * @return specification string
  */
 private String getSpecification(ValueSpecification vs) :
- 	fatal("cannot process ValueSpecification of type " + vs.metaType.toString()) ->
+ 	logFatal("cannot process ValueSpecification of type " + vs.metaType.toString()) ->
  	Void;
