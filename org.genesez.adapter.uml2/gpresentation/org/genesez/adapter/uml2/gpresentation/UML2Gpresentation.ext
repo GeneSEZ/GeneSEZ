@@ -1,32 +1,39 @@
-/**
- * Transforms an uml2 presentation model into a GeneSEZ presentation model
- * 
- * @author	tobias haubold
- * @date	2012-07-30
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
  */
 
 import uml;
 import gpresentation;
 
-// use qualifed naming functions
-extension org::genesez::adapter::uml2::scripts::Helper;
-extension org::genesez::adapter::uml2::scripts::StereotypeHelper;
+/**
+ * Transforms an UML2 presentation model into a GeneSEZ presentation model (gpresentation).
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ */
 
-// use logging
-extension org::genesez::platform::common::log::Log;
-extension org::genesez::platform::common::GlobalStore;
+extension org::genesez::util::logging::Logging;
+extension org::genesez::util::GlobalObjectStorage;
+
+extension org::genesez::adapter::uml2::Helper;
+extension org::genesez::adapter::uml2::StereotypeHelper;
+
 
 /**
  * Returns the currently populated presentation model
  */
-PPackage model() : get("presentationmodel");
+PPackage model() : 
+	globalObjectGet("presentationmodel");
+
 
 /**
  * Creates a root package for the model and walk the given model tree.
  */
 create PPackage transform(Model m) :
 	useLogger("org.genesez.adapter.uml2") ->
-	save("presentationmodel", this) ->
+	globalObjectSet("presentationmodel", this) ->
 	logDebug("transform: " + m.name) ->
 	setName( m.name ) ->
 	// walk containment
@@ -39,17 +46,6 @@ Void transform(Package this) :
 		is.select( e|e.isPackage() )
 			.transformPackage()
 			.roots().transformRoot()
-		//is.select( e|e.isRoot() ).transformRoot() ->
-		//is.select( e|e.isCompositeArea() ).transformCompositeArea() ->
-		//is.select( e|e.isElementArea() ).transformElementArea() ->
-		//is.select( e|e.isReferenceArea() ).transformReferenceArea() ->
-		//is.select( e|e.isUserDefinedArea() ).transformUserDefinedArea() ->
-		//is.select( e|e.isAutomaticallyGeneratedArea() ).transformAutomaticallyGeneratedArea() ->
-		// elements
-		//is.select( e|e.isInput() ).transformInput() ->
-		//is.select( e|e.isOutput() ).transformOutput() ->
-		//is.select( e|e.isAction() ).transformAction() ->
-		//is.select( e|e.isCompositeElement() ).transformCompositeElement()
 	) ->
 	// walk containment
 	nestedPackage.transform() ->
@@ -367,7 +363,6 @@ create PKey makeKey(Property p) :
 List[PValue] makeValue(List[Object] os, PKey key, InstanceSpecification is) :
 	logDebug("make values from list: " + os.toString() + " key: " + key.key) ->
 	os.collect( o | o.makeValue( key, is ));
-	//os.makeValue( key, is );
 
 create PValue makeValue(EnumerationLiteral el, PKey key, InstanceSpecification is) :
 	logDebug("make value from enumeration literal: " + el.name + " key: " + key.key) ->
@@ -375,7 +370,6 @@ create PValue makeValue(EnumerationLiteral el, PKey key, InstanceSpecification i
 	setValue( el.name ) ->
 	// reference to key
 	setKey( key ) ->
-	//key.value.add( this ) ->
 	this;
 	
 create PValue makeValue(NamedElement ne, PKey key, InstanceSpecification is) :
@@ -384,7 +378,6 @@ create PValue makeValue(NamedElement ne, PKey key, InstanceSpecification is) :
 	setValue( ne.name ) ->
 	// reference to key
 	setKey( key ) ->
-	//key.value.add( this ) ->
 	this;
 	
 create PValue makeValue(Object o, PKey key, InstanceSpecification is) :
@@ -393,7 +386,6 @@ create PValue makeValue(Object o, PKey key, InstanceSpecification is) :
 	setValue( o.toString() ) ->
 	// reference to key
 	setKey( key ) ->
-	//key.value.add( this ) ->
 	this;
 	
 Void makeValue(Void this, PKey key, InstanceSpecification is) :

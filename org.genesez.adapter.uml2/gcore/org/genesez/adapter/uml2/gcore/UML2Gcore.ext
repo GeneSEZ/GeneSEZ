@@ -23,17 +23,17 @@ import uml;
 import gcore;
 
 // use qualifed naming functions
-extension org::genesez::adapter::uml2::scripts::Helper;
+extension org::genesez::adapter::uml2::Helper;
 
 // use global store
-extension org::genesez::platform::common::GlobalStore;
+extension org::genesez::util::GlobalObjectStorage;
 
 // use logging
 extension org::genesez::util::logging::Logging;
 
 // behavior models
-extension org::genesez::adapter::uml2::uml2activities;
-extension org::genesez::adapter::uml2::uml2statemachines;
+extension org::genesez::adapter::uml2::gcore::UML2GcoreActivities;
+extension org::genesez::adapter::uml2::gcore::UML2GcoreStatemachines;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -142,7 +142,7 @@ create MModel transform(Model m) :
 create MModel transform(Profile p) :
 	useLogger( "org.genesez.adapter.uml2" ) ->
 	coremodel(this) ->
-	logWarn( "Unresolved UML profiles: " + m.getAllAppliedProfiles().select( p| p.isProxy() ) ) ->
+	logWarn( "Unresolved UML profiles: " + p.getAllAppliedProfiles().select( p| p.isProxy() ) ) ->
 	logTrace( "transform profile [ " + metaType + " ] - " + p ) ->
 	transformBasics(p) ->
 	transformPackage(p) ->
@@ -399,7 +399,8 @@ String defaultValue(Property this) :
 /**
  * Returns the value of the specified string expression.
  */
-String value(StringExpression this) : operand.stringValue().toString( symbol ).logTrace("default value string expression: ");
+String value(StringExpression this) : 
+	operand.stringValue().toString( symbol ).logTrace("default value string expression: ");
 
 /**
  * creates a GeneSEZ operation from an uml operation
@@ -812,7 +813,7 @@ List[Property] addAllAttributes(Stereotype this, List[Property] attributes) :
  * @return	the value of the tag
  */
 private Object getTaggedValue(Element this, Stereotype s, String tag) :
-	JAVA org.genesez.adapter.uml2.TransUtils.getTaggedValue(org.eclipse.uml2.uml.Element, org.eclipse.uml2.uml.Stereotype, java.lang.String);
+	JAVA org.genesez.adapter.uml2.TransformationHelper.getTaggedValue(org.eclipse.uml2.uml.Element, org.eclipse.uml2.uml.Stereotype, java.lang.String);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1231,25 +1232,29 @@ String name(MType this) :
  * Saves the uml model in the global store.
  * @return	the saved uml model
  */
-private Model uml2model(Model this) : save("uml2model", this);
+private Model uml2model(Model this) : 
+	globalObjectSet("uml2model", this);
 
 /**
  * Retrieves the uml model from the global store.
  * @return	the saved uml model
  */
-private Model uml2model() : get("uml2model");
+private Model uml2model() : 
+	globalObjectGet("uml2model");
 
 /**
  * Saves the GeneSEZ model in the global store.
  * @return	the saved GeneSEZ model
  */
-private MModel coremodel(MModel this) : save("coremodel", this);
+private MModel coremodel(MModel this) : 
+	globalObjectSet("coremodel", this);
 
 /**
  * Retrieves the GeneSEZ model from the global store.
  * @return	the saved GeneSEZ model
  */
-private MModel coremodel() : get("coremodel");
+private MModel coremodel() : 
+	globalObjectGet("coremodel");
 
 
 /*
@@ -1264,31 +1269,32 @@ private MModel coremodel() : get("coremodel");
  * @return	the unique xmi id
  */
 String xmiId (Element obj) : 
-	JAVA org.genesez.adapter.uml2.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
+	JAVA org.genesez.adapter.uml2.TransformationHelper.getXmiId(org.eclipse.emf.ecore.EObject);
 
 cached String generateID (Element obj) :
-	JAVA org.genesez.adapter.uml2.TransUtils.generateXmiId(org.eclipse.emf.ecore.EObject);
+	JAVA org.genesez.adapter.uml2.TransformationHelper.generateXmiId(org.eclipse.emf.ecore.EObject);
 
 /**
  * Returns true if the specified instance is a proxy object, i.e. an unresolved object, otherwise false.
  */
-boolean isProxy(Element this) : JAVA org.genesez.adapter.uml2.TransUtils.isProxy(org.eclipse.uml2.uml.Element);
+boolean isProxy(Element this) : 
+	JAVA org.genesez.adapter.uml2.TransformationHelper.isProxy(org.eclipse.uml2.uml.Element);
 
 /**
  * process EJavaObject externally. this function is never called but keeps the syntax checker calm ;-)
  */
 private List[String] eToString(ecore::EJavaObject obj):
-	JAVA org.genesez.adapter.uml2.TransUtils.eToString(java.lang.Object);
+	JAVA org.genesez.adapter.uml2.TransformationHelper.eToString(java.lang.Object);
 
 /**
  * process List structured EJavaObject externally
  */
 private List[String] eToString(List obj):
-	JAVA org.genesez.adapter.uml2.TransUtils.lToString(org.eclipse.emf.ecore.util.EDataTypeUniqueEList);
+	JAVA org.genesez.adapter.uml2.TransformationHelper.lToString(org.eclipse.emf.ecore.util.EDataTypeUniqueEList);
 
 /**
  * process flat EJavaObject externally
  */
 private List[String] eToString(Object obj):
-	JAVA org.genesez.adapter.uml2.TransUtils.eToString(java.lang.Object);
+	JAVA org.genesez.adapter.uml2.TransformationHelper.eToString(java.lang.Object);
 
