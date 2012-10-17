@@ -2,42 +2,42 @@ package org.genesez.adapter.uml2;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Stereotype;
 
 /**
- * Utility class for UML to GeneSEZ transformation
+ * Utility class for UML2 transformations.
  * 
- * @author	geobe
- * @author	nihe
- * @author	toh
- * @date	2007-06-11
+ * @author Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ * @author Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @author Georg Beier<georg.beier@fh-zwickau.de>
  */
-public class TransUtils {
+public class TransformationHelper {
 	
 	/**
-	 * Returns true if the specified instance is a proxy object, i.e. an unresolved object, otherwise false.
+	 * Returns true if the specified UML2 model element is a proxy object, 
+	 * i.e. an unresolved object, otherwise false.
+	 * 
+	 * @param	element		The UML2 model element.
+	 * @return	True if the element is a proxy object, otherwise false.
 	 */
-	public static boolean isProxy(Element e) {
-		return e.eIsProxy();
+	public static boolean isProxy(Element element) {
+		return element.eIsProxy();
 	}
 	
 	/**
-	 * Returns the tagged value of an uml model element
-	 * @param e		the uml model element
-	 * @param s		the applied uml stereotype
-	 * @param tag	the name of the tag
-	 * @return		the value of the tag
+	 * Returns the tagged value of an UML2 model element.
+	 * 
+	 * @param	element		The UML2 model element.
+	 * @param	stereotype	The applied UML2 stereotype.
+	 * @param	tag			The name of the tag.
+	 * @return	The value of the tag.
 	 */
-	public static Object getTaggedValue(Element e, Stereotype s, String tag) {
-		return e.getValue(s, tag);
+	public static Object getTaggedValue(Element element, Stereotype stereotype, String tag) {
+		return element.getValue(stereotype, tag);
 	}
 	
 	/**
@@ -45,12 +45,12 @@ public class TransUtils {
 	 * @param	pObj	an eobject
 	 * @return	the xmi id
 	 */
-	public static String getXmiId (EObject pObj) {
+	public static String getXmiId(EObject pObj) {
 		// note: pObj.eResource() can be null, if its unresolved proxy is (a type, defined within another model file)
 		try {
 			return ((XMLResource)pObj.eResource()).getID(pObj);
 		} catch (NullPointerException npe) {
-			return null;//pObj.toString();
+			return null;
 		}
 	}
 	
