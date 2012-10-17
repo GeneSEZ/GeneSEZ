@@ -41,7 +41,7 @@ public class GlobalObjectStorage {
 	 * @param	value	The specified value.
 	 * @return	The previous value of the specified key, or null if there was no mapping for key in the storage backend.
 	 */
-	public static Object save(String key, Object value) {
+	public static Object set(String key, Object value) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324548779609_480591_2541) ENABLED START */
 		return storageBackend.put(key, value);
 		/* PROTECTED REGION END */
