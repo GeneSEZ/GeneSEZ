@@ -25,16 +25,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.genesez.eclipse4.wizard.util.TemplateConfigXml;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 @SuppressWarnings("restriction")
-public class GeneSEZExampleWizardPage extends WizardPage {
+public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 
 	private static final String ENTER_APP_PROJECTNAME = "Enter an application project name. ";
+	private static final String ENTER_GEN_PROJECTNAME = "Enter a generator project name. ";
+	private static final String CHOOSE_A_WIZARD = "Choose a Wizard option";
 	private static final String PROJECTNAME_EXSISTS = "A project with this name or one that will be created already exists.";
-	private static final String SELECT_TEMPLATE = "Select a template for the project. ";
+	private static String description = "";
 
 	private MWindow hostWin;
 	private IEclipseContext context;
@@ -43,31 +45,31 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 	@Inject
 	private IPresentationEngine renderer;
 
-	public GeneSEZExampleWizardPage(String pageName, MWindow hostWin) {
+	public GeneSEZProjectWizardSelectionPage(String pageName, MWindow hostWin) {
 		super(pageName);
 		this.hostWin = hostWin;
 		this.context = hostWin.getContext();
 		this.workspace = ResourcesPlugin.getWorkspace().getRoot();
 
-		setTitle("GeneSEZ example selection");
+		setTitle("GeneSEZ Wizard Selection");
 		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
 				"/images/GeneSEZ.png"));
 
+		// This is not really necessary but it demonstrates how DI works
+		// once the code below runs the '@Inject' fields defined above will
+		// contain their correct values.
 		ContextInjectionFactory.inject(this, context);
 		initializeContext();
-		setPageComplete(false);
+		this.setPageComplete(false);
 	}
 
 	private void initializeContext() {
+		context.declareModifiable(WizardConstants.CHOOSE_WIZARD);
 		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
-		context.declareModifiable(WizardConstants.TEMPLATE);
+		context.declareModifiable(WizardConstants.GEN_PROJ_NAME);
 		context.modify(WizardConstants.DESCRIPTION, null);
 		context.modify(WizardConstants.APP_PROJ_NAME, null);
-		context.modify(WizardConstants.TEMPLATE, null);
-
-		context.set(WizardConstants.IS_EXAMPLE, true);
-		context.set(WizardConstants.WORKSPACE, workspace);
 	}
 
 	@Override
@@ -87,73 +89,92 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 	/*
 	 * Creates the following MUIElement tree:
 	 * 
-	 * pStack 
-	 * 	|-perspective 
-	 * 		|-complete 
-	 * 			|-templateSelection 
-	 * 			|-description
-	 * 			|-projectName
+	 * pStack
+	 * 	|-perspective
+	 * 		|-complete
+	 * 			|-projectname
+	 * 			|-template
+	 * 			|	|-tempSelection
+	 * 			|	|-tempDescription
+	 * 			|
+	 * 			|-preview
+	 * 			|-existUml
+	 * 				|-existGenProject
+	 * 				|-existUmlModell
+	 * 				|-existUmlRadio
 	 * 
 	 * @return the pStack MUIElement
 	 */
 	private MUIElement createModel() {
-
+		
 		// Create the model elements
-		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE
-				.createPerspectiveStack();
+		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE.createPerspectiveStack();
 		ContextInjectionFactory.inject(pStack, context);
-		MPerspective perspective = MAdvancedFactory.INSTANCE
-				.createPerspective();
-		MPartSashContainer complete = MBasicFactory.INSTANCE
-				.createPartSashContainer();
+		MPerspective perspective = MAdvancedFactory.INSTANCE.createPerspective();
+		MPartSashContainer complete = MBasicFactory.INSTANCE.createPartSashContainer();
 		complete.setHorizontal(false);
-		MInputPart templateSelection = MBasicFactory.INSTANCE.createInputPart();
+		MInputPart wizardSelection = MBasicFactory.INSTANCE.createInputPart();
 		MPart description = MBasicFactory.INSTANCE.createPart();
-		MInputPart projectName = MBasicFactory.INSTANCE.createInputPart();
+		MInputPart projectSettings = MBasicFactory.INSTANCE.createInputPart();
 
 		// put the model elements together
 		pStack.getChildren().add(perspective);
 		perspective.getChildren().add(complete);
-		complete.getChildren().add(templateSelection);
+		complete.getChildren().add(wizardSelection);
 		complete.getChildren().add(description);
-		complete.getChildren().add(projectName);
+		complete.getChildren().add(projectSettings);
 
 		// set the appropriate contributionURI e. g. bundleclass
-		templateSelection
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.TemplateSelectionPart");
-		description
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
-		projectName
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ProjectNamePart");
+		projectSettings.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ProjectSettingsPart");
+		description.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
+		wizardSelection.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ChooseWizardPart");
 		return pStack;
 	}
 
 	@Inject
 	private void updateMessage(
+			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectButton,
 			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
-			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template) {
-		String message = "";
-		if (template == null)
-			message = message.concat(SELECT_TEMPLATE);
-		if (appProjectName == null || appProjectName.equals(""))
-			message = message.concat(ENTER_APP_PROJECTNAME);
-		if (message.equals("")) {
-			setMessage(null);
-			if (projectAlreadyExists(appProjectName)) {
-				this.setMessage(PROJECTNAME_EXSISTS, ERROR);
-				this.setPageComplete(false);
-			} else
-				this.setPageComplete(true);
-		} else {
-			this.setMessage(message, INFORMATION);
+			@Optional @Named(WizardConstants.GEN_PROJ_NAME) String genProjectName) {
+		if(selectButton == null){
+			this.setMessage(CHOOSE_A_WIZARD);
 			this.setPageComplete(false);
+		}else{
+			String message = "";
+			if(appProjectName == null || appProjectName.equals(""))
+				message = message.concat(ENTER_APP_PROJECTNAME);
+			if(genProjectName == null || genProjectName.equals(""))
+				message = message.concat(ENTER_GEN_PROJECTNAME);
+			if(message.equals("")){
+				this.setMessage(null);
+				if(projectsAlreadyExists(appProjectName, genProjectName, (Integer) selectButton.getData())){
+					this.setMessage(PROJECTNAME_EXSISTS, ERROR);
+					this.setPageComplete(false);
+				} else
+					this.setPageComplete(true);
+			} else {
+				this.setMessage(message, INFORMATION);
+				this.setPageComplete(false);
+			}
 		}
 	}
 
-	private boolean projectAlreadyExists(String name) {
+	private boolean projectsAlreadyExists(String appProjName, String genProjName, int buttonData) {
+		switch (buttonData) {
+		case WizardConstants.RADIO_1 :
+			return projectAlreadyExists(appProjName) || projectAlreadyExists(genProjName);
+		case WizardConstants.RADIO_2 :
+			return projectAlreadyExists(appProjName);
+		case WizardConstants.RADIO_3 :
+			return projectAlreadyExists(genProjName);
+		default :
+			return true;
+		}
+	}
+	
+	private boolean projectAlreadyExists(String name){
 		for (IProject project : workspace.getProjects()) {
-			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$") ||
-					name.concat(".generator").matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
+			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
 				return true;
 		}
 		return false;
@@ -172,5 +193,24 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 				hostWin.getSharedElements().remove(hostModel);
 			}
 		});
+	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		Object button = context.get(WizardConstants.CHOOSE_WIZARD);
+		if(button != null)
+			if(((Button) button).getData().equals(WizardConstants.RADIO_3))
+				return false;
+		return super.canFlipToNextPage();
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		if(visible){
+			context.modify(WizardConstants.DESCRIPTION, description);
+		} else {
+			description = (String) context.get(WizardConstants.DESCRIPTION);
+		}
+		super.setVisible(visible);
 	}
 }

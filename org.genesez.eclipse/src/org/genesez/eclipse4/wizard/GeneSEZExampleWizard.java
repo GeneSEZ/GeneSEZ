@@ -15,7 +15,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.genesez.eclipse4.wizard.handler.CreateProjectHandler;
-import org.genesez.eclipse4.wizard.page.GenSEZProjectWizardSelectionPage;
 import org.genesez.eclipse4.wizard.page.GeneSEZExampleWizardPage;
 
 @SuppressWarnings("restriction")

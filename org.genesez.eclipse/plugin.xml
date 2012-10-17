@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+	
+	<extension
+	   point="org.eclipse.core.resources.natures"
+       id="genesezgennature"
+       name="GeneSEZ Generator Nature">
+    <runtime>
+       <run
+             class="org.genesez.eclipse4.wizard.util.GeneSEZGeneratorNature">
+       </run>
+    </runtime>
+	</extension>
+	
    <extension
   		 point="org.eclipse.ui.newWizards">
       <category
             id="org.genesez.eclipse4.wizard"
             name="GeneSEZ">
       </category>
-      <wizard 
+      <wizard
+            canFinishEarly="false"
             category="org.genesez.eclipse4.wizard"
             class="org.genesez.eclipse4.wizard.GeneSEZProjectWizard"
+            hasPages="true"
             icon="icons/butterfly.gif"
             id="org.genesez.eclipse4.wizard.genesezwizard"
             name="GeneSEZ Project"
             project="true">
             <description>
-				Create GeneSEZ Project mostly from templates
+				Create GeneSEZ Projects mostly from templates
 			</description>
       </wizard>
       <wizard
       		category="org.genesez.eclipse4.wizard"
             class="org.genesez.eclipse4.wizard.GeneSEZExampleWizard"
-            icon="icons/butterfly.gif"
+            icon="icons/butterfly_gray.gif"
             id="org.genesez.eclipse4.wizard.genesezexample"
             name="GeneSEZ Example"
             project="true">
@@ -43,12 +57,86 @@
 			category="org.eclipse.ui.Examples/org.genesez.eclipse4.examples"
 			id="org.genesez.eclipse4.wizard.genesezexample"
 			project="true"
-			icon="icons/butterfly.gif">
+			icon="icons/butterfly_gray.gif">
 			<description>
 				Creates Example GeneSEZ Projects
 			</description>
 		</wizard>
 	</extension>
+	
+	<extension
+	      point="org.eclipse.core.expressions.definitions">
+    <definition
+          id="org.genesez.eclipse.testProjectNature">
+          <adapt type="org.eclipse.core.resources.IProject">
+                <test
+                      property="org.eclipse.core.resources.projectNature" value="org.genesez.eclipse.genesezgennature">
+                </test>
+          </adapt>
+    </definition>
+	</extension>
+	
+	<extension
+	      point="org.eclipse.ui.commands">
+	      <command name="changeNature"
+             id="org.genesez.eclipse.changeGeneratorNatureCommand" defaultHandler="org.genesez.eclipse4.wizard.handler.ChangeGeneSEZNatureHandler" >
+             <commandParameter 
+             	   name="add"
+                   id="org.genesez.eclipse.addNatureParameter"
+                   optional="true">
+             </commandParameter>
+	      </command>
+	</extension>
+	
+    <extension
+          point="org.eclipse.ui.menus" >
+          <menuContribution
+                locationURI="popup:org.eclipse.ui.projectConfigure?after=additions" >
+                <command
+                      commandId="org.genesez.eclipse.changeGeneratorNatureCommand"
+               		  id="org.genesez.eclipse.addGeneratorNature"
+               		  label="Add GeneSEZ Generator Nature" 
+               		  icon="icons/butterfly.gif"
+               		  style="push">
+               		  <visibleWhen
+                         checkEnabled="false">
+                         <with variable="activeMenuSelection">
+                               <iterate>
+                               		<not>
+	            						<reference
+                         					definitionId="org.genesez.eclipse.testProjectNature">
+	            						</reference>
+            						</not>
+                               </iterate> 
+                         </with>
+               		  </visibleWhen>
+               		  <parameter 
+               		  	 value="true"
+                         name="org.genesez.eclipse.addNatureParameter">
+               		  </parameter>
+                </command>
+          </menuContribution>
+          <menuContribution
+                locationURI="popup:org.eclipse.ui.projectConfigure?after=additions" >
+                <command
+                      commandId="org.genesez.eclipse.changeGeneratorNatureCommand"
+               		  id="org.genesez.eclipse.removeGeneratorNature"
+               		  label="Remove GeneSEZ Generator Nature" 
+               		  icon="icons/butterfly_empty.gif"
+               		  style="push">
+               		  <visibleWhen
+                         checkEnabled="false">
+                         <with variable="activeMenuSelection">
+                               <iterate>
+                               		<reference
+                         				 definitionId="org.genesez.eclipse.testProjectNature">
+	            					</reference>
+                               </iterate> 
+                         </with>
+               		  </visibleWhen>
+                </command>
+          </menuContribution>
+    </extension>
 
  <!-- <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
   <renameParticipant class="org.genesez.eclipse4.wizard.util.ProjectRenameParticipant" id="eclipse4.wizard.util.projectrenameparticipant" name="%Refactoring.ProjectRenameParitcipant">
