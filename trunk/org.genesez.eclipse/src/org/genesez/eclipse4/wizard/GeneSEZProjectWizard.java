@@ -9,19 +9,25 @@ import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.genesez.eclipse4.wizard.handler.CreateProjectHandler;
-import org.genesez.eclipse4.wizard.page.GenSEZProjectWizardSelectionPage;
+import org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardSelectionPage;
+import org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardTemplatePage;
+import org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardWorkflowPage;
 
 @SuppressWarnings("restriction")
 public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
 	private MWindow hostWin;
 	private ParameterizedCommand executeCommand;
+	private IWizardPage page1;
+	private IWizardPage page2;
+	private IWizardPage page3;
 	
 	@Inject
 	private ECommandService commandService;
@@ -36,6 +42,9 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 				.getActiveWorkbenchWindow();
 		hostWin = (MWindow) wbw.getService(MWindow.class);
 		ContextInjectionFactory.inject(this, hostWin.getContext());
+		page1 = new GeneSEZProjectWizardSelectionPage("Create Projects", hostWin);
+		page2 = new GeneSEZProjectWizardTemplatePage("Choose Template", hostWin);
+		page3 = new GeneSEZProjectWizardWorkflowPage("Choose Workflow", hostWin);
 	}
 	
 	@PostConstruct
@@ -48,12 +57,19 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		addPage(new GenSEZProjectWizardSelectionPage("Create Projects", hostWin));
+		addPage(page1);
+		addPage(page2);
+		addPage(page3);
 	}
 
 	@Override
 	public boolean performFinish() {
 		handlerService.executeHandler(executeCommand);
 		return true;
+	}
+	
+	@Override
+	public boolean canFinish() {
+		return page1.isPageComplete() && page2.isPageComplete() && page3.isPageComplete();
 	}
 }

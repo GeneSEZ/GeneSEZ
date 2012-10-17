@@ -3,7 +3,6 @@ package org.genesez.eclipse4.wizard.page;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
@@ -25,16 +24,16 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.genesez.eclipse4.wizard.util.TemplateConfigXml;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 @SuppressWarnings("restriction")
-public class GeneSEZExampleWizardPage extends WizardPage {
+public class GeneSEZProjectWizardTemplatePage extends WizardPage {
 
-	private static final String ENTER_APP_PROJECTNAME = "Enter an application project name. ";
-	private static final String PROJECTNAME_EXSISTS = "A project with this name or one that will be created already exists.";
-	private static final String SELECT_TEMPLATE = "Select a template for the project. ";
+	private static final String CHOOSE_A_TEMPLATE = "Choose a template for project generation";
+	private static String description = "";
 
 	private MWindow hostWin;
 	private IEclipseContext context;
@@ -43,31 +42,28 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 	@Inject
 	private IPresentationEngine renderer;
 
-	public GeneSEZExampleWizardPage(String pageName, MWindow hostWin) {
+	public GeneSEZProjectWizardTemplatePage(String pageName, MWindow hostWin) {
 		super(pageName);
 		this.hostWin = hostWin;
 		this.context = hostWin.getContext();
 		this.workspace = ResourcesPlugin.getWorkspace().getRoot();
 
-		setTitle("GeneSEZ example selection");
+		setTitle("GeneSEZ Wizard Selection");
 		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
 				"/images/GeneSEZ.png"));
 
+		// This is not really necessary but it demonstrates how DI works
+		// once the code below runs the '@Inject' fields defined above will
+		// contain their correct values.
 		ContextInjectionFactory.inject(this, context);
 		initializeContext();
-		setPageComplete(false);
+		this.setPageComplete(false);
 	}
 
 	private void initializeContext() {
-		context.declareModifiable(WizardConstants.DESCRIPTION);
-		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
 		context.declareModifiable(WizardConstants.TEMPLATE);
-		context.modify(WizardConstants.DESCRIPTION, null);
-		context.modify(WizardConstants.APP_PROJ_NAME, null);
 		context.modify(WizardConstants.TEMPLATE, null);
-
-		context.set(WizardConstants.IS_EXAMPLE, true);
-		context.set(WizardConstants.WORKSPACE, workspace);
+		context.set(WizardConstants.IS_EXAMPLE, false);
 	}
 
 	@Override
@@ -87,76 +83,54 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 	/*
 	 * Creates the following MUIElement tree:
 	 * 
-	 * pStack 
-	 * 	|-perspective 
-	 * 		|-complete 
-	 * 			|-templateSelection 
-	 * 			|-description
-	 * 			|-projectName
+	 * pStack
+	 * 	|-perspective
+	 * 		|-complete
+	 * 			|-template
+	 * 			|	|-templateSelection
+	 * 			|	|-description
+	 * 			|
+	 * 			|-applicationModel
 	 * 
 	 * @return the pStack MUIElement
 	 */
 	private MUIElement createModel() {
-
+		
 		// Create the model elements
-		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE
-				.createPerspectiveStack();
+		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE.createPerspectiveStack();
 		ContextInjectionFactory.inject(pStack, context);
-		MPerspective perspective = MAdvancedFactory.INSTANCE
-				.createPerspective();
-		MPartSashContainer complete = MBasicFactory.INSTANCE
-				.createPartSashContainer();
+		MPerspective perspective = MAdvancedFactory.INSTANCE.createPerspective();
+		MPartSashContainer complete = MBasicFactory.INSTANCE.createPartSashContainer();
 		complete.setHorizontal(false);
+		MPartSashContainer template = MBasicFactory.INSTANCE.createPartSashContainer();
+		template.setHorizontal(false);
 		MInputPart templateSelection = MBasicFactory.INSTANCE.createInputPart();
 		MPart description = MBasicFactory.INSTANCE.createPart();
-		MInputPart projectName = MBasicFactory.INSTANCE.createInputPart();
+		MInputPart applicationModel = MBasicFactory.INSTANCE.createInputPart();
 
 		// put the model elements together
 		pStack.getChildren().add(perspective);
 		perspective.getChildren().add(complete);
-		complete.getChildren().add(templateSelection);
-		complete.getChildren().add(description);
-		complete.getChildren().add(projectName);
+		complete.getChildren().add(template);
+		template.getChildren().add(templateSelection);
+		template.getChildren().add(description);
+		complete.getChildren().add(applicationModel);
 
 		// set the appropriate contributionURI e. g. bundleclass
-		templateSelection
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.TemplateSelectionPart");
-		description
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
-		projectName
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ProjectNamePart");
+		templateSelection.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.TemplateSelectionPart");
+		description.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
+		applicationModel.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ApplicationModelPart");
 		return pStack;
 	}
 
 	@Inject
 	private void updateMessage(
-			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
-			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template) {
-		String message = "";
-		if (template == null)
-			message = message.concat(SELECT_TEMPLATE);
-		if (appProjectName == null || appProjectName.equals(""))
-			message = message.concat(ENTER_APP_PROJECTNAME);
-		if (message.equals("")) {
-			setMessage(null);
-			if (projectAlreadyExists(appProjectName)) {
-				this.setMessage(PROJECTNAME_EXSISTS, ERROR);
-				this.setPageComplete(false);
-			} else
-				this.setPageComplete(true);
-		} else {
-			this.setMessage(message, INFORMATION);
+			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template){
+		if(template == null){
+			this.setMessage(CHOOSE_A_TEMPLATE);
 			this.setPageComplete(false);
-		}
-	}
-
-	private boolean projectAlreadyExists(String name) {
-		for (IProject project : workspace.getProjects()) {
-			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$") ||
-					name.concat(".generator").matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
-				return true;
-		}
-		return false;
+		} else
+			this.setPageComplete(true);
 	}
 
 	private void renderModel(Composite parent, final MUIElement hostModel) {
@@ -173,4 +147,36 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 			}
 		});
 	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		System.err.println(visible);
+		System.err.println(context.get(WizardConstants.DESCRIPTION));
+		System.err.println(context.getActive(WizardConstants.DESCRIPTION));
+		System.err.println(context.getLocal(WizardConstants.DESCRIPTION));
+		if(visible){
+			context.modify(WizardConstants.DESCRIPTION, description);
+		} else {
+			description = (String) context.get(WizardConstants.DESCRIPTION);
+		}
+		super.setVisible(visible);
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		if(((Button) context.get(WizardConstants.CHOOSE_WIZARD)).getData().equals(WizardConstants.RADIO_3))
+			return true;
+		return super.isPageComplete();
+	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		Button button = (Button) context.get(WizardConstants.CHOOSE_WIZARD);
+		if(button.getData().equals(WizardConstants.RADIO_1) ||
+				button.getData().equals(WizardConstants.RADIO_3))
+			return false;
+		return super.canFlipToNextPage();
+	}
+	
+	
 }
