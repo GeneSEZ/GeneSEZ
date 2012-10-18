@@ -26,7 +26,7 @@ extension org::genesez::platform::typo3v4::mvc::profile::FluidProfile;
 extension org::genesez::platform::typo3v4::mvc::profile::FluidAccessHelper;
 
 // use TYPO3 naming context and common naming scripts
-extension org::genesez::platform::common::naming::Naming;
+extension org::genesez::metamodel::core::util::mapping::NameMapping;
 extension org::genesez::platform::typo3v4::mvc::convention::NamingContext;
 
 // use TYPO3 MVC access helper scripts which overrides
@@ -48,7 +48,7 @@ extension org::genesez::platform::common::m2m::CreateTemplate;
 
 Void modelAdditions(MModel this) :
 	useLogger("org.genesez.platform.typo3") ->
-	setNamingContext( namingContextGeneral() ) ->
+	setInternalNamingContext( namingContextGeneral() ) ->
 	// perform model additions for all stereotypes which are validators
 	anyStereotype.select( e | e.isLocalValidator() ).makeValidator() ->
 	// perform model additions for model

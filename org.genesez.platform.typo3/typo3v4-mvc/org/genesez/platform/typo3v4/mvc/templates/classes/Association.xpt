@@ -13,7 +13,7 @@
 «EXTENSION org::genesez::platform::common::genesez::profile::AccessHelper»
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::common::naming::Naming»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
 «EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
 «REM» use TYPO3 MVC naming scripts «ENDREM»
@@ -217,9 +217,9 @@
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAssociationRole -»
 «IF isSingleValuedType() -»
-«IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»«mapType( typeMappingContextModel() ) -» «ELSE -»«mapType() -» «ENDIF -»
+«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»«mapCollection( typeMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -228,7 +228,7 @@
 	Generates type hints for insert in and remove from methods.
 «ENDREM»
 «DEFINE TypeHintInsertInRemoveFrom FOR MAssociationRole -»
-«IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ENDDEFINE»
 
 
