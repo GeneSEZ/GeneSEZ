@@ -11,7 +11,7 @@
 «ENDREM»
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::common::naming::Naming»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
 «EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
 «REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
@@ -148,8 +148,8 @@
 «ENDREM»
 «DEFINE TypeHint FOR MParameter -»
 «IF isSingleValuedType() -»
-«IF generatePHPTypeHint(type) -»«type.name(getNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
-«ELSE -»«mapType() -» «ENDIF -»
+«IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
+«ELSE -»«mapCollection() -» «ENDIF -»
 «ENDDEFINE»
 
 

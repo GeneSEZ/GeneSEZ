@@ -10,7 +10,7 @@
 «EXTENSION org::genesez::platform::typo3v4::mvc::profile::ExtbaseAccessHelper»
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::common::naming::Naming»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
 «EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
 «REM» use TYPO3 MVC convention scripts «ENDREM»
@@ -56,7 +56,7 @@
 	The type mapping context is not needed for this part. 
 «ENDREM»
 «DEFINE ContextSettings FOR MModel -»
-«setNamingContext( namingContextConfiguration() ) -»
+«setInternalNamingContext( namingContextConfiguration() ) -»
 «ENDDEFINE»
 
 
@@ -161,8 +161,8 @@ module.«extensionName -» {
 «REM»
 «ENDREM»
 «DEFINE PersistenceClassesMapping FOR MModel -»
-«setNamingContext( namingContextGeneral() ) -»
-«setTypeMappingContext( typeMappingContextGeneral() ) -»
+«setInternalNamingContext( namingContextGeneral() ) -»
+«setExternalNamingContext( typeMappingContextGeneral() ) -»
 «IF !allPersistenceClassMappings().isEmpty -»
 config.tx_extbase {
 	persistence {
@@ -173,8 +173,8 @@ config.tx_extbase {
 }
 
 «ENDIF -»
-«revertNamingContext() -»
-«revertTypeMappingContext() -»
+«revertInternalNamingContext() -»
+«revertExternalNamingContext() -»
 «ENDDEFINE»
 
 

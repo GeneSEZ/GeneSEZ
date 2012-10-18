@@ -14,7 +14,7 @@
 «EXTENSION org::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile»
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
-«EXTENSION org::genesez::platform::common::naming::Naming»
+«EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
 «EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
 
 «REM» use TYPO3 MVC naming scripts «ENDREM»
@@ -55,9 +55,9 @@
 	 * @var «type.name()»
 «ELSE -»
 «IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
-	 * @var «mapType( typeMappingContextModel() ) -»<«type.name() -»>
+	 * @var «mapCollection( typeMappingContextModel() ) -»<«type.name() -»>
 «ELSE -»
-	 * @var «mapType() -»
+	 * @var «mapCollection() -»
 «ENDIF -» 
 «ENDIF -»
 	«EXPAND Cascade -»
@@ -72,9 +72,9 @@
 	 * @return «type.name()-» «comment("; ", "")»
 «ELSE -»
 «IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
-	 * @return «mapType( typeMappingContextModel() ) -»<«type.name() -»> «comment("; ", "")»
+	 * @return «mapCollection( typeMappingContextModel() ) -»<«type.name() -»> «comment("; ", "")»
 «ELSE -»
-	 * @return «mapType() -» «comment("; ", "")»
+	 * @return «mapCollection() -» «comment("; ", "")»
 «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
@@ -85,9 +85,9 @@
 	 * @param «type.name() -» $«name() -» «comment("; ", "")»
 «ELSE -»
 «IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
-	 * @param «mapType( typeMappingContextModel() ) -»<«type.name() -»> $«name() -» «comment("; ", "")»
+	 * @param «mapCollection( typeMappingContextModel() ) -»<«type.name() -»> $«name() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapType() -» $«name() -» «comment("; ", "")»
+	 * @param «mapCollection() -» $«name() -» «comment("; ", "")»
 «ENDIF -» 
 «ENDIF -»
 	 * @return void
@@ -191,7 +191,7 @@
 «IF isSingleValuedType() -»
 	 * @param «type.name() -» $«name() -» «comment("; ", "")»
 «ELSE -»
-	 * @param «mapType() -» $«name() -» «comment("; ", "")»
+	 * @param «mapCollection() -» $«name() -» «comment("; ", "")»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -202,9 +202,9 @@
 	 * @return «return.type.name() -» «return.comment("; ", "")»
 «ELSE -»
 «IF classifier.isRepositoryPackageElement() && !hasPrimitiveStereotype() -»
-	 * @return «mapType( typeMappingContextRepository() ) -»<«return.type.name() -»> «return.comment("; ", "")»
+	 * @return «return.mapCollection( typeMappingContextRepository() ) -»<«return.type.name() -»> «return.comment("; ", "")»
 «ELSE -»
-	 * @return «mapType() -» «return.comment("; ", "")»
+	 * @return «return.mapCollection() -» «return.comment("; ", "")»
 «ENDIF -»
 «ENDIF -»	
 «ELSE -»
