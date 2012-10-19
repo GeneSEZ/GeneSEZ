@@ -1,0 +1,251 @@
+«IMPORT gpresentation»
+«EXTENSION AccessHelper»
+
+
+«DEFINE Head FOR PRoot -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "headMetaData") -»
+<!DOCTYPE «getTaggedValue(HTMLP + "headMetaData", "doctype") -»>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=«getTaggedValue(HTMLP + "headMetaData", "contenttype") -»"> 
+  <title>«getTaggedValue(HTMLP + "headMetaData", "title") -»</title>
+  <meta name="description" content="«getTaggedValue(HTMLP + "headMetaData", "description") -»">
+  <meta name="keywords" content="«FOREACH getTaggedValues(HTMLP + "headMetaData", "keywords") AS k SEPARATOR ', ' -»«k -»«ENDFOREACH -»">
+  <meta name="language" content="«getTaggedValue(HTMLP + "headMetaData", "language") -»">
+  «FOREACH getTaggedValues(HTMLP + "headMetaData", "stylesheets") AS stylesheet -» 
+  <link rel="stylesheet" type="text/css" href="«stylesheet -»">
+  «ENDFOREACH -»
+</head>
+<body>
+  «EXPAND Root::Content FOREACH nestedContents -»
+</body>
+</html>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Div FOR PCompositeArea -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "div") -»
+<div «EXPAND universalAttrs -»>
+  «EXPAND Root::Content FOREACH nestedContents -»
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Div FOR PElementArea -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "div") -»
+<div «EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE ClassForm FOR PAutomaticallyGeneratedArea -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "classForm") -»
+TODO
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Div FOR PCompositeElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "div") -»
+<div «EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</div>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE P FOR PCompositeElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "p") -»
+<p «EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</p>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE H FOR PCompositeElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "h") -»
+<h«getTaggedValue(HTMLP + "h", "level") -» «EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</h«getTaggedValue(HTMLP + "h", "level") -»>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Link FOR PCompositeElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "link") -»
+«LET getTaggedValue(HTMLP + "link", "extern") == 'true' ? 'http://' : '' AS http -»
+<a href="«http + name -»" «EXPAND optionalAttr("link", "target") -» «EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</a>
+«ENDLET -»
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Form FOR PCompositeElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "form") -»
+<form action="«getTaggedValue(HTMLP + "form", "action") -»" «EXPAND optionalAttr("form", "method") -» «EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</form>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Select FOR PCompositeElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "select") -»
+«EXPAND Label -»
+<select «EXPAND inputAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</select>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Fieldset FOR PCompositeElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "fieldset") -»
+<fieldset «EXPAND universalAttrs -»>
+  <legend>«name -»</legend>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</fieldset>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE TextField FOR PInput -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "textField") -»
+«EXPAND Label -»
+<input type="text" «EXPAND optionalAttr("inputElement", "value") -» «EXPAND optionalAttr("textField", "maxlength") -» «EXPAND optionalAttr("textField", "size") -» «EXPAND inputAttrs -»>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Checkbox FOR PInput -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "checkbox") -»
+<label>
+<input type="checkbox" value="«getTaggedValue(HTMLP + "inputElement", "value")»" «EXPAND optionalAttr("inputElement", "checked") -» «EXPAND inputAttrs -»>
+«getTaggedValue(HTMLP + "inputElement", "label")»
+</label>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Option FOR PInput -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "option") -»
+<option value="«getTaggedValue(HTMLP + "inputElement", "value") -»"> «name -» </option>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE P FOR POutput -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "p") -»
+<p «EXPAND universalAttrs -»>«getTaggedValue(HTMLP + "p", "text") -»</p>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE H FOR POutput -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "h") -»
+<h«getTaggedValue(HTMLP + "h", "level") -» «EXPAND universalAttrs -»>«getTaggedValue(HTMLP + "h", "text") -»</h«getTaggedValue(HTMLP + "h", "level") -»>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Anchor FOR POutput -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "anchor") -»
+<a name="«name -»" «EXPAND universalAttrs -»>«getTaggedValue(HTMLP + "anchor", "text") -»</a>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Text FOR POutput -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "text") -»
+«getTaggedValue(HTMLP + "text", "text") -»
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Link FOR PAction -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "link") -»
+«LET getTaggedValue(HTMLP + "link", "extern") == 'true' ? 'http://' : '' AS http -»
+<a href="«http + name -»" «EXPAND optionalAttr("link", "target") -» «EXPAND universalAttrs -»>«getTaggedValue(HTMLP + "link", "text")»</a>
+«ENDLET -»
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Submit FOR PAction -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«IF hasPMetaData(HTMLP + "submit") -»
+<input type="submit" «EXPAND optionalAttr("inputElement", "value") -» «EXPAND universalAttrs -»>
+«ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE universalAttrs FOR PMetaDataAware -»
+«EXPAND optionalAttr("element", "class") -» «EXPAND optionalAttr("element", "id") -» «EXPAND optionalAttr("element", "style") -»
+«ENDDEFINE»
+
+
+«DEFINE inputAttrs FOR PElement -»
+name="«name -»" «EXPAND optionalAttr("element", "class") -» id="«name -»" «EXPAND optionalAttr("element", "style") -»
+«ENDDEFINE»
+
+
+«DEFINE optionalAttr(String stereotyp, String taggedValue) FOR PMetaDataAware -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+«LET hasTaggedValue(HTMLP + stereotyp, taggedValue) ? taggedValue + '="' + getTaggedValue(HTMLP + stereotyp, taggedValue) + '"' : '' AS v -»
+«v -»
+«ENDLET -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Label FOR PElement -»
+«LET 'GeneSEZ HTML Profile::' AS HTMLP -»
+<label for="«name -»">«getTaggedValue(HTMLP + "inputElement", "label") -»</label>
+«ENDLET -»
+«ENDDEFINE»
