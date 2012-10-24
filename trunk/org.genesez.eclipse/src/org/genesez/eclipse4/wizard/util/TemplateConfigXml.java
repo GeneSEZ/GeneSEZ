@@ -1,9 +1,13 @@
 package org.genesez.eclipse4.wizard.util;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.eclipse.core.runtime.IPath;
 
 /**
  * The Bean class for JAXB parsing
@@ -34,6 +38,12 @@ public class TemplateConfigXml {
 
 	/** the corresponding ZipFile */
 	private File file;
+	
+	/** all internal files */
+	private List<IPath> internalFiles = new ArrayList<IPath>();
+	
+	/** all internal folders */
+	private List<IPath> internalFolders = new ArrayList<IPath>();
 
 	/** @return name of the template */
 	public String getName() {
@@ -64,15 +74,39 @@ public class TemplateConfigXml {
 	public File getFile() {
 		return file;
 	}
+	
+	/** @return a List of internal files */
+	public List<IPath> getInternalFiles(){
+		return internalFiles;
+	}
+	
+	/** @return a List of internal folders */
+	public List<IPath> getInternalFolders(){
+		return internalFolders;
+	}
 
 	/**
 	 * Sets the corresponding file
-	 * 
-	 * @param file
-	 *            the file
+	 * @param file the file
 	 */
 	protected void setFile(File file) {
 		this.file = file;
+	}
+	
+	/**
+	 * Adds a folder to internalFolders
+	 * @param path the folder to add
+	 */
+	protected void addInternalFolder(IPath path){
+		internalFolders.add(path);
+	}
+	
+	/**
+	 * Adds a file to internalFiles
+	 * @param path the file to add
+	 */
+	protected void addInternalFile(IPath path){
+		internalFiles.add(path);
 	}
 
 	/**

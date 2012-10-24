@@ -5,7 +5,6 @@ import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -20,6 +19,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.IPresentationEngine;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -38,7 +38,6 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 
 	private MWindow hostWin;
 	private IEclipseContext context;
-	private IWorkspaceRoot workspace;
 
 	@Inject
 	private IPresentationEngine renderer;
@@ -47,7 +46,6 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 		super(pageName);
 		this.hostWin = hostWin;
 		this.context = hostWin.getContext();
-		this.workspace = ResourcesPlugin.getWorkspace().getRoot();
 
 		setTitle("GeneSEZ example selection");
 		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
@@ -61,13 +59,11 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 	private void initializeContext() {
 		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
+		context.declareModifiable(WizardConstants.GEN_PROJ_NAME);
 		context.declareModifiable(WizardConstants.TEMPLATE);
-		context.modify(WizardConstants.DESCRIPTION, null);
-		context.modify(WizardConstants.APP_PROJ_NAME, null);
-		context.modify(WizardConstants.TEMPLATE, null);
+		context.declareModifiable(IWizardPage.class);
 
 		context.set(WizardConstants.IS_EXAMPLE, true);
-		context.set(WizardConstants.WORKSPACE, workspace);
 	}
 
 	@Override
@@ -101,7 +97,7 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 		// Create the model elements
 		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE
 				.createPerspectiveStack();
-		ContextInjectionFactory.inject(pStack, context);
+//		ContextInjectionFactory.inject(pStack, context);
 		MPerspective perspective = MAdvancedFactory.INSTANCE
 				.createPerspective();
 		MPartSashContainer complete = MBasicFactory.INSTANCE
@@ -131,6 +127,7 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 	@Inject
 	private void updateMessage(
 			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
+			@Optional @Named(WizardConstants.GEN_PROJ_NAME) String genProjectName,
 			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template) {
 		String message = "";
 		if (template == null)
@@ -138,12 +135,14 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 		if (appProjectName == null || appProjectName.equals(""))
 			message = message.concat(ENTER_APP_PROJECTNAME);
 		if (message.equals("")) {
-			setMessage(null);
-			if (projectAlreadyExists(appProjectName)) {
+			if (projectAlreadyExists(appProjectName)
+					|| (genProjectName != null && projectAlreadyExists(genProjectName))) {
 				this.setMessage(PROJECTNAME_EXSISTS, ERROR);
 				this.setPageComplete(false);
-			} else
+			} else {
+				setMessage(null);
 				this.setPageComplete(true);
+			}
 		} else {
 			this.setMessage(message, INFORMATION);
 			this.setPageComplete(false);
@@ -151,9 +150,8 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 	}
 
 	private boolean projectAlreadyExists(String name) {
-		for (IProject project : workspace.getProjects()) {
-			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$") ||
-					name.concat(".generator").matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
+		for (IProject project : context.get(IWorkspaceRoot.class).getProjects()) {
+			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
 				return true;
 		}
 		return false;
@@ -172,5 +170,12 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 				hostWin.getSharedElements().remove(hostModel);
 			}
 		});
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		if(visible)
+			context.modify(IWizardPage.class, this);
+		super.setVisible(visible);
 	}
 }

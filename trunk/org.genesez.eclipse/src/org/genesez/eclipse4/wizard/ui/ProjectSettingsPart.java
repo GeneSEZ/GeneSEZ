@@ -5,10 +5,13 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -21,8 +24,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
+import org.genesez.eclipse4.wizard.util.ProjectSelectionDialog;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 @SuppressWarnings("restriction")
@@ -31,83 +34,66 @@ public class ProjectSettingsPart {
 	private static final String PROJECT_CHOOSE_MESSAGE = "Choose application project";
 	private static final String GENERATOR_INSERT_MESSAGE = "Insert generator project name";
 	private static final String GENERATOR_CHOOSE_MESSAGE = "Choose generator project";
-	
+
 	private Text textProjectname;
 	private Text textGeneratorname;
-	private GridData textData = new GridData(SWT.FILL, SWT.CENTER, true, false, 4,1);
-	private GridData buttonData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 	private Button browseProject;
 	private Button browseGenerator;
 	private Group grpProjectSettings;
 	private Object radioData;
 	private boolean textNotSet = true;
-	
-	@Inject IEclipseContext context;
+
+	@Inject
+	private IEclipseContext context;
+	@Inject
+	private IWorkspaceRoot workspace;
 
 	/**
 	 * Create contents of the view part.
 	 */
 	@PostConstruct
 	public void createControls(final Composite parent) {
-		grpProjectSettings = new Group(parent, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
+		parent.setLayout(new GridLayout(1, false));
+		grpProjectSettings = new Group(parent, SWT.BORDER
+				| SWT.SHADOW_ETCHED_IN);
+		grpProjectSettings.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false));
 		grpProjectSettings.setText("Project Settings");
-		grpProjectSettings.setLayout(new GridLayout(5,true));
-				
+		grpProjectSettings.setLayout(GridLayoutFactory
+				.copyLayout(WizardConstants.L_GL_TXTBTN));
+
 		textProjectname = new Text(grpProjectSettings, SWT.BORDER);
-		textProjectname.setLayoutData(textData);
+		textProjectname.setLayoutData(WizardConstants.L_GD_TXTBTN_TEXT);
 		textProjectname.setToolTipText(PROJECT_INSERT_MESSAGE);
+		textProjectname.setMessage(PROJECT_INSERT_MESSAGE);
 		textProjectname.setEnabled(false);
-		
+
 		browseProject = new Button(grpProjectSettings, SWT.NONE);
-		browseProject.setLayoutData(buttonData);
+		browseProject.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
 		browseProject.setText("Browse...");
 		browseProject.setEnabled(false);
-		
+
 		textGeneratorname = new Text(grpProjectSettings, SWT.BORDER);
-		textGeneratorname.setLayoutData(textData);
+		textGeneratorname.setLayoutData(WizardConstants.L_GD_TXTBTN_TEXT);
 		textGeneratorname.setToolTipText(GENERATOR_INSERT_MESSAGE);
+		textGeneratorname.setMessage(GENERATOR_INSERT_MESSAGE);
 		textGeneratorname.setEnabled(false);
-		
+
 		browseGenerator = new Button(grpProjectSettings, SWT.NONE);
-		browseGenerator.setLayoutData(buttonData);
+		browseGenerator.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
 		browseGenerator.setText("Browse...");
 		browseGenerator.setEnabled(false);
-		
+
 		addListener(parent);
-		
-//		e = new FileFieldEditor("editor", "", grpProjectSettings);
-////		editor = new StringButtonFieldEditor("generated.project",
-////				"Select project:", grpProjectSettings) {
-////
-////			SelectionDialog dialog = new ContainerSelectionDialog(
-////					parent.getShell(), null, false, "Choose Project");
-////
-////			@Override
-////			protected String changePressed() {
-////				dialog.setBlockOnOpen(true);
-////				dialog.open();
-////				Object[] result = dialog.getResult();
-////				if (result == null) {
-////					return "";
-////				}
-////				return result[0].toString();
-////			}
-////
-////			@Override
-////			public void dispose() {
-////				dialog.closeTray();
-////			}
-////		};
-//		e.setEmptyStringAllowed(true);
-//		e.setChangeButtonText("Browse...");
-//		e.fillIntoGrid(grpProjectSettings, 3);
 	}
-	
+
 	@Inject
-	private void setProjectSettingElements(@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectedRadioButton){
-		if(selectedRadioButton != null && !grpProjectSettings.isDisposed()){
+	private void setProjectSettingElements(
+			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectedRadioButton) {
+		if (selectedRadioButton != null && grpProjectSettings != null
+				&& !grpProjectSettings.isDisposed()) {
 			radioData = selectedRadioButton.getData();
-			if(radioData.equals(WizardConstants.RADIO_1)){
+			if (radioData.equals(WizardConstants.RADIO_1)) {
 				textNotSet = true;
 				textProjectname.setMessage(PROJECT_INSERT_MESSAGE);
 				textGeneratorname.setMessage(GENERATOR_INSERT_MESSAGE);
@@ -115,7 +101,7 @@ public class ProjectSettingsPart {
 				textGeneratorname.setEditable(true);
 				browseProject.setEnabled(false);
 				browseGenerator.setEnabled(false);
-			} else if(radioData.equals(WizardConstants.RADIO_2)){
+			} else if (radioData.equals(WizardConstants.RADIO_2)) {
 				textNotSet = false;
 				textProjectname.setMessage(PROJECT_INSERT_MESSAGE);
 				textGeneratorname.setMessage(GENERATOR_CHOOSE_MESSAGE);
@@ -123,7 +109,7 @@ public class ProjectSettingsPart {
 				textGeneratorname.setEditable(false);
 				browseProject.setEnabled(false);
 				browseGenerator.setEnabled(true);
-			} else if(radioData.equals(WizardConstants.RADIO_3)){
+			} else if (radioData.equals(WizardConstants.RADIO_3)) {
 				textNotSet = false;
 				textProjectname.setMessage(PROJECT_CHOOSE_MESSAGE);
 				textGeneratorname.setMessage(GENERATOR_INSERT_MESSAGE);
@@ -138,87 +124,96 @@ public class ProjectSettingsPart {
 			textGeneratorname.setEnabled(true);
 		}
 	}
-	
-	private void addListener(final Composite parent){
-		// set APP_PROJ_NAME in context and adds ".generator" on textGeneratorname if possible. 
+
+	private void addListener(final Composite parent) {
+		// set APP_PROJ_NAME in context and adds ".generator" on
+		// textGeneratorname if possible.
 		textProjectname.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(radioData != null && radioData.equals(WizardConstants.RADIO_1) && textNotSet){
-					textGeneratorname.setText(textProjectname.getText().concat(".generator"));
+				if (radioData != null
+						&& radioData.equals(WizardConstants.RADIO_1)
+						&& textNotSet) {
+					textGeneratorname.setText(textProjectname.getText().concat(
+							".generator"));
 				}
-				context.modify(WizardConstants.APP_PROJ_NAME, textProjectname.getText().trim());
+				context.modify(WizardConstants.APP_PROJ_NAME, textProjectname
+						.getText().trim());
 			}
 		});
-		
-		// disables the overwriting from above with ".generator", if a key is pressed on textGeneratorname
+
+		// disables the overwriting from above with ".generator", if a key is
+		// pressed on textGeneratorname
 		textGeneratorname.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyReleased(org.eclipse.swt.events.KeyEvent e) {
-				if(textGeneratorname.getText().equals("")){
+				if (textGeneratorname.getText().equals("")) {
 					textNotSet = true;
 				}
 			}
-			
+
 			@Override
 			public void keyPressed(org.eclipse.swt.events.KeyEvent e) {
 				textNotSet = false;
 			}
 		});
-		
+
 		// sets GEN_PROJ_NAME in context
 		textGeneratorname.addModifyListener(new ModifyListener() {
-			
+
 			@Override
 			public void modifyText(ModifyEvent e) {
-				context.modify(WizardConstants.GEN_PROJ_NAME,textGeneratorname.getText().trim());
+				context.modify(WizardConstants.GEN_PROJ_NAME, textGeneratorname
+						.getText().trim());
 			}
 		});
-		
+
 		// opens a dialog to select a project
 		browseGenerator.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SelectionDialog dialog = getSelectionDialog(parent);
-				dialog.setBlockOnOpen(true);
-				dialog.open();
-				Object[] result = dialog.getResult();
+				SelectionDialog dialog = new ProjectSelectionDialog(parent
+						.getShell(), "Choose Project:", workspace, true);
+				String result = dialogResult(dialog);
 				if(result != null)
-					textGeneratorname.setText(((Path) dialog.getResult()[0]).toString());
-				dialog.closeTray();
+					textGeneratorname.setText(result);
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		
+
 		// opens a dialog to select a project
 		browseProject.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SelectionDialog dialog = getSelectionDialog(parent);
-				dialog.setBlockOnOpen(true);
-				dialog.open();
-				Object[] result = dialog.getResult();
+				SelectionDialog dialog = new ProjectSelectionDialog(parent
+						.getShell(), "Choose Project:", workspace, false);
+				String result = dialogResult(dialog);
 				if(result != null)
-					textProjectname.setText(((Path) dialog.getResult()[0]).toString());
-				dialog.closeTray();
+					textProjectname.setText(result);
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
 	}
 	
-	private SelectionDialog getSelectionDialog(Composite parent){
-		SelectionDialog dialog = new ContainerSelectionDialog(
-				parent.getShell(), null, false, "Choose Project");
-		return dialog;
+	private String dialogResult(SelectionDialog dialog){
+		dialog.setBlockOnOpen(true);
+		dialog.open();
+		if (dialog.getReturnCode() == Window.OK) {
+			Object[] result = dialog.getResult();
+			if (result != null)
+				return ((IProject) dialog
+						.getResult()[0]).getName();
+		}
+		return null;
 	}
 
 	@PreDestroy

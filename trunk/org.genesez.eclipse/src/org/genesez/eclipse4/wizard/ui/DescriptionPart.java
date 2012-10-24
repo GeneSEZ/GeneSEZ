@@ -1,12 +1,18 @@
 package org.genesez.eclipse4.wizard.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -18,12 +24,18 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 @SuppressWarnings("restriction")
+@Creatable
 public class DescriptionPart {
 
 	public DescriptionPart() {
 	}
 
+	private Map<IWizardPage,String> currentDescriptions = new HashMap<IWizardPage, String>();
+	private IWizardPage currentPage;
 	private Text styledText;
+	
+	@Inject
+	private IEclipseContext context;
 	
 	/**
 	 * Create contents of the view part.
@@ -55,8 +67,23 @@ public class DescriptionPart {
 	
 	@Inject
 	private void setDescription(@Optional @Named(WizardConstants.DESCRIPTION) String description){
-		if(description != null && !styledText.isDisposed()){
+		if(description != null && styledText != null && !styledText.isDisposed()){
 			styledText.setText(description);
+		}
+	}
+	
+	@Inject
+	private void pageChanged(@Optional IWizardPage page){
+		if(page != null){
+			if(styledText != null && !styledText.isDisposed()){
+				if(currentPage != null)
+					currentDescriptions.put(currentPage, styledText.getText());
+				if(currentDescriptions.containsKey(page))
+					styledText.setText(currentDescriptions.get(page));
+				else
+					styledText.setText("");
+				currentPage = page;
+			}
 		}
 	}
 

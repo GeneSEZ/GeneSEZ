@@ -5,7 +5,6 @@ import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -20,6 +19,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.IPresentationEngine;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -36,11 +36,11 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 	private static final String ENTER_GEN_PROJECTNAME = "Enter a generator project name. ";
 	private static final String CHOOSE_A_WIZARD = "Choose a Wizard option";
 	private static final String PROJECTNAME_EXSISTS = "A project with this name or one that will be created already exists.";
-	private static String description = "";
+	private static final String PROJECTNAMES_EQUAL = "Projectnames must be different.";
 
 	private MWindow hostWin;
 	private IEclipseContext context;
-	private IWorkspaceRoot workspace;
+	private MUIElement hostModel;
 
 	@Inject
 	private IPresentationEngine renderer;
@@ -49,9 +49,8 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 		super(pageName);
 		this.hostWin = hostWin;
 		this.context = hostWin.getContext();
-		this.workspace = ResourcesPlugin.getWorkspace().getRoot();
 
-		setTitle("GeneSEZ Wizard Selection");
+		setTitle("GeneSEZ Project Wizard");
 		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
 				"/images/GeneSEZ.png"));
 
@@ -65,11 +64,10 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 
 	private void initializeContext() {
 		context.declareModifiable(WizardConstants.CHOOSE_WIZARD);
-		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
 		context.declareModifiable(WizardConstants.GEN_PROJ_NAME);
-		context.modify(WizardConstants.DESCRIPTION, null);
-		context.modify(WizardConstants.APP_PROJ_NAME, null);
+		context.declareModifiable(WizardConstants.DESCRIPTION);
+		context.declareModifiable(IWizardPage.class);
 	}
 
 	@Override
@@ -79,11 +77,11 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 		setControl(comp);
 
 		// Create the model
-		MUIElement hostModel = createModel();
+		hostModel = createModel();
 
 		// Render the model...by 4.2 M4 we expect that this will be
 		// available as a method in the EModelService
-		renderModel(comp, hostModel);
+		renderModel(comp);
 	}
 
 	/*
@@ -92,16 +90,9 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 	 * pStack
 	 * 	|-perspective
 	 * 		|-complete
-	 * 			|-projectname
-	 * 			|-template
-	 * 			|	|-tempSelection
-	 * 			|	|-tempDescription
-	 * 			|
-	 * 			|-preview
-	 * 			|-existUml
-	 * 				|-existGenProject
-	 * 				|-existUmlModell
-	 * 				|-existUmlRadio
+	 * 			|-wizardSelection
+	 * 			|-description
+	 * 			|-projectSettings
 	 * 
 	 * @return the pStack MUIElement
 	 */
@@ -136,7 +127,7 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectButton,
 			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
 			@Optional @Named(WizardConstants.GEN_PROJ_NAME) String genProjectName) {
-		if(selectButton == null){
+		if(selectButton == null || selectButton.isDisposed()){
 			this.setMessage(CHOOSE_A_WIZARD);
 			this.setPageComplete(false);
 		}else{
@@ -146,12 +137,16 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 			if(genProjectName == null || genProjectName.equals(""))
 				message = message.concat(ENTER_GEN_PROJECTNAME);
 			if(message.equals("")){
-				this.setMessage(null);
 				if(projectsAlreadyExists(appProjectName, genProjectName, (Integer) selectButton.getData())){
 					this.setMessage(PROJECTNAME_EXSISTS, ERROR);
 					this.setPageComplete(false);
-				} else
+				} else if(appProjectName.equals(genProjectName)){
+					this.setMessage(PROJECTNAMES_EQUAL, ERROR);
+					this.setPageComplete(false);
+				} else {
+					this.setMessage(null);
 					this.setPageComplete(true);
+				}
 			} else {
 				this.setMessage(message, INFORMATION);
 				this.setPageComplete(false);
@@ -173,14 +168,14 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 	}
 	
 	private boolean projectAlreadyExists(String name){
-		for (IProject project : workspace.getProjects()) {
+		for (IProject project : context.get(IWorkspaceRoot.class).getProjects()) {
 			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
 				return true;
 		}
 		return false;
 	}
 
-	private void renderModel(Composite parent, final MUIElement hostModel) {
+	private void renderModel(Composite parent) {
 		// This is subtle; unless the element is hooked into the model it won't
 		// fire events
 		hostWin.getSharedElements().add(hostModel);
@@ -207,9 +202,7 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 	@Override
 	public void setVisible(boolean visible) {
 		if(visible){
-			context.modify(WizardConstants.DESCRIPTION, description);
-		} else {
-			description = (String) context.get(WizardConstants.DESCRIPTION);
+			context.modify(IWizardPage.class,this);
 		}
 		super.setVisible(visible);
 	}

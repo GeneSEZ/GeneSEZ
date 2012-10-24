@@ -3,8 +3,6 @@ package org.genesez.eclipse4.wizard.page;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -37,7 +35,6 @@ public class GeneSEZProjectWizardWorkflowPage extends WizardPage {
 
 	private MWindow hostWin;
 	private IEclipseContext context;
-	private IWorkspaceRoot workspace;
 
 	@Inject
 	private IPresentationEngine renderer;
@@ -46,9 +43,8 @@ public class GeneSEZProjectWizardWorkflowPage extends WizardPage {
 		super(pageName);
 		this.hostWin = hostWin;
 		this.context = hostWin.getContext();
-		this.workspace = ResourcesPlugin.getWorkspace().getRoot();
 
-		setTitle("GeneSEZ Wizard Selection");
+		setTitle("GeneSEZ Project Wizard");
 		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
 				"/images/GeneSEZ.png"));
 
