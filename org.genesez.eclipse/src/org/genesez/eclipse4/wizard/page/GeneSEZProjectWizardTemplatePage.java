@@ -3,8 +3,6 @@ package org.genesez.eclipse4.wizard.page;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -19,6 +17,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.IPresentationEngine;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -33,11 +32,9 @@ import org.genesez.eclipse4.wizard.util.WizardConstants;
 public class GeneSEZProjectWizardTemplatePage extends WizardPage {
 
 	private static final String CHOOSE_A_TEMPLATE = "Choose a template for project generation";
-	private static String description = "";
 
 	private MWindow hostWin;
 	private IEclipseContext context;
-	private IWorkspaceRoot workspace;
 
 	@Inject
 	private IPresentationEngine renderer;
@@ -46,23 +43,22 @@ public class GeneSEZProjectWizardTemplatePage extends WizardPage {
 		super(pageName);
 		this.hostWin = hostWin;
 		this.context = hostWin.getContext();
-		this.workspace = ResourcesPlugin.getWorkspace().getRoot();
 
-		setTitle("GeneSEZ Wizard Selection");
+		setTitle("GeneSEZ Project Wizard");
 		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
 				"/images/GeneSEZ.png"));
 
-		// This is not really necessary but it demonstrates how DI works
-		// once the code below runs the '@Inject' fields defined above will
-		// contain their correct values.
 		ContextInjectionFactory.inject(this, context);
 		initializeContext();
 		this.setPageComplete(false);
 	}
 
 	private void initializeContext() {
+		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(WizardConstants.TEMPLATE);
-		context.modify(WizardConstants.TEMPLATE, null);
+		context.declareModifiable(WizardConstants.CHOOSE_WIZARD);
+		context.declareModifiable(WizardConstants.APPLICATION_MODEL_LIST);
+		context.declareModifiable(WizardConstants.COPY_MODEL_FILES);
 		context.set(WizardConstants.IS_EXAMPLE, false);
 	}
 
@@ -134,8 +130,6 @@ public class GeneSEZProjectWizardTemplatePage extends WizardPage {
 	}
 
 	private void renderModel(Composite parent, final MUIElement hostModel) {
-		// This is subtle; unless the element is hooked into the model it won't
-		// fire events
 		hostWin.getSharedElements().add(hostModel);
 
 		// Render it
@@ -150,33 +144,28 @@ public class GeneSEZProjectWizardTemplatePage extends WizardPage {
 
 	@Override
 	public void setVisible(boolean visible) {
-		System.err.println(visible);
-		System.err.println(context.get(WizardConstants.DESCRIPTION));
-		System.err.println(context.getActive(WizardConstants.DESCRIPTION));
-		System.err.println(context.getLocal(WizardConstants.DESCRIPTION));
 		if(visible){
-			context.modify(WizardConstants.DESCRIPTION, description);
-		} else {
-			description = (String) context.get(WizardConstants.DESCRIPTION);
+			context.modify(IWizardPage.class, this);
 		}
 		super.setVisible(visible);
 	}
 	
 	@Override
 	public boolean isPageComplete() {
-		if(((Button) context.get(WizardConstants.CHOOSE_WIZARD)).getData().equals(WizardConstants.RADIO_3))
-			return true;
+		Object button = context.get(WizardConstants.CHOOSE_WIZARD);
+		if(button != null)
+			if(((Button) button).getData().equals(WizardConstants.RADIO_3))
+				return true;
 		return super.isPageComplete();
 	}
 	
 	@Override
 	public boolean canFlipToNextPage() {
-		Button button = (Button) context.get(WizardConstants.CHOOSE_WIZARD);
-		if(button.getData().equals(WizardConstants.RADIO_1) ||
-				button.getData().equals(WizardConstants.RADIO_3))
-			return false;
+		Object button = context.get(WizardConstants.CHOOSE_WIZARD);
+		if(button != null)
+			if(((Button) button).getData().equals(WizardConstants.RADIO_1) ||
+					((Button) button).getData().equals(WizardConstants.RADIO_3))
+				return false;
 		return super.canFlipToNextPage();
 	}
-	
-	
 }

@@ -12,6 +12,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 @SuppressWarnings("restriction")
@@ -35,33 +36,42 @@ public class ChooseWorkflowPart {
 		
 		btnDoNotCreate = new Button(parent, SWT.RADIO);
 		btnDoNotCreate.setData(WizardConstants.RADIO_1);
+		btnDoNotCreate.setSelection(true);
+		btnDoNotCreate.setText("Do not create workflow file");
+		
+		btnCreateNewWorkflow = new Button(parent, SWT.RADIO);
+		btnCreateNewWorkflow.setData(WizardConstants.RADIO_2);
+		btnCreateNewWorkflow.setText("Create new workflow file");
+		
+		btnCreateNewWorkflow_1 = new Button(parent, SWT.RADIO);
+		btnCreateNewWorkflow_1.setData(WizardConstants.RADIO_3);
+		btnCreateNewWorkflow_1.setText("Create new workflow file from template");
+		
+		addListener();
+		btnDoNotCreate.notifyListeners(SWT.Selection, new Event());
+	}
+	
+	private void addListener(){
 		btnDoNotCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				context.modify(WizardConstants.CHOOSE_WORKFLOW, btnDoNotCreate);
 			}
 		});
-		btnDoNotCreate.setText("Do not create workflow file");
 		
-		btnCreateNewWorkflow = new Button(parent, SWT.RADIO);
-		btnCreateNewWorkflow.setData(WizardConstants.RADIO_2);
 		btnCreateNewWorkflow.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				context.modify(WizardConstants.CHOOSE_WORKFLOW, btnCreateNewWorkflow);
 			}
 		});
-		btnCreateNewWorkflow.setText("Create new workflow file");
 		
-		btnCreateNewWorkflow_1 = new Button(parent, SWT.RADIO);
-		btnCreateNewWorkflow_1.setData(WizardConstants.RADIO_3);
 		btnCreateNewWorkflow_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				context.modify(WizardConstants.CHOOSE_WORKFLOW, btnCreateNewWorkflow_1);
 			}
 		});
-		btnCreateNewWorkflow_1.setText("Create new workflow file from template");
 	}
 
 	@PreDestroy

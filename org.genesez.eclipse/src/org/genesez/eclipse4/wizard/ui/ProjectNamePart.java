@@ -39,11 +39,13 @@ public class ProjectNamePart {
 		text.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				String name = text.getText().trim();
+				String genName = name.concat(".generator");
 				context.modify(WizardConstants.APP_PROJ_NAME, name);
+				context.modify(WizardConstants.GEN_PROJ_NAME, genName);
 				if(name.equals(""))
 					text_disabled.setText("");
 				else
-					text_disabled.setText(name + ".generator");
+					text_disabled.setText(genName);
 
 			}
 		});

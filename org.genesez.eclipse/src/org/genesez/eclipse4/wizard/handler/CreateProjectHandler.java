@@ -15,7 +15,7 @@ public class CreateProjectHandler {
 	public boolean createProject(
 			@Named(WizardConstants.TEMPLATE) TemplateConfigXml template,
 			@Named(WizardConstants.APP_PROJ_NAME) String projectName,
-			@Named(WizardConstants.WORKSPACE) IWorkspaceRoot workspace) {
+			IWorkspaceRoot workspace) {
 		if (template == null || projectName == null || workspace == null) {
 			return false;
 		}

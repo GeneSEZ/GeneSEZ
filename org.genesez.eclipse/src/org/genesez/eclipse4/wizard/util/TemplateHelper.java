@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -30,6 +31,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 //
@@ -128,6 +130,14 @@ public class TemplateHelper {
 			InputStream stream = zf
 					.getInputStream(zf.getEntry(CONFIG_FILENAME));
 			toReturn = (TemplateConfigXml) un.unmarshal(stream);
+			Enumeration<? extends ZipEntry> entries= zf.entries();
+			while(entries.hasMoreElements()){
+				ZipEntry z_entry = entries.nextElement();
+				if(z_entry.isDirectory())
+					toReturn.addInternalFolder(new Path(z_entry.getName()));
+				else
+					toReturn.addInternalFile(new Path(z_entry.getName()));
+			}
 			toReturn.setFile(file);
 		} catch (ZipException e) {
 		} catch (IOException e) {
