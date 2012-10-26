@@ -15,90 +15,84 @@ import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
-import org.eclipse.e4.ui.workbench.IPresentationEngine;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
+import org.genesez.eclipse4.wizard.ui.ApplicationModelPart;
+import org.genesez.eclipse4.wizard.ui.DescriptionPart;
+import org.genesez.eclipse4.wizard.ui.TemplateSelectionPart;
 import org.genesez.eclipse4.wizard.util.TemplateConfigXml;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * In this page the template and the application Model can be chosen.
+ * 
+ * The page contains:
+ * <p>
+ * {@link TemplateSelectionPart}
+ * </p>
+ * <p>
+ * {@link DescriptionPart}
+ * </p>
+ * <p>
+ * {@link ApplicationModelPart}
+ * </p>
+ * See their documentation for needed {@link IEclipseContext} elements.
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 @SuppressWarnings("restriction")
-public class GeneSEZProjectWizardTemplatePage extends WizardPage {
+public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
 
 	private static final String CHOOSE_A_TEMPLATE = "Choose a template for project generation";
 
-	private MWindow hostWin;
-	private IEclipseContext context;
-
-	@Inject
-	private IPresentationEngine renderer;
-
+	/**
+	 * Creates the page.
+	 * 
+	 * @param pageName
+	 *            the page name.
+	 * @param hostWin
+	 *            the host window, which contains the context.
+	 */
 	public GeneSEZProjectWizardTemplatePage(String pageName, MWindow hostWin) {
-		super(pageName);
-		this.hostWin = hostWin;
-		this.context = hostWin.getContext();
-
-		setTitle("GeneSEZ Project Wizard");
-		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
-				"/images/GeneSEZ.png"));
-
-		ContextInjectionFactory.inject(this, context);
-		initializeContext();
-		this.setPageComplete(false);
+		super(pageName, hostWin);
 	}
 
-	private void initializeContext() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardPage#initializeContext
+	 * ()
+	 */
+	@Override
+	protected void initializeContext() {
 		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(WizardConstants.TEMPLATE);
 		context.declareModifiable(WizardConstants.CHOOSE_WIZARD);
 		context.declareModifiable(WizardConstants.APPLICATION_MODEL_LIST);
 		context.declareModifiable(WizardConstants.COPY_MODEL_FILES);
+		context.declareModifiable(WizardConstants.APPLICATION_MODEL_ROOT);
 		context.set(WizardConstants.IS_EXAMPLE, false);
 	}
 
-	@Override
-	public void createControl(Composite parent) {
-		Composite comp = new Composite(parent, SWT.NONE);
-		comp.setLayout(new FillLayout());
-		setControl(comp);
-
-		// Create the model
-		MUIElement hostModel = createModel();
-
-		// Render the model...by 4.2 M4 we expect that this will be
-		// available as a method in the EModelService
-		renderModel(comp, hostModel);
-	}
-
-	/*
-	 * Creates the following MUIElement tree:
+	/**
+	 * Creates the model with a {@link TemplateSelectionPart}, a
+	 * {@link DescriptionPart} and an {@link ApplicationModelPart}
 	 * 
-	 * pStack
-	 * 	|-perspective
-	 * 		|-complete
-	 * 			|-template
-	 * 			|	|-templateSelection
-	 * 			|	|-description
-	 * 			|
-	 * 			|-applicationModel
-	 * 
-	 * @return the pStack MUIElement
+	 * @see org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardPage#createModel()
 	 */
-	private MUIElement createModel() {
-		
+	protected MUIElement createModel() {
 		// Create the model elements
-		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE.createPerspectiveStack();
+		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE
+				.createPerspectiveStack();
 		ContextInjectionFactory.inject(pStack, context);
-		MPerspective perspective = MAdvancedFactory.INSTANCE.createPerspective();
-		MPartSashContainer complete = MBasicFactory.INSTANCE.createPartSashContainer();
+		MPerspective perspective = MAdvancedFactory.INSTANCE
+				.createPerspective();
+		MPartSashContainer complete = MBasicFactory.INSTANCE
+				.createPartSashContainer();
 		complete.setHorizontal(false);
-		MPartSashContainer template = MBasicFactory.INSTANCE.createPartSashContainer();
+		MPartSashContainer template = MBasicFactory.INSTANCE
+				.createPartSashContainer();
 		template.setHorizontal(false);
 		MInputPart templateSelection = MBasicFactory.INSTANCE.createInputPart();
 		MPart description = MBasicFactory.INSTANCE.createPart();
@@ -113,58 +107,61 @@ public class GeneSEZProjectWizardTemplatePage extends WizardPage {
 		complete.getChildren().add(applicationModel);
 
 		// set the appropriate contributionURI e. g. bundleclass
-		templateSelection.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.TemplateSelectionPart");
-		description.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
-		applicationModel.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ApplicationModelPart");
+		templateSelection
+				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.TemplateSelectionPart");
+		description
+				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
+		applicationModel
+				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ApplicationModelPart");
 		return pStack;
 	}
 
+	/**
+	 * Updates the Message if certain Context elements Change. Sets also whether
+	 * page is completed.
+	 * 
+	 * @param template
+	 *            {@link WizardConstants#TEMPLATE}
+	 */
 	@Inject
 	private void updateMessage(
-			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template){
-		if(template == null){
+			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template) {
+		if (template == null) {
 			this.setMessage(CHOOSE_A_TEMPLATE);
 			this.setPageComplete(false);
 		} else
 			this.setPageComplete(true);
 	}
 
-	private void renderModel(Composite parent, final MUIElement hostModel) {
-		hostWin.getSharedElements().add(hostModel);
-
-		// Render it
-		renderer.createGui(hostModel, parent, context);
-		// Clean up the shared elements list once we're done
-		parent.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				hostWin.getSharedElements().remove(hostModel);
-			}
-		});
-	}
-
-	@Override
-	public void setVisible(boolean visible) {
-		if(visible){
-			context.modify(IWizardPage.class, this);
-		}
-		super.setVisible(visible);
-	}
-	
+	/**
+	 * Sets if the page is completed evaluates also to true if
+	 * {@link WizardConstants#CHOOSE_WIZARD} has data
+	 * {@link WizardConstants#RADIO_3}.
+	 * 
+	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
+	 */
 	@Override
 	public boolean isPageComplete() {
 		Object button = context.get(WizardConstants.CHOOSE_WIZARD);
-		if(button != null)
-			if(((Button) button).getData().equals(WizardConstants.RADIO_3))
+		if (button != null)
+			if (((Button) button).getData().equals(WizardConstants.RADIO_3))
 				return true;
 		return super.isPageComplete();
 	}
-	
+
+	/**
+	 * Sets if the next page is allowed, the next page is not allowed for Button
+	 * data {@link WizardConstants#RADIO_3} and {@link WizardConstants#RADIO_1}
+	 * 
+	 * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
+	 */
 	@Override
 	public boolean canFlipToNextPage() {
 		Object button = context.get(WizardConstants.CHOOSE_WIZARD);
-		if(button != null)
-			if(((Button) button).getData().equals(WizardConstants.RADIO_1) ||
-					((Button) button).getData().equals(WizardConstants.RADIO_3))
+		if (button != null)
+			if (((Button) button).getData().equals(WizardConstants.RADIO_1)
+					|| ((Button) button).getData().equals(
+							WizardConstants.RADIO_3))
 				return false;
 		return super.canFlipToNextPage();
 	}

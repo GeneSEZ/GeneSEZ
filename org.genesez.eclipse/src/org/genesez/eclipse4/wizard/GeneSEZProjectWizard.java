@@ -23,6 +23,13 @@ import org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardTemplatePage;
 import org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardWorkflowPage;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * The GeneSEZ Project Wizard, used to create GeneSEZ Projects with application
+ * and/or generator project from templates.
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 @SuppressWarnings("restriction")
 public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
@@ -32,34 +39,48 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 	private IWizardPage page2;
 	private IWizardPage page3;
 	private IEclipseContext context;
-	
+
 	@Inject
 	private ECommandService commandService;
 	@Inject
 	private EHandlerService handlerService;
 
-	public GeneSEZProjectWizard() throws SecurityException, NoSuchMethodException {
+	/**
+	 * constructs the wizard
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 */
+	public GeneSEZProjectWizard() throws SecurityException,
+			NoSuchMethodException {
 		initialize();
 	}
-	
-	public void initialize(){
+
+	/**
+	 * Initializes the context, pages and the handler.
+	 */
+	private void initialize() {
 		IWorkbenchWindow wbw = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
 		hostWin = (MWindow) wbw.getService(MWindow.class);
 		context = hostWin.getContext();
 		ContextInjectionFactory.inject(this, context);
 		setContextInitial();
-		
-		page1 = new GeneSEZProjectWizardSelectionPage("Create Projects", hostWin);
+
+		page1 = new GeneSEZProjectWizardSelectionPage("Create Projects",
+				hostWin);
 		page2 = new GeneSEZProjectWizardTemplatePage("Choose Template", hostWin);
 		page3 = new GeneSEZProjectWizardWorkflowPage("Choose Workflow", hostWin);
-		
+
 		executeCommand = commandService.createCommand("create.projects", null);
 		CreateProjectHandler handler = new CreateProjectHandler();
 		ContextInjectionFactory.inject(handler, context);
 		handlerService.activateHandler("create.projects", handler);
 	}
 
+	/**
+	 * Adds the pages to the wizard.
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		addPage(page1);
@@ -67,24 +88,40 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 		addPage(page3);
 	}
 
+	/**
+	 * Calls the handler {@link CreateProjectHandler}
+	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 		handlerService.executeHandler(executeCommand);
 		return true;
 	}
-	
+
+	/**
+	 * If all pages are completed canFinish is true.
+	 * @see org.eclipse.jface.wizard.Wizard#canFinish()
+	 */
 	@Override
 	public boolean canFinish() {
-		return page1.isPageComplete() && page2.isPageComplete() && page3.isPageComplete();
+		return page1.isPageComplete() && page2.isPageComplete()
+				&& page3.isPageComplete();
 	}
-	
+
+	/**
+	 * Disposes the wizard.
+	 * @see org.eclipse.jface.wizard.Wizard#performCancel()
+	 */
 	@Override
 	public boolean performCancel() {
 		this.dispose();
 		return super.performCancel();
 	}
-	
-	private void setContextInitial(){
+
+	/**
+	 * initializes the context, so no error occurs during restart.
+	 */
+	private void setContextInitial() {
 		context.set(WizardConstants.TEMPLATE, null);
 		context.set(WizardConstants.IS_EXAMPLE, false);
 		context.set(WizardConstants.CHOOSE_WIZARD, null);
@@ -98,7 +135,10 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 		context.set(WizardConstants.WORKFLOW_DIRECTORY, null);
 		context.set(WizardConstants.APPLICATION_MODEL_LIST, null);
 		context.set(WizardConstants.COPY_MODEL_FILES, false);
+		context.set(WizardConstants.APPLICATION_MODEL_ROOT, null);
 		context.set(IWizardPage.class, null);
-		context.set(IWorkspaceRoot.class, ResourcesPlugin.getWorkspace().getRoot());
+		context.set(IWorkspaceRoot.class, ResourcesPlugin.getWorkspace()
+				.getRoot());
+		context.set(IWorkbench.class, PlatformUI.getWorkbench());
 	}
 }

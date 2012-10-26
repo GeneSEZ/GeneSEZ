@@ -15,15 +15,32 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
+/**
+ * A Selection dialog thats used to select an item in a tree.
+ * @author Domink Wetzel
+ */
 public abstract class AbstractFolderSelectionDialog extends SelectionDialog {
+	
+	/** the text set atop the tree */
 	protected String labelText;
+	/** the tree to select from*/
 	protected Tree tree;
 
+	/**
+	 * Creates the selection dialog
+	 * @param parentShell the parent shell
+	 * @param labelText the label atop the tree
+	 * @see SelectionDialog
+	 */
 	public AbstractFolderSelectionDialog(Shell parentShell, String labelText) {
 		super(parentShell);
 		this.labelText = labelText;
 	}
 	
+	/**
+	 * Adds a Label and the tree to the dialog field.
+	 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
         // create composite 
@@ -42,6 +59,10 @@ public abstract class AbstractFolderSelectionDialog extends SelectionDialog {
         return area;
     }
 	
+	/**
+	 * Sets the result to null if the return code is Window.CANCEL 
+	 * @see org.eclipse.jface.window.Window#setReturnCode(int)
+	 */
 	@Override
 	protected void setReturnCode(int code) {
 		if(code == Window.CANCEL)
@@ -49,6 +70,10 @@ public abstract class AbstractFolderSelectionDialog extends SelectionDialog {
 		super.setReturnCode(code);
 	}
 	
+	/**
+	 * adds the selection listener for the tree,
+	 * can be overwritten to set other listener
+	 */
 	protected void addListener(){
 		tree.addSelectionListener(new SelectionListener() {
 			
@@ -65,6 +90,9 @@ public abstract class AbstractFolderSelectionDialog extends SelectionDialog {
 		});
 	}
 	
+	/**
+	 * Fills the tree with the implementation specific content
+	 */
 	abstract protected void fillTree();
 
 }

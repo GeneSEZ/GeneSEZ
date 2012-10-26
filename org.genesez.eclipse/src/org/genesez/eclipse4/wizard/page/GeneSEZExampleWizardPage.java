@@ -5,7 +5,6 @@ import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
@@ -17,46 +16,56 @@ import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
-import org.eclipse.e4.ui.workbench.IPresentationEngine;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
+import org.genesez.eclipse4.wizard.ui.DescriptionPart;
+import org.genesez.eclipse4.wizard.ui.ProjectNamePart;
+import org.genesez.eclipse4.wizard.ui.TemplateSelectionPart;
 import org.genesez.eclipse4.wizard.util.TemplateConfigXml;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * The page needed to chose an Example template and define a project name.
+ * 
+ * The example Wizard page Contains of:
+ * <p>
+ * {@link TemplateSelectionPart}
+ * </p>
+ * <p>
+ * {@link DescriptionPart}
+ * </p>
+ * <p>
+ * {@link ProjectNamePart}
+ * </p>
+ * See their documentation for needed {@link IEclipseContext} elements.
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 @SuppressWarnings("restriction")
-public class GeneSEZExampleWizardPage extends WizardPage {
+public class GeneSEZExampleWizardPage extends GeneSEZProjectWizardPage {
 
 	private static final String ENTER_APP_PROJECTNAME = "Enter an application project name. ";
 	private static final String PROJECTNAME_EXSISTS = "A project with this name or one that will be created already exists.";
 	private static final String SELECT_TEMPLATE = "Select a template for the project. ";
 
-	private MWindow hostWin;
-	private IEclipseContext context;
-
-	@Inject
-	private IPresentationEngine renderer;
-
+	/**
+	 * Initializes the page.
+	 * 
+	 * @param pageName
+	 *            the name of the page.
+	 * @param hostWin
+	 *            the host window, which contains the context.
+	 */
 	public GeneSEZExampleWizardPage(String pageName, MWindow hostWin) {
-		super(pageName);
-		this.hostWin = hostWin;
-		this.context = hostWin.getContext();
-
-		setTitle("GeneSEZ example selection");
-		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
-				"/images/GeneSEZ.png"));
-
-		ContextInjectionFactory.inject(this, context);
-		initializeContext();
-		setPageComplete(false);
+		super(pageName, hostWin);
 	}
 
-	private void initializeContext() {
+	/**
+	 * initializes the context. This should contain all needed context elements
+	 * from the Parts.
+	 */
+	@Override
+	protected void initializeContext() {
 		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
 		context.declareModifiable(WizardConstants.GEN_PROJ_NAME);
@@ -66,38 +75,18 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 		context.set(WizardConstants.IS_EXAMPLE, true);
 	}
 
-	@Override
-	public void createControl(Composite parent) {
-		Composite comp = new Composite(parent, SWT.NONE);
-		comp.setLayout(new FillLayout());
-		setControl(comp);
-
-		// Create the model
-		MUIElement hostModel = createModel();
-
-		// Render the model...by 4.2 M4 we expect that this will be
-		// available as a method in the EModelService
-		renderModel(comp, hostModel);
-	}
-
-	/*
-	 * Creates the following MUIElement tree:
-	 * 
-	 * pStack 
-	 * 	|-perspective 
-	 * 		|-complete 
-	 * 			|-templateSelection 
-	 * 			|-description
-	 * 			|-projectName
-	 * 
-	 * @return the pStack MUIElement
+	/**
+	 * creates the Model, adds a {@link TemplateSelectionPart}, a
+	 * {@link DescriptionPart} and a {@link ProjectNamePart}
+	 * @see org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardPage#createModel()
 	 */
-	private MUIElement createModel() {
+	@Override
+	protected MUIElement createModel() {
 
 		// Create the model elements
 		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE
 				.createPerspectiveStack();
-//		ContextInjectionFactory.inject(pStack, context);
+		// ContextInjectionFactory.inject(pStack, context);
 		MPerspective perspective = MAdvancedFactory.INSTANCE
 				.createPerspective();
 		MPartSashContainer complete = MBasicFactory.INSTANCE
@@ -124,6 +113,17 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 		return pStack;
 	}
 
+	/**
+	 * Updates the Message if certain Context elements Change.
+	 * Sets also whether page is completed.
+	 *  
+	 * @param appProjectName
+	 *            {@link WizardConstants#APP_PROJ_NAME}
+	 * @param genProjectName
+	 *            {@link WizardConstants#GEN_PROJ_NAME}
+	 * @param template
+	 *            {@link WizardConstants#TEMPLATE}
+	 */
 	@Inject
 	private void updateMessage(
 			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
@@ -149,33 +149,18 @@ public class GeneSEZExampleWizardPage extends WizardPage {
 		}
 	}
 
+	/**
+	 * Checks whether the project already exists.
+	 * 
+	 * @param name
+	 *            the name of the project to check.
+	 * @return true if project exists.
+	 */
 	private boolean projectAlreadyExists(String name) {
 		for (IProject project : context.get(IWorkspaceRoot.class).getProjects()) {
 			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
 				return true;
 		}
 		return false;
-	}
-
-	private void renderModel(Composite parent, final MUIElement hostModel) {
-		// This is subtle; unless the element is hooked into the model it won't
-		// fire events
-		hostWin.getSharedElements().add(hostModel);
-
-		// Render it
-		renderer.createGui(hostModel, parent, context);
-		// Clean up the shared elements list once we're done
-		parent.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				hostWin.getSharedElements().remove(hostModel);
-			}
-		});
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		if(visible)
-			context.modify(IWizardPage.class, this);
-		super.setVisible(visible);
 	}
 }

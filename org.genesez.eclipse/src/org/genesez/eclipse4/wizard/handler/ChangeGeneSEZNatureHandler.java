@@ -19,11 +19,28 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * Handler to add/remove the GeneSEZ generator nature to projects
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 public class ChangeGeneSEZNatureHandler extends AbstractHandler {
 
 	private static final String NATURE = WizardConstants.PLUGIN_ID + "."
 			+ WizardConstants.NATURE_ID;
+	
+	/**
+	 * Standard constructor
+	 */
+	public ChangeGeneSEZNatureHandler(){
+	}
 
+	/**
+	 * Adds or removes the GeneSEZ generator nature from the chosen projects
+	 * 
+	 * @see org.eclipse.core.commands.AbstractHandler#execute(org.eclipse.core.commands.ExecutionEvent)
+	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IProject[] projects = getProjects();
@@ -38,6 +55,9 @@ public class ChangeGeneSEZNatureHandler extends AbstractHandler {
 		return null;
 	}
 
+	/**
+	 * @return the selected projects
+	 */
 	private IProject[] getProjects() {
 		try {
 			IWorkbenchWindow window = PlatformUI.getWorkbench()
@@ -65,9 +85,15 @@ public class ChangeGeneSEZNatureHandler extends AbstractHandler {
 		}
 	}
 
+	/**
+	 * adds the GeneSEZ generator nature to the project
+	 * 
+	 * @param project
+	 *            the project
+	 */
 	public static void addNature(IProject project) {
 		try {
-			if (project.getNature(NATURE) == null) {
+			if (!project.hasNature(NATURE)) {
 				IProjectDescription description = project.getDescription();
 				String[] natures = description.getNatureIds();
 				String[] newNatures = new String[natures.length + 1];
@@ -81,9 +107,15 @@ public class ChangeGeneSEZNatureHandler extends AbstractHandler {
 		}
 	}
 
+	/**
+	 * removes the GeneSEZ generator nature from the project
+	 * 
+	 * @param project
+	 *            the project
+	 */
 	public static void removeNature(IProject project) {
 		try {
-			if (project.getNature(NATURE) != null) {
+			if (project.hasNature(NATURE)) {
 				IProjectDescription description = project.getDescription();
 				String[] natures = description.getNatureIds();
 				String[] newNatures = new String[natures.length - 1];

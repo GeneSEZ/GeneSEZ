@@ -4,14 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
@@ -23,12 +20,22 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * Part to show a description.
+ * 
+ * Listen to context elements:
+ * <p>
+ * {@link WizardConstants#DESCRIPTION}
+ * </p>
+ * <p>
+ * {@link IWizardPage}
+ * </p>
+ * 
+ * @author Dominik Wetzel
+ *
+ */
 @SuppressWarnings("restriction")
-@Creatable
 public class DescriptionPart {
-
-	public DescriptionPart() {
-	}
 
 	private Map<IWizardPage,String> currentDescriptions = new HashMap<IWizardPage, String>();
 	private IWizardPage currentPage;
@@ -36,6 +43,12 @@ public class DescriptionPart {
 	
 	@Inject
 	private IEclipseContext context;
+
+	/**
+	 * Standard constructor
+	 */
+	public DescriptionPart(){
+	}
 	
 	/**
 	 * Create contents of the view part.
@@ -65,6 +78,10 @@ public class DescriptionPart {
 		styledText.setEnabled(false);
 	}
 	
+	/**
+	 * Sets the description given in the context
+	 * @param description the description from the context {@link WizardConstants#DESCRIPTION}
+	 */
 	@Inject
 	private void setDescription(@Optional @Named(WizardConstants.DESCRIPTION) String description){
 		if(description != null && styledText != null && !styledText.isDisposed()){
@@ -72,6 +89,10 @@ public class DescriptionPart {
 		}
 	}
 	
+	/**
+	 * Sets the {@link IWizardPage} to determine which description should be shown.
+	 * @param page the new page
+	 */
 	@Inject
 	private void pageChanged(@Optional IWizardPage page){
 		if(page != null){
@@ -86,14 +107,4 @@ public class DescriptionPart {
 			}
 		}
 	}
-
-	@PreDestroy
-	public void dispose() {
-	}
-
-	@Focus
-	public void setFocus() {
-		// TODO	Set the focus to control
-	}
-
 }

@@ -1,7 +1,6 @@
 package org.genesez.eclipse4.wizard.ui;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -9,7 +8,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -28,6 +26,29 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 import org.genesez.eclipse4.wizard.util.ProjectSelectionDialog;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * Part to enter an application and a generator project name. Also used to
+ * choose application or generator project
+ * 
+ * Modify context elements:
+ * <p>
+ * {@link WizardConstants#APP_PROJ_NAME}
+ * </p>
+ * <p>
+ * {@link WizardConstants#GEN_PROJ_NAME}
+ * </p>
+ * 
+ * Listens to context element:
+ * <p>
+ * {@link WizardConstants#CHOOSE_WIZARD}
+ * </p>
+ * <p>
+ * {@link IWorkspaceRoot}
+ * </p>
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 @SuppressWarnings("restriction")
 public class ProjectSettingsPart {
 	private static final String PROJECT_INSERT_MESSAGE = "Insert application project name";
@@ -47,6 +68,12 @@ public class ProjectSettingsPart {
 	private IEclipseContext context;
 	@Inject
 	private IWorkspaceRoot workspace;
+
+	/**
+	 * Standard constructor
+	 */
+	public ProjectSettingsPart() {
+	}
 
 	/**
 	 * Create contents of the view part.
@@ -84,9 +111,16 @@ public class ProjectSettingsPart {
 		browseGenerator.setText("Browse...");
 		browseGenerator.setEnabled(false);
 
-		addListener(parent);
+		addListener();
 	}
 
+	/**
+	 * Sets the state of the project settings elements depending on
+	 * {@link WizardConstants#CHOOSE_WIZARD}
+	 * 
+	 * @param selectedRadioButton
+	 *            the selected button.
+	 */
 	@Inject
 	private void setProjectSettingElements(
 			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectedRadioButton) {
@@ -125,7 +159,10 @@ public class ProjectSettingsPart {
 		}
 	}
 
-	private void addListener(final Composite parent) {
+	/**
+	 * Adds needed listener.
+	 */
+	private void addListener() {
 		// set APP_PROJ_NAME in context and adds ".generator" on
 		// textGeneratorname if possible.
 		textProjectname.addModifyListener(new ModifyListener() {
@@ -174,10 +211,11 @@ public class ProjectSettingsPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SelectionDialog dialog = new ProjectSelectionDialog(parent
-						.getShell(), "Choose Project:", workspace, true);
+				SelectionDialog dialog = new ProjectSelectionDialog(
+						browseGenerator.getShell(), "Choose Project:",
+						workspace, true);
 				String result = dialogResult(dialog);
-				if(result != null)
+				if (result != null)
 					textGeneratorname.setText(result);
 			}
 
@@ -191,10 +229,11 @@ public class ProjectSettingsPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SelectionDialog dialog = new ProjectSelectionDialog(parent
-						.getShell(), "Choose Project:", workspace, false);
+				SelectionDialog dialog = new ProjectSelectionDialog(
+						browseProject.getShell(), "Choose Project:", workspace,
+						false);
 				String result = dialogResult(dialog);
-				if(result != null)
+				if (result != null)
 					textProjectname.setText(result);
 			}
 
@@ -203,25 +242,22 @@ public class ProjectSettingsPart {
 			}
 		});
 	}
-	
-	private String dialogResult(SelectionDialog dialog){
+
+	/**
+	 * Gets the result of a dialog as String
+	 * 
+	 * @param dialog
+	 *            the dialog to get the result from
+	 * @return the result as String
+	 */
+	private String dialogResult(SelectionDialog dialog) {
 		dialog.setBlockOnOpen(true);
 		dialog.open();
 		if (dialog.getReturnCode() == Window.OK) {
 			Object[] result = dialog.getResult();
 			if (result != null)
-				return ((IProject) dialog
-						.getResult()[0]).getName();
+				return ((IProject) dialog.getResult()[0]).getName();
 		}
 		return null;
-	}
-
-	@PreDestroy
-	public void dispose() {
-	}
-
-	@Focus
-	public void setFocus() {
-		grpProjectSettings.setFocus();
 	}
 }

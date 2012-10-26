@@ -2,21 +2,20 @@ package org.genesez.eclipse4.wizard.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -34,6 +33,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.genesez.eclipse4.wizard.handler.ChangeGeneSEZNatureHandler;
+import org.genesez.eclipse4.wizard.util.replace.simpel.ReplacerHelper;
+import org.genesez.eclipse4.wizard.util.replace.simpel.SimpleTextReplacer;
+
 //
 
 /**
@@ -50,9 +53,14 @@ public class TemplateHelper {
 	private static final String TEMPLATE_FOLDER = "/templates/";
 	private static final String ARCHIVE_PATTERN = ".*[.]zip$";
 	private static final int BUFFER = 4096;
-	public static final String REPLACE_FILES = ".*/.*[.]mwe$|.*/MANIFEST[.]MF$|.*/build[.]xml";
-	private static final Pattern FILES_WITH_REPLACEMENTS = Pattern.compile(".*/[.]project$|" + REPLACE_FILES);
+	// public static final String REPLACE_FILES =
+	// ".*/.*[.]mwe$|.*/MANIFEST[.]MF$|.*/build[.]xml";
+	// private static final Pattern FILES_WITH_REPLACEMENTS =
+	// Pattern.compile(".*/[.]project$|" + REPLACE_FILES);
 	public static final String FOLDER_ENDING = "(/$|[.]generator/$)";
+	public static final String GENERATOR_ENDING = ".generator";
+	public static Set<SimpleTextReplacer> replacer = ReplacerHelper
+			.getAvailableReplacer();
 
 	private static JAXBContext jc = null;
 	private static Unmarshaller un = null;
@@ -130,10 +138,10 @@ public class TemplateHelper {
 			InputStream stream = zf
 					.getInputStream(zf.getEntry(CONFIG_FILENAME));
 			toReturn = (TemplateConfigXml) un.unmarshal(stream);
-			Enumeration<? extends ZipEntry> entries= zf.entries();
-			while(entries.hasMoreElements()){
+			Enumeration<? extends ZipEntry> entries = zf.entries();
+			while (entries.hasMoreElements()) {
 				ZipEntry z_entry = entries.nextElement();
-				if(z_entry.isDirectory())
+				if (z_entry.isDirectory())
 					toReturn.addInternalFolder(new Path(z_entry.getName()));
 				else
 					toReturn.addInternalFile(new Path(z_entry.getName()));
@@ -157,16 +165,29 @@ public class TemplateHelper {
 	 * Decompress the zip-file and changes the necessary files
 	 * 
 	 * @param template
-	 *            the chosen template
-	 * @param projectName
-	 *            the new Project name
+	 *            the template from the zip file.
+	 * @param appProjectName
+	 *            the application project name.
+	 * @param genProjectName
+	 *            the generator project name.
 	 * @param destination
-	 *            the destination for the files
+	 *            the destination path.
+	 * @param appFromZip
+	 *            true if application project should be used from template.
+	 * @param genFromZip
+	 *            true if generator project should be used from template.
+	 * @param monitor
+	 *            the progress monitor.
+	 * @return a List with projects decompressed from the zip file.
 	 * @throws IOException
-	 *             if something went wrong with unzip and/or writing the files
+	 *             if something went wrong with unzipping.
 	 */
 	public static List<String> decompress(TemplateConfigXml template,
-			String projectName, String destination) throws IOException {
+			String appProjectName, String genProjectName, String destination,
+			boolean appFromZip, boolean genFromZip, IProgressMonitor monitor)
+			throws IOException {
+		// ZipInputstream der TemplateDatei erzeugen
+		monitor.subTask("Prepare template file for reading.");
 		InputStream resStream = TemplateHelper.class
 				.getResourceAsStream(TEMPLATE_FOLDER
 						+ template.getFile().getName());
@@ -174,23 +195,56 @@ public class TemplateHelper {
 				resStream));
 		List<String> projects = new ArrayList<String>();
 		ZipEntry entry;
+		monitor.worked(10);
+		monitor.subTask("Decompress template file");
+		// einzelnen Entries lesen
 		while ((entry = zis.getNextEntry()) != null) {
-			if (entry.getName().equals(CONFIG_FILENAME))
-				continue;
+			if (monitor.isCanceled())
+				return null;
+			String entryName = entry.getName();
 			String oldName = template.getInternalProjectName();
-			String entryName = entry.getName().replaceFirst(oldName,
-					projectName);
-			String path = destination + "/" + entryName;
+			String oldGenName = oldName.concat(GENERATOR_ENDING);
+			// überprüfen was aus Template verwendet werden soll
+			if (entryName.equals(CONFIG_FILENAME)
+					|| (!genFromZip
+							&& entryName
+									.startsWith(oldGenName + File.separator) || (!appFromZip && entryName
+							.startsWith(oldName + File.separator))))
+				continue;
+			boolean isGenProject;
+			if (entryName.startsWith(oldGenName)) {
+				entryName = entry.getName().replaceFirst(oldGenName,
+						genProjectName);
+				isGenProject = true;
+			} else {
+				entryName = entry.getName().replaceFirst(oldName,
+						appProjectName);
+				isGenProject = false;
+			}
+
+			String path = destination + File.separator + entryName;
 			if (entry.isDirectory()) {
-				if (entryName.matches(projectName + FOLDER_ENDING))
+				if (entryName.matches(appProjectName + File.separator + "$")
+						|| entryName.matches(genProjectName + File.separator
+								+ "$"))
 					projects.add(entryName);
 				new File(path).mkdirs();
 			} else {
 				File emptyFile = new File(path);
-				if (FILES_WITH_REPLACEMENTS.matcher(emptyFile.toString())
-						.find()) {
-					fillFile(zis, emptyFile, oldName, projectName);
-				} else {
+				boolean fileExistend = false;
+				// Datei anlegen und währenddessen einiges ersetzen
+				// TODO: hier anderen Algorithmus wählen
+				Dictionary<String, Object> properties = new Hashtable<String, Object>();
+				properties.put(WizardConstants.TEMPLATE, template);
+				for (SimpleTextReplacer repl : replacer) {
+					if (repl.fillAndReplace(emptyFile, zis, oldName,
+							oldGenName, appProjectName, genProjectName,
+							isGenProject, properties)) {
+						fileExistend = true;
+					}
+				}
+				if (!fileExistend) {
+					// file anlegen, wenn sie zuvor nicht angelegt wurde
 					BufferedOutputStream dest = new BufferedOutputStream(
 							new FileOutputStream(path), BUFFER);
 					int count = 0;
@@ -204,58 +258,43 @@ public class TemplateHelper {
 			}
 		}
 		zis.close();
+		System.out.println(projects);
 		return projects;
 	}
 
 	/**
-	 * Fills the file with content and make the necessary changes
-	 * 
-	 * @param istream
-	 *            the inputStream that contains the data
-	 * @param file
-	 *            the file which will be written
-	 * @param oldName
-	 *            the old project name
-	 * @param projectName
-	 *            the new project name
-	 * @throws IOException
-	 *             if something went wrong with the reading and writing
-	 */
-	public static void fillFile(InputStream istream, File file,
-			String oldName, String projectName) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				istream), BUFFER);
-		StringBuilder buffer = new StringBuilder();
-		String line;
-		while ((line = reader.readLine()) != null) {
-			line = line.replaceAll(oldName, projectName);
-			buffer.append(line + System.getProperty("line.separator"));
-		}
-		FileWriter writer = new FileWriter(file);
-		writer.write(buffer.toString());
-		writer.close();
-	}
-
-	/**
-	 * Creates the GeneSEZ-Projects
+	 * Creates the GeneSEZ projects.
 	 * 
 	 * @param template
-	 * @param projectName
+	 *            the template from the zip file.
+	 * @param appProjectName
+	 *            the application project name.
+	 * @param genProjectName
+	 *            the generator project name.
 	 * @param workspace
-	 * @throws IOException
+	 *            the current workspace.
+	 * @param appFromZip
+	 *            true if application project should be used from template.
+	 * @param genFromZip
+	 *            true if generator project should be used from template.
+	 * @return true if everything works.
 	 */
 	public static boolean createProject(final TemplateConfigXml template,
-			final String projectName, final IWorkspaceRoot workspace) {
+			final String appProjectName, final String genProjectName,
+			final IWorkspaceRoot workspace, final boolean appFromZip,
+			final boolean genFromZip) {
 		Job createJob = new Job("Creating GeneSEZ Project") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Create " + projectName
+				monitor.beginTask("Create " + appProjectName
 						+ " GeneSEZ projects.", 100);
 				List<String> projects = null;
 				try {
-					projects = decompress(template, projectName, workspace
-							.getLocation().toString());
+					projects = decompress(template, appProjectName,
+							genProjectName, workspace.getLocationURI()
+									.getPath(), appFromZip, genFromZip, monitor);
 				} catch (Exception e1) {
+					e1.printStackTrace();
 					JOptionPane
 							.showMessageDialog(null,
 									"Decompression of the template failed.",
@@ -263,6 +302,8 @@ public class TemplateHelper {
 									JOptionPane.ERROR_MESSAGE);
 					return Status.CANCEL_STATUS;
 				}
+				if (projects == null)
+					return Status.CANCEL_STATUS;
 				monitor.worked(60);
 				// import the created project folders to eclipse workspace
 				for (String folder : projects) {
@@ -271,6 +312,8 @@ public class TemplateHelper {
 						project.create(monitor);
 						monitor.worked(80);
 						project.open(monitor);
+						if (project.getName().equals(genProjectName))
+							ChangeGeneSEZNatureHandler.addNature(project);
 					} catch (Exception e) {
 						e.printStackTrace();
 						return Status.CANCEL_STATUS;
