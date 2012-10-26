@@ -1,11 +1,9 @@
 package org.genesez.eclipse4.wizard.ui;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -16,8 +14,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * Part to enter a project name (Shows also the generator name).
+ * 
+ * Modify context elements:
+ * <p>
+ * {@link WizardConstants#APP_PROJ_NAME}
+ * </p>
+ * <p>
+ * {@link WizardConstants#GEN_PROJ_NAME}
+ * </p>
+ * 
+ * @author Dominik Wetzel
+ *
+ */
 @SuppressWarnings("restriction")
-@Creatable
 public class ProjectNamePart {
 	// Declare a field label, required for @Focus
 	@Inject
@@ -25,6 +36,15 @@ public class ProjectNamePart {
 	
 	private Text text_disabled;
 
+	/**
+	 * Standard constructor
+	 */
+	public ProjectNamePart() {
+	}
+	
+	/**
+	 * Create contents of the view part. 
+	 */
 	@PostConstruct
 	public void createControls(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -55,8 +75,5 @@ public class ProjectNamePart {
 		text_disabled = new Text(composite, SWT.SINGLE);
 		text_disabled.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 4,1));
 		text_disabled.setEnabled(false);
-	}
-	@PreDestroy
-	public void dispose() {
 	}
 }

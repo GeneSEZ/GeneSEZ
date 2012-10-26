@@ -1,4 +1,4 @@
-package org.genesez.eclipse4.wizard.util;
+package org.genesez.eclipse4.wizard.util.replace;
 
 import java.io.BufferedReader;
 import java.io.IOException;

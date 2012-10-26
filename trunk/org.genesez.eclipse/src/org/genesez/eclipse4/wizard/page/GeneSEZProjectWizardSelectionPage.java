@@ -17,20 +17,34 @@ import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
-import org.eclipse.e4.ui.workbench.IPresentationEngine;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
+import org.genesez.eclipse4.wizard.ui.ChooseWizardPart;
+import org.genesez.eclipse4.wizard.ui.DescriptionPart;
+import org.genesez.eclipse4.wizard.ui.ProjectSettingsPart;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * This page is needed to choose the wizard and set an application- and
+ * generator project name.
+ * 
+ * The page contains:
+ * <p>
+ * {@link ChooseWizardPart}
+ * </p>
+ * <p>
+ * {@link DescriptionPart}
+ * </p>
+ * <p>
+ * {@link ProjectSettingsPart}
+ * </p>
+ * See their documentation for needed {@link IEclipseContext} elements.
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 @SuppressWarnings("restriction")
-public class GeneSEZProjectWizardSelectionPage extends WizardPage {
+public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage {
 
 	private static final String ENTER_APP_PROJECTNAME = "Enter an application project name. ";
 	private static final String ENTER_GEN_PROJECTNAME = "Enter a generator project name. ";
@@ -38,31 +52,24 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 	private static final String PROJECTNAME_EXSISTS = "A project with this name or one that will be created already exists.";
 	private static final String PROJECTNAMES_EQUAL = "Projectnames must be different.";
 
-	private MWindow hostWin;
-	private IEclipseContext context;
-	private MUIElement hostModel;
-
-	@Inject
-	private IPresentationEngine renderer;
-
+	/**
+	 * Creates the page.
+	 * 
+	 * @param pageName
+	 *            the page name.
+	 * @param hostWin
+	 *            the host window, which contains the context.
+	 */
 	public GeneSEZProjectWizardSelectionPage(String pageName, MWindow hostWin) {
-		super(pageName);
-		this.hostWin = hostWin;
-		this.context = hostWin.getContext();
-
-		setTitle("GeneSEZ Project Wizard");
-		this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(),
-				"/images/GeneSEZ.png"));
-
-		// This is not really necessary but it demonstrates how DI works
-		// once the code below runs the '@Inject' fields defined above will
-		// contain their correct values.
-		ContextInjectionFactory.inject(this, context);
-		initializeContext();
-		this.setPageComplete(false);
+		super(pageName,hostWin);
 	}
 
-	private void initializeContext() {
+	/*
+	 * (non-Javadoc)
+	 * @see org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardPage#initializeContext()
+	 */
+	@Override
+	protected void initializeContext() {
 		context.declareModifiable(WizardConstants.CHOOSE_WIZARD);
 		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
 		context.declareModifiable(WizardConstants.GEN_PROJ_NAME);
@@ -70,39 +77,23 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 		context.declareModifiable(IWizardPage.class);
 	}
 
-	@Override
-	public void createControl(Composite parent) {
-		Composite comp = new Composite(parent, SWT.NONE);
-		comp.setLayout(new FillLayout());
-		setControl(comp);
-
-		// Create the model
-		hostModel = createModel();
-
-		// Render the model...by 4.2 M4 we expect that this will be
-		// available as a method in the EModelService
-		renderModel(comp);
-	}
-
-	/*
-	 * Creates the following MUIElement tree:
+	/**
+	 * Creates the model with a {@link ChooseWizardPart}, a
+	 * {@link DescriptionPart} and a {@link ProjectSettingsPart}.
 	 * 
-	 * pStack
-	 * 	|-perspective
-	 * 		|-complete
-	 * 			|-wizardSelection
-	 * 			|-description
-	 * 			|-projectSettings
-	 * 
-	 * @return the pStack MUIElement
+	 * @see org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardPage#createModel()
 	 */
-	private MUIElement createModel() {
-		
+	@Override
+	protected MUIElement createModel() {
+
 		// Create the model elements
-		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE.createPerspectiveStack();
+		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE
+				.createPerspectiveStack();
 		ContextInjectionFactory.inject(pStack, context);
-		MPerspective perspective = MAdvancedFactory.INSTANCE.createPerspective();
-		MPartSashContainer complete = MBasicFactory.INSTANCE.createPartSashContainer();
+		MPerspective perspective = MAdvancedFactory.INSTANCE
+				.createPerspective();
+		MPartSashContainer complete = MBasicFactory.INSTANCE
+				.createPartSashContainer();
 		complete.setHorizontal(false);
 		MInputPart wizardSelection = MBasicFactory.INSTANCE.createInputPart();
 		MPart description = MBasicFactory.INSTANCE.createPart();
@@ -116,31 +107,46 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 		complete.getChildren().add(projectSettings);
 
 		// set the appropriate contributionURI e. g. bundleclass
-		projectSettings.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ProjectSettingsPart");
-		description.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
-		wizardSelection.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ChooseWizardPart");
+		projectSettings
+				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ProjectSettingsPart");
+		description
+				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
+		wizardSelection
+				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ChooseWizardPart");
 		return pStack;
 	}
 
+	/**
+	 * Updates the Message if certain Context elements Change.
+	 * Sets also whether page is completed.
+	 * 
+	 * @param selectButton
+	 *            {@link WizardConstants#CHOOSE_WIZARD}
+	 * @param appProjectName
+	 *            {@link WizardConstants#APP_PROJ_NAME}
+	 * @param genProjectName
+	 *            {@link WizardConstants#GEN_PROJ_NAME}
+	 */
 	@Inject
 	private void updateMessage(
 			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectButton,
 			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
 			@Optional @Named(WizardConstants.GEN_PROJ_NAME) String genProjectName) {
-		if(selectButton == null || selectButton.isDisposed()){
+		if (selectButton == null || selectButton.isDisposed()) {
 			this.setMessage(CHOOSE_A_WIZARD);
 			this.setPageComplete(false);
-		}else{
+		} else {
 			String message = "";
-			if(appProjectName == null || appProjectName.equals(""))
+			if (appProjectName == null || appProjectName.equals(""))
 				message = message.concat(ENTER_APP_PROJECTNAME);
-			if(genProjectName == null || genProjectName.equals(""))
+			if (genProjectName == null || genProjectName.equals(""))
 				message = message.concat(ENTER_GEN_PROJECTNAME);
-			if(message.equals("")){
-				if(projectsAlreadyExists(appProjectName, genProjectName, (Integer) selectButton.getData())){
+			if (message.equals("")) {
+				if (projectsAlreadyExists(appProjectName, genProjectName,
+						(Integer) selectButton.getData())) {
 					this.setMessage(PROJECTNAME_EXSISTS, ERROR);
 					this.setPageComplete(false);
-				} else if(appProjectName.equals(genProjectName)){
+				} else if (appProjectName.equals(genProjectName)) {
 					this.setMessage(PROJECTNAMES_EQUAL, ERROR);
 					this.setPageComplete(false);
 				} else {
@@ -154,20 +160,41 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 		}
 	}
 
-	private boolean projectsAlreadyExists(String appProjName, String genProjName, int buttonData) {
+	/**
+	 * Checks whether the project already exists, uses the buttonData to
+	 * determine which projects should be checked.
+	 * 
+	 * @param appProjName
+	 *            the application project name.
+	 * @param genProjName
+	 *            the generator project name.
+	 * @param buttonData
+	 *            the button data (determines which button was selected).
+	 * @return true if project exists.
+	 */
+	private boolean projectsAlreadyExists(String appProjName,
+			String genProjName, int buttonData) {
 		switch (buttonData) {
-		case WizardConstants.RADIO_1 :
-			return projectAlreadyExists(appProjName) || projectAlreadyExists(genProjName);
-		case WizardConstants.RADIO_2 :
+		case WizardConstants.RADIO_1:
+			return projectAlreadyExists(appProjName)
+					|| projectAlreadyExists(genProjName);
+		case WizardConstants.RADIO_2:
 			return projectAlreadyExists(appProjName);
-		case WizardConstants.RADIO_3 :
+		case WizardConstants.RADIO_3:
 			return projectAlreadyExists(genProjName);
-		default :
+		default:
 			return true;
 		}
 	}
-	
-	private boolean projectAlreadyExists(String name){
+
+	/**
+	 * Checks whether the project already exists.
+	 * 
+	 * @param name
+	 *            the name of the project to check.
+	 * @return true if project exists.
+	 */
+	private boolean projectAlreadyExists(String name) {
 		for (IProject project : context.get(IWorkspaceRoot.class).getProjects()) {
 			if (name.matches("^(/||\\\\)" + project.getName() + "(/||\\\\)$"))
 				return true;
@@ -175,35 +202,18 @@ public class GeneSEZProjectWizardSelectionPage extends WizardPage {
 		return false;
 	}
 
-	private void renderModel(Composite parent) {
-		// This is subtle; unless the element is hooked into the model it won't
-		// fire events
-		hostWin.getSharedElements().add(hostModel);
-
-		// Render it
-		renderer.createGui(hostModel, parent, context);
-		// Clean up the shared elements list once we're done
-		parent.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				hostWin.getSharedElements().remove(hostModel);
-			}
-		});
-	}
-	
+	/**
+	 * Sets if the next page is allowed, currently a next page is not allowed
+	 * for Button data {@link WizardConstants#RADIO_3}
+	 * 
+	 * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
+	 */
 	@Override
 	public boolean canFlipToNextPage() {
 		Object button = context.get(WizardConstants.CHOOSE_WIZARD);
-		if(button != null)
-			if(((Button) button).getData().equals(WizardConstants.RADIO_3))
+		if (button != null)
+			if (((Button) button).getData().equals(WizardConstants.RADIO_3))
 				return false;
 		return super.canFlipToNextPage();
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		if(visible){
-			context.modify(IWizardPage.class,this);
-		}
-		super.setVisible(visible);
 	}
 }

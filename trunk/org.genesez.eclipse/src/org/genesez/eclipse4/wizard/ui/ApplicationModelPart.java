@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -32,11 +33,29 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * Part to choose files for the application model and to decide whether they
+ * should be copied or referenced.
+ * 
+ * Modify context elements:
+ * <p>
+ * {@link WizardConstants#APPLICATION_MODEL_LIST}
+ * </p>
+ * <p>
+ * {@link WizardConstants#COPY_MODEL_FILES}
+ * </p>
+ * <p>
+ * ({@link WizardConstants#APPLICATION_MODEL_ROOT})
+ * </p>
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 @SuppressWarnings("restriction")
 public class ApplicationModelPart {
 
 	private static final String BROWSE_FILES = "Choose folder for application model files";
-	
+
 	private Tree tree;
 	private Button btnSelectAll;
 	private Button btnDeselectAll;
@@ -53,12 +72,15 @@ public class ApplicationModelPart {
 
 	@Inject
 	private IEclipseContext context;
-	
+
 	@Inject
 	private IWorkspaceRoot workspace;
 
 	private Set<File> applicationModel = new HashSet<File>();
 
+	/**
+	 * Standard constructor
+	 */
 	public ApplicationModelPart() {
 	}
 
@@ -111,10 +133,15 @@ public class ApplicationModelPart {
 		btnCopyFilesTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 5, 1));
 		btnCopyFilesTo.setText("Copy files to application project");
-
+		btnCopyFilesTo.setSelection(true);
 		addListener();
+		btnCopyFilesTo.notifyListeners(SWT.Selection, new Event());
+
 	}
 
+	/**
+	 * Adds the needed Listener
+	 */
 	private void addListener() {
 
 		// creates a Listener which changes the look of an directory if not all
@@ -160,12 +187,12 @@ public class ApplicationModelPart {
 				}
 			}
 		};
-		
+
 		txtRootDirectory.addTraverseListener(new TraverseListener() {
-			
+
 			@Override
 			public void keyTraversed(TraverseEvent e) {
-				if(SWT.TRAVERSE_RETURN == e.detail){
+				if (SWT.TRAVERSE_RETURN == e.detail) {
 					btnRefresh.notifyListeners(SWT.Selection, new Event());
 					e.doit = false;
 				}
@@ -235,15 +262,17 @@ public class ApplicationModelPart {
 				String text = txtRootDirectory.getText();
 				tree.clearAll(true);
 				tree.removeAll();
-				if(text == null || text.equals(""))
+				if (text == null || text.equals(""))
 					return;
-				File file = new File(text);
+				IPath path = new Path(text);
+				File rootFile = path.toFile();
+				context.modify(WizardConstants.APPLICATION_MODEL_ROOT, path);
 				applicationModel.clear();
-				if (file.exists() && file.isDirectory()) {
+				if (rootFile.exists() && rootFile.isDirectory()) {
 					TreeItem item = new TreeItem(tree, SWT.NONE);
 					item.setImage(imgFolder);
-					prepareItem(item, file);
-					makeTree(file, item);
+					prepareItem(item, rootFile);
+					makeTree(rootFile, item);
 					item.setExpanded(true);
 				} else {
 					context.modify(WizardConstants.APPLICATION_MODEL_LIST, null);
@@ -354,10 +383,5 @@ public class ApplicationModelPart {
 		item.setChecked(false);
 		item.setData(file);
 		item.addListener(SWT.Modify, modifyCheckedListener);
-	}
-
-	@PreDestroy
-	public void dispose() {
-		
 	}
 }

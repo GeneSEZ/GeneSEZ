@@ -1,11 +1,9 @@
 package org.genesez.eclipse4.wizard.ui;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -15,9 +13,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * Part to choose one of 3 workflow file options.
+ * 
+ * Modifies context element:
+ * <p>
+ * {@link WizardConstants#CHOOSE_WORKFLOW}
+ * </p>
+ * 
+ * @author Dominik Wetzel
+ *
+ */
 @SuppressWarnings("restriction")
 public class ChooseWorkflowPart {
-
 
 	private Button btnDoNotCreate;
 	private Button btnCreateNewWorkflow;
@@ -25,6 +33,12 @@ public class ChooseWorkflowPart {
 
 	@Inject
 	private IEclipseContext context;
+	
+	/**
+	 * Standard constructor
+	 */
+	public ChooseWorkflowPart() {
+	}
 	
 	/**
 	 * Create contents of the view part.
@@ -51,6 +65,9 @@ public class ChooseWorkflowPart {
 		btnDoNotCreate.notifyListeners(SWT.Selection, new Event());
 	}
 	
+	/**
+	 * Adds the neede listener
+	 */
 	private void addListener(){
 		btnDoNotCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -73,14 +90,4 @@ public class ChooseWorkflowPart {
 			}
 		});
 	}
-
-	@PreDestroy
-	public void dispose() {
-	}
-
-	@Focus
-	public void setFocus() {
-		// TODO	Set the focus to control
-	}
-
 }

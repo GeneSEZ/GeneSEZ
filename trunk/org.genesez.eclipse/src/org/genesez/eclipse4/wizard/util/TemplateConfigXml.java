@@ -10,9 +10,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.eclipse.core.runtime.IPath;
 
 /**
- * The Bean class for JAXB parsing
+ * The Bean class for JAXB parsing for a template zip file.
+ * Contains also some additional information.
  * 
- * @author domwet
+ * @author Dominik Wetzel
  */
 @XmlRootElement(name = "templateConfig")
 public class TemplateConfigXml {
@@ -45,6 +46,10 @@ public class TemplateConfigXml {
 	/** all internal folders */
 	private List<IPath> internalFolders = new ArrayList<IPath>();
 
+	/** Standard constructor */
+	public TemplateConfigXml(){
+	}
+	
 	/** @return name of the template */
 	public String getName() {
 		return name;

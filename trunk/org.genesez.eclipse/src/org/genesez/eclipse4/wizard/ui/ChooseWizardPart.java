@@ -12,19 +12,39 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * Part to Choose from 3 Wizard options.
+ * 
+ * Modify context elements:
+ * <p>
+ * {@link WizardConstants#CHOOSE_WIZARD}
+ * </p>
+ * <p>
+ * {@link WizardConstants#DESCRIPTION}
+ * </p>
+ * 
+ * @author Dominik Wetzel
+ * 
+ */
 @SuppressWarnings("restriction")
 public class ChooseWizardPart {
 
 	private final static String APP_GEN_TEXT = "Create an application project and a generator project from a template.";
 	private final static String APP_TEXT = "Create an application project for a given generator project.";
 	private final static String GEN_TEXT = "Create a generator project for a given application project.";
-	
+
 	private Button btnRadioButton;
 	private Button btnCreateNewApplication;
 	private Button btnCreateNewGenerator;
-	
+
 	@Inject
 	private IEclipseContext context;
+
+	/**
+	 * Standard constructor
+	 */
+	public ChooseWizardPart() {
+	}
 
 	/**
 	 * Create contents of the view part.
@@ -32,23 +52,26 @@ public class ChooseWizardPart {
 	@PostConstruct
 	public void createControls(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
-		
+
 		btnRadioButton = new Button(parent, SWT.RADIO);
 		btnRadioButton.setData(WizardConstants.RADIO_1);
 		btnRadioButton.setText("Create new application and generator project");
-		
+
 		btnCreateNewApplication = new Button(parent, SWT.RADIO);
 		btnCreateNewApplication.setData(WizardConstants.RADIO_2);
 		btnCreateNewApplication.setText("Create new application project");
-		
+
 		btnCreateNewGenerator = new Button(parent, SWT.RADIO);
 		btnCreateNewGenerator.setData(WizardConstants.RADIO_3);
 		btnCreateNewGenerator.setText("Create new generator project");
-		
+
 		addListener();
 	}
 
-	private void addListener(){
+	/**
+	 * Adds the Listener
+	 */
+	private void addListener() {
 		btnRadioButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -56,19 +79,21 @@ public class ChooseWizardPart {
 				context.modify(WizardConstants.DESCRIPTION, APP_GEN_TEXT);
 			}
 		});
-		
+
 		btnCreateNewApplication.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				context.modify(WizardConstants.CHOOSE_WIZARD, btnCreateNewApplication);
+				context.modify(WizardConstants.CHOOSE_WIZARD,
+						btnCreateNewApplication);
 				context.modify(WizardConstants.DESCRIPTION, APP_TEXT);
 			}
 		});
-		
+
 		btnCreateNewGenerator.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				context.modify(WizardConstants.CHOOSE_WIZARD, btnCreateNewGenerator);
+				context.modify(WizardConstants.CHOOSE_WIZARD,
+						btnCreateNewGenerator);
 				context.modify(WizardConstants.DESCRIPTION, GEN_TEXT);
 			}
 		});

@@ -1,7 +1,5 @@
 package org.genesez.eclipse4.wizard;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.commands.ParameterizedCommand;
@@ -23,6 +21,10 @@ import org.genesez.eclipse4.wizard.handler.CreateProjectHandler;
 import org.genesez.eclipse4.wizard.page.GeneSEZExampleWizardPage;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
+/**
+ * The GeneSEZ Example wizard, to create GeneSEZ examples from templates.
+ * @author Dominik Wetzel
+ */
 @SuppressWarnings("restriction")
 public class GeneSEZExampleWizard extends Wizard implements INewWizard {
 
@@ -35,35 +37,64 @@ public class GeneSEZExampleWizard extends Wizard implements INewWizard {
 	@Inject
 	private EHandlerService handlerService;
 
+	/**
+	 * Constructs the GeneSEZ example wizard
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 */
 	public GeneSEZExampleWizard() throws SecurityException, NoSuchMethodException {
+		initialize();
+	}
+	
+	/**
+	 * Initializes the context and the handler.
+	 */
+	private void initialize(){
 		IWorkbenchWindow wbw = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
 		hostWin = (MWindow) wbw.getService(MWindow.class);
 		context = hostWin.getContext();
 		ContextInjectionFactory.inject(this, context);
 		setContextInitial();
-	}
-	
-	@PostConstruct
-	public void initialize(){
+		
 		executeCommand = commandService.createCommand("create.projects", null);
 		CreateProjectHandler handler = new CreateProjectHandler();
 		ContextInjectionFactory.inject(handler, context);
 		handlerService.activateHandler("create.projects", handler);
 	}
 
+	/**
+	 * Adds the example wizard page.
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		addPage(new GeneSEZExampleWizardPage("Create example projects", hostWin));
 	}
 
+	/**
+	 * Calls the handler {@link CreateProjectHandler}
+	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 		handlerService.executeHandler(executeCommand);
 		return true;
 	}
 	
-	@PreDestroy
+	/**
+	 * Disposes the Wizard.
+	 * @see org.eclipse.jface.wizard.Wizard#performCancel()
+	 */
+	@Override
+	public boolean performCancel() {
+		this.dispose();
+		return super.performCancel();
+	}
+	
+	/**
+	 * initializes the context, so no error occurs during restart.
+	 */
 	private void setContextInitial(){
 		context.set(WizardConstants.DESCRIPTION, null);
 		context.declareModifiable(WizardConstants.DESCRIPTION);
