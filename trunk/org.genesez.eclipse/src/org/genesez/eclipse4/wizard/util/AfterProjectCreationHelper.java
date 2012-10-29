@@ -34,16 +34,26 @@ public class AfterProjectCreationHelper {
 	 * @param copyFiles
 	 *            if true the files will be copied, else they will only be
 	 *            referenced.
+	 * @param appModelRoot
+	 *            the root folder for the application model
 	 */
 	public static void addApplicationModel(IProject project,
-			Collection<File> appModelList, boolean copyFiles) {
+			Collection<File> appModelList, boolean copyFiles, File appModelRoot) {
 		IFolder projectModelFolder = project.getFolder("model");
-		IPath folder = new Path(projectModelFolder.getLocationURI().getPath());
-		if (!folder.toFile().exists())
+		if (!projectModelFolder.exists()) {
+			IPath folder = new Path(projectModelFolder.getLocationURI()
+					.getPath());
 			folder.toFile().mkdirs();
+		}
 		for (File file : appModelList) {
 			URI linkTargetPath = file.toURI();
-			IFile fileResource = projectModelFolder.getFile(file.getName());
+			File folder = file.getParentFile();
+			if (!folder.equals(appModelRoot) && !folder.exists())
+				folder.mkdirs();
+			IFile fileResource = projectModelFolder.getFile(checkParent(
+					file.getParentFile(), appModelRoot)
+					+ file.getName());
+
 			if (copyFiles)
 				try {
 					FileUtils.copyFile(file, new File(fileResource
@@ -61,6 +71,13 @@ public class AfterProjectCreationHelper {
 				}
 			}
 		}
+	}
+
+	private static String checkParent(File toCheck, File appModelRoot) {
+		if (!toCheck.equals(appModelRoot))
+			return checkParent(toCheck.getParentFile(), appModelRoot)
+					+ toCheck.getName() + File.separator;
+		return "";
 	}
 
 	/**

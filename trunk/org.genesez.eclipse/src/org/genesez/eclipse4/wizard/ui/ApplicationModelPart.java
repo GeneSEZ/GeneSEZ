@@ -8,8 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -136,7 +134,6 @@ public class ApplicationModelPart {
 		btnCopyFilesTo.setSelection(true);
 		addListener();
 		btnCopyFilesTo.notifyListeners(SWT.Selection, new Event());
-
 	}
 
 	/**
@@ -264,9 +261,10 @@ public class ApplicationModelPart {
 				tree.removeAll();
 				if (text == null || text.equals(""))
 					return;
-				IPath path = new Path(text);
-				File rootFile = path.toFile();
-				context.modify(WizardConstants.APPLICATION_MODEL_ROOT, path);
+//				IPath path = new Path(text);
+//				File rootFile = path.toFile();
+				File rootFile = new File(text);
+				context.modify(WizardConstants.APPLICATION_MODEL_ROOT, rootFile);
 				applicationModel.clear();
 				if (rootFile.exists() && rootFile.isDirectory()) {
 					TreeItem item = new TreeItem(tree, SWT.NONE);

@@ -9,6 +9,7 @@ import javax.inject.Named;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.swt.widgets.Button;
@@ -18,8 +19,8 @@ import org.genesez.eclipse4.wizard.util.TemplateHelper;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 /**
- * Handles the creation of a project.
- * Gets all parameters from the Context.
+ * Handles the creation of a project. Gets all parameters from the Context.
+ * 
  * @author Dominik Wetzel
  */
 @SuppressWarnings("restriction")
@@ -31,7 +32,7 @@ public class CreateProjectHandler {
 	/**
 	 * Standard constructor
 	 */
-	public CreateProjectHandler(){
+	public CreateProjectHandler() {
 	}
 
 	/**
@@ -66,11 +67,12 @@ public class CreateProjectHandler {
 	public boolean createProject(
 			@Named(WizardConstants.IS_EXAMPLE) boolean example,
 			@Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
-			@Named(WizardConstants.GEN_PROJ_NAME) final String genProjectName,
+			@Named(WizardConstants.GEN_PROJ_NAME) String genProjectName,
 			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button wizardButton,
 			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template,
 			@Optional @Named(WizardConstants.APPLICATION_MODEL_LIST) Set<File> appModelFiles,
 			@Optional @Named(WizardConstants.COPY_MODEL_FILES) boolean copyModelFiles,
+			@Optional @Named(WizardConstants.APPLICATION_MODEL_ROOT) File appModelRoot,
 			@Optional @Named(WizardConstants.CHOOSE_WORKFLOW) Button workflowButton,
 			@Optional @Named(WizardConstants.WORKFLOW_TEMPLATE) String workflowTemplate,
 			@Optional @Named(WizardConstants.WORKFLOW_FILENAME) String workflowFilename,
@@ -84,18 +86,23 @@ public class CreateProjectHandler {
 			if (wizardSelection.equals(WizardConstants.RADIO_1)) {
 				TemplateHelper.createProject(template, appProjectName,
 						genProjectName, workspace, true, true);
-				handleAppModel(appProjectName, appModelFiles, copyModelFiles);
+				if (checkProjectCreationJob())
+					handleAppModel(appProjectName, appModelFiles,
+							copyModelFiles, appModelRoot);
 			} else if (wizardSelection.equals(WizardConstants.RADIO_2)) {
 				TemplateHelper.createProject(template, appProjectName,
 						genProjectName, workspace, true, false);
-				handleAppModel(appProjectName, appModelFiles, copyModelFiles);
-				Object workflowSelection = workflowButton.getData();
-				if (workflowSelection.equals(WizardConstants.RADIO_2))
-					handleWorkflow(null, workflowFilename, workflowDirectory,
-							appProjectName);
-				else if (workflowSelection.equals(WizardConstants.RADIO_3))
-					handleWorkflow(workflowTemplate, workflowFilename,
-							workflowDirectory, appProjectName);
+				if (checkProjectCreationJob()) {
+					handleAppModel(appProjectName, appModelFiles,
+							copyModelFiles, appModelRoot);
+					Object workflowSelection = workflowButton.getData();
+					if (workflowSelection.equals(WizardConstants.RADIO_2))
+						handleWorkflow(null, workflowFilename,
+								workflowDirectory, appProjectName);
+					else if (workflowSelection.equals(WizardConstants.RADIO_3))
+						handleWorkflow(workflowTemplate, workflowFilename,
+								workflowDirectory, appProjectName);
+				}
 			} else {
 				TemplateHelper.createProject(template, appProjectName,
 						genProjectName, workspace, false, true);
@@ -105,6 +112,18 @@ public class CreateProjectHandler {
 			workspace.refreshLocal(IWorkspaceRoot.DEPTH_INFINITE, null);
 		} catch (CoreException e) {
 			e.printStackTrace();
+		}
+		return true;
+	}
+
+	/**
+	 * Synchronizing with the projectCreationJob.
+	 */
+	private boolean checkProjectCreationJob() {
+		int state;
+		while ((state = TemplateHelper.createJob.getState()) != IStatus.OK) {
+			if (state == IStatus.CANCEL)
+				return false;
 		}
 		return true;
 	}
@@ -121,10 +140,10 @@ public class CreateProjectHandler {
 	 * @return true if everything works.
 	 */
 	private boolean handleAppModel(String appProjectName,
-			Set<File> appModelList, boolean copyModelFiles) {
+			Set<File> appModelList, boolean copyModelFiles, File appModelRoot) {
 		IProject project = workspace.getProject(appProjectName);
 		AfterProjectCreationHelper.addApplicationModel(project, appModelList,
-				copyModelFiles);
+				copyModelFiles, appModelRoot);
 		return true;
 	}
 

@@ -15,6 +15,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Button;
 import org.genesez.eclipse4.wizard.ui.ApplicationModelPart;
 import org.genesez.eclipse4.wizard.ui.DescriptionPart;
@@ -72,6 +73,7 @@ public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
 		context.declareModifiable(WizardConstants.APPLICATION_MODEL_LIST);
 		context.declareModifiable(WizardConstants.COPY_MODEL_FILES);
 		context.declareModifiable(WizardConstants.APPLICATION_MODEL_ROOT);
+		context.declareModifiable(IWizardPage.class);
 		context.set(WizardConstants.IS_EXAMPLE, false);
 	}
 

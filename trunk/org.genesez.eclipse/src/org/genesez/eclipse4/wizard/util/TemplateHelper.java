@@ -62,6 +62,8 @@ public class TemplateHelper {
 	public static Set<SimpleTextReplacer> replacer = ReplacerHelper
 			.getAvailableReplacer();
 
+	public static Job createJob; 
+	
 	private static JAXBContext jc = null;
 	private static Unmarshaller un = null;
 
@@ -279,11 +281,11 @@ public class TemplateHelper {
 	 *            true if generator project should be used from template.
 	 * @return true if everything works.
 	 */
-	public static boolean createProject(final TemplateConfigXml template,
+	public static void createProject(final TemplateConfigXml template,
 			final String appProjectName, final String genProjectName,
 			final IWorkspaceRoot workspace, final boolean appFromZip,
 			final boolean genFromZip) {
-		Job createJob = new Job("Creating GeneSEZ Project") {
+		createJob = new Job("Creating GeneSEZ Project") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Create " + appProjectName
@@ -326,9 +328,5 @@ public class TemplateHelper {
 		};
 		createJob.setUser(true);
 		createJob.schedule();
-		if (createJob.getResult() == Status.OK_STATUS) {
-			return true;
-		}
-		return false;
 	}
 }
