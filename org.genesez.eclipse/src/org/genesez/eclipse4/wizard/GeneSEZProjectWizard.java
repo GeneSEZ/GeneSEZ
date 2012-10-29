@@ -1,6 +1,7 @@
 package org.genesez.eclipse4.wizard;
 
 import javax.inject.Inject;
+import javax.swing.JOptionPane;
 
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -9,6 +10,7 @@ import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.InjectionException;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -47,6 +49,7 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
 	/**
 	 * constructs the wizard
+	 * 
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
 	 */
@@ -66,10 +69,9 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 		ContextInjectionFactory.inject(this, context);
 		setContextInitial();
 
-		page1 = new GeneSEZProjectWizardSelectionPage("Create Projects",
-				hostWin);
-		page2 = new GeneSEZProjectWizardTemplatePage("Choose Template", hostWin);
-		page3 = new GeneSEZProjectWizardWorkflowPage("Choose Workflow", hostWin);
+		page1 = new GeneSEZProjectWizardSelectionPage("ChooseWizard", hostWin);
+		page2 = new GeneSEZProjectWizardTemplatePage("ChooseTemplate", hostWin);
+		page3 = new GeneSEZProjectWizardWorkflowPage("ChooseWorkflow", hostWin);
 
 		executeCommand = commandService.createCommand("create.projects", null);
 		CreateProjectHandler handler = new CreateProjectHandler();
@@ -79,7 +81,9 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
 	/**
 	 * Adds the pages to the wizard.
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 * 
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
+	 *      org.eclipse.jface.viewers.IStructuredSelection)
 	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -90,16 +94,25 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
 	/**
 	 * Calls the handler {@link CreateProjectHandler}
+	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
-		handlerService.executeHandler(executeCommand);
+		try {
+			handlerService.executeHandler(executeCommand);
+		} catch (InjectionException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,
+					"Couldn't inject parameters into the handler.",
+					"InjectionException", JOptionPane.ERROR_MESSAGE);
+		}
 		return true;
 	}
 
 	/**
 	 * If all pages are completed canFinish is true.
+	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#canFinish()
 	 */
 	@Override
@@ -110,6 +123,7 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 
 	/**
 	 * Disposes the wizard.
+	 * 
 	 * @see org.eclipse.jface.wizard.Wizard#performCancel()
 	 */
 	@Override
