@@ -14,7 +14,6 @@ import java.util.Map;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVar;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.expression.ExecutionContext;
 import org.eclipse.xtend.expression.ExecutionContextImpl;
