@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.eclipse.xtend.util.uml2ecore;
+package org.eclipse.emf.ecore.adapter.uml2;
 
 import java.util.List;
 import java.util.regex.Matcher;
