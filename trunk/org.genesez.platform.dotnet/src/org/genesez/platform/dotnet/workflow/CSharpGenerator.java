@@ -10,6 +10,7 @@ import org.genesez.platform.common.workflow.DefaultGenerator;
 /**
  * Performs model to text transformations for the .net platform and C#.
  * @author Aibek Isaev
+ * @deprecated
  */
 public class CSharpGenerator extends DefaultGenerator {
 	
