@@ -1,0 +1,297 @@
+/**
+ * Validates an UML2 State Machine against the GeneSEZ metamodel
+ *
+ * currently covered:
+ * - general StateMachine validations
+ * --- owner of a StateMachine is a Class
+ * --- StateMachines on Interfaces will be ignored
+ * --- generalized classes have only one State Machine
+ * --- a Class has only one State Machine
+ * - general naming validations
+ * --- name of Transition will be ignored
+ * - proper naming validations
+ * --- everything that is used for naming of classes, methods, variables etc.
+ * - not supported
+ * --- ProtocolStateMachines
+ * --- unsupported Pseudostates
+ * --- unsupported EventTypes
+ * --- multiple Regions
+ * --- >1 Trigger on one Transition
+ * --- 1 InitialState per CompositeState
+ * --- default outgoing Transition on HistoryState
+ * --- deferrable Trigger on State
+ * --- Parameters on Behavior
+ * 
+ * @author	ines noetzold
+ * @author	toh (some minor fixes)
+ * @date 	2009-12-02
+ */
+
+//uml metamodel is going to be checked
+import uml;
+
+extension org::genesez::adapter::uml2::scripts::Helper;
+extension org::genesez::adapter::uml2::scripts::StatechartValidationHelper;
+
+
+/**
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * general StateMachine validations
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+
+/**
+ * checks if a State Machine is owned by a Class
+ * (StateMachines on Interfaces will not be generated, but since this is only a warning,
+ * this case is not handled here)
+ * @return true, if State Machine has an owning Class (or Interface)
+ */
+context StateMachine 
+ERROR "GeneSEZ Model Validation: StateMachine must be owned by a Class: "+name :
+	owner.metaType == Class || owner.metaType == Interface;
+	
+/**
+ * checks if a State Machine is owned by an Interface
+ * (GeneSEZ ignores State Machines on Interfaces)
+ * @return true, if State Machine is not owned by an Interface
+ */
+context StateMachine 
+WARNING "GeneSEZ Model Validation: StateMachine "+name+" needs an owning class to be generated." :
+	owner.metaType != Interface;
+
+/**
+ * checks if generalized classes have only one State Machine
+ * @return true, if only of side of generalization has a State Machine
+ */
+context Class if generalization != null && ownedElement.exists(e|e.metaType==StateMachine)
+ERROR "GeneSEZ Model Validation: only one side of a generalization can own a StateMachine: "+name :
+	getGenerals().forAll(e|e.ownedElement.contains(new StateMachine));
+
+/**
+ * checks if a Class has only one State Machine
+ * (this includes Behavorial State Machines, that are included as behaviors in states)
+ * @return true, if the Class has only one State Machine
+ */
+context Class if ownedElement.size > 1 && ownedElement.exists(e|e.metaType==StateMachine) 
+ERROR "GeneSEZ Model Validation: One Class can only be owner of one StateMachine: "+name :
+	(allOwnedElements().typeSelect(StateMachine)).size == 1;
+
+
+/**
+ *- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * general naming validations
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+
+/**
+ * checks if a Transition has a name (will be ignored by GeneSEZ)
+ * @return true, if Transition has no name
+ */
+context Transition 
+WARNING "GeneSEZ Model Validation: name of transition "+name+" will be ignored." :
+	!name.doesExist();
+
+
+/*
+ *- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * proper naming validations
+ * checks everything that is used for naming of classes, methods, variables etc.
+ * does not validate specific constraints of target platforms (programming languages),
+ * because M2M-transformation is independent of those
+ *
+ * all cases could be checked in one single validation, 
+ * but this would prevent detailed error messages for the user.
+ * so we go for usability instead of shortness.
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+
+/**
+ * checks if the owner of a StateMachine has a proper name
+ * @return true, if the name exists and contains only valid characters
+ */
+context Class if ownedElement.exists(e|e.metaType==StateMachine)
+ERROR "GeneSEZ Model Validation: StateMachine owner has no name." :
+	name.doesExist() && name.matches("(\\w)+");
+
+/**
+ * checks if a StateMachine has a proper name
+ * @return true, if StateMachine name contains only valid characters
+ */
+context StateMachine
+ERROR "GeneSEZ Model Validation: instance of StateMachine has no proper name." :
+	name.matches("(\\w)+");
+
+/**
+ * checks if a State has a proper name (FinalStates need none)
+ * @return true, if State has a name containing only valid characters
+ */
+context State if metaType!=FinalState 
+ERROR "GeneSEZ Model Validation: instance of state has no proper name (should start with lowercase and contains only a-z and 0-9)." :
+	name.doesExist() && name.matches("^[a-z](\\w)+");
+
+/**
+ * checks if the name of a FinalState is valid, if it has one
+ * (if it has no name, default naming will be applied)
+ * @return true, if name contains only valid characters
+ */
+context State if metaType == FinalState && name.doesExist()
+ERROR "GeneSEZ Model Validation: FinalState needs either no name or a proper one." :
+	name.matches("(\\w)+");
+
+/**
+ * checks if the name of an Initial or HistoryState is valid, if it has one
+ * (if it has no name, default naming will be applied)
+ * @return true, if name contains only valid characters
+ */
+context Pseudostate if (isInitial() || isHistory()) && name.doesExist()
+ERROR "GeneSEZ Model Validation: Initial or HistoryState needs either no name or a proper one." :
+	name.matches("(\\w)+");
+
+/**
+ * checks if a TimeEvent has a proper name
+ * @return true, if Event has a name containing only valid characters
+ */
+context TimeEvent 
+ERROR "GeneSEZ Model Validation: TimeEvent has no proper name." :
+	name.doesExist() && name.matches("(\\w)+");
+
+/**
+ * checks if a Behavior of a State or a Transition has a proper name
+ * @return true, if name contains only valid characters
+ */
+context Behavior if owner.metaType == State || owner.metaType == Transition
+ERROR "GeneSEZ Model Validation: behavior has no proper name." :
+	name.matches("(\\w)+");
+
+/**
+ * checks if an operation has a proper name
+ * @return true, if the name contains only valid characters
+ */
+context Operation ERROR "GeneSEZ Model Validation: operation has no proper name." :
+	name.matches("(\\w)+") || isConstructor() || isDestructor();
+
+/**
+ * checks if a signal has a proper name
+ * @return true, if the name contains only valid characters
+ */
+context Signal ERROR "GeneSEZ Model Validation: signal has no proper name." :
+	name.matches("(\\w)+");
+
+/**
+ * checks if a parameter has a proper name
+ * @return true, if the name contains only valid characters
+ */
+context Parameter 
+ERROR "GeneSEZ Model Validation: parameter on "+owner.toString()+" has no proper name." :
+	name.matches("(\\w)+") || isReturnParameter();
+
+/**
+ * checks if a ChangeEvent has a ChangeExpression that contains only valid characters
+ * (not included in the naming validations because access to ChangeExpression is only possible through ChangeEvent)
+ * @return true, if it has a valid ChangeExpression
+ */
+context ChangeEvent 
+ERROR "GeneSEZ Model Validation: ChangeEvent has no proper ChangeExpression." :
+	changeExpression != null  && changeExpression.stringValue().matches("(\\w)+");
+
+/**
+ * checks if there are duplicate names within the State Machine
+ *
+ * DISABLED: cannot be checked yet (2010-02-08)
+ * oAW 4.3.0 doesn't support equals-operation on type uml::String
+ * this bug was fixed in one of the later versions of oAW, so these checks
+ * should be enabled if the oAW-framework is updated
+ * (ref: https://bugs.eclipse.org/bugs/show_bug.cgi?id=277666)
+ *
+ * @return true, if there are none
+ */
+//context StateMachine
+//ERROR "GeneSEZ Model Validation: duplicate name in model: "+name :
+	//let n = ownedElement.typeSelect(NamedElement) :
+	//n.forAll(e| e.name.equals(name) );
+
+
+/*
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * not supported
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+
+/**
+ * checks if a ProtocolStateMachine is used
+ * @return true, if not
+ */
+context ProtocolStateMachine
+ERROR "GeneSEZ Model Validation: not supported: ProtocolStateMachine Diagrams." :
+	false;
+
+/**
+ * checks if only supported pseudostates are used
+ * (initial, final, shallow/deep history)
+ * @return true, if only those are used
+ */
+context Pseudostate 
+ERROR "GeneSEZ Model Validation: unsupported Pseudostate: "+kind :
+	kind == FinalState 
+	|| kind == PseudostateKind::initial 
+	|| kind == PseudostateKind::deepHistory 
+	|| kind == PseudostateKind::shallowHistory;
+
+/**
+ * checks if only supported event types are used
+ * (call, change, signal and time event)
+ * @return true, if only those types are used
+ */
+context Event ERROR "GeneSEZ Model Validation: not supported event "+metaType :
+	metaType == CallEvent || metaType == ChangeEvent 
+	|| metaType == SignalEvent || metaType == TimeEvent;
+
+/**
+ * checks if there are multiple regions in one state machine or composite state
+ * @return true, if there's only one region
+ */
+context State if isComposite
+ERROR "GeneSEZ Model Validation: not supported: multiple regions." :
+	region.size == 1;
+
+/**
+ * checks if a transition has max. one trigger
+ * @return true, if transition has one or none trigger
+ */
+context Transition 
+ERROR "GeneSEZ Model Validation: not supported: multiple triggers on transition." :
+	trigger.size == 0 || trigger.size == 1;
+	
+/**
+ * checks if composite state has an initial state
+ * @return true, if there's an initial state
+ */
+context State if isComposite
+WARNING "GeneSEZ Model Validation: not supported: composite state without initial state." :
+	let p = allOwnedElements().typeSelect(Pseudostate) :
+	p.select(e| e.isInitial() ).size > 0;
+
+/**
+ * checks if a HistoryState has an outgoing default transition
+ * @return true, if it has one
+ */
+context Pseudostate if this.isHistory()
+ERROR "GeneSEZ Model Validation: not supported: HistoryState without outgoing default transition." :
+	outgoing != null && outgoing.size > 0 && outgoing.trigger.isEmpty;
+
+/**
+ * checks if a State has a deferrable trigger
+ * warning because it will simply be ignored by GeneSEZ
+ * @return true, if the State has no deferrable trigger
+ */
+context State 
+WARNING "GeneSEZ Model Validation: not supported: deferrable trigger on State "+name+"." :
+	deferrableTrigger.isEmpty || deferrableTrigger.size == 0;
+
+/**
+ * checks if a behavior has parameters (those will be ignored by GeneSEZ)
+ * @return true, if there are no parameters
+ */
+context Behavior if (owner.metaType == State || owner.metaType == Transition)
+WARNING "GeneSEZ Model Validation: not supported: parameters on behavior "+name+"." :
+	ownedParameter == null || ownedParameter.size == 0;
