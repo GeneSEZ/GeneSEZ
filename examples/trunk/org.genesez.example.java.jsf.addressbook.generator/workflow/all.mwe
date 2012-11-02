@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+
+	<!-- Read the exported UML2 model file and transform it into a GeneSEZ Core model -->
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="modelcache/AddressBook.uml" />
+		
+		<excludePackage value="GeneSEZ Presentation Metamodel" />
+		<excludePackage value="UML Standard Profile" />
+		
+		<slot value="coremodel" />
+	</component>
+
+	<!-- Read the exported UML2 model file and transform it into a GeneSEZ Presentation model -->
+	<component class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="modelcache/AddressBook.uml" />
+		
+		<umlCheckScript value="org::genesez::adapter::uml2::uml2presentation" />
+		<uml2GenesezScriptCall value="org::genesez::adapter::uml2::uml2presentation::transform" />
+		
+		<slot value="presentationmodel" />
+	</component>
+	
+	<!-- Validate the GeneSEZ Core model against Common and Java specific constraints -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<slot value="coremodel" />
+	
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
+	</component>
+
+	<!-- Serialize the GeneSEZ Core model just for information  -->
+	<component class="org.genesez.platform.common.workflow.Serializer">
+		<slot value="coremodel" />
+	
+		<file value="modelcache/AddressBookDomain.xmi" />
+	</component>
+	
+	<!-- Serialize the GeneSEZ Presentation model just for information  -->
+	<component class="org.genesez.platform.common.workflow.Serializer">
+		<slot value="presentationmodel" />
+		
+		<file value="modelcache/AddressBookPresentation.xmi" />
+	</component>
+
+	<!-- Transform the GeneSEZ Core model into java source code -->
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
+		<slot value="coremodel" />
+				
+		<outputDir value="../org.genesez.example.java.jsf.addressbook/src-gen" />
+		<typeMappingFile value="typemapping.xml" />
+		<useModelNameAsBasePackage value="true" />
+		<newAssociationHandling value="false" />
+		<generateSectionComments value="false" />
+	</component>
+	
+	<!-- Transform the GeneSEZ Core model into JSF and HTML source code -->
+	<component class="org.genesez.platform.common.workflow.Generator">
+		<slot value="presentationmodel" />
+	
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelPackage value = "org.genesez.metamodel.gpresentation.GpresentationPackage" />
+		</metaModel>
+		
+		<template value="Root::ModelRoot" />
+		<outputDir value="../org.genesez.example.java.jsf.addressbook/WebContent" />
+	</component>
+	
+	
+</workflow>
