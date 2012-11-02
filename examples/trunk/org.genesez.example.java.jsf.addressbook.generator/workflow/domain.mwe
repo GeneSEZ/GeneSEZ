@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <workflow>
 
-	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
+	<!-- Read the exported UML2 model file and transform it into a GeneSEZ Core model -->
 	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
 		<model value="modelcache/AddressBook.uml" />
 		
@@ -9,18 +9,18 @@
 		<excludePackage value="UML Standard Profile" />
 	</component>
 
-	<!-- validate the GeneSEZ model against common + java specific constraints -->
+	<!-- Validate the GeneSEZ Core model against Common and Java specific constraints -->
 	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
 		<script value="org::genesez::platform::common::Constraints" />
 		<script value="org::genesez::platform::java::constraints::Syntax" />
 	</component>
 
-	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  /-->
+	<!-- Serialize the GeneSEZ Core model just for information  -->
 	<component class="org.genesez.platform.common.workflow.Serializer">
 		<file value="modelcache/AddressBookDomain.xmi" />
 	</component>
 
-	<!-- run the java code generation and transform the model into java source code -->
+	<!-- Transform the GeneSEZ Core model into java source code -->
 	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
 		<outputDir value="../org.genesez.example.java.jsf.addressbook/src-gen" />
 		<typeMappingFile value="typemapping.xml" />
