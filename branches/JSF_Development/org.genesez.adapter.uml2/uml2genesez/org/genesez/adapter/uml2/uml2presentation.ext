@@ -386,6 +386,22 @@ create PValue makeValue(NamedElement ne, PKey key, InstanceSpecification is) :
 	setKey( key ) ->
 	//key.value.add( this ) ->
 	this;
+
+create PValue makeValue(Property p, PKey key, InstanceSpecification is) :
+	logDebug("make value from property: " + p.name + " key: " + key.key) ->
+	// properties
+	setValue( p.getXmiId() ) ->
+	// reference to key
+	setKey( key ) ->
+	this;
+
+create PValue makeValue(Class c, PKey key, InstanceSpecification is) :
+	logDebug("make value from class: " + c.name + " key: " + key.key) ->
+	// properties
+	setValue( c.getXmiId() ) ->
+	// reference to key
+	setKey( key ) ->
+	this;
 	
 create PValue makeValue(Object o, PKey key, InstanceSpecification is) :
 	logDebug("make value from object: " + o.toString() + " key: " + key.key) ->
@@ -446,6 +462,12 @@ List[InstanceSpecification] many(InstanceSpecification this, String featureName)
 	slot.exists( e|e.definingFeature.name == featureName )
 		? slot.selectFirst( e|e.definingFeature.name == featureName ).value.typeSelect(InstanceValue).instance
 		: {};
+		
+/**
+ * Getter for the xmiId of an uml element.
+ */
+String getXmiId(Element obj) : 
+	JAVA org.genesez.adapter.uml2.TransUtils.getXmiId(org.eclipse.emf.ecore.EObject);
 
 /**
  * Returns true if it's a PPackage, otherwise else.
