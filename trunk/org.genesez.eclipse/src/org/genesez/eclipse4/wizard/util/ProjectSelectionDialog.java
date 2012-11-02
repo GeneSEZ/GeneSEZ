@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.util;
 
 import org.eclipse.core.resources.IProject;
@@ -20,7 +26,7 @@ import org.eclipse.ui.ide.IDE;
  * Used to select a project from the workspace, can also be used to see only
  * projects with GeneSEZ generator nature.
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 public class ProjectSelectionDialog extends AbstractFolderSelectionDialog {

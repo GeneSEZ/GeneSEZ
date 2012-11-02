@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.util;
 
 import java.io.File;
@@ -22,7 +28,7 @@ import org.eclipse.ui.PlatformUI;
  * generator project. Can contain the contents of a project in a zip file (
  * {@link TemplateConfigXml}) and the contents of a project in the workspace.
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 public class FolderAndZipFolderSelectionDialog extends
@@ -125,6 +131,9 @@ public class FolderAndZipFolderSelectionDialog extends
 			fillWithProjectFiles(genProjectName);
 			fillWithZipEntries(false, false);
 		}
+		for(TreeItem item : tree.getItems()){
+			item.setExpanded(true);
+		}
 
 	}
 
@@ -142,7 +151,6 @@ public class FolderAndZipFolderSelectionDialog extends
 			TreeItem item = new TreeItem(tree, SWT.NONE);
 			prepareItem(item, file);
 			makeTree(file, item);
-			item.setExpanded(true);
 		}
 	}
 

@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.ui;
 
 import java.io.File;
@@ -6,12 +12,15 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
@@ -29,30 +38,55 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
+import org.genesez.eclipse4.wizard.util.FolderAndZipFolderSelectionDialog;
+import org.genesez.eclipse4.wizard.util.TemplateConfigXml;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 /**
- * Part to choose files for the application model and to decide whether they
- * should be copied or referenced.
+ * Part to choose files for the application model and to decide whether they should be copied or referenced.
  * 
  * Modify context elements:
  * <p>
- * {@link WizardConstants#APPLICATION_MODEL_LIST}
+ * {@link WizardConstants#APPLICATION_MODEL_COLLECTION}
  * </p>
  * <p>
  * {@link WizardConstants#COPY_MODEL_FILES}
  * </p>
  * <p>
- * ({@link WizardConstants#APPLICATION_MODEL_ROOT})
+ * {@link WizardConstants#APPLICATION_MODEL_ROOT}
+ * </p>
+ * <p>
+ * {@link WizardConstants#APPLICATION_MODEL_DESTINATION}
  * </p>
  * 
- * @author Dominik Wetzel
+ * Listen to context elements:
+ * <p>
+ * {@link WizardConstants#CHOOSE_WORKFLOW}
+ * </p>
+ * <p>
+ * {@link WizardConstants#APP_PROJ_NAME}
+ * </p>
+ * <p>
+ * {@link WizardConstants#GEN_PROJ_NAME}
+ * </p>
+ * <p>
+ * {@link WizardConstants#TEMPLATE}
+ * </p>
+ * <p>
+ * {@link WizardConstants#CHOOSE_WIZARD}
+ * </p>
+ * <p>
+ * {@link IWorkspaceRoot}
+ * </p>
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 @SuppressWarnings("restriction")
 public class ApplicationModelPart {
 
 	private static final String BROWSE_FILES = "Choose folder for application model files";
+	private static final String BROWSE_PROJECTS = "Choose folder to store files.";
 
 	private Tree tree;
 	private Button btnSelectAll;
@@ -60,13 +94,31 @@ public class ApplicationModelPart {
 	private Button btnRefresh;
 	private Button btnCopyFilesTo;
 	private Group grpExistingApplicationModel;
-	private Text txtRootDirectory;
-	private Button btnRootDirectory;
+	private Text txtRootDirectorySource;
+	private Button btnRootDirectorySource;
+	private Text txtRootDirectoryDestination;
+	private Button btnRootDirectoryDestination;
 	private Listener modifyCheckedListener;
 
 	private Image imgFolder = null;
 	private Image imgFile = null;
 	private Image imgError = null;
+
+	@Inject
+	@Named(WizardConstants.TEMPLATE)
+	private TemplateConfigXml template;
+
+	@Inject
+	@Named(WizardConstants.APP_PROJ_NAME)
+	private String appName;
+
+	@Inject
+	@Named(WizardConstants.GEN_PROJ_NAME)
+	private String genName;
+
+	@Inject
+	@Named(WizardConstants.CHOOSE_WIZARD)
+	private Button wizardSelection;
 
 	@Inject
 	private IEclipseContext context;
@@ -94,23 +146,21 @@ public class ApplicationModelPart {
 			imgError = eclipseImages.getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
 		}
 
-		grpExistingApplicationModel = new Group(parent, SWT.BORDER
-				| SWT.SHADOW_ETCHED_IN);
+		grpExistingApplicationModel = new Group(parent, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
 		grpExistingApplicationModel.setText("Existing Application Model");
-		grpExistingApplicationModel.setLayout(GridLayoutFactory
-				.copyLayout(WizardConstants.L_GL_TXTBTN));
+		grpExistingApplicationModel.setLayout(GridLayoutFactory.copyLayout(WizardConstants.L_GL_TXTBTN));
 
-		txtRootDirectory = new Text(grpExistingApplicationModel, SWT.BORDER);
-		txtRootDirectory.setLayoutData(WizardConstants.L_GD_TXTBTN_TEXT);
-		txtRootDirectory.setMessage(BROWSE_FILES);
-		txtRootDirectory.setToolTipText(BROWSE_FILES);
+		txtRootDirectorySource = new Text(grpExistingApplicationModel, SWT.BORDER);
+		txtRootDirectorySource.setLayoutData(WizardConstants.L_GD_TXTBTN_TEXT);
+		txtRootDirectorySource.setMessage(BROWSE_FILES);
+		txtRootDirectorySource.setToolTipText(BROWSE_FILES);
 
-		btnRootDirectory = new Button(grpExistingApplicationModel, SWT.NONE);
-		btnRootDirectory.setText("Browse...");
-		btnRootDirectory.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
+		btnRootDirectorySource = new Button(grpExistingApplicationModel, SWT.NONE);
+		btnRootDirectorySource.setText("Browse...");
+		btnRootDirectorySource.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
 
 		tree = new Tree(grpExistingApplicationModel, SWT.BORDER | SWT.CHECK);
-		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 3));
+		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 3));
 
 		btnSelectAll = new Button(grpExistingApplicationModel, SWT.NONE);
 		btnSelectAll.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
@@ -126,14 +176,25 @@ public class ApplicationModelPart {
 
 		btnCopyFilesTo = new Button(grpExistingApplicationModel, SWT.CHECK);
 		btnCopyFilesTo.setSelection(false);
-		context.modify(WizardConstants.COPY_MODEL_FILES,
-				btnCopyFilesTo.getSelection());
-		btnCopyFilesTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 5, 1));
-		btnCopyFilesTo.setText("Copy files to application project");
+		context.modify(WizardConstants.COPY_MODEL_FILES, btnCopyFilesTo.getSelection());
+		btnCopyFilesTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		btnCopyFilesTo.setText("Copy files");
+		btnCopyFilesTo.setToolTipText("If not checked files will be referenced, else they will be copied");
 		btnCopyFilesTo.setSelection(true);
+
+		txtRootDirectoryDestination = new Text(grpExistingApplicationModel, SWT.BORDER);
+		txtRootDirectoryDestination.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+		txtRootDirectoryDestination.setMessage(BROWSE_PROJECTS);
+		txtRootDirectoryDestination.setToolTipText(BROWSE_PROJECTS);
+
+		btnRootDirectoryDestination = new Button(grpExistingApplicationModel, SWT.NONE);
+		btnRootDirectoryDestination.setText("Browse...");
+		btnRootDirectoryDestination.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
+		btnRootDirectoryDestination.setEnabled(false);
+
 		addListener();
 		btnCopyFilesTo.notifyListeners(SWT.Selection, new Event());
+		context.modify(WizardConstants.APPLICATION_MODEL_COLLECTION, applicationModel);
 	}
 
 	/**
@@ -161,8 +222,7 @@ public class ApplicationModelPart {
 						if (item.getGrayed())
 							containsGrayed = true;
 					}
-					if (containsNone && containsAll
-							|| (containsAll && !containsNone && containsGrayed)) {
+					if (containsNone && containsAll || (containsAll && !containsNone && containsGrayed)) {
 						// not all elements selected
 						items.setGrayed(true);
 						items.setChecked(true);
@@ -185,7 +245,9 @@ public class ApplicationModelPart {
 			}
 		};
 
-		txtRootDirectory.addTraverseListener(new TraverseListener() {
+		// Add listener to do refresh button if enter is clicked in the Source
+		// Text.
+		txtRootDirectorySource.addTraverseListener(new TraverseListener() {
 
 			@Override
 			public void keyTraversed(TraverseEvent e) {
@@ -196,17 +258,16 @@ public class ApplicationModelPart {
 			}
 		});
 
-		// Choose the root directory
-		btnRootDirectory.addSelectionListener(new SelectionListener() {
+		// Choose the root source directory
+		btnRootDirectorySource.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dialog = new DirectoryDialog(btnRootDirectory
-						.getShell());
+				DirectoryDialog dialog = new DirectoryDialog(btnRootDirectorySource.getShell());
 				dialog.setFilterPath(workspace.getLocationURI().getPath());
 				String dir = dialog.open();
 				if (dir != null)
-					txtRootDirectory.setText(dir.trim());
+					txtRootDirectorySource.setText(dir.trim());
 				btnRefresh.notifyListeners(SWT.Selection, new Event());
 			}
 
@@ -256,13 +317,13 @@ public class ApplicationModelPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String text = txtRootDirectory.getText();
+				String text = txtRootDirectorySource.getText();
 				tree.clearAll(true);
 				tree.removeAll();
 				if (text == null || text.equals(""))
 					return;
-//				IPath path = new Path(text);
-//				File rootFile = path.toFile();
+				// IPath path = new Path(text);
+				// File rootFile = path.toFile();
 				File rootFile = new File(text);
 				context.modify(WizardConstants.APPLICATION_MODEL_ROOT, rootFile);
 				applicationModel.clear();
@@ -273,7 +334,7 @@ public class ApplicationModelPart {
 					makeTree(rootFile, item);
 					item.setExpanded(true);
 				} else {
-					context.modify(WizardConstants.APPLICATION_MODEL_LIST, null);
+					context.modify(WizardConstants.APPLICATION_MODEL_COLLECTION, null);
 					TreeItem item = new TreeItem(tree, SWT.NONE);
 					item.setImage(imgError);
 					item.setText("An error occured while trying to read directory! Maybe its not existend.");
@@ -290,8 +351,42 @@ public class ApplicationModelPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				context.modify(WizardConstants.COPY_MODEL_FILES,
-						btnCopyFilesTo.getSelection());
+				context.modify(WizardConstants.COPY_MODEL_FILES, btnCopyFilesTo.getSelection());
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+
+		// Choose the root destination directory
+		txtRootDirectoryDestination.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				context.modify(WizardConstants.APPLICATION_MODEL_DESTINATION, txtRootDirectoryDestination.getText());
+			}
+		});
+
+		// Open a FolderSelectionDialog
+		btnRootDirectoryDestination.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FolderAndZipFolderSelectionDialog dialog = new FolderAndZipFolderSelectionDialog(btnRootDirectoryDestination
+						.getShell(), "Choose a folder:", workspace, template, appName, genName);
+				Object data = wizardSelection.getData();
+				if (data.equals(WizardConstants.RADIO_1))
+					dialog.setFlags(true, true, true);
+				else if (data.equals(WizardConstants.RADIO_2))
+					dialog.setFlags(true, true, false);
+				else
+					dialog.setFlags(true, false, true);
+				dialog.setBlockOnOpen(true);
+				dialog.open();
+				Object[] result = dialog.getResult();
+				if (result != null)
+					txtRootDirectoryDestination.setText(((File) result[0]).toString());
 			}
 
 			@Override
@@ -324,12 +419,10 @@ public class ApplicationModelPart {
 								setEvent(item, false);
 					} else if (items.getChecked()) {
 						applicationModel.add((File) items.getData());
-						context.modify(WizardConstants.APPLICATION_MODEL_LIST,
-								applicationModel);
+						context.modify(WizardConstants.APPLICATION_MODEL_COLLECTION, applicationModel);
 					} else {
 						applicationModel.remove(items.getData());
-						context.modify(WizardConstants.APPLICATION_MODEL_LIST,
-								applicationModel);
+						context.modify(WizardConstants.APPLICATION_MODEL_COLLECTION, applicationModel);
 					}
 					TreeItem parentItem = items.getParentItem();
 					if (parentItem != null) {
@@ -347,8 +440,37 @@ public class ApplicationModelPart {
 	}
 
 	/**
-	 * Creates the representation of the file tree for the given directory
-	 * (recursively)
+	 * Listens to {@link WizardConstants#TEMPLATE}. If template not null destination button is enabled.
+	 * 
+	 * @param template
+	 *            the template
+	 */
+	@Inject
+	private void enableButton(@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template) {
+		if (btnRootDirectoryDestination != null && !btnRootDirectoryDestination.isDisposed()) {
+			if (template != null)
+				btnRootDirectoryDestination.setEnabled(true);
+			else
+				btnRootDirectoryDestination.setEnabled(false);
+		}
+	}
+
+	/**
+	 * Sets the default text, listens to {@link WizardConstants#APP_PROJ_NAME}
+	 * 
+	 * @param name
+	 *            the application project name.
+	 */
+	@Inject
+	private void setRootDestination(@Optional @Named(WizardConstants.APP_PROJ_NAME) String name) {
+		if (txtRootDirectoryDestination != null && !txtRootDirectoryDestination.isDisposed()) {
+			if (name != null)
+				txtRootDirectoryDestination.setText(name + File.separator + "model");
+		}
+	}
+
+	/**
+	 * Creates the representation of the file tree for the given directory (recursively)
 	 * 
 	 * @param directory
 	 *            which will be used as the root of this tree part
