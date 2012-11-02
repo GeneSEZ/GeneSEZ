@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.page;
 
 import javax.inject.Inject;
@@ -40,7 +46,7 @@ import org.genesez.eclipse4.wizard.util.WizardConstants;
  * </p>
  * See their documentation for needed {@link IEclipseContext} elements.
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 @SuppressWarnings("restriction")
@@ -61,18 +67,22 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 	 *            the host window, which contains the context.
 	 */
 	public GeneSEZProjectWizardSelectionPage(String pageName, MWindow hostWin) {
-		super(pageName,hostWin);
+		super(pageName, hostWin);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardPage#initializeContext()
+	 * 
+	 * @see
+	 * org.genesez.eclipse4.wizard.page.GeneSEZProjectWizardPage#initializeContext
+	 * ()
 	 */
 	@Override
 	protected void initializeContext() {
 		context.declareModifiable(WizardConstants.CHOOSE_WIZARD);
 		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
 		context.declareModifiable(WizardConstants.GEN_PROJ_NAME);
+		context.declareModifiable(WizardConstants.START_PLUGIN_WIZARD);
 		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(IWizardPage.class);
 	}
@@ -87,13 +97,10 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 	protected MUIElement createModel() {
 
 		// Create the model elements
-		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE
-				.createPerspectiveStack();
+		MPerspectiveStack pStack = MAdvancedFactory.INSTANCE.createPerspectiveStack();
 		ContextInjectionFactory.inject(pStack, context);
-		MPerspective perspective = MAdvancedFactory.INSTANCE
-				.createPerspective();
-		MPartSashContainer complete = MBasicFactory.INSTANCE
-				.createPartSashContainer();
+		MPerspective perspective = MAdvancedFactory.INSTANCE.createPerspective();
+		MPartSashContainer complete = MBasicFactory.INSTANCE.createPartSashContainer();
 		complete.setHorizontal(false);
 		MInputPart wizardSelection = MBasicFactory.INSTANCE.createInputPart();
 		MPart description = MBasicFactory.INSTANCE.createPart();
@@ -109,16 +116,14 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 		// set the appropriate contributionURI e. g. bundleclass
 		projectSettings
 				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ProjectSettingsPart");
-		description
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
-		wizardSelection
-				.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ChooseWizardPart");
+		description.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.DescriptionPart");
+		wizardSelection.setContributionURI("bundleclass://org.genesez.eclipse/org.genesez.eclipse4.wizard.ui.ChooseWizardPart");
 		return pStack;
 	}
 
 	/**
-	 * Updates the Message if certain Context elements Change.
-	 * Sets also whether page is completed.
+	 * Updates the Message if certain Context elements Change. Sets also whether
+	 * page is completed.
 	 * 
 	 * @param selectButton
 	 *            {@link WizardConstants#CHOOSE_WIZARD}
@@ -128,25 +133,27 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 	 *            {@link WizardConstants#GEN_PROJ_NAME}
 	 */
 	@Inject
-	private void updateMessage(
-			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectButton,
+	private void updateMessage(@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectButton,
 			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appProjectName,
-			@Optional @Named(WizardConstants.GEN_PROJ_NAME) String genProjectName) {
+			@Optional @Named(WizardConstants.GEN_PROJ_NAME) String genProjectName,
+			@Optional @Named(WizardConstants.START_PLUGIN_WIZARD) boolean startPIWizard) {
 		if (selectButton == null || selectButton.isDisposed()) {
 			this.setMessage(CHOOSE_A_WIZARD);
 			this.setPageComplete(false);
 		} else {
+			boolean isRadio3 = selectButton.getData().equals(WizardConstants.RADIO_3);
 			String message = "";
 			if (appProjectName == null || appProjectName.equals(""))
-				message = message.concat(ENTER_APP_PROJECTNAME);
+				if (!isRadio3)
+					message = message.concat(ENTER_APP_PROJECTNAME);
 			if (genProjectName == null || genProjectName.equals(""))
-				message = message.concat(ENTER_GEN_PROJECTNAME);
+				if (!(isRadio3 && startPIWizard))
+					message = message.concat(ENTER_GEN_PROJECTNAME);
 			if (message.equals("")) {
-				if (projectsAlreadyExists(appProjectName, genProjectName,
-						(Integer) selectButton.getData())) {
+				if (projectsAlreadyExists(appProjectName, genProjectName, (Integer) selectButton.getData())) {
 					this.setMessage(PROJECTNAME_EXSISTS, ERROR);
 					this.setPageComplete(false);
-				} else if (appProjectName.equals(genProjectName)) {
+				} else if (appProjectName.equals(genProjectName) && !isRadio3) {
 					this.setMessage(PROJECTNAMES_EQUAL, ERROR);
 					this.setPageComplete(false);
 				} else {
@@ -161,7 +168,7 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 	}
 
 	/**
-	 * Checks whether the project already exists, uses the buttonData to
+	 * Checks whether the projects already exists, uses the buttonData to
 	 * determine which projects should be checked.
 	 * 
 	 * @param appProjName
@@ -172,12 +179,10 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 	 *            the button data (determines which button was selected).
 	 * @return true if project exists.
 	 */
-	private boolean projectsAlreadyExists(String appProjName,
-			String genProjName, int buttonData) {
+	private boolean projectsAlreadyExists(String appProjName, String genProjName, int buttonData) {
 		switch (buttonData) {
 		case WizardConstants.RADIO_1:
-			return projectAlreadyExists(appProjName)
-					|| projectAlreadyExists(genProjName);
+			return projectAlreadyExists(appProjName) || projectAlreadyExists(genProjName);
 		case WizardConstants.RADIO_2:
 			return projectAlreadyExists(appProjName);
 		case WizardConstants.RADIO_3:

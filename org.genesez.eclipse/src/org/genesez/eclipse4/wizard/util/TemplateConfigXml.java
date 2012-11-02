@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.util;
 
 import java.io.File;
@@ -13,7 +19,7 @@ import org.eclipse.core.runtime.IPath;
  * The Bean class for JAXB parsing for a template zip file.
  * Contains also some additional information.
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  */
 @XmlRootElement(name = "templateConfig")
 public class TemplateConfigXml {

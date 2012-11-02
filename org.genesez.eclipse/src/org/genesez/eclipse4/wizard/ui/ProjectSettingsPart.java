@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.ui;
 
 import javax.annotation.PostConstruct;
@@ -27,8 +33,7 @@ import org.genesez.eclipse4.wizard.util.ProjectSelectionDialog;
 import org.genesez.eclipse4.wizard.util.WizardConstants;
 
 /**
- * Part to enter an application and a generator project name. Also used to
- * choose application or generator project
+ * Part to enter an application and a generator project name. Also used to choose application or generator project
  * 
  * Modify context elements:
  * <p>
@@ -36,6 +41,9 @@ import org.genesez.eclipse4.wizard.util.WizardConstants;
  * </p>
  * <p>
  * {@link WizardConstants#GEN_PROJ_NAME}
+ * </p>
+ * <p>
+ * {@link WizardConstants#START_PLUGIN_WIZARD}
  * </p>
  * 
  * Listens to context element:
@@ -46,21 +54,23 @@ import org.genesez.eclipse4.wizard.util.WizardConstants;
  * {@link IWorkspaceRoot}
  * </p>
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 @SuppressWarnings("restriction")
 public class ProjectSettingsPart {
 	private static final String PROJECT_INSERT_MESSAGE = "Insert application project name";
-	private static final String PROJECT_CHOOSE_MESSAGE = "Choose application project";
+	// private static final String PROJECT_CHOOSE_MESSAGE = "Choose application project";
 	private static final String GENERATOR_INSERT_MESSAGE = "Insert generator project name";
 	private static final String GENERATOR_CHOOSE_MESSAGE = "Choose generator project";
 
+	private Group grpProjectSettings;
 	private Text textProjectname;
 	private Text textGeneratorname;
-	private Button browseProject;
+	// private Button browseProject;
 	private Button browseGenerator;
-	private Group grpProjectSettings;
+	private Button btnPlugInProject;
+
 	private Object radioData;
 	private boolean textNotSet = true;
 
@@ -81,24 +91,22 @@ public class ProjectSettingsPart {
 	@PostConstruct
 	public void createControls(final Composite parent) {
 		parent.setLayout(new GridLayout(1, false));
-		grpProjectSettings = new Group(parent, SWT.BORDER
-				| SWT.SHADOW_ETCHED_IN);
-		grpProjectSettings.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false));
+		grpProjectSettings = new Group(parent, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
+		grpProjectSettings.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		grpProjectSettings.setText("Project Settings");
-		grpProjectSettings.setLayout(GridLayoutFactory
-				.copyLayout(WizardConstants.L_GL_TXTBTN));
+		grpProjectSettings.setLayout(GridLayoutFactory.copyLayout(WizardConstants.L_GL_TXTBTN));
 
 		textProjectname = new Text(grpProjectSettings, SWT.BORDER);
-		textProjectname.setLayoutData(WizardConstants.L_GD_TXTBTN_TEXT);
+		textProjectname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 5, 1));
+		// textProjectname.setLayoutData(WizardConstants.L_GD_TXTBTN_TEXT);
 		textProjectname.setToolTipText(PROJECT_INSERT_MESSAGE);
 		textProjectname.setMessage(PROJECT_INSERT_MESSAGE);
 		textProjectname.setEnabled(false);
 
-		browseProject = new Button(grpProjectSettings, SWT.NONE);
-		browseProject.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
-		browseProject.setText("Browse...");
-		browseProject.setEnabled(false);
+		// browseProject = new Button(grpProjectSettings, SWT.NONE);
+		// browseProject.setLayoutData(WizardConstants.L_GD_TXTBTN_BUTTON);
+		// browseProject.setText("Browse...");
+		// browseProject.setEnabled(false);
 
 		textGeneratorname = new Text(grpProjectSettings, SWT.BORDER);
 		textGeneratorname.setLayoutData(WizardConstants.L_GD_TXTBTN_TEXT);
@@ -111,51 +119,61 @@ public class ProjectSettingsPart {
 		browseGenerator.setText("Browse...");
 		browseGenerator.setEnabled(false);
 
+		btnPlugInProject = new Button(grpProjectSettings, SWT.CHECK);
+		btnPlugInProject.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 5, 1));
+		btnPlugInProject.setText("Open Plugin-Project Wizard");
+		btnPlugInProject
+				.setToolTipText("If not checked a default generator project will be created, else a plugin Wizard will open.");
+		btnPlugInProject.setEnabled(false);
 		addListener();
 	}
 
 	/**
-	 * Sets the state of the project settings elements depending on
-	 * {@link WizardConstants#CHOOSE_WIZARD}
+	 * Sets the state of the project settings elements depending on {@link WizardConstants#CHOOSE_WIZARD}
 	 * 
 	 * @param selectedRadioButton
 	 *            the selected button.
 	 */
 	@Inject
-	private void setProjectSettingElements(
-			@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectedRadioButton) {
-		if (selectedRadioButton != null && grpProjectSettings != null
-				&& !grpProjectSettings.isDisposed()) {
+	private void setProjectSettingElements(@Optional @Named(WizardConstants.CHOOSE_WIZARD) Button selectedRadioButton) {
+		if (selectedRadioButton != null && grpProjectSettings != null && !grpProjectSettings.isDisposed()) {
 			radioData = selectedRadioButton.getData();
+			textProjectname.setText("");
+			textGeneratorname.setText("");
+			textProjectname.setEnabled(true);
+			textGeneratorname.setEnabled(true);
 			if (radioData.equals(WizardConstants.RADIO_1)) {
 				textNotSet = true;
 				textProjectname.setMessage(PROJECT_INSERT_MESSAGE);
 				textGeneratorname.setMessage(GENERATOR_INSERT_MESSAGE);
 				textProjectname.setEditable(true);
 				textGeneratorname.setEditable(true);
-				browseProject.setEnabled(false);
+				// browseProject.setEnabled(false);
 				browseGenerator.setEnabled(false);
+				btnPlugInProject.setEnabled(false);
 			} else if (radioData.equals(WizardConstants.RADIO_2)) {
 				textNotSet = false;
 				textProjectname.setMessage(PROJECT_INSERT_MESSAGE);
 				textGeneratorname.setMessage(GENERATOR_CHOOSE_MESSAGE);
 				textProjectname.setEditable(true);
 				textGeneratorname.setEditable(false);
-				browseProject.setEnabled(false);
+				// browseProject.setEnabled(false);
 				browseGenerator.setEnabled(true);
+				btnPlugInProject.setEnabled(false);
 			} else if (radioData.equals(WizardConstants.RADIO_3)) {
 				textNotSet = false;
-				textProjectname.setMessage(PROJECT_CHOOSE_MESSAGE);
 				textGeneratorname.setMessage(GENERATOR_INSERT_MESSAGE);
-				textProjectname.setEditable(false);
-				textGeneratorname.setEditable(true);
-				browseProject.setEnabled(true);
+				if(btnPlugInProject.getSelection())
+					textGeneratorname.setEnabled(false);
+				else{
+					textGeneratorname.setEditable(true);
+				}
+				// textProjectname.setEditable(false);
+				// browseProject.setEnabled(true);
+				textProjectname.setEnabled(false);
 				browseGenerator.setEnabled(false);
+				btnPlugInProject.setEnabled(true);
 			}
-			textProjectname.setText("");
-			textGeneratorname.setText("");
-			textProjectname.setEnabled(true);
-			textGeneratorname.setEnabled(true);
 		}
 	}
 
@@ -168,14 +186,10 @@ public class ProjectSettingsPart {
 		textProjectname.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (radioData != null
-						&& radioData.equals(WizardConstants.RADIO_1)
-						&& textNotSet) {
-					textGeneratorname.setText(textProjectname.getText().concat(
-							".generator"));
+				if (radioData != null && radioData.equals(WizardConstants.RADIO_1) && textNotSet) {
+					textGeneratorname.setText(textProjectname.getText().concat(".generator"));
 				}
-				context.modify(WizardConstants.APP_PROJ_NAME, textProjectname
-						.getText().trim());
+				context.modify(WizardConstants.APP_PROJ_NAME, textProjectname.getText().trim());
 			}
 		});
 
@@ -201,8 +215,7 @@ public class ProjectSettingsPart {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				context.modify(WizardConstants.GEN_PROJ_NAME, textGeneratorname
-						.getText().trim());
+				context.modify(WizardConstants.GEN_PROJ_NAME, textGeneratorname.getText().trim());
 			}
 		});
 
@@ -211,9 +224,8 @@ public class ProjectSettingsPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SelectionDialog dialog = new ProjectSelectionDialog(
-						browseGenerator.getShell(), "Choose Project:",
-						workspace, true);
+				SelectionDialog dialog = new ProjectSelectionDialog(browseGenerator.getShell(), "Choose Project:", workspace,
+						true);
 				String result = dialogResult(dialog);
 				if (result != null)
 					textGeneratorname.setText(result);
@@ -224,17 +236,34 @@ public class ProjectSettingsPart {
 			}
 		});
 
-		// opens a dialog to select a project
-		browseProject.addSelectionListener(new SelectionListener() {
+		// // opens a dialog to select a project
+		// browseProject.addSelectionListener(new SelectionListener() {
+		//
+		// @Override
+		// public void widgetSelected(SelectionEvent e) {
+		// SelectionDialog dialog = new ProjectSelectionDialog(
+		// browseProject.getShell(), "Choose Project:", workspace,
+		// false);
+		// String result = dialogResult(dialog);
+		// if (result != null)
+		// textProjectname.setText(result);
+		// }
+		//
+		// @Override
+		// public void widgetDefaultSelected(SelectionEvent e) {
+		// }
+		// });
+
+		btnPlugInProject.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SelectionDialog dialog = new ProjectSelectionDialog(
-						browseProject.getShell(), "Choose Project:", workspace,
-						false);
-				String result = dialogResult(dialog);
-				if (result != null)
-					textProjectname.setText(result);
+				if (btnPlugInProject.getSelection()) {
+					textGeneratorname.setEnabled(false);
+				} else {
+					textGeneratorname.setEnabled(true);
+				}
+				context.modify(WizardConstants.START_PLUGIN_WIZARD, btnPlugInProject.getSelection());
 			}
 
 			@Override

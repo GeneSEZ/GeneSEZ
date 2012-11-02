@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard;
 
 import javax.inject.Inject;
@@ -29,7 +35,7 @@ import org.genesez.eclipse4.wizard.util.WizardConstants;
  * The GeneSEZ Project Wizard, used to create GeneSEZ Projects with application
  * and/or generator project from templates.
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 @SuppressWarnings("restriction")
@@ -141,15 +147,17 @@ public class GeneSEZProjectWizard extends Wizard implements INewWizard {
 		context.set(WizardConstants.CHOOSE_WIZARD, null);
 		context.set(WizardConstants.APP_PROJ_NAME, null);
 		context.set(WizardConstants.GEN_PROJ_NAME, null);
+		context.set(WizardConstants.START_PLUGIN_WIZARD, false);
 		context.set(WizardConstants.DESCRIPTION, null);
 		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.set(WizardConstants.CHOOSE_WORKFLOW, null);
 		context.set(WizardConstants.WORKFLOW_TEMPLATE, null);
 		context.set(WizardConstants.WORKFLOW_FILENAME, null);
 		context.set(WizardConstants.WORKFLOW_DIRECTORY, null);
-		context.set(WizardConstants.APPLICATION_MODEL_LIST, null);
+		context.set(WizardConstants.APPLICATION_MODEL_COLLECTION, null);
 		context.set(WizardConstants.COPY_MODEL_FILES, false);
 		context.set(WizardConstants.APPLICATION_MODEL_ROOT, null);
+		context.set(WizardConstants.APPLICATION_MODEL_DESTINATION, null);
 		context.set(IWizardPage.class, null);
 		context.set(IWorkspaceRoot.class, ResourcesPlugin.getWorkspace()
 				.getRoot());

@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.util.replace.simpel;
 
 import java.io.BufferedReader;
@@ -8,6 +14,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Dictionary;
 
+/**
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ *
+ */
 public abstract class SimpleTextReplacer {
 
 	protected String[] fileExtensions = new String[]{};

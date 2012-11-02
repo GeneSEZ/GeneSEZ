@@ -1,4 +1,13 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.page;
+
+import java.io.File;
+import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -38,13 +47,15 @@ import org.genesez.eclipse4.wizard.util.WizardConstants;
  * </p>
  * See their documentation for needed {@link IEclipseContext} elements.
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 @SuppressWarnings("restriction")
 public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
 
-	private static final String CHOOSE_A_TEMPLATE = "Choose a template for project generation";
+	private static final String CHOOSE_A_TEMPLATE = "Choose a template for project generation.";
+	private static final String CHOOSE_A_DESTINATION = "Choose a destination for the application model.";
+	private static final String NOT_IN_APP_OR_GEN_PROJECT = "Application model needs to be either in application or generator project.";
 
 	/**
 	 * Creates the page.
@@ -70,9 +81,13 @@ public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
 		context.declareModifiable(WizardConstants.DESCRIPTION);
 		context.declareModifiable(WizardConstants.TEMPLATE);
 		context.declareModifiable(WizardConstants.CHOOSE_WIZARD);
-		context.declareModifiable(WizardConstants.APPLICATION_MODEL_LIST);
+		context.declareModifiable(WizardConstants.APPLICATION_MODEL_COLLECTION);
 		context.declareModifiable(WizardConstants.COPY_MODEL_FILES);
 		context.declareModifiable(WizardConstants.APPLICATION_MODEL_ROOT);
+		context.declareModifiable(WizardConstants.CHOOSE_WORKFLOW);
+		context.declareModifiable(WizardConstants.APP_PROJ_NAME);
+		context.declareModifiable(WizardConstants.GEN_PROJ_NAME);
+		context.declareModifiable(WizardConstants.APPLICATION_MODEL_DESTINATION);
 		context.declareModifiable(IWizardPage.class);
 		context.set(WizardConstants.IS_EXAMPLE, false);
 	}
@@ -124,15 +139,45 @@ public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
 	 * 
 	 * @param template
 	 *            {@link WizardConstants#TEMPLATE}
+	 * @param model
+	 *            {@link WizardConstants#APPLICATION_MODEL_COLLECTION}
+	 * @param destination
+	 *            {@link WizardConstants#APPLICATION_MODEL_DESTINATION}
+	 * @param appName
+	 *            {@link WizardConstants#APP_PROJ_NAME}
+	 * @param genName
+	 *            {@link WizardConstants#GEN_PROJ_NAME}
 	 */
 	@Inject
 	private void updateMessage(
-			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template) {
+			@Optional @Named(WizardConstants.TEMPLATE) TemplateConfigXml template,
+			@Optional @Named(WizardConstants.APPLICATION_MODEL_COLLECTION) Collection<File> model,
+			@Optional @Named(WizardConstants.APPLICATION_MODEL_DESTINATION) String destination,
+			@Optional @Named(WizardConstants.APP_PROJ_NAME) String appName,
+			@Optional @Named(WizardConstants.GEN_PROJ_NAME) String genName) {
 		if (template == null) {
 			this.setMessage(CHOOSE_A_TEMPLATE);
 			this.setPageComplete(false);
-		} else
-			this.setPageComplete(true);
+		} else {
+			if (model != null && !model.isEmpty()) {
+				if (destination == null || destination.equals("")) {
+					this.setMessage(CHOOSE_A_DESTINATION, ERROR);
+					this.setPageComplete(false);
+				} else if (appName != null && !appName.equals("")
+						&& genName != null && !genName.equals("")
+						&& !destination.startsWith(genName + File.separator)
+						&& !destination.startsWith(appName + File.separator)) {
+					this.setMessage(NOT_IN_APP_OR_GEN_PROJECT, ERROR);
+					this.setPageComplete(false);
+				} else {
+					this.setMessage(null);
+					this.setPageComplete(true);
+				}
+			} else {
+				this.setMessage(null);
+				this.setPageComplete(true);
+			}
+		}
 	}
 
 	/**

@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.util;
 
 import java.io.BufferedInputStream;
@@ -28,6 +34,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -40,11 +47,10 @@ import org.genesez.eclipse4.wizard.util.replace.simpel.SimpleTextReplacer;
 //
 
 /**
- * A Helper class, which is used to read the information out of the
- * templateConfig.xml which is inside the template zip files and to decompress
- * the chosen zip-file, where necessary things are changed in the project.
+ * A Helper class, which is used to read the information out of the templateConfig.xml which is inside the template zip files and
+ * to decompress the chosen zip-file, where necessary things are changed in the project.
  * 
- * @author domwet
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 public class TemplateHelper {
@@ -59,11 +65,13 @@ public class TemplateHelper {
 	// Pattern.compile(".*/[.]project$|" + REPLACE_FILES);
 	public static final String FOLDER_ENDING = "(/$|[.]generator/$)";
 	public static final String GENERATOR_ENDING = ".generator";
-	public static Set<SimpleTextReplacer> replacer = ReplacerHelper
-			.getAvailableReplacer();
+	public static Set<SimpleTextReplacer> replacer = ReplacerHelper.getAvailableReplacer();
+	public static final String DEFAULT_GEN_TEMPLATE = TEMPLATE_FOLDER + "default/default.zip";
+	public static final IPath LOCATION = new Path(TemplateHelper.class.getProtectionDomain().getCodeSource().getLocation()
+			.getFile());
 
-	public static Job createJob; 
-	
+	public static Job createJob;
+
 	private static JAXBContext jc = null;
 	private static Unmarshaller un = null;
 
@@ -88,16 +96,13 @@ public class TemplateHelper {
 	 * @throws FileNotFoundException
 	 *             if the template folder couldn't be found in the project
 	 */
-	public static List<TemplateConfigXml> readTemplateInformation()
-			throws FileNotFoundException, IOException, URISyntaxException {
+	public static List<TemplateConfigXml> readTemplateInformation() throws FileNotFoundException, IOException, URISyntaxException {
 		List<TemplateConfigXml> templates = new ArrayList<TemplateConfigXml>();
-		URL url = TemplateHelper.class.getProtectionDomain().getCodeSource()
-				.getLocation();
+		URL url = TemplateHelper.class.getProtectionDomain().getCodeSource().getLocation();
 		File folder = new File(url.getPath().concat(TEMPLATE_FOLDER));
 		File[] files;
 		if (!folder.isDirectory()) {
-			throw new FileNotFoundException("Directory " + folder.toString()
-					+ "can't be found in the project.");
+			throw new FileNotFoundException("Directory " + folder.toString() + "can't be found in the project.");
 		}
 		files = folder.listFiles(new FileFilter() {
 			@Override
@@ -116,14 +121,13 @@ public class TemplateHelper {
 	}
 
 	/**
-	 * Reads the zip file archive and the templateConfig.xml in it. If not found
-	 * a warning is shown.
+	 * Reads the zip file archive and the templateConfig.xml in it. If not found a warning is shown.
 	 * 
 	 * @param file
 	 *            the archive the should be read
 	 * @return the unmarshalled templateConfig.xml
 	 */
-	private static TemplateConfigXml readArchive(File file) {
+	public static TemplateConfigXml readArchive(File file) {
 		ZipFile zf = null;
 		TemplateConfigXml toReturn = null;
 		try {
@@ -131,14 +135,11 @@ public class TemplateHelper {
 			ZipEntry entry = zf.getEntry(CONFIG_FILENAME);
 			if (entry == null) {
 				JOptionPane.showMessageDialog(null,
-						"Couldn't find the templateConfig.xml inside the template file: "
-								+ file.getName(),
-						"No template config file found",
-						JOptionPane.WARNING_MESSAGE);
+						"Couldn't find the templateConfig.xml inside the template file: " + file.getName(),
+						"No template config file found", JOptionPane.WARNING_MESSAGE);
 				return null;
 			}
-			InputStream stream = zf
-					.getInputStream(zf.getEntry(CONFIG_FILENAME));
+			InputStream stream = zf.getInputStream(zf.getEntry(CONFIG_FILENAME));
 			toReturn = (TemplateConfigXml) un.unmarshal(stream);
 			Enumeration<? extends ZipEntry> entries = zf.entries();
 			while (entries.hasMoreElements()) {
@@ -184,17 +185,14 @@ public class TemplateHelper {
 	 * @throws IOException
 	 *             if something went wrong with unzipping.
 	 */
-	public static List<String> decompress(TemplateConfigXml template,
-			String appProjectName, String genProjectName, String destination,
-			boolean appFromZip, boolean genFromZip, IProgressMonitor monitor)
-			throws IOException {
+	public static List<String> decompress(TemplateConfigXml template, String appProjectName, String genProjectName,
+			String destination, boolean appFromZip, boolean genFromZip, IProgressMonitor monitor) throws IOException {
 		// ZipInputstream der TemplateDatei erzeugen
 		monitor.subTask("Prepare template file for reading.");
-		InputStream resStream = TemplateHelper.class
-				.getResourceAsStream(TEMPLATE_FOLDER
-						+ template.getFile().getName());
-		ZipInputStream zis = new ZipInputStream(new BufferedInputStream(
-				resStream));
+		IPath templatePath = new Path(template.getFile().getPath());
+		InputStream resStream = TemplateHelper.class.getResourceAsStream(IPath.SEPARATOR
+				+ templatePath.makeRelativeTo(LOCATION).toOSString());
+		ZipInputStream zis = new ZipInputStream(new BufferedInputStream(resStream));
 		List<String> projects = new ArrayList<String>();
 		ZipEntry entry;
 		monitor.worked(10);
@@ -208,27 +206,22 @@ public class TemplateHelper {
 			String oldGenName = oldName.concat(GENERATOR_ENDING);
 			// überprüfen was aus Template verwendet werden soll
 			if (entryName.equals(CONFIG_FILENAME)
-					|| (!genFromZip
-							&& entryName
-									.startsWith(oldGenName + File.separator) || (!appFromZip && entryName
+					|| (!genFromZip && entryName.startsWith(oldGenName + File.separator) || (!appFromZip && entryName
 							.startsWith(oldName + File.separator))))
 				continue;
 			boolean isGenProject;
 			if (entryName.startsWith(oldGenName)) {
-				entryName = entry.getName().replaceFirst(oldGenName,
-						genProjectName);
+				entryName = entry.getName().replaceFirst(oldGenName, genProjectName);
 				isGenProject = true;
 			} else {
-				entryName = entry.getName().replaceFirst(oldName,
-						appProjectName);
+				entryName = entry.getName().replaceFirst(oldName, appProjectName);
 				isGenProject = false;
 			}
 
 			String path = destination + File.separator + entryName;
 			if (entry.isDirectory()) {
 				if (entryName.matches(appProjectName + File.separator + "$")
-						|| entryName.matches(genProjectName + File.separator
-								+ "$"))
+						|| entryName.matches(genProjectName + File.separator + "$"))
 					projects.add(entryName);
 				new File(path).mkdirs();
 			} else {
@@ -239,16 +232,14 @@ public class TemplateHelper {
 				Dictionary<String, Object> properties = new Hashtable<String, Object>();
 				properties.put(WizardConstants.TEMPLATE, template);
 				for (SimpleTextReplacer repl : replacer) {
-					if (repl.fillAndReplace(emptyFile, zis, oldName,
-							oldGenName, appProjectName, genProjectName,
-							isGenProject, properties)) {
+					if (repl.fillAndReplace(emptyFile, zis, oldName, oldGenName, appProjectName, genProjectName, isGenProject,
+							properties)) {
 						fileExistend = true;
 					}
 				}
 				if (!fileExistend) {
 					// file anlegen, wenn sie zuvor nicht angelegt wurde
-					BufferedOutputStream dest = new BufferedOutputStream(
-							new FileOutputStream(path), BUFFER);
+					BufferedOutputStream dest = new BufferedOutputStream(new FileOutputStream(path), BUFFER);
 					int count = 0;
 					byte[] data = new byte[BUFFER];
 					while ((count = zis.read(data, 0, BUFFER)) != -1) {
@@ -260,7 +251,6 @@ public class TemplateHelper {
 			}
 		}
 		zis.close();
-		System.out.println(projects);
 		return projects;
 	}
 
@@ -281,27 +271,20 @@ public class TemplateHelper {
 	 *            true if generator project should be used from template.
 	 * @return true if everything works.
 	 */
-	public static void createProject(final TemplateConfigXml template,
-			final String appProjectName, final String genProjectName,
-			final IWorkspaceRoot workspace, final boolean appFromZip,
-			final boolean genFromZip) {
+	public static void createProject(final TemplateConfigXml template, final String appProjectName, final String genProjectName,
+			final IWorkspaceRoot workspace, final boolean appFromZip, final boolean genFromZip) {
 		createJob = new Job("Creating GeneSEZ Project") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Create " + appProjectName
-						+ " GeneSEZ projects.", 100);
+				monitor.beginTask("Create " + appProjectName + " GeneSEZ projects.", 100);
 				List<String> projects = null;
 				try {
-					projects = decompress(template, appProjectName,
-							genProjectName, workspace.getLocationURI()
-									.getPath(), appFromZip, genFromZip, monitor);
+					projects = decompress(template, appProjectName, genProjectName, workspace.getLocationURI().getPath(),
+							appFromZip, genFromZip, monitor);
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					JOptionPane
-							.showMessageDialog(null,
-									"Decompression of the template failed.",
-									"Can't create projects.",
-									JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Decompression of the template failed.", "Can't create projects.",
+							JOptionPane.ERROR_MESSAGE);
 					return Status.CANCEL_STATUS;
 				}
 				if (projects == null)

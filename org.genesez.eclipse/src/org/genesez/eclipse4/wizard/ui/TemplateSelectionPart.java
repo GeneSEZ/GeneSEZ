@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse4.wizard.ui;
 
 import java.io.FileNotFoundException;
@@ -42,7 +48,7 @@ import org.genesez.eclipse4.wizard.util.WizardConstants;
  * {@link WizardConstants#IS_EXAMPLE}
  * </p>
  * 
- * @author Dominik Wetzel
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
  * 
  */
 @SuppressWarnings("restriction")
