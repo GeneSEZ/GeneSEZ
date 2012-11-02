@@ -605,13 +605,22 @@ public interface GpresentationPackage extends EPackage
   int POUTPUT__OWNING_ELEMENT = PELEMENT__OWNING_ELEMENT;
 
   /**
+   * The feature id for the '<em><b>Output</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int POUTPUT__OUTPUT = PELEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The number of structural features of the '<em>POutput</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int POUTPUT_FEATURE_COUNT = PELEMENT_FEATURE_COUNT + 0;
+  int POUTPUT_FEATURE_COUNT = PELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gpresentation.impl.PActionImpl <em>PAction</em>}' class.
@@ -871,22 +880,22 @@ public interface GpresentationPackage extends EPackage
   int PPACKAGE__ROOTS = 1;
 
   /**
-   * The feature id for the '<em><b>Nested Packages</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PPACKAGE__NESTED_PACKAGES = 2;
-
-  /**
    * The feature id for the '<em><b>Owning Package</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PPACKAGE__OWNING_PACKAGE = 3;
+  int PPACKAGE__OWNING_PACKAGE = 2;
+
+  /**
+   * The feature id for the '<em><b>Nested Packages</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PPACKAGE__NESTED_PACKAGES = 3;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' containment reference list.
@@ -1176,6 +1185,17 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   EClass getPOutput();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gpresentation.POutput#getOutput <em>Output</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Output</em>'.
+   * @see org.genesez.metamodel.gpresentation.POutput#getOutput()
+   * @see #getPOutput()
+   * @generated
+   */
+  EAttribute getPOutput_Output();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gpresentation.PAction <em>PAction</em>}'.
@@ -1653,6 +1673,14 @@ public interface GpresentationPackage extends EPackage
      * @generated
      */
     EClass POUTPUT = eINSTANCE.getPOutput();
+
+    /**
+     * The meta object literal for the '<em><b>Output</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute POUTPUT__OUTPUT = eINSTANCE.getPOutput_Output();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gpresentation.impl.PActionImpl <em>PAction</em>}' class.
