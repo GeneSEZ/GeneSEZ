@@ -28,6 +28,7 @@ create PPackage transform(Model m) :
 	useLogger("org.genesez.adapter.uml2") ->
 	save("presentationmodel", this) ->
 	logDebug("transform: " + m.name) ->
+	setXmiGuid( m.getXmiId() ) ->
 	setName( m.name ) ->
 	// walk containment
 	m.nestedPackage.transform() ->
@@ -231,6 +232,8 @@ PContentArea makeContentArea(InstanceSpecification this) :
  * Transforms the meta data specified by stereotypes.
  */
 cached PMetaDataAware transformMetaDataAware(PMetaDataAware this, InstanceSpecification is) :
+	// properties
+	setXmiGuid( is.getXmiId() ) ->
 	metaData.addAll( is.getAppliedStereotypes().transformStereotype() ) ->
 	value.addAll( is.transformTaggedValues() ) ->
 	this;
@@ -245,6 +248,7 @@ cached PMetaDataAware transformMetaDataAware(PMetaDataAware this, InstanceSpecif
 create PPackage makePackage(InstanceSpecification is) :
 	logDebug("make package: " + is.name) ->
 	// properties
+	setXmiGuid( is.getXmiId() ) ->
 	setName( is.name ) ->
 	// containment: either in owning package or root package
 	is.hasOwningPackage()
