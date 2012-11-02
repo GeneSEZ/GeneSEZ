@@ -1,0 +1,51 @@
+import gcore;
+
+/**
+ * Getter which returns the GCore model inside coremodel slot.
+ */
+MModel globalVarGcoreModel() :
+	GLOBALVAR coremodel;
+	
+
+/**
+ * Getter for an MAttribute by it's xmi guid.
+ * 
+ * @param model		the model where the attribute is placed
+ * @param xmiGuid	the xmi guid of the attribute
+ * @return the attribute where the xmi guid is equals, otherwise null
+ */
+MAttribute getMAttributeByXmiGuid(MModel model, String xmiGuid) :
+	getMElementByXmiGuid(model, xmiGuid);
+	
+/**
+ *	Getter for a MClassifier identified by its xmiGuid
+ *
+ *	@param	model	instance of MModel
+ *	@param	xmiGuid	xmi guid of the MClassifier
+ *
+ *	@return	instance of MClassifier identified by xmiGuid or null
+ */
+MClassifier getMClassifierByXmiGuid(MModel model, String xmiGuid) :
+	getMElementByXmiGuid(model, xmiGuid);
+	
+/**
+ * Getter for an MElement by it's xmi guid.
+ * 
+ * @param model		the model where the element is placed
+ * @param xmiGuid	the xmi guid of the element
+ * @return the element where the xmi guid is equals, otherwise null
+ */
+MElement getMElementByXmiGuid(MModel model, String xmiGuid) :
+	getEObject(model, xmiGuid);
+
+/**
+ * Getter for an EObject by it's URI. 
+ * In case of an MElement the URI is normally the xmiGuid.
+ * 
+ * @param 	model 	The model where the object is placed.
+ * @param 	uri 	The URI of the object.
+ * @return 	The object where the URI is equals, otherwise null.
+ */
+private Object getEObject(MModel model, String uri) :
+	//JAVA org.genesez.example.java.jsf.addressbook.generator.GcoreAccessHelper.getEObjectByUri(org.genesez.metamodel.gcore.MModel, java.lang.String);
+	JAVA org.genesez.example.java.jsf.addressbook.generator.GcoreAccessHelper.getMElement(org.genesez.metamodel.gcore.MModel, java.lang.String);
