@@ -8,6 +8,7 @@ package org.genesez.metamodel.gpresentation.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -15,6 +16,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
@@ -33,6 +35,7 @@ import org.genesez.metamodel.gpresentation.PValue;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.genesez.metamodel.gpresentation.impl.PMetaDataAwareImpl#getXmiGuid <em>Xmi Guid</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PMetaDataAwareImpl#getMetaData <em>Meta Data</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PMetaDataAwareImpl#getValue <em>Value</em>}</li>
  * </ul>
@@ -42,6 +45,26 @@ import org.genesez.metamodel.gpresentation.PValue;
  */
 public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDataAware
 {
+  /**
+   * The default value of the '{@link #getXmiGuid() <em>Xmi Guid</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getXmiGuid()
+   * @generated
+   * @ordered
+   */
+  protected static final String XMI_GUID_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getXmiGuid() <em>Xmi Guid</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getXmiGuid()
+   * @generated
+   * @ordered
+   */
+  protected String xmiGuid = XMI_GUID_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getMetaData() <em>Meta Data</em>}' reference list.
    * <!-- begin-user-doc -->
@@ -81,6 +104,29 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
   protected EClass eStaticClass()
   {
     return GpresentationPackage.Literals.PMETA_DATA_AWARE;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getXmiGuid()
+  {
+    return xmiGuid;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setXmiGuid(String newXmiGuid)
+  {
+    String oldXmiGuid = xmiGuid;
+    xmiGuid = newXmiGuid;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID, oldXmiGuid, xmiGuid));
   }
 
   /**
@@ -154,6 +200,8 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
   {
     switch (featureID)
     {
+      case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
+        return getXmiGuid();
       case GpresentationPackage.PMETA_DATA_AWARE__META_DATA:
         return getMetaData();
       case GpresentationPackage.PMETA_DATA_AWARE__VALUE:
@@ -173,6 +221,9 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
   {
     switch (featureID)
     {
+      case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
+        setXmiGuid((String)newValue);
+        return;
       case GpresentationPackage.PMETA_DATA_AWARE__META_DATA:
         getMetaData().clear();
         getMetaData().addAll((Collection<? extends PMetaData>)newValue);
@@ -195,6 +246,9 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
   {
     switch (featureID)
     {
+      case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
+        setXmiGuid(XMI_GUID_EDEFAULT);
+        return;
       case GpresentationPackage.PMETA_DATA_AWARE__META_DATA:
         getMetaData().clear();
         return;
@@ -215,12 +269,31 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
   {
     switch (featureID)
     {
+      case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
+        return XMI_GUID_EDEFAULT == null ? xmiGuid != null : !XMI_GUID_EDEFAULT.equals(xmiGuid);
       case GpresentationPackage.PMETA_DATA_AWARE__META_DATA:
         return metaData != null && !metaData.isEmpty();
       case GpresentationPackage.PMETA_DATA_AWARE__VALUE:
         return value != null && !value.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (xmiGuid: ");
+    result.append(xmiGuid);
+    result.append(')');
+    return result.toString();
   }
 
 } //PMetaDataAwareImpl

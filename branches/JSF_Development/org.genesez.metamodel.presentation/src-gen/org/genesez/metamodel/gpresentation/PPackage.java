@@ -22,10 +22,11 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getXmiGuid <em>Xmi Guid</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getName <em>Name</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getRoots <em>Roots</em>}</li>
- *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getNestedPackages <em>Nested Packages</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PPackage#getMetaData <em>Meta Data</em>}</li>
  * </ul>
  * </p>
@@ -36,6 +37,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface PPackage extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Xmi Guid</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Xmi Guid</em>' attribute.
+   * @see #setXmiGuid(String)
+   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPPackage_XmiGuid()
+   * @model required="true"
+   * @generated
+   */
+  String getXmiGuid();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gpresentation.PPackage#getXmiGuid <em>Xmi Guid</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Xmi Guid</em>' attribute.
+   * @see #getXmiGuid()
+   * @generated
+   */
+  void setXmiGuid(String value);
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->

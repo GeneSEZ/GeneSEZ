@@ -34,10 +34,11 @@ import org.genesez.metamodel.gpresentation.PRoot;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getXmiGuid <em>Xmi Guid</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getRoots <em>Roots</em>}</li>
- *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getNestedPackages <em>Nested Packages</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getOwningPackage <em>Owning Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.impl.PPackageImpl#getMetaData <em>Meta Data</em>}</li>
  * </ul>
  * </p>
@@ -46,6 +47,26 @@ import org.genesez.metamodel.gpresentation.PRoot;
  */
 public class PPackageImpl extends EObjectImpl implements PPackage
 {
+  /**
+   * The default value of the '{@link #getXmiGuid() <em>Xmi Guid</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getXmiGuid()
+   * @generated
+   * @ordered
+   */
+  protected static final String XMI_GUID_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getXmiGuid() <em>Xmi Guid</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getXmiGuid()
+   * @generated
+   * @ordered
+   */
+  protected String xmiGuid = XMI_GUID_EDEFAULT;
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -115,6 +136,29 @@ public class PPackageImpl extends EObjectImpl implements PPackage
   protected EClass eStaticClass()
   {
     return GpresentationPackage.Literals.PPACKAGE;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getXmiGuid()
+  {
+    return xmiGuid;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setXmiGuid(String newXmiGuid)
+  {
+    String oldXmiGuid = xmiGuid;
+    xmiGuid = newXmiGuid;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PPACKAGE__XMI_GUID, oldXmiGuid, xmiGuid));
   }
 
   /**
@@ -206,12 +250,12 @@ public class PPackageImpl extends EObjectImpl implements PPackage
     {
       case GpresentationPackage.PPACKAGE__ROOTS:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getRoots()).basicAdd(otherEnd, msgs);
+      case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackages()).basicAdd(otherEnd, msgs);
       case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
         return eBasicSetContainer(otherEnd, GpresentationPackage.PPACKAGE__OWNING_PACKAGE, msgs);
-      case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackages()).basicAdd(otherEnd, msgs);
       case GpresentationPackage.PPACKAGE__META_DATA:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getMetaData()).basicAdd(otherEnd, msgs);
     }
@@ -230,10 +274,10 @@ public class PPackageImpl extends EObjectImpl implements PPackage
     {
       case GpresentationPackage.PPACKAGE__ROOTS:
         return ((InternalEList<?>)getRoots()).basicRemove(otherEnd, msgs);
-      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
-        return eBasicSetContainer(null, GpresentationPackage.PPACKAGE__OWNING_PACKAGE, msgs);
       case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
         return ((InternalEList<?>)getNestedPackages()).basicRemove(otherEnd, msgs);
+      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
+        return eBasicSetContainer(null, GpresentationPackage.PPACKAGE__OWNING_PACKAGE, msgs);
       case GpresentationPackage.PPACKAGE__META_DATA:
         return ((InternalEList<?>)getMetaData()).basicRemove(otherEnd, msgs);
     }
@@ -266,14 +310,16 @@ public class PPackageImpl extends EObjectImpl implements PPackage
   {
     switch (featureID)
     {
+      case GpresentationPackage.PPACKAGE__XMI_GUID:
+        return getXmiGuid();
       case GpresentationPackage.PPACKAGE__NAME:
         return getName();
       case GpresentationPackage.PPACKAGE__ROOTS:
         return getRoots();
-      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
-        return getOwningPackage();
       case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
         return getNestedPackages();
+      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
+        return getOwningPackage();
       case GpresentationPackage.PPACKAGE__META_DATA:
         return getMetaData();
     }
@@ -291,6 +337,9 @@ public class PPackageImpl extends EObjectImpl implements PPackage
   {
     switch (featureID)
     {
+      case GpresentationPackage.PPACKAGE__XMI_GUID:
+        setXmiGuid((String)newValue);
+        return;
       case GpresentationPackage.PPACKAGE__NAME:
         setName((String)newValue);
         return;
@@ -320,6 +369,9 @@ public class PPackageImpl extends EObjectImpl implements PPackage
   {
     switch (featureID)
     {
+      case GpresentationPackage.PPACKAGE__XMI_GUID:
+        setXmiGuid(XMI_GUID_EDEFAULT);
+        return;
       case GpresentationPackage.PPACKAGE__NAME:
         setName(NAME_EDEFAULT);
         return;
@@ -346,14 +398,16 @@ public class PPackageImpl extends EObjectImpl implements PPackage
   {
     switch (featureID)
     {
+      case GpresentationPackage.PPACKAGE__XMI_GUID:
+        return XMI_GUID_EDEFAULT == null ? xmiGuid != null : !XMI_GUID_EDEFAULT.equals(xmiGuid);
       case GpresentationPackage.PPACKAGE__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case GpresentationPackage.PPACKAGE__ROOTS:
         return roots != null && !roots.isEmpty();
-      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
-        return getOwningPackage() != null;
       case GpresentationPackage.PPACKAGE__NESTED_PACKAGES:
         return nestedPackages != null && !nestedPackages.isEmpty();
+      case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
+        return getOwningPackage() != null;
       case GpresentationPackage.PPACKAGE__META_DATA:
         return metaData != null && !metaData.isEmpty();
     }
@@ -371,7 +425,9 @@ public class PPackageImpl extends EObjectImpl implements PPackage
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
+    result.append(" (xmiGuid: ");
+    result.append(xmiGuid);
+    result.append(", name: ");
     result.append(name);
     result.append(')');
     return result.toString();

@@ -74,13 +74,22 @@ public interface GpresentationPackage extends EPackage
   int PMETA_DATA_AWARE = 16;
 
   /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PMETA_DATA_AWARE__XMI_GUID = 0;
+
+  /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PMETA_DATA_AWARE__META_DATA = 0;
+  int PMETA_DATA_AWARE__META_DATA = 1;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' containment reference list.
@@ -89,7 +98,7 @@ public interface GpresentationPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PMETA_DATA_AWARE__VALUE = 1;
+  int PMETA_DATA_AWARE__VALUE = 2;
 
   /**
    * The number of structural features of the '<em>PMeta Data Aware</em>' class.
@@ -98,7 +107,7 @@ public interface GpresentationPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PMETA_DATA_AWARE_FEATURE_COUNT = 2;
+  int PMETA_DATA_AWARE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gpresentation.impl.PAbstractAreaImpl <em>PAbstract Area</em>}' class.
@@ -109,6 +118,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PABSTRACT_AREA = 10;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PABSTRACT_AREA__XMI_GUID = PMETA_DATA_AWARE__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -164,6 +182,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PROOT = 0;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROOT__XMI_GUID = PABSTRACT_AREA__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -230,6 +257,15 @@ public interface GpresentationPackage extends EPackage
   int PCOMPOSITE_AREA = 1;
 
   /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PCOMPOSITE_AREA__XMI_GUID = PABSTRACT_AREA__XMI_GUID;
+
+  /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -292,6 +328,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PELEMENT = 2;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PELEMENT__XMI_GUID = PMETA_DATA_AWARE__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -358,6 +403,15 @@ public interface GpresentationPackage extends EPackage
   int PCONTENT_AREA = 12;
 
   /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PCONTENT_AREA__XMI_GUID = PMETA_DATA_AWARE__XMI_GUID;
+
+  /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -402,6 +456,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PUSER_DEFINED_AREA = 3;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PUSER_DEFINED_AREA__XMI_GUID = PCONTENT_AREA__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -450,6 +513,15 @@ public interface GpresentationPackage extends EPackage
   int PAUTOMATICALLY_GENERATED_AREA = 4;
 
   /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PAUTOMATICALLY_GENERATED_AREA__XMI_GUID = PCONTENT_AREA__XMI_GUID;
+
+  /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -494,6 +566,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PINPUT = 5;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PINPUT__XMI_GUID = PELEMENT__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -558,6 +639,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int POUTPUT = 6;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int POUTPUT__XMI_GUID = PELEMENT__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -631,6 +721,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PACTION = 7;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PACTION__XMI_GUID = PELEMENT__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -743,6 +842,15 @@ public interface GpresentationPackage extends EPackage
   int PREFERENCE_AREA = 9;
 
   /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREFERENCE_AREA__XMI_GUID = PCONTENT_AREA__XMI_GUID;
+
+  /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -796,6 +904,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PELEMENT_AREA = 11;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PELEMENT_AREA__XMI_GUID = PCONTENT_AREA__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -862,13 +979,22 @@ public interface GpresentationPackage extends EPackage
   int PPACKAGE = 13;
 
   /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PPACKAGE__XMI_GUID = 0;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PPACKAGE__NAME = 0;
+  int PPACKAGE__NAME = 1;
 
   /**
    * The feature id for the '<em><b>Roots</b></em>' containment reference list.
@@ -877,16 +1003,7 @@ public interface GpresentationPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PPACKAGE__ROOTS = 1;
-
-  /**
-   * The feature id for the '<em><b>Owning Package</b></em>' container reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PPACKAGE__OWNING_PACKAGE = 2;
+  int PPACKAGE__ROOTS = 2;
 
   /**
    * The feature id for the '<em><b>Nested Packages</b></em>' containment reference list.
@@ -898,13 +1015,22 @@ public interface GpresentationPackage extends EPackage
   int PPACKAGE__NESTED_PACKAGES = 3;
 
   /**
+   * The feature id for the '<em><b>Owning Package</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PPACKAGE__OWNING_PACKAGE = 4;
+
+  /**
    * The feature id for the '<em><b>Meta Data</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PPACKAGE__META_DATA = 4;
+  int PPACKAGE__META_DATA = 5;
 
   /**
    * The number of structural features of the '<em>PPackage</em>' class.
@@ -913,7 +1039,7 @@ public interface GpresentationPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PPACKAGE_FEATURE_COUNT = 5;
+  int PPACKAGE_FEATURE_COUNT = 6;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gpresentation.impl.PKeyImpl <em>PKey</em>}' class.
@@ -1007,6 +1133,15 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   int PCOMPOSITE_ELEMENT = 17;
+
+  /**
+   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PCOMPOSITE_ELEMENT__XMI_GUID = PELEMENT__XMI_GUID;
 
   /**
    * The feature id for the '<em><b>Meta Data</b></em>' reference list.
@@ -1367,6 +1502,17 @@ public interface GpresentationPackage extends EPackage
   EClass getPPackage();
 
   /**
+   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gpresentation.PPackage#getXmiGuid <em>Xmi Guid</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Xmi Guid</em>'.
+   * @see org.genesez.metamodel.gpresentation.PPackage#getXmiGuid()
+   * @see #getPPackage()
+   * @generated
+   */
+  EAttribute getPPackage_XmiGuid();
+
+  /**
    * Returns the meta object for the attribute '{@link org.genesez.metamodel.gpresentation.PPackage#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1505,6 +1651,17 @@ public interface GpresentationPackage extends EPackage
    * @generated
    */
   EClass getPMetaDataAware();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gpresentation.PMetaDataAware#getXmiGuid <em>Xmi Guid</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Xmi Guid</em>'.
+   * @see org.genesez.metamodel.gpresentation.PMetaDataAware#getXmiGuid()
+   * @see #getPMetaDataAware()
+   * @generated
+   */
+  EAttribute getPMetaDataAware_XmiGuid();
 
   /**
    * Returns the meta object for the reference list '{@link org.genesez.metamodel.gpresentation.PMetaDataAware#getMetaData <em>Meta Data</em>}'.
@@ -1825,6 +1982,14 @@ public interface GpresentationPackage extends EPackage
     EClass PPACKAGE = eINSTANCE.getPPackage();
 
     /**
+     * The meta object literal for the '<em><b>Xmi Guid</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PPACKAGE__XMI_GUID = eINSTANCE.getPPackage_XmiGuid();
+
+    /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1933,6 +2098,14 @@ public interface GpresentationPackage extends EPackage
      * @generated
      */
     EClass PMETA_DATA_AWARE = eINSTANCE.getPMetaDataAware();
+
+    /**
+     * The meta object literal for the '<em><b>Xmi Guid</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PMETA_DATA_AWARE__XMI_GUID = eINSTANCE.getPMetaDataAware_XmiGuid();
 
     /**
      * The meta object literal for the '<em><b>Meta Data</b></em>' reference list feature.

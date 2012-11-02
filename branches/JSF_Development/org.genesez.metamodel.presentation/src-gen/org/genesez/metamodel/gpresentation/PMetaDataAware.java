@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.genesez.metamodel.gpresentation.PMetaDataAware#getXmiGuid <em>Xmi Guid</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PMetaDataAware#getMetaData <em>Meta Data</em>}</li>
  *   <li>{@link org.genesez.metamodel.gpresentation.PMetaDataAware#getValue <em>Value</em>}</li>
  * </ul>
@@ -29,6 +30,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface PMetaDataAware extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Xmi Guid</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Xmi Guid</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Xmi Guid</em>' attribute.
+   * @see #setXmiGuid(String)
+   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPMetaDataAware_XmiGuid()
+   * @model required="true"
+   * @generated
+   */
+  String getXmiGuid();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gpresentation.PMetaDataAware#getXmiGuid <em>Xmi Guid</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Xmi Guid</em>' attribute.
+   * @see #getXmiGuid()
+   * @generated
+   */
+  void setXmiGuid(String value);
+
   /**
    * Returns the value of the '<em><b>Meta Data</b></em>' reference list.
    * The list contents are of type {@link org.genesez.metamodel.gpresentation.PMetaData}.
