@@ -1,0 +1,186 @@
+«REM»
+	(c) GeneSEZ Research Group
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+
+«IMPORT gcore»
+
+«REM»
+	Generation of a access helper profile file.
+		
+	@author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+«ENDREM»
+
+«EXTENSION org::genesez::platform::common::AccessHelper»
+
+«EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::GlobalVar»
+«EXTENSION org::genesez::metamodel::core::util::profile::m2t::util::Naming»
+
+
+«REM»
+	-- Public templates (THE FOLLOWING TEMPLATES CAN BE CALLED FROM OUTSIDE OF THIS FILE) -------------------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE Root FOR MModel -»
+«FILE globalVarAccessHelperFileName() -»
+«EXPAND Comment::AccessHelperFile -»
+
+// based on genesez meta model
+import gcore;
+
+// use common access helper scripts
+extension org::genesez::platform::common::AccessHelper;
+
+// use profile scripts
+extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFirst(".ext", "") -»;
+
+«EXPAND StereotypeElement FOREACH allClassifiers().typeSelect(MClass).sortBy(e | e.name) -»
+«ENDFILE -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE StereotypeElement FOR MClass -»
+«EXPAND Comment::StereotypeSection -»
+
+«EXPAND HasStereotype -»
+«EXPAND HasTaggedValue -»
+«EXPAND HasTaggedValueReference -»
+«FOREACH property.typeSelect(MAttribute).sortBy(e | e.name) AS a -»
+	«EXPAND Comment::TaggedValueSection FOR a -»
+	
+	«EXPAND HasTaggedValue FOR a -»
+	«EXPAND HasUtilizableTaggedValue FOR a -»
+	«EXPAND GetTaggedValue FOR a -»
+	«EXPAND SetTaggedValue FOR a -»
+	«REM»«EXPAND IsTaggedValue  FOR a -»«ENDREM»«"" -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«REM»
+	-- Private templates (THE FOLLOWING TEMPLATES SHOULD NOT BE INVOKED FROM OUTSIDE OF THIS FILE) ----------
+«ENDREM»
+
+«REM»
+«ENDREM»
+«DEFINE HasStereotype FOR MClass -»
+«EXPAND Comment::HasStereotype -»
+boolean «asAccessHelperHasStereotype() -»(MElement this) :
+	hasStereotype( «asProfileScriptName() -»() );
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE HasTaggedValue FOR MClass -»
+«IF hasAttributes() -»
+«EXPAND Comment::HasTaggedValue -»
+boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, String value) :
+	hasTaggedValue( «asProfileScriptName() -»(), tag, value );
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE HasTaggedValueReference FOR MClass -»
+«IF hasAttributes() -»
+«EXPAND Comment::HasTaggedValueReference -»
+boolean «asAccessHelperHasTaggedValue() -»(MElement this, String tag, MElement valueReference) :
+	hasTaggedValue( «asProfileScriptName() -»(), tag, valueReference );
+	
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE HasTaggedValue FOR MAttribute -»
+«EXPAND Comment::HasTaggedValue -»
+«IF !isTaggedValueReference() -»
+boolean «asAccessHelperHasTaggedValue() -»(MElement this, String value) :
+	hasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), value );
+«ELSE -»
+boolean «asAccessHelperHasTaggedValue() -»(MElement this, MElement valueReference) :
+	hasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), valueReference );
+«ENDIF -»
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE HasUtilizableTaggedValue FOR MAttribute -»
+«EXPAND Comment::HasUtilizableTaggedValue -»
+«IF !isTaggedValueReference() -»
+boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
+	hasUtilizableValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ELSE -»
+boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
+	hasUtilizableValueReference( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ENDIF -»
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE GetTaggedValue FOR MAttribute -»
+«EXPAND Comment::GetTaggedValue -»
+«IF isSingleValuedType() -»
+«IF !isTaggedValueReference() -»
+String «asAccessHelperGetTaggedValue() -»(MElement this) :
+	getTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ELSE -»
+MElement «asAccessHelperGetTaggedValue() -»(MElement this) :
+	getTaggedValueReference( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ENDIF -»
+«ELSE -»
+«IF !isTaggedValueReference() -»
+List[String] «asAccessHelperGetTaggedValue() -»(MElement this) : 
+	getTaggedValueList( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ELSE -»
+List[MElement] «asAccessHelperGetTaggedValue() -»(MElement this) : 
+	getTaggedValueReferenceList( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
+«ENDIF -»
+«ENDIF -»
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE SetTaggedValue FOR MAttribute -»
+«EXPAND Comment::SetTaggedValue -»
+«IF !isTaggedValueReference() -»
+Void «asAccessHelperSetTaggedValue() -»(MElement this, String value) :
+	setTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), value );
+«ELSE -»
+Void «asAccessHelperSetTaggedValue() -»(MElement this, MElement valueReference) :
+	setTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), valueReference );
+«ENDIF -»
+
+«ENDDEFINE»
+
+
+«REM»
+«ENDREM»
+«DEFINE IsTaggedValue FOR MAttribute -»
+«IF type.isEnumeration() -»
+«FOREACH ((MEnumeration)type).literal AS l -»
+«EXPAND Comment::IsTaggedValue(l) -»
+boolean «asAccessHelperIsTaggedValue(l) -»(MElement this) :
+	hasTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»(), «l.asProfileScriptName() -»() );
+
+«ENDFOREACH -»
+«ENDIF -»
+«ENDDEFINE»
