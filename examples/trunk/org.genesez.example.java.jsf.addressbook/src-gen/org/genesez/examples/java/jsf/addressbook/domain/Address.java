@@ -7,7 +7,7 @@ package org.genesez.examples.java.jsf.addressbook.domain;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author nicher
+ * @author roman01
  */
 public class Address extends Contact {
 	

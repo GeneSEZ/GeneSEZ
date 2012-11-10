@@ -1,5 +1,7 @@
 «IMPORT gpresentation»
+«IMPORT gcore»
 «EXTENSION AccessHelper»
+«EXTENSION GcoreAccessHelper»
 
 «DEFINE Head FOR PRoot -»
 «LET 'GeneSEZ HTML Profile::' AS HTMLP -»
@@ -51,27 +53,56 @@
 «LET 'GeneSEZ HTML Profile::' AS HTMLP -»
 «IF hasPMetaData(HTMLP + "autoForm") -»
 <form action="«getTaggedValue(HTMLP + "form", "action") -»"«EXPAND optionalAttr("form", "method") -»«EXPAND universalAttrs -»>
-  «IF hasTaggedValue(HTMLP + "autoForm", "field") -»
-  «FOREACH getTaggedValues(HTMLP + "autoForm", "field") AS f -»
-  
-  «ENDFOREACH -»
-  «ELSE -»
-  
-  «ENDIF -»
-  <input type="Submit">
+«LET hasTaggedValue(HTMLP + "autoForm", "field") ? 
+		getTaggedValues(HTMLP + "autoForm", "field") : 
+		getMClassByXmiGuid(getTaggedValue(HTMLP + "autoForm", "model")).allProperties().xmiGuid AS fields-»
+	«FOREACH fields AS f -»
+		«IF getMAttributeByXmiGuid(f).type.metaType == MClass -»
+			«IF getTaggedValues(HTMLP + "autoForm", "include").contains(f) -»
+				«EXPAND AutoFormField FOREACH ((MClass) getMAssociationRoleByXmiGuid(f).type).allProperties().typeSelect(MAttribute) -»
+			«ELSE -»
+				«EXPAND AutoFormField FOR getMAssociationRoleByXmiGuid(f) -»
+			«ENDIF -»
+		«ELSE -»
+			«EXPAND AutoFormField FOR getMAttributeByXmiGuid(f) -»
+		«ENDIF -»
+	«ENDFOREACH -»
+«ENDLET -»
+<p><input type="Submit"></p>
 </form>
 «ENDIF -»
 «ENDLET -»
 «ENDDEFINE»
 
 
-«DEFINE AutoFormField(String type) FOR PAutomaticallyGeneratedArea»
+«DEFINE AutoFormField FOR MAttribute -»
+«IF !stereotype.name.contains("ignore") -»
 <p>
-«switch (type) {
-	case 'Boolean' : '<input type="checkbox">'
-	default : '<input type="text">'
-}»
+<label>
+«taggedValue.selectFirst(e|e.tag.name == "label" && e.tag.stereotype.name == "label").value»
+«IF type == getMElementByXmiGuid("Boolean") -»
+<input type="checkbox" name="«name»" value="«name»">
+«ELSE -»
+<input type="text" name="«name»">
+«ENDIF -»
+</label>
 </p>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE AutoFormField FOR MAssociationRole -»
+«IF multiplicity == 1 -»
+<p>
+<label>
+«taggedValue.selectFirst(e|e.tag.name == "label" && e.tag.stereotype.name == "label").value»
+<select name="«name»">
+</select>
+</label>
+</p>
+«ELSE -»
+«REM»not really possible in HTML«ENDREM»
+«ENDIF -»
 «ENDDEFINE»
 
 

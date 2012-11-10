@@ -7,44 +7,26 @@ package org.genesez.examples.java.jsf.addressbook.domain;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author nicher
+ * @author roman01
  */
 public class Phone extends Contact {
 	
-	private String country;
-	
-	private String city;
+	private String extension;
 	
 	private String number;
 	
-	private String extension;
-	
 	/**
-	 * Returns the value of attribute '<em><b>country</b></em>'
+	 * Returns the value of attribute '<em><b>extension</b></em>'
 	 */
-	public String getCountry() {
-		return country;
+	public String getExtension() {
+		return extension;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>country</b></em>'
+	 * Sets the value of attribute '<em><b>extension</b></em>'
 	 */
-	public void setCountry(String country) {
-		this.country = country;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>city</b></em>'
-	 */
-	public String getCity() {
-		return city;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>city</b></em>'
-	 */
-	public void setCity(String city) {
-		this.city = city;
+	public void setExtension(String extension) {
+		this.extension = extension;
 	}
 	
 	/**
@@ -59,20 +41,6 @@ public class Phone extends Contact {
 	 */
 	public void setNumber(String number) {
 		this.number = number;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>extension</b></em>'
-	 */
-	public String getExtension() {
-		return extension;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>extension</b></em>'
-	 */
-	public void setExtension(String extension) {
-		this.extension = extension;
 	}
 	
 	// -- generated code of other cartridges --------------------------------

@@ -20,3 +20,47 @@ List[String] getTaggedValues(PMetaDataAware this, String uri, String key) :
 	hasTaggedValue(uri, key) ? 
 		this.value.select( e | e.key.key == key && e.key.owner.uri == uri ).collect(e | e.value) : 
 		{};
+	
+	
+MModel globalVarGcoreModel() :
+	GLOBALVAR coremodel;
+	
+
+List[MAttribute] allProperties(MClass this):
+	{}.addAll( hasGeneralization() ? 
+				getGeneralization().property : 
+				{} )
+	  .addAll( property )
+	  .addAll( hasRealization() ? 
+				getRealization().property : 
+				{} );
+			
+			
+boolean hasGeneralization(MClass this) :
+	!generalization.isEmpty;
+	
+	
+List[MClass] getGeneralization(MClass subclass):
+	( subclass.hasGeneralization() ? 
+		subclass.generalization.getGeneralization() : 
+		{} ).addAll(subclass.generalization);
+	
+	
+List[MClass] getGeneralization(MType subclass) : {};
+	
+	
+boolean hasRealization(MClass this) :
+	!globalVarGcoreModel().nestedPackage.classifier.typeSelect(MClass).select(e|e.generalization.contains(this)).isEmpty;
+
+
+List[MClass] getRealization(MClass superclass):
+	( superclass.hasRealization() ? 
+		superclass.realization().getRealization() : 
+		{} ).addAll(superclass.realization());
+
+
+List[MClass] getRealization(MType subclass) : {};
+
+
+List[MClass] realization(MClass this) :
+	globalVarGcoreModel().nestedPackage.classifier.typeSelect(MClass).select(e|e.generalization.contains(this));

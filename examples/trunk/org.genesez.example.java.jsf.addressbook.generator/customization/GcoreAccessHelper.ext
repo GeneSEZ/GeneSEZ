@@ -10,33 +10,34 @@ MModel globalVarGcoreModel() :
 /**
  * Getter for an MAttribute by it's xmi guid.
  * 
- * @param model		the model where the attribute is placed
  * @param xmiGuid	the xmi guid of the attribute
  * @return the attribute where the xmi guid is equals, otherwise null
  */
-MAttribute getMAttributeByXmiGuid(MModel model, String xmiGuid) :
-	getMElementByXmiGuid(model, xmiGuid);
-	
+MAttribute getMAttributeByXmiGuid(String xmiGuid) :
+	getMElementByXmiGuid(xmiGuid);
+
+
+MAssociationRole getMAssociationRoleByXmiGuid(String xmiGuid) :
+	getMElementByXmiGuid(xmiGuid);
+
 /**
- *	Getter for a MClassifier identified by its xmiGuid
+ *	Getter for a MClass identified by its xmiGuid
  *
- *	@param	model	instance of MModel
- *	@param	xmiGuid	xmi guid of the MClassifier
+ *	@param	xmiGuid	xmi guid of the MClass
  *
- *	@return	instance of MClassifier identified by xmiGuid or null
+ *	@return	instance of MClass identified by xmiGuid or null
  */
-MClassifier getMClassifierByXmiGuid(MModel model, String xmiGuid) :
-	getMElementByXmiGuid(model, xmiGuid);
+MClass getMClassByXmiGuid(String xmiGuid) :
+	getMElementByXmiGuid(xmiGuid);
 	
 /**
  * Getter for an MElement by it's xmi guid.
  * 
- * @param model		the model where the element is placed
  * @param xmiGuid	the xmi guid of the element
  * @return the element where the xmi guid is equals, otherwise null
  */
-MElement getMElementByXmiGuid(MModel model, String xmiGuid) :
-	getEObject(model, xmiGuid);
+MElement getMElementByXmiGuid(String xmiGuid) :
+	getEObject(globalVarGcoreModel(), xmiGuid);
 
 /**
  * Getter for an EObject by it's URI. 

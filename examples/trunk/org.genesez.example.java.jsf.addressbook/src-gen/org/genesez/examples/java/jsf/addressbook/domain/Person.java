@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author nicher
+ * @author roman01
  */
 public class Person extends Addressee {
 	

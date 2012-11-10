@@ -7,7 +7,7 @@ package org.genesez.examples.java.jsf.addressbook.domain;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author nicher
+ * @author roman01
  */
 public class Organisation extends Addressee {
 	
@@ -22,6 +22,8 @@ public class Organisation extends Addressee {
 	
 	private String name;
 	
+	private boolean nonprofit;
+	
 	/**
 	 * Returns the value of attribute '<em><b>name</b></em>'
 	 */
@@ -34,6 +36,20 @@ public class Organisation extends Addressee {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>nonprofit</b></em>'
+	 */
+	public boolean getNonprofit() {
+		return nonprofit;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>nonprofit</b></em>'
+	 */
+	public void setNonprofit(boolean nonprofit) {
+		this.nonprofit = nonprofit;
 	}
 	
 	/**
