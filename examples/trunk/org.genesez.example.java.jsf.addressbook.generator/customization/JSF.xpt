@@ -1,10 +1,115 @@
 «IMPORT gpresentation»
-
+«IMPORT gcore»
 «EXTENSION AccessHelper»
+«EXTENSION GcoreAccessHelper»
+«EXTENSION Profile»
 
 
-«DEFINE JSFRoot FOR PRoot -»
-«IF hasPMetaData("GeneSEZ JSF Profile::jsfHeadMetaData") -»
-JSF hier
+«DEFINE Head FOR PRoot -»
+«IF hasJSFHeadMetaData() -»
+<!DOCTYPE «getJSFDoctype() -»>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=«getJSFContenttype() -»" /> 
+  <title>«getJSFTitle() -»</title>
+  <meta name="description" content="«getJSFDescription() -»" />
+  <meta name="keywords" content="«FOREACH getJSFKeywords() AS k SEPARATOR ', ' -»«k -»«ENDFOREACH -»" />
+  <meta name="language" content="«getJSFLanguage() -»" />
+  «FOREACH getJSFStylesheets() AS stylesheet -» 
+  <link rel="stylesheet" type="text/css" href="«stylesheet -»" />
+  «ENDFOREACH -»
+</h:head>
+<h:body>
+  «EXPAND Root::Content FOREACH nestedContents -»
+</h:body>
+</html>
 «ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Div FOR PCompositeArea -»
+«IF hasJSFDiv() -»
+<div«EXPAND universalAttrs -»>
+  «EXPAND Root::Content FOREACH nestedContents -»
+</div>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Div FOR PElementArea -»
+«IF hasJSFDiv() -»
+<div«EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</div>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Div FOR PCompositeElement -»
+«IF hasJSFDiv() -»
+<div«EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</div>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE P FOR PCompositeElement -»
+«IF hasJSFParagraph() -»
+<p«EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</p>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Link FOR PCompositeElement -»
+«IF hasJSFLink() -»
+<h:form><h:commandLink action="«name -»"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</h:commandLink></h:form>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE P FOR POutput -»
+«IF hasJSFParagraph() -»
+<p«EXPAND universalAttrs -»>«output -»</p>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE H FOR POutput -»
+«IF hasJSFHeading() -»
+<h«getJSFHeadingLevel() -»«EXPAND universalAttrs -»>«output -»</h«getJSFHeadingLevel() -»>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Text FOR POutput -»
+«IF hasJSFSimpleText() -»
+«output»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Link FOR PAction -»
+«IF hasJSFLink() -»
+<h:form><h:commandLink action="«name -»"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>«getJSFLinkText()»</h:commandLink></h:form>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE universalAttrs FOR PMetaDataAware -»
+«EXPAND optionalAttr(prJSFElement(), prJSFClass()) -»«EXPAND optionalAttr(prJSFElement(), prJSFId()) -»«EXPAND optionalAttr(prJSFElement(), prJSFStyle()) -»
+«ENDDEFINE»
+
+
+«DEFINE optionalAttr(String stereotyp, String taggedValue) FOR PMetaDataAware -»
+«LET hasTaggedValue(stereotyp, taggedValue) ? ' ' + taggedValue + '="' + getTaggedValue(stereotyp, taggedValue) + '"' : '' AS v -»
+«v -»
+«ENDLET -»
 «ENDDEFINE»

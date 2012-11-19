@@ -6,7 +6,6 @@ extension Profile;
 boolean hasHTMLHeadMetaData(PMetaDataAware this) :
 	hasPMetaData( prHTMLHeadMetaData() );
 	
-	
 String getHTMLDoctype(PMetaDataAware this) :
 	getTaggedValue(prHTMLHeadMetaData(), prHTMLDoctype());
 	
@@ -99,31 +98,73 @@ String getHTMLLinkText(PMetaDataAware this) :
 	
 boolean hasHTMLSubmit(PMetaDataAware this) :
 	hasPMetaData(prHTMLSubmit());
+	
+	
+boolean hasJSFHeadMetaData(PMetaDataAware this) :
+	hasPMetaData( prJSFHeadMetaData() );
+	
+String getJSFDoctype(PMetaDataAware this) :
+	getTaggedValue(prJSFHeadMetaData(), prJSFDoctype());
+	
+String getJSFContenttype(PMetaDataAware this) :
+	getTaggedValue(prJSFHeadMetaData(), prJSFContenttype());
+	
+String getJSFTitle(PMetaDataAware this) :
+	getTaggedValue(prJSFHeadMetaData(), prJSFTitle());
+	
+String getJSFDescription(PMetaDataAware this) :
+	getTaggedValue(prJSFHeadMetaData(), prJSFDescription());
+	
+List[String] getJSFKeywords(PMetaDataAware this) :
+	getTaggedValues(prJSFHeadMetaData(), prJSFKeywords());
+	
+String getJSFLanguage(PMetaDataAware this) :
+	getTaggedValue(prJSFHeadMetaData(), prJSFLanguage());
+	
+List[String] getJSFStylesheets(PMetaDataAware this) :
+	getTaggedValues(prJSFHeadMetaData(), prJSFStylesheets());
+	
+boolean hasJSFDiv(PMetaDataAware this) :
+	hasPMetaData( prJSFDiv() );
+	
+boolean hasJSFParagraph(PMetaDataAware this) :
+	hasPMetaData( prJSFParagraph() );
+	
+boolean hasJSFLink(PMetaDataAware this) :
+	hasPMetaData( prJSFLink() );
+	
+boolean hasJSFHeading(PMetaDataAware this) :
+	hasPMetaData( prJSFHeading() );
+	
+String getJSFHeadingLevel(PMetaDataAware this) :
+	getTaggedValue(prJSFHeading(), prJSFLevel());
+	
+String getJSFLinkText(PMetaDataAware this) :
+	getTaggedValue(prJSFLink(), prJSFText());
+	
+boolean hasJSFSimpleText(PMetaDataAware this) :
+	hasPMetaData( prJSFSimpleText() );
 
 
 boolean hasPMetaData(PMetaDataAware this, String uri) :
 	this.metaData.exists( e | e.uri == uri);
-	
 
 boolean hasTaggedValue(PMetaDataAware this, String uri, String key) :
 	this.value.exists( e | e.key.key == key && e.key.owner.uri == uri );
-
 
 String getTaggedValue(PMetaDataAware this, String uri, String key) :
 	hasTaggedValue(uri, key) ? 
 		this.value.selectFirst( e | e.key.key == key && e.key.owner.uri == uri ).value : 
 		"";
-
  
 List[String] getTaggedValues(PMetaDataAware this, String uri, String key) :
 	hasTaggedValue(uri, key) ? 
 		this.value.select( e | e.key.key == key && e.key.owner.uri == uri ).collect(e | e.value) : 
 		{};
-	
+		
 	
 MModel globalVarGcoreModel() :
 	GLOBALVAR coremodel;
-	
 
 List[MAttribute] allProperties(MClass this):
 	{}.addAll( hasGeneralization() ? 
@@ -134,32 +175,25 @@ List[MAttribute] allProperties(MClass this):
 				getRealization().property : 
 				{} );
 			
-			
 boolean hasGeneralization(MClass this) :
 	!generalization.isEmpty;
-	
 	
 List[MClass] getGeneralization(MClass subclass):
 	( subclass.hasGeneralization() ? 
 		subclass.generalization.getGeneralization() : 
 		{} ).addAll(subclass.generalization);
 	
-	
 List[MClass] getGeneralization(MType subclass) : {};
-	
 	
 boolean hasRealization(MClass this) :
 	!globalVarGcoreModel().nestedPackage.classifier.typeSelect(MClass).select(e|e.generalization.contains(this)).isEmpty;
-
 
 List[MClass] getRealization(MClass superclass):
 	( superclass.hasRealization() ? 
 		superclass.realization().getRealization() : 
 		{} ).addAll(superclass.realization());
 
-
 List[MClass] getRealization(MType subclass) : {};
-
 
 List[MClass] realization(MClass this) :
 	globalVarGcoreModel().nestedPackage.classifier.typeSelect(MClass).select(e|e.generalization.contains(this));
