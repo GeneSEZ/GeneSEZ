@@ -8,7 +8,7 @@
        name="GeneSEZ Generator Nature">
     <runtime>
        <run
-             class="org.genesez.eclipse4.wizard.util.GeneSEZGeneratorNature">
+             class="org.genesez.eclipse.wizard.util.GeneSEZGeneratorNature">
        </run>
     </runtime>
 	</extension>
@@ -22,7 +22,7 @@
       <wizard
             canFinishEarly="false"
             category="org.genesez.eclipse4.wizard"
-            class="org.genesez.eclipse4.wizard.GeneSEZProjectWizard"
+            class="org.genesez.eclipse.wizard.GeneSEZProjectWizard"
             hasPages="true"
             icon="icons/butterfly.gif"
             id="org.genesez.eclipse4.wizard.genesezwizard"
@@ -34,7 +34,7 @@
       </wizard>
       <wizard
       		category="org.genesez.eclipse4.wizard"
-            class="org.genesez.eclipse4.wizard.GeneSEZExampleWizard"
+            class="org.genesez.eclipse.wizard.GeneSEZExampleWizard"
             icon="icons/butterfly_gray.gif"
             id="org.genesez.eclipse4.wizard.genesezexample"
             name="GeneSEZ Example"
@@ -53,7 +53,7 @@
 		</category>
 		<wizard
 			name="GeneSEZ Example"
-			class="org.genesez.eclipse4.wizard.GeneSEZExampleWizard"
+			class="org.genesez.eclipse.wizard.GeneSEZExampleWizard"
 			category="org.eclipse.ui.Examples/org.genesez.eclipse4.examples"
 			id="org.genesez.eclipse4.wizard.genesezexample"
 			project="true"
@@ -79,7 +79,7 @@
 	<extension
 	      point="org.eclipse.ui.commands">
 	      <command name="changeNature"
-             id="org.genesez.eclipse.changeGeneratorNatureCommand" defaultHandler="org.genesez.eclipse4.wizard.handler.ChangeGeneSEZNatureHandler" >
+             id="org.genesez.eclipse.changeGeneratorNatureCommand" defaultHandler="org.genesez.eclipse.wizard.handler.ChangeGeneSEZNatureHandler" >
              <commandParameter 
              	   name="add"
                    id="org.genesez.eclipse.addNatureParameter"
@@ -137,7 +137,26 @@
                 </command>
           </menuContribution>
     </extension>
+    <extension
+          point="org.eclipse.ui.editors">
+       <editor
+             class="org.genesez.eclipse.workfloweditor.WorkflowEditor"
+             default="true"
+             id="org.genesez.eclipse.workfloweditor.WorkflowEditor"
+             name="MWE2 Workflow Editor">
+       </editor>
+    </extension>
 
+	<extension
+	    point = "org.eclipse.ui.editors">
+		<editor
+	  	   id = "org.genesez.eclipse.workfloweditor.WorkflowEditor"
+	  	   name="GeneSEZ WorkflowEditor"
+	       class="org.genesez.eclipse.workfloweditor.WorkflowEditor"
+		   extensions="mwe2"
+	       >
+		</editor>
+	</extension>
  <!-- <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
   <renameParticipant class="org.genesez.eclipse4.wizard.util.ProjectRenameParticipant" id="eclipse4.wizard.util.projectrenameparticipant" name="%Refactoring.ProjectRenameParitcipant">
     <enablement>
