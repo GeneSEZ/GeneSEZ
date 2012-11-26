@@ -1,6 +1,7 @@
 import gpresentation;
 import gcore;
 extension Profile;
+extension GcoreAccessHelper;
 
 
 boolean hasHTMLHeadMetaData(PMetaDataAware this) :
@@ -139,11 +140,65 @@ boolean hasJSFHeading(PMetaDataAware this) :
 String getJSFHeadingLevel(PMetaDataAware this) :
 	getTaggedValue(prJSFHeading(), prJSFLevel());
 	
-String getJSFLinkText(PMetaDataAware this) :
-	getTaggedValue(prJSFLink(), prJSFText());
+String getJSFCommandElementText(PMetaDataAware this) :
+	getTaggedValue(prJSFCommandElement(), prJSFText());
 	
 boolean hasJSFSimpleText(PMetaDataAware this) :
 	hasPMetaData( prJSFSimpleText() );
+	
+boolean hasJSFForm(PMetaDataAware this) :
+	hasPMetaData( prJSFForm() );
+	
+boolean hasJSFFieldset(PMetaDataAware this) :
+	hasPMetaData( prJSFFieldset() );
+	
+boolean hasJSFInputText(PMetaDataAware this) :
+	hasPMetaData( prJSFInputText() );
+	
+String getJSFInputElementValue(PMetaDataAware this) :
+	getTaggedValue(prJSFInputElement(), prJSFValue());
+	
+String getJSFInputElementLabel(PMetaDataAware this) :
+	getTaggedValue(prJSFInputElement(), prJSFLabel());
+	
+boolean hasJSFInputElementDatePattern(PMetaDataAware this) :
+	hasTaggedValue(prJSFInputElement(), prJSFDatePattern());
+	
+String getJSFInputElementDatePattern(PMetaDataAware this) :
+	getTaggedValue(prJSFInputElement(), prJSFDatePattern());
+	
+boolean hasJSFCheckbox(PMetaDataAware this) :
+	hasPMetaData( prJSFCheckbox() );
+	
+boolean hasJSFInputElementItems(PMetaDataAware this) :
+	hasTaggedValue(prJSFInputElement(), prJSFItems());
+
+String getJSFInputElementItems(PMetaDataAware this) :
+	getTaggedValue(prJSFInputElement(), prJSFItems());
+	
+boolean hasJSFListbox(PMetaDataAware this) :
+	hasPMetaData( prJSFListbox() );
+	
+boolean hasJSFButton(PMetaDataAware this) :
+	hasPMetaData( prJSFButton() );
+	
+boolean hasJSFAutoForm(PMetaDataAware this) :
+	hasPMetaData( prJSFAutoForm() );
+	
+String getJSFAutoFormAction(PMetaDataAware this) :
+	getTaggedValue(prJSFAutoForm(), prJSFAction());
+	
+boolean hasJSFAutoFormField(PMetaDataAware this) :
+	hasTaggedValue(prJSFAutoForm(), prJSFField());
+	
+List[String] getJSFAutoFormField(PMetaDataAware this) :
+	getTaggedValues(prJSFAutoForm(), prJSFField());
+	
+String getJSFAutoFormModel(PMetaDataAware this) :
+	getTaggedValue(prJSFAutoForm(), prJSFModel());
+	
+String getJSFAutoFormInclude(PMetaDataAware this) :
+	getTaggedValues(prJSFAutoForm(), prJSFInclude());
 
 
 boolean hasPMetaData(PMetaDataAware this, String uri) :
@@ -167,13 +222,13 @@ MModel globalVarGcoreModel() :
 	GLOBALVAR coremodel;
 
 List[MAttribute] allProperties(MClass this):
-	{}.addAll( hasGeneralization() ? 
-				getGeneralization().property : 
+	{}.addAll( hasRealization() ? 
+				getRealization().property : 
 				{} )
 	  .addAll( property )
-	  .addAll( hasRealization() ? 
-				getRealization().property : 
-				{} );
+	  .addAll( hasGeneralization() ? 
+				getGeneralization().property : 
+				{} ) ;
 			
 boolean hasGeneralization(MClass this) :
 	!generalization.isEmpty;
@@ -197,3 +252,40 @@ List[MClass] getRealization(MType subclass) : {};
 
 List[MClass] realization(MClass this) :
 	globalVarGcoreModel().nestedPackage.classifier.typeSelect(MClass).select(e|e.generalization.contains(this));
+	
+
+boolean hasOwningElementWith(PElement this, String stereo) :
+	if owningElement.hasPMetaData(stereo) then
+		true
+	else if owningElement == null then
+		false
+	else 
+		owningElement.hasOwningElementWith(stereo)
+	;
+	
+
+String getBeanName(MClassifier this) :
+	name.toFirstLower() + "Bean";
+
+String getBeanPropertyName(MProperty this, MClass model) :
+	getBeanName(model) + "." + classifier.name.toFirstLower() + "." + name;
+	
+String getBeanPropertyNameForSelect(MProperty this) :
+	getBeanName(classifier) + "." + name + "Selection";
+	
+String getBeanPropertyNameForItems(MProperty this, MClass model) :
+	getBeanName(model) + "." + name;
+	
+	
+List[MProperty] autoFormProperties(PAutomaticallyGeneratedArea this) :
+	getAllXmiguids().propertiesByXmiGuid(this);
+
+private List[String] getAllXmiguids(PAutomaticallyGeneratedArea this) :
+	hasJSFAutoFormField() ? getJSFAutoFormField() : getMClassByXmiGuid(getJSFAutoFormModel()).allProperties().xmiGuid;
+	
+private List[MProperty] propertiesByXmiGuid(String this, PAutomaticallyGeneratedArea area) :
+	if getMAttributeByXmiGuid().type.metaType == MClass && area.getJSFAutoFormInclude().contains(this) then 
+		((MClass) getMAssociationRoleByXmiGuid().type).allProperties().typeSelect(MAttribute)
+	else
+		{getMPropertyByXmiGuid()}
+	;

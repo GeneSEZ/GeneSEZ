@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf8" /> 
+  <title>Person Formular</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="language" content="de" />
+  <link rel="stylesheet" type="text/css" href="../css/cssLayout.css" />
+</h:head>
+<h:body>
+<div id="top">
+Adressbuch
+</div>
+<div>
+<div id="left">
+<p>
+<h:form>
+<h:commandLink action="#{personBean.listPersons}">zurück zur Liste</h:commandLink>
+</h:form>
+</p>
+</div>
+<div class="left_content" id="content">
+<h1>Person Anlegen/Bearbeiten</h1>
+<h:form>
+<h:outputLabel for="firstname" value="Vorname"/>
+<h:inputText value="#{personBean.personDto.firstName}" id="firstname"/>
+<h:outputLabel for="lastname" value="Nachname"/>
+<h:inputText value="#{personBean.personDto.lastName}" id="lastname"/>
+<p>
+<h:outputLabel for="birthdate" value="Geburtstag"/>
+<h:inputText value="#{personBean.personDto.birthdate}" id="birthdate"><f:convertDateTime pattern="dd.MM.yyyy" /></h:inputText>
+</p>
+<fieldset>
+  <legend>Mitgliedschaften</legend>
+<h:selectManyCheckbox value="#{personBean.membershipSelection}" id="membership" layout="pageDirection">
+  <f:selectItems value="#{personBean.memberships.elements.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectManyCheckbox>
+</fieldset>
+<fieldset>
+  <legend>Telefon</legend>
+<h:outputLabel for="extension" value="Vorwahl"/>
+<h:inputText value="#{personBean.phoneDto.extension}" id="extension"/>
+<h:outputLabel for="number" value="Nummer"/>
+<h:inputText value="#{personBean.phoneDto.number}" id="number"/>
+</fieldset>
+<fieldset>
+  <legend>Adresse</legend>
+<h:outputLabel for="street" value="Straße"/>
+<h:inputText value="#{personBean.addressDto.street}" id="street"/>
+<p>
+<h:outputLabel for="zip" value="PLZ"/>
+<h:inputText value="#{personBean.addressDto.zip}" id="zip"/>
+<h:outputLabel for="town" value="Stadt"/>
+<h:inputText value="#{personBean.addressDto.town}" id="town"/>
+</p>
+<p>
+<h:outputLabel for="country" value="Land"/>
+<h:inputText value="#{personBean.addressDto.country}" id="country"/>
+</p>
+</fieldset>
+<h:commandButton value="Speichern" action="#{personBean.savePerson}"/>
+</h:form>
+</div>
+</div>
+<div id="bottom">
+GeneSEZ
+</div>
+</h:body>
+</html>

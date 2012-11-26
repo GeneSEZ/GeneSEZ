@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf8" /> 
-  <title>Home</title>
+  <title>Organisationen</title>
   <meta name="description" content="" />
   <meta name="keywords" content="" />
   <meta name="language" content="de" />
@@ -14,7 +14,7 @@
 </h:head>
 <h:body>
 <div id="top">
-Adressbuch
+Addressbuch
 </div>
 <div>
 <div id="left">
@@ -23,11 +23,19 @@ Adressbuch
 </h:form>
 </div>
 <div class="left_content" id="content">
+<h1>Organisationen</h1>
 <h:form>
-<h:commandLink action="#{personBean.listPersons}">Personen verwalten</h:commandLink>
-</h:form>
-<h:form>
-<h:commandLink action="#{organisationBean.listOrganisations}">Organisationen verwalten</h:commandLink>
+<p>
+<h:outputLabel for="olb" value="Organisatonen"/>
+<h:selectOneListbox value="#{organisationBean.orgaSelection}" id="olb">
+  <f:selectItems value="#{organisationBean.orgas.elements.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectOneListbox>
+</p>
+<p>
+<h:commandButton value="Bearbeiten" action="#{organisationBean.selectOrganisation}"/>
+<h:commandButton value="Anlegen" action="#{organisationBean.newOrganisation}"/>
+<h:commandButton value="Löschen" action="#{organisationBean.deleteOrganisation}"/>
+</p>
 </h:form>
 </div>
 </div>

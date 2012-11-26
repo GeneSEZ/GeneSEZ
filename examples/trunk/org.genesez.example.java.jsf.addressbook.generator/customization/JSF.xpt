@@ -30,6 +30,56 @@
 «ENDDEFINE»
 
 
+«DEFINE AutoForm FOR PAutomaticallyGeneratedArea -»
+«IF hasJSFAutoForm() -»
+<h:form«EXPAND universalAttrs -»>
+«EXPAND AutoFormFieldFrame(getMClassByXmiGuid(getJSFAutoFormModel())) FOREACH autoFormProperties() -»
+<p><h:commandButton value="Submit" action="#{« getBeanName(getMClassByXmiGuid(getJSFAutoFormModel())) + "." + getJSFAutoFormAction()»}"«EXPAND universalAttrs -»/></p>
+</h:form>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE AutoFormFieldFrame(MClass model) FOR MProperty -»
+«IF !stereotype.name.contains("ignore") -»
+<p>
+<h:outputLabel>
+«taggedValue.selectFirst(e|e.tag.name == "label" && e.tag.stereotype.name == "label").value»
+«IF type == MAttribute -»
+«EXPAND AutoFormField(model) FOR (MAttribute) this -» 
+«ELSE -»
+«EXPAND AutoFormField(model) FOR (MAssociationRole) this -» 
+«ENDIF -»
+</h:outputLabel>
+</p>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE AutoFormField(MClass model) FOR MAttribute -»
+«IF type == getMElementByXmiGuid("Boolean") -»
+<h:selectBooleanCheckbox value="#{«getBeanPropertyName(model)»}"/>
+«ELSEIF type == getMElementByXmiGuid("Date")-»
+<h:inputText value="#{«getBeanPropertyName(model)»}"><f:convertDateTime pattern="dd.MM.yyyy"/></h:inputText>
+«ELSE -»
+<h:inputText value="#{«getBeanPropertyName(model)»}"/>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE AutoFormField(MClass model) FOR MAssociationRole -»
+«IF multiplicity == 1 -»
+<h:selectOneListbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»">
+  <f:selectItems value="#{«getBeanPropertyNameForItems(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectOneListbox>
+«ELSE -»
+<h:selectManyCheckbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»" layout="pageDirection">
+  <f:selectItems value="#{«getBeanPropertyNameForItems(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectManyCheckbox>
+«ENDIF -»
+«ENDDEFINE»
+
+
 «DEFINE Div FOR PCompositeArea -»
 «IF hasJSFDiv() -»
 <div«EXPAND universalAttrs -»>
@@ -68,9 +118,82 @@
 
 «DEFINE Link FOR PCompositeElement -»
 «IF hasJSFLink() -»
-<h:form><h:commandLink action="«name -»"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>
+«IF !hasOwningElementWith(prJSFForm()) -»
+<h:form>
+«ENDIF -»
+<h:commandLink action="#{«name -»}"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>
   «EXPAND Root::Element FOREACH nestedElements -»
-</h:commandLink></h:form>
+</h:commandLink>
+«IF !hasOwningElementWith(prJSFForm()) -»
+</h:form>
+«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE H FOR PCompositeElement -»
+«IF hasJSFHeading() -»
+<h«getJSFHeadingLevel() -»«EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</h«getJSFHeadingLevel() -»>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Form FOR PCompositeElement -»
+«IF hasJSFForm() -»
+<h:form«EXPAND universalAttrs -»>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</h:form>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Fieldset FOR PCompositeElement -»
+«IF hasJSFFieldset() -»
+<fieldset«EXPAND universalAttrs -»>
+  <legend>«name -»</legend>
+  «EXPAND Root::Element FOREACH nestedElements -»
+</fieldset>
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE InputText FOR PInput -»
+«IF hasJSFInputText() -»
+«EXPAND Label -»
+<h:inputText value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -»
+«IF hasJSFInputElementDatePattern() -»
+><f:convertDateTime pattern="«getJSFInputElementDatePattern()»" /></h:inputText>
+«ELSE -»
+/>
+«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Checkbox FOR PInput -»
+«IF hasJSFCheckbox() -»
+«IF hasJSFInputElementItems() -»
+<h:selectManyCheckbox value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -» layout="pageDirection">
+  <f:selectItems value="#{«getJSFInputElementItems()».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectManyCheckbox>
+«ELSE -»
+<h:outputLabel>
+<h:selectBooleanCheckbox value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -»/>
+«getJSFInputElementLabel() -»
+</h:outputLabel>
+«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Listbox FOR PInput -»
+«IF hasJSFListbox() -»
+«EXPAND Label -»
+<h:selectOneListbox value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -»>
+  <f:selectItems value="#{«getJSFInputElementItems()».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectOneListbox>
 «ENDIF -»
 «ENDDEFINE»
 
@@ -89,7 +212,7 @@
 «ENDDEFINE»
 
 
-«DEFINE Text FOR POutput -»
+«DEFINE SimpleText FOR POutput -»
 «IF hasJSFSimpleText() -»
 «output»
 «ENDIF -»
@@ -98,7 +221,26 @@
 
 «DEFINE Link FOR PAction -»
 «IF hasJSFLink() -»
-<h:form><h:commandLink action="«name -»"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>«getJSFLinkText()»</h:commandLink></h:form>
+«IF !hasOwningElementWith(prJSFForm()) -»
+<h:form>
+«ENDIF -»
+<h:commandLink action="#{«name -»}"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>«getJSFCommandElementText()»</h:commandLink>
+«IF !hasOwningElementWith(prJSFForm()) -»
+</h:form>
+«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE Button FOR PAction -»
+«IF hasJSFButton() -»
+«IF !hasOwningElementWith(prJSFForm()) -»
+<h:form>
+«ENDIF -»
+<h:commandButton value="«getJSFCommandElementText()»" action="#{«name -»}"«EXPAND universalAttrs -»/>
+«IF !hasOwningElementWith(prJSFForm()) -»
+</h:form>
+«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 
@@ -108,8 +250,17 @@
 «ENDDEFINE»
 
 
+«DEFINE inputAttrs FOR PElement -»
+«EXPAND optionalAttr(prJSFElement(), prJSFClass()) -» id="«name -»"«EXPAND optionalAttr(prJSFElement(), prJSFStyle()) -»
+«ENDDEFINE»
+
+
 «DEFINE optionalAttr(String stereotyp, String taggedValue) FOR PMetaDataAware -»
 «LET hasTaggedValue(stereotyp, taggedValue) ? ' ' + taggedValue + '="' + getTaggedValue(stereotyp, taggedValue) + '"' : '' AS v -»
 «v -»
 «ENDLET -»
+«ENDDEFINE»
+
+«DEFINE Label FOR PElement -»
+<h:outputLabel for="«name -»" value="«getJSFInputElementLabel() -»"/>
 «ENDDEFINE»

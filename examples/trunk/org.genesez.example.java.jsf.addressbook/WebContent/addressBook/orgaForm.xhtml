@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf8" /> 
+  <title>Organisation Form</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="language" content="de" />
+  <link rel="stylesheet" type="text/css" href="../css/cssLayout.css" />
+</h:head>
+<h:body>
+<div id="top">
+Adressbuch
+</div>
+<div>
+<div id="left">
+<h:form>
+<h:commandLink action="#{organisationBean.listOrganisations}">zurück zur Liste</h:commandLink>
+</h:form>
+</div>
+<div class="left_content" id="content">
+<h:form>
+<p>
+<h:outputLabel>
+Name
+<h:inputText value="#{organisationBean.organisation.name}"/>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Non-Profit
+<h:selectBooleanCheckbox value="#{organisationBean.organisation.nonprofit}"/>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Mitglieder
+<h:selectManyCheckbox value="#{organisationBean.membersSelection}" id="members" layout="pageDirection">
+  <f:selectItems value="#{organisationBean.members.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectManyCheckbox>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Elternorganisation
+<h:selectOneListbox value="#{organisationBean.parentOrganisationSelection}" id="parentOrganisation">
+  <f:selectItems value="#{organisationBean.parentOrganisation.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectOneListbox>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Unterorganisationen
+<h:selectManyCheckbox value="#{organisationBean.subsidiariesSelection}" id="subsidiaries" layout="pageDirection">
+  <f:selectItems value="#{organisationBean.subsidiaries.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+</h:selectManyCheckbox>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Vorwahl
+<h:inputText value="#{organisationBean.phone.extension}"/>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Nummer
+<h:inputText value="#{organisationBean.phone.number}"/>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Straße
+<h:inputText value="#{organisationBean.address.street}"/>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+PLZ
+<h:inputText value="#{organisationBean.address.zip}"/>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Stadt
+<h:inputText value="#{organisationBean.address.town}"/>
+</h:outputLabel>
+</p>
+<p>
+<h:outputLabel>
+Land
+<h:inputText value="#{organisationBean.address.country}"/>
+</h:outputLabel>
+</p>
+<p><h:commandButton value="Submit" action="#{organisationBean.saveOrganisation}"/></p>
+</h:form>
+</div>
+</div>
+<div id="bottom">
+GeneSEZ
+</div>
+</h:body>
+</html>
