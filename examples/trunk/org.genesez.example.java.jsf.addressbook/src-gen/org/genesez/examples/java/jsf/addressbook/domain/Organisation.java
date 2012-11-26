@@ -5,19 +5,30 @@ package org.genesez.examples.java.jsf.addressbook.domain;
  * 	@FILE-ID : (_17_0_1_b3f027f_1346926367781_356200_2273) 
  */
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 /**
  * Please describe the responsibility of your class in your modeling tool.
  * @author roman01
  */
+@Entity
 public class Organisation extends Addressee {
 	
 	/** Stores associated objects of association MEMBERS to Person */
+	@ManyToMany(mappedBy = "membership")
 	private java.util.Set<Person> members = new java.util.HashSet<Person>();
 	
 	/** Stores the associated object of association PARENTORGANISATION to Organisation */
+	@ManyToOne
+	@JoinColumn(name = "Parent_ID", nullable = true)
 	private Organisation parentOrganisation;
 	
 	/** Stores associated objects of association SUBSIDIARIES to Organisation */
+	@OneToMany(mappedBy = "parentOrganisation")
 	private java.util.Set<Organisation> subsidiaries = new java.util.HashSet<Organisation>();
 	
 	private String name;

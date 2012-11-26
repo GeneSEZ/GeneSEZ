@@ -7,13 +7,25 @@ package org.genesez.examples.java.jsf.addressbook.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
 /**
  * Please describe the responsibility of your class in your modeling tool.
  * @author roman01
  */
+@Entity
 public class Person extends Addressee {
 	
 	/** Stores associated objects of association MEMBERSHIP to Organisation */
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(	name = "Link_Memberships", 
+    			joinColumns = { @JoinColumn(name = "Person_id")},
+    			inverseJoinColumns = { @JoinColumn(name = "Organisation_id")}
+		      )
 	private java.util.Set<Organisation> membership = new java.util.HashSet<Organisation>();
 	
 	private String firstName;

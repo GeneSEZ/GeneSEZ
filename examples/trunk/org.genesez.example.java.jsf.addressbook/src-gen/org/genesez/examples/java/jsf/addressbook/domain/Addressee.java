@@ -1,5 +1,16 @@
 package org.genesez.examples.java.jsf.addressbook.domain;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_17_0_1_b3f027f_1346925140937_90675_2017) 
@@ -9,11 +20,19 @@ package org.genesez.examples.java.jsf.addressbook.domain;
  * Please describe the responsibility of your class in your modeling tool.
  * @author roman01
  */
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Addressee {
 	
 	/** Stores associated objects of association CONTACTS to Contact */
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "Link_Addressee", 
+			   joinColumns = { @JoinColumn(name = "Addressee_id") }, 
+			   inverseJoinColumns = { @JoinColumn(name = "Contact_id") })
 	private java.util.Set<Contact> contacts = new java.util.HashSet<Contact>();
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	/**

@@ -5,10 +5,13 @@ package org.genesez.examples.java.jsf.addressbook.domain;
  * 	@FILE-ID : (_17_0_1_b3f027f_1346926165343_45655_2214) 
  */
 
+import javax.persistence.Entity;
+
 /**
  * Please describe the responsibility of your class in your modeling tool.
  * @author roman01
  */
+@Entity
 public class Phone extends Contact {
 	
 	private String extension;
