@@ -4,6 +4,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -17,10 +19,12 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartSashContainer;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.IPresentationEngine;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -30,18 +34,28 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.FileEditorInput;
+import org.genesez.eclipse.wizard.util.WizardConstants;
+import org.genesez.eclipse.workfloweditor.util.UIController;
 import org.genesez.eclipse.workfloweditor.util.WorkfloweditorConstants;
 
 @SuppressWarnings("restriction")
 public class WorkflowEditor extends EditorPart {
 
 	public static final String ID = "org.genesez.eclipse.workfloweditor.WorkflowEditor"; //$NON-NLS-1$
+	public static final String ERROR_MESSAGE = "File could not be saved due to some Errors";
+	public static final String ERROR_HEAD = "Save Error";
 
-	private MWindow hostWin;
-	private IEclipseContext context;
+	private final MWindow hostWin;
+	private final IEclipseContext context;
 	private Composite composite;
 	private Cursor oldCursor;
-	private Cursor newCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_CROSS);
+	private final Cursor newCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_CROSS);
+	private final Image image = new Image(Display.getCurrent(), getClass().getClassLoader().getResourceAsStream(
+	// "icons/butterfly.gif"));
+			"images/GeneSEZ_32x32.png"));
+	private boolean dirty = false;
+	private UIController controller;
 
 	/** The presentationEngine for Rendering */
 	@Inject
@@ -93,9 +107,9 @@ public class WorkflowEditor extends EditorPart {
 		complete.setHorizontal(true);
 
 		MPart availableElements = MBasicFactory.INSTANCE.createPart();
-		availableElements.setContainerData("25");
+		availableElements.setContainerData("30");
 		MInputPart usedElements = MBasicFactory.INSTANCE.createInputPart();
-		usedElements.setContainerData("75");
+		usedElements.setContainerData("70");
 
 		// put the model elements together
 		pStack.getChildren().add(perspective);
@@ -126,6 +140,7 @@ public class WorkflowEditor extends EditorPart {
 		renderer.createGui(hostModel, parent, context);
 		// Clean up the shared elements list once we're done
 		parent.addDisposeListener(new DisposeListener() {
+			@Override
 			public void widgetDisposed(DisposeEvent e) {
 				hostWin.getSharedElements().remove(hostModel);
 			}
@@ -135,11 +150,17 @@ public class WorkflowEditor extends EditorPart {
 	@Inject
 	private void changeCursor(@Optional @Named(WorkfloweditorConstants.SELECTED_WORKFLOWCOMPONENT) Object component) {
 		if (composite != null && !composite.isDisposed()) {
-			if (component != null)
+			if (component != null) {
 				composite.setCursor(newCursor);
-			else
+			} else {
 				composite.setCursor(oldCursor);
+			}
 		}
+	}
+
+	@Override
+	protected Image getDefaultImage() {
+		return image;
 	}
 
 	@Override
@@ -149,23 +170,42 @@ public class WorkflowEditor extends EditorPart {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// Do the Save operation
+		try {
+			controller.serialize();
+			setDirty(false);
+		} catch (Exception e) {
+			Status status = new Status(IStatus.ERROR, WizardConstants.PLUGIN_ID, IStatus.OK, e.getMessage(), e);
+			// Display the dialog
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), ERROR_HEAD, ERROR_MESSAGE, status);
+		}
 	}
 
 	@Override
 	public void doSaveAs() {
-		// Do the Save As operation
+		doSave(null);
 	}
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		if (!(input instanceof FileEditorInput)) {
+			throw new PartInitException("Not the right input type");
+		}
+		controller = new UIController(((FileEditorInput) input).getFile(), this);
+		ContextInjectionFactory.inject(controller, context);
+		context.set(UIController.class, controller);
+		setPartName(input.getName());
 		setSite(site);
 		setInput(input);
 	}
 
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+		firePropertyChange(PROP_DIRTY);
+	}
+
 	@Override
 	public boolean isDirty() {
-		return false;
+		return dirty;
 	}
 
 	@Override
