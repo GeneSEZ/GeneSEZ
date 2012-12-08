@@ -1,18 +1,22 @@
 package org.genesez.eclipse.workfloweditor.ui;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -24,52 +28,82 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.genesez.eclipse.workfloweditor.ui.renderer.FieldRenderer;
+import org.genesez.eclipse.workfloweditor.ui.renderer.RendererRegisterHelper;
+import org.genesez.eclipse.workfloweditor.util.ClassHelper;
 import org.genesez.eclipse.workfloweditor.util.Description;
+import org.genesez.eclipse.workfloweditor.util.UIController;
 import org.genesez.eclipse.workfloweditor.util.WorkfloweditorConstants;
 import org.genesez.workflow.WorkflowComponent;
 import org.genesez.workflow.profile.Parameter;
 
+@SuppressWarnings("restriction")
 public class WorkflowComponentGroup {
 
 	private static final String NO_DESCRIPTION = "No description given for the component.";
 	private static final String DESCRIPTION = "Description:";
 	private static final String OPEN = " Open ";
-	private static final String CLOSE = "Close";
+	private static final String CLOSE = " Close ";
 	private static final String SHOW_SUMMARY = "Show summary when closed.";
 
 	public static Map<Group, WorkflowComponentGroup> groups = new HashMap<Group, WorkflowComponentGroup>();
+	private static Collection<FieldRenderer> renderers = RendererRegisterHelper.getRenderer();
+	private static FieldRenderer defaultRenderer = RendererRegisterHelper.getDefaultRenderer();
 
-	private final Group group;
-	private final Composite header;
-	private final Button btnUpButton;
-	private final Button btnDownButton;
-	private final Button btnDeleteButton;
-	private final Composite parentParent;
+	private Group group;
+	private Composite header;
+	private Button btnUpButton;
+	private Button btnDownButton;
+	private Button btnDeleteButton;
+	private Composite advanced;
 
-	private final Composite description;
-	private final Label lblDescription;
+	private Composite description;
+	private Label lblDescription;
 
-	private final Composite showMore;
-	private final Button btnCheckButton;
-	private final Button btnOpenClose;
+	private Composite showMore;
+	private Button btnCheckButton;
+	private Button btnOpenClose;
 
+	private Image closeImage;
 	private Composite dynamicOpenPart;
 	private Composite dynamicClosedPart;
 
-	private final Label precedingDragTarget;
+	private Label precedingDragTarget;
+
+	private Map<Field, Method[]> advancedFields;
 
 	private final WorkflowComponent workflowComponent;
 
-	@Inject
-	private @Named(WorkfloweditorConstants.SELECTED_WORKFLOWCOMPONENT)
-	WorkflowComponent currentComponent;
+	private WorkflowComponent defaultWorkflowComponent = null;
 
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public WorkflowComponentGroup(Composite parent, WorkflowComponent component) {
-		this(parent, component, null);
+	private SelectionListener advancedBtnListener;
+	private SelectionListener simpleBtnListener;
+
+	@Inject
+	private UIController controller;
+
+	@Inject
+	private IEclipseContext context;
+
+	@Inject
+	private IWorkbench workbench;
+
+	@Inject
+	@Named(WorkfloweditorConstants.HEAD_COMPOSITE)
+	private Composite headComposite;
+
+	public WorkflowComponentGroup(WorkflowComponent component) {
+		this.workflowComponent = component;
+		try {
+			this.defaultWorkflowComponent = component.getClass().newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -82,7 +116,13 @@ public class WorkflowComponentGroup {
 	 * @param closeButtonImage
 	 *            the image for the closeButton, maybe null.
 	 */
-	public WorkflowComponentGroup(Composite parent, WorkflowComponent component, Image closeButtonImage) {
+	@PostConstruct
+	public void createControls(Composite parent) {
+		if (workbench != null) {
+			ISharedImages eclipseImages = workbench.getSharedImages();
+			closeImage = eclipseImages.getImage(ISharedImages.IMG_TOOL_DELETE);
+		}
+
 		precedingDragTarget = new Label(parent, SWT.NONE);
 		GridData gd_drag = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gd_drag.heightHint = 4;
@@ -92,9 +132,7 @@ public class WorkflowComponentGroup {
 		groups.put(group, this);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		this.parentParent = parent.getParent();
-		this.workflowComponent = component;
-		group.setText(component.getComponentName());
+		group.setText(workflowComponent.getComponentName());
 		group.setLayout(new GridLayout());
 
 		header = new Composite(group, SWT.NONE);
@@ -111,10 +149,10 @@ public class WorkflowComponentGroup {
 		btnUpButton = new Button(header, SWT.ARROW | SWT.UP);
 		btnDownButton = new Button(header, SWT.ARROW | SWT.DOWN);
 		btnDeleteButton = new Button(header, SWT.CLOSE);
-		if (closeButtonImage == null) {
-			btnDeleteButton.setText(" X ");
+		if (closeImage != null) {
+			btnDeleteButton.setImage(closeImage);
 		} else {
-			btnDeleteButton.setImage(closeButtonImage);
+			btnDeleteButton.setText(" X ");
 		}
 
 		description = new Composite(group, SWT.NONE);
@@ -124,7 +162,7 @@ public class WorkflowComponentGroup {
 		lblDescription = new Label(description, SWT.WRAP);
 		lblDescription.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
 
-		Description descriptionAnnotation = component.getClass().getAnnotation(Description.class);
+		Description descriptionAnnotation = workflowComponent.getClass().getAnnotation(Description.class);
 		if (descriptionAnnotation == null) {
 			lblDescription.setText(NO_DESCRIPTION);
 		} else {
@@ -149,99 +187,166 @@ public class WorkflowComponentGroup {
 		addListener();
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<Field> getAllFields() {
-		List<Class> classes = new ArrayList<Class>();
-		Class clazz = workflowComponent.getClass();
-		while (!clazz.equals(Object.class)) {
-			classes.add(clazz);
-			clazz = clazz.getSuperclass();
-		}
-		for (int i = classes.size() - 1; i >= 0; i--) {
-			Class[] interfaces = classes.get(i).getInterfaces();
-			boolean hasInterface = false;
-			for (Class interfaze : interfaces) {
-				if (interfaze.equals(WorkflowComponent.class)) {
-					hasInterface = true;
-					break;
-				}
-			}
-			if (hasInterface) {
-				break;
-			}
-			classes.remove(i);
-		}
-		List<Field> fields = new ArrayList<Field>();
-		for (Class clazz_i : classes) {
-			try {
-				Collections.addAll(fields, clazz_i.getDeclaredFields());
-			} catch (NoClassDefFoundError e) {
-				continue;
-			}
-		}
-		return fields;
-	}
-
 	private Composite closedPart() {
 		dynamicClosedPart = new Composite(group, SWT.NONE);
 		dynamicClosedPart.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		dynamicClosedPart.setLayout(new FillLayout());
 		Text closedText = new Text(dynamicClosedPart, SWT.WRAP | SWT.MULTI);
 		closedText.setEditable(false);
-		for (Field field : getAllFields()) {
+		StringBuffer buffer = new StringBuffer();
+		for (Field field : ClassHelper.getAllFields(workflowComponent.getClass(), WorkflowComponent.class)) {
 			Parameter param = field.getAnnotation(Parameter.class);
 			if (param != null) {
-				field.setAccessible(true);
-				String text = closedText.getText() + field.getName() + " = ";
-				Object value = null;
-				try {
-					value = field.get(workflowComponent);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+				Method array[] = new Method[4];
+				Boolean checkField = checkShowField(array, field, param);
+				if (checkField == null || !checkField) {
+					continue;
 				}
-				if (value == null) {
-					closedText.setText(text + "null\n");
-				} else {
-					closedText.setText(text + value.toString() + "\n");
-				}
+				buffer.append(field.getName() + " = " + getValue(field, workflowComponent, array) + "\n");
 			}
 		}
-		closedText.setText(closedText.getText().trim());
+		String text = buffer.toString().trim();
+		if (text.isEmpty()) {
+			closedText.setVisible(false);
+		}
+		closedText.setText(text);
 		return dynamicClosedPart;
+	}
+
+	private Boolean checkShowField(Method[] array, Field field, Parameter param) {
+		if (array != null && array.length >= 4) {
+			array[0] = ClassHelper.getGetter(field);
+			array[1] = ClassHelper.getSetter(field);
+			array[2] = ClassHelper.getAdder(field);
+			array[3] = ClassHelper.getRemover(field);
+
+			if (array[0] == null || (array[1] == null && (array[2] == null || array[3] == null))) {
+				return null;
+			}
+
+			String value = getValue(field, workflowComponent, array);
+
+			if (defaultWorkflowComponent == null) {
+				if (param.isRequired()) {
+					return true;
+				}
+				return false;
+			}
+
+			if (param.isRequired() && (value.isEmpty() || value.equals(Collections.EMPTY_LIST.toString()))) {
+				return true;
+			}
+			if (getValue(field, workflowComponent, array).equals(getValue(field, defaultWorkflowComponent, array))) {
+				return false;
+			}
+			return true;
+		}
+		return null;
+	}
+
+	private String getValue(Field field, Object instance, Method[] array) {
+		Object value = null;
+		try {
+			value = array[0].invoke(instance);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (value == null) {
+			return "";
+		}
+		return value.toString();
 	}
 
 	private Composite openPart() {
 		dynamicOpenPart = new Composite(group, SWT.NONE);
 		dynamicOpenPart.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		dynamicOpenPart.setLayout(new GridLayout(2, false));
-		for (Field field : getAllFields()) {
+		advancedFields = new HashMap<Field, Method[]>();
+		for (Field field : ClassHelper.getAllFields(workflowComponent.getClass(), WorkflowComponent.class)) {
 			Parameter param = field.getAnnotation(Parameter.class);
 			if (param != null) {
-				field.setAccessible(true);
-				Label fieldLabel = new Label(dynamicOpenPart, SWT.NONE);
-				fieldLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-				fieldLabel.setText(field.getName() + ":");
-				Text fieldValue = new Text(dynamicOpenPart, SWT.BORDER);
-				fieldValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-				Object value = null;
-				try {
-					value = field.get(workflowComponent);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+				Method array[] = new Method[4];
+				Boolean checkField = checkShowField(array, field, param);
+				if (checkField == null) {
+					continue;
 				}
-				if (value != null) {
-					fieldValue.setText(value.toString());
+				if (checkField) {
+					renderField(field, param, array);
+				} else {
+					advancedFields.put(field, array);
 				}
 			}
+		}
+		new Label(dynamicOpenPart, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2,
+				1));
+		if (!advancedFields.isEmpty()) {
+			advanced = new Composite(dynamicOpenPart, SWT.NONE);
+			advanced.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false, 2, 1));
+			advanced.setLayout(new GridLayout(2, false));
+			Label label_l = new Label(advanced, SWT.NONE);
+			label_l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			Button btnAdvanced = new Button(advanced, SWT.PUSH);
+			btnAdvanced.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+			btnAdvanced.setText("Advanced >>");
+			btnAdvanced.addSelectionListener(advancedBtnListener);
 		}
 		return dynamicOpenPart;
 	}
 
+	private Composite openAdvancedPart() {
+		for (Field field : advancedFields.keySet()) {
+			renderField(field, field.getAnnotation(Parameter.class), advancedFields.get(field));
+		}
+		Composite simple = new Composite(dynamicOpenPart, SWT.NONE);
+		simple.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false, 2, 1));
+		simple.setLayout(new GridLayout(2, false));
+		Label label_l = new Label(simple, SWT.NONE);
+		label_l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Button btnSimple = new Button(simple, SWT.PUSH);
+		btnSimple.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+		btnSimple.setText("<< Simple");
+		btnSimple.addSelectionListener(simpleBtnListener);
+		return dynamicOpenPart;
+	}
+
+	private void renderField(Field field, Parameter param, Method[] array) {
+		boolean rendered = false;
+		for (FieldRenderer renderer : renderers) {
+			if (renderer.renderElement(dynamicOpenPart, field, param, workflowComponent, workbench, context)) {
+				rendered = true;
+				break;
+			}
+		}
+		if (!rendered) {
+			defaultRenderer.renderElement(dynamicOpenPart, field, param, workflowComponent, workbench, context);
+		}
+	}
+
 	private void addListener() {
+		advancedBtnListener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				advanced.dispose();
+				openAdvancedPart();
+				headComposite.notifyListeners(SWT.Resize, new Event());
+			}
+		};
+
+		simpleBtnListener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				dynamicOpenPart.dispose();
+				openPart();
+				headComposite.notifyListeners(SWT.Resize, new Event());
+			}
+		};
 
 		// creates and disposes the needed parts
 		btnOpenClose.addSelectionListener(new SelectionAdapter() {
@@ -252,8 +357,7 @@ public class WorkflowComponentGroup {
 						dynamicClosedPart.dispose();
 					}
 					openPart();
-					group.setSize(group.getSize().x, group.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-					parentParent.notifyListeners(SWT.Resize, new Event());
+					headComposite.notifyListeners(SWT.Resize, new Event());
 				} else {
 					if (dynamicOpenPart != null) {
 						dynamicOpenPart.dispose();
@@ -276,8 +380,7 @@ public class WorkflowComponentGroup {
 							dynamicClosedPart.dispose();
 						}
 					}
-					group.setSize(group.getSize().x, group.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-					parentParent.notifyListeners(SWT.Resize, new Event());
+					headComposite.notifyListeners(SWT.Resize, new Event());
 				}
 			}
 		});
@@ -289,7 +392,7 @@ public class WorkflowComponentGroup {
 			public void widgetSelected(SelectionEvent e) {
 				precedingDragTarget.dispose();
 				group.dispose();
-				parentParent.notifyListeners(SWT.Resize, new Event());
+				headComposite.notifyListeners(SWT.Resize, new Event());
 			}
 		});
 
@@ -315,7 +418,7 @@ public class WorkflowComponentGroup {
 				if (pos > 1) {
 					group.moveAbove(group.getParent().getChildren()[pos - 3]);
 					precedingDragTarget.moveAbove(group);
-					parentParent.notifyListeners(SWT.Resize, new Event());
+					headComposite.notifyListeners(SWT.Resize, new Event());
 				}
 			}
 		});
@@ -329,7 +432,7 @@ public class WorkflowComponentGroup {
 				if (pos != -1 && pos < (group.getParent().getChildren().length - 2)) {
 					group.moveBelow(group.getParent().getChildren()[pos + 2]);
 					precedingDragTarget.moveAbove(group);
-					parentParent.notifyListeners(SWT.Resize, new Event());
+					headComposite.notifyListeners(SWT.Resize, new Event());
 				}
 			}
 		});
