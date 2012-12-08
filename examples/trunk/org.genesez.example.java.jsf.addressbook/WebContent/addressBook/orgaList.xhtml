@@ -13,34 +13,40 @@
   <link rel="stylesheet" type="text/css" href="../css/cssLayout.css" />
 </h:head>
 <h:body>
-<div id="top">
-Addressbuch
-</div>
+<ui:include src="header.xhtml"></ui:include>
 <div>
 <div id="left">
 <h:form>
 <h:commandLink action="#{loginBean.home}">Home</h:commandLink>
 </h:form>
 </div>
+</div>
 <div class="left_content" id="content">
+<div>
 <h1>Organisationen</h1>
+</div>
 <h:form>
-<p>
-<h:outputLabel for="olb" value="Organisatonen"/>
-<h:selectOneListbox value="#{organisationBean.orgaSelection}" id="olb">
-  <f:selectItems value="#{organisationBean.orgas.elements.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
-</h:selectOneListbox>
-</p>
-<p>
-<h:commandButton value="Bearbeiten" action="#{organisationBean.selectOrganisation}"/>
+<h:dataTable value="#{organisationBean.organisationCollection}" var="n">
+  <h:column>
+    <f:facet name="header">Organisation</f:facet>
+    #{n.value}
+  </h:column>
+  
+  <h:column>
+    <h:commandButton value="Anzeigen" action="#{organisationBean.showOrganisation}">
+	  <f:setPropertyActionListener target="#{organisationBean.organisationSelection}" value="#{n.key}" />
+    </h:commandButton>
+    <h:commandButton value="Bearbeiten" action="#{organisationBean.selectOrganisation}">
+	  <f:setPropertyActionListener target="#{organisationBean.organisationSelection}" value="#{n.key}" />
+    </h:commandButton>
+    <h:commandButton value="Löschen" action="#{organisationBean.deleteOrganisation}">
+	  <f:setPropertyActionListener target="#{organisationBean.organisationSelection}" value="#{n.key}" />
+    </h:commandButton>
+  </h:column>
+</h:dataTable>
 <h:commandButton value="Anlegen" action="#{organisationBean.newOrganisation}"/>
-<h:commandButton value="Löschen" action="#{organisationBean.deleteOrganisation}"/>
-</p>
 </h:form>
 </div>
-</div>
-<div id="bottom">
-GeneSEZ
-</div>
+<ui:include src="footer.xhtml"></ui:include>
 </h:body>
 </html>

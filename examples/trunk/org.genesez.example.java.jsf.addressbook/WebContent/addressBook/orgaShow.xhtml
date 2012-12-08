@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf8" /> 
-  <title>Organisation Form</title>
+  <title>Organisation anzeigen</title>
   <meta name="description" content="" />
   <meta name="keywords" content="" />
   <meta name="language" content="de" />
@@ -22,25 +22,25 @@
 </div>
 <div class="left_content" id="content">
 <div>
-<h1>Organisation anlegen/bearbeiten</h1>
+<h1>Ausgewählte Organisation</h1>
 </div>
 <h:form>
 <p>
 <h:outputLabel>
 Name
-<h:inputText value="#{organisationBean.name}" />
+<h:inputText value="#{organisationBean.name}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Non-Profit
-<h:selectBooleanCheckbox value="#{organisationBean.nonprofit}" />
+<h:selectBooleanCheckbox value="#{organisationBean.nonprofit}" onclick="return false" onkeydown="return false"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Mitglieder
-<h:selectManyCheckbox value="#{organisationBean.membersSelection}" id="members" layout="pageDirection" >
+<h:selectManyCheckbox value="#{organisationBean.membersSelection}" id="members" layout="pageDirection" onclick="return false" onkeydown="return false">
   <f:selectItems value="#{organisationBean.members.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectManyCheckbox>
 </h:outputLabel>
@@ -48,7 +48,7 @@ Mitglieder
 <p>
 <h:outputLabel>
 Elternorganisation
-<h:selectOneListbox value="#{organisationBean.parentOrganisationSelection}" id="parentOrganisation" >
+<h:selectOneListbox value="#{organisationBean.parentOrganisationSelection}" id="parentOrganisation" onclick="return false" onkeydown="return false">
   <f:selectItems value="#{organisationBean.parentOrganisation.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectOneListbox>
 </h:outputLabel>
@@ -56,7 +56,7 @@ Elternorganisation
 <p>
 <h:outputLabel>
 Unterorganisationen
-<h:selectManyCheckbox value="#{organisationBean.subsidiariesSelection}" id="subsidiaries" layout="pageDirection" >
+<h:selectManyCheckbox value="#{organisationBean.subsidiariesSelection}" id="subsidiaries" layout="pageDirection" onclick="return false" onkeydown="return false">
   <f:selectItems value="#{organisationBean.subsidiaries.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectManyCheckbox>
 </h:outputLabel>
@@ -64,40 +64,40 @@ Unterorganisationen
 <p>
 <h:outputLabel>
 Vorwahl
-<h:inputText value="#{organisationBean.extension}" />
+<h:inputText value="#{organisationBean.extension}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Nummer
-<h:inputText value="#{organisationBean.number}" />
+<h:inputText value="#{organisationBean.number}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Straße
-<h:inputText value="#{organisationBean.street}" />
+<h:inputText value="#{organisationBean.street}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 PLZ
-<h:inputText value="#{organisationBean.zip}" />
+<h:inputText value="#{organisationBean.zip}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Stadt
-<h:inputText value="#{organisationBean.town}" />
+<h:inputText value="#{organisationBean.town}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Land
-<h:inputText value="#{organisationBean.country}" />
+<h:inputText value="#{organisationBean.country}" readonly="true"/>
 </h:outputLabel>
 </p>
-<p><h:commandButton value="Submit" action="#{organisationBean.saveOrganisation}"/></p>
+<p><h:commandButton value="Liste" action="#{organisationBean.listOrganisation}"/></p>
 </h:form>
 </div>
 </div>

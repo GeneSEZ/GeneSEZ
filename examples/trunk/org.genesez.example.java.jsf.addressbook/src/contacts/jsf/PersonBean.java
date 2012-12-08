@@ -1,7 +1,10 @@
 package contacts.jsf;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jsf.util.FacesHelper;
 import contacts.facade.FacadeBase;
@@ -17,49 +20,107 @@ public class PersonBean {
 	
 	private FacadeBase facade;
 	
-	private CollectionDto persons = new CollectionDto();
+	private Map<Long, String> personCollection = new HashMap<Long, String>();
 	private Long personSelection;
-	private PersonDto personDto = new PersonDto();
+	private Long id;
+	private String firstName;
+	private String lastName;
+	private Date birthdate;
 	
-	private CollectionDto memberships;
+	
+	private Map<Long, String> memberships;
 	private List<String> membershipSelection;
 	
-	private AddressDto addressDto;
+	private Long phoneID;
+	private String extension;
+	private String number;
 	
-	private PhoneDto phoneDto;
+	private Long addressID;
+	private String street;
+	private String zip;
+	private String town;
+	private String country;
 	
 	public PersonBean() {
 	}
 	
 	public String newPerson() {
-		personDto = new PersonDto();
-		memberships = getUserFacade().getOrganisations();
-		addressDto = new AddressDto();
-		phoneDto = new PhoneDto();
+		memberships = getUserFacade().getOrganisations().getElements();
 		
 		return "pedit";
 	}
 	
 	public String savePerson() {
-		personDto.setUid(getUserFacade().saveOrUpdatePerson(personDto));
+		PersonDto person = assemblePersonDto();
+		person.setUid(getUserFacade().saveOrUpdatePerson(person));
 		
-		for(Long id : getUserFacade().getMemberships(personDto).getElements().keySet())
+		for(Long id : getUserFacade().getMemberships(person).getElements().keySet())
 			if(!membershipSelection.contains(id.toString()))
-				getUserFacade().removeMembership(personDto, getUserFacade().getOrganisation(id));
+				getUserFacade().removeMembership(person, getUserFacade().getOrganisation(id));
 		
 		for(String id : membershipSelection) {
 			OrganisationDto orgDto = getUserFacade().getOrganisation(Long.valueOf(id));
-			getUserFacade().addMembership(personDto, orgDto);
+			getUserFacade().addMembership(person, orgDto);
 		}
 		
-		phoneDto.setId(getUserFacade().saveOrUpdatePhone(phoneDto));
-		getUserFacade().addPhone(phoneDto, personDto);
+		PhoneDto phone = assemblePhoneDto();
+		phone.setId(getUserFacade().saveOrUpdatePhone(phone));
+		getUserFacade().addPhone(phone, person);
 		
-		addressDto.setId(getUserFacade().saveOrUpdateAddress(addressDto));
-		getUserFacade().addAddress(addressDto, personDto);
+		AddressDto address = assembleAddressDto();
+		address.setId(getUserFacade().saveOrUpdateAddress(address));
+		getUserFacade().addAddress(address, person);
 		
 		resetSelections();
 		return listPersons();
+	}
+	
+	private AddressDto assembleAddressDto() {
+		AddressDto a = new AddressDto();
+		a.setId(addressID);
+		a.setCountry(country);
+		a.setStreet(street);
+		a.setTown(town);
+		a.setZip(zip);
+		return a;
+	}
+
+	private PhoneDto assemblePhoneDto() {
+		PhoneDto p = new PhoneDto();
+		p.setId(phoneID);
+		p.setExtension(extension);
+		p.setNumber(number);
+		return p;
+	}
+
+	private PersonDto assemblePersonDto() {
+		PersonDto p = new PersonDto();
+		p.setUid(id);
+		p.setBirthdate(birthdate);
+		p.setFirstName(firstName);
+		p.setLastName(lastName);
+		return p;
+	}
+	
+	private void savePersonDto(PersonDto p) {
+		id = p.getId();
+		firstName = p.getFirstName();
+		lastName = p.getLastName();
+		birthdate = p.getBirthdate();
+	}
+	
+	private void savePhoneDto(PhoneDto p) {
+		phoneID = p.getId();
+		extension = p.getExtension();
+		number = p.getNumber();
+	}
+	
+	private void saveAddressDto(AddressDto a) {
+		addressID = a.getId();
+		street = a.getStreet();
+		town = a.getTown();
+		zip = a.getZip();
+		country = a.getCountry();
 	}
 	
 	private void resetSelections() {
@@ -81,18 +142,21 @@ public class PersonBean {
 	 */
 	private boolean select() {
 		if (personSelection != null && personSelection > 0) {
-			personDto = getUserFacade().getPerson(personSelection);
+			PersonDto person = getUserFacade().getPerson(personSelection);
+			savePersonDto(person);
 			
-			memberships = getUserFacade().getOrganisations();
+			memberships = getUserFacade().getOrganisations().getElements();
 			membershipSelection = new ArrayList<String>();
-			for(Long l : getUserFacade().getMemberships(personDto).getElements().keySet())
+			for(Long l : getUserFacade().getMemberships(person).getElements().keySet())
 				membershipSelection.add(l.toString());  
 			
-			CollectionDto phonesTemp = getUserFacade().getPhones(personDto);
-			phoneDto = phonesTemp.getElements().isEmpty() ? new PhoneDto() : getUserFacade().getPhone(phonesTemp.getElements().keySet().iterator().next());
+			CollectionDto phonesTemp = getUserFacade().getPhones(person);
+			PhoneDto phone = phonesTemp.getElements().isEmpty() ? new PhoneDto() : getUserFacade().getPhone(phonesTemp.getElements().keySet().iterator().next());
+			savePhoneDto(phone);
 			
-			CollectionDto adrsTemp = getUserFacade().getAddresses(personDto);
-			addressDto = adrsTemp.getElements().isEmpty() ? new AddressDto() : getUserFacade().getAddress(adrsTemp.getElements().keySet().iterator().next());
+			CollectionDto adrsTemp = getUserFacade().getAddresses(person);
+			AddressDto address = adrsTemp.getElements().isEmpty() ? new AddressDto() : getUserFacade().getAddress(adrsTemp.getElements().keySet().iterator().next());
+			saveAddressDto(address);
 			
 			return true;
 		}
@@ -100,7 +164,7 @@ public class PersonBean {
 	}
 
 	public String listPersons() {
-		persons = getUserFacade().getPersons();
+		personCollection = getUserFacade().getPersons().getElements();
 		resetSelections();
 		return "plist";
 	}
@@ -119,7 +183,7 @@ public class PersonBean {
 			for(Long id : adrs.getElements().keySet()) getUserFacade().removeAddress(getUserFacade().getAddress(id), dto);
 			
 			getUserFacade().deletePerson(dto);
-			persons = getUserFacade().getPersons();
+			personCollection = getUserFacade().getPersons().getElements();
 			resetSelections();
 		}
 		return listPersons();
@@ -135,20 +199,12 @@ public class PersonBean {
 		return (UserFacade) facade;
 	}
 	
-	public CollectionDto getPersons() {
-		return persons;
+	public Map<Long, String> getPersonCollection() {
+		return personCollection;
 	}
 
-	public void setPersons(CollectionDto persons) {
-		this.persons = persons;
-	}
-
-	public PersonDto getPersonDto() {
-		return personDto;
-	}
-
-	public void setPersonDto(PersonDto personDto) {
-		this.personDto = personDto;
+	public void setPersonCollection(Map<Long, String> persons) {
+		this.personCollection = persons;
 	}
 
 	public Long getPersonSelection() {
@@ -159,11 +215,11 @@ public class PersonBean {
 		this.personSelection = personSelection;
 	}
 	
-	public CollectionDto getMemberships() {
+	public Map<Long, String> getMemberships() {
 		return memberships;
 	}
 
-	public void setMemberships(CollectionDto memberships) {
+	public void setMemberships(Map<Long, String> memberships) {
 		this.memberships = memberships;
 	}
 	
@@ -175,20 +231,76 @@ public class PersonBean {
 		this.membershipSelection = membershipSelection;
 	}
 
-	public AddressDto getAddressDto() {
-		return addressDto;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setAddressDto(AddressDto addressDto) {
-		this.addressDto = addressDto;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public PhoneDto getPhoneDto() {
-		return phoneDto;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setPhoneDto(PhoneDto phoneDto) {
-		this.phoneDto = phoneDto;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 	
 }

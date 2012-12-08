@@ -143,6 +143,9 @@ String getJSFHeadingLevel(PMetaDataAware this) :
 String getJSFCommandElementText(PMetaDataAware this) :
 	getTaggedValue(prJSFCommandElement(), prJSFText());
 	
+String getJSFCommandElementAction(PMetaDataAware this) :
+	getTaggedValue(prJSFCommandElement(), prJSFAction());
+	
 boolean hasJSFSimpleText(PMetaDataAware this) :
 	hasPMetaData( prJSFSimpleText() );
 	
@@ -199,6 +202,9 @@ String getJSFAutoFormModel(PMetaDataAware this) :
 	
 String getJSFAutoFormInclude(PMetaDataAware this) :
 	getTaggedValues(prJSFAutoForm(), prJSFInclude());
+	
+String getJSFAutoFormType(PMetaDataAware this) :
+	getTaggedValue(prJSFAutoForm(), prJSFType());
 
 
 boolean hasPMetaData(PMetaDataAware this, String uri) :
@@ -263,18 +269,50 @@ boolean hasOwningElementWith(PElement this, String stereo) :
 		owningElement.hasOwningElementWith(stereo)
 	;
 	
+	
+String getOutcome(PElement this) :
+	getMOperationByXmiGuid(getJSFCommandElementAction()).classifier.name.toFirstLower() + "." + getMOperationByXmiGuid(getJSFCommandElementAction()).name;
+	
+String getSelectItemsValue(PElement this) : 
+	getMPropertyByXmiGuid(getJSFInputElementItems()).classifier.name.toFirstLower() + "." + getMPropertyByXmiGuid(getJSFInputElementItems()).name;
+
+String getInputValue(PElement this) :
+	getMPropertyByXmiGuid(getJSFInputElementValue()).classifier.name.toFirstLower() + "." + getMPropertyByXmiGuid(getJSFInputElementValue()).name;
+	
 
 String getBeanName(MClassifier this) :
 	name.toFirstLower() + "Bean";
 
-String getBeanPropertyName(MProperty this, MClass model) :
-	getBeanName(model) + "." + classifier.name.toFirstLower() + "." + name;
+String getBeanPropertyName(MProperty this, MClassifier model) :
+	getBeanName(model) + "." + name;
 	
 String getBeanPropertyNameForSelect(MProperty this) :
-	getBeanName(classifier) + "." + name + "Selection";
+	getBeanPropertyName(classifier) + "Selection";
 	
-String getBeanPropertyNameForItems(MProperty this, MClass model) :
-	getBeanName(model) + "." + name;
+String getBeanPropertyNameForSelect(MClass this) :
+	getBeanName() + "." + name.toFirstLower() + "Selection";
+	
+String getBeanPropertyNameForList(MClass this) :
+	getBeanName() + "." + name.toFirstLower() + "Collection";
+	
+	
+String getBeanMethodNameForSave(MClass this) :
+	getBeanName() + ".save" + name;
+	
+String getBeanMethodNameForDelete(MClass this) :
+	getBeanName() + ".delete" + name;
+	
+String getBeanMethodNameForShow(MClass this) :
+	getBeanName() + ".show" + name;
+	
+String getBeanMethodNameForUpdate(MClass this) :
+	getBeanName() + ".select" + name;
+	
+String getBeanMethodNameForCreate(MClass this) :
+	getBeanName() + ".new" + name;
+	
+String getBeanMethodNameForList(MClass this) :
+	getBeanName() + ".list" + name;
 	
 	
 List[MProperty] autoFormProperties(PAutomaticallyGeneratedArea this) :

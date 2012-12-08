@@ -33,22 +33,61 @@
 «DEFINE AutoForm FOR PAutomaticallyGeneratedArea -»
 «IF hasJSFAutoForm() -»
 <h:form«EXPAND universalAttrs -»>
-«EXPAND AutoFormFieldFrame(getMClassByXmiGuid(getJSFAutoFormModel())) FOREACH autoFormProperties() -»
-<p><h:commandButton value="Submit" action="#{« getBeanName(getMClassByXmiGuid(getJSFAutoFormModel())) + "." + getJSFAutoFormAction()»}"«EXPAND universalAttrs -»/></p>
+«LET getMClassByXmiGuid(getJSFAutoFormModel()) AS model -»
+«IF getJSFAutoFormType() == 'SAVE_OR_UPDATE' -»«EXPAND AutoFormSaveOrUpdate(model) -»
+«ELSEIF getJSFAutoFormType() == 'LIST' -»«EXPAND AutoFormList(model) -»
+«ELSEIF getJSFAutoFormType() == 'SHOW' -»«EXPAND AutoFormShow(model) -»
+«ENDIF -»
+«ENDLET -»
 </h:form>
 «ENDIF -»
 «ENDDEFINE»
 
 
-«DEFINE AutoFormFieldFrame(MClass model) FOR MProperty -»
+«DEFINE AutoFormSaveOrUpdate(MClass model) FOR PAutomaticallyGeneratedArea -»
+«EXPAND AutoFormFieldFrame(model, false) FOREACH autoFormProperties() -»
+<p><h:commandButton value="Submit" action="#{«getBeanMethodNameForSave(model)»}"«EXPAND universalAttrs -»/></p>
+«ENDDEFINE»
+
+
+«DEFINE AutoFormList(MClass model) FOR PAutomaticallyGeneratedArea -»
+<h:dataTable value="#{«getBeanPropertyNameForList(model)»}" var="n">
+  <h:column>
+    <f:facet name="header">«model.name»</f:facet>
+    #{n.value}
+  </h:column>
+  
+  <h:column>
+    <h:commandButton value="Anzeigen" action="#{«getBeanMethodNameForShow(model)»}">
+	  <f:setPropertyActionListener target="#{«getBeanPropertyNameForSelect(model)»}" value="#{n.key}" />
+    </h:commandButton>
+    <h:commandButton value="Bearbeiten" action="#{«getBeanMethodNameForUpdate(model)»}">
+	  <f:setPropertyActionListener target="#{«getBeanPropertyNameForSelect(model)»}" value="#{n.key}" />
+    </h:commandButton>
+    <h:commandButton value="Löschen" action="#{«getBeanMethodNameForDelete(model)»}">
+	  <f:setPropertyActionListener target="#{«getBeanPropertyNameForSelect(model)»}" value="#{n.key}" />
+    </h:commandButton>
+  </h:column>
+</h:dataTable>
+<h:commandButton value="Anlegen" action="#{«getBeanMethodNameForCreate(model)»}"/>
+«ENDDEFINE»
+
+
+«DEFINE AutoFormShow(MClass model) FOR PAutomaticallyGeneratedArea -»
+«EXPAND AutoFormFieldFrame(model, true) FOREACH autoFormProperties() -»
+<p><h:commandButton value="Liste" action="#{«getBeanMethodNameForList(model)»}"«EXPAND universalAttrs -»/></p>
+«ENDDEFINE»
+
+
+«DEFINE AutoFormFieldFrame(MClass model, boolean readonly) FOR MProperty -»
 «IF !stereotype.name.contains("ignore") -»
 <p>
 <h:outputLabel>
 «taggedValue.selectFirst(e|e.tag.name == "label" && e.tag.stereotype.name == "label").value»
 «IF type == MAttribute -»
-«EXPAND AutoFormField(model) FOR (MAttribute) this -» 
+«EXPAND AutoFormField(model, readonly) FOR (MAttribute) this -» 
 «ELSE -»
-«EXPAND AutoFormField(model) FOR (MAssociationRole) this -» 
+«EXPAND AutoFormField(model, readonly) FOR (MAssociationRole) this -» 
 «ENDIF -»
 </h:outputLabel>
 </p>
@@ -56,27 +95,38 @@
 «ENDDEFINE»
 
 
-«DEFINE AutoFormField(MClass model) FOR MAttribute -»
+«DEFINE AutoFormField(MClass model, boolean readonly) FOR MAttribute -»
+«LET readonly ? 'readonly="true"' : '' AS readonlyaddon -»
 «IF type == getMElementByXmiGuid("Boolean") -»
-<h:selectBooleanCheckbox value="#{«getBeanPropertyName(model)»}"/>
+«LET readonly ? 'onclick="return false" onkeydown="return false"' : '' AS readonlyaddon -»
+<h:selectBooleanCheckbox value="#{«getBeanPropertyName(model)»}" «readonlyaddon»/>
+«ENDLET -»
 «ELSEIF type == getMElementByXmiGuid("Date")-»
-<h:inputText value="#{«getBeanPropertyName(model)»}"><f:convertDateTime pattern="dd.MM.yyyy"/></h:inputText>
+<h:inputText value="#{«getBeanPropertyName(model)»}" «readonlyaddon»><f:convertDateTime pattern="dd.MM.yyyy"/></h:inputText>
 «ELSE -»
-<h:inputText value="#{«getBeanPropertyName(model)»}"/>
+<h:inputText value="#{«getBeanPropertyName(model)»}" «readonlyaddon»/>
 «ENDIF -»
+«ENDLET -»
 «ENDDEFINE»
 
 
-«DEFINE AutoFormField(MClass model) FOR MAssociationRole -»
+«DEFINE AutoFormField(MClass model, boolean readonly) FOR MAssociationRole -»
+«LET readonly ? 'onclick="return false" onkeydown="return false"' : '' AS readonlyaddon -»
 «IF multiplicity == 1 -»
-<h:selectOneListbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»">
-  <f:selectItems value="#{«getBeanPropertyNameForItems(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+<h:selectOneListbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»" «readonlyaddon»>
+  <f:selectItems value="#{«getBeanPropertyName(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectOneListbox>
 «ELSE -»
-<h:selectManyCheckbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»" layout="pageDirection">
-  <f:selectItems value="#{«getBeanPropertyNameForItems(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+<h:selectManyCheckbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»" layout="pageDirection" «readonlyaddon»>
+  <f:selectItems value="#{«getBeanPropertyName(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectManyCheckbox>
 «ENDIF -»
+«ENDLET -»
+«ENDDEFINE»
+
+
+«DEFINE Include FOR PReferenceArea -»
+<ui:include src="«target.name»"></ui:include>
 «ENDDEFINE»
 
 
@@ -121,7 +171,7 @@
 «IF !hasOwningElementWith(prJSFForm()) -»
 <h:form>
 «ENDIF -»
-<h:commandLink action="#{«name -»}"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>
+<h:commandLink action="#{«getOutcome()»}"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>
   «EXPAND Root::Element FOREACH nestedElements -»
 </h:commandLink>
 «IF !hasOwningElementWith(prJSFForm()) -»
@@ -162,7 +212,7 @@
 «DEFINE InputText FOR PInput -»
 «IF hasJSFInputText() -»
 «EXPAND Label -»
-<h:inputText value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -»
+<h:inputText value="#{«getInputValue()»}"«EXPAND inputAttrs -»
 «IF hasJSFInputElementDatePattern() -»
 ><f:convertDateTime pattern="«getJSFInputElementDatePattern()»" /></h:inputText>
 «ELSE -»
@@ -175,12 +225,12 @@
 «DEFINE Checkbox FOR PInput -»
 «IF hasJSFCheckbox() -»
 «IF hasJSFInputElementItems() -»
-<h:selectManyCheckbox value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -» layout="pageDirection">
-  <f:selectItems value="#{«getJSFInputElementItems()».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+<h:selectManyCheckbox value="#{«getInputValue()»}"«EXPAND inputAttrs -» layout="pageDirection">
+  <f:selectItems value="#{«getSelectItemsValue()».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectManyCheckbox>
 «ELSE -»
 <h:outputLabel>
-<h:selectBooleanCheckbox value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -»/>
+<h:selectBooleanCheckbox value="#{«getInputValue()»}"«EXPAND inputAttrs -»/>
 «getJSFInputElementLabel() -»
 </h:outputLabel>
 «ENDIF -»
@@ -191,8 +241,8 @@
 «DEFINE Listbox FOR PInput -»
 «IF hasJSFListbox() -»
 «EXPAND Label -»
-<h:selectOneListbox value="#{«getJSFInputElementValue()»}"«EXPAND inputAttrs -»>
-  <f:selectItems value="#{«getJSFInputElementItems()».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+<h:selectOneListbox value="#{«getInputValue()»}"«EXPAND inputAttrs -»>
+  <f:selectItems value="#{«getSelectItemsValue()».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectOneListbox>
 «ENDIF -»
 «ENDDEFINE»
@@ -224,7 +274,7 @@
 «IF !hasOwningElementWith(prJSFForm()) -»
 <h:form>
 «ENDIF -»
-<h:commandLink action="#{«name -»}"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>«getJSFCommandElementText()»</h:commandLink>
+<h:commandLink action="#{«getOutcome()»}"«EXPAND optionalAttr(prJSFLink(), prJSFTarget()) -»«EXPAND universalAttrs -»>«getJSFCommandElementText()»</h:commandLink>
 «IF !hasOwningElementWith(prJSFForm()) -»
 </h:form>
 «ENDIF -»
@@ -237,7 +287,7 @@
 «IF !hasOwningElementWith(prJSFForm()) -»
 <h:form>
 «ENDIF -»
-<h:commandButton value="«getJSFCommandElementText()»" action="#{«name -»}"«EXPAND universalAttrs -»/>
+<h:commandButton value="«getJSFCommandElementText()»" action="#{«getOutcome()»}"«EXPAND universalAttrs -»/>
 «IF !hasOwningElementWith(prJSFForm()) -»
 </h:form>
 «ENDIF -»

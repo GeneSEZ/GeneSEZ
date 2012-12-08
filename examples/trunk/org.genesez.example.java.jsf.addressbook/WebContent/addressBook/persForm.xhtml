@@ -13,9 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../css/cssLayout.css" />
 </h:head>
 <h:body>
-<div id="top">
-Adressbuch
-</div>
+<ui:include src="header.xhtml"></ui:include>
 <div>
 <div id="left">
 <p>
@@ -28,47 +26,45 @@ Adressbuch
 <h1>Person Anlegen/Bearbeiten</h1>
 <h:form>
 <h:outputLabel for="firstname" value="Vorname"/>
-<h:inputText value="#{personBean.personDto.firstName}" id="firstname"/>
+<h:inputText value="#{personBean.firstName}" id="firstname"/>
 <h:outputLabel for="lastname" value="Nachname"/>
-<h:inputText value="#{personBean.personDto.lastName}" id="lastname"/>
+<h:inputText value="#{personBean.lastName}" id="lastname"/>
 <p>
 <h:outputLabel for="birthdate" value="Geburtstag"/>
-<h:inputText value="#{personBean.personDto.birthdate}" id="birthdate"><f:convertDateTime pattern="dd.MM.yyyy" /></h:inputText>
+<h:inputText value="#{personBean.birthdate}" id="birthdate"><f:convertDateTime pattern="dd.MM.yyyy" /></h:inputText>
 </p>
 <fieldset>
   <legend>Mitgliedschaften</legend>
 <h:selectManyCheckbox value="#{personBean.membershipSelection}" id="membership" layout="pageDirection">
-  <f:selectItems value="#{personBean.memberships.elements.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
+  <f:selectItems value="#{personBean.memberships.entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectManyCheckbox>
 </fieldset>
 <fieldset>
   <legend>Telefon</legend>
 <h:outputLabel for="extension" value="Vorwahl"/>
-<h:inputText value="#{personBean.phoneDto.extension}" id="extension"/>
+<h:inputText value="#{personBean.extension}" id="extension"/>
 <h:outputLabel for="number" value="Nummer"/>
-<h:inputText value="#{personBean.phoneDto.number}" id="number"/>
+<h:inputText value="#{personBean.number}" id="number"/>
 </fieldset>
 <fieldset>
   <legend>Adresse</legend>
 <h:outputLabel for="street" value="Straße"/>
-<h:inputText value="#{personBean.addressDto.street}" id="street"/>
+<h:inputText value="#{personBean.street}" id="street"/>
 <p>
 <h:outputLabel for="zip" value="PLZ"/>
-<h:inputText value="#{personBean.addressDto.zip}" id="zip"/>
+<h:inputText value="#{personBean.zip}" id="zip"/>
 <h:outputLabel for="town" value="Stadt"/>
-<h:inputText value="#{personBean.addressDto.town}" id="town"/>
+<h:inputText value="#{personBean.town}" id="town"/>
 </p>
 <p>
 <h:outputLabel for="country" value="Land"/>
-<h:inputText value="#{personBean.addressDto.country}" id="country"/>
+<h:inputText value="#{personBean.country}" id="country"/>
 </p>
 </fieldset>
 <h:commandButton value="Speichern" action="#{personBean.savePerson}"/>
 </h:form>
 </div>
 </div>
-<div id="bottom">
-GeneSEZ
-</div>
+<ui:include src="footer.xhtml"></ui:include>
 </h:body>
 </html>
