@@ -28,13 +28,13 @@
 <p>
 <h:outputLabel>
 Name
-<h:inputText value="#{organisationBean.name}" />
+<h:inputText value="#{organisationBean.organisation.name}" />
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Non-Profit
-<h:selectBooleanCheckbox value="#{organisationBean.nonprofit}" />
+<h:selectBooleanCheckbox value="#{organisationBean.organisation.nonprofit}" />
 </h:outputLabel>
 </p>
 <p>
@@ -61,43 +61,63 @@ Unterorganisationen
 </h:selectManyCheckbox>
 </h:outputLabel>
 </p>
+<h:dataTable value="#{organisationBean.phone}" var="n">
+<h:column>
 <p>
 <h:outputLabel>
 Vorwahl
-<h:inputText value="#{organisationBean.extension}" />
+<h:inputText value="#{n.extension}" />
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Nummer
-<h:inputText value="#{organisationBean.number}" />
+<h:inputText value="#{n.number}" />
 </h:outputLabel>
 </p>
+</h:column>
+<h:column>
+<h:commandButton value="Löschen" action="#{organisationBean.removePhone}">
+<f:setPropertyActionListener target="#{organisationBean.phoneRemove}" value="#{n}" />
+</h:commandButton>
+</h:column>
+</h:dataTable>
+<p><h:commandButton value="Hinzufügen" action="#{organisationBean.addPhone}"/></p>
+<h:dataTable value="#{organisationBean.address}" var="n">
+<h:column>
 <p>
 <h:outputLabel>
 Straße
-<h:inputText value="#{organisationBean.street}" />
+<h:inputText value="#{n.street}" />
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 PLZ
-<h:inputText value="#{organisationBean.zip}" />
+<h:inputText value="#{n.zip}" />
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Stadt
-<h:inputText value="#{organisationBean.town}" />
+<h:inputText value="#{n.town}" />
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Land
-<h:inputText value="#{organisationBean.country}" />
+<h:inputText value="#{n.country}" />
 </h:outputLabel>
 </p>
-<p><h:commandButton value="Submit" action="#{organisationBean.saveOrganisation}"/></p>
+</h:column>
+<h:column>
+<h:commandButton value="Löschen" action="#{organisationBean.removeAddress}">
+<f:setPropertyActionListener target="#{organisationBean.addressRemove}" value="#{n}" />
+</h:commandButton>
+</h:column>
+</h:dataTable>
+<p><h:commandButton value="Hinzufügen" action="#{organisationBean.addAddress}"/></p>
+<p><h:commandButton value="Speichern" action="#{organisationBean.saveOrganisation}"/></p>
 </h:form>
 </div>
 </div>

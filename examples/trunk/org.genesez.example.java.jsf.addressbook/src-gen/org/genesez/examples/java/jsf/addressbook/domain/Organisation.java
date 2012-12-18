@@ -108,6 +108,10 @@ public class Organisation extends Addressee {
 	 * accessor for association to parentOrganisation
 	 */
 	public void setParentOrganisation(Organisation parentOrganisation) {
+		if(parentOrganisation == null)
+			this.parentOrganisation.removeFromSubsidiaries(this);
+		else
+			parentOrganisation.insertInSubsidiaries(this);
 		this.parentOrganisation = parentOrganisation;
 	}
 	

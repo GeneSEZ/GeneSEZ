@@ -200,7 +200,7 @@ List[String] getJSFAutoFormField(PMetaDataAware this) :
 String getJSFAutoFormModel(PMetaDataAware this) :
 	getTaggedValue(prJSFAutoForm(), prJSFModel());
 	
-String getJSFAutoFormInclude(PMetaDataAware this) :
+List[String] getJSFAutoFormInclude(PMetaDataAware this) :
 	getTaggedValues(prJSFAutoForm(), prJSFInclude());
 	
 String getJSFAutoFormType(PMetaDataAware this) :
@@ -227,7 +227,7 @@ List[String] getTaggedValues(PMetaDataAware this, String uri, String key) :
 MModel globalVarGcoreModel() :
 	GLOBALVAR coremodel;
 
-List[MAttribute] allProperties(MClass this):
+List[MAttribute] allProperties(MClassifier this):
 	{}.addAll( hasRealization() ? 
 				getRealization().property : 
 				{} )
@@ -236,27 +236,27 @@ List[MAttribute] allProperties(MClass this):
 				getGeneralization().property : 
 				{} ) ;
 			
-boolean hasGeneralization(MClass this) :
+boolean hasGeneralization(MClassifier this) :
 	!generalization.isEmpty;
 	
-List[MClass] getGeneralization(MClass subclass):
+List[MClass] getGeneralization(MClassifier subclass):
 	( subclass.hasGeneralization() ? 
 		subclass.generalization.getGeneralization() : 
 		{} ).addAll(subclass.generalization);
 	
 List[MClass] getGeneralization(MType subclass) : {};
 	
-boolean hasRealization(MClass this) :
+boolean hasRealization(MClassifier this) :
 	!globalVarGcoreModel().nestedPackage.classifier.typeSelect(MClass).select(e|e.generalization.contains(this)).isEmpty;
 
-List[MClass] getRealization(MClass superclass):
+List[MClass] getRealization(MClassifier superclass):
 	( superclass.hasRealization() ? 
 		superclass.realization().getRealization() : 
 		{} ).addAll(superclass.realization());
 
 List[MClass] getRealization(MType subclass) : {};
 
-List[MClass] realization(MClass this) :
+List[MClass] realization(MClassifier this) :
 	globalVarGcoreModel().nestedPackage.classifier.typeSelect(MClass).select(e|e.generalization.contains(this));
 	
 
@@ -280,20 +280,33 @@ String getInputValue(PElement this) :
 	getMPropertyByXmiGuid(getJSFInputElementValue()).classifier.name.toFirstLower() + "." + getMPropertyByXmiGuid(getJSFInputElementValue()).name;
 	
 
+String getVarName(MProperty this, MClass model, boolean iteration) :
+	 iteration ? "n." + name : getQualifiedBeanPropertyName(model);
+
 String getBeanName(MClassifier this) :
 	name.toFirstLower() + "Bean";
 
 String getBeanPropertyName(MProperty this, MClassifier model) :
 	getBeanName(model) + "." + name;
 	
-String getBeanPropertyNameForSelect(MProperty this) :
+String getBeanPropertyName(MClass this, MClass model) :
+	getBeanName(model) + "." + name.toFirstLower();
+
+String getQualifiedBeanPropertyName(MProperty this, MClassifier model) :
+	getBeanName(model) + "." + classifier.name.toFirstLower() + "." + name;
+	
+String getSelectBeanPropertyName(MProperty this) :
 	getBeanPropertyName(classifier) + "Selection";
 	
-String getBeanPropertyNameForSelect(MClass this) :
+String getSelectBeanPropertyName(MClass this) :
 	getBeanName() + "." + name.toFirstLower() + "Selection";
 	
-String getBeanPropertyNameForList(MClass this) :
+String getCollectionBeanPropertyName(MClass this) :
 	getBeanName() + "." + name.toFirstLower() + "Collection";
+	
+String getRemoveBeanPropertyName(MClass this, MClass model) :
+	getBeanPropertyName(model) + "Remove";
+
 	
 	
 String getBeanMethodNameForSave(MClass this) :
@@ -314,16 +327,15 @@ String getBeanMethodNameForCreate(MClass this) :
 String getBeanMethodNameForList(MClass this) :
 	getBeanName() + ".list" + name;
 	
+String getBeanMethodNameForAdd(MClass this, MClass model) :
+	model.getBeanName() + ".add" + name;
+	
+String getBeanMethodNameForRemove(MClass this, MClass model) :
+	model.getBeanName() + ".remove" + name;
+	
 	
 List[MProperty] autoFormProperties(PAutomaticallyGeneratedArea this) :
-	getAllXmiguids().propertiesByXmiGuid(this);
+	getAllXmiguids().getMPropertyByXmiGuid();
 
 private List[String] getAllXmiguids(PAutomaticallyGeneratedArea this) :
 	hasJSFAutoFormField() ? getJSFAutoFormField() : getMClassByXmiGuid(getJSFAutoFormModel()).allProperties().xmiGuid;
-	
-private List[MProperty] propertiesByXmiGuid(String this, PAutomaticallyGeneratedArea area) :
-	if getMAttributeByXmiGuid().type.metaType == MClass && area.getJSFAutoFormInclude().contains(this) then 
-		((MClass) getMAssociationRoleByXmiGuid().type).allProperties().typeSelect(MAttribute)
-	else
-		{getMPropertyByXmiGuid()}
-	;

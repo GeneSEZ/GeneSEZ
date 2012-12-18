@@ -44,14 +44,8 @@
 «ENDDEFINE»
 
 
-«DEFINE AutoFormSaveOrUpdate(MClass model) FOR PAutomaticallyGeneratedArea -»
-«EXPAND AutoFormFieldFrame(model, false) FOREACH autoFormProperties() -»
-<p><h:commandButton value="Submit" action="#{«getBeanMethodNameForSave(model)»}"«EXPAND universalAttrs -»/></p>
-«ENDDEFINE»
-
-
 «DEFINE AutoFormList(MClass model) FOR PAutomaticallyGeneratedArea -»
-<h:dataTable value="#{«getBeanPropertyNameForList(model)»}" var="n">
+<h:dataTable value="#{«getCollectionBeanPropertyName(model)»}" var="n">
   <h:column>
     <f:facet name="header">«model.name»</f:facet>
     #{n.value}
@@ -59,13 +53,13 @@
   
   <h:column>
     <h:commandButton value="Anzeigen" action="#{«getBeanMethodNameForShow(model)»}">
-	  <f:setPropertyActionListener target="#{«getBeanPropertyNameForSelect(model)»}" value="#{n.key}" />
+	  <f:setPropertyActionListener target="#{«getSelectBeanPropertyName(model)»}" value="#{n.key}" />
     </h:commandButton>
     <h:commandButton value="Bearbeiten" action="#{«getBeanMethodNameForUpdate(model)»}">
-	  <f:setPropertyActionListener target="#{«getBeanPropertyNameForSelect(model)»}" value="#{n.key}" />
+	  <f:setPropertyActionListener target="#{«getSelectBeanPropertyName(model)»}" value="#{n.key}" />
     </h:commandButton>
     <h:commandButton value="Löschen" action="#{«getBeanMethodNameForDelete(model)»}">
-	  <f:setPropertyActionListener target="#{«getBeanPropertyNameForSelect(model)»}" value="#{n.key}" />
+	  <f:setPropertyActionListener target="#{«getSelectBeanPropertyName(model)»}" value="#{n.key}" />
     </h:commandButton>
   </h:column>
 </h:dataTable>
@@ -74,20 +68,68 @@
 
 
 «DEFINE AutoFormShow(MClass model) FOR PAutomaticallyGeneratedArea -»
-«EXPAND AutoFormFieldFrame(model, true) FOREACH autoFormProperties() -»
-<p><h:commandButton value="Liste" action="#{«getBeanMethodNameForList(model)»}"«EXPAND universalAttrs -»/></p>
+«FOREACH autoFormProperties() AS p -»
+«IF p.type.metaType == MClass -»
+«EXPAND AutoFormAssoc(model, true, this) FOR (MAssociationRole) p -»
+«ELSE -»
+«EXPAND AutoFormFieldFrame(model, true, false) FOR (MAttribute) p -»
+«ENDIF -»
+«ENDFOREACH -»
+<p><h:commandButton value="List" action="#{«getBeanMethodNameForList(model)»}"«EXPAND universalAttrs -»/></p>
 «ENDDEFINE»
 
 
-«DEFINE AutoFormFieldFrame(MClass model, boolean readonly) FOR MProperty -»
+«DEFINE AutoFormSaveOrUpdate(MClass model) FOR PAutomaticallyGeneratedArea -»
+«FOREACH autoFormProperties() AS p -»
+«IF p.type.metaType == MClass -»
+«EXPAND AutoFormAssoc(model, false, this) FOR (MAssociationRole) p -»
+«ELSE -»
+«EXPAND AutoFormFieldFrame(model, false, false) FOR (MAttribute) p -»
+«ENDIF -»
+«ENDFOREACH -»
+<p><h:commandButton value="Speichern" action="#{«getBeanMethodNameForSave(model)»}"«EXPAND universalAttrs -»/></p>
+«ENDDEFINE»
+
+
+«DEFINE AutoFormAssoc(MClass model, boolean readonly, PAutomaticallyGeneratedArea area) FOR MAssociationRole -»
+«IF area.getJSFAutoFormInclude().contains(xmiGuid) -»
+«EXPAND AutoFormInclude(model, readonly) -»
+«ELSE -»
+«EXPAND AutoFormFieldFrame(model, readonly, false) -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«DEFINE AutoFormInclude(MClass model, boolean readonly) FOR MAssociationRole -»
+«FOREACH ((MClass) type).hasRealization() ? ((MClass) type).getRealization() : {(MClass) type} AS c -»
+<h:dataTable value="#{«c.getBeanPropertyName(model)»}" var="n">
+<h:column>
+«EXPAND AutoFormFieldFrame(model, readonly, true) FOREACH c.allProperties().typeSelect(MAttribute) -»
+</h:column>
+«IF !readonly && multiplicity != 1 -»
+<h:column>
+<h:commandButton value="Löschen" action="#{«c.getBeanMethodNameForRemove(model)»}">
+<f:setPropertyActionListener target="#{«c.getRemoveBeanPropertyName(model)»}" value="#{n}" />
+</h:commandButton>
+</h:column>
+«ENDIF -»
+</h:dataTable>
+«IF !readonly && multiplicity != 1 -»
+<p><h:commandButton value="Hinzufügen" action="#{«c.getBeanMethodNameForAdd(model)»}"/></p>
+«ENDIF -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+
+«DEFINE AutoFormFieldFrame(MClass model, boolean readonly, boolean iteration) FOR MProperty -»
 «IF !stereotype.name.contains("ignore") -»
 <p>
 <h:outputLabel>
 «taggedValue.selectFirst(e|e.tag.name == "label" && e.tag.stereotype.name == "label").value»
-«IF type == MAttribute -»
-«EXPAND AutoFormField(model, readonly) FOR (MAttribute) this -» 
-«ELSE -»
+«IF type.metaType == MClass -»
 «EXPAND AutoFormField(model, readonly) FOR (MAssociationRole) this -» 
+«ELSE -»
+«EXPAND AutoFormField(model, readonly, iteration) FOR (MAttribute) this -»
 «ENDIF -»
 </h:outputLabel>
 </p>
@@ -95,16 +137,16 @@
 «ENDDEFINE»
 
 
-«DEFINE AutoFormField(MClass model, boolean readonly) FOR MAttribute -»
+«DEFINE AutoFormField(MClass model, boolean readonly, boolean iteration) FOR MAttribute -»
 «LET readonly ? 'readonly="true"' : '' AS readonlyaddon -»
 «IF type == getMElementByXmiGuid("Boolean") -»
 «LET readonly ? 'onclick="return false" onkeydown="return false"' : '' AS readonlyaddon -»
-<h:selectBooleanCheckbox value="#{«getBeanPropertyName(model)»}" «readonlyaddon»/>
+<h:selectBooleanCheckbox value="#{«getVarName(model, iteration)»}" «readonlyaddon»/>
 «ENDLET -»
 «ELSEIF type == getMElementByXmiGuid("Date")-»
-<h:inputText value="#{«getBeanPropertyName(model)»}" «readonlyaddon»><f:convertDateTime pattern="dd.MM.yyyy"/></h:inputText>
+<h:inputText value="#{«getVarName(model, iteration)»}" «readonlyaddon»><f:convertDateTime pattern="dd.MM.yyyy"/></h:inputText>
 «ELSE -»
-<h:inputText value="#{«getBeanPropertyName(model)»}" «readonlyaddon»/>
+<h:inputText value="#{«getVarName(model, iteration)»}" «readonlyaddon»/>
 «ENDIF -»
 «ENDLET -»
 «ENDDEFINE»
@@ -113,11 +155,11 @@
 «DEFINE AutoFormField(MClass model, boolean readonly) FOR MAssociationRole -»
 «LET readonly ? 'onclick="return false" onkeydown="return false"' : '' AS readonlyaddon -»
 «IF multiplicity == 1 -»
-<h:selectOneListbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»" «readonlyaddon»>
+<h:selectOneListbox value="#{«getSelectBeanPropertyName()»}" id="«name»" «readonlyaddon»>
   <f:selectItems value="#{«getBeanPropertyName(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectOneListbox>
 «ELSE -»
-<h:selectManyCheckbox value="#{«getBeanPropertyNameForSelect()»}" id="«name»" layout="pageDirection" «readonlyaddon»>
+<h:selectManyCheckbox value="#{«getSelectBeanPropertyName()»}" id="«name»" layout="pageDirection" «readonlyaddon»>
   <f:selectItems value="#{«getBeanPropertyName(model)».entrySet()}" var="n" itemValue="#{n.key}" itemLabel="#{n.value}"/>
 </h:selectManyCheckbox>
 «ENDIF -»

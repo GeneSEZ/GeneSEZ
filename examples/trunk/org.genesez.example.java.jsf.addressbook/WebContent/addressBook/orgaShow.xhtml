@@ -28,13 +28,13 @@
 <p>
 <h:outputLabel>
 Name
-<h:inputText value="#{organisationBean.name}" readonly="true"/>
+<h:inputText value="#{organisationBean.organisation.name}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Non-Profit
-<h:selectBooleanCheckbox value="#{organisationBean.nonprofit}" onclick="return false" onkeydown="return false"/>
+<h:selectBooleanCheckbox value="#{organisationBean.organisation.nonprofit}" onclick="return false" onkeydown="return false"/>
 </h:outputLabel>
 </p>
 <p>
@@ -61,43 +61,51 @@ Unterorganisationen
 </h:selectManyCheckbox>
 </h:outputLabel>
 </p>
+<h:dataTable value="#{organisationBean.phone}" var="n">
+<h:column>
 <p>
 <h:outputLabel>
 Vorwahl
-<h:inputText value="#{organisationBean.extension}" readonly="true"/>
+<h:inputText value="#{n.extension}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Nummer
-<h:inputText value="#{organisationBean.number}" readonly="true"/>
+<h:inputText value="#{n.number}" readonly="true"/>
 </h:outputLabel>
 </p>
+</h:column>
+</h:dataTable>
+<h:dataTable value="#{organisationBean.address}" var="n">
+<h:column>
 <p>
 <h:outputLabel>
 Straße
-<h:inputText value="#{organisationBean.street}" readonly="true"/>
+<h:inputText value="#{n.street}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 PLZ
-<h:inputText value="#{organisationBean.zip}" readonly="true"/>
+<h:inputText value="#{n.zip}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Stadt
-<h:inputText value="#{organisationBean.town}" readonly="true"/>
+<h:inputText value="#{n.town}" readonly="true"/>
 </h:outputLabel>
 </p>
 <p>
 <h:outputLabel>
 Land
-<h:inputText value="#{organisationBean.country}" readonly="true"/>
+<h:inputText value="#{n.country}" readonly="true"/>
 </h:outputLabel>
 </p>
-<p><h:commandButton value="Liste" action="#{organisationBean.listOrganisation}"/></p>
+</h:column>
+</h:dataTable>
+<p><h:commandButton value="List" action="#{organisationBean.listOrganisation}"/></p>
 </h:form>
 </div>
 </div>
