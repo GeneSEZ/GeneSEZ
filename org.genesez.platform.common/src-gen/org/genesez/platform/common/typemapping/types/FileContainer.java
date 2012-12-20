@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;/complexType>
  * </pre>
  * 
- * 
+ * @deprecated
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "includeType", propOrder = {

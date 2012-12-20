@@ -5,5 +5,9 @@
 // Generated on: 2012.10.16 at 01:26:38 PM MESZ 
 //
 
+/**
+ * @deprecated
+ */
+
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.genesez.org/typemapping", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.genesez.platform.common.typemapping.types;
