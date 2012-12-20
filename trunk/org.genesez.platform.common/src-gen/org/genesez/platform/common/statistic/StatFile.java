@@ -13,6 +13,7 @@ import java.nio.file.Path;
  *  
  * @author Dominik Wetzel
  * @date 2011-11-15
+ * @deprecated
  */
 public class StatFile implements Comparable<StatFile> {
 	

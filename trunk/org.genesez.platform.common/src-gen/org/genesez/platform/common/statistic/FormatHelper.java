@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 /**
  * Helper class for XPand to format number nicely according current locale.
  * @author toh
+ * @deprecated
  */
 public class FormatHelper {
 	

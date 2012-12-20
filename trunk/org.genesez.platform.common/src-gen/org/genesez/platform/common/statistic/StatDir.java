@@ -13,6 +13,7 @@ import java.util.Collections;
  * 
  * @author Dominik Wetzel
  * @date 2011-11-15
+ * @deprecated
  */
 public class StatDir extends StatFile {
 	
