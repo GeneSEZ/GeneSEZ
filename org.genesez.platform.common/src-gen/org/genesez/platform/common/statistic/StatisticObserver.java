@@ -39,6 +39,7 @@ import java.io.File;
  * 
  * @author Dominik Wetzel
  * @date 2011-11-10
+ * @deprecated
  */
 public class StatisticObserver extends FileTreeObserverAdapter {
 	

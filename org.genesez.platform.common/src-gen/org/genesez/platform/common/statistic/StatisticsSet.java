@@ -11,6 +11,7 @@ package org.genesez.platform.common.statistic;
  * @author T. Hartmann
  * @author Dominik Wetzel
  * @date 2011-11-15
+ * @deprecated
  */
 public class StatisticsSet {
 	
