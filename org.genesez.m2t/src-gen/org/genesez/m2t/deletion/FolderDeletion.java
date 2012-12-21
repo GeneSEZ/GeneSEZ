@@ -117,7 +117,8 @@ public class FolderDeletion extends DeletionFeature {
 			// delete all folders normal if possible
 			if (Files.exists(dir) && dir.toFile().listFiles().length == 0) {
 				try {
-					FileSystemHelper.alterPermission(dir);
+					// toh: comments, may not be needed
+//					FileSystemHelper.alterPermission(dir);
 					Files.delete(dir);
 				} catch (IOException e) {
 					e.printStackTrace();
