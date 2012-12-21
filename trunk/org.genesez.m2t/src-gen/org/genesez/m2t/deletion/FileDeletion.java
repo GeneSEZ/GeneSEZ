@@ -134,7 +134,8 @@ public class FileDeletion extends DeletionFeature {
 			}
 			try {
 				Path del = Paths.get(delete);
-				FileSystemHelper.alterPermission(del);
+				// toh: comments, may not be needed
+//				FileSystemHelper.alterPermission(del);
 				Files.deleteIfExists(del);
 			} catch (IOException e) {
 				logger.error("Error while deleting a file", e);
