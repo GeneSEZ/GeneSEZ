@@ -3,8 +3,11 @@ package org.genesez.eclipse.workfloweditor.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.eclipse.emf.mwe2.language.mwe2.Component;
 
 @SuppressWarnings("rawtypes")
 public class ClassHelper {
@@ -23,6 +26,37 @@ public class ClassHelper {
 			return false;
 		}
 		return isSubtypeOf(clazz.getSuperclass(), supertype);
+	}
+
+	public static Method getMethod(String simpleName, Component component) {
+		Method toReturn = null;
+		int endIndex = simpleName.indexOf("(");
+		String toCheck = null;
+		if (endIndex == -1) {
+			toCheck = simpleName;
+		} else {
+			toCheck = simpleName.substring(0, endIndex);
+		}
+		Class clazz = null;
+		try {
+			clazz = Class.forName(component.getActualType().getIdentifier());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		boolean anotherCheck = false;
+		for (Method m : clazz.getMethods()) {
+			if (m.getName().equalsIgnoreCase(toCheck)) {
+				if (toReturn != null && !Arrays.equals(m.getParameterTypes(), toReturn.getParameterTypes())) {
+					anotherCheck = true;
+					break;
+				}
+				toReturn = m;
+			}
+		}
+		if (anotherCheck) {
+			throw new UnsupportedOperationException();
+		}
+		return toReturn;
 	}
 
 	public static Method getGetter(Field field) {
@@ -47,6 +81,10 @@ public class ClassHelper {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static Class getParameterType(Method method) {
+		return method.getParameterTypes()[0];
 	}
 
 	public static Method getAdder(Field field) {

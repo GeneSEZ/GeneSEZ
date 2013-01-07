@@ -90,7 +90,7 @@ public class WorkflowEditor extends EditorPart {
 	 */
 	protected void initializeContext() {
 		context.declareModifiable(WorkfloweditorConstants.SELECTED_WORKFLOWCOMPONENT);
-		context.declareModifiable(WorkfloweditorConstants.WORKFLOW_COMPONENTS);
+		context.declareModifiable(WorkfloweditorConstants.DRAGGED_WORKFLOWCOMPONENTGROUP);
 	}
 
 	/**
