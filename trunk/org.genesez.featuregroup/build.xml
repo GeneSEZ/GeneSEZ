@@ -6,12 +6,15 @@
 -->
 <project name="org.genesez.featuregroup" default="tag.all">
 	
-	<import file="lib/antcontrib.xml" />
+	<!-- specify the release version you want to build in your IDE here! -->
+	<property name="releaselocal" value="2.3.4" />
 	
+	
+	<import file="lib/antcontrib.xml" />
 	
 	<!-- current timestamp -->
 	<tstamp>
-		<format property="timestamp" pattern="yyyy-MM-dd" />
+		<format property="timestamp" pattern="yyyyMMdd" />
 	</tstamp>
 	
 	<!-- qualifier replacement: use the build number when running under hudson, else the timestamp -->
@@ -26,7 +29,7 @@
 	</if>
 	
 	<!-- genesez release version -->
-	<condition property="plugin.version" value="${release}.b${build.number}" else="${release}.t${timestamp}">
+	<condition property="plugin.version" value="${release}.b${build.number}" else="${releaselocal}.t${timestamp}">
 		<isset property="build.number" />
 	</condition>
 	
@@ -51,7 +54,7 @@
 	
 	<path id="build.plugins">
 		<dirset dir="${plugin.dir}">
-			<include name="org.eclipse.emf.ecore.adapter.uml" />
+			<include name="org.eclipse.emf.ecore.adapter.uml2" />
 			<include name="${prefix}.*" />
 			<exclude name="${prefix}.feature" />
 			<exclude name="${prefix}.featuregroup" />
@@ -61,13 +64,15 @@
 	
 	<target name="tag.all" description="Sets the GeneSEZ release version in all projects">
 		<echo message="Set release version = ${plugin.version}" />
-		<echo message="feature.dir = ${feature.dir}" />
-		<echo message="plugin.dir = ${plugin.dir}" />
+		<!--echo message="feature.dir = ${feature.dir}" />
+		<echo message="plugin.dir = ${plugin.dir}" /-->
 		
 		<for param="project">
 			<path refid="build.plugins" />
 			<sequential>
-				<!--
+				<basename property="project" file="@{project}" />
+				<echo message="${project}" />
+				<var name="project" unset="true" />
 				<replaceregexp byline="true"
 					file="@{project}/META-INF/MANIFEST.MF"
 					match="Bundle-Version:.*"
@@ -75,24 +80,27 @@
 				</replaceregexp>
 				<replaceregexp byline="true"
 					file="@{project}/META-INF/MANIFEST.MF"
-					match='org.genesez([\w\.]*);bundle-version=\"(\d|\.)*\"(.*)'
+					match='org.genesez([\w\.]*);bundle-version=\"(.+)\"(.*)'
 					replace='org.genesez\1;bundle-version="${plugin.version}"\3'>
 				</replaceregexp>
-				-->
-				<echo message="@{project}" />
+				<replaceregexp byline="true"
+					file="@{project}/META-INF/MANIFEST.MF"
+					match='org.eclipse.emf.ecore.adapter.uml2;bundle-version=\"(.+)\"(.*)'
+					replace='org.eclipse.emf.ecore.adapter.uml2;bundle-version="${plugin.version}"\2'>
+				</replaceregexp>
 			</sequential>
 		</for>
 		<for param="project">
 			<path refid="build.features" />
 			<sequential>
-				<!--
+				<basename property="project" file="@{project}" />
+				<echo message="${project}" />
+				<var name="project" unset="true" />
 				<replaceregexp byline="true"
 					file="@{project}/feature.xml"
-					match='(?&lt;!xml )version="0.0.0"'
-					replace='version="${plugin.version}"'>
+					match='^(\s*)version=".+"'
+					replace='\1version="${plugin.version}"'>
 				</replaceregexp>
-				-->
-				<echo message="@{project}" />
 			</sequential>
 		</for>
 		<!--
