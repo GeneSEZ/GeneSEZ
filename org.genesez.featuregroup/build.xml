@@ -4,7 +4,7 @@
 	
 	@author toh
 -->
-<project name="org.genesez.featuregroup" default="test">
+<project name="org.genesez.featuregroup" default="tag.all">
 	
 	<import file="lib/antcontrib.xml" />
 	
@@ -25,12 +25,85 @@
 		</then>
 	</if>
 	
+	<!-- genesez release version -->
 	<condition property="plugin.version" value="${release}.b${build.number}" else="${release}.t${timestamp}">
 		<isset property="build.number" />
 	</condition>
 	
 	
-	<target name="test">
-		<echo message="version = ${plugin.version}"></echo>
+	<!-- path to genesez projects -->
+	<dirname property="ant.file.dir" file="${ant.file}" />
+	<condition property="feature.dir" value="${ant.file.dir}/../features" else="${ant.file.dir}/..">
+		<isset property="env.BUILD_NUMBER" />
+	</condition>
+	<condition property="plugin.dir" value="${ant.file.dir}/../plugins" else="${ant.file.dir}/..">
+		<isset property="env.BUILD_NUMBER" />
+	</condition>
+	<property name="prefix" value="org.genesez" />
+	
+	<!-- genesez projects -->
+	<path id="build.features">
+		<dirset dir="${feature.dir}">
+			<include name="${prefix}.feature" />
+			<include name="${prefix}.featuregroup" />
+		</dirset>
+	</path>
+	
+	<path id="build.plugins">
+		<dirset dir="${plugin.dir}">
+			<include name="org.eclipse.emf.ecore.adapter.uml" />
+			<include name="${prefix}.*" />
+			<exclude name="${prefix}.feature" />
+			<exclude name="${prefix}.featuregroup" />
+		</dirset>
+	</path>
+	
+	
+	<target name="tag.all" description="Sets the GeneSEZ release version in all projects">
+		<echo message="Set release version = ${plugin.version}" />
+		<echo message="feature.dir = ${feature.dir}" />
+		<echo message="plugin.dir = ${plugin.dir}" />
+		
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<!--
+				<replaceregexp byline="true"
+					file="@{project}/META-INF/MANIFEST.MF"
+					match="Bundle-Version:.*"
+					replace="Bundle-Version: ${plugin.version}">
+				</replaceregexp>
+				<replaceregexp byline="true"
+					file="@{project}/META-INF/MANIFEST.MF"
+					match='org.genesez([\w\.]*);bundle-version=\"(\d|\.)*\"(.*)'
+					replace='org.genesez\1;bundle-version="${plugin.version}"\3'>
+				</replaceregexp>
+				-->
+				<echo message="@{project}" />
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<!--
+				<replaceregexp byline="true"
+					file="@{project}/feature.xml"
+					match='(?&lt;!xml )version="0.0.0"'
+					replace='version="${plugin.version}"'>
+				</replaceregexp>
+				-->
+				<echo message="@{project}" />
+			</sequential>
+		</for>
+		<!--
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match='(?&lt;!xml )version=".*"'
+			replace='version="${plugin.version}"' />
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match="feature_(\d|\.)*.jar"
+			replace="feature_${plugin.version}.jar" />
+		-->
 	</target>
 </project>
