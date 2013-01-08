@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	build file for release management
+	
+	@author toh
+-->
+<project name="org.genesez.featuregroup" default="test">
+	
+	<import file="lib/antcontrib.xml" />
+	
+	
+	<!-- current timestamp -->
+	<tstamp>
+		<format property="timestamp" pattern="yyyy-MM-dd" />
+	</tstamp>
+	
+	<!-- qualifier replacement: use the build number when running under hudson, else the timestamp -->
+	<if>
+		<and>
+			<isset property="env.BUILD_NUMBER" />
+		</and>
+		<then>
+			<property name="build.number" value="${env.BUILD_NUMBER}"/>
+		</then>
+	</if>
+	
+	<condition property="plugin.version" value="${release}.b${build.number}" else="${release}.t${timestamp}">
+		<isset property="build.number" />
+	</condition>
+	
+	
+	<target name="test">
+		<echo message="version = ${plugin.version}"></echo>
+	</target>
+</project>
