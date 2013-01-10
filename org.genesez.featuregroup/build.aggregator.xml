@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Aggregates the p2 repositories with GeneSEZ dependencies and publishs the aggregated onto the update site.
+	
+	@author	toh
+-->
+<project name="org.genesez.p2aggregator" default="aggregate">
+	
+	<import file="lib/antcontrib.xml" />
+	<import file="lib/xmltask.xml" />
+	
+	<path id="genesez.releases">
+		<!-- ../builds/*(build-id)/archive/buckminster.output/org.genesez.featuregroup*/site.p2 -->
+		<dirset dir="../builds">
+			<include name="*/archive/buckminster.output/org.genesez.featuregroup*/site.p2" />
+		</dirset>
+	</path>
+	
+	<target name="aggregate">
+		<!-- add each genesez release repository to the aggregator xml -->
+		<for param="release">
+			<path refid="genesez.releases" />
+			<sequential>
+				<echo message="path: @{release}" />
+				<xmltask source="genesez.dependencies.b3aggr" dest="genesez.dependencies.b3aggr">
+					<insert path="/Aggregation/validationSets/contributions[last()]" position="after">
+						<![CDATA[
+						<repositories location="file://@{release}">
+						]]>
+					</insert>
+				</xmltask>
+			</sequential>
+		</for>
+		
+	</target>
+</project>
