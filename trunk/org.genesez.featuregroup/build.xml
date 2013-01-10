@@ -6,18 +6,15 @@
 -->
 <project name="org.genesez.featuregroup" default="tag.all">
 	
-	<!-- specify the release version you want to build in your IDE here! -->
-	<property name="GeneSEZReleaseVersionLocal" value="2.3.4" />
-	
-	
 	<import file="lib/antcontrib.xml" />
+	<property environment="env" />
+	<property file="build.properties" />
+	
 	
 	<!-- current timestamp -->
 	<tstamp>
 		<format property="timestamp" pattern="yyyyMMdd-hhmm" />
 	</tstamp>
-	
-	<property environment="env" />
 	
 	<!-- qualifier replacement: use the build number when running under hudson, else the timestamp -->
 	<condition property="qualifier" value="b${env.BUILD_NUMBER}" else="t${timestamp}">
@@ -26,7 +23,7 @@
 			<isfalse value="${env.GENESEZ_USE_TIMESTAMP}" />
 		</and>
 	</condition>
-	<condition property="genesez.version" value="${env.GENESEZ_VERSION}" else="${GeneSEZReleaseVersionLocal}">
+	<condition property="genesez.version" value="${env.GENESEZ_VERSION}" else="${GENESEZ_VERSION}">
 		<isset property="env.GENESEZ_VERSION" />
 	</condition>
 	
