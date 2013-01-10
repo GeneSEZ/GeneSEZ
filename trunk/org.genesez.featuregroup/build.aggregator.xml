@@ -10,7 +10,6 @@
 	<import file="lib/xmltask.xml" />
 	
 	<path id="genesez.releases">
-		<!-- ../builds/*(build-id)/archive/buckminster.output/org.genesez.featuregroup*/site.p2 -->
 		<dirset dir="../../../builds">
 			<include name="*/archive/buckminster.output/org.genesez.featuregroup*/site.p2" />
 		</dirset>
@@ -21,11 +20,12 @@
 		<for param="release">
 			<path refid="genesez.releases" />
 			<sequential>
-				<echo message="path: @{release}" />
+				<var name="uri" value="file://@{release}" />
+				<echo message="add uri ${uri}" />
 				<xmltask source="genesez.dependencies.b3aggr" dest="genesez.dependencies.b3aggr">
-					<insert path="/Aggregation/validationSets/contributions[last()]" position="after">
+					<insert path="/aggregator:Aggregation/validationSets/contributions[last()]" position="under">
 						<![CDATA[
-						<repositories location="file://@{release}">
+						<repositories location="${uri}" />
 						]]>
 					</insert>
 				</xmltask>
