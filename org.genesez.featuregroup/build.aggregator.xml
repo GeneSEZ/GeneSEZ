@@ -10,6 +10,7 @@
 	<import file="lib/xmltask.xml" />
 	<property environment="env" />
 	
+	<property name="b3aggr.file" value="genesez.dependencies.b3aggr" />
 	<property name="reponame" value="AggRepo" />
 	
 	<path id="genesez.releases">
@@ -26,7 +27,7 @@
 			<sequential>
 				<var name="uri" value="file://@{release}" />
 				<echo message="add uri ${uri}" />
-				<xmltask source="genesez.dependencies.b3aggr" dest="genesez.dependencies.b3aggr">
+				<xmltask source="${b3aggr.file}" dest="${b3aggr.file}">
 					<insert path="/aggregator:Aggregation/validationSets[last()]" position="after">
 						<![CDATA[
 						  <validationSets label="${uri}">
@@ -48,7 +49,7 @@
 			<arg value="-data" />
 			<arg value="${env.WORKSPACE}" />
 			<arg value="--buildModel" />
-			<arg file="features/org.genesez.featuregroup/genesez.dependencies.b3aggr" />
+			<arg file="${basedir}/${b3aggr.file}" />
 			<arg value="--buildRoot" />
 			<arg value="${basedir}/${reponame}" />
 			<arg value="--stacktrace" />
