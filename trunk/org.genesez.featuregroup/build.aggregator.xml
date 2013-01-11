@@ -20,8 +20,7 @@
 	</path>
 	
 	
-	<target name="create.b3aggr.file">
-		<!-- add each genesez release repository to the aggregator xml -->
+	<target name="create.b3aggr.file" description="Adds the p2 repository of all successful and available GeneSEZ builds to the b3 aggregator model file.">
 		<for param="release">
 			<path refid="genesez.releases" />
 			<sequential>
@@ -31,7 +30,7 @@
 					<insert path="/aggregator:Aggregation/validationSets[last()]" position="after">
 						<![CDATA[
 						  <validationSets label="${uri}">
-						    <contributions>
+						    <contributions label="GeneSEZ">
 							  <repositories location="${uri}" />
 						    </contributions>
 						  </validationSets>
@@ -42,8 +41,8 @@
 		</for>
 	</target>
 	
-	<target name="aggregate" depends="create.b3aggr.file">
-		<exec executable="/bin/sh" dir="${b3.home.dir}">
+	<target name="aggregate" depends="create.b3aggr.file" description="Creates an aggregated p2 repository containing GeneSEZ builds with its dependencies.">
+		<exec executable="/bin/sh" dir="${b3.home.dir}" failonerror="true">
 			<arg value="b3" />
 			<arg value="aggregate" />
 			<arg value="-data" />
