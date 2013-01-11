@@ -8,6 +8,7 @@
 	
 	<import file="lib/antcontrib.xml" />
 	<import file="lib/xmltask.xml" />
+	<property environment="env" />
 	
 	<path id="genesez.releases">
 		<dirset followsymlinks="false" dir="../../../builds">
@@ -23,9 +24,13 @@
 				<var name="uri" value="file://@{release}" />
 				<echo message="add uri ${uri}" />
 				<xmltask source="genesez.dependencies.b3aggr" dest="genesez.dependencies.b3aggr">
-					<insert path="/aggregator:Aggregation/validationSets/contributions[last()]" position="under">
+					<insert path="/aggregator:Aggregation/validationSets[last()]" position="after">
 						<![CDATA[
-						<repositories location="${uri}" />
+						  <validationSets label="GeneSEZ Release ${env.GENESEZ_VERSION}">
+						    <contributions>
+							  <repositories location="${uri}" />
+						    </contributions>
+						  </validationSets>
 						]]>
 					</insert>
 				</xmltask>
