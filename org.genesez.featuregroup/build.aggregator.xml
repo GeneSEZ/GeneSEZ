@@ -10,13 +10,16 @@
 	<import file="lib/xmltask.xml" />
 	<property environment="env" />
 	
+	<property name="reponame" value="AggRepo" />
+	
 	<path id="genesez.releases">
 		<dirset followsymlinks="false" dir="../../../builds">
 			<include name="*/archive/buckminster.output/org.genesez.featuregroup*/site.p2" />
 		</dirset>
 	</path>
 	
-	<target name="aggregate">
+	
+	<target name="create.b3aggr.file">
 		<!-- add each genesez release repository to the aggregator xml -->
 		<for param="release">
 			<path refid="genesez.releases" />
@@ -26,7 +29,7 @@
 				<xmltask source="genesez.dependencies.b3aggr" dest="genesez.dependencies.b3aggr">
 					<insert path="/aggregator:Aggregation/validationSets[last()]" position="after">
 						<![CDATA[
-						  <validationSets label="GeneSEZ Release ${env.GENESEZ_VERSION}">
+						  <validationSets label="${uri}">
 						    <contributions>
 							  <repositories location="${uri}" />
 						    </contributions>
@@ -36,6 +39,18 @@
 				</xmltask>
 			</sequential>
 		</for>
-		
+	</target>
+	
+	<target name="aggregate" depends="create.b3aggr.file">
+		<exec executable="b3" dir="${b3.home.dir}">
+			<arg value="aggregate" />
+			<arg value="-data" />
+			<arg value="${env.WORKSPACE}" />
+			<arg value="--buildModel" />
+			<arg file="features/org.genesez.featuregroup/genesez.dependencies.b3aggr" />
+			<arg value="--buildRoot" />
+			<arg value="${basedir}/${reponame}" />
+			<arg value="--stacktrace" />
+		</exec>
 	</target>
 </project>
