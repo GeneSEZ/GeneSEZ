@@ -19,16 +19,15 @@
 		<mkdir dir="${publish.dir}"/>
 		<copy todir="${publish.dir}">
 			<fileset dir="${env.WORKSPACE}/buckminster.output">
-				<include name="org.genesez.featuregroup*/site.p2/**" />
+				<include name="org.genesez.featuregroup*/site.p2" />
 			</fileset>
-			<mapper type="glob" from="org.genesez.featuregroup*/site.p2/" to=""/>
+			<mapper type="regexp" from="(?:site\.p2/)(.*)" to="\1"/>
 		</copy>
 		<chmod perm="u=rwX,g=rwX,o=" dir="${publish.dir}" includes="**/*" type="both" />
 		<chgrp group="wwwcln" type="both">
 			<fileset dir="${publish.dir}" includes="**/*" />
 		</chgrp>
 	</target>
-	
 	
 	<property name="b3aggr.file" value="genesez.dependencies.b3aggr" />
 	<property name="reponame" value="AggRepo" />
