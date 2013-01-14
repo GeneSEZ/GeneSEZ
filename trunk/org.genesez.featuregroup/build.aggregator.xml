@@ -18,7 +18,10 @@
 		</condition>
 		<mkdir dir="${publish.dir}"/>
 		<copy todir="${publish.dir}">
-			<fileset dir="../../features/buckminster.output/org.genesez.featuregroup*/site.p2" />
+			<fileset dir="${env.WORKSPACE}/buckminster.output">
+				<include name="org.genesez.featuregroup*/site.p2/**" />
+			</fileset>
+			<mapper type="glob" from="org.genesez.featuregroup*/site.p2/" to=""/>
 		</copy>
 		<chmod perm="u=rwX,g=rwX,o=" dir="${publish.dir}" includes="**/*" type="both" />
 		<chgrp group="wwwcln" type="both">
