@@ -13,13 +13,17 @@
 	
 	
 	<target name="publish">
-		<condition property="publish.dir" value="${PUBLISH_TRUNK_DIR}/${genesez.version}" else="${PUBLISH_TAGS_DIR}/${genesez.version}">
+		<condition property="publish.dir" value="${PUBLISH_TRUNK_DIR}/${plugin.version}" else="${PUBLISH_TAGS_DIR}/${plugin.version}">
 			<contains string="${SCM_PATH}" substring="trunk" />
 		</condition>
 		<mkdir dir="${publish.dir}"/>
 		<copy todir="${publish.dir}">
 			<fileset dir="../../buckminster.output/org.genesez.featuregroup*/site.p2" />
 		</copy>
+		<chmod perm="u=rwX,g=rwX,o=" dir="${publish.dir}" includes="**/*" type="both" />
+		<chgrp group="wwwcln" type="both">
+			<fileset dir="${publish.dir}" includes="**/*" />
+		</chgrp>
 	</target>
 	
 	
