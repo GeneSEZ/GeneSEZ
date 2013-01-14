@@ -4,11 +4,24 @@
 	
 	@author	toh
 -->
-<project name="org.genesez.p2aggregator" default="aggregate">
+<project name="org.genesez.p2aggregator" default="publish">
 	
 	<import file="lib/antcontrib.xml" />
 	<import file="lib/xmltask.xml" />
+	<import file="build.xml" />
 	<property environment="env" />
+	
+	
+	<target name="publish">
+		<condition property="publish.dir" value="${PUBLISH_TRUNK_DIR}/${genesez.version}" else="${PUBLISH_TAGS_DIR}/${genesez.version}">
+			<contains string="${SCM_PATH}" substring="trunk" />
+		</condition>
+		<mkdir dir="${publish.dir}"/>
+		<copy todir="${publish.dir}">
+			<fileset dir="../../buckminster.output/org.genesez.featuregroup*/site.p2" />
+		</copy>
+	</target>
+	
 	
 	<property name="b3aggr.file" value="genesez.dependencies.b3aggr" />
 	<property name="reponame" value="AggRepo" />
@@ -18,7 +31,6 @@
 			<include name="*/archive/buckminster.output/org.genesez.featuregroup*/site.p2" />
 		</dirset>
 	</path>
-	
 	
 	<target name="create.b3aggr.file" description="Adds the p2 repository of all successful and available GeneSEZ builds to the b3 aggregator model file.">
 		<for param="release">
