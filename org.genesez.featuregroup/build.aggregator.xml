@@ -4,7 +4,7 @@
 	
 	@author	toh
 -->
-<project name="org.genesez.p2aggregator" default="publish">
+<project name="org.genesez.p2aggregator" default="publish.aggregated.repo">
 	
 	<import file="lib/antcontrib.xml" />
 	<import file="lib/xmltask.xml" />
@@ -12,10 +12,17 @@
 	<property environment="env" />
 	
 	
+	<condition property="publish.dir" value="${PUBLISH_TRUNK_DIR}/${plugin.version}" else="${PUBLISH_TAGS_DIR}/${plugin.version}">
+		<contains string="${SCM_PATH}" substring="trunk" />
+	</condition>
+	<condition property="b3aggr.file" value="genesez.development.repository.b3aggr" else="genesez.release.repository.b3aggr">
+		<contains string="${SCM_PATH}" substring="trunk" />
+	</condition>
+	<property name="reponame" value="AggRepo" />
+	
+	
+	
 	<target name="publish">
-		<condition property="publish.dir" value="${PUBLISH_TRUNK_DIR}/${plugin.version}" else="${PUBLISH_TAGS_DIR}/${plugin.version}">
-			<contains string="${SCM_PATH}" substring="trunk" />
-		</condition>
 		<mkdir dir="${publish.dir}"/>
 		<copy todir="${publish.dir}">
 			<fileset dir="${env.WORKSPACE}/buckminster.output">
@@ -29,21 +36,14 @@
 		</chgrp>
 	</target>
 	
-	<property name="b3aggr.file" value="genesez.dependencies.b3aggr" />
-	<property name="reponame" value="AggRepo" />
-	
-	<path id="genesez.releases">
-		<dirset followsymlinks="false" dir="../../../builds">
-			<include name="*/archive/buckminster.output/org.genesez.featuregroup*/site.p2" />
-		</dirset>
-	</path>
-	
-	<target name="create.b3aggr.file" description="Adds the p2 repository of all successful and available GeneSEZ builds to the b3 aggregator model file.">
+	<target name="create.b3aggr.file" depends="publish" description="Adds the p2 repository of all successful and available GeneSEZ builds to the b3 aggregator model file.">
 		<for param="release">
-			<path refid="genesez.releases" />
+			<path id="genesez.releases">
+				<dirset followsymlinks="false" dir="${publish.dir}/.." />
+			</path>
 			<sequential>
 				<var name="uri" value="file://@{release}" />
-				<echo message="add uri ${uri}" />
+				<echo message="repo uri ${uri}" />
 				
 				<!-- obtain genesez version from repo path -->
 				<var name="version" unset="true" />
@@ -90,5 +90,9 @@
 			<arg value="${basedir}/${reponame}" />
 			<arg value="--stacktrace" />
 		</exec>
+	</target>
+	
+	<target name="publish.aggregated.repo" depends="aggregate">
+		
 	</target>
 </project>
