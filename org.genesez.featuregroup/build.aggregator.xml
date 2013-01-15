@@ -98,12 +98,13 @@
 	</target>
 	
 	<target name="publish.aggregated.repo" depends="aggregate">
-		<mkdir dir="${aggregated.publish.dir}"/>
-		<copy todir="${aggregated.publish.dir}">
-			<dirset dir="${basedir}">
-				<include name="${reponame}/final" />
-			</dirset>
-		</copy>
+		<mkdir dir="${aggregated.publish.dir}" />
+		<delete includeEmptyDirs="true">
+			<fileset dir="${aggregated.publish.dir}" includes="**/*" />
+		</delete>
+		<move todir="${aggregated.publish.dir}">
+			<fileset dir="${basedir}/${reponame}/final" />
+		</move>
 		<chmod perm="u=rwX,g=rwX,o=" dir="${aggregated.publish.dir}" includes="**/*" type="both" />
 		<chgrp group="wwwcln" type="both">
 			<fileset dir="${aggregated.publish.dir}" includes="**/*" />
