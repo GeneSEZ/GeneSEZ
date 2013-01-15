@@ -98,11 +98,11 @@
 	</target>
 	
 	<target name="publish.aggregated.repo" depends="aggregate">
+		<mkdir dir="${aggregated.publish.dir}"/>
 		<copy todir="${aggregated.publish.dir}">
 			<dirset dir="${basedir}">
 				<include name="${reponame}/final" />
 			</dirset>
-			<mapper type="regexp" from="(?:site\.p2)(.*)" to="\1"/>
 		</copy>
 		<chmod perm="u=rwX,g=rwX,o=" dir="${aggregated.publish.dir}" includes="**/*" type="both" />
 		<chgrp group="wwwcln" type="both">
