@@ -7,14 +7,14 @@
 <project name="org.genesez.p2mirror" default="test">
 
 	<import file="lib/antcontrib.xml" />
-	<property environment="env" />
 	
-	<property name="source.repository.location" value="http://download.eclipse.org/releases/indigo"/>
+	<property name="source.repository" value="${env.p2.updatesite}"/>
+	<property name="plugin.name" value="${env.plugin.name}"/>
+	<property name="plugin.versions" value="${env.plugin.versions}"/>
 	
-	<property name="plugin.name" value="org.eclipse.emf.sdk.feature.group"/>
-	<property name="plugin.versions" value="2.7.1.v20110913-1526,2.7.2.v20120130-0943"/>
-	
+	<!--
 	<property name="eclipse.location" value="/opt/no.installer/eclipse/eclipse.genesez_devel/eclipse"/>
+	-->
 
 	<property name="destination.repository.location" value="/home/nicher/EclipseUpdateSite"/>
 	<property name="destination.repository.name" value="GeneSEZ Dependencies Repository"/>
@@ -22,7 +22,7 @@
 	
 	
 	<target name="test">
-		<echo message="${p2.updatesite}" />
+		<echo message="${source.repository}" />
 		<echo message="${plugin.name}" />
 		<echo message="${plugin.version}" />
 	</target>
