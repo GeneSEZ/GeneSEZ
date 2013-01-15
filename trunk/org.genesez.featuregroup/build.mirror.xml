@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Mirror Eclipse Plugins for GeneSEZ Dependencies Repository
+	
+	@author nihe
+-->
+<project name="org.genesez.p2mirror" default="test">
+
+	<import file="lib/antcontrib.xml" />
+	
+	<property name="source.repository.location" value="http://download.eclipse.org/releases/indigo"/>
+	
+	<property name="plugin.name" value="org.eclipse.emf.sdk.feature.group"/>
+	<property name="plugin.versions" value="2.7.1.v20110913-1526,2.7.2.v20120130-0943"/>
+	
+	<property name="eclipse.location" value="/opt/no.installer/eclipse/eclipse.genesez_devel/eclipse"/>
+
+	<property name="destination.repository.location" value="/home/nicher/EclipseUpdateSite"/>
+	<property name="destination.repository.name" value="GeneSEZ Dependencies Repository"/>
+	
+	<target name="test">
+		<echo message="${env.p2.updatesite}" />
+		<echo message="${env.plugin.name}" />
+		<echo message="${env.p2.version}" />
+	</target>
+	
+	
+	
+	<target name="mirror.plugins">
+			<for list="${plugin.versions}" param="plugin.version">
+				<sequential>
+					<antcall target="mirror.plugin">
+						<!--
+						<param name="plugin.name" value=""/>
+						-->
+						<param name="plugin.version" value="@{plugin.version}"/>
+					</antcall>
+					<echo message="@{source.plugin.version}"/>
+				</sequential>
+			</for>
+	</target>
+
+
+	<target name="mirror.plugin" description="Mirror Plugins for GeneSEZ Depencencies Repository">
+		<p2.mirror validate="true">
+			<repository location="file:${destination.repository.location}/${source.plugin.name}/${source.plugin.version}" name="${destination.repository.name}"/>			
+			<source>
+				<repository location="${source.repository.location}"/>
+			</source>
+			<slicingOptions followStrict="true"/>
+			<iu id="${source.plugin.name}" version="${source.plugin.version}"/>
+		</p2.mirror>
+	</target>
+	
+	<target name="mirror.plugin.external">
+		<exec executable="${eclipse.location}">
+			<arg value="-noSplash"/>
+			<arg value="-consoleLog"/>
+			<arg value="-data"/>
+			<arg value="${destination.repository.location}"/>
+			<arg value="-application"/>
+			<arg value="org.eclipse.ant.core.antRunner"/>
+			<arg value="-buildfile"/>
+			<arg value="${ant.file}"/>
+			<arg value="mirror.plugin"/>
+		</exec>
+	
+	</target>
+
+
+	<target name="delete.composite.updatesite.settings">
+		<delete>
+			<fileset dir="${destination.repository.location}">
+			    <include name="*.jar"/>
+				<include name="*/*.jar"/>
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="create.composite.updatesite.settings">
+		<for param="directory">
+			<path>
+				<dirset dir="${destination.repository.location}">
+				    <include name="*/*"/>
+					<exclude name="*/.*"/>
+				</dirset>
+			</path>
+			<sequential>
+				<echo message="@{directory}"/>
+				<p2.composite.repository>
+					<repository location="file:${destination.repository.location}" name="${destination.repository.name}"/>			
+					<add>
+						<repository location="file:@{directory}"/>
+					</add>
+				</p2.composite.repository>
+			</sequential>
+		</for>
+	</target>
+
+</project>
