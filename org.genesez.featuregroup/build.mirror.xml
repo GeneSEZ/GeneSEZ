@@ -56,12 +56,15 @@
 	
 	
 	<target name="aggregate.composite.repository">
+		<echo message="Aggregate p2 composite repository containing Eclipse plugins needed by GeneSEZ."/>
+
 		<delete>
 			<fileset dir="${destination.repository.dir}">
 			    <include name="*.jar"/>
 				<include name="*/*.jar"/>
 			</fileset>
 		</delete>
+		
 		<for param="directory">
 			<path>
 				<dirset dir="${destination.repository.dir}">
@@ -72,6 +75,8 @@
 			<sequential>
 				<var name="plugin.dir" unset="true"/>
 				<propertyregex property="plugin.dir" input="@{directory}" regexp="${destination.repository.dir}/(.*)" select="\1"/>
+				
+				<echo message="... Add ${plugin.dir} to aggregated p2 composite repository."/>
 				
 				<p2.composite.repository>
 					<repository location="file:${destination.repository.dir}" name="${destination.repository.name}"/>
