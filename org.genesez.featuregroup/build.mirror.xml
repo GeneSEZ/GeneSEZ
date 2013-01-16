@@ -22,15 +22,19 @@
 	<property name="eclipse.home" value="/opt/genesez/build/eclipse/RELEASE_LATEST"/>
 	
 	
-	<target name="mirror.plugins" description="Mirror Plugins for GeneSEZ Depencencies Repository">
+	<target name="mirror.plugins" description="Mirror Plugins for GeneSEZ Aggregated Repository">
+		<echo message="Mirror p2 repository from ${source.repository.url}:"/>
+		
 		<for list="${plugin.versions}" param="plugin.version">
 			<sequential>
+				<echo message="... add plugin ${plugin.name} in version @{plugin.version}."/>
+				
 				<p2.mirror validate="true">
 					<repository location="file:${destination.repository.dir}/${plugin.name}/@{plugin.version}" name="${destination.repository.name}"/>
 					<source>
 						<repository location="${source.repository.url}"/>
 					</source>
-					<slicingOptions followStrict="false"/>
+					<slicingOptions/>
 					<iu id="${plugin.name}" version="@{plugin.version}"/>
 				</p2.mirror>
 			</sequential>
@@ -56,7 +60,7 @@
 	
 	
 	<target name="aggregate.composite.repository">
-		<echo message="Aggregate p2 composite repository containing Eclipse plugins needed by GeneSEZ."/>
+		<echo message="Aggregate p2 composite repository containing Eclipse plugins needed by GeneSEZ:"/>
 
 		<delete>
 			<fileset dir="${destination.repository.dir}">
@@ -76,7 +80,7 @@
 				<var name="plugin.dir" unset="true"/>
 				<propertyregex property="plugin.dir" input="@{directory}" regexp="${destination.repository.dir}/(.*)" select="\1"/>
 				
-				<echo message="... add ${plugin.dir}"/>
+				<echo message="... add ${plugin.dir}."/>
 				
 				<p2.composite.repository>
 					<repository location="file:${destination.repository.dir}" name="${destination.repository.name}"/>
