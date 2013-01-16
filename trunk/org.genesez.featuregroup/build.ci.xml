@@ -55,13 +55,17 @@
 		</exec>
 	</target>
 	
-	<target name="buckminster.build" description="Builds genesez and creates a p2 repository">
+	
+	<target name="buckminster.build" description="Builds genesez (java source compiling).">
 		<exec executable="/bin/sh" dir="${buckminster.home.dir}" failonerror="true">
 			<arg value="buckminster" />
 			<arg value="-data" />
 			<arg value="${env.WORKSPACE}" />
 			<arg value="build" />
 		</exec>
+	</target>
+	
+	<target name="buckminster.perform" depends="buckminster.build" description="Creates a p2 repository">
 		<exec executable="/bin/sh" dir="${buckminster.home.dir}" failonerror="true">
 			<arg value="buckminster" />
 			<arg value="-data" />
@@ -76,7 +80,7 @@
 	</target>
 	
 	
-	<target name="publish.p2.repo" depends="buckminster.build" description="Moves the p2 repo of the current genesez build to the updatesite">
+	<target name="publish.p2.repo" depends="buckminster.perform" description="Moves the p2 repo of the current genesez build to the updatesite">
 		<mkdir dir="${publish.dir}"/>
 		<move todir="${publish.dir}">
 			<fileset dir="${env.WORKSPACE}/buckminster.output">
