@@ -54,16 +54,9 @@
 	</target>
 	
 	<target name="mirror.repository.external">
-		<exec executable="${eclipse.home}/eclipse">
-			<arg value="-noSplash"/>
-			<arg value="-data"/>
-			<arg value="${destination.repository.dir}"/>
-			<arg value="-application"/>
-			<arg value="org.eclipse.ant.core.antRunner"/>
-			<arg value="-buildfile"/>
-			<arg value="${ant.file}"/>
-			<arg value="mirror.repository"/>
-		</exec>
+		<antcall target="execute.eclipse">
+			<param name="ant.task" value="mirror.repository" />
+		</antcall>
 	</target>
 	
 	
@@ -110,16 +103,9 @@
 	</target>
 	
 	<target name="build.composite.repository.external">
-		<exec executable="${eclipse.home}/eclipse">
-			<arg value="-noSplash"/>
-			<arg value="-data"/>
-			<arg value="${destination.repository.dir}"/>
-			<arg value="-application"/>
-			<arg value="org.eclipse.ant.core.antRunner"/>
-			<arg value="-buildfile"/>
-			<arg value="${ant.file}"/>
-			<arg value="build.composite.repository"/>
-		</exec>
+		<antcall target="execute.eclipse">
+			<param name="ant.task" value="build.composite.repository" />
+		</antcall>
 	</target>
 	
 	
@@ -161,7 +147,16 @@
 	</target>
 	
 	<target name="rebuild.artefact.repository.external">
-		<exec executable="${eclipse.home}/eclipse">
+		<antcall target="execute.eclipse">
+			<param name="ant.task" value="rebuild.artefact.repository" />
+		</antcall>
+	</target>
+	
+	
+	
+	
+	<target name="execute.eclipse">
+		<exec executable="${eclipse.home}/eclipse" failonerror="true">
 			<arg value="-noSplash"/>
 			<arg value="-data"/>
 			<arg value="${destination.repository.dir}"/>
@@ -169,7 +164,7 @@
 			<arg value="org.eclipse.ant.core.antRunner"/>
 			<arg value="-buildfile"/>
 			<arg value="${ant.file}"/>
-			<arg value="rebuild.artefact.repository"/>
+			<arg value="${ant.task}"/>
 		</exec>
 	</target>
 	
