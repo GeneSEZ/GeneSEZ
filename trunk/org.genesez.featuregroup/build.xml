@@ -16,12 +16,17 @@
 		<format property="timestamp" pattern="yyyyMMdd-hhmm" />
 	</tstamp>
 	
-	<!-- qualifier replacement: use the build number when running under hudson, else the timestamp -->
-	<condition property="qualifier" value="b${env.BUILD_NUMBER}" else="t${timestamp}">
+	<!-- determine the version qualifier for the current build -->
+	<condition property="qualifier" value="d${timestamp}" else="v${timestamp}">
 		<and>
 			<isset property="env.BUILD_NUMBER" />
-			<isfalse value="${env.GENESEZ_USE_TIMESTAMP}" />
+			<contains string="${SCM_PATH}" substring="trunk" />
 		</and>
+	</condition>
+	<condition property="qualifier" value="l${timestamp}">
+		<not>
+			<isset property="env.BUILD_NUMBER" />
+		</not>
 	</condition>
 	<condition property="genesez.version" value="${env.GENESEZ_VERSION}" else="${GENESEZ_VERSION}">
 		<isset property="env.GENESEZ_VERSION" />
