@@ -118,6 +118,10 @@
 	
 	<target name="rebuild.artefact.repository">
 		<echo message="Rebuild p2 artefact repository:"/>
+		
+		<echo message="... create temporary p2 artefact repository."/>
+		<mkdir dir="${temp.dir}"/>
+		
 		<for param="directory">
 			<path>
 				<dirset dir="${destination.repository.metadata.dir}">
@@ -143,6 +147,7 @@
 			</sequential>
 		</for>
 		
+		<echo message="... move temporary p2 artefact repository."/>
 		<delete dir="${destination.repository.artefact.dir}"/>
 		<move file="${temp.dir}" tofile="${destination.repository.artefact.dir}"/>
 	</target>
