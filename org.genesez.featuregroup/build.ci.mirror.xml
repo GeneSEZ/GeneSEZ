@@ -20,12 +20,11 @@
 	<property name="temp.dir" value="${env.WORKSPACE}/tmp"/>
 	
 	<property name="destination.repository.name" value="GeneSEZ Aggregated Mirror Repository"/>
-	<property name="destination.repository.artefact.url" value="${destination.repository.url}/artefact"/>
+	<property name="destination.repository.artifact.url" value="${destination.repository.url}/artifact"/>
 	<property name="destination.repository.metadata.url" value="${destination.repository.url}/metadata"/>
-	<property name="destination.repository.artefact.dir" value="${destination.repository.dir}/artefact"/>
+	<property name="destination.repository.artifact.dir" value="${destination.repository.dir}/artifact"/>
 	<property name="destination.repository.metadata.dir" value="${destination.repository.dir}/metadata"/>
 	
-		
 	
 	<target name="mirror.repository" description="Mirror Repository for GeneSEZ Aggregated Repository">
 		<echo message="Mirror p2 repository from ${source.repository.url}:"/>
@@ -34,7 +33,7 @@
 			<sequential>
 				<echo message="... add ${plugin.name} (@{plugin.version})."/>
 				<p2.mirror validate="true">
-					<repository location="file:${destination.repository.artefact.dir}" name="${destination.repository.name}" kind="A"/>
+					<repository location="file:${destination.repository.artifact.dir}" name="${destination.repository.name}" kind="A"/>
 					<repository location="file:${destination.repository.metadata.dir}/${plugin.name}/@{plugin.version}" name="${destination.repository.name}" kind="M"/>
 					<source>
 						<repository location="${source.repository.url}"/>
@@ -70,11 +69,11 @@
 		    <fileset dir="${destination.repository.dir}" includes="*.jar,*.xml"/>
 		</delete>
 		
-		<echo message="... add p2 artefact repository."/>
+		<echo message="... add p2 artifact repository."/>
 		<p2.composite.repository>
 			<repository location="file:${destination.repository.dir}" name="${destination.repository.name}"/>
 			<add>
-				<repository location="${destination.repository.artefact.url}" kind="A"/>
+				<repository location="${destination.repository.artifact.url}" kind="A"/>
 			</add>
 		</p2.composite.repository>
 	
@@ -118,8 +117,8 @@
 
 	
 	
-	<target name="rebuild.artefact.repository">
-		<echo message="Rebuild p2 artefact repository:"/>
+	<target name="rebuild.artifact.repository">
+		<echo message="Rebuild p2 artifact repository:"/>
 		<for param="directory">
 			<path>
 				<dirset dir="${destination.repository.metadata.dir}">
@@ -137,7 +136,7 @@
 				<p2.mirror validate="true">
 					<repository location="file:${temp.dir}" name="${destination.repository.name}" kind="A"/>
 					<source>
-						<repository location="file:${destination.repository.artefact.dir}" kind="A"/>
+						<repository location="file:${destination.repository.artifact.dir}" kind="A"/>
 						<repository location="file:${destination.repository.metadata.dir}/${tmp.plugin.name}/${tmp.plugin.version}" kind="M"/>
 					</source>
 					<iu id="${tmp.plugin.name}" version="${tmp.plugin.version}"/>
@@ -146,8 +145,8 @@
 		</for>
 		
 		<mkdir dir="${temp.dir}"/>
-		<delete dir="${destination.repository.artefact.dir}"/>
-		<move file="${temp.dir}" tofile="${destination.repository.artefact.dir}"/>
+		<delete dir="${destination.repository.artifact.dir}"/>
+		<move file="${temp.dir}" tofile="${destination.repository.artifact.dir}"/>
 	</target>
 	
 	<target name="perform.rebuilding">
@@ -159,7 +158,6 @@
 			<arg value="org.eclipse.ant.core.antRunner"/>
 			<arg value="-buildfile"/>
 			<arg value="${ant.file}"/>
-			<arg value="rebuild.artefact.repository"/>
 			<arg value="-Ddestination.repository.dir=${destination.repository.dir}" />
 			<arg value="-Ddestination.repository.url=${destination.repository.url}" />
 		</exec>
