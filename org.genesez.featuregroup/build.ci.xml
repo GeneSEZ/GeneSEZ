@@ -16,7 +16,7 @@
 	
 	<import file="lib/antcontrib.xml" />
 	<import file="lib/xmltask.xml" />
-	<import file="build.xml" />
+	<import file="build.versioning.xml" />
 	<property environment="env" />
 	
 	
@@ -88,10 +88,9 @@
 			</fileset>
 			<mapper type="regexp" from="(?:site\.p2)(.*)" to="\1"/>
 		</move>
-		<chmod perm="u=rwX,g=rwX,o=" dir="${publish.dir}" includes="**/*" type="both" />
-		<chgrp group="wwwcln" type="both">
-			<fileset dir="${publish.dir}" includes="**/*" />
-		</chgrp>
+		<antcall target="change.permissions">
+			<param name="dir" value="${publish.dir}" />
+		</antcall>
 	</target>
 	
 	<target name="create.b3aggr.file" depends="publish.p2.repo" description="Adds the p2 repository of all successful and available GeneSEZ builds to the b3 aggregator model file.">
@@ -161,9 +160,15 @@
 		<move todir="${aggregated.publish.dir}">
 			<fileset dir="${basedir}/${reponame}/final" />
 		</move>
-		<chmod perm="u=rwX,g=rwX,o=" dir="${aggregated.publish.dir}" includes="**/*" type="both" />
+		<antcall target="change.permissions">
+			<param name="dir" value="${aggregated.publish.dir}" />
+		</antcall>
+	</target>
+	
+	<target name="change.permissions" description="Changes permission of the specified directory">
+		<chmod perm="u=rwX,g=rwX,o=" dir="${dir}" includes="**/*" type="both" />
 		<chgrp group="wwwcln" type="both">
-			<fileset dir="${aggregated.publish.dir}" includes="**/*" />
+			<fileset dir="${dir}" includes="**/*" />
 		</chgrp>
 	</target>
 </project>
