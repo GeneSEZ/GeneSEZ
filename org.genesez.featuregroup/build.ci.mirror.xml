@@ -66,9 +66,10 @@
 		<echo message="Aggregate p2 composite repository:"/>
 		
 		<echo message="... delete old configuration."/>
-		<delete file="${destination.repository.dir}/*.jar"/>
-		<delete file="${destination.repository.dir}/*.xml" verbose="true"/>
-		<!-- 
+		<delete>
+		    <fileset dir="${destination.repository.dir}" includes="*.jar,*.xml"/>
+		</delete>
+		
 		<echo message="... add p2 artefact repository."/>
 		<p2.composite.repository>
 			<repository location="file:${destination.repository.dir}" name="${destination.repository.name}"/>
@@ -98,7 +99,6 @@
 				</p2.composite.repository>
 			</sequential>
 		</for>
-		-->
 	</target>
 	
 	<target name="perform.aggregation">
