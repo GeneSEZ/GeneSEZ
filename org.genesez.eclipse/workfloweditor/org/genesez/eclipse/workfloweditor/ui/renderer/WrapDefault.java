@@ -1,4 +1,10 @@
-package org.genesez.eclipse.workfloweditor.ui;
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+package org.genesez.eclipse.workfloweditor.ui.renderer;
 
 import javax.annotation.PostConstruct;
 
@@ -12,16 +18,24 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.xtext.common.types.JvmFeature;
-import org.genesez.eclipse.workfloweditor.ui.renderer.BooleanValueRenderer;
-import org.genesez.eclipse.workfloweditor.ui.renderer.ComponentRenderer;
-import org.genesez.eclipse.workfloweditor.ui.renderer.IFeatureRenderer;
-import org.genesez.eclipse.workfloweditor.ui.renderer.StringValueRenderer;
-import org.genesez.eclipse.workfloweditor.ui.renderer.WrapFeatureRenderer;
 import org.genesez.eclipse.workfloweditor.ui.renderer.decorator.AddDecorator;
 import org.genesez.eclipse.workfloweditor.ui.renderer.decorator.SetDecorator;
 
+/**
+ * Wrapper for Boolean, String and Component Values. Works as interface between the different FeatureTypes (adder, setter,
+ * boolean, string, component) and the FeatureRenderern.
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 public class WrapDefault extends WrapFeatureRenderer {
 
+	/**
+	 * Enumeration for the ValueTypes.
+	 * 
+	 * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+	 * 
+	 */
 	public enum ValueType {
 		BOOLEAN, STRING, COMPONENT;
 	}
@@ -30,6 +44,18 @@ public class WrapDefault extends WrapFeatureRenderer {
 	private Group group;
 	private Image addImage;
 
+	/**
+	 * Constructs the Wrapper
+	 * 
+	 * @param feature
+	 *            the Feature
+	 * @param component
+	 *            the Component containing the feature
+	 * @param adder
+	 *            if its an adder
+	 * @param type
+	 *            the parameter type (ValueType)
+	 */
 	public WrapDefault(JvmFeature feature, Component component, boolean adder, ValueType type) {
 		super(feature, component, adder);
 		this.type = type;
@@ -60,6 +86,9 @@ public class WrapDefault extends WrapFeatureRenderer {
 
 	}
 
+	/**
+	 * Creates the Controls. If its an Adder a surrounding Group will be created, else the Feature will be directly rendered.
+	 */
 	@Override
 	@PostConstruct
 	public void createControls() {
@@ -82,6 +111,12 @@ public class WrapDefault extends WrapFeatureRenderer {
 		}
 	}
 
+	/**
+	 * Renders the element depending on "adder". If its adder = true an {@link AddDecorator}, if its false a {@link SetDecorator}
+	 * and the appropriate {@link FeatureRenderer} will be created.
+	 * 
+	 * @return the chosen IFeatureRenderer
+	 */
 	protected IFeatureRenderer renderElement() {
 		if (adder) {
 			switch (type) {

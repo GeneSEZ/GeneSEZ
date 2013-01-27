@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor.ui.renderer;
 
 import org.eclipse.emf.mwe2.language.mwe2.BooleanLiteral;
@@ -12,6 +18,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.xtext.common.types.JvmFeature;
 
+/**
+ * Value renderer, that Renders BooleanValues with a checkBox.
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 public class BooleanValueRenderer extends FeatureRenderer {
 
 	private Button fieldValue;
@@ -22,6 +34,7 @@ public class BooleanValueRenderer extends FeatureRenderer {
 
 	@Override
 	public boolean checkDefaultValue() {
+		// TODO: Implement this
 		return false;
 	}
 

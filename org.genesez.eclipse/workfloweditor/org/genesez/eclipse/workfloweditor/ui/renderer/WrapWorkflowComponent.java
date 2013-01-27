@@ -1,4 +1,10 @@
-package org.genesez.eclipse.workfloweditor.ui;
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+package org.genesez.eclipse.workfloweditor.ui.renderer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -31,12 +37,20 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.xtext.common.types.JvmFeature;
-import org.genesez.eclipse.workfloweditor.ui.renderer.IFeatureRenderer;
-import org.genesez.eclipse.workfloweditor.ui.renderer.WorkflowComponentRenderer;
-import org.genesez.eclipse.workfloweditor.ui.renderer.WrapFeatureRenderer;
+import org.genesez.eclipse.workfloweditor.ui.AvailableElementsPart;
 import org.genesez.eclipse.workfloweditor.ui.renderer.decorator.AddDecorator;
 import org.genesez.eclipse.workfloweditor.util.WorkfloweditorConstants;
 
+/**
+ * Wrapper around WorkflowComponents. Provides a group, where WorkflowComponents can be stored (and inserted from the
+ * {@link AvailableElementsPart}). Contains a Label, which is needed to insert WorkflowComponents at the end. If the feature is a
+ * setter the filler vanishes after placing a component.
+ * 
+ * TODO: Maybe Setter should be just like a normal component.
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 @SuppressWarnings("restriction")
 public class WrapWorkflowComponent extends WrapFeatureRenderer {
 
@@ -73,6 +87,7 @@ public class WrapWorkflowComponent extends WrapFeatureRenderer {
 		filler = new Label(composite, SWT.NONE);
 		filler.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		compositeColor = composite.getBackground();
+		composite.setData(WorkfloweditorConstants.CURRENT_FILLER);
 
 		addListeners();
 		addFillerListener();
@@ -107,8 +122,9 @@ public class WrapWorkflowComponent extends WrapFeatureRenderer {
 			@Override
 			public void drop(DropTargetEvent event) {
 				if (dragGroup != null) {
-					controller.reorderChildren(dragGroup, null);
-					controller.reorderAssignments(dragGroup, null);
+					if (controller.reorderChildren(dragGroup, null)) {
+						controller.reorderAssignments(dragGroup, null);
+					}
 					controller.refreshView();
 				}
 			}
@@ -207,6 +223,7 @@ public class WrapWorkflowComponent extends WrapFeatureRenderer {
 		return false;
 	}
 
+	@Override
 	@PreDestroy
 	public void dispose() {
 	}

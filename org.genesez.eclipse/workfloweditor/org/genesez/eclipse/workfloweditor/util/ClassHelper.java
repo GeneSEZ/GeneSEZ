@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor.util;
 
 import java.lang.reflect.Field;
@@ -9,9 +15,26 @@ import java.util.List;
 
 import org.eclipse.emf.mwe2.language.mwe2.Component;
 
+/**
+ * A helper class, that contains methods to get information about the class (such as inheritance and all fields and so on).
+ * 
+ * @deprecated due to using of the MWE2-Model, maybe some functionality is later needed again.
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
+@Deprecated
 @SuppressWarnings("rawtypes")
 public class ClassHelper {
 
+	/**
+	 * Checks whether the given class is of the given supertype
+	 * 
+	 * @param clazz
+	 *            the class
+	 * @param supertype
+	 *            the supertype
+	 * @return true if class is a subclass from supertype
+	 */
 	public static boolean isSubtypeOf(Class clazz, Class supertype) {
 		if (clazz.equals(Object.class)) {
 			return false;
@@ -28,6 +51,15 @@ public class ClassHelper {
 		return isSubtypeOf(clazz.getSuperclass(), supertype);
 	}
 
+	/**
+	 * Gets the Method of a Component.
+	 * 
+	 * @param simpleName
+	 *            the name of the Method
+	 * @param component
+	 *            the Component to look up in
+	 * @return the Method or null if not found
+	 */
 	public static Method getMethod(String simpleName, Component component) {
 		Method toReturn = null;
 		int endIndex = simpleName.indexOf("(");
@@ -59,6 +91,13 @@ public class ClassHelper {
 		return toReturn;
 	}
 
+	/**
+	 * Gets a getter of a Field if present
+	 * 
+	 * @param field
+	 *            the field to get the getter for
+	 * @return the Method or null if not existent.
+	 */
 	public static Method getGetter(Field field) {
 		try {
 			return field.getDeclaringClass().getMethod("get" + parseFieldName(field.getName()));
@@ -70,6 +109,13 @@ public class ClassHelper {
 		return null;
 	}
 
+	/**
+	 * Gets the Setter of a field
+	 * 
+	 * @param field
+	 *            the field to get the setter for
+	 * @return the Method or null if not existent.
+	 */
 	public static Method getSetter(Field field) {
 		try {
 			return field.getDeclaringClass().getMethod("set" + parseFieldName(field.getName()), field.getType());
@@ -83,10 +129,24 @@ public class ClassHelper {
 		return null;
 	}
 
+	/**
+	 * Gets the first parameter type of a Method
+	 * 
+	 * @param method
+	 *            the Method to get parameter type from
+	 * @return the parameter type.
+	 */
 	public static Class getParameterType(Method method) {
 		return method.getParameterTypes()[0];
 	}
 
+	/**
+	 * Gets a adder of a Field if present
+	 * 
+	 * @param field
+	 *            the field to get the adder for
+	 * @return the Method or null if not existent.
+	 */
 	public static Method getAdder(Field field) {
 		try {
 			for (Method method : field.getDeclaringClass().getMethods()) {
@@ -100,6 +160,13 @@ public class ClassHelper {
 		return null;
 	}
 
+	/**
+	 * Gets a remover of a Field if present
+	 * 
+	 * @param field
+	 *            the field to get the remover for
+	 * @return the Method or null if not existent.
+	 */
 	public static Method getRemover(Field field) {
 		try {
 			for (Method method : field.getDeclaringClass().getMethods()) {
@@ -155,6 +222,13 @@ public class ClassHelper {
 		return fields;
 	}
 
+	/**
+	 * Makes the first char upperCase for the given String
+	 * 
+	 * @param fieldName
+	 *            the name of a field.
+	 * @return
+	 */
 	private static String parseFieldName(String fieldName) {
 		return fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 	}

@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor.ui.renderer;
 
 import org.eclipse.emf.mwe2.language.mwe2.Component;
@@ -16,6 +22,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.xtext.common.types.JvmFeature;
 
+/**
+ * Value renderer for String Values. Uses a Text to change and show the content.
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 public class StringValueRenderer extends FeatureRenderer {
 
 	private Text fieldValue;
@@ -37,6 +49,7 @@ public class StringValueRenderer extends FeatureRenderer {
 	}
 
 	private void addListener() {
+		// changes the associated modelelement if content changed.
 		fieldValue.addModifyListener(new ModifyListener() {
 
 			@Override
