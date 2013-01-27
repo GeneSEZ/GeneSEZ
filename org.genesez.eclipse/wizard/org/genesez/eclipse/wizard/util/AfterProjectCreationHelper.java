@@ -59,20 +59,22 @@ public class AfterProjectCreationHelper {
 		for (File file : appModelList) {
 			URI linkTargetPath = file.toURI();
 			File folder = file.getParentFile();
-			if (!folder.equals(appModelRoot) && !folder.exists())
+			if (!folder.equals(appModelRoot) && !folder.exists()) {
 				folder.mkdirs();
+			}
 			IFile fileResource = null;
-			if (projectModelFolder != null)
+			if (projectModelFolder != null) {
 				fileResource = projectModelFolder.getFile(checkParent(file.getParentFile(), appModelRoot) + file.getName());
-			else
+			} else {
 				fileResource = project.getFile(checkParent(file.getParentFile(), appModelRoot) + file.getName());
-			if (copyFiles)
+			}
+			if (copyFiles) {
 				try {
 					FileUtils.copyFile(file, new File(fileResource.getLocationURI().getPath()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			else {
+			} else {
 				CreateFileOperation op = new CreateFileOperation(fileResource, linkTargetPath, null, "Reference Files");
 				try {
 					op.execute(new NullProgressMonitor(), null);
@@ -84,8 +86,9 @@ public class AfterProjectCreationHelper {
 	}
 
 	private static String checkParent(File toCheck, File appModelRoot) {
-		if (!toCheck.equals(appModelRoot))
+		if (!toCheck.equals(appModelRoot)) {
 			return checkParent(toCheck.getParentFile(), appModelRoot) + toCheck.getName() + File.separator;
+		}
 		return "";
 	}
 
@@ -106,15 +109,17 @@ public class AfterProjectCreationHelper {
 	public static void addWorklfowfile(String template, String fileName, String folderString, String appProjectName,
 			IWorkspaceRoot workspace) {
 		IPath folder = new Path(folderString);
-		if (!folder.isAbsolute())
+		if (!folder.isAbsolute()) {
 			folder = new Path(workspace.getLocationURI().getPath()).append(folder);
+		}
 		folder.toFile().mkdirs();
 		File file = folder.append(fileName + ".mwe2").toFile();
 		int result = JOptionPane.YES_OPTION;
-		if (file.exists())
+		if (file.exists()) {
 			result = JOptionPane.showConfirmDialog(null, "The file " + file.getName() + " already exists. Overwrite?",
 					"File already exists.", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (result != JOptionPane.YES_OPTION) {
+		}
+		if (result == JOptionPane.YES_OPTION) {
 			if (template != null && !template.equals("")) {
 				try {
 					FileUtils.copyFile(new File(template), file);
@@ -122,12 +127,13 @@ public class AfterProjectCreationHelper {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			} else
+			} else {
 				try {
 					file.createNewFile();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 
