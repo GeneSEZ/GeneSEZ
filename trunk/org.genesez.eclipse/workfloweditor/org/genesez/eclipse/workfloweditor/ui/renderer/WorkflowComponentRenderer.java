@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor.ui.renderer;
 
 import java.lang.reflect.Field;
@@ -7,7 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,7 +37,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -44,8 +48,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.xtext.common.types.JvmFeature;
 import org.genesez.eclipse.workfloweditor.util.ClassHelper;
@@ -54,10 +56,15 @@ import org.genesez.eclipse.workfloweditor.util.UIController;
 import org.genesez.eclipse.workfloweditor.util.WorkfloweditorConstants;
 import org.genesez.workflow.profile.Parameter;
 
-import com.google.common.collect.Multimap;
-
 //import org.genesez.workflow.WorkflowComponent;
 
+/**
+ * Class to render WorkflowComponents. Contains also DND functionality. TODO: Clean the Code, currently really messed up, due to
+ * many changes cause of the MWE2-Model. TODO: Complete functionality and commentaries.
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 @SuppressWarnings("restriction")
 public class WorkflowComponentRenderer extends FeatureRenderer {
 
@@ -72,9 +79,6 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 
 	private Group group;
 	private Composite header;
-	private Button btnUpButton;
-	private Button btnDownButton;
-	private Button btnDeleteButton;
 	private Composite advanced;
 
 	private DragSource dragSource;
@@ -87,7 +91,7 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 	private Button btnCheckButton;
 	private Button btnOpenClose;
 
-	private Image closeImage;
+	// private Image closeImage;
 	private Composite dynamicOpenPart;
 	private Composite dynamicClosedPart;
 
@@ -110,9 +114,6 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 
 	@Inject
 	private IEclipseContext context;
-
-	@Inject
-	private IWorkbench workbench;
 
 	@Inject
 	@Named(WorkfloweditorConstants.SELECTED_WORKFLOWCOMPONENT)
@@ -144,11 +145,6 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 	@Override
 	public void renderElement(Composite parent) {
 		parent.setLayout(new GridLayout());
-		if (workbench != null) {
-			ISharedImages eclipseImages = workbench.getSharedImages();
-			closeImage = eclipseImages.getImage(ISharedImages.IMG_TOOL_DELETE);
-		}
-
 		if (adder) {
 			precedingDropTarget = new Label(parent, SWT.NONE);
 			GridData gd_drop = new GridData(SWT.FILL, SWT.FILL, true, false);
@@ -228,6 +224,11 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		addListener();
 	}
 
+	/**
+	 * TODO: Should contain the summarized version of the component
+	 * 
+	 * @return the composite containing the summary
+	 */
 	private Composite closedPart() {
 		dynamicClosedPart = new Composite(group, SWT.NONE);
 		dynamicClosedPart.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -254,6 +255,14 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		return dynamicClosedPart;
 	}
 
+	/**
+	 * TODO: Needs complete rewrite -> should check if a field is shown immediately or only in advanced view.
+	 * 
+	 * @param array
+	 * @param field
+	 * @param param
+	 * @return
+	 */
 	private Boolean checkShowField(Method[] array, Field field, Parameter param) {
 		if (array != null && array.length >= 4) {
 			array[0] = ClassHelper.getGetter(field);
@@ -285,6 +294,14 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		return null;
 	}
 
+	/**
+	 * TODO: Maybe not needed -> rewrite
+	 * 
+	 * @param field
+	 * @param instance
+	 * @param array
+	 * @return
+	 */
 	private String getValue(Field field, Object instance, Method[] array) {
 		Object value = null;
 		try {
@@ -305,6 +322,11 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		return value.toString();
 	}
 
+	/**
+	 * Called when the workflowComponent gets opened. Shows all available JvmFeatures.
+	 * 
+	 * @return the Composite containing the Features.
+	 */
 	private Composite openPart() {
 		dynamicOpenPart = new Composite(group, SWT.NONE);
 		dynamicOpenPart.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -343,6 +365,11 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		return dynamicOpenPart;
 	}
 
+	/**
+	 * TODO: Should open advanced part, maybe it works like this.
+	 * 
+	 * @return the Composite containing the Advanced Feature.
+	 */
 	private Composite openAdvancedPart() {
 		for (Field field : advancedFields.keySet()) {
 			renderField(field, field.getAnnotation(Parameter.class), advancedFields.get(field));
@@ -359,6 +386,13 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		return dynamicOpenPart;
 	}
 
+	/**
+	 * TODO: Should render a field -> rewrite for MWE2 Model (or delete)
+	 * 
+	 * @param field
+	 * @param param
+	 * @param array
+	 */
 	private void renderField(Field field, Parameter param, Method[] array) {
 		boolean rendered = false;
 		// for (FeatureRenderer renderer : renderers) {
@@ -372,8 +406,12 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		// }
 	}
 
+	/**
+	 * Adds the listeners to the buttons
+	 */
 	private void addListener() {
 		final WorkflowComponentRenderer renderer = this;
+		// open advanced part
 		advancedBtnListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -383,6 +421,7 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 			}
 		};
 
+		// close advanced part
 		simpleBtnListener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -471,6 +510,7 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 		// }
 		// });
 
+		// if its an Adder DND functionality is enabled.
 		if (adder) {
 			precedingDropTarget.addMouseTrackListener(new MouseTrackAdapter() {
 
@@ -531,8 +571,9 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 				public void drop(DropTargetEvent event) {
 					if (dragGroup != null) {
 						Control dropped = ((DropTarget) event.widget).getControl();
-						controller.reorderChildren(dragGroup, dropped);
-						controller.reorderAssignments(dragGroup, dropped);
+						if (controller.reorderChildren(dragGroup, dropped)) {
+							controller.reorderAssignments(dragGroup, dropped);
+						}
 					}
 				}
 			});
@@ -557,34 +598,6 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 				}
 			});
 		}
-	}
-
-	/**
-	 * Gets the current position in the surrounding Composite
-	 * 
-	 * @return the position.
-	 */
-	public int getRealPosition() {
-		Control[] children = parent.getChildren();
-		for (int i = 0; i < children.length; i++) {
-			if (children[i].equals(group)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	public int getGroupPosition() {
-		int i = 0;
-		for (Control child : parent.getChildren()) {
-			if (child instanceof Group) {
-				i++;
-			}
-			if (child.equals(group)) {
-				return i;
-			}
-		}
-		return -1;
 	}
 
 	/**

@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor;
 
 import javax.inject.Inject;
@@ -36,9 +42,23 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.genesez.eclipse.wizard.util.WizardConstants;
+import org.genesez.eclipse.workfloweditor.ui.AvailableElementsPart;
+import org.genesez.eclipse.workfloweditor.ui.UsedElementsPart;
 import org.genesez.eclipse.workfloweditor.util.UIController;
 import org.genesez.eclipse.workfloweditor.util.WorkfloweditorConstants;
 
+/**
+ * Editor for Mwe2-Workflow files. Consists of
+ * <p>
+ * {@link AvailableElementsPart} and
+ * </p>
+ * <p>
+ * {@link UsedElementsPart}
+ * </p>
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 @SuppressWarnings("restriction")
 public class WorkflowEditor extends EditorPart {
 
@@ -52,8 +72,8 @@ public class WorkflowEditor extends EditorPart {
 	private Cursor oldCursor;
 	private final Cursor newCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_CROSS);
 	private final Image image = new Image(Display.getCurrent(), getClass().getClassLoader().getResourceAsStream(
-	// "icons/butterfly.gif"));
-			"images/GeneSEZ_32x32.png"));
+			"icons/butterfly.gif"));
+	// "images/GeneSEZ_32x32.png"));
 	private boolean dirty = false;
 	private UIController controller;
 
@@ -61,6 +81,9 @@ public class WorkflowEditor extends EditorPart {
 	@Inject
 	private IPresentationEngine renderer;
 
+	/**
+	 * Constructs the Editor.
+	 */
 	public WorkflowEditor() {
 		IWorkbenchWindow wbw = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		hostWin = (MWindow) wbw.getService(MWindow.class);
@@ -147,6 +170,12 @@ public class WorkflowEditor extends EditorPart {
 		});
 	}
 
+	/**
+	 * Changes the cursor, if a component was chosen.
+	 * 
+	 * @param component
+	 *            {@link WorkfloweditorConstants#SELECTED_WORKFLOWCOMPONENT}
+	 */
 	@Inject
 	private void changeCursor(@Optional @Named(WorkfloweditorConstants.SELECTED_WORKFLOWCOMPONENT) Object component) {
 		if (composite != null && !composite.isDisposed()) {
@@ -168,6 +197,9 @@ public class WorkflowEditor extends EditorPart {
 		composite.setFocus();
 	}
 
+	/**
+	 * Serializes the Workflow.
+	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
@@ -198,6 +230,12 @@ public class WorkflowEditor extends EditorPart {
 		setInput(input);
 	}
 
+	/**
+	 * Changes the dirty-Flag.
+	 * 
+	 * @param dirty
+	 *            the new dirty flag.
+	 */
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
 		firePropertyChange(PROP_DIRTY);

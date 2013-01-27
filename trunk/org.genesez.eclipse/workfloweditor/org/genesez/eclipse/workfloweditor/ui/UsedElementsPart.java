@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor.ui;
 
 import javax.annotation.PostConstruct;
@@ -6,7 +12,6 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.emf.mwe2.language.mwe2.Module;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -23,6 +28,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.genesez.eclipse.workfloweditor.util.UIController;
 
+/**
+ * Part, that contains the used WorkflowComponents from the modell.
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 @SuppressWarnings("restriction")
 public class UsedElementsPart {
 
@@ -33,8 +44,6 @@ public class UsedElementsPart {
 
 	private Composite composite;
 
-	private Module module;
-
 	@Inject
 	private IEclipseContext context;
 
@@ -44,6 +53,9 @@ public class UsedElementsPart {
 	@Inject
 	private UIController controller;
 
+	/**
+	 * Standard constructor
+	 */
 	public UsedElementsPart() {
 	}
 
@@ -60,8 +72,7 @@ public class UsedElementsPart {
 		moduleText = new Text(parent, SWT.BORDER);
 		moduleText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		module = controller.getModule();
-		String moduleName = module.getCanonicalName();
+		String moduleName = controller.getModuleName();
 		if (moduleName == null) {
 			moduleText.setText("");
 		} else {
@@ -79,10 +90,14 @@ public class UsedElementsPart {
 		scrolled.setContent(composite);
 		controller.setHeadComposite(scrolled);
 		addListeners();
-		controller.readFeatures(module.getRoot(), composite, context);
+		controller.readFeatures(controller.getRootComponent(), composite, context);
 	}
 
+	/**
+	 * adds the listeners
+	 */
 	private void addListeners() {
+		// allows scrolling if workflow is to long
 		scrolled.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
@@ -93,17 +108,12 @@ public class UsedElementsPart {
 			}
 		});
 
+		// modifies the Modulename
 		moduleText.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				String text = moduleText.getText();
-				if (text.isEmpty()) {
-					module.setCanonicalName(controller.getFileName());
-				} else {
-					module.setCanonicalName(text);
-				}
-				controller.setDirty(true);
+				controller.changeModuleName(moduleText.getText());
 			}
 		});
 	}

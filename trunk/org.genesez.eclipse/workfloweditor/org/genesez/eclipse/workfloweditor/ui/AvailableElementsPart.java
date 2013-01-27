@@ -1,3 +1,9 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor.ui;
 
 import java.util.List;
@@ -32,6 +38,22 @@ import org.genesez.workflow.WorkflowComponent;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 
+/**
+ * The part, which contains the available WorkflowComponents from {@link ExtensionPointReader}.
+ * 
+ * Modify context Element:
+ * <p>
+ * {@link WorkfloweditorConstants#SELECTED_WORKFLOWCOMPONENT}
+ * </p>
+ * 
+ * Listen to context Element:
+ * <p>
+ * {@link WorkfloweditorConstants#SELECTED_WORKFLOWCOMPONENT}
+ * </p>
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 @SuppressWarnings("restriction")
 public class AvailableElementsPart {
 
@@ -49,6 +71,9 @@ public class AvailableElementsPart {
 	@Inject
 	private IEclipseContext context;
 
+	/**
+	 * Standard constructor
+	 */
 	public AvailableElementsPart() {
 	}
 
@@ -62,7 +87,7 @@ public class AvailableElementsPart {
 		scrolled = new ScrolledComposite(parent, SWT.V_SCROLL);
 		scrolled.setExpandHorizontal(true);
 		scrolled.setExpandVertical(true);
-		scrolled.setLayoutData(new GridData(SWT.FILL,SWT.FILL, true,true));
+		scrolled.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite = new Composite(scrolled, SWT.NONE);
 		scrolled.setContent(composite);
 		composite.setLayout(new GridLayout());
@@ -100,31 +125,37 @@ public class AvailableElementsPart {
 			expandableComposite.addExpansionListener(expansionListener);
 		}
 	}
-	
-	private void addListener(){
+
+	/**
+	 * adds the needed Listeners
+	 */
+	private void addListener() {
+		// Allows scrolling if too much Items are available.
 		scrolled.addControlListener(new ControlAdapter() {
+			@Override
 			public void controlResized(ControlEvent e) {
 				Rectangle r = scrolled.getClientArea();
 				scrolled.setMinSize(grpAvailableWorkflowcomponents.computeSize(r.width, SWT.DEFAULT));
 			}
 		});
-		
+
 		// Listener to change group size on expansion state change.
 		expansionListener = new IExpansionListener() {
 
 			@Override
 			public void expansionStateChanging(ExpansionEvent e) {
 				ExpandableComposite ec = (ExpandableComposite) e.getSource();
-				if (ec.isExpanded())
+				if (ec.isExpanded()) {
 					grpAvailableWorkflowcomponents.setSize(
 							grpAvailableWorkflowcomponents.getSize().x,
 							grpAvailableWorkflowcomponents.getSize().y
 									- (Integer) ec.getData(WorkfloweditorConstants.COMPOSITE_HEIGHT));
-				else
+				} else {
 					grpAvailableWorkflowcomponents.setSize(
 							grpAvailableWorkflowcomponents.getSize().x,
 							grpAvailableWorkflowcomponents.getSize().y
 									+ (Integer) ec.getData(WorkfloweditorConstants.COMPOSITE_HEIGHT));
+				}
 			}
 
 			@Override
@@ -133,7 +164,7 @@ public class AvailableElementsPart {
 				scrolled.notifyListeners(SWT.Resize, new Event());
 			}
 		};
-		
+
 		// Checks whether a btn already selected and set SELECTED_WORKFLOWCOMPONENT in context.
 		btnSelectionListener = new SelectionListener() {
 
@@ -158,6 +189,14 @@ public class AvailableElementsPart {
 		};
 	}
 
+	/**
+	 * Listens on {@link WorkfloweditorConstants#SELECTED_WORKFLOWCOMPONENT}. If the object is null it will remove also the
+	 * current selection. Needed because SELECTED_WORKFLOWCOMPONENT is null after placing the currentComponent.
+	 * 
+	 * @param obj
+	 *            {@link WorkfloweditorConstants#SELECTED_WORKFLOWCOMPONENT}
+	 * 
+	 */
 	@Inject
 	private void listenToSelectedWorkflowComponent(@Optional @Named(WorkfloweditorConstants.SELECTED_WORKFLOWCOMPONENT) Object obj) {
 		if (currentSelection != null && !currentSelection.isDisposed()) {

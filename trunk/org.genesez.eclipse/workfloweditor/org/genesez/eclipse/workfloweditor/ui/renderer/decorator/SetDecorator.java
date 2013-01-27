@@ -1,21 +1,26 @@
+/*
+ * (c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
 package org.genesez.eclipse.workfloweditor.ui.renderer.decorator;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbench;
-import org.genesez.eclipse.workfloweditor.ui.renderer.WrapFeatureRenderer;
 import org.genesez.eclipse.workfloweditor.ui.renderer.IFeatureRenderer;
-import org.genesez.eclipse.workfloweditor.util.WorkfloweditorConstants;
 
-@SuppressWarnings("restriction")
+/**
+ * Adds Setter functionality to the FeatureRenderer. In fact a Button which allows to set back to the default Value. TODO:
+ * implement Button functionality
+ * 
+ * @author Dominik Wetzel <dominik.wetzel@fh-zwickau.de> (maintainer)
+ * 
+ */
 public class SetDecorator extends AbstractFeatureDecorator {
 
 	private Image imageRestoreDefault = null;
