@@ -107,15 +107,17 @@ public class TemplateHelper {
 		files = folder.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
-				if (pathname.toString().matches(ARCHIVE_PATTERN))
+				if (pathname.toString().matches(ARCHIVE_PATTERN)) {
 					return true;
+				}
 				return false;
 			}
 		});
 		for (int i = 0; i < files.length; i++) {
 			TemplateConfigXml read = readArchive(files[i]);
-			if (read != null)
+			if (read != null) {
 				templates.add(read);
+			}
 		}
 		return templates;
 	}
@@ -134,6 +136,7 @@ public class TemplateHelper {
 			zf = new ZipFile(file);
 			ZipEntry entry = zf.getEntry(CONFIG_FILENAME);
 			if (entry == null) {
+				// TODO: SWT Klasse benutzen.
 				JOptionPane.showMessageDialog(null,
 						"Couldn't find the templateConfig.xml inside the template file: " + file.getName(),
 						"No template config file found", JOptionPane.WARNING_MESSAGE);
@@ -144,10 +147,11 @@ public class TemplateHelper {
 			Enumeration<? extends ZipEntry> entries = zf.entries();
 			while (entries.hasMoreElements()) {
 				ZipEntry z_entry = entries.nextElement();
-				if (z_entry.isDirectory())
+				if (z_entry.isDirectory()) {
 					toReturn.addInternalFolder(new Path(z_entry.getName()));
-				else
+				} else {
 					toReturn.addInternalFile(new Path(z_entry.getName()));
+				}
 			}
 			toReturn.setFile(file);
 		} catch (ZipException e) {
@@ -199,16 +203,18 @@ public class TemplateHelper {
 		monitor.subTask("Decompress template file");
 		// einzelnen Entries lesen
 		while ((entry = zis.getNextEntry()) != null) {
-			if (monitor.isCanceled())
+			if (monitor.isCanceled()) {
 				return null;
+			}
 			String entryName = entry.getName();
 			String oldName = template.getInternalProjectName();
 			String oldGenName = oldName.concat(GENERATOR_ENDING);
 			// überprüfen was aus Template verwendet werden soll
 			if (entryName.equals(CONFIG_FILENAME)
 					|| (!genFromZip && entryName.startsWith(oldGenName + File.separator) || (!appFromZip && entryName
-							.startsWith(oldName + File.separator))))
+							.startsWith(oldName + File.separator)))) {
 				continue;
+			}
 			boolean isGenProject;
 			if (entryName.startsWith(oldGenName)) {
 				entryName = entry.getName().replaceFirst(oldGenName, genProjectName);
@@ -221,8 +227,9 @@ public class TemplateHelper {
 			String path = destination + File.separator + entryName;
 			if (entry.isDirectory()) {
 				if (entryName.matches(appProjectName + File.separator + "$")
-						|| entryName.matches(genProjectName + File.separator + "$"))
+						|| entryName.matches(genProjectName + File.separator + "$")) {
 					projects.add(entryName);
+				}
 				new File(path).mkdirs();
 			} else {
 				File emptyFile = new File(path);
@@ -287,8 +294,9 @@ public class TemplateHelper {
 							JOptionPane.ERROR_MESSAGE);
 					return Status.CANCEL_STATUS;
 				}
-				if (projects == null)
+				if (projects == null) {
 					return Status.CANCEL_STATUS;
+				}
 				monitor.worked(60);
 				// import the created project folders to eclipse workspace
 				for (String folder : projects) {
@@ -297,8 +305,9 @@ public class TemplateHelper {
 						project.create(monitor);
 						monitor.worked(80);
 						project.open(monitor);
-						if (project.getName().equals(genProjectName))
+						if (project.getName().equals(genProjectName)) {
 							ChangeGeneSEZNatureHandler.addNature(project);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						return Status.CANCEL_STATUS;
