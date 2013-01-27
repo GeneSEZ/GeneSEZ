@@ -48,7 +48,7 @@ import org.genesez.eclipse.wizard.util.WizardConstants;
  * 
  */
 @SuppressWarnings("restriction")
-public class GeneSEZExampleWizardPage extends GeneSEZProjectWizardPage {
+public class GeneSEZExampleWizardPage extends AbstractGeneSEZWizardPage {
 
 	private static final String ENTER_APP_PROJECTNAME = "Enter an application project name. ";
 	private static final String PROJECTNAME_EXSISTS = "A project with this name or one that will be created already exists.";
@@ -84,7 +84,7 @@ public class GeneSEZExampleWizardPage extends GeneSEZProjectWizardPage {
 	/**
 	 * creates the Model, adds a {@link TemplateSelectionPart}, a
 	 * {@link DescriptionPart} and a {@link ProjectNamePart}
-	 * @see org.genesez.eclipse.wizard.page.GeneSEZProjectWizardPage#createModel()
+	 * @see org.genesez.eclipse.wizard.page.AbstractGeneSEZWizardPage#createModel()
 	 */
 	@Override
 	protected MUIElement createModel() {
