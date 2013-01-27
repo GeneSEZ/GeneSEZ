@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Composite;
  *
  */
 @SuppressWarnings("restriction")
-public abstract class GeneSEZProjectWizardPage extends WizardPage {
+public abstract class AbstractGeneSEZWizardPage extends WizardPage {
 
 	/** The context which contains important values */
 	protected IEclipseContext context;
@@ -49,7 +49,7 @@ public abstract class GeneSEZProjectWizardPage extends WizardPage {
 	 * @param hostWin
 	 *            the host window, which contains the context.
 	 */
-	public GeneSEZProjectWizardPage(String pageName, MWindow hostWin) {
+	public AbstractGeneSEZWizardPage(String pageName, MWindow hostWin) {
 		super(pageName);
 		this.hostWin = hostWin;
 		this.context = hostWin.getContext();

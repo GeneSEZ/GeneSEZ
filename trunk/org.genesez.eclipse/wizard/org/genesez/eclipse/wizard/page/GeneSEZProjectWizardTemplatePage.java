@@ -51,7 +51,7 @@ import org.genesez.eclipse.wizard.util.WizardConstants;
  * 
  */
 @SuppressWarnings("restriction")
-public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
+public class GeneSEZProjectWizardTemplatePage extends AbstractGeneSEZWizardPage {
 
 	private static final String CHOOSE_A_TEMPLATE = "Choose a template for project generation.";
 	private static final String CHOOSE_A_DESTINATION = "Choose a destination for the application model.";
@@ -73,7 +73,7 @@ public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.genesez.eclipse.wizard.page.GeneSEZProjectWizardPage#initializeContext
+	 * org.genesez.eclipse.wizard.page.AbstractGeneSEZWizardPage#initializeContext
 	 * ()
 	 */
 	@Override
@@ -96,7 +96,7 @@ public class GeneSEZProjectWizardTemplatePage extends GeneSEZProjectWizardPage {
 	 * Creates the model with a {@link TemplateSelectionPart}, a
 	 * {@link DescriptionPart} and an {@link ApplicationModelPart}
 	 * 
-	 * @see org.genesez.eclipse.wizard.page.GeneSEZProjectWizardPage#createModel()
+	 * @see org.genesez.eclipse.wizard.page.AbstractGeneSEZWizardPage#createModel()
 	 */
 	protected MUIElement createModel() {
 		// Create the model elements

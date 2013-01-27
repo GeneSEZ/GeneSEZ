@@ -41,7 +41,7 @@ import org.genesez.eclipse.wizard.util.WizardConstants;
  * 
  */
 @SuppressWarnings("restriction")
-public class GeneSEZProjectWizardWorkflowPage extends GeneSEZProjectWizardPage {
+public class GeneSEZProjectWizardWorkflowPage extends AbstractGeneSEZWizardPage {
 
 	private static final String CHOOSE_WF_TEMPLATE = "Choose a workflow template. ";
 	private static final String SET_WF_FILENAME = "Set a workflow filename. ";
@@ -64,7 +64,7 @@ public class GeneSEZProjectWizardWorkflowPage extends GeneSEZProjectWizardPage {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.genesez.eclipse.wizard.page.GeneSEZProjectWizardPage#initializeContext
+	 * org.genesez.eclipse.wizard.page.AbstractGeneSEZWizardPage#initializeContext
 	 * ()
 	 */
 	@Override
@@ -79,7 +79,7 @@ public class GeneSEZProjectWizardWorkflowPage extends GeneSEZProjectWizardPage {
 	 * Creates the model with a {@link ChooseWorkflowPart} and a
 	 * {@link WorkflowFilePart}.
 	 * 
-	 * @see org.genesez.eclipse.wizard.page.GeneSEZProjectWizardPage#createModel()
+	 * @see org.genesez.eclipse.wizard.page.AbstractGeneSEZWizardPage#createModel()
 	 */
 	@Override
 	protected MUIElement createModel() {

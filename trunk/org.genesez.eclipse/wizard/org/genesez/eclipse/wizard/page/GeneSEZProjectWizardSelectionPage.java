@@ -50,7 +50,7 @@ import org.genesez.eclipse.wizard.util.WizardConstants;
  * 
  */
 @SuppressWarnings("restriction")
-public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage {
+public class GeneSEZProjectWizardSelectionPage extends AbstractGeneSEZWizardPage {
 
 	private static final String ENTER_APP_PROJECTNAME = "Enter an application project name. ";
 	private static final String ENTER_GEN_PROJECTNAME = "Enter a generator project name. ";
@@ -74,7 +74,7 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.genesez.eclipse.wizard.page.GeneSEZProjectWizardPage#initializeContext
+	 * org.genesez.eclipse.wizard.page.AbstractGeneSEZWizardPage#initializeContext
 	 * ()
 	 */
 	@Override
@@ -91,7 +91,7 @@ public class GeneSEZProjectWizardSelectionPage extends GeneSEZProjectWizardPage 
 	 * Creates the model with a {@link ChooseWizardPart}, a
 	 * {@link DescriptionPart} and a {@link ProjectSettingsPart}.
 	 * 
-	 * @see org.genesez.eclipse.wizard.page.GeneSEZProjectWizardPage#createModel()
+	 * @see org.genesez.eclipse.wizard.page.AbstractGeneSEZWizardPage#createModel()
 	 */
 	@Override
 	protected MUIElement createModel() {
