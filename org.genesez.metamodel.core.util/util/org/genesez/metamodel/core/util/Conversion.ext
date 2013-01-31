@@ -15,8 +15,7 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::AccessHelper reexport;
+extension org::genesez::metamodel::core::util::AccessHelper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -81,7 +80,7 @@ String comment(MElement this) :
  * @return	the comment string
  */
 String comment(MElement this, String commentSeparator, String nestedCommentSeparator) :
-	JAVA org.genesez.platform.common.Conversion.comment(org.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String);
+	JAVA org.genesez.metamodel.core.util.CommentProcessing.comment(org.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String);
 
 /**
  * formats the comment text of an element by using the asterix (*) as line prefix and the newline character as line suffix
@@ -126,7 +125,7 @@ String format(String this) :
  * @return	the formatted string
  */
 String format(String this, String linePrefix, String lineSuffix) :
-	JAVA org.genesez.platform.common.Conversion.format(java.lang.String, java.lang.String, java.lang.String);
+	JAVA org.genesez.util.comment.CommentProcessing.format(java.lang.String, java.lang.String, java.lang.String);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -322,5 +321,4 @@ String qn(MClassifier this) : package().qn() + "::" + name;
  * @return	string representation of the package path
  */
 String fullQualifiedNameSep(MPackage pkg, String separator) : 
-	JAVA org.genesez.platform.common.Conversion.getFullQualifiedName(org.genesez.metamodel.gcore.MPackage, java.lang.String);
-
+	JAVA org.genesez.metamodel.core.util.AccessHelper.getFullQualifiedName(org.genesez.metamodel.gcore.MPackage, java.lang.String);

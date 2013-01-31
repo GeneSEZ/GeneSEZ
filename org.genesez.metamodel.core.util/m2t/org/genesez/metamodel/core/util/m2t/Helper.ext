@@ -15,8 +15,8 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::Conversion;
+extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::Conversion;
 extension org::genesez::util::logging::Logging;
 
 /*
@@ -51,7 +51,7 @@ boolean usePrimitiveType(MParameter this) :
  * shouldn't be called!
  */
 boolean usePrimitiveType(MElement this) : 
-	fatal("somethings goes totally wrong within your templates... " +
+	logFatal("somethings goes totally wrong within your templates... " +
 	"   the function 'usePrimitiveType' shouldn't be called with an 'MElement': " + this) ->
 	false;
 
@@ -251,5 +251,4 @@ boolean isIgnoredContentPackage(MPackage this) :
  * @deprecated
  */
 private List[MPackage] rejectIgnoredPackages(List[MPackage] packages, String ignoredPackages) :
-	JAVA org.genesez.platform.common.m2t.TransUtils.rejectIgnoredPackages(java.util.List, java.lang.String);
-
+	JAVA org.genesez.metamodel.core.util.AccessHelper.rejectIgnoredPackages(java.util.List, java.lang.String);

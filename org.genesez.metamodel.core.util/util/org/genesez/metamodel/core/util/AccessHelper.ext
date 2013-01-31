@@ -21,8 +21,8 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::log::Log;
-extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -142,7 +142,7 @@ MType type(MProperty this) : type;
  * should NOT be called!
  */
 MType type(MElement this) : 
-	fatal("somethings goes totally wrong within your templates... " +
+	logFatal("somethings goes totally wrong within your templates... " +
 	"   you cannot determine the type of an 'MElement': " + this) ->
 	Void;
 
@@ -946,7 +946,7 @@ MPackage package(MClassifier this) :
 	switch (owningContext.metaType) {
 		case MModel : ((MPackage)owningContext)
 		case MPackage : ((MPackage)owningContext)
-		default : (fatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
+		default : (logFatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
 	};
 	
 /*
@@ -976,7 +976,7 @@ MModel model(MClassifier this) :
 		case MModel.isInstance(this) : ((MModel)owningContext)
 		case MPackage.isInstance(this) : ((MPackage)owningContext).model()
 		case MClassifier.isInstance(this) : ((MClassifier)owningContext).model()
-		default : (fatal("MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen.") -> Void)
+		default : (logFatal("MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen.") -> Void)
 	};
 
 MModel model(MElement this) :
@@ -986,7 +986,7 @@ MModel model(MElement this) :
 		case MParameter :  ((MParameter) this).operation.model()
 		case MProperty :  ((MProperty) this).model()
 		case MStereotype : ((MStereotype) this).model
-		default : (fatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
+		default : (logFatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
 	};
 
 /**
@@ -1186,7 +1186,7 @@ private String getComment(MComment this) :
  * @return	the class found or null
  */
 private MClassifier getClassifier(List[MClass] packages, String fullQualifiedName) :
-	JAVA org.genesez.platform.common.AccessHelper.getClassifier(java.util.List, java.lang.String);
+	JAVA org.genesez.metamodel.core.util.AccessHelper.getClassifier(java.util.List, java.lang.String);
 
 /**
  * getter for a package by it's full qualified name from a list of packages
@@ -1196,4 +1196,4 @@ private MClassifier getClassifier(List[MClass] packages, String fullQualifiedNam
  * @return	the package found or null
  */
 private MPackage getPackage(List[MPackage] packages, String fullQualifiedPackageName) :
-	JAVA org.genesez.platform.common.AccessHelper.getPackage(java.util.List, java.lang.String);
+	JAVA org.genesez.metamodel.core.util.AccessHelper.getPackage(java.util.List, java.lang.String);
