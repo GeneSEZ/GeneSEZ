@@ -1,12 +1,14 @@
-package org.genesez.platform.common;
+package org.genesez.metamodel.core.util;
 
-/* 
- *	Do not place import/include statements above this comment, just below. 
- * 	@FILE-ID : (_17_0_1_8e00291_1324545814672_565722_2120) 
- */
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.genesez.metamodel.gcore.MClassifier;
+import org.genesez.metamodel.gcore.MModel;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
+
 import org.genesez.metamodel.gcore.MPackage;
 
 /**
@@ -16,13 +18,75 @@ import org.genesez.metamodel.gcore.MPackage;
  * model in java MModel.getOwnedPackage() returns an empty list !!! why???
  * 
  * @author nihe
- * @author geobe
  * @author toh
- * @date 2008-04-18
+ * @author geobe
  */
 public class AccessHelper {
 	
-	// -- generated method stubs for implementations + derived attributes ---
+	private static Log logger = LogFactory.getLog(AccessHelper.class);
+	
+	/**
+	 * Removes all specified packages by full qualified name (package path) as a comma or 
+	 * semicolon separated string from the given list of packages.
+	 * 
+	 * @param	packages	a list of packages to filter
+	 * @param	ignoredPackages	comma or semicolon separated string with full qualified package names
+	 * @return	the filtered list of packages
+	 */
+	public static java.util.List<MPackage> rejectIgnoredPackages(java.util.List<MPackage> packages, String ignoredPackages) {
+		// perform actions
+		List<MPackage> toReturn = new ArrayList<MPackage>(packages);
+		List<String> pkgs = getPackages(ignoredPackages);
+		for (String s : pkgs) {
+			logger.debug("to reject: " + s);
+			for (MPackage p : packages) {
+				String fqn = getFullQualifiedName(p, ".");
+				logger.debug("test to reject: " + fqn);
+				if (s.equals(fqn)) {
+					logger.debug("reject: '" + s + "' == '" + fqn + "'");
+					toReturn.remove(p);
+				}
+			}
+		}
+		return toReturn;
+	}
+	
+	/**
+	 * Splits a comma or semicolon separated string of values into a list.
+	 * 
+	 * @param	list	a string with comma or semicolon separated values
+	 * @return	the list of values
+	 */
+	public static java.util.List<String> getPackages(String list) {
+		List<String> packages = new ArrayList<String>();
+		StringTokenizer tokenizer = new StringTokenizer(list, ",;");
+		while (tokenizer.hasMoreTokens()) {
+			//	cut leading + trailing spaces if separator was ', ' or '; '
+			packages.add(tokenizer.nextToken().trim());
+		}
+		return packages;
+	}
+	
+	/**
+	 * Getter for the full qualified name of a package.
+	 * 
+	 * @param	pkg	a package
+	 * @param	separator	a separator used for the full qualified name
+	 * @return	the full qualified name of the package
+	 */
+	public static String getFullQualifiedName(MPackage pkg, String separator) {
+		StringBuffer fqn = new StringBuffer();
+		MPackage p = pkg;
+		while (!(p instanceof MModel) && p != null) {
+			fqn.insert(0, p.getName());
+			p = p.getNestingPackage();
+			if (!(p instanceof MModel) && p != null) {
+				fqn.insert(0, separator);
+			}
+		}
+		return fqn.toString();
+	}
+	
 	/**
 	 * getter for a classifier by it's full qualified name the full qualified name must start with a package in the specified list.
 	 * 
@@ -33,7 +97,6 @@ public class AccessHelper {
 	 * @throws	Exception
 	 */
 	public static MClassifier getClassifier(java.util.List<MPackage> packages, String fullQualifiedName) throws Exception {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324546115629_413804_2182) ENABLED START */
 		int i = fullQualifiedName.lastIndexOf(".");
 		if (i != -1) {
 			String pkg = fullQualifiedName.substring(0, i);
@@ -51,7 +114,6 @@ public class AccessHelper {
 			}
 		}
 		throw new Exception("classifier not exist:" + fullQualifiedName);
-		/* PROTECTED REGION END */
 	}
 	
 	/**
@@ -64,7 +126,6 @@ public class AccessHelper {
 	 * @throws	Exception
 	 */
 	public static MPackage getPackage(java.util.List<MPackage> packages, String fullQualifiedPackagePath) throws Exception {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324546405228_57666_2246) ENABLED START */
 		// packages to search
 		List<MPackage> subPackages = packages;
 		// IOExtensions.fine("package count = " + subPackages.size());
@@ -92,7 +153,6 @@ public class AccessHelper {
 			}
 		}
 		return pSearchedFor;
-		/* PROTECTED REGION END */
 	}
 	
 	/**
@@ -102,7 +162,6 @@ public class AccessHelper {
 	 * @return	the first package from the package path or null if not found
 	 */
 	private static MPackage getNextPackage(java.util.List<MPackage> subPackages, String packagePath) {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324546611909_562791_2257) ENABLED START */
 		// get name of first package in package path
 		String pkgName = null;
 		if (packagePath.indexOf('.') > -1) {
@@ -130,7 +189,6 @@ public class AccessHelper {
 			}
 		}
 		return getPackageFromList(subPackages, pkgName);
-		/* PROTECTED REGION END */
 	}
 	
 	/**
@@ -140,14 +198,12 @@ public class AccessHelper {
 	 * @return	the package specified by name or null
 	 */
 	private static MPackage getPackageFromList(java.util.List<MPackage> pkgs, String packageName) {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324546741269_130418_2266) ENABLED START */
 		for (MPackage p : pkgs) {
 			if (p.getName().equals(packageName)) {
 				return p;
 			}
 		}
 		return null;
-		/* PROTECTED REGION END */
 	}
 	
 	/**
@@ -157,7 +213,6 @@ public class AccessHelper {
 	 * @return	true if the package is contained in the list, otherwise false
 	 */
 	private static boolean containsPackage(java.util.List<MPackage> pkgs, String packageName) {
-		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1324546849493_389714_2277) ENABLED START */
 		for (MPackage p : pkgs) {
 			// System.err.println("package = " + p.getName());
 			if (p.getName().equals(packageName)) {
@@ -165,13 +220,5 @@ public class AccessHelper {
 			}
 		}
 		return false;
-		/* PROTECTED REGION END */
 	}
-	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
-	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1324545814672_565722_2120) ENABLED START */
-	/* PROTECTED REGION END */
-	
 }

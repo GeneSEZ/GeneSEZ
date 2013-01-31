@@ -1,4 +1,4 @@
-package org.genesez.platform.common.m2t;
+package org.genesez.metamodel.core.util;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
