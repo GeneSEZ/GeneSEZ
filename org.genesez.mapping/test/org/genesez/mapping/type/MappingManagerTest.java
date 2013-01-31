@@ -1,18 +1,12 @@
 /**
  * 
  */
-package org.genesez.platform.common.typemapping;
+package org.genesez.mapping.type;
 
-import junit.framework.Assert;
+import org.genesez.mapping.type.types.MultiValuedType;
+import org.genesez.mapping.type.types.SingleValuedType;
 
-import org.genesez.platform.common.typemapping.BindingDelegator;
-import org.genesez.platform.common.typemapping.CollectionMappingManager;
-import org.genesez.platform.common.typemapping.ITypeMappingManager;
-import org.genesez.platform.common.typemapping.TypeMappingManager;
-import org.genesez.platform.common.typemapping.types.MultiValuedType;
-import org.genesez.platform.common.typemapping.types.SingleValuedType;
-import org.junit.Before;
-import org.junit.Test;
+import com.ibm.icu.impl.Assert;
 
 
 /**

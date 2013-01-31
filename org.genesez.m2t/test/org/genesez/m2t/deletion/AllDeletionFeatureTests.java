@@ -1,4 +1,4 @@
-package org.genesez.platform.common.workflow.feature;
+package org.genesez.m2t.deletion;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

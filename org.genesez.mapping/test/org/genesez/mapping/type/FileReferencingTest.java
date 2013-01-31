@@ -1,15 +1,8 @@
 /**
  * 
  */
-package org.genesez.platform.common.typemapping;
+package org.genesez.mapping.type;
 
-import static org.junit.Assert.assertEquals;
-
-import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
-
-import org.genesez.metamodel.gcore.MPrimitiveType;
 
 /**
  * @author pethu
