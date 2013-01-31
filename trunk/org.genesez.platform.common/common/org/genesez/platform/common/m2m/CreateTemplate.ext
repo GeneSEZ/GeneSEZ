@@ -12,9 +12,6 @@ import gcore;
 extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::common::AccessHelper;
 
-create List createList() :
-	this;
-
 // @deprecated
 create MPackage createPackage(MPackage container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
@@ -210,6 +207,7 @@ create MComment createComment(MElement container, String xmiGuid, String annotat
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+// @deprecated not used
 create MStereotype cloneStereotype(MStereotype st, MModel container) :
 	trace("cloning: " + metaType + ": " + st) ->
 	// references
@@ -220,6 +218,7 @@ create MStereotype cloneStereotype(MStereotype st, MModel container) :
 	this.processElement( st.cloneXmiGuid( container ), st ) ->
 	this;
 
+// @deprecated not used
 create MTag cloneTag(MTag tag, MStereotype container) :
 	trace("cloning: " + metaType + ": " + tag) ->
 	// containment
@@ -228,6 +227,7 @@ create MTag cloneTag(MTag tag, MStereotype container) :
 	this.processTag( tag.name, tag.type ) ->
 	this;
 
+// @deprecated not used
 create MTaggedValue cloneTaggedValue(MTaggedValue tv, MElement container) :
 	trace("cloning: " + metaType + ": " + tv) ->
 	// containments
@@ -237,6 +237,7 @@ create MTaggedValue cloneTaggedValue(MTaggedValue tv, MElement container) :
 	// references
 	setTag( tv.tag.cloneTag( tv.tag.stereotype.cloneStereotype( container.model() ) )) ->
 	this;
+
 
 create MOperation cloneOperation(MOperation op, MClassifier container) :
 	trace("cloning: " + metaType + ": " + op) ->
@@ -293,12 +294,14 @@ String cloneXmiGuid(MComment comment, MComment container) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+// @deprecated
 MClassifier processClassifier(MClassifier this, String visibility, boolean abstract, boolean final) :
 	setVisibility(visibility) ->
 	setAbstract(abstract) ->
 	setFinal(final) ->
 	this;
 
+// @deprecated
 MOperation processOperation(MOperation this, String visibility, boolean static, boolean abstract, boolean final, int multiplicity, boolean unique, boolean ordered) :
 	setVisibility(visibility) ->
 	setStatic(static) ->
@@ -309,6 +312,7 @@ MOperation processOperation(MOperation this, String visibility, boolean static, 
 	setOrdered(ordered) ->
 	this;
 
+// @deprecated
 MParameter processParameter(MParameter this, String defaultValue, String direction, int lowerBound, int upperBound, boolean unique, boolean ordered) :
 	setDefaultvalue( defaultValue ) ->
 	setDirection( direction ) ->
@@ -329,6 +333,7 @@ MParameter processParameter(MParameter this, String defaultValue, String directi
 	setOrdered( ordered ) ->
 	this;*/
 
+// @deprecated
 MAttribute processAttribute(MAttribute this, String defaultvalue, boolean static, boolean final) :
 	// set attribute values
 	setDefaultvalue(defaultvalue) ->
@@ -336,9 +341,11 @@ MAttribute processAttribute(MAttribute this, String defaultvalue, boolean static
 	setFinal(final) ->
 	this;
 
+// @deprecated
 MProperty processProperty(MProperty this, String visibility, boolean derived, Integer multiplicity, boolean unique, boolean ordered) :
 	processProperty(visibility, derived, 0, multiplicity, unique, ordered);
-	
+
+// @deprecated	
 MProperty processProperty(MProperty this, String visibility, boolean derived, Integer lowerBoundMultiplicity, Integer upperBoundMultiplicity, boolean unique, boolean ordered) :
 	setVisibility(visibility) ->
 	setDerived(derived) ->
@@ -359,6 +366,7 @@ MTaggedValue processTaggedValue(MTaggedValue this, String value, MElement valueR
 	setValueReference( valueReference ) ->
 	this;
 
+// @deprecated not used
 MComment processComment(MComment this, String annotation) :
 	setAnnotation( annotation ) ->
 	this;
@@ -368,6 +376,7 @@ MComment processComment(MComment this, String annotation) :
  * 	@param	xmiGuid	
  *	@param	elem	original instance of MElement
  */
+// @deprecated
 MElement processElement(MElement this, String xmiGuid, MElement elem) :
 	setXmiGuid(xmiGuid) ->
 	setName( elem.name ) ->
@@ -375,6 +384,7 @@ MElement processElement(MElement this, String xmiGuid, MElement elem) :
 	stereotype.addAll( elem.stereotype.cloneStereotype( this.model() ) ) ->
 	this;
 
+// @deprecated
 MElement processElement(MElement this, String xmiGuid, String name) :
 	setXmiGuid(xmiGuid) ->
 	setName( name ) ->
@@ -387,12 +397,13 @@ MElement processElement(MElement this, String xmiGuid, String name) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
+// @deprecated removed
 MPrimitiveType createPrimitiveTypeString(MModel container) :
 	container.primitiveTypes.exists(e|e.name == "String")
 		? container.primitiveTypes.selectFirst(e|e.name == "String")
 		: container.createPrimitiveType("String");
 
-
+// @deprecated removed
 MPrimitiveType createPrimitiveTypeBoolean(MModel container) :
 	container.primitiveTypes.exists(e|e.name == "Boolean")
 		? container.primitiveTypes.selectFirst(e|e.name == "Boolean")
