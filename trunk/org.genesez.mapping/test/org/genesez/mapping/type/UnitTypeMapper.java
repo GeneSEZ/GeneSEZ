@@ -1,9 +1,8 @@
 /**
  * 
  */
-package org.genesez.platform.common.typemapping;
+package org.genesez.mapping.type;
 
-import org.genesez.platform.common.typemapping.TypeMapper;
 
 /**
  * @author pethu

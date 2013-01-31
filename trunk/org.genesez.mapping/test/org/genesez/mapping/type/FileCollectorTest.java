@@ -1,16 +1,9 @@
 /**
  * 
  */
-package org.genesez.platform.common.typemapping;
-
-import static org.junit.Assert.assertEquals;
+package org.genesez.mapping.type;
 
 import java.util.LinkedHashSet;
-
-import org.genesez.platform.common.typemapping.BindingDelegator;
-import org.genesez.platform.common.typemapping.MappingFileCollector;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author pethu

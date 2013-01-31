@@ -1,13 +1,11 @@
 /**
  * 
  */
-package org.genesez.platform.common.typemapping;
+package org.genesez.mapping.type;
 
 /**
  * @author pethu
  */
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses( { BasicMappingTest.class, FileCollectorTest.class,

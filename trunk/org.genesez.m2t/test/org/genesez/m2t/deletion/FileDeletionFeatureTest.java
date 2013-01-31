@@ -1,4 +1,4 @@
-package org.genesez.platform.common.workflow.feature;
+package org.genesez.m2t.deletion;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -17,9 +17,9 @@ import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Properties;
 import java.util.Set;
 
+import org.genesez.m2t.deletion.FileDeletionFeature;
+import org.genesez.m2t.deletion.FileTreeWalkerFeature;
 import org.genesez.platform.common.NotPreparedException;
-import org.genesez.platform.common.workflow.feature.FileDeletionFeature;
-import org.genesez.platform.common.workflow.feature.FileTreeWalkerFeature;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;

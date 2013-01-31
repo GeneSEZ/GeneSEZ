@@ -1,15 +1,9 @@
 /**
  * 
  */
-package org.genesez.platform.common.typemapping;
+package org.genesez.mapping.type;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import org.genesez.platform.common.typemapping.BindingDelegator;
-import org.genesez.platform.common.typemapping.types.FileContainer;
-import org.junit.Before;
-import org.junit.Test;
+import org.genesez.mapping.type.types.FileContainer;
 
 
 /**
