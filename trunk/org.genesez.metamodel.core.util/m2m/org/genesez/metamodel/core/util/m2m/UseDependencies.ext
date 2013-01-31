@@ -12,14 +12,13 @@
  *   </li>
  * </ul>
  * 
- * @author	tobias haubold
- * @date	2008-04-18
+ * @author	tobias haubold <toh@fh-zwickau.de>
  */
 
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessHelper;
 
 /**
  * collects the use dependencies of a classifier
@@ -63,7 +62,7 @@ private Collection[MType] collectUseDependencies(MClassifier this) :
 	let deps = {} :
 		// add types of properties
 		deps.addAll( property.type.filter() ) ->
-		// add return types of operations		
+		// add return parameter types of operations
 		deps.addAll( operation.reject(e|!e.hasReturn()).return.type.filter()) ->
 		// add raised exceptions
 		deps.addAll( operation.raisedException.filter() ) ->
