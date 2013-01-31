@@ -15,57 +15,68 @@ extension org::genesez::platform::common::AccessHelper;
 create List createList() :
 	this;
 
+// @deprecated
 create MPackage createPackage(MPackage container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.nestedPackage.add(this) ->
 	this;
 
+// @deprecated
 create MClass createClass(MDefinitionContext container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.classifier.add(this) ->
 	this;
 
+// @deprecated
 create MInterface createInterface(MDefinitionContext container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.classifier.add(this) ->
 	this;
 
+// @deprecated
 create MEnumeration createEnumeration(MDefinitionContext container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.classifier.add( this ) ->
 	this;
 
+// @deprecated
 create MLiteral createEnumLiteral(MEnumeration container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.literal.add( this ) ->
 	this;
 
+// @deprecated
 create MExternal createExternal(MModel container, String specification) :
 	setSpecification( specification ) ->
 	container.externalTypes.add( this ) ->
 	this;
 
+// removed from gcore metamodel
 create MPrimitiveType createPrimitiveType(MModel container, String name, String xmiGuid) :
 	processElement( xmiGuid, name ) ->
 	container.primitiveTypes.add(this) ->
 	this;
 
+// removed from gcore metamodel
 create MPrimitiveType createPrimitiveType(MModel container, String name) :
 	processElement( name, name ) ->
 	container.primitiveTypes.add(this) ->
 	this;
 
+// @deprecated
 create MOperation createOperation(MClassifier container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.operation.add(this) ->
 	this;
 
+// @deprecated
 create MParameter createParameter(MOperation container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 //	container.parameter.add(this) ->
 	setOperation( container ) ->
 	this;
 
+// @deprecated
 create MAttribute createAttribute(MClassifier container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.property.add( this ) ->
@@ -76,6 +87,7 @@ create MAttribute createAttribute(MClassifier container, String xmiGuid, String 
  * Returns the stereotype instance with the specified properties.
  * It checks if the stereotype is already contained within the model and creates it if needed.
  */
+// @deprecated
 MStereotype ensureStereotype(MModel this, String xmiGuid, String name) :
 	anyStereotype.exists( s | s.name == name )
 		? anyStereotype.selectFirst( s | s.name == name )
@@ -94,6 +106,7 @@ MElement ensureStereotypeAssignment(MElement this, MStereotype stereotype) :
  * Creates a stereotype with the specified properties and ensures its model containment.
  * @return	the created stereotype
  */
+// @deprecated
 create MStereotype createStereotype(MModel container, String xmiGuid, String name) :
 	processElement( xmiGuid, name ) ->
 	container.anyStereotype.add( this ) ->
@@ -103,6 +116,7 @@ create MStereotype createStereotype(MModel container, String xmiGuid, String nam
  * Returns the tag instance with the specified properties.
  * It checks if the stereotype has already the specified tag and creates it if needed.
  */
+// @deprecated
 MTag ensureTag(MStereotype this, String name, String type) :
 	property.exists( p | p.name == name )
 		? property.selectFirst( p | p.name == name )
@@ -112,6 +126,7 @@ MTag ensureTag(MStereotype this, String name, String type) :
  * Creates a tag with the specified properties and ensures its model containment.
  * @return	the created tag
  */
+// @deprecated
 create MTag createTag(MStereotype container, String name, String type) :
 	setName( name ) ->
 	setType( type ) ->
@@ -123,6 +138,7 @@ create MTag createTag(MStereotype container, String name, String type) :
  * It checks if the tagged value is already present and creates it if needed.
  * It checks the stereotype assignment to the model element too and assigns it if needed.
  */
+// @deprecated
 MTaggedValue ensureTaggedValue(MElement this, MTag tag, String value) :
 	// check stereotype assignment
 	ensureStereotypeAssignment( tag.stereotype ) ->
@@ -136,6 +152,7 @@ MTaggedValue ensureTaggedValue(MElement this, MTag tag, String value) :
  * It ensures the assignment of the stereotype to the model element.
  * @return	the created tagged value
  */
+// @deprecated
 create MTaggedValue createTaggedValue(MElement container, MTag tag, String value) :
 	setValue( value ) ->
 	setTag( tag ) ->
@@ -149,6 +166,7 @@ create MTaggedValue createTaggedValue(MElement container, MTag tag, String value
  * It checks if the tagged value is already present and creates it if needed.
  * It checks the stereotype assignment to the model element too and assigns it if needed.
  */
+// @deprecated
 MTaggedValue ensureTaggedValue(MElement this, MTag tag, MElement valueReference) :
 	// check stereotype assignment
 	ensureStereotypeAssignment( tag.stereotype ) ->
@@ -162,6 +180,7 @@ MTaggedValue ensureTaggedValue(MElement this, MTag tag, MElement valueReference)
  * It ensures the assignment of the stereotype to the model element.
  * @return	the created tagged value
  */
+// @deprecated
 create MTaggedValue createTaggedValue(MElement container, MTag tag, MElement valueReference) :
 	setValueReference( valueReference ) ->
 	setTag( tag ) ->
@@ -176,7 +195,8 @@ create MAspect createAspect(MElement container, String domain, String name) :
 	setName(name) ->
 	container.aspect.add( this ) ->
 	this;
-	
+
+// @deprecated
 create MComment createComment(MElement container, String xmiGuid, String annotation) :
 	setXmiGuid(xmiGuid) ->
 	setAnnotation(annotation) ->
