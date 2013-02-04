@@ -3,7 +3,11 @@
  */
 package org.genesez.mapping.type;
 
+import org.junit.Assert;
+
 import org.genesez.mapping.type.types.FileContainer;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -12,7 +16,7 @@ import org.genesez.mapping.type.types.FileContainer;
 public class BindingDelegatorTest {
 
 	BindingDelegator bd = null;
-	static final String contextPath = "org.genesez.platform.common.typemapping.types";
+	static final String contextPath = "org.genesez.mapping.type.types";
 
 	/**
 	 * @throws java.lang.Exception
@@ -28,14 +32,14 @@ public class BindingDelegatorTest {
 	 */
 	@Test
 	public void getInvalidMappingBody() {
-		assertNull(bd
-				.getMappingBody("org/genesez/platform/common/typemapping/testmappings/invalidFile.xml"));
+		Assert.assertNull(bd
+				.getMappingBody("org/genesez/mapping/type/testmappings/invalidFile.xml"));
 	}
 
 	@Test
 	public void getValidMappingBody() {
-		assertNotNull(bd
-				.getMappingBody("org/genesez/platform/common/typemapping/testmappings/TestMapping.xml"));
+		Assert.assertNotNull(bd
+				.getMappingBody("org/genesez/mapping/type/testmappings/TestMapping.xml"));
 	}
 
 	/**
@@ -45,29 +49,28 @@ public class BindingDelegatorTest {
 	@Test
 	public void getFileContainerViaXPath() {
 		assert bd.getFileContainerByXPath(
-				"org/genesez/platform/common/typemapping/testmappings/TestMapping.xml",
+				"org/genesez/mapping/type/testmappings/TestMapping.xml",
 				"//tns:include") instanceof FileContainer;
 	}
 
 	@Test
 	public void getNoFileContainerViaXPath() {
-		assertNull(bd.getFileContainerByXPath(
-				"org/genesez/platform/common/typemapping/testmappings/primitiveTest.xml",
+		Assert.assertNull(bd.getFileContainerByXPath(
+				"org/genesez/mapping/type/testmappings/primitiveTest.xml",
 				"//tns:include"));
 	}
 
 	@Test
 	public void useWrongXPath() {
-		assertNull(bd.getFileContainerByXPath(
-				"org/genesez/platform/common/typemapping/testmappings/AdditionalMappings.xml",
+		Assert.assertNull(bd.getFileContainerByXPath(
+				"org/genesez/mapping/type/testmappings/AdditionalMappings.xml",
 				"//tns:primitiveTypes"));
 	}
 
 	@Test
 	public void getFileContainerWithoutNamespace() {
-		assertNull(bd.getFileContainerByXPath(
-				"org/genesez/platform/common/typemapping/testmappings/TestMapping.xml",
+		Assert.assertNull(bd.getFileContainerByXPath(
+				"org/genesez/mapping/type/testmappings/TestMapping.xml",
 				"//inlcude"));
 	}
-
 }

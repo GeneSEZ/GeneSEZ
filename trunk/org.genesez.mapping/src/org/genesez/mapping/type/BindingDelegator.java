@@ -173,6 +173,11 @@ public class BindingDelegator {
 				input = ClassLoader.getSystemResourceAsStream(mappingFile);
 			}
 			
+			// check if input is still null -> file not found
+			if (input == null) {
+				throw new FileNotFoundException(mappingFile);
+			}
+			
 			Document typeMappingDoc = documentBuilder.parse(input);
 			Node includeNode = (Node) xPath.evaluate(xPathExpression, typeMappingDoc, XPathConstants.NODE);
 			if (includeNode != null) {
@@ -204,12 +209,10 @@ public class BindingDelegator {
 		if (cause != null) {
 			log.error("Type Mapping: " + cause);
 		}
-		log.error("Type Mapping: " + e.getStackTrace());
-		log.info("Type Mapping: " + e.toString());
+		log.error("Type Mapping: " + e.toString());
 		/* PROTECTED REGION END */
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1324558508923_815444_4801) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
