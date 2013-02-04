@@ -119,7 +119,7 @@ create MModel transform(Model m) :
 	useLogger("org.genesez.adapter.uml2") ->
 	uml2model(m) ->
 	coremodel(this) ->
-	logWarn( "Unresolved UML profiles: " + m.getAllAppliedProfiles().select( p| p.isProxy() ) ) ->
+	m.getAllAppliedProfiles().logUnresolvedUmlProfile() ->
 	logTrace( "transform model [ " + metaType + " ] - " + m ) ->
 	transformBasics(m) ->
 	transformPackage(m) ->
@@ -142,7 +142,7 @@ create MModel transform(Model m) :
 create MModel transform(Profile p) :
 	useLogger( "org.genesez.adapter.uml2" ) ->
 	coremodel(this) ->
-	logWarn( "Unresolved UML profiles: " + p.getAllAppliedProfiles().select( p| p.isProxy() ) ) ->
+	p.getAllAppliedProfiles().logUnresolvedUmlProfile() ->
 	logTrace( "transform profile [ " + metaType + " ] - " + p ) ->
 	transformBasics(p) ->
 	transformPackage(p) ->
@@ -1099,6 +1099,15 @@ MElement transformBasics(MElement this, NamedElement n) :
 	filter + identification helpers
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+/**
+ * Logs a warning if the specified uml profile couldn't be resolved.
+ * @return	the uml profile itself
+ */
+private Profile logUnresolvedUmlProfile(Profile p) :
+	p.isProxy()
+		? logWarn( "Unresolved UML Profile: ", p)
+		: p;
 
 /**
  * checks if a package should be excluded from transformation by transformation settings
