@@ -3,78 +3,85 @@
  */
 package org.genesez.mapping.type;
 
+import org.easymock.EasyMock;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 
 /**
  * @author pethu
  */
 public class FileReferencingTest {
 
+	private interface MExternalType {
+		String getName();
+	}
+	
 	UnitTypeMapper utm = null;
-	MPrimitiveType primitiveMock = null;
-	MPrimitiveType primitiveMock2 = null;
+	MExternalType externalMock = null;
+	MExternalType externalMock2 = null;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		primitiveMock = EasyMock.createMock(MPrimitiveType.class);
-		primitiveMock2 = EasyMock.createMock(MPrimitiveType.class);
+		externalMock = EasyMock.createMock(MExternalType.class);
+		externalMock2 = EasyMock.createMock(MExternalType.class);
 	}
 
 	@Test
 	public void NoFileFound() {
 		utm = new UnitTypeMapper("nofile.xml");
-		assertEquals("", utm.getMappingType(true, true, "Implementation"));
+		Assert.assertEquals("", utm.mapMultiValuedType(true, true, "Implementation"));
 	}
 
 	@Test
 	public void singleInput() {
 		utm = new UnitTypeMapper(
-				"org/genesez/platform/common/typemapping/testmappings/TestMapping.xml");
-		assertEquals("LinkedHashSet", utm.getMappingType(true, true,
-				"Implementation"));
+				"org/genesez/mapping/type/testmappings/TestMapping.xml");
+		Assert.assertEquals("LinkedHashSet", utm.mapMultiValuedType(true, true, "Implementation"));
 	}
 
 	@Test
 	public void multipleInput() {
 		utm = new UnitTypeMapper(
-				"org/genesez/platform/common/typemapping/testmappings/multivaluedTest.xml",
-				"org/genesez/platform/common/typemapping/testmappings/externalTest.xml",
-				"org/genesez/platform/common/typemapping/testmappings/primitiveTest.xml");
-		assertEquals("LinkedHashSet", utm.getMappingType(true, true,
-				"Implementation"));
+				"org/genesez/mapping/type/testmappings/multivaluedTest.xml",
+				"org/genesez/mapping/type/testmappings/externalTest.xml",
+				"org/genesez/mapping/type/testmappings/primitiveTest.xml");
+		Assert.assertEquals("LinkedHashSet", utm.mapMultiValuedType(true, true, "Implementation"));
 	}
 
 	@Test
 	public void appendedMappings() {
-		EasyMock.expect(primitiveMock.getName()).andReturn("umlType");
-		EasyMock.replay(primitiveMock);
+		EasyMock.expect(externalMock.getName()).andReturn("umlType");
+		EasyMock.replay(externalMock);
 		utm = new UnitTypeMapper(
-				"org/genesez/platform/common/typemapping/testmappings/primitiveTest.xml",
-				"org/genesez/platform/common/typemapping/testmappings/AdditionalMappings.xml");
-		assertEquals("javaType", utm.getMappingName(primitiveMock));
+				"org/genesez/mapping/type/testmappings/primitiveTest.xml",
+				"org/genesez/mapping/type/testmappings/AdditionalMappings.xml");
+		Assert.assertEquals("javaType", utm.mapExternalType(externalMock.getName()));
 	}
 
 	@Test
 	public void NotOverwriteMappings() {
-		EasyMock.expect(primitiveMock.getName()).andReturn("boolean");
-		EasyMock.replay(primitiveMock);
+		EasyMock.expect(externalMock.getName()).andReturn("boolean");
+		EasyMock.replay(externalMock);
 		utm = new UnitTypeMapper(
-				"org/genesez/platform/common/typemapping/testmappings/AdditionalMappings.xml",
-				"org/genesez/platform/common/typemapping/testmappings/primitiveTest.xml");
-		assertEquals("BOOL", utm.getMappingName(primitiveMock));
+				"org/genesez/mapping/type/testmappings/AdditionalMappings.xml",
+				"org/genesez/mapping/type/testmappings/primitiveTest.xml");
+		Assert.assertEquals("BOOL", utm.mapExternalType(externalMock.getName()));
 	}
 
 	@Test
 	public void circularMappings() {
-		EasyMock.expect(primitiveMock.getName()).andReturn("circle");
-		EasyMock.replay(primitiveMock);
-		EasyMock.expect(primitiveMock2.getName()).andReturn("cube");
-		EasyMock.replay(primitiveMock2);
+		EasyMock.expect(externalMock.getName()).andReturn("circle");
+		EasyMock.replay(externalMock);
+		EasyMock.expect(externalMock2.getName()).andReturn("cube");
+		EasyMock.replay(externalMock2);
 		utm = new UnitTypeMapper(
-				"org/genesez/platform/common/typemapping/testmappings/circularReference1.xml");
-		assertEquals("ellipse", utm.getMappingName(primitiveMock));
-		assertEquals("hypercube", utm.getMappingName(primitiveMock2));
+				"org/genesez/mapping/type/testmappings/circularReference1.xml");
+		Assert.assertEquals("ellipse", utm.mapExternalType(externalMock.getName()));
+		Assert.assertEquals("hypercube", utm.mapExternalType(externalMock2.getName()));
 	}
 }

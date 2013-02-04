@@ -3,13 +3,22 @@
  */
 package org.genesez.mapping.type;
 
+import org.easymock.EasyMock;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 
 /**
  * @author pethu
  */
 public class BasicMappingTest {
-	MExternal externalMock;
-	MPrimitiveType primitiveMock;
+	
+	private interface MExternalType {
+		public String getName();
+	}
+	
+	MExternalType externalMock;
 	Boolean unique, ordered;
 
 	/**
@@ -17,15 +26,15 @@ public class BasicMappingTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		TypeMapper.initTypeMapper("org/genesez/platform/common/typemapping/testmappings/TestMapping.xml");
-		externalMock = EasyMock.createMock(MExternal.class);
+		TypeMapper.initTypeMapper("org/genesez/mapping/type/testmappings/TestMapping.xml");
+		externalMock = EasyMock.createMock(MExternalType.class);
 		// externalMock=GcoreFactory.eINSTANCE.createMExternal();
-		primitiveMock = EasyMock.createMock(MPrimitiveType.class);
-		// primitiveMock = GcoreFactory.eINSTANCE.createMPrimitiveType();
+		//externalMock = EasyMock.createMock(MPrimitiveType.class);
+		// externalMock = GcoreFactory.eINSTANCE.createMPrimitiveType();
 		unique = true;
 		ordered = false;
 		// externalMock = createMock(MExternal.class);
-		// primitiveMock = createMock(MPrimitiveType.class);
+		// externalMock = createMock(MPrimitiveType.class);
 	}
 
 	/**
@@ -34,84 +43,82 @@ public class BasicMappingTest {
 	 */
 	@Test
 	public void getDefaultMapping() {
-		// primitiveMock.setName("doesnotexist");
-		EasyMock.expect(primitiveMock.getName()).andReturn("doesnotexist");
-		EasyMock.replay(primitiveMock);
-		assertEquals("doesnotexist", TypeMapping.mappingName(primitiveMock));
+		// externalMock.setName("doesnotexist");
+		EasyMock.expect(externalMock.getName()).andReturn("doesnotexist");
+		EasyMock.replay(externalMock);
+		Assert.assertEquals("doesnotexist", TypeMapping.mapExternalType(externalMock.getName()));
 	}
 
 	@Test
 	public void getPrimitiveMapping() {
-		// primitiveMock.setName("boolean");
-		EasyMock.expect(primitiveMock.getName()).andReturn("boolean");
-		EasyMock.replay(primitiveMock);
-		assertEquals("boolean", TypeMapping.mappingName(primitiveMock));
+		// externalMock.setName("boolean");
+		EasyMock.expect(externalMock.getName()).andReturn("boolean");
+		EasyMock.replay(externalMock);
+		Assert.assertEquals("boolean", TypeMapping.mapExternalType(externalMock.getName()));
 	}
 
 	@Test
 	public void getPrimitiveContextMapping() {
-		// primitiveMock.setName("int");
-		EasyMock.expect(primitiveMock.getName()).andReturn("int");
-		EasyMock.replay(primitiveMock);
-		assertEquals("Integer", TypeMapping.mappingName(primitiveMock,
-				"Wrapper"));
+		// externalMock.setName("int");
+		EasyMock.expect(externalMock.getName()).andReturn("int");
+		EasyMock.replay(externalMock);
+		Assert.assertEquals("Integer", TypeMapping.mapExternalType(externalMock.getName(), "Wrapper"));
 	}
 
 	@Test
 	public void getPrimitiveDestMapping() {
-		// primitiveMock.setName("Boolean");
-		EasyMock.expect(primitiveMock.getName()).andReturn("Boolean");
-		EasyMock.replay(primitiveMock);
-		assertEquals("boolean", TypeMapping.mappingName(primitiveMock));
+		// externalMock.setName("Boolean");
+		EasyMock.expect(externalMock.getName()).andReturn("Boolean");
+		EasyMock.replay(externalMock);
+		Assert.assertEquals("boolean", TypeMapping.mapExternalType(externalMock.getName()));
 	}
 
 	@Test
 	public void getExternalMapping() {
 		// externalMock.setSpecification("Association");
-		EasyMock.expect(externalMock.getSpecification()).andReturn(
+		EasyMock.expect(externalMock.getName()).andReturn(
 				"Association");
 		EasyMock.replay(externalMock);
-		assertEquals("Association", TypeMapping.mappingName(externalMock));
+		Assert.assertEquals("Association", TypeMapping.mapExternalType(externalMock.getName()));
 	}
 
 	@Test
 	public void getExternalContextMapping() {
-		EasyMock.expect(externalMock.getSpecification()).andReturn(
+		EasyMock.expect(externalMock.getName()).andReturn(
 				"Association");
 		EasyMock.replay(externalMock);
-		assertEquals(
+		Assert.assertEquals(
 				"org.genesez.platform.java.umlsupport.associations.Association",
-				TypeMapping.mappingName(externalMock, "Import"));
+				TypeMapping.mapExternalType(externalMock.getName(), "Import"));
 	}
 
 	@Test
 	public void getExternalDestMapping() {
 		// externalMock.setSpecification("AssociationAC");
-		EasyMock.expect(externalMock.getSpecification()).andReturn(
+		EasyMock.expect(externalMock.getName()).andReturn(
 				"AssociationAC");
 		EasyMock.replay(externalMock);
-		assertEquals("Assoc", TypeMapping.mappingName(externalMock));
+		Assert.assertEquals("Assoc", TypeMapping.mapExternalType(externalMock.getName()));
 	}
 
 	@Test
 	public void getMultiValueMapping() {
-		assertEquals("Set", TypeMapping.mappingType(unique, ordered));
+		Assert.assertEquals("Set", TypeMapping.mapMultiValuedType(unique, ordered));
 	}
 
 	@Test
 	public void getMultiValueDefaultMapping() {
 		unique = false;
-		assertEquals("HashBag", TypeMapping.mappingType(unique, ordered,
+		Assert.assertEquals("HashBag", TypeMapping.mapMultiValuedType(unique, ordered,
 				"Implementation"));
 	}
 
 	@Test
 	public void caseInsensitiveContext() {
-		EasyMock.expect(externalMock.getSpecification()).andReturn(
+		EasyMock.expect(externalMock.getName()).andReturn(
 				"Association").times(2);
 		EasyMock.replay(externalMock);
-		assertSame(TypeMapping.mappingName(externalMock, "Import"), TypeMapping
-				.mappingName(externalMock, "imPORT"));
+		Assert.assertSame(TypeMapping.mapExternalType(externalMock.getName(), "Import"), TypeMapping
+				.mapExternalType(externalMock.getName(), "imPORT"));
 	}
-
 }
