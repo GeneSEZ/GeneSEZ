@@ -6,44 +6,109 @@
  */
 import gcore;
 
+
 /**
  * Helper scripts to clone GeneSEZ Core meta model elements.
  * 
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
+
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
 extension org::genesez::util::logging::Logging;
 
-MOperation cloneOperation(MOperation source, MClassifier container) :
-	let op = createOperation(container, source.cloneXmiGuid(container), source.name) :
-		source.logTrace("cloning: " + source.metaType + ": ") ->
-		op.processOperation(source.visibility, source.static, source.abstract, source.final) ->
-		// references
-		op.raisedException.addAll( source.raisedException ) ->
-		// containments
-		op.parameter.addAll( source.parameter.cloneParameter(op) ) ->
-		source.return != null
-			? op.setReturn(
-				source.return.cloneParameter(source)
-				.processParameter( source.return.defaultvalue, source.return.direction, source.return.lowerBoundMultiplicity, source.return.upperBoundMultiplicity, source.return.unique, source.return.ordered )
-			) : op ->
-		// deprecated
-		op.setReturnType( source.returnType ) ->
-		op;
 
+// -- Package -----------------------------------------------------------------------------------------------
+
+
+// -- Type and Literal --------------------------------------------------------------------------------------
+
+
+// -- Property ----------------------------------------------------------------------------------------------
+
+
+// -- Operation and Parameter -------------------------------------------------------------------------------
+
+
+/**
+ * Clones an operation based one the specified source operation and ensures its classifier containment.
+ * 
+ * @return	The cloned operation.
+ */
+MOperation cloneOperation(MOperation source, MClassifier container) :
+	// create a new operation, clone basic property values and set containment
+	let clone = createOperation( container, source.cloneXmiGuid( container ), source.name ) :
+		source.logTrace( "cloning: " + source.metaType + ": " ) ->
+		// clone extended property values
+		clone.processOperation( source.visibility, source.static, source.abstract, source.final ) ->
+		// clone references
+		clone.raisedException.addAll( source.raisedException ) ->
+		// clone own containments
+		clone.parameter.addAll( source.parameter.cloneParameter( clone ) ) ->
+		//source.parameter.cloneParameter( clone ) ->
+		source.return != null
+			? clone.setReturn(
+				source.return.cloneReturnParameter( clone )
+			) : clone ->
+		clone;
+		
+
+/**
+ * Clones a parameter based one the specified source parameter and ensures its operation containment.
+ * 
+ * @return	The cloned parameter.
+ */
 MParameter cloneParameter(MParameter source, MOperation container) :
-	let clone = createParameter( container, source.cloneXmiGuid(container), source.name ) :
-		source.logTrace("cloning: " + source.metaType + ": ") ->
-		source.processParameter( source.defaultvalue, source.direction, source.lowerBoundMultiplicity, source.upperBoundMultiplicity, source.unique, source.ordered) ->
-		// references
+	// create a new parameter, clone basic property values and set containment
+	let clone = createParameter( container, source.cloneXmiGuid( container ), source.name ) :
+		source.logTrace( "cloning: " + source.metaType + ": " ) ->
+		// clone extended property values
+		source.processParameter( source.defaultvalue, source.direction, source.lowerBoundMultiplicity, source.upperBoundMultiplicity, source.unique, source.ordered ) ->
+		// clone references
+		clone.setType( source.type ) ->
+		clone;
+
+		
+/**
+ * Clones a return parameter based one the specified source return parameter and ensures its operation containment.
+ * 
+ * @return	The cloned parameter.
+ */
+MParameter cloneReturnParameter(MParameter source, MOperation container) :
+	// create a new parameter, clone basic property values and set containment
+	let clone = createReturnParameter( container, source.cloneXmiGuid( container ), source.name ) :
+		source.logTrace( "cloning: " + source.metaType + ": " ) ->
+		// clone extended property values
+		source.processParameter( source.defaultvalue, source.direction, source.lowerBoundMultiplicity, source.upperBoundMultiplicity, source.unique, source.ordered ) ->
+		// clone references
 		clone.setType( source.type ) ->
 		clone;
 
 
+// -- Comment -----------------------------------------------------------------------------------------------
+
+
+// -- Extension Mechanism -----------------------------------------------------------------------------------
+
+
+/**
+ * Clones a tagged value based one the specified source tagged value and ensures its element containment.
+ * 
+ * @return	The cloned parameter.
+ */
+MTaggedValue cloneTaggedValue(MTaggedValue source, MElement container) :
+	// create a new tagged value, clone basic property values and set containment
+	let clone = createTaggedValue( container, source.tag, source.value ) :
+		source.logTrace( "cloning: " + source.metaType + ": " ) ->
+		clone;
+
+
+// -- Private Functionality ---------------------------------------------------------------------------------
+
+
 String cloneXmiGuid(MElement elem, MElement container) :
 	container.xmiGuid + "_" + elem.xmiGuid;
-
+	
 String cloneXmiGuid(MComment comment, MElement container) :
 	container.xmiGuid + "_" + comment.xmiGuid;
 
