@@ -1,11 +1,15 @@
 <?xml version="1.0" ?>
 <project name="org.genesez.adapter.magicdraw" basedir=".." default="">
 	
+	<dirname property="base.dir" file="${ant.file.org.genesez.adapter.magicdraw}" />
+	<property file="${base.dir}/environment.properties" />
+	
 	<condition property="build.display"
 		value="${env.DISPLAY}"
 		else=":1">
 		<isset property="env.DISPLAY" />
 	</condition>
+	
 	
 	<target name="magicdraw.clean" description="remove exported magic draw models">
 		<fileset dir="${modeling.dir}">
@@ -13,7 +17,7 @@
 		</fileset>
 	</target>
 	
-	<target name="magicdraw.metamodel.export"
+	<target name="magicdraw.model.export"
 		description="Export the GeneSEZ metamodel from Magic Draw to EMF XMI">
 		<parallel>
 			<antcall target="magicdraw.startx" />
