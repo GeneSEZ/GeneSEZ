@@ -1,8 +1,8 @@
 «IMPORT gcore»
 
 «EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::cpp::scripts::Naming»
 «EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
@@ -107,8 +107,8 @@ virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
 «ENDDEFINE»
 
 «DEFINE _returnTypeMulti FOR MOperation-»
-«IF returnType.isGenericType()»«mapType()-»<«returnType.name() -»«getTypeModifier()»>
-«ELSE»«mapType()-»<«returnType.mapName().asTypeName()-»«EXPAND Generic::Generics -»>«getTypeModifier()»«ENDIF»
+«IF returnType.isGenericType()»«return.mapCollection()-»<«returnType.name() -»«getTypeModifier()»>
+«ELSE»«return.mapCollection()-»<«returnType.mapName().asTypeName()-»«EXPAND Generic::Generics -»>«getTypeModifier()»«ENDIF»
 «ENDDEFINE»
 
 «DEFINE _ioperations FOR MOperation -»
@@ -131,8 +131,8 @@ virtual ~«asTypeName()-»()«IF isInterface()-» {}«ENDIF-»;
 «ENDDEFINE»
 
 «DEFINE _parameterMulti FOR MParameter-»
-«IF type.isGenericType()-»«mapType() -»<«type.name() -»«getTypeModifier()-»>
-«ELSE»«mapType()-»<«type.getFQNS()-»«type.asTypeName()-»«EXPAND Generic::Generics -»>«getTypeModifier() -»«ENDIF»
+«IF type.isGenericType()-»«mapCollection() -»<«type.name() -»«getTypeModifier()-»>
+«ELSE»«mapCollection()-»<«type.getFQNS()-»«type.asTypeName()-»«EXPAND Generic::Generics -»>«getTypeModifier() -»«ENDIF»
 «ENDDEFINE»
 
 «DEFINE _defaultValue FOR MParameter -»

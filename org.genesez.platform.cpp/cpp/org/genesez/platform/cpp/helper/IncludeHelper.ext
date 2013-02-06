@@ -1,8 +1,9 @@
 import gcore;
 
-extension org::genesez::platform::common::typemapping::TypeMapping;
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
 
 extension org::genesez::platform::cpp::scripts::Naming;
+
 /**
  * formats an operation name
  * @context	the operation to format
@@ -23,9 +24,9 @@ Set[MType] getIncludes(MClassifier this) :
 		
 Set[String] getCollectionIncludes(MClassifier this) :	
 	let deps = {} :
-		deps.addAll(property.select(e|e.multiplicity != 1).mapType("Include")) ->
-		deps.addAll(operation.select(e|e.multiplicity != 1).mapType("Include")) ->
-		deps.addAll(operation.parameter.select(e|e.multiplicity != 1).mapType("Include")) ->
+		deps.addAll(property.select(e|e.multiplicity != 1).mapCollection("Include")) ->
+		deps.addAll(operation.parameter.select(e|e.multiplicity != 1).mapCollection("Include")) ->
+		deps.addAll(operation.return.select(e|e.multiplicity != 1).mapCollection("Include")) ->
 		deps.toSet();
 		
 String getRelativePath(MClassifier this, MClassifier other) : JAVA
