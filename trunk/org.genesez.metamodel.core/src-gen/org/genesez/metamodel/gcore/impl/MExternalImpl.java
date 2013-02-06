@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.impl;
 
@@ -45,7 +41,6 @@ import org.genesez.metamodel.gcore.MTaggedValue;
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getTaggedValue <em>Tagged Value</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getStereotype <em>Stereotype</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getAspect <em>Aspect</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getSpecification <em>Specification</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getModel <em>Model</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MExternalImpl#getGenericParameter <em>Generic Parameter</em>}</li>
  * </ul>
@@ -134,26 +129,6 @@ public class MExternalImpl extends MTypeImpl implements MExternal
    * @ordered
    */
   protected EList<MAspect> aspect;
-
-  /**
-   * The default value of the '{@link #getSpecification() <em>Specification</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getSpecification()
-   * @generated
-   * @ordered
-   */
-  protected static final String SPECIFICATION_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getSpecification() <em>Specification</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getSpecification()
-   * @generated
-   * @ordered
-   */
-  protected String specification = SPECIFICATION_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getGenericParameter() <em>Generic Parameter</em>}' containment reference list.
@@ -293,29 +268,6 @@ public class MExternalImpl extends MTypeImpl implements MExternal
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getSpecification()
-  {
-    return specification;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setSpecification(String newSpecification)
-  {
-    String oldSpecification = specification;
-    specification = newSpecification;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MEXTERNAL__SPECIFICATION, oldSpecification, specification));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public MModel getModel()
   {
     if (eContainerFeatureID() != GcorePackage.MEXTERNAL__MODEL) return null;
@@ -425,8 +377,6 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         return getStereotype();
       case GcorePackage.MEXTERNAL__ASPECT:
         return getAspect();
-      case GcorePackage.MEXTERNAL__SPECIFICATION:
-        return getSpecification();
       case GcorePackage.MEXTERNAL__MODEL:
         return getModel();
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
@@ -468,9 +418,6 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         getAspect().clear();
         getAspect().addAll((Collection<? extends MAspect>)newValue);
         return;
-      case GcorePackage.MEXTERNAL__SPECIFICATION:
-        setSpecification((String)newValue);
-        return;
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
         getGenericParameter().clear();
         getGenericParameter().addAll((Collection<? extends MGeneric>)newValue);
@@ -507,9 +454,6 @@ public class MExternalImpl extends MTypeImpl implements MExternal
       case GcorePackage.MEXTERNAL__ASPECT:
         getAspect().clear();
         return;
-      case GcorePackage.MEXTERNAL__SPECIFICATION:
-        setSpecification(SPECIFICATION_EDEFAULT);
-        return;
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
         getGenericParameter().clear();
         return;
@@ -539,8 +483,6 @@ public class MExternalImpl extends MTypeImpl implements MExternal
         return stereotype != null && !stereotype.isEmpty();
       case GcorePackage.MEXTERNAL__ASPECT:
         return aspect != null && !aspect.isEmpty();
-      case GcorePackage.MEXTERNAL__SPECIFICATION:
-        return SPECIFICATION_EDEFAULT == null ? specification != null : !SPECIFICATION_EDEFAULT.equals(specification);
       case GcorePackage.MEXTERNAL__MODEL:
         return getModel() != null;
       case GcorePackage.MEXTERNAL__GENERIC_PARAMETER:
@@ -612,8 +554,6 @@ public class MExternalImpl extends MTypeImpl implements MExternal
     result.append(name);
     result.append(", xmiGuid: ");
     result.append(xmiGuid);
-    result.append(", specification: ");
-    result.append(specification);
     result.append(')');
     return result.toString();
   }

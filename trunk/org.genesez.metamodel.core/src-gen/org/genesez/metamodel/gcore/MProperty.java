@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore;
 
@@ -18,7 +14,6 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getVisibility <em>Visibility</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#isDerived <em>Derived</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getUpperBoundMultiplicity <em>Upper Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#isUnique <em>Unique</em>}</li>
@@ -86,32 +81,6 @@ public interface MProperty extends MElement
    * @generated
    */
   void setDerived(boolean value);
-
-  /**
-   * Returns the value of the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Multiplicity</em>' attribute.
-   * @see #setMultiplicity(int)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_Multiplicity()
-   * @model required="true"
-   * @generated
-   */
-  int getMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Multiplicity</em>' attribute.
-   * @see #getMultiplicity()
-   * @generated
-   */
-  void setMultiplicity(int value);
 
   /**
    * Returns the value of the '<em><b>Lower Bound Multiplicity</b></em>' attribute.

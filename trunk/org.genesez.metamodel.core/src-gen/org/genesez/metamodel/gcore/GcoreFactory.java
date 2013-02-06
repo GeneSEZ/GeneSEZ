@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore;
 
@@ -115,15 +111,6 @@ public interface GcoreFactory extends EFactory
    * @generated
    */
   MDataType createMDataType();
-
-  /**
-   * Returns a new object of class '<em>MPrimitive Type</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>MPrimitive Type</em>'.
-   * @generated
-   */
-  MPrimitiveType createMPrimitiveType();
 
   /**
    * Returns a new object of class '<em>MEnumeration</em>'.

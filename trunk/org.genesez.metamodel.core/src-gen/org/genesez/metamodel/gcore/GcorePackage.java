@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore;
 
@@ -145,7 +141,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMDefinitionContext()
    * @generated
    */
-  int MDEFINITION_CONTEXT = 38;
+  int MDEFINITION_CONTEXT = 37;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -890,22 +886,13 @@ public interface GcorePackage extends EPackage
   int MPROPERTY__DERIVED = MELEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPROPERTY__MULTIPLICITY = MELEMENT_FEATURE_COUNT + 2;
-
-  /**
    * The feature id for the '<em><b>Lower Bound Multiplicity</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MPROPERTY__LOWER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 3;
+  int MPROPERTY__LOWER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Upper Bound Multiplicity</b></em>' attribute.
@@ -914,7 +901,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__UPPER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 4;
+  int MPROPERTY__UPPER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Unique</b></em>' attribute.
@@ -923,7 +910,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__UNIQUE = MELEMENT_FEATURE_COUNT + 5;
+  int MPROPERTY__UNIQUE = MELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Ordered</b></em>' attribute.
@@ -932,7 +919,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__ORDERED = MELEMENT_FEATURE_COUNT + 6;
+  int MPROPERTY__ORDERED = MELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Classifier</b></em>' container reference.
@@ -941,7 +928,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__CLASSIFIER = MELEMENT_FEATURE_COUNT + 7;
+  int MPROPERTY__CLASSIFIER = MELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Generic Realization</b></em>' containment reference list.
@@ -950,7 +937,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 8;
+  int MPROPERTY__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -959,7 +946,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__TYPE = MELEMENT_FEATURE_COUNT + 9;
+  int MPROPERTY__TYPE = MELEMENT_FEATURE_COUNT + 8;
 
   /**
    * The number of structural features of the '<em>MProperty</em>' class.
@@ -968,7 +955,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 10;
+  int MPROPERTY_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 9;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl <em>MAssociation Role</em>}' class.
@@ -1053,15 +1040,6 @@ public interface GcorePackage extends EPackage
   int MASSOCIATION_ROLE__DERIVED = MPROPERTY__DERIVED;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MASSOCIATION_ROLE__MULTIPLICITY = MPROPERTY__MULTIPLICITY;
-
-  /**
    * The feature id for the '<em><b>Lower Bound Multiplicity</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1143,22 +1121,13 @@ public interface GcorePackage extends EPackage
   int MASSOCIATION_ROLE__COMPOSITION = MPROPERTY_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Opposite Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 2;
-
-  /**
    * The feature id for the '<em><b>Opposite Lower Bound Multiplicity</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 3;
+  int MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Opposite Upper Bound Multiplicity</b></em>' attribute.
@@ -1167,7 +1136,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 4;
+  int MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Qualifier Multiplicity</b></em>' attribute.
@@ -1176,7 +1145,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 5;
+  int MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Association</b></em>' reference.
@@ -1185,7 +1154,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__ASSOCIATION = MPROPERTY_FEATURE_COUNT + 6;
+  int MASSOCIATION_ROLE__ASSOCIATION = MPROPERTY_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Opposite</b></em>' reference.
@@ -1194,7 +1163,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__OPPOSITE = MPROPERTY_FEATURE_COUNT + 7;
+  int MASSOCIATION_ROLE__OPPOSITE = MPROPERTY_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Qualifier</b></em>' reference.
@@ -1203,7 +1172,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__QUALIFIER = MPROPERTY_FEATURE_COUNT + 8;
+  int MASSOCIATION_ROLE__QUALIFIER = MPROPERTY_FEATURE_COUNT + 7;
 
   /**
    * The number of structural features of the '<em>MAssociation Role</em>' class.
@@ -1212,7 +1181,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE_FEATURE_COUNT = MPROPERTY_FEATURE_COUNT + 9;
+  int MASSOCIATION_ROLE_FEATURE_COUNT = MPROPERTY_FEATURE_COUNT + 8;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MAssociationImpl <em>MAssociation</em>}' class.
@@ -1404,15 +1373,6 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MATTRIBUTE__DERIVED = MPROPERTY__DERIVED;
-
-  /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MATTRIBUTE__MULTIPLICITY = MPROPERTY__MULTIPLICITY;
 
   /**
    * The feature id for the '<em><b>Lower Bound Multiplicity</b></em>' attribute.
@@ -1641,22 +1601,13 @@ public interface GcorePackage extends EPackage
   int MMODEL__ASSOCIATION = MPACKAGE__ASSOCIATION;
 
   /**
-   * The feature id for the '<em><b>Primitive Types</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MMODEL__PRIMITIVE_TYPES = MPACKAGE_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Any Stereotype</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MMODEL__ANY_STEREOTYPE = MPACKAGE_FEATURE_COUNT + 1;
+  int MMODEL__ANY_STEREOTYPE = MPACKAGE_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>External Types</b></em>' containment reference list.
@@ -1665,7 +1616,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MMODEL__EXTERNAL_TYPES = MPACKAGE_FEATURE_COUNT + 2;
+  int MMODEL__EXTERNAL_TYPES = MPACKAGE_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>MModel</em>' class.
@@ -1674,7 +1625,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MMODEL_FEATURE_COUNT = MPACKAGE_FEATURE_COUNT + 3;
+  int MMODEL_FEATURE_COUNT = MPACKAGE_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MInterfaceImpl <em>MInterface</em>}' class.
@@ -1985,40 +1936,13 @@ public interface GcorePackage extends EPackage
   int MOPERATION__FINAL = MELEMENT_FEATURE_COUNT + 3;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MOPERATION__MULTIPLICITY = MELEMENT_FEATURE_COUNT + 4;
-
-  /**
-   * The feature id for the '<em><b>Unique</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MOPERATION__UNIQUE = MELEMENT_FEATURE_COUNT + 5;
-
-  /**
-   * The feature id for the '<em><b>Ordered</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MOPERATION__ORDERED = MELEMENT_FEATURE_COUNT + 6;
-
-  /**
    * The feature id for the '<em><b>Parameter</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MOPERATION__PARAMETER = MELEMENT_FEATURE_COUNT + 7;
+  int MOPERATION__PARAMETER = MELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Classifier</b></em>' container reference.
@@ -2027,7 +1951,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MOPERATION__CLASSIFIER = MELEMENT_FEATURE_COUNT + 8;
+  int MOPERATION__CLASSIFIER = MELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Generic Parameter</b></em>' containment reference list.
@@ -2036,7 +1960,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MOPERATION__GENERIC_PARAMETER = MELEMENT_FEATURE_COUNT + 9;
+  int MOPERATION__GENERIC_PARAMETER = MELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Raised Exception</b></em>' reference list.
@@ -2045,16 +1969,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MOPERATION__RAISED_EXCEPTION = MELEMENT_FEATURE_COUNT + 10;
-
-  /**
-   * The feature id for the '<em><b>Return Type</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MOPERATION__RETURN_TYPE = MELEMENT_FEATURE_COUNT + 11;
+  int MOPERATION__RAISED_EXCEPTION = MELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Return</b></em>' containment reference.
@@ -2063,7 +1978,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MOPERATION__RETURN = MELEMENT_FEATURE_COUNT + 12;
+  int MOPERATION__RETURN = MELEMENT_FEATURE_COUNT + 8;
 
   /**
    * The number of structural features of the '<em>MOperation</em>' class.
@@ -2072,7 +1987,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MOPERATION_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 13;
+  int MOPERATION_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 9;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MParameterImpl <em>MParameter</em>}' class.
@@ -2157,22 +2072,13 @@ public interface GcorePackage extends EPackage
   int MPARAMETER__DIRECTION = MELEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPARAMETER__MULTIPLICITY = MELEMENT_FEATURE_COUNT + 2;
-
-  /**
    * The feature id for the '<em><b>Lower Bound Multiplicity</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MPARAMETER__LOWER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 3;
+  int MPARAMETER__LOWER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Upper Bound Multiplicity</b></em>' attribute.
@@ -2181,7 +2087,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__UPPER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 4;
+  int MPARAMETER__UPPER_BOUND_MULTIPLICITY = MELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Unique</b></em>' attribute.
@@ -2190,7 +2096,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__UNIQUE = MELEMENT_FEATURE_COUNT + 5;
+  int MPARAMETER__UNIQUE = MELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Ordered</b></em>' attribute.
@@ -2199,7 +2105,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__ORDERED = MELEMENT_FEATURE_COUNT + 6;
+  int MPARAMETER__ORDERED = MELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Generic Realization</b></em>' containment reference list.
@@ -2208,7 +2114,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 7;
+  int MPARAMETER__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -2217,7 +2123,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__TYPE = MELEMENT_FEATURE_COUNT + 8;
+  int MPARAMETER__TYPE = MELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Event</b></em>' container reference.
@@ -2226,7 +2132,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__EVENT = MELEMENT_FEATURE_COUNT + 9;
+  int MPARAMETER__EVENT = MELEMENT_FEATURE_COUNT + 8;
 
   /**
    * The feature id for the '<em><b>Operation</b></em>' reference.
@@ -2235,7 +2141,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__OPERATION = MELEMENT_FEATURE_COUNT + 10;
+  int MPARAMETER__OPERATION = MELEMENT_FEATURE_COUNT + 9;
 
   /**
    * The number of structural features of the '<em>MParameter</em>' class.
@@ -2244,7 +2150,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 11;
+  int MPARAMETER_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 10;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MDataTypeImpl <em>MData Type</em>}' class.
@@ -2455,125 +2361,6 @@ public interface GcorePackage extends EPackage
   int MDATA_TYPE_FEATURE_COUNT = MCLASSIFIER_FEATURE_COUNT + 0;
 
   /**
-   * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MTypeImpl <em>MType</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.genesez.metamodel.gcore.impl.MTypeImpl
-   * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMType()
-   * @generated
-   */
-  int MTYPE = 24;
-
-  /**
-   * The feature id for the '<em><b>Specialization</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MTYPE__SPECIALIZATION = 0;
-
-  /**
-   * The number of structural features of the '<em>MType</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MTYPE_FEATURE_COUNT = 1;
-
-  /**
-   * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MPrimitiveTypeImpl <em>MPrimitive Type</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.genesez.metamodel.gcore.impl.MPrimitiveTypeImpl
-   * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMPrimitiveType()
-   * @generated
-   */
-  int MPRIMITIVE_TYPE = 13;
-
-  /**
-   * The feature id for the '<em><b>Specialization</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__SPECIALIZATION = MTYPE__SPECIALIZATION;
-
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__NAME = MTYPE_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__XMI_GUID = MTYPE_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Owned Comment</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__OWNED_COMMENT = MTYPE_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Tagged Value</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__TAGGED_VALUE = MTYPE_FEATURE_COUNT + 3;
-
-  /**
-   * The feature id for the '<em><b>Stereotype</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__STEREOTYPE = MTYPE_FEATURE_COUNT + 4;
-
-  /**
-   * The feature id for the '<em><b>Aspect</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__ASPECT = MTYPE_FEATURE_COUNT + 5;
-
-  /**
-   * The feature id for the '<em><b>Model</b></em>' container reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE__MODEL = MTYPE_FEATURE_COUNT + 6;
-
-  /**
-   * The number of structural features of the '<em>MPrimitive Type</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPRIMITIVE_TYPE_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 7;
-
-  /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MEnumerationImpl <em>MEnumeration</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2581,7 +2368,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMEnumeration()
    * @generated
    */
-  int MENUMERATION = 14;
+  int MENUMERATION = 13;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2798,7 +2585,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMStereotype()
    * @generated
    */
-  int MSTEREOTYPE = 15;
+  int MSTEREOTYPE = 14;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2898,7 +2685,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMTag()
    * @generated
    */
-  int MTAG = 16;
+  int MTAG = 15;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2944,7 +2731,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMComment()
    * @generated
    */
-  int MCOMMENT = 17;
+  int MCOMMENT = 16;
 
   /**
    * The feature id for the '<em><b>Xmi Guid</b></em>' attribute.
@@ -3008,7 +2795,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMTaggedValue()
    * @generated
    */
-  int MTAGGED_VALUE = 18;
+  int MTAGGED_VALUE = 17;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -3063,7 +2850,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMAspect()
    * @generated
    */
-  int MASPECT = 19;
+  int MASPECT = 18;
 
   /**
    * The feature id for the '<em><b>Domain</b></em>' attribute.
@@ -3127,7 +2914,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMIntroduction()
    * @generated
    */
-  int MINTRODUCTION = 20;
+  int MINTRODUCTION = 19;
 
   /**
    * The feature id for the '<em><b>Domain</b></em>' attribute.
@@ -3173,7 +2960,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMPointcut()
    * @generated
    */
-  int MPOINTCUT = 21;
+  int MPOINTCUT = 20;
 
   /**
    * The feature id for the '<em><b>Domain</b></em>' attribute.
@@ -3228,7 +3015,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMLiteral()
    * @generated
    */
-  int MLITERAL = 22;
+  int MLITERAL = 21;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3303,6 +3090,34 @@ public interface GcorePackage extends EPackage
   int MLITERAL_FEATURE_COUNT = MELEMENT_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MTypeImpl <em>MType</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.genesez.metamodel.gcore.impl.MTypeImpl
+   * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMType()
+   * @generated
+   */
+  int MTYPE = 23;
+
+  /**
+   * The feature id for the '<em><b>Specialization</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MTYPE__SPECIALIZATION = 0;
+
+  /**
+   * The number of structural features of the '<em>MType</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MTYPE_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MGenericImpl <em>MGeneric</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3310,7 +3125,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMGeneric()
    * @generated
    */
-  int MGENERIC = 23;
+  int MGENERIC = 22;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -3410,7 +3225,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMExternal()
    * @generated
    */
-  int MEXTERNAL = 25;
+  int MEXTERNAL = 24;
 
   /**
    * The feature id for the '<em><b>Specialization</b></em>' reference list.
@@ -3476,22 +3291,13 @@ public interface GcorePackage extends EPackage
   int MEXTERNAL__ASPECT = MTYPE_FEATURE_COUNT + 5;
 
   /**
-   * The feature id for the '<em><b>Specification</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MEXTERNAL__SPECIFICATION = MTYPE_FEATURE_COUNT + 6;
-
-  /**
    * The feature id for the '<em><b>Model</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MEXTERNAL__MODEL = MTYPE_FEATURE_COUNT + 7;
+  int MEXTERNAL__MODEL = MTYPE_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Generic Parameter</b></em>' containment reference list.
@@ -3500,7 +3306,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MEXTERNAL__GENERIC_PARAMETER = MTYPE_FEATURE_COUNT + 8;
+  int MEXTERNAL__GENERIC_PARAMETER = MTYPE_FEATURE_COUNT + 7;
 
   /**
    * The number of structural features of the '<em>MExternal</em>' class.
@@ -3509,7 +3315,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MEXTERNAL_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 9;
+  int MEXTERNAL_FEATURE_COUNT = MTYPE_FEATURE_COUNT + 8;
 
   /**
    * The meta object id for the '{@link org.genesez.metamodel.gcore.impl.MBehaviorImpl <em>MBehavior</em>}' class.
@@ -3519,7 +3325,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMBehavior()
    * @generated
    */
-  int MBEHAVIOR = 28;
+  int MBEHAVIOR = 27;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3673,7 +3479,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMActivity()
    * @generated
    */
-  int MACTIVITY = 26;
+  int MACTIVITY = 25;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3845,7 +3651,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMNode()
    * @generated
    */
-  int MNODE = 31;
+  int MNODE = 30;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3936,7 +3742,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMAction()
    * @generated
    */
-  int MACTION = 27;
+  int MACTION = 26;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4063,7 +3869,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMStateMachine()
    * @generated
    */
-  int MSTATE_MACHINE = 29;
+  int MSTATE_MACHINE = 28;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4244,7 +4050,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMFlow()
    * @generated
    */
-  int MFLOW = 30;
+  int MFLOW = 29;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4353,7 +4159,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMGuard()
    * @generated
    */
-  int MGUARD = 32;
+  int MGUARD = 31;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4444,7 +4250,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMUseCase()
    * @generated
    */
-  int MUSE_CASE = 33;
+  int MUSE_CASE = 32;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4652,7 +4458,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMInitial()
    * @generated
    */
-  int MINITIAL = 34;
+  int MINITIAL = 33;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4743,7 +4549,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMFinal()
    * @generated
    */
-  int MFINAL = 35;
+  int MFINAL = 34;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4834,7 +4640,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMState()
    * @generated
    */
-  int MSTATE = 36;
+  int MSTATE = 35;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4970,7 +4776,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMTransition()
    * @generated
    */
-  int MTRANSITION = 37;
+  int MTRANSITION = 36;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5106,7 +4912,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMEvent()
    * @generated
    */
-  int MEVENT = 39;
+  int MEVENT = 38;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5215,7 +5021,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMAtomicTransition()
    * @generated
    */
-  int MATOMIC_TRANSITION = 40;
+  int MATOMIC_TRANSITION = 39;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5396,7 +5202,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMLeafState()
    * @generated
    */
-  int MLEAF_STATE = 41;
+  int MLEAF_STATE = 40;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5532,7 +5338,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMCompositeState()
    * @generated
    */
-  int MCOMPOSITE_STATE = 42;
+  int MCOMPOSITE_STATE = 41;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5677,7 +5483,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMInitialState()
    * @generated
    */
-  int MINITIAL_STATE = 43;
+  int MINITIAL_STATE = 42;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5813,7 +5619,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMFinalState()
    * @generated
    */
-  int MFINAL_STATE = 44;
+  int MFINAL_STATE = 43;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5949,7 +5755,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMHistoryState()
    * @generated
    */
-  int MHISTORY_STATE = 45;
+  int MHISTORY_STATE = 44;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6112,7 +5918,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMTimeEvent()
    * @generated
    */
-  int MTIME_EVENT = 46;
+  int MTIME_EVENT = 45;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6239,7 +6045,7 @@ public interface GcorePackage extends EPackage
    * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMDestinationKind()
    * @generated
    */
-  int MDESTINATION_KIND = 47;
+  int MDESTINATION_KIND = 46;
 
 
   /**
@@ -6337,17 +6143,6 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EAttribute getMAssociationRole_Composition();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Opposite Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity()
-   * @see #getMAssociationRole()
-   * @generated
-   */
-  EAttribute getMAssociationRole_OppositeMultiplicity();
 
   /**
    * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeLowerBoundMultiplicity <em>Opposite Lower Bound Multiplicity</em>}'.
@@ -6523,17 +6318,6 @@ public interface GcorePackage extends EPackage
   EClass getMModel();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MModel#getPrimitiveTypes <em>Primitive Types</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Primitive Types</em>'.
-   * @see org.genesez.metamodel.gcore.MModel#getPrimitiveTypes()
-   * @see #getMModel()
-   * @generated
-   */
-  EReference getMModel_PrimitiveTypes();
-
-  /**
    * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MModel#getAnyStereotype <em>Any Stereotype</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6662,17 +6446,6 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EAttribute getMProperty_Derived();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MProperty#getMultiplicity()
-   * @see #getMProperty()
-   * @generated
-   */
-  EAttribute getMProperty_Multiplicity();
 
   /**
    * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MProperty#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}'.
@@ -6936,39 +6709,6 @@ public interface GcorePackage extends EPackage
   EAttribute getMOperation_Final();
 
   /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MOperation#getMultiplicity <em>Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MOperation#getMultiplicity()
-   * @see #getMOperation()
-   * @generated
-   */
-  EAttribute getMOperation_Multiplicity();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MOperation#isUnique <em>Unique</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Unique</em>'.
-   * @see org.genesez.metamodel.gcore.MOperation#isUnique()
-   * @see #getMOperation()
-   * @generated
-   */
-  EAttribute getMOperation_Unique();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MOperation#isOrdered <em>Ordered</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Ordered</em>'.
-   * @see org.genesez.metamodel.gcore.MOperation#isOrdered()
-   * @see #getMOperation()
-   * @generated
-   */
-  EAttribute getMOperation_Ordered();
-
-  /**
    * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MOperation#getParameter <em>Parameter</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -7013,17 +6753,6 @@ public interface GcorePackage extends EPackage
   EReference getMOperation_RaisedException();
 
   /**
-   * Returns the meta object for the reference '{@link org.genesez.metamodel.gcore.MOperation#getReturnType <em>Return Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Return Type</em>'.
-   * @see org.genesez.metamodel.gcore.MOperation#getReturnType()
-   * @see #getMOperation()
-   * @generated
-   */
-  EReference getMOperation_ReturnType();
-
-  /**
    * Returns the meta object for the containment reference '{@link org.genesez.metamodel.gcore.MOperation#getReturn <em>Return</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -7065,17 +6794,6 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EAttribute getMParameter_Direction();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MParameter#getMultiplicity <em>Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MParameter#getMultiplicity()
-   * @see #getMParameter()
-   * @generated
-   */
-  EAttribute getMParameter_Multiplicity();
 
   /**
    * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MParameter#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}'.
@@ -7174,27 +6892,6 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EClass getMDataType();
-
-  /**
-   * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MPrimitiveType <em>MPrimitive Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>MPrimitive Type</em>'.
-   * @see org.genesez.metamodel.gcore.MPrimitiveType
-   * @generated
-   */
-  EClass getMPrimitiveType();
-
-  /**
-   * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MPrimitiveType#getModel <em>Model</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the container reference '<em>Model</em>'.
-   * @see org.genesez.metamodel.gcore.MPrimitiveType#getModel()
-   * @see #getMPrimitiveType()
-   * @generated
-   */
-  EReference getMPrimitiveType_Model();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MEnumeration <em>MEnumeration</em>}'.
@@ -7733,17 +7430,6 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EClass getMExternal();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MExternal#getSpecification <em>Specification</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Specification</em>'.
-   * @see org.genesez.metamodel.gcore.MExternal#getSpecification()
-   * @see #getMExternal()
-   * @generated
-   */
-  EAttribute getMExternal_Specification();
 
   /**
    * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MExternal#getModel <em>Model</em>}'.
@@ -8771,14 +8457,6 @@ public interface GcorePackage extends EPackage
     EAttribute MASSOCIATION_ROLE__COMPOSITION = eINSTANCE.getMAssociationRole_Composition();
 
     /**
-     * The meta object literal for the '<em><b>Opposite Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY = eINSTANCE.getMAssociationRole_OppositeMultiplicity();
-
-    /**
      * The meta object literal for the '<em><b>Opposite Lower Bound Multiplicity</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -8913,14 +8591,6 @@ public interface GcorePackage extends EPackage
     EClass MMODEL = eINSTANCE.getMModel();
 
     /**
-     * The meta object literal for the '<em><b>Primitive Types</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MMODEL__PRIMITIVE_TYPES = eINSTANCE.getMModel_PrimitiveTypes();
-
-    /**
      * The meta object literal for the '<em><b>Any Stereotype</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -9019,14 +8689,6 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EAttribute MPROPERTY__DERIVED = eINSTANCE.getMProperty_Derived();
-
-    /**
-     * The meta object literal for the '<em><b>Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MPROPERTY__MULTIPLICITY = eINSTANCE.getMProperty_Multiplicity();
 
     /**
      * The meta object literal for the '<em><b>Lower Bound Multiplicity</b></em>' attribute feature.
@@ -9227,30 +8889,6 @@ public interface GcorePackage extends EPackage
     EAttribute MOPERATION__FINAL = eINSTANCE.getMOperation_Final();
 
     /**
-     * The meta object literal for the '<em><b>Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MOPERATION__MULTIPLICITY = eINSTANCE.getMOperation_Multiplicity();
-
-    /**
-     * The meta object literal for the '<em><b>Unique</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MOPERATION__UNIQUE = eINSTANCE.getMOperation_Unique();
-
-    /**
-     * The meta object literal for the '<em><b>Ordered</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MOPERATION__ORDERED = eINSTANCE.getMOperation_Ordered();
-
-    /**
      * The meta object literal for the '<em><b>Parameter</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -9281,14 +8919,6 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EReference MOPERATION__RAISED_EXCEPTION = eINSTANCE.getMOperation_RaisedException();
-
-    /**
-     * The meta object literal for the '<em><b>Return Type</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MOPERATION__RETURN_TYPE = eINSTANCE.getMOperation_ReturnType();
 
     /**
      * The meta object literal for the '<em><b>Return</b></em>' containment reference feature.
@@ -9323,14 +8953,6 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EAttribute MPARAMETER__DIRECTION = eINSTANCE.getMParameter_Direction();
-
-    /**
-     * The meta object literal for the '<em><b>Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MPARAMETER__MULTIPLICITY = eINSTANCE.getMParameter_Multiplicity();
 
     /**
      * The meta object literal for the '<em><b>Lower Bound Multiplicity</b></em>' attribute feature.
@@ -9405,24 +9027,6 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EClass MDATA_TYPE = eINSTANCE.getMDataType();
-
-    /**
-     * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MPrimitiveTypeImpl <em>MPrimitive Type</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.genesez.metamodel.gcore.impl.MPrimitiveTypeImpl
-     * @see org.genesez.metamodel.gcore.impl.GcorePackageImpl#getMPrimitiveType()
-     * @generated
-     */
-    EClass MPRIMITIVE_TYPE = eINSTANCE.getMPrimitiveType();
-
-    /**
-     * The meta object literal for the '<em><b>Model</b></em>' container reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MPRIMITIVE_TYPE__MODEL = eINSTANCE.getMPrimitiveType_Model();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MEnumerationImpl <em>MEnumeration</em>}' class.
@@ -9847,14 +9451,6 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EClass MEXTERNAL = eINSTANCE.getMExternal();
-
-    /**
-     * The meta object literal for the '<em><b>Specification</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MEXTERNAL__SPECIFICATION = eINSTANCE.getMExternal_Specification();
 
     /**
      * The meta object literal for the '<em><b>Model</b></em>' container reference feature.

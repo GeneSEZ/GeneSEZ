@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore;
 
@@ -20,14 +16,10 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#isStatic <em>Static</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#isAbstract <em>Abstract</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#isFinal <em>Final</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MOperation#getMultiplicity <em>Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MOperation#isUnique <em>Unique</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MOperation#isOrdered <em>Ordered</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#getParameter <em>Parameter</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#getClassifier <em>Classifier</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#getGenericParameter <em>Generic Parameter</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#getRaisedException <em>Raised Exception</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MOperation#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MOperation#getReturn <em>Return</em>}</li>
  * </ul>
  * </p>
@@ -143,84 +135,6 @@ public interface MOperation extends MElement
   void setFinal(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Multiplicity</em>' attribute.
-   * @see #setMultiplicity(int)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMOperation_Multiplicity()
-   * @model required="true"
-   * @generated
-   */
-  int getMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MOperation#getMultiplicity <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Multiplicity</em>' attribute.
-   * @see #getMultiplicity()
-   * @generated
-   */
-  void setMultiplicity(int value);
-
-  /**
-   * Returns the value of the '<em><b>Unique</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Unique</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Unique</em>' attribute.
-   * @see #setUnique(boolean)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMOperation_Unique()
-   * @model required="true"
-   * @generated
-   */
-  boolean isUnique();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MOperation#isUnique <em>Unique</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Unique</em>' attribute.
-   * @see #isUnique()
-   * @generated
-   */
-  void setUnique(boolean value);
-
-  /**
-   * Returns the value of the '<em><b>Ordered</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ordered</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Ordered</em>' attribute.
-   * @see #setOrdered(boolean)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMOperation_Ordered()
-   * @model required="true"
-   * @generated
-   */
-  boolean isOrdered();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MOperation#isOrdered <em>Ordered</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Ordered</em>' attribute.
-   * @see #isOrdered()
-   * @generated
-   */
-  void setOrdered(boolean value);
-
-  /**
    * Returns the value of the '<em><b>Parameter</b></em>' containment reference list.
    * The list contents are of type {@link org.genesez.metamodel.gcore.MParameter}.
    * <!-- begin-user-doc -->
@@ -286,32 +200,6 @@ public interface MOperation extends MElement
    * @generated
    */
   EList<MType> getRaisedException();
-
-  /**
-   * Returns the value of the '<em><b>Return Type</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Return Type</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Return Type</em>' reference.
-   * @see #setReturnType(MType)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMOperation_ReturnType()
-   * @model required="true"
-   * @generated
-   */
-  MType getReturnType();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MOperation#getReturnType <em>Return Type</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Return Type</em>' reference.
-   * @see #getReturnType()
-   * @generated
-   */
-  void setReturnType(MType value);
 
   /**
    * Returns the value of the '<em><b>Return</b></em>' containment reference.

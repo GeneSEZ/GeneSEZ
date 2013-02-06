@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.impl;
 
@@ -41,14 +37,10 @@ import org.genesez.metamodel.gcore.MType;
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#isStatic <em>Static</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#isAbstract <em>Abstract</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#isFinal <em>Final</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#getMultiplicity <em>Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#isUnique <em>Unique</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#isOrdered <em>Ordered</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#getParameter <em>Parameter</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#getClassifier <em>Classifier</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#getGenericParameter <em>Generic Parameter</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#getRaisedException <em>Raised Exception</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MOperationImpl#getReturn <em>Return</em>}</li>
  * </ul>
  * </p>
@@ -138,66 +130,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
   protected boolean final_ = FINAL_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final int MULTIPLICITY_EDEFAULT = 0;
-
-  /**
-   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected int multiplicity = MULTIPLICITY_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #isUnique() <em>Unique</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isUnique()
-   * @generated
-   * @ordered
-   */
-  protected static final boolean UNIQUE_EDEFAULT = false;
-
-  /**
-   * The cached value of the '{@link #isUnique() <em>Unique</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isUnique()
-   * @generated
-   * @ordered
-   */
-  protected boolean unique = UNIQUE_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #isOrdered() <em>Ordered</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isOrdered()
-   * @generated
-   * @ordered
-   */
-  protected static final boolean ORDERED_EDEFAULT = false;
-
-  /**
-   * The cached value of the '{@link #isOrdered() <em>Ordered</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isOrdered()
-   * @generated
-   * @ordered
-   */
-  protected boolean ordered = ORDERED_EDEFAULT;
-
-  /**
    * The cached value of the '{@link #getParameter() <em>Parameter</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -226,16 +158,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
    * @ordered
    */
   protected EList<MType> raisedException;
-
-  /**
-   * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getReturnType()
-   * @generated
-   * @ordered
-   */
-  protected MType returnType;
 
   /**
    * The cached value of the '{@link #getReturn() <em>Return</em>}' containment reference.
@@ -365,75 +287,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getMultiplicity()
-  {
-    return multiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setMultiplicity(int newMultiplicity)
-  {
-    int oldMultiplicity = multiplicity;
-    multiplicity = newMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MOPERATION__MULTIPLICITY, oldMultiplicity, multiplicity));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public boolean isUnique()
-  {
-    return unique;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setUnique(boolean newUnique)
-  {
-    boolean oldUnique = unique;
-    unique = newUnique;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MOPERATION__UNIQUE, oldUnique, unique));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public boolean isOrdered()
-  {
-    return ordered;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOrdered(boolean newOrdered)
-  {
-    boolean oldOrdered = ordered;
-    ordered = newOrdered;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MOPERATION__ORDERED, oldOrdered, ordered));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EList<MParameter> getParameter()
   {
     if (parameter == null)
@@ -480,49 +333,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
       raisedException = new EObjectResolvingEList<MType>(MType.class, this, GcorePackage.MOPERATION__RAISED_EXCEPTION);
     }
     return raisedException;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MType getReturnType()
-  {
-    if (returnType != null && returnType.eIsProxy())
-    {
-      InternalEObject oldReturnType = (InternalEObject)returnType;
-      returnType = (MType)eResolveProxy(oldReturnType);
-      if (returnType != oldReturnType)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, GcorePackage.MOPERATION__RETURN_TYPE, oldReturnType, returnType));
-      }
-    }
-    return returnType;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MType basicGetReturnType()
-  {
-    return returnType;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setReturnType(MType newReturnType)
-  {
-    MType oldReturnType = returnType;
-    returnType = newReturnType;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MOPERATION__RETURN_TYPE, oldReturnType, returnType));
   }
 
   /**
@@ -650,12 +460,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
         return isAbstract();
       case GcorePackage.MOPERATION__FINAL:
         return isFinal();
-      case GcorePackage.MOPERATION__MULTIPLICITY:
-        return getMultiplicity();
-      case GcorePackage.MOPERATION__UNIQUE:
-        return isUnique();
-      case GcorePackage.MOPERATION__ORDERED:
-        return isOrdered();
       case GcorePackage.MOPERATION__PARAMETER:
         return getParameter();
       case GcorePackage.MOPERATION__CLASSIFIER:
@@ -664,9 +468,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
         return getGenericParameter();
       case GcorePackage.MOPERATION__RAISED_EXCEPTION:
         return getRaisedException();
-      case GcorePackage.MOPERATION__RETURN_TYPE:
-        if (resolve) return getReturnType();
-        return basicGetReturnType();
       case GcorePackage.MOPERATION__RETURN:
         return getReturn();
     }
@@ -696,15 +497,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
       case GcorePackage.MOPERATION__FINAL:
         setFinal((Boolean)newValue);
         return;
-      case GcorePackage.MOPERATION__MULTIPLICITY:
-        setMultiplicity((Integer)newValue);
-        return;
-      case GcorePackage.MOPERATION__UNIQUE:
-        setUnique((Boolean)newValue);
-        return;
-      case GcorePackage.MOPERATION__ORDERED:
-        setOrdered((Boolean)newValue);
-        return;
       case GcorePackage.MOPERATION__PARAMETER:
         getParameter().clear();
         getParameter().addAll((Collection<? extends MParameter>)newValue);
@@ -716,9 +508,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
       case GcorePackage.MOPERATION__RAISED_EXCEPTION:
         getRaisedException().clear();
         getRaisedException().addAll((Collection<? extends MType>)newValue);
-        return;
-      case GcorePackage.MOPERATION__RETURN_TYPE:
-        setReturnType((MType)newValue);
         return;
       case GcorePackage.MOPERATION__RETURN:
         setReturn((MParameter)newValue);
@@ -749,15 +538,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
       case GcorePackage.MOPERATION__FINAL:
         setFinal(FINAL_EDEFAULT);
         return;
-      case GcorePackage.MOPERATION__MULTIPLICITY:
-        setMultiplicity(MULTIPLICITY_EDEFAULT);
-        return;
-      case GcorePackage.MOPERATION__UNIQUE:
-        setUnique(UNIQUE_EDEFAULT);
-        return;
-      case GcorePackage.MOPERATION__ORDERED:
-        setOrdered(ORDERED_EDEFAULT);
-        return;
       case GcorePackage.MOPERATION__PARAMETER:
         getParameter().clear();
         return;
@@ -766,9 +546,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
         return;
       case GcorePackage.MOPERATION__RAISED_EXCEPTION:
         getRaisedException().clear();
-        return;
-      case GcorePackage.MOPERATION__RETURN_TYPE:
-        setReturnType((MType)null);
         return;
       case GcorePackage.MOPERATION__RETURN:
         setReturn((MParameter)null);
@@ -795,12 +572,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
         return abstract_ != ABSTRACT_EDEFAULT;
       case GcorePackage.MOPERATION__FINAL:
         return final_ != FINAL_EDEFAULT;
-      case GcorePackage.MOPERATION__MULTIPLICITY:
-        return multiplicity != MULTIPLICITY_EDEFAULT;
-      case GcorePackage.MOPERATION__UNIQUE:
-        return unique != UNIQUE_EDEFAULT;
-      case GcorePackage.MOPERATION__ORDERED:
-        return ordered != ORDERED_EDEFAULT;
       case GcorePackage.MOPERATION__PARAMETER:
         return parameter != null && !parameter.isEmpty();
       case GcorePackage.MOPERATION__CLASSIFIER:
@@ -809,8 +580,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
         return genericParameter != null && !genericParameter.isEmpty();
       case GcorePackage.MOPERATION__RAISED_EXCEPTION:
         return raisedException != null && !raisedException.isEmpty();
-      case GcorePackage.MOPERATION__RETURN_TYPE:
-        return returnType != null;
       case GcorePackage.MOPERATION__RETURN:
         return return_ != null;
     }
@@ -836,12 +605,6 @@ public class MOperationImpl extends MElementImpl implements MOperation
     result.append(abstract_);
     result.append(", final: ");
     result.append(final_);
-    result.append(", multiplicity: ");
-    result.append(multiplicity);
-    result.append(", unique: ");
-    result.append(unique);
-    result.append(", ordered: ");
-    result.append(ordered);
     result.append(')');
     return result.toString();
   }

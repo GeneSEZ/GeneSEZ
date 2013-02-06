@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.impl;
 
@@ -79,7 +75,6 @@ public class GcoreFactoryImpl extends EFactoryImpl implements GcoreFactory
       case GcorePackage.MOPERATION: return createMOperation();
       case GcorePackage.MPARAMETER: return createMParameter();
       case GcorePackage.MDATA_TYPE: return createMDataType();
-      case GcorePackage.MPRIMITIVE_TYPE: return createMPrimitiveType();
       case GcorePackage.MENUMERATION: return createMEnumeration();
       case GcorePackage.MSTEREOTYPE: return createMStereotype();
       case GcorePackage.MTAG: return createMTag();
@@ -257,17 +252,6 @@ public class GcoreFactoryImpl extends EFactoryImpl implements GcoreFactory
   {
     MDataTypeImpl mDataType = new MDataTypeImpl();
     return mDataType;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MPrimitiveType createMPrimitiveType()
-  {
-    MPrimitiveTypeImpl mPrimitiveType = new MPrimitiveTypeImpl();
-    return mPrimitiveType;
   }
 
   /**

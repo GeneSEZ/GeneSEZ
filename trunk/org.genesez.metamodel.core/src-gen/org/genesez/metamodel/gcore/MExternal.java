@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore;
 
@@ -16,7 +12,6 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.genesez.metamodel.gcore.MExternal#getSpecification <em>Specification</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MExternal#getModel <em>Model</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MExternal#getGenericParameter <em>Generic Parameter</em>}</li>
  * </ul>
@@ -28,32 +23,6 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface MExternal extends MType, MElement
 {
-  /**
-   * Returns the value of the '<em><b>Specification</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Specification</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Specification</em>' attribute.
-   * @see #setSpecification(String)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMExternal_Specification()
-   * @model required="true"
-   * @generated
-   */
-  String getSpecification();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MExternal#getSpecification <em>Specification</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Specification</em>' attribute.
-   * @see #getSpecification()
-   * @generated
-   */
-  void setSpecification(String value);
-
   /**
    * Returns the value of the '<em><b>Model</b></em>' container reference.
    * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gcore.MModel#getExternalTypes <em>External Types</em>}'.

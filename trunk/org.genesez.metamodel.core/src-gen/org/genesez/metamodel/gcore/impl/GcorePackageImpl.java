@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.impl;
 
@@ -53,7 +49,6 @@ import org.genesez.metamodel.gcore.MOperation;
 import org.genesez.metamodel.gcore.MPackage;
 import org.genesez.metamodel.gcore.MParameter;
 import org.genesez.metamodel.gcore.MPointcut;
-import org.genesez.metamodel.gcore.MPrimitiveType;
 import org.genesez.metamodel.gcore.MProperty;
 import org.genesez.metamodel.gcore.MState;
 import org.genesez.metamodel.gcore.MStateMachine;
@@ -163,13 +158,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * @generated
    */
   private EClass mDataTypeEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass mPrimitiveTypeEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -567,7 +555,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMAssociationRole_OppositeMultiplicity()
+  public EAttribute getMAssociationRole_OppositeLowerBoundMultiplicity()
   {
     return (EAttribute)mAssociationRoleEClass.getEStructuralFeatures().get(2);
   }
@@ -577,7 +565,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMAssociationRole_OppositeLowerBoundMultiplicity()
+  public EAttribute getMAssociationRole_OppositeUpperBoundMultiplicity()
   {
     return (EAttribute)mAssociationRoleEClass.getEStructuralFeatures().get(3);
   }
@@ -587,7 +575,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMAssociationRole_OppositeUpperBoundMultiplicity()
+  public EAttribute getMAssociationRole_QualifierMultiplicity()
   {
     return (EAttribute)mAssociationRoleEClass.getEStructuralFeatures().get(4);
   }
@@ -597,19 +585,9 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMAssociationRole_QualifierMultiplicity()
-  {
-    return (EAttribute)mAssociationRoleEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getMAssociationRole_Association()
   {
-    return (EReference)mAssociationRoleEClass.getEStructuralFeatures().get(6);
+    return (EReference)mAssociationRoleEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -619,7 +597,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMAssociationRole_Opposite()
   {
-    return (EReference)mAssociationRoleEClass.getEStructuralFeatures().get(7);
+    return (EReference)mAssociationRoleEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -629,7 +607,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMAssociationRole_Qualifier()
   {
-    return (EReference)mAssociationRoleEClass.getEStructuralFeatures().get(8);
+    return (EReference)mAssociationRoleEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -737,7 +715,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMModel_PrimitiveTypes()
+  public EReference getMModel_AnyStereotype()
   {
     return (EReference)mModelEClass.getEStructuralFeatures().get(0);
   }
@@ -747,19 +725,9 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMModel_AnyStereotype()
-  {
-    return (EReference)mModelEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getMModel_ExternalTypes()
   {
-    return (EReference)mModelEClass.getEStructuralFeatures().get(2);
+    return (EReference)mModelEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -867,7 +835,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMProperty_Multiplicity()
+  public EAttribute getMProperty_LowerBoundMultiplicity()
   {
     return (EAttribute)mPropertyEClass.getEStructuralFeatures().get(2);
   }
@@ -877,7 +845,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMProperty_LowerBoundMultiplicity()
+  public EAttribute getMProperty_UpperBoundMultiplicity()
   {
     return (EAttribute)mPropertyEClass.getEStructuralFeatures().get(3);
   }
@@ -887,7 +855,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMProperty_UpperBoundMultiplicity()
+  public EAttribute getMProperty_Unique()
   {
     return (EAttribute)mPropertyEClass.getEStructuralFeatures().get(4);
   }
@@ -897,7 +865,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMProperty_Unique()
+  public EAttribute getMProperty_Ordered()
   {
     return (EAttribute)mPropertyEClass.getEStructuralFeatures().get(5);
   }
@@ -907,19 +875,9 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMProperty_Ordered()
-  {
-    return (EAttribute)mPropertyEClass.getEStructuralFeatures().get(6);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getMProperty_Classifier()
   {
-    return (EReference)mPropertyEClass.getEStructuralFeatures().get(7);
+    return (EReference)mPropertyEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -929,7 +887,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMProperty_GenericRealization()
   {
-    return (EReference)mPropertyEClass.getEStructuralFeatures().get(8);
+    return (EReference)mPropertyEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -939,7 +897,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMProperty_Type()
   {
-    return (EReference)mPropertyEClass.getEStructuralFeatures().get(9);
+    return (EReference)mPropertyEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -1117,39 +1075,9 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMOperation_Multiplicity()
-  {
-    return (EAttribute)mOperationEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getMOperation_Unique()
-  {
-    return (EAttribute)mOperationEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getMOperation_Ordered()
-  {
-    return (EAttribute)mOperationEClass.getEStructuralFeatures().get(6);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getMOperation_Parameter()
   {
-    return (EReference)mOperationEClass.getEStructuralFeatures().get(7);
+    return (EReference)mOperationEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -1159,7 +1087,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMOperation_Classifier()
   {
-    return (EReference)mOperationEClass.getEStructuralFeatures().get(8);
+    return (EReference)mOperationEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -1169,7 +1097,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMOperation_GenericParameter()
   {
-    return (EReference)mOperationEClass.getEStructuralFeatures().get(9);
+    return (EReference)mOperationEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -1179,17 +1107,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMOperation_RaisedException()
   {
-    return (EReference)mOperationEClass.getEStructuralFeatures().get(10);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getMOperation_ReturnType()
-  {
-    return (EReference)mOperationEClass.getEStructuralFeatures().get(11);
+    return (EReference)mOperationEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -1199,7 +1117,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMOperation_Return()
   {
-    return (EReference)mOperationEClass.getEStructuralFeatures().get(12);
+    return (EReference)mOperationEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -1237,7 +1155,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMParameter_Multiplicity()
+  public EAttribute getMParameter_LowerBoundMultiplicity()
   {
     return (EAttribute)mParameterEClass.getEStructuralFeatures().get(2);
   }
@@ -1247,7 +1165,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMParameter_LowerBoundMultiplicity()
+  public EAttribute getMParameter_UpperBoundMultiplicity()
   {
     return (EAttribute)mParameterEClass.getEStructuralFeatures().get(3);
   }
@@ -1257,7 +1175,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMParameter_UpperBoundMultiplicity()
+  public EAttribute getMParameter_Unique()
   {
     return (EAttribute)mParameterEClass.getEStructuralFeatures().get(4);
   }
@@ -1267,7 +1185,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMParameter_Unique()
+  public EAttribute getMParameter_Ordered()
   {
     return (EAttribute)mParameterEClass.getEStructuralFeatures().get(5);
   }
@@ -1277,19 +1195,9 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMParameter_Ordered()
-  {
-    return (EAttribute)mParameterEClass.getEStructuralFeatures().get(6);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getMParameter_GenericRealization()
   {
-    return (EReference)mParameterEClass.getEStructuralFeatures().get(7);
+    return (EReference)mParameterEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -1299,7 +1207,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMParameter_Type()
   {
-    return (EReference)mParameterEClass.getEStructuralFeatures().get(8);
+    return (EReference)mParameterEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -1309,7 +1217,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMParameter_Event()
   {
-    return (EReference)mParameterEClass.getEStructuralFeatures().get(9);
+    return (EReference)mParameterEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -1319,7 +1227,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMParameter_Operation()
   {
-    return (EReference)mParameterEClass.getEStructuralFeatures().get(10);
+    return (EReference)mParameterEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -1330,26 +1238,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
   public EClass getMDataType()
   {
     return mDataTypeEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getMPrimitiveType()
-  {
-    return mPrimitiveTypeEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getMPrimitiveType_Model()
-  {
-    return (EReference)mPrimitiveTypeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1857,19 +1745,9 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMExternal_Specification()
-  {
-    return (EAttribute)mExternalEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getMExternal_Model()
   {
-    return (EReference)mExternalEClass.getEStructuralFeatures().get(1);
+    return (EReference)mExternalEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1879,7 +1757,7 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
    */
   public EReference getMExternal_GenericParameter()
   {
-    return (EReference)mExternalEClass.getEStructuralFeatures().get(2);
+    return (EReference)mExternalEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2763,7 +2641,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     mAssociationRoleEClass = createEClass(MASSOCIATION_ROLE);
     createEAttribute(mAssociationRoleEClass, MASSOCIATION_ROLE__AGGREGATION);
     createEAttribute(mAssociationRoleEClass, MASSOCIATION_ROLE__COMPOSITION);
-    createEAttribute(mAssociationRoleEClass, MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY);
     createEAttribute(mAssociationRoleEClass, MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY);
     createEAttribute(mAssociationRoleEClass, MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY);
     createEAttribute(mAssociationRoleEClass, MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY);
@@ -2783,7 +2660,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEAttribute(mAttributeEClass, MATTRIBUTE__FINAL);
 
     mModelEClass = createEClass(MMODEL);
-    createEReference(mModelEClass, MMODEL__PRIMITIVE_TYPES);
     createEReference(mModelEClass, MMODEL__ANY_STEREOTYPE);
     createEReference(mModelEClass, MMODEL__EXTERNAL_TYPES);
 
@@ -2798,7 +2674,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     mPropertyEClass = createEClass(MPROPERTY);
     createEAttribute(mPropertyEClass, MPROPERTY__VISIBILITY);
     createEAttribute(mPropertyEClass, MPROPERTY__DERIVED);
-    createEAttribute(mPropertyEClass, MPROPERTY__MULTIPLICITY);
     createEAttribute(mPropertyEClass, MPROPERTY__LOWER_BOUND_MULTIPLICITY);
     createEAttribute(mPropertyEClass, MPROPERTY__UPPER_BOUND_MULTIPLICITY);
     createEAttribute(mPropertyEClass, MPROPERTY__UNIQUE);
@@ -2826,20 +2701,15 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEAttribute(mOperationEClass, MOPERATION__STATIC);
     createEAttribute(mOperationEClass, MOPERATION__ABSTRACT);
     createEAttribute(mOperationEClass, MOPERATION__FINAL);
-    createEAttribute(mOperationEClass, MOPERATION__MULTIPLICITY);
-    createEAttribute(mOperationEClass, MOPERATION__UNIQUE);
-    createEAttribute(mOperationEClass, MOPERATION__ORDERED);
     createEReference(mOperationEClass, MOPERATION__PARAMETER);
     createEReference(mOperationEClass, MOPERATION__CLASSIFIER);
     createEReference(mOperationEClass, MOPERATION__GENERIC_PARAMETER);
     createEReference(mOperationEClass, MOPERATION__RAISED_EXCEPTION);
-    createEReference(mOperationEClass, MOPERATION__RETURN_TYPE);
     createEReference(mOperationEClass, MOPERATION__RETURN);
 
     mParameterEClass = createEClass(MPARAMETER);
     createEAttribute(mParameterEClass, MPARAMETER__DEFAULTVALUE);
     createEAttribute(mParameterEClass, MPARAMETER__DIRECTION);
-    createEAttribute(mParameterEClass, MPARAMETER__MULTIPLICITY);
     createEAttribute(mParameterEClass, MPARAMETER__LOWER_BOUND_MULTIPLICITY);
     createEAttribute(mParameterEClass, MPARAMETER__UPPER_BOUND_MULTIPLICITY);
     createEAttribute(mParameterEClass, MPARAMETER__UNIQUE);
@@ -2850,9 +2720,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEReference(mParameterEClass, MPARAMETER__OPERATION);
 
     mDataTypeEClass = createEClass(MDATA_TYPE);
-
-    mPrimitiveTypeEClass = createEClass(MPRIMITIVE_TYPE);
-    createEReference(mPrimitiveTypeEClass, MPRIMITIVE_TYPE__MODEL);
 
     mEnumerationEClass = createEClass(MENUMERATION);
     createEReference(mEnumerationEClass, MENUMERATION__LITERAL);
@@ -2915,7 +2782,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     createEReference(mTypeEClass, MTYPE__SPECIALIZATION);
 
     mExternalEClass = createEClass(MEXTERNAL);
-    createEAttribute(mExternalEClass, MEXTERNAL__SPECIFICATION);
     createEReference(mExternalEClass, MEXTERNAL__MODEL);
     createEReference(mExternalEClass, MEXTERNAL__GENERIC_PARAMETER);
 
@@ -3070,8 +2936,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     mOperationEClass.getESuperTypes().add(this.getMElement());
     mParameterEClass.getESuperTypes().add(this.getMElement());
     mDataTypeEClass.getESuperTypes().add(this.getMClassifier());
-    mPrimitiveTypeEClass.getESuperTypes().add(this.getMType());
-    mPrimitiveTypeEClass.getESuperTypes().add(this.getMElement());
     mEnumerationEClass.getESuperTypes().add(this.getMDataType());
     mStereotypeEClass.getESuperTypes().add(this.getMElement());
     mLiteralEClass.getESuperTypes().add(this.getMElement());
@@ -3113,7 +2977,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEClass(mAssociationRoleEClass, MAssociationRole.class, "MAssociationRole", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMAssociationRole_Aggregation(), ecorePackage.getEBoolean(), "aggregation", null, 1, 1, MAssociationRole.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMAssociationRole_Composition(), ecorePackage.getEBoolean(), "composition", null, 1, 1, MAssociationRole.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMAssociationRole_OppositeMultiplicity(), ecorePackage.getEInt(), "oppositeMultiplicity", null, 1, 1, MAssociationRole.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMAssociationRole_OppositeLowerBoundMultiplicity(), ecorePackage.getEInt(), "oppositeLowerBoundMultiplicity", null, 1, 1, MAssociationRole.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMAssociationRole_OppositeUpperBoundMultiplicity(), ecorePackage.getEInt(), "oppositeUpperBoundMultiplicity", null, 1, 1, MAssociationRole.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMAssociationRole_QualifierMultiplicity(), ecorePackage.getEInt(), "qualifierMultiplicity", null, 1, 1, MAssociationRole.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3133,7 +2996,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEAttribute(getMAttribute_Final(), ecorePackage.getEBoolean(), "final", null, 1, 1, MAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mModelEClass, MModel.class, "MModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMModel_PrimitiveTypes(), this.getMPrimitiveType(), this.getMPrimitiveType_Model(), "primitiveTypes", null, 0, -1, MModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMModel_AnyStereotype(), this.getMStereotype(), this.getMStereotype_Model(), "anyStereotype", null, 0, -1, MModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMModel_ExternalTypes(), this.getMExternal(), this.getMExternal_Model(), "externalTypes", null, 0, -1, MModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -3148,7 +3010,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEClass(mPropertyEClass, MProperty.class, "MProperty", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMProperty_Visibility(), ecorePackage.getEString(), "visibility", null, 1, 1, MProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMProperty_Derived(), ecorePackage.getEBoolean(), "derived", null, 1, 1, MProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMProperty_Multiplicity(), ecorePackage.getEInt(), "multiplicity", null, 1, 1, MProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMProperty_LowerBoundMultiplicity(), ecorePackage.getEInt(), "lowerBoundMultiplicity", null, 1, 1, MProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMProperty_UpperBoundMultiplicity(), ecorePackage.getEInt(), "upperBoundMultiplicity", null, 1, 1, MProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMProperty_Unique(), ecorePackage.getEBoolean(), "unique", null, 1, 1, MProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3176,20 +3037,15 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEAttribute(getMOperation_Static(), ecorePackage.getEBoolean(), "static", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMOperation_Abstract(), ecorePackage.getEBoolean(), "abstract", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMOperation_Final(), ecorePackage.getEBoolean(), "final", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMOperation_Multiplicity(), ecorePackage.getEInt(), "multiplicity", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMOperation_Unique(), ecorePackage.getEBoolean(), "unique", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMOperation_Ordered(), ecorePackage.getEBoolean(), "ordered", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMOperation_Parameter(), this.getMParameter(), null, "parameter", null, 0, -1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMOperation_Classifier(), this.getMClassifier(), this.getMClassifier_Operation(), "classifier", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMOperation_GenericParameter(), this.getMGeneric(), this.getMGeneric_OwningOperation(), "genericParameter", null, 0, -1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMOperation_RaisedException(), this.getMType(), null, "raisedException", null, 0, -1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMOperation_ReturnType(), this.getMType(), null, "returnType", null, 1, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMOperation_Return(), this.getMParameter(), null, "return", null, 0, 1, MOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mParameterEClass, MParameter.class, "MParameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMParameter_Defaultvalue(), ecorePackage.getEString(), "defaultvalue", null, 1, 1, MParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMParameter_Direction(), ecorePackage.getEString(), "direction", null, 1, 1, MParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMParameter_Multiplicity(), ecorePackage.getEInt(), "multiplicity", null, 1, 1, MParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMParameter_LowerBoundMultiplicity(), ecorePackage.getEInt(), "lowerBoundMultiplicity", null, 1, 1, MParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMParameter_UpperBoundMultiplicity(), ecorePackage.getEInt(), "upperBoundMultiplicity", null, 1, 1, MParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMParameter_Unique(), ecorePackage.getEBoolean(), "unique", null, 1, 1, MParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3200,9 +3056,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEReference(getMParameter_Operation(), this.getMOperation(), null, "operation", null, 1, 1, MParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mDataTypeEClass, MDataType.class, "MDataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-    initEClass(mPrimitiveTypeEClass, MPrimitiveType.class, "MPrimitiveType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMPrimitiveType_Model(), this.getMModel(), this.getMModel_PrimitiveTypes(), "model", null, 1, 1, MPrimitiveType.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mEnumerationEClass, MEnumeration.class, "MEnumeration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMEnumeration_Literal(), this.getMLiteral(), this.getMLiteral_OwningEnumeration(), "literal", null, 0, -1, MEnumeration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3265,7 +3118,6 @@ public class GcorePackageImpl extends EPackageImpl implements GcorePackage
     initEReference(getMType_Specialization(), this.getMClassifier(), this.getMClassifier_Generalization(), "specialization", null, 0, -1, MType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mExternalEClass, MExternal.class, "MExternal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMExternal_Specification(), ecorePackage.getEString(), "specification", null, 1, 1, MExternal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMExternal_Model(), this.getMModel(), this.getMModel_ExternalTypes(), "model", null, 1, 1, MExternal.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMExternal_GenericParameter(), this.getMGeneric(), this.getMGeneric_OwningExternal(), "genericParameter", null, 0, -1, MExternal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
