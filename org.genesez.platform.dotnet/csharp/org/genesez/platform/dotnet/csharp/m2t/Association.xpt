@@ -9,8 +9,8 @@
 «IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 «EXTENSION org::genesez::platform::dotnet::csharp::convention::Naming»
 
 
@@ -47,13 +47,13 @@
 	«IF multiplicity == 1-»
 		«EXPAND _PropertyDecl( type.mapName().asTypeName(), asProperty() )-»
 	«ELSE-»
-		«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
+		«EXPAND _PropertyDecl( mapCollection() + "<" + type.mapName().asTypeName() + ">",
                         asProperty() )-»
 	«ENDIF-»
 «ELSE-»
-	«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
+	«EXPAND _PropertyDecl( mapCollection() + "<" + type.mapName().asTypeName() + ">",
                         asProperty() )-»
-	«EXPAND _PropertyDecl( mapType() + "<" + assocClass().asTypeName() + ">",
+	«EXPAND _PropertyDecl( mapCollection() + "<" + assocClass().asTypeName() + ">",
                         asProperty() + assocClass().asTypeName() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -67,16 +67,16 @@
 		«EXPAND _PropertyImpl( type.mapName().asTypeName(),
 							asProperty(), asAttribute() )-»
 	«ELSE-»
-		«EXPAND _PropertyImpl( mapType() + "<" + type.mapName().asTypeName() + ">",
+		«EXPAND _PropertyImpl( mapCollection() + "<" + type.mapName().asTypeName() + ">",
 							asProperty(), asAttribute() )-»
 	«ENDIF-»
 «ELSE-»
 	«EXPAND _Comment-»
-	public «mapType()»<«type.mapName().asTypeName()»> «asProperty()»
+	public «mapCollection()»<«type.mapName().asTypeName()»> «asProperty()»
 	{
 		get {
-			«mapType("Implementation")»<«type.mapName().asTypeName()»> _result
-				= new «mapType("Implementation")»<«type.mapName().asTypeName()»>();
+			«mapCollection("Implementation")»<«type.mapName().asTypeName()»> _result
+				= new «mapCollection("Implementation")»<«type.mapName().asTypeName()»>();
 			foreach ( var _assoc in this.«asAttribute()» ){
 				_result.add( _assoc.«asProperty()» );
 			}
@@ -84,7 +84,7 @@
 		}
 	} 
 	
-	«EXPAND _PropertyImpl( mapType() + "<" + assocClass().asTypeName() + ">",
+	«EXPAND _PropertyImpl( mapCollection() + "<" + assocClass().asTypeName() + ">",
 						asProperty() + assocClass().asTypeName(), asAttribute() )-»
 «ENDIF-»
 «ENDDEFINE»
@@ -228,7 +228,7 @@
 «ENDREM»
 «DEFINE _FieldImpl(String type, String name) FOR MAssociationRole-»
 		«EXPAND _Comment-»
-		private «type» «name» = new «mapType("Implementation")»<«name»>;;
+		private «type» «name» = new «mapCollection("Implementation")»<«name»>;;
 		
 «ENDDEFINE»
 
