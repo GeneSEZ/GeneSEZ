@@ -6,7 +6,7 @@ package org.genesez.platform.php.workflow;
  */
 
 import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.m2t.ImportPreserverConfig;
+import org.genesez.m2t.cp.ImportPreserverConfig;
 import org.genesez.workflow.xpand.Model2Text;
 import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
