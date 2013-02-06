@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.util;
 
@@ -142,11 +138,6 @@ public class GcoreAdapterFactory extends AdapterFactoryImpl
       public Adapter caseMDataType(MDataType object)
       {
         return createMDataTypeAdapter();
-      }
-      @Override
-      public Adapter caseMPrimitiveType(MPrimitiveType object)
-      {
-        return createMPrimitiveTypeAdapter();
       }
       @Override
       public Adapter caseMEnumeration(MEnumeration object)
@@ -526,21 +517,6 @@ public class GcoreAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createMDataTypeAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gcore.MPrimitiveType <em>MPrimitive Type</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.genesez.metamodel.gcore.MPrimitiveType
-   * @generated
-   */
-  public Adapter createMPrimitiveTypeAdapter()
   {
     return null;
   }

@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.impl;
 
@@ -37,7 +33,6 @@ import org.genesez.metamodel.gcore.MType;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getDefaultvalue <em>Defaultvalue</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getDirection <em>Direction</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getUpperBoundMultiplicity <em>Upper Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#isUnique <em>Unique</em>}</li>
@@ -92,26 +87,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
    * @ordered
    */
   protected String direction = DIRECTION_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final int MULTIPLICITY_EDEFAULT = 0;
-
-  /**
-   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected int multiplicity = MULTIPLICITY_EDEFAULT;
 
   /**
    * The default value of the '{@link #getLowerBoundMultiplicity() <em>Lower Bound Multiplicity</em>}' attribute.
@@ -288,29 +263,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
     direction = newDirection;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPARAMETER__DIRECTION, oldDirection, direction));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public int getMultiplicity()
-  {
-    return multiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setMultiplicity(int newMultiplicity)
-  {
-    int oldMultiplicity = multiplicity;
-    multiplicity = newMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPARAMETER__MULTIPLICITY, oldMultiplicity, multiplicity));
   }
 
   /**
@@ -585,8 +537,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return getDefaultvalue();
       case GcorePackage.MPARAMETER__DIRECTION:
         return getDirection();
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        return getMultiplicity();
       case GcorePackage.MPARAMETER__LOWER_BOUND_MULTIPLICITY:
         return getLowerBoundMultiplicity();
       case GcorePackage.MPARAMETER__UPPER_BOUND_MULTIPLICITY:
@@ -625,9 +575,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return;
       case GcorePackage.MPARAMETER__DIRECTION:
         setDirection((String)newValue);
-        return;
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        setMultiplicity((Integer)newValue);
         return;
       case GcorePackage.MPARAMETER__LOWER_BOUND_MULTIPLICITY:
         setLowerBoundMultiplicity((Integer)newValue);
@@ -671,9 +618,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
       case GcorePackage.MPARAMETER__DIRECTION:
         setDirection(DIRECTION_EDEFAULT);
         return;
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        setMultiplicity(MULTIPLICITY_EDEFAULT);
-        return;
       case GcorePackage.MPARAMETER__LOWER_BOUND_MULTIPLICITY:
         setLowerBoundMultiplicity(LOWER_BOUND_MULTIPLICITY_EDEFAULT);
         return;
@@ -713,8 +657,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return DEFAULTVALUE_EDEFAULT == null ? defaultvalue != null : !DEFAULTVALUE_EDEFAULT.equals(defaultvalue);
       case GcorePackage.MPARAMETER__DIRECTION:
         return DIRECTION_EDEFAULT == null ? direction != null : !DIRECTION_EDEFAULT.equals(direction);
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        return multiplicity != MULTIPLICITY_EDEFAULT;
       case GcorePackage.MPARAMETER__LOWER_BOUND_MULTIPLICITY:
         return lowerBoundMultiplicity != LOWER_BOUND_MULTIPLICITY_EDEFAULT;
       case GcorePackage.MPARAMETER__UPPER_BOUND_MULTIPLICITY:
@@ -750,8 +692,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
     result.append(defaultvalue);
     result.append(", direction: ");
     result.append(direction);
-    result.append(", multiplicity: ");
-    result.append(multiplicity);
     result.append(", lowerBoundMultiplicity: ");
     result.append(lowerBoundMultiplicity);
     result.append(", upperBoundMultiplicity: ");

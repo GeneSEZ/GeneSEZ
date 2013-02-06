@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.impl;
 
@@ -36,7 +32,6 @@ import org.genesez.metamodel.gcore.MType;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getVisibility <em>Visibility</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#isDerived <em>Derived</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getUpperBoundMultiplicity <em>Upper Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#isUnique <em>Unique</em>}</li>
@@ -90,26 +85,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
    * @ordered
    */
   protected boolean derived = DERIVED_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final int MULTIPLICITY_EDEFAULT = 0;
-
-  /**
-   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected int multiplicity = MULTIPLICITY_EDEFAULT;
 
   /**
    * The default value of the '{@link #getLowerBoundMultiplicity() <em>Lower Bound Multiplicity</em>}' attribute.
@@ -276,29 +251,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
     derived = newDerived;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__DERIVED, oldDerived, derived));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public int getMultiplicity()
-  {
-    return multiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setMultiplicity(int newMultiplicity)
-  {
-    int oldMultiplicity = multiplicity;
-    multiplicity = newMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__MULTIPLICITY, oldMultiplicity, multiplicity));
   }
 
   /**
@@ -530,8 +482,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return getVisibility();
       case GcorePackage.MPROPERTY__DERIVED:
         return isDerived();
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        return getMultiplicity();
       case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
         return getLowerBoundMultiplicity();
       case GcorePackage.MPROPERTY__UPPER_BOUND_MULTIPLICITY:
@@ -567,9 +517,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return;
       case GcorePackage.MPROPERTY__DERIVED:
         setDerived((Boolean)newValue);
-        return;
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        setMultiplicity((Integer)newValue);
         return;
       case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
         setLowerBoundMultiplicity((Integer)newValue);
@@ -610,9 +557,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
       case GcorePackage.MPROPERTY__DERIVED:
         setDerived(DERIVED_EDEFAULT);
         return;
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        setMultiplicity(MULTIPLICITY_EDEFAULT);
-        return;
       case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
         setLowerBoundMultiplicity(LOWER_BOUND_MULTIPLICITY_EDEFAULT);
         return;
@@ -649,8 +593,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return VISIBILITY_EDEFAULT == null ? visibility != null : !VISIBILITY_EDEFAULT.equals(visibility);
       case GcorePackage.MPROPERTY__DERIVED:
         return derived != DERIVED_EDEFAULT;
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        return multiplicity != MULTIPLICITY_EDEFAULT;
       case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
         return lowerBoundMultiplicity != LOWER_BOUND_MULTIPLICITY_EDEFAULT;
       case GcorePackage.MPROPERTY__UPPER_BOUND_MULTIPLICITY:
@@ -684,8 +626,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
     result.append(visibility);
     result.append(", derived: ");
     result.append(derived);
-    result.append(", multiplicity: ");
-    result.append(multiplicity);
     result.append(", lowerBoundMultiplicity: ");
     result.append(lowerBoundMultiplicity);
     result.append(", upperBoundMultiplicity: ");

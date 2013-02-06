@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore;
 
@@ -17,7 +13,6 @@ package org.genesez.metamodel.gcore;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#isAggregation <em>Aggregation</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#isComposition <em>Composition</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeLowerBoundMultiplicity <em>Opposite Lower Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeUpperBoundMultiplicity <em>Opposite Upper Bound Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}</li>
@@ -84,32 +79,6 @@ public interface MAssociationRole extends MProperty
    * @generated
    */
   void setComposition(boolean value);
-
-  /**
-   * Returns the value of the '<em><b>Opposite Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Opposite Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Opposite Multiplicity</em>' attribute.
-   * @see #setOppositeMultiplicity(int)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_OppositeMultiplicity()
-   * @model required="true"
-   * @generated
-   */
-  int getOppositeMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Opposite Multiplicity</em>' attribute.
-   * @see #getOppositeMultiplicity()
-   * @generated
-   */
-  void setOppositeMultiplicity(int value);
 
   /**
    * Returns the value of the '<em><b>Opposite Lower Bound Multiplicity</b></em>' attribute.

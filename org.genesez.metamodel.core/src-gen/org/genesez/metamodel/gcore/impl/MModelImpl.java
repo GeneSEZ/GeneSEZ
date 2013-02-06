@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gcore.impl;
 
@@ -21,7 +17,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.gcore.MExternal;
 import org.genesez.metamodel.gcore.MModel;
-import org.genesez.metamodel.gcore.MPrimitiveType;
 import org.genesez.metamodel.gcore.MStereotype;
 
 /**
@@ -31,7 +26,6 @@ import org.genesez.metamodel.gcore.MStereotype;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MModelImpl#getPrimitiveTypes <em>Primitive Types</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MModelImpl#getAnyStereotype <em>Any Stereotype</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MModelImpl#getExternalTypes <em>External Types</em>}</li>
  * </ul>
@@ -41,16 +35,6 @@ import org.genesez.metamodel.gcore.MStereotype;
  */
 public class MModelImpl extends MPackageImpl implements MModel
 {
-  /**
-   * The cached value of the '{@link #getPrimitiveTypes() <em>Primitive Types</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPrimitiveTypes()
-   * @generated
-   * @ordered
-   */
-  protected EList<MPrimitiveType> primitiveTypes;
-
   /**
    * The cached value of the '{@link #getAnyStereotype() <em>Any Stereotype</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -97,20 +81,6 @@ public class MModelImpl extends MPackageImpl implements MModel
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<MPrimitiveType> getPrimitiveTypes()
-  {
-    if (primitiveTypes == null)
-    {
-      primitiveTypes = new EObjectContainmentWithInverseEList<MPrimitiveType>(MPrimitiveType.class, this, GcorePackage.MMODEL__PRIMITIVE_TYPES, GcorePackage.MPRIMITIVE_TYPE__MODEL);
-    }
-    return primitiveTypes;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EList<MStereotype> getAnyStereotype()
   {
     if (anyStereotype == null)
@@ -145,8 +115,6 @@ public class MModelImpl extends MPackageImpl implements MModel
   {
     switch (featureID)
     {
-      case GcorePackage.MMODEL__PRIMITIVE_TYPES:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getPrimitiveTypes()).basicAdd(otherEnd, msgs);
       case GcorePackage.MMODEL__ANY_STEREOTYPE:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getAnyStereotype()).basicAdd(otherEnd, msgs);
       case GcorePackage.MMODEL__EXTERNAL_TYPES:
@@ -165,8 +133,6 @@ public class MModelImpl extends MPackageImpl implements MModel
   {
     switch (featureID)
     {
-      case GcorePackage.MMODEL__PRIMITIVE_TYPES:
-        return ((InternalEList<?>)getPrimitiveTypes()).basicRemove(otherEnd, msgs);
       case GcorePackage.MMODEL__ANY_STEREOTYPE:
         return ((InternalEList<?>)getAnyStereotype()).basicRemove(otherEnd, msgs);
       case GcorePackage.MMODEL__EXTERNAL_TYPES:
@@ -185,8 +151,6 @@ public class MModelImpl extends MPackageImpl implements MModel
   {
     switch (featureID)
     {
-      case GcorePackage.MMODEL__PRIMITIVE_TYPES:
-        return getPrimitiveTypes();
       case GcorePackage.MMODEL__ANY_STEREOTYPE:
         return getAnyStereotype();
       case GcorePackage.MMODEL__EXTERNAL_TYPES:
@@ -206,10 +170,6 @@ public class MModelImpl extends MPackageImpl implements MModel
   {
     switch (featureID)
     {
-      case GcorePackage.MMODEL__PRIMITIVE_TYPES:
-        getPrimitiveTypes().clear();
-        getPrimitiveTypes().addAll((Collection<? extends MPrimitiveType>)newValue);
-        return;
       case GcorePackage.MMODEL__ANY_STEREOTYPE:
         getAnyStereotype().clear();
         getAnyStereotype().addAll((Collection<? extends MStereotype>)newValue);
@@ -232,9 +192,6 @@ public class MModelImpl extends MPackageImpl implements MModel
   {
     switch (featureID)
     {
-      case GcorePackage.MMODEL__PRIMITIVE_TYPES:
-        getPrimitiveTypes().clear();
-        return;
       case GcorePackage.MMODEL__ANY_STEREOTYPE:
         getAnyStereotype().clear();
         return;
@@ -255,8 +212,6 @@ public class MModelImpl extends MPackageImpl implements MModel
   {
     switch (featureID)
     {
-      case GcorePackage.MMODEL__PRIMITIVE_TYPES:
-        return primitiveTypes != null && !primitiveTypes.isEmpty();
       case GcorePackage.MMODEL__ANY_STEREOTYPE:
         return anyStereotype != null && !anyStereotype.isEmpty();
       case GcorePackage.MMODEL__EXTERNAL_TYPES:
