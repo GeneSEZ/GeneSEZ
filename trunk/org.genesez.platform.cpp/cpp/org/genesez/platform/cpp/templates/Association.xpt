@@ -1,8 +1,8 @@
 «IMPORT gcore»
 
 «EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::cpp::scripts::Naming»
 «EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
@@ -22,7 +22,7 @@
 	«IF isSingleValuedType() -»
 		«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -» «asAttribute()»;
 	«ELSE»		
-		«mapType()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»> «asAttribute()»;
+		«mapCollection()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»> «asAttribute()»;
 	«ENDIF -»	
 «ENDDEFINE»
 
@@ -52,7 +52,7 @@
 	«IF isSingleValuedType() -»
 	«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -» «asGetter()-»();
 	«ELSE-»
-	const «mapType()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»>& «asGetter()»();
+	const «mapCollection()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»>& «asGetter()»();
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -76,7 +76,7 @@
 		return «asAttribute()-»;
 	}
 «ELSE-»
-	const «mapType()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»>& «classifier.asTypeName()»::«asGetter()»(){
+	const «mapCollection()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»>& «classifier.asTypeName()»::«asGetter()»(){
 		return «asAttribute()-»;
 	}
 «ENDIF-»
@@ -98,7 +98,7 @@
 «DEFINE _RemoveFromImpl FOR MAssociationRole -»
 «IF isMultiValuedType() -»
 	void «classifier.asTypeName()-»::«asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -» _out){
-		«mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -»>::iterator it = «asAttribute()-».begin();
+		«mapCollection()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -»>::iterator it = «asAttribute()-».begin();
 		
 		for(; it != «asAttribute()-».end(); it++) {
 			if(*it == _out) {
