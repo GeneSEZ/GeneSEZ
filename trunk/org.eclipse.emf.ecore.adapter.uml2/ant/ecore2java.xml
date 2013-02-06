@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<project name="org.eclipse.emf.ecore.adapter.uml2" basedir=".." default="ecore2java">
+	
+	<dirname property="ant.dir.org.eclipse.emf.ecore.adapter.uml2" file="${ant.file.org.eclipse.emf.ecore.adapter.uml2}" />
+	<property file="${ant.dir.org.eclipse.emf.ecore.adapter.uml2}/environment.properties" />
+	
+	<condition property="org.eclipse.emf.ecore.adapter.uml2.configuration.check">
+		<and>
+			<available file="${ECLIPSE_HOME}" />
+			<available file="${workspace.location}" />
+		</and>
+	</condition>
+	
+	<target name="ecore2java" depends="verify.config, ecore2java.internal, ecore2java.external" />
+	
+	<target name="verify.config" unless="org.eclipse.emf.ecore.adapter.uml2.configuration.check">
+		<echo level="warning">
+The settings to generate java sources from ecore models are not properly configured!
+Please configure the file 'environment.properties' in org.eclipse.emf.ecore.adapter.uml2/ant.
+
+Note: If you are working within the eclipse IDE you can run your ant build within the same jre as your workspace and don't need to configure anything!
+		</echo>
+	</target>
+	
+	<target name="ecore2java.internal" if="eclipse.running">
+		<emf.Ecore2Java model="${ecore.file}"
+			genModel="${genmodel.file}"
+			reconcileGenModel="reload"
+			generateJavaCode="true"
+			generateModelProject="false"
+			generateEditProject="false"
+			generateEditorProject="false"
+			modelProject="${base.dir}"
+			modelProjectFragmentPath="${ecore2java.path}">
+			<arg line="-package ${ecore.package}" />
+		</emf.Ecore2Java>
+	</target>
+	
+	<target name="ecore2java.external" if="org.eclipse.emf.ecore.adapter.uml2.configuration.check">
+		<mkdir dir="${workspace.location}" />
+		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows" failonerror="true">
+			<arg value="-noSplash" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${ant.file.org.eclipse.emf.ecore.adapter.uml2}" />
+			<arg value="ecore2java" />
+			<arg value="-Dbase.dir=${basedir}/${base.dir}" />
+			<arg value="-Decore.file=${basedir}/${ecore.file}" />
+			<arg value="-Dgenmodel.file=${basedir}/${genmodel.file}" />
+			<arg value="-Decore2java.path=${basedir}/${ecore2java.path}" />
+			<arg value="-Decore.package=${basedir}/${ecore.package}" />
+		</exec>
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix" failonerror="true">
+			<arg value="-noSplash" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${ant.file.org.eclipse.emf.ecore.adapter.uml2}" />
+			<arg value="ecore2java" />
+			<arg value="-Dbase.dir=${basedir}/${base.dir}" />
+			<arg value="-Decore.file=${basedir}/${ecore.file}" />
+			<arg value="-Dgenmodel.file=${basedir}/${genmodel.file}" />
+			<arg value="-Decore2java.path=${basedir}/${ecore2java.path}" />
+			<arg value="-Decore.package=${basedir}/${ecore.package}" />
+		</exec>
+	</target> 
+</project>
