@@ -206,6 +206,53 @@ boolean hasFixedUpperBoundMultiplicity(MOperation this) :
 // -- Properties --------------------------------------------------------------------------------------------
 
 
+// -- Getter for a Classifier --
+
+
+/**
+ * Returns the list of properties of an classifier including inherited,
+ * whereas all attributes are added first to the list.
+ *
+ * @return 	The list of properties of the classifier, otherwise an empty list.
+ * @see allAttributes(MClassifier)
+ * @see allAssociationRoles(MClassifier)
+ * @api
+ */
+List[MAttribute] allProperties(MClassifier this):
+	{ allAttributes() }.addAll(
+		allAssociationRoles()
+	);
+
+
+/**
+ * Returns the list of initializable properties of an classifier including inherited,
+ * whereas all initializable attributes are added first to the list.
+ * 
+ * @return	The list of initializable properties of the classifier, otherwise an empty list.
+ * @see allInitializableAttributes(MClassifier)
+ * @see allInitializableAssociationRoles(MClassifier)
+ */
+List[MProperty] allInitializableProperties(MClassifier this) :
+	{ allInitializableAttributes() }.addAll(
+		allInitializableAssociationRoles()
+	);
+
+
+/**
+ * Returns the list of owning initializable properties of an classifier including inherited,
+ * whereas all owning initializable attributes are added first to the list.
+ * 
+ * @return	The list of initializable properties of the classifier, otherwise an empty list.
+ * @see owningInitializableAttributes(MClassifier)
+ * @see owningInitializableAssociationRoles(MClassifier)
+ * @api
+ */
+List[MProperty] owningInitializableProperties(MClassifier this) :
+	{ owningInitializableAttributes() }.addAll(
+		owningInitializableAssociationRoles() 
+	);
+
+
 // -- Attributes --------------------------------------------------------------------------------------------
 
 
@@ -245,7 +292,7 @@ boolean hasDerivedAttributes(MClassifier this) :
 
 /**
  * Returns the list of attributes of an classifier including inherited,
- * whereas inherited attributes are first in the list.
+ * whereas inherited attributes are added first to the list.
  *
  * @return 	The list of attributes of the classifier, otherwise an empty list.
  * @api
@@ -271,7 +318,7 @@ private List[MAttribute] allAttributes(MType this) :
 
 /**
  * Returns the list of initializable attributes of an classifier including inherited which 
- * are neither final nor derived, whereas inherited initializable attributes are first in the list.
+ * are neither final nor derived, whereas inherited initializable attributes are added first to the list.
  *
  * @return	The list of initializable attributes of the classifier, otherwise an empty list.
  * @api
@@ -333,37 +380,8 @@ boolean hasDefaultValue(MAttribute this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/**
- * Getter for a list of all initializable properties. 
- * Excluding final and derived for MAttribute and derived for MAssociationRole.
- * 
- * @return	a list of initializable properties or an empty list
- */
-List[MProperty] owningInitializableProperties(MClassifier this) :
-	{}.addAll(
-		owningInitializableAttributes()
-	).addAll(
-		owningInitializableAssociationRoles() 
-	);
 
-/**
- * Returns the a list of all initializable properties.
- * Excluding final and derived for MAttribute and derived for MAssociationRole.
- * 
- * @return	the list of of initializable properties or an empty list
- */
-List[MProperty] allInitializableProperties(MClassifier this) :
-	{}.addAll(
-		allInitializableAttributes()
-	).addAll(
-		allInitializableAssociationRoles()
-	);
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	attributes
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
 
 
 
@@ -373,6 +391,14 @@ List[MProperty] allInitializableProperties(MClassifier this) :
 	association + association roles
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
+
+
+
+
+
+
+
+
 
 /**
  * checks if a classifier has association roles
@@ -449,15 +475,6 @@ boolean isAssociationClass(MClass this) : ownedAssociation != null;
  */
 boolean isAssociationClass(MClassifier this) : false;
 
-/**
- * checks if an association role belongs to an association class or not
- * @param	aend	an association role
- * @return	true, if it's a plain association role and doesn't belongs to an association class and 
- * 			false, if the association role belongs to an association class
- * @deprecated, use {@link hasAssociationClass(MAssociationRole)}
- */
-boolean isPlainAssociation(MAssociationRole aend) :
-	aend.association.associationClass == null;
 
 /**
  * getter for the association class of an association role
