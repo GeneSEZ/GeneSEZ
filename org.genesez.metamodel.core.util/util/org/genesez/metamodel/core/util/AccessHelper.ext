@@ -81,7 +81,7 @@ boolean isMultiValuedType(MParameter this) :
  * @return	true if the property has a fixed count of values, otherwise false
  */
 boolean hasFixedMultiplicity(MProperty this) : 
-	multiplicity > -1;
+	lowerBoundMultiplicity == upperBoundMultiplicity;
 	
 /**
  * checks if a property has a fixed lower count of values
@@ -102,14 +102,7 @@ boolean hasFixedUpperBoundMultiplicity(MProperty this) :
  * @return	true if the parameter has a fixed count of values, otherwise false
  */
 boolean hasFixedMultiplicity(MParameter this) : 
-	multiplicity > -1;
-
-/**
- * checks if an operation has a fixed count of values
- * @return	true if the operation has a fixed count of values, otherwise false
- */
-boolean hasFixedMultiplicity(MOperation this) : 
-	multiplicity > -1;
+	lowerBoundMultiplicity == upperBoundMultiplicity;
 
 /**
  * checks if a qualified association role has a single qualifier
@@ -566,7 +559,6 @@ List[MComment] ownedComment(MType this) :
 	switch (metaType) {
 		case MGeneric : {}
 		case MExternal : {}
-		case MPrimitiveType : {}
 		default : ((MClassifier)this).ownedComment
 	};
 	
@@ -867,12 +859,6 @@ boolean hasAspect(MElement this, String domain) :
 */
 
 /**
- * checks if the type is a primitive type
- * @return	true if the type is a primitive type, otherwise false
- */
-boolean isPrimitiveType(MType this) : metaType == MPrimitiveType;
-
-/**
  * checks if the type is a generic
  * @return	true if the type is a generic, otherwise false
  */
@@ -915,8 +901,7 @@ boolean isClass(MType this) : MClass.isInstance(this);
 String name(MType this) :
 	switch (metaType) {
 		case MGeneric : ((MGeneric)this).specification
-		case MExternal : ((MExternal)this).specification
-		case MPrimitiveType : ((MPrimitiveType)this).name
+		case MExternal : ((MExternal)this).name
 		default : ((MClassifier)this).name
 	};
 
