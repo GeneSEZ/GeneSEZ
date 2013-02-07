@@ -63,7 +63,7 @@ MParameter cloneParameter(MParameter source, MOperation container) :
 		// clone extended property values
 		clone.processParameter( source.defaultvalue, source.direction, source.multiplicity.cloneMultiplicity() ) ->
 		// clone references
-		clone.setType( source.type ) ->
+		clone.wireType( source.type ) ->
 		clone;
 
 
@@ -75,11 +75,11 @@ MParameter cloneParameter(MParameter source, MOperation container) :
 MParameter cloneReturnParameter(MParameter source, MOperation container) :
 	// create a new parameter, clone basic property values and set containment
 	let clone = createReturnParameter( container, source.cloneXmiGuid( container ), source.name ) :
-		source.logTrace( "cloning: " + source.metaType + ": " ) ->
+		source.logTrace( "cloning return: " + source.metaType + ": " ) ->
 		// clone extended property values
 		clone.processParameter( source.defaultvalue, source.direction, source.multiplicity.cloneMultiplicity() ) ->
 		// clone references
-		clone.setType( source.type ) ->
+		clone.wireType( source.type ) ->
 		clone;
 
 
@@ -93,8 +93,9 @@ MParameter cloneReturnParameter(MParameter source, MOperation container) :
  * Clones the specified multiplicity settings.
  * @return	multiplicity settings without containment.
  */
-MMultiplicity cloneMultiplicity(MMultiplicity this) :
-	createMultiplicity( lowerBound, upperBound, unique, ordered );
+MMultiplicity cloneMultiplicity(MMultiplicity source) :
+	source.logTrace( "cloning: " + source.metaType + ": " ) ->
+	createMultiplicity( source.lowerBound, source.upperBound, source.unique, source.ordered );
 
 
 // -- Extension Mechanism -----------------------------------------------------------------------------------
