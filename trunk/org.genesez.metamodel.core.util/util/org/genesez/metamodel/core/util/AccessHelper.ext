@@ -544,7 +544,7 @@ boolean hasOppositeQualifier(MAssociationRole this) :
  * It returns true, if the association role belongs to and acco
  * 
  * @return	True if the association role belongs to an association class, otherwise 
- *			false if it is a plain association role and does not belongs to an association class.
+ * 			false if it is a plain association role and does not belongs to an association class.
  * @api
  */
 boolean hasAssociationClass(MAssociationRole this) :
@@ -552,14 +552,13 @@ boolean hasAssociationClass(MAssociationRole this) :
 
 
 /**
- * getter for the association class of an association role
- * @param	aend	an association role
- * @return	the association class of an association role (or null)
- * @see		isPlainAssociation
+ * Returns the association class of an association role.
+ * 
+ * @return	The association class of the association role or 
+ * 			null if the association role is a plain association and does not belongs to an association class.
  * @todo do we really need this?
- * @todo rename it to associationClass 
  */
-MClass assocClass(MAssociationRole this) :
+MClass getAssociationClass(MAssociationRole this) :
 	association.associationClass;
 
 
@@ -662,7 +661,7 @@ boolean hasExceptions(MOperation this) : !raisedException.isEmpty;
  * @return	True if the element has at least one comment, otherwise false.
  */
 boolean hasComment(MElement this) :
-	ownedComment.size > 0;
+	!ownedComment.isEmpty;
 
 
 	
