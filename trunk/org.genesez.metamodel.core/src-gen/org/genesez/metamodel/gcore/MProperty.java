@@ -14,10 +14,10 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getVisibility <em>Visibility</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#isDerived <em>Derived</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getClassifier <em>Classifier</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getGenericRealization <em>Generic Realization</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getType <em>Type</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,32 +80,6 @@ public interface MProperty extends MElement
   void setDerived(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Multiplicity</em>' attribute.
-   * @see #setMultiplicity(MMultiplicity)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_Multiplicity()
-   * @model required="true"
-   * @generated
-   */
-  MMultiplicity getMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Multiplicity</em>' attribute.
-   * @see #getMultiplicity()
-   * @generated
-   */
-  void setMultiplicity(MMultiplicity value);
-
-  /**
    * Returns the value of the '<em><b>Classifier</b></em>' container reference.
    * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gcore.MClassifier#getProperty <em>Property</em>}'.
    * <!-- begin-user-doc -->
@@ -165,5 +139,31 @@ public interface MProperty extends MElement
    * @generated
    */
   void setType(MType value);
+
+  /**
+   * Returns the value of the '<em><b>Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Multiplicity</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Multiplicity</em>' containment reference.
+   * @see #setMultiplicity(MMultiplicity)
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_Multiplicity()
+   * @model containment="true" required="true"
+   * @generated
+   */
+  MMultiplicity getMultiplicity();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Multiplicity</em>' containment reference.
+   * @see #getMultiplicity()
+   * @generated
+   */
+  void setMultiplicity(MMultiplicity value);
 
 } // MProperty

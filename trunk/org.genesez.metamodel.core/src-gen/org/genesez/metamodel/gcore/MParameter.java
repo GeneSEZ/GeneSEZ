@@ -14,11 +14,11 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.MParameter#getDefaultvalue <em>Defaultvalue</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MParameter#getDirection <em>Direction</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MParameter#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MParameter#getGenericRealization <em>Generic Realization</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MParameter#getType <em>Type</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MParameter#getEvent <em>Event</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MParameter#getOperation <em>Operation</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MParameter#getMultiplicity <em>Multiplicity</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,32 +79,6 @@ public interface MParameter extends MElement
    * @generated
    */
   void setDirection(String value);
-
-  /**
-   * Returns the value of the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Multiplicity</em>' attribute.
-   * @see #setMultiplicity(MMultiplicity)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMParameter_Multiplicity()
-   * @model required="true"
-   * @generated
-   */
-  MMultiplicity getMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MParameter#getMultiplicity <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Multiplicity</em>' attribute.
-   * @see #getMultiplicity()
-   * @generated
-   */
-  void setMultiplicity(MMultiplicity value);
 
   /**
    * Returns the value of the '<em><b>Generic Realization</b></em>' containment reference list.
@@ -192,5 +166,31 @@ public interface MParameter extends MElement
    * @generated
    */
   void setOperation(MOperation value);
+
+  /**
+   * Returns the value of the '<em><b>Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Multiplicity</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Multiplicity</em>' containment reference.
+   * @see #setMultiplicity(MMultiplicity)
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMParameter_Multiplicity()
+   * @model containment="true" required="true"
+   * @generated
+   */
+  MMultiplicity getMultiplicity();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gcore.MParameter#getMultiplicity <em>Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Multiplicity</em>' containment reference.
+   * @see #getMultiplicity()
+   * @generated
+   */
+  void setMultiplicity(MMultiplicity value);
 
 } // MParameter

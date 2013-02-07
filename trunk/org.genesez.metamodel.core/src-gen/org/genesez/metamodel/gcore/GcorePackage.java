@@ -343,22 +343,22 @@ public interface GcorePackage extends EPackage
   int MPACKAGE__EVENT = MDEFINITION_CONTEXT__EVENT;
 
   /**
-   * The feature id for the '<em><b>Nested Package</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPACKAGE__NESTED_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Nesting Package</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MPACKAGE__NESTING_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 1;
+  int MPACKAGE__NESTING_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Nested Package</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPACKAGE__NESTED_PACKAGE = MDEFINITION_CONTEXT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Association</b></em>' containment reference list.
@@ -886,22 +886,13 @@ public interface GcorePackage extends EPackage
   int MPROPERTY__DERIVED = MELEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPROPERTY__MULTIPLICITY = MELEMENT_FEATURE_COUNT + 2;
-
-  /**
    * The feature id for the '<em><b>Classifier</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MPROPERTY__CLASSIFIER = MELEMENT_FEATURE_COUNT + 3;
+  int MPROPERTY__CLASSIFIER = MELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Generic Realization</b></em>' containment reference list.
@@ -910,7 +901,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 4;
+  int MPROPERTY__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -919,7 +910,16 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPROPERTY__TYPE = MELEMENT_FEATURE_COUNT + 5;
+  int MPROPERTY__TYPE = MELEMENT_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPROPERTY__MULTIPLICITY = MELEMENT_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>MProperty</em>' class.
@@ -1013,15 +1013,6 @@ public interface GcorePackage extends EPackage
   int MASSOCIATION_ROLE__DERIVED = MPROPERTY__DERIVED;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MASSOCIATION_ROLE__MULTIPLICITY = MPROPERTY__MULTIPLICITY;
-
-  /**
    * The feature id for the '<em><b>Classifier</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1049,6 +1040,15 @@ public interface GcorePackage extends EPackage
   int MASSOCIATION_ROLE__TYPE = MPROPERTY__TYPE;
 
   /**
+   * The feature id for the '<em><b>Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MASSOCIATION_ROLE__MULTIPLICITY = MPROPERTY__MULTIPLICITY;
+
+  /**
    * The feature id for the '<em><b>Aggregation</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1067,31 +1067,13 @@ public interface GcorePackage extends EPackage
   int MASSOCIATION_ROLE__COMPOSITION = MPROPERTY_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Opposite Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Qualifier Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 3;
-
-  /**
    * The feature id for the '<em><b>Association</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__ASSOCIATION = MPROPERTY_FEATURE_COUNT + 4;
+  int MASSOCIATION_ROLE__ASSOCIATION = MPROPERTY_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Opposite</b></em>' reference.
@@ -1100,7 +1082,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__OPPOSITE = MPROPERTY_FEATURE_COUNT + 5;
+  int MASSOCIATION_ROLE__OPPOSITE = MPROPERTY_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Qualifier</b></em>' reference.
@@ -1109,7 +1091,25 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MASSOCIATION_ROLE__QUALIFIER = MPROPERTY_FEATURE_COUNT + 6;
+  int MASSOCIATION_ROLE__QUALIFIER = MPROPERTY_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>Opposite Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 5;
+
+  /**
+   * The feature id for the '<em><b>Qualifier Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY = MPROPERTY_FEATURE_COUNT + 6;
 
   /**
    * The number of structural features of the '<em>MAssociation Role</em>' class.
@@ -1312,15 +1312,6 @@ public interface GcorePackage extends EPackage
   int MATTRIBUTE__DERIVED = MPROPERTY__DERIVED;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MATTRIBUTE__MULTIPLICITY = MPROPERTY__MULTIPLICITY;
-
-  /**
    * The feature id for the '<em><b>Classifier</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1346,6 +1337,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MATTRIBUTE__TYPE = MPROPERTY__TYPE;
+
+  /**
+   * The feature id for the '<em><b>Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATTRIBUTE__MULTIPLICITY = MPROPERTY__MULTIPLICITY;
 
   /**
    * The feature id for the '<em><b>Defaultvalue</b></em>' attribute.
@@ -1484,15 +1484,6 @@ public interface GcorePackage extends EPackage
   int MMODEL__EVENT = MPACKAGE__EVENT;
 
   /**
-   * The feature id for the '<em><b>Nested Package</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MMODEL__NESTED_PACKAGE = MPACKAGE__NESTED_PACKAGE;
-
-  /**
    * The feature id for the '<em><b>Nesting Package</b></em>' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1500,6 +1491,15 @@ public interface GcorePackage extends EPackage
    * @ordered
    */
   int MMODEL__NESTING_PACKAGE = MPACKAGE__NESTING_PACKAGE;
+
+  /**
+   * The feature id for the '<em><b>Nested Package</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MMODEL__NESTED_PACKAGE = MPACKAGE__NESTED_PACKAGE;
 
   /**
    * The feature id for the '<em><b>Association</b></em>' containment reference list.
@@ -1982,22 +1982,13 @@ public interface GcorePackage extends EPackage
   int MPARAMETER__DIRECTION = MELEMENT_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MPARAMETER__MULTIPLICITY = MELEMENT_FEATURE_COUNT + 2;
-
-  /**
    * The feature id for the '<em><b>Generic Realization</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MPARAMETER__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 3;
+  int MPARAMETER__GENERIC_REALIZATION = MELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' reference.
@@ -2006,7 +1997,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__TYPE = MELEMENT_FEATURE_COUNT + 4;
+  int MPARAMETER__TYPE = MELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Event</b></em>' container reference.
@@ -2015,7 +2006,7 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__EVENT = MELEMENT_FEATURE_COUNT + 5;
+  int MPARAMETER__EVENT = MELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Operation</b></em>' reference.
@@ -2024,7 +2015,16 @@ public interface GcorePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MPARAMETER__OPERATION = MELEMENT_FEATURE_COUNT + 6;
+  int MPARAMETER__OPERATION = MELEMENT_FEATURE_COUNT + 5;
+
+  /**
+   * The feature id for the '<em><b>Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MPARAMETER__MULTIPLICITY = MELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The number of structural features of the '<em>MParameter</em>' class.
@@ -2644,22 +2644,22 @@ public interface GcorePackage extends EPackage
   int MCOMMENT__OWNING_ELEMENT = 2;
 
   /**
-   * The feature id for the '<em><b>Nesting Comment</b></em>' container reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MCOMMENT__NESTING_COMMENT = 3;
-
-  /**
    * The feature id for the '<em><b>Nested Comment</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MCOMMENT__NESTED_COMMENT = 4;
+  int MCOMMENT__NESTED_COMMENT = 3;
+
+  /**
+   * The feature id for the '<em><b>Nesting Comment</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MCOMMENT__NESTING_COMMENT = 4;
 
   /**
    * The number of structural features of the '<em>MComment</em>' class.
@@ -5997,17 +5997,6 @@ public interface GcorePackage extends EPackage
   EClass getMPackage();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MPackage#getNestedPackage <em>Nested Package</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Nested Package</em>'.
-   * @see org.genesez.metamodel.gcore.MPackage#getNestedPackage()
-   * @see #getMPackage()
-   * @generated
-   */
-  EReference getMPackage_NestedPackage();
-
-  /**
    * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MPackage#getNestingPackage <em>Nesting Package</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6017,6 +6006,17 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMPackage_NestingPackage();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MPackage#getNestedPackage <em>Nested Package</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Nested Package</em>'.
+   * @see org.genesez.metamodel.gcore.MPackage#getNestedPackage()
+   * @see #getMPackage()
+   * @generated
+   */
+  EReference getMPackage_NestedPackage();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MPackage#getAssociation <em>Association</em>}'.
@@ -6083,28 +6083,6 @@ public interface GcorePackage extends EPackage
   EAttribute getMAssociationRole_Composition();
 
   /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Opposite Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity()
-   * @see #getMAssociationRole()
-   * @generated
-   */
-  EAttribute getMAssociationRole_OppositeMultiplicity();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Qualifier Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity()
-   * @see #getMAssociationRole()
-   * @generated
-   */
-  EAttribute getMAssociationRole_QualifierMultiplicity();
-
-  /**
    * Returns the meta object for the reference '{@link org.genesez.metamodel.gcore.MAssociationRole#getAssociation <em>Association</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6136,6 +6114,28 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMAssociationRole_Qualifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Opposite Multiplicity</em>'.
+   * @see org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity()
+   * @see #getMAssociationRole()
+   * @generated
+   */
+  EReference getMAssociationRole_OppositeMultiplicity();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Qualifier Multiplicity</em>'.
+   * @see org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity()
+   * @see #getMAssociationRole()
+   * @generated
+   */
+  EReference getMAssociationRole_QualifierMultiplicity();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MAssociation <em>MAssociation</em>}'.
@@ -6375,17 +6375,6 @@ public interface GcorePackage extends EPackage
   EAttribute getMProperty_Derived();
 
   /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MProperty#getMultiplicity()
-   * @see #getMProperty()
-   * @generated
-   */
-  EAttribute getMProperty_Multiplicity();
-
-  /**
    * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MProperty#getClassifier <em>Classifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6417,6 +6406,17 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMProperty_Type();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Multiplicity</em>'.
+   * @see org.genesez.metamodel.gcore.MProperty#getMultiplicity()
+   * @see #getMProperty()
+   * @generated
+   */
+  EReference getMProperty_Multiplicity();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MInterface <em>MInterface</em>}'.
@@ -6690,17 +6690,6 @@ public interface GcorePackage extends EPackage
   EAttribute getMParameter_Direction();
 
   /**
-   * Returns the meta object for the attribute '{@link org.genesez.metamodel.gcore.MParameter#getMultiplicity <em>Multiplicity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Multiplicity</em>'.
-   * @see org.genesez.metamodel.gcore.MParameter#getMultiplicity()
-   * @see #getMParameter()
-   * @generated
-   */
-  EAttribute getMParameter_Multiplicity();
-
-  /**
    * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MParameter#getGenericRealization <em>Generic Realization</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6743,6 +6732,17 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMParameter_Operation();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.genesez.metamodel.gcore.MParameter#getMultiplicity <em>Multiplicity</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Multiplicity</em>'.
+   * @see org.genesez.metamodel.gcore.MParameter#getMultiplicity()
+   * @see #getMParameter()
+   * @generated
+   */
+  EReference getMParameter_Multiplicity();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MDataType <em>MData Type</em>}'.
@@ -6905,17 +6905,6 @@ public interface GcorePackage extends EPackage
   EReference getMComment_OwningElement();
 
   /**
-   * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MComment#getNestingComment <em>Nesting Comment</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the container reference '<em>Nesting Comment</em>'.
-   * @see org.genesez.metamodel.gcore.MComment#getNestingComment()
-   * @see #getMComment()
-   * @generated
-   */
-  EReference getMComment_NestingComment();
-
-  /**
    * Returns the meta object for the containment reference list '{@link org.genesez.metamodel.gcore.MComment#getNestedComment <em>Nested Comment</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6925,6 +6914,17 @@ public interface GcorePackage extends EPackage
    * @generated
    */
   EReference getMComment_NestedComment();
+
+  /**
+   * Returns the meta object for the container reference '{@link org.genesez.metamodel.gcore.MComment#getNestingComment <em>Nesting Comment</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the container reference '<em>Nesting Comment</em>'.
+   * @see org.genesez.metamodel.gcore.MComment#getNestingComment()
+   * @see #getMComment()
+   * @generated
+   */
+  EReference getMComment_NestingComment();
 
   /**
    * Returns the meta object for class '{@link org.genesez.metamodel.gcore.MTaggedValue <em>MTagged Value</em>}'.
@@ -8304,20 +8304,20 @@ public interface GcorePackage extends EPackage
     EClass MPACKAGE = eINSTANCE.getMPackage();
 
     /**
-     * The meta object literal for the '<em><b>Nested Package</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MPACKAGE__NESTED_PACKAGE = eINSTANCE.getMPackage_NestedPackage();
-
-    /**
      * The meta object literal for the '<em><b>Nesting Package</b></em>' container reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference MPACKAGE__NESTING_PACKAGE = eINSTANCE.getMPackage_NestingPackage();
+
+    /**
+     * The meta object literal for the '<em><b>Nested Package</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MPACKAGE__NESTED_PACKAGE = eINSTANCE.getMPackage_NestedPackage();
 
     /**
      * The meta object literal for the '<em><b>Association</b></em>' containment reference list feature.
@@ -8372,22 +8372,6 @@ public interface GcorePackage extends EPackage
     EAttribute MASSOCIATION_ROLE__COMPOSITION = eINSTANCE.getMAssociationRole_Composition();
 
     /**
-     * The meta object literal for the '<em><b>Opposite Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY = eINSTANCE.getMAssociationRole_OppositeMultiplicity();
-
-    /**
-     * The meta object literal for the '<em><b>Qualifier Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY = eINSTANCE.getMAssociationRole_QualifierMultiplicity();
-
-    /**
      * The meta object literal for the '<em><b>Association</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -8410,6 +8394,22 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EReference MASSOCIATION_ROLE__QUALIFIER = eINSTANCE.getMAssociationRole_Qualifier();
+
+    /**
+     * The meta object literal for the '<em><b>Opposite Multiplicity</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY = eINSTANCE.getMAssociationRole_OppositeMultiplicity();
+
+    /**
+     * The meta object literal for the '<em><b>Qualifier Multiplicity</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY = eINSTANCE.getMAssociationRole_QualifierMultiplicity();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MAssociationImpl <em>MAssociation</em>}' class.
@@ -8598,14 +8598,6 @@ public interface GcorePackage extends EPackage
     EAttribute MPROPERTY__DERIVED = eINSTANCE.getMProperty_Derived();
 
     /**
-     * The meta object literal for the '<em><b>Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MPROPERTY__MULTIPLICITY = eINSTANCE.getMProperty_Multiplicity();
-
-    /**
      * The meta object literal for the '<em><b>Classifier</b></em>' container reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -8628,6 +8620,14 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EReference MPROPERTY__TYPE = eINSTANCE.getMProperty_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Multiplicity</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MPROPERTY__MULTIPLICITY = eINSTANCE.getMProperty_Multiplicity();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MInterfaceImpl <em>MInterface</em>}' class.
@@ -8838,14 +8838,6 @@ public interface GcorePackage extends EPackage
     EAttribute MPARAMETER__DIRECTION = eINSTANCE.getMParameter_Direction();
 
     /**
-     * The meta object literal for the '<em><b>Multiplicity</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MPARAMETER__MULTIPLICITY = eINSTANCE.getMParameter_Multiplicity();
-
-    /**
      * The meta object literal for the '<em><b>Generic Realization</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -8876,6 +8868,14 @@ public interface GcorePackage extends EPackage
      * @generated
      */
     EReference MPARAMETER__OPERATION = eINSTANCE.getMParameter_Operation();
+
+    /**
+     * The meta object literal for the '<em><b>Multiplicity</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MPARAMETER__MULTIPLICITY = eINSTANCE.getMParameter_Multiplicity();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MDataTypeImpl <em>MData Type</em>}' class.
@@ -9008,20 +9008,20 @@ public interface GcorePackage extends EPackage
     EReference MCOMMENT__OWNING_ELEMENT = eINSTANCE.getMComment_OwningElement();
 
     /**
-     * The meta object literal for the '<em><b>Nesting Comment</b></em>' container reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MCOMMENT__NESTING_COMMENT = eINSTANCE.getMComment_NestingComment();
-
-    /**
      * The meta object literal for the '<em><b>Nested Comment</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference MCOMMENT__NESTED_COMMENT = eINSTANCE.getMComment_NestedComment();
+
+    /**
+     * The meta object literal for the '<em><b>Nesting Comment</b></em>' container reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MCOMMENT__NESTING_COMMENT = eINSTANCE.getMComment_NestingComment();
 
     /**
      * The meta object literal for the '{@link org.genesez.metamodel.gcore.impl.MTaggedValueImpl <em>MTagged Value</em>}' class.

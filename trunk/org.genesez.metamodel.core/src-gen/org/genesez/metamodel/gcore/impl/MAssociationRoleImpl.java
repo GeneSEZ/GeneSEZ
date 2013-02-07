@@ -25,11 +25,11 @@ import org.genesez.metamodel.gcore.MType;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#isAggregation <em>Aggregation</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#isComposition <em>Composition</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getOppositeMultiplicity <em>Opposite Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getAssociation <em>Association</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getOpposite <em>Opposite</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getQualifier <em>Qualifier</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getOppositeMultiplicity <em>Opposite Multiplicity</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,46 +78,6 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
   protected boolean composition = COMPOSITION_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getOppositeMultiplicity() <em>Opposite Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOppositeMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final MMultiplicity OPPOSITE_MULTIPLICITY_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getOppositeMultiplicity() <em>Opposite Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOppositeMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected MMultiplicity oppositeMultiplicity = OPPOSITE_MULTIPLICITY_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getQualifierMultiplicity() <em>Qualifier Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getQualifierMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final MMultiplicity QUALIFIER_MULTIPLICITY_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getQualifierMultiplicity() <em>Qualifier Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getQualifierMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected MMultiplicity qualifierMultiplicity = QUALIFIER_MULTIPLICITY_EDEFAULT;
-
-  /**
    * The cached value of the '{@link #getAssociation() <em>Association</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -146,6 +106,26 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * @ordered
    */
   protected MType qualifier;
+
+  /**
+   * The cached value of the '{@link #getOppositeMultiplicity() <em>Opposite Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOppositeMultiplicity()
+   * @generated
+   * @ordered
+   */
+  protected MMultiplicity oppositeMultiplicity;
+
+  /**
+   * The cached value of the '{@link #getQualifierMultiplicity() <em>Qualifier Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getQualifierMultiplicity()
+   * @generated
+   * @ordered
+   */
+  protected MMultiplicity qualifierMultiplicity;
 
   /**
    * <!-- begin-user-doc -->
@@ -212,52 +192,6 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
     composition = newComposition;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__COMPOSITION, oldComposition, composition));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MMultiplicity getOppositeMultiplicity()
-  {
-    return oppositeMultiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOppositeMultiplicity(MMultiplicity newOppositeMultiplicity)
-  {
-    MMultiplicity oldOppositeMultiplicity = oppositeMultiplicity;
-    oppositeMultiplicity = newOppositeMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY, oldOppositeMultiplicity, oppositeMultiplicity));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MMultiplicity getQualifierMultiplicity()
-  {
-    return qualifierMultiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setQualifierMultiplicity(MMultiplicity newQualifierMultiplicity)
-  {
-    MMultiplicity oldQualifierMultiplicity = qualifierMultiplicity;
-    qualifierMultiplicity = newQualifierMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY, oldQualifierMultiplicity, qualifierMultiplicity));
   }
 
   /**
@@ -419,6 +353,102 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * <!-- end-user-doc -->
    * @generated
    */
+  public MMultiplicity getOppositeMultiplicity()
+  {
+    return oppositeMultiplicity;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetOppositeMultiplicity(MMultiplicity newOppositeMultiplicity, NotificationChain msgs)
+  {
+    MMultiplicity oldOppositeMultiplicity = oppositeMultiplicity;
+    oppositeMultiplicity = newOppositeMultiplicity;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY, oldOppositeMultiplicity, newOppositeMultiplicity);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOppositeMultiplicity(MMultiplicity newOppositeMultiplicity)
+  {
+    if (newOppositeMultiplicity != oppositeMultiplicity)
+    {
+      NotificationChain msgs = null;
+      if (oppositeMultiplicity != null)
+        msgs = ((InternalEObject)oppositeMultiplicity).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY, null, msgs);
+      if (newOppositeMultiplicity != null)
+        msgs = ((InternalEObject)newOppositeMultiplicity).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY, null, msgs);
+      msgs = basicSetOppositeMultiplicity(newOppositeMultiplicity, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY, newOppositeMultiplicity, newOppositeMultiplicity));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MMultiplicity getQualifierMultiplicity()
+  {
+    return qualifierMultiplicity;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetQualifierMultiplicity(MMultiplicity newQualifierMultiplicity, NotificationChain msgs)
+  {
+    MMultiplicity oldQualifierMultiplicity = qualifierMultiplicity;
+    qualifierMultiplicity = newQualifierMultiplicity;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY, oldQualifierMultiplicity, newQualifierMultiplicity);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setQualifierMultiplicity(MMultiplicity newQualifierMultiplicity)
+  {
+    if (newQualifierMultiplicity != qualifierMultiplicity)
+    {
+      NotificationChain msgs = null;
+      if (qualifierMultiplicity != null)
+        msgs = ((InternalEObject)qualifierMultiplicity).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY, null, msgs);
+      if (newQualifierMultiplicity != null)
+        msgs = ((InternalEObject)newQualifierMultiplicity).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY, null, msgs);
+      msgs = basicSetQualifierMultiplicity(newQualifierMultiplicity, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY, newQualifierMultiplicity, newQualifierMultiplicity));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -444,6 +474,10 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
     {
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
         return basicSetAssociation(null, msgs);
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        return basicSetOppositeMultiplicity(null, msgs);
+      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
+        return basicSetQualifierMultiplicity(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -462,10 +496,6 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
         return isAggregation();
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         return isComposition();
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
-        return getOppositeMultiplicity();
-      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
-        return getQualifierMultiplicity();
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
         if (resolve) return getAssociation();
         return basicGetAssociation();
@@ -475,6 +505,10 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER:
         if (resolve) return getQualifier();
         return basicGetQualifier();
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        return getOppositeMultiplicity();
+      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
+        return getQualifierMultiplicity();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -495,12 +529,6 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         setComposition((Boolean)newValue);
         return;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
-        setOppositeMultiplicity((MMultiplicity)newValue);
-        return;
-      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
-        setQualifierMultiplicity((MMultiplicity)newValue);
-        return;
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
         setAssociation((MAssociation)newValue);
         return;
@@ -509,6 +537,12 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
         return;
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER:
         setQualifier((MType)newValue);
+        return;
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        setOppositeMultiplicity((MMultiplicity)newValue);
+        return;
+      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
+        setQualifierMultiplicity((MMultiplicity)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -530,12 +564,6 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         setComposition(COMPOSITION_EDEFAULT);
         return;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
-        setOppositeMultiplicity(OPPOSITE_MULTIPLICITY_EDEFAULT);
-        return;
-      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
-        setQualifierMultiplicity(QUALIFIER_MULTIPLICITY_EDEFAULT);
-        return;
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
         setAssociation((MAssociation)null);
         return;
@@ -544,6 +572,12 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
         return;
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER:
         setQualifier((MType)null);
+        return;
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        setOppositeMultiplicity((MMultiplicity)null);
+        return;
+      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
+        setQualifierMultiplicity((MMultiplicity)null);
         return;
     }
     super.eUnset(featureID);
@@ -563,16 +597,16 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
         return aggregation != AGGREGATION_EDEFAULT;
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         return composition != COMPOSITION_EDEFAULT;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
-        return OPPOSITE_MULTIPLICITY_EDEFAULT == null ? oppositeMultiplicity != null : !OPPOSITE_MULTIPLICITY_EDEFAULT.equals(oppositeMultiplicity);
-      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
-        return QUALIFIER_MULTIPLICITY_EDEFAULT == null ? qualifierMultiplicity != null : !QUALIFIER_MULTIPLICITY_EDEFAULT.equals(qualifierMultiplicity);
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
         return association != null;
       case GcorePackage.MASSOCIATION_ROLE__OPPOSITE:
         return opposite != null;
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER:
         return qualifier != null;
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        return oppositeMultiplicity != null;
+      case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
+        return qualifierMultiplicity != null;
     }
     return super.eIsSet(featureID);
   }
@@ -592,10 +626,6 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
     result.append(aggregation);
     result.append(", composition: ");
     result.append(composition);
-    result.append(", oppositeMultiplicity: ");
-    result.append(oppositeMultiplicity);
-    result.append(", qualifierMultiplicity: ");
-    result.append(qualifierMultiplicity);
     result.append(')');
     return result.toString();
   }
