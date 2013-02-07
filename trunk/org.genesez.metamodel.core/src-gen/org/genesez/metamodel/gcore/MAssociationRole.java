@@ -13,8 +13,7 @@ package org.genesez.metamodel.gcore;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#isAggregation <em>Aggregation</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#isComposition <em>Composition</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeLowerBoundMultiplicity <em>Opposite Lower Bound Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeUpperBoundMultiplicity <em>Opposite Upper Bound Multiplicity</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getAssociation <em>Association</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOpposite <em>Opposite</em>}</li>
@@ -81,56 +80,30 @@ public interface MAssociationRole extends MProperty
   void setComposition(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Opposite Lower Bound Multiplicity</b></em>' attribute.
+   * Returns the value of the '<em><b>Opposite Multiplicity</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Opposite Lower Bound Multiplicity</em>' attribute isn't clear,
+   * If the meaning of the '<em>Opposite Multiplicity</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Opposite Lower Bound Multiplicity</em>' attribute.
-   * @see #setOppositeLowerBoundMultiplicity(int)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_OppositeLowerBoundMultiplicity()
+   * @return the value of the '<em>Opposite Multiplicity</em>' attribute.
+   * @see #setOppositeMultiplicity(MMultiplicity)
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_OppositeMultiplicity()
    * @model required="true"
    * @generated
    */
-  int getOppositeLowerBoundMultiplicity();
+  MMultiplicity getOppositeMultiplicity();
 
   /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeLowerBoundMultiplicity <em>Opposite Lower Bound Multiplicity</em>}' attribute.
+   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Opposite Lower Bound Multiplicity</em>' attribute.
-   * @see #getOppositeLowerBoundMultiplicity()
+   * @param value the new value of the '<em>Opposite Multiplicity</em>' attribute.
+   * @see #getOppositeMultiplicity()
    * @generated
    */
-  void setOppositeLowerBoundMultiplicity(int value);
-
-  /**
-   * Returns the value of the '<em><b>Opposite Upper Bound Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Opposite Upper Bound Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Opposite Upper Bound Multiplicity</em>' attribute.
-   * @see #setOppositeUpperBoundMultiplicity(int)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_OppositeUpperBoundMultiplicity()
-   * @model required="true"
-   * @generated
-   */
-  int getOppositeUpperBoundMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeUpperBoundMultiplicity <em>Opposite Upper Bound Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Opposite Upper Bound Multiplicity</em>' attribute.
-   * @see #getOppositeUpperBoundMultiplicity()
-   * @generated
-   */
-  void setOppositeUpperBoundMultiplicity(int value);
+  void setOppositeMultiplicity(MMultiplicity value);
 
   /**
    * Returns the value of the '<em><b>Qualifier Multiplicity</b></em>' attribute.
@@ -141,12 +114,12 @@ public interface MAssociationRole extends MProperty
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Qualifier Multiplicity</em>' attribute.
-   * @see #setQualifierMultiplicity(int)
+   * @see #setQualifierMultiplicity(MMultiplicity)
    * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_QualifierMultiplicity()
    * @model required="true"
    * @generated
    */
-  int getQualifierMultiplicity();
+  MMultiplicity getQualifierMultiplicity();
 
   /**
    * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}' attribute.
@@ -156,7 +129,7 @@ public interface MAssociationRole extends MProperty
    * @see #getQualifierMultiplicity()
    * @generated
    */
-  void setQualifierMultiplicity(int value);
+  void setQualifierMultiplicity(MMultiplicity value);
 
   /**
    * Returns the value of the '<em><b>Association</b></em>' reference.

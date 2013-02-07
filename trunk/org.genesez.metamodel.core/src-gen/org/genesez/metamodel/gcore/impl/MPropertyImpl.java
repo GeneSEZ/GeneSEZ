@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.gcore.MClassifier;
 import org.genesez.metamodel.gcore.MGeneric;
+import org.genesez.metamodel.gcore.MMultiplicity;
 import org.genesez.metamodel.gcore.MProperty;
 import org.genesez.metamodel.gcore.MType;
 
@@ -32,10 +33,7 @@ import org.genesez.metamodel.gcore.MType;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getVisibility <em>Visibility</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#isDerived <em>Derived</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getUpperBoundMultiplicity <em>Upper Bound Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#isUnique <em>Unique</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#isOrdered <em>Ordered</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getClassifier <em>Classifier</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getGenericRealization <em>Generic Realization</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getType <em>Type</em>}</li>
@@ -87,84 +85,24 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
   protected boolean derived = DERIVED_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getLowerBoundMultiplicity() <em>Lower Bound Multiplicity</em>}' attribute.
+   * The default value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getLowerBoundMultiplicity()
+   * @see #getMultiplicity()
    * @generated
    * @ordered
    */
-  protected static final int LOWER_BOUND_MULTIPLICITY_EDEFAULT = 0;
+  protected static final MMultiplicity MULTIPLICITY_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getLowerBoundMultiplicity() <em>Lower Bound Multiplicity</em>}' attribute.
+   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getLowerBoundMultiplicity()
+   * @see #getMultiplicity()
    * @generated
    * @ordered
    */
-  protected int lowerBoundMultiplicity = LOWER_BOUND_MULTIPLICITY_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getUpperBoundMultiplicity() <em>Upper Bound Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getUpperBoundMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final int UPPER_BOUND_MULTIPLICITY_EDEFAULT = 0;
-
-  /**
-   * The cached value of the '{@link #getUpperBoundMultiplicity() <em>Upper Bound Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getUpperBoundMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected int upperBoundMultiplicity = UPPER_BOUND_MULTIPLICITY_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #isUnique() <em>Unique</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isUnique()
-   * @generated
-   * @ordered
-   */
-  protected static final boolean UNIQUE_EDEFAULT = false;
-
-  /**
-   * The cached value of the '{@link #isUnique() <em>Unique</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isUnique()
-   * @generated
-   * @ordered
-   */
-  protected boolean unique = UNIQUE_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #isOrdered() <em>Ordered</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isOrdered()
-   * @generated
-   * @ordered
-   */
-  protected static final boolean ORDERED_EDEFAULT = false;
-
-  /**
-   * The cached value of the '{@link #isOrdered() <em>Ordered</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isOrdered()
-   * @generated
-   * @ordered
-   */
-  protected boolean ordered = ORDERED_EDEFAULT;
+  protected MMultiplicity multiplicity = MULTIPLICITY_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getGenericRealization() <em>Generic Realization</em>}' containment reference list.
@@ -258,9 +196,9 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getLowerBoundMultiplicity()
+  public MMultiplicity getMultiplicity()
   {
-    return lowerBoundMultiplicity;
+    return multiplicity;
   }
 
   /**
@@ -268,81 +206,12 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLowerBoundMultiplicity(int newLowerBoundMultiplicity)
+  public void setMultiplicity(MMultiplicity newMultiplicity)
   {
-    int oldLowerBoundMultiplicity = lowerBoundMultiplicity;
-    lowerBoundMultiplicity = newLowerBoundMultiplicity;
+    MMultiplicity oldMultiplicity = multiplicity;
+    multiplicity = newMultiplicity;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY, oldLowerBoundMultiplicity, lowerBoundMultiplicity));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public int getUpperBoundMultiplicity()
-  {
-    return upperBoundMultiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setUpperBoundMultiplicity(int newUpperBoundMultiplicity)
-  {
-    int oldUpperBoundMultiplicity = upperBoundMultiplicity;
-    upperBoundMultiplicity = newUpperBoundMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__UPPER_BOUND_MULTIPLICITY, oldUpperBoundMultiplicity, upperBoundMultiplicity));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public boolean isUnique()
-  {
-    return unique;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setUnique(boolean newUnique)
-  {
-    boolean oldUnique = unique;
-    unique = newUnique;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__UNIQUE, oldUnique, unique));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public boolean isOrdered()
-  {
-    return ordered;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOrdered(boolean newOrdered)
-  {
-    boolean oldOrdered = ordered;
-    ordered = newOrdered;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__ORDERED, oldOrdered, ordered));
+      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__MULTIPLICITY, oldMultiplicity, multiplicity));
   }
 
   /**
@@ -482,14 +351,8 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return getVisibility();
       case GcorePackage.MPROPERTY__DERIVED:
         return isDerived();
-      case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
-        return getLowerBoundMultiplicity();
-      case GcorePackage.MPROPERTY__UPPER_BOUND_MULTIPLICITY:
-        return getUpperBoundMultiplicity();
-      case GcorePackage.MPROPERTY__UNIQUE:
-        return isUnique();
-      case GcorePackage.MPROPERTY__ORDERED:
-        return isOrdered();
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        return getMultiplicity();
       case GcorePackage.MPROPERTY__CLASSIFIER:
         return getClassifier();
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
@@ -518,17 +381,8 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
       case GcorePackage.MPROPERTY__DERIVED:
         setDerived((Boolean)newValue);
         return;
-      case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
-        setLowerBoundMultiplicity((Integer)newValue);
-        return;
-      case GcorePackage.MPROPERTY__UPPER_BOUND_MULTIPLICITY:
-        setUpperBoundMultiplicity((Integer)newValue);
-        return;
-      case GcorePackage.MPROPERTY__UNIQUE:
-        setUnique((Boolean)newValue);
-        return;
-      case GcorePackage.MPROPERTY__ORDERED:
-        setOrdered((Boolean)newValue);
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        setMultiplicity((MMultiplicity)newValue);
         return;
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
         getGenericRealization().clear();
@@ -557,17 +411,8 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
       case GcorePackage.MPROPERTY__DERIVED:
         setDerived(DERIVED_EDEFAULT);
         return;
-      case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
-        setLowerBoundMultiplicity(LOWER_BOUND_MULTIPLICITY_EDEFAULT);
-        return;
-      case GcorePackage.MPROPERTY__UPPER_BOUND_MULTIPLICITY:
-        setUpperBoundMultiplicity(UPPER_BOUND_MULTIPLICITY_EDEFAULT);
-        return;
-      case GcorePackage.MPROPERTY__UNIQUE:
-        setUnique(UNIQUE_EDEFAULT);
-        return;
-      case GcorePackage.MPROPERTY__ORDERED:
-        setOrdered(ORDERED_EDEFAULT);
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        setMultiplicity(MULTIPLICITY_EDEFAULT);
         return;
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
         getGenericRealization().clear();
@@ -593,14 +438,8 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return VISIBILITY_EDEFAULT == null ? visibility != null : !VISIBILITY_EDEFAULT.equals(visibility);
       case GcorePackage.MPROPERTY__DERIVED:
         return derived != DERIVED_EDEFAULT;
-      case GcorePackage.MPROPERTY__LOWER_BOUND_MULTIPLICITY:
-        return lowerBoundMultiplicity != LOWER_BOUND_MULTIPLICITY_EDEFAULT;
-      case GcorePackage.MPROPERTY__UPPER_BOUND_MULTIPLICITY:
-        return upperBoundMultiplicity != UPPER_BOUND_MULTIPLICITY_EDEFAULT;
-      case GcorePackage.MPROPERTY__UNIQUE:
-        return unique != UNIQUE_EDEFAULT;
-      case GcorePackage.MPROPERTY__ORDERED:
-        return ordered != ORDERED_EDEFAULT;
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        return MULTIPLICITY_EDEFAULT == null ? multiplicity != null : !MULTIPLICITY_EDEFAULT.equals(multiplicity);
       case GcorePackage.MPROPERTY__CLASSIFIER:
         return getClassifier() != null;
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
@@ -626,14 +465,8 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
     result.append(visibility);
     result.append(", derived: ");
     result.append(derived);
-    result.append(", lowerBoundMultiplicity: ");
-    result.append(lowerBoundMultiplicity);
-    result.append(", upperBoundMultiplicity: ");
-    result.append(upperBoundMultiplicity);
-    result.append(", unique: ");
-    result.append(unique);
-    result.append(", ordered: ");
-    result.append(ordered);
+    result.append(", multiplicity: ");
+    result.append(multiplicity);
     result.append(')');
     return result.toString();
   }

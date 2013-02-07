@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.genesez.metamodel.gcore.GcorePackage;
 import org.genesez.metamodel.gcore.MAssociation;
 import org.genesez.metamodel.gcore.MAssociationRole;
+import org.genesez.metamodel.gcore.MMultiplicity;
 import org.genesez.metamodel.gcore.MType;
 
 /**
@@ -24,8 +25,7 @@ import org.genesez.metamodel.gcore.MType;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#isAggregation <em>Aggregation</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#isComposition <em>Composition</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getOppositeLowerBoundMultiplicity <em>Opposite Lower Bound Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getOppositeUpperBoundMultiplicity <em>Opposite Upper Bound Multiplicity</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getOppositeMultiplicity <em>Opposite Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getAssociation <em>Association</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MAssociationRoleImpl#getOpposite <em>Opposite</em>}</li>
@@ -78,44 +78,24 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
   protected boolean composition = COMPOSITION_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getOppositeLowerBoundMultiplicity() <em>Opposite Lower Bound Multiplicity</em>}' attribute.
+   * The default value of the '{@link #getOppositeMultiplicity() <em>Opposite Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getOppositeLowerBoundMultiplicity()
+   * @see #getOppositeMultiplicity()
    * @generated
    * @ordered
    */
-  protected static final int OPPOSITE_LOWER_BOUND_MULTIPLICITY_EDEFAULT = 0;
+  protected static final MMultiplicity OPPOSITE_MULTIPLICITY_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getOppositeLowerBoundMultiplicity() <em>Opposite Lower Bound Multiplicity</em>}' attribute.
+   * The cached value of the '{@link #getOppositeMultiplicity() <em>Opposite Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getOppositeLowerBoundMultiplicity()
+   * @see #getOppositeMultiplicity()
    * @generated
    * @ordered
    */
-  protected int oppositeLowerBoundMultiplicity = OPPOSITE_LOWER_BOUND_MULTIPLICITY_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getOppositeUpperBoundMultiplicity() <em>Opposite Upper Bound Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOppositeUpperBoundMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final int OPPOSITE_UPPER_BOUND_MULTIPLICITY_EDEFAULT = 0;
-
-  /**
-   * The cached value of the '{@link #getOppositeUpperBoundMultiplicity() <em>Opposite Upper Bound Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOppositeUpperBoundMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected int oppositeUpperBoundMultiplicity = OPPOSITE_UPPER_BOUND_MULTIPLICITY_EDEFAULT;
+  protected MMultiplicity oppositeMultiplicity = OPPOSITE_MULTIPLICITY_EDEFAULT;
 
   /**
    * The default value of the '{@link #getQualifierMultiplicity() <em>Qualifier Multiplicity</em>}' attribute.
@@ -125,7 +105,7 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * @generated
    * @ordered
    */
-  protected static final int QUALIFIER_MULTIPLICITY_EDEFAULT = 0;
+  protected static final MMultiplicity QUALIFIER_MULTIPLICITY_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getQualifierMultiplicity() <em>Qualifier Multiplicity</em>}' attribute.
@@ -135,7 +115,7 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * @generated
    * @ordered
    */
-  protected int qualifierMultiplicity = QUALIFIER_MULTIPLICITY_EDEFAULT;
+  protected MMultiplicity qualifierMultiplicity = QUALIFIER_MULTIPLICITY_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getAssociation() <em>Association</em>}' reference.
@@ -239,9 +219,9 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getOppositeLowerBoundMultiplicity()
+  public MMultiplicity getOppositeMultiplicity()
   {
-    return oppositeLowerBoundMultiplicity;
+    return oppositeMultiplicity;
   }
 
   /**
@@ -249,12 +229,12 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOppositeLowerBoundMultiplicity(int newOppositeLowerBoundMultiplicity)
+  public void setOppositeMultiplicity(MMultiplicity newOppositeMultiplicity)
   {
-    int oldOppositeLowerBoundMultiplicity = oppositeLowerBoundMultiplicity;
-    oppositeLowerBoundMultiplicity = newOppositeLowerBoundMultiplicity;
+    MMultiplicity oldOppositeMultiplicity = oppositeMultiplicity;
+    oppositeMultiplicity = newOppositeMultiplicity;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY, oldOppositeLowerBoundMultiplicity, oppositeLowerBoundMultiplicity));
+      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY, oldOppositeMultiplicity, oppositeMultiplicity));
   }
 
   /**
@@ -262,30 +242,7 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getOppositeUpperBoundMultiplicity()
-  {
-    return oppositeUpperBoundMultiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOppositeUpperBoundMultiplicity(int newOppositeUpperBoundMultiplicity)
-  {
-    int oldOppositeUpperBoundMultiplicity = oppositeUpperBoundMultiplicity;
-    oppositeUpperBoundMultiplicity = newOppositeUpperBoundMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY, oldOppositeUpperBoundMultiplicity, oppositeUpperBoundMultiplicity));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public int getQualifierMultiplicity()
+  public MMultiplicity getQualifierMultiplicity()
   {
     return qualifierMultiplicity;
   }
@@ -295,9 +252,9 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setQualifierMultiplicity(int newQualifierMultiplicity)
+  public void setQualifierMultiplicity(MMultiplicity newQualifierMultiplicity)
   {
-    int oldQualifierMultiplicity = qualifierMultiplicity;
+    MMultiplicity oldQualifierMultiplicity = qualifierMultiplicity;
     qualifierMultiplicity = newQualifierMultiplicity;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY, oldQualifierMultiplicity, qualifierMultiplicity));
@@ -505,10 +462,8 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
         return isAggregation();
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         return isComposition();
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY:
-        return getOppositeLowerBoundMultiplicity();
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY:
-        return getOppositeUpperBoundMultiplicity();
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        return getOppositeMultiplicity();
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
         return getQualifierMultiplicity();
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
@@ -540,14 +495,11 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         setComposition((Boolean)newValue);
         return;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY:
-        setOppositeLowerBoundMultiplicity((Integer)newValue);
-        return;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY:
-        setOppositeUpperBoundMultiplicity((Integer)newValue);
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        setOppositeMultiplicity((MMultiplicity)newValue);
         return;
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
-        setQualifierMultiplicity((Integer)newValue);
+        setQualifierMultiplicity((MMultiplicity)newValue);
         return;
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
         setAssociation((MAssociation)newValue);
@@ -578,11 +530,8 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         setComposition(COMPOSITION_EDEFAULT);
         return;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY:
-        setOppositeLowerBoundMultiplicity(OPPOSITE_LOWER_BOUND_MULTIPLICITY_EDEFAULT);
-        return;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY:
-        setOppositeUpperBoundMultiplicity(OPPOSITE_UPPER_BOUND_MULTIPLICITY_EDEFAULT);
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        setOppositeMultiplicity(OPPOSITE_MULTIPLICITY_EDEFAULT);
         return;
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
         setQualifierMultiplicity(QUALIFIER_MULTIPLICITY_EDEFAULT);
@@ -614,12 +563,10 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
         return aggregation != AGGREGATION_EDEFAULT;
       case GcorePackage.MASSOCIATION_ROLE__COMPOSITION:
         return composition != COMPOSITION_EDEFAULT;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_LOWER_BOUND_MULTIPLICITY:
-        return oppositeLowerBoundMultiplicity != OPPOSITE_LOWER_BOUND_MULTIPLICITY_EDEFAULT;
-      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_UPPER_BOUND_MULTIPLICITY:
-        return oppositeUpperBoundMultiplicity != OPPOSITE_UPPER_BOUND_MULTIPLICITY_EDEFAULT;
+      case GcorePackage.MASSOCIATION_ROLE__OPPOSITE_MULTIPLICITY:
+        return OPPOSITE_MULTIPLICITY_EDEFAULT == null ? oppositeMultiplicity != null : !OPPOSITE_MULTIPLICITY_EDEFAULT.equals(oppositeMultiplicity);
       case GcorePackage.MASSOCIATION_ROLE__QUALIFIER_MULTIPLICITY:
-        return qualifierMultiplicity != QUALIFIER_MULTIPLICITY_EDEFAULT;
+        return QUALIFIER_MULTIPLICITY_EDEFAULT == null ? qualifierMultiplicity != null : !QUALIFIER_MULTIPLICITY_EDEFAULT.equals(qualifierMultiplicity);
       case GcorePackage.MASSOCIATION_ROLE__ASSOCIATION:
         return association != null;
       case GcorePackage.MASSOCIATION_ROLE__OPPOSITE:
@@ -645,10 +592,8 @@ public class MAssociationRoleImpl extends MPropertyImpl implements MAssociationR
     result.append(aggregation);
     result.append(", composition: ");
     result.append(composition);
-    result.append(", oppositeLowerBoundMultiplicity: ");
-    result.append(oppositeLowerBoundMultiplicity);
-    result.append(", oppositeUpperBoundMultiplicity: ");
-    result.append(oppositeUpperBoundMultiplicity);
+    result.append(", oppositeMultiplicity: ");
+    result.append(oppositeMultiplicity);
     result.append(", qualifierMultiplicity: ");
     result.append(qualifierMultiplicity);
     result.append(')');
