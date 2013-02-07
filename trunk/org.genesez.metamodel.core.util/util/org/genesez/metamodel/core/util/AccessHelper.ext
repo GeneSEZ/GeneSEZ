@@ -67,7 +67,47 @@ boolean hasFixedUpperBoundMultiplicity(MProperty this) :
 
 
 // -- Association Role --
-	
+
+
+/**
+ * Checks if the opposite of an association role has a single-valued type.
+ * 
+ * @return	True if the opposite of the association role has a single-valued type, otherwise false.
+ * @api
+ */
+boolean isOppositeSingleValuedType(MAssociationRole this) :
+	oppositeMultiplicity.upperBound == 0 || oppositeMultiplicity.upperBound == 1;
+
+
+/**
+ * Checks if the opposite of an association role has a multi-valued type.
+ * 
+ * @return	True if the opposite of the association role has a multi-valued type, otherwise false.
+ * @api
+ */
+boolean isOppositeMultiValuedType(MAssociationRole this) :
+	oppositeMultiplicity.upperBound == -1 || oppositeMultiplicity.upperBound > 1;
+
+
+/**
+ * Checks if the opposite of an association role has a fixed lower count of values.
+ * 
+ * @return	True if the opposite of the association role has a fixed lower count of values, otherwise false.
+ * @api
+ */
+boolean hasOppositeFixedLowerBoundMultiplicity(MAssociationRole this) : 
+	oppositeMultiplicity.lowerBound > -1;
+
+
+/**
+ * Checks if the opposite of an association role has a fixed upper count of values.
+ * 
+ * @return	True if the opposite of the association role has a fixed upper count of values, otherwise false.
+ * @api
+ */
+boolean hasOppositeFixedUpperBoundMultiplicity(MAssociationRole this) : 
+	oppositeMultiplicity.upperBound > -1;
+
 
 /**
  * Checks if a qualified association role has a single-valued qualifier.
@@ -75,8 +115,8 @@ boolean hasFixedUpperBoundMultiplicity(MProperty this) :
  * @return	True if the qualified association role has a single-valued qualifier, otherwise false.
  * @api
  */
-boolean isSingleValuedQualifier(MAssociationRole this) :
-	qualifierMultiplicity == 0 || qualifierMultiplicity == 1;
+boolean isQualifierSingleValued(MAssociationRole this) :
+	qualifierMultiplicity.upperBound == 0 || qualifierMultiplicity.upperBound == 1;
 
 
 /**
@@ -85,20 +125,28 @@ boolean isSingleValuedQualifier(MAssociationRole this) :
  * @return	True if the qualified association role has a multi-valued qualifier, otherwise false.
  * @api
  */
-boolean isMultiValuedQualifier(MAssociationRole this) :
-	qualifierMultiplicity == -1 || qualifierMultiplicity > 1;
+boolean isQualifierMultiValued(MAssociationRole this) :
+	qualifierMultiplicity.upperBound == -1 || qualifierMultiplicity.upperBound > 1;
 
 
 /**
- * Checks if a qualified association role has a fixed count of values.
+ * Checks if a qualified association role has a fixed lower count of values.
  * 
- * @return	True if the qualified association role has a fixed count of values, otherwise false.
+ * @return	True if the qualified association role has a fixed lower count of values, otherwise false.
  * @api
- * @todo: use Xtend script hasReturnParameter
- * @deprecated
  */
-boolean hasFixedQualifierMultiplicity(MAssociationRole this) : 
-	qualifierMultiplicity > -1;
+boolean hasQualifierFixedLowerBoundMultiplicity(MAssociationRole this) : 
+	qualifierMultiplicity.lowerBound > -1;
+	
+
+/**
+ * Checks if a qualified association role has a fixed upper count of values.
+ * 
+ * @return	True if the qualified association role has a fixed upper count of values, otherwise false.
+ * @api
+ */
+boolean hasQualifierFixedUpperBoundMultiplicity(MAssociationRole this) : 
+	qualifierMultiplicity.upperBound > -1;
 
 
 // -- Parameter --
@@ -218,7 +266,7 @@ boolean hasFixedUpperBoundMultiplicity(MOperation this) :
  * @see allAssociationRoles(MClassifier)
  * @api
  */
-List[MAttribute] allProperties(MClassifier this):
+List[MAttribute] allProperties(MClassifier this) :
 	{ allAttributes() }.addAll(
 		allAssociationRoles()
 	);
@@ -278,7 +326,7 @@ boolean hasInitializableAttributes(MClassifier this) :
 
 
 /**
- * Checks if a classifier has derived attributes.
+ * Checks if a classifier has owning derived attributes.
  * 
  * @return	True if the classifier has derived attributes, otherwise false.
  * @api
@@ -297,7 +345,7 @@ boolean hasDerivedAttributes(MClassifier this) :
  * @return 	The list of attributes of the classifier, otherwise an empty list.
  * @api
  */
-List[MAttribute] allAttributes(MClassifier this):
+List[MAttribute] allAttributes(MClassifier this) :
 	{}.addAll(
 		generalization.allAttributes()
 	).addAll(
@@ -323,7 +371,7 @@ private List[MAttribute] allAttributes(MType this) :
  * @return	The list of initializable attributes of the classifier, otherwise an empty list.
  * @api
  */
-List[MAttribute] allInitializableAttributes(MClassifier this):
+List[MAttribute] allInitializableAttributes(MClassifier this) :
 	{}.addAll(
 		generalization.allInitializableAttributes()
 	).addAll( owningInitializableAttributes() );
@@ -370,110 +418,137 @@ boolean hasDefaultValue(MAttribute this) :
 
 
 
-
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	properties
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-
-
-
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	association + association roles
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-
-
-
-
-
-
+// -- Checks for a Classifier --
 
 
 /**
- * checks if a classifier has association roles
- * @return	true if the classifier has association roles, otherwise false
+ * Checks if a classifier has owning association roles.
+ * 
+ * @return	True if the classifier has owning association roles, otherwise false.
+ * @api
  */
 boolean hasAssociationRoles(MClassifier this) : 
-	property.typeSelect(MAssociationRole).size > 0;
+	property.exists( ar | ar.metaType == MAssociationRole );
+
 
 /**
- * checks if an association role has an opposite or not
- * @return	true, if the association role has an opposite
+ * Checks if a classifier has owning initializable association roles.
+ *
+ * @return	True if the classifier has owning initializable association roles, otherwise false.
+ * @api
  */
-boolean hasOpposite(MAssociationRole this) : opposite != null;
+boolean hasInitializableAssociationRoles(MClassifier this) : 
+	property.typeSelect( MAssociationRole ).exists( ar | !ar.derived );
+
+
+// -- Getter for a Classifier --
+
 
 /**
- * checks if the opposite of an association role has a simple valued type
- * @return	true if the opposite of an association role has a simple valued type, otherwise false
+ * Returns the list of association roles of an classifier including inherited,
+ * whereas inherited association roles are added first to the list.
+ *
+ * @return 	The list of association roles of the classifier, otherwise an empty list.
+ * @api
  */
-boolean isOppositeSingleValuedType(MAssociationRole this) :
-	oppositeMultiplicity.upperBound == 1;
+List[MAssociationRole] allAssociationRoles(MClassifier this) :
+	{}.addAll(
+		generalization.allAssociationRoles()
+	).addAll(
+		realization.allAssociationRoles()
+	).addAll( property.typeSelect(MAssociationRole) );
+
 
 /**
- * checks if the opposite of an association role has a multi-valued type
- * @return	true if the opposite of an association role has a multi-valued type, otherwise false
+ * Just there for error free templates.
+ * Just called if a generalization or realization of a classifier is no classifier.
+ * 
+ * @return	An empty list.
+ * @see		allAssociationRoles(MClassifier)
  */
-boolean isOppositeMultiValuedType(MAssociationRole this) :
-	oppositeMultiplicity.upperBound != 1;
+private List[MAssociationRole] allAssociationRoles(MType this) : 
+	{};
+
 
 /**
- * checks if an association role has a qualifier
- * @return	true, if the association role has a qualifier
+ * Returns the list of initializable association roles of an classifier including inherited which 
+ * are not derived, whereas inherited initializable association roles are added first to the list.
+ *
+ * @return	The list of initializable association roles of the classifier, otherwise an empty list.
+ * @api
  */
-boolean hasQualifier(MAssociationRole this) : qualifier != null;
+List[MAssociationRole] allInitializableAssociationRoles(MClassifier this) :
+	{}.addAll(
+		realization.allInitializableAssociationRoles()
+	).addAll( owningInitializableAssociationRoles() );
+
 
 /**
- * checks if an association role is qualified
- * @return	true, if the association role has a qualifier
- * @see		hasQualifier(MAssociationRole)
+ * Just there for error free templates.
+ * Just called if a generalization of a classifier is no classifier.
+ * 
+ * @return	An empty list.
+ * @see		allInitializableAssociationRoles(MClassifier)
  */
-boolean isQualified(MAssociationRole this) : hasQualifier();
+private List[MAssociationRole] allInitializableAssociationRoles(MType this) : 
+	{};
+
 
 /**
- * checks if the opposite of an association role is qualified
- * @return	true, if the opposite has a qualifier, otherwise false
+ * Returns the list of owning initializable association roles of an classifier which
+ * are not derived.
+ * 
+ * @return	The list of initializable association roles of the classifier, otherwise an empty list.
+ * @api
  */
-boolean hasQualifiedOpposite(MAssociationRole this) :
-	hasOpposite() ? opposite.isQualified() : false;
+List[MAssociationRole] owningInitializableAssociationRoles(MClassifier this) :
+	property.typeSelect(MAssociationRole).select( ar | 
+		!ar.derived
+	);
+
+
+// -- Checks for an Association Role --
+
 
 /**
- * checks if the opposite of an association role is qualified
- * @return	true, if the opposite has a qualifier, otherwise false
+ * Checks if an association role has an opposite.
+ * 
+ * @return	True if the association role has an opposite, otherwise false.
+ * @api
  */
-boolean isOppositeQualified(MAssociationRole this) :
-	hasOpposite() && opposite.isQualified();
+boolean hasOpposite(MAssociationRole this) : 
+	opposite != null;
+
 
 /**
- * checks if an association role belongs to an association class or not
- * @return	true, if it's a plain association role and doesn't belongs to an association class and 
+ * Checks if an association role has a qualifier.
+ * 
+ * @return	True if the association role has a qualifier, otherwise false.
+ * @api
+ */
+boolean hasQualifier(MAssociationRole this) : 
+	qualifier != null;
+
+
+/**
+ * Checks if the opposite of an association role has a qualifier.
+ * 
+ * @return	True if the opposite of the association role has a qualifier, otherwise false.
+ * @api
+ */
+boolean hasOppositeQualifier(MAssociationRole this) :
+	hasOpposite() && opposite.hasQualifier();
+
+
+/**
+ * Checks if an association role belongs to an association class.
+ * It returns true, if 
+ * 
+ * @return	True, if it's a plain association role and doesn't belongs to an association class and 
  * 			false, if the association role belongs to an association class
  */
 boolean hasAssociationClass(MAssociationRole this) :
 	association.associationClass != null;
-
-/**
- * check if a class is an association class or not
- * @return	true, if the class is an association class, otherwise false
- */
-boolean isAssociationClass(MClass this) : ownedAssociation != null;
-
-/**
- * check if a classifier is an association class or not
- * @see		isAssociationClass(MClass)
- * @return	false
- */
-boolean isAssociationClass(MClassifier this) : false;
 
 
 /**
@@ -481,80 +556,31 @@ boolean isAssociationClass(MClassifier this) : false;
  * @param	aend	an association role
  * @return	the association class of an association role (or null)
  * @see		isPlainAssociation
+ * @todo do we really need this?
+ * @todo rename it to associationClass 
  */
-MClass assocClass(MAssociationRole aend) :
-	aend.association.associationClass;
+MClass assocClass(MAssociationRole this) :
+	association.associationClass;
 
 
 /**
- * Getter for a list of all association roles including inherited.
- * Inherited association roles first.
- *
- * @return 	a list of association roles or an empty list
- */
-List[MAssociationRole] allAssociationRoles(MClassifier this):
-	{}.addAll(
-		generalization.isEmpty
-			? {}
-			: generalization.allAssociationRoles()
-	).addAll(
-		realization.isEmpty
-			? {}
-			: realization.allAssociationRoles()
-	).addAll( property.typeSelect(MAssociationRole) );
-
-
-/**
- * Just there for error free templates.
- *
- * @see		allAssociationRoles(MClassifier)
- * @return	an empty list
- */
-List[MAssociationRole] allAssociationRoles(MType this) : {};
-
-
-/**
- * Checks if a classifier has initializable association roles or not.
- *
- * @return	true, if a classifier has initializable association roles, otherwise false
- */
-boolean hasInitializableAssociationRoles(MClassifier this) : 
-	!allInitializableAssociationRoles().isEmpty;
-
-
-/**
- * Getter for a list of all owning initializable association roles.
- * Excluding derived.
+ * Check if a class is an association class.
  * 
- * @return	a list of initializable association roles or an empty list
+ * @return	True if the class is an association class, otherwise false.
+ * @api
  */
-List[MAssociationRole] owningInitializableAssociationRoles(MClassifier this) :
-	property.typeSelect(MAssociationRole).select( e | 
-		!e.derived
-	);
+boolean isAssociationClass(MClass this) : 
+	ownedAssociation != null;
 
 
 /**
- * Getter for a list of all initializable association roles.
- * Excluding derived.
- * Inherited initializable association roles first.
- *
- * @return 	a list of initializable association roles or an empty list
+ * Check if a classifier is an association class.
+ * 
+ * @return	False.
+ * @see		isAssociationClass(MClass)
  */
-List[MAssociationRole] allInitializableAssociationRoles(MClassifier this):
-	{}.addAll(
-		realization.isEmpty
-			? {}
-			: realization.allInitializableAssociationRoles()
-	).addAll( owningInitializableAssociationRoles() );
-
-
-/**
- * just there for error free templates
- * @see		allInitializableAssociationRoles(MClassifier)
- * @return	an empty list
- */
-List[MAssociationRole] allInitializableAssociationRoles(MType this) : {};
+boolean isAssociationClass(MClassifier this) : 
+	false;
 
 
 /*
@@ -637,64 +663,61 @@ boolean hasExceptions(MOperation this) : !raisedException.isEmpty;
 boolean hasComment(MElement this) :
 	ownedComment.size > 0;
 
-/**
- * getter for the comment text of a list of comments
- * @param	l	list of comments of an element
- * @return	the comment text as a string or an empty string
- * @todo	revise, see file comment for further details
- * @deprecated	use 'comment' functions in 'Conversion'-script instead
- */
-String getCommentText(List[MComment] this) :
-	size > 0
-		? getComment( first() ).replaceAll("\n", "; ")
-		: "";
 
-/**
- * getter for the owned comments of a type
- * @return	the list of owned comments
- * @deprecated	use 'comment' functions in 'Conversion'-script instead
- */
-List[MComment] ownedComment(MType this) :
-	switch (metaType) {
-		case MGeneric : {}
-		case MExternal : {}
-		default : ((MClassifier)this).ownedComment
-	};
 	
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	generics
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Generics ----------------------------------------------------------------------------------------------
+
 
 /**
- * checks if a classifier has one or more generic parameters
- * @return	true if the classifier has at least one generic parameter, otherwise false
+ * Checks if a classifier has one or more generic parameters.
+ * 
+ * @return	True if the classifier has at least one generic parameter, otherwise false.
+ * @api
  */
 boolean hasGenericParameter(MClassifier this) :
 	genericParameter.size > 0;
-	
+
+
 /**
- * checks if an external type has one or more generic parameters
- * @return	true if the external type has at least one generic parameter, otherwise false
+ * Checks if an external type has one or more generic parameters.
+ * 
+ * @return	True if the external type has at least one generic parameter, otherwise false.
+ * @api
  */
 boolean hasGenericParameter(MExternal this) :
 	genericParameter.size > 0;
 
-/**
- * checks if an operation has one or more generic parameter
- * @return	true if the operation has at least one generic parameter, otherwise false
- */
-boolean hasGenericParameter(MOperation this) :
-	genericParameter.size > 0;
 
 /**
- * checks if a property has one or more generic realizations
- * @return	true if the property has at least one generic realization, otherwise false
+ * Checks if a property has one or more generic realizations.
+ * 
+ * @return	True if the property has at least one generic realization, otherwise false.
+ * @api
  */
 boolean hasGenericRealization(MProperty this) :
 	genericRealization.size > 0;
+
+
+/**
+ * Checks if an operation has one or more generic parameter.
+ * 
+ * @return	True if the operation has at least one generic parameter, otherwise false.
+ * @api
+ */
+boolean hasGenericParameter(MOperation this) :
+	genericParameter.size > 0;
+	
+
+/**
+ * Checks if a parameter has one or more generic realizations.
+ * @return	True if the parameter has at least one generic realizations, otherwise false.
+ * @api
+ */
+boolean hasGenericParameter(MParameter this) :
+	genericRealization.size > 0;
+
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1080,23 +1103,9 @@ MModel model(MElement this) :
 MModel model(MPackage this) :
 	metaType == MModel
 		? this
-		: nestingPackage.getModel();
+		: nestingPackage.model();
 
-/**
- * getter for the model element by using a classifier
- * @return	the model element
- * @deprecated	replaced by {@link model(MClassifier)}
- */
-MModel getModel(MClassifier this) :
-	this.model();
 
-/**
- * getter for the model element by using a package
- * @return	the model element
- * @deprecated	replaced by {@link model(MClassifier)}
- */
-MModel getModel(MPackage this) :
-	this.model();
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
