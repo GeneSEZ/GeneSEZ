@@ -34,7 +34,7 @@ extension org::genesez::metamodel::core::util::m2m::CreateElement;
  * @api
  */
 boolean isSingleValuedType(MProperty this) :
-	upperBoundMultiplicity == 0 || upperBoundMultiplicity == 1;
+	multiplicity.upperBound == 0 || multiplicity.upperBound == 1;
 
 
 /**
@@ -44,7 +44,7 @@ boolean isSingleValuedType(MProperty this) :
  * @api
  */
 boolean isMultiValuedType(MProperty this) :
-	upperBoundMultiplicity == -1 || upperBoundMultiplicity > 1;
+	multiplicity.upperBound == -1 || multiplicity.upperBound > 1;
 
 
 /**
@@ -54,7 +54,7 @@ boolean isMultiValuedType(MProperty this) :
  * @api
  */
 boolean hasFixedLowerBoundMultiplicity(MProperty this) : 
-	lowerBoundMultiplicity > -1;
+	multiplicity.lowerBound > -1;
 
 
 /**
@@ -63,7 +63,7 @@ boolean hasFixedLowerBoundMultiplicity(MProperty this) :
  * @api
  */
 boolean hasFixedUpperBoundMultiplicity(MProperty this) : 
-	upperBoundMultiplicity > -1;
+	multiplicity.upperBound > -1;
 
 
 // -- Association Role --
@@ -111,7 +111,7 @@ boolean hasFixedQualifierMultiplicity(MAssociationRole this) :
  * @api
  */
 boolean isSingleValuedType(MParameter this) :
-	upperBoundMultiplicity == 0 || upperBoundMultiplicity == 1;
+	multiplicity.upperBound == 0 || multiplicity.upperBound == 1;
 
 
 /**
@@ -121,7 +121,7 @@ boolean isSingleValuedType(MParameter this) :
  * @api
  */
 boolean isMultiValuedType(MParameter this) :
-	upperBoundMultiplicity == -1 || upperBoundMultiplicity > 1;
+	multiplicity.upperBound == -1 || multiplicity.upperBound > 1;
 
 
 /**
@@ -131,7 +131,7 @@ boolean isMultiValuedType(MParameter this) :
  * @api
  */
 boolean hasFixedLowerBoundMultiplicity(MParameter this) : 
-	lowerBoundMultiplicity > -1;
+	multiplicity.lowerBound > -1;
 
 
 /**
@@ -141,7 +141,7 @@ boolean hasFixedLowerBoundMultiplicity(MParameter this) :
  * @api
  */
 boolean hasFixedUpperBoundMultiplicity(MParameter this) : 
-	upperBoundMultiplicity > -1;
+	multiplicity.upperBound > -1;
 
 
 // -- Operation --
@@ -391,14 +391,14 @@ boolean hasOpposite(MAssociationRole this) : opposite != null;
  * @return	true if the opposite of an association role has a simple valued type, otherwise false
  */
 boolean isOppositeSingleValuedType(MAssociationRole this) :
-	oppositeUpperBoundMultiplicity == 1;
+	oppositeMultiplicity.upperBound == 1;
 
 /**
  * checks if the opposite of an association role has a multi-valued type
  * @return	true if the opposite of an association role has a multi-valued type, otherwise false
  */
 boolean isOppositeMultiValuedType(MAssociationRole this) :
-	oppositeUpperBoundMultiplicity != 1;
+	oppositeMultiplicity.upperBound != 1;
 
 /**
  * checks if an association role has a qualifier
