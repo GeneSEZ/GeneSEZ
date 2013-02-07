@@ -28,22 +28,22 @@ extension org::genesez::metamodel::core::util::m2m::CreateElement;
 
 
 /**
- * Checks if a property has a single-valued type.
+ * Checks if a property is single-valued.
  * 
- * @return	True if the property has a single-valued type, otherwise false.
+ * @return	True if the property is single-valued, otherwise false.
  * @api
  */
-boolean isSingleValuedType(MProperty this) :
+boolean isSingleValued(MProperty this) :
 	multiplicity.upperBound == 0 || multiplicity.upperBound == 1;
 
 
 /**
- * Checks if a property has a multi-valued type.
+ * Checks if a property is multi-valued.
  * 
- * @return	True if the property has a multi-valued type, otherwise false.
+ * @return	True if the property is multi-valued, otherwise false.
  * @api
  */
-boolean isMultiValuedType(MProperty this) :
+boolean isMultiValued(MProperty this) :
 	multiplicity.upperBound == -1 || multiplicity.upperBound > 1;
 
 
@@ -70,22 +70,22 @@ boolean hasFixedUpperBoundMultiplicity(MProperty this) :
 
 
 /**
- * Checks if the opposite of an association role has a single-valued type.
+ * Checks if the opposite of an association role is single-valued.
  * 
- * @return	True if the opposite of the association role has a single-valued type, otherwise false.
+ * @return	True if the opposite of the association role is single-valued, otherwise false.
  * @api
  */
-boolean isOppositeSingleValuedType(MAssociationRole this) :
+boolean isOppositeSingleValued(MAssociationRole this) :
 	oppositeMultiplicity.upperBound == 0 || oppositeMultiplicity.upperBound == 1;
 
 
 /**
- * Checks if the opposite of an association role has a multi-valued type.
+ * Checks if the opposite of an association role is multi-valued.
  * 
- * @return	True if the opposite of the association role has a multi-valued type, otherwise false.
+ * @return	True if the opposite of the association role is multi-valued, otherwise false.
  * @api
  */
-boolean isOppositeMultiValuedType(MAssociationRole this) :
+boolean isOppositeMultiValued(MAssociationRole this) :
 	oppositeMultiplicity.upperBound == -1 || oppositeMultiplicity.upperBound > 1;
 
 
@@ -110,9 +110,9 @@ boolean hasOppositeFixedUpperBoundMultiplicity(MAssociationRole this) :
 
 
 /**
- * Checks if a qualified association role has a single-valued qualifier.
+ * Checks if the qualifier of an qualified association role is single-valued.
  * 
- * @return	True if the qualified association role has a single-valued qualifier, otherwise false.
+ * @return	True if the qualifier of the the qualified association role is single-valued, otherwise false.
  * @api
  */
 boolean isQualifierSingleValued(MAssociationRole this) :
@@ -120,9 +120,9 @@ boolean isQualifierSingleValued(MAssociationRole this) :
 
 
 /**
- * Checks if a qualified association role has a multi-valued qualifier.
+ * Checks if the qualifier of an qualified association role is multi-valued.
  * 
- * @return	True if the qualified association role has a multi-valued qualifier, otherwise false.
+ * @return	True if the qualifier of the the qualified association role is multi-valued, otherwise false.
  * @api
  */
 boolean isQualifierMultiValued(MAssociationRole this) :
@@ -130,9 +130,9 @@ boolean isQualifierMultiValued(MAssociationRole this) :
 
 
 /**
- * Checks if a qualified association role has a fixed lower count of values.
+ * Checks if the qualifier of an qualified association role has a fixed lower count of values.
  * 
- * @return	True if the qualified association role has a fixed lower count of values, otherwise false.
+ * @return	True if the qualifier of the qualified association role has a fixed lower count of values, otherwise false.
  * @api
  */
 boolean hasQualifierFixedLowerBoundMultiplicity(MAssociationRole this) : 
@@ -140,9 +140,9 @@ boolean hasQualifierFixedLowerBoundMultiplicity(MAssociationRole this) :
 	
 
 /**
- * Checks if a qualified association role has a fixed upper count of values.
+ * Checks if the qualifier of an qualified association role has a fixed upper count of values.
  * 
- * @return	True if the qualified association role has a fixed upper count of values, otherwise false.
+ * @return	True if the qualifier of the qualified association role has a fixed upper count of values, otherwise false.
  * @api
  */
 boolean hasQualifierFixedUpperBoundMultiplicity(MAssociationRole this) : 
@@ -153,22 +153,22 @@ boolean hasQualifierFixedUpperBoundMultiplicity(MAssociationRole this) :
 
 
 /**
- * Checks if the parameter has a single-valued type.
+ * Checks if the parameter is single-valued.
  * 
- * @return	True if the parameter has a single-valued type, otherwise false.
+ * @return	True if the parameter is single-valued, otherwise false.
  * @api
  */
-boolean isSingleValuedType(MParameter this) :
+boolean isSingleValued(MParameter this) :
 	multiplicity.upperBound == 0 || multiplicity.upperBound == 1;
 
 
 /**
- * Checks if the parameter has a multi-valued type.
+ * Checks if the parameter is multi-valued.
  * 
- * @return	True if the parameter has a multi-valued type, otherwise false.
+ * @return	True if the parameter is multi-valued, otherwise false.
  * @api
  */
-boolean isMultiValuedType(MParameter this) :
+boolean isMultiValued(MParameter this) :
 	multiplicity.upperBound == -1 || multiplicity.upperBound > 1;
 
 
@@ -196,30 +196,30 @@ boolean hasFixedUpperBoundMultiplicity(MParameter this) :
 
 
 /**
- * Checks if the return parameter of an operation has a single-valued type.
+ * Checks if the return parameter of an operation is single-valued.
  * 
- * @return	True if the return parameter of the operation has a single-valued type, otherwise false.
+ * @return	True if the return parameter of the operation is single-valued, otherwise false.
  * @api
  * @todo: use Xtend script hasReturnParameter
  * @deprecated
  */
-boolean isSingleValuedType(MOperation this) :
+boolean isReturnSingleValued(MOperation this) :
 	return != null
-		? return.isSingleValuedType()
+		? return.isSingleValued()
 		: false;
 
 
 /**
- * Checks if the return parameter of an operation has a multi-valued type.
+ * Checks if the return parameter of an operation is multi-valued.
  * 
- * @return	True if the return parameter of the operation has a multi-valued type, otherwise false.
+ * @return	True if the return parameter of the operation is multi-valued, otherwise false.
  * @api
  * @todo: use Xtend script hasReturnParameter
  * @deprecated
  */
-boolean isMultiValuedType(MOperation this) :
+boolean isReturnMultiValuedType(MOperation this) :
 	return != null
-		? !return.isSingleValuedType()
+		? !return.isSingleValued()
 		: false;
 
 
@@ -231,7 +231,7 @@ boolean isMultiValuedType(MOperation this) :
  * @todo: use Xtend script hasReturnParameter
  * @deprecated
  */
-boolean hasFixedLowerBoundMultiplicity(MOperation this) : 
+boolean hasReturnFixedLowerBoundMultiplicity(MOperation this) : 
 	return != null
 		? !return.hasFixedLowerBoundMultiplicity()
 		: false;
@@ -245,7 +245,7 @@ boolean hasFixedLowerBoundMultiplicity(MOperation this) :
  * @todo: use Xtend script hasReturnParameter
  * @deprecated
  */
-boolean hasFixedUpperBoundMultiplicity(MOperation this) : 
+boolean hasReturnFixedUpperBoundMultiplicity(MOperation this) : 
 	return != null
 		? !return.hasFixedUpperBoundMultiplicity()
 		: false;
