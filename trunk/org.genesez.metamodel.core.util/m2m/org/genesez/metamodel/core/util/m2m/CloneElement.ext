@@ -44,12 +44,10 @@ MOperation cloneOperation(MOperation source, MClassifier container) :
 		// clone references
 		clone.raisedException.addAll( source.raisedException ) ->
 		// clone own containments
-		clone.parameter.addAll( source.parameter.cloneParameter( clone ) ) ->
-		//source.parameter.cloneParameter( clone ) ->
+		source.parameter.cloneParameter( clone ) ->
 		source.return != null
-			? clone.setReturn(
-				source.return.cloneReturnParameter( clone )
-			) : clone ->
+			? source.return.cloneReturnParameter( clone )
+			: clone ->
 		clone;
 		
 
@@ -72,7 +70,7 @@ MParameter cloneParameter(MParameter source, MOperation container) :
 /**
  * Clones a return parameter based one the specified source return parameter and ensures its operation containment.
  * 
- * @return	The cloned parameter.
+ * @return	The cloned return parameter.
  */
 MParameter cloneReturnParameter(MParameter source, MOperation container) :
 	// create a new parameter, clone basic property values and set containment
@@ -86,6 +84,9 @@ MParameter cloneReturnParameter(MParameter source, MOperation container) :
 
 
 // -- Comment -----------------------------------------------------------------------------------------------
+
+
+
 
 
 // -- Extension Mechanism -----------------------------------------------------------------------------------
