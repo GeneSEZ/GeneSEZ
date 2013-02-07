@@ -212,22 +212,22 @@ boolean hasFixedUpperBoundMultiplicity(MOperation this) :
 // -- Checks for a Classifier --
 
 /**
- * Checks if a classifier has attributes.
+ * Checks if a classifier has owning attributes.
  * 
- * @return	True if the classifier has attributes, otherwise false.
+ * @return	True if the classifier has owning attributes, otherwise false.
  * @api
  */
 boolean hasAttributes(MClassifier this) : 
-	property.typeSelect( MAttribute ).size > 0;
+	property.exists( a | a.metaType == MAttribute );
 
 
 /**
- * Checks if a classifier has initializable attributes.
+ * Checks if a classifier has owning initializable attributes.
  *
- * @return	True if the classifier has initializable attributes, otherwise false.
+ * @return	True if the classifier has owning initializable attributes, otherwise false.
  */
 boolean hasInitializableAttributes(MClassifier this) : 
-	!allInitializableAttributes().isEmpty;
+	property.typeSelect( MAttribute ).exists( a | !a.static && !a.derived && !( a.final && a.hasDefaultValue() ) );
 
 
 /**
@@ -238,18 +238,6 @@ boolean hasInitializableAttributes(MClassifier this) :
  */
 boolean hasDerivedAttributes(MClassifier this) : 
 	property.typeSelect( MAttribute ).exists( a | a.derived );
-
-
-// -- Checks for an Attribute --
-
-/**
- * Checks if an attribute has a default value
- * 
- * @return	True if the attribute has a default value, otherwise false.
- * @api
- */
-boolean hasDefaultValue(MAttribute this) :
-	defaultvalue.length > 0;
 
 
 // -- Getter for a Classifier --
@@ -313,9 +301,22 @@ private List[MAttribute] allInitializableAttributes(MType this) :
  * @api
  */
 List[MAttribute] owningInitializableAttributes(MClassifier this) :
-	property.typeSelect(MAttribute).select( e | 
-		!e.static && !e.derived && !( e.final && e.hasDefaultValue() )
+	property.typeSelect(MAttribute).select( a | 
+		!a.static && !a.derived && !( a.final && a.hasDefaultValue() )
 	);
+
+
+// -- Checks for an Attribute --
+
+
+/**
+ * Checks if an attribute has a default value
+ * 
+ * @return	True if the attribute has a default value, otherwise false.
+ * @api
+ */
+boolean hasDefaultValue(MAttribute this) :
+	defaultvalue.length > 0;
 
 
 // -- Association Roles -------------------------------------------------------------------------------------
