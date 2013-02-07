@@ -7,13 +7,23 @@ package org.genesez.workflow;
 
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
+import org.eclipse.emf.mwe.core.issues.IssuesImpl;
+import org.eclipse.emf.mwe.core.issues.MWEDiagnostic;
 import org.eclipse.emf.mwe.core.lib.Mwe2Bridge;
+import org.eclipse.emf.mwe.core.monitor.NullProgressMonitor;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.eclipse.emf.mwe2.runtime.workflow.IWorkflowContext;
+import org.eclipse.emf.mwe2.runtime.workflow.WorkflowContextImpl;
 import org.genesez.workflow.profile.Parameter;
 
 /**
@@ -46,7 +56,63 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	 */
 	protected Mwe2Bridge getBridge() {
 		/* PROTECTED REGION ID(java.implementation._135mEPVBEeGsV8fV-DCYeA) ENABLED START */
-		return super.getBridge();
+		// @see WorkflowEngine.prepare()
+		// @see WorkflowEngine.logIssues()
+		// @see Mwe2Bridge.handleIssues()
+		return new Mwe2Bridge(this) {
+			/*
+			 * Overridden to catch any thrown exceptions and log issues first before rethrowing the exception
+			 * @see org.eclipse.emf.mwe.core.lib.Mwe2Bridge#invoke(org.eclipse.emf.mwe2.runtime.workflow.IWorkflowContext)
+			 */
+			@Override
+			public void invoke(final IWorkflowContext ctx) {
+				IssuesImpl issues = new IssuesImpl();
+				try {
+					AbstractWorkflowComponent.this.invoke(
+							new WorkflowContext() {
+								public String[] getSlotNames() {
+									return ctx.getSlotNames().toArray(new String[0]);
+								}
+								public Object get(String slotName) {
+									return ctx.get(slotName);
+								}
+								public void set(String slotName, Object value) {
+									ctx.put(slotName, value);
+								}
+							}, new NullProgressMonitor(), issues);
+				} catch (RuntimeException e) {
+					handleIssues(issues);
+					throw e;
+				}
+			}
+			
+			@Override
+			protected void handleIssues(IssuesImpl issues) {
+				for (MWEDiagnostic it : issues.getIssues()) {
+					// obtain an appropriate log object
+					Log log;
+					if (it.getContext() != null) {
+						log = LogFactory.getLog(it.getContext().getClass());
+					} else {
+						log = logger;
+					}
+					
+					// log messages
+					if (it.getSeverity() == Diagnostic.INFO) {
+						log.info(it.getMessage());
+					}
+					if (it.getSeverity() == Diagnostic.WARNING) {
+						log.warn(it.getMessage());
+					}
+					if (it.getSeverity() == Diagnostic.ERROR) {
+						log.error(it.getMessage());
+					}
+				}
+				if (issues.hasErrors()) {
+					throw new RuntimeException("Workflow interupted because of " + issues.getErrors().length + " errors.");
+				}
+			}
+		};
 		/* PROTECTED REGION END */
 	}
 	
@@ -85,6 +151,7 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 		return sb.toString();
 	}
 	
+	private static Log logger = LogFactory.getLog(AbstractWorkflowComponent.class);
 	/* PROTECTED REGION END */
 	
 }
