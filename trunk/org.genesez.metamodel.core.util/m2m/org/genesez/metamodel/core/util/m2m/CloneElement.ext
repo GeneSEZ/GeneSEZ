@@ -61,12 +61,12 @@ MParameter cloneParameter(MParameter source, MOperation container) :
 	let clone = createParameter( container, source.cloneXmiGuid( container ), source.name ) :
 		source.logTrace( "cloning: " + source.metaType + ": " ) ->
 		// clone extended property values
-		source.processParameter( source.defaultvalue, source.direction, source.lowerBoundMultiplicity, source.upperBoundMultiplicity, source.unique, source.ordered ) ->
+		source.processParameter( source.defaultvalue, source.direction, source.multiplicity.cloneMultiplicity() ) ->
 		// clone references
 		clone.setType( source.type ) ->
 		clone;
 
-		
+
 /**
  * Clones a return parameter based one the specified source return parameter and ensures its operation containment.
  * 
@@ -77,7 +77,7 @@ MParameter cloneReturnParameter(MParameter source, MOperation container) :
 	let clone = createReturnParameter( container, source.cloneXmiGuid( container ), source.name ) :
 		source.logTrace( "cloning: " + source.metaType + ": " ) ->
 		// clone extended property values
-		source.processParameter( source.defaultvalue, source.direction, source.lowerBoundMultiplicity, source.upperBoundMultiplicity, source.unique, source.ordered ) ->
+		source.processParameter( source.defaultvalue, source.direction, source.multiplicity.cloneMultiplicity() ) ->
 		// clone references
 		clone.setType( source.type ) ->
 		clone;
@@ -86,7 +86,15 @@ MParameter cloneReturnParameter(MParameter source, MOperation container) :
 // -- Comment -----------------------------------------------------------------------------------------------
 
 
+// -- Data Types --------------------------------------------------------------------------------------------
 
+
+/**
+ * Clones the specified multiplicity settings.
+ * @return	multiplicity settings without containment.
+ */
+MMultiplicity cloneMultiplicity(MMultiplicity this) :
+	createMultiplicity( lowerBound, upperBound, unique, ordered );
 
 
 // -- Extension Mechanism -----------------------------------------------------------------------------------
@@ -105,7 +113,6 @@ MTaggedValue cloneTaggedValue(MTaggedValue source, MElement container) :
 
 
 // -- Private Functionality ---------------------------------------------------------------------------------
-
 
 String cloneXmiGuid(MElement elem, MElement container) :
 	container.xmiGuid + "_" + elem.xmiGuid;

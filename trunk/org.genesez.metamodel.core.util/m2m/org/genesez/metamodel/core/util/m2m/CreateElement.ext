@@ -226,14 +226,11 @@ create MExternal createExternalType(MModel container, String xmiGuid, String nam
  * 
  * @return	The specified property.
  */
-MProperty processProperty(MProperty this, String visibility, boolean derived, Integer lowerBoundMultiplicity, Integer upperBoundMultiplicity, boolean unique, boolean ordered) :
+MProperty processProperty(MProperty this, String visibility, boolean derived, MMultiplicity multiplicity) :
 	// set extended property values
 	setVisibility( visibility ) ->
 	setDerived( derived ) ->
-	setLowerBoundMultiplicity( lowerBoundMultiplicity ) ->
-	setUpperBoundMultiplicity( upperBoundMultiplicity ) ->
-	setUnique(unique) ->
-	setOrdered(ordered) ->
+	setMultiplicity( multiplicity ) ->
 	this;
 
 /**
@@ -376,14 +373,11 @@ create MParameter createReturnParameter(MOperation container, String xmiGuid, St
  * 
  * @return	The specified parameter.
  */
-MParameter processParameter(MParameter this, String defaultValue, String direction, int lowerBoundMultiplicity, int upperBoundMultiplicity, boolean unique, boolean ordered) :
+MParameter processParameter(MParameter this, String defaultValue, String direction, MMultiplicity multiplicity) :
 	// set extended property values
 	setDefaultvalue( defaultValue ) ->
 	setDirection( direction ) ->
-	setLowerBoundMultiplicity( lowerBoundMultiplicity ) ->
-	setUpperBoundMultiplicity( upperBoundMultiplicity ) ->
-	setUnique( unique ) ->
-	setOrdered( ordered ) ->
+	setMultiplicity( multiplicity ) ->
 	this;
 
 /**
@@ -420,7 +414,22 @@ create MComment createComment(MElement container, String xmiGuid, String annotat
 	// set containment
 	container.ownedComment.add( this ) ->
 	this;
-	
+
+
+// -- Data Types --------------------------------------------------------------------------------------------
+
+
+/**
+ * Creates a multiplicity object with the specified settings.
+ * @return	multiplicity settings without containment.
+ */
+create MMultiplicity createMultiplicity(Integer lowerBoundMultiplicity, Integer upperBoundMultiplicity, boolean unique, boolean ordered) :
+	setLowerBound( lowerBoundMultiplicity ) ->
+	setUpperBound( upperBoundMultiplicity ) ->
+	setUnique( unique ) ->
+	setOrdered( ordered ) ->
+	this;
+
 
 // -- Extension Mechanism -----------------------------------------------------------------------------------
 

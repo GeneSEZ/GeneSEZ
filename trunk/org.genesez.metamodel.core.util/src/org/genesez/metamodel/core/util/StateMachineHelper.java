@@ -182,7 +182,7 @@ public class StateMachineHelper {
 					if (o instanceof MElement) {
 						types.add(((MElement) o).getName());
 					} else if (o instanceof MExternal) {
-						types.add(((MExternal) o).getSpecification());
+						types.add(((MExternal) o).getName());
 					}
 				}
 			}
