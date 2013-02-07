@@ -191,7 +191,7 @@ private MClassifier transform(Classifier c, MPackage this) :
 		// check if classifier is an external type
 		case c.isExternalType() : c.makeExternal()
 		// check if classifier is an primitive type
-		case c.metaType == PrimitiveType : c.makePrimitiveType()
+		case c.metaType == PrimitiveType : c.makeExternal()
 		// ignore stereotype when transforming uml models; when transforming uml profiles transform into classifier
         case c.metaType == Stereotype && Model.isInstance(uml2model()) : Void
         // else make + transform classifier
@@ -214,14 +214,14 @@ MType makeType(Type this) :
 	logTrace("    isExternalType:      " + isExternalType()) ->
 	switch {
 		//  check if type is null (e.g. constructors usually don't have a return type)
-		case metaType == Void : ((PrimitiveType)this).makePrimitiveType()
+		case metaType == Void : ((PrimitiveType)this).makeExternal()
 		// generic
 		case isTemplateParameter() : ((ClassifierTemplateParameter)((Classifier)this).templateParameter).makeGeneric()
 		// external class
 		case isExternalType() : ((Classifier)this).makeExternal()
 		// primitive type
-		case metaType == PrimitiveType : ((PrimitiveType)this).makePrimitiveType()
-		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
+		case metaType == PrimitiveType : ((PrimitiveType)this).makeExternal()
+//		case metaType == DataType && name == "void" : ((DataType)this).makePrimitiveType()
 		// classifier contained in profiles but not included profiles are transformed to external types when transforming uml models
 		// else as classifier
 		case isContainedInProfile() && Classifier.isInstance(this) && Model.isInstance(uml2model()) && !isContainedInIncludedProfile() : ((Classifier)this).makeExternal()
@@ -368,8 +368,6 @@ private create MAttribute makeAttribute(Property p) :
 	setDerived( p.isDerived ) ->
 	setStatic( p.isStatic ) ->
 	setFinal( p.isReadOnly ) ->
-	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
-	setMultiplicity( p.getUpper() ) ->
 	setLowerBoundMultiplicity( p.getLower() ) ->
 	setUpperBoundMultiplicity( p.getUpper() ) ->
 	setUnique( p.isUnique ) ->
@@ -416,10 +414,6 @@ create MOperation makeOperation(Operation o) :
 	setStatic( o.isStatic ) ->
 	setAbstract( o.isAbstract ) ->
 	setFinal( o.isLeaf ) ->
-	// @deprecated, use multiplicity information of return parameter instead
-	setMultiplicity( o.getUpper() ) ->
-	setUnique( o.isUnique ) ->
-	setOrdered( o.isOrdered ) ->
 	// associations
 	// add stereotypes of return type parameter [TODO: @deprecated, use return parameter instead - toh]
 	o.ownedParameter.exists(e|e.direction.toString() == "return")
@@ -439,8 +433,6 @@ create MOperation makeOperation(Operation o) :
 	parameter.addAll(
 		o.ownedParameter.reject(e|e.direction.toString() == "return").makeParameter().setOperation(this)
 	) ->
-	// set return type  [TODO: @deprecated, use return parameter instead - toh]
-	setReturnType( o.type.makeType() ) ->
 	// set raised exceptions
 	raisedException.addAll( o.raisedException.makeType() ) ->
 	// containments
@@ -468,8 +460,6 @@ private create MParameter makeParameter(Parameter p) :
 	// properties
 	setDefaultvalue( p.getDefault() ) ->
 	setDirection( p.direction.toString() ) ->
-	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
-	setMultiplicity( p.getUpper() ) ->
 	setLowerBoundMultiplicity( p.getLower() ) ->
 	setUpperBoundMultiplicity( p.getUpper() ) ->
 	setUnique( p.isUnique ) ->
@@ -491,8 +481,6 @@ private create MParameter makeParameter(Void v) :
 	setXmiGuid( "void" ) ->
 	setName( "" ) ->
 	setDirection( "return" ) ->
-	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
-	setMultiplicity(1) ->
 	setLowerBoundMultiplicity( 1 ) ->
 	setUpperBoundMultiplicity( 1 ) ->
 	setUnique( true ) ->
@@ -550,14 +538,10 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	// properties
 	setVisibility( aend.visibility.toString() ) ->
 	setDerived( aend.isDerived ) ->
-	// @deprecated, use lowerBoundMultiplicity and upperBoundMultiplicity instead
-	setMultiplicity( aend.getUpper() ) ->
 	setLowerBoundMultiplicity( aend.getLower() ) ->
 	setUpperBoundMultiplicity( aend.getUpper() ) ->
 	setUnique( aend.isUnique ) ->
 	setOrdered( aend.isOrdered ) ->
-	// @deprecated, use oppositeLowerBoundMultiplicity and oppositeUpperBoundMultiplicity instead
-	setOppositeMultiplicity( aend.oppositeMultiplicity() ) ->
 	setOppositeLowerBoundMultiplicity( aend.oppositeLowerBoundMultiplicity() ) ->
 	setOppositeUpperBoundMultiplicity( aend.oppositeUpperBoundMultiplicity() ) ->
 	// unique makes no sense
@@ -858,72 +842,61 @@ private MGeneric transformDefault(Classifier c, MGeneric this) :
 	setDefault( c.makeClassifier() ) ->
 	this;
 	
+	
+private create MExternal makeExternal(String name) :
+	setName( name ) ->
+	// container
+	coremodel().externalTypes.add( this ) ->
+	this;
+	
 /**
  * Returns an external with its specification set to the string representation of the specified instance.
  */
-private create MExternal makeExternal(ValueSpecification v) :
-	setSpecification( v.stringValue() ) ->
-	this;
+private MExternal makeExternal(ValueSpecification v) :
+	makeExternal( v.stringValue() );
 	
 /**
  * creates a GeneSEZ external type from an uml classifier
  * @param	c	an uml classifier
  * @return	the GeneSEZ external type
  */
-private create MExternal makeExternal(Classifier c) :
-	// properties
-	setSpecification( c.name ) ->
-	// container
-	coremodel().externalTypes.add( this ) ->
-	// set generics
-	c.ownedTemplateSignature != null
-		? genericParameter.addAll( 
-			c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
-		: this ->
-	this;
+private MExternal makeExternal(Classifier c) :
+	let e = makeExternal( c.name ) :
+		// set generics
+		c.ownedTemplateSignature != null
+			? e.genericParameter.addAll( 
+				c.ownedTemplateSignature.ownedParameter.typeSelect(ClassifierTemplateParameter).makeGeneric() )
+			: e ->
+		e;
 	
 /**
  * creates a GeneSEZ primitive type from an uml primitive type
  * @param	p	an uml primitive type
  * @return	the GeneSEZ primitive type
  */
-private create MPrimitiveType makePrimitiveType(PrimitiveType p) :
-	// basic element properties
-	transformBasics(p) ->
-	// container
-	coremodel().primitiveTypes.add( this ) ->
-	this;
+private MExternal makeExternal(PrimitiveType p) :
+	makeExternal( p.name );
 
 /**
  * polymorphic exception handling for the a little bug in magic draw 12.5
  * the primitive type 'void' is transformed into an uml datatype instead uml primitive type
  * @see		makePrimitiveType(Void v)
- */
 private MPrimitiveType makePrimitiveType(DataType d) :
 	// delegate
 	makePrimitiveType(null);
+ */
 	
 /**
  * polymorphic exception handling for the oaw type Void / null
  * simply creaets a GeneSEZ primitive type 'void'
  * @return	the GeneSEZ primitive type 'void'
- */
 private create MPrimitiveType makePrimitiveType(Void v) :
 //	logInfo("fixme: make primitive type from void") ->
 	setXmiGuid("void") ->
 	setName("void") ->
 	coremodel().primitiveTypes.add( this ) ->
 	this;
-	
-/**
- * just a marker for error free templates
- * no GeneSEZ primitive type is created, should one?
- * prints a 'severe' log message to report such an transformation
- * @return	void
  */
-private MPrimitiveType makePrimitiveType(Classifier c) :
-	logFatal("try to construct a MPrimitiveType object from: " + c) ->
-	Void;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1230,8 +1203,7 @@ private List[String] toList(String s) :
 String name(MType this) :
 	switch (metaType) {
 		case MGeneric : ((MGeneric)this).specification
-		case MExternal: ((MExternal)this).specification
-		case MPrimitiveType : ((MPrimitiveType)this).name
+		case MExternal: ((MExternal)this).name
 		case MClassifier : ((MClassifier)this).name
 		case MClass : ((MClass)this).name
 		default : logFatal("cannot determine name of type from object: " + metaType)
