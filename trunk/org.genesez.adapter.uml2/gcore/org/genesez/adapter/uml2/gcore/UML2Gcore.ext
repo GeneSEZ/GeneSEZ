@@ -368,10 +368,7 @@ private create MAttribute makeAttribute(Property p) :
 	setDerived( p.isDerived ) ->
 	setStatic( p.isStatic ) ->
 	setFinal( p.isReadOnly ) ->
-	setLowerBoundMultiplicity( p.getLower() ) ->
-	setUpperBoundMultiplicity( p.getUpper() ) ->
-	setUnique( p.isUnique ) ->
-	setOrdered( p.isOrdered ) ->
+	setMultiplicity( p.makeMultiplicity() ) ->
 	setDefaultvalue( p.defaultValue() ) ->
 	// associations
 	// set stereotype
@@ -460,10 +457,7 @@ private create MParameter makeParameter(Parameter p) :
 	// properties
 	setDefaultvalue( p.getDefault() ) ->
 	setDirection( p.direction.toString() ) ->
-	setLowerBoundMultiplicity( p.getLower() ) ->
-	setUpperBoundMultiplicity( p.getUpper() ) ->
-	setUnique( p.isUnique ) ->
-	setOrdered( p.isOrdered ) ->
+	setMultiplicity( p.makeMultiplicity() ) ->
 	// associations
 	setType( p.type.makeType() ) ->
 	// set stereotype
@@ -475,6 +469,7 @@ private create MParameter makeParameter(Parameter p) :
 	taggedValue.addAll( makeTaggedValues(this, p) ) ->
 	this;
 
+/*
 // do we need this? [toh]
 private create MParameter makeParameter(Void v) :
 	logTrace("make [" + metaType + "] - " + v) ->
@@ -487,6 +482,7 @@ private create MParameter makeParameter(Void v) :
 	setOrdered( false ) ->
 	setType( makeType( null )) ->
 	this;
+*/
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -538,15 +534,11 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	// properties
 	setVisibility( aend.visibility.toString() ) ->
 	setDerived( aend.isDerived ) ->
-	setLowerBoundMultiplicity( aend.getLower() ) ->
-	setUpperBoundMultiplicity( aend.getUpper() ) ->
-	setUnique( aend.isUnique ) ->
-	setOrdered( aend.isOrdered ) ->
-	setOppositeLowerBoundMultiplicity( aend.oppositeLowerBoundMultiplicity() ) ->
-	setOppositeUpperBoundMultiplicity( aend.oppositeUpperBoundMultiplicity() ) ->
-	// unique makes no sense
-	// ordered
-	setOrdered(aend.isOrdered) ->
+	// multiplicities
+	setMultiplicity( aend.makeMultiplicity() ) ->
+	aend.opposite != null
+		? setOppositeMultiplicity( aend.opposite.makeMultiplicity() )
+		: this ->
 	setAggregation( aend.aggregation.toString() == "shared" ? true : false ) ->
 	setComposition( aend.aggregation.toString() == "composite" ? true : false ) ->
 	// check for a qualified association end
@@ -577,29 +569,29 @@ private MType getType(Property aend) :
  * find the multiplicity of the other end of an association from the uml model
  * @param	aend	uml association end property
  * @deprecated
- */
 private Integer oppositeMultiplicity(Property aend) :
 	aend.opposite != null
 		? aend.opposite.getUpper()
 		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
+ */
 		
 /**
  * find the lower bound multiplicity of the other end of an association from the uml model
  * @param	aend	uml association end property
- */
 private Integer oppositeLowerBoundMultiplicity(Property aend) :
 	aend.opposite != null
 		? aend.opposite.getLower()
 		: aend.association.memberEnd.reject(e|e == aend).first().getLower();
+ */
 		
 /**
  * find the upper bound multiplicity of the other end of an association from the uml model
  * @param	aend	uml association end property
- */
 private Integer oppositeUpperBoundMultiplicity(Property aend) :
 	aend.opposite != null
 		? aend.opposite.getUpper()
 		: aend.association.memberEnd.reject(e|e == aend).first().getUpper();
+ */
 
 /**
  * checks if the assocation end is qualified with attributes
@@ -618,7 +610,7 @@ private Void checkQualifier(MAssociationRole this, Property aend) :
  */
 private MAssociationRole transformSimpleQualifier(MAssociationRole this, Property aend) :
 	logTrace("    qualifier multiplicity: " + aend.lower + ".." + aend.upper) ->
-	setQualifierMultiplicity( aend.qualifier.first().upper ) ->
+	setQualifierMultiplicity( aend.qualifier.first().makeMultiplicity() ) ->
 	setQualifier( aend.qualifier.first().type.makeType() ) ->
 	this;
 
@@ -897,6 +889,17 @@ private create MPrimitiveType makePrimitiveType(Void v) :
 	coremodel().primitiveTypes.add( this ) ->
 	this;
  */
+
+/**
+ * Returns the multilicity properties of the specified multiplicity element.
+ * @return	a multiplicity object without containment
+ */
+private create MMultiplicity makeMultiplicity(MultiplicityElement me) :
+	setLowerBound( me.lowerBound() ) ->
+	setUpperBound( me.upperBound() ) ->
+	setUnique( me.isUnique ) ->
+	setOrdered( me.isOrdered ) ->
+	this;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
