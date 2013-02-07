@@ -14,10 +14,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getVisibility <em>Visibility</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#isDerived <em>Derived</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MProperty#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MProperty#getUpperBoundMultiplicity <em>Upper Bound Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MProperty#isUnique <em>Unique</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MProperty#isOrdered <em>Ordered</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getClassifier <em>Classifier</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getGenericRealization <em>Generic Realization</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MProperty#getType <em>Type</em>}</li>
@@ -83,108 +80,30 @@ public interface MProperty extends MElement
   void setDerived(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Lower Bound Multiplicity</b></em>' attribute.
+   * Returns the value of the '<em><b>Multiplicity</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Lower Bound Multiplicity</em>' attribute isn't clear,
+   * If the meaning of the '<em>Multiplicity</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Lower Bound Multiplicity</em>' attribute.
-   * @see #setLowerBoundMultiplicity(int)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_LowerBoundMultiplicity()
+   * @return the value of the '<em>Multiplicity</em>' attribute.
+   * @see #setMultiplicity(MMultiplicity)
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_Multiplicity()
    * @model required="true"
    * @generated
    */
-  int getLowerBoundMultiplicity();
+  MMultiplicity getMultiplicity();
 
   /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#getLowerBoundMultiplicity <em>Lower Bound Multiplicity</em>}' attribute.
+   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#getMultiplicity <em>Multiplicity</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Lower Bound Multiplicity</em>' attribute.
-   * @see #getLowerBoundMultiplicity()
+   * @param value the new value of the '<em>Multiplicity</em>' attribute.
+   * @see #getMultiplicity()
    * @generated
    */
-  void setLowerBoundMultiplicity(int value);
-
-  /**
-   * Returns the value of the '<em><b>Upper Bound Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Upper Bound Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Upper Bound Multiplicity</em>' attribute.
-   * @see #setUpperBoundMultiplicity(int)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_UpperBoundMultiplicity()
-   * @model required="true"
-   * @generated
-   */
-  int getUpperBoundMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#getUpperBoundMultiplicity <em>Upper Bound Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Upper Bound Multiplicity</em>' attribute.
-   * @see #getUpperBoundMultiplicity()
-   * @generated
-   */
-  void setUpperBoundMultiplicity(int value);
-
-  /**
-   * Returns the value of the '<em><b>Unique</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Unique</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Unique</em>' attribute.
-   * @see #setUnique(boolean)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_Unique()
-   * @model required="true"
-   * @generated
-   */
-  boolean isUnique();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#isUnique <em>Unique</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Unique</em>' attribute.
-   * @see #isUnique()
-   * @generated
-   */
-  void setUnique(boolean value);
-
-  /**
-   * Returns the value of the '<em><b>Ordered</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ordered</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Ordered</em>' attribute.
-   * @see #setOrdered(boolean)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMProperty_Ordered()
-   * @model required="true"
-   * @generated
-   */
-  boolean isOrdered();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MProperty#isOrdered <em>Ordered</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Ordered</em>' attribute.
-   * @see #isOrdered()
-   * @generated
-   */
-  void setOrdered(boolean value);
+  void setMultiplicity(MMultiplicity value);
 
   /**
    * Returns the value of the '<em><b>Classifier</b></em>' container reference.

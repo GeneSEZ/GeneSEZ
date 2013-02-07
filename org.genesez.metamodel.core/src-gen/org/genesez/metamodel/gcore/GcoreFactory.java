@@ -383,6 +383,15 @@ public interface GcoreFactory extends EFactory
   MTimeEvent createMTimeEvent();
 
   /**
+   * Returns a new object of class '<em>MMultiplicity</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>MMultiplicity</em>'.
+   * @generated
+   */
+  MMultiplicity createMMultiplicity();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
