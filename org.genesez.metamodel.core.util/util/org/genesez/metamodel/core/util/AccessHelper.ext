@@ -1,143 +1,329 @@
-/**
- * Simplifies access to genesez models + makes working with the genesez metamodel more easier
- * 
- * currently covered:
- * - properties, attributes, association roles
- * - associations
- * - operations
- * - comments
- * - generics
- * - stereotypes + tagged values
- * - aspects
- * - type helpers
- * - classifiers
- * 
- * @author	tobias haubold 
- * @author	andre pflueger
- * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (last)
- * @date	2012-02-15
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
  */
 
-// based on genesez meta model
 import gcore;
+
+
+/**
+ * Helper scripts to simplifies access to GeneSEZ Core meta model elements and
+ * makes working with them more easier.
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ * @author	Andre Pflüger <andre.pflueger@fh-zwickau.de>
+ */
 
 extension org::genesez::util::logging::Logging;
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	multiplicity elements (properties, parameters, operations)
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+
+// -- Multiplicity Elements (Properties, Parameters, Operations) --------------------------------------------
+
+
+// -- Property --
+
 
 /**
- * checks if a property has a simple valued type
- * @return	true if the property has a simple valued type, otherwise false
+ * Checks if a property has a single-valued type.
+ * 
+ * @return	True if the property has a single-valued type, otherwise false.
+ * @api
  */
 boolean isSingleValuedType(MProperty this) :
-	upperBoundMultiplicity == 1;
+	upperBoundMultiplicity == 0 || upperBoundMultiplicity == 1;
+
 
 /**
- * checks if the return type of an operation has a simple valued type
- * @return	true if the return type of an operation has a simple valued type, otherwise false
+ * Checks if a property has a multi-valued type.
+ * 
+ * @return	True if the property has a multi-valued type, otherwise false.
+ * @api
+ */
+boolean isMultiValuedType(MProperty this) :
+	upperBoundMultiplicity == -1 || upperBoundMultiplicity > 1;
+
+
+/**
+ * Checks if a property has a fixed lower count of values.
+ * 
+ * @return	True if the property has a fixed lower count of values, otherwise false.
+ * @api
+ */
+boolean hasFixedLowerBoundMultiplicity(MProperty this) : 
+	lowerBoundMultiplicity > -1;
+
+
+/**
+ * Checks if a property has a fixed upper count of values.
+ * @return	True if the property has a fixed upper count of values, otherwise false.
+ * @api
+ */
+boolean hasFixedUpperBoundMultiplicity(MProperty this) : 
+	upperBoundMultiplicity > -1;
+
+
+// -- Association Role --
+	
+
+/**
+ * Checks if a qualified association role has a single-valued qualifier.
+ * 
+ * @return	True if the qualified association role has a single-valued qualifier, otherwise false.
+ * @api
+ */
+boolean isSingleValuedQualifier(MAssociationRole this) :
+	qualifierMultiplicity == 0 || qualifierMultiplicity == 1;
+
+
+/**
+ * Checks if a qualified association role has a multi-valued qualifier.
+ * 
+ * @return	True if the qualified association role has a multi-valued qualifier, otherwise false.
+ * @api
+ */
+boolean isMultiValuedQualifier(MAssociationRole this) :
+	qualifierMultiplicity == -1 || qualifierMultiplicity > 1;
+
+
+/**
+ * Checks if a qualified association role has a fixed count of values.
+ * 
+ * @return	True if the qualified association role has a fixed count of values, otherwise false.
+ * @api
+ * @todo: use Xtend script hasReturnParameter
+ * @deprecated
+ */
+boolean hasFixedQualifierMultiplicity(MAssociationRole this) : 
+	qualifierMultiplicity > -1;
+
+
+// -- Parameter --
+
+
+/**
+ * Checks if the parameter has a single-valued type.
+ * 
+ * @return	True if the parameter has a single-valued type, otherwise false.
+ * @api
+ */
+boolean isSingleValuedType(MParameter this) :
+	upperBoundMultiplicity == 0 || upperBoundMultiplicity == 1;
+
+
+/**
+ * Checks if the parameter has a multi-valued type.
+ * 
+ * @return	True if the parameter has a multi-valued type, otherwise false.
+ * @api
+ */
+boolean isMultiValuedType(MParameter this) :
+	upperBoundMultiplicity == -1 || upperBoundMultiplicity > 1;
+
+
+/**
+ * Checks if a parameter has a fixed lower count of values.
+ * 
+ * @return	True if the parameter has a fixed lower count of values, otherwise false.
+ * @api
+ */
+boolean hasFixedLowerBoundMultiplicity(MParameter this) : 
+	lowerBoundMultiplicity > -1;
+
+
+/**
+ * Checks if a parameter has a fixed upper count of values.
+ * 
+ * @return	True if the parameter has a fixed upper count of values, otherwise false.
+ * @api
+ */
+boolean hasFixedUpperBoundMultiplicity(MParameter this) : 
+	upperBoundMultiplicity > -1;
+
+
+// -- Operation --
+
+
+/**
+ * Checks if the return parameter of an operation has a single-valued type.
+ * 
+ * @return	True if the return parameter of the operation has a single-valued type, otherwise false.
+ * @api
+ * @todo: use Xtend script hasReturnParameter
+ * @deprecated
  */
 boolean isSingleValuedType(MOperation this) :
 	return != null
 		? return.isSingleValuedType()
 		: false;
 
-/**
- * checks if a parameter has a simple valued type
- * @return	true if the parameter has a simple valued type, otherwise false
- */
-boolean isSingleValuedType(MParameter this) :
-	upperBoundMultiplicity == 1;
 
 /**
- * checks if a property is a multi-valued type
- * @return	true if the property has a multi-valued type, otherwise false
- */
-boolean isMultiValuedType(MProperty this) :
-	upperBoundMultiplicity != 1;
-
-/**
- * checks if the return type of an operation is a multi-valued type
- * @return	true if the return type of an operation has a multi-valued type, otherwise false
+ * Checks if the return parameter of an operation has a multi-valued type.
+ * 
+ * @return	True if the return parameter of the operation has a multi-valued type, otherwise false.
+ * @api
+ * @todo: use Xtend script hasReturnParameter
+ * @deprecated
  */
 boolean isMultiValuedType(MOperation this) :
 	return != null
-		? return.isMultiValuedType()
+		? !return.isSingleValuedType()
 		: false;
 
-/**
- * checks if a parameter is a multi-valued type
- * @return	true if the parameter has a multi-valued type, otherwise false
- */
-boolean isMultiValuedType(MParameter this) :
-	upperBoundMultiplicity != 1;
 
 /**
- * checks if a property has a fixed count of values
- * @return	true if the property has a fixed count of values, otherwise false
+ * Checks if the return parameter of an operation has a fixed lower count of values.
+ * 
+ * @return	True if the return parameter of the operation has a fixed lower count of values, otherwise false.
+ * @api
+ * @todo: use Xtend script hasReturnParameter
+ * @deprecated
  */
-boolean hasFixedMultiplicity(MProperty this) : 
-	lowerBoundMultiplicity == upperBoundMultiplicity;
-	
-/**
- * checks if a property has a fixed lower count of values
- * @return	true if the property has a fixed lower count of values, otherwise false
- */
-boolean hasFixedLowerBoundMultiplicity(MProperty this) : 
-	lowerBoundMultiplicity > -1;
+boolean hasFixedLowerBoundMultiplicity(MOperation this) : 
+	return != null
+		? !return.hasFixedLowerBoundMultiplicity()
+		: false;
+
 
 /**
- * checks if a property has a fixed upper count of values
- * @return	true if the property has a fixed upper count of values, otherwise false
+ * Checks if the return parameter of an operation has a fixed upper count of values.
+ * 
+ * @return	True if the return parameter of the operation has a fixed upper count of values, otherwise false.
+ * @api
+ * @todo: use Xtend script hasReturnParameter
+ * @deprecated
  */
-boolean hasFixedUpperBoundMultiplicity(MProperty this) : 
-	upperBoundMultiplicity > -1;
+boolean hasFixedUpperBoundMultiplicity(MOperation this) : 
+	return != null
+		? !return.hasFixedUpperBoundMultiplicity()
+		: false;
+
+
+// -- Properties --------------------------------------------------------------------------------------------
+
+
+// -- Attributes --------------------------------------------------------------------------------------------
+
+
+// -- Checks for a Classifier --
 
 /**
- * checks if a parameter has a fixed count of values
- * @return	true if the parameter has a fixed count of values, otherwise false
+ * Checks if a classifier has attributes.
+ * 
+ * @return	True if the classifier has attributes, otherwise false.
+ * @api
  */
-boolean hasFixedMultiplicity(MParameter this) : 
-	lowerBoundMultiplicity == upperBoundMultiplicity;
+boolean hasAttributes(MClassifier this) : 
+	property.typeSelect( MAttribute ).size > 0;
+
 
 /**
- * checks if a qualified association role has a single qualifier
- * @return	true, if a qualified association has a single qualifier, otherwise false
+ * Checks if a classifier has initializable attributes.
+ *
+ * @return	True if the classifier has initializable attributes, otherwise false.
  */
-boolean isSingleQualified(MAssociationRole this) :
-	qualifierMultiplicity == 1;
+boolean hasInitializableAttributes(MClassifier this) : 
+	!allInitializableAttributes().isEmpty;
+
 
 /**
- * checks if a qualified association role can have more qualifier values
- * @return	true, if a qualified association role can have more qualifier values, otherwise false
+ * Checks if a classifier has derived attributes.
+ * 
+ * @return	True if the classifier has derived attributes, otherwise false.
+ * @api
  */
-boolean isMultiQualified(MAssociationRole this) :
-	qualifierMultiplicity != 1;
+boolean hasDerivedAttributes(MClassifier this) : 
+	property.typeSelect( MAttribute ).exists( a | a.derived );
+
+
+// -- Checks for an Attribute --
 
 /**
- * getter for the type of a parameter
- * @return	the type of the parameter
+ * Checks if an attribute has a default value
+ * 
+ * @return	True if the attribute has a default value, otherwise false.
+ * @api
  */
-MType type(MParameter this) : type;
+boolean hasDefaultValue(MAttribute this) :
+	defaultvalue.length > 0;
+
+
+// -- Getter for a Classifier --
+
 
 /**
- * getter for the type of a property
- * @return	the type of the property
+ * Returns the list of attributes of an classifier including inherited,
+ * whereas inherited attributes are first in the list.
+ *
+ * @return 	The list of attributes of the classifier, otherwise an empty list.
+ * @api
  */
-MType type(MProperty this) : type;
+List[MAttribute] allAttributes(MClassifier this):
+	{}.addAll(
+		generalization.allAttributes()
+	).addAll(
+		realization.allAttributes()
+	).addAll( property.typeSelect( MAttribute) );
+
 
 /**
- * just there for error free templates
- * should NOT be called!
+ * Just there for error free templates.
+ * Just called if a generalization or realization of a classifier is no classifier.
+ * 
+ * @return	An empty list.
+ * @see		allAttributes(MClassifier)
  */
-MType type(MElement this) : 
-	logFatal("somethings goes totally wrong within your templates... " +
-	"   you cannot determine the type of an 'MElement': " + this) ->
-	Void;
+private List[MAttribute] allAttributes(MType this) : 
+	{};
+
+
+/**
+ * Returns the list of initializable attributes of an classifier including inherited which 
+ * are neither final nor derived, whereas inherited initializable attributes are first in the list.
+ *
+ * @return	The list of initializable attributes of the classifier, otherwise an empty list.
+ * @api
+ */
+List[MAttribute] allInitializableAttributes(MClassifier this):
+	{}.addAll(
+		generalization.allInitializableAttributes()
+	).addAll( owningInitializableAttributes() );
+
+
+/**
+ * Just there for error free templates.
+ * Just called if a generalization of a classifier is no classifier.
+ * 
+ * @return	An empty list.
+ * @see		allInitializableAttributes(MClassifier)
+ */
+private List[MAttribute] allInitializableAttributes(MType this) : 
+	{};
+
+
+/**
+ * Returns the list of owning initializable attributes of an classifier which
+ * are neither final nor derived.
+ * 
+ * @return	The list of initializable attributes of the classifier, otherwise an empty list.
+ */
+List[MAttribute] owningInitializableAttributes(MClassifier this) :
+	property.typeSelect(MAttribute).select( e | 
+		!e.static && !e.derived && !( e.final && e.hasDefaultValue() )
+	);
+
+
+// -- Association Roles -------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -177,113 +363,7 @@ List[MProperty] allInitializableProperties(MClassifier this) :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/**
- * checks if a classifier has attributes
- * @return	true if the classifier has attributes, otherwise false
- */
-boolean hasAttributes(MClassifier this) : 
-	property.typeSelect(MAttribute).size > 0;
 
-/**
- * checks if a classifier has derived attributes
- * @return	true if the classifier has derived attributes, otherwise false
- */
-boolean hasDerivedAttributes(MClassifier this) : 
-	property.typeSelect(MAttribute).exists( a|a.derived );
-
-/**
- * checks if an attribute has a default value
- * @return	true if the attribute has a default value, otherwise false
- */
-boolean hasDefaultValue(MAttribute this) :
-	defaultvalue.length > 0;
-
-/**
- * it's just there for error free templates
- * @return	an empty list
- * @see		getParentAttributes(MClassifier)
- * @deprecated	replaced by {@link allInitializableAttributes(MType)}
- */
-List[MAttribute] getAllAttributes(MType this) : {};
-
-/**
- * getter for a list with all owned attributes excluding final and derived
- * @return	a list with attributes or an empty list
- * @deprecated	replaced by {@link owningInitializableAttributes(MClassifier)}
- */
-List[MAttribute] getOwnAttributes(MClassifier this) :
-	property.typeSelect(MAttribute).select( a| !a.final && !a.derived );
-
-
-/**
- * Getter for a list of all attributes including inherited.
- * Inherited attributes first.
- *
- * @return 	a list of attributes or an empty list
- */
-List[MAttribute] allAttributes(MClassifier this):
-	{}.addAll(
-		generalization.isEmpty
-			? {}
-			: generalization.allAttributes()
-	).addAll(
-		realization.isEmpty
-			? {}
-			: realization.allAttributes()
-	).addAll( property.typeSelect(MAttribute) );
-
-
-/**
- * Just there for error free templates.
- *
- * @see		allAttributes(MClassifier)
- * @return	an empty list
- */
-List[MAttribute] allAttributes(MType this) : {};
-
-
-/**
- * Checks if a classifier has initializable attributes or not.
- *
- * @return	true, if a classifier has initializable attributes, otherwise false
- */
-boolean hasInitializableAttributes(MClassifier this) : 
-	!allInitializableAttributes().isEmpty;
-
-
-/**
- * Getter for a list of all owning initializable attributes.
- * Excluding final and derived.
- * 
- * @return	a list of initializable attributes or an empty list
- */
-List[MAttribute] owningInitializableAttributes(MClassifier this) :
-	property.typeSelect(MAttribute).select( e | 
-		!e.static && !e.derived && !( e.final && e.hasDefaultValue() )
-	);
-
-
-/**
- * Getter for a list of all initializable attributes.
- * Excluding final and derived.
- * Inherited initializable attributes first.
- *
- * @return 	a list of initializable attributes or an empty list
- */
-List[MAttribute] allInitializableAttributes(MClassifier this):
-	{}.addAll(
-		generalization.isEmpty
-			? {}
-			: generalization.allInitializableAttributes()
-	).addAll( owningInitializableAttributes() );
-
-
-/**
- * just there for error free templates
- * @see		allInitializableAttributes(MClassifier)
- * @return	an empty list
- */
-List[MAttribute] allInitializableAttributes(MType this) : {};
 
 
 /*
@@ -1147,6 +1227,47 @@ MNode getInitialNode(MActivity this) :
 	node.reject(e|e.metaType == MAction)
 		.select(e|e.from.isEmpty)
 		.first();
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * getter for the type of a parameter
+ * @return	the type of the parameter
+ */
+//MType type(MParameter this) : type;
+
+/**
+ * getter for the type of a property
+ * @return	the type of the property
+ */
+//MType type(MProperty this) : type;
+
+/**
+ * just there for error free templates
+ * should NOT be called!
+ */
+/*
+MType type(MElement this) : 
+	logFatal("somethings goes totally wrong within your templates... " +
+	"   you cannot determine the type of an 'MElement': " + this) ->
+	Void;
+*/
+
+
+
+
+
+
+
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
