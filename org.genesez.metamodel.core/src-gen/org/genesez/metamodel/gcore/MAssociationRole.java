@@ -13,11 +13,11 @@ package org.genesez.metamodel.gcore;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#isAggregation <em>Aggregation</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#isComposition <em>Composition</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getAssociation <em>Association</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOpposite <em>Opposite</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifier <em>Qualifier</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,58 +78,6 @@ public interface MAssociationRole extends MProperty
    * @generated
    */
   void setComposition(boolean value);
-
-  /**
-   * Returns the value of the '<em><b>Opposite Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Opposite Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Opposite Multiplicity</em>' attribute.
-   * @see #setOppositeMultiplicity(MMultiplicity)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_OppositeMultiplicity()
-   * @model required="true"
-   * @generated
-   */
-  MMultiplicity getOppositeMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Opposite Multiplicity</em>' attribute.
-   * @see #getOppositeMultiplicity()
-   * @generated
-   */
-  void setOppositeMultiplicity(MMultiplicity value);
-
-  /**
-   * Returns the value of the '<em><b>Qualifier Multiplicity</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Qualifier Multiplicity</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Qualifier Multiplicity</em>' attribute.
-   * @see #setQualifierMultiplicity(MMultiplicity)
-   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_QualifierMultiplicity()
-   * @model required="true"
-   * @generated
-   */
-  MMultiplicity getQualifierMultiplicity();
-
-  /**
-   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Qualifier Multiplicity</em>' attribute.
-   * @see #getQualifierMultiplicity()
-   * @generated
-   */
-  void setQualifierMultiplicity(MMultiplicity value);
 
   /**
    * Returns the value of the '<em><b>Association</b></em>' reference.
@@ -210,5 +158,57 @@ public interface MAssociationRole extends MProperty
    * @generated
    */
   void setQualifier(MType value);
+
+  /**
+   * Returns the value of the '<em><b>Opposite Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Opposite Multiplicity</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Opposite Multiplicity</em>' containment reference.
+   * @see #setOppositeMultiplicity(MMultiplicity)
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_OppositeMultiplicity()
+   * @model containment="true" required="true"
+   * @generated
+   */
+  MMultiplicity getOppositeMultiplicity();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getOppositeMultiplicity <em>Opposite Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Opposite Multiplicity</em>' containment reference.
+   * @see #getOppositeMultiplicity()
+   * @generated
+   */
+  void setOppositeMultiplicity(MMultiplicity value);
+
+  /**
+   * Returns the value of the '<em><b>Qualifier Multiplicity</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Qualifier Multiplicity</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Qualifier Multiplicity</em>' containment reference.
+   * @see #setQualifierMultiplicity(MMultiplicity)
+   * @see org.genesez.metamodel.gcore.GcorePackage#getMAssociationRole_QualifierMultiplicity()
+   * @model containment="true" required="true"
+   * @generated
+   */
+  MMultiplicity getQualifierMultiplicity();
+
+  /**
+   * Sets the value of the '{@link org.genesez.metamodel.gcore.MAssociationRole#getQualifierMultiplicity <em>Qualifier Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Qualifier Multiplicity</em>' containment reference.
+   * @see #getQualifierMultiplicity()
+   * @generated
+   */
+  void setQualifierMultiplicity(MMultiplicity value);
 
 } // MAssociationRole

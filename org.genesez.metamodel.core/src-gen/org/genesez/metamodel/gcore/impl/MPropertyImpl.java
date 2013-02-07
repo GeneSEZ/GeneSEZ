@@ -33,10 +33,10 @@ import org.genesez.metamodel.gcore.MType;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getVisibility <em>Visibility</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#isDerived <em>Derived</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getClassifier <em>Classifier</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getGenericRealization <em>Generic Realization</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MPropertyImpl#getMultiplicity <em>Multiplicity</em>}</li>
  * </ul>
  * </p>
  *
@@ -85,26 +85,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
   protected boolean derived = DERIVED_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final MMultiplicity MULTIPLICITY_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected MMultiplicity multiplicity = MULTIPLICITY_EDEFAULT;
-
-  /**
    * The cached value of the '{@link #getGenericRealization() <em>Generic Realization</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -123,6 +103,16 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
    * @ordered
    */
   protected MType type;
+
+  /**
+   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMultiplicity()
+   * @generated
+   * @ordered
+   */
+  protected MMultiplicity multiplicity;
 
   /**
    * <!-- begin-user-doc -->
@@ -189,29 +179,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
     derived = newDerived;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__DERIVED, oldDerived, derived));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MMultiplicity getMultiplicity()
-  {
-    return multiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setMultiplicity(MMultiplicity newMultiplicity)
-  {
-    MMultiplicity oldMultiplicity = multiplicity;
-    multiplicity = newMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__MULTIPLICITY, oldMultiplicity, multiplicity));
   }
 
   /**
@@ -287,6 +254,54 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
    * <!-- end-user-doc -->
    * @generated
    */
+  public MMultiplicity getMultiplicity()
+  {
+    return multiplicity;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetMultiplicity(MMultiplicity newMultiplicity, NotificationChain msgs)
+  {
+    MMultiplicity oldMultiplicity = multiplicity;
+    multiplicity = newMultiplicity;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__MULTIPLICITY, oldMultiplicity, newMultiplicity);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMultiplicity(MMultiplicity newMultiplicity)
+  {
+    if (newMultiplicity != multiplicity)
+    {
+      NotificationChain msgs = null;
+      if (multiplicity != null)
+        msgs = ((InternalEObject)multiplicity).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MPROPERTY__MULTIPLICITY, null, msgs);
+      if (newMultiplicity != null)
+        msgs = ((InternalEObject)newMultiplicity).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MPROPERTY__MULTIPLICITY, null, msgs);
+      msgs = basicSetMultiplicity(newMultiplicity, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPROPERTY__MULTIPLICITY, newMultiplicity, newMultiplicity));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @SuppressWarnings("unchecked")
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
@@ -317,6 +332,8 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return eBasicSetContainer(null, GcorePackage.MPROPERTY__CLASSIFIER, msgs);
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
         return ((InternalEList<?>)getGenericRealization()).basicRemove(otherEnd, msgs);
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        return basicSetMultiplicity(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -351,8 +368,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return getVisibility();
       case GcorePackage.MPROPERTY__DERIVED:
         return isDerived();
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        return getMultiplicity();
       case GcorePackage.MPROPERTY__CLASSIFIER:
         return getClassifier();
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
@@ -360,6 +375,8 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
       case GcorePackage.MPROPERTY__TYPE:
         if (resolve) return getType();
         return basicGetType();
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        return getMultiplicity();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -381,15 +398,15 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
       case GcorePackage.MPROPERTY__DERIVED:
         setDerived((Boolean)newValue);
         return;
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        setMultiplicity((MMultiplicity)newValue);
-        return;
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
         getGenericRealization().clear();
         getGenericRealization().addAll((Collection<? extends MGeneric>)newValue);
         return;
       case GcorePackage.MPROPERTY__TYPE:
         setType((MType)newValue);
+        return;
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        setMultiplicity((MMultiplicity)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -411,14 +428,14 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
       case GcorePackage.MPROPERTY__DERIVED:
         setDerived(DERIVED_EDEFAULT);
         return;
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        setMultiplicity(MULTIPLICITY_EDEFAULT);
-        return;
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
         getGenericRealization().clear();
         return;
       case GcorePackage.MPROPERTY__TYPE:
         setType((MType)null);
+        return;
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        setMultiplicity((MMultiplicity)null);
         return;
     }
     super.eUnset(featureID);
@@ -438,14 +455,14 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
         return VISIBILITY_EDEFAULT == null ? visibility != null : !VISIBILITY_EDEFAULT.equals(visibility);
       case GcorePackage.MPROPERTY__DERIVED:
         return derived != DERIVED_EDEFAULT;
-      case GcorePackage.MPROPERTY__MULTIPLICITY:
-        return MULTIPLICITY_EDEFAULT == null ? multiplicity != null : !MULTIPLICITY_EDEFAULT.equals(multiplicity);
       case GcorePackage.MPROPERTY__CLASSIFIER:
         return getClassifier() != null;
       case GcorePackage.MPROPERTY__GENERIC_REALIZATION:
         return genericRealization != null && !genericRealization.isEmpty();
       case GcorePackage.MPROPERTY__TYPE:
         return type != null;
+      case GcorePackage.MPROPERTY__MULTIPLICITY:
+        return multiplicity != null;
     }
     return super.eIsSet(featureID);
   }
@@ -465,8 +482,6 @@ public abstract class MPropertyImpl extends MElementImpl implements MProperty
     result.append(visibility);
     result.append(", derived: ");
     result.append(derived);
-    result.append(", multiplicity: ");
-    result.append(multiplicity);
     result.append(')');
     return result.toString();
   }

@@ -34,11 +34,11 @@ import org.genesez.metamodel.gcore.MType;
  * <ul>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getDefaultvalue <em>Defaultvalue</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getDirection <em>Direction</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getMultiplicity <em>Multiplicity</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getGenericRealization <em>Generic Realization</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getEvent <em>Event</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getOperation <em>Operation</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MParameterImpl#getMultiplicity <em>Multiplicity</em>}</li>
  * </ul>
  * </p>
  *
@@ -87,26 +87,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
   protected String direction = DIRECTION_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected static final MMultiplicity MULTIPLICITY_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMultiplicity()
-   * @generated
-   * @ordered
-   */
-  protected MMultiplicity multiplicity = MULTIPLICITY_EDEFAULT;
-
-  /**
    * The cached value of the '{@link #getGenericRealization() <em>Generic Realization</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -135,6 +115,16 @@ public class MParameterImpl extends MElementImpl implements MParameter
    * @ordered
    */
   protected MOperation operation;
+
+  /**
+   * The cached value of the '{@link #getMultiplicity() <em>Multiplicity</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMultiplicity()
+   * @generated
+   * @ordered
+   */
+  protected MMultiplicity multiplicity;
 
   /**
    * <!-- begin-user-doc -->
@@ -201,29 +191,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
     direction = newDirection;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPARAMETER__DIRECTION, oldDirection, direction));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MMultiplicity getMultiplicity()
-  {
-    return multiplicity;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setMultiplicity(MMultiplicity newMultiplicity)
-  {
-    MMultiplicity oldMultiplicity = multiplicity;
-    multiplicity = newMultiplicity;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPARAMETER__MULTIPLICITY, oldMultiplicity, multiplicity));
   }
 
   /**
@@ -342,6 +309,54 @@ public class MParameterImpl extends MElementImpl implements MParameter
    * <!-- end-user-doc -->
    * @generated
    */
+  public MMultiplicity getMultiplicity()
+  {
+    return multiplicity;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetMultiplicity(MMultiplicity newMultiplicity, NotificationChain msgs)
+  {
+    MMultiplicity oldMultiplicity = multiplicity;
+    multiplicity = newMultiplicity;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, GcorePackage.MPARAMETER__MULTIPLICITY, oldMultiplicity, newMultiplicity);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMultiplicity(MMultiplicity newMultiplicity)
+  {
+    if (newMultiplicity != multiplicity)
+    {
+      NotificationChain msgs = null;
+      if (multiplicity != null)
+        msgs = ((InternalEObject)multiplicity).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MPARAMETER__MULTIPLICITY, null, msgs);
+      if (newMultiplicity != null)
+        msgs = ((InternalEObject)newMultiplicity).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - GcorePackage.MPARAMETER__MULTIPLICITY, null, msgs);
+      msgs = basicSetMultiplicity(newMultiplicity, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, GcorePackage.MPARAMETER__MULTIPLICITY, newMultiplicity, newMultiplicity));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @SuppressWarnings("unchecked")
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
@@ -372,6 +387,8 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return ((InternalEList<?>)getGenericRealization()).basicRemove(otherEnd, msgs);
       case GcorePackage.MPARAMETER__EVENT:
         return eBasicSetContainer(null, GcorePackage.MPARAMETER__EVENT, msgs);
+      case GcorePackage.MPARAMETER__MULTIPLICITY:
+        return basicSetMultiplicity(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -406,8 +423,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return getDefaultvalue();
       case GcorePackage.MPARAMETER__DIRECTION:
         return getDirection();
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        return getMultiplicity();
       case GcorePackage.MPARAMETER__GENERIC_REALIZATION:
         return getGenericRealization();
       case GcorePackage.MPARAMETER__TYPE:
@@ -418,6 +433,8 @@ public class MParameterImpl extends MElementImpl implements MParameter
       case GcorePackage.MPARAMETER__OPERATION:
         if (resolve) return getOperation();
         return basicGetOperation();
+      case GcorePackage.MPARAMETER__MULTIPLICITY:
+        return getMultiplicity();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -439,9 +456,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
       case GcorePackage.MPARAMETER__DIRECTION:
         setDirection((String)newValue);
         return;
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        setMultiplicity((MMultiplicity)newValue);
-        return;
       case GcorePackage.MPARAMETER__GENERIC_REALIZATION:
         getGenericRealization().clear();
         getGenericRealization().addAll((Collection<? extends MGeneric>)newValue);
@@ -451,6 +465,9 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return;
       case GcorePackage.MPARAMETER__OPERATION:
         setOperation((MOperation)newValue);
+        return;
+      case GcorePackage.MPARAMETER__MULTIPLICITY:
+        setMultiplicity((MMultiplicity)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -472,9 +489,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
       case GcorePackage.MPARAMETER__DIRECTION:
         setDirection(DIRECTION_EDEFAULT);
         return;
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        setMultiplicity(MULTIPLICITY_EDEFAULT);
-        return;
       case GcorePackage.MPARAMETER__GENERIC_REALIZATION:
         getGenericRealization().clear();
         return;
@@ -483,6 +497,9 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return;
       case GcorePackage.MPARAMETER__OPERATION:
         setOperation((MOperation)null);
+        return;
+      case GcorePackage.MPARAMETER__MULTIPLICITY:
+        setMultiplicity((MMultiplicity)null);
         return;
     }
     super.eUnset(featureID);
@@ -502,8 +519,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return DEFAULTVALUE_EDEFAULT == null ? defaultvalue != null : !DEFAULTVALUE_EDEFAULT.equals(defaultvalue);
       case GcorePackage.MPARAMETER__DIRECTION:
         return DIRECTION_EDEFAULT == null ? direction != null : !DIRECTION_EDEFAULT.equals(direction);
-      case GcorePackage.MPARAMETER__MULTIPLICITY:
-        return MULTIPLICITY_EDEFAULT == null ? multiplicity != null : !MULTIPLICITY_EDEFAULT.equals(multiplicity);
       case GcorePackage.MPARAMETER__GENERIC_REALIZATION:
         return genericRealization != null && !genericRealization.isEmpty();
       case GcorePackage.MPARAMETER__TYPE:
@@ -512,6 +527,8 @@ public class MParameterImpl extends MElementImpl implements MParameter
         return getEvent() != null;
       case GcorePackage.MPARAMETER__OPERATION:
         return operation != null;
+      case GcorePackage.MPARAMETER__MULTIPLICITY:
+        return multiplicity != null;
     }
     return super.eIsSet(featureID);
   }
@@ -531,8 +548,6 @@ public class MParameterImpl extends MElementImpl implements MParameter
     result.append(defaultvalue);
     result.append(", direction: ");
     result.append(direction);
-    result.append(", multiplicity: ");
-    result.append(multiplicity);
     result.append(')');
     return result.toString();
   }

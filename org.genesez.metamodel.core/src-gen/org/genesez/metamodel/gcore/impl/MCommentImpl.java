@@ -32,8 +32,8 @@ import org.genesez.metamodel.gcore.MElement;
  *   <li>{@link org.genesez.metamodel.gcore.impl.MCommentImpl#getXmiGuid <em>Xmi Guid</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MCommentImpl#getAnnotation <em>Annotation</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MCommentImpl#getOwningElement <em>Owning Element</em>}</li>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MCommentImpl#getNestingComment <em>Nesting Comment</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MCommentImpl#getNestedComment <em>Nested Comment</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MCommentImpl#getNestingComment <em>Nesting Comment</em>}</li>
  * </ul>
  * </p>
  *
@@ -174,17 +174,6 @@ public class MCommentImpl extends EObjectImpl implements MComment
    * <!-- end-user-doc -->
    * @generated
    */
-  public MComment getNestingComment()
-  {
-    if (eContainerFeatureID() != GcorePackage.MCOMMENT__NESTING_COMMENT) return null;
-    return (MComment)eContainer();
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EList<MComment> getNestedComment()
   {
     if (nestedComment == null)
@@ -192,6 +181,17 @@ public class MCommentImpl extends EObjectImpl implements MComment
       nestedComment = new EObjectContainmentWithInverseEList<MComment>(MComment.class, this, GcorePackage.MCOMMENT__NESTED_COMMENT, GcorePackage.MCOMMENT__NESTING_COMMENT);
     }
     return nestedComment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MComment getNestingComment()
+  {
+    if (eContainerFeatureID() != GcorePackage.MCOMMENT__NESTING_COMMENT) return null;
+    return (MComment)eContainer();
   }
 
   /**
@@ -209,12 +209,12 @@ public class MCommentImpl extends EObjectImpl implements MComment
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
         return eBasicSetContainer(otherEnd, GcorePackage.MCOMMENT__OWNING_ELEMENT, msgs);
+      case GcorePackage.MCOMMENT__NESTED_COMMENT:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedComment()).basicAdd(otherEnd, msgs);
       case GcorePackage.MCOMMENT__NESTING_COMMENT:
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
         return eBasicSetContainer(otherEnd, GcorePackage.MCOMMENT__NESTING_COMMENT, msgs);
-      case GcorePackage.MCOMMENT__NESTED_COMMENT:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedComment()).basicAdd(otherEnd, msgs);
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
   }
@@ -231,10 +231,10 @@ public class MCommentImpl extends EObjectImpl implements MComment
     {
       case GcorePackage.MCOMMENT__OWNING_ELEMENT:
         return eBasicSetContainer(null, GcorePackage.MCOMMENT__OWNING_ELEMENT, msgs);
-      case GcorePackage.MCOMMENT__NESTING_COMMENT:
-        return eBasicSetContainer(null, GcorePackage.MCOMMENT__NESTING_COMMENT, msgs);
       case GcorePackage.MCOMMENT__NESTED_COMMENT:
         return ((InternalEList<?>)getNestedComment()).basicRemove(otherEnd, msgs);
+      case GcorePackage.MCOMMENT__NESTING_COMMENT:
+        return eBasicSetContainer(null, GcorePackage.MCOMMENT__NESTING_COMMENT, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -273,10 +273,10 @@ public class MCommentImpl extends EObjectImpl implements MComment
         return getAnnotation();
       case GcorePackage.MCOMMENT__OWNING_ELEMENT:
         return getOwningElement();
-      case GcorePackage.MCOMMENT__NESTING_COMMENT:
-        return getNestingComment();
       case GcorePackage.MCOMMENT__NESTED_COMMENT:
         return getNestedComment();
+      case GcorePackage.MCOMMENT__NESTING_COMMENT:
+        return getNestingComment();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -345,10 +345,10 @@ public class MCommentImpl extends EObjectImpl implements MComment
         return ANNOTATION_EDEFAULT == null ? annotation != null : !ANNOTATION_EDEFAULT.equals(annotation);
       case GcorePackage.MCOMMENT__OWNING_ELEMENT:
         return getOwningElement() != null;
-      case GcorePackage.MCOMMENT__NESTING_COMMENT:
-        return getNestingComment() != null;
       case GcorePackage.MCOMMENT__NESTED_COMMENT:
         return nestedComment != null && !nestedComment.isEmpty();
+      case GcorePackage.MCOMMENT__NESTING_COMMENT:
+        return getNestingComment() != null;
     }
     return super.eIsSet(featureID);
   }

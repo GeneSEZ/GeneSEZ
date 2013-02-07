@@ -25,8 +25,8 @@ import org.genesez.metamodel.gcore.MPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getNestedPackage <em>Nested Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getNestingPackage <em>Nesting Package</em>}</li>
+ *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getNestedPackage <em>Nested Package</em>}</li>
  *   <li>{@link org.genesez.metamodel.gcore.impl.MPackageImpl#getAssociation <em>Association</em>}</li>
  * </ul>
  * </p>
@@ -81,13 +81,10 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<MPackage> getNestedPackage()
+  public MPackage getNestingPackage()
   {
-    if (nestedPackage == null)
-    {
-      nestedPackage = new EObjectContainmentWithInverseEList<MPackage>(MPackage.class, this, GcorePackage.MPACKAGE__NESTED_PACKAGE, GcorePackage.MPACKAGE__NESTING_PACKAGE);
-    }
-    return nestedPackage;
+    if (eContainerFeatureID() != GcorePackage.MPACKAGE__NESTING_PACKAGE) return null;
+    return (MPackage)eContainer();
   }
 
   /**
@@ -95,10 +92,13 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public MPackage getNestingPackage()
+  public EList<MPackage> getNestedPackage()
   {
-    if (eContainerFeatureID() != GcorePackage.MPACKAGE__NESTING_PACKAGE) return null;
-    return (MPackage)eContainer();
+    if (nestedPackage == null)
+    {
+      nestedPackage = new EObjectContainmentWithInverseEList<MPackage>(MPackage.class, this, GcorePackage.MPACKAGE__NESTED_PACKAGE, GcorePackage.MPACKAGE__NESTING_PACKAGE);
+    }
+    return nestedPackage;
   }
 
   /**
@@ -126,12 +126,12 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   {
     switch (featureID)
     {
-      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackage()).basicAdd(otherEnd, msgs);
       case GcorePackage.MPACKAGE__NESTING_PACKAGE:
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
         return eBasicSetContainer(otherEnd, GcorePackage.MPACKAGE__NESTING_PACKAGE, msgs);
+      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedPackage()).basicAdd(otherEnd, msgs);
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getAssociation()).basicAdd(otherEnd, msgs);
     }
@@ -148,10 +148,10 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   {
     switch (featureID)
     {
-      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
-        return ((InternalEList<?>)getNestedPackage()).basicRemove(otherEnd, msgs);
       case GcorePackage.MPACKAGE__NESTING_PACKAGE:
         return eBasicSetContainer(null, GcorePackage.MPACKAGE__NESTING_PACKAGE, msgs);
+      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
+        return ((InternalEList<?>)getNestedPackage()).basicRemove(otherEnd, msgs);
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return ((InternalEList<?>)getAssociation()).basicRemove(otherEnd, msgs);
     }
@@ -184,10 +184,10 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   {
     switch (featureID)
     {
-      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
-        return getNestedPackage();
       case GcorePackage.MPACKAGE__NESTING_PACKAGE:
         return getNestingPackage();
+      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
+        return getNestedPackage();
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return getAssociation();
     }
@@ -247,10 +247,10 @@ public class MPackageImpl extends MDefinitionContextImpl implements MPackage
   {
     switch (featureID)
     {
-      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
-        return nestedPackage != null && !nestedPackage.isEmpty();
       case GcorePackage.MPACKAGE__NESTING_PACKAGE:
         return getNestingPackage() != null;
+      case GcorePackage.MPACKAGE__NESTED_PACKAGE:
+        return nestedPackage != null && !nestedPackage.isEmpty();
       case GcorePackage.MPACKAGE__ASSOCIATION:
         return association != null && !association.isEmpty();
     }

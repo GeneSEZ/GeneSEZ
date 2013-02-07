@@ -5,10 +5,10 @@
     <details key="documentation" value="Author:gerbe.Created:8/30/12 6:57 PM.Title:.Comment:."/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="MPackage" eSuperTypes="#//MDefinitionContext">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" upperBound="-1"
-        eType="#//MPackage" containment="true" eOpposite="#//MPackage/nestingPackage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nestingPackage" eType="#//MPackage"
         changeable="false" eOpposite="#//MPackage/nestedPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" upperBound="-1"
+        eType="#//MPackage" containment="true" eOpposite="#//MPackage/nestingPackage"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="association" upperBound="-1"
         eType="#//MAssociation" containment="true" eOpposite="#//MAssociation/owningPackage"/>
   </eClassifiers>
@@ -21,16 +21,16 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="composition" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oppositeMultiplicity" lowerBound="1"
-        eType="#//MMultiplicity"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifierMultiplicity"
-        lowerBound="1" eType="#//MMultiplicity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="association" lowerBound="1"
         eType="#//MAssociation" eOpposite="#//MAssociation/end"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" lowerBound="1"
         eType="#//MAssociationRole"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="qualifier" lowerBound="1"
         eType="#//MType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oppositeMultiplicity" lowerBound="1"
+        eType="#//MMultiplicity" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualifierMultiplicity"
+        lowerBound="1" eType="#//MMultiplicity" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MAssociation" eSuperTypes="#//MElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="derived" lowerBound="1"
@@ -73,13 +73,13 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="derived" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" lowerBound="1"
-        eType="#//MMultiplicity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="classifier" lowerBound="1"
         eType="#//MClassifier" changeable="false" eOpposite="#//MClassifier/property"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="genericRealization" upperBound="-1"
         eType="#//MGeneric" containment="true" eOpposite="#//MGeneric/owningProperty"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//MType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multiplicity" lowerBound="1"
+        eType="#//MMultiplicity" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MInterface" eSuperTypes="#//MClassifier"/>
   <eClassifiers xsi:type="ecore:EClass" name="MClassifier" abstract="true" eSuperTypes="#//MElement #//MType #//MDefinitionContext">
@@ -127,8 +127,6 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" lowerBound="1"
-        eType="#//MMultiplicity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="genericRealization" upperBound="-1"
         eType="#//MGeneric" containment="true" eOpposite="#//MGeneric/owningParameter"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//MType"/>
@@ -136,6 +134,8 @@
         changeable="false" eOpposite="#//MEvent/parameter"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="operation" lowerBound="1"
         eType="#//MOperation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multiplicity" lowerBound="1"
+        eType="#//MMultiplicity" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MDataType" eSuperTypes="#//MClassifier"/>
   <eClassifiers xsi:type="ecore:EClass" name="MEnumeration" eSuperTypes="#//MDataType">
@@ -163,10 +163,10 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="owningElement" eType="#//MElement"
         changeable="false" eOpposite="#//MElement/ownedComment"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingComment" eType="#//MComment"
-        changeable="false" eOpposite="#//MComment/nestedComment"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nestedComment" upperBound="-1"
         eType="#//MComment" containment="true" eOpposite="#//MComment/nestingComment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingComment" eType="#//MComment"
+        changeable="false" eOpposite="#//MComment/nestedComment"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MTaggedValue">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
