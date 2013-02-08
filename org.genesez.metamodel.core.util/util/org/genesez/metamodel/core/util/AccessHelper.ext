@@ -582,72 +582,114 @@ boolean isAssociationClass(MClassifier this) :
 	false;
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	operations
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Operation ---------------------------------------------------------------------------------------------
+
+
+// -- Checks for a Classifier --
 
 /**
- * checks if a classifier has operations
- * @return	true if the classifier has operations, otherwise false
+ * Checks if a classifier has owning operations including constructors and destructors.
+ * 
+ * @return	True if the classifier has owning operations, otherwise false.
+ * @api
  */
-boolean hasOperations(MClassifier this) : operation.size > 0;
+boolean hasOperations(MClassifier this) : 
+	!operation.isEmpty;
+
 
 /**
- * checks if a classifier has operation declarations, that is, if it has abstract operations
- * @return	true if the classifier has abstract operations, otherwise false
+ * Checks if a classifier has owning declared operations excluding constructors and destructors.
+ * 
+ * @return	True if the classifier has declared operations, otherwise false
+ * @api
  */
-boolean hasOperationDeclarations(MClassifier this) : 
-	operation.reject( o|o.isConstructor() || o.isDestructor() || !o.abstract ).size > 0;
+boolean hasDeclaredOperations(MClassifier this) :
+	operation.exists( o | !o.isConstructor() && !o.isDestructor() && o.abstract );
+
 
 /**
- * checks if a classifier has one or more constructors
- * @return	true if the classifier has constructors, otherwise false
+ * Checks if a classifier has one or more constructors.
+ * 
+ * @return	True if the classifier has at least one constructors, otherwise false.
  * @see		isConstructor(MOperation)
+ * @api
  */
-boolean hasConstructors(MClassifier this) : operation.exists( o|o.isConstructor() );
+boolean hasConstructors(MClassifier this) : 
+	operation.exists( o | o.isConstructor() );
+
 
 /**
- * checks if an operation is a constructor of a classifier
- * @return	true if the operation is a constructor, otherwise false
+ * Checks if a classifier has one or more destructors.
+ * 
+ * @return	True if the classifier has at least one destructors, otherwise false.
+ * @see		isDestructor(MOperation)
+ * @api
+ */
+boolean hasDestructors(MClassifier this) : 
+	operation.exists( o | o.isDestructor() );
+
+
+// -- Checks for an Operation --
+
+
+/**
+ * Checks if an operation is a constructor of a classifier, whereas the following properties are checked:
+ *   - is the stereotype "Create" starting with a capital letter assigned to the specified operation or
+ *   - is the stereotype "create" starting with a small letter assigned to the specified operation or
+ *   - is the name of the classifier equals to the name of the specified operation
+ * 
+ * @return	True if the operation is a constructor of a classifier, otherwise false.
+ * @api
  */
 boolean isConstructor(MOperation this) :
 	hasStereotype("Create") || hasStereotype("create") || classifier.name == name;
 
-/**
- * checks if a classifier has one or more destructors
- * @return	true if the classifier has destructors, otherwise false
- * @see		isDestructor(MOperation)
- */
-boolean hasDestructors(MClassifier this) : operation.exists( o|o.isDestructor() );
 
 /**
- * checks if an operation is a destructor of a classifier
- * @return	true if the operation is a destructor, otherwise false
+ * Checks if an operation is a destructor of a classifier, whereas the following properties are checked:
+ *   - is the stereotype "Destroy" starting with a capital letter assigned to the specified operation or
+ *   - is the stereotype "destroy" starting with a small letter assigned to the specified operation or
+ *   - does the name of the specified operation starting with the "~" character
+ * 
+ * @return	True if the operation is a destructor of a classifier, otherwise false.
+ * @api
  */
 boolean isDestructor(MOperation this) :
 	hasStereotype("Destroy") || hasStereotype("destroy") || name.startsWith("~");
 
+
 /**
- * checks if an operation has a return type
- * @return	true if the operation has a return type, otherwise false
+ * Checks if an operation has a return parameter which is likewise not "void".
+ * 
+ * @return	True if the operation has a return parameter, otherwise false.
+ * @api
  */
 boolean hasReturn(MOperation this) :
 	return != null && return.type.name().toLowerCase() != "void";
 
+
 /**
- * checks if a parameter has a default value
- * @return	true if the parameter has a default value, otherwise false
+ * Checks if an operation has exceptions that can be thrown.
+ * 
+ * @return	True if the operation has exceptions, otherwise false.
+ * @api
+ */
+boolean hasExceptions(MOperation this) : 
+	!raisedException.isEmpty;
+
+
+// -- Checks for a Parameter --
+
+
+/**
+ * Checks if a parameter has a default value.
+ * 
+ * @return	True if the parameter has a default value, otherwise false.
+ * @api
  */
 boolean hasDefaultValue(MParameter this) :
 	defaultvalue.length > 0;
 
-/**
- * checks if an operation can throw exceptions
- * @return	true if the operation can throw exceptions, otherwise false
- */
-boolean hasExceptions(MOperation this) : !raisedException.isEmpty;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
