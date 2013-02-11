@@ -9,6 +9,8 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -24,6 +26,8 @@ import org.eclipse.xtend.typesystem.MetaModel;
 import org.genesez.m2t.cp.ImportPreserverConfig;
 import org.genesez.mapping.type.TypeMapper;
 import org.genesez.workflow.profile.Parameter;
+
+import com.google.common.io.Files;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -93,6 +97,13 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 				}
 			}
 		} else {
+			// ensure output directory exists
+			try {
+				java.nio.file.Files.createDirectories(Paths.get(outputDir));
+			} catch (IOException e) {
+				logger.error("Unable to create output directory", e);
+			}
+			// check default outlet
 			Outlet d = getDefaultOutlet();
 			if (d == null) {
 				Outlet o = new Outlet();
