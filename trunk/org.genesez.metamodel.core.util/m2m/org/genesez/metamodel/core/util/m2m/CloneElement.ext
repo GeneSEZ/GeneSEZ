@@ -92,22 +92,27 @@ MParameter cloneReturnParameter(MParameter source, MOperation container) :
 
 
 /**
- * Clones a comment based one the specified source comment and by ensuring it's element containment.
+ * Clones a comment based one the specified source comment and and ensures its element containment.
  * 
- * @return	The cloned return parameter.
+ * @return	The cloned comment.
  */
 MComment cloneComment(MComment source, MElement container) :
+	// create a new comment, clone basic property values and set containment
 	let clone = createComment( container, source.cloneXmiGuid( container ), source.annotation ) :
+		// clone own containments
 		source.nestedComment.cloneComment( clone ) ->
 		clone;
 
+
 /**
- * Clones a comment based one the specified source comment and by ensuring it's comment containment.
+ * Clones a comment based one the specified source comment and and ensures its comment containment.
  * 
- * @return	The cloned return parameter.
+ * @return	The cloned comment.
  */
 MComment cloneComment(MComment source, MComment container) :
+	// create a new comment, clone basic property values and set containment
 	let clone = createComment( container, source.cloneXmiGuid( container ), source.annotation ) :
+		// clone own containments
 		source.nestedComment.cloneComment( clone ) ->
 		clone;
 
@@ -131,7 +136,7 @@ MMultiplicity cloneMultiplicity(MMultiplicity source) :
 /**
  * Clones a tagged value based one the specified source tagged value and ensures its element containment.
  * 
- * @return	The cloned parameter.
+ * @return	The cloned tagged value.
  */
 MTaggedValue cloneTaggedValue(MTaggedValue source, MElement container) :
 	// create a new tagged value, clone basic property values and set containment
@@ -142,11 +147,14 @@ MTaggedValue cloneTaggedValue(MTaggedValue source, MElement container) :
 
 // -- Private Functionality ---------------------------------------------------------------------------------
 
+
 String cloneXmiGuid(MElement elem, MElement container) :
 	container.xmiGuid + "_" + elem.xmiGuid;
 	
+
 String cloneXmiGuid(MComment comment, MElement container) :
 	container.xmiGuid + "_" + comment.xmiGuid;
+
 
 String cloneXmiGuid(MComment comment, MComment container) :
 	container.xmiGuid + "_" + comment.xmiGuid;
