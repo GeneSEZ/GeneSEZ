@@ -8,9 +8,10 @@
 «ENDREM»
 
 «REM» useful support functions «ENDREM»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
@@ -53,13 +54,12 @@
 	* feature 'usePrimitiveTyp' to use arrays instead of collections
 	* if type is a primitive type, the wrapper type must be used as generic type for collections
 «ENDREM»
-«DEFINE MultiValuedType FOR MElement -»
+«DEFINE MultiValuedType(MMultiplicity multiplicity, MType type) FOR MElement -»
+	«logTrace("", "Generate multi valued type for [" + multiplicity + ", " + type.name() + "] " + this) -»
 	«IF usePrimitiveType() -»
-		«type().mapName().asTypeName() -»«EXPAND GenericUse»[]
-	«ELSEIF type().isPrimitiveType() -»
-		«mapType() -»<«type().mapName("Wrapper").asTypeName()»«EXPAND GenericUse»>
+		«type.mapName().asTypeName() -»«EXPAND GenericUse»[]
 	«ELSE -»
-		«mapType() -»<«type().mapName().asTypeName()»«EXPAND GenericUse»>
+		«multiplicity.mapCollection() -»<«type.mapName("Wrapper").asTypeName()»«EXPAND GenericUse»>
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -182,12 +182,17 @@
 «specification -»
 «ENDDEFINE»
 
+«REM» Just here for error free templates «ENDREM»
+«DEFINE GenericUse(List[MGeneric] generics) FOR MType -»
+«ENDDEFINE»
+
+
 «REM»
 	Generates the type parameters / generics used by an attribute.
 «ENDREM»
 «DEFINE GenericUse FOR MAttribute -»
 «IF !genericRealization.isEmpty -»
-	<«getGenericList(genericRealization) -»>
+	<«genericRealization.getGenericList() -»>
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»
@@ -197,7 +202,7 @@
 «ENDREM»
 «DEFINE GenericUse FOR MParameter -»
 «IF !genericRealization.isEmpty -»
-	<«getGenericList(genericRealization) -»>
+	<«genericRealization.getGenericList() -»>
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»

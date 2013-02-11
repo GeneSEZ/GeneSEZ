@@ -9,9 +9,9 @@
 «ENDREM»
 
 «EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
@@ -53,7 +53,7 @@ public @interface «name.toFirstUpper() -» {
 	Generates a meta data field for the annotation.
 «ENDREM»
 «DEFINE _Element FOR MAttribute -»
-	«type.mapName().asTypeName()»«IF isMultiValuedType()»[]«ENDIF» «name»()«IF hasDefaultValue() -» default «IF type.metaType == MEnumeration -»«type.mapName().asTypeName()».«ENDIF -»«defaultvalue»«ENDIF -»;
+	«type.mapName().asTypeName()»«IF isMultiValued()»[]«ENDIF» «name»()«IF hasDefaultValue() -» default «IF type.metaType == MEnumeration -»«type.mapName().asTypeName()».«ENDIF -»«defaultvalue»«ENDIF -»;
 «ENDDEFINE»
 
 «REM»

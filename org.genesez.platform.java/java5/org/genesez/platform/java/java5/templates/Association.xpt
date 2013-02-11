@@ -13,9 +13,9 @@
 «ENDREM»
 
 «REM» useful helper functions «ENDREM»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::java::scripts::Type»
 «EXTENSION org::genesez::platform::java::scripts::Naming»
@@ -117,7 +117,7 @@
 «ENDREM»
 «DEFINE _Initialization FOR MAssociationRole -»
 «IF hasAssociationClass() -»
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 	new OneAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -»,
 				«association.associationClass.asTypeName() -»> (this
 		, new Accessor<«type.asTypeName() -»>() {
@@ -150,7 +150,7 @@
 		)
 	«ENDIF -»
 «ELSE -»«REM» association without association class «ENDREM»
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 	new OneAssociation<«classifier.asTypeName() -», «type.asTypeName() -»>(this
 		, new Accessor<«type.asTypeName() -»>() {
 			public «type.asTypeName() -» get() {
@@ -241,7 +241,7 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 «DEFINE _AssociationDecl FOR MAssociationRole -»
 	«EXPAND Comment::Association -»
 	«IF hasAssociationClass() -»
-		«IF isSingleValuedType() -»
+		«IF isSingleValued() -»
 			«EXPAND _Modifier» «type.asTypeName()-» «asAttribute() -»;
 			«EXPAND Comment::AssociationClass -»
 			«EXPAND _Modifier» «association.associationClass.asTypeName()-» «association.associationClass.asAttribute() -»;
@@ -255,7 +255,7 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 		«IF multiplicity == 1 -»
 			«EXPAND _Modifier» «type.asTypeName()-» «asAttribute() -»;
 		«ELSE-»
-			«EXPAND _Modifier» «mapType()»<«type.asTypeName()-»> «asAttribute()» = new «mapType("Implementation")»<«type.asTypeName() -»>();
+			«EXPAND _Modifier» «mapCollection()»<«type.asTypeName()-»> «asAttribute()» = new «mapCollection("Implementation")»<«type.asTypeName() -»>();
 		«ENDIF-»
 	«ENDIF»
 «ENDDEFINE»
@@ -312,12 +312,12 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 	«IF isPlainAssociation()-»
 		«IF multiplicity != 1-»
 			«EXPAND _CommentGetter-»
-			public «mapType()»<«type.asTypeName()»> «asGetter()»();
+			public «mapCollection()»<«type.asTypeName()»> «asGetter()»();
 		«ENDIF-»
 	«ELSE-»
 		«EXPAND _CommentGetter-»
-		public «mapType()»<«type.asTypeName()»> «asGetter()»();
-		public «mapType()»<«type.asTypeName()»> «asGetter()»«type.asTypeName()»();
+		public «mapCollection()»<«type.asTypeName()»> «asGetter()»();
+		public «mapCollection()»<«type.asTypeName()»> «asGetter()»«type.asTypeName()»();
 	«ENDIF-»
 «ENDDEFINE»
 
@@ -334,7 +334,7 @@ Association<«classifier.asTypeName()», «type.asTypeName()»>
 				return «asAttribute()»;
 			}
 		«ELSE-»
-			public «mapType()-»<«type.asTypeName()»> «asGetter()»() {
+			public «mapCollection()-»<«type.asTypeName()»> «asGetter()»() {
 				return this.«asAttribute()-»;
 				«REM»«IF unique == true-»
 					return java.util.Collections.unmodifiableSet(«asAttribute()»);

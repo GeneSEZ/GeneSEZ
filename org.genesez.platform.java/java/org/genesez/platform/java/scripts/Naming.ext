@@ -11,7 +11,7 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessHelper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -263,7 +263,7 @@ String asRemovePropertyAccessOperation(MProperty this) : "remove" + name.toFirst
  */
 boolean isGetter(MOperation this) : 
 	// do not use attributeName() in this method cause it creates call circle
-	(this.returnType.name() == "Boolean" || this.returnType.name() == "boolean") &&
+	(this.return != null && ( this.return.type.name() == "Boolean" || this.return.type.name() == "boolean") ) &&
 	(this.name == "is"+this.name.subString(2,this.name.length) || this.name == "has"+this.name.subString(3,this.name.length))
 		? true
 		: (
@@ -293,7 +293,7 @@ String attributeName(MOperation this) :
 		: "" ->
 	this.isGetter()
 		? (
-			(this.returnType.name() == "Boolean" || this.returnType.name() == "boolean") &&
+			(this.return != null && ( this.return.type.name() == "Boolean" || this.return.type.name() == "boolean") ) &&
 			this.name.subString(0,1) == "is"	 
 				? this.name.subString(2,this.name.length)
 				: this.name.subString(3,this.name.length) 

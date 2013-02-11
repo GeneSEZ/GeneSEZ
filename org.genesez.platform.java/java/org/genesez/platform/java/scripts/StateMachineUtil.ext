@@ -1,9 +1,9 @@
 
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessHelper;
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::typemapping::TypeMapping;
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
 extension org::genesez::platform::java::scripts::Naming;
 
 /**
@@ -20,7 +20,7 @@ prepareActiveClass(MClassifier clazz) :
 private create MExternal eventReceiverType(MClassifier clazz) :
 	// add containment
 	clazz.model().externalTypes.add( this ) ->
-	setSpecification("EventReceiver<" + clazz.asTypeName() + ".EventId>") ->
+	setName("EventReceiver<" + clazz.asTypeName() + ".EventId>") ->
 	this
 	;
 
@@ -111,7 +111,7 @@ List extractGroup(MAtomicTransition head, List[MAtomicTransition] remaining, Lis
  * outer state
  */
 List[MAtomicTransition] sortInnerToOuter(List[MAtomicTransition] atl) : 
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.sortInnerToOuter(java.util.List)
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.sortInnerToOuter(java.util.List)
  	;
 
 /**
@@ -172,7 +172,7 @@ cached List[MParameter] parameterList(MActivity this) :
  * @return list of Parameters
  */
 List[MParameter] getCommonParams(List l) :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.getCommonParams(java.util.List) 
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.getCommonParams(java.util.List) 
 	;
 
 
@@ -228,7 +228,7 @@ MState nearestReachable(List[MHistoryState] reachable, MState from) :
  */
 List [MActivity] resultingEntries(MHistoryState history, MLeafState target) :
 //	visitedStates(history, target).entry
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.
 		resultingEntries(org.genesez.metamodel.gcore.MHistoryState, org.genesez.metamodel.gcore.MLeafState)
 	;
 
@@ -237,7 +237,7 @@ List [MActivity] resultingEntries(MHistoryState history, MLeafState target) :
  */
 List [MActivity] resultingStartDo(MHistoryState history, MLeafState target) :
 //	visitedStates(history, target).do
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.
 		resultingStartDo(org.genesez.metamodel.gcore.MHistoryState, org.genesez.metamodel.gcore.MLeafState)
 	;
 
@@ -252,7 +252,7 @@ resultingTimer(MHistoryState history, MLeafState target) :
  * build a list of visited states on the way from history state to target
  */
 List [MState] visitedStates(MHistoryState history, MLeafState target) :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.
 		visitedStates(org.genesez.metamodel.gcore.MHistoryState, org.genesez.metamodel.gcore.MLeafState)
 	;
 
@@ -261,7 +261,7 @@ List [MState] visitedStates(MHistoryState history, MLeafState target) :
  */
 private MGuard registerGuard(MGuard guard) :
 	//guard
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.registerGuard(org.genesez.metamodel.gcore.MGuard)
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.registerGuard(org.genesez.metamodel.gcore.MGuard)
 	;
 
 /**
@@ -273,48 +273,47 @@ private MGuard registerGuard(MGuard guard) :
  * @return list of normalized guard expression serving as key
  */
 List[String] getGuards() :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.getGuards()
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.getGuards()
 	;
 
 /**
  * initalize internal maps for registered guard methods
  */
 private Void clearGuardInfo() :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.clearGuardInfo()
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.clearGuardInfo()
 	;
 
 /**
  * get the method name for a guard
  */
 String method(MGuard guard) :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.getMethod(org.genesez.metamodel.gcore.MGuard)
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.getMethod(org.genesez.metamodel.gcore.MGuard)
 	;
 
 /**
  * get the method name for a guard
  */
 String method(String guardExp) :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.getMethod(java.lang.String)
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.getMethod(java.lang.String)
 	;
 
 /**
  * get normalized guard expression
  */
 String expression(MGuard guard) :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.guardKey(org.genesez.metamodel.gcore.MGuard)
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.guardKey(org.genesez.metamodel.gcore.MGuard)
 	;
 
 /**
  * get all events constrained with this guard
  */
 boolean isTriggerless(String guard) :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.isTriggerless(java.lang.String)
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.isTriggerless(java.lang.String)
 	;
 
 /**
  * get all events constrained with this guard
  */
 Set[MEvent] getGuardEvents(String guard) :
-	JAVA org.genesez.platform.common.m2t.StateMachineHelper.getGuardEvents(java.lang.String)
+	JAVA org.genesez.metamodel.core.util.StateMachineHelper.getGuardEvents(java.lang.String)
 	;
-	 	

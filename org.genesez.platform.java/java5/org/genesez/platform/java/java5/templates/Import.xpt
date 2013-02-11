@@ -9,13 +9,14 @@
 	@author andre pflueger (last)
 «ENDREM»
 
-«EXTENSION org::genesez::platform::common::m2t::Helper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
-«REM» use import helper «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+
 «EXTENSION org::genesez::platform::java::scripts::Imports»
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
 
+«EXTENSION org::genesez::util::logging::Logging»
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -26,14 +27,15 @@
 	checks if a import of a type is really needed
 «ENDREM»
 «DEFINE Import FOR MClassifier -»
+«logTrace("", "Generate imports for: " + this) -»
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : («this.xmiGuid-») 
  */
-«EXPAND _FixedImports -»
 «EXPAND Annotation::ImportStatements -»
 «EXPAND Annotation::ImportStatements FOREACH classifier -»
-«EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this))»
+«EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this)
+		.logDebug("Import in context " + fullQualifiedName(name) + " for type " + s.asTypeName() + " resolved ") )»
 «EXPAND _OtherImports»
 «ENDDEFINE»
 
@@ -64,10 +66,16 @@ import «fullQualifiedName( asTypeName(), basePackage() )»;
 «REM»
 	generates the imports needed for a type
 «ENDREM»
-«DEFINE _Import FOR MType -»
-«IF mapName("Import").toString().toString().trim().length > 0 -»
+«DEFINE _Import FOR MExternal -»
 import «mapName("Import")»;
-«ENDIF»
+«ENDDEFINE»
+
+«DEFINE _Import FOR MGeneric -»
+«REM» Nothing to import for MGeneric's! «ENDREM»
+«ENDDEFINE»
+
+«DEFINE _Import FOR MType -»
+«logFatal("", "Unable to generate imports for MType: " + this) -»
 «ENDDEFINE»
 
 «REM»
