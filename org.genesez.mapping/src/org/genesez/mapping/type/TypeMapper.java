@@ -94,6 +94,19 @@ public class TypeMapper {
 	}
 	
 	/**
+	 * Returns true if a mapping for the specified type in the specified context exists, otherwise false.
+	 * 
+	 * @param mappingType	The type to map.
+	 * @param context		The context in which the type should be mapped.
+	 * @return	True if a type mapping exists, otherwise false.
+	 * 
+	 * @see org.genesez.mapping.type.ITypeMappingManager#hasTypeMapping(java.lang.String, java.lang.String)
+	 */
+	public boolean hasExternalTypeMapping(String externalType, String context) {
+		return externalTypeManager.hasTypeMapping(externalType, context);
+	}
+	
+	/**
 	 * Returns the name of the external type if a mapping entry exists, 
 	 * otherwise the specified name of the external type will be returned.
 	 * 

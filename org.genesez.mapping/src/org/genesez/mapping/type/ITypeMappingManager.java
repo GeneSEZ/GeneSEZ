@@ -24,6 +24,14 @@ public interface ITypeMappingManager<T> {
 	public String getTypeMapping(String mappingType, String context);
 	
 	/**
+	 * Returns true if a mapping for the specified type in the specified context exists, otherwise false.
+	 * @param mappingType	The type to map.
+	 * @param context		The context in which the type should be mapped.
+	 * @return	True if a type mapping exists, otherwise false.
+	 */
+	public boolean hasTypeMapping(String mappingType, String context);
+	
+	/**
 	 * Appends the type mappings specified by the parameter {@code typeMappingContainer} to the type mapping map of the type mapping manager.
 	 * 
 	 * @param	typeMappingContainer	List of possible new type mappings.

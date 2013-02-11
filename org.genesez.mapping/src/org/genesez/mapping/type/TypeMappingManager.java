@@ -34,6 +34,25 @@ public class TypeMappingManager<T extends SingleValuedType> implements ITypeMapp
 	}
 	
 	/**
+	 * Returns true if a mapping for the specified type in the specified context exists, otherwise false.
+	 * @see org.genesez.mapping.type.ITypeMappingManager#hasTypeMapping(java.lang.String, java.lang.String)
+	 */
+	public boolean hasTypeMapping(String mappingType, String context) {
+		if (context == null) {
+			return typeMappings.containsKey(mappingType);
+		}
+		if (typeMappings.containsKey(mappingType)) {
+			T specificType = typeMappings.get(mappingType);
+			for (Context c : specificType.getContextMap()) {
+				if (c.getKey().equalsIgnoreCase(context)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Returns the mapping of the specified single-valued type by means of the specified context.
 	 * If no mapping for the specified context exists in the type mapping map then the default mapping will be returned.
 	 * Otherwise if no mapping exists the specified parameter will be returned.
