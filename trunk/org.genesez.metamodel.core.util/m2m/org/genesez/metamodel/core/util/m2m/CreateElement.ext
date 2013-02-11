@@ -28,6 +28,7 @@ MPackage ensurePackageExistence(MPackage container, String xmiGuid, String name)
 		? container.nestedPackage.selectFirst( e | e.name == name )
 		: createPackage( container, xmiGuid, name );
 
+
 /**
  * Creates a package with the specified properties and ensures its package containment.
  * 
@@ -55,7 +56,8 @@ MClassifier processClassifier(MClassifier this, String visibility, boolean abstr
 	setAbstract( abstract ) ->
 	setFinal( final ) ->
 	this;
-	
+
+
 /**
  * Assigns the specified generalization to the specified classifier.
  * 
@@ -95,6 +97,7 @@ MClass ensureClassExistence(MDefinitionContext container, String xmiGuid, String
 		? container.classifier.selectFirst( e | e.name == name )
 		: createClass( container, xmiGuid, name );
 
+
 /**
  * Creates a class with the specified properties and ensures its definition context containment.
  * 
@@ -116,6 +119,7 @@ MInterface ensureInterfaceExistence(MDefinitionContext container, String xmiGuid
 	container.classifier.exists( e | e.name == name )
 		? container.classifier.selectFirst( e | e.name == name )
 		: createInterface( container, xmiGuid, name );
+
 
 /**
  * Creates an interface with the specified properties and ensures its definition context containment.
@@ -139,6 +143,7 @@ MDataType ensureDataTypeExistence(MDefinitionContext container, String xmiGuid, 
 		? container.classifier.selectFirst( e | e.name == name )
 		: createDataType( container, xmiGuid, name );
 
+
 /**
  * Creates a data type with the specified properties and ensures its definition context containment.
  * 
@@ -160,6 +165,7 @@ MEnumeration ensureEnumerationExistence(MDefinitionContext container, String xmi
 	container.classifier.exists( e | e.name == name )
 		? container.classifier.selectFirst( e | e.name == name )
 		: createEnumeration( container, xmiGuid, name );
+
 
 /**
  * Creates an enumeration with the specified properties and ensures its definition context containment.
@@ -183,6 +189,7 @@ MLiteral ensureLiteralExistence(MEnumeration container, String xmiGuid, String n
 		? container.literal.selectFirst( e | e.name == name )
 		: createLiteral( container, xmiGuid, name );
 
+
 /**
  * Creates a literal with the specified properties and ensures its enumeration containment.
  * 
@@ -204,6 +211,7 @@ MExternal ensureExternalTypeExistence(MModel container, String xmiGuid, String n
 	container.externalTypes.exists( e | e.name == name )
 		? container.externalTypes.selectFirst( e | e.name == name )
 		: createExternalType( container, xmiGuid, name );
+
 
 /**
  * Creates an external type with the specified properties and ensures its model containment.
@@ -233,6 +241,7 @@ MProperty processProperty(MProperty this, String visibility, boolean derived, MM
 	setMultiplicity( multiplicity ) ->
 	this;
 
+
 /**
  * Assigns the specified type to the specified property.
  * 
@@ -252,6 +261,7 @@ MAttribute ensureAttributeExistence(MClassifier container, String xmiGuid, Strin
 		? container.property.selectFirst( e | e.name == name )
 		: createAttribute( container, xmiGuid, name );
 
+
 /**
  * Creates an attribute with the specified properties and ensures its classifier containment.
  * 
@@ -263,6 +273,7 @@ create MAttribute createAttribute(MClassifier container, String xmiGuid, String 
 	// set containment
 	container.property.add( this ) ->
 	this;
+
 
 /**
  * Assigns the specified properties to the specified attribute.
@@ -289,6 +300,7 @@ MOperation ensureOperationExistence(MClassifier container, String xmiGuid, Strin
 		? container.operation.selectFirst( e | e.name == name )
 		: createOperation( container, xmiGuid, name );
 
+
 /**
  * Creates an operation with the specified properties and ensures its classifier containment.
  * 
@@ -300,6 +312,7 @@ create MOperation createOperation(MClassifier container, String xmiGuid, String 
 	// set containment
 	container.operation.add( this ) ->
 	this;
+
 
 /**
  * Assigns the specified properties to the specified operation.
@@ -313,6 +326,7 @@ MOperation processOperation(MOperation this, String visibility, boolean static, 
 	setAbstract( abstract ) ->
 	setFinal( final ) ->
 	this;
+
 
 /**
  * Assigns the specified raised exception to the specified operation.
@@ -333,6 +347,7 @@ MParameter ensureParameterExistence(MOperation container, String xmiGuid, String
 		? container.parameter.selectFirst( e | e.name == name )
 		: createParameter( container, xmiGuid, name );
 
+
 /**
  * Returns the return parameter instance with the specified properties.
  * It checks if the return parameter is already contained within the operation and creates it if needed.
@@ -341,6 +356,7 @@ MParameter ensureReturnParameterExistence(MOperation container, String xmiGuid, 
 	container.return.name == name
 		? container.return
 		: createReturnParameter( container, xmiGuid, name );
+
 
 /**
  * Creates a parameter with the specified properties and ensures its operation containment.
@@ -355,6 +371,7 @@ create MParameter createParameter(MOperation container, String xmiGuid, String n
 	setOperation( container ) ->
 	this;
 
+
 /**
  * Creates a return parameter with the specified properties and ensures its operation containment.
  * 
@@ -368,6 +385,7 @@ create MParameter createReturnParameter(MOperation container, String xmiGuid, St
 	setOperation( container ) ->
 	this;
 
+
 /**
  * Assigns the specified properties to the specified parameter.
  * 
@@ -379,6 +397,7 @@ MParameter processParameter(MParameter this, String defaultValue, String directi
 	setDirection( direction ) ->
 	setMultiplicity( multiplicity ) ->
 	this;
+
 
 /**
  * Assigns the specified type to the specified parameter.
@@ -402,6 +421,7 @@ MComment ensureCommentExistence(MElement container, String xmiGuid, String annot
 		? container.ownedComment.selectFirst( e | e.annotation == annotation )
 		: createComment( container, xmiGuid, annotation );
 
+
 /**
  * Creates a comment with the specified properties and ensures its element containment.
  * 
@@ -414,6 +434,7 @@ create MComment createComment(MElement container, String xmiGuid, String annotat
 	// set containment
 	container.ownedComment.add( this ) ->
 	this;
+
 
 /**
  * Creates a comment with the specified properties and ensures its containment within another comment.
@@ -457,6 +478,7 @@ MStereotype ensureStereotypeExistence(MModel container, String xmiGuid, String n
 		? container.anyStereotype.selectFirst( s | s.name == name )
 		: createStereotype( container, xmiGuid, name );
 
+
 /**
  * Creates a stereotype with the specified properties and ensures its model containment.
  * 
@@ -468,6 +490,7 @@ create MStereotype createStereotype(MModel container, String xmiGuid, String nam
 	// set containment
 	container.anyStereotype.add( this ) ->
 	this;
+
 
 /**
  * Assigns the specified generalization to the specified stereotype.
@@ -487,6 +510,7 @@ MTag ensureTagExistence(MStereotype container, String name, String type) :
 	container.property.exists( p | p.name == name )
 		? container.property.selectFirst( p | p.name == name )
 		: createTag( container, name, type );
+
 
 /**
  * Creates a tag with the specified properties and ensures its model containment.
@@ -515,6 +539,7 @@ MTaggedValue ensureTaggedValueExistence(MElement container, MTag tag, String val
 		? container.taggedValue.selectFirst( tv | tv.tag == tag && tv.value == value )
 		: createTaggedValue( container, tag, value );
 
+
 /**
  * Returns the tagged value instance with the specified properties.
  * It checks if the tagged value is already present and creates it if needed.
@@ -527,6 +552,7 @@ MTaggedValue ensureTaggedValueExistence(MElement container, MTag tag, MElement v
 	container.taggedValue.exists( tv | tv.tag == tag && tv.valueReference == valueReference )
 		? container.taggedValue.selectFirst( tv | tv.tag == tag && tv.valueReference == valueReference )
 		: createTaggedValue( container, tag, valueReference );
+
 
 /**
  * Creates a tagged value with the specified properties and ensures its model containment.
@@ -543,6 +569,7 @@ create MTaggedValue createTaggedValue(MElement container, MTag tag, String value
 	// ensure stereotype assignment to model element
 	container.ensureStereotypeAssignment( tag.stereotype ) ->
 	this;
+
 
 /**
  * Creates a tagged value with the specified properties and ensures its model containment.
