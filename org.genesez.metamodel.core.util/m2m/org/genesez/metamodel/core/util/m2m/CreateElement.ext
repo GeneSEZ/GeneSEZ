@@ -415,6 +415,19 @@ create MComment createComment(MElement container, String xmiGuid, String annotat
 	container.ownedComment.add( this ) ->
 	this;
 
+/**
+ * Creates a comment with the specified properties and ensures its containment within another comment.
+ * 
+ * @return	The created comment.
+ */
+create MComment createComment(MComment container, String xmiGuid, String annotation) :
+	// set basic property values
+	setXmiGuid( xmiGuid ) ->
+	setAnnotation( annotation ) ->
+	// set containment
+	container.nestedComment.add( this ) ->
+	this;
+
 
 // -- Data Types --------------------------------------------------------------------------------------------
 
