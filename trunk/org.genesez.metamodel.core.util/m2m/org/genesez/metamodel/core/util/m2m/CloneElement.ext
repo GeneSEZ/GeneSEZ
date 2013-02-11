@@ -48,6 +48,7 @@ MOperation cloneOperation(MOperation source, MClassifier container) :
 		source.return != null
 			? source.return.cloneReturnParameter( clone )
 			: clone ->
+		source.ownedComment.cloneComment( clone ) ->
 		clone;
 		
 
@@ -64,6 +65,8 @@ MParameter cloneParameter(MParameter source, MOperation container) :
 		clone.processParameter( source.defaultvalue, source.direction, source.multiplicity.cloneMultiplicity() ) ->
 		// clone references
 		clone.wireType( source.type ) ->
+		// clone own containments
+		source.ownedComment.cloneComment( clone ) ->
 		clone;
 
 
@@ -80,10 +83,33 @@ MParameter cloneReturnParameter(MParameter source, MOperation container) :
 		clone.processParameter( source.defaultvalue, source.direction, source.multiplicity.cloneMultiplicity() ) ->
 		// clone references
 		clone.wireType( source.type ) ->
+		// clone own containments
+		source.ownedComment.cloneComment( clone ) ->
 		clone;
 
 
 // -- Comment -----------------------------------------------------------------------------------------------
+
+
+/**
+ * Clones a comment based one the specified source comment and by ensuring it's element containment.
+ * 
+ * @return	The cloned return parameter.
+ */
+MComment cloneComment(MComment source, MElement container) :
+	let clone = createComment( container, source.cloneXmiGuid( container ), source.annotation ) :
+		source.nestedComment.cloneComment( clone ) ->
+		clone;
+
+/**
+ * Clones a comment based one the specified source comment and by ensuring it's comment containment.
+ * 
+ * @return	The cloned return parameter.
+ */
+MComment cloneComment(MComment source, MComment container) :
+	let clone = createComment( container, source.cloneXmiGuid( container ), source.annotation ) :
+		source.nestedComment.cloneComment( clone ) ->
+		clone;
 
 
 // -- Data Types --------------------------------------------------------------------------------------------
