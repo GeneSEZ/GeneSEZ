@@ -4,7 +4,6 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_16_0_b6f02e1_1249463754375_944273_708) 
  */
-
 import java.awt.Color;
 
 /**
@@ -18,7 +17,6 @@ public class Polygon implements Form {
 	/**
 	 * the points a polygon consists of
 	 */
-	
 	private Point[] points = null;
 	
 	// -- generated constructors --------------------------------------------
@@ -108,7 +106,7 @@ public class Polygon implements Form {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */

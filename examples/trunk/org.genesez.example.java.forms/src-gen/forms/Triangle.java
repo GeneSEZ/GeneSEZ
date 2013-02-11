@@ -5,7 +5,6 @@ package forms;
  * 	@FILE-ID : (_16_0_b6f02e1_1249464030468_592473_783) 
  */
 
-
 /**
  * Describes the geometrical form <b>triangle</b> as a special <i>polygon</i>
  * @author dreamer
@@ -21,15 +20,13 @@ public class Triangle extends Polygon {
 	 */
 	public Triangle(Point a, Point b, Point c) {
 		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249464090812_470196_811) ENABLED START */
-		super(new Point[] {
-		a, b, c
-		});
+		super(new Point[] { a, b, c });
 		/* PROTECTED REGION END */
 	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249464030468_592473_783) ENABLED START */

@@ -5,7 +5,6 @@ package forms;
  * 	@FILE-ID : (_14_0_b6f02e1_1212580097593_990285_125) 
  */
 
-
 /**
  * Describes the common behavior of a geometrical forms
  * @author dreamer

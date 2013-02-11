@@ -4,7 +4,6 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_14_0_b6f02e1_1211871374078_396988_308) 
  */
-
 import java.awt.Color;
 
 /**
@@ -122,7 +121,7 @@ public class Line implements Form {
 	
 	// -- generated association + attribute accessors -----------------------
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871374078_396988_308) ENABLED START */

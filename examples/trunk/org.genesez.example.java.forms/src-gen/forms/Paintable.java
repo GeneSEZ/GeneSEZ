@@ -4,7 +4,6 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_16_0_b6f02e1_1249464729937_936506_1005) 
  */
-
 import java.awt.Color;
 
 /**

@@ -4,7 +4,6 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_16_0_b6f02e1_1249543362015_69354_283) 
  */
-
 import java.awt.Color;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -113,7 +112,7 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
@@ -129,7 +128,7 @@ public class Figure implements Form, AssociationRole {
 		return (Association<Figure, Form>) association.get(Associations.FORMS);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */

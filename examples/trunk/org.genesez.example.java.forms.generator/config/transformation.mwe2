@@ -1,0 +1,31 @@
+module org.genesez.example.forms.transformation
+
+Workflow {
+	component = @org.genesez.adapter.uml2.gcore.Uml2Gcore {
+		uml2file = "model/forms.uml"
+	}
+	component = org.genesez.workflow.xpand.Validator {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::Constraints"
+		script = "org::genesez::platform::java::constraints::Syntax"
+	}
+	component = org.genesez.workflow.xpand.Model2Model {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+	}
+	component = org.genesez.workflow.EmfWriter {
+		schemaLocationImplementation = true
+		file = "model/forms.gcore.xmi"
+		slot = "coremodel"
+	}
+	component = org.genesez.workflow.xpand.Model2TextComposite {
+		component = org.genesez.platform.java.workflow.Gcore2Java {
+			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+			slot = "coremodel"
+			template = "org::genesez::platform::java::java5::templates::Root::Root"
+			outputDir = "../org.genesez.example.java.forms/src-gen"
+			typeMappingFile = "typemapping.xml"
+		}
+	}
+}

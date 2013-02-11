@@ -5,7 +5,6 @@ package forms;
  * 	@FILE-ID : (_16_0_b6f02e1_1249464012328_770017_760) 
  */
 
-
 /**
  * Describes the geometrical form <b>rectangle</b> as a specic <i>polygon</i>
  * @author dreamer
@@ -20,15 +19,13 @@ public class Rectangle extends Polygon {
 	 */
 	public Rectangle(Point a, Point c) {
 		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249464153812_196550_828) ENABLED START */
-		super(new Point[] {
-		a, new Point(c.getX(), a.getY()), c, new Point(a.getX(), c.getY())
-		});
+		super(new Point[] { a, new Point(c.getX(), a.getY()), c, new Point(a.getX(), c.getY()) });
 		/* PROTECTED REGION END */
 	}
 	
 	// -- generated method stubs for implementations + derived attributes ---
 	
-	// -- generated code of other cartridges --------------------------------
+	// -- generated code  ---------------------------------------------------
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249464012328_770017_760) ENABLED START */
