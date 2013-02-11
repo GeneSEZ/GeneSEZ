@@ -9,8 +9,10 @@
 // based on genesez meta model
 import gcore;
 
+extension org::genesez::metamodel::core::util::AccessHelper;
 extension org::genesez::platform::java::scripts::Conversion;
-extension org::genesez::platform::common::typemapping::TypeMapping;
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
+extension org::genesez::util::logging::Logging;
 
 /**
  * determines if an import of a classifier is needed for a classifier
@@ -27,7 +29,11 @@ boolean isImportNeeded(MClassifier supplier, MClassifier this) :
  * @return	true, if the import of the type is needed, otherwise false
  */
 boolean isImportNeeded(MType supplier, MClassifier this) :
-	!supplier.mapName("Import").filterImports();
+	supplier.metaType == MExternal
+		? (hasExternalTypeMapping( (MExternal)supplier, "Import" )
+			? !supplier.mapName("Import").filterImports()
+			: false
+		) : supplier.filterImports();
 
 /**
  * filters unnecessary import statements

@@ -9,10 +9,10 @@
 //	based genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::Conversion;
+extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::Conversion;
+extension org::genesez::metamodel::core::util::m2t::Helper;
 extension org::genesez::util::logging::Logging;
-extension org::genesez::platform::common::m2t::Helper;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -54,7 +54,7 @@ context MOperation WARNING "GeneSEZ: the modifiers of the interface operation wi
 */
 
 context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf! " + fqn() :
-	isMultiValuedType() && usePrimitiveType() && hasGenericRealization()
+	isMultiValued() && usePrimitiveType() && hasGenericRealization()
 		? false
 		: true;
 
@@ -70,7 +70,7 @@ context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you w
  * @return	 true, if the name is not a reserved java word, otherwise false
  */
 context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word! " + fqn() :
-	{ MPrimitiveType, MStereotype, MTag, MTaggedValue }.contains( metaType )
+	{ MStereotype, MTag, MTaggedValue }.contains( metaType )
 		? true
 		: (
 	!{"abstract", "continue", "for", "new", "switch", "assert", "default", "goto", 

@@ -17,8 +17,9 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
-extension org::genesez::platform::common::m2t::Helper;
+extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::m2t::Helper;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
 extension org::genesez::platform::common::m2m::CreateBasics;
 extension org::genesez::platform::common::m2m::CreateTemplate;
 
@@ -67,7 +68,7 @@ private MClassifier process(MClassifier this) :
  * - adds the interface 'association role'
  */
 Void prepareClass(MClassifier this) :
-	let i = makeAssociationRole(getModel()) :
+	let i = makeAssociationRole(model()) :
 		realization.add(i) ->
 		Void;
 
@@ -77,7 +78,7 @@ Void prepareClass(MClassifier this) :
  * - adds an attribute
  */
 Void prepareAssociationClass(MClassifier this) :
-	let i = makeAssociationClass(getModel()) : 
+	let i = makeAssociationClass(model()) : 
 		realization.add(i) -> 
 		makeAssociationClassLinkAttribute() ->
 		Void;
@@ -88,7 +89,7 @@ Void prepareAssociationClass(MClassifier this) :
 private MAttribute makeAssociationClassLinkAttribute(MClassifier this) : 
 	let attrib = createAttribute(xmiGuid + ".associationClassLink", "associationClassLink")
 			.processAttribute("new ACLink()", false, false)
-			.processProperty("private", false, 1, false, false) :
+			.processProperty("private", false, 0, 1, false, false) :
 		attrib.setType( model().makeACLink() ) ->
 		attrib.createAccessor("true", "false") ->
 	attrib;
@@ -102,59 +103,59 @@ private MAttribute makeAssociationClassLinkAttribute(MClassifier this) :
 /**
  * creates the 'AssociationRole' interface as external type
  */
-MExternal makeAssociationRole(MModel this) : createExternal("AssociationRole");
+MExternal makeAssociationRole(MModel this) : createExternalType("AssociationRole", "AssociationRole");
 
 /**
  * creates the 'RelatedAssociationRole' interface as external type
  */
-MExternal makeRelatedAssociationRole(MModel this) : createExternal("RelatedAssociationRole");
+MExternal makeRelatedAssociationRole(MModel this) : createExternalType("RelatedAssociationRole", "RelatedAssociationRole");
 
 /**
  * creates the 'AssociationClass' interface as external type
  */
-MExternal makeAssociationClass(MModel this) : createExternal("AssociationClass");
+MExternal makeAssociationClass(MModel this) : createExternalType("AssociationClass", "AssociationClass");
 
 /**
  * creates the 'ACLink' class as external type
  */
-MExternal makeACLink(MModel this) : createExternal("ACLink");
+MExternal makeACLink(MModel this) : createExternalType("ACLink", "ACLink");
 
 /**
  * creates the 'Association' interface as external type
  */
-MExternal makeAssociation(MModel this) : createExternal("Association");
+MExternal makeAssociation(MModel this) : createExternalType("Association", "Association");
 
 /**
  * creates the 'AssociationAC' interface as external type
  */
-MExternal makeAssociationAC(MModel this) : createExternal("AssociationAC");
+MExternal makeAssociationAC(MModel this) : createExternalType("AssociationAC", "AssociationAC");
 	
 /**
  * creates the 'OneAssociation' class as external type
  */
-MExternal makeOneAssociation(MModel this) : createExternal("OneAssociation");
+MExternal makeOneAssociation(MModel this) : createExternalType("OneAssociation", "OneAssociation");
 
 /**
  * creates the 'OneAssociationAC' class as external type
  */
-MExternal makeOneAssociationAC(MModel this) : createExternal("OneAssociationAC");
+MExternal makeOneAssociationAC(MModel this) : createExternalType("OneAssociationAC", "OneAssociationAC");
 
 /**
  * creates the 'ManyAssociation' class as external type
  */
-MExternal makeManyAssociation(MModel this) : createExternal("ManyAssociation");
+MExternal makeManyAssociation(MModel this) : createExternalType("ManyAssociation", "ManyAssociation");
 
 /**
  * creates the 'ManyAssociationAC' class as external type
  */
-MExternal makeManyAssociationAC(MModel this) : createExternal("ManyAssociationAC");
+MExternal makeManyAssociationAC(MModel this) : createExternalType("ManyAssociationAC","ManyAssociationAC");
 
 /**
  * creates the 'HashSet' class as external type
  */
-MExternal makeHashSet(MModel this) : createExternal("HashSet");
+MExternal makeHashSet(MModel this) : createExternalType("HashSet", "HashSet");
 
 /**
  * creates the 'HashMap' class as external type
  */
-MExternal makeHashMap(MModel this) : createExternal("HashMap");
+MExternal makeHashMap(MModel this) : createExternalType("HashMap", "HashMap");

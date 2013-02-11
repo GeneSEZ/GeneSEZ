@@ -10,11 +10,11 @@
 	@author andre pflueger (last)
 «ENDREM»
 
-«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 «EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::common::m2t::Helper»
-«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::java::scripts::Type»
 «EXTENSION org::genesez::platform::java::scripts::Naming»
@@ -42,10 +42,10 @@
 	Generates an initialization block to initialize all multi-valued attributes with default values if any.
 «ENDREM»
 «DEFINE InitializationBlock FOR MClassifier -»
-«IF property.typeSelect(MAttribute).exists( p | !p.static && !p.derived && p.isMultiValuedType() && p.hasDefaultValue() ) -»
+«IF property.typeSelect(MAttribute).exists( p | !p.static && !p.derived && p.isMultiValued() && p.hasDefaultValue() ) -»
 	// initialize all multi valued fields with their default values
 	{
-	«EXPAND _MultiValuedInitialization FOREACH property.typeSelect(MAttribute).select( p | !p.static && !p.derived && p.isMultiValuedType() && p.hasDefaultValue() ) -»
+	«EXPAND _MultiValuedInitialization FOREACH property.typeSelect(MAttribute).select( p | !p.static && !p.derived && p.isMultiValued() && p.hasDefaultValue() ) -»
 	«EXPAND _InitializationBlock -»
 	}
 «ENDIF -»
@@ -88,8 +88,8 @@
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
 	«IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -»
 	«IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -»
-	«IF a.isMultiValuedType() && a.generateAdd() -»«EXPAND _Add FOR a -»«ENDIF -»
-	«IF a.isMultiValuedType() && a.generateRemove() -»«EXPAND _Remove FOR a -»«ENDIF -»
+	«IF a.isMultiValued() && a.generateAdd() -»«EXPAND _Add FOR a -»«ENDIF -»
+	«IF a.isMultiValued() && a.generateRemove() -»«EXPAND _Remove FOR a -»«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -118,10 +118,10 @@
 	«IF fieldAccess()-»
 		«EXPAND _Annotation-»
 	«ENDIF-»
-	«IF isSingleValuedType()-»
+	«IF isSingleValued()-»
 		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::GenericUse» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ELSE -»
-		«EXPAND _Modifier -» «EXPAND Type::MultiValuedType -» «asAttribute()» «EXPAND _DefaultValue -»;
+		«EXPAND _Modifier -» «EXPAND Type::MultiValuedType(multiplicity, type) -» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ENDIF»
 «ENDDEFINE»
 
@@ -131,10 +131,10 @@
 «ENDREM»
 «DEFINE _DerivedDeclaration FOR MAttribute -»
 	«EXPAND Comment::Getter -»
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 	public «type.mapName().asTypeName()» «asGetter()»();
 	«ELSE -»
-	public «EXPAND Type::MultiValuedType -» «asGetter()»();
+	public «EXPAND Type::MultiValuedType(multiplicity, type) -» «asGetter()»();
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -143,10 +143,10 @@
 «ENDREM»
 «DEFINE _DerivedImplementation FOR MAttribute -»
 	«EXPAND Comment::Getter -»
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 	«EXPAND _Modifier» «type.mapName().asTypeName()» «asGetter()»() {
 	«ELSE -»
-	«EXPAND _Modifier» «EXPAND Type::MultiValuedType -» «asGetter()»() {
+	«EXPAND _Modifier» «EXPAND Type::MultiValuedType(multiplicity, type) -» «asGetter()»() {
 	«ENDIF -»
 		«EXPAND _DerivedImplementationBody -»
 	}
@@ -185,21 +185,19 @@
 	Note: this is not valid java code: ' = new ArrayList<String>[3];'
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
-«IF isSingleValuedType() && hasDefaultValue() -»
+«IF isSingleValued() && hasDefaultValue() -»
 	«IF type.isEnumeration() -»
 	 = «type.mapName().asTypeName()».«defaultvalue.asEnumLiteral() -»
 	«ELSE -»
 	 = «defaultvalue -»
 	«ENDIF -»
-«ELSEIF isMultiValuedType() && !final -»
-	«IF usePrimitiveType() && !hasFixedMultiplicity() -»
+«ELSEIF isMultiValued() && !final -»
+	«IF usePrimitiveType() && !hasFixedUpperBoundMultiplicity() -»
 	 = null
-	«ELSEIF usePrimitiveType() && hasFixedMultiplicity() -»
-	 = new «type.mapName().asTypeName()»[«upperBoundMultiplicity»]
-	«ELSEIF type.isPrimitiveType() -»
-	 = new «mapType("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
+	«ELSEIF usePrimitiveType() && hasFixedUpperBoundMultiplicity() -»
+	 = new «type.mapName().asTypeName()»[«multiplicity.upperBound»]
 	«ELSE -»
-	 = new «mapType("Implementation") -»<«type.mapName().asTypeName() -»«EXPAND Type::GenericUse»>()
+	 = new «mapCollection("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
 	«ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
@@ -229,16 +227,16 @@
 	«IF !fieldAccess()-»
 		«EXPAND _Annotation-»
 	«ENDIF-»
-	«IF isSingleValuedType() -»		
+	«IF isSingleValued() -»		
 		«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
-			«IF this.type().mapName().asTypeName().matches("Date") -»
+			«IF this.type.mapName().asTypeName().matches("Date") -»
 				return new Date(«asAttribute() -».getTime());
 			«ELSE -»
 				return «asAttribute()»;
 			«ENDIF -»
 		}
 	«ELSE -»
-		«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType -» «asGetter()»() {
+		«EXPAND _ModifierAccessor» «EXPAND Type::MultiValuedType(multiplicity, type) -» «asGetter()»() {
 			return «asAttribute()»;
 		}
 	«ENDIF -»
@@ -252,14 +250,14 @@
 	«IF !fieldAccess() && !this.generateGetter()-»
 		«EXPAND _Annotation-»
 	«ENDIF-»
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 		«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
 			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
 		}
 	«ELSE -»
-		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType -» «IF static-»_«ENDIF-»«asAttribute()») {
+		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType(multiplicity, type) -» «IF static-»_«ENDIF-»«asAttribute()») {
 			«IF hasStereotype("primitive") -»
-				«IF !static-»this.«ENDIF-»«asAttribute()» = new «type().mapName().asTypeName() -»[«IF static-»_«ENDIF-»«asAttribute()».length];
+				«IF !static-»this.«ENDIF-»«asAttribute()» = new «type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«asAttribute()».length];
 				for (int counter = 0; counter < «IF static-»_«ENDIF-»«asAttribute()».length; counter++) {
 					«IF !static-»this.«ENDIF-»«asAttribute()»[counter] = «IF static-»_«ENDIF-»«asAttribute()»[counter];
 				}
