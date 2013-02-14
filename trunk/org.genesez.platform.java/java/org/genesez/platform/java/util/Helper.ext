@@ -1,0 +1,83 @@
+/**
+ * Helper functions for java
+ * 
+ * @author  andre pflueger
+ * @date    2011-12-26
+ */
+
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::platform::java::util::Naming;
+extension org::genesez::metamodel::core::util::AccessHelper;
+
+/**
+ * checks if property is a java primitive data type
+ *
+ *	@param		this	instance of MProperty
+ *
+ *	@return  	true, if property is a java primitive data type
+ */
+boolean isJavaPrimitiveType(MProperty this) : 
+    switch (this.type.asTypeName().toLowerCase()) {
+    	case "int": true
+    	case "long": true
+    	case "byte": true
+    	case "short": true
+    	case "float": true
+    	case "double": true
+    	default: false
+    };
+
+/**
+ *	returns the modifier for a MProperty
+ *
+ *	@param		this	instance of MProperty
+ *
+ *	@return  	Java modifier of the MProperty
+ */
+String modifier(MProperty this) :
+	switch(this.visibility) {
+		case "package": ""
+		default: this.visibility
+	};	
+
+/**
+ *	returns the modifier for a MClassifier
+ *
+ *	@param		this	instance of MClassifier
+ *
+ *	@return  	Java modifier of the MClassifier
+ */
+String modifier(MClassifier this) :
+	switch(this.visibility) {
+		case "package": ""
+		default: this.visibility
+	};
+
+/**
+ *	returns the modifier for a MOperation
+ *
+ *	@param		this	instance of MOperation
+ *
+ *	@return  	Java modifier of the MOperation
+ */
+String modifier(MOperation this) :
+	switch(this.visibility) {
+		case "package": ""
+		default: this.visibility
+	};
+
+/**
+ *	returns the modifier for a MAssociationRole
+ *
+ *	@param		this	instance of MAssociationRole
+ *
+ *	@return  	Java modifier of the MAssociationRole
+ */
+String modifier(MAssociationRole this) :
+	switch(this.visibility) {
+		case "package": ""
+		default: this.visibility
+	};

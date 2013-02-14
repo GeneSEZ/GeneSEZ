@@ -1,0 +1,113 @@
+
+«IMPORT gcore»
+
+«REM»
+	Main entry point for generating java code.
+	Iterates over the model and delegates the handling of classifiers.
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+«ENDREM»
+
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
+«REM» use dependencies to generate imports «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::m2m::UseDependencies»
+«EXTENSION org::genesez::util::logging::Logging»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+
+«EXTENSION org::genesez::platform::java::util::Conversion»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Association»
+«EXTENSION org::genesez::platform::java::java5::scripts::Helper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of the model, adds use dependencies to all classifiers, 
+	prepares all association classes and rejects all ignored packages
+	@context	a genesez model
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«REM» init logging «ENDREM»
+	«useLogger("org.genesez.platform.java")»
+	«REM» start transformation «ENDREM»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+	«IF !isIgnoredContentPackage()»
+		«EXPAND Root FOREACH classifier»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	generates the package documentation if there is any
+	delegates the handling of all classifiers
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«IF !isIgnoredContentPackage()»
+		«IF hasComment()»
+			«EXPAND Comment::Package -»
+		«ENDIF»
+		«EXPAND Root FOREACH classifier»
+	«ENDIF»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the generation of an interface and java annotation
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«IF emHasStereotype(java5AnnotationStereotype())»
+	    «FILE filePath( asAnnotationFileName(), basePath() )»
+	        «EXPAND Annotation::Root»
+	    «ENDFILE»
+	«ELSE-»
+	    «FILE filePath( asFileName(), basePath() )»
+	        «EXPAND Interface::Root»                
+	    «ENDFILE»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of a class
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Class::Root»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of an enumeration
+«ENDREM»
+«DEFINE Root FOR MEnumeration-»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND Enumeration::Root»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of a data type
+«ENDREM»
+«DEFINE Root FOR MDataType»
+«FILE filePath( asFileName(), basePath() )»
+	«EXPAND DataType::Root»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM»
+	because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«logFatal("generation of 'MClassifier's is currently not supported")»
+«ENDDEFINE»
