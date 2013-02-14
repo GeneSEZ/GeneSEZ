@@ -17,8 +17,9 @@ import gcore;
  * @author	Andre Pflüger <andre.pflueger@fh-zwickau.de>
  */
 
+extension org::genesez::metamodel::core::util::ExtensionMechanism;
 extension org::genesez::util::logging::Logging;
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
+
 
 
 // -- Multiplicity Elements (Properties, Parameters, Operations) --------------------------------------------
@@ -643,7 +644,7 @@ boolean hasDestructors(MClassifier this) :
  * @api
  */
 boolean isConstructor(MOperation this) :
-	hasStereotype("Create") || hasStereotype("create") || classifier.name == name;
+	emHasStereotype("Create") || emHasStereotype("create") || classifier.name == name;
 
 
 /**
@@ -656,7 +657,7 @@ boolean isConstructor(MOperation this) :
  * @api
  */
 boolean isDestructor(MOperation this) :
-	hasStereotype("Destroy") || hasStereotype("destroy") || name.startsWith("~");
+	emHasStereotype("Destroy") || emHasStereotype("destroy") || name.startsWith("~");
 
 
 /**
@@ -760,302 +761,61 @@ boolean hasGenericRealization(MParameter this) :
 	genericRealization.size > 0;
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	stereotypes + tagged values
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- Type Information --------------------------------------------------------------------------------------
+
 
 /**
- * checks if an element is annotated with a stereotype
- * @param	stereotype	the name of a stereotype
- * @return	true if the element has the stereotype, otherwise false
- */
-boolean hasStereotype(MElement this, String stereotype) :
-	this.stereotype.name.contains(stereotype);
-
-/**
- * return a stereotype with the given name
- * @param	this	the instance of MElement
- * @param	name	the name of a stereotype
- * @return	the stereotype
- */
-MStereotype getStereotype(MElement this, String name) :
-	this.stereotype.selectFirst(e|e.name == name);
-
-/**
- * checks if an element has a tagged value by ignoring the stereotype
- * @param	tag		the name of a tagged value
- * @param	value	the value of a tagged value
- * @return	true if the element has a tag with the given value, otherwise false
- */
-boolean hasTaggedValue(MElement this, String tag, String value) :
-	taggedValue.exists( e| e.tag.name == tag && e.value == value );
-	
-/**
- * checks if an element has a tagged value by ignoring the stereotype
- * @param	tag				the name of a tagged value
- * @param	valueReference	the value reference of a tagged value
- * @return	true if the element has a tag with the given value reference, otherwise false
- */
-boolean hasTaggedValue(MElement this, String tag, MElement valueReference) :
-	taggedValue.exists( e| e.tag.name == tag && e.valueReference == valueReference );
-
-/**
- * checks if an element has a tagged value of a specific stereotype
- * @param	sterotype	the name of a stereotype
- * @param	tag			the name of a tagged value
- * @param	value		the value of a tagged value
- * @return	true if the element has a tag with the given value, otherwise false
- */
-boolean hasTaggedValue(MElement this, String stereotype, String tag, String value) :
-	!taggedValue.typeSelect(MTaggedValue)
-		.select( e| e.value == value && e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		.isEmpty;
-		
-/**
- * checks if an element has a tagged value of a specific stereotype
- * @param	sterotype		the name of a stereotype
- * @param	tag				the name of a tagged value
- * @param	valueReference	the value reference of a tagged value
- * @return	true if the element has a tag with the given value reference, otherwise false
- */
-boolean hasTaggedValue(MElement this, String stereotype, String tag, MElement valueReference) :
-	!taggedValue.typeSelect(MTaggedValue)
-		.select( e| e.valueReference == valueReference && e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		.isEmpty;
-
-/**
- * 	returns a tagged value of a stereotype if exists
+ * Checks if a type is a generic.
  *
- * 	@param	stereotype	the name of a stereotype
- *	@param	tag			the name of a tagged value
- *	
- * 	@return		value of the tagged value
+ * @return	True if the type is a generic, otherwise false.
  */
-String getTaggedValue(MElement this, String stereotype, String tag) :
-	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value
-		: "";
-		
-/**
- * 	returns a tagged value reference of a stereotype if exists
- *
- * 	@param	stereotype	the name of a stereotype
- *	@param	tag			the name of a tagged value
- *	
- * 	@return		value reference of the tagged value
- */
-MElement getTaggedValueReference(MElement this, String stereotype, String tag) :
-	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).valueReference
-		: "";
+boolean isGenericType(MType this) : 
+	metaType == MGeneric;
+
 
 /**
- * returns the boolean value of a tagged value of a stereotype
+ * Checks if a type is an external type.
  * 
- * @param	stereotype	the name of a stereotype
- * @param	tag			the name of a tagged value
+ * @return	True if the type is an external type, otherwise false.
+ */
+boolean isExternalType(MType this) : 
+	metaType == MExternal;
+
+
+/**
+ * Checks if a type is a data type.
  * 
- * @return	true, if the tagged value is true, otherwise false
+ * @return	True if the type is a data type, otherwise false.
  */
-boolean getTaggedBooleanValue(MElement this, String stereotype, String tag) :
-	hasTaggedValue( stereotype, tag, "true")
-		? true
-		: false;
+boolean isDataType(MType this) : 
+	metaType == MDataType;
+
 
 /**
- * Returns a list of tagged values of a stereotype.
+ * Checks if a type is an enumeration.
  * 
- * @param	stereotype	the name of a stereotype
- * @param	tag			the name of the tagged value
+ * @return	True if the type is an enumeration, otherwise false.
+ */
+boolean isEnumeration(MType this) : 
+	metaType == MEnumeration;
+
+
+/**
+ * Checks if a type is a classifier.
  * 
- * @return	the list of tagged values
+ * @return	True if the type is a classifier, otherwise false.
  */
-List[MTaggedValue] owningTaggedValues(MElement this, String stereotype, String tag) :
-	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		? this.taggedValue.select(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		: {};
+boolean isClassifier(MType this) : 
+	MClassifier.isInstance(this);
+
 
 /**
- * Returns a list of values of a tagged value of a stereotype.
- * 
- * @param	stereotype	the name of a stereotype
- * @param	tag			the name of the tagged value
- * 
- * @return	the list of values
- */
-List[String] getTaggedValueList(MElement this, String stereotype, String tag) :
-	let taggedValues = {} :
-		taggedValues.addAll( owningTaggedValues(stereotype, tag).value ) ->
-		taggedValues;
-		
-/**
- * Returns a list of value references of a tagged value of a stereotype.
- * 
- * @param	stereotype	the name of a stereotype
- * @param	tag			the name of the tagged value
- * 
- * @return	the list of value references
- */
-List[MElement] getTaggedValueReferenceList(MElement this, String stereotype, String tag) :
-	let taggedValueReferences = {} :
-		taggedValueReferences.addAll( owningTaggedValues(stereotype, tag).valueReference ) ->
-		taggedValueReferences;
-
-/**
- *	function to set any existing tagged value
- *
- *	@param		this	MProperty
- *	@param		tag		name of the tagged value
- *	@param		value	the new value of the tagged value
- *
- */
-Void setTaggedValue(MElement this, String tag, String value) :
-	this.taggedValue.selectFirst(e|e.tag.name == tag).setValue(value);
-	
-/**
- *	function to set any existing tagged value reference
- *
- *	@param		this			MProperty
- *	@param		tag				name of the tagged value
- *	@param		valueReference	the new value reference of the tagged value
- *
- */
-Void setTaggedValue(MElement this, String tag, MElement valueReference) :
-	this.taggedValue.selectFirst(e|e.tag.name == tag).setValueReference(valueReference);
-	
-/**
- *	function to set a tagged value of a specific stereotype
- *	note: if a MTagggedValue already exists, it is used and it's value is changed
- *
- *	@param		this		MPropertye
- *	@param		stereotype	name of the stereotype
- *	@param		tag			name of the tagged value
- *	@param		value		the new value of the tagged value
- *
- */
-Void setTaggedValue(MElement this, String stereotype, String tag, String value) :
-	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).setValue(value)
-		: createTaggedValue(
-			this.stereotype.selectFirst(e|e.name == stereotype).property.selectFirst(e|e.name == tag),
-			value
-		);
-	
-/**
- *	function to set a tagged value reference of a specific stereotype
- *	note: if a MTagggedValue already exists, it is used and it's value is changed
- *
- *	@param		this			MPropertye
- *	@param		stereotype		name of the stereotype
- *	@param		tag				name of the tagged value
- *	@param		valueReference	new value reference of the tagged value
- *
- */
-Void setTaggedValue(MElement this, String stereotype, String tag, MElement valueReference) :
-	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype)
-		? this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).setValueReference(valueReference)
-		: createTaggedValue(
-			this.stereotype.selectFirst(e|e.name == stereotype).property.selectFirst(e|e.name == taggedValue),
-			valueReference
-		);
-	
-/**
- * 	checks if a tagged value of a stereotype exists and has a utilizable value (not empty or null)
- *
- * 	@param	sterotype		the name of a stereotype
- * 	@param	tag				the name of a tagged value
- * 	
- *	@return		true if the value exists and is utilizable
- */
-boolean hasUtilizableValue(MElement this, String stereotype, String tag) :
-	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype) &&
-	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "" &&
-	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "null" &&
-	// (nihe) I think this check is not needed anymore, because multi valued tagged values are splited into separate tagged values 
-	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).value != "[]"
-		? true
-		: false;
-		
-/**
- * 	checks if a tagged value of a stereotype exists and has a utilizable value reference (not null)
- *
- * 	@param	sterotype		the name of a stereotype
- * 	@param	tag				the name of a tagged value
- * 	
- *	@return		true if the value reference exists and is utilizable
- */
-boolean hasUtilizableValueReference(MElement this, String stereotype, String tag) :
-	this.taggedValue.exists(e|e.tag.name == tag && e.tag.stereotype.name == stereotype) &&
-	this.taggedValue.selectFirst(e|e.tag.name == tag && e.tag.stereotype.name == stereotype).valueReference != null
-		? true
-		: false;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	aspects
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * checks if an element has an aspect with the specified name and domain name
- * @param	domain	the name of a domain
- * @param	name	the name of an aspect
- * @return	true if an element has an aspect with a specified name and domain name, otherwise false
- */
-boolean hasAspect(MElement this, String domain, String name) :
-	!aspect.select( a| a.domain == domain && a.name == name ).isEmpty;
-
-/**
- * checks if an element has an aspect with a specified domain name or not
- * @param	domain	the name of a domain
- * @return	true if an element has an aspect with a specified domain name, otherwise false
- */
-boolean hasAspect(MElement this, String domain) :
-	!aspect.select( a| a.domain == domain ).isEmpty;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	type helpers
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * checks if the type is a generic
- * @return	true if the type is a generic, otherwise false
- */
-boolean isGenericType(MType this) : metaType == MGeneric;
-
-/**
- * checks if the type is an external type
- * @return	true if the type is an external type, otherwise false
- */
-boolean isExternalType(MType this) : metaType == MExternal;
-
-/**
- * checks if the type is a data type
- * @return	true if the type is a data type, otherwise false
- */
-boolean isDataType(MType this) : metaType == MDataType;
-
-/**
- * checks if the type is an enumeration
- * @return	true if the type is an enumeration, otherwise false
- */
-boolean isEnumeration(MType this) : metaType == MEnumeration;
-
-/**
- * checks if the type is a classifier
- * @return	true if the type is a classifier, otherwise false
- */
-boolean isClassifier(MType this) : MClassifier.isInstance(this);
-
-/**
- * checks if the type is a class
+ * Checks if a type is a class
  * @return	true if the type is a class, otherwise false
  */
-boolean isClass(MType this) : MClass.isInstance(this);
+boolean isClass(MType this) : 
+	MClass.isInstance(this);
+
 
 /**
  * getter for the name of a type or the specification of a generic
@@ -1285,19 +1045,6 @@ MClassifier getClassifier(MElement this) :
 		case MAssociationRole : ((MAssociationRole) this).classifier
 		default : null
 	};
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	activities
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-MNode getInitialNode(MActivity this) :
-	node.reject(e|e.metaType == MAction)
-		.select(e|e.from.isEmpty)
-		.first();
-
-
 
 
 
