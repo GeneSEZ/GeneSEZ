@@ -7,8 +7,8 @@
 // based on genesez meta model
 import gcore;
 
-// use common access helper scripts
-extension org::genesez::metamodel::core::util::AccessHelper;
+// use metamodel core extension mechanism scripts
+extension org::genesez::metamodel::core::util::ExtensionMechanism;
 
 // use profile scripts
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
@@ -24,8 +24,8 @@ extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
  * 
  * @return true if the element has the stereotype, otherwise false
  */
-boolean hasAccessorStereotype(MElement this) :
-	hasStereotype( prAccessor() );
+boolean prHasAccessorStereotype(MElement this) :
+	emHasStereotype( prAccessor() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -35,8 +35,8 @@ boolean hasAccessorStereotype(MElement this) :
  * @param value  the value of a tagged value
  * @return true if the element has a tagged value with the given value, otherwise false
  */
-boolean hasAccessorTaggedValue(MElement this, String tag, String value) :
-	hasTaggedValue( prAccessor(), tag, value );
+boolean prHasAccessorTaggedValue(MElement this, String tag, String value) :
+	emHasTaggedValue( prAccessor(), tag, value );
 	
 /**
  * Checks if an element has a value reference of a specific tagged value 
@@ -46,8 +46,8 @@ boolean hasAccessorTaggedValue(MElement this, String tag, String value) :
  * @param valueReference  the value reference of a tagged value
  * @return true if the element has a tagged value with the given value reference, otherwise false
  */
-boolean hasAccessorTaggedValue(MElement this, String tag, MElement valueReference) :
-	hasTaggedValue( prAccessor(), tag, valueReference );
+boolean prHasAccessorTaggedValue(MElement this, String tag, MElement valueReference) :
+	emHasTaggedValue( prAccessor(), tag, valueReference );
 	
 /*
 - - "getter" - - - - - - - - - -
@@ -60,8 +60,8 @@ boolean hasAccessorTaggedValue(MElement this, String tag, MElement valueReferenc
  * @param value  the value of a tagged value
  * @return true if the element has a tagged value with the given value, otherwise false
  */
-boolean hasAccessorGetter(MElement this, String value) :
-	hasTaggedValue( prAccessor(), prAccessorGetter(), value );
+boolean prHasAccessorGetter(MElement this, String value) :
+	emHasTaggedValue( prAccessor(), prAccessorGetter(), value );
 
 /**
  * Checks if an element has a value of the tagged value "getter" 
@@ -69,8 +69,8 @@ boolean hasAccessorGetter(MElement this, String value) :
  *
  * @return true if the element has a tagged value with a utilizable value, otherwise false
  */
-boolean hasAccessorUtilizableGetter(MElement this) :
-	hasUtilizableValue( prAccessor(), prAccessorGetter() );
+boolean prHasAccessorUtilizableGetter(MElement this) :
+	emHasUtilizableTaggedValue( prAccessor(), prAccessorGetter() );
 
 /**
  * Returns the value of the tagged value "getter"
@@ -78,8 +78,8 @@ boolean hasAccessorUtilizableGetter(MElement this) :
  *
  * @return the value of the tagged value
  */
-String getAccessorGetter(MElement this) :
-	getTaggedValue( prAccessor(), prAccessorGetter() );
+String prGetAccessorGetter(MElement this) :
+	emGetTaggedValue( prAccessor(), prAccessorGetter() );
 
 /**
  * Sets the value of an existing the tagged value "getter"
@@ -87,7 +87,7 @@ String getAccessorGetter(MElement this) :
  *
  * @param value the new value of a tagged value
  */
-Void setAccessorGetter(MElement this, String value) :
+Void prSetAccessorGetter(MElement this, String value) :
 	setTaggedValue( prAccessor(), prAccessorGetter(), value );
 
 /*
@@ -101,8 +101,8 @@ Void setAccessorGetter(MElement this, String value) :
  * @param value  the value of a tagged value
  * @return true if the element has a tagged value with the given value, otherwise false
  */
-boolean hasAccessorSetter(MElement this, String value) :
-	hasTaggedValue( prAccessor(), prAccessorSetter(), value );
+boolean prHasAccessorSetter(MElement this, String value) :
+	emHasTaggedValue( prAccessor(), prAccessorSetter(), value );
 
 /**
  * Checks if an element has a value of the tagged value "setter" 
@@ -110,8 +110,8 @@ boolean hasAccessorSetter(MElement this, String value) :
  *
  * @return true if the element has a tagged value with a utilizable value, otherwise false
  */
-boolean hasAccessorUtilizableSetter(MElement this) :
-	hasUtilizableValue( prAccessor(), prAccessorSetter() );
+boolean prHasAccessorUtilizableSetter(MElement this) :
+	emHasUtilizableTaggedValue( prAccessor(), prAccessorSetter() );
 
 /**
  * Returns the value of the tagged value "setter"
@@ -119,8 +119,8 @@ boolean hasAccessorUtilizableSetter(MElement this) :
  *
  * @return the value of the tagged value
  */
-String getAccessorSetter(MElement this) :
-	getTaggedValue( prAccessor(), prAccessorSetter() );
+String prGetAccessorSetter(MElement this) :
+	emGetTaggedValue( prAccessor(), prAccessorSetter() );
 
 /**
  * Sets the value of an existing the tagged value "setter"
@@ -128,7 +128,7 @@ String getAccessorSetter(MElement this) :
  *
  * @param value the new value of a tagged value
  */
-Void setAccessorSetter(MElement this, String value) :
+Void prSetAccessorSetter(MElement this, String value) :
 	setTaggedValue( prAccessor(), prAccessorSetter(), value );
 
 /*
@@ -142,8 +142,8 @@ Void setAccessorSetter(MElement this, String value) :
  * 
  * @return true if the element has the stereotype, otherwise false
  */
-boolean hasDiStereotype(MElement this) :
-	hasStereotype( prDi() );
+boolean prHasDiStereotype(MElement this) :
+	emHasStereotype( prDi() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -153,8 +153,8 @@ boolean hasDiStereotype(MElement this) :
  * @param value  the value of a tagged value
  * @return true if the element has a tagged value with the given value, otherwise false
  */
-boolean hasDiTaggedValue(MElement this, String tag, String value) :
-	hasTaggedValue( prDi(), tag, value );
+boolean prHasDiTaggedValue(MElement this, String tag, String value) :
+	emHasTaggedValue( prDi(), tag, value );
 	
 /**
  * Checks if an element has a value reference of a specific tagged value 
@@ -164,8 +164,8 @@ boolean hasDiTaggedValue(MElement this, String tag, String value) :
  * @param valueReference  the value reference of a tagged value
  * @return true if the element has a tagged value with the given value reference, otherwise false
  */
-boolean hasDiTaggedValue(MElement this, String tag, MElement valueReference) :
-	hasTaggedValue( prDi(), tag, valueReference );
+boolean prHasDiTaggedValue(MElement this, String tag, MElement valueReference) :
+	emHasTaggedValue( prDi(), tag, valueReference );
 	
 /*
 - - "constructor" - - - - - - - - - -
@@ -178,8 +178,8 @@ boolean hasDiTaggedValue(MElement this, String tag, MElement valueReference) :
  * @param value  the value of a tagged value
  * @return true if the element has a tagged value with the given value, otherwise false
  */
-boolean hasDiConstructor(MElement this, String value) :
-	hasTaggedValue( prDi(), prDiConstructor(), value );
+boolean prHasDiConstructor(MElement this, String value) :
+	emHasTaggedValue( prDi(), prDiConstructor(), value );
 
 /**
  * Checks if an element has a value of the tagged value "constructor" 
@@ -187,8 +187,8 @@ boolean hasDiConstructor(MElement this, String value) :
  *
  * @return true if the element has a tagged value with a utilizable value, otherwise false
  */
-boolean hasDiUtilizableConstructor(MElement this) :
-	hasUtilizableValue( prDi(), prDiConstructor() );
+boolean prHasDiUtilizableConstructor(MElement this) :
+	emHasUtilizableTaggedValue( prDi(), prDiConstructor() );
 
 /**
  * Returns the value of the tagged value "constructor"
@@ -196,8 +196,8 @@ boolean hasDiUtilizableConstructor(MElement this) :
  *
  * @return the value of the tagged value
  */
-String getDiConstructor(MElement this) :
-	getTaggedValue( prDi(), prDiConstructor() );
+String prGtDiConstructor(MElement this) :
+	emGetTaggedValue( prDi(), prDiConstructor() );
 
 /**
  * Sets the value of an existing the tagged value "constructor"
@@ -205,7 +205,7 @@ String getDiConstructor(MElement this) :
  *
  * @param value the new value of a tagged value
  */
-Void setDiConstructor(MElement this, String value) :
+Void prSetDiConstructor(MElement this, String value) :
 	setTaggedValue( prDi(), prDiConstructor(), value );
 
 /*
@@ -219,8 +219,8 @@ Void setDiConstructor(MElement this, String value) :
  * @param value  the value of a tagged value
  * @return true if the element has a tagged value with the given value, otherwise false
  */
-boolean hasDiSetter(MElement this, String value) :
-	hasTaggedValue( prDi(), prDiSetter(), value );
+boolean prHasDiSetter(MElement this, String value) :
+	emHasTaggedValue( prDi(), prDiSetter(), value );
 
 /**
  * Checks if an element has a value of the tagged value "setter" 
@@ -228,8 +228,8 @@ boolean hasDiSetter(MElement this, String value) :
  *
  * @return true if the element has a tagged value with a utilizable value, otherwise false
  */
-boolean hasDiUtilizableSetter(MElement this) :
-	hasUtilizableValue( prDi(), prDiSetter() );
+boolean prHasDiUtilizableSetter(MElement this) :
+	emHasUtilizableTaggedValue( prDi(), prDiSetter() );
 
 /**
  * Returns the value of the tagged value "setter"
@@ -237,8 +237,8 @@ boolean hasDiUtilizableSetter(MElement this) :
  *
  * @return the value of the tagged value
  */
-String getDiSetter(MElement this) :
-	getTaggedValue( prDi(), prDiSetter() );
+String prGetDiSetter(MElement this) :
+	emGetTaggedValue( prDi(), prDiSetter() );
 
 /**
  * Sets the value of an existing the tagged value "setter"
@@ -246,7 +246,7 @@ String getDiSetter(MElement this) :
  *
  * @param value the new value of a tagged value
  */
-Void setDiSetter(MElement this, String value) :
+Void prSetDiSetter(MElement this, String value) :
 	setTaggedValue( prDi(), prDiSetter(), value );
 
 /*
@@ -260,8 +260,8 @@ Void setDiSetter(MElement this, String value) :
  * 
  * @return true if the element has the stereotype, otherwise false
  */
-boolean hasExcludeStereotype(MElement this) :
-	hasStereotype( prExclude() );
+boolean prHasExcludeStereotype(MElement this) :
+	emHasStereotype( prExclude() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -274,8 +274,8 @@ boolean hasExcludeStereotype(MElement this) :
  * 
  * @return true if the element has the stereotype, otherwise false
  */
-boolean hasExternalStereotype(MElement this) :
-	hasStereotype( prExternal() );
+boolean prHasExternalStereotype(MElement this) :
+	emHasStereotype( prExternal() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -288,8 +288,8 @@ boolean hasExternalStereotype(MElement this) :
  * 
  * @return true if the element has the stereotype, otherwise false
  */
-boolean hasPrimitiveStereotype(MElement this) :
-	hasStereotype( prPrimitive() );
+boolean prHasPrimitiveStereotype(MElement this) :
+	emHasStereotype( prPrimitive() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -302,6 +302,6 @@ boolean hasPrimitiveStereotype(MElement this) :
  * 
  * @return true if the element has the stereotype, otherwise false
  */
-boolean hasVolatileStereotype(MElement this) :
-	hasStereotype( prVolatile() );
+boolean prHasVolatileStereotype(MElement this) :
+	emHasStereotype( prVolatile() );
 
