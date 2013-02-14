@@ -17,8 +17,8 @@
 
 «EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
-«EXTENSION org::genesez::platform::php::scripts::CodeGen»
-«EXTENSION org::genesez::platform::php::scripts::Naming»
+«EXTENSION org::genesez::platform::php::util::CodeGen»
+«EXTENSION org::genesez::platform::php::util::Naming»
 
 
 «REM»
@@ -105,7 +105,7 @@
 	«EXPAND Comment::MagicSet -»
 	public function __set($«asMagicSetParameter()», $«asMagicSetValueParameter()») {
 		switch ($«asMagicSetParameter()») {
-			«FOREACH select( e|e.isSingleValuedType() ) AS a -»
+			«FOREACH select( e|e.isSingleValued() ) AS a -»
 			case '«a.name»': $this->«a.asAttribute()» = $«asMagicSetValueParameter()»; return;
 			«ENDFOREACH -»
 			default: throw new Exception('«asMagicSetException()»: ' . $«asMagicSetParameter()»); break;
@@ -125,7 +125,7 @@
 	«EXPAND Comment::MagicIsSet -»
 	public function __isset($«asMagicIsSetParameter()») {
 		switch ($«asMagicIsSetParameter()») {
-			«FOREACH select( e|e.isSingleValuedType() ) AS a -»
+			«FOREACH select( e|e.isSingleValued() ) AS a -»
 			case '«a.name»': return isset($this->«a.asAttribute()»);
 			«ENDFOREACH -»
 			default: throw new Exception('«asMagicIsSetException()»: ' . $«asMagicIsSetParameter()»); break;
@@ -146,7 +146,7 @@
 	«EXPAND Comment::MagicUnSet -»
 	public function __unset($«asMagicUnSetParameter()») {
 		switch ($«asMagicUnSetParameter()») {
-			«FOREACH select( e|e.isSingleValuedType() ) AS a -»
+			«FOREACH select( e|e.isSingleValued() ) AS a -»
 			case '«a.name»': $this->«a.asAttribute()» = null; return;
 			«ENDFOREACH -»
 			default: throw new Exception('«asMagicUnSetException()»: ' . $«asMagicUnSetParameter()»); break;

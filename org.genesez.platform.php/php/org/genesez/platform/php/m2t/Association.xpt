@@ -17,7 +17,7 @@
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «REM» use naming conventions «ENDREM»
-«EXTENSION org::genesez::platform::php::scripts::Naming»
+«EXTENSION org::genesez::platform::php::util::Naming»
 
 
 «REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
@@ -106,7 +106,7 @@
 	@param	this	an association role
 «ENDREM»
 «DEFINE _Init FOR MAssociationRole -»
-«IF isMultiValuedType() || isQualified()» = array()«ENDIF -»
+«IF isMultiValued() || hasQualifier()» = array()«ENDIF -»
 «ENDDEFINE»
 
 
@@ -144,13 +144,13 @@ new «asAssociationManagementClassName()»($this, $this->«asAttribute()»«EXPA
 	generates the opposite parameter for the constructor of an association management object
 «ENDREM»
 «DEFINE _Opposite FOR MAssociationRole -»
-«IF hasOpposite() && !isOppositeQualified() -», '«opposite.asAssociation()»'«ENDIF -»
-«IF !hasOpposite() && isQualified() && isMultiValuedType() -», null«ENDIF -»
+«IF hasOpposite() && !hasOppositeQualifier() -», '«opposite.asAssociation()»'«ENDIF -»
+«IF !hasOpposite() && hasQualifier() && isMultiValued() -», null«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	generates the 'toMany' parameter for the constructor of an association management object
 «ENDREM»
 «DEFINE _QualifiedMany FOR MAssociationRole -»
-«IF isQualified() && isMultiValuedType()», true«ENDIF -»
+«IF hasQualifier() && isMultiValued()», true«ENDIF -»
 «ENDDEFINE»

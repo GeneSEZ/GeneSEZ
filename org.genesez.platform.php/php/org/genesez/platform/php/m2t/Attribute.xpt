@@ -17,6 +17,8 @@
 «ENDREM»
 
 
+«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
+
 «REM» use helper to access information «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
@@ -24,8 +26,8 @@
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «REM» use naming conventions «ENDREM»
-«EXTENSION org::genesez::platform::php::scripts::Naming»
-«EXTENSION org::genesez::platform::php::scripts::CodeGen»
+«EXTENSION org::genesez::platform::php::util::Naming»
+«EXTENSION org::genesez::platform::php::util::CodeGen»
 
 
 «REM»
@@ -60,9 +62,9 @@
 «LET property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS attributes -»
 	«IF isApiAccessorStyle() -»
 		«EXPAND _GetterApi FOREACH attributes.select( a|a.generateGetter() ) -»
-		«EXPAND _SetterApi FOREACH attributes.select( a|a.generateSetter() || a.hasTaggedValue("di", "setter", "true") ) -»
+		«EXPAND _SetterApi FOREACH attributes.select( a|a.generateSetter() || a.emHasTaggedValue("di", "setter", "true") ) -»
 	«ELSE -»
-		«EXPAND _SetterApi FOREACH attributes.select( a|a.hasTaggedValue("di", "setter", "true") ) -»
+		«EXPAND _SetterApi FOREACH attributes.select( a|a.emHasTaggedValue("di", "setter", "true") ) -»
 	«ENDIF -»
 	«EXPAND _InsertIn FOREACH attributes.select( a|a.generateSetter() ) -»
 	«EXPAND _RemoveFrom FOREACH attributes.select( a|a.generateSetter() ) -»
@@ -110,7 +112,7 @@
 «DEFINE _GetterApi FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor -» function «asGetter()»() {
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 		return $this->«asAttribute()»;
 	«ELSE -»
 		return array_values($this->«asAttribute()»);
@@ -123,7 +125,7 @@
 	note: only for single value types
 «ENDREM»
 «DEFINE _SetterApi FOR MAttribute -»
-«IF isSingleValuedType() -»
+«IF isSingleValued() -»
 	«EXPAND Comment::Setter -»
 	«IF type.isClassifier() || type.isExternalType() -»
 	«EXPAND _ModifierAccessor -» function «asSetter()»(«type.mapName().asTypeName().filterType()» $«name») {
@@ -139,7 +141,7 @@
 	generates the insert in method for an attribute with a collection type
 «ENDREM»
 «DEFINE _InsertIn FOR MAttribute -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND _ModifierAccessor -» function «asInsertIn()»($toAdd) {
 		$this->«asAttribute()»[] = $toAdd;
@@ -151,7 +153,7 @@
 	generates the remove from method for an attribute with a collection type
 «ENDREM»
 «DEFINE _RemoveFrom FOR MAttribute -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»($toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
@@ -191,7 +193,7 @@
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
 «IF hasDefaultValue() -» = «defaultvalue -»
-«ELSEIF isMultiValuedType() -» = array()«ENDIF -»
+«ELSEIF isMultiValued() -» = array()«ENDIF -»
 «ENDDEFINE»
 
 «REM»

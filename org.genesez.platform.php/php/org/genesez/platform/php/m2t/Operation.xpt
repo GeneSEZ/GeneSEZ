@@ -24,11 +24,11 @@
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «REM» use php access helper «ENDREM»
-«EXTENSION org::genesez::platform::php::scripts::AccessHelper»
+«EXTENSION org::genesez::platform::php::util::AccessHelper»
 «EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 «REM» use naming conventions «ENDREM»
-«EXTENSION org::genesez::platform::php::scripts::Naming»
-«EXTENSION org::genesez::platform::php::scripts::CodeGen»
+«EXTENSION org::genesez::platform::php::util::Naming»
+«EXTENSION org::genesez::platform::php::util::CodeGen»
 
 
 «REM»
@@ -154,7 +154,7 @@
 	generates type hints for multi-valued types or special single valued types
 «ENDREM»
 «DEFINE _TypeHint FOR MParameter -»
-«IF multiplicity == 1 -»
+«IF multiplicity.upperBound == 1 -»
 «IF generateTypeHint(type) -»«type.mapName().asTypeName()» «ENDIF -»
 «ELSE -»array «ENDIF -»
 «ENDDEFINE»

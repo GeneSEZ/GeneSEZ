@@ -22,11 +22,11 @@ MClassifier addAssociationIncludes(MClassifier this) :
 	this;
 
 MAssociationRole checkMultiplicity(MAssociationRole this) :
-	isQualified()
-		? ( isSingleQualified()
+	hasQualifier()
+		? ( isQualifierSingleValued()
 			? classifier.supplier.add( makeSingleQualifiedAssociation() )
 			: classifier.supplier.add( makeMultiQualifiedAssociation() )
-		) : ( isSingleValuedType()
+		) : ( isSingleValued()
 			? classifier.supplier.add( makeOneAssociation() )
 			: classifier.supplier.add( makeManyAssociation() )
 		) ->
