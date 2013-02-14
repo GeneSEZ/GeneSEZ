@@ -30,6 +30,7 @@ extension org::genesez::util::GlobalObjectStorage;
 
 // use logging
 extension org::genesez::util::logging::Logging;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
 
 // behavior models
 extension org::genesez::adapter::uml2::gcore::UML2GcoreActivities;
@@ -894,12 +895,9 @@ private create MPrimitiveType makePrimitiveType(Void v) :
  * Returns the multilicity properties of the specified multiplicity element.
  * @return	a multiplicity object without containment
  */
-private create MMultiplicity makeMultiplicity(MultiplicityElement me) :
-	setLowerBound( me.lowerBound() ) ->
-	setUpperBound( me.upperBound() ) ->
-	setUnique( me.isUnique ) ->
-	setOrdered( me.isOrdered ) ->
-	this;
+private MMultiplicity makeMultiplicity(MultiplicityElement me) :
+	logTrace(me, "make multiplicity: " ) ->
+	createMultiplicity( me.lowerBound(), me.upperBound(), me.isUnique, me.isOrdered );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
