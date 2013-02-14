@@ -27,10 +27,10 @@
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «REM» useful conversions «ENDREM»
-«EXTENSION org::genesez::platform::php::scripts::Conversion»
+«EXTENSION org::genesez::platform::php::util::Conversion»
 «EXTENSION org::genesez::metamodel::core::util::Conversion»
 «REM» use naming conventions «ENDREM»
-«EXTENSION org::genesez::platform::php::scripts::Naming»
+«EXTENSION org::genesez::platform::php::util::Naming»
 
 
 «REM»
@@ -94,7 +94,7 @@
 «ENDREM»
 «DEFINE Association FOR MAssociationRole -»
 	/**
-	«IF isSingleValuedType() && !isQualified() -»
+	«IF isSingleValued() && !hasQualifier() -»
 	 * @var	«type.mapName().asTypeName()»	stores the linked object of «EXPAND _DefaultAssociationCommentText» «IF hasComment()»({@link __get() documented here})«ENDIF»
 	«ELSE -»
 	 * @var	array of «type.mapName().asTypeName()»	stores the linked objects of «EXPAND _DefaultAssociationCommentText» «IF hasComment()»({@link __get() documented here})«ENDIF»
@@ -147,7 +147,7 @@
 	 * getter method of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
 	«ENDIF -»
 	 * @generated	accessor to get the value of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 	 * @return	«type.mapName().asTypeName()»	the value of «EXPAND _PropertyName -»
 	«ELSE -»
 	 * @return	array	the value of «EXPAND _PropertyName -» as an array of type {@link «type.mapName().asTypeName()»}
@@ -237,7 +237,7 @@
 	 * getter method of the «IF derived»derived «ENDIF»association attribute «EXPAND _PropertyName»
 	«ENDIF -»
 	 * @generated	accessor to get the value of the «IF derived»derived «ENDIF»association attribute «EXPAND _PropertyName -» from association to {@link «type.mapName().asTypeName()»}
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 	 * @return	«type.mapName().asTypeName()»	the value of «EXPAND _PropertyName»
 	«ELSE -»
 	 * @return	array	the value of «EXPAND _PropertyName -» as an array of type «type.mapName().asTypeName()»
@@ -433,7 +433,7 @@
 	generates the @param tag
 «ENDREM»
 «DEFINE _Parameter FOR MParameter -»
-«IF isSingleValuedType() -»
+«IF isSingleValued() -»
 	 * @param	«type.mapName().asTypeName()»	$«asParameter()»	«EXPAND _ParameterComment -»
 «ELSE -»
 	 * @param	array	$«asParameter()»	«EXPAND _ParameterComment -»
@@ -449,8 +449,8 @@
 «IF hasComment() -»
 «comment().format("", "")»
 «ELSE -»
-«IF isMultiValuedType() -»array of type '«type.mapName().asTypeName() -»'«ENDIF -»
-«IF isMultiValuedType() && hasDefaultValue() -», «ENDIF -»
+«IF isMultiValued() -»array of type '«type.mapName().asTypeName() -»'«ENDIF -»
+«IF isMultiValued() && hasDefaultValue() -», «ENDIF -»
 «IF hasDefaultValue() -»default value is '«defaultvalue -»'«ENDIF»
 «ENDIF -»
 «ENDDEFINE»
@@ -460,10 +460,10 @@
 «ENDREM»
 «DEFINE _Return FOR MOperation -»
 «IF hasReturn() -»
-«IF isMultiValuedType() -»
-	 * @return	array of «returnType.mapName().asTypeName()»
+«IF return.isMultiValued() -»
+	 * @return	array of «return.type.mapName().asTypeName()»
 «ELSE -»
-	 * @return	«returnType.mapName().asTypeName()»
+	 * @return	«return.type.mapName().asTypeName()»
 «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»

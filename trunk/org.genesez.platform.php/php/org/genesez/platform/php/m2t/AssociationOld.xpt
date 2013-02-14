@@ -24,7 +24,7 @@
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «REM» use naming conventions «ENDREM»
-«EXTENSION org::genesez::platform::php::scripts::Naming»
+«EXTENSION org::genesez::platform::php::util::Naming»
 
 
 «REM»
@@ -82,7 +82,7 @@
 	@param	this	an association role
 «ENDREM»
 «DEFINE _Init FOR MAssociationRole -»
-«IF isMultiValuedType()» = array()«ENDIF -»
+«IF isMultiValued()» = array()«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -99,7 +99,7 @@
 «DEFINE _GetterImpl FOR MAssociationRole -»
 	«EXPAND Comment::Getter -»
 	«visibility» function «asGetter()»() {
-	«IF isSingleValuedType() -»
+	«IF isSingleValued() -»
 		return $this->«asAttribute()»;
 	«ELSE -»
 		return array_values($this->«asAttribute()»);
@@ -112,7 +112,7 @@
 	only if it has a simple type
 «ENDREM»
 «DEFINE _SetterDecl FOR MAssociationRole -»
-«IF isSingleValuedType() -»
+«IF isSingleValued() -»
 	«EXPAND Comment::Setter -»
 	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()»);
 «ENDIF -»
@@ -123,7 +123,7 @@
 	only if it has a simple type
 «ENDREM»
 «DEFINE _SetterImpl FOR MAssociationRole -»
-«IF isSingleValuedType() -»
+«IF isSingleValued() -»
 	«EXPAND Comment::Setter -»
 	«visibility» function «asSetter()»(«type.mapName().asTypeName()» $«asAttribute()») {
 		$this->«asAttribute()» = $«asAttribute()»;
@@ -136,7 +136,7 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _InsertInDecl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::InsertIn -»
 	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd);
 «ENDIF -»
@@ -147,7 +147,7 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _InsertInImpl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::InsertIn -»
 	«visibility» function «asInsertIn()»(«type.mapName().asTypeName()» $toAdd) {
 		$this->«asAttribute()»[] = $toAdd;
@@ -160,7 +160,7 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _RemoveFromDecl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::RemoveFrom -»
 	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove);
 «ENDIF -»
@@ -171,7 +171,7 @@
 	only if it has a collection type
 «ENDREM»
 «DEFINE _RemoveFromImpl FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::RemoveFrom -»
 	«visibility» function «asRemoveFrom()»(«type.mapName().asTypeName()» $toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);

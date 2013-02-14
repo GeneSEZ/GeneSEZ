@@ -247,25 +247,25 @@ String asManyAssociationClassName() : "UML_ManyAssociation";
 String asSingleQualifiedAssociationClassName() : "UML_SingleQualifiedAssociation";
 String asMultiQualifiedAssociationClassName() : "UML_MultiQualifiedAssociation";
 String asAssociationManagementClassName(MAssociationRole this) :
-	isQualified()
-		? ( isSingleQualified() ? asSingleQualifiedAssociationClassName() : asMultiQualifiedAssociationClassName() )
-		: ( isSingleValuedType() ? asOneAssociationClassName() : asManyAssociationClassName() );
+	hasQualifier()
+		? ( isQualifierSingleValued() ? asSingleQualifiedAssociationClassName() : asMultiQualifiedAssociationClassName() )
+		: ( isSingleValued() ? asOneAssociationClassName() : asManyAssociationClassName() );
 String qualifier(MAssociationRole this) :
-	isQualified()
-		? ( isSingleQualified() ? " single qualified" : " multi qualified" )
+	hasQualifier()
+		? ( isQualifierSingleValued() ? " single qualified" : " multi qualified" )
 		: "";
 String direction(MAssociationRole this) :
 	hasOpposite() ? "bidirectional" : "unidirectional";
 String type(MAssociationRole this) :
-	isSingleValuedType() && hasOpposite() && opposite.isSingleValuedType() ? "one to one" : (
-	isSingleValuedType() && hasOpposite() && opposite.isMultiValuedType() ? "many to one" : (
-	isMultiValuedType() && hasOpposite() && opposite.isSingleValuedType() ? "one to many" : (
-	isMultiValuedType() && hasOpposite() && opposite.isMultiValuedType() ? "many to many" : (
-	isSingleValuedType() ? "to one" : (
-	isMultiValuedType() ? "to many" : (
+	isSingleValued() && hasOpposite() && opposite.isSingleValued() ? "one to one" : (
+	isSingleValued() && hasOpposite() && opposite.isMultiValued() ? "many to one" : (
+	isMultiValued() && hasOpposite() && opposite.isSingleValued() ? "one to many" : (
+	isMultiValued() && hasOpposite() && opposite.isMultiValued() ? "many to many" : (
+	isSingleValued() ? "to one" : (
+	isMultiValued() ? "to many" : (
 	""))))));
 String symmetry(MAssociationRole this) :
-	isOppositeQualified() ? "symmetry not ensured, opposite is qualified" : "symmetry ensured";
+	hasOppositeQualifier() ? "symmetry not ensured, opposite is qualified" : "symmetry ensured";
 
 String prefix(MAssociationRole this) : "_";
 
