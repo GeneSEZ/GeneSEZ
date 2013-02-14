@@ -537,8 +537,8 @@ private create MAssociationRole makeAssociationRole(Property aend) :
 	setDerived( aend.isDerived ) ->
 	// multiplicities
 	setMultiplicity( aend.makeMultiplicity() ) ->
-	aend.opposite != null
-		? setOppositeMultiplicity( aend.opposite.makeMultiplicity() )
+	aend.association.memberEnd.exists( a|a != aend )
+		? setOppositeMultiplicity( aend.association.memberEnd.selectFirst( a|a != aend ).makeMultiplicity() )
 		: this ->
 	setAggregation( aend.aggregation.toString() == "shared" ? true : false ) ->
 	setComposition( aend.aggregation.toString() == "composite" ? true : false ) ->
