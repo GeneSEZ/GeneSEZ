@@ -17,6 +17,7 @@ import gcore;
 
 extension org::genesez::metamodel::core::util::AccessHelper;
 extension org::genesez::metamodel::core::util::Conversion;
+extension org::genesez::metamodel::core::util::ExtensionMechanism;
 extension org::genesez::util::logging::Logging;
 
 /*
@@ -30,21 +31,21 @@ extension org::genesez::util::logging::Logging;
  * @return	true, if a primitive type should be used, otherwise false
  */
 boolean usePrimitiveType(MProperty this) :
-	hasStereotype("primitive");
+	emHasStereotype("primitive");
 
 /**
  * checks if a primitive type should be used
  * @return	true, if a primitive type should be used, otherwise false
  */
 boolean usePrimitiveType(MOperation this) :
-	hasStereotype("primitive");
+	emHasStereotype("primitive");
 
 /**
  * checks if a primitive type should be used
  * @return	true, if a primitive type should be used, otherwise false
  */
 boolean usePrimitiveType(MParameter this) :
-	hasStereotype("primitive");
+	emHasStereotype("primitive");
 
 /**
  * just there for error free templates :-)
@@ -110,10 +111,10 @@ boolean generateRemove(MProperty this): generateAccessor( "remove" );
  * @return	true, if an accessor should be generated, otherwise false
  */
 boolean generateAccessor(MProperty this, String accessor):
-	hasStereotype( accessorStereotype() )
-		? getTaggedBooleanValue( accessorStereotype(), accessor )
-		: ( classifier.hasStereotype( accessorStereotype() )
-			? classifier.getTaggedBooleanValue( accessorStereotype(), accessor )
+	emHasStereotype( accessorStereotype() )
+		? emGetTaggedBooleanValue( accessorStereotype(), accessor )
+		: ( classifier.emHasStereotype( accessorStereotype() )
+			? classifier.emGetTaggedBooleanValue( accessorStereotype(), accessor )
 			: ( classifier.stereotype.exists( s|accessorsForStereotypes().toList().contains( s.name ) )
 				? true
 				: false
