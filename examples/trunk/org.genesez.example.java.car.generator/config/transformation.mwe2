@@ -1,0 +1,62 @@
+module org.genesez.example.forms.transformation
+
+Workflow {
+	// read the exported uml2 model file and transform it into a GeneSEZ model
+	component = @org.genesez.adapter.uml2.gcore.Uml2Gcore {
+		uml2file = "model/example.uml"
+	}
+	// validate the GeneSEZ model against common + java specific constraints
+	component = org.genesez.workflow.xpand.Validator {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::validation::Constraints"
+		script = "org::genesez::platform::java::validation::Syntax"
+	}
+	// automatically implement interface operations in classes
+	// and add necessary use dependencies
+	component = org.genesez.workflow.xpand.Model2Model {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+	}
+	// serialize the GeneSEZ model - just for info if you want to have a look at it
+	component = org.genesez.workflow.EmfWriter {
+		schemaLocationImplementation = true
+		file = "model/example.xmi"
+		slot = "coremodel"
+	}
+	// run the java code generation and transform the model into java source code
+	component = org.genesez.workflow.xpand.Model2TextComposite {
+		component = org.genesez.platform.java.workflow.Gcore2Java {
+			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+			slot = "coremodel"
+			
+			// directory in which the generated files are placed
+			outputDir = "../org.genesez.example.java.car/src-gen"
+			template = "org::genesez::platform::java::m2t::Root::Root"
+			// boolean value indicates if the model name is used as base package or not
+			useModelNameAsBasePackage = true
+			
+			/* there are several possibilities to specify your type mapping file(s):
+			
+			1. You can list all files seperately here; if there are redundant rules 
+			the rule in the last specified typemapping file is active (recommended)
+			2. You can also include a typemapping file, e.g. the default java typemapping 
+			file, into your project specific file. In this case just list your project 
+			specific file here; with this solution redundant rules are not overriden by
+			the latest specified rule, e.g. in the project specific typemapping file 
+			after including another typemapping file. This is an opposing behaviour 
+			to the one described in possibility 1.
+			*/
+			typeMappingFile = "typemapping.xml"
+			// adjust default templates using aspects, see XPand AOP-Feature
+			aopTemplate = "Attrib"
+//			aopTemplate = "org::genesez::platform::java::m2t::aop::SystemUserAsAuthor"
+//			aopTemplate = "org::genesez::platform::java::m2t::aop::SectionComments"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			// adjust default xtend scripts with aspects, see Xtend AOP-Feature
+			aopScript = "Naming"
+			
+		}
+	}
+}
