@@ -1,0 +1,242 @@
+«REM»
+	(c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+«IMPORT gcore»
+
+«REM»
+	Registers aspects to implement associations using the association library.
+	
+	@author tobias haubold <toh@fh-zwickau.de> (maintainer)
+	@author georg beier
+	@author	nico herbig
+«ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::platform::java::util::Naming»
+
+
+«REM»
+	Registers an instead advice to generate association declarations.
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Association::Declaration FOR MClass -»
+	«EXPAND Declaration -»
+«ENDAROUND»
+
+«REM»
+	Registers an instead advice to generate association acess methods.
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Association::Accessors FOR MClass -»
+	«EXPAND Accessor -»
+«ENDAROUND»
+
+«AROUND org::genesez::platform::java::m2t::Association::Accessors FOR MInterface -»
+	«EXPAND Accessor -»
+«ENDAROUND»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	Generates the declaration of association attributes.
+«ENDREM»
+«DEFINE Declaration FOR MClass -»
+«IF hasAssociationRoles() -»
+	«EXPAND EnumDefinition -»
+	«EXPAND ManagementObjectDeclaration -»
+«ENDIF -»
+«EXPAND org::genesez::platform::java::m2t::Association::AssociationDeclaration -»
+«ENDDEFINE»
+
+«REM»
+	Generates accessors for association attributes.
+«ENDREM»
+«DEFINE Accessor FOR MClass -»
+«IF hasAssociationRoles() -»
+	«EXPAND ManagementObjectInitialization -»
+	«EXPAND GenericAccessor -»
+	«EXPAND Accessors FOREACH property.typeSelect(MAssociationRole) -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Accessor FOR MInterface -»
+	«EXPAND AccessorDeclaration FOREACH property.typeSelect(MAssociationRole) -»
+«ENDDEFINE»
+
+
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	Generates an enum with all navigable association ends.
+«ENDREM»
+«DEFINE EnumDefinition FOR MClassifier -»
+	«EXPAND CommentAssociationEnum -»
+	public enum Associations implements RelatedAssociationRole {
+		«EXPAND EnumLiteralDefinition FOREACH property.typeSelect(MAssociationRole) SEPARATOR ", " -»
+	}
+«ENDDEFINE»
+
+«REM»
+	Generates an enum literal for an association role.
+«ENDREM»
+«DEFINE EnumLiteralDefinition FOR MAssociationRole -»
+	«asEnumLiteral() -»
+«ENDDEFINE»
+
+«REM»
+	Generates the declaration to store the association management objects.
+«ENDREM»
+«DEFINE ManagementObjectDeclaration FOR MClassifier -»
+	«EXPAND CommentAssociationManagement -»
+	private Map<RelatedAssociationRole, Association<? extends Object, ? extends Object>> association = new LinkedHashMap<RelatedAssociationRole, Association<? extends Object,? extends Object>>();
+«ENDDEFINE»
+
+«REM»
+	Generates the initialization of the association management objects.
+«ENDREM»
+«DEFINE ManagementObjectInitialization FOR MClassifier -»
+	// initialization block for association management objects
+	{
+		«EXPAND InitializationEntry FOREACH property.typeSelect(MAssociationRole) -»
+	}
+«ENDDEFINE»
+
+«REM»
+	Generates the initialization for a navigable association end.
+«ENDREM»
+«DEFINE InitializationEntry FOR MAssociationRole -»
+		association.put(Associations.«asEnumLiteral()», «EXPAND Initialization -»);
+«ENDDEFINE»
+
+«REM»
+	Generates the initialization for a navigable association attribute.
+«ENDREM»
+«DEFINE Initialization FOR MAssociationRole -»
+«IF hasAssociationClass() -»
+	«IF isSingleValued() -»
+	new OneAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -»,
+				«association.associationClass.asTypeName() -»> (this
+		, new Accessor<«type.asTypeName() -»>() {
+			public «type.asTypeName() -» get() {
+				return «asAttribute()»;
+			}
+			public void set(«type.asTypeName() -» referenced) {
+				«asAttribute()» = referenced;
+			}
+		}
+		, new Accessor<«association.associationClass.asTypeName() -»>() {
+			public «association.associationClass.asTypeName() -» get() {
+				return «association.associationClass.asAttribute()»;
+			}
+			public void set(«association.associationClass.asTypeName() -» referenced) {
+				«association.associationClass.asAttribute()» = referenced;
+			}
+		}
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ELSE -»
+	new ManyAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -», 
+				«association.associationClass.asTypeName() -»>
+				(this, «asAttribute() -»
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ENDIF -»
+«ELSE -»«REM» association without association class «ENDREM»
+	«IF isSingleValued() -»
+	new OneAssociation<«classifier.asTypeName() -», «type.asTypeName() -»>(this
+		, new Accessor<«type.asTypeName() -»>() {
+			public «type.asTypeName() -» get() {
+				return «asAttribute()»;
+			}
+			public void set(«type.asTypeName() -» referenced) {
+				«asAttribute()» = referenced;
+			}
+		}
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ELSE -»
+	new ManyAssociation<«classifier.asTypeName() -»,
+				«type.asTypeName() -»>(this, «asAttribute() -»
+		«IF hasOpposite() -»
+		 	,«type.asTypeName()».Associations.«opposite.asEnumLiteral() -»
+		«ENDIF -»
+		)
+	«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the generic accessor used by the association handling library.
+«ENDREM»
+«DEFINE GenericAccessor FOR MClassifier -»
+	«EXPAND CommentAssociationGenericAccessor -»
+	public Association<? extends Object, ? extends Object> getAssociation(
+			RelatedAssociationRole role) {
+		if (association.containsKey(role)) return association.get(role);
+		throw new RuntimeException("the class doesn't have the association you specified!");
+	}
+«ENDDEFINE»
+
+«REM»
+	Generates an get access operation for an association attribute.
+«ENDREM»
+«DEFINE Accessors FOR MAssociationRole -»
+«EXPAND org::genesez::platform::java::m2t::Comment::Accessor -»
+	@SuppressWarnings("unchecked")
+	public «EXPAND Type -» «asAccessor()»() {
+		return («EXPAND Type -») association.get(Associations.«asEnumLiteral()»);
+	}
+«ENDDEFINE»
+
+«REM»
+	Generates an get access operation declaration for an association attribute.
+«ENDREM»
+«DEFINE AccessorDeclaration FOR MAssociationRole -»
+	public «EXPAND Type -» «asAccessor()»();
+«ENDDEFINE»
+
+«REM»
+	Generates the type of an association attribute.
+«ENDREM»
+«DEFINE Type FOR MAssociationRole -»
+«IF hasAssociationClass() -»
+AssociationAC<«classifier.asTypeName()», «type.asTypeName()», «association.associationClass.asTypeName()»>
+«ELSE -»
+Association<«classifier.asTypeName()», «type.asTypeName()»>
+«ENDIF -»
+«ENDDEFINE»
+
+
+
+«REM»
+	Generates the comment of the association enum definition.
+«ENDREM»
+«DEFINE CommentAssociationEnum FOR MClassifier -»
+	/** Defines an identifier for each association, used by the association handling library */
+«ENDDEFINE»
+
+«REM»
+	Generates the comment of the map storing the association management objects.
+«ENDREM»
+«DEFINE CommentAssociationManagement FOR MClassifier -»
+	/** Stores the association management objects */
+«ENDDEFINE»
+
+«REM»
+	Generates the comment of the generic accessor method for association objects.
+«ENDREM»
+«DEFINE CommentAssociationGenericAccessor FOR MClassifier -»
+	/**
+	 * Provides generic access to association objects, used by the association handling library
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 */
+«ENDDEFINE»
