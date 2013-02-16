@@ -1,0 +1,129 @@
+/**
+ * Prepares the model to use the association library to implement associations.
+ * 
+ * Perform the following transformations:
+ * - adds an interface realization of 'AssociationRole' to each class that has navigable association ends
+ * - adds an interface realization of 'AssociationClass' to each association class
+ * - adds an attribute with the stereotype accessor to each association class to enable
+ *   generation of a get access method which is required by the interface 'AssociationClass'
+ * 
+ * @author	georg beier
+ * @author	tobias haubold
+ * @author	andre pflueger (last)
+ */
+import gcore;
+
+extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
+extension org::genesez::util::logging::Logging;
+
+
+/**
+ * Prepares the model.
+ */
+MModel prepare(MModel this) :
+	useLogger("org.genesez.platform.java.m2m.aop.AssociationLibrary") ->
+	process() ->
+	this;
+
+/**
+ * Iterate over all packages and classifiers.
+ */
+private MPackage process(MPackage this) :
+	nestedPackage.process() ->
+	classifier.process() ->
+	this;
+
+/**
+ * Prepare classisifer with association roles and association classes.
+ */
+private MClassifier process(MClassifier this) :
+	// prepare classes with associations
+	hasAssociationRoles() ? prepareClass() : this ->
+	// prepare association class
+	isAssociationClass() ? prepareAssociationClass() : this ->
+	this;
+
+
+/**
+ * Adds the interface realization of 'AssociationRole'.
+ */
+MClassifier prepareClass(MClassifier this) :
+	logDebug(this, "Prepare classifier: ") ->
+	(let i = makeAssociationRole(model()) :
+		realization.add(i) ->
+		this);
+
+/**
+ * Adds the interface realization of 'AssociationClass' and an attribute to
+ * store the association class link.
+ */
+Void prepareAssociationClass(MClassifier this) :
+	logDebug(this, "Prepare association class: ") ->
+	(let i = makeAssociationClass(model()) : 
+		realization.add(i) -> 
+		makeAssociationClassLinkAttribute() ->
+		Void);
+
+/**
+ * Creates the association class link attribute.
+ */
+private MAttribute makeAssociationClassLinkAttribute(MClassifier this) : 
+	logDebug(this, "Create association class link: ") ->
+	ensureAttributeExistence( xmiGuid + ".associationClassLink", "associationClassLink" )
+		.processAttribute( "new ACLink()", false, false )
+		.processProperty("private", false, createMultiplicity( 0, 1, false, false ) )
+		.wireType( model().makeACLink() )
+		.prAssignGeneSezAccessorStereotype( true, false, false, false );
+
+
+/**
+ * Returns the 'AssociationRole' interface.
+ */
+MExternal makeAssociationRole(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.AssociationRole", "AssociationRole");
+
+/**
+ * Returns the 'RelatedAssociationRole' interface.
+ */
+MExternal makeRelatedAssociationRole(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole", "RelatedAssociationRole");
+
+/**
+ * Returns the 'AssociationClass' interface.
+ */
+MExternal makeAssociationClass(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.AssociationClass", "AssociationClass");
+
+/**
+ * Returns the 'ACLink' class.
+ */
+MExternal makeACLink(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.ACLink", "ACLink");
+
+/**
+ * Returns the 'Association' interface.
+ */
+MExternal makeAssociation(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.Association", "Association");
+
+/**
+ * Returns the 'AssociationAC' interface.
+ */
+MExternal makeAssociationAC(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.AssociationAC", "AssociationAC");
+	
+/**
+ * Returns the 'OneAssociation' class.
+ */
+MExternal makeOneAssociation(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.OneAssociation", "OneAssociation");
+
+/**
+ * Returns the 'OneAssociationAC' class.
+ */
+MExternal makeOneAssociationAC(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.OneAssociationAC", "OneAssociationAC");
+
+/**
+ * Returns the 'ManyAssociation' class.
+ */
+MExternal makeManyAssociation(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.ManyAssociation", "ManyAssociation");
+
+/**
+ * Returns the 'ManyAssociationAC' class.
+ */
+MExternal makeManyAssociationAC(MModel this) : ensureExternalTypeExistence("org.genesez.platform.java.umlsupport.associations.ManyAssociationAC","ManyAssociationAC");
