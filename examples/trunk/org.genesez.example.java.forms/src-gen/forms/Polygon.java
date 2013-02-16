@@ -8,18 +8,14 @@ import java.awt.Color;
 
 /**
  * Describes the geometrical form <b>polygon</b>
- * @author dreamer
  */
 public class Polygon implements Form {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * the points a polygon consists of
 	 */
 	private Point[] points = null;
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructs a polygon with the specified points
 	 * @param	points	points describing a polygon in the given order
@@ -33,7 +29,6 @@ public class Polygon implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * determines the center of area of the form
 	 * @return	the location of the center of area
@@ -104,11 +99,6 @@ public class Polygon implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249463754375_944273_708) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

@@ -17,11 +17,9 @@ import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
  * <p>
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
- * @author dreamer
  */
 public class Figure implements Form, AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		FORMS
@@ -33,7 +31,6 @@ public class Figure implements Form, AssociationRole {
 	/** Stores associated objects of association FORMS to Form */
 	private java.util.Set<Form> forms = new java.util.HashSet<Form>();
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * determines the center of area of the form
 	 * @return	the location of the center of area
@@ -104,7 +101,6 @@ public class Figure implements Form, AssociationRole {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	// initialization block for association management objects
 	{
 		association.put(Associations.FORMS, new ManyAssociation<Figure, Form>(this, forms));
@@ -128,9 +124,6 @@ public class Figure implements Form, AssociationRole {
 		return (Association<Figure, Form>) association.get(Associations.FORMS);
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

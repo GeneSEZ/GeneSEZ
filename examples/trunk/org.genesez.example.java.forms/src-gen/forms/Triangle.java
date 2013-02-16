@@ -7,11 +7,9 @@ package forms;
 
 /**
  * Describes the geometrical form <b>triangle</b> as a special <i>polygon</i>
- * @author dreamer
  */
 public class Triangle extends Polygon {
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructs a triangle with the points in the specified order
 	 * @param	a	the first point of the triangle
@@ -24,11 +22,6 @@ public class Triangle extends Polygon {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249464030468_592473_783) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

@@ -7,11 +7,9 @@ package forms;
 
 /**
  * Describes the geometrical form <b>rectangle</b> as a specic <i>polygon</i>
- * @author dreamer
  */
 public class Rectangle extends Polygon {
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructs a rectangle by the 2 diagonally points
 	 * @param	a	the lower left point of the rectangle
@@ -23,11 +21,6 @@ public class Rectangle extends Polygon {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249464012328_770017_760) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

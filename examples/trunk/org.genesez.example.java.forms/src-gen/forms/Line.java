@@ -8,11 +8,8 @@ import java.awt.Color;
 
 /**
  * Describes the geometrical form of a <i><b>line</b></i>
- * @author dreamer
  */
 public class Line implements Form {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * indicates the start point of the line
@@ -24,7 +21,6 @@ public class Line implements Form {
 	 */
 	private Point end;
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructs a line from the center of the coordinate system to the specified end
 	 * @param	end	the end point of the line
@@ -48,7 +44,6 @@ public class Line implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * determines the center of area of the form
 	 * @return	the location of the center of area
@@ -119,11 +114,6 @@ public class Line implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871374078_396988_308) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

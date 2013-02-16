@@ -7,7 +7,6 @@ package forms;
 
 /**
  * describes things which can be <i><b>moved</b></i>
- * @author dreamer
  */
 public interface Moveable {
 	
@@ -19,9 +18,6 @@ public interface Moveable {
 	 */
 	public void move(double dx, double dy);
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._14_0_b6f02e1_1214478843156_556754_163) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
