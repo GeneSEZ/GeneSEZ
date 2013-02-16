@@ -12,8 +12,10 @@ import gcore;
  * @author	tobias haubold <toh@fh-zwickau.de> (maintainer)
  */
 extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::ExtensionMechanism;
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
+extension org::genesez::util::logging::Logging;
 
 
 /**
@@ -21,34 +23,34 @@ extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
  * 
  * @return	The property owning the tagged values.
  */
-MProperty prAssignGeneSezAccessorStereotype(MProperty this, String get, String set, String add, String remove) :
-	prAssignGeneSezAccessorStereotype( get, set, add, remove );
+MProperty prAssignGeneSezAccessorStereotype(MProperty this, boolean get, boolean set, boolean add, boolean remove) :
+	prDoAssignGeneSezAccessorStereotype( get, set, add, remove );
 
 /**
  * Assigns the «accessor» stereotype and creates the specified tagged values.
  * 
  * @return	The classifier owning the tagged values.
  */
-MClassifier prAssignGeneSezAccessorStereotype(MClassifier this, String get, String set, String add, String remove) :
-	prAssignGeneSezAccessorStereotype( get, set, add, remove );
+MClassifier prAssignGeneSezAccessorStereotype(MClassifier this, boolean get, boolean set, boolean add, boolean remove) :
+	prDoAssignGeneSezAccessorStereotype( get, set, add, remove );
 
 /**
  * Assigns the specified values to the tags of the «accessor» stereotype.
  * 
  * @return	The element owning the tagged values.
  */
-private MElement prAssignGeneSezAccessorStereotype(MElement this, String get, String set, String add, String remove) :
+private MElement prDoAssignGeneSezAccessorStereotype(MElement this, boolean get, boolean set, boolean add, boolean remove) :
 	ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorGetter() ), get
+		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorGetter() ), get.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorSetter() ), set
+		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorSetter() ), set.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorAdd() ), add
+		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorAdd() ), add.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorRemove() ), remove
+		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorRemove() ), remove.toString()
 	).owningElement;
 
 /**
@@ -68,32 +70,12 @@ MStereotype prEnsureGeneSezAccessorStereotype(MModel this) :
  * @return	The «accessor» stereotype.
  */
 private MStereotype prEnsureGeneSezAccessorTags(MStereotype this) :
-	ensureTagExistence( accessorGetterXmiGuid(), prAccessorGetter() ).stereotype
-		.ensureTagExistence( accessorSetterXmiGuid(), prAccessorSetter() ).stereotype
-		.ensureTagExistence( accessorAddXmiGuid(), prAccessorAdd() ).stereotype
-		.ensureTagExistence( accessorRemoveXmiGuid(), prAccessorRemove() ).stereotype;
+	ensureTagExistence( prAccessorGetter(), "Boolean" ).stereotype
+		.ensureTagExistence( prAccessorSetter(), "Boolean" ).stereotype
+		.ensureTagExistence( prAccessorAdd(), "Boolean" ).stereotype
+		.ensureTagExistence( prAccessorRemove(), "Boolean" ).stereotype;
 
 /**
  * Returns the xmi guid of the «accessor» stereotype.
  */
 private String accessorXmiGuid() : "org.genesez.adapter.uml2.profile.accessor";
-
-/**
- * Returns the xmi guid of the 'getter' tag of the «accessor» stereotype.
- */
-private String accessorGetterXmiGuid() : "org.genesez.adapter.uml2.profile.accessor.getter";
-
-/**
- * Returns the xmi guid of the 'setter' tag of the «accessor» stereotype.
- */
-private String accessorSetterXmiGuid() : "org.genesez.adapter.uml2.profile.accessor.setter";
-
-/**
- * Returns the xmi guid of the 'add' tag of the «accessor» stereotype.
- */
-private String accessorAddXmiGuid() : "org.genesez.adapter.uml2.profile.accessor.add";
-
-/**
- * Returns the xmi guid of the 'remove' tag of the «accessor» stereotype.
- */
-private String accessorRemoveXmiGuid() : "org.genesez.adapter.uml2.profile.accessor.remove";
