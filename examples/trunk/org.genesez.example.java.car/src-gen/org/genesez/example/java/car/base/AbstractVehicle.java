@@ -1,20 +1,15 @@
-package de.genesez.example.java.car.base;
+package org.genesez.example.java.car.base;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_11_5_6340215_1179139182234_646597_164) 
  */
-
-import org.genesez.platform.java.umlsupport.associations.*;
 import java.awt.Color;
 
 /**
  * This abstract class Vehicle is the superclass for all things that can drive (for example: car, boat, air plane, ...).
- * @author apflueger
  */
 public abstract class AbstractVehicle implements IDriveable, IPaintable {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	private String make;
 	
@@ -22,17 +17,6 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
 	private VehicleStatus state = VehicleStatus.STOP;
 	
-	// -- generated method declarations -------------------------------------
-	/**
-	 * Method stub for further implementation.
-	 * @param	distance	
-	 * @return	
-	 * @throws	OutOfFuelException
-	 * @throws	FlatTireException
-	 */
-	public abstract boolean drive(Integer distance) throws OutOfFuelException, FlatTireException;
-	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @param	color	
@@ -45,11 +29,6 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1179139182234_646597_164) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

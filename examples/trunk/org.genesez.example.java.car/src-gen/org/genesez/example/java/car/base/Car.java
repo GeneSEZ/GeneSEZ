@@ -1,29 +1,26 @@
-package de.genesez.example.java.car.base;
+package org.genesez.example.java.car.base;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_11_5_6340215_1177945913718_872802_139) 
  */
-
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.genesez.platform.java.umlsupport.associations.Association;
-import org.genesez.platform.java.umlsupport.associations.OneAssociation;
+
 import org.genesez.platform.java.umlsupport.associations.Accessor;
-import org.genesez.platform.java.umlsupport.associations.OneAssociationAC;
-import org.genesez.platform.java.umlsupport.associations.*;
+import org.genesez.platform.java.umlsupport.associations.Association;
 import org.genesez.platform.java.umlsupport.associations.AssociationAC;
-import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
 import org.genesez.platform.java.umlsupport.associations.AssociationRole;
+import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
+import org.genesez.platform.java.umlsupport.associations.OneAssociation;
+import org.genesez.platform.java.umlsupport.associations.OneAssociationAC;
 import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * A car is a vehicle with four wheels and drives on the road.
- * @author apflueger
  */
 public class Car extends AbstractVehicle implements AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		SPARE, LICENSE, LICENSEPLATE, ENGINE, WHEELS
@@ -54,9 +51,8 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	 * 
 	 * internal bla bla bla
 	 */
-	private Integer maxSpeed;
+	private int maxSpeed;
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructor of the class car
 	 * @param	mxs	maximum of speed
@@ -69,7 +65,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * starts the engine of the car and moves it to another place
 	 * @param	distance	
@@ -77,7 +72,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	 * @throws	OutOfFuelException
 	 * @throws	FlatTireException
 	 */
-	public boolean drive(Integer distance) throws OutOfFuelException, FlatTireException {
+	public boolean drive(int distance) throws OutOfFuelException, FlatTireException {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1215088972218_727597_762) ENABLED START */
 		// TODO: implementation of method 'Car.drive(...)'
 		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
@@ -87,20 +82,19 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	/**
 	 * count the number of wheels
 	 */
-	private Integer getNoOfWheels() {
+	private int getNoOfWheels() {
 		/* PROTECTED REGION ID(java.derived.attribute.implementation._11_5_6340215_1178786244296_257674_121) ENABLED START */
 		// TODO: implementation of derived (calculated) attribute 'noOfWheels'
 		throw new UnsupportedOperationException("The implementation of the derived attribute 'noOfWheels' is missing!");
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * describes the maximum speed of a car
 	 * 
 	 * internal bla bla bla
 	 */
-	public Integer getMaxSpeed() {
+	public int getMaxSpeed() {
 		return maxSpeed;
 	}
 	
@@ -155,7 +149,7 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
@@ -203,9 +197,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 		return (Association<Car, Wheel>) association.get(Associations.WHEELS);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945913718_872802_139) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

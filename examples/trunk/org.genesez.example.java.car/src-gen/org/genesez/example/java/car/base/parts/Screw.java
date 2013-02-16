@@ -1,30 +1,24 @@
-package de.genesez.example.java.car.base.parts;
+package org.genesez.example.java.car.base.parts;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_11_5_6340215_1178034133828_951385_16) 
  */
 
-import org.genesez.platform.java.umlsupport.associations.*;
-
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author apflueger
  */
 public class Screw {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * describes the length of a screw
 	 */
-	private float length;
+	private double length;
 	
-	private float diameter;
+	private double diameter;
 	
 	private boolean metric;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @param	count	
@@ -36,18 +30,17 @@ public class Screw {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * describes the length of a screw
 	 */
-	public float getLength() {
+	public double getLength() {
 		return length;
 	}
 	
 	/**
 	 * Returns the value of attribute '<em><b>diameter</b></em>'
 	 */
-	public float getDiameter() {
+	public double getDiameter() {
 		return diameter;
 	}
 	
@@ -58,9 +51,6 @@ public class Screw {
 		return metric;
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1178034133828_951385_16) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

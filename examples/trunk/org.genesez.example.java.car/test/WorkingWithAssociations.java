@@ -2,8 +2,8 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.genesez.example.java.car.base.Car;
-import de.genesez.example.java.car.base.Wheel;
+import org.genesez.example.java.car.base.Car;
+import org.genesez.example.java.car.base.Wheel;
 
 /**
  * demonstrate the benefit of the association handling library

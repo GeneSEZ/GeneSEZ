@@ -5,5 +5,5 @@
  * 
  * der geschachtelte kommentar
  */
-package de.genesez.example.java.car.base.parts;
+package org.genesez.example.java.car.base.parts;
 

@@ -1,28 +1,25 @@
-package de.genesez.example.java.car.base;
+package org.genesez.example.java.car.base;
 
 /* 
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_11_5_6340215_1177945943625_542159_161) 
  */
-
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.genesez.platform.java.umlsupport.associations.Association;
-import org.genesez.platform.java.umlsupport.associations.OneAssociation;
+
+import org.genesez.example.java.car.base.parts.Screw;
 import org.genesez.platform.java.umlsupport.associations.Accessor;
-import org.genesez.platform.java.umlsupport.associations.*;
-import de.genesez.example.java.car.base.parts.Screw;
-import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
+import org.genesez.platform.java.umlsupport.associations.Association;
 import org.genesez.platform.java.umlsupport.associations.AssociationRole;
+import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
+import org.genesez.platform.java.umlsupport.associations.OneAssociation;
 import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author apflueger
  */
 public class Wheel implements IChangeable, AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		MYCAR, SCREW
@@ -37,30 +34,16 @@ public class Wheel implements IChangeable, AssociationRole {
 	/** Stores associated objects of association SCREW to Screw */
 	private java.util.Set<Screw> screw = new java.util.HashSet<Screw>();
 	
-	private float diameter;
+	private double diameter;
 	
 	private java.util.Set<String> specification = new java.util.HashSet<String>();
 	
-	private Integer durability = 100000;
-	
-	// -- generated method stubs for implementations + derived attributes ---
-	/**
-	 * Method stub for further implementation.
-	 * @param	newWheel	
-	 * @return	
-	 */
-	public boolean change(IChangeable newWheel) {
-		/* PROTECTED REGION ID(java.implementation._11_5_6340215_1179139054625_520706_1) ENABLED START */
-		// TODO: implementation of method 'Wheel.change(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
+	private int durability = 100000;
 	
 	/**
 	 * Method stub for further implementation.
 	 * @throws	FlatTireException
 	 */
-	
 	public void roll() throws FlatTireException {
 		/* PROTECTED REGION ID(java.implementation._11_5_6340215_1179238960437_25222_122) ENABLED START */
 		// TODO: implementation of method 'Wheel.roll(...)'
@@ -68,7 +51,18 @@ public class Wheel implements IChangeable, AssociationRole {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
+	/**
+	 * Method stub for further implementation.
+	 * @param	newInstance	
+	 * @return	
+	 */
+	public boolean change(IChangeable newInstance) {
+		/* PROTECTED REGION ID(java.implementation._11_5_6340215_1177945943625_542159_161__11_5_6340215_1179139274500_389758_230) ENABLED START */
+		// TODO: implementation of method 'Wheel.change(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
 	// initialization block for association management objects
 	{
 		association.put(Associations.MYCAR, new OneAssociation<Wheel, Car>(this, new Accessor<Car>() {
@@ -85,7 +79,7 @@ public class Wheel implements IChangeable, AssociationRole {
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
@@ -109,9 +103,6 @@ public class Wheel implements IChangeable, AssociationRole {
 		return (Association<Wheel, Screw>) association.get(Associations.SCREW);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945943625_542159_161) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
