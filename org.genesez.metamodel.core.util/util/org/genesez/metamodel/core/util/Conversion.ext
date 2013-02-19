@@ -15,6 +15,9 @@ import gcore;
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 
+// include super Xtend scripts 
+extension org::genesez::util::Conversion;
+
 extension org::genesez::metamodel::core::util::AccessHelper;
 
 
@@ -25,11 +28,11 @@ extension org::genesez::metamodel::core::util::AccessHelper;
  * Builds the comment text of an element by placing an empty line between the comments and nested comments.
  * 
  * @return	The comment string.
- * @see		comment(String, String)
+ * @see		comment(MElement, String, String)
  * @api
  */
 String comment(MElement this) :
-	comment("\n\n", "\n\n");
+	comment( "\n\n", "\n\n" );
 
 
 /**
@@ -41,66 +44,45 @@ String comment(MElement this) :
  * @api
  */
 String comment(MElement this, String commentSeparator, String nestedCommentSeparator) :
-	JAVA org.genesez.metamodel.core.util.CommentProcessing.comment(org.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String);
-
-
-/**
- * Formats a string by adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the string.
- * Hint: To format the comment text of an element please use the formatComment* scripts instead.  
- * 
- * @return	The formatted string.
- * @api
- */
-String format(String this) :
-	format(" * ", "\n");
-
-
-/**
- * Formats a string by adding the specified prefix and suffix to each line within the string.
- * Hint: To format the comment text of an element please use the formatComment* scripts instead.
- * 
- * @param	linePrefix	A prefix which is prepended to each line.
- * @param	lineSuffix	A suffix which is appended to each line.
- * @return	The formatted string.
- * @api
- */
-String format(String this, String linePrefix, String lineSuffix) :
-	JAVA org.genesez.util.comment.CommentProcessing.format(java.lang.String, java.lang.String, java.lang.String);
+	JAVA org.genesez.metamodel.core.util.CommentProcessing.comment( org.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String );
 
 
 /**
  * Formats the comment text of an element by placing an empty line between the comments and nested comments
  * and adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the comment text.
  * 
- * @return	The formatted comment string.
- * @see		formatComment(MElement, String, String)
- */
-String formatComment(MElement this) : 
-	formatComment(" * ", "\n");
-
-
-/**
- * Formats the comment text of an element by placing an empty line between the comments and nested comments
- * and adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the comment text.
- * 
- * @return	The formatted comment string.
- * @see		formatComment(MElement, String, String)
+ * @return	The formatted comment text.
+ * @see		comment(MElement)
+ * @see		formatCommentAsterix(String)
  * @api
  */
 String formatCommentAsterix(MElement this) : 
-	formatComment(" * ", "\n");
+	comment().formatCommentAsterix();
 
 
 /**
  * Formats the comment text of an element by placing an empty line between the comments and nested comments
  * and adding two slashes  ('// ') as prefix and the newline ('\n') as suffix to each line within the comment text.
  * 
- * @return	The formatted comment string.
- * @see		formatComment(MElement, String, String)
+ * @return	The formatted comment text.
+ * @see		comment(MElement)
+ * @see		formatCommentSlashSlash(String)
  * @api
  */
 String formatCommentSlashSlash(MElement this) : 
-	formatComment("// ", "\n");
+	comment().formatCommentSlashSlash();
+
+
+/**
+ * Formats the comment text of an element by placing an empty line between the comments and nested comments
+ * and adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the comment text.
+ * 
+ * @return	The formatted comment text.
+ * @see		comment(MElement)
+ * @see		formatComment(String)
+ */
+String formatComment(MElement this) : 
+	comment().formatComment();
 
 
 /**
@@ -109,13 +91,13 @@ String formatCommentSlashSlash(MElement this) :
  * 
  * @param	linePrefix	A prefix which is prepended to each line.
  * @param	lineSuffix	A suffix which is appended to each line.
- * @return	The formatted comment string.
+ * @return	The formatted comment text.
  * @see		comment(MElement)
- * @see		format(String, String, String)
+ * @see		formatComment(String, String, String)
  * @api
  */
 String formatComment(MElement this, String linePrefix, String lineSuffix) :
-	comment().format(linePrefix, lineSuffix);
+	comment().formatComment( linePrefix, lineSuffix );
 
 
 /**
@@ -128,11 +110,11 @@ String formatComment(MElement this, String linePrefix, String lineSuffix) :
  * @param	lineSuffix				A suffix which is appended to each line.
  * @return	The formatted comment string.
  * @see		comment(MElement, String, String)
- * @see		format(String, String, String)
+ * @see		formatComment(String, String, String)
  * @api
  */
 String formatComment(MElement this, String commentSeparator, String nestedCommentSeparator, String linePrefix, String lineSuffix) :
-	comment(commentSeparator, nestedCommentSeparator).format(linePrefix, lineSuffix);
+	comment( commentSeparator, nestedCommentSeparator ).formatComment( linePrefix, lineSuffix );
 
 
 // -- Directory name and path conversions ------------------------------------------------------------------- 
