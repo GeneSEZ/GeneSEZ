@@ -47,7 +47,7 @@ extension org::genesez::adapter::uml2::gcore::validation::util::StatechartValida
  * @return true, if State Machine has an owning Class (or Interface)
  */
 context StateMachine 
-ERROR "GeneSEZ Model Validation: StateMachine must be owned by a Class: "+name :
+ERROR "GeneSEZ Model Validation: StateMachine must be owned by a Class: [" + fqn() + "]" :
 	owner.metaType == Class || owner.metaType == Interface;
 	
 /**
@@ -56,7 +56,7 @@ ERROR "GeneSEZ Model Validation: StateMachine must be owned by a Class: "+name :
  * @return true, if State Machine is not owned by an Interface
  */
 context StateMachine 
-WARNING "GeneSEZ Model Validation: StateMachine "+name+" needs an owning class to be generated." :
+WARNING "GeneSEZ Model Validation: StateMachine "+name+" needs an owning class to be generated. [" + fqn() + "]" :
 	owner.metaType != Interface;
 
 /**
@@ -64,7 +64,7 @@ WARNING "GeneSEZ Model Validation: StateMachine "+name+" needs an owning class t
  * @return true, if only of side of generalization has a State Machine
  */
 context Class if generalization != null && ownedElement.exists(e|e.metaType==StateMachine)
-ERROR "GeneSEZ Model Validation: only one side of a generalization can own a StateMachine: "+name :
+ERROR "GeneSEZ Model Validation: only one side of a generalization can own a StateMachine: [" + fqn() + "]" :
 	getGenerals().forAll(e|e.ownedElement.contains(new StateMachine));
 
 /**
@@ -73,7 +73,7 @@ ERROR "GeneSEZ Model Validation: only one side of a generalization can own a Sta
  * @return true, if the Class has only one State Machine
  */
 context Class if ownedElement.size > 1 && ownedElement.exists(e|e.metaType==StateMachine) 
-ERROR "GeneSEZ Model Validation: One Class can only be owner of one StateMachine: "+name :
+ERROR "GeneSEZ Model Validation: One Class can only be owner of one StateMachine: [" + fqn() + "]" :
 	(allOwnedElements().typeSelect(StateMachine)).size == 1;
 
 
@@ -88,7 +88,7 @@ ERROR "GeneSEZ Model Validation: One Class can only be owner of one StateMachine
  * @return true, if Transition has no name
  */
 context Transition 
-WARNING "GeneSEZ Model Validation: name of transition "+name+" will be ignored." :
+WARNING "GeneSEZ Model Validation: name of transition "+name+" will be ignored. [" + fqn() + "]" :
 	!name.doesExist();
 
 
@@ -110,7 +110,7 @@ WARNING "GeneSEZ Model Validation: name of transition "+name+" will be ignored."
  * @return true, if the name exists and contains only valid characters
  */
 context Class if ownedElement.exists(e|e.metaType==StateMachine)
-ERROR "GeneSEZ Model Validation: StateMachine owner has no name." :
+ERROR "GeneSEZ Model Validation: StateMachine owner has no name. [" + fqn() + "]" :
 	name.doesExist() && name.matches("(\\w)+");
 
 /**
@@ -118,7 +118,7 @@ ERROR "GeneSEZ Model Validation: StateMachine owner has no name." :
  * @return true, if StateMachine name contains only valid characters
  */
 context StateMachine
-ERROR "GeneSEZ Model Validation: instance of StateMachine has no proper name." :
+ERROR "GeneSEZ Model Validation: instance of StateMachine has no proper name. [" + fqn() + "]" :
 	name.matches("(\\w)+");
 
 /**
@@ -126,7 +126,7 @@ ERROR "GeneSEZ Model Validation: instance of StateMachine has no proper name." :
  * @return true, if State has a name containing only valid characters
  */
 context State if metaType!=FinalState 
-ERROR "GeneSEZ Model Validation: instance of state has no proper name (should start with lowercase and contains only a-z and 0-9)." :
+ERROR "GeneSEZ Model Validation: instance of state has no proper name (should start with lowercase and contains only a-z and 0-9). [" + fqn() + "]" :
 	name.doesExist() && name.matches("^[a-z](\\w)+");
 
 /**
@@ -135,7 +135,7 @@ ERROR "GeneSEZ Model Validation: instance of state has no proper name (should st
  * @return true, if name contains only valid characters
  */
 context State if metaType == FinalState && name.doesExist()
-ERROR "GeneSEZ Model Validation: FinalState needs either no name or a proper one." :
+ERROR "GeneSEZ Model Validation: FinalState needs either no name or a proper one. [" + fqn() + "]" :
 	name.matches("(\\w)+");
 
 /**
@@ -144,7 +144,7 @@ ERROR "GeneSEZ Model Validation: FinalState needs either no name or a proper one
  * @return true, if name contains only valid characters
  */
 context Pseudostate if (isInitial() || isHistory()) && name.doesExist()
-ERROR "GeneSEZ Model Validation: Initial or HistoryState needs either no name or a proper one." :
+ERROR "GeneSEZ Model Validation: Initial or HistoryState needs either no name or a proper one. [" + fqn() + "]" :
 	name.matches("(\\w)+");
 
 /**
@@ -152,7 +152,7 @@ ERROR "GeneSEZ Model Validation: Initial or HistoryState needs either no name or
  * @return true, if Event has a name containing only valid characters
  */
 context TimeEvent 
-ERROR "GeneSEZ Model Validation: TimeEvent has no proper name." :
+ERROR "GeneSEZ Model Validation: TimeEvent has no proper name. [" + fqn() + "]" :
 	name.doesExist() && name.matches("(\\w)+");
 
 /**
@@ -160,21 +160,21 @@ ERROR "GeneSEZ Model Validation: TimeEvent has no proper name." :
  * @return true, if name contains only valid characters
  */
 context Behavior if owner.metaType == State || owner.metaType == Transition
-ERROR "GeneSEZ Model Validation: behavior has no proper name." :
+ERROR "GeneSEZ Model Validation: behavior has no proper name. [" + fqn() + "]" :
 	name.matches("(\\w)+");
 
 /**
  * checks if an operation has a proper name
  * @return true, if the name contains only valid characters
  */
-context Operation ERROR "GeneSEZ Model Validation: operation has no proper name." :
+context Operation ERROR "GeneSEZ Model Validation: operation has no proper name. [" + fqn() + "]" :
 	name.matches("(\\w)+") || isConstructor() || isDestructor();
 
 /**
  * checks if a signal has a proper name
  * @return true, if the name contains only valid characters
  */
-context Signal ERROR "GeneSEZ Model Validation: signal has no proper name." :
+context Signal ERROR "GeneSEZ Model Validation: signal has no proper name. [" + fqn() + "]" :
 	name.matches("(\\w)+");
 
 /**
@@ -182,7 +182,7 @@ context Signal ERROR "GeneSEZ Model Validation: signal has no proper name." :
  * @return true, if the name contains only valid characters
  */
 context Parameter 
-ERROR "GeneSEZ Model Validation: parameter on "+owner.toString()+" has no proper name." :
+ERROR "GeneSEZ Model Validation: parameter on "+owner.toString()+" has no proper name. [" + fqn() + "]" :
 	name.matches("(\\w)+") || isReturnParameter();
 
 /**
@@ -191,7 +191,7 @@ ERROR "GeneSEZ Model Validation: parameter on "+owner.toString()+" has no proper
  * @return true, if it has a valid ChangeExpression
  */
 context ChangeEvent 
-ERROR "GeneSEZ Model Validation: ChangeEvent has no proper ChangeExpression." :
+ERROR "GeneSEZ Model Validation: ChangeEvent has no proper ChangeExpression. [" + fqn() + "]" :
 	changeExpression != null  && changeExpression.stringValue().matches("(\\w)+");
 
 /**
@@ -222,7 +222,7 @@ ERROR "GeneSEZ Model Validation: ChangeEvent has no proper ChangeExpression." :
  * @return true, if not
  */
 context ProtocolStateMachine
-ERROR "GeneSEZ Model Validation: not supported: ProtocolStateMachine Diagrams." :
+ERROR "GeneSEZ Model Validation: not supported: ProtocolStateMachine Diagrams. [" + fqn() + "]" :
 	false;
 
 /**
@@ -231,7 +231,7 @@ ERROR "GeneSEZ Model Validation: not supported: ProtocolStateMachine Diagrams." 
  * @return true, if only those are used
  */
 context Pseudostate 
-ERROR "GeneSEZ Model Validation: unsupported Pseudostate: "+kind :
+ERROR "GeneSEZ Model Validation: unsupported Pseudostate: "+kind + "[" + fqn() + "]" :
 	kind == FinalState 
 	|| kind == PseudostateKind::initial 
 	|| kind == PseudostateKind::deepHistory 
@@ -251,7 +251,7 @@ context Event ERROR "GeneSEZ Model Validation: not supported event "+metaType :
  * @return true, if there's only one region
  */
 context State if isComposite
-ERROR "GeneSEZ Model Validation: not supported: multiple regions." :
+ERROR "GeneSEZ Model Validation: not supported: multiple regions. [" + fqn() + "]" :
 	region.size == 1;
 
 /**
@@ -259,7 +259,7 @@ ERROR "GeneSEZ Model Validation: not supported: multiple regions." :
  * @return true, if transition has one or none trigger
  */
 context Transition 
-ERROR "GeneSEZ Model Validation: not supported: multiple triggers on transition." :
+ERROR "GeneSEZ Model Validation: not supported: multiple triggers on transition. [" + fqn() + "]" :
 	trigger.size == 0 || trigger.size == 1;
 	
 /**
@@ -267,7 +267,7 @@ ERROR "GeneSEZ Model Validation: not supported: multiple triggers on transition.
  * @return true, if there's an initial state
  */
 context State if isComposite
-WARNING "GeneSEZ Model Validation: not supported: composite state without initial state." :
+WARNING "GeneSEZ Model Validation: not supported: composite state without initial state. [" + fqn() + "]" :
 	let p = allOwnedElements().typeSelect(Pseudostate) :
 	p.select(e| e.isInitial() ).size > 0;
 
@@ -276,7 +276,7 @@ WARNING "GeneSEZ Model Validation: not supported: composite state without initia
  * @return true, if it has one
  */
 context Pseudostate if this.isHistory()
-ERROR "GeneSEZ Model Validation: not supported: HistoryState without outgoing default transition." :
+ERROR "GeneSEZ Model Validation: not supported: HistoryState without outgoing default transition. [" + fqn() + "]" :
 	outgoing != null && outgoing.size > 0 && outgoing.trigger.isEmpty;
 
 /**
