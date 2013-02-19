@@ -4,6 +4,7 @@ package org.genesez.example.java.statemachine.smfeatures;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_15_5_1_6340215_1233754261619_362762_1178) 
  */
+
 import org.genesez.platform.java.umlsupport.statemachine.EventQueue;
 import org.genesez.platform.java.umlsupport.statemachine.EventReceiver;
 import org.genesez.platform.java.umlsupport.statemachine.GuardedTransition;
