@@ -259,7 +259,7 @@ String qualifiedNameSeparator() :
 
 
 /**
- * Getter for a human readable identifier of a model.
+ * Returns the human readable full qualified name of a model.
  * 
  * @api
  */
@@ -268,7 +268,7 @@ String fqn(MModel this) :
 
 
 /**
- * Getter for a human readable identifier of a package.
+ * Returns the human readable full qualified name of a package.
  * 
  * @api
  */
@@ -277,7 +277,7 @@ String fqn(MPackage this) :
 
 
 /**
- * Getter for a human readable identifier of a classifier.
+ * Returns the human readable full qualified name of a classifier.
  * 
  * @api
  */
@@ -286,7 +286,7 @@ String fqn(MClassifier this) :
 
 
 /**
- * Getter for a human readable identifier of a property.
+ * Returns the human readable full qualified name of a property.
  * 
  * @api
  */
@@ -295,9 +295,9 @@ String fqn(MProperty this) :
 
 
 /**
- * Getter for a human readable identifier of an operation.
+ * Returns the human readable full qualified name of an operation.
  * 
- * @todo: Regard return type of operation in fqn.
+ * @todo: 	Regard return type of operation in fqn.
  * @api
  */
 String fqn(MOperation this) :
@@ -305,7 +305,7 @@ String fqn(MOperation this) :
 
 
 /**
- * Getter for a human readable identifier of an element.
+ * Returns the human readable full qualified name of an element.
  * 
  * @api
  */
@@ -317,25 +317,66 @@ String fqn(MElement this) :
 
 
 /**
- * Returns the qualified name of the specified root model element, i.e. an empty string.
+ * Returns the human readable qualified name of a model.
+ * Instead of the full qualified name script which returns the name of the model
+ * this script returns an empty string.
+ * 
+ * @api
  */
 String qn(MModel this) : 
 	"";
 
 
 /**
- * Returns the qualified name of the specified package.
+ * Returns the human readable qualified name of a package.
+ * 
+ * @see		qn(MModel)
+ * @api
  */
 String qn(MPackage this) :
-	nestingPackage == null || nestingPackage.metaType == MModel
-		? name
-		: nestingPackage.qn() + "::" + name;
-		
-/**
- * Returns the qualified name of the specified classifier.
- */
-String qn(MClassifier this) : package().qn() + "::" + name;
+	nestingPackage != null && nestingPackage.metaType != MModel
+		? nestingPackage.qn() + "::" + name 
+		: name;
 
+
+/**
+ * Returns the human readable qualified name of a classifier.
+ * 
+ * @see		qn(MPackage)
+ * @api
+ */
+String qn(MClassifier this) :
+	package().qn() + qualifiedNameSeparator() + name;
+
+
+/**
+ * Returns the human readable qualified name of a property.
+ * 
+ * @see		qn(MClassifier)
+ * @api
+ */
+String qn(MProperty this) :
+	classifier.qn() + qualifiedNameSeparator() + name;
+
+
+/**
+ * Returns the human readable qualified name of an operation.
+ * 
+ * @see		qn(MClassifier)
+ * @todo: 	Regard return type of operation in qn.
+ * @api
+ */
+String qn(MOperation this) :
+	classifier.qn() + qualifiedNameSeparator() + name + "(" + parameter.name.toString(", ") + ")";
+
+
+/**
+ * Returns the human readable full qualified name of an element.
+ * 
+ * @api
+ */
+String qn(MElement this) :
+	name;
 
 
 /*
