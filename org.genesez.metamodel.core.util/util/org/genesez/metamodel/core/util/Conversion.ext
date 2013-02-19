@@ -16,7 +16,7 @@ import gcore;
  */
 
 // include super Xtend scripts 
-extension org::genesez::util::Conversion;
+extension org::genesez::util::Conversion reexport;
 
 extension org::genesez::metamodel::core::util::AccessHelper;
 
@@ -44,8 +44,7 @@ String comment(MElement this) :
  * @api
  */
 String comment(MElement this, String commentSeparator, String nestedCommentSeparator) :
-	JAVA org.genesez.metamodel.core.util.CommentProcessing.comment( org.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String );
-
+	JAVA org.genesez.metamodel.core.util.CommentProcessing.comment(org.genesez.metamodel.gcore.MElement, java.lang.String, java.lang.String);
 
 /**
  * Formats the comment text of an element by placing an empty line between the comments and nested comments
@@ -251,77 +250,18 @@ String filePath(MPackage this, String base) :
 		: base + dirPathSeparator() + filePath();
 
 
+// -- String Splitting and List Merging Conversions ---------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
 
 /**
- * getter for a comma separated string of element names
- * @param	l	list of model elements of type MElement
- * @return	comma blank (', ') separated list of element names or an empty string
- */
-String getNameList(List[MElement] l) :
-	l.size > 1 
-		? ((MElement) l.first()).name + ", " + getNameList(l.withoutFirst())
-		: (l.size > 0
-			? ((MElement) l.first()).name
-			: "");
-
-/**
- * getter for a comma separated string of generic specifications
- * @param	l	list of model elements of type MGeneric
- * @return	comma blank (', ') separated list of generic specifications
- */
-String getGenericList(List[MGeneric] l) :
-	l.size > 1 
-		? ((MGeneric) l.first()).specification + ", " + getGenericList(l.withoutFirst())
-		: (l.size > 0
-			? ((MGeneric) l.first()).specification
-			: "");
-
-/**
- * Splits a comma separated list of values into a list of strings and removs all unnessesary whitespace.
- * If the specified string only contains the separator a list with an empty string is returned.
+ * Merges a list of generics into a comma blank (', ') seperated list of generic specifications.
+ * If the specified list contains no elements an empty string is returned. 
  * 
- * @param	s	comma separated list of values
- * @return	the list of strings
+ * @param	list	A list of generics.
+ * @return	The comma blank (', ') separated list of generic specifications, otherwise an empty string.
  */
-List[String] toList(String s) :
-	s.trim().length == 0
-		? {}
-		: ( s.trim() == ","
-			? {""}
-			: s.split(",").trim() );
+String convertToString(List[MGeneric] list) :
+	list.specification.toString(", ");
 
 
 // -- Full Qualified Names ----------------------------------------------------------------------------------
