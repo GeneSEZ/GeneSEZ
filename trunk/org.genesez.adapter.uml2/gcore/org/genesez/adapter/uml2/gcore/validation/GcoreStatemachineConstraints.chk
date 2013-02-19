@@ -32,6 +32,7 @@ import uml;
 
 extension org::genesez::adapter::uml2::Helper;
 extension org::genesez::adapter::uml2::gcore::validation::util::StatechartValidationHelper;
+extension org::genesez::util::logging::Logging;
 
 
 /**
@@ -263,13 +264,21 @@ ERROR "GeneSEZ Model Validation: not supported: multiple triggers on transition.
 	trigger.size == 0 || trigger.size == 1;
 	
 /**
- * checks if composite state has an initial state
- * @return true, if there's an initial state
+ * Checks if composite state has an initial state, no incomming transitions or incomming and outgoing transitions.
+ * Note: This check does NOT care about Guards!
+ * 
+ * initial state | incomming | outgoing | result
+ * ---------------------------------------------
+ * yes           | *         | *        | true
+ * no            | no        | *        | true
+ * no            | yes       | yes      | true
+ * no            | yes       | no       | false
+ * 
+ * @return true, if the composite state is modelled correctly
  */
 context State if isComposite
-WARNING "GeneSEZ Model Validation: not supported: composite state without initial state. [" + fqn() + "]" :
-	let p = allOwnedElements().typeSelect(Pseudostate) :
-	p.select(e| e.isInitial() ).size > 0;
+ERROR "GeneSEZ Model Validation: not supported: composite state without initial state, incomming transitions and no outgoing transitions. [" + fqn() + "]" :
+	!allOwnedElements().typeSelect(Pseudostate).select( e|e.isInitial() ).isEmpty || incoming.isEmpty || !outgoing.isEmpty;
 
 /**
  * checks if a HistoryState has an outgoing default transition
