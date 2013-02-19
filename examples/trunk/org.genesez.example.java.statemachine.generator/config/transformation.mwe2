@@ -1,0 +1,54 @@
+module org.genesez.example.java.statemachine.transformation
+
+var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
+	standardUML2Setup = true
+}
+
+Workflow {
+	// read uml model, validate it and transform it into a gcore model
+	component = org.genesez.workflow.CompositeComponent {
+		component = org.genesez.workflow.EmfReader {
+			file = "model/calculator.uml"
+			slot = "umlmodel"
+		}
+		component = @org.genesez.adapter.uml2.gcore.Uml2Validator {
+			uml2slot = "umlmodel"
+		}
+		component = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+			slot = "umlmodel"
+			outputSlot = "coremodel"
+			mapClassesInModelToExternal = true
+		}
+	}
+	// validate the gcore model
+	component = org.genesez.workflow.xpand.Validator {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::validation::Constraints"
+		script = "org::genesez::platform::java::validation::Syntax"
+	}
+	// modify the gcore model: realize abstract operations, add association handling, add use dependencies for imports
+	component = org.genesez.workflow.xpand.Model2Model {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+		script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+	}
+	// serialize the gcore model for debug purpose
+	component = org.genesez.workflow.EmfWriter {
+		schemaLocationImplementation = true
+		file = "model/calculator.xmi"
+		slot = "coremodel"
+	}
+	// generate java source code from the gcore model
+	component = org.genesez.workflow.xpand.Model2TextComposite {
+		component = org.genesez.platform.java.workflow.Gcore2Java {
+			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+			slot = "coremodel"
+			outputDir = "../org.genesez.example.java.statemachine/src-gen"
+			template = "org::genesez::platform::java::m2t::Root::Root"
+			useModelNameAsBasePackage = true
+			typeMappingFile = "typemapping.xml"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+		}
+	}
+}
