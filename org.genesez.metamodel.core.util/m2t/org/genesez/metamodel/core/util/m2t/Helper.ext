@@ -115,7 +115,7 @@ boolean generateAccessor(MProperty this, String accessor):
 		? emGetTaggedBooleanValue( accessorStereotype(), accessor )
 		: ( classifier.emHasStereotype( accessorStereotype() )
 			? classifier.emGetTaggedBooleanValue( accessorStereotype(), accessor )
-			: ( classifier.stereotype.exists( s|accessorsForStereotypes().toList().contains( s.name ) )
+			: ( classifier.stereotype.exists( s|accessorsForStereotypes().convertToList().contains( s.name ) )
 				? true
 				: false
 			)
@@ -230,7 +230,7 @@ List[MPackage] rejectIgnoredPackages(List[MPackage] this) : this.select( p|!p.is
  * Returns true if the specified package should be ignored/excluded, otherwise false.
  */
 boolean isRejected(MPackage this) :
-	ignoredPackages().toList().exists( ip|ip == qn() )
+	ignoredPackages().convertToList().exists( ip|ip == qn() )
 		? (logDebug("Reject '" + qn() + "'") -> true)
 		: false;
 
@@ -238,7 +238,7 @@ boolean isRejected(MPackage this) :
  * Returns true if the contents of the specified package should be ignored, otherwise false.
  */
 boolean isIgnoredContentPackage(MPackage this) : 
-	ignoredContentPackages().toList().exists( p|p == qn() )
+	ignoredContentPackages().convertToList().exists( p|p == qn() )
 		? (logDebug("Reject content of '" + qn() + "'") -> true)
 		: false;
 
