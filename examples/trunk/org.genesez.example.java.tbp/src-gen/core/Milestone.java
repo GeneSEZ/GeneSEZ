@@ -4,7 +4,6 @@ package core;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_16_0_b6f02e1_1231922886578_724134_407) 
  */
-
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,11 +11,9 @@ import org.genesez.platform.java.umlsupport.associations.*;
 
 /**
  * Represents a step within a project that has to be completet.
- * @author nicher
  */
 public class Milestone implements AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		PROJECT, TASK
@@ -39,7 +36,6 @@ public class Milestone implements AssociationRole {
 	
 	private Date deadline;
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>name</b></em>'
 	 */
@@ -86,7 +82,7 @@ public class Milestone implements AssociationRole {
 	 * Returns the value of attribute '<em><b>deadline</b></em>'
 	 */
 	public Date getDeadline() {
-		return deadline;
+		return new Date(deadline.getTime());
 	}
 	
 	/**
@@ -136,9 +132,6 @@ public class Milestone implements AssociationRole {
 		return (Association<Milestone, Task>) association.get(Associations.TASK);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1231922886578_724134_407) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

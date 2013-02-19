@@ -4,7 +4,6 @@ package core;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_16_0_b6f02e1_1231922905218_820951_467) 
  */
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.genesez.platform.java.umlsupport.associations.*;
@@ -12,11 +11,9 @@ import org.genesez.platform.java.umlsupport.associations.*;
 /**
  * A task represents an enclosed task with a defined outcome, which has to be 
  * completed within a planned amount of time.
- * @author nicher
  */
 public abstract class Task implements AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		PROJECT, MILESTONE, MAINTASK
@@ -42,7 +39,6 @@ public abstract class Task implements AssociationRole {
 	
 	private Duration timeBudgetPlanned;
 	
-	// -- generated association + attribute accessors -----------------------
 	// initialization block for association management objects
 	{
 		association.put(Associations.PROJECT, new OneAssociation<Task, Project>(this, new Accessor<Project>() {
@@ -108,9 +104,6 @@ public abstract class Task implements AssociationRole {
 		return (Association<Task, MainTask>) association.get(Associations.MAINTASK);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1231922905218_820951_467) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

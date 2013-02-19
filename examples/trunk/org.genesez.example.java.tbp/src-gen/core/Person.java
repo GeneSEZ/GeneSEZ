@@ -4,18 +4,15 @@ package core;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_16_0_b6f02e1_1231923313656_394195_575) 
  */
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.genesez.platform.java.umlsupport.associations.*;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author nicher
  */
 public class Person implements AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		SUBTASK
@@ -29,7 +26,6 @@ public class Person implements AssociationRole {
 	
 	private String name;
 	
-	// -- generated association + attribute accessors -----------------------
 	// initialization block for association management objects
 	{
 		association.put(Associations.SUBTASK, new ManyAssociationAC<Person, SubTask, TimeBudget>(this, subTask, SubTask.Associations.PERSON));
@@ -53,9 +49,6 @@ public class Person implements AssociationRole {
 		return (AssociationAC<Person, SubTask, TimeBudget>) association.get(Associations.SUBTASK);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1231923313656_394195_575) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

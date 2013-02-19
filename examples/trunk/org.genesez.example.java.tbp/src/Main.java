@@ -11,9 +11,6 @@ import core.Project;
  */
 public class Main {
 	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		Project project = new Project();
 		project.setName("Cebit");

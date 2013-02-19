@@ -1,0 +1,32 @@
+module org.genesez.example.java.tbp.transformation
+
+Workflow {
+	component = @org.genesez.adapter.uml2.gcore.Uml2Gcore {
+		uml2file = "model/time.budget.planning.uml"
+	}
+	component = org.genesez.workflow.xpand.Validator {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::validation::Constraints"
+		script = "org::genesez::platform::java::validation::Syntax"
+	}
+	component = org.genesez.workflow.xpand.Model2Model {
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+	}
+	component = org.genesez.workflow.EmfWriter {
+		schemaLocationImplementation = true
+		file = "model/time.budget.planning.xmi"
+		slot = "coremodel"
+	}
+	component = org.genesez.workflow.xpand.Model2TextComposite {
+		component = org.genesez.platform.java.workflow.Gcore2Java {
+			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+			slot = "coremodel"
+			outputDir = "../org.genesez.example.java.tbp/src-gen"
+			template = "org::genesez::platform::java::m2t::Root::Root"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+		}
+	}
+}
