@@ -45,7 +45,7 @@ extension org::genesez::adapter::uml2::gcore::validation::util::StatechartValida
  * @return true, if StateMachine has a name
  */
 context StateMachine 
-ERROR "UML2 Model Validation: StateMachine has no name." :
+ERROR "UML2 Model Validation: StateMachine has no name. [" + fqn() + "]" :
 	name.doesExist();
 
 /**
@@ -53,21 +53,21 @@ ERROR "UML2 Model Validation: StateMachine has no name." :
  * @return true, if Behavior has a name
  */
 context Behavior if owner.metaType == State || owner.metaType == Transition
-ERROR "UML2 Model Validation: behavior has no name." :
+ERROR "UML2 Model Validation: behavior has no name. [" + fqn() + "]" :
 	name.doesExist();
 
 /**
  * checks if an Operation has a name
  * @return true, if it has a name
  */
-context Operation ERROR "UML2 Model Validation: operation has no name." :
+context Operation ERROR "UML2 Model Validation: operation has no name. [" + fqn() + "]" :
 	name.doesExist() || isConstructor() || isDestructor();
 
 /**
  * checks if a Signal has a name
  * @return true, if it has a name
  */
-context Signal ERROR "UML2 Model Validation: signal has no name." :
+context Signal ERROR "UML2 Model Validation: signal has no name. [" + fqn() + "]" :
 	name.doesExist();
 
 /**
@@ -75,7 +75,7 @@ context Signal ERROR "UML2 Model Validation: signal has no name." :
  * @return true, if it has a name
  */
 context Parameter 
-ERROR "UML2 Model Validation: parameter on "+owner.toString()+" has no name." :
+ERROR "UML2 Model Validation: parameter on "+owner.toString()+" has no name. [" + fqn() + "]" :
 	name.doesExist() || isReturnParameter();
 
 
@@ -91,7 +91,7 @@ ERROR "UML2 Model Validation: parameter on "+owner.toString()+" has no name." :
  * @return true, if it contains one
  */
 context StateMachine
-ERROR "UML2 Model Validation: StateMachine must contain at least one Region directly." :
+ERROR "UML2 Model Validation: StateMachine must contain at least one Region directly. [" + fqn() + "]" :
 	let r = ownedElement.typeSelect(Region) :
 	r.select(e|e.stateMachine != null).size > 0;
 
@@ -102,7 +102,7 @@ ERROR "UML2 Model Validation: StateMachine must contain at least one Region dire
  * @return true, if there's only one
  */
 context Region if subvertex.typeSelect(Pseudostate).size > 1
-ERROR "UML2 Model Validation: One Region can only contains one InitialState." :
+ERROR "UML2 Model Validation: One Region can only contains one InitialState. [" + fqn() + "]" :
 	let p = subvertex.typeSelect(Pseudostate) :
 	p.select(e| e.isInitial() ).size == 1;
 	
@@ -111,7 +111,7 @@ ERROR "UML2 Model Validation: One Region can only contains one InitialState." :
  * @return true, if it has none
  */
 context Pseudostate if isInitial()
-ERROR "UML2 Model Validation: InitialState must not have incoming transitions." :
+ERROR "UML2 Model Validation: InitialState must not have incoming transitions. [" + fqn() + "]" :
 	incoming == null || incoming.size == 0;
 
 /**
@@ -119,7 +119,7 @@ ERROR "UML2 Model Validation: InitialState must not have incoming transitions." 
  * @return true, if it has exactly one
  */
 context Pseudostate if isInitial()
-ERROR "UML2 Model Validation: InitialState must have exactly one outgoing transition." :
+ERROR "UML2 Model Validation: InitialState must have exactly one outgoing transition. [" + fqn() + "]" :
 	outgoing.size == 1;
 
 /**
@@ -127,7 +127,7 @@ ERROR "UML2 Model Validation: InitialState must have exactly one outgoing transi
  * return true, if it has neither
  */
 context Pseudostate if isInitial()
-ERROR "UML2 Model Validation: transition from InitialState must have neither Trigger nor Guard. " :
+ERROR "UML2 Model Validation: transition from InitialState must have neither Trigger nor Guard.  [" + fqn() + "]" :
 	outgoing.trigger.isEmpty && (outgoing.guard).forAll(e|e.specification==null);
 
 /**
@@ -135,7 +135,7 @@ ERROR "UML2 Model Validation: transition from InitialState must have neither Tri
  * @return true, if it has none
  */
 context FinalState 
-ERROR "UML2 Model Validation: FinalState must not have outgoing transitions." :
+ERROR "UML2 Model Validation: FinalState must not have outgoing transitions. [" + fqn() + "]" :
 	outgoing == null || outgoing.size == 0;
 
 	
@@ -150,21 +150,21 @@ ERROR "UML2 Model Validation: FinalState must not have outgoing transitions." :
  * @return true, if it has an Event
  */
 context Transition if trigger != null && trigger.size > 0 
-ERROR "UML2 Model Validation: Transition with Trigger needs Event." :
+ERROR "UML2 Model Validation: Transition with Trigger needs Event. [" + fqn() + "]" :
 	trigger.event != null && trigger.event.size > 0;
 
 /**
  * checks if a call event has actually an operation to call
  * @return true, if an operation is defined for the call event
  */
-context CallEvent ERROR "UML2 Model Validation: CallEvent needs an operation." :
+context CallEvent ERROR "UML2 Model Validation: CallEvent needs an operation. [" + fqn() + "]" :
  	operation != null;
 
 /**
  * checks if a SignalEvent has a signal
  * @return true, if a signal is defined for the SignalEvent
  */
-context SignalEvent ERROR "UML2 Model Validation: SignalEvent needs a signal." :
+context SignalEvent ERROR "UML2 Model Validation: SignalEvent needs a signal. [" + fqn() + "]" :
  	signal != null;
 
 /**
@@ -172,7 +172,7 @@ context SignalEvent ERROR "UML2 Model Validation: SignalEvent needs a signal." :
  * does not check if TimeExpression contains only digits to provide the possibility to define a variable
  * @return true, if an expression is defined for the TimeEvent
  */
-context TimeEvent ERROR "UML2 Model Validation: TimeEvent needs a TimeExpression." :
+context TimeEvent ERROR "UML2 Model Validation: TimeEvent needs a TimeExpression. [" + fqn() + "]" :
  	when.stringValue().length > 0;
 
 /**
@@ -180,7 +180,7 @@ context TimeEvent ERROR "UML2 Model Validation: TimeEvent needs a TimeExpression
  * @return true, if the owner is one of the above
  */
 context Operation 
-ERROR "UML2 Model Validation: operation must be owned by a StateMachine, a Class or a Classifier." :
+ERROR "UML2 Model Validation: operation must be owned by a StateMachine, a Class or a Classifier. [" + fqn() + "]" :
 	{StateMachine, Classifier, Class, AssociationClass, Interface, DataType, Enumeration}.contains( owner.metaType );
 
 /**
@@ -189,12 +189,12 @@ ERROR "UML2 Model Validation: operation must be owned by a StateMachine, a Class
  * @return true, if it has one
  */
 context Operation if type != Void && type != null
-ERROR "UML2 Model Validation: Operation with return type needs return parameter of the same type." : 
+ERROR "UML2 Model Validation: Operation with return type needs return parameter of the same type. [" + fqn() + "]" : 
 	ownedParameter.exists(e| (e.direction.toString()=="return" && e.type==type) );
 
 /**
  * checks if the owner of a signal is a StateMachine
  * @return true, if the owner is a StateMachine
  */
-context Signal ERROR "UML2 Model Validation: signal must be owned by a StateMachine." :
+context Signal ERROR "UML2 Model Validation: signal must be owned by a StateMachine. [" + fqn() + "]" :
 	owner.metaType == StateMachine;
