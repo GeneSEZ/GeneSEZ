@@ -68,7 +68,7 @@ public class CommentProcessing {
 	 * @param	lineSuffix	the suffix appended to each line
 	 * @return	the formatted string
 	 */
-	public static String format(String s, String linePrefix, String lineSuffix) {
+	public static String formatComment(String s, String linePrefix, String lineSuffix) {
 		StringBuffer result = new StringBuffer();
 		for (String line : s.split("\n")) {
 			result.append(linePrefix + line + lineSuffix);
