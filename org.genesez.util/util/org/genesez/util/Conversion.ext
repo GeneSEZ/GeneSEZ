@@ -1,0 +1,109 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+
+/**
+ * Helper scripts for conversions to makes code generation more easier.
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+
+// -- Comment Conversions -----------------------------------------------------------------------------------
+
+
+/**
+ * Formats a comment text by adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the comment text.
+ * 
+ * @return	The formatted string comment.
+ * @see		formatComment(String, String, String)
+ * @api
+ */
+String formatCommentAsterix(String this) : 
+	formatComment( " * ", "\n" );
+
+
+/**
+ * Formats a comment text by adding two slashes  ('// ') as prefix and the newline ('\n') as suffix to each line within the comment text.
+ * 
+ * @return	The formatted comment text.
+ * @see		formatComment(String, String, String)
+ * @api
+ */
+String formatCommentSlashSlash(String this) : 
+	formatComment( "// ", "\n" );
+
+
+/**
+ * Formats a comment text by adding the asterix (' * ') as prefix and the newline ('\n') as suffix to each line within the string.
+ * 
+ * @return	The formatted comment text.
+ * @see		formatComment(String, String, String)
+ * @api
+ */
+String formatComment(String this) :
+	formatComment( " * ", "\n" );
+
+
+/**
+ * Formats a comment text by adding the specified prefix and suffix to each line within the string.
+ * 
+ * @param	linePrefix	A prefix which is prepended to each line.
+ * @param	lineSuffix	A suffix which is appended to each line.
+ * @return	The formatted comment text.
+ * @api
+ */
+String formatComment(String this, String linePrefix, String lineSuffix) :
+	JAVA org.genesez.util.comment.CommentProcessing.formatComment( java.lang.String, java.lang.String, java.lang.String );
+
+
+// -- Directory and File Conversions ------------------------------------------------------------------------ 
+
+
+/**
+ * Getter for the directory path separator character.
+ *
+ * @return	The directory path separator character ('/').
+ * @api
+ */
+String dirPathSeparator() : 
+	"/";
+
+
+/**
+ * Getter for the file extension separator character.
+ *
+ * @return	The file extension separator character ('.').
+ * @api
+ */
+String fileExtensionSeparator() : 
+	".";
+
+
+// -- String Splitting and Merging Conversions --------------------------------------------------------------
+
+
+/**
+ * Splits a comma separated list of values into a list of strings and removes all unnessesary whitespace.
+ * If the specified string only contains the separator an empty list is returned.
+ * 
+ * @param	s	comma separated list of values
+ * @return	the list of strings
+ */
+List[String] toList(String s) :
+	s.trim().length != 0 && s.trim() != ","
+		? s.split(",").trim()
+		: {""};
+/*
+
+	s.trim().length == 0
+		? {}
+		: ( s.trim() == ","
+			? {""}
+			: s.split(",").trim() );
+*/
