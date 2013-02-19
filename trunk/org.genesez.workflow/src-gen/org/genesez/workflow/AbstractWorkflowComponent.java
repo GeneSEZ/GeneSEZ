@@ -81,8 +81,9 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 								}
 							}, new NullProgressMonitor(), issues);
 				} catch (RuntimeException e) {
-					handleIssues(issues);
 					throw e;
+				} finally {
+					handleIssues(issues);
 				}
 			}
 			
@@ -151,7 +152,7 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 		return sb.toString();
 	}
 	
-	private static Log logger = LogFactory.getLog(AbstractWorkflowComponent.class);
+	private Log logger = LogFactory.getLog(getClass());
 	/* PROTECTED REGION END */
 	
 }
