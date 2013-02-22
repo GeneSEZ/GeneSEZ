@@ -15,7 +15,7 @@ import gcore;
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 
-// include super Xtend scripts 
+// include and reexport super Xtend scripts
 extension org::genesez::util::Conversion reexport;
 
 extension org::genesez::metamodel::core::util::AccessHelper;
@@ -141,7 +141,7 @@ String dirName(MClassifier this) :
  * @api
  */
 String dirPath(MClassifier this) : 
-	package().fullQualifiedNameSep( dirPathSeparator() );
+	package().qn( dirPathSeparator() );
 
 
 /**
@@ -214,7 +214,7 @@ String filePath(MClassifier this, String filename, String basePath) :
  * @api 
  */
 String filePath(MPackage this) :
-	fullQualifiedNameSep( dirPathSeparator() );
+	qn( dirPathSeparator() );
 
 
 /**
@@ -226,9 +226,9 @@ String filePath(MPackage this) :
  * @api 
  */
 String filePath(MPackage this, String base) :
-	base == ""
-		? filePath()
-		: base + dirPathSeparator() + filePath();
+	base != ""
+		? base + dirPathSeparator() + filePath()
+		: filePath();
 
 
 // -- String Splitting and List Merging Conversions ---------------------------------------------------------
@@ -245,13 +245,62 @@ String convertToString(List[MGeneric] list) :
 	list.specification.toString(", ");
 
 
-// -- Full Qualified Names ----------------------------------------------------------------------------------
+// -- Full Qualified Model Names ----------------------------------------------------------------------------
+
+
+/**
+ * Getter for the full qualified model name separator character.
+ *
+ * @return	The full qualified model name separator character ('::').
+ * @api
+ */
+String fqmnSeparator() : 
+	"::";
+
+
+/**
+ * Returns the human readable full qualified model name of a model.
+ * 
+ * @api
+ */
+String fqmn(MModel this) :
+	name + " [" + xmiGuid + "]";
+
+
+/**
+ * Returns the human readable full qualified model name of an element.
+ * 
+ * @api
+ */
+String fqmn(MElement this) :
+	getQMBase() + fqmnSeparator() + getQMName();
+
+
+/**
+ * Private getter for the qualified model base (the model name).
+ * 
+ * @return	The qualified model base.
+ */
+private String getQMBase(MElement this) :
+	model().name;
+
+
+/**
+ * Private getter for the qualified model name (the element name and xmiGuid).
+ * 
+ * @return	The qualified model name.
+ */
+private String getQMName(MElement this) :
+	qn( fqmnSeparator() ) + " [" + xmiGuid + "]";
+
+
+// -- Qualified Names ---------------------------------------------------------------------------------------
 
 
 /**
  * Getter for the qualified name separator character.
  *
- * @return	The qualified extension separator character ('::').
+ * @return	The qualified name separator character ('::').
  * @api
  */
 String qualifiedNameSeparator() : 
@@ -259,197 +308,240 @@ String qualifiedNameSeparator() :
 
 
 /**
- * Returns the human readable full qualified name of a model.
- * 
- * @api
+ * Returns the qualified name of a model.
+ *
+ * @return	The qualified model name.
  */
-String fqn(MModel this) :
-	name;
-
-
-/**
- * Returns the human readable full qualified name of a package.
- * 
- * @api
- */
-String fqn(MPackage this) : 
-	nestingPackage.fqn() + qualifiedNameSeparator() + name;
-
-
-/**
- * Returns the human readable full qualified name of a classifier.
- * 
- * @api
- */
-String fqn(MClassifier this) :
-	package().fqn() + qualifiedNameSeparator() + name;
-
-
-/**
- * Returns the human readable full qualified name of a property.
- * 
- * @api
- */
-String fqn(MProperty this) :
-	classifier.fqn() + qualifiedNameSeparator() + name;
-
-
-/**
- * Returns the human readable full qualified name of an operation.
- * 
- * @todo: 	Regard return type of operation in fqn.
- * @api
- */
-String fqn(MOperation this) :
-	classifier.fqn() + qualifiedNameSeparator() + name + "(" + parameter.name.toString(", ") + ")";
-
-
-/**
- * Returns the human readable full qualified name of an element.
- * 
- * @api
- */
-String fqn(MElement this) :
-	name;
-
-
-// -- Qualified Names ---------------------------------------------------------------------------------------
-
-
-/**
- * Returns the human readable qualified name of a model.
- * Instead of the full qualified name script which returns the name of the model
- * this script returns an empty string.
- * 
- * @api
- */
-String qn(MModel this) : 
+private String qn(MModel this) : 
 	"";
 
 
 /**
- * Returns the human readable qualified name of a package.
+ * Returns the qualified name of a package.
  * 
- * @see		qn(MModel)
+ * @return	The qualified model name.
+ * @see		qn(MPackage, String)
  * @api
  */
 String qn(MPackage this) :
-	nestingPackage != null && nestingPackage.metaType != MModel
-		? nestingPackage.qn() + qualifiedNameSeparator() + name 
-		: name;
+	qn( qualifiedNameSeparator() );
 
 
 /**
- * Returns the human readable qualified name of a classifier.
+ * Returns the qualified name of a package.
  * 
- * @see		qn(MPackage)
+ * @param	separator	A separator used between the names.
+ * @return	The qualified model name.
+ * @see		qn(MPackage, String, String)
+ * @api
+ */
+String qn(MPackage this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of a package.
+ * 
+ * @param	separator	A separator used between the names.
+ * @param	packageName	The alternative name of a package.
+ * @return	The qualified model name.
+ * @api
+ */
+String qn(MPackage this, String separator, String packageName) :
+	nestingPackage != null && nestingPackage.metaType != MModel
+		? nestingPackage.qn( separator ) + separator + packageName
+		: packageName;
+
+
+/**
+ * Returns the qualified name of a package.
+ * 
+ * @param	separator	A separator used between the names.
+ * @param	packageName	The alternative name of a package.
+ * @param	base		A base name to prepend.
+ * @return	The qualified model name.
+ * @see		qn(MPackage, String, String)
+ * @api
+ */
+String qn(MPackage this, String separator, String packageName, String base) :
+	base != ""
+		? base + separator + qn( separator, packageName )
+		: qn( separator, packageName );
+
+
+/**
+ * Returns the qualified name of a classifier.
+ * 
+ * @return	The qualified model name.
+ * @see		qn(MClassifier, String)
  * @api
  */
 String qn(MClassifier this) :
-	package().qn() + qualifiedNameSeparator() + name;
+	qn( qualifiedNameSeparator() );
 
 
 /**
- * Returns the human readable qualified name of a property.
+ * Returns the qualified name of a classifier.
  * 
- * @see		qn(MClassifier)
+ * @param	separator	A separator used between the names.
+ * @return	The qualified model name.
+ * @see		qn(MClassifier, String, String)
+ * @api
+ */
+String qn(MClassifier this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of a classifier.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	classifierName	The alternative name of a classifier.
+ * @return	The qualified model name.
+ * @api
+ */
+String qn(MClassifier this, String separator, String classifierName) :
+	owningContext != null && owningContext.metaType != MModel
+		? owningContext.qn( separator ) + separator + classifierName 
+		: classifierName;
+
+
+/**
+ * Returns the qualified name of a classifier.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	classifierName	The alternative name of a classifier.
+ * @param	base			A base name to prepend.
+ * @return	The qualified model name.
+ * @see		qn(MClassifier, String, String)
+ * @api
+ */
+String qn(MClassifier this, String separator, String base, String classifierName) :
+	base != ""
+		? base + separator + qn( separator, classifierName )
+		: qn( separator, classifierName );
+
+
+/**
+ * Returns the qualified name of a property.
+ * 
+ * @return	The qualified model name.
+ * @see		qn(MProperty, String)
  * @api
  */
 String qn(MProperty this) :
-	classifier.qn() + qualifiedNameSeparator() + name;
+	qn( qualifiedNameSeparator() );
 
 
 /**
- * Returns the human readable qualified name of an operation.
+ * Returns the qualified name of a property.
  * 
- * @see		qn(MClassifier)
- * @todo: 	Regard return type of operation in qn.
+ * @param	separator	A separator used between the names.
+ * @return	The qualified model name.
+ * @see		qn(MProperty, String, String)
+ * @api
+ */
+String qn(MProperty this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of a property.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	propertyName	The alternative name of a property.
+ * @return	The qualified model name.
+ * @api
+ */
+String qn(MProperty this, String separator, String propertyName) :
+	classifier.qn( separator ) + separator + propertyName;
+
+
+/**
+ * Returns the qualified name of a property.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	propertyName	The alternative name of a property.
+ * @param	base			A base name to prepend.
+ * @return	The qualified model name.
+ * @see		qn(MProperty, String, String)
+ * @api
+ */
+String qn(MProperty this, String separator, String base, String propertyName) :
+	base != ""
+		? base + separator + qn( separator, propertyName )
+		: qn( separator, propertyName );
+
+
+/**
+ * Returns the qualified name of an operation.
+ * 
+ * @return	The qualified model name.
+ * @see		qn(MOperation, String)
  * @api
  */
 String qn(MOperation this) :
-	classifier.qn() + qualifiedNameSeparator() + name + "(" + parameter.name.toString(", ") + ")";
+	qn( qualifiedNameSeparator() );
 
 
 /**
- * Returns the human readable full qualified name of an element.
+ * Returns the qualified name of an operation.
  * 
+ * @param	separator	A separator used between the names.
+ * @return	The qualified model name.
+ * @see		qn(MOperation, String, String)
  * @api
  */
-String qn(MElement this) :
+String qn(MOperation this, String separator) :
+	qn( separator, name );
+
+
+/**
+ * Returns the qualified name of an operation.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	operationName	The alternative name of an operation.
+ * @return	The qualified model name.
+ * @api
+ */
+String qn(MOperation this, String separator, String operationName) :
+	classifier.qn( separator ) + separator + operationName + "(" + parameter.name.toString(", ") + ")";
+
+
+/**
+ * Returns the qualified name of an operation.
+ * 
+ * @param	separator		A separator used between the names.
+ * @param	operationName	The alternative name of an operation.
+ * @param	base			A base name to prepend.
+ * @return	The qualified model name.
+ * @see		qn(MOperation, String, String)
+ * @api
+ */
+String qn(MOperation this, String separator, String base, String operationName) :
+	base != ""
+		? base + separator + qn( separator, operationName )
+		: qn( separator, operationName );
+
+
+/**
+ * Returns the qualified name of an element.
+ * 
+ * @return	The qualified model name.
+ * @see		qn(MElement, String)
+ * @api
+ */
+String qn(MElement this) : 
 	name;
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
 /**
- * getter for the full qualified name of a classifier based on it's namespace
- * @param	spearator	the separator to use between the names
- * @return	string representation of the full qualified name
+ * Returns the qualified name of an element.
+ * 
+ * @param	separator	A separator used between the names.
+ * @return	The qualified model name.
+ * @see		qn(MElement, String)
+ * @api
  */
-String fullQualifiedNameSep(MClassifier this, String separator) : 
-	let fqn = package().fullQualifiedNameSep(separator) :
-		fqn.length == 0
-			? name.toFirstUpper()
-			: fqn + separator + name.toFirstUpper();
-
-/**
- * getter for the full qualified name of a classifier based on it's namespace
- * @param	typename	the typename of the classifier, usually according naming conventions
- * @param	spearator	the separator to use between the names
- * @return	string representation of the full qualified name
- */
-String fullQualifiedNameSep(MClassifier this, String typename, String separator) : 
-	let fqn = package().fullQualifiedNameSep(separator) :
-		fqn.length == 0
-			? typename
-			: fqn + separator + typename;
-
-/**
- * getter for the full qualified name of a classifier based on a base package and it's namespace
- * @param	typename	the typename of the classifier, usually according naming conventions
- * @param	base		the base package to prepend
- * @param	spearator	the separator to use between the names
- * @return	string representation of the full qualified name
- */
-String fullQualifiedNameSep(MClassifier this, String typename, String base, String separator) : 
-	let fqn = package().fullQualifiedNameSep(base, separator) :
-		fqn.length == 0
-			? name.toFirstUpper()
-			: fqn + separator + typename;
-
-/**
- * getter for the full qualified name of a package
- * @param	base		a base package to prepend
- * @param	separator	a separator used to build the package path
- * @return	the full qualified name of the package
- */
-String fullQualifiedNameSep(MPackage this, String base, String separator) : 
-	base == ""
-		? fullQualifiedNameSep( separator )
-		: base + separator + fullQualifiedNameSep( separator );
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	mapping to java functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * getter for the package path of a classifier
- * @param	pkg			a package
- * @param	separator	a separator used to build the package path
- * @return	string representation of the package path
- */
-String fullQualifiedNameSep(MPackage this, String separator) : 
-	JAVA org.genesez.metamodel.core.util.AccessHelper.getFullQualifiedName(org.genesez.metamodel.gcore.MPackage, java.lang.String);
+String qn(MElement this, String separator) : 
+	name;
