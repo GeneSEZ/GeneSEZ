@@ -53,7 +53,7 @@ boolean isExtendible(MPackage this, String token) :
  * Extends the specified package using the specified regex to split its name into the package names.
  */
 MPackage process(MPackage this, String tokenRegExp) :
-	logDebug( "Extending package: " + fqn() ) ->
+	logDebug( "Extending package: " + fqmn() ) ->
 	( let parts = name.split( tokenRegExp ).trim() :
 		buildHierarchy( parts.first(), parts.withoutFirst() )
 	) ->
@@ -66,7 +66,7 @@ MPackage process(MPackage this, String tokenRegExp) :
  * The last entry of the specified remaining is used to rename the specified package.
  */
 MPackage buildHierarchy(MPackage this, String name, List[String] remaining) :
-	logDebug( "manipulate: " + fqn() + " with " + name) ->
+	logDebug( "manipulate: " + fqmn() + " with " + name) ->
 	remaining.isEmpty
 		? setName( name )
 		: buildHierarchy(
