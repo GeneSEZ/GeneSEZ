@@ -40,7 +40,7 @@ public class AccessHelper {
 		for (String s : pkgs) {
 			logger.debug("to reject: " + s);
 			for (MPackage p : packages) {
-				String fqn = getFullQualifiedName(p, ".");
+				String fqn = getQualifiedName(p, ".");
 				logger.debug("test to reject: " + fqn);
 				if (s.equals(fqn)) {
 					logger.debug("reject: '" + s + "' == '" + fqn + "'");
@@ -68,13 +68,13 @@ public class AccessHelper {
 	}
 	
 	/**
-	 * Getter for the full qualified name of a package.
+	 * Getter for the qualified name of a package.
 	 * 
 	 * @param	pkg	a package
 	 * @param	separator	a separator used for the full qualified name
-	 * @return	the full qualified name of the package
+	 * @return	the qualified name of the package
 	 */
-	public static String getFullQualifiedName(MPackage pkg, String separator) {
+	private static String getQualifiedName(MPackage pkg, String separator) {
 		StringBuffer fqn = new StringBuffer();
 		MPackage p = pkg;
 		while (!(p instanceof MModel) && p != null) {
