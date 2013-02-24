@@ -1,0 +1,164 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
+/**
+ * Helper scripts to simplifies navigation to GeneSEZ Core meta model elements and
+ * makes working with them more easier.
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ */
+
+extension org::genesez::util::logging::Logging;
+
+
+// -- Navigation to Model Element ---------------------------------------------------------------------------
+
+
+/**
+ * Returns the model element by using a package as starting point of navigation.
+ */
+MModel navModel(MPackage this) :
+	metaType != MModel
+		? nestingPackage.navModel()
+		: this;
+
+
+/**
+ * Returns the model element by using a classifier as starting point of navigation.
+ * @todo: Check if this script is correct?
+ */
+MModel navModel(MClassifier this) :
+	switch ( owningContext.metaType ) {
+		case MModel : ((MModel) owningContext)
+		case MPackage : ((MPackage) owningContext).navModel()
+		case MClassifier : ((MClassifier) owningContext).navModel()
+		// Void or null as return statement?
+		default : ( logFatal( "MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen." ) -> null )
+	};
+/*
+MModel navModel(MClassifier this) :
+	switch {
+		case MModel.isInstance(this) : ((MModel)owningContext)
+		case MPackage.isInstance(this) : ((MPackage)owningContext).navModel()
+		case MClassifier.isInstance(this) : ((MClassifier)owningContext).navModel()
+		default : (logFatal("MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen.") -> Void)
+	};
+*/
+
+
+/**
+ * Returns the model element by using a property as starting point of navigation.
+ *
+ * @see navModel(MClassifier)
+ */
+MModel navModel(MProperty this) : 
+	classifier.navModel();
+
+
+/**
+ * Returns the model element by using an operation as starting point of navigation.
+ *
+ * @see navModel(MClassifier)
+ */
+MModel navModel(MOperation this) :	
+	classifier.navModel();
+
+
+/**
+ * Returns the model element by using a parameter as starting point of navigation.
+ *
+ * @see navModel(MOperation)
+ */
+MModel navModel(MParameter this) :	
+	operation.navModel();
+
+
+// -- Extension Mechanism --
+
+
+/**
+ * Returns the model element by using a stereotype as starting point of navigation.
+ * @todo: replace it because stereotype has a direct connection to model
+ */
+MModel navModel(MStereotype this) :	
+	model;
+
+
+/**
+ * Returns the model element by using an element as starting point of navigation.
+ * @todo: Check if commenting the following lines are correct.
+ */
+MModel navModel(MElement this) :
+	logFatal( "Unable to determine MModel from MElement. Please add your case to this function!" ) ->
+	null;
+	//switch (this.metaType) {
+		//case MClassifier : ((MClassifier) this).model()
+		//case MOperation :  ((MOperation) this).model()
+		//case MParameter :  ((MParameter) this).operation.model()
+		//case MProperty :  ((MProperty) this).model()
+		//case MStereotype : ((MStereotype) this).model
+		//default : (logFatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
+	//};
+
+
+// -- Navigation to Package Element -------------------------------------------------------------------------
+
+
+/**
+ * Returns the package element by using a classifier as starting point of navigation.
+ * @todo: Check if this script is correct?
+ */
+MPackage navPackage(MClassifier this) :
+	switch ( owningContext.metaType ) {
+		// do we need the following line?
+		case MModel : ((MPackage) owningContext)
+		case MPackage : ((MPackage) owningContext)
+		case MClassifier : ((MClassifier) owningContext).navPackage()
+		// Void or null as return statement?
+		default : ( logFatal( "MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen." ) -> null )
+	};
+/*
+MPackage navPackage(MClassifier this) :
+	switch (owningContext.metaType) {
+		// do we need the following line?
+		case MModel : ((MPackage) owningContext)
+		case MPackage : ((MPackage) owningContext)
+		// what is with classifier in classifier
+		default : (logFatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
+	};
+*/
+
+
+/**
+ * Returns the package element by using a property as starting point of navigation.
+ *
+ * @see navPackage(MClassifier)
+ */
+MPackage navPackage(MProperty this) : 
+	classifier.navPackage();
+
+
+/**
+ * Returns the package element by using an operation as starting point of navigation.
+ *
+ * @see navPackage(MClassifier)
+ */
+MPackage navPackage(MOperation this) :	
+	classifier.navPackage();
+
+
+/**
+ * Returns the package element by using a parameter as starting point of navigation.
+ *
+ * @see navPackage(MOperation)
+ */
+MPackage navPackage(MParameter this) :	
+	operation.navPackage();
