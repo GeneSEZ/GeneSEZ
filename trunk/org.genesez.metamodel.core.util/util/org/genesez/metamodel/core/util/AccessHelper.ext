@@ -15,6 +15,8 @@ import gcore;
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  * @author	Andre Pflüger <andre.pflueger@fh-zwickau.de>
+ * 
+ * @todo: Check multiplicity scripts to delete redundant
  */
 
 extension org::genesez::metamodel::core::util::ExtensionMechanism;
@@ -75,7 +77,7 @@ boolean hasFixedUpperBoundMultiplicity(MMultiplicity this) :
  * @api
  */
 boolean isSingleValued(MProperty this) :
-	multiplicity.upperBound == 0 || multiplicity.upperBound == 1;
+	multiplicity.isSingleValued();
 
 
 /**
@@ -85,7 +87,7 @@ boolean isSingleValued(MProperty this) :
  * @api
  */
 boolean isMultiValued(MProperty this) :
-	multiplicity.upperBound == -1 || multiplicity.upperBound > 1;
+	multiplicity.isMultiValued();
 
 
 /**
@@ -95,7 +97,7 @@ boolean isMultiValued(MProperty this) :
  * @api
  */
 boolean hasFixedLowerBoundMultiplicity(MProperty this) : 
-	multiplicity.lowerBound > -1;
+	multiplicity.hasFixedLowerBoundMultiplicity();
 
 
 /**
@@ -105,7 +107,7 @@ boolean hasFixedLowerBoundMultiplicity(MProperty this) :
  * @api
  */
 boolean hasFixedUpperBoundMultiplicity(MProperty this) : 
-	multiplicity.upperBound > -1;
+	multiplicity.hasFixedUpperBoundMultiplicity();
 
 
 // -- Association Role --
@@ -118,7 +120,7 @@ boolean hasFixedUpperBoundMultiplicity(MProperty this) :
  * @api
  */
 boolean isOppositeSingleValued(MAssociationRole this) :
-	oppositeMultiplicity.upperBound == 0 || oppositeMultiplicity.upperBound == 1;
+	oppositeMultiplicity.isSingleValued();
 
 
 /**
@@ -128,7 +130,7 @@ boolean isOppositeSingleValued(MAssociationRole this) :
  * @api
  */
 boolean isOppositeMultiValued(MAssociationRole this) :
-	oppositeMultiplicity.upperBound == -1 || oppositeMultiplicity.upperBound > 1;
+	oppositeMultiplicity.isMultiValued();
 
 
 /**
@@ -138,7 +140,7 @@ boolean isOppositeMultiValued(MAssociationRole this) :
  * @api
  */
 boolean hasOppositeFixedLowerBoundMultiplicity(MAssociationRole this) : 
-	oppositeMultiplicity.lowerBound > -1;
+	oppositeMultiplicity.hasFixedLowerBoundMultiplicity();
 
 
 /**
@@ -148,47 +150,51 @@ boolean hasOppositeFixedLowerBoundMultiplicity(MAssociationRole this) :
  * @api
  */
 boolean hasOppositeFixedUpperBoundMultiplicity(MAssociationRole this) : 
-	oppositeMultiplicity.upperBound > -1;
+	oppositeMultiplicity.hasFixedUpperBoundMultiplicity();
 
 
 /**
  * Checks if the qualifier of an qualified association role is single-valued.
  * 
  * @return	True if the qualifier of the the qualified association role is single-valued, otherwise false.
+ * @todo: Add check statement which checks if the qualifier is set.
  * @api
  */
 boolean isQualifierSingleValued(MAssociationRole this) :
-	qualifierMultiplicity.upperBound == 0 || qualifierMultiplicity.upperBound == 1;
+	qualifierMultiplicity.isSingleValued();
 
 
 /**
  * Checks if the qualifier of an qualified association role is multi-valued.
  * 
  * @return	True if the qualifier of the the qualified association role is multi-valued, otherwise false.
+ * @todo: Add check statement which checks if the qualifier is set.
  * @api
  */
 boolean isQualifierMultiValued(MAssociationRole this) :
-	qualifierMultiplicity.upperBound == -1 || qualifierMultiplicity.upperBound > 1;
+	qualifierMultiplicity.isMultiValued();
 
 
 /**
  * Checks if the qualifier of an qualified association role has a fixed lower count of values.
  * 
  * @return	True if the qualifier of the qualified association role has a fixed lower count of values, otherwise false.
+ * @todo: Add check statement which checks if the qualifier is set.
  * @api
  */
 boolean hasQualifierFixedLowerBoundMultiplicity(MAssociationRole this) : 
-	qualifierMultiplicity.lowerBound > -1;
+	qualifierMultiplicity.hasFixedLowerBoundMultiplicity();
 	
 
 /**
  * Checks if the qualifier of an qualified association role has a fixed upper count of values.
  * 
  * @return	True if the qualifier of the qualified association role has a fixed upper count of values, otherwise false.
+ * @todo: Add check statement which checks if the qualifier is set.
  * @api
  */
 boolean hasQualifierFixedUpperBoundMultiplicity(MAssociationRole this) : 
-	qualifierMultiplicity.upperBound > -1;
+	qualifierMultiplicity.hasFixedUpperBoundMultiplicity();
 
 
 // -- Parameter --
@@ -201,7 +207,7 @@ boolean hasQualifierFixedUpperBoundMultiplicity(MAssociationRole this) :
  * @api
  */
 boolean isSingleValued(MParameter this) :
-	multiplicity.upperBound == 0 || multiplicity.upperBound == 1;
+	multiplicity.isSingleValued();
 
 
 /**
@@ -211,7 +217,7 @@ boolean isSingleValued(MParameter this) :
  * @api
  */
 boolean isMultiValued(MParameter this) :
-	multiplicity.upperBound == -1 || multiplicity.upperBound > 1;
+	multiplicity.isMultiValued();
 
 
 /**
@@ -221,7 +227,7 @@ boolean isMultiValued(MParameter this) :
  * @api
  */
 boolean hasFixedLowerBoundMultiplicity(MParameter this) : 
-	multiplicity.lowerBound > -1;
+	multiplicity.hasFixedLowerBoundMultiplicity();
 
 
 /**
@@ -231,7 +237,7 @@ boolean hasFixedLowerBoundMultiplicity(MParameter this) :
  * @api
  */
 boolean hasFixedUpperBoundMultiplicity(MParameter this) : 
-	multiplicity.upperBound > -1;
+	multiplicity.hasFixedUpperBoundMultiplicity();
 
 
 // -- Operation --
@@ -243,7 +249,6 @@ boolean hasFixedUpperBoundMultiplicity(MParameter this) :
  * @return	True if the return parameter of the operation is single-valued, otherwise false.
  * @api
  * @todo: use Xtend script hasReturnParameter
- * @deprecated
  */
 boolean isReturnSingleValued(MOperation this) :
 	return != null
@@ -257,7 +262,6 @@ boolean isReturnSingleValued(MOperation this) :
  * @return	True if the return parameter of the operation is multi-valued, otherwise false.
  * @api
  * @todo: use Xtend script hasReturnParameter
- * @deprecated
  */
 boolean isReturnMultiValued(MOperation this) :
 	return != null
@@ -271,7 +275,6 @@ boolean isReturnMultiValued(MOperation this) :
  * @return	True if the return parameter of the operation has a fixed lower count of values, otherwise false.
  * @api
  * @todo: use Xtend script hasReturnParameter
- * @deprecated
  */
 boolean hasReturnFixedLowerBoundMultiplicity(MOperation this) : 
 	return != null
@@ -285,7 +288,6 @@ boolean hasReturnFixedLowerBoundMultiplicity(MOperation this) :
  * @return	True if the return parameter of the operation has a fixed upper count of values, otherwise false.
  * @api
  * @todo: use Xtend script hasReturnParameter
- * @deprecated
  */
 boolean hasReturnFixedUpperBoundMultiplicity(MOperation this) : 
 	return != null
