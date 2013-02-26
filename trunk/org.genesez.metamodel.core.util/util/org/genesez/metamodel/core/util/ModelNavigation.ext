@@ -43,6 +43,7 @@ MModel navModel(MClassifier this) :
 		// Void or null as return statement?
 		default : ( logFatal( "MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen." ) -> null )
 	};
+
 /*
 MModel navModel(MClassifier this) :
 	switch {
@@ -52,6 +53,14 @@ MModel navModel(MClassifier this) :
 		default : (logFatal("MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen.") -> Void)
 	};
 */
+
+
+/**
+ * Returns the model element by using an external type as starting point of navigation.
+ */
+MModel navModel(MExternal this) :
+	model;
+
 
 
 /**
@@ -90,6 +99,14 @@ MModel navModel(MParameter this) :
  */
 MModel navModel(MStereotype this) :	
 	model;
+
+
+/**
+ * Returns the model element by using a type as starting point of navigation.
+ */
+MModel navModel(MType this) :
+	logFatal( "Unable to determine MModel from MType. Please add your case to this function!" ) ->
+	null;
 
 
 /**
