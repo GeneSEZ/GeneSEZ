@@ -9,6 +9,8 @@
 import gcore;
 
 extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::ModelNavigation;
+
 extension org::genesez::metamodel::core::util::m2t::Helper;
 extension org::genesez::util::logging::Logging;
 
@@ -54,7 +56,7 @@ String includePath(MClassifier used, MClassifier this) :
  * @return	relative path to the required (used) classifier
  */
 String relativeIncludePath(MClassifier used, MClassifier this) :
-	getPathBack(package(), "") + pathBack(basePath()) + getPathForward(used.package(), "");
+	getPathBack(navPackage(), "") + pathBack(basePath()) + getPathForward(used.navPackage(), "");
 
 /**
  * returns the include path of a required classifier based on it's package, the base package and
@@ -66,7 +68,7 @@ String absoluteIncludePath(MClassifier this) :
 		(includeBase().length == 0 ? "" : "/") + 
 	basePath() + 
 		(basePath().length == 0 ? "" : "/") + 
-	getPathForward(package(), "");
+	getPathForward(navPackage(), "");
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
