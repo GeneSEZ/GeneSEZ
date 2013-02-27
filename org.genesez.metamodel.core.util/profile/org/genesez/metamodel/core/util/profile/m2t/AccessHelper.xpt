@@ -39,7 +39,7 @@ extension org::genesez::metamodel::core::util::ExtensionMechanism;
 // use profile scripts
 extension «globalVarXtendFilePath() -»::«globalVarProfileFileName().replaceFirst(".ext", "") -»;
 
-«EXPAND StereotypeElement FOREACH allClassifiers().typeSelect(MClass).sortBy(e | e.name) -»
+«EXPAND StereotypeElement FOREACH allNestedClassifiers().typeSelect(MClass).sortBy(e | e.name) -»
 «ENDFILE -»
 «ENDDEFINE»
 
@@ -136,7 +136,7 @@ boolean «asAccessHelperHasUtilizableTaggedValue() -»(MElement this) :
 «ENDREM»
 «DEFINE GetTaggedValue FOR MAttribute -»
 «EXPAND Comment::GetTaggedValue -»
-«IF isSingleValued() -»
+«IF multiplicity.isSingleValued() -»
 «IF !isTaggedValueReference() -»
 String «asAccessHelperGetTaggedValue() -»(MElement this) :
 	emGetTaggedValue( «classifier.asProfileScriptName() -»(), «asProfileScriptName() -»() );
