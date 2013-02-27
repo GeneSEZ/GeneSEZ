@@ -15,22 +15,20 @@ import gcore;
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  * @author	Andre Pflüger <andre.pflueger@fh-zwickau.de>
- * 
- * @todo: Check multiplicity scripts to delete redundant
  */
 
 extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::ModelNavigation;
 extension org::genesez::util::logging::Logging;
-
 
 
 // -- Multiplicity Elements (Properties, Parameters, Operations) --------------------------------------------
 
 
 /**
- * Checks if a multipicity is single-valued.
+ * Checks if a multiplicity is single-valued.
  * 
- * @return	True if the multipicity is single-valued, otherwise false.
+ * @return	True if the multiplicity is single-valued, otherwise false.
  * @api
  */
 boolean isSingleValued(MMultiplicity this) :
@@ -38,9 +36,9 @@ boolean isSingleValued(MMultiplicity this) :
 
 
 /**
- * Checks if a multipicity is multi-valued.
+ * Checks if a multiplicity is multi-valued.
  * 
- * @return	True if the multipicity is multi-valued, otherwise false.
+ * @return	True if the multiplicity is multi-valued, otherwise false.
  * @api
  */
 boolean isMultiValued(MMultiplicity this) :
@@ -48,9 +46,9 @@ boolean isMultiValued(MMultiplicity this) :
 
 
 /**
- * Checks if a multipicity has a fixed lower count of values.
+ * Checks if a multiplicity has a fixed lower count of values.
  * 
- * @return	True if the multipicity has a fixed lower count of values, otherwise false.
+ * @return	True if the multiplicity has a fixed lower count of values, otherwise false.
  * @api
  */
 boolean hasFixedLowerBoundMultiplicity(MMultiplicity this) : 
@@ -58,241 +56,193 @@ boolean hasFixedLowerBoundMultiplicity(MMultiplicity this) :
 
 
 /**
- * Checks if a multipicity has a fixed upper count of values.
+ * Checks if a multiplicity has a fixed upper count of values.
  * 
- * @return	True if the multipicity has a fixed upper count of values, otherwise false.
+ * @return	True if the multiplicity has a fixed upper count of values, otherwise false.
  * @api
  */
 boolean hasFixedUpperBoundMultiplicity(MMultiplicity this) : 
 	upperBound > -1;
 
 
-// -- Property --
+// -- Packages ----------------------------------------------------------------------------------------------
+
+
+// -- Getter for a Package --
 
 
 /**
- * Checks if a property is single-valued.
- * 
- * @return	True if the property is single-valued, otherwise false.
+ * Returns the nested package tree of a package, i.e. nested packages and their nested packages.
+ *
+ * @return 	The list of nested packages of the package, otherwise an empty list.
  * @api
  */
-boolean isSingleValued(MProperty this) :
-	multiplicity.isSingleValued();
+List[MPackage] allNestedPackages(MPackage this) :
+	{ nestedPackage }.addAll(
+		nestedPackage.allNestedPackages()
+	);
+
+
+// -- Types -------------------------------------------------------------------------------------------------
+
+
+// -- Getter for a Type --
 
 
 /**
- * Checks if a property is multi-valued.
+ * Returns the generalization tree of a classifier, i.e. super types and there super types.
  * 
- * @return	True if the property is multi-valued, otherwise false.
+ * @return 	The list of generalizations of the classifier, otherwise an empty list.
  * @api
  */
-boolean isMultiValued(MProperty this) :
-	multiplicity.isMultiValued();
+List[MType] allGeneralizations(MClassifier this) :
+	{}.addAll(
+		generalization.allGeneralizations()
+	).addAll( generalization );
 
 
 /**
- * Checks if a property has a fixed lower count of values.
+ * Just there for error free templates.
+ * Just called if a generalization of a classifier is no classifier.
  * 
- * @return	True if the property has a fixed lower count of values, otherwise false.
- * @api
+ * @return	An empty list.
+ * @see		allGeneralizations(MClassifier)
  */
-boolean hasFixedLowerBoundMultiplicity(MProperty this) : 
-	multiplicity.hasFixedLowerBoundMultiplicity();
+private List[MType] allGeneralizations(MType this) : 
+	{};
+
+
+// -- Checks for a Type --
 
 
 /**
- * Checks if a property has a fixed upper count of values.
+ * Checks if a type is a classifier.
  * 
- * @return	True if the property has a fixed upper count of values, otherwise false.
+ * @return	True if the type is a classifier, otherwise false.
  * @api
  */
-boolean hasFixedUpperBoundMultiplicity(MProperty this) : 
-	multiplicity.hasFixedUpperBoundMultiplicity();
-
-
-// -- Association Role --
+boolean isClassifier(MType this) : 
+	MClassifier.isInstance(this);
 
 
 /**
- * Checks if the opposite of an association role is single-valued.
+ * Checks if a type is a class.
  * 
- * @return	True if the opposite of the association role is single-valued, otherwise false.
+ * @return	True if the type is a class, otherwise false.
  * @api
  */
-boolean isOppositeSingleValued(MAssociationRole this) :
-	oppositeMultiplicity.isSingleValued();
+boolean isClass(MType this) : 
+	metaType == MClass;
 
 
 /**
- * Checks if the opposite of an association role is multi-valued.
+ * Checks if a type is an interface.
  * 
- * @return	True if the opposite of the association role is multi-valued, otherwise false.
+ * @return	True if the type is an interface, otherwise false.
  * @api
  */
-boolean isOppositeMultiValued(MAssociationRole this) :
-	oppositeMultiplicity.isMultiValued();
+boolean isInterface(MType this) : 
+	metaType == MInterface;
 
 
 /**
- * Checks if the opposite of an association role has a fixed lower count of values.
+ * Checks if a type is a data type.
  * 
- * @return	True if the opposite of the association role has a fixed lower count of values, otherwise false.
+ * @return	True if the type is a data type, otherwise false.
  * @api
  */
-boolean hasOppositeFixedLowerBoundMultiplicity(MAssociationRole this) : 
-	oppositeMultiplicity.hasFixedLowerBoundMultiplicity();
+boolean isDataType(MType this) : 
+	metaType == MDataType;
 
 
 /**
- * Checks if the opposite of an association role has a fixed upper count of values.
+ * Checks if a type is an enumeration.
  * 
- * @return	True if the opposite of the association role has a fixed upper count of values, otherwise false.
+ * @return	True if the type is an enumeration, otherwise false.
  * @api
  */
-boolean hasOppositeFixedUpperBoundMultiplicity(MAssociationRole this) : 
-	oppositeMultiplicity.hasFixedUpperBoundMultiplicity();
+boolean isEnumeration(MType this) : 
+	metaType == MEnumeration;
 
 
 /**
- * Checks if the qualifier of an qualified association role is single-valued.
+ * Checks if a type is an external type.
  * 
- * @return	True if the qualifier of the the qualified association role is single-valued, otherwise false.
- * @todo: Add check statement which checks if the qualifier is set.
+ * @return	True if the type is an external type, otherwise false.
  * @api
  */
-boolean isQualifierSingleValued(MAssociationRole this) :
-	qualifierMultiplicity.isSingleValued();
+boolean isExternalType(MType this) : 
+	metaType == MExternal;
 
 
 /**
- * Checks if the qualifier of an qualified association role is multi-valued.
- * 
- * @return	True if the qualifier of the the qualified association role is multi-valued, otherwise false.
- * @todo: Add check statement which checks if the qualifier is set.
+ * Checks if a type is a generic.
+ *
+ * @return	True if the type is a generic, otherwise false.
  * @api
  */
-boolean isQualifierMultiValued(MAssociationRole this) :
-	qualifierMultiplicity.isMultiValued();
+boolean isGenericType(MType this) : 
+	metaType == MGeneric;
 
 
 /**
- * Checks if the qualifier of an qualified association role has a fixed lower count of values.
+ * Returns the name or the specification of a type.
  * 
- * @return	True if the qualifier of the qualified association role has a fixed lower count of values, otherwise false.
- * @todo: Add check statement which checks if the qualifier is set.
+ * @return	The name or specification of the type.
+ * @todo: Check if this script is used after refactoring?
+ */
+String name(MType this) :
+	switch (metaType) {
+		case MExternal : ((MExternal) this).name
+		case MGeneric : ((MGeneric) this).specification
+		default : ((MClassifier) this).name
+	};
+
+
+// -- Classifiers -------------------------------------------------------------------------------------------
+
+
+// -- Getter for a Package --
+
+ 
+/**
+ * Returns the list of classifier which are nested inside a package or its nested package tree.
+ *
+ * @return 	The list of nested classifier of the package, otherwise an empty list.
  * @api
  */
-boolean hasQualifierFixedLowerBoundMultiplicity(MAssociationRole this) : 
-	qualifierMultiplicity.hasFixedLowerBoundMultiplicity();
+List[MClassifier] allNestedClassifiers(MPackage this) :
+	{ classifier }.addAll(
+		nestedPackage.allNestedClassifiers()
+	);
 	
 
+// -- Getter for a Type --
+
+ 
 /**
- * Checks if the qualifier of an qualified association role has a fixed upper count of values.
+ * Returns the specialization tree of a type, i.e. sub classifier and there sub classifier.
  * 
- * @return	True if the qualifier of the qualified association role has a fixed upper count of values, otherwise false.
- * @todo: Add check statement which checks if the qualifier is set.
+ * @return 	The list of specializations of the type, otherwise an empty list.
  * @api
  */
-boolean hasQualifierFixedUpperBoundMultiplicity(MAssociationRole this) : 
-	qualifierMultiplicity.hasFixedUpperBoundMultiplicity();
-
-
-// -- Parameter --
-
-
-/**
- * Checks if the parameter is single-valued.
- * 
- * @return	True if the parameter is single-valued, otherwise false.
- * @api
- */
-boolean isSingleValued(MParameter this) :
-	multiplicity.isSingleValued();
+List[MClassifier] allSpecializations(MType this):
+	{ owningSpecializations() }.addAll(
+		owningSpecializations().allSpecializations()
+	);
 
 
 /**
- * Checks if the parameter is multi-valued.
+ * Returns the list of owning specializations of a type.
  * 
- * @return	True if the parameter is multi-valued, otherwise false.
+ * @return	The list of specializations of the classifier, otherwise an empty list.
+ * @todo:	make unidirectional association between generalization and spezialization bidirectional to avoid this script.
  * @api
  */
-boolean isMultiValued(MParameter this) :
-	multiplicity.isMultiValued();
-
-
-/**
- * Checks if a parameter has a fixed lower count of values.
- * 
- * @return	True if the parameter has a fixed lower count of values, otherwise false.
- * @api
- */
-boolean hasFixedLowerBoundMultiplicity(MParameter this) : 
-	multiplicity.hasFixedLowerBoundMultiplicity();
-
-
-/**
- * Checks if a parameter has a fixed upper count of values.
- * 
- * @return	True if the parameter has a fixed upper count of values, otherwise false.
- * @api
- */
-boolean hasFixedUpperBoundMultiplicity(MParameter this) : 
-	multiplicity.hasFixedUpperBoundMultiplicity();
-
-
-// -- Operation --
-
-
-/**
- * Checks if the return parameter of an operation is single-valued.
- * 
- * @return	True if the return parameter of the operation is single-valued, otherwise false.
- * @api
- * @todo: use Xtend script hasReturnParameter
- */
-boolean isReturnSingleValued(MOperation this) :
-	return != null
-		? return.isSingleValued()
-		: false;
-
-
-/**
- * Checks if the return parameter of an operation is multi-valued.
- * 
- * @return	True if the return parameter of the operation is multi-valued, otherwise false.
- * @api
- * @todo: use Xtend script hasReturnParameter
- */
-boolean isReturnMultiValued(MOperation this) :
-	return != null
-		? !return.isSingleValued()
-		: false;
-
-
-/**
- * Checks if the return parameter of an operation has a fixed lower count of values.
- * 
- * @return	True if the return parameter of the operation has a fixed lower count of values, otherwise false.
- * @api
- * @todo: use Xtend script hasReturnParameter
- */
-boolean hasReturnFixedLowerBoundMultiplicity(MOperation this) : 
-	return != null
-		? !return.hasFixedLowerBoundMultiplicity()
-		: false;
-
-
-/**
- * Checks if the return parameter of an operation has a fixed upper count of values.
- * 
- * @return	True if the return parameter of the operation has a fixed upper count of values, otherwise false.
- * @api
- * @todo: use Xtend script hasReturnParameter
- */
-boolean hasReturnFixedUpperBoundMultiplicity(MOperation this) : 
-	return != null
-		? !return.hasFixedUpperBoundMultiplicity()
-		: false;
+List[MClassifier] owningSpecializations(MType this) :
+	navModel().allNestedClassifiers().select( c | 
+		c.generalization.contains( this ) 
+	);
 
 
 // -- Properties --------------------------------------------------------------------------------------------
@@ -302,23 +252,21 @@ boolean hasReturnFixedUpperBoundMultiplicity(MOperation this) :
 
 
 /**
- * Returns the list of properties of an classifier including inherited,
- * whereas all attributes are added first to the list.
+ * Returns the list of inherited and owning properties of an classifier.
  *
  * @return 	The list of properties of the classifier, otherwise an empty list.
  * @see allAttributes(MClassifier)
  * @see allAssociationRoles(MClassifier)
  * @api
  */
-List[MAttribute] allProperties(MClassifier this) :
+List[MProperty] allProperties(MClassifier this) :
 	{ allAttributes() }.addAll(
 		allAssociationRoles()
 	);
 
 
 /**
- * Returns the list of initializable properties of an classifier including inherited,
- * whereas all initializable attributes are added first to the list.
+ * Returns the list of inherited and owning initializable properties of an classifier.
  * 
  * @return	The list of initializable properties of the classifier, otherwise an empty list.
  * @see allInitializableAttributes(MClassifier)
@@ -331,8 +279,7 @@ List[MProperty] allInitializableProperties(MClassifier this) :
 
 
 /**
- * Returns the list of owning initializable properties of an classifier including inherited,
- * whereas all owning initializable attributes are added first to the list.
+ * Returns the list of owning initializable properties of an classifier.
  * 
  * @return	The list of initializable properties of the classifier, otherwise an empty list.
  * @see owningInitializableAttributes(MClassifier)
@@ -383,8 +330,7 @@ boolean hasDerivedAttributes(MClassifier this) :
 
 
 /**
- * Returns the list of attributes of an classifier including inherited,
- * whereas inherited attributes are added first to the list.
+ * Returns the list of inherited and owning attributes of an classifier.
  *
  * @return 	The list of attributes of the classifier, otherwise an empty list.
  * @api
@@ -409,8 +355,8 @@ private List[MAttribute] allAttributes(MType this) :
 
 
 /**
- * Returns the list of initializable attributes of an classifier including inherited which 
- * are neither final nor derived, whereas inherited initializable attributes are added first to the list.
+ * Returns the list of inherited and owning initializable attributes of an classifier which 
+ * are neither final nor derived.
  *
  * @return	The list of initializable attributes of the classifier, otherwise an empty list.
  * @api
@@ -488,8 +434,7 @@ boolean hasInitializableAssociationRoles(MClassifier this) :
 
 
 /**
- * Returns the list of association roles of an classifier including inherited,
- * whereas inherited association roles are added first to the list.
+ * Returns the list of inherited and owning association roles of an classifier.
  *
  * @return 	The list of association roles of the classifier, otherwise an empty list.
  * @api
@@ -514,8 +459,8 @@ private List[MAssociationRole] allAssociationRoles(MType this) :
 
 
 /**
- * Returns the list of initializable association roles of an classifier including inherited which 
- * are not derived, whereas inherited initializable association roles are added first to the list.
+ * Returns the list of inherited and owning initializable association roles of an classifier which 
+ * are not derived.
  *
  * @return	The list of initializable association roles of the classifier, otherwise an empty list.
  * @api
@@ -528,7 +473,7 @@ List[MAssociationRole] allInitializableAssociationRoles(MClassifier this) :
 
 /**
  * Just there for error free templates.
- * Just called if a generalization of a classifier is no classifier.
+ * Just called if a realization of a classifier is no classifier.
  * 
  * @return	An empty list.
  * @see		allInitializableAssociationRoles(MClassifier)
@@ -707,6 +652,7 @@ boolean isDestructor(MOperation this) :
  * Checks if an operation has a return parameter which is likewise not "void".
  * 
  * @return	True if the operation has a return parameter, otherwise false.
+ * @todo:	Check if the void check is necessary.
  * @api
  */
 boolean hasReturn(MOperation this) :
@@ -797,369 +743,9 @@ boolean hasGenericRealization(MProperty this) :
 
 /**
  * Checks if a parameter has one or more generic realizations.
+ * 
  * @return	True if the parameter has at least one generic realizations, otherwise false.
  * @api
  */
 boolean hasGenericRealization(MParameter this) :
 	genericRealization.size > 0;
-
-
-// -- Type Information --------------------------------------------------------------------------------------
-
-
-/**
- * Checks if a type is a generic.
- *
- * @return	True if the type is a generic, otherwise false.
- */
-boolean isGenericType(MType this) : 
-	metaType == MGeneric;
-
-
-/**
- * Checks if a type is an external type.
- * 
- * @return	True if the type is an external type, otherwise false.
- */
-boolean isExternalType(MType this) : 
-	metaType == MExternal;
-
-
-/**
- * Checks if a type is a data type.
- * 
- * @return	True if the type is a data type, otherwise false.
- */
-boolean isDataType(MType this) : 
-	metaType == MDataType;
-
-
-/**
- * Checks if a type is an enumeration.
- * 
- * @return	True if the type is an enumeration, otherwise false.
- */
-boolean isEnumeration(MType this) : 
-	metaType == MEnumeration;
-
-
-/**
- * Checks if a type is a classifier.
- * 
- * @return	True if the type is a classifier, otherwise false.
- */
-boolean isClassifier(MType this) : 
-	MClassifier.isInstance(this);
-
-
-/**
- * Checks if a type is a class.
- * 
- * @return	True if the type is a class, otherwise false.
- */
-boolean isClass(MType this) : 
-	MClass.isInstance(this);
-
-
-/**
- * getter for the name of a type or the specification of a generic
- * @return	the name (or specification) of the type
- */
-String name(MType this) :
-	switch (metaType) {
-		case MGeneric : ((MGeneric)this).specification
-		case MExternal : ((MExternal)this).name
-		default : ((MClassifier)this).name
-	};
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	package accessors
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * getter for the package element by using a property
- * @return	the package element
- */
-MPackage package(MProperty this) : classifier.package();
-
-/**
- * getter for the package element by using an operation
- * @return	the package element
- */
-MPackage package(MOperation this) : classifier.package();
-
-/**
- * getter for the package element by using a classifier
- * @return	the package element
- */
-MPackage package(MClassifier this) :
-	switch (owningContext.metaType) {
-		case MModel : ((MPackage)owningContext)
-		case MPackage : ((MPackage)owningContext)
-		default : (logFatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
-	};
-	
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	model accessors
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * getter for the model element by using a property
- * @return	the model element
- */
-MModel model(MProperty this) : classifier.model();
-
-/**
- * getter for the model element by using an operation
- * @return	the model element
- */
-MModel model(MOperation this) :	classifier.model();
-
-/**
- * getter for the model element by using a classifier
- * @return	the model element
- */
-MModel model(MClassifier this) :
-	switch {
-		case MModel.isInstance(this) : ((MModel)owningContext)
-		case MPackage.isInstance(this) : ((MPackage)owningContext).model()
-		case MClassifier.isInstance(this) : ((MClassifier)owningContext).model()
-		default : (logFatal("MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen.") -> Void)
-	};
-
-MModel model(MElement this) :
-	switch (this.metaType) {
-		case MClassifier : ((MClassifier) this).model()
-		case MOperation :  ((MOperation) this).model()
-		case MParameter :  ((MParameter) this).operation.model()
-		case MProperty :  ((MProperty) this).model()
-		case MStereotype : ((MStereotype) this).model
-		default : (logFatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
-	};
-
-/**
- * getter for the model element by using a package
- * @return	the model element
- */
-MModel model(MPackage this) :
-	metaType == MModel
-		? this
-		: nestingPackage.model();
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	classifiers
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * getter for a class by it's full qualified name which is separed by dot's
- * @param	fullQualifiedName	full qualified name of the class
- * @return	the class found or Void
- */
-MClass getClass(MModel this, String fullQualifiedName) :
-	let c = getClassifier(fullQualifiedName) :
-		c.metaType == MClass
-			? c
-			: Void;
-
-/**
- * getter for a classifier by it's full qualified name which is separed by dot's
- * @param	fullQualifiedName	full qualified name of the classifier
- * @return	the classifier found or null
- */
-MClassifier getClassifier(MModel this, String fullQualifiedName) :
-	getClassifier(nestedPackage, fullQualifiedName);
-
-/**
- * getter for a package by it's full qualified name, which is separated by dot's
- * @param	fullQualifiedPackageName	full qualified name of a package
- * @return	the package found or null
- */
-MPackage getPackage(MModel this, String fullQualifiedPackageName) :
-	getPackage(nestedPackage, fullQualifiedPackageName);
-
-List[MClassifier] allClassifiers(MPackage this) :
-	addAllClassifier({});
-
-List[MClassifier] addAllClassifier(MPackage this, List[MClassifier] classifiers) :
-	classifiers.addAll(classifier) ->
-	nestedPackage.addAllClassifier(classifiers) ->
-	classifiers;
-	
-	
-/**
- * Getter for a list of all generalized types.
- * Indirect generalized types first.
- *
- * @return 	a list of generalized types or an empty list
- */
-List[MType] allGeneralizations(MClassifier this) :
-	let generalizations = {} :
-		!generalization.isEmpty
-			? (	generalizations.addAll( generalization.allGeneralizations() ) ->	
-				generalizations.addAll( generalization )
-			) : Void ->
-		generalizations;
-
-
-/**
- * just there for error free templates
- *
- * @see		allGeneralizations(MClassifier)
- * @return	an empty list
- */
-List[MType] allGeneralizations(MType this) :
-	{};
-
-
-/**
- * Getter for a list of all owning specialized types
- *
- * @return	a list of specialized types or an empty list
- */
-List[MClassifier] owningSpecializations(MClassifier this) :
-	model().allClassifiers().select( e | e.generalization.contains(this) );
-
-
-/**
- * Getter for a list of all owning specialized types
- *
- * @see		owningSpecializations(MClassifier)
- * @return	a list of specialized types or an empty list
- */
-List[MClassifier] owningSpecializations(MExternal this) :
-	model.allClassifiers().select( e | e.generalization.contains(this) );
-
-
-/**
- * just there for error free templates
- *
- * @see		owningSpecializations(MClassifier)
- * @return	an empty list
- */
-List[MClassifier] owningSpecializations(MType this) :
-	{};
-
-
-/**
- * Getter for a list of all specialized types.
- * Direct specialized types first.
- *
- * @return 	a list of specialized types or an empty list
- */
-List[MClassifier] allSpecializations(MType this):
-	let specializations = {} :
-		!owningSpecializations().isEmpty
-			? (	specializations.addAll( owningSpecializations() ) ->
-				specializations.addAll( owningSpecializations().allSpecializations() )
-			) : Void ->
-		specializations;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	packages
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-	
-List[MPackage] allPackages(MPackage this) :
-	addAllPackages({});
-
-List[MPackage] addAllPackages(MPackage this, List[MPackage] packages) :
-	packages.addAll(nestedPackage) ->
-	nestedPackage.addAllPackages(packages) ->
-	packages;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	elements
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-MClassifier getClassifier(MElement this) :
-	switch (metaType) {
-		case MOperation : ((MOperation) this).classifier
-		case MAttribute : ((MAttribute) this).classifier
-		case MAssociationRole : ((MAssociationRole) this).classifier
-		default : null
-	};
-
-
-
-
-
-
-
-
-
-
-/**
- * getter for the type of a parameter
- * @return	the type of the parameter
- */
-//MType type(MParameter this) : type;
-
-/**
- * getter for the type of a property
- * @return	the type of the property
- */
-//MType type(MProperty this) : type;
-
-/**
- * just there for error free templates
- * should NOT be called!
- */
-/*
-MType type(MElement this) : 
-	logFatal("somethings goes totally wrong within your templates... " +
-	"   you cannot determine the type of an 'MElement': " + this) ->
-	Void;
-*/
-
-
-
-
-
-
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	private functions
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * getter for a string representation of a comment
- * @return	the string representation of a comment
- */
-private String getComment(MComment this) :
-	annotation != "null"
-		? annotation
-		: "";
-
-/**
- * getter for a class by it's full qualified name from a list of classes
- * note: should actually only work, if the list contains the package, which is the first in the full qualified name
- * @param	packages			a list of packages
- * @param	fullQualifiedName	the full qualified name of a class
- * @return	the class found or null
- */
-private MClassifier getClassifier(List[MClass] packages, String fullQualifiedName) :
-	JAVA org.genesez.metamodel.core.util.AccessHelper.getClassifier(java.util.List, java.lang.String);
-
-/**
- * getter for a package by it's full qualified name from a list of packages
- * note: should actually only work, if the list contains the package, which is the first in the full qualified name
- * @param	packages					a list of packages
- * @param	fullQualifiedPackageName	full qualifed name of a package
- * @return	the package found or null
- */
-private MPackage getPackage(List[MPackage] packages, String fullQualifiedPackageName) :
-	JAVA org.genesez.metamodel.core.util.AccessHelper.getPackage(java.util.List, java.lang.String);
