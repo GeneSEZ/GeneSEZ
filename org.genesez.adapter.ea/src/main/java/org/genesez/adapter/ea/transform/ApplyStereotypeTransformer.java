@@ -12,12 +12,18 @@ import org.genesez.adapter.ea.ContentRegistry;
 import org.genesez.adapter.ea.ProfileRegistry;
 import org.sparx.ConnectorTag;
 
+/**
+ * Class for transforming stereotypes
+ * 
+ * @author christian
+ * @version 1
+ */
 
 public class ApplyStereotypeTransformer {
 	
 	private static final Log log = LogFactory.getLog(ApplyStereotypeTransformer.class);
 		
-	// Connector
+	// Connector stereotypes
 	//------------------------------------------------------------------------
 	
 	/**
@@ -27,10 +33,15 @@ public class ApplyStereotypeTransformer {
 	 */
 	public static Element applyStereotypes(org.sparx.Connector eaElement,
 			Element umlElement) {
-		log.debug("Applying stereotypes");
+		log.debug("Applying stereotypes for connectors");
 		String s = eaElement.GetStereotype();
 		Stereotype st = ProfileRegistry.instance.getStereotype(s);
 
+		if(s.length() == 0){
+			log.debug("No stereotype to apply, going on...");
+			return umlElement;
+		}
+		
 		if (umlElement.isStereotypeApplicable(st)) {
 			log.debug("Apply stereotype " + st.getName());
 			EObject o = umlElement.applyStereotype(st);
@@ -40,7 +51,7 @@ public class ApplyStereotypeTransformer {
 						st);
 			}
 		} else {
-			log.error("Stereotype is not applicable!");
+			log.error("Stereotype connector is not applicable!");
 		}
 		return umlElement;
 	}
@@ -97,7 +108,7 @@ public class ApplyStereotypeTransformer {
 	//------------------------------------------------------------------------
 	
 	public static Element applyStereotypes(org.sparx.Element eaElement, Element umlElement) {
-		log.debug("Applying stereotypes");
+		log.debug("Applying stereotypes for elements");
 		for (String s : eaElement.GetStereotypeList().split(",")) {
 			log.debug("Search for stereotype " + s);
 			Stereotype st = ProfileRegistry.instance.getStereotype(s);
@@ -109,7 +120,10 @@ public class ApplyStereotypeTransformer {
 					applyTaggedValuesElement(eaElement,umlElement, st);
 				}
 			}else{
-				log.error("Stereotype is not applicable!");
+				log.error("Stereotype eaElement("+ eaElement.GetName() 
+						+ "), umlElement(" + umlElement.toString() 
+						+ "), stereotype(" + s 
+						+ ") is not applicable!");
 			}
 		}
 		return umlElement;

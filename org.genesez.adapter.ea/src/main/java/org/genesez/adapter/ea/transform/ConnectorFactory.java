@@ -453,7 +453,7 @@ public class ConnectorFactory {
 		List<Integer> values = new ArrayList<Integer>(2);
 		int lower = 0, upper = 0;
 		String cardinality = connectorEnd.GetCardinality();
-		log.debug("Origianl: " + cardinality);
+		log.debug("Origin: " + cardinality);
 		// if string is empty
 		if (cardinality.equals("")) {
 			log.debug("Cardinality is empty");
