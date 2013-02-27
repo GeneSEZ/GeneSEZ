@@ -17,13 +17,19 @@
 «EXTENSION org::genesez::platform::typo3v4::mvc::convention::Conversion»
 
 «REM» use TYPO3 TCx access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3v4::scripts::TCxAccessHelper»
+«EXTENSION org::genesez::platform::typo3v4::util::TCxAccessHelper»
 
 «REM» use TYPO3 naming scripts «ENDREM»
 «EXTENSION org::genesez::platform::typo3v4::convention::Naming»
 
+«REM» use common access helper scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+
 «REM» use common conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+
+«REM» use common navigation scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::ModelNavigation»
 
 
 «REM»
@@ -88,7 +94,7 @@
 «DEFINE DataType FOR MInterface -»
 	<data type="array">
 	«EXPAND LanguageKey("default") -»
-	«FOREACH model().getT3LocalizationLanguageKeys() AS languageKey -»
+	«FOREACH navModel().getT3LocalizationLanguageKeys() AS languageKey -»
 		«EXPAND LanguageKey(languageKey.asT3Language()) -»
 	«ENDFOREACH -»
 	</data>

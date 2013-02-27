@@ -21,8 +21,8 @@
 
 «REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equal «ENDREM»
-«EXTENSION org::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
-«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::typo3v4::mvc::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 
 
 «REM»
@@ -107,7 +107,7 @@
 	Generates the getter method for an attribute.
 «ENDREM»
 «DEFINE Getter FOR MAttribute -»
-«IF !hasAccessorGetter("false") -»
+«IF !prHasAccessorGetter("false") -»
 	«EXPAND Comment::Getter -»
 	«EXPAND ModifierAccessor -» function «asGetterName() -»() {
 		return $this->«name() -»;
@@ -121,7 +121,7 @@
 	Generates the setter method for an attribute.
 «ENDREM»
 «DEFINE Setter FOR MAttribute -»
-«IF !hasAccessorSetter("false") && !hasDiSetter("true") -»
+«IF !prHasAccessorSetter("false") && !prHasDiSetter("true") -»
 	«EXPAND Comment::Setter -»
 	«EXPAND ModifierAccessor -» function «asSetterName() -»(«EXPAND TypeHintSetter -»$«name() -») {
 		$this->«name() -» = $«name() -»;
@@ -135,7 +135,7 @@
 	Generates the insert in method for an attribute with a collection type.
 «ENDREM»
 «DEFINE InsertIn FOR MAttribute -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd) {
 		$this->«name() -»->attach($toAdd);
@@ -149,7 +149,7 @@
 	Generates the remove from method for an attribute with a collection type.
 «ENDREM»
 «DEFINE RemoveFrom FOR MAttribute -»
-«IF isMultiValuedType() -»
+«IF isMultiValued() -»
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove) {
 		$this->«name() -»->detach($toRemove);
@@ -179,10 +179,10 @@
 	Generates type hints for setter methods.
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAttribute -»
-«IF isSingleValuedType() -»
+«IF multiplicity.isSingleValued() -»
 «IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»«mapCollection( typeMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
+«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»«mapCollection( typeMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 

@@ -21,10 +21,13 @@
 «EXTENSION org::genesez::platform::typo3v4::mvc::convention::Naming»
 
 «REM» use TYPO3 MVC access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
+«EXTENSION org::genesez::platform::typo3v4::mvc::util::AccessHelper»
+
+«REM» use common access helper scripts «ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 
 «REM» use common conversion scripts «ENDREM»
-«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
 
 
 «REM»
@@ -51,10 +54,10 @@
 	Generates the annotation for an property.
 «ENDREM»
 «DEFINE Property FOR MProperty -»
-«IF isSingleValuedType() -»
+«IF multiplicity.isSingleValued() -»
 	 * @var «type.name()»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
+«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»
 	 * @var «mapCollection( typeMappingContextModel() ) -»<«type.name() -»>
 «ELSE -»
 	 * @var «mapCollection() -»
@@ -68,10 +71,10 @@
 
 
 «DEFINE Getter FOR MProperty -»
-«IF isSingleValuedType() -»
+«IF multiplicity.isSingleValued() -»
 	 * @return «type.name()-» «comment("; ", "")»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
+«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»
 	 * @return «mapCollection( typeMappingContextModel() ) -»<«type.name() -»> «comment("; ", "")»
 «ELSE -»
 	 * @return «mapCollection() -» «comment("; ", "")»
@@ -81,10 +84,10 @@
 
 
 «DEFINE Setter FOR MProperty -»
-«IF isSingleValuedType() -»
+«IF multiplicity.isSingleValued() -»
 	 * @param «type.name() -» $«name() -» «comment("; ", "")»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»
+«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»
 	 * @param «mapCollection( typeMappingContextModel() ) -»<«type.name() -»> $«name() -» «comment("; ", "")»
 «ELSE -»
 	 * @param «mapCollection() -» $«name() -» «comment("; ", "")»
@@ -172,7 +175,7 @@
 
 
 «DEFINE Inject FOR MProperty -»
-«IF hasDiSetter("true") -»
+«IF prHasDiSetter("true") -»
 	 * @inject
 «ENDIF -»
 «ENDDEFINE»
@@ -188,7 +191,7 @@
 «REM» - - MOperation  - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
 
 «DEFINE Param FOR MParameter -»
-«IF isSingleValuedType() -»
+«IF multiplicity.isSingleValued() -»
 	 * @param «type.name() -» $«name() -» «comment("; ", "")»
 «ELSE -»
 	 * @param «mapCollection() -» $«name() -» «comment("; ", "")»
@@ -198,10 +201,10 @@
 
 «DEFINE Return FOR MOperation -»
 «IF hasReturn() -»
-«IF isSingleValuedType() -»
+«IF return.multiplicity.isSingleValued() -»
 	 * @return «return.type.name() -» «return.comment("; ", "")»
 «ELSE -»
-«IF classifier.isRepositoryPackageElement() && !hasPrimitiveStereotype() -»
+«IF classifier.isRepositoryPackageElement() && !prHasPrimitiveStereotype() -»
 	 * @return «return.mapCollection( typeMappingContextRepository() ) -»<«return.type.name() -»> «return.comment("; ", "")»
 «ELSE -»
 	 * @return «return.mapCollection() -» «return.comment("; ", "")»

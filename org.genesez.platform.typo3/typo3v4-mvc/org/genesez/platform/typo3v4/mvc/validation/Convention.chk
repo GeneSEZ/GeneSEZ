@@ -10,8 +10,8 @@ import gcore;
 
 // use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equal
-extension org::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::typo3v4::mvc::util::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessHelper;
 
 
 /*
@@ -40,5 +40,5 @@ context MProperty WARNING "GeneSEZ: Visibility of the property for the domain ob
  */	
 context MAttribute WARNING "GeneSEZ: Could not handle multi valued attributes for types which are no classifier!" :
 	classifier.metaType == MClass && ( ((MClass)classifier).isEntity() || ((MClass)classifier).isValueObject() ) && !type.isClassifier()
-		? isSingleValuedType()
+		? multiplicity.isSingleValued()
 		: true;

@@ -17,11 +17,13 @@ extension org::genesez::platform::typo3v4::mvc::convention::NamingContext;
 
 // use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equals
-extension org::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::typo3v4::mvc::util::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessHelper;
+
+extension org::genesez::metamodel::core::util::ModelNavigation;
 
 // use common create template scripts
-extension org::genesez::platform::common::m2m::MakeElement;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
 
 
 /*
@@ -78,19 +80,19 @@ Void changeDomainObjectPropertyVisibility(MProperty this) :
 
 
 Void changeDomainObjectAttributeMultiplicity(MAttribute this) :
-	!isClassifier(type) && isMultiValuedType()
+	!isClassifier(type) && multiplicity.isMultiValued()
 		? (	stereotype.add(
-				let s = makeStereotype( model(), prT3TCxMinitems(), prT3TCxMinitems() ) :
-					makeTaggedValue(this, makeTag( s, prT3TCxMinitemsMinitems(), "Integer" ), lowerBoundMultiplicity.toString() ) ->
+				let s = createStereotype( navModel(), prT3TCxMinitems(), prT3TCxMinitems() ) :
+					createTaggedValue(this, createTag( s, prT3TCxMinitemsMinitems(), "Integer" ), multiplicity.lowerBound.toString() ) ->
 					s
 				) ->
 			stereotype.add(
-				let s = makeStereotype( model(), prT3TCxMaxitems(), prT3TCxMaxitems() ) :
-					makeTaggedValue(this, makeTag( s, prT3TCxMaxitemsMaxitems(), "Integer" ), upperBoundMultiplicity.toString() ) ->
+				let s = createStereotype( navModel(), prT3TCxMaxitems(), prT3TCxMaxitems() ) :
+					createTaggedValue(this, createTag( s, prT3TCxMaxitemsMaxitems(), "Integer" ), multiplicity.upperBound.toString() ) ->
 					s
 			) ->
-			hasFixedLowerBoundMultiplicity() && lowerBoundMultiplicity == 1 ? setLowerBoundMultiplicity(1) : setLowerBoundMultiplicity(0) ->
-			setUpperBoundMultiplicity(1)
+			multiplicity.hasFixedLowerBoundMultiplicity() && multiplicity.lowerBound == 1 ? multiplicity.setLowerBound(1) : multiplicity.setLowerBound(0) ->
+			multiplicity.setUpperBound(1)
 		)
 		: Void;
 		
