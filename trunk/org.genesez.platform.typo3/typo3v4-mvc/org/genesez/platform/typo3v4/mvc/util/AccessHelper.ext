@@ -44,7 +44,7 @@ extension org::genesez::metamodel::core::util::Conversion;
  * @return	the list of TYPO3 MVC Extbase controllers or an empty list
  */
 cached List[MClass] allControllers(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isController() );
+	allNestedClassifiers().typeSelect(MClass).select( e | e.isController() );
 	
 
 /**
@@ -188,7 +188,7 @@ cached boolean isFactory(MClass this) :
  * @return	the list of TYPO3 MVC Extbase entities and value objects or an empty list
  */
 cached List[MClass] allEntitiesAndValueObjects(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
+	allNestedClassifiers().typeSelect(MClass).select( e | e.isEntity() || e.isValueObject() );
 
 
 /**
@@ -409,7 +409,7 @@ boolean createSortingField(MClass this) :
  * @return	true if an attribute is one to one unidirectornal, otherwise false
  */
 boolean isOneToOneUnidirectional(MAttribute this) :
-	isSingleValued();
+	multiplicity.isSingleValued();
 
 
 /**
@@ -418,7 +418,7 @@ boolean isOneToOneUnidirectional(MAttribute this) :
  * @return	true if an attribute is one to many unidirectornal, otherwise false
  */
 boolean isOneToManyUnidirectional(MAttribute this) :
-	isMultiValued();
+	multiplicity.isMultiValued();
 
 
 /**
@@ -427,7 +427,7 @@ boolean isOneToManyUnidirectional(MAttribute this) :
  * @return	true if an association role is one to one unidirectornal, otherwise false
  */
 boolean isOneToOneUnidirectional(MAssociationRole this) :
-	isOppositeSingleValued() && isSingleValued() && !hasOpposite();
+	oppositeMultiplicity.isSingleValued() && multiplicity.isSingleValued() && !hasOpposite();
 
 
 /**
@@ -436,7 +436,7 @@ boolean isOneToOneUnidirectional(MAssociationRole this) :
  * @return	true if an association role is one to one bidirectornal, otherwise false
  */
 boolean isOneToOneBidirectional(MAssociationRole this) :
-	isOppositeSingleValued() && isSingleValued() && hasOpposite();
+	oppositeMultiplicity.isSingleValued() && multiplicity.isSingleValued() && hasOpposite();
 
 
 /**
@@ -445,7 +445,7 @@ boolean isOneToOneBidirectional(MAssociationRole this) :
  * @return	true if an association role is one to many unidirectornal, otherwise false
  */
 boolean isOneToManyUnidirectional(MAssociationRole this) :
-	isOppositeSingleValued() && isMultiValued() && !hasOpposite();
+	oppositeMultiplicity.isSingleValued() && multiplicity.isMultiValued() && !hasOpposite();
 
 	
 /**
@@ -454,7 +454,7 @@ boolean isOneToManyUnidirectional(MAssociationRole this) :
  * @return	true if an association role is one to many bidirectornal, otherwise false
  */
 boolean isOneToManyBidirectional(MAssociationRole this) :
-	isOppositeSingleValued() && isMultiValued() && hasOpposite();
+	oppositeMultiplicity.isSingleValued() && multiplicity.isMultiValued() && hasOpposite();
 
 
 /**
@@ -463,7 +463,7 @@ boolean isOneToManyBidirectional(MAssociationRole this) :
  * @return	true if an association role is many to one unidirectornal, otherwise false
  */
 boolean isManyToOneUnidirectional(MAssociationRole this) :
-	isOppositeMultiValued() && isSingleValued() && !hasOpposite();
+	oppositeMultiplicity.isMultiValued() && multiplicity.isSingleValued() && !hasOpposite();
 
 
 /**
@@ -472,7 +472,7 @@ boolean isManyToOneUnidirectional(MAssociationRole this) :
  * @return	true if an association role is many to one bidirectornal, otherwise false
  */
 boolean isManyToOneBidirectional(MAssociationRole this) :
-	isOppositeMultiValued() && isSingleValued() && hasOpposite();
+	oppositeMultiplicity.isMultiValued() && multiplicity.isSingleValued() && hasOpposite();
 	
 
 /**
@@ -481,7 +481,7 @@ boolean isManyToOneBidirectional(MAssociationRole this) :
  * @return	true if an association role is many to many unidirectornal, otherwise false
  */
 boolean isManyToManyUnidirectional(MAssociationRole this) :
-	isOppositeMultiValued() && isMultiValued() && !hasOpposite();
+	oppositeMultiplicity.isMultiValued() && multiplicity.isMultiValued() && !hasOpposite();
 	
 
 /**
@@ -490,7 +490,7 @@ boolean isManyToManyUnidirectional(MAssociationRole this) :
  * @return	true if an association role is many to many bidirectornal, otherwise false
  */
 boolean isManyToManyBidirectional(MAssociationRole this) :
-	isOppositeMultiValued() && isMultiValued() && hasOpposite();
+	oppositeMultiplicity.isMultiValued() && multiplicity.isMultiValued() && hasOpposite();
 
 
 /*
@@ -505,7 +505,7 @@ boolean isManyToManyBidirectional(MAssociationRole this) :
  * @return	the list of TYPO3 MVC Extbase entities or an empty list
  */
 cached List[MClass] allEntities(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isEntity() );
+	allNestedClassifiers().typeSelect(MClass).select( e | e.isEntity() );
 
 
 /**
@@ -540,7 +540,7 @@ cached boolean isEntity(MClass this) :
  * @return	the list of TYPO3 MVC Extbase value objects or an empty list
  */
 cached List[MClass] allValueObjects(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isValueObject() );
+	allNestedClassifiers().typeSelect(MClass).select( e | e.isValueObject() );
 	
 
 /**
@@ -573,7 +573,7 @@ cached boolean isValueObject(MClass this) :
  * @return	the list of TYPO3 MVC Extbase repositories or an empty list
  */
 cached List[MClass] allRepositories(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isRepository() );
+	allNestedClassifiers().typeSelect(MClass).select( e | e.isRepository() );
 
 
 /**
@@ -663,7 +663,7 @@ cached boolean isService(MClass this) :
  * @return	the list of TYPO3 MVC Extbase validators or an empty list
  */
 cached List[MClass] allValidators(MModel this) :
-	allClassifiers().typeSelect(MClass).select( e | e.isValidator() );
+	allNestedClassifiers().typeSelect(MClass).select( e | e.isValidator() );
 	
 
 /**
@@ -782,7 +782,7 @@ cached boolean isViewHelper(MClass this) :
  * @return	the list of TYPO3 MVC Extbase plugins or an empty list
  */
 cached List[MInterface] allPlugins(MModel this) :
-	allClassifiers().typeSelect(MInterface).select( e | e.isPlugin() );
+	allNestedClassifiers().typeSelect(MInterface).select( e | e.isPlugin() );
 
 
 /**
@@ -801,7 +801,7 @@ cached boolean isPlugin(MInterface this) :
  * @return	the list of TYPO3 MVC Extbase modules or an empty list
  */
 cached List[MInterface] allModules(MModel this) :
-	allClassifiers().typeSelect(MInterface).select( e | e.isModule() );
+	allNestedClassifiers().typeSelect(MInterface).select( e | e.isModule() );
 
 
 /**

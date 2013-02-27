@@ -21,8 +21,8 @@
 
 «REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equal «ENDREM»
-«EXTENSION org::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
-«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::typo3v4::mvc::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 
 
 «REM»
@@ -148,7 +148,7 @@
 	Generates the declaration of the 'insert in' method for an association attribute.
 «ENDREM»
 «DEFINE InsertInDeclaration FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF multiplicity.isMultiValued() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd);
 	
@@ -160,7 +160,7 @@
 	Generates the 'insert in' method for an association attribute with a collection type.
 «ENDREM»
 «DEFINE InsertInImplemementation FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF multiplicity.isMultiValued() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND ModifierAccessor -» function «asInsertInName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toAdd) {
 		$this->«name() -»->attach($toAdd);
@@ -174,7 +174,7 @@
 	Generates the declaration of the 'remove from' method for an association attribute.
 «ENDREM»
 «DEFINE RemoveFromDeclaration FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF multiplicity.isMultiValued() -»
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove);
 	
@@ -186,7 +186,7 @@
 	Generates the 'remove from' method for an association attribute with a collection type.
 «ENDREM»
 «DEFINE RemoveFromImplemementation FOR MAssociationRole -»
-«IF isMultiValuedType() -»
+«IF multiplicity.isMultiValued() -»
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND ModifierAccessor -» function «asRemoveFromName() -»(«EXPAND TypeHintInsertInRemoveFrom -»$toRemove) {
 		$this->«name() -»->detach($toRemove);
@@ -216,10 +216,10 @@
 	Generates type hints for setter methods.
 «ENDREM»
 «DEFINE TypeHintSetter FOR MAssociationRole -»
-«IF isSingleValuedType() -»
+«IF multiplicity.isSingleValued() -»
 «IF generatePHPTypeHint(type) -»«type.name(getInternalNamingContext(), typeMappingContextPHPTypeHint()) -» «ENDIF -»
 «ELSE -»
-«IF classifier.isModelPackageElement() && !hasPrimitiveStereotype() -»«mapCollection( typeMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
+«IF classifier.isModelPackageElement() && !prHasPrimitiveStereotype() -»«mapCollection( typeMappingContextModel() ) -» «ELSE -»«mapCollection() -» «ENDIF -»
 «ENDIF -»
 «ENDDEFINE»
 

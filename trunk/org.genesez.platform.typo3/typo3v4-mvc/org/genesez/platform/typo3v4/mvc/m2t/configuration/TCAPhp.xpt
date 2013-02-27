@@ -27,11 +27,11 @@
 
 «REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equals «ENDREM»
-«EXTENSION org::genesez::platform::typo3v4::mvc::scripts::AccessHelper»
-«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::typo3v4::mvc::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 
 «REM» use TYPO3 TCx access helper scripts «ENDREM»
-«EXTENSION org::genesez::platform::typo3v4::scripts::TCxAccessHelper»
+«EXTENSION org::genesez::platform::typo3v4::util::TCxAccessHelper»
 
 
 «REM»
@@ -1124,12 +1124,12 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 
 «DEFINE TCAColumnsConfigMaxitems FOR MAttribute -»
-				'maxitems' => «IF hasFixedUpperBoundMultiplicity() -»«upperBoundMultiplicity -»«ELSE -»99999«ENDIF -»,
+				'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»99999«ENDIF -»,
 «ENDDEFINE»
 
 
 «DEFINE TCAColumnsConfigMaxitems FOR MAssociationRole -»
-				'maxitems' => «IF hasFixedUpperBoundMultiplicity() -»«upperBoundMultiplicity -»«ELSE -»99999«ENDIF -»,
+				'maxitems' => «IF multiplicity.hasFixedUpperBoundMultiplicity() -»«multiplicity.upperBound -»«ELSE -»99999«ENDIF -»,
 «ENDDEFINE»
 
 
@@ -1156,12 +1156,12 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 
 «DEFINE TCAColumnsConfigMinitems FOR MAttribute -»
-				'minitems' => «IF hasFixedLowerBoundMultiplicity() -»«lowerBoundMultiplicity -»«ELSE -»0«ENDIF -»,
+				'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
 «ENDDEFINE»
 
 
 «DEFINE TCAColumnsConfigMinitems FOR MAssociationRole -»
-				'minitems' => «IF hasFixedLowerBoundMultiplicity() -»«lowerBoundMultiplicity -»«ELSE -»0«ENDIF -»,
+				'minitems' => «IF multiplicity.hasFixedLowerBoundMultiplicity() -»«multiplicity.lowerBound -»«ELSE -»0«ENDIF -»,
 «ENDDEFINE»
 
 
@@ -1173,7 +1173,7 @@ hier evtl. versuch über sql type maximum herauszufinden
 
 
 «DEFINE TCAColumnsConfigMultiple FOR MProperty -»
-				'multiple' => «!unique -»,
+				'multiple' => «!multiplicity.unique -»,
 «ENDDEFINE»
 
 

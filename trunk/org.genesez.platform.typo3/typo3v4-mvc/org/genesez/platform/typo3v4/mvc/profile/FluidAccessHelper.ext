@@ -7,8 +7,8 @@
 // based on genesez meta model
 import gcore;
 
-// use common access helper scripts
-extension org::genesez::platform::common::AccessHelper;
+// use metamodel core extension mechanism scripts
+extension org::genesez::metamodel::core::util::ExtensionMechanism;
 
 // use profile scripts
 extension org::genesez::platform::typo3v4::mvc::profile::FluidProfile;
@@ -25,7 +25,7 @@ extension org::genesez::platform::typo3v4::mvc::profile::FluidProfile;
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3FluidViewHelperStereotype(MElement this) :
-	hasStereotype( prT3FluidViewHelper() );
+	emHasStereotype( prT3FluidViewHelper() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -36,7 +36,7 @@ boolean hasT3FluidViewHelperStereotype(MElement this) :
  * @return true if the element has a tagged value with the given value, otherwise false
  */
 boolean hasT3FluidViewHelperTaggedValue(MElement this, String tag, String value) :
-	hasTaggedValue( prT3FluidViewHelper(), tag, value );
+	emHasTaggedValue( prT3FluidViewHelper(), tag, value );
 	
 /**
  * Checks if an element has a value reference of a specific tagged value 
@@ -47,7 +47,7 @@ boolean hasT3FluidViewHelperTaggedValue(MElement this, String tag, String value)
  * @return true if the element has a tagged value with the given value reference, otherwise false
  */
 boolean hasT3FluidViewHelperTaggedValue(MElement this, String tag, MElement valueReference) :
-	hasTaggedValue( prT3FluidViewHelper(), tag, valueReference );
+	emHasTaggedValue( prT3FluidViewHelper(), tag, valueReference );
 	
 /*
 - - "viewHelperType" - - - - - - - - - -
@@ -61,7 +61,7 @@ boolean hasT3FluidViewHelperTaggedValue(MElement this, String tag, MElement valu
  * @return true if the element has a tagged value with the given value, otherwise false
  */
 boolean hasT3FluidViewHelperViewHelperType(MElement this, String value) :
-	hasTaggedValue( prT3FluidViewHelper(), prT3FluidViewHelperViewHelperType(), value );
+	emHasTaggedValue( prT3FluidViewHelper(), prT3FluidViewHelperViewHelperType(), value );
 
 /**
  * Checks if an element has a value of the tagged value "viewHelperType" 
@@ -70,7 +70,7 @@ boolean hasT3FluidViewHelperViewHelperType(MElement this, String value) :
  * @return true if the element has a tagged value with a utilizable value, otherwise false
  */
 boolean hasT3FluidViewHelperUtilizableViewHelperType(MElement this) :
-	hasUtilizableValue( prT3FluidViewHelper(), prT3FluidViewHelperViewHelperType() );
+	emHasUtilizableTaggedValue( prT3FluidViewHelper(), prT3FluidViewHelperViewHelperType() );
 
 /**
  * Returns the value of the tagged value "viewHelperType"
@@ -79,7 +79,7 @@ boolean hasT3FluidViewHelperUtilizableViewHelperType(MElement this) :
  * @return the value of the tagged value
  */
 String getT3FluidViewHelperViewHelperType(MElement this) :
-	getTaggedValue( prT3FluidViewHelper(), prT3FluidViewHelperViewHelperType() );
+	emGetTaggedValue( prT3FluidViewHelper(), prT3FluidViewHelperViewHelperType() );
 
 /**
  * Sets the value of an existing the tagged value "viewHelperType"
@@ -102,5 +102,5 @@ Void setT3FluidViewHelperViewHelperType(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3FluidViewHelperPackageStereotype(MElement this) :
-	hasStereotype( prT3FluidViewHelperPackage() );
+	emHasStereotype( prT3FluidViewHelperPackage() );
 

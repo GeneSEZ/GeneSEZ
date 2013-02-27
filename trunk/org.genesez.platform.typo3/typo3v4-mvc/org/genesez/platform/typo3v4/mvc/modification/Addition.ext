@@ -31,10 +31,14 @@ extension org::genesez::platform::typo3v4::mvc::convention::NamingContext;
 
 // use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equal 
-extension org::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::typo3v4::mvc::util::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessHelper;
+
+// use common navigation scripts
+extension org::genesez::metamodel::core::util::ModelNavigation;
 
 // use common create template scripts
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
 extension org::genesez::platform::common::m2m::CopyElement;
 extension org::genesez::platform::common::m2m::MakeElement;
 extension org::genesez::platform::common::m2m::CreateTemplate;
@@ -104,7 +108,7 @@ addSingletonInterface(MClass this) :
 	// checks if the class has a stereotype 
 	hasT3SingletonStereotype()
 		// if true, then create the singleton interface
-		? realization.add( createExternal( model(), "T3_LIB_SINGLETON" ) )
+		? realization.add( createExternal( navModel(), "T3_LIB_SINGLETON" ) )
 		: Void;
 
 
@@ -127,7 +131,7 @@ Void injectConfigurationManagerType(MClass this) :
 	// checks if the configuration manager should be generated
 	getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() != prT3ExtbaseConfigurationManagerTypeNone()
 		// if true, then create the super controller type which is specified
-		? (	let a = makeInjectAttribute( "configurationManager", createExternal( model(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() ) ) :
+		? (	let a = makeInjectAttribute( "configurationManager", createExternal( navModel(), getT3ExtbaseDependencyInjectionInjectConfigurationManagerType() ) ) :
 				// add comment to discribe the attribute
 				a.makeComment("TYPO3 Extbase configuration manager") 
 		) : Void;
@@ -138,7 +142,7 @@ Void injectObjectManagerType(MClass this) :
 	// checks if the object manager should be generated
 	getT3ExtbaseDependencyInjectionInjectObjectManagerType() != prT3ExtbaseObjectManagerTypeNone()
 		// if true, then create the super controller type which is specified
-		? (	let a = makeInjectAttribute( "objectManager", createExternal( model(), getT3ExtbaseDependencyInjectionInjectObjectManagerType() ) ) :
+		? (	let a = makeInjectAttribute( "objectManager", createExternal( navModel(), getT3ExtbaseDependencyInjectionInjectObjectManagerType() ) ) :
 				// add comment to discribe the attribute
 				a.makeComment("TYPO3 Extbase object manager") 
 		) : Void;
@@ -149,7 +153,7 @@ Void injectPersistenceManagerType(MClass this) :
 	// checks if the persistence manager should be generated
 	getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() != prT3ExtbasePersistenceManagerTypeNone()
 		// if true, then create the super controller type which is specified
-		? (	let a = makeInjectAttribute( "persistenceManager", createExternal( model(), getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() ) ) :
+		? (	let a = makeInjectAttribute( "persistenceManager", createExternal( navModel(), getT3ExtbaseDependencyInjectionInjectPersistenceManagerType() ) ) :
 				// add comment to discribe the attribute
 				a.makeComment("TYPO3 Extbase persistence manager") 
 		) : Void;
@@ -167,7 +171,7 @@ private MAttribute makeInjectAttribute(MClass this, String name, MType dependenc
 		) ->
 		// add stereotype to mark this attribute as dependency injection
 		a.stereotype.add( 
-			let s = makeStereotype( model(), prDi(), prDi() ) :
+			let s = makeStereotype( navModel(), prDi(), prDi() ) :
 				a.makeTaggedValue( makeTag( s, prDiSetter(), "Boolean" ), "true" ) ->
 				s
 		) ->
@@ -203,7 +207,7 @@ cached MClass makeController(MClass domainObject) :
 	// checks if the controller doesn't already exists
 	( domainObject.hasT3ExtbaseDomainObjectCreateController("true") || domainObject.hasT3ExtbaseDomainObjectCreatePlugin("true") ) &&
 	!domainObject.existsController()
-		? (	let c = createClass( domainObject.model(), domainObject.xmiGuid + ".controller", domainObject.asControllerName() ) :
+		? (	let c = createClass( domainObject.navModel(), domainObject.xmiGuid + ".controller", domainObject.asControllerName() ) :
 				logTrace("create new controller class for domain object: " + domainObject.name) ->
 				c.processController(domainObject)
 		) : domainObject.model().allControllers().selectFirst( c | c.nameS() == domainObject.asControllerName() );
@@ -229,7 +233,7 @@ MClass processController(MClass this, MClass domainObject) :
 	addControllerDeleteAction(domainObject) ->
 	// add stereotype to mark this class as controller
 	stereotype.add( 
-		makeStereotype( model(), prT3ExtbaseController(), prT3ExtbaseController() ) 
+		makeStereotype( navModel(), prT3ExtbaseController(), prT3ExtbaseController() ) 
 	) ->
 	this;
 
@@ -248,15 +252,15 @@ Void addControllerType(MClass this) :
 					case controllerType == prT3ExtbaseControllerTypeNone() :
 						Void
 					case controllerType == prT3ExtbaseControllerTypeExtbaseControllerInterface() :
-						realization.add( createExternal( model(), controllerType ) )
+						realization.add( createExternal( navModel(), controllerType ) )
 					case generalization.isEmpty :
-						generalization.add( createExternal( model(), controllerType ) )
+						generalization.add( createExternal( navModel(), controllerType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( model(), prT3ExtbaseControllerTypeExtbaseActionController() ) )
+				? generalization.add( createExternal( navModel(), prT3ExtbaseControllerTypeExtbaseActionController() ) )
 				: Void
 		);
 
@@ -473,13 +477,13 @@ Void addEntityType(MClass this) :
 					case entityType == prT3ExtbaseEntityTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( model(), entityType ) )
+						generalization.add( createExternal( navModel(), entityType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( model(), prT3ExtbaseEntityTypeExtbaseAbstractEntity() ) )
+				? generalization.add( createExternal( navModel(), prT3ExtbaseEntityTypeExtbaseAbstractEntity() ) )
 				: Void
 		);
 
@@ -522,13 +526,13 @@ Void addValueObjectType(MClass this) :
 					case valueObjectType == prT3ExtbaseValueObjectTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( model(), valueObjectType ) )
+						generalization.add( createExternal( navModel(), valueObjectType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( model(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject() ) )
+				? generalization.add( createExternal( navModel(), prT3ExtbaseValueObjectTypeExtbaseAbstractValueObject() ) )
 				: Void 
 		);
 
@@ -555,10 +559,10 @@ cached MClass makeRepository(MClass domainObject) :
 	// checks if the respository doesn't already exists
 	( domainObject.hasT3ExtbaseDomainObjectCreateRepository("true") || domainObject.hasT3ExtbaseDomainObjectCreateController("true") ) &&
 	!domainObject.existsRepository()
-		? (	let c = createClass( domainObject.model(), domainObject.xmiGuid + ".repository", domainObject.asRepositoryName() ) :
+		? (	let c = createClass( domainObject.navModel(), domainObject.xmiGuid + ".repository", domainObject.asRepositoryName() ) :
 				logTrace("create new repository class for domain object: " + domainObject.name) ->
 				c.processRepository(domainObject)
-		) : domainObject.model().allRepositories().selectFirst( e | e.nameS() == domainObject.asRepositoryName() );
+		) : domainObject.navModel().allRepositories().selectFirst( e | e.nameS() == domainObject.asRepositoryName() );
 
 
 MClass processRepository(MClass this, MClass domainObject) :
@@ -590,13 +594,13 @@ Void addRepositoryType(MClass this) :
 					case repositoryType == prT3ExtbaseRepositoryTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( model(), repositoryType ) )
+						generalization.add( createExternal( navModel(), repositoryType ) )
 					default : Void
 				} 
 		) 
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( model(), prT3ExtbaseRepositoryTypeExtbaseRepository() ) )
+				? generalization.add( createExternal( navModel(), prT3ExtbaseRepositoryTypeExtbaseRepository() ) )
 				: Void 
 		);
 
@@ -641,23 +645,23 @@ cached MClass makeValidator(MClass domainObject) :
 	logTrace("call makeValidator for domain object: " + domainObject.name) ->
 	domainObject.hasT3ExtbaseDomainObjectCreateValidator("true") &&
 	!domainObject.existsValidator()
-		? (	let c = createClass( domainObject.model(), domainObject.xmiGuid + ".validator", domainObject.asValidatorName() ) :
+		? (	let c = createClass( domainObject.navModel(), domainObject.xmiGuid + ".validator", domainObject.asValidatorName() ) :
 				logTrace("create new validator class for domain object: " + domainObject.name) ->
 				c.processValidator()
-		) : domainObject.model().allValidators().selectFirst( e | e.nameS() == domainObject.asValidatorName() ); 	
+		) : domainObject.navModel().allValidators().selectFirst( e | e.nameS() == domainObject.asValidatorName() ); 	
 
 
 cached MClass makeValidator(MStereotype stereotype) :
 	logTrace("call makeValidator for stereotype: " + stereotype.name) ->
 	stereotype.isLocalValidator() &&
 	!stereotype.existsValidator() 
-		? (	let c = createClass(stereotype.model(), stereotype.xmiGuid + ".validator", stereotype.asValidatorName() ) :
+		? (	let c = createClass(stereotype.navModel(), stereotype.xmiGuid + ".validator", stereotype.asValidatorName() ) :
 				logTrace("create new validator class for stereotype: " + stereotype.name) ->
 				c.generalization.add(
 					makeValidatorGeneralization( stereotype.generalization.first() )
 				) ->
 				c.processValidator()
-		) : stereotype.model().allValidators().select( v | v.nameS() == stereotype.asValidatorName() ).first();
+		) : stereotype.navModel().allValidators().select( v | v.nameS() == stereotype.asValidatorName() ).first();
 
 
 MType makeValidatorGeneralization(MStereotype this) :
@@ -682,7 +686,7 @@ MClass processValidator(MClass this) :
 	addValidatorIsValid() ->
 	// add stereotype to mark this class as validator
 	stereotype.add( 
-		makeStereotype( model(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
+		makeStereotype( navModel(), prT3ExtbaseValidator(), prT3ExtbaseValidator() ) 
 	) ->
 	this;
 
@@ -701,17 +705,17 @@ Void addValidatorType(MClass this) :
 					case validatorType == prT3ExtbaseValidatorTypeNone() :
 						Void
 					case validatorType == prT3ExtbaseValidatorTypeExtbaseValidatorInterface() :
-						realization.add( createExternal( model(), validatorType ) )
+						realization.add( createExternal( navModel(), validatorType ) )
 					case validatorType == prT3ExtbaseValidatorTypeExtbaseObjectValidatorInterface() :
-						realization.add( createExternal( model(), validatorType ) )
+						realization.add( createExternal( navModel(), validatorType ) )
 					case generalization.isEmpty :
-						generalization.add( createExternal( model(), validatorType ) )
+						generalization.add( createExternal( navModel(), validatorType ) )
 					default : Void
 				}
 		)
 		// else create the default one
 		: ( generalization.isEmpty 
-				? generalization.add( createExternal( model(), prT3ExtbaseValidatorTypeExtbaseAbstractValidator() ) )
+				? generalization.add( createExternal( navModel(), prT3ExtbaseValidatorTypeExtbaseAbstractValidator() ) )
 				: Void 
 		);
 
@@ -752,10 +756,10 @@ cached MClass makePlugin(MClass domainObject) :
 	// checks if the plugin doesn't already exists
 	domainObject.hasT3ExtbaseDomainObjectCreatePlugin("true") &&
 	!domainObject.existsPlugin()
-		? (	let i = createInterface( domainObject.model(), domainObject.xmiGuid + ".plugin", domainObject.asPluginName() ) :
+		? (	let i = createInterface( domainObject.navModel(), domainObject.xmiGuid + ".plugin", domainObject.asPluginName() ) :
 				logTrace("create new plugin interface for domain object: " + domainObject.name) ->
 				i.processPlugin(domainObject)
-		) : domainObject.model().allPlugins().selectFirst( p | p.name() == domainObject.asPluginName() );
+		) : domainObject.navModel().allPlugins().selectFirst( p | p.name() == domainObject.asPluginName() );
 
 
 MInterface processPlugin(MInterface this, MClass domainObject) :
@@ -766,7 +770,7 @@ MInterface processPlugin(MInterface this, MClass domainObject) :
 	makeComment("Plugin for a domain object.") ->
 	// add stereotype to mark this interface as plugin
 	stereotype.add( 
-		let s = makeStereotype( model(), prT3ExtbasePlugin(), prT3ExtbasePlugin() ) :
+		let s = makeStereotype( navModel(), prT3ExtbasePlugin(), prT3ExtbasePlugin() ) :
 			makeTaggedValue( makeTag( s, prT3ExtbasePluginTitle(), "String" ), domainObject.asPluginName() ) ->
 			(	let controller = makeController(domainObject) :
 				( 	let controllerActionType = makeTag(s, prT3ExtbasePluginControllerActions(), "Operation") :
@@ -814,13 +818,13 @@ Void addViewHelperType(MClass this) :
 					case viewHelperType == prT3FluidViewHelperTypeNone() :
 						Void
 					case generalization.isEmpty :
-						generalization.add( createExternal( model(), viewHelperType ) )
+						generalization.add( createExternal( navModel(), viewHelperType ) )
 					default : Void
 				} 
 		) 
 		// else create the default one
 		: (	generalization.isEmpty 
-				? generalization.add( createExternal( model(), prT3FluidViewHelperTypeFluidAbstractViewHelper() ) )
+				? generalization.add( createExternal( navModel(), prT3FluidViewHelperTypeFluidAbstractViewHelper() ) )
 				: Void 
 		);
 
@@ -858,22 +862,22 @@ private String asPluginName(MClassifier domainElement) :
 
 private boolean existsController(MClass this) :
 	// checks if the controller doesn't already exists
-	!model().allControllers().select( c | c.nameS() == asControllerName() ).isEmpty;
+	!navModel().allControllers().select( c | c.nameS() == asControllerName() ).isEmpty;
 	
 
 private boolean existsRepository(MClass this) :
 	// checks if the respository doesn't already exists
-	!model().allRepositories().select( r | r.nameS() == asRepositoryName() ).isEmpty;
+	!navModel().allRepositories().select( r | r.nameS() == asRepositoryName() ).isEmpty;
 
 
 private boolean existsValidator(MClass this) :
 	// checks if the validator doesn't already exists
-	!model().allValidators().select( v | v.nameS() == asValidatorName() ).isEmpty;
+	!navModel().allValidators().select( v | v.nameS() == asValidatorName() ).isEmpty;
 
 private boolean existsValidator(MStereotype this) :
 	// checks if the validator doesn't already exists
-	!model().allValidators().select( v | v.nameS() == asValidatorName() ).isEmpty;
+	!navModel().allValidators().select( v | v.nameS() == asValidatorName() ).isEmpty;
 
 private boolean existsPlugin(MClass this) :
 	// checks if the plugin doesn't already exists
-	!model().allPlugins().select( p | p.asPluginName() == asPluginName() ).isEmpty;
+	!navModel().allPlugins().select( p | p.asPluginName() == asPluginName() ).isEmpty;
