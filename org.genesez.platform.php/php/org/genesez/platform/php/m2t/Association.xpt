@@ -106,7 +106,7 @@
 	@param	this	an association role
 «ENDREM»
 «DEFINE _Init FOR MAssociationRole -»
-«IF isMultiValued() || hasQualifier()» = array()«ENDIF -»
+«IF multiplicity.isMultiValued() || hasQualifier()» = array()«ENDIF -»
 «ENDDEFINE»
 
 
@@ -145,12 +145,12 @@ new «asAssociationManagementClassName()»($this, $this->«asAttribute()»«EXPA
 «ENDREM»
 «DEFINE _Opposite FOR MAssociationRole -»
 «IF hasOpposite() && !hasOppositeQualifier() -», '«opposite.asAssociation()»'«ENDIF -»
-«IF !hasOpposite() && hasQualifier() && isMultiValued() -», null«ENDIF -»
+«IF !hasOpposite() && hasQualifier() && multiplicity.isMultiValued() -», null«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	generates the 'toMany' parameter for the constructor of an association management object
 «ENDREM»
 «DEFINE _QualifiedMany FOR MAssociationRole -»
-«IF hasQualifier() && isMultiValued()», true«ENDIF -»
+«IF hasQualifier() && multiplicity.isMultiValued()», true«ENDIF -»
 «ENDDEFINE»

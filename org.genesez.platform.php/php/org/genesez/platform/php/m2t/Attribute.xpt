@@ -112,7 +112,7 @@
 «DEFINE _GetterApi FOR MAttribute -»
 	«EXPAND Comment::Getter -»
 	«EXPAND _ModifierAccessor -» function «asGetter()»() {
-	«IF isSingleValued() -»
+	«IF multiplicity.isSingleValued() -»
 		return $this->«asAttribute()»;
 	«ELSE -»
 		return array_values($this->«asAttribute()»);
@@ -125,7 +125,7 @@
 	note: only for single value types
 «ENDREM»
 «DEFINE _SetterApi FOR MAttribute -»
-«IF isSingleValued() -»
+«IF multiplicity.isSingleValued() -»
 	«EXPAND Comment::Setter -»
 	«IF type.isClassifier() || type.isExternalType() -»
 	«EXPAND _ModifierAccessor -» function «asSetter()»(«type.mapName().asTypeName().filterType()» $«name») {
@@ -141,7 +141,7 @@
 	generates the insert in method for an attribute with a collection type
 «ENDREM»
 «DEFINE _InsertIn FOR MAttribute -»
-«IF isMultiValued() -»
+«IF multiplicity.isMultiValued() -»
 	«EXPAND Comment::InsertIn -»
 	«EXPAND _ModifierAccessor -» function «asInsertIn()»($toAdd) {
 		$this->«asAttribute()»[] = $toAdd;
@@ -153,7 +153,7 @@
 	generates the remove from method for an attribute with a collection type
 «ENDREM»
 «DEFINE _RemoveFrom FOR MAttribute -»
-«IF isMultiValued() -»
+«IF multiplicity.isMultiValued() -»
 	«EXPAND Comment::RemoveFrom -»
 	«EXPAND _ModifierAccessor -» function «asRemoveFrom()»($toRemove) {
 		$entry = array_search($toRemove, $«asAttribute()»);
@@ -193,7 +193,7 @@
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
 «IF hasDefaultValue() -» = «defaultvalue -»
-«ELSEIF isMultiValued() -» = array()«ENDIF -»
+«ELSEIF multiplicity.isMultiValued() -» = array()«ENDIF -»
 «ENDDEFINE»
 
 «REM»
