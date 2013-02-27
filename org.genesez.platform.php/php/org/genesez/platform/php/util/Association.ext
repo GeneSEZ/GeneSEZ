@@ -9,6 +9,8 @@
 import gcore;
 
 extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::ModelNavigation;
+
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
 
 
@@ -23,23 +25,23 @@ MClassifier addAssociationIncludes(MClassifier this) :
 
 MAssociationRole checkMultiplicity(MAssociationRole this) :
 	hasQualifier()
-		? ( isQualifierSingleValued()
+		? ( qualifierMultiplicity.isSingleValued()
 			? classifier.supplier.add( makeSingleQualifiedAssociation() )
 			: classifier.supplier.add( makeMultiQualifiedAssociation() )
-		) : ( isSingleValued()
+		) : ( multiplicity.isSingleValued()
 			? classifier.supplier.add( makeOneAssociation() )
 			: classifier.supplier.add( makeManyAssociation() )
 		) ->
 	this;
 
 MExternal makeOneAssociation(MAssociationRole this) :
-	model().ensureExternalTypeExistence("UML_OneAssociation", "UML_OneAssociation");
+	navModel().ensureExternalTypeExistence("UML_OneAssociation", "UML_OneAssociation");
 
 MExternal makeManyAssociation(MAssociationRole this) :
-	model().ensureExternalTypeExistence("UML_ManyAssociation", "UML_ManyAssociation");
+	navModel().ensureExternalTypeExistence("UML_ManyAssociation", "UML_ManyAssociation");
 
 MExternal makeSingleQualifiedAssociation(MAssociationRole this) :
-	model().ensureExternalTypeExistence("UML_SingleQualifiedAssociation", "UML_SingleQualifiedAssociation");
+	navModel().ensureExternalTypeExistence("UML_SingleQualifiedAssociation", "UML_SingleQualifiedAssociation");
 
 MExternal makeMultiQualifiedAssociation(MAssociationRole this) :
-	model().ensureExternalTypeExistence("UML_MultiQualifiedAssociation", "UML_MultiQualifiedAssociation");
+	navModel().ensureExternalTypeExistence("UML_MultiQualifiedAssociation", "UML_MultiQualifiedAssociation");
