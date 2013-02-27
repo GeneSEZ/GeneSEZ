@@ -15,9 +15,9 @@
 // based on genesez meta model
 import gcore;
 
-extension org::genesez::metamodel::core::util::AccessHelper;
 extension org::genesez::metamodel::core::util::Conversion;
 extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::ModelNavigation;
 extension org::genesez::util::logging::Logging;
 
 /*
@@ -157,7 +157,7 @@ boolean fieldAccess() : GLOBALVAR fieldAccess == null ? true : GLOBALVAR fieldAc
  * getter for the 'base path' based on the 'base package'
  * @return	value of the base path
  */
-String basePath(MClassifier this) : package().basePath();
+String basePath(MClassifier this) : navPackage().basePath();
 
 /**
  * getter for the 'base path' based on the 'base package'
@@ -171,7 +171,7 @@ String basePath(MPackage this) : basePackage().replaceAll("\\.", "/");
  * which are configured in the workflow component
  * @return	the base package to use for code generation or an empty string
  */
-String basePackage(MClassifier this) : package().basePackage(); 
+String basePackage(MClassifier this) : navPackage().basePackage(); 
 
 /**
  * getter for the 'base package' which is used for generation
@@ -181,7 +181,7 @@ String basePackage(MClassifier this) : package().basePackage();
  */
 String basePackage(MPackage this) : 
 	useModelNameAsBasePackage()
-		? model().name
+		? navModel().name
 		: ( GLOBALVAR basePackage == null ? "" : GLOBALVAR basePackage );
 
 /**
