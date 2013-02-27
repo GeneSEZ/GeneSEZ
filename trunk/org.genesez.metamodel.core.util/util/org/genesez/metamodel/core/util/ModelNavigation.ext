@@ -23,36 +23,23 @@ extension org::genesez::util::logging::Logging;
 
 
 /**
+ * Returns the specified model element istself.
+ */
+MModel navModel(MModel this) :
+	this;
+
+/**
  * Returns the model element by using a package as starting point of navigation.
  */
 MModel navModel(MPackage this) :
-	metaType != MModel
-		? nestingPackage.navModel()
-		: this;
+	nestingPackage.navModel();
 
 
 /**
  * Returns the model element by using a classifier as starting point of navigation.
- * @todo: Check if this script is correct?
  */
 MModel navModel(MClassifier this) :
-	switch ( owningContext.metaType ) {
-		case MModel : ((MModel) owningContext)
-		case MPackage : ((MPackage) owningContext).navModel()
-		case MClassifier : ((MClassifier) owningContext).navModel()
-		// Void or null as return statement?
-		default : ( logFatal( "MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen." ) -> null )
-	};
-
-/*
-MModel navModel(MClassifier this) :
-	switch {
-		case MModel.isInstance(this) : ((MModel)owningContext)
-		case MPackage.isInstance(this) : ((MPackage)owningContext).navModel()
-		case MClassifier.isInstance(this) : ((MClassifier)owningContext).navModel()
-		default : (logFatal("MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen.") -> Void)
-	};
-*/
+	owningContext.navModel();
 
 
 /**
@@ -60,7 +47,6 @@ MModel navModel(MClassifier this) :
  */
 MModel navModel(MExternal this) :
 	model;
-
 
 
 /**
@@ -95,14 +81,18 @@ MModel navModel(MParameter this) :
 
 /**
  * Returns the model element by using a stereotype as starting point of navigation.
- * @todo: replace it because stereotype has a direct connection to model
  */
 MModel navModel(MStereotype this) :	
 	model;
 
 
+// -- Error Free Functions --
+
+
 /**
  * Returns the model element by using a type as starting point of navigation.
+ *
+ * @return	null
  */
 MModel navModel(MType this) :
 	logFatal( "Unable to determine MModel from MType. Please add your case to this function!" ) ->
@@ -111,47 +101,29 @@ MModel navModel(MType this) :
 
 /**
  * Returns the model element by using an element as starting point of navigation.
- * @todo: Check if commenting the following lines are correct.
+ *
+ * @return	null
  */
 MModel navModel(MElement this) :
 	logFatal( "Unable to determine MModel from MElement. Please add your case to this function!" ) ->
 	null;
-	//switch (this.metaType) {
-		//case MClassifier : ((MClassifier) this).model()
-		//case MOperation :  ((MOperation) this).model()
-		//case MParameter :  ((MParameter) this).operation.model()
-		//case MProperty :  ((MProperty) this).model()
-		//case MStereotype : ((MStereotype) this).model
-		//default : (logFatal("unable to determine MModel from MElement. Please add your case to this function!") -> Void)
-	//};
 
 
 // -- Navigation to Package Element -------------------------------------------------------------------------
 
 
 /**
+  * Returns the specified package element istself.
+ */
+MPackage navPackage(MPackage this) :
+	this;
+
+/**
  * Returns the package element by using a classifier as starting point of navigation.
  * @todo: Check if this script is correct?
  */
 MPackage navPackage(MClassifier this) :
-	switch ( owningContext.metaType ) {
-		// do we need the following line?
-		case MModel : ((MPackage) owningContext)
-		case MPackage : ((MPackage) owningContext)
-		case MClassifier : ((MClassifier) owningContext).navPackage()
-		// Void or null as return statement?
-		default : ( logFatal( "MDefinitionContext is neither MPackage nor MModel nor MClassifier. This should never happen." ) -> null )
-	};
-/*
-MPackage navPackage(MClassifier this) :
-	switch (owningContext.metaType) {
-		// do we need the following line?
-		case MModel : ((MPackage) owningContext)
-		case MPackage : ((MPackage) owningContext)
-		// what is with classifier in classifier
-		default : (logFatal("MDefinitionContext is neither MPackage nor MModel. This should never happen.") -> Void)
-	};
-*/
+	owningContext.navPackage();
 
 
 /**
@@ -179,3 +151,26 @@ MPackage navPackage(MOperation this) :
  */
 MPackage navPackage(MParameter this) :	
 	operation.navPackage();
+	
+
+// -- Error Free Functions --
+
+
+/**
+ * Returns the package element by using a type as starting point of navigation.
+ *
+ * @return	null
+ */
+MModel navPackage(MType this) :
+	logFatal( "Unable to determine MPackage from MType. Please add your case to this function!" ) ->
+	null;
+
+
+/**
+ * Returns the package element by using an element as starting point of navigation.
+ *
+ * @return	null
+ */
+MModel navPackage(MElement this) :
+	logFatal( "Unable to determine MPackage from MElement. Please add your case to this function!" ) ->
+	null;
