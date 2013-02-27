@@ -11,7 +11,7 @@ import gcore;
  * 
  * @author	tobias haubold <toh@fh-zwickau.de> (maintainer)
  */
-extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::ModelNavigation;
 extension org::genesez::metamodel::core::util::ExtensionMechanism;
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
@@ -41,16 +41,16 @@ MClassifier prAssignGeneSezAccessorStereotype(MClassifier this, boolean get, boo
  */
 private MElement prDoAssignGeneSezAccessorStereotype(MElement this, boolean get, boolean set, boolean add, boolean remove) :
 	ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorGetter() ), get.toString()
+		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorGetter() ), get.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorSetter() ), set.toString()
+		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorSetter() ), set.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorAdd() ), add.toString()
+		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorAdd() ), add.toString()
 	).owningElement
 	.ensureTaggedValueExistence(
-		model().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorRemove() ), remove.toString()
+		navModel().prEnsureGeneSezAccessorStereotype().property.selectFirst( p|p.name == prAccessorRemove() ), remove.toString()
 	).owningElement;
 
 /**
