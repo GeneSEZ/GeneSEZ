@@ -248,21 +248,23 @@ String asSingleQualifiedAssociationClassName() : "UML_SingleQualifiedAssociation
 String asMultiQualifiedAssociationClassName() : "UML_MultiQualifiedAssociation";
 String asAssociationManagementClassName(MAssociationRole this) :
 	hasQualifier()
-		? ( isQualifierSingleValued() ? asSingleQualifiedAssociationClassName() : asMultiQualifiedAssociationClassName() )
-		: ( isSingleValued() ? asOneAssociationClassName() : asManyAssociationClassName() );
+		? ( qualifierMultiplicity.isSingleValued() ? asSingleQualifiedAssociationClassName() : asMultiQualifiedAssociationClassName() )
+		: ( multiplicity.isSingleValued() ? asOneAssociationClassName() : asManyAssociationClassName() );
 String qualifier(MAssociationRole this) :
 	hasQualifier()
-		? ( isQualifierSingleValued() ? " single qualified" : " multi qualified" )
+		? ( qualifierMultiplicity.isSingleValued() ? " single qualified" : " multi qualified" )
 		: "";
+		
 String direction(MAssociationRole this) :
 	hasOpposite() ? "bidirectional" : "unidirectional";
+
 String type(MAssociationRole this) :
-	isSingleValued() && hasOpposite() && opposite.isSingleValued() ? "one to one" : (
-	isSingleValued() && hasOpposite() && opposite.isMultiValued() ? "many to one" : (
-	isMultiValued() && hasOpposite() && opposite.isSingleValued() ? "one to many" : (
-	isMultiValued() && hasOpposite() && opposite.isMultiValued() ? "many to many" : (
-	isSingleValued() ? "to one" : (
-	isMultiValued() ? "to many" : (
+	multiplicity.isSingleValued() && hasOpposite() && oppositeMultiplicity.isSingleValued() ? "one to one" : (
+	multiplicity.isSingleValued() && hasOpposite() && oppositeMultiplicity.isMultiValued() ? "many to one" : (
+	multiplicity.isMultiValued() && hasOpposite() && oppositeMultiplicity.isSingleValued() ? "one to many" : (
+	multiplicity.isMultiValued() && hasOpposite() && oppositeMultiplicity.isMultiValued() ? "many to many" : (
+	multiplicity.isSingleValued() ? "to one" : (
+	multiplicity.isMultiValued() ? "to many" : (
 	""))))));
 String symmetry(MAssociationRole this) :
 	hasOppositeQualifier() ? "symmetry not ensured, opposite is qualified" : "symmetry ensured";
