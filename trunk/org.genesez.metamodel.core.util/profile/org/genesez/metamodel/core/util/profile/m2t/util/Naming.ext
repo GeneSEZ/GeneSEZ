@@ -18,6 +18,7 @@ extension org::genesez::metamodel::core::util::profile::m2t::util::GlobalVar;
 
 // -- Script name conventions for classifiers ---------------------------------------------------------------
 
+
 private String asScriptName(MClass this) :
 	name.replaceFirst(globalVarStereotypeNamePrefix(), "").toFirstUpper();
 	
@@ -32,6 +33,7 @@ private String asScriptName(MClassifier this) :
 
 // -- Script name conventions for attributes and literals ---------------------------------------------------
 
+
 private String asScriptName(MAttribute this) : 
 	name.toFirstUpper();
 
@@ -41,6 +43,7 @@ private String asScriptName(MLiteral this) :
 	
 
 // -- Script name conventions for profile -------------------------------------------------------------------
+
 
 String asProfileScriptName(MClassifier this) :
 	"pr" + asScriptName();
@@ -56,29 +59,30 @@ String asProfileScriptName(MLiteral this) :
 
 // -- Script name conventions for access helper -------------------------------------------------------------
 
+
 String asAccessHelperHasStereotype(MClassifier this) :
-	"prHas" + asScriptName() + "Stereotype";
+	"emHas" + asScriptName() + "Stereotype";
 
 
 String asAccessHelperHasTaggedValue(MClassifier this) :
-	"prHas" + asScriptName() + "TaggedValue";
+	"emHas" + asScriptName() + "TaggedValue";
 
 
 String asAccessHelperHasTaggedValue(MAttribute this) :
-	"prHas" + classifier.asScriptName() + asScriptName();
+	"emHas" + classifier.asScriptName() + asScriptName();
 	
 
 String asAccessHelperHasUtilizableTaggedValue(MAttribute this) :
-	"prHas" + classifier.asScriptName() + "Utilizable" + asScriptName();
+	"emHas" + classifier.asScriptName() + "Utilizable" + asScriptName();
 
 
 String asAccessHelperGetTaggedValue(MAttribute this) :
-	"prGet" + classifier.asScriptName() + asScriptName();
+	"emGet" + classifier.asScriptName() + asScriptName();
 
 
 String asAccessHelperSetTaggedValue(MAttribute this) :
-	"prSet" + classifier.asScriptName() + asScriptName();
+	"emSet" + classifier.asScriptName() + asScriptName();
 	
 	
 String asAccessHelperIsTaggedValue(MAttribute this, MLiteral l) :
-	"psIs" + classifier.asScriptName() + asScriptName() + l.asScriptName();
+	"emIs" + classifier.asScriptName() + asScriptName() + l.asScriptName();
