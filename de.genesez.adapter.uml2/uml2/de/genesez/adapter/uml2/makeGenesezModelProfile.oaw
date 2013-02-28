@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 
+		just a bunch of workflow components to
+		- instantiate an uml2 model
+		- transform the model from uml2 meta model to genesez meta model
+		  (with uml2 profile support)
+		
+		@deprecated		use the Java class {@link de.genesez.platforms.common.Uml2GeneSEZ} instead
+		
+		following parameters are required:
+		==================================
+		
+		$inputModelFile		name of the uml2 file
+		$uml2ProfileFile	name of the uml2 profile file
+		$genesezModel		name of the slot which holds the genesez model
+		$excludePackages	comma or comma blank [, ] separated list of package names to exclude from transformation
+		$mapClassesInModelToExternal	boolean indicating if all classes contained in the model are
+										transformed to external classes instead of classifiers
+		$externalPackages	comma or comma blank [, ] separated list of package names which are used as container
+							for external classes (therefor are not transformed to genesez packages)
+		$externalStereotypes	comma or comma blank [, ] separated list of names of stereotypes which are applied 
+								to packages	or classes, indicating that the package is a container for external classes
+								or the classes are external classes
+	 -->
+	
+	
+	<!-- reading + instantiating the uml2 model -->
+	<cartridge
+		file = "de::genesez::platforms::common::workflow::xmiReader.oaw"
+		inputModelFile = "${inputModelFile}"
+		modelSlot = "uml2model"
+	/>
+	
+	<!-- transform model from uml2 meta model to genesez meta model with uml2 profile support -->
+	<cartridge
+		file = "de::genesez::adapter::uml2::uml2genesezProfile.oaw"
+		uml2Model = "uml2model"
+		uml2ProfileFile = "${uml2ProfileFile}"
+		genesezModel = "${genesezModel}"
+		excludePackages = "${excludePackages}"
+		excludeStereotypes="${excludeStereotypes}"
+		mapClassesInModelToExternal = "${mapClassesInModelToExternal}"
+		externalPackages = "${externalPackages}"
+		externalStereotypes = "${externalStereotypes}"
+	/>
+	
+</workflow>

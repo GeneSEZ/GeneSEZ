@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 
+		performs model modifications on genesez models
+		
+		following parameters are required:
+		==================================
+		
+		$invokeScript	the root ext-file where the transformation starts
+		$configFile		xml file for configuration settings
+	 -->
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="gcore" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="de.genesez.metamodel.gcore.GcorePackage" />
+	</bean>
+	<!-- bean id="gcore" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="gcore" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="gcore.ecore" />
+	</bean -->
+	
+	
+	<component id="performMM" class="oaw.xtend.XtendComponent">
+		
+		<metaModel idRef="gcore" />
+		
+		<!-- make config file accessible as global variable -->
+		<globalVarDef name="configFile" value="'${configFile}'"/>
+		
+		<!-- Run the model to model transformation itself. -->
+		<invoke	value="${invokeScript}" />
+		
+		<!-- boolean which indicates if old or new association handling is used -->
+		<globalVarDef name="newAssociationHandling" value="${newAssociationHandling}"/>
+		
+		<!-- boolean which indicates if field or property access is used -->
+		<globalVarDef name="fieldAccess" value="${fieldAccess}"/>
+		
+		<!-- vars for the accessor stereotype -->
+		<globalVarDef name="disableAccessors" value="${disableAccessors}"/>
+		<globalVarDef name="useAccessorStereotype" value="${useAccessorStereotype}"/>
+		<globalVarDef name="usePropertyVisibilityForAccessors" value="${usePropertyVisibilityForAccessors}"/>
+	</component>
+
+</workflow>

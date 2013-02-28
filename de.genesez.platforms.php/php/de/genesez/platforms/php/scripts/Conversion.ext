@@ -1,0 +1,34 @@
+/**
+ * Helper functions for PHP specific conversions for easier code generation
+ * 
+ * Adopted version of the {@link de::genesez::platforms::common::Conversion} for the php platform
+ * 
+ * @author	tobias haubold
+ * @date	2007-12-11
+ * @see		de::genesez::platforms::common::Conversion
+ */
+
+// based on genesez meta model
+import gcore;
+
+// based on the common conversion scripts
+extension de::genesez::platforms::common::Conversion reexport;
+extension de::genesez::platforms::php::scripts::Naming;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the package declaration, adopted version for php artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String)
+ */
+String packageDeclaration(MClassifier this) : 
+	packageDeclaration( "" );
+
+/**
+ * getter for the package declaration, adopted version for php artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String, String)
+ */
+String packageDeclaration(MClassifier this, String base) : 
+	package().fullQualifiedNameSep( base, fqnSeparator() );

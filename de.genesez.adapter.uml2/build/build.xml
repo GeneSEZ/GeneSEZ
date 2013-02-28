@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.adapter.uml2" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+
+	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+
+	<!-- Import project related properties -->
+	<property file="build/build.properties" />
+
+	<!-- Set the classpath -->
+	<path id="de.genesez.adapter.uml2.classpath">
+		<pathelement path="${build.basedir}/de.genesez.platforms.common/${bin.dir}" />
+		<path refid="Plug-in Dependencies.libraryclasspath"/>
+	</path>
+	
+	<!-- Public target section -->
+
+	<target name="build"
+		description="Build de.genesez.adapter.uml2"
+		depends="adapter.uml2.compile">
+	</target>
+
+	<target name="createjar"
+		description="Create the plugin jar for de.genesez.adapter.uml2"
+		depends="build">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${bin.dir}" includes="**/*" />
+			<fileset dir="${uml2.dir}" includes="**/*" />
+		</jar>
+	</target>
+	
+	<target name="clean"
+		description="Clean de.genesez.adapter.uml2">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${dist.dir}" includes="*.jar" />
+		</delete>
+	</target>
+
+	<!-- Private target section -->
+
+	<target name="adapter.uml2.compile">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" destdir="${bin.dir}"
+			classpathref="de.genesez.adapter.uml2.classpath"
+			target="${target}"
+			source="${source}"
+			debug="on" />
+	</target>
+	
+</project>

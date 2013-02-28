@@ -1,0 +1,45 @@
+/**
+ * php specific access helper
+ * 
+ * @author	tobias haubold
+ * @date	2008-05-05
+ */
+
+//	based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper reexport;
+extension de::genesez::platforms::common::log::Log;
+
+
+/**
+ * getter for the operations
+ * if operations have the same name, the one with the most parameter count is choosen
+ * @return	list of operations with unique names
+ */
+Collection[MOperation] operations(MClassifier this) :
+	{}.addAll(
+		// add all operations with unique names
+		operation.select( o| !operation.exists( e| e.name == o.name && e != o) )
+	).addAll(
+		operation.select( o| operation.exists( e| e.name == o.name && e != o )
+			// add the operation with the most parameter count
+			? operation.select( e| e.name == o.name ).sortBy(e|e.parameter.size * -1).get(0) == o
+			: false
+		)
+	);
+
+/**
+ * checks if an operation is a constructor method of a classifier or not
+ * - check UML, PHP4 and PHP5 notation of a constructor method
+ * @return	true, if the operation is a constructor method, otherwise false
+ */
+boolean isConstructor(MOperation this) :
+	hasStereotype("create") || classifier.name == name || name == "__construct";
+
+/**
+ * checks if an operation is a destructor method of a classifier or not
+ * @return	true, if the operation is a destructor method, otherwise false
+ */
+boolean isDestructor(MOperation this) :
+	name.startsWith("~") || name == "__destruct";

@@ -1,0 +1,164 @@
+«REM»
+	Performs the generation of java5 annotations
+	
+	@author nancy doerfel (last)
+	@date	2010-05-31
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful support functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use java naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«REM» use java conversions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::java5::scripts::Helper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes an java annotation
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+package «packageDeclaration( basePackage() ) -»;
+«EXPAND Import::Import -»   
+«EXPAND Comment::Type -»
+«EXPAND _Annotation-»
+public @interface «name() -» {
+	
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+	// -- generated attribute, constant + association declarations ----------
+	«ENDIF -»
+	«EXPAND _AttributeDeclaration -»
+	
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
+	// -- generated method declarations -------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Declaration -»
+	
+	«IF generateSectionComments() && ( hasAssociationRoles() ) -»
+	// -- generated association accessors -----------------------------------
+	«ENDIF -»
+	«EXPAND Attribute::Derived -»
+	«EXPAND Association::Accessors -»
+	
+	// -- generated code of other cartridges --------------------------------
+	«EXPAND _Extension-»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.annotation.own.code.declaration." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+«REM»
+	this define block can be used by other cartridges to add some generation code
+«ENDREM»
+«DEFINE _Extension FOR MInterface-»
+«ENDDEFINE»
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MInterface-»
+    «EXPAND Element::JavaAnnotation FOR this»
+    «EXPAND _java5Annotation-»
+    «EXPAND _java5Inherited-»
+«ENDDEFINE»
+
+
+«REM»
+    will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+    «IF hasStereotype(java5AnnotationStereotype())-»
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "retention")-»
+            import java.lang.annotation.Retention;               
+            import static java.lang.annotation.RetentionPolicy.«getTaggedValue(java5AnnotationStereotype(), "retention")-»;                       
+        «ENDIF-»           
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
+            import java.lang.annotation.Target;           
+            «FOREACH getTaggedValue(java5AnnotationStereotype(), "target").getElements() AS name SEPARATOR ","»
+                import static java.lang.annotation.ElementType.«name-»;                       
+            «ENDFOREACH»
+        «ENDIF-»
+    «ENDIF»  
+    «IF hasStereotype("java5Inherited")-»
+        import java.lang.annotation.Inherited;
+    «ENDIF»  
+«ENDDEFINE»
+
+«REM» 
+    evaluates the stereotype "java5Annotation"
+«ENDREM»
+
+«DEFINE _java5Annotation FOR MInterface-»
+    «IF hasStereotype(java5AnnotationStereotype())-»
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "target")-»
+            @Target({«FOREACH getTaggedValue(java5AnnotationStereotype(), "target").getElements() AS name SEPARATOR ","-» «name-» «ENDFOREACH-»})
+        «ENDIF-»
+        «IF hasUtilizableValue(java5AnnotationStereotype(), "retention")-»
+            @Retention(«getTaggedValue(java5AnnotationStereotype(), "retention")-»)
+        «ENDIF»         
+    «ENDIF»
+«ENDDEFINE»
+
+«REM» 
+    evaluates the stereotype "java5Inherited"
+«ENDREM»
+
+«DEFINE _java5Inherited FOR MInterface-»
+    «IF hasStereotype("java5Inherited")-»
+       @Inherited
+    «ENDIF»
+«ENDDEFINE»
+
+«REM»
+    processes all attributes
+    
+    for interfaces, all attributes are treated as 'public', 'static' and 'final'
+    for classifiers the attributes are ordered: static final, static, non static
+«ENDREM»
+«DEFINE _AttributeDeclaration FOR MClassifier -»
+    «EXPAND _ConvertToMethodDeclaration FOREACH property.typeSelect(MAttribute) -»
+«ENDDEFINE»
+
+«REM»
+    generates an annotation method declaration from an MAttribute
+        
+    public static final String value = "1000";
+    String value() default "1000"; 
+    
+«ENDREM»
+«DEFINE _ConvertToMethodDeclaration FOR MAttribute -»
+    «EXPAND Comment::Attribute-»
+    «IF isSingleValuedType()-»
+        «type.mapName().asTypeName()» «asAttribute()»() «EXPAND _DefaultValue -»;
+    «ELSE»
+        «EXPAND Type::MultiValuedType -» «asAttribute()»() «EXPAND _DefaultValue -»;
+    «ENDIF»
+«ENDDEFINE»
+
+«REM»
+    processes the default value of an attribute
+    for non-final, multi-valued attributes, a default is always generated (for type safety)
+    final multi-valued attributes should be initialized within the constructor
+    
+    note: this is not valid java code: ' = new ArrayList<String>[3];'
+«ENDREM»
+«DEFINE _DefaultValue FOR MAttribute -»
+«IF hasDefaultValue() -»
+    «IF type.isEnumeration() -»
+     default «type.mapName().asTypeName()».«defaultvalue.asEnumLiteral() -»
+    «ELSE -»
+     default «defaultvalue -»
+    «ENDIF -»
+«ENDIF -»
+«ENDDEFINE»

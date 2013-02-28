@@ -1,0 +1,55 @@
+/**
+ * GeneSEZ QF-Test generator script.
+ */
+
+// uses GeneSEZ testing metamodel - the source metamodel
+import gtesting;
+
+// use logging
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::qftest::scripts::Helper;
+extension de::genesez::platforms::qftest::scripts::Steps;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	parameters passed to the transformation
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * the model is passed in as a global variable
+ * @return	the testing model
+ */
+private TModel getTestingModel() : (TModel) GLOBALVAR testingmodel;
+
+private String getOutputDirectory(): (String) GLOBALVAR outputdir;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend function to transform a uml2 model
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ *
+ */
+Void transform(TModel t) :
+	trace("transforming " + t.metaType + ", " + t.name) ->
+	t.nestedPackages.transform();
+
+/**
+ *
+ */
+Void transform(TPackage t) :
+	trace("transforming " + t.metaType + ", " + t.name) ->
+	t.nestedPackages.transform() ->
+	t.testsuites.transform();
+
+/**
+ *
+ */
+Void transform(TTestSuite t) :
+	trace("transforming " + t.metaType + ", " + t.name) ->
+	t.openFile( getOutputDirectory() ) ->
+	t.rootStep() ->
+	t.saveFile( getOutputDirectory() );

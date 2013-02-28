@@ -1,0 +1,111 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>New and Noteworthy for openArchitectureWare 4.3.1</title><link rel="stylesheet" href="../book.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="openArchitectureWare User Guide"><link rel="up" href="appendix.html" title="Part&nbsp;IV.&nbsp;Appendix"><link rel="prev" href="javadoc/overview-summary.html" title="API documentation"><link rel="next" href="whatsnew43.html" title="New and Noteworthy for openArchitectureWare 4.3"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="whatsnew431"></a>New and Noteworthy for openArchitectureWare 4.3.1</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="whatsnew431.html#graphviz_addition">Integration with the Graphviz visualization toolkit
+		</a></span></dt><dt><span class="section"><a href="whatsnew431.html#refactoring_addition">
+			Refactoring support for
+			<span class="emphasis"><em>Xpand</em></span>
+			and
+			<span class="emphasis"><em>Xtend</em></span>
+		</a></span></dt><dt><span class="section"><a href="whatsnew431.html#xsd_adapter_addition">XSD Adapter</a></span></dt><dt><span class="section"><a href="whatsnew431.html#outline_improvement">Improved editor outlines</a></span></dt><dt><span class="section"><a href="whatsnew431.html#release_stats">Release statistics</a></span></dt><dt><span class="section"><a href="whatsnew431.html#migration">Migration</a></span></dt></dl></div><p> openArchitectureWare 4.3.1 is mainly a bugfix release. We have
+		fixed over 90 bugs with a lot of help by active community members.
+	</p><p> In addition to the bug fixes, the following major improvements
+		should be especially mentioned: </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="graphviz_addition"></a>Integration with the Graphviz visualization toolkit
+		</h2></div></div></div><p> This new component provides a DSL for quickly creating Graphviz
+			diagrams: </p><div class="figure"><a name="screenshot_visualization"></a><p class="title"><b>Figure&nbsp;77.&nbsp;Graphviz integration</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/whatsnew/screenshot_visualization.png" alt="Graphviz integration"></div></div></div><br class="figure-break"><p>
+			The component also allows to transform any models handled by
+			<span class="emphasis"><em>openArchitectureWare</em></span>
+			into diagrams.
+		</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="refactoring_addition"></a>
+			Refactoring support for
+			<span class="emphasis"><em>Xpand</em></span>
+			and
+			<span class="emphasis"><em>Xtend</em></span>
+		</h2></div></div></div><p>
+			The editors for
+			<span class="emphasis"><em>Xtend</em></span>
+			and
+			<span class="emphasis"><em> Xpand</em></span>
+			editors now have refactoring support. For example, extensions and
+			template definitions can be moved, renamed, and extracted
+		</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xsd_adapter_addition"></a>XSD Adapter</h2></div></div></div><p>This is a component which allows oAW to transparently use
+			XML Schemas (XSD) as meta models and read/write XML files as models.
+		</p><p>
+			<a href="whatsnew431.html#whatsnew431_xsd_xml2text" title="Figure&nbsp;78.&nbsp;Example XML to Text Transformation">Figure&nbsp;78, &#8220;Example XML to Text Transformation&#8221;</a>
+			shows how a meta model can be specified using XML Schema (
+			<code class="classname">metamodel.xsd</code>
+			) and how an XML file (
+			<code class="classname">model.xml</code>
+			), which is an instance of this XML Schema (XSD), is used as model.
+			In this example, text is generated from the model using an Xpand
+			model to text transformation. The Xpand editor is aware of the XSD
+			and therefore provides static type checking and code completion based
+			on the XSD. The workflow ties all together: The
+			<code class="classname"> XMLReader </code>
+			(see
+			<a href="xsd_reference.html#xsd_reference_workflow_components_xmlreader" title="XMLReader">the section called &#8220;
+        <code class="classname">XMLReader</code>
+      &#8221;</a>
+			) reads the XML file and accesses the XSD using an
+			<code class="classname">XSDMetaModel</code>
+			(see
+			<a href="xsd_reference.html#xsd_reference_workflow_components_xsdmetamodel" title="XSDMetaModel">the section called &#8220;
+        <code class="classname">XSDMetaModel</code>
+      &#8221;</a>
+			) , which transparently transforms the XSD to an Ecore model in the
+			background (see
+			<a href="xsd_reference.html#xsd_reference_xsd2ecore" title="Behind the scenes: Transforming XSD to Ecore">the section called &#8220;Behind the scenes: Transforming XSD to Ecore&#8221;</a>
+			). After reading the model, text is generated using a usual Xpand
+			template.
+		</p><div class="figure"><a name="whatsnew431_xsd_xml2text"></a><p class="title"><b>Figure&nbsp;78.&nbsp;Example XML to Text Transformation</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/whatsnew/xsd_xml2text.png" alt="Example XML to Text Transformation"></div></div></div><br class="figure-break"><p>
+			Despite of reading XML files as models, models can also be written as
+			XML files.
+			<a href="whatsnew431.html#whatsnew431_xsd_xml2xml" title="Figure&nbsp;79.&nbsp;Example XML to XML Transformation">Figure&nbsp;79, &#8220;Example XML to XML Transformation&#8221;</a>
+			shows how the
+			<code class="classname"> XMLReader </code>
+			(see
+			<a href="xsd_reference.html#xsd_reference_workflow_components_xmlreader" title="XMLReader">the section called &#8220;
+        <code class="classname">XMLReader</code>
+      &#8221;</a>
+			) reads an XML file based on a custom XSD, an Xtend model to model
+			transformation is used to transform this an SVG (Scalable Vector
+			Graphics) based model, which is then serialized to XML using the
+			<code class="classname"> XMLWriter </code>
+			(see
+			<a href="xsd_reference.html#xsd_reference_workflow_components_xmlwriter" title="XMLWriter">the section called &#8220;
+        <code class="classname">XMLWriter</code>
+      &#8221;</a>
+			) . Linke in the Xpand scenario above, the Xtend editor is aware of
+			both the custom and the SVG-XSD and therefore provides static type
+			checking and code completion. Any model that can be processed using
+			oAW can be transformed to an XSD based one. Until now, creating XML
+			files had to be done via a model to text transformation via Xpand.
+			This approach guarantees that the created XML is valid to it's schema
+			and beautified (can be deactivated). Furthermore there is the
+			convenience of an output format aware editor.
+		</p><div class="figure"><a name="whatsnew431_xsd_xml2xml"></a><p class="title"><b>Figure&nbsp;79.&nbsp;Example XML to XML Transformation</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/whatsnew/xsd_xml2xml.png" alt="Example XML to XML Transformation"></div></div></div><br class="figure-break"><p>
+			To get started, check out the examples that come with oAW. They are
+			accessible under
+			<span class="emphasis"><em>File</em></span>
+			,
+			<span class="emphasis"><em>New...</em></span>
+			,
+			<span class="emphasis"><em>Examples</em></span>
+			.
+		</p><div class="figure"><a name="whatsnew431_xsd_examples"></a><p class="title"><b>Figure&nbsp;80.&nbsp;XSD Examples</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/whatsnew/xsd_examples.png" alt="XSD Examples"></div></div></div><br class="figure-break"></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="outline_improvement"></a>Improved editor outlines</h2></div></div></div><p>
+			The outline views of the various editors that come with
+			<span class="emphasis"><em> openArchitectureWare</em></span>
+			have been improved and work much more reliably now.
+		</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="release_stats"></a>Release statistics</h2></div></div></div><p>
+			The list of bugs fixed during the last release can be found here:
+			<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://tinyurl.com/6kc9uu" target="_top">http://tinyurl.com/6kc9uu</a>
+		</p><p>
+			The list of known issues can be found at:
+			<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://tinyurl.com/5rm28b" target="_top">http://tinyurl.com/5rm28b</a>
+		</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="migration"></a>Migration</h2></div></div></div><p>
+			A migration guide for migrating Xtext 4.2 projects to Xtext 4.3
+			projects can be found in the reference documentation at
+			<span class="emphasis"><em>
+				<a href="xtext_reference.html#xtext_reference_migration" title="Migrating from a prior version to Xtext 4.3.1">Migrating from Xtext 4.2 to Xtext 4.3</a>
+				.
+			</em></span>
+		</p></div></div></body></html>
