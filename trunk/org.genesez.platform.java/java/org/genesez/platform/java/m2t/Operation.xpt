@@ -345,40 +345,6 @@
 «ENDREM»
 
 «REM»
-	generates the body of an operation with a default return statement and a region for own code implementations
-	distincts the multi-valued return type
-	@deprecated		replaced by {@link _ImplmentationBody} + {@link _ConstructorBody}
-«ENDREM»
-«DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation -»
-	«IF hasReturn() -»
-		«IF return.multiplicity.isSingleValued() -»
-			«getReturnTypeDeclaration(return.type.mapName().asTypeName())»
-		«ELSE -»
-			«EXPAND Type::MultiValuedType(return.multiplicity, return.type) -» returnValue = null;
-		«ENDIF -»
-	«ENDIF -»
-	«EXPAND _OwnCodeImpl("java.implementation." + xmiGuid) -»
-	«getReturnTypeReturn(return.type.mapName().asTypeName())»
-«ENDDEFINE»
-
-«REM»
-	generates the protected region of an operation
-	@param	id	protected region id
-	@deprecated
-«ENDREM»
-«DEFINE _OwnCodeImpl(String id) FOR MOperation -»
-	«IF isConstructor() -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
-		«ENDPROTECT»
-	«ELSE -»
-		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
-		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
-		«ENDPROTECT»
-	«ENDIF -»
-«ENDDEFINE»
-
-«REM»
 	generates synchronized key word using UML CallConcurrencyKind
 «ENDREM»
 «DEFINE _Concurrent FOR MOperation -»
