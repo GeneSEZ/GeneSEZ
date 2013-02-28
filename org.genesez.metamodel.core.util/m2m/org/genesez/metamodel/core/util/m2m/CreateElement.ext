@@ -454,6 +454,13 @@ create MComment createComment(MComment container, String xmiGuid, String annotat
 
 
 /**
+ * Creates a multiplicity object with the specified settings, unique = true and ordered = false (uml standard).
+ * @return	multiplicity settings without containment.
+ */
+MMultiplicity createMultiplicity(Integer lowerBoundMultiplicity, Integer upperBoundMultiplicity) :
+	createMultiplicity( lowerBoundMultiplicity, upperBoundMultiplicity, true, false );
+
+/**
  * Creates a multiplicity object with the specified settings.
  * @return	multiplicity settings without containment.
  */
@@ -588,6 +595,17 @@ create MTaggedValue createTaggedValue(MElement container, MTag tag, MElement val
 	this;
 
 
+/**
+ * Assigns the specified stereotype to the specified model element if not already assigned.
+ * 
+ * @return	The specified model element.
+ */
+MElement ensureStereotypeAssignment(MElement this, MStereotype stereotype) :
+	!this.stereotype.contains( stereotype )
+		? ( this.stereotype.add( stereotype ) -> this )
+		: this;
+
+
 // -- Private Functionality ---------------------------------------------------------------------------------
 
 
@@ -601,14 +619,3 @@ private MElement setBasicProperties(MElement this, String xmiGuid, String name) 
 	setXmiGuid( xmiGuid ) ->
 	setName( name ) ->
 	this;
-
-	
-/**
- * Assigns the specified stereotype to the specified model element if not already assigned.
- * 
- * @return	The specified model element.
- */
-private MElement ensureStereotypeAssignment(MElement this, MStereotype stereotype) :
-	!this.stereotype.contains( stereotype )
-		? ( this.stereotype.add( stereotype ) -> this )
-		: this;
