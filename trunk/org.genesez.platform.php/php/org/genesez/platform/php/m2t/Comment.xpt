@@ -18,6 +18,7 @@
 
 «REM» use helper to access information «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::ModelNavigation»
 «REM» useful helper for current user + timestamp «ENDREM»
 «EXTENSION org::genesez::util::sysenv::DateTimeHelper»
 «EXTENSION org::genesez::util::sysenv::UserInfoHelper»
@@ -53,7 +54,7 @@
 «DEFINE Type FOR MClassifier -»
 /**
 «IF hasComment() -»
-«comment().format() -»
+«formatCommentAsterix() -»
 «ENDIF -»
 «EXPAND _Supertypes -»
  * @author	«getUserAccountName()»
@@ -65,7 +66,7 @@
 	generates the @package declaration
 «ENDREM»
 «DEFINE PackageDeclaration FOR MClassifier -»
-«LET model().name AS p -»
+«LET navModel().name AS p -»
 «IF p.length > 0 -»
  * @package	«p»
 «ENDIF -»
@@ -142,7 +143,7 @@
 «DEFINE Getter FOR MAttribute -»
 	/**
 	«IF hasComment() -»
-	«comment().format() -»
+	«formatCommentAsterix() -»
 	«ELSE -»
 	 * getter method of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
 	«ENDIF -»
@@ -232,7 +233,7 @@
 «DEFINE Getter FOR MAssociationRole -»
 	/**
 	«IF hasComment() -»
-	«comment().format()»
+	«formatCommentAsterix() -»
 	«ELSE -»
 	 * getter method of the «IF derived»derived «ENDIF»association attribute «EXPAND _PropertyName»
 	«ENDIF -»
@@ -267,7 +268,7 @@
 «DEFINE Operation FOR MOperation -»
 	/**
 	«IF hasComment() -»
-«comment().format("	 * ", "\n") -»
+«formatComment("	 * ", "\n") -»
 	«ELSE -»
 	 * @generated	method stub for implementation
 	«ENDIF -»
@@ -285,7 +286,7 @@
 «DEFINE Constructor FOR MOperation -»
 	/**
 	«IF hasComment() -»
-«comment().format("	 * ", "\n") -»
+«formatComment("	 * ", "\n") -»
 	«ELSE -»
 	 * @generated	constructs an object of class {@link «classifier.asTypeName()»}
 	«ENDIF -»
@@ -302,7 +303,7 @@
 «DEFINE Destructor FOR MOperation -»
 	/**
 	«IF hasComment() -»
-«comment().format("	 * ", "\n") -»
+«formatComment("	 * ", "\n") -»
 	«ELSE -»
 	 * @generated	destructor for the class {@link «classifier.asTypeName()»}
 	«ENDIF -»
@@ -447,7 +448,7 @@
 «ENDREM»
 «DEFINE _ParameterComment FOR MParameter -»
 «IF hasComment() -»
-«comment().format("", "")»
+«formatComment("", "")»
 «ELSE -»
 «IF multiplicity.isMultiValued() -»array of type '«type.mapName().asTypeName() -»'«ENDIF -»
 «IF multiplicity.isMultiValued() && hasDefaultValue() -», «ENDIF -»
