@@ -1,17 +1,18 @@
 «IMPORT gcore»
 
-«EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::util::sysenv::UserInfoHelper»
-«EXTENSION org::genesez::util::sysenv::DateTimeHelper»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::UserInfoHelper»
+«EXTENSION org::genesez::platform::common::DateHelper»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
 
 «EXTENSION org::genesez::platform::cpp::scripts::Naming»
 «EXTENSION org::genesez::platform::cpp::helper::PackageHelper»
 
-«DEFINE FileComment(String fileExt) FOR MClassifier»
+«DEFINE fileComment(String fileExt) FOR MClassifier»
 /*!
  * «name».«fileExt»
- * Author:  «getUserAccountName()»
+ * Author:  «getUserName()»
  * Created: «getTimeStamp()»
  */ 
 «ENDDEFINE»
@@ -45,4 +46,12 @@
 «ENDDEFINE»
 
 «DEFINE Type FOR MClassifier»
+«REM»
+/**
+«IF hasComment() »
+ * «getCommentText(ownedComment()) »
+«ENDIF -»
+ * @author	«getUserName() »
+ */
+«ENDREM» 
 «ENDDEFINE»

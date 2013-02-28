@@ -10,7 +10,6 @@ import org.genesez.platform.common.workflow.DefaultGenerator;
 /**
  * Performs model to text transformations for the .net platform and C#.
  * @author Aibek Isaev
- * @deprecated
  */
 public class CSharpGenerator extends DefaultGenerator {
 	
@@ -71,9 +70,8 @@ public class CSharpGenerator extends DefaultGenerator {
 	 * @param typeMappingFile
 	 *            name of the file used by the generator for type mapping
 	 */
-	public boolean addTypeMappingFile(String typeMappingFile) {
-		boolean result = super.addTypeMappingFile(typeMappingFile);
-		isNotAddTypeMappingFile = !result;
-		return result;
+	public void addTypeMappingFile(String typeMappingFile) {
+		super.addTypeMappingFile(typeMappingFile);
+		isNotAddTypeMappingFile = false;
 	}
 }

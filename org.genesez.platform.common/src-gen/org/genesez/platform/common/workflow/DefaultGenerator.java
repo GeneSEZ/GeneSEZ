@@ -5,9 +5,6 @@ package org.genesez.platform.common.workflow;
  * 	@FILE-ID : (_17_0_1_8e00291_1317994867406_376688_2793) 
  */
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.genesez.platform.common.m2t.ImportBeautifier;
@@ -29,7 +26,6 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @author Dominik Wetzel
  * @date 2011-10-12
- * @deprecated
  */
 public class DefaultGenerator extends Generator {
 	
@@ -122,9 +118,7 @@ public class DefaultGenerator extends Generator {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1318595813162_223951_3757) ENABLED START */
 		// add exclude packages as global variables
 		String packages = WorkflowUtils.arrayToString(excludedPackages);
-		addGlobalVarDef("excludePackage", packages);
-		String classifierPackages = WorkflowUtils.arrayToString(excludedContentPackages);
-		addGlobalVarDef("excludeContentPackage", classifierPackages);
+		addGlobalVarDef("excludePackages", packages);
 		// init type mapper
 		TypeMapper.initTypeMapper(typeMappingFiles.toArray(new String[0]));
 		
@@ -282,21 +276,9 @@ public class DefaultGenerator extends Generator {
 	 * @param	typeMappingFile	A type mapping file to use.
 	 */
 	
-	public boolean addTypeMappingFile(String typeMappingFile) {
+	public void addTypeMappingFile(String typeMappingFile) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1317994891773_230537_2811) ENABLED START */
-		Path path = Paths.get(typeMappingFile);
-		if ((ClassLoader.getSystemResourceAsStream(typeMappingFile) != null) ||
-				(path.isAbsolute() && Files.exists(path))) {
-				typeMappingFiles.add(typeMappingFile);
-				return true;
-		} else {
-			if(path.isAbsolute()){
-				logger.warn(typeMappingFile + " does not exist!");
-			} else {
-				logger.warn(typeMappingFile + " could not be found in classpath!");
-			}
-		}
-		return false;
+		typeMappingFiles.add(typeMappingFile);
 		/* PROTECTED REGION END */
 	}
 	
@@ -381,11 +363,6 @@ public class DefaultGenerator extends Generator {
 		defaults.setProperty("deleteOldFiles", "true");
 		defaults.setProperty("deleteEmptyFolders", "true");
 		defaults.setProperty("importTakeOver", "true");
-	}
-	
-	protected java.util.Set<String> excludedContentPackages = new java.util.HashSet<String>();
-	public void addExcludeContentPackage(String excludeContentPackage) {
-		excludedContentPackages.add(excludeContentPackage);
 	}
 	/* PROTECTED REGION END */
 	

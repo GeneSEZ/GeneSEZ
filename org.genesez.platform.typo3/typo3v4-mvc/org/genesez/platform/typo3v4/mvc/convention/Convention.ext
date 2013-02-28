@@ -9,13 +9,13 @@
 import gcore;
 
 // use GeneSEZ profile access helper scripts
-extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessHelper;
+extension org::genesez::platform::common::genesez::profile::AccessHelper;
 
 // use TYPO3 MVC conversion scripts
 extension org::genesez::platform::typo3v4::mvc::convention::Conversion;
 
 // use TYPO3 MVC access helper scripts
-extension org::genesez::platform::typo3v4::mvc::util::AccessHelper;
+extension org::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
 
 // use TYPO3 MVC workflow globalvar scripts
 extension org::genesez::platform::typo3v4::mvc::workflow::GlobalVar;
@@ -337,7 +337,9 @@ String getterNamePrefix(MAttribute this) :
  * @return	the prefix to prepend
  */
 String setterNamePrefix(MAttribute this) :
-	"set";
+	hasDiSetter("true")
+		? "inject"
+		: "set";
 
 
 /**
@@ -408,9 +410,6 @@ String removeFromNamePrefix(MAssociationRole this) :
 
 String controllerActionNameSuffix() :
 	"Action";
-	
-String controllerCommandNameSuffix() :
-	"Command";
 
 /**
  * Getter of the suffix which is added to the name of an operation.
@@ -422,9 +421,6 @@ String operationNameSuffix(MOperation this) :
 		// checks if operation is an TYPO3 MVC Controller Action and doesn't already ends with "Action"
 		case isControllerAction() && !name.endsWith( controllerActionNameSuffix() ) :
 			controllerActionNameSuffix()
-		// checks if operation is an TYPO3 MVC Controller Command and doesn't already ends with "Command"
-		case isControllerCommand() && !name.endsWith( controllerCommandNameSuffix() ) :
-			controllerCommandNameSuffix()
 		default : 
 			""
 	};

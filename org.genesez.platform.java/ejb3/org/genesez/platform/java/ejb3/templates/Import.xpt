@@ -9,7 +9,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -26,12 +26,8 @@
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier-»
 	«EXPAND CallbackImport»
-	«IF isClass() && (operation.exists(e|e.hasUtilizableValue("ejb3OperationInterceptor", "interceptors")) || hasUtilizableValue("ejb3ClassInterceptor", "interceptors"))-»
+	«IF operation.exists(e|e.hasStereotype("ejb3OperationInterceptor")) || hasStereotype("ejb3ClassInterceptor")-»
 		import javax.interceptor.Interceptors;
-	«ENDIF-»
-	«IF isClass() && (operation.exists(e|e.hasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")))-»
-		import javax.interceptor.AroundInvoke;
-		import javax.interceptor.InvocationContext;
 	«ENDIF-»
 	«IF operation.exists(e|e.hasStereotype("ejb3Timer"))-»
 		import javax.ejb.Timer;

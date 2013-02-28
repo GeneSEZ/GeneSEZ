@@ -12,7 +12,6 @@ import java.util.Properties;
  * 
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-20
- * @deprecated
  */
 public class WorkflowProperties {
 	
@@ -32,11 +31,9 @@ public class WorkflowProperties {
 	static {
 		defaults.setProperty("slot", "coremodel");
 		defaults.setProperty("coreSlot", "coremodel");
-		defaults.setProperty("presentationSlot", "presentationmodel");
 		defaults.setProperty("reqSlot", "reqmodel");
 		defaults.setProperty("traceSlot", "tracemodel");
 		defaults.setProperty("gcorePackage", "org.genesez.metamodel.gcore.GcorePackage");
-		defaults.setProperty("gpresentationPackage", "org.genesez.metamodel.gpresentation.GpresentationPackage");
 		defaults.setProperty("greqPackage", "org.genesez.metamodel.greq.GreqPackage");
 		defaults.setProperty("gtracePackage", "org.genesez.metamodel.gtrace.GtracePackage");
 	}

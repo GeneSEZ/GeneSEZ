@@ -15,7 +15,7 @@
 «IMPORT gcore»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -32,7 +32,7 @@
 	«IF hasStereotype("seam2ApplicationException")-»
 		import javax.ejb.ApplicationException;
 	«ENDIF-»
-	«IF isClass() && operation.exists(e|e.hasStereotype("seam2Observer"))-»
+	«IF operation.exists(e|e.hasStereotype("seam2Observer"))-»
 		import org.jboss.seam.annotations.Observer;
 	«ENDIF»
 	«IF hasStereotype("seam2Logger")-»

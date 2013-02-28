@@ -1,0 +1,66 @@
+/**
+ * 	functions for changing or adding operations
+ *  
+ * @author	andre pflueger
+ * @date	2010-01-13
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::common::m2t::Helper;
+extension org::genesez::platform::common::log::Log;
+extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::common::AccessHelper;
+
+/**
+ *	clones the stereotype of the operation and adds them to the property
+ *
+ *	@param	this		instance of MOperation
+ *	@param	property	target for the stereotypes
+ */		
+Void copyStereotypesToProperty(MOperation this, MProperty property) :
+	this != null
+		? (
+			/** copy the stereotypes and taggedValues to the attribute
+			  * and remove them from the operation
+			  *
+			  *	perhabs it makes sense to copy only the stereotypes really
+			  *	evaluated by the cartridge in attribute template
+			  *	Are there any stereotypes which can be seriously annotated to the getter
+			  *	method but not to the existing attribute?
+			  */
+			property.stereotype.addAll(this.stereotype) ->
+			property.taggedValue.addAll(this.taggedValue) ->
+			this.stereotype.removeAll(this.stereotype) ->
+			this.taggedValue.removeAll(this.taggedValue) 
+		)
+		: "";
+
+/**
+ *	clones the stereotypes of the source operation and adds them
+ *	to the target operation
+ *
+ *	@param	source		source operation
+ *	@param	target		target operation 
+ */
+Void copyStereotypesToOperation(MOperation source, MOperation target) :
+	source != null && target != null
+		? (
+			/** copy the stereotypes and taggedValues from the source operation
+			  * to the target operation and remove them at the source operation
+			  *
+			  *	perhabs it makes sense to copy only the stereotypes really
+			  *	evaluated by the cartridge in attribute template
+			  *	Are there any stereotypes which can be seriously annotated to the getter
+			  *	method but not to the existing attribute?
+			  */
+			target.stereotype.addAll(source.stereotype) ->
+			target.taggedValue.addAll(source.taggedValue) ->
+			source.stereotype.removeAll(source.stereotype) ->
+			source.taggedValue.removeAll(source.taggedValue) 
+		)
+		: "";
+
+	

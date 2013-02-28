@@ -21,7 +21,6 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
  *  
  * @author Tobias Haubold
  * @date 2011-08-23
- * @deprecated
  */
 public class Copier extends AbstractWorkflowComponent {
 	

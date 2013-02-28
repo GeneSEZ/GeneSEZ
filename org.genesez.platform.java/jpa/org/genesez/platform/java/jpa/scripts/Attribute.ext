@@ -1,6 +1,6 @@
 import gcore;
 
-extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::m2m::CreateTemplate;
 extension org::genesez::platform::common::m2m::CreateBasics;
@@ -96,8 +96,7 @@ Void checkPersistenceStereotypes(MAttribute this) :
   *	@param		this		instance of MAttribute
   */		
 Void checkOptimisticLockingStereotype(MAttribute this) :
-	 this.classifier.hasStereotype("jpaPersistentEntity") &&
-	 ((this.name.asTypeName() == "version" && this.type.asTypeName() == "int") ||
-	 this.classifier.property.exists(e|e.hasTaggedValue("jpaPersistentEntity", "optimisticLocking", "true")))
+	 (this.name.asTypeName() == "version" && this.type.asTypeName() == "int") ||
+	 this.classifier.property.exists(e|e.hasTaggedValue("jpaPersistentEntity", "optimisticLocking", "true"))
 	 	? addOptimisticLockingStereotype()
 	 	: "";

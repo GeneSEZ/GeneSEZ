@@ -9,7 +9,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -45,6 +45,34 @@
 «DEFINE Annotation FOR MClass-»
 	«EXPAND _PersistentEntity-»
 	«EXPAND _PrimaryKey-»
+«ENDDEFINE»
+
+«REM»
+	generate an equals and hashCode operation for a persistent entity
+«ENDREM»
+«DEFINE Equals FOR MClass -»
+	«IF hasTaggedValue("jpaPersistentEntity", "equals", "true")-»
+		public boolean equals(Object other) {
+			if (this == other) {
+				return true;
+			}
+			if (other == null || this.getClass() != other.getClass()) {
+				return false;
+			}
+			«this.asTypeName()-» o = («this.asTypeName()-») other;
+			if (this.getId() == o.getId() && this.getVersion() == o.getVersion()) {
+				return true;
+			}
+			return false;
+		}
+		
+		public int hashCode() {
+			int result = 23;
+			result = 37 * result + this.getId();
+			result = 37 * result + this.getVersion();
+			return result;
+		}
+	«ENDIF-»
 «ENDDEFINE»
 
 «REM» method searches the super classes recursively for class with annoted inheritance strategy«ENDREM»

@@ -12,18 +12,16 @@ import gcore;
 extension org::genesez::platform::typo3v4::profile::Profile;
 
 // use TYPO3 naming context and common naming scripts
-extension org::genesez::metamodel::core::util::mapping::NameMapping;
+extension org::genesez::platform::common::naming::Naming;
 extension org::genesez::platform::typo3v4::mvc::convention::NamingContext;
 
 // use TYPO3 MVC access helper scripts which overrides
 // common access helper scripts if script name is equals
-extension org::genesez::platform::typo3v4::mvc::util::AccessHelper;
-extension org::genesez::metamodel::core::util::AccessHelper;
-
-extension org::genesez::metamodel::core::util::ModelNavigation;
+extension org::genesez::platform::typo3v4::mvc::scripts::AccessHelper;
+extension org::genesez::platform::common::AccessHelper;
 
 // use common create template scripts
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::platform::common::m2m::MakeElement;
 
 
 /*
@@ -33,7 +31,7 @@ extension org::genesez::metamodel::core::util::m2m::CreateElement;
 */
 
 Void modelModifications(MModel this) :
-	setInternalNamingContext( namingContextGeneral() ) ->
+	setNamingContext( namingContextGeneral() ) ->
 	packageModifications();
 
 
@@ -80,19 +78,19 @@ Void changeDomainObjectPropertyVisibility(MProperty this) :
 
 
 Void changeDomainObjectAttributeMultiplicity(MAttribute this) :
-	!isClassifier(type) && multiplicity.isMultiValued()
+	!isClassifier(type) && isMultiValuedType()
 		? (	stereotype.add(
-				let s = createStereotype( navModel(), prT3TCxMinitems(), prT3TCxMinitems() ) :
-					createTaggedValue(this, createTag( s, prT3TCxMinitemsMinitems(), "Integer" ), multiplicity.lowerBound.toString() ) ->
+				let s = makeStereotype( model(), prT3TCxMinitems(), prT3TCxMinitems() ) :
+					makeTaggedValue(this, makeTag( s, prT3TCxMinitemsMinitems(), "Integer" ), lowerBoundMultiplicity.toString() ) ->
 					s
 				) ->
 			stereotype.add(
-				let s = createStereotype( navModel(), prT3TCxMaxitems(), prT3TCxMaxitems() ) :
-					createTaggedValue(this, createTag( s, prT3TCxMaxitemsMaxitems(), "Integer" ), multiplicity.upperBound.toString() ) ->
+				let s = makeStereotype( model(), prT3TCxMaxitems(), prT3TCxMaxitems() ) :
+					makeTaggedValue(this, makeTag( s, prT3TCxMaxitemsMaxitems(), "Integer" ), upperBoundMultiplicity.toString() ) ->
 					s
 			) ->
-			multiplicity.hasFixedLowerBoundMultiplicity() && multiplicity.lowerBound == 1 ? multiplicity.setLowerBound(1) : multiplicity.setLowerBound(0) ->
-			multiplicity.setUpperBound(1)
+			hasFixedLowerBoundMultiplicity() && lowerBoundMultiplicity == 1 ? setLowerBoundMultiplicity(1) : setLowerBoundMultiplicity(0) ->
+			setUpperBoundMultiplicity(1)
 		)
 		: Void;
 		
