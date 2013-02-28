@@ -9,7 +9,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -26,6 +26,14 @@
 	public functions
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 «ENDREM»
+
+«REM» generates a class «ENDREM»
+«DEFINE Root FOR MClass-»
+	«REM»
+		generates the rest of the class 
+	«ENDREM»
+	«EXPAND org::genesez::platform::java::java5::templates::Class::Root-»
+«ENDDEFINE»
 
 «REM»
 	evaluates the stereotypes "ejb3Remote" and "ejb3Local"
@@ -71,8 +79,6 @@
 «DEFINE Annotation FOR MClass-»	
 	«EXPAND _SessionBean-»
 	«EXPAND _MessageDriven-»
-	«EXPAND _Interceptor»
-	«EXPAND _Startup-»
 	«EXPAND Element::CMTransactionality-»
 	«EXPAND Element::EJB-»
 «ENDDEFINE»
@@ -121,20 +127,21 @@
  			, description = "«getTaggedValue("ejb3MessageDrivenBean", "description")-»"
  		«ENDIF-»
  		«IF hasStereotype("ejb3ActivationConfigProperty")-»
- 			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "propertyName") && 
- 				hasUtilizableValue("ejb3ActivationConfigProperty", "propertyValue")-»
+ 			«IF hasUtilizableValue("ejb3ActivationConfigProperty", "name") && 
+ 				hasUtilizableValue("ejb3ActivationConfigProperty", "value")-»
  				, activationConfig = {
- 				«FOREACH getTaggedValueList("ejb3ActivationConfigProperty", "propertyName") AS name SEPARATOR ","»
+ 				«FOREACH getTaggedValueList("ejb3ActivationConfigProperty", "name") AS name SEPARATOR ","»
  					@ActivationConfigProperty(
  						propertyName = "«name-»",  						
- 						«LET getTaggedValueList("ejb3ActivationConfigProperty", "propertyName").indexOf(name) AS index-»
- 							propertyValue = "«getTaggedValueList("ejb3ActivationConfigProperty", "propertyValue").get(index)-»")
+ 						«LET getTaggedValueList("ejb3ActivationConfigProperty", "name").indexOf(name) AS index-»
+ 							propertyValue = "«getTaggedValueList("ejb3ActivationConfigProperty", "value").get(index)-»")
  						«ENDLET»
  				«ENDFOREACH»
  				}
  			«ENDIF-»
  		«ENDIF»
- 		)
+ 		)			
+		«EXPAND _Interceptor»
 	«ENDIF»
 «ENDDEFINE»
 
@@ -399,21 +406,4 @@
 		  	«ENDIF»
 		«ENDFOREACH»
 	«ENDIF-»
-«ENDDEFINE»
-
-«REM»
-    evaluates the stereotype ejb3Startup
-«ENDREM»
-«DEFINE _Startup FOR MClass-»
-    «IF hasStereotype("ejb3Startup")-»
-        @Startup 
-        «IF hasTaggedValue("ejb3Startup", "depends", "true")-»
-            «IF hasUtilizableValue("ejb3Startup", "depends")-»
-                (depends={
-                «FOREACH getTaggedValueList("ejb3Startup", "depends") AS value SEPARATOR ", "-»
-                    "«value-»"
-                «ENDFOREACH-»})
-            «ENDIF-»
-        «ENDIF-»
-    «ENDIF-»
 «ENDDEFINE»

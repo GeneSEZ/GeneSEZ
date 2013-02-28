@@ -10,10 +10,6 @@ import org.eclipse.xpand2.output.JavaBeautifier;
 import org.apache.commons.logging.LogFactory;
 import org.genesez.platform.common.workflow.WorkflowUtils;
 import org.apache.commons.logging.Log;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 import org.eclipse.emf.mwe.core.issues.Issues;
 
@@ -68,7 +64,6 @@ public class JavaGenerator extends DefaultGenerator {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010973_2130_2723) ENABLED START */
 		// check typemappingfile
 		if (isNotAddTypeMappingFile)
-			issues.addWarning(this, "No typemapping file given/found. Default will be used.");
 			super.addTypeMappingFile(properties.getProperty("typeMappingFile"));
 		
 		// set fieldAccess
@@ -102,13 +97,10 @@ public class JavaGenerator extends DefaultGenerator {
 	 * @param	typeMappingFile	name of the file used by the generator for type mapping.
 	 */
 	
-	public boolean addTypeMappingFile(String typeMappingFile) {
+	public void addTypeMappingFile(String typeMappingFile) {
 		/* PROTECTED REGION ID(java.implementation._17_0_1_8e00291_1326709010982_274549_2726) ENABLED START */
-		if(super.addTypeMappingFile(typeMappingFile)){
-			isNotAddTypeMappingFile = false;
-			return true;
-		}
-		return false;
+		super.addTypeMappingFile(typeMappingFile);
+		isNotAddTypeMappingFile = false;
 		/* PROTECTED REGION END */
 	}
 	

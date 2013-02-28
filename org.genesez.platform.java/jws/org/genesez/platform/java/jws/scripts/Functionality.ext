@@ -7,9 +7,8 @@ import gcore;
  * @date	2011-03-21
  */
 
-extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::java::jws::scripts::Class;
-extension org::genesez::platform::java::jws::scripts::Attribute;
 
 Void additions(MModel this) :
 	this.nestedPackage.additions() ->
@@ -33,10 +32,6 @@ Void modifications(MPackage this) :
 	this.classifier.typeSelect(MClass).modifications();
 	
 Void modifications(MClass this) :
-	this.property.typeSelect(MAttribute).modifications() ->
 	checkWebServiceName() ->
 	checkWebServiceClientName();
-	
-Void modifications(MAttribute this) :
-	checkAccessorForJWSStereotypes();
 	

@@ -9,7 +9,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
 «EXTENSION org::genesez::platform::java::jpa::scripts::Stereotypes»
@@ -140,7 +140,7 @@
 «ENDREM»
 «DEFINE _JoinTable FOR MAssociationRole-»
 	«IF hasStereotype("jpaJoinTable")-»
-		@JoinTable(name="«getTaggedValue("jpaJoinTable", "name")-»"
+		@JoinTable(name="«IF hasUtilizableValue("jpaJoinTable", "name")-»«getTaggedValue("jpaJoinTable", "name")-»"«ELSE-»«tableNamePrefix()-»«this.classifier.name.toFirstUpper()-»_«tableNamePrefix()-»«this.name-»"«ENDIF-»
 		«IF hasStereotype("jpaJoinColumn")-»
 			, joinColumns=
 			«EXPAND _JoinColumn-»

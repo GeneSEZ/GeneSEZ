@@ -24,7 +24,6 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
  * @author Tobias Haubold
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @date 2011-08-20
- * @deprecated
  */
 public class CompositeModel2Model extends CompositeComponent {
 	

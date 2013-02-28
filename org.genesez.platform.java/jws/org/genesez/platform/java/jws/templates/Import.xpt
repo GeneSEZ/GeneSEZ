@@ -9,7 +9,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -30,7 +30,7 @@
 	«IF hasStereotype("jwsSOAPBinding")-»
 		import javax.jws.soap.SOAPBinding;
 	«ENDIF-»
-	«IF (hasStereotype("jwsSOAPHandler") && getTaggedValueList("jwsHandlerChain", "handlers").size > 0) || hasUtilizableValue("jwsHandlerChain", "file")-»
+	«IF hasStereotype("jwsSOAPHandler")-»
 		import javax.jws.HandlerChain;
 	«ENDIF-»
 	«IF operation.exists(e|e.return.hasStereotype("jwsWebResult"))-»

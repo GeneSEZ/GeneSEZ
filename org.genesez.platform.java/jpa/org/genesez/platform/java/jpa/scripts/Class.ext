@@ -1,6 +1,6 @@
 import gcore;
 
-extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::common::m2m::CreateTemplate;
 extension org::genesez::platform::common::m2m::MakeElement;
@@ -12,29 +12,13 @@ extension org::genesez::platform::java::java5::scripts::Stereotypes;
 extension org::genesez::platform::java::jpa::scripts::Naming;
 
 /**
- *	transforms the Jacobson stereotype "entity" to "jpaPersistentEntity"
- */
-Void transformJacobsonStereotypes(MClass this) :
-	this.hasStereotype("entity")
-		? this.addPersistentEntityStereotype("", true, "", "", "", true)
-		: "";
-		
-/**
- *	transforms the WAM stereotype "material" to "jpaPersistentEntity"
- */
-Void transformWAMStereotypes(MClass this) :
-	this.hasStereotype("material")
-		? this.addPersistentEntityStereotype("", true, "", "", "", true)
-		: "";
-
-/**
   * add standard constructor to entity beans 
   *	if there is not already one
   */	
 MClassifier addStandardConstructor(MClass this) :
 	this.hasStereotype("jpaPersistentEntity") &&
-	!operation.exists(e|e.isConstructor() && e.parameter.isEmpty)
-		? makeStandardConstructor("public")
+	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
+		? makeStandardConstructor()
 		: "";
 
 /**
@@ -149,8 +133,8 @@ Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
   * add serializable interface to an entity bean
   */
 MClassifier addSerializable(MClassifier this) :
-	(this.hasStereotype("jpaPersistentEntity") || this.hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true")) 
-	&& !generalization.typeSelect(MClass).exists(e | e.hasStereotype("jpaPersistentEntity")) 
+	this.hasStereotype("jpaPersistentEntity") || this.hasTaggedValue("jpaPrimaryKeyClass", "embeddable", "true") 
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Serializable") 
 		? realization.add(createExternal(this.getModel(), "Serializable"))
 		: "";
 
@@ -254,26 +238,20 @@ Void addVersionAttribute(MClass this) :
 	this.makeAttribute("version", "int", "private");
 	
 /**
-  *	add stereotype "java5EqualsProperty" as Internal stereotype for primary key
+  *	add stereotype "java5EqualsProperty" as Internal stereotype
   *	if class is a persistent entity and owns the stereotype 
   *	"java5EqualsOperation"
   */
 Void checkEqualsProperties(MClass this) :
 	hasStereotype("java5EqualsOperation") && 
-	this.hasTaggedValue("jpaPersistentEntity", "usePKAsEqualsProperty", "true")
+	hasStereotype("jpaPersistentEntity") &&
+	!this.property.exists(e|e.hasStereotype("java5EqualsProperty"))
 		? (
 			this.property.exists(e|e.hasStereotype("jpaPrimaryKey"))
 				? this.property.selectFirst(e|e.hasStereotype("jpaPrimaryKey")).addInternalStereotype("java5EqualsProperty")
+				: "" ->
+			this.property.exists(e|e.hasStereotype("jpaOptimisticLocking"))
+				? this.property.selectFirst(e|e.hasStereotype("jpaOptimisticLocking")).addInternalStereotype("java5EqualsProperty")
 				: ""
 		)
 		: "";
-		
-/**
-  *	if there is more than one association role referencing the same class, 
-  *	add the stereotype "jpaJoinTable" to ensure that several join tables are used
-  * (this is a bug in hibernate 3.3.x)
-  *	
-  *	@param		this		instance of MClass
-  */
-Void checkClassesOfAssociationRoles(MClass this) :
-	this.property.typeSelect(MAssociationRole).select(e|e.classifier == null);

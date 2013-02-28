@@ -1,0 +1,108 @@
+
+«IMPORT gcore»
+
+«REM» templates for hibernate mapping «ENDREM»
+
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::hibernate::scripts::HibernateHelper»
+
+
+«DEFINE HbmConfigFile FOR Object»
+«FILE "xml/hibernate.cfg.xml" -»
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration> 
+  <session-factory>
+	«PROTECT CSTART "<!--" CEND "-->" ID "hbm.cfg.xml.1"»
+    <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+    <property name="hibernate.c3p0.idle_test_period">3000</property>
+    <property name="hibernate.c3p0.max_size">20</property>
+    <property name="hibernate.c3p0.max_statements">50</property>
+    <!-- Connection Pool c3p0 konfigurieren -->
+    <property name="hibernate.c3p0.min_size">5</property>
+    <property name="hibernate.c3p0.timeout">300</property>
+    <!-- Verbindung zur HSQL Datenbank konfigurieren -->
+    <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+    <property name="hibernate.connection.url">jdbc:hsqldb:hsql://localhost/UserCenter</property>
+    <property name="hibernate.connection.username">sa</property>
+    <property name="hibernate.default_schema">PUBLIC</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+    <property name="hibernate.format_sql">true</property>
+    <!-- automatischen Schemaexport bei Programmstart konfigurieren 
+			(validate, update, create, create-drop)
+		-->
+    <property name="hibernate.hbm2ddl.auto">create-drop</property>
+	«ENDPROTECT»
+    <!-- Angabe der Mappingdateien -->
+	«FOREACH classToMap() AS ctm-»
+	<mapping resource="xml/«ctm».hbm.xml"/>
+	«ENDFOREACH-»
+  </session-factory>
+</hibernate-configuration>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«DEFINE HbMappingFile FOR MClass-»
+«FILE "xml/" + name + ".hbm.xml" »
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="«package().fqn()»">
+	<class name="«name»" table="T_«name»">
+		«EXPAND _PersistAttributes»
+		«EXPAND _PlainAttributes»
+«REM»		<property name="loginName" not-null="true" unique="true"/>
+		<property name="password" access="field"/>
+		<set name="lectures" access="field" cascade="save-update"
+			inverse="true">
+			<key column="listener" />
+			<one-to-many class="Participation" />
+		</set>
+«ENDREM»
+	</class>
+</hibernate-mapping>
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE _PersistAttributes FOR MClass»
+	<!-- persistence attributes -->
+	«IF property.typeSelect(MAttribute).select(a|a.hasAspect("persistent, id")).isEmpty»
+		<id name="«((MAttribute) findKey().first()).name»" access="field">
+			<generator class="native" />
+		</id>
+	«ENDIF»
+	«FOREACH property.typeSelect(MAttribute).select(a|a.hasAspect("persistent")) AS pa»
+		«IF pa.hasAspect("persistent", "id")»
+		<id name="«pa.name»" access="field">
+			<generator class="native" />
+		</id>
+		«ENDIF»
+		«IF pa.hasAspect("persistent", "version")»
+		<version name="«pa.name»"/>
+		«ENDIF»
+	«ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE _PlainAttributes FOR MClass»
+	<!-- model attributes -->
+	«FOREACH property.typeSelect(MAttribute).reject(a|a.hasAspect("persistent")) AS pa»
+		«IF pa.multiplicity == 1»
+			«IF pa.hasAspect("generate", "key")»
+			<property name="«pa.name»" not-null="true" unique="true"/>
+			«ELSE»
+			<property name="«pa.name»"/>
+			«ENDIF»
+		«ELSE»
+			<set name="«pa.name»" table="T_«name»_«pa.name.toFirstUpper()»" access="field">
+			«FOREACH collectionKey() AS key»
+				<key column="«((MAttribute)key).name»" «IF ((MAttribute)key).hasStereotype("key")»property-ref="«((MAttribute)key).name»" not-null="true"«ENDIF» on-delete="cascade"/>
+			«ENDFOREACH»
+				<element type="«pa.type.name()»" column="«pa.name»" not-null="true"/>
+			</set>
+		«ENDIF»
+	«ENDFOREACH»
+«ENDDEFINE»

@@ -7,9 +7,9 @@
 
 «IMPORT gcore»
 
-«EXTENSION org::genesez::util::logging::Logging»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
-«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::cpp::scripts::Naming»
 «EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
@@ -63,20 +63,20 @@
 	«IF isSingleValuedType()-»
 		«EXPAND _static -»«EXPAND _final -»«type.name() -»«getTypeModifier() -» «asAttribute() -»«IF final -»«EXPAND _DefaultValue -»«ENDIF -»;
 	«ELSE -»
-		«EXPAND _static -»«EXPAND _final -»«mapCollection() -»<«type.name() -»«getTypeModifier() -»> «asAttribute() -»;
+		«EXPAND _static -»«EXPAND _final -»«mapType() -»<«type.name() -»«getTypeModifier() -»> «asAttribute() -»;
 	«ENDIF -»
 «ELSE-»
 	«IF isSingleValuedType() -»
 		«EXPAND _static -»«EXPAND _final -»«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»«type.getTypeModifier() -» «asAttribute() -»«IF final -»«EXPAND _DefaultValue -»«ENDIF -»;
 	«ELSE -»
-		«EXPAND _static -»«EXPAND _final -»«mapCollection() -»<«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»> «asAttribute() -»;
+		«EXPAND _static -»«EXPAND _final -»«mapType() -»<«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»> «asAttribute() -»;
 	«ENDIF -»
 «ENDIF-»
 «ENDDEFINE»
 
 «DEFINE _DerivedDecl FOR MAttribute -»	
 	«IF isSingleValuedType() -»const «type.getFQNS()-»«type.mapName() -» «asGetter() -»();
-	«ELSE -»const «mapCollection()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»> «asGetter()-»();«ENDIF -»
+	«ELSE -»const «mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»> «asGetter()-»();«ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _DerivedImpl FOR MAttribute -»	
@@ -91,9 +91,9 @@
 			return derived;
 		}
 	«ELSE -»	
-		const «mapCollection()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»> «classifier.asTypeName()-»::«asGetter() -»()
+		const «mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»> «classifier.asTypeName()-»::«asGetter() -»()
 		{
-			«mapCollection()-»«type.getFQNS()-»«type.mapName()-»> derived«IF !type.isPrimitiveType()-»= 0«ENDIF-»;
+			«mapType()-»«type.getFQNS()-»«type.mapName()-»> derived«IF !type.isPrimitiveType()-»= 0«ENDIF-»;
 			«PROTECT CSTART '/* ' CEND ' */' ID("cpp.implementation." + xmiGuid)»
 			// TODO: implementation of '«asGetter()-»' for class '«classifier.asTypeName()»'
 			
@@ -115,7 +115,7 @@
 	«IF isSingleValuedType() -»
 	«EXPAND _static-»«type.getFQNS()-»«type.mapName().asTypeName() -»«IF !type.isPrimitiveType()»«ENDIF» «asGetter() -»();
 	«ELSE -»
-	«EXPAND _static-»const «mapCollection()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»>& «asGetter() -»();
+	«EXPAND _static-»const «mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»>& «asGetter() -»();
 	«ENDIF -»
 «ENDDEFINE»
 
@@ -135,7 +135,7 @@
 «DEFINE _RemoveFromImpl FOR MAttribute -»
 «IF isMultiValuedType() -»
 	void «classifier.asTypeName()-»::«asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»& _toRemove)	{
-		«mapCollection()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»>::iterator it = «asAttribute()-».begin();
+		«mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»>::iterator it = «asAttribute()-».begin();
 		
 		for(; it != «asAttribute()-».end(); it++) {
 			if(*it == _toRemove) {
@@ -152,7 +152,7 @@
 		return «asAttribute()-»;
 	}
 	«ELSE -»
-	const «mapCollection() -»<«type.getFQNS()-»«type.mapName().asTypeName()-»>& «classifier.asTypeName()-»::«asGetter() -»() {
+	const «mapType() -»<«type.getFQNS()-»«type.mapName().asTypeName()-»>& «classifier.asTypeName()-»::«asGetter() -»() {
 		return «asAttribute()-»;
 	}
 	«ENDIF -»

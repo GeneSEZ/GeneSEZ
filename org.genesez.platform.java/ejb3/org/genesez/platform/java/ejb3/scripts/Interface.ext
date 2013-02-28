@@ -4,9 +4,13 @@ extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::java::ejb3::scripts::Stereotypes;
 extension org::genesez::platform::java::scripts::Naming;
 extension org::genesez::platform::common::m2m::CreateTemplate;
-extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::common::m2m::RemoveElement;
 
+MClassifier addMessageListener(MClassifier this) :
+	stereotype.name.exists(e|e == "ejb3MessageDrivenBean")
+		? realization.add(createExternal(this.model(), "MessageListener"))
+		: "";
 
 /**
   *	adds a business interface for the session bean if stereotype "ejb3Local" or "ejb3Remote" is used 
@@ -27,7 +31,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
 								this.realization.add(interface) ->
 								interface.addRemoteStereotype("") ->
-								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
 								this.removeStereotype(this.getStereotype("ejb3Remote"))
 						)
 						: ""
@@ -37,7 +41,7 @@ Void addSessionBeanInterfaces(MClassifier this) :
 						this.realization.add(interface) ->
 						interface.addRemoteStereotype("") ->
 						interface.model().externalTypes.remove("I"+asTypeName()+"Remote") ->
-						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor() && !(e.isSetter() && e.static) ).cloneOperation(interface) ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface) ->
 						this.removeStereotype(this.getStereotype("ejb3Remote"))
 				)
 		) 

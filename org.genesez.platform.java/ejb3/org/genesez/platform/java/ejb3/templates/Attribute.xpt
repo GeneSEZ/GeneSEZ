@@ -10,7 +10,7 @@
 «REM» import code gen meta model «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -42,27 +42,8 @@
 «ENDREM»
 «DEFINE _Resource FOR MAttribute-»
 	«IF hasStereotype("ejb3Resource")-»
-		@Resource«IF hasUtilizableValue("ejb3Resource", "name") || 
-			hasUtilizableValue("ejb3Resource", "description") || 
-			hasUtilizableValue("ejb3Resource", "mappedName") || 
-			(hasUtilizableValue("ejb3Resource", "shareable") &&
-			!this.getTaggedBooleanValue("ejbResource", "shareable"))-»(
-			«IF hasUtilizableValue("ejb3Resource", "name")-»
-				name="«getTaggedValue("ejb3Resource", "name")-»"«IF hasUtilizableValue("ejb3Resource", "description") || 
-					hasUtilizableValue("ejb3Resource", "mappedName") || 
-					(hasUtilizableValue("ejb3Resource", "shareable") && 
-					!this.getTaggedBooleanValue("ejbResource", "shareable"))-», «ENDIF-»
-			«ENDIF-»
-			«IF hasUtilizableValue("ejb3Resource", "description")-»
-				description="«getTaggedValue("ejb3Resource", "description")-»"«IF hasUtilizableValue("ejb3Resource", "mappedName") || 
-					(hasUtilizableValue("ejb3Resource", "shareable") && !this.getTaggedBooleanValue("ejbResource", "shareable"))-», «ENDIF-»
-			«ENDIF-»
-			«IF hasUtilizableValue("ejb3Resource", "mappedName")-»
-				mappedName="«getTaggedValue("ejb3Resource", "mappedName")-»"«IF hasUtilizableValue("ejb3Resource", "shareable") && !this.getTaggedBooleanValue("ejbResource", "shareable")-», «ENDIF-»
-			«ENDIF-»
-			«IF hasUtilizableValue("ejb3Resource", "shareable") && !this.getTaggedBooleanValue("ejbResource", "shareable")-»
-				shareable=«getTaggedValue("ejb3Resource", "shareable")-»
-			«ENDIF-»)
+		@Resource«IF hasUtilizableValue("ejb3Resource", "value")-»
+			(«getTaggedValue("ejb3Resource", "value")-»)
 		«ENDIF-»
 	«ENDIF-»
 «ENDDEFINE»

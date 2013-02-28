@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 
+		just a bunch of workflow components to
+		- instantiate an genesez model
+		- transform the model from genesez meta model to genesez testing meta model
+		
+		following parameters are required:
+		==================================
+		
+		$inputModelFile		name of the genesez file
+		$testingModel		name of the slot which holds the genesez testing model
+	 -->
+	
+	<!-- reading + instantiating the genesez model -->
+	<cartridge
+		file = "org::genesez::platform::common::workflow::xmiReader.oaw"
+		inputModelFile = "${inputModelFile}"
+		modelSlot = "genesezmodel"
+	/>
+	
+	<!-- transform model from genesez meta model to genesez testing meta model -->
+	<cartridge
+		file = "org::genesez::testing::workflow::genesez2testing.oaw"
+		genesezModel = "genesezmodel"
+		testingModel = "${testingModel}"
+	/>
+	
+</workflow>

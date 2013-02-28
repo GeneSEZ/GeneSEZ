@@ -1,0 +1,91 @@
+
+«IMPORT gcore»
+
+«REM»
+	Performs the generation of classes
+	
+	@author	nico herbig
+	@author	tobias haubold
+	@author andre pflueger (last)
+«ENDREM»
+
+«REM» useful support fuctions «ENDREM»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::scripts::Type»
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::scripts::StateMachineUtil»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes a class
+«ENDREM»
+«DEFINE Root FOR MClass -»
+package «packageDeclaration( basePackage() ) -»;
+«EXPAND Import::Import -»
+«REM» generate a newline between imports + type comment «ENDREM»
+«prepareActiveClass() -»
+«EXPAND Comment::Type -»
+«EXPAND _Annotation-»
+«EXPAND Type::Modifier -» class «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» «EXPAND Type::Realization -» {
+	
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+	// -- generated attribute, constant + association declarations ----------
+	«ENDIF -»
+	«EXPAND Association::Declaration -»
+	«EXPAND Attribute::Declaration -»
+	
+	«IF generateSectionComments() && ( hasConstructors() ) -»
+	// -- generated constructors --------------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Constructor -»
+	
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
+	// -- generated method declarations -------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Declaration -»
+	
+	«IF generateSectionComments() && ( hasOperations() ) -»
+	// -- generated method stubs for implementations + derived attributes ---
+	«ENDIF -»
+	«EXPAND Operation::Implementation -»
+	«EXPAND Attribute::Derived -»
+	
+	«IF generateSectionComments() && ( hasAssociationRoles() || hasAttributes() ) -»
+	// -- generated association + attribute accessors -----------------------
+	«ENDIF -»
+	«EXPAND Attribute::Accessors -»
+	«EXPAND Association::Accessors -»
+	«EXPAND Operation::Equals -»
+	
+	// -- generated code of other cartridges --------------------------------
+	«EXPAND _Extension-»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.class.own.code.implementation." + xmiGuid) -»
+	
+	«IF ! ownedBehavior.isEmpty -»
+	// -- generated state machine section -----------------------------------
+	«EXPAND StateMachine::StateMachine FOREACH ownedBehavior.typeSelect(MStateMachine) -»	
+	«ENDIF -»
+}
+«ENDDEFINE»
+
+«REM»
+	this define block can be used by other cartridges to add some generation code
+«ENDREM»
+«DEFINE _Extension FOR MClass-»
+«ENDDEFINE»
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MClass-»
+«ENDDEFINE»

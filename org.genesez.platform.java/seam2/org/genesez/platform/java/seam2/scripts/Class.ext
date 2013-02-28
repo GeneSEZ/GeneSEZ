@@ -1,6 +1,6 @@
 import gcore;
 
-extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::java::java5::scripts::Class;
 extension org::genesez::platform::java::java5::scripts::Stereotypes;
@@ -34,8 +34,8 @@ Void checkJasyptEncryptionStereotype(MClass this) :
   */	
 MClassifier addStandardConstructor(MClass this) :
 	this.hasStereotype("seam2Component") &&
-	!(operation.exists(e|e.isConstructor() && e.parameter.isEmpty))
-		? makeStandardConstructor("public")
+	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
+		? makeStandardConstructor()
 		: "";
 
 /**

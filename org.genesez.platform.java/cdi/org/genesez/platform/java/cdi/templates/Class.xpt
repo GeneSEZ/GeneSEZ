@@ -9,7 +9,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -41,7 +41,6 @@
 	«EXPAND Element::Specializes-»
 	«EXPAND Element::New-»
 	«EXPAND Element::Decorator-»
-	«EXPAND HomeBean::MakeEntityHome-»
 «ENDDEFINE»
 
 «REM» 
@@ -51,7 +50,7 @@
 	«IF hasStereotype("cdiApplicationScoped")
 		|| property.exists(e|e.hasStereotype("cdiApplicationScoped"))
 		|| operation.exists(e|e.hasStereotype("cdiApplicationScoped"))»
-		import javax.enterprise.context.ApplicationScoped;
+		import javax.enterprise.context.ApplicationScoped;;
 	«ENDIF»
 	«IF hasStereotype("cdiSessionScoped")
 		|| property.exists(e|e.hasStereotype("cdiSessionScoped"))

@@ -1,0 +1,88 @@
+/**
+ * QF-Test script steps
+ *
+ * @author	Gerrit Beine
+ * @date	2008-08-04
+ */
+
+//      based on genesez testing meta model
+import gtesting;
+
+// use logging
+extension org::genesez::platform::common::log::Log;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	RootStep related xTend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * generates the RootStep
+ */
+Void rootStep(TTestSuite this) :
+	trace("Creating RootStep for " + name ) -> 
+	qfRootStep() ->
+	testSet();
+
+/**
+ * generates the TestSet
+ */
+Void testSet(TTestSuite this) :
+	trace("Creating TestSet for " + name ) -> 
+	qfTestSet() ->
+	testcases.testCase();
+
+/**
+ * generates a TestCase
+ */
+Void testCase(TTestCase this) :
+	trace("Creating TestCase for " + name ) ->
+	qfTestCase() ->
+	qfReset();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping to java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * create the root step
+ * @param	t	the Test Suite
+ * @return	void
+ */
+private Void qfRootStep(TTestSuite t) :
+	JAVA org.genesez.platform.qftest.QftFile.qfRootStep(org.genesez.testing.gtesting.TTestSuite);
+
+/**
+ * create the test set
+ * @param	t	the Test Suite
+ * @return	void
+ */
+private Void qfTestSet(TTestSuite t) :
+	qfElement(t, "TestSet");
+
+/**
+ * create a test case
+ * @param	t	the Test Case
+ * @return	void
+ */
+private Void qfTestCase(TTestCase t) :
+	qfElement(t, "TestCase");
+
+/**
+ * creates a QF Test XML Element
+ * @param	t	the test model element
+ * @param	s	the tag name of the element
+ * return	void
+ */
+private Void qfElement(TElement t, String s) :
+ 	JAVA org.genesez.platform.qftest.QftFile.qfElement(org.genesez.testing.gtesting.TElement, java.lang.String);
+
+/**
+ * resets the active element
+ * @return	void
+ */
+private Void qfReset() :
+	JAVA org.genesez.platform.qftest.QftFile.qfReset();

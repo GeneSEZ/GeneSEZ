@@ -8,7 +8,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -96,6 +96,14 @@
 	«EXPAND org::genesez::platform::java::ejb3::templates::Class::Annotation-»
 	«EXPAND org::genesez::platform::java::jbv::templates::Class::Annotation-»
 	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	extensions for class code generation
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Class::_Extension FOR MClass-»
+	«EXPAND org::genesez::platform::java::jpa::templates::Class::Equals-»
+	«targetDef.proceed()-»
 «ENDAROUND»
 
 «REM»

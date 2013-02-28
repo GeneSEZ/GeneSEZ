@@ -1,99 +1,14 @@
 import gcore;
 
-extension org::genesez::util::logging::Logging;
+extension org::genesez::platform::common::log::Log;
 extension org::genesez::platform::common::AccessHelper;
 extension org::genesez::platform::java::scripts::Naming;
 extension org::genesez::platform::java::java5::scripts::Class;
 extension org::genesez::platform::java::ejb3::scripts::Stereotypes;
 extension org::genesez::platform::common::m2m::MakeElement;
-extension org::genesez::platform::common::m2m::RemoveElement;
-extension org::genesez::platform::common::m2m::CreateBasics;
-extension org::genesez::platform::common::m2m::CreateTemplate;
 /* remove this import to be independent from jpa cartridge */
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
-
-/**
- *	transform Jacobson stereotype "control" to a stateless session bean 
- *	with local business interface
- *	transform Jacobson stereotype "boundary" to a stateless session bean 
- *	with remote business interface
- */
-Void transformJacobsonStereotypes(MClass this) :
-	this.hasStereotype("control")
-		? (
-			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
-			this.addLocalStereotype("")
-		)
-		: "" ->
-	this.hasStereotype("boundary")
-		? (
-			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
-			this.addRemoteStereotype("")
-		)
-		: "" ;
-
-/**
- *	transform WAM stereotype "tool" to a stateless session bean with local business interface
- *	transform WAM stereotype "automaton" to a stateless session bean with local business interface
- *	and an timer operation
- */
-Void transformWAMStereotypes(MClass this) :
-	this.hasStereotype("tool")
-		? (
-			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
-			this.addLocalStereotype("")
-		)
-		: "" ->
-	this.hasStereotype("automaton")
-		? (
-			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
-			this.addLocalStereotype("") ->
-			this.makeAttribute("timerService", "TimerService", "public") ->
-			(
-				let op = this.makeOperation("executeTask", "public", false, false, false) :				
-					op.parameter.add(op.makeParameter("timer", "", "in", this.model().createExternal("Timer")))
-			)
-		)
-		: "" ;
-
-/**
- *	adds the stereotype "ejb3Remote" to a session bean
- *	if the stereotype "jwsWebService" exists and 
- *	there is neither stereotype "ejb3Local" nor "ejb3Remote"
- *	available
- *
- *	this		instance of MClassifier	
- */
-Void addRemoteBusinessInterface(MClassifier this) :
-	hasStereotype("ejb3SessionBean") &&
-	hasStereotype("jwsWebService") &&
-	realization.isEmpty && 
-	!(hasStereotype("ejb3Local") || hasStereotype("ejb3Remote"))
-		? addRemoteStereotype("")
-		: "";
-
-/**
- *	adds the interface "MessageListener" to a message driven bean
- *	if there is no such realization
- *	adds the operation "onMessage(Message)" to a message driven bean
- *	if there is no such operation
- *
- *	@param		this		instance of MClass
- */
-MClassifier addMessageListener(MClass this) :
-	hasStereotype("ejb3MessageDrivenBean")
-		? ( 
-			!realization.exists(e|e.name().matches("MessageListener") || e.name().matches("javax.jms.MessageListener"))
-				? realization.add(createExternal(this.model(), "javax.jms.MessageListener"))
-				: "" ->
-			!this.operation.exists(e|e.name.matches("onMessage"))
-				? (
-					let o = makeOperation("onMessage", "public") :
-						o.parameter.add(o.makeParameter("message", "in", this.model().createExternal("javax.jms.Message")))
-				)
-				: ""
-		)
-		: "";
+extension org::genesez::platform::common::m2m::CreateBasics;
 
 /**
  *	adds the stereotype "ejb3Local" to a session bean
@@ -117,7 +32,7 @@ addLocalBusinessInterface(MClassifier this) :
 MClassifier addStandardConstructor(MClass this) :
 	(this.hasStereotype("ejb3SessionBean") || this.hasStereotype("ejb3MessageDrivenBean")) &&
 	!(operation.exists(e|e.name == name && e.parameter.isEmpty))
-		? makeStandardConstructor("public")
+		? makeStandardConstructor()
 		: "";
 	
 /**
@@ -142,7 +57,7 @@ Void checkUseOfEntityManager(MClass this) :
 						? addStereotypesForEntityManager("entityManager", "[EXTENDED]")
 						: (
 							addStereotypesForEntityManager("entityManager", "[]") ->
-							logError("Use of an EntityManager with extended persistence context in a stateless SessionBean "+this.name+". Context was switched from extended to normal.")
+							error("Use of an EntityManager with extended persistence context in a stateless SessionBean "+this.name+". Context was switched from extended to normal.")
 						)
 
 				)
@@ -158,7 +73,7 @@ Void checkUseOfEntityManager(MClass this) :
 								? addStereotypesForEntityManager("session", "[EXTENDED]")
 								: (
 									addStereotypesForEntityManager("session", "[]") ->
-									logError("Use of an SessionManager with extended persistence context in the stateless SessionBean "+this.name+". Context was switched from extended to normal.")
+									error("Use of an SessionManager with extended persistence context in the stateless SessionBean "+this.name+". Context was switched from extended to normal.")
 								)
 							
 						)

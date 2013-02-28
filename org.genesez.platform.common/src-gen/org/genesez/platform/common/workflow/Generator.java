@@ -28,7 +28,6 @@ import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
  * @author Nico Herbig <nico.herbig@fh-zwickau.de>
  * @author Dominik Wetzel
  * @date 2011-10-11
- * @deprecated
  */
 public class Generator extends org.eclipse.xpand2.Generator {
 	
@@ -70,11 +69,6 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		EmfMetaModel gcore = new EmfMetaModel();
 		gcore.setMetaModelPackage(properties.getProperty("gcorePackage"));
 		addMetaModel(gcore);
-		
-		// add GeneSEZ presentation meta model
-		EmfMetaModel gpres = new EmfMetaModel();
-		gpres.setMetaModelPackage(properties.getProperty("gpresentationPackage"));
-		addMetaModel(gpres);
 		
 		// add GeneSEZ requirements meta model
 		EmfMetaModel greq = new EmfMetaModel();
@@ -151,9 +145,6 @@ public class Generator extends org.eclipse.xpand2.Generator {
 		// add available models as global variable definitions
 		if (ctx.get(properties.getProperty("coreSlot")) != null) {
 			addGlobalVarDef("coremodel", properties.get("coreSlot"));
-		}
-		if (ctx.get(properties.getProperty("presentationSlot")) != null) {
-			addGlobalVarDef("presentationmodel", properties.get("presentationSlot"));
 		}
 		if (ctx.get(properties.getProperty("reqSlot")) != null) {
 			addGlobalVarDef("reqmodel", properties.get("reqSlot"));

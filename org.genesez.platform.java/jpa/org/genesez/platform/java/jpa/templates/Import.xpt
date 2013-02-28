@@ -8,7 +8,7 @@
 «ENDREM»
 
 «REM» useful metamodel extensions «ENDREM»
-«EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::platform::common::log::Log»
 
 «EXTENSION org::genesez::platform::common::AccessHelper»
 «EXTENSION org::genesez::platform::common::Conversion»
@@ -19,7 +19,6 @@
 «EXTENSION org::genesez::platform::java::scripts::Naming»
 «EXTENSION org::genesez::platform::java::scripts::Conversion»
 «EXTENSION org::genesez::platform::java::jpa::scripts::Naming»
-«EXTENSION org::genesez::platform::java::jpa::scripts::Class»
 
 «REM» 
 	generates import proReg and statements for hibernate classes
@@ -28,12 +27,8 @@
 «DEFINE ImportStatements FOR MClassifier-»
 	«IF hasStereotype("jpaPersistentEntity")-»
 		import javax.persistence.Entity;
-		«IF isClass() && (this.generalization.size == 0 || checkAnnotationTableUsage((MClass) this)) -»
-			import javax.persistence.Table;
-		«ENDIF-»
-		«IF !generalization.typeSelect(MClass).exists(e | e.hasStereotype("jpaPersistentEntity")) -»
-			import java.io.Serializable;
-		«ENDIF-»
+		import javax.persistence.Table;
+		import java.io.Serializable;
 	«ENDIF-»
 	«IF property.exists(e|e.hasStereotype("jpaOptimisticLocking")) || operation.exists(e|e.hasStereotype("jpaOptimisticLocking"))-»
 		import javax.persistence.Version;
