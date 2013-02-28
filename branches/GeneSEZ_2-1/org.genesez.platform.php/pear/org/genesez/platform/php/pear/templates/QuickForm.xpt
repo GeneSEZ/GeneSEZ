@@ -1,0 +1,358 @@
+«REM»
+	Generates an html form definition based on PEAR::HTML_QuickForm.
+	
+	currently covered:
+	- text fields
+	- password fields (with stereotype)
+	- password equality check
+	- trim filter
+	- submit button
+	
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
+	
+	@todo	refactor it to use model modification +  model 2 text transformation
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use logging «ENDREM»
+«EXTENSION org::genesez::platform::common::log::Log»
+«REM» use helper to access information «ENDREM»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«REM» use conversion functions «ENDREM»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::FileSystemHelper»
+«EXTENSION org::genesez::platform::common::UserInfoHelper»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::php::scripts::Import»
+«REM» use pear naming conventions «ENDREM»
+«EXTENSION org::genesez::platform::php::pear::scripts::QuickFormNaming»
+«EXTENSION org::genesez::platform::php::pear::scripts::QuickFormUtil»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of a model to generate forms from classes
+	rejects all ignored packages from further processing
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+	«EXPAND Root FOREACH classifier.reject( e| e.metaType == MDataType || e.metaType == MEnumeration )»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	reject all data types from further processing
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier.reject( e| e.metaType == MDataType || e.metaType == MEnumeration )»
+«ENDDEFINE»
+
+«REM»
+	interfaces are not mapped to QuickForm fomular definitions!
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«fatal("'MInterfaces's are not mapped to a QuickForm form definition!")»
+«ENDDEFINE»
+
+«REM»
+	should not happend, because 'MClassifier' is an abstract class!
+	it's just there for error-free templates :-)
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("'MClassifier's are not supported by the QuickForm form definition template!")»
+«ENDDEFINE»
+
+«REM»
+	generates the formular definition
+	- for import generation, the 'base package' is ignored
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE asQuickFormFileName() -»
+<?php
+require_once 'HTML/QuickForm.php';
+«IF generateIncludes() -»
+require_once '«asInclude()»';
+«ENDIF -»
+«EXPAND _FormClass -»
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the form class
+«ENDREM»
+«DEFINE _FormClass FOR MClass -»
+«EXPAND _CommentClass -»
+class «asQuickFormTypeName()» {
+	«EXPAND _CreateFunction -»
+	«EXPAND _BuildObjectFunction -»
+	«EXPAND _CustomDefinitionFunction -»
+}
+«ENDDEFINE»
+
+«REM»
+	generates a method which creates the form object
+«ENDREM»
+«DEFINE _CreateFunction FOR MClass -»
+	«EXPAND _CommentCreateFunction -»
+	public static function «asQuickFormCreateMethodName()»($«asQuickFormCreateMethodDefaultValueParameterName()» = array()) {
+		$form = new HTML_QuickForm('«asQuickFormName()»');
+		«EXPAND _AddDefaultValues -»
+		«EXPAND _AddHiddenValues -»
+		«EXPAND _AddElement FOREACH property -»
+		«EXPAND _AddSubmitButton -»
+		«EXPAND _AddValidationRule FOREACH property -»
+		«EXPAND _AddFilter FOREACH property -»
+		«EXPAND _AddCustomDefinitions -»
+		return $form;
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a method which builds an object from the form object
+«ENDREM»
+«DEFINE _BuildObjectFunction FOR MClass -»
+	«EXPAND _CommentBuildObjectFunction -»
+	public static function «asQuickFormBuildObjectMethodName()»($«asQuickFormBuildObjectMethodFormParameterName()», $«asQuickFormBuildObjectMethodObjectParameterName()» = null) {
+		«EXPAND _NullObjectCheck -»
+		«EXPAND _ExportValue FOREACH property -»
+		return $«asQuickFormBuildObjectMethodObjectParameterName()»;
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a method for custom form definitions
+«ENDREM»
+«DEFINE _CustomDefinitionFunction FOR MClass -»
+	«EXPAND _CommentCustomDefinitionFunction -»
+	private static function «asQuickFormAddCustomDefinitionMethodName()»($«asQuickFormAddCustomDefinitionMethodFormParameterName()») {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("pear.quickform.custom.definitions." + xmiGuid)»
+		// TODO: further form definitions for class '«asQuickFormTypeName()»'
+		«ENDPROTECT»
+	}
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«DEFINE _CommentClass FOR MClass -»
+/**
+ * Support class for dealing with QuickForm form definitions
+ * 
+ * It provides two methods for converting an object into a form definition and vise versa. 
+ * An additional method is used to add some custom definitions to the form object.
+ * 
+ * @see		http://pear.php.net/manual/en/package.html.html-quickform.php
+ * @author	«getUserName()»
+ */
+«ENDDEFINE»
+
+«DEFINE _CommentCreateFunction FOR MClass -»
+	/**
+	 * creates a QuickForm form definition for a «asTypeName()»
+	 * @param	array	$«asQuickFormCreateMethodDefaultValueParameterName()»	default form values
+	 * @return	HTML_QuickForm	form definition for a «asTypeName()»
+	 * @see		http://pear.php.net/manual/en/package.html.html-quickform.html-quickform.setdefaults.php
+	 */
+«ENDDEFINE»
+
+«DEFINE _CommentBuildObjectFunction FOR MClass -»
+	/**
+	 * sets the values of the form object to the «asTypeName()» object
+	 * if the «asTypeName()» object is obmitted, a new instance is created
+	 * @param	HTML_QuickForm	a form, submitted by the user
+	 * @param	«asTypeName()»	an object to which the values of the form are set
+	 * @return	«asTypeName()»	the object with the submitted values
+	 */
+«ENDDEFINE»
+
+«DEFINE _CommentCustomDefinitionFunction FOR MClass -»
+	/**
+	 * method to add custom definitions to the form object
+	 * @generated	method stub for further implementation
+	 * @param	HTML_QuickForm	the created form for further adjustments
+	 * @see		«asQuickFormCreateMethodName()»()
+	 */
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the assignment for default values
+«ENDREM»
+«DEFINE _AddDefaultValues FOR MClass -»
+		$form->setDefaults($«asQuickFormCreateMethodDefaultValueParameterName()»);
+«ENDDEFINE»
+
+«REM»
+	adds hidden values to the form
+«ENDREM»
+«DEFINE _AddHiddenValues FOR MClass -»
+«EXPAND _AddHiddenIdElement -»
+«ENDDEFINE»
+
+«REM»
+	adds a hidden 'id' element to the form
+«ENDREM»
+«DEFINE _AddHiddenIdElement FOR MClass -»
+		$form->addElement('hidden', 'id');
+«ENDDEFINE»
+
+«REM»
+	adds an element to the form
+«ENDREM»
+«DEFINE _AddElement FOR MProperty -»
+«IF isSingleValuedType() -»
+	«IF isPasswordElement() -»
+		«EXPAND _AddPasswordElement -»
+	«ELSE -»
+		«EXPAND _AddTextElement -»
+	«ENDIF -»
+«ELSE -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	adds validation rules
+«ENDREM»
+«DEFINE _AddValidationRule FOR MProperty -»
+	«IF isPasswordElement() -»
+		«EXPAND _AddPasswordValidationRule -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	adds filters
+«ENDREM»
+«DEFINE _AddFilter FOR MProperty -»
+	«EXPAND _AddTrimFilter -»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	adds a submit button
+«ENDREM»
+«DEFINE _AddSubmitButton FOR MClass -»
+		$form->addElement('submit', 'save', 'save');
+«ENDDEFINE»
+
+«REM»
+	adds a text element
+«ENDREM»
+«DEFINE _AddTextElement FOR MProperty -»
+		$form->addElement('text', '«asQuickFormElementName()»', '«asQuickFormElementLabel()»');
+«ENDDEFINE»
+
+«REM»
+	adds a password element + a retyped password element
+«ENDREM»
+«DEFINE _AddPasswordElement FOR MProperty -»
+		$form->addElement('password', '«asQuickFormElementName()»', '«asQuickFormElementLabel()»');
+		$form->addElement('password', '«asQuickFormPasswordRepeatElementName()»', '«asQuickFormPasswordRepeatLabel()»');
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	adds a password validation rule
+«ENDREM»
+«DEFINE _AddPasswordValidationRule FOR MProperty -»
+		$form->addRule(
+			array('«asQuickFormElementName()»', '«asQuickFormPasswordRepeatElementName()»'),
+			'The passwords you entered do not match!', 'compare'); 
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	adds a trim filter
+«ENDREM»
+«DEFINE _AddTrimFilter FOR MProperty -»
+		$form->applyFilter('«asQuickFormElementName()»', 'trim');
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the method call to add custom definitions to the form
+«ENDREM»
+«DEFINE _AddCustomDefinitions FOR MClass -»
+		self::«asQuickFormAddCustomDefinitionMethodName()»($form);
+«ENDDEFINE»
+
+«REM»
+	generates a check if the object parameter of the build object method is null or not
+	- used for distinction between 'create' and 'edit'
+«ENDREM»
+«DEFINE _NullObjectCheck FOR MClass -»
+		if ($«asQuickFormBuildObjectMethodObjectParameterName()» === null) {
+			$«asQuickFormBuildObjectMethodObjectParameterName()» = new «asTypeName()»();
+		}
+«ENDDEFINE»
+
+«REM»
+	exports the value from the form and sets it on the object
+	- delegates to normal export or to checked export
+«ENDREM»
+«DEFINE _ExportValue FOR MProperty -»
+«IF isPasswordElement() -»
+	«EXPAND _ExportPasswordValue -»
+«ELSE -»
+	«EXPAND _ExportNormalValue -»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	exports a value of the form and sets it on the object using the specified kind of access
+«ENDREM»
+«DEFINE _ExportNormalValue FOR MProperty -»
+«IF isAttributeAccess() -»
+		$«classifier.asQuickFormBuildObjectMethodObjectParameterName()»->«asAttribute()» = $«asQuickFormBuildObjectMethodFormParameterName()»->exportValue('«asQuickFormElementName()»');
+«ELSEIF isArrayAccess() -»
+		$«classifier.asQuickFormBuildObjectMethodObjectParameterName()»['«asAttribute()»'] = $«asQuickFormBuildObjectMethodFormParameterName()»->exportValue('«asQuickFormElementName()»');
+«ELSE -»
+		$«classifier.asQuickFormBuildObjectMethodObjectParameterName()»->«asSetter()»($«asQuickFormBuildObjectMethodFormParameterName()»->exportValue('«asQuickFormElementName()»'));
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	exports a value of the form and sets it on the object using a setter method
+	only if it differs from an empty string
+«ENDREM»
+«DEFINE _ExportPasswordValue FOR MProperty -»
+		if ($«asQuickFormBuildObjectMethodFormParameterName()»->exportValue('«asQuickFormElementName()»') != "") {
+			«EXPAND _ExportNormalValue -»
+		}
+«ENDDEFINE»

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	<property name="baseDir" value="." />
+	<property name="typeMappingDir" value="." />
+	<!-- read the exported uml2 model file and transform it into a GeneSEZ model -->
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<!-- directory which contains the exported uml2 model -->
+		<model value="${baseDir}/model/org.genesez.platform.uml" />
+		<!--<profile value="model/GeneSEZ_Profile.profile.uml" />-->
+	</component>
+	<!-- validate the GeneSEZ model against common + java specific constraints -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
+	</component>
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  /-->
+	<component id="serialize" class="org.genesez.platform.common.workflow.Serializer">
+		<file value="${baseDir}/model/org.genesez.platform.xmi" />
+	</component>
+	<!-- run the java code generation and transform the model into java source code -->
+	<component id="model2java" class="org.genesez.platform.java.workflow.JavaGenerator">
+		<!-- directory in which the generated files are placed -->
+		<outputDir value="${baseDir}/../org.genesez.platform.java/src-gen" />
+		<excludePackage value="common" />
+		<typeMappingFile value="${typeMappingDir}/typemapping.xml" />
+		<excludedDirectoryNames value="types" />
+		<aspectTemplate value="${baseDir}/customization::Around" />
+		<importTakeOver value="true" />
+		<!-- boolean value indicates if the model name is used as base package or not -->
+		<useModelNameAsBasePackage value="true" />
+		<newAssociationHandling value="false" />
+	</component>
+</workflow>

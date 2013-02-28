@@ -1,0 +1,183 @@
+
+«IMPORT greq»
+«IMPORT gcore»
+
+«REM»
+	Generates an overview page with traceability information of requirements.
+	@author tobias haubold
+«ENDREM»
+
+«EXTENSION org::genesez::metamodel::navigation::RequirementsTraceability»
+
+«EXTENSION org::genesez::platform::common::Conversion»
+
+«EXTENSION org::genesez::platform::dashboard::AccessHelper»
+«EXTENSION org::genesez::platform::dashboard::Dashboard»
+«EXTENSION org::genesez::platform::dashboard::Naming»
+
+
+«DEFINE Root FOR RRequirement -»
+«FILE requirementFileName()»
+	«EXPAND _Requirement -»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE _Requirement FOR RRequirement -»
+	«EXPAND _Summary -»
+	«EXPAND _Details -»
+	«EXPAND _TraceabilityInformation -»
+	«EXPAND _TraceabilityInformationDetail -»
+	«EXPAND _SupportedScenarios -»
+	«EXPAND _SupportedScenarioSteps -»
+	«EXPAND _SelfReferences -»
+«ENDDEFINE»
+
+«REM» - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates summary information
+«ENDREM»
+«DEFINE _Summary FOR RRequirement -»
+	<h2>Requirement «id»</h2>
+	<p>«definition»</p>
+«ENDDEFINE»
+
+«REM»
+	generates more detailed information
+«ENDREM»
+«DEFINE _Details FOR RRequirement -»
+<div>
+	<table>
+		<tr>
+			<th>Version</th>
+			<td>«version»</td>
+		</tr>
+		«IF url.isUseful() -»
+		<tr>
+			<th>Further information</th>
+			<td><a target="_blank" href="«url»">«url»</a></td>
+		</tr>
+		«ENDIF -»
+		«IF precedence.isUseful() -»
+		<tr>
+			<th>Precedence</th>
+			<td>«precedence»</td>
+		</tr>
+		«ENDIF -»
+		«IF rationale.isUseful() -»
+		<tr>
+			<th>Rationale</th>
+			<td>«rationale»</td>
+		</tr>
+		«ENDIF -»
+		«IF type.isUseful() -»
+		<tr>
+			<th>Type</th>
+			<td>«type»</td>
+		</tr>
+		«ENDIF -»
+		«IF verificationMethod.isUseful() -»
+		<tr>
+			<th>Verification&nbsp;method</th>
+			<td>«verificationMethod»</td>
+		</tr>
+		«ENDIF -»
+	</table>
+</div>
+«ENDDEFINE»
+
+«DEFINE _TraceabilityInformation FOR RRequirement -»
+<h3>Traceability Information</h3>
+<div>
+	<table class="centerCells">
+		<tr>
+			<th>Classifier</th>
+			<th>Association Ends</th>
+			<th>Operations</th>
+			<th>Parameters</th>
+			<th>Attributes</th>
+			<th>Satisfaction Rate</th>
+		</tr>
+		<tr>
+			<td>«element().typeSelect(MClassifier).size»</td>
+			<td>«element().typeSelect(MAssociationRole).size»</td>
+			<td>«element().typeSelect(MOperation).size»</td>
+			<td>«element().typeSelect(MParameter).size»</td>
+			<td>«element().typeSelect(MAttribute).size»</td>
+			<td>«IF element().isEmpty»unsatisfied«ELSE»satisfied«ENDIF»</td>
+		</tr>
+	</table>
+</div>
+«ENDDEFINE»
+
+«DEFINE _TraceabilityInformationDetail FOR RRequirement -»
+	«EXPAND _TraceabilityInformationDetail FOR element().typeSelect(MClassifier) -»
+	«EXPAND _TraceabilityInformationDetail FOR element().typeSelect(MAssociationRole) -»
+	«EXPAND _TraceabilityInformationDetail FOR element().typeSelect(MOperation) -»
+	«EXPAND _TraceabilityInformationDetail FOR element().typeSelect(MParameter) -»
+	«EXPAND _TraceabilityInformationDetail FOR element().typeSelect(MAttribute) -»
+«ENDDEFINE»
+
+«DEFINE _TraceabilityInformationDetail FOR List[MElement] -»
+«IF !isEmpty -»
+<h3>«first().asMetaTypeNamePlural()» Satisfied</h3>
+<div>
+	<dl>
+		«FOREACH this AS e -»
+		<dt>«EXPAND org::genesez::platform::dashboard::traceability::structure::GcoreCommon::QualifiedName FOR e -»</dt>
+		<dd>«e.comment()»</dd>
+		«ENDFOREACH -»
+	</dl>
+</div>
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _SupportedScenarios FOR RRequirement -»
+«IF !supportedScenario.isEmpty -»
+<h3>Supported Scenarios</h3>
+<div class="list">
+	«EXPAND GreqCommon::ListItem(true) FOREACH supportedScenario.sortBy( e|e.sort() ) -»
+</div>
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _SupportedScenarioSteps FOR RRequirement -»
+«IF !supportedScenarioStep.isEmpty -»
+<h3>Supported Scenario Steps</h3>
+<div class="list">
+	«EXPAND GreqCommon::ListItem(true, true) FOREACH supportedScenarioStep.sortBy( e|e.sort() ) -»
+</div>
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _SelfReferences FOR RRequirement -»
+«IF parent != null || !child.isEmpty || refining != null || !refined.isEmpty || deriving != null || !derived.isEmpty -»
+<h3>Referenced Requirements</h3>
+<dl>
+	«EXPAND _Reference("Parent Requirement") FOR parent -»
+	«EXPAND _Reference("Child Requirements") FOR child -»
+	«EXPAND _Reference("Refines") FOR refining -»
+	«EXPAND _Reference("Refined by") FOR refined -»
+	«EXPAND _Reference("Derived from") FOR deriving -»
+	«EXPAND _Reference("Derived Requirements") FOR derived -»
+</dl>
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _Reference(String kind) FOR RSpecObject -»
+«IF this != null -»
+	<dt>«kind»</dt>
+	<dd class="list">
+		«EXPAND GreqCommon::ListItem(true, true) -»
+	</dd>
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _Reference(String kind) FOR List[RSpecObject] -»
+«IF !isEmpty -»
+	<dt>«kind»</dt>
+	<dd class="list">
+		«EXPAND GreqCommon::ListItem(true, true) FOREACH this -»
+	</dd>
+«ENDIF -»
+«ENDDEFINE»

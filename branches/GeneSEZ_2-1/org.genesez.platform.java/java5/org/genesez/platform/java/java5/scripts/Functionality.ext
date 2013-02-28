@@ -1,0 +1,55 @@
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2009-04-14
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension org::genesez::platform::common::log::Log;
+extension org::genesez::platform::java::java5::scripts::Operation;
+extension org::genesez::platform::java::java5::scripts::Attribute;
+extension org::genesez::platform::java::java5::scripts::Class;
+extension org::genesez::platform::java::java5::scripts::Annotation;
+
+
+Void additions(MModel this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MPackage this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MClass this) :
+	this.addEqualsOperation();
+
+Void modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications() -> 
+	this.classifier.typeSelect(MInterface).modifications();
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications() ->
+	this.classifier.typeSelect(MInterface).modifications();
+	
+Void modifications(MClass this) :
+	this.property.typeSelect(MAttribute).modifications() ->
+	this.property.typeSelect(MAssociationRole).modifications();
+	
+Void modifications(MAttribute this) :
+	checkFieldAccess(); //->
+	//createGetterOperation(this.classifier) ->
+	//createSetterOperation(this.classifier);
+	
+Void modifications(MAssociationRole this) :
+	//createGetterOperation(this.classifier);// ->
+	//createSetterOperation();
+	"";
+	
+Void modifications(MInterface this) :
+    addTargetStereotype() ->
+    addRetentionStereotype();

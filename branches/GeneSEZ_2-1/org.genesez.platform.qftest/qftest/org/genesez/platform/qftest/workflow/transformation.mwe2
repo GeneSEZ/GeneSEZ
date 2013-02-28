@@ -1,0 +1,26 @@
+module org.genesez.platform.qftest.workflow
+
+/*
+ * performs a model-to-text transformation (code generation)
+ * 
+ * following parameters are required:
+ * ==================================
+ * 
+ * $outputDir 			the path where the generated file are produced
+ * $testingModel		name of the slot which holds the genesez testing model
+ */
+
+var testingModel
+var outputDir
+
+Workflow {
+	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : gtesting {
+		metaModelPackage = "org.genesez.testing.gtesting.GtestingPackage"
+	}
+	component = org.eclipse.xtend.XtendComponent {
+		metaModel = gtesting
+		globalVarDef = { name = "testingmodel" value = "'${testingModel}'" }
+		globalVarDef = { name = "outputdir" value = "'${outputDir}'" }
+		invoke = "org::genesez::platform::qftest::scripts::model2text::transform(testingmodel)"
+	}
+}

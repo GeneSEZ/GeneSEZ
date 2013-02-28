@@ -1,0 +1,49 @@
+«IMPORT gcore»
+
+«REM»
+	Template for ejb3 attributes
+	
+	@author		andre pflueger
+	@date		2009-02-22
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::platform::common::log::Log»
+
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluate stereotypes for attributes 
+«ENDREM»
+«DEFINE Annotation FOR MAttribute»
+	«EXPAND _Resource-»
+	«EXPAND Element::EJB-»	
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	evaluates the stereotype ejb3Resource
+«ENDREM»
+«DEFINE _Resource FOR MAttribute-»
+	«IF hasStereotype("ejb3Resource")-»
+		@Resource«IF hasUtilizableValue("ejb3Resource", "value")-»
+			(«getTaggedValue("ejb3Resource", "value")-»)
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»

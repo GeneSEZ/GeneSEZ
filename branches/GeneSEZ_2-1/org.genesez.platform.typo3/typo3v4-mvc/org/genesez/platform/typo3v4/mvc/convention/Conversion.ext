@@ -1,0 +1,709 @@
+/**
+ * General file conventions for TYPO3 MVC.  
+ * Everything in relation to files and directories!!!
+ *
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-07-20
+ */
+
+// based on genesez meta model
+import gcore;
+
+// use TYPO3 naming context and common naming scripts
+extension org::genesez::platform::common::naming::Naming;
+extension org::genesez::platform::typo3v4::mvc::convention::NamingContext;
+
+// use TYPO3 MVC convention scripts
+extension org::genesez::platform::typo3v4::mvc::convention::Convention;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC file name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Getter for the separator within a file name.
+ *
+ * @return	The separator for directories in file names.
+ */
+String fileSeparator() : 
+	"/";
+
+
+/**
+ * Getter of the PHP file extension including the beginning dot.
+ *
+ * @return	The file extension for PHP artefacts ('.php').
+ */
+String fileExtensionPHP() : 
+	".php";
+
+
+/**
+ * Getter of the SQL file extension including the beginning dot.
+ *
+ * @return	The file extension for SQL artefacts ('.sql').
+ */
+String fileExtensionSQL() : 
+	".sql";
+
+
+/**
+ * Getter of the TypoScript file extension including the beginning dot.
+ *
+ * @return	The file extension for TypoScript artefacts ('.txt').
+ */
+String fileExtensionTS() : 
+	".txt";
+
+
+/**
+ * Getter of the HTML file extension including the beginning dot.
+ *
+ * @return	The file extension for HTML artefacts ('.html').
+ */
+String fileExtensionHTML() : 
+	".html";
+
+
+/**
+ * Getter of the XML file extension including the beginning dot.
+ *
+ * @return	The file extension for XML artefacts ('.xml').
+ */
+String fileExtensionXML() : 
+	".xml";
+
+
+/**
+ * Formats the file name of a classifier without file extension.
+ *
+ * @return	The file name of a classifier.
+ */
+String fileName(MClassifier this) :
+	classifierNamePrefix() + name( namingContextPHPCompliant() ) + classifierNameSuffix();
+
+
+/**
+ * Formats the file name of a classifier as php file.
+ *
+ * @return	The file name of the classifier as php file.
+ */
+String fileNamePHP(MClassifier this) :
+	fileName() + fileExtensionPHP();
+
+
+/**
+ * Gets the file name of "ext_localconf.php".
+ *
+ * @return	The file name of "ext_localconf.php". 
+ */
+String extLocalconfPhpFileName() :
+	"ext_localconf" + fileExtensionPHP();
+
+
+/**
+ * Gets the file name of "ext_tables.php".
+ *
+ * @return	The file name of "ext_tables.php". 
+ */
+String extTablesPHPFileName() :
+	"ext_tables" + fileExtensionPHP();
+
+
+/**
+ * Gets the file name of "flexform_<plugin>.xml".
+ *
+ * @return	The file name of "flexform_<plugin>.xml". 
+ */
+String flexformXMLFileName(MInterface this) :
+	"flexform_" + name( namingContextPHPCompliant() ).toLowerCase() + fileExtensionXML();
+
+
+
+/**
+ * Gets the file name of "tca.php".
+ *
+ * @return	The file name of "tca.php". 
+ */
+String tcaPHPFileName(MClass this) :
+	fileName() + fileExtensionPHP();
+
+
+/**
+ * Gets the file name of "ext_tables.sql".
+ *
+ * @return	The file name of "ext_tables.sql". 
+ */
+String extTablesSQLFileName() :
+	"ext_tables" + fileExtensionSQL();
+
+
+/**
+ * Gets the file name of "ext_typoscript_setup.txt".
+ *
+ * @return	The file name of "ext_typoscript_setup.txt". 
+ */
+String extTypoScriptSetupTSFileName() :
+	"setup" + fileExtensionTS();
+	
+
+/**
+ * Gets the file name of "ext_typoscript_constants.txt".
+ *
+ * @return	The file name of "ext_typoscript_constants.txt". 
+ */
+String extTypoScriptConstantsTSFileName() :
+	"constants" + fileExtensionTS();
+
+
+/**
+ * Gets the file name of "locallang.xml".
+ *
+ * @return	The file name of "locallang.xml". 
+ */
+String locallangXMLFileName() :
+	"locallang" + fileExtensionXML();
+
+
+/**
+ * Gets the file name of "locallang_db.xml".
+ *
+ * @return	The file name of "locallang_db.xml". 
+ */
+String locallangDbXMLFileName() :
+	"locallang_db" + fileExtensionXML();
+
+
+/**
+ * Gets the file name of "locallang_csh_<domain_object>.xml".
+ *
+ * @return	The file name of "locallang_csh_<domain_object>.xml". 
+ */
+String locallangCshXMLFileName(MClass this) :
+	"locallang_csh_" + name( namingContextLocalizationCSH() ) + fileExtensionXML();
+
+
+/**
+ * Gets the file name of "locallang_ff_<plugin>.xml".
+ *
+ * @return	The file name of "locallang_ff_<plugin>.xml". 
+ */
+String locallangFFXMLFileName(MInterface this) :
+	"locallang_ff_" + name( namingContextPHPCompliant() ).toLowerCase() + fileExtensionXML();
+
+
+/**
+ * Gets the file name of "locallang_mod_<module>.xml".
+ *
+ * @return	The file name of "locallang_mod_<module>.xml". 
+ */
+String locallangModXMLFileName(MInterface this) :
+	"locallang_mod_" + name( namingContextPHPCompliant() ).toLowerCase() + fileExtensionXML();
+	
+
+/**
+ * Gets the file name of "Default.html".
+ *
+ * @return	The file name of "Default.html". 
+ */
+String defaultHTMLFileName() :
+	"Default" + fileExtensionHTML();
+
+
+/**
+ * Gets the file name of "FormErrors.html".
+ *
+ * @return	The file name of "FormErrors.html". 
+ */
+String formErrorsHTMLFileName() :
+	"FormErrors" + fileExtensionHTML();
+
+
+/**
+ * Gets the file name of "FormFields.html".
+ *
+ * @return	The file name of "FormFields.html". 
+ */
+String formFieldsHTMLFileName() :
+	"FormFields" + fileExtensionHTML();
+
+
+/**
+ * Gets the file name of "Properties.html".
+ *
+ * @return	The file name of "Properties.html". 
+ */
+String propertiesHTMLFileName() :
+	"Properties" + fileExtensionHTML();
+
+
+/**
+ * Gets the file name of "Edit.html".
+ *
+ * @return	The file name of "Edit.html". 
+ */
+String editHTMLFileName() :
+	"Edit" + fileExtensionHTML();
+
+
+/**
+ * Gets the file name of "List.html".
+ *
+ * @return	The file name of "List.html". 
+ */
+String listHTMLFileName() :
+	"List" + fileExtensionHTML();
+
+
+/**
+ * Gets the file name of "New.html".
+ *
+ * @return	The file name of "New.html". 
+ */
+String newHTMLFileName() :
+	"New" + fileExtensionHTML();
+
+
+/**
+ * Gets the file name of "Show.html".
+ *
+ * @return	The file name of "Show.html". 
+ */
+String showHTMLFileName() :
+	"Show" + fileExtensionHTML();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 MVC file path conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Getter for the file path of a classifier based on it's namespace.
+ * 
+ * @return	The file path for the classifier, e.g. "Classes/Domain/Model".
+ */
+private String filePath(MClassifier this) :
+	baseFilePath() + fileSeparator() + classifierNamePath().replaceAll(classifierNameSeperator(), fileSeparator());
+
+
+/**
+ * Getter for the base path of a classifier based on it's namespace.
+ * 
+ * @return	 The base file path for the classifier, e.g. "Classes".
+ */
+private String baseFilePath(MClassifier this) :
+	switch {
+		default : classesPath()
+	};
+
+
+/*
+- - Classes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String classesPath() :
+	"Classes";
+
+
+String classesControllerPath() :
+	"Classes/Controller";
+
+
+String classesDomainPath() :
+	"Classes/Domain";
+
+
+String classesDomainFactoryPath() :
+	"Classes/Domain/Factory";
+
+
+String classesDomainModelPath() :
+	"Classes/Domain/Model";
+
+	
+String classesDomainRepositoryPath() :
+	"Classes/Domain/Repository";
+
+
+String classesDomainServicePath() :
+	"Classes/Domain/Service";
+	
+	
+String classesDomainValidatorPath() :
+	"Classes/Domain/Validator";
+
+
+String classesViewHelpersPath() :
+	"Classes/ViewHelpers";
+
+
+/*
+- - Configuration - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String configurationPath() :
+	"Configuration";
+
+
+String configurationFlexFormsPath() :
+	"Configuration/FlexForms";
+
+
+String configurationTCAPath() :
+	"Configuration/TCA";
+
+
+String configurationTypoScriptPath() :
+	"Configuration/TypoScript";
+
+
+/*
+- - Documentation - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String documentationPath() :
+	"Documentation";
+
+
+String documentationManualPath() :
+	"Documentation/Manual";
+	
+
+/*
+- - Resources - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+*/
+
+String resourcesPath() :
+	"Resources";
+	
+
+String resourcesPrivatePath() :
+	"Resources/Private";
+
+
+String resourcesPrivateBackendPath() :
+	"Resources/Private/Backend";
+
+
+String resourcesPrivateBackendLayoutsPath() :
+	"Resources/Private/Backend/Layouts";
+
+
+String resourcesPrivateBackendPartialsPath() :
+	"Resources/Private/Backend/Partials";
+
+
+String resourcesPrivateBackendTemplatesPath() :
+	"Resources/Private/Backend/Templates";
+
+
+String resourcesPrivateLanguagePath() :
+	"Resources/Private/Language";
+
+
+String resourcesPrivateLayoutsPath() :
+	"Resources/Private/Layouts";
+
+
+String resourcesPrivatePartialsPath() :
+	"Resources/Private/Partials";
+	
+
+String resourcesPrivateTemplatesPath() :
+	"Resources/Private/Templates";
+
+
+String resourcesPublicPath() :
+	"Resources/Public";
+	
+String resourcesPublicIconsPath() :
+	"Resources/Public/Icons";
+
+
+/*
+- - Tests - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    
+*/
+
+String testsPath() :
+	"Tests";
+
+
+String testsControllerPath() :
+	"Tests/Controller";
+
+
+String testsDomainPath() :
+	"Tests/Domain";
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	GENERAL TYPO3 file path and name conventions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * Getter for the full file path and name of a classifier based on the given basename and including path.
+ *
+ * @param	fileName	The file name of the classifier, usually the name according to naming conventions.
+ * @return	the full file name of the classifier including the path, e.g. "Classes/Domain/Model/Blog.php"
+ */
+String fileNamePath(MClassifier this, String filename) :
+	filePath() + fileSeparator() + filename;
+
+
+/**
+ * Gets the file path and name of "ext_localconf.php".
+ *
+ * @return	The file path and name of "ext_localconf.php". 
+ */
+String extLocalconfPHPFileNamePath() :
+	extLocalconfPhpFileName();
+
+
+/**
+ * Gets the file path and name of "ext_tables.php".
+ *
+ * @return	The file path and name of "ext_tables.php". 
+ */
+String extTablesPHPFileNamePath() :
+	extTablesPHPFileName();
+	
+
+/**
+ * Gets the file path and name of "ext_tables.sql".
+ *
+ * @return	The file path and name of "ext_tables.sql". 
+ */
+String extTablesSQLFileNamePath() :
+	extTablesSQLFileName();
+
+
+/**
+ * Gets the file path and name of "flexform_<plugin>.xml".
+ *
+ * @return	The file path and name of "flexform_<plugin>.xml". 
+ */
+String flexformXMLFileNamePath(MInterface this) :
+	configurationFlexFormsPath() + fileSeparator() + flexformXMLFileName();
+
+
+/**
+ * Gets the file path and name of "tca.php".
+ *
+ * @return	The file path and name of "tca.php". 
+ */
+String tcaPHPFileNamePath(MClass this) :
+	configurationTCAPath() + fileSeparator() + tcaPHPFileName();
+
+
+/**
+ * Gets the file path and name of "ext_typoscript_setup.txt".
+ *
+ * @return	The file path and name of "ext_typoscript_setup.txt". 
+ */
+String extTypoScriptSetupTSFileNamePath() :
+	configurationTypoScriptPath() + fileSeparator() + extTypoScriptSetupTSFileName();
+	
+
+/**
+ * Gets the file path and name of "ext_typoscript_constante.txt".
+ *
+ * @return	The file path and name of "ext_typoscript_constants.txt". 
+ */
+String extTypoScriptConstantsTSFileNamePath() :
+	configurationTypoScriptPath() + fileSeparator() + extTypoScriptConstantsTSFileName();	
+
+
+/**
+ * Gets the file path and name of "locallang.xml".
+ *
+ * @return	The file path and name of "locallang.xml". 
+ */
+String locallangXMLFileNamePath() :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangXMLFileName();
+
+
+/**
+ * Gets the file path and name of "locallang_db.xml".
+ *
+ * @return	The file path and name of "locallang_db.xml". 
+ */
+String locallangDbXMLFileNamePath() :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangDbXMLFileName();	
+
+
+/**
+ * Gets the file path and name of "locallang_csh_<domain_object>.xml".
+ *
+ * @return	The file path and name of "locallang_csh_<domain_object>.xml". 
+ */
+String locallangCshXMLFileNamePath(MClass this) :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangCshXMLFileName();	
+
+
+/**
+ * Gets the file path and name of "locallang_ff_<plugin>.xml".
+ *
+ * @return	The file path and name of "locallang_ff_<plugin>.xml". 
+ */
+String locallangFFXMLFileNamePath(MInterface this) :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangFFXMLFileName();	
+
+
+/**
+ * Gets the file path and name of "locallang_mod_<module>.xml".
+ *
+ * @return	The file path and name of "locallang_mod_<module>.xml". 
+ */
+String locallangModXMLFileNamePath(MInterface this) :
+	resourcesPrivateLanguagePath() + fileSeparator() + locallangModXMLFileName();	
+
+
+/**
+ * Gets the file path and name of "Default.html" for backend.
+ *
+ * @return	The file path and name of "Default.html" for backend. 
+ */
+String defaultHTMLBackendFileNamePath() :
+	  resourcesPrivateBackendLayoutsPath() + fileSeparator() + defaultHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "Default.html" for frontend.
+ *
+ * @return	The file path and name of "Default.html" for frontend. 
+ */
+String defaultHTMLFrontendFileNamePath() :
+	  resourcesPrivateLayoutsPath() + fileSeparator() + defaultHTMLFileName();
+
+
+/**
+ * Gets the file path and name of "FormErrors.html" for backend.
+ *
+ * @return	The file path and name of "FormErrors.html" for backend. 
+ */
+String formErrorsHTMLBackendFileNamePath() :
+	  resourcesPrivateBackendPartialsPath() + fileSeparator() + formErrorsHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "FormErrors.html" for frontend.
+ *
+ * @return	The file path and name of "FormErrors.html" for frontend. 
+ */
+String formErrorsHTMLFrontendFileNamePath() :
+	  resourcesPrivatePartialsPath() + fileSeparator() + formErrorsHTMLFileName();
+
+
+/**
+ * Gets the file path and name of "FormFields.html" for backend.
+ *
+ * @return	The file path and name of "FormFields.html" for backend. 
+ */
+String formFieldsHTMLBackendFileNamePath(MClass this) :
+	  resourcesPrivateBackendPartialsPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + formFieldsHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "FormFields.html" for frontend.
+ *
+ * @return	The file path and name of "FormFields.html" for frontend. 
+ */
+String formFieldsHTMLFrontendFileNamePath(MClass this) :
+	  resourcesPrivatePartialsPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + formFieldsHTMLFileName();
+
+
+/**
+ * Gets the file path and name of "Properties.html" for backend.
+ *
+ * @return	The file path and name of "Properties.html" for backend. 
+ */
+String propertiesHTMLBackendFileNamePath(MClass this) :
+	  resourcesPrivateBackendPartialsPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + propertiesHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "Properties.html" for frontend.
+ *
+ * @return	The file path and name of "Properties.html" for frontend. 
+ */
+String propertiesHTMLFrontendFileNamePath(MClass this) :
+	  resourcesPrivatePartialsPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + propertiesHTMLFileName();
+
+
+/**
+ * Gets the file path and name of "Edit.html" for backend.
+ *
+ * @return	The file path and name of "Edit.html" for backend. 
+ */
+String editHTMLBackendFileNamePath(MClass this) :
+	  resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + editHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "Edit.html" for frontend.
+ *
+ * @return	The file path and name of "Edit.html" for frontend. 
+ */
+String editHTMLFrontendFileNamePath(MClass this) :
+	  resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + editHTMLFileName();
+
+
+/**
+ * Gets the file path and name of "List.html" for backend.
+ *
+ * @return	The file path and name of "List.html" for backend. 
+ */
+String listHTMLBackendFileNamePath(MClass this) :
+	  resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + listHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "List.html" for frontend.
+ *
+ * @return	The file path and name of "List.html" for frontend. 
+ */
+String listHTMLFrontendFileNamePath(MClass this) :
+	  resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + listHTMLFileName();
+
+
+/**
+ * Gets the file path and name of "New.html" for backend.
+ *
+ * @return	The file path and name of "New.html" for backend. 
+ */
+String newHTMLBackendFileNamePath(MClass this) :
+	  resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + newHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "New.html" for frontend.
+ *
+ * @return	The file path and name of "New.html" for frontend. 
+ */
+String newHTMLFrontendFileNamePath(MClass this) :
+	  resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + newHTMLFileName();
+
+
+/**
+ * Gets the file path and name of "Show.html" for backend.
+ *
+ * @return	The file path and name of "Show.html" for backend. 
+ */
+String showHTMLBackendFileNamePath(MClass this) :
+	  resourcesPrivateBackendTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + showHTMLFileName();
+	  
+
+/**
+ * Gets the file path and name of "Show.html" for frontend.
+ *
+ * @return	The file path and name of "Show.html" for frontend. 
+ */
+String showHTMLFrontendFileNamePath(MClass this) :
+	  resourcesPrivateTemplatesPath() + fileSeparator() + name( namingContextPHPCompliant() ) + fileSeparator() + showHTMLFileName();

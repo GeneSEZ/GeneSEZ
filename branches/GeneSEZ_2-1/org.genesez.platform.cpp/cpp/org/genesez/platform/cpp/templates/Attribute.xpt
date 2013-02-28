@@ -1,0 +1,187 @@
+«REM»
+ Handling of MAttribute elements.
+ 
+ author: Robert Meichsner
+ date: 28/11/07
+«ENDREM»
+
+«IMPORT gcore»
+
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+«EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
+«EXTENSION org::genesez::platform::cpp::helper::PackageHelper»
+
+«DEFINE Declaration(String vis) FOR MClass -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && e.static && e.final && !e.derived) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && !e.static && e.final && !e.derived) -»
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && e.static && !e.final && !e.derived) -»	
+	«EXPAND _Declaration FOREACH property.typeSelect(MAttribute).select(e | !e.isTypedef() && e.visibility == vis && !e.static && !e.final && !e.derived) -»
+«ENDDEFINE»
+
+«DEFINE DerivedDecl(String vis) FOR MClassifier -»
+	«EXPAND _DerivedDecl FOREACH property.typeSelect(MAttribute).select( e| e.visibility == vis && e.static && e.derived ) -»
+	«EXPAND _DerivedDecl FOREACH property.typeSelect(MAttribute).select( e| e.visibility == vis && !e.static && e.derived ) -»
+«ENDDEFINE»
+
+«DEFINE AccessorDecl FOR MClass -»
+«REM»«EXPAND _GetterDecl FOREACH property.typeSelect(MAttribute).select(e| e.final && !e.derived) -»«ENDREM»
+«FOREACH property.typeSelect(MAttribute).select(e| !e.final && !e.derived) AS attrib -»
+	«IF generateGetter(attrib)-»«EXPAND _GetterDecl FOR attrib -»«ENDIF-»
+	«IF generateSetter(attrib)-»«EXPAND _SetterDecl FOR attrib -»«ENDIF-»
+	«EXPAND _InsertInDecl FOR attrib -»
+	«EXPAND _RemoveFromDecl FOR attrib -»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE AccessorImpl FOR MClass-»
+«REM»«EXPAND _GetterImpl FOREACH property.typeSelect(MAttribute).select(e| e.final && !e.derived) -»«ENDREM»
+«FOREACH property.typeSelect(MAttribute).select(e| !e.final && !e.derived) AS attrib -»
+	«IF generateGetter(attrib)-»«EXPAND _GetterImpl FOR attrib -»«ENDIF-»
+	«IF generateSetter(attrib)-»«EXPAND _SetterImpl FOR attrib -»«ENDIF-»
+	«EXPAND _InsertInImpl FOR attrib -»
+	«EXPAND _RemoveFromImpl FOR attrib -»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE DerivedImpl FOR MClassifier -»
+	«EXPAND _DerivedImpl FOREACH property.typeSelect(MAttribute).select( e| e.static && e.derived ) -»
+	«EXPAND _DerivedImpl FOREACH property.typeSelect(MAttribute).select( e| !e.static && e.derived ) -»
+«ENDDEFINE»
+
+«REM»
+ ************************************
+ Private functions
+ ************************************
+«ENDREM»
+
+«DEFINE _Declaration FOR MAttribute -»
+«IF type.isGenericType()-»
+	«IF isSingleValuedType()-»
+		«EXPAND _static -»«EXPAND _final -»«type.name() -»«getTypeModifier() -» «asAttribute() -»«IF final -»«EXPAND _DefaultValue -»«ENDIF -»;
+	«ELSE -»
+		«EXPAND _static -»«EXPAND _final -»«mapType() -»<«type.name() -»«getTypeModifier() -»> «asAttribute() -»;
+	«ENDIF -»
+«ELSE-»
+	«IF isSingleValuedType() -»
+		«EXPAND _static -»«EXPAND _final -»«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»«type.getTypeModifier() -» «asAttribute() -»«IF final -»«EXPAND _DefaultValue -»«ENDIF -»;
+	«ELSE -»
+		«EXPAND _static -»«EXPAND _final -»«mapType() -»<«type.getFQNS() -»«type.mapName().asTypeName() -»«EXPAND Generic::Generics -»> «asAttribute() -»;
+	«ENDIF -»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _DerivedDecl FOR MAttribute -»	
+	«IF isSingleValuedType() -»const «type.getFQNS()-»«type.mapName() -» «asGetter() -»();
+	«ELSE -»const «mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»> «asGetter()-»();«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _DerivedImpl FOR MAttribute -»	
+	«IF isSingleValuedType() -»
+		const «type.getFQNS()-»«type.mapName()-» «classifier.asTypeName()-»::«asGetter()-»()
+		{
+			«type.mapName()-» derived;
+			«PROTECT CSTART '/* ' CEND ' */' ID("cpp.implementation." + xmiGuid)»
+			// TODO: implementation of '«asGetter()-»' for class '«classifier.asTypeName()»'
+			
+			«ENDPROTECT»	
+			return derived;
+		}
+	«ELSE -»	
+		const «mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»> «classifier.asTypeName()-»::«asGetter() -»()
+		{
+			«mapType()-»«type.getFQNS()-»«type.mapName()-»> derived«IF !type.isPrimitiveType()-»= 0«ENDIF-»;
+			«PROTECT CSTART '/* ' CEND ' */' ID("cpp.implementation." + xmiGuid)»
+			// TODO: implementation of '«asGetter()-»' for class '«classifier.asTypeName()»'
+			
+			«ENDPROTECT»	
+			return derived;
+		}
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _InsertInDecl FOR MAttribute -»
+«IF !final && isMultiValuedType() -»void «asInsertIn()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»&);«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _RemoveFromDecl FOR MAttribute -»
+«IF !final && isMultiValuedType() -»void «asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»&);«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _GetterDecl FOR MAttribute -»
+	«IF isSingleValuedType() -»
+	«EXPAND _static-»«type.getFQNS()-»«type.mapName().asTypeName() -»«IF !type.isPrimitiveType()»«ENDIF» «asGetter() -»();
+	«ELSE -»
+	«EXPAND _static-»const «mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»>& «asGetter() -»();
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _SetterDecl FOR MAttribute -»
+«IF isSingleValuedType() -»«EXPAND _static-» void «asSetter()»(«type.getFQNS()-»«type.mapName().asTypeName()»«IF !type.isPrimitiveType()»«ENDIF»);«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _InsertInImpl FOR MAttribute -»
+«IF isMultiValuedType() -»
+	void «classifier.asTypeName()-»::«asInsertIn()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»& _toInsert) {
+		«IF unique-»«asAttribute()-».insert(«asAttribute()-».end(), _toInsert);
+		«ELSE-»«asAttribute()-».push_back(_toInsert);«ENDIF-»
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _RemoveFromImpl FOR MAttribute -»
+«IF isMultiValuedType() -»
+	void «classifier.asTypeName()-»::«asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»& _toRemove)	{
+		«mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»>::iterator it = «asAttribute()-».begin();
+		
+		for(; it != «asAttribute()-».end(); it++) {
+			if(*it == _toRemove) {
+				«asAttribute()-».erase(it);
+			}
+		}
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _GetterImpl FOR MAttribute -»
+	«IF isSingleValuedType() -»
+	«type.getFQNS()-»«type.mapName().asTypeName() -»«IF !type.isPrimitiveType()»«ENDIF» «classifier.asTypeName()-»::«asGetter() -»() {
+		return «asAttribute()-»;
+	}
+	«ELSE -»
+	const «mapType() -»<«type.getFQNS()-»«type.mapName().asTypeName()-»>& «classifier.asTypeName()-»::«asGetter() -»() {
+		return «asAttribute()-»;
+	}
+	«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _SetterImpl FOR MAttribute -»
+«IF isSingleValuedType() -»	
+	void «classifier.asTypeName()-»::«asSetter()»(«type.getFQNS()-»«type.mapName().asTypeName()»«IF !type.isPrimitiveType()»«ENDIF» _in) {
+		«asAttribute()-» = _in;
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE DefaultValue FOR MClass-»
+«FOREACH property.typeSelect(MAttribute).select(e|!e.derived && !e.final && e.static) AS mAttribute-»
+	«IF isSingleValuedType(mAttribute) && hasDefaultValue(mAttribute)-»
+		«mAttribute.type.getFQNS()-»«mAttribute.type.mapName().asTypeName()-» «asTypeName()-»::«mAttribute.name-» = «mAttribute.defaultvalue-»;
+	«ENDIF-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE _DefaultValue FOR MAttribute-»
+ = «defaultvalue-»
+«ENDDEFINE»
+
+«DEFINE _final FOR MAttribute -»
+	«IF final-»«IF !static-»static «ENDIF-»const «ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _static FOR MAttribute -»
+	«IF static-»static «ENDIF-»
+«ENDDEFINE»

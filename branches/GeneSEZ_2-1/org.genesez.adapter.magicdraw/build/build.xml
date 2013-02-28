@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="org.genesez.adapter.magicdraw" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+
+	<available file="${build.basedir}/org.genesez.build" type="dir" property="org.genesez.build.available" />
+	<fail unless="org.genesez.build.available" message="Please make sure that ${build.basedir}/org.genesez.build is available" />
+
+	<import file="${build.basedir}/org.genesez.build/build/imports.xml" />
+	
+	<!-- Import project related properties -->
+	<property file="build.properties" />
+	
+	<!-- Set the classpath -->
+	<path id="org.genesez.adapter.magicdraw.classpath">
+		<path refid="Plug-in Dependencies.libraryclasspath"/>
+	</path>
+	
+	<target name="build" description="Build org.genesez.adapter.magicdraw" />
+	
+	<target name="createjar"
+		depends="build"
+		description="Create the plugin jar for org.genesez.adapter.magicdraw">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${build.dir}" includes="metamodel-export.xml" />
+		</jar>
+	</target>
+	
+	<target name="clean"
+		description="Clean org.genesez.adapter.magicdraw">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${dist.dir}" includes="*.jar" />
+		</delete>
+	</target>
+</project>

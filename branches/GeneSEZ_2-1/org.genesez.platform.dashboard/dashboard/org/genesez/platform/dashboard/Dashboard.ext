@@ -1,0 +1,67 @@
+
+import gcore;
+import greq;
+
+/**
+ * Provides directory name, file name, path and url definitions for the dashboard.
+ * @author tobias haubold
+ */
+
+extension org::genesez::platform::common::Conversion;
+extension org::genesez::platform::dashboard::Conversion;
+
+/* directory names */
+String dashboardDir() : "html";
+String navigationDir() : "navigation";
+String traceabilityDir() : "traceability";
+String structureDir() : "structure";
+String specificationDir() : "specification";
+String requirementDir() : "requirements";
+String scenarioDir() : "scenarios";
+
+/* directory paths */
+String navigationPath() : dashboardDir() + "/" + navigationDir() + "/";
+String traceabilityPath() : dashboardDir() + "/" + traceabilityDir() + "/";
+String structurePath() : traceabilityPath() + "/" + structureDir() + "/";
+String specificationPath() : traceabilityPath() + "/" + specificationDir() + "/";
+String requirementPath() : specificationPath() + requirementDir() + "/";
+String scenarioPath() : specificationPath() + scenarioDir() + "/";
+
+/* filenames */
+String classifierListFileName() : navigationPath() + "classifier.html";
+String packageListFileName() : navigationPath() +  "packages.html";
+String scenarioListFileName() : navigationPath() + "scenarios.html";
+String requirementsListFileName() : navigationPath() + "requirements.html";
+
+String traceabilitySummaryFileName() : traceabilityPath() + "dashboard.html";
+String revisedSpecificationFileName() : traceabilityPath() + "revised.html";
+String unsatisfiedSpecificationFileName() : traceabilityPath() + "unsatisfied.html";
+String unspecifiedStructureFileName() : traceabilityPath() + "unspecified.html";
+String traceableFileName() : traceabilityPath() + "traceable.html";
+
+String packageSummaryFileName() : "package-summary.html";
+String packageFileName(MPackage this) : structurePath() + filePath() + "/" + packageSummaryFileName();
+String classifierFileName(MClassifier this) : structurePath() + filePath(name) + ".html";
+
+String requirementFileName(RRequirement this) : requirementPath() + id + ".html";
+String scenarioFileName(RScenario this) : scenarioPath() + id + ".html";
+
+/* urls for links, note: we use a javascript function to open links */
+String linkTraceabilityToRoot() : "../../";
+String linkToRevisedSpecification() : "#";
+String linkToUnsatisfiedSpecification() : "#";
+String linkToUnspecifiedStructure() : "#";
+String clickOnRevisedSpecification() : "openNavigation(1)";
+String clickOnUnsatisfiedSpecification() : "openNavigation(2)";
+String clickOnUnspecifiedStructure() : "openNavigation(3)";
+
+/* links for structure model elements */
+String linkTo(MPackage this) : "#";
+String clickOn(MPackage this) : "showPackage('" + filePath() + "')";
+String linkTo(MClassifier this) : "#";
+String clickOn(MClassifier this) : "showClassifier('" + dirPath() + "', '" + name + "')";
+
+/* link to source code documentation */
+String apiIndex() : "index.html";
+String linkToApi(MPackage this) : pathBack() + apiIndex() + "?" + filePath() + "/package-summary.html";
+String linkToApi(MClassifier this) : package().pathBack() + apiIndex() + "?" + dirPath() + "/" + name + ".html";

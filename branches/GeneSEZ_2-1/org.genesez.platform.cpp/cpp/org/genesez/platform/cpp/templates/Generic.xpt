@@ -1,0 +1,82 @@
+«IMPORT gcore»
+
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+«EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
+
+«DEFINE Declaration FOR MClassifier -»
+template<«FOREACH genericParameter AS g SEPARATOR ", "-»typename «g.specification-»«ENDFOREACH-»> 
+«ENDDEFINE»
+
+«DEFINE Generics FOR MClassifier -»
+«IF !genericParameter.isEmpty-»<«FOREACH genericParameter AS g SEPARATOR ", "-»«g.name()-»«ENDFOREACH-»>«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MOperation-»
+«IF classifier.hasGenericParameter() && classifier == returnType -»
+	<«FOREACH classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH -»>
+«ELSE -»
+	«IF isTyped() -»<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH -»>«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MProperty -»
+«IF classifier.hasGenericParameter() && classifier == type -»
+<«FOREACH classifier.genericParameter AS g SEPARATOR ", " -»«g.name() -»«ENDFOREACH-»>
+«ELSE -»
+«IF isTyped() -»<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH -»>«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MExternal -»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MParameter -»
+«IF operation.classifier.hasGenericParameter() && operation.classifier == type -»
+	<«FOREACH operation.classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH -»>
+«ELSE -»
+	«IF isTyped() -»
+		<«FOREACH getTypeInformation() AS g SEPARATOR ", " -»«g -»«ENDFOREACH -»>
+	«ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MType-»
+«ENDDEFINE»
+
+«DEFINE _ FOR MType-»
+«ENDDEFINE»
+
+«REM»
+«DEFINE Generics FOR MOperation-»
+«IF hasGenericParameter() -»
+	<«FOREACH genericParameter AS g SEPARATOR ", " -»«g.name() -»«ENDFOREACH-»>
+«ENDIF»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MProperty-»
+«IF classifier.hasGenericParameter() && classifier == type-»
+	<«FOREACH classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH-»>
+«ELSE»
+	«IF hasGenericRealization()-»
+		<«FOREACH genericRealization AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH-»>
+	«ENDIF-»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MExternal -»
+«ENDDEFINE»
+
+«DEFINE Generics FOR MParameter -»
+«IF operation.classifier.hasGenericParameter() && operation.classifier == type-»
+	<«FOREACH operation.classifier.genericParameter AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH-»>
+«ELSE»
+	«IF hasGenericRealization()-»
+		<«FOREACH genericRealization AS g SEPARATOR ", "-»«g.name() -»«ENDFOREACH-»>
+	«ENDIF-»
+«ENDIF-»
+«ENDDEFINE»
+«ENDREM»

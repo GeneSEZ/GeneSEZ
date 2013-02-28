@@ -1,0 +1,129 @@
+«REM»
+	Operation template for C#
+	
+	@author	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::dotnet::csharp::scripts::Naming»
+«EXTENSION org::genesez::platform::dotnet::csharp::scripts::Uml»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generate an implementation for a constructor
+«ENDREM»
+«DEFINE ConstructorImpl FOR MOperation-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier» «classifier.asTypeName()»(«EXPAND Parameter-»)
+		{
+			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate a declaration for an operation
+«ENDREM»
+«DEFINE OperationDecl FOR MOperation-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier» «EXPAND _Return-» «asOperation()-»(«EXPAND Parameter-»);
+«ENDDEFINE»
+
+
+«REM»
+	generate an implementation for an operation
+«ENDREM»
+«DEFINE OperationImpl FOR MOperation-»
+		«EXPAND _Comment-»
+		«EXPAND _Modifier» «EXPAND _Return-» «asOperation()-»(«EXPAND Parameter-»)
+		{
+			«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+		}
+«ENDDEFINE»
+
+
+«REM»
+	generate parameter list for an operation
+«ENDREM»
+«DEFINE Parameter FOR MOperation-»
+«FOREACH parameter AS p SEPARATOR ", "-»
+«EXPAND _Parameter FOR p-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate parameter declaration
+«ENDREM»
+«DEFINE _Parameter FOR MParameter-»
+«IF multiplicity == 1-»
+«direction()» «type.mapName().asTypeName()» «asParameter()-»
+«ELSE-»
+«direction()» «type.mapName().asTypeName()»[] «asParameter()-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate modifier for an attribute
+«ENDREM»
+«DEFINE _Modifier FOR MOperation-»
+«IF classifier.metaType == MInterface-»
+	«IF static» static«ENDIF-»
+«ELSE-»
+	«visibility-»«IF static» static«ENDIF-»«IF abstract» abstract«ENDIF-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate parameter declaration
+«ENDREM»
+«DEFINE _Return FOR MOperation-»
+«IF multiplicity == 1-»
+		«returnType.mapName().asTypeName()»
+«ELSE-»
+		«returnType.mapName().asTypeName()»[]
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate a protected region for own implementations
+«ENDREM»
+«DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
+			«PROTECT CSTART "/* " CEND " */" ID (proRegId)»
+			/* TODO put your own implementation code here */
+			
+			«ENDPROTECT»
+«ENDDEFINE»
+
+
+«REM»
+	generate operation comment
+«ENDREM»
+«DEFINE _Comment FOR MOperation-»
+«IF hasComment()-»
+		/// «getCommentText(ownedComment)»
+«ENDIF-»
+«ENDDEFINE»
+

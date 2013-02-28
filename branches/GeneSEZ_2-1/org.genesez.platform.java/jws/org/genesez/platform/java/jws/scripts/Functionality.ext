@@ -1,0 +1,37 @@
+import gcore;
+
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2011-03-21
+ */
+
+extension org::genesez::platform::common::log::Log;
+extension org::genesez::platform::java::jws::scripts::Class;
+
+Void additions(MModel this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MPackage this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MClass this) :
+	checkWebServiceClientSuperClass() ->
+	checkWebServiceInterface() ->
+	checkSOAPHandler();
+
+Void modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MClass this) :
+	checkWebServiceName() ->
+	checkWebServiceClientName();
+	

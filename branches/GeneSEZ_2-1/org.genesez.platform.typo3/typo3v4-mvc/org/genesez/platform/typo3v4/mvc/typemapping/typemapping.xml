@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	basic type mapping for typo3 extbase
+	
+	@author Nico Herbig <nico.herbig@genesez.org>
+	@date	2011-04-13
+ -->
+<tns:typeMapping xmlns:tns="http://www.genesez.org/typemapping"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<tns:include>
+    	<tns:file>org/genesez/platform/typo3v4/typemapping/typemapping.xml</tns:file>
+	</tns:include>
+	
+	<!-- Collection for multi value type support -->
+	<tns:multiValuedTypes>
+		<tns:multiValuedType>
+			<tns:default>array</tns:default>
+			<tns:context name="Model">Tx_Extbase_Persistence_ObjectStorage</tns:context>
+			<tns:context name="Repository">Tx_Extbase_Persistence_QueryResultInterface</tns:context>
+		</tns:multiValuedType>
+		<tns:multiValuedType ordered="false" unique="false">
+			<tns:default>array</tns:default>
+			<tns:context name="Model">Tx_Extbase_Persistence_ObjectStorage</tns:context>
+			<tns:context name="Repository">Tx_Extbase_Persistence_QueryResultInterface</tns:context>
+		</tns:multiValuedType>
+		<tns:multiValuedType ordered="false" unique="true">
+			<tns:default>array</tns:default>
+			<tns:context name="Model">Tx_Extbase_Persistence_ObjectStorage</tns:context>
+			<tns:context name="Repository">Tx_Extbase_Persistence_QueryResultInterface</tns:context>
+		</tns:multiValuedType>
+		<tns:multiValuedType ordered="true" unique="false">
+			<tns:default>array</tns:default>
+			<tns:context name="Model">Tx_Extbase_Persistence_ObjectStorage</tns:context>
+			<tns:context name="Repository">Tx_Extbase_Persistence_QueryResultInterface</tns:context>
+		</tns:multiValuedType>
+		<tns:multiValuedType ordered="true" unique="true">
+			<tns:default>array</tns:default>
+			<tns:context name="Model">Tx_Extbase_Persistence_ObjectStorage</tns:context>
+			<tns:context name="Repository">Tx_Extbase_Persistence_QueryResultInterface</tns:context>
+		</tns:multiValuedType>
+	</tns:multiValuedTypes>
+	
+	<!-- primitive types defined within the UML metamodel -->
+	<tns:primitiveTypes>
+		<tns:type from="Boolean">
+			<tns:to>boolean</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">tinyint(1) unsigned DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Boolean</tns:context>
+		</tns:type>
+		<tns:type from="Integer">
+			<tns:to>int</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">int(11) DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Integer</tns:context>
+		</tns:type>
+		<tns:type from="String">
+			<tns:to>string</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">varchar(255) DEFAULT '' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">String</tns:context>
+		</tns:type>
+		<tns:type from="UnlimitedNatural">
+			<tns:to>int</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">int(11) DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Integer</tns:context>
+		</tns:type>
+		<!-- php specific primitives -->
+		<tns:type from="mixed">
+			<tns:to>mixed</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">varchar(255) DEFAULT '' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">String</tns:context>
+		</tns:type>
+		<!-- magic draw specific primitives -->
+		<tns:type from="boolean">
+			<tns:to>boolean</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">tinyint(1) unsigned DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Boolean</tns:context>
+		</tns:type>
+		<tns:type from="byte">
+			<tns:to>int</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">tinyint(1) unsigned DEFAULT '' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx"></tns:context>
+		</tns:type>
+		<tns:type from="char">
+			<tns:to>string</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">varchar(1) DEFAULT '' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">String</tns:context>
+		</tns:type>
+		<tns:type from="date">
+			<tns:to></tns:to>
+			<tns:context name="PHPTypeHint">DateTime</tns:context>
+			<tns:context name="SQLColumnDefinition">int(11) DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">DateTime</tns:context>
+		</tns:type>
+		<tns:type from="double">
+			<tns:to>float</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">double(11,2) DEFAULT '0.00' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Float</tns:context>
+		</tns:type>
+		<tns:type from="float">
+			<tns:to>float</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">double(11,2) DEFAULT '0.00' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Float</tns:context>
+		</tns:type>
+		<tns:type from="int">
+			<tns:to>int</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">int(11) DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Integer</tns:context>
+		</tns:type>
+		<tns:type from="long">
+			<tns:to>int</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">int(11) DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Integer</tns:context>
+		</tns:type>
+		<tns:type from="short">
+			<tns:to>int</tns:to>
+			<tns:context name="PHPTypeHint"></tns:context>
+			<tns:context name="SQLColumnDefinition">int(11) DEFAULT '0' NOT NULL</tns:context>
+			<tns:context name="TYPO3TCx">Integer</tns:context>
+		</tns:type>
+		<tns:type from="void">
+			<tns:to>void</tns:to>
+		</tns:type>
+	</tns:primitiveTypes>
+	
+	<tns:externalTypes>
+		<tns:type from="EXTBASE_ABSTRACT_ENTITY">
+			<tns:to>Tx_Extbase_DomainObject_AbstractEntity</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_FRONTEND_USER">
+			<tns:to>Tx_Extbase_Domain_Model_FrontendUser</tns:to>
+			<tns:context name="SQLTableName">fe_users</tns:context>
+		</tns:type>
+		<tns:type from="EXTBASE_FRONTEND_GROUP">
+			<tns:to>Tx_Extbase_Domain_Model_FrontendUserGroup</tns:to>
+			<tns:context name="SQLTableName">fe_groups</tns:context>
+		</tns:type>
+		<tns:type from="EXTBASE_ABSTRACT_VALUE_OBJECT">
+			<tns:to>Tx_Extbase_DomainObject_AbstractValueObject</tns:to>
+		</tns:type>
+		
+		<tns:type from="EXTBASE_REPOSITORY">
+			<tns:to>Tx_Extbase_Persistence_Repository</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_FRONTEND_USER_REPOSITORY">
+			<tns:to>Tx_Extbase_Domain_Repository_FrontendUserRepository</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_FRONTEND_GROUP_REPOSITORY">
+			<tns:to>Tx_Extbase_Domain_Repository_FrontendUserGroupRepository</tns:to>
+		</tns:type>
+		
+		<tns:type from="EXTBASE_ABSTRACT_CONTROLLER">
+			<tns:to>Tx_Extbase_MVC_Controller_AbstractController</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_ACTION_CONTROLLER">
+			<tns:to>Tx_Extbase_MVC_Controller_ActionController</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_CONTROLLER_INTERFACE">
+			<tns:to>Tx_Extbase_MVC_Controller_ControllerInterface</tns:to>
+		</tns:type>
+		
+		<tns:type from="EXTBASE_UNIT_TEST">
+			<tns:to>Tx_Extbase_Tests_Unit_BaseTestCase</tns:to>
+		</tns:type>
+		
+		<tns:type from="EXTBASE_ABSTRACT_VALIDATOR">
+			<tns:to>Tx_Extbase_Validation_Validator_AbstractValidator</tns:to>
+		</tns:type>
+		<!-- This type mapping exists for stereotype generalization. -->
+		<tns:type from="T3ExtbaseAbstractValidator">
+			<tns:to>Tx_Extbase_Validation_Validator_AbstractValidator</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_ABSTRACT_OBJECT_VALIDATOR">
+			<tns:to>Tx_Extbase_Validation_Validator_AbstractObjectValidator</tns:to>
+		</tns:type>
+		<!-- This type mapping exists for stereotype generalization. -->
+		<tns:type from="T3ExtbaseAbstractObjectValidator">
+			<tns:to>Tx_Extbase_Validation_Validator_AbstractObjectValidator</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_VALIDATOR_INTERFACE">
+			<tns:to>Tx_Extbase_Validation_Validator_ValidatorInterface</tns:to>
+		</tns:type>
+		<tns:type from="EXTBASE_OBJECT_VALIDATOR_INTERFACE">
+			<tns:to>Tx_Extbase_Validation_Validator_ObjectValidatorInterface</tns:to>
+		</tns:type>
+		
+		<tns:type from="FLUID_ABSTRACT_VIEW_HELPER">
+			<tns:to>Tx_Fluid_Core_ViewHelper_AbstractViewHelper</tns:to>
+		</tns:type>
+		<tns:type from="FLUID_ABSTRACT_TAG_BASED_VIEW_HELPER">
+			<tns:to>Tx_Fluid_Core_ViewHelper_AbstractTagBasedViewHelper</tns:to>
+		</tns:type>
+				
+		<tns:type from="EXTBASE_CONFIGURATION_MANAGER_INTERFACE">
+			<tns:to>Tx_Extbase_Configuration_ConfigurationManagerInterface</tns:to>
+			<tns:context name="PHPTypeHint">Tx_Extbase_Configuration_ConfigurationManagerInterface</tns:context>
+		</tns:type>
+		<tns:type from="EXTBASE_OBJECT_MANAGER_INTERFACE">
+			<tns:to>Tx_Extbase_Object_ObjectManagerInterface</tns:to>
+			<tns:context name="PHPTypeHint">Tx_Extbase_Object_ObjectManagerInterface</tns:context>
+		</tns:type>
+		<tns:type from="EXTBASE_PERSISTENCE_MANAGER_INTERFACE">
+			<tns:to>Tx_Extbase_Persistence_ManagerInterface</tns:to>
+			<tns:context name="PHPTypeHint">Tx_Extbase_Persistence_ManagerInterface</tns:context>
+		</tns:type>
+	</tns:externalTypes>
+</tns:typeMapping>

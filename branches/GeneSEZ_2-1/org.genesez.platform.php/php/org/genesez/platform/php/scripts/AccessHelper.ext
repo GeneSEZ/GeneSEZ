@@ -1,0 +1,53 @@
+/**
+ * php specific access helper
+ * 
+ * @author	tobias haubold
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
+ * @date	2011-11-24
+ */
+
+//	based on genesez meta model
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper reexport;
+extension org::genesez::platform::common::log::Log;
+
+
+/**
+ * Getter for the operations.
+ * If operations have the same name, the one with the most parameter count is choosen.
+ *
+ * @return	list of operations with unique names
+ */
+Collection[MOperation] uniqueOperations(MClassifier this) :
+	{}.addAll(
+		// add all operations with unique names
+		operation.select( o| !operation.exists( e| e.name == o.name && e != o) )
+	).addAll(
+		operation.select( o| operation.exists( e| e.name == o.name && e != o )
+			// add the operation with the most parameter count
+			? operation.select( e| e.name == o.name ).sortBy(e|e.parameter.size * -1).get(0) == o
+			: false
+		)
+	);
+
+/**
+ * Checks if an operation is a constructor of a classifier.
+ * - check UML, PHP4 and PHP5 notation of a constructor method
+ *
+ * @return	true if the operation is a constructor, otherwise false
+ * @override
+ */
+boolean isConstructor(MOperation this) :
+	hasStereotype("Create") || hasStereotype("create") || classifier.name == name || name == "__construct";
+
+
+/**
+ * Checks if an operation is a destructor of a classifier.
+ * - check UML, PHP4 and PHP5 notation of a constructor method
+ *
+ * @return	true if the operation is a destructor, otherwise false
+ * @override
+ */
+boolean isDestructor(MOperation this) :
+	hasStereotype("Destroy") || hasStereotype("destroy") || name.startsWith("~") || name == "__destruct";

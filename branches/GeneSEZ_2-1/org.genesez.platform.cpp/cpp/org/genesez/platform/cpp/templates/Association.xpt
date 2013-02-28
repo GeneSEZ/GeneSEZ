@@ -1,0 +1,110 @@
+«IMPORT gcore»
+
+«EXTENSION org::genesez::platform::common::log::Log»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::cpp::scripts::Naming»
+«EXTENSION org::genesez::platform::cpp::scripts::AccessHelper»
+«EXTENSION org::genesez::platform::cpp::helper::PackageHelper»
+
+«DEFINE Declaration(String vis) FOR MClassifier -»	
+«EXPAND _Declaration FOREACH property.typeSelect(MAssociationRole).select(e| e.visibility == vis && !e.derived) -» 
+«ENDDEFINE»
+
+«DEFINE _Declaration FOR MAssociationRole -»
+	«IF composition-»
+		«debug("Komposition: " + name)-»
+	«ENDIF-»
+	«IF aggregation-»
+		«debug("Aggregation: " + name)-»
+	«ENDIF-»
+	«IF isSingleValuedType() -»
+		«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -» «asAttribute()»;
+	«ELSE»		
+		«mapType()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»> «asAttribute()»;
+	«ENDIF -»	
+«ENDDEFINE»
+
+«DEFINE AccessorDecl FOR MClassifier -»
+	«FOREACH property.typeSelect(MAssociationRole).select( e | !e.derived ) AS p -»
+		«EXPAND _GetterDecl FOR p -»		
+		«EXPAND _InsertInDecl FOR p -»
+		«EXPAND _RemoveFromDecl FOR p -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«DEFINE AccessorImpl FOR MClass -»
+	«FOREACH property.typeSelect(MAssociationRole).select( e | !e.derived ) AS p -»
+		«EXPAND _GetterImpl FOR p -»
+		«EXPAND _InsertInImpl FOR p -»
+		«EXPAND _RemoveFromImpl FOR p -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+ ***********************
+ private stuff
+ ***********************
+«ENDREM»
+
+«DEFINE _GetterDecl FOR MAssociationRole -»	
+	«IF isSingleValuedType() -»
+	«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -» «asGetter()-»();
+	«ELSE-»
+	const «mapType()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»>& «asGetter()»();
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _InsertInDecl FOR MAssociationRole -»
+«IF isSingleValuedType() -»
+	void «asSetter()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -»);
+«ELSE-»	
+	void «asInsertIn()-»(«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -»);
+«ENDIF -»	
+«ENDDEFINE»
+
+«DEFINE _RemoveFromDecl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	void «asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -»);
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _GetterImpl FOR MAssociationRole -»
+«IF isSingleValuedType() -»
+	«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -» «classifier.asTypeName()»::«asGetter()-»(){
+		return «asAttribute()-»;
+	}
+«ELSE-»
+	const «mapType()»<«type.getFQNS()-»«type.mapName().asTypeName()»«EXPAND Generic::Generics -»«getTypeModifier() -»>& «classifier.asTypeName()»::«asGetter()»(){
+		return «asAttribute()-»;
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _InsertInImpl FOR MAssociationRole -»
+«IF isSingleValuedType() -»
+	void «classifier.asTypeName()-»::«asSetter()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -» _in)
+	{
+		«asAttribute()» = _in;
+	}
+«ELSE-»	
+	void «classifier.asTypeName()-»::«asInsertIn()-»(«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -» _in){		
+		«asAttribute()-».insert(«asAttribute()-».end(), _in);
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«DEFINE _RemoveFromImpl FOR MAssociationRole -»
+«IF isMultiValuedType() -»
+	void «classifier.asTypeName()-»::«asRemoveFrom()-»(const «type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -» _out){
+		«mapType()-»<«type.getFQNS()-»«type.mapName().asTypeName()-»«EXPAND Generic::Generics -»«getTypeModifier() -»>::iterator it = «asAttribute()-».begin();
+		
+		for(; it != «asAttribute()-».end(); it++) {
+			if(*it == _out) {
+				«asAttribute()-».erase(it);
+			}
+		}		
+	}
+«ENDIF -»
+«ENDDEFINE»

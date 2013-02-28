@@ -1,0 +1,476 @@
+
+«IMPORT gcore»
+
+«REM»
+	Performs the generation of classes
+	
+	@author	georg beier
+«ENDREM»
+
+«REM» useful support fuctions «ENDREM»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::scripts::Type»
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::scripts::StateMachineUtil»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes a state machine
+«ENDREM»
+«DEFINE StateMachine FOR MStateMachine -»
+«EXPAND _EventCreators -»
+«EXPAND _ActionMethods -»
+«EXPAND _GuardMethods -»
+«EXPAND _States -»
+«EXPAND _EventIds -»
+«EXPAND _HistoryStateFields -»
+«EXPAND _Events -»
+«EXPAND _TakeEvent -»
+«EXPAND _StateMachineImpl -»
+«EXPAND _SMDebug -»
+«ENDDEFINE»
+
+«DEFINE _States FOR MStateMachine -»
+	/** enum for all leaf states */
+	static enum StateId {
+		«FOREACH smstate.leafStates() AS state SEPARATOR ", " -»«state.name»«ENDFOREACH»  
+	};
+	
+	/** member variable holding current state */
+	private StateId currentState = StateId.«startupState().name»;
+	/** package visible getter for debug purposes */
+	StateId getCurrentState() {
+		return currentState;
+	}
+«ENDDEFINE»
+
+«DEFINE _HistoryStateFields FOR MStateMachine -»
+	«FOREACH smstate.typeSelect(MHistoryState) AS history -»  
+	/** remember «history.deep ? "deep":"shallow"» history for «history.name» */
+	private StateId «history.asHistoryField()»«
+		history.defaultHistory == null ? "" : " = StateId." + history.defaultHistory.asState()»;
+	«ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE _EventIds FOR MStateMachine -» 
+	/** enum for all trigger events */
+	static enum EventId {
+		«FOREACH event.name.toSet().sortBy(name|name) AS evname SEPARATOR ", " -»«evname»«ENDFOREACH»  
+	};
+«ENDDEFINE»
+
+«DEFINE _TakeEvent FOR MStateMachine -»
+	/**
+	 * process events from event queue
+	 */
+	@Override
+	public void takeEvent(EventQueue.Event<EventId> event) {
+		StateId temp = currentState;
+		currentState = stateMachine.takeEvent(event, currentState, this);
+		System.out.println(getClass().getSimpleName() + ": " + temp + " --(" + event + ")-> " + currentState);
+	};
+«ENDDEFINE»
+
+«DEFINE _ActionMethods FOR MStateMachine -»
+	«REM»
+		if more than one activity has the same name, take only the first 
+		and map all others on that!
+		don't create activity methods for reserved names ignore and defer
+		do activities are treated special
+	«ENDREM»
+	// all state machine actions are implemented as a method
+	«FOREACH ownedBehavior.typeSelect(MActivity).
+				select(e|e.do.isEmpty).
+				reject(e|e.name == "ignore" || e.name == "defer").
+				name.toSet().sortBy(n|n) AS name -»
+		«EXPAND _Action FOR ownedBehavior.typeSelect(MActivity).
+				select(e|e.name == name).first()»
+	«ENDFOREACH»
+	// do actions are called from a thread, controlled by start and stop methods
+	«FOREACH ownedBehavior.typeSelect(MActivity).
+				reject(e|e.do.isEmpty).
+				reject(e|e.name == "ignore" || e.name == "defer").
+				name.toSet().sortBy(n|n) AS name -»
+		«EXPAND _DoAction FOR ownedBehavior.typeSelect(MActivity).
+				select(e|e.name == name).first()»
+	«ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE _Action FOR MActivity -»
+	«EXPAND Comment::Action -»
+	private void «asAction()»(SmEvent event) {
+		«EXPAND _SMDebugMsg("\"( ... )\"") -»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("action." + xmiGuid)»
+		// TODO: implementation of action method '«asAction()»(...)'
+		throw new UnsupportedOperationException(
+				"The implementation of this generated method stub is missing!");
+		«ENDPROTECT»
+	}
+«ENDDEFINE»
+
+«DEFINE _DoAction FOR MActivity -»
+	«EXPAND Comment::Action -»
+	private void «asAction()»() {
+		«EXPAND _SMDebugMsg("\"( ... )\"") -»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("action." + xmiGuid)»
+		// TODO: implementation of action method '«asAction()»(...)'
+		try {
+			Thread.sleep(1); // set this to reasonable value
+		} catch (InterruptedException e) {
+		} // set this to reasonable value
+		throw new UnsupportedOperationException(
+				"The implementation of this generated method stub is missing!");
+		«ENDPROTECT»
+	}
+	/** field to control thread execution */
+	private boolean threadControlFor«asAction().toFirstUpper()»;
+	/** start thread execution */
+	private void «asStartDo()»() {
+		«EXPAND _SMDebugMsg("\" start\"") -»
+		threadControlFor«asAction().toFirstUpper()» = true;
+		new Thread() {
+			public void run() {
+				while(threadControlFor«asAction().toFirstUpper()») {
+					«asAction()»();
+				}
+				«EXPAND _SMDebugMsg("\" stopped\"") -»
+			}
+		}
+		.start();
+	}
+	/** notice thread execution to stop */
+	private void «asEndDo()»() {
+		«EXPAND _SMDebugMsg("\" stop\"") -»
+		threadControlFor«asAction().toFirstUpper()» = false;
+	}
+«ENDDEFINE»
+
+«DEFINE _GuardMethods FOR MStateMachine -»
+	«initGuards() -»
+	// all state machine guards are implemented as a method
+	«FOREACH getGuards() AS guardEx -»
+		«IF guardEx.isTriggerless() -»
+	/** evaluate guard condition [«guardEx»] for automatic (i.e. triggerless) transition */
+	private boolean «guardEx.method()»() {
+		«EXPAND _SMDebugMsg("\"[" + guardEx + "]()\"") -»
+		«EXPAND _BodyGuard FOR "guard.noevent."
+						   + guardEx.replaceAll("\\s", "_")
+						   + "." + xmiGuid -»
+	}
+		«ENDIF-»
+		«FOREACH getGuardEvents(guardEx) AS guardevent -»
+	/** 
+	 * evaluate guard condition [«guardEx»]
+	 * @param event triggering event
+	 */
+	private boolean «guardEx.method()»(SmEvent event) {
+		«EXPAND _SMDebugMsg("\"[" + guardEx + "]()\" + event.getClass()") -»
+		«EXPAND _BodyGuard FOR "guard." + guardevent.name + "."
+						   + guardEx.replaceAll("\\s", "_")
+						   + "." + xmiGuid -»
+	}
+		«ENDFOREACH»
+	«ENDFOREACH»
+«ENDDEFINE»
+
+«REM»
+	generates the body of a guard method
+«ENDREM»
+«DEFINE _BodyGuard FOR String-»
+		«PROTECT CSTART '/* ' CEND ' */' ID (this)»
+		// TODO: implementation of guard method
+		return false;
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+	generates the parameters of an action from attached event
+«ENDREM»
+«DEFINE _Params FOR MActivity -»
+	«FOREACH parameterList() AS p SEPARATOR ", " -»
+		«p.type.mapName().asTypeName() -» «p.asParameter()»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«DEFINE _StateMachineImpl FOR MStateMachine -»
+	/** class variable holding state machine of this class */
+	private static StateMachine<«owningContext.name», EventId, StateId> stateMachine =
+		new StateMachine<«owningContext.name», EventId, StateId>(); 
+	static {
+		@SuppressWarnings("unused")
+		Transition<«owningContext.name.asTypeName()», EventId, StateId> tempTransition;
+		@SuppressWarnings("unused")
+		GuardedTransition<«owningContext.name.asTypeName()», EventId, StateId> tempGuardedTransition;
+		@SuppressWarnings("unused")
+		GuardedTransitionGroup<«owningContext.name.asTypeName()», EventId, StateId> tempGroup;
+		«FOREACH atomicTransition.transitionGroups().sourceSort() AS group -»
+			«LET ((List[MAtomicTransition])group).sortInnerToOuter() AS atrgroup -»
+				«IF atrgroup.size == 1 -»
+					«LET atrgroup.first() AS atr -»
+						«FOREACH atr.definingTransition.trigger AS trigger -»
+		// «atr.source.name» -- «trigger.name»(«trigger.parameter.name») -> «atr.target.name»
+						«ENDFOREACH»
+		tempTransition = new «atr.transitionType()»<«owningContext.name.asTypeName()», EventId, StateId>(StateId.«atr.target.name») {
+						«EXPAND _ExecMethod FOR atr -»
+						«IF atr.definingTransition.guard != null »«EXPAND _EvalMethod FOR atr»«ENDIF -»
+		};
+						«FOREACH atr.definingTransition.trigger AS trigger -»
+		// «atr.source.name» -- «trigger.name»(«trigger.parameter.name») -> «atr.target.name»
+		stateMachine.addTransition(EventId.«trigger.name», StateId.«atr.source.name», tempTransition);
+						«ENDFOREACH»
+					«ENDLET»
+				«ELSE»
+		/*
+					«FOREACH atrgroup AS atr SEPARATOR ", " -»«((MAtomicTransition)atr).name»«ENDFOREACH»
+		*/
+		tempGroup = new GuardedTransitionGroup<«owningContext.name.asTypeName()», EventId, StateId>();
+					«FOREACH atrgroup AS elem -»
+						«LET elem AS atr -»
+							«LET atr.definingTransition.trigger.first() AS trigger -»
+		// «atr.source.name» -- «trigger.name»(«trigger.parameter.name»)«atr.definingTransition.guard.name» -> «atr.target.name»
+		tempGuardedTransition = new GuardedTransition<«owningContext.name.asTypeName()», EventId, StateId>(StateId.«atr.target.name») {
+					«EXPAND _ExecMethod FOR atr -»
+					«EXPAND _EvalMethod FOR atr -»
+		};
+		tempGroup.addGuardedTransition(tempGuardedTransition);
+							«ENDLET» 		
+						«ENDLET»
+					«ENDFOREACH»
+					«LET (MAtomicTransition)((List) group).first() AS atr»
+						«LET atr.definingTransition.trigger.first() AS trigger -»
+		stateMachine.addTransition(EventId.«trigger.name», StateId.«atr.source.name», tempGroup);
+						«ENDLET»
+					«ENDLET»
+				«ENDIF»
+			«ENDLET -»
+		«ENDFOREACH»
+		«REM»
+		«atomicTransition.transitionGroups().collect(gr|"{" + gr.collect(e|"<"+e.source.name + "-" + e.definingTransition.trigger.name+">")+"}")»
+		«ENDREM»  
+	};
+«ENDDEFINE»
+
+«REM»
+	generates the exec method of a Transition
+«ENDREM»
+«DEFINE _ExecMethod FOR MAtomicTransition -»
+	«FOREACH definingTransition.trigger AS trigger -»
+	@SuppressWarnings("unused")
+	public StateId exec(EventQueue.Event<EventId> ev, «statemachine.owningContext.name.asTypeName()» obj) {
+		«EXPAND _SMDebugMsg("\"exec(" + trigger.name + ")\"") -»
+		«FOREACH historyContext AS history -»
+			obj.«history.asHistoryField()» = StateId.«history.historyToSave(source).asState()»;
+		«ENDFOREACH -»
+		«FOREACH stopTimer AS timer -»
+		obj.stopTimerFor«timer.asTypeName()»();	// stop time triggers in source state
+		«ENDFOREACH -»
+		«IF exit.isEmpty && action.isEmpty && entry.isEmpty && endDo.isEmpty && startDo.isEmpty -»
+		// no action bound to this transition
+		«ENDIF -»
+		«FOREACH endDo AS action -»
+		obj.«action.asEndDo()»(); // call all endDo's
+		«ENDFOREACH -»
+		«FOREACH exit AS action -»
+		obj.«action.asAction()»((«trigger.asTypeName()») ev); // call all exit actions
+		«ENDFOREACH -»
+		«FOREACH action AS action -»
+			«IF action.name == "ignore" -»
+		// ignore event
+			«ELSEIF action.name == "defer" -»
+		ev.send();
+			«ELSE -»
+		obj.«action.asAction()»((«trigger.asTypeName()») ev);	// call all onTransition actions
+			«ENDIF -»
+		«ENDFOREACH -»
+		«IF target.metaType == MHistoryState -»
+			«EXPAND _HistoryTransitionEndMethods(trigger) -»
+		«ELSE -»
+			«EXPAND _NormalTransitionEndMethods(trigger) -»
+		«ENDIF -»
+	}
+	«ENDFOREACH»
+«ENDDEFINE»
+
+«REM»
+	generates calls to methods at the end of a normal transition 
+	(i.e. entry, startDo, startTimer)
+«ENDREM»
+«DEFINE _NormalTransitionEndMethods(MEvent trigger) FOR MAtomicTransition -»
+	«FOREACH entry AS action -»
+	obj.«action.asAction()»((«trigger.asTypeName()») ev);	// call all entry actions
+	«ENDFOREACH -»
+	«FOREACH startDo AS action -»
+	obj.«action.asStartDo()»();	// call all startDo's
+	«ENDFOREACH -»
+	«FOREACH startTimer AS timer -»
+	obj.startTimerFor«timer.asTypeName()»();	// start time triggers in target state
+	«ENDFOREACH -»
+	return super.exec(ev, obj);
+«ENDDEFINE»
+
+«REM»
+	generates calls to methods at the end of a history transition 
+	(i.e. entry, startDo, startTimer)
+	depending on remembered history state 
+«ENDREM»
+«DEFINE _HistoryTransitionEndMethods(MEvent trigger) FOR MAtomicTransition -»
+	«LET (MHistoryState) target AS history -»
+	switch(obj.«history.asHistoryField()») {
+		«FOREACH source.metaType == MInitialState ?
+					{history.defaultHistory} :
+					history.reachableHistory
+				 AS target -»
+		case «target.asState()»:
+			«FOREACH history.resultingEntries(target) AS action -»
+			obj.«action.asAction()»((«trigger.asTypeName()») ev);	// call all entry actions
+			«ENDFOREACH -»
+			«FOREACH history.resultingStartDo(target) AS action -»
+			obj.«action.asStartDo()»();	// call all startDo's
+			«ENDFOREACH -»
+			«FOREACH history.resultingTimer(target) AS timer -»
+			obj.startTimerFor«timer.asTypeName()»();	// start time triggers in target state
+			«ENDFOREACH -»
+			super.exec(ev, obj);
+			return StateId.«target.asState()»;
+		«ENDFOREACH -»
+	}
+	«ENDLET -»
+	return super.exec(ev, obj);
+«ENDDEFINE»
+
+«REM»
+	generates the eval method of a GuardedTransition
+«ENDREM»
+«DEFINE _EvalMethod FOR MAtomicTransition -»
+	«FOREACH definingTransition.trigger AS trigger -»
+	/** evaluate guard condition [«definingTransition.guard != null ? definingTransition.guard.expression() : true»] */
+	@SuppressWarnings("unused")
+	public boolean eval(EventQueue.Event<EventId> ev, «statemachine.owningContext.name.asTypeName()» obj) {
+		«EXPAND _SMDebugMsg("\"eval(" + trigger.name + ")\"") -»
+		return «
+		IF definingTransition.guard != null
+		»obj.«definingTransition.guard.method()»((«trigger.asTypeName()») ev)«
+		ELSE»true«ENDIF»;
+	}
+	«ENDFOREACH»
+«ENDDEFINE»
+
+«REM»
+	generates the parameter list of an action from an event
+«ENDREM»
+«DEFINE _Params FOR MEvent -»
+	«FOREACH parameter AS p SEPARATOR ", " -»
+	«IF p.isSingleValuedType() -»
+		«p.type.mapName().asTypeName() -» «p.asParameter()»
+	«ELSE -»
+		«EXPAND Type::MultiValuedType FOR p -» «p.asParameter()»
+	«ENDIF -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«DEFINE _Events FOR MStateMachine -»
+	/** inner class as local base class for all trigger events */
+	private class SmEvent extends EventQueue.Event<EventId> {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("SmEvent." + xmiGuid)»
+		// Usually nothing to insert here, just in case ... 
+		«ENDPROTECT»
+		public SmEvent(EventId id) {
+			super(id);
+		}
+		public «((MClassifier)owningContext).asTypeName()» getReceiver() {
+			return «((MClassifier)owningContext).asTypeName()».this;
+		}
+	}
+	«FOREACH event.sortBy(ev|ev.name) AS event -»
+	private class «event.asTypeName()» extends SmEvent {
+		«EXPAND _Members FOR event -»
+		public «event.asTypeName()»(«EXPAND _Params FOR event») {
+			super(EventId.«event.name»);
+			«EXPAND _MemberInit FOR event -»
+		}
+	}
+	«ENDFOREACH»  
+«ENDDEFINE»
+
+«DEFINE _EventCreators FOR MStateMachine -»
+	«FOREACH event.sortBy(ev|ev.name).reject(e|e.name.startsWith("_") || e.metaType == MTimeEvent) AS event -»
+	public void take«event.asTypeName()»(«EXPAND _Params FOR event») {
+		new «event.asTypeName()»(«
+			FOREACH event.parameter AS p SEPARATOR ", " -»
+			«p.asParameter()»«ENDFOREACH»).«IF event.isCall -»sendImmediate«ELSE»send«ENDIF»();
+	}
+	«ENDFOREACH»  
+	«FOREACH event.sortBy(ev|ev.name).typeSelect(MTimeEvent) AS event -»
+	private Timer timerFor«event.asTypeName()»;
+	private void startTimerFor«event.asTypeName()»() {
+		«EXPAND _SMDebugMsg("\"startet\"") FOR event -»
+		timerFor«event.asTypeName()» = new «event.asTypeName()»().sendDelayed(«event.when»); 
+	}
+	private void stopTimerFor«event.asTypeName()»() {
+		if(timerFor«event.asTypeName()» != null) {
+			timerFor«event.asTypeName()».cancel();
+			«EXPAND _SMDebugMsg("\"stopped\"")  FOR event -»
+		}
+		timerFor«event.asTypeName()» = null; 
+	}
+	«ENDFOREACH»  
+«ENDDEFINE»
+
+«REM»
+	generates members for parameters for an event
+«ENDREM»
+«DEFINE _Members FOR MEvent -»
+	«FOREACH parameter AS p -»
+	«IF p.isSingleValuedType() -»
+		private «p.type.mapName().asTypeName() » «p.asParameter()»;
+		public «p.type.mapName().asTypeName() » «p.asGetter()»() { return «p.asParameter()»; }
+	«ELSE -»
+		private «EXPAND Type::MultiValuedType FOR p » «p.asParameter()»;
+		public «EXPAND Type::MultiValuedType FOR p » «p.asGetter()»() { return «p.asParameter()»; }
+	«ENDIF -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the field initialisations for an event
+«ENDREM»
+«DEFINE _MemberInit FOR MEvent -»
+	«FOREACH parameter AS p-»
+	this.«p.asParameter()» = «p.asParameter()»;
+	«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the parameters of an event as a parameter list for action methods
+«ENDREM»
+«DEFINE _AllMembersGet FOR MEvent -»
+	«FOREACH parameter AS p SEPARATOR ", " -»
+	ev.«p.asGetter()-»()«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates debug switch
+«ENDREM»
+«DEFINE _SMDebug FOR MStateMachine -»
+	«PROTECT CSTART '/* ' CEND ' */' ID ("debugflag." + xmiGuid)»
+	/** switch state machine tracing on / off */
+	private static final boolean SMDEBUG = true;
+	«ENDPROTECT -»
+«REM»
+«ENDREM»
+«ENDDEFINE»
+
+«REM»
+	generates debug message output
+«ENDREM»
+«DEFINE _SMDebugMsg(String msg) FOR MElement -»
+«REM»«ENDREM»	if(SMDEBUG) System.out.println("«this.name» " + «msg»);
+«ENDDEFINE»

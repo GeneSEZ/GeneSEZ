@@ -1,0 +1,52 @@
+/**
+ * mapping UML to C#
+ * 
+ * @author	gerrit beine
+ * @date	2008-06-01
+ */
+
+//	based on genesez meta model
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper;
+
+/**
+ * returns the direction of a parameter in C#
+ * @return	the direction
+ */
+String direction(MParameter this) :
+	switch (direction) {
+		case 'inout': 'ref'
+		case 'out': 'out'
+		default: ''
+	};
+
+/**
+ * return the visibility modifier of an attribute
+ * @return the visibility
+ */
+String visibility(MAttribute this) :
+	switch {
+		case static && final: visibility
+		default: 'private'
+	};
+
+/**
+ * return if a getter for an attribute should be generated
+ * @return	true, if the getter should be generated
+ */
+boolean getter(MAttribute this) :
+	switch {
+		case hasStereotype('accessor'): hasTaggedValue('getter', 'true')
+		default: true
+	};
+
+/**
+ * return if a setter for an attribute should be generated
+ * @return	true, if the setter should be generated
+ */
+boolean setter(MAttribute this) :
+	switch {
+		case hasStereotype('accessor'): hasTaggedValue('setter', 'true')
+		default: true
+	};

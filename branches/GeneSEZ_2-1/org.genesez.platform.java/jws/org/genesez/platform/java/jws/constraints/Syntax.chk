@@ -1,0 +1,48 @@
+/**
+ * Validates a model for generation using the jws platform
+ * 
+ * @author	andre pflueger
+ * @date	2010-11-10
+ */
+
+//	based genesez meta model
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::common::Conversion;
+extension org::genesez::platform::common::log::Log;
+extension org::genesez::platform::common::m2t::Helper;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type related things
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks the correct usage of web service annotations jwsWebService, jwsSOAPBinding, jwsHandlerChain
+ * @return	false generates an error, if web service annotations are not used with stateless session or message driven beans
+ */
+context MClass ERROR "GeneSEZ: WebService annotations are allowed with stateless session or message driven beans only." + fqn() : 
+	(this.hasStereotype("jwsWebService") || hasStereotype("jwsSOAPBinding") || hasStereotype("jwsHandlerChain")) &&
+	!(hasStereotype("ejb3MessageDrivenBean") || hasTaggedValue("ejb3SessionBean", "stateful", "false"))
+		? false
+		: true;
+		
+/**
+ * 	checks the usage of a remote business interface if stereotypes jwsWebService, 
+ *	jwsSOAPBinding, jwsHandlerChain are available
+ * 
+ * 	@return		false generates an error, if session bean has local business interface
+ */
+context MClass ERROR "GeneSEZ: WebService session bean makes no sense with local business interface." + fqn() : 
+	(this.hasStereotype("jwsWebService") || hasStereotype("jwsSOAPBinding") || hasStereotype("jwsHandlerChain")) &&
+	hasStereotype("ejb3Local")
+		? false
+		: true;
+		
+context MAttribute ERROR "GeneSEZ: WebService annotation @WebServiceRef is allowed with stateless session or message driven beans only." + fqn() :
+	this.hasStereotype("jwsWebServiceRef") &&
+	!(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasStereotype("ejb3SessionBean"))
+		? false
+		: true;
