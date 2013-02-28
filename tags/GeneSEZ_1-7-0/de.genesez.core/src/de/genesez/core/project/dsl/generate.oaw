@@ -1,0 +1,83 @@
+<workflow>
+<!--
+	Creates the GeneSEZ project wizard DSL
+	This workflow is based on org.openarchitectureware.xtext.generator
+-->
+
+    <property file='generate.properties'/>
+
+	<property name="grammar" />
+	<property name="debug.grammar" value="false" />
+
+	<property name="core.project.name" />
+	<property name="core.project.src" value="src" />
+	<property name="core.project.src.gen" value="src-gen" />
+
+	<property name="language.name" />
+	<property name="language.nsURI" value="http://www.genesez.de/dsl/${language.name}" />
+	<property name="language.fileextension" value="${language.name}" />
+	<property name="basepath" />
+
+	<!--internal properties !do not overwrite!-->
+	<property name="internal.core.project.base"
+		value="${workspace.dir}/${core.project.name}" />
+	<property name="internal.core.project.src"
+		value="${internal.core.project.base}/${core.project.src}" />
+	<property name="internal.core.project.src.gen"
+		value="${internal.core.project.base}/${core.project.src.gen}" />
+
+    <bean class="org.eclipse.mwe.emf.StandaloneSetup">
+        <platformUri value=".."/>
+    	<registerGeneratedEPackage value="org.openarchitectureware.xtext.XtextPackage"/>
+    </bean>
+
+	<bean class="oaw.xtext.GeneratorConfig"
+		languageName="${language.name}"
+		fileExtension="${language.fileextension}"
+		basePath="${basepath}"
+		nsURI="${language.nsURI}"
+		coreProjectName="${core.project.name}"
+		coreSrc="${core.project.src}"
+		coreSrcGen="${core.project.src.gen}"/>
+
+    <component file="org/openarchitectureware/xtext/parser/Parser.oaw">
+       <modelFile value="${grammar}"/>
+       <outputSlot value="xtextFile"/>
+    </component>
+
+	<!-- Generate the ecore model and parser for the DSL -->
+	<component class="oaw.xpand2.Generator">
+		<fileEncoding value="ISO-8859-1" />
+		<metaModel id="mm"
+			class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" />
+		<expand
+			value="org::openarchitectureware::xtext::Root::core_src_gen('${debug.grammar}') FOR xtextFile" />
+		<outlet path="${internal.core.project.src.gen}"
+			overwrite="true" />
+	</component>
+
+	<!-- Generate the sources for the DSL -->
+	<component class="oaw.xpand2.Generator">
+		<fileEncoding value="ISO-8859-1" />
+		<metaModel idRef="mm" />
+		<expand
+			value="org::openarchitectureware::xtext::Root::core_src FOR xtextFile" />
+		<outlet path="${internal.core.project.src}" overwrite="true" />
+	</component>
+
+	<!-- Generate the grammar file for the DSL -->
+	<component class="org.antlr.WorkflowComponent">
+		<grammar
+			value="${internal.core.project.src.gen}/${basepath}/parser/${language.name}.g" />
+		<arg value="-o" />
+		<arg value="." />
+	</component>
+
+	<!-- Write the xtextFile as XMI so that the parser can load it for tracing-->
+	<component class='oaw.emf.XmiWriter'>
+		<inputSlot value="xtextFile" />
+		<modelFile
+			value='${internal.core.project.src.gen}/${basepath}/${language.name}.xmi' />
+	</component>
+
+</workflow>

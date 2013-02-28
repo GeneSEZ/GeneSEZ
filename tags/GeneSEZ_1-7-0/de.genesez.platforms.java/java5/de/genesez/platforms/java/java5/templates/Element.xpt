@@ -1,0 +1,49 @@
+«REM»
+	Template for java5 according to elements in general
+	
+	@author	nancy doerfel
+	@date	2010-09-04
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::jpa::scripts::Stereotypes»
+«EXTENSION de::genesez::platforms::java::java5::scripts::Helper»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+
+«ENDREM»
+
+«DEFINE JavaAnnotation FOR MElement-»
+    «FOREACH stereotype.select(e|e.hasStereotype(java5AnnotationStereotype())) AS stereos»
+        @«stereos.name»
+        «IF !stereos.taggedValue.isEmpty»
+        («taggedValue.value.getElements()»
+	        «FOREACH taggedValue AS taggedValue-»
+	           «FOREACH taggedValue.value.getElements() AS name SEPARATOR ","-» 
+	               «name-» 
+	           «ENDFOREACH -»
+	        «ENDFOREACH -»
+	    )
+	    «ENDIF -»                   
+    «ENDFOREACH -»
+«ENDDEFINE»

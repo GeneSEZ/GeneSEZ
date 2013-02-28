@@ -1,0 +1,103 @@
+«REM»
+	Template for ejb3-Aspects
+	
+	@author	andre pflueger
+	@date	2009-02-22
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::Imports»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Class»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Attribute»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Stereotypes»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Interface»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for Enterprise JavaBeans (Version 3)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	override fixed imports because a different association handling 
+	is in use for the ejb3 cartridge
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+	«EXPAND Import::ImportStatements»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	fix problems with generated imports and the containing proReg 
+	(if proreg has content, only the end of the proreg is generated)
+	fast solution idea: generate imports in the proreg; add custom imports
+	next time imports are generated they will be generated in the proreg but will 
+	be overridden by restoring the proreg which happens after generating the source code
+	
+	this is not a good handling of the problem because there is generated code in a proreg
+	which is reserved for customized code 
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Import::Import FOR MClassifier-»
+	«PROTECT CSTART "/*" CEND "*/" ID ("java.type.import." + xmiGuid)» 
+	/* TODO: put your own source code here */
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_FixedImports -»
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_Import FOREACH supplier.select( s| s.isImportNeeded(this) && s.metaType.name != "gcore::MExternal")»
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_OtherImports»
+	«ENDPROTECT»
+«ENDAROUND»
+
+«REM»
+	annotations for interfaces
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Interface::_Annotation FOR MInterface-»
+	«EXPAND Class::RemoteLocal-»
+	«targetDef.proceed()-» 
+«ENDAROUND»	
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Class::_Annotation FOR MClass-»
+	«EXPAND Class::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for operations (used for return type, parameters and operations)
+	there is a conflict by using jws and ejb in one cartridge --> write own jws cartridge
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MOperation-»
+	«EXPAND Operation::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+	«EXPAND Attribute::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	add code to the extension area in the java5 class template
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Class::Root::_Extension FOR MClass-»
+	«EXPAND Class::AddPublicOperations-»
+	«targetDef.proceed()-»
+«ENDAROUND»

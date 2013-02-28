@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+	
+    <!-- working with uml2 models requires the uml2 meta model -->
+	<bean id="uml2" class="org.openarchitectureware.uml2.UML2MetaModel"/>
+	
+	<component class="oaw.emf.XmiReader">
+		<modelFile value=""/>
+ 		<outputSlot value="profile"/>
+	</component>
+	
+	<component id="profile2text" class="oaw.xpand2.Generator" skipOnErrors="true">
+		<metaModel class="oaw.type.emf.EmfMetaModel">
+ 			<metaModelPackage value="org.eclipse.emf.ecore.EcorePackage"/>
+		</metaModel>
+		<metaModel class="oaw.uml2.UML2MetaModel"/>
+		<expand value="de::genesez::adapter::uml2::templates::profile::Root FOR profile"/>
+		<outlet path=""/>
+		<fileEncoding value="UTF-8"/>
+	</component>
+
+</workflow>

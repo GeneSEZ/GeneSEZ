@@ -1,0 +1,94 @@
+«REM»
+	JBoss Seam Framework cartridge (version 2.1.2)
+	
+	description:
+	The template is based on the ejb cartridge and evaluates several stereotypes
+	to generate annotations of JBoss Seam. Its uses aspects around the methhods
+	of the ejb annotations in the Xpand files of the ejb3 cartridge.
+	
+	@author		andre pflueger
+	@date		2008/10/29
+	@version 	1.0
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::seam2::scripts::Operation»
+«EXTENSION de::genesez::platforms::java::seam2::scripts::Interface»
+«EXTENSION de::genesez::platforms::java::seam2::scripts::Naming»
+
+
+«REM»
+	public functions 
+	should be called from an aspects file
+	currently not in use because only one aspects file can be called
+«ENDREM»
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Class::_Annotation FOR MClass-»
+	«EXPAND Class::Annotation-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for operations
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MOperation-»
+	«EXPAND Operation::Annotation-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+	«EXPAND Attribute::Annotation-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for interfaces
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Interface::_Annotation FOR MInterface-»
+	«EXPAND Interface::Annotation-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	annotations for association roles
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Association::_Annotation FOR MAssociationRole-»
+	«EXPAND Association::Annotation-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	import statements
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+	«EXPAND Import::ImportStatements-»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	evaluates the role security stereotypes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Interface::_Extension FOR MInterface-»
+	«EXPAND Interface::GetterSetterForSessionBeans-»
+	«targetDef.proceed()-»
+«ENDAROUND» 

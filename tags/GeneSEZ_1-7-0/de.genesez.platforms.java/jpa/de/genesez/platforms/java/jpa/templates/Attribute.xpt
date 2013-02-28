@@ -1,0 +1,104 @@
+«REM»
+	Template for jpa annotations according to attributes
+	
+	@author	andre pflueger
+	@date	2009-02-22
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::jpa::scripts::Stereotypes»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» evaluate stereotypes for attributes «ENDREM»
+«DEFINE Annotation FOR MAttribute»
+	«EXPAND Element::PrimaryKey-»
+	«EXPAND Element::Column-»	
+	«EXPAND Element::DatatypeMapping-»
+	«EXPAND _Persistence-»
+	«EXPAND Element::OptimisticLocking-»
+	«EXPAND Class::DiscriminatorValue-»	
+	«EXPAND _MultiValueAttributes-»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	adds an annotation for multi value attributes
+«ENDREM»
+«DEFINE _MultiValueAttributes FOR MAttribute-»
+	«IF multiplicity != 1-»
+		«IF this.classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+			@org.hibernate.annotations.CollectionOfElements
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype jpaPersistenceContext and jpaPersistenceUnit 
+«ENDREM»
+«DEFINE _Persistence FOR MAttribute-»
+	«IF !this.hasStereotype("seam2Injection")-»
+		«IF hasStereotype("jpaPersistenceContext") && hasUtilizableValue("jpaPersistenceContext", "type")-»
+			«IF getTaggedValue("jpaPersistenceContext", "type").getElements().size > 1-»
+				@PersistenceContexts(
+			«ENDIF-»
+			«FOREACH getTaggedValue("jpaPersistenceContext", "type").getElements() AS types SEPARATOR ","-»
+	 			@PersistenceContext (
+	 				type = PersistenceContextType.«types-»
+	 				«IF hasUtilizableValue("jpaPerssistenceContext", "unitName")-»  						
+		 				«LET getTaggedValue("jpaPersistenceContext", "unitName").getElements().indexOf(types) AS index-»
+		 					, unitName = "«getTaggedValue("jpaPersistenceContext", "unitName").getElements().get(index)-»"
+		 				«ENDLET»
+		 			«ENDIF»
+	 				«IF hasUtilizableValue("jpaPerssistenceContext", "name")-»  						
+		 				«LET getTaggedValue("jpaPersistenceContext", "name").getElements().indexOf(types) AS index-»
+		 					, name = "«getTaggedValue("jpaPersistenceContext", "name").getElements().get(index)-»"
+		 				«ENDLET-»
+		 			«ENDIF-»)	 			
+	 		«ENDFOREACH-»
+	 		«IF getTaggedValue("jpaPersistenceContext", "type").getElements().size > 1-»
+	 			)
+	 		«ENDIF-»		
+		«ELSEIF hasStereotype("jpaPersistenceContext")-»
+			@PersistenceContext
+		«ELSEIF hasStereotype("jpaPersistenceUnit") && hasUtilizableValue("jpaPersistenceUnit", "name") && hasUtilizableValue("jpaPersistenceUnit", "unitName")-»
+			«IF getTaggedValue("jpaPersistenceUnit", "name").getElements().size > 1-»
+				@PersistenceUnits {
+			«ENDIF-»
+			 «FOREACH getTaggedValue("jpaPersistenceUnit", "name").getElements() AS names SEPARATOR ","-»
+	 			@PersistenceUnit(
+	 				name = "«names-»",  						
+	 				«LET getTaggedValue("jpaPersistenceUnit", "unitName").getElements().indexOf(names) AS index-»
+	 					unitName = "«getTaggedValue("jpaPersistenceUnit", "unitName").getElements().get(index)-»")
+	 				«ENDLET»
+	 		«ENDFOREACH-»)
+	 		«IF getTaggedValue("jpaPersistenceUnit", "name").getElements().size > 1-»
+				}
+			«ENDIF-»
+	 	«ELSEIF hasStereotype("jpaPersistenceUnit")-»
+	 		@PersistenceUnit
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»

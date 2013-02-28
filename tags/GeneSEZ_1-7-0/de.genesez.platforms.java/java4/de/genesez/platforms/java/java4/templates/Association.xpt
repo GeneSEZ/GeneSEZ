@@ -1,0 +1,353 @@
+«REM»
+	Handles everything about associations
+	
+	generates the association handling based on the old java association handling
+	
+	@author georg beier
+	@author	nico herbig
+	@author andre pflueger
+	@author	tobias haubold
+	@author	nico herbig (last)
+	@date	2009-05-26
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::Association»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the declaration of association attributes
+«ENDREM»
+«DEFINE Declaration FOR MClass -»
+	«EXPAND _AssociationDecl»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of accessors for association attributes
+«ENDREM»
+«DEFINE Accessors FOR MClass -»
+	«EXPAND _AccessorImpl»
+«ENDDEFINE»
+
+«DEFINE Accessors FOR MInterface -»
+	«EXPAND _AccessorDecl»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generate a declaration for an attribute
+«ENDREM»
+«DEFINE _AssociationDecl FOR MAssociationRole-»
+	«EXPAND _CommentAssociation-»
+	«IF isPlainAssociation()-»
+		«IF multiplicity == 1-»
+			«EXPAND _Modifier» «type.asTypeName()-» «asAttribute()-»;
+		«ELSE-»
+			«EXPAND _Modifier» «mapType()» «asAttribute()» = new «mapType("Implementation")»();
+		«ENDIF-»
+	«ELSE-»
+		«REM»«EXPAND _Modifier» «mapType()» «asAttribute()» = new «mapType("Implementation")»();«ENDREM»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+«DEFINE _AssocClassReferences FOR MAssociation-»
+	«FOREACH end AS aend-»
+		/** reference attribute to the managed association end */
+		private «aend.type.asTypeName()-» «aend.asAttribute()-»;
+	«ENDFOREACH-»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	generate attributes for a class
+«ENDREM»
+«DEFINE _AssociationDecl FOR MClass-»
+	«REM»«EXPAND _AssocClassReferences FOR ownedAssociation-»«ENDREM»
+	«EXPAND _AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
+
+«REM»
+	generate attributes for a classifier
+«ENDREM»
+«DEFINE _AssociationDecl FOR MClassifier-»
+	«EXPAND _AssociationDecl FOREACH property.typeSelect(MAssociationRole)-»
+«ENDDEFINE»
+
+«DEFINE _CommentAssociation FOR MAssociationRole-»
+	/**
+	 * variable for association to «this.type.asTypeName()»
+	 */
+«ENDDEFINE»
+
+«REM»
+	 generate modifiers for mclassifier
+«ENDREM»
+«DEFINE _Modifier FOR MAssociationRole-»
+	«visibility-»
+«ENDDEFINE»
+
+
+«DEFINE _AccessorDecl FOR MInterface-»
+	«FOREACH property.typeSelect(MAssociationRole) AS a-»
+		«EXPAND _GetterDecl FOR a-»
+		«EXPAND _InsertInDecl FOR a-»
+		«EXPAND _RemoveFromDecl FOR a-»
+	«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE _AccessorImpl FOR MClass-»
+	«REM»«EXPAND _AssocClassReferenceGetters FOR ownedAssociation-»«ENDREM»
+	«FOREACH property.typeSelect(MAssociationRole) AS a-»
+		«EXPAND _GetterImpl FOR a-»
+		«EXPAND _InsertInImpl FOR a-»
+		«EXPAND _RemoveFromImpl FOR a-»
+	«ENDFOREACH-»
+«ENDDEFINE»
+
+«REM»
+	generate a getter declaration method for a MAssociationRole
+«ENDREM»
+«DEFINE _GetterDecl FOR MAssociationRole-»
+	«IF isPlainAssociation()-»
+		«IF multiplicity != 1-»
+			«EXPAND _CommentGetter-»
+			public «mapType()» «asGetter()»();
+		«ENDIF-»
+	«ELSE-»
+		«EXPAND _CommentGetter-»
+		public «mapType()» «asGetter()»();
+		public «mapType()» «asGetter()»«type.asTypeName()»();
+	«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a getter implementation method for a MAssociationRole
+«DEFINE _GetterImpl FOR MAssociationRole-»
+	«IF isPlainAssociation()-»
+		«EXPAND _CommentGetter-»
+		«IF multiplicity == 1-»
+			public «type.asTypeName()» «asGetter()»() {
+				return «asAttribute()»;
+			}
+		«ELSE-»
+			public «mapType()-» «asGetter()»() {
+				«IF unique == true-»
+					return java.util.Collections.unmodifiableSet(«asAttribute()»);
+				«ELSEIF unique == false && ordered == false-»
+					return java.util.Collections.unmodifiableSet(«asAttribute()»);
+				«ELSE»
+					return java.util.Collections.unmodifiableList(«asAttribute()»);
+				«ENDIF-»
+			}
+		«ENDIF-»
+	«ELSE-»
+		«REM»public «mapType()»<«type.asTypeName()»> «asGetter()»() {
+			«mapType("Implementation")»<«type.asTypeName()»> _result = new «mapType("Implementation")»<«type.asTypeName()»>();
+			for(«type.asTypeName()» _assoc : «asAttribute()») {
+				_result.add(_assoc.«asGetter()»());
+			}
+			return _result;
+		}
+		
+		/** 
+		  * accessor to the association class objects
+		  */
+		public «mapType()»<«type.asTypeName()»> «asGetter()»«type.asTypeName()»() {
+			«IF unique == true-»
+				return java.util.Collections.unmodifiableSet(«asAttribute()»);
+			«ELSE-»
+				return java.util.Collections.unmodifiableSet(«asAttribute()»);
+			«ENDIF-»
+		}«ENDREM»
+	«ENDIF-»
+«ENDDEFINE»
+
+// generate a insert in declaration method
+«DEFINE _InsertInDecl FOR MAssociationRole-»
+	«IF isPlainAssociation()-»
+		«EXPAND _CommentAccessor-»
+		«IF multiplicity != 1-»
+			public void «asInsertIn()-»(«type.asTypeName()» «asAttribute()-»);
+		«ELSEIF multiplicity == 1»
+			public void «asSetter()-»(«type.asTypeName()» «asAttribute()-»);
+		«ENDIF»
+	«ELSE-»
+		«REM»public void «asInsertIn()»(«type.asTypeName()» _in, «type.asTypeName()» _at);«ENDREM»
+	«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a insert in implementation method
+«DEFINE _InsertInImpl FOR MAssociationRole-»
+	«IF isPlainAssociation()-»
+		«EXPAND _CommentAccessor-»
+		«IF multiplicity != 1-»
+			public void «asInsertIn()-»(«type.asTypeName()-» «asAttribute()-») {
+				«IF multiplicity == 1-»
+					if (this.«asAttribute()-» == «asAttribute()-») {
+						return;
+					}
+					«IF opposite != null && opposite.multiplicity != 1-»
+						if (this.«asAttribute()-» != null) {
+							this.«asAttribute()-».«opposite.asRemoveFrom()-»(this);
+						}
+					«ENDIF-»
+					this.«asAttribute()-» = «asAttribute()-»;
+				«ELSE-»
+					if (this.«asAttribute()-».contains(«asAttribute()-»)) {
+						return;
+					}
+					this.«asAttribute()-».add(«asAttribute()-»);
+				«ENDIF-»
+				«IF opposite != null && opposite.multiplicity != 1 
+					&& (opposite.hasTaggedValue("accessor", "setter", "true")
+						|| !opposite.hasStereotype("accessor"))-»
+					if (!«asAttribute()-».«opposite.asGetter()-»().contains(this)) {
+						«asAttribute()-».«opposite.asInsertIn()-»(this);
+					}
+				«ELSEIF opposite != null && opposite.multiplicity == 1 
+						&& (opposite.hasTaggedValue("accessor", "setter", "true") 
+							|| !opposite.hasStereotype("accessor"))-»
+					«asAttribute()-».«opposite.asSetter()-»(this);
+				«ENDIF-»
+			}
+		«ELSEIF multiplicity == 1-»
+			public void «asSetter()-»(«type.asTypeName()-» «asAttribute()-»){
+				this.«asAttribute()-» = «asAttribute()-»; 
+			}
+		«ENDIF»
+	«ELSE-»
+		«REM»/**
+		  * insert into association, generate linked association class object
+		  * @param _other partner object
+		  * @return newly generated linked association class object
+		  */
+		public «type.asTypeName()» «asInsertIn()»(«type.asTypeName()» _other) {
+			«IF association.end.first() != this-»
+				«type.asTypeName()» _assoc = new «type.asTypeName()»(this, _other);
+			«ELSE-»
+				«assocClass().mapName()» _assoc = new «type.asTypeName()»(_other, this);
+			«ENDIF-»
+			this.«asVariable()».add(_assoc);
+		«IF opposite != null-»
+			_other.«opposite.asInsertIn()»(_assoc); 
+		«ENDIF-»
+			return _assoc;
+		}
+		
+		/**
+		  * insert linked association class object into association
+		  * @param _other partner object
+		  * @return newly generated linked association class object
+		  */
+		public void «asInsertIn()»(«type.asTypeName()» _assoc) {
+			if (this.«asAttribute()».contains(_assoc)) {
+					return;
+			}
+			if(_assoc.«opposite.asGetter()»() != this) {
+				throw new RuntimeException("inconsistent association object");
+			}
+			this.«asAttribute()».add(_assoc);
+		}«ENDREM»
+	«ENDIF-»
+«ENDDEFINE»
+
+
+// generate a remove from declaration method
+«DEFINE _RemoveFromDecl FOR MAssociationRole-»
+	«IF multiplicity != 1-»
+		«EXPAND _CommentAccessor-»
+		public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-»);
+	«ENDIF»
+«ENDDEFINE»
+
+
+// generate a remove from implementation method
+«DEFINE _RemoveFromImpl FOR MAssociationRole-»
+	«IF isPlainAssociation()-»
+		«IF multiplicity != 1-»
+			«EXPAND _CommentAccessor-»
+			public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-») {
+				«IF multiplicity == 1-»
+					if (this.«asAttribute()-» != «asAttribute()-») {
+						return;
+					}
+					this.«asAttribute()-» = null;
+				«ELSE-»
+					if (!this.«asAttribute()-».contains(«asAttribute()-»)) {
+						return;
+					}
+					this.«asAttribute()-».remove(«asAttribute()-»);
+				«ENDIF-»
+				«IF opposite != null && opposite.multiplicity != 1-»
+					if («asAttribute()-».«opposite.asGetter()-»().contains(this)) {
+						«asAttribute()-».«opposite.asRemoveFrom()-»(this);
+					}
+				«ENDIF-»
+			}
+		«ENDIF»
+	«ELSE-»
+		«REM»/**
+		  * remove entry from association indexed by its association class object
+		  */
+		public void «asRemoveFrom()»(«type.asTypeName()» _assoc) {
+			if (!«asAttribute()».contains(_assoc)) {
+				return;
+			}
+			«asAttribute()».remove(_assoc);
+			«IF opposite != null-»
+				_assoc.«asGetter()»().«opposite.asRemoveFrom()»(_assoc);
+			«ENDIF-»
+		}«ENDREM»
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _CommentGetter FOR MAssociationRole-»
+	/**
+	 * accessor for association to «name»
+	«IF hasComment()-»
+		 * «ownedComment.getCommentText()»
+	«ENDIF-»
+	 */
+«ENDDEFINE»
+
+«DEFINE _CommentAccessor FOR MAssociationRole-»
+	/**
+	 * accessor for association to «name»
+	«IF hasComment()-»
+	 	* @see {@link «asGetter()»}
+	«ENDIF-»
+	 */
+«ENDDEFINE»
+
+«REM»
+«DEFINE _AssocClassReferenceGetters FOR MAssociation-»
+	«FOREACH end AS aend-»
+		/** getter of reference attribute to the managed association end  «aend.asVariable()»*/
+		public «aend.type.asTypeName()» «aend.asGetter()»() {
+			return «aend.asVariable()»;
+		}
+	«ENDFOREACH-»
+«ENDDEFINE»
+«ENDREM»

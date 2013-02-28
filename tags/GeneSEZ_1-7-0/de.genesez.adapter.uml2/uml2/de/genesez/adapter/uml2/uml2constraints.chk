@@ -1,0 +1,63 @@
+/**
+ * Validates an uml2 model for transformation into a GeneSEZ model
+ * 
+ * @author	tobias haubold
+ * @date	2008-03-27
+ * @version	alpha
+ */
+
+// based uml meta model
+import uml;
+
+extension de::genesez::adapter::uml2::scripts::Helper;
+
+/**
+ * checks if the name of a named element contains only valid characters
+ * valid characters are: letters, numbers, underscores
+ * @return	false, if the name contains other characters, otherwise true
+ */
+context NamedElement WARNING "GeneSEZ UML2 Adapter: name contains invalid characters: " + metaType + ", " + fqn() :
+	switch (true) {
+		case metaType == Model : name.matches("(\\w|\\.)+")
+		case metaType == Package : true
+		case {Classifier, Operation, EnumerationLiteral}.contains(metaType) :
+			name.matches("(\\w)+")
+		case metaType == Parameter && ((Parameter)this).direction.toString() != "return" : name.matches("(\\w|\\.)+")
+		case metaType == Property : 
+			( 
+				((Property)this).association != null && ((Property)this).class == null 
+					? true
+					: name.matches("(\\w)+")
+			)
+		default : true
+	};
+
+/**
+ * checks if a property has a type or not
+ * @return  false, if the type is not set on the property, otherwise true
+ */
+context Property ERROR "GeneSEZ UML2 Adapter: property has no type: " + fqn() :
+	type != Void || type != null;
+
+/**
+ * checks if an association end property has more than one qualifier attribute
+ * @return	false, if the property has more than one qualified attribute
+ */
+context Property ERROR "GeneSEZ UML2 Adapter: qualified associations with more than one qualifier attribute are currently not supported" :
+	qualifier.size < 2;
+
+/**
+ * checks if a parameter has a type or not
+ * @return	false, if the parameter has no return type, otherwise true
+ */
+context Parameter ERROR "GeneSEZ UML2 Adapter: parameter has no type: " + fqn() :
+	type != Void || type != null;
+
+
+/**
+ * checks if an operation has a return type or not
+ * @return	false, if the operation has no return type, otherwise true
+ */
+context Operation WARNING "GeneSEZ UML2 Adapter: operation has no return type: " + fqn() :
+	type != Void || type != null;
+

@@ -1,0 +1,74 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::common::AccessHelper»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented association functions
+// //////////////////////////////////////////////////////////////////////////////
+
+«REM»
+// override the java4 getter method for associations
+«AROUND de::genesez::platforms::java::java4::templates::Association::GetterDecl FOR MAssociationRole»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")»
+	«EXPAND Association::GetterDecl»
+«ENDIF»
+«ENDAROUND»
+«ENDREM»
+
+«REM»
+// override the java4 getter method for associations
+«AROUND de::genesez::platforms::java::java4::templates::Association::GetterImpl FOR MAssociationRole»
+«IF !hasTaggedValue("AccessorModifier", "getter", "false")»
+	«EXPAND Association::GetterImpl»
+«ENDIF»
+«ENDAROUND»
+«ENDREM»
+
+
+// override the java4 insertin method for associations
+«AROUND de::genesez::platforms::java::java4::templates::Association::InsertInImpl FOR MAssociationRole»
+«EXPAND Association::InsertInImpl»
+«ENDAROUND»
+
+
+// override the java4 removefrom method for associations
+«AROUND de::genesez::platforms::java::java4::templates::Association::RemoveFromImpl FOR MAssociationRole»
+«EXPAND Association::RemoveFromImpl»
+«ENDAROUND»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// aspect oriented attribute functions
+// //////////////////////////////////////////////////////////////////////////////
+
+«REM»
+// addition to the java 4 getter method for attribute
+«AROUND de::genesez::platforms::java::java4::templates::Attribute::GetterImpl FOR MAttribute»
+«EXPAND Attribute::GetterImpl-»
+«ENDAROUND»
+«ENDREM»
+
+
+«REM»
+// addition to the java 4 insertIn method for attribute
+«AROUND de::genesez::platforms::java::java4::templates::Attribute::InsertInImpl FOR MAttribute»
+«IF !hasTaggedValue("AccessorModifier", "insertIn", "false")»
+	«EXPAND Attribute::InsertInImpl-»
+«ENDIF»
+«ENDAROUND»
+«ENDREM»
+
+«REM»
+// addition to the java 4 removeFrom method for attribute
+«AROUND de::genesez::platforms::java::java4::templates::Attribute::RemoveFromImpl FOR MAttribute»
+«IF !hasTaggedValue("AccessorModifier", "removeFrom", "false")»
+	«EXPAND Attribute::RemoveFromImpl-»
+«ENDIF»
+«ENDAROUND»
+«ENDREM»
+
+
+

@@ -1,0 +1,30 @@
+/**
+ * Validates a model for generation using the java platform
+ * 
+ * @author	andre pflueger
+ * @date	2010-09-08
+ */
+
+//	based genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::m2t::Helper;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type related things
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+
+/**
+ * checks the modifiers of an attribute of an interface
+ * @return	generates a warning if the attibute is a single value, has the modifier 'final' and a default value
+ */
+context MAttribute WARNING "GeneSEZ: A final single-valued attribute with a default value makes no sense! A static final attribute will be generated instead." + fqn() :
+	classifier.metaType == MClass
+		? (final && this.hasDefaultValue() && this.isSingleValuedType() ? true : false)
+		: true;

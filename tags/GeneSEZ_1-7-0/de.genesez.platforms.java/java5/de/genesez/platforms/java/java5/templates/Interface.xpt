@@ -1,0 +1,78 @@
+«REM»
+	Performs the generation of interfaces
+	
+	@author	nico herbig
+	@author	tobias haubold
+	@author andre pflueger (last)
+	@date	2007-07-13
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful support functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«REM» use java naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«REM» use java conversions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes an interface
+«ENDREM»
+«DEFINE Root FOR MInterface -»
+package «packageDeclaration( basePackage() ) -»;
+«EXPAND Import::Import -»   
+«EXPAND Comment::Type -»
+«EXPAND _Annotation-»
+public interface «asTypeName() -» «EXPAND Type::Generics -» «EXPAND Type::Generalization -» {
+	
+	«IF generateSectionComments() && ( hasAttributes() || hasAssociationRoles() ) -»
+	// -- generated attribute, constant + association declarations ----------
+	«ENDIF -»
+	«EXPAND Attribute::Declaration -»
+	
+	«IF generateSectionComments() && ( hasOperationDeclarations() ) -»
+	// -- generated method declarations -------------------------------------
+	«ENDIF -»
+	«EXPAND Operation::Declaration -»
+	
+	«IF generateSectionComments() && ( hasAssociationRoles() ) -»
+	// -- generated association accessors -----------------------------------
+	«ENDIF -»
+	«EXPAND Attribute::Derived -»
+	«EXPAND Association::Accessors -»
+	
+	// -- generated code of other cartridges --------------------------------
+	«EXPAND _Extension-»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.interface.own.code.declaration." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+«REM»
+	this define block can be used by other cartridges to add some generation code
+«ENDREM»
+«DEFINE _Extension FOR MInterface-»
+«ENDDEFINE»
+
+«REM»
+	will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE _Annotation FOR MInterface-»
+«ENDDEFINE»
+
+«REM»
+    will be overriden by other cartridges to generate annotations by using aspects
+«ENDREM»
+«DEFINE ImportStatements FOR MClassifier-»
+«ENDDEFINE»
+

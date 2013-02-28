@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.build.common" basedir=".">
+
+	<!-- import environment and required scripts -->
+	<import file="imports.xml"/>
+
+	<!-- private targets -->
+
+	<target name="tag.all"
+		description="Set the GENESEZ_RELEASE_VERSION in all projects">
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<replaceregexp byline="true"
+					file="@{project}/META-INF/MANIFEST.MF"
+					match="Bundle-Version:.*"
+					replace="Bundle-Version: ${plugin.version}">
+				</replaceregexp>
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<replaceregexp byline="true"
+					file="@{project}/feature.xml"
+					match='(?&lt;!xml )version=".*"'
+					replace='version="${plugin.version}"'>
+				</replaceregexp>
+			</sequential>
+		</for>
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match='(?&lt;!xml )version=".*"'
+			replace='version="${plugin.version}"' />
+		<replaceregexp byline="true"
+			file="${build.basedir}/${prefix}.updatesite/site.xml"
+			match="feature_(\d|\.)*.jar"
+			replace="feature_${plugin.version}.jar" />
+	</target>
+
+	<target name="build.all"
+		description="Runs the build targets for all plugins">
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="@{project}"
+					target="build"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+					<property name="build.number" value="${build.number}" />
+					<property name="plugin.version" value="${plugin.version}"/>
+					<property name="build.controlled" value="true" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="createjar.all"
+		description="Creates jar files for all plugins and features">
+		<for param="project">
+			<path refid="build.projects" />
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="@{project}"
+					target="createjar"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+					<property name="build.number" value="${build.number}" />
+					<property name="plugin.version" value="${plugin.version}"/>
+					<property name="build.controlled" value="true" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="bundle.all"
+		description="bundles GeneSEZ with oAW + eclipse">
+		<delete dir="${genesez.dir}" />
+		<delete dir="${bundle.dir}" />
+		<mkdir dir="${genesez.dir}" />
+		<mkdir dir="${bundle.dir}" />
+		<!-- create the new gensez bundle zip -->
+		<for param="project">
+			<path refid="build.features" />
+			<sequential>
+				<propertyregex property="project.@{project}"
+					input="@{project}"
+					regexp="${build.basedir.absolute}/(.*)"
+					select="\1"
+					casesensitive="false"
+					/>
+				<unjar dest="${genesez.dir}/features/${project.@{project}}_${plugin.version}">
+					<fileset dir="@{project}/dist">
+						<include name="*_${plugin.version}.jar"/>
+					</fileset>
+				</unjar>
+			</sequential>
+		</for>
+		<for param="project">
+			<path refid="build.plugins" />
+			<sequential>
+				<propertyregex property="project.@{project}"
+					input="@{project}"
+					regexp="${build.basedir.absolute}/(.*)"
+					select="\1"
+					casesensitive="false"
+					/>
+				<if>
+					<!-- filter plug-ins for unpacking -->
+					<matches pattern="${genesez.extract}" string="${project.@{project}}" casesensitive="false" />
+					<then>
+						<unjar dest="${temp.dir}/genesez/plugins/${project.@{project}}_${plugin.version}">
+							<fileset dir="@{project}/dist">
+								<include name="*_${plugin.version}.jar" />
+							</fileset>
+						</unjar>
+					</then>
+					<else>
+						<copy todir="${temp.dir}/genesez/plugins">
+							<fileset dir="@{project}/dist">
+								<include name="*_${plugin.version}.jar" />
+							</fileset>
+						</copy>
+					</else>
+				</if>
+			</sequential>
+		</for>
+		<zip destfile="${bundle.dir}/genesez-${plugin.version}.zip" basedir="${temp.dir}/genesez" includes="**/*"></zip>
+		
+		<!-- create genesez + oAW + eclipse all-in-one bundles -->
+		<!-- p1 bundles - Eclipse <= 3.3 
+		<for param="file">
+			<path>
+				<fileset dir="${eclipse.p1.dir}" includes="*.zip"/>
+			</path>
+			<sequential>
+				<propertyregex property="file.@{file}"
+					input="@{file}"
+					regexp=".*/(.*)"
+					select="\1"
+					casesensitive="false"
+					/>
+				<echo message="${file.@{file}}" />
+				<zip destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}">
+					<zipfileset src="${eclipse.p1.dir}/${file.@{file}}" />
+					<zipfileset src="${bundle.dir}/genesez-${plugin.version}.zip" prefix="eclipse" />
+					<zipfileset dir="${dropins.location}" prefix="eclipse"/>
+				</zip>
+			</sequential>
+		</for>
+		<for param="file">
+			<path>
+				<fileset dir="${eclipse.p1.dir}" includes="*.tar.gz"/>
+			</path>
+			<sequential>
+				<propertyregex property="file.@{file}"
+					input="@{file}"
+					regexp=".*/(.*)"
+					select="\1"
+					casesensitive="false"
+					/>
+				<mkdir dir="${unpack.dir}" />
+				<untar src="${eclipse.p1.dir}/${file.@{file}}" dest="${unpack.dir}" compression="gzip" />
+				<unzip src="${bundle.dir}/genesez-${plugin.version}.zip" dest="${unpack.dir}/eclipse" />
+				<copy todir="${unpack.dir}/eclipse">
+					<fileset dir="${dropins.location}"/>
+				</copy>
+				<tar destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}" compression="gzip" longfile="gnu">
+					<fileset dir="${unpack.dir}" includes="**/*" />
+				</tar>
+				<delete dir="${unpack.dir}" />
+			</sequential>
+		</for>-->
+		
+		<!-- p2 bundles - Eclipse >= 3.4 
+		<for param="file">
+			<path>
+				<fileset dir="${eclipse.p2.dir}" includes="*.zip"/>
+			</path>
+			<sequential>
+				<propertyregex property="file.@{file}"
+					input="@{file}"
+					regexp=".*/(.*)"
+					select="\1"
+					casesensitive="false"
+					/>
+				<echo message="${file.@{file}}" />
+				<zip destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}">
+					<zipfileset src="${eclipse.p2.dir}/${file.@{file}}" />
+					<zipfileset src="${bundle.dir}/genesez-${plugin.version}.zip" prefix="eclipse/dropins/genesez" />
+					<zipfileset dir="${dropins.location}" prefix="eclipse/dropins/prerequisites"/>
+				</zip>
+			</sequential>
+		</for>
+		<for param="file">
+			<path>
+				<fileset dir="${eclipse.p2.dir}" includes="*.tar.gz"/>
+			</path>
+			<sequential>
+				<propertyregex property="file.@{file}"
+					input="@{file}"
+					regexp=".*/(.*)"
+					select="\1"
+					casesensitive="false"
+					/>
+				<mkdir dir="${unpack.dir}" />
+				<untar src="${eclipse.p2.dir}/${file.@{file}}" dest="${unpack.dir}" compression="gzip" />
+				<unzip src="${bundle.dir}/genesez-${plugin.version}.zip" dest="${unpack.dir}/eclipse/dropins/genesez" />
+				<copy todir="${unpack.dir}/eclipse/dropins/prerequisites">
+					<fileset dir="${dropins.location}"/>
+				</copy>
+				<tar destfile="${bundle.dir}/genesez-${plugin.version}-${file.@{file}}" compression="gzip" longfile="gnu">
+					<fileset dir="${unpack.dir}" includes="**/*" />
+				</tar>
+				<delete dir="${unpack.dir}" />
+			</sequential>
+		</for>-->
+	</target>
+	
+	<target name="distribute.all"
+		description="Distributes updatesite and bundles">
+		<ant antfile="${build.file}"
+			dir="${updatesite}"
+			target="distribute"
+			inheritAll="false">
+			<property name="build.basedir" value="${build.basedir}" />
+			<property name="build.number" value="${build.number}" />
+			<property name="plugin.version" value="${plugin.version}"/>
+			<property name="build.controlled" value="true" />
+		</ant>
+		<condition property="download.destination"
+			value="${download.location}/${branch}"
+			else="${download.location}">
+			<isset property="branch" />
+		</condition>
+		<delete dir="${download.destination}" />
+		<mkdir dir="${download.destination}" />
+		<copy todir="${download.destination}">
+			<fileset dir="${bundle.dir}" includes="*" />
+		</copy>
+	</target>
+	
+	<target name="clean.all"
+		description="Cleaning lady">
+		<for param="project">
+			<path refid="build.projects" />
+			<sequential>
+				<ant antfile="${build.file}"
+					dir="@{project}"
+					target="clean"
+					inheritAll="false">
+					<property name="build.basedir" value="${build.basedir}" />
+					<property name="build.number" value="${build.number}" />
+					<property name="build.controlled" value="true" />
+				</ant>
+			</sequential>
+		</for>
+		<delete dir="${genesez.dir}" />
+		<delete dir="${bundle.dir}" />
+		<delete includeEmptyDirs="true">
+			<fileset dir="${eclipse.build}" includes="**/*" excludes="dropins/**"/>
+		</delete>
+	</target>
+
+</project>

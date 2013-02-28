@@ -1,0 +1,39 @@
+«REM»
+	Template for attribute annotations of the jws platform
+	
+	@author		andre pflueger
+	@date		2010-11-10
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«DEFINE Attribute FOR MAttribute-»
+	«IF hasStereotype("jwsWebServiceRef")-»
+		@WebServiceRef(«getTaggedValue("jwsWebServiceRef", "value")-».class			
+		«IF hasUtilizableValue("jwsWebServiceRef", "name")-»
+			, name="«getTaggedValue("jwsWebServiceRef", "name")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebServiceRef", "mappedName")-»
+			, mappedName="«getTaggedValue("jwsWebServiceRef", "mappedName")-»"
+		«ENDIF-»			
+		«IF hasUtilizableValue("jwsWebServiceRef", "type")-»
+			, type="«getTaggedValue("jwsWebServiceRef", "type")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebServiceRef", "wsdlLocation")-»
+			, wsdlLocation="«getTaggedValue("jwsWebServiceRef", "wsdlLocation")-»"
+		«ENDIF-»)
+	«ENDIF-»
+«ENDDEFINE»
