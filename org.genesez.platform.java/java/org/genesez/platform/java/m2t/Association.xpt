@@ -22,7 +22,8 @@
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::Helper»
 «EXTENSION org::genesez::platform::java::util::Conversion»
-«EXTENSION org::genesez::platform::java::util::Association»
+
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
 
 
 «REM»
@@ -61,7 +62,7 @@
 «DEFINE AssociationDeclaration FOR MAssociationRole -»
 	«EXPAND Comment::Association -»
 	«IF hasAssociationClass() -»
-		«IF isSingleValued() -»
+		«IF multiplicity.isSingleValued() -»
 			«EXPAND Modifier» «type.asTypeName()-» «asAttribute() -»;
 			«EXPAND Comment::AssociationClass -»
 			«EXPAND Modifier» «association.associationClass.asTypeName()-» «association.associationClass.asAttribute() -»;
@@ -69,10 +70,8 @@
 			«EXPAND Modifier» LinkedHashMap<«type.asTypeName() -», «association.associationClass.asTypeName() -»> «asAttribute()» = new LinkedHashMap<«type.asTypeName() -», «association.associationClass.asTypeName() -»>();
 		«ENDIF -»
 	«ELSE-»
-		«IF fieldAccess() -»
-			«EXPAND Annotation -»
-		«ENDIF-»
-		«IF isSingleValued() -»
+		«EXPAND Annotation -»
+		«IF multiplicity.isSingleValued() -»
 			«EXPAND Modifier» «type.asTypeName()-» «asAttribute() -»;
 		«ELSE-»
 			«EXPAND Modifier» «mapCollection()»<«type.asTypeName()-»> «asAttribute()» = new «mapCollection("Implementation")»<«type.asTypeName() -»>();
@@ -123,7 +122,7 @@
 		public «mapCollection()»<«type.asTypeName()»> «asGetter()»();
 		public «mapCollection()»<«type.asTypeName()»> «asGetter()»«type.asTypeName()»();
 	«ELSE-»
-		«IF isSingleValued() -»
+		«IF multiplicity.isSingleValued() -»
 			«EXPAND _CommentGetter-»
 			public «mapCollection()»<«type.asTypeName()»> «asGetter()»();
 		«ENDIF-»
@@ -155,10 +154,8 @@
 		}«ENDREM»
 	«ELSE-»
 		«EXPAND _CommentGetter-»
-		«IF !fieldAccess()-»
-			«EXPAND Annotation-»
-		«ENDIF-»
-		«IF isSingleValued() -»
+		«EXPAND Annotation-»
+		«IF multiplicity.isSingleValued() -»
 			public «type.asTypeName()» «asGetter()»() {
 				return «asAttribute()»;
 			}
@@ -185,9 +182,9 @@
 		«REM»public void «asInsertIn()»(«type.asTypeName()» _in, «type.asTypeName()» _at);«ENDREM»
 	«ELSE-»
 		«EXPAND _CommentAccessor-»
-		«IF isMultiValued() -»
+		«IF multiplicity.isMultiValued() -»
 			public void «asInsertIn()-»(«type.asTypeName()» «asAttribute()-»);
-		«ELSEIF isSingleValued() -»
+		«ELSEIF multiplicity.isSingleValued() -»
 			public void «asSetter()-»(«type.asTypeName()» «asAttribute()-»);
 		«ENDIF»
 	«ENDIF-»
@@ -232,9 +229,9 @@
 		}«ENDREM»
 	«ELSE-»
 		«EXPAND _CommentAccessor-»
-		«IF isMultiValued() -»
+		«IF multiplicity.isMultiValued() -»
 			public void «asInsertIn()-»(«type.asTypeName()-» «asAttribute()-») {
-				«IF isSingleValued() -»
+				«IF multiplicity.isSingleValued() -»
 					if (this.«asAttribute()-» == «asAttribute()-») {
 						return;
 					}
@@ -250,17 +247,17 @@
 					}
 					this.«asAttribute()-».add(«asAttribute()-»);
 				«ENDIF-»
-				«IF opposite != null && opposite.isMultiValued() 
+				«IF opposite != null && oppositeMultiplicity.isMultiValued() 
 					&& opposite.generateSetter()-»
 					if (!«asAttribute()-».«opposite.asGetter()-»().contains(this)) {
 						«asAttribute()-».«opposite.asInsertIn()-»(this);
 					}
-				«ELSEIF opposite != null && opposite.isSingleValued() 
+				«ELSEIF opposite != null && oppositeMultiplicity.isSingleValued() 
 						&& opposite.generateSetter()-»
 					«asAttribute()-».«opposite.asSetter()-»(this);
 				«ENDIF-»
 			}
-		«ELSEIF isSingleValued() -»
+		«ELSEIF multiplicity.isSingleValued() -»
 			public void «asSetter()-»(«type.asTypeName()-» «asAttribute()-»){
 				this.«asAttribute()-» = «asAttribute()-»; 
 			}
@@ -272,7 +269,7 @@
 	Generates a remove from (remove) access method declaration.
 «ENDREM»
 «DEFINE _RemoveFromDecl FOR MAssociationRole-»
-	«IF isMultiValued() -»
+	«IF multiplicity.isMultiValued() -»
 		«EXPAND _CommentAccessor-»
 		public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-»);
 	«ENDIF»
@@ -296,10 +293,10 @@
 			«ENDIF-»
 		}«ENDREM»
 	«ELSE-»
-		«IF isMultiValued() -»
+		«IF multiplicity.isMultiValued() -»
 			«EXPAND _CommentAccessor-»
 			public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-») {
-				«IF isSingleValued() -»
+				«IF multiplicity.isSingleValued() -»
 					if (this.«asAttribute()-» != «asAttribute()-») {
 						return;
 					}
@@ -315,7 +312,7 @@
 					if («asAttribute()-».«opposite.asGetter()-»().contains(this)) {
 						«asAttribute()-».«opposite.asRemoveFrom()-»(this);
 					}
-				«ELSEIF opposite != null && opposite.isSingleValued() 
+				«ELSEIF opposite != null && oppositeMultiplicity.isSingleValued() 
 					&& opposite.generateSetter()-»
 					«asAttribute()-».«opposite.asSetter()-»(null);
 				«ENDIF-»
@@ -328,7 +325,7 @@
 	/**
 	 * accessor for association to «name»
 	«IF hasComment()-»
-		 * «ownedComment.getCommentText()»
+		«comment().formatCommentAsterix()»
 	«ENDIF-»
 	 */
 «ENDDEFINE»

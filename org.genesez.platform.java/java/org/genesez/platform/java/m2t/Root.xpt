@@ -18,9 +18,9 @@
 «REM» neat m2t helper functions «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
 
+«EXTENSION org::genesez::platform::java::m2m::Annotation»
 «EXTENSION org::genesez::platform::java::util::Conversion»
 «EXTENSION org::genesez::platform::java::util::Naming»
-«EXTENSION org::genesez::platform::java::java5::scripts::Helper»
 
 
 «REM»
@@ -66,8 +66,8 @@
 	processes the generation of an interface and java annotation
 «ENDREM»
 «DEFINE Root FOR MInterface»
-	«IF emHasStereotype(java5AnnotationStereotype())»
-	    «FILE filePath( asAnnotationFileName(), basePath() )»
+	«IF emHasStereotype( prJavaAnnotationStereotype() )»
+	    «FILE filePath( asFileName(), basePath() )»
 	        «EXPAND Annotation::Root»
 	    «ENDFILE»
 	«ELSE-»

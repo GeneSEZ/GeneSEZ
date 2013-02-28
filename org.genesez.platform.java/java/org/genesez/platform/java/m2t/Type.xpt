@@ -14,10 +14,10 @@
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
+«EXTENSION org::genesez::platform::java::m2m::Annotation»
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::Conversion»
 «EXTENSION org::genesez::platform::java::util::Helper»
-«EXTENSION org::genesez::platform::java::java5::scripts::Helper»
 «EXTENSION org::genesez::util::logging::Logging»
 
 
@@ -30,7 +30,7 @@
 «ENDDEFINE»
 
 «DEFINE Inner FOR MInterface -»
-	«IF emHasStereotype(java5AnnotationStereotype()) -»
+	«IF emHasStereotype(prJavaAnnotationStereotype()) -»
 		«EXPAND Annotation::Inner -»
 	«ELSE -»
 		«EXPAND Interface::Inner -»
@@ -193,7 +193,7 @@
 «ENDREM»
 «DEFINE GenericUse FOR MAttribute -»
 «IF !genericRealization.isEmpty -»
-	<«genericRealization.getGenericList() -»>
+	<«genericRealization.convertToString() -»>
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»
@@ -203,7 +203,7 @@
 «ENDREM»
 «DEFINE GenericUse FOR MParameter -»
 «IF !genericRealization.isEmpty -»
-	<«genericRealization.getGenericList() -»>
+	<«genericRealization.convertToString() -»>
 «ELSE-»
 «ENDIF-»
 «ENDDEFINE»

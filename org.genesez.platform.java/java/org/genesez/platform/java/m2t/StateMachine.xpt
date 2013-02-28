@@ -7,7 +7,6 @@
 	@author	georg beier
 «ENDREM»
 
-«REM» useful support fuctions «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
@@ -367,10 +366,10 @@
 «ENDREM»
 «DEFINE _Params FOR MEvent -»
 	«FOREACH parameter AS p SEPARATOR ", " -»
-	«IF p.isSingleValued() -»
+	«IF p.multiplicity.isSingleValued() -»
 		«p.type.mapName().asTypeName() -» «p.asParameter()»
 	«ELSE -»
-		«EXPAND Type::MultiValuedType FOR p -» «p.asParameter()»
+		«EXPAND Type::MultiValuedType(p.multiplicity, p.type) FOR p -» «p.asParameter()»
 	«ENDIF -»
 	«ENDFOREACH -»
 «ENDDEFINE»
@@ -428,12 +427,12 @@
 «ENDREM»
 «DEFINE _Members FOR MEvent -»
 	«FOREACH parameter AS p -»
-	«IF p.isSingleValued() -»
+	«IF p.multiplicity.isSingleValued() -»
 		private «p.type.mapName().asTypeName() » «p.asParameter()»;
 		public «p.type.mapName().asTypeName() » «p.asGetter()»() { return «p.asParameter()»; }
 	«ELSE -»
-		private «EXPAND Type::MultiValuedType FOR p » «p.asParameter()»;
-		public «EXPAND Type::MultiValuedType FOR p » «p.asGetter()»() { return «p.asParameter()»; }
+		private «EXPAND Type::MultiValuedType(p.multiplicity, p.type) FOR p » «p.asParameter()»;
+		public «EXPAND Type::MultiValuedType(p.multiplicity, p.type) FOR p » «p.asGetter()»() { return «p.asParameter()»; }
 	«ENDIF -»
 	«ENDFOREACH -»
 «ENDDEFINE»

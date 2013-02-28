@@ -8,15 +8,15 @@
 	@author tobias haubold (last)
 «ENDREM»
 
-«EXTENSION org::genesez::util::logging::Logging»
 «EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 «EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
+«EXTENSION org::genesez::platform::java::m2m::Annotation»
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::Conversion»
-«EXTENSION org::genesez::platform::java::java5::scripts::Helper»
+«EXTENSION org::genesez::util::logging::Logging»
 
 
 «REM»
@@ -54,7 +54,7 @@ public @interface «name.toFirstUpper() -» {
 	Generates a meta data field for the annotation.
 «ENDREM»
 «DEFINE _Element FOR MAttribute -»
-	«type.mapName().asTypeName()»«IF isMultiValued()»[]«ENDIF» «name»()«IF hasDefaultValue() -» default «IF type.metaType == MEnumeration -»«type.mapName().asTypeName()».«ENDIF -»«defaultvalue»«ENDIF -»;
+	«type.mapName().asTypeName()»«IF multiplicity.isMultiValued()»[]«ENDIF» «name»()«IF hasDefaultValue() -» default «IF type.metaType == MEnumeration -»«type.mapName().asTypeName()».«ENDIF -»«defaultvalue»«ENDIF -»;
 «ENDDEFINE»
 
 «REM»
@@ -76,17 +76,17 @@ public @interface «name.toFirstUpper() -» {
 	Generates imports for Java5 specific annotations on annotations.
 «ENDREM»
 «DEFINE ImportStatements FOR MClassifier -»
-	«IF emHasStereotype(java5AnnotationStereotype()) -»
-		«IF emHasTaggedValue(java5AnnotationStereotype(), "documented", "true") -»
+	«IF emHasStereotype(prJavaAnnotationStereotype()) -»
+		«IF emHasTaggedValue(prJavaAnnotationStereotype(), "documented", "true") -»
 import java.lang.annotation.Documented;
 		«ENDIF -»
-		«IF emHasUtilizableTaggedValue(java5AnnotationStereotype(), "retention") -»
+		«IF emHasUtilizableTaggedValue(prJavaAnnotationStereotype(), "retention") -»
 import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.«emGetTaggedValue(java5AnnotationStereotype(), "retention") -»;
+import static java.lang.annotation.RetentionPolicy.«emGetTaggedValue(prJavaAnnotationStereotype(), "retention") -»;
 		«ENDIF -»
-		«IF emHasUtilizableTaggedValue(java5AnnotationStereotype(), "target") -»
+		«IF emHasUtilizableTaggedValue(prJavaAnnotationStereotype(), "target") -»
 import java.lang.annotation.Target;
-		«FOREACH emGetTaggedValues(java5AnnotationStereotype(), "target") AS name -»
+		«FOREACH emGetTaggedValues(prJavaAnnotationStereotype(), "target") AS name -»
 import static java.lang.annotation.ElementType.«name -»;
 		«ENDFOREACH -»
 		«ENDIF -»
@@ -100,15 +100,15 @@ import static java.lang.annotation.ElementType.«name -»;
 	Evaluates the stereotype "java5Annotation".
 «ENDREM»
 «DEFINE _java5Annotation FOR MInterface -»
-	«IF emHasStereotype(java5AnnotationStereotype()) -»
-		«IF emHasTaggedValue(java5AnnotationStereotype(), "documented", "true") -»
+	«IF emHasStereotype(prJavaAnnotationStereotype()) -»
+		«IF emHasTaggedValue(prJavaAnnotationStereotype(), "documented", "true") -»
 			@Documented
 		«ENDIF -»
-		«IF emHasUtilizableTaggedValue(java5AnnotationStereotype(), "target") -»
-			@Target({«FOREACH emGetTaggedValues(java5AnnotationStereotype(), "target") AS name SEPARATOR "," -» «name -» «ENDFOREACH -»})
+		«IF emHasUtilizableTaggedValue(prJavaAnnotationStereotype(), "target") -»
+			@Target({«FOREACH emGetTaggedValues(prJavaAnnotationStereotype(), "target") AS name SEPARATOR "," -» «name -» «ENDFOREACH -»})
 		«ENDIF -»
-		«IF emHasUtilizableTaggedValue(java5AnnotationStereotype(), "retention") -»
-			@Retention(«emGetTaggedValue(java5AnnotationStereotype(), "retention") -»)
+		«IF emHasUtilizableTaggedValue(prJavaAnnotationStereotype(), "retention") -»
+			@Retention(«emGetTaggedValue(prJavaAnnotationStereotype(), "retention") -»)
 		«ENDIF -»
 	«ENDIF -»
 «ENDDEFINE»

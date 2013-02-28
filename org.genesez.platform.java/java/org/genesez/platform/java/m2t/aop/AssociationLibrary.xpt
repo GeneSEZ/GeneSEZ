@@ -116,7 +116,7 @@
 «ENDREM»
 «DEFINE Initialization FOR MAssociationRole -»
 «IF hasAssociationClass() -»
-	«IF isSingleValued() -»
+	«IF multiplicity.isSingleValued() -»
 	new OneAssociationAC<«classifier.asTypeName() -», «type.asTypeName() -»,
 				«association.associationClass.asTypeName() -»> (this
 		, new Accessor<«type.asTypeName() -»>() {
@@ -149,7 +149,7 @@
 		)
 	«ENDIF -»
 «ELSE -»«REM» association without association class «ENDREM»
-	«IF isSingleValued() -»
+	«IF multiplicity.isSingleValued() -»
 	new OneAssociation<«classifier.asTypeName() -», «type.asTypeName() -»>(this
 		, new Accessor<«type.asTypeName() -»>() {
 			public «type.asTypeName() -» get() {

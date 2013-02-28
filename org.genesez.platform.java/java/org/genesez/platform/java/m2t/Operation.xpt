@@ -196,7 +196,7 @@
 «ENDREM»
 «DEFINE _Params FOR MAttribute-»
 	«EXPAND _Annotation-»
-	«IF isSingleValued()-»
+	«IF multiplicity.isSingleValued()-»
 		«type.mapName().asTypeName()-»«EXPAND Type::GenericUse» «asAttribute()-»
 	«ELSE-»
 		«EXPAND Type::MultiValuedType(multiplicity, type) -» «asAttribute()-»
@@ -241,13 +241,15 @@
 «DEFINE _Declaration FOR MOperation-»
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
-	«IF isReturnSingleValued() && return.type.mapName() != null-»
-		«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()»(«EXPAND _Params») «EXPAND _Exception -»;
-	«ELSEIF isReturnMultiValued()-»
-		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType(return.multiplicity, return.type) FOR return-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-»;
+	«IF hasReturn() -»
+		«IF return.multiplicity.isSingleValued() && return.type.mapName() != null-»
+			«EXPAND _Modifier» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()»(«EXPAND _Params») «EXPAND _Exception -»;
+		«ELSEIF return.multiplicity.isMultiValued()-»
+			«EXPAND _Modifier-» «EXPAND Type::MultiValuedType(return.multiplicity, return.type) FOR return-» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-»;
+		«ENDIF-»
 	«ELSE -»
 		«EXPAND _Modifier-» void «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-»;
-	«ENDIF-»
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»
@@ -257,13 +259,15 @@
 «DEFINE _Implementation FOR MOperation-»
 	«EXPAND Comment::Operation-»
 	«EXPAND _Annotation-»
-	«IF isReturnSingleValued() && return.type.mapName() != null-»
-		«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
-	«ELSEIF isReturnMultiValued()-»
-		«EXPAND _Modifier-» «EXPAND Type::MultiValuedType(return.multiplicity, return.type) FOR return -» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+	«IF hasReturn() -»
+		«IF return.multiplicity.isSingleValued() && return.type.mapName() != null-»
+			«EXPAND _Modifier-» «EXPAND _SingleValueReturn-»«EXPAND Type::GenericUse FOR return» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+		«ELSEIF return.multiplicity.isMultiValued()-»
+			«EXPAND _Modifier-» «EXPAND Type::MultiValuedType(return.multiplicity, return.type) FOR return -» «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
+		«ENDIF-»
 	«ELSE -»
 		«EXPAND _Modifier-» void «asOperation()-»(«EXPAND _Params-») «EXPAND _Exception-» {
-	«ENDIF-»
+	«ENDIF -»
 	«EXPAND _ImplementationBody-»
 	}
 «ENDDEFINE»
@@ -292,7 +296,7 @@
 «ENDREM»
 «DEFINE _Params FOR MOperation -»
 	«FOREACH parameter AS p SEPARATOR ", "-»
-		«EXPAND _Annotation FOR p-» «IF p.isSingleValued()-»
+		«EXPAND _Annotation FOR p-» «IF p.multiplicity.isSingleValued()-»
 			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
 		«ELSE-»
 			«EXPAND Type::MultiValuedType(p.multiplicity, p.type) FOR p-» «p.asParameter()-» «IF p.hasDefaultValue()-» = «p.defaultvalue-»«ENDIF-»
@@ -346,10 +350,12 @@
 	@deprecated		replaced by {@link _ImplmentationBody} + {@link _ConstructorBody}
 «ENDREM»
 «DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation -»
-	«IF isReturnSingleValued() -»
-		«getReturnTypeDeclaration(return.type.mapName().asTypeName())»
-	«ELSE -»
-		«EXPAND Type::MultiValuedType(return.multiplicity, return.type) -» returnValue = null;
+	«IF hasReturn() -»
+		«IF return.multiplicity.isSingleValued() -»
+			«getReturnTypeDeclaration(return.type.mapName().asTypeName())»
+		«ELSE -»
+			«EXPAND Type::MultiValuedType(return.multiplicity, return.type) -» returnValue = null;
+		«ENDIF -»
 	«ENDIF -»
 	«EXPAND _OwnCodeImpl("java.implementation." + xmiGuid) -»
 	«getReturnTypeReturn(return.type.mapName().asTypeName())»
