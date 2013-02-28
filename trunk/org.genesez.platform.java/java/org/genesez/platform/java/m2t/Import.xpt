@@ -36,24 +36,17 @@
 «EXPAND Annotation::ImportStatements FOREACH classifier -»
 «EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this)
 		.logDebug("Import in context " + fullQualifiedName(name) + " for type " + s.asTypeName() + " resolved ") )»
+«EXPAND StateMachineImports -»
 «EXPAND _OtherImports»
 «ENDDEFINE»
 
 «REM»
-	generates fixed import statements
-	imports the types for association handling + java.util package
+	Generates import statements for state machines if needed.
 «ENDREM»
-«DEFINE _FixedImports FOR MClassifier -»
-	«REM»import java.util.*;«ENDREM»
-	«IF newAssociationHandling()-»
-	import java.util.LinkedHashMap;
-	import java.util.Map;
-	import org.genesez.platform.java.umlsupport.associations.*;
-	«ENDIF»
+«DEFINE StateMachineImports FOR MClassifier -»
 	«IF metaType == MClass && !((MClass)this).ownedBehavior.typeSelect(MStateMachine).isEmpty -»
 	import org.genesez.platform.java.umlsupport.statemachine.*;
 	«ENDIF»
-	«EXPAND Annotation::ImportStatements -»
 «ENDDEFINE»
 
 «REM»

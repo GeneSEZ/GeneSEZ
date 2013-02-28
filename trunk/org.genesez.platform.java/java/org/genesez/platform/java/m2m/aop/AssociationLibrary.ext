@@ -14,6 +14,7 @@
 import gcore;
 
 extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::ModelNavigation;
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::util::logging::Logging;
@@ -51,7 +52,7 @@ private MClassifier process(MClassifier this) :
  */
 MClassifier prepareClass(MClassifier this) :
 	logDebug(this, "Prepare classifier: ") ->
-	(let i = makeAssociationRole(model()) :
+	(let i = navModel().makeAssociationRole() :
 		realization.add(i) ->
 		this);
 
@@ -61,7 +62,7 @@ MClassifier prepareClass(MClassifier this) :
  */
 Void prepareAssociationClass(MClassifier this) :
 	logDebug(this, "Prepare association class: ") ->
-	(let i = makeAssociationClass(model()) : 
+	(let i = navModel().makeAssociationClass() : 
 		realization.add(i) -> 
 		makeAssociationClassLinkAttribute() ->
 		Void);
@@ -74,7 +75,7 @@ private MAttribute makeAssociationClassLinkAttribute(MClassifier this) :
 	ensureAttributeExistence( xmiGuid + ".associationClassLink", "associationClassLink" )
 		.processAttribute( "new ACLink()", false, false )
 		.processProperty("private", false, createMultiplicity( 0, 1, false, false ) )
-		.wireType( model().makeACLink() )
+		.wireType( navModel().makeACLink() )
 		.prAssignGeneSezAccessorStereotype( true, false, false, false );
 
 

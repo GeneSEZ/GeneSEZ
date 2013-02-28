@@ -24,7 +24,7 @@ extension org::genesez::util::logging::Logging;
  * checks the inheritance of java types
  * @return	false generates an error, if multiple inheritance is used on a classifier which is not an interface
  */
-context MClassifier ERROR "GeneSEZ: multiple inheritance is only allowed for interfaces: " + fqn() : 
+context MClassifier ERROR "GeneSEZ: multiple inheritance is only allowed for interfaces: " + fqmn() : 
 	generalization.size > 1
 		? (metaType == MInterface ? true : false)
 		: true;
@@ -33,7 +33,7 @@ context MClassifier ERROR "GeneSEZ: multiple inheritance is only allowed for int
  * checks the modifiers of an attribute of an interface
  * @return	generates a warning if the attibute has other modifiers than 'public', 'static' and 'final'
  */
-context MAttribute WARNING "GeneSEZ: the modifiers of the interface attribute will be ignored! only 'public', 'static + 'final' are permitted! " + fqn() :
+context MAttribute WARNING "GeneSEZ: the modifiers of the interface attribute will be ignored! only 'public', 'static + 'final' are permitted! " + fqmn() :
 	classifier.metaType == MInterface
 		? (visibility == "public" && static && final ? true : false)
 		: true;
@@ -53,8 +53,8 @@ context MOperation WARNING "GeneSEZ: the modifiers of the interface operation wi
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf! " + fqn() :
-	isMultiValued() && usePrimitiveType() && hasGenericRealization()
+context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf! " + fqmn() :
+	multiplicity.isMultiValued() && usePrimitiveType() && hasGenericRealization()
 		? false
 		: true;
 
@@ -69,7 +69,7 @@ context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you w
  * 'assert' was added in java 1.4, 'enum' was added in java 5
  * @return	 true, if the name is not a reserved java word, otherwise false
  */
-context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word! " + fqn() :
+context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word! " + fqmn() :
 	{ MStereotype, MTag, MTaggedValue }.contains( metaType )
 		? true
 		: (

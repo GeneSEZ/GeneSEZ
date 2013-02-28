@@ -43,17 +43,17 @@
 	Generates an initialization block to initialize all multi-valued attributes with default values if any.
 «ENDREM»
 «DEFINE InitializationBlock FOR MClassifier -»
-«IF property.typeSelect(MAttribute).exists( p | !p.static && !p.derived && p.isMultiValued() && p.hasDefaultValue() ) -»
+«IF property.typeSelect(MAttribute).exists( p | !p.static && !p.derived && p.multiplicity.isMultiValued() && p.hasDefaultValue() ) -»
 	// initialize all multi valued fields with their default values
 	{
-	«EXPAND _MultiValuedInitialization FOREACH property.typeSelect(MAttribute).select( p | !p.static && !p.derived && p.isMultiValued() && p.hasDefaultValue() ) -»
+	«EXPAND _MultiValuedInitialization FOREACH property.typeSelect(MAttribute).select( p | !p.static && !p.derived && p.multiplicity.isMultiValued() && p.hasDefaultValue() ) -»
 	«EXPAND _InitializationBlock -»
 	}
 «ENDIF -»
 «ENDDEFINE»
 
 «DEFINE _MultiValuedInitialization FOR MAttribute -»
-	«FOREACH defaultvalue.toList() AS v -»
+	«FOREACH defaultvalue.convertToList() AS v -»
 		«asAttribute()».add(«v»);
 	«ENDFOREACH -»
 «ENDDEFINE»
@@ -89,8 +89,8 @@
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
 	«IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -»
 	«IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -»
-	«IF a.isMultiValued() && a.generateAdd() -»«EXPAND _Add FOR a -»«ENDIF -»
-	«IF a.isMultiValued() && a.generateRemove() -»«EXPAND _Remove FOR a -»«ENDIF -»
+	«IF a.multiplicity.isMultiValued() && a.generateAdd() -»«EXPAND _Add FOR a -»«ENDIF -»
+	«IF a.multiplicity.isMultiValued() && a.generateRemove() -»«EXPAND _Remove FOR a -»«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -116,10 +116,8 @@
 «ENDREM»
 «DEFINE _Declaration FOR MAttribute -»
 	«EXPAND Comment::Attribute-»
-	«IF fieldAccess()-»
-		«EXPAND _Annotation-»
-	«ENDIF-»
-	«IF isSingleValued()-»
+	«EXPAND _Annotation-»
+	«IF multiplicity.isSingleValued()-»
 		«EXPAND _Modifier -» «type.mapName().asTypeName()»«EXPAND Type::GenericUse» «asAttribute()» «EXPAND _DefaultValue -»;
 	«ELSE -»
 		«EXPAND _Modifier -» «EXPAND Type::MultiValuedType(multiplicity, type) -» «asAttribute()» «EXPAND _DefaultValue -»;
@@ -132,7 +130,7 @@
 «ENDREM»
 «DEFINE _DerivedDeclaration FOR MAttribute -»
 	«EXPAND Comment::Getter -»
-	«IF isSingleValued() -»
+	«IF multiplicity.isSingleValued() -»
 	public «type.mapName().asTypeName()» «asGetter()»();
 	«ELSE -»
 	public «EXPAND Type::MultiValuedType(multiplicity, type) -» «asGetter()»();
@@ -144,7 +142,7 @@
 «ENDREM»
 «DEFINE _DerivedImplementation FOR MAttribute -»
 	«EXPAND Comment::Getter -»
-	«IF isSingleValued() -»
+	«IF multiplicity.isSingleValued() -»
 	«EXPAND _Modifier» «type.mapName().asTypeName()» «asGetter()»() {
 	«ELSE -»
 	«EXPAND _Modifier» «EXPAND Type::MultiValuedType(multiplicity, type) -» «asGetter()»() {
@@ -186,16 +184,16 @@
 	Note: this is not valid java code: ' = new ArrayList<String>[3];'
 «ENDREM»
 «DEFINE _DefaultValue FOR MAttribute -»
-«IF isSingleValued() && hasDefaultValue() -»
+«IF multiplicity.isSingleValued() && hasDefaultValue() -»
 	«IF type.isEnumeration() -»
 	 = «type.mapName().asTypeName()».«defaultvalue.asEnumLiteral() -»
 	«ELSE -»
 	 = «defaultvalue -»
 	«ENDIF -»
-«ELSEIF isMultiValued() && !final -»
-	«IF usePrimitiveType() && !hasFixedUpperBoundMultiplicity() -»
+«ELSEIF multiplicity.isMultiValued() && !final -»
+	«IF usePrimitiveType() && !multiplicity.hasFixedUpperBoundMultiplicity() -»
 	 = null
-	«ELSEIF usePrimitiveType() && hasFixedUpperBoundMultiplicity() -»
+	«ELSEIF usePrimitiveType() && multiplicity.hasFixedUpperBoundMultiplicity() -»
 	 = new «type.mapName().asTypeName()»[«multiplicity.upperBound»]
 	«ELSE -»
 	 = new «mapCollection("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
@@ -225,10 +223,8 @@
 «ENDREM»
 «DEFINE _Getter FOR MAttribute -»
 	«EXPAND Comment::Getter -»
-	«IF !fieldAccess()-»
-		«EXPAND _Annotation-»
-	«ENDIF-»
-	«IF isSingleValued() -»		
+	«EXPAND _Annotation-»
+	«IF multiplicity.isSingleValued() -»		
 		«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
 			«IF this.type.mapName().asTypeName().matches("Date") -»
 				return new Date(«asAttribute() -».getTime());
@@ -248,10 +244,8 @@
 «ENDREM»
 «DEFINE _Setter FOR MAttribute -»
 	«EXPAND Comment::Setter -»
-	«IF !fieldAccess() && !this.generateGetter()-»
-		«EXPAND _Annotation-»
-	«ENDIF-»
-	«IF isSingleValued() -»
+	«EXPAND _Annotation-»
+	«IF multiplicity.isSingleValued() -»
 		«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
 			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
 		}

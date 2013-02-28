@@ -1,0 +1,32 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+import gcore;
+
+/**
+ * Provides support for a default constructor.
+ * 
+ * @author	andre pflueger
+ * @author	tobias haubold <toh@fh-zwickau.de>
+ */
+extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
+
+
+/**
+ * Creates a default constructor if not already exists.
+ * 
+ * Note:
+ * This constructor does not have a protected region.
+ * The modeller has to model a constructor with no 
+ * arguments explicitly if a protected region is desired.
+ */
+MClass ensureDefaultConstructor(MClass this, String visibility) :
+	hasConstructors() && operation.select( o|o.isConstructor() ).exists( o|o.parameter.isEmpty )
+		? this
+		: ensureOperationExistence( xmiGuid + "_StandardConstructor", name )
+			.processOperation( visibility, false, false, false ) ->
+	this;
