@@ -22,11 +22,9 @@ extension org::genesez::metamodel::core::util::profile::m2t::util::GlobalVar;
 
 private String asScriptName(MClass this) :
 	name.replaceFirst(globalVarStereotypeNamePrefix(), "").toFirstUpper();
-	
 
 private String asScriptName(MEnumeration this) :
 	name.replaceFirst(globalVarEnumerationNamePrefix(), "").toFirstUpper();
-
 
 private String asScriptName(MClassifier this) :
 	name.toFirstUpper();
@@ -38,7 +36,6 @@ private String asScriptName(MClassifier this) :
 private String asScriptName(MAttribute this) : 
 	name.toFirstUpper();
 
-
 private String asScriptName(MLiteral this) :
 	name.toLowerCase().split("_").collect( e | e.toFirstUpper() ).toString("");
 	
@@ -49,10 +46,8 @@ private String asScriptName(MLiteral this) :
 String asProfileScriptName(MClassifier this) :
 	"pr" + asScriptName();
 
-
 String asProfileScriptName(MAttribute this) :
 	classifier.asProfileScriptName() + asScriptName(); 
-
 
 String asProfileScriptName(MLiteral this) :
 	owningEnumeration.asProfileScriptName() + asScriptName();
