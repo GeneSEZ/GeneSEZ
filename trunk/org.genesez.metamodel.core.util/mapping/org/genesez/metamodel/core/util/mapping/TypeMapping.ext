@@ -7,6 +7,7 @@
 
 import gcore;
 
+
 /**
  * Frontend for gcore specific type mapping support.
  * 
@@ -17,6 +18,7 @@ extension org::genesez::mapping::type::TypeMapping;
 
 
 // -- Types which are mapped by the type mapping ------------------------------------------------------------
+
 
 /**
  * Returns true if a mapping for the specified type in the specified context exists, otherwise false.
@@ -30,6 +32,7 @@ extension org::genesez::mapping::type::TypeMapping;
 boolean hasExternalTypeMapping(MExternal this, String contextName) :
 	hasExternalTypeMapping( name, contextName );
 
+
 /**
  * Maps the name of an external type using the type mapping.
  *
@@ -38,6 +41,7 @@ boolean hasExternalTypeMapping(MExternal this, String contextName) :
  */
 String mapName(MExternal this) : 
 	mapExternalType( name );
+
 
 /**
  * Maps the name of an external type within the specified context using the type mapping.
@@ -52,6 +56,7 @@ String mapName(MExternal this, String contextName) :
 
 // -- Types which are not mapped by the type mapping --------------------------------------------------------
 
+
 /**
  * The name of generic types are not mapped by the type mapping.
  *
@@ -60,6 +65,7 @@ String mapName(MExternal this, String contextName) :
  */
 MGeneric mapName(MGeneric this) : 
 	this;
+
 
 /**
  * The name of generic types are not mapped by the type mapping.
@@ -80,6 +86,7 @@ MGeneric mapName(MGeneric this, String contextName) :
  */
 MClassifier mapName(MClassifier this) : 
 	this;
+
 
 /**
  * The name of classifiers are not mapped by the type mapping.
@@ -102,6 +109,7 @@ MClassifier mapName(MClassifier this, String contextName) :
 MType mapName(MType this) : 
 	this;
 
+
 /**
  * The name of types are not mapped by the type mapping.
  * This script is just there for error free templates.
@@ -116,6 +124,7 @@ MType mapName(MType this, String contextName) :
 
 // -- Multi-valued Types of model elements which are mapped by the type mapping -----------------------------
 
+
 /**
  * Maps the multiplicity settings to a collection type using the type mapping.
  *
@@ -124,6 +133,7 @@ MType mapName(MType this, String contextName) :
  */
 String mapCollection(MMultiplicity this) :
 	mapMultiValuedType( unique, ordered );
+
 
 /**
  * Maps the multiplicity settings with the specified context to a collection type using the type mapping.
@@ -135,6 +145,7 @@ String mapCollection(MMultiplicity this) :
 String mapCollection(MMultiplicity this, String contextName) :
 	mapMultiValuedType( unique, ordered, contextName );
 
+
 /**
  * Maps the collection type of a parameter using the type mapping.
  *
@@ -143,6 +154,7 @@ String mapCollection(MMultiplicity this, String contextName) :
  */
 String mapCollection(MParameter this) :
 	mapMultiValuedType( multiplicity.unique, multiplicity.ordered );
+
 
 /**
  * Maps the collection type of a parameter within the specified context using the type mapping.
@@ -163,6 +175,7 @@ String mapCollection(MParameter this, String contextName) :
  */
 String mapCollection(MProperty this) :
 	mapMultiValuedType( multiplicity.unique, multiplicity.ordered );
+
 
 /**
  * Maps the collection type of a property within the specified context using the type mapping.
