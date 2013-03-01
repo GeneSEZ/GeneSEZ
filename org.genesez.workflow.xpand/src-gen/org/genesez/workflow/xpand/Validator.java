@@ -62,6 +62,7 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Returns the value of attribute '<em><b>script</b></em>'
+	 * @return	
 	 */
 	public java.util.Set<String> getScript() {
 		return script;

@@ -100,6 +100,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>isT3MvcCompliant</b></em>'
+	 * @return	
 	 */
 	public boolean getIsT3MvcCompliant() {
 		return isT3MvcCompliant;
@@ -107,6 +108,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>isT3MvcCompliant</b></em>'
+	 * @param	isT3MvcCompliant	
 	 */
 	public void setIsT3MvcCompliant(boolean isT3MvcCompliant) {
 		this.isT3MvcCompliant = isT3MvcCompliant;
@@ -114,6 +116,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>xtendNamingFile</b></em>'
+	 * @return	
 	 */
 	public String getXtendNamingFile() {
 		return xtendNamingFile;
@@ -121,6 +124,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>xtendNamingFile</b></em>'
+	 * @param	xtendNamingFile	
 	 */
 	public void setXtendNamingFile(String xtendNamingFile) {
 		this.xtendNamingFile = xtendNamingFile;
@@ -128,6 +132,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'
+	 * @return	
 	 */
 	public boolean getUseModelNameAsExtensionKey() {
 		return useModelNameAsExtensionKey;
@@ -135,6 +140,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'
+	 * @param	useModelNameAsExtensionKey	
 	 */
 	public void setUseModelNameAsExtensionKey(boolean useModelNameAsExtensionKey) {
 		this.useModelNameAsExtensionKey = useModelNameAsExtensionKey;
@@ -142,6 +148,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>extensionKey</b></em>'
+	 * @return	
 	 */
 	public String getExtensionKey() {
 		return extensionKey;
@@ -149,6 +156,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>extensionKey</b></em>'
+	 * @param	extensionKey	
 	 */
 	public void setExtensionKey(String extensionKey) {
 		this.extensionKey = extensionKey;
@@ -156,6 +164,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>scaffolding</b></em>'
+	 * @return	
 	 */
 	public boolean getScaffolding() {
 		return scaffolding;
@@ -163,6 +172,7 @@ public class Gcore2Typo3 extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>scaffolding</b></em>'
+	 * @param	scaffolding	
 	 */
 	public void setScaffolding(boolean scaffolding) {
 		this.scaffolding = scaffolding;

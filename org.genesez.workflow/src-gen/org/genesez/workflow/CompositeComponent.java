@@ -53,6 +53,7 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 	
 	/**
 	 * Returns the value of attribute '<em><b>component</b></em>'
+	 * @return	
 	 */
 	public java.util.List<T> getComponent() {
 		return component;

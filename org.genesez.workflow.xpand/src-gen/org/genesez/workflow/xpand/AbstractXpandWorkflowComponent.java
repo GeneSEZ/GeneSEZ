@@ -82,9 +82,34 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	/**
 	 * Returns the value of attribute '<em><b>aopScript</b></em>'
+	 * @return	
 	 */
 	public java.util.Set<String> getAopScript() {
 		return aopScript;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>metaModel</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<MetaModel> getMetaModel() {
+		return metaModel;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>globalVarDef</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<GlobalVarDef> getGlobalVarDef() {
+		return globalVarDef;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>emfMetaModelPackage</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<String> getEmfMetaModelPackage() {
+		return emfMetaModelPackage;
 	}
 	
 	/**
@@ -104,13 +129,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>metaModel</b></em>'
-	 */
-	public java.util.Set<MetaModel> getMetaModel() {
-		return metaModel;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>metaModel</b></em>'.
 	 * @param	metaModel	the value to add
 	 */
@@ -127,13 +145,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>globalVarDef</b></em>'
-	 */
-	public java.util.Set<GlobalVarDef> getGlobalVarDef() {
-		return globalVarDef;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>globalVarDef</b></em>'.
 	 * @param	globalVarDef	the value to add
 	 */
@@ -147,13 +158,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	 */
 	public void removeGlobalVarDef(GlobalVarDef globalVarDef) {
 		this.globalVarDef.remove(globalVarDef);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>emfMetaModelPackage</b></em>'
-	 */
-	public java.util.Set<String> getEmfMetaModelPackage() {
-		return emfMetaModelPackage;
 	}
 	
 	/**

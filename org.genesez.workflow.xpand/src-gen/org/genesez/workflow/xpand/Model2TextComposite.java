@@ -148,6 +148,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Returns the value of attribute '<em><b>preFileTreeWalker</b></em>'
+	 * @return	
 	 */
 	public FileTreeWalker getPreFileTreeWalker() {
 		return preFileTreeWalker;
@@ -155,6 +156,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Sets the value of attribute '<em><b>preFileTreeWalker</b></em>'
+	 * @param	preFileTreeWalker	
 	 */
 	public void setPreFileTreeWalker(FileTreeWalker preFileTreeWalker) {
 		this.preFileTreeWalker = preFileTreeWalker;
@@ -162,6 +164,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Returns the value of attribute '<em><b>postFileTreeWalker</b></em>'
+	 * @return	
 	 */
 	public FileTreeWalker getPostFileTreeWalker() {
 		return postFileTreeWalker;
@@ -169,6 +172,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Sets the value of attribute '<em><b>postFileTreeWalker</b></em>'
+	 * @param	postFileTreeWalker	
 	 */
 	public void setPostFileTreeWalker(FileTreeWalker postFileTreeWalker) {
 		this.postFileTreeWalker = postFileTreeWalker;
@@ -176,6 +180,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Returns the value of attribute '<em><b>revisionControlSystemFinder</b></em>'
+	 * @return	
 	 */
 	public RevisionControlSystemFinder getRevisionControlSystemFinder() {
 		return revisionControlSystemFinder;
@@ -183,6 +188,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Sets the value of attribute '<em><b>revisionControlSystemFinder</b></em>'
+	 * @param	revisionControlSystemFinder	
 	 */
 	public void setRevisionControlSystemFinder(RevisionControlSystemFinder revisionControlSystemFinder) {
 		this.revisionControlSystemFinder = revisionControlSystemFinder;
@@ -190,6 +196,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Returns the value of attribute '<em><b>fileDeletion</b></em>'
+	 * @return	
 	 */
 	public FileDeletion getFileDeletion() {
 		return fileDeletion;
@@ -197,6 +204,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Sets the value of attribute '<em><b>fileDeletion</b></em>'
+	 * @param	fileDeletion	
 	 */
 	public void setFileDeletion(FileDeletion fileDeletion) {
 		this.fileDeletion = fileDeletion;
@@ -204,6 +212,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Returns the value of attribute '<em><b>folderDeletion</b></em>'
+	 * @return	
 	 */
 	public FolderDeletion getFolderDeletion() {
 		return folderDeletion;
@@ -211,6 +220,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Sets the value of attribute '<em><b>folderDeletion</b></em>'
+	 * @param	folderDeletion	
 	 */
 	public void setFolderDeletion(FolderDeletion folderDeletion) {
 		this.folderDeletion = folderDeletion;
@@ -218,6 +228,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Returns the value of attribute '<em><b>contentPreserve</b></em>'
+	 * @return	
 	 */
 	public XPandLineContentPreserving getContentPreserve() {
 		return contentPreserve;
@@ -225,6 +236,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Sets the value of attribute '<em><b>contentPreserve</b></em>'
+	 * @param	contentPreserve	
 	 */
 	public void setContentPreserve(XPandLineContentPreserving contentPreserve) {
 		this.contentPreserve = contentPreserve;
@@ -232,6 +244,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Returns the value of attribute '<em><b>importPreserver</b></em>'
+	 * @return	
 	 */
 	public ImportPreserver getImportPreserver() {
 		return importPreserver;
@@ -239,6 +252,7 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/**
 	 * Sets the value of attribute '<em><b>importPreserver</b></em>'
+	 * @param	importPreserver	
 	 */
 	public void setImportPreserver(ImportPreserver importPreserver) {
 		this.importPreserver = importPreserver;

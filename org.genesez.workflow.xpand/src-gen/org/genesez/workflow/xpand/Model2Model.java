@@ -71,9 +71,26 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Returns the value of attribute '<em><b>script</b></em>'
+	 * @return	
 	 */
 	public java.util.Set<String> getScript() {
 		return script;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>outputSlot</b></em>'
+	 * @return	
+	 */
+	public String getOutputSlot() {
+		return outputSlot;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>outputSlot</b></em>'
+	 * @param	outputSlot	
+	 */
+	public void setOutputSlot(String outputSlot) {
+		this.outputSlot = outputSlot;
 	}
 	
 	/**
@@ -90,20 +107,6 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 	 */
 	public void removeScript(String script) {
 		this.script.remove(script);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>outputSlot</b></em>'
-	 */
-	public String getOutputSlot() {
-		return outputSlot;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>outputSlot</b></em>'
-	 */
-	public void setOutputSlot(String outputSlot) {
-		this.outputSlot = outputSlot;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._IInokPLKEeGYwYEQM4LYvw) ENABLED START */

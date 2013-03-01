@@ -56,6 +56,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>generateIncludes</b></em>'
+	 * @return	
 	 */
 	public boolean getGenerateIncludes() {
 		return generateIncludes;
@@ -63,6 +64,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>generateIncludes</b></em>'
+	 * @param	generateIncludes	
 	 */
 	public void setGenerateIncludes(boolean generateIncludes) {
 		this.generateIncludes = generateIncludes;
@@ -70,6 +72,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>relativeIncludes</b></em>'
+	 * @return	
 	 */
 	public boolean getRelativeIncludes() {
 		return relativeIncludes;
@@ -77,6 +80,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>relativeIncludes</b></em>'
+	 * @param	relativeIncludes	
 	 */
 	public void setRelativeIncludes(boolean relativeIncludes) {
 		this.relativeIncludes = relativeIncludes;
@@ -84,6 +88,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>includeBase</b></em>'
+	 * @return	
 	 */
 	public String getIncludeBase() {
 		return includeBase;
@@ -91,6 +96,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>includeBase</b></em>'
+	 * @param	includeBase	
 	 */
 	public void setIncludeBase(String includeBase) {
 		this.includeBase = includeBase;
@@ -98,6 +104,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>propertyAccess</b></em>'
+	 * @return	
 	 */
 	public String getPropertyAccess() {
 		return propertyAccess;
@@ -105,6 +112,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>propertyAccess</b></em>'
+	 * @param	propertyAccess	
 	 */
 	public void setPropertyAccess(String propertyAccess) {
 		this.propertyAccess = propertyAccess;
@@ -112,6 +120,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>accessorStyle</b></em>'
+	 * @return	
 	 */
 	public String getAccessorStyle() {
 		return accessorStyle;
@@ -119,6 +128,7 @@ public class Gcore2Php extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>accessorStyle</b></em>'
+	 * @param	accessorStyle	
 	 */
 	public void setAccessorStyle(String accessorStyle) {
 		this.accessorStyle = accessorStyle;
