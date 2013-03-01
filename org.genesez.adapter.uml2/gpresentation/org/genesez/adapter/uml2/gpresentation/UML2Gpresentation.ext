@@ -35,6 +35,7 @@ create PPackage transform(Model m) :
 	useLogger("org.genesez.adapter.uml2") ->
 	globalObjectSet("presentationmodel", this) ->
 	logDebug("transform: " + m.name) ->
+	setXmiGuid( m.getXmiId() ) ->
 	setName( m.name ) ->
 	// walk containment
 	m.nestedPackage.transform() ->
@@ -227,6 +228,8 @@ PContentArea makeContentArea(InstanceSpecification this) :
  * Transforms the meta data specified by stereotypes.
  */
 cached PMetaDataAware transformMetaDataAware(PMetaDataAware this, InstanceSpecification is) :
+	// properties
+	setXmiGuid( is.getXmiId() ) ->
 	metaData.addAll( is.getAppliedStereotypes().transformStereotype() ) ->
 	value.addAll( is.transformTaggedValues() ) ->
 	this;
@@ -241,6 +244,7 @@ cached PMetaDataAware transformMetaDataAware(PMetaDataAware this, InstanceSpecif
 create PPackage makePackage(InstanceSpecification is) :
 	logDebug("make package: " + is.name) ->
 	// properties
+	setXmiGuid( is.getXmiId() ) ->
 	setName( is.name ) ->
 	// containment: either in owning package or root package
 	is.hasOwningPackage()
@@ -322,6 +326,8 @@ create PInput makeInput(InstanceSpecification is) :
  */
 create POutput makeOutput(InstanceSpecification is) :
 	logDebug("make output: " + is.name) ->
+	// properties
+	setOutput( is.oneString( "output" ) ) ->
 	// inheritance + containment
 	copy( is ) ->
 	this;
@@ -378,6 +384,31 @@ create PValue makeValue(NamedElement ne, PKey key, InstanceSpecification is) :
 	setValue( ne.name ) ->
 	// reference to key
 	setKey( key ) ->
+	//key.value.add( this ) ->
+	this;
+
+create PValue makeValue(Property p, PKey key, InstanceSpecification is) :
+	logDebug("make value from property: " + p.name + " key: " + key.key) ->
+	// properties
+	setValue( p.getXmiId() ) ->
+	// reference to key
+	setKey( key ) ->
+	this;
+
+create PValue makeValue(Class c, PKey key, InstanceSpecification is) :
+	logDebug("make value from class: " + c.name + " key: " + key.key) ->
+	// properties
+	setValue( c.getXmiId() ) ->
+	// reference to key
+	setKey( key ) ->
+	this;
+	
+create PValue makeValue(Operation o, PKey key, InstanceSpecification is) :
+	logDebug("make value from operation: " + o.name + " key: " + key.key) ->
+	// properties
+	setValue( o.getXmiId() ) ->
+	// reference to key
+	setKey( key ) ->
 	this;
 	
 create PValue makeValue(Object o, PKey key, InstanceSpecification is) :
@@ -431,6 +462,13 @@ InstanceSpecification one(InstanceSpecification this, String featureName) :
 	slot.selectFirst( e|e.definingFeature.name == featureName ).value.typeSelect(InstanceValue).first().instance;
 	
 /**
+ * Returns the first instance specification value of the specified feature.
+ * Note: If there are more features with the same name, the first one is used!
+ */
+String oneString(InstanceSpecification this, String featureName) :
+	slot.selectFirst( e|e.definingFeature.name == featureName ).value.typeSelect(LiteralString).first().value;
+	
+/**
  * Returns all instance specification values of the specified feature.
  * Note: If there are more features with the same name, the first one is used!
  */
@@ -438,6 +476,12 @@ List[InstanceSpecification] many(InstanceSpecification this, String featureName)
 	slot.exists( e|e.definingFeature.name == featureName )
 		? slot.selectFirst( e|e.definingFeature.name == featureName ).value.typeSelect(InstanceValue).instance
 		: {};
+		
+/**
+ * Getter for the xmiId of an uml element.
+ */
+String getXmiId(Element obj) : 
+	JAVA org.genesez.adapter.uml2.TransformationHelper.getXmiId(org.eclipse.emf.ecore.EObject);
 
 /**
  * Returns true if it's a PPackage, otherwise else.
