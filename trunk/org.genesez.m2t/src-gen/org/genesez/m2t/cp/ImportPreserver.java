@@ -241,6 +241,7 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Sets the value of attribute '<em><b>enabled</b></em>'
+	 * @param	enabled	
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;

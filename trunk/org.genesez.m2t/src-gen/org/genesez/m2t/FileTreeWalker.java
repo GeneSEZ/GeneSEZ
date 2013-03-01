@@ -212,9 +212,18 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	
 	/**
 	 * the observers
+	 * @return	
 	 */
 	public java.util.Set<FileTreeObserver> getObserver() {
 		return observer;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>baseDir</b></em>'
+	 * @param	baseDir	
+	 */
+	public void setBaseDir(String baseDir) {
+		this.baseDir = baseDir;
 	}
 	
 	/**
@@ -229,13 +238,6 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	 */
 	public void removeObserver(FileTreeObserver observer) {
 		this.observer.remove(observer);
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>baseDir</b></em>'
-	 */
-	public void setBaseDir(String baseDir) {
-		this.baseDir = baseDir;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Y_wQKQD0EeK7ac-mrkJBDw) ENABLED START */

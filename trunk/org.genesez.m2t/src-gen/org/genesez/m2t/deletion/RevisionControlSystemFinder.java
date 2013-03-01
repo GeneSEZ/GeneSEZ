@@ -108,6 +108,7 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 	
 	/**
 	 * The outputPath, where deletion should take place.
+	 * @param	baseDir	
 	 */
 	public void setBaseDir(String baseDir) {
 		this.baseDir = baseDir;
