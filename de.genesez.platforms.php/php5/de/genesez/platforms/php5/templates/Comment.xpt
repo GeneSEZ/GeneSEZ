@@ -1,0 +1,341 @@
+«REM»
+	Performs the generation of comments.
+	Comment Tags are phpdocumentor specific. Doxygen doesn't like the type information.
+	
+	currently handled:
+	- file, type
+	- operation, constructor, destructor
+	- attributes + association: decl, getter, setter, insertIn, removeFrom
+	
+	@author	tobias haubold
+	@date	2008-04-09
+	@todo	a way to merge model documentation with user added documentation ?
+	@todo	comments are currently for 'phpdocumentor', 'doxygen' support is not best :/
+	@todo	maybe @uses tags?
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» useful helper for current user + timestamp «ENDREM»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» useful conversions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Conversion»
+«REM» use naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates a file comment (page scope)
+«ENDREM»
+«DEFINE File FOR MClassifier -»
+/**
+ * @author	«getUserName()»
+ * @package	«packageDeclaration( basePath() )»
+ */
+«ENDDEFINE»
+
+«REM»
+	generates a type comment (class scope)
+«ENDREM»
+«DEFINE Type FOR MClassifier -»
+/**
+«IF hasComment() -»
+«comment().format() -»
+«ENDIF -»
+«EXPAND _Supertypes -»
+ * @author	«getUserName()»
+ * @package	«packageDeclaration( basePath() )»
+ */
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the documentation for an attribute
+	only a link to the getter documentation is generated
+«ENDREM»
+«DEFINE Attribute FOR MAttribute -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	attribute definition
+	 * @var		«type.mapName().asTypeName()»	$«asAttribute()»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for an association attribute
+	only a link to the getter documentation is generated
+«ENDREM»
+«DEFINE Association FOR MAssociationRole -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	attribute definition for association to {@link «opposite.classifier.asTypeName()»}
+	 * @var		«type.mapName().asTypeName()»	$«asAttribute()»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for a setter method of an attribute
+«ENDREM»
+«DEFINE Setter FOR MAttribute -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	setter method for the attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
+	 * @param	«type.mapName().asTypeName()»	$«asAttribute()»	the value to set
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for the 'insert in' method of an attribute with a collection type
+«ENDREM»
+«DEFINE InsertIn FOR MAttribute -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	adder method for the multi-valued attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
+	 * @param	«type.mapName().asTypeName()»	$toAdd	the value to add
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for the 'remove from' method of an attribute with a collection type
+«ENDREM»
+«DEFINE RemoveFrom FOR MAttribute -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	method to remove values from the multi-valued attribute {@link «classifier.asTypeName()»::«asGetter()»() $«asAttribute()»}
+	 * @param	«type.mapName().asTypeName()»	$toRemove	the value to remove
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for a setter method of an association attribute
+«ENDREM»
+«DEFINE Setter FOR MAssociationRole -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	setter method for the association to {@link «type.mapName().asTypeName()»}
+	 * @param	«type.mapName().asTypeName()»	$«asAttribute()»	the value to set
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for the 'insert in' method of an association attribute with a collection type
+«ENDREM»
+«DEFINE InsertIn FOR MAssociationRole -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	adder method for the multi-valued association  to {@link «type.mapName().asTypeName()»}
+	 * @param	«type.mapName().asTypeName()»	$toAdd	the value to add
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for the 'remove from' method of an association attribute with a collection type
+«ENDREM»
+«DEFINE RemoveFrom FOR MAssociationRole -»
+	/**
+	«IF hasComment() -»
+	 * documented here {@link «classifier.asTypeName()»::«asGetter()»()}
+	«ENDIF -»
+	 * @generated	method to remove values from the multi-valued association to {@link «type.mapName().asTypeName()»}
+	 * @param	«type.mapName().asTypeName()»	$toRemove	the value to remove
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for an attribute getter method
+	the attribute is only documented in the getter method
+«ENDREM»
+«DEFINE Getter FOR MAttribute -»
+	/**
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	 * getter method of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
+	«ENDIF -»
+	 * @generated	accessor to get the value of the «IF derived»derived «ENDIF»attribute «EXPAND _PropertyName»
+	«IF isSingleValuedType() -»
+	 * @return	«type.mapName().asTypeName()»	the value of «EXPAND _PropertyName -»
+	«ELSE -»
+	 * @return	array	the value of «EXPAND _PropertyName -» as an array of type {@link «type.mapName().asTypeName()»}
+	«ENDIF»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for an association attribute getter method
+	the association is only documented in the getter method
+«ENDREM»
+«DEFINE Getter FOR MAssociationRole -»
+	/**
+	«IF hasComment() -»
+	«comment().format()»
+	«ELSE -»
+	 * getter method of the «IF derived»derived «ENDIF»association attribute «EXPAND _PropertyName»
+	«ENDIF -»
+	 * @generated	accessor to get the value of the «IF derived»derived «ENDIF»association attribute «EXPAND _PropertyName -» from association to {@link «type.mapName().asTypeName()»}
+	«IF isSingleValuedType() -»
+	 * @return	«type.mapName().asTypeName()»	the value of «EXPAND _PropertyName»
+	«ELSE -»
+	 * @return	array	the value of «EXPAND _PropertyName -» as an array of type «type.mapName().asTypeName()»
+	«ENDIF»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the documentation for an operation
+«ENDREM»
+«DEFINE Operation FOR MOperation -»
+	/**
+	«IF hasComment() -»
+	«comment().format() -»
+	«ENDIF -»
+	 * @generated	method stub for implementation
+	«IF hasExceptions() -»
+	 * 
+	«EXPAND _ExceptionLink FOREACH raisedException -»
+	 * 
+	«ENDIF -»
+	«EXPAND _Parameter FOREACH parameter -»
+	«EXPAND _Return -»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the constructor documentation
+«ENDREM»
+«DEFINE Constructor FOR MOperation -»
+	/**
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	 * constructs an object of class {@link «classifier.asTypeName()»}
+	«ENDIF -»
+	 * @generated	constructor stub for implementation
+	«IF hasExceptions() -»
+	 * 
+	«EXPAND _ExceptionLink FOREACH raisedException -»
+	 * 
+	«ENDIF -»
+	«EXPAND _Parameter FOREACH parameter -»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the destructor documentation
+«ENDREM»
+«DEFINE Destructor FOR MOperation -»
+	/**
+	«IF hasComment() -»
+	«comment().format() -»
+	«ELSE -»
+	 * destructor for the class {@link «classifier.asTypeName()»}
+	«ENDIF -»
+	 * @generated	destructor stub for implementation
+	«IF hasExceptions() -»
+	 * 
+	«EXPAND _ExceptionLink FOREACH raisedException -»
+	 * 
+	«ENDIF -»
+	«EXPAND _Parameter FOREACH parameter -»
+	 */
+«ENDDEFINE»
+
+«REM»
+	generates the constructor comment for enumerations
+«ENDREM»
+«DEFINE Constructor FOR MEnumeration -»
+	/**
+	 * @generated	private constructor to prevent instantiation of enumeration objects
+	 */
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an @see link for supertypes
+«ENDREM»
+«DEFINE _Supertypes FOR MClassifier -»
+«FOREACH generalization AS g -»
+ * @see		«g.mapName().asTypeName()»
+«ENDFOREACH -»
+«FOREACH realization AS r -»
+ * @see		«r.mapName().asTypeName()»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the name of an property if it's derived, else as link
+«ENDREM»
+«DEFINE _PropertyName FOR MProperty -»
+«IF derived -»$«asAttribute()»«ELSE -»{@link «classifier.asTypeName()»::$«asAttribute()»}«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates a region for own code comments
+«DEFINE _OwnComment(String indent, String id) FOR MElement -»
+«indent» * @internal «PROTECT CSTART '<!-- ' CEND ' -->' ID (id)»
+«indent» * @internal <!-- TODO: put your own comments here -->
+«indent» * @internal «ENDPROTECT»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	generates the @param tag
+«ENDREM»
+«DEFINE _Parameter FOR MParameter -»
+«IF isSingleValuedType() -»
+	 * @param	«type.mapName().asTypeName()»	$«asParameter()»	«comment().format("", "")»
+«ELSE -»
+	 * @param	array	$«asParameter()»	«comment().format("", "")»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the @return tag
+«ENDREM»
+«DEFINE _Return FOR MOperation -»
+«IF hasReturnType() -»
+	 * @return	«returnType.mapName().asTypeName()»	«comment().format("", "")»
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the exceptions that may be thrown by an operation
+«ENDREM»
+«DEFINE _ExceptionLink FOR MType -»
+	 * @throws		{@link «mapName().asTypeName()»}
+«ENDDEFINE»

@@ -1,0 +1,163 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::io::io»
+
+«EXTENSION de::genesez::common::AccessHelper»
+«EXTENSION de::genesez::common::Conversion»
+«EXTENSION de::genesez::common::GeneralHelper»
+«EXTENSION de::genesez::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate constructor for mclass
+«DEFINE ConstructorImpl FOR MClassifier-»
+«EXPAND ConstructorImpl FOREACH operation.select(e|e.name == name)-»
+«ENDDEFINE»
+
+
+// generate all abstract methods for a classifier
+«DEFINE OperationDecl FOR MClassifier-»
+«EXPAND OperationDecl FOREACH operation.select(e|e.name != name && e.abstract)-»
+«ENDDEFINE»
+
+
+// generate all methods for a classifier
+«DEFINE OperationImpl FOR MClassifier-»
+«EXPAND OperationImpl FOREACH operation.select(e|e.name != name && !e.abstract)-»
+«ENDDEFINE»
+
+
+// generate constructor for mclass
+«DEFINE ConstructorImpl FOR MOperation-»
+«EXPAND _CommentOperation-»
+«EXPAND _Modifier» «asClassifierName(name)» («EXPAND _Parameter») «EXPAND _Exception» {
+«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+}
+«ENDDEFINE»
+
+
+// generate a declaration for an abstract operation
+«DEFINE OperationDecl FOR MOperation-»
+«EXPAND _CommentOperation-»
+«IF multiplicity == 1-»
+	«EXPAND _Modifier» «returnType.mapName()» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+«ELSE-»
+	«EXPAND _Modifier» «mapType()» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception»;
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate an implementation for an normal operation
+«DEFINE OperationImpl FOR MOperation-»
+«EXPAND _CommentOperation-»
+«IF multiplicity == 1-»
+	«EXPAND _Modifier» «returnType.mapName()» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+«ELSE-»
+	«IF returnType.metaType == MPrimitiveType-»
+		«EXPAND _Modifier» «mapType()» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«ELSE-»
+		«EXPAND _Modifier» «mapType()» «asOperationName(name)»(«EXPAND _Parameter») «EXPAND _Exception» {
+	«ENDIF-»
+«ENDIF-»
+	«EXPAND _DefaultReturnAndOwnCodeImpl-»
+}
+«ENDDEFINE»
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+«DEFINE _CommentOperation FOR MOperation-»
+/**
+«IF hasComment()-»
+ * «ownedComment.getCommentText()»
+«ENDIF-»
+«EXPAND _CommentParameter-»
+«EXPAND _CommentReturn-»
+«EXPAND _CommentExeception-»
+ */
+«ENDDEFINE»
+
+«DEFINE _CommentParameter FOR MOperation-»
+«FOREACH parameter.typeSelect(MParameter) AS p-»
+ * @param  «asParameterName(p.name)»  «p.ownedComment.getCommentText()»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE _CommentReturn FOR MOperation-»
+«IF returnType.name().toLowerCase() != "void" -»
+ * @return  «getCommentText(returnType.ownedComment())»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _CommentExeception FOR MOperation-»
+«FOREACH raisedException.typeSelect(MClassifier) AS c-»
+ * @throws  «(c.mapName())»  «c.ownedComment.getCommentText()»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+«DEFINE _DefaultReturnAndOwnCodeImpl FOR MOperation»
+«IF multiplicity == 1-»
+	«getReturnTypeDeclaration(returnType.mapName())»
+«ELSE-»
+	«IF returnType.metaType == MPrimitiveType-»
+		«mapType()»<«returnType.mapName("Wrapper")»> returnValue = null;
+	«ELSE-»
+		«mapType()»<«returnType.mapName()»> returnValue = null;
+	«ENDIF-»
+«ENDIF-»
+	«EXPAND _OwnCodeImpl("java.moperation.implementation.operation.code." + xmiGuid)-»
+	«getReturnTypeReturn(returnType.mapName())»
+«ENDDEFINE»
+
+// generate a protected region for own implementations
+«DEFINE _OwnCodeImpl(String proRegId) FOR MOperation-»
+/* «PROTECT CSTART "" CEND "" ID (proRegId)» */
+/* TODO put your own implementation code here */
+
+/* «ENDPROTECT» */
+«ENDDEFINE»
+
+
+// generate modifiers for moperation
+«DEFINE _Modifier FOR MOperation-»
+«visibility» «IF static»static«ENDIF» «IF final»final«ENDIF» «IF abstract»abstract«ENDIF»
+«ENDDEFINE»
+
+
+// generate a parameter list for moperation
+«DEFINE _Parameter FOR MOperation-»
+«FOREACH parameter AS p SEPARATOR ", "-»
+	«EXPAND _Parameter FOR p-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+// generate a parameter for moperation
+«DEFINE _Parameter FOR MParameter»
+«IF multiplicity == 1-»
+	«type.mapName()» «asParameterName(name)»
+«ELSE-»
+	«mapType()»<«type.mapName()»> «asParameterName(name)»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate exceptions for a moperation
+«DEFINE _Exception FOR MOperation-»
+«IF !raisedException.isEmpty-»
+	throws «FOREACH raisedException AS e SEPARATOR ", "»«e.mapName()»«ENDFOREACH»
+«ENDIF-»
+«ENDDEFINE»

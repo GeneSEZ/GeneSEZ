@@ -1,0 +1,64 @@
+«REM»
+	Performs the generation of the import region
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+	@date	2007-07-13
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«REM» use import helper «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Imports»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the imports
+	checks if a import of a type is really needed
+«ENDREM»
+«DEFINE Import FOR MClassifier -»
+«EXPAND _FixedImports -»
+«EXPAND _Import FOREACH supplier.select( s| s.isImportNeeded(this) )»
+«EXPAND _OwnImports -»
+«ENDDEFINE»
+
+«REM»
+	generates fixed import statements
+	imports the types for association handling + java.util package
+«ENDREM»
+«DEFINE _FixedImports FOR MClassifier -»
+import java.util.*;
+import de.genesez.platforms.java.umlsupport.associations.*;
+«ENDDEFINE»
+
+«REM»
+	generates the imports needed for a classifier
+«ENDREM»
+«DEFINE _Import FOR MClassifier -»
+import «fullQualifiedName( asTypeName(), basePackage() )»;
+«ENDDEFINE»
+
+«REM»
+	generates the imports needed for a type
+«ENDREM»
+«DEFINE _Import FOR MType -»
+import «mapName("Import")»;
+«ENDDEFINE»
+
+«REM»
+	generates a region for own imports
+«ENDREM»
+«DEFINE _OwnImports FOR MClassifier -»
+«PROTECT CSTART "/* " CEND " */" ID ("java.type.import." + xmiGuid)»
+// TODO: put your further include + require statements here
+«ENDPROTECT»
+«ENDDEFINE»

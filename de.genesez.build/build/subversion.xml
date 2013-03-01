@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="de.genesez.build.subversion" basedir=".." default="">
+  
+	<!--  all properties are in build.properties --> 
+	<property file="${project.build.dir}/subversion.properties" /> 
+
+	<!-- path to the svnant libraries -->
+	<path id="subversion.classpath">
+		<pathelement location="${svnjavahl.jar}" />
+		<pathelement location="${svnant.jar}" />
+		<pathelement location="${svnClientAdapter.jar}" />
+	</path>
+	
+	<!-- load the svn task -->
+	<taskdef resource="svntask.properties"
+		classpathref="subversion.classpath"/>
+
+	<!-- generate repository url -->
+	<condition property="repository"
+		value="${svn.tags}/${svn.tag}">
+		<isset property="svn.tag" />
+	</condition>
+	<condition property="repository"
+		value="${svn.branches}/${svn.branch}"
+		else="${svn.trunk}">
+		<isset property="svn.branch" />
+	</condition>
+
+	<target name="checkoutOrUpdate"
+		description="Wether check out or update a project in build.basedir">
+		<if>
+			<istrue value="${update}"/>
+			<then>
+				<svn>
+					<update dir="${build.basedir}/${project}" />
+				</svn>
+			</then>
+			<else>
+				<svn>
+					<checkout url="${repository}/${project}"
+						destpath="${build.basedir}/${project}" />
+				</svn>
+			</else>
+		</if>
+	</target>
+	
+	<target name="revert"
+		description="Revert changes on build project">
+		<svn>
+			<revert dir="eclipse-development"/>
+		</svn>
+	</target>
+	
+</project>

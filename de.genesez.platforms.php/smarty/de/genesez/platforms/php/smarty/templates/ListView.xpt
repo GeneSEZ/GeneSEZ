@@ -1,0 +1,127 @@
+«REM»
+	Handles all classes and generates an html table for list views.
+	
+	currently covered:
+	- just a simple matrix view of properties
+	
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
+	
+	@todo	remove static 'password' field check
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«REM» use smarty naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::smarty::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of a model to generate smarty templates for classes
+	rejects all ignored packages from further processing
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	reject all data types from further processing
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier.reject( e| e.metaType == MDataType || e.metaType == MEnumeration )»
+«ENDDEFINE»
+
+«REM»
+	interfaces are not mapped to templates!
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«fatal("'MInterfaces's are not mapped to smarty templates!")»
+«ENDDEFINE»
+
+«REM»
+	should not happend, because 'MClassifier' is an abstract class!
+	it's just there for error-free templates :-)
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("'MClassifier's are currently not mapped to smarty templates!")»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates a list view
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE asTemplateFileName("listTable")»
+<table>
+	<tr>
+		«EXPAND _Header FOREACH property.select( e| e.multiplicity == 1 ).reject( e| e.hasTaggedValue("html", "type", "PASSWORD") ) -»
+		«EXPAND _OwnHeader -»
+	</tr>
+	{foreach from=$«asSmartyTemplateVariablePlural()» item="«asSmartyTemplateVariable()»"}
+	<tr>
+		«EXPAND _Body FOREACH property.select( e| e.multiplicity == 1 ).reject( e| e.hasTaggedValue("html", "type", "PASSWORD") ) -»
+		«EXPAND _OwnBody -»
+	</tr>
+	{/foreach}
+</table>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the table header columns
+«ENDREM»
+«DEFINE _Header FOR MProperty -»
+		<th>«asHeaderName()»</th>
+«ENDDEFINE»
+
+«REM»
+	region for own table header columns
+«ENDREM»
+«DEFINE _OwnHeader FOR MClass -»
+		«PROTECT CSTART '{* ' CEND ' *}' ID ("php.smarty.listview.header." + xmiGuid)»
+		{* TODO: put your further table header columns here *}
+		«ENDPROTECT»
+«ENDDEFINE»
+
+«REM»
+	generates the table body columns
+«ENDREM»
+«DEFINE _Body FOR MProperty -»
+		<td>{$«asSmartyTemplateVariable(classifier)».«asAttributeName()»}</td>
+«ENDDEFINE»
+
+«REM»
+	region for own table body columns
+«ENDREM»
+«DEFINE _OwnBody FOR MClass -»
+		«PROTECT CSTART '{* ' CEND ' *}' ID ("php.smarty.listview.body." + xmiGuid)»
+		{* TODO: put your further table body columns here *}
+		«ENDPROTECT»
+«ENDDEFINE»
+
