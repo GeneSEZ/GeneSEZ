@@ -8,6 +8,7 @@ import gcore;
 
 /**
  * Provides support to deal with access operations based on the stereotype «accessor».
+ * It creates get and set access operations if desired.
  * 
  * @author	andre pflueger
  * @author	tobias haubold <toh@fh-zwickau.de>
@@ -43,7 +44,7 @@ MAttribute emAccessorForStaticFinalAttribute(MAttribute this) :
 					emHasTaggedValue( prAccessor(), prAccessorSetter(), "true" )
 						? logWarn("Generation of a set access operation for a static final attribute makes no sense!" + fqmn())
 						: this
-				) : prAssignGeneSezAccessorStereotype( generateGetter(), false, false, false )
+				) : prAssignGeneSezAccessorStereotype( emGenerateGetAccess(), false, false, false )
 		) : this ->
 	this;
 
@@ -59,16 +60,17 @@ MAttribute emAccessorForStaticFinalAttribute(MAttribute this) :
  * implemented; accessor sereotypes on MClass instances will be considered but not removed)
  */
 MProperty emEnsureGetAccessOperation(MProperty this) :
-	generateGetter()
+	emGenerateGetAccess()
 		? (
 			classifier.ensureOperationExistence( xmiGuid + "_get", asGetter() )
 				.processOperation( "public", false, false, false )
-				.ensureReturnParameterExistence( xmiGuid + "_getReturn", "" )
+				.ensureReturnParameterExistence( xmiGuid + "_getReturn", asAttribute() )
 				.processParameter( null, "return", multiplicity.cloneMultiplicity() )
 				.wireType( type )
 				.operation
+				.assignGetAccessOperationComment( this )
 				.ensureStereotypeAssignment(
-					navModel().ensureStereotypeExistence("http://www.genesez.de/GetterOperation", "http://www.genesez.de/GetterOperation")
+					navModel().ensureStereotypeExistence( emGetAccessOperationIdentifier(), emGetAccessOperationIdentifier() )
 				)
 		) : this ->
 	this;
@@ -87,7 +89,7 @@ MProperty emEnsureGetAccessOperation(MProperty this) :
  * @TODO	check if in case of a multi-valued property, instead of a set...(collection type) operation and add/remove operation would be more appropriate
  */
 MProperty emEnsureSetAccessOperation(MProperty this) : 
-	generateSetter()
+	emGenerateSetAccess()
 		? (
 			classifier.ensureOperationExistence( xmiGuid + "_set", asSetter() )
 				.processOperation( "public", false, false, false )
@@ -95,8 +97,9 @@ MProperty emEnsureSetAccessOperation(MProperty this) :
 				.processParameter( null, "in", multiplicity.cloneMultiplicity() )
 				.wireType( type )
 				.operation
+				.assignSetAccessOperationComment( this )
 				.ensureStereotypeAssignment(
-					navModel().ensureStereotypeExistence("http://www.genesez.de/SetterOperation", "http://www.genesez.de/SetterOperation")
+					navModel().ensureStereotypeExistence( emSetAccessOperationIdentifier(), emSetAccessOperationIdentifier() )
 				)
 		) : this ->
 	this;
@@ -113,3 +116,50 @@ MOperation emGetAccessOperation(MProperty this) :
 MOperation emSetAccessOperation(MProperty this) :
 	classifier.operation.select( o|o.isSetter() && o.parameter.size == 1 );
 
+/**
+ * Returns the identifier to generate get access operations.
+ */
+String emGetAccessOperationIdentifier() :
+	"http://www.genesez.org/access/GetOperation";
+
+/**
+ * Returns the identifier to generate set access operations.
+ */
+String emSetAccessOperationIdentifier() :
+	"http://www.genesez.org/access/SetOperation";
+
+/**
+ * Assigns a comment to the get access operation.
+ * If the property has comments, they are cloned to the get access operation, else a default comment is set.
+ * 
+ * @return	the context object itself
+ */
+MOperation assignGetAccessOperationComment(MOperation this, MProperty source) :
+	source.hasComment()
+		? source.ownedComment.cloneComment( this )
+		: createComment( xmiGuid + "_comment", source.defaultGetAccessOperationComment() ) ->
+	this;
+
+/**
+ * Assigns a comment to the set access operation.
+ * If the property has comments, they are cloned to the set access operation, else a default comment is set.
+ * 
+ * @return	the context object itself
+ */
+MOperation assignSetAccessOperationComment(MOperation this, MProperty source) :
+	source.hasComment()
+		? source.ownedComment.cloneComment( this )
+		: createComment( xmiGuid + "_comment", source.defaultSetAccessOperationComment() ) ->
+	this;
+
+/**
+ * Returns a default comment text for get access operations of the specified property.
+ */
+String defaultGetAccessOperationComment(MProperty this) :
+	"Returns the value of attribute '<em><b>" + asAttribute() + "</b></em>'";
+
+/**
+ * Returns a default comment text for set access operations of the specified property.
+ */
+String defaultSetAccessOperationComment(MProperty this) :
+	"Sets the value of attribute '<em><b>" + asAttribute() + "</b></em>'";
