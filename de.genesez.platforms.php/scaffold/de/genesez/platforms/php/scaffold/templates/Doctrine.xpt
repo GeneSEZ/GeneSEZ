@@ -1,0 +1,30 @@
+«REM»
+	Scaffold support for phpdoctrine db abstraction.
+	Generates implementation aspects using phpdoctrine framework for db abstraction.
+	
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates a 'fetchAll' method
+	@param	queryVar	the variable which should store the query
+	@param	returnVar	the variable which should save the query result
+«ENDREM»
+«DEFINE Fetch(String queryVar, String returnVar) FOR MClass»
+	«queryVar» = new Doctrine_Query();
+	«queryVar»->from('«asTypeName()» t');
+	«returnVar» = «queryVar»->execute();
+«ENDDEFINE»

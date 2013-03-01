@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- 
+		performs a model-to-text transformation (code generation)
+		
+		following parameters are required:
+		==================================
+		
+		$rootTemplate 		the root xpt-file where the generation starts
+		$aspectTemplates	comma separated list of templates with aspect advices for XPand AOP
+		$aspectScripts		comma separated list of scripts with aspect advices for Xtend AOP
+		$excludePackages	comma or semicola separated list with packages to exclude from code generation
+							(full qualified package names, ', ' or '; ' are also permitted)
+		$typeMappingFile	name of the xml type mapping file
+		$outputDir 			the path where the generated file are produced
+		$proRegDir 			the path where the protected reagions are found
+							(usually the same as the output directory
+		$configFile			xml file for configuration settings
+	-->
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="gcore" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="de.genesez.metamodel.gcore.GcorePackage" />
+	</bean>
+	<!-- bean id="gcore" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="gcore" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="gcore.ecore" />
+	</bean-->
+	
+	<component id="performM2T" class="de.genesez.platforms.common.workflow.xpand2.Generator" skipOnErrors="true">
+		
+		<metaModel idRef="gcore" />
+		
+		<!-- Template files are written in the utf-8 charset. -->
+		<fileEncoding value="utf-8" />
+		
+		<!-- Define the type mapping file -->
+		<typeMappingFile value="${typeMappingFile}" />
+		
+		<!-- exclude packages from code gen -->
+		<globalVarDef name="excludePackages" value="'${excludePackages}'"/>
+		
+		<!-- make config file accessible as global variable -->
+		<globalVarDef name="configFile" value="'${configFile}'"/>
+		
+		<expand value="${rootTemplate}" />
+		<genPath value="${outputDir}" />
+		
+		<!-- config AOP features -->
+		<advices value="${aspectTemplates}"/>
+		<extensionAdvices value="${aspectScripts}" />
+		
+		<!-- Config the protected regions resolver. -->
+		<prSrcPaths value="${proRegDir}" />
+		<prDefaultExcludes value="false" />
+		<prExcludes value=".svn" />
+
+	</component>
+
+</workflow>

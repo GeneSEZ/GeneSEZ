@@ -1,0 +1,41 @@
+«REM»
+	Performs the generation of enumerations
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+	@date	2008-05-19
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«REM» use java naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«REM» use java conversions «ENDREM»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an enumeration
+«ENDREM»
+«DEFINE Root FOR MEnumeration -»
+package «packageDeclaration( basePackage() ) -»;
+«EXPAND Import::Import -»
+«EXPAND Comment::Type -»
+«EXPAND Type::Modifier -» enum «asTypeName() -» {
+	
+	«IF generateSectionComments()»
+	// -- enumeration literals ----------------------------------------------
+	«ENDIF»
+	«FOREACH literal AS l SEPARATOR ", " -»«l.asEnumLiteral() -»«ENDFOREACH -»;
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.enumeration.own.code.implementation." + xmiGuid) -»
+}
+«ENDDEFINE»
