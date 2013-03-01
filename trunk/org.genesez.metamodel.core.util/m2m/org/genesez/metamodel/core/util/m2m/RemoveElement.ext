@@ -34,8 +34,32 @@ import gcore;
 // -- Extension Mechanism -----------------------------------------------------------------------------------
 
 
+MElement emRemoveStereotypes(MElement this) :
+	// remove all assigned stereotypes
+	stereotype.collect( s | this.emRemoveStereotype( s ) );
+
+
+MElement emRemoveStereotype(MElement this, MStereotype stereotype) :
+	// remove all assigned tagged values of the specified stereotype
+	stereotype.property.collect( p | this.emRemoveTaggedValues( p ) ) ->
+	// remove the specified stereotype
+	this.stereotype.remove( stereotype ) ->
+	this;
+
+
+MElement emRemoveTaggedValues(MElement this, MTag tag) :
+	taggedValue.remove( taggedValue.select( tv | tv.tag == tag ) ) ->
+	this;
+
+
 MElement emRemoveTaggedValue(MElement this, MTag tag, String value) :
-	taggedValue.remove( taggedValue.select( tv|tv.tag == tag && tv.value == value ) );
+	taggedValue.remove( taggedValue.select( tv | tv.tag == tag && tv.value == value ) ) ->
+	this;
+
+
+MElement emRemoveTaggedValueReference(MElement this, MTag tag, MElement valueReference) :
+	taggedValue.remove( taggedValue.select( tv | tv.tag == tag && tv.value == valueReference ) ) ->
+	this;
 
 
 // -- Private Functionality ---------------------------------------------------------------------------------
