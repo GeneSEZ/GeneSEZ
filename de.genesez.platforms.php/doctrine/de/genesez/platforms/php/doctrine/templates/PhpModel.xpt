@@ -1,0 +1,130 @@
+«REM»
+	Handles all classes and generates the table definition for phpdoctrine as php file.
+	
+	currently covered:
+	- properties with simple types as columns
+	
+	@author		tobias haubold
+	@date		2008-04-17
+	@version	alpha
+	
+	@todo	associations + collection mappings
+	@todo	simple types, size + constraints
+	@todo	comments (class, methods + maybe virtual attributes (table columns)? )
+	@todo	maybe introduce a parameter (name of a stereotype) which indicates persistent classes in the model
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» use conversion functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use php naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the contents of the model
+	rejects all ignored packages from further processing
+«ENDREM»
+«DEFINE Root FOR MModel»
+	«EXPAND Root FOREACH nestedPackage.rejectIgnoredPackages()»
+«ENDDEFINE»
+
+«REM»
+	processes the contents of a package
+	reject all data types from further processing
+«ENDREM»
+«DEFINE Root FOR MPackage»
+	«EXPAND Root FOREACH nestedPackage»
+	«EXPAND Root FOREACH classifier.reject( e| e.metaType == MDataType || e.metaType == MEnumeration )»
+«ENDDEFINE»
+
+«REM»
+	interfaces are not mapped to a table definition!
+«ENDREM»
+«DEFINE Root FOR MInterface»
+	«fatal("'MInterfaces's are not mapped to a table definition!")»
+«ENDDEFINE»
+
+«REM»
+	should not happend, because 'MClassifier' is an abstract class!
+	it's just there for error-free templates :-)
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+	«fatal("'MClassifier's are currently not supported by the phpdoctrine model definition templates!")»
+«ENDDEFINE»
+
+«REM»
+	generates the table definition
+«ENDREM»
+«DEFINE Root FOR MClass»
+«FILE filePath( asFileName(), basePath() ) -»
+<?php
+«EXPAND _Class -»
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates the class definition
+«ENDREM»
+«DEFINE _Class FOR MClass -»
+class «asTypeName()» extends Doctrine_Record {
+	«EXPAND _TableDefinition -»
+	
+	«EXPAND _SetUp -»
+}
+«ENDDEFINE»
+
+«REM»
+	generates the function 'setTableDefinition'
+«ENDREM»
+«DEFINE _TableDefinition FOR MClass -»
+	public function setTableDefinition() {
+		«EXPAND _SimpleType FOREACH property.typeSelect(MAttribute).select( e| e.multiplicity == 1 )»
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.doctrine.record.definition." + xmiGuid)»
+		// TODO: further table definitions for class '«asTypeName()»'
+		«ENDPROTECT»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the function 'setUp'
+«ENDREM»
+«DEFINE _SetUp FOR MClass -»
+	public function setUp() {
+		«PROTECT CSTART '/* ' CEND ' */' ID ("php.doctrine.record.setUp." + xmiGuid)»
+		// TODO: further setups for class '«asTypeName()»'
+		«ENDPROTECT»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the definition of a table column
+«ENDREM»
+«DEFINE _SimpleType FOR MProperty -»
+		$this->hasColumn('«name»', '«type.mapName()»');
+«ENDDEFINE»
+

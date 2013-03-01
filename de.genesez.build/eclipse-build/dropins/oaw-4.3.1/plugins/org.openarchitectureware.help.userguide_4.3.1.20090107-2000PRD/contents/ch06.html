@@ -1,0 +1,416 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Stdlib</title><link rel="stylesheet" href="../book.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="openArchitectureWare User Guide"><link rel="up" href="reference.html" title="Part&nbsp;II.&nbsp;Reference"><link rel="prev" href="xtext_reference.html" title="Xtext Reference"><link rel="next" href="eclipse_integration.html" title="oAW 4 Eclipse Integration"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e9214"></a>Stdlib</h2></div></div></div><div class="toc"><dl><dt><span class="section"><a href="ch06.html#d0e9217">Introduction</a></span></dt><dt><span class="section"><a href="ch06.html#d0e9228">Stdlib extensions</a></span></dt><dt><span class="section"><a href="ch06.html#d0e10365">Stdlib workflow components</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e9217"></a>Introduction</h2></div></div></div><p>openArchitectureWare delivers a set of small useful utility
+    extensions and components in the
+    <code class="classname">org.openarchitectureware.util.stdlib</code> package. A
+    dependency to this plugin is already added and reexported by the
+    <code class="filename">org.openarchitectureware.dependencies</code> plugin, so you
+    don't need to add an explicit dependency to stdlib.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e9228"></a>Stdlib extensions</h2></div></div></div><p>This section describes the components and extensions provided by
+    Stdlib. We use the shortcut "<code class="classname">oaw.util.stdlib...</code>"
+    for component classes in package
+    "<code class="classname">org.openarchitectureware.util.stdlib</code>" in workflow
+    configurations for convenience.</p><p>Note that many functions of the Stdlib make use of static variables
+    in their Java implementation, thus the values are kept through a complete
+    oAW workflow. Also, because of the static implementation, the features are
+    not threadsafe. </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9241"></a>IO extensions</h3></div></div></div><p>This is an extremely useful library to print information to the
+      logging facility. It is really valuable through transformation processes
+      or for complex expressions to know what exactly expressions are
+      evaluated to.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9246"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="filename">org::openarchitectureware::util::stdlib::io</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9253"></a><code class="methodname">debug (Object o)</code></h5></div></div></div><p>Logs an object with DEBUG level to the logger.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - The object to
+              dump.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The object o</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9272"></a><code class="methodname">info (Object o)</code></h5></div></div></div><p>Logs an object with INFO level to the logger.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - The object to
+              dump.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The object o</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9291"></a><code class="methodname">error (Object o)</code></h5></div></div></div><p>Logs an object with ERROR level to the logger.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - The object to
+              dump.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The object o</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9310"></a><code class="methodname">syserr (Object o)</code></h5></div></div></div><p>Prints an object to System.err.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - The object that
+              should be printed. null is allowed.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The object o</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9329"></a><code class="methodname">syserr (Object o, String
+          prefix)</code></h5></div></div></div><p>Prints an Object to stderr with a prefix string.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - The object that
+              should be printed. null is allowed.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The object o</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9348"></a><code class="methodname">throwError (Object o)</code></h5></div></div></div><p>Throws an IllegalStateMessage.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - The exception
+              message.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> Nothing, since an
+          exception is thrown.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9367"></a>Examples</h4></div></div></div><pre class="programlisting">import data;
+extension org::openarchitectureware::util::stdlib::io;
+
+create DataModel this duplicate(DataModel s):
+  entity.addAll( s.entity.duplicate() ) -&gt;
+  setName(s.name);
+  
+create Entity this duplicate(Entity old):
+  (old.name+" has "+old.reference.size+" references").info() -&gt;
+  old.reference.name.info() -&gt;
+</pre><p>This leads to the following output on the console:</p><pre class="programlisting">922  INFO  - Person has 1 references
+923  INFO  - [autos]
+926  INFO  - Vehicle has 0 references
+926  INFO  - []
+</pre><p>Of course IO extension functions can also be used within Xpand,
+        but if used for logging purposes you have to deal with one side
+        effect: Since the functions return the passed object (the result of an
+        expression, in the simplest case just a string) and Xpand prints out
+        expression results to the opened file, the message will be shown on
+        the console, but also be in the result file. This you might want to
+        avoid, so you can use a small trick for this: after calling a log
+        function use the chaining operator and let the result of the
+        expression be an empty string:</p><pre class="programlisting">&laquo;EXTENSION org::openarchitectureware::util::stdlib::io&raquo;
+...
+&laquo;DEFINE javaClass FOR Entity&raquo;
+  &laquo;REM&raquo;The following expression will dump the feature names without producing output as side effect&laquo;ENDREM&raquo;
+  &laquo;features.name.info() -&gt; ""&raquo;
+</pre><p>This will produce this output on the console:</p><pre class="programlisting">1122 INFO  IOExtensions       - [name, age, address]
+1740 INFO  IOExtensions       - [street, zip, city]
+</pre><p>Each function returns the object on which they have been called,
+        so you can build chain expressions. Or, in other words, if you have
+        some expression like </p><pre class="programlisting">element.x.y.z.select(t|t.someProp).a</pre><p>you can always embed one of these io functions anywhere such as
+        in</p><pre class="programlisting">element.x<span class="bold"><strong>.syserr()</strong></span>.y.z.select(t|t.someProp<span class="bold"><strong>.info()</strong></span>).a</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9399"></a>Controlling the log level</h4></div></div></div><p>You may want to control the logging level for the messages which
+        are printed via the logging facility. How this is configured in detail
+        depends on the underlying logging framework. openArchitectureWare uses
+        the Apache Commons Logging library, which may dispatches to another
+        logging framework, mostly Log4J.</p><p>To control the logging level exactly for the IO extensions you
+        have to know the category to which the messages are logged to. It is
+        common to use the class names of the classes that use the logger. In
+        the case of the IO extensions this class is
+        <code class="classname">org.openarchitectureware.util.stdlib.IOExtensions</code>.</p><p>The following example shows a Log4J configuration file which
+        would disable log levels below warning. This example would only work
+        if the properties file is found at the beginning of the classpath.
+        Make sure that the file would be found before any other Log4J
+        configurations on your classpath. The file must be named
+        <code class="filename">log4j.properties</code>.</p><pre class="programlisting">log4j.appender.CONSOLE = org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.layout = org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern = %p %C{1} %m %n
+
+log4j.rootLogger = INFO, CONSOLE
+# suppress info messages from IOExtensions
+log4j.logger.org.openarchitectureware.util.stdlib.IOExtensions=WARN, CONSOLE
+log4j.additivity.org.openarchitectureware.util.stdlib.IOExtensions=false
+</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9417"></a>Counter extensions</h3></div></div></div><p>Sometimes it is necessary to have counters within transformation
+      code. The counter extensions enable to initialize, manipulate and
+      retrieve counters.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9422"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::counter</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9429"></a><code class="methodname">int counterInc (Object o)</code></h5></div></div></div><p>Increments a counter.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - A key for this
+              counter. If this function is called with a Null argument an
+              anonymous counter is used. If no counter was registered for the
+              key a new counter instance will be created and initialized with
+              0.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The incremented
+          counter.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9448"></a><code class="methodname">int counterDec (Object o)</code></h5></div></div></div><p>Decrements a counter.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - A key for this
+              counter. If this function is called with a Null argument an
+              anonymous counter is used. If no counter was registered for the
+              key a new counter instance will be created and initialized with
+              0.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The decremented
+          counter.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9467"></a><code class="methodname">int counterReset (Object o)</code></h5></div></div></div><p>Resets a counter.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - A key for this
+              counter. If this function is called with a Null argument an
+              anonymous counter is used. If no counter was registered for the
+              key a new counter instance will be created and initialized with
+              0.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> Always 0.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9486"></a><code class="methodname">int counterGet (Object o)</code></h5></div></div></div><p>Retrieves the current state of a counter.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - A key for this
+              counter. If this function is called with a Null argument the
+              anonymous counter is used.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> Current counter
+          value.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9505"></a>Example</h4></div></div></div><pre class="programlisting">&laquo;DEFINE CounterExtensionsDemo FOR Object&raquo;
+&laquo;FILE "CounterExtensions.txt"&raquo;
+  First counter:
+  get         : &laquo;counterGet()&raquo;
+  inc         : &laquo;counterInc()&raquo;
+  inc         : &laquo;counterInc()&raquo;
+  inc         : &laquo;counterInc()&raquo;
+  dec         : &laquo;counterDec()&raquo;
+
+  Second (named) counter:
+  inc         : &laquo;counterInc("idx")&raquo; 
+  inc         : &laquo;counterInc("idx")&raquo; 
+  inc         : &laquo;counterInc("idx")&raquo;
+  reset       : &laquo;counterReset("idx")&raquo;
+  inc         : &laquo;counterInc("idx")&raquo;
+
+  First counter:
+  inc         : &laquo;counterInc()&raquo;
+  
+&laquo;ENDFILE&raquo;
+&laquo;ENDDEFINE&raquo;
+</pre><p>This example will create the following output:</p><pre class="programlisting">  First counter:
+  get         : 0
+  inc         : 1
+  inc         : 2
+  inc         : 3
+  dec         : 2
+
+  Second (named) counter:
+  inc         : 1 
+  inc         : 2 
+  inc         : 3
+  reset       : 0
+  inc         : 1
+
+  First counter:
+  inc         : 3
+</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9514"></a>Properties extensions</h3></div></div></div><p>You might want to specify configuration values from properties
+      files from your transformation code. The Properties extensions can help
+      you there. Before being able to access the properties through an
+      extension function the properties files must be read and its values
+      stored. This is done through the workflow component PropertiesReader,
+      which is described below.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9519"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::properties</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9526"></a><code class="methodname">String getProperty(String
+          key)</code></h5></div></div></div><p>Retrieves a configuration property.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - Property key.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> Property value, if
+          defined, else null.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9545"></a>Workflow component</h4></div></div></div><p>The workflow component PropertiesReader is used to load
+        properties files. It is possible to configure multiple properties
+        files by adding the propertiesFile tag multiple times.</p><div class="table"><a name="d0e9550"></a><p class="title"><b>Table&nbsp;26.&nbsp;Workflow component
+          org.openarchitectureware.util.stdlib.PropertiesReader</b></p><div class="table-contents"><table summary="Workflow component&#xA;          org.openarchitectureware.util.stdlib.PropertiesReader" cellspacing="0" cellpadding="10" border="0" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col><col><col><col></colgroup><thead><tr><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Property</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Type</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Mandatory</th><th style="border-bottom: 2 solid #000000; " align="center">Description</th></tr></thead><tbody><tr><td style="border-right: 2 solid #000000; ">propertiesFile</td><td style="border-right: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; ">yes</td><td style="">The properties file to read.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9578"></a>Example</h4></div></div></div><p>Workflow configuration:</p><pre class="programlisting">&lt;component class="oaw.util.stdlib.PropertiesReader"&gt;
+  &lt;propertiesFile value="src/config1.properties"/&gt;
+  &lt;propertiesFile value="src/config2.properties"/&gt;
+&lt;/component&gt;</pre><p><code class="filename">config1.properties</code>:</p><pre class="programlisting">shapes = box,polygon,ellipse,point</pre><p>Usage in an extension:</p><pre class="programlisting">extension org::openarchitectureware::util::stdlib::properties;
+
+cached List[String] SHAPES () : getProperty("shapes").split(",").trim();</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9595"></a>Element properties extensions</h3></div></div></div><p>This allows you to temporarily associate name-value pairs with any
+      model element. </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9600"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::elementprops</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9607"></a><code class="methodname">Void setProperty( Object element, String name,
+          Object value )</code></h5></div></div></div><p>Sets the property named name to the value.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>element</strong></span> - The model
+              element.</p></li><li><p><span class="bold"><strong>name</strong></span> - Property
+              name.</p></li><li><p><span class="bold"><strong>value</strong></span> - The property
+              value.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> nothing.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9636"></a><code class="methodname">Object getProperty( Object element, String name
+          )</code></h5></div></div></div><p>Retrieves a dynamic property from an element.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>element</strong></span> - The model
+              element.</p></li><li><p><span class="bold"><strong>name</strong></span> - Property
+              name.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The property
+          value.</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9660"></a>Issues extensions</h3></div></div></div><p>In template code there is no direct access to the Issues instance
+      of the workflow's context possible. The Issues extensions help to report
+      warnings and errors to the Issues instance during transformation.</p><p>This should not encourage you to use constraint checking and
+      generally raise errors directly from within the transformations.
+      However, sometimes it is sensible and useful to be able to do
+      that.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9667"></a>Extension functions</h4></div></div></div><p>Extension:
+        org::openarchitectureware::util::stdlib::issues</p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9672"></a><code class="methodname">String reportWarning( String message
+          )</code></h5></div></div></div><p>Reports a warning message to the workflow context.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>message</strong></span> - A
+              message.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The message.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9691"></a><code class="methodname">String reportWarning( Object object, String
+          message )</code></h5></div></div></div><p>Reports a warning message and the qualified name of a context
+          object to the workflow context.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>object</strong></span> - A context
+              object.</p></li><li><p><span class="bold"><strong>message</strong></span> - A
+              message.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The message.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9715"></a><code class="methodname">String reportError( String message
+          )</code></h5></div></div></div><p>Reports a error message to the workflow context.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>message</strong></span> - A
+              message.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The message.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9734"></a><code class="methodname">String reportError( Object object, String message
+          )</code></h5></div></div></div><p>Reports a error message and the qualified name of a context
+          object to the workflow context.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>object</strong></span> - A context
+              object.</p></li><li><p><span class="bold"><strong>message</strong></span> - A
+              message.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The message.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9758"></a>Workflow component</h4></div></div></div><p>The Issues extensions require that the workflow component
+        <code class="classname">org.openarchitectureware.util.stdlib.ExtIssueReporter</code>
+        is configured in the workflow before calling the extensions. The
+        purpose of this component is make the workflow's Issues instance
+        available for the extensions.</p><p>The <code class="classname">ExtIssueReporter</code> component does not
+        have any properties.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9771"></a>Example</h4></div></div></div><p>Workflow configuration:</p><pre class="programlisting">&lt;?xml version="1.0"?&gt;
+&lt;workflow&gt;
+  ...
+  &lt;component class="oaw.util.stdlib.ExtIssueReporter"/&gt;
+</pre><p>Using from Xtend:</p><pre class="programlisting">import metamodel;
+extension org::openarchitectureware::util::stdlib::issues;
+
+demo (Model this) :
+  issuesExtensionsDemo()
+  ;
+
+issuesExtensionsDemo () :
+  reportWarning("Reporting a warn message from Xtend to the workflow");
+</pre><p>Console output:</p><pre class="programlisting">INFO WorkflowRunner running workflow: workflow/generator.oaw 
+...
+...
+INFO CompositeComponent ExtIssueReporter: setting up issue logging from within .ext and .xpt files 
+INFO WorkflowRunner workflow completed in 1101ms! 
+WARN WorkflowRunner Reporting a warn message from Xtend to the workflow 
+</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9786"></a>Naming extensions</h3></div></div></div><p>The Naming extensions are only usable with EMF models.</p><p>This one helps with names, qualified names and namespaces. A
+      qualified name is defined as the seuqence of primitive names of the
+      containment hierarchy of an element, seperated by a dot (e.g.
+      java.lang.String). In order for this to work, model elements are
+      expected to have a name attribute of type EString.<sup>[<a name="d0e9793" href="#ftn.d0e9793">9</a>]</sup></p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9796"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::naming</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9803"></a><code class="methodname">String namespace(Object
+          this)</code></h5></div></div></div><p>Returns the namespace, i.e. the qualified name minus the name
+          of the element itself.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>this</strong></span> - A model
+              element.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The qualified
+          namespace name of the element.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9822"></a><code class="methodname">String qualifiedName(Object
+          this)</code></h5></div></div></div><p>Returns the qualified name (dot separated) of an element by
+          evaluating its containment hierarchy.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>this</strong></span> - A model
+              element.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The qualified name
+          of the element.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9841"></a><code class="methodname">String loc(Object this)</code></h5></div></div></div><p>Tries to build a useful description of an element in the
+          model; very useful for error reporting.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>this</strong></span> - A model
+              element.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> Location information
+          about the element.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9860"></a><code class="methodname">Object findByName( Collection candidates, String
+          name )</code></h5></div></div></div><p>Searches the candidates for an element with a specific
+          name.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>candidates</strong></span> - A collection
+              of model elements.</p></li><li><p><span class="bold"><strong>name</strong></span> - The searched
+              element name.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The searched element
+          or null if no element with that name is contained in the candidates
+          collection.</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9884"></a>Globalvar extensions</h3></div></div></div><p>Sometimes you might want to share information within a
+      transformation process. One alternative is the use of GLOBALVAR
+      expressions, but this needs that the variables are configured in the
+      workflow.</p><p>The Globalvar extensions help to store and retrieve objects within
+      a transformation process.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9891"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::globalvar</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9898"></a><code class="methodname">Object storeGlobalVar(String s, Object
+          o)</code></h5></div></div></div><p>Stores an object.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>s</strong></span> - A key.</p></li><li><p><span class="bold"><strong>o</strong></span> - The object to store.
+              Pass null to remove the global var.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The object.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9922"></a><code class="methodname">Object getGlobalVar(String
+          s)</code></h5></div></div></div><p>Retrieves a stored object.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>s</strong></span> - The key under which
+              the object is stored.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The stored object or
+          null if no object was stored for the key.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e9941"></a><code class="methodname">Object removeGlobalVar(String
+          s)</code></h5></div></div></div><p>Removes a stored object from the global var store.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>s</strong></span> - The key under which
+              the object is stored.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The stored object or
+          null if no object was stored for the key.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9960"></a>Example</h4></div></div></div><p>Usage in Xtend:</p><pre class="programlisting">import metamodel;
+extension org::openarchitectureware::util::stdlib::io;
+extension org::openarchitectureware::util::stdlib::globalvar;
+
+demo (Model this) :
+  globalvarExtensionsDemo1() -&gt;
+  globalvarExtensionsDemo2()
+;
+
+globalvarExtensionsDemo1 () :
+    "Storing global var...".info() -&gt;
+    storeGlobalVar("msg", "oAW is cool stuff!");
+    
+globalvarExtensionsDemo2 () :
+    ("Getting message from global var: "+getGlobalVar("msg")).info();    
+</pre><p>Console output:</p><pre class="programlisting">INFO IOExtensions Storing global var... 
+INFO IOExtensions Getting message from global var: oAW is cool stuff! 
+</pre><p>This a simple example storing a string, but of course you can
+        store the result of any expression this way.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e9973"></a>Cloning extensions</h3></div></div></div><p>The cloning utilities help you to clone a model element and all
+      its children. The <code class="methodname">clone(Object)</code> function clones
+      a single object and its children, whereas the
+      <code class="methodname">clone(List)</code> clones a list of elements. The
+      semantics of cloning is as follows:</p><div class="itemizedlist"><ul type="disc"><li><p>the object passed in as a parameter is duplicated</p></li><li><p>all objects referenced via containment references are also
+          duplicated, recursively</p></li><li><p>the values of the attributes are duplicated</p></li><li><p>non-containing references to other objects are copied while
+          the target is not cloned (a reference to the original is created in
+          the new object)</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e9997"></a>Extension functions</h4></div></div></div><p>Extension
+        <code class="classname">org::openarchitectureware::util::stdlib::cloning</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10004"></a><code class="methodname">Object clone( Object original
+          )</code></h5></div></div></div><p>Clones an object.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>original</strong></span> - The object
+              that should be cloned.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The cloned
+          object.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10023"></a><code class="methodname">List clone( List l )</code></h5></div></div></div><p>Clones a list of objects.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p>l - Source list</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> A list of cloned
+          objects.</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10040"></a>Cross references extensions</h3></div></div></div><p>Sometimes there is the need to find objects that reference a
+      specific object. This extension helps to solve this recurring task. This
+      extension can only be used for EMF based models.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e10045"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::crossref</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10052"></a><code class="methodname">List[EObject] getReferencingObjects(EObject
+          target)</code></h5></div></div></div><p>Retrieves objects that reference a given object.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>target</strong></span> - The target
+              object.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> A list of objects
+          referencing the target.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e10071"></a>Example</h4></div></div></div><p>Usage in Xtend:</p><pre class="programlisting">extension org::openarchitectureware::util::stdlib::crossref;
+
+crossRefDemo (Model this) :
+    eAllContents.typeSelect(Datatype).dumpCrossReferences();
+    
+dumpCrossReferences (Datatype this) :
+    ("Number of cross references to datatype "+name+":"
+    + getReferencingObjects().size)
+    .info()
+    ;
+</pre><p>Console output:</p><pre class="programlisting">INFO IOExtensions Number of cross references to datatype Integer:1 
+INFO IOExtensions Number of cross references to datatype String:4 
+</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10082"></a>UID extensions</h3></div></div></div><p>Often it is required to create and retrieve unique identifiers for
+      objects through the transformation process. The UID extensions provide a
+      simple mechanism for this task. Unique identifiers are calculated from
+      the current system time plus an internal counter. The extensions
+      therefore only guarantee that the identifier stays the same within one
+      workflow execution, but will change through different runs. If you need
+      to have unique identifiers that stay the same over every generation run
+      (e.g. for Protected Regions Ids) then you need another mechanism.</p><p>If you are loading the model that assigns IDs to EObject (only for
+      EMF based models) the <code class="methodname">xmlId()</code> function will be
+      useful. Especially when using UML2 models this function will return a
+      unique and non-changing identifier for objects.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e10092"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::uid</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10099"></a><code class="methodname">cached String uid( Object o
+          )</code></h5></div></div></div><p>Retrieves objects that reference a given object.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>target</strong></span> - The target
+              object.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> A list of objects
+          referencing the target.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10118"></a><code class="methodname">cached String uid( Object o
+          )</code></h5></div></div></div><p>Creates a unique identifier for an object.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>target</strong></span> - The target
+              object.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> A list of objects
+          referencing the target.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10137"></a><code class="methodname">String xmlId (ecore::EObject
+          o)</code></h5></div></div></div><p>Retrieves an object's identifier. The object must be read from
+          a XMLResource.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>o</strong></span> - An object.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The object's id.
+          Returns null if the object was not load from a XMLResource.</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10156"></a>Mixin extensions</h3></div></div></div><p>These utilities help with mixin models. Mixin models are typically
+      simple models that provide additional information about model elements
+      in a source model of a transformation. They can be seen as
+      annotations.</p><p>These utilities expect that the mixin models have a very specific
+      structure: A root element, and then any subtree, where the elements have
+      a name attribute. Here's an example:</p><div class="figure"><a name="d0e10163"></a><p class="title"><b>Figure&nbsp;26.&nbsp;Mixin model example</b></p><div class="figure-contents"><div class="screenshot"><div class="mediaobject"><img src="images/09_stdlibReference/mixinmodel.png" alt="Mixin model example"></div></div></div></div><br class="figure-break"><p>The mixin elements are
+      <code class="classname">ControllingServiceRefSpec</code> and
+      <code class="classname">BundleSpec</code>. They are owned by the root element,
+      <code class="classname">Cbd2OsgiMixin</code>. The name is expected to contain
+      the qualified name of the element the annotation refers to. Once the
+      model is set up like this, and made available to a transformation using
+      the workflow's GLOBALVAR facilities, you can then use the extension
+      functions.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e10182"></a>Extension functions</h4></div></div></div><p>Extension:
+        <code class="classname">org::openarchitectureware::util::stdlib::mixin</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10189"></a><code class="methodname">Object getMandatoryMixin( Object mixinModel,
+          Object ctx, oaw::Type t )</code></h5></div></div></div><p>Returns the corresponding mixin element for the context
+          object; the mixin must be of type t and its name attribute must
+          correspond to the qualified name of the context. If none is found, a
+          workflow ERROR is raised and a null object is returned (so you can
+          call additional operations on it without getting a null evaluation
+          error). </p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>mixinModel</strong></span> - The root
+              element of the mixin model.</p></li><li><p><span class="bold"><strong>ctx</strong></span> - The context
+              object.</p></li><li><p>t - The type of the mixin model element.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The mixin model
+          element corresponding to ctx.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10216"></a><code class="methodname">Object getOptionalMixin( Object mixinModel,
+          Object ctx, oaw::Type t )</code></h5></div></div></div><p>Same as <code class="methodname">getMandatoryMixin()</code>, but does
+          not raise an error in case nothing is found.</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10225"></a>Tracing extensions</h3></div></div></div><p>The tracing extensions allow to create trace paths during your
+      model transformations. This is done by creating a trace model which
+      holds references from source to target elements. Traces must be added
+      explicitly to the transformation code.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e10230"></a>Extension functions</h4></div></div></div><p>Extension
+        <code class="classname">org::openarchitectureware::util::stdlib::tracing</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10237"></a><code class="methodname">Void createTrace( Object from, Object to, String
+          kind, String backKind )</code></h5></div></div></div><p>Creates a trace between two elements.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>from</strong></span> - Source
+              element.</p></li><li><p><span class="bold"><strong>to</strong></span> - Target
+              element.</p></li><li><p><span class="bold"><strong>kind</strong></span> - Name for the trace
+              from source to target.</p></li><li><p><span class="bold"><strong>backkind</strong></span> - Name for the
+              trace from target back to source.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> Nothing.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10271"></a><code class="methodname">Void createTrace( Object from, Object to, String
+          kind )</code></h5></div></div></div><p>Creates a trace between two elements.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>from</strong></span> - Source
+              element.</p></li><li><p><span class="bold"><strong>to</strong></span> - Target
+              element.</p></li><li><p><span class="bold"><strong>kind</strong></span> - Name for the
+              trace.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> Nothing.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10300"></a><code class="methodname">Void clearTrace()</code></h5></div></div></div><p>Clears all traces.</p><p><span class="bold"><strong>Parameters:</strong></span> none</p><p><span class="bold"><strong>Returns:</strong></span> Nothing.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10314"></a><code class="methodname">Object getSingleTraceTarget( Object from, String
+          kind )</code></h5></div></div></div><p>Finds the target of a trace. This function will report an
+          error if no trace for the source element to the target of the
+          specified kind can be found.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>from</strong></span> - Source
+              element.</p></li><li><p><span class="bold"><strong>kind</strong></span> - Trace kind
+              name.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span> The target element
+          of that trace.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="d0e10338"></a><code class="methodname">boolean hasTrace( Object from, String kind
+          )</code></h5></div></div></div><p>Proves if a trace of a specific kind exists for some
+          element.</p><p><span class="bold"><strong>Parameters:</strong></span></p><div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><strong>from</strong></span> - Source
+              element.</p></li><li><p><span class="bold"><strong>kind</strong></span> - Trace kind
+              name.</p></li></ul></div><p><span class="bold"><strong>Returns:</strong></span>
+          <code class="methodname">true</code>, if a trace of that kind exists for
+          the element.</p></div></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e10365"></a>Stdlib workflow components</h2></div></div></div><p>Besides the extensions described in the previous section oAW's
+    Stdlib provides some workflow components.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10370"></a>SystemCommand</h3></div></div></div><p>This component executes a system command.</p><div class="table"><a name="d0e10375"></a><p class="title"><b>Table&nbsp;27.&nbsp;Workflow component
+        org.openarchitectureware.util.stdlib.SystemCommand</b></p><div class="table-contents"><table summary="Workflow component&#xA;        org.openarchitectureware.util.stdlib.SystemCommand" cellspacing="0" cellpadding="10" border="0" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col><col><col><col></colgroup><thead><tr><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Property</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Type</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Mandatory</th><th style="border-bottom: 2 solid #000000; " align="center">Description</th></tr></thead><tbody><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">command</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">yes</td><td style="border-bottom: 2 solid #000000; ">The command to execute.</td></tr><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">directory</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">no</td><td style="border-bottom: 2 solid #000000; ">Execution directory.</td></tr><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">arg</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">no</td><td style="border-bottom: 2 solid #000000; ">(multiple) command arguments</td></tr><tr><td style="border-right: 2 solid #000000; ">env</td><td style="border-right: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; ">no</td><td style="">(multiple) additional environment entries. Format:
+              [key],[value]</td></tr></tbody></table></div></div><br class="table-break"><p><span class="bold"><strong>Example:</strong></span></p><pre class="programlisting">&lt;component class="oaw.util.stdlib.SystemCommand"&gt;
+  &lt;directory value="src-gen"/&gt;
+  &lt;command value="sh"/&gt;
+  &lt;arg value="processdot.sh"/&gt;
+&lt;/component&gt;
+</pre><p><span class="bold"><strong>Console output:</strong></span></p><pre class="programlisting">1639 INFO  - Running command '[sh, processdot.sh]' in directory [absolutepath] ...
+1667 INFO  - processing shape_box.dot ...
+2597 INFO  - processing shape_polygon.dot ...
+...
+3564 INFO  - Execution of command was successful.
+</pre><p>Windows tip:</p><p>When executing a command on windows this is typically done with
+      the cmd as command value. It is important that the command terminates,
+      therefore the argument /c must be appended as arg value.<sup>[<a name="d0e10444" href="#ftn.d0e10444">10</a>]</sup></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10452"></a>SlotCopier</h3></div></div></div><p>This component copies an element from one slot to another. The
+      slot content is not cloned.</p><div class="table"><a name="d0e10458"></a><p class="title"><b>Table&nbsp;28.&nbsp;Workflow component
+          org.openarchitectureware.util.stdlib.SlotCopier</b></p><div class="table-contents"><table summary="Workflow component&#xA;          org.openarchitectureware.util.stdlib.SlotCopier" cellspacing="0" cellpadding="10" border="0" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col><col><col><col></colgroup><thead><tr><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Property</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Type</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Mandatory</th><th style="border-bottom: 2 solid #000000; " align="center">Description</th></tr></thead><tbody><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">fromSlot</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">yes</td><td style="border-bottom: 2 solid #000000; ">Source slot name.</td></tr><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">toSlot</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">yes</td><td style="border-bottom: 2 solid #000000; ">Destination slot name.</td></tr><tr><td style="border-right: 2 solid #000000; ">removeTopLevelList</td><td style="border-right: 2 solid #000000; ">boolean</td><td style="border-right: 2 solid #000000; ">no</td><td style="">If true the source slot must contain a list and the top
+                level list is removed (i.e. the first element from the list is
+                copied to the destination slot), otherwise it is not
+                removed.</td></tr></tbody></table></div></div><p><br class="table-break"><span class="bold"><strong>Example:</strong></span></p><pre class="programlisting">&lt;component class="oaw.util.stdlib.SlotCopier"&gt;
+    &lt;fromSlot value="model"/&gt;
+    &lt;toSlot value="target"/&gt;
+&lt;/component&gt;
+</pre><p><span class="bold"><strong>Console output:</strong></span></p><pre class="programlisting">INFO SlotCopier copying org.eclipse.emf.ecore.impl.DynamicEObjectImpl@1fdbef 
+  (eClass: org.eclipse.emf.ecore.impl.EClassImpl@fc5b01 (name: Model) (instanceClassName: null) 
+  (abstract: false, interface: false)) 
+  [org.eclipse.emf.ecore.impl.DynamicEObjectImpl] 
+</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10513"></a>SlotListAdder</h3></div></div></div><p>This component copies an element from one slot to a list contained
+      in another slot.</p><div class="table"><a name="d0e10518"></a><p class="title"><b>Table&nbsp;29.&nbsp;Workflow component
+        org.openarchitectureware.util.stdlib.SlotListAdder</b></p><div class="table-contents"><table summary="Workflow component&#xA;        org.openarchitectureware.util.stdlib.SlotListAdder" cellspacing="0" cellpadding="10" border="0" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col><col><col><col></colgroup><thead><tr><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Property</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Type</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Mandatory</th><th style="border-bottom: 2 solid #000000; " align="center">Description</th></tr></thead><tbody><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">modelSlot</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">yes</td><td style="border-bottom: 2 solid #000000; ">Source slot name.</td></tr><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">listSlot</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">yes</td><td style="border-bottom: 2 solid #000000; ">Target slot name. This slot contains a list of
+              elements.</td></tr><tr><td style="border-right: 2 solid #000000; ">uniqueNames</td><td style="border-right: 2 solid #000000; ">boolean</td><td style="border-right: 2 solid #000000; ">no</td><td style="">If true, names have to be unique, otherwise not. Requires
+              that modelSlot contains an EObject.</td></tr></tbody></table></div></div><br class="table-break"><p><span class="bold"><strong>Example:</strong></span></p><p>This example adds the content of slot 'model' to the slot
+      'targetList'. The slot 'targetList' does not contain anything at the
+      time of execution.</p><pre class="programlisting">&lt;component class="oaw.util.stdlib.SlotListAdder"&gt;
+    &lt;modelSlot value="model"/&gt;
+    &lt;listSlot value="targetList"/&gt;
+&lt;/component&gt;
+</pre><p><span class="bold"><strong>Console output:</strong></span></p><pre class="programlisting">INFO CompositeComponent SlotListAdder: adding contents of slot 'model' to the list of stuff in 'targetList' 
+...
+...
+INFO WorkflowRunner workflow completed in 1503ms! 
+WARN WorkflowRunner 'targetList' is empty, creating a new list. [org.openarchitectureware.util.stdlib.SlotListAdder@7536e7]  
+</pre><p>Note that the warn messages will appear after the workflow
+      finished, since they are reported as a workflow warn issue.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e10578"></a>SlotPrinter</h3></div></div></div><p>This component prints a workflow context slot content to the log.
+      This can be useful for debugging purposes.</p><div class="table"><a name="d0e10583"></a><p class="title"><b>Table&nbsp;30.&nbsp;Workflow component
+        org.openarchitectureware.util.stdlib.SlotPrinter</b></p><div class="table-contents"><table summary="Workflow component&#xA;        org.openarchitectureware.util.stdlib.SlotPrinter" cellspacing="0" cellpadding="10" border="0" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col><col><col><col></colgroup><thead><tr><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Property</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Type</th><th style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; " align="center">Mandatory</th><th style="border-bottom: 2 solid #000000; " align="center">Description</th></tr></thead><tbody><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">slotName</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">yes</td><td style="border-bottom: 2 solid #000000; ">The name of a slot whose content should be
+              dumped.</td></tr><tr><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">message</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; border-bottom: 2 solid #000000; ">no</td><td style="border-bottom: 2 solid #000000; ">An optional message that will be prefixed to the log
+              output.</td></tr><tr><td style="border-right: 2 solid #000000; ">level</td><td style="border-right: 2 solid #000000; ">String</td><td style="border-right: 2 solid #000000; ">no</td><td style="">The log level for the message. Valid values are TRACE,
+              DEBUG, INFO, WARN.</td></tr></tbody></table></div></div><br class="table-break"><p><span class="bold"><strong>Example:</strong></span></p><pre class="programlisting">&lt;component class="oaw.util.stdlib.SlotPrinter"&gt;
+    &lt;slotName value="model"/&gt;
+    &lt;message value="DUMP"/&gt;
+    &lt;level value="INFO"/&gt;
+&lt;/component&gt;
+</pre><p><span class="bold"><strong>Console output:</strong></span></p><pre class="programlisting">INFO SlotPrinter DUMP: (slot: model)org.eclipse.emf.ecore.impl.DynamicEObjectImpl@d22ddb 
+  (eClass: org.eclipse.emf.ecore.impl.EClassImpl@fe0ce9 (name: Model) (instanceClassName: null) 
+  (abstract: false, interface: false)) 
+</pre></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e9793" href="#d0e9793">9</a>] </sup>It is intended that the uml2ecore utility can add such a name
+          attribute to every meta class automatically.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e10444" href="#d0e10444">10</a>] </sup>See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.ss64.com/nt/cmd.html" target="_top">http://www.ss64.com/nt/cmd.html</a>,
+          <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.java-forum.org/de/viewtopic.php?p=469059" target="_top">http://www.java-forum.org/de/viewtopic.php?p=469059</a></p></div></div></div></body></html>

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<project name="de.genesez.build.release" basedir=".." default="">
+
+	<property file="${project.build.dir}/release.properties" />
+
+	<!-- Append the build number when running under hudson -->
+	<if>
+		<and>
+			<isset property="env.BUILD_NUMBER" />
+		</and>
+		<then>
+			<!-- buildnumber file="${build.basedir}/build.number" / -->
+			<property name="build.number" value="${env.BUILD_NUMBER}"/>
+		</then>
+	</if>
+
+	<condition property="plugin.version"
+		value="${release}.${build.number}"
+		else="${release}">
+		<isset property="build.number" />
+	</condition>
+	
+	<property name="project.name" value="${ant.project.name}" />
+	<property name="plugin.name" value="${project.name}_${plugin.version}"/>
+	<property name="plugin.jar" value="${plugin.name}.jar"/>
+
+	<path id="build.plugins">
+		<path refid="build.metamodels" />
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.core" />
+		</dirset>
+		<path refid="build.platforms" />
+		<path refid="build.adapter" />
+	</path>
+
+	<path id="build.adapter">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.adapter.*" />
+		</dirset>
+	</path>
+
+	<path id="build.platforms">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.platforms.*" />
+		</dirset>
+	</path>
+
+	<path id="build.metamodels">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.metamodel" />
+			<include name="${prefix}.testing" />
+		</dirset>
+	</path>
+
+	<path id="build.features">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.feature" />
+		</dirset>
+	</path>
+
+	<path id="build.examples">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.example.*" />
+		</dirset>
+	</path>
+
+	<path id="build.projects">
+		<path refid="build.features" />
+		<path refid="build.plugins" />
+	</path>
+
+</project>

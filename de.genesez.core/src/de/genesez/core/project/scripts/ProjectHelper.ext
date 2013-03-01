@@ -1,0 +1,8 @@
+import project;
+
+extension de::genesez::core::project::Extensions reexport;
+
+String toManifestString(List[String] bundles):
+	bundles.size == 1 ?
+		bundles.first() :
+		bundles.select(e|e != bundles.first()).toManifestString() + ",\n " + bundles.first();

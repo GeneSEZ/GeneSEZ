@@ -1,0 +1,228 @@
+<?xml version="1.0" ?>
+
+<project name="de.genesez.testing" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+
+	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+
+	<condition property="build.display"
+		value="${env.DISPLAY}"
+		else=":1">
+		<isset property="env.DISPLAY" />
+	</condition>
+
+	<!-- Import project related properties -->
+	<property file="build/build.properties" />
+
+	<!-- Set the classpath -->
+	<path id="de.genesez.testing.classpath">
+		<pathelement location="${bin.dir}" />
+		<pathelement location="${workflow.dir}" />
+		<pathelement location="${model.generate.dir}" />
+		<pathelement path="${build.basedir}/de.genesez.metamodel/${bin.dir}" />
+		<pathelement path="${build.basedir}/de.genesez.metamodel/metamodel" />
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+	</path>
+
+	<!-- Task definition section -->
+
+	<taskdef name="oaw.workflow"
+		classname="org.openarchitectureware.workflow.ant.WorkflowAntTask"
+		classpathref="de.genesez.testing.classpath" />
+
+	<!-- Public target section -->
+
+	<target name="build"
+		description="Build de.genesez.testing"
+		depends="testing.compile">
+	</target>
+
+	<target name="createjar"
+		description="Create the plugin jar for de.genesez.testing"
+		depends="build">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${basedir}">
+				<include name="plugin.xml"/>
+				<include name="${model.generate.dir}/*.ecore"/>
+			</fileset>
+			<fileset dir="${bin.dir}" includes="**/*" />
+			<fileset dir="${workflow.dir}" includes="**/*" />
+		</jar>
+	</target>
+
+	<target name="clean"
+		description="Clean de.genesez.testing">
+		<delete includeemptydirs="true" failonerror="false">
+			<!-- remove all binary files -->
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${dist.dir}" includes="*.jar" />
+			<!-- remove generated java code -->
+			<fileset dir="${ecore2java.path}">
+				<include name="${ecore.base}/**/*" />
+			</fileset>
+			<!-- remove ecore model -->
+			<fileset dir="${model.generate.dir}">
+				<include name="*.ecore" />
+			</fileset>
+			<!-- remove exported magic draw models -->
+			<fileset dir="${model.export.dir}">
+				<include name="*.uml" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- Private target section -->
+
+	<target name="testing.uml2ecore.startx" unless="env.DISPLAY">
+		<exec executable="${STARTPROC_BIN}" osfamily="unix">
+			<arg value="--start" />
+			<arg value="--background" />
+			<arg value="--exec" />
+			<arg value="${XVFB_BIN}" />
+			<arg value="--" />
+			<arg value="${build.display}" />
+			<arg value="-screen" />
+			<arg value="0" />
+			<arg value="800x600x8" />
+		</exec>
+	</target>
+
+	<target name="testing.uml2ecore.endx" unless="env.DISPLAY">
+		<exec executable="${KILLPROC_BIN}" osfamily="unix">
+			<arg value="--stop" />
+			<arg value="--exec" />
+			<arg value="${XVFB_BIN}" />
+		</exec>
+	</target>
+
+	<target name="testing.uml2ecore"
+		description="Export the GeneSEZ testing from Magic Draw to EMF XMI" >
+		<parallel>
+			<antcall target="testing.uml2ecore.startx" />
+			<sequential>
+				<sleep seconds="5" />
+				<exec executable="${EXPORTEMFUML2}" osfamily="unix">
+					<env key="DISPLAY" value="${build.display}" />
+					<arg value="project_file=${basedir}/${magicdraw.file}" />
+					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="load_all_modules=true" />
+					<arg value="check_time=true" />
+				</exec>
+				<exec executable="${EXPORTEMFUML2}.exe" osfamily="windows">
+					<env key="DISPLAY" value="${build.display}" />
+					<arg value="project_file=${basedir}/${magicdraw.file}" />
+					<arg value="destination_dir=${basedir}/${model.export.dir}" />
+					<arg value="load_all_modules=true" />
+					<arg value="check_time=true" />
+				</exec>
+				<antcall target="testing.uml2ecore.endx" />
+			</sequential>
+		</parallel>
+		<if>
+			<available file="${uml2.file}"/>
+			<then>
+				<java classname="org.openarchitectureware.workflow.WorkflowRunner"
+					classpathref="de.genesez.testing.classpath"
+					fork = "true"
+					dir="${basedir}">
+					<arg value="${oaw.workflow.file}" />
+					<arg value="-pbaseDir=${basedir}" />
+					<arg value="--ant" />
+				</java>
+			</then>
+			<else>
+				<echo message="File ${uml2.file} not available"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="testing.ecore2java"
+		description=""
+		if="eclipse.running">
+		<if>
+			<available file="${ecore.file}"/>
+			<then>
+				<emf.Ecore2Java model="${ecore.file}"
+					genModel="${genmodel.file}"
+					reconcileGenModel="reload"			
+					generateJavaCode="true"
+					generateModelProject="false"
+					generateEditProject="false"
+					generateEditorProject="false"
+					modelProject="${basedir}"
+					modelProjectFragmentPath="${ecore2java.path}">
+					<arg line="-package ${ecore.package}" />
+				</emf.Ecore2Java>
+			</then>
+			<else>
+				<echo message="File ${ecore.file} not available"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="testing.compile"
+		description=""
+		depends="testing.uml2ecore,testing.ecore2java.internal,testing.ecore2java.external">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.testing.classpath"
+			target="${target}"
+			source="${source}"
+			debug="on" />
+	</target>
+
+	<target name="testing.ecore2java.internal"
+		description=""
+		if="eclipse.running">
+		<echo>Eclipse is running...</echo>
+		<antcall target="testing.ecore2java" />
+	</target> 
+
+	<target name="testing.ecore2java.external"
+		description=""
+		unless="eclipse.running">
+		<echo>Eclipse is not running...</echo>
+		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="testing.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+			<arg value="-Dbuild.controlled=${build.controlled}" />
+		</exec>
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="testing.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+			<arg value="-Dbuild.controlled=${build.controlled}" />
+		</exec>
+	</target> 
+
+</project>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.core" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+
+	<available file="${build.basedir}/de.genesez.build" type="dir" property="de.genesez.build.available" />
+	<fail unless="de.genesez.build.available" message="Please make sure that ${build.basedir}/de.genesez.build is available" />
+
+	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+
+	<!-- Import project related properties -->
+	<property file="build/build.properties" />
+
+	<!-- Set the classpath -->
+	<path id="de.genesez.core.classpath">
+		<path refid="Plug-in Dependencies.libraryclasspath" />
+		<fileset dir="${ECLIPSE_HOME}/plugins">
+			<include name="org.eclipse.ui_*.jar" />
+			<include name="org.eclipse.swt*.jar" />
+			<include name="org.eclipse.swt_*.jar" />
+			<!-- just for make compile run -->
+			<include name="org.eclipse.swt.gtk.linux.x86_*.jar" />
+			<include name="org.eclipse.jface_*.jar" />
+			<include name="org.eclipse.core.commands_*.jar" />
+			<include name="org.eclipse.ui.workbench_*.jar" />
+			<include name="org.eclipse.core.runtime_*.jar" />
+			<include name="org.eclipse.osgi_*.jar" />
+			<include name="org.eclipse.equinox.common_*.jar" />
+			<include name="org.eclipse.core.jobs_*.jar" />
+			<include name="org.eclipse.runtime.comatibility.registry_*/runtime_registry_comatibility.jar" />
+			<include name="org.eclipse.equinox.registry_*.jar" />
+			<include name="org.eclipse.equinox.preferences_*.jar" />
+			<include name="org.eclipse.core.contenttype_*.jar" />
+			<include name="org.eclipse.equinox.app_*.jar" />
+			<include name="org.eclipse.ui.ide_*.jar" />
+			<include name="org.eclipse.core.resources_*.jar" />
+		</fileset>
+		<fileset dir="${OAW_PLUGIN_DIR}">
+			<include name="org.antlr_3.0.0/*.jar" />
+			<include name="org.openarchitectureware.base_4.3.*.jar" />
+			<include name="org.openarchitectureware.xtext.core_4.3.*.jar" />
+			<include name="org.openarchitectureware.xtext.core.base_4.3.*.jar" />
+			<include name="org.openarchitectureware.xtext.generator_4.3.*.jar" />
+		</fileset>
+		<pathelement location="${workflow.dir}" />
+		<pathelement path="${src.dir}"/>
+	</path>
+	
+	<!-- Public target section -->
+
+	<target name="build"
+		description="Build de.genesez.core"
+		depends="core.builddsl,core.compile" >
+	</target>
+
+	<target name="createjar"
+		description="Create the plugin jar for de.genesez.core"
+		depends="build">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/${plugin.jar}"
+			compress="true"
+		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${basedir}">
+				<include name="${icons.dir}/**"/>
+				<include name="${schema.dir}/**"/>
+				<include name="plugin.xml"/>
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="${project.path}/*.ext"/>
+				<include name="${project.path}/*.chk"/>
+				<include name="${project.path}/parser/*.ext"/>
+				<include name="${project.path}/scripts/**"/>
+				<include name="${project.path}/templates/**"/>
+				<include name="${project.path}/workflow/**"/>
+			</fileset>
+			<fileset dir="${src-gen.dir}">
+				<include name="${project.path}/*.ecore"/>
+				<include name="${project.path}/*.xmi"/>
+				<include name="${project.path}/*.ext"/>
+				<include name="${project.path}/*.chk"/>
+				<include name="${project.path}/parser/*.ext"/>
+				<include name="${project.path}/parser/*.oaw"/>
+				<include name="${project.path}/parser/*.g"/>
+				<include name="${project.path}/parser/*.tokens"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="clean"
+		description="Clean de.genesez.core">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${dist.dir}" includes="*.jar" />
+			<fileset dir="${src.dir}/${project.path}">
+				<include name="*.ext"/>
+				<include name="*.chk"/>
+			</fileset>
+			<fileset dir="${parser.dir}" />
+			<fileset dir="${src-gen.dir}" excludes="**/*genmodel" />
+		</delete>
+	</target>
+
+	<!-- Private target section -->
+
+	<target name="core.builddsl">
+		<java classname="org.openarchitectureware.workflow.WorkflowRunner"
+			classpathref="de.genesez.core.classpath"
+			fork = "true"
+			dir="${basedir}">
+			<arg value="${oaw.workflow.file}" />
+			<arg value="-pbaseDir=${basedir}" />
+			<arg value="--ant" />
+		</java>
+	</target>
+
+	<target name="core.ecore2java"
+		description=""
+		if="eclipse.running">
+		<if>
+			<available file="${ecore.file}"/>
+			<then>
+				<emf.Ecore2Java model="${ecore.file}"
+					genModel="${genmodel.file}"
+					reconcileGenModel="reload"
+					generateJavaCode="true"
+					generateModelProject="false"
+					generateEditProject="false"
+					generateEditorProject="false"
+					modelProject="${basedir}"
+					modelProjectFragmentPath="${ecore2java.path}">
+					<arg line="-package ${ecore.package}" />
+				</emf.Ecore2Java>
+			</then>
+			<else>
+				<echo message="File ${ecore.file} not available"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="core.compile"
+		depends="core.ecore2java.internal,core.ecore2java.external">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src-gen.dir}:${src.dir}" 
+			destdir="${bin.dir}"
+			classpathref="de.genesez.core.classpath"
+			target="${target}"
+			source="${source}"
+			debug="on" />
+	</target>
+
+	<target name="core.ecore2java.internal"
+		description=""
+		if="eclipse.running">
+		<echo>Eclipse is running...</echo>
+		<antcall target="core.ecore2java" />
+	</target>
+
+	<target name="core.ecore2java.external"
+		description=""
+		unless="eclipse.running">
+		<echo>Eclipse is not running...</echo>
+		<mkdir dir="${workspace.location}" />
+		<exec executable="${ECLIPSE_HOME}/eclipsec.exe" osfamily="windows">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="core.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+			<arg value="-Dbuild.controlled=${build.controlled}" />
+		</exec>
+		<exec executable="${ECLIPSE_HOME}/eclipse" osfamily="unix">
+			<arg value="-noSplash" />
+			<arg value="-configuration" />
+			<arg value="${configuration.location}" />
+			<arg value="-data" />
+			<arg value="${workspace.location}" />
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${build.file}" />
+			<arg value="core.ecore2java" />
+			<arg value="-Dbuild.basedir=${build.basedir}" />
+			<arg value="-Dbuild.controlled=${build.controlled}" />
+		</exec>
+	</target>
+
+</project>

@@ -1,0 +1,36 @@
+«REM»
+	Template for creating generator projects
+	
+	@author	Gerrit Beine
+	@date	2010/03/07
+«ENDREM»
+
+«REM» import project meta model «ENDREM»
+«IMPORT project»
+
+«EXTENSION de::genesez::core::project::scripts::ProjectHelper»
+
+«DEFINE main FOR Generator»
+«EXPAND Generator::manifest FOR manifest-»
+«EXPAND Generator::file FOREACH files-»
+«ENDDEFINE»
+
+«DEFINE manifest FOR Manifest»
+«FILE "META-INF/MANIFEST.MF" GENERATOR-»
+Bundle-SymbolicName: «name»
+Bundle-Name: «name»
+Bundle-Version: 0.1
+Bundle-ManifestVersion: 2
+Manifest-Version: 1.0
+Eclipse-LazyStart: false
+«IF bundles.size > 0 -»
+Require-Bundle: «bundles.toManifestString()»
+«ENDIF»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE file FOR File»
+«FILE name GENERATOR-»
+«content»
+«ENDFILE»
+«ENDDEFINE»

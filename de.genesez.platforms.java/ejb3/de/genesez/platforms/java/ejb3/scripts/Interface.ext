@@ -1,0 +1,83 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::common::log::Log;
+
+MClassifier addMessageListener(MClassifier this) :
+	stereotype.name.exists(e|e == "ejb3MessageDrivenBean")
+		? realization.add(createExternal(this.model(), "MessageListener"))
+		: "";
+
+/**
+  *	adds a business interface for the session bean if stereotype "ejb3Local" or "ejb3Remote" is used 
+  *	(see further conditions beyond)
+  *	for using an own business interface which is also modelled, annotate the interface with the named stereotypes
+  *	and DO NOT use these stereotypes at the session bean class
+  *
+  * the method checks if an interface with a given name in the "ejb3Local" or "ejb3Remote" stereotype exists and do not
+  *	create a new one (modelled interface over generated)
+  */
+Void addSessionBeanInterfaces(MClassifier this) :
+	isRemoteInterfaceNeeded()
+		? ( 
+			this.hasUtilizableValue("ejb3Remote", "name")
+				? (
+					!allClassifiers(this.model()).typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Remote", "name"))
+						? (	
+							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
+								this.realization.add(interface) ->
+								interface.addRemoteStereotype("") ->
+								this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+						)
+						: ""
+				)
+				: (
+					let interface = createInterface(this.package(), asTypeName()+"Remote", asTypeName()+"Remote") : 
+						this.realization.add(interface) ->
+						interface.addRemoteStereotype("") ->
+						interface.model().externalTypes.remove("I"+asTypeName()+"Remote") ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+				)
+		) 
+		: "" ->
+	isLocalInterfaceNeeded()
+		? (
+			this.hasUtilizableValue("ejb3Local", "name")
+				? (	
+					!allClassifiers(this.model()).typeSelect(MInterface).exists(e|e.name == this.getTaggedValue("ejb3Local", "name"))
+						? (	
+							let interface = createInterface(this.package(), this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
+								this.realization.add(interface) ->
+								interface.addLocalStereotype("") ->
+								this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+						)
+						: ""
+				)
+				: (
+					let interface = createInterface(this.package(), asTypeName()+"Local", asTypeName()+"Local") : 
+						this.realization.add(interface) ->
+						interface.addLocalStereotype("") ->
+						interface.model().externalTypes.remove("I"+asTypeName()+"Local") ->
+						this.operation.select(e|e.visibility == "public" && !e.isConstructor()).cloneOperation(interface)
+				)
+		)
+		: "";
+
+/**
+ *	checks whether a remote session bean interface should be created
+ */		
+boolean isRemoteInterfaceNeeded(MClassifier this) :
+	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Remote")
+		? true
+		: false;
+
+/**
+ *	checks whether a local session bean interface should be created
+ */	
+boolean isLocalInterfaceNeeded(MClassifier this) :
+	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Local")
+		? true
+		: false;

@@ -1,0 +1,63 @@
+/**
+ * conversion for QF-Test
+ *
+ * @author      gerrit beine
+ * @date        2008-08-04
+ */
+
+// uses GeneSEZ testing metamodel
+import gtesting;
+
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::qftest::scripts::Naming;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the full qualified name of a classifier
+ * @param       spearator       the separator to use between the names
+ * @return      string representation of the full qualified name
+ */
+String fullFileName(TTestSuite this) :
+        dirPath() + fileSeparator() + asFileName();
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        file names, file paths + directory paths
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the path of a classifier based on it's namespace
+ * @return      the path of the classifier
+ */
+String dirPath(TTestSuite this) :
+        owningPackage.fullQualifiedNameSep( dirSeparator() );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+String fullQualifiedNameSep(TPackage this, String base, String separator) : 
+	base == ""
+		? fullQualifiedNameSep( separator )
+		: base + separator + fullQualifiedNameSep( separator );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	mapping to java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the package path of a classifier
+ * @param	pkg			a package
+ * @param	separator	a separator used to build the package path
+ * @return	string representation of the package path
+ */
+String fullQualifiedNameSep(TPackage pkg, String separator) : 
+	JAVA de.genesez.platforms.qftest.Conversion.getFullQualifiedName(de.genesez.testing.gtesting.TPackage, java.lang.String);
+
