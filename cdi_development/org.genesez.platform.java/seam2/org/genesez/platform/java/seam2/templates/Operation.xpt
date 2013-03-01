@@ -1,0 +1,177 @@
+«REM»
+	JBoss Seam Framework cartridge (version 2.1.2)
+	
+	description:
+	The template is based on the ejb cartridge and evaluates several stereotypes
+	to generate annotations of JBoss Seam. Its uses aspects around the methhods
+	of the ejb annotations in the Xpand files of the ejb3 cartridge.
+	
+	@author		andre pflueger
+	@date		2008/10/29
+	@version 	1.0
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::platform::common::log::Log»
+
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::seam2::scripts::Operation»
+«EXTENSION org::genesez::platform::java::seam2::scripts::Naming»
+
+«REM»
+	evaluates the stereotypes for operations only 
+«ENDREM»
+«DEFINE Annotation FOR MOperation-»
+	«EXPAND Element::Bijection-»
+	«EXPAND _ContextDemarcation-»
+	«EXPAND Element::Asynchronity-»
+	«EXPAND Element::Remoting-»
+	«EXPAND Element::Restrict-»
+	«EXPAND Element::EntityPermission-»
+	«EXPAND Element::UserSecurity-»
+	«EXPAND Element::RoleSecurity-»
+	«IF hasStereotype("seam2AroundInvoke")-»
+		@AroundInvoke
+	«ENDIF-»	
+	«EXPAND Element::Transactional-»	
+	«EXPAND Element::ReadOnly-»
+	«IF hasStereotype("seam2Unwrap")-»
+		@Unwrap
+	«ENDIF-»
+	«EXPAND _Factory-»
+	«EXPAND _Lifecycle-»
+	«EXPAND _Observer-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Factory
+«ENDREM»
+«DEFINE _Factory FOR MOperation-»
+	«IF hasStereotype("seam2Factory") && this.classifier.metaType != MInterface -»
+		@Factory(autoCreate=«getTaggedValue("seam2Factory", "autoCreate")-»
+		«IF hasUtilizableValue("seam2Factory", "scope") && !hasTaggedValue("seam2Factory", "scope", "UNSPECIFIED")-»
+			, scope(ScopeType.«getTaggedValue("seam2Factory", "scope")-»
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2Factory", "value")-»
+			, value="«projectNamespace()-»«getTaggedValue("seam2Factory", "value")-»"
+		«ENDIF-»)
+	«ENDIF»	
+«ENDDEFINE»
+	
+«REM»
+	evaluates the stereotype seam2Lifecycle
+«ENDREM»
+«DEFINE _Lifecycle FOR MOperation-»
+	«IF hasStereotype("seam2Lifecycle") && this.classifier.metaType != MInterface-»
+		«IF hasTaggedValue("seam2Lifecycle", "create", "true")-»
+			@Create
+		«ENDIF-»
+		«IF hasTaggedValue("seam2Lifecycle", "destroy", "true")-»
+			@Destroy
+			@Remove
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	evaluates the stereotype seam2Observer
+	TODO: adding of observerValuePrefix should be done in model2model
+«ENDREM»
+«DEFINE _Observer FOR MOperation-»
+	«IF hasStereotype("seam2Observer") && this.classifier.metaType != MInterface-»
+		@Observer(create=«getTaggedValue("seam2Observer", "create")-»,
+		«IF hasUtilizableValue("seam2Observer", "value")-»
+			value={«FOREACH getTaggedValueList("seam2Observer", "value") AS value SEPARATOR ","-»
+				"«IF !value.contains(".")-»«observerValuePrefix()-»«ENDIF-»«value-»"
+			«ENDFOREACH-»}		
+		«ENDIF-»)
+	«ENDIF-»	
+«ENDDEFINE»
+
+«REM»
+	evaluates the context demarcation stereotypes
+«ENDREM»
+«DEFINE _ContextDemarcation FOR MOperation-»
+	«IF hasStereotype("seam2Begin") && this.classifier.metaType != MInterface-»
+		@Begin(nested=«getTaggedValue("seam2Begin", "nested")-»
+		«IF hasUtilizableValue("seam2Begin", "flushMode") || !hasTaggedValue("seam2Begin", "flushMode", "AUTO")-»
+			, flushMode=FlushModeType.«getTaggedValue("seam2Begin", "flushMode")-»
+		«ENDIF-»
+		«IF hasTaggedValue("seam2Begin", "join", "true")-»
+			, join=«getTaggedValue("seam2Begin", "join")-»
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2Begin", "pageflow")-»
+			, pageflow="«getTaggedValue("seam2Begin", "pageflow")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2Begin", "ifOutcome")-»
+			, ifOutcome={«FOREACH getTaggedValueList("seam2Begin", "ifOutcome") AS values SEPARATOR ","-»
+				"«values-»"
+			«ENDFOREACH-»}
+		«ENDIF-»)		
+	«ENDIF-»	
+	«IF hasStereotype("seam2End") && this.classifier.metaType != MInterface-»
+		@End(beforeRedirect=«getTaggedValue("seam2End", "beforeRedirect")-»
+		«IF hasUtilizableValue("seam2End", "ifOutcome")-»
+			, ifOutcome={«FOREACH getTaggedValueList("seam2End", "ifOutcome") AS values SEPARATOR ","-»
+				"«values-»"
+			«ENDFOREACH-»}
+		«ENDIF-»)	
+	«ENDIF-»		
+	«IF hasStereotype("seam2StartTask") && this.classifier.metaType != MInterface-»
+		@StartTask(flushMode=FlushModeType.«getTaggedValue("seam2StartTask", "flushMode")-»
+		«IF hasUtilizableValue("seam2StartTask", "id")-»
+			, id="«getTaggedValue("seam2StartTask", "id")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2StartTask", "pageflow")-»
+			, pageflow="«getTaggedValue("seam2StartTask", "pageflow")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2StartTask", "taskIdParameter") || hasTaggedValue("seam2StartTask", "taskIdParameter", "taskId")-»
+			, taskIdParameter="«getTaggedValue("seam2StartTask", "taskIdParameter")-»"
+		«ENDIF-»
+	«ENDIF-»	
+	«IF hasStereotype("seam2BeginTask") && this.classifier.metaType != MInterface-»
+		@BeginTask(flushMode=FlushModeType.«taggedValue.selectFirst(e|e.tag.name == "flushMode").value-»
+		«IF hasUtilizableValue("seam2BeginTask", "id")-»
+			, id="«getTaggedValue("seam2BeginTask", "id")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2BeginTask", "pageflow")-»
+			, pageflow="«getTaggedValue("seam2BeginTask", "pageflow")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2BeginTask", "taskIdParameter") || hasTaggedValue("seam2BeginTask", "taskIdParameter", "taskId")-»
+			, taskIdParameter="«getTaggedValue("seam2BeginTask", "taskIdParameter")-»"
+		«ENDIF-»
+	«ENDIF-»	
+	«IF hasStereotype("seam2EndTask") && this.classifier.metaType != MInterface-»
+		@EndTask(beforeRedirect=«getTaggedValue("seam2EndTask", "beforeRedirect")-»
+		«IF hasUtilizableValue("seam2EndTask", "ifOutcome")-»
+			, ifOutcome={«FOREACH getTaggedValueList("seam2EndTask", "ifOutcome") AS values SEPARATOR ","-»
+				"«values-»"
+			«ENDFOREACH-»}
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2EndTask", "transition")-»
+			, transition="«getTaggedValue("seam2EndTask", "transition")-»")
+		«ENDIF-»)	
+	«ENDIF-»	
+	«IF hasStereotype("seam2ContextDemarcation") && this.classifier.metaType != MInterface-»
+		«IF hasUtilizableValue("seam2ContextDemarcation", "createProcessDefinition")-»
+			@CreateProcess(definition="«getTaggedValue("seam2ContextDemarcation", "createProcessDefinition")-»")
+		«ENDIF»
+		«IF hasUtilizableValue("seam2ContextDemarcation", "resumeProcessIdParameter")-»
+			@ResumeProcess
+			«IF !hasTaggedValue("seam2ContextDemarcation", "resumeProcessIdParameter", "processId")-»
+				(processIdParameter="«getTaggedValue("seam2ContextDemarcation", "resumeProcessIdParameter")-»")
+			«ENDIF-»
+		«ENDIF-»
+		«IF hasUtilizableValue("seam2ContextDemarcation", "transition")-»
+			@Transition("«getTaggedValue("seam2ContextDemarcation", "transition")-»")
+		«ENDIF-»
+	«ENDIF»
+«ENDDEFINE»

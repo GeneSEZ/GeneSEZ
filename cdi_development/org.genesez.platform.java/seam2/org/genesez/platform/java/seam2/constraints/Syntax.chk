@@ -1,0 +1,31 @@
+/**
+ * Validates a model for generation using the seam2 platform
+ * 
+ * @author	andre pflueger
+ * @date	2011-03-25
+ */
+
+//	based genesez meta model
+import gcore;
+
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::common::Conversion;
+extension org::genesez::platform::common::log::Log;
+extension org::genesez::platform::common::m2t::Helper;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type related things
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks the correct usage of scope value for stereotype seam2DataModel
+ * @return	false generates an error, if other scope than UNSPECIFIED or PAGE is used
+ */
+context MAttribute ERROR "GeneSEZ: Annotation @DataModel does only allow scope type UNSPECIFIED and PAGE." + fqn() : 
+	hasStereotype("seam2DataModel") && 
+	!(getTaggedValue("seam2DataModel", "scope").matches("UNSPECIFIED") 
+	|| getTaggedValue("seam2DataModel", "scope").matches("SCOPE"))
+		? false
+		: true;

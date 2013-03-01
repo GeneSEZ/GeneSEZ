@@ -1,0 +1,106 @@
+import gcore;
+
+extension org::genesez::platform::common::log::Log;
+extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::platform::common::m2m::CreateTemplate;
+extension org::genesez::platform::common::m2m::MakeElement;
+extension org::genesez::platform::java::scripts::Naming;
+extension org::genesez::platform::java::jws::scripts::Stereotypes;
+
+/**
+ *	checks if WebServiceClient stereotype is available and adds
+ *	MExternal "javax.xml.ws.Service" if this class has no other 
+ * 	generalization
+ *
+ *	@param	this		instance of MClass
+ */
+Void checkWebServiceClientSuperClass(MClass this) :
+	hasStereotype("jwsWebServiceClient") 
+	&& generalization.isEmpty
+		? generalization.add(createExternal(this.model(), "javax.xml.ws.Service")) 
+		: "";
+
+/**
+  *	adds copy of stereotype jwsWebService to the associated remote business interface
+  *	add copies of stereoytypes jwsSOAPBinding and jwsHandlerChain to the associated
+  * remote buesiness interface if these stereotypes are available 
+  *
+  *	@param 	this		instance of MClass
+  *
+  */
+Void checkWebServiceInterface(MClass this) :
+	hasStereotype("jwsWebService")
+		? (
+			let i = realization.typeSelect(MInterface).selectFirst(e|e.hasStereotype("ejb3Remote")) :
+			 	i.addWebServiceStereotype(this) ->
+			 	hasStereotype("jwsSOAPBinding") 
+			 		? i.addSOAPBindingStereotype(this)
+			 		: "" ->
+			 	hasStereotype("jwsHandlerChain")
+			 		? i.addHandlerChainStereotype(this)
+			 		: ""
+		)
+		: "";
+		
+/** 
+  *	checks the tagged value name of stereotype jwsWebService and assigns
+  *	the class name if there is no value available
+  *
+  *	@param	this	instance of MClass
+  */
+Void checkWebServiceName(MClass this) :
+	!hasUtilizableValue("jwsWebService", "name")
+		? setTaggedValue("jwsWebService", "name", this.asTypeName())
+		: "";
+		
+/** 
+  *	checks the tagged value name of stereotype jwsWebServiceClient and assigns
+  *	the class name if there is no value available
+  *
+  *	@param	this	instance of MClass
+  */
+Void checkWebServiceClientName(MClass this) :
+	!hasUtilizableValue("jwsWebServiceClient", "name")
+		? setTaggedValue("jwsWebServiceClient", "name", this.asTypeName())
+		: "";
+		
+/**
+  *	adds interface SOAPHandler and corresponding operations with
+  *	stereotype "jwsSOAPHandler"
+  *
+  *	@param	this	instance of MClass
+  */
+Void checkSOAPHandler(MClass this) :
+	hasStereotype("jwsSOAPHandler")
+		? (
+			!realization.exists(e|e.name().contains("SOAPHandler"))
+				? realization.add(this.model().createExternal("SOAPHandler<SOAPMessageContext>"))
+				: "" ->
+			!operation.exists(e|e.name.matches("handleMessage"))
+				? (
+					let o = makeOperation("handleMessage", "public") :
+						o.parameter.add(o.makeParameter("context", "in", this.model().createExternal("SOAPMessageContext"))) ->
+						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.model())))
+				)
+				: "" ->
+			!operation.exists(e|e.name.matches("handleFault"))
+				? (
+					let o = makeOperation("handleFault", "public") :
+						o.parameter.add(o.makeParameter("context", "in", this.model().createExternal("SOAPMessageContext"))) ->
+						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.model())))
+				)
+				: "" ->
+			!operation.exists(e|e.name.matches("getHeaders"))
+				? (
+					let o = makeOperation("getHeaders", "public") :
+						o.setReturn(o.makeReturnParameter(1, -1, true, false, this.model().createExternal("QName")))
+				)
+				: "" ->
+			!operation.exists(e|e.name.matches("close"))
+				? (
+					let o = makeOperation("close", "public")  :
+						o.parameter.add(o.makeParameter("context", "in", this.model().createExternal("MessageContext")))
+				)
+				: ""
+		)
+		: "";

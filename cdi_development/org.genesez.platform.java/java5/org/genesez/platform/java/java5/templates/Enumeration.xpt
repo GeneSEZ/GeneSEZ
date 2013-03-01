@@ -1,0 +1,58 @@
+
+«IMPORT gcore»
+
+«REM»
+	Performs the generation of enumerations
+	
+	The following features are provided:
+	- enumeration literals
+	- operation implementations
+	
+	@author	nico herbig
+	@author	tobias haubold (last)
+«ENDREM»
+
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+
+«REM» use java naming conventions «ENDREM»
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an enumeration
+«ENDREM»
+«DEFINE Root FOR MEnumeration -»
+package «packageDeclaration( basePackage() ) -»;
+«EXPAND Import::Import -»
+«EXPAND Comment::Type -»
+«EXPAND Type::Modifier -» enum «asTypeName() -» «EXPAND Type::Realization -»{
+	
+	«IF generateSectionComments()»
+	// -- enumeration literals ----------------------------------------------
+	«ENDIF»
+	«EXPAND _Literal FOREACH literal SEPARATOR "," »;
+	
+	«IF generateSectionComments() && ( hasOperations() ) -»
+	// -- generated method stubs for implementations ------------------------
+	«ENDIF -»
+	«EXPAND Operation::Implementation -»
+	
+	// -- own code implementation -------------------------------------------
+	«EXPAND Type::OwnCodeImpl("java.enumeration.own.code.implementation." + xmiGuid) -»
+}
+«ENDDEFINE»
+
+«REM»
+	generates an enumeration literal
+«ENDREM»
+«DEFINE _Literal FOR MLiteral -»
+	«EXPAND Comment::EnumerationLiteral -»
+	«asEnumLiteral()»
+«ENDDEFINE»
+

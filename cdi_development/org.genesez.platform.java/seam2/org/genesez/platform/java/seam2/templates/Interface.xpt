@@ -1,0 +1,50 @@
+«REM»
+	JBoss Seam Framework cartridge (version 2.1.2)
+	
+	description:
+	The template is based on the ejb cartridge and evaluates several stereotypes
+	to generate annotations of JBoss Seam. Its uses aspects around the methhods
+	of the ejb annotations in the Xpand files of the ejb3 cartridge.
+	
+	@author		andre pflueger
+	@date		2008/10/29
+	@version 	1.0
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::platform::common::log::Log»
+
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+
+«REM»
+	evaluates Seam interface annotations
+«ENDREM»
+«DEFINE Annotation FOR MInterface-»
+	«EXPAND Element::Remoting-»
+«ENDDEFINE» 
+
+«REM»
+	generate getter- and setter-operations in session beans with "seam2Component"-stereotype
+«ENDREM»
+«DEFINE GetterSetterForSessionBeans FOR MInterface-»
+	«FOREACH this.package().classifier.select(e|e.hasStereotype("ejb3SessionBean") && e.hasStereotype("seam2Component")) AS c-»
+		«FOREACH c.realization AS r-»	
+			«IF r.name() == this.name-»
+				«FOREACH c.property AS p-»
+					«IF p.generateGetter()-»
+						«EXPAND org::genesez::platform::java::java5::templates::Attribute::_DerivedDeclaration FOR (MAttribute) p-»
+					«ENDIF-»
+					«IF p.generateSetter()-»
+						«EXPAND org::genesez::platform::java::seam2::templates::Attribute::_SetterDeclaration FOR (MAttribute) p-»
+					«ENDIF-»
+				«ENDFOREACH-»
+			«ENDIF-»
+		«ENDFOREACH-»
+	«ENDFOREACH-»
+«ENDDEFINE» 

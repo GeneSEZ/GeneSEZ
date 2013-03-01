@@ -1,0 +1,57 @@
+«IMPORT gcore»
+
+«REM»
+    template for di4java class annotations
+    
+    @author     nancy doerfel
+    @date       2010-05-07
+    @version    1.0
+«ENDREM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION org::genesez::platform::common::log::Log»
+
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::Conversion»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+
+«EXTENSION org::genesez::platform::java::scripts::Type»
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»  «ENDREM»
+«DEFINE Annotation FOR MInterface-»
+    «EXPAND _Qualifier-»        
+    «EXPAND _Scope-»            
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+    Qualifier annotation, only with stereotypes
+«ENDREM»
+«DEFINE _Qualifier FOR MInterface-»
+    «IF hasStereotype("di4javaQualifier")-»
+    @Qualifier
+    «ENDIF»     
+«ENDDEFINE»
+
+«REM» 
+    Scope annotation, only with stereotypes
+«ENDREM»
+«DEFINE _Scope FOR MInterface-»
+    «IF hasStereotype("di4javaScope")-»
+    @Scope
+    «ENDIF»     
+«ENDDEFINE»

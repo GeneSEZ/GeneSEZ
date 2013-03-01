@@ -1,0 +1,58 @@
+import gcore;
+
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2009-03-17
+ */
+
+extension org::genesez::platform::java::jpa::scripts::Attribute;
+extension org::genesez::platform::java::jpa::scripts::Association;
+extension org::genesez::platform::java::jpa::scripts::Class;
+extension org::genesez::platform::java::scripts::Naming;
+
+Void additions(MModel this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+
+Void additions(MPackage this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MClass this) :
+	transformJacobsonStereotypes() ->
+	transformWAMStereotypes() ->
+	addStandardConstructor() ->
+	addSerializable() ->
+	checkPrimaryKeyAttributeAndOrStereotype() -> 
+	addOptimisticLocking();
+
+Void modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MClass this) :
+	//checkInheritanceStereotype() -> 
+	checkInheritance()-> 
+	this.property.typeSelect(MAssociationRole).checkAssociationStereotype() ->
+	this.property.typeSelect(MAttribute).modifications() ->
+	this.operation.typeSelect(MOperation).modifications() ->		
+	this.checkEqualsProperties() ->
+	addAccessorStereotype();
+	
+Void modifications(MAttribute this) :
+	checkAttributeName() ->
+	checkPersistenceStereotypes() ->
+	checkOptimisticLockingStereotype() ->
+	checkPrimaryKey();
+
+Void modifications(MOperation this) :
+	checkPrimaryKey();
+
+Void modifications(MInterface this) :
+	Void;
