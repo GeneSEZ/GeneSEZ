@@ -1,0 +1,197 @@
+«IMPORT gcore»
+«REM»
+	Handles everything about Operations.
+	Performs the generation of operations, constructors, destructors.
+	
+	currently implemented:
+	- modifiers (visibility, static, final)
+	- constructors, destructors, declarations, implementations
+	- parameters, protected regions
+	- default value for params
+	- type mapping, param types
+	- comment support with exceptions
+	- type hints are not used!
+	
+	@author	tobias haubold
+	@date	2008-04-07
+	@todo	revise default return value when included in typemapping xml file
+«ENDREM»
+
+
+
+
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use php access helper «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::AccessHelper»
+«REM» use naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the operations of a classifier
+	order: constructor, destructor, declarations, implementations
+«ENDREM»
+«DEFINE All FOR MClassifier -»
+	«EXPAND Constructor -»
+	«EXPAND Destructor -»
+	«EXPAND Declaration -»
+	«EXPAND Implementation -»
+«ENDDEFINE»
+
+«REM»
+	processes all constructors
+«ENDREM»
+«DEFINE Constructor FOR MClassifier -»
+	«EXPAND _Constructor FOREACH operations().select( e| e.isConstructor() ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all destructors
+«ENDREM»
+«DEFINE Destructor FOR MClassifier -»
+	«EXPAND _Destructor FOREACH operations().select( e| e.isDestructor() ) -»
+«ENDDEFINE»
+
+«REM»
+	processes operation declarations
+«ENDREM»
+«DEFINE Declaration FOR MInterface -»
+	«EXPAND _Declaration FOREACH operations() -»
+«ENDDEFINE»
+
+«REM»
+	processes all operations to declare
+	- realized operations from interfaces first
+«ENDREM»
+«DEFINE Declaration FOR MClassifier -»
+	«EXPAND _Declaration FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Declaration FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+«ENDDEFINE»
+
+«REM»
+	processes all operations to implement
+	- realized operations from interfaces first
+«ENDREM»
+«DEFINE Implementation FOR MClassifier -»
+	«EXPAND _Implementation FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+	«EXPAND _Implementation FOREACH operations().select( e| !e.isConstructor() && !e.isDestructor() && !e.abstract && !realization.typeSelect(MInterface).operation.name.contains( e.name ) ) -»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generates an operation declaration
+	note: generates a line feed after each declaration
+«ENDREM»
+«DEFINE _Declaration FOR MOperation»
+	«EXPAND Comment::Operation -»
+	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -»);
+«ENDDEFINE»
+
+«REM»
+	generates an operation implementation
+«ENDREM»
+«DEFINE _Implementation FOR MOperation»
+	«EXPAND Comment::Operation -»
+	«EXPAND _Modifier -» function «asOperation()»(«EXPAND _Params -») {
+		«EXPAND _OwnCodeImpl("php.implementation." + xmiGuid) -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a constructor
+	has no return value
+«ENDREM»
+«DEFINE _Constructor FOR MOperation»
+	«EXPAND Comment::Constructor -»
+	«visibility» function __construct(«EXPAND _Params -») {
+		«EXPAND _OwnCodeImpl("php.constructor." + xmiGuid) -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates a destructor
+	cannot have parameters or a return value
+«ENDREM»
+«DEFINE _Destructor FOR MOperation»
+	«EXPAND Comment::Destructor -»
+	«visibility» function __destruct() {
+		«EXPAND _OwnCodeImpl("php.destructor." + xmiGuid) -»
+	}
+«ENDDEFINE»
+
+«REM»
+	generates the visibility and the modifiers static, final + abstract for an operation
+	abstract only if the class is also abstract
+«ENDREM»
+«DEFINE _Modifier FOR MOperation -»
+	«visibility»«IF static» static«ENDIF -»«IF final» final«ENDIF -»«IF abstract && classifier.abstract» abstract«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the parameters of an operation
+«ENDREM»
+«DEFINE _Params FOR MOperation -»
+«FOREACH parameter AS p SEPARATOR ", " -»
+«EXPAND _TypeHint FOR p -»«EXPAND _Parameter FOR p -»
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates type hints for multi-valued types or special single valued types
+«ENDREM»
+«DEFINE _TypeHint FOR MParameter -»
+«IF multiplicity == 1 -»
+«IF generateTypeHint(type) -»«type.mapName().asTypeName()» «ENDIF -»
+«ELSE -»array «ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the parameter name and the type of call (call by value or call by reference)
+«ENDREM»
+«DEFINE _Parameter FOR MParameter -»
+«IF direction == "out" || direction == "inout" -»&«ENDIF -»$«asParameter()»«EXPAND _DefaultValue -»
+«ENDDEFINE»
+
+«REM»
+	generates the default value
+«ENDREM»
+«DEFINE _DefaultValue FOR MParameter -»
+«IF hasDefaultValue() -» = «defaultvalue»«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the protected region of an operation
+	@param	id	protected region id
+«ENDREM»
+«DEFINE _OwnCodeImpl(String id) FOR MOperation -»
+«IF isConstructor() -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
+		throw new Exception('The implementation of the constructor of the class «classifier.asTypeName()» is missing !');
+		«ENDPROTECT»
+«ELSEIF isDestructor() -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of destructor for class '«classifier.asTypeName()»'
+		throw new Exception('The implementation of the destructor of the class «classifier.asTypeName()» is missing !');
+		«ENDPROTECT»
+«ELSE -»
+		«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
+		throw new Exception('The implementation of the method «classifier.asTypeName()»::«asOperation()» is missing !');
+		«ENDPROTECT»
+«ENDIF -»
+«ENDDEFINE»
+

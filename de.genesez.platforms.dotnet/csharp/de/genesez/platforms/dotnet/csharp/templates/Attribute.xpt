@@ -1,0 +1,133 @@
+«REM»
+	Attribute template for C#
+	
+	@author	Gerrit Beine
+	@date	2008/01/18
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Naming»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Uml»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate field declaration
+«ENDREM»
+«DEFINE FieldDecl FOR MAttribute-»
+		«EXPAND _Comment-»
+«IF multiplicity == 1-»
+		«EXPAND _Modifier» «type.mapName().asTypeName()» «asAttribute()»«EXPAND _DefaultValue-»;
+«ELSE-»
+		«EXPAND _Modifier» «mapType()»<«type.mapName().asTypeName()»> «asAttribute()» = new «mapType("Implementation")»<«type.mapName().asTypeName()»>();
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate property declaration
+«ENDREM»
+«DEFINE PropertyDecl FOR MAttribute-»
+«IF multiplicity == 1-»
+	«EXPAND _PropertyDecl( type.mapName().asTypeName(), asProperty() )-»
+«ELSE-»
+	«EXPAND _PropertyDecl( mapType() + "<" + type.mapName().asTypeName() + ">",
+	                   asProperty() )-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate property implementation
+«ENDREM»
+«DEFINE PropertyImpl FOR MAttribute-»
+«IF multiplicity == 1-»
+	«EXPAND _PropertyImpl( type.mapName().asTypeName(), asProperty() )-»
+«ELSE-»
+	«EXPAND _PropertyImpl( mapType() + "<" + type.mapName().asTypeName() + ">",
+	                   asProperty() )-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate property declaration
+«ENDREM»
+«DEFINE _PropertyDecl(String type, String name) FOR MAttribute-»
+		«EXPAND _Comment-»
+«IF classifier.metaType == MInterface-»
+		«IF static»static«ENDIF»«type» «name»
+«ELSE»
+		public «IF static»static«ENDIF»«type» «name»
+«ENDIF»
+		{
+			«IF getter()»get;«ENDIF»
+			«IF setter()»set;«ENDIF»
+		}
+		
+«ENDDEFINE»
+
+
+«REM»
+	generate property implementation
+«ENDREM»
+«DEFINE _PropertyImpl(String type, String name) FOR MAttribute-»
+		«EXPAND _Comment-»
+		public «IF static»static«ENDIF-» «type» «name»
+		{
+«IF static»
+			«IF getter()»get { return «classifier.asTypeName()».«asAttribute()»; }«ENDIF»
+			«IF setter()»set { «classifier.asTypeName()».«asAttribute()» = value; }«ENDIF»
+«ELSE»
+			«IF getter()»get { return this.«asAttribute()»; }«ENDIF»
+			«IF setter()»set { this.«asAttribute()» = value; }«ENDIF»
+«ENDIF-»
+		}
+«ENDDEFINE»
+
+
+«REM»
+	generate modifier for an attribute
+«ENDREM»
+«DEFINE _Modifier FOR MAttribute-»
+		«visibility()» «IF hasStereotype("volatile")»volatile«ENDIF-» «IF static»static«ENDIF-» «IF final»readonly«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate default value for an attribute
+«ENDREM»
+«DEFINE _DefaultValue FOR MAttribute-»
+«IF defaultvalue.length > 0-»
+ = «defaultvalue»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«REM»
+	generate attribute comment
+«ENDREM»
+«DEFINE _Comment FOR MAttribute-»
+«IF hasComment()-»
+		/// «getCommentText(ownedComment)»
+«ENDIF-»
+«ENDDEFINE»
+

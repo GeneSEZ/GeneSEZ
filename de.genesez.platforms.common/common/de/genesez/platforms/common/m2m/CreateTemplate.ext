@@ -1,0 +1,262 @@
+/**
+ * Helper scripts to create + clone GeneSEZ model elements
+ * - useful for m2m transformations + model modifications
+ * 
+ * @author	tobias haubold
+ * @date	2008-07-01
+ */
+
+// based on genesez meta model
+import gcore;
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+
+create List createList() :
+	this;
+
+create MPackage createPackage(MPackage container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.nestedPackage.add(this) ->
+	this;
+
+create MClass createClass(MPackage container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.classifier.add(this) ->
+	this;
+
+create MInterface createInterface(MPackage container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.classifier.add(this) ->
+	this;
+
+create MEnumeration createEnumeration(MDefinitionContext container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.classifier.add( this ) ->
+	this;
+
+create MLiteral createEnumLiteral(MEnumeration container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.literal.add( this ) ->
+	this;
+
+create MExternal createExternal(MModel container, String specification) :
+	setSpecification( specification ) ->
+	container.externalTypes.add( this ) ->
+	this;
+
+create MPrimitiveType createPrimitiveType(MModel container, String name, String xmiGuid) :
+	processElement( xmiGuid, name ) ->
+	container.primitiveTypes.add(this) ->
+	this;
+
+create MPrimitiveType createPrimitiveType(MModel container, String name) :
+	processElement( name, name ) ->
+	container.primitiveTypes.add(this) ->
+	this;
+
+create MOperation createOperation(MClassifier container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.operation.add(this) ->
+	this;
+
+create MParameter createParameter(MOperation container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+//	container.parameter.add(this) ->
+	setOperation( container ) ->
+	this;
+
+create MAttribute createAttribute(MClassifier container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.property.add( this ) ->
+	this;
+
+create MStereotype createStereotype(MModel container, String xmiGuid, String name) :
+	processElement( xmiGuid, name ) ->
+	container.anyStereotype.add( this ) ->
+	this;
+
+create MTag createTag(MStereotype container, String name, String type) :
+	setName( name ) ->
+	setType( type ) ->
+	container.property.add( this ) ->
+	this;
+
+create MTaggedValue createTaggedValue(MElement container, MTag tag, String value) :
+	setValue( value ) ->
+	setTag( tag ) ->
+	container.taggedValue.add( this ) ->
+	this;
+
+create MAspect createAspect(MElement container, String domain, String name) :
+	setDomain(domain) ->
+	setName(name) ->
+	container.aspect.add( this ) ->
+	this;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	cloning
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+create MStereotype cloneStereotype(MStereotype st, MModel container) :
+	trace("cloning: " + metaType + ": " + st) ->
+	// references
+	// containments
+	container.anyStereotype.add( this ) ->
+	st.property.cloneTag( this ) ->
+	// attributes
+	this.processElement( st.cloneXmiGuid( container ), st ) ->
+	this;
+
+create MTag cloneTag(MTag tag, MStereotype container) :
+	trace("cloning: " + metaType + ": " + tag) ->
+	// containment
+	container.property.add( this ) ->
+	// attributes
+	this.processTag( tag.name, tag.type ) ->
+	this;
+
+create MTaggedValue cloneTaggedValue(MTaggedValue tv, MElement container) :
+	trace("cloning: " + metaType + ": " + tv) ->
+	// containments
+	container.taggedValue.add( this ) ->
+	// attributes
+	this.processTaggedValue( tv.value ) ->
+	// references
+	setTag( tv.tag.cloneTag( tv.tag.stereotype.cloneStereotype( container.model() ) )) ->
+	this;
+
+create MOperation cloneOperation(MOperation op, MClassifier container) :
+	trace("cloning: " + metaType + ": " + op) ->
+	container.operation.add( this ) ->
+	// references
+	setReturnType( op.returnType ) ->
+	raisedException.addAll( op.raisedException ) ->
+	// containments
+	parameter.addAll( op.parameter.cloneParameter( this ) ) ->
+	op.return != null
+		? setReturn( op.return.cloneParameter( this ) )
+		: this ->
+	op.returnTypeComment.cloneComment( this ) ->
+	// attributes
+	this.processElement( op.cloneXmiGuid( container ), op ) ->
+	this.processOperation(op.visibility, op.static, op.abstract, op.final, op.multiplicity, op.unique, op.ordered) ->	
+	this;
+
+create MParameter cloneParameter(MParameter param, MOperation container) :
+	trace("cloning: " + metaType + ": " + param) ->
+	// containment
+	setOperation(container) ->
+	// further properties + references
+	this.processElement( param.cloneXmiGuid( container ), param ) ->
+	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.unique, param.ordered) ->
+	setType( param.type ) ->
+	this;
+	
+create MComment cloneComment(MComment comment, MElement container) :
+	trace("cloning: " + metaType + ": " + comment) ->
+	setXmiGuid( comment.cloneXmiGuid( container ) ) ->
+	setAnnotation( comment.annotation ) ->
+	nestedComment.addAll( comment.nestedComment.cloneComment( this ) ) ->
+	this;
+	
+create MComment cloneComment(MComment comment, MComment container) :
+	trace("cloning: " + metaType + ": " + comment) ->
+	setXmiGuid( comment.cloneXmiGuid( container ) ) ->
+	setAnnotation( comment.annotation ) ->
+	nestedComment.addAll( comment.nestedComment.cloneComment( this ) ) ->
+	this;
+
+String cloneXmiGuid(MElement elem, MElement container) :
+	container.xmiGuid + "_" + elem.xmiGuid;
+
+String cloneXmiGuid(MComment comment, MElement container) :
+	container.xmiGuid + "_" + comment.xmiGuid;
+
+String cloneXmiGuid(MComment comment, MComment container) :
+	container.xmiGuid + "_" + comment.xmiGuid;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	copying attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+MClassifier processClassifier(MClassifier this, String visibility, boolean abstract, boolean final) :
+	setVisibility(visibility) ->
+	setAbstract(abstract) ->
+	setFinal(final) ->
+	this;
+
+MOperation processOperation(MOperation this, String visibility, boolean static, boolean abstract, boolean final, int multiplicity, boolean unique, boolean ordered) :
+	setVisibility(visibility) ->
+	setStatic(static) ->
+	setAbstract(abstract) ->
+	setFinal(final) ->
+	setMultiplicity(multiplicity) ->
+	setUnique(unique) ->
+	setOrdered(ordered) ->
+	this;
+
+MParameter processParameter(MParameter this, String defaultValue, String direction, int multiplicity, boolean unique, boolean ordered) :
+	setDefaultvalue( defaultValue ) ->
+	setDirection( direction ) ->
+	setMultiplicity( multiplicity ) ->
+	setUnique( unique ) ->
+	setOrdered( ordered ) ->
+	this;
+
+MAttribute processAttribute(MAttribute this, String defaultvalue, boolean static, boolean final) :
+	// set attribute values
+	setDefaultvalue(defaultvalue) ->
+	setStatic(static) ->
+	setFinal(final) ->
+	this;
+
+MProperty processProperty(MProperty this, String visibility, boolean derived, Integer multiplicity, boolean unique, boolean ordered) :
+	setVisibility(visibility) ->
+	setDerived(derived) ->
+	setMultiplicity(multiplicity) ->
+	setUnique(unique) ->
+	setOrdered(ordered) ->
+	this;
+
+MTag processTag(MTag this, String name, String type) :
+	setName( name ) ->
+	setType( type ) ->
+	this;
+
+MTaggedValue processTaggedValue(MTaggedValue this, String value) :
+	setValue( value ) ->
+	this;
+
+/**
+ * 	processes the given model element and sets all parameters
+ * 	@param	xmiGuid	
+ *	@param	elem	original instance of MElement
+ */
+MElement processElement(MElement this, String xmiGuid, MElement elem) :
+	setXmiGuid(xmiGuid) ->
+	setName( elem.name ) ->
+	ownedComment.addAll( elem.ownedComment.cloneComment( this ) ) ->
+	stereotype.addAll( elem.stereotype.cloneStereotype( this.model() ) ) ->
+	this;
+
+MElement processElement(MElement this, String xmiGuid, String name) :
+	setXmiGuid(xmiGuid) ->
+	setName( name ) ->
+	this;
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	basic types with existence check
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+MPrimitiveType createPrimitiveTypeString(MModel container) :
+	container.primitiveTypes.exists(e|e.name == "String")
+		? container.primitiveTypes.selectFirst(e|e.name == "String")
+		: container.createPrimitiveType("String");
