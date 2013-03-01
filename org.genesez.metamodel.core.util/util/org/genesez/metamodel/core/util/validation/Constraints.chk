@@ -1,94 +1,120 @@
-/**
- * Validates a GeneSEZ model
- * 
- * currently covered:
- * - realizations of interfaces
- * - abstract + final classifiers, operations
- * - abstract operations must be contained within abstract classifiers
- * - destructor return type, parameters of destructors
- * 
- * @author	tobias haubold
- * @date	2008-05-26
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
  */
 
-// based on genesez meta model
 import gcore;
 
-// use helper to access model information more easily
+
+/**
+ * Validates a GeneSEZ Core model.
+ * 
+ * Currently the following checks are covered:
+ *   - realizations of interfaces
+ *   - abstract + final classifiers
+ *   - abstract + final operations
+ *   - abstract operations must be contained within abstract classifiers
+ *   - destructor return type, parameters of destructors
+ * 
+ * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
+ */
+
 extension org::genesez::metamodel::core::util::AccessHelper;
 extension org::genesez::metamodel::core::util::Conversion;
 
 
+// -- Classifier Checks -------------------------------------------------------------------------------------
+
+
 /**
- * checks if an interface has realizations
- * @return	false, if the interface has realizations, otherwise true
+ * Checks if a classifier is not both abstract and final.
+ * 
+ * @return	False if the classifier is both abstract and final, otherwise true.
  */
-context MInterface ERROR "GeneSEZ: interfaces cannot have realizations! the realizations '" + realization.name() + "' will be ignored; " + fqmn() :
+context MClassifier ERROR "GeneSEZ: Classifiers cannot be both final and abstract! " + fqmn() :
+	!( abstract && final );
+
+
+/**
+ * Checks if a non-abstract classifier does not have abstract operations.
+ * 
+ * @return	False if the non-abstract classifier has abstract operations, otherwise true.
+ */
+context MClassifier WARNING "GeneSEZ: Non-abstract classifiers cannot have abstract operations! " + fqmn() :
+	!( !abstract && operation.exists( o | o.abstract == true ) );
+
+
+// -- Interface Checks --------------------------------------------------------------------------------------
+
+
+/**
+ * Checks if an interface does not have realizations.
+ * 
+ * @return	False if the interface has realizations, otherwise true.
+ */
+context MInterface ERROR "GeneSEZ: Interfaces cannot have realizations! " + fqmn() :
 	realization.isEmpty;
 
-/**
- * checks if a classifier is both, abstract + final
- * @return	false, if the classifier is abstract + final, otherwise true
- */
-context MClassifier ERROR "GeneSEZ: classifiers cannot be both, 'final' and 'abstract': " + fqmn() :
-	!( abstract && final );
+
+// -- Association Role Checks -------------------------------------------------------------------------------
+
 
 /**
- * checks if a non-abstract classifier has abstract operations
- * @return	false, if the classifier is not abstract and has abstract operations, otherwise true
+ * Checks a bidirectional association does not have a qualifier on the opposite.
+ * 
+ * @return	False if a bidirectional association has a qualifier on the opposite, otherwise true.
  */
-context MClassifier WARNING "GeneSEZ: non-abstract classifiers cannot have abstract operations: '" + operation.select( e| e.abstract == true ).name + "' : " + fqmn() :
-	!( !abstract && operation.exists( e| e.abstract == true ) );
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	operations
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * checks if an operation is both, abstract + final
- * @return	false, if the operation is both, abstract + final, otherwise true
- */
-context MOperation ERROR "GeneSEZ: operations cannot be both, 'final' and 'abstract': " + fqmn() :
-	!( abstract && final );
-
-/**
- * checks if an abstract operation is contained in an abstract class
- * @return	false, if the operation is abstract and not within an abstract class, otherwise true
- */
-context MOperation WARNING "GeneSEZ: abstract operations MUST be contained within an abstract class! " + fqmn() :
-	!( abstract && !classifier.abstract );
-
-/**
- * checks if an destructor operation has a return type set
- * @return	false, if the destructor has a return type, otherwise true
- */
-context MOperation WARNING "GeneSEZ: destructor operations cannot have a return type - it will be ignored! " + fqmn() :
-	!( isDestructor() && return != null );
-
-/**
- * checks if an destructor operation has parameters
- * @return	false, if the destructor operation has parameters, otherwise true
- */
-context MOperation WARNING "GeneSEZ: destructor operations cannot have parameters - they will be ignored! " + fqmn() :
-	!( isDestructor() && parameter.size > 0 );
-
-/**
- * checks if a parameter has a type
- * @return	false, if the parameter has no type
- */
-context MParameter WARNING "GeneSEZ: parameter has no type!" :
-	! ( type == Void && direction != "return" );
-
-
-// - - association roles - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-/**
- * checks if there is a bidirectional association with qualifier attributes on the opposite
- * @return	false, if a bidirectional association has qualifier attributes on the opposite, otherwise true
- */
-context MAssociationRole WARNING "GeneSEZ: the symmetry of bidirectional associations with an qualified association end on the opposite is not supported by any platform! " + fqmn() :
-	opposite != null
+context MAssociationRole WARNING "GeneSEZ: Bidirectional associations cannot have a qualifier on the opposite! " + fqmn() :
+	opposite == null
 		? true
 		: !( opposite.qualifier != null );
+
+
+// -- Operation Checks --------------------------------------------------------------------------------------
+
+
+/**
+ * Checks if an operation is not both abstract and final.
+ * 
+ * @return	False if the operation is both abstract and final, otherwise true.
+ */
+context MOperation ERROR "GeneSEZ: Operations cannot be both final and abstract! " + fqmn() :
+	!( abstract && final );
+
+
+/**
+ * Checks if an abstract operation is contained within an abstract class.
+ * 
+ * @return	False if the abstract operation is not contained within an abstract class, otherwise true.
+ */
+context MOperation WARNING "GeneSEZ: Abstract operations must be contained in an abstract class! " + fqmn() :
+	!( abstract && !classifier.abstract );
+
+
+/**
+ * Checks if a destructor operation does not have parameters.
+ * 
+ * @return	False if the destructor operation has parameters, otherwise true.
+ */
+context MOperation WARNING "GeneSEZ: Destructor operations cannot have parameters! " + fqmn() :
+	!( isDestructor() && !parameter.isEmpty );
+
+
+/**
+ * Checks if a destructor operation does not have a return parameter.
+ * 
+ * @return	False if the destructor operation has a return parameter, otherwise true.
+ */
+context MOperation WARNING "GeneSEZ: Destructor operations cannot have return parameters! " + fqmn() :
+	!( isDestructor() && return != null );
+
+
+/**
+ * Checks if a parameter has a type.
+ * 
+ * @return	False if the parameter has no type, otherwise true.
+ */
+context MParameter WARNING "GeneSEZ: Parameters needs to have a type! " + fqmn() + " of " + operation.fqmn() :
+	! ( ( type == null || type == Void ) && direction != "return" );
