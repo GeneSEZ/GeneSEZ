@@ -11,11 +11,63 @@ import gcore;
  * 
  * @author	tobias haubold <toh@fh-zwickau.de> (maintainer)
  */
+extension org::genesez::metamodel::core::util::Conversion;
 extension org::genesez::metamodel::core::util::ModelNavigation;
 extension org::genesez::metamodel::core::util::ExtensionMechanism;
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::metamodel::core::util::m2t::Helper;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
 extension org::genesez::util::logging::Logging;
+
+
+/**
+ * Returns true if a get access operation should be generated, otherwise false
+ */
+boolean emGenerateGetAccess(MProperty this) :
+	emGenerateAccessOperation( prAccessorGetter() );
+
+/**
+ * Returns true if a set access operations should be generated, otherwise false
+ */
+boolean emGenerateSetAccess(MProperty this) :
+	emGenerateAccessOperation( prAccessorSetter() );
+
+/**
+ * Returns true if a add access operation should be generated, otherwise false.
+ */
+boolean emGenerateAddAccess(MProperty this) :
+	emGenerateAccessOperation( prAccessorAdd() );
+
+/**
+ * Returns true if the property access operation remove should be generated for the specified property, otherwise false.
+ */
+boolean emGenerateRemoveAccess(MProperty this) :
+	emGenerateAccessOperation( prAccessorRemove() );
+
+/**
+ * Checks if the specified access operation type should be generated for the specified property.
+ * 
+ * 1) if the property has the accessor stereotype, it is evaluated
+ * 2) if the classifier has the accessor stereotype, it is evaluated and used for all properties
+ * 3) if the classifier has a stereotype for which accessors should be generated, accessors are generated
+ * 4) if the classifier is a MDataType and the accessor type is "get access", true is returned
+ * 5) else no access operations are generated
+ * 
+ * @return	true, if an access operation should be generated, otherwise false
+ */
+boolean emGenerateAccessOperation(MProperty this, String accessOperationType):
+	emHasStereotype( accessorStereotype() )
+		? emGetTaggedBooleanValue( accessorStereotype(), accessOperationType )
+		: ( classifier.emHasStereotype( accessorStereotype() )
+			? classifier.emGetTaggedBooleanValue( accessorStereotype(), accessOperationType )
+			: ( classifier.stereotype.exists( s|accessorsForStereotypes().convertToList().contains( s.name ) )
+				? true
+				: (	classifier.metaType == MDataType && accessOperationType == prAccessorGetter()
+					? true
+					: false
+				)
+			)
+		);
 
 
 /**
@@ -79,3 +131,4 @@ private MStereotype prEnsureGeneSezAccessorTags(MStereotype this) :
  * Returns the xmi guid of the «accessor» stereotype.
  */
 private String accessorXmiGuid() : "org.genesez.adapter.uml2.profile.accessor";
+
