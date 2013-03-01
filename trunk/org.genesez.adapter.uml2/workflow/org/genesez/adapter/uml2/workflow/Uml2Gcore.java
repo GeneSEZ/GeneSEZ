@@ -14,11 +14,8 @@ import org.genesez.workflow.xpand.Model2Model;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Uml2Gcore extends Model2Model {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean mapClassesInModelToExternal = false;
@@ -55,7 +52,6 @@ public class Uml2Gcore extends Model2Model {
 		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -78,7 +74,6 @@ public class Uml2Gcore extends Model2Model {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>mapClassesInModelToExternal</b></em>'
 	 */
@@ -222,9 +217,6 @@ public class Uml2Gcore extends Model2Model {
 		this.includeProfiles.remove(includeProfiles);
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._F6MosP3MEeGcKvbUXThvRw) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
