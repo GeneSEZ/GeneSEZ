@@ -60,6 +60,7 @@ public class UmlCalculator implements AssociationRole, EventReceiver<UmlCalculat
 	
 	/**
 	 * Returns the value of attribute '<em><b>result</b></em>'
+	 * @return	
 	 */
 	public BigDecimal getResult() {
 		return result;

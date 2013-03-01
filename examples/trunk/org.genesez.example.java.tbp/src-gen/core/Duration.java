@@ -29,6 +29,7 @@ public class Duration {
 	
 	/**
 	 * Returns the value of attribute '<em><b>time</b></em>'
+	 * @return	
 	 */
 	public long getTime() {
 		return time;
@@ -36,6 +37,7 @@ public class Duration {
 	
 	/**
 	 * Returns the value of attribute '<em><b>unit</b></em>'
+	 * @return	
 	 */
 	public String getUnit() {
 		return unit;

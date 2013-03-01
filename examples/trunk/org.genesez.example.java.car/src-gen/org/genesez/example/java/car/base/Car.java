@@ -80,6 +80,16 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	}
 	
 	/**
+	 * describes the maximum speed of a car
+	 * 
+	 * internal bla bla bla
+	 * @return	
+	 */
+	public int getMaxSpeed() {
+		return maxSpeed;
+	}
+	
+	/**
 	 * count the number of wheels
 	 */
 	private int getNoOfWheels() {
@@ -87,15 +97,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 		// TODO: implementation of derived (calculated) attribute 'noOfWheels'
 		throw new UnsupportedOperationException("The implementation of the derived attribute 'noOfWheels' is missing!");
 		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * describes the maximum speed of a car
-	 * 
-	 * internal bla bla bla
-	 */
-	public int getMaxSpeed() {
-		return maxSpeed;
 	}
 	
 	// initialization block for association management objects

@@ -34,6 +34,7 @@ public class Project implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>name</b></em>'
+	 * @return	
 	 */
 	public String getName() {
 		return name;
@@ -41,6 +42,7 @@ public class Project implements AssociationRole {
 	
 	/**
 	 * Sets the value of attribute '<em><b>name</b></em>'
+	 * @param	name	
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -48,6 +50,7 @@ public class Project implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>description</b></em>'
+	 * @return	
 	 */
 	public String getDescription() {
 		return description;
@@ -55,6 +58,7 @@ public class Project implements AssociationRole {
 	
 	/**
 	 * Sets the value of attribute '<em><b>description</b></em>'
+	 * @param	description	
 	 */
 	public void setDescription(String description) {
 		this.description = description;

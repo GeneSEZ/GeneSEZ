@@ -32,6 +32,7 @@ public class Screw {
 	
 	/**
 	 * describes the length of a screw
+	 * @return	
 	 */
 	public double getLength() {
 		return length;
@@ -39,6 +40,7 @@ public class Screw {
 	
 	/**
 	 * Returns the value of attribute '<em><b>diameter</b></em>'
+	 * @return	
 	 */
 	public double getDiameter() {
 		return diameter;
@@ -46,6 +48,7 @@ public class Screw {
 	
 	/**
 	 * Returns the value of attribute '<em><b>metric</b></em>'
+	 * @return	
 	 */
 	public boolean getMetric() {
 		return metric;

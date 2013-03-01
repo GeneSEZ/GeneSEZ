@@ -38,6 +38,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>name</b></em>'
+	 * @return	
 	 */
 	public String getName() {
 		return name;
@@ -45,6 +46,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Sets the value of attribute '<em><b>name</b></em>'
+	 * @param	name	
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -52,6 +54,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>description</b></em>'
+	 * @return	
 	 */
 	public String getDescription() {
 		return description;
@@ -59,6 +62,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Sets the value of attribute '<em><b>description</b></em>'
+	 * @param	description	
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -66,6 +70,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>state</b></em>'
+	 * @return	
 	 */
 	public State getState() {
 		return state;
@@ -73,6 +78,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Sets the value of attribute '<em><b>state</b></em>'
+	 * @param	state	
 	 */
 	public void setState(State state) {
 		this.state = state;
@@ -80,6 +86,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>deadline</b></em>'
+	 * @return	
 	 */
 	public Date getDeadline() {
 		return new Date(deadline.getTime());
@@ -87,6 +94,7 @@ public class Milestone implements AssociationRole {
 	
 	/**
 	 * Sets the value of attribute '<em><b>deadline</b></em>'
+	 * @param	deadline	
 	 */
 	public void setDeadline(Date deadline) {
 		this.deadline = deadline;

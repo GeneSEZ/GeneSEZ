@@ -35,6 +35,7 @@ public class Engine implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>ps</b></em>'
+	 * @return	
 	 */
 	public byte getPs() {
 		return ps;
@@ -42,6 +43,7 @@ public class Engine implements AssociationRole {
 	
 	/**
 	 * Returns the value of attribute '<em><b>name</b></em>'
+	 * @return	
 	 */
 	public String getName() {
 		return name;

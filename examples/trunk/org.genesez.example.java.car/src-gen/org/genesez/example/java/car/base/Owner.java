@@ -28,6 +28,7 @@ public class Owner implements AssociationClass {
 	
 	/**
 	 * Returns the value of attribute '<em><b>associationClassLink</b></em>'
+	 * @return	
 	 */
 	public ACLink getAssociationClassLink() {
 		return associationClassLink;
