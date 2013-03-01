@@ -10,14 +10,11 @@ package org.genesez.m2t.deletion;
  * 
  * @author Dominik Wetzel
  * @date 2011-09-15
- * @author dreamer
  */
 public interface RevisionControlSystem {
 	
-	// -- generated attribute, constant + association declarations ----------
 	public static final java.util.Set<RevisionControlSystem> REGISTRY = new java.util.HashSet<RevisionControlSystem>();
 	
-	// -- generated method declarations -------------------------------------
 	/**
 	 * gives the metadata foldername of the currently checked RCS.
 	 * @return	the metadata folder name
@@ -42,9 +39,6 @@ public interface RevisionControlSystem {
 	 */
 	public String toString();
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._qUp80AQdEeK-ufRtI9UaTA) ENABLED START */
 	/* PROTECTED REGION END */
 }

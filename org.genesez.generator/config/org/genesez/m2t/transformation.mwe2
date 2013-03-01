@@ -4,19 +4,20 @@ var name = "org.genesez.m2t"
 var namespace = "org::genesez::m2t"
 var classpath = "org/genesez/m2t"
 
+var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
+	standardUML2Setup = true
+}
+var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+}
+
 Workflow {
-	bean = org.eclipse.xtend.typesystem.uml2.Setup {
-		standardUML2Setup = true
-	}
-	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : gcore {
-		metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
-	}
 	component = workflow.CompositeComponent {
 		component = workflow.EmfReader {
 			file = "modeling/${name}/genesez.m2t.uml"
 			slot = "uml2model"
 		}
-		component = adapter.uml2.workflow.Uml2Validator {}
+		component = @org.genesez.adapter.uml2.gcore.Uml2Validator {}
 		component = adapter.uml2.workflow.Uml2Gcore {}
 	}
 	component = workflow.EmfWriter {
@@ -27,11 +28,13 @@ Workflow {
 		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
 		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
 		script = "${namespace}::ApacheCommonsLogging::modify"
-		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
-		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
-		aopScript = "${namespace}::DoNotOptimizeFinalAttribsWithDefaultValue"
+		script = "org::genesez::platform::java::m2m::Prepare::prepare"
+		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+//		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
+//		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
+//		aopScript = "${namespace}::DoNotOptimizeFinalAttribsWithDefaultValue"
 		
-		globalVarDef = { name = "fieldAccess" value = "true" }
+//		globalVarDef = { name = "fieldAccess" value = "true" }
 	}
 	component = org.genesez.workflow.EmfWriter {
 		cloneSlotContents = true
@@ -48,10 +51,14 @@ Workflow {
 //		excludeContentPackage = ","
 //		excludePackage = "org::genesez::m2t::xpand"
 //	}
+	
 	component = workflow.xpand.Model2TextComposite {
 		component = platform.java.workflow.Gcore2Java {
 			outputDir = "../${name}/src-gen"
+			
 			aopTemplate = "org::genesez::workflow::NoFixedImports"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "${classpath}/typemapping.xml"
 			typeMappingFile = "${classpath}/typemapping.rcs.xml"
 			typeMappingFile = "typemapping.acl.xml"
@@ -62,14 +69,17 @@ Workflow {
 			excludePackage = "org::genesez::m2t::cp::xpand"
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	component = workflow.xpand.Model2TextComposite {
 		component = platform.java.workflow.Gcore2Java {
 			outputDir = "../org.genesez.workflow.xpand/m2t"
+			
 			aopTemplate = "org::genesez::workflow::NoFixedImports"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "${classpath}/typemapping.xml"
 			typeMappingFile = "typemapping.acl.xml"
 			typeMappingFile = "typemapping.java.xml"
@@ -80,8 +90,8 @@ Workflow {
 			excludeContentPackage = "org::genesez::m2t"
 			excludeContentPackage = "org::genesez::m2t::cp"
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 //		component = workflow.xpand.Model2Text {
 //			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
@@ -112,6 +122,7 @@ Workflow {
 //			}
 //		}
 	}
+	
 //	component = platform.java.workflow.JavaGenerator {
 //		outputDir = "../org.genesez.workflow.xpand/m2t"
 //		aspectTemplate = "org::genesez::workflow::NoFixedImports"

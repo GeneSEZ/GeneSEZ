@@ -4,7 +4,6 @@ package org.genesez.m2t.deletion;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_jOF40ATYEeKUpcpqfZ9tsA) 
  */
-
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -18,11 +17,8 @@ import org.genesez.m2t.FileTreeObserverAdapter;
 /**
  * org.eclipse.jgit-1.0.0.201106090707-r.jar
  * svnkit.jar
- * @author dreamer
  */
 public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public static java.util.Set<RevisionControlSystem> available = new java.util.HashSet<RevisionControlSystem>();
 	
@@ -33,7 +29,6 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 	 */
 	protected String baseDir;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @param	dir	
@@ -111,7 +106,6 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * The outputPath, where deletion should take place.
 	 */
@@ -119,9 +113,6 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 		this.baseDir = baseDir;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._jOF40ATYEeKUpcpqfZ9tsA) ENABLED START */
 	static {
 		RevisionControlSystem.REGISTRY.add(new GitRcs());

@@ -4,17 +4,13 @@ package org.genesez.m2t.cp;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_G9snEA8lEeK6yuw9r03UDQ) 
  */
-
 import java.nio.file.Path;
 import java.util.List;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class FileIdProvider implements LineContentExtractor, LineContentPreservable {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * To find the place where the file-ID stands.
@@ -23,7 +19,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	private String fileId;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @return	
@@ -108,11 +103,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._G9snEA8lEeK6yuw9r03UDQ) ENABLED START */
 	/* PROTECTED REGION END */
 	

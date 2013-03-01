@@ -15,17 +15,13 @@ import org.eclipse.jgit.util.FS;
  * 
  * @author Dominik Wetzel
  * @date 2011-09-15
- * @author dreamer
  */
 public class GitRcs implements RevisionControlSystem {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	private String metadataFolderName = ".git";
 	
 	private java.util.Set<String> rootDir = new java.util.HashSet<String>();
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * gives the metadata foldername of the currently checked RCS.
 	 * @return	the metadata folder name
@@ -71,11 +67,6 @@ public class GitRcs implements RevisionControlSystem {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._bPxLoAS9EeKUpcpqfZ9tsA) ENABLED START */
 	/* PROTECTED REGION END */
 	

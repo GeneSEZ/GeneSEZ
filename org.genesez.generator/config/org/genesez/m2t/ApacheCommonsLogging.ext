@@ -1,7 +1,8 @@
 
 import gcore;
 
-extension org::genesez::platform::common::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::ModelNavigation;
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
 extension org::genesez::util::logging::Logging;
 
@@ -23,8 +24,9 @@ MClassifier check(MClassifier this) :
 MClassifier logger(MClassifier this) :
 	createAttribute( xmiGuid + "_logger", "logger" )
 		.processAttribute( "LogFactory.getLog(getClass())", false, true )
-		.processProperty( "public", false, 0, 1, true, false )
-		.wireType( model().ensureExternalTypeExistence( "Log", "Log") )
+		.processProperty( "public", false, createMultiplicity( 0, 1, true, false ) )
+		.wireType( navModel().ensureExternalTypeExistence( "org.apache.commons.logging.Log", "Log") )
 		.classifier
-		.supplier.add( model().ensureExternalTypeExistence( "LogFactory", "LogFactory" ) ) ->
+		// ensure import statement
+		.supplier.add( navModel().ensureExternalTypeExistence( "org.apache.commons.logging.LogFactory", "LogFactory" ) ) ->
 	this;

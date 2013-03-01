@@ -7,26 +7,23 @@ package org.genesez.m2t.cp;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class ImportPreserverConfig {
 	
-	// -- generated attribute, constant + association declarations ----------
 	private String fileExtensionRegExp;
 	
 	private String importRegExp;
 	
-	// -- generated constructors --------------------------------------------
-	
 	/**
 	 * Initializing constructor for class '<em><b>ImportPreserverConfig</b></em>'.
+	 * @param	fileExtensionRegExp	{@link String.getFileExtensionRegExp()}
+	 * @param	importRegExp	{@link String.getImportRegExp()}
 	 */
 	public ImportPreserverConfig(String fileExtensionRegExp, String importRegExp) {
 		this.fileExtensionRegExp = fileExtensionRegExp;
 		this.importRegExp = importRegExp;
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>fileExtensionRegExp</b></em>'
 	 */
@@ -41,7 +38,6 @@ public class ImportPreserverConfig {
 		return importRegExp;
 	}
 	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.datatype.own.code.implementation._8oUToAm-EeK7rvpt4qDtAg) ENABLED START */
 	/* PROTECTED REGION END */
 }

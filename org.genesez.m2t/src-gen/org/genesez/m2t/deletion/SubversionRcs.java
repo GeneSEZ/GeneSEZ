@@ -4,7 +4,6 @@ package org.genesez.m2t.deletion;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_bP3SQAS9EeKUpcpqfZ9tsA) 
  */
-
 import java.io.File;
 
 import org.tmatesoft.svn.core.SVNException;
@@ -16,11 +15,8 @@ import org.tmatesoft.svn.core.wc.SVNWCClient;
  * 
  * @author Dominik Wetzel
  * @date 2011-09-15
- * @author dreamer
  */
 public class SubversionRcs implements RevisionControlSystem {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	private String metadataFolderName = ".svn";
 	
@@ -28,7 +24,6 @@ public class SubversionRcs implements RevisionControlSystem {
 	
 	private SVNWCClient wcClient = manager.getWCClient();
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * gives the metadata foldername of the currently checked RCS.
 	 * @return	the metadata folder name
@@ -80,11 +75,6 @@ public class SubversionRcs implements RevisionControlSystem {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._bP3SQAS9EeKUpcpqfZ9tsA) ENABLED START */
 	/* PROTECTED REGION END */
 	
