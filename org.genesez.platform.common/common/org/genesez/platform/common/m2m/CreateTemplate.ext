@@ -94,6 +94,7 @@ MStereotype ensureStereotype(MModel this, String xmiGuid, String name) :
  * Assigns the specified stereotype to the specified model element if not already assigned.
  * @return	the model element specified
  */
+// @deprecated
 MElement ensureStereotypeAssignment(MElement this, MStereotype stereotype) :
 	!this.stereotype.contains( stereotype )
 		? (this.stereotype.add( stereotype ) -> this)
@@ -265,14 +266,16 @@ create MParameter cloneParameter(MParameter param, MOperation container) :
 	this.processParameter(param.defaultvalue, param.direction, param.multiplicity, param.multiplicity, param.unique, param.ordered) ->
 	setType( param.type ) ->
 	this;
-	
+
+// @deprecated
 create MComment cloneComment(MComment comment, MElement container) :
 	trace("cloning: " + metaType + ": " + comment) ->
 	setXmiGuid( comment.cloneXmiGuid( container ) ) ->
 	setAnnotation( comment.annotation ) ->
 	nestedComment.addAll( comment.nestedComment.cloneComment( this ) ) ->
 	this;
-	
+
+// @deprecated
 create MComment cloneComment(MComment comment, MComment container) :
 	trace("cloning: " + metaType + ": " + comment) ->
 	setXmiGuid( comment.cloneXmiGuid( container ) ) ->
@@ -280,12 +283,15 @@ create MComment cloneComment(MComment comment, MComment container) :
 	nestedComment.addAll( comment.nestedComment.cloneComment( this ) ) ->
 	this;
 
+// @deprecated
 String cloneXmiGuid(MElement elem, MElement container) :
 	container.xmiGuid + "_" + elem.xmiGuid;
 
+// @deprecated
 String cloneXmiGuid(MComment comment, MElement container) :
 	container.xmiGuid + "_" + comment.xmiGuid;
 
+// @deprecated
 String cloneXmiGuid(MComment comment, MComment container) :
 	container.xmiGuid + "_" + comment.xmiGuid;
 
@@ -357,11 +363,13 @@ MProperty processProperty(MProperty this, String visibility, boolean derived, In
 	setOrdered(ordered) ->
 	this;
 
+// @deprecated
 MTag processTag(MTag this, String name, String type) :
 	setName( name ) ->
 	setType( type ) ->
 	this;
 
+// @deprecated
 MTaggedValue processTaggedValue(MTaggedValue this, String value, MElement valueReference) :
 	setValue( value ) ->
 	setValueReference( valueReference ) ->
