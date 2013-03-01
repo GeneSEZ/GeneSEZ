@@ -20,26 +20,23 @@ import org.genesez.metamodel.gpresentation.PAction;
  *
  * @generated
  */
-public class PActionImpl extends PElementImpl implements PAction
-{
-  /**
+public class PActionImpl extends PElementImpl implements PAction {
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PActionImpl()
-  {
+	protected PActionImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PACTION;
 	}
 

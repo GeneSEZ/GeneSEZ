@@ -23,9 +23,7 @@ package org.genesez.metamodel.gpresentation;
  * @model
  * @generated
  */
-public interface POutput extends PElement
-{
-
+public interface POutput extends PElement {
 	/**
 	 * Returns the value of the '<em><b>Output</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -51,4 +49,5 @@ public interface POutput extends PElement
 	 * @generated
 	 */
 	void setOutput(String value);
+
 } // POutput

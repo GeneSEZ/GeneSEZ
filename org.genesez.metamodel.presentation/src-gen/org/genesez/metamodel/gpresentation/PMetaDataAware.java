@@ -28,9 +28,8 @@ import org.eclipse.emf.ecore.EObject;
  * @model abstract="true"
  * @generated
  */
-public interface PMetaDataAware extends EObject
-{
-  /**
+public interface PMetaDataAware extends EObject {
+	/**
 	 * Returns the value of the '<em><b>Xmi Guid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -56,38 +55,38 @@ public interface PMetaDataAware extends EObject
 	 */
 	void setXmiGuid(String value);
 
-		/**
+	/**
 	 * Returns the value of the '<em><b>Meta Data</b></em>' reference list.
 	 * The list contents are of type {@link org.genesez.metamodel.gpresentation.PMetaData}.
 	 * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Meta Data</em>' reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Meta Data</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Meta Data</em>' reference list.
 	 * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPMetaDataAware_MetaData()
 	 * @model
 	 * @generated
 	 */
-  EList<PMetaData> getMetaData();
+	EList<PMetaData> getMetaData();
 
-  /**
+	/**
 	 * Returns the value of the '<em><b>Value</b></em>' containment reference list.
 	 * The list contents are of type {@link org.genesez.metamodel.gpresentation.PValue}.
 	 * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gpresentation.PValue#getOwner <em>Owner</em>}'.
 	 * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Value</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Value</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Value</em>' containment reference list.
 	 * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPMetaDataAware_Value()
 	 * @see org.genesez.metamodel.gpresentation.PValue#getOwner
 	 * @model opposite="owner" containment="true"
 	 * @generated
 	 */
-  EList<PValue> getValue();
+	EList<PValue> getValue();
 
 } // PMetaDataAware

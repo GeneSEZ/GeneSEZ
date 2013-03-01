@@ -29,48 +29,43 @@ import org.genesez.metamodel.gpresentation.PContentArea;
  *
  * @generated
  */
-public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeArea
-{
-  /**
+public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeArea {
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PCompositeAreaImpl()
-  {
+	protected PCompositeAreaImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PCOMPOSITE_AREA;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PAbstractArea getOwningArea()
-  {
+	public PAbstractArea getOwningArea() {
 		if (eContainerFeatureID() != GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA) return null;
 		return (PAbstractArea)eContainer();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA:
 				if (eInternalContainer() != null)
@@ -80,14 +75,13 @@ public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeA
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA:
 				return eBasicSetContainer(null, GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA, msgs);
@@ -95,14 +89,13 @@ public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeA
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 			case GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA:
 				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PABSTRACT_AREA__NESTED_CONTENTS, PAbstractArea.class, msgs);
@@ -110,14 +103,13 @@ public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeA
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA:
 				return getOwningArea();
@@ -125,14 +117,13 @@ public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeA
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public boolean eIsSet(int featureID)
-  {
+	@Override
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA:
 				return getOwningArea() != null;
@@ -140,14 +131,13 @@ public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeA
 		return super.eIsSet(featureID);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass)
-  {
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == PContentArea.class) {
 			switch (derivedFeatureID) {
 				case GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA: return GpresentationPackage.PCONTENT_AREA__OWNING_AREA;
@@ -157,14 +147,13 @@ public class PCompositeAreaImpl extends PAbstractAreaImpl implements PCompositeA
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass)
-  {
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == PContentArea.class) {
 			switch (baseFeatureID) {
 				case GpresentationPackage.PCONTENT_AREA__OWNING_AREA: return GpresentationPackage.PCOMPOSITE_AREA__OWNING_AREA;

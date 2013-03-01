@@ -28,48 +28,43 @@ import org.genesez.metamodel.gpresentation.PContentArea;
  *
  * @generated
  */
-public abstract class PContentAreaImpl extends PMetaDataAwareImpl implements PContentArea
-{
-  /**
+public abstract class PContentAreaImpl extends PMetaDataAwareImpl implements PContentArea {
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PContentAreaImpl()
-  {
+	protected PContentAreaImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PCONTENT_AREA;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PAbstractArea getOwningArea()
-  {
+	public PAbstractArea getOwningArea() {
 		if (eContainerFeatureID() != GpresentationPackage.PCONTENT_AREA__OWNING_AREA) return null;
 		return (PAbstractArea)eContainer();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
 				if (eInternalContainer() != null)
@@ -79,14 +74,13 @@ public abstract class PContentAreaImpl extends PMetaDataAwareImpl implements PCo
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
 				return eBasicSetContainer(null, GpresentationPackage.PCONTENT_AREA__OWNING_AREA, msgs);
@@ -94,14 +88,13 @@ public abstract class PContentAreaImpl extends PMetaDataAwareImpl implements PCo
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
 				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PABSTRACT_AREA__NESTED_CONTENTS, PAbstractArea.class, msgs);
@@ -109,14 +102,13 @@ public abstract class PContentAreaImpl extends PMetaDataAwareImpl implements PCo
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
 				return getOwningArea();
@@ -124,14 +116,13 @@ public abstract class PContentAreaImpl extends PMetaDataAwareImpl implements PCo
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public boolean eIsSet(int featureID)
-  {
+	@Override
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
 				return getOwningArea() != null;

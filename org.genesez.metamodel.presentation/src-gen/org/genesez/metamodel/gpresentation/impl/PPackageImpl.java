@@ -45,9 +45,8 @@ import org.genesez.metamodel.gpresentation.PRoot;
  *
  * @generated
  */
-public class PPackageImpl extends EObjectImpl implements PPackage
-{
-  /**
+public class PPackageImpl extends EObjectImpl implements PPackage {
+	/**
 	 * The default value of the '{@link #getXmiGuid() <em>Xmi Guid</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,78 +66,76 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 	 */
 	protected String xmiGuid = XMI_GUID_EDEFAULT;
 
-		/**
+	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-  protected static final String NAME_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = null;
 
-  /**
+	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-  protected String name = NAME_EDEFAULT;
+	protected String name = NAME_EDEFAULT;
 
-  /**
+	/**
 	 * The cached value of the '{@link #getRoots() <em>Roots</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getRoots()
 	 * @generated
 	 * @ordered
 	 */
-  protected EList<PRoot> roots;
+	protected EList<PRoot> roots;
 
-  /**
+	/**
 	 * The cached value of the '{@link #getNestedPackages() <em>Nested Packages</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getNestedPackages()
 	 * @generated
 	 * @ordered
 	 */
-  protected EList<PPackage> nestedPackages;
+	protected EList<PPackage> nestedPackages;
 
-  /**
+	/**
 	 * The cached value of the '{@link #getMetaData() <em>Meta Data</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getMetaData()
 	 * @generated
 	 * @ordered
 	 */
-  protected EList<PMetaData> metaData;
+	protected EList<PMetaData> metaData;
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PPackageImpl()
-  {
+	protected PPackageImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PPACKAGE;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -147,7 +144,7 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		return xmiGuid;
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -159,88 +156,81 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PPACKAGE__XMI_GUID, oldXmiGuid, xmiGuid));
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public String getName()
-  {
+	public String getName() {
 		return name;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public void setName(String newName)
-  {
+	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PPACKAGE__NAME, oldName, name));
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public EList<PRoot> getRoots()
-  {
+	public EList<PRoot> getRoots() {
 		if (roots == null) {
 			roots = new EObjectContainmentWithInverseEList<PRoot>(PRoot.class, this, GpresentationPackage.PPACKAGE__ROOTS, GpresentationPackage.PROOT__OWNING_PACKAGE);
 		}
 		return roots;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PPackage getOwningPackage()
-  {
+	public PPackage getOwningPackage() {
 		if (eContainerFeatureID() != GpresentationPackage.PPACKAGE__OWNING_PACKAGE) return null;
 		return (PPackage)eContainer();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public EList<PPackage> getNestedPackages()
-  {
+	public EList<PPackage> getNestedPackages() {
 		if (nestedPackages == null) {
 			nestedPackages = new EObjectContainmentWithInverseEList<PPackage>(PPackage.class, this, GpresentationPackage.PPACKAGE__NESTED_PACKAGES, GpresentationPackage.PPACKAGE__OWNING_PACKAGE);
 		}
 		return nestedPackages;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public EList<PMetaData> getMetaData()
-  {
+	public EList<PMetaData> getMetaData() {
 		if (metaData == null) {
 			metaData = new EObjectContainmentWithInverseEList<PMetaData>(PMetaData.class, this, GpresentationPackage.PPACKAGE__META_DATA, GpresentationPackage.PMETA_DATA__CONTAINER);
 		}
 		return metaData;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @SuppressWarnings("unchecked")
-  @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PPACKAGE__ROOTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRoots()).basicAdd(otherEnd, msgs);
@@ -256,14 +246,13 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PPACKAGE__ROOTS:
 				return ((InternalEList<?>)getRoots()).basicRemove(otherEnd, msgs);
@@ -277,14 +266,13 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 			case GpresentationPackage.PPACKAGE__OWNING_PACKAGE:
 				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PPACKAGE__NESTED_PACKAGES, PPackage.class, msgs);
@@ -292,14 +280,13 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case GpresentationPackage.PPACKAGE__XMI_GUID:
 				return getXmiGuid();
@@ -317,15 +304,14 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void eSet(int featureID, Object newValue)
-  {
+	@SuppressWarnings("unchecked")
+	@Override
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case GpresentationPackage.PPACKAGE__XMI_GUID:
 				setXmiGuid((String)newValue);
@@ -349,14 +335,13 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		super.eSet(featureID, newValue);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public void eUnset(int featureID)
-  {
+	@Override
+	public void eUnset(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PPACKAGE__XMI_GUID:
 				setXmiGuid(XMI_GUID_EDEFAULT);
@@ -377,14 +362,13 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		super.eUnset(featureID);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public boolean eIsSet(int featureID)
-  {
+	@Override
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PPACKAGE__XMI_GUID:
 				return XMI_GUID_EDEFAULT == null ? xmiGuid != null : !XMI_GUID_EDEFAULT.equals(xmiGuid);
@@ -402,14 +386,13 @@ public class PPackageImpl extends EObjectImpl implements PPackage
 		return super.eIsSet(featureID);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public String toString()
-  {
+	@Override
+	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());

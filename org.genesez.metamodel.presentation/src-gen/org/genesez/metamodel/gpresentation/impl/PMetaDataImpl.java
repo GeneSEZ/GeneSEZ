@@ -42,115 +42,107 @@ import org.genesez.metamodel.gpresentation.PPackage;
  *
  * @generated
  */
-public class PMetaDataImpl extends EObjectImpl implements PMetaData
-{
-  /**
+public class PMetaDataImpl extends EObjectImpl implements PMetaData {
+	/**
 	 * The default value of the '{@link #getUri() <em>Uri</em>}' attribute.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getUri()
 	 * @generated
 	 * @ordered
 	 */
-  protected static final String URI_EDEFAULT = null;
+	protected static final String URI_EDEFAULT = null;
 
-  /**
+	/**
 	 * The cached value of the '{@link #getUri() <em>Uri</em>}' attribute.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getUri()
 	 * @generated
 	 * @ordered
 	 */
-  protected String uri = URI_EDEFAULT;
+	protected String uri = URI_EDEFAULT;
 
-  /**
+	/**
 	 * The cached value of the '{@link #getKey() <em>Key</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getKey()
 	 * @generated
 	 * @ordered
 	 */
-  protected EList<PKey> key;
+	protected EList<PKey> key;
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PMetaDataImpl()
-  {
+	protected PMetaDataImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PMETA_DATA;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public String getUri()
-  {
+	public String getUri() {
 		return uri;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public void setUri(String newUri)
-  {
+	public void setUri(String newUri) {
 		String oldUri = uri;
 		uri = newUri;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PMETA_DATA__URI, oldUri, uri));
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public EList<PKey> getKey()
-  {
+	public EList<PKey> getKey() {
 		if (key == null) {
 			key = new EObjectContainmentWithInverseEList<PKey>(PKey.class, this, GpresentationPackage.PMETA_DATA__KEY, GpresentationPackage.PKEY__OWNER);
 		}
 		return key;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PPackage getContainer()
-  {
+	public PPackage getContainer() {
 		if (eContainerFeatureID() != GpresentationPackage.PMETA_DATA__CONTAINER) return null;
 		return (PPackage)eContainer();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @SuppressWarnings("unchecked")
-  @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA__KEY:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getKey()).basicAdd(otherEnd, msgs);
@@ -162,14 +154,13 @@ public class PMetaDataImpl extends EObjectImpl implements PMetaData
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA__KEY:
 				return ((InternalEList<?>)getKey()).basicRemove(otherEnd, msgs);
@@ -179,14 +170,13 @@ public class PMetaDataImpl extends EObjectImpl implements PMetaData
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 			case GpresentationPackage.PMETA_DATA__CONTAINER:
 				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PPACKAGE__META_DATA, PPackage.class, msgs);
@@ -194,14 +184,13 @@ public class PMetaDataImpl extends EObjectImpl implements PMetaData
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA__URI:
 				return getUri();
@@ -213,15 +202,14 @@ public class PMetaDataImpl extends EObjectImpl implements PMetaData
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void eSet(int featureID, Object newValue)
-  {
+	@SuppressWarnings("unchecked")
+	@Override
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA__URI:
 				setUri((String)newValue);
@@ -234,14 +222,13 @@ public class PMetaDataImpl extends EObjectImpl implements PMetaData
 		super.eSet(featureID, newValue);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public void eUnset(int featureID)
-  {
+	@Override
+	public void eUnset(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA__URI:
 				setUri(URI_EDEFAULT);
@@ -253,14 +240,13 @@ public class PMetaDataImpl extends EObjectImpl implements PMetaData
 		super.eUnset(featureID);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public boolean eIsSet(int featureID)
-  {
+	@Override
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA__URI:
 				return URI_EDEFAULT == null ? uri != null : !URI_EDEFAULT.equals(uri);
@@ -272,14 +258,13 @@ public class PMetaDataImpl extends EObjectImpl implements PMetaData
 		return super.eIsSet(featureID);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public String toString()
-  {
+	@Override
+	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());

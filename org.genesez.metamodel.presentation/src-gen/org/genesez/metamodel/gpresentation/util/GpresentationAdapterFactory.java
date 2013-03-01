@@ -23,40 +23,37 @@ import org.genesez.metamodel.gpresentation.*;
  * @see org.genesez.metamodel.gpresentation.GpresentationPackage
  * @generated
  */
-public class GpresentationAdapterFactory extends AdapterFactoryImpl
-{
-  /**
+public class GpresentationAdapterFactory extends AdapterFactoryImpl {
+	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected static GpresentationPackage modelPackage;
+	protected static GpresentationPackage modelPackage;
 
-  /**
+	/**
 	 * Creates an instance of the adapter factory.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public GpresentationAdapterFactory()
-  {
+	public GpresentationAdapterFactory() {
 		if (modelPackage == null) {
 			modelPackage = GpresentationPackage.eINSTANCE;
 		}
 	}
 
-  /**
+	/**
 	 * Returns whether this factory is applicable for the type of the object.
 	 * <!-- begin-user-doc -->
-   * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
-   * <!-- end-user-doc -->
+	 * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
+	 * <!-- end-user-doc -->
 	 * @return whether this factory is applicable for the type of the object.
 	 * @generated
 	 */
-  @Override
-  public boolean isFactoryForType(Object object)
-  {
+	@Override
+	public boolean isFactoryForType(Object object) {
 		if (object == modelPackage) {
 			return true;
 		}
@@ -66,14 +63,14 @@ public class GpresentationAdapterFactory extends AdapterFactoryImpl
 		return false;
 	}
 
-  /**
+	/**
 	 * The switch that delegates to the <code>createXXX</code> methods.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected GpresentationSwitch<Adapter> modelSwitch =
-    new GpresentationSwitch<Adapter>() {
+	protected GpresentationSwitch<Adapter> modelSwitch =
+		new GpresentationSwitch<Adapter>() {
 			@Override
 			public Adapter casePRoot(PRoot object) {
 				return createPRootAdapter();
@@ -152,301 +149,281 @@ public class GpresentationAdapterFactory extends AdapterFactoryImpl
 			}
 		};
 
-  /**
+	/**
 	 * Creates an adapter for the <code>target</code>.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @param target the object to adapt.
 	 * @return the adapter for the <code>target</code>.
 	 * @generated
 	 */
-  @Override
-  public Adapter createAdapter(Notifier target)
-  {
+	@Override
+	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PRoot <em>PRoot</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PRoot
 	 * @generated
 	 */
-  public Adapter createPRootAdapter()
-  {
+	public Adapter createPRootAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PCompositeArea <em>PComposite Area</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PCompositeArea
 	 * @generated
 	 */
-  public Adapter createPCompositeAreaAdapter()
-  {
+	public Adapter createPCompositeAreaAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PElement <em>PElement</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PElement
 	 * @generated
 	 */
-  public Adapter createPElementAdapter()
-  {
+	public Adapter createPElementAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PUserDefinedArea <em>PUser Defined Area</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PUserDefinedArea
 	 * @generated
 	 */
-  public Adapter createPUserDefinedAreaAdapter()
-  {
+	public Adapter createPUserDefinedAreaAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PAutomaticallyGeneratedArea <em>PAutomatically Generated Area</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PAutomaticallyGeneratedArea
 	 * @generated
 	 */
-  public Adapter createPAutomaticallyGeneratedAreaAdapter()
-  {
+	public Adapter createPAutomaticallyGeneratedAreaAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PInput <em>PInput</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PInput
 	 * @generated
 	 */
-  public Adapter createPInputAdapter()
-  {
+	public Adapter createPInputAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.POutput <em>POutput</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.POutput
 	 * @generated
 	 */
-  public Adapter createPOutputAdapter()
-  {
+	public Adapter createPOutputAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PAction <em>PAction</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PAction
 	 * @generated
 	 */
-  public Adapter createPActionAdapter()
-  {
+	public Adapter createPActionAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PMetaData <em>PMeta Data</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PMetaData
 	 * @generated
 	 */
-  public Adapter createPMetaDataAdapter()
-  {
+	public Adapter createPMetaDataAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PReferenceArea <em>PReference Area</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PReferenceArea
 	 * @generated
 	 */
-  public Adapter createPReferenceAreaAdapter()
-  {
+	public Adapter createPReferenceAreaAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PAbstractArea <em>PAbstract Area</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PAbstractArea
 	 * @generated
 	 */
-  public Adapter createPAbstractAreaAdapter()
-  {
+	public Adapter createPAbstractAreaAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PElementArea <em>PElement Area</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PElementArea
 	 * @generated
 	 */
-  public Adapter createPElementAreaAdapter()
-  {
+	public Adapter createPElementAreaAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PContentArea <em>PContent Area</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PContentArea
 	 * @generated
 	 */
-  public Adapter createPContentAreaAdapter()
-  {
+	public Adapter createPContentAreaAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PPackage <em>PPackage</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PPackage
 	 * @generated
 	 */
-  public Adapter createPPackageAdapter()
-  {
+	public Adapter createPPackageAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PKey <em>PKey</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PKey
 	 * @generated
 	 */
-  public Adapter createPKeyAdapter()
-  {
+	public Adapter createPKeyAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PValue <em>PValue</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PValue
 	 * @generated
 	 */
-  public Adapter createPValueAdapter()
-  {
+	public Adapter createPValueAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PMetaDataAware <em>PMeta Data Aware</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PMetaDataAware
 	 * @generated
 	 */
-  public Adapter createPMetaDataAwareAdapter()
-  {
+	public Adapter createPMetaDataAwareAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for an object of class '{@link org.genesez.metamodel.gpresentation.PCompositeElement <em>PComposite Element</em>}'.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see org.genesez.metamodel.gpresentation.PCompositeElement
 	 * @generated
 	 */
-  public Adapter createPCompositeElementAdapter()
-  {
+	public Adapter createPCompositeElementAdapter() {
 		return null;
 	}
 
-  /**
+	/**
 	 * Creates a new adapter for the default case.
 	 * <!-- begin-user-doc -->
-   * This default implementation returns null.
-   * <!-- end-user-doc -->
+	 * This default implementation returns null.
+	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @generated
 	 */
-  public Adapter createEObjectAdapter()
-  {
+	public Adapter createEObjectAdapter() {
 		return null;
 	}
 

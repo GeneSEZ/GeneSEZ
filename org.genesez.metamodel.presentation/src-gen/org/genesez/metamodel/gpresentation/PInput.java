@@ -17,6 +17,5 @@ package org.genesez.metamodel.gpresentation;
  * @model
  * @generated
  */
-public interface PInput extends PElement
-{
+public interface PInput extends PElement {
 } // PInput

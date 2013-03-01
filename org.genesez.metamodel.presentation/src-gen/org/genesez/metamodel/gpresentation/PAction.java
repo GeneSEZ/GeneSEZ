@@ -17,6 +17,5 @@ package org.genesez.metamodel.gpresentation;
  * @model
  * @generated
  */
-public interface PAction extends PElement
-{
+public interface PAction extends PElement {
 } // PAction
