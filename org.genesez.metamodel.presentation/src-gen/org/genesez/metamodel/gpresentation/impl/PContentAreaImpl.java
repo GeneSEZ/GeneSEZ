@@ -31,117 +31,112 @@ import org.genesez.metamodel.gpresentation.PContentArea;
 public abstract class PContentAreaImpl extends PMetaDataAwareImpl implements PContentArea
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PContentAreaImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PCONTENT_AREA;
-  }
+		return GpresentationPackage.Literals.PCONTENT_AREA;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PAbstractArea getOwningArea()
   {
-    if (eContainerFeatureID() != GpresentationPackage.PCONTENT_AREA__OWNING_AREA) return null;
-    return (PAbstractArea)eContainer();
-  }
+		if (eContainerFeatureID() != GpresentationPackage.PCONTENT_AREA__OWNING_AREA) return null;
+		return (PAbstractArea)eContainer();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
-        if (eInternalContainer() != null)
-          msgs = eBasicRemoveFromContainer(msgs);
-        return eBasicSetContainer(otherEnd, GpresentationPackage.PCONTENT_AREA__OWNING_AREA, msgs);
-    }
-    return super.eInverseAdd(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return eBasicSetContainer(otherEnd, GpresentationPackage.PCONTENT_AREA__OWNING_AREA, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
-        return eBasicSetContainer(null, GpresentationPackage.PCONTENT_AREA__OWNING_AREA, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
+				return eBasicSetContainer(null, GpresentationPackage.PCONTENT_AREA__OWNING_AREA, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
   {
-    switch (eContainerFeatureID())
-    {
-      case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
-        return eInternalContainer().eInverseRemove(this, GpresentationPackage.PABSTRACT_AREA__NESTED_CONTENTS, PAbstractArea.class, msgs);
-    }
-    return super.eBasicRemoveFromContainerFeature(msgs);
-  }
+		switch (eContainerFeatureID()) {
+			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
+				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PABSTRACT_AREA__NESTED_CONTENTS, PAbstractArea.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
-        return getOwningArea();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
+				return getOwningArea();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
-        return getOwningArea() != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCONTENT_AREA__OWNING_AREA:
+				return getOwningArea() != null;
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //PContentAreaImpl

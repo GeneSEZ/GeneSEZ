@@ -25,242 +25,238 @@ import org.genesez.metamodel.gpresentation.*;
 public class GpresentationFactoryImpl extends EFactoryImpl implements GpresentationFactory
 {
   /**
-   * Creates the default factory implementation.
-   * <!-- begin-user-doc -->
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public static GpresentationFactory init()
   {
-    try
-    {
-      GpresentationFactory theGpresentationFactory = (GpresentationFactory)EPackage.Registry.INSTANCE.getEFactory("http://genesez.org/metamodel/presentation"); 
-      if (theGpresentationFactory != null)
-      {
-        return theGpresentationFactory;
-      }
-    }
-    catch (Exception exception)
-    {
-      EcorePlugin.INSTANCE.log(exception);
-    }
-    return new GpresentationFactoryImpl();
-  }
+		try {
+			GpresentationFactory theGpresentationFactory = (GpresentationFactory)EPackage.Registry.INSTANCE.getEFactory("http://genesez.org/metamodel/presentation"); 
+			if (theGpresentationFactory != null) {
+				return theGpresentationFactory;
+			}
+		}
+		catch (Exception exception) {
+			EcorePlugin.INSTANCE.log(exception);
+		}
+		return new GpresentationFactoryImpl();
+	}
 
   /**
-   * Creates an instance of the factory.
-   * <!-- begin-user-doc -->
+	 * Creates an instance of the factory.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public GpresentationFactoryImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EObject create(EClass eClass)
   {
-    switch (eClass.getClassifierID())
-    {
-      case GpresentationPackage.PROOT: return createPRoot();
-      case GpresentationPackage.PCOMPOSITE_AREA: return createPCompositeArea();
-      case GpresentationPackage.PUSER_DEFINED_AREA: return createPUserDefinedArea();
-      case GpresentationPackage.PAUTOMATICALLY_GENERATED_AREA: return createPAutomaticallyGeneratedArea();
-      case GpresentationPackage.PINPUT: return createPInput();
-      case GpresentationPackage.POUTPUT: return createPOutput();
-      case GpresentationPackage.PACTION: return createPAction();
-      case GpresentationPackage.PMETA_DATA: return createPMetaData();
-      case GpresentationPackage.PREFERENCE_AREA: return createPReferenceArea();
-      case GpresentationPackage.PELEMENT_AREA: return createPElementArea();
-      case GpresentationPackage.PPACKAGE: return createPPackage();
-      case GpresentationPackage.PKEY: return createPKey();
-      case GpresentationPackage.PVALUE: return createPValue();
-      case GpresentationPackage.PCOMPOSITE_ELEMENT: return createPCompositeElement();
-      default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
-    }
-  }
+		switch (eClass.getClassifierID()) {
+			case GpresentationPackage.PROOT: return createPRoot();
+			case GpresentationPackage.PCOMPOSITE_AREA: return createPCompositeArea();
+			case GpresentationPackage.PUSER_DEFINED_AREA: return createPUserDefinedArea();
+			case GpresentationPackage.PAUTOMATICALLY_GENERATED_AREA: return createPAutomaticallyGeneratedArea();
+			case GpresentationPackage.PINPUT: return createPInput();
+			case GpresentationPackage.POUTPUT: return createPOutput();
+			case GpresentationPackage.PACTION: return createPAction();
+			case GpresentationPackage.PMETA_DATA: return createPMetaData();
+			case GpresentationPackage.PREFERENCE_AREA: return createPReferenceArea();
+			case GpresentationPackage.PELEMENT_AREA: return createPElementArea();
+			case GpresentationPackage.PPACKAGE: return createPPackage();
+			case GpresentationPackage.PKEY: return createPKey();
+			case GpresentationPackage.PVALUE: return createPValue();
+			case GpresentationPackage.PCOMPOSITE_ELEMENT: return createPCompositeElement();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PRoot createPRoot()
   {
-    PRootImpl pRoot = new PRootImpl();
-    return pRoot;
-  }
+		PRootImpl pRoot = new PRootImpl();
+		return pRoot;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PCompositeArea createPCompositeArea()
   {
-    PCompositeAreaImpl pCompositeArea = new PCompositeAreaImpl();
-    return pCompositeArea;
-  }
+		PCompositeAreaImpl pCompositeArea = new PCompositeAreaImpl();
+		return pCompositeArea;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PUserDefinedArea createPUserDefinedArea()
   {
-    PUserDefinedAreaImpl pUserDefinedArea = new PUserDefinedAreaImpl();
-    return pUserDefinedArea;
-  }
+		PUserDefinedAreaImpl pUserDefinedArea = new PUserDefinedAreaImpl();
+		return pUserDefinedArea;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PAutomaticallyGeneratedArea createPAutomaticallyGeneratedArea()
   {
-    PAutomaticallyGeneratedAreaImpl pAutomaticallyGeneratedArea = new PAutomaticallyGeneratedAreaImpl();
-    return pAutomaticallyGeneratedArea;
-  }
+		PAutomaticallyGeneratedAreaImpl pAutomaticallyGeneratedArea = new PAutomaticallyGeneratedAreaImpl();
+		return pAutomaticallyGeneratedArea;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PInput createPInput()
   {
-    PInputImpl pInput = new PInputImpl();
-    return pInput;
-  }
+		PInputImpl pInput = new PInputImpl();
+		return pInput;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public POutput createPOutput()
   {
-    POutputImpl pOutput = new POutputImpl();
-    return pOutput;
-  }
+		POutputImpl pOutput = new POutputImpl();
+		return pOutput;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PAction createPAction()
   {
-    PActionImpl pAction = new PActionImpl();
-    return pAction;
-  }
+		PActionImpl pAction = new PActionImpl();
+		return pAction;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PMetaData createPMetaData()
   {
-    PMetaDataImpl pMetaData = new PMetaDataImpl();
-    return pMetaData;
-  }
+		PMetaDataImpl pMetaData = new PMetaDataImpl();
+		return pMetaData;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PReferenceArea createPReferenceArea()
   {
-    PReferenceAreaImpl pReferenceArea = new PReferenceAreaImpl();
-    return pReferenceArea;
-  }
+		PReferenceAreaImpl pReferenceArea = new PReferenceAreaImpl();
+		return pReferenceArea;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PElementArea createPElementArea()
   {
-    PElementAreaImpl pElementArea = new PElementAreaImpl();
-    return pElementArea;
-  }
+		PElementAreaImpl pElementArea = new PElementAreaImpl();
+		return pElementArea;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PPackage createPPackage()
   {
-    PPackageImpl pPackage = new PPackageImpl();
-    return pPackage;
-  }
+		PPackageImpl pPackage = new PPackageImpl();
+		return pPackage;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PKey createPKey()
   {
-    PKeyImpl pKey = new PKeyImpl();
-    return pKey;
-  }
+		PKeyImpl pKey = new PKeyImpl();
+		return pKey;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PValue createPValue()
   {
-    PValueImpl pValue = new PValueImpl();
-    return pValue;
-  }
+		PValueImpl pValue = new PValueImpl();
+		return pValue;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PCompositeElement createPCompositeElement()
   {
-    PCompositeElementImpl pCompositeElement = new PCompositeElementImpl();
-    return pCompositeElement;
-  }
+		PCompositeElementImpl pCompositeElement = new PCompositeElementImpl();
+		return pCompositeElement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public GpresentationPackage getGpresentationPackage()
   {
-    return (GpresentationPackage)getEPackage();
-  }
+		return (GpresentationPackage)getEPackage();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @deprecated
-   * @generated
-   */
+	 * @deprecated
+	 * @generated
+	 */
   @Deprecated
   public static GpresentationPackage getPackage()
   {
-    return GpresentationPackage.eINSTANCE;
-  }
+		return GpresentationPackage.eINSTANCE;
+	}
 
 } //GpresentationFactoryImpl

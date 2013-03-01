@@ -31,117 +31,112 @@ import org.genesez.metamodel.gpresentation.PRoot;
 public class PRootImpl extends PAbstractAreaImpl implements PRoot
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PRootImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PROOT;
-  }
+		return GpresentationPackage.Literals.PROOT;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PPackage getOwningPackage()
   {
-    if (eContainerFeatureID() != GpresentationPackage.PROOT__OWNING_PACKAGE) return null;
-    return (PPackage)eContainer();
-  }
+		if (eContainerFeatureID() != GpresentationPackage.PROOT__OWNING_PACKAGE) return null;
+		return (PPackage)eContainer();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PROOT__OWNING_PACKAGE:
-        if (eInternalContainer() != null)
-          msgs = eBasicRemoveFromContainer(msgs);
-        return eBasicSetContainer(otherEnd, GpresentationPackage.PROOT__OWNING_PACKAGE, msgs);
-    }
-    return super.eInverseAdd(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PROOT__OWNING_PACKAGE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return eBasicSetContainer(otherEnd, GpresentationPackage.PROOT__OWNING_PACKAGE, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PROOT__OWNING_PACKAGE:
-        return eBasicSetContainer(null, GpresentationPackage.PROOT__OWNING_PACKAGE, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PROOT__OWNING_PACKAGE:
+				return eBasicSetContainer(null, GpresentationPackage.PROOT__OWNING_PACKAGE, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
   {
-    switch (eContainerFeatureID())
-    {
-      case GpresentationPackage.PROOT__OWNING_PACKAGE:
-        return eInternalContainer().eInverseRemove(this, GpresentationPackage.PPACKAGE__ROOTS, PPackage.class, msgs);
-    }
-    return super.eBasicRemoveFromContainerFeature(msgs);
-  }
+		switch (eContainerFeatureID()) {
+			case GpresentationPackage.PROOT__OWNING_PACKAGE:
+				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PPACKAGE__ROOTS, PPackage.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PROOT__OWNING_PACKAGE:
-        return getOwningPackage();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PROOT__OWNING_PACKAGE:
+				return getOwningPackage();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PROOT__OWNING_PACKAGE:
-        return getOwningPackage() != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PROOT__OWNING_PACKAGE:
+				return getOwningPackage() != null;
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //PRootImpl

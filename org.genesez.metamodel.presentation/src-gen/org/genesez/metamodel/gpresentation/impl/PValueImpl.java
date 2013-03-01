@@ -38,279 +38,270 @@ import org.genesez.metamodel.gpresentation.PValue;
 public class PValueImpl extends EObjectImpl implements PValue
 {
   /**
-   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getValue()
-   * @generated
-   * @ordered
-   */
+	 * @see #getValue()
+	 * @generated
+	 * @ordered
+	 */
   protected static final String VALUE_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getValue()
-   * @generated
-   * @ordered
-   */
+	 * @see #getValue()
+	 * @generated
+	 * @ordered
+	 */
   protected String value = VALUE_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getKey() <em>Key</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getKey() <em>Key</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getKey()
-   * @generated
-   * @ordered
-   */
+	 * @see #getKey()
+	 * @generated
+	 * @ordered
+	 */
   protected PKey key;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PValueImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PVALUE;
-  }
+		return GpresentationPackage.Literals.PVALUE;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public String getValue()
   {
-    return value;
-  }
+		return value;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public void setValue(String newValue)
   {
-    String oldValue = value;
-    value = newValue;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PVALUE__VALUE, oldValue, value));
-  }
+		String oldValue = value;
+		value = newValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PVALUE__VALUE, oldValue, value));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PKey getKey()
   {
-    if (key != null && key.eIsProxy())
-    {
-      InternalEObject oldKey = (InternalEObject)key;
-      key = (PKey)eResolveProxy(oldKey);
-      if (key != oldKey)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, GpresentationPackage.PVALUE__KEY, oldKey, key));
-      }
-    }
-    return key;
-  }
+		if (key != null && key.eIsProxy()) {
+			InternalEObject oldKey = (InternalEObject)key;
+			key = (PKey)eResolveProxy(oldKey);
+			if (key != oldKey) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, GpresentationPackage.PVALUE__KEY, oldKey, key));
+			}
+		}
+		return key;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PKey basicGetKey()
   {
-    return key;
-  }
+		return key;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public void setKey(PKey newKey)
   {
-    PKey oldKey = key;
-    key = newKey;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PVALUE__KEY, oldKey, key));
-  }
+		PKey oldKey = key;
+		key = newKey;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PVALUE__KEY, oldKey, key));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PMetaDataAware getOwner()
   {
-    if (eContainerFeatureID() != GpresentationPackage.PVALUE__OWNER) return null;
-    return (PMetaDataAware)eContainer();
-  }
+		if (eContainerFeatureID() != GpresentationPackage.PVALUE__OWNER) return null;
+		return (PMetaDataAware)eContainer();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PVALUE__OWNER:
-        if (eInternalContainer() != null)
-          msgs = eBasicRemoveFromContainer(msgs);
-        return eBasicSetContainer(otherEnd, GpresentationPackage.PVALUE__OWNER, msgs);
-    }
-    return super.eInverseAdd(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PVALUE__OWNER:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return eBasicSetContainer(otherEnd, GpresentationPackage.PVALUE__OWNER, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PVALUE__OWNER:
-        return eBasicSetContainer(null, GpresentationPackage.PVALUE__OWNER, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PVALUE__OWNER:
+				return eBasicSetContainer(null, GpresentationPackage.PVALUE__OWNER, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
   {
-    switch (eContainerFeatureID())
-    {
-      case GpresentationPackage.PVALUE__OWNER:
-        return eInternalContainer().eInverseRemove(this, GpresentationPackage.PMETA_DATA_AWARE__VALUE, PMetaDataAware.class, msgs);
-    }
-    return super.eBasicRemoveFromContainerFeature(msgs);
-  }
+		switch (eContainerFeatureID()) {
+			case GpresentationPackage.PVALUE__OWNER:
+				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PMETA_DATA_AWARE__VALUE, PMetaDataAware.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PVALUE__VALUE:
-        return getValue();
-      case GpresentationPackage.PVALUE__KEY:
-        if (resolve) return getKey();
-        return basicGetKey();
-      case GpresentationPackage.PVALUE__OWNER:
-        return getOwner();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PVALUE__VALUE:
+				return getValue();
+			case GpresentationPackage.PVALUE__KEY:
+				if (resolve) return getKey();
+				return basicGetKey();
+			case GpresentationPackage.PVALUE__OWNER:
+				return getOwner();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PVALUE__VALUE:
-        setValue((String)newValue);
-        return;
-      case GpresentationPackage.PVALUE__KEY:
-        setKey((PKey)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PVALUE__VALUE:
+				setValue((String)newValue);
+				return;
+			case GpresentationPackage.PVALUE__KEY:
+				setKey((PKey)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PVALUE__VALUE:
-        setValue(VALUE_EDEFAULT);
-        return;
-      case GpresentationPackage.PVALUE__KEY:
-        setKey((PKey)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PVALUE__VALUE:
+				setValue(VALUE_EDEFAULT);
+				return;
+			case GpresentationPackage.PVALUE__KEY:
+				setKey((PKey)null);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PVALUE__VALUE:
-        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-      case GpresentationPackage.PVALUE__KEY:
-        return key != null;
-      case GpresentationPackage.PVALUE__OWNER:
-        return getOwner() != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PVALUE__VALUE:
+				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+			case GpresentationPackage.PVALUE__KEY:
+				return key != null;
+			case GpresentationPackage.PVALUE__OWNER:
+				return getOwner() != null;
+		}
+		return super.eIsSet(featureID);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String toString()
   {
-    if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (value: ");
-    result.append(value);
-    result.append(')');
-    return result.toString();
-  }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (value: ");
+		result.append(value);
+		result.append(')');
+		return result.toString();
+	}
 
 } //PValueImpl
