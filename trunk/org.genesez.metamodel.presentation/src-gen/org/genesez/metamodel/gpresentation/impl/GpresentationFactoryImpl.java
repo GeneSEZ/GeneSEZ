@@ -22,16 +22,14 @@ import org.genesez.metamodel.gpresentation.*;
  * <!-- end-user-doc -->
  * @generated
  */
-public class GpresentationFactoryImpl extends EFactoryImpl implements GpresentationFactory
-{
-  /**
+public class GpresentationFactoryImpl extends EFactoryImpl implements GpresentationFactory {
+	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public static GpresentationFactory init()
-  {
+	public static GpresentationFactory init() {
 		try {
 			GpresentationFactory theGpresentationFactory = (GpresentationFactory)EPackage.Registry.INSTANCE.getEFactory("http://genesez.org/metamodel/presentation"); 
 			if (theGpresentationFactory != null) {
@@ -44,25 +42,23 @@ public class GpresentationFactoryImpl extends EFactoryImpl implements Gpresentat
 		return new GpresentationFactoryImpl();
 	}
 
-  /**
+	/**
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public GpresentationFactoryImpl()
-  {
+	public GpresentationFactoryImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public EObject create(EClass eClass)
-  {
+	@Override
+	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case GpresentationPackage.PROOT: return createPRoot();
 			case GpresentationPackage.PCOMPOSITE_AREA: return createPCompositeArea();
@@ -83,179 +79,163 @@ public class GpresentationFactoryImpl extends EFactoryImpl implements Gpresentat
 		}
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PRoot createPRoot()
-  {
+	public PRoot createPRoot() {
 		PRootImpl pRoot = new PRootImpl();
 		return pRoot;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PCompositeArea createPCompositeArea()
-  {
+	public PCompositeArea createPCompositeArea() {
 		PCompositeAreaImpl pCompositeArea = new PCompositeAreaImpl();
 		return pCompositeArea;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PUserDefinedArea createPUserDefinedArea()
-  {
+	public PUserDefinedArea createPUserDefinedArea() {
 		PUserDefinedAreaImpl pUserDefinedArea = new PUserDefinedAreaImpl();
 		return pUserDefinedArea;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PAutomaticallyGeneratedArea createPAutomaticallyGeneratedArea()
-  {
+	public PAutomaticallyGeneratedArea createPAutomaticallyGeneratedArea() {
 		PAutomaticallyGeneratedAreaImpl pAutomaticallyGeneratedArea = new PAutomaticallyGeneratedAreaImpl();
 		return pAutomaticallyGeneratedArea;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PInput createPInput()
-  {
+	public PInput createPInput() {
 		PInputImpl pInput = new PInputImpl();
 		return pInput;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public POutput createPOutput()
-  {
+	public POutput createPOutput() {
 		POutputImpl pOutput = new POutputImpl();
 		return pOutput;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PAction createPAction()
-  {
+	public PAction createPAction() {
 		PActionImpl pAction = new PActionImpl();
 		return pAction;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PMetaData createPMetaData()
-  {
+	public PMetaData createPMetaData() {
 		PMetaDataImpl pMetaData = new PMetaDataImpl();
 		return pMetaData;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PReferenceArea createPReferenceArea()
-  {
+	public PReferenceArea createPReferenceArea() {
 		PReferenceAreaImpl pReferenceArea = new PReferenceAreaImpl();
 		return pReferenceArea;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PElementArea createPElementArea()
-  {
+	public PElementArea createPElementArea() {
 		PElementAreaImpl pElementArea = new PElementAreaImpl();
 		return pElementArea;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PPackage createPPackage()
-  {
+	public PPackage createPPackage() {
 		PPackageImpl pPackage = new PPackageImpl();
 		return pPackage;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PKey createPKey()
-  {
+	public PKey createPKey() {
 		PKeyImpl pKey = new PKeyImpl();
 		return pKey;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PValue createPValue()
-  {
+	public PValue createPValue() {
 		PValueImpl pValue = new PValueImpl();
 		return pValue;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PCompositeElement createPCompositeElement()
-  {
+	public PCompositeElement createPCompositeElement() {
 		PCompositeElementImpl pCompositeElement = new PCompositeElementImpl();
 		return pCompositeElement;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public GpresentationPackage getGpresentationPackage()
-  {
+	public GpresentationPackage getGpresentationPackage() {
 		return (GpresentationPackage)getEPackage();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @deprecated
 	 * @generated
 	 */
-  @Deprecated
-  public static GpresentationPackage getPackage()
-  {
+	@Deprecated
+	public static GpresentationPackage getPackage() {
 		return GpresentationPackage.eINSTANCE;
 	}
 

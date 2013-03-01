@@ -17,6 +17,5 @@ package org.genesez.metamodel.gpresentation;
  * @model
  * @generated
  */
-public interface PUserDefinedArea extends PContentArea
-{
+public interface PUserDefinedArea extends PContentArea {
 } // PUserDefinedArea

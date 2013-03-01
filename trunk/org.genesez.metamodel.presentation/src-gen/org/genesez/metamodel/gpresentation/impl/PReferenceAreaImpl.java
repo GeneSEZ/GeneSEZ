@@ -30,46 +30,42 @@ import org.genesez.metamodel.gpresentation.PRoot;
  *
  * @generated
  */
-public class PReferenceAreaImpl extends PContentAreaImpl implements PReferenceArea
-{
-  /**
+public class PReferenceAreaImpl extends PContentAreaImpl implements PReferenceArea {
+	/**
 	 * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getTarget()
 	 * @generated
 	 * @ordered
 	 */
-  protected PRoot target;
+	protected PRoot target;
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PReferenceAreaImpl()
-  {
+	protected PReferenceAreaImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PREFERENCE_AREA;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PRoot getTarget()
-  {
+	public PRoot getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
 			target = (PRoot)eResolveProxy(oldTarget);
@@ -81,37 +77,34 @@ public class PReferenceAreaImpl extends PContentAreaImpl implements PReferenceAr
 		return target;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PRoot basicGetTarget()
-  {
+	public PRoot basicGetTarget() {
 		return target;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public void setTarget(PRoot newTarget)
-  {
+	public void setTarget(PRoot newTarget) {
 		PRoot oldTarget = target;
 		target = newTarget;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PREFERENCE_AREA__TARGET, oldTarget, target));
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case GpresentationPackage.PREFERENCE_AREA__TARGET:
 				if (resolve) return getTarget();
@@ -120,14 +113,13 @@ public class PReferenceAreaImpl extends PContentAreaImpl implements PReferenceAr
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public void eSet(int featureID, Object newValue)
-  {
+	@Override
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case GpresentationPackage.PREFERENCE_AREA__TARGET:
 				setTarget((PRoot)newValue);
@@ -136,14 +128,13 @@ public class PReferenceAreaImpl extends PContentAreaImpl implements PReferenceAr
 		super.eSet(featureID, newValue);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public void eUnset(int featureID)
-  {
+	@Override
+	public void eUnset(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PREFERENCE_AREA__TARGET:
 				setTarget((PRoot)null);
@@ -152,14 +143,13 @@ public class PReferenceAreaImpl extends PContentAreaImpl implements PReferenceAr
 		super.eUnset(featureID);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public boolean eIsSet(int featureID)
-  {
+	@Override
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PREFERENCE_AREA__TARGET:
 				return target != null;

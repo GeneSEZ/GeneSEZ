@@ -7,9 +7,11 @@
 package org.genesez.metamodel.gpresentation.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.genesez.metamodel.gpresentation.GpresentationPackage;
 import org.genesez.metamodel.gpresentation.POutput;
 
@@ -26,9 +28,8 @@ import org.genesez.metamodel.gpresentation.POutput;
  *
  * @generated
  */
-public class POutputImpl extends PElementImpl implements POutput
-{
-  /**
+public class POutputImpl extends PElementImpl implements POutput {
+	/**
 	 * The default value of the '{@link #getOutput() <em>Output</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -37,6 +38,7 @@ public class POutputImpl extends PElementImpl implements POutput
 	 * @ordered
 	 */
 	protected static final String OUTPUT_EDEFAULT = null;
+
 	/**
 	 * The cached value of the '{@link #getOutput() <em>Output</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -47,28 +49,26 @@ public class POutputImpl extends PElementImpl implements POutput
 	 */
 	protected String output = OUTPUT_EDEFAULT;
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected POutputImpl()
-  {
+	protected POutputImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.POUTPUT;
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -77,7 +77,7 @@ public class POutputImpl extends PElementImpl implements POutput
 		return output;
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -89,7 +89,7 @@ public class POutputImpl extends PElementImpl implements POutput
 			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.POUTPUT__OUTPUT, oldOutput, output));
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -103,7 +103,7 @@ public class POutputImpl extends PElementImpl implements POutput
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -118,7 +118,7 @@ public class POutputImpl extends PElementImpl implements POutput
 		super.eSet(featureID, newValue);
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -133,7 +133,7 @@ public class POutputImpl extends PElementImpl implements POutput
 		super.eUnset(featureID);
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -147,7 +147,7 @@ public class POutputImpl extends PElementImpl implements POutput
 		return super.eIsSet(featureID);
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated

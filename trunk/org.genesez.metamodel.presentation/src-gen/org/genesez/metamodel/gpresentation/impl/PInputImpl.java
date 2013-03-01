@@ -20,26 +20,23 @@ import org.genesez.metamodel.gpresentation.PInput;
  *
  * @generated
  */
-public class PInputImpl extends PElementImpl implements PInput
-{
-  /**
+public class PInputImpl extends PElementImpl implements PInput {
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PInputImpl()
-  {
+	protected PInputImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PINPUT;
 	}
 

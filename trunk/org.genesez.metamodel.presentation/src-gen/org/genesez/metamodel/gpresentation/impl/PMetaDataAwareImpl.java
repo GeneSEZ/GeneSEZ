@@ -43,9 +43,8 @@ import org.genesez.metamodel.gpresentation.PValue;
  *
  * @generated
  */
-public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDataAware
-{
-  /**
+public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDataAware {
+	/**
 	 * The default value of the '{@link #getXmiGuid() <em>Xmi Guid</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -65,48 +64,46 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 	 */
 	protected String xmiGuid = XMI_GUID_EDEFAULT;
 
-		/**
+	/**
 	 * The cached value of the '{@link #getMetaData() <em>Meta Data</em>}' reference list.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getMetaData()
 	 * @generated
 	 * @ordered
 	 */
-  protected EList<PMetaData> metaData;
+	protected EList<PMetaData> metaData;
 
-  /**
+	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-  protected EList<PValue> value;
+	protected EList<PValue> value;
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PMetaDataAwareImpl()
-  {
+	protected PMetaDataAwareImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PMETA_DATA_AWARE;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -115,7 +112,7 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 		return xmiGuid;
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -127,41 +124,38 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID, oldXmiGuid, xmiGuid));
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public EList<PMetaData> getMetaData()
-  {
+	public EList<PMetaData> getMetaData() {
 		if (metaData == null) {
 			metaData = new EObjectResolvingEList<PMetaData>(PMetaData.class, this, GpresentationPackage.PMETA_DATA_AWARE__META_DATA);
 		}
 		return metaData;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public EList<PValue> getValue()
-  {
+	public EList<PValue> getValue() {
 		if (value == null) {
 			value = new EObjectContainmentWithInverseEList<PValue>(PValue.class, this, GpresentationPackage.PMETA_DATA_AWARE__VALUE, GpresentationPackage.PVALUE__OWNER);
 		}
 		return value;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @SuppressWarnings("unchecked")
-  @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA_AWARE__VALUE:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getValue()).basicAdd(otherEnd, msgs);
@@ -169,14 +163,13 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA_AWARE__VALUE:
 				return ((InternalEList<?>)getValue()).basicRemove(otherEnd, msgs);
@@ -184,14 +177,13 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
 				return getXmiGuid();
@@ -203,15 +195,14 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void eSet(int featureID, Object newValue)
-  {
+	@SuppressWarnings("unchecked")
+	@Override
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
 				setXmiGuid((String)newValue);
@@ -228,14 +219,13 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 		super.eSet(featureID, newValue);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public void eUnset(int featureID)
-  {
+	@Override
+	public void eUnset(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
 				setXmiGuid(XMI_GUID_EDEFAULT);
@@ -250,14 +240,13 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 		super.eUnset(featureID);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public boolean eIsSet(int featureID)
-  {
+	@Override
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PMETA_DATA_AWARE__XMI_GUID:
 				return XMI_GUID_EDEFAULT == null ? xmiGuid != null : !XMI_GUID_EDEFAULT.equals(xmiGuid);
@@ -269,7 +258,7 @@ public abstract class PMetaDataAwareImpl extends EObjectImpl implements PMetaDat
 		return super.eIsSet(featureID);
 	}
 
-		/**
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated

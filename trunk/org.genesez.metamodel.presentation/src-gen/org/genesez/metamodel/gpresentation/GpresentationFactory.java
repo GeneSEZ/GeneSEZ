@@ -16,149 +16,148 @@ import org.eclipse.emf.ecore.EFactory;
  * @see org.genesez.metamodel.gpresentation.GpresentationPackage
  * @generated
  */
-public interface GpresentationFactory extends EFactory
-{
-  /**
+public interface GpresentationFactory extends EFactory {
+	/**
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  GpresentationFactory eINSTANCE = org.genesez.metamodel.gpresentation.impl.GpresentationFactoryImpl.init();
+	GpresentationFactory eINSTANCE = org.genesez.metamodel.gpresentation.impl.GpresentationFactoryImpl.init();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PRoot</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PRoot</em>'.
 	 * @generated
 	 */
-  PRoot createPRoot();
+	PRoot createPRoot();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PComposite Area</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PComposite Area</em>'.
 	 * @generated
 	 */
-  PCompositeArea createPCompositeArea();
+	PCompositeArea createPCompositeArea();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PUser Defined Area</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PUser Defined Area</em>'.
 	 * @generated
 	 */
-  PUserDefinedArea createPUserDefinedArea();
+	PUserDefinedArea createPUserDefinedArea();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PAutomatically Generated Area</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PAutomatically Generated Area</em>'.
 	 * @generated
 	 */
-  PAutomaticallyGeneratedArea createPAutomaticallyGeneratedArea();
+	PAutomaticallyGeneratedArea createPAutomaticallyGeneratedArea();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PInput</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PInput</em>'.
 	 * @generated
 	 */
-  PInput createPInput();
+	PInput createPInput();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>POutput</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>POutput</em>'.
 	 * @generated
 	 */
-  POutput createPOutput();
+	POutput createPOutput();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PAction</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PAction</em>'.
 	 * @generated
 	 */
-  PAction createPAction();
+	PAction createPAction();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PMeta Data</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PMeta Data</em>'.
 	 * @generated
 	 */
-  PMetaData createPMetaData();
+	PMetaData createPMetaData();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PReference Area</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PReference Area</em>'.
 	 * @generated
 	 */
-  PReferenceArea createPReferenceArea();
+	PReferenceArea createPReferenceArea();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PElement Area</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PElement Area</em>'.
 	 * @generated
 	 */
-  PElementArea createPElementArea();
+	PElementArea createPElementArea();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PPackage</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PPackage</em>'.
 	 * @generated
 	 */
-  PPackage createPPackage();
+	PPackage createPPackage();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PKey</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PKey</em>'.
 	 * @generated
 	 */
-  PKey createPKey();
+	PKey createPKey();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PValue</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PValue</em>'.
 	 * @generated
 	 */
-  PValue createPValue();
+	PValue createPValue();
 
-  /**
+	/**
 	 * Returns a new object of class '<em>PComposite Element</em>'.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>PComposite Element</em>'.
 	 * @generated
 	 */
-  PCompositeElement createPCompositeElement();
+	PCompositeElement createPCompositeElement();
 
-  /**
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the package supported by this factory.
 	 * @generated
 	 */
-  GpresentationPackage getGpresentationPackage();
+	GpresentationPackage getGpresentationPackage();
 
 } //GpresentationFactory

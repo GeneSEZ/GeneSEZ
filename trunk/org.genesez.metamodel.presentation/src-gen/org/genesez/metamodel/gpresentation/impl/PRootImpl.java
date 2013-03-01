@@ -28,48 +28,43 @@ import org.genesez.metamodel.gpresentation.PRoot;
  *
  * @generated
  */
-public class PRootImpl extends PAbstractAreaImpl implements PRoot
-{
-  /**
+public class PRootImpl extends PAbstractAreaImpl implements PRoot {
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  protected PRootImpl()
-  {
+	protected PRootImpl() {
 		super();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  protected EClass eStaticClass()
-  {
+	@Override
+	protected EClass eStaticClass() {
 		return GpresentationPackage.Literals.PROOT;
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  public PPackage getOwningPackage()
-  {
+	public PPackage getOwningPackage() {
 		if (eContainerFeatureID() != GpresentationPackage.PROOT__OWNING_PACKAGE) return null;
 		return (PPackage)eContainer();
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PROOT__OWNING_PACKAGE:
 				if (eInternalContainer() != null)
@@ -79,14 +74,13 @@ public class PRootImpl extends PAbstractAreaImpl implements PRoot
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case GpresentationPackage.PROOT__OWNING_PACKAGE:
 				return eBasicSetContainer(null, GpresentationPackage.PROOT__OWNING_PACKAGE, msgs);
@@ -94,14 +88,13 @@ public class PRootImpl extends PAbstractAreaImpl implements PRoot
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
-  {
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 			case GpresentationPackage.PROOT__OWNING_PACKAGE:
 				return eInternalContainer().eInverseRemove(this, GpresentationPackage.PPACKAGE__ROOTS, PPackage.class, msgs);
@@ -109,14 +102,13 @@ public class PRootImpl extends PAbstractAreaImpl implements PRoot
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType)
-  {
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case GpresentationPackage.PROOT__OWNING_PACKAGE:
 				return getOwningPackage();
@@ -124,14 +116,13 @@ public class PRootImpl extends PAbstractAreaImpl implements PRoot
 		return super.eGet(featureID, resolve, coreType);
 	}
 
-  /**
+	/**
 	 * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-  @Override
-  public boolean eIsSet(int featureID)
-  {
+	@Override
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case GpresentationPackage.PROOT__OWNING_PACKAGE:
 				return getOwningPackage() != null;
