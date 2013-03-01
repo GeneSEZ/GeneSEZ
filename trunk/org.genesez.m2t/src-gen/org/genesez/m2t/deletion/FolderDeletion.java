@@ -4,7 +4,6 @@ package org.genesez.m2t.deletion;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_ZAIqqwD0EeK7ac-mrkJBDw) 
  */
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,17 +23,13 @@ import org.genesez.util.filesystem.FileSystemHelper;
  * 
  * @author Dominik Wetzel
  * @date 2011-10-11
- * @author dreamer
  */
 public class FolderDeletion extends DeletionFeature {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
 	private java.util.List<Path> emptyFolders = new java.util.ArrayList<Path>();
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Prepares the deletion of empty packages. Called after a directory was completely visited.
 	 * @param	dir	the directory that will be checked.
@@ -118,7 +113,7 @@ public class FolderDeletion extends DeletionFeature {
 			if (Files.exists(dir) && dir.toFile().listFiles().length == 0) {
 				try {
 					// toh: comments, may not be needed
-//					FileSystemHelper.alterPermission(dir);
+					//					FileSystemHelper.alterPermission(dir);
 					Files.delete(dir);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -156,11 +151,6 @@ public class FolderDeletion extends DeletionFeature {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
-	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZAIqqwD0EeK7ac-mrkJBDw) ENABLED START */
 	/* PROTECTED REGION END */
 	

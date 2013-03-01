@@ -4,7 +4,6 @@ package org.genesez.m2t.deletion;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_ZACkBgD0EeK7ac-mrkJBDw) 
  */
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,11 +22,8 @@ import org.genesez.util.filesystem.FileSystemHelper;
  * 
  * @author Dominik Wetzel
  * @date 2011-09-20
- * @author dreamer
  */
 public class FileDeletion extends DeletionFeature {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -46,7 +42,6 @@ public class FileDeletion extends DeletionFeature {
 	 */
 	private Map<String, Long> files;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @param	file	
@@ -135,7 +130,7 @@ public class FileDeletion extends DeletionFeature {
 			try {
 				Path del = Paths.get(delete);
 				// toh: comments, may not be needed
-//				FileSystemHelper.alterPermission(del);
+				//				FileSystemHelper.alterPermission(del);
 				Files.deleteIfExists(del);
 			} catch (IOException e) {
 				logger.error("Error while deleting a file", e);
@@ -171,7 +166,6 @@ public class FileDeletion extends DeletionFeature {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * the includes
 	 */
@@ -200,9 +194,6 @@ public class FileDeletion extends DeletionFeature {
 		this.excludedFiles.remove(excludedFiles);
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZACkBgD0EeK7ac-mrkJBDw) ENABLED START */
 	{
 		files = new LinkedHashMap<>();

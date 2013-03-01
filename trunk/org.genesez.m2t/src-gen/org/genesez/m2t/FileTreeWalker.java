@@ -4,7 +4,6 @@ package org.genesez.m2t;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_Y_wQKQD0EeK7ac-mrkJBDw) 
  */
-
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -20,11 +19,8 @@ import org.apache.commons.logging.LogFactory;
  * A FileVisitor that walks the given FileTree and calls the update methods on its Observers.
  * 
  * @author Dominik Wetzel
- * @author dreamer
  */
 public class FileTreeWalker implements FileVisitor<Path> {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -35,7 +31,6 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	
 	private String baseDir;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Unregisters all currently used observers.
 	 */
@@ -215,7 +210,6 @@ public class FileTreeWalker implements FileVisitor<Path> {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * the observers
 	 */
@@ -244,9 +238,6 @@ public class FileTreeWalker implements FileVisitor<Path> {
 		this.baseDir = baseDir;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Y_wQKQD0EeK7ac-mrkJBDw) ENABLED START */
 	/* PROTECTED REGION END */
 	

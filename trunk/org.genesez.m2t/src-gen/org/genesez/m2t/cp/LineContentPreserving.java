@@ -4,7 +4,6 @@ package org.genesez.m2t.cp;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_jnWBUA7TEeKSL4xN3YIZZg) 
  */
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,11 +27,9 @@ import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class LineContentPreserving extends FileTreeObserverAdapter implements AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		PRESERVABLE
@@ -58,7 +55,6 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	protected boolean prepared = false;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @param	dir	
@@ -219,7 +215,6 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * paths relative to output directory that are excluded during the file search.
 	 */
@@ -271,9 +266,6 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 		return (Association<LineContentPreserving, LineContentPreservable>) association.get(Associations.PRESERVABLE);
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._jnWBUA7TEeKSL4xN3YIZZg) ENABLED START */
 	/* PROTECTED REGION END */
 	

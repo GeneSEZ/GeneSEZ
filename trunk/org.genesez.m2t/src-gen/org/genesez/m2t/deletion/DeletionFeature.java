@@ -4,7 +4,6 @@ package org.genesez.m2t.deletion;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_ZAIqzgD0EeK7ac-mrkJBDw) 
  */
-
 import org.genesez.m2t.FileTreeObserverAdapter;
 
 /**
@@ -12,11 +11,8 @@ import org.genesez.m2t.FileTreeObserverAdapter;
  * 
  * @author Dominik Wetzel
  * @date 2011-10-11
- * @author dreamer
  */
 public abstract class DeletionFeature extends FileTreeObserverAdapter {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * Directory names that are excluded during file search
@@ -38,13 +34,11 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 	 */
 	protected boolean prepared = false;
 	
-	// -- generated method declarations -------------------------------------
 	/**
 	 * Method stub for further implementation.
 	 */
 	public abstract void delete();
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Sets prepared to true. Called if file tree walked completely.
 	 */
@@ -54,7 +48,6 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Directory names that are excluded during file search
 	 */
@@ -90,9 +83,6 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 		this.enabled = enabled;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZAIqzgD0EeK7ac-mrkJBDw) ENABLED START */
 	{
 		// exclude all revision control metadata folders

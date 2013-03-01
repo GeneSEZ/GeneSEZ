@@ -4,7 +4,6 @@ package org.genesez.m2t.cp;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_Pos7EA7zEeKn_eQP-uNBOQ) 
  */
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -18,11 +17,8 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class ImportPreserver extends FileIdProvider implements ContentIncluder, LineContentExtractor, LineContentPreservable {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -43,7 +39,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	private boolean prepared = false;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @param	config	
@@ -244,7 +239,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Sets the value of attribute '<em><b>enabled</b></em>'
 	 */
@@ -252,9 +246,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 		this.enabled = enabled;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Pos7EA7zEeKn_eQP-uNBOQ) ENABLED START */
 	{
 		allImports = new LinkedHashMap<>();

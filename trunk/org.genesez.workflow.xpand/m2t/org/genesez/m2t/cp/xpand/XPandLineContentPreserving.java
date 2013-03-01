@@ -4,7 +4,6 @@ package org.genesez.m2t.cp.xpand;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_L9UhsA_0EeKuTrE1zpGjjg) 
  */
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -20,11 +19,9 @@ import org.genesez.m2t.cp.LineContentPreserving;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class XPandLineContentPreserving extends LineContentPreserving implements PostProcessor {
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @param	file	
@@ -91,9 +88,6 @@ public class XPandLineContentPreserving extends LineContentPreserving implements
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._L9UhsA_0EeKuTrE1zpGjjg) ENABLED START */
 	/* PROTECTED REGION END */
 	
