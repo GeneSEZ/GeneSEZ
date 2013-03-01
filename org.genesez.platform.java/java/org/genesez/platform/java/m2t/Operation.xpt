@@ -16,6 +16,7 @@
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
+«EXTENSION org::genesez::platform::java::m2m::AccessOperation»
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::Conversion»
 «EXTENSION org::genesez::platform::java::util::Helper»
@@ -332,11 +333,17 @@
 	an implementation which throws an exception that this method is not yet supported
 «ENDREM»
 «DEFINE _ImplementationBody FOR MOperation -»
+	«IF emHasStereotype( emGetAccessOperationIdentifier() ) -»
+		«EXPAND AccessOperationImpl::GetOperationImpl -»
+	«ELSEIF emHasStereotype( emSetAccessOperationIdentifier() ) -»
+		«EXPAND AccessOperationImpl::SetOperationImpl -»
+	«ELSE -»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("java.implementation." + xmiGuid)»
 		// TODO: implementation of method '«classifier.asTypeName()».«asOperation()»(...)'
 		throw new UnsupportedOperationException(
 				"The implementation of this generated method stub is missing!");
 		«ENDPROTECT»
+	«ENDIF -»
 «ENDDEFINE»
 
 «REM»

@@ -1,0 +1,58 @@
+«REM»
+	(c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+«IMPORT gcore»
+
+«REM»
+	Generates the implementation body of access operations.
+	
+	@see	org::genesez::platform::java::m2m::AccessOperation
+	
+	@author	nico herbig
+	@author	tobias haubold <toh@fh-zwickau.de>
+	@author andre pflueger (last)
+«ENDREM»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::Helper»
+
+
+«REM»
+	Generates the implementation of a get access operation.
+«ENDREM»
+«DEFINE GetOperationImpl FOR MOperation -»
+	«IF return.multiplicity.isSingleValued() -»
+		«IF return.type.mapName().asTypeName().matches("Date") -»
+			return new Date(«return.name -».getTime());
+		«ELSE -»
+			return «return.name»;
+		«ENDIF -»
+	«ELSE -»
+		return «return.name»;
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the implementation of a set access operation.
+«ENDREM»
+«DEFINE SetOperationImpl FOR MOperation -»
+	«LET parameter.first() AS param -»
+	«IF param.multiplicity.isSingleValued() -»
+		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+	«ELSE -»
+		«IF emHasStereotype("primitive") -»
+			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
+			for (int counter = 0; counter < «IF static-»_«ENDIF-»«param.name».length; counter++) {
+				«IF !static-»this.«ENDIF-»«param.name»[counter] = «IF static-»_«ENDIF-»«param.name»[counter];
+			}
+		«ELSE -»
+			«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
+		«ENDIF-»
+	«ENDIF -»
+	«ENDLET -»
+«ENDDEFINE»
