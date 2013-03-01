@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<!--
+	ant build file for automation of model transformation steps,
+	if ant runs in the same JVM as eclipse
+	
+	@author	dreamer
+	
+	to execute this build file, ant MUST run in the same JVM as eclipse
+	[ right click » run as » ant build ... » JRE tab » run in the same JRE as the workspace ]
+-->
+
+<project name="de.genesez.metamodel.internal" basedir=".." default="generate.metamodel.implementation">
+	
+	<!--
+		import build file containing
+		- needed properties
+		- uml2ecore task [oaw workflow]
+		- ecore2java task
+	-->
+	<import file="build-user.xml" />
+	
+	<!--
+		executes uml2ecore + ecore2java
+		- starts the oaw workflow to generate the ecore model from the emf uml2 model
+		- starts ecore code generation to generate the genmodel file and the metamodel implementation from the ecore model 
+	-->
+	<target name = "generate.metamodel.implementation"
+		depends="uml2ecore, ecore2java"
+		description="executes the oaw workflow to create the ecore model + then generates the metamodel implementation from it">
+	</target>
+</project>

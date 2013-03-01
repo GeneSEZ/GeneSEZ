@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 
+		performs model-2-model transformations
+		
+		following parameters are required:
+		==================================
+		
+		$invokeScript		extention call which starts the transformation
+							contains the xTend file, xTend function and the name of the input model slot
+							[e.g.: de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)]
+		$outputModelSlot	name of the slot which holds the transformed model
+		$configFile			xml file for configuration settings
+	-->
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="genesezMM.GenesezMMPackage" />
+	</bean>
+	<!-- bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="genesezMM.ecore" />
+	</bean -->
+	
+	
+	<component id="performM2M" class="oaw.xtend.XtendComponent">
+		
+		<metaModel idRef="genesezMM" />
+		
+		<!-- make config file accessible as global variable -->
+		<globalVarDef name="configFile" value="'${configFile}'"/>
+		
+		<!-- run the model to model transformation itself -->
+		<invoke	value="${invokeScript}" />
+		
+		<!-- Finally, the return value of the transformation is put into the 
+			 outputModel slot in the workflow. -->
+		<outputSlot value="${outputModelSlot}" />
+		
+	</component>
+
+</workflow>

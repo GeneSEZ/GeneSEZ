@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- 
+		performs a model-to-text transformation (code generation)
+		without the AOP of templates
+		(for this see the workflow component 'performM2TAOP')
+		- includes beautifier for java + xml
+		
+		following parameters are required:
+		==================================
+		
+		$rootTemplate 		the root xpt-file where the generation starts
+		$excludePackages	comma or semicola separated list with packages to exclude from code generation
+							(full qualified package names, ', ' or '; ' are also permitted)
+		$xmlMappingFile		name of the xml mapping file
+		$outputDir 			the path where the generated file are produced
+		$proRegDir 			the path where the protected reagions are found
+							(usually the same as the output directory
+		$configFile			xml file for configuration settings
+	-->
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" />
+	<!-- bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="genesezMM.ecore" />
+	</bean -->
+	
+	
+	<component id="performM2T" class="oaw.xpand2.Generator" skipOnErrors="true">
+		
+		<metaModel idRef="genesezMM" />
+		
+		<!-- Template files are written in the utf-8 charset. -->
+		<fileEncoding value="utf-8" />
+		
+		<!-- Define the map target as global variable. -->
+		<globalVarDef name="xmlMappingFile" value="'${xmlMappingFile}'"/>
+		
+		<!-- exclude packages from code gen -->
+		<globalVarDef name="excludePackages" value="'${excludePackages}'"/>
+		
+		<!-- make config file accessible as global variable -->
+		<globalVarDef name="configFile" value="'${configFile}'"/>
+		
+		<expand value="${rootTemplate}" />
+		<genPath value="${outputDir}" />
+		
+		<!-- Config the protected regions resolver. -->
+		<prSrcPaths value="${proRegDir}" />
+		<prDefaultExcludes value="false" />
+		<prExcludes value=".svn" />
+		
+		<!-- Use some beautifiers to beautify the generated code. -->
+		<!-- beautifier 
+			class="org.hybridlabs.source.formatter.JavaImportBeautifier"
+			conventionFilePath="-filename-"
+			organizeImports="true"
+			format="true" / -->
+		<!-- use eclipse beautifier with eclipse settings -->
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.JavaBeautifier"
+			configFile="de/genesez/workflows/java/eclipse.java.formatter.settings.xml" />
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
+		
+	</component>
+
+</workflow>

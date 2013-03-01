@@ -1,0 +1,77 @@
+/*
+	C# specifc conversions for easier code generation
+*/
+
+//	based on genesez meta model
+import genesezMM;
+
+extension de::genesez::io::io;
+extension de::genesez::common::Conversion;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the filename of an interface based on it's namespace separated with dashes
+ * @param	interface		an interface
+ * @return	the full qualified name of the interface based on it's namespace
+ */
+String getFilename(MInterface this) : 
+	// delegate to general Conversion script and append file extension
+//	interface.getFilename(getFileExtension());
+	owningPackage.getFullQualifiedName(getFileSeparator()) + getFileSeparator() + "I" + name + getFileExtension(); 
+
+/**
+ * getter for the filename of a classifier based on it's namespace separated with dashes
+ * @param	classifier		a classifier
+ * @return	the full qualified name of the classifier based on it's namespace
+ */
+String getFilename(MClassifier classifier) : 
+	// delegate to general Conversion script and append file extension
+	classifier.getFilename(getFileExtension());
+
+/**
+ * getter for the full qualified name of a package, which owns a classifier
+ * @param	classifier	a classfier
+ * @return	the full qualified name of the package owning the classifier
+ */
+String getPackagePath(MClassifier classifier) :
+	classifier.owningPackage.getFullQualifiedName();
+
+/**
+ * getter for the full qualified name of a package using dot's as separator
+ * @param	pkg		a package
+ * @return	the full qualified name of a package
+ */
+String getFullQualifiedName(MPackage pkg) : 
+	pkg.getFullQualifiedName(getFqnSeparator());
+
+/**
+ * getter for the full qualified name of a classifier using dot's as separator
+ * @param	clazz	a classifier
+ * @return	string representation of the full qualified name
+ */
+String getFullQualifiedName(MClassifier class) : 
+	class.owningPackage.getFullQualifiedName() + getFqnSeparator() + class.name;
+
+/**
+ * getter for the filename of a classifier based on it's namespace separated with dashes
+ * @param	classifier		a classifier
+ * @param	fileExtension	the file extension including the beginning dot
+ * @return	the full qualified name of the classifier based on it's namespace
+ */
+String getFilename(MInterface interface, String fileExtension) : 
+	interface.getFullQualifiedName(getFileSeparator()) + fileExtension;
+
+/**
+ * getter for the separator for full qualified names
+ */
+private String getFqnSeparator() : ".";
+
+/**
+ * getter for the file extension
+ */
+private String getFileExtension() : ".cs";

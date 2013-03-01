@@ -1,0 +1,91 @@
+«REM»
+	Association Template for C# classes
+	
+	@autor	Gerrit Beine
+	@date	2008/01/08
+«ENDREM»
+
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::dotnet::csharp::scripts::Arrange»
+
+«IMPORT de::genesez::platforms::dotnet::csharp»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	generate private attributes for an association
+«ENDREM»
+«DEFINE PrivateFields FOR MClass-»
+«EXPAND _FieldDecl FOREACH associations()-»
+«ENDDEFINE»
+
+«REM»
+	generate properties for an association
+«ENDREM»
+«DEFINE Properties FOR MClass-»
+«EXPAND _PropertyImpl FOREACH associationProperties()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert methods for an association
+«ENDREM»
+«DEFINE InsertImpl FOR MClass-»
+«EXPAND _InsertImpl FOREACH associations()-»
+«ENDDEFINE»
+
+
+«REM»
+	generate remove methods for an association
+«ENDREM»
+«DEFINE RemoveImpl FOR MClass-»
+«EXPAND _RemoveImpl FOREACH associations()-»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+«REM»
+	generate field declaration for an association role
+«ENDREM»
+«DEFINE _FieldDecl FOR MAssociationRole-»
+«EXPAND templates::Association::FieldDecl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate property for an association role
+«ENDREM»
+«DEFINE _PropertyImpl FOR MAssociationRole-»
+«EXPAND templates::Association::PropertyImpl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate insert into implementation for an association
+«ENDREM»
+«DEFINE _InsertImpl FOR MAssociationRole-»
+«EXPAND templates::Association::InsertImpl-»
+«ENDDEFINE»
+
+
+«REM»
+	generate remove from implementation for an association
+«ENDREM»
+«DEFINE _RemoveImpl FOR MAssociationRole-»
+«EXPAND templates::Association::RemoveImpl-»
+«ENDDEFINE»
+

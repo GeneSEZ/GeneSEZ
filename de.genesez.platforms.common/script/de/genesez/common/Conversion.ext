@@ -1,0 +1,88 @@
+/*
+	general conversions for easier code generation
+*/
+
+//	based on genesez meta model
+import genesezMM;
+
+extension de::genesez::io::io;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for a comma separated string of element names
+ * @param	l	list of model elements of type MElement
+ * @return	comma blank (', ') separated list of element names or an empty string
+ */
+String getNameList(List l) :
+	l.size > 1 
+		? ((MElement) l.first()).name + ", " + getNameList(l.withoutFirst())
+		: (l.size > 0
+			? ((MElement) l.first()).name
+			: "");
+
+/**
+ * getter for a comma separated string of generic specifications
+ * @param	l	list of model elements of type MGeneric
+ * @return	comma blank (', ') separated list of generic specifications
+ */
+String getGenericList(List l) :
+	l.size > 1 
+		? ((MGeneric) l.first()).specification + ", " + getGenericList(l.withoutFirst())
+		: (l.size > 0
+			? ((MGeneric) l.first()).specification
+			: "");
+
+/**
+ * getter for the full qualified name of a classifier
+ * @param	clazz	a classifier
+ * @return	string representation of the full qualified name
+ */
+String getFullQualifiedName(MClassifier clazz, String separator) : 
+//	JAVA de.genesez.genesezmm.Conversion.getFQNPackagePath(genesezMM.MClassifier);
+	clazz.owningPackage.getFullQualifiedName(separator) + separator + clazz.name;
+
+/**
+ * getter for the filename of a classifier based on it's namespace separated with dashes
+ * @param	classifier		a classifier
+ * @param	fileExtension	the file extension including the beginning dot
+ * @return	the full qualified name of the classifier based on it's namespace
+ */
+String getFilename(MClassifier classifier, String fileExtension) : 
+	classifier.getFullQualifiedName(getFileSeparator()) + fileExtension;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the package path of a classifier
+ * @param	pkg			a package
+ * @param	separator	a separator used to build the package path
+ * @return	string representation of the package path
+ */
+String getFullQualifiedName(MPackage pkg, String separator) : 
+	JAVA de.genesez.common.Conversion.getFullQualifiedName(genesezMM.MPackage, java.lang.String);
+
+/**
+ * getter for the separator within a file name
+ */
+String getFileSeparator() : "/";
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private extend functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private java functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/

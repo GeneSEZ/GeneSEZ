@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 
+		executes the transformation from uml2 model to genesez model
+		without profile mechanism
+		
+		following parameters are required:
+		==================================
+		
+		$uml2Model			name of the slot which holds the uml2 model
+		$excludePackages	comma or semicolon separated list of package names to exclude
+							(comma blank [, ] or semicolon blank [; ] are also permitted)
+		$genesezModel		name of the slot which holds the genesez model
+	 -->
+	
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="genesezMM.GenesezMMPackage" />
+	</bean>
+	<!-- bean id="genesezMM" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="genesezMM.ecore" />
+	</bean -->
+	
+    <!-- working with uml2 models requires the uml2 meta model -->
+	<bean id="uml2MM" class="org.openarchitectureware.uml2.UML2MetaModel"/>
+	
+	
+	<component id="uml2genesezMM" class="oaw.xtend.XtendComponent">
+		
+		<metaModel idRef="genesezMM" />
+		<metaModel idRef="uml2MM" />
+		
+		<globalVarDef name="uml2model" value="${uml2Model}" />
+		<globalVarDef name="excludePackages" value="'${excludePackages}'" />
+		
+		<!-- Run the model to model transformation itself. There's an 
+			 extension file called uml2genesezMM.ext in the respective location
+			 in the classpath that contains a function called transform that
+			 takes an object of type UML2::Model as its parameter. Note that 
+			 we can use the slot name uml2model as a variable in this expression. -->
+		<invoke	value="de::genesez::uml2genesezmm::uml2genesezMM::transform(uml2model)" />
+		
+		<!-- Finally, the return value of the transformation is put into the 
+			 generatorModel slot in the workflow. -->
+		<outputSlot value="${genesezModel}" />
+	</component>
+
+</workflow>
