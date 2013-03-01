@@ -15,11 +15,8 @@ import org.genesez.workflow.xpand.Model2Text;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Gcore2Java extends Model2Text {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String eclipseFormatterConfig = "org/genesez/platform/java/workflow/eclipse.java.formatter.settings.xml";
@@ -50,12 +47,11 @@ public class Gcore2Java extends Model2Text {
 	
 	// override default values of workflow parameters
 	{
-		setTemplate("org::genesez::platform::java::java5::templates::Root::Root");
+		setTemplate("org::genesez::platform::java::m2t::Root::Root");
 		addTypeMappingFile("org/genesez/platform/java/typemapping/typemapping.xml");
 		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -82,7 +78,6 @@ public class Gcore2Java extends Model2Text {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>eclipseFormatterConfig</b></em>'
 	 */
@@ -227,9 +222,6 @@ public class Gcore2Java extends Model2Text {
 		this.usePropertyVisibilityForAccessors = usePropertyVisibilityForAccessors;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._tPrfIAjhEeKn2-J_iePC7Q) ENABLED START */
 	{
 		// init import preserve

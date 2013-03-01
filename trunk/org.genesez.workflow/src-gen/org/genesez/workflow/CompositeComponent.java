@@ -14,16 +14,12 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class CompositeComponent<T extends WorkflowComponent> extends AbstractWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private java.util.List<T> component = new java.util.ArrayList<T>();
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -55,7 +51,6 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>component</b></em>'
 	 */
@@ -79,9 +74,6 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 		this.component.remove(component);
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._lFzPUP9cEeGCP-nN45yJrw) ENABLED START */
 	/* PROTECTED REGION END */
 	

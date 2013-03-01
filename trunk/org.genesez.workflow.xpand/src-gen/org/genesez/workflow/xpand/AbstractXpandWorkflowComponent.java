@@ -17,11 +17,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = ALWAYS)
 	private java.util.Set<String> aopScript = new java.util.LinkedHashSet<String>();
@@ -35,7 +32,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
 	private java.util.Set<String> emfMetaModelPackage = new java.util.HashSet<String>();
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -84,7 +80,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>aopScript</b></em>'
 	 */
@@ -177,9 +172,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 		this.emfMetaModelPackage.remove(emfMetaModelPackage);
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Aes3IPqcEeGS1KtqERYUjQ) ENABLED START */
 	/* PROTECTED REGION END */
 	

@@ -15,11 +15,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean schemaLocation = true;
@@ -38,7 +35,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	
 	private Writer writer;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
@@ -71,7 +67,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 		return writer.getLogMessage();
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>schemaLocation</b></em>'
 	 */
@@ -142,9 +137,6 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 		this.multipleResourcesInCaseOfList = multipleResourcesInCaseOfList;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._UMGTcPLIEeGYwYEQM4LYvw) ENABLED START */
 	private void prepareDelegate() {
 		writer = new Writer();

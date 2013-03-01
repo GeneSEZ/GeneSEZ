@@ -2,25 +2,25 @@
 «IMPORT gcore»
 
 «EXTENSION org::genesez::workflow::Utility»
-«EXTENSION org::genesez::platform::common::AccessHelper»
-«EXTENSION org::genesez::platform::common::Conversion»
-«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::util::logging::Logging»
 
-«AROUND org::genesez::platform::java::java5::templates::Attribute::_Declaration FOR MAttribute -»
+«AROUND org::genesez::platform::java::m2t::Attribute::_Declaration FOR MAttribute -»
 	«IF !isDefaultOverride() -»
 		«targetDef.proceed() -»
 	«ENDIF -»
 «ENDAROUND»
 
-«AROUND org::genesez::platform::java::java5::templates::Attribute::_MultiValuedInitialization FOR MAttribute -»
+«AROUND org::genesez::platform::java::m2t::Attribute::_MultiValuedInitialization FOR MAttribute -»
 	«IF !isDefaultOverride() -»
 		«targetDef.proceed() -»
 	«ENDIF -»
 «ENDAROUND»
 
-«AROUND org::genesez::platform::java::java5::templates::Attribute::InitializationBlock FOR MClassifier -»
-	«IF property.typeSelect(MAttribute).exists( p | !p.isDefaultOverride() && !p.static && !p.derived && p.isMultiValuedType() && p.hasDefaultValue() ) -»
+«AROUND org::genesez::platform::java::m2t::Attribute::InitializationBlock FOR MClassifier -»
+	«IF property.typeSelect(MAttribute).exists( p | !p.isDefaultOverride() && !p.static && !p.derived && p.multiplicity.isMultiValued() && p.hasDefaultValue() ) -»
 		«targetDef.proceed() -»
 	«ENDIF -»
 	«EXPAND DefaultOverride -»
@@ -38,13 +38,13 @@
 «ENDDEFINE»
 
 «DEFINE DefaultOverride(MAttribute base) FOR MAttribute -»
-	«IF base.isSingleValuedType() -»
+	«IF base.multiplicity.isSingleValued() -»
 		«base.asSetter()»(«defaultvalue»);
 	«ELSE -»
-		«IF isSingleValuedType() -»
+		«IF multiplicity.isSingleValued() -»
 		«base.asAddPropertyAccessOperation()»(«defaultvalue»);
 		«ELSE -»
-		«FOREACH defaultvalue.toList() AS v -»
+		«FOREACH defaultvalue.convertToList() AS v -»
 		«base.asAddPropertyAccessOperation()»(«v»);
 		«ENDFOREACH -»
 		«ENDIF -»

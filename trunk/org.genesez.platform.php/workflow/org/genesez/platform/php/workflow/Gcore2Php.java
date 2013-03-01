@@ -13,11 +13,8 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Gcore2Php extends Model2Text {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean generateIncludes = true;
@@ -40,7 +37,6 @@ public class Gcore2Php extends Model2Text {
 		addTypeMappingFile("org/genesez/platform/php/typemapping/typemapping.xml");
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -58,7 +54,6 @@ public class Gcore2Php extends Model2Text {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>generateIncludes</b></em>'
 	 */
@@ -129,9 +124,6 @@ public class Gcore2Php extends Model2Text {
 		this.accessorStyle = accessorStyle;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._oDsWYAopEeKxusbn3Pe47g) ENABLED START */
 	{
 		// initialize import preserve config

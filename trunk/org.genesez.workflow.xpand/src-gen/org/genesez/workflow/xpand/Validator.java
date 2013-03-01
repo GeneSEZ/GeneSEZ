@@ -17,18 +17,14 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Validator extends AbstractXpandWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = true, workflowInclusion = ALWAYS)
 	private java.util.Set<String> script = new java.util.LinkedHashSet<String>();
 	
 	private CheckComponent checkComponent;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
@@ -64,7 +60,6 @@ public class Validator extends AbstractXpandWorkflowComponent {
 		return checkComponent.getLogMessage();
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>script</b></em>'
 	 */
@@ -88,9 +83,6 @@ public class Validator extends AbstractXpandWorkflowComponent {
 		this.script.remove(script);
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._NEnv4PLHEeGYwYEQM4LYvw) ENABLED START */
 	private void prepareDelegate() {
 		checkComponent = new CheckComponent();

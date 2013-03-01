@@ -4,11 +4,13 @@ package org.genesez.workflow.profile;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_d9kawP3PEeGcKvbUXThvRw.JavaAnnotationInterface) 
  */
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.CLASS;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
+@Retention(CLASS)
 public @interface Variable {
 	
 	// -- generated code of other cartridges --------------------------------

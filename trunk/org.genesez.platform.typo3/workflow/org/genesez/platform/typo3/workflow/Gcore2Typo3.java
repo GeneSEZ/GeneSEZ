@@ -26,11 +26,8 @@ import org.genesez.workflow.xpand.Model2Text;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Gcore2Typo3 extends Model2Text {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean isT3MvcCompliant = false;
@@ -53,7 +50,6 @@ public class Gcore2Typo3 extends Model2Text {
 		addTypeMappingFile("org/genesez/platform/typo3v4/mvc/typemapping/typemapping.xml");
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -102,7 +98,6 @@ public class Gcore2Typo3 extends Model2Text {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>isT3MvcCompliant</b></em>'
 	 */
@@ -173,9 +168,6 @@ public class Gcore2Typo3 extends Model2Text {
 		this.scaffolding = scaffolding;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._uBPwkApCEeKxusbn3Pe47g) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

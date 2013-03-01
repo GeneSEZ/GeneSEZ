@@ -16,11 +16,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean useSingleGlobalResourceSet = false;
@@ -32,7 +29,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String file;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -52,7 +48,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>useSingleGlobalResourceSet</b></em>'
 	 */
@@ -109,9 +104,6 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 		this.file = file;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._y0pgQPRsEeGG-J2DIYyoXg) ENABLED START */
 	/* PROTECTED REGION END */
 	

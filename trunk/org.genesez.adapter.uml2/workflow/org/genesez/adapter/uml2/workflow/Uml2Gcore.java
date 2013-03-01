@@ -50,7 +50,7 @@ public class Uml2Gcore extends Model2Model {
 	// override default values of workflow parameters
 	{
 		setSlot("uml2model");
-		addScript("org::genesez::adapter::uml2::uml2genesez::transform");
+		addScript("org::genesez::adapter::uml2::gcore::UML2Gcore::transform");
 		setOutputSlot("coremodel");
 		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
 	}

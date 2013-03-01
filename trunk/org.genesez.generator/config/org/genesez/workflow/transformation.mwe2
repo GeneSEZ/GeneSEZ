@@ -4,18 +4,21 @@ var name = "org.genesez.workflow"
 var namespace = "org::genesez::workflow"
 var classpath = "org/genesez/workflow"
 
+var uml2setup = org.eclipse.xtend.typesystem.uml2.Setup {
+	standardUML2Setup = true
+}
+var emf = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.eclipse.emf.ecore.EcorePackage"
+}
+var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+}
+var uml = org.eclipse.xtend.typesystem.uml2.UML2MetaModel {}
+var umlns = org.genesez.adapter.uml2.UmlPackageUriSetup {
+	umlNsUri = "http://www.eclipse.org/uml2/4.0.0/UML"
+}
+
 Workflow {
-	bean = org.eclipse.xtend.typesystem.uml2.Setup {
-		standardUML2Setup = true
-	}
-	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : emf {
-		metaModelPackage = "org.eclipse.emf.ecore.EcorePackage"
-	}
-	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : gcore {
-		metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
-	}
-	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml {
-	}
 //	component = adapter.uml2.Uml2GeneSEZ {
 //		model = "../${name}/model/genesez.workflow.uml"
 //		includeProfile = "org.genesez.workflow.profile"
@@ -80,8 +83,9 @@ Workflow {
 			file = "modeling/${name}/genesez.workflow.uml"
 			slot = "uml2model"
 		}
-		component = adapter.uml2.workflow.Uml2Validator {}
-		component = adapter.uml2.workflow.Uml2Gcore {
+//		component = adapter.uml2.workflow.Uml2Validator {}
+		component = @org.genesez.adapter.uml2.gcore.Uml2Validator {}
+		component = org.genesez.adapter.uml2.workflow.Uml2Gcore {
 			includeProfiles = "org.genesez.workflow.profile"
 		}
 	}
@@ -96,10 +100,12 @@ Workflow {
 		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
 		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
 		script = "org::genesez::m2t::ApacheCommonsLogging::modify"
-//		script = "org.genesez.workflow::DefaultValueAnnotation::prepare"
-		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
-		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
-		aopScript = "org::genesez::m2t::DoNotOptimizeFinalAttribsWithDefaultValue"
+//	//	script = "org.genesez.workflow::DefaultValueAnnotation::prepare"
+		script = "org::genesez::platform::java::m2m::Prepare::prepare"
+		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+//		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
+//		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
+//		aopScript = "org::genesez::m2t::DoNotOptimizeFinalAttribsWithDefaultValue"
 	}
 //	component = platform.common.workflow.CompositeModel2Model {
 //		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
@@ -142,6 +148,8 @@ Workflow {
 			aopTemplate = "${namespace}::NoFixedImports"
 			aopTemplate = "${namespace}::AnnotationImports"
 			aopTemplate = "${namespace}::Delegate"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.acl.xml"
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
@@ -157,8 +165,8 @@ Workflow {
 			// we exclude direct model contents only by specifying e.g. the separator
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	// -- xpand workflow integration
@@ -192,6 +200,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.acl.xml"
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
@@ -208,8 +218,8 @@ Workflow {
 			excludePackage = "org::genesez::platform::dotnet::workflow"
 			excludePackage = "org::genesez::platform::php::workflow"
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	// -- uml2 adapter
@@ -242,6 +252,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
 			typeMappingFile = "typemapping.xpand.xml"
@@ -255,8 +267,8 @@ Workflow {
 			excludePackage = "org::genesez::platform::php::workflow"
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	// -- java platform
@@ -288,6 +300,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
 			typeMappingFile = "typemapping.xpand.xml"
@@ -301,8 +315,8 @@ Workflow {
 			excludePackage = "org::genesez::platform::php::workflow"
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	// -- typo3 platform
@@ -314,6 +328,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
 			typeMappingFile = "typemapping.xpand.xml"
@@ -327,8 +343,8 @@ Workflow {
 			excludePackage = "org::genesez::platform::php::workflow"
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	// -- documentation platform
@@ -340,6 +356,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
 			typeMappingFile = "typemapping.xpand.xml"
@@ -354,8 +372,8 @@ Workflow {
 			
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 //	component = platform.java.workflow.JavaGenerator {
@@ -387,6 +405,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
 			typeMappingFile = "typemapping.xpand.xml"
@@ -400,8 +420,8 @@ Workflow {
 			excludePackage = "org::genesez::platform::php::workflow"
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	// -- php platform
@@ -413,6 +433,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
 			typeMappingFile = "typemapping.xpand.xml"
@@ -426,8 +448,8 @@ Workflow {
 			excludePackage = "org::genesez::platform::dotnet::workflow"
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	// -- profile generator
@@ -439,6 +461,8 @@ Workflow {
 			aopTemplate = "${namespace}::Delegate"
 			aopTemplate = "${namespace}::DefaultOverride"
 			aopTemplate = "${namespace}::CheckConfiguration"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.mwe.xml"
 			typeMappingFile = "typemapping.xpand.xml"
@@ -452,8 +476,8 @@ Workflow {
 			excludePackage = "org::genesez::platform::php::workflow"
 			excludeContentPackage = ","
 			
-			globalVarDef = { name = "newAssociationHandling" value = "true"}
-			globalVarDef = { name = "generateSectionComments" value = "true"}
+//			globalVarDef = { name = "newAssociationHandling" value = "true"}
+//			globalVarDef = { name = "generateSectionComments" value = "true"}
 		}
 	}
 	/*

@@ -4,7 +4,6 @@ package org.genesez.workflow.xpand;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_T90ZMAWHEeKiOsNmFSLL5Q) 
  */
-
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -23,11 +22,8 @@ import org.genesez.workflow.CompositeComponent;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Model2TextComposite<T extends Model2Text> extends CompositeComponent<T> {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -45,7 +41,6 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	private ImportPreserver importPreserver;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
@@ -151,7 +146,6 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>preFileTreeWalker</b></em>'
 	 */
@@ -250,9 +244,6 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 		this.importPreserver = importPreserver;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._T90ZMAWHEeKiOsNmFSLL5Q) ENABLED START */
 	/* PROTECTED REGION END */
 	

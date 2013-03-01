@@ -19,11 +19,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Model2Model extends AbstractXpandWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = true, workflowInclusion = ALWAYS)
 	private java.util.Set<String> script = new java.util.LinkedHashSet<String>();
@@ -33,7 +30,6 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 	
 	private CompositeComponent compositeXtend;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
@@ -73,7 +69,6 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 		return compositeXtend.getLogMessage();
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>script</b></em>'
 	 */
@@ -111,9 +106,6 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 		this.outputSlot = outputSlot;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._IInokPLKEeGYwYEQM4LYvw) ENABLED START */
 	private void prepareDelegate() {
 		compositeXtend = new CompositeComponent(getClass().getName());

@@ -4,7 +4,6 @@ package org.genesez.workflow.xpand;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_wWx1oPt9EeGRytmSxmtqcQ) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.ALWAYS;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
@@ -31,11 +30,8 @@ import com.google.common.io.Files;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Model2Text extends AbstractXpandWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -75,7 +71,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	private ImportPreserverConfig importPreserverConfig;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -148,7 +143,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 		return generator.getLogMessage();
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>fileEncoding</b></em>'
 	 */
@@ -362,9 +356,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 		this.importPreserverConfig = importPreserverConfig;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._wWx1oPt9EeGRytmSxmtqcQ) ENABLED START */
 	private Outlet getDefaultOutlet() {
 		for (Outlet o : outlet) {
