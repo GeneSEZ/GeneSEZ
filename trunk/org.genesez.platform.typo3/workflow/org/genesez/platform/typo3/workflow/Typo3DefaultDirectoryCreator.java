@@ -45,6 +45,7 @@ public class Typo3DefaultDirectoryCreator extends Model2Model {
 	
 	/**
 	 * Returns the value of attribute '<em><b>outputDir</b></em>'
+	 * @return	
 	 */
 	public String getOutputDir() {
 		return outputDir;
@@ -52,6 +53,7 @@ public class Typo3DefaultDirectoryCreator extends Model2Model {
 	
 	/**
 	 * Sets the value of attribute '<em><b>outputDir</b></em>'
+	 * @param	outputDir	
 	 */
 	public void setOutputDir(String outputDir) {
 		this.outputDir = outputDir;

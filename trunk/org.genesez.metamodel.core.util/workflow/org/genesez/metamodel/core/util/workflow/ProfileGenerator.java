@@ -61,6 +61,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>xtendFilePath</b></em>'
+	 * @return	
 	 */
 	public String getXtendFilePath() {
 		return xtendFilePath;
@@ -68,6 +69,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>xtendFilePath</b></em>'
+	 * @param	xtendFilePath	
 	 */
 	public void setXtendFilePath(String xtendFilePath) {
 		this.xtendFilePath = xtendFilePath;
@@ -75,6 +77,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>profileFileName</b></em>'
+	 * @return	
 	 */
 	public String getProfileFileName() {
 		return profileFileName;
@@ -82,6 +85,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>profileFileName</b></em>'
+	 * @param	profileFileName	
 	 */
 	public void setProfileFileName(String profileFileName) {
 		this.profileFileName = profileFileName;
@@ -89,6 +93,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>accessHelperFileName</b></em>'
+	 * @return	
 	 */
 	public String getAccessHelperFileName() {
 		return accessHelperFileName;
@@ -96,6 +101,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>accessHelperFileName</b></em>'
+	 * @param	accessHelperFileName	
 	 */
 	public void setAccessHelperFileName(String accessHelperFileName) {
 		this.accessHelperFileName = accessHelperFileName;
@@ -103,6 +109,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>stereotypeNamePrefix</b></em>'
+	 * @return	
 	 */
 	public String getStereotypeNamePrefix() {
 		return stereotypeNamePrefix;
@@ -110,6 +117,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>stereotypeNamePrefix</b></em>'
+	 * @param	stereotypeNamePrefix	
 	 */
 	public void setStereotypeNamePrefix(String stereotypeNamePrefix) {
 		this.stereotypeNamePrefix = stereotypeNamePrefix;
@@ -117,6 +125,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Returns the value of attribute '<em><b>enumerationNamePrefix</b></em>'
+	 * @return	
 	 */
 	public String getEnumerationNamePrefix() {
 		return enumerationNamePrefix;
@@ -124,6 +133,7 @@ public class ProfileGenerator extends Model2Text {
 	
 	/**
 	 * Sets the value of attribute '<em><b>enumerationNamePrefix</b></em>'
+	 * @param	enumerationNamePrefix	
 	 */
 	public void setEnumerationNamePrefix(String enumerationNamePrefix) {
 		this.enumerationNamePrefix = enumerationNamePrefix;

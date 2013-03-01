@@ -82,6 +82,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Returns the value of attribute '<em><b>pdfOutputDir</b></em>'
+	 * @return	
 	 */
 	public String getPdfOutputDir() {
 		return pdfOutputDir;
@@ -89,6 +90,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Sets the value of attribute '<em><b>pdfOutputDir</b></em>'
+	 * @param	pdfOutputDir	
 	 */
 	public void setPdfOutputDir(String pdfOutputDir) {
 		this.pdfOutputDir = pdfOutputDir;
@@ -96,6 +98,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Returns the value of attribute '<em><b>latexRootFile</b></em>'
+	 * @return	
 	 */
 	public String getLatexRootFile() {
 		return latexRootFile;
@@ -103,6 +106,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Sets the value of attribute '<em><b>latexRootFile</b></em>'
+	 * @param	latexRootFile	
 	 */
 	public void setLatexRootFile(String latexRootFile) {
 		this.latexRootFile = latexRootFile;
@@ -110,6 +114,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Returns the value of attribute '<em><b>showPdfLatexLog</b></em>'
+	 * @return	
 	 */
 	public boolean getShowPdfLatexLog() {
 		return showPdfLatexLog;
@@ -117,6 +122,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Sets the value of attribute '<em><b>showPdfLatexLog</b></em>'
+	 * @param	showPdfLatexLog	
 	 */
 	public void setShowPdfLatexLog(boolean showPdfLatexLog) {
 		this.showPdfLatexLog = showPdfLatexLog;
@@ -124,6 +130,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Returns the value of attribute '<em><b>command</b></em>'
+	 * @return	
 	 */
 	public String getCommand() {
 		return command;
@@ -131,6 +138,7 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	
 	/**
 	 * Sets the value of attribute '<em><b>command</b></em>'
+	 * @param	command	
 	 */
 	public void setCommand(String command) {
 		this.command = command;

@@ -76,6 +76,7 @@ public class Uml2Gcore extends Model2Model {
 	
 	/**
 	 * Returns the value of attribute '<em><b>mapClassesInModelToExternal</b></em>'
+	 * @return	
 	 */
 	public boolean getMapClassesInModelToExternal() {
 		return mapClassesInModelToExternal;
@@ -83,6 +84,7 @@ public class Uml2Gcore extends Model2Model {
 	
 	/**
 	 * Sets the value of attribute '<em><b>mapClassesInModelToExternal</b></em>'
+	 * @param	mapClassesInModelToExternal	
 	 */
 	public void setMapClassesInModelToExternal(boolean mapClassesInModelToExternal) {
 		this.mapClassesInModelToExternal = mapClassesInModelToExternal;
@@ -90,6 +92,7 @@ public class Uml2Gcore extends Model2Model {
 	
 	/**
 	 * Returns the value of attribute '<em><b>allowGeneratedXmiGuid</b></em>'
+	 * @return	
 	 */
 	public boolean getAllowGeneratedXmiGuid() {
 		return allowGeneratedXmiGuid;
@@ -97,6 +100,7 @@ public class Uml2Gcore extends Model2Model {
 	
 	/**
 	 * Sets the value of attribute '<em><b>allowGeneratedXmiGuid</b></em>'
+	 * @param	allowGeneratedXmiGuid	
 	 */
 	public void setAllowGeneratedXmiGuid(boolean allowGeneratedXmiGuid) {
 		this.allowGeneratedXmiGuid = allowGeneratedXmiGuid;
@@ -104,9 +108,42 @@ public class Uml2Gcore extends Model2Model {
 	
 	/**
 	 * Returns the value of attribute '<em><b>externalStereotypes</b></em>'
+	 * @return	
 	 */
 	public java.util.Set<String> getExternalStereotypes() {
 		return externalStereotypes;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>externalPackages</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<String> getExternalPackages() {
+		return externalPackages;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>excludeStereotypes</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<String> getExcludeStereotypes() {
+		return excludeStereotypes;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>excludePackages</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<String> getExcludePackages() {
+		return excludePackages;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>includeProfiles</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<String> getIncludeProfiles() {
+		return includeProfiles;
 	}
 	
 	/**
@@ -126,13 +163,6 @@ public class Uml2Gcore extends Model2Model {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>externalPackages</b></em>'
-	 */
-	public java.util.Set<String> getExternalPackages() {
-		return externalPackages;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>externalPackages</b></em>'.
 	 * @param	externalPackages	the value to add
 	 */
@@ -146,13 +176,6 @@ public class Uml2Gcore extends Model2Model {
 	 */
 	public void removeExternalPackages(String externalPackages) {
 		this.externalPackages.remove(externalPackages);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>excludeStereotypes</b></em>'
-	 */
-	public java.util.Set<String> getExcludeStereotypes() {
-		return excludeStereotypes;
 	}
 	
 	/**
@@ -172,13 +195,6 @@ public class Uml2Gcore extends Model2Model {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>excludePackages</b></em>'
-	 */
-	public java.util.Set<String> getExcludePackages() {
-		return excludePackages;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>excludePackages</b></em>'.
 	 * @param	excludePackages	the value to add
 	 */
@@ -192,13 +208,6 @@ public class Uml2Gcore extends Model2Model {
 	 */
 	public void removeExcludePackages(String excludePackages) {
 		this.excludePackages.remove(excludePackages);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>includeProfiles</b></em>'
-	 */
-	public java.util.Set<String> getIncludeProfiles() {
-		return includeProfiles;
 	}
 	
 	/**

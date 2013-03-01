@@ -115,6 +115,7 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	/**
 	 * Specifies the execution in case of errors.
+	 * @return	
 	 */
 	public boolean getAbortOnError() {
 		return abortOnError;
@@ -122,6 +123,7 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	/**
 	 * Specifies the execution in case of errors.
+	 * @param	abortOnError	
 	 */
 	public void setAbortOnError(boolean abortOnError) {
 		this.abortOnError = abortOnError;

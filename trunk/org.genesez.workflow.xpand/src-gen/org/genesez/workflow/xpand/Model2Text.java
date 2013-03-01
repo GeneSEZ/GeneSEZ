@@ -145,6 +145,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Returns the value of attribute '<em><b>fileEncoding</b></em>'
+	 * @return	
 	 */
 	public String getFileEncoding() {
 		return fileEncoding;
@@ -152,6 +153,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Sets the value of attribute '<em><b>fileEncoding</b></em>'
+	 * @param	fileEncoding	
 	 */
 	public void setFileEncoding(String fileEncoding) {
 		this.fileEncoding = fileEncoding;
@@ -159,6 +161,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Returns the value of attribute '<em><b>isMultiValueSlot</b></em>'
+	 * @return	
 	 */
 	public boolean getIsMultiValueSlot() {
 		return isMultiValueSlot;
@@ -166,6 +169,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Sets the value of attribute '<em><b>isMultiValueSlot</b></em>'
+	 * @param	isMultiValueSlot	
 	 */
 	public void setIsMultiValueSlot(boolean isMultiValueSlot) {
 		this.isMultiValueSlot = isMultiValueSlot;
@@ -173,6 +177,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Returns the value of attribute '<em><b>prDefaultExcludes</b></em>'
+	 * @return	
 	 */
 	public boolean getPrDefaultExcludes() {
 		return prDefaultExcludes;
@@ -180,6 +185,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Sets the value of attribute '<em><b>prDefaultExcludes</b></em>'
+	 * @param	prDefaultExcludes	
 	 */
 	public void setPrDefaultExcludes(boolean prDefaultExcludes) {
 		this.prDefaultExcludes = prDefaultExcludes;
@@ -187,6 +193,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Returns the value of attribute '<em><b>prExcludes</b></em>'
+	 * @return	
 	 */
 	public String getPrExcludes() {
 		return prExcludes;
@@ -194,6 +201,7 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Sets the value of attribute '<em><b>prExcludes</b></em>'
+	 * @param	prExcludes	
 	 */
 	public void setPrExcludes(String prExcludes) {
 		this.prExcludes = prExcludes;
@@ -201,9 +209,90 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Returns the value of attribute '<em><b>prSourceDir</b></em>'
+	 * @return	
 	 */
 	public java.util.Set<String> getPrSourceDir() {
 		return prSourceDir;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>outlet</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<Outlet> getOutlet() {
+		return outlet;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>postProcessor</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<PostProcessor> getPostProcessor() {
+		return postProcessor;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>aopTemplate</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<String> getAopTemplate() {
+		return aopTemplate;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>template</b></em>'
+	 * @return	
+	 */
+	public String getTemplate() {
+		return template;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>template</b></em>'
+	 * @param	template	
+	 */
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>outputDir</b></em>'
+	 * @return	
+	 */
+	public String getOutputDir() {
+		return outputDir;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>outputDir</b></em>'
+	 * @param	outputDir	
+	 */
+	public void setOutputDir(String outputDir) {
+		this.outputDir = outputDir;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>typeMappingFile</b></em>'
+	 * @return	
+	 */
+	public java.util.Set<String> getTypeMappingFile() {
+		return typeMappingFile;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>importPreserverConfig</b></em>'
+	 * @return	
+	 */
+	public ImportPreserverConfig getImportPreserverConfig() {
+		return importPreserverConfig;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>importPreserverConfig</b></em>'
+	 * @param	importPreserverConfig	
+	 */
+	public void setImportPreserverConfig(ImportPreserverConfig importPreserverConfig) {
+		this.importPreserverConfig = importPreserverConfig;
 	}
 	
 	/**
@@ -223,13 +312,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>outlet</b></em>'
-	 */
-	public java.util.Set<Outlet> getOutlet() {
-		return outlet;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>outlet</b></em>'.
 	 * @param	outlet	the value to add
 	 */
@@ -243,13 +325,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	 */
 	public void removeOutlet(Outlet outlet) {
 		this.outlet.remove(outlet);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>postProcessor</b></em>'
-	 */
-	public java.util.Set<PostProcessor> getPostProcessor() {
-		return postProcessor;
 	}
 	
 	/**
@@ -269,13 +344,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>aopTemplate</b></em>'
-	 */
-	public java.util.Set<String> getAopTemplate() {
-		return aopTemplate;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>aopTemplate</b></em>'.
 	 * @param	aopTemplate	the value to add
 	 */
@@ -292,41 +360,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>template</b></em>'
-	 */
-	public String getTemplate() {
-		return template;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>template</b></em>'
-	 */
-	public void setTemplate(String template) {
-		this.template = template;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>outputDir</b></em>'
-	 */
-	public String getOutputDir() {
-		return outputDir;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>outputDir</b></em>'
-	 */
-	public void setOutputDir(String outputDir) {
-		this.outputDir = outputDir;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>typeMappingFile</b></em>'
-	 */
-	public java.util.Set<String> getTypeMappingFile() {
-		return typeMappingFile;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>typeMappingFile</b></em>'.
 	 * @param	typeMappingFile	the value to add
 	 */
@@ -340,20 +373,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	 */
 	public void removeTypeMappingFile(String typeMappingFile) {
 		this.typeMappingFile.remove(typeMappingFile);
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>importPreserverConfig</b></em>'
-	 */
-	public ImportPreserverConfig getImportPreserverConfig() {
-		return importPreserverConfig;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>importPreserverConfig</b></em>'
-	 */
-	public void setImportPreserverConfig(ImportPreserverConfig importPreserverConfig) {
-		this.importPreserverConfig = importPreserverConfig;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._wWx1oPt9EeGRytmSxmtqcQ) ENABLED START */
