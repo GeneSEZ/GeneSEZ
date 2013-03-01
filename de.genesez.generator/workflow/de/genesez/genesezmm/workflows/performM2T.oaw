@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+	
+	<!-- 	This workflow component is provided to perform the code generation
+			(Model-to-Text Transformation) without the AOP of templates 
+			(for this see the workflow component 'performM2TAOP').
+			
+			Following parameters are required:
+			==================================
+			
+			$rootTemplate 		the root xpt-file where the generation starts
+			$excludePackages	comma or semicola separated list with packages to exclude from code generation
+								(full qualified package names, ', ' or '; ' are also permitted)
+			$xmlMappingFile		name of the xml mapping file
+			$outputDir 			the path where the generated file are produced
+			$proRegDir 			the path where the protected reagions are found
+								(usually the same as the output directory
+	-->
+	
+	
+	<component id="performM2T" class="oaw.xpand2.Generator" skipOnErrors="true">
+		
+		<!-- Template files are written in the utf-8 charset. -->
+		<fileEncoding value="utf-8" />
+		
+		<!-- Working on genesezMM models also requires the EcorePackage to 
+			 be configured as a meta model. -->
+		<metaModel id="genesezMM" class="oaw.type.emf.EmfMetaModel">
+			<metaModelPackage value="genesezMM.GenesezMMPackage" />
+		</metaModel>
+		
+		<!-- Define the map target as global variable. -->
+		<globalVarDef name="xmlMappingFile" value="'${xmlMappingFile}'"/>
+		
+		<!-- exclude packages from code gen -->
+		<globalVarDef name="excludePackages" value="'${excludePackages}'"/>
+		
+		<expand value="${rootTemplate}" />
+		<genPath value="${outputDir}" />
+		
+		<!-- Config the protected regions resolver. -->
+		<prSrcPaths value="${proRegDir}" />
+		<prDefaultExcludes value="false" />
+		<prExcludes value=".svn" />
+
+		<!-- Use some beautifiers to beautify the generated code. -->
+		<beautifier 
+			class="org.hybridlabs.source.formatter.JavaImportBeautifier"
+			conventionFilePath="-filename-"
+			organizeImports="true"
+			format="true" />
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.JavaBeautifier" />
+		<beautifier
+			class="org.openarchitectureware.xpand2.output.XmlBeautifier" />
+		
+	</component>
+
+</workflow>

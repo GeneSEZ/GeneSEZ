@@ -1,0 +1,27 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::java::helper::Type»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate realization for a class
+«DEFINE Realization FOR MClass-»
+«IF !supertype.typeSelect(MInterface).isEmpty-»
+	implements «FOREACH supertype.typeSelect(MInterface) AS c SEPARATOR ", "»«asClassifierName(c.name)»«ENDFOREACH»
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+

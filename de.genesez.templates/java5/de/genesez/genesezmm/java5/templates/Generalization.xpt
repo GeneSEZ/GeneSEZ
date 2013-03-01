@@ -1,0 +1,51 @@
+«REM» import code gen meta model «ENDREM»
+«IMPORT genesezMM»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::java::helper::Type»
+«EXTENSION de::genesez::java::helper::Helper»
+«EXTENSION de::genesez::java::helper::Naming»
+
+«EXTENSION de::genesez::typemapping::TypeMapping»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// public functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate generalization for a minterface
+«DEFINE Generalization FOR MInterface-»
+«IF !supertype.typeSelect(MInterface).isEmpty-»
+	extends «supertype.typeSelect(MInterface).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MInterface).first()»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// generate generalization for a mclass
+«DEFINE Generalization FOR MClass-»
+«IF !supertype.typeSelect(MClass).isEmpty-»
+	extends «supertype.typeSelect(MClass).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MClass).first()»
+«ENDIF-»
+«ENDDEFINE»
+
+// generate generalization for a mclass
+«DEFINE Generalization FOR MDataType-»
+«IF !supertype.typeSelect(MDataType).isEmpty-»
+	extends «supertype.typeSelect(MDataType).first().name.asClassifierName()»«EXPAND _Generics FOR supertype.typeSelect(MDataType).first()»
+«ENDIF-»
+«ENDDEFINE»
+
+
+// //////////////////////////////////////////////////////////////////////////////
+// private functions
+// //////////////////////////////////////////////////////////////////////////////
+
+
+// generate generics
+«DEFINE _Generics FOR MClassifier-»
+«IF hasGenericParameter()-»
+	<«getGenericList(genericParameter)»>
+«ELSE-»
+«ENDIF-»
+«ENDDEFINE»
