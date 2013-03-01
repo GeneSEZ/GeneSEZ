@@ -1,0 +1,23 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
+extension de::genesez::platforms::java::ejb3::scripts::Interface;
+	
+Void checkTimerStereotype(MOperation this) :
+	parameter.exists(e|e.type.asTypeName() == "Timer") && parameter.size == 1 &&
+	(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false"))
+		? addTimerStereotype()
+		: "";
+		
+Void checkTimerServiceStereotype(MAttribute this) :
+	!this.hasStereotype("ejb3Resource") && this.type.asTypeName() == "TimerService"
+		? this.addResourceStereotype("")
+		: "";
+		
+Void checkEJBStereotype(MAttribute this) :
+	!this.hasStereotype("ejb3EJB") && isSessionBeanInterface(this.type.asTypeName())
+		? this.addEJBStereotype("", "", "", "", "")
+		: "";

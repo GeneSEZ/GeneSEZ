@@ -1,0 +1,76 @@
+/**
+ * Helper functions for java specific conversions for easier code generation
+ * 
+ * Adopted version of the {@link de::genesez::platforms::common::Conversion} for the java platform
+ * 
+ * @author	tobias haubold
+ * @date	2007-12-11
+ * @see		de::genesez::platforms::common::Conversion
+ */
+
+// based on genesez meta model
+import gcore;
+
+// based on the common conversion scripts
+extension de::genesez::platforms::common::Conversion reexport;
+extension de::genesez::platforms::java::scripts::Naming;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the package declaration, adopted version for java artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String)
+ */
+String packageDeclaration(MClassifier this) : 
+	owningPackage.packageDeclaration();
+
+/**
+ * getter for the package declaration, adopted version for java artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String, String)
+ */
+String packageDeclaration(MClassifier this, String base) : 
+	owningPackage.packageDeclaration( base );
+
+/**
+ * getter for the package declaration, adopted version for java artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String)
+ */
+String packageDeclaration(MPackage this) : 
+	fullQualifiedNameSep( fqnSeparator() );
+
+/**
+ * getter for the package declaration, adopted version for java artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MPackage, String, String)
+ */
+String packageDeclaration(MPackage this, String base) : 
+	fullQualifiedNameSep( base, fqnSeparator() );
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter of the full qualified name, adopted version for java artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MClassifier, String, String)
+ */
+String fullQualifiedName(MClassifier this, String typename) : 
+	fullQualifiedNameSep( typename, fqnSeparator() );
+
+/**
+ * getter for the full qualified name using a base path, adopted version for java artefacts
+ * @see	de::genesez::platforms::common::Conversion::fullQualifiedName(MClassifier, String, String, String)
+ */
+String fullQualifiedName(MClassifier this, String typename, String base) : 
+	fullQualifiedNameSep( typename, base, fqnSeparator());
+	
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/** 
+  *	returns the elements of an array formatted as string ("[<elem1>,<elem2>,<elem3>]") 
+  */
+List[String] getElements(String this) :
+	subString(1, length -1).split(",").trim();

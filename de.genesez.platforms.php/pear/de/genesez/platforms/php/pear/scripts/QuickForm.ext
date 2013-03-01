@@ -1,0 +1,93 @@
+/**
+ * @author	tobias haubold
+ * @date	2008-09-03
+ * 
+ * by now it's not possible to create a form class for each entity within a model modification or M2M
+ * - for the generation of the implementation is the entity class needed:
+ *   - search the entity class within the model
+ *   - reference the entity class from the form class
+ * - the latter way is the appropriate, e.g. possible with stereotypes + tagged values but by now the
+ *   type of a tagged value is restricted to 'String'
+*/
+
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::php::pear::scripts::QuickFormNaming;
+
+MModel addForm(MModel this) : 
+	createFormPackage() ->
+	process() ->
+	this;
+
+MPackage process(MPackage this) : 
+	nestedPackage.process() -> 
+	classifier.process() ->
+	this;
+
+MClassifier process(MClassifier this) : 
+	filter() 
+		? createForm()
+		: this;
+
+boolean filter(MClassifier this) : 
+	hasStereotype("entity");
+
+MPackage createFormPackage(MModel this) :
+	createPackage("php.pear.quickform.package.form." + xmiGuid, "form");
+
+MPrimitiveType createVoid(MClassifier this) :
+	getModel().createPrimitiveType("void");
+
+MPrimitiveType createString(MClassifier this) :
+	getModel().createPrimitiveType("String");
+
+private MClassifier createForm(MClassifier this) :
+	let f = createClass(getModel().createFormPackage(), "php.pear.quickform.formclass." + xmiGuid, asQuickFormTypeName()) :
+		f.processClassifier("public", false, false) ->
+		f.createFormMethod() ->
+		f.createBuildObjectMethod() ->
+		f.createAddCustomDefinitionMethod() ->
+	f;
+
+private MOperation createFormMethod(MClassifier this) :
+	let o = createOperation("php.pear.quickform.formclass.create." + xmiGuid, asQuickFormCreateMethodName()) :
+		o.processOperation("public", true, false, false, 1, true, false) ->
+		o.setReturnType(createVoid()) ->
+		o.createDefaultValueParameter() ->
+	o;
+
+private MOperation createBuildObjectMethod(MClassifier this) :
+	let o = createOperation("php.pear.quickform.formclass.buildObject." + xmiGuid, asQuickFormBuildObjectMethodName()) :
+		o.processOperation("public", true, false, false, 1, true, false) ->
+		o.setReturnType(createVoid()) ->
+	o;
+
+private MOperation createAddCustomDefinitionMethod(MClassifier this) :
+	let o = createOperation("php.pear.quickform.formclass.addCustomDefinition." + xmiGuid, asQuickFormAddCustomDefinitionMethodName()) :
+		o.processOperation("public", true, false, false, 1, true, false) ->
+		o.setReturnType(createVoid()) ->
+	o;
+
+private MParameter createDefaultValueParameter(MOperation this) : 
+	let p = createParameter("php.pear.quickform.formclass.create.defaultValue." + xmiGuid, asQuickFormCreateMethodDefaultValueParameterName()) :
+		p.processParameter("array()", "in", 1, false, false) ->
+		p.setType(classifier.createString()) ->
+	p;
+
+private MParameter createBuildObjectFormParameter(MOperation this) :
+	let p = createParameter("php.pear.quickform.formclass.buildObject.form." + xmiGuid, asQuickFormBuildObjectMethodFormParameterName()) :
+		p.processParameter("", "in", 1, false, false) ->
+		p.setType(classifier.createString()) ->
+	p;
+
+private MParameter createBuildObjectObjectParameter(MOperation this) :
+	let p = createParameter("php.pear.quickform.formclass.buildObject.object." + xmiGuid, classifier.asQuickFormBuildObjectMethodObjectParameterName()) :
+		p.processParameter("null", "in", 1, false, false) ->
+		p.setType(classifier.createString()) ->
+	p;
+
+private MParameter createCustomDefinitionFormParameter(MOperation this) :
+	null;

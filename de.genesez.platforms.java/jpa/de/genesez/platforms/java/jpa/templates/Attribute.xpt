@@ -1,0 +1,263 @@
+«REM»
+	Template for hibernate annotations according to attributes
+	
+	@author	andre pflueger
+	@date	2009-02-22
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::jpa::scripts::Stereotypes»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	evaluates the stereotype ejb3PrimaryKey
+	is used by attribute and operation
+ «ENDREM»
+«DEFINE PrimaryKey FOR MElement-»
+	«REM» simple primary key «ENDREM»
+	«IF hasStereotype("ejb3PrimaryKey") && hasTaggedValue("ejb3PrimaryKey", "embeddedId", "false")»
+		@Id
+	«ENDIF»
+	«REM» 
+		look for primary key in superclass
+		if the names are equal there must be an column annotation with insertable = false
+		and updatable = false
+		otherwise there will be a mapping error because hibernate tries to map the
+		primary key of the superclass and of the subclass in the same column
+		Per derfault there is no need for an primary key in the derived class
+	«ENDREM»	
+	«IF this.getClassifier() != null-»
+		«IF this.getClassifier().generalization.typeSelect(MClassifier).property.exists(e|e.name == name 
+			&& e.hasStereotype("ejb3PrimaryKey"))-»
+			«IF !hasStereotype("ejb3Column")-»
+				«addColumnForPrimaryKeyInheritance(this.getClassifier()) -> ""-»
+			«ELSE»
+				«stereotype.selectFirst(e|e == "ejb3Column").taggedValue.selectFirst(e|e == "insertable").setValue("false")-»
+				«stereotype.selectFirst(e|e == "ejb3Column").taggedValue.selectFirst(e|e == "updatable").setValue("false")-»
+			«ENDIF»
+		«ENDIF»
+	«ENDIF-»
+	
+	«REM» composed primary key «ENDREM»
+	«IF hasTaggedValue("ejb3PrimaryKey", "embeddedId", "true")»
+		@EmbeddedId
+	«ENDIF»
+	
+	«REM» automatic primary key generation 
+	«IF this.getClassifier() != null-»
+		«IF this.getClassifier().generalization.isEmpty && this.getClassifier().hasStereotype("ejb3PersistentEntity") && !hasStereotype("ejb3PrimaryKey") && this.name == "id" && this.type().name() == "int"-»
+			@Id
+			@GeneratedValue(strategy = GenerationType.AUTO)
+		«ENDIF»
+	«ENDIF-»
+	«ENDREM»
+	«REM» generationtype of primary keys «ENDREM»
+	«IF hasStereotype("ejb3TableGenerator") && hasUtilizableValue("ejb3TableGenerator", "name")-»
+		@TableGenerator(name="«getTaggedValue("ejb3TableGenerator", "name")-»"
+		«IF hasUtilizableValue("ejb3TableGenerator", "table")-»
+			, table="«getTaggedValue("ejb3TableGenerator", "table")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3TableGenerator", "pkColumnName")-»
+			, pkColumnName="«getTaggedValue("ejb3TableGenerator", "pkColumnName")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3TableGenerator", "valueColumnName")-»
+			, valueColumnName="«getTaggedValue("ejb3TableGenerator", "valueColumnName")-»"
+		«ENDIF-»	
+		«IF hasUtilizableValue("ejb3TableGenerator", "pkColumnValue")-»
+			, pkColumnValue="«getTaggedValue("ejb3TableGenerator", "pkColumnValue")-»"
+		«ENDIF-»	
+		«IF hasUtilizableValue("ejb3TableGenerator", "initialValue")-»
+			, initialValue = «getTaggedValue("ejb3TableGenerator", "initialValue")-»
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3TableGenerator", "allocationSize")-»
+			, allocationSize = «getTaggedValue("ejb3TableGenerator", "allocationSize")-»
+		«ENDIF»
+		)	
+	«ENDIF»
+	«IF hasStereotype("ejb3SequenceGenerator") && hasUtilizableValue("ejb3SequenceGenerator", "name")-»
+		@SequenceGenerator(name="«getTaggedValue("ejb3SequenceGenerator", "name")-»"
+		«IF hasUtilizableValue("ejb3SequenceGenerator", "sequenceName")-»
+			, sequenceName="«getTaggedValue("ejb3SequenceGenerator", "sequenceName")-»"
+		«ENDIF-»	
+		«IF hasUtilizableValue("ejb3SequenceGenerator", "initialValue")-»
+			, initialValue = «getTaggedValue("ejb3SequenceGenerator", "initialValue")-»
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3SequenceGenerator", "allocationSize")-»
+			, allocationSize = «getTaggedValue("ejb3SequenceGenerator", "allocationSize")-»
+		«ENDIF-»)
+	«ENDIF»
+	«IF hasTaggedValue("ejb3PrimaryKey", "generatedValue", "true")-»
+		@GeneratedValue(strategy=GenerationType.«getTaggedValue("ejb3PrimaryKey", "strategy")-»
+		«IF hasTaggedValue("ejb3PrimaryKey", "strategy", "TABLE") || hasTaggedValue("ejb3PrimaryKey", "strategy", "SEQUENCE")-»
+			«IF hasUtilizableValue("ejb3PrimaryKey", "generatorName")-»
+				, generator="«getTaggedValue("ejb3PrimaryKey", "generatorName")-»"
+			«ENDIF-»
+		«ENDIF-»	
+		)
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype ejb3Column
+	is used by attribute and operation
+ «ENDREM»
+«DEFINE Column FOR MElement»
+	«REM» column «ENDREM»
+	«IF hasStereotype("ejb3Column")»
+		@Column(
+		«IF hasUtilizableValue("ejb3Column", "name")-»
+			name="«getTaggedValue("ejb3Column", "name")-»"
+		«ELSE-»
+			name="«name.asTypeName()-»"
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "unique", "true")-»
+			, unique=true, nullable=false
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "nullable", "false") && !hasTaggedValue("ejb3Column", "unique", "true")-»
+			, nullable=false
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "insertable", "false")-»
+			, insertable=false
+		«ENDIF-»
+		«IF hasTaggedValue("ejb3Column", "updatable", "false")-»
+			, updatable=false
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3Column", "columnDefinition")-»
+			, columnDefinition="«getTaggedValue("ejb3Column", "columnDefinition")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("ejb3Column", "table")-»
+			, table="«getTaggedValue("ejb3Column", "table")-»"
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "length", "255")-»
+			, length=«taggedValue.selectFirst(e|e.tag.name == "length").value-»
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "precision", "0")-»
+			, precision=«taggedValue.selectFirst(e|e.tag.name == "precision").value-»
+		«ENDIF-»
+		«IF !hasTaggedValue("ejb3Column", "scale", "0")-»
+			, scale=«taggedValue.selectFirst(e|e.tag.name == "scale").value-»
+		«ENDIF-»
+		)		
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	evaluates the stereotype ejb3DatatypeMapping
+	is used by attribute and operation
+ «ENDREM»
+«DEFINE DatatypeMapping FOR MElement»
+	«IF hasStereotype("ejb3DatatypeMapping")»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Basic")»
+			@Basic(optional=«getTaggedValue("ejb3DatatypeMapping", "optional")-»
+			«IF hasUtilizableValue("ejb3DatatypeMapping", "fetch") && 
+				!hasTaggedValue("ejb3DatatypeMapping", "fetch", "DEFAULT")-»
+				, fetch=FetchType.«getTaggedValue("ejb3DatatypeMapping", "fetch")-»
+			«ENDIF-»)
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Lob")»
+			@Lob
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Temporal")»
+			@Temporal
+			«IF !hasTaggedValue("ejb3DatatypeMapping", "temporalType", "null")-»
+				(TemporalType.«getTaggedValue("ejb3DatatypeMapping", "temporalType")-»)
+			«ENDIF»
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "type", "Enumerated")»
+			@Enumerated
+			«IF hasUtilizableValue("ejb3DatatypeMapping", "enumType") && 
+				!hasTaggedValue("ejb3DatatypeMapping", "enumType", "ORDINAL")-»
+				(«getTaggedValue("ejb3DatatypeMapping", "enumType")-»)
+			«ENDIF»
+		«ENDIF»
+		«IF hasTaggedValue("ejb3DatatypeMapping", "transient", "true")-»
+			@Transient
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» evaluate stereotypes for attributes «ENDREM»
+«DEFINE _Annotation FOR MAttribute»
+	«EXPAND PrimaryKey»
+	«EXPAND Column»	
+	«EXPAND DatatypeMapping»
+	«EXPAND _Persistence»
+	«REM» stereotype "ejb3DiscriminatorValue" «ENDREM»
+	«EXPAND Class::DiscriminatorValue-»	
+	«IF multiplicity != 1-»
+		«REM»wird hier wirklich die klasse auf die zustandsbehaftete SessionBean getestet?«ENDREM»
+		«IF !hasStereotype("ejb3Association") || this.classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+			@org.hibernate.annotations.CollectionOfElements
+		«ENDIF-»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype ejb3PersistenceContext and ejb3PersistenceUnit 
+«ENDREM»
+«DEFINE _Persistence FOR MAttribute»
+	«IF hasStereotype("ejb3PersistenceContext") && hasUtilizableValue("ejb3PersistenceContext", "type")»
+		«IF getTaggedValue("ejb3PersistenceContext", "type").getElements().size > 1-»
+			@PersistenceContexts(
+		«ENDIF-»
+		«FOREACH getTaggedValue("ejb3PersistenceContext", "type").getElements() AS types SEPARATOR ","-»
+ 			@PersistenceContext (
+ 				type = PersistenceContextType.«types-»
+ 				«IF hasUtilizableValue("ejb3PerssistenceContext", "unitName")-»  						
+	 				«LET getTaggedValue("ejb3PersistenceContext", "unitName").getElements().indexOf(types) AS index-»
+	 					, unitName = "«getTaggedValue("ejb3PersistenceContext", "unitName").getElements().get(index)-»"
+	 				«ENDLET»
+	 			«ENDIF»
+ 				«IF hasUtilizableValue("ejb3PerssistenceContext", "name")-»  						
+	 				«LET getTaggedValue("ejb3PersistenceContext", "name").getElements().indexOf(types) AS index-»
+	 					, name = "«getTaggedValue("ejb3PersistenceContext", "name").getElements().get(index)-»"
+	 				«ENDLET-»
+	 			«ENDIF-»)	 			
+ 		«ENDFOREACH-»
+ 		«IF getTaggedValue("ejb3PersistenceContext", "type").getElements().size > 1-»
+ 			)
+ 		«ENDIF-»		
+	«ELSEIF hasStereotype("ejb3PersistenceContext")-»
+		@PersistenceContext
+	«ELSEIF hasStereotype("ejb3PersistenceUnit") && hasUtilizableValue("ejb3PersistenceUnit", "name") && hasUtilizableValue("ejb3PersistenceUnit", "unitName")-»
+		«IF getTaggedValue("ejb3PersistenceUnit", "name").getElements().size > 1-»
+			@PersistenceUnits {
+		«ENDIF-»
+		 «FOREACH getTaggedValue("ejb3PersistenceUnit", "name").getElements() AS names SEPARATOR ","-»
+ 			@PersistenceUnit(
+ 				name = "«names-»",  						
+ 				«LET getTaggedValue("ejb3PersistenceUnit", "unitName").getElements().indexOf(names) AS index-»
+ 					unitName = "«getTaggedValue("ejb3PersistenceUnit", "unitName").getElements().get(index)-»")
+ 				«ENDLET»
+ 		«ENDFOREACH-»)
+ 		«IF getTaggedValue("ejb3PersistenceUnit", "name").getElements().size > 1-»
+			}
+		«ENDIF-»
+ 	«ELSEIF hasStereotype("ejb3PersistenceUnit")-»
+ 		@PersistenceUnit
+	«ENDIF-»
+«ENDDEFINE»

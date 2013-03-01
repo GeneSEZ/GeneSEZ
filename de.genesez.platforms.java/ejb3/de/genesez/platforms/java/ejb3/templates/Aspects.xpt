@@ -1,0 +1,354 @@
+«REM»
+	Template for ejb3-Aspects
+	
+	@author	andre pflueger
+	@date	2009-02-22
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«EXTENSION de::genesez::platforms::common::GeneralHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+«EXTENSION de::genesez::platforms::java::scripts::Imports»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Class»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Attribute»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Stereotypes»
+«EXTENSION de::genesez::platforms::java::ejb3::scripts::Interface»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	aspects for Enterprise JavaBeans (Version 3)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	override fixed imports because a different association handling 
+	is in use for the ejb3 cartridge
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Import::_OtherImports FOR MClassifier-»
+	«EXPAND Class::_ImportStatements»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+	fix problems with generated imports and the containing proReg 
+	(if proreg has content, only the end of the proreg is generated)
+	fast solution idea: generate imports in the proreg; add custom imports
+	next time imports are generated they will be generated in the proreg but will 
+	be overridden by restoring the proreg which happens after generating the source code
+	
+	this is not a good handling of the problem because there is generated code in a proreg
+	which is reserved for customized code 
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Import::Import FOR MClassifier-»
+	«PROTECT CSTART "/*" CEND "*/" ID ("java.type.import." + xmiGuid)» 
+	/* TODO: put your own source code here */
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_FixedImports -»
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_Import FOREACH supplier.select( s| s.isImportNeeded(this) && s.metaType.name != "gcore::MExternal")»
+	«EXPAND de::genesez::platforms::java::java5::templates::Import::_OtherImports»
+	«ENDPROTECT»
+«ENDAROUND»
+
+«REM»
+	annotations for interfaces
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Interface::_Annotation FOR MInterface-»
+	«EXPAND Class::RemoteLocal-»
+	«targetDef.proceed()-» 
+«ENDAROUND»	
+
+«REM»
+	annotations for classes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Class::_Annotation FOR MClass-»
+	«EXPAND Class::_Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for operations (used for return type, parameters and operations)
+	there is a conflict by using jws and ejb in one cartridge --> write own jws cartridge
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Operation::_Annotation FOR MOperation-»
+	«EXPAND Operation::Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	annotations for attributes
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Attribute::_Annotation FOR MAttribute-»
+	«EXPAND Attribute::_Annotation-»
+	«targetDef.proceed()-» 
+«ENDAROUND»
+
+«REM»
+	extends the class generation of the java5-cartridge
+«ENDREM»
+«AROUND de::genesez::platforms::java::java5::templates::Class::Root::_Extension FOR MClass-»
+	/**
+	  * generated methods from the implementing interface(s)
+	  * «FOREACH realization.typeSelect(MInterface).asTypeName() AS name SEPARATOR ", "-»«IF !((name == "I"+asTypeName()+"Local") || (name == "I"+asTypeName()+"Remote"))-»«name-»«ENDIF-»«ENDFOREACH»
+	  */
+	«REM»
+		do not add the operations of the generated session bean interface because these are 
+		already implemented in this class
+	«ENDREM»
+	«FOREACH realization.typeSelect(MInterface) AS interface»
+	  	«IF !((interface.asTypeName() == "I"+asTypeName()+"Local") || (interface.asTypeName() == "I"+asTypeName()+"Remote"))»
+	  		«EXPAND de::genesez::platforms::java::java5::templates::Operation::Implementation FOR interface -»
+	  	«ENDIF»
+	«ENDFOREACH»
+	«targetDef.proceed()-»
+«ENDAROUND»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	automatisches Hinzufügen von Stereotypen, Attributen, Operationen, Interfaces auf Klassenebene
+«DEFINE _CreateClassStereotypes FOR MClass-»
+«ENDREM»
+	
+	
+	
+	«REM»
+		«EXPAND _CreateSessionBeanInterfaces-»
+	«EXPAND _CreatePersistenceStereotypes FOREACH property.typeSelect(MAttribute)-»
+	«EXPAND _CreateEJBStereotype FOREACH property.typeSelect(MAttribute)-»
+	«EXPAND _CreateTimerServiceStereotype FOREACH property.typeSelect(MAttribute)-»
+	«EXPAND _CreateTimerStereotype FOREACH operation-»
+	«EXPAND _CreateInheritanceStereotype-»
+	«EXPAND _CreatePrimaryKeyAttributeAndOrStereotype-»
+	«EXPAND _CreateAssociationStereotype FOREACH property.typeSelect(MAssociationRole)-»
+		
+		ToDos:
+			- create MInterface for all session beans with operations, so it will be 
+			generated by java5-cartridge without interaction of this cartridge
+			goal is to make modifications to the modell and not in the xpand templates
+			makes it possible to modify the elements in other cartridges as well (i.e. seam2)
+			
+			this will be necessary cause java5-cartridge has a new import process
+«ENDDEFINE»
+
+	«ENDREM»
+
+«REM»
+	automatic generation of a default primary key attribute
+	automatic annotation for a primary key attribute with name "id" and type "int"
+«DEFINE _CreatePrimaryKeyAttributeAndOrStereotype FOR MClass-»«ENDREM»
+	«REM»add default primaryKey-attribute "id" if necessary and not existing«ENDREM»«REM»
+	«IF generalization.isEmpty && hasStereotype("ejb3PersistentEntity") && 
+		property.notExists(e|e.hasStereotype("ejb3PrimaryKey")) && 
+		property.notExists(e|e.name == "id" && e.type.name() == "int")-»
+		«addDefaultPrimaryKeyAttribute(this, "id", "int", "private") -> ""-»
+	«ENDIF»
+	«REM»add "ejb3PrimaryKey"-stereotype if necessary and not existing«ENDREM»«REM»
+	«IF	property.exists(e|e.name == "id" && e.type.name() == "int") && 
+		!property.selectFirst(e|e.name == "id" && e.type.name() == "int").hasStereotype("ejb3PrimaryKey")-»
+		«property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "AUTO", "")->""-»
+	«ENDIF»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	automatic annotation of timeout operations
+«DEFINE _CreateTimerStereotype FOR MOperation-»
+	«REM» stereotype ejb3Timer; constraints should be realized by check language «ENDREM»«REM»
+	«IF (parameter.exists(e|e.type.asTypeName() == "Timer") && parameter.size == 1) && 
+		(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false"))-»
+		«addTimerStereotype()->""-»
+	«ENDIF-»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	automatische Generierung der Assoziationsstereotypen
+«DEFINE _CreateAssociationStereotype FOR MAssociationRole-»
+	«IF hasStereotype("ejb3Association")-»
+		«EXPAND Association::_AssociationStereotypeExists-»
+	«ELSE-»
+		«EXPAND Association::_AssociationStereotypeNotExists-»
+	«ENDIF»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	automatic generation of @Resource for not annotated TimerService attribute
+«DEFINE _CreateTimerServiceStereotype FOR MAttribute-»
+	«IF !hasStereotype("ejb3Resource") && type.asTypeName() == "TimerService"-»
+		«addResourceStereotype(this, "")->""-»
+	«ENDIF-»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	auotmatisches Hinzufügen von Stereotypen für EntityManager und EntityManagerFactory
+«DEFINE _CreatePersistenceStereotypes FOR MAttribute-»
+	«IF type.asTypeName() == "EntityManager"-»
+		«addPersistenceContextStereotype(this, "[]", "[]", "[]")->""-»
+	«ELSEIF type.asTypeName() == "EntityManagerFactory"-»
+		«addPersistenceUnitStereotype(this, "[]", "[]")->""-»
+	«ENDIF»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	automatisches Hinzufügen von SessionBean-Interfaces
+	fällt womöglich bei EJB 3.1 für lokale Interfaces weg
+	es wird ein MInterface-Element dem Modell hinzugefügt (mit Stereotyp "ejb3{Remote|Local}"
+	und den public Operationen der Klasse bis auf den/die Konstruktoren
+«DEFINE _CreateSessionBeanInterfaces FOR MClass-»
+	«IF hasStereotype("ejb3SessionBean")-»
+		«IF hasStereotype("ejb3Remote")-»
+			«IF hasUtilizableValue("ejb3Remote", "name")-»
+				«LET createInterface(this.owningPackage, getTaggedValue("ejb3Remote", "name"), getTaggedValue("ejb3Remote", "name")) AS interface-»
+					«this.realization.add(interface)-»
+					«addRemoteStereotype(interface, "")->""-»
+					«FOREACH operation.typeSelect(MOperation) AS op»
+					 	«IF ((op.visibility == 'public') && (op.name != asTypeName()))»
+					 		«op.copyOperation(interface)-> ""-»
+					 	«ENDIF»
+					 «ENDFOREACH»
+				«ENDLET»
+				«REM»«addExternalInterface(this, "I"+getTaggedValue("ejb3Remote", "name"))-> ""-»«ENDREM»«REM»
+			«ELSE-»
+				«LET createInterface(this.owningPackage, asTypeName()+"Remote", asTypeName()+"Remote") AS interface-»
+					«this.realization.add(interface)-»
+					«addRemoteStereotype(interface, "")->""-»
+					«FOREACH operation.typeSelect(MOperation) AS op»
+					 	«IF ((op.visibility == 'public') && (op.name != asTypeName()))»
+					 		«op.copyOperation(interface)-> ""-»
+					 	«ENDIF»
+					 «ENDFOREACH»
+				«ENDLET»
+				«REM»«addExternalInterface(this, "I"+asTypeName()+"Remote")-> ""-»«ENDREM»«REM»
+			«ENDIF-»
+		«ENDIF-»
+		«IF hasStereotype("ejb3Local")-»
+			«IF hasUtilizableValue("ejb3Local", "name")-»
+				«LET createInterface(this.owningPackage, getTaggedValue("ejb3Local", "name"), getTaggedValue("ejb3Local", "name")) AS interface-»
+					«this.realization.add(interface)-»
+					«addLocalStereotype(interface, "")->""-»
+					«FOREACH operation.typeSelect(MOperation) AS op»
+					 	«IF ((op.visibility == 'public') && (op.name != asTypeName()))»
+					 		«op.copyOperation(interface)-> ""-»
+					 	«ENDIF»
+					 «ENDFOREACH»
+				«ENDLET»
+				«REM»«addExternalInterface(this, "I"+getTaggedValue("ejb3Local", "name"))-> ""-»«ENDREM»«REM»
+			«ELSE-»
+				«LET createInterface(this.owningPackage, asTypeName()+"Local", asTypeName()+"Local") AS interface-»
+					«this.realization.add(interface)-»
+					«addLocalStereotype(interface, "")->""-»
+					«FOREACH operation.typeSelect(MOperation) AS op»
+					 	«IF ((op.visibility == 'public') && (op.name != asTypeName()))»
+					 		«op.copyOperation(interface)-> ""-»
+					 	«ENDIF»
+					 «ENDFOREACH»
+				«ENDLET»
+				«REM»«addExternalInterface(this, "I"+asTypeName()+"Local")-> ""-»«ENDREM»	«REM»
+			«ENDIF-»			
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+«ENDREM»
+
+«REM» 
+	automatic annotation of EJB for session bean interfaces
+	following the naming convention "I + <Name> + {Remote|Local}" 
+«DEFINE _CreateEJBStereotype FOR MAttribute-»
+	«IF !hasStereotype("ejb3EJB")-»
+		«IF isSessionBeanInterface(this.type.asTypeName())-»
+			«addEJBStereotype(this, "", "", "", "", "")->""-»
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+«ENDREM»
+«REM»
+«DEFINE _CreateInheritanceStereotype FOR MClass-»«ENDREM»
+	«REM» automatic annotation of inheritance «ENDREM»«REM»
+	«IF !hasStereotype("ejb3DiscriminatorValue") && !hasStereotype("ejb3PrimaryKeyJoinColumn")-»
+		«IF !generalization.isEmpty-»
+			«FOREACH generalization.typeSelect(MClass) AS class-»
+				«REM» only inheritance of depth one «ENDREM»«REM»
+				«IF (hasStereotype(class, "ejb3Inheritance") || hasStereotype(class, "ejb3DiscriminatorColumn")) &&
+					class.generalization.isEmpty-»
+					«REM»a«ENDREM»«REM»
+					«IF hasStereotype("ejb3Inheritance")-»
+						«REM»
+							logically there is no discriminator column stereotype in super class
+							it cannot be annotated to class if @Inheritance is not available
+						«ENDREM»«REM»
+						«IF getTaggedValue(class, "ejb3Inheritance", "strategy") == "SINGLE_TABLE"-»
+							«IF getTaggedValue(class, "ejb3Inheritance", "discriminatorType") == "STRING"-»
+								«addDiscriminatorColumnStereotype(class, "", "STRING", "31", "DTYPE") ->""-»
+								«REM»
+									ejb3DiscriminatorValue is not needed here because class name
+									is choosen by default as identifier of the discriminator column
+									if "@DiscriminatorValue" is missing
+								«ENDREM»«REM»
+							«ELSEIF getTaggedValue(class, "ejb3Inheritance", "discriminatorType") == "INT"-»
+								«addDiscriminatorColumnStereotype(class, "", "INT", "31", "DTYPE") ->""-»
+								«addDiscriminatorValueStereotype(class, class.name.asTypeName().length.toString()) ->""-»
+								«addDiscriminatorValueStereotype(this, asTypeName().length.toString()) ->""-»
+							«ELSEIF getTaggedValue(class, "ejb3Inheritance", "discriminatorType") == "CHAR"-»
+								«addDiscriminatorColumnStereotype(class, "", "CHAR", "31", "DTYPE") ->""-»
+								«addDiscriminatorValueStereotype(class, class.name.asTypeName().subString(0, 1)) ->""-»
+								«addDiscriminatorValueStereotype(this, asTypeName().subString(0, 1).toString()) ->""-»
+							«ENDIF»
+						«ENDIF»
+					«ENDIF»
+				«ELSE-»
+					«REM» there is no "@Inheritance" and "@DiscriminatorColumn" at super class «ENDREM»«REM»
+					«IF class.generalization.isEmpty-»
+						«REM»these two annotations are only needed if this is not a derived class«ENDREM»«REM»
+						«addInheritanceStereotype(class, "SINGLE_TABLE") ->""-»
+						«addDiscriminatorColumnStereotype(class, "", "STRING", "31", "DTYPE") ->""-»
+					«ENDIF-»
+					«REM»
+						equal named primary keys in super and derived class are 
+						detected by primary key annotation in Attribute.xpt
+						--> nothing to do here 
+					«ENDREM»
+					«REM»
+						ejb3DiscriminatorValue is not needed here because class name
+						is choosen by default as identifier of the discriminator column
+						if "@DiscriminatorValue" is missing
+					«ENDREM»«REM»
+				«ENDIF-»
+			«ENDFOREACH»
+		«ELSE-»
+			«REM» look for this class in generalizations of other classes «ENDREM»«REM»
+			«FOREACH this.owningPackage.classifier.typeSelect(MClass) AS classes-»
+				«IF !hasStereotype("ejb3Inheritance") && !classes.generalization.isEmpty && 
+					classes.generalization.typeSelect(MClass).name.exists(e|e == this.name)-»
+					«addInheritanceStereotype(this, "SINGLE_TABLE") ->""-»
+					«addDiscriminatorColumnStereotype(this, "", "STRING", "31", "DTYPE") ->""-»
+					«REM»
+						ejb3DiscriminatorValue is not needed here because class name
+						is choosen by default as identifier of the discriminator column
+						if "@DiscriminatorValue" is missing		
+					«EXPAND _Inheritance-»
+					«ENDREM»«REM»	
+				«ENDIF»			
+			«ENDFOREACH»
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+«ENDREM»

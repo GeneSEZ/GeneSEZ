@@ -1,0 +1,22 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::ejb3::scripts::Interface;
+
+MClassifier addConverter(MClassifier this) :
+	this.hasStereotype("seam2Converter")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Converter") 
+		? addExternalInterface(this, "Converter")
+		: "";
+		
+MClassifier addValidator(MClassifier this) :
+	this.hasStereotype("seam2Validator")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Validator") 
+		? addExternalInterface(this, "Validator")
+		: "";
+		
+MClassifier addFilter(MClassifier this) :
+	this.hasStereotype("seam2ServletContainerIntegration")  
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Filter") 
+		? addExternalInterface(this, "Filter")
+		: "";

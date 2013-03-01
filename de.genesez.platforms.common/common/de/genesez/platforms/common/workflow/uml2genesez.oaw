@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<workflow>
+
+	<!-- 
+		executes the transformation from uml2 model to genesez model
+		without profile mechanism
+		
+		@deprecated		use the Java class {@link de.genesez.platforms.common.Uml2GeneSEZ} instead
+		
+		following parameters are required:
+		==================================
+		
+		$uml2Model			name of the slot which holds the uml2 model
+		$genesezModel		name of the slot which holds the genesez model
+		$excludePackages	comma or comma blank [, ] separated list of package names to exclude from transformation
+		$mapClassesInModelToExternal	boolean indicating if all classes contained in the model are
+										transformed to external classes instead of classifiers
+		$externalPackages	comma or comma blank [, ] separated list of package names which are used as container
+							for external classes (therefor are not transformed to genesez packages)
+		$externalStereotypes	comma or comma blank [, ] separated list of names of stereotypes which are applied 
+								to packages	or classes, indicating that the package is a container for external classes
+								or the classes are external classes
+	 -->
+	
+	<!-- initialize the support for UML2 models -->
+	<bean class="org.openarchitectureware.uml2.Setup" standardUML2Setup="true" />
+	
+	<!-- working with genesez models requires the genesez meta model -->
+	<bean id="gcore" class="oaw.type.emf.EmfMetaModel">
+		<metaModelPackage value="de.genesez.metamodel.gcore.GcorePackage" />
+	</bean>
+	<!-- bean id="gcore" class="org.eclipse.m2t.type.emf.EmfRegistryMetaModel" / -->
+	<!-- bean id="gcore" class="oaw.type.emf.EmfMetaModel">
+		<metaModelFile value="gcore.ecore" />
+	</bean -->
+	
+    <!-- working with uml2 models requires the uml2 meta model -->
+	<bean id="uml2" class="org.openarchitectureware.uml2.UML2MetaModel"/>
+	
+	
+	<!-- validate the uml2 model for transformation into a GeneSEZ model -->
+	<cartridge
+		file = "de::genesez::platforms::common::workflow::constraintChecker.oaw"
+		modelSlot = "uml2model"
+		checkScript = "de::genesez::adapter::uml2::uml2constraints"
+		abortOnError = "true"
+	/>
+	
+	<!-- run uml2genesez transformation -->
+	<component id="uml2gcore" class="oaw.xtend.XtendComponent">
+		
+		<metaModel idRef="gcore" />
+		<metaModel idRef="uml2" />
+		
+		<globalVarDef name="uml2model" value="${uml2Model}" />
+		<globalVarDef name="excludePackages" value="'${excludePackages}'" />
+		<globalVarDef name="mapClassesInModelToExternal" value="${mapClassesInModelToExternal}" />
+		<globalVarDef name="externalPackages" value="'${externalPackages}'" />
+		<globalVarDef name="externalStereotypes" value="'${externalStereotypes}'" />
+		
+		<!-- Run the model to model transformation itself. There's an 
+			 extension file called uml2genesez.ext in the respective location
+			 in the classpath that contains a function called transform that
+			 takes an object of type UML2::Model as its parameter. Note that 
+			 we can use the slot name uml2model as a variable in this expression. -->
+		<invoke	value="de::genesez::adapter::uml2::uml2genesez::transform(uml2model)" />
+		
+		<!-- Finally, the return value of the transformation is put into the 
+			 generatorModel slot in the workflow. -->
+		<outputSlot value="${genesezModel}" />
+	</component>
+
+</workflow>

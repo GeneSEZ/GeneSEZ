@@ -1,0 +1,72 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+
+MClassifier addMessageListener(MClassifier this) :
+	stereotype.name.exists(e|e == "ejb3MessageDrivenBean")
+		? realization.add(createExternal(this.getModel(), "MessageListener"))
+		: "";
+
+Void addSessionBeanInterfaces(MClassifier this) :
+	isRemoteInterfaceNeeded()
+		? ( 
+			this.hasUtilizableValue("ejb3Remote", "name")
+				? (
+					let interface = createInterface(this.owningPackage, this.getTaggedValue("ejb3Remote", "name"), this.getTaggedValue("ejb3Remote", "name")) : 
+						this.realization.add(interface) ->
+						interface.addRemoteStereotype("") ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+				)
+				: (
+					let interface = createInterface(this.owningPackage, asTypeName()+"Remote", asTypeName()+"Remote") : 
+						this.realization.add(interface) ->
+						interface.addRemoteStereotype("") ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+				)
+		) 
+		: "" ->
+	isLocalInterfaceNeeded()
+		? (
+			this.hasUtilizableValue("ejb3Local", "name")
+				? (
+					let interface = createInterface(this.owningPackage, this.getTaggedValue("ejb3Local", "name"), this.getTaggedValue("ejb3Local", "name")) : 
+						this.realization.add(interface) ->
+						interface.addLocalStereotype("") ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+				)
+				: (
+					let interface = createInterface(this.owningPackage, asTypeName()+"Local", asTypeName()+"Local") : 
+						this.realization.add(interface) ->
+						interface.addLocalStereotype("") ->
+						interface.owningPackage.getModel().externalTypes.remove("I"+asTypeName()+"Local") ->
+						this.operation.typeSelect(MOperation).select(e|e.visibility == "public" && e.name != this.asTypeName()).cloneOperation(interface)
+				)
+		)
+		: "";
+		
+boolean isRemoteInterfaceNeeded(MClassifier this) :
+	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Remote") /* &&	
+	!this.realization.hasStereotype("ejb3Remote") */
+		? true
+		: false;
+
+boolean isLocalInterfaceNeeded(MClassifier this) :
+	this.hasStereotype("ejb3SessionBean") && this.hasStereotype("ejb3Local") /* &&
+	!this.realization.hasStereotype("ejb3Local") */
+		? true
+		: false;
+
+boolean isSessionBeanInterface(String attributeType) :
+	(
+		(attributeType.endsWith("Remote") || attributeType.endsWith("Local")) &&
+		attributeType.startsWith("I")		
+	)
+		? true
+		: false;
+
+Void addExternalInterface(MClassifier this, String name) :
+	realization.add(createExternal(this.getModel(), name));

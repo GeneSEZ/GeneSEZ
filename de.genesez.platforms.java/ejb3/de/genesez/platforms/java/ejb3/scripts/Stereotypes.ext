@@ -1,0 +1,185 @@
+/**
+ * 	functions for creating new MStereotypes, MTags, MTaggedValues and for changing the value
+ *	of an MTaggedValue 
+ * 
+ * 
+ * @author	andre pflueger
+ * @date	2008-09-05
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+/**
+ *	function to add an "ejb3Remote" stereotype to a MClassifier
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MClassifier
+ *	@param		name		name of the remote interface
+ *
+ */
+Void addRemoteStereotype(MClassifier this, String name) :
+	let s = makeRemoteStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "name", "String"), name);
+
+
+
+/**
+ *	function to create an "ejb3Remote" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MClassifier
+ *
+ */
+MStereotype makeRemoteStereotype(MClassifier container) :
+	let s = createStereotype(container.owningPackage.getModel(), "ejb3Remote", "ejb3Remote") :
+		s.property.add(createTag(s, "name", "String")) ->
+		s;
+
+/**
+ *	function to add an "ejb3Local" stereotype to a MClassifier
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MClassifier
+ *	@param		name		name of the local interface
+ *
+ */
+Void addLocalStereotype(MClassifier this, String name) :
+	let s = makeLocalStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "name", "String"), name);
+
+
+
+/**
+ *	function to create an "ejb3Local" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to anyStereotype list of MModel
+ *
+ *	@param		container		instance of MClassifier
+ *
+ */
+MStereotype makeLocalStereotype(MClassifier container) :
+	let s = createStereotype(container.owningPackage.getModel(), "ejb3Local", "ejb3Local") :
+		s.property.add(createTag(s, "name", "String")) ->
+		s;
+
+/**
+ *	function to add an "ejb3Timer" stereotype to a MOperation
+ *	default values are not set by this function!
+ *
+ *	@param		this			instance of MOperation
+ *
+ */
+Void addTimerStereotype(MOperation this) :
+	this.classifier.owningPackage.getModel().anyStereotype.add(makeTimerStereotype(this));
+
+/**
+ *	function to create an "ejb3Timer" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MOperation, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		operation		instance of MOperation
+ *
+ */
+create MStereotype makeTimerStereotype(MOperation operation) :
+	setName("ejb3Timer") ->
+	operation.stereotype.add(this);
+
+/**
+ *	function to add an "ejb3Resource" stereotype to a MAttribute
+ *	default values are not set by this function!
+ *
+ *	@param		this		instance of MAttribute
+ *	@param		value		value of "ejb3Resource" 
+ *
+ */
+Void addResourceStereotype(MAttribute this, String value) :
+	this.classifier.owningPackage.getModel().anyStereotype.add(makeResourceStereotype(this, value));
+
+/**
+ *	function to create an "ejb3Resource" stereotype
+ *	default values are not set by this function!
+ *	function adds MStereotype only to the stereotype list of the MClass, not to 
+ *	anyStereotype list of MModel
+ *
+ *	@param		strategy		value of "ejb3InheritanceType" (standard: "SINGLE_TABLE")
+ *
+ */
+create MStereotype makeResourceStereotype(MAttribute attri, String value) :
+	setName("ejb3Resource") ->
+	property.add(makeTag("value", "String")) ->
+	attri.taggedValue.add(makeTaggedValue(value, makeTag("value", "String"))) ->
+	attri.stereotype.add(this);
+
+/**
+ *	function to add an "ejb3EJB" stereotype to a MAttribute
+ *	default values are not set by this function!
+ *
+ *	@param		this			instance of a MAttribute
+ *	@param		name			
+ *	@param		beanInterface	
+ *	@param		beanName		
+ *	@param		mappedName		
+ *
+ */
+Void addEJBStereotype(MAttribute this, String name, String beanInterface, String beanName, String description, String mappedName) :
+	let s = makeEJBStereotype(this) :
+		this.stereotype.add(s) ->
+		createTaggedValue(this, createTag(s, "name", "String"), name) ->
+		createTaggedValue(this, createTag(s, "beanInterface", "String"), beanInterface) ->
+		createTaggedValue(this, createTag(s, "beanName", "String"), beanName) ->
+		createTaggedValue(this, createTag(s, "description", "String"), description) ->
+		createTaggedValue(this, createTag(s, "mappedName", "String"), mappedName);
+		
+/**
+ *	function to create an "ejb3EJB" stereotype
+ *	function adds MStereotype only to anyStereotype-list of MModel
+ *
+ *	@param		container	element which is the container for the new EJBStereotype
+ *
+ */
+MStereotype makeEJBStereotype(MAttribute container) :
+	let s = createStereotype(container.classifier.owningPackage.getModel(), "ejb3EJB", "ejb3EJB") :
+		s.property.add(createTag(s, "name", "String")) ->
+		s.property.add(createTag(s, "beanInterface", "String")) ->
+		s.property.add(createTag(s, "beanName", "String")) ->
+		s.property.add(createTag(s, "description", "String")) ->
+		s.property.add(createTag(s, "mappedName", "String")) ->
+		s;	
+
+/**
+ *	function to create a MTag (i.e. for use with MTaggedvalue)
+ *
+ *	@param		name				name of the MTag
+ *	@param		type				type of the value (i.e. the value in MTaggedValue)
+ *	[@param		stereotypeName		name of the containing stereotype]
+ *
+ */
+create MTag makeTag(String name, String type) :
+	setName(name) ->
+	setType(type);
+/*
+makeNewTag(String name, String type) : 
+	let t = new MTag :
+		t.setName(name) -> t.setType(type) ->
+	t;
+*/
+/**
+ *	function to create a MTaggedValue
+ *	MTaggedvalue consists of value and a tag which contains the name of the 
+ *	MTaggedValue and the data type of the value
+ *
+ *	@param		value	value of the MTaggedvalue
+ *	@param		tag		containing MTag to this value
+ *
+ */
+create MTaggedValue makeTaggedValue(String value, MTag tag) :
+	setValue(value) ->
+	setTag(tag);

@@ -1,0 +1,157 @@
+«REM»
+	Handles the generation of some magic methods:
+	- accessor magic methods, get, set, isset, unset
+	
+	Notes:
+	- generation of accessors for attributes is done if the workflow configuration 
+	  is set to magic method accessors
+	- generation of accessors (only get) for associations is done if the association library
+	  is used to implement associations
+	
+	@author	toh
+	@date	2009-03-12
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«EXTENSION de::genesez::platforms::php::scripts::CodeGen»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+
+
+«REM»
+	processes the generation of accessor methods for attributes and associations
+	- getter for associations + attributes
+	- setter + isset + unset only for attributes if magic accessors shall be used
+«ENDREM»
+«DEFINE Accessors FOR MClassifier -»
+«IF isApiAccessorStyle() -»
+	«IF !useOldAssociationHandling() -»
+	«EXPAND _Getter FOR property.typeSelect(MAssociationRole) -»
+	«ENDIF -»
+«ELSE -»
+	«IF useOldAssociationHandling() -»
+	«EXPAND _Getter FOR property.typeSelect(MAttribute).generateGetter() -»
+	«ELSE -»
+	«EXPAND _Getter FOR magicGet() -»
+	«ENDIF -»
+«ENDIF -»
+«IF isMagicAccessorStyle() -»
+	«EXPAND _Setter FOR property.typeSelect(MAttribute).select( e|e.generateSetter() ) -»
+	«EXPAND _IsSet FOR property.typeSelect(MAttribute).select( e|e.generateSetter() ) -»
+	«EXPAND _UnSet FOR property.typeSelect(MAttribute).select( e|e.generateSetter() ) -»
+«ENDIF -»
+«ENDDEFINE»
+
+
+«REM» - - __get() - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates the getter accessors using the magic <code>__get()</code> function
+	note: this function returns only unmodifiable values (important for arrays) (cannot return references!)
+«ENDREM»
+«DEFINE _Getter FOR List[MProperty] -»
+«IF size > 0 -»
+	«EXPAND Comment::MagicGet -»
+	public function __get($«asMagicGetParameter()») {
+		switch ($«asMagicGetParameter()») {
+			«EXPAND _Get FOREACH typeSelect(MAttribute) -»
+			«EXPAND _Get FOR typeSelect(MAssociationRole) -»
+			default: throw new Exception('«asMagicGetException()»: ' . $«asMagicGetParameter()»); break;
+		}
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	generates the case statement to get an attribute
+«ENDREM»
+«DEFINE _Get FOR MAttribute -»
+			case '«name»': return $this->«asAttribute()»;
+«ENDDEFINE»
+
+«REM»
+	generates the case statement to get an association
+	- if there is only one association, it is lazy initialized within the method
+	- else a separate lazy initialization method is generated
+«ENDREM»
+«DEFINE _Get FOR List[MAssociationRole] -»
+	«IF size == 1 -»
+			case '«first().asAssociation()»' :
+				if ($this->«associationManagementAttribute()» === null) {
+					$this->«associationManagementAttribute()» = «EXPAND Association::SingleInitialization FOR first()»
+				}
+				return $this->«associationManagementAttribute()»;
+	«ELSE -»
+		«FOREACH this AS a -»
+			case '«a.asAssociation()»':
+		«ENDFOREACH -»
+		«IF size > 0 -»
+				return $this->«associationInitializationFunction()»($«asMagicGetParameter()»);
+		«ENDIF -»
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM» - - __set() - - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates the setter accessors using the magic <code>__set()</code> function
+	note: only for single value types
+«ENDREM»
+«DEFINE _Setter FOR List[MAttribute] -»
+«IF size > 0 -»
+	«EXPAND Comment::MagicSet -»
+	public function __set($«asMagicSetParameter()», $«asMagicSetValueParameter()») {
+		switch ($«asMagicSetParameter()») {
+			«FOREACH select( e|e.isSingleValuedType() ) AS a -»
+			case '«a.name»': $this->«a.asAttribute()» = $«asMagicSetValueParameter()»; return;
+			«ENDFOREACH -»
+			default: throw new Exception('«asMagicSetException()»: ' . $«asMagicSetParameter()»); break;
+		}
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM» - - __isset() - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates the magic <code>__isset()</code> function for all members with setter accessors
+	note: only for single value types
+«ENDREM»
+«DEFINE _IsSet FOR List[MAttribute] -»
+«IF size > 0 -»
+	«EXPAND Comment::MagicIsSet -»
+	public function __isset($«asMagicIsSetParameter()») {
+		switch ($«asMagicIsSetParameter()») {
+			«FOREACH select( e|e.isSingleValuedType() ) AS a -»
+			case '«a.name»': return isset($this->«a.asAttribute()»);
+			«ENDFOREACH -»
+			default: throw new Exception('«asMagicIsSetException()»: ' . $«asMagicIsSetParameter()»); break;
+		}
+	}
+«ENDIF -»
+«ENDDEFINE»
+
+«REM» - - __unset() - - - - - - - - - - - - - - - - - - - - - - - - - «ENDREM»
+
+«REM»
+	generates the magic <code>__isset()</code> function for all members with setter accessors
+	note: only for single value types
+	note: does not work: <code>unset($this->singleValue);</code>
+«ENDREM»
+«DEFINE _UnSet FOR List[MAttribute] -»
+«IF size > 0 -»
+	«EXPAND Comment::MagicUnSet -»
+	public function __unset($«asMagicUnSetParameter()») {
+		switch ($«asMagicUnSetParameter()») {
+			«FOREACH select( e|e.isSingleValuedType() ) AS a -»
+			case '«a.name»': $this->«a.asAttribute()» = null; return;
+			«ENDFOREACH -»
+			default: throw new Exception('«asMagicUnSetException()»: ' . $«asMagicUnSetParameter()»); break;
+		}
+	}
+«ENDIF -»
+«ENDDEFINE»

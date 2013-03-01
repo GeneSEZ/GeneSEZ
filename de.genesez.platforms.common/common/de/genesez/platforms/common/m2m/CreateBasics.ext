@@ -1,0 +1,38 @@
+/**
+ * Helper to create basic or common elements
+ * 
+ * @author	tobias haubold
+ * @date	2008-07-17
+ * 
+ * @todo	add a check if the stereotype 'accessor' is already contained in the model (by use from genesez profile)
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+
+
+/**
+ * creates the stereotype '«accessor»' from the genesez profile with default tagged values
+ * (getter = 'true', setter = 'false')
+ * @return	the stereotype '«accessor»'
+ */
+MStereotype createAccessor(MProperty property) :
+	property.createAccessor("true", "false");
+
+/**
+ * creates the stereotype '«accessor»' from the genesez profile with the given tagged values set
+ * @return	the stereotype '«accessor»'
+ */
+MStereotype createAccessor(MProperty property, String getter, String setter) :
+	let s = property.model().createStereotype("genesez.profile.stereotype.accessor", "accessor") :
+		property.taggedValue.add( 
+			property.createTaggedValue( s.createTag("getter", "Boolean"), getter)
+		) ->
+		property.taggedValue.add( 
+			property.createTaggedValue( s.createTag("setter", "Boolean"), setter)
+		) ->
+		property.stereotype.add( s ) ->
+	s;

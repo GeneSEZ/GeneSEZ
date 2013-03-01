@@ -1,0 +1,28 @@
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
+extension de::genesez::platforms::java::seam2::scripts::Operation;
+
+/**
+  *
+  */
+checkDestroyMethod(MClass this) :
+	hasStereotype("seam2Component") && hasTaggedValue("ejb3SessionBean", "stateful", "true")
+		? (
+			!operation.exists(e|e.hasTaggedValue("seam2Lifecycle", "destroy", "true")) 
+				? (
+					(!operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
+						? addOperation(this, "destroy")
+						: ""
+					) ->
+					operation.selectFirst(e|e.name == "destroy" && e.parameter.size == 0).addLifecycleStereotype("false", "true") ->
+					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.hasStereotype("ejb3Local") || e.hasStereotype("ejb3Remote")).addOperation("destroy")
+						: "")
+				)
+				: ""
+		)
+		: "";
+

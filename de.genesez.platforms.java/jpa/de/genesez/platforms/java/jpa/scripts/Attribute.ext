@@ -1,0 +1,44 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
+
+
+Void checkPrimaryKeyAttributeAndOrStereotype(MClass this) :
+	//add default primaryKey-attribute "id" if necessary and not existing
+	generalization.isEmpty && hasStereotype("ejb3PersistentEntity") && 
+	property.notExists(e|e.hasStereotype("ejb3PrimaryKey")) && 
+	property.notExists(e|e.name == "id" && e.type.name() == "int")
+		? this.addDefaultPrimaryKeyAttribute("id", "int", "private") 
+		: "" ->
+	//add "ejb3PrimaryKey"-stereotype if necessary and not existing and class is not @Embedabble (pk class)«ENDREM»
+	property.exists(e|e.name == "id" && e.type.name() == "int") && 
+	!(hasStereotype("ejb3PrimaryKeyClass") && hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "true")) && 
+	!property.selectFirst(e|e.name == "id" && e.type.name() == "int").hasStereotype("ejb3PrimaryKey")
+		? property.selectFirst(e|e.name == "id" && e.type.name() == "int").addPrimaryKeyStereotype("true", "false", "AUTO", "")
+		: "";
+
+Void checkPersistenceStereotypes(MAttribute this) :
+	this.type.asTypeName() == "EntityManager"
+		? this.addPersistenceContextStereotype("[]", "[]", "[]") 
+		: "" ->
+	this.type.asTypeName() == "EntityManagerFactory"
+		? this.addPersistenceUnitStereotype("[]", "[]")
+		: "";
+
+Void addDefaultPrimaryKeyAttribute(MClassifier this, String name, String type, String visibility) :
+	this.property.add(createAttribute(this, name, type, visibility)) ->
+	this;
+
+create MAttribute createAttribute(MClassifier container, String name, String type, String visibility) :
+	this.setMultiplicity(1) ->
+	this.setName(name) ->	
+	setXmiGuid(container.xmiGuid) ->
+	// set operation properties
+	setVisibility(visibility) ->
+	setStatic(false) ->
+	setFinal(false) ->	
+	this.setType(container.getModel().createPrimitiveType(type, type)) ->	
+	this;

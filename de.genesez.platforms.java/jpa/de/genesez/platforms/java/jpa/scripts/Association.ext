@@ -1,0 +1,308 @@
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
+extension de::genesez::platforms::common::AccessHelper; 
+extension de::genesez::platforms::java::scripts::Naming;
+
+Void checkAssociationStereotype(MAssociationRole this) :
+	this.hasStereotype("ejb3Association") 
+		? (//Stereotype existiert
+			opposite != null
+				? ( /**
+					even with existing stereotype "ejb3Association" the tagged value
+					"type" does not have to be set if association is bidirectional.
+					check if opposite has an association stereotype
+					*/
+					!opposite.hasStereotype("ejb3Association")
+						? ( /**
+							opposite has no stereotype "ejb3Association"
+							set necessary annotation and add value to tagged value "type" for easy
+							evaluation of the opposite association later in the generation process. 
+							Cannot create stereotype on opposite because it does not work for some reason!!! (eins zu n)
+							*/
+							multiplicity == 1
+								? (
+									opposite.multiplicity == 1
+										? (
+											setTaggedValue(this, "type", "OneToOne") ->
+											setTaggedValue(this, "mappedBy", opposite.asAttribute())
+										)
+										: (
+											setTaggedValue(this, "type", "ManyToOne") ->	
+											setTaggedValue(this, "mappedBy", "null")
+										)
+								)
+								: (
+									opposite.multiplicity == 1
+										? (
+											setTaggedValue(this, "type", "OneToMany") ->
+											setTaggedValue(this, "mappedBy", opposite.asAttribute())
+										)
+										: (
+											setTaggedValue(this, "type", "ManyToMany") ->
+											setTaggedValue(this, "mappedBy", opposite.asAttribute())
+										)
+								)
+						)
+						: (/**
+							only one side of the association (the opposite) have been provided with an stereotype
+							by the user, so let's find out what has to be annotated on this side of the association
+							*/
+							evaluateOppositeStereotype(this, opposite)
+						)
+				)
+				: (	/**
+						unidirectional
+					*/
+					evaluateUnidirectionalAssociation()
+				)
+		)
+		: (/**
+			MAssociationRole has no association stereotype 
+			automatic annotation, not possible for unidirectional association because 
+			opposite attribute is not available and can not be evaluated
+			*/
+			opposite != null
+				? (/**
+						bidirectional
+						check if opposite has an association stereotype
+					*/
+					!opposite.hasStereotype("ejb3Association")
+						? (/**
+								opposite has no stereotype "ejb3Association"
+								set necessary annotation and add stereotype to the opposite for easy
+								evaluation of the opposite association later in the generation process. 
+								Generation can not have been there because in this case this association 
+								site would have had a stereotype. Tagged value "mappedBy" is set on this 
+								site thus no "mappedBy" is set to the new stereotype (exception: @ManyToOne)
+							*/
+							multiplicity == 1
+								? (
+									opposite.multiplicity == 1
+										? (
+											addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->
+											addAssociationStereotype(opposite, "OneToOne", "null", "[]", "DEFAULT", "true", "null")
+										)
+										: (
+											addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->
+											addAssociationStereotype(opposite, "ManyToOne", "null", "[]", "DEFAULT", "true", "null")
+										)
+								)
+								: (
+									opposite.multiplicity == 1
+										? (
+											addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null") ->
+											addAssociationStereotype(opposite, "OneToMany", "null", "[]", "DEFAULT", "true", asAttribute())
+										)
+										: (
+											addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", opposite.asAttribute()) ->
+											addAssociationStereotype(opposite, "ManyToMany", "null", "[]", "DEFAULT", "true", "null")
+										)
+								)
+						)
+						: (/**
+								only the opposite of the association have been provided with an stereotype by the
+								user, so let's find out what has to be annotated on this side of the association
+							*/
+							evaluateOppositeStereotype(this, opposite)
+						)
+				)
+				: (/**
+						unidirectional
+					*/
+					evaluateUnidirectionalAssociation()
+				)
+		);
+
+Void evaluateOppositeStereotype(MAssociationRole this, MAssociationRole op) :
+	/**
+		evaluates stereotype "ejb3Association", tagged value "type" and "mappedBy"
+	*/
+	op.hasTaggedValue("ejb3Association", "type", "AutoDetect") || 
+	!op.hasUtilizableValue("ejb3Association", "type")
+		? (
+			multiplicity == 1
+				? (
+					op.multiplicity == 1
+						? (
+							!op.hasUtilizableValue("ejb3Association", "mappedBy")
+								? (
+									hasStereotype("ejb3Association")
+										? (
+											setTaggedValue(this, "mappedBy", op.asAttribute()) ->
+											setTaggedValue(this, "type", "OneToOne")
+										)
+										: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", op.asAttribute())
+								)
+								: (
+									hasStereotype("ejb3Association")
+										? (
+											setTaggedValue(this, "mappedBy", "null") ->
+											setTaggedValue(this, "type", "OneToOne")
+										)
+										: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "null")
+								) ->
+							setTaggedValue(op, "type", "OneToOne")
+						)
+						: (
+							!hasStereotype("ejb3Association")
+								? addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null")
+								: (
+									setTaggedValue(this, "type", "ManyToOne")->
+									setTaggedValue(this, "mappedBy", "null")
+								) ->
+							setTaggedValue(op, "type", "OneToMany") ->
+							setTaggedValue(op, "mappedBy", asAttribute())
+						)						
+				)
+				: (
+					op.multiplicity == 1
+						? (
+							hasStereotype("ejb3Association")
+								? (
+									setTaggedValue(this, "mappedBy", op.asAttribute()) ->
+									setTaggedValue(this, "type", "OneToMany")
+								)
+								: addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", op.asAttribute()) ->
+							setTaggedValue(op, "type", "ManyToOne")
+						)
+						: (
+							!op.hasUtilizableValue("ejb3Association", "mappedBy")
+								? (
+									hasStereotype("ejb3Association")
+										? (
+											setTaggedValue(this, "mappedBy", op.asAttribute()) ->
+											setTaggedValue(this, "type", "ManyToMany")
+										)
+										: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", op.asAttribute())
+								)
+								: (
+									hasStereotype("ejb3Association")
+										? (
+											setTaggedValue(this, "mappedBy", "null") ->
+											setTaggedValue(this, "type", "ManyToMany")
+										)
+										: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "null") ->
+									setTaggedValue(op, "type", "ManyToMany")
+								)
+						)
+				)
+		)
+		: (
+			op.hasTaggedValue("ejb3Association", "type", "OneToOne")
+				? (
+					!op.hasUtilizableValue("ejb3Association", "mappedBy")
+						? (
+							hasStereotype("ejb3Association")
+								? (
+									setTaggedValue(this, "mappedBy", op.asAttribute()) ->
+									setTaggedValue(this, "type", "OneToOne")
+								)
+								: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", op.asAttribute())
+								
+						)
+						: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "null")
+				)
+				: (
+					op.hasTaggedValue("ejb3Association", "type", "OneToMany")
+						? (
+							!hasStereotype("ejb3Association")
+								? addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null")
+								: (
+									setTaggedValue(this, "type", "ManyToOne")->
+									setTaggedValue(this, "mappedBy", "null")
+								)
+						)
+						: (
+							op.hasTaggedValue("ejb3Association", "type", "ManyToOne")
+								? (
+									!op.hasUtilizableValue("ejb3Association", "mappedBy")
+										? (
+											hasStereotype("ejb3Association")
+												? (
+													setTaggedValue(this, "type", "OneToMany")->
+													setTaggedValue(this, "mappedBy", op.asAttribute())
+												)
+												: addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", op.asAttribute())
+										)
+										: (
+											setTaggedValue(op, "mappedBy", "null") ->
+											!hasStereotype("ejb3Association")
+												? addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", op.asAttribute())
+												: (
+													setTaggedValue(this, "type", "OneToMany")->
+													setTaggedValue(this, "mappedBy", op.asAttribute())
+												)
+										)
+								)
+								: (
+									op.hasTaggedValue("ejb3Association", "type", "ManyToMany")
+										? (
+											!op.hasUtilizableValue("ejb3Association", "mappedBy")
+												? (
+													hasStereotype("ejb3Association")
+														? (
+															setTaggedValue(this, "mappedBy", op.asAttribute()) ->
+															setTaggedValue(this, "type", "ManyToMany")
+														)
+														: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", op.asAttribute())
+												)
+												: (
+													!hasStereotype("ejb3Association")
+														? addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "")
+														: (
+															setTaggedValue(this, "type", "ManyToMany")->
+															setTaggedValue(this, "mappedBy", "")
+														)
+												)
+										)
+										: ""
+								)
+						)
+				)
+		);
+
+/**
+	evaluation of an unidirectional association with the help of the attribute "oppositeMultiplicity"
+*/
+Void evaluateUnidirectionalAssociation(MAssociationRole this) :
+	hasStereotype("ejb3Association")
+		? (
+			/**
+				if association type cannot be used, set the right values
+				by evaluating new attribute oppositeMultiplicity
+			*/
+			hasTaggedValue("ejb3Association", "type", "AutoDetect") || 
+			!hasUtilizableValue("ejb3Association", "type")
+				? (
+					multiplicity == 1
+						? (
+							oppositeMultiplicity == 1
+								? setTaggedValue(this, "type", "OneToOne")
+								: setTaggedValue(this, "type", "ManyToOne")
+						)
+						: (
+							oppositeMultiplicity == 1
+								? setTaggedValue(this, "type", "OneToMany")
+								: setTaggedValue(this, "type", "ManyToMany")
+						)
+				)
+				: ""
+		)
+		: (
+			/**
+				evaluate new attribute oppositeMultiplicity
+			*/
+			multiplicity == 1
+				? (
+					oppositeMultiplicity == 1
+						? addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "null")
+						: addAssociationStereotype(this, "ManyToOne", "null", "[]", "DEFAULT", "true", "null")
+				)
+				: (
+					oppositeMultiplicity == 1
+						? addAssociationStereotype(this, "OneToMany", "null", "[]", "DEFAULT", "true", "null")
+						: addAssociationStereotype(this, "ManyToMany", "null", "[]", "DEFAULT", "true", "null")
+				) 
+		);

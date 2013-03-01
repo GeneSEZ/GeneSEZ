@@ -1,0 +1,35 @@
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2009-03-17
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::java::jpa::scripts::Attribute;
+extension de::genesez::platforms::java::jpa::scripts::Association;
+extension de::genesez::platforms::java::jpa::scripts::Class;
+extension de::genesez::platforms::java::scripts::Naming;
+
+Void modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MClass this) :
+	addSerializable() ->
+	checkInheritanceStereotype() ->
+	checkPrimaryKeyAttributeAndOrStereotype() ->
+	this.property.typeSelect(MAssociationRole).checkAssociationStereotype() ->
+	this.property.typeSelect(MAttribute).modifications();
+	
+Void modifications(MAttribute this) :
+	checkPersistenceStereotypes();
+
+Void modifications(MInterface this) :
+	Void;

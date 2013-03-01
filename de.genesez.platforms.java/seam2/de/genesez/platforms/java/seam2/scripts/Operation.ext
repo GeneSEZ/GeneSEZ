@@ -1,0 +1,48 @@
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::seam2::scripts::Stereotypes;
+
+/**
+MModel addOperation(MModel this, String name) :
+	nestedPackage.addOperation(name);
+	
+MPackage addOperation(MPackage this, String name) :
+	classifier.addOperation(name);
+*/
+MClassifier addOperation(MClassifier this, String name) :
+	operation.add(createOperation(this, this.name+"."+name, name));
+	
+/*
+create MOperation makeOperation(MClassifier container, String name) : 
+	setName(name) ->
+	setVisibility("public") ->
+	setXmiGuid(container.name+name) ->
+	container.operation.add(this);
+*/
+
+create MOperation createOperation(MClassifier container, String xmiGuid, String name) :
+	// set containment
+	container.operation.add(this) ->
+	// set basics inherit from MElement
+	setName(name) ->
+	setXmiGuid(xmiGuid) ->
+	// set operation properties
+	setVisibility("public") ->
+	setStatic(false) ->
+	setAbstract(false) ->
+	setFinal(false) ->
+	setMultiplicity(1) ->
+	setUnique(true) ->
+	setOrdered(false) ->
+	// set operation associations
+	setReturnType(container.getModel().createVoid()) ->
+	this;
+
+create MPrimitiveType createVoid(MModel container) :
+	// containment
+	container.primitiveTypes.add(this) ->
+	setXmiGuid("void") ->
+	setName("void") ->
+	this; 

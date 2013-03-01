@@ -1,0 +1,40 @@
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2009-03-17
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::log::Log;
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::java::seam2::scripts::Class;
+extension de::genesez::platforms::java::seam2::scripts::Interface;
+
+Void modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MClass this) :
+	addValidator() -> 
+	addConverter() ->
+	addFilter() ->
+	checkDestroyMethod() ->
+	this.property.typeSelect(MAttribute).modifications() ->
+	this.operation.typeSelect(MOperation).modifications();
+	
+Void modifications(MOperation this) :
+	Void;
+	
+Void modifications(MAttribute this) :
+	Void;
+
+Void modifications(MInterface this) :
+	Void;

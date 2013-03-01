@@ -1,0 +1,93 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::java::jpa::scripts::Stereotypes;
+
+/**
+  * add serializable interface to an entity bean
+  */
+MClassifier addSerializable(MClassifier this) :
+	this.hasStereotype("ejb3PersistentEntity") || this.hasTaggedValue("ejb3PrimaryKeyClass", "embeddable", "true") 
+	&& !generalization.typeSelect(MClassifier).realization.typeSelect(MExternal).exists(e|e.specification == "Serializable") 
+		? realization.add(createExternal(this.getModel(), "Serializable"))
+		: "";
+
+/**
+	add inheritance stereotype if necassary
+*/
+Void checkInheritanceStereotype(MClass this) :
+	!hasStereotype("ejb3DiscriminatorValue") && !hasStereotype("ejb3PrimaryKeyJoinColumn")
+		? ( !this.generalization.isEmpty
+			? generalization.typeSelect(MClass).isDerivedClass(this)
+			: this.owningPackage.classifier.typeSelect(MClass).isSuperClass(this)
+		)
+		: "";
+		
+/**
+  * helper method for "checkInheritanceStereotype"	
+  *	class is a derived class
+  */
+Void isDerivedClass(MClass superClass, MClass derivedClass) :
+	(superClass.hasStereotype("ejb3Inheritance") || superClass.hasStereotype("ejb3DiscriminatorColumn")) &&
+	superClass.generalization.isEmpty
+		? ( derivedClass.hasStereotype("ejb3Inheritance")
+			? ( /* 	logically there is no discriminator column stereotype in super class
+					it cannot be annotated to class if @Inheritance is not available */
+				superClass.getTaggedValue("ejb3Inheritance", "strategy") == "SINGLE_TABLE"
+					? (	superClass.getTaggedValue("ejb3Inheritance", "discriminatorType") == "STRING"
+						? ( superClass.addDiscriminatorColumnStereotype("", "STRING", "31", "DTYPE")
+							/*	ejb3DiscriminatorValue is not needed here because class name
+								is choosen by default as identifier of the discriminator column
+								if "@DiscriminatorValue" is missing */
+						)
+						: ( superClass.getTaggedValue("ejb3Inheritance", "discriminatorType") == "INT"
+								? ( superClass.addDiscriminatorColumnStereotype("", "INT", "31", "DTYPE") ->
+									superClass.addDiscriminatorValueStereotype(superClass.name.asTypeName().length.toString()) ->
+									derivedClass.addDiscriminatorValueStereotype(derivedClass.asTypeName().length.toString())
+								)
+								: (superClass.getTaggedValue("ejb3Inheritance", "discriminatorType") == "CHAR"
+									? (	superClass.addDiscriminatorColumnStereotype("", "CHAR", "31", "DTYPE") ->
+										superClass.addDiscriminatorValueStereotype(superClass.name.asTypeName().subString(0, 1)) ->
+										derivedClass.addDiscriminatorValueStereotype(derivedClass.asTypeName().subString(0, 1).toString())
+									)
+									: ""
+								)
+						)
+					)
+					: ""
+			)
+			: ""
+		)
+		: ( // there is no "@Inheritance" and "@DiscriminatorColumn" at super class
+			superClass.generalization.isEmpty
+				? ( //these two annotations are only needed if super class is not a derived class)
+					superClass.addInheritanceStereotype("SINGLE_TABLE") ->
+					superClass.addDiscriminatorColumnStereotype( "", "STRING", "31", "DTYPE")
+					/* 	equal named primary keys in super and derived class are 
+						detected by primary key annotation in Attribute.xpt
+						--> nothing to do here 
+						
+						ejb3DiscriminatorValue is not needed here because class name
+						is choosen by default as identifier of the discriminator column
+						if "@DiscriminatorValue" is missing */
+				)
+				: ""
+		);
+
+/**
+  * helper method for "checkInheritanceStereotype"
+  *	look for this class in generalizations of other classes
+  */
+Void isSuperClass(MClass derivedClass, MClass superClass) :
+	!superClass.hasStereotype("ejb3Inheritance") && !derivedClass.generalization.isEmpty && 
+	derivedClass.generalization.typeSelect(MClass).name.exists(e|e == derivedClass.name)
+		? (
+			superClass.addInheritanceStereotype("SINGLE_TABLE") ->
+			superClass.addDiscriminatorColumnStereotype("", "STRING", "31", "DTYPE")
+			/* 	ejb3DiscriminatorValue is not needed here because class name
+				is choosen by default as identifier of the discriminator column
+				if "@DiscriminatorValue" is missing */	
+		)
+		: "";

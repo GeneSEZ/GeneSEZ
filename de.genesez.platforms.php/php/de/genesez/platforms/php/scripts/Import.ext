@@ -1,0 +1,122 @@
+/**
+ * calculates include paths for php files
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-10
+ */
+
+//	based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::m2t::Helper;
+extension de::genesez::platforms::common::log::Log;
+
+/**
+ * checks if an import is needed or not
+ * @param	used	the type which is used
+ * @return	true, because every type must be included (exernal type)
+ */
+boolean isImportNeeded(MType used, MClassifier this) :
+	true;
+
+/**
+ * checks if an import is needed or not
+ * @param	used	the classifier which is used
+ * @return	true, if the used classifier must be imported, otherwise false
+ */
+boolean isImportNeeded(MClassifier used, MClassifier this) :
+	used != this;
+
+/**
+ * returns the include path of the used / required classifier depending on the 
+ * 'relativeIncludes' parameter
+ * @context	the classifier for which the include statement is created
+ * @param	used	the classifier which is used
+ * @see		relativeIncludePath(MClassifier, MClassifier)
+ * @see		absoluteIncludePath(MClassifier)
+ * @return	the include path of the used classifier
+ */
+String includePath(MClassifier used, MClassifier this) :
+	relativeIncludes()
+		? relativeIncludePath(used, this)
+		: absoluteIncludePath(used);
+
+/**
+ * returns the relative include path of a required classifier based on the package of the
+ * current classifier and the used base path
+ * 
+ * builds the path from classifier back to model root and also back from the base path and
+ * then adds the path from model root to the used type
+ * 
+ * @context	the classifier for which the include statement is created
+ * @param	used	the type which is used
+ * @return	relative path to the required (used) classifier
+ */
+String relativeIncludePath(MClassifier used, MClassifier this) :
+	getPathBack(owningPackage, "") + pathBack(basePath()) + getPathForward(used.owningPackage, "");
+
+/**
+ * returns the include path of a required classifier based on it's package, the base package and
+ * the include base
+ * @return	include path of the required classifier
+ */
+String absoluteIncludePath(MClassifier this) :
+	includeBase() + 
+		(includeBase().length == 0 ? "" : "/") + 
+	basePath() + 
+		(basePath().length == 0 ? "" : "/") + 
+	getPathForward(owningPackage, "");
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * returns a path back to the given path, e.g. is the given path is 'some/dir' then
+ * the function will return '../../'
+ * @return	path back to the given path with ending slash ('/')
+ */
+private String pathBack(String this) :
+	let s = {} :
+		trim().split("/").select(e|e.length > 0).forAll(e|s.add("../") -> true) ->
+	s.toString("");
+
+/**
+ * builds a relative file path back to the model root from the given package
+ * @context	the package from which the file path is build
+ * @param	path	the current path back, initial an empty string
+ * @return	relative file path back to the model root
+ */
+private String getPathBack(MPackage this, String path) :
+	metaType == MModel
+		? path
+		: getPathBack(nestingPackage, "../" + path);
+	
+/**
+ * builds a relative file path up from the model root up to the given package
+ * @context	the package for which the file path is build
+ * @param	path	the current path, initial an empty string
+ * @return	relative file path from the model root to the given package
+ */
+private String getPathForward(MPackage this, String path) :
+	metaType == MModel
+		? path
+		: getPathForward(nestingPackage, name + "/" + path);
+
+/**
+ * returns the value of the generate includes parameter
+ * @return	true, if includes should be generated, otherwise false
+ */
+boolean generateIncludes() : GLOBALVAR generateIncludes == null ? true : GLOBALVAR generateIncludes;
+
+/**
+ * returns the value of the relative includes parameter
+ * @return	true, if reletive includes should be generated, otherwise false
+ */
+boolean relativeIncludes() : GLOBALVAR relativeIncludes == null ? false : GLOBALVAR relativeIncludes;
+
+/**
+ * returns the include base path configured as global variable
+ * @return	the include base path
+ */
+String includeBase() : GLOBALVAR includeBase == null ? "" : GLOBALVAR includeBase;

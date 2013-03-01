@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project name="de.genesez.build.release" basedir=".." default="">
+
+	<property file="${project.build.dir}/release.properties" />
+
+	<!-- Append the build number when running under hudson -->
+	<if>
+		<and>
+			<isset property="env.BUILD_NUMBER" />
+			<not><isset property="build.number" /></not>
+		</and>
+		<then>
+			<buildnumber file="${build.basedir}/build.number" />
+		</then>
+	</if>
+
+	<condition property="plugin.version"
+		value="${release}.${build.number}"
+		else="${release}">
+		<isset property="build.number" />
+	</condition>
+	
+	<property name="project.name" value="${ant.project.name}" />
+	<property name="plugin.name" value="${project.name}_${plugin.version}"/>
+	<property name="plugin.jar" value="${plugin.name}.jar"/>
+
+	<path id="build.plugins">
+		<dirset dir="${build.basedir}">
+			<exclude name="${prefix}.example.*" />
+			<exclude name="${prefix}.build" />
+			<exclude name="${prefix}.feature" />
+			<exclude name="${prefix}.updatesite" />
+			<exclude name=".metadata" />
+			<exclude name="workspace" />
+			<include name="*" />
+		</dirset>
+	</path>
+
+	<path id="build.features">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.feature" />
+		</dirset>
+	</path>
+
+	<path id="build.examples">
+		<dirset dir="${build.basedir}">
+			<include name="${prefix}.example.*" />
+		</dirset>
+	</path>
+
+	<path id="build.projects">
+		<path refid="build.features" />
+		<path refid="build.plugins" />
+	</path>
+
+</project>

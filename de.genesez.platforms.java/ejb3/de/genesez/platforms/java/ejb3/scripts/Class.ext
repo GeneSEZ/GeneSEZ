@@ -1,0 +1,85 @@
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::m2m::CreateTemplate;
+extension de::genesez::platforms::java::scripts::Naming;
+extension de::genesez::platforms::java::ejb3::scripts::Stereotypes;
+
+/**
+  * add standard constructor to a bean class
+  */
+MModel addStandardConstructor(MModel this) :
+	nestedPackage.addStandardConstructor();
+	
+MPackage addStandardConstructor(MPackage this) :
+	nestedPackage.addStandardConstructor() ->
+	classifier.addStandardConstructor();
+	
+MClassifier addStandardConstructor(MClassifier this) :
+	operation.exists(e|e.name == name) && operation.select(e|e.name == name).parameter == "[]"
+	? ""
+	: operation.add(makeStandardConstructor());
+
+/**
+  * helper method for "addStandardConstructor"
+  */
+create MOperation makeStandardConstructor(MClassifier container) : 
+	setName(container.name) ->
+	setVisibility("public") ->
+	setXmiGuid("StandardConstructor" + container.name) ->
+	setRaisedException(createList()) ->
+	setOwnedComment(createList()) ->
+	setParameter(createList()) ->
+	setReturnType(createPrimitiveType(container.getModel(), "void", "void")) ->
+	container.operation.add(this);
+	
+	
+//Diese Extensions werden für die Interceptorklassenerstellung benötigt
+//extension de::genesez::platforms::java::ejb3::scripts::AccessHelper;
+//extension de::genesez::platforms::java::ejb3::scripts::Conversion;
+		
+/**
+	Hier werden Methoden für die Verarbeitung der Interceptorklassen auf Xtend-Ebene definiert.
+	Diese Funktionalität bleibt zunächst auf XPand-Ebene.
+	Grund: Zu viel Aufwand bei zu wenig Ergebnis...bisher auf XPand-Ebene schöner zu lösen,
+	da dort direkt Code in die Methodenrümpfe geschrieben werden kann.
+*/ 
+/**
+Void addInterceptorClass(MClassifier this) :
+	createClassifier(this.getModel(), this.asTypeName()+"Interceptor", this.asTypeName()+"Interceptor") ->
+	this.getTaggedValue("ejb3ClassInterceptor", "methods").getElements().addInterceptorOperation(this);
+	
+Void addInterceptorOperation(String name, MClassifier this) :
+	let parameter = createParameterList() :
+		let operation = createOperation(name, name, parameter, "public", false, false, createList(), 1, false, createList(), createList(), createPrimitiveType("Object"), false, false) :
+			operation.addParameter("ctx", 1, createPrimitiveType("InvocationContext")) ->
+			this.operation.add(operation);
+
+create MOperation createOperation(String xmiGuid, String name, List[MParameter] parameter, String visibility, Boolean abstract, Boolean final, List aspect, Integer multiplicity, Boolean ordered, List ownedComment, List raisedException, MType returnType, Boolean static, Boolean unique) :
+	processOperation(this, xmiGuid, name, parameter, visibility, abstract, final, aspect, multiplicity, ordered, ownedComment, raisedException, returnType, static, unique) ->
+	this;
+
+create MPrimitiveType createPrimitiveType(MModel container, String name, String xmiGuid) :
+	processElement(xmiGuid, name) ->
+	container.primitiveTypes.add(this) ->
+	this;
+
+create List[MParameter] createParameterList() :
+	this;
+
+create List createList() :
+	this;		
+
+MParameter addParameter(MOperation op, String name, Integer multiplicity, MType type) :
+	op.parameter.add(createParameter(name, multiplicity, type));
+
+create MParameter createParameter(String name, Integer multiplicity, MType type) :
+	this.setName(name) ->
+	this.setMultiplicity(multiplicity) ->
+	this.setOrdered(false) ->
+	//achtung, eins zu n
+	this.setType(createPrimitiveType("Object")) ->
+	this.setXmiGuid(name) ->
+	this;
+*/
+

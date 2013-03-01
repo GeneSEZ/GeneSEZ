@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<project name="de.genesez.build.imports" basedir=".." default="">
+
+	<!-- Set the build.basedir property -->
+	<dirname property="project.build.dir" file="${ant.file.de.genesez.build.imports}" />
+	<property name="project.dir" value="${project.build.dir}/.." />
+	<condition property="build.basedir"
+		value="${basedir}/.."
+		else="${project.dir}/..">
+		<matches pattern="de.genesez.build" string="${ant.file}" />
+	</condition>
+
+	<property name="build.basedir.absolute" location="${build.basedir}"/>
+
+	<import file="environment.xml"/>
+	<import file="classpath.xml"/>
+	<import file="antcontrib.xml" />
+	<import file="release.xml" />
+
+</project>

@@ -1,0 +1,227 @@
+/**
+ * Helper function for M2T Transformations
+ * 
+ * currently provided:
+ * - filter for lists of packages to simply exclude packages from code generation
+ * - the base package which is used for generation
+ * - flag to use the model name as base package for generation
+ * - flag which indicates if section comments are generated or not
+ * - distinctions if accessors are generated or not
+ * 
+ * @author	tobias haubold
+ * @date	2008-04-18
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+extension de::genesez::platforms::common::Conversion;
+extension de::genesez::platforms::common::log::Log;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with the stereotype «primitive» for multiplicity-elements
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if a primitive type should be used
+ * @return	true, if a primitive type should be used, otherwise false
+ */
+boolean usePrimitiveType(MProperty this) :
+	hasStereotype("primitive");
+
+/**
+ * checks if a primitive type should be used
+ * @return	true, if a primitive type should be used, otherwise false
+ */
+boolean usePrimitiveType(MOperation this) :
+	hasStereotype("primitive");
+
+/**
+ * checks if a primitive type should be used
+ * @return	true, if a primitive type should be used, otherwise false
+ */
+boolean usePrimitiveType(MParameter this) :
+	hasStereotype("primitive");
+
+/**
+ * just there for error free templates :-)
+ * shouldn't be called!
+ */
+boolean usePrimitiveType(MElement this) : 
+	fatal("somethings goes totally wrong within your templates... " +
+	"   the function 'usePrimitiveType' shouldn't be called with an 'MElement': " + this) ->
+	false;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with accessor-methods and the visibility of accessors
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if the generation of accessor-methods is disabled or not
+ * @return	true, if the generation of accessors is disabled, otherwise false
+ */
+String accessorsForStereotypes() : GLOBALVAR accessorsForStereotypes == null ? "entity" : GLOBALVAR accessorsForStereotypes;
+
+/**
+ * checks if the generation of accessor-methods should be distincted by the «accessor» stereotype
+ * @return	true, if the stereotype «accessor» is used, otherwise false
+ */
+String accessorStereotype() : GLOBALVAR accessorStereotype == null ? "accessor" : GLOBALVAR accessorStereotype;
+
+/**
+ * checks if properties should always be private and the visibility of the properties is used as the visibility of their accessor-methods
+ * @return	true, if the visibility of properties are used for the accessor-methods, otherwise false
+ */
+boolean usePropertyVisibilityForAccessors() : GLOBALVAR usePropertyVisibilityForAccessors == null ? false : GLOBALVAR usePropertyVisibilityForAccessors;
+
+
+/**
+ * checks if a getter-accessor should be generated or not
+ * @return	true, if a getter-accessor should be generated, otherwise false
+ */
+boolean generateGetter(MProperty this): generateAccessor( "getter" );
+
+/**
+ * checks if a setter-accessor should be generated or not
+ * @return	true, if a setter-accessor should be generated, otherwise false
+ */
+boolean generateSetter(MProperty this): generateAccessor( "setter" );
+
+/**
+ * checks if an accessor should be generated or not
+ * 1) if the property has the accessor stereotype, it is evaluated
+ * 2) if the classifier has the accessor stereotype, it is evaluated and used for all properties
+ * 3) if the classifier has a stereotype for which accessors should be generated, accessors are generated
+ * 4) else no accessors are generated
+ * @return	true, if an accessor should be generated, otherwise false
+ */
+boolean generateAccessor(MProperty this, String accessor):
+	hasStereotype( accessorStereotype() )
+		? getTaggedBooleanValue( accessorStereotype(), accessor )
+		: ( classifier.hasStereotype( accessorStereotype() )
+			? classifier.getTaggedBooleanValue( accessorStereotype(), accessor )
+			: ( classifier.stereotype.exists( s|accessorsForStereotypes().toList().contains( s.name ) )
+				? true
+				: false
+			)
+		);
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with the association handling
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if the old or new association handling is activated
+ * regular case is the new association handling
+ * @return	true, if the new association handling should be used (standard case)
+ */
+boolean newAssociationHandling() : GLOBALVAR newAssociationHandling == null ? true : GLOBALVAR newAssociationHandling;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with access type of annotations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * checks if field or property access is activated
+ * default is field access
+ * @return	true, if field access should be used (default) 
+ */
+boolean fieldAccess() : GLOBALVAR fieldAccess == null ? true : GLOBALVAR fieldAccess;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	helpers for working with base packages + base paths
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the 'base path' based on the 'base package'
+ * @return	value of the base path
+ */
+String basePath(MClassifier this) : owningPackage.basePath();
+
+/**
+ * getter for the 'base path' based on the 'base package'
+ * @return	value of the base path
+ */
+String basePath(MPackage this) : basePackage().replaceAll("\\.", "/");
+
+/**
+ * getter for the 'base package' which is used for generation
+ * evaluates the global variables 'useModelNameAsBasePackage' and 'basePackage',
+ * which are configured in the workflow component
+ * @return	the base package to use for code generation or an empty string
+ */
+String basePackage(MClassifier this) : owningPackage.basePackage(); 
+
+/**
+ * getter for the 'base package' which is used for generation
+ * evaluates the global variables 'useModelNameAsBasePackage' and 'basePackage',
+ * which are configured in the workflow component
+ * @return	the base package to use for code generation or an empty string
+ */
+String basePackage(MPackage this) : 
+	useModelNameAsBasePackage()
+		? getModel().name
+		: ( GLOBALVAR basePackage == null ? "" : GLOBALVAR basePackage );
+
+/**
+ * checks if the model name should be used as base package
+ * @return	true, if the model name should be used as base package, otherwise false
+ */
+private boolean useModelNameAsBasePackage() : 
+	GLOBALVAR useModelNameAsBasePackage == null ? false : GLOBALVAR useModelNameAsBasePackage;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	config switch for section comments
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter for the global variable 'generateSectionComments' which is configured in the workflow component
+ * if it's not configured, 'true' is used as standard
+ * @return	value of the global variable 'generateSectionComments' or 'true'
+ */
+boolean generateSectionComments() : 
+	GLOBALVAR generateSectionComments == null ? true : GLOBALVAR generateSectionComments;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	filters a list of packages to exclude them from code generation
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter accessor for the global variable 'excludePackages', configured in the workflow component
+ * @return	value of the global variable 'excludePackages'
+ */
+String ignoredPackages() : (String) GLOBALVAR excludePackages;
+
+/**
+ * rejects all packages contained in the 'excludePackages' variable from the specified list of packages
+ * @context	list of packages to filter
+ * @return	list of packages without the packages to ignore
+ */
+List[MPackage] rejectIgnoredPackages(List[MPackage] this) :
+	rejectIgnoredPackages( ignoredPackages() );
+
+/**
+ * rejects all packages from the given list, specified in the given string as a comma 
+ * or semicolon separated list with full qualified package names
+ * @param	packages		list of packages to filter
+ * @param	ignoredPackages	comma or semicola separated list with full qualified package names
+ * @return	list of packages without the packages to ignore
+ */
+private List[MPackage] rejectIgnoredPackages(List[MPackage] packages, String ignoredPackages) :
+	JAVA de.genesez.platforms.common.m2t.TransUtils.rejectIgnoredPackages(java.util.List, java.lang.String);
+

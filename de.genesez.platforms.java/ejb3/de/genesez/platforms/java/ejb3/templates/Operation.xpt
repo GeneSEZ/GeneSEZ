@@ -1,0 +1,233 @@
+«REM»
+	Template for ejb3-Association
+	
+	@author	andre pflueger
+	@date	2009-02-22
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful metamodel extensions «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+«EXTENSION de::genesez::platforms::java::scripts::Type»
+«EXTENSION de::genesez::platforms::java::scripts::Naming»
+«EXTENSION de::genesez::platforms::java::scripts::Conversion»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	public functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM» 
+	container-managed transaction demarcation
+	for operations and classes
+«ENDREM»
+«DEFINE CMTransactionality FOR MElement-»
+	«IF hasStereotype("ejb3TransactionAttribute")»
+		«IF hasUtilizableValue("ejb3TransactionAttribute", "type") || !hasTaggedValue("ejb3TransactionAttribute", "type", "REQUIRED")»
+			@TransactionAttribute(TransactionAttributeType.«getTaggedValue("ejb3TransactionAttributeType", "type")-»)
+		«ENDIF»
+	«ENDIF»
+«ENDDEFINE»
+
+«REM» 
+	main method for evaluation of the annotations	
+«ENDREM»
+«DEFINE Annotation FOR MOperation»
+	«REM» stereotype ejb3Timer; constraints should be realized by check language «ENDREM»
+	«IF (hasStereotype("ejb3Timer") && (parameter.exists(e|e.type.mapName().asTypeName() == "Timer") && parameter.size == 1)) && 
+		(classifier.hasStereotype("ejb3MessageDrivenBean") || classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false"))-»
+		@Timeout
+	«ENDIF-»
+	«REM»
+		stereotype ejb3Callback for different bean types 
+		(only if there is no external callback handling 
+		(-> EntityListener and Interceptor))
+	«ENDREM»
+	«EXPAND _Callback-»
+	«REM» stereotype ejb3TransactionAttribute «ENDREM»
+	«EXPAND CMTransactionality-»
+	«REM» stereotype ejb3Interceptor «ENDREM»
+	«EXPAND _Interceptor-»
+	«REM» java web services (jws); should be seperated in an own cartridge 
+	«EXPAND _JWS-»	«ENDREM»
+	«REM» stereotype "ejb3EJB" «ENDREM»
+	«EXPAND Attribute::EJB-»
+«ENDDEFINE»
+
+«REM»
+	generates annotations for operation parameter
+	why is this operation public? where is it used?
+«DEFINE ParamAnnotations FOR MOperation-»
+	«EXPAND Attribute::WebParam-»		
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+
+
+«REM»
+	generates the operation parameter
+«DEFINE _Params FOR MOperation-»
+	«FOREACH parameter AS p SEPARATOR ", " -»
+		«IF p.isSingleValuedType() -»
+			«p.type.mapName().asTypeName() -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+		«ELSE -»
+			«EXPAND de::genesez::platforms::java::java5::templates::Type::MultiValuedType FOR p -» «p.asParameter()» «IF p.hasDefaultValue()» = «p.defaultvalue»«ENDIF -»
+		«ENDIF -»
+	«ENDFOREACH -»
+«ENDDEFINE»
+«ENDREM»
+
+«REM»
+	generates annotations for java web services (jws)
+	should be seperated in own cartridge cause it depends not on ejb and vice versa
+	there is already a seperation on modell level
+	
+	check for coorect using of the stereotypes jwsWebResult (only for return type) 
+	and jwsWebParam (only for parameter) necessary
+
+«DEFINE _JWS FOR MOperation-»
+	«EXPAND ParamAnnotations-»
+	«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false") && hasStereotype("jwsWebResult")-»
+		@WebResult(header=«getTaggedValue("jwsWebResult", "header")-»
+		«IF hasUtilizableValue("jwsWebResult", "name")-»
+			name="«getTaggedValue("jwsWebResult", "name")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebResult", "partName")-»
+			partName="«getTaggedValue("jwsWebResult", "partName")-»"
+		«ENDIF-»
+		«IF hasUtilizableValue("jwsWebResult", "targetNamespace")-»
+			targetNamespace="«getTaggedValue("jwsWebResult", "targetNamespace")-»"
+		«ENDIF-»)
+	«ENDIF»
+	«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "false")-»
+		«IF hasStereotype("jwsWebMethod")-»
+			@WebMethod(exclude=«getTaggedValue("jwsWebMethod", "exclude")-»
+			«IF hasUtilizableValue("jwsWebMethod", "operationName")-»
+				, operationName="«getTaggedValue("jwsWebMethod", "operationName")-»"
+			«ENDIF-»
+			«IF hasUtilizableValue("jwsWebMethod", "action")-»
+				, action="«getTaggedValue("jwsWebMethod", "action")-»"
+			«ENDIF-»)
+		«ENDIF-»
+		«IF hasTaggedValue("jwsWebMethod", "oneway", "true")-»
+			@Oneway
+		«ENDIF-» 	
+	«ENDIF-»
+«ENDDEFINE»
+«ENDREM»
+
+«REM» 
+	evaluate the stereotype ejb3Callback 
+«ENDREM»
+«DEFINE _Callback FOR MOperation-»
+	«IF hasTaggedValue("ejb3Callback", "external", "false")-»
+		«IF classifier.hasStereotype("ejb3SessionBean") || classifier.hasStereotype("ejb3MessageDrivenBean")-»
+			«IF hasTaggedValue("ejb3Callback", "postConstruct", "true")-»
+				@PostConstruct
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preDestroy", "true")-»
+				@PreDestroy
+			«ENDIF-»
+		«ENDIF-»
+		«IF classifier.hasTaggedValue("ejb3SessionBean", "stateful", "true")-»
+			«IF hasTaggedValue("ejb3Callback", "postActivate", "true")-»
+				@PostActivate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePassivate", "true")-»
+				@PrePassivate
+			«ENDIF-»
+		«ENDIF-»
+		«IF classifier.hasStereotype("ejb3PersistentEntity")»
+			«IF hasTaggedValue("ejb3Callback", "postPersist", "true")-»
+				@PostPersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePersist", "true")-»
+				@PrePersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postUpdate", "true")-»
+				@PostUpdate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preUpdate", "true")-»
+				@PreUpdate
+			«ENDIF-»	
+			«IF hasTaggedValue("ejb3Callback", "postRemove", "true")-»
+				@PostRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preRemove", "true")-»
+				@PreRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postLoad", "true")-»
+				@PostLoad
+			«ENDIF-»
+		«ENDIF-»
+		«REM»for entity listener classes«ENDREM»
+		«IF !classifier.hasStereotype("ejb3PersistentEntity") &&
+			!classifier.hasStereotype("ejb3SessionBean") && 
+			!classifier.hasStereotype("ejb3MessageDrivenBean")-»
+			«IF hasTaggedValue("ejb3Callback", "postPersist", "true")-»
+				@PostPersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePersist", "true")-»
+				@PrePersist
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postUpdate", "true")-»
+				@PostUpdate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preUpdate", "true")-»
+				@PreUpdate
+			«ENDIF-»	
+			«IF hasTaggedValue("ejb3Callback", "postRemove", "true")-»
+				@PostRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preRemove", "true")-»
+				@PreRemove
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postLoad", "true")-»
+				@PostLoad
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postActivate", "true")-»
+				@PostActivate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "prePassivate", "true")-»
+				@PrePassivate
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "postConstruct", "true")-»
+				@PostConstruct
+			«ENDIF-»
+			«IF hasTaggedValue("ejb3Callback", "preDestroy", "true")-»
+				@PreDestroy
+			«ENDIF-»
+		«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«REM» 
+	evaluate the stereotype ejb3OperationInterceptor 
+«ENDREM»
+«DEFINE _Interceptor FOR MOperation-»
+	«IF hasStereotype("ejb3OperationInterceptor")-»
+		«IF hasUtilizableValue("ejb3OperationInterceptor", "interceptors")-»
+			@Interceptors(value={«FOREACH getTaggedValue("ejb3OperationInterceptor", "interceptors").getElements() AS interceptor SEPARATOR ", "-»
+					«interceptor-».class
+			«ENDFOREACH-»})
+		«ENDIF»
+		«IF hasTaggedValue("ejb3OperationInterceptor", "aroundInvoke", "true")-»
+			@AroundInvoke
+		«ENDIF»	
+		«IF hasTaggedValue("ejb3OperationInterceptor", "excludeClassInterceptors", "true")-»
+			@ExcludeClassInterceptors
+		«ENDIF»	
+	«ENDIF»
+«ENDDEFINE»
