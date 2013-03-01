@@ -268,6 +268,7 @@ List[MProperty] allProperties(MClassifier this) :
  * @return	The list of initializable properties of the classifier, otherwise an empty list.
  * @see allInitializableAttributes(MClassifier)
  * @see allInitializableAssociationRoles(MClassifier)
+ * @api
  */
 List[MProperty] allInitializableProperties(MClassifier this) :
 	{ allInitializableAttributes() }.addAll(
@@ -308,6 +309,7 @@ boolean hasAttributes(MClassifier this) :
  * Checks if a classifier has owning initializable attributes.
  *
  * @return	True if the classifier has owning initializable attributes, otherwise false.
+ * @api
  */
 boolean hasInitializableAttributes(MClassifier this) : 
 	property.typeSelect( MAttribute ).exists( a | !a.static && !a.derived && !( a.final && a.hasDefaultValue() ) );
@@ -559,6 +561,7 @@ boolean isAssociationClass(MClass this) :
  * 
  * @return	False.
  * @see		isAssociationClass(MClass)
+ * @api
  */
 boolean isAssociationClass(MClassifier this) : 
 	false;
