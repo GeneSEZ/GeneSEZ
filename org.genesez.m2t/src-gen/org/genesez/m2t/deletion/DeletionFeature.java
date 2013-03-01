@@ -49,6 +49,14 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 	}
 	
 	/**
+	 * switch for deletion
+	 * @param	enabled	
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	/**
 	 * Directory names that are excluded during file search
 	 */
 	public void addExcludedDirectoryNames(String excludedDirectoryNames) {
@@ -74,13 +82,6 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 	 */
 	public void removeExcludedRelativePaths(String excludedRelativePaths) {
 		this.excludedRelativePaths.remove(excludedRelativePaths);
-	}
-	
-	/**
-	 * switch for deletion
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZAIqzgD0EeK7ac-mrkJBDw) ENABLED START */
