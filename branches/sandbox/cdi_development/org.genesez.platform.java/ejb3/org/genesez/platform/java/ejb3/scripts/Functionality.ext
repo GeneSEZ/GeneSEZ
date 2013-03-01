@@ -1,0 +1,55 @@
+import gcore;
+
+/**
+ * 	modificates the metamodel before generation of the source code  
+ *  
+ * @author	andre pflueger
+ * @date	2009-03-17
+ */
+
+extension org::genesez::platform::java::ejb3::scripts::Attribute;
+extension org::genesez::platform::java::ejb3::scripts::Interface;
+extension org::genesez::platform::java::ejb3::scripts::Class;
+extension org::genesez::platform::java::scripts::Naming;
+
+Void additions(MModel this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MPackage this) :
+	this.nestedPackage.additions() ->
+	this.classifier.typeSelect(MClass).additions();
+	
+Void additions(MClass this) :
+	transformJacobsonStereotypes() ->
+	transformWAMStereotypes() ->
+	addRemoteBusinessInterface() ->
+	addLocalBusinessInterface() ->
+	addSessionBeanInterfaces() ->
+	addStandardConstructor() ->
+	checkUseOfEntityManager() ->
+	addMessageListener();
+
+Void modifications(MModel this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MPackage this) :
+	this.nestedPackage.modifications() ->
+	this.classifier.typeSelect(MClass).modifications();
+	
+Void modifications(MClass this) :
+	this.property.typeSelect(MAttribute).modifications() ->
+	this.operation.typeSelect(MOperation).modifications();
+	
+Void modifications(MOperation this) :
+	checkTimerStereotype();
+	
+Void modifications(MAttribute this) :
+	changeSessionBeanAttributeDatatype() ->
+	checkEJBStereotype() ->
+	checkTimerServiceStereotype() ->
+	checkAccessorForEJBStereotypes();
+
+Void modifications(MInterface this) :
+	Void;
