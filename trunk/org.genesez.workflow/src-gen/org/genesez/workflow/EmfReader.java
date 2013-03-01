@@ -12,7 +12,9 @@ import java.util.Map.Entry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.xml.type.AnyType;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
@@ -54,6 +56,10 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 			logger.trace(entry.toString());
 		}
 		reader.invokeInternal(context, monitor, issues);
+		Object object = context.get(getSlot());
+		if (object instanceof AnyType) {
+			logger.warn("The root element of the instantiated model is of type 'AnyType'! It seams your model uses a namespace URI which is not registered with the corresponding EPackage of your meta model in the EMF EPackage Registry.");
+		}
 		/* PROTECTED REGION END */
 	}
 	
