@@ -12,16 +12,12 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComponent implements WorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String slot = "coremodel";
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -34,7 +30,6 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>slot</b></em>'
 	 */
@@ -49,9 +44,6 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 		this.slot = slot;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._nY_VQPRsEeGG-J2DIYyoXg) ENABLED START */
 	/* PROTECTED REGION END */
 	

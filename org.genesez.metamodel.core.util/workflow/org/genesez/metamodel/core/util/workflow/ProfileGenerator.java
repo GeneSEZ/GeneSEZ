@@ -12,11 +12,8 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class ProfileGenerator extends Model2Text {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String xtendFilePath;
@@ -39,7 +36,6 @@ public class ProfileGenerator extends Model2Text {
 		addTypeMappingFile("org/genesez/platform/common/typemapping/typemapping.xml");
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -63,7 +59,6 @@ public class ProfileGenerator extends Model2Text {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>xtendFilePath</b></em>'
 	 */
@@ -134,9 +129,6 @@ public class ProfileGenerator extends Model2Text {
 		this.enumerationNamePrefix = enumerationNamePrefix;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._JnZ-oAofEeKxusbn3Pe47g) ENABLED START */
 	/* PROTECTED REGION END */
 	

@@ -12,11 +12,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Typo3Scaffolding extends Typo3Model2Model {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean scaffolding = false;
@@ -26,7 +23,6 @@ public class Typo3Scaffolding extends Typo3Model2Model {
 		addScript("org::genesez::platform::typo3v4::mvc::modification::Scaffolding::modelScaffolding");
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -40,7 +36,6 @@ public class Typo3Scaffolding extends Typo3Model2Model {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>scaffolding</b></em>'
 	 */
@@ -55,9 +50,6 @@ public class Typo3Scaffolding extends Typo3Model2Model {
 		this.scaffolding = scaffolding;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Dz4oYApBEeKxusbn3Pe47g) ENABLED START */
 	/* PROTECTED REGION END */
 	

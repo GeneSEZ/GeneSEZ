@@ -4,7 +4,6 @@ package org.genesez.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_vaiVYPRiEeGG-J2DIYyoXg) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import java.util.Map.Entry;
@@ -23,11 +22,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * .WHEN_NEEDED
- * @author dreamer
  */
 public class EmfReader extends AbstractEmfResourceWorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -42,7 +38,6 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	
 	private Reader reader;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
@@ -83,7 +78,6 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 		return reader.getLogMessage();
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>makeEPackagesGlobal</b></em>'
 	 */
@@ -126,9 +120,6 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 		this.ignoreMissingModel = ignoreMissingModel;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._vaiVYPRiEeGG-J2DIYyoXg) ENABLED START */
 	private void prepareDelegate() {
 		reader = new Reader();

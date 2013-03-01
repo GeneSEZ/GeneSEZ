@@ -19,11 +19,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Provides copying services for files and directories (recursively) based on apache commons io.
- * @author dreamer
  */
 public class Copier extends AbstractWorkflowComponent implements WorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * The source file or directory to copy.
@@ -47,7 +44,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	 */
 	private File destFile;
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Method stub for further implementation.
 	 * @return	
@@ -104,7 +100,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * The source file or directory to copy.
 	 */
@@ -133,9 +128,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 		this.destination = destination;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._PXWqsPLLEeGYwYEQM4LYvw) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

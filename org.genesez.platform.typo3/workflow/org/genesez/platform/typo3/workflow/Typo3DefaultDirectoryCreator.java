@@ -13,11 +13,8 @@ import org.genesez.workflow.xpand.Model2Model;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Typo3DefaultDirectoryCreator extends Model2Model {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String outputDir;
@@ -28,7 +25,6 @@ public class Typo3DefaultDirectoryCreator extends Model2Model {
 		setSlot("");
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Validates the configuration of the component before invocation.
 	 * @param	issues	Instance to collect all problems during configuration check.
@@ -47,7 +43,6 @@ public class Typo3DefaultDirectoryCreator extends Model2Model {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>outputDir</b></em>'
 	 */
@@ -62,9 +57,6 @@ public class Typo3DefaultDirectoryCreator extends Model2Model {
 		this.outputDir = outputDir;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._hJRnUAo8EeKxusbn3Pe47g) ENABLED START */
 	/* PROTECTED REGION END */
 	

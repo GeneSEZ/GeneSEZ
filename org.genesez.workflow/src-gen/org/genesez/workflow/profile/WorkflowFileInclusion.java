@@ -7,16 +7,11 @@ package org.genesez.workflow.profile;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public enum WorkflowFileInclusion {
 	
-	// -- enumeration literals ----------------------------------------------
+	WHEN_NEEDED, ALWAYS;
 	
-	WHEN_NEEDED,
-	ALWAYS;
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.enumeration.own.code.implementation._6oBPUPd0EeGhUpgqSX_5tA) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

@@ -28,11 +28,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core.lib.AbstractWorkflowComponent implements WorkflowComponent {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * Specifies the execution in case of errors.
@@ -40,7 +37,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private boolean abortOnError = true;
 	
-	// -- generated method declarations -------------------------------------
 	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
@@ -49,7 +45,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	 */
 	protected abstract void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues);
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Provides the mwe2 execution wrapper.
 	 * @return	
@@ -68,18 +63,19 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 			public void invoke(final IWorkflowContext ctx) {
 				IssuesImpl issues = new IssuesImpl();
 				try {
-					AbstractWorkflowComponent.this.invoke(
-							new WorkflowContext() {
-								public String[] getSlotNames() {
-									return ctx.getSlotNames().toArray(new String[0]);
-								}
-								public Object get(String slotName) {
-									return ctx.get(slotName);
-								}
-								public void set(String slotName, Object value) {
-									ctx.put(slotName, value);
-								}
-							}, new NullProgressMonitor(), issues);
+					AbstractWorkflowComponent.this.invoke(new WorkflowContext() {
+						public String[] getSlotNames() {
+							return ctx.getSlotNames().toArray(new String[0]);
+						}
+						
+						public Object get(String slotName) {
+							return ctx.get(slotName);
+						}
+						
+						public void set(String slotName, Object value) {
+							ctx.put(slotName, value);
+						}
+					}, new NullProgressMonitor(), issues);
 				} catch (RuntimeException e) {
 					throw e;
 				} finally {
@@ -117,7 +113,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Specifies the execution in case of errors.
 	 */
@@ -132,9 +127,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 		this.abortOnError = abortOnError;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._paljEPU8EeGsV8fV-DCYeA) ENABLED START */
 	protected String listToString(Collection<? extends Object> list) {
 		StringBuilder sb = new StringBuilder();

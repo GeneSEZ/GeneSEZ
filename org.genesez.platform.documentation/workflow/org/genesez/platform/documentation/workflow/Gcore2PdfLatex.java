@@ -18,11 +18,8 @@ import org.genesez.workflow.profile.Parameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
- * @author dreamer
  */
 public class Gcore2PdfLatex extends Gcore2Latex {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String pdfOutputDir;
@@ -36,7 +33,6 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
 	private String command = "pdflatex";
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
 	 * Invokes the execution of the component.
 	 * @param	context	The context of workflow execution.
@@ -84,7 +80,6 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
 	 * Returns the value of attribute '<em><b>pdfOutputDir</b></em>'
 	 */
@@ -141,9 +136,6 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 		this.command = command;
 	}
 	
-	// -- generated code  ---------------------------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._AmnOYAoxEeKxusbn3Pe47g) ENABLED START */
 	/* PROTECTED REGION END */
 	
