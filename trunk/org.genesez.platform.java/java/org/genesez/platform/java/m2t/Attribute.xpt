@@ -15,6 +15,7 @@
 «EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::profile::AccessorStereotype»
 «EXTENSION org::genesez::util::logging::Logging»
 
 «EXTENSION org::genesez::platform::java::util::Naming»
@@ -84,12 +85,12 @@
 	for 'final' attributes, the generation of setter's is suppressed
 «ENDREM»
 «DEFINE Accessors FOR MClass -»
-«EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| e.generateGetter() && e.final && !e.derived ) -»
+«EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| e.emGenerateGetAccess() && e.final && !e.derived ) -»
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
-	«IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -»
-	«IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -»
-	«IF a.multiplicity.isMultiValued() && a.generateAdd() -»«EXPAND _Add FOR a -»«ENDIF -»
-	«IF a.multiplicity.isMultiValued() && a.generateRemove() -»«EXPAND _Remove FOR a -»«ENDIF -»
+	«REM» «IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -» «ENDREM»
+	«REM» «IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -» «ENDREM»
+	«IF a.multiplicity.isMultiValued() && a.emGenerateAddAccess() -»«EXPAND _Add FOR a -»«ENDIF -»
+	«IF a.multiplicity.isMultiValued() && a.emGenerateRemoveAccess() -»«EXPAND _Remove FOR a -»«ENDIF -»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -97,9 +98,11 @@
 	processes the accessor methods for attributes
 	
 	for data types, only getters are generated
+	
+	@deprecated	use org::genesez::platform::java::m2m::AccessOperation::emEnsureGetAccessOperation instead
 «ENDREM»
 «DEFINE Accessors FOR MDataType -»
-«EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| !e.derived ) -»
+«REM» «EXPAND _Getter FOREACH property.typeSelect(MAttribute).select( e| !e.derived ) -» «ENDREM»
 «ENDDEFINE»
 
 
@@ -219,10 +222,11 @@
 «REM»
 	generates the getter method for an attribute
 	the attribute is simply returned
+	
+	@deprecated	use AccessOperationImpl::GetAccessOperationImpl instead with AccessOperation::emEnsureGetAccessOperation()
 «ENDREM»
 «DEFINE _Getter FOR MAttribute -»
 	«EXPAND Comment::Getter -»
-	«EXPAND _Annotation-»
 	«IF multiplicity.isSingleValued() -»		
 		«EXPAND _ModifierAccessor» «type.mapName().asTypeName()» «asGetter()»() {
 			«IF this.type.mapName().asTypeName().matches("Date") -»
@@ -240,10 +244,11 @@
 
 «REM»
 	generates the setter method for an attribute
+	
+	@deprecated	use AccessOperationImpl::SetAccessOperationImpl instead with AccessOperation::emEnsureSetAccessOperation()
 «ENDREM»
 «DEFINE _Setter FOR MAttribute -»
 	«EXPAND Comment::Setter -»
-	«EXPAND _Annotation-»
 	«IF multiplicity.isSingleValued() -»
 		«EXPAND _ModifierAccessor» void «asSetter()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
 			«IF !static-»this.«ENDIF-»«asAttribute()» = «IF static-»_«ENDIF-»«asAttribute()»;
