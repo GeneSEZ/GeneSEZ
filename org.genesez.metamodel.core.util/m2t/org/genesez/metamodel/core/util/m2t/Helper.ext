@@ -80,46 +80,6 @@ String accessorStereotype() : GLOBALVAR accessorStereotype == null ? "accessor" 
  */
 boolean usePropertyVisibilityForAccessors() : GLOBALVAR usePropertyVisibilityForAccessors == null ? false : GLOBALVAR usePropertyVisibilityForAccessors;
 
-/**
- * checks if a getter-accessor should be generated or not
- * @return	true, if a getter-accessor should be generated, otherwise false
- */
-boolean generateGetter(MProperty this): generateAccessor( "getter" );
-
-/**
- * checks if a setter-accessor should be generated or not
- * @return	true, if a setter-accessor should be generated, otherwise false
- */
-boolean generateSetter(MProperty this): generateAccessor( "setter" );
-
-/**
- * Returns true if the property access operation add should be generated for the specified property, otherwise false.
- */
-boolean generateAdd(MProperty this): generateAccessor( "add" );
-
-/**
- * Returns true if the property access operation remove should be generated for the specified property, otherwise false.
- */
-boolean generateRemove(MProperty this): generateAccessor( "remove" );
-
-/**
- * checks if an accessor should be generated or not
- * 1) if the property has the accessor stereotype, it is evaluated
- * 2) if the classifier has the accessor stereotype, it is evaluated and used for all properties
- * 3) if the classifier has a stereotype for which accessors should be generated, accessors are generated
- * 4) else no accessors are generated
- * @return	true, if an accessor should be generated, otherwise false
- */
-boolean generateAccessor(MProperty this, String accessor):
-	emHasStereotype( accessorStereotype() )
-		? emGetTaggedBooleanValue( accessorStereotype(), accessor )
-		: ( classifier.emHasStereotype( accessorStereotype() )
-			? classifier.emGetTaggedBooleanValue( accessorStereotype(), accessor )
-			: ( classifier.stereotype.exists( s|accessorsForStereotypes().convertToList().contains( s.name ) )
-				? true
-				: false
-			)
-		);
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
