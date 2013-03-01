@@ -32,63 +32,63 @@ package org.genesez.metamodel.gpresentation;
 public interface PElement extends PMetaDataAware
 {
   /**
-   * Returns the value of the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Name</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPElement_Name()
-   * @model required="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #setName(String)
+	 * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPElement_Name()
+	 * @model required="true"
+	 * @generated
+	 */
   String getName();
 
   /**
-   * Sets the value of the '{@link org.genesez.metamodel.gpresentation.PElement#getName <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.genesez.metamodel.gpresentation.PElement#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #getName()
+	 * @generated
+	 */
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Owning Area</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gpresentation.PElementArea#getNestedElements <em>Nested Elements</em>}'.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Owning Area</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gpresentation.PElementArea#getNestedElements <em>Nested Elements</em>}'.
+	 * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Owning Area</em>' container reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Owning Area</em>' container reference.
-   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPElement_OwningArea()
-   * @see org.genesez.metamodel.gpresentation.PElementArea#getNestedElements
-   * @model opposite="nestedElements" transient="false" changeable="false"
-   * @generated
-   */
+	 * @return the value of the '<em>Owning Area</em>' container reference.
+	 * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPElement_OwningArea()
+	 * @see org.genesez.metamodel.gpresentation.PElementArea#getNestedElements
+	 * @model opposite="nestedElements" transient="false" changeable="false"
+	 * @generated
+	 */
   PElementArea getOwningArea();
 
   /**
-   * Returns the value of the '<em><b>Owning Element</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gpresentation.PCompositeElement#getNestedElements <em>Nested Elements</em>}'.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Owning Element</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gpresentation.PCompositeElement#getNestedElements <em>Nested Elements</em>}'.
+	 * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Owning Element</em>' container reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Owning Element</em>' container reference.
-   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPElement_OwningElement()
-   * @see org.genesez.metamodel.gpresentation.PCompositeElement#getNestedElements
-   * @model opposite="nestedElements" transient="false" changeable="false"
-   * @generated
-   */
+	 * @return the value of the '<em>Owning Element</em>' container reference.
+	 * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPElement_OwningElement()
+	 * @see org.genesez.metamodel.gpresentation.PCompositeElement#getNestedElements
+	 * @model opposite="nestedElements" transient="false" changeable="false"
+	 * @generated
+	 */
   PCompositeElement getOwningElement();
 
 } // PElement

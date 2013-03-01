@@ -33,144 +33,138 @@ import org.genesez.metamodel.gpresentation.PRoot;
 public class PReferenceAreaImpl extends PContentAreaImpl implements PReferenceArea
 {
   /**
-   * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getTarget()
-   * @generated
-   * @ordered
-   */
+	 * @see #getTarget()
+	 * @generated
+	 * @ordered
+	 */
   protected PRoot target;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PReferenceAreaImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PREFERENCE_AREA;
-  }
+		return GpresentationPackage.Literals.PREFERENCE_AREA;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PRoot getTarget()
   {
-    if (target != null && target.eIsProxy())
-    {
-      InternalEObject oldTarget = (InternalEObject)target;
-      target = (PRoot)eResolveProxy(oldTarget);
-      if (target != oldTarget)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, GpresentationPackage.PREFERENCE_AREA__TARGET, oldTarget, target));
-      }
-    }
-    return target;
-  }
+		if (target != null && target.eIsProxy()) {
+			InternalEObject oldTarget = (InternalEObject)target;
+			target = (PRoot)eResolveProxy(oldTarget);
+			if (target != oldTarget) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, GpresentationPackage.PREFERENCE_AREA__TARGET, oldTarget, target));
+			}
+		}
+		return target;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public PRoot basicGetTarget()
   {
-    return target;
-  }
+		return target;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public void setTarget(PRoot newTarget)
   {
-    PRoot oldTarget = target;
-    target = newTarget;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PREFERENCE_AREA__TARGET, oldTarget, target));
-  }
+		PRoot oldTarget = target;
+		target = newTarget;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GpresentationPackage.PREFERENCE_AREA__TARGET, oldTarget, target));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PREFERENCE_AREA__TARGET:
-        if (resolve) return getTarget();
-        return basicGetTarget();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PREFERENCE_AREA__TARGET:
+				if (resolve) return getTarget();
+				return basicGetTarget();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PREFERENCE_AREA__TARGET:
-        setTarget((PRoot)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PREFERENCE_AREA__TARGET:
+				setTarget((PRoot)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PREFERENCE_AREA__TARGET:
-        setTarget((PRoot)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PREFERENCE_AREA__TARGET:
+				setTarget((PRoot)null);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PREFERENCE_AREA__TARGET:
-        return target != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PREFERENCE_AREA__TARGET:
+				return target != null;
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //PReferenceAreaImpl

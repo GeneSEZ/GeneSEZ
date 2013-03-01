@@ -23,24 +23,24 @@ import org.genesez.metamodel.gpresentation.PAction;
 public class PActionImpl extends PElementImpl implements PAction
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PActionImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PACTION;
-  }
+		return GpresentationPackage.Literals.PACTION;
+	}
 
 } //PActionImpl

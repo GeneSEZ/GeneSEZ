@@ -38,149 +38,142 @@ import org.genesez.metamodel.gpresentation.PElement;
 public class PCompositeElementImpl extends PElementImpl implements PCompositeElement
 {
   /**
-   * The cached value of the '{@link #getNestedElements() <em>Nested Elements</em>}' containment reference list.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getNestedElements() <em>Nested Elements</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getNestedElements()
-   * @generated
-   * @ordered
-   */
+	 * @see #getNestedElements()
+	 * @generated
+	 * @ordered
+	 */
   protected EList<PElement> nestedElements;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PCompositeElementImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PCOMPOSITE_ELEMENT;
-  }
+		return GpresentationPackage.Literals.PCOMPOSITE_ELEMENT;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public EList<PElement> getNestedElements()
   {
-    if (nestedElements == null)
-    {
-      nestedElements = new EObjectContainmentWithInverseEList<PElement>(PElement.class, this, GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS, GpresentationPackage.PELEMENT__OWNING_ELEMENT);
-    }
-    return nestedElements;
-  }
+		if (nestedElements == null) {
+			nestedElements = new EObjectContainmentWithInverseEList<PElement>(PElement.class, this, GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS, GpresentationPackage.PELEMENT__OWNING_ELEMENT);
+		}
+		return nestedElements;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedElements()).basicAdd(otherEnd, msgs);
-    }
-    return super.eInverseAdd(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getNestedElements()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
-        return ((InternalEList<?>)getNestedElements()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
+				return ((InternalEList<?>)getNestedElements()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
-        return getNestedElements();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
+				return getNestedElements();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
-        getNestedElements().clear();
-        getNestedElements().addAll((Collection<? extends PElement>)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
+				getNestedElements().clear();
+				getNestedElements().addAll((Collection<? extends PElement>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
-        getNestedElements().clear();
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
+				getNestedElements().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
-        return nestedElements != null && !nestedElements.isEmpty();
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case GpresentationPackage.PCOMPOSITE_ELEMENT__NESTED_ELEMENTS:
+				return nestedElements != null && !nestedElements.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //PCompositeElementImpl

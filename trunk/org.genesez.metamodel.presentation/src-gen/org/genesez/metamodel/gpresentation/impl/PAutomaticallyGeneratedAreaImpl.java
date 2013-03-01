@@ -23,24 +23,24 @@ import org.genesez.metamodel.gpresentation.PAutomaticallyGeneratedArea;
 public class PAutomaticallyGeneratedAreaImpl extends PContentAreaImpl implements PAutomaticallyGeneratedArea
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PAutomaticallyGeneratedAreaImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PAUTOMATICALLY_GENERATED_AREA;
-  }
+		return GpresentationPackage.Literals.PAUTOMATICALLY_GENERATED_AREA;
+	}
 
 } //PAutomaticallyGeneratedAreaImpl

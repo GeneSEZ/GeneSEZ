@@ -30,29 +30,29 @@ package org.genesez.metamodel.gpresentation;
 public interface PReferenceArea extends PContentArea
 {
   /**
-   * Returns the value of the '<em><b>Target</b></em>' reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Target</em>' reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Target</em>' reference.
-   * @see #setTarget(PRoot)
-   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPReferenceArea_Target()
-   * @model required="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Target</em>' reference.
+	 * @see #setTarget(PRoot)
+	 * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPReferenceArea_Target()
+	 * @model required="true"
+	 * @generated
+	 */
   PRoot getTarget();
 
   /**
-   * Sets the value of the '{@link org.genesez.metamodel.gpresentation.PReferenceArea#getTarget <em>Target</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.genesez.metamodel.gpresentation.PReferenceArea#getTarget <em>Target</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Target</em>' reference.
-   * @see #getTarget()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Target</em>' reference.
+	 * @see #getTarget()
+	 * @generated
+	 */
   void setTarget(PRoot value);
 
 } // PReferenceArea

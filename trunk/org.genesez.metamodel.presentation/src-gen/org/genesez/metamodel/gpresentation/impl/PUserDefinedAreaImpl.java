@@ -23,24 +23,24 @@ import org.genesez.metamodel.gpresentation.PUserDefinedArea;
 public class PUserDefinedAreaImpl extends PContentAreaImpl implements PUserDefinedArea
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected PUserDefinedAreaImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return GpresentationPackage.Literals.PUSER_DEFINED_AREA;
-  }
+		return GpresentationPackage.Literals.PUSER_DEFINED_AREA;
+	}
 
 } //PUserDefinedAreaImpl

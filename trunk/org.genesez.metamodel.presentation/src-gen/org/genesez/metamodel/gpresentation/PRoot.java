@@ -30,20 +30,20 @@ package org.genesez.metamodel.gpresentation;
 public interface PRoot extends PAbstractArea
 {
   /**
-   * Returns the value of the '<em><b>Owning Package</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gpresentation.PPackage#getRoots <em>Roots</em>}'.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Owning Package</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.genesez.metamodel.gpresentation.PPackage#getRoots <em>Roots</em>}'.
+	 * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Owning Package</em>' container reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Owning Package</em>' container reference.
-   * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPRoot_OwningPackage()
-   * @see org.genesez.metamodel.gpresentation.PPackage#getRoots
-   * @model opposite="roots" required="true" transient="false" changeable="false"
-   * @generated
-   */
+	 * @return the value of the '<em>Owning Package</em>' container reference.
+	 * @see org.genesez.metamodel.gpresentation.GpresentationPackage#getPRoot_OwningPackage()
+	 * @see org.genesez.metamodel.gpresentation.PPackage#getRoots
+	 * @model opposite="roots" required="true" transient="false" changeable="false"
+	 * @generated
+	 */
   PPackage getOwningPackage();
 
 } // PRoot

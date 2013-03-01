@@ -27,7 +27,9 @@ Workflow {
 	}
 	
 	// reference to the uml meta model
-	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml { }
+	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml {
+		
+	}
 	
 	// instantiate the uml model from file
 	component = org.eclipse.xtend.typesystem.emf.XmiReader {
@@ -38,7 +40,7 @@ Workflow {
 	component = org.eclipse.xtend.check.CheckComponent {
 		metaModel = emf
 		metaModel = uml
-		checkFile = "org::eclipse::xtend::util::uml2ecore::constraints"
+		checkFile = "org::eclipse::emf::ecore::adapter::uml2::validation::UML2Constraints"
 		emfAllChildrenSlot = "uml2model"
 		abortOnError = true
 	}
@@ -50,7 +52,7 @@ Workflow {
 		globalVarDef = { name = "includedPackages" value = "'${includedPackages}'" }
 		globalVarDef = { name = "addNameAttribute" value = "${addNameAttribute}" }
 		globalVarDef = { name = "resourcePerToplevelPackage" value = "${resourcePerToplevelPackage}" }
-		invoke = "org::eclipse::xtend::util::uml2ecore::uml2ecore::top(uml2model)"
+		invoke = "org::eclipse::emf::ecore::adapter::uml2::UML2Ecore::top(uml2model)"
 		outputSlot = "ecoreModel"
 	}
 	// serialize the instantiated ecore model into a file
