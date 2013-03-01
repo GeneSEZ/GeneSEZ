@@ -1,0 +1,357 @@
+/**
+ * naming conventions for java
+ * 
+ * - fileName is only the file name, e.g. 'FooBar.java'
+ * 
+ * @author	nico herbig
+ * @author	tobias haubold (last)
+ * @date	2007-07-16
+ */
+
+// based on genesez meta model
+import gcore;
+
+extension de::genesez::platforms::common::AccessHelper;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	prefix + suffix + file extensions for types
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * getter of the separator for full qualified names
+ * @return	the separator for full qualified names on the java platform ('.')
+ */
+String fqnSeparator() : ".";
+
+/**
+ * getter of the file extension including the beginning dot
+ * @return	the file extension for java artefacts ('.java')
+ */
+String fileExtension() : ".java";
+
+/**
+ * getter of the prefix which is added to the name of an interface
+ * @return	the prefix to prepend
+ */
+String prefix(MInterface this) : "";
+
+/**
+ * getter of the suffix which is added to the name of an interface
+ * @return	the suffix to append
+ */
+String suffix(MInterface this) : "";
+
+/**
+ * getter of the prefix which is added to the name of a class
+ * @return	the prefix to prepend
+ */
+String prefix(MClass this) : abstract ? "" : "";
+
+/**
+ * getter of the suffix which is added to the name of a class
+ * @return	the suffix to append
+ */
+String suffix(MClass this) : abstract ? "" : "";
+
+/**
+ * getter of the prefix which is added to the name of an enumeration
+ * @return	the prefix to prepend
+ */
+String prefix(MEnumeration this) : "";
+
+/**
+ * getter of the suffix which is added to the name of an enumeration
+ * @return	the suffix to append
+ */
+String suffix(MEnumeration this) : "";
+
+/**
+ * just there for error free templates ;-)
+ * @return	an empty string
+ */
+String prefix(MClassifier this) : "";
+
+/**
+ * just there for error free templates ;-)
+ * @return	an empty string
+ */
+String suffix(MClassifier this) : "";
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the name of a class using prefix + suffix
+ * @return	formatted name of the class
+ */
+String asTypeName(MClass this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of an interface using prefix + suffix
+ * @return	formatted name of the interface
+ */
+String asTypeName(MInterface this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of an enumeration using prefix + suffix
+ * @return	formatted name of the enumeration
+ */
+String asTypeName(MEnumeration this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a data type using prefix + suffix
+ * @return	formatted name of the data type
+ */
+String asTypeName(MDataType this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a classifier using prefix + suffix
+ * @return	formatted name of the classifier
+ */
+String asTypeName(MClassifier this) : prefix() + name.toFirstUpper() + suffix();
+
+/**
+ * formats the name of a type, it should NOT do anything, it's just there for error free templates ;-)
+ * don't touch generics, primitive types or external types (external are mapped correctly)
+ * @return	the name of the type
+ */
+String asTypeName(MType this) : name();
+
+/**
+ * formats the name of a type after typemapping
+ * don't touch the type - the name of the type is determined by typemapping
+ * @return	the name of the type
+ */
+String asTypeName(String this) : this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	file names
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats the filename of a class
+ * @return	the filename of the class
+ */
+String asFileName(MClass this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of an interface
+ * @return	the filename of the interface
+ */
+String asFileName(MInterface this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of an enumeration
+ * @return	the filename of the enumeration
+ */
+String asFileName(MEnumeration this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of a data type
+ * @return	the filename of the data type
+ */
+String asFileName(MDataType this) : asTypeName() + fileExtension();
+
+/**
+ * formats the filename of a classifier
+ * it's usually not called!
+ * @return	the filename of a classifier
+ */
+String asFileName(MClassifier this) : asTypeName() + fileExtension();
+
+/**
+ * 
+ */
+//String asFileName(MType this) : this;
+
+/**
+ * formats the name of a type after typemapping
+ * don't touch the type, the name of the type is determined by typemapping
+ * @return	the name of the type
+ */
+//String asFileName(String this) : this;
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	enumeration literals
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an enumeration literal
+ * @context	the enumeration literal to format
+ * @return	the formatted enum literal
+ */
+String asEnumLiteral(MLiteral this) : name.toUpperCase();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an attribute name as a constant
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asConstant(MAttribute this) : name.toUpperCase();
+
+/**
+ * formats an attribute name as a normal attribute
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asVariable(MAttribute this) : name.toFirstLower();
+
+/**
+ * formats an attribute name according to the value of it's 'final' property
+ * @context	the attribute to format
+ * @return	the formatted attribute name
+ */
+String asAttribute(MAttribute this) : final ? asConstant() : asVariable();
+
+/**
+ * formats an attribute name as a getter method
+ * @context	the attribute to format
+ * @return	the formatted name of the getter method
+ */
+String asGetter(MAttribute this) : "get" + name.toFirstUpper();
+
+/**
+ * formats an attribute name as a setter method
+ * @context	the attribute to format
+ * @return	the formatted name of the setter method
+ */
+String asSetter(MAttribute this) : "set" + name.toFirstUpper();
+
+/**
+ * formats an attribute name as a 'insert in' method
+ * @context	the attribute to format
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertIn(MAttribute this) : "insertIn" + name.toFirstUpper();
+
+/**
+ * formats an attribute name as a 'remove from' method
+ * @context	the attribute to format
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFrom(MAttribute this) : "removeFrom" + name.toFirstUpper();
+
+/**
+ * formats an attribute name as a 'add to' method
+ * @context	the attribute to format
+ * @return	the formatted name of the add-to method
+ */
+String asAddTo(MAttribute this) : "addTo" + name.toFirstUpper();
+
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	association attributes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an association role as a association attribute
+ * @context	the association role to format
+ * @return	the formatted name of the association attribute
+ */
+String asAttribute(MAssociationRole this) : name.toFirstLower();
+
+/**
+ * formats an association role as a getter method
+ * @context	the association role to format
+ * @return	the formatted name of the getter method
+ */
+String asGetter(MAssociationRole this) : "get" + name.toFirstUpper();
+
+/**
+ * formats an association role as a setter method
+ * @context	the association role to format
+ * @return	the formatted name of the setter method
+ */
+String asSetter(MAssociationRole this) : "set" + name.toFirstUpper();
+
+/**
+ * formats an association role as a 'insert in' method
+ * @context	the association role to format
+ * @return	the formatted name of the 'insert in' method
+ */
+String asInsertIn(MAssociationRole this) : "insertIn" + name.toFirstUpper();
+
+/**
+ * formats an association role as a 'remove from' method
+ * @context	the association role to format
+ * @return	the formatted name of the 'remove from' method
+ */
+String asRemoveFrom(MAssociationRole this) : "removeFrom" + name.toFirstUpper();
+
+/**
+ * formats an association role as a 'iterator' method
+ * @context	the association role to format
+ * @return	the formatted name of the 'iterator' method
+ */
+String asIterator(MAssociationRole this) : asGetter() + "Iterator";
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	operations
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asOperation(MOperation this) : name.toFirstLower();
+
+/**
+ * formats an operation name as a constructor
+ * only for php4, not called for php5 and higher
+ * 
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asConstructor(MOperation this) : name.toFirstUpper();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	parameters
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats an operation name
+ * @context	the operation to format
+ * @return	the formatted name of the operation
+ */
+String asParameter(MParameter this) : name.toFirstLower();
+
+
+/*
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	type compatibility functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
+/**
+ * formats a property as an attribute
+ * just there for error-free templates (polymorphism)
+ * @see	asAttribute(MAttribute)
+ * @see asAttribtue(MAssociationRole)
+ */
+String asAttribute(MProperty this) : name.toFirstLower();

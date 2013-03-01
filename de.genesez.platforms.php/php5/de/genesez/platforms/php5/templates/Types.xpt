@@ -1,0 +1,133 @@
+«REM»
+	Handles classifiers, creates files and delegates the transformation of types to specific templates
+	
+	currently delegated:
+	- class, interface, enumeration
+	- require_once statements for imports of other php files
+	
+	@author	tobias haubold
+	@date	2008-03-27
+	@todo	data type
+«ENDREM»
+
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» use logging «ENDREM»
+«EXTENSION de::genesez::platforms::common::log::Log»
+«REM» use helper to access information «ENDREM»
+«EXTENSION de::genesez::platforms::common::AccessHelper»
+«REM» use conversion functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::Conversion»
+«REM» neat m2t helper functions «ENDREM»
+«EXTENSION de::genesez::platforms::common::m2t::Helper»
+«REM» use the type mapping «ENDREM»
+«EXTENSION de::genesez::platforms::common::typemapping::TypeMapping»
+
+«REM» use php naming conventions «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Naming»
+«REM» need import helper «ENDREM»
+«EXTENSION de::genesez::platforms::php::scripts::Import»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the generation of a type
+	every type is contained in a single source file
+	@context	a type to transform into text
+«ENDREM»
+«DEFINE Root FOR MClassifier»
+«FILE filePath( asFileName(), basePath() ) -»
+<?php
+«EXPAND Comment::File -»
+
+«EXPAND _Imports -»
+
+«EXPAND _OwnImports("php.own.imports." + xmiGuid) -»
+
+«EXPAND _TypeDef -»
+?>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM»
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	private functions
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+«ENDREM»
+
+«REM»
+	processes the generation of a class
+«ENDREM»
+«DEFINE _TypeDef FOR MClass -»
+«EXPAND Class::Root -»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of an interface
+«ENDREM»
+«DEFINE _TypeDef FOR MInterface -»
+«EXPAND Interface::Root -»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of an enumeration
+«ENDREM»
+«DEFINE _TypeDef FOR MEnumeration -»
+«EXPAND Enumeration::Root -»
+«ENDDEFINE»
+
+«REM»
+	processes the generation of a data type
+«ENDREM»
+«DEFINE _TypeDef FOR MDataType -»
+// TODO: «fatal("generation of 'MDataType's is currently not supported")»
+«ENDDEFINE»
+
+«REM»
+	because the fact, 'MClassifier' is abstract, an object of type MClassifier cannot exist!
+«ENDREM»
+«DEFINE _TypeDef FOR MClassifier -»
+// TODO: «fatal("generation of 'MClassifier's is currently not supported")»
+«ENDDEFINE»
+
+«REM»
+	generate import statements for referenced classes from other php files
+«ENDREM»
+«DEFINE _Imports FOR MClassifier -»
+«FOREACH supplier AS s -»
+require_once '«EXPAND _Require(s) -»';
+«ENDFOREACH -»
+«ENDDEFINE»
+
+«REM»
+	generates the require path for an classifier to include
+	@param	used	the classifier which is required
+«ENDREM»
+«DEFINE _Require(MClassifier used) FOR MClassifier -»
+«used.getRequirePath(this) + used.asFileName() -»
+«ENDDEFINE»
+
+«REM»
+	generates the require path for an type to include
+	only for external types important!
+	@param	used	the type which is required
+«ENDREM»
+«DEFINE _Require(MType used) FOR MClassifier -»
+«used.mapName("import") -»
+«ENDDEFINE»
+
+«REM»
+	generates a region for own import declarations
+	@param	id	protected region id
+«ENDREM»
+«DEFINE _OwnImports(String id) FOR MClassifier -»
+«PROTECT CSTART '/* ' CEND ' */' ID (id)»
+// TODO: put your further include + require statements here
+«ENDPROTECT»
+«ENDDEFINE»

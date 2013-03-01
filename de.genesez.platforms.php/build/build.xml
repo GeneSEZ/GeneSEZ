@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="de.genesez.platforms.php" basedir=".." default="build">
+
+	<condition property="build.basedir"
+		value="${basedir}/..">
+		<not>
+			<isset property="build.basedir" />
+		</not>
+	</condition>
+	
+	<import file="${build.basedir}/de.genesez.build/build/imports.xml" />
+	
+	<!-- Import project related properties -->
+	<property file="build/build.properties" />
+	
+	<!-- Public target section -->
+	
+	<target name="build"
+		description="Build de.genesez.platforms.php">
+	</target>
+
+	<target name="pluginjar"
+		description="Create the plugin jar for de.genesez.platforms.php">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/de.genesez.platforms.php_${release}.jar"
+			compress="true"
+		 	manifest="META-INF/MANIFEST.MF">
+			<fileset dir="${php.dir}" />
+			<fileset dir="${php5.dir}" />
+			<fileset dir="${php6.dir}" />
+			<fileset dir="${pear.dir}" />
+			<fileset dir="${doctrine.dir}" />
+			<fileset dir="${smarty.dir}" />
+			<fileset dir="${controller.dir}" />
+			<fileset dir="${scaffold.dir}" />
+		</jar>
+	</target>
+	
+	<target name="clean"
+		description="Clean de.genesez.platforms.php">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${dist.dir}" includes="*.jar" />
+		</delete>
+	</target>
+	
+	<!-- Private target section -->
+
+</project>
