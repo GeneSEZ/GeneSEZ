@@ -56,3 +56,37 @@
 	«ENDIF -»
 	«ENDLET -»
 «ENDDEFINE»
+
+«REM»
+	Generates the implementation of an add access operation.
+«ENDREM»
+«DEFINE AddOperationImpl FOR MOperation -»
+	«LET parameter.first() AS param -»
+		«IF emHasStereotype("primitive") -»
+			«PROTECT CSTART "/* " CEND " */" ID ("add.property.access_" + xmiGuid)»
+			// TODO: sorry the template for add operations on arrays is missing, please file a feature request at forge.genesez.org
+			throw new UnsupportedOperationException(
+					"The implementation of the property access operation add for multi valued attribute '«param.name»' is missing!");
+			«ENDPROTECT»
+		«ELSE -»
+			«IF !static-»this.«ENDIF-»«param.name».add(«IF static-»_«ENDIF-»«param.name»);
+		«ENDIF -»
+	«ENDLET -»
+«ENDDEFINE»
+
+«REM»
+	Generates the implementation of a remove access operation.
+«ENDREM»
+«DEFINE RemoveOperationImpl FOR MOperation -»
+	«LET parameter.first() AS param -»
+		«IF emHasStereotype("primitive") -»
+			«PROTECT CSTART "/* " CEND " */" ID ("remove.property.access_" + xmiGuid)»
+			// TODO: sorry the template for remove operations on arrays is missing, please file a feature request at forge.genesez.org
+			throw new UnsupportedOperationException(
+					"The implementation of the property access operation remove for multi valued attribute '«param.name»' is missing!");
+			«ENDPROTECT»
+		«ELSE -»
+			«IF !static-»this.«ENDIF-»«param.name».remove(«IF static-»_«ENDIF-»«param.name»);
+		«ENDIF -»
+	«ENDLET -»
+«ENDDEFINE»
