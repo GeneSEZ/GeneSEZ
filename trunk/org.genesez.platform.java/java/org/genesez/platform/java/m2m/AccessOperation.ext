@@ -60,9 +60,9 @@ MAttribute emAccessorForStaticFinalAttribute(MAttribute this) :
  * implemented; accessor sereotypes on MClass instances will be considered but not removed)
  */
 MProperty emEnsureGetAccessOperation(MProperty this) :
-	emGenerateGetAccess()
+	emGenerateGetAccess() && !emHasGetAccessOperation()
 		? (
-			classifier.ensureOperationExistence( xmiGuid + "_get", asGetter() )
+			classifier.createOperation( xmiGuid + "_get", asGetter() )
 				.processOperation( "public", false, false, false )
 				.ensureReturnParameterExistence( xmiGuid + "_getReturn", asAttribute() )
 				.processParameter( null, "return", multiplicity.cloneMultiplicity() )
@@ -89,9 +89,9 @@ MProperty emEnsureGetAccessOperation(MProperty this) :
  * @TODO	check if in case of a multi-valued property, instead of a set...(collection type) operation and add/remove operation would be more appropriate
  */
 MProperty emEnsureSetAccessOperation(MProperty this) : 
-	emGenerateSetAccess()
+	emGenerateSetAccess() && !emHasSetAccessOperation()
 		? (
-			classifier.ensureOperationExistence( xmiGuid + "_set", asSetter() )
+			classifier.createOperation( xmiGuid + "_set", asSetter() )
 				.processOperation( "public", false, false, false )
 				.ensureParameterExistence( xmiGuid + "_setParam", asAttribute() )
 				.processParameter( null, "in", multiplicity.cloneMultiplicity() )
@@ -113,9 +113,9 @@ MProperty emEnsureSetAccessOperation(MProperty this) :
  * with an operation body containing source code instead of a protected region.
  */
 MProperty emEnsureAddAccessOperation(MProperty this) :
-	multiplicity.isMultiValued() && emGenerateAddAccess()
+	multiplicity.isMultiValued() && emGenerateAddAccess() && !emHasAddAccessOperation()
 		? (
-			classifier.ensureOperationExistence( xmiGuid + "_add", asAddPropertyAccessOperation() )
+			classifier.createOperation( xmiGuid + "_add", asAddPropertyAccessOperation() )
 				.processOperation( "public", false, false, false )
 				.ensureParameterExistence( xmiGuid + "_addParam", asAttribute() )
 				.processParameter( null, "in", createMultiplicity( 0, 1 ) )
@@ -137,9 +137,9 @@ MProperty emEnsureAddAccessOperation(MProperty this) :
  * with an operation body containing source code instead of a protected region.
  */
 MProperty emEnsureRemoveAccessOperation(MProperty this) :
-	multiplicity.isMultiValued() && emGenerateRemoveAccess()
+	multiplicity.isMultiValued() && emGenerateRemoveAccess() && !emHasRemoveAccessOperation()
 		? (
-			classifier.ensureOperationExistence( xmiGuid + "_remove", asRemovePropertyAccessOperation() )
+			classifier.createOperation( xmiGuid + "_remove", asRemovePropertyAccessOperation() )
 				.processOperation( "public", false, false, false )
 				.ensureParameterExistence( xmiGuid + "_removeParam", asAttribute() )
 				.processParameter( null, "in", createMultiplicity( 0, 1 ) )
@@ -152,6 +152,32 @@ MProperty emEnsureRemoveAccessOperation(MProperty this) :
 				)
 		) : this ->
 	this;
+
+
+/**
+ * Returns true if a get access operation for the specified property already exists, otherwise false.
+ */
+boolean emHasGetAccessOperation(MProperty this) :
+	classifier.operation.exists( o|o.name == asGetter() && o.parameter.isEmpty && o.hasReturn() && o.return.type == type );
+
+/**
+ * Returns true if a set access operation for the specified property already exists, otherwise false.
+ */
+boolean emHasSetAccessOperation(MProperty this) :
+	classifier.operation.exists( o|o.name == asSetter() && !o.hasReturn() && o.parameter.size == 1 && o.parameter.first().type == type );
+
+/**
+ * Returns true if an add access operation for the specified property already exists, otherwise false.
+ */
+boolean emHasAddAccessOperation(MProperty this) :
+	classifier.operation.exists( o|o.name == asAddPropertyAccessOperation() && !o.hasReturn() && o.parameter.size == 1 && o.parameter.first().type == type );
+
+/**
+ * Returns true if a remove access operation for the specified property already exists, otherwise false.
+ */
+boolean emHasRemoveAccessOperation(MProperty this) :
+	classifier.operation.exists( o|o.name == asRemovePropertyAccessOperation() && !o.hasReturn() && o.parameter.size == 1 && o.parameter.first().type == type );
+
 
 /**
  * Returns the get access operation for the specified property.
