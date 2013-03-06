@@ -31,16 +31,15 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>slot</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>slot</b></em>'.
 	 */
 	public String getSlot() {
 		return slot;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>slot</b></em>'
-	 * @param	slot	
+	 * Sets the value of attribute '<em><b>slot</b></em>'.
+	 * @param	slot	the value to set.
 	 */
 	public void setSlot(String slot) {
 		this.slot = slot;

@@ -79,136 +79,30 @@ public class Gcore2Java extends Model2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>eclipseFormatterConfig</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>eclipseFormatterConfig</b></em>'.
 	 */
 	public String getEclipseFormatterConfig() {
 		return eclipseFormatterConfig;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>eclipseFormatterConfig</b></em>'
-	 * @param	eclipseFormatterConfig	
+	 * Sets the value of attribute '<em><b>eclipseFormatterConfig</b></em>'.
+	 * @param	eclipseFormatterConfig	the value to set.
 	 */
 	public void setEclipseFormatterConfig(String eclipseFormatterConfig) {
 		this.eclipseFormatterConfig = eclipseFormatterConfig;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>excludePackage</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>excludePackage</b></em>'.
 	 */
 	public java.util.Set<String> getExcludePackage() {
 		return excludePackage;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>excludeContentPackage</b></em>'
-	 * @return	
-	 */
-	public java.util.Set<String> getExcludeContentPackage() {
-		return excludeContentPackage;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>fieldAccess</b></em>'
-	 * @return	
-	 */
-	public boolean getFieldAccess() {
-		return fieldAccess;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>fieldAccess</b></em>'
-	 * @param	fieldAccess	
-	 */
-	public void setFieldAccess(boolean fieldAccess) {
-		this.fieldAccess = fieldAccess;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>useModelNameAsBasePackage</b></em>'
-	 * @return	
-	 */
-	public boolean getUseModelNameAsBasePackage() {
-		return useModelNameAsBasePackage;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>useModelNameAsBasePackage</b></em>'
-	 * @param	useModelNameAsBasePackage	
-	 */
-	public void setUseModelNameAsBasePackage(boolean useModelNameAsBasePackage) {
-		this.useModelNameAsBasePackage = useModelNameAsBasePackage;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>basePackage</b></em>'
-	 * @return	
-	 */
-	public String getBasePackage() {
-		return basePackage;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>basePackage</b></em>'
-	 * @param	basePackage	
-	 */
-	public void setBasePackage(String basePackage) {
-		this.basePackage = basePackage;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>accessorForStereotypes</b></em>'
-	 * @return	
-	 */
-	public String getAccessorForStereotypes() {
-		return accessorForStereotypes;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>accessorForStereotypes</b></em>'
-	 * @param	accessorForStereotypes	
-	 */
-	public void setAccessorForStereotypes(String accessorForStereotypes) {
-		this.accessorForStereotypes = accessorForStereotypes;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>accessorStereotype</b></em>'
-	 * @return	
-	 */
-	public String getAccessorStereotype() {
-		return accessorStereotype;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>accessorStereotype</b></em>'
-	 * @param	accessorStereotype	
-	 */
-	public void setAccessorStereotype(String accessorStereotype) {
-		this.accessorStereotype = accessorStereotype;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>usePropertyVisibilityForAccessors</b></em>'
-	 * @return	
-	 */
-	public boolean getUsePropertyVisibilityForAccessors() {
-		return usePropertyVisibilityForAccessors;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>usePropertyVisibilityForAccessors</b></em>'
-	 * @param	usePropertyVisibilityForAccessors	
-	 */
-	public void setUsePropertyVisibilityForAccessors(boolean usePropertyVisibilityForAccessors) {
-		this.usePropertyVisibilityForAccessors = usePropertyVisibilityForAccessors;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>excludePackage</b></em>'.
-	 * @param	excludePackage	the value to add
+	 * @param	excludePackage	the value to add.
 	 */
 	public void addExcludePackage(String excludePackage) {
 		this.excludePackage.add(excludePackage);
@@ -216,15 +110,22 @@ public class Gcore2Java extends Model2Text {
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>excludePackage</b></em>'.
-	 * @param	excludePackage	the value to remove
+	 * @param	excludePackage	the value to remove.
 	 */
 	public void removeExcludePackage(String excludePackage) {
 		this.excludePackage.remove(excludePackage);
 	}
 	
 	/**
+	 * Returns the value of attribute '<em><b>excludeContentPackage</b></em>'.
+	 */
+	public java.util.Set<String> getExcludeContentPackage() {
+		return excludeContentPackage;
+	}
+	
+	/**
 	 * Adds the specified value to the attribute '<em><b>excludeContentPackage</b></em>'.
-	 * @param	excludeContentPackage	the value to add
+	 * @param	excludeContentPackage	the value to add.
 	 */
 	public void addExcludeContentPackage(String excludeContentPackage) {
 		this.excludeContentPackage.add(excludeContentPackage);
@@ -232,10 +133,100 @@ public class Gcore2Java extends Model2Text {
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>excludeContentPackage</b></em>'.
-	 * @param	excludeContentPackage	the value to remove
+	 * @param	excludeContentPackage	the value to remove.
 	 */
 	public void removeExcludeContentPackage(String excludeContentPackage) {
 		this.excludeContentPackage.remove(excludeContentPackage);
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>fieldAccess</b></em>'.
+	 */
+	public boolean getFieldAccess() {
+		return fieldAccess;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>fieldAccess</b></em>'.
+	 * @param	fieldAccess	the value to set.
+	 */
+	public void setFieldAccess(boolean fieldAccess) {
+		this.fieldAccess = fieldAccess;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>useModelNameAsBasePackage</b></em>'.
+	 */
+	public boolean getUseModelNameAsBasePackage() {
+		return useModelNameAsBasePackage;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>useModelNameAsBasePackage</b></em>'.
+	 * @param	useModelNameAsBasePackage	the value to set.
+	 */
+	public void setUseModelNameAsBasePackage(boolean useModelNameAsBasePackage) {
+		this.useModelNameAsBasePackage = useModelNameAsBasePackage;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>basePackage</b></em>'.
+	 */
+	public String getBasePackage() {
+		return basePackage;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>basePackage</b></em>'.
+	 * @param	basePackage	the value to set.
+	 */
+	public void setBasePackage(String basePackage) {
+		this.basePackage = basePackage;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>accessorForStereotypes</b></em>'.
+	 */
+	public String getAccessorForStereotypes() {
+		return accessorForStereotypes;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>accessorForStereotypes</b></em>'.
+	 * @param	accessorForStereotypes	the value to set.
+	 */
+	public void setAccessorForStereotypes(String accessorForStereotypes) {
+		this.accessorForStereotypes = accessorForStereotypes;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>accessorStereotype</b></em>'.
+	 */
+	public String getAccessorStereotype() {
+		return accessorStereotype;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>accessorStereotype</b></em>'.
+	 * @param	accessorStereotype	the value to set.
+	 */
+	public void setAccessorStereotype(String accessorStereotype) {
+		this.accessorStereotype = accessorStereotype;
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>usePropertyVisibilityForAccessors</b></em>'.
+	 */
+	public boolean getUsePropertyVisibilityForAccessors() {
+		return usePropertyVisibilityForAccessors;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>usePropertyVisibilityForAccessors</b></em>'.
+	 * @param	usePropertyVisibilityForAccessors	the value to set.
+	 */
+	public void setUsePropertyVisibilityForAccessors(boolean usePropertyVisibilityForAccessors) {
+		this.usePropertyVisibilityForAccessors = usePropertyVisibilityForAccessors;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._tPrfIAjhEeKn2-J_iePC7Q) ENABLED START */

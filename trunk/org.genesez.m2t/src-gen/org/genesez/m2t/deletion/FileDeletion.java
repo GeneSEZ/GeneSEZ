@@ -44,7 +44,6 @@ public class FileDeletion extends DeletionFeature {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void updateFileVisit(Path file) {
 		/* PROTECTED REGION ID(java.implementation._ZACkJQD0EeK7ac-mrkJBDw) ENABLED START */
@@ -106,7 +105,6 @@ public class FileDeletion extends DeletionFeature {
 	 * deletes the unchanged files. Therefore it compares the old last modification dates with the new ones.
 	 * 
 	 * @throws NotPreparedException if prepare wasn't called before
-	 * @return	
 	 */
 	protected java.util.Set<String> deleteUntouchedFiles() {
 		/* PROTECTED REGION ID(java.implementation._ZACkNQD0EeK7ac-mrkJBDw) ENABLED START */
@@ -168,6 +166,7 @@ public class FileDeletion extends DeletionFeature {
 	
 	/**
 	 * the includes
+	 * @param	includedFiles	the value to add.
 	 */
 	public void addIncludedFiles(String includedFiles) {
 		this.includedFiles.add(includedFiles);
@@ -175,6 +174,7 @@ public class FileDeletion extends DeletionFeature {
 	
 	/**
 	 * the includes
+	 * @param	includedFiles	the value to remove.
 	 */
 	public void removeIncludedFiles(String includedFiles) {
 		this.includedFiles.remove(includedFiles);
@@ -182,6 +182,7 @@ public class FileDeletion extends DeletionFeature {
 	
 	/**
 	 * the excludes
+	 * @param	excludedFiles	the value to add.
 	 */
 	public void addExcludedFiles(String excludedFiles) {
 		this.excludedFiles.add(excludedFiles);
@@ -189,6 +190,7 @@ public class FileDeletion extends DeletionFeature {
 	
 	/**
 	 * the excludes
+	 * @param	excludedFiles	the value to remove.
 	 */
 	public void removeExcludedFiles(String excludedFiles) {
 		this.excludedFiles.remove(excludedFiles);

@@ -121,7 +121,6 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	 * @throws IOException if an I/O-Error occurs
 	 * @param	file	a reference to the file
 	 * @param	exc	the I/O exception that prevented the file from being visited.
-	 * @return	
 	 * @throws	IOException
 	 */
 	public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
@@ -212,22 +211,14 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	
 	/**
 	 * the observers
-	 * @return	
 	 */
 	public java.util.Set<FileTreeObserver> getObserver() {
 		return observer;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>baseDir</b></em>'
-	 * @param	baseDir	
-	 */
-	public void setBaseDir(String baseDir) {
-		this.baseDir = baseDir;
-	}
-	
-	/**
 	 * the observers
+	 * @param	observer	the value to add.
 	 */
 	public void addObserver(FileTreeObserver observer) {
 		this.observer.add(observer);
@@ -235,9 +226,18 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	
 	/**
 	 * the observers
+	 * @param	observer	the value to remove.
 	 */
 	public void removeObserver(FileTreeObserver observer) {
 		this.observer.remove(observer);
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>baseDir</b></em>'.
+	 * @param	baseDir	the value to set.
+	 */
+	public void setBaseDir(String baseDir) {
+		this.baseDir = baseDir;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Y_wQKQD0EeK7ac-mrkJBDw) ENABLED START */

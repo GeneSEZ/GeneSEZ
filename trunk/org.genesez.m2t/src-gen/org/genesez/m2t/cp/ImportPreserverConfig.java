@@ -25,16 +25,14 @@ public class ImportPreserverConfig {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>fileExtensionRegExp</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>fileExtensionRegExp</b></em>'.
 	 */
 	public String getFileExtensionRegExp() {
 		return fileExtensionRegExp;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>importRegExp</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>importRegExp</b></em>'.
 	 */
 	public String getImportRegExp() {
 		return importRegExp;

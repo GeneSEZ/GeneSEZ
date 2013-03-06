@@ -147,112 +147,105 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>preFileTreeWalker</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>preFileTreeWalker</b></em>'.
 	 */
 	public FileTreeWalker getPreFileTreeWalker() {
 		return preFileTreeWalker;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>preFileTreeWalker</b></em>'
-	 * @param	preFileTreeWalker	
+	 * Sets the value of attribute '<em><b>preFileTreeWalker</b></em>'.
+	 * @param	preFileTreeWalker	the value to set.
 	 */
 	public void setPreFileTreeWalker(FileTreeWalker preFileTreeWalker) {
 		this.preFileTreeWalker = preFileTreeWalker;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>postFileTreeWalker</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>postFileTreeWalker</b></em>'.
 	 */
 	public FileTreeWalker getPostFileTreeWalker() {
 		return postFileTreeWalker;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>postFileTreeWalker</b></em>'
-	 * @param	postFileTreeWalker	
+	 * Sets the value of attribute '<em><b>postFileTreeWalker</b></em>'.
+	 * @param	postFileTreeWalker	the value to set.
 	 */
 	public void setPostFileTreeWalker(FileTreeWalker postFileTreeWalker) {
 		this.postFileTreeWalker = postFileTreeWalker;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>revisionControlSystemFinder</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>revisionControlSystemFinder</b></em>'.
 	 */
 	public RevisionControlSystemFinder getRevisionControlSystemFinder() {
 		return revisionControlSystemFinder;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>revisionControlSystemFinder</b></em>'
-	 * @param	revisionControlSystemFinder	
+	 * Sets the value of attribute '<em><b>revisionControlSystemFinder</b></em>'.
+	 * @param	revisionControlSystemFinder	the value to set.
 	 */
 	public void setRevisionControlSystemFinder(RevisionControlSystemFinder revisionControlSystemFinder) {
 		this.revisionControlSystemFinder = revisionControlSystemFinder;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>fileDeletion</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>fileDeletion</b></em>'.
 	 */
 	public FileDeletion getFileDeletion() {
 		return fileDeletion;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>fileDeletion</b></em>'
-	 * @param	fileDeletion	
+	 * Sets the value of attribute '<em><b>fileDeletion</b></em>'.
+	 * @param	fileDeletion	the value to set.
 	 */
 	public void setFileDeletion(FileDeletion fileDeletion) {
 		this.fileDeletion = fileDeletion;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>folderDeletion</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>folderDeletion</b></em>'.
 	 */
 	public FolderDeletion getFolderDeletion() {
 		return folderDeletion;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>folderDeletion</b></em>'
-	 * @param	folderDeletion	
+	 * Sets the value of attribute '<em><b>folderDeletion</b></em>'.
+	 * @param	folderDeletion	the value to set.
 	 */
 	public void setFolderDeletion(FolderDeletion folderDeletion) {
 		this.folderDeletion = folderDeletion;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>contentPreserve</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>contentPreserve</b></em>'.
 	 */
 	public XPandLineContentPreserving getContentPreserve() {
 		return contentPreserve;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>contentPreserve</b></em>'
-	 * @param	contentPreserve	
+	 * Sets the value of attribute '<em><b>contentPreserve</b></em>'.
+	 * @param	contentPreserve	the value to set.
 	 */
 	public void setContentPreserve(XPandLineContentPreserving contentPreserve) {
 		this.contentPreserve = contentPreserve;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>importPreserver</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>importPreserver</b></em>'.
 	 */
 	public ImportPreserver getImportPreserver() {
 		return importPreserver;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>importPreserver</b></em>'
-	 * @param	importPreserver	
+	 * Sets the value of attribute '<em><b>importPreserver</b></em>'.
+	 * @param	importPreserver	the value to set.
 	 */
 	public void setImportPreserver(ImportPreserver importPreserver) {
 		this.importPreserver = importPreserver;

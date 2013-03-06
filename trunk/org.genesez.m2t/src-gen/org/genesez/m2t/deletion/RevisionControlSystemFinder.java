@@ -31,7 +31,6 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	dir	
 	 */
 	public void updateBeforeDir(Path dir) {
 		/* PROTECTED REGION ID(java.implementation._v2WZ0ATYEeKUpcpqfZ9tsA) ENABLED START */
@@ -67,7 +66,6 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 	
 	/**
 	 * Checks if there is another repository metadata folder above the given path.
-	 * @param	folder	
 	 */
 	private void checkAbove(Path folder) {
 		/* PROTECTED REGION ID(java.implementation._ZAIq7QD0EeK7ac-mrkJBDw) ENABLED START */
@@ -108,7 +106,7 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 	
 	/**
 	 * The outputPath, where deletion should take place.
-	 * @param	baseDir	
+	 * @param	baseDir	the value to set.
 	 */
 	public void setBaseDir(String baseDir) {
 		this.baseDir = baseDir;

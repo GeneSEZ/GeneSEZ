@@ -52,8 +52,7 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>component</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>component</b></em>'.
 	 */
 	public java.util.List<T> getComponent() {
 		return component;
@@ -61,7 +60,7 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 	
 	/**
 	 * Adds the specified value to the attribute '<em><b>component</b></em>'.
-	 * @param	component	the value to add
+	 * @param	component	the value to add.
 	 */
 	public void addComponent(T component) {
 		this.component.add(component);
@@ -69,7 +68,7 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>component</b></em>'.
-	 * @param	component	the value to remove
+	 * @param	component	the value to remove.
 	 */
 	public void removeComponent(T component) {
 		this.component.remove(component);

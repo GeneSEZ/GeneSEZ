@@ -41,7 +41,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	config	
 	 */
 	public void setConfig(ImportPreserverConfig config) {
 		/* PROTECTED REGION ID(java.implementation._U0AiUA7zEeKn_eQP-uNBOQ) ENABLED START */
@@ -68,8 +67,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	line	
-	 * @return	
 	 */
 	protected boolean isComment(String line) {
 		/* PROTECTED REGION ID(java.implementation._Xc7swA89EeK6yuw9r03UDQ) ENABLED START */
@@ -79,8 +76,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Includes the preserved content into the specified content and returns all content.
-	 * @param	input	
-	 * @return	
 	 */
 	public java.util.List<String> includeContent(java.util.List<String> input) {
 		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__4BERgA7pEeKn_eQP-uNBOQ) ENABLED START */
@@ -164,8 +159,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
-	 * @return	
 	 */
 	public boolean hasExtractableContent(Path file) {
 		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__BeNPcA7sEeKn_eQP-uNBOQ) ENABLED START */
@@ -181,7 +174,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Processes the specified line of content.
-	 * @param	line	
 	 */
 	public void extractContent(String line) {
 		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__R27m0A7rEeKn_eQP-uNBOQ) ENABLED START */
@@ -201,7 +193,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void finished(boolean file) {
 		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__mYwn8A7yEeKn_eQP-uNBOQ) ENABLED START */
@@ -221,7 +212,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public LineContentExtractor getExtractor() {
 		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__j24soA7oEeKn_eQP-uNBOQ) ENABLED START */
@@ -231,7 +221,6 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public ContentIncluder getIncluder() {
 		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__n5OgsA7oEeKn_eQP-uNBOQ) ENABLED START */
@@ -240,8 +229,8 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>enabled</b></em>'
-	 * @param	enabled	
+	 * Sets the value of attribute '<em><b>enabled</b></em>'.
+	 * @param	enabled	the value to set.
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;

@@ -37,16 +37,15 @@ public class Typo3Scaffolding extends Typo3Model2Model {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>scaffolding</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>scaffolding</b></em>'.
 	 */
 	public boolean getScaffolding() {
 		return scaffolding;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>scaffolding</b></em>'
-	 * @param	scaffolding	
+	 * Sets the value of attribute '<em><b>scaffolding</b></em>'.
+	 * @param	scaffolding	the value to set.
 	 */
 	public void setScaffolding(boolean scaffolding) {
 		this.scaffolding = scaffolding;

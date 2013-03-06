@@ -21,7 +21,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public String getFileId() {
 		/* PROTECTED REGION ID(java.implementation._LMKyoA8lEeK6yuw9r03UDQ) ENABLED START */
@@ -31,7 +30,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public boolean hasFileId() {
 		/* PROTECTED REGION ID(java.implementation._yNM6AA8sEeK6yuw9r03UDQ) ENABLED START */
@@ -41,8 +39,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
-	 * @return	
 	 */
 	public boolean hasExtractableContent(Path file) {
 		/* PROTECTED REGION ID(java.implementation._G9snEA8lEeK6yuw9r03UDQ__BeNPcA7sEeKn_eQP-uNBOQ) ENABLED START */
@@ -52,7 +48,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/**
 	 * Processes the specified line of content.
-	 * @param	line	
 	 */
 	public void extractContent(String line) {
 		/* PROTECTED REGION ID(java.implementation._G9snEA8lEeK6yuw9r03UDQ__R27m0A7rEeKn_eQP-uNBOQ) ENABLED START */
@@ -67,7 +62,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void finished(boolean file) {
 		/* PROTECTED REGION ID(java.implementation._G9snEA8lEeK6yuw9r03UDQ__mYwn8A7yEeKn_eQP-uNBOQ) ENABLED START */
@@ -79,7 +73,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public LineContentExtractor getExtractor() {
 		/* PROTECTED REGION ID(java.implementation._G9snEA8lEeK6yuw9r03UDQ__j24soA7oEeKn_eQP-uNBOQ) ENABLED START */
@@ -89,7 +82,6 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public ContentIncluder getIncluder() {
 		/* PROTECTED REGION ID(java.implementation._G9snEA8lEeK6yuw9r03UDQ__n5OgsA7oEeKn_eQP-uNBOQ) ENABLED START */

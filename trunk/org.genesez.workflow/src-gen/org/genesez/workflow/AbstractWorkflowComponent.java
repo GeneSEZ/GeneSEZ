@@ -47,7 +47,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	/**
 	 * Provides the mwe2 execution wrapper.
-	 * @return	
 	 */
 	protected Mwe2Bridge getBridge() {
 		/* PROTECTED REGION ID(java.implementation._135mEPVBEeGsV8fV-DCYeA) ENABLED START */
@@ -115,7 +114,6 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	/**
 	 * Specifies the execution in case of errors.
-	 * @return	
 	 */
 	public boolean getAbortOnError() {
 		return abortOnError;
@@ -123,7 +121,7 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	
 	/**
 	 * Specifies the execution in case of errors.
-	 * @param	abortOnError	
+	 * @param	abortOnError	the value to set.
 	 */
 	public void setAbortOnError(boolean abortOnError) {
 		this.abortOnError = abortOnError;

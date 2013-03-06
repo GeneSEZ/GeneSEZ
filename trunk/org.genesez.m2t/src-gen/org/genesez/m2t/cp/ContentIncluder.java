@@ -12,8 +12,6 @@ public interface ContentIncluder {
 	
 	/**
 	 * Includes the preserved content into the specified content and returns all content.
-	 * @param	input	
-	 * @return	
 	 */
 	public java.util.List<String> includeContent(java.util.List<String> input);
 	

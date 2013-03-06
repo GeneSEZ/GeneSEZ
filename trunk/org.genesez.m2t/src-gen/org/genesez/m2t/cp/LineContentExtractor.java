@@ -13,20 +13,16 @@ public interface LineContentExtractor {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
-	 * @return	
 	 */
 	public boolean hasExtractableContent(Path file);
 	
 	/**
 	 * Processes the specified line of content.
-	 * @param	line	
 	 */
 	public void extractContent(String line);
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void finished(boolean file);
 	
