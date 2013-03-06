@@ -76,6 +76,8 @@ public class MappingFileCollector {
 		FileContainer fileContainer = jaxbDelegator.getFileContainerByXPath(typeMappingFile, "//tns:include");
 		if (fileContainer != null) {
 			for (String file : fileContainer.getFileList()) {
+				// trim leading and trailing whitespace from file path
+				file = file.trim();
 				if (!(fileSet.contains(file))) {
 					fileSet.add(file);
 					workList.add(file);
