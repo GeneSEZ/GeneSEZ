@@ -57,7 +57,6 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	dir	
 	 */
 	public void updateBeforeDir(Path dir) {
 		/* PROTECTED REGION ID(java.implementation._7nBVcA7yEeKn_eQP-uNBOQ) ENABLED START */
@@ -77,7 +76,6 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void updateFileVisit(Path file) {
 		/* PROTECTED REGION ID(java.implementation._amVfkA7uEeKn_eQP-uNBOQ) ENABLED START */
@@ -122,7 +120,6 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	protected void extractContent(Path file) {
 		/* PROTECTED REGION ID(java.implementation._0Qg2UA_AEeKuTrE1zpGjjg) ENABLED START */
@@ -164,7 +161,6 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	protected void includeContent(Path file) {
 		/* PROTECTED REGION ID(java.implementation._1oeHwA_AEeKuTrE1zpGjjg) ENABLED START */
@@ -217,6 +213,7 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * paths relative to output directory that are excluded during the file search.
+	 * @param	excludedRelativePaths	the value to add.
 	 */
 	public void addExcludedRelativePaths(String excludedRelativePaths) {
 		this.excludedRelativePaths.add(excludedRelativePaths);
@@ -224,6 +221,7 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * paths relative to output directory that are excluded during the file search.
+	 * @param	excludedRelativePaths	the value to remove.
 	 */
 	public void removeExcludedRelativePaths(String excludedRelativePaths) {
 		this.excludedRelativePaths.remove(excludedRelativePaths);
@@ -231,6 +229,7 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * Directory names that are excluded during file search
+	 * @param	excludedDirectoryNames	the value to add.
 	 */
 	public void addExcludedDirectoryNames(String excludedDirectoryNames) {
 		this.excludedDirectoryNames.add(excludedDirectoryNames);
@@ -238,6 +237,7 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/**
 	 * Directory names that are excluded during file search
+	 * @param	excludedDirectoryNames	the value to remove.
 	 */
 	public void removeExcludedDirectoryNames(String excludedDirectoryNames) {
 		this.excludedDirectoryNames.remove(excludedDirectoryNames);

@@ -54,15 +54,13 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public String getLogMessage() {
 		return checkComponent.getLogMessage();
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>script</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>script</b></em>'.
 	 */
 	public java.util.Set<String> getScript() {
 		return script;
@@ -70,7 +68,7 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Adds the specified value to the attribute '<em><b>script</b></em>'.
-	 * @param	script	the value to add
+	 * @param	script	the value to add.
 	 */
 	public void addScript(String script) {
 		this.script.add(script);
@@ -78,7 +76,7 @@ public class Validator extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>script</b></em>'.
-	 * @param	script	the value to remove
+	 * @param	script	the value to remove.
 	 */
 	public void removeScript(String script) {
 		this.script.remove(script);

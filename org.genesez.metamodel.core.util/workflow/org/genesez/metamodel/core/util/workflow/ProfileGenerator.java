@@ -60,80 +60,75 @@ public class ProfileGenerator extends Model2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>xtendFilePath</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>xtendFilePath</b></em>'.
 	 */
 	public String getXtendFilePath() {
 		return xtendFilePath;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>xtendFilePath</b></em>'
-	 * @param	xtendFilePath	
+	 * Sets the value of attribute '<em><b>xtendFilePath</b></em>'.
+	 * @param	xtendFilePath	the value to set.
 	 */
 	public void setXtendFilePath(String xtendFilePath) {
 		this.xtendFilePath = xtendFilePath;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>profileFileName</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>profileFileName</b></em>'.
 	 */
 	public String getProfileFileName() {
 		return profileFileName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>profileFileName</b></em>'
-	 * @param	profileFileName	
+	 * Sets the value of attribute '<em><b>profileFileName</b></em>'.
+	 * @param	profileFileName	the value to set.
 	 */
 	public void setProfileFileName(String profileFileName) {
 		this.profileFileName = profileFileName;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>accessHelperFileName</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>accessHelperFileName</b></em>'.
 	 */
 	public String getAccessHelperFileName() {
 		return accessHelperFileName;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>accessHelperFileName</b></em>'
-	 * @param	accessHelperFileName	
+	 * Sets the value of attribute '<em><b>accessHelperFileName</b></em>'.
+	 * @param	accessHelperFileName	the value to set.
 	 */
 	public void setAccessHelperFileName(String accessHelperFileName) {
 		this.accessHelperFileName = accessHelperFileName;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>stereotypeNamePrefix</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>stereotypeNamePrefix</b></em>'.
 	 */
 	public String getStereotypeNamePrefix() {
 		return stereotypeNamePrefix;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>stereotypeNamePrefix</b></em>'
-	 * @param	stereotypeNamePrefix	
+	 * Sets the value of attribute '<em><b>stereotypeNamePrefix</b></em>'.
+	 * @param	stereotypeNamePrefix	the value to set.
 	 */
 	public void setStereotypeNamePrefix(String stereotypeNamePrefix) {
 		this.stereotypeNamePrefix = stereotypeNamePrefix;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>enumerationNamePrefix</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>enumerationNamePrefix</b></em>'.
 	 */
 	public String getEnumerationNamePrefix() {
 		return enumerationNamePrefix;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>enumerationNamePrefix</b></em>'
-	 * @param	enumerationNamePrefix	
+	 * Sets the value of attribute '<em><b>enumerationNamePrefix</b></em>'.
+	 * @param	enumerationNamePrefix	the value to set.
 	 */
 	public void setEnumerationNamePrefix(String enumerationNamePrefix) {
 		this.enumerationNamePrefix = enumerationNamePrefix;

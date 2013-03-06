@@ -55,80 +55,75 @@ public class Gcore2Php extends Model2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>generateIncludes</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>generateIncludes</b></em>'.
 	 */
 	public boolean getGenerateIncludes() {
 		return generateIncludes;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>generateIncludes</b></em>'
-	 * @param	generateIncludes	
+	 * Sets the value of attribute '<em><b>generateIncludes</b></em>'.
+	 * @param	generateIncludes	the value to set.
 	 */
 	public void setGenerateIncludes(boolean generateIncludes) {
 		this.generateIncludes = generateIncludes;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>relativeIncludes</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>relativeIncludes</b></em>'.
 	 */
 	public boolean getRelativeIncludes() {
 		return relativeIncludes;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>relativeIncludes</b></em>'
-	 * @param	relativeIncludes	
+	 * Sets the value of attribute '<em><b>relativeIncludes</b></em>'.
+	 * @param	relativeIncludes	the value to set.
 	 */
 	public void setRelativeIncludes(boolean relativeIncludes) {
 		this.relativeIncludes = relativeIncludes;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>includeBase</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>includeBase</b></em>'.
 	 */
 	public String getIncludeBase() {
 		return includeBase;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>includeBase</b></em>'
-	 * @param	includeBase	
+	 * Sets the value of attribute '<em><b>includeBase</b></em>'.
+	 * @param	includeBase	the value to set.
 	 */
 	public void setIncludeBase(String includeBase) {
 		this.includeBase = includeBase;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>propertyAccess</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>propertyAccess</b></em>'.
 	 */
 	public String getPropertyAccess() {
 		return propertyAccess;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>propertyAccess</b></em>'
-	 * @param	propertyAccess	
+	 * Sets the value of attribute '<em><b>propertyAccess</b></em>'.
+	 * @param	propertyAccess	the value to set.
 	 */
 	public void setPropertyAccess(String propertyAccess) {
 		this.propertyAccess = propertyAccess;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>accessorStyle</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>accessorStyle</b></em>'.
 	 */
 	public String getAccessorStyle() {
 		return accessorStyle;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>accessorStyle</b></em>'
-	 * @param	accessorStyle	
+	 * Sets the value of attribute '<em><b>accessorStyle</b></em>'.
+	 * @param	accessorStyle	the value to set.
 	 */
 	public void setAccessorStyle(String accessorStyle) {
 		this.accessorStyle = accessorStyle;

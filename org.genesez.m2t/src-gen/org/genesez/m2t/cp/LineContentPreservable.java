@@ -12,13 +12,11 @@ public interface LineContentPreservable {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public LineContentExtractor getExtractor();
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public ContentIncluder getIncluder();
 	

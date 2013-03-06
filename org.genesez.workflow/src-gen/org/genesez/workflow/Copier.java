@@ -46,7 +46,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public String getLogMessage() {
 		/* PROTECTED REGION ID(java.implementation._2zHZIP6tEeGciM7nbRm1bw) ENABLED START */
@@ -102,7 +101,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	
 	/**
 	 * The source file or directory to copy.
-	 * @return	
 	 */
 	public String getSource() {
 		return source;
@@ -110,7 +108,7 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	
 	/**
 	 * The source file or directory to copy.
-	 * @param	source	
+	 * @param	source	the value to set.
 	 */
 	public void setSource(String source) {
 		this.source = source;
@@ -118,7 +116,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	
 	/**
 	 * The destination file or directory to copy to.
-	 * @return	
 	 */
 	public String getDestination() {
 		return destination;
@@ -126,7 +123,7 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	
 	/**
 	 * The destination file or directory to copy to.
-	 * @param	destination	
+	 * @param	destination	the value to set.
 	 */
 	public void setDestination(String destination) {
 		this.destination = destination;

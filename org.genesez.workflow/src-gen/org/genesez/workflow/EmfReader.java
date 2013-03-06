@@ -72,55 +72,51 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public String getLogMessage() {
 		return reader.getLogMessage();
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>makeEPackagesGlobal</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>makeEPackagesGlobal</b></em>'.
 	 */
 	public boolean getMakeEPackagesGlobal() {
 		return makeEPackagesGlobal;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>makeEPackagesGlobal</b></em>'
-	 * @param	makeEPackagesGlobal	
+	 * Sets the value of attribute '<em><b>makeEPackagesGlobal</b></em>'.
+	 * @param	makeEPackagesGlobal	the value to set.
 	 */
 	public void setMakeEPackagesGlobal(boolean makeEPackagesGlobal) {
 		this.makeEPackagesGlobal = makeEPackagesGlobal;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>firstElementOnly</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>firstElementOnly</b></em>'.
 	 */
 	public boolean getFirstElementOnly() {
 		return firstElementOnly;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>firstElementOnly</b></em>'
-	 * @param	firstElementOnly	
+	 * Sets the value of attribute '<em><b>firstElementOnly</b></em>'.
+	 * @param	firstElementOnly	the value to set.
 	 */
 	public void setFirstElementOnly(boolean firstElementOnly) {
 		this.firstElementOnly = firstElementOnly;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>ignoreMissingModel</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>ignoreMissingModel</b></em>'.
 	 */
 	public boolean getIgnoreMissingModel() {
 		return ignoreMissingModel;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>ignoreMissingModel</b></em>'
-	 * @param	ignoreMissingModel	
+	 * Sets the value of attribute '<em><b>ignoreMissingModel</b></em>'.
+	 * @param	ignoreMissingModel	the value to set.
 	 */
 	public void setIgnoreMissingModel(boolean ignoreMissingModel) {
 		this.ignoreMissingModel = ignoreMissingModel;

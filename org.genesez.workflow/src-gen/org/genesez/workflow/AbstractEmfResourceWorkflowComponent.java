@@ -49,64 +49,60 @@ public abstract class AbstractEmfResourceWorkflowComponent extends AbstractSlotW
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>useSingleGlobalResourceSet</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>useSingleGlobalResourceSet</b></em>'.
 	 */
 	public boolean getUseSingleGlobalResourceSet() {
 		return useSingleGlobalResourceSet;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>useSingleGlobalResourceSet</b></em>'
-	 * @param	useSingleGlobalResourceSet	
+	 * Sets the value of attribute '<em><b>useSingleGlobalResourceSet</b></em>'.
+	 * @param	useSingleGlobalResourceSet	the value to set.
 	 */
 	public void setUseSingleGlobalResourceSet(boolean useSingleGlobalResourceSet) {
 		this.useSingleGlobalResourceSet = useSingleGlobalResourceSet;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>resourceSet</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>resourceSet</b></em>'.
 	 */
 	public ResourceSet getResourceSet() {
 		return resourceSet;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>resourceSet</b></em>'
-	 * @param	resourceSet	
+	 * Sets the value of attribute '<em><b>resourceSet</b></em>'.
+	 * @param	resourceSet	the value to set.
 	 */
 	public void setResourceSet(ResourceSet resourceSet) {
 		this.resourceSet = resourceSet;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>uri</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>uri</b></em>'.
 	 */
 	public String getUri() {
 		return uri;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>uri</b></em>'
-	 * @param	uri	
+	 * Sets the value of attribute '<em><b>uri</b></em>'.
+	 * @param	uri	the value to set.
 	 */
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>file</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>file</b></em>'.
 	 */
 	public String getFile() {
 		return file;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>file</b></em>'
-	 * @param	file	
+	 * Sets the value of attribute '<em><b>file</b></em>'.
+	 * @param	file	the value to set.
 	 */
 	public void setFile(String file) {
 		this.file = file;

@@ -81,64 +81,60 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>pdfOutputDir</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>pdfOutputDir</b></em>'.
 	 */
 	public String getPdfOutputDir() {
 		return pdfOutputDir;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>pdfOutputDir</b></em>'
-	 * @param	pdfOutputDir	
+	 * Sets the value of attribute '<em><b>pdfOutputDir</b></em>'.
+	 * @param	pdfOutputDir	the value to set.
 	 */
 	public void setPdfOutputDir(String pdfOutputDir) {
 		this.pdfOutputDir = pdfOutputDir;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>latexRootFile</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>latexRootFile</b></em>'.
 	 */
 	public String getLatexRootFile() {
 		return latexRootFile;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>latexRootFile</b></em>'
-	 * @param	latexRootFile	
+	 * Sets the value of attribute '<em><b>latexRootFile</b></em>'.
+	 * @param	latexRootFile	the value to set.
 	 */
 	public void setLatexRootFile(String latexRootFile) {
 		this.latexRootFile = latexRootFile;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>showPdfLatexLog</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>showPdfLatexLog</b></em>'.
 	 */
 	public boolean getShowPdfLatexLog() {
 		return showPdfLatexLog;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>showPdfLatexLog</b></em>'
-	 * @param	showPdfLatexLog	
+	 * Sets the value of attribute '<em><b>showPdfLatexLog</b></em>'.
+	 * @param	showPdfLatexLog	the value to set.
 	 */
 	public void setShowPdfLatexLog(boolean showPdfLatexLog) {
 		this.showPdfLatexLog = showPdfLatexLog;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>command</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>command</b></em>'.
 	 */
 	public String getCommand() {
 		return command;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>command</b></em>'
-	 * @param	command	
+	 * Sets the value of attribute '<em><b>command</b></em>'.
+	 * @param	command	the value to set.
 	 */
 	public void setCommand(String command) {
 		this.command = command;

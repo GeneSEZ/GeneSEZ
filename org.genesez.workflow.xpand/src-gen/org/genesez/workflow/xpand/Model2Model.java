@@ -63,39 +63,21 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public String getLogMessage() {
 		return compositeXtend.getLogMessage();
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>script</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>script</b></em>'.
 	 */
 	public java.util.Set<String> getScript() {
 		return script;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>outputSlot</b></em>'
-	 * @return	
-	 */
-	public String getOutputSlot() {
-		return outputSlot;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>outputSlot</b></em>'
-	 * @param	outputSlot	
-	 */
-	public void setOutputSlot(String outputSlot) {
-		this.outputSlot = outputSlot;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>script</b></em>'.
-	 * @param	script	the value to add
+	 * @param	script	the value to add.
 	 */
 	public void addScript(String script) {
 		this.script.add(script);
@@ -103,10 +85,25 @@ public class Model2Model extends AbstractXpandWorkflowComponent {
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>script</b></em>'.
-	 * @param	script	the value to remove
+	 * @param	script	the value to remove.
 	 */
 	public void removeScript(String script) {
 		this.script.remove(script);
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>outputSlot</b></em>'.
+	 */
+	public String getOutputSlot() {
+		return outputSlot;
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>outputSlot</b></em>'.
+	 * @param	outputSlot	the value to set.
+	 */
+	public void setOutputSlot(String outputSlot) {
+		this.outputSlot = outputSlot;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._IInokPLKEeGYwYEQM4LYvw) ENABLED START */

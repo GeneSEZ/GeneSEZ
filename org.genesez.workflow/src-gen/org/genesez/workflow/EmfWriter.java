@@ -61,87 +61,81 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @return	
 	 */
 	public String getLogMessage() {
 		return writer.getLogMessage();
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>schemaLocation</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>schemaLocation</b></em>'.
 	 */
 	public boolean getSchemaLocation() {
 		return schemaLocation;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>schemaLocation</b></em>'
-	 * @param	schemaLocation	
+	 * Sets the value of attribute '<em><b>schemaLocation</b></em>'.
+	 * @param	schemaLocation	the value to set.
 	 */
 	public void setSchemaLocation(boolean schemaLocation) {
 		this.schemaLocation = schemaLocation;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>schemaLocationImplementation</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>schemaLocationImplementation</b></em>'.
 	 */
 	public boolean getSchemaLocationImplementation() {
 		return schemaLocationImplementation;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>schemaLocationImplementation</b></em>'
-	 * @param	schemaLocationImplementation	
+	 * Sets the value of attribute '<em><b>schemaLocationImplementation</b></em>'.
+	 * @param	schemaLocationImplementation	the value to set.
 	 */
 	public void setSchemaLocationImplementation(boolean schemaLocationImplementation) {
 		this.schemaLocationImplementation = schemaLocationImplementation;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>ignoreEmptySlot</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>ignoreEmptySlot</b></em>'.
 	 */
 	public boolean getIgnoreEmptySlot() {
 		return ignoreEmptySlot;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>ignoreEmptySlot</b></em>'
-	 * @param	ignoreEmptySlot	
+	 * Sets the value of attribute '<em><b>ignoreEmptySlot</b></em>'.
+	 * @param	ignoreEmptySlot	the value to set.
 	 */
 	public void setIgnoreEmptySlot(boolean ignoreEmptySlot) {
 		this.ignoreEmptySlot = ignoreEmptySlot;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>cloneSlotContents</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>cloneSlotContents</b></em>'.
 	 */
 	public boolean getCloneSlotContents() {
 		return cloneSlotContents;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>cloneSlotContents</b></em>'
-	 * @param	cloneSlotContents	
+	 * Sets the value of attribute '<em><b>cloneSlotContents</b></em>'.
+	 * @param	cloneSlotContents	the value to set.
 	 */
 	public void setCloneSlotContents(boolean cloneSlotContents) {
 		this.cloneSlotContents = cloneSlotContents;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>multipleResourcesInCaseOfList</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>multipleResourcesInCaseOfList</b></em>'.
 	 */
 	public boolean getMultipleResourcesInCaseOfList() {
 		return multipleResourcesInCaseOfList;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>multipleResourcesInCaseOfList</b></em>'
-	 * @param	multipleResourcesInCaseOfList	
+	 * Sets the value of attribute '<em><b>multipleResourcesInCaseOfList</b></em>'.
+	 * @param	multipleResourcesInCaseOfList	the value to set.
 	 */
 	public void setMultipleResourcesInCaseOfList(boolean multipleResourcesInCaseOfList) {
 		this.multipleResourcesInCaseOfList = multipleResourcesInCaseOfList;

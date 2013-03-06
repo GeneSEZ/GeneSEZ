@@ -99,80 +99,75 @@ public class Gcore2Typo3 extends Model2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>isT3MvcCompliant</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>isT3MvcCompliant</b></em>'.
 	 */
 	public boolean getIsT3MvcCompliant() {
 		return isT3MvcCompliant;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>isT3MvcCompliant</b></em>'
-	 * @param	isT3MvcCompliant	
+	 * Sets the value of attribute '<em><b>isT3MvcCompliant</b></em>'.
+	 * @param	isT3MvcCompliant	the value to set.
 	 */
 	public void setIsT3MvcCompliant(boolean isT3MvcCompliant) {
 		this.isT3MvcCompliant = isT3MvcCompliant;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>xtendNamingFile</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>xtendNamingFile</b></em>'.
 	 */
 	public String getXtendNamingFile() {
 		return xtendNamingFile;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>xtendNamingFile</b></em>'
-	 * @param	xtendNamingFile	
+	 * Sets the value of attribute '<em><b>xtendNamingFile</b></em>'.
+	 * @param	xtendNamingFile	the value to set.
 	 */
 	public void setXtendNamingFile(String xtendNamingFile) {
 		this.xtendNamingFile = xtendNamingFile;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'.
 	 */
 	public boolean getUseModelNameAsExtensionKey() {
 		return useModelNameAsExtensionKey;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'
-	 * @param	useModelNameAsExtensionKey	
+	 * Sets the value of attribute '<em><b>useModelNameAsExtensionKey</b></em>'.
+	 * @param	useModelNameAsExtensionKey	the value to set.
 	 */
 	public void setUseModelNameAsExtensionKey(boolean useModelNameAsExtensionKey) {
 		this.useModelNameAsExtensionKey = useModelNameAsExtensionKey;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>extensionKey</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>extensionKey</b></em>'.
 	 */
 	public String getExtensionKey() {
 		return extensionKey;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>extensionKey</b></em>'
-	 * @param	extensionKey	
+	 * Sets the value of attribute '<em><b>extensionKey</b></em>'.
+	 * @param	extensionKey	the value to set.
 	 */
 	public void setExtensionKey(String extensionKey) {
 		this.extensionKey = extensionKey;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>scaffolding</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>scaffolding</b></em>'.
 	 */
 	public boolean getScaffolding() {
 		return scaffolding;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>scaffolding</b></em>'
-	 * @param	scaffolding	
+	 * Sets the value of attribute '<em><b>scaffolding</b></em>'.
+	 * @param	scaffolding	the value to set.
 	 */
 	public void setScaffolding(boolean scaffolding) {
 		this.scaffolding = scaffolding;

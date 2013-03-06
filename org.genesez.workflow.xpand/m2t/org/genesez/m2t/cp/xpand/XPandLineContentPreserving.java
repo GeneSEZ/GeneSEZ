@@ -24,7 +24,6 @@ public class XPandLineContentPreserving extends LineContentPreserving implements
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void updateFileVisit(Path file) {
 		/* PROTECTED REGION ID(java.implementation._GdBFYA_1EeKuTrE1zpGjjg) ENABLED START */

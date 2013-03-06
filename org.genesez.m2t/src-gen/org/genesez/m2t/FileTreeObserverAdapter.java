@@ -13,7 +13,6 @@ public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	dir	
 	 */
 	public void updateBeforeDir(Path dir) {
 		/* PROTECTED REGION ID(java.implementation._ZACkPwD0EeK7ac-mrkJBDw) ENABLED START */
@@ -22,7 +21,6 @@ public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	dir	
 	 */
 	public void updateAfterDir(Path dir) {
 		/* PROTECTED REGION ID(java.implementation._ZACkQQD0EeK7ac-mrkJBDw) ENABLED START */
@@ -31,7 +29,6 @@ public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void updateFileVisit(Path file) {
 		/* PROTECTED REGION ID(java.implementation._ZACkQwD0EeK7ac-mrkJBDw) ENABLED START */
@@ -40,7 +37,6 @@ public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	file	
 	 */
 	public void updateFileVisitFailed(Path file) {
 		/* PROTECTED REGION ID(java.implementation._ZACkRQD0EeK7ac-mrkJBDw) ENABLED START */

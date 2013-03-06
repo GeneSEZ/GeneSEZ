@@ -54,8 +54,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	name	
-	 * @param	value	
 	 */
 	public void addGlobalVarDef(String name, String value) {
 		/* PROTECTED REGION ID(java.implementation._uiyqUP4AEeGA35ujkRyC6w) ENABLED START */
@@ -68,8 +66,6 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	name	
-	 * @param	value	
 	 */
 	public void addGlobalVarDef(String name, Object value) {
 		/* PROTECTED REGION ID(java.implementation._v14C0P4AEeGA35ujkRyC6w) ENABLED START */
@@ -81,40 +77,15 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>aopScript</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>aopScript</b></em>'.
 	 */
 	public java.util.Set<String> getAopScript() {
 		return aopScript;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>metaModel</b></em>'
-	 * @return	
-	 */
-	public java.util.Set<MetaModel> getMetaModel() {
-		return metaModel;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>globalVarDef</b></em>'
-	 * @return	
-	 */
-	public java.util.Set<GlobalVarDef> getGlobalVarDef() {
-		return globalVarDef;
-	}
-	
-	/**
-	 * Returns the value of attribute '<em><b>emfMetaModelPackage</b></em>'
-	 * @return	
-	 */
-	public java.util.Set<String> getEmfMetaModelPackage() {
-		return emfMetaModelPackage;
-	}
-	
-	/**
 	 * Adds the specified value to the attribute '<em><b>aopScript</b></em>'.
-	 * @param	aopScript	the value to add
+	 * @param	aopScript	the value to add.
 	 */
 	public void addAopScript(String aopScript) {
 		this.aopScript.add(aopScript);
@@ -122,15 +93,22 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>aopScript</b></em>'.
-	 * @param	aopScript	the value to remove
+	 * @param	aopScript	the value to remove.
 	 */
 	public void removeAopScript(String aopScript) {
 		this.aopScript.remove(aopScript);
 	}
 	
 	/**
+	 * Returns the value of attribute '<em><b>metaModel</b></em>'.
+	 */
+	public java.util.Set<MetaModel> getMetaModel() {
+		return metaModel;
+	}
+	
+	/**
 	 * Adds the specified value to the attribute '<em><b>metaModel</b></em>'.
-	 * @param	metaModel	the value to add
+	 * @param	metaModel	the value to add.
 	 */
 	public void addMetaModel(MetaModel metaModel) {
 		this.metaModel.add(metaModel);
@@ -138,31 +116,37 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>metaModel</b></em>'.
-	 * @param	metaModel	the value to remove
+	 * @param	metaModel	the value to remove.
 	 */
 	public void removeMetaModel(MetaModel metaModel) {
 		this.metaModel.remove(metaModel);
 	}
 	
 	/**
-	 * Adds the specified value to the attribute '<em><b>globalVarDef</b></em>'.
-	 * @param	globalVarDef	the value to add
+	 * Returns the value of attribute '<em><b>globalVarDef</b></em>'.
 	 */
-	public void addGlobalVarDef(GlobalVarDef globalVarDef) {
-		this.globalVarDef.add(globalVarDef);
+	public java.util.Set<GlobalVarDef> getGlobalVarDef() {
+		return globalVarDef;
 	}
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>globalVarDef</b></em>'.
-	 * @param	globalVarDef	the value to remove
+	 * @param	globalVarDef	the value to remove.
 	 */
 	public void removeGlobalVarDef(GlobalVarDef globalVarDef) {
 		this.globalVarDef.remove(globalVarDef);
 	}
 	
 	/**
+	 * Returns the value of attribute '<em><b>emfMetaModelPackage</b></em>'.
+	 */
+	public java.util.Set<String> getEmfMetaModelPackage() {
+		return emfMetaModelPackage;
+	}
+	
+	/**
 	 * Adds the specified value to the attribute '<em><b>emfMetaModelPackage</b></em>'.
-	 * @param	emfMetaModelPackage	the value to add
+	 * @param	emfMetaModelPackage	the value to add.
 	 */
 	public void addEmfMetaModelPackage(String emfMetaModelPackage) {
 		this.emfMetaModelPackage.add(emfMetaModelPackage);
@@ -170,7 +154,7 @@ public abstract class AbstractXpandWorkflowComponent extends AbstractSlotWorkflo
 	
 	/**
 	 * Removes the specified value from the attribute '<em><b>emfMetaModelPackage</b></em>'.
-	 * @param	emfMetaModelPackage	the value to remove
+	 * @param	emfMetaModelPackage	the value to remove.
 	 */
 	public void removeEmfMetaModelPackage(String emfMetaModelPackage) {
 		this.emfMetaModelPackage.remove(emfMetaModelPackage);
