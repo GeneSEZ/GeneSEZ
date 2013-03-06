@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gtrace.impl;
 
@@ -14,6 +10,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.genesez.metamodel.gcore.MElement;
+
 import org.genesez.metamodel.greq.RRequirement;
 
 import org.genesez.metamodel.gtrace.GtracePackage;
