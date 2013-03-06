@@ -80,7 +80,7 @@ MInterface emAssignAnnotationStereotype(MElement this) :
 MElement emAssignTargetAnnotationValues(MElement this, boolean onAnnotationType, boolean onType, boolean onConstructor,
 		boolean onMethod, boolean onField, boolean onLocalVariable, boolean onParameter, boolean onPackage) :
 		
-	let tag = navModel().emEnsureAnnotationStereotype().emTag( prJavaAnnotationStereotypeTargetTag() ) :
+	let tag = navModel().emEnsureAnnotationStereotype().emGetTag( prJavaAnnotationStereotypeTargetTag() ) :
 		onAnnotationType ? ensureTaggedValueExistence( tag, "ANNOTATION_TYPE" ) : emRemoveTaggedValue( tag, "ANNOTATION_TYPE" ) ->
 		onType ? ensureTaggedValueExistence( tag, "TYPE" ) : emRemoveTaggedValue( tag, "TYPE" ) ->
 		onConstructor ? ensureTaggedValueExistence( tag, "CONSTRUCTOR" ) : emRemoveTaggedValue( tag, "CONSTRUCTOR" ) ->
@@ -98,7 +98,7 @@ MElement emAssignTargetAnnotationValues(MElement this, boolean onAnnotationType,
  */
 MElement emAssignRetentionAnnotationValue(MElement this, String retentionPolicy) :
 	ensureTaggedValueExistence(
-		navModel().emEnsureAnnotationStereotype().emTag( prJavaAnnotationStereotypeRetentionTag() ),
+		navModel().emEnsureAnnotationStereotype().emGetTag( prJavaAnnotationStereotypeRetentionTag() ),
 		switch {
 			case retentionPolicy.toUpperCase() == "SOURCE" : "SOURCE"
 			case retentionPolicy.toUpperCase() == "RUNTIME" : "RUNTIME"
@@ -112,7 +112,7 @@ MElement emAssignRetentionAnnotationValue(MElement this, String retentionPolicy)
  */
 MElement emAssignDocumentedAnnotationValue(MElement this, boolean isDocumented) :
 	ensureTaggedValueExistence(
-		navModel().emEnsureAnnotationStereotype().emTag( prJavaAnnotationStereotypeDocumentedTag() ),
+		navModel().emEnsureAnnotationStereotype().emGetTag( prJavaAnnotationStereotypeDocumentedTag() ),
 		isDocumented.toString()
 	).owningElement;
 
