@@ -372,14 +372,16 @@ package «packageDeclaration( basePackage() ) -»;
 	generates the comments of the parameters
 «ENDREM»
 «DEFINE _Params FOR MParameter -»
+«IF hasComment() -»
  * @param	«asParameter()»	«comment().formatComment("", "")»
+«ENDIF -»
 «ENDDEFINE»
 
 «REM»
 	generates the comment of the return type
 «ENDREM»
 «DEFINE _Return FOR MOperation -»
-«IF hasReturn() -»
+«IF hasReturn() && return.hasComment() -»
  * @return	«return.comment().formatComment("", "")»
 «ENDIF -»
 «ENDDEFINE»
