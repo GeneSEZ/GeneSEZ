@@ -187,6 +187,12 @@ String ignoredContentPackages() : (String) GLOBALVAR excludeContentPackage;
 List[MPackage] rejectIgnoredPackages(List[MPackage] this) : this.select( p|!p.isRejected() );
 
 /**
+ * Returns true if the specified model should be ignored/excluded, otherwise false.
+ */
+boolean isRejected(MModel this) :
+	ignoredPackages().convertToList().contains( "." );
+
+/**
  * Returns true if the specified package should be ignored/excluded, otherwise false.
  */
 boolean isRejected(MPackage this) :
@@ -195,9 +201,15 @@ boolean isRejected(MPackage this) :
 		: false;
 
 /**
+ * Returns true if the contents of the specified model should be ignored, otherwise false.
+ */
+boolean isIgnoredContentPackage(MModel this) :
+	ignoredContentPackages().convertToList().contains( "." );
+
+/**
  * Returns true if the contents of the specified package should be ignored, otherwise false.
  */
-boolean isIgnoredContentPackage(MPackage this) : 
+boolean isIgnoredContentPackage(MPackage this) :
 	ignoredContentPackages().convertToList().exists( p|p == qn() )
 		? (logDebug("Reject content of '" + qn() + "'") -> true)
 		: false;
