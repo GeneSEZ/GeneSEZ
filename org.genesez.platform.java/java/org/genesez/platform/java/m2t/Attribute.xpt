@@ -89,8 +89,8 @@
 «FOREACH property.typeSelect(MAttribute).select( e| !e.final && !e.derived ) AS a -»
 	«REM» «IF a.generateGetter() -»«EXPAND _Getter FOR a -»«ENDIF -» «ENDREM»
 	«REM» «IF a.generateSetter() -»«EXPAND _Setter FOR a -»«ENDIF -» «ENDREM»
-	«IF a.multiplicity.isMultiValued() && a.emGenerateAddAccess() -»«EXPAND _Add FOR a -»«ENDIF -»
-	«IF a.multiplicity.isMultiValued() && a.emGenerateRemoveAccess() -»«EXPAND _Remove FOR a -»«ENDIF -»
+	«REM» «IF a.multiplicity.isMultiValued() && a.emGenerateAddAccess() -»«EXPAND _Add FOR a -»«ENDIF -» «ENDREM»
+	«REM» «IF a.multiplicity.isMultiValued() && a.emGenerateRemoveAccess() -»«EXPAND _Remove FOR a -»«ENDIF -» «ENDREM»
 «ENDFOREACH -»
 «ENDDEFINE»
 
@@ -269,6 +269,8 @@
 
 «REM»
 	Generates the add property access method for an multi valued attribute
+	
+	@deprecated	use AccessOperationImpl::AddAccessOperationImpl instead with AccessOperation::emEnsureAddAccessOperation()
 «ENDREM»
 «DEFINE _Add FOR MAttribute -»
 	«EXPAND Comment::Add -»
@@ -287,6 +289,8 @@
 
 «REM»
 	Generates the remove property access method for an multi valued attribute
+	
+	@deprecated	use AccessOperationImpl::RemoveAccessOperationImpl instead with AccessOperation::emEnsureRemoveAccessOperation()
 «ENDREM»
 «DEFINE _Remove FOR MAttribute -»
 	«EXPAND Comment::Remove -»

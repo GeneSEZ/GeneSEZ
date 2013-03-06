@@ -7,7 +7,11 @@
 import gcore;
 
 /**
- * Modifies gcore models for Java source code generation.
+ * Modifies gcore models for Java source code generation. It performs the following steps:
+ * - object identity of classes
+ * - singleton design pattern
+ * - unifies information to generate java annotation types
+ * - property access operations
  * 
  * @author	andre pflueger
  * @author	tobias haubold <toh@fh-zwickau.de>
@@ -101,6 +105,8 @@ MClassifier modification(MClassifier this) :
 MAttribute modification(MAttribute this) :
 	emEnsureGetAccessOperation() ->
 	emEnsureSetAccessOperation() ->
+	emEnsureAddAccessOperation() ->
+	emEnsureRemoveAccessOperation() ->
 	emAccessorForStaticFinalAttribute() ->
 	//createGetterOperation(this.classifier) ->
 	//createSetterOperation(this.classifier) ->
