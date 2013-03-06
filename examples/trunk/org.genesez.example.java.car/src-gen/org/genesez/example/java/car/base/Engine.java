@@ -34,16 +34,14 @@ public class Engine implements AssociationRole {
 	private String name;
 	
 	/**
-	 * Returns the value of attribute '<em><b>ps</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>ps</b></em>'.
 	 */
 	public byte getPs() {
 		return ps;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>name</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>name</b></em>'.
 	 */
 	public String getName() {
 		return name;

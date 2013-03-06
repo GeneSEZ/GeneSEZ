@@ -41,8 +41,7 @@ public class UmlOperand implements EventReceiver<UmlOperand.EventId> {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>val</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>val</b></em>'.
 	 */
 	public BigDecimal getVal() {
 		return val;

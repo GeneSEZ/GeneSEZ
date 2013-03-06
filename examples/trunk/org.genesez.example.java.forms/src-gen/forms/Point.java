@@ -114,7 +114,6 @@ public class Point implements Form {
 	
 	/**
 	 * the x coordinate value
-	 * @return	
 	 */
 	public double getX() {
 		return x;
@@ -122,7 +121,6 @@ public class Point implements Form {
 	
 	/**
 	 * the y coordinate value
-	 * @return	
 	 */
 	public double getY() {
 		return y;

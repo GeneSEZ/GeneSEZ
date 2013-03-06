@@ -21,7 +21,6 @@ public class Screw {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	count	
 	 */
 	public void screwOn(int count) {
 		/* PROTECTED REGION ID(java.implementation._12_5_8a7027a_1183038841674_975104_475) ENABLED START */
@@ -32,23 +31,20 @@ public class Screw {
 	
 	/**
 	 * describes the length of a screw
-	 * @return	
 	 */
 	public double getLength() {
 		return length;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>diameter</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>diameter</b></em>'.
 	 */
 	public double getDiameter() {
 		return diameter;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>metric</b></em>'
-	 * @return	
+	 * Returns the value of attribute '<em><b>metric</b></em>'.
 	 */
 	public boolean getMetric() {
 		return metric;

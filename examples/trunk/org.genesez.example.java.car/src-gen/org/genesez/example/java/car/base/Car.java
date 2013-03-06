@@ -67,7 +67,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	
 	/**
 	 * starts the engine of the car and moves it to another place
-	 * @param	distance	
 	 * @return	true, if the car arrived successfully, otherwise false
 	 * @throws	OutOfFuelException
 	 * @throws	FlatTireException
@@ -83,7 +82,6 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	 * describes the maximum speed of a car
 	 * 
 	 * internal bla bla bla
-	 * @return	
 	 */
 	public int getMaxSpeed() {
 		return maxSpeed;

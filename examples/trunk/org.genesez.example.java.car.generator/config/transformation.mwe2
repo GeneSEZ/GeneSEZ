@@ -1,9 +1,29 @@
 module org.genesez.example.forms.transformation
 
+var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
+	standardUML2Setup = true
+}
+
 Workflow {
-	// read the exported uml2 model file and transform it into a GeneSEZ model
-	component = @org.genesez.adapter.uml2.gcore.Uml2Gcore {
-		uml2file = "model/example.uml"
+	// read the uml2 model file
+	component = org.genesez.workflow.EmfReader {
+		file = "model/example.uml"
+		slot = "uml2slot"
+	}
+	// validate the uml2 model for transformability
+	component = org.genesez.workflow.xpand.Validator {
+		metaModel = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : umlmm {}
+		slot = "uml2slot"
+		script = "org::genesez::adapter::uml2::gcore::validation::UML2Constraints"
+		script = "org::genesez::adapter::uml2::gcore::validation::UML2StatemachineConstraints"
+		script = "org::genesez::adapter::uml2::gcore::validation::GcoreStatemachineConstraints"
+	}
+	// transform the uml2 model into a GeneSEZ model
+	component = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+		metaModel = umlmm
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		slot = "uml2slot"
+		script = "org::genesez::adapter::uml2::gcore::UML2Gcore::transform"
 	}
 	// validate the GeneSEZ model against common + java specific constraints
 	component = org.genesez.workflow.xpand.Validator {

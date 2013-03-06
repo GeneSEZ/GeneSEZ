@@ -19,8 +19,6 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	color	
-	 * @return	
 	 */
 	public Color repaint(Color color) {
 		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1215089083984_451860_771) ENABLED START */

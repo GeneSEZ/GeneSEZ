@@ -53,8 +53,6 @@ public class Wheel implements IChangeable, AssociationRole {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	newInstance	
-	 * @return	
 	 */
 	public boolean change(IChangeable newInstance) {
 		/* PROTECTED REGION ID(java.implementation._11_5_6340215_1177945943625_542159_161__11_5_6340215_1179139274500_389758_230) ENABLED START */

@@ -5,20 +5,26 @@ var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
 }
 
 Workflow {
-	// read uml model, validate it and transform it into a gcore model
-	component = org.genesez.workflow.CompositeComponent {
-		component = org.genesez.workflow.EmfReader {
-			file = "model/calculator.uml"
-			slot = "umlmodel"
-		}
-		component = @org.genesez.adapter.uml2.gcore.Uml2Validator {
-			uml2slot = "umlmodel"
-		}
-		component = org.genesez.adapter.uml2.workflow.Uml2Gcore {
-			slot = "umlmodel"
-			outputSlot = "coremodel"
-			mapClassesInModelToExternal = true
-		}
+	// read the uml2 model file
+	component = org.genesez.workflow.EmfReader {
+		file = "model/calculator.uml"
+		slot = "uml2model"
+	}
+	// validate the uml2 model for transformability
+	component = org.genesez.workflow.xpand.Validator {
+		metaModel = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : umlmm {}
+		slot = "uml2model"
+		script = "org::genesez::adapter::uml2::gcore::validation::UML2Constraints"
+		script = "org::genesez::adapter::uml2::gcore::validation::UML2StatemachineConstraints"
+		script = "org::genesez::adapter::uml2::gcore::validation::GcoreStatemachineConstraints"
+	}
+	// transform the uml2 model into a GeneSEZ model
+	component = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+		metaModel = umlmm
+		slot = "uml2model"
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		script = "org::genesez::adapter::uml2::gcore::UML2Gcore::transform"
+		mapClassesInModelToExternal = true
 	}
 	// validate the gcore model
 	component = org.genesez.workflow.xpand.Validator {
@@ -40,7 +46,7 @@ Workflow {
 		file = "model/calculator.xmi"
 		slot = "coremodel"
 	}
-	// generate java source code from the gcore model
+	// run the java code generation and transform the model into java source code
 	component = org.genesez.workflow.xpand.Model2TextComposite {
 		component = org.genesez.platform.java.workflow.Gcore2Java {
 			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"

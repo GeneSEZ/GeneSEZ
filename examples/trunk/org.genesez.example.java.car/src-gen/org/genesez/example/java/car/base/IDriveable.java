@@ -12,8 +12,6 @@ public interface IDriveable {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	distance	
-	 * @return	
 	 * @throws	FlatTireException
 	 * @throws	OutOfFuelException
 	 */

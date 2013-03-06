@@ -13,8 +13,6 @@ public interface IPaintable {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	color	
-	 * @return	
 	 */
 	public Color repaint(Color color);
 	

@@ -1,14 +1,38 @@
 module org.genesez.example.forms.transformation
 
+var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
+	standardUML2Setup = true
+}
+
 Workflow {
-	component = @org.genesez.adapter.uml2.gcore.Uml2Gcore {
-		uml2file = "model/forms.uml"
+	// read the uml2 model file
+	component = org.genesez.workflow.EmfReader {
+		file = "model/forms.uml"
+		slot = "uml2slot"
 	}
+	// validate the uml2 model for transformability
+	component = org.genesez.workflow.xpand.Validator {
+		metaModel = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : umlmm {}
+		slot = "uml2slot"
+		script = "org::genesez::adapter::uml2::gcore::validation::UML2Constraints"
+		script = "org::genesez::adapter::uml2::gcore::validation::UML2StatemachineConstraints"
+		script = "org::genesez::adapter::uml2::gcore::validation::GcoreStatemachineConstraints"
+	}
+	// transform the uml2 model into a GeneSEZ model
+	component = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+		metaModel = umlmm
+		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+		slot = "uml2slot"
+		script = "org::genesez::adapter::uml2::gcore::UML2Gcore::transform"
+	}
+	// validate the GeneSEZ model against common + java specific constraints
 	component = org.genesez.workflow.xpand.Validator {
 		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
 		script = "org::genesez::metamodel::core::util::validation::Constraints"
 		script = "org::genesez::platform::java::validation::Syntax"
 	}
+	// automatically implement interface operations in classes
+	// and add necessary use dependencies
 	component = org.genesez.workflow.xpand.Model2Model {
 		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
 		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
@@ -16,11 +40,13 @@ Workflow {
 		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
 		script = "org::genesez::platform::java::m2m::Prepare::prepare"
 	}
+	// serialize the GeneSEZ model - just for info if you want to have a look at it
 	component = org.genesez.workflow.EmfWriter {
 		schemaLocationImplementation = true
 		file = "model/forms.gcore.xmi"
 		slot = "coremodel"
 	}
+	// run the java code generation and transform the model into java source code
 	component = org.genesez.workflow.xpand.Model2TextComposite {
 		component = org.genesez.platform.java.workflow.Gcore2Java {
 			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"

@@ -14,8 +14,6 @@ public interface IChangeable {
 	
 	/**
 	 * Method stub for further implementation.
-	 * @param	newInstance	
-	 * @return	
 	 */
 	public boolean change(IChangeable newInstance);
 	
