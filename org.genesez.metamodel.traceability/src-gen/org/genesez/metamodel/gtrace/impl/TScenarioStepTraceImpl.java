@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gtrace.impl;
 
@@ -15,6 +11,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.genesez.metamodel.gcore.MOperation;
 import org.genesez.metamodel.gcore.MState;
+
 import org.genesez.metamodel.greq.RScenarioStep;
 
 import org.genesez.metamodel.gtrace.GtracePackage;

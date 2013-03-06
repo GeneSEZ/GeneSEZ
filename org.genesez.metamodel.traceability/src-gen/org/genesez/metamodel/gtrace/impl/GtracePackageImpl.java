@@ -1,8 +1,4 @@
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
  */
 package org.genesez.metamodel.gtrace.impl;
 
@@ -14,6 +10,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.genesez.metamodel.gcore.GcorePackage;
+
 import org.genesez.metamodel.greq.GreqPackage;
 
 import org.genesez.metamodel.gtrace.GtraceFactory;
