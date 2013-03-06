@@ -1,10 +1,8 @@
 module org.genesez.metamodel.requirements
 
-// properties from file (i don't know any way to reference a properties file in mwe2')
-var model.dir = "model"
-var ecore.file = "${model.dir}/greq.ecore"
-var modeling.dir = "modeling"
-var uml2.file = "${modeling.dir}/greq.uml"
+// file references
+var ecore.file = "model/greq.ecore"
+var uml2.file = "modeling/greq.uml"
 
 var nsUri = "http://genesez.org/metamodel/requirements"
 // transform the root package (model) in uml model
@@ -12,23 +10,18 @@ var includedPackages = "org.genesez.metamodel"
 var addNameAttribute = false
 var resourcePerToplevelPackage = false
 
-/*
- * performs the uml 2 ecore transformation
- */
+// uml setup (for standalone use)
+var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
+	standardUML2Setup = true
+}
+// reference to the ecore meta model
+var emfmm = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.eclipse.emf.ecore.EcorePackage"
+}
+// reference to the uml meta model
+var umlmm = org.eclipse.xtend.typesystem.uml2.UML2MetaModel { }
+
 Workflow {
-	// initialize uml2 support
-	bean = org.eclipse.xtend.typesystem.uml2.Setup {
-		standardUML2Setup = true
-	}
-	
-	// reference to the ecore meta model
-	bean = org.eclipse.xtend.typesystem.emf.EmfMetaModel : emf {
-		metaModelPackage = "org.eclipse.emf.ecore.EcorePackage"
-	}
-	
-	// reference to the uml meta model
-	bean = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : uml { }
-	
 	// instantiate the uml model from file
 	component = org.eclipse.emf.mwe.utils.Reader {
 		uri = "${uml2.file}"
@@ -36,21 +29,21 @@ Workflow {
 	}
 	// validate uml model to be transformable into an ecore model
 	component = org.eclipse.xtend.check.CheckComponent {
-		metaModel = emf
-		metaModel = uml
-		checkFile = "org::eclipse::xtend::util::uml2ecore::constraints"
+		metaModel = emfmm
+		metaModel = umlmm
+		checkFile = "org::eclipse::emf::ecore::adapter::uml2::validation::UML2Constraints"
 		emfAllChildrenSlot = "uml2model"
 		abortOnError = true
 	}
 	// transform the uml model into an ecore model
 	component = org.eclipse.xtend.XtendComponent {
-		metaModel = emf
-		metaModel = uml
+		metaModel = emfmm
+		metaModel = umlmm
 		globalVarDef = { name = "nsUri" value = "'${nsUri}'" }
 		globalVarDef = { name = "includedPackages" value = "'${includedPackages}'" }
 		globalVarDef = { name = "addNameAttribute" value = "${addNameAttribute}" }
 		globalVarDef = { name = "resourcePerToplevelPackage" value = "${resourcePerToplevelPackage}" }
-		invoke = "org::eclipse::xtend::util::uml2ecore::uml2ecore::top(uml2model)"
+		invoke = "org::eclipse::emf::ecore::adapter::uml2::UML2Ecore::top(uml2model)"
 		outputSlot = "ecoreModel"
 	}
 	/*
