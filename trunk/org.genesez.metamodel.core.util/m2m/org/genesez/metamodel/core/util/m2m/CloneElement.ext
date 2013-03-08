@@ -140,7 +140,7 @@ MMultiplicity cloneMultiplicity(MMultiplicity source) :
  */
 MTaggedValue cloneTaggedValue(MTaggedValue source, MElement container) :
 	// create a new tagged value, clone basic property values and set containment
-	let clone = createTaggedValue( container, source.tag, source.value ) :
+	let clone = source.value != null ? createTaggedValue( container, source.tag, source.value ) : createTaggedValue( container, source.tag, source.valueReference ) :
 		source.logTrace( "cloning: " + source.metaType + ": " ) ->
 		clone;
 
