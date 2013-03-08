@@ -34,11 +34,23 @@ import gcore;
 // -- Extension Mechanism -----------------------------------------------------------------------------------
 
 
+/**
+ * Removes all stereotypes from an element amd ensures the deletion of its tagged values.
+ * 
+ * @return	The specified element.
+ * @api
+ */
 MElement emRemoveStereotypes(MElement this) :
 	// remove all assigned stereotypes
 	stereotype.collect( s | this.emRemoveStereotype( s ) );
 
 
+/**
+ * Removes the specified stereotype from an element and ensures the deletion of its tagged values.
+ * 
+ * @return	The specified element.
+ * @api
+ */
 MElement emRemoveStereotype(MElement this, MStereotype stereotype) :
 	// remove all assigned tagged values of the specified stereotype
 	stereotype.property.collect( p | this.emRemoveTaggedValues( p ) ) ->
@@ -47,18 +59,50 @@ MElement emRemoveStereotype(MElement this, MStereotype stereotype) :
 	this;
 
 
+/**
+ * Removes all tagged values from an element.
+ * 
+ * @return	The specified element.
+ * @api
+ */
+MElement emRemoveTaggedValues(MElement this) :
+	taggedValue.removeAll( taggedValue ) ->
+	this;
+
+
+/**
+ * Removes all tagged values of the specified tag from an element.
+ * 
+ * @return	The specified element.
+ * @api
+ */
 MElement emRemoveTaggedValues(MElement this, MTag tag) :
+	// remove all assigned tagged values of the specified tag
 	taggedValue.remove( taggedValue.select( tv | tv.tag == tag ) ) ->
 	this;
 
 
+/**
+ * Removes the specified tagged value of a tag from an element.
+ * 
+ * @return	The specified element.
+ * @todo: 	Revise documentation.
+ * @api
+ */
 MElement emRemoveTaggedValue(MElement this, MTag tag, String value) :
 	taggedValue.remove( taggedValue.select( tv | tv.tag == tag && tv.value == value ) ) ->
 	this;
 
 
+/**
+ * Removes the specified tagged value reference of a tag from an element.
+ * 
+ * @return	The specified element.
+ * @todo: 	Revise documentation.
+ * @api
+ */
 MElement emRemoveTaggedValueReference(MElement this, MTag tag, MElement valueReference) :
-	taggedValue.remove( taggedValue.select( tv | tv.tag == tag && tv.value == valueReference ) ) ->
+	taggedValue.remove( taggedValue.select( tv | tv.tag == tag && tv.valueReference == valueReference ) ) ->
 	this;
 
 
