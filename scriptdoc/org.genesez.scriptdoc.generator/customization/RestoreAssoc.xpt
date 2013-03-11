@@ -1,0 +1,203 @@
+«REM»
+	restore old reasonable association handling
+	
+	@author	georg beier
+	@date	2011-04-30
+«ENDREM»
+
+«REM» based on genesez meta model «ENDREM»
+«IMPORT gcore»
+
+«REM» useful helper functions «ENDREM»
+«EXTENSION org::genesez::platform::common::AccessHelper»
+«EXTENSION org::genesez::platform::common::m2t::Helper»
+«EXTENSION org::genesez::platform::common::typemapping::TypeMapping»
+
+«EXTENSION org::genesez::platform::java::scripts::Type»
+«EXTENSION org::genesez::platform::java::scripts::Naming»
+«EXTENSION org::genesez::platform::java::scripts::Conversion»
+«EXTENSION org::genesez::platform::java::scripts::Association»
+«EXTENSION org::genesez::platform::java::java5::templates::Association»
+
+«REM»
+	rebuild getter
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Association::_GetterImpl FOR MAssociationRole»
+	«IF isPlainAssociation()-»
+		«EXPAND _CommentGetter-»
+		«IF !fieldAccess()-»
+			«EXPAND _Annotation-»
+		«ENDIF-»
+		«IF multiplicity == 1-»
+			public «type.asTypeName()» «asGetter()»() {
+				return «asAttribute()»;
+			}
+		«ELSE-»
+			public «mapType()-»<«type.asTypeName()»> «asGetter()»() {
+				«IF unique == true-»
+					return java.util.Collections.unmodifiableSet(«asAttribute()»);
+				«ELSEIF unique == false && ordered == false-»
+					return java.util.Collections.unmodifiableSet(«asAttribute()»);
+				«ELSE-»
+					return java.util.Collections.unmodifiableList(«asAttribute()»);
+				«ENDIF-»
+			}
+		«ENDIF-»
+	«ELSE-»
+		public «mapType()»<«type.asTypeName()»> «asGetter()»() {
+			«mapType("Implementation")»<«type.asTypeName()»> _result = new «mapType("Implementation")»<«type.asTypeName()»>();
+			for(«type.asTypeName()» _assoc : «asAttribute()») {
+				_result.add(_assoc.«asGetter()»());
+			}
+			return _result;
+		}
+		
+		/** 
+		  * accessor to the association class objects
+		  */
+		public «mapType()»<«type.asTypeName()»> «asGetter()»«type.asTypeName()»() {
+			«IF unique == true-»
+				return java.util.Collections.unmodifiableSet(«asAttribute()»);
+			«ELSE-»
+				return java.util.Collections.unmodifiableSet(«asAttribute()»);
+			«ENDIF-»
+		}
+	«ENDIF-»
+«ENDAROUND»
+
+«REM»
+	rebuild insertInto
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Association::_InsertInImpl FOR MAssociationRole»
+	«IF isPlainAssociation()-»
+		«EXPAND _CommentAccessor-»
+		«IF multiplicity != 1-»
+			public void «asInsertIn()-»(«type.asTypeName()-» «asAttribute()-») {
+				«IF multiplicity == 1-»
+					if (this.«asAttribute()-» == «asAttribute()-») {
+						return;
+					}
+					«IF opposite != null && opposite.multiplicity != 1-»
+						if (this.«asAttribute()-» != null) {
+							this.«asAttribute()-».«opposite.asRemoveFrom()-»(this);
+						}
+					«ENDIF-»
+					this.«asAttribute()-» = «asAttribute()-»;
+				«ELSE-»
+					if (this.«asAttribute()-».contains(«asAttribute()-»)) {
+						return;
+					}
+					this.«asAttribute()-».add(«asAttribute()-»);
+				«ENDIF-»
+				«IF opposite != null && opposite.multiplicity != 1 
+					&& opposite.generateSetter()-»
+					if (!«asAttribute()-».«opposite.asGetter()-»().contains(this)) {
+						«asAttribute()-».«opposite.asInsertIn()-»(this);
+					}
+				«ELSEIF opposite != null && opposite.multiplicity == 1 
+						&& opposite.generateSetter()-»
+					«asAttribute()-».«opposite.asSetter()-»(this);
+				«ENDIF-»
+			}
+		«ELSEIF multiplicity == 1-»
+			public void «asSetter()-»(«type.asTypeName()-» «asAttribute()-»){
+				this.«asAttribute()-» = «asAttribute()-»; 
+			}
+		«ENDIF»
+	«ELSE-»
+		/**
+		  * insert into association, generate linked association class object
+		  * @param _other partner object
+		  * @return newly generated linked association class object
+		  */
+		public «type.asTypeName()» «asInsertIn()»(«type.asTypeName()» _other) {
+			«IF association.end.first() != this-»
+				«type.asTypeName()» _assoc = new «type.asTypeName()»(this, _other);
+			«ELSE-»
+				«assocClass().mapName()» _assoc = new «type.asTypeName()»(_other, this);
+			«ENDIF-»
+			this.«asVariable()».add(_assoc);
+		«IF opposite != null-»
+			_other.«opposite.asInsertIn()»(_assoc); 
+		«ENDIF-»
+			return _assoc;
+		}
+		
+		/**
+		  * insert linked association class object into association
+		  * @param _other partner object
+		  * @return newly generated linked association class object
+		  */
+		public void «asInsertIn()»(«type.asTypeName()» _assoc) {
+			if (this.«asAttribute()».contains(_assoc)) {
+					return;
+			}
+			if(_assoc.«opposite.asGetter()»() != this) {
+				throw new RuntimeException("inconsistent association object");
+			}
+			this.«asAttribute()».add(_assoc);
+		}
+	«ENDIF-»
+«ENDAROUND»
+
+«REM»
+	rebuild removeFrom
+«ENDREM»
+«AROUND org::genesez::platform::java::java5::templates::Association::_RemoveFromImpl FOR MAssociationRole»
+	«IF isPlainAssociation()-»
+		«IF multiplicity != 1-»
+			«EXPAND _CommentAccessor-»
+			public void «asRemoveFrom()-»(«type.asTypeName()-» «asAttribute()-») {
+				«IF multiplicity == 1-»
+					if (this.«asAttribute()-» != «asAttribute()-») {
+						return;
+					}
+					this.«asAttribute()-» = null;
+				«ELSE-»
+					if (!this.«asAttribute()-».contains(«asAttribute()-»)) {
+						return;
+					}
+					this.«asAttribute()-».remove(«asAttribute()-»);
+				«ENDIF-»
+				«IF opposite != null && opposite.multiplicity != 1 
+					&& opposite.generateSetter()-»
+					if («asAttribute()-».«opposite.asGetter()-»().contains(this)) {
+						«asAttribute()-».«opposite.asRemoveFrom()-»(this);
+					}
+				«ENDIF-»
+			}
+		«ENDIF-»
+	«ELSE-»
+		/**
+		  * remove entry from association indexed by its association class object
+		  */
+		public void «asRemoveFrom()»(«type.asTypeName()» _assoc) {
+			if (!«asAttribute()».contains(_assoc)) {
+				return;
+			}
+			«asAttribute()».remove(_assoc);
+			«IF opposite != null-»
+				_assoc.«asGetter()»().«opposite.asRemoveFrom()»(_assoc);
+			«ENDIF-»
+		}
+	«ENDIF-»
+«ENDAROUND»
+
+«DEFINE _CommentGetter FOR MAssociationRole-»
+	/**
+	 * accessor for association to «name»
+	«IF hasComment()-»
+		 * «ownedComment.getCommentText()»
+	«ENDIF-»
+	 */
+«ENDDEFINE»
+
+«DEFINE _CommentAccessor FOR MAssociationRole-»
+	/**
+	 * accessor for association to «name»
+	«IF hasComment()-»
+	 	* @see {@link «asGetter()»}
+	«ENDIF-»
+	 */
+«ENDDEFINE»
+
