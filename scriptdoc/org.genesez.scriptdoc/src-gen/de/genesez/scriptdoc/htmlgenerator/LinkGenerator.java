@@ -3,7 +3,8 @@ package de.genesez.scriptdoc.htmlgenerator;
 import java.util.*;
 import java.io.File;
 
-import de.genesez.scriptdoc.helper.RelativePath;
+import org.genesez.scriptdoc.helper.RelativePath;
+
 import de.genesez.scriptdoc.helper.StringHelper;
 import de.genesez.scriptdoc.parsing.Executable;
 import de.genesez.scriptdoc.parsing.ExtendScript;

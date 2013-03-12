@@ -2,8 +2,15 @@ package de.genesez.scriptdoc.htmlgenerator.templates;
 
 import java.util.*;
 
+import org.genesez.scriptdoc.parsing.*;
+
 import de.genesez.scriptdoc.htmlgenerator.wildcards.factory.*;
-import de.genesez.scriptdoc.parsing.*;
+import de.genesez.scriptdoc.parsing.CheckScript;
+import de.genesez.scriptdoc.parsing.ExpandScript;
+import de.genesez.scriptdoc.parsing.ExtendScript;
+import de.genesez.scriptdoc.parsing.IContent;
+import de.genesez.scriptdoc.parsing.Script;
+import de.genesez.scriptdoc.parsing.ScriptPackage;
 
 /* PROTECTED REGION ID(java.type.import._17_0_1_ce902ca_1337511558116_590677_1829) ENABLED START */
 // TODO: put your further include + require statements here
