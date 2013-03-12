@@ -1,4 +1,4 @@
-package de.genesez.scriptdoc.helper;
+package org.genesez.scriptdoc.helper;
 
 import java.io.*;
 import java.util.*;
