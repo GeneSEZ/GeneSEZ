@@ -1,4 +1,4 @@
-package de.genesez.scriptdoc.parsing;
+package org.genesez.scriptdoc.parsing;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.Set;
 
 import de.genesez.scriptdoc.helper.ExecutableHelper;
 import de.genesez.scriptdoc.htmlgenerator.*;
+import de.genesez.scriptdoc.parsing.Roots;
 
 public class DocParser {
 
