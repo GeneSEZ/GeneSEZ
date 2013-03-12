@@ -5,9 +5,9 @@ import java.io.File;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.genesez.scriptdoc.helper.RelativePath;
 import org.junit.Test;
 
-import de.genesez.scriptdoc.helper.RelativePath;
 
 public class RelativePathTest extends TestCase{
 

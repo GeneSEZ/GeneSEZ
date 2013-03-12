@@ -5,8 +5,19 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.genesez.scriptdoc.parsing.*;
-import de.genesez.scriptdoc.helper.*;
+import org.genesez.scriptdoc.helper.*;
+import org.genesez.scriptdoc.parsing.*;
+
+import de.genesez.scriptdoc.parsing.Executable;
+import de.genesez.scriptdoc.parsing.Function;
+import de.genesez.scriptdoc.parsing.IContent;
+import de.genesez.scriptdoc.parsing.Script;
+import de.genesez.scriptdoc.parsing.ScriptPackage;
+import de.genesez.scriptdoc.parsing.SymbolTable;
+import de.genesez.scriptdoc.parsing.Template;
+import de.genesez.scriptdoc.parsing.Validation;
+import de.genesez.scriptdoc.helper.StatsHelper;
+import de.genesez.scriptdoc.helper.StringHelper;
 import de.genesez.scriptdoc.htmlgenerator.LinkGenerator;
 import de.genesez.scriptdoc.htmlgenerator.templates.ExecutableIndexTemplate;
 import de.genesez.scriptdoc.parsing.Function.OwnerType;
