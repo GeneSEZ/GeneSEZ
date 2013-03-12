@@ -81,7 +81,7 @@ public class DocParser {
 		}
 		
 		/* loading built-in functions */
-		BuiltInLoader.getInstance().setRoot(scriptDocFolder);
+		BuiltInLoader.getInstance().setRoot(".");
 		BuiltInLoader.getInstance().generate();
 		
 		/* generating the provided function that are provided automatically by EMF */
