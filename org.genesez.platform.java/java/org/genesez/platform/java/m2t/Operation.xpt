@@ -21,6 +21,8 @@
 «EXTENSION org::genesez::platform::java::util::Conversion»
 «EXTENSION org::genesez::platform::java::util::Helper»
 «EXTENSION org::genesez::util::logging::Logging»
+«EXTENSION org::genesez::util::Conversion»
+
 
 «REM»
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -356,7 +358,15 @@
 	Generates the default value of the return parameter as return statement.
 «ENDREM»
 «DEFINE DefaultReturn FOR MParameter -»
+	«IF multiplicity.isSingleValued() -»
 		return «defaultvalue»;
+	«ELSE -»
+		«EXPAND Type::MultiValuedType(multiplicity, type) -» result = new «mapCollection("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>();
+		«FOREACH defaultvalue.convertToList() AS v -»
+		result.add(«v»);
+		«ENDFOREACH -»
+		return result;
+	«ENDIF -»
 «ENDDEFINE»
 
 
