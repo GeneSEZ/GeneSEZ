@@ -4,21 +4,20 @@ package org.genesez.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_lFzPUP9cEeGCP-nN45yJrw) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
 public class CompositeComponent<T extends WorkflowComponent> extends AbstractWorkflowComponent {
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
-	private java.util.List<T> component = new java.util.ArrayList<T>();
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
+	private java.util.List<WorkflowComponent> component = new java.util.ArrayList<WorkflowComponent>();
 	
 	/**
 	 * Validates the configuration of the component before invocation.
@@ -30,6 +29,29 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 			c.checkConfiguration(issues);
 		}
 		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>component</b></em>'.
+	 */
+	public java.util.List<WorkflowComponent> getComponent() {
+		return component;
+	}
+	
+	/**
+	 * Adds the specified value to the attribute '<em><b>component</b></em>'.
+	 * @param	component	the value to add.
+	 */
+	public void addComponent(WorkflowComponent component) {
+		this.component.add(component);
+	}
+	
+	/**
+	 * Removes the specified value from the attribute '<em><b>component</b></em>'.
+	 * @param	component	the value to remove.
+	 */
+	public void removeComponent(WorkflowComponent component) {
+		this.component.remove(component);
 	}
 	
 	/**
@@ -51,30 +73,6 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 		/* PROTECTED REGION END */
 	}
 	
-	/**
-	 * Returns the value of attribute '<em><b>component</b></em>'.
-	 */
-	public java.util.List<T> getComponent() {
-		return component;
-	}
-	
-	/**
-	 * Adds the specified value to the attribute '<em><b>component</b></em>'.
-	 * @param	component	the value to add.
-	 */
-	public void addComponent(T component) {
-		this.component.add(component);
-	}
-	
-	/**
-	 * Removes the specified value from the attribute '<em><b>component</b></em>'.
-	 * @param	component	the value to remove.
-	 */
-	public void removeComponent(T component) {
-		this.component.remove(component);
-	}
-	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._lFzPUP9cEeGCP-nN45yJrw) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }

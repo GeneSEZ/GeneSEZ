@@ -4,18 +4,18 @@ package org.genesez.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_nY_VQPRsEeGG-J2DIYyoXg) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
 public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComponent implements WorkflowComponent {
 	
-	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String slot = "coremodel";
 	
 	/**
@@ -45,7 +45,14 @@ public abstract class AbstractSlotWorkflowComponent extends AbstractWorkflowComp
 		this.slot = slot;
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "slot")
+	public String getDefaultSlot() {
+		return "coremodel";
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._nY_VQPRsEeGG-J2DIYyoXg) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
