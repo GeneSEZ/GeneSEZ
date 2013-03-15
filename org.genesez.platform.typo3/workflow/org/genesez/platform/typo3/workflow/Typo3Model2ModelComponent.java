@@ -4,7 +4,6 @@ package org.genesez.platform.typo3.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_esLdUAo9EeKxusbn3Pe47g) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import java.util.Arrays;
@@ -14,31 +13,29 @@ import java.util.Map;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
+import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.expression.ExecutionContext;
 import org.eclipse.xtend.expression.ExecutionContextImpl;
 import org.eclipse.xtend.expression.TypeSystemImpl;
 import org.eclipse.xtend.expression.Variable;
-import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.genesez.mapping.name.NameMapper;
 import org.genesez.metamodel.gcore.MModel;
-import org.genesez.workflow.profile.Parameter;
-import org.genesez.workflow.xpand.Model2Model;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
+import org.genesez.workflow.xpand.Model2ModelComponent;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Typo3Model2Model extends Model2Model {
+public class Typo3Model2ModelComponent extends Model2ModelComponent {
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean useModelNameAsExtensionKey = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean isT3MvcCompliant = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
-	private String xtendNamingFile = "org::genesez::platform::typo3v4::mvc::convention::Naming";
-	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String extensionKey;
 	
 	/**
@@ -47,6 +44,11 @@ public class Typo3Model2Model extends Model2Model {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._zhoXUAo_EeKxusbn3Pe47g) ENABLED START */
+		// check default values
+		if (getXtendNamingFile() == null) {
+			setXtendNamingFile(getDefaultXtendNamingFile());
+		}
+		
 		// check extension key
 		if (!useModelNameAsExtensionKey || (extensionKey == null || extensionKey.isEmpty())) {
 			issues.addError(this, "Either workflow parameter 'extensionKey' must be present or 'useModelNameAsExtensionKey' must be set to 'true'", Arrays.<Object> asList(useModelNameAsExtensionKey, extensionKey));
@@ -81,7 +83,7 @@ public class Typo3Model2Model extends Model2Model {
 			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
 		}
 		ExecutionContext namingCtx = new ExecutionContextImpl(new TypeSystemImpl(), globalVars);
-		NameMapper.initNameMapper(xtendNamingFile, namingCtx, getMetaModel());
+		NameMapper.initNameMapper(getXtendNamingFile(), namingCtx, getMetaModel());
 		
 		// start execution
 		super.invokeInternal(context, monitor, issues);
@@ -119,21 +121,6 @@ public class Typo3Model2Model extends Model2Model {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>xtendNamingFile</b></em>'.
-	 */
-	public String getXtendNamingFile() {
-		return xtendNamingFile;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>xtendNamingFile</b></em>'.
-	 * @param	xtendNamingFile	the value to set.
-	 */
-	public void setXtendNamingFile(String xtendNamingFile) {
-		this.xtendNamingFile = xtendNamingFile;
-	}
-	
-	/**
 	 * Returns the value of attribute '<em><b>extensionKey</b></em>'.
 	 */
 	public String getExtensionKey() {
@@ -148,7 +135,30 @@ public class Typo3Model2Model extends Model2Model {
 		this.extensionKey = extensionKey;
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useModelNameAsExtensionKey")
+	public boolean getDefaultUseModelNameAsExtensionKey() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "isT3MvcCompliant")
+	public boolean getDefaultIsT3MvcCompliant() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "xtendNamingFile")
+	public String getDefaultXtendNamingFile() {
+		return "org::genesez::platform::typo3v4::mvc::convention::Naming";
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._esLdUAo9EeKxusbn3Pe47g) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
