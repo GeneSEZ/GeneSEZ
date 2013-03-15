@@ -153,5 +153,4 @@ public class FolderDeletion extends DeletionFeature {
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZAIqqwD0EeK7ac-mrkJBDw) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }

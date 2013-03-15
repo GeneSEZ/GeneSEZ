@@ -118,5 +118,4 @@ public class RevisionControlSystemFinder extends FileTreeObserverAdapter {
 		RevisionControlSystem.REGISTRY.add(new SubversionRcs());
 	}
 	/* PROTECTED REGION END */
-	
 }

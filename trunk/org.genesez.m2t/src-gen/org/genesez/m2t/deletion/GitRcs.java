@@ -69,5 +69,4 @@ public class GitRcs implements RevisionControlSystem {
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._bPxLoAS9EeKUpcpqfZ9tsA) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }

@@ -75,6 +75,85 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 	}
 	
 	/**
+	 * Method stub for further implementation.
+	 */
+	public boolean hasExtractableContent(Path file) {
+		/* PROTECTED REGION ID(java.implementation._kNPlcIvfEeKyp9GO00JvUQ) ENABLED START */
+		if (importRegex == null || !enabled) {
+			return false;
+		}
+		if (extensionsRegex == null || extensionsRegex.matcher(file.toString()).matches()) {
+			return true;
+		}
+		return false;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Processes the specified line of content.
+	 */
+	public void extractContent(String line) {
+		/* PROTECTED REGION ID(java.implementation._kNPlc4vfEeKyp9GO00JvUQ) ENABLED START */
+		// delegate to file id provider
+		super.extractContent(line);
+		// extract imports
+		String tl = line.trim();
+		if (importRegex.matcher(tl).matches()) {
+			fileImports.addAll(fileContent);
+			fileImports.add(tl);
+			fileContent.clear();
+		} else if (!fileImports.isEmpty()) {
+			fileContent.add(line);
+		}
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public void finished(boolean file) {
+		/* PROTECTED REGION ID(java.implementation._kNF0cIvfEeKyp9GO00JvUQ) ENABLED START */
+		if (file) {
+			if (hasFileId() && !fileImports.isEmpty()) {
+				allImports.put(getFileId(), new ArrayList<>(fileImports));
+			}
+			fileImports.clear();
+			fileContent.clear();
+		} else {
+			prepared = true;
+		}
+		// delegate to file id provider
+		super.finished(file);
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public LineContentExtractor getExtractor() {
+		/* PROTECTED REGION ID(java.implementation._pyA1kovfEeKyp9GO00JvUQ) ENABLED START */
+		return this;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public ContentIncluder getIncluder() {
+		/* PROTECTED REGION ID(java.implementation._pyA1kIvfEeKyp9GO00JvUQ) ENABLED START */
+		return this;
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Sets the value of attribute '<em><b>enabled</b></em>'.
+	 * @param	enabled	the value to set.
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	/**
 	 * Includes the preserved content into the specified content and returns all content.
 	 */
 	public java.util.List<String> includeContent(java.util.List<String> input) {
@@ -157,89 +236,9 @@ public class ImportPreserver extends FileIdProvider implements ContentIncluder, 
 		/* PROTECTED REGION END */
 	}
 	
-	/**
-	 * Method stub for further implementation.
-	 */
-	public boolean hasExtractableContent(Path file) {
-		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__BeNPcA7sEeKn_eQP-uNBOQ) ENABLED START */
-		if (importRegex == null || !enabled) {
-			return false;
-		}
-		if (extensionsRegex == null || extensionsRegex.matcher(file.toString()).matches()) {
-			return true;
-		}
-		return false;
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Processes the specified line of content.
-	 */
-	public void extractContent(String line) {
-		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__R27m0A7rEeKn_eQP-uNBOQ) ENABLED START */
-		// delegate to file id provider
-		super.extractContent(line);
-		// extract imports
-		String tl = line.trim();
-		if (importRegex.matcher(tl).matches()) {
-			fileImports.addAll(fileContent);
-			fileImports.add(tl);
-			fileContent.clear();
-		} else if (!fileImports.isEmpty()) {
-			fileContent.add(line);
-		}
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	public void finished(boolean file) {
-		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__mYwn8A7yEeKn_eQP-uNBOQ) ENABLED START */
-		if (file) {
-			if (hasFileId() && !fileImports.isEmpty()) {
-				allImports.put(getFileId(), new ArrayList<>(fileImports));
-			}
-			fileImports.clear();
-			fileContent.clear();
-		} else {
-			prepared = true;
-		}
-		// delegate to file id provider
-		super.finished(file);
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	public LineContentExtractor getExtractor() {
-		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__j24soA7oEeKn_eQP-uNBOQ) ENABLED START */
-		return this;
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	public ContentIncluder getIncluder() {
-		/* PROTECTED REGION ID(java.implementation._Pos7EA7zEeKn_eQP-uNBOQ__n5OgsA7oEeKn_eQP-uNBOQ) ENABLED START */
-		return this;
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>enabled</b></em>'.
-	 * @param	enabled	the value to set.
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Pos7EA7zEeKn_eQP-uNBOQ) ENABLED START */
 	{
 		allImports = new LinkedHashMap<>();
 	}
 	/* PROTECTED REGION END */
-	
 }

@@ -96,5 +96,4 @@ public abstract class DeletionFeature extends FileTreeObserverAdapter {
 		}
 	}
 	/* PROTECTED REGION END */
-	
 }

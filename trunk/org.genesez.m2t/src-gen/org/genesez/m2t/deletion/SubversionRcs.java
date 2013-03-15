@@ -77,5 +77,4 @@ public class SubversionRcs implements RevisionControlSystem {
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._bP3SQAS9EeKUpcpqfZ9tsA) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
