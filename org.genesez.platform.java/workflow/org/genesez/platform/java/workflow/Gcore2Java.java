@@ -4,93 +4,96 @@ package org.genesez.platform.java.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_tPrfIAjhEeKn2-J_iePC7Q) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.eclipse.xpand2.output.JavaBeautifier;
-import org.genesez.m2t.cp.ImportPreserverConfig;
-import org.genesez.workflow.profile.Parameter;
-import org.genesez.workflow.xpand.Model2Text;
+import org.genesez.workflow.Model2Text;
+import org.genesez.workflow.Parameter;
+import org.genesez.workflow.SimpleModel2Text;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Gcore2Java extends Model2Text {
+public class Gcore2Java extends SimpleModel2Text {
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
-	private String eclipseFormatterConfig = "org/genesez/platform/java/workflow/eclipse.java.formatter.settings.xml";
-	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> excludePackage = new java.util.LinkedHashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> excludeContentPackage = new java.util.LinkedHashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean fieldAccess = true;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean useModelNameAsBasePackage = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String basePackage = "";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
-	private String accessorForStereotypes = "entity";
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
+	private java.util.Set<String> accessorForStereotypes = new java.util.HashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String accessorStereotype = "accessor";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean usePropertyVisibilityForAccessors = false;
-	
-	// override default values of workflow parameters
-	{
-		setTemplate("org::genesez::platform::java::m2t::Root::Root");
-		addTypeMappingFile("org/genesez/platform/java/typemapping/typemapping.xml");
-		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
-	}
 	
 	/**
 	 * Validates the configuration of the component before invocation.
-	 * @param	issues	Instance to collect all problems during configuration check.
 	 */
-	public void checkConfiguration(Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._WVoL8AjmEeKn2-J_iePC7Q) ENABLED START */
-		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("excludePackage", listToString(excludePackage));
-		addGlobalVarDef("excludeContentPackage", listToString(excludeContentPackage));
-		addGlobalVarDef("fieldAccess", fieldAccess);
-		addGlobalVarDef("useModelNameAsBasePackage", useModelNameAsBasePackage);
-		addGlobalVarDef("basePackage", basePackage);
-		addGlobalVarDef("accessorForStereotypes", accessorForStereotypes);
-		addGlobalVarDef("accessorStereotype", accessorStereotype);
-		addGlobalVarDef("usePropertyVisibilityForAccessors", usePropertyVisibilityForAccessors);
-		
-		// formatter
-		JavaBeautifier jb = new JavaBeautifier();
-		jb.setConfigFile(eclipseFormatterConfig);
-		addPostProcessor(jb);
-		
-		// delegate to base class
-		super.checkConfiguration(issues);
-		/* PROTECTED REGION END */
+	public boolean validate() {
+		boolean result = true;
+		if (getTemplate() == null) {
+			setTemplate(getDefaultTemplate());
+		}
+		if (basePackage == null) {
+			basePackage = getDefaultBasePackage();
+		}
+		if (accessorForStereotypes.isEmpty()) {
+			accessorForStereotypes = getDefaultAccessorForStereotypes();
+		}
+		if (accessorStereotype == null) {
+			accessorStereotype = getDefaultAccessorStereotype();
+		}
+		result = result && super.validate();
+		return result;
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>eclipseFormatterConfig</b></em>'.
+	 * Method stub for further implementation.
 	 */
-	public String getEclipseFormatterConfig() {
-		return eclipseFormatterConfig;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>eclipseFormatterConfig</b></em>'.
-	 * @param	eclipseFormatterConfig	the value to set.
-	 */
-	public void setEclipseFormatterConfig(String eclipseFormatterConfig) {
-		this.eclipseFormatterConfig = eclipseFormatterConfig;
+	public java.util.Set<Parameter> getParameter() {
+		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		if (excludePackage.isEmpty()) {
+			result.add(new Parameter("excludePackage", ""));
+		} else {
+			for (String it : excludePackage) {
+				result.add(new Parameter("excludePackage", it));
+			}
+		}
+		if (excludeContentPackage.isEmpty()) {
+			result.add(new Parameter("excludeContentPackage", ""));
+		} else {
+			for (String it : excludeContentPackage) {
+				result.add(new Parameter("excludeContentPackage", it));
+			}
+		}
+		result.add(new Parameter("fieldAccess", fieldAccess));
+		result.add(new Parameter("useModelNameAsBasePackage", useModelNameAsBasePackage));
+		result.add(new Parameter("basePackage", basePackage));
+		if (accessorForStereotypes.isEmpty()) {
+			result.add(new Parameter("accessorForStereotypes", ""));
+		} else {
+			for (String it : accessorForStereotypes) {
+				result.add(new Parameter("accessorForStereotypes", it));
+			}
+		}
+		result.add(new Parameter("accessorStereotype", accessorStereotype));
+		result.add(new Parameter("usePropertyVisibilityForAccessors", usePropertyVisibilityForAccessors));
+		return result;
 	}
 	
 	/**
@@ -187,16 +190,24 @@ public class Gcore2Java extends Model2Text {
 	/**
 	 * Returns the value of attribute '<em><b>accessorForStereotypes</b></em>'.
 	 */
-	public String getAccessorForStereotypes() {
+	public java.util.Set<String> getAccessorForStereotypes() {
 		return accessorForStereotypes;
 	}
 	
 	/**
-	 * Sets the value of attribute '<em><b>accessorForStereotypes</b></em>'.
-	 * @param	accessorForStereotypes	the value to set.
+	 * Adds the specified value to the attribute '<em><b>accessorForStereotypes</b></em>'.
+	 * @param	accessorForStereotypes	the value to add.
 	 */
-	public void setAccessorForStereotypes(String accessorForStereotypes) {
-		this.accessorForStereotypes = accessorForStereotypes;
+	public void addAccessorForStereotypes(String accessorForStereotypes) {
+		this.accessorForStereotypes.add(accessorForStereotypes);
+	}
+	
+	/**
+	 * Removes the specified value from the attribute '<em><b>accessorForStereotypes</b></em>'.
+	 * @param	accessorForStereotypes	the value to remove.
+	 */
+	public void removeAccessorForStereotypes(String accessorForStereotypes) {
+		this.accessorForStereotypes.remove(accessorForStereotypes);
 	}
 	
 	/**
@@ -229,11 +240,64 @@ public class Gcore2Java extends Model2Text {
 		this.usePropertyVisibilityForAccessors = usePropertyVisibilityForAccessors;
 	}
 	
-	/* PROTECTED REGION ID(java.class.own.code.implementation._tPrfIAjhEeKn2-J_iePC7Q) ENABLED START */
-	{
-		// init import preserve
-		setImportPreserverConfig(new ImportPreserverConfig(".*(\\.java)$", "(import)\\s+.*;$"));
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "fieldAccess")
+	public boolean getDefaultFieldAccess() {
+		return true;
 	}
-	/* PROTECTED REGION END */
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "useModelNameAsBasePackage")
+	public boolean getDefaultUseModelNameAsBasePackage() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "basePackage")
+	public String getDefaultBasePackage() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessorForStereotypes")
+	public java.util.Set<String> getDefaultAccessorForStereotypes() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("entity");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessorStereotype")
+	public String getDefaultAccessorStereotype() {
+		return "accessor";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "usePropertyVisibilityForAccessors")
+	public boolean getDefaultUsePropertyVisibilityForAccessors() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "template")
+	public String getDefaultTemplate() {
+		return "org::genesez::platform::java::m2t::Root::Root";
+	}
+	
+	/* PROTECTED REGION ID(java.class.own.code.implementation._tPrfIAjhEeKn2-J_iePC7Q) ENABLED START */
+	/* PROTECTED REGION END */
 }
