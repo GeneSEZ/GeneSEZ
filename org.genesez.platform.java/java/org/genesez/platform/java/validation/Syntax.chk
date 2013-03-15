@@ -69,7 +69,7 @@ context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you w
  * 'assert' was added in java 1.4, 'enum' was added in java 5
  * @return	 true, if the name is not a reserved java word, otherwise false
  */
-context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word! " + fqmn() :
+context MElement WARNING "GeneSEZ: the name '" + name + "' is a reserved java word! Make sure your naming scripts modify the name of " + fqmn() :
 	{ MStereotype, MTag, MTaggedValue }.contains( metaType )
 		? true
 		: (
@@ -81,4 +81,3 @@ context MElement ERROR "GeneSEZ: the name '" + name + "' is a reserved java word
 		"finally", "long", "strictfp", "volatile", "const", "float", "native", "super", "while"
 	}.contains(name)
 	);
-
