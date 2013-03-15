@@ -4,54 +4,65 @@ package org.genesez.platform.php.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_oDsWYAopEeKxusbn3Pe47g) 
  */
-
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.m2t.cp.ImportPreserverConfig;
-import org.genesez.workflow.xpand.Model2Text;
-import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
+import org.genesez.workflow.Parameter;
+import org.genesez.workflow.SimpleModel2Text;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Gcore2Php extends Model2Text {
+public class Gcore2Php extends SimpleModel2Text {
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean generateIncludes = true;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean relativeIncludes = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String includeBase = "";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String propertyAccess = "setter";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String accessorStyle = "magic";
 	
-	// override default values of workflow parameters
-	{
-		setTemplate("org::genesez::platform::php5::templates::Root::Root");
-		addTypeMappingFile("org/genesez/platform/php/typemapping/typemapping.xml");
+	/**
+	 * Method stub for further implementation.
+	 */
+	public boolean validate() {
+		boolean result = true;
+		if (getTemplate() == null) {
+			setTemplate(getDefaultTemplate());
+		}
+		if (includeBase == null) {
+			includeBase = getDefaultIncludeBase();
+		}
+		if (propertyAccess == null) {
+			propertyAccess = getDefaultPropertyAccess();
+		}
+		if (accessorStyle == null) {
+			accessorStyle = getDefaultAccessorStyle();
+		}
+		result = result && super.validate();
+		return result;
 	}
 	
 	/**
-	 * Validates the configuration of the component before invocation.
-	 * @param	issues	Instance to collect all problems during configuration check.
+	 * Method stub for further implementation.
 	 */
-	public void checkConfiguration(Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._e5HAsAoqEeKxusbn3Pe47g) ENABLED START */
-		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("generateIncludes", generateIncludes);
-		addGlobalVarDef("relativeIncludes", relativeIncludes);
-		addGlobalVarDef("includeBase", includeBase);
-		addGlobalVarDef("propertyAccess", propertyAccess);
-		addGlobalVarDef("accessorStyle", accessorStyle);
-		// delegate to base class
-		super.checkConfiguration(issues);
-		/* PROTECTED REGION END */
+	public java.util.Set<Parameter> getParameter() {
+		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		result.add(new Parameter("generateIncludes", generateIncludes));
+		result.add(new Parameter("relativeIncludes", relativeIncludes));
+		result.add(new Parameter("includeBase", includeBase));
+		result.add(new Parameter("propertyAccess", propertyAccess));
+		result.add(new Parameter("accessorStyle", accessorStyle));
+		return result;
 	}
 	
 	/**
@@ -129,11 +140,54 @@ public class Gcore2Php extends Model2Text {
 		this.accessorStyle = accessorStyle;
 	}
 	
-	/* PROTECTED REGION ID(java.class.own.code.implementation._oDsWYAopEeKxusbn3Pe47g) ENABLED START */
-	{
-		// initialize import preserve config
-		setImportPreserverConfig(new ImportPreserverConfig(".*(\\.php)$", "(require|include|require_once|include_once)\\s+.*;$"));
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "generateIncludes")
+	public boolean getDefaultGenerateIncludes() {
+		return true;
 	}
-	/* PROTECTED REGION END */
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "relativeIncludes")
+	public boolean getDefaultRelativeIncludes() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "includeBase")
+	public String getDefaultIncludeBase() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "propertyAccess")
+	public String getDefaultPropertyAccess() {
+		return "setter";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessorStyle")
+	public String getDefaultAccessorStyle() {
+		return "magic";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "template")
+	public String getDefaultTemplate() {
+		return "org::genesez::platform::php5::templates::Root::Root";
+	}
+	
+	/* PROTECTED REGION ID(java.class.own.code.implementation._oDsWYAopEeKxusbn3Pe47g) ENABLED START */
+	/* PROTECTED REGION END */
 }
