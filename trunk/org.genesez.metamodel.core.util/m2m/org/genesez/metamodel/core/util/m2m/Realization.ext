@@ -1,12 +1,14 @@
 /**
- * Adds the method definition of interface realizations and abstract methods of base classes to non abstract classes.
+ * Adds operation definitions to non abstract classes based on operation declarations 
+ * in the generalization tree or realization tree.
  * 
- * - if class has generalizations with abstract methods, these are added as non abstract
- * - if class has generalizations, only the direct realizations are added
- * - if class has no generalizations, the realizations are added recursivly, i.e. the
- *   interfaces and recursively all generalizations of the interfaces
- * 
- * No further searches in the inheritance hierarchy is done
+ * The context is the any classifier.
+ * A list of operation definitions is collected from the whole generalization tree. This list
+ * does NOT include constructors, destructors and abstract operations.
+ * Realizable operation declarations are collected from the whole generalization tree (abstract operations) 
+ * and the whole realization tree.
+ * Both are checked for matches and all realizable operations which does not match are realized 
+ * on the context classifier.
  * 
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
@@ -15,6 +17,7 @@ import gcore;
 extension org::genesez::util::logging::Logging;
 extension org::genesez::metamodel::core::util::AccessHelper;
 extension org::genesez::metamodel::core::util::m2m::CloneElement;
+extension org::genesez::metamodel::core::util::Conversion;
 
 /**
  * Performs the model transformation to add operations of interfaces to classes.
@@ -29,35 +32,36 @@ MPackage realize(MPackage this) :
  * Processes the realization of operations of a classifier.
  */
 MClassifier check(MClassifier this) :
+	logDebug("Realize operations for " + fqmn()) ->
 	metaType == MClass && !abstract
-		? ( generalization.isEmpty
-			? realization.typeSelect(MInterface).recursiveRealize( (MClass)this )
-			: (
-				generalization.typeSelect(MClassifier).realize( this ) ->
-				realization.typeSelect(MInterface).realize( ((MClass)this) )
-			)
-		) : this ->
+		? allRealizableOperations().realize( this, allRealizedOperations() )
+		: this ->
 	this;
 
 /**
- * Adds abstract operations of the base class as non abstract operations.
+ * Realizes the specified operation on the specified classifier if not already realized.
  */
-MClass realize(MClassifier base, MClassifier this) :
-	base.operation.select(e|e.abstract).cloneOperation( this ).setAbstract(false) ->
+MClassifier realize(MOperation realizable, MClassifier this, List[MOperation] realized) :
+	realized.exists( o|o.isRealized(realizable) ).logDebug("Realization check for '" + realizable.fqmn() + "' resolved: ") == true
+		? this
+		: realizable.cloneOperation( this ).setAbstract( false ) ->
 	this;
 
 /**
- * Adds the operations of the interface to the list of operations of the class.
+ * Checks if the first operation is an realization of the second operation.
+ * 
+ * Note: The realization is NOT conserned with any particular programming lanugage but rather specific to MOperation
+ * and depends on a subset their features. This check includes:
+ * - the name of the operation
+ * - the count of parameters and their type
+ * - the existence and if the type of the return parameter
+ * You may use AOP functionality to adjust this behaviour to your needs.
+ * 
+ * @return	True, if the first operation is a realization of the second operation, otherwise false.
  */
-MClass realize(MInterface realize, MClass this) :
-	realize.operation.cloneOperation( this ).setAbstract(false) ->
-	this;
-
-/**
- * Adds the operations of the interface to the list of operations of the class
- * and additionally performs a recursive call with all generalizations of the interface
- */
-MClass recursiveRealize(MInterface realize, MClass this) :
-	realize.realize( this ) ->
-	realize.generalization.typeSelect(MInterface).recursiveRealize( this ) ->
-	this;
+boolean isRealized(MOperation realization, MOperation realizable) :
+	realization.name == realizable.name
+	&& realization.parameter.size == realizable.parameter.size
+	&& realization.hasReturn() == realizable.hasReturn()
+	&& realization.return.type == realizable.return.type
+	&& realization.parameter.type == realizable.parameter.type;
