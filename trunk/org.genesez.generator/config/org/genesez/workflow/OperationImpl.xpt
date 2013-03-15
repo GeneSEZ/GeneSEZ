@@ -1,0 +1,123 @@
+«REM»
+	(c) GeneSEZ Research Group <genesez@fh-zwickau.de>
+	All rights reserved.
+	
+	Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+«ENDREM»
+«IMPORT gcore»
+
+«REM»
+	Performs the generation of the operation implementations for transformables, i.e. the following operations:
+	- validate
+	- getParameter
+	
+	@author	tobias haubold <toh@fh-zwickau.de>
+«ENDREM»
+«EXTENSION org::genesez::workflow::Utility»
+«EXTENSION org::genesez::m2t::ApacheCommonsLogging»
+«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::platform::java::util::Naming»
+«EXTENSION org::genesez::platform::java::util::JavaTypes»
+«EXTENSION org::genesez::util::logging::Logging»
+
+
+«AROUND org::genesez::platform::java::m2t::Operation::_ImplementationBody FOR MOperation -»
+«IF (name == "validate") -»
+	«EXPAND ValidateBody FOR classifier -»
+«ELSEIF name == "getParameter" -»
+	«EXPAND GetParameterBody -»
+«ELSE -»
+	«targetDef.proceed() -»
+«ENDIF -»
+«ENDAROUND»
+
+
+«REM»
+	Generates the implementation body of the 'validate()' operation.
+	- Check if default values for parameters of base class exist
+	- Check if parameter has default values
+	- Check if parameter is mandatory
+«ENDREM»
+«DEFINE ValidateBody FOR MClassifier -»
+	boolean result = true;
+	«EXPAND DefaultValues FOREACH operation.select( o|o.isDefault() && o.hasReturn() && !o.hasAttribute() ) -»
+	«FOREACH property.typeSelect(MAttribute).select( p|p.isParameter() ) AS p -»
+		«EXPAND DefaultValues FOR p -»
+		«EXPAND Validate FOR p -»
+	«ENDFOREACH -»
+	«IF needValidateBaseClass() -»
+	result = result && super.validate();
+	«ENDIF -»
+	return result;
+«ENDDEFINE»
+
+«REM»
+	Assigns default values to a workflow parameter of a base class.
+«ENDREM»
+«DEFINE DefaultValues FOR MOperation -»
+	«IF return.multiplicity.isSingleValued() && !return.type.isPrimitiveType() -»
+		if («asGetAccess()»() == null) {
+			«asSetAccess()»(«name»());
+		}
+	«ELSE -»
+		if («asGetAccess()»().isEmpty()) {
+			«EXPAND org::genesez::platform::java::m2t::Type::MultiValuedType(return.multiplicity, return.type) FOR return -» defaultValues = «name»();
+			for («return.type.mapName().asTypeName()» it : defaultValues) {
+				«asAddAccess()»(it);
+			}
+		}
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Assigns default values to a workflow parameter if no other values were specified.
+«ENDREM»
+«DEFINE DefaultValues FOR MAttribute -»
+	«IF hasDefaultOperation() && !type.isPrimitiveType() -»
+		if («asAttribute()»«IF multiplicity.isSingleValued()» == null«ELSE».isEmpty()«ENDIF») {
+			«asAttribute()» = «asDefaultOperation()»();
+		}
+	«ENDIF -»
+«ENDDEFINE»
+
+«REM»
+	Generates the check for values of mandatory workflow parameters.
+«ENDREM»
+«DEFINE Validate FOR MAttribute -»
+	«IF isMandatoryParameter() && !hasDefaultOperation() -»
+		if («asAttribute()»«IF multiplicity.isSingleValued()» == null«ELSE».isEmpty()«ENDIF» && «loggerAttributeName()».isErrorEnabled()) {
+			«loggerAttributeName()».error("Mandatory parameter '«asAttribute()»' not set!");
+			result = false;
+		}
+	«ENDIF -»
+«ENDDEFINE»
+
+
+«REM»
+	Generates the implementation body of the 'getParameter()' operation.
+	- Check if base class provides transformation parameters
+	- Adds all transformation parameters to a list and returns it
+«ENDREM»
+«DEFINE GetParameterBody FOR MOperation -»
+		«EXPAND org::genesez::platform::java::m2t::Type::MultiValuedType(return.multiplicity, return.type) FOR return -» result = 
+	«IF classifier.needParameterBaseClass() -»
+		super.getParameter();
+	«ELSE -»
+		new «return.mapCollection("Implementation") -»<«return.type.mapName("Wrapper").asTypeName() -»«EXPAND org::genesez::platform::java::m2t::Type::GenericUse»>();
+	«ENDIF -»
+	«FOREACH classifier.property.select( p|p.isTransformationParameter() ) AS p -»
+	«IF p.multiplicity.isSingleValued() -»
+		result.add(new «return.type.asTypeName()»("«p.name»", «p.asAttribute()»));
+	«ELSE -»
+		if («p.asAttribute()».isEmpty()) {
+			result.add(new «return.type.asTypeName()»("«p.name»", ""));
+		} else {
+			for («p.type.mapName().asTypeName()» it : «p.asAttribute()») {
+				result.add(new «return.type.asTypeName()»("«p.name»", it));
+			}
+		}
+	«ENDIF -»
+	«ENDFOREACH -»
+		return result;
+«ENDDEFINE»

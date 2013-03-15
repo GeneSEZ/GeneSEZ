@@ -37,6 +37,12 @@
     <availablePage>
       <emfPageIdentifier href="genesez.workflow.notation#_Ic9ekAo8EeKxusbn3Pe47g"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="genesez.workflow.notation#_ZoeyAIZUEeKi-fAVJTcXlg"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="genesez.workflow.notation#_xYgXAIZnEeKi-fAVJTcXlg"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -49,6 +55,9 @@
         </children>
         <children>
           <emfPageIdentifier href="genesez.workflow.notation#_JD-NsPRjEeGG-J2DIYyoXg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="genesez.workflow.notation#_xYgXAIZnEeKi-fAVJTcXlg"/>
         </children>
         <children>
           <emfPageIdentifier href="genesez.workflow.notation#_ThdNUAWHEeKiOsNmFSLL5Q"/>
@@ -76,6 +85,9 @@
         </children>
         <children>
           <emfPageIdentifier href="genesez.workflow.notation#_AgWTgAofEeKxusbn3Pe47g"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="genesez.workflow.notation#_ZoeyAIZUEeKi-fAVJTcXlg"/>
         </children>
       </children>
     </windows>

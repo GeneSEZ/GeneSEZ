@@ -1,0 +1,34 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+import gcore;
+
+/**
+ * Modifies the type of workflow parameter properties.
+ * Currently the mwe2 editor can not deal with type parameters (java generics).
+ * This script modifies the type to the constraining type of the generic.
+ * 
+ * @author	tobias haubold <toh@fh-zwickau.de>
+ */
+extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::platform::java::m2m::Annotation;
+
+
+/**
+ * Returns the prefix for java annotation types during their type definition.
+ */
+around org::genesez::platform::java::util::Naming::prefix(MInterface this) :
+	emHasStereotype( prJavaAnnotationStereotype() )
+		? "Wf"
+		: ctx.proceed();
+
+/**
+ * Returns the prefix for java annotation types during their use.
+ */
+around org::genesez::platform::java::util::Naming::prefix(MStereotype this) :
+	emHasStereotype( prJavaAnnotationStereotype() )
+		? "Wf"
+		: ctx.proceed();

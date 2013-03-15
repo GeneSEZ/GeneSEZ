@@ -1,0 +1,95 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ * 
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+import gcore;
+
+/**
+ * Provides model modifications to deal with default values for workflow parameters.
+ * Default values for workflow parameters are modeled using attributes.
+ * For each workflow parameter with default value an operation returning this default value is created.
+ * If the attribute just provides a default value and does not define a workflow parameter it is removed.
+ * 
+ * @author	tobias haubold <toh@fh-zwickau.de>
+ */
+extension org::genesez::workflow::Utility;
+extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::ModelNavigation;
+extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::metamodel::core::util::m2m::CloneElement;
+
+
+/**
+ * Delegates execution to containment objects.
+ * @return	the context object itself
+ */
+MPackage modify(MPackage this) :
+	nestedPackage.modify() ->
+	classifier.modify() ->
+	this;
+
+/**
+ * Delegates execution to containment objects.
+ * @return	the context object itself
+ */
+MClassifier modify(MClassifier this) :
+	classifier.modify() ->
+	property.typeSelect(MAttribute).check() ->
+	this;
+
+/**
+ * Delegates transformation appropriately for workflow parameters, default values and all other attributes.
+ * @return	the context object itself
+ */
+MAttribute check(MAttribute this) :
+	isParameter() && hasDefaultValue()
+		? handleParameter()
+		: this ->
+	isDefault()
+		? handleDefault()
+		: this;
+
+/**
+ * Creates an operation returning the default value for the specified workflow parameter.
+ * 
+ * @return	the context object itself
+ */
+MAttribute handleParameter(MAttribute this) :
+	doCreateDefaultOperation() ->
+	this;
+
+/**
+ * Creates an operation returning the default value for the specified parameter default and 
+ * removes the specified property.
+ * 
+ * @return	the context object itself
+ */
+MAttribute handleDefault(MAttribute this) :
+	doCreateDefaultOperation() ->
+	classifier.property.remove( this ) ->
+	this;
+
+/**
+ * Creates an operation returning the default value of the specified attribute, assigns the 
+ * stereotype 'default' and sets the tag 'parameter' to the name of the transformation parameter.
+ * 
+ * @return	the created operation
+ */
+MOperation doCreateDefaultOperation(MAttribute this) :
+	classifier
+		.ensureOperationExistence( xmiGuid, asDefaultOperation() )
+		.processOperation("public", false, false, false)
+		.ensureReturnParameterExistence( xmiGuid + "_return", "" )
+		.processParameter( defaultvalue, "return", multiplicity.cloneMultiplicity() )
+		.wireType( type )
+		.operation
+		.ensureStereotypeAssignment(
+			navModel().emEnsureDefaultStereotype()
+		)
+		.ensureTaggedValueExistence(
+			navModel().emEnsureDefaultStereotype().emGetTag( prTagDefaultParameter() ), "\"" + name + "\""
+		)
+		.owningElement;
