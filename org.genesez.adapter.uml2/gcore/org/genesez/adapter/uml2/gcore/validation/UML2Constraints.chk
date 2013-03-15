@@ -10,6 +10,32 @@
 import uml;
 
 extension org::genesez::adapter::uml2::Helper;
+extension org::genesez::util::logging::Logging;
+
+
+/**
+ * Checks all applied UML profiles if they are resolved.
+ */
+context Model WARNING "Unresolved UML Profile(s), transformation may crash!: " + getAllAppliedProfiles().select( p|p.isProxy() ) :
+	!getAllAppliedProfiles().exists( p|p.isProxy() );
+
+/**
+ * Checks all imported packages if they are resolved.
+ */
+context Model WARNING "Unresolved UML package import detected, transformation may crash!: " + getImportedPackages().select(e|e.isProxy()) :
+	!getImportedPackages().exists(e|e.isProxy());
+
+/**
+ * Checks all imported elements if they are resolved.
+ */
+context Model WARNING "Unresolved UML element import detected, transformation may crash!: " + getImportedElements().select(e|e.isProxy()) :
+	!getImportedElements().exists(e|e.isProxy());
+
+/**
+ * Checks if an element is not resolved.
+ */
+context Element WARNING "Proxy element detected! " + this + " -> " + fqn():
+	!isProxy();
 
 /**
  * checks if the name of a named element contains only valid characters
