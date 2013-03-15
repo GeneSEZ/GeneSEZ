@@ -54,7 +54,7 @@ import org.genesez.eclipse.workfloweditor.util.ClassHelper;
 import org.genesez.eclipse.workfloweditor.util.Description;
 import org.genesez.eclipse.workfloweditor.util.UIController;
 import org.genesez.eclipse.workfloweditor.util.WorkfloweditorConstants;
-import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.profile.WfParameter;
 
 //import org.genesez.workflow.WorkflowComponent;
 
@@ -263,7 +263,7 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 	 * @param param
 	 * @return
 	 */
-	private Boolean checkShowField(Method[] array, Field field, Parameter param) {
+	private Boolean checkShowField(Method[] array, Field field, WfParameter param) {
 		if (array != null && array.length >= 4) {
 			array[0] = ClassHelper.getGetter(field);
 			array[1] = ClassHelper.getSetter(field);
@@ -372,7 +372,7 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 	 */
 	private Composite openAdvancedPart() {
 		for (Field field : advancedFields.keySet()) {
-			renderField(field, field.getAnnotation(Parameter.class), advancedFields.get(field));
+			renderField(field, field.getAnnotation(WfParameter.class), advancedFields.get(field));
 		}
 		Composite simple = new Composite(dynamicOpenPart, SWT.NONE);
 		simple.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false, 2, 1));
@@ -393,7 +393,7 @@ public class WorkflowComponentRenderer extends FeatureRenderer {
 	 * @param param
 	 * @param array
 	 */
-	private void renderField(Field field, Parameter param, Method[] array) {
+	private void renderField(Field field, WfParameter param, Method[] array) {
 		boolean rendered = false;
 		// for (FeatureRenderer renderer : renderers) {
 		// if (renderer.renderElement(dynamicOpenPart, field, param, workflowComponent, workbench, context)) {
