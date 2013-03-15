@@ -6,7 +6,6 @@ package org.genesez.platform.java.workflow;
  */
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
-import org.genesez.workflow.Model2Text;
 import org.genesez.workflow.Parameter;
 import org.genesez.workflow.SimpleModel2Text;
 import org.genesez.workflow.profile.WfDefault;
