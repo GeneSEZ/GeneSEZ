@@ -4,37 +4,34 @@ package org.genesez.platform.dotnet.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_4vH5QAomEeKxusbn3Pe47g) 
  */
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.m2t.cp.ImportPreserverConfig;
-import org.genesez.workflow.xpand.Model2Text;
+import org.genesez.workflow.SimpleModel2Text;
+import org.genesez.workflow.profile.WfDefault;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Gcore2Csharp extends Model2Text {
+public class Gcore2Csharp extends SimpleModel2Text {
 	
-	// override default values of workflow parameters
-	{
-		setTemplate("org::genesez::platform::dotnet::csharp::templates::Root::Root");
-		addTypeMappingFile("org/genesez/platform/dotnet/csharp/typemapping/typemapping.xml");
+	/**
+	 * Method stub for further implementation.
+	 */
+	public boolean validate() {
+		boolean result = true;
+		if (getTemplate() == null) {
+			setTemplate(getDefaultTemplate());
+		}
+		result = result && super.validate();
+		return result;
 	}
 	
 	/**
-	 * Validates the configuration of the component before invocation.
-	 * @param	issues	Instance to collect all problems during configuration check.
+	 * Method stub for further implementation.
 	 */
-	public void checkConfiguration(Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._Y5P3YAonEeKxusbn3Pe47g) ENABLED START */
-		// delegate to base class
-		super.checkConfiguration(issues);
-		/* PROTECTED REGION END */
+	@WfDefault(parameter = "template")
+	public String getDefaultTemplate() {
+		return "org::genesez::platform::dotnet::csharp::templates::Root::Root";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._4vH5QAomEeKxusbn3Pe47g) ENABLED START */
-	{
-		// initialize import preserve config
-		setImportPreserverConfig(new ImportPreserverConfig(".*(\\.cs)$", "(using)\\s+.*;$"));
-	}
 	/* PROTECTED REGION END */
-	
 }
