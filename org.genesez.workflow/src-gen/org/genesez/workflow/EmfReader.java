@@ -11,14 +11,14 @@ import java.util.Map.Entry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.xml.type.AnyType;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.utils.Reader;
-import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * .WHEN_NEEDED
@@ -27,13 +27,13 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean makeEPackagesGlobal = true;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean firstElementOnly = true;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean ignoreMissingModel = false;
 	
 	private Reader reader;
@@ -74,7 +74,10 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 * Method stub for further implementation.
 	 */
 	public String getLogMessage() {
-		return reader.getLogMessage();
+		/* PROTECTED REGION ID(java.implementation._gvX1IP6tEeGciM7nbRm1bw) ENABLED START */
+		// TODO: implementation of method 'EmfReader.getLogMessage(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
 	}
 	
 	/**
@@ -122,6 +125,30 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 		this.ignoreMissingModel = ignoreMissingModel;
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "makeEPackagesGlobal")
+	public boolean getDefaultMakeEPackagesGlobal() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "firstElementOnly")
+	public boolean getDefaultFirstElementOnly() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "ignoreMissingModel")
+	public boolean getDefaultIgnoreMissingModel() {
+		return false;
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._vaiVYPRiEeGG-J2DIYyoXg) ENABLED START */
 	private void prepareDelegate() {
 		reader = new Reader();
@@ -136,5 +163,4 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	}
 	
 	/* PROTECTED REGION END */
-	
 }

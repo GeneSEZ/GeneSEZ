@@ -14,7 +14,7 @@ import java.lang.annotation.Retention;
  */
 @Documented
 @Retention(RUNTIME)
-public @interface Parameter {
+public @interface WfParameter {
 	
 	// -- generated elements ------------------------------------------------
 	boolean isRequired() default false;
@@ -22,6 +22,8 @@ public @interface Parameter {
 	boolean isMultiValued() default false;
 	
 	WorkflowFileInclusion workflowInclusion() default WorkflowFileInclusion.WHEN_NEEDED;
+	
+	boolean isTransformationParameter() default true;
 	
 	// -- generated code of other cartridges --------------------------------
 	

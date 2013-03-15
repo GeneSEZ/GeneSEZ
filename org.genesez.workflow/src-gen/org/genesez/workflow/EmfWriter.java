@@ -4,33 +4,33 @@ package org.genesez.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_UMGTcPLIEeGYwYEQM4LYvw) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.emf.mwe.utils.Writer;
-import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
 public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean schemaLocation = true;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean schemaLocationImplementation = true;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean ignoreEmptySlot = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean cloneSlotContents = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean multipleResourcesInCaseOfList = false;
 	
 	private Writer writer;
@@ -63,7 +63,10 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 * Method stub for further implementation.
 	 */
 	public String getLogMessage() {
-		return writer.getLogMessage();
+		/* PROTECTED REGION ID(java.implementation._vsnQgP6tEeGciM7nbRm1bw) ENABLED START */
+		// TODO: implementation of method 'EmfWriter.getLogMessage(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
 	}
 	
 	/**
@@ -141,6 +144,46 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 		this.multipleResourcesInCaseOfList = multipleResourcesInCaseOfList;
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "schemaLocation")
+	public boolean getDefaultSchemaLocation() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "schemaLocationImplementation")
+	public boolean getDefaultSchemaLocationImplementation() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "ignoreEmptySlot")
+	public boolean getDefaultIgnoreEmptySlot() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "cloneSlotContents")
+	public boolean getDefaultCloneSlotContents() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "multipleResourcesInCaseOfList")
+	public boolean getDefaultMultipleResourcesInCaseOfList() {
+		return false;
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._UMGTcPLIEeGYwYEQM4LYvw) ENABLED START */
 	private void prepareDelegate() {
 		writer = new Writer();
@@ -157,5 +200,4 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	}
 	
 	/* PROTECTED REGION END */
-	
 }
