@@ -17,6 +17,7 @@
 «EXTENSION org::genesez::metamodel::core::util::AccessHelper»
 «EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
+«EXTENSION org::genesez::metamodel::core::util::profile::AccessorStereotype»
 
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::Helper»
@@ -90,8 +91,8 @@
 «ENDREM»
 «DEFINE AccessorDeclaration FOR MInterface-»
 	«FOREACH property.typeSelect(MAssociationRole) AS a-»
-		«IF a.generateGetter()-»«EXPAND _GetterDecl FOR a-»«ENDIF»
-		«IF a.generateSetter()-»
+		«IF a.emGenerateGetAccess()-»«EXPAND _GetterDecl FOR a-»«ENDIF»
+		«IF a.emGenerateSetAccess()-»
 			«EXPAND _InsertInDecl FOR a-»
 			«EXPAND _RemoveFromDecl FOR a-»
 		«ENDIF»
@@ -104,8 +105,8 @@
 «DEFINE AccessorImplementation FOR MClass -»
 	«REM»«EXPAND _AssocClassReferenceGetters FOR ownedAssociation-»«ENDREM»
 	«FOREACH property.typeSelect(MAssociationRole) AS a -»
-		«IF a.generateGetter() -»«EXPAND _GetterImpl FOR a -»«ENDIF»
-		«IF a.generateSetter() -»
+		«IF a.emGenerateGetAccess() -»«EXPAND _GetterImpl FOR a -»«ENDIF»
+		«IF a.emGenerateSetAccess() -»
 			«EXPAND _InsertInImpl FOR a -»
 			«EXPAND _RemoveFromImpl FOR a -»
 		«ENDIF»
@@ -247,12 +248,12 @@
 					this.«asAttribute()-».add(«asAttribute()-»);
 				«ENDIF-»
 				«IF opposite != null && oppositeMultiplicity.isMultiValued() 
-					&& opposite.generateSetter()-»
+					&& opposite.emGenerateSetAccess()-»
 					if (!«asAttribute()-».«opposite.asGetter()-»().contains(this)) {
 						«asAttribute()-».«opposite.asInsertIn()-»(this);
 					}
 				«ELSEIF opposite != null && oppositeMultiplicity.isSingleValued() 
-						&& opposite.generateSetter()-»
+						&& opposite.emGenerateSetAccess()-»
 					«asAttribute()-».«opposite.asSetter()-»(this);
 				«ENDIF-»
 			}
@@ -307,12 +308,12 @@
 					this.«asAttribute()-».remove(«asAttribute()-»);
 				«ENDIF-»
 				«IF opposite != null && opposite.multiplicity != 1 
-					&& opposite.generateSetter()-»
+					&& opposite.emGenerateSetAccess()-»
 					if («asAttribute()-».«opposite.asGetter()-»().contains(this)) {
 						«asAttribute()-».«opposite.asRemoveFrom()-»(this);
 					}
 				«ELSEIF opposite != null && oppositeMultiplicity.isSingleValued() 
-					&& opposite.generateSetter()-»
+					&& opposite.emGenerateSetAccess()-»
 					«asAttribute()-».«opposite.asSetter()-»(null);
 				«ENDIF-»
 			}
