@@ -108,6 +108,19 @@ List[MType] allGeneralizations(MClassifier this) :
 private List[MType] allGeneralizations(MType this) : 
 	{};
 
+/**
+ * Returns the realization tree of a classifier, i.e. super types and there super types.
+ * 
+ * @return 	The list of realizations of the classifier, otherwise an empty list.
+ * @api
+ */
+List[MType] allRealizations(MClassifier this) :
+	{}.addAll(
+		realization.typeSelect(MClassifier).allRealizations()
+	).addAll(
+		realization
+	);
+
 
 // -- Checks for a Type --
 
@@ -613,6 +626,33 @@ boolean hasConstructors(MClassifier this) :
  */
 boolean hasDestructors(MClassifier this) : 
 	operation.exists( o | o.isDestructor() );
+
+
+// -- Getter for a Classifier --
+
+
+/**
+ * Returns all realized operations of the specified classifier including inherited operations from generalizations.
+ * 
+ * @return 	All operations, without constructors, destructors, abstract operations or operations from realizations.
+ * @api
+ */
+cached List[MOperation] allRealizedOperations(MClassifier this) :
+	operation.reject( o|o.isConstructor() || o.isDestructor() || o.abstract )
+		.addAll(
+			allGeneralizations().typeSelect(MClassifier).operation.reject( o|o.isConstructor() || o.isDestructor() || o.abstract )
+		);
+
+/**
+ * Returns all realizable operations of the specified classifier including inherited operations from generalizations and realizations.
+ * 
+ * @return 	All operations the classifier must realize.
+ * @api
+ */
+cached List[MOperation] allRealizableOperations(MClassifier this) :
+	allRealizations().typeSelect(MClassifier).operation.addAll(
+		allGeneralizations().typeSelect(MClassifier).operation.select( o|o.abstract )
+	);
 
 
 // -- Checks for an Operation --
