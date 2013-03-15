@@ -4,7 +4,6 @@ package org.genesez.platform.documentation.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_AmnOYAoxEeKxusbn3Pe47g) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import java.io.BufferedReader;
@@ -14,23 +13,25 @@ import java.io.InputStreamReader;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.genesez.workflow.profile.Parameter;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
+import org.genesez.workflow.xpand.Model2TextComponent;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Gcore2PdfLatex extends Gcore2Latex {
+public class Gcore2PdfLatex extends Model2TextComponent {
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String pdfOutputDir;
 	
-	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String latexRootFile;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean showPdfLatexLog = true;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String command = "pdflatex";
 	
 	/**
@@ -140,7 +141,22 @@ public class Gcore2PdfLatex extends Gcore2Latex {
 		this.command = command;
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "showPdfLatexLog")
+	public boolean getDefaultShowPdfLatexLog() {
+		return true;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "command")
+	public String getDefaultCommand() {
+		return "pdflatex";
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._AmnOYAoxEeKxusbn3Pe47g) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
