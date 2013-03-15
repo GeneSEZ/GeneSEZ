@@ -4,74 +4,104 @@ package org.genesez.adapter.uml2.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_F6MosP3MEeGcKvbUXThvRw) 
  */
-
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.eclipse.xtend.typesystem.uml2.UML2MetaModel;
-import org.genesez.workflow.profile.Parameter;
-import org.genesez.workflow.xpand.Model2Model;
+import org.genesez.workflow.Model2Model;
+import org.genesez.workflow.Parameter;
+import org.genesez.workflow.SimpleScript;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Uml2Gcore extends Model2Model {
+public class Uml2Gcore extends SimpleScript {
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean mapClassesInModelToExternal = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean allowGeneratedXmiGuid = false;
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> externalStereotypes = new java.util.HashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> externalPackages = new java.util.HashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> excludeStereotypes = new java.util.HashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> excludePackages = new java.util.HashSet<String>();
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> includeProfiles = new java.util.HashSet<String>();
 	
-	// initialize all multi valued fields with their default values
-	{
-		externalStereotypes.add("external");
-		excludeStereotypes.add("exclude");
-		excludePackages.add("UML Standard Profile");
-	}
-	// override default values of workflow parameters
-	{
-		setSlot("uml2model");
-		addScript("org::genesez::adapter::uml2::gcore::UML2Gcore::transform");
-		setOutputSlot("coremodel");
-		addEmfMetaModelPackage("org.genesez.metamodel.gcore.GcorePackage");
+	/**
+	 * Method stub for further implementation.
+	 */
+	public boolean validate() {
+		boolean result = true;
+		if (getScript() == null) {
+			setScript(getDefaultScript());
+		}
+		if (externalStereotypes.isEmpty()) {
+			externalStereotypes = getDefaultExternalStereotypes();
+		}
+		if (excludeStereotypes.isEmpty()) {
+			excludeStereotypes = getDefaultExcludeStereotypes();
+		}
+		if (excludePackages.isEmpty()) {
+			excludePackages = getDefaultExcludePackages();
+		}
+		result = result && super.validate();
+		return result;
 	}
 	
 	/**
-	 * Validates the configuration of the component before invocation.
-	 * @param	issues	Instance to collect all problems during configuration check.
+	 * Method stub for further implementation.
 	 */
-	public void checkConfiguration(Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._1xGzgP3yEeGA35ujkRyC6w) ENABLED START */
-		// add uml meta model (note: not generated if protected region is disabled)
-		addMetaModel(new UML2MetaModel());
-		
-		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("mapClassesInModelToExternal", mapClassesInModelToExternal);
-		addGlobalVarDef("allowGeneratedXmiGuid", allowGeneratedXmiGuid);
-		addGlobalVarDef("externalStereotypes", listToString(externalStereotypes));
-		addGlobalVarDef("externalPackages", listToString(externalPackages));
-		addGlobalVarDef("excludeStereotypes", listToString(excludeStereotypes));
-		addGlobalVarDef("excludePackages", listToString(excludePackages));
-		addGlobalVarDef("includeProfiles", listToString(includeProfiles));
-		// delegate to base class
-		super.checkConfiguration(issues);
-		/* PROTECTED REGION END */
+	public java.util.Set<Parameter> getParameter() {
+		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		result.add(new Parameter("mapClassesInModelToExternal", mapClassesInModelToExternal));
+		result.add(new Parameter("allowGeneratedXmiGuid", allowGeneratedXmiGuid));
+		if (externalStereotypes.isEmpty()) {
+			result.add(new Parameter("externalStereotypes", ""));
+		} else {
+			for (String it : externalStereotypes) {
+				result.add(new Parameter("externalStereotypes", it));
+			}
+		}
+		if (externalPackages.isEmpty()) {
+			result.add(new Parameter("externalPackages", ""));
+		} else {
+			for (String it : externalPackages) {
+				result.add(new Parameter("externalPackages", it));
+			}
+		}
+		if (excludeStereotypes.isEmpty()) {
+			result.add(new Parameter("excludeStereotypes", ""));
+		} else {
+			for (String it : excludeStereotypes) {
+				result.add(new Parameter("excludeStereotypes", it));
+			}
+		}
+		if (excludePackages.isEmpty()) {
+			result.add(new Parameter("excludePackages", ""));
+		} else {
+			for (String it : excludePackages) {
+				result.add(new Parameter("excludePackages", it));
+			}
+		}
+		if (includeProfiles.isEmpty()) {
+			result.add(new Parameter("includeProfiles", ""));
+		} else {
+			for (String it : includeProfiles) {
+				result.add(new Parameter("includeProfiles", it));
+			}
+		}
+		return result;
 	}
 	
 	/**
@@ -219,8 +249,60 @@ public class Uml2Gcore extends Model2Model {
 		this.includeProfiles.remove(includeProfiles);
 	}
 	
-	/* PROTECTED REGION ID(java.class.own.code.implementation._F6MosP3MEeGcKvbUXThvRw) ENABLED START */
-	// TODO: put your own implementation code here
-	/* PROTECTED REGION END */
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "mapClassesInModelToExternal")
+	public boolean getDefaultMapClassesInModelToExternal() {
+		return false;
+	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "allowGeneratedXmiGuid")
+	public boolean getDefaultAllowGeneratedXmiGuid() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "externalStereotypes")
+	public java.util.Set<String> getDefaultExternalStereotypes() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("external");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "excludeStereotypes")
+	public java.util.Set<String> getDefaultExcludeStereotypes() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("exclude");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "excludePackages")
+	public java.util.Set<String> getDefaultExcludePackages() {
+		java.util.Set<String> result = new java.util.HashSet<String>();
+		result.add("UML Standard Profile");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "script")
+	public String getDefaultScript() {
+		return "org::genesez::adapter::uml2::gcore::UML2Gcore::transform";
+	}
+	
+	/* PROTECTED REGION ID(java.class.own.code.implementation._F6MosP3MEeGcKvbUXThvRw) ENABLED START */
+	/* PROTECTED REGION END */
 }
