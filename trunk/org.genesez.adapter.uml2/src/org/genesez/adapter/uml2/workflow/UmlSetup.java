@@ -42,6 +42,7 @@ public class UmlSetup extends Setup {
 			if (NS_URI_URI_MAP.isEmpty()) {
 				setRegisterProfileLocation(true);
 			}
+			setStandardProfileMapping(true);
 			
 			// register map contents
 			for (Map.Entry<String, String> me : NS_URI_FQN_MAP.entrySet()) {
@@ -99,6 +100,17 @@ public class UmlSetup extends Setup {
 	 */
 	public void addNsUriProfileLocation(Mapping map) {
 		NS_URI_URI_MAP.put(map.getFrom(), map.getTo());
+	}
+	
+	/**
+	 * Registers a mapping of the standard UML profile depending on specified value.
+	 * Change introduced from UML version 3.x.x to 4.x.x.
+	 * @param map	true if registration should be performed
+	 */
+	public void setStandardProfileMapping(boolean map) {
+		if (map) {
+			addUriMap( new org.eclipse.xtend.typesystem.emf.Mapping("pathmap://UML_PROFILES/Standard.profile.uml", "pathmap://UML_PROFILES/StandardL2.profile.uml"));
+		}
 	}
 	
 	
