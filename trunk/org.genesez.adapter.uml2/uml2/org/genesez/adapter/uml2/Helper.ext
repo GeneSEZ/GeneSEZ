@@ -6,6 +6,8 @@
  */
 import uml;
 
+extension org::genesez::util::logging::Logging;
+
 /**
  * Checks if the operation is a constructor or not.
  * @return true if its a constructor, otherwise false
@@ -26,6 +28,14 @@ Boolean isDestructor(Operation this) :
  */
 Boolean isReturnParameter(Parameter this) :
 	direction.toString() == "return";
+
+
+/**
+ * Returns true if the specified instance is a proxy object, i.e. an unresolved object, otherwise false.
+ */
+boolean isProxy(Element this) : 
+	JAVA org.genesez.adapter.uml2.TransformationHelper.isProxy(org.eclipse.uml2.uml.Element);
+
 
 /**
  * calculates the full qualfied name of a model
