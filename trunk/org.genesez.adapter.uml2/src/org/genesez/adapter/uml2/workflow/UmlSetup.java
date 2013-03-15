@@ -7,21 +7,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.mwe.core.ConfigurationException;
-import org.eclipse.emf.mwe.core.resources.ResourceLoaderFactory;
 import org.eclipse.emf.mwe.utils.Mapping;
-import org.eclipse.uml2.types.TypesPackage;
-import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.UMLPlugin;
-import org.eclipse.uml2.uml.profile.l2.L2Package;
-import org.eclipse.uml2.uml.profile.l3.L3Package;
-import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.xtend.typesystem.emf.EcoreUtil2;
 import org.eclipse.xtend.typesystem.uml2.Setup;
 
 /**
- * Utility class which allows to set different namespace URIs for the currently registered UML EPackage.
+ * Provides standalone use of UML based on the xtend uml setup.
+ * It allows to customize registered packages in the emf package registry and uml profile locations.
  * 
  * @author tobias haubold <toh@fh-zwickau.de>
  */
@@ -65,6 +59,10 @@ public class UmlSetup extends Setup {
 		}
 	}
 	
+	/**
+	 * Registers standard UML packages and profile packages depending on specified value.
+	 * @param shallRegister	true if registration should be performed
+	 */
 	public void setRegisterNsUri(boolean shallRegister) {
 		if (shallRegister) {
 			NS_URI_FQN_MAP.put("http://www.eclipse.org/uml2/4.0.0/Types", "org.eclipse.uml2.types.TypesPackage");
@@ -83,6 +81,10 @@ public class UmlSetup extends Setup {
 		NS_URI_FQN_MAP.put(map.getFrom(), map.getTo());
 	}
 	
+	/**
+	 * Registers standard UML profiles depending on specified value.
+	 * @param shallRegister	true if registration should be performed
+	 */
 	public void setRegisterProfileLocation(boolean shallRegister) {
 		if (shallRegister) {
 			NS_URI_URI_MAP.put("http://www.eclipse.org/uml2/4.0.0/UML/Profile/L2", "pathmap://UML_PROFILES/StandardL2.profile.uml#_0");
@@ -100,6 +102,14 @@ public class UmlSetup extends Setup {
 	}
 	
 	
+	/**
+	 * Resolves the EPackage by the specified full qualified name and registers it
+	 * using its own namespace URI as well as the specified.
+	 * A warning message is logged if the specified EPackage cannot be resolved.
+	 * 
+	 * @param nsUri	the namespace URI for the EPackage
+	 * @param fqn	the full qualified name of the EPackage
+	 */
 	protected void registerEPackage(String nsUri, String fqn) {
 		try {
 			EPackage ePackage = EcoreUtil2.getEPackageByClassName(fqn);
