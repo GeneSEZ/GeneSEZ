@@ -4,59 +4,72 @@ package org.genesez.metamodel.core.util.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_JnZ-oAofEeKxusbn3Pe47g) 
  */
-
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.genesez.workflow.xpand.Model2Text;
-import org.genesez.workflow.profile.Parameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
+import org.genesez.workflow.Parameter;
+import org.genesez.workflow.SimpleModel2Text;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class ProfileGenerator extends Model2Text {
+public class ProfileGenerator extends SimpleModel2Text {
 	
-	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String xtendFilePath;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String profileFileName = "Profile.ext";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String accessHelperFileName = "AccessHelper.ext";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String stereotypeNamePrefix = "";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String enumerationNamePrefix = "";
 	
-	// override default values of workflow parameters
-	{
-		setTemplate("org::genesez::platform::common::profile::templates::Root::Root");
-		addTypeMappingFile("org/genesez/platform/common/typemapping/typemapping.xml");
+	/**
+	 * Method stub for further implementation.
+	 */
+	public boolean validate() {
+		boolean result = true;
+		if (getTemplate() == null) {
+			setTemplate(getDefaultTemplate());
+		}
+		if (xtendFilePath == null && logger.isErrorEnabled()) {
+			logger.error("Mandatory parameter 'xtendFilePath' not set!");
+			result = false;
+		}
+		if (profileFileName == null) {
+			profileFileName = getDefaultProfileFileName();
+		}
+		if (accessHelperFileName == null) {
+			accessHelperFileName = getDefaultAccessHelperFileName();
+		}
+		if (stereotypeNamePrefix == null) {
+			stereotypeNamePrefix = getDefaultStereotypeNamePrefix();
+		}
+		if (enumerationNamePrefix == null) {
+			enumerationNamePrefix = getDefaultEnumerationNamePrefix();
+		}
+		result = result && super.validate();
+		return result;
 	}
 	
 	/**
-	 * Validates the configuration of the component before invocation.
-	 * @param	issues	Instance to collect all problems during configuration check.
+	 * Method stub for further implementation.
 	 */
-	public void checkConfiguration(Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._zAbf0AogEeKxusbn3Pe47g) ENABLED START */
-		// check mandatory workflow parameter
-		if (xtendFilePath == null || xtendFilePath.isEmpty()) {
-			issues.addError(this, "Workflow parameter 'xtendFilePath' is missing!", xtendFilePath);
-		}
-		
-		// add workflow parameter for transformation variables as global variables
-		addGlobalVarDef("xtendFilePath", xtendFilePath);
-		addGlobalVarDef("profileFileName", profileFileName);
-		addGlobalVarDef("accessHelperFileName", accessHelperFileName);
-		addGlobalVarDef("stereotypeNamePrefix", stereotypeNamePrefix);
-		addGlobalVarDef("enumerationNamePrefix", enumerationNamePrefix);
-		
-		// delegate to base class
-		super.checkConfiguration(issues);
-		/* PROTECTED REGION END */
+	public java.util.Set<Parameter> getParameter() {
+		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		result.add(new Parameter("xtendFilePath", xtendFilePath));
+		result.add(new Parameter("profileFileName", profileFileName));
+		result.add(new Parameter("accessHelperFileName", accessHelperFileName));
+		result.add(new Parameter("stereotypeNamePrefix", stereotypeNamePrefix));
+		result.add(new Parameter("enumerationNamePrefix", enumerationNamePrefix));
+		return result;
 	}
 	
 	/**
@@ -134,7 +147,46 @@ public class ProfileGenerator extends Model2Text {
 		this.enumerationNamePrefix = enumerationNamePrefix;
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "profileFileName")
+	public String getDefaultProfileFileName() {
+		return "Profile.ext";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "accessHelperFileName")
+	public String getDefaultAccessHelperFileName() {
+		return "AccessHelper.ext";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "stereotypeNamePrefix")
+	public String getDefaultStereotypeNamePrefix() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "enumerationNamePrefix")
+	public String getDefaultEnumerationNamePrefix() {
+		return "";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "template")
+	public String getDefaultTemplate() {
+		return "org::genesez::platform::common::profile::templates::Root::Root";
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._JnZ-oAofEeKxusbn3Pe47g) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
