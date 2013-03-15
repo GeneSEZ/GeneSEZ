@@ -31,6 +31,40 @@ extension org::genesez::util::logging::Logging;
 
 
 /**
+ * Delegates execution to containment objects.
+ * @return	the context object itself
+ */
+MPackage doFieldAccess(MPackage this) :
+	do( true );
+
+/**
+ * Delegates execution to containment objects.
+ * @return	the context object itself
+ */
+MPackage doPropertyAccess(MPackage this) :
+	do( false );
+
+/**
+ * Delegates execution to containment objects.
+ * @return	the context object itself
+ */
+private MPackage do(MPackage this, boolean doFieldAccess) :
+	classifier.do( doFieldAccess ) ->
+	nestedPackage.do( doFieldAccess ) ->
+	this;
+
+/**
+ * Delegates execution to containment objects.
+ * @return	the context object itself
+ */
+private MClassifier do(MClassifier this, boolean doFieldAccess) :
+	doFieldAccess
+		? property.doFieldAccess()
+		: property.doPropertyAccess() ->
+	classifier.do( doFieldAccess ) ->
+	this;
+
+/**
  * Prepares the specified property for field access by assigning stereotypes and tagged values 
  * from the property access operations to the property.
  * 
@@ -59,23 +93,27 @@ MProperty doFieldAccess(MProperty this) :
  */
 MProperty doPropertyAccess(MProperty this) :
 	// ensure there is eventually at least a get access method generated
-	!generateGetter() && !generateSetter() && emGetAccessOperation() == null && emSetAccessOperation() == null
+	!emGenerateGetAccess() && !emGenerateSetAccess() && emGetAccessOperation() == null && emSetAccessOperation() == null
 		? (
 			logInfo("Property access is enabled but no get and set access methods are present. A get access method will be generated for " + fqmn()) ->
-			ensureTaggedValueExistence( navModel().prEnsureGeneSezAccessorStereotype().emGetTag( prAccessorGetter() ), "true" )
+			// create a get access operation
+			ensureTaggedValueExistence( navModel().prEnsureGeneSezAccessorStereotype().emGetTag( prAccessorGetter() ), "true" ) ->
+			emProcessGetAccessOperation()
 		) : this ->
 	(
 	let get = emGetAccessOperation() :
 	let set = emSetAccessOperation() :
-		generateGetter() || generateSetter()
+		emGenerateGetAccess() || emGenerateSetAccess()
 			? (
+				// move metadata to property access operations
 				get != null
-					? get.emMoveExtensionsTo( this )
+					? emMoveExtensionsTo( get )
 					: this ->
 				set != null
-					? set.emMoveExtensionsTo( this )
+					? emMoveExtensionsTo( set )
 					: this
 			) : (
+				// move metadata to modeled get property access operation, use set property access as fallback if not get exists
 				get != null
 					? (
 						emMoveExtensionsTo( get ) ->
