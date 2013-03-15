@@ -7,12 +7,36 @@
 import gcore;
 
 /**
- * Provides java types as external types.
+ * Provides java core types as external types and checks for java primitive types.
  * 
  * @author	tobias haubold <toh@fh-zwickau.de> (maintainer)
  */
 extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::metamodel::core::util::mapping::TypeMapping;
 
+
+/**
+ * Checks if the specified external type is a primitive type.
+ * 
+ * @return 	True, if the specified type is a java primitive type, otherwise false.
+ */
+boolean isPrimitiveType(MExternal this) : 
+	mapName() == "boolean" || (switch (mapName().toLowerCase()) {
+		case "int": true
+		case "long": true
+		case "byte": true
+		case "short": true
+		case "float": true
+		case "double": true
+		default: false
+	});
+
+/**
+ * Checks if any type except an external type is a primitive type.
+ * 
+ * @return	False, only an external type can be primitive.
+ */
+boolean isPrimitiveType(MType this) : false;
 
 /**
  * Returns the primitive type boolean.
