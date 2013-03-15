@@ -974,8 +974,6 @@ private MClass transformClass(MClass this, Class c) :
 	setFinal( c.isLeaf ) ->
 	// transform classifier
 	transformClassifier(c) ->
-	// interface realizations
-	realization.addAll( c.interfaceRealization.contract.makeType() ) ->
 	this;
 	
 /**
@@ -1033,8 +1031,8 @@ private MClassifier transformClassifier(MClassifier this, Classifier c) :
 	// set stereotype
 	stereotype.addAll( c.getAppliedStereotypes().makeStereotype() ) ->
 	// add generalizations and realizations
-	generalization.addAll( c.general.makeType() ) ->
-	realization.addAll( c.clientDependency.typeSelect(Realization).supplier.typeSelect(Interface).makeType() ) ->
+	generalization.addAll( c.generalization.general.makeType() ) ->
+	realization.addAll( c.clientDependency.typeSelect(InterfaceRealization).contract.makeType() ) ->
 	// containments
 	// add comment to classifier
 	ownedComment.addAll( c.ownedComment.typeSelect(Comment).makeComment() ) ->
