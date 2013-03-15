@@ -10,66 +10,75 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.container.CompositeComponent;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.Generator;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xpand2.output.PostProcessor;
+import org.eclipse.xtend.expression.ExecutionContext;
+import org.eclipse.xtend.expression.ExecutionContextImpl;
+import org.eclipse.xtend.expression.TypeSystemImpl;
+import org.eclipse.xtend.expression.Variable;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
 import org.genesez.m2t.cp.ImportPreserverConfig;
 import org.genesez.mapping.type.TypeMapper;
-import org.genesez.workflow.profile.Parameter;
-
-import com.google.common.io.Files;
+import org.genesez.workflow.Model2Text;
+import org.genesez.workflow.Transformable;
+import org.genesez.workflow.profile.WfDefault;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Model2Text extends AbstractXpandWorkflowComponent {
+public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String fileEncoding = "utf-8";
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean isMultiValueSlot = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean prDefaultExcludes = false;
 	
-	@Parameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String prExcludes = ".svn";
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> prSourceDir = new java.util.LinkedHashSet<String>();
 	
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<Outlet> outlet = new java.util.LinkedHashSet<Outlet>();
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<PostProcessor> postProcessor = new java.util.LinkedHashSet<PostProcessor>();
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = ALWAYS)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = ALWAYS, isTransformationParameter = true)
 	private java.util.Set<String> aopTemplate = new java.util.LinkedHashSet<String>();
 	
-	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = ALWAYS)
-	private String template;
-	
-	@Parameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = true, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private String outputDir;
 	
-	private Generator generator;
+	private CompositeComponent compositeGenerator;
 	
-	@Parameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED)
+	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<String> typeMappingFile = new java.util.LinkedHashSet<String>();
 	
 	private ImportPreserverConfig importPreserverConfig;
+	
+	@WfParameter(isRequired = true, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
+	private java.util.Set<Model2Text> model2text = new java.util.HashSet<Model2Text>();
 	
 	/**
 	 * Validates the configuration of the component before invocation.
@@ -77,8 +86,8 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	 */
 	public void checkConfiguration(Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._gLI4APt-EeGRytmSxmtqcQ) ENABLED START */
-		if (template == null || template.isEmpty()) {
-			issues.addError(this, "Workflow parameter 'template' is missing!", template);
+		if (model2text.isEmpty()) {
+			issues.addError(this, "Workflow parameter 'model2text' is missing!", model2text);
 		}
 		if (outputDir == null || outputDir.isEmpty()) {
 			if (outlet.isEmpty()) {
@@ -115,9 +124,15 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 		for (Outlet o : outlet) {
 			ensureDirectoryExists(o.getPath());
 		}
+		// ensure valid transformables
+		for (Transformable t : model2text) {
+			if (!t.validate()) {
+				issues.addError(this, "Model2Text transformable is not valid!", t);
+			}
+		}
 		super.checkConfiguration(issues);
 		prepareDelegate();
-		generator.checkConfiguration(issues);
+		compositeGenerator.checkConfiguration(issues);
 		/* PROTECTED REGION END */
 	}
 	
@@ -129,17 +144,20 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._iXJckPt-EeGRytmSxmtqcQ) ENABLED START */
+		// init naming mapper
+		Map<String, Variable> globalVars = new HashMap<String, Variable>();
+		for (GlobalVarDef globalVarDef : getGlobalVarDef()) {
+			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
+		}
+		ExecutionContext namingCtx = new ExecutionContextImpl(new TypeSystemImpl(), globalVars);
+		//		NameMapper.initNameMapper(xtendNamingFile, namingCtx, getMetaModel());
+		
 		// init type mapper
 		TypeMapper.initTypeMapper(typeMappingFile.toArray(new String[0]));
-		generator.invoke(context, monitor, issues);
+		
+		// invoke
+		compositeGenerator.invoke(context, monitor, issues);
 		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Method stub for further implementation.
-	 */
-	public String getLogMessage() {
-		return generator.getLogMessage();
 	}
 	
 	/**
@@ -295,21 +313,6 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>template</b></em>'.
-	 */
-	public String getTemplate() {
-		return template;
-	}
-	
-	/**
-	 * Sets the value of attribute '<em><b>template</b></em>'.
-	 * @param	template	the value to set.
-	 */
-	public void setTemplate(String template) {
-		this.template = template;
-	}
-	
-	/**
 	 * Returns the value of attribute '<em><b>outputDir</b></em>'.
 	 */
 	public String getOutputDir() {
@@ -362,6 +365,61 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 		this.importPreserverConfig = importPreserverConfig;
 	}
 	
+	/**
+	 * Returns the value of attribute '<em><b>model2text</b></em>'.
+	 */
+	public java.util.Set<Model2Text> getModel2text() {
+		return model2text;
+	}
+	
+	/**
+	 * Adds the specified value to the attribute '<em><b>model2text</b></em>'.
+	 * @param	model2text	the value to add.
+	 */
+	public void addModel2text(Model2Text model2text) {
+		this.model2text.add(model2text);
+	}
+	
+	/**
+	 * Removes the specified value from the attribute '<em><b>model2text</b></em>'.
+	 * @param	model2text	the value to remove.
+	 */
+	public void removeModel2text(Model2Text model2text) {
+		this.model2text.remove(model2text);
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "fileEncoding")
+	public String getDefaultFileEncoding() {
+		return "utf-8";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "isMultiValueSlot")
+	public boolean getDefaultIsMultiValueSlot() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "prDefaultExcludes")
+	public boolean getDefaultPrDefaultExcludes() {
+		return false;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "prExcludes")
+	public String getDefaultPrExcludes() {
+		return ".svn";
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._wWx1oPt9EeGRytmSxmtqcQ) ENABLED START */
 	private Outlet getDefaultOutlet() {
 		for (Outlet o : outlet) {
@@ -384,37 +442,41 @@ public class Model2Text extends AbstractXpandWorkflowComponent {
 	// the generator delegate deals with beautifiers in a way of List<?>
 	@SuppressWarnings("unchecked")
 	private void prepareDelegate() {
-		generator = new Generator();
-		generator.setSkipOnErrors(getAbortOnError());
-		for (MetaModel mm : getMetaModel()) {
-			generator.addMetaModel(mm);
-		}
-		for (GlobalVarDef def : getGlobalVarDef()) {
-			generator.addGlobalVarDef(def);
-		}
-		for (String s : getAopScript()) {
-			generator.addExtensionAdvice(s);
-		}
-		for (String s : aopTemplate) {
-			generator.addAdvice(s);
-		}
-		generator.setFileEncoding(fileEncoding);
-		generator.setPrDefaultExcludes(prDefaultExcludes);
-		generator.setPrExcludes(prExcludes);
-		generator.setPrSrcPaths(listToString(prSourceDir));
-		for (Outlet o : outlet) {
-			generator.addOutlet(o);
-		}
-		for (PostProcessor p : postProcessor) {
-			((List<Object>) generator.getBeautifier()).add(p);
-		}
-		if (isMultiValueSlot) {
-			generator.setExpand(template + " FOREACH " + getSlot());
-		} else {
-			generator.setExpand(template + " FOR " + getSlot());
+		compositeGenerator = new CompositeComponent(getClass().getName());
+		for (Model2Text m2t : model2text) {
+			Generator gen = new Generator();
+			gen.setSkipOnErrors(getAbortOnError());
+			for (MetaModel mm : getMetaModel()) {
+				gen.addMetaModel(mm);
+			}
+			addGlobalVarDefs(m2t.getParameter());
+			for (GlobalVarDef def : getGlobalVarDef()) {
+				gen.addGlobalVarDef(def);
+			}
+			for (String s : getAopScript()) {
+				gen.addExtensionAdvice(s);
+			}
+			for (String s : aopTemplate) {
+				gen.addAdvice(s);
+			}
+			gen.setFileEncoding(fileEncoding);
+			gen.setPrDefaultExcludes(prDefaultExcludes);
+			gen.setPrExcludes(prExcludes);
+			gen.setPrSrcPaths(listToString(prSourceDir));
+			for (Outlet o : outlet) {
+				gen.addOutlet(o);
+			}
+			for (PostProcessor p : postProcessor) {
+				((List<Object>) gen.getBeautifier()).add(p);
+			}
+			String template = m2t.getTemplate();
+			if (isMultiValueSlot) {
+				gen.setExpand(template + " FOREACH " + getSlot());
+			} else {
+				gen.setExpand(template + " FOR " + getSlot());
+			}
+			compositeGenerator.addComponent(gen);
 		}
 	}
-	
 	/* PROTECTED REGION END */
-	
 }

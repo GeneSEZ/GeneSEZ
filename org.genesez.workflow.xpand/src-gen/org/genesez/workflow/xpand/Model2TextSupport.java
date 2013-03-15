@@ -19,11 +19,12 @@ import org.genesez.m2t.deletion.FileDeletion;
 import org.genesez.m2t.deletion.FolderDeletion;
 import org.genesez.m2t.deletion.RevisionControlSystemFinder;
 import org.genesez.workflow.CompositeComponent;
+import org.genesez.workflow.WorkflowComponent;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
  */
-public class Model2TextComposite<T extends Model2Text> extends CompositeComponent<T> {
+public class Model2TextSupport<T extends Model2TextComponent> extends CompositeComponent<T> {
 	
 	public final Log logger = LogFactory.getLog(getClass());
 	
@@ -66,13 +67,18 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 		// the default output directory from the first model2text component
 		String defaultOutputDir = null;
 		if (!getComponent().isEmpty()) {
-			Model2Text m2t = getComponent().iterator().next();
-			defaultOutputDir = m2t.getOutputDir();
-			
-			// create import preserver if config available
-			if (m2t.getImportPreserverConfig() != null && importPreserver == null) {
-				importPreserver = new ImportPreserver();
-				importPreserver.setConfig(m2t.getImportPreserverConfig());
+			WorkflowComponent wc = getComponent().iterator().next();
+			if (wc instanceof Model2TextComponent) {
+				Model2TextComponent m2t = (Model2TextComponent) getComponent().iterator().next();
+				defaultOutputDir = m2t.getOutputDir();
+				
+				// create import preserver if config available
+				if (m2t.getImportPreserverConfig() != null && importPreserver == null) {
+					importPreserver = new ImportPreserver();
+					importPreserver.setConfig(m2t.getImportPreserverConfig());
+				}
+			} else {
+				issues.addError(this, "The 'component' must be of type 'Model2TextComponent'", wc);
 			}
 		}
 		
@@ -137,8 +143,11 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 		
 		// add import preserver as post processor
 		if (contentPreserve != null) {
-			for (Model2Text m2t : getComponent()) {
-				m2t.addPostProcessor(contentPreserve);
+			for (WorkflowComponent wc : getComponent()) {
+				if (wc instanceof Model2TextComponent) {
+					Model2TextComponent m2t = (Model2TextComponent) wc;
+					m2t.addPostProcessor(contentPreserve);
+				}
 			}
 		}
 		
@@ -253,5 +262,4 @@ public class Model2TextComposite<T extends Model2Text> extends CompositeComponen
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._T90ZMAWHEeKiOsNmFSLL5Q) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
