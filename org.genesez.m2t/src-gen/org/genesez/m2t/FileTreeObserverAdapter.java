@@ -53,5 +53,4 @@ public abstract class FileTreeObserverAdapter implements FileTreeObserver {
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZACkPAD0EeK7ac-mrkJBDw) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }

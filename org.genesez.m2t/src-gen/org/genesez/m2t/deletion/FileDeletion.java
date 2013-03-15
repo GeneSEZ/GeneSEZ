@@ -140,31 +140,6 @@ public class FileDeletion extends DeletionFeature {
 	}
 	
 	/**
-	 * Method stub for further implementation.
-	 */
-	public void delete() {
-		/* PROTECTED REGION ID(java.implementation._ZACkBgD0EeK7ac-mrkJBDw__fxr7AATmEeKUpcpqfZ9tsA) ENABLED START */
-		if (!enabled) {
-			return;
-		}
-		if (!prepared) {
-			logger.fatal("File deletion was not prepared! Ensure it runs within a file system walker.");
-			return;
-		}
-		long time = System.currentTimeMillis();
-		Set<String> log = deleteUntouchedFiles();
-		time = System.currentTimeMillis() - time;
-		if (logger.isInfoEnabled()) {
-			logger.info(log.size() + " file(s) deleted.");
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("Deleted file(s): " + log.toString());
-			logger.debug("File deletion took: " + (time / 1000.0) + "s");
-		}
-		/* PROTECTED REGION END */
-	}
-	
-	/**
 	 * the includes
 	 * @param	includedFiles	the value to add.
 	 */
@@ -196,10 +171,34 @@ public class FileDeletion extends DeletionFeature {
 		this.excludedFiles.remove(excludedFiles);
 	}
 	
+	/**
+	 * Method stub for further implementation.
+	 */
+	public void delete() {
+		/* PROTECTED REGION ID(java.implementation._ZACkBgD0EeK7ac-mrkJBDw__fxr7AATmEeKUpcpqfZ9tsA) ENABLED START */
+		if (!enabled) {
+			return;
+		}
+		if (!prepared) {
+			logger.fatal("File deletion was not prepared! Ensure it runs within a file system walker.");
+			return;
+		}
+		long time = System.currentTimeMillis();
+		Set<String> log = deleteUntouchedFiles();
+		time = System.currentTimeMillis() - time;
+		if (logger.isInfoEnabled()) {
+			logger.info(log.size() + " file(s) deleted.");
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("Deleted file(s): " + log.toString());
+			logger.debug("File deletion took: " + (time / 1000.0) + "s");
+		}
+		/* PROTECTED REGION END */
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._ZACkBgD0EeK7ac-mrkJBDw) ENABLED START */
 	{
 		files = new LinkedHashMap<>();
 	}
 	/* PROTECTED REGION END */
-	
 }

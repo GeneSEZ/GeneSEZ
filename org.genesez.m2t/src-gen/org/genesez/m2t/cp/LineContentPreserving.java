@@ -268,5 +268,4 @@ public class LineContentPreserving extends FileTreeObserverAdapter implements As
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._jnWBUA7TEeKSL4xN3YIZZg) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }

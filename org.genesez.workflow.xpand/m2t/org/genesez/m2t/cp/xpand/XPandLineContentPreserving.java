@@ -89,5 +89,4 @@ public class XPandLineContentPreserving extends LineContentPreserving implements
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._L9UhsA_0EeKuTrE1zpGjjg) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }

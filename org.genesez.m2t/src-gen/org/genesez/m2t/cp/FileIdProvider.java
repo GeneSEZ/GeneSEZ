@@ -97,5 +97,4 @@ public class FileIdProvider implements LineContentExtractor, LineContentPreserva
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._G9snEA8lEeK6yuw9r03UDQ) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }

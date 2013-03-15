@@ -4,63 +4,95 @@ var name = "org.genesez.m2t"
 var namespace = "org::genesez::m2t"
 var classpath = "org/genesez/m2t"
 
-var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
 	standardUML2Setup = true
-}
-var umlns = org.genesez.adapter.uml2.workflow.UmlPackageUriSetup {
-	umlNsUri = "http://www.eclipse.org/uml2/4.0.0/UML"
 }
 var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
 	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
 }
+var uml = org.eclipse.xtend.typesystem.uml2.UML2MetaModel {}
 
 Workflow {
-	component = workflow.CompositeComponent {
-		component = workflow.EmfReader {
+	// uml2genesez transformation
+	component = org.genesez.workflow.CompositeComponent {
+		component = org.genesez.workflow.EmfReader {
 			file = "modeling/${name}/genesez.m2t.uml"
 			slot = "uml2model"
 		}
-		component = @org.genesez.adapter.uml2.gcore.Uml2Validator {}
-		component = adapter.uml2.workflow.Uml2Gcore {}
+		component = org.genesez.workflow.xpand.ValidatorComponent {
+			metaModel = uml
+			slot = "uml2model"
+			
+			validator = org.genesez.adapter.uml2.workflow.UmlModelValidation {}
+			validator = org.genesez.adapter.uml2.workflow.UmlStateMachineValidation {}
+			validator = org.genesez.adapter.uml2.workflow.Uml2GcoreStateMachineValidation {}
+		}
+		component = org.genesez.workflow.xpand.Model2ModelComponent {
+			metaModel = uml
+			metaModel = gcore
+			slot = "uml2model"
+			outputSlot = "coremodel"
+			
+			model2model = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+				includeProfiles = "org.genesez.workflow.profile"
+			}
+		}
 	}
-	component = workflow.EmfWriter {
+	
+	// dump gcore model for debugging
+	component = org.genesez.workflow.EmfWriter {
 		file = "model/${name}/uml2gcore.gcore.xmi"
 	}
-	component = workflow.xpand.Model2Model {
+	
+	// prepare gcore model for java source code generation
+	component = org.genesez.workflow.xpand.ModelModificationComponent {
 		metaModel = gcore
-		script = "org::genesez::platform::java::m2m::PackageExtend::extend"
-		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
-		script = "${namespace}::ApacheCommonsLogging::modify"
-		script = "org::genesez::platform::java::m2m::Prepare::prepare"
-		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
-//		script = "org::genesez::platform::java::java5::scripts::Functionality::additions"
-//		script = "org::genesez::platform::java::java5::scripts::Functionality::modifications"
-//		aopScript = "${namespace}::DoNotOptimizeFinalAttribsWithDefaultValue"
 		
-//		globalVarDef = { name = "fieldAccess" value = "true" }
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::PackageExtend::extend"
+		}
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::Prepare::prepare"
+		}
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::m2t::ApacheCommonsLogging::modify"
+		}
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		}
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+		}
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+		}
 	}
+	
+	// dump modified gcore model for debugging
 	component = org.genesez.workflow.EmfWriter {
 		cloneSlotContents = true
 		file = "model/${name}/uml2gcore.modified.gcore.xmi"
 	}
-//	component = platform.java.workflow.JavaGenerator {
-//		outputDir = "../${name}/src-gen"
-//		aspectTemplate = "org::genesez::workflow::NoFixedImports"
-//		typeMappingFile = "${classpath}/typemapping.xml"
-//		typeMappingFile = "${classpath}/typemapping.rcs.xml"
-//		typeMappingFile = "typemapping.acl.xml"
-//		typeMappingFile = "typemapping.java.xml"
-//		typeMappingFile = "typemapping.xpand.xml"
-//		excludeContentPackage = ","
-//		excludePackage = "org::genesez::m2t::xpand"
-//	}
 	
-	component = workflow.xpand.Model2TextComposite {
-		component = platform.java.workflow.Gcore2Java {
+	// validate model for java source code generation
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = gcore
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::metamodel::core::util::validation::Constraints"
+		}
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::platform::java::validation::Syntax"
+		}
+	}
+	
+	// generate m2t sources
+	component = org.genesez.workflow.xpand.Model2TextSupport {
+		component = org.genesez.workflow.xpand.Model2TextComponent {
+			metaModel = gcore
 			outputDir = "../${name}/src-gen"
 			
-			aopTemplate = "org::genesez::workflow::NoFixedImports"
-			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			importPreserverConfig = org.genesez.platform.java.workflow.JavaImportPreserverConfig {}
+			postProcessor = platform.java.workflow.GeneSezJavaPostProcessor {}
 			
 			typeMappingFile = "${classpath}/typemapping.xml"
 			typeMappingFile = "${classpath}/typemapping.rcs.xml"
@@ -68,73 +100,40 @@ Workflow {
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.xpand.xml"
 			
-			excludePackage = "org::genesez::m2t::xpand"
-			excludePackage = "org::genesez::m2t::cp::xpand"
-			excludeContentPackage = "."
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
 			
-//			globalVarDef = { name = "newAssociationHandling" value = "true"}
-//			globalVarDef = { name = "generateSectionComments" value = "true"}
+			model2text = org.genesez.platform.java.workflow.Gcore2Java {
+				excludeContentPackage = "."
+				
+				excludePackage = "org::genesez::m2t::xpand"
+				excludePackage = "org::genesez::m2t::cp::xpand"
+			}
 		}
 	}
-	component = workflow.xpand.Model2TextComposite {
-		component = platform.java.workflow.Gcore2Java {
+	
+	// generate m2t xpand integration
+	component = org.genesez.workflow.xpand.Model2TextSupport {
+		component = org.genesez.workflow.xpand.Model2TextComponent {
+			metaModel = gcore
 			outputDir = "../org.genesez.workflow.xpand/m2t"
 			
-			aopTemplate = "org::genesez::workflow::NoFixedImports"
-			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
+			importPreserverConfig = org.genesez.platform.java.workflow.JavaImportPreserverConfig {}
+			postProcessor = platform.java.workflow.GeneSezJavaPostProcessor {}
 			
 			typeMappingFile = "${classpath}/typemapping.xml"
 			typeMappingFile = "typemapping.acl.xml"
 			typeMappingFile = "typemapping.java.xml"
 			typeMappingFile = "typemapping.xpand.xml"
 			
-			excludePackage = "org::genesez::m2t::deletion"
-			excludeContentPackage = "."
-			excludeContentPackage = "org::genesez::m2t"
-			excludeContentPackage = "org::genesez::m2t::cp"
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
 			
-//			globalVarDef = { name = "newAssociationHandling" value = "true"}
-//			globalVarDef = { name = "generateSectionComments" value = "true"}
+			model2text = platform.java.workflow.Gcore2Java {
+				excludeContentPackage = "."
+				excludeContentPackage = "org::genesez::m2t"
+				excludeContentPackage = "org::genesez::m2t::cp"
+				
+				excludePackage = "org::genesez::m2t::deletion"
+			}
 		}
-//		component = workflow.xpand.Model2Text {
-//			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
-//			
-//			outputDir = "../org.genesez.workflow.xpand/m2t"
-//			aopTemplate = "org::genesez::workflow::NoFixedImports"
-//			typeMappingFile = "${classpath}/typemapping.xml"
-//			typeMappingFile = "typemapping.acl.xml"
-//			typeMappingFile = "typemapping.java.xml"
-//			typeMappingFile = "typemapping.xpand.xml"
-//			
-//			globalVarDef = { name = "excludeContentPackages" value = "',org::genesez::m2t'" }
-//			globalVarDef = { name = "excludePackages" value = "'org::genesez::m2t::deletion'"}
-//			globalVarDef = { name = "fieldAccess" value = "true"}
-//			globalVarDef = { name = "newAssociationHandling" value = "true"}
-//			
-//			globalVarDef = { name = "useModelNameAsBasePackage" value = "false"}
-//			globalVarDef = { name = "basePackage" value = "''"}
-//			globalVarDef = { name = "generateSectionComments" value = "true"}
-//			globalVarDef = { name = "accessorForStereotypes" value = "'entity'"}
-//			globalVarDef = { name = "accessorStereotype" value = "'accessor'"}
-//			globalVarDef = { name = "usePropertyVisibilityForAccessors" value = "false"}
-//			
-//			template = "org::genesez::platform::java::java5::templates::Root::Root"
-//			
-//			postProcessor = org.eclipse.xpand2.output.JavaBeautifier {
-//				configFile = "org/genesez/platform/java/workflow/eclipse.java.formatter.settings.xml"
-//			}
-//		}
 	}
-	
-//	component = platform.java.workflow.JavaGenerator {
-//		outputDir = "../org.genesez.workflow.xpand/m2t"
-//		aspectTemplate = "org::genesez::workflow::NoFixedImports"
-//		typeMappingFile = "${classpath}/typemapping.xml"
-//		typeMappingFile = "typemapping.acl.xml"
-//		typeMappingFile = "typemapping.java.xml"
-//		typeMappingFile = "typemapping.xpand.xml"
-//		excludeContentPackage = ""
-//		excludeContentPackage = "org::genesez::m2t"
-//		excludePackage = "org::genesez::m2t::deletion"
-//	}
 }

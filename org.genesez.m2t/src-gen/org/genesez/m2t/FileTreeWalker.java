@@ -242,5 +242,4 @@ public class FileTreeWalker implements FileVisitor<Path> {
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Y_wQKQD0EeK7ac-mrkJBDw) ENABLED START */
 	/* PROTECTED REGION END */
-	
 }
