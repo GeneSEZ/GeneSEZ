@@ -8,13 +8,13 @@ import gcore;
 
 
 /**
- * Helper scripts to clone GeneSEZ Core meta model elements.
+ * Helper scripts to clone respectively copy GeneSEZ Core meta model elements.
  * 
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
 
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::util::logging::Logging;
 
 
@@ -131,6 +131,18 @@ MMultiplicity cloneMultiplicity(MMultiplicity source) :
 
 
 // -- Extension Mechanism -----------------------------------------------------------------------------------
+
+
+/**
+ * Clones all stereotype assignments from the specified source element to the specified destination element.
+ *
+ * @param source		The source element.
+ * @param destination	The destination element.
+ * @return	The specified destination element. 
+ */
+MElement cloneStereotypeAssignments(MElement source, MElement destination) :
+	source.stereotype.collect( s | destination.ensureStereotypeAssignment( s ) ) ->
+	destination;
 
 
 /**
