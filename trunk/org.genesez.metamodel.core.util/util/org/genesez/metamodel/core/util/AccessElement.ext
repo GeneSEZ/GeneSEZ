@@ -9,15 +9,16 @@ import gcore;
 
 
 /**
- * Utility scripts to get information about GeneSEZ Core meta model elements.
+ * Utility scripts to access information about GeneSEZ Core meta model elements.
+ * 
+ * HINT: All scripts for extension mechanism are available under the prefix 'em'.
  * 
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  * @author	Andre Pflüger <andre.pflueger@fh-zwickau.de>
  */
 
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::ModelNavigation;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 
 // -- Multiplicity Elements (Properties, Parameters, Operations) --------------------------------------------
@@ -668,7 +669,7 @@ cached List[MOperation] allRealizableOperations(MClassifier this) :
  * @api
  */
 boolean isConstructor(MOperation this) :
-	emHasStereotype( "Create" ) || emHasStereotype( "create" ) || classifier.name == name;
+	emHasStereotypeAssignment( "Create" ) || emHasStereotypeAssignment( "create" ) || classifier.name == name;
 
 
 /**
@@ -681,18 +682,17 @@ boolean isConstructor(MOperation this) :
  * @api
  */
 boolean isDestructor(MOperation this) :
-	emHasStereotype( "Destroy" ) || emHasStereotype( "destroy" ) || name.startsWith( "~" );
+	emHasStereotypeAssignment( "Destroy" ) || emHasStereotypeAssignment( "destroy" ) || name.startsWith( "~" );
 
 
 /**
  * Checks if an operation has a return parameter which is likewise not "void".
  * 
  * @return	True if the operation has a return parameter, otherwise false.
- * @todo:	Check if the void check is necessary.
  * @api
  */
 boolean hasReturn(MOperation this) :
-	return != null && return.type.name().toLowerCase() != "void";
+	return != null;
 
 
 /**
@@ -785,3 +785,242 @@ boolean hasGenericRealization(MProperty this) :
  */
 boolean hasGenericRealization(MParameter this) :
 	genericRealization.size > 0;
+
+
+// -- Extension Mechanism - Stereotypes ---------------------------------------------------------------------
+
+
+// -- Checks for a Model --
+
+
+/**
+ * Checks if a model has the specified stereotype.
+ *
+ * @param	stereotype	The name of a stereotype.
+ * @return	True if the model has the stereotype, otherwise false.
+ * @api
+ */
+boolean emHasStereotype(MModel this, String stereotype) :
+	anyStereotype.exists( s | s.name == stereotype );
+
+
+// -- Getter for a Model --
+
+
+/**
+ * Returns a stereotype specified by its name.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @return	The stereotype, otherwise null if the stereotype is not exsitent.
+ * @api
+ */
+MStereotype emGetStereotype(MModel this, String stereotype) :
+	anyStereotype.selectFirst( s | s.name == stereotype );
+
+
+// -- Extension Mechanism - Stereotype Assignments ----------------------------------------------------------
+
+
+// -- Checks for an Element --
+
+
+/**
+ * Checks if an element has the specified stereotype assigned.
+ *
+ * @param	stereotype	The name of a stereotype.
+ * @return	True if the element has the stereotype assigned, otherwise false.
+ * @api
+ */
+boolean emHasStereotypeAssignment(MElement this, String stereotype) :
+	this.stereotype.exists( s | s.name == stereotype );
+
+
+// -- Getter for an Element --
+
+
+/**
+ * Returns a stereotype specified by its name.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @return	The stereotype, otherwise null if the stereotype is not assigned.
+ * @api
+ */
+MStereotype emGetStereotypeAssignment(MElement this, String stereotype) :
+	this.stereotype.selectFirst( s | s.name == stereotype );
+
+
+// -- Extension Mechanism - Tags ----------------------------------------------------------------------------
+
+
+// -- Getter for a Stereotype --
+
+
+/**
+ * Returns a tag specified by its name.
+ * 
+ * @param	tag	The name of a tag.
+ * @return	The tag, otherwise null if the tag is not existent.
+ * @api
+ */
+MTag emGetTag(MStereotype this, String tag) :
+	property.selectFirst( p | p.name == tag );
+
+
+// -- Extension Mechanism - Tagged Values -------------------------------------------------------------------
+
+
+// -- Checks for an Element --
+
+
+/**
+ * Checks if an element has one or more owning tagged values specified by its name and stereotype assignment.
+ *
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	True if the element has at least one tagged value, otherwise false.
+ * @api
+ */
+boolean emHasOwningTaggedValues(MElement this, String stereotype, String tag) :
+	taggedValue.exists( tv | tv.tag.name == tag && tv.tag.stereotype.name == stereotype ); 
+
+
+/**
+ * Checks if an element has the specified tagged value including stereotype assignment.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @param	value		The value of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+ * @api
+ */
+boolean emHasTaggedValue(MElement this, String stereotype, String tag, String value) :
+	taggedValue.exists( tv | tv.value == value && tv.tag.name == tag && tv.tag.stereotype.name == stereotype );
+
+
+/**
+ * Checks if an element has the specified tagged value reference including stereotype assignment.
+ * 
+ * @param	stereotype		The name of a stereotype.
+ * @param	tag				The name of a tagged value.
+ * @param	valueReference	The value reference of a tagged value.
+ * @return	True if the element has a tagged value, otherwise false.
+ * @api
+ */
+boolean emHasTaggedValue(MElement this, String stereotype, String tag, MElement valueReference) :
+	taggedValue.exists( tv | tv.valueReference == valueReference && tv.tag.name == tag && tv.tag.stereotype.name == stereotype );
+
+
+/**
+ * Checks if a single-valued tagged value specified by its name and stereotype assignment has a utilizable value
+ * which is neither empty ('') nor null ('null').
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	True if the element has a utilizable tagged value, otherwise false.
+ * @api
+ */
+boolean emHasUtilizableTaggedValue(MElement this, String stereotype, String tag) :
+	emHasOwningTaggedValues( stereotype, tag )
+		? emGetTaggedValue( stereotype, tag ) != "" && emGetTaggedValue( stereotype, tag ) != "null" 
+		: false;
+
+
+/**
+ * Checks if a single-valued tagged value specified by its name and stereotype assignment has a utilizable value reference
+ * which is not null.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	True if the element has a utilizable tagged value, otherwise false.
+ * @api
+ */
+boolean emHasUtilizableTaggedValueReference(MElement this, String stereotype, String tag) :
+	emHasOwningTaggedValues( stereotype, tag )
+		? emGetTaggedValueReference( stereotype, tag ) != null 
+		: false;
+
+
+// -- Getter for an Element --
+
+
+/**
+ * Returns the list of owning tagged values specified by its name and stereotype assignment.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	The list of tagged values, otherwise an empty list.
+ * @api
+ */
+List[MTaggedValue] emOwningTaggedValues(MElement this, String stereotype, String tag) :
+	taggedValue.select( tv | tv.tag.name == tag && tv.tag.stereotype.name == stereotype );
+	
+
+/**
+ * Returns the value of a single-valued tagged value specified by its name and stereotype assignment.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	The value of the single-valued tagged value, otherwise an empty string, if the tagged value is not assigned.
+ * @api
+ */
+String emGetTaggedValue(MElement this, String stereotype, String tag) :
+	emHasOwningTaggedValues( stereotype, tag )
+		? emOwningTaggedValues( stereotype, tag ).first().value
+		: "";
+
+
+/**
+ * Returns the value reference of a single-valued tagged value specified by its name and stereotype assignment.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	The value reference of the single-valued tagged value, otherwise null, if the tagged value is not assigned.
+ * @api
+ */
+MElement emGetTaggedValueReference(MElement this, String stereotype, String tag) :
+	emHasOwningTaggedValues( stereotype, tag )
+		? emOwningTaggedValues( stereotype, tag ).first().valueReference
+		: null;
+
+
+/**
+ * Returns the boolean value of a single-valued tagged value specified by its name and stereotype assignment.
+ * Please note that in both cases the return value is false, if the value of the tagged value is either false or the tagged value is not assigned.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	The boolean value of the single-valued tagged value, otherwise false, if the tagged value is not assigned.
+ * @api
+ */
+boolean emGetTaggedBooleanValue(MElement this, String stereotype, String tag) :
+	emHasTaggedValue( stereotype, tag, "true" )
+		? true
+		: false;
+
+
+/**
+ * Returns the list of values of a multi-valued tagged value specified by its name and stereotype assignment.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	The list of values of a multi-valued tagged value, otherwise an empty list, if the tagged value is not assigned.
+ * @api
+ */
+List[String] emAllTaggedValues(MElement this, String stereotype, String tag) :
+	emHasOwningTaggedValues( stereotype, tag )
+		? emOwningTaggedValues( stereotype, tag ).value
+		: {};
+
+
+/**
+ * Returns the list of value references of a multi-valued tagged value specified by its name and stereotype assignment.
+ * 
+ * @param	stereotype	The name of a stereotype.
+ * @param	tag			The name of a tagged value.
+ * @return	The list of value references of a multi-valued tagged value, otherwise an empty list, if the tagged value is not assigned.
+ * @api
+ */
+List[MElement] emAllTaggedValueReferences(MElement this, String stereotype, String tag) :
+	emHasOwningTaggedValues( stereotype, tag )
+		? emOwningTaggedValues( stereotype, tag ).valueReference
+		: {};
