@@ -16,102 +16,11 @@
 import gcore;
 
 extension org::genesez::metamodel::core::util::Conversion;
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::ModelNavigation;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::GlobalVar;
+
 extension org::genesez::util::logging::Logging;
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	helpers for working with the stereotype «primitive» for multiplicity-elements
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * checks if a primitive type should be used
- * @return	true, if a primitive type should be used, otherwise false
- */
-boolean usePrimitiveType(MProperty this) :
-	emHasStereotype("primitive");
-
-/**
- * checks if a primitive type should be used
- * @return	true, if a primitive type should be used, otherwise false
- */
-boolean usePrimitiveType(MOperation this) :
-	emHasStereotype("primitive");
-
-/**
- * checks if a primitive type should be used
- * @return	true, if a primitive type should be used, otherwise false
- */
-boolean usePrimitiveType(MParameter this) :
-	emHasStereotype("primitive");
-
-/**
- * just there for error free templates :-)
- * shouldn't be called!
- */
-boolean usePrimitiveType(MElement this) : 
-	logFatal("somethings goes totally wrong within your templates... " +
-	"   the function 'usePrimitiveType' shouldn't be called with an 'MElement': " + this) ->
-	false;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	helpers for working with accessor-methods and the visibility of accessors
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * checks if the generation of accessor-methods is disabled or not
- * @return	true, if the generation of accessors is disabled, otherwise false
- */
-String accessorsForStereotypes() : GLOBALVAR accessorsForStereotypes == null ? "entity" : GLOBALVAR accessorsForStereotypes;
-
-/**
- * checks if the generation of accessor-methods should be distincted by the «accessor» stereotype
- * @return	true, if the stereotype «accessor» is used, otherwise false
- */
-String accessorStereotype() : GLOBALVAR accessorStereotype == null ? "accessor" : GLOBALVAR accessorStereotype;
-
-/**
- * checks if properties should always be private and the visibility of the properties is used as the visibility of their accessor-methods
- * @return	true, if the visibility of properties are used for the accessor-methods, otherwise false
- */
-boolean usePropertyVisibilityForAccessors() : GLOBALVAR usePropertyVisibilityForAccessors == null ? false : GLOBALVAR usePropertyVisibilityForAccessors;
-
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	helpers for working with the association handling
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * checks if the old or new association handling is activated
- * regular case is the new association handling
- * @return	true, if the new association handling should be used (standard case)
- */
-boolean newAssociationHandling() : GLOBALVAR newAssociationHandling == null ? true : GLOBALVAR newAssociationHandling;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	helpers for working with access type of annotations
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * checks if field or property access is activated
- * default is field access
- * @return	true, if field access should be used (default) 
- */
-boolean fieldAccess() : GLOBALVAR fieldAccess == null ? true : GLOBALVAR fieldAccess;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	helpers for working with base packages + base paths
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
 
 /**
  * getter for the 'base path' based on the 'base package'
@@ -140,30 +49,9 @@ String basePackage(MClassifier this) : navPackage().basePackage();
  * @return	the base package to use for code generation or an empty string
  */
 String basePackage(MPackage this) : 
-	useModelNameAsBasePackage()
+	globalVarUseModelNameAsBasePackage()
 		? navModel().name
 		: ( GLOBALVAR basePackage == null ? "" : GLOBALVAR basePackage );
-
-/**
- * checks if the model name should be used as base package
- * @return	true, if the model name should be used as base package, otherwise false
- */
-private boolean useModelNameAsBasePackage() : 
-	GLOBALVAR useModelNameAsBasePackage == null ? false : GLOBALVAR useModelNameAsBasePackage;
-
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	config switch for section comments
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
-
-/**
- * getter for the global variable 'generateSectionComments' which is configured in the workflow component
- * if it's not configured, 'true' is used as standard
- * @return	value of the global variable 'generateSectionComments' or 'true'
- */
-boolean generateSectionComments() : 
-	GLOBALVAR generateSectionComments == null ? true : GLOBALVAR generateSectionComments;
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -171,12 +59,6 @@ boolean generateSectionComments() :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 */
 
-/**
- * getter accessor for the global variable 'excludePackages', configured in the workflow component
- * @return	value of the global variable 'excludePackages'
- */
-String ignoredPackages() : (String) GLOBALVAR excludePackage;
-String ignoredContentPackages() : (String) GLOBALVAR excludeContentPackage;
 
 /**
  * Rejects all packages contained in the 'excludePackages' variable from the specified list of packages.
@@ -190,13 +72,13 @@ List[MPackage] rejectIgnoredPackages(List[MPackage] this) : this.select( p|!p.is
  * Returns true if the specified model should be ignored/excluded, otherwise false.
  */
 boolean isRejected(MModel this) :
-	ignoredPackages().convertToList().contains( "." );
+	globalVarExcludePackage().convertToList().contains( "." );
 
 /**
  * Returns true if the specified package should be ignored/excluded, otherwise false.
  */
 boolean isRejected(MPackage this) :
-	ignoredPackages().convertToList().exists( ip|ip == qn() )
+	globalVarExcludePackage().convertToList().exists( ip|ip == qn() )
 		? (logDebug("Reject '" + qn() + "'") -> true)
 		: false;
 
@@ -204,24 +86,12 @@ boolean isRejected(MPackage this) :
  * Returns true if the contents of the specified model should be ignored, otherwise false.
  */
 boolean isIgnoredContentPackage(MModel this) :
-	ignoredContentPackages().convertToList().contains( "." );
+	globalVarExcludePackageContent().convertToList().contains( "." );
 
 /**
  * Returns true if the contents of the specified package should be ignored, otherwise false.
  */
 boolean isIgnoredContentPackage(MPackage this) :
-	ignoredContentPackages().convertToList().exists( p|p == qn() )
+	globalVarExcludePackageContent().convertToList().exists( p|p == qn() )
 		? (logDebug("Reject content of '" + qn() + "'") -> true)
 		: false;
-
-/**
- * rejects all packages from the given list, specified in the given string as a comma 
- * or semicolon separated list with full qualified package names
- * @param	packages		list of packages to filter
- * @param	ignoredPackages	comma or semicola separated list with full qualified package names
- * @return	list of packages without the packages to ignore
- * 
- * @deprecated
- */
-private List[MPackage] rejectIgnoredPackages(List[MPackage] packages, String ignoredPackages) :
-	JAVA org.genesez.metamodel.core.util.AccessHelper.rejectIgnoredPackages(java.util.List, java.lang.String);
