@@ -30,5 +30,4 @@ public abstract class AbstractVehicle implements IDriveable, IPaintable {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1179139182234_646597_164) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

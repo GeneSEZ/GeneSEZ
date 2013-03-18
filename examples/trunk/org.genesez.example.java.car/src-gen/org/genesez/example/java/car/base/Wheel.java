@@ -104,5 +104,4 @@ public class Wheel implements IChangeable, AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945943625_542159_161) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

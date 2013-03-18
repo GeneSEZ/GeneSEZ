@@ -1,65 +1,87 @@
-module org.genesez.example.forms.transformation
+module org.genesez.example.java.car
 
-var umlsetup = org.eclipse.xtend.typesystem.uml2.Setup {
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
 	standardUML2Setup = true
 }
+var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+}
+var uml = org.eclipse.xtend.typesystem.uml2.UML2MetaModel {}
 
 Workflow {
 	// read the uml2 model file
 	component = org.genesez.workflow.EmfReader {
 		file = "model/example.uml"
-		slot = "uml2slot"
+		slot = "uml2model"
 	}
 	// validate the uml2 model for transformability
-	component = org.genesez.workflow.xpand.Validator {
-		metaModel = org.eclipse.xtend.typesystem.uml2.UML2MetaModel : umlmm {}
-		slot = "uml2slot"
-		script = "org::genesez::adapter::uml2::gcore::validation::UML2Constraints"
-		script = "org::genesez::adapter::uml2::gcore::validation::UML2StatemachineConstraints"
-		script = "org::genesez::adapter::uml2::gcore::validation::GcoreStatemachineConstraints"
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = uml
+		slot = "uml2model"
+		
+		validator = org.genesez.adapter.uml2.workflow.UmlModelValidation {}
+		validator = org.genesez.adapter.uml2.workflow.UmlStateMachineValidation {}
+		validator = org.genesez.adapter.uml2.workflow.Uml2GcoreStateMachineValidation {}
 	}
 	// transform the uml2 model into a GeneSEZ model
-	component = org.genesez.adapter.uml2.workflow.Uml2Gcore {
-		metaModel = umlmm
-		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
-		slot = "uml2slot"
-		script = "org::genesez::adapter::uml2::gcore::UML2Gcore::transform"
+	component = org.genesez.workflow.xpand.Model2ModelComponent {
+		metaModel = uml
+		metaModel = gcore
+		slot = "uml2model"
+		outputSlot = "coremodel"
+		
+		model2model = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+		}
 	}
-	// validate the GeneSEZ model against common + java specific constraints
-	component = org.genesez.workflow.xpand.Validator {
-		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
-		script = "org::genesez::metamodel::core::util::validation::Constraints"
-		script = "org::genesez::platform::java::validation::Syntax"
-	}
-	// automatically implement interface operations in classes
-	// and add necessary use dependencies
-	component = org.genesez.workflow.xpand.Model2Model {
-		emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
-		script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
-		script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
-		script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
-		script = "org::genesez::platform::java::m2m::Prepare::prepare"
+	// prepare gcore model for java source code generation
+	component = org.genesez.workflow.xpand.ModelModificationComponent {
+		metaModel = gcore
+		
+		// implement associations using the association library
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::aop::AssociationLibrary::prepare"
+		}
+		// cares about property access operations, annotation definition and usage, 
+		// singleton design pattern and hashCode + equals operations
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::platform::java::m2m::Prepare::prepare"
+		}
+		// automatically implement abstract and interface operations in classes
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		}
+		// add necessary use dependencies for import generation
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+		}
 	}
 	// serialize the GeneSEZ model - just for info if you want to have a look at it
 	component = org.genesez.workflow.EmfWriter {
-		schemaLocationImplementation = true
 		file = "model/example.xmi"
-		slot = "coremodel"
+	}
+	// validate the GeneSEZ model against general + java specific constraints
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = gcore
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::metamodel::core::util::validation::Constraints"
+		}
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::platform::java::validation::Syntax"
+		}
 	}
 	// run the java code generation and transform the model into java source code
-	component = org.genesez.workflow.xpand.Model2TextComposite {
-		component = org.genesez.platform.java.workflow.Gcore2Java {
-			emfMetaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
-			slot = "coremodel"
+	component = org.genesez.workflow.xpand.Model2TextSupport {
+		component = org.genesez.workflow.xpand.Model2TextComponent {
+			metaModel = gcore
 			
 			// directory in which the generated files are placed
 			outputDir = "../org.genesez.example.java.car/src-gen"
-			template = "org::genesez::platform::java::m2t::Root::Root"
-			// boolean value indicates if the model name is used as base package or not
-			useModelNameAsBasePackage = true
 			
-			/* there are several possibilities to specify your type mapping file(s):
+			importPreserverConfig = org.genesez.platform.java.workflow.JavaImportPreserverConfig {}
+			postProcessor = org.genesez.platform.java.workflow.GeneSezJavaPostProcessor {}
 			
+			/*
+			there are several possibilities to specify your type mapping file(s):
 			1. You can list all files seperately here; if there are redundant rules 
 			the rule in the last specified typemapping file is active (recommended)
 			2. You can also include a typemapping file, e.g. the default java typemapping 
@@ -70,14 +92,20 @@ Workflow {
 			to the one described in possibility 1.
 			*/
 			typeMappingFile = "typemapping.xml"
+			
+			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
 			// adjust default templates using aspects, see XPand AOP-Feature
 			aopTemplate = "Attrib"
-//			aopTemplate = "org::genesez::platform::java::m2t::aop::SystemUserAsAuthor"
-//			aopTemplate = "org::genesez::platform::java::m2t::aop::SectionComments"
-			aopTemplate = "org::genesez::platform::java::m2t::aop::AssociationLibrary"
 			// adjust default xtend scripts with aspects, see Xtend AOP-Feature
 			aopScript = "Naming"
 			
+//			aopTemplate = "org::genesez::platform::java::m2t::aop::SystemUserAsAuthor"
+//			aopTemplate = "org::genesez::platform::java::m2t::aop::SectionComments"
+			
+			model2text = org.genesez.platform.java.workflow.Gcore2Java {
+				// boolean value indicates if the model name is used as base package or not
+				useModelNameAsBasePackage = true
+			}
 		}
 	}
 }

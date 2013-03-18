@@ -199,5 +199,4 @@ public class Car extends AbstractVehicle implements AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1177945913718_872802_139) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

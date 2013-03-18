@@ -13,5 +13,4 @@ public class OutOfFuelException extends Exception {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1215088391109_339679_545) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

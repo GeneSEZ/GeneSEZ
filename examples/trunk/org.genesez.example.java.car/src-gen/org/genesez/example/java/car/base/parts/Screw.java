@@ -53,5 +53,4 @@ public class Screw {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._11_5_6340215_1178034133828_951385_16) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }
