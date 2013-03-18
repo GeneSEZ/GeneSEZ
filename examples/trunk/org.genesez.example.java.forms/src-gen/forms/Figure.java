@@ -32,29 +32,6 @@ public class Figure implements Form, AssociationRole {
 	private java.util.Set<Form> forms = new java.util.HashSet<Form>();
 	
 	/**
-	 * determines the center of area of the form
-	 * @return	the location of the center of area
-	 */
-	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		// TODO: implementation of method 'Figure.getCenterOfArea(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * determines if the form is crossing another form
-	 * @param	form	the form to check for crossing
-	 * @return	true, if the specified form crosses this form, otherwise false
-	 */
-	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Figure.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
 	 * moves the position by the given delta values within a 2-dimensional 
 	 * coordinate system
 	 * @param	dx	delta value to move in <i><b>x</b></i> direction
@@ -101,6 +78,29 @@ public class Figure implements Form, AssociationRole {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * determines the center of area of the form
+	 * @return	the location of the center of area
+	 */
+	public Point getCenterOfArea() {
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		// TODO: implementation of method 'Figure.getCenterOfArea(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * determines if the form is crossing another form
+	 * @param	form	the form to check for crossing
+	 * @return	true, if the specified form crosses this form, otherwise false
+	 */
+	public boolean isCrossing(Form form) {
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Figure.isCrossing(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
 	// initialization block for association management objects
 	{
 		association.put(Associations.FORMS, new ManyAssociation<Figure, Form>(this, forms));
@@ -127,5 +127,4 @@ public class Figure implements Form, AssociationRole {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

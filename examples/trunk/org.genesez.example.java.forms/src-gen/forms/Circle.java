@@ -44,29 +44,6 @@ public class Circle implements Form {
 	}
 	
 	/**
-	 * determines the center of area of the form
-	 * @return	the location of the center of area
-	 */
-	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		// TODO: implementation of method 'Circle.getCenterOfArea(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * determines if the form is crossing another form
-	 * @param	form	the form to check for crossing
-	 * @return	true, if the specified form crosses this form, otherwise false
-	 */
-	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Circle.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
 	 * moves the position by the given delta values within a 2-dimensional 
 	 * coordinate system
 	 * @param	dx	delta value to move in <i><b>x</b></i> direction
@@ -113,8 +90,30 @@ public class Circle implements Form {
 		/* PROTECTED REGION END */
 	}
 	
+	/**
+	 * determines the center of area of the form
+	 * @return	the location of the center of area
+	 */
+	public Point getCenterOfArea() {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		// TODO: implementation of method 'Circle.getCenterOfArea(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * determines if the form is crossing another form
+	 * @param	form	the form to check for crossing
+	 * @return	true, if the specified form crosses this form, otherwise false
+	 */
+	public boolean isCrossing(Form form) {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Circle.isCrossing(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871307421_631477_281) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

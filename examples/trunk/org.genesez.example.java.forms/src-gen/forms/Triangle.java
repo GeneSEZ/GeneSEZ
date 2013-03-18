@@ -25,5 +25,4 @@ public class Triangle extends Polygon {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249464030468_592473_783) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

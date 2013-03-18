@@ -24,5 +24,4 @@ public class Rectangle extends Polygon {
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249464012328_770017_760) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

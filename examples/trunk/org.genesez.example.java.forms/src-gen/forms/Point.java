@@ -44,25 +44,17 @@ public class Point implements Form {
 	}
 	
 	/**
-	 * determines the center of area of the form
-	 * @return	the location of the center of area
+	 * the x coordinate value
 	 */
-	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		return new Point(this.x, this.y);
-		/* PROTECTED REGION END */
+	public double getX() {
+		return x;
 	}
 	
 	/**
-	 * determines if the form is crossing another form
-	 * @param	form	the form to check for crossing
-	 * @return	true, if the specified form crosses this form, otherwise false
+	 * the y coordinate value
 	 */
-	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Point.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
+	public double getY() {
+		return y;
 	}
 	
 	/**
@@ -113,21 +105,28 @@ public class Point implements Form {
 	}
 	
 	/**
-	 * the x coordinate value
+	 * determines the center of area of the form
+	 * @return	the location of the center of area
 	 */
-	public double getX() {
-		return x;
+	public Point getCenterOfArea() {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		return new Point(this.x, this.y);
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * the y coordinate value
+	 * determines if the form is crossing another form
+	 * @param	form	the form to check for crossing
+	 * @return	true, if the specified form crosses this form, otherwise false
 	 */
-	public double getY() {
-		return y;
+	public boolean isCrossing(Form form) {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Point.isCrossing(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871095796_723781_254) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }
