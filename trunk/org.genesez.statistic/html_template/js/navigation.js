@@ -12,6 +12,7 @@ function startUp(){
 		var element = supported[i];
 		$.ajax({
 			async: false,
+			dataType: "html",
 			url: "html/" + element.toLowerCase() + ".html",
 			success: function(){
 				navigation.push(element);
@@ -31,6 +32,7 @@ function openNavigation(index) {
 	if (index < 0 || index > navigation.length) return;
 	$.ajax({
 		async: true,
+			dataType: "html",
 		url: "html/" + navigation[index].toLowerCase() + ".html",
 		success: function(html) {
 			$('#main_content').html(html);
