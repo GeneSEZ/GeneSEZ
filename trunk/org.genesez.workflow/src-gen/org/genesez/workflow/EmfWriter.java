@@ -64,8 +64,7 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public String getLogMessage() {
 		/* PROTECTED REGION ID(java.implementation._vsnQgP6tEeGciM7nbRm1bw) ENABLED START */
-		// TODO: implementation of method 'EmfWriter.getLogMessage(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		return writer.getLogMessage();
 		/* PROTECTED REGION END */
 	}
 	

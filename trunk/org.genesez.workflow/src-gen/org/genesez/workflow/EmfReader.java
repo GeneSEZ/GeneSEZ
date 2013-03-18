@@ -75,8 +75,7 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 */
 	public String getLogMessage() {
 		/* PROTECTED REGION ID(java.implementation._gvX1IP6tEeGciM7nbRm1bw) ENABLED START */
-		// TODO: implementation of method 'EmfReader.getLogMessage(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		return reader.getLogMessage();
 		/* PROTECTED REGION END */
 	}
 	
