@@ -8,7 +8,9 @@
 import gcore;
 
 // use metamodel core extension mechanism scripts
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 // use profile scripts
 extension org::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
@@ -25,7 +27,7 @@ extension org::genesez::platform::typo3v4::mvc::profile::ExtbaseProfile;
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseAbstractObjectValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseAbstractObjectValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseAbstractObjectValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,7 +41,7 @@ boolean hasT3ExtbaseAbstractObjectValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseAbstractValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseAbstractValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseAbstractValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -53,7 +55,7 @@ boolean hasT3ExtbaseAbstractValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseAlphanumericValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseAlphanumericValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseAlphanumericValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -67,7 +69,7 @@ boolean hasT3ExtbaseAlphanumericValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseAssociationStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseAssociation() );
+	emHasStereotypeAssignment( prT3ExtbaseAssociation() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -130,7 +132,7 @@ String getT3ExtbaseAssociationCascadeType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseAssociationCascadeType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseAssociation(), prT3ExtbaseAssociationCascadeType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseAssociation(), prT3ExtbaseAssociationCascadeType() ), value );
 
 /*
 - - "fetchType" - - - - - - - - - -
@@ -171,7 +173,7 @@ String getT3ExtbaseAssociationFetchType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseAssociationFetchType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseAssociation(), prT3ExtbaseAssociationFetchType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseAssociation(), prT3ExtbaseAssociationFetchType() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -185,7 +187,7 @@ Void setT3ExtbaseAssociationFetchType(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseClassesPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseClassesPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseClassesPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -199,7 +201,7 @@ boolean hasT3ExtbaseClassesPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseColumnMappingStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseColumnMapping() );
+	emHasStereotypeAssignment( prT3ExtbaseColumnMapping() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -262,7 +264,7 @@ String getT3ExtbaseColumnMappingMapOnProperty(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseColumnMappingMapOnProperty(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseColumnMapping(), prT3ExtbaseColumnMappingMapOnProperty(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseColumnMapping(), prT3ExtbaseColumnMappingMapOnProperty() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -276,7 +278,7 @@ Void setT3ExtbaseColumnMappingMapOnProperty(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseControllerStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseController() );
+	emHasStereotypeAssignment( prT3ExtbaseController() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -339,7 +341,7 @@ String getT3ExtbaseControllerControllerType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseControllerControllerType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseController(), prT3ExtbaseControllerControllerType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseController(), prT3ExtbaseControllerControllerType() ), value );
 
 /*
 - - "createErrorAction" - - - - - - - - - -
@@ -380,7 +382,7 @@ String getT3ExtbaseControllerCreateErrorAction(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseControllerCreateErrorAction(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseController(), prT3ExtbaseControllerCreateErrorAction(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseController(), prT3ExtbaseControllerCreateErrorAction() ), value );
 
 /*
 - - "createGetErrorFlashMessage" - - - - - - - - - -
@@ -421,7 +423,7 @@ String getT3ExtbaseControllerCreateGetErrorFlashMessage(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseControllerCreateGetErrorFlashMessage(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseController(), prT3ExtbaseControllerCreateGetErrorFlashMessage(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseController(), prT3ExtbaseControllerCreateGetErrorFlashMessage() ), value );
 
 /*
 - - "createInitializeAction" - - - - - - - - - -
@@ -462,7 +464,7 @@ String getT3ExtbaseControllerCreateInitializeAction(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseControllerCreateInitializeAction(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseController(), prT3ExtbaseControllerCreateInitializeAction(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseController(), prT3ExtbaseControllerCreateInitializeAction() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -476,7 +478,7 @@ Void setT3ExtbaseControllerCreateInitializeAction(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseControllerActionStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseControllerAction() );
+	emHasStereotypeAssignment( prT3ExtbaseControllerAction() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -539,7 +541,7 @@ String getT3ExtbaseControllerActionCreateInitializeAction(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseControllerActionCreateInitializeAction(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseControllerAction(), prT3ExtbaseControllerActionCreateInitializeAction(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseControllerAction(), prT3ExtbaseControllerActionCreateInitializeAction() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -553,7 +555,7 @@ Void setT3ExtbaseControllerActionCreateInitializeAction(MElement this, String va
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseControllerCommandStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseControllerCommand() );
+	emHasStereotypeAssignment( prT3ExtbaseControllerCommand() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -567,7 +569,7 @@ boolean hasT3ExtbaseControllerCommandStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseControllerNoActionStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseControllerNoAction() );
+	emHasStereotypeAssignment( prT3ExtbaseControllerNoAction() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -581,7 +583,7 @@ boolean hasT3ExtbaseControllerNoActionStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseControllerPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseControllerPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseControllerPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -595,7 +597,7 @@ boolean hasT3ExtbaseControllerPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseDateTimeValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseDateTimeValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseDateTimeValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -609,7 +611,7 @@ boolean hasT3ExtbaseDateTimeValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseDependencyInjectionStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseDependencyInjection() );
+	emHasStereotypeAssignment( prT3ExtbaseDependencyInjection() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -672,7 +674,7 @@ String getT3ExtbaseDependencyInjectionInjectConfigurationManagerType(MElement th
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDependencyInjectionInjectConfigurationManagerType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDependencyInjection(), prT3ExtbaseDependencyInjectionInjectConfigurationManagerType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDependencyInjection(), prT3ExtbaseDependencyInjectionInjectConfigurationManagerType() ), value );
 
 /*
 - - "injectObjectManagerType" - - - - - - - - - -
@@ -713,7 +715,7 @@ String getT3ExtbaseDependencyInjectionInjectObjectManagerType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDependencyInjectionInjectObjectManagerType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDependencyInjection(), prT3ExtbaseDependencyInjectionInjectObjectManagerType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDependencyInjection(), prT3ExtbaseDependencyInjectionInjectObjectManagerType() ), value );
 
 /*
 - - "injectPersistenceManagerType" - - - - - - - - - -
@@ -754,7 +756,7 @@ String getT3ExtbaseDependencyInjectionInjectPersistenceManagerType(MElement this
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDependencyInjectionInjectPersistenceManagerType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDependencyInjection(), prT3ExtbaseDependencyInjectionInjectPersistenceManagerType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDependencyInjection(), prT3ExtbaseDependencyInjectionInjectPersistenceManagerType() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -768,7 +770,7 @@ Void setT3ExtbaseDependencyInjectionInjectPersistenceManagerType(MElement this, 
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseDomainObjectStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseDomainObject() );
+	emHasStereotypeAssignment( prT3ExtbaseDomainObject() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -831,7 +833,7 @@ String getT3ExtbaseDomainObjectAllowTableOnStandardPages(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectAllowTableOnStandardPages(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectAllowTableOnStandardPages(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectAllowTableOnStandardPages() ), value );
 
 /*
 - - "createController" - - - - - - - - - -
@@ -872,7 +874,7 @@ String getT3ExtbaseDomainObjectCreateController(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateController(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateController(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateController() ), value );
 
 /*
 - - "createEndtimeField" - - - - - - - - - -
@@ -913,7 +915,7 @@ String getT3ExtbaseDomainObjectCreateEndtimeField(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateEndtimeField(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateEndtimeField(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateEndtimeField() ), value );
 
 /*
 - - "createHiddenField" - - - - - - - - - -
@@ -954,7 +956,7 @@ String getT3ExtbaseDomainObjectCreateHiddenField(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateHiddenField(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateHiddenField(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateHiddenField() ), value );
 
 /*
 - - "createLocalizationFields" - - - - - - - - - -
@@ -995,7 +997,7 @@ String getT3ExtbaseDomainObjectCreateLocalizationFields(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateLocalizationFields(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateLocalizationFields(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateLocalizationFields() ), value );
 
 /*
 - - "createPlugin" - - - - - - - - - -
@@ -1036,7 +1038,7 @@ String getT3ExtbaseDomainObjectCreatePlugin(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreatePlugin(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreatePlugin(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreatePlugin() ), value );
 
 /*
 - - "createRepository" - - - - - - - - - -
@@ -1077,7 +1079,7 @@ String getT3ExtbaseDomainObjectCreateRepository(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateRepository(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateRepository(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateRepository() ), value );
 
 /*
 - - "createSortingField" - - - - - - - - - -
@@ -1118,7 +1120,7 @@ String getT3ExtbaseDomainObjectCreateSortingField(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateSortingField(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateSortingField(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateSortingField() ), value );
 
 /*
 - - "createStarttimeField" - - - - - - - - - -
@@ -1159,7 +1161,7 @@ String getT3ExtbaseDomainObjectCreateStarttimeField(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateStarttimeField(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateStarttimeField(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateStarttimeField() ), value );
 
 /*
 - - "createValidator" - - - - - - - - - -
@@ -1200,7 +1202,7 @@ String getT3ExtbaseDomainObjectCreateValidator(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateValidator(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateValidator(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateValidator() ), value );
 
 /*
 - - "createVersioningFields" - - - - - - - - - -
@@ -1241,7 +1243,7 @@ String getT3ExtbaseDomainObjectCreateVersioningFields(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseDomainObjectCreateVersioningFields(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateVersioningFields(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseDomainObject(), prT3ExtbaseDomainObjectCreateVersioningFields() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1255,7 +1257,7 @@ Void setT3ExtbaseDomainObjectCreateVersioningFields(MElement this, String value)
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseDontValidateStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseDontValidate() );
+	emHasStereotypeAssignment( prT3ExtbaseDontValidate() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1269,7 +1271,7 @@ boolean hasT3ExtbaseDontValidateStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseDontVerifyRequestHashStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseDontVerifyRequestHash() );
+	emHasStereotypeAssignment( prT3ExtbaseDontVerifyRequestHash() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1283,7 +1285,7 @@ boolean hasT3ExtbaseDontVerifyRequestHashStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseEmailAddressValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseEmailAddressValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseEmailAddressValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1297,7 +1299,7 @@ boolean hasT3ExtbaseEmailAddressValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseEntityStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseEntity() );
+	emHasStereotypeAssignment( prT3ExtbaseEntity() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -1360,7 +1362,7 @@ String getT3ExtbaseEntityEntityType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseEntityEntityType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseEntity(), prT3ExtbaseEntityEntityType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseEntity(), prT3ExtbaseEntityEntityType() ), value );
 
 /*
 - - "isAggregateRoot" - - - - - - - - - -
@@ -1401,7 +1403,7 @@ String getT3ExtbaseEntityIsAggregateRoot(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseEntityIsAggregateRoot(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseEntity(), prT3ExtbaseEntityIsAggregateRoot(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseEntity(), prT3ExtbaseEntityIsAggregateRoot() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1415,7 +1417,7 @@ Void setT3ExtbaseEntityIsAggregateRoot(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseEntityPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseEntityPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseEntityPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1429,7 +1431,7 @@ boolean hasT3ExtbaseEntityPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseFactoryStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseFactory() );
+	emHasStereotypeAssignment( prT3ExtbaseFactory() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1443,7 +1445,7 @@ boolean hasT3ExtbaseFactoryStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseFactoryPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseFactoryPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseFactoryPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1457,7 +1459,7 @@ boolean hasT3ExtbaseFactoryPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseFloatValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseFloatValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseFloatValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1471,7 +1473,7 @@ boolean hasT3ExtbaseFloatValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseGenericObjectValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseGenericObjectValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseGenericObjectValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1485,7 +1487,7 @@ boolean hasT3ExtbaseGenericObjectValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseInheritanceStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseInheritance() );
+	emHasStereotypeAssignment( prT3ExtbaseInheritance() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -1548,7 +1550,7 @@ String getT3ExtbaseInheritanceInheritanceType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseInheritanceInheritanceType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseInheritance(), prT3ExtbaseInheritanceInheritanceType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseInheritance(), prT3ExtbaseInheritanceInheritanceType() ), value );
 
 /*
 - - "typeColumn" - - - - - - - - - -
@@ -1589,7 +1591,7 @@ String getT3ExtbaseInheritanceTypeColumn(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseInheritanceTypeColumn(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseInheritance(), prT3ExtbaseInheritanceTypeColumn(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseInheritance(), prT3ExtbaseInheritanceTypeColumn() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1603,7 +1605,7 @@ Void setT3ExtbaseInheritanceTypeColumn(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseIntegerValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseIntegerValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseIntegerValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1617,7 +1619,7 @@ boolean hasT3ExtbaseIntegerValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseModelPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseModelPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseModelPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1631,7 +1633,7 @@ boolean hasT3ExtbaseModelPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseModuleStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseModule() );
+	emHasStereotypeAssignment( prT3ExtbaseModule() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -1684,8 +1686,8 @@ boolean hasT3ExtbaseModuleUtilizableAccess(MElement this) :
  *
 * @return the values of the tagged value
  */
-List[String] getT3ExtbaseModuleAccess(MElement this) : 
-	emGetTaggedValues( prT3ExtbaseModule(), prT3ExtbaseModuleAccess() );
+List[String] getT3ExtbaseModuleAccess(MElement this) :
+	emAllTaggedValues( prT3ExtbaseModule(), prT3ExtbaseModuleAccess() );
 
 /**
  * Sets the value of an existing the tagged value "access"
@@ -1694,7 +1696,7 @@ List[String] getT3ExtbaseModuleAccess(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseModuleAccess(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseModule(), prT3ExtbaseModuleAccess(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseModule(), prT3ExtbaseModuleAccess() ), value );
 
 /*
 - - "configurationAdditions" - - - - - - - - - -
@@ -1726,7 +1728,7 @@ boolean hasT3ExtbaseModuleUtilizableConfigurationAdditions(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3ExtbaseModuleConfigurationAdditions(MElement this) : 
-	emGetTaggedValues( prT3ExtbaseModule(), prT3ExtbaseModuleConfigurationAdditions() );
+	emAllTaggedValues( prT3ExtbaseModule(), prT3ExtbaseModuleConfigurationAdditions() );
 
 /**
  * Sets the value of an existing the tagged value "configurationAdditions"
@@ -1735,7 +1737,7 @@ List[String] getT3ExtbaseModuleConfigurationAdditions(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseModuleConfigurationAdditions(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseModule(), prT3ExtbaseModuleConfigurationAdditions(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseModule(), prT3ExtbaseModuleConfigurationAdditions() ), value );
 
 /*
 - - "controllerActions" - - - - - - - - - -
@@ -1767,7 +1769,7 @@ boolean hasT3ExtbaseModuleUtilizableControllerActions(MElement this) :
 * @return the value references of the tagged value
  */
 List[MElement] getT3ExtbaseModuleControllerActions(MElement this) : 
-	emGetTaggedValueReferences( prT3ExtbaseModule(), prT3ExtbaseModuleControllerActions() );
+	emAllTaggedValueReferences( prT3ExtbaseModule(), prT3ExtbaseModuleControllerActions() );
 
 /**
  * Sets the value reference of an existing the tagged value "controllerActions"
@@ -1776,7 +1778,7 @@ List[MElement] getT3ExtbaseModuleControllerActions(MElement this) :
  * @param valueReference the new value reference of a tagged value
  */
 Void setT3ExtbaseModuleControllerActions(MElement this, MElement valueReference) :
-	setTaggedValue( prT3ExtbaseModule(), prT3ExtbaseModuleControllerActions(), valueReference );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseModule(), prT3ExtbaseModuleControllerActions() ), valueReference );
 
 /*
 - - "mainModule" - - - - - - - - - -
@@ -1817,7 +1819,7 @@ String getT3ExtbaseModuleMainModule(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseModuleMainModule(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseModule(), prT3ExtbaseModuleMainModule(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseModule(), prT3ExtbaseModuleMainModule() ), value );
 
 /*
 - - "position" - - - - - - - - - -
@@ -1858,7 +1860,7 @@ String getT3ExtbaseModulePosition(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseModulePosition(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseModule(), prT3ExtbaseModulePosition(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseModule(), prT3ExtbaseModulePosition() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1872,7 +1874,7 @@ Void setT3ExtbaseModulePosition(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseNoTestCaseStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseNoTestCase() );
+	emHasStereotypeAssignment( prT3ExtbaseNoTestCase() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1886,7 +1888,7 @@ boolean hasT3ExtbaseNoTestCaseStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseNotEmptyValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseNotEmptyValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseNotEmptyValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1900,7 +1902,7 @@ boolean hasT3ExtbaseNotEmptyValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseNumberRangeValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseNumberRangeValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseNumberRangeValidator() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -1963,7 +1965,7 @@ String getT3ExtbaseNumberRangeValidatorEndRange(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseNumberRangeValidatorEndRange(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseNumberRangeValidator(), prT3ExtbaseNumberRangeValidatorEndRange(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseNumberRangeValidator(), prT3ExtbaseNumberRangeValidatorEndRange() ), value );
 
 /*
 - - "startRange" - - - - - - - - - -
@@ -2004,7 +2006,7 @@ String getT3ExtbaseNumberRangeValidatorStartRange(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseNumberRangeValidatorStartRange(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseNumberRangeValidator(), prT3ExtbaseNumberRangeValidatorStartRange(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseNumberRangeValidator(), prT3ExtbaseNumberRangeValidatorStartRange() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2018,7 +2020,7 @@ Void setT3ExtbaseNumberRangeValidatorStartRange(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseNumberValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseNumberValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseNumberValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2032,7 +2034,7 @@ boolean hasT3ExtbaseNumberValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbasePluginStereotype(MElement this) :
-	emHasStereotype( prT3ExtbasePlugin() );
+	emHasStereotypeAssignment( prT3ExtbasePlugin() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2086,7 +2088,7 @@ boolean hasT3ExtbasePluginUtilizableControllerActions(MElement this) :
 * @return the value references of the tagged value
  */
 List[MElement] getT3ExtbasePluginControllerActions(MElement this) : 
-	emGetTaggedValueReferences( prT3ExtbasePlugin(), prT3ExtbasePluginControllerActions() );
+	emAllTaggedValueReferences( prT3ExtbasePlugin(), prT3ExtbasePluginControllerActions() );
 
 /**
  * Sets the value reference of an existing the tagged value "controllerActions"
@@ -2095,7 +2097,7 @@ List[MElement] getT3ExtbasePluginControllerActions(MElement this) :
  * @param valueReference the new value reference of a tagged value
  */
 Void setT3ExtbasePluginControllerActions(MElement this, MElement valueReference) :
-	setTaggedValue( prT3ExtbasePlugin(), prT3ExtbasePluginControllerActions(), valueReference );
+	ensureTaggedValueExistence( getTag ( prT3ExtbasePlugin(), prT3ExtbasePluginControllerActions() ), valueReference );
 
 /*
 - - "iconFileNamePath" - - - - - - - - - -
@@ -2136,7 +2138,7 @@ String getT3ExtbasePluginIconFileNamePath(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbasePluginIconFileNamePath(MElement this, String value) :
-	setTaggedValue( prT3ExtbasePlugin(), prT3ExtbasePluginIconFileNamePath(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbasePlugin(), prT3ExtbasePluginIconFileNamePath() ), value );
 
 /*
 - - "pluginType" - - - - - - - - - -
@@ -2177,7 +2179,7 @@ String getT3ExtbasePluginPluginType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbasePluginPluginType(MElement this, String value) :
-	setTaggedValue( prT3ExtbasePlugin(), prT3ExtbasePluginPluginType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbasePlugin(), prT3ExtbasePluginPluginType() ), value );
 
 /*
 - - "title" - - - - - - - - - -
@@ -2218,7 +2220,7 @@ String getT3ExtbasePluginTitle(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbasePluginTitle(MElement this, String value) :
-	setTaggedValue( prT3ExtbasePlugin(), prT3ExtbasePluginTitle(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbasePlugin(), prT3ExtbasePluginTitle() ), value );
 
 /*
 - - "uncachedControllerActions" - - - - - - - - - -
@@ -2250,7 +2252,7 @@ boolean hasT3ExtbasePluginUtilizableUncachedControllerActions(MElement this) :
 * @return the value references of the tagged value
  */
 List[MElement] getT3ExtbasePluginUncachedControllerActions(MElement this) : 
-	emGetTaggedValueReferences( prT3ExtbasePlugin(), prT3ExtbasePluginUncachedControllerActions() );
+	emAllTaggedValueReferences( prT3ExtbasePlugin(), prT3ExtbasePluginUncachedControllerActions() );
 
 /**
  * Sets the value reference of an existing the tagged value "uncachedControllerActions"
@@ -2259,7 +2261,7 @@ List[MElement] getT3ExtbasePluginUncachedControllerActions(MElement this) :
  * @param valueReference the new value reference of a tagged value
  */
 Void setT3ExtbasePluginUncachedControllerActions(MElement this, MElement valueReference) :
-	setTaggedValue( prT3ExtbasePlugin(), prT3ExtbasePluginUncachedControllerActions(), valueReference );
+	ensureTaggedValueExistence( getTag ( prT3ExtbasePlugin(), prT3ExtbasePluginUncachedControllerActions() ), valueReference );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2273,7 +2275,7 @@ Void setT3ExtbasePluginUncachedControllerActions(MElement this, MElement valueRe
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseRegularExpressionValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseRegularExpressionValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseRegularExpressionValidator() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2336,7 +2338,7 @@ String getT3ExtbaseRegularExpressionValidatorRegularExpression(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseRegularExpressionValidatorRegularExpression(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseRegularExpressionValidator(), prT3ExtbaseRegularExpressionValidatorRegularExpression(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseRegularExpressionValidator(), prT3ExtbaseRegularExpressionValidatorRegularExpression() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2350,7 +2352,7 @@ Void setT3ExtbaseRegularExpressionValidatorRegularExpression(MElement this, Stri
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseRepositoryStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseRepository() );
+	emHasStereotypeAssignment( prT3ExtbaseRepository() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2413,7 +2415,7 @@ String getT3ExtbaseRepositoryCreateInitializeObject(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseRepositoryCreateInitializeObject(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseRepository(), prT3ExtbaseRepositoryCreateInitializeObject(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseRepository(), prT3ExtbaseRepositoryCreateInitializeObject() ), value );
 
 /*
 - - "repositoryType" - - - - - - - - - -
@@ -2454,7 +2456,7 @@ String getT3ExtbaseRepositoryRepositoryType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseRepositoryRepositoryType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseRepository(), prT3ExtbaseRepositoryRepositoryType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseRepository(), prT3ExtbaseRepositoryRepositoryType() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2468,7 +2470,7 @@ Void setT3ExtbaseRepositoryRepositoryType(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseRepositoryPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseRepositoryPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseRepositoryPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2482,7 +2484,7 @@ boolean hasT3ExtbaseRepositoryPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseServiceStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseService() );
+	emHasStereotypeAssignment( prT3ExtbaseService() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2496,7 +2498,7 @@ boolean hasT3ExtbaseServiceStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseServicePackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseServicePackage() );
+	emHasStereotypeAssignment( prT3ExtbaseServicePackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2510,7 +2512,7 @@ boolean hasT3ExtbaseServicePackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseStringLengthValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseStringLengthValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseStringLengthValidator() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2573,7 +2575,7 @@ String getT3ExtbaseStringLengthValidatorMaximum(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseStringLengthValidatorMaximum(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseStringLengthValidator(), prT3ExtbaseStringLengthValidatorMaximum(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseStringLengthValidator(), prT3ExtbaseStringLengthValidatorMaximum() ), value );
 
 /*
 - - "minimum" - - - - - - - - - -
@@ -2614,7 +2616,7 @@ String getT3ExtbaseStringLengthValidatorMinimum(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseStringLengthValidatorMinimum(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseStringLengthValidator(), prT3ExtbaseStringLengthValidatorMinimum(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseStringLengthValidator(), prT3ExtbaseStringLengthValidatorMinimum() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2628,7 +2630,7 @@ Void setT3ExtbaseStringLengthValidatorMinimum(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseStringValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseStringValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseStringValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2642,7 +2644,7 @@ boolean hasT3ExtbaseStringValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseTableMappingStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseTableMapping() );
+	emHasStereotypeAssignment( prT3ExtbaseTableMapping() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2705,7 +2707,7 @@ String getT3ExtbaseTableMappingTableName(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseTableMappingTableName(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseTableMapping(), prT3ExtbaseTableMappingTableName(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseTableMapping(), prT3ExtbaseTableMappingTableName() ), value );
 
 /*
 - - "typeColumn" - - - - - - - - - -
@@ -2746,7 +2748,7 @@ String getT3ExtbaseTableMappingTypeColumn(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseTableMappingTypeColumn(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseTableMapping(), prT3ExtbaseTableMappingTypeColumn(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseTableMapping(), prT3ExtbaseTableMappingTypeColumn() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2760,7 +2762,7 @@ Void setT3ExtbaseTableMappingTypeColumn(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseTestStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseTest() );
+	emHasStereotypeAssignment( prT3ExtbaseTest() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2823,7 +2825,7 @@ String getT3ExtbaseTestCreateSetUp(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseTestCreateSetUp(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseTest(), prT3ExtbaseTestCreateSetUp(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseTest(), prT3ExtbaseTestCreateSetUp() ), value );
 
 /*
 - - "createTearDown" - - - - - - - - - -
@@ -2864,7 +2866,7 @@ String getT3ExtbaseTestCreateTearDown(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseTestCreateTearDown(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseTest(), prT3ExtbaseTestCreateTearDown(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseTest(), prT3ExtbaseTestCreateTearDown() ), value );
 
 /*
 - - "testType" - - - - - - - - - -
@@ -2905,7 +2907,7 @@ String getT3ExtbaseTestTestType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseTestTestType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseTest(), prT3ExtbaseTestTestType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseTest(), prT3ExtbaseTestTestType() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2919,7 +2921,7 @@ Void setT3ExtbaseTestTestType(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseTestCaseStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseTestCase() );
+	emHasStereotypeAssignment( prT3ExtbaseTestCase() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2933,7 +2935,7 @@ boolean hasT3ExtbaseTestCaseStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseTestPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseTestPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseTestPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2947,7 +2949,7 @@ boolean hasT3ExtbaseTestPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseTextValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseTextValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseTextValidator() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2961,7 +2963,7 @@ boolean hasT3ExtbaseTextValidatorStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseValidatorStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseValidator() );
+	emHasStereotypeAssignment( prT3ExtbaseValidator() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3024,7 +3026,7 @@ String getT3ExtbaseValidatorValidatorType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseValidatorValidatorType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseValidator(), prT3ExtbaseValidatorValidatorType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseValidator(), prT3ExtbaseValidatorValidatorType() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3038,7 +3040,7 @@ Void setT3ExtbaseValidatorValidatorType(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseValidatorPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseValidatorPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseValidatorPackage() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3052,7 +3054,7 @@ boolean hasT3ExtbaseValidatorPackageStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseValueObjectStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseValueObject() );
+	emHasStereotypeAssignment( prT3ExtbaseValueObject() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3115,7 +3117,7 @@ String getT3ExtbaseValueObjectValueObjectType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtbaseValueObjectValueObjectType(MElement this, String value) :
-	setTaggedValue( prT3ExtbaseValueObject(), prT3ExtbaseValueObjectValueObjectType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtbaseValueObject(), prT3ExtbaseValueObjectValueObjectType() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3129,5 +3131,11 @@ Void setT3ExtbaseValueObjectValueObjectType(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtbaseValueObjectPackageStereotype(MElement this) :
-	emHasStereotype( prT3ExtbaseValueObjectPackage() );
+	emHasStereotypeAssignment( prT3ExtbaseValueObjectPackage() );
 
+
+// -- Private Functionality ---------------------------------------------------------------------------------
+
+
+private getTag(MElement this, String stereotype, String tag) :
+	navModel().emGetStereotype( stereotype ).emGetTag( tag );
