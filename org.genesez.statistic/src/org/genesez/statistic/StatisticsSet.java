@@ -334,6 +334,32 @@ public class StatisticsSet {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._17_0_1_8e00291_1320316789551_308733_1733) ENABLED START */
-	/* PROTECTED REGION END */
+	private String relPathToGeneratedImplChart = null;
+	private String relPathToOverviewChart = null;
+	private String title = null;
 	
+	public String getRelPathToGeneratedImplChart() {
+		return relPathToGeneratedImplChart;
+	}
+
+	public void setRelPathToGeneratedImplChart(String relPathToGeneratedImplChart) {
+		this.relPathToGeneratedImplChart = relPathToGeneratedImplChart;
+	}
+
+	public String getRelPathToOverviewChart() {
+		return relPathToOverviewChart;
+	}
+
+	public void setRelPathToOverviewChart(String relPathToOverviewChart) {
+		this.relPathToOverviewChart = relPathToOverviewChart;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	/* PROTECTED REGION END */
 }
