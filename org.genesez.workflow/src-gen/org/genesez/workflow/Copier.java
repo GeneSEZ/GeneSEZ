@@ -8,18 +8,35 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.genesez.workflow.profile.WfParameter;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * Provides copying services for files and directories (recursively) based on apache commons io.
  */
 public class Copier extends AbstractWorkflowComponent implements WorkflowComponent {
+	
+	public final Log logger = LogFactory.getLog(getClass());
 	
 	/**
 	 * The source file or directory to copy.
@@ -129,6 +146,72 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._PXWqsPLLEeGYwYEQM4LYvw) ENABLED START */
-	// TODO: put your own implementation code here
+	/**
+	 * Returns the parent path of the location of the specified class file or null, if it cannot be obtained.
+	 */
+	public static Path resourceBase(Class<?> clazz) {
+		Path result = null;
+		try {
+			// obtain location of class file; note: could be a directory or a jar file!
+			URL url = clazz.getProtectionDomain().getCodeSource().getLocation();
+			// either the directory or the jar file are in the same folder
+			result = Paths.get(url.toURI()).getParent();
+		} catch (Exception e) {
+			// TODO: log exception
+		}
+		return result;
+	}
+	
+	/**
+	 * Copies everything below the source path into the destination path recursively.
+	 */
+	public static void copy(final Path source, final Path destination) throws IOException {
+		Files.walkFileTree(source, copyFileVisitor(source, destination));
+	}
+	
+	/**
+	 * Returns a simple copy file visitor implementation.
+	 */
+	public static FileVisitor<Path> copyFileVisitor(final Path source, final Path destination) {
+		return new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+				// create output directory if not exists
+				Path rel = source.relativize(dir);
+				Path dest = Paths.get(destination.toString(), rel.toString());
+				if (Files.notExists(dest)) {
+					Files.createDirectories(dest);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+			
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+				// copy file
+				Path rel = source.relativize(file);
+				Path dest = Paths.get(destination.toString(), rel.toString());
+				Files.copy(file, dest, StandardCopyOption.REPLACE_EXISTING);
+				return super.visitFile(file, attrs);
+			}
+		};
+	}
+	
+	/**
+	 * Returns a zip file system for the specified zip file.
+	 */
+	public static FileSystem zipFileSystem(final Path zipFile) throws IOException {
+		// create a new zip file system and copy html template from zip
+		URI uri = URI.create("jar:file:" + zipFile.toUri().getPath());
+		FileSystem zfs = FileSystems.newFileSystem(uri, Collections.<String, String> emptyMap());
+		return zfs;
+	}
+	
+	/**
+	 * Returns the root path of the zip file system for the specified zip file.
+	 */
+	public static Path zipFileSystemRoot(final Path zipFile) throws IOException {
+		FileSystem zfs = zipFileSystem(zipFile);
+		return zfs.getPath("/");
+	}
 	/* PROTECTED REGION END */
 }
