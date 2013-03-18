@@ -9,24 +9,16 @@ import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Collections;
 
 import org.eclipse.emf.mwe.core.WorkflowContext;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xtend.type.impl.java.JavaMetaModel;
 import org.genesez.m2t.FileTreeWalker;
+import org.genesez.workflow.Copier;
 import org.genesez.workflow.profile.WfDefault;
 import org.genesez.workflow.profile.WfParameter;
 import org.genesez.workflow.xpand.Model2TextComponent;
@@ -113,10 +105,8 @@ public class StatisticComponent extends Model2TextComponent {
 		if (Files.notExists(htmlTemplate)) {
 			try {
 				// obtain location of class file; note: could be a directory or a jar file!
-				URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
-				logger.debug("location: " + url);
 				// either the directory or the jar file are in the same folder which contains the default template
-				Path base = Paths.get(url.toURI()).getParent();
+				Path base = Copier.resourceBase(getClass());
 				htmlTemplate = base.resolve(htmlTemplate);
 				logger.debug("path: " + htmlTemplate);
 			} catch (Exception e) {
@@ -128,40 +118,17 @@ public class StatisticComponent extends Model2TextComponent {
 			// try to read from the zip file
 			Path zipped = htmlTemplate.resolve("html_template.zip");
 			if (Files.exists(zipped)) {
-				// create a new zip file system and copy html template from zip
-				URI uri = URI.create("jar:file:" + zipped.toUri().getPath());
+				// create a new zip file system and use the root path of it
 				try {
-					FileSystem zfs = FileSystems.newFileSystem(uri, Collections.<String, String>emptyMap());
-					base = zfs.getPath("/");
+					base = Copier.zipFileSystemRoot(zipped);
 				} catch (IOException e) {
 					logger.error("could not create zip file system", e);
 				}
 			}
 			// copy html template files
-			final Path copyBase = base;
 			final Path destination = Paths.get(getOutputDir());
 			try {
-				Files.walkFileTree(base, new SimpleFileVisitor<Path>() {
-					@Override
-					public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-						// create output directory if not exists
-						Path rel = copyBase.relativize(dir);
-						Path dest = Paths.get(destination.toString(), rel.toString());
-						if (Files.notExists(dest)) {
-							Files.createDirectories(dest);
-						}
-						return FileVisitResult.CONTINUE;
-					}
-					
-					@Override
-					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-						// copy file
-						Path rel = copyBase.relativize(file);
-						Path dest = Paths.get(destination.toString(), rel.toString());
-						Files.copy(file, dest, StandardCopyOption.REPLACE_EXISTING);
-						return super.visitFile(file, attrs);
-					}
-				});
+				Copier.copy(base, destination);
 			} catch (IOException e) {
 				logger.error("could not copy html template!", e);
 			}
