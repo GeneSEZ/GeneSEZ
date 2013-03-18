@@ -9,7 +9,7 @@
 //	based on genesez meta model
 import gcore;
 
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::util::logging::Logging;
 
 
@@ -39,7 +39,7 @@ Collection[MOperation] uniqueOperations(MClassifier this) :
  * @override
  */
 boolean isConstructor(MOperation this) :
-	emHasStereotype("Create") || emHasStereotype("create") || classifier.name == name || name == "__construct";
+	emHasStereotypeAssignment("Create") || emHasStereotypeAssignment("create") || classifier.name == name || name == "__construct";
 
 
 /**
@@ -50,4 +50,4 @@ boolean isConstructor(MOperation this) :
  * @override
  */
 boolean isDestructor(MOperation this) :
-	emHasStereotype("Destroy") || emHasStereotype("destroy") || name.startsWith("~") || name == "__destruct";
+	emHasStereotypeAssignment("Destroy") || emHasStereotypeAssignment("destroy") || name.startsWith("~") || name == "__destruct";
