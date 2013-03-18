@@ -1,23 +1,26 @@
+/*
+ * (c) GeneSEZ Research Group
+ * All rights reserved.
+ *
+ * Licensed according to GeneSEZ License Terms <http://www.genesez.org/en/license>
+ */
+
+import gcore;
+
+
 /**
  * Simplifies access to genesez models + makes working with the genesez metamodel more easier.
  * 
- * @author	Nico Herbig <nico.herbig@fh-zwickau.de>
- * @date	2011-09-12
+ * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
-
-// based on genesez meta model
-import gcore;
 
 // use TYPO3 profile + access helper scripts
 extension org::genesez::platform::typo3v4::profile::Profile;
 extension org::genesez::platform::typo3v4::profile::AccessHelper;
 
 	
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Table Configuration Array (TCA) 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- TYPO3 Table Configuration Array (TCA) ----------------------------------------------------------------- 
+
 
 /**
  * Checks if the advanced configuration of a property should be generated for the 'showitem' field.
@@ -33,11 +36,8 @@ boolean generateAdvancedTCATypesNumbers(MProperty this) :
 		: false;
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Core Engine (TCE) 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- TYPO3 Core Engine (TCE) ------------------------------------------------------------------------------- 
+
 
 /**
  * Returns the a list of FlexForm sheets for a plugin without the 'DEFAULT' sheet.
@@ -65,11 +65,8 @@ List[MAttribute] allTCESheetProperties(MInterface this, String sheet) :
 		: property.typeSelect(MAttribute).select( e | e.getT3TCEOptionSheet() == sheet );
 
 
-/*
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	TYPO3 Table Configuration Array (TCA) or TYPO3 Core Engine (TCE) 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-*/
+// -- TYPO3 Table Configuration Array (TCA) or TYPO3 Core Engine (TCE) -------------------------------------- 
+
 
 /**
  * Returns The a list of evaluation functions for a property.
