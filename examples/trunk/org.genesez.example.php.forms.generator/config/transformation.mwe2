@@ -1,0 +1,77 @@
+module org.genesez.example.php.forms
+
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
+	standardUML2Setup = true
+}
+var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+}
+var uml = org.eclipse.xtend.typesystem.uml2.UML2MetaModel {}
+
+Workflow {
+	// read the uml2 model file
+	component = org.genesez.workflow.EmfReader {
+		file = "model/forms.uml"
+		slot = "uml2model"
+	}
+	// validate the uml2 model for transformability
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = uml
+		slot = "uml2model"
+		
+		validator = org.genesez.adapter.uml2.workflow.UmlModelValidation {}
+		validator = org.genesez.adapter.uml2.workflow.UmlStateMachineValidation {}
+		validator = org.genesez.adapter.uml2.workflow.Uml2GcoreStateMachineValidation {}
+	}
+	// transform the uml2 model into a GeneSEZ model
+	component = org.genesez.workflow.xpand.Model2ModelComponent {
+		metaModel = uml
+		metaModel = gcore
+		slot = "uml2model"
+		outputSlot = "coremodel"
+		
+		model2model = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+		}
+	}
+	// prepare gcore model for java source code generation
+	component = org.genesez.workflow.xpand.ModelModificationComponent {
+		metaModel = gcore
+		
+		// automatically implement abstract and interface operations in classes
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::Realization::realize"
+		}
+		// add necessary use dependencies for import generation
+		model2model = org.genesez.workflow.SimpleScript {
+			script = "org::genesez::metamodel::core::util::m2m::UseDependencies::addUseDependencies"
+		}
+	}
+	// serialize the GeneSEZ model - just for info if you want to have a look at it
+	component = org.genesez.workflow.EmfWriter {
+		file = "model/forms.xmi"
+	}
+	// validate the GeneSEZ model against general + java specific constraints
+	component = org.genesez.workflow.xpand.ValidatorComponent {
+		metaModel = gcore
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::metamodel::core::util::validation::Constraints"
+		}
+		validator = org.genesez.workflow.SimpleValidator {
+			script = "org::genesez::platform::php::validation::Syntax"
+		}
+	}
+	// run the java code generation and transform the model into java source code
+	component = org.genesez.workflow.xpand.Model2TextSupport {
+		component = org.genesez.workflow.xpand.Model2TextComponent {
+			metaModel = gcore
+			outputDir = "../org.genesez.example.php.forms/src-gen"
+			
+			importPreserverConfig = org.genesez.platform.php.workflow.PhpImportPreserveConfig {}
+			
+			typeMappingFile = "typemapping.xml"
+			
+			model2text = org.genesez.platform.php.workflow.Gcore2Php {
+			}
+		}
+	}
+}
