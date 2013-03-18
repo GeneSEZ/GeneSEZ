@@ -68,7 +68,7 @@ public class Typo3Scaffolding extends SimpleScript {
 	 */
 	@WfDefault(parameter = "script")
 	public String getDefaultScript() {
-		return "org::genesez::platform::typo3v4::mvc::modification::Scaffolding::modelScaffolding";
+		return "org::genesez::platform::typo3v4::mvc::m2m::Scaffolding::modelScaffolding";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Dz4oYApBEeKxusbn3Pe47g) ENABLED START */

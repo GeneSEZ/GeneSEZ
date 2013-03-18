@@ -29,7 +29,7 @@ public class Typo3ModelModification extends SimpleScript {
 	 */
 	@WfDefault(parameter = "script")
 	public String getDefaultScript() {
-		return "org::genesez::platform::typo3v4::mvc::modification::Modification::modelModifications";
+		return "org::genesez::platform::typo3v4::mvc::m2m::Modification::modelModifications";
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._NtK3IApAEeKxusbn3Pe47g) ENABLED START */
