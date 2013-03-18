@@ -23,11 +23,11 @@ import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xpand2.Generator;
 import org.eclipse.xpand2.output.Outlet;
 import org.eclipse.xpand2.output.PostProcessor;
+import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.expression.ExecutionContext;
 import org.eclipse.xtend.expression.ExecutionContextImpl;
 import org.eclipse.xtend.expression.TypeSystemImpl;
 import org.eclipse.xtend.expression.Variable;
-import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
 import org.genesez.m2t.cp.ImportPreserverConfig;
 import org.genesez.mapping.type.TypeMapper;
@@ -79,6 +79,9 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	
 	@WfParameter(isRequired = true, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private java.util.Set<Model2Text> model2text = new java.util.HashSet<Model2Text>();
+	
+	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
+	private java.util.Set<Model2Text> aopModel2Text = new java.util.LinkedHashSet<Model2Text>();
 	
 	/**
 	 * Validates the configuration of the component before invocation.
@@ -144,13 +147,14 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._iXJckPt-EeGRytmSxmtqcQ) ENABLED START */
+		super.invokeInternal(context, monitor, issues);
 		// init naming mapper
 		Map<String, Variable> globalVars = new HashMap<String, Variable>();
 		for (GlobalVarDef globalVarDef : getGlobalVarDef()) {
 			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
 		}
 		ExecutionContext namingCtx = new ExecutionContextImpl(new TypeSystemImpl(), globalVars);
-		//		NameMapper.initNameMapper(xtendNamingFile, namingCtx, getMetaModel());
+		// NameMapper.initNameMapper(xtendNamingFile, namingCtx, getMetaModel());
 		
 		// init type mapper
 		TypeMapper.initTypeMapper(typeMappingFile.toArray(new String[0]));
@@ -386,6 +390,29 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 	 */
 	public void removeModel2text(Model2Text model2text) {
 		this.model2text.remove(model2text);
+	}
+	
+	/**
+	 * Returns the value of attribute '<em><b>aopModel2Text</b></em>'.
+	 */
+	public java.util.Set<Model2Text> getAopModel2Text() {
+		return aopModel2Text;
+	}
+	
+	/**
+	 * Adds the specified value to the attribute '<em><b>aopModel2Text</b></em>'.
+	 * @param	aopModel2Text	the value to add.
+	 */
+	public void addAopModel2Text(Model2Text aopModel2Text) {
+		this.aopModel2Text.add(aopModel2Text);
+	}
+	
+	/**
+	 * Removes the specified value from the attribute '<em><b>aopModel2Text</b></em>'.
+	 * @param	aopModel2Text	the value to remove.
+	 */
+	public void removeAopModel2Text(Model2Text aopModel2Text) {
+		this.aopModel2Text.remove(aopModel2Text);
 	}
 	
 	/**

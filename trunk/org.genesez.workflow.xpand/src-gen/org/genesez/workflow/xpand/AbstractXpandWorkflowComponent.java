@@ -17,8 +17,8 @@ import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.Gl
 import org.eclipse.xtend.typesystem.MetaModel;
 import org.eclipse.xtend.typesystem.emf.EmfMetaModel;
 import org.genesez.workflow.AbstractSlotWorkflowComponent;
-import org.genesez.workflow.profile.WfParameter;
 import org.genesez.workflow.Parameter;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.

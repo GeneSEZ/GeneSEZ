@@ -24,12 +24,12 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.emf.mwe.core.WorkflowContext;
-import org.eclipse.emf.mwe.core.issues.Issues;
-import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
-import org.genesez.workflow.profile.WfParameter;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.mwe.core.issues.Issues;
+import org.genesez.workflow.profile.WfParameter;
+import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 
 /**
  * Provides copying services for files and directories (recursively) based on apache commons io.
@@ -65,8 +65,30 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 	 */
 	public String getLogMessage() {
 		/* PROTECTED REGION ID(java.implementation._2zHZIP6tEeGciM7nbRm1bw) ENABLED START */
-		// TODO: implementation of method 'Copier.getLogMessage(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		return "Copy from '" + source + "' to '" + destination + "'.";
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * Invokes the execution of the component.
+	 * @param	context	The context of workflow execution.
+	 * @param	monitor	Instance to report any activity to.
+	 * @param	issues	Instance to collect all problems during execution.
+	 */
+	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
+		/* PROTECTED REGION ID(java.implementation._nmjWkI_wEeKQUf80QkSPWA) ENABLED START */
+		super.invokeInternal(context, monitor, issues);
+		try {
+			if (sourceFile.isDirectory()) {
+				FileUtils.copyDirectory(sourceFile, destFile);
+			}
+			if (sourceFile.isFile()) {
+				FileUtils.copyFile(sourceFile, destFile);
+			}
+		} catch (IOException e) {
+			issues.addError(this, "Error during copy", context, e, Arrays.<Object> asList(sourceFile, destFile));
+			e.printStackTrace();
+		}
 		/* PROTECTED REGION END */
 	}
 	
@@ -119,28 +141,6 @@ public class Copier extends AbstractWorkflowComponent implements WorkflowCompone
 		}
 		if (sourceFile.isFile() && destFile.exists() && !destFile.isFile()) {
 			issues.addError(this, "Cannot copy a file to a directory");
-		}
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * Invokes the execution of the component.
-	 * @param	context	The context of workflow execution.
-	 * @param	monitor	Instance to report any activity to.
-	 * @param	issues	Instance to collect all problems during execution.
-	 */
-	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._PXWqsPLLEeGYwYEQM4LYvw__rTW_YPU4EeGsV8fV-DCYeA) ENABLED START */
-		try {
-			if (sourceFile.isDirectory()) {
-				FileUtils.copyDirectory(sourceFile, destFile);
-			}
-			if (sourceFile.isFile()) {
-				FileUtils.copyFile(sourceFile, destFile);
-			}
-		} catch (IOException e) {
-			issues.addError(this, "Error during copy", context, e, Arrays.<Object> asList(sourceFile, destFile));
-			e.printStackTrace();
 		}
 		/* PROTECTED REGION END */
 	}

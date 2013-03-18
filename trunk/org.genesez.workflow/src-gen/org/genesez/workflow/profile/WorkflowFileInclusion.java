@@ -13,6 +13,5 @@ public enum WorkflowFileInclusion {
 	WHEN_NEEDED, ALWAYS;
 	
 	/* PROTECTED REGION ID(java.enumeration.own.code.implementation._6oBPUPd0EeGhUpgqSX_5tA) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

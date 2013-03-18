@@ -23,6 +23,5 @@ public @interface WfDefault {
 	
 	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.annotation.own.code.declaration._GV9OQP3lEeGA35ujkRyC6w.JavaAnnotationInterface) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

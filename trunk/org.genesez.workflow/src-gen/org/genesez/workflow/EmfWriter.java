@@ -43,6 +43,7 @@ public class EmfWriter extends AbstractEmfResourceWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._r4HjsPjlEeGhK_C0J8Xzwg) ENABLED START */
+		super.invokeInternal(context, monitor, issues);
 		writer.invokeInternal(context, monitor, issues);
 		/* PROTECTED REGION END */
 	}
