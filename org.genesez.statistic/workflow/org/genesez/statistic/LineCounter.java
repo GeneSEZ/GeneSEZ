@@ -30,7 +30,12 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
 /**
- * Please describe the responsibility of your class in your modeling tool.
+ * Counts the lines of every file thats not excluded and sums them up into the following categories:
+ * - generated lines of source code
+ * - manual implemented lines of source code
+ * - lines of documentation
+ * - lines of comments
+ * - lines of protected regions (as a special kind of comment lines)
  */
 public class LineCounter extends FileTreeObserverAdapter {
 	
@@ -112,7 +117,7 @@ public class LineCounter extends FileTreeObserverAdapter {
 	}
 	
 	/**
-	 * Method stub for further implementation.
+	 * Reads the specified file and counts the lines.
 	 */
 	public void readFile(Path file, boolean isGenerated) {
 		/* PROTECTED REGION ID(java.implementation._Y8qXAI1pEeKY9prllV7Cvw) ENABLED START */
@@ -381,6 +386,29 @@ public class LineCounter extends FileTreeObserverAdapter {
 	@WfDefault(parameter = "multiLineEndComment")
 	public String getDefaultMultiLineEndComment() {
 		return "*/";
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "relativeGeneratedDir")
+	public java.util.Set<String> getDefaultRelativeGeneratedDir() {
+		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
+		result.add("src-gen");
+		return result;
+	}
+	
+	/**
+	 * Method stub for further implementation.
+	 */
+	@WfDefault(parameter = "excludedDir")
+	public java.util.Set<String> getDefaultExcludedDir() {
+		java.util.Set<String> result = new java.util.LinkedHashSet<String>();
+		result.add(".svn");
+		result.add(".cvs");
+		result.add(".hg");
+		result.add(".git");
+		return result;
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._Nx0r8IzJEeKLl_w7vhifuQ) ENABLED START */
