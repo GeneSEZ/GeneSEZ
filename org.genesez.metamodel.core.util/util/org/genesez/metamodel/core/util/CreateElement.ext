@@ -13,6 +13,7 @@ import gcore;
  * 
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
+ * @todo	Prefix extension mechanism scripts with 'em'
  */
 
 
@@ -480,7 +481,7 @@ MMultiplicity createMultiplicity(Integer lowerBoundMultiplicity, Integer upperBo
 	this;
 
 
-// -- Extension Mechanism -----------------------------------------------------------------------------------
+// -- Extension Mechanism - Stereotypes ---------------------------------------------------------------------
 
 
 /**
@@ -516,6 +517,23 @@ MStereotype wireGeneralization(MStereotype this, MStereotype generalization) :
 	this;
 
 
+// -- Extension Mechanism - Stereotype Assignments ----------------------------------------------------------
+
+
+/**
+ * Assigns the specified stereotype to the specified model element if not already assigned.
+ * 
+ * @return	The specified model element.
+ */
+MElement ensureStereotypeAssignment(MElement this, MStereotype stereotype) :
+	!this.stereotype.contains( stereotype )
+		? ( this.stereotype.add( stereotype ) -> this )
+		: this;
+
+
+// -- Extension Mechanism - Tags ----------------------------------------------------------------------------
+
+
 /**
  * Returns the tag instance with the specified properties.
  * It checks if the stereotype has already the specified tag and creates it if needed.
@@ -538,7 +556,10 @@ create MTag createTag(MStereotype container, String name, String type) :
 	// set containment
 	container.property.add( this ) ->
 	this;
-	
+
+
+// -- Extension Mechanism - Tagged Values -------------------------------------------------------------------
+
 
 /**
  * Returns the tagged value instance with the specified properties.
@@ -600,17 +621,6 @@ create MTaggedValue createTaggedValue(MElement container, MTag tag, MElement val
 	// ensure stereotype assignment to model element
 	container.ensureStereotypeAssignment( tag.stereotype ) ->
 	this;
-
-
-/**
- * Assigns the specified stereotype to the specified model element if not already assigned.
- * 
- * @return	The specified model element.
- */
-MElement ensureStereotypeAssignment(MElement this, MStereotype stereotype) :
-	!this.stereotype.contains( stereotype )
-		? ( this.stereotype.add( stereotype ) -> this )
-		: this;
 
 
 // -- Private Functionality ---------------------------------------------------------------------------------
