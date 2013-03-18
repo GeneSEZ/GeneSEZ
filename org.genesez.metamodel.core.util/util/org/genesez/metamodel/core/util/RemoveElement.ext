@@ -11,6 +11,8 @@ import gcore;
 /**
  * Helper scripts to remove GeneSEZ Core meta model elements.
  * 
+ * HINT: All scripts for extension mechanism are available under the prefix 'em'.
+ * 
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
  */
@@ -31,32 +33,35 @@ import gcore;
 // -- Comment -----------------------------------------------------------------------------------------------
 
 
-// -- Extension Mechanism -----------------------------------------------------------------------------------
+// -- Extension Mechanism - Stereotype Assignments ----------------------------------------------------------
 
 
 /**
- * Removes all stereotypes from an element amd ensures the deletion of its tagged values.
+ * Removes all assigned stereotypes from an element amd ensures the deletion of its tagged values.
  * 
  * @return	The specified element.
  * @api
  */
-MElement emRemoveStereotypes(MElement this) :
+MElement emRemoveStereotypeAssignments(MElement this) :
 	// remove all assigned stereotypes
-	stereotype.collect( s | this.emRemoveStereotype( s ) );
+	stereotype.collect( s | this.emRemoveStereotypeAssignment( s ) );
 
 
 /**
- * Removes the specified stereotype from an element and ensures the deletion of its tagged values.
+ * Removes the specified assigned stereotype from an element and ensures the deletion of its tagged values.
  * 
  * @return	The specified element.
  * @api
  */
-MElement emRemoveStereotype(MElement this, MStereotype stereotype) :
-	// remove all assigned tagged values of the specified stereotype
+MElement emRemoveStereotypeAssignment(MElement this, MStereotype stereotype) :
+	// remove all tagged values of the specified stereotype
 	stereotype.property.collect( p | this.emRemoveTaggedValues( p ) ) ->
-	// remove the specified stereotype
+	// remove the specified assigned stereotype
 	this.stereotype.remove( stereotype ) ->
 	this;
+
+
+// -- Extension Mechanism - Tagged Values -------------------------------------------------------------------
 
 
 /**
