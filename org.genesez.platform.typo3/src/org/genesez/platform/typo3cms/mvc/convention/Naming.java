@@ -1,4 +1,4 @@
-package org.genesez.platform.typo3v4.mvc.convention;
+package org.genesez.platform.typo3cms.mvc.convention;
 
 import java.util.ArrayList;
 import java.util.List;
