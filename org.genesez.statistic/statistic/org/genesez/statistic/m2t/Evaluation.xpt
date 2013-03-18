@@ -22,14 +22,14 @@
 
 «REM»
 «ENDREM»
-«DEFINE Root FOR StatisticObserver -»
+«DEFINE Root FOR LineCounter -»
 	«FILE "html/overview.html"»
-		«EXPAND Basics-»
-		«EXPAND Diagram FOR rootDir-»
+		«EXPAND Basics FOR rootDir.statSet -»
+		«EXPAND Diagram FOR rootDir.statSet -»
 		«EXPAND Footer-»
 	«ENDFILE»
 	
-	«IF withDetails»
+	«IF withFileDetails»
 		«EXPAND Details»
 	«ENDIF»
 «ENDDEFINE»
@@ -41,8 +41,8 @@
 
 «REM»
 «ENDREM»
-«DEFINE Basics FOR StatisticObserver -»
-	<h2>Statistic Overview for «toString()»</h2> 
+«DEFINE Basics FOR StatisticsSet -»
+	<h2>Statistic Overview for «title»</h2> 
 	<table border="0" style="width:60%;margin:20px auto 0;" align="center" width="60%">
 	
 		<colgroup>
@@ -52,26 +52,26 @@
 	
 		<tr>
 			<td>Number of generated code lines:</td>
-			<td align="right">«rootDir.statSet.linesOfGenCode.format()»</td>
+			<td align="right">«linesOfGenCode.format()»</td>
 		</tr>
 		<tr>
 			<td>Number of implemented code lines:</td>
-			<td align="right">«rootDir.statSet.linesOfOwnCode.format()»</td>
+			<td align="right">«linesOfOwnCode.format()»</td>
 		</tr>
 		<tr>
 			<td>Number of commentar lines:<a href="#one" title="Contains generated and not generated comment lines. Also all protected region lines count to this.">&sup1;</a></td>
-			<td align="right">«(rootDir.statSet.linesOfComments + rootDir.statSet.linesOfProtRegs).format()»</td>
+			<td align="right">«(linesOfComments + linesOfProtRegs).format()»</td>
 		</tr>
 		<tr>
 			<td>Number of documentation lines:<a href="#two" title="Contains generated and not generated documentation lines.">&sup2;</a></td>
-			<td align="right">«rootDir.statSet.linesOfDocu.format()»</td>
+			<td align="right">«linesOfDocu.format()»</td>
 		</tr>
 		<tr>
 			<td colspan="2"><hr></td>
 		</tr>
 		<tr>
 			<td><b>Sum of all lines:</b></td>
-			<td align="right"><b>«rootDir.statSet.allLines.format()»</b></td>
+			<td align="right"><b>«allLines.format()»</b></td>
 		</tr>
 	</table>
 «ENDDEFINE»
@@ -79,9 +79,9 @@
 
 «REM»
 «ENDREM»
-«DEFINE Details FOR StatisticObserver»
+«DEFINE Details FOR LineCounter»
 	«FILE "html/details.html"»
-		<h2>Detailed statistics for «toString()»</h2>
+		<h2>Detailed statistics for «rootDir.statSet.title»</h2>
 		<table border="0" align="center">
 		<tr>
 			<th>File</th>
@@ -139,13 +139,19 @@
 
 
 «REM»
+	Use 2 paths for each image: one for use within the html template, one for standalone use
 «ENDREM»
-«DEFINE Diagram FOR StatFile»
+«DEFINE Diagram FOR StatisticsSet»
 	<div align="center" width="120%">
 		<br /><br />
-		<img src="charts\gen_imp.png" />
-
-		<img src="charts\all.png" />
+		<object data="«relPathToGeneratedImplChart»" type="image/png">
+			<object data="../«relPathToGeneratedImplChart»" type="image/png">
+			</object>
+		</object>
+		<object data="«relPathToOverviewChart»" type="image/png">
+			<object data="../«relPathToOverviewChart»" type="image/png">
+			</object>
+		</object>
 		<br /><br />
 		
 		<a style="text-decoration: none;" href="http://www.jfree.org/jfreechart/">
@@ -164,7 +170,7 @@
 
 «REM»
 «ENDREM»
-«DEFINE Footer FOR StatisticObserver -»
+«DEFINE Footer FOR LineCounter -»
 <div style="font-size:8pt;margin-top:8px" align="left">
 	<a name="one">&sup1;&nbsp;Contains generated and not generated comment lines. Also all protected region lines count to this.<br></a>
 	<a name="two">&sup2;&nbsp;Contains generated and not generated documentation lines.</a>
@@ -174,7 +180,7 @@
 
 «REM»
 «ENDREM»
-«DEFINE Foot FOR StatisticObserver -»
+«DEFINE Foot FOR LineCounter -»
 <div style="font-size:8pt;margin-top:8px" align="left">
 	<a name="one1">&sup1;&nbsp;All comment lines with protected regions.<br></a>
 	<a name="two1">&sup2;&nbsp;Only protected region lines.</a>
