@@ -20,6 +20,5 @@ public interface WorkflowComponent extends WorkflowComponentWithID, IWorkflowCom
 	public void checkConfiguration(Issues issues);
 	
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._AU05APRzEeGG-J2DIYyoXg) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

@@ -55,6 +55,5 @@ public class Parameter {
 	}
 	
 	/* PROTECTED REGION ID(java.datatype.own.code.implementation._BKlvsIZoEeKi-fAVJTcXlg) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

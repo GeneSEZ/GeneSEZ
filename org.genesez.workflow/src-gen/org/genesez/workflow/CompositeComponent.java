@@ -32,6 +32,26 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 	}
 	
 	/**
+	 * Invokes the execution of the component.
+	 * @param	context	The context of workflow execution.
+	 * @param	monitor	Instance to report any activity to.
+	 * @param	issues	Instance to collect all problems during execution.
+	 */
+	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
+		/* PROTECTED REGION ID(java.implementation._YGvEgI_uEeKpSZF4h81flQ) ENABLED START */
+		super.invokeInternal(context, monitor, issues);
+		for (WorkflowComponent c : component) {
+			// check for abort
+			if (monitor != null && monitor.isCanceled()) {
+				return;
+			}
+			// invoke
+			c.invoke(context, monitor, issues);
+		}
+		/* PROTECTED REGION END */
+	}
+	
+	/**
 	 * Returns the value of attribute '<em><b>component</b></em>'.
 	 */
 	public java.util.List<WorkflowComponent> getComponent() {
@@ -52,25 +72,6 @@ public class CompositeComponent<T extends WorkflowComponent> extends AbstractWor
 	 */
 	public void removeComponent(WorkflowComponent component) {
 		this.component.remove(component);
-	}
-	
-	/**
-	 * Invokes the execution of the component.
-	 * @param	context	The context of workflow execution.
-	 * @param	monitor	Instance to report any activity to.
-	 * @param	issues	Instance to collect all problems during execution.
-	 */
-	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
-		/* PROTECTED REGION ID(java.implementation._lFzPUP9cEeGCP-nN45yJrw__rTW_YPU4EeGsV8fV-DCYeA) ENABLED START */
-		for (WorkflowComponent c : component) {
-			// check for abort
-			if (monitor != null && monitor.isCanceled()) {
-				return;
-			}
-			// invoke
-			c.invoke(context, monitor, issues);
-		}
-		/* PROTECTED REGION END */
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._lFzPUP9cEeGCP-nN45yJrw) ENABLED START */

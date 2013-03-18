@@ -4,11 +4,11 @@ package org.genesez.workflow;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_2LP-8IvmEeKyp9GO00JvUQ) 
  */
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-
-import org.genesez.workflow.profile.WfParameter;
 import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.genesez.workflow.profile.WfParameter;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -56,6 +56,5 @@ public class SimpleValidator implements Model2Model, Validator {
 	}
 	
 	/* PROTECTED REGION ID(java.class.own.code.implementation._2LP-8IvmEeKyp9GO00JvUQ) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

@@ -16,6 +16,5 @@ public interface Model2Model extends Transformable {
 	public String getScript();
 	
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._cKwxcIZoEeKi-fAVJTcXlg) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

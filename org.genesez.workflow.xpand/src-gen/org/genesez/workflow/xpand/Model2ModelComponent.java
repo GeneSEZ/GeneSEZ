@@ -14,13 +14,12 @@ import org.eclipse.emf.mwe.core.container.CompositeComponent;
 import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xtend.XtendComponent;
+import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.expression.ExecutionContext;
 import org.eclipse.xtend.expression.ExecutionContextImpl;
 import org.eclipse.xtend.expression.TypeSystemImpl;
 import org.eclipse.xtend.expression.Variable;
-import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
-import org.genesez.mapping.name.NameMapper;
 import org.genesez.workflow.Model2Model;
 import org.genesez.workflow.profile.WfParameter;
 
@@ -45,13 +44,14 @@ public class Model2ModelComponent extends AbstractXpandWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._QITJ0Pn6EeG2esQ-bp2d2A) ENABLED START */
+		super.invokeInternal(context, monitor, issues);
 		// init naming mapper
 		Map<String, Variable> globalVars = new HashMap<String, Variable>();
 		for (GlobalVarDef globalVarDef : getGlobalVarDef()) {
 			globalVars.put(globalVarDef.getName(), new Variable(globalVarDef.getName(), globalVarDef.getValue()));
 		}
 		ExecutionContext namingCtx = new ExecutionContextImpl(new TypeSystemImpl(), globalVars);
-		//		NameMapper.initNameMapper(xtendNamingFile, namingCtx, getMetaModel());
+		// NameMapper.initNameMapper(xtendNamingFile, namingCtx, getMetaModel());
 		
 		// invoke
 		compositeXtend.invoke(context, monitor, issues);

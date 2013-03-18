@@ -16,6 +16,5 @@ public interface Model2Text extends Transformable {
 	public String getTemplate();
 	
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._a8HNAIZoEeKi-fAVJTcXlg) ENABLED START */
-	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
 }

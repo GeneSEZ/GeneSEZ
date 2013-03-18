@@ -46,6 +46,7 @@ public class EmfReader extends AbstractEmfResourceWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._qcViMPjlEeGhK_C0J8Xzwg) ENABLED START */
+		super.invokeInternal(context, monitor, issues);
 		logger.trace("EMF uri map:");
 		for (Entry<URI, URI> entry : URIConverter.URI_MAP.entrySet()) {
 			logger.trace(entry.toString());

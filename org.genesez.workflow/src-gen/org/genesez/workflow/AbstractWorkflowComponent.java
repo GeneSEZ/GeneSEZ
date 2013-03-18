@@ -40,7 +40,11 @@ public abstract class AbstractWorkflowComponent extends org.eclipse.emf.mwe.core
 	 * @param	monitor	Instance to report any activity to.
 	 * @param	issues	Instance to collect all problems during execution.
 	 */
-	protected abstract void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues);
+	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
+		/* PROTECTED REGION ID(java.implementation._rTW_YPU4EeGsV8fV-DCYeA) ENABLED START */
+		WorkflowContextSupport.update(context);
+		/* PROTECTED REGION END */
+	}
 	
 	/**
 	 * Provides the mwe2 execution wrapper.

@@ -4,18 +4,18 @@ package org.genesez.workflow.xpand;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_khAd0IpREeK8mZXbW9KccQ) 
  */
-import org.eclipse.emf.mwe.core.container.CompositeComponent;
-import org.genesez.workflow.Model2Model;
-import org.genesez.workflow.Transformable;
-import org.eclipse.emf.mwe.core.issues.Issues;
+import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
+
 import org.eclipse.emf.mwe.core.WorkflowContext;
+import org.eclipse.emf.mwe.core.container.CompositeComponent;
+import org.eclipse.emf.mwe.core.issues.Issues;
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor;
 import org.eclipse.xtend.XtendComponent;
 import org.eclipse.xtend.expression.AbstractExpressionsUsingWorkflowComponent.GlobalVarDef;
 import org.eclipse.xtend.typesystem.MetaModel;
-
+import org.genesez.workflow.Model2Model;
+import org.genesez.workflow.Transformable;
 import org.genesez.workflow.profile.WfParameter;
-import static org.genesez.workflow.profile.WorkflowFileInclusion.WHEN_NEEDED;
 
 /**
  * Please describe the responsibility of your class in your modeling tool.
@@ -55,6 +55,7 @@ public class ModelModificationComponent extends AbstractXpandWorkflowComponent {
 	 */
 	protected void invokeInternal(WorkflowContext context, ProgressMonitor monitor, Issues issues) {
 		/* PROTECTED REGION ID(java.implementation._VgM7pIpSEeK8mZXbW9KccQ) ENABLED START */
+		super.invokeInternal(context, monitor, issues);
 		compositeXtend.invoke(context, monitor, issues);
 		/* PROTECTED REGION END */
 	}
