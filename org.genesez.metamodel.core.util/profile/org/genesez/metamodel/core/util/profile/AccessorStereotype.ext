@@ -12,11 +12,13 @@ import gcore;
  * @author	tobias haubold <toh@fh-zwickau.de> (maintainer)
  */
 extension org::genesez::metamodel::core::util::Conversion;
-extension org::genesez::metamodel::core::util::ModelNavigation;
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
-extension org::genesez::metamodel::core::util::m2t::Helper;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::Helper;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
+extension org::genesez::metamodel::core::util::GlobalVar;
 extension org::genesez::util::logging::Logging;
 
 
@@ -56,11 +58,11 @@ boolean emGenerateRemoveAccess(MProperty this) :
  * @return	true, if an access operation should be generated, otherwise false
  */
 boolean emGenerateAccessOperation(MProperty this, String accessOperationType):
-	emHasStereotype( accessorStereotype() )
-		? emGetTaggedBooleanValue( accessorStereotype(), accessOperationType )
-		: ( classifier.emHasStereotype( accessorStereotype() )
-			? classifier.emGetTaggedBooleanValue( accessorStereotype(), accessOperationType )
-			: ( classifier.stereotype.exists( s|accessorsForStereotypes().convertToList().contains( s.name ) )
+	prHasAccessorStereotype()
+		? emGetTaggedBooleanValue( prAccessor(), accessOperationType )
+		: ( classifier.prHasAccessorStereotype()
+			? classifier.emGetTaggedBooleanValue( prAccessor(), accessOperationType )
+			: ( classifier.stereotype.exists( s|globalVarAccessorsForStereotypes().convertToList().contains( s.name ) )
 				? true
 				: (	classifier.metaType == MDataType && accessOperationType == prAccessorGetter()
 					? true
