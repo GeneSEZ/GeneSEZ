@@ -8,7 +8,9 @@
 import gcore;
 
 // use metamodel core extension mechanism scripts
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 // use profile scripts
 extension org::genesez::platform::typo3v4::profile::Profile;
@@ -25,7 +27,7 @@ extension org::genesez::platform::typo3v4::profile::Profile;
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3ExtensionManagerStereotype(MElement this) :
-	emHasStereotype( prT3ExtensionManager() );
+	emHasStereotypeAssignment( prT3ExtensionManager() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -88,7 +90,7 @@ String getT3ExtensionManagerAuthor(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerAuthor(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerAuthor(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerAuthor() ), value );
 
 /*
 - - "authorCompany" - - - - - - - - - -
@@ -129,7 +131,7 @@ String getT3ExtensionManagerAuthorCompany(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerAuthorCompany(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerAuthorCompany(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerAuthorCompany() ), value );
 
 /*
 - - "authorEMail" - - - - - - - - - -
@@ -170,7 +172,7 @@ String getT3ExtensionManagerAuthorEMail(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerAuthorEMail(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerAuthorEMail(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerAuthorEMail() ), value );
 
 /*
 - - "category" - - - - - - - - - -
@@ -211,7 +213,7 @@ String getT3ExtensionManagerCategory(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerCategory(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerCategory(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerCategory() ), value );
 
 /*
 - - "clearCacheOnLoad" - - - - - - - - - -
@@ -252,7 +254,7 @@ String getT3ExtensionManagerClearCacheOnLoad(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerClearCacheOnLoad(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerClearCacheOnLoad(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerClearCacheOnLoad() ), value );
 
 /*
 - - "conflicts" - - - - - - - - - -
@@ -284,7 +286,7 @@ boolean hasT3ExtensionManagerUtilizableConflicts(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3ExtensionManagerConflicts(MElement this) : 
-	emGetTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerConflicts() );
+	emAllTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerConflicts() );
 
 /**
  * Sets the value of an existing the tagged value "conflicts"
@@ -293,7 +295,7 @@ List[String] getT3ExtensionManagerConflicts(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerConflicts(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerConflicts(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerConflicts() ), value );
 
 /*
 - - "createDirs" - - - - - - - - - -
@@ -325,7 +327,7 @@ boolean hasT3ExtensionManagerUtilizableCreateDirs(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3ExtensionManagerCreateDirs(MElement this) : 
-	emGetTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerCreateDirs() );
+	emAllTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerCreateDirs() );
 
 /**
  * Sets the value of an existing the tagged value "createDirs"
@@ -334,7 +336,7 @@ List[String] getT3ExtensionManagerCreateDirs(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerCreateDirs(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerCreateDirs(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerCreateDirs() ), value );
 
 /*
 - - "dependencies" - - - - - - - - - -
@@ -366,7 +368,7 @@ boolean hasT3ExtensionManagerUtilizableDependencies(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3ExtensionManagerDependencies(MElement this) : 
-	emGetTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerDependencies() );
+	emAllTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerDependencies() );
 
 /**
  * Sets the value of an existing the tagged value "dependencies"
@@ -375,7 +377,7 @@ List[String] getT3ExtensionManagerDependencies(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerDependencies(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerDependencies(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerDependencies() ), value );
 
 /*
 - - "description" - - - - - - - - - -
@@ -416,7 +418,7 @@ String getT3ExtensionManagerDescription(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerDescription(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerDescription(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerDescription() ), value );
 
 /*
 - - "doNotLoadInFE" - - - - - - - - - -
@@ -457,7 +459,7 @@ String getT3ExtensionManagerDoNotLoadInFE(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerDoNotLoadInFE(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerDoNotLoadInFE(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerDoNotLoadInFE() ), value );
 
 /*
 - - "internal" - - - - - - - - - -
@@ -498,7 +500,7 @@ String getT3ExtensionManagerInternal(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerInternal(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerInternal(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerInternal() ), value );
 
 /*
 - - "lockType" - - - - - - - - - -
@@ -530,7 +532,7 @@ boolean hasT3ExtensionManagerUtilizableLockType(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3ExtensionManagerLockType(MElement this) : 
-	emGetTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerLockType() );
+	emAllTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerLockType() );
 
 /**
  * Sets the value of an existing the tagged value "lockType"
@@ -539,7 +541,7 @@ List[String] getT3ExtensionManagerLockType(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerLockType(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerLockType(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerLockType() ), value );
 
 /*
 - - "modifyTables" - - - - - - - - - -
@@ -571,7 +573,7 @@ boolean hasT3ExtensionManagerUtilizableModifyTables(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3ExtensionManagerModifyTables(MElement this) : 
-	emGetTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerModifyTables() );
+	emAllTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerModifyTables() );
 
 /**
  * Sets the value of an existing the tagged value "modifyTables"
@@ -580,7 +582,7 @@ List[String] getT3ExtensionManagerModifyTables(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerModifyTables(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerModifyTables(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerModifyTables() ), value );
 
 /*
 - - "priority" - - - - - - - - - -
@@ -621,7 +623,7 @@ String getT3ExtensionManagerPriority(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerPriority(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerPriority(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerPriority() ), value );
 
 /*
 - - "shy" - - - - - - - - - -
@@ -662,7 +664,7 @@ String getT3ExtensionManagerShy(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerShy(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerShy(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerShy() ), value );
 
 /*
 - - "state" - - - - - - - - - -
@@ -703,7 +705,7 @@ String getT3ExtensionManagerState(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerState(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerState(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerState() ), value );
 
 /*
 - - "suggests" - - - - - - - - - -
@@ -735,7 +737,7 @@ boolean hasT3ExtensionManagerUtilizableSuggests(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3ExtensionManagerSuggests(MElement this) : 
-	emGetTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerSuggests() );
+	emAllTaggedValues( prT3ExtensionManager(), prT3ExtensionManagerSuggests() );
 
 /**
  * Sets the value of an existing the tagged value "suggests"
@@ -744,7 +746,7 @@ List[String] getT3ExtensionManagerSuggests(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerSuggests(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerSuggests(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerSuggests() ), value );
 
 /*
 - - "title" - - - - - - - - - -
@@ -785,7 +787,7 @@ String getT3ExtensionManagerTitle(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerTitle(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerTitle(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerTitle() ), value );
 
 /*
 - - "uploadFolder" - - - - - - - - - -
@@ -826,7 +828,7 @@ String getT3ExtensionManagerUploadFolder(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerUploadFolder(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerUploadFolder(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerUploadFolder() ), value );
 
 /*
 - - "version" - - - - - - - - - -
@@ -867,7 +869,7 @@ String getT3ExtensionManagerVersion(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3ExtensionManagerVersion(MElement this, String value) :
-	setTaggedValue( prT3ExtensionManager(), prT3ExtensionManagerVersion(), value );
+	ensureTaggedValueExistence( getTag ( prT3ExtensionManager(), prT3ExtensionManagerVersion() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -881,7 +883,7 @@ Void setT3ExtensionManagerVersion(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3LocalizationStereotype(MElement this) :
-	emHasStereotype( prT3Localization() );
+	emHasStereotypeAssignment( prT3Localization() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -935,7 +937,7 @@ boolean hasT3LocalizationUtilizableLanguageKeys(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3LocalizationLanguageKeys(MElement this) : 
-	emGetTaggedValues( prT3Localization(), prT3LocalizationLanguageKeys() );
+	emAllTaggedValues( prT3Localization(), prT3LocalizationLanguageKeys() );
 
 /**
  * Sets the value of an existing the tagged value "languageKeys"
@@ -944,7 +946,7 @@ List[String] getT3LocalizationLanguageKeys(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3LocalizationLanguageKeys(MElement this, String value) :
-	setTaggedValue( prT3Localization(), prT3LocalizationLanguageKeys(), value );
+	ensureTaggedValueExistence( getTag ( prT3Localization(), prT3LocalizationLanguageKeys() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -958,7 +960,7 @@ Void setT3LocalizationLanguageKeys(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3SingletonStereotype(MElement this) :
-	emHasStereotype( prT3Singleton() );
+	emHasStereotypeAssignment( prT3Singleton() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -972,7 +974,7 @@ boolean hasT3SingletonStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAAssociationTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAAssociationType() );
+	emHasStereotypeAssignment( prT3TCAAssociationType() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -1035,7 +1037,7 @@ String getT3TCAAssociationTypeColumnsConfigWizardAdd(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAAssociationTypeColumnsConfigWizardAdd(MElement this, String value) :
-	setTaggedValue( prT3TCAAssociationType(), prT3TCAAssociationTypeColumnsConfigWizardAdd(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAAssociationType(), prT3TCAAssociationTypeColumnsConfigWizardAdd() ), value );
 
 /*
 - - "columnsConfigWizardEdit" - - - - - - - - - -
@@ -1076,7 +1078,7 @@ String getT3TCAAssociationTypeColumnsConfigWizardEdit(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAAssociationTypeColumnsConfigWizardEdit(MElement this, String value) :
-	setTaggedValue( prT3TCAAssociationType(), prT3TCAAssociationTypeColumnsConfigWizardEdit(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAAssociationType(), prT3TCAAssociationTypeColumnsConfigWizardEdit() ), value );
 
 /*
 - - "columnsConfigWizardSuggest" - - - - - - - - - -
@@ -1117,7 +1119,7 @@ String getT3TCAAssociationTypeColumnsConfigWizardSuggest(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAAssociationTypeColumnsConfigWizardSuggest(MElement this, String value) :
-	setTaggedValue( prT3TCAAssociationType(), prT3TCAAssociationTypeColumnsConfigWizardSuggest(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAAssociationType(), prT3TCAAssociationTypeColumnsConfigWizardSuggest() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1131,7 +1133,7 @@ Void setT3TCAAssociationTypeColumnsConfigWizardSuggest(MElement this, String val
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCABooleanTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCABooleanType() );
+	emHasStereotypeAssignment( prT3TCABooleanType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1145,7 +1147,7 @@ boolean hasT3TCABooleanTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCACheckTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCACheckType() );
+	emHasStereotypeAssignment( prT3TCACheckType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1159,7 +1161,7 @@ boolean hasT3TCACheckTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAClassStereotype(MElement this) :
-	emHasStereotype( prT3TCAClass() );
+	emHasStereotypeAssignment( prT3TCAClass() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -1222,7 +1224,7 @@ MElement getT3TCAClassCtrlLabel(MElement this) :
  * @param valueReference the new value reference of a tagged value
  */
 Void setT3TCAClassCtrlLabel(MElement this, MElement valueReference) :
-	setTaggedValue( prT3TCAClass(), prT3TCAClassCtrlLabel(), valueReference );
+	ensureTaggedValueExistence( getTag ( prT3TCAClass(), prT3TCAClassCtrlLabel() ), valueReference );
 
 /*
 - - "ctrlLabelAlt" - - - - - - - - - -
@@ -1254,7 +1256,7 @@ boolean hasT3TCAClassUtilizableCtrlLabelAlt(MElement this) :
 * @return the value references of the tagged value
  */
 List[MElement] getT3TCAClassCtrlLabelAlt(MElement this) : 
-	emGetTaggedValueReferences( prT3TCAClass(), prT3TCAClassCtrlLabelAlt() );
+	emAllTaggedValueReferences( prT3TCAClass(), prT3TCAClassCtrlLabelAlt() );
 
 /**
  * Sets the value reference of an existing the tagged value "ctrlLabelAlt"
@@ -1263,7 +1265,7 @@ List[MElement] getT3TCAClassCtrlLabelAlt(MElement this) :
  * @param valueReference the new value reference of a tagged value
  */
 Void setT3TCAClassCtrlLabelAlt(MElement this, MElement valueReference) :
-	setTaggedValue( prT3TCAClass(), prT3TCAClassCtrlLabelAlt(), valueReference );
+	ensureTaggedValueExistence( getTag ( prT3TCAClass(), prT3TCAClassCtrlLabelAlt() ), valueReference );
 
 /*
 - - "ctrlLabelAltForce" - - - - - - - - - -
@@ -1304,7 +1306,7 @@ String getT3TCAClassCtrlLabelAltForce(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAClassCtrlLabelAltForce(MElement this, String value) :
-	setTaggedValue( prT3TCAClass(), prT3TCAClassCtrlLabelAltForce(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAClass(), prT3TCAClassCtrlLabelAltForce() ), value );
 
 /*
 - - "ctrlSectionAdditions" - - - - - - - - - -
@@ -1336,7 +1338,7 @@ boolean hasT3TCAClassUtilizableCtrlSectionAdditions(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCAClassCtrlSectionAdditions(MElement this) : 
-	emGetTaggedValues( prT3TCAClass(), prT3TCAClassCtrlSectionAdditions() );
+	emAllTaggedValues( prT3TCAClass(), prT3TCAClassCtrlSectionAdditions() );
 
 /**
  * Sets the value of an existing the tagged value "ctrlSectionAdditions"
@@ -1345,7 +1347,7 @@ List[String] getT3TCAClassCtrlSectionAdditions(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAClassCtrlSectionAdditions(MElement this, String value) :
-	setTaggedValue( prT3TCAClass(), prT3TCAClassCtrlSectionAdditions(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAClass(), prT3TCAClassCtrlSectionAdditions() ), value );
 
 /*
 - - "interfaceSectionAdditions" - - - - - - - - - -
@@ -1377,7 +1379,7 @@ boolean hasT3TCAClassUtilizableInterfaceSectionAdditions(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCAClassInterfaceSectionAdditions(MElement this) : 
-	emGetTaggedValues( prT3TCAClass(), prT3TCAClassInterfaceSectionAdditions() );
+	emAllTaggedValues( prT3TCAClass(), prT3TCAClassInterfaceSectionAdditions() );
 
 /**
  * Sets the value of an existing the tagged value "interfaceSectionAdditions"
@@ -1386,7 +1388,7 @@ List[String] getT3TCAClassInterfaceSectionAdditions(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAClassInterfaceSectionAdditions(MElement this, String value) :
-	setTaggedValue( prT3TCAClass(), prT3TCAClassInterfaceSectionAdditions(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAClass(), prT3TCAClassInterfaceSectionAdditions() ), value );
 
 /*
 - - "palettesSectionAdditions" - - - - - - - - - -
@@ -1418,7 +1420,7 @@ boolean hasT3TCAClassUtilizablePalettesSectionAdditions(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCAClassPalettesSectionAdditions(MElement this) : 
-	emGetTaggedValues( prT3TCAClass(), prT3TCAClassPalettesSectionAdditions() );
+	emAllTaggedValues( prT3TCAClass(), prT3TCAClassPalettesSectionAdditions() );
 
 /**
  * Sets the value of an existing the tagged value "palettesSectionAdditions"
@@ -1427,7 +1429,7 @@ List[String] getT3TCAClassPalettesSectionAdditions(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAClassPalettesSectionAdditions(MElement this, String value) :
-	setTaggedValue( prT3TCAClass(), prT3TCAClassPalettesSectionAdditions(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAClass(), prT3TCAClassPalettesSectionAdditions() ), value );
 
 /*
 - - "typesSectionAdditions" - - - - - - - - - -
@@ -1459,7 +1461,7 @@ boolean hasT3TCAClassUtilizableTypesSectionAdditions(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCAClassTypesSectionAdditions(MElement this) : 
-	emGetTaggedValues( prT3TCAClass(), prT3TCAClassTypesSectionAdditions() );
+	emAllTaggedValues( prT3TCAClass(), prT3TCAClassTypesSectionAdditions() );
 
 /**
  * Sets the value of an existing the tagged value "typesSectionAdditions"
@@ -1468,7 +1470,7 @@ List[String] getT3TCAClassTypesSectionAdditions(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAClassTypesSectionAdditions(MElement this, String value) :
-	setTaggedValue( prT3TCAClass(), prT3TCAClassTypesSectionAdditions(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAClass(), prT3TCAClassTypesSectionAdditions() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1482,7 +1484,7 @@ Void setT3TCAClassTypesSectionAdditions(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCADatabaseTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCADatabaseType() );
+	emHasStereotypeAssignment( prT3TCADatabaseType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1496,7 +1498,7 @@ boolean hasT3TCADatabaseTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCADateTimeTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCADateTimeType() );
+	emHasStereotypeAssignment( prT3TCADateTimeType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1510,7 +1512,7 @@ boolean hasT3TCADateTimeTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAFileReferenceTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAFileReferenceType() );
+	emHasStereotypeAssignment( prT3TCAFileReferenceType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1524,7 +1526,7 @@ boolean hasT3TCAFileReferenceTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAFileTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAFileType() );
+	emHasStereotypeAssignment( prT3TCAFileType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1538,7 +1540,7 @@ boolean hasT3TCAFileTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAFloatTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAFloatType() );
+	emHasStereotypeAssignment( prT3TCAFloatType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1552,7 +1554,7 @@ boolean hasT3TCAFloatTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAFolderTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAFolderType() );
+	emHasStereotypeAssignment( prT3TCAFolderType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1566,7 +1568,7 @@ boolean hasT3TCAFolderTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAImageReferenceTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAImageReferenceType() );
+	emHasStereotypeAssignment( prT3TCAImageReferenceType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1580,7 +1582,7 @@ boolean hasT3TCAImageReferenceTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAImageTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAImageType() );
+	emHasStereotypeAssignment( prT3TCAImageType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1594,7 +1596,7 @@ boolean hasT3TCAImageTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAInputTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAInputType() );
+	emHasStereotypeAssignment( prT3TCAInputType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1608,7 +1610,7 @@ boolean hasT3TCAInputTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAIntegerTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAIntegerType() );
+	emHasStereotypeAssignment( prT3TCAIntegerType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1622,7 +1624,7 @@ boolean hasT3TCAIntegerTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCANoneTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCANoneType() );
+	emHasStereotypeAssignment( prT3TCANoneType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1636,7 +1638,7 @@ boolean hasT3TCANoneTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAOtherTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAOtherType() );
+	emHasStereotypeAssignment( prT3TCAOtherType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1650,7 +1652,7 @@ boolean hasT3TCAOtherTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAPropertyStereotype(MElement this) :
-	emHasStereotype( prT3TCAProperty() );
+	emHasStereotypeAssignment( prT3TCAProperty() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -1704,7 +1706,7 @@ boolean hasT3TCAPropertyUtilizableColumnsConfigAdditions(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCAPropertyColumnsConfigAdditions(MElement this) : 
-	emGetTaggedValues( prT3TCAProperty(), prT3TCAPropertyColumnsConfigAdditions() );
+	emAllTaggedValues( prT3TCAProperty(), prT3TCAPropertyColumnsConfigAdditions() );
 
 /**
  * Sets the value of an existing the tagged value "columnsConfigAdditions"
@@ -1713,7 +1715,7 @@ List[String] getT3TCAPropertyColumnsConfigAdditions(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyColumnsConfigAdditions(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyColumnsConfigAdditions(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyColumnsConfigAdditions() ), value );
 
 /*
 - - "columnsDefaultExtras" - - - - - - - - - -
@@ -1754,7 +1756,7 @@ String getT3TCAPropertyColumnsDefaultExtras(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyColumnsDefaultExtras(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyColumnsDefaultExtras(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyColumnsDefaultExtras() ), value );
 
 /*
 - - "columnsExclude" - - - - - - - - - -
@@ -1795,7 +1797,7 @@ String getT3TCAPropertyColumnsExclude(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyColumnsExclude(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyColumnsExclude(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyColumnsExclude() ), value );
 
 /*
 - - "columnsSectionAdditions" - - - - - - - - - -
@@ -1827,7 +1829,7 @@ boolean hasT3TCAPropertyUtilizableColumnsSectionAdditions(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCAPropertyColumnsSectionAdditions(MElement this) : 
-	emGetTaggedValues( prT3TCAProperty(), prT3TCAPropertyColumnsSectionAdditions() );
+	emAllTaggedValues( prT3TCAProperty(), prT3TCAPropertyColumnsSectionAdditions() );
 
 /**
  * Sets the value of an existing the tagged value "columnsSectionAdditions"
@@ -1836,7 +1838,7 @@ List[String] getT3TCAPropertyColumnsSectionAdditions(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyColumnsSectionAdditions(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyColumnsSectionAdditions(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyColumnsSectionAdditions() ), value );
 
 /*
 - - "typesAltLabel" - - - - - - - - - -
@@ -1877,7 +1879,7 @@ String getT3TCAPropertyTypesAltLabel(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyTypesAltLabel(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyTypesAltLabel(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyTypesAltLabel() ), value );
 
 /*
 - - "typesFormStyleCodes" - - - - - - - - - -
@@ -1918,7 +1920,7 @@ String getT3TCAPropertyTypesFormStyleCodes(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyTypesFormStyleCodes(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyTypesFormStyleCodes(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyTypesFormStyleCodes() ), value );
 
 /*
 - - "typesPaletteNumber" - - - - - - - - - -
@@ -1959,7 +1961,7 @@ String getT3TCAPropertyTypesPaletteNumber(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyTypesPaletteNumber(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyTypesPaletteNumber(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyTypesPaletteNumber() ), value );
 
 /*
 - - "typesSpecialConfiguration" - - - - - - - - - -
@@ -2000,7 +2002,7 @@ String getT3TCAPropertyTypesSpecialConfiguration(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCAPropertyTypesSpecialConfiguration(MElement this, String value) :
-	setTaggedValue( prT3TCAProperty(), prT3TCAPropertyTypesSpecialConfiguration(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCAProperty(), prT3TCAPropertyTypesSpecialConfiguration() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2014,7 +2016,7 @@ Void setT3TCAPropertyTypesSpecialConfiguration(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCARadioTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCARadioType() );
+	emHasStereotypeAssignment( prT3TCARadioType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2028,7 +2030,7 @@ boolean hasT3TCARadioTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCASelectTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCASelectType() );
+	emHasStereotypeAssignment( prT3TCASelectType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2042,7 +2044,7 @@ boolean hasT3TCASelectTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCAStringTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCAStringType() );
+	emHasStereotypeAssignment( prT3TCAStringType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2056,7 +2058,7 @@ boolean hasT3TCAStringTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCATextTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCATextType() );
+	emHasStereotypeAssignment( prT3TCATextType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2070,7 +2072,7 @@ boolean hasT3TCATextTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEBooleanTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEBooleanType() );
+	emHasStereotypeAssignment( prT3TCEBooleanType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2084,7 +2086,7 @@ boolean hasT3TCEBooleanTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCECheckTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCECheckType() );
+	emHasStereotypeAssignment( prT3TCECheckType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2098,7 +2100,7 @@ boolean hasT3TCECheckTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEDatabaseTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEDatabaseType() );
+	emHasStereotypeAssignment( prT3TCEDatabaseType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2112,7 +2114,7 @@ boolean hasT3TCEDatabaseTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEDateTimeTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEDateTimeType() );
+	emHasStereotypeAssignment( prT3TCEDateTimeType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2126,7 +2128,7 @@ boolean hasT3TCEDateTimeTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEFileReferenceTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEFileReferenceType() );
+	emHasStereotypeAssignment( prT3TCEFileReferenceType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2140,7 +2142,7 @@ boolean hasT3TCEFileReferenceTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEFileTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEFileType() );
+	emHasStereotypeAssignment( prT3TCEFileType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2154,7 +2156,7 @@ boolean hasT3TCEFileTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEFloatTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEFloatType() );
+	emHasStereotypeAssignment( prT3TCEFloatType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2168,7 +2170,7 @@ boolean hasT3TCEFloatTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEFolderTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEFolderType() );
+	emHasStereotypeAssignment( prT3TCEFolderType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2182,7 +2184,7 @@ boolean hasT3TCEFolderTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEImageReferenceTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEImageReferenceType() );
+	emHasStereotypeAssignment( prT3TCEImageReferenceType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2196,7 +2198,7 @@ boolean hasT3TCEImageReferenceTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEImageTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEImageType() );
+	emHasStereotypeAssignment( prT3TCEImageType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2210,7 +2212,7 @@ boolean hasT3TCEImageTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEInputTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEInputType() );
+	emHasStereotypeAssignment( prT3TCEInputType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2224,7 +2226,7 @@ boolean hasT3TCEInputTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEIntegerTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEIntegerType() );
+	emHasStereotypeAssignment( prT3TCEIntegerType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2238,7 +2240,7 @@ boolean hasT3TCEIntegerTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCENoneTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCENoneType() );
+	emHasStereotypeAssignment( prT3TCENoneType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2252,7 +2254,7 @@ boolean hasT3TCENoneTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEOptionStereotype(MElement this) :
-	emHasStereotype( prT3TCEOption() );
+	emHasStereotypeAssignment( prT3TCEOption() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2315,7 +2317,7 @@ String getT3TCEOptionSheet(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCEOptionSheet(MElement this, String value) :
-	setTaggedValue( prT3TCEOption(), prT3TCEOptionSheet(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCEOption(), prT3TCEOptionSheet() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2329,7 +2331,7 @@ Void setT3TCEOptionSheet(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEOtherTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEOtherType() );
+	emHasStereotypeAssignment( prT3TCEOtherType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2343,7 +2345,7 @@ boolean hasT3TCEOtherTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCERadioTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCERadioType() );
+	emHasStereotypeAssignment( prT3TCERadioType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2357,7 +2359,7 @@ boolean hasT3TCERadioTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCESelectTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCESelectType() );
+	emHasStereotypeAssignment( prT3TCESelectType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2371,7 +2373,7 @@ boolean hasT3TCESelectTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCEStringTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCEStringType() );
+	emHasStereotypeAssignment( prT3TCEStringType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2385,7 +2387,7 @@ boolean hasT3TCEStringTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCETextTypeStereotype(MElement this) :
-	emHasStereotype( prT3TCETextType() );
+	emHasStereotypeAssignment( prT3TCETextType() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2399,7 +2401,7 @@ boolean hasT3TCETextTypeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxAllowedStereotype(MElement this) :
-	emHasStereotype( prT3TCxAllowed() );
+	emHasStereotypeAssignment( prT3TCxAllowed() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2462,7 +2464,7 @@ String getT3TCxAllowedAllowed(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxAllowedAllowed(MElement this, String value) :
-	setTaggedValue( prT3TCxAllowed(), prT3TCxAllowedAllowed(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxAllowed(), prT3TCxAllowedAllowed() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2476,7 +2478,7 @@ Void setT3TCxAllowedAllowed(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxAutoSizeMaxStereotype(MElement this) :
-	emHasStereotype( prT3TCxAutoSizeMax() );
+	emHasStereotypeAssignment( prT3TCxAutoSizeMax() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2539,7 +2541,7 @@ String getT3TCxAutoSizeMaxAutoSizeMax(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxAutoSizeMaxAutoSizeMax(MElement this, String value) :
-	setTaggedValue( prT3TCxAutoSizeMax(), prT3TCxAutoSizeMaxAutoSizeMax(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxAutoSizeMax(), prT3TCxAutoSizeMaxAutoSizeMax() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2553,7 +2555,7 @@ Void setT3TCxAutoSizeMaxAutoSizeMax(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxColsStereotype(MElement this) :
-	emHasStereotype( prT3TCxCols() );
+	emHasStereotypeAssignment( prT3TCxCols() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2616,7 +2618,7 @@ String getT3TCxColsCols(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxColsCols(MElement this, String value) :
-	setTaggedValue( prT3TCxCols(), prT3TCxColsCols(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxCols(), prT3TCxColsCols() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2630,7 +2632,7 @@ Void setT3TCxColsCols(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxDisallowedStereotype(MElement this) :
-	emHasStereotype( prT3TCxDisallowed() );
+	emHasStereotypeAssignment( prT3TCxDisallowed() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2693,7 +2695,7 @@ String getT3TCxDisallowedDisallowed(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxDisallowedDisallowed(MElement this, String value) :
-	setTaggedValue( prT3TCxDisallowed(), prT3TCxDisallowedDisallowed(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxDisallowed(), prT3TCxDisallowedDisallowed() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2707,7 +2709,7 @@ Void setT3TCxDisallowedDisallowed(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxEvalStereotype(MElement this) :
-	emHasStereotype( prT3TCxEval() );
+	emHasStereotypeAssignment( prT3TCxEval() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2761,7 +2763,7 @@ boolean hasT3TCxEvalUtilizableEvals(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCxEvalEvals(MElement this) : 
-	emGetTaggedValues( prT3TCxEval(), prT3TCxEvalEvals() );
+	emAllTaggedValues( prT3TCxEval(), prT3TCxEvalEvals() );
 
 /**
  * Sets the value of an existing the tagged value "evals"
@@ -2770,7 +2772,7 @@ List[String] getT3TCxEvalEvals(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxEvalEvals(MElement this, String value) :
-	setTaggedValue( prT3TCxEval(), prT3TCxEvalEvals(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxEval(), prT3TCxEvalEvals() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2784,7 +2786,7 @@ Void setT3TCxEvalEvals(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxItemsStereotype(MElement this) :
-	emHasStereotype( prT3TCxItems() );
+	emHasStereotypeAssignment( prT3TCxItems() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2838,7 +2840,7 @@ boolean hasT3TCxItemsUtilizableItems(MElement this) :
 * @return the values of the tagged value
  */
 List[String] getT3TCxItemsItems(MElement this) : 
-	emGetTaggedValues( prT3TCxItems(), prT3TCxItemsItems() );
+	emAllTaggedValues( prT3TCxItems(), prT3TCxItemsItems() );
 
 /**
  * Sets the value of an existing the tagged value "items"
@@ -2847,7 +2849,7 @@ List[String] getT3TCxItemsItems(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxItemsItems(MElement this, String value) :
-	setTaggedValue( prT3TCxItems(), prT3TCxItemsItems(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxItems(), prT3TCxItemsItems() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2861,7 +2863,7 @@ Void setT3TCxItemsItems(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxMaxStereotype(MElement this) :
-	emHasStereotype( prT3TCxMax() );
+	emHasStereotypeAssignment( prT3TCxMax() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -2924,7 +2926,7 @@ String getT3TCxMaxMax(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxMaxMax(MElement this, String value) :
-	setTaggedValue( prT3TCxMax(), prT3TCxMaxMax(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxMax(), prT3TCxMaxMax() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2938,7 +2940,7 @@ Void setT3TCxMaxMax(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxMaxSizeStereotype(MElement this) :
-	emHasStereotype( prT3TCxMaxSize() );
+	emHasStereotypeAssignment( prT3TCxMaxSize() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3001,7 +3003,7 @@ String getT3TCxMaxSizeMaxSize(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxMaxSizeMaxSize(MElement this, String value) :
-	setTaggedValue( prT3TCxMaxSize(), prT3TCxMaxSizeMaxSize(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxMaxSize(), prT3TCxMaxSizeMaxSize() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3015,7 +3017,7 @@ Void setT3TCxMaxSizeMaxSize(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxMaxitemsStereotype(MElement this) :
-	emHasStereotype( prT3TCxMaxitems() );
+	emHasStereotypeAssignment( prT3TCxMaxitems() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3078,7 +3080,7 @@ String getT3TCxMaxitemsMaxitems(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxMaxitemsMaxitems(MElement this, String value) :
-	setTaggedValue( prT3TCxMaxitems(), prT3TCxMaxitemsMaxitems(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxMaxitems(), prT3TCxMaxitemsMaxitems() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3092,7 +3094,7 @@ Void setT3TCxMaxitemsMaxitems(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxMinitemsStereotype(MElement this) :
-	emHasStereotype( prT3TCxMinitems() );
+	emHasStereotypeAssignment( prT3TCxMinitems() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3155,7 +3157,7 @@ String getT3TCxMinitemsMinitems(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxMinitemsMinitems(MElement this, String value) :
-	setTaggedValue( prT3TCxMinitems(), prT3TCxMinitemsMinitems(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxMinitems(), prT3TCxMinitemsMinitems() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3169,7 +3171,7 @@ Void setT3TCxMinitemsMinitems(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxPrependTnameStereotype(MElement this) :
-	emHasStereotype( prT3TCxPrependTname() );
+	emHasStereotypeAssignment( prT3TCxPrependTname() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3232,7 +3234,7 @@ String getT3TCxPrependTnamePrependTname(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxPrependTnamePrependTname(MElement this, String value) :
-	setTaggedValue( prT3TCxPrependTname(), prT3TCxPrependTnamePrependTname(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxPrependTname(), prT3TCxPrependTnamePrependTname() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3246,7 +3248,7 @@ Void setT3TCxPrependTnamePrependTname(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxRowsStereotype(MElement this) :
-	emHasStereotype( prT3TCxRows() );
+	emHasStereotypeAssignment( prT3TCxRows() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3309,7 +3311,7 @@ String getT3TCxRowsRows(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxRowsRows(MElement this, String value) :
-	setTaggedValue( prT3TCxRows(), prT3TCxRowsRows(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxRows(), prT3TCxRowsRows() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3323,7 +3325,7 @@ Void setT3TCxRowsRows(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxShowThumbsStereotype(MElement this) :
-	emHasStereotype( prT3TCxShowThumbs() );
+	emHasStereotypeAssignment( prT3TCxShowThumbs() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3386,7 +3388,7 @@ String getT3TCxShowThumbsShowThumbs(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxShowThumbsShowThumbs(MElement this, String value) :
-	setTaggedValue( prT3TCxShowThumbs(), prT3TCxShowThumbsShowThumbs(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxShowThumbs(), prT3TCxShowThumbsShowThumbs() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3400,7 +3402,7 @@ Void setT3TCxShowThumbsShowThumbs(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxSizeStereotype(MElement this) :
-	emHasStereotype( prT3TCxSize() );
+	emHasStereotypeAssignment( prT3TCxSize() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3463,7 +3465,7 @@ String getT3TCxSizeSize(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxSizeSize(MElement this, String value) :
-	setTaggedValue( prT3TCxSize(), prT3TCxSizeSize(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxSize(), prT3TCxSizeSize() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3477,7 +3479,7 @@ Void setT3TCxSizeSize(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean hasT3TCxUploadfolderStereotype(MElement this) :
-	emHasStereotype( prT3TCxUploadfolder() );
+	emHasStereotypeAssignment( prT3TCxUploadfolder() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -3540,5 +3542,11 @@ String getT3TCxUploadfolderUploadfolder(MElement this) :
  * @param value the new value of a tagged value
  */
 Void setT3TCxUploadfolderUploadfolder(MElement this, String value) :
-	setTaggedValue( prT3TCxUploadfolder(), prT3TCxUploadfolderUploadfolder(), value );
+	ensureTaggedValueExistence( getTag ( prT3TCxUploadfolder(), prT3TCxUploadfolderUploadfolder() ), value );
 
+
+// -- Private Functionality ---------------------------------------------------------------------------------
+
+
+private getTag(MElement this, String stereotype, String tag) :
+	navModel().emGetStereotype( stereotype ).emGetTag( tag );

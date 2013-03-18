@@ -12,17 +12,15 @@
 
 «REM» use TYPO3 naming context and common naming scripts «ENDREM»
 «EXTENSION org::genesez::metamodel::core::util::mapping::NameMapping»
+«EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 «EXTENSION org::genesez::platform::typo3v4::mvc::convention::NamingContext»
-
-«REM» use extenesion mechanism scripts «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
 
 «REM» use TYPO3 MVC access helper scripts which overrides «ENDREM»
 «REM» php access helper scripts which overrides «ENDREM»
 «REM» common access helper scripts if script name is equal «ENDREM»
 «EXTENSION org::genesez::platform::typo3v4::mvc::util::AccessHelper»
 «EXTENSION org::genesez::platform::php::util::AccessHelper»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
 
 «REM»
@@ -182,19 +180,19 @@ $«name() -»«EXPAND DefaultValue -»
 		«EXPAND OwnCodeImplementationConstructor(id) -»
 «ELSEIF isDestructor() -»
 		«EXPAND OwnCodeImplementationDestructor(id) -»
-«ELSEIF emHasStereotype("http://www.genesez.org/TYPO3/TYPO3v4/controller/showAction") -»
+«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/showAction") -»
 		«EXPAND OwnCodeImplementationControllerShowAction -»
-«ELSEIF emHasStereotype("http://www.genesez.org/TYPO3/TYPO3v4/controller/listAction") -»
+«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/listAction") -»
 		«EXPAND OwnCodeImplementationControllerListAction -»
-«ELSEIF emHasStereotype("http://www.genesez.org/TYPO3/TYPO3v4/controller/newAction") -»
+«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/newAction") -»
 		«EXPAND OwnCodeImplementationControllerNewAction -»
-«ELSEIF emHasStereotype("http://www.genesez.org/TYPO3/TYPO3v4/controller/createAction") -»
+«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/createAction") -»
 		«EXPAND OwnCodeImplementationControllerCreateAction -»
-«ELSEIF emHasStereotype("http://www.genesez.org/TYPO3/TYPO3v4/controller/editAction") -»
+«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/editAction") -»
 		«EXPAND OwnCodeImplementationControllerEditAction -»
-«ELSEIF emHasStereotype("http://www.genesez.org/TYPO3/TYPO3v4/controller/updateAction") -»
+«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/updateAction") -»
 		«EXPAND OwnCodeImplementationControllerUpdateAction -»
-«ELSEIF emHasStereotype("http://www.genesez.org/TYPO3/TYPO3v4/controller/deleteAction") -»
+«ELSEIF emHasStereotypeAssignment("http://www.genesez.org/TYPO3/TYPO3v4/controller/deleteAction") -»
 		«EXPAND OwnCodeImplementationControllerDeleteAction -»
 «ELSE -»
 		«EXPAND OwnCodeImplementationOperation(id) -»
