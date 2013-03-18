@@ -8,7 +8,9 @@
 import gcore;
 
 // use metamodel core extension mechanism scripts
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
 
 // use profile scripts
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
@@ -25,7 +27,7 @@ extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
  * @return true if the element has the stereotype, otherwise false
  */
 boolean prHasAccessorStereotype(MElement this) :
-	emHasStereotype( prAccessor() );
+	emHasStereotypeAssignment( prAccessor() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -88,7 +90,7 @@ String prGetAccessorGetter(MElement this) :
  * @param value the new value of a tagged value
  */
 Void prSetAccessorGetter(MElement this, String value) :
-	setTaggedValue( prAccessor(), prAccessorGetter(), value );
+	ensureTaggedValueExistence( getTag ( prAccessor(), prAccessorGetter() ), value );
 
 /*
 - - "setter" - - - - - - - - - -
@@ -129,7 +131,7 @@ String prGetAccessorSetter(MElement this) :
  * @param value the new value of a tagged value
  */
 Void prSetAccessorSetter(MElement this, String value) :
-	setTaggedValue( prAccessor(), prAccessorSetter(), value );
+	ensureTaggedValueExistence( getTag ( prAccessor(), prAccessorSetter() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -143,7 +145,7 @@ Void prSetAccessorSetter(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean prHasDiStereotype(MElement this) :
-	emHasStereotype( prDi() );
+	emHasStereotypeAssignment( prDi() );
 
 /**
  * Checks if an element has a value of a specific tagged value 
@@ -206,7 +208,7 @@ String prGtDiConstructor(MElement this) :
  * @param value the new value of a tagged value
  */
 Void prSetDiConstructor(MElement this, String value) :
-	setTaggedValue( prDi(), prDiConstructor(), value );
+	ensureTaggedValueExistence( getTag ( prDi(), prDiConstructor() ), value );
 
 /*
 - - "setter" - - - - - - - - - -
@@ -247,7 +249,7 @@ String prGetDiSetter(MElement this) :
  * @param value the new value of a tagged value
  */
 Void prSetDiSetter(MElement this, String value) :
-	setTaggedValue( prDi(), prDiSetter(), value );
+	ensureTaggedValueExistence( getTag ( prDi(), prDiSetter() ), value );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -261,7 +263,7 @@ Void prSetDiSetter(MElement this, String value) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean prHasExcludeStereotype(MElement this) :
-	emHasStereotype( prExclude() );
+	emHasStereotypeAssignment( prExclude() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -275,7 +277,7 @@ boolean prHasExcludeStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean prHasExternalStereotype(MElement this) :
-	emHasStereotype( prExternal() );
+	emHasStereotypeAssignment( prExternal() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -289,7 +291,7 @@ boolean prHasExternalStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean prHasPrimitiveStereotype(MElement this) :
-	emHasStereotype( prPrimitive() );
+	emHasStereotypeAssignment( prPrimitive() );
 
 /*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -303,5 +305,11 @@ boolean prHasPrimitiveStereotype(MElement this) :
  * @return true if the element has the stereotype, otherwise false
  */
 boolean prHasVolatileStereotype(MElement this) :
-	emHasStereotype( prVolatile() );
+	emHasStereotypeAssignment( prVolatile() );
 
+
+// -- Private Functionality ---------------------------------------------------------------------------------
+
+
+private getTag(MElement this, String stereotype, String tag) :
+	navModel().emGetStereotype( stereotype ).emGetTag( tag );
