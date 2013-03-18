@@ -8,7 +8,7 @@ import gcore;
 
 
 /**
- * Helper scripts to clone respectively copy GeneSEZ Core meta model elements.
+ * Helper scripts to clone GeneSEZ Core meta model elements.
  * 
  * @author	Tobias Haubold <tobias.haubold@fh-zwickau.de> (maintainer)
  * @author	Nico Herbig <nico.herbig@fh-zwickau.de> (maintainer)
@@ -130,31 +130,41 @@ MMultiplicity cloneMultiplicity(MMultiplicity source) :
 	createMultiplicity( source.lowerBound, source.upperBound, source.unique, source.ordered );
 
 
-// -- Extension Mechanism -----------------------------------------------------------------------------------
+// -- Extension Mechanism - Stereotype Assignments ----------------------------------------------------------
 
 
 /**
  * Clones all stereotype assignments from the specified source element to the specified destination element.
  *
- * @param source		The source element.
- * @param destination	The destination element.
+ * @param 	source		The source element.
+ * @param 	destination	The destination element.
  * @return	The specified destination element. 
  */
 MElement cloneStereotypeAssignments(MElement source, MElement destination) :
-	source.stereotype.collect( s | destination.ensureStereotypeAssignment( s ) ) ->
+	source.stereotype.collect( s | 
+		destination.ensureStereotypeAssignment( s ) 
+		) ->
 	destination;
 
 
+// -- Extension Mechanism - Tagged Values -------------------------------------------------------------------
+
+
 /**
- * Clones a tagged value based one the specified source tagged value and ensures its element containment.
+ * Clones all tagged values from the specified source element to the specified destination element and
+ * ensures the stereotype assignment to the destination element too.
  * 
- * @return	The cloned tagged value.
+ * @param 	source		The source element.
+ * @param 	destination	The destination element.
+ * @return	The specified destination element. 
  */
-MTaggedValue cloneTaggedValue(MTaggedValue source, MElement container) :
-	// create a new tagged value, clone basic property values and set containment
-	let clone = source.value != null ? createTaggedValue( container, source.tag, source.value ) : createTaggedValue( container, source.tag, source.valueReference ) :
-		source.logTrace( "cloning: " + source.metaType + ": " ) ->
-		clone;
+MElement cloneTaggedValues(MElement source, MElement destination) :
+	source.taggedValue.collect( tv | 
+		tv.value != null 
+			? destination.ensureTaggedValueExistence( tv.tag, tv.value ) 
+			: destination.ensureTaggedValueExistence( tv.tag, tv.valueReference) 
+		) ->
+	destination;
 
 
 // -- Private Functionality ---------------------------------------------------------------------------------
