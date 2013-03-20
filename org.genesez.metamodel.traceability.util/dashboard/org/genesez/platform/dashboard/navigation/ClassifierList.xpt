@@ -1,0 +1,32 @@
+«IMPORT gcore»
+
+«REM»
+	Generates an html chunk with a list of all classifiers.
+	@author tobias haubold
+«ENDREM»
+
+«EXTENSION org::genesez::metamodel::core::util::Conversion»
+«EXTENSION org::genesez::platform::dashboard::AccessHelper»
+«EXTENSION org::genesez::platform::dashboard::Dashboard»
+
+«DEFINE Root FOR MModel»
+«FILE classifierListFileName()»
+	«EXPAND ClassifierList -»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE ClassifierList FOR MModel -»
+<div class="list">
+	«EXPAND Entry FOREACH allClassifiers()»
+</div>
+«ENDDEFINE»
+
+«DEFINE Entry FOR MClassifier -»
+	<div class="entry">
+		<div class="content">
+			<a href="#" onclick="«clickOn()»" title="«name»">
+				<div class="truncating">«name»</div>
+			</a>
+		</div>
+	</div>
+«ENDDEFINE»

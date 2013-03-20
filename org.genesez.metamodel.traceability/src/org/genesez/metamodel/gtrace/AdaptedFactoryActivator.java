@@ -7,14 +7,14 @@ import org.genesez.metamodel.gtrace.impl.GtraceAdaptedFactoryImpl;
 
 public class AdaptedFactoryActivator {
 	
-	private GtraceFactory usual = GtracePackage.eINSTANCE.getGtraceFactory();
-	private GtraceFactory factory = new GtraceAdaptedFactoryImpl();
+	private static GtraceFactory usual = GtracePackage.eINSTANCE.getGtraceFactory();
+	private static GtraceFactory factory = new GtraceAdaptedFactoryImpl();
 	
-	public void enable() {
+	public static void enable() {
 		GtracePackage.eINSTANCE.setEFactoryInstance(factory);
 	}
 	
-	public void disable() {
+	public static void disable() {
 		GtracePackage.eINSTANCE.setEFactoryInstance(usual);
 	}
 }
