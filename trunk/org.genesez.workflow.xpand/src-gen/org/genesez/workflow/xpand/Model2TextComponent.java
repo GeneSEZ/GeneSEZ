@@ -477,6 +477,10 @@ public class Model2TextComponent extends AbstractXpandWorkflowComponent {
 				gen.addMetaModel(mm);
 			}
 			addGlobalVarDefs(m2t.getParameter());
+			for (Model2Text aopM2t : aopModel2Text) {
+				addGlobalVarDefs(aopM2t.getParameter());
+				gen.addAdvice(aopM2t.getTemplate());
+			}
 			for (GlobalVarDef def : getGlobalVarDef()) {
 				gen.addGlobalVarDef(def);
 			}
