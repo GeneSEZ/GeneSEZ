@@ -46,6 +46,7 @@ public class DocParser {
 		} else {
 			// some test scripts
 			paths.add("org.genesez.util");
+			paths.add("org.genesez.metamodel.core.util");
 			//paths.add("org.genesez.platform.java/java5");
 			//paths.add("org.genesez.platform.java/java");
 
