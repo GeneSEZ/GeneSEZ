@@ -16,12 +16,8 @@ import java.lang.annotation.Retention;
 @Retention(RUNTIME)
 public @interface WfDefault {
 	
-	// -- generated elements ------------------------------------------------
 	String parameter();
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.annotation.own.code.declaration._GV9OQP3lEeGA35ujkRyC6w.JavaAnnotationInterface) ENABLED START */
 	/* PROTECTED REGION END */
 }

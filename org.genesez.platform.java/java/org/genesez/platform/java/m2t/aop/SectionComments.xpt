@@ -11,7 +11,7 @@
 	
 	@author  tobias haubold <toh@fh-zwickau.de> (maintainer)
 «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 
 
 «REM»
@@ -166,6 +166,14 @@
 «ENDREM»
 «AROUND org::genesez::platform::java::m2t::Enumeration::OperationImplementation FOR MEnumeration -»
 	«EXPAND OperationImplementation -»
+	«targetDef.proceed() -»
+«ENDAROUND»
+
+«REM»
+	Registers an aspect to generate the section comment for annotation elements.
+«ENDREM»
+«AROUND org::genesez::platform::java::m2t::Annotation::Element FOR MInterface -»
+	«EXPAND Member -»
 	«targetDef.proceed() -»
 «ENDAROUND»
 
