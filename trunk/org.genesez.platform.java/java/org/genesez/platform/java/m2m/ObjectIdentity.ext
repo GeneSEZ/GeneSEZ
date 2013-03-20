@@ -12,10 +12,9 @@ import gcore;
  * @author	andre pflueger
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::ModelNavigation;
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
-extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::AccessElement;
 
 extension org::genesez::platform::java::util::JavaTypes;
 
@@ -26,14 +25,14 @@ extension org::genesez::platform::java::util::JavaTypes;
  */
 MClass identity(MClass this) :
 	(
-		emHasStereotype("java5EqualsOperation")
+		emHasStereotypeAssignment("java5EqualsOperation")
 		&& (
 			generalization.typeSelect(MClass).size > 0
 			// [toh] i guess it should check the complete inheritance hierarchy, not only the base class
-			&& !allGeneralizations().typeSelect(MClass).exists( c|c.emHasStereotype("java5EqualsOperation") )
-			//&& !generalization.typeSelect(MClass).first().emHasStereotype("java5EqualsOperation")
+			&& !allGeneralizations().typeSelect(MClass).exists( c|c.emHasStereotypeAssignment("java5EqualsOperation") )
+			//&& !generalization.typeSelect(MClass).first().emHasStereotypeAssignment("java5EqualsOperation")
 		)
-		&& !property.exists( p|p.emHasStereotype("java5EqualsProperty") )
+		&& !property.exists( p|p.emHasStereotypeAssignment("java5EqualsProperty") )
 	)
 		? (
 			!operation.exists( o|o.name == "equals" )

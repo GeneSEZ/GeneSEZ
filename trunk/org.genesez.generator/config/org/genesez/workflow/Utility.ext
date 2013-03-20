@@ -15,9 +15,8 @@ import gcore;
  * 
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
-extension org::genesez::metamodel::core::util::AccessHelper;
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::CreateElement;
 
 
 // -- utility functions for 'transformables'
@@ -47,7 +46,7 @@ boolean needParameterBaseClass(MClassifier this) :
  * Returns true if the specified operation has the stereotype 'default', otherwise false.
  */
 boolean isDefault(MOperation this) :
-	emHasStereotype( prStereotypeDefault() );
+	emHasStereotypeAssignment( prStereotypeDefault() );
 
 /**
  * Returns true if an attribute specifying the default value exists for the specified operation, otherwise false.
@@ -106,7 +105,7 @@ String defaultOperationPrefix() : "getDefault";
  * Returns true if the property is a mandatory parameter, otherwise false (that means optional parameter).
  */
 boolean isMandatoryParameter(MAttribute this) :
-	emHasStereotype("parameter") && emHasOwningTaggedValues("parameter", "isRequired")
+	emHasStereotypeAssignment("parameter") && emHasOwningTaggedValues("parameter", "isRequired")
 		? emGetTaggedBooleanValue("parameter", "isRequired")
 		: false;
 
@@ -120,13 +119,13 @@ boolean isTransformationParameter(MProperty this) :
  * Returns true if the property is a workflow parameter, otherwise false.
  */
 boolean isParameter(MProperty this) :
-	metaType == MAttribute && emHasStereotype( prStereotypeParameter() );
+	metaType == MAttribute && emHasStereotypeAssignment( prStereotypeParameter() );
 
 /**
  * Returns true if the property provides a new default value, otherwise false.
  */
 boolean isDefault(MProperty this) :
-	metaType == MAttribute && emHasStereotype( prStereotypeDefault() );
+	metaType == MAttribute && emHasStereotypeAssignment( prStereotypeDefault() );
 
 
 // -- workflow profile related - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

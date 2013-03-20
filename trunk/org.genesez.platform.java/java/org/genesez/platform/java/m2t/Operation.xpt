@@ -11,9 +11,8 @@
 «ENDREM»
 
 «REM» useful support functions «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
-«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
-«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::java::m2m::AccessOperation»
@@ -79,7 +78,7 @@
 	such operation
 «ENDREM»
 «DEFINE Singleton FOR MClass -»
-	«IF this.emHasStereotype("singleton") &&
+	«IF this.emHasStereotypeAssignment("singleton") &&
 	!this.operation.exists(e|e.name.matches("getInstance"))	-»
 		public static «this.name.asTypeName() -» getInstance() {
 			if (instance == null) {
@@ -100,8 +99,8 @@
 	and at least one property has the stereotype "java5EqualsProperty"
 «ENDREM»
 «DEFINE Equals FOR MClass -»
-	«IF emHasStereotype("java5EqualsOperation") && 
-		this.property.exists(e|e.emHasStereotype("java5EqualsProperty")) -»
+	«IF emHasStereotypeAssignment("java5EqualsOperation") && 
+		this.property.exists(e|e.emHasStereotypeAssignment("java5EqualsProperty")) -»
 		/**
 		  *	checks if instance and parameter other are equal according to specified properties
 		  *
@@ -134,7 +133,7 @@
 		public int hashCode() {
 			int result = 23;
 			«EXPAND _SuperHashCode-»
-			«FOREACH this.property.select(e|e.emHasStereotype("java5EqualsProperty")).sortBy(e|e.name) AS value -»
+			«FOREACH this.property.select(e|e.emHasStereotypeAssignment("java5EqualsProperty")).sortBy(e|e.name) AS value -»
 				«IF !value.isJavaPrimitiveType()-»if (this.«value.asGetter()-»() != null) {
 				«ENDIF-»result = 37 * result + this.«value.asGetter()-»()«IF !value.isJavaPrimitiveType()-».hashCode()«ENDIF-»;
 				«IF !value.isJavaPrimitiveType()-»}
@@ -147,7 +146,7 @@
 «ENDDEFINE»
 
 «DEFINE _EqualsProperties FOR MClass-»
-	«FOREACH this.property.select(e|e.emHasStereotype("java5EqualsProperty")).sortBy(e|e.name) AS value SEPARATOR " && "-»
+	«FOREACH this.property.select(e|e.emHasStereotypeAssignment("java5EqualsProperty")).sortBy(e|e.name) AS value SEPARATOR " && "-»
 		«IF value.isJavaPrimitiveType()-»
 			this.«value.asGetter()-»() == o.«value.asGetter()-»()
 		«ELSE-»
@@ -159,14 +158,14 @@
 
 «DEFINE _SuperEquals FOR MClass-»
 	«IF this.generalization.typeSelect(MClass).size > 0 && 
-		this.generalization.typeSelect(MClass).first().emHasStereotype("java5EqualsOperation")
+		this.generalization.typeSelect(MClass).first().emHasStereotypeAssignment("java5EqualsOperation")
 		-»super.equals(o) &&
 	«ENDIF-»
 «ENDDEFINE»
 
 «DEFINE _SuperHashCode FOR MClass-»
 	«IF this.generalization.typeSelect(MClass).size > 0 && 
-		this.generalization.typeSelect(MClass).first().emHasStereotype("java5EqualsOperation")
+		this.generalization.typeSelect(MClass).first().emHasStereotypeAssignment("java5EqualsOperation")
 		-»result = 37 * result + super.hashCode();
 	«ENDIF-»
 «ENDDEFINE»
@@ -321,7 +320,7 @@
 	an implementation which throws an exception that this method is not yet supported
 «ENDREM»
 «DEFINE _ConstructorBody FOR MOperation -»
-	«IF !emHasStereotype("http://www.genesez.org/StandardConstructor")-»
+	«IF !emHasStereotypeAssignment("http://www.genesez.org/StandardConstructor")-»
 		«PROTECT CSTART '/* ' CEND ' */' ID ("java.constructor." + xmiGuid)»
 		// TODO: implementation of constructor for class '«classifier.asTypeName()»'
 			throw new UnsupportedOperationException(
@@ -335,13 +334,13 @@
 	an implementation which throws an exception that this method is not yet supported
 «ENDREM»
 «DEFINE _ImplementationBody FOR MOperation -»
-	«IF emHasStereotype( emGetAccessOperationIdentifier() ) -»
+	«IF emHasStereotypeAssignment( emGetAccessOperationIdentifier() ) -»
 		«EXPAND AccessOperationImpl::GetOperationImpl -»
-	«ELSEIF emHasStereotype( emSetAccessOperationIdentifier() ) -»
+	«ELSEIF emHasStereotypeAssignment( emSetAccessOperationIdentifier() ) -»
 		«EXPAND AccessOperationImpl::SetOperationImpl -»
-	«ELSEIF emHasStereotype( emAddAccessOperationIdentifier() ) -»
+	«ELSEIF emHasStereotypeAssignment( emAddAccessOperationIdentifier() ) -»
 		«EXPAND AccessOperationImpl::AddOperationImpl -»
-	«ELSEIF emHasStereotype( emRemoveAccessOperationIdentifier() ) -»
+	«ELSEIF emHasStereotypeAssignment( emRemoveAccessOperationIdentifier() ) -»
 		«EXPAND AccessOperationImpl::RemoveOperationImpl -»
 	«ELSEIF hasReturn() && return.hasDefaultValue() -»
 		«EXPAND DefaultReturn FOR return -»
@@ -378,7 +377,7 @@
 	generates synchronized key word using UML CallConcurrencyKind
 «ENDREM»
 «DEFINE _Concurrent FOR MOperation -»
-	«IF emHasStereotype("http://www.genesez.org/CallConcurrencyKind/Guarded")-»synchronized «ENDIF -»
+	«IF emHasStereotypeAssignment("http://www.genesez.org/CallConcurrencyKind/Guarded")-»synchronized «ENDIF -»
 «ENDDEFINE»
 
 «REM»

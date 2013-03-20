@@ -15,8 +15,7 @@
 	@author andre pflueger
 	@author	tobias haubold <toh@fh-zwickau.de>
 «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
-«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 «EXTENSION org::genesez::platform::java::util::Naming»
 «EXTENSION org::genesez::platform::java::util::Helper»
@@ -45,7 +44,7 @@
 	«IF param.multiplicity.isSingleValued() -»
 		«IF !static-»this.«ENDIF-»«param.name» = «IF static-»_«ENDIF-»«param.name»;
 	«ELSE -»
-		«IF emHasStereotype("primitive") -»
+		«IF emHasStereotypeAssignment("primitive") -»
 			«IF !static-»this.«ENDIF-»«param.name» = new «param.type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«param.name».length];
 			for (int counter = 0; counter < «IF static-»_«ENDIF-»«param.name».length; counter++) {
 				«IF !static-»this.«ENDIF-»«param.name»[counter] = «IF static-»_«ENDIF-»«param.name»[counter];
@@ -62,7 +61,7 @@
 «ENDREM»
 «DEFINE AddOperationImpl FOR MOperation -»
 	«LET parameter.first() AS param -»
-		«IF emHasStereotype("primitive") -»
+		«IF emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("add.property.access_" + xmiGuid)»
 			// TODO: sorry the template for add operations on arrays is missing, please file a feature request at forge.genesez.org
 			throw new UnsupportedOperationException(
@@ -79,7 +78,7 @@
 «ENDREM»
 «DEFINE RemoveOperationImpl FOR MOperation -»
 	«LET parameter.first() AS param -»
-		«IF emHasStereotype("primitive") -»
+		«IF emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("remove.property.access_" + xmiGuid)»
 			// TODO: sorry the template for remove operations on arrays is missing, please file a feature request at forge.genesez.org
 			throw new UnsupportedOperationException(

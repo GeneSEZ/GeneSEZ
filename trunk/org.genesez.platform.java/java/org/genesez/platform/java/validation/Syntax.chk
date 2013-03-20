@@ -9,9 +9,10 @@
 //	based genesez meta model
 import gcore;
 
-extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::Conversion;
-extension org::genesez::metamodel::core::util::m2t::Helper;
+extension org::genesez::metamodel::core::util::Helper;
+extension org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement;
 extension org::genesez::util::logging::Logging;
 
 /*
@@ -54,7 +55,7 @@ context MOperation WARNING "GeneSEZ: the modifiers of the interface operation wi
 */
 
 context MProperty WARNING "GeneSEZ: you shouldn't mix generics and arrays! you will dive into some problems, see: joshua block, effective java, generics, http://java.sun.com/docs/books/effective/generics.pdf! " + fqmn() :
-	multiplicity.isMultiValued() && usePrimitiveType() && hasGenericRealization()
+	multiplicity.isMultiValued() && prHasPrimitiveStereotype() && hasGenericRealization()
 		? false
 		: true;
 

@@ -13,7 +13,7 @@ import gcore;
  * 
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::platform::java::m2m::Annotation;
 
 
@@ -21,7 +21,7 @@ extension org::genesez::platform::java::m2m::Annotation;
  * Returns the prefix for java annotation types during their type definition.
  */
 around org::genesez::platform::java::util::Naming::prefix(MInterface this) :
-	emHasStereotype( prJavaAnnotationStereotype() )
+	emHasStereotypeAssignment( prJavaAnnotationStereotype() )
 		? "Wf"
 		: ctx.proceed();
 
@@ -29,6 +29,6 @@ around org::genesez::platform::java::util::Naming::prefix(MInterface this) :
  * Returns the prefix for java annotation types during their use.
  */
 around org::genesez::platform::java::util::Naming::prefix(MStereotype this) :
-	emHasStereotype( prJavaAnnotationStereotype() )
+	emHasStereotypeAssignment( prJavaAnnotationStereotype() )
 		? "Wf"
 		: ctx.proceed();
