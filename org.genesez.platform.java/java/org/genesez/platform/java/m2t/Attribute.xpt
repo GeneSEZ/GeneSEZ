@@ -10,12 +10,13 @@
 	@author andre pflueger (last)
 «ENDREM»
 
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 «EXTENSION org::genesez::metamodel::core::util::Conversion»
-«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
-«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+«EXTENSION org::genesez::metamodel::core::util::GlobalVar»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 «EXTENSION org::genesez::metamodel::core::util::profile::AccessorStereotype»
+«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement»
 «EXTENSION org::genesez::util::logging::Logging»
 
 «EXTENSION org::genesez::platform::java::util::Naming»
@@ -164,7 +165,7 @@
 «DEFINE _Modifier FOR MAttribute -»
 «IF classifier.metaType == MInterface -»
 	public static final
-«ELSEIF usePropertyVisibilityForAccessors() && !derived -»
+«ELSEIF globalVarUsePropertyVisibilityForAccessors() && !derived -»
 	private «IF static -»static«ENDIF -» «IF final -»final «ENDIF -» «EXPAND _Volatile -»
 «ELSE -»
 	«modifier()» «IF static -»static«ENDIF -» «IF final -»final«ENDIF -» «EXPAND _Volatile -»
@@ -175,7 +176,7 @@
 	evaluates the stereotype "volatile" of the GeneSEZ UML profile
 «ENDREM»
 «DEFINE _Volatile FOR MAttribute -»
-	«IF emHasStereotype("volatile")-»volatile«ENDIF-»
+	«IF emHasStereotypeAssignment("volatile")-»volatile«ENDIF-»
 «ENDDEFINE»
 
 «REM»
@@ -193,9 +194,9 @@
 	 = «defaultvalue -»
 	«ENDIF -»
 «ELSEIF multiplicity.isMultiValued() && !final -»
-	«IF usePrimitiveType() && !multiplicity.hasFixedUpperBoundMultiplicity() -»
+	«IF prHasPrimitiveStereotype() && !multiplicity.hasFixedUpperBoundMultiplicity() -»
 	 = null
-	«ELSEIF usePrimitiveType() && multiplicity.hasFixedUpperBoundMultiplicity() -»
+	«ELSEIF prHasPrimitiveStereotype() && multiplicity.hasFixedUpperBoundMultiplicity() -»
 	 = new «type.mapName().asTypeName()»[«multiplicity.upperBound»]
 	«ELSE -»
 	 = new «mapCollection("Implementation") -»<«type.mapName("Wrapper").asTypeName() -»«EXPAND Type::GenericUse»>()
@@ -255,7 +256,7 @@
 		}
 	«ELSE -»
 		«EXPAND _ModifierAccessor» void «asSetter()»(«EXPAND Type::MultiValuedType(multiplicity, type) -» «IF static-»_«ENDIF-»«asAttribute()») {
-			«IF emHasStereotype("primitive") -»
+			«IF emHasStereotypeAssignment("primitive") -»
 				«IF !static-»this.«ENDIF-»«asAttribute()» = new «type.mapName().asTypeName() -»[«IF static-»_«ENDIF-»«asAttribute()».length];
 				for (int counter = 0; counter < «IF static-»_«ENDIF-»«asAttribute()».length; counter++) {
 					«IF !static-»this.«ENDIF-»«asAttribute()»[counter] = «IF static-»_«ENDIF-»«asAttribute()»[counter];
@@ -275,7 +276,7 @@
 «DEFINE _Add FOR MAttribute -»
 	«EXPAND Comment::Add -»
 	«EXPAND _ModifierAccessor» void «asAddPropertyAccessOperation()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
-		«IF emHasStereotype("primitive") -»
+		«IF emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("add.property.access_" + xmiGuid)»
 			// TODO: sorry the template for add operations on arrays is missing, please file a feature request at forge.genesez.org
 			throw new UnsupportedOperationException(
@@ -295,7 +296,7 @@
 «DEFINE _Remove FOR MAttribute -»
 	«EXPAND Comment::Remove -»
 	«EXPAND _ModifierAccessor» void «asRemovePropertyAccessOperation()»(«type.mapName().asTypeName()» «IF static-»_«ENDIF-»«asAttribute()») {
-		«IF emHasStereotype("primitive") -»
+		«IF emHasStereotypeAssignment("primitive") -»
 			«PROTECT CSTART "/* " CEND " */" ID ("remove.property.access_" + xmiGuid)»
 			// TODO: sorry the template for remove operations on arrays is missing, please file a feature request at forge.genesez.org
 			throw new UnsupportedOperationException(
@@ -313,7 +314,7 @@
 	distincts if the visibility of the property should be used or simply 'public'
 «ENDREM»
 «DEFINE _ModifierAccessor FOR MAttribute -»
-	«IF usePropertyVisibilityForAccessors() -»
+	«IF globalVarUsePropertyVisibilityForAccessors() -»
 	«modifier()» «IF static»static«ENDIF -» «IF final»final«ENDIF -»
 	«ELSE -»
 	public «IF static»static«ENDIF -» «IF final»final«ENDIF -»

@@ -18,10 +18,9 @@ import gcore;
  * @author	andre pflueger
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
-extension org::genesez::metamodel::core::util::AccessHelper;
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::ModelNavigation;
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
 extension org::genesez::platform::java::m2m::Constructor;
@@ -34,7 +33,7 @@ extension org::genesez::platform::java::m2m::Constructor;
  * @return	the class itself
  */
 MClass singleton(MClass this) :
-	this.emHasStereotype("singleton")
+	this.emHasStereotypeAssignment("singleton")
 		? (
 			!this.property.exists(e|e.name.matches("instance"))
 				? (

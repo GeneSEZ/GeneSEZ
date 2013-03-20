@@ -1,11 +1,10 @@
 
 «IMPORT gcore»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
-«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 «EXTENSION org::genesez::platform::java::util::Naming»
 
 «AROUND org::genesez::platform::java::m2t::Operation::_ImplementationBody FOR MOperation -»
-	«IF emHasStereotype("delegate") && classifier.property.exists( p|p.emHasStereotype("delegate") ) -»
+	«IF emHasStereotypeAssignment("delegate") && classifier.property.exists( p|p.emHasStereotypeAssignment("delegate") ) -»
 		«EXPAND DelegateImpl -»
 	«ELSE -»
 		«targetDef.proceed() -»
@@ -21,7 +20,7 @@
 «ENDDEFINE»
 
 «DEFINE Attribute FOR MOperation -»
-	«classifier.property.selectFirst( p|p.emHasStereotype("delegate") ).asAttribute() -»
+	«classifier.property.selectFirst( p|p.emHasStereotypeAssignment("delegate") ).asAttribute() -»
 «ENDDEFINE»
 
 «DEFINE Call FOR MOperation -»

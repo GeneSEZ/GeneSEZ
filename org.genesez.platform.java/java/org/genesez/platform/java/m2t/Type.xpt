@@ -8,10 +8,10 @@
 «ENDREM»
 
 «REM» useful support functions «ENDREM»
-«EXTENSION org::genesez::metamodel::core::util::AccessHelper»
+«EXTENSION org::genesez::metamodel::core::util::AccessElement»
 «EXTENSION org::genesez::metamodel::core::util::Conversion»
-«EXTENSION org::genesez::metamodel::core::util::ExtensionMechanism»
-«EXTENSION org::genesez::metamodel::core::util::m2t::Helper»
+«EXTENSION org::genesez::metamodel::core::util::Helper»
+«EXTENSION org::genesez::metamodel::core::util::profile::GeneSEZProfileAccessElement»
 «EXTENSION org::genesez::metamodel::core::util::mapping::TypeMapping»
 
 «EXTENSION org::genesez::platform::java::m2m::Annotation»
@@ -34,7 +34,7 @@
 «ENDDEFINE»
 
 «DEFINE Inner FOR MInterface»
-	«IF emHasStereotype(prJavaAnnotationStereotype()) -»
+	«IF emHasStereotypeAssignment(prJavaAnnotationStereotype()) -»
 		«EXPAND Annotation::Inner -»
 	«ELSE -»
 		«EXPAND Interface::Inner -»
@@ -61,7 +61,7 @@
 «ENDREM»
 «DEFINE MultiValuedType(MMultiplicity multiplicity, MType type) FOR MElement -»
 	«logTrace("", "Generate multi valued type for [" + multiplicity + ", " + type.name() + "] " + this) -»
-	«IF usePrimitiveType() -»
+	«IF prHasPrimitiveStereotype() -»
 		«type.mapName().asTypeName() -»«EXPAND GenericUse»[]
 	«ELSE -»
 		«multiplicity.mapCollection() -»<«type.mapName("Wrapper").asTypeName()»«EXPAND GenericUse»>

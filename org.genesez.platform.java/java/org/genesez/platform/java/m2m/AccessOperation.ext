@@ -13,13 +13,12 @@ import gcore;
  * @author	andre pflueger
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
-extension org::genesez::metamodel::core::util::AccessHelper;
+extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::Conversion;
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::ModelNavigation;
-extension org::genesez::metamodel::core::util::m2m::CloneElement;
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
-extension org::genesez::metamodel::core::util::m2t::Helper;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::CloneElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::Helper;
 extension org::genesez::metamodel::core::util::profile::GeneSEZProfile;
 extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::platform::java::util::Naming;
@@ -39,7 +38,7 @@ extension org::genesez::util::logging::Logging;
 MAttribute emAccessorForStaticFinalAttribute(MAttribute this) :
 	final && static
 		? (
-			emHasStereotype( prAccessor() )
+			emHasStereotypeAssignment( prAccessor() )
 				? (
 					emHasTaggedValue( prAccessor(), prAccessorSetter(), "true" )
 						? logWarn("Generation of a set access operation for a static final attribute makes no sense!" + fqmn())

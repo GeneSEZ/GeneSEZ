@@ -13,11 +13,10 @@ import gcore;
  * @author  nancy doerfel
  * @author	tobias haubold <toh@fh-zwickau.de>
  */
-extension org::genesez::metamodel::core::util::AccessHelper;
-extension org::genesez::metamodel::core::util::ExtensionMechanism;
-extension org::genesez::metamodel::core::util::ModelNavigation;
-extension org::genesez::metamodel::core::util::m2m::CreateElement;
-extension org::genesez::metamodel::core::util::m2m::RemoveElement;
+extension org::genesez::metamodel::core::util::AccessElement;
+extension org::genesez::metamodel::core::util::NavigateElement;
+extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::metamodel::core::util::RemoveElement;
 
 
 /**
@@ -33,7 +32,7 @@ extension org::genesez::metamodel::core::util::m2m::RemoveElement;
  * @param this the MInterface which later represents an annotation (@interface)
  */
 MInterface emUnifyAnnotationStereotype(MInterface this) :
-	!property.typeSelect(MAssociationRole).select( e|e.name.startsWith("base_") ).isEmpty || emHasStereotype( prJavaAnnotationStereotype() )
+	!property.typeSelect(MAssociationRole).select( e|e.name.startsWith("base_") ).isEmpty || emHasStereotypeAssignment( prJavaAnnotationStereotype() )
 		? (
 			emAssignTargetAnnotationValues(
 				emHasTargetAnnotationValue("ANNOTATION_TYPE") || emHasMetaTypeExtension("Stereotype") || emHasMetaTypeExtension("Element"),
