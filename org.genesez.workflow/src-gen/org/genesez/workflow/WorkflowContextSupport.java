@@ -39,13 +39,14 @@ public class WorkflowContextSupport {
 	 */
 	public static Object getSlot(String name) {
 		/* PROTECTED REGION ID(java.implementation._OKvg0I-_EeK_rM5VK2SGEA) ENABLED START */
+		Object result = null;
 		if (mweWfContext != null) {
-			mweWfContext.get(name);
+			result = mweWfContext.get(name);
 		}
 		if (mwe2WfContext != null) {
-			mwe2WfContext.get(name);
+			result = mwe2WfContext.get(name);
 		}
-		return null;
+		return result;
 		/* PROTECTED REGION END */
 	}
 	
