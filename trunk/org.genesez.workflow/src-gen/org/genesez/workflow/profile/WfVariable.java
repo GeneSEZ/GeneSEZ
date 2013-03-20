@@ -13,9 +13,6 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 @Retention(CLASS)
 public @interface WfVariable {
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.annotation.own.code.declaration._d9kawP3PEeGcKvbUXThvRw.JavaAnnotationInterface) ENABLED START */
 	/* PROTECTED REGION END */
 }

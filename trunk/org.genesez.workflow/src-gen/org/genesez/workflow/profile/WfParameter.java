@@ -16,7 +16,6 @@ import java.lang.annotation.Retention;
 @Retention(RUNTIME)
 public @interface WfParameter {
 	
-	// -- generated elements ------------------------------------------------
 	boolean isRequired() default false;
 	
 	boolean isMultiValued() default false;
@@ -25,9 +24,6 @@ public @interface WfParameter {
 	
 	boolean isTransformationParameter() default true;
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.annotation.own.code.declaration._SS618PXWEeGt_pQB8d500A.JavaAnnotationInterface) ENABLED START */
 	/* PROTECTED REGION END */
 }
