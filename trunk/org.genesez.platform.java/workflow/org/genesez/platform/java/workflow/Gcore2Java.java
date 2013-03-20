@@ -20,7 +20,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	private java.util.Set<String> excludePackage = new java.util.LinkedHashSet<String>();
 	
 	@WfParameter(isRequired = false, isMultiValued = true, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
-	private java.util.Set<String> excludeContentPackage = new java.util.LinkedHashSet<String>();
+	private java.util.Set<String> excludePackageContent = new java.util.LinkedHashSet<String>();
 	
 	@WfParameter(isRequired = false, isMultiValued = false, workflowInclusion = WHEN_NEEDED, isTransformationParameter = true)
 	private boolean fieldAccess = true;
@@ -73,11 +73,11 @@ public class Gcore2Java extends SimpleModel2Text {
 				result.add(new Parameter("excludePackage", it));
 			}
 		}
-		if (excludeContentPackage.isEmpty()) {
-			result.add(new Parameter("excludeContentPackage", ""));
+		if (excludePackageContent.isEmpty()) {
+			result.add(new Parameter("excludePackageContent", ""));
 		} else {
-			for (String it : excludeContentPackage) {
-				result.add(new Parameter("excludeContentPackage", it));
+			for (String it : excludePackageContent) {
+				result.add(new Parameter("excludePackageContent", it));
 			}
 		}
 		result.add(new Parameter("fieldAccess", fieldAccess));
@@ -119,26 +119,26 @@ public class Gcore2Java extends SimpleModel2Text {
 	}
 	
 	/**
-	 * Returns the value of attribute '<em><b>excludeContentPackage</b></em>'.
+	 * Returns the value of attribute '<em><b>excludePackageContent</b></em>'.
 	 */
-	public java.util.Set<String> getExcludeContentPackage() {
-		return excludeContentPackage;
+	public java.util.Set<String> getExcludePackageContent() {
+		return excludePackageContent;
 	}
 	
 	/**
-	 * Adds the specified value to the attribute '<em><b>excludeContentPackage</b></em>'.
-	 * @param	excludeContentPackage	the value to add.
+	 * Adds the specified value to the attribute '<em><b>excludePackageContent</b></em>'.
+	 * @param	excludePackageContent	the value to add.
 	 */
-	public void addExcludeContentPackage(String excludeContentPackage) {
-		this.excludeContentPackage.add(excludeContentPackage);
+	public void addExcludePackageContent(String excludePackageContent) {
+		this.excludePackageContent.add(excludePackageContent);
 	}
 	
 	/**
-	 * Removes the specified value from the attribute '<em><b>excludeContentPackage</b></em>'.
-	 * @param	excludeContentPackage	the value to remove.
+	 * Removes the specified value from the attribute '<em><b>excludePackageContent</b></em>'.
+	 * @param	excludePackageContent	the value to remove.
 	 */
-	public void removeExcludeContentPackage(String excludeContentPackage) {
-		this.excludeContentPackage.remove(excludeContentPackage);
+	public void removeExcludePackageContent(String excludePackageContent) {
+		this.excludePackageContent.remove(excludePackageContent);
 	}
 	
 	/**
