@@ -11,12 +11,17 @@ import gtrace;
  * 
  * @author toh
  */
+extension org::genesez::workflow::xpand::WorkflowContextSupport;
+extension org::genesez::util::logging::Logging;
 
 // access to models using global variables
-MModel gcore() : GLOBALVAR coremodel;
-RModel greq() : GLOBALVAR reqmodel;
-TTraceModel gtrace() : GLOBALVAR tracemodel;
+MModel gcore() : getSlot( gcoreModel() );
+RModel greq() : getSlot( greqModel() );
+TTraceModel gtrace() : getSlot( gtraceModel() );
 
+String gcoreModel() : GLOBALVAR gcoreModelSlot;
+String greqModel() : GLOBALVAR greqModelSlot;
+String gtraceModel() : GLOBALVAR gtraceModelSlot;
 
 // direct navigation support
 List[RRequirement] requirement(MElement this) : requirementTrace().requirement;
