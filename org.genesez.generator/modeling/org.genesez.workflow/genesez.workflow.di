@@ -43,6 +43,9 @@
     <availablePage>
       <emfPageIdentifier href="genesez.workflow.notation#_xYgXAIZnEeKi-fAVJTcXlg"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="genesez.workflow.notation#_VL0rEI8IEeKpNoiOVa6Abg"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -88,6 +91,9 @@
         </children>
         <children>
           <emfPageIdentifier href="genesez.workflow.notation#_ZoeyAIZUEeKi-fAVJTcXlg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="genesez.workflow.notation#_VL0rEI8IEeKpNoiOVa6Abg"/>
         </children>
       </children>
     </windows>
