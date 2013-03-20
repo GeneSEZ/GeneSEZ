@@ -1,0 +1,67 @@
+module org.genesez.example.java.requirements.traceability.dashboard
+
+// do uml setup
+var uml2setup = org.genesez.adapter.uml2.workflow.UmlSetup {
+	standardUML2Setup = true
+}
+// create meta model definitions
+var gcore = org.eclipse.xtend.typesystem.emf.EmfMetaModel {
+	metaModelPackage = "org.genesez.metamodel.gcore.GcorePackage"
+}
+var uml = org.eclipse.xtend.typesystem.uml2.UML2MetaModel {}
+
+Workflow {
+	// uml to genesez transformation
+	component = org.genesez.workflow.CompositeComponent {
+		// read the uml2 model file
+		component = org.genesez.workflow.EmfReader {
+			file = "model/forms.uml"
+			slot = "uml2model"
+		}
+		// validate the uml2 model for transformability
+		component = org.genesez.workflow.xpand.ValidatorComponent {
+			metaModel = uml
+			slot = "uml2model"
+			
+			validator = org.genesez.adapter.uml2.workflow.UmlModelValidation {}
+			validator = org.genesez.adapter.uml2.workflow.UmlStateMachineValidation {}
+			validator = org.genesez.adapter.uml2.workflow.Uml2GcoreStateMachineValidation {}
+		}
+		// transform the uml2 model into a GeneSEZ model
+		component = org.genesez.workflow.xpand.Model2ModelComponent {
+			metaModel = uml
+			metaModel = gcore
+			slot = "uml2model"
+			outputSlot = "coremodel"
+			
+			model2model = org.genesez.adapter.uml2.workflow.Uml2Gcore {
+			}
+		}
+	}
+	
+	// traceability setup
+	component = org.genesez.traceability.TraceabilityComponent {
+		gcoreModelFile = "../org.genesez.example.java.requirements.traceability/model/forms.xmi"
+		greqModelFile = "../org.genesez.example.java.requirements.traceability/model/requirements.xmi"
+		gtraceModelFile = "../org.genesez.example.java.requirements.traceability/model/requirement.traceability.xmi"
+		
+		/* 
+			We created the traceability model in the same directory as the structure + requirements model. The 
+			model element references are relative uris. The execution directory of the workflow is different
+			from the directory where we created the traceability model and therefore our model references are not resolveable.
+			Using uri mappings we can point emf to the right place.
+			This workflow component automatically sets the right uri mappings for the default case:
+			(the uri base for both referenced models is the directory of the traceability model and both models are referenced by name)
+		*/
+	}
+	
+	// generate dashboard
+	component = org.genesez.workflow.xpand.Model2TextSupport {
+		component = org.genesez.traceability.DashboardComponent {
+			outputDir = "../org.genesez.example.java.requirements.traceability/dashboard"
+			// we generate the sources using the trace model!
+			slot = "tracemodel"
+			model2text = org.genesez.traceability.Traceability2Dashboard {}
+		}
+	}
+}

@@ -4,7 +4,6 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_14_0_b6f02e1_1211871307421_631477_281) 
  */
-
 import static traceability.Requirement.Value.R1;
 import static traceability.Scenario.Value.S2;
 import static traceability.ScenarioStep.Value.ST2_2;
@@ -17,17 +16,10 @@ import traceability.ScenarioStep;
 
 /**
  * describes the geometrical shape of a <i><b>circle</b></i>
- * @author dreamer
  */
-@Scenario({
-	S2
-})
-@Requirement({
-	R1
-})
+@Scenario({ S2 })
+@Requirement({ R1 })
 public class Circle implements Form {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * the center of the circle
@@ -39,7 +31,6 @@ public class Circle implements Form {
 	 */
 	private double radius;
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructs an unit circle in the center of the coordinate system
 	 */
@@ -55,37 +46,11 @@ public class Circle implements Form {
 	 * @param	center	the center of the circle
 	 * @param	radius	the distance from the center to the circle line
 	 */
-	@ScenarioStep({
-		ST2_2
-	})
+	@ScenarioStep({ ST2_2 })
 	public Circle(Point center, double radius) {
 		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249463891828_217474_748) ENABLED START */
 		this.center = center;
 		this.radius = radius;
-		/* PROTECTED REGION END */
-	}
-	
-	// -- generated method stubs for implementations + derived attributes ---
-	/**
-	 * determines the center of area of the form
-	 * @return	the location of the center of area
-	 */
-	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		// TODO: implementation of method 'Circle.getCenterOfArea(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * determines if the form is crossing another form
-	 * @param	form	the form to check for crossing
-	 * @return	true, if the specified form crosses this form, otherwise false
-	 */
-	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Circle.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
 	
@@ -136,13 +101,30 @@ public class Circle implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
+	/**
+	 * determines the center of area of the form
+	 * @return	the location of the center of area
+	 */
+	public Point getCenterOfArea() {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		// TODO: implementation of method 'Circle.getCenterOfArea(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
 	
-	// -- generated code of other cartridges --------------------------------
+	/**
+	 * determines if the form is crossing another form
+	 * @param	form	the form to check for crossing
+	 * @return	true, if the specified form crosses this form, otherwise false
+	 */
+	public boolean isCrossing(Form form) {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871307421_631477_281__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Circle.isCrossing(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
 	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871307421_631477_281) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

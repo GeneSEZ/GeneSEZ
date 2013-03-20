@@ -4,7 +4,6 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_14_0_b6f02e1_1211871095796_723781_254) 
  */
-
 import static traceability.Requirement.Value.R1;
 import static traceability.ScenarioStep.Value.ST2_1;
 
@@ -12,17 +11,13 @@ import java.awt.Color;
 
 import traceability.Requirement;
 import traceability.ScenarioStep;
+import traceability.Scenario;
 
 /**
  * Describes a <i><b>point</b></i> in a 2-dimensional coordinate system
- * @author dreamer
  */
-@Requirement({
-	R1
-})
+@Requirement({ R1 })
 public class Point implements Form {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * the x coordinate value
@@ -34,13 +29,10 @@ public class Point implements Form {
 	 */
 	private double y;
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructs a point in the center of the coordinate system
 	 */
-	@ScenarioStep({
-		ST2_1
-	})
+	@ScenarioStep({ ST2_1 })
 	public Point() {
 		/* PROTECTED REGION ID(java.constructor._14_0_b6f02e1_1211871240109_473577_277) ENABLED START */
 		this.x = 0.0;
@@ -53,9 +45,7 @@ public class Point implements Form {
 	 * @param	x	the x-coordinate value of the point
 	 * @param	y	the y-coordinate value of the point
 	 */
-	@ScenarioStep({
-		ST2_1
-	})
+	@ScenarioStep({ ST2_1 })
 	public Point(double x, double y) {
 		/* PROTECTED REGION ID(java.constructor._16_0_b6f02e1_1249463853031_881157_741) ENABLED START */
 		this.x = x;
@@ -63,27 +53,18 @@ public class Point implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated method stubs for implementations + derived attributes ---
 	/**
-	 * determines the center of area of the form
-	 * @return	the location of the center of area
+	 * the x coordinate value
 	 */
-	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		return new Point(this.x, this.y);
-		/* PROTECTED REGION END */
+	public double getX() {
+		return x;
 	}
 	
 	/**
-	 * determines if the form is crossing another form
-	 * @param	form	the form to check for crossing
-	 * @return	true, if the specified form crosses this form, otherwise false
+	 * the y coordinate value
 	 */
-	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Point.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
+	public double getY() {
+		return y;
 	}
 	
 	/**
@@ -133,26 +114,29 @@ public class Point implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
 	/**
-	 * the x coordinate value
+	 * determines the center of area of the form
+	 * @return	the location of the center of area
 	 */
-	public double getX() {
-		return x;
+	public Point getCenterOfArea() {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		return new Point(this.x, this.y);
+		/* PROTECTED REGION END */
 	}
 	
 	/**
-	 * the y coordinate value
+	 * determines if the form is crossing another form
+	 * @param	form	the form to check for crossing
+	 * @return	true, if the specified form crosses this form, otherwise false
 	 */
-	public double getY() {
-		return y;
+	public boolean isCrossing(Form form) {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871095796_723781_254__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Point.isCrossing(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871095796_723781_254) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

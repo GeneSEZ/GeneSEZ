@@ -7,14 +7,13 @@ package forms;
 
 import static traceability.Requirement.Value.R5;
 import traceability.Requirement;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /**
  * describes things which can be <i><b>moved</b></i>
- * @author dreamer
  */
-@Requirement({
-	R5
-})
+@Requirement({ R5 })
 public interface Moveable {
 	
 	/**
@@ -23,14 +22,9 @@ public interface Moveable {
 	 * @param	dx	delta value to move in <i><b>x</b></i> direction
 	 * @param	dy	delta value to move in <i><b>y</b></i> direction
 	 */
-	@Requirement({
-		R5
-	})
+	@Requirement({ R5 })
 	public void move(double dx, double dy);
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._14_0_b6f02e1_1214478843156_556754_163) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */

@@ -4,7 +4,6 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_16_0_b6f02e1_1249543362015_69354_283) 
  */
-
 import static traceability.Requirement.Value.R4;
 
 import java.awt.Color;
@@ -17,19 +16,17 @@ import org.genesez.platform.java.umlsupport.associations.ManyAssociation;
 import org.genesez.platform.java.umlsupport.associations.RelatedAssociationRole;
 
 import traceability.Requirement;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /**
  * <p>
  *   describes a complex <b>figure</b> by a composition of forms
  * </p>
- * @author dreamer
  */
-@Requirement({
-	R4
-})
+@Requirement({ R4 })
 public class Figure implements Form, AssociationRole {
 	
-	// -- generated attribute, constant + association declarations ----------
 	/** Defines an identifier for each association, used by the association handling library */
 	public enum Associations implements RelatedAssociationRole {
 		FORMS
@@ -40,30 +37,6 @@ public class Figure implements Form, AssociationRole {
 	
 	/** Stores associated objects of association FORMS to Form */
 	private java.util.Set<Form> forms = new java.util.HashSet<Form>();
-	
-	// -- generated method stubs for implementations + derived attributes ---
-	/**
-	 * determines the center of area of the form
-	 * @return	the location of the center of area
-	 */
-	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		// TODO: implementation of method 'Figure.getCenterOfArea(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * determines if the form is crossing another form
-	 * @param	form	the form to check for crossing
-	 * @return	true, if the specified form crosses this form, otherwise false
-	 */
-	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Figure.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
 	
 	/**
 	 * moves the position by the given delta values within a 2-dimensional 
@@ -112,7 +85,29 @@ public class Figure implements Form, AssociationRole {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
+	/**
+	 * determines the center of area of the form
+	 * @return	the location of the center of area
+	 */
+	public Point getCenterOfArea() {
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		// TODO: implementation of method 'Figure.getCenterOfArea(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
+	/**
+	 * determines if the form is crossing another form
+	 * @param	form	the form to check for crossing
+	 * @return	true, if the specified form crosses this form, otherwise false
+	 */
+	public boolean isCrossing(Form form) {
+		/* PROTECTED REGION ID(java.implementation._16_0_b6f02e1_1249543362015_69354_283__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Figure.isCrossing(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
+	
 	// initialization block for association management objects
 	{
 		association.put(Associations.FORMS, new ManyAssociation<Figure, Form>(this, forms));
@@ -120,7 +115,7 @@ public class Figure implements Form, AssociationRole {
 	
 	/**
 	 * Provides generic access to association objects, used by the association handling library
-	 * @see de.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(de.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
+	 * @see org.genesez.platform.java.umlsupport.associations.AssociationRole#getAssociation(org.genesez.platform.java.umlsupport.associations.modified.RelatedAssociationRole)
 	 */
 	public Association<? extends Object, ? extends Object> getAssociation(RelatedAssociationRole role) {
 		if (association.containsKey(role))
@@ -136,11 +131,7 @@ public class Figure implements Form, AssociationRole {
 		return (Association<Figure, Form>) association.get(Associations.FORMS);
 	}
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._16_0_b6f02e1_1249543362015_69354_283) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

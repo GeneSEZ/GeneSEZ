@@ -4,24 +4,20 @@ package forms;
  *	Do not place import/include statements above this comment, just below. 
  * 	@FILE-ID : (_14_0_b6f02e1_1211871374078_396988_308) 
  */
-
 import static traceability.Requirement.Value.R1;
 import static traceability.Requirement.Value.R3;
 
 import java.awt.Color;
 
 import traceability.Requirement;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /**
  * Describes the geometrical form of a <i><b>line</b></i>
- * @author dreamer
  */
-@Requirement({
-R1, R3
-})
+@Requirement({ R1, R3 })
 public class Line implements Form {
-	
-	// -- generated attribute, constant + association declarations ----------
 	
 	/**
 	 * indicates the start point of the line
@@ -33,7 +29,6 @@ public class Line implements Form {
 	 */
 	private Point end;
 	
-	// -- generated constructors --------------------------------------------
 	/**
 	 * constructs a line from the center of the coordinate system to the specified end
 	 * @param	end	the end point of the line
@@ -54,30 +49,6 @@ public class Line implements Form {
 		/* PROTECTED REGION ID(java.constructor._14_0_b6f02e1_1211871400078_573707_331) ENABLED START */
 		this.start = start;
 		this.end = end;
-		/* PROTECTED REGION END */
-	}
-	
-	// -- generated method stubs for implementations + derived attributes ---
-	/**
-	 * determines the center of area of the form
-	 * @return	the location of the center of area
-	 */
-	public Point getCenterOfArea() {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
-		// TODO: implementation of method 'Line.getCenterOfArea(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
-		/* PROTECTED REGION END */
-	}
-	
-	/**
-	 * determines if the form is crossing another form
-	 * @param	form	the form to check for crossing
-	 * @return	true, if the specified form crosses this form, otherwise false
-	 */
-	public boolean isCrossing(Form form) {
-		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
-		// TODO: implementation of method 'Line.isCrossing(...)'
-		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
 		/* PROTECTED REGION END */
 	}
 	
@@ -128,13 +99,30 @@ public class Line implements Form {
 		/* PROTECTED REGION END */
 	}
 	
-	// -- generated association + attribute accessors -----------------------
+	/**
+	 * determines the center of area of the form
+	 * @return	the location of the center of area
+	 */
+	public Point getCenterOfArea() {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464477484_822826_834) ENABLED START */
+		// TODO: implementation of method 'Line.getCenterOfArea(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
 	
-	// -- generated code of other cartridges --------------------------------
+	/**
+	 * determines if the form is crossing another form
+	 * @param	form	the form to check for crossing
+	 * @return	true, if the specified form crosses this form, otherwise false
+	 */
+	public boolean isCrossing(Form form) {
+		/* PROTECTED REGION ID(java.implementation._14_0_b6f02e1_1211871374078_396988_308__16_0_b6f02e1_1249464485156_784670_838) ENABLED START */
+		// TODO: implementation of method 'Line.isCrossing(...)'
+		throw new UnsupportedOperationException("The implementation of this generated method stub is missing!");
+		/* PROTECTED REGION END */
+	}
 	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.class.own.code.implementation._14_0_b6f02e1_1211871374078_396988_308) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
-	
 }

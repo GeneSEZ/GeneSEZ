@@ -7,14 +7,13 @@ package forms;
 
 import static traceability.Requirement.Value.R6;
 import traceability.Requirement;
+import traceability.Scenario;
+import traceability.ScenarioStep;
 
 /**
  * describes things which can be <i><b>rotated</b></i>
- * @author dreamer
  */
-@Requirement({
-	R6
-})
+@Requirement({ R6 })
 public interface Rotateable {
 	
 	/**
@@ -30,9 +29,6 @@ public interface Rotateable {
 	 */
 	public void rotate(Point center, double phi);
 	
-	// -- generated code of other cartridges --------------------------------
-	
-	// -- own code implementation -------------------------------------------
 	/* PROTECTED REGION ID(java.interface.own.code.declaration._14_0_b6f02e1_1214478880187_510458_215) ENABLED START */
 	// TODO: put your own implementation code here
 	/* PROTECTED REGION END */
