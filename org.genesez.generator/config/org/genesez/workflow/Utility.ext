@@ -17,6 +17,7 @@ import gcore;
  */
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
+extension org::genesez::util::logging::Logging;
 
 
 // -- utility functions for 'transformables'
@@ -35,8 +36,8 @@ boolean needValidateBaseClass(MClassifier this) :
  */
 boolean needParameterBaseClass(MClassifier this) :
 	allGeneralizations().typeSelect(MClassifier).operation.exists(
-	o|o.name == "getParameter" && o.parameter.isEmpty && o.hasReturn() && o.return.type.metaType == MExternal && ((MExternal)o.return.type).name == "Parameter"
-);
+		o|o.name == "getParameter" && o.parameter.isEmpty && o.hasReturn() && o.return.type.name() == "Parameter"
+	);
 
 
 // -- utility functions to create operations returning default values - - - - - - - - - - - - - - -
