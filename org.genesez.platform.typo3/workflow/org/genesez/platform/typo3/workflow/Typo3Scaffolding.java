@@ -35,7 +35,7 @@ public class Typo3Scaffolding extends SimpleScript {
 	 * Method stub for further implementation.
 	 */
 	public java.util.Set<Parameter> getParameter() {
-		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		java.util.Set<Parameter> result = super.getParameter();
 		result.add(new Parameter("scaffolding", scaffolding));
 		return result;
 	}

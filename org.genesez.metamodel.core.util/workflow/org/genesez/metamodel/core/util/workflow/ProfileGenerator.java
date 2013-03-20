@@ -63,7 +63,7 @@ public class ProfileGenerator extends SimpleModel2Text {
 	 * Method stub for further implementation.
 	 */
 	public java.util.Set<Parameter> getParameter() {
-		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		java.util.Set<Parameter> result = super.getParameter();
 		result.add(new Parameter("xtendFilePath", xtendFilePath));
 		result.add(new Parameter("profileFileName", profileFileName));
 		result.add(new Parameter("accessHelperFileName", accessHelperFileName));
