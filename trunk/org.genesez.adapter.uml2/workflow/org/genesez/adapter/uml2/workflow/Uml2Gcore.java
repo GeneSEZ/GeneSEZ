@@ -63,7 +63,7 @@ public class Uml2Gcore extends SimpleScript {
 	 * Method stub for further implementation.
 	 */
 	public java.util.Set<Parameter> getParameter() {
-		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		java.util.Set<Parameter> result = super.getParameter();
 		result.add(new Parameter("mapClassesInModelToExternal", mapClassesInModelToExternal));
 		result.add(new Parameter("allowGeneratedXmiGuid", allowGeneratedXmiGuid));
 		if (externalStereotypes.isEmpty()) {

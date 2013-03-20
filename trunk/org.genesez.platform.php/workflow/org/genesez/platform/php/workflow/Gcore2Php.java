@@ -56,7 +56,7 @@ public class Gcore2Php extends SimpleModel2Text {
 	 * Method stub for further implementation.
 	 */
 	public java.util.Set<Parameter> getParameter() {
-		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		java.util.Set<Parameter> result = super.getParameter();
 		result.add(new Parameter("generateIncludes", generateIncludes));
 		result.add(new Parameter("relativeIncludes", relativeIncludes));
 		result.add(new Parameter("includeBase", includeBase));

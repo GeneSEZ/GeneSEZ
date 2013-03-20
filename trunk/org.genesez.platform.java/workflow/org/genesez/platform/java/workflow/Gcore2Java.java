@@ -65,7 +65,7 @@ public class Gcore2Java extends SimpleModel2Text {
 	 * Method stub for further implementation.
 	 */
 	public java.util.Set<Parameter> getParameter() {
-		java.util.Set<Parameter> result = new java.util.LinkedHashSet<Parameter>();
+		java.util.Set<Parameter> result = super.getParameter();
 		if (excludePackage.isEmpty()) {
 			result.add(new Parameter("excludePackage", ""));
 		} else {
