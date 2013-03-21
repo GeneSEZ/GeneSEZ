@@ -77,7 +77,7 @@ boolean hasFixedUpperBoundMultiplicity(MMultiplicity this) :
  * @api
  */
 List[MPackage] allNestedPackages(MPackage this) :
-	{ nestedPackage }.addAll(
+	nestedPackage.addAll(
 		nestedPackage.allNestedPackages()
 	);
 
@@ -223,7 +223,7 @@ String name(MType this) :
  * @api
  */
 List[MClassifier] allNestedClassifiers(MPackage this) :
-	{ classifier }.addAll(
+	classifier.addAll(
 		nestedPackage.allNestedClassifiers()
 	);
 	
@@ -238,7 +238,7 @@ List[MClassifier] allNestedClassifiers(MPackage this) :
  * @api
  */
 List[MClassifier] allSpecializations(MType this):
-	{ owningSpecializations() }.addAll(
+	owningSpecializations().addAll(
 		owningSpecializations().allSpecializations()
 	);
 
@@ -271,7 +271,7 @@ List[MClassifier] owningSpecializations(MType this) :
  * @api
  */
 List[MProperty] allProperties(MClassifier this) :
-	{ allAttributes() }.addAll(
+	allAttributes().addAll(
 		allAssociationRoles()
 	);
 
@@ -285,7 +285,7 @@ List[MProperty] allProperties(MClassifier this) :
  * @api
  */
 List[MProperty] allInitializableProperties(MClassifier this) :
-	{ allInitializableAttributes() }.addAll(
+	allInitializableAttributes().addAll(
 		allInitializableAssociationRoles()
 	);
 
@@ -299,7 +299,7 @@ List[MProperty] allInitializableProperties(MClassifier this) :
  * @api
  */
 List[MProperty] owningInitializableProperties(MClassifier this) :
-	{ owningInitializableAttributes() }.addAll(
+	owningInitializableAttributes().addAll(
 		owningInitializableAssociationRoles() 
 	);
 
