@@ -30,7 +30,7 @@ public class DocParser {
 		Set<File> directories = new LinkedHashSet<File>();
 
 		if(args.length == 0) {
-			base = "/home/nicher/workspace/workspace.genesez_scriptdoc";
+			base = "D:/GeneSEZ/eclipse/eclipse/workspace/org.genesez.scriptdoc";
 			scriptDocFolder  = "scriptdoc";
 		} else {
 			if(args[0] == "1") {
@@ -46,7 +46,7 @@ public class DocParser {
 		} else {
 			// some test scripts
 			paths.add("org.genesez.util");
-			paths.add("org.genesez.metamodel.core.util");
+			//paths.add("org.genesez.metamodel.core.util");
 			//paths.add("org.genesez.platform.java/java5");
 			//paths.add("org.genesez.platform.java/java");
 
