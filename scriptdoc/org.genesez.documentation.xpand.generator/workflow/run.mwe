@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workflow>
+	
+	<!-- define a property for the file path and name of the uml2 model -->
+	<property name="uml2model" value="modelcache/org.genesez.documentation.xpand.uml" />
+	
+	<!-- define a property for the file path and name of the xmi output -->
+	<property name="genesezmodel" value="modelcache/org.genesez.documentation.xpand.xmi" />
+	
+	<!-- define a property for the output dir -->
+	<property name="outputDir" value="../org.genesez.documentation.xpand/src-gen" />
+
+	<!-- read the exported UML2 model and transform it into a GeneSEZ model -->
+	<component id="uml2genesez" class="org.genesez.adapter.uml2.Uml2GeneSEZ">
+		<model value="${uml2model}" />
+	</component>
+	
+	<!-- validate the GeneSEZ model against common + PHP + TYPO3 + TYPO3 MVC specific constraints -->
+	<component id="validate" class="org.genesez.platform.common.workflow.Validator">
+		<script value="org::genesez::platform::common::Constraints" />
+		<script value="org::genesez::platform::java::constraints::Syntax" />
+	</component>
+	
+	<!-- execute model modifications for Java -->
+	<component class="org.genesez.platform.common.workflow.CompositeModel2Model">
+		<script value="org::genesez::platform::common::m2m::Realization::realize" />
+	</component>
+	
+	<!-- serialize the GeneSEZ model - just for info if you want to have a look at it  -->
+	<component class="org.genesez.platform.common.workflow.Serializer">
+		<file value="model/forms.gcore.xmi" />
+	</component>
+	
+	<!-- execute code generation for Java -->
+	<component class="org.genesez.platform.java.workflow.JavaGenerator">
+		<outputDir value="${outputDir}" />
+		<typeMappingFile value="typemapping.xml" />
+		<useModelNameAsBasePackage value="true" />
+		<generateSectionComments value="false" />
+	</component>
+	
+</workflow>
