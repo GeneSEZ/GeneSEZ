@@ -17,9 +17,10 @@ extension org::genesez::platform::java::seam2::scripts::Operation;
 extension org::genesez::platform::java::seam2::scripts::Interface;
 extension org::genesez::platform::java::seam2::scripts::Package;
 
-Void additions(MModel this) :
+MModel additions(MModel this) :
 	this.nestedPackage.additions() ->
-	this.classifier.typeSelect(MClass).additions();
+	this.classifier.typeSelect(MClass).additions() ->
+	this;
 
 Void additions(MPackage this) :
 	this.nestedPackage.additions() ->
@@ -49,9 +50,10 @@ Void additions(MAttribute this) :
 	addDataModelSelectionIndexValue() ->
 	addFactoryMethodForDataModelAttributes();
 
-Void modifications(MModel this) :
+MModel modifications(MModel this) :
 	this.nestedPackage.modifications() ->
-	this.classifier.typeSelect(MClass).modifications();
+	this.classifier.typeSelect(MClass).modifications() ->
+	this;
 	
 Void modifications(MPackage this) :
 	this.nestedPackage.modifications() ->

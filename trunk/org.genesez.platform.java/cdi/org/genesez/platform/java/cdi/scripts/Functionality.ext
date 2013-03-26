@@ -13,11 +13,12 @@ extension org::genesez::platform::java::cdi::scripts::Class;
 extension org::genesez::platform::java::cdi::scripts::Attribute;
 extension org::genesez::platform::java::cdi::scripts::Interface;
 
-Void modifications(MModel this) :
+MModel modifications(MModel this) :
     this.nestedPackage.modifications() ->
     this.classifier.typeSelect(MClass).modifications() -> 
     this.classifier.typeSelect(MInterface).modifications() ->
-    this.postModifications();
+    this.postModifications() ->
+    this;
 
 Void modifications(MPackage this) :
     this.nestedPackage.modifications() ->
@@ -35,9 +36,10 @@ Void modifications(MAttribute this) :
     "";
 
 
-Void postModifications(MModel this) :
+MModel postModifications(MModel this) :
     this.nestedPackage.postModifications() ->
-    this.classifier.typeSelect(MClass).postModifications();
+    this.classifier.typeSelect(MClass).postModifications() ->
+    this;
 
 Void postModifications(MPackage this) :
     this.nestedPackage.postModifications() ->

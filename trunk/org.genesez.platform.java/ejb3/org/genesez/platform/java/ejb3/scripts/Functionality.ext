@@ -12,9 +12,10 @@ extension org::genesez::platform::java::ejb3::scripts::Interface;
 extension org::genesez::platform::java::ejb3::scripts::Class;
 extension org::genesez::platform::java::util::Naming;
 
-Void additions(MModel this) :
+MModel additions(MModel this) :
 	this.nestedPackage.additions() ->
-	this.classifier.typeSelect(MClass).additions();
+	this.classifier.typeSelect(MClass).additions() ->
+	this;
 	
 Void additions(MPackage this) :
 	this.nestedPackage.additions() ->
@@ -30,9 +31,10 @@ Void additions(MClass this) :
 	checkUseOfEntityManager() ->
 	addMessageListener();
 
-Void modifications(MModel this) :
+MModel modifications(MModel this) :
 	this.nestedPackage.modifications() ->
-	this.classifier.typeSelect(MClass).modifications();
+	this.classifier.typeSelect(MClass).modifications() ->
+	this;
 	
 Void modifications(MPackage this) :
 	this.nestedPackage.modifications() ->
