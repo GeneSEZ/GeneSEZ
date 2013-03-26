@@ -12,7 +12,6 @@ import gcore;
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::metamodel::core::util::CreateElement;
 extension org::genesez::metamodel::core::util::NavigateElement;
-extension org::genesez::platform::common::m2m::MakeElement;
 
 /**
  *	function to add an "ejb3SessionBean" stereotype to a MClassifier
@@ -127,8 +126,8 @@ Void addTimerStereotype(MOperation this) :
  *	@param		container		instance of MOperation
  *
  */
-MStereotype makeTimerStereotype(MOperation container) :
-	makeStereotype(container.classifier.navPackage().navModel(), "ejb3Timer", "ejb3Timer");
+MStereotype makeTimerStereotype(MOperation this) :
+	navModel().ensureStereotypeExistence("ejb3Timer", "ejb3Timer");
 
 /**
  *	function to add an "ejb3ActivationConfigProperty" stereotype to a MClass
