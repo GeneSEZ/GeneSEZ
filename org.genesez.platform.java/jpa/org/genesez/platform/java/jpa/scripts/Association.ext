@@ -4,6 +4,7 @@ extension org::genesez::util::logging::Logging;
 extension org::genesez::platform::java::jpa::scripts::Stereotypes;
 extension org::genesez::metamodel::core::util::AccessElement;
 extension org::genesez::platform::java::util::Naming;
+extension org::genesez::platform::java::util::ExtensionMechanism;
 extension org::genesez::platform::java::jpa::scripts::Naming;
 
 Void checkAssociationStereotype(MAssociationRole this) :
@@ -148,7 +149,7 @@ Void evaluateOppositeStereotype(MAssociationRole this, MAssociationRole op) :
 										)
 										: addAssociationStereotype(this, "OneToOne", "null", "[]", "DEFAULT", "true", "false")
 								) ->
-							setTaggedValue(op, "type", "OneToOne")
+							op.setTaggedValue("jpaAssociation", "type", "OneToOne")
 						)
 						: (
 							!emHasStereotypeAssignment("jpaAssociation")
