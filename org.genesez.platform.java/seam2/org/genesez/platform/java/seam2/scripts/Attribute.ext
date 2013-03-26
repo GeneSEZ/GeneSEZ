@@ -2,7 +2,7 @@ import gcore;
 
 extension org::genesez::util::logging::Logging;
 extension org::genesez::metamodel::core::util::AccessElement;
-extension org::genesez::platform::common::m2m::CreateBasics;
+extension org::genesez::metamodel::core::util::profile::AccessorStereotype;
 extension org::genesez::metamodel::core::util::RemoveElement;
 extension org::genesez::platform::java::seam2::scripts::Stereotypes;
 extension org::genesez::platform::java::jbv::scripts::Stereotypes;
@@ -38,7 +38,7 @@ Void addAccessorStereotype(MAttribute this) :
 			//add an accessor for get and set methods if no accessor 
 			//stereotype exists
 			!this.emHasStereotypeAssignment("accessor")
-				? createAccessor("true", "true")
+				? emAssignGeneSezAccessorStereotype(true, true, false, false)
 				: ""
 		)
 		: "";
@@ -73,7 +73,7 @@ Void checkAccessStereotypeOfSeamStereotypedAttributes(MAttribute this) :
 			//add an accessor for no get and set methods if no accessor 
 			//stereotype exists
 			!this.emHasStereotypeAssignment("accessor")
-				? createAccessor("false", "false")
+				? emAssignGeneSezAccessorStereotype(false, false, false, false)
 				: ""
 		)
 		: "";
@@ -150,7 +150,7 @@ Void setupSeamManagedPersistence(MAttribute this) :
 		this.addInjectionStereotype("false", "true", "UNSPECIFIED", "") ->
 		emRemoveStereotypeAssignment(emGetStereotypeAssignment("jpaPersistenceContext")) ->
 		!this.emHasStereotypeAssignment("accessor")
-			? this.createAccessor("false", "false")
+			? this.emAssignGeneSezAccessorStereotype(false, false, false, false)
 			: ""
 	)
 	: "";
