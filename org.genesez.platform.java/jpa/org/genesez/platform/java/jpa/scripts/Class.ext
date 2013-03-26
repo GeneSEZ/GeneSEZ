@@ -243,7 +243,12 @@ Void isSuperClass(MClass derivedClass, MClass superClass) :
   *	@param	this	instance of MClassifier	
   */
 Void addDefaultPrimaryKeyAttribute(MClassifier this) :
-	this.makeAttribute("id", "int", "private");
+	ensureAttributeExistence( xmiGuid + "_id", "id" )
+		.processAttribute( "", false, false )
+		.processProperty( "private", false, createMultiplicity(0, 1) )
+		.wireType( navModel().typeIntPrimitive() );
+//	old impl:
+//	this.makeAttribute("id", "int", "private");
 
 /**
   *	adds a version attribute to the classifier
@@ -253,7 +258,12 @@ Void addDefaultPrimaryKeyAttribute(MClassifier this) :
   *	@param	this	instance of MClassifier	
   */
 Void addVersionAttribute(MClass this) :
-	this.makeAttribute("version", "int", "private");
+	ensureAttributeExistence( xmiGuid + "_version", "version" )
+		.processAttribute( "", false, false )
+		.processProperty( "private", false, createMultiplicity(0, 1) )
+		.wireType( navModel().typeIntPrimitive() );
+//	old impl:
+//	this.makeAttribute("version", "int", "private");
 	
 /**
   *	add stereotype "java5EqualsProperty" as Internal stereotype for primary key

@@ -50,7 +50,14 @@ Void transformWAMStereotypes(MClass this) :
 		? (
 			this.addSessionBeanStereotype(this.name, "", "", false, "EntityManager", "None") ->
 			this.addLocalStereotype("") ->
-			this.makeAttribute("timerService", "TimerService", "public") ->
+			ensureAttributeExistence( xmiGuid + "_timerService", "timerService" )
+				.processAttribute( "", false, false )
+				.processProperty( "public", false, createMultiplicity(0, 1) )
+				.wireType(
+					navModel().ensureExternalTypeExistence("TimerService", "TimerService")
+				) ->
+//	old impl:
+//			this.makeAttribute("timerService", "TimerService", "public") ->
 			(
 				this.ensureOperationExistence( this.xmiGuid + ".executeTask", "executeTask" )
 					.processOperation( "public", false, false, false )
@@ -217,20 +224,38 @@ Void createAccessorForEntityManager(MProperty this) :
   *	with the datatype "EntityManager" or "Session" not already exists
   */
 Void addEntityManager(MClass this, String type) :
-	!existEntityManager() 
-		? (type.matches("EntityManager")
-			? makeAttribute("entityManager", "EntityManager", "private")
-			: (type.matches("EntityManager_Extended")
-				? makeAttribute("entityManager", "EntityManager", "private")
-				: (type.matches("Session")
-					? makeAttribute("session", "Session", "private")
-					: (type.matches("Session_Extended")
-						? makeAttribute("session", "Session", "private")
-						: ""
-					)	
-				)
-			)
-		)
+	!existEntityManager()
+		? (switch {
+			case (type.matches("EntityManager") || type.matches("EntityManager_Extended")) :
+				ensureAttributeExistence( xmiGuid + "_entityManager", "entityManager" )
+					.processAttribute( "", false, false )
+					.processProperty( "private", false, createMultiplicity(0, 1) )
+					.wireType(
+						navModel().ensureExternalTypeExistence("EntityManager", "EntityManager")
+					)
+			case (type.matches("Session") || type.matches("Session_Extended")) :
+				ensureAttributeExistence( xmiGuid + "_session", "session" )
+					.processAttribute( "", false, false )
+					.processProperty( "private", false, createMultiplicity(0, 1) )
+					.wireType(
+						navModel().ensureExternalTypeExistence("Session", "Session")
+					)
+			default : ""
+		})
+//	old impl:
+//		? (type.matches("EntityManager")
+//			? makeAttribute("entityManager", "EntityManager", "private")
+//			: (type.matches("EntityManager_Extended")
+//				? makeAttribute("entityManager", "EntityManager", "private")
+//				: (type.matches("Session")
+//					? makeAttribute("session", "Session", "private")
+//					: (type.matches("Session_Extended")
+//						? makeAttribute("session", "Session", "private")
+//						: ""
+//					)	
+//				)
+//			)
+//		)
 		: "" ->
 	"";
 

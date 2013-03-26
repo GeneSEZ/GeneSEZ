@@ -44,7 +44,14 @@ MClassifier addStandardConstructor(MClass this) :
   */
 Void addLoggerAttribute(MClass this) :
 	!this.emHasStereotypeAssignment("jpaPersistentEntity") && this.emHasTaggedValue("seam2Component", "logger", "true") && !this.existLoggerAttribute() 
-		? makeAttribute("logger", "org.jboss.seam.log.Log", "private")
+		? ensureAttributeExistence( xmiGuid + "_logger", "logger" )
+			.processAttribute( "", false, false )
+			.processProperty( "private", false, createMultiplicity(0, 1) )
+			.wireType(
+				navModel().ensureExternalTypeExistence("org.jboss.seam.log.Log", "org.jboss.seam.log.Log")
+			)
+//	old impl:
+//		makeAttribute("logger", "org.jboss.seam.log.Log", "private")
 		: "";
 
 /**
