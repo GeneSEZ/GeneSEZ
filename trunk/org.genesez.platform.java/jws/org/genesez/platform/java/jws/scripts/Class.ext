@@ -80,28 +80,60 @@ Void checkSOAPHandler(MClass this) :
 				: "" ->
 			!operation.exists(e|e.name.matches("handleMessage"))
 				? (
-					let o = makeOperation("handleMessage", "public") :
-						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeSOAPMessageContext() ) ) ->
-						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.navModel())))
+					ensureOperationExistence( xmiGuid + ".handleMessage", "handleMessage" )
+						.processOperation( "public", false, false, false )
+						.ensureParameterExistence( xmiGuid + ".handleMessage.context", "context" )
+							.processParameter( "", "in", createMultiplicity(0, 1) )
+							.wireType( this.navModel().typeSOAPMessageContext() )
+							.operation
+						.ensureReturnParameterExistence( xmiGuid + ".handleMessage.return", "" )
+							.processParameter( "", "return", createMultiplicity(0, 1))
+							.wireType( this.navModel().typeBooleanPrimitive() )
+//	old impl:
+//					let o = makeOperation("handleMessage", "public") :
+//						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeSOAPMessageContext() ) ) ->
+//						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.navModel())))
 				)
 				: "" ->
 			!operation.exists(e|e.name.matches("handleFault"))
 				? (
-					let o = makeOperation("handleFault", "public") :
-						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeSOAPMessageContext() ) ) ->
-						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.navModel())))
+					ensureOperationExistence( xmiGuid + ".handleFault", "handleFault" )
+						.processOperation( "public", false, false, false )
+						.ensureParameterExistence( xmiGuid + ".handleFault.context", "context" )
+							.processParameter( "", "in", createMultiplicity(0, 1) )
+							.wireType( this.navModel().typeSOAPMessageContext() )
+							.operation
+						.ensureReturnParameterExistence( xmiGuid + ".handleFault.return", "" )
+							.processParameter( "", "return", createMultiplicity(0, 1))
+							.wireType( this.navModel().typeBooleanPrimitive() )
+//	old impl:
+//					let o = makeOperation("handleFault", "public") :
+//						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeSOAPMessageContext() ) ) ->
+//						o.setReturn(o.makeReturnParameter(createPrimitiveTypeBoolean(this.navModel())))
 				)
 				: "" ->
 			!operation.exists(e|e.name.matches("getHeaders"))
 				? (
-					let o = makeOperation("getHeaders", "public") :
-						o.setReturn(o.makeReturnParameter(1, -1, true, false, this.navModel().typeQName() ))
+					ensureOperationExistence( xmiGuid + ".getHeaders", "getHeaders" )
+						.processOperation( "public", false, false, false )
+						.ensureReturnParameterExistence( xmiGuid + ".getHeaders.return", "" )
+							.processParameter( "", "return", createMultiplicity(1, -1, true, false))
+							.wireType( this.navModel().typeQName() )
+//	old impl:
+//					let o = makeOperation("getHeaders", "public") :
+//						o.setReturn(o.makeReturnParameter(1, -1, true, false, this.navModel().typeQName() ))
 				)
 				: "" ->
 			!operation.exists(e|e.name.matches("close"))
 				? (
-					let o = makeOperation("close", "public")  :
-						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeMessageContext() ))
+					ensureOperationExistence( xmiGuid + ".close", "close" )
+						.processOperation( "public", false, false, false )
+						.ensureParameterExistence( xmiGuid + ".close.context", "context" )
+							.processParameter( "", "in", createMultiplicity(0, 1))
+							.wireType( this.navModel().typeMessageContext() )
+//	old impl:
+//					let o = makeOperation("close", "public")  :
+//						o.parameter.add(o.makeParameter("context", "in", this.navModel().typeMessageContext() ))
 				)
 				: ""
 		)

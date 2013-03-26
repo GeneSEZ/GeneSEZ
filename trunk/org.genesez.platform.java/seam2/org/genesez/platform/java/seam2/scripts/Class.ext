@@ -59,9 +59,17 @@ Void checkAbstractClassesForComponentStereotype(MClass this) :
   *
   */
 Void addFactoryMethod(MClassifier this, String autoCreate, String scope, String value) :
-	makeOperation("initiate"+value.toFirstUpper(), "public") ->
-	this.realization.typeSelect(MClassifier).makeOperation("initiate"+value.toFirstUpper(), "public") ->
+	addInitiateOperation(value) ->
+//	old impl:
+//	makeOperation("initiate"+value.toFirstUpper(), "public") ->
+	this.realization.typeSelect(MClassifier).addInitiateOperation( value ) ->
+//	old impl:
+//	this.realization.typeSelect(MClassifier).makeOperation("initiate"+value.toFirstUpper(), "public") ->
 	this.operation.selectFirst(e|e.name == "initiate"+value.toFirstUpper()).addFactoryStereotype(autoCreate, scope, value);
+
+MOperation addInitiateOperation(MClassifier this, String value) :
+	ensureOperationExistence( xmiGuid + ".initiate"+value.toFirstUpper(), "initiate"+value.toFirstUpper() )
+		.processOperation( "public", false, false, false );
 
 /**
   *	checks if there is an attribute with the datatype "Log"
@@ -85,19 +93,28 @@ Void checkCreateMethod(MClass this) :
 				? (
 					(!operation.exists(e|e.name == "init" && e.parameter.size == 0)
 						? (
-							let o = makeOperation("init", "public") :
-								o.addInternalStereotype("http://www.genesez.org/java/seam2/CreateOperation")
+							addInitOperation()
+								.ensureStereotypeAssignment(
+									navModel().ensureStereotypeExistence( "http://www.genesez.org/java/seam2/CreateOperation", "http://www.genesez.org/java/seam2/CreateOperation" )
+								)
+//	old impl:
+//							let o = makeOperation("init", "public") :
+//								o.addInternalStereotype("http://www.genesez.org/java/seam2/CreateOperation")
 						)
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "init" && e.parameter.size == 0).addLifecycleStereotype("true", "false") ->
 					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).operation.exists(e|e.name == "init" && e.parameter.size == 0)
-						? this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).makeOperation("init", "public")
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).addInitOperation()
 						: "")
 				)
 				: ""
 		)
 		: "";
+
+MOperation addInitOperation(MClassifier this) :
+	ensureOperationExistence( xmiGuid + ".init", "init")
+		.processOperation( "public", false, false, false );
 
 /**
   *	adds method named "destroy" with annotation "@Destroy" and @Remove 
@@ -111,19 +128,28 @@ Void checkDestroyMethod(MClass this) :
 				? (
 					(!operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
 						? (
-							let o = makeOperation("destroy", "public") :
-								o.addInternalStereotype("http://www.genesez.org/java/seam2/DestroyOperation")
+							addDestroyOperation()
+								.ensureStereotypeAssignment(
+									navModel().ensureStereotypeExistence( "http://www.genesez.org/java/seam2/DestroyOperation", "http://www.genesez.org/java/seam2/DestroyOperation" )
+								)
+//	old impl:
+//							let o = makeOperation("destroy", "public") :
+//								o.addInternalStereotype("http://www.genesez.org/java/seam2/DestroyOperation")
 						)
 						: ""
 					) ->
 					operation.selectFirst(e|e.name == "destroy" && e.parameter.size == 0).addLifecycleStereotype("false", "true") ->
 					(!this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).operation.exists(e|e.name == "destroy" && e.parameter.size == 0)
-						? this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).makeOperation("destroy", "public")
+						? this.realization.typeSelect(MClassifier).selectFirst(e|e.emHasStereotypeAssignment("ejb3Local") || e.emHasStereotypeAssignment("ejb3Remote")).addDestroyOperation()
 						: "")
 				)
 				: ""
 		)
 		: "";
+
+MOperation addDestroyOperation(MClassifier this) :
+	ensureOperationExistence( xmiGuid + ".destroy", "destroy")
+		.processOperation( "public", false, false, false );
 
 /**
   *	adds an entity home class for a persistent entity which is also a Seam component
